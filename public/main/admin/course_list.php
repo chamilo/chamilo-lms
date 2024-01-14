@@ -6,6 +6,11 @@
  * This script shows a list of courses and allows searching for courses codes
  * and names.
  */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -123,7 +128,6 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
     }
 
     if ($getCount) {
-        $sql .= " GROUP BY course.code";
         $res = Database::query($sql);
         $row = Database::fetch_array($res);
         if ($row) {
@@ -171,27 +175,63 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
 
         $actions = [];
         $actions[] = Display::url(
-            Display::return_icon('info2.png', get_lang('Information')),
+            Display::getMdiIcon(
+                ActionIcon::INFORMATION,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_SMALL,
+                get_lang('Information')
+            ),
             "course_information.php?id=$courseId"
         );
         $actions[] = Display::url(
-            Display::return_icon('course_home.png', get_lang('Course home')),
+            Display::getMdiIcon(
+                ToolIcon::COURSE_HOME,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_SMALL,
+                get_lang('Course home')
+            ),
             $courseInfo['course_public_url']
         );
         $actions[] = Display::url(
-            Display::return_icon('statistics.png', get_lang('Reporting')),
+            Display::getMdiIcon(
+                ToolIcon::TRACKING,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_SMALL,
+                get_lang('Reporting')
+            ),
             $path.'tracking/courseLog.php?'.api_get_cidreq_params($courseId)
         );
         $actions[] = Display::url(
-            Display::return_icon('edit.png', get_lang('Edit')),
+            Display::getMdiIcon(
+                ActionIcon::EDIT,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_SMALL,
+                get_lang('Edit')
+            ),
             $path.'admin/course_edit.php?id='.$courseId
         );
         $actions[] = Display::url(
-            Display::return_icon('backup.png', get_lang('Create a backup')),
+            Display::getMdiIcon(
+                ActionIcon::TAKE_BACKUP,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_SMALL,
+                get_lang('Create a backup')
+            ),
             $path.'course_copy/create_backup.php?'.api_get_cidreq_params($courseId)
         );
         $actions[] = Display::url(
-            Display::return_icon('delete.png', get_lang('Delete')),
+            Display::getMdiIcon(
+                ActionIcon::DELETE,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_SMALL,
+                get_lang('Delete')
+            ),
             $path.'admin/course_list.php?delete_course='.$courseCode,
             [
                 'onclick' => "javascript: if (!confirm('"
@@ -311,42 +351,52 @@ function get_course_visibility_icon($visibility)
     $style = 'margin-bottom:0;margin-right:5px;';
     switch ($visibility) {
         case 0:
-            return Display::return_icon(
-                'bullet_red.png',
-                get_lang('Closed - the course is only accessible to the teachers'),
-                ['style' => $style]
+            return Display::getMdiIcon(
+                StateIcon::CLOSED_VISIBILITY,
+                'ch-tool-icon',
+                null,
+                22,
+                get_lang('Closed - the course is only accessible to the teachers')
             );
 
             break;
         case 1:
-            return Display::return_icon(
-                'bullet_orange.png',
-                get_lang('Private access (access authorized to group members only) access (access authorized to group members only)'),
-                ['style' => $style]
+            return Display::getMdiIcon(
+                StateIcon::PRIVATE_VISIBILITY,
+                'ch-tool-icon',
+                null,
+                22,
+                get_lang('Private access (access authorized to group members only) access (access authorized to group members only)')
             );
 
             break;
         case 2:
-            return Display::return_icon(
-                'bullet_green.png',
-                get_lang(' Open - access allowed for users registered on the platform'),
-                ['style' => $style]
+            return Display::getMdiIcon(
+                StateIcon::OPEN_VISIBILITY,
+                'ch-tool-icon',
+                null,
+                22,
+                get_lang(' Open - access allowed for users registered on the platform')
             );
 
             break;
         case 3:
-            return Display::return_icon(
-                'bullet_blue.png',
-                get_lang('Public - access allowed for the whole world'),
-                ['style' => $style]
+            return Display::getMdiIcon(
+                StateIcon::PUBLIC_VISIBILITY,
+                'ch-tool-icon',
+                null,
+                22,
+                get_lang('Public - access allowed for the whole world')
             );
 
             break;
         case 4:
-            return Display::return_icon(
-                'bullet_grey.png',
-                get_lang('Hidden - Completely hidden to all users except the administrators'),
-                ['style' => $style]
+            return Display::getMdiIcon(
+                StateIcon::HIDDEN_VISIBILITY,
+                'ch-tool-icon',
+                null,
+                22,
+                get_lang('Hidden - Completely hidden to all users except the administrators')
             );
 
             break;
@@ -490,22 +540,24 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
 
     $courseListUrl = api_get_self();
     $actions1 = Display::url(
-        Display::return_icon(
-            'new_course.png',
-            get_lang('Create a course'),
-            [],
-            ICON_SIZE_MEDIUM
+        Display::getMdiIcon(
+            ToolIcon::COURSE,
+            'ch-tool-icon-gradient',
+            null,
+            32,
+            get_lang('Create a course')
         ),
         api_get_path(WEB_CODE_PATH).'admin/course_add.php'
     );
 
     if ('true' === api_get_setting('course_validation')) {
         $actions1 .= Display::url(
-            Display::return_icon(
-                'course_request_pending.png',
-                get_lang('Review incoming course requests'),
-                [],
-                ICON_SIZE_MEDIUM
+            Display::getMdiIcon(
+                'book-heart-outline',
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_MEDIUM,
+                get_lang('Review incoming course requests')
             ),
             api_get_path(WEB_CODE_PATH).'admin/course_request_review.php'
         );

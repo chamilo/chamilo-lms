@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  *  Shows the exercise results.
@@ -136,7 +137,7 @@ if (!$is_allowedToEdit) {
 }
 
 $allowRecordAudio = 'true' === api_get_setting('enable_record_audio');
-$allowTeacherCommentAudio = true === api_get_configuration_value('allow_teacher_comment_audio');
+$allowTeacherCommentAudio = ('true' === api_get_setting('exercise.allow_teacher_comment_audio'));
 
 //$js = '<script>'.api_get_language_translate_html().'</script>';
 //$htmlHeadXtra[] = $js;
@@ -184,7 +185,7 @@ if ('export' != $action) {
 
     echo Display::toolbarAction('toolbar', [
         Display::url(
-            Display::return_icon('pdf.png', get_lang('Export')),
+            Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Export')),
             api_get_self().'?'.api_get_cidreq().'&id='.$id.'&action=export&'
         ),
     ]); ?>
@@ -325,7 +326,7 @@ if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLa
         $track_exercise_info,
         false,
         false,
-        api_get_configuration_value('quiz_results_answers_report')
+        ('true' === api_get_setting('exercise.quiz_results_answers_report'))
     );
 }
 
@@ -668,7 +669,7 @@ foreach ($questionList as $questionId) {
 
             if ($allowRecordAudio && $allowTeacherCommentAudio) {
                 echo '<div class="col-sm-5">';
-                echo ExerciseLib::getOralFeedbackForm($id, $questionId, $student_id);
+                echo ExerciseLib::getOralFeedbackForm($id, $questionId, $exercise_id);
                 echo '</div>';
             }
             echo '</div>';
@@ -689,7 +690,7 @@ foreach ($questionList as $questionId) {
 
                 echo '<div id="'.$marksname.'" class="hidden">';
 
-                $allowDecimalScore = api_get_configuration_value('quiz_open_question_decimal_score');
+                $allowDecimalScore = ('true' === api_get_setting('exercise.quiz_open_question_decimal_score'));
                 $formMark = new FormValidator('marksform_'.$questionId, 'post');
                 $formMark->addHeader(get_lang('Assign a grade'));
                 $model = ExerciseLib::getCourseScoreModel();

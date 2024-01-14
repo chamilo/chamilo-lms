@@ -1,9 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"Language: fr_FR\n"
+"PO-Revision-Date: 2024-01-13 02:40+0000\n"
+"Last-Translator: Weblate admin <ywarnier@beeznest.org>\n"
+"Language-Team: French <https://translation.chamilo.org/projects/chamilo-lms/"
+"translations/fr/>\n"
+"Language: fr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.3.1\n"
 
 msgid "You can generate badges for the skills learnt by your users, to give them recognition for their effort, through which they will be able to show off their acquired skills and competencies with icons that will be shown on their user profile. For more information on OpenBadges, check <a href='http://openbadges.org'>http://openbadges.org/</a>."
 msgstr "Vous pouvez maintenant créer des insignes qui reconnaissent les compétences apprisent par vos utilisateurs, les récompenses pour leurs efforts et au travers desquels ils pourront démontrer leurs compétences acquises sur leur page de profil. Pour plus d'informations au sujet d'OpenBadges: <a href='http://openbadges.org'>http://openbadges.org</a>."
@@ -718,6 +724,8 @@ msgstr "Utiliser le score sur mesure pour toutes les questions"
 
 msgid "You should add some items to your learning path, otherwise you won't be able to attach audio files to them"
 msgstr ""
+"Vous devriez ajouter quelques éléments à votre parcours, sans quoi vous ne "
+"pourrez pas y attacher de fichiers audio"
 
 msgid "Inactive days"
 msgstr "Jours inactifs"
@@ -24064,6 +24072,8 @@ msgstr "Déplacer les résultats utilisateurs de tout un cours dans/vers une ses
 
 msgid "If your quiz have hotspot questions included, you should select the images related from the documents."
 msgstr ""
+"Si votre test comporte des questions sur image, vous devriez sélectionner "
+"les images liées depuis l'outil documents."
 
 msgid "Back to the attempt list"
 msgstr "Retour à la liste des tentatives"
@@ -24118,3 +24128,48 @@ msgstr "Nom"
 
 msgid "Official code"
 msgstr "Code officiel"
+
+msgid "Your Reg"
+msgstr "Votre inscription sur"
+
+msgid "Dear"
+msgstr "Bonjour"
+
+msgid "Welcome to this platform"
+msgstr "Bienvenue sur cette plateforme"
+
+msgid "You are registered to"
+msgstr "Vous êtes inscrit sur la plateforme "
+
+msgid "with the following settings:"
+msgstr "avec les identifiants suivants :"
+
+msgid "For more details visit %s"
+msgstr "Pour plus de détails vous pouvez vous rendre sur %s"
+
+msgid "In case of trouble, contact us."
+msgstr "En cas de problème, vous pouvez nous contacter."
+
+msgid "Manager"
+msgstr "Responsable"
+
+msgid "Add a forumCategory"
+msgstr "Ajouter une catégorie de forum"
+
+msgid "Create surveyDoodle"
+msgstr "Créer une enquête Doodle"
+
+msgid "Sticky courses"
+msgstr "Cours spéciaux"
+
+msgid "Current session tab"
+msgstr "En cours"
+
+msgid "Upcoming session tab"
+msgstr "À venir"
+
+msgid "Past session tab"
+msgstr "Terminées"
+
+msgid "User has participate dans de platforme %s the contrat date %s certificate date %s time %s"
+msgstr "a participé à une formation en ligne sur la plateforme %s de l’Office franco-allemand pour la Jeunesse. <br>Du <span style=\"color: #672290;\">%s</span> au <span style=\"color: #672290;\">%s</span>.<br><br>Cette formation avait pour objectif la préparation linguistique et interculturelle à une mobilité dans un cadre de formation professionnelle."

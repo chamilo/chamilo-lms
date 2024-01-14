@@ -1,9 +1,9 @@
 <!-- tracking course log -->
 <script>
-window.onload = function() {
+$(() => {
     var scoreStudent = document.getElementById("chart-score").getContext('2d');
     var lastAccess = document.getElementById("chart-access").getContext('2d');
-    var jsonfile = {{ json_time_student }};
+    var jsonfile = {{ json_time_student|raw }};
     var labels = [];
     var times = [];
 
@@ -32,23 +32,23 @@ window.onload = function() {
                 display: false
             },
             scales: {
-                xAxes:[{
+                x: {
                     position: "bottom",
-                    scaleLabel: {
+                    title: {
                         display: true,
-                        labelString: '{{ "Students"|get_lang|e('js') }}',
+                        text: '{{ "Students"|get_lang|e('js') }}'
                     },
-                    ticks: {
-                        display: false
-                    }
-                }],
-                yAxes: [{
-                    position: "left",
-                    scaleLabel: {
+                    ticks: { display: false },
+                    min: 0
+                },
+                y: {
+                    title: {
                         display: true,
-                        labelString: '{{ "Minutes"|get_lang|e('js') }}',
-                    }
-                }]
+                        text: '{{ "Minutes"|get_lang|e('js') }}'
+                    },
+                    position: "left",
+                    min: 0
+                }
             }
         }
     });
@@ -59,9 +59,9 @@ window.onload = function() {
             labels: ["0-9%", "10-19%", "20-29%", "30-39%", "40-49%", "50-59%", "60-69%", "70-79%", "80-89%", "90-100%"],
             datasets: [{
                 label: '{{ "NumberOfUsers"|get_lang|e('js') }}',
-                data: {{ score_distribution }},
-                backgroundColor: {{ chart_colors }},
-                borderColor: {{ chart_colors }},
+                data: {{ score_distribution|raw }},
+                backgroundColor: {{ chart_colors|raw }},
+                borderColor: {{ chart_colors|raw }},
                 borderWidth: 1,
                 fill: false
             }]
@@ -71,35 +71,33 @@ window.onload = function() {
               display: false
             },
             scales: {
-                yAxes: [{
+                y: {
                     position: "left",
-                    scaleLabel: {
-                        display: true,
-                        labelString: '{{ "NumberOfUsers"|get_lang|e('js') }}',
+                    title: {
+                      text: '{{ "NumberOfUsers"|get_lang|e('js') }}',
+                      display: true
                     },
                     ticks: {
                         display: true,
                         min: 0,
                         stepSize: 1
-                    }
-                }],
-                xAxes:[{
-                    position: "bottom",
-                    scaleLabel: {
-                        display: true,
-                        labelString: "{{ 'PercentileScoresDistribution'|get_lang|e('js') }}",
                     },
-                    gridLines: {
+                    min: 0
+                },
+                x: {
+                    position: "bottom",
+                    title: {
+                      text: "{{ 'PercentileScoresDistribution'|get_lang|e('js') }}",
                       display: true
                     },
-                    ticks: {
-                        display: false,
-                    }
-                }],
+                    gridLines: { display: true },
+                    ticks: { display: true, },
+                    min: 0
+                },
             }
         }
     });
-};
+})
 </script>
 
 <div class="tracking-course-summary">

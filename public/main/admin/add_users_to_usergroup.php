@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 // resetting the course id
 use Chamilo\CoreBundle\Entity\Usergroup;
 
@@ -323,7 +325,7 @@ if (!empty($user_list)) {
 Display::display_header($tool_name);
 
 $actions = '<a href="usergroups.php">'.
-    Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')).'</a>';
 
 $actions .= Display::url(
     get_lang('Advanced search'),
@@ -332,10 +334,10 @@ $actions .= Display::url(
 );
 
 $actions .= '<a href="usergroup_user_import.php">'.
-    Display::return_icon('import_csv.png', get_lang('Import'), [], ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ActionIcon::IMPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import')).'</a>';
 
 $actions .= '<a href="'.api_get_self().'?id='.$id.'&action=export">'.
-    Display::return_icon('export_csv.png', get_lang('Export'), [], ICON_SIZE_MEDIUM).
+    Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export')).
     '</a>';
 
 echo Display::toolbarAction('add_users', [$actions]);

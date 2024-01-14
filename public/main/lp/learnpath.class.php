@@ -5,8 +5,10 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
+use Chamilo\CourseBundle\Entity\CLpRelUser;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CourseBundle\Repository\CLpRelUserRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
@@ -21,11 +23,13 @@ use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CTool;
+use \Chamilo\CoreBundle\Entity\ResourceNode;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use PhpZip\ZipFile;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * Class learnpath
@@ -1323,7 +1327,7 @@ class learnpath
         $nextText = get_lang('Next');
         $fullScreenText = get_lang('Back to normal screen');
 
-        $settings = api_get_configuration_value('lp_view_settings');
+        $settings = api_get_setting('lp.lp_view_settings', true);
         $display = $settings['display'] ?? false;
         $icon = Display::getMdiIcon('information');
 
@@ -1682,7 +1686,7 @@ class learnpath
     ) {
         $courseId = $course->getId();
 
-        $allow = api_get_configuration_value('allow_teachers_to_access_blocked_lp_by_prerequisite');
+        $allow = ('true' === api_get_setting('lp.allow_teachers_to_access_blocked_lp_by_prerequisite'));
         if ($allow) {
             if (api_is_allowed_to_edit() ||
                 api_is_platform_admin(true) ||
@@ -1818,24 +1822,40 @@ class learnpath
                     // Try group
                     $is_visible = false;
                     // Checking only the user visibility
-                    // @todo fix visibility
-                    $userVisibility = 1;
-                    if (1 == $userVisibility) {
-                        $is_visible = true;
-                    } else {
-                        $userGroups = GroupManager::getAllGroupPerUserSubscription($student_id, $courseId);
-                        if (!empty($userGroups)) {
-                            foreach ($userGroups as $groupInfo) {
-                                $groupId = $groupInfo['iid'];
-                                // @todo fix visibility.
-                                $userVisibility = 1;
-                                if (1 == $userVisibility) {
-                                    $is_visible = true;
-                                    break;
-                                }
-                            }
-                        }
+                    $userVisibility = self::isUserSubscribedToLp($lp, $student_id, $course, $session);
+
+                    if (true === $userVisibility) {
+                        return true;
                     }
+
+                    // Try with groups
+                    $groupVisibility = self::isGroupSubscribedToLp($lp, $student_id, $course, $session);
+                    if (true === $groupVisibility) {
+                        return true;
+                    }
+                }
+            }
+
+            return $is_visible;
+        } else {
+
+            $is_visible = true;
+            $subscriptionSettings = self::getSubscriptionSettings();
+            // Check if the subscription users/group to a LP is ON
+            if (1 == $lp->getSubscribeUsers() &&
+                true === $subscriptionSettings['allow_add_users_to_lp']
+            ) {
+                $is_visible = false;
+                $userVisibility = self::isUserSubscribedToLp($lp, $student_id, $course, $session);
+
+                if (true === $userVisibility) {
+                    return true;
+                }
+
+                // Try with groups
+                $groupVisibility = self::isGroupSubscribedToLp($lp, $student_id, $course, $session);
+                if (true === $groupVisibility) {
+                    return true;
                 }
             }
 
@@ -1843,6 +1863,70 @@ class learnpath
         }
 
         return true;
+    }
+
+    public static function isGroupSubscribedToLp(
+        CLp $lp,
+        int $studentId,
+        Course $course,
+        SessionEntity $session = null
+    ): bool {
+
+        // Subscribed groups to a LP
+        $links = $lp->getResourceNode()->getResourceLinks();
+        $selectedChoices = [];
+        foreach ($links as $link) {
+            if (null !== $link->getGroup()) {
+                $selectedChoices[] = $link->getGroup()->getIid();
+            }
+        }
+
+        $isVisible = false;
+        $userGroups = GroupManager::getAllGroupPerUserSubscription($studentId, $course->getId());
+        if (!empty($userGroups)) {
+            foreach ($userGroups as $groupInfo) {
+                $groupId = $groupInfo['iid'];
+                if (in_array($groupId, $selectedChoices)) {
+                    $isVisible = true;
+                    break;
+                }
+            }
+        }
+
+        return $isVisible;
+    }
+
+    public static function isUserSubscribedToLp(
+        CLp $lp,
+        int $studentId,
+        Course $course,
+        SessionEntity $session = null
+    ): bool {
+
+        $isVisible = true;
+        $em = Database::getManager();
+
+        /** @var CLpRelUserRepository $cLpRelUserRepo */
+        $cLpRelUserRepo = $em->getRepository(CLpRelUser::class);
+
+        // Getting subscribed users to a LP.
+        $subscribedUsersInLp = $cLpRelUserRepo->getUsersSubscribedToItem(
+            $lp,
+            $course,
+            $session
+        );
+
+        $selectedChoices = [];
+        foreach ($subscribedUsersInLp as $users) {
+            /** @var \Chamilo\CourseBundle\Entity\CLpRelUser $users */
+            $selectedChoices[] = $users->getUser()->getId();
+        }
+
+        if (!api_is_allowed_to_edit() && !in_array($studentId, $selectedChoices)) {
+            $isVisible = false;
+        }
+
+        return $isVisible;
     }
 
     /**
@@ -1975,7 +2059,7 @@ class learnpath
         // If the option to use the score as progress is set for this learning
         // path, then the rules are completely different: we assume only one
         // item exists and the progress of the LP depends on the score
-        $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
+        $scoreAsProgressSetting = ('true' === api_get_setting('lp.lp_score_as_progress_enable'));
         if (true === $scoreAsProgressSetting) {
             $scoreAsProgress = $this->getUseScoreAsProgress();
             if ($scoreAsProgress) {
@@ -3114,7 +3198,7 @@ class learnpath
      */
     public function prerequisites_match($itemId = null)
     {
-        $allow = api_get_configuration_value('allow_teachers_to_access_blocked_lp_by_prerequisite');
+        $allow = ('true' === api_get_setting('lp.allow_teachers_to_access_blocked_lp_by_prerequisite'));
         if ($allow) {
             if (api_is_allowed_to_edit() ||
                 api_is_platform_admin(true) ||
@@ -3590,7 +3674,7 @@ class learnpath
         if (!api_is_invitee()) {
             // Save progress.
             [$progress] = $this->get_progress_bar_text('%');
-            $scoreAsProgressSetting = api_get_configuration_value('lp_score_as_progress_enable');
+            $scoreAsProgressSetting = ('true' === api_get_setting('lp.lp_score_as_progress_enable'));
             $scoreAsProgress = $this->getUseScoreAsProgress();
             if ($scoreAsProgress && $scoreAsProgressSetting && (null === $score || empty($score) || -1 == $score)) {
                 if ($debug) {
@@ -4591,18 +4675,14 @@ class learnpath
                 $iconName = str_replace(' ', '', $type);
                 $icon = '';
                 switch ($iconName) {
+                    case 'category':
                     case 'chapter':
                     case 'folder':
                     case 'dir':
-                        $icon = Display::getMdiIcon('bookmark-multiple', 'ch-tool-icon', '', 16);
+                        $icon = Display::getMdiIcon(ObjectIcon::CHAPTER, 'ch-tool-icon', '', ICON_SIZE_TINY);
                         break;
                     default:
-                        $icon = Display::return_icon(
-                            'lp_'.$iconName.'.png',
-                            '',
-                            [],
-                            ICON_SIZE_TINY
-                        );
+                        $icon = Display::getMdiIcon(ObjectIcon::SINGLE_ELEMENT, 'ch-tool-icon', '', ICON_SIZE_TINY);
                         break;
                 }
 
@@ -4742,12 +4822,7 @@ class learnpath
 
         /*if ($backToBuild) {
             $back = Display::url(
-                Display::return_icon(
-                    'back.png',
-                    get_lang('GoBack'),
-                    '',
-                    ICON_SIZE_MEDIUM
-                ),
+                Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', null, 32, get_lang('GoBack')),
                 "lp_controller.php?action=add_item&type=step&lp_id=$lpId&".api_get_cidreq()
             );
         }*/
@@ -4764,12 +4839,7 @@ class learnpath
         );
 
         /*$actionsLeft .= Display::url(
-            Display::return_icon(
-                'upload_audio.png',
-                get_lang('Add audio'),
-                '',
-                ICON_SIZE_MEDIUM
-            ),
+            Display::getMdiIcon('music-note-plus', 'ch-tool-icon', null, 32, get_lang('Add audio')),
             'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                 'action' => 'admin_view',
                 'lp_id' => $lpId,
@@ -4815,18 +4885,8 @@ class learnpath
 
         if ($allowExpand) {
             /*$actionsLeft .= Display::url(
-                Display::return_icon(
-                    'expand.png',
-                    get_lang('Expand'),
-                    ['id' => 'expand'],
-                    ICON_SIZE_MEDIUM
-                ).
-                Display::return_icon(
-                    'contract.png',
-                    get_lang('Collapse'),
-                    ['id' => 'contract', 'class' => 'hide'],
-                    ICON_SIZE_MEDIUM
-                ),
+                Display::getMdiIcon('arrow-expand-all', 'ch-tool-icon', null, 32, get_lang('Expand')).
+                Display::getMdiIcon('arrow-collapse-all', 'ch-tool-icon', null, 32, get_lang('Collapse')),
                 '#',
                 ['role' => 'button', 'id' => 'hide_bar_template']
             );*/
@@ -5782,22 +5842,12 @@ class learnpath
 
         if (TOOL_LP_FINAL_ITEM !== $itemType) {
             $return .= Display::url(
-                Display::return_icon(
-                    'edit.png',
-                    get_lang('Edit'),
-                    [],
-                    ICON_SIZE_SMALL
-                ),
+                Display::getMdiIcon('pencil', 'ch-tool-icon', null, 22, get_lang('Edit')),
                 $url.'&action=edit_item&path_item='.$path
             );
 
             /*$return .= Display::url(
-                Display::return_icon(
-                    'move.png',
-                    get_lang('Move'),
-                    [],
-                    ICON_SIZE_SMALL
-                ),
+                Display::getMdiIcon('arrow-right-bold', 'ch-tool-icon', null, 22, get_lang('Move')),
                 $url.'&action=move_item'
             );*/
         }
@@ -5805,22 +5855,12 @@ class learnpath
         // Commented for now as prerequisites cannot be added to chapters.
         if ('dir' !== $itemType) {
             $return .= Display::url(
-                Display::return_icon(
-                    'accept.png',
-                    get_lang('Prerequisites'),
-                    [],
-                    ICON_SIZE_SMALL
-                ),
+                Display::getMdiIcon('graph', 'ch-tool-icon', null, 22, get_lang('Prerequisites')),
                 $url.'&action=edit_item_prereq'
             );
         }
         $return .= Display::url(
-            Display::return_icon(
-                'delete.png',
-                get_lang('Delete'),
-                [],
-                ICON_SIZE_SMALL
-            ),
+            Display::getMdiIcon('delete', 'ch-tool-icon', null, 22, get_lang('Delete')),
             $url.'&action=delete_item'
         );
 
@@ -6086,12 +6126,17 @@ class learnpath
                 $itemId = $item['iid'];
                 $type = $item['itemType'];
                 $iconName = str_replace(' ', '', $type);
-                $icon = Display::return_icon(
-                    'lp_'.$iconName.'.png',
-                    '',
-                    [],
-                    ICON_SIZE_TINY
-                );
+                switch ($iconName) {
+                    case 'category':
+                    case 'chapter':
+                    case 'folder':
+                    case 'dir':
+                        $icon = Display::getMdiIcon(ObjectIcon::CHAPTER, 'ch-tool-icon', '', ICON_SIZE_TINY);
+                        break;
+                    default:
+                        $icon = Display::getMdiIcon(ObjectIcon::SINGLE_ELEMENT, 'ch-tool-icon', '', ICON_SIZE_TINY);
+                        break;
+                }
 
                 if ($itemId == $currentItemId) {
                     return '';
@@ -6458,17 +6503,14 @@ class learnpath
 
         $return = '<ul class="mt-2 bg-white list-group lp_resource">';
         $return .= '<li class="list-group-item lp_resource_element disable_drag">';
-        $return .= Display::return_icon('new_exercice.png');
+        $return .= Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, 32, get_lang('New test'));
         $return .= '<a
             href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'&lp_id='.$this->lp_id.'">'.
             get_lang('New test').'</a>';
         $return .= '</li>';
 
-        $previewIcon = Display::return_icon(
-            'preview_view.png',
-            get_lang('Preview')
-        );
-        $quizIcon = Display::return_icon('quiz.png', '', [], ICON_SIZE_TINY);
+        $previewIcon = Display::getMdiIcon('magnify-plus-outline', 'ch-tool-icon', null, 22, get_lang('Preview'));
+        $quizIcon = Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, 16, get_lang('Exercise'));
         $moveIcon = Display::getMdiIcon('cursor-move', 'ch-tool-icon', '', 16, get_lang('Move'));
         $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq();
         foreach ($exercises as $exercise) {
@@ -6562,14 +6604,14 @@ class learnpath
 
         <ul class="mt-2 bg-white list-group lp_resource">
             <li class="list-group-item lp_resource_element disable_drag ">
-                '.Display::return_icon('linksnew.gif').'
+                '.Display::getMdiIcon(ObjectIcon::LINK, 'ch-tool-icon', null, ICON_SIZE_SMALL).'
                 <a
                 href="'.api_get_path(WEB_CODE_PATH).'link/link.php?'.$courseIdReq.'&action=addlink&lp_id='.$this->lp_id.'"
                 title="'.get_lang('Add a link').'">'.
                 get_lang('Add a link').'
                 </a>
             </li>';
-        $linkIcon = Display::return_icon('links.png', '', [], ICON_SIZE_TINY);
+        $linkIcon = Display::getMdiIcon('file-link', 'ch-tool-icon', null, 16, get_lang('Link'));
         foreach ($categorizedLinks as $categoryId => $links) {
             $linkNodes = null;
             /** @var CLink $link */
@@ -6577,7 +6619,7 @@ class learnpath
                 $title = $link->getTitle();
                 $id = $link->getIid();
                 $linkUrl = Display::url(
-                    Display::return_icon('preview_view.png', get_lang('Preview')),
+                    Display::getMdiIcon('magnify-plus-outline', 'ch-tool-icon', null, 22, get_lang('Preview')),
                     api_get_path(WEB_CODE_PATH).'link/link_goto.php?'.api_get_cidreq().'&link_id='.$key,
                     ['target' => '_blank']
                 );
@@ -6638,11 +6680,11 @@ class learnpath
         $return .= '<li class="list-group-item lp_resource_element">';
         $works = getWorkListTeacher(0, 100, null, null, null);
         if (!empty($works)) {
-            $icon = Display::return_icon('works.png', '', [], ICON_SIZE_TINY);
+            $icon = Display::getMdiIcon('inbox-full', 'ch-tool-icon',null, 16, get_lang('Student publication'));
             foreach ($works as $work) {
                 $workId = $work['iid'];
                 $link = Display::url(
-                    Display::return_icon('preview_view.png', get_lang('Preview')),
+                    Display::getMdiIcon('magnify-plus-outline', 'ch-tool-icon', null, 22, get_lang('Preview')),
                     api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId,
                     ['target' => '_blank']
                 );
@@ -6720,7 +6762,7 @@ class learnpath
 
         // First add link
         $return .= '<li class="list-group-item lp_resource_element disable_drag">';
-        $return .= Display::return_icon('new_forum.png');
+        $return .= Display::getMdiIcon('comment-quote	', 'ch-tool-icon', null, 32, get_lang('Create a new forum'));
         $return .= Display::url(
             get_lang('Create a new forum'),
             api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&'.http_build_query([
@@ -6748,7 +6790,7 @@ class learnpath
             $forumId = $forum->getIid();
             $title = Security::remove_XSS($forum->getForumTitle());
             $link = Display::url(
-                Display::return_icon('preview_view.png', get_lang('Preview')),
+                Display::getMdiIcon('magnify-plus-outline', 'ch-tool-icon', null, 22, get_lang('Preview')),
                 api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId,
                 ['target' => '_blank']
             );
@@ -6761,7 +6803,7 @@ class learnpath
             $return .= '<a class="moved" href="#">';
             $return .= $moveIcon;
             $return .= ' </a>';
-            $return .= Display::return_icon('forum.png', '', [], ICON_SIZE_TINY);
+            $return .= Display::getMdiIcon('comment-quote', 'ch-tool-icon', null, 16, get_lang('Forum'));
 
             $moveLink = Display::url(
                 $title.' '.$link,
@@ -6790,7 +6832,7 @@ class learnpath
                 foreach ($threads as $thread) {
                     $threadId = $thread->getIid();
                     $link = Display::url(
-                        Display::return_icon('preview_view.png', get_lang('Preview')),
+                        Display::getMdiIcon('magnify-plus-outline', 'ch-tool-icon', null, 22, get_lang('Preview')),
                         api_get_path(WEB_CODE_PATH).
                         'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId,
                         ['target' => '_blank']
@@ -6804,7 +6846,7 @@ class learnpath
                     $return .= '&nbsp;<a class="moved" href="#">';
                     $return .= $moveIcon;
                     $return .= ' </a>';
-                    $return .= Display::return_icon('forumthread.png', get_lang('Thread'), [], ICON_SIZE_TINY);
+                    $return .= Display::getMdiIcon('format-quote-open', 'ch-tool-icon', null, 16, get_lang('Thread'));
                     $return .= '<a
                         class="moved link_with_id"
                         data-id="'.$threadId.'"
@@ -7154,7 +7196,7 @@ class learnpath
 
     public static function getCategorySessionId($id)
     {
-        if (false === api_get_configuration_value('allow_session_lp_category')) {
+        if ('true' !== api_get_setting('lp.allow_session_lp_category')) {
             return 0;
         }
 
@@ -7544,7 +7586,7 @@ class learnpath
                     CURLOPT_MAXREDIRS => 10,
                 ];
 
-                $proxySettings = api_get_configuration_value('proxy_settings');
+                $proxySettings = api_get_setting('platform.proxy_settings', true);
                 if (!empty($proxySettings) &&
                     isset($proxySettings['curl_setopt_array'])
                 ) {
@@ -8053,8 +8095,8 @@ class learnpath
      */
     public static function getSubscriptionSettings()
     {
-        $subscriptionSettings = api_get_configuration_value('lp_subscription_settings');
-        if (empty($subscriptionSettings)) {
+        $subscriptionSettings = api_get_setting('lp.lp_subscription_settings', true);
+        if (!is_array($subscriptionSettings)) {
             // By default, allow both settings
             $subscriptionSettings = [
                 'allow_add_users_to_lp' => true,
@@ -8386,7 +8428,7 @@ class learnpath
 
     public function setItemTitle(FormValidator $form)
     {
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $form->addHtmlEditor(
                 'title',
                 get_lang('Title'),
@@ -8482,18 +8524,20 @@ class learnpath
      */
     public static function getUserIdentifierForExternalServices()
     {
-        if (api_get_configuration_value('scorm_api_username_as_student_id')) {
-            return api_get_user_info(api_get_user_id())['username'];
-        } elseif (null != api_get_configuration_value('scorm_api_extrafield_to_use_as_student_id')) {
-            $extraFieldValue = new ExtraFieldValue('user');
-            $extrafield = $extraFieldValue->get_values_by_handler_and_field_variable(
-                api_get_user_id(),
-                api_get_configuration_value('scorm_api_extrafield_to_use_as_student_id')
-            );
-
+        $scormApiExtraFieldUseStudentId = api_get_setting('lp.scorm_api_extrafield_to_use_as_student_id');
+        $extraFieldValue = new ExtraFieldValue('user');
+        $extrafield = $extraFieldValue->get_values_by_handler_and_field_variable(
+            api_get_user_id(),
+            $scormApiExtraFieldUseStudentId
+        );
+        if (is_array($extrafield) && isset($extrafield['value'])) {
             return $extrafield['value'];
         } else {
-            return api_get_user_id();
+            if ('true' === $scormApiExtraFieldUseStudentId) {
+                return api_get_user_info(api_get_user_id())['username'];
+            } else {
+                return api_get_user_id();
+            }
         }
     }
 
@@ -8502,13 +8546,17 @@ class learnpath
      *
      * @param array $orderList A associative array with id and parent_id keys.
      */
-    public static function sortItemByOrderList(CLpItem $rootItem, array $orderList = [], $flush = true)
+    public static function sortItemByOrderList(CLpItem $rootItem, array $orderList = [], $flush = true, $lpItemRepo = null, $em = null)
     {
         if (empty($orderList)) {
             return true;
         }
-        $lpItemRepo = Container::getLpItemRepository();
-        $em = Database::getManager();
+        if (!isset($lpItemRepo)) {
+            $lpItemRepo = Container::getLpItemRepository();
+        }
+        if (!isset($em)) {
+            $em = Database::getManager();
+        }
         $counter = 2;
         $rootItem->setDisplayOrder(1);
         $rootItem->setPreviousItemId(null);
@@ -8534,17 +8582,10 @@ class learnpath
             /** @var CLpItem $itemEntity */
             $itemEntity = $lpItemRepo->find($itemId);
             $itemEntity->setParent($parent);
-            $previousId = (int) $itemEntity->getPreviousItemId();
-            //if (0 === $previousId) {
-                $itemEntity->setPreviousItemId(null);
-            //}
-
-            $nextId = (int) $itemEntity->getNextItemId();
-            //if (0 === $nextId) {
-                $itemEntity->setNextItemId(null);
-            //}
-
+            $itemEntity->setPreviousItemId(null);
+            $itemEntity->setNextItemId(null);
             $itemEntity->setDisplayOrder($counter);
+
             $em->persist($itemEntity);
             if ($flush) {
                 $em->flush();
@@ -8552,7 +8593,6 @@ class learnpath
             $counter++;
         }
 
-        $em->flush();
         $lpItemRepo->recoverNode($rootItem, 'displayOrder');
         $em->persist($rootItem);
         if ($flush) {
@@ -8560,6 +8600,32 @@ class learnpath
         }
 
         return true;
+    }
+
+    public static function move(int $lpId, string $direction)
+    {
+        $em = Database::getManager();
+        /** @var CLp $lp */
+        $lp = Container::getLpRepository()->find($lpId);
+        if ($lp) {
+            $resourceNode = $lp->getResourceNode();
+            $position = $resourceNode->getDisplayOrder();
+            $resourceNodeId = $resourceNode->getId();
+
+            $item = $em->find(ResourceNode::class, $resourceNodeId);
+            if ($item) {
+                $newPosition = 0;
+                if ('down' === $direction) {
+                    $newPosition = $position + 1;
+                }
+                if ('up' === $direction) {
+                    $newPosition = $position - 1;
+                }
+                $item->setDisplayOrder($newPosition);
+                $em->persist($item);
+                $em->flush();
+            }
+        }
     }
 
     /**

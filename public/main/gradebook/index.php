@@ -69,7 +69,7 @@ switch ($action) {
         }
         break;
     case 'export_table':
-        $hidePdfReport = api_get_configuration_value('gradebook_hide_pdf_report_button');
+        $hidePdfReport = ('true' === api_get_setting('gradebook.gradebook_hide_pdf_report_button'));
         if ($hidePdfReport) {
             api_not_allowed(true);
         }
@@ -458,9 +458,9 @@ if (isset($_GET['deletelink'])) {
                         thread_qualify_max = 0,
                         thread_weight = 0,
                         thread_title_qualify = ""
-					WHERE c_id = '.$course_id.' AND iid = (
+					WHERE iid = (
 					    SELECT ref_id FROM '.$tbl_grade_links.'
-					    WHERE id='.$get_delete_link.' AND type = '.LINK_FORUM_THREAD.'
+					    WHERE id = '.$get_delete_link.' AND type = '.LINK_FORUM_THREAD.'
                     )';
             Database::query($sql);
             // clean attendance
@@ -469,7 +469,7 @@ if (isset($_GET['deletelink'])) {
                         attendance_qualify_title = ""
 				 	WHERE iid = (
 				 	    SELECT ref_id FROM '.$tbl_grade_links.'
-				 	    WHERE id='.$get_delete_link.' AND type = '.LINK_ATTENDANCE.'
+				 	    WHERE id = '.$get_delete_link.' AND type = '.LINK_ATTENDANCE.'
                     )';
             Database::query($sql);
             $link[0]->delete();
@@ -831,7 +831,7 @@ if (!empty($selectCat)) {
 }
 
 if (!api_is_allowed_to_edit(null, true)) {
-    $allowButton = false === api_get_configuration_value('gradebook_hide_pdf_report_button');
+    $allowButton = ('false' === api_get_setting('gradebook.gradebook_hide_pdf_report_button'));
     if ($allowButton) {
         $actionsLeft .= Display::url(
             Display::getMdiIcon('file-pdf-box').get_lang('Download report in PDF'),
@@ -933,10 +933,10 @@ if (isset($first_time) && 1 == $first_time && api_is_allowed_to_edit(null, true)
         $i = 0;
         $allcat = [];
         $model = ExerciseLib::getCourseScoreModel();
-        $allowGraph = false === api_get_configuration_value('gradebook_hide_graph');
+        $allowGraph = ('false' === api_get_setting('gradebook.gradebook_hide_graph'));
         $isAllow = api_is_allowed_to_edit(null, true);
 
-        $settings = api_get_configuration_value('gradebook_pdf_export_settings');
+        $settings = api_get_setting('gradebook.gradebook_pdf_export_settings', true);
         $showFeedBack = true;
         if (isset($settings['hide_feedback_textarea']) && $settings['hide_feedback_textarea']) {
             $showFeedBack = false;
@@ -983,7 +983,7 @@ if (isset($first_time) && 1 == $first_time && api_is_allowed_to_edit(null, true)
                     if ('true' === api_get_setting('gradebook_detailed_admin_view')) {
                         $loadStats = [1, 2, 3];
                     } else {
-                        if (false !== api_get_configuration_value('gradebook_enable_best_score')) {
+                        if ('true' === api_get_setting('gradebook.gradebook_enable_best_score')) {
                             $loadStats = [2];
                         }
                     }

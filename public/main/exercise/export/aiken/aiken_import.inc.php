@@ -10,6 +10,8 @@
  * @author César Perales <cesar.perales@gmail.com> Parse function for Aiken format
  */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 /**
  * This function displays the form for import of the zip file with qti2.
  *
@@ -20,12 +22,7 @@ function aiken_display_form()
     $name_tools = get_lang('Import Aiken quiz');
     $form = '<div class="actions">';
     $form .= '<a href="exercise.php?show=test&'.api_get_cidreq().'">'.
-        Display::return_icon(
-            'back.png',
-            get_lang('Back to Tests tool'),
-            '',
-            ICON_SIZE_MEDIUM
-        ).'</a>';
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to Tests tool')).'</a>';
     $form .= '</div>';
     $form_validator = new FormValidator(
         'aiken_upload',

@@ -12,6 +12,10 @@
  * @author Roan EMbrechts, code cleaning
  */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
+
 // we are in the admin area so we do not need a course id
 $cidReset = true;
 
@@ -77,70 +81,30 @@ $htmlHeadXtra[] = '<script>
         return false;
     });
 
- 	//$(window).load(function () {
-      $(".make_visible_and_invisible").attr("href","javascript:void(0)");
-	//});
+    $(".make_visible_and_invisible").click(function(e) {
+        e.preventDefault();
 
- 	$("td .make_visible_and_invisible").click(function () {
-		make_visible="visible.png";
-		make_invisible="invisible.png";
-		id_link_tool=$(this).attr("id");
-		id_img_link_tool="img"+id_link_tool;
-		path_name_of_imglinktool=$("#"+id_img_link_tool).attr("src");
-		link_info_id=id_link_tool.split("linktool_");
-		link_id=link_info_id[1];
+        var id_link_tool = $(this).attr("id");
+        var link_id = id_link_tool.split("linktool_")[1];
+        var currentIcon = $("#imglinktool_" + link_id);
 
-		link_tool_info=path_name_of_imglinktool.split("/");
-		my_image_tool=link_tool_info[link_tool_info.length-1];
+        $.ajax({
+            type: "POST",
+            url: "../admin/languages.php",
+            data: { id: link_id, visibility: currentIcon.hasClass("mdi-toggle-switch") ? 0 : 1, sent_http_request: 1 },
+            beforeSend: function() {
+                $("#id_content_message").html("<div class=\'warning-message alert alert-warning\'><em class=\'fa fa-refresh fa-spin\'></em>'.get_lang('Loading'). '...</div>");
+            },
+            success: function(response) {
+                if (response === "set_visible" || response === "set_hidden") {
+                    var newIconClass = (response === "set_visible") ? "mdi-toggle-switch" : "mdi-toggle-switch-off";
+                    var oldIconClass = (response === "set_visible") ? "mdi-toggle-switch-off" : "mdi-toggle-switch";
 
-
-		if (my_image_tool=="visible.png") {
-			path_name_of_imglinktool=path_name_of_imglinktool.replace(make_visible,make_invisible);
-			my_visibility=0;
-		} else {
-			path_name_of_imglinktool=path_name_of_imglinktool.replace(make_invisible,make_visible);
-			my_visibility=1;
-		}
-
-		$.ajax({
-			contentType: "application/x-www-form-urlencoded",
-			beforeSend: function(myObject) {
-				$("#id_content_message").html("<div class=\"warning-message alert alert-warning\"><em class=\"fa fa-refresh fa-spin\"></em>  '.get_lang('Loading').'</div>");
-			},
-			type: "POST",
-			url: "../admin/languages.php",
-			data: "id="+link_id+"&visibility="+my_visibility+"&sent_http_request=1",
-			success: function(datos) {
-
-                if (datos=="set_visible" || datos=="set_hidden") {
-                    $("#"+id_img_link_tool).attr("src",path_name_of_imglinktool);
-
-                    if (my_image_tool=="visible.png") {
-                        $("#"+id_img_link_tool).attr("alt","'.get_lang('Make available').'");
-                        $("#"+id_img_link_tool).attr("title","'.get_lang('Make available').'");
-                    } else {
-                        $("#"+id_img_link_tool).attr("alt","'.get_lang('Make unavailable').'");
-                        $("#"+id_img_link_tool).attr("title","'.get_lang('Make unavailable').'");
-                    }
-
-                    if (datos=="set_visible") {
-                        $("#id_content_message").html("<div class=\"confirmation-message alert alert-success\">'.get_lang('LanguageIsNowVisible').'</div>");
-                    }
-
-                    if (datos=="set_hidden") {
-                        $("#id_content_message").html("<div class=\"confirmation-message alert alert-success\">'.get_lang('The language has been hidden. It will not be possible to use it until it becomes visible again.').'</div>");
-                    }
+                    currentIcon.removeClass(oldIconClass).addClass(newIconClass);
                 }
-
-                var action = datos.split(":")[0];
-                if (action && action == "confirm") {
-                    var id = datos.split(":")[1];
-                    var sure = "<div class=\"warning-message alert alert-warning\">'.get_lang('There are users using this language. Do you want to disable this language and set all this users with the default portal language?').'<br /><br /><a href=\"languages.php?action=make_unavailable_confirmed&id="+id+"\" class=\"btn btn--plain\"><em class=\"fa fa-eye\"></em> '.get_lang('Make unavailable').'</a></div>";
-                    $("#id_content_message").html(sure);
-                    $("html, body").animate({ scrollTop: 0 }, 200);
-				}
-		} });
-	});
+            }
+        });
+    });
 
  });
 </script>';
@@ -303,16 +267,11 @@ while ($row = Database::fetch_array($result_select)) {
     $row_td[] = $row['english_name'].' ('.$row['isocode'].')';
 
     if ($row['isocode'] == $currentLanguage) {
-        $setplatformlanguage = Display::return_icon(
-            'languages.png',
-            get_lang('Current portal\'s language'),
-            '',
-            ICON_SIZE_SMALL
-        );
+        $setplatformlanguage = Display::getMdiIcon(ToolIcon::TRANSLATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Current portal\'s language'));
     } else {
         $setplatformlanguage =
             "<a href=\"javascript:if (confirm('".addslashes(get_lang('Are you sure you want to set this language as the portal\'s default?'))."')) { location.href='".api_get_self()."?action=setplatformlanguage&id=".$row['id']."'; }\">".
-            Display::return_icon('languages_na.png', get_lang('Set language as default'), null, ICON_SIZE_SMALL)."</a>";
+            Display::getMdiIcon(ToolIcon::TRANSLATION, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Set language as default'))."</a>";
     }
 
     $allow_delete_sub_language = null;
@@ -324,7 +283,7 @@ while ($row = Database::fetch_array($result_select)) {
         if (false === $verified_if_is_sub_language) {
             $verified_if_is_father = SubLanguageManager::check_if_language_is_father($row['id']);
             $allow_use_sub_language = "&nbsp;<a href='sub_language_add.php?action=definenewsublanguage&id=".$row['id']."'>".
-                Display::return_icon('new_language.png', get_lang('Create sub-language'), [], ICON_SIZE_SMALL)."</a>";
+                Display::getMdiIcon(ToolIcon::TRANSLATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Create sub-language'))."</a>";
             if (true === $verified_if_is_father) {
                 $allow_add_term_sub_language = '';
             } else {
@@ -333,24 +292,25 @@ while ($row = Database::fetch_array($result_select)) {
         } else {
             $allow_use_sub_language = '';
             $all_information_of_sub_language = SubLanguageManager::get_all_information_of_language($row['id']);
-            $allow_add_term_sub_language = "&nbsp;<a href='sub_language.php?action=registersublanguage&id=".Security::remove_XSS($all_information_of_sub_language['parent_id'])."&sub_language_id=".Security::remove_XSS($row['id'])."'>".Display::return_icon('2rightarrow.png', get_lang('Add terms to the sub-language'), ['width' => ICON_SIZE_SMALL, 'height' => ICON_SIZE_SMALL])."</a>";
-            $allow_delete_sub_language = "&nbsp;<a href='sub_language_add.php?action=deletesublanguage&id=".Security::remove_XSS($all_information_of_sub_language['parent_id'])."&sub_language_id=".Security::remove_XSS($row['id'])."'>".Display::return_icon('delete.png', get_lang('Delete sub-language'), ['width' => ICON_SIZE_SMALL, 'height' => ICON_SIZE_SMALL])."</a>";
+            $allow_add_term_sub_language = "&nbsp;<a href='sub_language.php?action=registersublanguage&id=".Security::remove_XSS($all_information_of_sub_language['parent_id'])."&sub_language_id=".Security::remove_XSS($row['id'])."'>".Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add terms to the sub-language'))."</a>";
+            $allow_delete_sub_language = "&nbsp;<a href='sub_language_add.php?action=deletesublanguage&id=".Security::remove_XSS($all_information_of_sub_language['parent_id'])."&sub_language_id=".Security::remove_XSS($row['id'])."'>".Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete sub-language'))."</a>";
         }
     }
 
     if ($row['isocode'] == $currentLanguage) {
-        $row_td[] = Display::return_icon('visible.png', get_lang('Visible')).
+        $row_td[] = Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Visible')).
             "<a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".
-            Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>
+            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))."</a>
                      &nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
     } else {
-        if (1 == $row['available']) {
-            $row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='".api_get_self()."?action=makeunavailable&id=".$row['id']."'>".
-                Display::return_icon('visible.png', get_lang('Make unavailable'), ['id' => 'imglinktool_'.$row['id']], ICON_SIZE_SMALL)."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
-        } else {
-            $row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='".api_get_self()."?action=makeavailable&id=".$row['id']."'>".
-                Display::return_icon('invisible.png', get_lang('Make available'), ['id' => 'imglinktool_'.$row['id']], ICON_SIZE_SMALL)."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
-        }
+        $action = ($row['available'] == 1) ? 'makeunavailable' : 'makeavailable';
+        $icon = ($row['available'] == 1) ? StateIcon::ACTIVE : StateIcon::INACTIVE;
+        $tooltip = ($row['available'] == 1) ? get_lang('Make unavailable') : get_lang('Make available');
+
+        $row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='".api_get_self()."?action=$action&id=".$row['id']."'>".
+            Display::getMdiIcon($icon, 'ch-tool-icon', null, ICON_SIZE_SMALL, $tooltip, ['id' => 'imglinktool_'.$row['id']])."</a>
+            <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))."</a>
+            &nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
     }
     $language_data[] = $row_td;
 }

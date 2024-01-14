@@ -8,7 +8,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 // Access restrictions
 api_protect_admin_script(true);
 
-if (true != api_get_configuration_value('sync_db_with_schema')) {
+if ('false' === api_get_setting('platform.sync_db_with_schema')) {
     api_not_allowed(true);
 }
 

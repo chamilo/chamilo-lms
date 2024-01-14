@@ -2,7 +2,7 @@ api_platform:
     title: 'Chamilo Api'
     version: '1.0.0'
     mapping:
-        paths: ['%kernel.project_dir%/src/CoreBundle/Entity', '%kernel.project_dir%/src/CourseBundle/Entity']
+        paths: ['%kernel.project_dir%/src/CoreBundle/Entity', '%kernel.project_dir%/src/CourseBundle/Entity', '%kernel.project_dir%/src/CoreBundle/ApiResource',]
     patch_formats:
         json: ['application/merge-patch+json']
     swagger:
@@ -47,6 +47,8 @@ api_platform:
         ApiPlatform\Core\Exception\FilterValidationException: 400
         Doctrine\ORM\OptimisticLockException: 409
         Doctrine\DBAL\Exception\UniqueConstraintViolationException: 409
+
+    metadata_backward_compatibility_layer: false
 
 #    mercure:
 #        hub_url: '%env(MERCURE_SUBSCRIBE_URL)%'

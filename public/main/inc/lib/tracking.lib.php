@@ -16,6 +16,8 @@ use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
 use ExtraField as ExtraFieldModel;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  *  Class Tracking.
@@ -157,7 +159,7 @@ class Tracking
             return '';
         }
 
-        $hideTime = api_get_configuration_value('hide_lp_time');
+        $hideTime = ('true' === api_get_setting('lp.hide_lp_time'));
         $lp_id = (int) $lp_id;
 
         $lp_item_id = (int) $lp_item_id;
@@ -218,13 +220,25 @@ class Tracking
         $extend_all = 0;
         if (!empty($extendedAll)) {
             $extend_all_link = Display::url(
-                Display::return_icon('view_less_stats.gif', get_lang('Hide all attempts')),
+                Display::getMdiIcon(
+                    ActionIcon::VIEW_LESS,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('Hide all attempts')
+                ),
                 api_get_self().'?action=stats'.$url_suffix
             );
             $extend_all = 1;
         } else {
             $extend_all_link = Display::url(
-                Display::return_icon('view_more_stats.gif', get_lang('Show all attempts')),
+                Display::getMdiIcon(
+                    ActionIcon::VIEW_MORE,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('Show all attempts')
+                ),
                 api_get_self().'?action=stats&extend_all=1'.$url_suffix
             );
         }
@@ -405,8 +419,11 @@ class Tracking
                     $extend_link = '';
                     if (!empty($inter_num)) {
                         $extend_link = Display::url(
-                            Display::return_icon(
-                                'visible.png',
+                            Display::getMdiIcon(
+                                ActionIcon::VISIBLE,
+                                'ch-tool-icon',
+                                null,
+                                ICON_SIZE_SMALL,
                                 get_lang('Hide attempt view')
                             ),
                             api_get_self().'?action=stats&fold_id='.$my_item_id.$url_suffix
@@ -478,27 +495,51 @@ class Tracking
                                 // The extend button for this attempt has been clicked.
                                 $extend_this_attempt = 1;
                                 $extend_attempt_link = Display::url(
-                                    Display::return_icon('visible.png', get_lang('Hide attempt view')),
+                                    Display::getMdiIcon(
+                                        ActionIcon::VISIBLE,
+                                        'ch-tool-icon',
+                                        null,
+                                        ICON_SIZE_SMALL,
+                                        get_lang('Hide attempt view')
+                                    ),
                                     api_get_self().'?action=stats&extend_id='.$my_item_id.'&fold_attempt_id='.$row['iv_id'].$url_suffix
                                 );
                                 if ($accessToPdfExport) {
                                     $extend_attempt_link .= '&nbsp;'.
                                         Display::url(
-                                            Display::return_icon('pdf.png', get_lang('Export to PDF')),
+                                            Display::getMdiIcon(
+                                                ActionIcon::EXPORT_PDF,
+                                                'ch-tool-icon',
+                                                null,
+                                                ICON_SIZE_SMALL,
+                                                get_lang('Export to PDF')
+                                            ),
                                             api_get_self().'?action=export_stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix,
                                             ['class' => 'export']
                                         );
                                 }
                             } else { // Same case if fold_attempt_id is set, so not implemented explicitly.
-                                // The extend button for this attempt has not been clicked.
+                                // The "extend" button for this attempt has not been clicked.
                                 $extend_attempt_link = Display::url(
-                                    Display::return_icon('invisible.png', get_lang('Extend attempt view')),
+                                    Display::getMdiIcon(
+                                        ActionIcon::INVISIBLE,
+                                        'ch-tool-icon',
+                                        null,
+                                        ICON_SIZE_SMALL,
+                                        get_lang('Extend attempt view')
+                                    ),
                                     api_get_self().'?action=stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
                                 );
                                 if ($accessToPdfExport) {
                                     $extend_attempt_link .= '&nbsp;'.
                                         Display::url(
-                                            Display::return_icon('pdf.png', get_lang('Export to PDF')),
+                                            Display::getMdiIcon(
+                                                ActionIcon::EXPORT_PDF,
+                                                'ch-tool-icon',
+                                                null,
+                                                ICON_SIZE_SMALL,
+                                                get_lang('Export to PDF')
+                                            ),
                                             api_get_self().'?action=export_stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix,
                                             ['class' => 'export']
                                         );
@@ -553,8 +594,11 @@ class Tracking
 
                         if ('dir' !== $row['item_type']) {
                             if (!$is_allowed_to_edit && $result_disabled_ext_all) {
-                                $view_score = Display::return_icon(
-                                    'invisible.png',
+                                $view_score = Display::getMdiIcon(
+                                    ActionIcon::INVISIBLE,
+                                    'ch-tool-icon',
+                                    null,
+                                    ICON_SIZE_SMALL,
                                     get_lang('Results hidden by the exercise setting')
                                 );
                             } else {
@@ -716,14 +760,26 @@ class Tracking
                             // The extend button for this attempt has been clicked.
                             $extend_this_attempt = 1;
                             $extend_attempt_link = Display::url(
-                                Display::return_icon('visible.png', get_lang('Hide attempt view')),
+                                Display::getMdiIcon(
+                                    ActionIcon::VISIBLE,
+                                    'ch-tool-icon',
+                                    null,
+                                    ICON_SIZE_SMALL,
+                                    get_lang('Hide attempt view')
+                                ),
                                 api_get_self().'?action=stats&extend_id='.$my_item_id.'&fold_attempt_id='.$row['iv_id'].$url_suffix
                             );
                         } else {
                             // Same case if fold_attempt_id is set, so not implemented explicitly.
-                            // The extend button for this attempt has not been clicked.
+                            // The "Extend" button for this attempt has not been clicked.
                             $extend_attempt_link = Display::url(
-                                Display::return_icon('invisible.png', get_lang('Extend attempt view')),
+                                Display::getMdiIcon(
+                                    ActionIcon::INVISIBLE,
+                                    'ch-tool-icon',
+                                    null,
+                                    ICON_SIZE_SMALL,
+                                    get_lang('Extend attempt view')
+                                ),
                                 api_get_self().'?action=stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
                             );
                         }
@@ -737,7 +793,13 @@ class Tracking
                     $extend_link = '';
                     if ($inter_num > 1) {
                         $extend_link = Display::url(
-                            Display::return_icon('invisible.png', get_lang('Extend attempt view')),
+                            Display::getMdiIcon(
+                                ActionIcon::INVISIBLE,
+                                'ch-tool-icon',
+                                null,
+                                ICON_SIZE_SMALL,
+                                get_lang('Extend attempt view')
+                            ),
                             api_get_self().'?action=stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
                         );
                     }
@@ -910,8 +972,11 @@ class Tracking
                                 ) {
                                     $showRowspan = true;
                                     $correct_test_link = Display::url(
-                                        Display::return_icon(
-                                            'view_less_stats.gif',
+                                        Display::getMdiIcon(
+                                            ActionIcon::VIEW_LESS,
+                                            'ch-tool-icon',
+                                            null,
+                                            ICON_SIZE_SMALL,
                                             get_lang('Hide all attempts')
                                         ),
                                         api_get_self().'?action=stats'.$my_url_suffix.'&sid='.$sessionId.'&lp_item_id='.$my_id.'#'.$linkId,
@@ -919,8 +984,11 @@ class Tracking
                                     );
                                 } else {
                                     $correct_test_link = Display::url(
-                                        Display::return_icon(
-                                            'view_more_stats.gif',
+                                        Display::getMdiIcon(
+                                            ActionIcon::VIEW_MORE,
+                                            'ch-tool-icon',
+                                            null,
+                                            ICON_SIZE_SMALL,
                                             get_lang(
                                                 'Show all attemptsByExercise'
                                             )
@@ -958,8 +1026,11 @@ class Tracking
                             $scoreItem = null;
                             if ('quiz' === $row['item_type']) {
                                 if (!$is_allowed_to_edit && $result_disabled_ext_all) {
-                                    $scoreItem .= Display::return_icon(
-                                        'invisible.png',
+                                    $scoreItem .= Display::getMdiIcon(
+                                        ActionIcon::INVISIBLE,
+                                        'ch-tool-icon',
+                                        null,
+                                        ICON_SIZE_SMALL,
                                         get_lang('Results hidden by the exercise setting')
                                     );
                                 } else {
@@ -1102,11 +1173,12 @@ class Tracking
                                             $time_attemp = api_format_time($row_attempts['exe_duration'], 'js');
                                         }
                                         if (!$is_allowed_to_edit && $result_disabled_ext_all) {
-                                            $view_score = Display::return_icon(
-                                                'invisible.png',
-                                                get_lang(
-                                                    'Results hidden by the exercise setting'
-                                                )
+                                            $view_score = Display::getMdiIcon(
+                                                ActionIcon::INVISIBLE,
+                                                'ch-tool-icon',
+                                                null,
+                                                ICON_SIZE_SMALL,
+                                                get_lang('Results hidden by the exercise setting')
                                             );
                                         } else {
                                             // Show only float when need it
@@ -1247,7 +1319,13 @@ class Tracking
         $total_time = str_replace('NaN', '00'.$h.'00\'00"', $total_time);
 
         if (!$is_allowed_to_edit && $result_disabled_ext_all) {
-            $final_score = Display::return_icon('invisible.png', get_lang('Results hidden by the exercise setting'));
+            $final_score = Display::getMdiIcon(
+                ActionIcon::INVISIBLE,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_SMALL,
+                get_lang('Results hidden by the exercise setting')
+            );
             $finalScoreToCsv = get_lang('Results hidden by the exercise setting');
         } else {
             if (is_numeric($total_score)) {
@@ -1782,7 +1860,7 @@ class Tracking
      */
     public static function minimumTimeAvailable($sessionId, $courseId)
     {
-        if (!api_get_configuration_value('lp_minimum_time')) {
+        if ('true' !== api_get_setting('lp.lp_minimum_time')) {
             return false;
         }
 
@@ -2086,7 +2164,12 @@ class Tracking
                                 $url = api_get_path(WEB_CODE_PATH).
                                     'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cid='.$courseInfo['real_id'];
                                 $icon = '<a href="'.$url.'" title="'.get_lang('Remind inactive user').'">
-                                  '.Display::getMdiIcon('alert').'
+                                  '.Display::getMdiIcon(
+                                      StateIcon::WARNING,
+                                      'ch-tool-icon',
+                                      null,
+                                      ICON_SIZE_SMALL
+                                    ).'
                                  </a>';
                             }
 
@@ -3265,13 +3348,13 @@ class Tracking
             // Compose a filter based on optional learning paths list given
             $condition_lp = '';
             if (count($lp_ids) > 0) {
-                $condition_lp = " iid IN(".implode(',', $lp_ids).") ";
+                $condition_lp = " AND iid IN(".implode(',', $lp_ids).") ";
             }
 
             // Check the real number of LPs corresponding to the filter in the
             // database (and if no list was given, get them all)
             $sql = "SELECT DISTINCT(iid) FROM $lpTable
-                    WHERE $condition_lp";
+                    WHERE 1=1 $condition_lp";
             $result = Database::query($sql);
             $session_condition = api_get_session_condition($sessionId);
 
@@ -4521,7 +4604,7 @@ class Tracking
             ],
         ];
 
-        $trackingColumnsConfig = api_get_configuration_value('tracking_columns');
+        $trackingColumnsConfig = api_get_setting('session.tracking_columns', true);
         if (!empty($trackingColumnsConfig)) {
             $trackingColumns = $trackingColumnsConfig;
         }
@@ -4647,11 +4730,12 @@ class Tracking
         if ($show_courses) {
             if (!empty($courses)) {
                 $html .= Display::page_subheader(
-                    Display::return_icon(
-                        'course.png',
-                        get_lang('My courses'),
-                        [],
-                        ICON_SIZE_SMALL
+                    Display::getMdiIcon(
+                        'book-open-page-variant',
+                        'ch-tool-icon',
+                        null,
+                        ICON_SIZE_SMALL,
+                        get_lang('My courses')
                     ).' '.get_lang('My courses')
                 );
 
@@ -4780,11 +4864,23 @@ class Tracking
                         empty($_GET['session_id'])
                     ) {
                         $detailsLink .= '<a href="#course_session_header">';
-                        $detailsLink .= Display::return_icon('2rightarrow_na.png', get_lang('Details'));
+                        $detailsLink .= Display::getMdiIcon(
+                            'fast-forward-outline',
+                            'ch-tool-icon',
+                            null,
+                            ICON_SIZE_SMALL,
+                            get_lang('Details')
+                        );
                         $detailsLink .= '</a>';
                     } else {
                         $detailsLink .= '<a href="'.api_get_self().'?course='.$courseCode.$extra_params.'#course_session_header">';
-                        $detailsLink .= Display::return_icon('2rightarrow.png', get_lang('Details'));
+                        $detailsLink .= Display::getMdiIcon(
+                            'fast-forward-outline',
+                            'ch-tool-icon',
+                            null,
+                            ICON_SIZE_SMALL,
+                            get_lang('Details')
+                        );
                         $detailsLink .= '</a>';
                     }
 
@@ -4921,11 +5017,12 @@ class Tracking
                 );
             }
 
-            $sessionIcon = Display::return_icon(
-                'session.png',
-                get_lang('Course sessions'),
-                [],
-                ICON_SIZE_SMALL
+            $sessionIcon = Display::getMdiIcon(
+                'google-classroom',
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_SMALL,
+                get_lang('Course sessions')
             );
 
             $anchor = Display::url('', '', ['name' => 'course_session_header']);
@@ -5022,16 +5119,22 @@ class Tracking
 
                 if (isset($_GET['session_id']) && $my_session_id == $_GET['session_id']) {
                     $icon = Display::url(
-                        Display::return_icon(
-                            '2rightarrow_na.png',
+                        Display::getMdiIcon(
+                            'fast-forward-outline',
+                            'ch-tool-icon',
+                            null,
+                            ICON_SIZE_SMALL,
                             get_lang('Details')
                         ),
                         api_get_self().'?session_id='.$my_session_id.'#course_session_list'
                     );
                 } else {
                     $icon = Display::url(
-                        Display::return_icon(
-                            '2rightarrow.png',
+                        Display::getMdiIcon(
+                            'fast-forward-outline',
+                            'ch-tool-icon',
+                            null,
+                            ICON_SIZE_SMALL,
                             get_lang('Details')
                         ),
                         api_get_self().'?session_id='.$my_session_id.'#course_session_list'
@@ -5088,10 +5191,12 @@ class Tracking
                     ],
                     'score' => [
                         get_lang('Score').
-                        Display::return_icon(
-                            'info3.gif',
-                            get_lang('Average of tests in Learning Paths'),
-                            ['align' => 'absmiddle', 'hspace' => '3px']
+                        Display::getMdiIcon(
+                            ActionIcon::INFORMATION,
+                            'ch-tool-icon',
+                            null,
+                            ICON_SIZE_SMALL,
+                            get_lang('Average of tests in Learning Paths')
                         ),
                     ],
                     'best_score' => [
@@ -5251,16 +5356,14 @@ class Tracking
                         $_GET['session_id'] == $session_id_from_get
                     ) {
                         $details = Display::url(
-                            Display::return_icon('2rightarrow_na.png', get_lang('Details')),
+                            Display::getMdiIcon('fast-forward-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Details')),
                         '#course_session_data'
                         );
                     } else {
                         $url = api_get_self().
                             '?course='.$course_code.'&session_id='.$session_id_from_get.$extra_params.'#course_session_data';
                         $details = Display::url(
-                            Display::return_icon(
-                                '2rightarrow.png',
-                                get_lang('Details')
+                            Display::getMdiIcon('fast-forward-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Details')
                             ),
                             $url
                         );
@@ -5352,11 +5455,13 @@ class Tracking
             <th>'.get_lang('Ranking').'</th>
             <th>'.get_lang('Best result in course').'</th>
             <th>'.get_lang('Statistics').' '
-                .Display::return_icon(
-                    'info3.gif',
-                    get_lang('In case of multiple attempts, only shows the best result of each learner'),
-                    ['align' => 'absmiddle', 'hspace' => '3px']
-                ).
+                .Display::getMdiIcon(
+                    ActionIcon::INFORMATION,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('In case of multiple attempts')
+                    ).
             '</th>
             </tr>
             </thead>
@@ -5558,7 +5663,7 @@ class Tracking
         ];
 
         $headers = '';
-        $trackingColumns = api_get_configuration_value('tracking_columns');
+        $trackingColumns = api_get_setting('session.tracking_columns', true);
         if (isset($trackingColumns['my_progress_lp'])) {
             foreach ($columnHeaders as $key => $value) {
                 if (!isset($trackingColumns['my_progress_lp'][$key]) ||
@@ -6801,7 +6906,7 @@ class Tracking
     {
         return
             api_is_platform_admin(true, true) ||
-            api_get_session_entity($sessionId)->hasUserAsGeneralCoach(api_get_user_entity()) ||
+            (!empty($sessionId) && api_get_session_entity($sessionId)->hasUserAsGeneralCoach(api_get_user_entity())) ||
             api_is_allowed_to_create_course() ||
             api_is_course_tutor() ||
             api_is_course_admin();
@@ -7567,7 +7672,13 @@ class Tracking
                 get_lang('BestAttempt'),
                 get_lang('Ranking'),
                 get_lang('BestResultInCourse'),
-                get_lang('Statistics').Display::return_icon('info3.gif', get_lang('OnlyBestResultsPerStudent')),
+                get_lang('Statistics').Display::getMdiIcon(
+                    ActionIcon::INFORMATION,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('OnlyBestResultsPerStudent')
+                ),
             ]
         );
 
@@ -7718,7 +7829,7 @@ class Tracking
             'last_connection' => get_lang('LastConnexion'),
         ];
 
-        $trackingColumns = api_get_configuration_value('tracking_columns');
+        $trackingColumns = api_get_setting('session.tracking_columns', true);
 
         if (isset($trackingColumns['my_progress_lp'])) {
             $columnHeaders = array_filter(
@@ -7740,7 +7851,7 @@ class Tracking
             $columnHeaders['student_follow_page_add_LP_subscription_info'] = get_lang('Unlock');
         }
 
-        if (true === api_get_configuration_value('student_follow_page_add_LP_acquisition_info')) {
+        if ('true' === api_get_setting('lp.student_follow_page_add_LP_acquisition_info')) {
             $columnHeaders['student_follow_page_add_LP_acquisition_info'] = get_lang('Acquisition');
         }
 
@@ -8651,7 +8762,7 @@ class TrackingCourseLog
         $sortByFirstName = api_sort_by_first_name();
         Session::write('user_id_list', []);
         $userIdList = [];
-        $addExerciseOption = api_get_configuration_value('add_exercise_best_attempt_in_report');
+        $addExerciseOption = api_get_setting('exercise.add_exercise_best_attempt_in_report', true);
         $exerciseResultsToCheck = [];
         if (!empty($addExerciseOption) && isset($addExerciseOption['courses']) &&
             isset($addExerciseOption['courses'][$courseCode])
@@ -8801,8 +8912,13 @@ class TrackingCourseLog
             $url = $urlBase.'&student='.$user['user_id'];
 
             $user['link'] = '<center><a href="'.$url.'">
-                            '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
-                             </a></center>';
+                            '.Display::getMdiIcon(
+                                'fast-forward-outline',
+                                'ch-tool-icon',
+                                null,
+                                ICON_SIZE_MEDIUM,
+                                get_lang('Details')
+                ).'</a></center>';
 
             // store columns in array $users
             $user_row = [];
@@ -9015,8 +9131,13 @@ class TrackingCourseLog
                 <center>
                  <a
                     href="../my_space/myStudents.php?student='.$user['user_id'].'&details=true&cid='.$courseId.'&origin=tracking_course&sid='.$sessionId.'">
-                    '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
-                 </a>
+                    '.Display::getMdiIcon(
+                        'fast-forward-outline',
+                        'ch-tool-icon',
+                        null,
+                        ICON_SIZE_SMALL,
+                        get_lang('Details')
+                ).'</a>
                 </center>';
 
             // store columns in array $users
@@ -9047,37 +9168,37 @@ class TrackingCourseLog
     public static function actionsLeft($current, $sessionId = 0, $addWrapper = true)
     {
         $usersLink = Display::url(
-            Display::return_icon('user.png', get_lang('Report on learners'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('account', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Report on learners')),
             'courseLog.php?'.api_get_cidreq(true, false)
         );
 
         $groupsLink = Display::url(
-            Display::return_icon('group.png', get_lang('Group reporting'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('account-group', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Group reporting')),
             'course_log_groups.php?'.api_get_cidreq()
         );
         $resourcesLink = '';
         /*$resourcesLink = Display::url(
-            Display::return_icon('tools.png', get_lang('Report on resource'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('chart-box', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Report on resource')),
             'course_log_resources.php?'.api_get_cidreq(true, false)
         );*/
 
         $courseLink = Display::url(
-            Display::return_icon('course.png', get_lang('Course report'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('book-open-page-variant	', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Course report')),
             'course_log_tools.php?'.api_get_cidreq(true, false)
         );
 
         $examLink = Display::url(
-            Display::return_icon('quiz.png', get_lang('Exam tracking'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('chart-box', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Exam tracking')),
             api_get_path(WEB_CODE_PATH).'tracking/exams.php?'.api_get_cidreq()
         );
 
         $eventsLink = Display::url(
-            Display::return_icon('security.png', get_lang('Audit report'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('security', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Audit report')),
             api_get_path(WEB_CODE_PATH).'tracking/course_log_events.php?'.api_get_cidreq()
         );
 
         $lpLink = Display::url(
-            Display::return_icon('scorms.png', get_lang('CourseLPsGenericStats'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('map-marker-path', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CourseLPsGenericStats')),
             api_get_path(WEB_CODE_PATH).'tracking/lp_report.php?'.api_get_cidreq()
         );
 
@@ -9090,7 +9211,7 @@ class TrackingCourseLog
             $checkExport = $attendance->getAttendanceLogin($startDate, $endDate);
             if (false !== $checkExport) {
                 $attendanceLink = Display::url(
-                    Display::return_icon('attendance_list.png', get_lang('Logins'), '', ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon('av-timer', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Logins')),
                     api_get_path(WEB_CODE_PATH).'attendance/index.php?'.api_get_cidreq().'&action=calendar_logins'
                 );
             }
@@ -9099,61 +9220,51 @@ class TrackingCourseLog
         switch ($current) {
             case 'users':
                 $usersLink = Display::url(
-                        Display::return_icon(
-                        'user_na.png',
-                        get_lang('Report on learners'),
-                        [],
-                        ICON_SIZE_MEDIUM
-                    ),
+                        Display::getMdiIcon('account', 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Report on learners')),
                     '#'
                 );
                 break;
             case 'groups':
                 $groupsLink = Display::url(
-                    Display::return_icon('group_na.png', get_lang('Group reporting'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon('account-group', 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Group reporting')),
                     '#'
                 );
                 break;
             case 'courses':
                 $courseLink = Display::url(
-                    Display::return_icon('course_na.png', get_lang('Course report'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon('book-open-page-variant', 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Course report')),
                     '#'
                 );
                 break;
             case 'resources':
                 $resourcesLink = Display::url(
-                    Display::return_icon(
-                    'tools_na.png',
-                    get_lang('Report on resource'),
-                    [],
-                    ICON_SIZE_MEDIUM
-                    ),
+                    Display::getMdiIcon('package-variant-closed', 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Report on resource')),
                     '#'
                 );
                 break;
             case 'exams':
                 $examLink = Display::url(
-                    Display::return_icon('quiz_na.png', get_lang('Exam tracking'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Exam tracking')),
                     '#'
                 );
                 break;
             case 'logs':
                 $eventsLink = Display::url(
-                    Display::return_icon('security_na.png', get_lang('Audit report'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon('security', 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Audit report')),
                     '#'
                 );
                 break;
             case 'attendance':
                 if (!empty($sessionId)) {
                     $attendanceLink = Display::url(
-                        Display::return_icon('attendance_list.png', get_lang('Logins'), '', ICON_SIZE_MEDIUM),
+                        Display::getMdiIcon('av-timer', 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Logins')),
                         '#'
                     );
                 }
                 break;
             case 'lp':
                 $lpLink = Display::url(
-                    Display::return_icon('scorms_na.png', get_lang('CourseLPsGenericStats'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon('map-marker-path', 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('CourseLPsGenericStats')),
                     '#'
                 );
                 break;

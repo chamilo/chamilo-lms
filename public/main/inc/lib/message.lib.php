@@ -37,23 +37,22 @@ class MessageManager
                 );
                 $sender = $message->getSender();
 
-                $deleteButton = '';
-                if (!empty($url) && $currentUserId === $sender->getId()) {
-                    $deleteButton = Display::url(
-                        get_lang('Delete'),
-                        $url.'&action=delete_message&message_id='.$messageId,
-                        ['class' => 'btn btn--danger']
-                    );
+                $deleteLink = '';
+                if (!empty($url) && $sender && $currentUserId === $sender->getId()) {
+                    $deleteLink = '<a title="'.addslashes(
+                            get_lang('DeleteMessage')
+                        ).'" href="'.$url.'&action=delete_message&message_id='.$messageId.'"  onclick="javascript:if(!confirm('."'".addslashes(
+                            api_htmlentities(get_lang('ConfirmDeleteMessage'))
+                        )."'".')) return false;" >&nbsp;&nbsp;&nbsp;&nbsp;'.
+                        Display::returnPrimeIcon('trash', 'lg').'</a>';
                 }
 
-                $content = $message->getContent().'<br />'.$date.'<br />'.
+                $content = '<div class="custom-message">' . $message->getContent().'<br />'.$date.'<br />'.
                     get_lang('Author').': '.$sender->getUsername().
-                    '<br />'.
-                    $deleteButton
-                ;
+                    '<br /></div>';
 
                 $html .= Display::panelCollapse(
-                    $localTime.' '.UserManager::formatUserFullName($sender).' '.$message->getTitle(),
+                    $localTime.' '.UserManager::formatUserFullName($sender).' '.$message->getTitle().$deleteLink,
                     $content,
                     $tag,
                     null,
@@ -287,7 +286,7 @@ class MessageManager
 
                 $message = (new Message())
                     ->setSender($userSender)
-                    ->addReceiver($userRecipient)
+                    ->addReceiverTo($userRecipient)
                     ->setTitle($subject)
                     ->setContent($content)
                     ->setGroup($group)
@@ -1409,7 +1408,7 @@ class MessageManager
         );
         $layoutContent = '';
         $emailbody = '';
-        if (true == api_get_configuration_value('mail_template_system')) {
+        if ('true' === api_get_setting('mail.mail_template_system')) {
             $mailTemplateManager = new MailTemplateManager();
             $templateText = $mailTemplateManager->getTemplateByType('new_user_mail_to_admin_approval.tpl');
             if (empty($templateText)) {
@@ -1426,7 +1425,7 @@ class MessageManager
 
         $emailsubject = '['.get_lang('ApprovalForNewAccount').'] '.$user->getUsername();
 
-        if (api_get_configuration_value('send_inscription_notification_to_general_admin_only')) {
+        if ('true' === api_get_setting('admin.send_inscription_notification_to_general_admin_only')) {
             $email = api_get_setting('emailAdministrator');
             $firstname = api_get_setting('administratorSurname');
             $lastname = api_get_setting('administratorName');

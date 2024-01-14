@@ -11,9 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class SettingListener
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function onSettingPreSave(SettingsEvent $event): void
     {
@@ -21,9 +19,9 @@ class SettingListener
         $url = $this->container->get('doctrine')->getRepository('ChamiloCoreBundle:AccessUrl')->find($urlId);
         $settings = $event->getSettings();*/
 
-        //$settings->setUrl($url);
-        //$event->getSettings()->setAccessUrl($url);
-        //$settings->setAccessUrl($url);
-        //$event->setArgument('url', $url);
+        // $settings->setUrl($url);
+        // $event->getSettings()->setAccessUrl($url);
+        // $settings->setAccessUrl($url);
+        // $event->setArgument('url', $url);
     }
 }

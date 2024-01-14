@@ -52,7 +52,7 @@ class AssetController
 
                 // The image was cropped manually by the user, so we force to render this version,
                 // no matter other crop parameters.
-                //$crop = $resourceFile->getCrop();
+                // $crop = $resourceFile->getCrop();
                 /*if (!empty($crop)) {
                     $params['crop'] = $crop;
                 }*/

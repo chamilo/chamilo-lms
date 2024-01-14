@@ -4,7 +4,7 @@
       v-t="'Step 2 - Requirements'"
       class="install-title mb-8"
     />
-    
+
     <p class="RequirementText mb-4">
       <strong v-text="t('Please read the following requirements thoroughly.')" />
     </p>
@@ -53,12 +53,12 @@
     />
 
     <div class="text-center mb-4">
-      <p class="text-body-2-bold mb-2">
+      <p class="text-body-2 font-semibold mb-2">
         {{ t('PHP version ') }} >= {{ installerData.phpRequiredVersion }}
       </p>
       <p
         v-if="installerData.stepData.isVersionPassed"
-        class="text-success text-body-1-bold"
+        class="text-success text-body-1 font-semibold"
       >
         <span
           class="mdi mdi-check"
@@ -69,7 +69,7 @@
       </p>
       <p
         v-else
-        class="text-error text-body-1-bold"
+        class="text-error text-body-1 font-semibold"
         v-text="t('Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again.')"
       />
     </div>
@@ -93,7 +93,7 @@
         />
       </p>
     </div>
-      
+
     <h4
       class="install-subtitle mb-4"
       v-text="t('Recommended settings')"
@@ -237,8 +237,8 @@
     <div v-else>
       <div v-if="installerData.stepData.notWritable.length > 0">
         <strong
-          class="text-error"
           v-t="'Warning!'"
+          class="text-error"
         />
         <p class="text-error">
           {{ t('Some files or folders don\'t have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the') }}

@@ -85,8 +85,7 @@ class AttendanceLink extends AbstractLink
         $sql = 'SELECT count(*) AS number FROM '.$tbl_attendance_result."
                 WHERE
                     session_id = $sessionId AND
-                    c_id = '.$this->course_id.' AND
-                    attendance_id = '".$this->get_ref_id()."'";
+                    attendance_id = ".$this->get_ref_id();
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
@@ -114,7 +113,7 @@ class AttendanceLink extends AbstractLink
         // Get results
         $sql = 'SELECT *
                 FROM '.$tbl_attendance_result.'
-                WHERE c_id = '.$this->course_id.' AND attendance_id = '.$this->get_ref_id();
+                WHERE attendance_id = '.$this->get_ref_id();
         if (isset($studentId)) {
             $sql .= ' AND user_id = '.intval($studentId);
         }

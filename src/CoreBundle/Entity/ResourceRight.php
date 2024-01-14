@@ -7,34 +7,25 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="resource_right")
- */
-class ResourceRight
+#[ORM\Table(name: 'resource_right')]
+#[ORM\Entity]
+class ResourceRight implements Stringable
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="bigint")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ResourceLink", inversedBy="resourceRights")
-     * @ORM\JoinColumn(name="resource_link_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: ResourceLink::class, inversedBy: 'resourceRights')]
+    #[ORM\JoinColumn(name: 'resource_link_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?ResourceLink $resourceLink = null;
 
-    /**
-     * @ORM\Column(name="role", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'role', type: 'string', length: 255, nullable: false)]
     protected string $role;
 
-    /**
-     * @ORM\Column(name="mask", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'mask', type: 'integer', nullable: false)]
     protected int $mask;
 
     public function __toString(): string

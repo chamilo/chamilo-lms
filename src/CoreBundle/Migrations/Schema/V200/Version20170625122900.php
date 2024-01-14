@@ -26,7 +26,7 @@ class Version20170625122900 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('c_document');
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_document ADD resource_node_id BIGINT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_document ADD resource_node_id INT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'
             );
@@ -39,7 +39,7 @@ class Version20170625122900 extends AbstractMigrationChamilo
 
         if ($table->hasColumn('id')) {
             $this->addSql('ALTER TABLE c_document DROP id');
-            //$this->addSql('ALTER TABLE c_document DROP id, DROP c_id, DROP path, DROP size, DROP session_id');
+            // $this->addSql('ALTER TABLE c_document DROP id, DROP c_id, DROP path, DROP size, DROP session_id');
         }
 
         $this->addSql('ALTER TABLE c_document CHANGE c_id c_id INT DEFAULT NULL');
@@ -60,7 +60,7 @@ class Version20170625122900 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('c_announcement');
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_announcement ADD resource_node_id BIGINT DEFAULT NULL;');
+            $this->addSql('ALTER TABLE c_announcement ADD resource_node_id INT DEFAULT NULL;');
             $this->addSql(
                 'ALTER TABLE c_announcement ADD CONSTRAINT FK_39912E021BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'
             );
@@ -81,7 +81,7 @@ class Version20170625122900 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_announcement_attachment CHANGE announcement_id announcement_id INT DEFAULT NULL');
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_announcement_attachment ADD resource_node_id BIGINT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_announcement_attachment ADD resource_node_id INT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_announcement_attachment ADD CONSTRAINT FK_5480BD4A913AEA17 FOREIGN KEY (announcement_id) REFERENCES c_announcement (iid) ON DELETE CASCADE'
             );
@@ -93,7 +93,5 @@ class Version20170625122900 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Exercise result
@@ -63,7 +64,7 @@ $interbreadcrumb[] = [
 
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
-if (api_get_configuration_value('quiz_prevent_copy_paste')) {
+if ('true' === api_get_setting('exercise.quiz_prevent_copy_paste')) {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.nocopypaste.js"></script>';
 }
 
@@ -88,11 +89,11 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
         'exercise_result_actions',
         [
             Display::url(
-                Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32),
+                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('GoBackToQuestionList')),
                 'admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
             )
             .Display::url(
-                Display::return_icon('settings.png', get_lang('ModifyExercise'), [], 32),
+                Display::getMdiIcon('cog', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ModifyExercise')),
                 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id
             ),
         ]
@@ -208,7 +209,7 @@ $stats = ExerciseLib::displayQuestionListByAttempt(
     $saveResults,
     $remainingMessage,
     $allowSignature,
-    api_get_configuration_value('quiz_results_answers_report'),
+    ('true' === api_get_setting('exercise.quiz_results_answers_report')),
     false
 );
 $pageContent .= ob_get_contents();
@@ -226,7 +227,7 @@ $statsTeacher = ExerciseLib::displayQuestionListByAttempt(
     false,
     $remainingMessage,
     $allowSignature,
-    api_get_configuration_value('quiz_results_answers_report'),
+    ('true' === api_get_setting('exercise.quiz_results_answers_report')),
     false
 );
 ob_end_clean();

@@ -3,6 +3,9 @@
 /* For licensing terms, see /license.txt */
 
 // The file that contains all the initialisation stuff (and includes all the configuration stuff)
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once 'dropbox_init.inc.php';
 
 $_course = api_get_course_info();
@@ -244,25 +247,25 @@ if ('add' != $action) {
         if (0 == api_get_session_id()) {
             if (0 != $view_dropbox_category_received && api_is_allowed_to_session_edit(false, true)) {
                 $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&view_sent_category='.$viewSentCategory.'&view='.$view.'">'.
-                    Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('root'), '', ICON_SIZE_MEDIUM).
+                    Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Up').' '.get_lang('root')).
                     "</a>";
                 $actions .= get_lang('Category').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_received]['cat_name']).'</strong> ';
                 $movelist[0] = 'Root'; // move_received selectbox content
             } else {
                 $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory&view='.$view.'">'.
-                    Display::return_icon('new_folder.png', get_lang('Add a new folder'), '', ICON_SIZE_MEDIUM).'</a>';
+                    Display::getMdiIcon(ActionIcon::CREATE_FOLDER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a new folder')).'</a>';
             }
             echo Display::toolbarAction('dropbox', [$actions]);
         } else {
             if (api_is_allowed_to_session_edit(false, true)) {
                 if (0 != $view_dropbox_category_received && api_is_allowed_to_session_edit(false, true)) {
                     $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&view_sent_category='.$viewSentCategory.'&view='.$view.'">'.
-                        Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('root'), '', ICON_SIZE_MEDIUM)."</a>";
+                        Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Up').' '.get_lang('root'))."</a>";
                     $actions .= get_lang('Category').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_received]['cat_name']).'</strong> ';
                     $movelist[0] = 'Root'; // move_received selectbox content
                 } else {
                     $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory&view='.$view.'">'.
-                        Display::return_icon('new_folder.png', get_lang('Add a new folder'), '', ICON_SIZE_MEDIUM).
+                        Display::getMdiIcon(ActionIcon::CREATE_FOLDER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a new folder')).
                         '</a>';
                 }
                 echo Display::toolbarAction('dropbox', [$actions]);
@@ -283,34 +286,34 @@ if ('add' != $action) {
         if (0 == api_get_session_id()) {
             if (empty($viewSentCategory)) {
                 $actions .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=add\">".
-                    Display::return_icon('upload_file.png', get_lang('Share a new file'), '', ICON_SIZE_MEDIUM).
+                    Display::getMdiIcon(ActionIcon::UPLOAD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Share a new file')).
                     "</a>";
             }
             if (0 != $view_dropbox_category_sent) {
                 $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category=0&view='.$view.'">'.
-                    Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('root'), '', ICON_SIZE_MEDIUM).
+                    Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Up').' '.get_lang('root')).
                     "</a>";
                 $actions .= get_lang('Category').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_sent]['cat_name']).'</strong> ';
             } else {
                 $actions .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=addsentcategory\">".
-                    Display::return_icon('new_folder.png', get_lang('Add a new folder'), '', ICON_SIZE_MEDIUM)."</a>\n";
+                    Display::getMdiIcon(ActionIcon::CREATE_FOLDER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a new folder'))."</a>\n";
             }
             echo Display::toolbarAction('dropbox', [$actions]);
         } else {
             if (api_is_allowed_to_session_edit(false, true)) {
                 if (empty($viewSentCategory)) {
                     $actions .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=add\">".
-                        Display::return_icon('upload_file.png', get_lang('Share a new file'), '', ICON_SIZE_MEDIUM).
+                        Display::getMdiIcon(ActionIcon::UPLOAD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Share a new file')).
                     "</a>";
                 }
                 if (0 != $view_dropbox_category_sent) {
                     $actions .= get_lang('You are in folder').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_sent]['cat_name']).'</strong> ';
                     $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category=0&view='.$view.'">'.
-                        Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('root'), '', ICON_SIZE_MEDIUM).
+                        Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Up').' '.get_lang('root')).
                         "</a>";
                 } else {
                     $actions .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=addsentcategory\">".
-                        Display::return_icon('new_folder.png', get_lang('Add a new folder'), '', ICON_SIZE_MEDIUM)."</a>\n";
+                        Display::getMdiIcon(ActionIcon::CREATE_FOLDER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a new folder'))."</a>\n";
                 }
                 echo Display::toolbarAction('dropbox', [$actions]);
             }
@@ -414,19 +417,14 @@ if ('add' != $action) {
                             $_SESSION['_seen'][$_course['id']][TOOL_DROPBOX]
                         )
                     ) {
-                        $new_icon = '&nbsp;'.Display::return_icon(
-                            'new_dropbox_message.png',
-                            get_lang('New'),
-                            '',
-                            ICON_SIZE_SMALL
-                        );
+                        $new_icon = '&nbsp;'.Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('New'));
                     }
                 }
 
                 $link_open = '<a href="'.api_get_path(WEB_CODE_PATH).'dropbox/dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'">';
                 $dropbox_file_data[] = $link_open.DocumentManager::build_document_icon_tag('file', $dropbox_file->title).'</a>';
                 $dropbox_file_data[] = '<a href="'.api_get_path(WEB_CODE_PATH).'dropbox/dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'&action=download">'.
-                    Display::return_icon('save.png', get_lang('Download'), ['style' => 'float:right;'], ICON_SIZE_SMALL).
+                    Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Download')).
                     '</a>'.$link_open.$dropbox_file->title.'</a>'.$new_icon.'<br />'.$dropbox_file->description;
                 $file_size = $dropbox_file->filesize;
                 $dropbox_file_data[] = format_file_size($file_size);
@@ -442,11 +440,11 @@ if ('add' != $action) {
 
                 $action_icons = check_number_feedback($dropbox_file->id, $number_feedback).' '.get_lang('Feedback').'
                 <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=viewfeedback&id='.$dropbox_file->id.'&'.$sort_params.'">'.
-                    Display::return_icon('discuss.png', get_lang('Comment'), '', ICON_SIZE_SMALL).'</a>
+                    Display::getMdiIcon(ActionIcon::COMMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Comment')).'</a>
                 <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=movereceived&move_id='.$dropbox_file->id.'&'.$sort_params.'">'.
-                    Display::return_icon('move.png', get_lang('Move'), '', ICON_SIZE_SMALL).'</a>
+                    Display::getMdiIcon(ActionIcon::MOVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Move')).'</a>
                 <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=deletereceivedfile&id='.$dropbox_file->id.'&'.$sort_params.'" onclick="javascript: return confirmation(\''.$dropbox_file->title.'\');">'.
-                    Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).
+                    Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).
                 '</a>';
 
                 // This is a hack to have an additional row in a sortable table
@@ -487,15 +485,15 @@ if ('add' != $action) {
                     $dropbox_category_data[] = $link_open.DocumentManager::build_document_icon_tag('folder', $category['cat_name']).'</a>';
                     $dropbox_category_data[] =
                         '<a href="'.api_get_path(WEB_CODE_PATH).'dropbox/dropbox_download.php?'.api_get_cidreq().'&cat_id='.$category['cat_id'].'&action=downloadcategory&sent_received=received">'.
-                        Display::return_icon('save_pack.png', get_lang('Save'), ['style' => 'float:right;'], ICON_SIZE_SMALL).'</a>'.$link_open.$category['cat_name'].'</a>';
+                        Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Save')).'</a>'.$link_open.$category['cat_name'].'</a>';
                     $dropbox_category_data[] = '';
                     $dropbox_category_data[] = '';
                     $dropbox_category_data[] = '';
                     $dropbox_category_data[] =
                         '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=editcategory&id='.$category['cat_id'].'">'.
-                        Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>
+                        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>
                         <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=deletereceivedcategory&id='.$category['cat_id'].'" onclick="javascript: return confirmation(\''.Security::remove_XSS($category['cat_name']).'\');">'.
-                        Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
+                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
                 }
                 if (is_array($dropbox_category_data) && count($dropbox_category_data) > 0) {
                     $dropbox_data_recieved[] = $dropbox_category_data;
@@ -602,7 +600,7 @@ if ('add' != $action) {
                 $link_open = '<a href="'.api_get_path(WEB_CODE_PATH).'dropbox/dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'">';
                 $dropbox_file_data[] = $link_open.DocumentManager::build_document_icon_tag('file', $dropbox_file->title).'</a>';
                 $dropbox_file_data[] = '<a href="'.api_get_path(WEB_CODE_PATH).'dropbox/dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'&action=download">'.
-                    Display::return_icon('save.png', get_lang('Save'), ['style' => 'float:right;'], ICON_SIZE_SMALL).
+                    Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Save')).
                     '</a>'.
                     $link_open.
                     $dropbox_file->title.
@@ -625,16 +623,16 @@ if ('add' != $action) {
 
                 $action_icons = check_number_feedback($dropbox_file->id, $number_feedback).' '.get_lang('Feedback').'
                     <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=viewfeedback&id='.$dropbox_file->id.'&'.$sort_params.'">'.
-                        Display::return_icon('discuss.png', get_lang('Comment'), '', ICON_SIZE_SMALL).
+                        Display::getMdiIcon(ActionIcon::COMMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Comment')).
                     '</a>
                     <a href="'.api_get_path(WEB_CODE_PATH).'dropbox/update.php?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=update&id='.$dropbox_file->id.'&'.$sort_params.'">'.
-                        Display::return_icon('upload_file.png', get_lang('Update'), '', ICON_SIZE_SMALL).
+                        Display::getMdiIcon(ActionIcon::UPLOAD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Update')).
                     '</a>
                     <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=movesent&move_id='.$dropbox_file->id.'&'.$sort_params.'">'.
-                        Display::return_icon('move.png', get_lang('Move'), '', ICON_SIZE_SMALL).'
+                        Display::getMdiIcon(ActionIcon::MOVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Move')).'
                     </a>
                     <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=deletesentfile&id='.$dropbox_file->id.'&'.$sort_params.'" onclick="javascript: return confirmation(\''.$dropbox_file->title.'\');">'.
-                        Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).
+                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).
                     '</a>';
                 // This is a hack to have an additional row in a sortable table
                 if ('viewfeedback' == $action && isset($_GET['id']) && is_numeric($_GET['id']) && $dropbox_file->id == $_GET['id']) {
@@ -665,14 +663,14 @@ if ('add' != $action) {
                     $link_open = '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$category['cat_id'].'&view='.$view.'">';
                     $dropbox_category_data[] = $link_open.DocumentManager::build_document_icon_tag('folder', Security::remove_XSS($category['cat_name'])).'</a>';
                     $dropbox_category_data[] = '<a href="'.api_get_path(WEB_CODE_PATH).'dropbox/dropbox_download.php?'.api_get_cidreq().'&cat_id='.$category['cat_id'].'&action=downloadcategory&sent_received=sent">'.
-                        Display::return_icon('save_pack.png', get_lang('Save'), ['style' => 'float:right;'], ICON_SIZE_SMALL).'</a>'.$link_open.Security::remove_XSS($category['cat_name']).'</a>';
+                        Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Save')).'</a>'.$link_open.Security::remove_XSS($category['cat_name']).'</a>';
                     $dropbox_category_data[] = '';
                     $dropbox_category_data[] = '';
                     $dropbox_category_data[] = '';
                     $dropbox_category_data[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=editcategory&id='.$category['cat_id'].'">'.
-                        Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>
+                        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>
                         <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=deletesentcategory&id='.$category['cat_id'].'" onclick="javascript: return confirmation(\''.Security::remove_XSS($category['cat_name']).'\');">'.
-                        Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
+                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
                 }
                 if (is_array($dropbox_category_data) && count($dropbox_category_data) > 0) {
                     $dropbox_data_sent[] = $dropbox_category_data;

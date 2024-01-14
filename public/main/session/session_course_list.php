@@ -1,6 +1,8 @@
 <?php
 
 /* For licensing terms, see /license.txt */
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 $cidReset = true;
 
@@ -86,11 +88,11 @@ foreach ($Courses as $key => $enreg) {
     $course[] = api_htmlentities($enreg['title'], ENT_QUOTES);
     $course[] = '<a href="session_course_user_list.php?id_session='.$id_session.'&course_code='.$enreg['code'].'">'.$enreg['nbr_users'].' '.get_lang('Users').'</a>';
     $course[] = '<a href="'.api_get_path(WEB_COURSE_PATH).$enreg['code'].'/?id_session='.$id_session.'">'.
-        Display::return_icon('course_home.png', get_lang('Course')).'</a>
+        Display::getMdiIcon(ObjectIcon::HOME, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course')).'</a>
 			<a href="session_course_edit.php?id_session='.$id_session.'&page=session_course_list.php&course_code='.$enreg['code'].'">'.
-        Display::return_icon('edit.png', get_lang('Edit')).'</a>
+        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>
 			<a href="'.api_get_self().'?id_session='.$id_session.'&sort='.$sort.'&action=delete&idChecked[]='.$enreg['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES)).'\')) return false;">'.
-        Display::return_icon('delete.png', get_lang('Delete')).'</a>';
+        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
     $tableCourses[] = $course;
 }
 echo '<form method="post" action="'.api_get_self().'">';

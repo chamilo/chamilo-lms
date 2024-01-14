@@ -1,57 +1,57 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Action\NotFoundAction;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * CStudentPublicationAssignment.
- *
- * @ORM\Table(
- *     name="c_student_publication_assignment",
- *     indexes={
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository")
- */
-class CStudentPublicationAssignment
+#[ORM\Table(name: 'c_student_publication_assignment')]
+#[ORM\Entity(repositoryClass: CStudentPublicationAssignmentRepository::class)]
+#[ApiResource(
+    operations: [
+        new Get(
+            controller: NotFoundAction::class,
+            output: false,
+            read: false,
+        ),
+    ],
+)]
+class CStudentPublicationAssignment implements Stringable
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    protected int $iid;
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    protected ?int $iid = null;
 
-    /**
-     * @ORM\Column(name="expires_on", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'expires_on', type: 'datetime', nullable: true)]
+    #[Groups(['c_student_publication:write', 'student_publication:read'])]
     protected ?DateTime $expiresOn = null;
 
-    /**
-     * @ORM\Column(name="ends_on", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'ends_on', type: 'datetime', nullable: true)]
+    #[Groups(['c_student_publication:write', 'student_publication:read'])]
+    #[Assert\GreaterThanOrEqual(propertyPath: 'expiresOn')]
     protected ?DateTime $endsOn = null;
 
-    /**
-     * @ORM\Column(name="add_to_calendar", type="integer", nullable=false)
-     */
-    protected int $addToCalendar;
+    #[ORM\Column(name: 'add_to_calendar', type: 'integer', nullable: false)]
+    #[Groups(['student_publication:item:get'])]
+    protected int $eventCalendarId = 0;
 
-    /**
-     * @ORM\Column(name="enable_qualification", type="boolean", nullable=false)
-     */
+    #[ORM\Column(name: 'enable_qualification', type: 'boolean', nullable: false)]
     protected bool $enableQualification;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication", inversedBy="assignment")
-     * @ORM\JoinColumn(name="publication_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\OneToOne(inversedBy: 'assignment', targetEntity: CStudentPublication::class)]
+    #[ORM\JoinColumn(name: 'publication_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CStudentPublication $publication;
 
     public function __toString(): string
@@ -59,16 +59,9 @@ class CStudentPublicationAssignment
         return (string) $this->getIid();
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
-    }
-
-    public function setExpiresOn(DateTime $expiresOn): self
-    {
-        $this->expiresOn = $expiresOn;
-
-        return $this;
     }
 
     public function getExpiresOn(): ?DateTime
@@ -76,9 +69,9 @@ class CStudentPublicationAssignment
         return $this->expiresOn;
     }
 
-    public function setEndsOn(DateTime $endsOn): self
+    public function setExpiresOn(?DateTime $expiresOn): self
     {
-        $this->endsOn = $endsOn;
+        $this->expiresOn = $expiresOn;
 
         return $this;
     }
@@ -88,21 +81,21 @@ class CStudentPublicationAssignment
         return $this->endsOn;
     }
 
-    public function setAddToCalendar(int $addToCalendar): self
+    public function setEndsOn(?DateTime $endsOn): self
     {
-        $this->addToCalendar = $addToCalendar;
+        $this->endsOn = $endsOn;
 
         return $this;
     }
 
-    public function getAddToCalendar(): int
+    public function getEventCalendarId(): int
     {
-        return $this->addToCalendar;
+        return $this->eventCalendarId;
     }
 
-    public function setEnableQualification(bool $enableQualification): self
+    public function setEventCalendarId(int $eventCalendarId): self
     {
-        $this->enableQualification = $enableQualification;
+        $this->eventCalendarId = $eventCalendarId;
 
         return $this;
     }
@@ -110,6 +103,13 @@ class CStudentPublicationAssignment
     public function getEnableQualification(): bool
     {
         return $this->enableQualification;
+    }
+
+    public function setEnableQualification(bool $enableQualification): self
+    {
+        $this->enableQualification = $enableQualification;
+
+        return $this;
     }
 
     public function getPublication(): CStudentPublication
@@ -120,6 +120,10 @@ class CStudentPublicationAssignment
     public function setPublication(CStudentPublication $publication): self
     {
         $this->publication = $publication;
+
+        $qualification = $this->publication->getQualification();
+
+        $this->enableQualification = !empty($qualification);
 
         return $this;
     }

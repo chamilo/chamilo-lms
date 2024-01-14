@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Promotion as PromotionEntity;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * Class Promotion
@@ -163,27 +165,12 @@ class Promotion extends Model
     public function display()
     {
         $actions = '<a href="career_dashboard.php">'.
-            Display::return_icon(
-                'back.png',
-                get_lang('Back'),
-                '',
-                '32'
-            )
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back'))
             .'</a>';
         $actions .= '<a href="'.api_get_self().'?action=add">'.
-            Display::return_icon(
-                'new_promotion.png',
-                get_lang('Add'),
-                '',
-                '32'
-            ).'</a>';
+            Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')).'</a>';
         $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.
-            Display::return_icon(
-                'new_session.png',
-                get_lang('Add a training session'),
-                '',
-                '32'
-            ).'</a>';
+            Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a training session')).'</a>';
 
         echo Display::toolbarAction('promotion_actions', [$actions]);
         echo Display::grid_html('promotions');

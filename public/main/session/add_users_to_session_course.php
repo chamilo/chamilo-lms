@@ -3,6 +3,7 @@
 
 // resetting the course id
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 $cidReset = true;
 
@@ -329,7 +330,7 @@ function change_select(val) {
 </script>';
 
 $form_sent = 0;
-$errorMsg = $firstLetterUser = $firstLetterSession = '';
+$firstLetterUser = $firstLetterSession = '';
 $UserList = $SessionList = [];
 $sessions = [];
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
@@ -638,13 +639,13 @@ if ($ajax_search) {
 if ('multiple' == $add_type) {
     $link_add_type_unique =
         '<a href="'.api_get_self().'?course_id='.$courseId.'&id_session='.$id_session.'&add='.$addProcess.'&add_type=unique">'.
-        Display::return_icon('single.gif').get_lang('Single registration').'</a>';
-    $link_add_type_multiple = Display::url(Display::return_icon('multiple.gif').get_lang('Multiple registration'), '');
+        Display::getMdiIcon(ObjectIcon::SINGLE_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Single registration')).get_lang('Single registration').'</a>';
+    $link_add_type_multiple = Display::url(Display::getMdiIcon(ObjectIcon::MULTI_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Multiple registration')).get_lang('Multiple registration'), '');
 } else {
-    $link_add_type_unique = Display::url(Display::return_icon('single.gif').get_lang('Single registration'), '');
+    $link_add_type_unique = Display::url(Display::getMdiIcon(ObjectIcon::SINGLE_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Single registration')).get_lang('Single registration'), '');
     $link_add_type_multiple =
         '<a href="'.api_get_self().'?course_id='.$courseId.'&id_session='.$id_session.'&amp;add='.$addProcess.'&amp;add_type=multiple">'
-        .Display::return_icon('multiple.gif').get_lang('Multiple registration').'</a>';
+        .Display::getMdiIcon(ObjectIcon::MULTI_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Multiple registration')).get_lang('Multiple registration').'</a>';
 }
 
 echo Display::toolbarAction('users_to_session', [$link_add_type_unique.$link_add_type_multiple]);
@@ -701,11 +702,6 @@ echo Display::page_header($tool_name.' ('.$session_info['name'].') - '.$courseIn
     <input type="hidden" name="form_sent" value="1"/>
     <input type="hidden" name="add_type"/>
 
-    <?php
-    if (!empty($errorMsg)) {
-        echo Display::return_message($errorMsg); //main API
-    }
-    ?>
     <div id="multiple-add-session" class="grid grid-cols-3">
         <div class="col-md-4">
             <div class="form-group">

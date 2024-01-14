@@ -15,6 +15,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @template-extends AbstractType<object>
+ */
 class JuryType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -44,8 +47,8 @@ class JuryType extends AbstractType
                 'property' => 'branchName',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
-                            //->where('u.role LIKE :role')
-                            //->setParameter(':role', 'ROLE_JURY%')
+                            // ->where('u.role LIKE :role')
+                            // ->setParameter(':role', 'ROLE_JURY%')
                         ->orderBy('u.branchName', Criteria::DESC)
                     ;
                 },
@@ -56,7 +59,7 @@ class JuryType extends AbstractType
         $builder->add('closure_user_id', TextType::class);
         $builder->add('exercise_id', TextType::class);
 
-        //$builder->add('users', 'collection', array('type' => new JuryType()));
+        // $builder->add('users', 'collection', array('type' => new JuryType()));
 
         $builder->add('submit', SubmitType::class);
     }

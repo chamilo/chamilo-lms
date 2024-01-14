@@ -39,6 +39,7 @@ class LanguageRepository extends ServiceEntityRepository
         $languages = $this->getAllAvailable()->getQuery()->getResult();
 
         $list = [];
+
         /** @var Language $language */
         foreach ($languages as $language) {
             $list[$language->getIsocode()] = $language->getOriginalName();

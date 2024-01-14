@@ -30,6 +30,7 @@ final class Version20201212195112 extends AbstractMigrationChamilo
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
         $em = $doctrine->getManager();
+
         /** @var Connection $connection */
         $connection = $em->getConnection();
         $courseRepo = $container->get(CourseRepository::class);
@@ -41,6 +42,7 @@ final class Version20201212195112 extends AbstractMigrationChamilo
 
         // Migrating c_tool.
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             // Categories

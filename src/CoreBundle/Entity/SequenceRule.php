@@ -8,24 +8,16 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class SequenceRule.
- *
- * @ORM\Table(name="sequence_rule")
- * @ORM\Entity
- */
+#[ORM\Table(name: 'sequence_rule')]
+#[ORM\Entity]
 class SequenceRule
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: false)]
     protected string $description;
 
     /**
@@ -46,9 +38,6 @@ class SequenceRule
         return $this->description;
     }
 
-    /**
-     * @return SequenceRule
-     */
     public function setDescription(string $description): self
     {
         $this->description = $description;

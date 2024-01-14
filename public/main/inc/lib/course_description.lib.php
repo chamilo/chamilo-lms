@@ -302,14 +302,14 @@ class CourseDescription
     public function get_default_description_icon()
     {
         $default_description_icon = [];
-        $default_description_icon[1] = 'info.png';
-        $default_description_icon[2] = 'objective.png';
-        $default_description_icon[3] = 'topics.png';
-        $default_description_icon[4] = 'strategy.png';
-        $default_description_icon[5] = 'laptop.png';
-        $default_description_icon[6] = 'teacher.png';
-        $default_description_icon[7] = 'assessment.png';
-        $default_description_icon[8] = 'wizard.png';
+        $default_description_icon[1] = 'image-text';
+        $default_description_icon[2] = 'flag-checkered';
+        $default_description_icon[3] = 'table-of-contents';
+        $default_description_icon[4] = 'strategy';
+        $default_description_icon[5] = 'laptop';
+        $default_description_icon[6] = 'human-male-board';
+        $default_description_icon[7] = 'order-bool-ascending-variant';
+        $default_description_icon[8] = 'magic-staff';
 
         return $default_description_icon;
     }

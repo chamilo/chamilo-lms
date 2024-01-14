@@ -17,8 +17,7 @@ class TrackEExerciseVoter extends Voter
 
     public function __construct(
         private Security $security
-    ) {
-    }
+    ) {}
 
     protected function supports(string $attribute, $subject): bool
     {
@@ -61,7 +60,7 @@ class TrackEExerciseVoter extends Voter
                 return true;
             }
         } else {
-            if ($course->hasTeacher($user)) {
+            if ($course->hasUserAsTeacher($user)) {
                 return true;
             }
         }

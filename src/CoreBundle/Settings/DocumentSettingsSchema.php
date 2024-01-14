@@ -20,8 +20,8 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
         $builder
             ->setDefaults(
                 [
-                    'default_document_quotum' => '100000000',
-                    'default_group_quotum' => '100000000',
+                    'default_document_quotum' => '1000',
+                    'default_group_quotum' => '250',
                     'permanently_remove_deleted_files' => 'false',
                     'upload_extensions_list_type' => 'blacklist',
                     'upload_extensions_blacklist' => '',
@@ -40,7 +40,7 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                     'show_users_folders' => 'true',
                     'show_default_folders' => 'true',
                     'enabled_text2audio' => 'false',
-                    //'enable_nanogong' => 'false',
+                    // 'enable_nanogong' => 'false',
                     'show_documents_preview' => 'false',
                     'enable_wami_record' => 'false',
                     'enable_webcam_clip' => 'false',
@@ -58,6 +58,17 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                     'allow_personal_user_files' => '',
                     // ?
                     'if_file_exists_option' => 'rename',
+                    'send_notification_when_document_added' => 'false',
+                    'thematic_pdf_orientation' => 'landscape',
+                    'certificate_pdf_orientation' => 'landscape',
+                    'allow_general_certificate' => 'false',
+                    'group_document_access' => 'false',
+                    'group_category_document_access' => 'false',
+                    'allow_compilatio_tool' => 'false',
+                    'compilatio_tool' => '',
+                    'documents_hide_download_icon' => 'false',
+                    'enable_x_sendfile_headers' => 'false',
+                    'documents_custom_cloud_link_list' => '',
                 ]
             )
             ->setTransformer(
@@ -117,7 +128,7 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
             ->add('show_users_folders', YesNoType::class)
             ->add('show_default_folders', YesNoType::class)
             ->add('enabled_text2audio', YesNoType::class)
-            //->add('enable_nanogong', YesNoType::class)
+            // ->add('enable_nanogong', YesNoType::class)
             ->add('show_documents_preview', YesNoType::class)
             ->add('enable_wami_record', YesNoType::class)
             ->add('enable_webcam_clip', YesNoType::class)
@@ -147,6 +158,82 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                     ],
                 ]
             )
+            ->add('send_notification_when_document_added', YesNoType::class)
+            ->add(
+                'thematic_pdf_orientation',
+                ChoiceType::class,
+                [
+                    'choices' => [
+                        'Portrait' => 'portrait',
+                        'Landscape' => 'landscape',
+                    ],
+                ]
+            )
+            ->add(
+                'certificate_pdf_orientation',
+                ChoiceType::class,
+                [
+                    'choices' => [
+                        'Portrait' => 'portrait',
+                        'Landscape' => 'landscape',
+                    ],
+                ]
+            )
+            ->add('allow_general_certificate', YesNoType::class)
+            ->add('group_document_access', YesNoType::class)
+            ->add('group_category_document_access', YesNoType::class)
+            ->add('allow_compilatio_tool', YesNoType::class)
+            ->add(
+                'compilatio_tool',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Allow compilatio plagiarism prevention tool, requires extension "php-soap"  sudo apt-get install php-soap').
+                        $this->settingArrayHelpValue('compilatio_tool'),
+                ]
+            )
+            ->add('documents_hide_download_icon', YesNoType::class)
+            ->add('enable_x_sendfile_headers', YesNoType::class)
+            ->add(
+                'documents_custom_cloud_link_list',
+                TextareaType::class,
+                [
+                    'help_html' => true,
+                    'help' => get_lang('Custom cloud link URLS, this requires enable_add_file_link = true').
+                        $this->settingArrayHelpValue('documents_custom_cloud_link_list'),
+                ]
+            )
         ;
+    }
+
+    private function settingArrayHelpValue(string $variable): string
+    {
+        $values = [
+            'compilatio_tool' => "<pre>
+                [
+                    'settings' => [
+                        'key' => '',
+                        'soap_url' => '',
+                        'proxy_host' => '',
+                        'proxy_port' => '',
+                        'max_filesize' => '',
+                        'transport_mode' => '',
+                        'wget_uri' => '',
+                        'wget_login' => '',
+                        'wget_password' => '',
+                    ]
+                ]
+                </pre>",
+            'documents_custom_cloud_link_list' => "<pre>
+                ['links' => ['example.com', 'example2.com']]
+                </pre>",
+        ];
+
+        $returnValue = [];
+        if (isset($values[$variable])) {
+            $returnValue = $values[$variable];
+        }
+
+        return $returnValue;
     }
 }

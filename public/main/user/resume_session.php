@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Component\Utils\NameConvention;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -98,9 +99,7 @@ if ('true' === $allowTutors) {
     Display::display_header($tool_name);
 
     echo Display::page_header(
-        Display::return_icon(
-            'session.png',
-            get_lang('Session')
+        Display::getMdiIcon('google-classroom', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Session')
         ).' '.$session->getName()
     );
     echo Display::page_subheader(get_lang('General properties').$url); ?>
@@ -257,8 +256,8 @@ if ('true' === $allowTutors) {
 
             if ($multiple_url_is_on) {
                 if ($user['access_url_id'] != $url_id) {
-                    $user_link .= ' '.Display::return_icon('warning.png', get_lang('Users not added to the URL'), [], ICON_SIZE_SMALL);
-                    $add = Display::return_icon('add.png', get_lang('Add users to an URL'), [], ICON_SIZE_SMALL);
+                    $user_link .= ' '.Display::getMdiIcon('alert', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Users not added to the URL'));
+                    $add = Display::getMdiIcon(ActionIcon::ADD, get_lang('Add users to an URL'));
                     $link_to_add_user_in_url = '<a href="resume_session.php?action=add_user_to_url&id_session='.$id_session.'&user_id='.$user['user_id'].'">'.$add.'</a>';
                 }
             }
@@ -269,11 +268,11 @@ if ('true' === $allowTutors) {
                     </td>
                     <td>
                         <a href="../my_space/myStudents.php?student='.$user['user_id'].''.$orig_param.'">'.
-                        Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;
+                        Display::getMdiIcon('chart-box', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Reporting')).'</a>&nbsp;
                         <a href="session_course_user.php?id_user='.$user['user_id'].'&id_session='.$id_session.'">'.
-                        Display::return_icon('course.png', get_lang('Block user from courses in this session')).'</a>&nbsp;
+                        Display::getMdiIcon('book-open-page-variant', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Block user from courses in this session')).'</a>&nbsp;
                         <a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('Please confirm your choice').'\')) return false;">'.
-                        Display::return_icon('delete.png', get_lang('Delete')).'</a>
+                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>
                         '.$link_to_add_user_in_url.'
                     </td>
                     </tr>';

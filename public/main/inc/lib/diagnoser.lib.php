@@ -2,6 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
+
 /**
  * Class Diagnoser
  * Class that is responsible for generating diagnostic information about the system.
@@ -843,8 +847,8 @@ class Diagnoser
         $res = $connection->query('SELECT id, code, directory, disk_quota, last_visit FROM course ORDER BY last_visit DESC, code LIMIT 500');
         $systemPath = api_get_path(SYS_COURSE_PATH);
         $webPath = api_get_path(WEB_COURSE_PATH);
-        $courseHomeIcon = Display::return_icon('home.png', get_lang('CourseHome'));
-        $courseEditIcon = Display::return_icon('edit.png', get_lang('Edit'));
+        $courseHomeIcon = Display::getMdiIcon(ObjectIcon::HOME, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('CourseHome'));
+        $courseEditIcon = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'));
         $windows = api_is_windows_os();
         $courseEditPath = api_get_path(WEB_CODE_PATH).'admin/course_edit.php?id=';
         while ($row = $res->fetch()) {
@@ -925,21 +929,21 @@ class Diagnoser
     ) {
         switch ($status) {
             case self::STATUS_OK:
-                $img = 'bullet_green.png';
+                $img = StateIcon::COMPLETE;
                 break;
             case self::STATUS_WARNING:
-                $img = 'bullet_orange.png';
+                $img = StateIcon::WARNING;
                 break;
             case self::STATUS_ERROR:
-                $img = 'bullet_red.png';
+                $img = StateIcon::ERROR;
                 break;
             case self::STATUS_INFORMATION:
             default:
-                $img = 'bullet_blue.png';
+                $img = ActionIcon::INFORMATION;
                 break;
         }
 
-        $image = Display::return_icon($img, $status);
+        $image = Display::getMdiIcon($img, 'ch-tool-icon', null, ICON_SIZE_SMALL, $title);
         $url = $this->get_link($title, $url);
 
         $formatted_current_value = $current_value;

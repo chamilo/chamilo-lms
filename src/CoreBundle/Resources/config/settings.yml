@@ -166,6 +166,11 @@ services:
         tags:
             - {name: sylius.settings_schema, alias: chamilo_core.settings.survey, namespace: survey}
 
+    chamilo_core.settings.work:
+        class: Chamilo\CoreBundle\Settings\WorkSettingsSchema
+        tags:
+            - { name: sylius.settings_schema, alias: chamilo_core.settings.work, namespace: work }
+
     chamilo_core.settings.ticket:
         class: Chamilo\CoreBundle\Settings\TicketSettingsSchema
         tags:
@@ -180,3 +185,8 @@ services:
         class: Chamilo\CoreBundle\Settings\WebServiceSettingsSchema
         tags:
             - {name: sylius.settings_schema, alias: chamilo_core.settings.webservice, namespace: webservice}
+
+    chamilo_core.settings.stylesheets:
+      class: Chamilo\CoreBundle\Settings\StylesheetsSettingsSchema
+      tags:
+        - { name: sylius.settings_schema, alias: chamilo_core.settings.stylesheets, namespace: stylesheets }

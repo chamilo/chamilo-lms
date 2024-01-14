@@ -1,15 +1,67 @@
 .app-topbar {
-  @apply bg-white border-b border-solid border-gray-25 fixed left-0 p-4 top-0 w-full text-gray-50 z-10
+  @apply flex bg-white border-b border-solid border-gray-25 fixed left-0 p-4 top-0 w-full text-gray-50 z-10
     md:text-gray-90;
+
+  &__start {
+    @apply mr-auto;
+  }
+
+  &__items {
+    @apply flex grow justify-end items-center gap-6;
+  }
+
+  &__end {
+    @apply ml-6 flex items-center gap-6;
+  }
+
+  .item-button {
+    @apply w-6 h-6 relative;
+
+    .mdi,
+    &__icon {
+      @apply text-gray-50 inline-block transition-colors
+        hover:text-gray-90;
+      font-size: 18px;
+      line-height: 18px;
+      height: 18px;
+      width: 18px;
+
+      &::before {
+        font-size: 18px;
+        line-height: 18px;
+      }
+    }
+
+    &__badge {
+      @apply bg-error text-white rounded-full text-tiny font-semibold absolute;
+      height: 15px;
+      line-height: 14px;
+      right: -3px;
+      top: -4px;
+      width: 15px;
+    }
+
+    &--unread {
+      @apply text-gray-90;
+
+      .item-button__icon,
+      .mdi {
+        @apply text-gray-90;
+      }
+    }
+  }
+
+  .user-avatar {
+    @apply rounded-full w-6 h-6 text-white bg-primary leading-6 text-body-2 font-semibold;
+
+    img {
+      @apply rounded-full w-6 h-6;
+    }
+  }
 }
 
-.app-topbar.p-megamenu,
 .app-topbar .p-menubar {
   @apply flex;
-}
-
-.app-topbar.p-megamenu {
-  @apply md:px-6;
 }
 
 .app-topbar .p-menubar {
@@ -17,7 +69,6 @@
 }
 
 .app-topbar__user-submenu,
-.app-topbar.p-megamenu,
 .app-topbar .p-menubar {
   .p-menuitem-link {
     @apply rounded-none py-3 px-4 transition-none select-none;
@@ -33,7 +84,6 @@
   }
 }
 
-.app-topbar .p-megamenu-root-list,
 .app-topbar .p-menubar-root-list {
   @apply bg-white grow justify-end;
 
@@ -61,28 +111,6 @@
       > .p-menuitem-link {
         @apply text-primary;
       }
-    }
-  }
-}
-
-.app-topbar.p-megamenu {
-  .p-megamenu-end {
-    @apply ml-3 flex items-center gap-3;
-  }
-
-  .p-megamenu-panel {
-    @apply border-none shadow-lg text-gray-90;
-  }
-
-  .p-megamenu-submenu-header {
-    @apply rounded-t-md font-semibold m-0 py-3 px-4;
-  }
-
-  .p-megamenu-submenu {
-    @apply py-1 px-0 w-52;
-
-    .p-menu-separator {
-      @apply border-t border-solid my-1 mx-0;
     }
   }
 }

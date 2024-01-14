@@ -20,7 +20,7 @@ if (empty($_POST['current_dir'])) {
 $uncompress = 1;
 
 $allowHtaccess = false;
-if (api_get_configuration_value('allow_htaccess_import_from_scorm') && isset($_POST['allow_htaccess'])) {
+if (('true' === api_get_setting('lp.allow_htaccess_import_from_scorm')) && isset($_POST['allow_htaccess'])) {
     $allowHtaccess = true;
 }
 

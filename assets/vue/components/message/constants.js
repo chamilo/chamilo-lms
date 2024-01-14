@@ -10,6 +10,8 @@ export const MESSAGE_TYPE_GROUP = 5;
 export const MESSAGE_TYPE_INVITATION = 6;
 export const MESSAGE_TYPE_CONVERSATION = 7;
 
+export const MESSAGE_STATUS_DELETED = 3;
+
 /**
  * See: src/CoreBundle/Entity/MessageRelUser.php
  */

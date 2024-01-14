@@ -6,6 +6,9 @@
  * Helper library for weekly reports.
  */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
+
 /**
  * @param $course_code
  *
@@ -143,14 +146,14 @@ function showResults($courseInfo, $weeksCount, $page)
     if (14 == $weeksCount) {
         $html .= '<span style="float:right;"><a href="tutor.php?page='.(1 == $page ? 2 : 1).'">'.(1 == $page ? 'Siguiente' : 'Anterior').'</a></span>';
     }
-    //$html .= '<span style="float:right;"><a href="'.api_get_self().'?action=export'.$get_parameter.$get_parameter2.'">'.Display::return_icon('export_excel.png', get_lang('Export'), '', '32').'</a></span>';
+    //$html .= '<span style="float:right;"><a href="'.api_get_self().'?action=export'.$get_parameter.$get_parameter2.'">'.Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export')).'</a></span>';
 
     $html .= '</form>';
     $html .= '<table class="reports">';
     $html .= '<tr>
             <th ></th>';
     for ($i = 7 * $page - 6; $i <= $page * 7; $i++) {
-        $html .= '<th colspan="2">Week '.$i.'<a href="assign_tickets.php?id='.$ids[$i].'" class="ajax">'.Display::return_icon('edit.png', get_lang('Edit'), ['width' => '16', 'height' => '16'], 22).'</a></th>';
+        $html .= '<th colspan="2">Week '.$i.'<a href="assign_tickets.php?id='.$ids[$i].'" class="ajax">'.Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a></th>';
     }
     $html .= '</tr>';
     $html .= $line;
@@ -202,8 +205,8 @@ function showStudentResult($datos, $pagina)
 
     $fila .= '<td><a href="'.api_get_path(WEB_CODE_PATH).'user/userInfo.php?'.api_get_cidreq().'&uInfo='.$datos[$inicio]['user_id'].'">'.$datos[$inicio]['username'].'</a></td>';
     foreach ($datos as $dato) {
-        $fila .= '<td align="center">'.(1 == $dato['work_ok'] ? Display::return_icon('check.png') : Display::return_icon('aspa.png')).'</td>';
-        $fila .= '<td align="center">'.(1 == $dato['thread_ok'] ? Display::return_icon('check.png') : Display::return_icon('aspa.png')).'</td>';
+        $fila .= '<td align="center">'.(1 == $dato['work_ok'] ? Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon', null, ICON_SIZE_SMALL) : Display::getMdiIcon(StateIcon::INCOMPLETE, 'ch-tool-icon', null, ICON_SIZE_SMALL)).'</td>';
+        $fila .= '<td align="center">'.(1 == $dato['thread_ok'] ? Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon', null, ICON_SIZE_SMALL) : Display::getMdiIcon(StateIcon::INCOMPLETE, 'ch-tool-icon', null, ICON_SIZE_SMALL)).'</td>';
     }
     $fila .= '</tr>';
 

@@ -68,6 +68,8 @@ class Certificate extends Model
         }
 
         if ($this->user_id) {
+            // Need to be called before any operation
+            $this->checkCertificatePath();
             // To force certification generation
             if ($this->force_certificate_generation) {
                 $this->generate([], $sendNotification);
@@ -88,7 +90,8 @@ class Certificate extends Model
             $this->html_file = $this->certification_user_path.basename($this->certificate_data['path_certificate']);
             $this->qr_file = $this->certification_user_path.$pathinfo['filename'].'_qr.png';
         } else {
-            if (api_get_configuration_value('allow_general_certificate')) {
+            $this->checkCertificatePath();
+            if ('true' === api_get_setting('document.allow_general_certificate')) {
                 // General certificate
                 $name = md5($this->user_id).'.html';
                 $my_path_certificate = $this->certification_user_path.$name;
@@ -126,6 +129,30 @@ class Certificate extends Model
                     );
                     $this->certificate_data['path_certificate'] = $path_certificate;
                 }
+            }
+        }
+    }
+
+    /**
+     * Checks if the certificate user path directory is created.
+     */
+    public function checkCertificatePath()
+    {
+        $this->certification_user_path = null;
+
+        // Setting certification path
+        $path_info = UserManager::getUserPathById($this->user_id, 'system');
+        $web_path_info = UserManager::getUserPathById($this->user_id, 'web');
+
+        if (!empty($path_info) && isset($path_info)) {
+            $this->certification_user_path = $path_info.'certificate/';
+            $this->certification_web_user_path = $web_path_info.'certificate/';
+            $mode = api_get_permissions_for_new_directories();
+            if (!is_dir($path_info)) {
+                mkdir($path_info, $mode, true);
+            }
+            if (!is_dir($this->certification_user_path)) {
+                mkdir($this->certification_user_path, $mode);
             }
         }
     }
@@ -301,6 +328,7 @@ class Certificate extends Model
                 }
             }
         } else {
+            $this->checkCertificatePath();
             // General certificate
             $name = md5($this->user_id).'.html';
             $my_path_certificate = $this->certification_user_path.$name;
@@ -764,7 +792,7 @@ class Certificate extends Model
         // variables for the default template
         $tplContent->assign('complete_name', $userInfo['complete_name']);
         $tplContent->assign('time_in_platform', $time);
-        $tplContent->assign('certificate_generated_date', api_get_local_time($myCertificate['created_at']));
+        $tplContent->assign('certificate_generated_date', isset($myCertificate['created_at']) ? api_get_local_time($myCertificate['created_at']) : '');
         if (!empty($termsValidationDate)) {
             $termsValidationDate = api_get_local_time($termsValidationDate);
         }
@@ -775,7 +803,7 @@ class Certificate extends Model
         $tplContent->assign(
             'certificate_generated_date_no_time',
             api_get_local_time(
-                $myCertificate['created_at'],
+                $myCertificate['created_at'] ?? null,
                 null,
                 null,
                 false,
@@ -813,7 +841,7 @@ class Certificate extends Model
      */
     public function generatePdfFromCustomCertificate()
     {
-        $orientation = api_get_configuration_value('certificate_pdf_orientation');
+        $orientation = api_get_setting('document.certificate_pdf_orientation');
 
         $params['orientation'] = 'landscape';
         if (!empty($orientation)) {

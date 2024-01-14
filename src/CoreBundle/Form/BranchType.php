@@ -13,6 +13,9 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @template-extends  AbstractType<BranchSync>
+ */
 class BranchType extends AbstractType
 {
     /**
@@ -43,7 +46,7 @@ class BranchType extends AbstractType
                     ],
                 ]
             )
-            //->add('parent_id', 'choice', array('choices'=> array(), 'required' => false))
+            // ->add('parent_id', 'choice', array('choices'=> array(), 'required' => false))
             ->add(
                 'parent_id',
                 'text',
@@ -52,7 +55,7 @@ class BranchType extends AbstractType
                     'disabled' => $parentIdDisabled,
                 ]
             )
-            //->add('parent_id', 'choice', array('choices'=> array(1 => 'jjaa',2=>'ddd'), 'required' => false))
+            // ->add('parent_id', 'choice', array('choices'=> array(1 => 'jjaa',2=>'ddd'), 'required' => false))
             ->add('branch_ip', 'text')
             ->add('latitude', 'text')
             ->add('longitude', 'text')

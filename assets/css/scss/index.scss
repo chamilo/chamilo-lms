@@ -13,13 +13,14 @@
 
 @import "settings/typography";
 
+@import "atoms/form";
 @import "atoms/avatar";
 @import "atoms/buttons";
 @import "atoms/checkbox";
 @import "atoms/dropdown";
-@import "atoms/form";
 @import "atoms/fieldset";
 @import "atoms/inline_message";
+@import "atoms/inputgroup";
 @import "atoms/input_switch";
 @import "atoms/input_text";
 @import "atoms/messages";
@@ -29,6 +30,7 @@
 @import "atoms/radio";
 @import "atoms/skeleton";
 @import "atoms/tags";
+@import "atoms/toast";
 
 @import "molecules/course_tool";
 @import "molecules/datepicker";
@@ -39,9 +41,11 @@
 @import "organisms/cards";
 @import "organisms/course_card";
 @import "organisms/datatable";
+@import "organisms/dataview";
 @import "organisms/modals";
 @import "organisms/menu";
 @import "organisms/sidebar";
+@import "organisms/section_header";
 @import "organisms/tables";
 @import "organisms/install";
 
@@ -52,9 +56,16 @@
 @import "layout/breadcrumb";
 @import 'layout/main_container';
 
+@import "admin_index";
+
+@import "course_home";
+
 @import 'login';
 
 @import 'forums';
 @import 'exercise';
+@import 'catalog_course';
+@import 'catalog_session';
 //@import 'jqueryui';
 @import 'lp';
+@import "userreluser";

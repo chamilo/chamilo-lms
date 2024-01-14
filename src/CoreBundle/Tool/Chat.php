@@ -22,7 +22,7 @@ class Chat extends AbstractTool implements ToolInterface
 
     public function getIcon(): string
     {
-        return 'mdi-';
+        return 'mdi-chat-processing';
     }
 
     public function getLink(): string

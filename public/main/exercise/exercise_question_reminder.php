@@ -3,11 +3,12 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 
-if (false === api_get_configuration_value('block_category_questions')) {
+if ('false' === api_get_setting('exercise.block_category_questions')) {
     api_not_allowed(true);
 }
 
@@ -106,9 +107,9 @@ if (!$hideHeaderAndFooter) {
 // I'm in a preview mode as course admin. Display the action menu.
 if (!$hideHeaderAndFooter && api_is_course_admin()) {
     $actions = '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->iId.'">'.
-        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('GoBackToQuestionList')).'</a>';
     $actions .= '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->iId.'">'.
-        Display::return_icon('edit.png', get_lang('ModifyExercise'), [], 32).'</a>';
+        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ModifyExercise')).'</a>';
     echo Display::toolbarAction('toolbar', [$actions]);
 }
 echo Display::page_header($categoryObj->name);

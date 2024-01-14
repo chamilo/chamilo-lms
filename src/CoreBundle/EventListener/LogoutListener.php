@@ -43,6 +43,7 @@ class LogoutListener
         $request = $event->getRequest();
 
         // Chamilo logout
+        $request->getSession()->remove('_selected_locale');
         $request->getSession()->remove('_locale');
         $request->getSession()->remove('_locale_user');
 
@@ -61,7 +62,7 @@ class LogoutListener
         $user = $token->getUser();
         if ($user instanceof User) {
             $userId = $user->getId();
-            $table = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
             $sql = "SELECT login_id, login_date
                     FROM {$table}
@@ -95,6 +96,6 @@ class LogoutListener
         $login = $this->router->generate('index');
 
         return new RedirectResponse($login);
-        //return new JsonResponse('logout out', 200);
+        // return new JsonResponse('logout out', 200);
     }
 }

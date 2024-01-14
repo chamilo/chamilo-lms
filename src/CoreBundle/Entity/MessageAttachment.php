@@ -6,24 +6,24 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\Controller\Api\CreateMessageAttachmentAction;
+use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ORM\Table(name="message_attachment")
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository")
- */
 #[ApiResource(
-    collectionOperations: [
-        'get',
-        'post' => [
-            'controller' => CreateMessageAttachmentAction::class,
-            'deserialize' => false,
-            'security' => "is_granted('ROLE_USER')",
-            'validation_groups' => ['Default', 'message_attachment:create'],
-            'openapi_context' => [
+    types: ['http://schema.org/MediaObject'],
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(
+            controller: CreateMessageAttachmentAction::class,
+            openapiContext: [
                 'requestBody' => [
                     'content' => [
                         'multipart/form-data' => [
@@ -43,46 +43,43 @@ use Symfony\Component\Serializer\Annotation\Groups;
                     ],
                 ],
             ],
-        ],
+            security: 'is_granted(\'ROLE_USER\')',
+            validationContext: [
+                'groups' => [
+                    'Default',
+                    'message_attachment:create',
+                ],
+            ],
+            deserialize: false
+        ),
     ],
-    iri: 'http://schema.org/MediaObject',
-    itemOperations: ['get'],
-    normalizationContext: ['groups' => 'message:read'],
+    normalizationContext: [
+        'groups' => ['message:read'],
+    ],
 )]
-class MessageAttachment extends AbstractResource implements ResourceInterface
+#[ORM\Table(name: 'message_attachment')]
+#[ORM\Entity(repositoryClass: MessageAttachmentRepository::class)]
+class MessageAttachment extends AbstractResource implements ResourceInterface, Stringable
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="path", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'path', type: 'string', length: 255, nullable: false)]
     protected string $path;
-
-    /**
-     * @ORM\Column(name="comment", type="text", nullable=true)
-     */
     #[Groups(['message:read'])]
+    #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected ?string $comment = null;
 
-    /**
-     * @ORM\Column(name="size", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'size', type: 'integer', nullable: false)]
     protected int $size;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Message", inversedBy="attachments", cascade={"persist"})
-     * @ORM\JoinColumn(name="message_id", referencedColumnName="id", nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Message::class, cascade: ['persist'], inversedBy: 'attachments')]
+    #[ORM\JoinColumn(name: 'message_id', referencedColumnName: 'id', nullable: false)]
     protected Message $message;
 
-    /**
-     * @ORM\Column(name="filename", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'filename', type: 'string', length: 255, nullable: false)]
     protected string $filename;
 
     public function __construct()

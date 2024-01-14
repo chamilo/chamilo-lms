@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -340,7 +341,7 @@ $returnParams = $extraField->addElements(
 );
 $jqueryReadyContent = $returnParams['jquery_ready_content'];
 
-$allowEmailTemplate = api_get_configuration_value('mail_template_system');
+$allowEmailTemplate = ('true' === api_get_setting('mail.mail_template_system'));
 if ($allowEmailTemplate) {
     $form->addEmailTemplate(['user_edit_content.tpl']);
 }
@@ -353,7 +354,7 @@ $(function () {
 </script>';
 
 // Freeze user conditions, admin cannot updated them
-$extraConditions = api_get_configuration_value('show_conditions_to_user');
+$extraConditions = api_get_setting('profile.show_conditions_to_user', true);
 
 if ($extraConditions && isset($extraConditions['conditions'])) {
     $extraConditions = $extraConditions['conditions'];
@@ -516,21 +517,11 @@ if ($error_drh) {
 
 $actions = [
     Display::url(
-        Display::return_icon(
-            'info.png',
-            get_lang('Information'),
-            [],
-            ICON_SIZE_MEDIUM
-        ),
+        Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Information')),
         api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$user_id
     ),
     Display::url(
-        Display::return_icon(
-            'login_as.png',
-            get_lang('Login as'),
-            [],
-            ICON_SIZE_MEDIUM
-        ),
+        Display::getMdiIcon(ActionIcon::LOGIN_AS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Login as')),
         api_get_path(WEB_CODE_PATH).
         'admin/user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::getTokenFromSession()
     ),

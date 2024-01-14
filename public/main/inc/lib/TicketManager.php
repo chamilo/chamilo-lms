@@ -12,6 +12,8 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * Class TicketManager.
@@ -863,7 +865,7 @@ class TicketManager
         ";
 
         $projectId = (int) $_GET['project_id'];
-        $userIsAllowInProject = self::userIsAllowInProject(api_get_user_entity($userId), $projectId);
+        $userIsAllowInProject = self::userIsAllowInProject($projectId);
 
         // Check if a role was set to the project
         if (false == $userIsAllowInProject) {
@@ -958,26 +960,28 @@ class TicketManager
 
             switch ($row['source']) {
                 case self::SOURCE_PRESENTIAL:
-                    $img_source = 'icons/32/user.png';
+                    $img_source = ObjectIcon::USER;
                     break;
                 case self::SOURCE_EMAIL:
-                    $img_source = 'icons/32/mail.png';
+                    $img_source = ObjectIcon::EMAIL;
                     break;
                 case self::SOURCE_PHONE:
-                    $img_source = 'icons/32/event.png';
+                    $img_source = ObjectIcon::PHONE;
                     break;
                 default:
-                    $img_source = 'icons/32/ticket.png';
+                    $img_source = ObjectIcon::TICKET;
                     break;
             }
 
             $row['start_date'] = Display::dateToStringAgoAndLongDate($row['start_date']);
             $row['sys_lastedit_datetime'] = Display::dateToStringAgoAndLongDate($row['sys_lastedit_datetime']);
 
-            $icon = Display::return_icon(
+            $icon = Display::getMdiIcon(
                 $img_source,
+                'ch-tool-icon',
+                'margin-right: 10px; float: left;',
+                ICON_SIZE_SMALL,
                 get_lang('Information'),
-                ['style' => 'margin-right: 10px; float: left;']
             );
 
             $icon .= '<a href="ticket_details.php?ticket_id='.$row['id'].'">'.$row['code'].'</a>';
@@ -1059,7 +1063,7 @@ class TicketManager
 
         // Check if a role was set to the project
         if (!empty($allowRoleList) && is_array($allowRoleList)) {
-            $allowed = self::userIsAllowInProject(api_get_user_entity(), $projectId);
+            $allowed = self::userIsAllowInProject($projectId);
             if (!$allowed) {
                 $sql .= " AND (ticket.assigned_last_user = $userId OR ticket.sys_insert_user_id = $userId )";
             }
@@ -1281,7 +1285,7 @@ class TicketManager
                         message.ticket_id = '$ticketId' ";
             $result = Database::query($sql);
             $ticket['messages'] = [];
-            $attach_icon = Display::return_icon('attachment.gif', '');
+            $attach_icon = Display::getMdiIcon(ObjectIcon::ATTACHMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL);
 
             while ($row = Database::fetch_assoc($result)) {
                 $message = $row;
@@ -2285,17 +2289,17 @@ class TicketManager
     public static function getSettingsMenuItems($exclude = null)
     {
         $project = [
-            'icon' => 'project.png',
+            'icon' => ObjectIcon::PROJECT,
             'url' => 'projects.php',
             'content' => get_lang('Projects'),
         ];
         $status = [
-            'icon' => 'check-circle.png',
+            'icon' => StateIcon::COMPLETE,
             'url' => 'status.php',
             'content' => get_lang('Status'),
         ];
         $priority = [
-            'icon' => 'tickets_urgent.png',
+            'icon' => StateIcon::EXPIRED,
             'url' => 'priorities.php',
             'content' => get_lang('Priority'),
         ];
@@ -2422,12 +2426,11 @@ class TicketManager
         }
     }
 
-    /**
-     * @param int   $projectId
-     */
-    public static function userIsAllowInProject(User $user, $projectId): bool
+    public static function userIsAllowInProject(int $projectId): bool
     {
-        if ($user->hasRole('ROLE_ADMIN')) {
+        $authorizationChecked = Container::getAuthorizationChecker();
+
+        if ($authorizationChecked->isGranted('ROLE_ADMIN')) {
             return true;
         }
 
@@ -2435,10 +2438,10 @@ class TicketManager
 
         // Check if a role was set to the project.
         // Project 1 is considered the default and is accessible to all users
-        if (!empty($allowRoleList) && is_array($allowRoleList)) {
+        if (!empty($allowRoleList)) {
             $result = false;
             foreach ($allowRoleList as $role) {
-                if ($user->hasRole($role)) {
+                if ($authorizationChecked->isGranted($role)) {
                     $result = true;
                     break;
                 }
@@ -2452,33 +2455,38 @@ class TicketManager
 
     public static function getAllowedRolesFromProject(int $projectId): array
     {
-        if ('' === $options = Container::getSettingsManager()->getSetting('ticket.ticket_project_user_roles')) {
+        // Define a mapping from role IDs to role names
+        $roleMap = [
+            1 => 'ROLE_ADMIN',
+            17 => 'ROLE_STUDENT_BOSS',
+            4 => 'ROLE_RRHH',
+            3 => 'ROLE_SESSION_MANAGER',
+            // ... other mappings can be added as needed
+        ];
+
+        $jsonString = Container::getSettingsManager()->getSetting('ticket.ticket_project_user_roles');
+
+        if (empty($jsonString)) {
             return [];
         }
 
-        if ([] === $permissionsLines = explode(PHP_EOL, $options)) {
+        $data = json_decode($jsonString, true);
+
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            // Invalid JSON
             return [];
         }
 
-        foreach ($permissionsLines as $permissionsLine) {
-            [$id, $rolesLine] = explode(':', $permissionsLine, 2);
-
-            if (empty($rolesLine)) {
-                continue;
-            }
-
-            $roles = explode(',', $rolesLine);
-
-            if ($projectId !== (int) $id) {
-                continue;
-            }
-
-            return array_map(
-                fn($role) => (int) $role,
-                $roles
-            );
+        if (!isset($data['permissions'][$projectId])) {
+            // No permissions for the given projectId
+            return [];
         }
 
-        return [];
+        $roleIds = $data['permissions'][$projectId];
+
+        // Transform role IDs into role names using the defined mapping
+        return array_map(function ($roleId) use ($roleMap) {
+            return $roleMap[$roleId] ?? "$roleId";
+        }, $roleIds);
     }
 }

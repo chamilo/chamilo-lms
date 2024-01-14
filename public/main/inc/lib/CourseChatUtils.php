@@ -658,7 +658,7 @@ class CourseChatUtils
             $criteria = Criteria::create()->where(Criteria::expr()->eq('course', $course));
             $userIsCoach = api_is_course_session_coach($this->userId, $course->getId(), $session->getId());
 
-            if (api_get_configuration_value('course_chat_restrict_to_coach')) {
+            if ('true' === api_get_setting('chat.course_chat_restrict_to_coach')) {
                 if ($userIsCoach) {
                     $criteria->andWhere(
                         Criteria::expr()->eq('status', Session::STUDENT)

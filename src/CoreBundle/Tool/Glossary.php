@@ -17,7 +17,7 @@ class Glossary extends AbstractTool implements ToolInterface
 
     public function getLink(): string
     {
-        return '/main/glossary/index.php';
+        return '/resources/glossary/:nodeId/';
     }
 
     public function getIcon(): string

@@ -117,6 +117,7 @@ class ResourceNodeVoter extends Voter
                 if ($resourceNode->isPublic()) {
                     return true;
                 }
+
                 // no break
             case self::EDIT:
                 break;
@@ -126,9 +127,9 @@ class ResourceNodeVoter extends Voter
         // Check if I'm the owner.
         $creator = $resourceNode->getCreator();
 
-        if ($creator instanceof UserInterface &&
-            $user instanceof UserInterface &&
-            $user->getUserIdentifier() === $creator->getUserIdentifier()
+        if ($creator instanceof UserInterface
+            && $user instanceof UserInterface
+            && $user->getUserIdentifier() === $creator->getUserIdentifier()
         ) {
             return true;
         }
@@ -161,9 +162,9 @@ class ResourceNodeVoter extends Voter
 
             // Check if resource was sent to the current user.
             $linkUser = $link->getUser();
-            if ($linkUser instanceof UserInterface &&
-                $user instanceof UserInterface &&
-                $linkUser->getUserIdentifier() === $user->getUserIdentifier()) {
+            if ($linkUser instanceof UserInterface
+                && $user instanceof UserInterface
+                && $linkUser->getUserIdentifier() === $user->getUserIdentifier()) {
                 $linkFound = 2;
 
                 break;
@@ -178,18 +179,18 @@ class ResourceNodeVoter extends Voter
 
             $linkSession = $link->getSession();
             $linkGroup = $link->getGroup();
-            //$linkUserGroup = $link->getUserGroup();
+            // $linkUserGroup = $link->getUserGroup();
 
             // @todo Check if resource was sent to a usergroup
 
             // Check if resource was sent inside a group in a course session.
-            if (null === $linkUser &&
-                $linkGroup instanceof CGroup && !empty($groupId) &&
-                $linkSession instanceof Session && !empty($sessionId) &&
-                $linkCourse instanceof Course && !empty($courseId) &&
-                ($linkCourse->getId() === $courseId &&
-                $linkSession->getId() === $sessionId &&
-                $linkGroup->getIid() === $groupId)
+            if (null === $linkUser
+                && $linkGroup instanceof CGroup && !empty($groupId)
+                && $linkSession instanceof Session && !empty($sessionId)
+                && $linkCourse instanceof Course
+                && ($linkCourse->getId() === $courseId
+                && $linkSession->getId() === $sessionId
+                && $linkGroup->getIid() === $groupId)
             ) {
                 $linkFound = 3;
 
@@ -197,11 +198,11 @@ class ResourceNodeVoter extends Voter
             }
 
             // Check if resource was sent inside a group in a base course.
-            if (null === $linkUser &&
-                empty($sessionId) &&
-                $linkGroup instanceof CGroup && !empty($groupId) &&
-                $linkCourse instanceof Course && !empty($courseId) && ($linkCourse->getId() === $courseId &&
-                $linkGroup->getIid() === $groupId)
+            if (null === $linkUser
+                && empty($sessionId)
+                && $linkGroup instanceof CGroup && !empty($groupId)
+                && $linkCourse instanceof Course && ($linkCourse->getId() === $courseId
+                && $linkGroup->getIid() === $groupId)
             ) {
                 $linkFound = 4;
 
@@ -209,10 +210,10 @@ class ResourceNodeVoter extends Voter
             }
 
             // Check if resource was sent to a course inside a session.
-            if (null === $linkUser &&
-                $linkSession instanceof Session && !empty($sessionId) &&
-                $linkCourse instanceof Course && !empty($courseId) && ($linkCourse->getId() === $courseId &&
-                $linkSession->getId() === $sessionId)
+            if (null === $linkUser
+                && $linkSession instanceof Session && !empty($sessionId)
+                && $linkCourse instanceof Course && ($linkCourse->getId() === $courseId
+                && $linkSession->getId() === $sessionId)
             ) {
                 $linkFound = 5;
 
@@ -220,8 +221,8 @@ class ResourceNodeVoter extends Voter
             }
 
             // Check if resource was sent to a course.
-            if (null === $linkUser &&
-                $linkCourse instanceof Course && !empty($courseId) && $linkCourse->getId() === $courseId
+            if (null === $linkUser
+                && $linkCourse instanceof Course && $linkCourse->getId() === $courseId
             ) {
                 $linkFound = 6;
 
@@ -251,8 +252,8 @@ class ResourceNodeVoter extends Voter
         }
 
         // Taken the rights from context (request + user roles).
-        //$rights = $link->getResourceNode()->getTool()->getToolResourceRight();
-        //$rights = $link->getResourceNode()->getResourceType()->getTool()->getToolResourceRight();
+        // $rights = $link->getResourceNode()->getTool()->getToolResourceRight();
+        // $rights = $link->getResourceNode()->getResourceType()->getTool()->getToolResourceRight();
 
         // By default, the rights are:
         // Teachers: CRUD.
@@ -272,8 +273,8 @@ class ResourceNodeVoter extends Voter
             }
 
             // If student.
-            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_STUDENT) &&
-                ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()
+            if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_STUDENT)
+                && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()
             ) {
                 $resourceRight = (new ResourceRight())
                     ->setMask($readerMask)
@@ -283,8 +284,8 @@ class ResourceNodeVoter extends Voter
             }
 
             // For everyone.
-            if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility() &&
-                $link->getCourse()->isPublic()
+            if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()
+                && $link->getCourse()->isPublic()
             ) {
                 $allowAnonsToView = true;
                 $resourceRight = (new ResourceRight())
@@ -391,7 +392,7 @@ class ResourceNodeVoter extends Voter
 
         // Role and permissions settings
         // Student can just view (read)
-        //$acl->allow($student, null, self::getReaderMask());
+        // $acl->allow($student, null, self::getReaderMask());
 
         // Teacher can view/edit
         /*$acl->allow(

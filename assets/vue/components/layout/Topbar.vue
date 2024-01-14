@@ -1,23 +1,17 @@
 <template>
-  <TopbarNotLoggedIn v-if="!isAuthenticated" />
+  <TopbarNotLoggedIn v-if="!securityStore.isAuthenticated" />
   <TopbarLoggedIn
-    v-if="isAuthenticated"
-    :current-user="currentUser"
-    :platform-settings="platformSettings"
+    v-else
+    :current-user="securityStore.user"
   />
 </template>
 
 <script setup>
-import {useStore} from "vuex";
+import { useStore } from "vuex"
 
-import TopbarLoggedIn from "./TopbarLoggedIn.vue";
-import TopbarNotLoggedIn from "./TopbarNotLoggedIn.vue";
-import {computed} from "vue";
+import TopbarLoggedIn from "./TopbarLoggedIn.vue"
+import TopbarNotLoggedIn from "./TopbarNotLoggedIn.vue"
+import { useSecurityStore } from "../../store/securityStore"
 
-const store = useStore();
-
-const platformSettings = window.config;
-
-const isAuthenticated = computed(() => store.getters['security/isAuthenticated']);
-const currentUser = computed(() => store.getters['security/getUser']);
+const securityStore = useSecurityStore()
 </script>

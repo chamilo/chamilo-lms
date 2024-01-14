@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * @author Bart Mollet
@@ -329,7 +330,7 @@ function prepare_user_sql_query($getCount)
     $sql .= $extraConditions;
 
     $variables = Session::read('variables_to_show', []);
-    $extraFields = api_get_configuration_value('user_search_on_extra_fields');
+    $extraFields = api_get_setting('profile.user_search_on_extra_fields', true);
 
     if (!empty($extraFields) && isset($extraFields['extra_fields']) && isset($_GET['keyword'])) {
         $extraFieldList = $extraFields['extra_fields'];
@@ -547,7 +548,7 @@ function modify_filter($user_id, $url_params, $row)
     $loginAsStatusForSessionAdmins = [$statusname[STUDENT]];
 
     // Except when session.allow_session_admin_login_as_teacher is enabled, then can login_as teachers also
-    if (api_get_configuration_value('session.allow_session_admin_login_as_teacher')) {
+    if ('true' === api_get_setting('session.allow_session_admin_login_as_teacher')) {
         $loginAsStatusForSessionAdmins[] = $statusname[COURSEMANAGER];
     }
 
@@ -730,7 +731,7 @@ function modify_filter($user_id, $url_params, $row)
         }
     }
 
-    $allowDelete = api_get_configuration_value('allow_delete_user_for_session_admin');
+    $allowDelete = ('true' === api_get_setting('session.allow_delete_user_for_session_admin'));
 
     if (api_is_session_admin() && $allowDelete) {
         if ($user_id != $currentUserId &&
@@ -842,35 +843,37 @@ function active_filter($active, $params, $row)
 {
     $_user = api_get_user_info();
 
+    $action = 'Unlock';
+    $image = StateIcon::WARNING;
     if ('1' == $active) {
         $action = 'Lock';
-        $image = 'accept'; //mdi-check-circle
+        $image = StateIcon::COMPLETE;
     } elseif ('-1' == $active) {
         $action = 'edit';
-        $image = 'warning'; //mdi-alert-circle
-    } elseif ('0' == $active) {
-        $action = 'Unlock';
-        $image = 'error'; //mdi-minus-circle
+        $image = StateIcon::EXPIRED;
     }
 
     $result = '';
 
     if ('edit' === $action) {
-        $result = Display::return_icon(
-            $image.'.png',
-            get_lang('Account expired'),
-            [],
-            16
+        $result = Display::getMdiIcon(
+            $image,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_TINY,
+            get_lang('Account expired')
         );
     } elseif ($row['0'] != $_user['user_id']) {
         // you cannot lock yourself out otherwise you could disable all the
         // accounts including your own => everybody is locked out and nobody
         // can change it anymore.
-        $result = Display::return_icon(
-            $image.'.png',
+        $result = Display::getMdiIcon(
+            $image,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_TINY,
             get_lang(ucfirst($action)),
-            ['onclick' => 'active_user(this);', 'id' => 'img_'.$row['0']],
-            16
+            ['onclick' => 'active_user(this);', 'id' => 'img_'.$row['0']]
         );
     }
 
@@ -1105,6 +1108,7 @@ $status_options[COURSEMANAGER] = get_lang('Trainer');
 $status_options[DRH] = get_lang('Human Resources Manager');
 $status_options[SESSIONADMIN] = get_lang('Course sessionsAdmin');
 $status_options[PLATFORM_ADMIN] = get_lang('Administrator');
+$status_options[STUDENT_BOSS] = get_lang('RoleStudentBoss');
 
 $form->addSelect(
     'keyword_status',

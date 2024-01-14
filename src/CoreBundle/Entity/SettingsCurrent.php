@@ -11,99 +11,68 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Platform settings.
- *
- * @ORM\Table(
- *     name="settings_current",
- *     options={"row_format"="DYNAMIC"},
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(
- *             name="unique_setting",
- *             columns={"variable", "subkey", "access_url"})
- *     },
- *     indexes={
- *         @ORM\Index(name="access_url", columns={"access_url"})
- *     }
- * )
- * @ORM\Entity
  */
+#[ORM\Table(name: 'settings_current', options: ['row_format' => 'DYNAMIC'])]
+#[ORM\Index(columns: ['access_url'], name: 'access_url')]
+#[ORM\UniqueConstraint(name: 'unique_setting', columns: ['variable', 'subkey', 'access_url'])]
+#[ORM\Entity]
 class SettingsCurrent
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl", inversedBy="settings", cascade={"persist"})
-     * @ORM\JoinColumn(name="access_url", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: AccessUrl::class, cascade: ['persist'], inversedBy: 'settings')]
+    #[ORM\JoinColumn(name: 'access_url', referencedColumnName: 'id')]
     protected AccessUrl $url;
 
-    /**
-     * @ORM\Column(name="variable", type="string", length=190, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'variable', type: 'string', length: 190, nullable: false)]
     protected string $variable;
 
-    /**
-     * @ORM\Column(name="subkey", type="string", length=190, nullable=true)
-     */
+    #[ORM\Column(name: 'subkey', type: 'string', length: 190, nullable: true)]
     protected ?string $subkey = null;
 
-    /**
-     * @ORM\Column(name="type", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'type', type: 'string', length: 255, nullable: true)]
     protected ?string $type = null;
 
-    /**
-     * @ORM\Column(name="category", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'category', type: 'string', length: 255, nullable: true)]
     protected ?string $category = null;
 
-    /**
-     * @ORM\Column(name="selected_value", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'selected_value', type: 'text', nullable: true)]
     protected ?string $selectedValue = null;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="comment", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'comment', type: 'string', length: 255, nullable: true)]
     protected ?string $comment = null;
 
-    /**
-     * @ORM\Column(name="scope", type="string", length=50, nullable=true)
-     */
+    #[ORM\Column(name: 'scope', type: 'string', length: 50, nullable: true)]
     protected ?string $scope = null;
 
-    /**
-     * @ORM\Column(name="subkeytext", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'subkeytext', type: 'string', length: 255, nullable: true)]
     protected ?string $subkeytext = null;
 
-    /**
-     * @ORM\Column(name="access_url_changeable", type="integer", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'access_url_changeable', type: 'integer', nullable: false)]
     protected int $accessUrlChangeable;
 
-    /**
-     * @ORM\Column(name="access_url_locked", type="integer", nullable=false, options={"default":0 })
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'access_url_locked', type: 'integer', nullable: false, options: ['default' => 0])]
     protected int $accessUrlLocked = 0;
 
     public function __construct()
     {
         $this->accessUrlLocked = 0;
         $this->scope = '';
+    }
+
+    public function getVariable(): string
+    {
+        return $this->variable;
     }
 
     public function setVariable(string $variable): self
@@ -113,9 +82,9 @@ class SettingsCurrent
         return $this;
     }
 
-    public function getVariable(): string
+    public function getSubkey(): ?string
     {
-        return $this->variable;
+        return $this->subkey;
     }
 
     public function setSubkey(string $subkey): self
@@ -125,14 +94,9 @@ class SettingsCurrent
         return $this;
     }
 
-    /**
-     * Get subkey.
-     *
-     * @return string
-     */
-    public function getSubkey()
+    public function getType(): ?string
     {
-        return $this->subkey;
+        return $this->type;
     }
 
     public function setType(string $type): self
@@ -142,14 +106,9 @@ class SettingsCurrent
         return $this;
     }
 
-    /**
-     * Get type.
-     *
-     * @return string
-     */
-    public function getType()
+    public function getCategory(): ?string
     {
-        return $this->type;
+        return $this->category;
     }
 
     public function setCategory(?string $category): self
@@ -159,26 +118,21 @@ class SettingsCurrent
         return $this;
     }
 
-    public function getCategory(): ?string
+    public function getSelectedValue(): ?string
     {
-        return $this->category;
+        return $this->selectedValue;
     }
 
-    public function setSelectedValue(?string $selectedValue): self
+    public function setSelectedValue(null|float|int|string $selectedValue): self
     {
         $this->selectedValue = $selectedValue;
 
         return $this;
     }
 
-    /**
-     * Get selectedValue.
-     *
-     * @return string
-     */
-    public function getSelectedValue()
+    public function getTitle(): string
     {
-        return $this->selectedValue;
+        return $this->title;
     }
 
     public function setTitle(string $title): self
@@ -188,14 +142,9 @@ class SettingsCurrent
         return $this;
     }
 
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getComment(): ?string
     {
-        return $this->title;
+        return $this->comment;
     }
 
     public function setComment(string $comment): self
@@ -205,14 +154,9 @@ class SettingsCurrent
         return $this;
     }
 
-    /**
-     * Get comment.
-     *
-     * @return string
-     */
-    public function getComment()
+    public function getScope(): ?string
     {
-        return $this->comment;
+        return $this->scope;
     }
 
     public function setScope(string $scope): self
@@ -222,14 +166,9 @@ class SettingsCurrent
         return $this;
     }
 
-    /**
-     * Get scope.
-     *
-     * @return string
-     */
-    public function getScope()
+    public function getSubkeytext(): ?string
     {
-        return $this->scope;
+        return $this->subkeytext;
     }
 
     public function setSubkeytext(string $subkeytext): self
@@ -239,14 +178,9 @@ class SettingsCurrent
         return $this;
     }
 
-    /**
-     * Get subkeytext.
-     *
-     * @return string
-     */
-    public function getSubkeytext()
+    public function getAccessUrlChangeable(): int
     {
-        return $this->subkeytext;
+        return $this->accessUrlChangeable;
     }
 
     public function setAccessUrlChangeable(int $accessUrlChangeable): self
@@ -256,14 +190,9 @@ class SettingsCurrent
         return $this;
     }
 
-    /**
-     * Get accessUrlChangeable.
-     *
-     * @return int
-     */
-    public function getAccessUrlChangeable()
+    public function getAccessUrlLocked(): int
     {
-        return $this->accessUrlChangeable;
+        return $this->accessUrlLocked;
     }
 
     public function setAccessUrlLocked(int $accessUrlLocked): self
@@ -273,25 +202,12 @@ class SettingsCurrent
         return $this;
     }
 
-    public function getAccessUrlLocked(): int
-    {
-        return $this->accessUrlLocked;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return AccessUrl
-     */
-    public function getUrl()
+    public function getUrl(): AccessUrl
     {
         return $this->url;
     }

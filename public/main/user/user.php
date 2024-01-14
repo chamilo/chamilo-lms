@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * This script displays a list of the users of the current course.
@@ -49,7 +50,7 @@ if (!empty($sessionId)) {
 }
 
 $disableUsers = 3 === (int) $course_info['visibility'] &&
-    api_get_configuration_value('disable_change_user_visibility_for_public_courses');
+    ('true' === api_get_setting('profile.disable_change_user_visibility_for_public_courses'));
 
 if (false === $canEdit && $disableUsers) {
     api_not_allowed(true);
@@ -524,9 +525,9 @@ $table->set_header($header_nr++, get_lang('Login'));
 $indexList['groups'] = $header_nr;
 $table->set_header($header_nr++, get_lang('Group'), false);
 
-$hideFields = api_get_configuration_value('hide_user_field_from_list');
+$hideFields = api_get_setting('profile.hide_user_field_from_list', true);
 
-if (!empty($hideFields)) {
+if (isset($hideFields['fields'])) {
     $hideFields = $hideFields['fields'];
     foreach ($hideFields as $fieldToHide) {
         if (isset($indexList[$fieldToHide])) {
@@ -591,7 +592,7 @@ if ($canRead) {
             $selectedTab = 1;
             $url = api_get_path(WEB_CODE_PATH).'user/subscribe_user.php?'.api_get_cidreq().'&type='.STUDENT;
             $icon = Display::url(
-                Display::return_icon('add-user.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
+                Display::getMdiIcon(ActionIcon::ADD_USER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')),
                 $url
             );
             break;
@@ -599,7 +600,7 @@ if ($canRead) {
             $selectedTab = 2;
             $url = api_get_path(WEB_CODE_PATH).'user/subscribe_user.php?'.api_get_cidreq().'&type='.COURSEMANAGER;
             $icon = Display::url(
-                Display::return_icon('add-teacher.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
+                Display::getMdiIcon(ActionIcon::ADD_USER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')),
                 $url
             );
             break;
@@ -612,19 +613,19 @@ if ($canRead) {
 
     if ($canRead) {
         $actionsLeft .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=csv&type='.$type.'">'.
-            Display::return_icon('export_csv.png', get_lang('CSV export'), [], ICON_SIZE_MEDIUM).'</a> ';
+            Display::getMdiIcon('export_csv', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')).'</a> ';
         $actionsLeft .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=xls&type='.$type.'">'.
-            Display::return_icon('export_excel.png', get_lang('Excel export'), [], ICON_SIZE_MEDIUM).'</a> ';
+            Display::getMdiIcon('export_excel', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Excel export')).'</a> ';
     }
 
     if ($canEditUsers && $canEdit) {
         $actionsLeft .= '<a href="user_import.php?'.api_get_cidreq().'&action=import&type='.$type.'">'.
-            Display::return_icon('import_csv.png', get_lang('Import users list'), [], ICON_SIZE_MEDIUM).'</a> ';
+            Display::getMdiIcon('import_csv', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import users list')).'</a> ';
     }
 
     if ($canRead) {
         $actionsLeft .= '<a href="user.php?'.api_get_cidreq().'&action=export&format=pdf&type='.$type.'">'.
-            Display::return_icon('pdf.png', get_lang('Export to PDF'), [], ICON_SIZE_MEDIUM).'</a> ';
+            Display::getMdiIcon('pdf', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')).'</a> ';
     }
 
     // Build search-form
@@ -1021,7 +1022,7 @@ function modify_filter($user_id, $row, $data)
     if ($is_allowed_to_track) {
         $result .= '<a href="../my_space/myStudents.php?'.api_get_cidreq().'&student='.$user_id.'&details=true&course='.$courseId.'&origin=user_course&id_session='.api_get_session_id().'"
         title="'.get_lang('Reporting').'">
-            '.Display::return_icon('statistics.png', get_lang('Reporting')).'
+            '.Display::getMdiIcon('statistics', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Reporting')).'
         </a>';
     }
 
@@ -1030,7 +1031,7 @@ function modify_filter($user_id, $row, $data)
     if (api_is_platform_admin()) {
         $result .= ' <a
         href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::getTokenFromSession().'">'.
-            Display::return_icon('login_as.png', get_lang('Login as')).'</a>&nbsp;&nbsp;';
+            Display::getMdiIcon('login_as', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Login as')).'</a>&nbsp;&nbsp;';
     }
 
     if (api_is_allowed_to_edit(null, true)) {
@@ -1054,7 +1055,7 @@ function modify_filter($user_id, $row, $data)
                 $result .= '<a href="'.
                     api_get_path(WEB_CODE_PATH).'extra/userInfo.php?'.api_get_cidreq().'&editMainUserInfo='.$user_id.'"
                     title="'.get_lang('Edit').'" >'.
-                    Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).
+                    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).
                     '</a>&nbsp;';
             }
 

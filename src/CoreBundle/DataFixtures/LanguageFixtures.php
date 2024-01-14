@@ -383,7 +383,7 @@ class LanguageFixtures extends Fixture
             [
                 'original_name' => 'Runasimi',
                 'english_name' => 'quechua_cusco',
-                'isocode' => 'quz_PE',
+                'isocode' => 'qu_PE',
                 'available' => 0,
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',

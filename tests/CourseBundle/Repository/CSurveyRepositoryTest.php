@@ -166,6 +166,7 @@ class CSurveyRepositoryTest extends AbstractApiTest
 
         /** @var CSurvey $survey */
         $survey = $surveyRepo->find($survey->getIid());
+
         /** @var CSurveyQuestion $question */
         $question = $surveyQuestionRepo->find($question->getIid());
 

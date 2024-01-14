@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\Common\Collections\Criteria;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Generate a teacher time report in platform by session only.
@@ -178,11 +179,11 @@ if ($session) {
     $view->assign('users', $usersInfo);
 
     $actions = Display::url(
-        Display::return_icon('export_csv.png', get_lang('CSV export'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')),
         api_get_self().'?'.http_build_query(['export' => 'csv', 'session' => $session->getId()])
     );
     $actions .= Display::url(
-        Display::return_icon('export_excel.png', get_lang('Excel export'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Excel export')),
         api_get_self().'?'.http_build_query(['export' => 'xls', 'session' => $session->getId()])
     );
 

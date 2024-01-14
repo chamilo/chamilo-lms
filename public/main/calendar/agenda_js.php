@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
 $typeList = ['personal', 'course', 'admin', 'platform'];
@@ -107,37 +109,19 @@ if ('en' === $region_value) {
 }
 $tpl->assign('region_value', $region_value);
 
-$export_icon = Display::return_icon(
-    'export.png',
-    null,
-    null,
-    null,
-    null,
-    true,
-    false
-);
-$export_icon_low = Display::return_icon(
-    'export_low_fade.png',
-    null,
-    null,
-    null,
-    null,
-    true,
-    false
-);
-$export_icon_high = Display::return_icon(
-    'export_high_fade.png',
-    null,
-    null,
-    null,
-    null,
-    true,
-    false
-);
+$export_icon = ActionIcon::EXPORT_ARCHIVE;
+$export_icon_low = ActionIcon::EXPORT_ARCHIVE;
+$export_icon_high = ActionIcon::EXPORT_ARCHIVE;
 
 $tpl->assign(
     'export_ical_confidential_icon',
-    Display::return_icon($export_icon_high, get_lang('Export in iCal format as confidential event'))
+    Display::getMdiIcon(
+        $export_icon_high,
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_SMALL,
+        get_lang('Export in iCal format as confidential event')
+    )
 );
 
 $actions = $agenda->displayActions('calendar', $userId);
@@ -182,7 +166,7 @@ $agendaColors = array_merge(
         'personal' => 'steel blue', //steel blue
         'student_publication' => '#FF8C00', //DarkOrange
     ],
-    api_get_configuration_value('agenda_colors') ?: []
+    api_get_setting('agenda.agenda_colors', true) ?: []
 );
 
 switch ($type_event_class) {
@@ -279,9 +263,9 @@ $form->addLabel(get_lang('Attachment'), '<div id="attachment_text" style="displa
 $form->addHtml('</div>');
 
 $tpl->assign('form_add', $form->returnForm());
-$tpl->assign('legend_list', api_get_configuration_value('agenda_legend'));
+$tpl->assign('legend_list', api_get_setting('agenda.agenda_legend', true));
 
-$onHoverInfo = api_get_configuration_value('agenda_on_hover_info');
+$onHoverInfo = api_get_setting('agenda.agenda_on_hover_info', true);
 if (!empty($onHoverInfo)) {
     $options = $onHoverInfo['options'];
 } else {

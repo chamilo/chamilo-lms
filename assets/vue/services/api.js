@@ -4,14 +4,16 @@ export default function makeService(endpoint) {
   return {
     find(id, params) {
       console.log('api.js find');
-      if (params) {
-        params['getFile'] = true;
-      } else {
-        params = {getFile: true};
-      }
+      const currentParams = new URLSearchParams(window.location.search);
+      const combinedParams = {
+        ...Object.fromEntries(currentParams),
+        ...params,
+        getFile: true
+      };
 
-      let options = {params: params};
-      return fetch(`${id}`, options);
+      const searchParams = new URLSearchParams(combinedParams);
+
+      return fetch(id, { params: Object.fromEntries(searchParams) });
     },
     findAll(params) {
       console.log('api.js findAll');

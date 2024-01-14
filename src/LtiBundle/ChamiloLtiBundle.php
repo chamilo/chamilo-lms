@@ -8,6 +8,4 @@ namespace Chamilo\LtiBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class ChamiloLtiBundle extends Bundle
-{
-}
+class ChamiloLtiBundle extends Bundle {}

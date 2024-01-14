@@ -31,10 +31,10 @@ class PaginationSubscriber implements EventSubscriberInterface
         $event->stopPropagation();
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
-            'knp_pager.items' => ['items', 1/*increased priority to override any internal*/],
+            'knp_pager.items' => ['items', 1/* increased priority to override any internal */],
             'knp_pager.pagination' => ['pagination', 0],
         ];
     }

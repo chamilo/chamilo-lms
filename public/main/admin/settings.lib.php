@@ -7,6 +7,9 @@ use ChamiloSession as Session;
 use Symfony\Component\Filesystem\Filesystem;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Entity\Asset;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * Library of the settings.php file.
@@ -862,29 +865,27 @@ function handleSearch()
         }
         */
 
-        $xapianLoaded = Display::return_icon('bullet_green.png', get_lang('Validate'));
-        $dir_exists = Display::return_icon('bullet_green.png', get_lang('Validate'));
-        $dir_is_writable = Display::return_icon('bullet_green.png', get_lang('Validate'));
-        $specific_fields_exists = Display::return_icon('bullet_green.png', get_lang('Validate'));
+        $xapianLoaded = Display::getMdiIcon(StateIcon::OPEN_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Validate'));
+        $dir_exists = Display::getMdiIcon(StateIcon::OPEN_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Validate'));
+        $dir_is_writable = Display::getMdiIcon(StateIcon::OPEN_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Validate'));
+        $specific_fields_exists = Display::getMdiIcon(StateIcon::OPEN_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Validate'));
 
         //Testing specific fields
         if (empty($specific_fields)) {
-            $specific_fields_exists = Display::return_icon(
-                'bullet_red.png',
-                get_lang('Add a specific search field')
+            $specific_fields_exists = Display::getMdiIcon(StateIcon::CLOSED_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add a specific search field')
             );
         }
         //Testing xapian extension
         if (!extension_loaded('xapian')) {
-            $xapianLoaded = Display::return_icon('bullet_red.png', get_lang('Error'));
+            $xapianLoaded = Display::getMdiIcon(StateIcon::CLOSED_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Error'));
         }
         //Testing xapian searchdb path
         if (!is_dir($xapianPath)) {
-            $dir_exists = Display::return_icon('bullet_red.png', get_lang('Error'));
+            $dir_exists = Display::getMdiIcon(StateIcon::CLOSED_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Error'));
         }
         //Testing xapian searchdb path is writable
         if (!is_writable($xapianPath)) {
-            $dir_is_writable = Display::return_icon('bullet_red.png', get_lang('Error'));
+            $dir_is_writable = Display::getMdiIcon(StateIcon::CLOSED_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Error'));
         }
 
         $data = [];
@@ -917,7 +918,7 @@ function handleTemplates()
     if ('add' != $action) {
         echo '<div class="actions" style="margin-left: 1px;">';
         echo '<a href="settings.php?category=Templates&action=add">'.
-                Display::return_icon('new_template.png', get_lang('Add a template'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::getMdiIcon(ObjectIcon::TEMPLATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a template')).'</a>';
         echo '</div>';
     }
 
@@ -1060,8 +1061,8 @@ function getTemplateData($from, $number_of_items, $column, $direction)
  */
 function actionsFilter($id)
 {
-    $return = '<a href="settings.php?category=Templates&action=edit&id='.Security::remove_XSS($id).'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>';
-    $return .= '<a href="settings.php?category=Templates&action=delete&id='.Security::remove_XSS($id).'" onClick="javascript:if(!confirm('."'".get_lang('Please confirm your choice')."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
+    $return = '<a href="settings.php?category=Templates&action=edit&id='.Security::remove_XSS($id).'">'.Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
+    $return .= '<a href="settings.php?category=Templates&action=delete&id='.Security::remove_XSS($id).'" onClick="javascript:if(!confirm('."'".get_lang('Please confirm your choice')."'".')) return false;">'.Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
 
     return $return;
 }
@@ -1256,7 +1257,7 @@ function addEditTemplate()
                     'confirm'
                 );
                 echo '<a href="settings.php?category=Templates&action=add">'.
-                    Display::return_icon('new_template.png', get_lang('Add a template'), '', ICON_SIZE_MEDIUM).
+                    Display::getMdiIcon(ObjectIcon::TEMPLATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a template')).
                     '</a>';
             } else {
                 $templateContent = '<head>'.$viewport.'<title>'.$values['title'].'</title>'.$bootstrap.'</head>'
@@ -1400,13 +1401,13 @@ function generateSettingsForm($settings, $settings_by_access_list)
                             $form->addElement(
                                 'html',
                                 '<div class="float-right"><a class="share_this_setting" data_status = "0"  data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
-                                Display::return_icon('shared_setting.png', get_lang('Change setting visibility for the other portals'), null, ICON_SIZE_MEDIUM).'</a></div>'
+                                Display::getMdiIcon(StateIcon::SHARED_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Change setting visibility for the other portals')).'</a></div>'
                             );
                         } else {
                             $form->addElement(
                                 'html',
                                 '<div class="float-right"><a class="share_this_setting" data_status = "1" data_to_send = "'.$row['variable'].'" href="javascript:void(0);">'.
-                                Display::return_icon('shared_setting_na.png', get_lang('Change setting visibility for the other portals'), null, ICON_SIZE_MEDIUM).'</a></div>'
+                                Display::getMdiIcon(StateIcon::SHARED_VISIBILITY, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Change setting visibility for the other portals')).'</a></div>'
                             );
                         }
                     } else {
@@ -1414,13 +1415,13 @@ function generateSettingsForm($settings, $settings_by_access_list)
                             $form->addElement(
                                 'html',
                                 '<div class="float-right">'.
-                                Display::return_icon('shared_setting.png', get_lang('Change setting visibility for the other portals'), null, ICON_SIZE_MEDIUM).'</div>'
+                                Display::getMdiIcon(StateIcon::SHARED_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Change setting visibility for the other portals')).'</div>'
                             );
                         } else {
                             $form->addElement(
                                 'html',
                                 '<div class="float-right">'.
-                                Display::return_icon('shared_setting_na.png', get_lang('Change setting visibility for the other portals'), null, ICON_SIZE_MEDIUM).'</div>'
+                                Display::getMdiIcon(StateIcon::SHARED_VISIBILITY, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Change setting visibility for the other portals')).'</div>'
                             );
                         }
                     }
@@ -1687,7 +1688,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 $url = PDF::get_watermark(null);
 
                 if (false != $url) {
-                    $delete_url = '<a href="?delete_watermark">'.get_lang('Remove picture').' '.Display::return_icon('delete.png', get_lang('Remove picture')).'</a>';
+                    $delete_url = '<a href="?delete_watermark">'.get_lang('Remove picture').' '.Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove picture')).'</a>';
                     $form->addElement('html', '<div style="max-height:100px; max-width:100px; margin-left:162px; margin-bottom:10px; clear:both;"><img src="'.$url.'" style="margin-bottom:10px;" />'.$delete_url.'</div>');
                 }
 
@@ -1861,9 +1862,9 @@ function showSearchToolsStatusTable()
                 $output[] = '';
             }
 
-            $icon = Display::return_icon('bullet_red.png', get_lang('Not installed'));
+            $icon = Display::getMdiIcon(StateIcon::CLOSED_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Not installed'));
             if (!empty($output[0])) {
-                $icon = Display::return_icon('bullet_green.png', get_lang('Installed'));
+                $icon = Display::getMdiIcon(StateIcon::OPEN_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Installed'));
             }
             $data2[] = [$program, $output[0], $icon];
         }

@@ -44,22 +44,12 @@ class CourseDescriptionController
             foreach ($categories as $id => $title) {
                 if (ADD_BLOCK == $i) {
                     $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=add">'.
-                        Display::return_icon(
-                            $iconList[$id],
-                            $title,
-                            '',
-                            ICON_SIZE_MEDIUM
-                        ).
+                        Display::getMdiIcon($iconList[$id], 'ch-tool-icon', null, 32, $title).
                         '</a>';
                     break;
                 } else {
                     $actionLeft .= '<a href="index.php?action=edit&'.api_get_cidreq().'&description_type='.$id.'">'.
-                        Display::return_icon(
-                            $iconList[$id],
-                            $title,
-                            '',
-                            ICON_SIZE_MEDIUM
-                        ).
+                        Display::getMdiIcon($iconList[$id], 'ch-tool-icon', null, 32, $title).
                         '</a>';
                     $i++;
                 }
@@ -261,7 +251,7 @@ class CourseDescriptionController
             $form->addElement('hidden', 'description_type', $description_type);
             //$form->addElement('hidden', 'sec_token', $token);
 
-            if (api_get_configuration_value('save_titles_as_html')) {
+            if ('true' === api_get_setting('editor.save_titles_as_html')) {
                 $form->addHtmlEditor(
                     'title',
                     get_lang('Title'),
@@ -351,7 +341,7 @@ class CourseDescriptionController
                 'index.php?action=add&'.api_get_cidreq()
             );
             $form->addElement('hidden', 'description_type', ADD_BLOCK);
-            if (api_get_configuration_value('save_titles_as_html')) {
+            if ('true' === api_get_setting('editor.save_titles_as_html')) {
                 $form->addHtmlEditor(
                     'title',
                     get_lang('Title'),

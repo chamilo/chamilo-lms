@@ -40,6 +40,7 @@ class OutcomeDeleteRequest extends OutcomeRequest
 
         /** @var GradebookEvaluation $evaluation */
         $evaluation = $this->entityManager->find(GradebookEvaluation::class, $sourcedParts['e']);
+
         /** @var User $user */
         $user = $this->entityManager->find(User::class, $sourcedParts['u']);
 

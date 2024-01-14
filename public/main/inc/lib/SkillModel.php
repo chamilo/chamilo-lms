@@ -24,6 +24,7 @@ use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 class SkillModel extends Model
 {
@@ -192,7 +193,7 @@ class SkillModel extends Model
                 break;
         }
 
-        $isHierarchicalTable = api_get_configuration_value('table_of_hierarchical_skill_presentation');
+        $isHierarchicalTable = ('true' === api_get_setting('skill.skills_hierarchical_view_in_user_tracking'));
         $skillRepo = Container::getSkillRepository();
         $html = '';
         foreach ($skills as $skill) {
@@ -711,7 +712,7 @@ class SkillModel extends Model
      */
     public function processVertex(Vertex $vertex, $skills = [], $level = 0)
     {
-        $isHierarchicalTable = api_get_configuration_value('table_of_hierarchical_skill_presentation');
+        $isHierarchicalTable = ('true' === api_get_setting('skill.skills_hierarchical_view_in_user_tracking'));
         $subTable = '';
         if ($vertex->getVerticesEdgeTo()->count() > 0) {
             if ($isHierarchicalTable) {
@@ -788,6 +789,7 @@ class SkillModel extends Model
             }
         }
 
+        $assetRepo = Container::getAssetRepository();
         foreach ($skills as $resultData) {
             $courseId = $resultData['course_id'];
             if (!empty($courseId)) {
@@ -800,9 +802,18 @@ class SkillModel extends Model
             } else {
                 $courseInfo = [];
             }
+            $asset = $assetRepo->find($resultData['asset_id']);
+            $image = $assetRepo->getAssetUrl($asset);
+            $badgeImage = Display::img(
+                $image,
+                '',
+                ['width' => '40'],
+                false
+            );;
             $tableRow = [
                 'skill_id' => $resultData['id'],
                 'asset_id' => $resultData['asset_id'],
+                'skill_badge' => $badgeImage,
                 'skill_name' => self::translateName($resultData['name']),
                 'short_code' => $resultData['short_code'],
                 'skill_url' => $resultData['url'],
@@ -818,8 +829,8 @@ class SkillModel extends Model
             $tableRows[] = $tableRow;
         }
 
-        $isHierarchicalTable = api_get_configuration_value('table_of_hierarchical_skill_presentation');
-        $allowLevels = api_get_configuration_value('skill_levels_names');
+        $isHierarchicalTable = ('true' === api_get_setting('skill.skills_hierarchical_view_in_user_tracking'));
+        $allowLevels = api_get_setting('skill.skill_levels_names', true);
 
         $tableResult = '<div id="skillList">';
         if ($isHierarchicalTable) {
@@ -1651,7 +1662,7 @@ class SkillModel extends Model
                 }
             }
 
-            $allow = api_get_configuration_value('allow_private_skills');
+            $allow = ('true' === api_get_setting('skill.allow_private_skills'));
             if (true === $allow) {
                 if (api_is_teacher()) {
                     return UserManager::isTeacherOfStudent(
@@ -1829,12 +1840,7 @@ class SkillModel extends Model
     public function getToolBar()
     {
         $toolbar = Display::url(
-            Display::return_icon(
-                'back.png',
-                get_lang('Manage skills'),
-                null,
-                ICON_SIZE_MEDIUM
-            ),
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Manage skills')),
             api_get_path(WEB_CODE_PATH).'skills/skill_list.php'
         );
 
@@ -1885,7 +1891,7 @@ class SkillModel extends Model
         $resultId = 0,
         $addHeader = false
     ) {
-        $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
+        $allowSkillInTools = ('true' === api_get_setting('skill.allow_skill_rel_items'));
         if ($allowSkillInTools && !empty($typeId) && !empty($itemId) && !empty($userId)) {
             $em = Database::getManager();
             $items = $em->getRepository(SkillRelItem::class)->findBy(
@@ -1963,7 +1969,7 @@ class SkillModel extends Model
      */
     public static function addSkillsToForm(FormValidator $form, $typeId, $itemId = 0)
     {
-        $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
+        $allowSkillInTools = ('true' === api_get_setting('skill.allow_skill_rel_items'));
         if (!$allowSkillInTools) {
             return [];
         }
@@ -2006,7 +2012,7 @@ class SkillModel extends Model
      */
     public static function getSkillRelItemsPerCourse($courseId, $sessionId = null)
     {
-        $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
+        $allowSkillInTools = ('true' === api_get_setting('skill.allow_skill_rel_items'));
         $skills = [];
 
         if (empty($sessionId)) {
@@ -2104,7 +2110,7 @@ class SkillModel extends Model
      */
     public static function getSkillRelItems($typeId, $itemId)
     {
-        $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
+        $allowSkillInTools = ('true' === api_get_setting('skill.allow_skill_rel_items'));
         $skills = [];
         if ($allowSkillInTools) {
             $em = Database::getManager();
@@ -2144,7 +2150,7 @@ class SkillModel extends Model
      */
     public static function deleteSkillsFromItem($itemId, $typeId)
     {
-        $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
+        $allowSkillInTools = ('true' === api_get_setting('skill.allow_skill_rel_items'));
         if ($allowSkillInTools) {
             $itemId = (int) $itemId;
             $typeId = (int) $typeId;
@@ -2174,7 +2180,7 @@ class SkillModel extends Model
      */
     public static function saveSkills($form, $typeId, $itemId)
     {
-        $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
+        $allowSkillInTools = ('true' === api_get_setting('skill.allow_skill_rel_items'));
         if ($allowSkillInTools) {
             $userId = api_get_user_id();
             $courseId = api_get_course_int_id();
@@ -2254,7 +2260,7 @@ class SkillModel extends Model
      */
     public static function saveSkillsToCourse($skills, $courseId, $sessionId)
     {
-        $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
+        $allowSkillInTools = ('true' === api_get_setting('skill.allow_skill_rel_items'));
         if (!$allowSkillInTools) {
             return false;
         }
@@ -2341,7 +2347,7 @@ class SkillModel extends Model
         string $argumentation,
         int $authorId
     ): ?SkillRelUser {
-        $showLevels = false === api_get_configuration_value('hide_skill_levels');
+        $showLevels = ('false' === api_get_setting('skill.hide_skill_levels'));
 
         $entityManager = Database::getManager();
 

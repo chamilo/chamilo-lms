@@ -4,6 +4,11 @@
 /**
  * Report on users followed (filtered by status given in URL).
  */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -105,7 +110,7 @@ function get_users($from, $limit, $column, $direction)
     }
 
     if (false === $drhLoaded) {
-        $checkSessionVisibility = api_get_configuration_value('show_users_in_active_sessions_in_tracking');
+        $checkSessionVisibility = ('true' === api_get_setting('session.show_users_in_active_sessions_in_tracking'));
         $students = UserManager::getUsersFollowedByUser(
             api_get_user_id(),
             $status,
@@ -181,10 +186,10 @@ function get_users($from, $limit, $column, $direction)
 
         if (isset($_GET['id_coach']) && 0 != intval($_GET['id_coach'])) {
             $detailsLink = '<a href="myStudents.php?student='.$student_id.'&id_coach='.$coach_id.'&id_session='.$sessionId.'">
-				            '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a>';
+				            '.Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Details')).'</a>';
         } else {
             $detailsLink = '<a href="myStudents.php?student='.$student_id.'">
-				            '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a>';
+				            '.Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Details')).'</a>';
         }
 
         $row[] = $detailsLink;
@@ -206,27 +211,27 @@ $actionsLeft = '';
 if (api_is_drh()) {
     $menu_items = [
         Display::url(
-            Display::return_icon('statistics.png', get_lang('View my progress'), '', ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('View my progress')),
             $webCodePath.'auth/my_progress.php'
         ),
         Display::url(
-            Display::return_icon('user_na.png', get_lang('Learners'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Learners')),
             '#'
         ),
         Display::url(
-            Display::return_icon('teacher.png', get_lang('Trainers'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Trainers')),
             'teachers.php'
         ),
         Display::url(
-            Display::return_icon('course.png', get_lang('Courses'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Courses')),
             'course.php'
         ),
         Display::url(
-            Display::return_icon('session.png', get_lang('Course sessions'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Course sessions')),
             'session.php'
         ),
         Display::url(
-            Display::return_icon('skills.png', get_lang('Skills'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ObjectIcon::BADGE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Skills')),
             $webCodePath.'social/my_skills_report.php'
         ),
     ];
@@ -239,46 +244,41 @@ if (api_is_drh()) {
     }
 } elseif (api_is_student_boss()) {
     $actionsLeft .= Display::url(
-        Display::return_icon('statistics.png', get_lang('View my progress'), '', ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('View my progress')),
         $webCodePath.'auth/my_progress.php'
     );
     $actionsLeft .= Display::url(
-        Display::return_icon('user_na.png', get_lang('Learners'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Learners')),
         '#'
     );
     $actionsLeft .= Display::url(
-        Display::return_icon('skills.png', get_lang('Skills'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ObjectIcon::BADGE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Skills')),
         $webCodePath.'social/my_skills_report.php'
     );
     $actionsLeft .= Display::url(
-        Display::return_icon('statistics.png', get_lang("Corporate report"), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang("Corporate report")),
         $webCodePath.'my_space/company_reports.php'
     );
     $actionsLeft .= Display::url(
-        Display::return_icon(
-            'certificate_list.png',
-            get_lang('GradebookSeeListOfLearnersCertificates'),
-            [],
-            ICON_SIZE_MEDIUM
-        ),
+        Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('GradebookSeeListOfLearnersCertificates')),
         $webCodePath.'gradebook/certificate_report.php'
     );
 }
 
 $actionsRight = Display::url(
-    Display::return_icon('printer.png', get_lang('Print'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ActionIcon::PRINT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Print')),
     'javascript: void(0);',
     ['onclick' => 'javascript: window.print();']
 );
 $actionsRight .= Display::url(
-    Display::return_icon('export_csv.png', get_lang('CSV export'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')),
     api_get_self().'?export=csv&keyword='.$keyword
 );
 
 $toolbar = Display::toolbarAction('toolbar-user', [$actionsLeft, $actionsRight]);
 
 $itemPerPage = 10;
-$perPage = api_get_configuration_value('my_space_users_items_per_page');
+$perPage = api_get_setting('profile.my_space_users_items_per_page');
 if ($perPage) {
     $itemPerPage = (int) $perPage;
 }

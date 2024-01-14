@@ -174,7 +174,7 @@ switch ($action) {
         }
         break;
     case 'active_user':
-        $allow = api_get_configuration_value('allow_disable_user_for_session_admin');
+        $allow = ('true' === api_get_setting('session.allow_disable_user_for_session_admin'));
         if ((api_is_platform_admin() && api_global_admin_can_edit_admin($_GET['user_id'])) ||
             (
                 $allow &&

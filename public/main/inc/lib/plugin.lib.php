@@ -2,6 +2,7 @@
 /* See license terms in /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 /**
  * Class AppPlugin.
@@ -700,22 +701,13 @@ class AppPlugin
             $pluginName = $obj->get_name();
             $pluginTitle = $obj->get_title();
             if (!empty($obj->course_settings)) {
-                if (is_file(api_get_path(SYS_CODE_PATH).'img/icons/'.ICON_SIZE_SMALL.'/'.$pluginName.'.png')) {
-                    $icon = Display::return_icon(
-                        $pluginName.'.png',
-                        Security::remove_XSS($pluginTitle),
-                        '',
-                        ICON_SIZE_SMALL
-                    );
-                } else {
-                    $icon = Display::return_icon(
-                        'plugins.png',
-                        Security::remove_XSS($pluginTitle),
-                        '',
-                        ICON_SIZE_SMALL
-                    );
-                }
-
+                $icon = Display::getMdiIcon(
+                    ToolIcon::PLUGIN,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    Security::remove_XSS($pluginTitle)
+                );
                 $form->addHtml('<div class="panel panel-default">');
                 $form->addHtml('
                     <div class="panel-heading" role="tab" id="heading-'.$pluginName.'-settings">
@@ -756,7 +748,7 @@ class AppPlugin
                         );
                         $courseSetting = api_get_course_setting($setting['name']);
                         if (-1 === $courseSetting) {
-                            $defaultValue = api_get_plugin_setting($plugin_name, $setting['name']);
+                            $defaultValue = api_get_plugin_setting($pluginName, $setting['name']);
                             if (!empty($defaultValue)) {
                                 if ('true' === $defaultValue) {
                                     $element->setChecked(true);

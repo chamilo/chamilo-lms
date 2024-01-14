@@ -48,7 +48,7 @@ if ($edit_result_form->validate()) {
         $result->set_score($score);
         $result->save();
 
-        $allowMultipleAttempts = api_get_configuration_value('gradebook_multiple_evaluation_attempts');
+        $allowMultipleAttempts = ('true' === api_get_setting('gradebook.gradebook_multiple_evaluation_attempts'));
         if ($allowMultipleAttempts) {
             $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT_ATTEMPT);
             $now = api_get_utc_datetime();

@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Framework\Container;
-
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 class ExtraField extends Model
 {
     public const FIELD_TYPE_TEXT = 1;
@@ -178,10 +178,10 @@ class ExtraField extends Model
             'lp_view',
         ];
 
-        if (api_get_configuration_value('allow_scheduled_announcements')) {
+        if ('true' === api_get_setting('announcement.allow_scheduled_announcements')) {
             $result[] = 'scheduled_announcement';
         }
-        if (api_get_configuration_value('allow_portfolio_tool')) {
+        if ('true' === api_get_setting('platform.allow_portfolio_tool')) {
             $result[] = 'portfolio';
         }
         sort($result);
@@ -1676,7 +1676,7 @@ class ExtraField extends Model
                                     );
 
                                     $linkToDelete = '&nbsp;'.Display::url(
-                                        Display::return_icon('delete.png', get_lang('Delete')),
+                                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
                                         'javascript:void(0)',
                                         ['id' => $deleteId]
                                     );
@@ -2109,20 +2109,10 @@ class ExtraField extends Model
     public function display()
     {
         $actions = '<a href="../admin/index.php">';
-        $actions .= Display::return_icon(
-            'back.png',
-            get_lang('Back to').' '.get_lang('Administration'),
-            '',
-            ICON_SIZE_MEDIUM
-        );
+        $actions .= Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Administration'));
         $actions .= '</a>';
         $actions .= '<a href="'.api_get_self().'?action=add&type='.$this->type.'">';
-        $actions .= Display::return_icon(
-            'add_user_fields.png',
-            get_lang('Add'),
-            '',
-            ICON_SIZE_MEDIUM
-        );
+        $actions .= Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add'));
         $actions .= '</a>';
 
         echo Display::toolbarAction('toolbar', [$actions]);
@@ -2406,8 +2396,8 @@ class ExtraField extends Model
     public function getJqgridActionLinks($token)
     {
         //With this function we can add actions to the jgrid (edit, delete, etc)
-        $editIcon = Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL);
-        $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
+        $editIcon = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'));
+        $deleteIcon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'));
         $confirmMessage = addslashes(
             api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES)
         );
@@ -2833,7 +2823,7 @@ JAVASCRIPT;
                             }
                             break;
                         default:
-                            $inject_extra_fields .= " fv$counter.value as {$extra['field']}, ";
+                            $inject_extra_fields .= " fv$counter.field_value as {$extra['field']}, ";
                             break;
                     }
 
@@ -2889,7 +2879,7 @@ JAVASCRIPT;
                                  INNER JOIN $this->table_field_options fvo$counter
                                  ON (
                                     fv$counter.field_id = fvo$counter.field_id AND
-                                    fv$counter.value = fvo$counter.option_value
+                                    fv$counter.field_value = fvo$counter.option_value
                                  )
                                 ";
                             break;
@@ -2913,7 +2903,7 @@ JAVASCRIPT;
                                     $newCounter++;
                                 }
                                 if (!empty($whereTag)) {
-                                    $options['where'] .= ' AND  ('.implode(' AND ', $whereTag).') ';
+                                    $options['where'] .= ' AND  ('.implode(' OR ', $whereTag).') ';
                                 }
                             }
                             break;
@@ -2921,7 +2911,7 @@ JAVASCRIPT;
                             // text, textarea, etc
                             $options['where'] = str_replace(
                                 $extra_info['field'],
-                                'fv'.$counter.'.field_id = '.$extra_info['id'].' AND fv'.$counter.'.value',
+                                'fv'.$counter.'.field_id = '.$extra_info['id'].' AND fv'.$counter.'.field_value',
                                 $options['where']
                             );
                             break;
@@ -3167,15 +3157,15 @@ JAVASCRIPT;
 
         $value = implode("','", $cleanOptions);
 
-        $sql = "SELECT DISTINCT t.*, v.value, o.display_text
+        $sql = "SELECT DISTINCT t.*, v.field_value as value, o.display_text
                 FROM $tagRelExtraTable te
                 INNER JOIN $tagTable t
                 ON (t.id = te.tag_id AND te.field_id = t.field_id AND te.field_id = $tagId)
                 INNER JOIN $table v
                 ON (te.item_id = v.item_id AND v.field_id = $id)
                 INNER JOIN $optionsTable o
-                ON (o.option_value = v.value)
-                WHERE v.value IN ('".$value."')
+                ON (o.option_value = v.field_value)
+                WHERE v.field_value IN ('".$value."')
                 ORDER BY o.option_order, t.tag
                ";
         $result = Database::query($sql);
@@ -3217,7 +3207,7 @@ JAVASCRIPT;
                 } else {
                     if ($optionsExists) {
                         // Adding always the default value
-                        if ($option_details['id'] == $defaultValueId) {
+                        /*if ($option_details['id'] == $defaultValueId) {
                             $options[$option_details['option_value']] = $option_details['display_text'];
                         } else {
                             if (isset($addOptions) && !empty($addOptions)) {
@@ -3226,7 +3216,7 @@ JAVASCRIPT;
                                     $options[$option_details['option_value']] = $option_details['display_text'];
                                 }
                             }
-                        }
+                        }*/
                     } else {
                         // Normal behaviour
                         $options[$option_details['option_value']] = $option_details['display_text'];

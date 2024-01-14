@@ -14,54 +14,40 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Sortable\Entity\Repository\SortableRepository;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Learning paths categories.
- *
- * @ORM\Table(
- *     name="c_lp_category",
- * )
- * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
  */
-class CLpCategory extends AbstractResource implements ResourceInterface
+#[ORM\Table(name: 'c_lp_category')]
+#[ORM\Entity(repositoryClass: SortableRepository::class)]
+class CLpCategory extends AbstractResource implements ResourceInterface, Stringable
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $iid = null;
 
-    /**
-     * @ORM\Column(name="name", type="text")
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'name', type: 'text')]
     protected string $name;
 
-    /**
-     * @Gedmo\SortablePosition
-     * @ORM\Column(name="position", type="integer")
-     */
+    #[Gedmo\SortablePosition]
+    #[ORM\Column(name: 'position', type: 'integer')]
     protected int $position;
 
     /**
-     * @var Collection|CLpCategoryUser[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CourseBundle\Entity\CLpCategoryUser",
-     *     mappedBy="category",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
+     * @var Collection<int, CLpCategoryRelUser>
      */
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: CLpCategoryRelUser::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $users;
 
     /**
-     * @var Collection|CLp[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CLp", mappedBy="category", cascade={"detach"})
+     * @var Collection<int, CLp>
      */
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: CLp::class, cascade: ['detach'])]
     protected Collection $lps;
 
     public function __construct()
@@ -102,26 +88,23 @@ class CLpCategory extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
 
     /**
-     * @return Collection|CLp[]
+     * @return Collection<int, CLp>
      */
-    public function getLps()
+    public function getLps(): Collection
     {
         return $this->lps;
     }
 
     /**
-     * @return Collection
+     * @return Collection<int, CLpCategoryRelUser>
      */
-    public function getUsers()
+    public function getUsers(): Collection
     {
         return $this->users;
     }
@@ -134,7 +117,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
         }
     }
 
-    public function addUser(CLpCategoryUser $categoryUser): void
+    public function addUser(CLpCategoryRelUser $categoryUser): void
     {
         $categoryUser->setCategory($this);
 
@@ -143,7 +126,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
         }
     }
 
-    public function hasUser(CLpCategoryUser $categoryUser): bool
+    public function hasUser(CLpCategoryRelUser $categoryUser): bool
     {
         if (0 !== $this->getUsers()->count()) {
             $criteria = Criteria::create()->where(
@@ -163,7 +146,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
     public function hasUserAdded(User $user): bool
     {
         if (0 !== $this->getUsers()->count()) {
-            $categoryUser = new CLpCategoryUser();
+            $categoryUser = new CLpCategoryRelUser();
             $categoryUser->setCategory($this);
             $categoryUser->setUser($user);
 
@@ -173,7 +156,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface
         return false;
     }
 
-    public function removeUsers(CLpCategoryUser $user): self
+    public function removeUsers(CLpCategoryRelUser $user): self
     {
         $this->users->removeElement($user);
 

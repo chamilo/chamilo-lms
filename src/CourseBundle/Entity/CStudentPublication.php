@@ -1,161 +1,172 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Doctrine\Common\Filter\OrderFilterInterface;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\State\CStudentPublicationPostProcessor;
+use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * CStudentPublication.
- *
- * @ORM\Table(
- *     name="c_student_publication",
- *     indexes={
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CStudentPublicationRepository")
- */
-class CStudentPublication extends AbstractResource implements ResourceInterface
+#[ORM\Table(name: 'c_student_publication')]
+#[ORM\Entity(repositoryClass: CStudentPublicationRepository::class)]
+#[ApiResource(
+    operations: [
+        new Put(security: "is_granted('EDIT', object.resourceNode)"),
+        new Get(
+            normalizationContext: [
+                'groups' => ['student_publication:read', 'student_publication:item:get'],
+            ],
+            security: "is_granted('VIEW', object.resourceNode)",
+        ),
+        new GetCollection(),
+        new Delete(security: "is_granted('DELETE', object.resourceNode)"),
+        new Post(
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            processor: CStudentPublicationPostProcessor::class
+        ),
+    ],
+    normalizationContext: [
+        'groups' => ['student_publication:read'],
+    ],
+    denormalizationContext: [
+        'groups' => ['c_student_publication:write'],
+    ],
+    order: ['sentDate' => 'DESC'],
+)]
+#[ApiFilter(
+    OrderFilter::class,
+    properties: [
+        'title',
+        'sentDate' => ['nulls_comparison' => OrderFilterInterface::NULLS_SMALLEST],
+        'assignment.expiresOn' => ['nulls_comparison' => OrderFilterInterface::NULLS_SMALLEST],
+        'assingment.endsOn' => ['nulls_comparison' => OrderFilterInterface::NULLS_SMALLEST],
+    ]
+)]
+class CStudentPublication extends AbstractResource implements ResourceInterface, Stringable
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    protected int $iid;
+    #[Groups(['c_student_publication:write'])]
+    public bool $addToGradebook = false;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
-     */
+    #[Groups(['c_student_publication:write'])]
+    public int $gradebookCategoryId = 0;
+
+    #[Groups(['c_student_publication:write'])]
+    public bool $addToCalendar = false;
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    protected ?int $iid = null;
+
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[Groups(['c_student_publication:write', 'student_publication:read'])]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
+    #[Groups(['c_student_publication:write', 'student_publication:item:get'])]
     protected ?string $description;
 
-    /**
-     * @ORM\Column(name="author", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'author', type: 'string', length: 255, nullable: true)]
     protected ?string $author = null;
 
-    /**
-     * @ORM\Column(name="active", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'active', type: 'integer', nullable: true)]
     protected ?int $active = null;
 
-    /**
-     * @ORM\Column(name="accepted", type="boolean", nullable=true)
-     */
+    #[ORM\Column(name: 'accepted', type: 'boolean', nullable: true)]
     protected ?bool $accepted = null;
 
-    /**
-     * @ORM\Column(name="post_group_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'post_group_id', type: 'integer', nullable: false)]
     protected int $postGroupId;
 
-    /**
-     * @ORM\Column(name="sent_date", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'sent_date', type: 'datetime', nullable: true)]
+    #[Groups(['student_publication:read'])]
     protected ?DateTime $sentDate;
 
-    /**
-     * @ORM\Column(name="filetype", type="string", length=10, nullable=false)
-     */
     #[Assert\NotBlank]
     #[Assert\Choice(callback: 'getFileTypes')]
+    #[ORM\Column(name: 'filetype', type: 'string', length: 10, nullable: false)]
     protected string $filetype;
 
-    /**
-     * @ORM\Column(name="has_properties", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'has_properties', type: 'integer', nullable: false)]
     protected int $hasProperties;
 
-    /**
-     * @ORM\Column(name="view_properties", type="boolean", nullable=true)
-     */
+    #[ORM\Column(name: 'view_properties', type: 'boolean', nullable: true)]
     protected ?bool $viewProperties = null;
 
-    /**
-     * @ORM\Column(name="qualification", type="float", precision=6, scale=2, nullable=false)
-     */
+    #[ORM\Column(name: 'qualification', type: 'float', precision: 6, scale: 2, nullable: false)]
+    #[Groups(['c_student_publication:write', 'student_publication:read'])]
     protected float $qualification;
 
-    /**
-     * @ORM\Column(name="date_of_qualification", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'date_of_qualification', type: 'datetime', nullable: true)]
     protected ?DateTime $dateOfQualification = null;
 
     /**
-     * @var Collection|CStudentPublication[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication", mappedBy="publicationParent")
+     * @var Collection<int, CStudentPublication>
      */
+    #[ORM\OneToMany(mappedBy: 'publicationParent', targetEntity: self::class)]
     protected Collection $children;
 
     /**
-     * @var Collection|CStudentPublicationComment[]
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublicationComment", mappedBy="publication")
+     * @var Collection<int, CStudentPublicationComment>
      */
+    #[ORM\OneToMany(mappedBy: 'publication', targetEntity: CStudentPublicationComment::class)]
     protected Collection $comments;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="iid")
-     */
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'iid')]
     protected ?CStudentPublication $publicationParent;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublicationAssignment", mappedBy="publication")
-     */
+    #[Groups(['c_student_publication:write', 'student_publication:read'])]
+    #[ORM\OneToOne(mappedBy: 'publication', targetEntity: CStudentPublicationAssignment::class, cascade: ['persist'])]
+    #[Assert\Valid]
     protected ?CStudentPublicationAssignment $assignment = null;
 
-    /**
-     * @ORM\Column(name="qualificator_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'qualificator_id', type: 'integer', nullable: false)]
     protected int $qualificatorId;
 
-    /**
-     * @ORM\Column(name="weight", type="float", precision=6, scale=2, nullable=false)
-     */
     #[Assert\NotBlank]
-    protected float $weight;
+    #[ORM\Column(name: 'weight', type: 'float', precision: 6, scale: 2, nullable: false)]
+    #[Groups(['c_student_publication:write', 'student_publication:read'])]
+    protected float $weight = 0;
 
-    /**
-     * @ORM\Column(name="allow_text_assignment", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'allow_text_assignment', type: 'integer', nullable: false)]
+    #[Groups(['c_student_publication:write', 'student_publication:item:get'])]
     protected int $allowTextAssignment;
 
-    /**
-     * @ORM\Column(name="contains_file", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'contains_file', type: 'integer', nullable: false)]
     protected int $containsFile;
 
-    /**
-     * @ORM\Column(name="document_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'document_id', type: 'integer', nullable: false)]
     protected int $documentId;
 
-    /**
-     * @ORM\Column(name="filesize", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'filesize', type: 'integer', nullable: true)]
     protected ?int $fileSize = null;
 
     public function __construct()
@@ -182,19 +193,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this->getTitle();
     }
 
-    public function getFileTypes(): array
+    public function getTitle(): string
     {
-        return ['file', 'folder'];
-    }
-
-    /**
-     * Get iid.
-     *
-     * @return int
-     */
-    public function getIid()
-    {
-        return $this->iid;
+        return $this->title;
     }
 
     public function setTitle(string $title): self
@@ -204,14 +205,14 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getFileTypes(): array
     {
-        return $this->title;
+        return ['file', 'folder'];
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
     }
 
     public function setDescription(string $description): self
@@ -221,9 +222,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getAuthor(): ?string
     {
-        return $this->description;
+        return $this->author;
     }
 
     public function setAuthor(string $author): self
@@ -233,14 +234,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get author.
-     *
-     * @return string
-     */
-    public function getAuthor()
+    public function getActive(): ?int
     {
-        return $this->author;
+        return $this->active;
     }
 
     public function setActive(int $active): self
@@ -250,14 +246,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get active.
-     *
-     * @return int
-     */
-    public function getActive()
+    public function getAccepted(): ?bool
     {
-        return $this->active;
+        return $this->accepted;
     }
 
     public function setAccepted(bool $accepted): self
@@ -267,36 +258,21 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get accepted.
-     *
-     * @return bool
-     */
-    public function getAccepted()
+    public function getPostGroupId(): int
     {
-        return $this->accepted;
+        return $this->postGroupId;
     }
 
-    /**
-     * Set postGroupId.
-     *
-     * @return CStudentPublication
-     */
-    public function setPostGroupId(int $postGroupId)
+    public function setPostGroupId(int $postGroupId): static
     {
         $this->postGroupId = $postGroupId;
 
         return $this;
     }
 
-    /**
-     * Get postGroupId.
-     *
-     * @return int
-     */
-    public function getPostGroupId()
+    public function getSentDate(): ?DateTime
     {
-        return $this->postGroupId;
+        return $this->sentDate;
     }
 
     public function setSentDate(DateTime $sentDate): self
@@ -306,14 +282,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get sentDate.
-     *
-     * @return DateTime
-     */
-    public function getSentDate()
+    public function getFiletype(): string
     {
-        return $this->sentDate;
+        return $this->filetype;
     }
 
     public function setFiletype(string $filetype): self
@@ -323,14 +294,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get filetype.
-     *
-     * @return string
-     */
-    public function getFiletype()
+    public function getHasProperties(): int
     {
-        return $this->filetype;
+        return $this->hasProperties;
     }
 
     public function setHasProperties(int $hasProperties): self
@@ -340,14 +306,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get hasProperties.
-     *
-     * @return int
-     */
-    public function getHasProperties()
+    public function getViewProperties(): ?bool
     {
-        return $this->hasProperties;
+        return $this->viewProperties;
     }
 
     public function setViewProperties(bool $viewProperties): self
@@ -357,14 +318,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get viewProperties.
-     *
-     * @return bool
-     */
-    public function getViewProperties()
+    public function getQualification(): float
     {
-        return $this->viewProperties;
+        return $this->qualification;
     }
 
     public function setQualification(float $qualification): self
@@ -374,14 +330,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get qualification.
-     *
-     * @return float
-     */
-    public function getQualification()
+    public function getDateOfQualification(): ?DateTime
     {
-        return $this->qualification;
+        return $this->dateOfQualification;
     }
 
     public function setDateOfQualification(DateTime $dateOfQualification): self
@@ -391,31 +342,21 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get dateOfQualification.
-     *
-     * @return DateTime
-     */
-    public function getDateOfQualification()
+    public function getQualificatorId(): int
     {
-        return $this->dateOfQualification;
+        return $this->qualificatorId;
     }
 
-    /**
-     * Set qualificatorId.
-     *
-     * @return CStudentPublication
-     */
-    public function setQualificatorId(int $qualificatorId)
+    public function setQualificatorId(int $qualificatorId): static
     {
         $this->qualificatorId = $qualificatorId;
 
         return $this;
     }
 
-    public function getQualificatorId(): int
+    public function getWeight(): float
     {
-        return $this->qualificatorId;
+        return $this->weight;
     }
 
     public function setWeight(float $weight): self
@@ -425,14 +366,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get weight.
-     *
-     * @return float
-     */
-    public function getWeight()
+    public function getAllowTextAssignment(): int
     {
-        return $this->weight;
+        return $this->allowTextAssignment;
     }
 
     public function setAllowTextAssignment(int $allowTextAssignment): self
@@ -442,14 +378,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get allowTextAssignment.
-     *
-     * @return int
-     */
-    public function getAllowTextAssignment()
+    public function getContainsFile(): int
     {
-        return $this->allowTextAssignment;
+        return $this->containsFile;
     }
 
     public function setContainsFile(int $containsFile): self
@@ -459,20 +390,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get containsFile.
-     *
-     * @return int
-     */
-    public function getContainsFile()
-    {
-        return $this->containsFile;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDocumentId()
+    public function getDocumentId(): int
     {
         return $this->documentId;
     }
@@ -511,6 +429,21 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return null;
     }
 
+    /**
+     * @return Collection<int, CStudentPublication>
+     */
+    public function getChildren(): Collection
+    {
+        return $this->children;
+    }
+
+    public function setChildren(Collection $children): self
+    {
+        $this->children = $children;
+
+        return $this;
+    }
+
     public function getAssignment(): ?CStudentPublicationAssignment
     {
         return $this->assignment;
@@ -520,20 +453,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     {
         $this->assignment = $assignment;
 
-        return $this;
-    }
-
-    /**
-     * @return CStudentPublication[]|Collection
-     */
-    public function getChildren()
-    {
-        return $this->children;
-    }
-
-    public function setChildren(Collection $children): self
-    {
-        $this->children = $children;
+        if ($assignment) {
+            $assignment->setPublication($this);
+        }
 
         return $this;
     }
@@ -563,16 +485,13 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return CStudentPublicationComment[]|Collection
+     * @return Collection<int, CStudentPublicationComment>
      */
-    public function getComments()
+    public function getComments(): Collection
     {
         return $this->comments;
     }
 
-    /**
-     * @param CStudentPublicationComment[]|Collection $comments
-     */
     public function setComments(Collection $comments): self
     {
         $this->comments = $comments;
@@ -585,6 +504,11 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
         return $this->getIid();
     }
 
+    public function getIid(): ?int
+    {
+        return $this->iid;
+    }
+
     public function getResourceName(): string
     {
         return $this->getTitle();
@@ -593,5 +517,54 @@ class CStudentPublication extends AbstractResource implements ResourceInterface
     public function setResourceName(string $name): self
     {
         return $this->setTitle($name);
+    }
+
+    #[Groups(['student_publication:read'])]
+    public function getUniqueStudentAttemptsTotal(): int
+    {
+        $userIdList = [];
+
+        $reduce = $this->children
+            ->filter(function (self $child) {
+                return $child->postGroupId === $this->postGroupId;
+            })
+            ->reduce(function (int $accumulator, self $child) use (&$userIdList): int {
+                $user = $child->getUser();
+
+                if (!\in_array($user->getId(), $userIdList, true)) {
+                    $userIdList[] = $user->getId();
+
+                    return $accumulator + 1;
+                }
+
+                return $accumulator;
+            })
+        ;
+
+        return $reduce ?: 0;
+    }
+
+    #[Groups(['student_publication:read'])]
+    public function getStudentSubscribedToWork(): int
+    {
+        $firstLink = $this->getFirstResourceLink();
+
+        $course = $firstLink->getCourse();
+        $session = $firstLink->getSession();
+        $group = $firstLink->getGroup();
+
+        if ($group) {
+            return $group->getMembers()->count();
+        }
+
+        if ($session) {
+            return $session->getSessionRelCourseRelUsersByStatus($course, Session::STUDENT)->count();
+        }
+
+        if ($course) {
+            return $course->getStudentSubscriptions()->count();
+        }
+
+        return 0;
     }
 }

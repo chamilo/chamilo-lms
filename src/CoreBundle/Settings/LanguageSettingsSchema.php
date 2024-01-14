@@ -23,14 +23,17 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
                     'allow_use_sub_language' => 'false',
                     'auto_detect_language_custom_pages' => 'true',
                     'show_different_course_language' => 'true',
-                    'language_priority_1' => 'platform_lang',
-                    'language_priority_2' => 'platform_lang',
-                    'language_priority_3' => 'platform_lang',
+                    'language_priority_1' => 'course_lang',
+                    'language_priority_2' => 'user_profil_lang',
+                    'language_priority_3' => 'user_selected_lang',
                     'language_priority_4' => 'platform_lang',
                     'hide_dltt_markup' => 'false',
                     'show_language_selector_in_menu' => 'true',
                     'user_name_order' => '',
                     'user_name_sort' => '',
+                    'language_flags_by_country' => 'false',
+                    'allow_course_multiple_languages' => 'false',
+                    'template_activate_language_filter' => 'false',
                 ]
             )
         ;
@@ -90,6 +93,9 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
             ])
             ->add('hide_dltt_markup')
             ->add('show_language_selector_in_menu', YesNoType::class)
+            ->add('language_flags_by_country', YesNoType::class)
+            ->add('allow_course_multiple_languages', YesNoType::class)
+            ->add('template_activate_language_filter', YesNoType::class)
         ;
 
         $choices = [

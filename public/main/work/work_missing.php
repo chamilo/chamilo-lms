@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 
@@ -98,19 +100,19 @@ if (isset($_GET['list']) && 'with' === $_GET['list']) {
 Display::display_header(null);
 
 $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_list_all.php?id='.$workId.'&'.api_get_cidreq().'">'.
-    Display::return_icon('back.png', get_lang('Back to Assignments list'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to Assignments list')).'</a>';
 if (!empty($workId)) {
     if (empty($_GET['list']) or 'with' == Security::remove_XSS($_GET['list'])) {
         $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$workId.'&list=without">'.
-            Display::return_icon('exercice_uncheck.png', get_lang('ViewLearners who didn\'t send their work'), '', ICON_SIZE_MEDIUM).
+            Display::getMdiIcon(ActionIcon::GRADE, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('ViewLearners who didn\'t send their work')).
             '</a>';
     } else {
         if (!isset($_GET['action']) || (isset($_GET['action']) && 'send_mail' != $_GET['action'])) {
             $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$workId.'&list=without&action=send_mail&sec_token='.$token.'">'.
-                Display::return_icon('mail_send.png', get_lang('Send a reminder'), '', ICON_SIZE_MEDIUM).
+                Display::getMdiIcon(ActionIcon::SEND_MESSAGE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Send a reminder')).
                 '</a>';
         } else {
-            $actions .= Display::return_icon('mail_send_na.png', get_lang('Send a reminder'), '', ICON_SIZE_MEDIUM);
+            $actions .= Display::getMdiIcon(ActionIcon::SEND_MESSAGE, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Send a reminder'));
         }
     }
 }

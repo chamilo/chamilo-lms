@@ -164,7 +164,7 @@ $visibleResults = [
     SURVEY_VISIBLE_PUBLIC => get_lang('Everyone'),
 ];
 
-if (api_get_configuration_value('hide_survey_reporting_button')) {
+if ('true' === api_get_setting('survey.hide_survey_reporting_button')) {
     $form->addLabel(get_lang('Results visibility'), get_lang('Feature disabled by administrator'));
 } else {
     $form->addSelect('visible_results', get_lang('Results visibility'), $visibleResults);
@@ -259,6 +259,7 @@ if ('add' === $action) {
 
 $form->addElement('checkbox', 'one_question_per_page', null, get_lang('One question per page'));
 $form->addElement('checkbox', 'shuffle', null, get_lang('Enable shuffle mode'));
+$form->addElement('checkbox', 'display_question_number', null, get_lang('Display question number'))->setValue(true);
 
 $input_name_list = null;
 

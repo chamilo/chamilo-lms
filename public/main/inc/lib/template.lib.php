@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 /**
  * Class Template.
@@ -105,8 +106,21 @@ class Template
 
         $this->twig = Container::getTwig();
 
-        // Setting system variables
-        //$this->set_system_parameters();
+        // Setting app paths/URLs
+        $this->assign('_p', $this->getWebPaths());
+
+        // Here we can add system parameters that can be use in any template
+        $_s = [
+            'software_name' => api_get_configuration_value('software_name'),
+            'system_version' => api_get_configuration_value('system_version'),
+            'site_name' => api_get_setting('siteName'),
+            'institution' => api_get_setting('Institution'),
+            'institution_url' => api_get_setting('InstitutionUrl'),
+            'date' => api_format_date('now', DATE_FORMAT_LONG),
+            'timezone' => api_get_timezone(),
+            'gamification_mode' => api_get_setting('gamification_mode'),
+        ];
+        $this->assign('_s', $_s);
 
         // Setting user variables
         //$this->set_user_parameters();
@@ -128,6 +142,31 @@ class Template
         }
     }
 
+    private function getWebPaths()
+    {
+        $queryString = empty($_SERVER['QUERY_STRING']) ? '' : $_SERVER['QUERY_STRING'];
+        $requestURI = empty($_SERVER['REQUEST_URI']) ? '' : $_SERVER['REQUEST_URI'];
+
+        return [
+            'web' => api_get_path(WEB_PATH),
+            'web_relative' => api_get_path(REL_PATH),
+            'web_course' => api_get_path(WEB_COURSE_PATH),
+            'web_main' => api_get_path(WEB_CODE_PATH),
+            'web_css' => api_get_path(WEB_CSS_PATH),
+            'web_css_theme' => api_get_path(WEB_CSS_PATH).$this->themeDir,
+            'web_ajax' => api_get_path(WEB_AJAX_PATH),
+            'web_img' => api_get_path(WEB_IMG_PATH),
+            'web_plugin' => api_get_path(WEB_PLUGIN_PATH),
+            'web_lib' => api_get_path(WEB_LIBRARY_PATH),
+            'web_self' => api_get_self(),
+            'self_basename' => basename(api_get_self()),
+            'web_query_vars' => api_htmlentities($queryString),
+            'web_self_query_vars' => api_htmlentities($requestURI),
+            'web_cid_query' => api_get_cidreq(),
+            'web_rel_code' => api_get_path(REL_CODE_PATH),
+        ];
+    }
+
     /**
      * @param string $helpInput
      */
@@ -145,7 +184,7 @@ class Template
                 $help = Security::remove_XSS($help);
                 $content = '<div class="help">';
                 $content .= Display::url(
-                    Display::return_icon('help.png', get_lang('Help'), null, ICON_SIZE_LARGE),
+                    Display::getMdiIcon(ToolIcon::HELP, 'ch-tool-icon', null, ICON_SIZE_LARGE, get_lang('Help')),
                     api_get_path(WEB_CODE_PATH).'help/help.php?open='.$help,
                     [
                         'class' => 'ajax',
@@ -444,7 +483,7 @@ class Template
             'mediaelement/plugins/vrview/vrview.css',
         ];
 
-        $features = api_get_configuration_value('video_features');
+        $features = api_get_setting('platform.video_features', true);
         $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen', 'vrview'];
 
         if (!empty($features) && isset($features['features'])) {
@@ -596,7 +635,7 @@ class Template
             'mediaelement/plugins/vrview/vrview.js',
         ];
 
-        $features = api_get_configuration_value('video_features');
+        $features = api_get_setting('platform.video_features', true);
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {
                 if ('vrview' === $feature) {
@@ -786,7 +825,7 @@ class Template
      */
     public static function getThemeFallback()
     {
-        $theme = api_get_configuration_value('theme_fallback');
+        $theme = api_get_setting('platform.theme_fallback');
         if (empty($theme)) {
             $theme = 'chamilo';
         }
@@ -960,12 +999,7 @@ class Template
     {
         //@todo move this in the template
         $rightFloatMenu = '';
-        $iconBug = Display::return_icon(
-            'bug.png',
-            get_lang('Report a bug'),
-            [],
-            ICON_SIZE_LARGE
-        );
+        $iconBug = Display::getMdiIcon(ToolIcon::BUG_REPORT, 'ch-tool-icon', null, ICON_SIZE_LARGE, get_lang('Report a bug'));
         if ('true' === api_get_setting('show_link_bug_notification') && $this->user_is_logged_in) {
             $rightFloatMenu = '<div class="report">
 		        <a href="https://github.com/chamilo/chamilo-lms/wiki/How-to-report-issues" target="_blank">
@@ -979,12 +1013,7 @@ class Template
         ) {
             // by default is project_id = 1
             $defaultProjectId = 1;
-            $iconTicket = Display::return_icon(
-                'help.png',
-                get_lang('Ticket'),
-                [],
-                ICON_SIZE_LARGE
-            );
+            $iconTicket = Display::getMdiIcon(ToolIcon::HELP, 'ch-tool-icon', null, ICON_SIZE_LARGE, get_lang('Ticket'));
             $courseInfo = api_get_course_info();
             $courseParams = '';
             if (!empty($courseInfo)) {
@@ -992,7 +1021,7 @@ class Template
             }
             $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams;
 
-            $allow = TicketManager::userIsAllowInProject(api_get_user_entity(), $defaultProjectId);
+            $allow = TicketManager::userIsAllowInProject($defaultProjectId);
 
             if ($allow) {
                 $rightFloatMenu .= '<div class="help">
@@ -1077,45 +1106,45 @@ class Template
         // by https://securityheaders.io/
         // Enable these settings in configuration.php to use them on your site
         // Strict-Transport-Security
-        $setting = api_get_configuration_value('security_strict_transport');
+        $setting = api_get_setting('security.security_strict_transport');
         if (!empty($setting)) {
             header('Strict-Transport-Security: '.$setting);
         }
         // Content-Security-Policy
-        $setting = api_get_configuration_value('security_content_policy');
+        $setting = api_get_setting('security.security_content_policy');
         if (!empty($setting)) {
             header('Content-Security-Policy: '.$setting);
         }
-        $setting = api_get_configuration_value('security_content_policy_report_only');
+        $setting = api_get_setting('security.security_content_policy_report_only');
         if (!empty($setting)) {
             header('Content-Security-Policy-Report-Only: '.$setting);
         }
         // Public-Key-Pins
-        $setting = api_get_configuration_value('security_public_key_pins');
+        $setting = api_get_setting('security.security_public_key_pins');
         if (!empty($setting)) {
             header('Public-Key-Pins: '.$setting);
         }
-        $setting = api_get_configuration_value('security_public_key_pins_report_only');
+        $setting = api_get_setting('security.security_public_key_pins_report_only');
         if (!empty($setting)) {
             header('Public-Key-Pins-Report-Only: '.$setting);
         }
         // X-Frame-Options
-        $setting = api_get_configuration_value('security_x_frame_options');
+        $setting = api_get_setting('security.security_x_frame_options');
         if (!empty($setting)) {
             header('X-Frame-Options: '.$setting);
         }
         // X-XSS-Protection
-        $setting = api_get_configuration_value('security_xss_protection');
+        $setting = api_get_setting('security.security_xss_protection');
         if (!empty($setting)) {
             header('X-XSS-Protection: '.$setting);
         }
         // X-Content-Type-Options
-        $setting = api_get_configuration_value('security_x_content_type_options');
+        $setting = api_get_setting('security.security_x_content_type_options');
         if (!empty($setting)) {
             header('X-Content-Type-Options: '.$setting);
         }
         // Referrer-Policy
-        $setting = api_get_configuration_value('security_referrer_policy');
+        $setting = api_get_setting('security.security_referrer_policy');
         if (!empty($setting)) {
             header('Referrer-Policy: '.$setting);
         }

@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+
 /**
  * Class ResultTable
  * Table to display results for an evaluation.
@@ -208,7 +211,7 @@ class ResultTable extends SortableTable
                     $row,
                     3,
                     Display::url(
-                        Display::return_icon('delete.png', get_lang('Delete')),
+                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
                         $url.'&action=delete_attempt&result_attempt_id='.$data['id']
                     )
                 );
@@ -227,7 +230,7 @@ class ResultTable extends SortableTable
     private function build_edit_column($item)
     {
         $locked_status = $this->evaluation->get_locked();
-        $allowMultipleAttempts = api_get_configuration_value('gradebook_multiple_evaluation_attempts');
+        $allowMultipleAttempts = ('true' === api_get_setting('gradebook.gradebook_multiple_evaluation_attempts'));
         $baseUrl = api_get_self().'?selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq();
         $editColumn = '';
         if (api_is_allowed_to_edit(null, true) && 0 == $locked_status) {
@@ -235,27 +238,27 @@ class ResultTable extends SortableTable
                 if (!empty($item['percentage_score'])) {
                     $editColumn .=
                         Display::url(
-                            Display::return_icon('add.png', get_lang('AddAttempt'), '', '22'),
+                            Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('AddAttempt')),
                             $baseUrl.'&action=add_attempt&editres='.$item['result_id']
                         );
                 } else {
                     $editColumn .= '<a href="'.api_get_self().'?editres='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
-                        Display::return_icon('edit.png', get_lang('Edit'), '', '22').'</a>';
+                        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
                 }
             } else {
                 $editColumn .= '<a href="'.api_get_self().'?editres='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
-                    Display::return_icon('edit.png', get_lang('Edit'), '', '22').'</a>';
+                    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
             }
             $editColumn .= ' <a href="'.api_get_self().'?delete_mark='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
-                Display::return_icon('delete.png', get_lang('Delete'), '', '22').'</a>';
+                Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
         }
 
         if (null == $this->evaluation->get_course_code()) {
             $editColumn .= '&nbsp;<a href="'.api_get_self().'?resultdelete='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'" onclick="return confirmationuser();">';
-            $editColumn .= Display::return_icon('delete.png', get_lang('Delete'));
+            $editColumn .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'));
             $editColumn .= '</a>';
             $editColumn .= '&nbsp;<a href="user_stats.php?userid='.$item['id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">';
-            $editColumn .= Display::return_icon('statistics.gif', get_lang('Statistics'));
+            $editColumn .= Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Statistics'));
             $editColumn .= '</a>';
         }
 
@@ -266,7 +269,7 @@ class ResultTable extends SortableTable
 
             if (null != $doc_url) {
                 $editColumn .= '&nbsp;<a href="'.$doc_url.'" target="_blank">';
-                $editColumn .= Display::return_icon('link.gif', get_lang('Open document')).'</a>';
+                $editColumn .= Display::getMdiIcon(ToolIcon::LINK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Open document')).'</a>';
             }
         }
 

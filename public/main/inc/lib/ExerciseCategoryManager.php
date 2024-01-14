@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Class ExtraFieldValue
@@ -88,7 +89,7 @@ class ExerciseCategoryManager extends Model
         $parameters
     ) {
         $repo = Container::getExerciseCategoryRepository();
-        $translator = Container::getTranslator();
+        $translator = Container::$container->get('translator');
         foreach ($primaryKeys as $id) {
             $category = $repo->find($id);
             $repo->hardDelete($category);
@@ -176,8 +177,8 @@ class ExerciseCategoryManager extends Model
     public function getJqgridActionLinks($token)
     {
         //With this function we can add actions to the jgrid (edit, delete, etc)
-        $editIcon = Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL);
-        $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
+        $editIcon = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'));
+        $deleteIcon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'));
         $confirmMessage = addslashes(
             api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES)
         );
@@ -258,20 +259,10 @@ JAVASCRIPT;
         // Action links
         $content = '<div class="actions">';
         $content .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'">';
-        $content .= Display::return_icon(
-            'back.png',
-            get_lang('Back to').' '.get_lang('Administration'),
-            '',
-            ICON_SIZE_MEDIUM
-        );
+        $content .= Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Administration'));
         $content .= '</a>';
         $content .= '<a href="'.api_get_self().'?action=add&'.api_get_cidreq().'">';
-        $content .= Display::return_icon(
-            'add.png',
-            get_lang('Add'),
-            '',
-            ICON_SIZE_MEDIUM
-        );
+        $content .= Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add'));
         $content .= '</a>';
         $content .= '</div>';
 

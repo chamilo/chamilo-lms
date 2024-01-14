@@ -11,49 +11,39 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * SysCalendar.
- *
- * @ORM\Table(name="sys_calendar")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'sys_calendar')]
+#[ORM\Entity]
 class SysCalendar
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    public const COLOR_SYSTEM_EVENT = '#FF0000';
+
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="content", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'content', type: 'text', nullable: true)]
     protected ?string $content = null;
 
-    /**
-     * @ORM\Column(name="start_date", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'start_date', type: 'datetime', nullable: true)]
     protected ?DateTime $startDate = null;
 
-    /**
-     * @ORM\Column(name="end_date", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'end_date', type: 'datetime', nullable: true)]
     protected ?DateTime $endDate = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\AccessUrl")
-     * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: AccessUrl::class)]
+    #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected AccessUrl $url;
 
-    /**
-     * @ORM\Column(name="all_day", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'all_day', type: 'integer', nullable: false)]
     protected int $allDay;
+
+    #[ORM\Column(name: 'color', type: 'string', length: 20, nullable: true)]
+    protected ?string $color = null;
 
     public function setTitle(string $title): self
     {
@@ -148,6 +138,18 @@ class SysCalendar
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(string $color): self
+    {
+        $this->color = $color;
+
+        return $this;
     }
 
     public function getUrl(): AccessUrl

@@ -26,9 +26,9 @@ final class CStudentPublicationRepository extends ResourceRepository
     public function findAllByCourse(
         Course $course,
         Session $session = null,
-        ?string $title = null,
-        ?int $active = null,
-        ?string $fileType = null
+        string $title = null,
+        int $active = null,
+        string $fileType = null
     ): QueryBuilder {
         $qb = $this->getResourcesByCourse($course, $session);
 
@@ -42,9 +42,9 @@ final class CStudentPublicationRepository extends ResourceRepository
     public function getStudentAssignments(
         CStudentPublication $publication,
         Course $course,
-        ?Session $session = null,
-        ?CGroup $group = null,
-        ?User $user = null
+        Session $session = null,
+        CGroup $group = null,
+        User $user = null
     ): QueryBuilder {
         $qb = $this->getResourcesByCourse($course, $session, $group);
 
@@ -60,6 +60,7 @@ final class CStudentPublicationRepository extends ResourceRepository
     public function getStudentPublicationByUser(User $user, Course $course, Session $session = null): array
     {
         $qb = $this->findAllByCourse($course, $session);
+
         /** @var CStudentPublication[] $works */
         $works = $qb->getQuery()->getResult();
         $list = [];
@@ -73,8 +74,12 @@ final class CStudentPublicationRepository extends ResourceRepository
         return $list;
     }
 
-    public function countUserPublications(User $user, Course $course, Session $session = null, CGroup $group = null): int
-    {
+    public function countUserPublications(
+        User $user,
+        Course $course,
+        Session $session = null,
+        CGroup $group = null
+    ): int {
         $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session);
         $qb->andWhere('resource.publicationParent IS NOT NULL');
 
@@ -93,7 +98,7 @@ final class CStudentPublicationRepository extends ResourceRepository
     /**
      * Find all the works registered by a teacher.
      */
-    public function findWorksByTeacher(User $user, Course $course, Session $session = null)
+    public function findWorksByTeacher(User $user, Course $course, Session $session = null): array
     {
         $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session);
         $qb->andWhere('resource.publicationParent IS NOT NULL');
@@ -105,7 +110,7 @@ final class CStudentPublicationRepository extends ResourceRepository
         ;
     }
 
-    private function addActiveQueryBuilder(?int $active = null, QueryBuilder $qb = null): QueryBuilder
+    private function addActiveQueryBuilder(int $active = null, QueryBuilder $qb = null): void
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
 
@@ -115,32 +120,26 @@ final class CStudentPublicationRepository extends ResourceRepository
                 ->setParameter('active', $active)
             ;
         }
-
-        return $qb;
     }
 
-    private function addNotDeletedPublicationQueryBuilder(QueryBuilder $qb = null): QueryBuilder
+    private function addNotDeletedPublicationQueryBuilder(QueryBuilder $qb = null): void
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
         $qb
             ->andWhere('resource.active <> 2')
         ;
-
-        return $qb;
     }
 
-    private function addFileTypeQueryBuilder(?string $fileType, QueryBuilder $qb = null): QueryBuilder
+    private function addFileTypeQueryBuilder(?string $fileType, QueryBuilder $qb = null): void
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
         if (null === $fileType) {
-            return $qb;
+            return;
         }
 
         $qb
             ->andWhere('resource.filetype = :filetype')
             ->setParameter('filetype', $fileType)
         ;
-
-        return $qb;
     }
 }

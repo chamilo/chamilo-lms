@@ -3,6 +3,8 @@
 
 use Chamilo\CoreBundle\Entity\User;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 /**
  * This file displays the user's profile,
@@ -353,7 +355,7 @@ if ('true' === api_get_setting('profile.is_editable')) {
 }
 
 // Student cannot modified their user conditions
-$extraConditions = api_get_configuration_value('show_conditions_to_user');
+$extraConditions = api_get_setting('profile.show_conditions_to_user', true);
 if ($extraConditions && isset($extraConditions['conditions'])) {
     $extraConditions = $extraConditions['conditions'];
     foreach ($extraConditions as $condition) {
@@ -660,18 +662,18 @@ if ($allowSocialTool) {
     if ('true' === api_get_setting('extended_profile')) {
         if ('true' === api_get_setting('allow_message_tool')) {
             $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
-                Display::return_icon('shared_profile.png', get_lang('View shared profile')).'</a>';
+                Display::getMdiIcon(ToolIcon::SHARED_PROFILE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('View shared profile')).'</a>';
             $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
-                Display::return_icon('inbox.png', get_lang('Messages')).'</a>';
+                Display::getMdiIcon(ToolIcon::MESSAGE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Messages')).'</a>';
         }
         $show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
 
         if (isset($_GET['type']) && 'extended' === $_GET['type']) {
             $actions .= '<a href="profile.php?type=reduced'.$show.'">'.
-                Display::return_icon('edit.png', get_lang('Edit normal profile'), '', 16).'</a>';
+                Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Edit normal profile')).'</a>';
         } else {
             $actions .= '<a href="profile.php?type=extended'.$show.'">'.
-                Display::return_icon('edit.png', get_lang('Edit extended profile'), '', 16).'</a>';
+                Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Edit extended profile')).'</a>';
         }
     }
 }

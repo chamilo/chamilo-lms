@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  *  Class DocumentManager
@@ -22,7 +23,7 @@ class DocumentManager
     /**
      * @param string $course_code
      *
-     * @return int the document folder quota for the current course in bytes
+     * @return int the document folder quota for the current course in megabytes
      *             or the default quota
      */
     public static function get_course_quota($course_code = null)
@@ -367,7 +368,7 @@ class DocumentManager
         $len = filesize($full_file_name);
         // Fixing error when file name contains a ","
         $filename = str_replace(',', '', $filename);
-        $sendFileHeaders = api_get_configuration_value('enable_x_sendfile_headers');
+        $sendFileHeaders = ('true' === api_get_setting('document.enable_x_sendfile_headers'));
 
         // Allows chrome to make videos and audios seekable
         header('Accept-Ranges: bytes');
@@ -2334,8 +2335,8 @@ class DocumentManager
         $repo = Container::getDocumentRepository();
         $nodeRepository = $repo->getResourceNodeRepository();
         $move = get_lang('Move');
-        $icon = '<i class="mdi-cursor-move mdi v-icon ch-tool-icon" style="font-size: 16px; width: 16px; height: 16px;" aria-hidden="true" medium="" title="'.htmlentities(get_lang('Move')).'"></i>';
-        $folderIcon = Display::return_icon('lp_folder.png');
+        $icon = '<i class="mdi-cursor-move mdi ch-tool-icon" style="font-size: 16px; width: 16px; height: 16px;" aria-hidden="true" title="'.htmlentities(get_lang('Move')).'"></i>';
+        $folderIcon = Display::getMdiIcon(ObjectIcon::CHAPTER, 'ch-tool-icon', null, ICON_SIZE_SMALL);
 
         $options = [
             'decorate' => true,
@@ -2848,7 +2849,7 @@ class DocumentManager
                     0
                 );
 
-                if ($documentData) {
+                if (isset($documentData['absolute_path'])) {
                     $fileContent = file_get_contents($documentData['absolute_path']);
                 }
             }
@@ -3451,7 +3452,7 @@ This folder contains all sessions that have been opened in the chat. Although th
         }
 
         if ($document) {
-            $allowNotification = api_get_configuration_value('send_notification_when_document_added');
+            $allowNotification = ('true' === api_get_setting('document.send_notification_when_document_added'));
             if ($sendNotification && $allowNotification) {
                 $courseTitle = $courseEntity->getTitle();
                 if (!empty($sessionId)) {

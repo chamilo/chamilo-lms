@@ -15,8 +15,8 @@ class Basic extends Toolbar
      * In order to add a new plugin you have to load it in default/layout/head.tpl.
      */
     public array $defaultPlugins = [
-        //'adobeair',
-        //'ajax',
+        // 'adobeair',
+        // 'ajax',
         'audio',
         'image2_chamilo',
         'bidi',
@@ -25,14 +25,14 @@ class Basic extends Toolbar
         'dialogui',
         'dialogadvtab',
         'div',
-        //if you activate this plugin the html, head tags will not be saved
-        //'divarea',
-        //'docprops',
+        // if you activate this plugin the html, head tags will not be saved
+        // 'divarea',
+        // 'docprops',
         'find',
         'flash',
         'font',
         'iframe',
-        //'iframedialog',
+        // 'iframedialog',
         'indentblock',
         'justify',
         'language',
@@ -45,20 +45,20 @@ class Basic extends Toolbar
         'print',
         'save',
         'selectall',
-        //'sharedspace',
+        // 'sharedspace',
         'showblocks',
         'smiley',
-        //'sourcedialog',
-        //'stylesheetparser',
-        //'tableresize',
+        // 'sourcedialog',
+        // 'stylesheetparser',
+        // 'tableresize',
         'templates',
-        //'uicolor',
+        // 'uicolor',
         'video',
         'widget',
         'wikilink',
         'wordcount',
         'inserthtml',
-        //'xml',
+        // 'xml',
         'qmarkersrolls',
     ];
 
@@ -133,7 +133,7 @@ class Basic extends Toolbar
             $plugins[] = 'ckeditor_vimeo_embed';
         }
 
-        if (api_get_configuration_value('ck_editor_block_image_copy_paste')) {
+        if ('true' === api_get_setting('editor.ck_editor_block_image_copy_paste')) {
             $plugins[] = 'blockimagepaste';
         }
         $this->defaultPlugins = array_unique(array_merge($this->defaultPlugins, $plugins));
@@ -207,7 +207,7 @@ class Basic extends Toolbar
 
         $this->config = $config;
 
-        //$config['width'] = '100';
+        // $config['width'] = '100';
         $this->config['height'] = '300';
 
         return $this->config;

@@ -8,7 +8,7 @@ class ch_open extends survey_question
 {
     /**
      * @param array  $questionData
-     * @param string $answers
+     * @param string|array $answers
      */
     public function render(FormValidator $form, $questionData = [], $answers = '')
     {

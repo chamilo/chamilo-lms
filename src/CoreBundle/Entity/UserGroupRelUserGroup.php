@@ -10,32 +10,23 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * GroupRelGroup.
- *
- * @ORM\Table(name="usergroup_rel_usergroup")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'usergroup_rel_usergroup')]
+#[ORM\Entity]
 class UserGroupRelUserGroup
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="group_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'group_id', type: 'integer', nullable: false)]
     protected int $groupId;
 
-    /**
-     * @ORM\Column(name="subgroup_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'subgroup_id', type: 'integer', nullable: false)]
     protected int $subgroupId;
 
-    /**
-     * @ORM\Column(name="relation_type", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'relation_type', type: 'integer', nullable: false)]
     protected int $relationType;
 
     /**

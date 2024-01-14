@@ -79,6 +79,7 @@
 
             {% macro tree(item) %}
                 {% import _self as self %}
+                {% set isCurrentItem = item.id == lp_current_item_id %}
                 <div id="toc_{{ item.id }}"
                      class="panel panel-default
                     {{ item.parent_id ? 'child_item':'root_item' }}
@@ -96,7 +97,8 @@
                                 <a class="item-header" role="button"
                                    data-toggle="collapse" data-parent="#tocchildren_{{ item.parent_id }}"
                                    href="#tocchildren_{{ item.id }}"
-                                   aria-expanded="true" aria-controls="tocchildren_{{ item.id }}">
+                                   aria-expanded="{{ isCurrentItem ? 'true' : 'false' }}"
+                                   aria-controls="tocchildren_{{ item.id }}">
                                     {{ item.title | raw }}
                                 </a>
                             {% else %}
@@ -110,7 +112,7 @@
                     </div>
                     {% if item.children|length %}
                         <div id="tocchildren_{{ item.id }}"
-                             class="panel-collapse collapse {{ item.is_parent_of_current ? 'in' : '' }}"
+                             class="panel-collapse collapse {{ isCurrentItem ? 'in' : '' }}"
                              role="tabpanel"
                              aria-labelledby="heading_item_{{item.id}}">
                             <div class="panel-body">
@@ -132,3 +134,29 @@
         </div>
     {% endif %}
 {% endautoescape %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+            var lpCurrentItemId = '{{ lp_current_item_id }}';
+            var currentElement = document.getElementById('toc_' + lpCurrentItemId);
+            if (currentElement) {
+                var parentContainer = currentElement.closest('.item-children');
+                var previousSibling;
+                if (parentContainer) {
+                    previousSibling = parentContainer.previousElementSibling;
+                }
+                if (previousSibling) {
+                    previousSibling.click();
+                    var parentContainer2 = previousSibling.closest('.item-children');
+                    var previousSibling2;
+                    if (parentContainer2) {
+                        previousSibling2 = parentContainer2.previousElementSibling;
+                    }
+                    if (previousSibling2) {
+                        previousSibling2.click()
+                    }
+                }
+            }
+        }, 1000);
+    });
+</script>

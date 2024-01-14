@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Repository\CNotebookRepository;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * Class RestApi.
@@ -2018,7 +2019,7 @@ class Rest extends WebService
             "modules" => [],
         ];
 
-        $quizIcon = Display::return_icon('quiz.png', '', [], ICON_SIZE_SMALL, false, true);
+        $quizIcon = Display::getMdiIcon(ObjectIcon::TEST, 'ch-tool-icon', null, ICON_SIZE_SMALL);
 
         $json['modules'] = array_map(
             function (array $exercise) use ($quizIcon) {

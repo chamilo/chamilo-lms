@@ -4,6 +4,9 @@
 /**
  * Script to import students from LDAP.
  */
+
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+
 // resetting the course id
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -51,7 +54,7 @@ $course = $_POST['course'];
 if (empty($annee) && empty($course)) {
     Display::display_header($tool_name);
     echo '<div style="align:center">';
-    echo Display::return_icon('group.gif', get_lang('Select a filter to find a matching string at the end of the OU attribute'));
+    echo Display::getMdiIcon(ObjectIcon::GROUP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Select a filter to find a matching string at the end of the OU attribute'));
     echo get_lang('Select a filter to find a matching string at the end of the OU attribute');
     //echo '<em>'.get_lang('In order to do this, you must enter the year, the component and the component's step').'</em><br />';
     ///echo get_lang('Follow each of these steps, step by step').'<br />';
@@ -65,7 +68,7 @@ if (empty($annee) && empty($course)) {
 } elseif (!empty($annee) && empty($course)) {
     Display::display_header($tool_name);
     echo '<div style="align:center">';
-    echo Display::return_icon('course.png', get_lang('Select a course in which you would like to register the users you are going to select next')).' '.get_lang('Select a course in which you would like to register the users you are going to select next').'<br />';
+    echo Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Select a course in which you would like to register the users you are going to select next')).' '.get_lang('Select a course in which you would like to register the users you are going to select next').'<br />';
     echo '<form method="post" action="'.api_get_self().'?annee='.Security::remove_XSS($annee).'"><br />';
     echo '<select name="course">';
     $courses = CourseManager::get_courses_list();
@@ -83,7 +86,7 @@ if (empty($annee) && empty($course)) {
     echo '<div style="align: center;">';
     echo '<br />';
     echo '<br />';
-    echo '<h3>'.Display::return_icon('group.gif', get_lang('Select learners')).' '.get_lang('Select learners').'</h3>';
+    echo '<h3>'.Display::getMdiIcon(ObjectIcon::GROUP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Select learners')).' '.get_lang('Select learners').'</h3>';
     //echo "Connection ...";
     $ds = ldap_connect($ldap_host, $ldap_port) or exit(get_lang('LDAP Connection Error'));
     ldap_set_version($ds);

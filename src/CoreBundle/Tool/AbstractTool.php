@@ -11,20 +11,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 abstract class AbstractTool
 {
-    /**
-     * @Groups({"ctool:read"})
-     */
+    #[Groups(['ctool:read'])]
     protected string $name;
 
-    /**
-     * @Groups({"ctool:read"})
-     */
+    #[Groups(['ctool:read'])]
     protected string $nameToShow = '';
 
-    /**
-     * @Groups({"ctool:read"})
-     */
+    #[Groups(['ctool:read'])]
     protected string $icon = '';
+
+    #[Groups(['ctool:read'])]
     protected string $category = '';
     protected string $link;
     protected string $image;
@@ -33,12 +29,14 @@ abstract class AbstractTool
     protected array $resourceTypes = [];
 
     /**
-     * @var string
+     * Tool scope.
      *
-     *  00 disabled tool
-     *  01 course tool
-     *  10 global tool
-     *  11 global or course or both
+     * Values can be the following.
+     *
+     * - 00 disabled tool
+     * - 01 course tool
+     * - 10 global tool
+     * - 11 global or course or both
      */
     protected string $scope;
 
@@ -121,7 +119,7 @@ abstract class AbstractTool
 
     public function getNameToShow(): string
     {
-        //return $this->getName();
+        // return $this->getName();
         return ucfirst(str_replace('_', ' ', $this->getName()));
     }
 

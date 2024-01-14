@@ -7,39 +7,11 @@
 </template>
 
 <script setup>
-import Loading from '../../components/Loading.vue';
-import PageForm from '../../components/page/Form.vue';
-import { useDatatableUpdate } from '../../composables/datatableUpdate';
-import { ref, watch } from 'vue';
+import Loading from "../../components/Loading.vue"
+import PageForm from "../../components/page/Form.vue"
+import { useDatatableUpdate } from "../../composables/datatableUpdate"
 
-const item = ref({});
+const { item, isLoading, retrieve, updateItem } = useDatatableUpdate("Page")
 
-const {
-  isLoading,
-  retrieve,
-  retrievedItem,
-  updateItem,
-  updated,
-  onUpdated
-} = useDatatableUpdate('Page');
-
-retrieve();
-
-watch(
-  retrievedItem,
-  (newValue) => {
-    item.value = newValue;
-  }
-);
-
-watch(
-  updated,
-  (newValue) => {
-    if (!newValue) {
-      return;
-    }
-
-    onUpdated(item);
-  }
-);
+retrieve()
 </script>

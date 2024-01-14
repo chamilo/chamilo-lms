@@ -11,50 +11,34 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TrackEHotpotatoes.
- *
- * @ORM\Table(name="track_e_hotpotatoes", indexes={
- *     @ORM\Index(name="idx_tehp_user_id", columns={"exe_user_id"}),
- *     @ORM\Index(name="idx_tehp_c_id", columns={"c_id"})
- * })
- * @ORM\Entity
  */
+#[ORM\Table(name: 'track_e_hotpotatoes')]
+#[ORM\Index(name: 'idx_tehp_user_id', columns: ['exe_user_id'])]
+#[ORM\Index(name: 'idx_tehp_c_id', columns: ['c_id'])]
+#[ORM\Entity]
 class TrackEHotpotatoes
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="exe_name", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'exe_name', type: 'string', length: 255, nullable: false)]
     protected string $exeName;
 
-    /**
-     * @ORM\Column(name="exe_user_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'exe_user_id', type: 'integer', nullable: true)]
     protected ?int $exeUserId = null;
 
-    /**
-     * @ORM\Column(name="exe_date", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'exe_date', type: 'datetime', nullable: false)]
     protected DateTime $exeDate;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer', nullable: false)]
     protected int $cId;
 
-    /**
-     * @ORM\Column(name="score", type="smallint", nullable=false)
-     */
+    #[ORM\Column(name: 'score', type: 'smallint', nullable: false)]
     protected int $score;
 
-    /**
-     * @ORM\Column(name="max_score", type="smallint", nullable=false)
-     */
+    #[ORM\Column(name: 'max_score', type: 'smallint', nullable: false)]
     protected int $maxScore;
 
     /**

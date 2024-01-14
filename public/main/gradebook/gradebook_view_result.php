@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 require_once __DIR__.'/lib/fe/exportgradebook.php';
 
@@ -48,11 +50,11 @@ if (isset($_GET['delete_mark'])) {
 }
 
 if (isset($_GET['selecteval'])) {
-    $allresults = Result :: load(null, null, $select_eval);
+    $allresults = Result :: load(null, null, $select_eval, true);
     $iscourse = !empty(api_get_course_id());
 }
 
-$allowMultipleAttempts = api_get_configuration_value('gradebook_multiple_evaluation_attempts');
+$allowMultipleAttempts = ('true' === api_get_setting('gradebook.gradebook_multiple_evaluation_attempts'));
 
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
@@ -147,11 +149,12 @@ if (isset($_GET['action'])) {
                 Display::display_header();
                 $items[] = [
                     'url' => $backUrl,
-                    'content' => Display::return_icon(
-                        'back.png',
-                        get_lang('Back'),
-                        [],
-                        ICON_SIZE_MEDIUM
+                    'content' => Display::getMdiIcon(
+                        ActionIcon::BACK,
+                        'ch-tool-icon',
+                        null,
+                        ICON_SIZE_MEDIUM,
+                        get_lang('Back')
                     ),
                 ];
                 echo Display::actions($items);
@@ -675,7 +678,7 @@ if (null == $file_type) {
     //show the result header
     if (isset($export_result_form) && !(isset($edit_res_form))) {
         echo $export_result_form->display();
-        DisplayGradebook::display_header_result($eval[0], $currentcat[0]->get_id(), 1);
+        DisplayGradebook::display_header_result($eval[0], $currentcat[0]->get_id(), 'view_result');
     } else {
         if (isset($import_result_form)) {
             echo $import_result_form->display();
@@ -683,7 +686,7 @@ if (null == $file_type) {
         if (isset($edit_res_form)) {
             echo $edit_res_form->toHtml();
         }
-        DisplayGradebook::display_header_result($eval[0], $currentcat[0]->get_id(), 1);
+        DisplayGradebook::display_header_result($eval[0], $currentcat[0]->get_id(), 'view_result');
     }
     // Letter-based scores are built from lib/results_data_generator.class.php::get_score_display()
     $resultTable->display();

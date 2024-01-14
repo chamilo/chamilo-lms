@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\PersonalFileRepository;
+use Chamilo\CoreBundle\Repository\Node\SocialPostAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\TicketMessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
@@ -90,8 +91,9 @@ use Symfony\Component\Routing\Router;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Translation\Translator;
 use Twig\Environment;
+use UnitEnum;
 
 /**
  * Symfony services for the legacy Chamilo code.
@@ -100,7 +102,8 @@ class Container
 {
     public static ?ContainerInterface $container = null;
     public static ?Request $request = null;
-    public static ?TranslatorInterface $translator = null;
+    // For legacy, to get the translator service is necessary get it by Container::$container->get('translator')
+    public static ?Translator $translator = null;
     public static Environment $twig;
     public static ?Session $session = null;
     public static string $legacyTemplate = '@ChamiloCore/Layout/layout_one_col.html.twig';
@@ -110,10 +113,7 @@ class Container
         self::$container = $container;
     }
 
-    /**
-     * @return array|bool|float|int|string|null
-     */
-    public static function getParameter(string $parameter)
+    public static function getParameter(string $parameter): null|array|bool|float|int|string|UnitEnum
     {
         if (self::$container->hasParameter($parameter)) {
             return self::$container->getParameter($parameter);
@@ -162,9 +162,6 @@ class Container
         return self::$container->get('messenger.bus.default');
     }
 
-    /**
-     * @return Environment
-     */
     public static function getTwig()
     {
         return self::$twig;
@@ -199,7 +196,7 @@ class Container
         self::$request = $request;
     }
 
-    public static function getSession(): Session|HttpSessionInterface|bool|null
+    public static function getSession(): null|bool|HttpSessionInterface|Session
     {
         if (null !== self::$session) {
             return self::$session;
@@ -231,20 +228,6 @@ class Container
     public static function getTokenStorage()
     {
         return self::$container->get('security.token_storage');
-    }
-
-    /**
-     * @return TranslatorInterface
-     */
-    public static function getTranslator()
-    {
-        if (null !== self::$translator) {
-            return self::$translator;
-        }
-
-        //if (self::$container->has('translator')) {
-        return self::$container->get('translator');
-        //}
     }
 
     public static function getMailer(): Mailer
@@ -298,6 +281,11 @@ class Container
     public static function getTicketMessageAttachmentRepository(): TicketMessageAttachmentRepository
     {
         return self::$container->get(TicketMessageAttachmentRepository::class);
+    }
+
+    public static function getSocialPostAttachmentRepository(): SocialPostAttachmentRepository
+    {
+        return self::$container->get(SocialPostAttachmentRepository::class);
     }
 
     public static function getCourseRepository(): CourseRepository
@@ -631,6 +619,7 @@ class Container
     {
         $doctrine = $container->get('doctrine');
         Database::setConnection($doctrine->getConnection());
+
         /** @var EntityManager $em */
         $em = $doctrine->getManager();
         Database::setManager($em);

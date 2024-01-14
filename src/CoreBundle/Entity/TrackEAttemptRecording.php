@@ -1,76 +1,60 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-/**
- * TrackEAttemptRecording.
- *
- * @ORM\Table(name="track_e_attempt_recording",
- *     indexes={
- *         @ORM\Index(name="exe_id", columns={"exe_id"}),
- *         @ORM\Index(name="question_id", columns={"question_id"}),
- *         @ORM\Index(name="session_id", columns={"session_id"})
- *     })
- *     @ORM\Entity
- */
+#[ApiResource(
+    operations: [
+        new Get(security: 'is_granted("VIEW", object)'),
+    ],
+    security: 'is_granted("ROLE_USER")'
+)]
+#[ORM\Table(name: 'track_e_attempt_recording')]
+#[ORM\Index(columns: ['exe_id'], name: 'exe_id')]
+#[ORM\Index(columns: ['question_id'], name: 'question_id')]
+#[ORM\Index(columns: ['session_id'], name: 'session_id')]
+#[ORM\Entity]
 class TrackEAttemptRecording
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="exe_id", type="integer", nullable=false)
-     */
-    protected int $exeId;
-
-    /**
-     * @ORM\Column(name="question_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'question_id', type: 'integer', nullable: false)]
     protected int $questionId;
 
-    /**
-     * @ORM\Column(name="marks", type="integer", nullable=false)
-     */
-    protected int $marks;
+    #[ORM\Column(name: 'marks', type: 'float', nullable: false)]
+    protected float $marks;
 
-    /**
-     * @Gedmo\Timestampable(on="create")
-     *
-     * @ORM\Column(name="insert_date", type="datetime", nullable=false)
-     */
+    #[Gedmo\Timestampable(on: 'create')]
+    #[ORM\Column(name: 'insert_date', type: 'datetime', nullable: false)]
     protected DateTime $insertDate;
 
-    /**
-     * @ORM\Column(name="author", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'author', type: 'integer', nullable: false)]
     protected int $author;
 
-    /**
-     * @ORM\Column(name="teacher_comment", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'teacher_comment', type: 'text', nullable: false)]
     protected string $teacherComment;
 
-    /**
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'session_id', type: 'integer', nullable: false)]
     protected int $sessionId;
 
-    /**
-     * @ORM\Column(name="answer", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'answer', type: 'text', nullable: true)]
     protected ?string $answer;
+
+    #[ORM\ManyToOne(inversedBy: 'revisedAttempts')]
+    #[ORM\JoinColumn(name: 'exe_id', referencedColumnName: 'exe_id', nullable: false)]
+    private ?TrackEExercise $trackExercise = null;
 
     public function __construct()
     {
@@ -80,65 +64,45 @@ class TrackEAttemptRecording
         $this->author = 0;
     }
 
-    /**
-     * Set exeId.
-     *
-     * @return TrackEAttemptRecording
-     */
-    public function setExeId(int $exeId)
+    public function getTrackExercise(): ?TrackEExercise
     {
-        $this->exeId = $exeId;
+        return $this->trackExercise;
+    }
+
+    public function setTrackExercise(?TrackEExercise $trackExercise): static
+    {
+        $this->trackExercise = $trackExercise;
 
         return $this;
     }
 
-    /**
-     * Get exeId.
-     *
-     * @return int
-     */
-    public function getExeId()
+    public function getQuestionId(): int
     {
-        return $this->exeId;
+        return $this->questionId;
     }
 
-    /**
-     * Set questionId.
-     *
-     * @return TrackEAttemptRecording
-     */
-    public function setQuestionId(int $questionId)
+    public function setQuestionId(int $questionId): static
     {
         $this->questionId = $questionId;
 
         return $this;
     }
 
-    /**
-     * Get questionId.
-     *
-     * @return int
-     */
-    public function getQuestionId()
+    public function getMarks(): float
     {
-        return $this->questionId;
+        return $this->marks;
     }
 
-    public function setMarks(int $marks): self
+    public function setMarks(float $marks): self
     {
         $this->marks = $marks;
 
         return $this;
     }
 
-    /**
-     * Get marks.
-     *
-     * @return int
-     */
-    public function getMarks()
+    public function getInsertDate(): DateTime
     {
-        return $this->marks;
+        return $this->insertDate;
     }
 
     public function setInsertDate(DateTime $insertDate): self
@@ -148,36 +112,21 @@ class TrackEAttemptRecording
         return $this;
     }
 
-    /**
-     * Get insertDate.
-     *
-     * @return DateTime
-     */
-    public function getInsertDate()
+    public function getAuthor(): int
     {
-        return $this->insertDate;
+        return $this->author;
     }
 
-    /**
-     * Set author.
-     *
-     * @return TrackEAttemptRecording
-     */
-    public function setAuthor(int $author)
+    public function setAuthor(int $author): static
     {
         $this->author = $author;
 
         return $this;
     }
 
-    /**
-     * Get author.
-     *
-     * @return int
-     */
-    public function getAuthor()
+    public function getTeacherComment(): string
     {
-        return $this->author;
+        return $this->teacherComment;
     }
 
     public function setTeacherComment(string $teacherComment): self
@@ -187,44 +136,19 @@ class TrackEAttemptRecording
         return $this;
     }
 
-    /**
-     * Get teacherComment.
-     *
-     * @return string
-     */
-    public function getTeacherComment()
+    public function getSessionId(): int
     {
-        return $this->teacherComment;
+        return $this->sessionId;
     }
 
-    /**
-     * Set sessionId.
-     *
-     * @return TrackEAttemptRecording
-     */
-    public function setSessionId(int $sessionId)
+    public function setSessionId(int $sessionId): static
     {
         $this->sessionId = $sessionId;
 
         return $this;
     }
 
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }

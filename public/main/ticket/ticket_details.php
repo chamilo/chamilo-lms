@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -131,7 +133,7 @@ if (empty($ticket)) {
     api_not_allowed(true);
 }
 $projectId = (int) $ticket['ticket']['project_id'];
-$userIsAllowInProject = TicketManager::userIsAllowInProject(api_get_user_entity(), $projectId);
+$userIsAllowInProject = TicketManager::userIsAllowInProject($projectId);
 $allowEdition = $ticket['ticket']['assigned_last_user'] == $user_id
     || $ticket['ticket']['sys_insert_user_id']
     == $user_id
@@ -331,7 +333,7 @@ if ($allowEdition
 
 Display::display_header();
 $actions = Display::url(
-    Display::return_icon('back.png', get_lang('Tickets'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Tickets')),
     api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId
 );
 echo Display::toolbarAction('ticket', [$actions]);
@@ -399,7 +401,7 @@ if (null != $ticket['ticket']['course_url']) {
             <td></td>
             <td colspan="2"></td>
           </tr>';
-    if (api_get_configuration_value('ticket_lp_quiz_info_add')) {
+    if ('true' === api_get_setting('lp.ticket_lp_quiz_info_add')) {
         if (!empty($ticket['ticket']['exercise_url'])) {
             echo '<tr>
                 <td><b>'.get_lang('Exercise').':</b> '.$ticket['ticket']['exercise_url'].' </td>

@@ -1,61 +1,47 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CForumCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(
- *     name="c_forum_category",
- *     indexes={
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CForumCategoryRepository")
- */
-class CForumCategory extends AbstractResource implements ResourceInterface
+#[ORM\Table(name: 'c_forum_category')]
+#[ORM\Entity(repositoryClass: CForumCategoryRepository::class)]
+class CForumCategory extends AbstractResource implements ResourceInterface, Stringable
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    protected int $iid;
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    protected ?int $iid = null;
 
-    /**
-     * @ORM\Column(name="cat_title", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'cat_title', type: 'string', length: 255, nullable: false)]
     protected string $catTitle;
 
-    /**
-     * @ORM\Column(name="cat_comment", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'cat_comment', type: 'text', nullable: true)]
     protected ?string $catComment;
 
-    /**
-     * @ORM\Column(name="cat_order", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'cat_order', type: 'integer', nullable: false)]
     protected int $catOrder;
 
-    /**
-     * @ORM\Column(name="locked", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'locked', type: 'integer', nullable: false)]
     protected int $locked;
 
     /**
-     * @var Collection|CForum[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CForum", mappedBy="forumCategory")
+     * @var Collection<int, CForum>
      */
+    #[ORM\OneToMany(mappedBy: 'forumCategory', targetEntity: CForum::class)]
     protected Collection $forums;
 
     public function __construct()
@@ -71,12 +57,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface
         return $this->getCatTitle();
     }
 
-    /**
-     * Get iid.
-     *
-     * @return int
-     */
-    public function getIid()
+    public function getIid(): ?int
     {
         return $this->iid;
     }
@@ -88,12 +69,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get catTitle.
-     *
-     * @return string
-     */
-    public function getCatTitle()
+    public function getCatTitle(): string
     {
         return $this->catTitle;
     }
@@ -117,12 +93,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get catOrder.
-     *
-     * @return int
-     */
-    public function getCatOrder()
+    public function getCatOrder(): int
     {
         return $this->catOrder;
     }
@@ -134,27 +105,20 @@ class CForumCategory extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get locked.
-     *
-     * @return int
-     */
-    public function getLocked()
+    public function getLocked(): int
     {
         return $this->locked;
     }
 
     /**
-     * Get forums.
-     *
-     * @return Collection|CForum[]
+     * @return Collection<int, CForum>
      */
-    public function getForums()
+    public function getForums(): Collection
     {
         return $this->forums;
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }

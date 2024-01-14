@@ -4,6 +4,8 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
@@ -172,32 +174,32 @@ Display::display_header(null);
 $documentsAddedInWork = getAllDocumentsFromWorkToString($workId, $courseInfo);
 
 $actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'">'.
-    Display::return_icon('back.png', get_lang('Back to Assignments list'), '', ICON_SIZE_MEDIUM).'</a>';
+Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to Assignments list')).'</a>';
 
 if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfCourse) {
-    $blockAddDocuments = api_get_configuration_value('block_student_publication_add_documents');
+    $blockAddDocuments = ('true' === api_get_setting('work.block_student_publication_add_documents'));
     if (!$blockAddDocuments) {
         $actionsLeft .= '<a
             href="'.api_get_path(WEB_CODE_PATH).'work/add_document.php?'.api_get_cidreq().'&id='.$workId.'">';
-        $actionsLeft .= Display::return_icon('new_document.png', get_lang('Add document'), '', ICON_SIZE_MEDIUM).'</a>';
+        $actionsLeft .= Display::getMdiIcon(ObjectIcon::DOCUMENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add document')).'</a>';
     }
 
     $actionsLeft .= '<a
         href="'.api_get_path(WEB_CODE_PATH).'work/add_user.php?'.api_get_cidreq().'&id='.$workId.'">';
-    $actionsLeft .= Display::return_icon('addworkuser.png', get_lang('Add a user'), '', ICON_SIZE_MEDIUM).'</a>';
+    $actionsLeft .= Display::getMdiIcon(ActionIcon::ADD_USER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a user')).'</a>';
 
     $actionsLeft .= '<a
         href="'.api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=export_pdf">';
-    $actionsLeft .= Display::return_icon('pdf.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
+    $actionsLeft .= Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export')).'</a>';
 
     $displayOutput = '<a
         href="'.api_get_path(WEB_CODE_PATH).'work/work_missing.php?'.api_get_cidreq().'&id='.$workId.'&list=without">'.
-    Display::return_icon('exercice_uncheck.png', get_lang('View missing assignments'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ActionIcon::GRADE, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('View missing assignments')).'</a>';
 
     $editLink = '<a href="'.api_get_path(WEB_CODE_PATH).'work/edit_work.php?'.api_get_cidreq().'&id='.$workId.'">';
-    $editLink .= Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM).'</a>';
+    $editLink .= Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit')).'</a>';
 
-    $blockEdition = api_get_configuration_value('block_student_publication_edition');
+    $blockEdition = ('true' === api_get_setting('work.block_student_publication_edition'));
     if ($blockEdition && !api_is_platform_admin()) {
         $editLink = '';
     }
@@ -210,24 +212,14 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
         $studentPublication = $repo->find($workId);
         $downloadUrl = $repo->getResourceFileDownloadUrl($studentPublication).'?'.api_get_cidreq();
         $displayOutput .= '<a class="btn-toolbar" href="'.$downloadUrl.'?'.api_get_cidreq().'">'.
-            Display::return_icon(
-                'save_pack.png',
-                get_lang('Download assignments package'),
-                null,
-                ICON_SIZE_MEDIUM
-            ).' '.get_lang('Download assignments package').'</a>';
+            Display::getMdiIcon(ActionIcon::EXPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Download assignments package')).' '.get_lang('Download assignments package').'</a>';
     }
     $actionsLeft .= $displayOutput;
 
     // @todo fix upload corrections.
     /*$url = api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId;
     $actionsLeft .= '<a class="btn-toolbar" href="'.$url.'">'.
-        Display::return_icon(
-            'upload_package.png',
-            get_lang('Upload corrections package'),
-            '',
-            ICON_SIZE_MEDIUM
-        ).' '.get_lang('Upload corrections package').'</a>';
+        Display::getMdiIcon(ActionIcon::UPLOAD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Upload corrections package')).' '.get_lang('Upload corrections package').'</a>';
     */
     $url = api_get_path(WEB_CODE_PATH).
         'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_correction';
@@ -238,7 +230,7 @@ echo Display::toolbarAction('toolbar-worklist', [$actionsLeft]);
 
 $plagiarismListJqgridColumn = [];
 $plagiarismListJqgridLine = [];
-$allowAntiPlagiarism = api_get_configuration_value('allow_compilatio_tool');
+$allowAntiPlagiarism = ('true' === api_get_setting('document.allow_compilatio_tool'));
 if ($allowAntiPlagiarism) {
     $plagiarismListJqgridColumn = ['Compilatio'];
     $plagiarismListJqgridLine = [

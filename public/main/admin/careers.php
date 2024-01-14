@@ -2,12 +2,14 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$allowCareer = api_get_configuration_value('allow_session_admin_read_careers');
+$allowCareer = ('true' === api_get_setting('session.allow_session_admin_read_careers'));
 api_protect_admin_script($allowCareer);
 
 // Add the JS needed to use the jqgrid
@@ -74,7 +76,7 @@ $extra_params['autowidth'] = 'true';
 $extra_params['height'] = 'auto';
 
 $diagramLink = '';
-$allow = api_get_configuration_value('allow_career_diagram');
+$allow = ('true' === api_get_setting('profile.allow_career_diagram'));
 if ($allow) {
     $diagramLink = '<a
         href="'.api_get_path(WEB_CODE_PATH).'admin/career_diagram.php?id=\'+options.rowId+\'">'.
@@ -84,10 +86,10 @@ if ($allow) {
 // With this function we can add actions to the jgrid (edit, delete, etc)
 if (api_is_platform_admin()) {
     $actionLinks = 'function action_formatter(cellvalue, options, rowObject) {
-        return \'<a href="?action=edit&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
+        return \'<a href="?action=edit&id=\'+options.rowId+\'">'.Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit')).'</a>'.
             $diagramLink.
-            '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=copy&id=\'+options.rowId+\'">'.Display::return_icon('copy.png', get_lang('Copy'), '', ICON_SIZE_SMALL).'</a>'.
-            '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
+            '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=copy&id=\'+options.rowId+\'">'.Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Copy')).'</a>'.
+            '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>'.
             '\';
     }';
 } else {
@@ -128,7 +130,7 @@ switch ($action) {
         } else {
             $content .= '<div class="actions">';
             $content .= '<a href="'.api_get_self().'">'.
-                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')).'</a>';
             $content .= '</div>';
             $form->protect();
             $content .= $form->returnForm();
@@ -183,7 +185,7 @@ switch ($action) {
             exit;
         } else {
             $content .= '<div class="actions">';
-            $content .= '<a href="'.api_get_self().'">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+            $content .= '<a href="'.api_get_self().'">'.Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')).'</a>';
             $content .= '</div>';
             $form->protect();
             $content .= $form->returnForm();

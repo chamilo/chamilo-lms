@@ -9,6 +9,8 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CGroupCategory;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 /**
  * This library contains some functions for group-management.
@@ -721,25 +723,11 @@ class GroupManager
         }
 
         $session = api_get_session_entity(api_get_session_id());
-        //$group = api_get_group_entity(api_get_group_id());
         $group = null;
 
-        $qb = $repo->getResourcesByCourse($course, $session, $group);
+        $qb = $repo->getResourcesByCourse($course, $session, $group, null, true, true);
 
         return $qb->getQuery()->getArrayResult();
-        /*$course_info = api_get_course_info($course_code);
-        $courseId = $course_info['real_id'];
-        $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
-        $sql = "SELECT * FROM $table
-                WHERE c_id = $courseId
-                ORDER BY display_order";
-        $res = Database::query($sql);
-        $cats = [];
-        while ($cat = Database::fetch_array($res)) {
-            $cats[] = $cat;
-        }
-
-        return $cats;*/
     }
 
     /**
@@ -917,14 +905,6 @@ class GroupManager
         if (empty($title)) {
             return false;
         }
-        /*$sql = "SELECT MAX(display_order)+1 as new_order
-                FROM $table
-                WHERE c_id = $course_id ";
-        $res = Database::query($sql);
-        $obj = Database::fetch_object($res);
-        if (!isset($obj->new_order)) {
-            $obj->new_order = 1;
-        }*/
 
         $course = api_get_course_entity(api_get_course_int_id());
         $session = api_get_session_entity(api_get_session_id());
@@ -994,7 +974,7 @@ class GroupManager
         $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $id = (int) $id;
 
-        $allowDocumentAccess = api_get_configuration_value('group_category_document_access');
+        $allowDocumentAccess = ('true' === api_get_setting('document.group_category_document_access'));
         $documentCondition = '';
         if ($allowDocumentAccess) {
             $documentAccess = (int) $documentAccess;
@@ -1085,24 +1065,25 @@ class GroupManager
      */
     public static function swap_category_order($id1, $id2)
     {
-        $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
-        $id1 = intval($id1);
-        $id2 = intval($id2);
-        $course_id = api_get_course_int_id();
+        $em = Database::getManager();
 
-        $sql = "SELECT id, display_order FROM $table
-                WHERE id IN ($id1,$id2) AND c_id = $course_id ";
-        $res = Database::query($sql);
-        $cat1 = Database::fetch_object($res);
-        $cat2 = Database::fetch_object($res);
+        $groupCategoryRepo = $em->getRepository(CGroupCategory::class);
+        $cat1 = $groupCategoryRepo->find($id1);
+        $cat2 = $groupCategoryRepo->find($id2);
+
         if ($cat1 && $cat2) {
-            $sql = "UPDATE $table SET display_order=$cat2->display_order
-                    WHERE id = $cat1->id AND c_id = $course_id ";
-            Database::query($sql);
+            $node1 = $cat1->getResourceNode();
+            $node2 = $cat2->getResourceNode();
 
-            $sql = "UPDATE $table SET display_order=$cat1->display_order
-                    WHERE id = $cat2->id AND c_id = $course_id ";
-            Database::query($sql);
+            if ($node1 && $node2) {
+                $order1 = $node1->getDisplayOrder();
+                $order2 = $node2->getDisplayOrder();
+
+                $node1->setDisplayOrder($order2);
+                $node2->setDisplayOrder($order1);
+
+                $em->flush();
+            }
         }
     }
 
@@ -1692,7 +1673,7 @@ class GroupManager
      * Subscribe tutor(s) to a specified group in current course.
      *
      * @param mixed $userList  Can be an array with user-id's or a single user-id
-     * @param array $groupInfo
+     * @param CGroup $group
      * @param int   $course_id
      */
     public static function subscribeTutors($userList, CGroup $group = null, $course_id = 0)
@@ -1702,7 +1683,7 @@ class GroupManager
         }
         $userList = is_array($userList) ? $userList : [$userList];
         $result = true;
-        $course_id = isset($course_id) && !empty($course_id) ? intval($course_id) : api_get_course_int_id();
+        $course_id = !empty($course_id) ? intval($course_id) : api_get_course_int_id();
         $table_group_tutor = Database::get_course_table(TABLE_GROUP_TUTOR);
         $groupId = (int) $group->getIid();
 
@@ -2256,46 +2237,46 @@ class GroupManager
                 $edit_actions = '<a
                     href="'.$url.'settings.php?'.api_get_cidreq(true, false).'&gid='.$groupId.'"
                     title="'.get_lang('Edit').'">'.
-                    Display::return_icon('edit.png', get_lang('Edit this group'), '', ICON_SIZE_SMALL).
+                    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit this group')).
                     '</a>&nbsp;';
 
                 if (1 == $group->getStatus()) {
                     $edit_actions .= '<a
                         href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=set_invisible&group_id='.$groupId.'"
                         title="'.get_lang('Hide').'">'.
-                        Display::return_icon('visible.png', get_lang('Hide'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                        Display::getMdiIcon('eye', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Hide')).'</a>&nbsp;';
                 } else {
                     $edit_actions .= '<a
                         href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=set_visible&group_id='.$groupId.'"
                         title="'.get_lang('Show').'">'.
-                        Display::return_icon('invisible.png', get_lang('Show'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                        Display::getMdiIcon('eye-closed', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Show')).'</a>&nbsp;';
                 }
 
                 $edit_actions .= '<a
                     href="'.$url.'member_settings.php?'.api_get_cidreq(true, false).'&gid='.$groupId.'"
                     title="'.get_lang('Group members').'">'.
-                    Display::return_icon('user.png', get_lang('Group members'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                    Display::getMdiIcon(ToolIcon::MEMBER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Group members')).'</a>&nbsp;';
 
                 $edit_actions .= '<a
                     href="'.$url.'group_overview.php?action=export&type=xls&'.api_get_cidreq(true, false).'&id='.$groupId.'"
                     title="'.get_lang('Export users list').'">'.
-                    Display::return_icon('export_excel.png', get_lang('Export'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                    Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Export')).'</a>&nbsp;';
 
                 if ($surveyGroupExists) {
                     $edit_actions .= Display::url(
-                        Display::return_icon('survey.png', get_lang('ExportSurveyResults'), '', ICON_SIZE_SMALL),
+                        Display::getMdiIcon(ToolIcon::SURVEY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('ExportSurveyResults')),
                         $url.'group_overview.php?action=export_surveys&'.api_get_cidreq(true, false).'&id='.$groupId
                     ).'&nbsp;';
                 }
                 $edit_actions .= '<a
                     href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=fill_one&group_id='.$groupId.'"
                     onclick="javascript: if(!confirm('."'".$confirmMessage."'".')) return false;" title="'.get_lang('FillGroup').'">'.
-                    Display::return_icon('fill.png', get_lang('FillGroup'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                    Display::getMdiIcon(ActionIcon::FILL, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('FillGroup')).'</a>&nbsp;';
 
                 $edit_actions .= '<a
                     href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=delete_one&group_id='.$groupId.'"
                     onclick="javascript: if(!confirm('."'".$confirmMessage."'".')) return false;" title="'.get_lang('Delete').'">'.
-                    Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                    Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>&nbsp;';
 
                 $row[] = $edit_actions;
             }
@@ -2743,16 +2724,31 @@ class GroupManager
         $items = [
             '<a class="nav-link '.$activeSettings.'"
                 id="group_settings_tab" href="'.sprintf($url, 'settings.php').'">
-                '.Display::return_icon('settings.png').' '.get_lang('Settings').'
-            </a>'.
+                '.Display::getMdiIcon(
+                    ToolIcon::SETTINGS,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('Settings')
+                ).'</a>'.
             '<a class="nav-link '.$activeMember.'"
-                    id="group_members_tab" href="'.sprintf($url, 'member_settings.php').'">
-                    '.Display::return_icon('user.png').' '.get_lang('Group members').
-            '</a>'.
+                id="group_members_tab" href="'.sprintf($url, 'member_settings.php').'">
+                '.Display::getMdiIcon(
+                ToolIcon::MEMBER,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_SMALL,
+                get_lang('Group members')
+            ).'</a>'.
             '<a class="nav-link  '.$activeTutor.'"
-                    id="group_tutors_tab" href="'.sprintf($url, 'tutor_settings.php').'">
-                    '.Display::return_icon('teacher.png').' '.get_lang('Group tutors').'
-            </a>',
+                id="group_tutors_tab" href="'.sprintf($url, 'tutor_settings.php').'">
+                '.Display::getMdiIcon(
+                'human-male-board',
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_SMALL,
+                get_lang('Group tutors')
+            ).'</a>',
         ];
 
         echo Display::toolbarAction('group', $items);
@@ -2932,7 +2928,7 @@ class GroupManager
         }*/
 
         // Check group document access
-        $allow = api_get_configuration_value('group_document_access');
+        $allow = ('true' === api_get_setting('document.group_document_access'));
         if ($allow) {
             $documentAccess = $group->getDocumentAccess();
         }

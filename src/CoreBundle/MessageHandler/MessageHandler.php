@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\MessageHandler;
 
 use Chamilo\CoreBundle\Entity\Message;
-use Chamilo\CoreBundle\Repository\MessageRepository;
+use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -15,14 +15,9 @@ use Symfony\Component\Mime\Address;
 
 class MessageHandler implements MessageHandlerInterface
 {
-    private Mailer $mailer;
-    private MessageRepository $repo;
-
-    public function __construct(Mailer $mailer, MessageRepository $repo)
-    {
-        $this->mailer = $mailer;
-        $this->repo = $repo;
-    }
+    public function __construct(
+        private readonly Mailer $mailer
+    ) {}
 
     public function __invoke(Message $message): void
     {
@@ -40,7 +35,12 @@ class MessageHandler implements MessageHandlerInterface
         foreach ($message->getReceivers() as $messageRelUser) {
             $receiver = $messageRelUser->getReceiver();
             $address = new Address($receiver->getEmail(), $receiver->getFirstname());
-            $email->addBcc($address);
+
+            if (MessageRelUser::TYPE_TO === $messageRelUser->getReceiverType()) {
+                $email->addTo($address);
+            } elseif (MessageRelUser::TYPE_CC === $messageRelUser->getReceiverType()) {
+                $email->addBcc($address);
+            }
         }
 
         $params = [

@@ -24103,3 +24103,45 @@ msgstr "See as student"
 
 msgid "Official code"
 msgstr "Official code"
+
+msgid "Welcome, please go to diagnostic at %s."
+msgstr "Welcome, please go to diagnostic at %s."
+
+msgid "Your session search diagnosis is saved"
+msgstr "Your session search diagnosis is saved"
+
+msgid "Send diagnostic finalization message"
+msgstr "Send diagnostic finalization message"
+
+msgid "DiagnosticfinalizationmessageTitle"
+msgstr "Diagnostic finalization"
+
+msgid "DiagnosticfinalizationmessageContent"
+msgstr "Hi %s, I'm %s and I'm reviewing your diagnotic to define the course you will be folling."
+
+msgid "Add a forumCategory"
+msgstr "Add a forum Category"
+
+msgid "Create surveyDoodle"
+msgstr "Create Doodle survey"
+
+msgid "Sticky courses"
+msgstr "Sticky courses"
+
+msgid "Current session tab"
+msgstr "Current"
+
+msgid "Upcoming session tab"
+msgstr "Upcoming"
+
+msgid "Past session tab"
+msgstr "Past"
+
+msgid "By checking this box, I confirm that I accept the data processing by the platform"
+msgstr "By checking this box, I confirm that I accept the data processing by the platform"
+
+msgid "The platform owner, responsible for the processing, implements processing of personal data to respond to your contact request. The data is mandatory. In their absence, it will not be possible to process your request."
+msgstr "The platform owner, responsible for the processing, implements processing of personal data to respond to your contact request. The data is mandatory. In their absence, it will not be possible to process your request."
+
+msgid "Back to tests list"
+msgstr "Back to tests list"

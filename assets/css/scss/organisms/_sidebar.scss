@@ -9,21 +9,22 @@
   }
 
   &__top {
-    @apply sm:hidden font-bold pt-14 px-9 text-gray-90 text-[32px];
+    @apply sm:hidden font-bold pt-10 px-9 text-gray-90 text-[32px];
   }
 
   &__panel {
-    @apply py-6 px-0 overflow-x-hidden overflow-y-auto flex-1 overscroll-none;
+    @apply pt-8 px-0 overflow-x-hidden overflow-y-auto flex-1 overscroll-none
+      sm:pt-5;
   }
 
   &__bottom {
-    @apply border-b border-solid border-gray-25 p-6 text-tiny-bold;
+    @apply border-b border-solid border-gray-25 p-6 text-tiny font-semibold;
   }
 
   &__logout-link {
     @apply block font-semibold whitespace-nowrap mt-5 mx-6 mb-3.5 px-4 py-2;
 
-    .pi {
+    .mdi {
       @apply leading-normal text-body-2;
     }
 
@@ -37,8 +38,11 @@
   }
 
   &__button {
-    @apply hidden bg-white border border-solid border-gray-25 rounded-full absolute top-7 -right-4 text-tiny text-primary p-3
-      sm:inline-flex;
+    @apply bg-white border border-solid border-gray-25 rounded-full top-6 -right-4 text-primary p-1.5;
+    display: none !important;
+    font-size: 20px;
+    line-height: 20px;
+    position: absolute !important;
     z-index: 11;
 
     &:hover,
@@ -63,15 +67,15 @@
         @apply gap-4 pl-8 py-3 pr-6 mb-1 flex-nowrap;
 
         .p-submenu-icon {
-          @apply order-3 rotate-90 text-body-2-bold;
+          @apply order-3 rotate-90 text-body-2 font-semibold;
         }
 
         .p-menuitem-icon {
-          @apply order-1 text-body-2-bold;
+          @apply order-1 text-body-2 font-semibold;
         }
 
         .p-menuitem-text {
-          @apply order-2 grow text-body-2-bold whitespace-nowrap;
+          @apply order-2 grow text-body-2 font-semibold whitespace-nowrap;
         }
 
         &.router-link-active,
@@ -108,8 +112,7 @@
 }
 
 .app-sidebar__topbar-button {
-  @apply flex h-8 w-8 rounded-full transition-none items-center justify-center
-    sm:hidden;
+  @apply text-center sm:hidden;
 }
 
 #app {
@@ -143,7 +146,7 @@
       }
 
       &__logout-link {
-        @apply md:mx-5 md:my-3 md:py-3 md:px-3 text-center;
+        @apply sm:mx-5 sm:my-3 sm:py-3 sm:px-3 text-center;
 
         .logout-text {
           @apply sm:hidden sm:mr-0;
@@ -152,15 +155,24 @@
     }
 
     .app-sidebar__topbar-button {
-      .pi.pi-times {
+      .mdi.mdi-close {
         &::before {
-          content: "\e91d";
+          content: "\F035C";
         }
       }
     }
 
     .app-main {
       @apply overflow-auto;
+    }
+  }
+}
+
+@media (min-width: 640px) {
+  .app-sidebar {
+    &__button {
+      display: inline-flex !important;
+      position: absolute !important;
     }
   }
 }

@@ -22,6 +22,8 @@
     {%- block chamilo_footer -%}
     {% endblock -%}
     {{ modals_block }}
+
+    {% include "@ChamiloCore/Layout/foot.html.twig" %}
     </body>
     </html>
 {% else %}

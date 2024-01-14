@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Query\Expr\Join;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * @todo change class name
@@ -87,7 +88,7 @@ class CoursesAndSessionsCatalog
                 WHERE
                     tcf.item_type = $extraFieldType AND
                     tcf.variable = 'hide_from_catalog' AND
-                    tcfv.value = 1
+                    tcfv.field_value = 1
                 ";
 
         $result = Database::query($sql);
@@ -179,7 +180,7 @@ class CoursesAndSessionsCatalog
         $allCategories = CourseCategory::getAllCategories();
         $categoryToAvoid = '';
         if (api_is_student()) {
-            $categoryToAvoid = api_get_configuration_value('course_category_code_to_use_as_model');
+            $categoryToAvoid = api_get_setting('course.course_category_code_to_use_as_model');
         }
         foreach ($allCategories as $category) {
             $categoryCode = $category['code'];
@@ -262,7 +263,7 @@ class CoursesAndSessionsCatalog
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
                 $urlCondition = ' access_url_id = '.$urlId.' ';
-                $allowBaseCategories = api_get_configuration_value('allow_base_course_category');
+                $allowBaseCategories = ('true' === api_get_setting('course.allow_base_course_category'));
                 if ($allowBaseCategories) {
                     $urlCondition = ' (access_url_id = '.$urlId.' OR access_url_id = 1)  ';
                 }
@@ -479,7 +480,7 @@ class CoursesAndSessionsCatalog
             if (-1 != $urlId) {
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
                 $urlCondition = ' access_url_id = '.$urlId.' AND';
-                $allowBaseCategories = api_get_configuration_value('allow_base_course_category');
+                $allowBaseCategories = ('true' === api_get_setting('course.allow_base_course_category'));
                 if ($allowBaseCategories) {
                     $urlCondition = ' (access_url_id = '.$urlId.' OR access_url_id = 1) AND ';
                 }
@@ -813,7 +814,7 @@ class CoursesAndSessionsCatalog
                         ->where(
                             $qb->expr()->eq('fv.field', $extraFieldInfo['id'])
                         )->andWhere(
-                            $qb->expr()->eq('fv.value ', 1)
+                            $qb->expr()->eq('fv.fieldValue ', 1)
                         )
                         ->getDQL()
                 )
@@ -1335,11 +1336,12 @@ class CoursesAndSessionsCatalog
      */
     public static function getSessionIcon($sessionName)
     {
-        return Display::return_icon(
-            'window_list.png',
-            $sessionName,
+        return Display::getMdiIcon(
+            ObjectIcon::SESSION,
+            'ch-tool-icon',
             null,
-            ICON_SIZE_MEDIUM
+            ICON_SIZE_MEDIUM,
+            $sessionName
         );
     }
 
@@ -1444,7 +1446,7 @@ class CoursesAndSessionsCatalog
 
     public static function getCatalogSearchSettings()
     {
-        $settings = api_get_configuration_value('catalog_settings');
+        $settings = api_get_setting('session.catalog_settings', true);
         if (empty($settings)) {
             // Default everything is visible
             $settings = [

@@ -3,6 +3,9 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * This script is the Tickets plugin main entry point.
@@ -131,7 +134,7 @@ if (empty($projectId)) {
 }
 
 $currentUrl = api_get_self().'?project_id='.$projectId;
-$isAllow = TicketManager::userIsAllowInProject(api_get_user_entity(), $projectId);
+$isAllow = TicketManager::userIsAllowInProject($projectId);
 $actionRight = '';
 
 Display::display_header(get_lang('My tickets'));
@@ -232,12 +235,7 @@ if (!empty($projectId)) {
     // Add link
     if ('true' === api_get_setting('ticket_allow_student_add') || api_is_platform_admin()) {
         $actionRight = Display::url(
-            Display::return_icon(
-                'add.png',
-                get_lang('Add'),
-                null,
-                ICON_SIZE_MEDIUM
-            ),
+            Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')),
             api_get_path(WEB_CODE_PATH).'ticket/new_ticket.php?project_id='.$projectId.'&'.api_get_cidReq(),
             ['title' => get_lang('Add')]
         );
@@ -245,23 +243,13 @@ if (!empty($projectId)) {
 
     if (api_is_platform_admin()) {
         $actionRight .= Display::url(
-            Display::return_icon(
-                'export_excel.png',
-                get_lang('Export'),
-                null,
-                ICON_SIZE_MEDIUM
-            ),
+            Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export')),
             api_get_self().'?action=export'.$get_parameter.$get_parameter2.'&project_id='.$projectId,
             ['title' => get_lang('Export')]
         );
 
         $actionRight .= Display::url(
-            Display::return_icon(
-                'settings.png',
-                get_lang('Settings'),
-                null,
-                ICON_SIZE_MEDIUM
-            ),
+            Display::getMdiIcon(ToolIcon::SETTINGS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Settings')),
             api_get_path(WEB_CODE_PATH).'ticket/settings.php',
             ['title' => get_lang('Settings')]
         );
@@ -285,24 +273,20 @@ if (!empty($projectId)) {
     }
 
     $options = '';
-    $iconProject = Display::return_icon(
-        'project.png',
-        get_lang('Projects'),
-        null,
-        ICON_SIZE_MEDIUM
-        );
+    $iconProject = Display::getMdiIcon(ObjectIcon::PROJECT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Projects'));
     if ($isAdmin) {
         $options .= Display::url(
             $iconProject,
             api_get_path(WEB_CODE_PATH).'ticket/projects.php'
         );
     }
-    $iconTicket = Display::return_icon(
-        'tickets.png',
-        $ticketLabel,
+    $iconTicket = Display::getMdiIcon(
+        ObjectIcon::TICKET,
+        'ch-tool-icon',
         null,
-        ICON_SIZE_MEDIUM
-        );
+        ICON_SIZE_MEDIUM,
+        $ticketLabel
+    );
     $options .= Display::url(
         $iconTicket,
         $url
@@ -355,7 +339,7 @@ if (!empty($projectId)) {
     if ('true' === api_get_setting('ticket_allow_student_add')) {
         echo '<div class="actions">';
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'ticket/new_ticket.php?project_id='.$projectId.'">'.
-                Display::return_icon('add.png', get_lang('Add'), '', '32').
+                Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')).
              '</a>';
         echo '</div>';
     }

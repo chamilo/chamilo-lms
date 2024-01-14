@@ -6,10 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\DataProvider\Extension;
 
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
-//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
+use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
+use Chamilo\CoreBundle\Entity\User;
 use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\QueryBuilder;
@@ -17,19 +18,22 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
 
-final class SessionRelUserExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
+// use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
+
+final class SessionRelUserExtension implements QueryCollectionExtensionInterface // , QueryItemExtensionInterface
 {
-    private Security $security;
-    private RequestStack $requestStack;
+    public function __construct(
+        private readonly Security $security,
+        private readonly RequestStack $requestStack
+    ) {}
 
-    public function __construct(Security $security, RequestStack $request)
-    {
-        $this->security = $security;
-        $this->requestStack = $request;
-    }
-
-    public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null): void
-    {
+    public function applyToCollection(
+        QueryBuilder $queryBuilder,
+        QueryNameGeneratorInterface $queryNameGenerator,
+        string $resourceClass,
+        Operation $operation = null,
+        array $context = []
+    ): void {
         $this->addWhere($queryBuilder, $resourceClass);
     }
 
@@ -77,11 +81,12 @@ final class SessionRelUserExtension implements QueryCollectionExtensionInterface
             return;
         }
 
+        /** @var User|null $user */
         if (null === $user = $this->security->getUser()) {
             throw new AccessDeniedException('Access Denied SessionRelUser');
         }
 
         $qb->andWhere(sprintf('%s.user = :current_user', $alias));
-        $qb->setParameter('current_user', $user);
+        $qb->setParameter('current_user', $user->getId());
     }
 }

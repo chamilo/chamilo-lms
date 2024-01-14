@@ -32,7 +32,7 @@ $form = new FormValidator(
 $form->addElement('header', null, get_lang('Add learning path category'));
 
 // Title
-if (api_get_configuration_value('save_titles_as_html')) {
+if ('true' === api_get_setting('editor.save_titles_as_html')) {
     $form->addHtmlEditor(
         'name',
         get_lang('Name'),
@@ -81,12 +81,7 @@ if ($form->validate()) {
 Display::display_header(get_lang('Create new learning path'), 'Path');
 
 $actions = '<a href="lp_controller.php?'.api_get_cidreq().'">'.
-    Display::return_icon(
-        'back.png',
-        get_lang('ReturnToLearning paths'),
-        '',
-        ICON_SIZE_MEDIUM
-    ).
+    Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', null, 32, get_lang('ReturnToLearning paths')).
     '</a>';
 
 echo Display::toolbarAction('toolbar', [$actions]);

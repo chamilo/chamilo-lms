@@ -9,7 +9,7 @@ namespace Chamilo\CoreBundle\EventListener;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
-use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Exception;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -30,22 +30,14 @@ class LegacyListener
 {
     use ContainerAwareTrait;
 
-    private Environment $twig;
-    private TokenStorageInterface $tokenStorage;
-    private UserRepository $userRepository;
-    private AccessUrlRepository $accessUrlRepository;
-    private RouterInterface $router;
-    private ParameterBagInterface $parameterBag;
-
-    public function __construct(Environment $twig, TokenStorageInterface $tokenStorage, UserRepository $userRepository, AccessUrlRepository $accessUrlRepository, RouterInterface $router, ParameterBagInterface $parameterBag)
-    {
-        $this->twig = $twig;
-        $this->tokenStorage = $tokenStorage;
-        $this->userRepository = $userRepository;
-        $this->accessUrlRepository = $accessUrlRepository;
-        $this->router = $router;
-        $this->parameterBag = $parameterBag;
-    }
+    public function __construct(
+        private readonly Environment $twig,
+        private readonly TokenStorageInterface $tokenStorage,
+        private readonly AccessUrlRepository $accessUrlRepository,
+        private readonly RouterInterface $router,
+        private readonly ParameterBagInterface $parameterBag,
+        private readonly SettingsManager $settingsManager
+    ) {}
 
     public function onKernelRequest(RequestEvent $event): void
     {
@@ -103,8 +95,22 @@ class LegacyListener
         $session->set('is_platformAdmin', $isAdmin);
         $session->set('is_allowedCreateCourse', $allowedCreateCourse);
 
+        if ('true' === $this->settingsManager->getSetting('course.student_view_enabled')) {
+            if ($request->query->has('isStudentView')) {
+                $isStudentView = $request->query->get('isStudentView');
+
+                if ('true' === $isStudentView) {
+                    $session->set('studentview', 'studentview');
+                } elseif ('false' === $isStudentView) {
+                    $session->set('studentview', 'teacherview');
+                }
+            } elseif (!$session->has('studentview')) {
+                $session->set('studentview', 'teacherview');
+            }
+        }
+
         // Theme icon is loaded in the TwigListener src/ThemeBundle/EventListener/TwigListener.php
-        //$theme = api_get_visual_theme();
+        // $theme = api_get_visual_theme();
         /*$languages = api_get_languages();
         $languageList = [];
         foreach ($languages as $isoCode => $language) {
@@ -124,9 +130,9 @@ class LegacyListener
                 'text' => $languageList[$isoFixed] ?? 'English',
             ]
         );*/
-        //$twig->addGlobal('current_locale', $request->getLocale());
-        //$twig->addGlobal('available_locales', $languages);
-        //$twig->addGlobal('show_toolbar', \Template::isToolBarDisplayedForUser() ? 1 : 0);
+        // $twig->addGlobal('current_locale', $request->getLocale());
+        // $twig->addGlobal('available_locales', $languages);
+        // $twig->addGlobal('show_toolbar', \Template::isToolBarDisplayedForUser() ? 1 : 0);
 
         // Extra content
         $extraHeader = '';
@@ -156,11 +162,7 @@ class LegacyListener
         $session->set('access_url_id', $urlId);
     }
 
-    public function onKernelResponse(ResponseEvent $event): void
-    {
-    }
+    public function onKernelResponse(ResponseEvent $event): void {}
 
-    public function onKernelController(ControllerEvent $event): void
-    {
-    }
+    public function onKernelController(ControllerEvent $event): void {}
 }

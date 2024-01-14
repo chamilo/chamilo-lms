@@ -2,6 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 ob_start();
 $cidReset = true;
@@ -83,23 +86,23 @@ if (api_is_platform_admin(true, true)) {
 
     if (!api_is_session_admin()) {
         $menu_items[] = Display::url(
-            Display::return_icon('statistics.png', get_lang('View my progress'), '', ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('View my progress')),
             api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
         );
         $menu_items[] = Display::url(
-            Display::return_icon('user.png', get_lang('Learners'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Learners')),
             'index.php?view=drh_students&display=yourstudents'
         );
         $menu_items[] = Display::url(
-            Display::return_icon('teacher.png', get_lang('Teachers'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Teachers')),
             'teachers.php'
         );
         $menu_items[] = Display::url(
-            Display::return_icon('course_na.png', get_lang('Courses'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Courses')),
             '#'
         );
         $menu_items[] = Display::url(
-            Display::return_icon('session.png', get_lang('Sessions'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Sessions')),
             api_get_path(WEB_CODE_PATH).'my_space/session.php'
         );
         $menu_items[] = Display::url(
@@ -114,7 +117,7 @@ if (api_is_platform_admin(true, true)) {
         if (api_can_login_as($user_id)) {
             $link = '<a
                     href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::get_existing_token().'">'.
-                    Display::return_icon('login_as.png', get_lang('Login as'), null, ICON_SIZE_MEDIUM).'</a>&nbsp;&nbsp;';
+                    Display::getMdiIcon(ActionIcon::LOGIN_AS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Login as')).'</a>&nbsp;&nbsp;';
             $menu_items[] = $link;
         }
     }
@@ -129,7 +132,7 @@ if (api_is_platform_admin(true, true)) {
 
     if (count($a_courses) > 0) {
         $actionsRight .= Display::url(
-            Display::return_icon('printer.png', get_lang('Print'), [], 32),
+            Display::getMdiIcon(ActionIcon::PRINT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Print')),
             'javascript: void(0);',
             ['onclick' => 'javascript: window.print();']
         );
@@ -143,7 +146,7 @@ if (api_is_platform_admin(true, true)) {
 if ($showImportIcon) {
     echo "<div align=\"right\">";
     echo '<a href="user_import.php?id_session='.$sessionId.'&action=export&type=xml">'.
-            Display::return_icon('excel.gif', get_lang('Import users list')).'&nbsp;'.get_lang('Import users list').'</a>';
+            Display::getMdiIcon(ActionIcon::IMPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Import users list')).'&nbsp;'.get_lang('Import users list').'</a>';
     echo "</div><br />";
 }
 
@@ -329,7 +332,7 @@ function get_courses($from, $limit, $column, $direction)
 
             $courseIcon = '<a
                 href="'.api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?cid='.$courseId.'&sid='.$sessionId.'">
-                '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
+                '.Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Details')).'
               </a>';
             $title = Display::url(
                 $data['title'],
@@ -345,7 +348,7 @@ function get_courses($from, $limit, $column, $direction)
                 $checkExport = $attendance->getAttendanceLogin($startDate, $endDate);
                 if (false !== $checkExport) {
                     $attendanceLink = Display::url(
-                        Display::return_icon('attendance_list.png', get_lang('Logins'), '', ICON_SIZE_MEDIUM),
+                        Display::getMdiIcon(ToolIcon::ATTENDANCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Logins')),
                         api_get_path(WEB_CODE_PATH).'attendance/index.php?cid='.$courseId.'&sid='.$sessionId.'&action=calendar_logins'
                     );
                 }
@@ -379,10 +382,10 @@ $table = new SortableTable(
 
 $table->set_header(0, get_lang('Course title'), false);
 $table->set_header(1, get_lang('NbLearners'), false);
-$table->set_header(2, get_lang('Time spent in the course').Display::return_icon('info.png', get_lang('Time in course'), ['align' => 'absmiddle', 'hspace' => '3px']), false);
+$table->set_header(2, get_lang('Time spent in the course').Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Time in course')), false);
 $table->set_header(3, get_lang('Thematic advance'), false);
-$table->set_header(4, get_lang('AvgLearnersProgress').Display::return_icon('info.png', get_lang('Average of all learners in all courses'), ['align' => 'absmiddle', 'hspace' => '3px']), false);
-$table->set_header(5, get_lang('Average score in learning paths').Display::return_icon('info.png', get_lang('Average of all learners in all courses'), ['align' => 'absmiddle', 'hspace' => '3px']), false);
+$table->set_header(4, get_lang('AvgLearnersProgress').Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Average of all learners in all courses')), false);
+$table->set_header(5, get_lang('Average score in learning paths').Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Average of all learners in all courses')), false);
 $table->set_header(6, get_lang('Messages per learner'), false);
 $table->set_header(7, get_lang('Assignments'), false);
 $table->set_header(8, get_lang('Attendances'), false);

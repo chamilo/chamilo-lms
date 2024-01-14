@@ -115,7 +115,7 @@ class UsergroupRepositoryTest extends KernelTestCase
         ;
         $em->persist($userGroupRelUser);
 
-        //UserGroupRelUserGroup.php
+        // UserGroupRelUserGroup.php
 
         $group->getCourses()->add($userGroupRelCourse);
         $group->getQuestions()->add($userGroupRelQuestion);

@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
@@ -21,16 +20,9 @@ class MessageVoter extends Voter
     public const EDIT = 'EDIT';
     public const DELETE = 'DELETE';
 
-    private EntityManagerInterface $entityManager;
-    private Security $security;
-
     public function __construct(
-        EntityManagerInterface $entityManager,
-        Security $security
-    ) {
-        $this->entityManager = $entityManager;
-        $this->security = $security;
-    }
+        private readonly Security $security
+    ) {}
 
     protected function supports(string $attribute, $subject): bool
     {
@@ -75,12 +67,14 @@ class MessageVoter extends Voter
                 }
 
                 break;
+
             case self::VIEW:
-                if ($message->hasReceiver($user) || $message->getSender() === $user) {
+                if ($message->hasUserReceiver($user) || $message->getSender() === $user) {
                     return true;
                 }
 
                 break;
+
             case self::DELETE:
                 // @todo
                 break;

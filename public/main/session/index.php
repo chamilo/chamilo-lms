@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com>  Beeznest
@@ -144,11 +146,11 @@ if (!empty($courseList)) {
         foreach ($lp_list as $item) {
             if (empty($item['modified_on'])) {
                 $lp_date_original = $item['created_on'];
-                $image = 'new.gif';
+                $image = ObjectIcon::STAR_EMPTY;
                 $label = get_lang('Course added');
             } else {
                 $lp_date_original = $item['modified_on'];
-                $image = 'moderator_star.png';
+                $image = ObjectIcon::STAR;
                 $label = get_lang('Learning path updated');
             }
 
@@ -160,8 +162,11 @@ if (!empty($courseList)) {
 
             if (strtotime($last_date) < strtotime($lp_date_original)) {
                 if (empty($icons)) {
-                    $icons .= ' '.Display::return_icon(
+                    $icons .= ' '.Display::getMdiIcon(
                         $image,
+                        'ch-tool-icon',
+                        null,
+                        ICON_SIZE_SMALL,
                         get_lang('Since your latest visit').': '.$label.' - '.$lp_date_original
                     ).' ';
                 }
@@ -187,7 +192,7 @@ if (false == api_is_coach_of_course_in_session($session_id)) {
 }
 
 $entityManager = Database::getManager();
-$sessionTitleLink = api_get_configuration_value('courses_list_session_title_link');
+$sessionTitleLink = api_get_setting('course.courses_list_session_title_link');
 
 if (2 == $sessionTitleLink && 1 === $session->getNbrCourses()) {
     $sessionCourses = $session->getCourses();
@@ -295,10 +300,12 @@ if (!empty($courseList)) {
                     );
 
                     $new_exercises[] = [
-                        'status' => Display::return_icon(
-                            'star.png',
-                            get_lang('New'),
-                            ['width' => ICON_SIZE_SMALL]
+                        'status' => Display::getMdiIcon(
+                            ObjectIcon::STAR_EMPTY,
+                            'ch-tool-icon',
+                            null,
+                            ICON_SIZE_SMALL,
+                            get_lang('New')
                         ),
                         'date' => $exerciseInfo['start_time'],
                         'course' => $courseInfo['title'],
@@ -340,11 +347,12 @@ if (!empty($courseList)) {
                     );
 
                     $my_real_array[] = [
-                        'status' => Display::return_icon(
-                            'quiz.png',
-                            get_lang('Attempted'),
-                            '',
-                            ICON_SIZE_SMALL
+                        'status' => Display::getMdiIcon(
+                            ObjectIcon::TEST,
+                            'ch-tool-icon',
+                            null,
+                            ICON_SIZE_SMALL,
+                            get_lang('Attempted')
                         ),
                         'date' => $start_date,
                         'course' => $courseInfo['title'],
@@ -376,7 +384,7 @@ if ($session->getDuration() > 0) {
 $editLink = '';
 if (api_is_platform_admin()) {
     $editLink = '&nbsp;'.Display::url(
-        Display::return_icon('edit.png', get_lang('Edit')),
+        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
         api_get_path(WEB_CODE_PATH).'session/session_edit.php?page=resume_session.php&id='.$session_id
     );
 }
@@ -623,7 +631,7 @@ if (!api_is_anonymous()) {
 
 // Main headers
 $headers = [
-    Display::return_icon('moderator_star.png'),
+    Display::getMdiIcon(ObjectIcon::STAR, 'ch-tool-icon', null, ICON_SIZE_SMALL),
     get_lang('Courses'),
     get_lang('Learning paths'),
 ];

@@ -30,8 +30,8 @@ final class CCalendarEventRepository extends ResourceRepository
         DateTime $endDate,
         array $users,
         Course $course,
-        ?Session $session = null,
-        ?CGroup $group = null
+        Session $session = null,
+        CGroup $group = null
     ): CCalendarEvent {
         $event = (new CCalendarEvent())
             ->setTitle($announcement->getTitle())

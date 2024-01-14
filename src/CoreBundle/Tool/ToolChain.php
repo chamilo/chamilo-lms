@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Tool;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\ToolResourceRight;
@@ -124,8 +125,8 @@ class ToolChain
             ->setMask(ResourceNodeVoter::getReaderMask())
         ;
 
-        //$tool->addToolResourceRight($toolResourceRight);
-        //$tool->addToolResourceRight($toolResourceRightReader);
+        // $tool->addToolResourceRight($toolResourceRight);
+        // $tool->addToolResourceRight($toolResourceRightReader);
     }
 
     public function addToolsInCourse(Course $course): Course
@@ -153,9 +154,9 @@ class ToolChain
             'chat',
             'student_publication',
             'survey',
-            //'wiki',
+            'wiki',
             'notebook',
-            //'blog',
+            // 'blog',
             'course_tool',
             'course_homepage',
             'tracking',
@@ -179,26 +180,33 @@ class ToolChain
                 continue;
             }
 
+            $linkVisibility = ResourceLink::VISIBILITY_PUBLISHED;
+            if (\in_array($tool->getName(), ['course_setting', 'course_maintenance'])) {
+                $linkVisibility = ResourceLink::VISIBILITY_DRAFT;
+            }
+
             /** @var Tool $toolEntity */
             $toolEntity = $toolRepo->findOneBy($criteria);
-            $position = $toolList[$tool->getName()] + 1;
+            if ($toolEntity) {
+                $position = $toolList[$tool->getName()] + 1;
 
-            $courseTool = (new CTool())
-                ->setTool($toolEntity)
-                ->setName($tool->getName())
-                ->setPosition($position)
-                ->setVisibility($visibility)
-                ->setParent($course)
-                ->setCreator($course->getCreator())
-                ->addCourseLink($course)
-            ;
-            $course->addTool($courseTool);
+                $courseTool = (new CTool())
+                    ->setTool($toolEntity)
+                    ->setName($tool->getName())
+                    ->setPosition($position)
+                    ->setVisibility($visibility)
+                    ->setParent($course)
+                    ->setCreator($course->getCreator())
+                    ->addCourseLink($course, null, null, $linkVisibility)
+                ;
+                $course->addTool($courseTool);
+            }
         }
 
         return $course;
     }
 
-    public function getTools()
+    public function getTools(): iterable
     {
         return $this->handlerCollection->getCollection();
     }

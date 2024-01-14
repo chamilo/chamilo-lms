@@ -777,7 +777,7 @@ class BuyCoursesPlugin extends Plugin
             'course_img' => null,
         ];
 
-        $courseTeachers = $course->getTeachers();
+        $courseTeachers = $course->getTeachersSubscriptions();
 
         foreach ($courseTeachers as $teachers) {
             $user = $teachers->getUser();

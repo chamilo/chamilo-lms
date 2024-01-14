@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * This script is the Tickets plugin main entry point.
@@ -132,13 +133,13 @@ function modify_filter($id, $params, $row)
     $code = $row['code'];
 
     $result = Display::url(
-        Display::return_icon('edit.png', get_lang('Edit')),
+        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
         api_get_self()."?action=edit&id={$id}"
     );
 
     if (!in_array($code, TicketManager::getDefaultStatusList())) {
         $result .= Display::url(
-            Display::return_icon('delete.png', get_lang('Delete')),
+            Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
             api_get_self()."?action=delete&id={$id}"
         );
     }
@@ -161,14 +162,14 @@ $items = [
 ];
 
 $actions = Display::url(
-    Display::return_icon('back.png', get_lang('Tickets'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Tickets')),
     api_get_path(WEB_CODE_PATH).'ticket/tickets.php'
 );
 $sections = TicketManager::getSettingsMenuItems('status');
 array_unshift($sections, $items);
 foreach ($sections as $item) {
     $actions .= Display::url(
-        Display::return_icon($item['icon'], $item['content'], [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon($item['icon'], 'ch-tool-icon', null, ICON_SIZE_MEDIUM, $item['content']),
         $item['url']
     );
 }

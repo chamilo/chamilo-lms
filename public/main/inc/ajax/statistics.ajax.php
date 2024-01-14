@@ -621,7 +621,7 @@ switch ($action) {
                 $table = $table['table'];
                 break;
             case 'status':
-                $sessionStatusAllowed = api_get_configuration_value('allow_session_status');
+                $sessionStatusAllowed = ('true' === api_get_setting('session.allow_session_status'));
                 if (!$sessionStatusAllowed) {
                     exit;
                 }

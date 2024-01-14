@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * @author Olivier Brouckaert & Julio Montoya & Hubert Borderiou 21-10-2011 (Question by category)
@@ -11,7 +12,7 @@ use ChamiloSession as Session;
  *    This script allows to manage the question list
  *    It is included from the script admin.php
  */
-$limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+$limitTeacherAccess = ('true' === api_get_setting('exercise.limit_exercise_teacher_access'));
 
 // deletes a question from the exercise (not from the data base)
 if ($deleteQuestion) {
@@ -132,9 +133,9 @@ if (!$inATest) {
         // In building mode show all questions not render by teacher order.
         $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
         $allowQuestionOrdering = true;
-        $showPagination = api_get_configuration_value('show_question_pagination');
+        $showPagination = api_get_setting('exercise.show_question_pagination');
         if (!empty($showPagination) && $nbrQuestions > $showPagination) {
-            $length = api_get_configuration_value('question_pagination_length');
+            $length = api_get_setting('exercise.question_pagination_length');
             $url = api_get_self().'?'.api_get_cidreq();
             // Use pagination for exercise with more than 200 questions.
             $allowQuestionOrdering = false;
@@ -193,33 +194,18 @@ if (!$inATest) {
                 }
 
                 $clone_link = Display::url(
-                    Display::return_icon(
-                        'cd.png',
-                        get_lang('Copy'),
-                        [],
-                        ICON_SIZE_TINY
-                    ),
+                    Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Copy')),
                     api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'&page='.$page,
                     ['class' => 'btn btn--plain btn-sm']
                 );
 
                 $edit_link = CALCULATED_ANSWER == $objQuestionTmp->selectType() && $objQuestionTmp->isAnswered()
                     ? Display::span(
-                        Display::return_icon(
-                            'edit_na.png',
-                            get_lang('Question edition is not available because the question has been already answered. However, you can copy and modify it.'),
-                            [],
-                            ICON_SIZE_TINY
-                        ),
+                        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-disabled', null, ICON_SIZE_TINY, get_lang('Question edition is not available because the question has been already answered. However, you can copy and modify it.')),
                         ['class' => 'btn btn--plain btn-sm']
                     )
                     : Display::url(
-                        Display::return_icon(
-                            'edit.png',
-                            get_lang('Edit'),
-                            [],
-                            ICON_SIZE_TINY
-                        ),
+                        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Edit')),
                         api_get_self().'?'.api_get_cidreq().'&'
                             .http_build_query([
                                 'type' => $objQuestionTmp->selectType(),
@@ -231,12 +217,7 @@ if (!$inATest) {
                 $delete_link = null;
                 if (true == $objExercise->edit_exercise_in_lp) {
                     $delete_link = Display::url(
-                        Display::return_icon(
-                            'delete.png',
-                            get_lang('Remove from test'),
-                            [],
-                            ICON_SIZE_TINY
-                        ),
+                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Remove from test')),
                         api_get_self().'?'.api_get_cidreq().'&'
                             .http_build_query([
                                 'id' => $exerciseId,

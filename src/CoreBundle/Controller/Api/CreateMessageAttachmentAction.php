@@ -22,7 +22,7 @@ class CreateMessageAttachmentAction extends BaseResourceFileAction
      */
     public function __invoke(Request $request, MessageAttachmentRepository $repo, EntityManager $em): MessageAttachment
     {
-        /** @var UploadedFile $uploadedFile */
+        /** @var UploadedFile|null $uploadedFile */
         $uploadedFile = $request->files->get('file');
 
         if (empty($uploadedFile)) {

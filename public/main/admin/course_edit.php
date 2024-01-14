@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 $cidReset = true;
 
@@ -139,11 +141,11 @@ $form->addText(
 
 $form->applyFilter('visual_code', 'strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
-
+$allowBaseCourseCategory = ('true' === api_get_setting('course.allow_base_course_category'));
 $categories = $courseCategoriesRepo->getCategoriesByCourseIdAndAccessUrlId(
     $urlId,
     $courseId,
-    api_get_configuration_value('allow_base_course_category')
+    $allowBaseCourseCategory
 );
 
 $courseCategoryNames = [];
@@ -186,7 +188,7 @@ if (array_key_exists('add_teachers_to_sessions_courses', $courseInfo)) {
     );
 }
 
-$allowEditSessionCoaches = false === api_get_configuration_value('disabled_edit_session_coaches_course_editing_course');
+$allowEditSessionCoaches = ('false' === api_get_setting('course.disabled_edit_session_coaches_course_editing_course'));
 $coursesInSession = SessionManager::get_session_by_course($courseInfo['real_id']);
 if (!empty($coursesInSession) && $allowEditSessionCoaches) {
     foreach ($coursesInSession as $session) {
@@ -265,7 +267,7 @@ $extra = $extraField->addElements(
     true
 );
 
-if (api_get_configuration_value('multiple_access_url_show_shared_course_marker')) {
+if ('true' === api_get_setting('course.multiple_access_url_show_shared_course_marker')) {
     $urls = UrlManager::get_access_url_from_course($courseId);
     $urlToString = '';
     foreach ($urls as $url) {
@@ -283,7 +285,7 @@ $(function() {
 $form->addButtonUpdate(get_lang('Edit course information'));
 
 // Set some default values
-$courseInfo['disk_quota'] = round(DocumentManager::get_course_quota($courseInfo['code']) / 1024 / 1024, 1);
+$courseInfo['disk_quota'] = round(DocumentManager::get_course_quota($courseInfo['code']), 1);
 $courseInfo['real_code'] = $courseInfo['code'];
 $courseInfo['add_teachers_to_sessions_courses'] = $courseInfo['add_teachers_to_sessions_courses'] ?? 0;
 
@@ -355,7 +357,7 @@ if ($form->validate()) {
         ->setVisualCode($visual_code)
         ->setDepartmentName($course['department_name'])
         ->setDepartmentUrl($department_url)
-        ->setDiskQuota($course['disk_quota'] * 1024 * 1024)
+        ->setDiskQuota($course['disk_quota'])
         ->setSubscribe($course['subscribe'])
         ->setUnsubscribe($course['unsubscribe'])
         ->setVisibility($visibility)
@@ -441,16 +443,16 @@ if ($form->validate()) {
 Display::display_header($tool_name);
 
 $actions = Display::url(
-    Display::return_icon('back.png', get_lang('Back')),
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Back')),
     api_get_path(WEB_CODE_PATH).'admin/course_list.php'
 );
 $actions .= Display::url(
-    Display::return_icon('course_home.png', get_lang('Course homepage')),
+    Display::getMdiIcon(ToolIcon::COURSE_HOME, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course homepage')),
     $courseInfo['course_public_url'],
     ['target' => '_blank']
 );
 $actions .= Display::url(
-    Display::return_icon('info2.png', get_lang('Information')),
+    Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Information')),
     api_get_path(WEB_CODE_PATH)."admin/course_information.php?id=$courseId"
 );
 

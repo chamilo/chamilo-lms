@@ -1,16 +1,20 @@
 <template>
   <div>
-    <Toolbar :handle-edit="editHandler"  :handle-delete="del">
+    <Toolbar
+      :handle-delete="del"
+      :handle-edit="editHandler"
+    >
       <template slot="left">
-        <v-toolbar-title v-if="item">{{
-          `${$options.servicePrefix} ${item['@id']}`
-        }}</v-toolbar-title>
+        <v-toolbar-title v-if="item">{{ `${$options.servicePrefix} ${item["@id"]}` }} </v-toolbar-title>
       </template>
     </Toolbar>
 
     <br />
 
-    <div v-if="item" class="table-coursecategory-show">
+    <div
+      v-if="item"
+      class="table-coursecategory-show"
+    >
       <v-simple-table>
         <template slot="default">
           <thead>
@@ -24,26 +28,31 @@
           </thead>
           <tbody>
             <tr>
-              <td><strong>{{ $t('name') }}</strong></td>
               <td>
-                                    {{ item['name'] }}
+                <strong>{{ $t("name") }}</strong>
               </td>
-            
-              <td><strong>{{ $t('code') }}</strong></td>
               <td>
-                                    {{ item['code'] }}
+                {{ item["name"] }}
+              </td>
+
+              <td>
+                <strong>{{ $t("code") }}</strong>
+              </td>
+              <td>
+                {{ item["code"] }}
               </td>
             </tr>
-            
+
             <tr>
-              <td><strong>{{ $t('description') }}</strong></td>
               <td>
-                                    {{ item['description'] }}
+                <strong>{{ $t("description") }}</strong>
               </td>
-            
+              <td>
+                {{ item["description"] }}
+              </td>
+
               <td></td>
             </tr>
-            
           </tbody>
         </template>
       </v-simple-table>
@@ -54,34 +63,34 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import { mapFields } from 'vuex-map-fields';
-import Loading from '../../components/Loading.vue';
-import ShowMixin from '../../mixins/ShowMixin';
-import Toolbar from '../../components/Toolbar.vue';
+import { mapActions, mapGetters } from "vuex"
+import { mapFields } from "vuex-map-fields"
+import Loading from "../../components/Loading.vue"
+import ShowMixin from "../../mixins/ShowMixin"
+import Toolbar from "../../components/Toolbar.vue"
 
-const servicePrefix = 'CourseCategory';
+const servicePrefix = "CourseCategory"
 
 export default {
-  name: 'CourseCategoryShow',
+  name: "CourseCategoryShow",
   servicePrefix,
   components: {
-      Loading,
-      Toolbar
+    Loading,
+    Toolbar,
   },
   mixins: [ShowMixin],
   computed: {
-    ...mapFields('coursecategory', {
-      isLoading: 'isLoading'
+    ...mapFields("coursecategory", {
+      isLoading: "isLoading",
     }),
-    ...mapGetters('coursecategory', ['find'])
+    ...mapGetters("coursecategory", ["find"]),
   },
   methods: {
-    ...mapActions('coursecategory', {
-      deleteItem: 'del',
-      reset: 'resetShow',
-      retrieve: 'load'
-    })
-  }
-};
+    ...mapActions("coursecategory", {
+      deleteItem: "del",
+      reset: "resetShow",
+      retrieve: "load",
+    }),
+  },
+}
 </script>

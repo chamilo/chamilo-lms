@@ -111,7 +111,7 @@ class ChamiloSession implements \ArrayAccess
      *
      * @return bool
      */
-    public static function has($variable)
+    public static function has($variable): bool
     {
         return isset($_SESSION[$variable]);
     }
@@ -119,7 +119,7 @@ class ChamiloSession implements \ArrayAccess
     /**
      * Clear.
      */
-    public static function clear()
+    public static function clear(): void
     {
         $session = Container::getSession();
         $session->clear();
@@ -128,7 +128,7 @@ class ChamiloSession implements \ArrayAccess
     /**
      * Destroy.
      */
-    public static function destroy()
+    public static function destroy(): void
     {
         $session = Container::getSession();
         $session->invalidate();
@@ -137,30 +137,30 @@ class ChamiloSession implements \ArrayAccess
     /*
      * ArrayAccess
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($_SESSION[$offset]);
     }
 
     /**
-     * It it exists returns the value stored at the specified offset.
-     * If offset does not exists returns null. Do not trigger a warning.
+     * If it exists returns the value stored at the specified offset.
+     * If offset does not exist returns null. Do not trigger a warning.
      *
      * @param string $offset
      *
-     * @return any
+     * @return mixed
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return self::read($offset);
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         self::write($offset, $value);
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($_SESSION[$offset]);
     }

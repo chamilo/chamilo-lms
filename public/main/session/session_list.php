@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+ini_set('memory_limit', '2024M');
+
 /**
  * List sessions in an efficient and usable way.
  */
@@ -148,15 +150,15 @@ if (!isset($_GET['keyword'])) {
     ];
 }
 
-$hideSearch = api_get_configuration_value('hide_search_form_in_session_list');
+$hideSearch = ('true' === api_get_setting('session.hide_search_form_in_session_list'));
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-     return \'<a href="session_edit.php?page=resume_session.php&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit')).'</a>'.
-    '&nbsp;<a href="add_users_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('user_subscribe_session.png', get_lang('Subscribe users to this session')).'</a>'.
-    '&nbsp;<a href="add_courses_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('courses_to_session.png', get_lang('Add courses to this session')).'</a>'.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=copy&idChecked=\'+options.rowId+\'">'.Display::return_icon('copy.png', get_lang('Copy')).'</a>'.
-    '<button type="button" title="'.get_lang('Delete').'" onclick="if(confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) window.location = '."\'session_list.php?action=delete&idChecked=\' + ".'\' + options.rowId +\';">'.Display::return_icon('delete.png', get_lang('Delete')).'</button>'.
+     return \'<a href="session_edit.php?page=resume_session.php&id=\'+options.rowId+\'">'.Display::getMdiIcon('pencil', 'ch-tool-icon', null, 22, get_lang('Edit')).'</a>'.
+    '&nbsp;<a href="add_users_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::getMdiIcon('account-multiple-plus', 'ch-tool-icon', null, 22, get_lang('Subscribe users to this session')).'</a>'.
+    '&nbsp;<a href="add_courses_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::getMdiIcon('book-open-page-variant', 'ch-tool-icon', null, 22, get_lang('Add courses to this session')).'</a>'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=copy&idChecked=\'+options.rowId+\'">'.Display::getMdiIcon('text-box-plus', 'ch-tool-icon', null, 22, get_lang('Copy')).'</a>'.
+    '<button type="button" title="'.get_lang('Delete').'" onclick="if(confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) window.location = '."\'session_list.php?action=delete&idChecked=\' + ".'\' + options.rowId +\';">'.Display::getMdiIcon('delete', 'ch-tool-icon', null, 22, get_lang('Delete')).'</button>'.
     '\';
 }';
 
@@ -351,21 +353,18 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 
 $actionsRight = '';
 $actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.
-    Display::return_icon('new_session.png', get_lang('Add a training session'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon('google-classroom', 'ch-tool-icon-gradient', null, 32, get_lang('Add a training session')).'</a>';
 if (api_is_platform_admin()) {
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'session/add_many_session_to_category.php">'.
-        Display::return_icon('session_to_category.png', get_lang('Add a training sessionsInCategories'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon('tab-plus', 'ch-tool-icon-gradient', null, 32, get_lang('Add a training sessionsInCategories')).'</a>';
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_category_list.php">'.
-        Display::return_icon('folder.png', get_lang('Sessions categories list'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon('file-tree-outline', 'ch-tool-icon-gradient', null, 32, get_lang('Sessions categories list')).'</a>';
 }
 
 echo $actions;
 if (api_is_platform_admin()) {
-    $actionsRight .= '<div class="pull-right">';
     $actionsRight .= $sessionFilter->returnForm();
-    $actionsRight .= '</div>';
 
-    $actionsRight .= '<div class="pull-right">';
     // Create a search-box
     $form = new FormValidator(
         'search_simple',
@@ -378,7 +377,7 @@ if (api_is_platform_admin()) {
     $form->addElement('text', 'keyword', null, ['aria-label' => get_lang('Search')]);
     $form->addHidden('list_type', $listType);
     $form->addButtonSearch(get_lang('Search'));
-    $actionsRight .= $form->returnForm().'</div>';
+    $actionsRight .= $form->returnForm();
 }
 
 echo Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);

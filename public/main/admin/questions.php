@@ -7,6 +7,7 @@ use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use Knp\Component\Pager\Paginator;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -157,7 +158,7 @@ if ($formSent) {
                     $exercise->read($exerciseId);
                     $exerciseData .= $exercise->title.'&nbsp;';
                     $exerciseData .= Display::url(
-                        Display::return_icon('edit.png', get_lang('Edit')),
+                        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
                         $urlExercise.http_build_query(
                             [
                             'cidReq' => $courseCode,
@@ -193,7 +194,7 @@ if ($formSent) {
                     $question->questionData .= '&nbsp;'.get_lang('Orphan question');
                 }
                 $question->questionData .= Display::url(
-                    Display::return_icon('edit.png', get_lang('Edit')),
+                    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
                     $urlExercise.http_build_query(
                         [
                             'cidReq' => $courseCode,

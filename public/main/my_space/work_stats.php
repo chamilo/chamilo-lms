@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
@@ -11,7 +13,7 @@ $allowToTrack = api_is_platform_admin() || api_is_allowed_to_edit();
 if (!$allowToTrack) {
     api_not_allowed(true);
 }
-$consideredWorkingTime = api_get_configuration_value('considered_working_time');
+$consideredWorkingTime = api_get_setting('work.considered_working_time');
 
 if (false === $consideredWorkingTime) {
     api_not_allowed(true);
@@ -46,7 +48,7 @@ function get_count_users()
 
 function get_users($from, $number_of_items, $column, $direction)
 {
-    $consideredWorkingTime = api_get_configuration_value('considered_working_time');
+    $consideredWorkingTime = api_get_setting('work.considered_working_time');
 
     $courseId = api_get_course_int_id();
     $courseCode = api_get_course_id();
@@ -151,7 +153,7 @@ function get_users($from, $number_of_items, $column, $direction)
 
         $row[] = $status;
         /*$detailsLink = Display::url(
-            Display::return_icon('2rightarrow.png', get_lang('Details').' '.$studentData['username']),
+            Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Details').' '.$studentData['username']),
             $urlDetails,
             ['id' => 'details_'.$studentData['username']]
         );
@@ -168,7 +170,7 @@ $actionsLeft = '';
 $toolbar = Display::toolbarAction('toolbar-student', [$actionsLeft]);
 
 $itemPerPage = 10;
-$perPage = api_get_configuration_value('my_space_users_items_per_page');
+$perPage = api_get_setting('profile.my_space_users_items_per_page');
 if ($perPage) {
     $itemPerPage = (int) $perPage;
 }

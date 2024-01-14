@@ -998,7 +998,10 @@ class Answer
                 $(window).on('load', function() {
                     jsPlumb.ready(function() {
                         if ($('#drag{$this->questionId}_question').length > 0) {
-                            MatchingDraggable.init('{$this->questionId}');
+                            setTimeout(function() {
+                                // Initialize MatchingDraggable
+                                MatchingDraggable.init('{$this->questionId}');
+                            }, 1000);
                         }
                     });
                 });

@@ -103,10 +103,10 @@ $form->addRule(
     'filetype',
     $allowed_picture_types
 );
-
+$allowBaseCourseCategory = ('true' === api_get_setting('course.allow_base_course_category'));
 $countCategories = $courseCategoriesRepo->countAllInAccessUrl(
     $accessUrlId,
-    api_get_configuration_value('allow_base_course_category')
+    $allowBaseCourseCategory
 );
 
 if ($countCategories >= 100) {
@@ -120,14 +120,15 @@ if ($countCategories >= 100) {
         ['url' => $url]
     );
 } else {
+    $allowBaseCourseCategory = ('true' === api_get_setting('course.allow_base_course_category'));
     $categories = $courseCategoriesRepo->findAllInAccessUrl(
         $accessUrlId,
-        api_get_configuration_value('allow_base_course_category')
+        $allowBaseCourseCategory
     );
     $categoriesOptions = [null => get_lang('None')];
     $categoryToAvoid = '';
     if (!api_is_platform_admin()) {
-        $categoryToAvoid = api_get_configuration_value('course_category_code_to_use_as_model');
+        $categoryToAvoid = api_get_setting('course.course_category_code_to_use_as_model');
     }
 
     /** @var CourseCategory $category */
@@ -437,8 +438,8 @@ if ($form->validate()) {
     if (!$course_validation_feature) {
         $message = Display::return_message(get_lang('Once you click on "Create a course", a course is created with a section for Tests, Project based learning, Assessments, Courses, Dropbox, Agenda and much more. Logging in as teacher provides you with editing privileges for this course.'));
         // If the donation feature is enabled, show a message with a donate button
-        if (true == api_get_configuration_value('course_creation_donate_message_show')) {
-            $button = api_get_configuration_value('course_creation_donate_link');
+        if ('true' === api_get_setting('course.course_creation_donate_message_show')) {
+            $button = api_get_setting('course.course_creation_donate_link');
             if (!empty($button)) {
                 $message .= Display::return_message(get_lang('DonateToTheProject').'<br /><br /><div style="display:block; margin-left:42%;">'.$button.'</div>', 'warning', false);
             }

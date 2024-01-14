@@ -50,24 +50,6 @@ class LearnpathLink extends AbstractLink
         }
 
         return $list;
-
-        /*$session_id = $this->get_session_id();
-        if (empty($session_id)) {
-            $session_condition = api_get_session_condition(0, true);
-        } else {
-            $session_condition = api_get_session_condition($session_id, true, true);
-        }
-
-        $sql = 'SELECT iid, name FROM '.$this->get_learnpath_table().'
-                WHERE c_id = '.$this->course_id.' '.$session_condition.' ';
-        $result = Database::query($sql);
-
-        $cats = [];
-        while ($data = Database::fetch_array($result)) {
-            $cats[] = [$data['iid'], $data['name']];
-        }
-
-        return $cats;*/
     }
 
     /**
@@ -77,7 +59,7 @@ class LearnpathLink extends AbstractLink
     {
         $tbl_stats = Database::get_course_table(TABLE_LP_VIEW);
         $sql = "SELECT count(id) AS number FROM $tbl_stats
-				WHERE c_id = ".$this->course_id." AND lp_id = ".$this->get_ref_id();
+				WHERE lp_id = ".$this->get_ref_id();
         $result = Database::query($sql);
         $number = Database::fetch_array($result, 'NUM');
 
@@ -104,7 +86,6 @@ class LearnpathLink extends AbstractLink
 
         $sql = "SELECT * FROM $tbl_stats
                 WHERE
-                	c_id = ".$this->course_id." AND
                     lp_id = ".$this->get_ref_id()." AND
                     session_id = $session_id ";
 
@@ -211,7 +192,7 @@ class LearnpathLink extends AbstractLink
     public function is_valid_link()
     {
         $sql = 'SELECT count(iid) FROM '.$this->get_learnpath_table().'
-                WHERE c_id = '.$this->course_id.' AND id = '.$this->get_ref_id().' ';
+                WHERE iid = '.$this->get_ref_id().' ';
         $result = Database::query($sql);
         $number = Database::fetch_row($result, 'NUM');
 
@@ -265,7 +246,7 @@ class LearnpathLink extends AbstractLink
     {
         if (!isset($this->learnpath_data)) {
             $sql = 'SELECT * FROM '.$this->get_learnpath_table().'
-                    WHERE c_id = '.$this->course_id.' AND iid = '.$this->get_ref_id().' ';
+                    WHERE iid = '.$this->get_ref_id().' ';
             $result = Database::query($sql);
             $this->learnpath_data = Database::fetch_array($result);
         }

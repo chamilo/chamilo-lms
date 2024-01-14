@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\EventListener;
 
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -16,6 +15,9 @@ use Symfony\Component\Serializer\SerializerInterface;
 use TicketManager;
 use Twig\Environment;
 
+/**
+ * Twig-related event listener. For filters, look into ChamiloExtension.php.
+ */
 class TwigListener
 {
     private SerializerInterface $serializer;
@@ -49,13 +51,11 @@ class TwigListener
         if (null !== $token) {
             $user = $token->getUser();
             if ($user instanceof UserInterface) {
-                /** @var User $userClone */
-                $userClone = clone $user;
-                $data = $this->serializer->serialize($userClone, 'jsonld', [
+                $data = $this->serializer->serialize($user, 'jsonld', [
                     'groups' => ['user_json:read'],
                 ]);
                 $isAuth = true;
-                $userIsAllowedInProject = TicketManager::userIsAllowInProject($userClone, 1);
+                $userIsAllowedInProject = TicketManager::userIsAllowInProject(1);
             }
         }
 
@@ -74,6 +74,7 @@ class TwigListener
 
             'social.social_enable_messages_feedback',
             'social.disable_dislike_option',
+            'platform.redirect_index_to_url_for_logged_users',
         ];
 
         // @todo get variables in 1 query.
@@ -91,7 +92,7 @@ class TwigListener
 
         $languages = $this->languageRepository->getAllAvailable()->getQuery()->getArrayResult();
 
-        //$this->twig->addGlobal('text_direction', api_get_text_direction());
+        // $this->twig->addGlobal('text_direction', api_get_text_direction());
         $this->twig->addGlobal('from_vue', $request->request->get('from_vue') ? 1 : 0);
         $this->twig->addGlobal('is_authenticated', json_encode($isAuth));
         $this->twig->addGlobal('user_json', $data ?? json_encode([]));

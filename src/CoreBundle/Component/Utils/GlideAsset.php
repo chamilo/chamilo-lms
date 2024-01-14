@@ -6,6 +6,4 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Component\Utils;
 
-class GlideAsset extends Glide
-{
-}
+class GlideAsset extends Glide {}

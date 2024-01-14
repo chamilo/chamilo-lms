@@ -2,13 +2,13 @@ export default {
   path: '/resources/document/:node/',
   meta: { requiresAuth: true, showBreadcrumb: true },
   name: 'documents',
-  component: () => import('../components/documents/Layout.vue'),
+  component: () => import('../components/layout/SimpleRouterViewLayout.vue'),
   redirect: { name: 'DocumentsList' },
   children: [
     {
       name: 'DocumentsList',
       path: '',
-      component: () => import('../views/documents/List.vue')
+      component: () => import('../views/documents/DocumentsList.vue')
     },
     {
       name: 'DocumentsCreate',
@@ -23,7 +23,7 @@ export default {
     {
       name: 'DocumentsUploadFile',
       path: 'upload',
-      component: () => import('../views/documents/Upload.vue')
+      component: () => import('../views/documents/DocumentsUpload.vue')
     },
     {
       name: 'DocumentsUpdate',

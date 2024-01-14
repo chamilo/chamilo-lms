@@ -17,6 +17,9 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @template-extends AbstractType<Course>
+ */
 class CourseType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -24,7 +27,7 @@ class CourseType extends AbstractType
         // @todo as a service to load the preferred_choices
         $builder
             ->add('title', TextType::class)
-            //->add('code', 'text')
+            // ->add('code', 'text')
             ->add(
                 'course_language',
                 LocaleType::class,
@@ -45,7 +48,7 @@ class CourseType extends AbstractType
             ->add('department_url', UrlType::class, [
                 'required' => false,
             ])
-            //->add('disk_quota', 'text')
+            // ->add('disk_quota', 'text')
             ->add(
                 'expiration_date',
                 DateType::class,

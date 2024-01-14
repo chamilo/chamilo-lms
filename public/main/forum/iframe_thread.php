@@ -53,9 +53,9 @@ $sessionEntity = api_get_session_entity(api_get_session_id());
 /* Is the user allowed here? */
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
-if (!api_is_allowed_to_edit(false, true) &&
-    (false == $forumEntity->isVisible($courseEntity, $sessionEntity) ||
-        false == $threadEntity->isVisible($courseEntity, $sessionEntity)
+if (!api_is_allowed_to_create_course() &&
+    (false == $forumEntity->isVisible($courseEntity) ||
+        false == $threadEntity->isVisible($courseEntity)
     )
 ) {
     api_not_allowed(false);

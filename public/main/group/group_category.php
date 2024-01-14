@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -176,7 +179,7 @@ $group = [
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('user.png', get_lang('Registration')).' '.get_lang('Registration'),
+    Display::getMdiIcon(ToolIcon::MEMBER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Registration')).' '.get_lang('Registration'),
     null,
     false
 );
@@ -198,12 +201,12 @@ $group = [
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('folder.png', get_lang('Documents')).' '.get_lang('Documents'),
+    Display::getMdiIcon(ToolIcon::DOCUMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Documents')).' '.get_lang('Documents'),
     null,
     false
 );
 
-$allowDocumentGroupAccess = api_get_configuration_value('group_category_document_access');
+$allowDocumentGroupAccess = ('true' === api_get_setting('document.group_category_document_access'));
 if ($allowDocumentGroupAccess) {
     $form->addElement('html', '</div>');
     $form->addElement('html', '<div class="col-md-6">');
@@ -233,9 +236,7 @@ if ($allowDocumentGroupAccess) {
     $form->addGroup(
         $group,
         '',
-        Display::return_icon(
-            'folder.png',
-            get_lang('DocumentsAccess')
+        Display::getMdiIcon(ToolIcon::DOCUMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('DocumentsAccess')
         ).'<span>'.get_lang('DocumentsAccess').'</span>',
         null,
         false
@@ -260,7 +261,7 @@ $group = [
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('work.png', get_lang('Assignments'), [], ICON_SIZE_SMALL).' '.get_lang('Assignments'),
+    Display::getMdiIcon(ToolIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Assignments')).' '.get_lang('Assignments'),
     '',
     false
 );
@@ -278,7 +279,7 @@ $group = [
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('agenda.png', get_lang('Agenda')).' '.get_lang('Agenda'),
+    Display::getMdiIcon(ToolIcon::AGENDA, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Agenda')).' '.get_lang('Agenda'),
     null,
     false
 );
@@ -300,7 +301,7 @@ $group = [
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('announce.png', get_lang('Announcements')).' '.get_lang('Announcements'),
+    Display::getMdiIcon(ToolIcon::ANNOUNCEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Announcements')).' '.get_lang('Announcements'),
     null,
     false
 );
@@ -318,7 +319,7 @@ $group = [
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('forum.png', get_lang('Group Forum')).' '.get_lang('Group Forum'),
+    Display::getMdiIcon(ToolIcon::FORUM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Group Forum')).' '.get_lang('Group Forum'),
     null,
     false
 );
@@ -340,7 +341,7 @@ $group = [
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('wiki.png', get_lang('Wiki')).' '.get_lang('Wiki'),
+    Display::getMdiIcon(ToolIcon::WIKI, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Wiki')).' '.get_lang('Wiki'),
     null,
     false
 );
@@ -357,7 +358,7 @@ $group = [
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('chat.png', get_lang('Chat')).' '.get_lang('Chat'),
+    Display::getMdiIcon(ToolIcon::CHAT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Chat')).' '.get_lang('Chat'),
     null,
     false
 );
@@ -436,7 +437,7 @@ if ($form->validate()) {
 Display::display_header($nameTools, 'Group');
 
 $actions = '<a href="group.php">'.
-    Display::return_icon('back.png', get_lang('Back to Groups list'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to Groups list')).'</a>';
 echo Display::toolbarAction('toolbar', [$actions]);
 
 $defaults = $category;

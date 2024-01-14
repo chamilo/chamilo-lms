@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Class Category
@@ -844,7 +845,7 @@ class Category implements GradebookItem
         $session_id = null
     ) {
         $key = 'category:'.$this->id.'student:'.(int) $studentId.'type:'.$type.'course:'.$course_code.'session:'.(int) $session_id;
-        $useCache = api_get_configuration_value('gradebook_use_apcu_cache');
+        $useCache = ('true' === api_get_setting('gradebook.gradebook_use_apcu_cache'));
         $cacheAvailable = api_get_configuration_value('apc') && $useCache;
 
         if ($cacheAvailable) {
@@ -2143,12 +2144,7 @@ class Category implements GradebookItem
                 );
 
                 $exportToPDF = Display::url(
-                    Display::return_icon(
-                        'pdf.png',
-                        get_lang('Export to PDF'),
-                        [],
-                        ICON_SIZE_MEDIUM
-                    ),
+                    Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')),
                     "$url&action=export"
                 );
 
@@ -2183,7 +2179,7 @@ class Category implements GradebookItem
      */
     public static function exportAllCertificates($catId, $userList = [])
     {
-        $orientation = api_get_configuration_value('certificate_pdf_orientation');
+        $orientation = api_get_setting('document.certificate_pdf_orientation');
 
         $params['orientation'] = 'landscape';
         if (!empty($orientation)) {
@@ -2196,7 +2192,7 @@ class Category implements GradebookItem
         $params['bottom'] = 0;
         $page_format = 'landscape' == $params['orientation'] ? 'A4-L' : 'A4';
         $pdf = new PDF($page_format, $params['orientation'], $params);
-        if (api_get_configuration_value('add_certificate_pdf_footer')) {
+        if ('true' === api_get_setting('certificate.add_certificate_pdf_footer')) {
             $pdf->setCertificateFooter();
         }
         $certificate_list = GradebookUtils::get_list_users_certificates($catId, $userList);
@@ -2545,7 +2541,7 @@ class Category implements GradebookItem
     private static function create_category_objects_from_sql_result($result)
     {
         $categories = [];
-        $allow = api_get_configuration_value('allow_gradebook_stats');
+        $allow = ('true' === api_get_setting('gradebook.allow_gradebook_stats'));
         if ($allow) {
             $em = Database::getManager();
             $repo = $em->getRepository(GradebookCategory::class);

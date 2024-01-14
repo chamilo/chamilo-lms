@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\LegalRepository;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 $cidReset = true;
 
@@ -12,7 +13,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_set_more_memory_and_time_limits();
 api_block_anonymous_users();
 
-if (api_get_configuration_value('disable_gdpr')) {
+if ('true' === api_get_setting('profile.disable_gdpr')) {
     api_not_allowed(true);
 }
 
@@ -368,11 +369,11 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
         $userId,
         'legal_accept'
     );
-    $permissionBlock .= Display::return_icon('accept_na.png', get_lang('Rejected'));
+    $permissionBlock .= Display::getMdiIcon(ActionIcon::REJECT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Rejected'));
     if (isset($value['value']) && !empty($value['value'])) {
         [$legalId, $legalLanguageId, $legalTime] = explode(':', $value['value']);
         $permissionBlock = '<h4>'.get_lang('Current status').'</h4>'.
-            get_lang('Legal agreement accepted').' '.Display::return_icon('accept.png', get_lang('Legal agreement accepted'), [], ICON_SIZE_TINY).
+            get_lang('Legal agreement accepted').' '.Display::getMdiIcon(ActionIcon::ACCEPT, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Legal agreement accepted')).
             '<br />';
         $permissionBlock .= get_lang('Date').': '.api_get_local_time($legalTime).'<br /><br />';
         $permissionBlock .= $formToString;
@@ -415,9 +416,9 @@ $treatmentTypes = LegalManager::getTreatmentTypeList();
     $personalData['treatment'][$item]['content'] = $legalTermContent;
 }*/
 
-$officerName = api_get_configuration_value('data_protection_officer_name');
-$officerRole = api_get_configuration_value('data_protection_officer_role');
-$officerEmail = api_get_configuration_value('data_protection_officer_email');
+$officerName = api_get_setting('profile.data_protection_officer_name');
+$officerRole = api_get_setting('profile.data_protection_officer_role');
+$officerEmail = api_get_setting('profile.data_protection_officer_email');
 if (!empty($officerName)) {
     $personalData['officer_name'] = $officerName;
     $personalData['officer_role'] = $officerRole;
@@ -427,7 +428,7 @@ if (!empty($officerName)) {
 $tpl = new Template(null);
 
 $actions = Display::url(
-    Display::return_icon('excel.png', get_lang('Export'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export')),
     api_get_path(WEB_CODE_PATH).'social/personal_data.php?export=1'
 );
 

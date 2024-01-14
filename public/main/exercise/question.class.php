@@ -184,7 +184,7 @@ abstract class Question
                         $objQuestion->category = (int) $categoryInfo['category_id'];
                     }
 
-                    if (api_get_configuration_value('allow_mandatory_question_in_category') &&
+                    if (('true' === api_get_setting('exercise.allow_mandatory_question_in_category')) &&
                         isset($categoryInfo['mandatory'])
                     ) {
                         $objQuestion->mandatory = (int) $categoryInfo['mandatory'];
@@ -228,7 +228,7 @@ abstract class Question
      */
     public function selectTitle()
     {
-        if (!api_get_configuration_value('save_titles_as_html')) {
+        if ('true' !== api_get_setting('editor.save_titles_as_html')) {
             return $this->question;
         }
 
@@ -237,9 +237,9 @@ abstract class Question
 
     public function getTitleToDisplay(Exercise $exercise, int $itemNumber): string
     {
-        $showQuestionTitleHtml = api_get_configuration_value('save_titles_as_html');
+        $showQuestionTitleHtml = ('true' === api_get_setting('editor.save_titles_as_html'));
         $title = '';
-        if (api_get_configuration_value('show_question_id')) {
+        if ('true' === api_get_setting('exercise.show_question_id')) {
             $title .= '<h4>#'.$this->course['code'].'-'.$this->iid.'</h4>';
         }
 
@@ -376,7 +376,7 @@ abstract class Question
                     ";
             $res = Database::query($sql);
             $row = Database::fetch_array($res);
-            $allowMandatory = api_get_configuration_value('allow_mandatory_question_in_category');
+            $allowMandatory = ('true' === api_get_setting('exercise.allow_mandatory_question_in_category'));
             if ($row['nb'] > 0) {
                 $extraMandatoryCondition = '';
                 if ($allowMandatory) {
@@ -1153,7 +1153,7 @@ abstract class Question
      */
     public function createForm(&$form, $exercise)
     {
-        $zoomOptions = api_get_configuration_value('quiz_image_zoom');
+        $zoomOptions = api_get_setting('exercise.quiz_image_zoom', true);
         if (isset($zoomOptions['options'])) {
             $finderFolder = api_get_path(WEB_PATH).'vendor/studio-42/elfinder/';
             echo '<!-- elFinder CSS (REQUIRED) -->';
@@ -1205,7 +1205,7 @@ abstract class Question
         }
 
         // question name
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $editorConfig = ['ToolbarSet' => 'TitleAsHtml'];
             $form->addHtmlEditor(
                 'questionName',
@@ -1269,7 +1269,7 @@ abstract class Question
                 TestCategory::getCategoriesIdAndName()
             );
             if (EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM == $exercise->getQuestionSelectionType() &&
-                api_get_configuration_value('allow_mandatory_question_in_category')
+                ('true' === api_get_setting('exercise.allow_mandatory_question_in_category'))
             ) {
                 $form->addCheckBox('mandatory', get_lang('IsMandatory'));
             }
@@ -1505,26 +1505,16 @@ abstract class Question
         }
 
         echo '<li>';
-        echo '<div class="icon_image_content">';
+        echo '<div class="icon_image">';
         if (true == $objExercise->exercise_was_added_in_lp) {
-            echo Display::return_icon(
-                'database_na.png',
-                get_lang('Recycle existing questions'),
-                null,
-                ICON_SIZE_BIG
-            );
+            echo Display::getMdiIcon('database', 'ch-tool-icon-disabled mt-4', null, ICON_SIZE_BIG, get_lang('Recycle existing questions'));
         } else {
             if (in_array($feedbackType, [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
                 echo $url = '<a href="question_pool.php?'.api_get_cidreq()."&type=1&fromExercise=$exerciseId\">";
             } else {
                 echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&fromExercise='.$exerciseId.'">';
             }
-            echo Display::return_icon(
-                'database.png',
-                get_lang('Recycle existing questions'),
-                null,
-                ICON_SIZE_BIG
-            );
+            echo Display::getMdiIcon('database', 'ch-tool-icon mt-4', 'display: block; height: auto;', ICON_SIZE_BIG, get_lang('Recycle existing questions'));
         }
         echo '</a>';
         echo '</div></li>';
@@ -1651,7 +1641,7 @@ abstract class Question
                         $score['result'] = ' ? ';
                     }
 
-                    $hide = api_get_configuration_value('hide_free_question_score');
+                    $hide = ('true' === api_get_setting('exercise.hide_free_question_score'));
                     if (true === $hide) {
                         $score['result'] = '-';
                     }
@@ -1695,7 +1685,7 @@ abstract class Question
         // dont display score for certainty degree questions
         if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == $this->type) {
             $showRibbon = false;
-            $ribbonResult = api_get_configuration_value('show_exercise_question_certainty_ribbon_result');
+            $ribbonResult = ('true' === api_get_setting('exercise.show_exercise_question_certainty_ribbon_result'));
             if (true === $ribbonResult) {
                 $showRibbon = true;
             }

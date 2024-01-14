@@ -8,47 +8,36 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 
 /**
  * CAnnouncementAttachment.
- *
- * @ORM\Table(name="c_announcement_attachment")
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository")
  */
-class CAnnouncementAttachment extends AbstractResource implements ResourceInterface
+#[ORM\Table(name: 'c_announcement_attachment')]
+#[ORM\Entity(repositoryClass: CAnnouncementAttachmentRepository::class)]
+class CAnnouncementAttachment extends AbstractResource implements ResourceInterface, Stringable
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    protected int $iid;
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    protected ?int $iid = null;
 
-    /**
-     * @ORM\Column(name="path", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'path', type: 'string', length: 255, nullable: false)]
     protected string $path;
 
-    /**
-     * @ORM\Column(name="comment", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected ?string $comment = null;
 
-    /**
-     * @ORM\Column(name="size", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'size', type: 'integer', nullable: false)]
     protected int $size;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CAnnouncement", inversedBy="attachments", cascade={"persist"})
-     * @ORM\JoinColumn(name="announcement_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: CAnnouncement::class, inversedBy: 'attachments', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'announcement_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CAnnouncement $announcement;
 
-    /**
-     * @ORM\Column(name="filename", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'filename', type: 'string', length: 255, nullable: false)]
     protected string $filename;
 
     public function __construct()
@@ -112,7 +101,7 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
         return $this->size;
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }

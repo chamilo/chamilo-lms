@@ -4,7 +4,9 @@ vendor/symfony/twig-bridge/Resources/views/Form/tailwind_2_layout.html.twig #}
 {% use 'form_div_layout.html.twig' %}
 
 {%- block form_row -%}
-    {%- set row_attr = row_attr|merge({ class: row_attr.class|default(row_class|default('p-float-label')) }) -%}
+    {% if not compound -%}
+        {%- set row_attr = row_attr|merge({ class: row_attr.class|default(row_class|default('p-float-label')) }) -%}
+    {% endif %}
 
     {%- set widget_attr = {} -%}
     {%- if help is not empty -%}
@@ -12,8 +14,13 @@ vendor/symfony/twig-bridge/Resources/views/Form/tailwind_2_layout.html.twig #}
     {%- endif -%}
     <div class="field">
         <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
-            {{- form_widget(form, widget_attr) -}}
-            {{- form_label(form) -}}
+            {% if compound -%}
+                {{- form_label(form) -}}
+                {{- form_widget(form, widget_attr) -}}
+            {% else %}
+                {{- form_widget(form, widget_attr) -}}
+                {{- form_label(form) -}}
+            {% endif %}
             {{- form_errors(form) -}}
             {{- form_help(form) -}}
         </div>
@@ -29,3 +36,7 @@ vendor/symfony/twig-bridge/Resources/views/Form/tailwind_2_layout.html.twig #}
     {%- set attr = attr|merge({ class: attr.class|default('p-dropdown p-component p-inputwrapper p-inputwrapper-filled') }) -%}
     {{- parent() -}}
 {%- endblock -%}
+
+{%- block checkbox_widget -%}
+        <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+{%- endblock checkbox_widget -%}

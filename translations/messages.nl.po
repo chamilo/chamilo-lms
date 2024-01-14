@@ -1,9 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
+"PO-Revision-Date: 2024-01-13 02:40+0000\n"
+"Last-Translator: Weblate admin <ywarnier@beeznest.org>\n"
+"Language-Team: Dutch <https://translation.chamilo.org/projects/chamilo-lms/"
+"translations/nl/>\n"
 "Language: nl\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.3.1\n"
 
 msgid "You can generate badges for the skills learnt by your users, to give them recognition for their effort, through which they will be able to show off their acquired skills and competencies with icons that will be shown on their user profile. For more information on OpenBadges, check <a href='http://openbadges.org'>http://openbadges.org/</a>."
 msgstr "Je kunt badges genereren voor de vaardigheden door je gebruikers aangeleerd, om hen erkenning te geven voor hun inspanningen. Hierdoor zullen ze ook hun vaardigheden en competenties kunnen etaleren met pictogrammen die bij hun gebruikersprofiel zullen verschijnen. Voor meer informatie over OpenBadges, surf naar http://openbadges.org"
@@ -24,7 +30,7 @@ msgid "Criteria to earn the badge"
 msgstr "Criteria om de badge te verdienen"
 
 msgid "Badge preview"
-msgstr "Badge preview"
+msgstr "Voorvertoning van badge"
 
 msgid "Design a new badge"
 msgstr "Ontwerp een nieuwe badge"
@@ -63,40 +69,41 @@ msgid "Student's superior"
 msgstr "Leidinggevende van de student"
 
 msgid "Cosecant:\t\t\t\tcsc(x)"
-msgstr ""
+msgstr "Cosecans:\t\t\t\tcsc(x)"
 
 msgid "Hyperbolic cosecant:\t\tcsch(x)"
-msgstr ""
+msgstr "Hyperbolische cosecans: csch(x)"
 
 msgid "Arccosecant:\t\t\tarccsc(x)"
-msgstr ""
+msgstr "Arcuscosecans:\t\t\tarccsc(x)"
 
 msgid "Hyperbolic arccosecant:\t\tarccsch(x)"
-msgstr ""
+msgstr "Hyperbolische arccosecans:\t\tcsch(x)"
 
 msgid "Secant:\t\t\t\tsec(x)"
-msgstr ""
+msgstr "Secans:\t\t\t\tsec(x)"
 
 msgid "Hyperbolic secant:\t\tsech(x)"
-msgstr ""
+msgstr "Hyperbolische secans: sech(x)"
 
+#, fuzzy
 msgid "Arcsecant:\t\t\tarcsec(x)"
-msgstr ""
+msgstr "Arcussecans:\t\t\tarcsec(x)"
 
 msgid "Hyperbolic arcsecant:\t\tarcsech(x)"
-msgstr ""
+msgstr "Hyperbolische arcsecans: \t\tarcsech(x)"
 
 msgid "Cotangent:\t\t\tcot(x)"
-msgstr ""
+msgstr "Cotangens:\t\t\tcot(x)"
 
 msgid "Hyperbolic cotangent:\t\tcoth(x)"
-msgstr ""
+msgstr "Hyperbolische cotangens: coth(x)"
 
 msgid "Arccotangent:\t\t\tarccot(x)"
-msgstr ""
+msgstr "Arccotangens:\t\t\tarccot(x)"
 
 msgid "Hyperbolic arccotangent:\t\tarccoth(x)"
-msgstr ""
+msgstr "Hyperbolische arccotangens: arccoth(x)"
 
 msgid "In order for this site to work and be able to measure the use of content, this platform uses cookies.<br /><br />\nIf needed, the Help section of your browser indicates how to configure cookies.<br /><br />\nFor more information on cookies, you can visit the <a href=\"http://www.aboutcookies.org/\">About Cookies</a> website."
 msgstr "\"Om deze site te laten werken en het gebruik van content te kunnen meten, maakt dit platform gebruik van cookies. \nIndien nodig geeft de Help sectie van uw browser aan hoe cookies te configureren. \nVoor meer informatie over cookies kunt u de About Cookies website bezoeken.\";"
@@ -118,6 +125,14 @@ msgstr "Download certificaat"
 
 msgid "Sorry, this installation has an active courses limit, which has now been reached. You can still create new courses, but only if you hide/disable at least one existing active course. To do this, edit a course from the administration courses list, and change the visibility to 'hidden', then try creating this course again. To increase the maximum number of active courses allowed on this Chamilo installation, please contact your hosting provider or, if available, upgrade to a superior hosting plan."
 msgstr ""
+"Het spijt ons, maar deze installatie heeft een limiet voor actieve cursussen "
+"bereikt. U kunt nog steeds nieuwe cursussen aanmaken, maar alleen als u ten "
+"minste één bestaande actieve cursus verbergt/deactiveert. Om dit te doen, "
+"bewerkt u een cursus vanuit de administratieve cursuslijst en wijzigt u de "
+"zichtbaarheid naar 'verborgen'. Probeer daarna deze cursus opnieuw aan te "
+"maken. Om het maximale aantal actieve cursussen dat toegestaan is op deze "
+"Chamilo-installatie te verhogen, neemt u contact op met uw hostingprovider "
+"of, indien beschikbaar, upgrade naar een superieur hostingplan."
 
 msgid "Welcome to the campus of %s"
 msgstr "Welkom op de campus van %s"
@@ -225,19 +240,19 @@ msgid "The session duration allows you to set a number of days of access startin
 msgstr "De sessieduur maakt het u mogelijk een aantal dagen toegang in te stellen, beginnend bij de eerste dag dat een gebruiker toegang heeft tot de sessie. Op deze manier kunt u een sessie instellen als 'toegang voor 15 dagen' in plaats van starten op een vastgestelde datum voor alle studenten."
 
 msgid "Hyperbolic arctangent:\t\tarctanh(x)"
-msgstr ""
+msgstr "Hyperbolische arctangens: arctanh(x)"
 
 msgid "Session duration"
 msgstr "Sessieduur"
 
 msgid "Arctangent:\t\t\tarctan(x)"
-msgstr ""
+msgstr "Arctangens:\t\t\tarctan(x)"
 
 msgid "Hyperbolic tangent:\t\ttanh(x)"
-msgstr ""
+msgstr "Hyperbolische tangens: tanh(x)"
 
 msgid "Tangent:\t\t\ttan(x)"
-msgstr ""
+msgstr "Raaklijn:\t\t\ttan(x)"
 
 msgid "Coach and student"
 msgstr "Coach en student"
@@ -246,67 +261,67 @@ msgid "Series"
 msgstr "Serie"
 
 msgid "Hyperbolic arccosine:\t\tarccosh(x)"
-msgstr ""
+msgstr "Hyperbolische arccosinus: arccosh(x)"
 
 msgid "Arccosine:\t\t\tarccos(x)"
-msgstr ""
+msgstr "Arccosinus:\t\t\tarccos(x)"
 
 msgid "Hyperbolic cosine:\t\tcosh(x)"
-msgstr ""
+msgstr "Hyperbolische cosinus: cosh(x)"
 
 msgid "Cosine:\t\t\t\tcos(x)"
-msgstr ""
+msgstr "Cosinus:\t\t\t\tcos(x)"
 
 msgid "Teachers time report"
 msgstr "Leraartijdrapport"
 
 msgid "Hyperbolic arcsine:\t\tarcsinh(x)"
-msgstr ""
+msgstr "Hyperbolische arcsinus: arcsinh(x)"
 
 msgid "Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator."
 msgstr "Kunt u uw taal niet in de lijst vinden? Neem dan contact met ons op via info@chamilo.org om bij te dragen als vertaler."
 
 msgid "Arcsine:\t\t\tarcsin(x)"
-msgstr ""
+msgstr "Arcussinus:\t\t\tarcsin(x)"
 
 msgid "Hyperbolic sine:\t\tsinh(x)"
-msgstr ""
+msgstr "Hyperbolische sinus: sinh(x)"
 
 msgid "Sine:\t\t\t\tsin(x)"
-msgstr ""
+msgstr "Sinus:\t\t\t\tsin(x)"
 
 msgid "Pi number:\t\t\tpi"
-msgstr ""
+msgstr "Pi-nummer:\t\t\tπ"
 
 msgid "E number:\t\t\te"
-msgstr ""
+msgstr "E-nummer:\t\t\tE"
 
 msgid "Logarithm:\t\t\tlog(x)"
-msgstr ""
+msgstr "Logaritme:\t\t\tlog(x)"
 
 msgid "Natural logarithm:\t\tln(x)"
-msgstr ""
+msgstr "Natuurlijke logaritme: ln(x)"
 
 msgid "Absolute value:\t\t\tabs(x)"
 msgstr "Absolute waarde"
 
 msgid "Square root:\t\t\tsqrt(x)"
-msgstr ""
+msgstr "Kwadraatwortel:\t\t\t√(x)"
 
 msgid "Exponentiation:\t\t\t^"
-msgstr ""
+msgstr "Exponentiëring:\t\t\t^"
 
 msgid "Division:\t\t\t/"
-msgstr ""
+msgstr "Afdeling:\t\t\t/"
 
 msgid "Multiplication:\t\t\t*"
-msgstr ""
+msgstr "Vermenigvuldiging:\t\t\t*"
 
 msgid "Substraction:\t\t\t-"
-msgstr ""
+msgstr "Aftrekking:\t\t\t-"
 
 msgid "Summation:\t\t\t+"
-msgstr ""
+msgstr "Sommatie:\t\t\t+"
 
 msgid "Formula notation"
 msgstr "Formule notatie"
@@ -339,13 +354,13 @@ msgid "Sincerely"
 msgstr "Met vriendelijke groet,"
 
 msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
-msgstr ""
+msgstr "Voorbeeld van een formule: sqrt([x] / [y]) * (e^(ln(pi)))"
 
 msgid "Variable ranges"
 msgstr ""
 
 msgid "Range value"
-msgstr ""
+msgstr "Bereikwaarde"
 
 msgid "Calculated question"
 msgstr "Berekend antwoord"
@@ -979,6 +994,11 @@ msgstr "This is the text for question 1 A. Answer 1 B. Answer 2 C. Answer 3 ANSW
 
 msgid "The Aiken format comes in a simple text (.txt) file, with several question blocks, each separated by a blank line. The first line is the question, the answer lines are prefixed by a letter and a dot, and the correct answer comes next with the ANSWER: prefix. See example below."
 msgstr ""
+"Het Aiken-formaat wordt geleverd in een eenvoudig tekstbestand (.txt), met "
+"verschillende vraagblokken, elk gescheiden door een lege regel. De eerste "
+"regel is de vraag, de antwoordregels beginnen met een letter en een punt, en "
+"het juiste antwoord volgt daarna met de prefix ANTWOORD:. Zie onderstaand "
+"voorbeeld."
 
 msgid "The imported file has at least one question without any answer (or the answers do not include the required prefix letter). Please make sure each question has at least one answer and that it is prefixed by a letter and a dot or a parenthesis, like this: A. answer one"
 msgstr "The imported file has at least one question without any answer (or the answers do not include the required prefix letter). Please make sure each question has at least one answer and that it is prefixed by a letter and a dot or a parenthesis, like this: A. answer one"
@@ -1074,28 +1094,29 @@ msgid "Roles"
 msgstr "Rollen"
 
 msgid "Curriculum"
-msgstr ""
+msgstr "Curriculum"
 
 msgid "%s to review (%s)"
-msgstr ""
+msgstr "%s ter beoordeling (%s)"
 
 msgid "%s unanswered (%s)"
-msgstr ""
+msgstr "%s onbeantwoord (%s)"
 
 msgid "%s answered (%s)+(%s)"
-msgstr ""
+msgstr "%s geantwoord (%s)+(%s)"
 
+#, fuzzy
 msgid "(%s) Unanswered"
-msgstr ""
+msgstr "(%s) Onbeantwoord"
 
 msgid "(%s) Answered"
-msgstr ""
+msgstr "(%s) Beantwoord"
 
 msgid "(%s) Current question"
-msgstr ""
+msgstr "(%s) Huidige vraag"
 
 msgid "(%s) To review"
-msgstr ""
+msgstr "(%s) Ter beoordeling"
 
 msgid "Return to exercises list"
 msgstr "Keer terug naar oefeningenlijst"
@@ -1222,6 +1243,10 @@ msgstr "Broodkruimelnavigatie"
 
 msgid "The PHP setting \"allow_url_fopen\" is set to off. This prevents the registration mechanism to work properly. This setting can be changed in you PHP configuration file (php.ini) or in the Apache Virtual Host configuration, using the php_admin_value directive"
 msgstr ""
+"De PHP-instelling \"allow_url_fopen\" staat uitgeschakeld. Dit verhindert "
+"dat het registratiemechanisme correct functioneert. Deze instelling kan "
+"worden gewijzigd in uw PHP-configuratiebestand (php.ini) of in de Apache "
+"Virtual Host-configuratie, met behulp van de php_admin_value-directief"
 
 msgid "Impossible to contact the version server right now. Please try again later."
 msgstr "On mogelijk om de versieserver nu te contacteren. Probeer later nogmaals."
@@ -1236,10 +1261,10 @@ msgid "Your version is not up-to-date"
 msgstr "Uw versie is niet up-to-date"
 
 msgid "Hotpotatoes"
-msgstr ""
+msgstr "Hotpotatoes"
 
 msgid "-1 = All questions will be selected."
-msgstr ""
+msgstr "-1 = Alle vragen zullen geselecteerd worden."
 
 msgid "You can customize the email sent to users when they finished the exercise. You can use tags like these:"
 msgstr "You can customize the email sent to users when they finished the exercise. You can use tags like these: 1. {{ student.username }} 2. {{ student.firstname }} 3. {{ student.lastname }} 4. {{ student.official_code }} 5. {{ exercise.title }} 6. {{ exercise.start_time }} 7. {{ exercise.end_time }} 8. {{ course.title }} 9. {{ course.code }"
@@ -1719,7 +1744,7 @@ msgid " Open - access allowed for users registered on the platform"
 msgstr "Open – toegang toegelaten voor geregistreerde gebruikers"
 
 msgid "Student %s is no subscribed to this course"
-msgstr ""
+msgstr "Student %s is niet ingeschreven voor deze cursus"
 
 msgid "This language will be valid for every visitor of your courses portal"
 msgstr "Deze taal zal gelden voor alle bezoekers van uw cursussite."
@@ -4222,6 +4247,11 @@ msgstr "Mededeling is gewijzigd."
 
 msgid "This Meta Image path is the path to a file inside your Chamilo directory (e.g. home/image.png) that should show in a Twitter card or a OpenGraph card when showing a link to your LMS. Twitter recommends an image of 120 x 120 pixels, which might sometimes be cropped to 120x90."
 msgstr ""
+"Dit Meta Image-pad is het pad naar een bestand binnen uw Chamilo-directory ("
+"bijvoorbeeld home/image.png) dat weergegeven moet worden in een Twitter-"
+"kaart of een OpenGraph-kaart wanneer er een link naar uw LMS wordt getoond. "
+"Twitter beveelt een afbeelding van 120 x 120 pixels aan, die soms kan worden "
+"bijgesneden tot 120x90."
 
 msgid "Permissions for new files"
 msgstr "Permissies voor nieuwe bestanden"
@@ -4449,7 +4479,7 @@ msgid "Can a teacher define learner profile fields to retrieve additional inform
 msgstr "Kan een cursusbeheerder extra velden definiëren om meer gegevens van de gebruikers van de cursus te verzamelen?"
 
 msgid "Twitter Site account"
-msgstr ""
+msgstr "Twitter-siteaccount"
 
 msgid "Languages"
 msgstr "Talen"
@@ -5760,7 +5790,7 @@ msgid "The field is successfully moved up."
 msgstr "Het veld is met succes naar boven verplaatst."
 
 msgid "OpenGraph meta title"
-msgstr ""
+msgstr "OpenGraph metatitel"
 
 msgid "This will show an OpenGraph Description meta (og:description) in your site's headers"
 msgstr ""
@@ -24070,4 +24100,3 @@ msgstr ""
 
 msgid "Show the result to the learner: Show the score, the learner's choice and his feedback on each attempt, add the correct answer and his feedback when the chosen limit of attempts is reached."
 msgstr ""
-

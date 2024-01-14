@@ -1,0 +1,46 @@
+$color_1: #01579B;
+$color_2: #1B5E20;
+$color_3: #7f6003;
+$color_4: #B71C1C;
+
+.p-toast {
+  @apply opacity-95;
+
+  &-message {
+    @apply rounded-md mb-3.5 shadow-gray-30 shadow-md;
+
+    &-content {
+      @apply py-4 px-6 gap-2.5;
+
+      .p-toast-message-text {
+        @apply text-body-1;
+      }
+      .p-toast-message-icon {
+      }
+      .p-toast-summary {
+        @apply font-semibold;
+      }
+      .p-toast-detail {
+      }
+    }
+
+    .p-toast-icon-close {
+      @apply rounded-full transition duration-200 w-4 h-6
+        focus:outline-none;
+    }
+
+    &.p-toast-message-info {
+      @apply bg-primary text-white;
+    }
+
+    &.p-toast-message-success {
+      @apply bg-success text-white;
+    }
+    &.p-toast-message-warn {
+      @apply bg-warning text-gray-90;
+    }
+    &.p-toast-message-error {
+      @apply bg-error text-white;
+    }
+  }
+}

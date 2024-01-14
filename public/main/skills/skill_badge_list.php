@@ -8,6 +8,9 @@
  *
  * @deprecated use skill_list.php
  */
+
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -32,12 +35,7 @@ $interbreadcrumb = [
 ];
 
 $toolbar = Display::url(
-    Display::return_icon(
-        'list_badges.png',
-        get_lang('Manage skills'),
-        null,
-        ICON_SIZE_MEDIUM
-    ),
+    Display::getMdiIcon(ObjectIcon::LIST, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Manage skills')),
     api_get_path(WEB_CODE_PATH).'skills/skill_list.php',
     ['title' => get_lang('Manage skills')]
 );

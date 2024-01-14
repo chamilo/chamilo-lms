@@ -158,8 +158,8 @@ class SortableTable extends HTML_Table
         $this->defaultItemsPerPage = $default_items_per_page;
         $this->hideItemSelector = false;
 
-        $defaultRow = api_get_configuration_value('table_default_row');
-        if (!empty($defaultRow)) {
+        $defaultRow = (int) api_get_setting('platform.table_default_row');
+        if ($defaultRow > 0) {
             $this->defaultItemsPerPage = $default_items_per_page = $defaultRow;
         }
 
@@ -778,8 +778,8 @@ class SortableTable extends HTML_Table
             .'per_page" onchange="javascript: this.form.submit();">';
         $list = [10, 20, 50, 100, 500, 1000];
 
-        $rowList = api_get_configuration_value('table_row_list');
-        if (!empty($rowList) && isset($rowList['options'])) {
+        $rowList = api_get_setting('platform.table_row_list', true);
+        if (is_array($rowList) && isset($rowList['options'])) {
             $list = $rowList['options'];
         }
 
@@ -1011,7 +1011,7 @@ class SortableTable extends HTML_Table
      *
      * @param array $parameters
      */
-    public function set_additional_parameters($parameters)
+    public function set_additional_parameters(array $parameters)
     {
         $this->additional_parameters = $parameters;
     }

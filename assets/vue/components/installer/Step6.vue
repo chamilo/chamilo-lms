@@ -25,7 +25,7 @@
       >
         <div
           v-t="'Administrator login'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -39,7 +39,7 @@
       >
         <div
           v-t="'Administrator password'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -54,7 +54,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Administrator first name'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -65,7 +65,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Administrator last name'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -76,7 +76,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Administrator e-mail'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -87,7 +87,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Administrator telephone'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -102,7 +102,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Your portal name'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -113,7 +113,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Main language'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -124,7 +124,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Allow self-registration'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -135,7 +135,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Your company short name'"
-          class="field text-body-2-bold"
+          class="field text-body-2font-semibold"
         />
         <div
           class="field text-body-2"
@@ -146,7 +146,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'URL of this company'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -157,7 +157,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Encryption method'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -172,7 +172,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Database Host'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -183,7 +183,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Port'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -194,7 +194,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Database Login'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -205,7 +205,7 @@
       <div class="formgroup-inline">
         <div
           v-t="'Database Password'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -216,14 +216,14 @@
       <div class="formgroup-inline">
         <div
           v-t="'Database name'"
-          class="field text-body-2-bold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
           v-text="installerData.stepData.dbNameForm"
         />
       </div>
-      
+
       <Message
         v-if="'new' === installerData.installType"
         :closable="false"
@@ -238,29 +238,21 @@
     <div class="formgroup-inline">
       <div class="field">
         <Button
+          v-if="!installerData.isUpdateAvailable"
           :label="t('Previous')"
           class="p-button-secondary"
           icon="mdi mdi-page-previous"
           name="step4"
           type="submit"
         />
-        <input
-          id="is_executable"
-          v-model="isExecutable"
-          name="is_executable"
-          type="hidden"
-        >
-        <input
-          type="hidden"
-          name="step6"
-          value="1"
-        >
+        <input id="is_executable" v-model="isExecutable" name="is_executable" type="hidden" />
+        <input type="hidden" name="step6" value="1" />
       </div>
-
       <Button
         id="button_step6"
-        :label="t('Install Chamilo')"
+        :label="installerData.isUpdateAvailable ? t('Update Chamilo') : t('Install Chamilo')"
         :loading="loading"
+        :disabled="isButtonDisabled"
         class="p-button-success"
         icon="mdi mdi-progress-download"
         name="button_step6"
@@ -303,11 +295,15 @@
       />
       <ProgressBar mode="indeterminate" />
     </Message>
+    <ProgressBar :value="progressPercentage" style="height: 22px"> {{ progressPercentage }}/100 </ProgressBar>
+    <div class="log-container">
+      <div v-html="logTerminalContent"></div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { inject, ref } from 'vue';
+import { inject, ref} from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import Message from 'primevue/message';
@@ -319,14 +315,39 @@ const { t } = useI18n();
 const installerData = inject('installerData');
 
 const loading = ref(false);
-
+const isButtonDisabled = ref(installerData.value.isUpdateAvailable);
 const isExecutable = ref('');
 
-function btnStep6OnClick () {
-  loading.value= true;
 
+const logTerminalContent = ref('');
+const progressPercentage = ref(0);
+
+function updateLog() {
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      const response = JSON.parse(xhr.responseText);
+      logTerminalContent.value = response.log_terminal;
+      progressPercentage.value = response.progress_percentage;
+      scrollToBottom();
+
+      isButtonDisabled.value = false;
+    }
+  };
+  xhr.open('GET', installerData.value.logUrl, true);
+  xhr.send();
+}
+
+function btnStep6OnClick() {
+  loading.value = true;
   isExecutable.value = 'step6';
-
   document.getElementById('install_form').submit();
 }
+
+function scrollToBottom() {
+  const logContainer = document.querySelector('.log-container');
+  logContainer.scrollTop = logContainer.scrollHeight;
+}
+
+setInterval(updateLog, 2000);
 </script>

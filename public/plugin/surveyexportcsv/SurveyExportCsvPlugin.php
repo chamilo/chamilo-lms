@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 /**
  * Class SurveyExportCsvPlugin.
  */
@@ -65,7 +67,7 @@ class SurveyExportCsvPlugin extends Plugin
         }
 
         return Display::url(
-            Display::return_icon('export_csv.png', get_lang('CSV export'), [], $iconSize),
+            Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, $iconSize, get_lang('CSV export')),
             api_get_path(WEB_PLUGIN_PATH).'surveyexportcsv/export.php?survey='.$surveyId.'&'.api_get_cidreq()
         );
     }

@@ -111,4 +111,34 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
 
         return $extraFieldValues;
     }
+
+    public function findLegalAcceptByItemId($itemId)
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->innerJoin('s.field', 'sf')
+            ->where('s.itemId = :itemId')
+            ->andWhere('sf.variable = :variable')
+            ->andWhere('sf.itemType = :itemType')
+            ->andWhere('s.fieldValue IS NOT NULL')
+            ->andWhere('s.fieldValue != :emptyString')
+            ->orderBy('s.id', 'ASC')
+            ->setMaxResults(1)
+            ->setParameter('itemId', $itemId)
+            ->setParameter('variable', 'legal_accept')
+            ->setParameter('itemType', 1)
+            ->setParameter('emptyString', '')
+        ;
+
+        $result = $qb->getQuery()->getOneOrNullResult();
+
+        if (null === $result) {
+            return null;
+        }
+
+        return [
+            'id' => $result->getId(),
+            'itemId' => $result->getItemId(),
+            'value' => $result->getFieldValue(),
+        ];
+    }
 }

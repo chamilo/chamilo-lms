@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
@@ -44,10 +46,10 @@ $sessionId = api_get_session_id();
 if (api_is_allowed_to_edit()) {
     if ('registered' === $type) {
         $actionsLeft .= '<a href="class.php?'.api_get_cidreq().'&type=not_registered">'.
-            Display::return_icon('add-class.png', get_lang('Add classes to a course'), [], ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add classes to a course')).'</a>';
     } else {
         $actionsLeft .= '<a href="class.php?'.api_get_cidreq().'&type=registered">'.
-            Display::return_icon('back.png', get_lang('Classes'), [], ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Classes')).'</a>';
 
         $form = new FormValidator(
             'groups',

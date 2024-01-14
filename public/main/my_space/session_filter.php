@@ -5,6 +5,9 @@
 /**
  * Report for current courses followed by the user.
  */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_TRACKING;
@@ -330,20 +333,20 @@ Display::display_header(get_lang('CertificatesSessions'));
 echo Display::page_header(get_lang('CertificatesSessions'));
 $actions = '';
 $actions .= Display::url(
-    Display::return_icon('back.png', get_lang('Back'), [], 32),
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
     api_get_path(WEB_CODE_PATH).'my_space'
 );
 
 if ($allowCustomCertificate) {
     $url = api_get_path(WEB_PLUGIN_PATH).'customcertificate/src/export_pdf_all_in_one.php';
     $actions .= Display::url(
-        Display::return_icon('pdf.png', get_lang('ExportAllCertificatesToPDF'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportAllCertificatesToPDF')),
         $url,
         ['id' => 'export_pdf']
     );
 
     $actions .= Display::url(
-        Display::return_icon('file_zip.png', get_lang('ExportAllCertificatesToZIP'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ActionIcon::DOWNLOAD_MULTIPLE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportAllCertificatesToZIP')),
         $url,
         ['id' => 'export_zip']
     );
@@ -392,7 +395,7 @@ if (0 == count($certificateList)) {
 
             $url .= '&action=export';
             $pdf = Display::url(
-                Display::return_icon('pdf.png', get_lang('Download')),
+                Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Download')),
                 $url,
                 ['target' => '_blank']
             );
@@ -404,7 +407,7 @@ if (0 == count($certificateList)) {
                 '&action=delete'.
                 '&cat_id='.$categoryId.
                 '&certificate_id='.$valueCertificate['id'].'">
-                    '.Display::return_icon('delete.png', get_lang('Delete')).'
+                    '.Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'
                   </a>'.PHP_EOL;
             echo '</td></tr>';
         }

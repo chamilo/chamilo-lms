@@ -10,27 +10,20 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TrackEAttemptCoeff.
- *
- * @ORM\Table(name="track_e_attempt_coeff")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'track_e_attempt_coeff')]
+#[ORM\Entity]
 class TrackEAttemptCoeff
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="attempt_id", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'attempt_id', type: 'integer', nullable: false)]
     protected int $attemptId;
 
-    /**
-     * @ORM\Column(name="marks_coeff", type="float", precision=6, scale=2, nullable=true)
-     */
+    #[ORM\Column(name: 'marks_coeff', type: 'float', precision: 6, scale: 2, nullable: true)]
     protected ?float $marksCoeff = null;
 
     /**

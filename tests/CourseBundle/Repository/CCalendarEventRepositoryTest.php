@@ -273,6 +273,7 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
 
         // Now change to collective.
         $calendarRepo = self::getContainer()->get(CCalendarEventRepository::class);
+
         /** @var CCalendarEvent $event */
         $event = $calendarRepo->find($eventId);
         $event->setCollective(true);

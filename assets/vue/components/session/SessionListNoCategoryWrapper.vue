@@ -1,24 +1,16 @@
 <template>
-    <h5>
-      <v-icon icon="mdi-folder" />
-      {{ $t('No category') }}
-    </h5>
-    <SessionListCategoryWrapper :sessions="sessions"/>
+    <div v-if="sessions.length > 0">
+      <SessionListCategoryWrapper :sessions="sessions"/>
+    </div>
 </template>
-<script>
 
-import SessionListCategoryWrapper from '../../components/session/SessionListCategoryWrapper';
+<script setup>
+import SessionListCategoryWrapper from '../../components/session/SessionListCategoryWrapper'
 
-export default {
-  name: 'SessionListNoCategoryWrapper',
-  components: {
-    SessionListCategoryWrapper
+defineProps({
+  sessions: {
+    type: Array,
+    required: true,
   },
-  props: {
-    sessions: Array,
-  },
-  setup() {
-  }
-}
-
+})
 </script>

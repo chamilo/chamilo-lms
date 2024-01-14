@@ -94,7 +94,9 @@ class LearnpathList
                     $order
                 ";*/
         //$learningPaths = Database::getManager()->createQuery($dql)->getResult();
-        $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
+        $qb->addOrderBy('node.displayOrder', 'ASC');
+
+        $showBlockedPrerequisite = ('true' === api_get_setting('lp.show_prerequisite_as_blocked'));
         $names = [];
         $isAllowToEdit = api_is_allowed_to_edit();
         $learningPaths = $qb->getQuery()->getResult();
@@ -151,7 +153,7 @@ class LearnpathList
                 'lp_prevent_reinit' => $lp->getPreventReinit(),
                 'seriousgame_mode' => $lp->getSeriousgameMode(),
                 'lp_scorm_debug' => $lp->getDebug(),
-                'lp_display_order' => $lp->getDisplayOrder(),
+                'lp_display_order' => $lp->getResourceNode()->getDisplayOrder() + 1,
                 'autolaunch' => $lp->getAutolaunch(),
                 'created_on' => $lp->getCreatedOn() ? $lp->getCreatedOn()->format('Y-m-d H:i:s') : null,
                 'modified_on' => $lp->getModifiedOn() ? $lp->getModifiedOn()->format('Y-m-d H:i:s') : null,
@@ -166,7 +168,7 @@ class LearnpathList
             ];
             $names[$lp->getName()] = $lp->getIid();
         }
-        asort($names);
+        //asort($names);
         $this->alpha_list = $names;
     }
 

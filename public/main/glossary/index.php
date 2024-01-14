@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * @author Christian Fasanando, initial version
@@ -87,7 +88,7 @@ switch ($action) {
         );
         // Setting the form elements
         $form->addElement('header', get_lang('Add new glossary term'));
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $form->addHtmlEditor(
                 'name',
                 get_lang('Term'),
@@ -127,7 +128,7 @@ switch ($action) {
                 'add_glossary',
                 [
                     Display::url(
-                        Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+                        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
                         api_get_self().'?'.api_get_cidreq()
                     ),
                 ]
@@ -152,7 +153,7 @@ switch ($action) {
             // Setting the form elements
             $form->addElement('header', get_lang('Edit term'));
             $form->addElement('hidden', 'glossary_id');
-            if (api_get_configuration_value('save_titles_as_html')) {
+            if ('true' === api_get_setting('editor.save_titles_as_html')) {
                 $form->addHtmlEditor(
                     'name',
                     get_lang('Term'),
@@ -225,7 +226,7 @@ switch ($action) {
                     'edit_glossary',
                     [
                         Display::url(
-                            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+                            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
                             api_get_self().'?'.api_get_cidreq()
                         ),
                     ]
@@ -447,7 +448,7 @@ switch ($action) {
             Session::write('glossary_view', $_GET['view']);
         } else {
             $view = Session::read('glossary_view');
-            $defaultView = api_get_configuration_value('default_glossary_view');
+            $defaultView = api_get_setting('glossary.default_glossary_view');
             if (empty($defaultView)) {
                 $defaultView = 'table';
             }

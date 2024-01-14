@@ -1,7 +1,7 @@
-import { inject } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import { useToast } from 'primevue/usetoast';
 
 export function useDatatableCreate (servicePrefix) {
     const moduleName = servicePrefix.toLowerCase();
@@ -11,14 +11,15 @@ export function useDatatableCreate (servicePrefix) {
     const route = useRoute();
     const { t } = useI18n();
 
-    const flashMessageList = inject('flashMessageList');
+    const toast = useToast();
 
     function onCreated (item) {
-        flashMessageList.value.push({
+        toast.add({
             severity: 'success',
             detail: t('{resource} created', {
                 'resource': item['resourceNode'] ? item['resourceNode'].title : item.title,
             }),
+            life: 3500,
         });
 
         let folderParams = route.query;

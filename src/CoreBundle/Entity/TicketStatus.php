@@ -10,32 +10,23 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Status.
- *
- * @ORM\Table(name="ticket_status")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'ticket_status')]
+#[ORM\Entity]
 class TicketStatus
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="code", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'code', type: 'string', length: 255, nullable: false)]
     protected string $code;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
     protected string $name;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
     /**

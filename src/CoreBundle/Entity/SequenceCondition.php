@@ -8,44 +8,28 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class SequenceCondition.
- *
- * @ORM\Table(name="sequence_condition")
- * @ORM\Entity
- */
+#[ORM\Table(name: 'sequence_condition')]
+#[ORM\Entity]
 class SequenceCondition
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: false)]
     protected string $description;
 
-    /**
-     * @ORM\Column(name="mat_op", type="string")
-     */
+    #[ORM\Column(name: 'mat_op', type: 'string')]
     protected string $mathOperation;
 
-    /**
-     * @ORM\Column(name="param", type="float")
-     */
-    protected string $param;
+    #[ORM\Column(name: 'param', type: 'float')]
+    protected float $param;
 
-    /**
-     * @ORM\Column(name="act_true", type="integer")
-     */
-    protected string $actTrue;
+    #[ORM\Column(name: 'act_true', type: 'integer')]
+    protected int $actTrue;
 
-    /**
-     * @ORM\Column(name="act_false", type="string")
-     */
+    #[ORM\Column(name: 'act_false', type: 'string')]
     protected string $actFalse;
 
     /**
@@ -66,9 +50,6 @@ class SequenceCondition
         return $this->description;
     }
 
-    /**
-     * @return SequenceCondition
-     */
     public function setDescription(string $description): self
     {
         $this->description = $description;
@@ -91,53 +72,35 @@ class SequenceCondition
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getParam()
+    public function getParam(): float
     {
         return $this->param;
     }
 
-    /**
-     * @return SequenceCondition
-     */
-    public function setParam(string $param): self
+    public function setParam(float $param): self
     {
         $this->param = $param;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getActTrue()
+    public function getActTrue(): int
     {
         return $this->actTrue;
     }
 
-    /**
-     * @return SequenceCondition
-     */
-    public function setActTrue(string $actTrue): self
+    public function setActTrue(int $actTrue): self
     {
         $this->actTrue = $actTrue;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getActFalse()
+    public function getActFalse(): string
     {
         return $this->actFalse;
     }
 
-    /**
-     * @return SequenceCondition
-     */
     public function setActFalse(string $actFalse): self
     {
         $this->actFalse = $actFalse;

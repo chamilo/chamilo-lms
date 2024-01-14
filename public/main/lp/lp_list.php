@@ -56,7 +56,7 @@ $actions = '';
 $allowCategory = true;
 if (!empty($sessionId)) {
     $allowCategory = false;
-    if (api_get_configuration_value('allow_session_lp_category')) {
+    if ('true' === api_get_setting('lp.allow_session_lp_category')) {
         $allowCategory = true;
     }
 }
@@ -135,8 +135,8 @@ if ($filteredCategoryId) {
 }
 
 $test_mode = api_get_setting('server_type');
-$showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
-$allowLpChamiloExport = api_get_configuration_value('allow_lp_chamilo_export');
+$showBlockedPrerequisite = ('true' === api_get_setting('lp.show_prerequisite_as_blocked'));
+$allowLpChamiloExport = ('true' === api_get_setting('lp.allow_lp_chamilo_export'));
 $allowMinTime = Tracking::minimumTimeAvailable($sessionId, $courseId);
 $accumulateWorkTimeTotal = 0;
 if ($allowMinTime) {
@@ -626,21 +626,21 @@ foreach ($categories as $category) {
                 /*
                 if (1 == $details['lp_type']) {
                     $dsp_disk = Display::url(
-                        Display::getMdiIcon('package', 'ch-tool-icon', '', 22),
+                        Display::getMdiIcon('archive-arrow-down', 'ch-tool-icon', '', 22),
                         api_get_self()."?$cidReq&action=export&lp_id=$id",
                         ['title' => htmlentities(get_lang('Export as SCORM'))]
                     );
                 } elseif (2 == $details['lp_type']) {
                     $dsp_disk = Display::url(
-                        Display::getMdiIcon('package', 'ch-tool-icon', '', 22),
+                        Display::getMdiIcon('archive-arrow-down', 'ch-tool-icon', '', 22),
                         api_get_self()."?$cidReq&action=export&lp_id=$id&export_name="
                             .api_replace_dangerous_char($name).'.zip',
                         ['title' => htmlentities(get_lang('Export as SCORM'))]
                     );
                 } else {
-                    $dsp_disk = Display::getMdiIcon('package', 'ch-tool-icon-disabled', '', 22, get_lang('Export as SCORM'));
+                    $dsp_disk = Display::getMdiIcon('archive-arrow-down', 'ch-tool-icon-disabled', '', 22, get_lang('Export as SCORM'));
                 }*/
-                $dsp_disk = Display::getMdiIcon('package', 'ch-tool-icon-disabled', '', 22, get_lang('Export as SCORM'));
+                $dsp_disk = Display::getMdiIcon('archive-arrow-down', 'ch-tool-icon-disabled', '', 22, get_lang('Export as SCORM'));
 
                 // Copy temporarily disabled until course copy works
                 /*
@@ -870,8 +870,8 @@ learnpath::generate_learning_path_folder($courseInfo);
 //DocumentManager::removeGeneratedAudioTempFile();
 
 $downloadFileAfterFinish = '';
-if ($ending && $allLpTimeValid && api_get_configuration_value('download_files_after_all_lp_finished')) {
-    $downloadFilesSetting = api_get_configuration_value('download_files_after_all_lp_finished');
+if ($ending && $allLpTimeValid && api_get_setting('lp.download_files_after_all_lp_finished', true)) {
+    $downloadFilesSetting = api_get_setting('lp.download_files_after_all_lp_finished', true);
     $courseCode = $courseInfo['code'];
     $downloadFinishId = isset($_REQUEST['download_finished']) ? (int) $_REQUEST['download_finished'] : 0;
     if (isset($downloadFilesSetting['courses'][$courseCode])) {

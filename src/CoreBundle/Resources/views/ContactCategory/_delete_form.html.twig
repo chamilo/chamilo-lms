@@ -1,0 +1,7 @@
+<form method="post" action="{{ path('chamilo_contact_category_delete', {'id': contact_category.id}) }}" onsubmit="return confirm({{ 'Are you sure you want to delete this item?'|trans|json_encode }});">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ contact_category.id) }}">
+    <button class="btn btn--danger">
+        <em class="mdi mdi-trash-can"></em>
+        {{ "Delete"|trans }}
+    </button>
+</form>

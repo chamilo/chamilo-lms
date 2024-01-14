@@ -9,14 +9,15 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
+use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(name="c_course_description")
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CCourseDescriptionRepository")
- */
-class CCourseDescription extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface
+#[ORM\Table(name: 'c_course_description')]
+#[ORM\Entity(repositoryClass: CCourseDescriptionRepository::class)]
+class CCourseDescription extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
     public const TYPE_DESCRIPTION = 1;
     public const TYPE_OBJECTIVES = 2;
@@ -27,33 +28,23 @@ class CCourseDescription extends AbstractResource implements ResourceInterface, 
     public const TYPE_ASSESSMENT = 7;
     public const TYPE_CUSTOM = 8;
 
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    protected int $iid;
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    protected ?int $iid = null;
 
-    /**
-     * @ORM\Column(name="title", type="text", nullable=true)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'title', type: 'text', nullable: true)]
     protected ?string $title = null;
 
-    /**
-     * @ORM\Column(name="content", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'content', type: 'text', nullable: true)]
     protected ?string $content;
 
-    /**
-     * @ORM\Column(name="description_type", type="integer", nullable=false)
-     */
     #[Assert\Choice(callback: 'getTypes')]
+    #[ORM\Column(name: 'description_type', type: 'integer', nullable: false)]
     protected int $descriptionType;
 
-    /**
-     * @ORM\Column(name="progress", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'progress', type: 'integer', nullable: false)]
     protected int $progress;
 
     public function __construct()
@@ -150,15 +141,12 @@ class CCourseDescription extends AbstractResource implements ResourceInterface, 
         return $this->progress;
     }
 
-    /**
-     * @return int
-     */
-    public function getIid()
+    public function getIid(): ?int
     {
         return $this->iid;
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }

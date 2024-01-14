@@ -75,7 +75,7 @@ class PDF
         ];
 
         // Default value is 96 set in the mpdf library file config.php
-        $value = api_get_configuration_value('pdf_img_dpi');
+        $value = api_get_setting('platform.pdf_img_dpi');
         if (!empty($value)) {
             $params['img_dpi'] = (int) $value;
         }
@@ -475,17 +475,17 @@ class PDF
 
         if ($addDefaultCss) {
             $basicStyles = [
-                api_get_bootstrap_and_font_awesome(true, true),
-                api_get_path(SYS_PUBLIC_PATH).'build/css/app.css',
+                //api_get_bootstrap_and_font_awesome(true, true),
+                //api_get_path(SYS_PUBLIC_PATH).'build/css/app.css',
                 api_get_path(SYS_PUBLIC_PATH).'build/css/themes/'.api_get_visual_theme().'/default.css',
             ];
             foreach ($basicStyles as $style) {
                 $cssContent = file_get_contents($style);
-                $this->pdf->WriteHTML($cssContent, 1);
+                @$this->pdf->WriteHTML($cssContent, 1);
             }
         }
 
-        $this->pdf->WriteHTML($document_html);
+        @$this->pdf->WriteHTML($document_html);
 
         if (empty($pdf_name)) {
             $output_file = 'pdf_'.date('Y-m-d-his').'.pdf';
@@ -899,7 +899,7 @@ class PDF
      *
      * @return string
      */
-    private static function fixImagesPaths($documentHtml, array $courseInfo, $dirName = '')
+    private static function fixImagesPaths($documentHtml, array $courseInfo = null, $dirName = '')
     {
         $html = new HTML5();
         $doc = $html->loadHTML($documentHtml);
@@ -912,8 +912,8 @@ class PDF
 
         $protocol = api_get_protocol();
         $sysCodePath = api_get_path(SYS_CODE_PATH);
-        $sysCoursePath = api_get_path(SYS_COURSE_PATH);
-        $sysUploadPath = api_get_path(SYS_UPLOAD_PATH);
+        $sysCoursePath = api_get_path(SYS_PATH).'../app/courses/';
+        $sysUploadPath = api_get_path(SYS_PATH).'../app/upload/';
 
         $documentPath = $courseInfo ? $sysCoursePath.$courseInfo['path'].'/document/' : '';
 

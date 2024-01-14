@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
@@ -121,6 +122,9 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         $options = []
     ): void {
         $em = $this->getEntityManager();
+
+        $accessUrl = $em->find(AccessUrl::class, $accessUrl);
+
         $setting = new SettingsCurrent();
         $setting
             ->setVariable($variable)
@@ -133,8 +137,8 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
             ->setScope($scope)
             ->setSubkeytext($subKeyText)
             ->setUrl($accessUrl)
-            ->setAccessUrlChangeable($accessUrlChangeable)
-            ->setAccessUrlLocked($accessUrlLocked)
+            ->setAccessUrlChangeable((int) $accessUrlChangeable)
+            ->setAccessUrlLocked((int) $accessUrlLocked)
         ;
 
         $em->persist($setting);
@@ -163,11 +167,17 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
     }
 
     /**
-     * @param string $variable
+     * @param string     $variable
+     * @param null|mixed $configuration
      */
-    public function getConfigurationValue($variable)
+    public function getConfigurationValue($variable, $configuration = null)
     {
         global $_configuration;
+
+        if (isset($configuration)) {
+            $_configuration = $configuration;
+        }
+
         if (isset($_configuration[$variable])) {
             return $_configuration[$variable];
         }
@@ -182,7 +192,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
      */
     public function removeSettingCurrent($variable): void
     {
-        //to be implemented
+        // to be implemented
     }
 
     public function addLegacyFileToResource(
@@ -193,7 +203,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         $fileName = '',
         $description = ''
     ): bool {
-        $class = \get_class($resource);
+        $class = $resource::class;
         $documentPath = basename($filePath);
 
         if (is_dir($filePath) || (!is_dir($filePath) && !file_exists($filePath))) {
@@ -256,16 +266,19 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
             $groupId = $item['to_group_id'] ?? 0;
 
             $newVisibility = ResourceLink::VISIBILITY_DRAFT;
+
             // Old 1.11.x visibility (item property) is based in this switch:
             switch ($visibility) {
                 case 0:
                     $newVisibility = ResourceLink::VISIBILITY_DRAFT;
 
                     break;
+
                 case 1:
                     $newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
 
                     break;
+
                 case 2:
                     $newVisibility = ResourceLink::VISIBILITY_DELETED;
 

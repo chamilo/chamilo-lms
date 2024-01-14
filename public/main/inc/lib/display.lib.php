@@ -2,6 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Framework\Container;
@@ -524,7 +528,7 @@ class Display
             $hmail .= '&#'.ord($email[$i]).';';
         }
 
-        $value = api_get_configuration_value('add_user_course_information_in_mailto');
+        $value = ('true' === api_get_setting('profile.add_user_course_information_in_mailto'));
 
         if ($value) {
             if ('false' === api_get_setting('allow_email_editor')) {
@@ -649,13 +653,13 @@ class Display
      * @version Feb 2011
      */
     public static function return_icon(
-        $image,
-        $alt_text = '',
-        $additional_attributes = [],
-        $size = ICON_SIZE_SMALL,
-        $show_text = true,
-        $return_only_path = false,
-        $loadThemeIcon = true
+        string $image,
+        ?string $alt_text = '',
+        ?array $additional_attributes = [],
+        ?int $size = ICON_SIZE_SMALL,
+        ?bool $show_text = true,
+        ?bool $return_only_path = false,
+        ?bool $loadThemeIcon = true
     ) {
         $code_path = api_get_path(SYS_PUBLIC_PATH);
         $w_code_path = api_get_path(WEB_PUBLIC_PATH);
@@ -1196,7 +1200,7 @@ class Display
         // Default row quantity
         if (!isset($extra_params['rowList'])) {
             $extra_params['rowList'] = [20, 50, 100, 500, 1000, $all_value];
-            $rowList = api_get_configuration_value('table_row_list');
+            $rowList = api_get_setting('platform.table_row_list', true);
             if (!empty($rowList) && isset($rowList['options'])) {
                 $rowList = $rowList['options'];
                 $rowList[] = $all_value;
@@ -1204,9 +1208,9 @@ class Display
             $extra_params['rowList'] = $rowList;
         }
 
-        $defaultRow = api_get_configuration_value('table_default_row');
-        if (!empty($defaultRow)) {
-            $obj->rowNum = (int) $defaultRow;
+        $defaultRow = (int) api_get_setting('platform.table_default_row');
+        if ($defaultRow > 0) {
+            $obj->rowNum = $defaultRow;
         }
 
         $json = '';
@@ -1316,7 +1320,7 @@ class Display
         $json_encode = str_replace('"formatter":"extra_formatter"', 'formatter:extra_formatter', $json_encode);
         $json_encode = str_replace(['{"first":"first",', '"end":"end"}'], '', $json_encode);
 
-        if (api_get_configuration_value('allow_compilatio_tool') &&
+        if (('true' === api_get_setting('document.allow_compilatio_tool')) &&
             (false !== strpos($_SERVER['REQUEST_URI'], 'work/work.php') ||
              false != strpos($_SERVER['REQUEST_URI'], 'work/work_list_all.php')
             )
@@ -1328,6 +1332,7 @@ class Display
         }
         // Creating the jqgrid element.
         $json .= '$("#'.$div_id.'").jqGrid({';
+        $json .= "autowidth: true,";
         //$json .= $beforeSelectRow;
         $json .= $gridComplete;
         $json .= $beforeProcessing;
@@ -1740,6 +1745,7 @@ class Display
                 class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
                 aria-expanded="false"
                 aria-haspopup="true"
+                onclick="document.querySelector(\'#'.$id.'_menu\').classList.toggle(\'hidden\')"
             >
               '.$title.'
               <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -1771,19 +1777,7 @@ class Display
             </div>
             </div>
             </div>
-            <script>
-             document.addEventListener("DOMContentLoaded", function() {
-                const button = document.querySelector("#'.$id.'");
-                    button.addEventListener("click", (e) => {
-                    let menu = document.querySelector("#'.$id.'_menu");
-                    if (menu.classList.contains("hidden")) {
-                        menu.classList.remove("hidden");
-                    } else {
-                        menu.classList.add("hidden");
-                    }
-                });
-            });
-            </script>';
+        ';
 
         return $html;
     }
@@ -2185,7 +2179,8 @@ class Display
             $end = $contentList[2];
         }
 
-        return '<div id="'.$id.'" class="p-toolbar p-component" role="toolbar">
+
+        return '<div id="'.$id.'" class="p-toolbar p-component flex items-center justify-between flex-wrap" role="toolbar">
                 <div class="p-toolbar-group-start p-toolbar-group-left">'.$start.'</div>
                 <div class="p-toolbar-group-center">'.$center.'</div>
                 <div class="p-toolbar-group-end p-toolbar-group-right">'.$end.'</div>
@@ -2193,7 +2188,121 @@ class Display
         ';
     }
 
-    public static function getMdiIcon(string $name, string $additionalClass = null, string $style = null, int $pixelSize = null, string $title = null, array $additionalAttributes = null): string
+    /**
+     * @param array  $content
+     * @param array  $colsWidth Optional. Columns width
+     *
+     * @return string
+     */
+    public static function toolbarGradeAction($content, $colsWidth = [])
+    {
+        $col = count($content);
+
+        if (!$colsWidth) {
+            $width = 8 / $col;
+            array_walk($content, function () use ($width, &$colsWidth) {
+                $colsWidth[] = $width;
+            });
+        }
+
+        $html = '<div id="grade" class="p-toolbar p-component flex items-center justify-between flex-wrap" role="toolbar">';
+        for ($i = 0; $i < $col; $i++) {
+            $class = 'col-sm-'.$colsWidth[$i];
+            if ($col > 1) {
+                if ($i > 0 && $i < count($content) - 1) {
+                    $class .= ' text-center';
+                } elseif ($i === count($content) - 1) {
+                    $class .= ' text-right';
+                }
+            }
+            $html .= '<div class="'.$class.'">'.$content[$i].'</div>';
+        }
+        $html .= '</div>';
+
+        return $html;
+    }
+
+    /**
+     * The auto-translated title version of getMdiIconSimple()
+     * Shortcut method to getMdiIcon, to be used from Twig (see ChamiloExtension.php)
+     * using acceptable default values
+     * @param string $name The icon name or a string representing the icon in our *Icon Enums
+     * @param int|null $size The icon size
+     * @param string|null $additionalClass Additional CSS class to add to the icon
+     * @param string|null $title A title for the icon
+     * @return string
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     */
+    public static function getMdiIconTranslate(
+        string $name,
+        ?int $size = ICON_SIZE_SMALL,
+        ?string $additionalClass = 'ch-tool-icon',
+        ?string $title = null
+    ): string
+    {
+        if (!empty($title)) {
+            $title = get_lang($title);
+        }
+
+        return self::getMdiIconSimple($name, $size, $additionalClass, $title);
+    }
+    /**
+     * Shortcut method to getMdiIcon, to be used from Twig (see ChamiloExtension.php)
+     * using acceptable default values
+     * @param string $name The icon name or a string representing the icon in our *Icon Enums
+     * @param int|null $size The icon size
+     * @param string|null $additionalClass Additional CSS class to add to the icon
+     * @param string|null $title A title for the icon
+     * @return string
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     */
+    public static function getMdiIconSimple(
+        string $name,
+        ?int $size = ICON_SIZE_SMALL,
+        ?string $additionalClass = 'ch-tool-icon',
+        ?string $title = null
+    ): string
+    {
+        // If the string contains '::', we assume it is a reference to one of the icon Enum classes in src/CoreBundle/Component/Utils/
+        $matches = [];
+        if (preg_match('/(\w*)::(\w*)/', $name, $matches)) {
+            if (count($matches) != 3) {
+                throw new InvalidArgumentException('Invalid enum case string format. Expected format is "EnumClass::CASE".');
+            }
+            $enum = $matches[1];
+            $case = $matches[2];
+            if (!class_exists('Chamilo\CoreBundle\Component\Utils\\'.$enum)) {
+                throw new InvalidArgumentException("Class {$enum} does not exist.");
+            }
+            $reflection = new ReflectionEnum('Chamilo\CoreBundle\Component\Utils\\'.$enum);
+            // Check if the case exists in the Enum class
+            if (!$reflection->hasCase($case)) {
+                throw new InvalidArgumentException("Case {$case} does not exist in enum class {$enum}.");
+            }
+            // Get the Enum case
+            /* @var ReflectionEnumUnitCase $enumUnitCaseObject */
+            $enumUnitCaseObject = $reflection->getCase($case);
+            $enumValue = $enumUnitCaseObject->getValue();
+            $name = $enumValue->value;
+
+        }
+
+        return self::getMdiIcon($name, $additionalClass, null, $size, $title);
+    }
+
+    /**
+     * Get a full HTML <i> tag for an icon from the Material Design Icons set
+     * @param string|ActionIcon|ToolIcon|ObjectIcon|StateIcon $name
+     * @param string|null                                     $additionalClass
+     * @param string|null                                     $style
+     * @param int|null                                        $pixelSize
+     * @param string|null                                     $title
+     * @param array|null                                      $additionalAttributes
+     * @return string
+     */
+    public static function getMdiIcon(string|ActionIcon|ToolIcon|ObjectIcon|StateIcon $name, string $additionalClass = null, string $style = null, int $pixelSize = null, string $title = null, array $additionalAttributes = null): string
     {
         $sizeString = '';
         if (!empty($pixelSize)) {
@@ -2202,9 +2311,21 @@ class Display
         if (empty($style)) {
             $style = '';
         }
-        $additionalAttributes['class'] = "mdi-$name mdi v-icon notranslate v-icon--size-default $additionalClass";
+
+        $additionalAttributes['class'] = 'mdi mdi-';
+
+        if ($name instanceof ActionIcon
+            || $name instanceof ToolIcon
+            || $name instanceof ObjectIcon
+            || $name instanceof StateIcon
+        ) {
+            $additionalAttributes['class'] .= $name->value;
+        } else {
+            $additionalAttributes['class'] .= $name;
+        }
+
+        $additionalAttributes['class'] .= " $additionalClass";
         $additionalAttributes['style'] = $sizeString.$style;
-        $additionalAttributes['medium'] = '';
         $additionalAttributes['aria-hidden'] = 'true';
 
         if (!empty($title)) {
@@ -2264,6 +2385,31 @@ class Display
         return "$icon ";
     }
 
+    public static function returnPrimeIcon(
+        $name,
+        $size = '',
+        $fixWidth = false,
+        $additionalClass = ''
+    ) {
+        $className = "pi pi-$name";
+
+        if ($fixWidth) {
+            $className .= ' pi-fw';
+        }
+
+        if ($size) {
+            $className .= " pi-$size";
+        }
+
+        if (!empty($additionalClass)) {
+            $className .= " $additionalClass";
+        }
+
+        $icon = self::tag('i', null, ['class' => $className]);
+
+        return "$icon ";
+    }
+
     /**
      * @param string     $title
      * @param string     $content
@@ -2288,21 +2434,50 @@ class Display
         $open = true,
         $fullClickable = false
     ) {
+        $javascript = '';
         if (!empty($idAccordion)) {
-            $headerClass = $fullClickable ? 'center-block ' : '';
-            $headerClass .= $open ? '' : 'collapsed';
-            $contentClass = 'panel-collapse collapse ';
-            $contentClass .= $open ? 'in' : '';
-            $ariaExpanded = $open ? 'true' : 'false';
+            $javascript = '
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const buttons = document.querySelectorAll("#card_'.$idAccordion.' a");
+                const menus = document.querySelectorAll("#collapse_'.$idAccordion.'");
+                buttons.forEach((button, index) => {
+                    button.addEventListener("click", function() {
+                        menus.forEach((menu, menuIndex) => {
+                            if (index === menuIndex) {
+                                menu.classList.toggle("active");
+                            } else {
+                                menu.classList.remove("active");
+                            }
+                        });
+                    });
+                });
+            });
+        </script>';
+            $html = '
+        <div class="mt-4 rounded-lg bg-gray-50 p-2">
+            <div class="px-4 bg-gray-100 border border-gray-50" id="card_'.$idAccordion.'">
+                <h5>
+                    <a role="button"
+                        class="cursor-pointer"
+                        data-toggle="collapse"
+                        data-target="#collapse_'.$idAccordion.'"
+                        aria-expanded="'.(($open) ? 'true' : 'false').'"
+                        aria-controls="collapse_'.$idAccordion.'"
+                    >
+                        '.$title.'
+                    </a>
+                </h5>
+            </div>
+            <div
+                id="collapse_'.$idAccordion.'"
+                class="px-4 border border-gray-50 bg-white collapse custom-collapse '.(($open) ? 'active' : '').'"
+            >
+                <div id="collapse_contant_'.$idAccordion.'"  class="card-body ">';
 
-            $html = <<<HTML
-                <div class="v-card bg-white mx-2" id="$id">
-                    <div class="v-card-header text-h5 my-2">
-                        $title
-                    </div>
-                    <div class="v-card-text">$content</div>
-                </div>
-HTML;
+            $html .= $content;
+            $html .= '</div></div></div>';
+
         } else {
             if (!empty($id)) {
                 $params['id'] = $id;
@@ -2316,17 +2491,19 @@ HTML;
             $html = self::div($html, $params);
         }
 
-        return $html;
+        return $javascript.$html;
     }
 
     /**
      * Returns the string "1 day ago" with a link showing the exact date time.
      *
-     * @param string $dateTime in UTC or a DateTime in UTC
+     * @param string|DateTime $dateTime in UTC or a DateTime in UTC
+     *
+     * @throws Exception
      *
      * @return string
      */
-    public static function dateToStringAgoAndLongDate($dateTime)
+    public static function dateToStringAgoAndLongDate(string|DateTime $dateTime): string
     {
         if (empty($dateTime) || '0000-00-00 00:00:00' === $dateTime) {
             return '';

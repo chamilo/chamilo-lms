@@ -16,6 +16,8 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Entity\CGroup;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * Class CourseManager.
@@ -519,7 +521,7 @@ class CourseManager
                 );
             }
         }
-        if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
+        if ('true' === api_get_setting('session.catalog_course_subscription_in_user_s_session')) {
             // Also unlink the course from the users' currently accessible sessions
             /** @var Course $course */
             $course = Container::getCourseRepository()->findOneBy([
@@ -604,7 +606,7 @@ class CourseManager
 
         $userId = api_get_user_id();
 
-        if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
+        if ('true' === api_get_setting('session.catalog_course_subscription_in_user_s_session')) {
             $user = api_get_user_entity($userId);
             $sessions = $user->getCurrentlyAccessibleSessions();
             if (empty($sessions)) {
@@ -621,7 +623,7 @@ class CourseManager
                     return false;
                 }
                 // user has no session at all, create one starting now
-                $numberOfDays = api_get_configuration_value('user_s_session_duration') ?: 3 * 365;
+                $numberOfDays = (int) api_get_setting('session.user_s_session_duration');
                 try {
                     $duration = new DateInterval(sprintf('P%dD', $numberOfDays));
                 } catch (Exception $exception) {
@@ -644,7 +646,7 @@ class CourseManager
                 $session->setCoachAccessEndDate($endDate);
                 $session->setDisplayEndDate($endDate);
                 $session->setSendSubscriptionNotification(false);
-                $adminId = api_get_configuration_value('session_automatic_creation_user_id') ?: 1;
+                $adminId = (int) api_get_setting('session.session_automatic_creation_user_id');
                 $session->addSessionAdmin(api_get_user_entity($adminId));
                 $session->addUserInSession(0, $user);
                 Database::getManager()->persist($session);
@@ -1125,7 +1127,7 @@ class CourseManager
         $userId = (int) $userId;
         $session_id = (int) $session_id;
 
-        if (api_get_configuration_value('catalog_course_subscription_in_user_s_session')) {
+        if ('true' === api_get_setting('session.catalog_course_subscription_in_user_s_session')) {
             // with this option activated, only check whether the course is in one of the users' sessions
             $course = Container::getCourseRepository()->findOneBy([
                 'code' => $course_code,
@@ -2091,7 +2093,7 @@ class CourseManager
                     $html .= '<ul class="user-teacher">';
                     foreach ($list as $teacher) {
                         $html .= '<li>';
-                        $html .= Display::return_icon('teacher.png', '', null, ICON_SIZE_TINY);
+                        $html .= Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_TINY);
                         $html .= ' '.$teacher;
                         $html .= '</li>';
                     }
@@ -2198,11 +2200,12 @@ class CourseManager
                 foreach ($course_coachs as $coachs) {
                     $html .= Display::tag(
                         'li',
-                        Display::return_icon(
-                            'teacher.png',
-                            get_lang('Coach'),
+                        Display::getMdiIcon(
+                            ObjectIcon::TEACHER,
+                            'ch-tool-icon',
                             null,
-                            ICON_SIZE_TINY
+                            ICON_SIZE_TINY,
+                            get_lang('Coach')
                         ).' '.$coachs
                     );
                 }
@@ -2227,7 +2230,8 @@ class CourseManager
     public static function get_group_list_of_course(
         $course_code,
         $session_id = 0,
-        $getEmptyGroups = 0
+        $getEmptyGroups = 0,
+        $asArray = false
     ) {
         $course_info = api_get_course_info($course_code);
 
@@ -2254,7 +2258,11 @@ class CourseManager
                     continue;
                 }
             }
-            $groupList[$group->getIid()] = $group;
+            if ($asArray) {
+                $groupList[$group->getIid()] = ['id' => $group->getIid(), 'name' => $group->getName()];
+            } else {
+                $groupList[$group->getIid()] = $group;
+            }
         }
 
         /* 0 != $session_id ? $session_condition = ' WHERE g.session_id IN(1,'.intval($session_id).')' : $session_condition = ' WHERE g.session_id = 0';
@@ -2826,7 +2834,7 @@ class CourseManager
         $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
         $languageCondition = '';
-        $onlyInUserLanguage = api_get_configuration_value('my_courses_show_courses_in_user_language_only');
+        $onlyInUserLanguage = ('true' === api_get_setting('course.my_courses_show_courses_in_user_language_only'));
         if ($useUserLanguageFilterIfAvailable && $onlyInUserLanguage) {
             $userInfo = api_get_user_info(api_get_user_id());
             if (!empty($userInfo['language'])) {
@@ -3163,19 +3171,22 @@ class CourseManager
                                 ENT_QUOTES,
                         $charset
                     )).'\')) return false;">';
-                    $data .= Display::return_icon(
-                        'delete.gif',
-                        get_lang('Delete'),
-                        ['style' => 'vertical-align:middle;float:right;']
+                    $data .= Display::getMdiIcon(
+                        ActionIcon::DELETE,
+                        'ch-tool-icon',
+                        'vertical-align:middle;float:right;',
+                        ICON_SIZE_SMALL,
+                        get_lang('Delete')
                     );
                     $data .= '</a> ';
                     //edit
                     $data .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&description_id='.$description->id.'">';
-                    $data .= Display::return_icon(
-                        'edit.png',
-                        get_lang('Edit'),
-                        ['style' => 'vertical-align:middle;float:right; padding-right:4px;'],
-                        ICON_SIZE_SMALL
+                    $data .= Display::getMdiIcon(
+                        ActionIcon::EDIT,
+                        'ch-tool-icon',
+                        'vertical-align:middle;float:right; padding-right:4px;',
+                        ICON_SIZE_SMALL,
+                        get_lang('Edit')
                     );
                     $data .= '</a> ';
                 }
@@ -3440,7 +3451,7 @@ class CourseManager
         );
 
         if (!empty($result)) {
-            if (1 == $result['value']) {
+            if (1 == $result['field_value']) {
                 return true;
             }
         }
@@ -3475,7 +3486,7 @@ class CourseManager
 
         // Filter by language
         $languageCondition = '';
-        $onlyInUserLanguage = api_get_configuration_value('my_courses_show_courses_in_user_language_only');
+        $onlyInUserLanguage = ('true' === api_get_setting('course.my_courses_show_courses_in_user_language_only'));
         if ($useUserLanguageFilterIfAvailable && $onlyInUserLanguage) {
             $userInfo = api_get_user_info(api_get_user_id());
             if (!empty($userInfo['language'])) {
@@ -3542,12 +3553,11 @@ class CourseManager
                 $params['status'] = $course_info['status'];
                 $params['category'] = $course_info['categoryName'];
                 $params['category_code'] = $course_info['categoryCode'];
-                $params['icon'] = Display::return_icon(
-                    'drawing-pin.png',
+                $params['icon'] = Display::getMdiIcon(
+                    ObjectIcon::PIN,
+                    'ch-tool-icon',
                     null,
-                    null,
-                    ICON_SIZE_LARGE,
-                    null
+                    ICON_SIZE_LARGE
                 );
 
                 if ('true' == api_get_setting('display_coursecode_in_courselist')) {
@@ -3618,7 +3628,7 @@ class CourseManager
         }
 
         $languageCondition = '';
-        $onlyInUserLanguage = api_get_configuration_value('my_courses_show_courses_in_user_language_only');
+        $onlyInUserLanguage = ('true' === api_get_setting('course.my_courses_show_courses_in_user_language_only'));
         if ($useUserLanguageFilterIfAvailable && $onlyInUserLanguage) {
             $userInfo = api_get_user_info(api_get_user_id());
             if (!empty($userInfo['language'])) {
@@ -3767,7 +3777,7 @@ class CourseManager
             $params['extrafields'] = CourseManager::getExtraFieldsToBePresented($course_info['real_id']);
             $params['real_id'] = $course_info['real_id'];
 
-            if (api_get_configuration_value('enable_unsubscribe_button_on_my_course_page')
+            if ('true' === api_get_setting('course.enable_unsubscribe_button_on_my_course_page')
                 && '1' === $course_info['unsubscribe']
             ) {
                 $params['unregister_button'] = CoursesAndSessionsCatalog::return_unregister_button(
@@ -3847,7 +3857,7 @@ class CourseManager
         $user_id = api_get_user_id();
         $course_info = api_get_course_info_by_id($course['real_id']);
         $course_visibility = (int) $course_info['visibility'];
-        $allowUnsubscribe = api_get_configuration_value('enable_unsubscribe_button_on_my_course_page');
+        $allowUnsubscribe = ('true' === api_get_setting('course.enable_unsubscribe_button_on_my_course_page'));
 
         if (Course::HIDDEN === $course_visibility) {
             return '';
@@ -3868,13 +3878,11 @@ class CourseManager
         // Show a hyperlink to the course, unless the course is closed and user is not course admin.
         $session_url = '';
         $params = [];
-        $params['icon'] = Display::return_icon(
-            'session.png',
+        $params['icon'] = Display::getMdiIcon(
+            ObjectIcon::SESSION,
+            'ch-tool-icon',
             null,
-            [],
-            ICON_SIZE_LARGE,
-            null,
-            true
+            ICON_SIZE_LARGE
         );
         $params['real_id'] = $course_info['real_id'];
         $params['visibility'] = $course_info['visibility'];
@@ -3937,10 +3945,10 @@ class CourseManager
         if (!empty($thumbnails)) {
             $params['html_image'] = Display::img($thumbnails, $course_info['name'], ['class' => 'img-responsive']);
         } else {
-            $params['html_image'] = Display::return_icon(
-                'session.png',
-                $course_info['name'],
-                ['class' => 'img-responsive'],
+            $params['html_image'] = Display::getMdiIcon(
+                ObjectIcon::SESSION,
+                'ch-tool-icon img-responsive',
+                null,
                 ICON_SIZE_LARGE,
                 $course_info['name']
             );
@@ -4740,7 +4748,7 @@ class CourseManager
                 WHERE
                     tcf.item_type = $extraFieldType AND
                     tcf.variable = 'popular_courses' AND
-                    tcfv.value = 1 AND
+                    tcfv.field_value = 1 AND
                     visibility <> ".Course::CLOSED." AND
                     visibility <> ".Course::HIDDEN." $where_access_url";
 
@@ -4858,7 +4866,7 @@ class CourseManager
             $my_course['teachers'] = self::getTeachersFromCourse($course_info['real_id'], true);
             $point_info = self::get_course_ranking($course_info['real_id'], 0);
             $my_course['rating_html'] = '';
-            if (false === api_get_configuration_value('hide_course_rating')) {
+            if (('false' === api_get_setting('course.hide_course_rating'))) {
                 $my_course['rating_html'] = Display::return_rating_system(
                     'star_'.$course_info['real_id'],
                     $ajax_url.'&course_id='.$course_info['real_id'],
@@ -5240,9 +5248,12 @@ class CourseManager
      *
      * @return array
      */
-    public static function getCourseSettingVariables(AppPlugin $appPlugin)
+    public static function getCourseSettingVariables(AppPlugin $appPlugin = null)
     {
-        $pluginCourseSettings = $appPlugin->getAllPluginCourseSettings();
+        $pluginCourseSettings = [];
+        if ($appPlugin) {
+            $pluginCourseSettings = $appPlugin->getAllPluginCourseSettings();
+        }
         $courseSettings = [
             // Get allow_learning_path_theme from table
             'allow_learning_path_theme',
@@ -5313,7 +5324,7 @@ class CourseManager
      *
      * @return bool
      */
-    public static function saveCourseConfigurationSetting(AppPlugin $appPlugin, $variable, $value, $courseId)
+    public static function saveCourseConfigurationSetting($variable, $value, $courseId, AppPlugin $appPlugin = null)
     {
         $settingList = self::getCourseSettingVariables($appPlugin);
 
@@ -5337,13 +5348,13 @@ class CourseManager
                 ['variable = ? AND c_id = ?' => [$variable, $courseId]]
             );
 
-            if ($settingFromDatabase['value'] != $value) {
+            /*if ($settingFromDatabase['value'] != $value) {
                 Event::addEvent(
                     LOG_COURSE_SETTINGS_CHANGED,
                     $variable,
                     $settingFromDatabase['value']." -> $value"
                 );
-            }
+            }*/
         } else {
             // Create
             Database::insert(
@@ -5356,11 +5367,11 @@ class CourseManager
                 ]
             );
 
-            Event::addEvent(
+            /*Event::addEvent(
                 LOG_COURSE_SETTINGS_CHANGED,
                 $variable,
                 $value
-            );
+            );*/
         }
 
         return true;
@@ -6115,11 +6126,12 @@ class CourseManager
         $course_info['status'] = $course['status'];
 
         // New code displaying the user's status in respect to this course.
-        $status_icon = Display::return_icon(
-            'blackboard.png',
-            $course_info['title'],
-            [],
-            ICON_SIZE_LARGE
+        $status_icon = Display::getMdiIcon(
+            'account-key',
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_LARGE,
+            $course_info['title']
         );
 
         $params = [];
@@ -6127,9 +6139,9 @@ class CourseManager
 
         if (api_is_platform_admin()) {
             if ($loadDirs) {
-                $params['right_actions'] .= '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview" href="javascript:void(0);">'.Display::return_icon('folder.png', get_lang('Documents'), ['align' => 'absmiddle'], ICON_SIZE_SMALL).'</a>';
+                $params['right_actions'] .= '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview" href="javascript:void(0);">'.Display::getMdiIcon(ObjectIcon::FOLDER, 'ch-tool-icon', 'align: absmiddle;', ICON_SIZE_SMALL, get_lang('Documents')).'</a>';
                 $params['right_actions'] .= '<a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course['real_id'].'">'.
-                    Display::return_icon('edit.png', get_lang('Edit'), ['align' => 'absmiddle'], ICON_SIZE_SMALL).
+                    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', 'align: absmiddle;', ICON_SIZE_SMALL, get_lang('Edit')).
                     '</a>';
                 $params['right_actions'] .= Display::div(
                     '',
@@ -6147,7 +6159,7 @@ class CourseManager
             if (Course::CLOSED != $course_info['visibility']) {
                 if ($loadDirs) {
                     $params['right_actions'] .= '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview" href="javascript:void(0);">'.
-                        Display::return_icon('folder.png', get_lang('Documents'), ['align' => 'absmiddle'], ICON_SIZE_SMALL).'</a>';
+                        Display::getMdiIcon(ObjectIcon::FOLDER, 'ch-tool-icon', 'align: absmiddle;', ICON_SIZE_SMALL, get_lang('Documents')).'</a>';
                     $params['right_actions'] .= Display::div(
                         '',
                         [
@@ -6545,7 +6557,7 @@ class CourseManager
             ->setSort($relationInfo['sort'])
             ->setUserCourseCat($relationInfo['user_course_cat']);
 
-        $course->addUsers($courseRelUser);
+        $course->addSubscription($courseRelUser);
 
         $em = Database::getManager();
         $em->persist($course);

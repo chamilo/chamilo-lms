@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Config setting:
@@ -62,14 +63,14 @@ class ScheduledAnnouncement extends Model
         // action links
         $action = '<div class="actions" style="margin-bottom:20px">';
         $action .= Display::url(
-            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
             api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$sessionId
         );
 
         $action .= '<a href="'.api_get_self().'?action=add&session_id='.$sessionId.'">'.
-            Display::return_icon('add.png', get_lang('Add'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')).'</a>';
         $action .= '<a href="scheduled_announcement.php?action=run&session_id='.$sessionId.'">'.
-            Display::return_icon('tuning.png', get_lang('Send pending announcements manually'), '', ICON_SIZE_MEDIUM).
+            Display::getMdiIcon(ActionIcon::SEND_MESSAGE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Send pending announcements manually')).
             '</a>';
 
         $action .= '</div>';
@@ -455,7 +456,7 @@ class ScheduledAnnouncement extends Model
      */
     public function allowed()
     {
-        return api_get_configuration_value('allow_scheduled_announcements');
+        return ('true' === api_get_setting('announcement.allow_scheduled_announcements'));
     }
 
     private function setTagsInForm(FormValidator $form)

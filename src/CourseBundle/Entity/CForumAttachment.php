@@ -8,60 +8,41 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
+use Symfony\Component\Uid\Uuid;
 
-/**
- * @ORM\Table(
- *     name="c_forum_attachment",
- *     indexes={
- *         @ORM\Index(name="course", columns={"c_id"})
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CForumAttachmentRepository")
- */
-class CForumAttachment extends AbstractResource implements ResourceInterface
+#[ORM\Table(name: 'c_forum_attachment')]
+#[ORM\Index(name: 'course', columns: ['c_id'])]
+#[ORM\Entity(repositoryClass: CForumAttachmentRepository::class)]
+class CForumAttachment extends AbstractResource implements ResourceInterface, Stringable
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    protected int $iid;
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    protected ?int $iid = null;
 
-    /**
-     * @ORM\Column(name="c_id", type="integer")
-     */
+    #[ORM\Column(name: 'c_id', type: 'integer')]
     protected int $cId;
 
-    /**
-     * @ORM\Column(name="path", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'path', type: 'string', length: 255, nullable: false)]
     protected string $path;
 
-    /**
-     * @ORM\Column(name="comment", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected ?string $comment = null;
 
-    /**
-     * @ORM\Column(name="size", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'size', type: 'integer', nullable: false)]
     protected int $size;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CForumPost", cascade={"persist"}, inversedBy="attachments")
-     * @ORM\JoinColumn(name="post_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: CForumPost::class, cascade: ['persist'], inversedBy: 'attachments')]
+    #[ORM\JoinColumn(name: 'post_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CForumPost $post;
 
-    /**
-     * @ORM\Column(name="filename", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'filename', type: 'string', length: 255, nullable: false)]
     protected string $filename;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function __toString(): string
     {
@@ -70,10 +51,8 @@ class CForumAttachment extends AbstractResource implements ResourceInterface
 
     /**
      * Get iid.
-     *
-     * @return int
      */
-    public function getIid()
+    public function getIid(): ?int
     {
         return $this->iid;
     }
@@ -180,7 +159,7 @@ class CForumAttachment extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }

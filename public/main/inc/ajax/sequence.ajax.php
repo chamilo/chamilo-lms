@@ -69,7 +69,7 @@ switch ($action) {
         api_protect_admin_script();
 
         $showDelete = isset($_REQUEST['show_delete']) ? $_REQUEST['show_delete'] : false;
-        $image = Display::return_icon('item-sequence.png', null, null, ICON_SIZE_LARGE);
+        $image = Display::getMdiIcon('notebook', 'ch-tool-icon', null, ICON_SIZE_LARGE);
 
         if (empty($id)) {
             exit;

@@ -33,7 +33,7 @@
     {{ form_content }}
     {{ search_filter }}
 
-    {% set fold_forum_categories = 'forum_fold_categories'|api_get_configuration_value %}
+    {% set fold_forum_categories = chamilo_settings_get('forum.forum_fold_categories') %}
 
     {% if categories is not empty %}
         {% for item in categories %}
@@ -42,8 +42,8 @@
             {% if item.extra_fields is defined %}
                 {% for extra_field in item.extra_fields %}
                     {% if extra_field.variable == 'language' %}
-                        {% set category_language_array = extra_field.value | split(';')  %}
-                        {% set category_language = extra_field.value | replace({';': ' ' })  %}
+                        {% set category_language_array = extra_field.field_value | split(';')  %}
+                        {% set category_language = extra_field.field_value | replace({';': ' ' })  %}
                     {% endif %}
                 {% endfor %}
             {% endif %}
@@ -51,7 +51,7 @@
             {% if fold_forum_categories %}
                 {% set panel_icon %}
                     <a href="{{ item.url }}" title="{{ item.title }}">
-                        <span class="open">{{ 'folder-outline'|mdi_icon(32) }}</span>
+                        <span class="open">{{ 'ObjectIcon::FOLDER'|mdi_icon(32) }}</span>
                     </a>
                 {% endset %}
 
@@ -66,7 +66,7 @@
             {% else %}
                 {% set panel_title %}
                     <a href="{{ item.url }}" title="{{ item.title }}" class="flex flex-row gap-2">
-                        <span class="open">{{ 'folder-outline'|mdi_icon(32) }}</span>
+                        <span class="open">{{ 'ObjectIcon::FOLDER'|mdi_icon(32) }}</span>
                         {{ item.title }}{{ item.icon_session }}
                     </a>
                     {% for category_language_item in category_language_array %}
@@ -95,9 +95,9 @@
                                                 <img src="{{ subitem.forum_image }}" width="48px">
                                             {% else %}
                                                 {% if subitem.forum_of_group == 0 %}
-                                                    {{ 'forum.png'|mdi_icon(48) }}
+                                                    {{ 'ObjectIcon::FORUM'|mdi_icon(48) }}
                                                 {% else %}
-                                                    {{ 'forum'|mdi_icon(48) }}
+                                                    {{ 'ObjectIcon::FORUM'|mdi_icon(48) }}
                                                 {% endif %}
                                             {% endif %}
                                         </a>
@@ -106,18 +106,18 @@
                                 </div>
                                 <div class="w-4/5 flex flex-row justify-between">
                                     <h3 class="text-lg flex flex-row">
-                                        {{ 'forum'|mdi_icon(32) }}
+                                        {{ 'ObjectIcon::FORUM'|mdi_icon(32) }}
                                         <a href="{{ subitem.url }}" title="{{ subitem.title }}" class="{{ subitem.visibility != '1' ? 'text-muted': '' }}">{{ subitem.title }}</a>
 {#                                            {% if subitem.forum_of_group != 0 %}#}
 {#                                                <a class="forum-goto" href="../group/group_space.php?cid={{ course.id }}&sid={{ session.id }}&gid={{ subitem.forum_of_group }}">#}
-{#                                                    {{ "forum.png"|img(22) }} {{ "Go to"|trans }} {{ subitem.forum_group_title }}#}
+{#                                                    {{ 'ObjectIcon::FORUM'|mdi_icon(22) }} {{ "Go to"|trans }} {{ subitem.forum_group_title }}#}
 {#                                                </a>#}
 {#                                            {% endif %}#}
                                         {{ subitem.icon_session }}
                                     </h3>
                                     {% if subitem.last_poster_id is not empty %}
                                         <div class="forum-date">
-                                            {{ 'comment' | mdi_icon }}
+                                            {{ 'ObjectIcon::FORUM_POST' | mdi_icon }}
                                             {{ subitem.last_poster_date }}
                                             « {{ subitem.last_post_title }} »
                                             {{ "By"|trans }}
@@ -145,7 +145,7 @@
             {% endset %}
             <div class="category-forum {{ category_language }}" id="category_{{ item.id }}">
                 {% if fold_forum_categories %}
-                    {{ display.collapse('category_' ~ item.id, panel_title, panel_content, false, fold_forum_categories, item.tools, panel_icon ) }}
+                    {{ display.customCollapse('category_' ~ item.id, panel_title, panel_content, false, true, item.tools, panel_icon ) }}
                 {% else %}
                     {{ display.panel(panel_title, panel_content) }}
                 {% endif %}

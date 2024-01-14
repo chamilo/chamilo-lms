@@ -53,37 +53,24 @@ define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);
 
 /**
  * Returns a translated (localized) string.
- *
- * @param string $variable
- *
- * @return string
  */
-function get_lang($variable)
+function get_lang(string $variable): string
 {
-    $translator = Container::getTranslator();
+    $translator = Container::$translator ?: Container::$container->get('translator');
 
     if (!$translator) {
         return $variable;
     }
 
-    $locale = api_get_language_isocode();
-    $userInfo = api_get_user_info();
-    if (is_array($userInfo) && !empty($userInfo['language'])) {
-        $locale = $userInfo['language'];
-    }
-
-    $courseInfo = api_get_course_info();
-    if (isset($courseInfo)) {
-        $locale = $courseInfo['language'];
-    }
+    $defaultLocale = 'en';
 
     // Using symfony
     $defaultDomain = 'messages';
+
     return $translator->trans(
         $variable,
         [],
-        $defaultDomain,
-        $locale
+        $defaultDomain
     );
 }
 
@@ -179,14 +166,14 @@ function api_get_timezone()
         // First, get the default timezone of the server
         $timezone = date_default_timezone_get();
         // Second, see if a timezone has been chosen for the platform
-        $timezoneFromSettings = api_get_setting('timezone_value', 'timezones');
+        $timezoneFromSettings = api_get_setting('platform.timezone', false, 'timezones');
 
         if (null != $timezoneFromSettings) {
             $timezone = $timezoneFromSettings;
         }
 
         // If allowed by the administrator
-        $allowUserTimezones = api_get_setting('use_users_timezone', 'timezones');
+        $allowUserTimezones = api_get_setting('profile.use_users_timezone', false, 'timezones');
         $userId = api_get_user_id();
 
         if ('true' === $allowUserTimezones && !empty($userId)) {

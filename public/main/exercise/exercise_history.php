@@ -8,6 +8,9 @@
  * @author Denes Nagy, HotPotatoes integration
  * @author Wolfgang Schneider, code/html cleanup
  */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 api_protect_course_script(true);
@@ -50,7 +53,7 @@ if (isset($_GET['message'])) {
 }
 
 $actions = '<a href="exercise_report.php?'.api_get_cidreq().'&filter=2">'.
-    Display::return_icon('back.png', get_lang('Back to result list'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to result list')).'</a>';
 echo Display::toolbarAction('toolbar', [$actions]);
 ?>
 

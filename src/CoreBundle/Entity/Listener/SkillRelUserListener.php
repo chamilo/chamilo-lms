@@ -11,63 +11,50 @@ use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Display;
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PostPersistEventArgs;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SkillRelUserListener
 {
-    protected Security $security;
-    private SettingsManager $settingsManager;
-    private RouterInterface $router;
-    private TranslatorInterface $translator;
-
     public function __construct(
-        SettingsManager $settingsManager,
-        RouterInterface $router,
-        TranslatorInterface $translator,
-        Security $security
-    ) {
-        $this->settingsManager = $settingsManager;
-        $this->router = $router;
-        $this->translator = $translator;
-        $this->security = $security;
-    }
+        protected SettingsManager $settingsManager,
+        private readonly RouterInterface $router,
+        private readonly TranslatorInterface $translator,
+        protected Security $security
+    ) {}
 
-    public function postPersist(SkillRelUser $skillRelUser, LifecycleEventArgs $event): void
+    public function postPersist(SkillRelUser $skillRelUser, PostPersistEventArgs $event): void
     {
         $user = $skillRelUser->getUser();
         $skill = $skillRelUser->getSkill();
 
-        $badgeAssignationNotification = $this->settingsManager->getSetting('skill.badge_assignation_notification');
+        // Notification of badge assignation
+        $url = $this->router->generate(
+            'badge_issued_all',
+            ['skillId' => $skill->getId(), 'userId' => $user->getId()]
+        );
 
-        if ('true' === $badgeAssignationNotification) {
-            $url = $this->router->generate(
-                'badge_issued_all',
-                ['skillId' => $skill->getId(), 'userId' => $user->getId()]
-            );
+        $message = sprintf(
+            $this->translator->trans('Hi, %s. You have achieved the skill "%s". To see the details go here: %s.'),
+            $user->getFirstname(),
+            $skill->getName(),
+            Display::url($url, $url)
+        );
 
-            $message = sprintf(
-                $this->translator->trans('Hi, %s. You have achieved the skill "%s". To see the details go here: %s.'),
-                $user->getFirstname(),
-                $skill->getName(),
-                Display::url($url, $url)
-            );
+        if (null !== $this->security->getToken()) {
+            /** @var User $currentUser */
+            $currentUser = $this->security->getUser();
+            $message = (new Message())
+                ->setTitle($this->translator->trans('You have achieved a new skill.'))
+                ->setContent($message)
+                ->addReceiverTo($user)
+                ->setSender($currentUser)
+            ;
 
-            if (null !== $this->security->getToken()) {
-                /** @var User $currentUser */
-                $currentUser = $this->security->getUser();
-                $message = (new Message())
-                    ->setTitle($this->translator->trans('You have achieved a new skill.'))
-                    ->setContent($message)
-                    ->addReceiver($user)
-                    ->setSender($currentUser)
-                ;
-
-                $event->getObjectManager()->persist($message);
-                $event->getObjectManager()->flush();
-            }
+            $event->getObjectManager()->persist($message);
+            $event->getObjectManager()->flush();
         }
     }
 }

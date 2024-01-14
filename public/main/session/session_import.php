@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 $cidReset = true;
 
@@ -532,7 +533,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
 Display::display_header($toolName);
 $actions = '<a href="../session/session_list.php">'.
-    Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', ICON_SIZE_MEDIUM).
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Administration')).
     '</a>';
 echo Display::toolbarAction('session_import', [$actions]);
 
@@ -586,7 +587,7 @@ $form->addButtonImport(get_lang('Import session(s)'));
 
 $defaults = ['sendMail' => 'true', 'file_type' => 'csv'];
 
-$options = api_get_configuration_value('session_import_settings');
+$options = api_get_setting('session.session_import_settings', true);
 if (!empty($options) && isset($options['options'])) {
     if (isset($options['options']['session_exists_default_option'])) {
         $defaults['overwrite'] = $options['options']['session_exists_default_option'];

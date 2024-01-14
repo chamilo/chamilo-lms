@@ -32,7 +32,7 @@ $skillRelSkill = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\SkillR
 $skillLevelRepo = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\Level::class);
 $skillUserRepo = $entityManager->getRepository(\Chamilo\CoreBundle\Entity\SkillRelUser::class);
 
-$skillLevels = api_get_configuration_value('skill_levels_names');
+$skillLevels = api_get_setting('skill.skill_levels_names', true);
 
 $skillsOptions = ['' => get_lang('Select')];
 $acquiredLevel = ['' => get_lang('none')];
@@ -202,7 +202,7 @@ if (!empty($skillIdFromGet)) {
             $skillsOptions,
             [
                 'id' => 'sub_skill_id_'.($counter + 1),
-                'class' => 'sub_skill',
+                'class' => 'sub_skill ',
             ]
         );
 
@@ -227,7 +227,7 @@ $form->addHidden('user', $user->getId());
 $form->addHidden('id', $skillId);
 $form->addRule('skill', get_lang('Required field'), 'required');
 
-$showLevels = false; // === api_get_configuration_value('hide_skill_levels');
+$showLevels = ('false' === api_get_setting('skill.hide_skill_levels'));
 
 if ($showLevels) {
     $form->addSelect('acquired_level', get_lang('Level acquired'), $acquiredLevel);
@@ -304,9 +304,9 @@ if ($form->validate()) {
         $parentData = $skillModel->get($parentId);
 
         $data = $extraFieldValue->get_values_by_handler_and_field_variable($parentId, 'children_auto_threshold');
-        if (!empty($data) && !empty($data['value'])) {
-            // Search X children
-            $requiredSkills = $data['value'];
+        // Search X children
+        $requiredSkills = isset($data['value']) ? (int) $data['value'] : 0;
+        if ($requiredSkills > 0) {
             $children = $skillRelSkill->getChildren($parentId);
             $counter = 0;
             foreach ($children as $child) {
@@ -321,9 +321,9 @@ if ($form->validate()) {
                     Display::addFlash(Display::return_message(get_lang('Message Sent')));
                     $url = api_get_path(WEB_CODE_PATH).'skills/assign.php?user='.$userId.'&id='.$parentId;
                     $link = Display::url($url, $url);
-                    $subject = get_lang('A student has obtained the number of sub-skills needed to validate the mother skill.');
+                    $subject = get_lang('A student has obtained the number of sub-skills needed to validate the mother skill');
                     $message = sprintf(
-                        get_lang('Learner %s has enough sub-skill to get skill %s. To assign this skill it is possible to go here : %s'),
+                        get_lang('Learner %s has enough sub-skill to get skill %s . To assign this skill it is possible to go here : %s'),
                         UserManager::formatUserFullName($user),
                         $parentData['name'],
                         $link
@@ -349,17 +349,6 @@ if ($form->validate()) {
                 UserManager::formatUserFullName($user)
             ),
             'success'
-        )
-    );
-
-    Display::addFlash(
-        Display::return_message(
-            sprintf(
-                get_lang('To assign a new skill to this user, click <a href="%s">here</a>'),
-                api_get_self().'?'.http_build_query(['user' => $user->getId()])
-            ),
-            'info',
-            false
         )
     );
 

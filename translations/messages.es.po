@@ -24071,3 +24071,20 @@ msgstr "Regresar a la lista de intentos"
 msgid "Show the result to the learner: Show the score, the learner's choice and his feedback on each attempt, add the correct answer and his feedback when the chosen limit of attempts is reached."
 msgstr "Mostrar el resultado al alumno: mostrar la puntuación, la elección del alumno y sus comentarios en cada intento, agrega la respuesta correcta y sus comentarios cuando se alcance el límite de intentos elegido."
 
+msgid "Add a forumCategory"
+msgstr "Agregar una categoria de foro"
+
+msgid "Create surveyDoodle"
+msgstr "Crear una encuesta Doodle"
+
+msgid "Sticky courses"
+msgstr "Cursos especiales"
+
+msgid "Current session tab"
+msgstr "Actual"
+
+msgid "Upcoming session tab"
+msgstr "Por venir"
+
+msgid "Past session tab"
+msgstr "Finalizadas"

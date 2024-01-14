@@ -1,6 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+
 ob_start();
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -305,51 +309,51 @@ if (api_is_platform_admin(true, true)) {
 
     if (!api_is_session_admin()) {
         $menu_items[] = Display::url(
-            Display::return_icon('statistics.png', get_lang('View my progress'), '', ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('View my progress')),
             api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
         );
         $menu_items[] = Display::url(
-            Display::return_icon('user.png', get_lang('Learners'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Learners')),
             'index.php?view=drh_students&amp;display=yourstudents'
         );
         $menu_items[] = Display::url(
-            Display::return_icon('teacher.png', get_lang('Teachers'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Teachers')),
             'teachers.php'
         );
         $menu_items[] = Display::url(
-            Display::return_icon('course.png', get_lang('Courses'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Courses')),
             'course.php'
         );
         $menu_items[] = Display::url(
-            Display::return_icon('session_na.png', get_lang('Course sessions'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Course sessions')),
             '#'
         );
     } else {
         $menu_items[] = Display::url(
-            Display::return_icon('teacher.png', get_lang('Trainers'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Trainers')),
             'session_admin_teachers.php'
         );
     }
 
     $menu_items[] = Display::url(
-        Display::return_icon('works.png', get_lang('Assignments report'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ObjectIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Assignments report')),
         api_get_path(WEB_CODE_PATH).'my_space/works_in_session_report.php'
     );
     $menu_items[] = Display::url(
-        Display::return_icon('clock.png', get_lang('Teachers time report by session'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ObjectIcon::TIME_REPORT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Teachers time report by session')),
         api_get_path(WEB_CODE_PATH).'admin/teachers_time_by_session_report.php'
     );
 
     if (!api_is_session_admin()) {
         $menu_items[] = Display::url(
-            Display::return_icon('1day.png', get_lang('Course sessionsPlanCalendar'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ObjectIcon::SURVEY_DOODLE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Course sessionsPlanCalendar')),
             api_get_path(WEB_CODE_PATH)."calendar/planification.php"
         );
     }
 
     if (api_is_drh()) {
         $menu_items[] = Display::url(
-            Display::return_icon('session.png', get_lang('SessionFilterReport'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('SessionFilterReport')),
             api_get_path(WEB_CODE_PATH).'my_space/session_filter.php'
         );
     }
@@ -364,12 +368,12 @@ if (api_is_platform_admin(true, true)) {
     $actionsRight = '';
     if (count($a_sessions) > 0) {
         $actionsRight = Display::url(
-            Display::return_icon('printer.png', get_lang('Print'), [], 32),
+            Display::getMdiIcon(ActionIcon::PRINT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Print')),
             'javascript: void(0);',
             ['onclick' => 'javascript: window.print();']
         );
         $actionsRight .= Display::url(
-            Display::return_icon('export_csv.png', get_lang('CSV export'), [], 32),
+            Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')),
             api_get_self().'?export=csv'
         );
     }
@@ -380,7 +384,7 @@ if (api_is_platform_admin(true, true)) {
     echo Display::page_header(get_lang('Your sessions'));
 } elseif (api_is_teacher()) {
     $actionsRight = Display::url(
-        Display::return_icon('clock.png', get_lang('Teachers time report by session'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ObjectIcon::TIME_REPORT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Teachers time report by session')),
         api_get_path(WEB_CODE_PATH).'admin/teachers_time_by_session_report.php'
     );
 

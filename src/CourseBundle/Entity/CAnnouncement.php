@@ -8,65 +8,45 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(name="c_announcement")
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CAnnouncementRepository")
- */
-class CAnnouncement extends AbstractResource implements ResourceInterface
+#[ORM\Table(name: 'c_announcement')]
+#[ORM\Entity(repositoryClass: CAnnouncementRepository::class)]
+class CAnnouncement extends AbstractResource implements ResourceInterface, Stringable
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    protected int $iid;
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    protected ?int $iid = null;
 
-    /**
-     * @ORM\Column(name="title", type="text", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="content", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'content', type: 'text', nullable: true)]
     protected ?string $content;
 
-    /**
-     * @ORM\Column(name="end_date", type="date", nullable=true)
-     */
+    #[ORM\Column(name: 'end_date', type: 'date', nullable: true)]
     protected ?DateTime $endDate = null;
 
-    /**
-     * @ORM\Column(name="display_order", type="integer", nullable=false)
-     */
-    protected int $displayOrder;
-
-    /**
-     * @ORM\Column(name="email_sent", type="boolean", nullable=true)
-     */
+    #[ORM\Column(name: 'email_sent', type: 'boolean', nullable: true)]
     protected ?bool $emailSent = null;
 
     /**
      * @var Collection<int, CAnnouncementAttachment>
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CourseBundle\Entity\CAnnouncementAttachment",
-     *     mappedBy="announcement", cascade={"persist", "remove"}, orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: CAnnouncementAttachment::class, mappedBy: 'announcement', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $attachments;
 
     public function __construct()
     {
         $this->content = '';
-        $this->displayOrder = 1;
         $this->attachments = new ArrayCollection();
     }
 
@@ -123,23 +103,6 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
         return $this->endDate;
     }
 
-    public function setDisplayOrder(int $displayOrder): self
-    {
-        $this->displayOrder = $displayOrder;
-
-        return $this;
-    }
-
-    /**
-     * Get displayOrder.
-     *
-     * @return int
-     */
-    public function getDisplayOrder()
-    {
-        return $this->displayOrder;
-    }
-
     public function setEmailSent(bool $emailSent): self
     {
         $this->emailSent = $emailSent;
@@ -157,7 +120,7 @@ class CAnnouncement extends AbstractResource implements ResourceInterface
         return $this->emailSent;
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }

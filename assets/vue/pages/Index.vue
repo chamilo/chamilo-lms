@@ -1,4 +1,5 @@
 <template>
+  <!-- Public homepage (no login required) -->
   <div class="container mx-auto flex gap-8">
     <Login class="md:w-4/12 lg:order-1" />
     <div
@@ -7,33 +8,35 @@
     >
       <PageCardList
         :pages="pages"
+        class="grid gap-4 grid-cols-1"
       />
     </div>
   </div>
 </template>
 
 <script setup>
-import {ref} from 'vue'
-import {useStore} from "vuex";
-import {useI18n} from "vue-i18n";
-import Login from '../components/Login';
-import PageCardList from "../components/page/PageCardList";
+import { ref } from "vue"
+import { useStore } from "vuex"
+import { useI18n } from "vue-i18n"
+import Login from "../components/Login"
+import PageCardList from "../components/page/PageCardList"
 
-const store = useStore();
-const {locale} = useI18n();
+const store = useStore()
+const { locale } = useI18n()
 
-const pages = ref([]);
+const pages = ref([])
 
-store
-  .dispatch(
-    'page/findAll',
-    {
-      'category.title': 'index',
-      'enabled': '1',
-      'locale': locale.value
-    }
-  )
-  .then(
-    response => pages.value = response
-  );
+const findAllPages = () => {
+  pages.value = []
+
+  store
+    .dispatch("page/findAll", {
+      "category.title": "index",
+      enabled: "1",
+      locale: locale.value,
+    })
+    .then((response) => (pages.value = response))
+}
+
+findAllPages()
 </script>

@@ -1,8 +1,9 @@
-import { computed, inject } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import { isEmpty } from 'lodash';
 import { useI18n } from 'vue-i18n';
+import { useToast } from 'primevue/usetoast';
 
 export function useDatatableUpdate (servicePrefix) {
     const moduleName = servicePrefix.toLowerCase();
@@ -11,9 +12,11 @@ export function useDatatableUpdate (servicePrefix) {
     const route = useRoute();
     const { t } = useI18n();
 
-    const flashMessageList = inject('flashMessageList');
+    const toast = useToast();
 
     const isLoading = computed(() => store.getters[`${moduleName}/isLoading`]);
+
+    const item = ref({});
 
     async function retrieve () {
         let id = route.params.id;
@@ -43,26 +46,51 @@ export function useDatatableUpdate (servicePrefix) {
         return store.getters[`${moduleName}/find`](id);
     });
 
+    watch(
+        retrievedItem,
+        (newValue) => {
+            item.value = newValue;
+        }
+    );
+
     async function updateItem (item) {
         await store.dispatch(`${moduleName}/update`, item);
     }
 
     const updated = computed(() => store.state[moduleName].updated);
 
+    watch(
+        updated,
+        (newValue) => {
+            if (!newValue) {
+                return;
+            }
+
+            onUpdated(item);
+        }
+    );
+
+    async function updateItemWithFormData (item) {
+        await store.dispatch(`${moduleName}/updateWithFormData`, item);
+    }
+
     function onUpdated (item) {
-        flashMessageList.value.push({
+        toast.add({
             severity: 'success',
             detail: t('{resource} updated', {
                 'resource': item['@id'],
             }),
+            life: 3500,
         });
     }
 
     return {
         isLoading,
+        item,
         retrieve,
         retrievedItem,
         updateItem,
+        updateItemWithFormData,
         updated,
         onUpdated,
     };

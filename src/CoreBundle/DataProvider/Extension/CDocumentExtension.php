@@ -6,10 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\DataProvider\Extension;
 
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
-//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
-use Chamilo\CoreBundle\Entity\ResourceLink;
+use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
+// use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
+use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Metadata\Operation;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -19,19 +19,22 @@ use Symfony\Component\Security\Core\Security;
 /**
  * Extension is called when loading api/documents.json.
  */
-final class CDocumentExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
+final class CDocumentExtension implements QueryCollectionExtensionInterface // , QueryItemExtensionInterface
 {
-    private Security $security;
-    private RequestStack $requestStack;
+    use CourseLinkExtensionTrait;
 
-    public function __construct(Security $security, RequestStack $request)
-    {
-        $this->security = $security;
-        $this->requestStack = $request;
-    }
+    public function __construct(
+        private readonly Security $security,
+        private readonly RequestStack $requestStack
+    ) {}
 
-    public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null): void
-    {
+    public function applyToCollection(
+        QueryBuilder $queryBuilder,
+        QueryNameGeneratorInterface $queryNameGenerator,
+        string $resourceClass,
+        Operation $operation = null,
+        array $context = []
+    ): void {
         $this->addWhere($queryBuilder, $resourceClass);
     }
 
@@ -59,9 +62,9 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface //, 
         // Listing documents must contain the resource node parent (resourceNode.parent) and the course (cid)
         // At least the cid so the CourseListener can be called.
         $resourceParentId = $request->query->get('resourceNode_parent');
-        $courseId = $request->query->get('cid');
-        $sessionId = $request->query->get('sid');
-        $groupId = $request->query->get('gid');
+        $courseId = $request->query->getInt('cid');
+        $sessionId = $request->query->getInt('sid');
+        $groupId = $request->query->getInt('gid');
 
         if (empty($resourceParentId)) {
             throw new AccessDeniedException('resourceNode.parent is required');
@@ -71,58 +74,12 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface //, 
             throw new AccessDeniedException('cid is required');
         }
 
-        $rootAlias = $queryBuilder->getRootAliases()[0];
-
-        $queryBuilder
-            ->innerJoin("$rootAlias.resourceNode", 'node')
-            ->innerJoin('node.resourceLinks', 'links')
-        ;
-
-        // Do not show deleted resources.
-        $queryBuilder
-            ->andWhere('links.visibility != :visibilityDeleted')
-            ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED)
-        ;
-
-        $allowDraft =
-            $this->security->isGranted('ROLE_ADMIN') ||
-            $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-        ;
-
-        if (!$allowDraft) {
-            $queryBuilder
-                ->andWhere('links.visibility != :visibilityDraft')
-                ->setParameter('visibilityDraft', ResourceLink::VISIBILITY_DRAFT)
-            ;
-        }
-
-        $queryBuilder
-            ->andWhere('links.course = :course')
-            ->setParameter('course', $courseId)
-        ;
-
-        if (empty($sessionId)) {
-            $queryBuilder->andWhere('links.session IS NULL');
-        } else {
-            $queryBuilder
-                ->andWhere('links.session = :session')
-                ->setParameter('session', $sessionId)
-            ;
-        }
-
-        if (empty($groupId)) {
-            $queryBuilder->andWhere('links.group IS NULL');
-        } else {
-            $queryBuilder
-                ->andWhere('links.group = :group')
-                ->setParameter('group', $groupId)
-            ;
-        }
+        $this->addCourseLinkWithVisibilityConditions($queryBuilder, true, $courseId, $sessionId, $groupId);
 
         /*$queryBuilder->
             andWhere('node.creator = :current_user')
         ;*/
-        //$queryBuilder->andWhere(sprintf('%s.node.creator = :current_user', $rootAlias));
-        //$queryBuilder->setParameter('current_user', $user->getId());
+        // $queryBuilder->andWhere(sprintf('%s.node.creator = :current_user', $rootAlias));
+        // $queryBuilder->setParameter('current_user', $user->getId());
     }
 }

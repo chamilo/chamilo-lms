@@ -4,40 +4,35 @@
 /**
  * Reporting page on the user's own progress.
  */
+
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-if (api_get_configuration_value('block_my_progress_page')) {
+if (('true' === api_get_setting('platform.block_my_progress_page'))) {
     api_not_allowed(true);
 }
 
+$httpRequest = HttpRequest::createFromGlobals();
+
 $this_section = SECTION_TRACKING;
 $nameTools = get_lang('Progress');
-
-$htmlHeadXtra[] = api_get_js('jquery.timelinr-0.9.54.js');
-$htmlHeadXtra[] = "<script>
-$(function() {
-    $().timelinr({
-        containerDiv: '#my_timeline',
-        autoPlayPause: 2000
-    })
-});
-</script>";
 
 $pluginCalendar = 'true' === api_get_plugin_setting('learning_calendar', 'enabled');
 
 if ($pluginCalendar) {
     $plugin = LearningCalendarPlugin::create();
-    $plugin->setJavaScript($htmlHeadXtra);
+    $plugin->setJavaScript();
 }
 
 $user_id = api_get_user_id();
 $courseUserList = CourseManager::get_courses_list_by_user_id($user_id);
 $dates = $issues = '';
-$sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : 0;
-$courseId = isset($_GET['cid']) ? (int) $_GET['cid'] : 0;
+$sessionId = $httpRequest->query->getInt('sid');
+$courseId = $httpRequest->query->get('cid');
 
 /*
 if (!empty($courseUserList)) {
@@ -101,8 +96,8 @@ if (!empty($dates)) {
 }
 */
 
-if (api_get_configuration_value('private_messages_about_user_visible_to_user')) {
-    $allowMessages = api_get_configuration_value('private_messages_about_user');
+if ('true' === api_get_setting('message.private_messages_about_user_visible_to_user')) {
+    $allowMessages = ('true' === api_get_setting('message.private_messages_about_user'));
     if ($allowMessages) {
         // Messages
         $content .= Display::page_subheader2(get_lang('Messages'));
@@ -115,7 +110,7 @@ if (empty($content)) {
     $message = Display::return_message(get_lang('No data available'), 'warning');
 }
 
-$show = api_get_configuration_value('allow_career_users');
+$show = ('true' === api_get_setting('profile.allow_career_users'));
 
 if ($show) {
     $careers = UserManager::getUserCareers($user_id);

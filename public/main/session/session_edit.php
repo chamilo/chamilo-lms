@@ -133,6 +133,22 @@ if ($form->validate()) {
     );
 
     if ($return) {
+        // Delete picture of session
+        $deletePicture = $_POST['delete_picture'] ?? '';
+        if ($deletePicture && $return) {
+            SessionManager::deleteAsset($return);
+        }
+
+        // Add image
+        $picture = $_FILES['picture'];
+        if (!empty($picture['name'])) {
+            SessionManager::updateSessionPicture(
+                $return,
+                $picture,
+                $params['picture_crop_result']
+            );
+        }
+
         Display::addFlash(Display::return_message(get_lang('Update successful')));
         header('Location: resume_session.php?id_session='.$return);
         exit();

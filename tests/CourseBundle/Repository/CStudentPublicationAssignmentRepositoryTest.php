@@ -38,7 +38,7 @@ class CStudentPublicationAssignmentRepositoryTest extends AbstractApiTest
         $em->persist($publication);
 
         $assignment = (new CStudentPublicationAssignment())
-            ->setAddToCalendar(0)
+            ->setEventCalendarId(0)
             ->setEnableQualification(true)
             ->setEndsOn(new DateTime())
             ->setExpiresOn(new DateTime())

@@ -8,7 +8,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 interface EntityAccessUrlInterface
 {
-    public function setUrl(AccessUrl $url);
+    public function setUrl(?AccessUrl $url): self;
 
-    public function getUrl(): AccessUrl;
+    public function getUrl(): ?AccessUrl;
 }

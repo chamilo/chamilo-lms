@@ -6,122 +6,110 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Serializer\Filter\PropertyFilter;
+use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_ADMIN')"},
- *     normalizationContext={"groups"={"course_category:read", "course:read"}, "swagger_definition_name"="Read"},
- *     denormalizationContext={"groups"={"course_category:write", "course:write"}},
- * )
- * @ApiFilter(SearchFilter::class, properties={"name":"partial", "code":"partial"})
- * @ApiFilter(PropertyFilter::class)
- * @ApiFilter(OrderFilter::class, properties={"name", "code"})
- * @ORM\Table(
- *     name="course_category",
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="code", columns={"code"})
- *     },
- *     indexes={
- *         @ORM\Index(name="parent_id", columns={"parent_id"}),
- *         @ORM\Index(name="tree_pos", columns={"tree_pos"})
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\CourseCategoryRepository")
- */
-class CourseCategory
+#[ApiResource(
+    normalizationContext: [
+        'groups' => ['course_category:read', 'course:read'],
+        'swagger_definition_name' => 'Read',
+    ],
+    denormalizationContext: [
+        'groups' => ['course_category:write', 'course:write'],
+    ],
+    security: "is_granted('ROLE_ADMIN')"
+)]
+#[ORM\Table(name: 'course_category')]
+#[ORM\Index(columns: ['parent_id'], name: 'parent_id')]
+#[ORM\Index(columns: ['tree_pos'], name: 'tree_pos')]
+#[ORM\UniqueConstraint(name: 'code', columns: ['code'])]
+#[ORM\Entity(repositoryClass: CourseCategoryRepository::class)]
+#[ApiFilter(filterClass: SearchFilter::class, properties: ['name' => 'partial', 'code' => 'partial'])]
+#[ApiFilter(filterClass: PropertyFilter::class)]
+#[ApiFilter(filterClass: OrderFilter::class, properties: ['name', 'code'])]
+#[ApiResource(
+    uriTemplate: '/courses/{id}/categories.{_format}',
+    operations: [
+        new GetCollection(),
+    ],
+    uriVariables: [
+        'id' => new Link(
+            fromClass: Course::class,
+            identifiers: ['id']
+        ),
+    ],
+    status: 200,
+    normalizationContext: [
+        'groups' => ['course_category:read', 'course:read'],
+    ],
+)]
+class CourseCategory implements Stringable
 {
-    /**
-     * @Groups({"course_category:read", "course:read"})
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[Groups(['course_category:read', 'course:read'])]
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", mappedBy="parent")
-     *
-     * @var Collection|CourseCategory[]
+     * @var Collection<int, CourseCategory>
      */
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     protected Collection $children;
-
-    /**
-     * @Groups({"course_category:read", "course_category:write", "course:read"})
-     * @ORM\Column(name="name", type="text", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[Groups(['course_category:read', 'course_category:write', 'course:read', 'session:read'])]
+    #[ORM\Column(name: 'name', type: 'text', nullable: false)]
     protected string $name;
-
-    /**
-     * @Groups({"course_category:read", "course_category:write", "course:read"})
-     * @ORM\Column(name="code", type="string", length=40, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[Groups(['course_category:read', 'course_category:write', 'course:read'])]
+    #[ORM\Column(name: 'code', type: 'string', length: 40, nullable: false)]
     protected string $code;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?CourseCategory $parent = null;
-
-    /**
-     * @ORM\Column(name="tree_pos", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'tree_pos', type: 'integer', nullable: true)]
     protected ?int $treePos = null;
-
-    /**
-     * @ORM\Column(name="children_count", type="smallint", nullable=true)
-     */
+    #[ORM\Column(name: 'children_count', type: 'smallint', nullable: true)]
     protected ?int $childrenCount;
-
-    /**
-     * @ORM\Column(name="auth_course_child", type="string", length=40, nullable=true)
-     */
+    #[ORM\Column(name: 'auth_course_child', type: 'string', length: 40, nullable: true)]
     protected ?string $authCourseChild = null;
-
-    /**
-     * @ORM\Column(name="auth_cat_child", type="string", length=40, nullable=true)
-     */
+    #[ORM\Column(name: 'auth_cat_child', type: 'string', length: 40, nullable: true)]
     protected ?string $authCatChild = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Asset", cascade={"remove"} )
-     * @ORM\JoinColumn(name="asset_id", referencedColumnName="id", onDelete="SET NULL")
-     */
+    #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['remove'])]
+    #[ORM\JoinColumn(name: 'asset_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?Asset $asset = null;
-
-    /**
-     * @Groups({"course_category:read", "course_category:write"})
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[Groups(['course_category:read', 'course_category:write'])]
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelCourseCategory",
-     *     mappedBy="courseCategory", cascade={"persist"}, orphanRemoval=true
-     * )
-     *
-     * @var AccessUrlRelCourseCategory[]|Collection
+     * @var Collection<int, AccessUrlRelCourseCategory>
      */
+    #[ORM\OneToMany(
+        mappedBy: 'courseCategory',
+        targetEntity: AccessUrlRelCourseCategory::class,
+        cascade: ['persist'],
+        orphanRemoval: true
+    )]
     protected Collection $urls;
 
     /**
-     * @var Course[]|Collection
-     * @ORM\ManyToMany(targetEntity="Chamilo\CoreBundle\Entity\Course", mappedBy="categories")
+     * @var Collection<int, Course>
      */
+    #[ORM\ManyToMany(targetEntity: Course::class, mappedBy: 'categories')]
     protected Collection $courses;
 
     public function __construct()
@@ -164,9 +152,9 @@ class CourseCategory
     }
 
     /**
-     * @return Collection
+     * @return Collection<int, CourseCategory>
      */
-    public function getChildren()
+    public function getChildren(): Collection
     {
         return $this->children;
     }
@@ -179,21 +167,14 @@ class CourseCategory
         return $this;
     }
 
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
     public function getName(): string
     {
         return $this->name;
     }
 
-    public function setCode(string $code): self
+    public function setName(string $name): self
     {
-        $this->code = $code;
+        $this->name = $name;
 
         return $this;
     }
@@ -208,9 +189,9 @@ class CourseCategory
         return $this->code;
     }
 
-    public function setTreePos(int $treePos): self
+    public function setCode(string $code): self
     {
-        $this->treePos = $treePos;
+        $this->code = $code;
 
         return $this;
     }
@@ -225,9 +206,9 @@ class CourseCategory
         return $this->treePos;
     }
 
-    public function setChildrenCount(int $childrenCount): self
+    public function setTreePos(int $treePos): self
     {
-        $this->childrenCount = $childrenCount;
+        $this->treePos = $treePos;
 
         return $this;
     }
@@ -242,9 +223,9 @@ class CourseCategory
         return $this->childrenCount;
     }
 
-    public function setAuthCourseChild(string $authCourseChild): self
+    public function setChildrenCount(int $childrenCount): self
     {
-        $this->authCourseChild = $authCourseChild;
+        $this->childrenCount = $childrenCount;
 
         return $this;
     }
@@ -254,9 +235,9 @@ class CourseCategory
         return $this->authCourseChild;
     }
 
-    public function setAuthCatChild(string $authCatChild): self
+    public function setAuthCourseChild(string $authCourseChild): self
     {
-        $this->authCatChild = $authCatChild;
+        $this->authCourseChild = $authCourseChild;
 
         return $this;
     }
@@ -264,6 +245,13 @@ class CourseCategory
     public function getAuthCatChild(): ?string
     {
         return $this->authCatChild;
+    }
+
+    public function setAuthCatChild(string $authCatChild): self
+    {
+        $this->authCatChild = $authCatChild;
+
+        return $this;
     }
 
     public function getDescription(): ?string
@@ -283,16 +271,16 @@ class CourseCategory
         return $this->asset;
     }
 
-    public function hasAsset(): bool
-    {
-        return null !== $this->asset;
-    }
-
     public function setAsset(?Asset $asset): self
     {
         $this->asset = $asset;
 
         return $this;
+    }
+
+    public function hasAsset(): bool
+    {
+        return null !== $this->asset;
     }
 
     public function getCourses(): Collection
@@ -312,10 +300,7 @@ class CourseCategory
         $this->courses[] = $course;
     }
 
-    /**
-     * @return AccessUrlRelCourseCategory[]|Collection
-     */
-    public function getUrls()
+    public function getUrls(): array|Collection
     {
         return $this->urls;
     }
@@ -323,7 +308,7 @@ class CourseCategory
     /**
      * @param AccessUrlRelCourseCategory[]|Collection $urls
      */
-    public function setUrls($urls): self
+    public function setUrls(array|Collection $urls): self
     {
         $this->urls = $urls;
 
@@ -333,10 +318,7 @@ class CourseCategory
     public function addUrl(AccessUrl $accessUrl): self
     {
         if (!$this->hasUrl($accessUrl)) {
-            $item = (new AccessUrlRelCourseCategory())
-                ->setCourseCategory($this)
-                ->setUrl($accessUrl)
-            ;
+            $item = (new AccessUrlRelCourseCategory())->setCourseCategory($this)->setUrl($accessUrl);
             $this->urls->add($item);
         }
 
@@ -346,9 +328,7 @@ class CourseCategory
     public function hasUrl(AccessUrl $accessUrl): bool
     {
         if (0 !== $this->urls->count()) {
-            $criteria = Criteria::create()->where(
-                Criteria::expr()->eq('url', $accessUrl)
-            );
+            $criteria = Criteria::create()->where(Criteria::expr()->eq('url', $accessUrl));
             $relation = $this->urls->matching($criteria);
 
             return $relation->count() > 0;

@@ -1,6 +1,8 @@
 <?php
 /* See license terms in /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -109,7 +111,7 @@ $(function() {
 <?php
 
 $actions = '<a href="exercise_report.php?exerciseId='.(int) ($_GET['exerciseId']).'&'.api_get_cidreq().'">'.
-    Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go back to the questions list')).'</a>';
 $actions = Display::toolbarAction('exercise_report', [$actions]);
 
 echo Display::grid_html('live_stats');

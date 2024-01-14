@@ -1,62 +1,45 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository;
 use Cocur\Slugify\Slugify;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
+use Symfony\Component\Uid\Uuid;
 
-/**
- * CStudentPublicationComment.
- *
- * @ORM\Table(
- *     name="c_student_publication_comment",
- *     indexes={
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository")
- */
-class CStudentPublicationComment extends AbstractResource implements ResourceInterface
+#[ORM\Table(name: 'c_student_publication_comment')]
+#[ORM\Entity(repositoryClass: CStudentPublicationCommentRepository::class)]
+class CStudentPublicationComment extends AbstractResource implements ResourceInterface, Stringable
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    protected int $iid;
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    protected ?int $iid = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CStudentPublication", inversedBy="comments")
-     * @ORM\JoinColumn(name="work_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: CStudentPublication::class, inversedBy: 'comments')]
+    #[ORM\JoinColumn(name: 'work_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CStudentPublication $publication;
 
-    /**
-     * @ORM\Column(name="comment", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected ?string $comment = null;
 
-    /**
-     * @ORM\Column(name="file", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'file', type: 'string', length: 255, nullable: true)]
     protected ?string $file = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    /**
-     * @ORM\Column(name="sent_at", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'sent_at', type: 'datetime', nullable: false)]
     protected DateTime $sentAt;
 
     public function __construct()
@@ -69,26 +52,14 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
         return (string) $this->getIid();
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }
 
-    public function setComment(string $comment): self
+    public function getFile(): ?string
     {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get comment.
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
+        return $this->file;
     }
 
     public function setFile(string $file): self
@@ -96,16 +67,6 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
         $this->file = $file;
 
         return $this;
-    }
-
-    /**
-     * Get file.
-     *
-     * @return string
-     */
-    public function getFile()
-    {
-        return $this->file;
     }
 
     public function getUser(): User
@@ -120,16 +81,16 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
         return $this;
     }
 
+    public function getSentAt(): DateTime
+    {
+        return $this->sentAt;
+    }
+
     public function setSentAt(DateTime $sentAt): self
     {
         $this->sentAt = $sentAt;
 
         return $this;
-    }
-
-    public function getSentAt(): DateTime
-    {
-        return $this->sentAt;
     }
 
     public function getPublication(): CStudentPublication
@@ -144,7 +105,7 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
         return $this;
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }
@@ -152,10 +113,22 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
     public function getResourceName(): string
     {
         $text = strip_tags($this->getComment());
-        $slugify = new Slugify();
-        $text = $slugify->slugify($text);
 
-        return (string) substr($text, 0, 40);
+        $text = Slugify::create()->slugify($text);
+
+        return substr($text, 0, 40);
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(string $comment): self
+    {
+        $this->comment = $comment;
+
+        return $this;
     }
 
     public function setResourceName(string $name): self

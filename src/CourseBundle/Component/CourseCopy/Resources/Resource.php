@@ -162,20 +162,20 @@ class Resource
                 return TOOL_QUIZ;
             case RESOURCE_TEST_CATEGORY:
                 return TOOL_TEST_CATEGORY;
-            //case RESOURCE_QUIZQUESTION: //no corresponding global constant
-            //	return TOOL_QUIZ_QUESTION;
-            //case RESOURCE_TOOL_INTRO:
-            //	return TOOL_INTRO;
-            //case RESOURCE_LINKCATEGORY:
-            //	return TOOL_LINK_CATEGORY;
-            //case RESOURCE_SCORM:
-            //	return TOOL_SCORM_DOCUMENT;
+                //case RESOURCE_QUIZQUESTION: //no corresponding global constant
+                //	return TOOL_QUIZ_QUESTION;
+                //case RESOURCE_TOOL_INTRO:
+                //	return TOOL_INTRO;
+                //case RESOURCE_LINKCATEGORY:
+                //	return TOOL_LINK_CATEGORY;
+                //case RESOURCE_SCORM:
+                //	return TOOL_SCORM_DOCUMENT;
             case RESOURCE_SURVEY:
                 return TOOL_SURVEY;
-            //case RESOURCE_SURVEYQUESTION:
-            //	return TOOL_SURVEY_QUESTION;
-            //case RESOURCE_SURVEYINVITATION:
-            //	return TOOL_SURVEY_INVITATION;
+                //case RESOURCE_SURVEYQUESTION:
+                //	return TOOL_SURVEY_QUESTION;
+                //case RESOURCE_SURVEYINVITATION:
+                //	return TOOL_SURVEY_INVITATION;
             case RESOURCE_GLOSSARY:
                 return TOOL_GLOSSARY;
             case RESOURCE_WIKI:

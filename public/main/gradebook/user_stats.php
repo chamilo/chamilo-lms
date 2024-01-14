@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
@@ -105,11 +107,12 @@ if (!empty($categoryId)) {
         'name' => get_lang('List View'),
     ];
     $actions .= '<a href=gradebook_flatview.php?selectcat='.$categoryId.'&'.api_get_cidreq().'>'.
-        Display::return_icon(
-            'back.png',
-            get_lang('Back to').' '.get_lang('List View'),
-            '',
-            ICON_SIZE_MEDIUM
+        Display::getMdiIcon(
+            ActionIcon::BACK,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_MEDIUM,
+            get_lang('Back to').' '.get_lang('List View')
         ).
         '</a>';
 }
@@ -120,11 +123,11 @@ if (!empty($evaluationId)) {
         'name' => get_lang('Assessment details'),
     ];
     $actions .= '<a href="gradebook_view_result.php?selecteval='.$evaluationId.'&'.api_get_cidreq().'">
-	'.Display::return_icon('back.png', get_lang('Back toScore'), '', ICON_SIZE_MEDIUM).'</a>';
+	'.Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back toScore')).'</a>';
 }
 
 $actions .= '<a href="'.api_get_self().'?exportpdf=&userid='.$userId.'&selectcat='.$category[0]->get_id().'&'.api_get_cidreq().'" target="_blank">
-'.Display::return_icon('pdf.png', get_lang('Export to PDF'), '', ICON_SIZE_MEDIUM).'</a>';
+'.Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')).'</a>';
 
 $actions .= '</div>';
 

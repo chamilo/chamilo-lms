@@ -9,11 +9,8 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use CourseManager;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\EntityManagerInterface;
 use SessionManager;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -29,21 +26,10 @@ class SessionVoter extends Voter
     public const EDIT = 'EDIT';
     public const DELETE = 'DELETE';
 
-    private EntityManagerInterface $entityManager;
-    private Security $security;
-    private SettingsManager $settingsManager;
-
     public function __construct(
-        EntityManagerInterface $entityManager,
-        //CourseRepository $courseManager,
-        Security $security,
-        SettingsManager $settingsManager
-    ) {
-        $this->entityManager = $entityManager;
-        //$this->courseManager = $courseManager;
-        $this->security = $security;
-        $this->settingsManager = $settingsManager;
-    }
+        private readonly Security $security,
+        private readonly SettingsManager $settingsManager
+    ) {}
 
     protected function supports(string $attribute, $subject): bool
     {
@@ -93,7 +79,7 @@ class SessionVoter extends Voter
                 $userIsGeneralCoach = $session->hasUserAsGeneralCoach($user);
                 if (null === $currentCourse) {
                     $userIsStudent = $session->getSessionRelCourseByUser($user, Session::STUDENT)->count() > 0;
-                    $userIsCourseCoach = false;
+                    $userIsCourseCoach = $session->hasCoachInCourseList($user); // The current course will be checked in CourseVoter.
                 } else {
                     $userIsCourseCoach = $session->hasCourseCoachInCourse($user, $currentCourse);
                     $userIsStudent = $session->hasUserInCourse($user, $currentCourse, Session::STUDENT);
@@ -143,6 +129,7 @@ class SessionVoter extends Voter
                 }
 
                 return false;
+
             case self::EDIT:
             case self::DELETE:
                 $canEdit = $this->canEditSession($user, $session, false);
@@ -236,16 +223,16 @@ class SessionVoter extends Voter
             return true;
         }
 
-        if ($this->security->isGranted('ROLE_SESSION_MANAGER') &&
-            'true' !== $this->settingsManager->getSetting('session.allow_session_admins_to_manage_all_sessions') &&
-            !$session->hasUserAsSessionAdmin($user)
+        if ($this->security->isGranted('ROLE_SESSION_MANAGER')
+            && 'true' !== $this->settingsManager->getSetting('session.allow_session_admins_to_manage_all_sessions')
+            && !$session->hasUserAsSessionAdmin($user)
         ) {
             return false;
         }
 
-        if ($this->security->isGranted('ROLE_ADMIN') &&
-            'true' === $this->settingsManager->getSetting('session.allow_teachers_to_create_sessions') &&
-            !$session->hasUserAsGeneralCoach($user)
+        if ($this->security->isGranted('ROLE_TEACHER')
+            && 'true' === $this->settingsManager->getSetting('session.allow_teachers_to_create_sessions')
+            && !$session->hasUserAsGeneralCoach($user)
         ) {
             return false;
         }

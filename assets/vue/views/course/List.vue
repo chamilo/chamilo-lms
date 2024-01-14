@@ -2,17 +2,26 @@
   <div class="course-list">
     <Toolbar :handle-add="addHandler" />
 
-    <v-container grid-list-xl fluid>
-      <v-layout row wrap>
-<!--        <v-flex sm12>-->
-<!--          <h1>Course List</h1>-->
-<!--        </v-flex>-->
+    <v-container
+      fluid
+      grid-list-xl
+    >
+      <v-layout
+        row
+        wrap
+      >
+        <!--        <v-flex sm12>-->
+        <!--          <h1>Course List</h1>-->
+        <!--        </v-flex>-->
         <v-flex lg12>
-          <DataFilter :handle-filter="onSendFilter" :handle-reset="resetFilter">
+          <DataFilter
+            :handle-filter="onSendFilter"
+            :handle-reset="resetFilter"
+          >
             <CourseFilterForm
               ref="filterForm"
-              :values="filters"
               slot="filter"
+              :values="filters"
             />
           </DataFilter>
 
@@ -32,20 +41,26 @@
             show-select
             @update:options="onUpdateOptions"
           >
-            <template slot="item.visibility" slot-scope="{ item }">
-              {{ $n(item['visibility']) }}
+            <template
+              slot="item.visibility"
+              slot-scope="{ item }"
+            >
+              {{ $n(item["visibility"]) }}
             </template>
 
-            <template slot="item.expirationDate" slot-scope="{ item }">
-              {{ formatDateTime(item['expirationDate'], 'long') }}
+            <template
+              slot="item.expirationDate"
+              slot-scope="{ item }"
+            >
+              {{ formatDateTime(item["expirationDate"], "long") }}
             </template>
 
             <ActionCell
               slot="item.action"
               slot-scope="props"
-              :handle-show="() => showHandler(props.item)"
-              :handle-edit="() => editHandler(props.item)"
               :handle-delete="() => deleteHandler(props.item)"
+              :handle-edit="() => editHandler(props.item)"
+              :handle-show="() => showHandler(props.item)"
             ></ActionCell>
           </v-data-table>
         </v-flex>
@@ -55,58 +70,58 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import { mapFields } from 'vuex-map-fields';
-import ListMixin from '../../mixins/ListMixin';
-import ActionCell from '../../components/ActionCell.vue';
-import CourseFilterForm from '../../components/course/Filter.vue';
-import DataFilter from '../../components/DataFilter.vue';
-import Toolbar from '../../components/Toolbar.vue';
+import { mapActions, mapGetters } from "vuex"
+import { mapFields } from "vuex-map-fields"
+import ListMixin from "../../mixins/ListMixin"
+import ActionCell from "../../components/ActionCell.vue"
+import CourseFilterForm from "../../components/course/Filter.vue"
+import DataFilter from "../../components/DataFilter.vue"
+import Toolbar from "../../components/Toolbar.vue"
 
 export default {
-  name: 'CourseList',
-  servicePrefix: 'Course',
+  name: "CourseList",
+  servicePrefix: "Course",
   mixins: [ListMixin],
   components: {
     Toolbar,
     ActionCell,
     CourseFilterForm,
-    DataFilter
+    DataFilter,
   },
   data() {
     return {
       headers: [
-        { text: 'title', value: 'title' },
-        { text: 'code', value: 'code' },
-        { text: 'courseLanguage', value: 'Language' },
-        { text: 'visibility', value: 'visibility' },
+        { text: "title", value: "title" },
+        { text: "code", value: "code" },
+        { text: "courseLanguage", value: "Language" },
+        { text: "visibility", value: "visibility" },
         {
-          text: 'Actions',
-          value: 'action',
-          sortable: false
-        }
+          text: "Actions",
+          value: "action",
+          sortable: false,
+        },
       ],
-      selected: []
-    };
+      selected: [],
+    }
   },
   computed: {
-    ...mapGetters('course', {
-      items: 'list'
+    ...mapGetters("course", {
+      items: "list",
     }),
-    ...mapFields('course', {
-      deletedItem: 'deleted',
-      error: 'error',
-      isLoading: 'isLoading',
-      resetList: 'resetList',
-      totalItems: 'totalItems',
-      view: 'view'
-    })
+    ...mapFields("course", {
+      deletedItem: "deleted",
+      error: "error",
+      isLoading: "isLoading",
+      resetList: "resetList",
+      totalItems: "totalItems",
+      view: "view",
+    }),
   },
   methods: {
-    ...mapActions('course', {
-      getPage: 'fetchAll',
-      deleteItem: 'del'
-    })
-  }
-};
+    ...mapActions("course", {
+      getPage: "fetchAll",
+      deleteItem: "del",
+    }),
+  },
+}
 </script>

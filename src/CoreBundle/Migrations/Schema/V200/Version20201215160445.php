@@ -37,6 +37,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
         $em = $doctrine->getManager();
+
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
@@ -56,6 +57,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
         $rootPath = $kernel->getProjectDir();
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();
@@ -70,6 +72,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
+
                 /** @var CForumCategory $resource */
                 $resource = $forumCategoryRepo->find($id);
                 if ($resource->hasResourceNode()) {
@@ -104,6 +107,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
             $admin = $this->getAdmin();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
+
                 /** @var CForum $resource */
                 $resource = $forumRepo->find($id);
                 if ($resource->hasResourceNode()) {
@@ -139,6 +143,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
                 $forumImage = $itemData['forum_image'];
                 if (!empty($forumImage)) {
                     $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/upload/forum/images/'.$forumImage;
+                    error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                     if ($this->fileExists($filePath)) {
                         $this->addLegacyFileToResource($filePath, $forumRepo, $resource, $id, $forumImage);
                     }
@@ -162,6 +167,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
 
             foreach ($items as $itemData) {
                 $id = (int) $itemData['iid'];
+
                 /** @var CForumThread $resource */
                 $resource = $forumThreadRepo->find($id);
                 if ($resource->hasResourceNode()) {
@@ -209,6 +215,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
             $admin = $this->getAdmin();
             foreach ($items as $itemData) {
                 $id = (int) $itemData['iid'];
+
                 /** @var CForumPost $resource */
                 $resource = $forumPostRepo->find($id);
 
@@ -284,6 +291,7 @@ final class Version20201215160445 extends AbstractMigrationChamilo
 
                 if (!empty($fileName) && !empty($path)) {
                     $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/upload/forum/'.$path;
+                    error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                     if ($this->fileExists($filePath)) {
                         $this->addLegacyFileToResource($filePath, $forumPostRepo, $post, $id, $fileName);
                         $em->persist($post);

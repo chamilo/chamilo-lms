@@ -598,7 +598,7 @@ class CourseSelectForm
                         break;
                     case RESOURCE_FORUMTOPIC:
                     case RESOURCE_FORUMPOST:
-                       //Add post from topic
+                        //Add post from topic
                         if (RESOURCE_FORUMTOPIC == $type) {
                             $posts_to_save = [];
                             $posts = $course->resources[RESOURCE_FORUMPOST];

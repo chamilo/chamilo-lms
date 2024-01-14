@@ -2,6 +2,8 @@
 
 /* For licensing terms, see license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
@@ -36,27 +38,17 @@ class GradebookTable extends SortableTable
 
     /**
      * GradebookTable constructor.
-     *
-     * @param Category $currentcat
-     * @param array    $cats
-     * @param array    $evals
-     * @param array    $links
-     * @param null     $addparams
-     * @param bool     $exportToPdf
-     * @param null     $showTeacherView
-     * @param int      $userId
-     * @param array    $studentList
      */
     public function __construct(
-        $currentcat,
-        $cats = [],
-        $evals = [],
-        $links = [],
-        $addparams = null,
-        $exportToPdf = false,
-        $showTeacherView = null,
-        $userId = null,
-        $studentList = [],
+        Category $currentcat,
+        array $cats = [],
+        array $evals = [],
+        array $links = [],
+        array $addparams = [],
+        bool $exportToPdf = false,
+        ?bool $showTeacherView = null,
+        ?int $userId = null,
+        array $studentList = [],
         array $loadStats = []
     ) {
         $this->teacherView = is_null($showTeacherView) ? api_is_allowed_to_edit(null, true) : $showTeacherView;
@@ -81,13 +73,13 @@ class GradebookTable extends SortableTable
         $this->datagen = new GradebookDataGenerator($cats, $evals, $links);
         $this->datagen->exportToPdf = $this->exportToPdf;
         $this->datagen->preLoadDataKey = $this->getPreloadDataKey();
-        $this->datagen->hidePercentage = api_get_configuration_value('hide_gradebook_percentage_user_result');
+        $this->datagen->hidePercentage = ('true' === api_get_setting('gradebook.hide_gradebook_percentage_user_result'));
 
         if (!empty($userId)) {
             $this->datagen->userId = $userId;
         }
 
-        if (isset($addparams)) {
+        if (!empty($addparams)) {
             $this->set_additional_parameters($addparams);
         }
 
@@ -105,7 +97,7 @@ class GradebookTable extends SortableTable
         }
 
         $model = ExerciseLib::getCourseScoreModel();
-        $settings = api_get_configuration_value('gradebook_pdf_export_settings');
+        $settings = api_get_setting('gradebook.gradebook_pdf_export_settings', true);
         $showWeight = true;
         if ($this->exportToPdf && isset($settings['hide_score_weight']) && $settings['hide_score_weight']) {
             $showWeight = false;
@@ -388,14 +380,12 @@ class GradebookTable extends SortableTable
         }
 
         $model = ExerciseLib::getCourseScoreModel();
-        $userExerciseScoreInCategory = api_get_configuration_value(
-            'gradebook_use_exercise_score_settings_in_categories'
-        );
-        $useExerciseScoreInTotal = api_get_configuration_value('gradebook_use_exercise_score_settings_in_total');
+        $userExerciseScoreInCategory = ('true' === api_get_setting('gradebook.gradebook_use_exercise_score_settings_in_categories'));
+        $useExerciseScoreInTotal = ('true' === api_get_setting('gradebook.gradebook_use_exercise_score_settings_in_total'));
         $course_code = api_get_course_id();
         $session_id = api_get_session_id();
         $defaultData = Session::read($this->getPreloadDataKey());
-        $settings = api_get_configuration_value('gradebook_pdf_export_settings');
+        $settings = api_get_setting('gradebook.gradebook_pdf_export_settings', true);
         $showWeight = true;
         if ($this->exportToPdf && isset($settings['hide_score_weight']) && $settings['hide_score_weight']) {
             $showWeight = false;
@@ -620,7 +610,7 @@ class GradebookTable extends SortableTable
                             }
 
                             // Type
-                            $row[] = $this->build_type_column($item, ['style' => 'padding-left:5px']);
+                            $row[] = $this->build_type_column($item, 'padding-left:5px');
                             // Name.
                             $row[] = $invisibility_span_open.'&nbsp;&nbsp;&nbsp; '.
                                 $this->build_name_link($item, $type, 4).$invisibility_span_close;
@@ -705,8 +695,11 @@ class GradebookTable extends SortableTable
                                         ]
                                     );
                                 } else {
-                                    $label = Display::return_icon(
-                                        'warning.png',
+                                    $label = Display::getMdiIcon(
+                                        StateIcon::WARNING,
+                                        'ch-tool-icon',
+                                        null,
+                                        ICON_SIZE_SMALL,
                                         sprintf(get_lang('The sum of all weights of activities must be %s'), $categoryWeight)
                                     );
                                     $total = Display::label($totalWeight.' / '.$categoryWeight, 'warning');
@@ -962,7 +955,7 @@ class GradebookTable extends SortableTable
                     $warning_message = sprintf(get_lang('The sum of all weights of activities must be %s'), $weight_category);
                     $modify_icons =
                         '<a href="gradebook_edit_cat.php?editcat='.$id_cat.'&cidReq='.$course_code.'&id_session='.api_get_session_id().'">'.
-                        Display::return_icon('edit.png', $warning_message, [], ICON_SIZE_SMALL).'</a>';
+                        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'), ['alt' => $warning_message]);
                     $warning_message .= $modify_icons;
                     echo Display::return_message($warning_message, 'warning', false);
                 }
@@ -1199,13 +1192,13 @@ class GradebookTable extends SortableTable
 
     /**
      * @param $item
-     * @param array $attributes
+     * @param string $style
      *
      * @return string
      */
-    private function build_type_column($item, $attributes = [])
+    private function build_type_column($item, $style = null)
     {
-        return GradebookUtils::build_type_icon_tag($item->get_icon_name(), $attributes);
+        return GradebookUtils::build_type_icon_tag($item->get_icon_name(), $style);
     }
 
     /**

@@ -5,6 +5,9 @@
 /**
  * @author Julio Montoya <gugli100@gmail.com>
  */
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -121,9 +124,7 @@ $social_right_content = '<h2>'.$group_info['name'].'</h2>';
 foreach ($users as $user) {
     switch ($user['relation_type']) {
         case GROUP_USER_PERMISSION_ADMIN:
-            $user['link'] = Display::return_icon(
-                'social_group_admin.png',
-                get_lang('Admin')
+            $user['link'] = Display::getMdiIcon(ObjectIcon::ADMIN_USER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Admin')
             );
             break;
         case GROUP_USER_PERMISSION_READER:
@@ -136,35 +137,25 @@ foreach ($users as $user) {
             )
             ) {
                 $user['link'] = '<a href="group_members.php?id='.$group_id.'&u='.$user['id'].'&action=delete">'.
-                    Display::return_icon(
-                        'delete.png',
-                        get_lang('Delete from group')
+                    Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete from group')
                     ).'</a>'.
                     '<a href="group_members.php?id='.$group_id.'&u='.$user['id'].'&action=set_moderator">'.
-                    Display::return_icon(
-                        'social_moderator_add.png',
-                        get_lang('Add as moderator')
+                    Display::getMdiIcon(ActionIcon::ADD_USER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add as moderator')
                     ).'</a>';
             }
             break;
         case GROUP_USER_PERMISSION_PENDING_INVITATION:
             $user['link'] = '<a href="group_members.php?id='.$group_id.'&u='.$user['id'].'&action=add">'.
-                Display::return_icon(
-                    'pending_invitation.png',
-                    get_lang('Pending invitation')
+                Display::getMdiIcon(ObjectIcon::PENDING_INVITATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Pending invitation')
                 ).'</a>';
             break;
         case GROUP_USER_PERMISSION_MODERATOR:
-            $user['link'] = Display::return_icon(
-                'social_group_moderator.png',
-                get_lang('Moderator')
+            $user['link'] = Display::getMdiIcon(ObjectIcon::MODERATOR_USER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Moderator')
             );
             //only group admin can manage moderators
             if (GROUP_USER_PERMISSION_ADMIN == $user_role) {
                 $user['link'] .= '<a href="group_members.php?id='.$group_id.'&u='.$user['id'].'&action=delete_moderator">'.
-                    Display::return_icon(
-                        'social_moderator_delete.png',
-                        get_lang('Remove moderator')
+                    Display::getMdiIcon('account-voice-off', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove moderator')
                     ).'</a>';
             }
             break;

@@ -7,19 +7,16 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity\Listener;
 
 use Chamilo\CoreBundle\Entity\Message;
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PostPersistEventArgs;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 class MessageListener
 {
-    private MessageBusInterface $bus;
+    public function __construct(
+        private MessageBusInterface $bus
+    ) {}
 
-    public function __construct(MessageBusInterface $bus)
-    {
-        $this->bus = $bus;
-    }
-
-    public function postPersist(Message $message, LifecycleEventArgs $args): void
+    public function postPersist(Message $message, PostPersistEventArgs $args): void
     {
         if ($message) {
             // Creates an outbox version, if message is sent in the inbox.

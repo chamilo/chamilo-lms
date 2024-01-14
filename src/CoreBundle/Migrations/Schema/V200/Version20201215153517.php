@@ -32,6 +32,7 @@ final class Version20201215153517 extends AbstractMigrationChamilo
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
         $em = $doctrine->getManager();
+
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
@@ -48,6 +49,7 @@ final class Version20201215153517 extends AbstractMigrationChamilo
         $admin = $this->getAdmin();
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();
@@ -59,6 +61,7 @@ final class Version20201215153517 extends AbstractMigrationChamilo
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
+
                 /** @var CQuiz $resource */
                 $resource = $announcementRepo->find($id);
                 if ($resource->hasResourceNode()) {
@@ -90,6 +93,7 @@ final class Version20201215153517 extends AbstractMigrationChamilo
                 $id = $itemData['iid'];
                 $path = $itemData['path'];
                 $fileName = $itemData['filename'];
+
                 /** @var CAnnouncementAttachment $resource */
                 $resource = $announcementAttachmentRepo->find($id);
                 if ($resource->hasResourceNode()) {
@@ -112,13 +116,11 @@ final class Version20201215153517 extends AbstractMigrationChamilo
                 $em->flush();
 
                 $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/upload/announcements/'.$path;
+                error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                 $this->addLegacyFileToResource($filePath, $announcementAttachmentRepo, $resource, $id, $fileName);
                 $em->persist($resource);
                 $em->flush();
             }
-
-            $em->flush();
-            $em->clear();
         }
     }
 }

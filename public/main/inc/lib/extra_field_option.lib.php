@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Handles the extra fields for various objects (users, sessions, courses).
@@ -683,7 +684,7 @@ class ExtraFieldOption extends Model
         echo '<div class="actions">';
         $field_id = isset($_REQUEST['field_id']) ? intval($_REQUEST['field_id']) : null;
         echo '<a href="'.api_get_self().'?action=add&type='.$this->type.'&field_id='.$field_id.'">'.
-                Display::return_icon('add_user_fields.png', get_lang('Add'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')).'</a>';
         echo '</div>';
         echo Display::grid_html('extra_field_options');
     }

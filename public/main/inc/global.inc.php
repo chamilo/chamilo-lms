@@ -20,13 +20,13 @@ if (isset($fileToLoad)) {
  */
 require_once __DIR__.'/../../../vendor/autoload.php';
 
-// Get settings from .env.local file created.
-$envFile = __DIR__.'/../../../.env.local';
+// Get settings from the created .env file.
+$envFile = __DIR__.'/../../../.env';
 if (file_exists($envFile)) {
     (new Dotenv())->load($envFile);
 } else {
     throw new \RuntimeException('APP_ENV environment variable is not defined.
-        You need to define environment variables for configuration to load variables from a .env.local file.');
+        You need to define environment variables for configuration to load variables from a .env file.');
 }
 
 $env = $_SERVER['APP_ENV'] ?? 'dev';
@@ -90,6 +90,7 @@ try {
 
     // Symfony uses request_stack now
     $container->get('request_stack')->push($request);
+    $container->get('translator')->setLocale($request->getLocale());
 
     if (!empty($saveFlashBag)) {
         foreach ($saveFlashBag as $typeMessage => $messageList) {

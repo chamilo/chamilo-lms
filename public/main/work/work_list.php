@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
@@ -64,10 +65,10 @@ $interbreadcrumb[] = [
 $documentsAddedInWork = getAllDocumentsFromWorkToString($workId, $courseInfo);
 
 $actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'">'.
-    Display::return_icon('back.png', get_lang('Back to Assignments list'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to Assignments list')).'</a>';
 
 $actionsRight = '';
-$onlyOnePublication = api_get_configuration_value('allow_only_one_student_publication_per_user');
+$onlyOnePublication = ('true' === api_get_setting('work.allow_only_one_student_publication_per_user'));
 if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !api_is_invitee()) {
     $url = api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId;
     $actionsRight = Display::url(
@@ -106,7 +107,7 @@ if (!empty($my_folder_data['description'])) {
 $extraFieldWorkData = workGetExtraFieldData($workId);
 
 if (!empty($extraFieldWorkData)) {
-    $forceDownload = api_get_configuration_value('force_download_doc_before_upload_work');
+    $forceDownload = ('true' === api_get_setting('work.force_download_doc_before_upload_work'));
     if ($forceDownload) {
         // Force to download documents first.
         $downloadDocumentsFirst = addslashes(get_lang('DownloadDocumentsFirst'));

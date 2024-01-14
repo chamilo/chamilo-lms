@@ -30,6 +30,15 @@ export default {
         isAdmin(state, getters) {
             return getters.isAuthenticated && (getters.hasRole('ROLE_SUPER_ADMIN') || getters.hasRole('ROLE_ADMIN'));
         },
+        isCourseAdmin(state, getters) {
+          if (getters.isAdmin) {
+            return true
+          }
+
+          return getters.isAuthenticated
+            && getters.hasRole("ROLE_CURRENT_COURSE_SESSION_TEACHER")
+            && getters.hasRole("ROLE_CURRENT_COURSE_TEACHER")
+        },
         isCurrentTeacher(state, getters) {
             if (!getters.isAuthenticated) {
                 return false;
@@ -95,13 +104,15 @@ export default {
     },
     actions: {
         async login({commit}, payload) {
-            commit(AUTHENTICATING);
-            await SecurityAPI.login(payload.login, payload.password).then(response => {
-                commit(AUTHENTICATING_SUCCESS, response.data);
-                return response.data;
-            }).catch(error => {
-                commit(AUTHENTICATING_ERROR, error);
-            });
+          commit(AUTHENTICATING);
+          try {
+            const response = await SecurityAPI.login(payload.login, payload.password);
+            commit(AUTHENTICATING_SUCCESS, response.data);
+            return response.data;
+          } catch (error) {
+            commit(AUTHENTICATING_ERROR, error);
+            throw error;
+          }
         },
 
         async logout({commit}) {

@@ -56,11 +56,12 @@ class UserManager
 
     /**
      * Validates the password.
-     *
-     * @return bool
      */
-    public static function isPasswordValid(User $user, $plainPassword)
+    public static function isPasswordValid(User $user, string $plainPassword): bool
     {
+        /**
+         * @psalm-suppress PrivateService
+         */
         $hasher = Container::$container->get('security.user_password_hasher');
 
         return $hasher->isPasswordValid($user, $plainPassword);
@@ -334,9 +335,9 @@ class UserManager
                 $userFieldValue->saveFieldValues(
                     $extra,
                     true,
-                    null,
-                    null,
-                    null,
+                    false,
+                    [],
+                    [],
                     true
                 );
             } else {
@@ -364,7 +365,7 @@ class UserManager
                 'false'
             );
 
-            if (!empty($redirectToURLAfterLogin) && api_get_configuration_value('plugin_redirection_enabled')) {
+            if (!empty($redirectToURLAfterLogin) && ('true' === api_get_setting('admin.plugin_redirection_enabled'))) {
                 RedirectionPlugin::insert($userId, $redirectToURLAfterLogin);
             }
 
@@ -434,7 +435,7 @@ class UserManager
                     }
                 }
 
-                $twoEmail = api_get_configuration_value('send_two_inscription_confirmation_mail');
+                $twoEmail = ('true' === api_get_setting('mail.send_two_inscription_confirmation_mail'));
                 if (true === $twoEmail) {
                     $emailBody = $tpl->render(
                         '@ChamiloCore/Mailer/Legacy/new_user_first_email_confirmation.html.twig'
@@ -487,7 +488,7 @@ class UserManager
                     if (!empty($emailBodyTemplate)) {
                         $emailBody = $emailBodyTemplate;
                     }
-                    $sendToInbox = api_get_configuration_value('send_inscription_msg_to_inbox');
+                    $sendToInbox = ('true' === api_get_setting('registration.send_inscription_msg_to_inbox'));
                     if ($sendToInbox) {
                         $adminList = self::get_all_administrators();
                         $senderId = 1;
@@ -518,7 +519,7 @@ class UserManager
                     }
                 }
 
-                $notification = api_get_configuration_value('send_notification_when_user_added');
+                $notification = api_get_setting('profile.send_notification_when_user_added', true);
                 if (!empty($notification) && isset($notification['admins']) && is_array($notification['admins'])) {
                     foreach ($notification['admins'] as $adminId) {
                         $emailSubjectToAdmin = get_lang('The user has been added').': '.
@@ -720,7 +721,7 @@ class UserManager
                 WHERE user_id = '".$user_id."'";
         Database::query($sql);
 
-        if (api_get_configuration_value('plugin_redirection_enabled')) {
+        if ('true' === api_get_setting('admin.plugin_redirection_enabled')) {
             RedirectionPlugin::deleteUserRedirection($user_id);
         }
 
@@ -1066,7 +1067,11 @@ class UserManager
             $expiration_date = new \DateTime($expiration_date, new DateTimeZone('UTC'));
         }
 
+        $previousStatus = $user->getStatus();
+        $previousRole = $user->getRoleFromStatus($previousStatus);
+
         $user
+            ->removeRole($previousRole)
             ->setLastname($lastname)
             ->setFirstname($firstname)
             ->setUsername($username)
@@ -1717,6 +1722,56 @@ class UserManager
     }
 
     /**
+     * Get user path from user ID (returns an array).
+     * The return format is a complete path to a folder ending with "/"
+     * In case the first level of subdirectory of users/ does not exist, the
+     * function will attempt to create it. Probably not the right place to do it
+     * but at least it avoids headaches in many other places.
+     *
+     * @param int    $id   User ID
+     * @param string $type Type of path to return (can be 'system', 'web', 'last')
+     *
+     * @return string User folder path (i.e. /var/www/chamilo/app/upload/users/1/1/)
+     */
+    public static function getUserPathById($id, $type)
+    {
+        $id = (int) $id;
+        if (!$id) {
+            return null;
+        }
+
+        $userPath = "users/$id/";
+        if (api_get_setting('split_users_upload_directory') === 'true') {
+            $userPath = 'users/'.substr((string) $id, 0, 1).'/'.$id.'/';
+            // In exceptional cases, on some portals, the intermediate base user
+            // directory might not have been created. Make sure it is before
+            // going further.
+
+            $rootPath = api_get_path(SYS_PATH).'../app/upload/users/'.substr((string) $id, 0, 1);
+            if (!is_dir($rootPath)) {
+                $perm = api_get_permissions_for_new_directories();
+                try {
+                    mkdir($rootPath, $perm);
+                } catch (Exception $e) {
+                    error_log($e->getMessage());
+                }
+            }
+        }
+        switch ($type) {
+            case 'system': // Base: absolute system path.
+                $userPath = api_get_path(SYS_PATH).'../app/upload/'.$userPath;
+                break;
+            case 'web': // Base: absolute web path.
+                $userPath = api_get_path(WEB_PATH).'../app/upload/'.$userPath;
+                break;
+            case 'last': // Only the last part starting with users/
+                break;
+        }
+
+        return $userPath;
+    }
+
+    /**
      * Gets the current user image.
      *
      * @param string $userId
@@ -2220,7 +2275,7 @@ class UserManager
                     $tags = self::get_user_tags_to_string($user_id, $row['id'], false);
                     $extra_data['extra_'.$row['fvar']] = $tags;
                 } else {
-                    $sqlu = "SELECT value as fval
+                    $sqlu = "SELECT field_value as fval
                             FROM $t_ufv
                             WHERE field_id=".$row['id']." AND item_id = ".$user_id;
                     $resu = Database::query($sqlu);
@@ -2560,18 +2615,18 @@ class UserManager
         $order = 'ORDER BY sc.name, s.name';
 
         // Order by date if showing all sessions
-        $showAllSessions = true === api_get_configuration_value('show_all_sessions_on_my_course_page');
+        $showAllSessions = ('true' === api_get_setting('course.show_all_sessions_on_my_course_page'));
         if ($showAllSessions) {
             $order = 'ORDER BY s.accessStartDate';
         }
 
         // Order by position
-        if (api_get_configuration_value('session_list_order')) {
+        if ('true' === api_get_setting('session.session_list_order')) {
             $order = 'ORDER BY s.position';
         }
 
         // Order by dates according to settings
-        $orderBySettings = api_get_configuration_value('my_courses_session_order');
+        $orderBySettings = api_get_setting('session.my_courses_session_order', true);
         if (!empty($orderBySettings) && isset($orderBySettings['field']) && isset($orderBySettings['order'])) {
             $field = $orderBySettings['field'];
             $orderSetting = $orderBySettings['order'];
@@ -2633,7 +2688,10 @@ class UserManager
             }
         }
 
-        $collapsable = api_get_configuration_value('allow_user_session_collapsable');
+        $collapsable = ('true' === api_get_setting('session.allow_user_session_collapsable'));
+
+
+
         $extraField = new ExtraFieldValue('session');
         $collapsableLink = api_get_path(WEB_PATH).'user_portal.php?action=collapse_session';
 
@@ -5636,7 +5694,7 @@ SQL;
      */
     public static function anonymizeUserWithVerification($userId)
     {
-        $allowDelete = api_get_configuration_value('allow_delete_user_for_session_admin');
+        $allowDelete = ('true' === api_get_setting('session.allow_delete_user_for_session_admin'));
 
         $message = '';
         if (api_is_platform_admin() ||
@@ -5681,7 +5739,7 @@ SQL;
      */
     public static function deleteUserWithVerification($userId)
     {
-        $allowDelete = api_get_configuration_value('allow_delete_user_for_session_admin');
+        $allowDelete = ('true' === api_get_setting('session.allow_delete_user_for_session_admin'));
         $message = Display::return_message(get_lang('You cannot delete this user'), 'error');
         $userToUpdateInfo = api_get_user_info($userId);
 
@@ -6001,7 +6059,7 @@ SQL;
      */
     public static function addUserCareer($userId, $careerId)
     {
-        if (!api_get_configuration_value('allow_career_users')) {
+        if ('true' !== api_get_setting('profile.allow_career_users')) {
             return false;
         }
 
@@ -6022,7 +6080,7 @@ SQL;
      */
     public static function updateUserCareer($userCareerId, $data)
     {
-        if (!api_get_configuration_value('allow_career_users')) {
+        if ('true' !== api_get_setting('profile.allow_career_users')) {
             return false;
         }
 

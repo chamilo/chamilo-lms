@@ -5,6 +5,9 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com>
@@ -118,26 +121,28 @@ echo '<div id="delineation-container">';
 if (empty($choiceValue) && empty($hotSpot) && $loaded) {
     $nextQuestion = $questionNum + 1;
     $destinationId = isset($questionList[$nextQuestion]) ? $questionList[$nextQuestion] : -1;
-    $icon = Display::return_icon(
-        'reload.png',
-        '',
-        ['style' => 'width:22px; height:22px; padding-left:0px;padding-right:5px;']
+    $icon = Display::getMdiIcon(
+        ActionIcon::REFRESH,
+        'ch-tool-icon',
+        'width:22px; height:22px; padding-left:0px;padding-right:5px;',
+        ICON_SIZE_SMALL
     );
     $links = '<a onclick="tryAgain();" href="#">'.get_lang('Try again').'</a>&nbsp;'.$icon.'&nbsp;';
 
     // the link to finish the test
     if (-1 == $destinationId) {
-        $links .= Display::return_icon(
-                'finish.gif',
-                '',
-                ['style' => 'width:22px; height:22px; padding-left:0px;padding-right:5px;']
+        $links .= Display::getMdiIcon(
+                StateIcon::COMPLETE,
+                'ch-tool-icon',
+                'width:22px; height:22px; padding-left:0px;padding-right:5px;',
+                ICON_SIZE_SMALL
             ).'<a onclick="SendEx(-1);" href="#">'.get_lang('End of activity').'</a><br /><br />';
     } else {
         // the link to other question
         if (in_array($destinationId, $questionList)) {
             $num_value_array = array_keys($questionList, $destinationId);
-            $icon = Display::return_icon(
-                'quiz.png',
+            $icon = Display::getMdiIcon(
+                ObjectIcon::TEST,
                 '',
                 ['style' => 'padding-left:0px;padding-right:5px;']
             );
@@ -390,20 +395,22 @@ if (isset($result['answer_destination'])) {
 // the link to retry the question
 if (isset($try) && 1 == $try) {
     $num_value_array = array_keys($questionList, $questionId);
-    $links .= Display:: return_icon(
-        'reload.gif',
-        '',
-        ['style' => 'padding-left:0px;padding-right:5px;']
+    $links .= Display::getMdiIcon(
+        ActionIcon::REFRESH,
+        'ch-tool-icon',
+        'padding-left:0px;padding-right:5px;',
+        ICON_SIZE_SMALL
     ).'<a onclick="SendEx('.$num_value_array[0].');" href="#">'.get_lang('Try again').'</a><br /><br />';
 }
 
 // the link to theory (a learning path)
 if (!empty($lp)) {
     $lp_url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp;
-    $links .= Display:: return_icon(
-        'theory.gif',
-        '',
-        ['style' => 'padding-left:0px;padding-right:5px;']
+    $links .= Display::getMdiIcon(
+        ObjectIcon::DOCUMENT,
+        'ch-tool-icon',
+        'padding-left:0px;padding-right:5px;',
+        ICON_SIZE_SMALL
     ).'<a target="_blank" href="'.$lp_url.'">'.get_lang('Theory link').'</a><br />';
 }
 
@@ -411,10 +418,11 @@ $links .= '<br />';
 
 // the link to an external website or link
 if (!empty($url) && -1 != $url) {
-    $links .= Display:: return_icon(
-        'link.gif',
-        '',
-        ['style' => 'padding-left:0px;padding-right:5px;']
+    $links .= Display::getMdiIcon(
+        ObjectIcon::LINK,
+        'ch-tool-icon',
+        'padding-left:0px;padding-right:5px;',
+        ICON_SIZE_SMALL
     ).'<a target="_blank" href="'.$url.'">'.get_lang('Visit this link').'</a><br /><br />';
 }
 
@@ -423,19 +431,21 @@ $destinationId = isset($questionList[$nextQuestion]) ? $questionList[$nextQuesti
 
 // the link to finish the test
 if (-1 == $destinationId) {
-    $links .= Display:: return_icon(
-        'finish.gif',
-        '',
-        ['style' => 'width:22px; height:22px; padding-left:0px;padding-right:5px;']
+    $links .= Display::getMdiIcon(
+        StateIcon::COMPLETE,
+        'ch-tool-icon',
+        'width:22px; height:22px; padding-left:0px;padding-right:5px;',
+        ICON_SIZE_SMALL
     ).'<a onclick="SendEx(-1);" href="#">'.get_lang('End of activity').'</a><br /><br />';
 } else {
     // the link to other question
     if (in_array($destinationId, $questionList)) {
         $num_value_array = array_keys($questionList, $destinationId);
-        $icon = Display::return_icon(
-                'quiz.png',
-                '',
-                ['style' => 'padding-left:0px;padding-right:5px;']
+        $icon = Display::getMdiIcon(
+            ObjectIcon::TEST,
+            'ch-tool-icon',
+            'padding-left:0px;padding-right:5px;',
+            ICON_SIZE_SMALL
         );
         $links .= '<a onclick="SendEx('.$num_value_array[0].');" href="#">'.
                 get_lang('Question').' '.$num_value_array[0].'</a>&nbsp;';

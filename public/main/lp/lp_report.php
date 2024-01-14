@@ -6,6 +6,8 @@ use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
+use Chamilo\CourseBundle\Entity\CLpRelUser;
+use Chamilo\CourseBundle\Repository\CLpRelUserRepository;
 
 /**
  * Report from students for learning path.
@@ -51,7 +53,7 @@ if (empty($lp)) {
 
 $urlBase = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=report&lp_id='.$lpId;
 $url = $urlBase.'&group_filter='.$groupFilter;
-$allowUserGroups = api_get_configuration_value('allow_lp_subscription_to_usergroups');
+$allowUserGroups = ('true' === api_get_setting('lp.allow_lp_subscription_to_usergroups'));
 
 $course = api_get_course_entity($courseId);
 $session = api_get_session_entity($sessionId);
@@ -59,33 +61,21 @@ $session = api_get_session_entity($sessionId);
 $em = Database::getManager();
 // Check LP subscribers
 if ('1' === $lp->getSubscribeUsers()) {
-    /** @var ItemPropertyRepository $itemRepo */
-    $itemRepo = $em->getRepository('ChamiloCourseBundle:CItemProperty');
-    $subscribedUsersInLp = $itemRepo->getUsersSubscribedToItem(
-        'learnpath',
-        $lpId,
+
+    /** @var CLpRelUserRepository $cLpRelUserRepo */
+    $cLpRelUserRepo = $em->getRepository('ChamiloCourseBundle:CLpRelUser');
+    $subscribedUsersInLp = $cLpRelUserRepo->getUsersSubscribedToItem(
+        $entity,
         $course,
         $session
     );
 
     // Subscribed groups to a LP
-    $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
-        'learnpath',
-        $lpId,
-        $course,
-        $session
-    );
-
+    $links = $entity->getResourceNode()->getResourceLinks();
     $groups = [];
-    /** @var CItemProperty $itemProperty */
-    if (!empty($subscribedGroupsInLp)) {
-        foreach ($subscribedGroupsInLp as $itemProperty) {
-            if (!empty($itemProperty)) {
-                $getGroup = $itemProperty->getGroup();
-                if (!empty($getGroup)) {
-                    $groups[] = $itemProperty->getGroup()->getId();
-                }
-            }
+    foreach ($links as $link) {
+        if (null !== $link->getGroup()) {
+            $groups[] = $link->getGroup()->getIid();
         }
     }
 
@@ -102,10 +92,11 @@ if ('1' === $lp->getSubscribeUsers()) {
     }
 
     if (!empty($subscribedUsersInLp)) {
-        foreach ($subscribedUsersInLp as $itemProperty) {
-            $user = $itemProperty->getToUser();
+        foreach ($subscribedUsersInLp as $users) {
+            /** @var CLpRelUser $users */
+            $user = $users->getUser();
             if ($user) {
-                $users[]['user_id'] = $itemProperty->getToUser()->getId();
+                $users[]['user_id'] = $user->getId();
             }
         }
     }
@@ -315,7 +306,7 @@ if (!empty($users)) {
         $userGroupList = '';
         if (!empty($groups)) {
             $groupsByUser = GroupManager::getAllGroupPerUserSubscription($userId, $courseId, $sessionId);
-            $icon = Display::return_icon('group.png', get_lang('Group'));
+            $icon = Display::getMdiIcon('account-group', 'ch-tool-icon', null, 22, get_lang('Group'));
             if (!empty($groupsByUser)) {
                 $groupUrl = api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(true, false);
                 foreach ($groupsByUser as $group) {
@@ -327,7 +318,7 @@ if (!empty($users)) {
         $classesToString = '';
         if ($allowUserGroups) {
             $classes = $userGroup->getUserGroupListByUser($userId, Usergroup::NORMAL_CLASS);
-            $icon = Display::return_icon('class.png', get_lang('Class'));
+            $icon = Display::getMdiIcon('account-group', 'ch-tool-icon', null, 22, get_lang('Class'));
             if (!empty($classes)) {
                 $classUrl = api_get_path(WEB_CODE_PATH).'user/class.php?'.api_get_cidreq(true, false);
                 foreach ($classes as $class) {
@@ -351,16 +342,19 @@ if (!empty($users)) {
         $row[] = "$lpProgress %";
         $row[] = is_numeric($lpScore) ? "$lpScore%" : $lpScore;
         $row[] = $lpLastConnection;
-        $actions = Display::url(Display::return_icon('statistics.png', get_lang('Reporting')), $trackingUrl).'&nbsp;';
+        $actions = Display::url(
+            Display::getMdiIcon('chart-box', 'ch-tool-icon', null, 32, get_lang('Reporting')),
+            $trackingUrl
+        ).'&nbsp;';
 
         $actions .= Display::url(
-            Display::return_icon('2rightarrow.png', get_lang('Details')),
+            Display::getMdiIcon('fast-forward-outline', 'ch-tool-icon', null, 32, get_lang('Details')),
             'javascript:void(0);',
             ['data-id' => $userId, 'class' => 'details']
         ).'&nbsp;';
 
         $actions .= Display::url(
-            Display::return_icon('clean.png', get_lang('Reset')),
+            Display::getMdiIcon('broom', 'ch-tool-icon', null, 32, get_lang('Reset')),
             'javascript:void(0);',
             ['data-id' => $userId, 'data-username' => $userInfo['username'], 'class' => 'delete_attempt']
         );
@@ -405,34 +399,19 @@ $interbreadcrumb[] = [
 ];
 
 $actions = Display::url(
-    Display::return_icon(
-        'back.png',
-        get_lang('Back'),
-        [],
-        ICON_SIZE_MEDIUM
-    ),
+    Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', null, 32, get_lang('Back')),
     api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq()
 );
 
 if (!empty($users)) {
     $actions .= Display::url(
-        Display::return_icon(
-            'pdf.png',
-            get_lang('ExportToPdf'),
-            [],
-            ICON_SIZE_MEDIUM
-        ),
+        Display::getMdiIcon('file-pdf-box', 'ch-tool-icon', null, 32, get_lang('ExportToPdf')),
         $url.'&export=pdf'
     );
     $userListToString = array_column($userList, 'username');
     $userListToString = implode(', ', $userListToString);
     $actions .= Display::url(
-        Display::return_icon(
-            'clean.png',
-            get_lang('Clean'),
-            [],
-            ICON_SIZE_MEDIUM
-        ),
+        Display::getMdiIcon('broom', 'ch-tool-icon', null, 32, get_lang('Clean')),
         'javascript:void(0);',
         ['data-users' => $userListToString, 'class' => 'delete_all']
     );

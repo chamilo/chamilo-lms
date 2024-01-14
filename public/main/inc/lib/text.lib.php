@@ -685,13 +685,13 @@ function get_week_from_day($date)
  * Example: "Test example of a long string"
  * substrwords(5) = Test ... *.
  *
- * @param string
- * @param int the max number of character
- * @param string how the string will be end
+ * @param $text string
+ * @param $maxchar int the max number of character
+ * @param $end string how the string will be ended
  *
- * @return a reduce string
+ * @return string
  */
-function substrwords($text, $maxchar, $end = '...')
+function substrwords(string $text, int $maxchar, string $end = '...'): string
 {
     if (strlen($text) > $maxchar) {
         $words = explode(" ", $text);

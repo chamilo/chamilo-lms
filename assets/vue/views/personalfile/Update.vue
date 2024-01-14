@@ -2,35 +2,36 @@
   <div v-if="!isLoading && item">
     <!--      :handle-delete="del"-->
     <Toolbar
-        :handle-submit="onSendFormData"
-        :handle-reset="resetForm"
+      :handle-reset="resetForm"
+      :handle-submit="onSendFormData"
     />
     <DocumentsForm
       ref="updateForm"
-      :values="item"
       :errors="violations"
+      :values="item"
     >
-
-    <EditLinks :item="item" links-type="users" />
-
+      <EditLinks
+        :item="item"
+        links-type="users"
+      />
     </DocumentsForm>
     <Loading :visible="isLoading || deleteLoading" />
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import { mapFields } from 'vuex-map-fields';
-import DocumentsForm from '../../components/personalfile/Form.vue';
-import Loading from '../../components/Loading.vue';
-import Toolbar from '../../components/Toolbar.vue';
-import UpdateMixin from '../../mixins/UpdateMixin';
-import EditLinks from "../../components/resource_links/EditLinks.vue";
+import { mapActions, mapGetters } from "vuex"
+import { mapFields } from "vuex-map-fields"
+import DocumentsForm from "../../components/personalfile/Form.vue"
+import Loading from "../../components/Loading.vue"
+import Toolbar from "../../components/Toolbar.vue"
+import UpdateMixin from "../../mixins/UpdateMixin"
+import EditLinks from "../../components/resource_links/EditLinks.vue"
 
-const servicePrefix = 'PersonalFile';
+const servicePrefix = "PersonalFile"
 
 export default {
-  name: 'PersonalFileUpdate',
+  name: "PersonalFileUpdate",
   servicePrefix,
   components: {
     EditLinks,
@@ -40,25 +41,25 @@ export default {
   },
   mixins: [UpdateMixin],
   computed: {
-    ...mapFields('personalfile', {
-      deleteLoading: 'isLoading',
-      isLoading: 'isLoading',
-      error: 'error',
-      updated: 'updated',
-      violations: 'violations'
+    ...mapFields("personalfile", {
+      deleteLoading: "isLoading",
+      isLoading: "isLoading",
+      error: "error",
+      updated: "updated",
+      violations: "violations",
     }),
-    ...mapGetters('personalfile', ['find']),
+    ...mapGetters("personalfile", ["find"]),
   },
   methods: {
-    ...mapActions('personalfile', {
-      createReset: 'resetCreate',
-      deleteItem: 'del',
-      delReset: 'resetDelete',
-      retrieve: 'load',
-      update: 'update',
-      updateWithFormData: 'updateWithFormData',
-      updateReset: 'resetUpdate'
-    })
-  }
-};
+    ...mapActions("personalfile", {
+      createReset: "resetCreate",
+      deleteItem: "del",
+      delReset: "resetDelete",
+      retrieve: "load",
+      update: "update",
+      updateWithFormData: "updateWithFormData",
+      updateReset: "resetUpdate",
+    }),
+  },
+}
 </script>

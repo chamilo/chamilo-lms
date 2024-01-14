@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 ob_start();
 $cidReset = true;
@@ -169,12 +170,12 @@ if (Database::num_rows($result_coachs) > 0) {
 			        <td>'.$firstname.'</td><td>'.$lastname.'</td><td>'.$s_connection_time.'</td>
 			        <td>
 			            <a href="course.php?type=coach&user_id='.$id_coach.'">
-                        '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
+                        '.Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Details')).'
 			            </a>
                     </td>
 			        <td>
 			            <a href="student.php?type=coach&user_id='.$id_coach.'">
-			                '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
+			                '.Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Details')).'
 			            </a>
 			            </td>
                     </tr>';
@@ -184,10 +185,10 @@ if (Database::num_rows($result_coachs) > 0) {
 			        <td>'.$s_connection_time.'</td>
 			        <td>
 			            <a href="course.php?type=coach&user_id='.$id_coach.'">
-			            '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a></td>
+			            '.Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Details')).'</a></td>
                     <td>
                         <a href="student.php?type=coach&user_id='.$id_coach.'">
-                        '.Display::return_icon('2rightarrow.png', get_lang('Details')).'</a>
+                        '.Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Details')).'</a>
                     </td>
                     </tr>';
         }

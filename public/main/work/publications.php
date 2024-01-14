@@ -6,7 +6,7 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (false === api_get_configuration_value('allow_my_student_publication_page')) {
+if ('false' === api_get_setting('work.allow_my_student_publication_page')) {
     api_not_allowed(true);
 }
 

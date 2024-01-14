@@ -52,7 +52,7 @@ if ($isStudent) {
     $result = $objSkill->getUserSkillsTable($userId);
     $tableRows = $result['skills'];
     $tpl->assign('skill_table', $result['table']);
-    $tplPath = 'skill/student_report.tpl';
+    $tplPath = 'skill/student_report.html.twig';
 } elseif ($isStudentBoss) {
     $tableRows = [];
     $followedStudents = UserManager::getUsersFollowedByStudentBoss($userId);

@@ -6,6 +6,9 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use ChamiloSession as Session;
 use Doctrine\ORM\NoResultException;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * Class GlossaryManager
@@ -128,7 +131,7 @@ class GlossaryManager
         $glossaryName = trim($glossaryName);
         $parsed = $glossaryName;
 
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $parsed = api_htmlentities($parsed);
             $parsed = "%$parsed%";
         }
@@ -444,7 +447,7 @@ class GlossaryManager
     {
         $view = Session::read('glossary_view', '');
         if (empty($view)) {
-            $defaultView = api_get_configuration_value('default_glossary_view');
+            $defaultView = api_get_setting('glossary.default_glossary_view');
             if (empty($defaultView)) {
                 $defaultView = 'table';
             }
@@ -471,40 +474,30 @@ class GlossaryManager
         $actionsLeft = '';
         $url = api_get_path(WEB_CODE_PATH).'glossary/index.php?'.api_get_cidreq();
         if (api_is_allowed_to_edit(null, true)) {
-            $addIcon = Display::return_icon(
-                'new_glossary_term.png',
-                get_lang('Add new glossary term'),
-                '',
-                ICON_SIZE_MEDIUM
-            );
+            $addIcon = Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add new glossary term'));
             $actionsLeft .= '<a href="'.$url.'&action=addglossary">'.$addIcon.'</a>';
         }
 
         if (api_is_allowed_to_edit(null, true)) {
             $actionsLeft .= '<a href="'.$url.'&action=import">'.
-                Display::return_icon('import.png', get_lang('Import glossary'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::getMdiIcon(ActionIcon::IMPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import glossary')).'</a>';
         }
 
         if (!api_is_anonymous()) {
             $actionsLeft .= '<a id="export_opener" href="'.$url.'&action=export">'.
-                Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export')).'</a>';
         }
 
         if ('table' === $view || !isset($view)) {
             $actionsLeft .= '<a href="'.$url.'&action=changeview&view=list">'.
-                Display::return_icon('view_detailed.png', get_lang('List view'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::getMdiIcon(StateIcon::DETAILED_VIEW, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('List view')).'</a>';
         } else {
             $actionsLeft .= '<a href="'.$url.'&action=changeview&view=table">'.
-                Display::return_icon('view_text.png', get_lang('Table view'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::getMdiIcon(StateIcon::LIST_VIEW, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Table view')).'</a>';
         }
 
         if (api_is_allowed_to_edit(true, true, true)) {
-            $exportIcon = Display::return_icon(
-                'export_to_documents.png',
-                get_lang('Export latest version of this page to Documents'),
-                [],
-                ICON_SIZE_MEDIUM
-            );
+            $exportIcon = Display::getMdiIcon(ActionIcon::EXPORT_DOC, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export latest version of this page to Documents'));
             $actionsLeft .= Display::url(
                 $exportIcon,
                 $url.'&'.http_build_query(['action' => 'export_documents'])
@@ -518,12 +511,12 @@ class GlossaryManager
         if (!api_is_allowed_to_edit(true, true, true)) {
             if ('ASC' === $orderList) {
                 $actionsLeft .= Display::url(
-                    Display::return_icon('falling.png', get_lang('Sort Descending'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Sort Descending')),
                     $url.'&'.http_build_query(['order' => 'DESC'])
                 );
             } else {
                 $actionsLeft .= Display::url(
-                    Display::return_icon('upward.png', get_lang('Sort Ascending'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Sort Ascending')),
                     $url.'&'.http_build_query(['order' => 'ASC'])
                 );
             }
@@ -570,7 +563,7 @@ class GlossaryManager
             if (api_is_allowed_to_edit(true, true)) {
                 $content .= Display::noDataView(
                     get_lang('Glossary'),
-                    Display::return_icon('glossary.png', '', [], 64),
+                    Display::getMdiIcon(ObjectIcon::GLOSSARY, 'ch-tool-icon', null, ICON_SIZE_BIG),
                     get_lang('Add glossary'),
                     $url.'&'.http_build_query(['action' => 'addglossary'])
                 );
@@ -815,7 +808,7 @@ class GlossaryManager
     {
         $glossary_id = $row[2];
         $return = '<a href="'.api_get_self().'?action=edit_glossary&glossary_id='.$glossary_id.'&'.api_get_cidreq().'&msg=edit">'.
-            Display::return_icon('edit.png', get_lang('Edit'), '', 22).'</a>';
+            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
         $repo = Container::getGlossaryRepository();
         /** @var CGlossary $glossaryData */
         $glossaryData = $repo->find($glossary_id);
@@ -824,7 +817,7 @@ class GlossaryManager
             $return .= '<a
                 href="'.api_get_self().'?action=delete_glossary&glossary_id='.$glossary_id.'&'.api_get_cidreq().'"
                 onclick="return confirmation(\''.$glossaryTerm.'\');">'.
-                Display::return_icon('delete.png', get_lang('Delete'), '', 22).'</a>';
+                Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
             /*
              * if ($glossaryData->getSessionId() == api_get_session_id()) {
             } else {
@@ -1029,7 +1022,7 @@ class GlossaryManager
         //usort($data, 'sorter');
         $list = [];
         $list[] = ['term', 'definition'];
-        $allowStrip = api_get_configuration_value('allow_remove_tags_in_glossary_export');
+        $allowStrip = ('true' === api_get_setting('glossary.allow_remove_tags_in_glossary_export'));
         foreach ($data as $line) {
             $definition = $line[1];
             if ($allowStrip) {

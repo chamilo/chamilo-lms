@@ -24,6 +24,7 @@ class Version20211005154000 extends AbstractMigrationChamilo
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
         $em = $doctrine->getManager();
+
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
@@ -63,6 +64,7 @@ class Version20211005154000 extends AbstractMigrationChamilo
             $attachmentRepo->create($messageAttachment);
 
             $filePath = $rootPath.'/app/upload/ticket_attachment/'.$item['path'];
+            error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
             $this->addLegacyFileToResource($filePath, $attachmentRepo, $messageAttachment, $item['id']);
 
             $em->persist($messageAttachment);

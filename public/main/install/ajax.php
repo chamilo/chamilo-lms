@@ -40,8 +40,8 @@ if ('new' === $installType) {
 
 $dbPort = isset($_POST['db_port']) ? $_POST['db_port'] : 3306;
 
-$database = connectToDatabase($dbHost, $dbUsername, $dbPass, $dbName, $dbPort);
-$manager = $database->getManager();
+connectToDatabase($dbHost, $dbUsername, $dbPass, $dbName, $dbPort);
+$manager = Database::getManager();
 
 $db_prefix = api_get_configuration_value('db_prefix') ? api_get_configuration_value('db_prefix') : 'chamilo_';
 $db_c_prefix = api_get_configuration_value('table_prefix') ? api_get_configuration_value('table_prefix') : 'crs_';

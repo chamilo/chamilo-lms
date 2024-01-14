@@ -41,6 +41,9 @@ use Chamilo\CourseBundle\Entity\CSurveyAnswer;
 use Chamilo\CourseBundle\Entity\CWiki;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Exception\NotSupported;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use SocialManager;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -63,9 +66,11 @@ final class UserToJsonNormalizer
      *
      * @param array $substitutionTerms Substitute terms for some elements
      *
-     * @return string
+     * @throws NotSupported
+     * @throws NoResultException
+     * @throws NonUniqueResultException
      */
-    public function getPersonalDataToJson(int $userId, array $substitutionTerms)
+    public function getPersonalDataToJson(int $userId, array $substitutionTerms): string
     {
         $em = $this->em;
         $dateFormat = DateTimeInterface::ATOM;
@@ -80,13 +85,13 @@ final class UserToJsonNormalizer
 
         // Dummy content
         $user->setDateOfBirth(null);
-        //$user->setBiography($noDataLabel);
+        // $user->setBiography($noDataLabel);
         /*$user->setFacebookData($noDataLabel);
         $user->setFacebookName($noDataLabel);
         $user->setFacebookUid($noDataLabel);*/
-        //$user->setImageName($noDataLabel);
-        //$user->setTwoStepVerificationCode($noDataLabel);
-        //$user->setGender($noDataLabel);
+        // $user->setImageName($noDataLabel);
+        // $user->setTwoStepVerificationCode($noDataLabel);
+        // $user->setGender($noDataLabel);
         /*$user->setGplusData($noDataLabel);
         $user->setGplusName($noDataLabel);
         $user->setGplusUid($noDataLabel);*/
@@ -96,7 +101,7 @@ final class UserToJsonNormalizer
         $user->setTwitterName($noDataLabel);
         $user->setTwitterUid($noDataLabel);*/
         $user->setWebsite($noDataLabel);
-        //$user->setToken($noDataLabel);
+        // $user->setToken($noDataLabel);
 
         /*$friends = SocialManager::get_friends($userId);
         $friendList = [];
@@ -120,6 +125,7 @@ final class UserToJsonNormalizer
             'user' => $userId,
         ]);
         $gradebookCertificate = [];
+
         /** @var GradebookCertificate $item */
         foreach ($result as $item) {
             $createdAt = $item->getCreatedAt()->format($dateFormat);
@@ -132,11 +138,11 @@ final class UserToJsonNormalizer
         }
 
         // TrackEExercises
-        $criteria = [
+        $result = $em->getRepository(TrackEExercise::class)->findBy([
             'user' => $userId,
-        ];
-        $result = $em->getRepository(TrackEExercise::class)->findBy($criteria);
+        ]);
         $trackEExercises = [];
+
         /** @var TrackEExercise $item */
         foreach ($result as $item) {
             $date = $item->getExeDate()->format($dateFormat);
@@ -151,18 +157,18 @@ final class UserToJsonNormalizer
         }
 
         // TrackEAttempt
-        $criteria = [
+        $result = $em->getRepository(TrackEAttempt::class)->findBy([
             'user' => $userId,
-        ];
-        $result = $em->getRepository(TrackEAttempt::class)->findBy($criteria);
+        ]);
         $trackEAttempt = [];
+
         /** @var TrackEAttempt $item */
         foreach ($result as $item) {
             $date = $item->getTms()->format($dateFormat);
             $list = [
                 'Attempt #'.$item->getTrackEExercise()->getExeId(),
-                //'Answer: '.$item->getAnswer(),
-                //'Marks: '.$item->getMarks(),
+                // 'Answer: '.$item->getAnswer(),
+                // 'Marks: '.$item->getMarks(),
                 'Position: '.$item->getPosition(),
                 'Date: '.$date,
             ];
@@ -170,11 +176,11 @@ final class UserToJsonNormalizer
         }
 
         // TrackECourseAccess
-        $criteria = [
+        $result = $em->getRepository(TrackECourseAccess::class)->findBy([
             'user' => $userId,
-        ];
-        $result = $em->getRepository(TrackECourseAccess::class)->findBy($criteria);
+        ]);
         $trackECourseAccessList = [];
+
         /** @var TrackECourseAccess $item */
         foreach ($result as $item) {
             $startDate = $item->getLoginCourseDate()->format($dateFormat);
@@ -232,6 +238,7 @@ final class UserToJsonNormalizer
         }
 
         $trackELoginList = [];
+
         /** @var TrackELogin $item */
         foreach ($trackResults[TrackELogin::class] as $item) {
             $startDate = $item->getLoginDate()->format($dateFormat);
@@ -246,6 +253,7 @@ final class UserToJsonNormalizer
 
         // TrackEAccess
         $trackEAccessList = [];
+
         /** @var TrackEAccess $item */
         foreach ($trackResults[TrackEAccess::class] as $item) {
             $date = $item->getAccessDate()->format($dateFormat);
@@ -259,6 +267,7 @@ final class UserToJsonNormalizer
 
         // TrackEOnline
         $trackEOnlineList = [];
+
         /** @var TrackEOnline $item */
         foreach ($trackResults[TrackEOnline::class] as $item) {
             $date = $item->getLoginDate()->format($dateFormat);
@@ -273,6 +282,7 @@ final class UserToJsonNormalizer
 
         // TrackEDefault
         $trackEDefault = [];
+
         /** @var TrackEDefault $item */
         foreach ($trackResults[TrackEDefault::class] as $item) {
             $date = $item->getDefaultDate()->format($dateFormat);
@@ -289,6 +299,7 @@ final class UserToJsonNormalizer
 
         // TrackELastaccess
         $trackELastaccess = [];
+
         /** @var TrackELastaccess $item */
         foreach ($trackResults[TrackELastaccess::class] as $item) {
             $date = $item->getAccessDate()->format($dateFormat);
@@ -303,6 +314,7 @@ final class UserToJsonNormalizer
 
         // TrackEUploads
         $trackEUploads = [];
+
         /** @var TrackEUploads $item */
         foreach ($trackResults[TrackEUploads::class] as $item) {
             $date = $item->getUploadDate()->format($dateFormat);
@@ -315,18 +327,20 @@ final class UserToJsonNormalizer
         }
 
         $gradebookResult = [];
+
         /** @var GradebookResult $item */
         foreach ($trackResults[GradebookResult::class] as $item) {
             $date = $item->getCreatedAt()->format($dateFormat);
             $list = [
                 'Evaluation id# '.$item->getEvaluation()->getId(),
-                //'Score: '.$item->getScore(),
+                // 'Score: '.$item->getScore(),
                 'Creation date: '.$date,
             ];
             $gradebookResult[] = implode(', ', $list);
         }
 
         $trackEDownloads = [];
+
         /** @var TrackEDownloads $item */
         foreach ($trackResults[TrackEDownloads::class] as $item) {
             $date = $item->getDownDate()->format($dateFormat);
@@ -338,11 +352,11 @@ final class UserToJsonNormalizer
         }
 
         // UserCourseCategory
-        $criteria = [
+        $result = $em->getRepository(UserCourseCategory::class)->findBy([
             'user' => $userId,
-        ];
-        $result = $em->getRepository(UserCourseCategory::class)->findBy($criteria);
+        ]);
         $userCourseCategory = [];
+
         /** @var UserCourseCategory $item */
         foreach ($result as $item) {
             $list = [
@@ -352,11 +366,11 @@ final class UserToJsonNormalizer
         }
 
         // Forum
-        $criteria = [
+        $result = $em->getRepository(CForumPost::class)->findBy([
             'user' => $userId,
-        ];
-        $result = $em->getRepository(CForumPost::class)->findBy($criteria);
+        ]);
         $cForumPostList = [];
+
         /** @var CForumPost $item */
         foreach ($result as $item) {
             $date = $item->getPostDate()->format($dateFormat);
@@ -368,11 +382,11 @@ final class UserToJsonNormalizer
         }
 
         // CForumThread
-        $criteria = [
+        $result = $em->getRepository(CForumThread::class)->findBy([
             'user' => $userId,
-        ];
-        $result = $em->getRepository(CForumThread::class)->findBy($criteria);
+        ]);
         $cForumThreadList = [];
+
         /** @var CForumThread $item */
         foreach ($result as $item) {
             $date = $item->getThreadDate()->format($dateFormat);
@@ -398,11 +412,11 @@ final class UserToJsonNormalizer
         }*/
 
         // cGroupRelUser
-        $criteria = [
+        $result = $em->getRepository(CGroupRelUser::class)->findBy([
             'user' => $userId,
-        ];
-        $result = $em->getRepository(CGroupRelUser::class)->findBy($criteria);
+        ]);
         $cGroupRelUser = [];
+
         /** @var CGroupRelUser $item */
         foreach ($result as $item) {
             $list = [
@@ -414,11 +428,11 @@ final class UserToJsonNormalizer
         }
 
         // CAttendanceSheet
-        $criteria = [
+        $result = $em->getRepository(CAttendanceSheet::class)->findBy([
             'user' => $userId,
-        ];
-        $result = $em->getRepository(CAttendanceSheet::class)->findBy($criteria);
+        ]);
         $cAttendanceSheetList = [];
+
         /** @var CAttendanceSheet $item */
         foreach ($result as $item) {
             $list = [
@@ -429,11 +443,11 @@ final class UserToJsonNormalizer
         }
 
         // CAttendanceResult
-        $criteria = [
+        $result = $em->getRepository(CAttendanceResult::class)->findBy([
             'user' => $userId,
-        ];
-        $result = $em->getRepository(CAttendanceResult::class)->findBy($criteria);
+        ]);
         $cAttendanceResult = [];
+
         /** @var CAttendanceResult $item */
         foreach ($result as $item) {
             $list = [
@@ -444,18 +458,18 @@ final class UserToJsonNormalizer
         }
 
         // Message
-        $criteria = [
+        $result = $em->getRepository(Message::class)->findBy([
             'sender' => $userId,
-        ];
-        $result = $em->getRepository(Message::class)->findBy($criteria);
+        ]);
         $messageList = [];
+
         /** @var Message $item */
         foreach ($result as $item) {
             $date = $item->getSendDate()->format($dateFormat);
             $userName = '';
             if ($item->getReceivers()) {
                 foreach ($item->getReceivers() as $receiver) {
-                    $userName = ', '.$receiver->getUsername();
+                    $userName = ', '.$receiver->getReceiver()->getUsername();
                 }
             }
 
@@ -469,11 +483,11 @@ final class UserToJsonNormalizer
         }
 
         // CSurveyAnswer
-        $criteria = [
+        $result = $em->getRepository(CSurveyAnswer::class)->findBy([
             'user' => $userId,
-        ];
-        $result = $em->getRepository(CSurveyAnswer::class)->findBy($criteria);
+        ]);
         $cSurveyAnswer = [];
+
         /** @var CSurveyAnswer $item */
         foreach ($result as $item) {
             $list = [
@@ -484,11 +498,11 @@ final class UserToJsonNormalizer
         }
 
         // CDropboxFile
-        $criteria = [
+        $result = $em->getRepository(CDropboxFile::class)->findBy([
             'uploaderId' => $userId,
-        ];
-        $result = $em->getRepository(CDropboxFile::class)->findBy($criteria);
+        ]);
         $cDropboxFile = [];
+
         /** @var CDropboxFile $item */
         foreach ($result as $item) {
             $date = $item->getUploadDate()->format($dateFormat);
@@ -501,11 +515,11 @@ final class UserToJsonNormalizer
         }
 
         // CDropboxPerson
-        $criteria = [
+        $result = $em->getRepository(CDropboxPerson::class)->findBy([
             'userId' => $userId,
-        ];
-        $result = $em->getRepository(CDropboxPerson::class)->findBy($criteria);
+        ]);
         $cDropboxPerson = [];
+
         /** @var CDropboxPerson $item */
         foreach ($result as $item) {
             $list = [
@@ -516,11 +530,11 @@ final class UserToJsonNormalizer
         }
 
         // CDropboxPerson
-        $criteria = [
+        $result = $em->getRepository(CDropboxFeedback::class)->findBy([
             'authorUserId' => $userId,
-        ];
-        $result = $em->getRepository(CDropboxFeedback::class)->findBy($criteria);
+        ]);
         $cDropboxFeedback = [];
+
         /** @var CDropboxFeedback $item */
         foreach ($result as $item) {
             $date = $item->getFeedbackDate()->format($dateFormat);
@@ -533,11 +547,11 @@ final class UserToJsonNormalizer
         }
 
         // CNotebook
-        $criteria = [
+        $result = $em->getRepository(CNotebook::class)->findBy([
             'user' => $userId,
-        ];
-        $result = $em->getRepository(CNotebook::class)->findBy($criteria);
+        ]);
         $cNotebook = [];
+
         /** @var CNotebook $item */
         foreach ($result as $item) {
             $date = $item->getUpdateDate()->format($dateFormat);
@@ -549,62 +563,62 @@ final class UserToJsonNormalizer
         }
 
         // CLpView
-        $criteria = [
+        $result = $em->getRepository(CLpView::class)->findBy([
             'user' => $userId,
-        ];
-        $result = $em->getRepository(CLpView::class)->findBy($criteria);
+        ]);
         $cLpView = [];
+
         /** @var CLpView $item */
         foreach ($result as $item) {
             $list = [
-                //'Id #'.$item->getId(),
+                // 'Id #'.$item->getId(),
                 'LP #'.$item->getLp()->getIid(),
                 'Progress: '.$item->getProgress(),
-                //'Course #'.$item->getCId(),
-                //'Session #'.$item->getSessionId(),
+                // 'Course #'.$item->getCId(),
+                // 'Session #'.$item->getSessionId(),
             ];
             $cLpView[] = implode(', ', $list);
         }
 
         // CStudentPublication
-        $criteria = [
+        $result = $em->getRepository(CStudentPublication::class)->findBy([
             'user' => $userId,
-        ];
-        $result = $em->getRepository(CStudentPublication::class)->findBy($criteria);
+        ]);
         $cStudentPublication = [];
+
         /** @var CStudentPublication $item */
         foreach ($result as $item) {
             $list = [
                 'Title: '.$item->getTitle(),
-                //'URL: '.$item->getTitle(),
+                // 'URL: '.$item->getTitle(),
             ];
             $cStudentPublication[] = implode(', ', $list);
         }
 
         // CStudentPublicationComment
-        $criteria = [
+        $result = $em->getRepository(CStudentPublicationComment::class)->findBy([
             'user' => $userId,
-        ];
-        $result = $em->getRepository(CStudentPublicationComment::class)->findBy($criteria);
+        ]);
         $cStudentPublicationComment = [];
+
         /** @var CStudentPublicationComment $item */
         foreach ($result as $item) {
             $date = $item->getSentAt()->format($dateFormat);
             $list = [
                 'Commment: '.$item->getComment(),
                 'File '.$item->getFile(),
-                //'Course # '.$item->getCId(),
+                // 'Course # '.$item->getCId(),
                 'Date: '.$date,
             ];
             $cStudentPublicationComment[] = implode(', ', $list);
         }
 
         // CWiki
-        $criteria = [
+        $result = $em->getRepository(CWiki::class)->findBy([
             'userId' => $userId,
-        ];
-        $result = $em->getRepository(CWiki::class)->findBy($criteria);
+        ]);
         $cWiki = [];
+
         /** @var CWiki $item */
         foreach ($result as $item) {
             $list = [
@@ -616,11 +630,11 @@ final class UserToJsonNormalizer
         }
 
         // Ticket
-        $criteria = [
+        $result = $em->getRepository(Ticket::class)->findBy([
             'insertUserId' => $userId,
-        ];
-        $result = $em->getRepository(Ticket::class)->findBy($criteria);
+        ]);
         $ticket = [];
+
         /** @var Ticket $item */
         foreach ($result as $item) {
             $list = [
@@ -631,11 +645,11 @@ final class UserToJsonNormalizer
         }
 
         // Message
-        $criteria = [
+        $result = $em->getRepository(TicketMessage::class)->findBy([
             'insertUserId' => $userId,
-        ];
-        $result = $em->getRepository(TicketMessage::class)->findBy($criteria);
+        ]);
         $ticketMessage = [];
+
         /** @var TicketMessage $item */
         foreach ($result as $item) {
             $date = $item->getInsertDateTime()->format($dateFormat);
@@ -649,11 +663,11 @@ final class UserToJsonNormalizer
         }
 
         // SkillRelUserComment
-        $criteria = [
+        $result = $em->getRepository(SkillRelUserComment::class)->findBy([
             'feedbackGiver' => $userId,
-        ];
-        $result = $em->getRepository(SkillRelUserComment::class)->findBy($criteria);
+        ]);
         $skillRelUserComment = [];
+
         /** @var SkillRelUserComment $item */
         foreach ($result as $item) {
             $date = $item->getFeedbackDateTime()->format($dateFormat);
@@ -666,16 +680,16 @@ final class UserToJsonNormalizer
         }
 
         // UserRelCourseVote
-        $criteria = [
+        $result = $em->getRepository(UserRelCourseVote::class)->findBy([
             'user' => $userId,
-        ];
-        $result = $em->getRepository(UserRelCourseVote::class)->findBy($criteria);
+        ]);
         $userRelCourseVote = [];
+
         /** @var UserRelCourseVote $item */
         foreach ($result as $item) {
             $list = [
                 'Course #'.$item->getCourse()->getId(),
-                //'Session #'.$item->getSession()->getId(),
+                // 'Session #'.$item->getSession()->getId(),
                 'Vote: '.$item->getVote(),
             ];
             $userRelCourseVote[] = implode(', ', $list);
@@ -730,9 +744,9 @@ final class UserToJsonNormalizer
             ]
         );*/
 
-        //$user->setDropBoxReceivedFiles([]);
-        //$user->setGroups([]);
-        //$user->setCurriculumItems([]);
+        // $user->setDropBoxReceivedFiles([]);
+        // $user->setGroups([]);
+        // $user->setCurriculumItems([]);
 
         /*$portals = $user->getPortals();
         if (!empty($portals)) {
@@ -753,7 +767,7 @@ final class UserToJsonNormalizer
         $user->setAchievedSkills($list);
         $user->setCommentedUserSkills([]);*/
 
-        //$extraFieldValues = new \ExtraFieldValue('user');
+        // $extraFieldValues = new \ExtraFieldValue('user');
 
         $lastLogin = $user->getLastLogin();
         /*if (null === $lastLogin) {

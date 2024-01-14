@@ -35,6 +35,7 @@ final class Version20201217124011 extends AbstractMigrationChamilo
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
         $em = $doctrine->getManager();
+
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
@@ -45,7 +46,8 @@ final class Version20201217124011 extends AbstractMigrationChamilo
         $courseRepo = $container->get(CourseRepository::class);
         $sessionRepo = $container->get(SessionRepository::class);
         $groupRepo = $container->get(CGroupRepository::class);
-        //$userRepo = $container->get(UserRepository::class);
+
+        // $userRepo = $container->get(UserRepository::class);
         /** @var Kernel $kernel */
         $kernel = $container->get('kernel');
         $rootPath = $kernel->getProjectDir();
@@ -53,6 +55,7 @@ final class Version20201217124011 extends AbstractMigrationChamilo
         $admin = $this->getAdmin();
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();
@@ -65,6 +68,7 @@ final class Version20201217124011 extends AbstractMigrationChamilo
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
+
                 /** @var CStudentPublication $resource */
                 $resource = $studentPublicationRepo->find($id);
                 if ($resource->hasResourceNode()) {
@@ -105,6 +109,7 @@ final class Version20201217124011 extends AbstractMigrationChamilo
                 $path = $itemData['url'];
                 $title = $itemData['title'];
                 $parentId = $itemData['parent_id'];
+
                 /** @var CStudentPublication $resource */
                 $resource = $studentPublicationRepo->find($id);
                 if ($resource->hasResourceNode()) {
@@ -127,6 +132,7 @@ final class Version20201217124011 extends AbstractMigrationChamilo
                 }
 
                 $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/'.$path;
+                error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                 $this->addLegacyFileToResource($filePath, $studentPublicationRepo, $resource, $id, $title);
                 $em->persist($resource);
                 $em->flush();
@@ -151,6 +157,7 @@ final class Version20201217124011 extends AbstractMigrationChamilo
                 $path = $itemData['url_correction'];
 
                 $course = $courseRepo->find($courseId);
+
                 /** @var CStudentPublication $studentPublication */
                 $studentPublication = $studentPublicationRepo->find($id);
                 $correction = $studentPublication->getCorrection();
@@ -165,6 +172,7 @@ final class Version20201217124011 extends AbstractMigrationChamilo
                 $em->persist($correction);
 
                 $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/'.$path;
+                error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                 $this->addLegacyFileToResource($filePath, $studentPublicationCorrectionRepo, $correction, null, $title);
                 $em->persist($correction);
                 $em->flush();
@@ -182,11 +190,13 @@ final class Version20201217124011 extends AbstractMigrationChamilo
                 $id = $itemData['iid'];
                 $file = $itemData['file'];
                 $workId = $itemData['work_id'];
+
                 /** @var CStudentPublicationComment $resource */
                 $resource = $studentPublicationCommentRepo->find($id);
                 if ($resource->hasResourceNode()) {
                     continue;
                 }
+
                 /** @var CStudentPublication $parent */
                 $parent = $studentPublicationRepo->find($workId);
                 $sql = "SELECT * FROM c_student_publication WHERE c_id = {$courseId} AND id = {$workId}";
@@ -202,6 +212,7 @@ final class Version20201217124011 extends AbstractMigrationChamilo
                 $resource->addCourseLink($course, $session, $group, ResourceLink::VISIBILITY_PUBLISHED);
 
                 $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/'.$file;
+                error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                 $this->addLegacyFileToResource($filePath, $studentPublicationRepo, $resource, $id, $title);
                 $em->persist($resource);
                 $em->flush();

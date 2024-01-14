@@ -183,14 +183,11 @@ if (count($blocks) > 0) {
 
     $search_link = '<a href="%ssearch/index.php?mode=%s&action=search&query=%s%s">';
 
-    $iconGallery = (('gallery' == $mode) ? 'ButtonGallOn' : 'ButtonGallOff').'.png';
-    $iconDefault = (('default' == $mode) ? 'ButtonListOn' : 'ButtonListOff').'.png';
-
     $mode_selector = '<div id="mode-selector">';
     $mode_selector .= sprintf($search_link, api_get_path(WEB_CODE_PATH), 'gallery', $_REQUEST['query'], $get_params);
-    $mode_selector .= Display::return_icon($iconGallery).'</a>';
+    $mode_selector .= ('gallery' == $mode) ? getMdiIcon(ObjectIcon::GALLERY, 'ch-tool-icon') : getMdiIcon(ObjectIcon::GALLERY, 'ch-tool-icon-disabled');
     $mode_selector .= sprintf($search_link, api_get_path(WEB_CODE_PATH), 'default', $_REQUEST['query'], $get_params);
-    $mode_selector .= Display::return_icon($iconDefault).'</a>';
+    $mode_selector .= ('default' == $mode) ? getMdiIcon(ObjectIcon::LIST, 'ch-tool-icon') : getMdiIcon(ObjectIcon::LIST, 'ch-tool-icon-disabled');
     $mode_selector .= '</div>';
 
     echo '<div id="search-results-container">';

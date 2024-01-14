@@ -6,138 +6,89 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use Chamilo\CoreBundle\Repository\SkillRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(name="skill")
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\SkillRepository")
- */
-#[ApiResource(
-    attributes: [
-        'security' => "is_granted('ROLE_ADMIN')",
-    ],
-    normalizationContext: [
-        'groups' => ['skill:read'],
-    ],
-)]
-class Skill
+#[ApiResource(security: 'is_granted(\'ROLE_ADMIN\')', normalizationContext: ['groups' => ['skill:read']])]
+#[ORM\Table(name: 'skill')]
+#[ORM\Entity(repositoryClass: SkillRepository::class)]
+class Skill implements Stringable
 {
     public const STATUS_DISABLED = 0;
     public const STATUS_ENABLED = 1;
-
-    /**
-     * @Groups({"skill:read"})
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[Groups(['skill:read'])]
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Profile", inversedBy="skills")
-     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: Profile::class, inversedBy: 'skills')]
+    #[ORM\JoinColumn(name: 'profile_id', referencedColumnName: 'id')]
     protected ?Profile $profile = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="skill", cascade={"persist"})
-     *
-     * @var SkillRelUser[]|Collection
+     * @var Collection<int, SkillRelUser>
      */
+    #[ORM\OneToMany(targetEntity: SkillRelUser::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $issuedSkills;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelItem", mappedBy="skill", cascade={"persist"})
-     *
-     * @var Collection|SkillRelItem[]
+     * @var Collection<int, SkillRelItem>
      */
+    #[ORM\OneToMany(targetEntity: SkillRelItem::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $items;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelSkill", mappedBy="skill", cascade={"persist"})
-     *
-     * @var Collection|SkillRelSkill[]
+     * @var Collection<int, SkillRelSkill>
      */
+    #[ORM\OneToMany(targetEntity: SkillRelSkill::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $skills;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelCourse", mappedBy="skill", cascade={"persist"})
-     *
-     * @var Collection|SkillRelCourse[]
+     * @var Collection<int, SkillRelCourse>
      */
+    #[ORM\OneToMany(targetEntity: SkillRelCourse::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $courses;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelGradebook", mappedBy="skill", cascade={"persist"})
-     *
-     * @var Collection|SkillRelGradebook[]
+     * @var Collection<int, SkillRelGradebook>
      */
+    #[ORM\OneToMany(targetEntity: SkillRelGradebook::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $gradeBookCategories;
-
-    /**
-     * @Groups({"skill:read", "skill:write"})
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[Groups(['skill:read', 'skill:write'])]
+    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
     protected string $name;
-
-    /**
-     * @Groups({"skill:read", "skill:write"})
-     *
-     * @ORM\Column(name="short_code", type="string", length=100, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[Groups(['skill:read', 'skill:write'])]
+    #[ORM\Column(name: 'short_code', type: 'string', length: 100, nullable: false)]
     protected string $shortCode;
-
-    /**
-     * @Groups({"skill:read", "skill:write"})
-     *
-     * @ORM\Column(name="description", type="text", nullable=false)
-     */
+    #[Groups(['skill:read', 'skill:write'])]
+    #[ORM\Column(name: 'description', type: 'text', nullable: false)]
     protected string $description;
-
-    /**
-     * @ORM\Column(name="access_url_id", type="integer", nullable=false)
-     */
     #[Assert\NotNull]
+    #[ORM\Column(name: 'access_url_id', type: 'integer', nullable: false)]
     protected int $accessUrlId;
-
-    /**
-     * @ORM\Column(name="icon", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'icon', type: 'string', length: 255, nullable: false)]
     protected string $icon;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Asset", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="asset_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: 'asset_id', referencedColumnName: 'id')]
     protected ?Asset $asset = null;
-
-    /**
-     * @ORM\Column(name="criteria", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'criteria', type: 'text', nullable: true)]
     protected ?string $criteria = null;
-
-    /**
-     * @ORM\Column(name="status", type="integer", nullable=false, options={"default":1})
-     */
+    #[ORM\Column(name: 'status', type: 'integer', nullable: false, options: ['default' => 1])]
     protected int $status;
-
-    /**
-     * @Gedmo\Timestampable(on="update")
-     *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
-     */
+    #[Gedmo\Timestampable(on: 'update')]
+    #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: false)]
     protected DateTime $updatedAt;
-
     public function __construct()
     {
         $this->issuedSkills = new ArrayCollection();
@@ -149,43 +100,36 @@ class Skill
         $this->description = '';
         $this->status = self::STATUS_ENABLED;
     }
-
     public function __toString(): string
     {
         return $this->getName();
     }
-
     public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
-
     public function getName(): string
     {
         return $this->name;
     }
-
     public function getShortCode(): string
     {
         return $this->shortCode;
     }
-
     public function setShortCode(string $shortCode): self
     {
         $this->shortCode = $shortCode;
 
         return $this;
     }
-
     public function setDescription(string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
-
     public function getDescription(): string
     {
         return $this->description;
@@ -212,7 +156,6 @@ class Skill
     {
         return $this->accessUrlId;
     }
-
     public function setIcon(string $icon): self
     {
         $this->icon = $icon;
@@ -229,7 +172,6 @@ class Skill
     {
         return $this->icon;
     }
-
     public function setCriteria(string $criteria): self
     {
         $this->criteria = $criteria;
@@ -246,7 +188,6 @@ class Skill
     {
         return $this->criteria;
     }
-
     public function setStatus(int $status): self
     {
         $this->status = $status;
@@ -305,7 +246,6 @@ class Skill
     {
         return $this->profile;
     }
-
     public function setProfile(Profile $profile): self
     {
         $this->profile = $profile;
@@ -314,34 +254,31 @@ class Skill
     }
 
     /**
-     * Get issuedSkills.
-     *
-     * @return Collection
+     * @return Collection<int, SkillRelUser>
      */
-    public function getIssuedSkills()
+    public function getIssuedSkills(): Collection
     {
         return $this->issuedSkills;
     }
 
     /**
-     * @return Collection
+     * @return Collection<int, SkillRelItem>
      */
-    public function getItems()
+    public function getItems(): Collection
     {
         return $this->items;
     }
-
     public function setItems(ArrayCollection $items): self
     {
         $this->items = $items;
 
         return $this;
     }
-
     public function hasItem(int $typeId, int $itemId): bool
     {
         if (0 !== $this->getItems()->count()) {
             $found = false;
+
             /** @var SkillRelItem $item */
             foreach ($this->getItems() as $item) {
                 if ($item->getItemId() === $itemId && $item->getItemType() === $typeId) {
@@ -356,7 +293,6 @@ class Skill
 
         return false;
     }
-
     public function addItem(SkillRelItem $skillRelItem): void
     {
         $skillRelItem->setSkill($this);
@@ -370,7 +306,6 @@ class Skill
     {
         return $this->courses;
     }
-
     public function setCourses(ArrayCollection $courses): self
     {
         $this->courses = $courses;
@@ -381,17 +316,15 @@ class Skill
     /**
      * @return SkillRelSkill[]|Collection
      */
-    public function getSkills()
+    public function getSkills(): array|Collection
     {
         return $this->skills;
     }
 
     /**
      * @param SkillRelSkill[]|Collection $skills
-     *
-     * @return Skill
      */
-    public function setSkills($skills): self
+    public function setSkills(array|Collection $skills): self
     {
         $this->skills = $skills;
 
@@ -401,57 +334,49 @@ class Skill
     /**
      * @return SkillRelGradebook[]|Collection
      */
-    public function getGradeBookCategories()
+    public function getGradeBookCategories(): array|Collection
     {
         return $this->gradeBookCategories;
     }
 
     /**
      * @param SkillRelGradebook[]|Collection $gradeBookCategories
-     *
-     * @return Skill
      */
-    public function setGradeBookCategories($gradeBookCategories): self
+    public function setGradeBookCategories(array|Collection $gradeBookCategories): self
     {
         $this->gradeBookCategories = $gradeBookCategories;
 
         return $this;
     }
-
     public function hasAsset(): bool
     {
         return null !== $this->asset;
     }
-
     public function getAsset(): ?Asset
     {
         return $this->asset;
     }
-
     public function setAsset(?Asset $asset): self
     {
         $this->asset = $asset;
 
         return $this;
     }
-
     public function hasCourseAndSession(SkillRelCourse $searchItem): bool
     {
         if (0 !== $this->getCourses()->count()) {
             $found = false;
+
             /** @var SkillRelCourse $item */
             foreach ($this->getCourses() as $item) {
                 $sessionPassFilter = false;
                 $session = $item->getSession();
                 $sessionId = empty($session) ? 0 : $session->getId();
                 $searchSessionId = empty($searchItem->getSession()) ? 0 : $searchItem->getSession()->getId();
-
                 if ($sessionId === $searchSessionId) {
                     $sessionPassFilter = true;
                 }
-                if ($item->getCourse()->getId() === $searchItem->getCourse()->getId() &&
-                    $sessionPassFilter
-                ) {
+                if ($item->getCourse()->getId() === $searchItem->getCourse()->getId() && $sessionPassFilter) {
                     $found = true;
 
                     break;
@@ -463,7 +388,6 @@ class Skill
 
         return false;
     }
-
     public function addToCourse(SkillRelCourse $item): void
     {
         $item->setSkill($this);

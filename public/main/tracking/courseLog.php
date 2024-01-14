@@ -6,6 +6,9 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -83,7 +86,7 @@ if ($export_csv) {
     }
     ob_start();
 }
-$columnsToHideFromSetting = api_get_configuration_value('course_log_hide_columns');
+$columnsToHideFromSetting = api_get_setting('course.course_log_hide_columns', true);
 $columnsToHide = [0, 8, 9, 10, 11];
 if (!empty($columnsToHideFromSetting) && isset($columnsToHideFromSetting['columns'])) {
     $columnsToHide = $columnsToHideFromSetting['columns'];
@@ -95,9 +98,12 @@ $csv_content = [];
 $js = "<script>
     // hide column and display the button to unhide it
     function foldup(id) {
-        $('#reporting_table .data_table tr td:nth-child(' + (id + 1) + ')').toggleClass('hide');
-        $('#reporting_table .data_table tr th:nth-child(' + (id + 1) + ')').toggleClass('hide');
-        $('div#unhideButtons a:nth-child(' + (id + 1) + ')').toggleClass('hide');
+        var show = function () {\$(this).css('outline', '1px solid red')};
+        var hide = function () {\$(this).css('outline', '1px solid gree')};
+
+        $('#reporting_table .data_table tr td:nth-child(' + (id + 1) + ')').toggle();
+        $('#reporting_table .data_table tr th:nth-child(' + (id + 1) + ')').toggle();
+        $('div#unhideButtons a:nth-child(' + (id + 1) + ')').toggle();
     }
 
     // add the red cross on top of each column
@@ -105,12 +111,7 @@ $js = "<script>
         $('#reporting_table .data_table tr th').each(
             function(index) {
                 $(this).prepend(
-                    '<div style=\"cursor:pointer\" onclick=\"foldup(' + index + ')\">".Display::return_icon(
-                        'visible.png',
-                        get_lang('Hide column'),
-                        ['align' => 'absmiddle', 'hspace' => '3px'],
-                        ICON_SIZE_SMALL
-                     )."</div>'
+                    '<div style=\"cursor:pointer\" onclick=\"foldup(' + index + ')\">".Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Hide column'))."</div>'
                 );
             }
         );
@@ -199,7 +200,7 @@ Display::display_header($nameTools, 'Tracking');
 $actionsLeft = TrackingCourseLog::actionsLeft('users', $sessionId, false);
 
 $actionsRight = '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
-    Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ActionIcon::PRINT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Print')).'</a>';
 
 $additionalParams = '';
 if (isset($_GET['additional_profile_field'])) {
@@ -215,7 +216,7 @@ if (isset($_GET['users_tracking_per_page'])) {
 
 $actionsRight .= '<a
     href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$additionalParams.$users_tracking_per_page.'">
-     '.Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM).'</a>';
+     '.Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')).'</a>';
 // Create a search-box.
 $form_search = new FormValidator(
     'search_simple',
@@ -241,25 +242,10 @@ echo Display::toolbarAction(
 $course_name = get_lang('Course').' '.$course->getTitle();
 
 if ($sessionId) {
-    $titleSession = Display::return_icon(
-        'session.png',
-        get_lang('Session'),
-        [],
-        ICON_SIZE_SMALL
-    ).' '.api_get_session_name($sessionId);
-    $titleCourse = Display::return_icon(
-        'course.png',
-        get_lang('Course'),
-        [],
-        ICON_SIZE_SMALL
-    ).' '.$course_name;
+    $titleSession = Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Session')).' '.api_get_session_name($sessionId);
+    $titleCourse = Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course')).' '.$course_name;
 } else {
-    $titleSession = Display::return_icon(
-        'course.png',
-        get_lang('Course'),
-        [],
-        ICON_SIZE_SMALL
-    ).' '.$course->getTitle();
+    $titleSession = Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course')).' '.$course->getTitle();
 }
 
 $teacherList = CourseManager::getTeacherListFromCourseCodeToString(
@@ -290,14 +276,14 @@ if (!empty($coaches)) {
     $html .= $coaches;
 }
 
-$showReporting = false === api_get_configuration_value('hide_reporting_session_list');
+$showReporting = ('false' === api_get_setting('session.hide_reporting_session_list'));
 if ($showReporting) {
     $sessionList = SessionManager::get_session_by_course($courseId);
     if (!empty($sessionList)) {
         $html .= Display::page_subheader2(get_lang('Session list'));
-        $icon = Display::return_icon(
-            'session.png',
-            null,
+        $icon = Display::getMdiIcon(
+            ObjectIcon::SESSION,
+            'ch-tool-icon',
             null,
             ICON_SIZE_TINY
         );
@@ -581,7 +567,7 @@ if ($nbStudents > 0) {
     ];
     $el = $form->addSelect(
         'since',
-        Display::getMdiIcon('alert').get_lang('Remind learners inactive since'),
+        Display::getMdiIcon(StateIcon::WARNING, 'ch-tool-icon', null, ICON_SIZE_SMALL).get_lang('Remind learners inactive since'),
         $options,
         ['disable_js' => true, 'class' => 'col-sm-3']
     );
@@ -652,14 +638,14 @@ if ($nbStudents > 0) {
     $table->set_header(
         $headerCounter++,
         get_lang('Time').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('Time spent in the course'), [], ICON_SIZE_TINY),
+        Display::getMdiIcon('clock-outline', 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Time spent in the course')),
         false
     );
     $headers['training_time'] = get_lang('Time');
     $table->set_header(
         $headerCounter++,
         get_lang('Progress').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('Average progress in courses'), [], ICON_SIZE_TINY),
+        Display::getMdiIcon(ObjectIcon::COURSE_PROGRESS, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Average progress in courses')),
         false
     );
     $headers['course_progress'] = get_lang('Course progress');
@@ -667,33 +653,33 @@ if ($nbStudents > 0) {
     $table->set_header(
         $headerCounter++,
         get_lang('Exercise progress').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('Progress of exercises taken by the student'), [], ICON_SIZE_TINY),
+        Display::getMdiIcon(ObjectIcon::COURSE_PROGRESS, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Progress of exercises taken by the student')),
         false
     );
     $headers['exercise_progress'] = get_lang('Exercise progress');
     $table->set_header(
         $headerCounter++,
         get_lang('Exercise average').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('Average of best grades of each exercise attempt'), [], ICON_SIZE_TINY),
+        Display::getMdiIcon('format-annotation-plus', 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Average of best grades of each exercise attempt')),
         false
     );
     $headers['exercise_average'] = get_lang('Exercise average');
     $table->set_header(
         $headerCounter++,
         get_lang('Score').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('Average of tests in Learning Paths'), [], ICON_SIZE_TINY),
+        Display::getMdiIcon('format-annotation-plus', 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Average of tests in Learning Paths')),
         false
     );
     $headers['score'] = get_lang('Score');
     $table->set_header(
         $headerCounter++,
         $bestScoreLabel.'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('Average of tests in Learning Paths'), [], ICON_SIZE_TINY),
+        Display::getMdiIcon('format-annotation-plus', 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Average of tests in Learning Paths')),
         false
     );
     $headers['score_best'] = $bestScoreLabel;
 
-    $addExerciseOption = api_get_configuration_value('add_exercise_best_attempt_in_report');
+    $addExerciseOption = api_get_setting('exercise.add_exercise_best_attempt_in_report', true);
     $exerciseResultHeaders = [];
     if (!empty($addExerciseOption) && isset($addExerciseOption['courses']) &&
         isset($addExerciseOption['courses'][$courseCode])
@@ -763,20 +749,20 @@ if ($nbStudents > 0) {
     $html .= '<div id="unhideButtons" class="btn-toolbar">';
     $index = 0;
     $getLangDisplayColumn = get_lang('Show column');
-    /*foreach ($headers as $header) {
+    foreach ($headers as $header) {
         $html .= Display::toolbarButton(
             $header,
             '#',
             'arrow-right',
-            'default',
+            'plain-outline',
             [
                 'title' => htmlentities("$getLangDisplayColumn \"$header\"", ENT_QUOTES),
-                'class' => 'hide',
+                'style' => 'display: none;',
                 'onclick' => "foldup($index); return false;",
             ]
         );
         $index++;
-    }*/
+    }
     $html .= '</div>';
 
     $html .= '<div id="reporting_table">';
@@ -875,7 +861,7 @@ if (!empty($groupList)) {
                         if (!empty($results)) {
                             foreach ($results as $result) {
                                 if (!empty($result['max_score'])) {
-                                    $score = $result['score'] / $result['max_score  '];
+                                    $score = $result['score'] / $result['max_score'];
                                     if ($score > $best) {
                                         $best = $score;
                                     }

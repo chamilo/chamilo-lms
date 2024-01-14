@@ -8,7 +8,7 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (api_get_configuration_value('disable_my_lps_page')) {
+if ('true' === api_get_setting('lp.disable_my_lps_page')) {
     api_not_allowed(true);
 }
 
@@ -70,10 +70,7 @@ if (!empty($courses)) {
         $params = '&cid='.$course->getId().'&sid='.$sessionId;
         $link = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=view'.$params.'&lp_id='.$id;
         $icon = Display::url(
-            Display::return_icon(
-                'learnpath.png',
-                get_lang('Lp')
-            ),
+            Display::getMdiIcon('map-marker-path', 'ch-tool-icon', null, 22, get_lang('Lp')),
             $link
         );
 

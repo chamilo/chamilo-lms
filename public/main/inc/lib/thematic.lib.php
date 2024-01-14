@@ -9,6 +9,8 @@ use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
 use Chamilo\CourseBundle\Entity\CThematicPlan;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 /**
  * Provides functions for thematic option inside attendance tool.
@@ -109,61 +111,46 @@ class Thematic
                 if (api_get_session_id()) {
                     if (api_get_session_id() == $thematic[3]) {
                         $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic[0].'">'.
-                            Display::return_icon('lesson_plan.png', get_lang('Thematic plan'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                            Display::getMdiIcon(ToolIcon::COURSE_PROGRESS_PLAN, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Thematic plan')).'</a>&nbsp;';
                         $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic[0].'">'.
-                            Display::return_icon('lesson_plan_calendar.png', get_lang('Thematic advance'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                            Display::getMdiIcon(ToolIcon::COURSE_PROGRESS_SCHEDULE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Thematic advance')).'</a>&nbsp;';
 
                         $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$thematic[0].'">'.
-                            Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>';
+                            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
                         $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$thematic[0].'">'.
-                            Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
+                            Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
                     } else {
-                        $actions .= Display::return_icon(
-                            'lesson_plan_na.png',
-                            get_lang('Thematic plan'),
-                            '',
-                            ICON_SIZE_SMALL
-                        ).'&nbsp;';
-                        $actions .= Display::return_icon(
-                            'lesson_plan_calendar_na.png',
-                            get_lang('Thematic advance'),
-                            '',
-                            ICON_SIZE_SMALL
-                        ).'&nbsp;';
-                        $actions .= Display::return_icon('edit_na.png', get_lang('Edit'), '', ICON_SIZE_SMALL);
-                        $actions .= Display::return_icon(
-                            'delete_na.png',
-                            get_lang('Delete'),
-                            '',
-                            ICON_SIZE_SMALL
-                        ).'&nbsp;';
+                        $actions .= Display::getMdiIcon(ToolIcon::COURSE_PROGRESS_PLAN, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Thematic plan')).'&nbsp;';
+                        $actions .= Display::getMdiIcon(ToolIcon::COURSE_PROGRESS_SCHEDULE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Thematic advance')).'&nbsp;';
+                        $actions .= Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Edit'));
+                        $actions .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Delete')).'&nbsp;';
                         $actions .= Display::url(
-                            Display::return_icon('cd.gif', get_lang('Copy')),
+                            Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Copy')),
                             'index.php?'.api_get_cidreq().'&action=thematic_copy&thematic_id='.$thematic[0]
                         );
                     }
                 } else {
                     $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic[0].'">'.
-                        Display::return_icon('lesson_plan.png', get_lang('Thematic plan'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                        Display::getMdiIcon(ToolIcon::COURSE_PROGRESS_PLAN, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Thematic plan')).'</a>&nbsp;';
                     $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic[0].'">'.
-                        Display::return_icon('lesson_plan_calendar.png', get_lang('Thematic advance'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                        Display::getMdiIcon(ToolIcon::COURSE_PROGRESS_SCHEDULE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Thematic advance')).'</a>&nbsp;';
 
                     if ($thematic[2] > 1) {
                         $actions .= '<a href="'.api_get_self().'?action=moveup&'.api_get_cidreq().'&thematic_id='.$thematic[0].'">'.
-                            Display::return_icon('up.png', get_lang('Up'), '', ICON_SIZE_SMALL).'</a>';
+                            Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Up')).'</a>';
                     } else {
-                        $actions .= Display::return_icon('up_na.png', '&nbsp;', '', ICON_SIZE_SMALL);
+                        $actions .= Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL);
                     }
                     /*if ($thematic[2] < self::get_max_thematic_item()) {
                         $actions .= '<a href="'.api_get_self().'?action=movedown&a'.api_get_cidreq().'&thematic_id='.$thematic[0].'">'.
-                            Display::return_icon('down.png', get_lang('down'), '', ICON_SIZE_SMALL).'</a>';
+                            Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('down')).'</a>';
                     } else {
-                        $actions .= Display::return_icon('down_na.png', '&nbsp;', '', ICON_SIZE_SMALL);
+                        $actions .= Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL);
                     }
                     $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$thematic[0].'">'.
-                        Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>';
+                        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
                     $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$thematic[0].'">'.
-                        Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
+                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
                 }
                 $thematics[] = [$thematic[0], $thematic[1], $actions];
             }
@@ -348,51 +335,23 @@ class Thematic
     /**
      * Delete logically (set active field to 0) a thematic.
      *
-     * @param int|array One or many thematic ids
+     * @param int|array $thematicId One or many thematic ids
      *
-     * @return int Affected rows
+     * @return void
      */
-    public function delete($thematic_id)
+    public function delete(int|array $thematicId): void
     {
-        $tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
-        $affected_rows = 0;
-        if (is_array($thematic_id)) {
-            foreach ($thematic_id as $id) {
-                $id = (int) $id;
-                $sql = "UPDATE $tbl_thematic SET active = 0
-                        WHERE iid = $id";
-                $result = Database::query($sql);
-                $affected_rows += Database::affected_rows($result);
-                if (!empty($affected_rows)) {
-                    // update row item property table
-                    /*api_item_property_update(
-                        $_course,
-                        'thematic',
-                        $id,
-                        'ThematicDeleted',
-                        $user_id
-                    );*/
-                }
+        $repo = Container::getThematicRepository();
+
+        if (is_array($thematicId)) {
+            foreach ($thematicId as $id) {
+                $resource = $repo->find($id);
+                $repo->delete($resource);
             }
         } else {
-            $thematic_id = (int) $thematic_id;
-            $sql = "UPDATE $tbl_thematic SET active = 0
-                    WHERE iid = $thematic_id";
-            $result = Database::query($sql);
-            $affected_rows = Database::affected_rows($result);
-            if (!empty($affected_rows)) {
-                // update row item property table
-                /*api_item_property_update(
-                    $_course,
-                    'thematic',
-                    $thematic_id,
-                    'ThematicDeleted',
-                    $user_id
-                );*/
-            }
-        }
-
-        return $affected_rows;
+            $resource = $repo->find($thematicId);
+            $repo->delete($resource);
+        };
     }
 
     /**
@@ -452,18 +411,11 @@ class Thematic
      *
      * @see SortableTable#get_total_number_of_items()
      */
-    public static function get_number_of_thematic_advances(array $params)
+    public static function get_number_of_thematic_advances(array $params): int
     {
-        $table = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
         $thematic_id = (int) $params['thematic_id'];
-
-        $sql = "SELECT COUNT(iid) AS total_number_of_items
-                FROM $table
-                WHERE thematic_id = $thematic_id ";
-        $res = Database::query($sql);
-        $obj = Database::fetch_object($res);
-
-        return $obj->total_number_of_items;
+        $repo = Container::getThematicAdvanceRepository();
+        return $repo->count(['thematic' => $thematic_id]);
     }
 
     /**
@@ -516,11 +468,11 @@ class Thematic
                 $actions = '';
                 $actions .= '<a
                         href="index.php?'.api_get_cidreq().'&action=thematic_advance_edit&thematic_id='.$thematic_id.'&thematic_advance_id='.$thematic_advance[0].'">'.
-                        Display::return_icon('edit.png', get_lang('Edit'), '', 22).'</a>';
+                        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
                 $actions .= '<a
                     onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;"
                     href="index.php?'.api_get_cidreq().'&action=thematic_advance_delete&thematic_id='.$thematic_id.'&thematic_advance_id='.$thematic_advance[0].'">'.
-                        Display::return_icon('delete.png', get_lang('Delete'), '', 22).'</a></center>';
+                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a></center>';
                 $data[] = [$i, $thematic_advance[1], $thematic_advance[2], $thematic_advance[3], $actions];
                 $i++;
                 // }

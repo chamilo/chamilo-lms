@@ -1,31 +1,4 @@
 <template>
-  <PrimeToolbar
-    v-if="isAdmin"
-  >
-    <template #start>
-      <Button
-        :label="t('New page')"
-        class="p-button-outlined"
-        icon="mdi mdi-file-plus"
-        @click="goToAddItem"
-      />
-      <!--      <Button-->
-      <!--        :label="t('New category')"-->
-      <!--        class="p-button-outlined"-->
-      <!--        icon="mdi mdi-folder-plus"-->
-      <!--        @click="openNew"-->
-      <!--      />-->
-
-      <!--      <Button-->
-      <!--        :label="t('Delete selected')"-->
-      <!--        class="p-button-outlined p-button-danger"-->
-      <!--        :disabled="!selectedItems.length > 0"-->
-      <!--        icon="mdi mdi-delete"-->
-      <!--        @click="confirmDeleteMultiple"-->
-      <!--      />-->
-    </template>
-  </PrimeToolbar>
-
   <DataTable
     v-if="isAdmin"
     v-model:filters="filters"
@@ -58,7 +31,7 @@
       <template #body="slotProps">
         <a
           v-if="slotProps.data"
-          class="cursor-pointer "
+          class="cursor-pointer"
           @click="onShowItem(slotProps.data)"
         >
           {{ slotProps.data.title }}
@@ -100,14 +73,14 @@
           <!--          />-->
 
           <Button
-            v-if="isAuthenticated"
+            v-if="securityStore.isAuthenticated"
             class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
             icon="mdi mdi-pencil"
             @click="goToEditItem(slotProps.data)"
           />
 
           <Button
-            v-if="isAuthenticated"
+            v-if="securityStore.isAuthenticated"
             class="p-button-icon-only p-button-danger p-button-outlined p-button-sm"
             icon="mdi mdi-delete"
             @click="confirmDeleteItem(slotProps.data)"
@@ -121,7 +94,7 @@
     v-model:visible="itemDialog"
     :header="t('New folder')"
     :modal="true"
-    :style="{width: '450px'}"
+    :style="{ width: '450px' }"
     class="p-fluid"
   >
     <div class="field">
@@ -129,7 +102,7 @@
         <InputText
           id="title"
           v-model.trim="item.title"
-          :class="{'p-invalid': submitted && !item.title}"
+          :class="{ 'p-invalid': submitted && !item.title }"
           autocomplete="off"
           autofocus
           required="true"
@@ -165,7 +138,7 @@
   <Dialog
     v-model:visible="deleteItemDialog"
     :modal="true"
-    :style="{width: '450px'}"
+    :style="{ width: '450px' }"
     header="Confirm"
   >
     <div class="confirmation-content">
@@ -173,7 +146,10 @@
         class="pi pi-exclamation-triangle p-mr-3"
         style="font-size: 2rem"
       />
-      <span v-if="item">Are you sure you want to delete <b>{{ item.title }}</b>?</span>
+      <span v-if="item"
+        >Are you sure you want to delete <b>{{ item.title }}</b
+        >?</span
+      >
     </div>
     <template #footer>
       <Button
@@ -194,7 +170,7 @@
   <Dialog
     v-model:visible="deleteMultipleDialog"
     :modal="true"
-    :style="{width: '450px'}"
+    :style="{ width: '450px' }"
     header="Confirm"
   >
     <div class="confirmation-content">
@@ -225,57 +201,70 @@
 </template>
 
 <script setup>
-import PrimeToolbar from 'primevue/toolbar';
-import { useStore } from 'vuex';
-import { useDatatableList } from '../../composables/datatableList';
-import { computed, inject, onMounted, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { useStore } from "vuex"
+import { useDatatableList } from "../../composables/datatableList"
+import { computed, inject, onMounted, ref } from "vue"
+import { useI18n } from "vue-i18n"
+import { useToast } from "primevue/usetoast"
+import { useSecurityStore } from "../../store/securityStore"
 
-const store = useStore();
+const store = useStore()
+const securityStore = useSecurityStore()
 
-const { t } = useI18n();
+const { t } = useI18n()
 
-const { filters, options, onUpdateOptions, goToAddItem, onShowItem, goToEditItem, deleteItem } = useDatatableList('Page');
+const { filters, options, onUpdateOptions, onShowItem, goToEditItem, deleteItem } =
+  useDatatableList("Page")
 
-const flashMessageList = inject('flashMessageList');
+const toast = useToast()
+
+const layoutMenuItems = inject("layoutMenuItems")
 
 onMounted(() => {
-  filters.value.loadNode = 0;
+  filters.value.loadNode = 0
 
-  onUpdateOptions(options.value);
-});
+  onUpdateOptions(options.value)
 
-const isAuthenticated = computed(() => store.getters['security/isAuthenticated']);
-const isAdmin = computed(() => store.getters['security/isAdmin']);
+  if (isAdmin.value) {
+    layoutMenuItems.value = [
+      {
+        label: t("New page"),
+        to: { name: "PageCreate" },
+      }
+    ]
+  }
+})
 
-const items = computed(() => store.state['page'].recents);
+const isAdmin = computed(() => store.getters["security/isAdmin"])
+
+const items = computed(() => store.state["page"].recents)
 
 // const deletedPage = computed(() => store.state['page'].deleted);
-const isLoading = computed(() => store.state['page'].isLoading)
-const totalItems = computed(() => store.state['page'].totalItems)
+const isLoading = computed(() => store.state["page"].isLoading)
+const totalItems = computed(() => store.state["page"].totalItems)
 
-const selectedItems = ref([]);
-const itemDialog = ref(false);
-const deleteItemDialog = ref(false);
-const deleteMultipleDialog = ref(false);
-const item = ref({});
-const submitted = ref(false);
+const selectedItems = ref([])
+const itemDialog = ref(false)
+const deleteItemDialog = ref(false)
+const deleteMultipleDialog = ref(false)
+const item = ref({})
+const submitted = ref(false)
 
 const onPage = (event) => {
-  options.value.itemsPerPage = event.rows;
-  options.value.page = event.page + 1;
-  options.value.sortBy = event.sortField;
-  options.value.sortDesc = event.sortOrder === -1;
+  options.value.itemsPerPage = event.rows
+  options.value.page = event.page + 1
+  options.value.sortBy = event.sortField
+  options.value.sortDesc = event.sortOrder === -1
 
-  onUpdateOptions(options.value);
-};
+  onUpdateOptions(options.value)
+}
 
 const sortingChanged = (event) => {
   options.value.sortBy = event.sortField
   options.value.sortDesc = event.sortOrder === -1
 
-  onUpdateOptions(options.value);
-};
+  onUpdateOptions(options.value)
+}
 
 /*const openNew = () => {
   item.value = {};
@@ -284,43 +273,45 @@ const sortingChanged = (event) => {
 };*/
 
 const saveItem = () => {
-  submitted.value = true;
+  submitted.value = true
 
   if (item.value.title.trim()) {
     if (!item.value.id) {
       // item.value.creator
       //createCategory.value(item.value);
-      flashMessageList.value.push({
-        severity: 'success',
-        detail: t('Saved')
-      });
+      toast.add({
+        severity: "success",
+        detail: t("Saved"),
+        life: 3500,
+      })
     }
 
-    itemDialog.value = false;
-    item.value = {};
+    itemDialog.value = false
+    item.value = {}
   }
-};
+}
 
 const deleteMultipleItems = () => {
-  console.log('deleteMultipleItems'. selectedItems.value);
+  console.log("deleteMultipleItems".selectedItems.value)
 
-  store.dispatch('page/delMultiple', selectedItems.value).then(() => {
-    deleteMultipleDialog.value = false;
-    selectedItems.value = [];
+  store.dispatch("page/delMultiple", selectedItems.value).then(() => {
+    deleteMultipleDialog.value = false
+    selectedItems.value = []
 
-    flashMessageList.value.push({
-      severity: 'success',
-      detail: t('Pages deleted')
-    });
-  });
+    toast.add({
+      severity: "success",
+      detail: t("Pages deleted"),
+      life: 3500,
+    })
+  })
 
-  onUpdateOptions(options.value);
-};
+  onUpdateOptions(options.value)
+}
 
 const hideDialog = () => {
-  itemDialog.value = false;
-  submitted.value = false;
-};
+  itemDialog.value = false
+  submitted.value = false
+}
 
 /*const editItem = (item) => {
   item.value = { ...item };
@@ -328,19 +319,19 @@ const hideDialog = () => {
 };*/
 
 const confirmDeleteItem = (itemToDelete) => {
-  item.value = itemToDelete;
-  deleteItemDialog.value = true;
-};
+  item.value = itemToDelete
+  deleteItemDialog.value = true
+}
 
 /*const confirmDeleteMultiple = () => {
   deleteMultipleDialog.value = true;
 };*/
 
 const btnCofirmSingleDeleteOnClick = () => {
-  deleteItem(item);
+  deleteItem(item)
 
-  item.value = {};
+  item.value = {}
 
-  deleteItemDialog.value = false;
-};
+  deleteItemDialog.value = false
+}
 </script>

@@ -6,13 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity\Listener;
 
-use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
-use Doctrine\ORM\Event\LifecycleEventArgs;
-use Exception;
+use Doctrine\ORM\Event\PrePersistEventArgs;
 
 /**
  * Class CourseListener.
@@ -22,56 +19,15 @@ use Exception;
  */
 class CourseListener
 {
-    protected ToolChain $toolChain;
+    public function __construct(
+        protected ToolChain $toolChain,
+        protected SettingsManager $settingsManager
+    ) {}
 
-    protected SettingsManager $settingsManager;
-
-    public function __construct(ToolChain $toolChain, SettingsManager $settingsManager)
+    public function prePersist(Course $course, PrePersistEventArgs $args): void
     {
-        $this->toolChain = $toolChain;
-        $this->settingsManager = $settingsManager;
-    }
-
-    /**
-     * This code is executed when a new course is created.
-     *
-     * new object : prePersist
-     * edited object: preUpdate
-     *
-     * This function add the course tools to the current course entity
-     * thanks to the tool chain see src/Chamilo/CourseBundle/ToolChain.php
-     *
-     * @throws Exception
-     */
-    public function prePersist(Course $course, LifecycleEventArgs $args): void
-    {
-        //error_log('Course listener prePersist');
-        /*if ($course) {
-            // $this->checkLimit($repo, $course, $url);
-            $this->toolChain->addToolsInCourse($course);
-        }*/
-    }
-
-    public function postPersist(Course $course, LifecycleEventArgs $args): void
-    {
-        ///$this->checkLimit($repo, $course, $url);
+        // /$this->checkLimit($repo, $course, $url);
         $this->toolChain->addToolsInCourse($course);
-
-        $args->getObjectManager()->persist($course);
-        $args->getObjectManager()->flush();
-    }
-
-    /**
-     * This code is executed when a course is updated.
-     *
-     * @throws Exception
-     */
-    public function preUpdate(Course $course, LifecycleEventArgs $args): void
-    {
-        //error_log('preUpdate');
-        /*$url = $course->getCurrentUrl();
-        $repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
-        $this->checkLimit($repo, $course, $url);*/
     }
 
     /*protected function checkLimit(CourseRepository $repo, Course $course, AccessUrl $url): void

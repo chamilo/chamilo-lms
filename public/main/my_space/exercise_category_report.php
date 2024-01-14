@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -87,7 +89,7 @@ $form->addButtonSearch(get_lang('Search'));
 Display::display_header($nameTools);
 $form->display();
 
-$extraFields = api_get_configuration_value('exercise_category_report_user_extra_fields');
+$extraFields = api_get_setting('exercise.exercise_category_report_user_extra_fields', true);
 
 if ($form->validate() && !empty($courseInfo)) {
     $values = $form->getSubmitValues();
@@ -281,7 +283,7 @@ if ($form->validate() && !empty($courseInfo)) {
         [
             'url' => '  ',
             'url_attributes' => ['id' => 'excel_export'],
-            'content' => Display::return_icon('export_excel.png', get_lang('Excel export')),
+            'content' => Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Excel export')),
         ],
     ];
 

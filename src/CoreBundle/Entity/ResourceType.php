@@ -10,40 +10,35 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Stringable;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="resource_type")
- */
-class ResourceType
+#[ORM\Table(name: 'resource_type')]
+#[ORM\Entity]
+class ResourceType implements Stringable
 {
     use TimestampableEntity;
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue]
+    #[Groups(['resource_node:read'])]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column()
-     */
     #[Assert\NotBlank]
+    #[ORM\Column]
+    #[Groups(['resource_node:read'])]
     protected string $name;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool", inversedBy="resourceTypes")
-     * @ORM\JoinColumn(name="tool_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: Tool::class, inversedBy: 'resourceTypes')]
+    #[ORM\JoinColumn(name: 'tool_id', referencedColumnName: 'id')]
     protected Tool $tool;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ResourceNode", mappedBy="resourceType", cascade={"persist", "remove"})
-     *
      * @var ResourceNode[]|Collection
      */
+    #[ORM\OneToMany(targetEntity: ResourceNode::class, mappedBy: 'resourceType', cascade: ['persist', 'remove'])]
     protected Collection $resourceNodes;
 
     public function __construct()
@@ -88,7 +83,7 @@ class ResourceType
     /**
      * @return ResourceNode[]|Collection
      */
-    public function getResourceNodes()
+    public function getResourceNodes(): array|Collection
     {
         return $this->resourceNodes;
     }
@@ -96,7 +91,7 @@ class ResourceType
     /**
      * @param ResourceNode[]|Collection $resourceNodes
      */
-    public function setResourceNodes($resourceNodes): self
+    public function setResourceNodes(array|Collection $resourceNodes): self
     {
         $this->resourceNodes = $resourceNodes;
 

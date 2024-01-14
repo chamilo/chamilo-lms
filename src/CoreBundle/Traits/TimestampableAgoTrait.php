@@ -11,17 +11,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 trait TimestampableAgoTrait
 {
-    /**
-     * @Groups({"api"})
-     */
+    #[Groups(['api'])]
     public function getCreatedAtAgo(): string
     {
         return Carbon::instance($this->getCreatedAt())->diffForHumans();
     }
 
-    /**
-     * @Groups({"api"})
-     */
+    #[Groups(['api'])]
     public function getUpdatedAtAgo(): string
     {
         return Carbon::instance($this->getUpdatedAt())->diffForHumans();

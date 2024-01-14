@@ -31,7 +31,5 @@ final class Version20201206111706 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE block CHANGE path path VARCHAR(190) NOT NULL');
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

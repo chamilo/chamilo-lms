@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * This class provides methods for the notebook management.
@@ -189,21 +190,22 @@ class NotebookManager
         if (!api_is_anonymous()) {
             if (0 == $sessionId || api_is_allowed_to_session_edit(false, true)) {
                 echo '<a href="index.php?'.api_get_cidreq().'&action=addnote">'.
-                    Display::return_icon('new_note.png', get_lang('Add new note in my personal notebook'), '', '32').
+                    Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add new note in my personal notebook')).
                     '</a>';
             }
         }
 
         echo '<a
             href="index.php?'.api_get_cidreq().'&action=changeview&view=creation_date&direction='.$link_sort_direction.'">'.
-            Display::return_icon('notes_order_by_date_new.png', get_lang('Sort by date created'), '', '32').
+            Display::getMdiIcon(ActionIcon::SORT_DATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Sort by date created')).
             '</a>';
         echo '<a
             href="index.php?'.api_get_cidreq().'&action=changeview&view=update_date&direction='.$link_sort_direction.'">'.
-            Display::return_icon('notes_order_by_date_mod.png', get_lang('Sort by date last modified'), '', '32').
+            Display::getMdiIcon(ActionIcon::SORT_DATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Sort by date last modified')).
             '</a>';
         echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=title&direction='.$link_sort_direction.'">'.
-            Display::return_icon('notes_order_by_title.png', get_lang('Sort by title'), '', '32').'</a>';
+            Display::getMdiIcon(ActionIcon::SORT_ALPHA, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Sort by title')).
+            '</a>';
         echo '</div>';
 
         $notebookView = Session::read('notebook_view');
@@ -242,11 +244,11 @@ class NotebookManager
             }
 
             $actions = '<a href="'.api_get_self().'?action=editnote&notebook_id='.$row['notebook_id'].'">'.
-                Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>';
+                Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
             $actions .= '<a
                 href="'.api_get_self().'?action=deletenote&notebook_id='.$row['notebook_id'].'"
                 onclick="return confirmation(\''.$row['title'].'\');">'.
-                Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
+                Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
 
             echo Display::panel(
                 $row['description'],

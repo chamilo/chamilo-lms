@@ -175,6 +175,7 @@ class ResourceNodeRepositoryTest extends AbstractApiTest
         $resourceNode = $repo->find($resourceNode->getId());
 
         $this->assertSame(1, $resourceNode->getResourceLinks()->count());
+
         /** @var ResourceLink $link */
         $link = $resourceNode->getResourceLinks()->first();
 

@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 /**
  * Exercise preview.
  *
@@ -61,7 +63,7 @@ if (0 != $objExercise->expired_time && !empty($clock_expired_time)) {
     $time_control = true;
 }
 
-$htmlHeadXtra[] = api_get_build_js('exercise.js');
+$htmlHeadXtra[] = api_get_build_js('legacy_exercise.js');
 if ($time_control) {
     // Get time left for expiring time
     $time_left = api_strtotime($clock_expired_time, 'UTC') - time();
@@ -87,7 +89,7 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
 
 if ('mobileapp' === $origin) {
     $actions = '<a href="javascript:window.history.go(-1);">'.
-        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('GoBackToQuestionList')).'</a>';
     echo Display::toolbarAction('toolbar', [$actions]);
 }
 
@@ -99,21 +101,21 @@ $editLink = '';
 if ($is_allowed_to_edit) {
     if ($objExercise->sessionId == $sessionId) {
         $editLink = Display::url(
-            Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
+            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
             api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
         );
     }
     $editLink .= Display::url(
-        Display::return_icon('test_results.png', get_lang('Results and feedback and feedback'), [], ICON_SIZE_SMALL),
+        Display::getMdiIcon('chart-box', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Results and feedback and feedback')),
         api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id,
         ['title' => get_lang('Results and feedback and feedback')]
     );
 }
 
-$iconExercise = Display::return_icon('test-quiz.png', null, [], ICON_SIZE_MEDIUM);
+$iconExercise = Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon-gradient', null, ICON_SIZE_MEDIUM, get_lang('Exercise'));
 
 // Exercise name.
-if (api_get_configuration_value('save_titles_as_html')) {
+if ('true' === api_get_setting('editor.save_titles_as_html')) {
     $html .= Display::div(
         $objExercise->get_formated_title().PHP_EOL.$editLink
     );
@@ -160,7 +162,7 @@ $exercise_url_button = Display::url(
 );
 
 $btnCheck = '';
-$quizCheckButtonEnabled = api_get_configuration_value('quiz_check_button_enable');
+$quizCheckButtonEnabled = ('true' === api_get_setting('exercise.quiz_check_button_enable'));
 if ($quizCheckButtonEnabled) {
     $btnCheck = Display::button(
             'quiz_check_request_button',
@@ -434,7 +436,7 @@ if ($time_control) {
 
 $html .= $message;
 
-$disable = api_get_configuration_value('exercises_disable_new_attempts');
+$disable = ('true' === api_get_setting('exercise.exercises_disable_new_attempts'));
 if ($disable && empty($exercise_stat_info)) {
     $exercise_url_button = Display::return_message(get_lang('The portal do not allowed to start new test for the moment, please come back later.'));
 }

@@ -8,6 +8,9 @@
  *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);
@@ -152,7 +155,7 @@ $user_file_template =
 EOT;
 $renderer->setCustomElementTemplate($user_file_template);
 
-$form->addElement('file', 'user_file', Display::return_icon('word_big.gif'));
+$form->addElement('file', 'user_file', Display::getMdiIcon(ActionIcon::EXPORT_DOC, 'ch-tool-icon', null, ICON_SIZE_SMALL));
 if ('true' === api_get_setting('search_enabled')) {
     $form->addElement('checkbox', 'index_document', '', get_lang('Index document text?ument'));
     $form->addElement('html', '<br />');

@@ -14,10 +14,10 @@ jobs:
             fail-fast: false
             matrix:
                 operating-system: [ubuntu-latest]
-                php-versions: ['8.0']
+                php-versions: ['8.1']
         steps:
             - name: Checkout
-              uses: actions/checkout@v2
+              uses: actions/checkout@v4
 
             - name: Setup node
               run: |
@@ -100,7 +100,7 @@ jobs:
               run: php bin/phpunit  --coverage-clover clover.xml
 
             - name: Coverage
-              uses: codecov/codecov-action@v2
+              uses: codecov/codecov-action@v3
               with:
                   token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
                   files: ./clover.xml

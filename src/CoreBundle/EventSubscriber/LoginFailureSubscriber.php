@@ -16,9 +16,8 @@ use Symfony\Component\Security\Http\Event\LoginFailureEvent;
 class LoginFailureSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private TrackELoginRecordRepository $trackELoginRecordingRepository
-    ) {
-    }
+        private readonly TrackELoginRecordRepository $trackELoginRecordingRepository
+    ) {}
 
     public static function getSubscribedEvents(): array
     {
@@ -30,6 +29,7 @@ class LoginFailureSubscriber implements EventSubscriberInterface
     public function onFailureEvent(LoginFailureEvent $event): void
     {
         $passport = $event->getPassport();
+
         /** @var UserBadge $userBadge */
         $userBadge = $passport->getBadge(UserBadge::class);
         $username = $userBadge->getUserIdentifier();

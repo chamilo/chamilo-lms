@@ -9,56 +9,48 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 use Chamilo\CoreBundle\Controller\Api\BaseResourceFileAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\AccessUrl;
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\EntityAccessUrlInterface;
 use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceFormat;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\ResourceWithAccessUrlInterface;
-use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\AccessUrlListenerTrait;
 use Cocur\Slugify\SlugifyInterface;
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PostUpdateEventArgs;
+use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Exception;
 use InvalidArgumentException;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\Security;
 
+use const JSON_THROW_ON_ERROR;
+use const PATHINFO_EXTENSION;
+
 class ResourceListener
 {
     use AccessUrlListenerTrait;
 
-    protected SlugifyInterface $slugify;
-    protected Security $security;
-    protected ToolChain $toolChain;
-    protected RequestStack $request;
-
     public function __construct(
-        SlugifyInterface $slugify,
-        ToolChain $toolChain,
-        RequestStack $request,
-        Security $security
-    ) {
-        $this->slugify = $slugify;
-        $this->security = $security;
-        $this->toolChain = $toolChain;
-        $this->request = $request;
-    }
+        protected SlugifyInterface $slugify,
+        protected ToolChain $toolChain,
+        protected RequestStack $request,
+        protected Security $security
+    ) {}
 
     /**
      * Only in creation.
      *
      * @throws Exception
      */
-    public function prePersist(AbstractResource $resource, LifecycleEventArgs $eventArgs): void
+    public function prePersist(AbstractResource $resource, PrePersistEventArgs $eventArgs): void
     {
         $em = $eventArgs->getObjectManager();
         $request = $this->request;
@@ -109,7 +101,7 @@ class ResourceListener
         // 3. Set ResourceType.
         // @todo use static table instead of Doctrine
         $resourceTypeRepo = $em->getRepository(ResourceType::class);
-        $entityClass = \get_class($eventArgs->getObject());
+        $entityClass = $eventArgs->getObject()::class;
 
         $name = $this->toolChain->getResourceTypeNameByEntity($entityClass);
 
@@ -142,7 +134,7 @@ class ResourceListener
             }
 
             if (null === $parentUrl) {
-                throw new InvalidArgumentException(('The resource needs an AccessUrl: use $resource->addAccessUrl()'));
+                throw new InvalidArgumentException('The resource needs an AccessUrl: use $resource->addAccessUrl()');
             }
             $parentNode = $parentUrl;
         }
@@ -170,7 +162,7 @@ class ResourceListener
                 $resourceNodeIdFromRequest = $currentRequest->get('parentResourceNodeId');
                 if (empty($resourceNodeIdFromRequest)) {
                     $contentData = $request->getCurrentRequest()->getContent();
-                    $contentData = json_decode($contentData, true);
+                    $contentData = json_decode($contentData, true, 512, JSON_THROW_ON_ERROR);
                     $resourceNodeIdFromRequest = $contentData['parentResourceNodeId'] ?? '';
                 }
 
@@ -191,8 +183,11 @@ class ResourceListener
         }
 
         if ($resource instanceof PersonalFile) {
-            $valid = $parentNode->getCreator()->getUsername() === $currentUser->getUsername() ||
-                     $parentNode->getId() === $currentUser->getResourceNode()->getId();
+            if (null === $currentUser) {
+                $currentUser = $parentNode->getCreator();
+            }
+            $valid = $parentNode->getCreator()->getUsername() === $currentUser->getUsername()
+                     || $parentNode->getId() === $currentUser->getResourceNode()->getId();
 
             if (!$valid) {
                 $msg = sprintf('User %s cannot add a file to another user', $currentUser->getUsername());
@@ -207,6 +202,27 @@ class ResourceListener
             ->setResourceType($resourceType)
             ->setParent($parentNode)
         ;
+
+        $txtTypes = [
+            'events',
+            'event_attachments',
+            'illustrations',
+            'links',
+            'files',
+            'courses',
+            'users',
+            'external_tools',
+            'usergroups',
+        ];
+        $resourceFormatRepo = $em->getRepository(ResourceFormat::class);
+        $formatName = (\in_array($name, $txtTypes, true) ? 'txt' : 'html');
+        $resourceFormat = $resourceFormatRepo->findOneBy([
+            'name' => $formatName,
+        ]);
+        if ($resourceFormat) {
+            $resourceNode->setResourceFormat($resourceFormat);
+        }
+
         $resource->setResourceNode($resourceNode);
 
         // Update resourceNode title from Resource.
@@ -255,15 +271,15 @@ class ResourceListener
             $resourceNode->setParent($parentResourceNode);
         }
 
-        //error_log('Resource listener preUpdate');
-        //$this->setLinks($resource, $eventArgs->getEntityManager());
+        // error_log('Resource listener preUpdate');
+        // $this->setLinks($resource, $eventArgs->getEntityManager());
     }
 
-    public function postUpdate(AbstractResource $resource, LifecycleEventArgs $eventArgs): void
+    public function postUpdate(AbstractResource $resource, PostUpdateEventArgs $eventArgs): void
     {
-        //error_log('resource listener postUpdate');
-        //$em = $eventArgs->getEntityManager();
-        //$this->updateResourceName($resource, $resource->getResourceName(), $em);
+        // error_log('resource listener postUpdate');
+        // $em = $eventArgs->getEntityManager();
+        // $this->updateResourceName($resource, $resource->getResourceName(), $em);
     }
 
     public function updateResourceName(AbstractResource $resource): void
@@ -276,7 +292,7 @@ class ResourceListener
 
         $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
         if (empty($extension)) {
-            //$slug = $this->slugify->slugify($resourceName);
+            // $slug = $this->slugify->slugify($resourceName);
         }
         /*$originalExtension = pathinfo($resourceName, PATHINFO_EXTENSION);
         $originalBasename = \basename($resourceName, $originalExtension);

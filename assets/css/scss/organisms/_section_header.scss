@@ -1,0 +1,15 @@
+.section-header {
+  @apply flex gap-4 items-center border-b border-b-gray-30;
+
+  &--h2 {
+    @apply pb-6 ;
+  }
+
+  &--h6 {
+    @apply pb-4;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply mr-auto;
+  }
+}

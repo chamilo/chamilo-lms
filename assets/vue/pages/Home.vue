@@ -1,56 +1,39 @@
 <template>
-  <div
-    v-if="announcements.length"
-  >
-    <SystemAnnouncementCardList
-      :announcements="announcements"
-    />
-  </div>
+  <!-- Homepage for logged-in users -->
+  <div class="flex flex-col gap-4">
+    <div v-if="announcements.length">
+      <SystemAnnouncementCardList :announcements="announcements" />
+    </div>
 
-  <div
-    v-if="pages.length"
-    class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 mt-2"
-  >
-    <PageCardList
-      :pages="pages"
-    />
+    <PageCardList class="grid gap-4 grid-cols-1" />
   </div>
 </template>
 
 <script setup>
 import axios from "axios";
-import {reactive, toRefs} from 'vue'
-import {useStore} from "vuex";
-import {useI18n} from "vue-i18n";
+import { ref } from "vue";
+import { useRouter } from 'vue-router';
 import PageCardList from "../components/page/PageCardList";
 import SystemAnnouncementCardList from "../components/systemannouncement/SystemAnnouncementCardList";
+import { usePlatformConfig } from "../store/platformConfig";
 
-const store = useStore();
-const state = reactive({
-  announcements: [],
-  pages: [],
-});
+const announcements = ref([]);
+const router = useRouter();
+const platformConfigStore = usePlatformConfig();
 
-axios.get('/news/list').then(response => {
-  if (Array.isArray(response.data)) {
-    state.announcements = response.data;
-  }
-}).catch(function (error) {
-  console.log(error);
-});
+const redirectValue = platformConfigStore.getSetting("platform.redirect_index_to_url_for_logged_users");
+if (typeof redirectValue === 'string' && redirectValue.trim() !== '') {
+  router.push(`/${redirectValue}`);
+}
 
-const {locale} = useI18n();
-
-store.dispatch(
-  'page/findAll',
-  {
-    'category.title': 'home',
-    'enabled': '1',
-    'locale': locale.value
-  }
-).then((response) => {
-  state.pages = response;
-});
-
-const {announcements, pages} = toRefs(state);
+axios
+  .get("/news/list")
+  .then((response) => {
+    if (Array.isArray(response.data)) {
+      announcements.value = response.data;
+    }
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
 </script>

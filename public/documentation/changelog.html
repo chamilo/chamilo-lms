@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8" />
     <title>Chamilo Changelog</title>
-    <link rel="stylesheet" href="../build/css/app.css" type="text/css" media="screen,projection" />
-    <link rel="stylesheet" href="../build/css/themes/chamilo/default.css" type="text/css" media="screen,projection" />
-    <link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
-    <link rel="stylesheet" href="../build/css/print.css" type="text/css" media="print" />
-    <script src="../build/app.js"></script>
+    <link rel="stylesheet" href="../build/legacy_app.css" />
+    <link rel="stylesheet" href="../build/app.css" />
+    <link rel="stylesheet" href="../build/vue.css" />
+    <link rel="stylesheet" href="default.css" />
+    <script src="../build/legacy_app.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -34,20 +34,13 @@
         </div><!--/.nav-collapse -->
     </div>
 </nav>
-<style>
-    .version h1 {
-        padding-top: 60px;
-    }
-</style>
-
 <script>
     $(document).ready(function() {
-        var versionList = '';
         $('.version').each(function( index ) {
             var version = $(this).attr('aria-label');
             var title = $(this).find('h1').text();
             var titleParts = title.split('-');
-            var title = titleParts[0];
+            title = titleParts[0];
             var cityParts = titleParts[1].split(',');
 
             var city = cityParts[0];
@@ -108,8 +101,8 @@
 
     </table>
 
-    <div class="version" aria-role="article" aria-label="1.11.10">
-        <a name="1.11.10"></a>
+    <div class="version" aria-label="1.11.10">
+        <a id="1.11.10"></a>
 
         <h1>Chamilo 1.11.10 - ?????,  ??/??/????</h1>
         <h3>Release notes - summary</h3>
@@ -117,40 +110,40 @@
         <h3>Release name</h3>
         <p>...</p>
         <h3>Security fixes</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
         </ul>
         <h3>Possibly breaking changes</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
             <li>[2018-12-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/a681bf55eac1742d1e4fca865f52679286b745b8">a681bf55</a>) <a href="https://github.com/chamilo/chamilo-lms/issues/2708">GH#2708</a> Remove duplicate from limit_session_admin_role configuration setting</li>
         </ul>
         <h3>Notable new Features</h3>
         <h4>For end-users, teachers and Chamilo admins</h4>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
         </ul>
         <h4>For developers and sysadmins</h4>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
             <li>[2018-12-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/74964fc204cb80f6a978b3ecb4d448861e928f36">74964fc2</a>) <a href="https://task.beeznest.com/issues/15095">BT#15095</a> Add session_admins_edit_courses_content conf setting</li>
             <li>[2018-12-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/dbc571c72b73e1a223699c2ed571e84fad65b210">dbc571c7</a>) <a href="https://task.beeznest.com/issues/15095">BT#15095</a> Allow to session admins login as teachers</li>
         </ul>
         <h3>Improvements (minor features) and debug</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
         </ul>
         <h3>Stylesheets and theming</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
         </ul>
         <h3>Web services</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
         </ul>
         <h3>Removals</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
         </ul>
         <h3>Known issues</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
         </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.11.8">
-    <a name="1.11.8"></a>
+    <div class="version" aria-label="1.11.8">
+    <a id="1.11.8"></a>
 
     <h1>Chamilo 1.11.8 - Sayaxché,  12/08/2018</h1>
     <h3>Release notes - summary</h3>
@@ -164,7 +157,7 @@
             are hoping to make after 1.11.8 to get out of the 1.11 versions and into our restructured version 2.0.
         </p>
         <h3>Security fixes</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
             <li>[2018-07-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/385a84efe62a1910700465c1748e4036dc43bf18">385a84ef</a>) Security: Add app/Resources/public/css to the list of directories where execution of PHP is forbidden</li>
             <li>[2018-07-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/b0041b6250b3fdbe5a939c549e8d0ce69dd686e1">b0041b62</a>) Security: Add documentation about X-Frame-Options in configuration.dist.php</li>
             <li>[2018-07-23] (<a href="https://github.com/chamilo/chamilo-lms/commit/0de84700648f098c1fbf6b807dee28ec640efe62">4ffe5edb</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2532">#2532</a>) Security: Add Security::remove_XSS to clean variables from $_REQUEST</li>
@@ -177,14 +170,14 @@
             <li>[2018-04-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/00f3e4a6506035674a58ccdf4ebe098bd6f607e3">00f3e4a6</a>) Security: Fix work access for teachers and students </li>
         </ul>
         <h3>Possibly breaking changes</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
             <li>[2018-07-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/6750c5f582038458378194ca0d14992441c942c5">6750c5f5</a> - <a href="https://task.beeznest.com/issues/14687">BT#14687</a>) Gradebook: Rename disable_gradebook_stats to gradebook_enable_best_score and fix behaviour: now the setting will be required to *enable* the 3 last columns of the gradebook results table (avg, best score and ranking)</li>
             <li>[2018-07-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/4d67dfb66a3e489ef12fa4db7eef3c3f5e89367a">4d67dfb6</a> - <a href="https://task.beeznest.com/issues/14687">BT#14687</a>) Gradebook: Avoid conflict between gradebook_detailed_admin_view and disable_gradebook_stats</li>
         </ul>
 
         <h3>Notable new Features</h3>
         <h4>For end-users, teachers and Chamilo admins</h4>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
             <li>[2018-07-05] (<a href="https://github.com/chamilo/chamilo-lms/commit/33dc232d6ffcd985f52bf8b1a56b497033b6b52f">33dc232d</a> - <a href="https://task.beeznest.com/issues/14609">BT#14609</a>) Learnpath: SCORM change: Default value of olms.lesson_status is "not attempted"</li>
             <li>[2018-06-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/43bf48686b636cdb6623d5bd53a4eae6e14a1ea6">43bf4868</a> - <a href="https://task.beeznest.com/issues/14435">BT#14435</a>) Quiz: Change color from blue to black in ASCIIMathML scripts to highlight formulas (now will appear in a normal black)</li>
             <li>[2018-06-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/dd3390a6b9c638bec466e4b18e2e73682e417f31">dd3390a6</a>) Global: Adding page about the course</li>
@@ -204,7 +197,7 @@
             <li>[2018-03-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/b256c09001123d01154edff3eea8c6f0b8f096bb">b256c090</a> - <a href="https://task.beeznest.com/issues/14056">BT#14056</a>) Portfolio: Add Portfolio Tool. Requires DB changes</li>
         </ul>
         <h4>For developers and sysadmins</h4>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
             <li>[2018-08-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/9472341ef0b207235f75e65cf64604b3846c21cc">9472341e</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2606">GH#2606</a>) WIP: GDPR (#2606) Admin: Add configuration setting 'enable_gdpr' to enable special privacy options to ease implementation of European GDPR. Add personal data info page, LegalRepository, personal data treatment types display and update getLastLogin() results including track_e_login for legacy users</li>
             <li>[2018-07-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/c0259638105253f1148cce5fd23da1c90ab27dcd">c0259638</a> - <a href="https://task.beeznest.com/issues/14687">BT#14687</a>) Gradebook: Delete gradebook categories when deleting course</li>
             <li>[2018-07-25] (<a href="https://github.com/chamilo/chamilo-lms/commit/5acc3b24c4b68e1030fc6924549c904df5801267">5acc3b24</a> - <a href="https://task.beeznest.com/issues/14687">BT#14687</a>) Admin: Allow search course by ajax to platform admin</li>
@@ -246,7 +239,7 @@
 
         </ul>
         <h3>Improvements (minor features) and debug</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
             <li>[2018-08-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/45ff6b6d89a9096061a03f2326363241fce8170b">45ff6b6d</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2622">GH#2622</a>) WYSIWYG: Add documentation, declare BETA and add French translation to the VR/360° video viewer in Chamilo</li>
             <li>[2018-08-11] (<a href="https://github.com/chamilo/chamilo-lms/commit/1e9543a8e62b6213f79e1ed85887bb24b9006274">1e9543a8</a>) WYSIWYG: Add DOCTYPE html to HTML documents created through CKEditor</li>
             <li>[2018-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/1629f2939d1ad6fdae21c4c6bb65bbe8ce8eed88">1629f293</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2622">GH#2622</a>) Global: Enable VRView mediaelement plugin by default</li>
@@ -919,7 +912,7 @@
             <li>[2018-02-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/96cd3ddedc6287262c9157f4fe5b768796cd2820">96cd3dde</a>) Document: Remove api_not_allowed() in order to avoid double headers</li>
             <li>[2018-02-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/9835041cca2bd9189e74e442843d8641d16ef20e">9835041c</a> - <a href="https://task.beeznest.com/issues/14005">BT#14005</a>) Document: Fix move document feature</li>
             <li>[2018-02-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/3d837cf4883d254f53eedcb59f119dff7b2720d8">3d837cf4</a> - <a href="https://task.beeznest.com/issues/13829">BT#13829</a>) Global: Course catalog: Hide course categories with no courses</li>
-            <li>[2018-02-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/2e7c681bee5cc143a3a7eaabdd0a94111f85dd7c">2e7c681b</a> - <a href="https://task.beeznest.com/issues/13556">BT#13556</a>) Message: Replace not valid tag </br> to <br /> when parsing message</li>
+            <li>[2018-02-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/2e7c681bee5cc143a3a7eaabdd0a94111f85dd7c">2e7c681b</a> - <a href="https://task.beeznest.com/issues/13556">BT#13556</a>) Message: Replace not valid tag &lt;/br&gt; to &lt;br /&gt; when parsing message</li>
             <li>[2018-02-12] (<a href="https://github.com/chamilo/chamilo-lms/commit/f4c672195362161b11219b8af563dd9e7be981a6">f4c67219</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2351">GH#2351</a>) Quiz: Hide question category if setting is on</li>
             <li>[2018-02-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/f78ca9d963e5df3ae4b29d8b599b00f762f4d161">f78ca9d9</a> - <a href="https://task.beeznest.com/issues/13992">BT#13992</a>) Tracking: Fix "onbeforeunload" not calling course logout in firefox</li>
             <li>[2018-02-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/fbffecbfb44b776af1af6b2ea10903a742300d4d">fbffecbf</a> - <a href="https://task.beeznest.com/issues/13808">BT#13808</a>) Display: Fix wrong css styles when printing</li>
@@ -928,7 +921,7 @@
             <li>[2018-02-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/0eed7fd8e4651a58c05b94397b878737fbaeb647">0eed7fd8</a> - <a href="https://task.beeznest.com/issues/13808">BT#13808</a>) Display: Add bootstrap to keep HTML structure when printing</li>
             <li>[2018-02-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/876c4a821477ad5e2b564a72f8202b8dcca4dee9">876c4a82</a> - <a href="https://task.beeznest.com/issues/13913">BT#13913</a>) Plugin: "getToolIconVisibility" added to allow plugins to show icon to teachers</li>
             <li>[2018-02-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/2b26a9ca508ddd237c2dde4d7b5894892085c002">2b26a9ca</a> - <a href="https://task.beeznest.com/issues/13954">BT#13954</a>) Internal: Add script to fix issues with migrations from Chamilo <1.11.6 where lp.id and lp.iid could be mixed in the c_lp_item table</li>
-            <li>[2018-02-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/102264d49a7010a838f58a3db1b696b6f76b4e49">102264d4</a> - <a href="https://task.beeznest.com/issues/13979">BT#13979</a>) Global: Wrap recover password url in a <a> tag</li>
+            <li>[2018-02-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/102264d49a7010a838f58a3db1b696b6f76b4e49">102264d4</a> - <a href="https://task.beeznest.com/issues/13979">BT#13979</a>) Global: Wrap recover password url in a &lt;a&gt; tag</li>
             <li>[2018-02-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/06d0d12ee52a3e5907e7bca44454639793fcf992">06d0d12e</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2351">GH#2351</a>) Quiz: Save question category when duplicate exercise</li>
             <li>[2018-02-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/772dbcb74be89b711e2e9d961ac53de91bde8556">772dbcb7</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2351">GH#2351</a>) Quiz: Save question category when cloning a question</li>
             <li>[2018-02-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/57984f132717ae6a88e0f3571691260cb0ab8cd2">57984f13</a> - <a href="https://task.beeznest.com/issues/13187">BT#13187</a>) Global: Use real xls export instead of html table in generic data export AJAX</li>
@@ -957,7 +950,7 @@
             <li>[2018-01-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/7ededc83970b6a293b00380e5eb2ee26916c653d">7ededc83</a> - <a href="https://task.beeznest.com/issues/13697">BT#13697</a>) Ticket: Send ticket attachments in email</li>
         </ul>
         <h3>Stylesheets and theming</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
             <li>[2018-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/38e649ac17cf8c74dfe6b63af41e42c0f8cd1728">38e649ac</a>) Template: Fix footer</li>
             <li>[2018-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/c267e71b7f2c12f5434e9c9592181aa0e740617c">c267e71b</a>) Template: Update fix show_footer and show_header tpl</li>
             <li>[2018-08-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/248d9d9a43cdadca731427898ef818d25388aacc">248d9d9a</a>) Template: Improvement of template layout and css structure</li>
@@ -969,7 +962,7 @@
             <li>[2017-12-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/355066261c39f6eddff6c077935d8837d8af3a6f">35506626</a> - <a href="https://task.beeznest.com/issues/12835">BT#12835</a>) Template: Add template for document/webcam</li>
         </ul>
         <h3>Web services</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
             <li>[2018-08-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/9ab965d95808a6b473fe757ec426e8c3e21fce7d">9ab965d9</a> - <a href="https://task.beeznest.com/issues/14613">BT#14613</a>) Webservice: Webservice can register user to a course no matter the course config Webservice is kind of "admin" $checkTeacherPermission parameter added</li>
             <li>[2018-08-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/7b1bf11218ea9dbec342bb0ea02f627e1e98fd26">7b1bf112</a> - <a href="https://task.beeznest.com/issues/14613">BT#14613</a>) Webservice: Add "webservice_validation" conf to validate login against a webservice</li>
             <li>[2018-08-01] (<a href="https://github.com/chamilo/chamilo-lms/commit/df10c53f2203724a85e39d3c1e16f80fef4bcd69">df10c53f</a> - <a href="https://task.beeznest.com/issues/14613">BT#14613</a>) Webservice: WSGetUserFromUsername now returns extra fields</li>
@@ -979,7 +972,7 @@
             <li>Parameters encode change from base64 to json in file main/webservices/api/v2.php <a href="https://github.com/chamilo/chamilo-lms/commit/0de84700648f098c1fbf6b807dee28ec640efe62">4ffe5edb</a></li>
         </ul>
         <h3>Removals</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
             <li>[2018-04-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/bc808c832d7f54eeb6f9f041f5c458111ed5bfa1">bc808c83</a> - <a href="https://task.beeznest.com/issues/14242">BT#14242</a>) Gradebook: Remove unused code get_not_created_links, try find exercise with iid.</li>
             <li>[2018-04-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/6094513dfc52402c84a0c2b4fffdbb6bfc26b7cb">6094513d</a>) Course info: Remove unused variables</li>
             <li>[2018-03-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/82f724d67510c6dae44b0c5ae0d9b21e6b3523a9">82f724d6</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2469">GH#2469</a>) Internal: Remove call of setting "user_name_sort_by" not used anymore</li>
@@ -991,12 +984,12 @@
             <li>[2018-03-02] (<a href="https://github.com/chamilo/chamilo-lms/commit/f38583cf0df8716caa6c7e5ab7b552403c396437">f38583cf</a>) Internal: Remove deprecated use "create_function" in compare rule - FormValidator Shows error in php 7.2</li>
         </ul>
         <h3>Known issues</h3>
-        <ul aria-role="log" aria-live="off">
+        <ul aria-live="off">
         </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.11.6">
-    <a name="1.11.6"></a>
+    <div class="version" aria-label="1.11.6">
+    <a id="1.11.6"></a>
 
     <h1>Chamilo 1.11.6 - Poznán,  18/01/2018</h1>
     <h3>Release notes - summary</h3>
@@ -1004,16 +997,16 @@
     <h3>Release name</h3>
     <p><a href="https://en.wikipedia.org/wiki/Pozna%C5%84">Poznán</a> is a city on the Warta river in west-central Poland. It is best known for its renaissance Old Town and Ostrów Tumski Cathedral. Poznań is among the oldest and largest cities in Poland. It has often topped rankings as a city with very high quality of education and a very high standard of living. Giving the stability this 8th anniversary version 1.11.6 has achieved and its high benefits to education, we believe Poznán is a fitting name for us.</p>
     <h3>Security fixes</h3>
-    <ul aria-role="log" aria-live="off">
+    <ul aria-live="off">
         <li>[2017-09-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/4ffe5edb442d27943c0a52bd2078c64aa2328c80">4ffe5edb</a> - <a href="https://task.beeznest.com/issues/13285">BT#13285</a>) Security: Remove excessive SQL quotes filtering adding risk to queries</li>
     </ul>
     <h3>Possibly breaking changes</h3>
-    <ul aria-role="log" aria-live="off">
+    <ul aria-live="off">
     </ul>
 
     <h3>Notable new Features</h3>.
     <h4>For end-users, teachers and Chamilo admins</h4>
-    <ul aria-role="log" aria-live="off">
+    <ul aria-live="off">
         <li>[2018-01-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/49ba4f6d7b9888928e19a19b331d37925d86c351">49ba4f6d</a>) Plugin: Test2PDF: Add test2pdf plugin to convert exercises to PDF. This plugin can be further cleaned up but works as is.</li>
         <li>[2017-12-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/958f1f59b64e4008915350cadaf1e4fb3370f578">958f1f59</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2229">GH#2229</a>) Document: Add Cloud Files links (and fixes)</li>
         <li>[2017-10-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/8700571d786e7d153479bd43b1744676cd75daaf">8700571d</a>) Document: Add webm support in showinframes.php (using jplayer)</li>
@@ -1025,7 +1018,7 @@
     </ul>
 
     <h4>For developers and sysadmins</h4>
-    <ul aria-role="log" aria-live="off">
+    <ul aria-live="off">
         <li>[2017-12-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/b00352a5b2cc4ed199e1db41e4398503e15fec5c">b00352a5</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2149">GH#2149</a>) Webservices: Add REST services to create user, create course and subscribe to course. Remove SQL injection. Improve code style</li>
         <li>[2017-12-28] (<a href="https://github.com/chamilo/chamilo-lms/commit/39bbae3c5da98e2abef53fb39ac14c40893067ed">39bbae3c</a> - <a href="https://task.beeznest.com/issues/13750">BT#13750</a>) Admin: Add configuration setting "session_list_order" to enable sessions ordering in courses list (requires DB changes)</li>
         <li>[2017-12-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/a8974e8061fe744f68a8730b72a87e5e9364bd84">a8974e80</a> - <a href="https://task.beeznest.com/issues/13789">BT#13789</a>) Admin: Add configuration setting "exercise_category_report_user_extra_fields" to add extra fields to the exercise_category_report.php page</li>
@@ -1089,7 +1082,7 @@
     </ul>
 
     <h3>Improvements (minor features) and debug</h3>
-    <ul aria-role="log" aria-live="off">
+    <ul aria-live="off">
         <li>[2018-01-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/d713cbff9ff1ebceb4c0e90ecb8131bcf04763cd">d713cbff</a>) Add LTI plugin translation to French and Spanish</li>
         <li>[2018-01-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/002b907867dcea704c0533b85c3876a91e393e97">002b9078</a> - <a href="https://task.beeznest.com/issues/13469">BT#13469</a>) Fix and improve Ims/LIT plugin</li>
         <li>[2018-01-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/e40687261466e8b5a8173db9e62c7c5faa3b5d97">e4068726</a>) Style: Fix dropdown menu color</li>
@@ -2164,7 +2157,7 @@
     </ul>
 
     <h3>Stylesheets and theming</h3>
-    <ul aria-role="log" aria-live="off">
+    <ul aria-live="off">
         <li>[2017-12-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/de79a59f46e2de4ecf81b9782532f4bef092bd27">de79a59f</a>) Template: Change course code for the course id to use in Twig variable</li>
         <li>[2017-08-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/b092665a78e8ee82757b51f03ab496ea0aac569a">b092665a</a> - <a href="https://task.beeznest.com/issues/13169">BT#13169</a>) Template: Add _p.web_url variable in twig template</li>
         <li>[2017-06-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/686274be02c1ed3027ed0b7a76b2f6e12cc800cd">686274be</a> - <a href="https://task.beeznest.com/issues/12926">BT#12926</a>) Template: Improving and create tpl for forum view</li>
@@ -2173,11 +2166,11 @@
     </ul>
 
     <h3>Web services</h3>
-    <ul aria-role="log" aria-live="off">
+    <ul aria-live="off">
     </ul>
 
     <h3>Removals</h3>
-    <ul aria-role="log" aria-live="off">
+    <ul aria-live="off">
         <li>[2017-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/fe4fb5d0d1d5e099c3b766b3250fb35a4b489867">fe4fb5d0</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2200">GH#2200</a>) Remove "Text" plugin as it duplicates the "Static" plugin features</li>
         <li>[2017-10-18] (<a href="https://github.com/chamilo/chamilo-lms/commit/070043ec4c6e733127e51a040ac245f649f45c84">070043ec</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/2198">GH#2198</a>) Internal: Remove unused and unmaintained main/reports code</li>
         <li>[2017-10-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/280e06aa60f6f21ff4926c0463f845020bc96dd5">280e06aa</a>) Internal: Remove unused get_test_id</li>
@@ -2206,14 +2199,14 @@
     </ul>
 
     <h3>Known issues</h3>
-    <ul aria-role="log" aria-live="off">
+    <ul aria-live="off">
         <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/a285f48555774f1ef2df4df4b9b27c32187b07c0">a285f485</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1956">GH#1956</a>) Document: Text-to-speech feature is broken due to the services providers not allowing the service for free anymore. See configuration.dist.php for the API key to use Google Translate. Pediaphon will be removed.</li>
         <li>Several issues have been reported migrating from 1.9 to 1.11.4. Some have been fixed in 1.11.6, but did not have the capacity (in terms of human resources) to review the migration process in-depth. Please make sure you undertake any critical production-environment migration with a specialist. Try Chamilo Official Providers, for example.</li>
     </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.11.4">
-    <a name="1.11.4"></a>
+    <div class="version" aria-label="1.11.4">
+    <a id="1.11.4"></a>
     <h1>Chamilo 1.11.4 - Uyuni, 31st of May 2017</h1>
     <h3>Release notes - summary</h3>
     <p>Chamilo 1.11.4 is a minor, bugfix release of the 1.11.x branch, with a large number of bugfixes on top of 1.11.2.</p>
@@ -3465,8 +3458,8 @@
     </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.11.2">
-    <a name="1.11.2"></a>
+    <div class="version" aria-label="1.11.2">
+    <a id="1.11.2"></a>
     <h1>Chamilo 1.11.2 - Bari, 1st of November 2016</h1>
     <h3>Release notes - summary</h3>
     <p>Chamilo 1.11.2 is a minor, bugfix release of the 1.11.x branch, with a few bugfixes on top of 1.11.0.</p>
@@ -3574,8 +3567,8 @@
     </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.11.0">
-    <a name="1.11.0"></a>
+    <div class="version" aria-label="1.11.0">
+    <a id="1.11.0"></a>
     <h1>Chamilo 1.11.0 - Lecce, 17th of October 2016</h1>
     <h3>Release notes - summary</h3>
     <p>Chamilo 1.11.0 is a major release of the 1.11.x branch. It is meant as a transition between 1.10 and 2.0 versions.</p>
@@ -5021,8 +5014,8 @@
 
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.10.8">
-    <a name="1.10.8"></a>
+    <div class="version" aria-label="1.10.8">
+    <a id="1.10.8"></a>
     <h1>Chamilo 1.10.8 - Vilcashuamán, 22nd of July 2016</h1>
     <h3>Release notes - summary</h3>
     <p>Chamilo 1.10.8 is a minor, bugfix release of the 1.10.x branch, with a few new features and bugfixes on top of 1.10.6.</p>
@@ -5137,8 +5130,8 @@
     </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.10.6">
-    <a name="1.10.6"></a>
+    <div class="version" aria-label="1.10.6">
+    <a id="1.10.6"></a>
     <h1>Chamilo 1.10.6 - Zacatecas, 24th of May 2016</h1>
     <h3>Release notes - summary</h3>
     <p>Chamilo 1.10.6 is a minor, bugfix release of the 1.10.x branch, with a few new features and bugfixes on top of 1.10.4.</p>
@@ -5363,8 +5356,8 @@
     </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.10.4">
-    <a name="1.10.4"></a>
+    <div class="version" aria-label="1.10.4">
+    <a id="1.10.4"></a>
     <h1>Chamilo 1.10.4 - Bath, 22th of March 2016</h1>
     <h3>Release notes - summary</h3>
     <p>Chamilo 1.10.4 is a minor, bugfix release of the 1.10.x branch, with a few new features and bugfixes on top of 1.10.2.</p>
@@ -5695,8 +5688,8 @@
     </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.10.2">
-    <a  name="1.10.2"></a>
+    <div class="version" aria-label="1.10.2">
+    <a  id="1.10.2"></a>
     <h1>Chamilo 1.10.2 - Alsted, 22nd of December 2015</h1>
     <h3>Release notes - summary</h3>
     <p>Chamilo 1.10.2 is a minor, bugfix version of the 1.10.x branch, with a few new features and  bugfixes on top of 1.10.0. Notably, this version enables the migration from 1.9.x to 1.10.2 (many bugs were reported in the migration from 1.9.x to 1.10.0, which were fixed within the 2 months to this minor version).</p>
@@ -5925,8 +5918,8 @@
     </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.10.0">
-<a  name="1.10.0"></a>
+    <div class="version" aria-label="1.10.0">
+<a  id="1.10.0"></a>
 
 <h1>Chamilo 1.10.0 - San Juan, 16th of October 2015</h1>
 <h3>Release notes - summary</h3>
@@ -6897,8 +6890,8 @@
 </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.9.10.2">
-<a  name="1.9.10.2"></a>
+    <div class="version" aria-label="1.9.10.2">
+<a  id="1.9.10.2"></a>
 
 <h1>Chamilo 1.9.10.2 - Sipán, 19th of March, 2015</h1>
 <h3>Release notes - summary</h3>
@@ -6970,8 +6963,8 @@
 
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.9.10">
-<a  name="1.9.10"></a>
+    <div class="version" aria-label="1.9.10">
+<a  id="1.9.10"></a>
 <h1>Chamilo 1.9.10 - Huánuco, 25th of January, 2015</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.10 is a new minor version of the 1.9.x branch, with many bugfixes and a few interesting new features (as such, you can just overwrite previous files to upgrade from 1.9.8, 1.9.8.1 or 1.9.8.2 to 1.9.10).</p>
@@ -7339,21 +7332,21 @@ All security issues are published and patches are attached on <a href="https://s
 </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.9.8.2">
-<a  name="1.9.8.2"></a>
+    <div class="version" aria-label="1.9.8.2">
+<a  id="1.9.8.2"></a>
 <h1>Chamilo 1.9.8.2 - ,21st of June, 2014</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.8.2 is a very little patch version with one bugfix regarding the learning paths tool. Considering the fact that 1.9.8 is planned for the long term, we'd hate to have such a minor patch left on the side for a year or so. This will be packaged and promoted as 1.9.8, but the folder inside the 1.9.8 will be called 1.9.8.2, with a change to this changelog file and a one-line change to main/newscorm/learnpathItem.class.php (as such, you can update just this file to upgrade from 1.9.8.1 to 1.9.8.2. See <a href="https://github.com/chamilo/chamilo-lms/commit/642a80e9e838f98f25135fbb64795e4f3df86260">the code change</a> for detais.</p>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.9.8.1">
+    <div class="version" aria-label="1.9.8.1">
 <h1>Chamilo 1.9.8.1 - ,18th of June 2014</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.8.1 is a patch version with one security patch on top of 1.9.8 (in the included library for FCKeditor). Please check <a href="https://support.chamilo.org/projects/chamilo-18/wiki/Security_issues">our security issues page</a> for more information.</p>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.9.8.0">
-        <a  name="1.9.8.0"></a>
+    <div class="version" aria-label="1.9.8.0">
+        <a  id="1.9.8.0"></a>
 <h1>Chamilo 1.9.8 - Thon, 15th of June, 2014</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.8 is a minor stable version with a series of improvements on top of 1.9.6.<br />
@@ -7861,15 +7854,15 @@ Stylesheets have been considerably changed in version 1.9.8, which might require
 </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.9.6.1">
-<a  name="1.9.6.1"></a>
+    <div class="version" aria-label="1.9.6.1">
+<a  id="1.9.6.1"></a>
 
 <h1>Chamilo 1.9.6.1 - ,22th of May 2014</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.6.1 is a patch version with security patches on top of 1.9.6. Please check <a href="https://support.chamilo.org/projects/chamilo-18/wiki/Security_issues">our security issues page</a> for more information.</p>
 </div>
 
-<div class="version" aria-role="article" aria-label="1.9.6.0">
+<div class="version" aria-label="1.9.6.0">
 <h1>Chamilo 1.9.6 - Rochefort, 4th of June, 2013</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.6 is a minor stable version with security patches and a series of improvements on top of 1.9.4.</p>
@@ -8009,8 +8002,8 @@ Stylesheets have been considerably changed in version 1.9.8, which might require
 </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.9.4">
-<a  name="1.9.4"></a>
+    <div class="version" aria-label="1.9.4">
+<a  id="1.9.4"></a>
 
 <h1>Chamilo 1.9.4 - Puebla, 18th of January, 2013</h1>
 <h3>Release notes - summary</h3>
@@ -8282,8 +8275,8 @@ Stylesheets have been considerably changed in version 1.9.8, which might require
 </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.9.2">
-<a  name="1.9.2"></a>
+    <div class="version" aria-label="1.9.2">
+<a  id="1.9.2"></a>
 
 <h1>Chamilo 1.9.2 - Hanga Roa, 27th of September, 2012</h1>
 <h3>Release notes - summary</h3>
@@ -8381,8 +8374,8 @@ Stylesheets have been considerably changed in version 1.9.8, which might require
 </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.9.0">
-<a  name="1.9.0"></a>
+    <div class="version" aria-label="1.9.0">
+<a  id="1.9.0"></a>
 
 <h1>Chamilo 1.9.0 - Vogüé, 31st of July, 2012</h1>
 
@@ -8886,8 +8879,8 @@ Due to the move to HTML5, it is very likely that any older stylesheet will have 
 </ul>
     </div>
 
-<div class="version" aria-role="article" aria-label="1.8.8.6">
-<a  name="1.8.8.6"></a>
+<div class="version" aria-label="1.8.8.6">
+<a  id="1.8.8.6"></a>
 
 <h1>Chamilo 1.8.8.6 - Rottweil, 20th of July 2012</h1>
 
@@ -8905,8 +8898,8 @@ Due to the move to HTML5, it is very likely that any older stylesheet will have 
 </ul>
 </div>
 
-    <div class="version" aria-role="article" aria-label="1.8.8.4">
-<a  name="1.8.8.4"></a>
+    <div class="version" aria-label="1.8.8.4">
+<a  id="1.8.8.4"></a>
 
 <h1>Chamilo 1.8.8.4 - La Molina, August 2011</h1>
 
@@ -9095,8 +9088,8 @@ This version of Chamilo only includes a few minor new features:
 </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.8.8.2">
-<a  name="1.8.8.2"></a>
+    <div class="version" aria-label="1.8.8.2">
+<a  id="1.8.8.2"></a>
 
 <h1>Chamilo 1.8.8.2 - Bellavista, May 2011</h1>
 
@@ -9157,8 +9150,8 @@ This version of Chamilo only includes a few minor new features:
 </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.8.8">
-  <a  name="1.8.8"></a>
+    <div class="version" aria-label="1.8.8">
+  <a  id="1.8.8"></a>
 
 <h1>Chamilo 1.8.8 - Miraflores, May 2011</h1>
 
@@ -9421,8 +9414,8 @@ providers (see our website, <i>Support</i> tab).
 
     </div>
 
-<div class="version" aria-role="article" aria-label="1.8.7.1">
-<a  name="1.8.7.1"></a>
+<div class="version" aria-label="1.8.7.1">
+<a  id="1.8.7.1"></a>
 
 <h1>Chamilo 1.8.7.1 - Palmas, July 2010</h1>
 <h3>New Features</h3>
@@ -9522,8 +9515,8 @@ providers (see our website, <i>Support</i> tab).
   <li>main/online folder has been removed (deprecated)</li>
 </ul>
     </div>
-    <div class="version" aria-role="article" aria-label="1.8.7">
-<a  name="1.8.7"></a>
+    <div class="version" aria-label="1.8.7">
+<a  id="1.8.7"></a>
 
 <h1>Chamilo 1.8.7 - Istanbul, June 2010</h1>
 
@@ -9628,8 +9621,8 @@ providers (see our website, <i>Support</i> tab).
 <br />
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.8.6.2">
-<a  name="1.8.6.2"></a>
+    <div class="version" aria-label="1.8.6.2">
+<a  id="1.8.6.2"></a>
 
 <h1>Chamilo 1.8.6.2 - Salto, January 2010</h1>
 
@@ -9727,8 +9720,8 @@ providers (see our website, <i>Support</i> tab).
 </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.8.6.1">
-<a  name="1.8.6.1"></a>
+    <div class="version" aria-label="1.8.6.1">
+<a  id="1.8.6.1"></a>
 <p>
     Chamilo was initially a fork of the Dokeos project, which was a 2004 fork of the Claroline project.
     In the interest of science, we have added below the retrievable code changes history of both projects.<br /><br />
@@ -9785,8 +9778,8 @@ providers (see our website, <i>Support</i> tab).
 <br />
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.8.6">
-<a  name="1.8.6"></a>
+    <div class="version" aria-label="1.8.6">
+<a  id="1.8.6"></a>
 
 <h1>Dokeos 1.8.6 - Svalbard, June 2009</h1>
 
@@ -9985,8 +9978,8 @@ providers (see our website, <i>Support</i> tab).
 </ul>
 <br />
     </div>
-    <div class="version" aria-role="article" aria-label="1.8.5">
-        <a name="1.8.5"></a>
+    <div class="version" aria-label="1.8.5">
+        <a id="1.8.5"></a>
         <h1>Dokeos 1.8.5 - Valparaiso, June 2008</h1>
         <h3>Release notes - summary</h3>
         <p>Dokeos 1.8.5 is a major debugging release but includes interesting new features as well.&nbsp;</p>
@@ -10115,8 +10108,8 @@ providers (see our website, <i>Support</i> tab).
             </li>
         </ul>
     </div>
-    <div class="version" aria-role="article" aria-label="1.8.4">
-        <a name="1.8.4"></a>
+    <div class="version" aria-label="1.8.4">
+        <a id="1.8.4"></a>
         <h1>Dokeos 1.8.4 - September 2007</h1>
 
         <h3>Release notes - summary</h3>
@@ -10182,8 +10175,8 @@ providers (see our website, <i>Support</i> tab).
         </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.8.0">
-<a name="1.8.0"></a>
+    <div class="version" aria-label="1.8.0">
+<a id="1.8.0"></a>
 
 <h1>Dokeos 1.8 - May 2007</h1>
 
@@ -10217,22 +10210,22 @@ a simple videoconferencing interface.</p>
 </ul>
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.6.5">
-        <a name="1.6.5"></a>
+    <div class="version" aria-label="1.6.5">
+        <a id="1.6.5"></a>
         <h1>Dokeos 1.6.5 - , July 2006 </h1>
         <h3>Release notes - summary</h3>
         <p>Security Release. 1 bug has been fixed.<br/>
         </p>
     </div>
-    <div class="version" aria-role="article" aria-label="1.6.4">
-<a name="1.6.4"></a>
+    <div class="version" aria-label="1.6.4">
+<a id="1.6.4"></a>
 <h1>Dokeos 1.6.4 - , April 2006 </h1>
 <h3>Release notes - summary</h3>
 <p>Bugfix release. 2 bugs have been fixed. One security hole has been fixed <br />
 </p>
     </div>
-    <div class="version" aria-role="article" aria-label="1.6.3">
-<a name="1.6.3"></a>
+    <div class="version" aria-label="1.6.3">
+<a id="1.6.3"></a>
 
 <h1>Dokeos 1.6.3 - , February 2006 </h1>
 
@@ -10240,8 +10233,8 @@ a simple videoconferencing interface.</p>
 
 <p>Bugfix release. 44 bugs have been fixed.<br />
     </div>
-    <div class="version" aria-role="article" aria-label="1.6.2">
-<a name="1.6.2"></a>
+    <div class="version" aria-label="1.6.2">
+<a id="1.6.2"></a>
 
 <h1>Dokeos 1.6.2 - , September 2005</h1>
 
@@ -10250,8 +10243,8 @@ a simple videoconferencing interface.</p>
 <p>Bugfix release. 14 bugs have been fixed.<br />
 
     </div>
-    <div class="version" aria-role="article" aria-label="1.6.1">
-<a name="1.6.1"></a>
+    <div class="version" aria-label="1.6.1">
+<a id="1.6.1"></a>
 
 <h1>Dokeos 1.6.1 - , August 2005</h1>
 
@@ -10259,8 +10252,8 @@ a simple videoconferencing interface.</p>
 
 <p>Bugfix release. 31 bugs have been fixed.<br />
     </div>
-    <div class="version" aria-role="article" aria-label="1.6.0">
-<a name="1.6"></a>
+    <div class="version" aria-label="1.6.0">
+<a id="1.6"></a>
 
 <h1>Dokeos 1.6 - July 2005</h1>
 
@@ -10295,8 +10288,8 @@ a simple videoconferencing interface.</p>
         as plugin).</li>
     </ul>
     </div>
-    <div class="version" aria-role="article" aria-label="1.5.5">
-    <a name="1.5.5"></a>
+    <div class="version" aria-label="1.5.5">
+    <a id="1.5.5"></a>
 
     <h1>Dokeos 1.5.5 - 2004</h1>
 
@@ -10322,22 +10315,22 @@ a simple videoconferencing interface.</p>
           <li> Language revision : dokeos vocabulary has been generalised to be adapted to different types of organisations and not only universities</li>
     </ul>
     </div>
-    <div class="version" aria-role="article" aria-label="1.4.2">
-    <a name="1.4.2"></a>
+    <div class="version" aria-label="1.4.2">
+    <a id="1.4.2"></a>
     <h1>Claroline 1.4.2 - 2003</h1>
     <ul>
         <li>No feature is added to Claroline 1.4.2. This release is basically stressed on stability increase and bugs fixing.</li>
     </ul>
     </div>
-    <div class="version" aria-role="article" aria-label="1.4.1">
-    <a name="1.4.1"></a>
+    <div class="version" aria-label="1.4.1">
+    <a id="1.4.1"></a>
     <h1>Claroline 1.4.1 - 2003</h1>
     <ul>
         <li>No feature is added to Claroline 1.4.2. This release is basically stressed on stability increase and bugs fixing.</li>
     </ul>
     </div>
-    <div class="version" aria-role="article" aria-label="1.4.0">
-    <a name="1.4"></a>
+    <div class="version" aria-label="1.4.0">
+    <a id="1.4"></a>
     <h1>Claroline 1.4 - 2003</h1>
     The main Claroline improvements are hidden behind the screen.
     We have totally recoded the Claroline Kernel to be more
@@ -10384,15 +10377,15 @@ a simple videoconferencing interface.</p>
             every user's action on the platform.</li>
     </ul>
     </div>
-    <div class="version" aria-role="article" aria-label="1.3.1">
-    <a name="1.3.1"></a>
+    <div class="version" aria-label="1.3.1">
+    <a id="1.3.1"></a>
     <h1>Claroline 1.3.1 - 2003</h1>
     <ul>
         <li>No feature is added to Claroline 1.3.1. This release is basically stressed on stability increase and bugs fixing.</li>
     </ul>
     </div>
-    <div class="version" aria-role="article" aria-label="1.3.0">
-    <a name="1.3.0"></a>
+    <div class="version" aria-label="1.3.0">
+    <a id="1.3.0"></a>
     <h1>Claroline 1.3.0 - 2003</h1>
     <ul>
         <li>LANGUAGE. New languages added. Claroline is now in 12 languages :
@@ -10416,8 +10409,8 @@ a simple videoconferencing interface.</p>
             completely rewritten.</li>
     </ul>
     </div>
-    <div class="version" aria-role="article" aria-label="1.2.0">
-    <a name="1.2.0"></a>
+    <div class="version" aria-label="1.2.0">
+    <a id="1.2.0"></a>
     <h1>Claroline 1.2.0 - 2002</h1>
     <ul>
         <li>Claroline can be installed in a server sub-directory.</li>
@@ -10457,7 +10450,6 @@ a simple videoconferencing interface.</p>
         <li>a release date</li>
         <li>an optional, short history explaining the relationship between the version and the place</li>
     </ul>
-    </p>
     <h3>Sections</h3>
     <p>
         Inside each version block, different sections are laid out to ease the reading of the changelog:
@@ -10473,7 +10465,6 @@ a simple videoconferencing interface.</p>
         <li>Removals: when a tool or stylesheet is not maintained anymore, or when we replaced some library with another, we will remove deprecated files. This is a list of such files that might have been removed or simply marked for deprecation or removal in later versions.</li>
         <li>Known issues: sometimes we are made aware that some Chamilo features will not work anymore. We will report those here to make sure our users are aware of them.</li>
     </ul>
-    </p>
     <h3>Syntax</h3>
     <p>
         Every change comes with a link to the change in our versions tracking system, a link to the reported issue or task (if any) and a description of the change's purpose.
@@ -10530,7 +10521,6 @@ a simple videoconferencing interface.</p>
         <li>Wiki</li>
         <li>Work</li>
     </ul>
-    </p>
     <h3>Hashtags</h3>
     <p>
         In some very specific cases, this changelog might contain references to specific topics, like compliance to
@@ -10540,7 +10530,6 @@ a simple videoconferencing interface.</p>
         <li>(#scorm): indicates that this feature relates to the SCORM standard</li>
         <li>(#fresh-users): indicates that this feature helps prevent drama with fresh users lacking experience and prone to error</li>
     </ul>
-    </p>
     </div>
 </div></div></div>
 

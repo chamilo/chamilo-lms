@@ -5,6 +5,9 @@
 /**
  * @author Julio Montoya <gugli100@gmail.com>
  */
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -64,7 +67,7 @@ function add_image_form() {
 	document.getElementById("filepath_"+counter_image).innerHTML = "\n\
         <input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />\n\
         <a href=\"javascript:remove_image_form("+id_elem1+")\">\n\
-            <img src=\"'.Display::returnIconPath('delete.gif').'\">\n\
+            '.Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_TINY).'\n\
         </a>\n\
     ";
 
@@ -193,7 +196,7 @@ if ($is_group_member || GROUP_PERMISSION_OPEN == $groupInfo['visibility']) {
             $social_right_content .= '<a
                 class="btn btn--plain btn-sm"
                 href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.
-                    Display::getMdiIcon('email').' '.
+                    Display::getMdiIcon(ObjectIcon::EMAIL).' '.
                 get_lang('You have been invited to join now').'</a>';
         }
         $social_right_content .= '</div>';
@@ -259,7 +262,7 @@ if ($is_group_member || GROUP_PERMISSION_OPEN == $groupInfo['visibility']) {
             $member_content .= '<div class="group-tool">';
             $member_content .= '<div class="pull-right">';
             $member_content .= Display::url(
-                Display::getMdiIcon('pencil').' '.get_lang('Edit members list'),
+                Display::getMdiIcon(ActionIcon::EDIT).' '.get_lang('Edit members list'),
                 'group_members.php?id='.$group_id,
                 ['class' => 'btn btn--plain btn-sm', 'title' => get_lang('Edit members list')]
             );
@@ -276,9 +279,9 @@ if ($is_group_member || GROUP_PERMISSION_OPEN == $groupInfo['visibility']) {
             )) {
                 //add icons
                 if (GROUP_USER_PERMISSION_ADMIN == $member['relation_type']) {
-                    $icon = Display::return_icon('social_group_admin.png', get_lang('Admin'));
+                    $icon = Display::getMdiIcon(ObjectIcon::ADMIN_USER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Admin'));
                 } elseif (GROUP_USER_PERMISSION_MODERATOR == $member['relation_type']) {
-                    $icon = Display::return_icon('social_group_moderator.png', get_lang('Moderator'));
+                    $icon = Display::getMdiIcon(ObjectIcon::MODERATOR_USER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Moderator'));
                 } else {
                     $icon = '';
                 }

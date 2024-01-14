@@ -10,34 +10,21 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Cocur\Slugify\SlugifyInterface;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 
 class ResourceNodeListener
 {
-    protected SlugifyInterface $slugify;
-    protected Security $security;
-    protected ToolChain $toolChain;
-    protected RequestStack $request;
-    protected ResourceNodeRepository $resourceNodeRepository;
-    //protected $accessUrl;
+    // protected $accessUrl;
 
     public function __construct(
-        SlugifyInterface $slugify,
-        ToolChain $toolChain,
-        RequestStack $request,
-        Security $security,
-        ResourceNodeRepository $resourceNodeRepository
-    ) {
-        $this->slugify = $slugify;
-        $this->security = $security;
-        $this->toolChain = $toolChain;
-        $this->request = $request;
-        //$this->accessUrl = null;
-        $this->resourceNodeRepository = $resourceNodeRepository;
-    }
+        protected SlugifyInterface $slugify,
+        protected ToolChain $toolChain,
+        protected RequestStack $request,
+        protected Security $security,
+        protected ResourceNodeRepository $resourceNodeRepository
+    ) {}
 
     /*public function prePersist(ResourceNode $resourceNode, LifecycleEventArgs $event)
     {

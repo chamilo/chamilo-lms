@@ -6,6 +6,4 @@ namespace Chamilo\CourseBundle\Schema;
 
 use Chamilo\CourseBundle\Settings\ServiceRegistry;
 
-class SchemaRegistry extends ServiceRegistry
-{
-}
+class SchemaRegistry extends ServiceRegistry {}

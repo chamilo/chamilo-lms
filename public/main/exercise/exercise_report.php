@@ -2,7 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Entity\TrackEAttemptRecording;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 
@@ -18,6 +20,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 
+$htmlHeadXtra[] = api_get_asset('js-cookie/src/js.cookie.js');
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 $filter_user = isset($_REQUEST['filter_by_user']) ? (int) $_REQUEST['filter_by_user'] : null;
@@ -33,7 +36,7 @@ if (api_is_student_boss() && !empty($filter_user)) {
     api_protect_course_script(true, false, true);
 }
 
-$limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+$limitTeacherAccess = ('true' === api_get_setting('exercise.limit_exercise_teacher_access'));
 $allowClean = Exercise::allowAction('clean_results');
 
 if ($limitTeacherAccess && !api_is_platform_admin()) {
@@ -166,6 +169,10 @@ if (isset($_REQUEST['comments']) &&
         api_not_allowed();
     }
 
+    $em = Database::getManager();
+
+    $trackExercise = $em->find(TrackEExercise::class, $id);
+
     $student_id = $track_exercise_info['exe_user_id'];
     $session_id = $track_exercise_info['session_id'];
     $lp_id = $track_exercise_info['orig_lp_id'];
@@ -237,16 +244,14 @@ if (isset($_REQUEST['comments']) &&
 
         $recording = new TrackEAttemptRecording();
         $recording
-            ->setExeId($id)
+            ->setTrackExercise($trackExercise)
             ->setQuestionId($questionId)
             ->setAuthor(api_get_user_id())
             ->setTeacherComment($my_comments)
-            ->setExeId($id)
             ->setMarks($marks)
             ->setSessionId(api_get_session_id())
         ;
 
-        $em = Database::getManager();
         $em->persist($recording);
         $em->flush();
     }
@@ -318,7 +323,7 @@ if (isset($_REQUEST['comments']) &&
             false,
             false,
             false,
-            api_get_configuration_value('quiz_results_answers_report'),
+            ('true' === api_get_setting('exercise.quiz_results_answers_report')),
             false
         );
         $objExerciseTmp->results_disabled = $oldResultDisabled;
@@ -334,7 +339,7 @@ if (isset($_REQUEST['comments']) &&
             false,
             false,
             false,
-            api_get_configuration_value('quiz_results_answers_report'),
+            ('true' === api_get_setting('exercise.quiz_results_answers_report')),
             false
         );
         ob_end_clean();
@@ -404,7 +409,7 @@ if (isset($_REQUEST['comments']) &&
         $sql = "UPDATE $TBL_LP_ITEM_VIEW
                 SET score = '".(float) $tot."'
                 $statusCondition
-                WHERE c_id = $course_id AND id = $lp_item_view_id";
+                WHERE c_id = $course_id AND iid = $lp_item_view_id";
         Database::query($sql);
 
         header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise_show.php?id='.$id.'&student='.$student_id.'&'.api_get_cidreq());
@@ -419,27 +424,22 @@ if ($is_allowedToEdit && 'learnpath' != $origin) {
         api_is_course_tutor() || api_is_session_general_coach()
     ) {
         $actions .= '<a href="exercise.php?'.api_get_cidreq().'">'.
-            Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go back to the questions list')).'</a>';
         $actions .= '<a href="live_stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.
-            Display::return_icon('activity_monitor.png', get_lang('Live results'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon('monitor-screenshot', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Live results')).'</a>';
         $actions .= '<a href="stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.
-            Display::return_icon('statistics.png', get_lang('Report by question'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon('chart-box', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Report by question')).'</a>';
         $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&exerciseId='.$exercise_id.'" >'.
-        Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon('content-save', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export')).'</a>';
         $actions .= Display::url(
-            Display::return_icon('reload.png', get_lang('RecalculateResults'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::REFRESH, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('RecalculateResults')),
             api_get_path(WEB_CODE_PATH).'exercise/recalculate_all.php?'.api_get_cidreq()."&exercise=$exercise_id"
         );
 
         // clean result before a selected date icon
         if ($allowClean) {
             $actions .= Display::url(
-                Display::return_icon(
-                    'clean_before_date.png',
-                    get_lang('Clean all results before a selected date'),
-                    '',
-                    ICON_SIZE_MEDIUM
-                ),
+                Display::getMdiIcon('delete-clock', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Clean all results before a selected date')),
                 '#',
                 ['onclick' => 'javascript:display_date_picker()']
             );
@@ -469,12 +469,7 @@ if ($is_allowedToEdit && 'learnpath' != $origin) {
     }
 } else {
     $actions .= '<a href="exercise.php">'.
-        Display::return_icon(
-            'back.png',
-            get_lang('Go back to the questions list'),
-            '',
-            ICON_SIZE_MEDIUM
-        ).
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go back to the questions list')).
     '</a>';
 }
 
@@ -670,11 +665,11 @@ if ($is_allowedToEdit || $is_tutor) {
 
     // Column config
     $column_model = [
-        ['name' => 'firstname', 'index' => 'firstname', 'width' => '50', 'align' => 'left', 'search' => 'true'],
+        ['name' => 'firstname', 'index' => 'firstname', 'width' => '150', 'align' => 'left', 'search' => 'true'],
         [
             'name' => 'lastname',
             'index' => 'lastname',
-            'width' => '50',
+            'width' => '150',
             'align' => 'left',
             'formatter' => 'action_formatter',
             'search' => 'true',
@@ -682,15 +677,15 @@ if ($is_allowedToEdit || $is_tutor) {
         [
             'name' => 'login',
             'index' => 'username',
-            'width' => '40',
+            'width' => '150',
             'align' => 'left',
             'search' => 'true',
-            'hidden' => api_get_configuration_value('exercise_attempts_report_show_username') ? 'false' : 'true',
+            'hidden' => ('true' === api_get_setting('exercise.exercise_attempts_report_show_username')) ? 'false' : 'true',
         ],
         [
             'name' => 'group_name',
             'index' => 'group_id',
-            'width' => '40',
+            'width' => '150',
             'align' => 'left',
             'search' => 'true',
             'stype' => 'select',
@@ -702,15 +697,15 @@ if ($is_allowedToEdit || $is_tutor) {
             //for the top bar
             'editoptions' => ['value' => $group_parameters],
         ],
-        ['name' => 'duration', 'index' => 'exe_duration', 'width' => '30', 'align' => 'left', 'search' => 'true'],
-        ['name' => 'start_date', 'index' => 'start_date', 'width' => '60', 'align' => 'left', 'search' => 'true'],
-        ['name' => 'exe_date', 'index' => 'exe_date', 'width' => '60', 'align' => 'left', 'search' => 'true'],
-        ['name' => 'score', 'index' => 'score', 'width' => '50', 'align' => 'center', 'search' => 'true'],
-        ['name' => 'ip', 'index' => 'user_ip', 'width' => '40', 'align' => 'center', 'search' => 'true'],
+        ['name' => 'duration', 'index' => 'exe_duration', 'width' => '150', 'align' => 'left', 'search' => 'true'],
+        ['name' => 'start_date', 'index' => 'start_date', 'width' => '150', 'align' => 'left', 'search' => 'true'],
+        ['name' => 'exe_date', 'index' => 'exe_date', 'width' => '150', 'align' => 'left', 'search' => 'true'],
+        ['name' => 'score', 'index' => 'score', 'width' => '100', 'align' => 'center', 'search' => 'true'],
+        ['name' => 'ip', 'index' => 'user_ip', 'width' => '120', 'align' => 'center', 'search' => 'true'],
         [
             'name' => 'status',
             'index' => 'revised',
-            'width' => '40',
+            'width' => '130',
             'align' => 'left',
             'search' => 'true',
             'stype' => 'select',
@@ -726,12 +721,12 @@ if ($is_allowedToEdit || $is_tutor) {
                     ),
             ],
         ],
-        ['name' => 'lp', 'index' => 'orig_lp_id', 'width' => '60', 'align' => 'left', 'search' => 'false'],
-        ['name' => 'actions', 'index' => 'actions', 'width' => '60', 'align' => 'left', 'search' => 'false', 'sortable' => 'false'],
+        ['name' => 'lp', 'index' => 'orig_lp_id', 'width' => '150', 'align' => 'left', 'search' => 'false'],
+        ['name' => 'actions', 'index' => 'actions', 'width' => '120', 'align' => 'left', 'search' => 'false', 'sortable' => 'false'],
     ];
 
     if ('true' === $officialCodeInList) {
-        $officialCodeRow = ['name' => 'official_code', 'index' => 'official_code', 'width' => '50', 'align' => 'left', 'search' => 'true'];
+        $officialCodeRow = ['name' => 'official_code', 'index' => 'official_code', 'width' => '100', 'align' => 'left', 'search' => 'true'];
         $column_model = array_merge([$officialCodeRow], $column_model);
     }
 

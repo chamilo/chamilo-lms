@@ -5,6 +5,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Copy resources from one course in a session to another one.
@@ -114,11 +115,12 @@ function displayForm()
     // Actions
     $html .= '<div class="actions">';
     // Link back to the documents overview
-    $html .= '<a href="'.$returnLink.'">'.Display::return_icon(
-            'back.png',
-        get_lang('Back to').' '.get_lang('Backup'),
-        '',
-        ICON_SIZE_MEDIUM
+    $html .= '<a href="'.$returnLink.'">'.Display::getMdiIcon(
+        ActionIcon::BACK,
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_MEDIUM,
+        get_lang('Back to').' '.get_lang('Backup')
         ).'</a>';
     $html .= '</div>';
 
@@ -383,12 +385,12 @@ if (('course_select_form' === $action) ||
         CourseSelectForm :: display_form($course, $hiddenFields, true);
 
         echo '<div style="float:right"><a href="javascript:window.history.go(-1);">'.
-            Display::return_icon(
-                'back.png',
-                get_lang('Back').' '.get_lang('To').' '.get_lang(
-                    'PlatformAdmin'
-                ),
-                ['style' => 'vertical-align:middle']
+            Display::getMdiIcon(
+                ActionIcon::BACK,
+                'ch-tool-icon',
+                'vertical-align:middle',
+                ICON_SIZE_SMALL,
+                get_lang('Back').' '.get_lang('To').' '.get_lang('PlatformAdmin')
             ).
             get_lang('Back').'</a></div>';
     } else {

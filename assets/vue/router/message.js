@@ -2,23 +2,23 @@ export default {
   path: '/resources/messages',
   meta: { requiresAuth: true },
   name: 'messages',
-  component: () => import('../components/message/Layout.vue'),
+  component: () => import('../components/message/MessageLayout.vue'),
   redirect: { name: 'MessageList' },
   children: [
     {
       name: 'MessageList',
       path: '',
-      component: () => import('../views/message/List.vue')
+      component: () => import('../views/message/MessageList.vue')
     },
     {
       name: 'MessageCreate',
       path: 'new',
-      component: () => import('../views/message/Create.vue')
+      component: () => import('../views/message/MessageCreate.vue')
     },
     {
       name: 'MessageReply',
       path: 'reply',
-      component: () => import('../views/message/Reply.vue')
+      component: () => import('../views/message/MessageReply.vue')
     },
     /*{
       name: 'MessageUpdate',
@@ -29,7 +29,7 @@ export default {
       name: 'MessageShow',
       //path: ':id',
       path: 'show',
-      component: () => import('../views/message/Show.vue')
+      component: () => import('../views/message/MessageShow.vue')
     }
   ]
 };

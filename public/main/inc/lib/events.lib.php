@@ -516,7 +516,7 @@ class Event
         $position = (int) $position;
         $course_id = (int) $course_id;
         $now = api_get_utc_datetime();
-        $recording = api_get_configuration_value('quiz_answer_extra_recording');
+        $recording = ('true' === api_get_setting('exercise.quiz_answer_extra_recording'));
 
         // check user_id or get from context
         if (empty($user_id)) {
@@ -615,11 +615,12 @@ class Event
         $em = Database::getManager();
         if (false == $updateResults) {
             $attempt_id = Database::insert($TBL_TRACK_ATTEMPT, $attempt);
+            $trackExercise = $em->find(TrackEExercise::class, $exe_id);
 
             if ($attempt_id) {
                 $recording = new TrackEAttemptRecording();
                 $recording
-                    ->setExeId($attempt_id)
+                    ->setTrackExercise($trackExercise)
                     ->setQuestionId($question_id)
                     ->setAnswer($answer)
                     ->setMarks((int) $score)
@@ -630,7 +631,7 @@ class Event
                 $em->flush();
             }
         } else {
-            if (api_get_configuration_value('allow_time_per_question')) {
+            if ('true' === api_get_setting('exercise.allow_time_per_question')) {
                 $attempt['seconds_spent'] = $questionDuration + (int) $attemptData['seconds_spent'];
             }
             Database::update(
@@ -1131,7 +1132,7 @@ class Event
             Database::query($sql);
         }
 
-        if (api_get_configuration_value('lp_minimum_time')) {
+        if ('true' === api_get_setting('lp.lp_minimum_time')) {
             $sql = "DELETE FROM track_e_access_complete
                     WHERE
                         tool = 'learnpath' AND
@@ -1786,18 +1787,15 @@ class Event
      * Get a list of all the exercises in a given learning path.
      *
      * @param int $lp_id
-     * @param int $course_id This parameter is probably deprecated as lp_id now is a global iid
      *
      * @return array
      */
-    public static function get_all_exercises_from_lp($lp_id, $course_id)
+    public static function get_all_exercises_from_lp($lp_id)
     {
         $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
-        $course_id = (int) $course_id;
         $lp_id = (int) $lp_id;
         $sql = "SELECT * FROM $lp_item_table
                 WHERE
-                    c_id = $course_id AND
                     lp_id = $lp_id AND
                     item_type = 'quiz'
                 ORDER BY parent_item_id, display_order";

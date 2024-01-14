@@ -2,11 +2,11 @@
 <head>
   <meta charset="utf-8" />
   <title>Guida di installazione di Chamilo LMS</title>
-  <link rel="stylesheet" href="../build/css/app.css" type="text/css" media="screen,projection" />
-  <link rel="stylesheet" href="../build/css/themes/chamilo/default.css" type="text/css" media="screen,projection" />
-  <link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
-  <link rel="stylesheet" href="../build/css/print.css" type="text/css" media="print" />
-  <script src="../build/app.js"></script>
+    <link rel="stylesheet" href="../build/legacy_app.css" />
+    <link rel="stylesheet" href="../build/app.css" />
+    <link rel="stylesheet" href="../build/vue.css" />
+    <link rel="stylesheet" href="default.css" />
+    <script src="../build/legacy_app.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -454,13 +454,12 @@
 <p class="p14"><span class="s1">Per scrivere formule con ASCIIMath nei documenti esiste un corrispondente plugin per l’editor online che deve essere attivato. Per fare ciò vedere la sezione di amministrazione della piattaforma, aprendo la pagina “Amministrazione”&gt;”Impostazioni di Configurazione”&gt;”Editor”. Abilitare l’impostazione “ASCIIMathML mathematical editor”.</span></p>
 <p class="p8"><span class="s1"></span><br></p>
 <p class="p14"><span class="s1">All’interno dei vostri documenti lo script ASCIIMathML.js presenterà le formule matematiche in queste due modalità alternative:</span></p>
+<p>
 <ul>
   <li class="li14"><span class="s1">traducendo le notazioni delle formule ASCIIMath in codice MathML. Gli standard di MathML sono supportati attualmente dai seguenti browsers:</span></li>
-  <ul>
-    <li class="li14"><span class="s1">Mozilla Firefox, potresti però dover installare i font STIX (<a href="http://www.stixfonts.org"><span class="s2">http://www.stixfonts.org</span></a>) sulle tue macchine client per avere una resa ottimale delle formule;</span></li>
-    <li class="li14"><span class="s1">Internet Explorer 6 o superiore utilizzando l’add-on MathPlayer 2.0 o superiore (<a href="http://ww.dessci.com/en/products/mathplayer"><span class="s2">http://ww.dessci.com/en/products/mathplayer</span></a>);</span></li>
-    <li class="li14"><span class="s1">Opera 9.5 o superiore</span></li>
-  </ul>
+  <li class="li14"><span class="s1">Mozilla Firefox, potresti però dover installare i font STIX (<a href="http://www.stixfonts.org"><span class="s2">http://www.stixfonts.org</span></a>) sulle tue macchine client per avere una resa ottimale delle formule;</span></li>
+  <li class="li14"><span class="s1">Internet Explorer 6 o superiore utilizzando l’add-on MathPlayer 2.0 o superiore (<a href="http://ww.dessci.com/en/products/mathplayer"><span class="s2">http://ww.dessci.com/en/products/mathplayer</span></a>);</span></li>
+  <li class="li14"><span class="s1">Opera 9.5 o superiore</span></li>
   <li class="li14"><span class="s1">per browser che non supportano MathML viene effettuata la conversione della notazione delle formule ASCIIMath in notazione TeX passando tramite un servizio esterno. Il servizio esterno produce e ritorna un’immagine che contiene la formula. Questa modalità è chiamata “image-based fallback”.</span></li>
 </ul>
 <p class="p8"><span class="s1"></span><br></p>

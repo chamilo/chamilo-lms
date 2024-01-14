@@ -89,8 +89,8 @@ class BaseResourceFileAction
                 if ($linkSet) {
                     $em->persist($resourceLink);
                     $resourceNode->addResourceLink($resourceLink);
-                    //$em->persist($resourceNode);
-                    //$em->persist($resource->getResourceNode());
+                    // $em->persist($resourceNode);
+                    // $em->persist($resource->getResourceNode());
                 }
             }
         }
@@ -98,7 +98,7 @@ class BaseResourceFileAction
         // Use by Chamilo not api platform.
         $links = $resource->getResourceLinkEntityList();
         if ($links) {
-            //error_log('$resource->getResourceLinkEntityList()');
+            // error_log('$resource->getResourceLinkEntityList()');
             foreach ($links as $link) {
                 /*$rights = [];
                 switch ($link->getVisibility()) {
@@ -120,8 +120,8 @@ class BaseResourceFileAction
                         $link->addResourceRight($right);
                     }
                 }*/
-                //error_log('link adding to node: '.$resource->getResourceNode()->getId());
-                //error_log('link with user : '.$link->getUser()->getUsername());
+                // error_log('link adding to node: '.$resource->getResourceNode()->getId());
+                // error_log('link with user : '.$link->getUser()->getUsername());
                 $resource->getResourceNode()->addResourceLink($link);
 
                 $em->persist($link);
@@ -150,7 +150,7 @@ class BaseResourceFileAction
             $parentResourceNodeId = (int) $request->get('parentResourceNodeId');
             $resourceLinkList = $request->get('resourceLinkList', []);
             if (!empty($resourceLinkList)) {
-                $resourceLinkList = false === strpos($resourceLinkList, '[') ? json_decode('['.$resourceLinkList.']', true) : json_decode($resourceLinkList, true);
+                $resourceLinkList = !str_contains($resourceLinkList, '[') ? json_decode('['.$resourceLinkList.']', true) : json_decode($resourceLinkList, true);
                 if (empty($resourceLinkList)) {
                     $message = 'resourceLinkList is not a valid json. Use for example: [{"cid":1, "visibility":1}]';
 
@@ -200,7 +200,7 @@ class BaseResourceFileAction
             $fileType = $request->get('filetype');
             $resourceLinkList = $request->get('resourceLinkList', []);
             if (!empty($resourceLinkList)) {
-                $resourceLinkList = false === strpos($resourceLinkList, '[') ? json_decode('['.$resourceLinkList.']', true) : json_decode($resourceLinkList, true);
+                $resourceLinkList = !str_contains($resourceLinkList, '[') ? json_decode('['.$resourceLinkList.']', true) : json_decode($resourceLinkList, true);
                 if (empty($resourceLinkList)) {
                     $message = 'resourceLinkList is not a valid json. Use for example: [{"cid":1, "visibility":1}]';
 
@@ -251,6 +251,7 @@ class BaseResourceFileAction
                 }
 
                 break;
+
             case 'folder':
                 break;
         }
@@ -284,7 +285,7 @@ class BaseResourceFileAction
         } else {
             $title = $request->get('title');
             $content = $request->request->get('contentFile');
-            //$comment = $request->request->get('comment');
+            // $comment = $request->request->get('comment');
         }
 
         $repo->setResourceName($resource, $title);

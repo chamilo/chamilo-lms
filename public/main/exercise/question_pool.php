@@ -5,6 +5,8 @@ use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 use Knp\Component\Pager\Paginator;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * Question Pool
@@ -98,7 +100,7 @@ if ($is_allowedToEdit) {
 
     // Deletes a question from the database and all exercises
     if ($delete) {
-        $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+        $limitTeacherAccess = ('true' === api_get_setting('exercise.limit_exercise_teacher_access'));
         if ($limitTeacherAccess && !api_is_platform_admin()) {
             api_not_allowed(true);
         }
@@ -376,7 +378,7 @@ if (1 == $exercise_id_changed) {
 $my_exercise_list = [];
 $my_exercise_list['0'] = get_lang('AllTests');
 $my_exercise_list['-1'] = get_lang('Orphan questions');
-$titleSavedAsHtml = api_get_configuration_value('save_titles_as_html');
+$titleSavedAsHtml = ('true' === api_get_setting('editor.save_titles_as_html'));
 if (is_array($exercise_list)) {
     foreach ($exercise_list as $row) {
         $my_exercise_list[$row['iid']] = '';
@@ -851,7 +853,7 @@ $nbrQuestions = getQuestions(
     $formValues
 );
 
-$length = api_get_configuration_value('question_pagination_length');
+$length = api_get_setting('exercise.question_pagination_length');
 if (empty($length)) {
     $length = 20;
 }
@@ -1027,12 +1029,12 @@ Display::display_header($nameTools, 'Exercise');
 $actions = '';
 if (isset($fromExercise) && $fromExercise > 0) {
     $actions .= '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$fromExercise.'">'.
-        Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go back to the questions list')).'</a>';
 } else {
     $actions .= '<a href="exercise.php?'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('BackToTestsList'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to tests list')).'</a>';
     $actions .= "<a href='admin.php?exerciseId=0'>".
-        Display::return_icon('add_question.gif', get_lang('New question'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('New question')).'</a>';
 }
 echo Display::toolbarAction('toolbar', [$actions]);
 
@@ -1182,7 +1184,7 @@ function getLinkForQuestion(
     if ($in_addA) {
         $sessionIcon = '';
         if (!empty($sessionId) && -1 != $sessionId) {
-            $sessionIcon = ' '.Display::return_icon('star.png', get_lang('Session'));
+            $sessionIcon = ' '.Display::getMdiIcon(ObjectIcon::STAR, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Session'));
         }
         $exerciseId = (int) $exerciseId;
         $questionId = (int) $questionId;
@@ -1227,7 +1229,7 @@ function get_action_icon_for_question(
     $in_exercise_id,
     Exercise $myObjEx
 ) {
-    $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
+    $limitTeacherAccess = ('true' === api_get_setting('exercise.limit_exercise_teacher_access'));
     $getParams = "&selected_course=$in_selected_course&courseCategoryId=$in_courseCategoryId&exerciseId=$in_exercise_id&exerciseLevel=$in_exerciseLevel&answerType=$in_answerType&session_id=$in_session_id";
     $res = '';
     switch ($in_action) {
@@ -1237,11 +1239,11 @@ function get_action_icon_for_question(
             }
 
             if (isQuestionInActiveQuiz($in_questionid)) {
-                $res = Display::return_icon('delete_na.png', get_lang('ThisQuestionExistsInAnotherExercisesWarning'));
+                $res = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('ThisQuestionExistsInAnotherExercisesWarning'));
             } else {
                 $res = "<a href='".api_get_self()."?".
                 api_get_cidreq().$getParams."&delete=$in_questionid' onclick='return confirm_your_choice()'>";
-                $res .= Display::return_icon('delete.png', get_lang('Delete'));
+                $res .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'));
                 $res .= "</a>";
             }
 
@@ -1252,7 +1254,7 @@ function get_action_icon_for_question(
                 $from_exercise,
                 $in_questionid,
                 $in_questiontype,
-                Display::return_icon('edit.png', get_lang('Edit')),
+                Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
                 $in_session_id,
                 $in_exercise_id
             );
@@ -1263,7 +1265,7 @@ function get_action_icon_for_question(
             if (!$myObjEx->hasQuestion($in_questionid)) {
                 $res = "<a href='".api_get_self().'?'.
                     api_get_cidreq().$getParams."&recup=$in_questionid&fromExercise=$from_exercise'>";
-                $res .= Display::return_icon('view_more_stats.gif', get_lang('InsertALinkToThisQuestionInTheExercise'));
+                $res .= Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('InsertALinkToThisQuestionInTheExercise'));
                 $res .= '</a>';
             }
 
@@ -1272,7 +1274,7 @@ function get_action_icon_for_question(
             $url = api_get_self().'?'.api_get_cidreq().$getParams.
                 "&question_copy=$in_questionid&course_id=$in_selected_course&fromExercise=$from_exercise";
             $res = Display::url(
-                Display::return_icon('cd.png', get_lang('Re-use a copy inside the current test')),
+                Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Re-use a copy inside the current test')),
                 $url
             );
 

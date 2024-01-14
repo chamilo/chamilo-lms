@@ -22,8 +22,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class ChatController extends AbstractResourceController implements CourseControllerInterface
 {
     use ControllerTrait;
-    use ResourceControllerTrait;
     use CourseControllerTrait;
+    use ResourceControllerTrait;
 
     /**
      * @Route("/resources/chat/", name="chat_home", options={"expose"=true})
@@ -42,7 +42,7 @@ class ChatController extends AbstractResourceController implements CourseControl
         return $this->render(
             '@ChamiloCore/Chat/chat.html.twig',
             [
-                'restrict_to_coach' => api_get_configuration_value('course_chat_restrict_to_coach'),
+                'restrict_to_coach' => ('true' === api_get_setting('chat.course_chat_restrict_to_coach')),
                 'user' => api_get_user_info(),
             ]
         );
@@ -90,21 +90,22 @@ class ChatController extends AbstractResourceController implements CourseControl
                 Event::registerLog($logInfo);
 
                 break;
+
             case 'track':
                 $courseChatUtils->keepUserAsConnected();
                 $courseChatUtils->disconnectInactiveUsers();
 
                 $friend = isset($_REQUEST['friend']) ? (int) $_REQUEST['friend'] : 0;
-                //$filePath = $courseChatUtils->getFileName(true, $friend);
-                //$newFileSize = file_exists($filePath) ? filesize($filePath) : 0;
-                //$oldFileSize = isset($_GET['size']) ? (int) $_GET['size'] : -1;
+                // $filePath = $courseChatUtils->getFileName(true, $friend);
+                // $newFileSize = file_exists($filePath) ? filesize($filePath) : 0;
+                // $oldFileSize = isset($_GET['size']) ? (int) $_GET['size'] : -1;
                 $newUsersOnline = $courseChatUtils->countUsersOnline();
                 $oldUsersOnline = isset($_GET['users_online']) ? (int) $_GET['users_online'] : 0;
 
                 $json = [
                     'status' => true,
                     'data' => [
-                        //'oldFileSize' => file_exists($filePath) ? filesize($filePath) : 0,
+                        // 'oldFileSize' => file_exists($filePath) ? filesize($filePath) : 0,
                         'oldFileSize' => false,
                         'history' => $courseChatUtils->readMessages(false, $friend),
                         'usersOnline' => $newUsersOnline,
@@ -114,6 +115,7 @@ class ChatController extends AbstractResourceController implements CourseControl
                 ];
 
                 break;
+
             case 'preview':
                 $json = [
                     'status' => true,
@@ -123,6 +125,7 @@ class ChatController extends AbstractResourceController implements CourseControl
                 ];
 
                 break;
+
             case 'reset':
                 $friend = isset($_REQUEST['friend']) ? (int) $_REQUEST['friend'] : 0;
 
@@ -132,6 +135,7 @@ class ChatController extends AbstractResourceController implements CourseControl
                 ];
 
                 break;
+
             case 'write':
                 $friend = isset($_REQUEST['friend']) ? (int) $_REQUEST['friend'] : 0;
                 $status = $courseChatUtils->saveMessage($_REQUEST['message'], $friend);

@@ -48,8 +48,8 @@ class GroupVoterTest extends WebTestCase
 
         // Group in public course.
         $publicCourse = $this->createCourse('public');
-        $publicCourse->addUser($studentWithAccess, 0, null, CourseRelUser::STUDENT);
-        $publicCourse->addUser($teacherWithAccess, 0, null, CourseRelUser::TEACHER);
+        $publicCourse->addSubscriptionForUser($studentWithAccess, 0, null, CourseRelUser::STUDENT);
+        $publicCourse->addSubscriptionForUser($teacherWithAccess, 0, null, CourseRelUser::TEACHER);
         $em->persist($publicCourse);
 
         $group = (new CGroup())
@@ -63,9 +63,13 @@ class GroupVoterTest extends WebTestCase
         $em->flush();
 
         yield 'admin access to course' => [VoterInterface::ACCESS_GRANTED, $admin, $group];
+
         yield 'student with no access to course' => [VoterInterface::ACCESS_GRANTED, $student, $group];
+
         yield 'student with access to course' => [VoterInterface::ACCESS_GRANTED, $studentWithAccess, $group];
+
         yield 'teacher with no access to course' => [VoterInterface::ACCESS_GRANTED, $teacher, $group];
+
         yield 'teacher with access to course' => [VoterInterface::ACCESS_GRANTED, $teacherWithAccess, $group];
 
         $group->setStatus(false);
@@ -73,18 +77,22 @@ class GroupVoterTest extends WebTestCase
         $em->flush();
 
         yield 'admin access to course' => [VoterInterface::ACCESS_GRANTED, $admin, $group];
+
         yield 'student with no access to course' => [VoterInterface::ACCESS_DENIED, $student, $group];
+
         yield 'student with access to course' => [VoterInterface::ACCESS_DENIED, $studentWithAccess, $group];
+
         yield 'teacher with no access to course' => [VoterInterface::ACCESS_DENIED, $teacher, $group];
+
         yield 'teacher with access to course' => [VoterInterface::ACCESS_GRANTED, $teacherWithAccess, $group];
 
         // REGISTERED course.
         $registeredCourse = $this->createCourse('registered');
         $registeredCourse->setVisibility(Course::REGISTERED);
-        $registeredCourse->addUser($studentWithAccess, 0, null, CourseRelUser::STUDENT);
-        $registeredCourse->addUser($studentInGroup2IsTutor, 0, null, CourseRelUser::STUDENT);
-        $registeredCourse->addUser($studentInGroup2IsMember, 0, null, CourseRelUser::STUDENT);
-        $registeredCourse->addUser($teacherWithAccess, 0, null, CourseRelUser::TEACHER);
+        $registeredCourse->addSubscriptionForUser($studentWithAccess, 0, null, CourseRelUser::STUDENT);
+        $registeredCourse->addSubscriptionForUser($studentInGroup2IsTutor, 0, null, CourseRelUser::STUDENT);
+        $registeredCourse->addSubscriptionForUser($studentInGroup2IsMember, 0, null, CourseRelUser::STUDENT);
+        $registeredCourse->addSubscriptionForUser($teacherWithAccess, 0, null, CourseRelUser::TEACHER);
         $em->persist($registeredCourse);
         $em->flush();
 
@@ -122,10 +130,15 @@ class GroupVoterTest extends WebTestCase
         $granted = VoterInterface::ACCESS_GRANTED;
 
         yield 'admin access to reg course' => [$granted, $admin, $group2];
+
         yield 'teacher access to reg course' => [$granted, $teacherWithAccess, $group2];
+
         yield 'teacher no access to reg course' => [$denied, $teacher, $group2];
+
         yield 'student no access to reg course' => [$denied, $student, $group2];
+
         yield 'student access to reg course group status=false' => [$denied, $studentWithAccess, $group2];
+
         yield 'student in group2 access to reg course group status=false' => [$denied, $studentInGroup2IsMember, $group2];
 
         $group2->setStatus(true);
@@ -133,10 +146,15 @@ class GroupVoterTest extends WebTestCase
         $em->flush();
 
         yield 'admin access to reg course status=true' => [$granted, $admin, $group2];
+
         yield 'teacher access to reg course status=true' => [$granted, $teacherWithAccess, $group2];
+
         yield 'teacher no access to reg course status=true' => [$denied, $teacher, $group2];
+
         yield 'student no access to reg course status=true' => [$denied, $student, $group2];
+
         yield 'student no access to group 2' => [$granted, $studentWithAccess, $group2];
+
         yield 'student access to reg course group status=true' => [$granted, $studentInGroup2IsMember, $group2];
 
         $registeredCourse->setVisibility(Course::HIDDEN);
@@ -144,9 +162,13 @@ class GroupVoterTest extends WebTestCase
         $em->flush();
 
         yield 'admin access to reg course hidden' => [$granted, $admin, $group2];
+
         yield 'teacher access to reg course hidden' => [$denied, $teacherWithAccess, $group2];
+
         yield 'teacher no access to reg course hidden' => [$denied, $teacher, $group2];
+
         yield 'studentWithAccess no access reg course hidden' => [$denied, $studentWithAccess, $group2];
+
         yield 'studentInGroup2IsMember to reg course hidden' => [$denied, $studentInGroup2IsMember, $group2];
     }
 }

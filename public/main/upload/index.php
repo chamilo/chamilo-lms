@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Main script for the documents tool.
@@ -119,7 +120,7 @@ $content_origins = [
 
 echo Display::toolbarAction('lp', [
     '<a href="'.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'">'.
-    Display::return_icon('back.png', get_lang('Back to learning paths'), '', ICON_SIZE_MEDIUM).'</a>',
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to learning paths')).'</a>',
 ]);
 
 $form = new FormValidator(
@@ -152,7 +153,7 @@ if (api_is_platform_admin()) {
     $form->addElement('checkbox', 'use_max_score', null, get_lang('Use default maximum score of 100'));
 }
 
-if (api_get_configuration_value('allow_htaccess_import_from_scorm')) {
+if ('true' === api_get_setting('lp.allow_htaccess_import_from_scorm')) {
     $form->addElement('checkbox', 'allow_htaccess', null, get_lang('Allow htaccess in the SCORM import'));
 }
 

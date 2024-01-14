@@ -10,27 +10,20 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * SystemTemplate.
- *
- * @ORM\Table(name="system_template")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'system_template')]
+#[ORM\Entity]
 class SystemTemplate
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=250, nullable=false)
-     */
+    #[ORM\Column(name: 'title', type: 'string', length: 250, nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="comment", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'comment', type: 'text', nullable: false)]
     protected string $comment;
 
     /**
@@ -39,10 +32,12 @@ class SystemTemplate
      */
     protected ?Asset $image = null;
 
-    /**
-     * @ORM\Column(name="content", type="text", nullable=false)
-     */
+
+    #[ORM\Column(name: 'content', type: 'text', nullable: false)]
     protected string $content;
+
+    #[ORM\Column(name: 'language', type: 'string', length: 40, nullable: true)]
+    protected string $language;
 
     public function __construct()
     {
@@ -125,5 +120,17 @@ class SystemTemplate
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getLanguage(): string
+    {
+        return $this->language;
+    }
+
+    public function setLanguage(string $language): self
+    {
+        $this->language = $language;
+
+        return $this;
     }
 }

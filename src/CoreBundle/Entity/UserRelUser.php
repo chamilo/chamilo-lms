@@ -1,14 +1,20 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\Entity\Listener\UserRelUserListener;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,109 +24,85 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Associations between users.
- *
- * @ORM\Table(name="user_rel_user",
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(
- *             name="user_friend_relation",
- *             columns={"user_id", "friend_user_id", "relation_type"}
- *         )
- *     },
- *     indexes={
- *       @ORM\Index(name="idx_user_rel_user__user", columns={"user_id"}),
- *       @ORM\Index(name="idx_user_rel_user__friend_user", columns={"friend_user_id"}),
- *       @ORM\Index(name="idx_user_rel_user__user_friend_user", columns={"user_id", "friend_user_id"})
- *    }
- * )
- * @ORM\Entity
- * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\UserRelUserListener"})
  */
 #[ApiResource(
-    collectionOperations: [
-        'get' => [
-            //'security' => "is_granted('ROLE_ADMIN')",
-        ],
-        'post' => [
-            'security_post_denormalize' => "is_granted('CREATE', object)",
-        ],
+    operations: [
+        new Get(),
+        new Put(security: "is_granted('EDIT', object)"),
+        new Delete(security: "is_granted('DELETE', object)"),
+        new GetCollection(),
+        new Post(securityPostDenormalize: "is_granted('CREATE', object)"),
     ],
-    itemOperations: [
-        'get' => [
-            //'security' => "is_granted('ROLE_ADMIN')",
+    normalizationContext: [
+        'groups' => [
+            'user_rel_user:read',
+            'timestampable_created:read',
         ],
-        'put' => [
-            'security' => "is_granted('EDIT', object)",
-        ],
-        'delete' => [
-            'security' => "is_granted('DELETE', object)",
-        ],
-    ],
-    attributes: [
-        'security' => 'is_granted("ROLE_USER")',
     ],
     denormalizationContext: [
         'groups' => ['user_rel_user:write'],
     ],
-    normalizationContext: [
-        'groups' => ['user_rel_user:read', 'timestampable_created:read'],
-    ],
+    security: 'is_granted("ROLE_USER")'
 )]
-#[ApiFilter(SearchFilter::class, properties: [
-    'user' => 'exact',
-    'friend' => 'exact',
-    'relationType' => 'exact',
-    'friend.username' => 'partial',
-])]
 #[UniqueEntity(
     fields: ['user', 'friend', 'relationType'],
-    errorPath: 'User',
     message: 'User-friend relation already exists',
+    errorPath: 'User'
+)]
+#[ORM\Table(name: 'user_rel_user')]
+#[ORM\Index(columns: ['user_id'], name: 'idx_user_rel_user__user')]
+#[ORM\Index(columns: ['friend_user_id'], name: 'idx_user_rel_user__friend_user')]
+#[ORM\Index(columns: ['user_id', 'friend_user_id'], name: 'idx_user_rel_user__user_friend_user')]
+#[ORM\UniqueConstraint(name: 'user_friend_relation', columns: ['user_id', 'friend_user_id', 'relation_type'])]
+#[ORM\Entity]
+#[ORM\EntityListeners([UserRelUserListener::class])]
+#[ApiFilter(
+    filterClass: SearchFilter::class,
+    properties: [
+        'user' => 'exact',
+        'friend' => 'exact',
+        'relationType' => 'exact',
+        'friend.username' => 'partial',
+    ]
 )]
 class UserRelUser
 {
-    use UserTrait;
     use TimestampableTypedEntity;
+    use UserTrait;
 
     public const USER_UNKNOWN = 0;
-    //public const USER_RELATION_TYPE_UNKNOWN = 1;
-    //public const USER_RELATION_TYPE_PARENT = 2;
+    // public const USER_RELATION_TYPE_UNKNOWN = 1;
+    // public const USER_RELATION_TYPE_PARENT = 2;
     public const USER_RELATION_TYPE_FRIEND = 3;
-    public const USER_RELATION_TYPE_GOODFRIEND = 4; // should be deprecated is useless
-    //public const USER_RELATION_TYPE_ENEMY = 5; // should be deprecated is useless
+    public const USER_RELATION_TYPE_GOODFRIEND = 4;
+    // should be deprecated is useless
+    // public const USER_RELATION_TYPE_ENEMY = 5; // should be deprecated is useless
     public const USER_RELATION_TYPE_DELETED = 6;
     public const USER_RELATION_TYPE_RRHH = 7;
     public const USER_RELATION_TYPE_BOSS = 8;
     public const USER_RELATION_TYPE_HRM_REQUEST = 9;
     public const USER_RELATION_TYPE_FRIEND_REQUEST = 10;
 
-    /**
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="friends")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-     */
     #[Assert\NotNull]
     #[Groups(['user_rel_user:read', 'user_rel_user:write'])]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'friends')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\User", inversedBy="friendsWithMe")
-     * @ORM\JoinColumn(name="friend_user_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-     */
     #[Assert\NotNull]
     #[Groups(['user_rel_user:read', 'user_rel_user:write'])]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'friendsWithMe')]
+    #[ORM\JoinColumn(name: 'friend_user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $friend;
 
-    /**
-     * @ORM\Column(name="relation_type", type="integer", nullable=false)
-     */
     #[Assert\NotBlank]
     #[Groups(['user_rel_user:read', 'user_rel_user:write'])]
+    #[ORM\Column(name: 'relation_type', type: 'integer', nullable: false)]
     protected int $relationType;
 
     public function __construct()
@@ -164,12 +146,7 @@ class UserRelUser
         return $this->relationType;
     }
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }

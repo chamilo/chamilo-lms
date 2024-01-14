@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Exercise administration
@@ -54,7 +55,7 @@ api_protect_course_script(true);
 $is_allowedToEdit = api_is_allowed_to_edit(null, true, false, false);
 $sessionId = api_get_session_id();
 $studentViewActive = api_is_student_view_active();
-$showPagination = api_get_configuration_value('show_question_pagination');
+$showPagination = api_get_setting('exercise.show_question_pagination');
 
 if (!$is_allowedToEdit) {
     api_not_allowed(true);
@@ -275,7 +276,7 @@ if ('thisExercise' === $modifyIn) {
     }
 }
 
-$htmlHeadXtra[] = api_get_build_js('exercise.js');
+$htmlHeadXtra[] = api_get_build_js('legacy_exercise.js');
 
 $template = new Template();
 $templateName = $template->get_template('exercise/submit.js.tpl');
@@ -292,24 +293,24 @@ if ($inATest) {
     if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion'])) {
         $actions .= '<a
         href="'.api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
-            Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go back to the questions list')).'</a>';
     }
 
     if (!isset($_GET['hotspotadmin']) && !isset($_GET['newQuestion']) && !isset($_GET['editQuestion'])) {
         $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'">'.
-            Display::return_icon('back.png', get_lang('BackToTestsList'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to tests list')).'</a>';
     }
     $actions .= '<a
         href="'.api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&exerciseId='.$objExercise->getId().'&preview=1">'.
-        Display::return_icon('preview_view.png', get_lang('Preview'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon(ActionIcon::PREVIEW_CONTENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Preview')).'</a>';
 
     $actions .= Display::url(
-        Display::return_icon('test_results.png', get_lang('Results and feedback'), '', ICON_SIZE_MEDIUM),
+        Display::getMdiIcon('chart-box', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Results and feedback')),
         api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->getId()
     );
 
     $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->getId().'">'.
-        Display::return_icon('settings.png', get_lang('Edit test name and settings'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon('cog', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit test name and settings')).'</a>';
 
     $maxScoreAllQuestions = 0;
     if (false === $showPagination) {
@@ -336,7 +337,7 @@ if ($inATest) {
     }
     if ($editQuestion && $objQuestion->existsInAnotherExercise()) {
         echo Display::return_message(
-            Display::getMdiIcon('alert')
+            Display::getMdiIcon('alert', 'ch-tool-icon', null, ICON_SIZE_SMALL)
                 .get_lang('ThisQuestionExistsInAnotherTestsWarning'),
             'warning',
             false
@@ -397,12 +398,12 @@ if ($inATest) {
 } elseif (isset($_GET['newQuestion'])) {
     // we are in create a new question from question pool not in a test
     $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go back to the questions list')).'</a>';
     echo Display::toolbarAction('toolbar', [$actions]);
 } else {
-    // If we are in question_pool but not in an test, go back to question create in pool
+    // If we are in question_pool but not in a test, go back to the questions created in pool
     $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/question_pool.php?'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go back to the questions list')).
         '</a>';
     echo Display::toolbarAction('toolbar', [$actions]);
 }

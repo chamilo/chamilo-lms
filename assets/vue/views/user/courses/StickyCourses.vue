@@ -1,45 +1,38 @@
 <template>
-  <div v-if="courses.length" class="mb-6">
-    <h2> {{ $t('Sticky courses')}}</h2>
+  <div
+    v-if="courses.length"
+    class="mb-6"
+  >
+    <h2 class="mb-2">{{ $t("Sticky courses") }}</h2>
     <div
-        class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-2">
-      <CourseCardList
-          :courses="courses"
-      />
+      v-if="courses.length"
+      class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-2"
+    >
+      <CourseCardList :courses="courses" />
     </div>
-    <hr />
   </div>
 </template>
 
-<script>
-import CourseCardList from '../../../components/course/CourseCardList.vue';
-import {computed} from "vue";
-import {useStore} from 'vuex';
-import {useQuery, useResult} from '@vue/apollo-composable'
-import {GET_STICKY_COURSES} from "../../../graphql/queries/Course";
+<script setup>
+import CourseCardList from "../../../components/course/CourseCardList.vue"
+import { computed, ref, watchEffect } from "vue"
+import { useStore } from "vuex"
+import { GET_STICKY_COURSES } from "../../../graphql/queries/Course"
+import { useQuery } from "@vue/apollo-composable"
+import { useSecurityStore } from "../../../store/securityStore"
 
-export default {
-  name: 'StickyCourses',
-  components: {
-    CourseCardList,
-  },
-  setup() {
-    const store = useStore();
-    let user = computed(() => store.getters['security/getUser']);
+const store = useStore()
+const securityStore = useSecurityStore()
 
-    if (user.value) {
-      const {result: resultStickyCourses, loading: loadingCourses} = useQuery(GET_STICKY_COURSES);
-      const courses = useResult(resultStickyCourses, [], (data) => {
-        return data.courses.edges.map(function (edge) {
-          return edge.node;
-        });
-      });
+const queryResponse = ref({})
 
-      return {
-        courses,
-        loadingCourses
-      }
-    }
-  }
-};
+if (securityStore.isAuthenticated) {
+  const { result } = useQuery(GET_STICKY_COURSES)
+
+  watchEffect(() => {
+    queryResponse.value = result.value
+  })
+}
+
+const courses = computed(() => queryResponse.value?.courses?.edges?.map(({ node }) => node) ?? [])
 </script>

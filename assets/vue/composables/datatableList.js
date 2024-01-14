@@ -1,10 +1,11 @@
 import { useStore } from 'vuex'
-import { inject, ref } from 'vue';
+import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { isEmpty } from 'lodash'
 
 import { useCidReq } from './cidReq'
 import { useI18n } from 'vue-i18n';
+import { useToast } from 'primevue/usetoast';
 
 export function useDatatableList (servicePrefix) {
   const moduleName = servicePrefix.toLowerCase()
@@ -16,7 +17,7 @@ export function useDatatableList (servicePrefix) {
 
   const { cid, sid, gid } = useCidReq()
 
-  const flashMessageList = inject('flashMessageList')
+  const toast = useToast();
 
   const filters = ref({})
 
@@ -116,10 +117,11 @@ export function useDatatableList (servicePrefix) {
 
     onUpdateOptions(options.value);
 
-    flashMessageList.value.push({
+    toast.add({
       severity: 'success',
-      detail: t('Deleted')
-    })
+      detail: t('Deleted'),
+      life: 3500,
+    });
   }
 
   return {

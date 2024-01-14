@@ -194,7 +194,7 @@ if (isset($_POST['title'])) {
         !empty($_POST['title'])
     ) {
         $post_title = Exercise::format_title_variable($_POST['title']);
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $post_title = $_POST['title'];
         }
     }
@@ -701,7 +701,7 @@ switch ($action) {
         }
         break;
     case 'export_to_course_build':
-        $allowExport = api_get_configuration_value('allow_lp_chamilo_export');
+        $allowExport = ('true' === api_get_setting('lp.allow_lp_chamilo_export'));
         if (api_is_allowed_to_edit() && $allowExport) {
             if (!$lp_found) {
                 require 'lp_list.php';
@@ -785,7 +785,7 @@ switch ($action) {
             api_not_allowed(true);
         }
         if ($lp_found) {
-            learnpath::move_up($_REQUEST['lp_id'], $_REQUEST['category_id']);
+            learnpath::move($_REQUEST['lp_id'], 'up');
             Display::addFlash(Display::return_message(get_lang('Update successful')));
         }
         header('Location: '.$listUrl);
@@ -798,7 +798,7 @@ switch ($action) {
             api_not_allowed(true);
         }
         if ($lp_found) {
-            learnpath::move_down($_REQUEST['lp_id'], $_REQUEST['category_id']);
+            learnpath::move($_REQUEST['lp_id'], 'down');
             Display::addFlash(Display::return_message(get_lang('Update successful')));
         }
         header('Location: '.$listUrl);
@@ -1004,11 +1004,14 @@ switch ($action) {
             $url = $courseInfo['course_public_url'].'?sid='.api_get_session_id();
             $redirectTo = isset($_GET['redirectTo']) ? $_GET['redirectTo'] : '';
             switch ($redirectTo) {
+                case 'course_home':
+                    $url = api_get_path(WEB_PATH).'course/'.api_get_course_int_id().'/home?'.api_get_cidreq();
+                    break;
                 case 'lp_list':
                     $url = 'lp_controller.php?'.api_get_cidreq();
                     break;
                 case 'my_courses':
-                    $url = api_get_path(WEB_PATH).'user_portal.php';
+                    $url = api_get_path(WEB_PATH).'courses';
                     break;
                 case 'portal_home':
                     $url = api_get_path(WEB_PATH);

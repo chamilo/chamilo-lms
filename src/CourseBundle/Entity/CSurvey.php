@@ -1,228 +1,163 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Stringable;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @Gedmo\Tree(type="nested")
- * @ORM\Table(
- *     name="c_survey",
- *     indexes={
- *         @ORM\Index(name="idx_survey_code", columns={"code"})
- *     }
- * )
- * @ORM\Entity(repositoryClass="Chamilo\CourseBundle\Repository\CSurveyRepository")
- */
-class CSurvey extends AbstractResource implements ResourceInterface
+#[ORM\Table(name: 'c_survey')]
+#[ORM\Index(columns: ['code'], name: 'idx_survey_code')]
+#[Gedmo\Tree(type: 'nested')]
+#[ORM\Entity(repositoryClass: CSurveyRepository::class)]
+class CSurvey extends AbstractResource implements ResourceInterface, Stringable
 {
-    /**
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    protected int $iid;
+    #[ORM\Column(name: 'iid', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    protected ?int $iid = null;
 
-    /**
-     * @ORM\Column(name="code", type="string", length=40, nullable=true)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'code', type: 'string', length: 40, nullable: true)]
     protected ?string $code = null;
 
-    /**
-     * @ORM\Column(name="title", type="text", nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
-    /**
-     * @ORM\Column(name="subtitle", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'subtitle', type: 'text', nullable: true)]
     protected ?string $subtitle;
 
-    /**
-     * @ORM\Column(name="lang", type="string", length=20, nullable=true)
-     */
+    #[ORM\Column(name: 'lang', type: 'string', length: 20, nullable: true)]
     protected ?string $lang;
 
-    /**
-     * @ORM\Column(name="avail_from", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'avail_from', type: 'datetime', nullable: true)]
     protected ?DateTime $availFrom = null;
 
-    /**
-     * @ORM\Column(name="avail_till", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'avail_till', type: 'datetime', nullable: true)]
     protected ?DateTime $availTill = null;
 
-    /**
-     * @ORM\Column(name="is_shared", type="string", length=1, nullable=true)
-     */
+    #[ORM\Column(name: 'is_shared', type: 'string', length: 1, nullable: true)]
     protected ?string $isShared = null;
 
-    /**
-     * @ORM\Column(name="template", type="string", length=20, nullable=true)
-     */
+    #[ORM\Column(name: 'template', type: 'string', length: 20, nullable: true)]
     protected ?string $template = null;
 
-    /**
-     * @ORM\Column(name="intro", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'intro', type: 'text', nullable: true)]
     protected ?string $intro = null;
 
-    /**
-     * @ORM\Column(name="surveythanks", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'surveythanks', type: 'text', nullable: true)]
     protected ?string $surveyThanks = null;
 
-    /**
-     * @ORM\Column(name="creation_date", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'creation_date', type: 'datetime', nullable: false)]
     protected DateTime $creationDate;
 
-    /**
-     * @ORM\Column(name="invited", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'invited', type: 'integer', nullable: false)]
     protected int $invited;
 
-    /**
-     * @ORM\Column(name="answered", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'answered', type: 'integer', nullable: false)]
     protected int $answered;
 
-    /**
-     * @ORM\Column(name="invite_mail", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'invite_mail', type: 'text', nullable: false)]
     protected string $inviteMail;
 
-    /**
-     * @ORM\Column(name="reminder_mail", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'reminder_mail', type: 'text', nullable: false)]
     protected string $reminderMail;
 
-    /**
-     * @ORM\Column(name="mail_subject", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'mail_subject', type: 'string', length: 255, nullable: false)]
     protected string $mailSubject;
 
-    /**
-     * @ORM\Column(name="anonymous", type="string", length=10, nullable=false)
-     */
     #[Assert\NotBlank]
+    #[ORM\Column(name: 'anonymous', type: 'string', length: 10, nullable: false)]
     protected string $anonymous;
 
-    /**
-     * @ORM\Column(name="access_condition", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'access_condition', type: 'text', nullable: true)]
     protected ?string $accessCondition = null;
 
-    /**
-     * @ORM\Column(name="shuffle", type="boolean", nullable=false)
-     */
+    #[ORM\Column(name: 'shuffle', type: 'boolean', nullable: false)]
     protected bool $shuffle;
 
-    /**
-     * @ORM\Column(name="one_question_per_page", type="boolean", nullable=false)
-     */
+    #[ORM\Column(name: 'one_question_per_page', type: 'boolean', nullable: false)]
     protected bool $oneQuestionPerPage;
 
-    /**
-     * @ORM\Column(name="survey_version", type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(name: 'survey_version', type: 'string', length: 255, nullable: false)]
     protected string $surveyVersion;
 
-    /**
-     * @Gedmo\TreeLeft
-     * @ORM\Column(name="lft", type="integer", nullable=true, unique=false)
-     */
+    #[Gedmo\TreeLeft]
+    #[ORM\Column(name: 'lft', type: 'integer', unique: false, nullable: true)]
     protected ?int $lft = null;
 
-    /**
-     * @Gedmo\TreeRight
-     * @ORM\Column(name="rgt", type="integer", nullable=true, unique=false)
-     */
+    #[Gedmo\TreeRight]
+    #[ORM\Column(name: 'rgt', type: 'integer', unique: false, nullable: true)]
     protected ?int $rgt = null;
 
-    /**
-     * @Gedmo\TreeLevel
-     * @ORM\Column(name="lvl", type="integer", nullable=true, unique=false)
-     */
+    #[Gedmo\TreeLevel]
+    #[ORM\Column(name: 'lvl', type: 'integer', unique: false, nullable: true)]
     protected ?int $lvl = null;
 
     /**
-     * @var Collection|CSurveyQuestion[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestion", mappedBy="survey", cascade={"remove"})
+     * @var Collection<int, CSurveyQuestion>
      */
+    #[ORM\OneToMany(mappedBy: 'survey', targetEntity: CSurveyQuestion::class, cascade: ['remove'])]
     protected Collection $questions;
 
     /**
-     * @var Collection|CSurveyInvitation[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyInvitation", mappedBy="survey", cascade={"remove"})
+     * @var Collection<int, CSurveyInvitation>
      */
+    #[ORM\OneToMany(mappedBy: 'survey', targetEntity: CSurveyInvitation::class, cascade: ['remove'])]
     protected Collection $invitations;
 
-    /**
-     * @Gedmo\TreeParent
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CSurvey", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="iid", onDelete="CASCADE")
-     */
+    #[Gedmo\TreeParent]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected ?CSurvey $surveyParent = null;
 
     /**
-     * @var Collection|CSurvey[]
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurvey", mappedBy="surveyParent")
+     * @var Collection<int, CSurvey>
      */
+    #[ORM\OneToMany(mappedBy: 'surveyParent', targetEntity: self::class)]
     protected Collection $children;
 
     /**
-     * @var Collection|CSurveyQuestionOption[]
-     *
-     * @ORM\OrderBy({"sort"="ASC"})
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CSurveyQuestionOption", mappedBy="survey", cascade={"remove"})
+     * @var Collection<int, CSurveyQuestionOption>
      */
+    #[ORM\OrderBy(['sort' => 'ASC'])]
+    #[ORM\OneToMany(mappedBy: 'survey', targetEntity: CSurveyQuestionOption::class, cascade: ['remove'])]
     protected Collection $options;
 
-    /**
-     * @ORM\Column(name="survey_type", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'survey_type', type: 'integer', nullable: false)]
     protected int $surveyType;
 
-    /**
-     * @ORM\Column(name="show_form_profile", type="integer", nullable=false)
-     */
+    #[ORM\Column(name: 'show_form_profile', type: 'integer', nullable: false)]
     protected int $showFormProfile;
 
-    /**
-     * @ORM\Column(name="form_fields", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'form_fields', type: 'text', nullable: false)]
     protected string $formFields;
 
-    /**
-     * @ORM\Column(name="visible_results", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'visible_results', type: 'integer', nullable: true)]
     protected ?int $visibleResults = null;
 
-    /**
-     * @ORM\Column(name="is_mandatory", type="boolean", options={"default":false})
-     */
+    #[ORM\Column(name: 'is_mandatory', type: 'boolean', options: ['default' => false])]
     protected bool $isMandatory = false;
+
+    #[ORM\Column(name: 'display_question_number', type: 'boolean', options: ['default' => true])]
+    protected bool $displayQuestionNumber;
 
     public function __construct()
     {
+        $this->title = '';
         $this->creationDate = new DateTime();
         $this->invited = 0;
         $this->answered = 0;
@@ -242,16 +177,17 @@ class CSurvey extends AbstractResource implements ResourceInterface
         $this->children = new ArrayCollection();
         $this->invitations = new ArrayCollection();
         $this->options = new ArrayCollection();
+        $this->displayQuestionNumber = true;
     }
 
     public function __toString(): string
     {
-        return $this->getCode();
+        return (string) $this->getCode();
     }
 
-    public function getIid(): int
+    public function getCode(): ?string
     {
-        return $this->iid;
+        return $this->code;
     }
 
     public function setCode(string $code): self
@@ -261,14 +197,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get code.
-     *
-     * @return string
-     */
-    public function getCode()
+    public function getTitle(): string
     {
-        return $this->code;
+        return $this->title;
     }
 
     public function setTitle(string $title): self
@@ -278,9 +209,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getTitle(): string
+    public function getSubtitle(): ?string
     {
-        return $this->title;
+        return $this->subtitle;
     }
 
     public function setSubtitle(string $subtitle): self
@@ -290,9 +221,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function getSubtitle(): ?string
+    public function getLang(): ?string
     {
-        return $this->subtitle;
+        return $this->lang;
     }
 
     public function setLang(string $lang): self
@@ -302,31 +233,17 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get lang.
-     *
-     * @return string
-     */
-    public function getLang()
-    {
-        return $this->lang;
-    }
-
-    public function setAvailFrom(DateTime $availFrom): self
-    {
-        $this->availFrom = $availFrom;
-
-        return $this;
-    }
-
     public function getAvailFrom(): ?DateTime
     {
         return $this->availFrom;
     }
 
-    public function setAvailTill(DateTime $availTill): self
+    public function setAvailFrom(DateTime $availFrom = null): self
     {
-        $this->availTill = $availTill;
+        if (null === $availFrom) {
+            $availFrom = new DateTime();
+        }
+        $this->availFrom = $availFrom;
 
         return $this;
     }
@@ -336,6 +253,21 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this->availTill;
     }
 
+    public function setAvailTill(DateTime $availTill = null): self
+    {
+        if (null === $availTill) {
+            $availTill = new DateTime();
+        }
+        $this->availTill = $availTill;
+
+        return $this;
+    }
+
+    public function getIsShared(): ?string
+    {
+        return $this->isShared;
+    }
+
     public function setIsShared(string $isShared): self
     {
         $this->isShared = $isShared;
@@ -343,14 +275,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get isShared.
-     *
-     * @return string
-     */
-    public function getIsShared()
+    public function getTemplate(): ?string
     {
-        return $this->isShared;
+        return $this->template;
     }
 
     public function setTemplate(string $template): self
@@ -360,14 +287,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get template.
-     *
-     * @return string
-     */
-    public function getTemplate()
+    public function getIntro(): ?string
     {
-        return $this->template;
+        return $this->intro;
     }
 
     public function setIntro(string $intro): self
@@ -377,14 +299,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get intro.
-     *
-     * @return string
-     */
-    public function getIntro()
+    public function getSurveythanks(): ?string
     {
-        return $this->intro;
+        return $this->surveyThanks;
     }
 
     public function setSurveythanks(string $surveythanks): self
@@ -394,14 +311,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get surveythanks.
-     *
-     * @return string
-     */
-    public function getSurveythanks()
+    public function getCreationDate(): DateTime
     {
-        return $this->surveyThanks;
+        return $this->creationDate;
     }
 
     public function setCreationDate(DateTime $creationDate): self
@@ -411,14 +323,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get creationDate.
-     *
-     * @return DateTime
-     */
-    public function getCreationDate()
+    public function getInvited(): int
     {
-        return $this->creationDate;
+        return $this->invited;
     }
 
     public function setInvited(int $invited): self
@@ -428,14 +335,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get invited.
-     *
-     * @return int
-     */
-    public function getInvited()
+    public function getAnswered(): int
     {
-        return $this->invited;
+        return $this->answered;
     }
 
     public function setAnswered(int $answered): self
@@ -445,14 +347,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get answered.
-     *
-     * @return int
-     */
-    public function getAnswered()
+    public function getInviteMail(): string
     {
-        return $this->answered;
+        return $this->inviteMail;
     }
 
     public function setInviteMail(string $inviteMail): self
@@ -462,14 +359,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get inviteMail.
-     *
-     * @return string
-     */
-    public function getInviteMail()
+    public function getReminderMail(): string
     {
-        return $this->inviteMail;
+        return $this->reminderMail;
     }
 
     public function setReminderMail(string $reminderMail): self
@@ -479,14 +371,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get reminderMail.
-     *
-     * @return string
-     */
-    public function getReminderMail()
+    public function getMailSubject(): string
     {
-        return $this->reminderMail;
+        return $this->mailSubject;
     }
 
     public function setMailSubject(string $mailSubject): self
@@ -496,14 +383,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get mailSubject.
-     *
-     * @return string
-     */
-    public function getMailSubject()
+    public function getAnonymous(): string
     {
-        return $this->mailSubject;
+        return $this->anonymous;
     }
 
     public function setAnonymous(string $anonymous): self
@@ -513,14 +395,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get anonymous.
-     *
-     * @return string
-     */
-    public function getAnonymous()
+    public function getAccessCondition(): ?string
     {
-        return $this->anonymous;
+        return $this->accessCondition;
     }
 
     public function setAccessCondition(string $accessCondition): self
@@ -530,14 +407,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get accessCondition.
-     *
-     * @return string
-     */
-    public function getAccessCondition()
+    public function getShuffle(): bool
     {
-        return $this->accessCondition;
+        return $this->shuffle;
     }
 
     public function setShuffle(bool $shuffle): self
@@ -547,14 +419,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get shuffle.
-     *
-     * @return bool
-     */
-    public function getShuffle()
+    public function getOneQuestionPerPage(): bool
     {
-        return $this->shuffle;
+        return $this->oneQuestionPerPage;
     }
 
     public function setOneQuestionPerPage(bool $oneQuestionPerPage): self
@@ -564,14 +431,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get oneQuestionPerPage.
-     *
-     * @return bool
-     */
-    public function getOneQuestionPerPage()
+    public function getSurveyVersion(): string
     {
-        return $this->oneQuestionPerPage;
+        return $this->surveyVersion;
     }
 
     public function setSurveyVersion(string $surveyVersion): self
@@ -581,14 +443,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get surveyVersion.
-     *
-     * @return string
-     */
-    public function getSurveyVersion()
+    public function getSurveyType(): int
     {
-        return $this->surveyVersion;
+        return $this->surveyType;
     }
 
     public function setSurveyType(int $surveyType): self
@@ -598,14 +455,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get surveyType.
-     *
-     * @return int
-     */
-    public function getSurveyType()
+    public function getShowFormProfile(): int
     {
-        return $this->surveyType;
+        return $this->showFormProfile;
     }
 
     public function setShowFormProfile(int $showFormProfile): self
@@ -615,14 +467,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get showFormProfile.
-     *
-     * @return int
-     */
-    public function getShowFormProfile()
+    public function getFormFields(): string
     {
-        return $this->showFormProfile;
+        return $this->formFields;
     }
 
     public function setFormFields(string $formFields): self
@@ -632,14 +479,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get formFields.
-     *
-     * @return string
-     */
-    public function getFormFields()
+    public function getVisibleResults(): ?int
     {
-        return $this->formFields;
+        return $this->visibleResults;
     }
 
     public function setVisibleResults(int $visibleResults): self
@@ -649,14 +491,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * Get visibleResults.
-     *
-     * @return int
-     */
-    public function getVisibleResults()
+    public function isMandatory(): bool
     {
-        return $this->visibleResults;
+        return $this->isMandatory;
     }
 
     public function setIsMandatory(bool $isMandatory): self
@@ -666,15 +503,10 @@ class CSurvey extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    public function isMandatory(): bool
-    {
-        return $this->isMandatory;
-    }
-
     /**
-     * @return CSurveyQuestion[]|Collection
+     * @return Collection<int, CSurveyQuestion>
      */
-    public function getQuestions()
+    public function getQuestions(): Collection
     {
         return $this->questions;
     }
@@ -735,17 +567,15 @@ class CSurvey extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return CSurvey[]|Collection
+     * @return Collection<int, CSurvey>
      */
-    public function getChildren()
+    public function getChildren(): Collection
     {
         return $this->children;
     }
 
     /**
-     * @param CSurvey[]|Collection $children
-     *
-     * @return CSurvey
+     * @param Collection<int, CSurvey> $children
      */
     public function setChildren(Collection $children): self
     {
@@ -755,9 +585,9 @@ class CSurvey extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return CSurveyQuestionOption[]|Collection
+     * @return Collection<int, CSurveyQuestionOption>
      */
-    public function getOptions()
+    public function getOptions(): Collection
     {
         return $this->options;
     }
@@ -770,35 +600,49 @@ class CSurvey extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return CSurveyInvitation[]|Collection
+     * @return Collection<int, CSurveyInvitation>
      */
-    public function getInvitations()
+    public function getInvitations(): Collection
     {
         return $this->invitations;
     }
 
-    /**
-     * @param CSurveyInvitation[]|Collection $invitations
-     */
-    public function setInvitations($invitations): self
+    public function setInvitations(Collection $invitations): self
     {
         $this->invitations = $invitations;
 
         return $this;
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
-        return $this->getIid();
+        return (int) $this->getIid();
+    }
+
+    public function getIid(): ?int
+    {
+        return $this->iid;
     }
 
     public function getResourceName(): string
     {
-        return $this->getCode();
+        return (string) $this->getCode();
     }
 
     public function setResourceName(string $name): self
     {
         return $this->setCode($name);
+    }
+
+    public function isDisplayQuestionNumber(): bool
+    {
+        return $this->displayQuestionNumber;
+    }
+
+    public function setDisplayQuestionNumber(bool $displayQuestionNumber): static
+    {
+        $this->displayQuestionNumber = $displayQuestionNumber;
+
+        return $this;
     }
 }

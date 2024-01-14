@@ -20,6 +20,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * This is a code library for Chamilo.
@@ -889,7 +891,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     }
 
     // Session admin has access to course
-    $sessionAccess = api_get_configuration_value('session_admins_access_all_content');
+    $sessionAccess = ('true' === api_get_setting('session.session_admins_access_all_content'));
     if ($sessionAccess) {
         $allow_session_admins = true;
     }
@@ -1051,7 +1053,7 @@ function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = f
 function api_block_inactive_user()
 {
     $data = true;
-    if (1 != api_get_configuration_value('security_block_inactive_users_immediately')) {
+    if ('true' !== api_get_setting('security.security_block_inactive_users_immediately')) {
         return $data;
     }
 
@@ -1903,7 +1905,7 @@ function api_get_anonymous_id()
     $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
     $tableU = Database::get_main_table(TABLE_MAIN_USER);
     $ip = Database::escape_string(api_get_real_ip());
-    $max = (int) api_get_configuration_value('max_anonymous_users');
+    $max = (int) api_get_setting('admin.max_anonymous_users');
     if ($max >= 2) {
         $sql = "SELECT * FROM $table as TEL
                 JOIN $tableU as U
@@ -2188,14 +2190,11 @@ function api_format_course_array(Course $course = null)
     $courseData['about_url'] = $coursePath.$courseData['real_id'].'/about';
     $courseData['add_teachers_to_sessions_courses'] = $course->isAddTeachersToSessionsCourses();
 
-    $image = Display::return_icon(
-        'course.png',
+    $image = Display::getMdiIcon(
+        ObjectIcon::COURSE,
+        'ch-tool-icon',
         null,
-        null,
-        ICON_SIZE_BIG,
-        null,
-        true,
-        false
+        ICON_SIZE_BIG
     );
 
     $illustration = Container::getIllustrationRepository()->getIllustrationUrl($course);
@@ -2211,12 +2210,8 @@ function api_format_course_array(Course $course = null)
 
 /**
  * Returns a difficult to guess password.
- *
- * @param int $length the length of the password
- *
- * @return string the generated password
  */
-function api_generate_password($length = 8)
+function api_generate_password(int $length = 8, $useRequirements = true): string
 {
     if ($length < 2) {
         $length = 2;
@@ -2230,7 +2225,7 @@ function api_generate_password($length = 8)
     $minUpperCase = $length - $minLowerCase;
 
     $password = '';
-    $passwordRequirements = api_get_configuration_value('password_requirements');
+    $passwordRequirements = $useRequirements ? Security::getPasswordRequirements() : [];
 
     $factory = new RandomLib\Factory();
     $generator = $factory->getGenerator(new SecurityLib\Strength(SecurityLib\Strength::MEDIUM));
@@ -2533,11 +2528,12 @@ function api_get_session_image($sessionId, User $user)
     if (!$user->hasRole('ROLE_STUDENT')) {
         // Check whether is not a student
         if ($sessionId > 0) {
-            $image = '&nbsp;&nbsp;'.Display::return_icon(
-                'star.png',
-                get_lang('Session-specific resource'),
-                ['align' => 'absmiddle'],
-                ICON_SIZE_SMALL
+            $image = '&nbsp;&nbsp;'.Display::getMdiIcon(
+                ObjectIcon::STAR,
+                'ch-tool-icon',
+                'align:absmiddle;',
+                ICON_SIZE_SMALL,
+                get_lang('Session-specific resource')
             );
         }
     }
@@ -2595,7 +2591,7 @@ function api_get_session_condition(
  *
  * @return string|array
  */
-function api_get_setting($variable)
+function api_get_setting($variable, $isArray = false, $key = null)
 {
     $settingsManager = Container::getSettingsManager();
     if (empty($settingsManager)) {
@@ -2631,7 +2627,31 @@ function api_get_setting($variable)
             return $newResult;
             break;
         default:
-            return $settingsManager->getSetting($variable);
+            $settingValue = $settingsManager->getSetting($variable, true);
+            if ($isArray && !empty($settingValue)) {
+                // Check if the value is a valid JSON string
+                $decodedValue = json_decode($settingValue, true);
+
+                // If it's a valid JSON string and the result is an array, return it
+                if (is_array($decodedValue)) {
+                    return $decodedValue;
+                }
+
+                // If it's not an array, continue with the normal flow
+                // Optional: If you need to evaluate the value using eval
+                $strArrayValue = rtrim($settingValue, ';');
+                $value = eval("return $strArrayValue;");
+                if (is_array($value)) {
+                    return $value;
+                }
+            }
+
+            // If the value is not a JSON array or wasn't returned previously, continue with the normal flow
+            if (!empty($key) && isset($settingValue[$variable][$key])) {
+                return $settingValue[$variable][$key];
+            }
+
+            return $settingValue;
             break;
     }
 }
@@ -3237,7 +3257,7 @@ function api_is_allowed_to_edit(
 
     $sessionId = api_get_session_id();
 
-    if ($sessionId && api_get_configuration_value('session_courses_read_only_mode')) {
+    if ($sessionId && 'true' === api_get_setting('session.session_courses_read_only_mode')) {
         $efv = new ExtraFieldValue('course');
         $lockExrafieldField = $efv->get_values_by_handler_and_field_variable(
             api_get_course_int_id(),
@@ -3449,7 +3469,7 @@ function api_not_allowed(
  */
 function languageToCountryIsoCode($languageIsoCode)
 {
-    $allow = api_get_configuration_value('language_flags_by_country');
+    $allow = ('true' === api_get_setting('language.language_flags_by_country'));
 
     // @todo save in DB
     switch ($languageIsoCode) {
@@ -3569,7 +3589,7 @@ function api_get_language_id($language)
 
     // We check the language by iscocode
     $langInfo = api_get_language_from_iso($language);
-    if (!empty($langInfo->getId())) {
+    if (null !== $langInfo && !empty($langInfo->getId())) {
         return $langInfo->getId();
     }
 
@@ -3791,10 +3811,12 @@ function api_time_to_hms($seconds, $space = ':', $showSeconds = true, $roundMinu
     if (-1 == $seconds) {
         return
             get_lang('Unknown').
-            Display::return_icon(
-                'info2.gif',
-                get_lang('The datas about this user were registered when the calculation of time spent on the platform wasn\'t possible.'),
-                ['align' => 'absmiddle', 'hspace' => '3px']
+            Display::getMdiIcon(
+                ActionIcon::INFORMATION,
+                'ch-tool-icon',
+                'align: absmiddle; hspace: 3px',
+                ICON_SIZE_SMALL,
+                get_lang('The datas about this user were registered when the calculation of time spent on the platform wasn\'t possible.')
             );
     }
 
@@ -5816,8 +5838,8 @@ function api_get_jquery_ui_js()
 
 function api_get_jqgrid_js()
 {
-    return api_get_build_css('free-jqgrid.css').PHP_EOL
-        .api_get_build_js('free-jqgrid.js');
+    return api_get_build_css('legacy_free-jqgrid.css').PHP_EOL
+        .api_get_build_js('legacy_free-jqgrid.js');
 }
 
 /**
@@ -6292,6 +6314,21 @@ function api_get_roles()
     return $roles;
 }
 
+function api_get_user_roles(): array
+{
+    $roles = [
+        'ROLE_TEACHER',
+        'ROLE_STUDENT',
+        'ROLE_RRHH',
+        'ROLE_SESSION_MANAGER',
+        'ROLE_STUDENT_BOSS',
+        'ROLE_INVITEE',
+        'ROLE_USER',
+    ];
+
+    return array_combine($roles, $roles);
+}
+
 /**
  * @param string $file
  *
@@ -6421,53 +6458,71 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
         return null;
     }
 
-    $translations = [
-        'wordLength' => get_lang('The password is too short'),
-        'wordNotEmail' => get_lang('Your password cannot be the same as your email'),
-        'wordSimilarToUsername' => get_lang('Your password cannot contain your username'),
-        'wordTwoCharacterClasses' => get_lang('Use different character classes'),
-        'wordRepetitions' => get_lang('Too many repetitions'),
-        'wordSequences' => get_lang('Your password contains sequences'),
-        'errorList' => get_lang('errors found'),
-        'veryWeak' => get_lang('Very weak'),
-        'weak' => get_lang('Weak'),
-        'normal' => get_lang('Normal'),
-        'medium' => get_lang('Medium'),
-        'strong' => get_lang('Strong'),
-        'veryStrong' => get_lang('Very strong'),
+    $minRequirements = Security::getPasswordRequirements()['min'];
+
+    $options = [
+        'rules' => [],
     ];
 
-    $js = api_get_asset('pwstrength-bootstrap/dist/pwstrength-bootstrap.js');
-    $js .= "<script>
-    var errorMessages = {
-        password_to_short : \"".get_lang('The password is too short')."\",
-        same_as_username : \"".get_lang('Your password cannot be the same as your username')."\"
-    };
+    if ($minRequirements['length'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['length'],
+            'pattern' => '.',
+            'helpText' => sprintf(
+                get_lang('Minimum %s characters in total'),
+                $minRequirements['length']
+            ),
+        ];
+    }
 
+    if ($minRequirements['lowercase'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['lowercase'],
+            'pattern' => '[a-z]',
+            'helpText' => sprintf(
+                get_lang('Minimum %s lowercase characters'),
+                $minRequirements['lowercase']
+            ),
+        ];
+    }
+
+    if ($minRequirements['uppercase'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['uppercase'],
+            'pattern' => '[A-Z]',
+            'helpText' => sprintf(
+                get_lang('Minimum %s uppercase characters'),
+                $minRequirements['uppercase']
+            ),
+        ];
+    }
+
+    if ($minRequirements['numeric'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['numeric'],
+            'pattern' => '[0-9]',
+            'helpText' => sprintf(
+                get_lang('Minimum %s numerical (0-9) characters'),
+                $minRequirements['numeric']
+            ),
+        ];
+    }
+
+    if ($minRequirements['specials'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['specials'],
+            'pattern' => '[!"#$%&\'()*+,\-./\\\:;<=>?@[\\]^_`{|}~]',
+            'helpText' => sprintf(
+                get_lang('Minimum %s special characters'),
+                $minRequirements['specials']
+            ),
+        ];
+    }
+
+    $js = api_get_js('password-checker/password-checker.js');
+    $js .= "<script>
     $(function() {
-        var lang = ".json_encode($translations).";
-        var options = {
-            onLoad : function () {
-                //$('#messages').text('Start typing password');
-            },
-            onKeyUp: function (evt) {
-                $(evt.target).pwstrength('outputErrorList');
-            },
-            errorMessages : errorMessages,
-            viewports: {
-                progress: '#password_progress',
-                verdict: '#password-verdict',
-                errors: '#password-errors'
-            },
-            usernameField: '$usernameInputId'
-        };
-        options.i18n = {
-            t: function (key) {
-                var result = lang[key];
-                return result === key ? '' : result; // This assumes you return the
-            }
-        };
-        $('".$passwordInputId."').pwstrength(options);
+        $('".$passwordInputId."').passwordChecker(".json_encode($options).");
     });
     </script>";
 
@@ -6615,7 +6670,7 @@ function api_can_login_as($loginAsUserId, $userId = null)
 
     $loginAsStatusForSessionAdmins = [STUDENT];
 
-    if (api_get_setting('session.allow_session_admin_login_as_teacher')) {
+    if ('true' === api_get_setting('session.allow_session_admin_login_as_teacher')) {
         $loginAsStatusForSessionAdmins[] = COURSEMANAGER;
     }
 
@@ -7027,7 +7082,7 @@ function api_mail_html(
         $message = new TemplatedEmail();
         $message->subject($subject);
 
-        $list = api_get_configuration_value('send_all_emails_to');
+        $list = api_get_setting('announcement.send_all_emails_to', true);
         if (!empty($list) && isset($list['emails'])) {
             foreach ($list['emails'] as $email) {
                 $message->cc($email);
@@ -7050,8 +7105,8 @@ function api_mail_html(
         }
 
         $params = [
-            'mail_header_style' => api_get_configuration_value('mail_header_style'),
-            'mail_content_style' => api_get_configuration_value('mail_content_style'),
+            'mail_header_style' => api_get_setting('mail.mail_header_style'),
+            'mail_content_style' => api_get_setting('mail.mail_content_style'),
             'link' => $additionalParameters['link'] ?? '',
             'automatic_email_text' => $automaticEmailText,
             'content' => $body,
@@ -7202,7 +7257,7 @@ function api_protect_limit_for_session_admin()
  */
 function api_protect_session_admin_list_users()
 {
-    $limitAdmin = api_get_configuration_value('limit_session_admin_list_users');
+    $limitAdmin = ('true' === api_get_setting('session.limit_session_admin_list_users'));
 
     if (api_is_session_admin() && true === $limitAdmin) {
         api_not_allowed(true);

@@ -447,7 +447,7 @@ class EvalForm extends FormValidator
             $select->updateSelectWithSelectedOption($this);
         }
 
-        $allowMultipleAttempts = api_get_configuration_value('gradebook_multiple_evaluation_attempts');
+        $allowMultipleAttempts = ('true' === api_get_setting('gradebook.gradebook_multiple_evaluation_attempts'));
         if ($allowMultipleAttempts) {
             $this->addTextarea('comment', get_lang('Comment'));
         }

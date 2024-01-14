@@ -230,7 +230,7 @@ function WSImportLP($params)
             $userId
         );
         $entity
-            ->setName($lpName)
+            ->setTitle($lpName)
             ->setContentLocal($proximity)
             ->setContentMaker($maker)
         ;

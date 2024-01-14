@@ -90,7 +90,7 @@ switch ($action) {
         if ($form->validate()) {
             $values = $form->exportValues();
             $item = new Profile();
-            $item->setName($values['name']);
+            $item->setTitle($values['name']);
             $em->persist($item);
             $em->flush();
 
@@ -114,7 +114,7 @@ switch ($action) {
 
         if ($form->validate()) {
             $values = $form->exportValues();
-            $item->setName($values['name']);
+            $item->setTitle($values['name']);
             $em->persist($item);
             $em->flush();
             Display::addFlash(Display::return_message(get_lang('Update successful')));

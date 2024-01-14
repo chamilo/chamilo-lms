@@ -63,7 +63,7 @@ class VideoChat
             [
                 'from_user' => $fromUser,
                 'to_user' => $toUser,
-                'room_name' => $chatName,
+                'title' => $chatName,
                 'datetime' => api_get_utc_datetime(),
             ]
         );
@@ -82,7 +82,7 @@ class VideoChat
             'COUNT(1) AS count',
             Database::get_main_table(TABLE_MAIN_CHAT_VIDEO),
             [
-                'where' => ['room_name = ?' => $name],
+                'where' => ['title = ?' => $name],
             ],
             'first'
         );

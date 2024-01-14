@@ -79,7 +79,7 @@ class CreateSessionFromModelTest extends V2TestCase
     {
         // create a promotion
         $career = new Career();
-        $careerId = $career->save(['name' => 'test career'.time()]);
+        $careerId = $career->save(['title' => 'test career'.time()]);
         $promotion = new Promotion();
         $promotionId = $promotion->save(['career_id' => $careerId, 'name' => 'test promo'.time()]);
 

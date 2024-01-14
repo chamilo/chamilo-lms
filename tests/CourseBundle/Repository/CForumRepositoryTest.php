@@ -28,7 +28,7 @@ class CForumRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
 
         $forum = (new CForum())
-            ->setForumTitle('forum')
+            ->setTitle('forum')
             ->setForumComment('comment')
             ->setForumThreads(0)
             ->setForumPosts(0)
@@ -74,7 +74,7 @@ class CForumRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
 
         $forum = (new CForum())
-            ->setForumTitle('forum')
+            ->setTitle('forum')
             ->setParent($course)
             ->setCreator($teacher)
         ;
@@ -103,7 +103,7 @@ class CForumRepositoryTest extends AbstractApiTest
         $lpRepo->createLp($lp);
 
         $forum = (new CForum())
-            ->setForumTitle('forum')
+            ->setTitle('forum')
             ->setParent($course)
             ->setCreator($teacher)
             ->setLp($lp)
@@ -130,7 +130,7 @@ class CForumRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
 
         $forum = (new CForum())
-            ->setForumTitle('forum')
+            ->setTitle('forum')
             ->setParent($course)
             ->setCreator($teacher)
         ;

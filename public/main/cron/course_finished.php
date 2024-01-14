@@ -58,7 +58,7 @@ foreach ($sessions as $session) {
         $user = $sessionUser->getUser();
 
         $subjectTemplate = new Template(null, false, false, false, false, false);
-        $subjectTemplate->assign('session_name', $session->getName());
+        $subjectTemplate->assign('session_name', $session->getTitle());
 
         $subjectLayout = $subjectTemplate->get_template(
             'mail/cron_course_finished_subject.tpl'
@@ -66,7 +66,7 @@ foreach ($sessions as $session) {
 
         $bodyTemplate = new Template(null, false, false, false, false, false);
         $bodyTemplate->assign('complete_user_name', UserManager::formatUserFullName($user));
-        $bodyTemplate->assign('session_name', $session->getName());
+        $bodyTemplate->assign('session_name', $session->getTitle());
 
         $bodyLayout = $bodyTemplate->get_template(
             'mail/cron_course_finished_body.tpl'
@@ -83,7 +83,7 @@ foreach ($sessions as $session) {
 
         echo '============'.PHP_EOL;
         echo "Email sent to: ".UserManager::formatUserFullName($user)." ({$user->getEmail()})".PHP_EOL;
-        echo "Session: {$session->getName()}".PHP_EOL;
+        echo "Session: {$session->getTitle()}".PHP_EOL;
         echo "End date: {$session->getAccessEndDate()->format('Y-m-d h:i')}".PHP_EOL;
     }
 }

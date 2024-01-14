@@ -26,28 +26,28 @@ class Illustration extends AbstractResource implements ResourceInterface, String
     #[ORM\Id]
     protected Uuid $id;
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    protected string $title;
     public function __construct()
     {
         $this->id = Uuid::v4();
-        $this->name = 'illustration';
+        $this->title = 'illustration';
     }
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
     public function getId(): Uuid
     {
         return $this->id;
     }
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
@@ -57,10 +57,10 @@ class Illustration extends AbstractResource implements ResourceInterface, String
     }
     public function getResourceName(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
     public function setResourceName(string $name): self
     {
-        return $this->setName($name);
+        return $this->setTitle($name);
     }
 }

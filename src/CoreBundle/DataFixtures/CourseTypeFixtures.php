@@ -21,7 +21,7 @@ class CourseTypeFixtures extends Fixture
 
         foreach ($list as $name) {
             $courseType = (new CourseType())
-                ->setName($name)
+                ->setTitle($name)
             ;
             $manager->persist($courseType);
         }

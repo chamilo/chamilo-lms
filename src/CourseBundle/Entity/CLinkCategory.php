@@ -140,8 +140,8 @@ class CLinkCategory extends AbstractResource implements ResourceInterface, Strin
 
     #[Groups(['link_category:read', 'link_category:write'])]
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'category_title', type: 'string', length: 255, nullable: false)]
-    protected string $categoryTitle;
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    protected string $title;
 
     #[Groups(['link_category:read', 'link_category:write'])]
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
@@ -164,7 +164,7 @@ class CLinkCategory extends AbstractResource implements ResourceInterface, Strin
 
     public function __toString(): string
     {
-        return $this->getCategoryTitle();
+        return $this->getTitle();
     }
 
     public function getIid(): int
@@ -172,16 +172,16 @@ class CLinkCategory extends AbstractResource implements ResourceInterface, Strin
         return $this->iid;
     }
 
-    public function setCategoryTitle(string $categoryTitle): self
+    public function setTitle(string $title): self
     {
-        $this->categoryTitle = $categoryTitle;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getCategoryTitle(): string
+    public function getTitle(): string
     {
-        return $this->categoryTitle;
+        return $this->title;
     }
 
     public function setDescription(string $description): self
@@ -223,11 +223,11 @@ class CLinkCategory extends AbstractResource implements ResourceInterface, Strin
 
     public function getResourceName(): string
     {
-        return $this->getCategoryTitle();
+        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setCategoryTitle($name);
+        return $this->setTitle($name);
     }
 }

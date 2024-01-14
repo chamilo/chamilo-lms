@@ -197,13 +197,13 @@ $interbreadcrumb[] = [
 ];
 
 if ($attendanceEntity) {
-    $interbreadcrumb[] = ['url' => '#', 'name' => $attendanceEntity->getName()];
+    $interbreadcrumb[] = ['url' => '#', 'name' => $attendanceEntity->getTitle()];
 }
 
 if ('calendar_list' === $action || 'calendar_edit' === $action) {
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendanceId,
-        'name' => $attendanceEntity->getName(),
+        'name' => $attendanceEntity->getTitle(),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Attendance calendar')];
 }
@@ -457,7 +457,7 @@ switch ($action) {
         $groupList = isset($_POST['groups']) ? [$_POST['groups']] : [];
         $interbreadcrumb[] = [
             'url' => 'index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendanceId,
-            'name' => $attendanceEntity->getName(),
+            'name' => $attendanceEntity->getTitle(),
         ];
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add a date and time')];
 

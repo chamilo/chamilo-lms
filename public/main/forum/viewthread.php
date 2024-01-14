@@ -239,15 +239,15 @@ if (!empty($groupId)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('Group area').' '.$groupEntity->getName(),
+        'name' => get_lang('Group area').' '.$groupEntity->getTitle(),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'&search='.Security::remove_XSS(urlencode($my_search)),
-        'name' => Security::remove_XSS($forumEntity->getForumTitle()),
+        'name' => Security::remove_XSS($forumEntity->getTitle()),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&'.api_get_cidreq().'&thread='.$threadId,
-        'name' => Security::remove_XSS($threadEntity->getThreadTitle()),
+        'name' => Security::remove_XSS($threadEntity->getTitle()),
     ];
 } else {
     $my_search = isset($_GET['search']) ? $_GET['search'] : '';
@@ -263,15 +263,15 @@ if (!empty($groupId)) {
                 'forum/index.php?forumcategory='.$current_forum_category->getIid().'&search='.Security::remove_XSS(
                     urlencode($my_search)
                 ),
-            'name' => Security::remove_XSS($current_forum_category->getCatTitle()),
+            'name' => Security::remove_XSS($current_forum_category->getTitle()),
         ];
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId.'&search='.Security::remove_XSS(urlencode($my_search)),
-            'name' => Security::remove_XSS($forumEntity->getForumTitle()),
+            'name' => Security::remove_XSS($forumEntity->getTitle()),
         ];
         $interbreadcrumb[] = [
             'url' => '#',
-            'name' => Security::remove_XSS($threadEntity->getThreadTitle()),
+            'name' => Security::remove_XSS($threadEntity->getTitle()),
         ];
     }
 }

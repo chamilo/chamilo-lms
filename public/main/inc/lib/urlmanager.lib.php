@@ -388,7 +388,7 @@ class UrlManager
         }
         $where .= ' AND (parent_id IS NULL) ';
 
-        $sql = "SELECT u.id, name, access_url_id
+        $sql = "SELECT u.id, u.title, access_url_id
                 FROM $table u
                 INNER JOIN $table_url_rel
                 ON $table_url_rel.course_category_id = u.id
@@ -1318,12 +1318,12 @@ class UrlManager
             $needle = api_convert_encoding($needle, $charset, 'utf-8');
             $needle = Database::escape_string($needle);
             // search courses where username or firstname or lastname begins likes $needle
-            $sql = 'SELECT id, name
+            $sql = 'SELECT id, u.title
                     FROM '.Database::get_main_table(TABLE_MAIN_CATEGORY).' u
                     WHERE
                         name LIKE "'.$needle.'%" AND
                         (parent_id IS NULL or parent_id = 0)
-                    ORDER BY name
+                    ORDER BY u.title
                     LIMIT 11';
             $result = Database::query($sql);
             $i = 0;
@@ -1332,7 +1332,7 @@ class UrlManager
                 if ($i <= 10) {
                     $return .= '<a
                     href="javascript: void(0);"
-                    onclick="javascript: add_user_to_url(\''.addslashes($data['id']).'\',\''.addslashes($data['name']).' \')">'.$data['name'].' </a><br />';
+                    onclick="javascript: add_user_to_url(\''.addslashes($data['id']).'\',\''.addslashes($data['name']).' \')">'.$data['title'].' </a><br />';
                 } else {
                     $return .= '...<br />';
                 }

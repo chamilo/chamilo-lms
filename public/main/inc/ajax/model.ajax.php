@@ -289,6 +289,7 @@ if (($search || $forceSearch) && ('false' !== $search)) {
 if (!$sidx) {
     $sidx = 1;
 }
+$options = [];
 
 //2. Selecting the count FIRST
 //@todo rework this
@@ -1048,7 +1049,7 @@ switch ($action) {
         foreach ($items as $item) {
             $result[] = [
                 'id' => $item->getId(),
-                'name' => $item->getName(),
+                'name' => $item->getTitle(),
             ];
         }
         /*$result = $manager->get_all([
@@ -1957,9 +1958,9 @@ switch ($action) {
                 $sord = 'DESC';
             }
         } else {
-            $sidx = in_array($sidx, $columns) ? $sidx : 'name';
+            $sidx = in_array($sidx, $columns) ? $sidx : 'title';
         }
-        $orderBy = "$sidx $sord, s.name";
+        $orderBy = "$sidx $sord, s.title";
         $limit = 20;
         $total_pages = 0;
         if ($count > 0) {
@@ -2060,6 +2061,8 @@ switch ($action) {
         break;
     case 'get_session_lp_progress':
         $sessionId = 0;
+        $date_from = $_GET['date_from'];
+        $date_to = $_GET['date_to'];
         if (!empty($_GET['session_id']) && !empty($_GET['course_id'])) {
             $sessionId = (int) $_GET['session_id'];
             $courseId = (int) $_GET['course_id'];
@@ -2318,7 +2321,7 @@ switch ($action) {
         }
 
         $result = Database::select(
-            'p.id,p.name, p.description, c.name as career, p.status',
+            'p.id,p.name, p.description, c.title as career, p.status',
             "$obj->table p LEFT JOIN ".Database::get_main_table(TABLE_CAREER)." c  ON c.id = p.career_id ",
             ['order' => "$sidx $sord", 'LIMIT' => "$start , $limit"]
         );

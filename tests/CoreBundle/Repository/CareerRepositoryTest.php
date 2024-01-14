@@ -21,7 +21,7 @@ class CareerRepositoryTest extends AbstractApiTest
         $repo = self::getContainer()->get(CareerRepository::class);
 
         $career = (new Career())
-            ->setName('Julio')
+            ->setTitle('Julio')
             ->setDescription('test')
             ->setStatus(1)
         ;

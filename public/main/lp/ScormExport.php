@@ -1069,12 +1069,12 @@ EOD;
             $pdf = new PDF();
             $result = $pdf->html_to_pdf(
                 $files_to_export,
-                $lp->getName(),
+                $lp->getTitle(),
                 $courseCode,
                 true,
                 true,
                 true,
-                $lp->getName()
+                $lp->getTitle()
             );
 
             return $result;

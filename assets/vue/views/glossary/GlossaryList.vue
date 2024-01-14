@@ -157,7 +157,7 @@ const termToDeleteString = computed(() => {
   if (termToDelete.value === null) {
     return ""
   }
-  return termToDelete.value.name
+  return termToDelete.value.title
 })
 
 onMounted(() => {

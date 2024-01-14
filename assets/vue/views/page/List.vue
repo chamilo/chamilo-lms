@@ -109,7 +109,7 @@
         />
         <label
           v-t="'Name'"
-          for="name"
+          for="title"
         />
       </div>
       <small

@@ -17,7 +17,7 @@
       :class="{ 'text-right text-body-2': editStatus }"
     >
       <span class="mdi mdi-book-open" />
-      {{ t('Session: {session}', {'session': link.session.name }) }}
+      {{ t('Session: {session}', {'session': link.session.title }) }}
     </div>
 
     <div

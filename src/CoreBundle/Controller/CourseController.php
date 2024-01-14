@@ -250,14 +250,14 @@ class CourseController extends ToolBaseController
     ): RedirectResponse {
         /** @var CTool|null $tool */
         $tool = $repo->findOneBy([
-            'name' => $toolName,
+            'title' => $toolName,
         ]);
 
         if (null === $tool) {
             throw new NotFoundHttpException($this->trans('Tool not found'));
         }
 
-        $tool = $toolChain->getToolFromName($tool->getTool()->getName());
+        $tool = $toolChain->getToolFromName($tool->getTool()->getTitle());
         $link = $tool->getLink();
 
         if (null === $this->getCourse()) {

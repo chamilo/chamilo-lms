@@ -265,7 +265,7 @@ class ExerciseLink extends AbstractLink
         } else {
             $sql = "SELECT * FROM $tblHp hp
                     INNER JOIN $tblDoc doc
-                    ON (hp.exe_name = doc.path AND doc.c_id = hp.c_id)
+                    ON (hp.title = doc.path AND doc.c_id = hp.c_id)
                     WHERE
                         hp.c_id = $courseId AND
                         doc.iid = $exerciseId";

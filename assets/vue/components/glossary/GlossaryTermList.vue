@@ -10,7 +10,7 @@
         <template #header>
           <div class="-mb-2 flex items-center justify-between gap-2 bg-gray-15 px-4 py-2">
             <div>
-              {{ term.name }}
+              {{ term.title }}
             </div>
             <div v-if="securityStore.isAuthenticated && isCurrentTeacher">
               <BaseButton

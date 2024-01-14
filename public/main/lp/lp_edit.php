@@ -345,7 +345,7 @@ if ($form->validate()) {
     }
 
     $lp
-        ->setName($_REQUEST['lp_name'])
+        ->setTitle($_REQUEST['lp_name'])
         ->setAuthor($_REQUEST['lp_author'] ?? '')
         ->setTheme($_REQUEST['lp_theme'])
         ->setHideTocFrame($hide_toc_frame)

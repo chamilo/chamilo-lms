@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'idx_chat_video_to_user', columns: ['to_user'])]
 #[ORM\Index(name: 'idx_chat_video_from_user', columns: ['from_user'])]
 #[ORM\Index(name: 'idx_chat_video_users', columns: ['from_user', 'to_user'])]
-#[ORM\Index(name: 'idx_chat_video_room_name', columns: ['room_name'])]
+#[ORM\Index(name: 'idx_chat_video_title', columns: ['title'])]
 #[ORM\Entity]
 class ChatVideo
 {
@@ -31,8 +31,8 @@ class ChatVideo
     #[ORM\Column(name: 'to_user', type: 'integer', nullable: false)]
     protected int $toUser;
 
-    #[ORM\Column(name: 'room_name', type: 'string', nullable: false)]
-    protected string $roomName;
+    #[ORM\Column(name: 'title', type: 'string', nullable: false)]
+    protected string $title;
 
     #[ORM\Column(name: 'datetime', type: 'datetime', nullable: false)]
     protected DateTime $datetime;
@@ -82,25 +82,25 @@ class ChatVideo
     }
 
     /**
-     * Set room_name.
+     * Set title.
      *
      * @return ChatVideo
      */
-    public function setRoomName(string $roomName)
+    public function setTitle(string $title)
     {
-        $this->roomName = $roomName;
+        $this->title = $title;
 
         return $this;
     }
 
     /**
-     * Get room_name.
+     * Get title.
      *
      * @return string
      */
-    public function getRoomName()
+    public function getTitle()
     {
-        return $this->roomName;
+        return $this->title;
     }
 
     /**

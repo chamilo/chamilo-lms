@@ -111,7 +111,7 @@
     class="p-fluid"
   >
     <div class="p-field">
-      <label for="name">{{ $t("Name") }}</label>
+      <label for="title">{{ $t("Name") }}</label>
       <InputText
         id="title"
         v-model.trim="item.title"

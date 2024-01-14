@@ -66,7 +66,7 @@ $course_id = api_get_course_int_id();
 $table_posts = Database::get_course_table(TABLE_FORUM_POST);
 $table_users = Database::get_main_table(TABLE_MAIN_USER);
 
-$sql = "SELECT username, firstname, lastname, u.id, post_date, post_title, post_text
+$sql = "SELECT username, firstname, lastname, u.id, post_date, title as post_title, post_text
         FROM $table_posts posts
         INNER JOIN $table_users u
         ON (posts.poster_id = u.id)

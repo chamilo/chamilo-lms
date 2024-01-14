@@ -50,8 +50,9 @@ class CTool extends AbstractResource implements ResourceInterface, ResourceShowC
     protected ?int $iid = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'name', type: 'text', nullable: false)]
-    protected string $name;
+    #[Groups(['ctool:read'])]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
+    protected string $title;
 
     #[ORM\Column(name: 'visibility', type: 'boolean', nullable: true)]
     protected ?bool $visibility = null;
@@ -82,17 +83,22 @@ class CTool extends AbstractResource implements ResourceInterface, ResourceShowC
 
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
-    public function getName(): string
+    public function getNameToTranslate(): string
     {
-        return $this->name;
+        return ucfirst(str_replace('_', ' ', $this->title));
     }
 
-    public function setName(string $name): self
+    public function getTitle(): string
     {
-        $this->name = $name;
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
 
         return $this;
     }
@@ -169,11 +175,11 @@ class CTool extends AbstractResource implements ResourceInterface, ResourceShowC
 
     public function getResourceName(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setName($name);
+        return $this->setTitle($name);
     }
 }

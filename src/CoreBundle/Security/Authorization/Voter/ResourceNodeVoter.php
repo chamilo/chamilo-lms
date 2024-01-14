@@ -94,7 +94,7 @@ class ResourceNodeVoter extends Voter
         }*/
         /** @var ResourceNode $resourceNode */
         $resourceNode = $subject;
-        $resourceTypeName = $resourceNode->getResourceType()->getName();
+        $resourceTypeName = $resourceNode->getResourceType()->getTitle();
 
         // Illustrations are always visible, nothing to check.
         if ('illustrations' === $resourceTypeName) {

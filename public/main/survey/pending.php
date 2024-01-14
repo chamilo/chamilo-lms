@@ -21,7 +21,7 @@ foreach ($pendingList as $pending) {
     $survey = $pending->getSurvey();
 
     //$course = $course ? ['id' => $course->getId(), 'title' => $course->getTitle(), 'code' => $course->getCode()] : null;
-    $session = $session ? ['id' => $session->getId(), 'name' => $session->getName()] : null;
+    $session = $session ? ['id' => $session->getId(), 'name' => $session->getTitle()] : null;
     $courseInfo = api_get_course_info_by_id($course->getId());
     $surveysData[$survey->getIid()] = [
         'title' => $survey->getTitle(),

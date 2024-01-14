@@ -78,7 +78,7 @@
       <div class="section-header section-header--h2">
         <h2 class="">
           {{ course.title }}
-          <small v-if="session"> ({{ session.name }}) </small>
+          <small v-if="session"> ({{ session.title }}) </small>
         </h2>
 
         <div class="grow-0">
@@ -182,7 +182,7 @@
           :key="'tool-' + index.toString()"
           :change-visibility="changeVisibility"
           :data-index="index"
-          :data-tool="tool.name"
+          :data-tool="tool.title"
           :go-to-setting-course-tool="goToSettingCourseTool"
           :tool="tool"
         />
@@ -251,7 +251,7 @@ const routerTools = ["document", "link", "glossary", "agenda", "student_publicat
 courseService.loadCTools(course.value.id, session.value?.id)
   .then((cTools) => {
     tools.value = cTools.map(element => {
-      if (routerTools.includes(element.name)) {
+      if (routerTools.includes(element.title)) {
         element.to = element.url
       }
 
@@ -294,7 +294,7 @@ const toggleCourseTMenu = (event) => {
 }
 
 function goToSettingCourseTool(tool) {
-  return "/course/" + course.value.id + "/settings/" + tool.tool.name + "?sid=" + session.value?.id
+  return "/course/" + course.value.id + "/settings/" + tool.tool.title + "?sid=" + session.value?.id
 }
 
 function goToShortCut(shortcut) {
@@ -361,7 +361,7 @@ async function updateDisplayOrder(htmlItem, newIndex) {
 
   if (typeof tools !== "undefined" && Array.isArray(tools.value)) {
     const toolList = tools.value
-    toolItem = toolList.find((element) => element.name === tool)
+    toolItem = toolList.find((element) => element.title === tool)
   } else {
     console.error("Error: tools.value is undefined")
     return

@@ -33,7 +33,7 @@ class CourseToolDataTranformer implements DataTransformerInterface
         $tool = $object->getTool();
 
         $toolModel = $this->toolChain->getToolFromName(
-            $tool->getName()
+            $tool->getTitle()
         );
 
         $course = $this->getCourse();

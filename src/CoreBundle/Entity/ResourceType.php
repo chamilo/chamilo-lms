@@ -29,7 +29,7 @@ class ResourceType implements Stringable
     #[Assert\NotBlank]
     #[ORM\Column]
     #[Groups(['resource_node:read'])]
-    protected string $name;
+    protected string $title;
 
     #[ORM\ManyToOne(targetEntity: Tool::class, inversedBy: 'resourceTypes')]
     #[ORM\JoinColumn(name: 'tool_id', referencedColumnName: 'id')]
@@ -48,7 +48,7 @@ class ResourceType implements Stringable
 
     public function __toString(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function getId(): int
@@ -56,14 +56,14 @@ class ResourceType implements Stringable
         return $this->id;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }

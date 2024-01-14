@@ -29,7 +29,7 @@ $t_user = Database::get_main_table(TABLE_MAIN_USER);
 $visible_log = Security::remove_XSS($_GET['visiblelog']);
 
 $evaledit = Evaluation :: load($visible_log);
-$sql = "SELECT le.name,le.description,le.weight,le.visible,le.type,le.created_at, us.id as user_id
+$sql = "SELECT le.title,le.description,le.weight,le.visible,le.type,le.created_at, us.id as user_id
         FROM $t_linkeval_log le
         INNER JOIN $t_user us
         ON le.user_id_log = us.id

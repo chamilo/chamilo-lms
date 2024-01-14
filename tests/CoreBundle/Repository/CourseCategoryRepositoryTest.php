@@ -26,7 +26,7 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
 
         $item = (new CourseCategory())
             ->setCode('Course cat')
-            ->setName('Course cat')
+            ->setTitle('Course cat')
             ->setDescription('desc')
             ->setTreePos(1)
             ->setChildrenCount(0)
@@ -62,14 +62,14 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
 
         $item = (new CourseCategory())
             ->setCode('Course cat')
-            ->setName('Course cat')
+            ->setTitle('Course cat')
         ;
         $em->persist($item);
         $em->flush();
 
         $sub = (new CourseCategory())
             ->setCode('Sub cat')
-            ->setName('Sub cat')
+            ->setTitle('Sub cat')
             ->setParent($item)
         ;
         $em->persist($sub);
@@ -102,7 +102,7 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
 
         $item = (new CourseCategory())
             ->setCode('cat')
-            ->setName('cat')
+            ->setTitle('cat')
             ->setAsset($asset)
         ;
 
@@ -143,7 +143,7 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
 
         $courseCategory = (new CourseCategory())
             ->setCode('cat')
-            ->setName('cat')
+            ->setTitle('cat')
             ->setAsset($asset)
         ;
         $repoCourseCategory->save($courseCategory);
@@ -192,7 +192,7 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
 
         $courseCategory = (new CourseCategory())
             ->setCode('cat')
-            ->setName('cat')
+            ->setTitle('cat')
             ->setAsset($asset)
         ;
         $repoCourseCategory->save($courseCategory);
@@ -234,7 +234,7 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
 
         $category = (new CourseCategory())
             ->setCode('Course cat')
-            ->setName('Course cat')
+            ->setTitle('Course cat')
         ;
         $em->persist($category);
 

@@ -221,12 +221,12 @@
         :class="{ 'p-invalid': submitted && !item.title }"
         autocomplete="off"
         autofocus
-        name="name"
+        name="title"
         required="true"
       />
       <label
         v-t="'Name'"
-        for="name"
+        for="title"
       />
     </div>
     <small
@@ -392,7 +392,7 @@ const showBackButtonIfNotRootFolder = computed(() => {
   if (!resourceNode.value) {
     return false
   }
-  return resourceNode.value.resourceType.name !== "courses"
+  return resourceNode.value.resourceType.title !== "courses"
 })
 
 function back() {

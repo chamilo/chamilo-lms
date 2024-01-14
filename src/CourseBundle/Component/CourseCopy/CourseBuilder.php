@@ -524,7 +524,7 @@ class CourseBuilder
 
         $sql = "SELECT * FROM $table
                 WHERE c_id = $courseId $sessionCondition $idCondition
-                ORDER BY cat_title";
+                ORDER BY title";
 
         $result = Database::query($sql);
         while ($obj = Database::fetch_object($result)) {
@@ -564,7 +564,7 @@ class CourseBuilder
         $sql = "SELECT * FROM $table WHERE c_id = $courseId
                 $sessionCondition
                 $idCondition
-                ORDER BY thread_title ";
+                ORDER BY title ";
         $result = Database::query($sql);
 
         while ($obj = Database::fetch_object($result)) {
@@ -1498,7 +1498,7 @@ class CourseBuilder
                 $lp = new CourseCopyLearnpath(
                     $obj->id,
                     $obj->lp_type,
-                    $obj->name,
+                    $obj->title,
                     $obj->path,
                     $obj->ref,
                     $obj->description,

@@ -33,7 +33,7 @@ class GradeBookCategoryRepositoryTest extends AbstractApiTest
         $course = $this->createCourse('new');
 
         $category = (new GradebookCategory())
-            ->setName('cat1')
+            ->setTitle('cat1')
             ->setDescription('desc')
             ->setCertifMinScore(100)
             ->setDocumentId(0)
@@ -51,7 +51,7 @@ class GradeBookCategoryRepositoryTest extends AbstractApiTest
         $this->assertHasNoEntityViolations($category);
 
         $evaluation = (new GradebookEvaluation())
-            ->setName('eva')
+            ->setTitle('eva')
             ->setDescription('desc')
             ->setCategory($category)
             ->setVisible(1)
@@ -106,7 +106,7 @@ class GradeBookCategoryRepositoryTest extends AbstractApiTest
         $course = $this->createCourse('new');
 
         $category = (new GradebookCategory())
-            ->setName('cat1')
+            ->setTitle('cat1')
             ->setCourse($course)
             ->setWeight(100.00)
             ->setVisible(true)
@@ -115,7 +115,7 @@ class GradeBookCategoryRepositoryTest extends AbstractApiTest
         $this->assertHasNoEntityViolations($category);
 
         $evaluation = (new GradebookEvaluation())
-            ->setName('eva')
+            ->setTitle('eva')
             ->setCategory($category)
             ->setCourse($course)
             ->setWeight(100.00)

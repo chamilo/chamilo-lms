@@ -674,7 +674,7 @@ class Rest extends WebService
 
             $categories[] = [
                 'id' => (int) $category['iid'],
-                'title' => $category['cat_title'],
+                'title' => $category['title'],
                 'catId' => (int) $category['cat_id'],
                 'description' => $category['cat_comment'],
                 'forums' => $categoryForums,
@@ -715,7 +715,7 @@ class Rest extends WebService
         foreach ($threads as $thread) {
             $forum['threads'][] = [
                 'id' => $thread['iid'],
-                'title' => $thread['thread_title'],
+                'title' => $thread['title'],
                 'lastEditDate' => api_convert_and_format_date($thread['lastedit_date'], DATE_TIME_FORMAT_LONG_24H),
                 'numberOfReplies' => $thread['thread_replies'],
                 'numberOfViews' => $thread['thread_views'],
@@ -740,7 +740,7 @@ class Rest extends WebService
         $thread = [
             'id' => intval($threadInfo['iid']),
             'cId' => intval($threadInfo['c_id']),
-            'title' => $threadInfo['thread_title'],
+            'title' => $threadInfo['title'],
             'forumId' => intval($threadInfo['forum_id']),
             'posts' => [],
         ];
@@ -820,7 +820,7 @@ class Rest extends WebService
         $categoriesTempList = learnpath::getCategories($this->course->getId());
 
         $categoryNone = new CLpCategory();
-        $categoryNone->setName(get_lang('WithOutCategory'));
+        $categoryNone->setTitle(get_lang('WithOutCategory'));
         $categoryNone->setPosition(0);
 
         $categories = array_merge([$categoryNone], $categoriesTempList);

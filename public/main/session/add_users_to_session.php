@@ -100,7 +100,7 @@ echo Display::toolbarAction(
     ]
 );
 
-echo '<h2>'.$tool_name.' ('.$session->getName().') </h2>';
+echo '<h2>'.$tool_name.' ('.$session->getTitle().') </h2>';
 
 echo $contentForm;
 

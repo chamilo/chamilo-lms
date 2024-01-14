@@ -253,7 +253,7 @@ function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 
                         <a href='http://www.facebook.com/sharer.php?u=".api_get_path(WEB_PATH)."badge/".$skill->getId()."/user/".$userId."' target='_new'>
                             <em class='fa fa-facebook-square fa-3x text-info' aria-hidden='true'></em>
                         </a>
-                        <a href='https://twitter.com/home?status=".sprintf(get_lang('I have achieved skill %s on %s'), '"'.$skill->getName().'"', api_get_setting('siteName')).' - '.api_get_path(WEB_PATH).'badge/'.$skill->getId().'/user/'.$userId."' target='_new'>
+                        <a href='https://twitter.com/home?status=".sprintf(get_lang('I have achieved skill %s on %s'), '"'.$skill->getTitle().'"', api_get_setting('siteName')).' - '.api_get_path(WEB_PATH).'badge/'.$skill->getId().'/user/'.$userId."' target='_new'>
                             <em class='fa fa-twitter-square fa-3x text-light' aria-hidden='true'></em>
                         </a>
                     </div>

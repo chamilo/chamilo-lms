@@ -86,7 +86,7 @@ class ToolChain
                 $toolEntity = $toolFromDatabase;
             } else {
                 $toolEntity = (new Tool())
-                    ->setName($name)
+                    ->setTitle($name)
                 ;
                 if ($tool->isCourseTool()) {
                     $this->setToolPermissions($toolEntity);
@@ -99,7 +99,7 @@ class ToolChain
             if (!empty($types)) {
                 foreach ($types as $key => $typeName) {
                     $resourceType = (new ResourceType())
-                        ->setName($key)
+                        ->setTitle($key)
                     ;
 
                     if ($toolEntity->hasResourceType($resourceType)) {

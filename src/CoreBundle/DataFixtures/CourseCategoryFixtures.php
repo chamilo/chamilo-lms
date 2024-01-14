@@ -33,7 +33,7 @@ class CourseCategoryFixtures extends Fixture
 
         foreach ($list as $key => $data) {
             $courseCategory = (new CourseCategory())
-                ->setName($data['name'])
+                ->setTitle($data['name'])
                 ->setCode($data['code'])
                 ->setTreePos($key + 1)
                 ->addUrl($url)

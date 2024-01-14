@@ -5320,7 +5320,7 @@ EOT;
         }
 
         $resourceDeletedMessage = Category::show_message_resource_delete($courseId);
-        if (false !== $resourceDeletedMessage || api_is_allowed_to_edit() || api_is_excluded_user_type()) {
+        if (!empty($resourceDeletedMessage) || api_is_allowed_to_edit() || api_is_excluded_user_type()) {
             return '';
         }
 

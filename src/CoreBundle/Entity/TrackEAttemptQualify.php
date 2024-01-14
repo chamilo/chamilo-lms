@@ -68,9 +68,12 @@ class TrackEAttemptQualify
     {
         return $this->trackExercise;
     }
+
     /**
      * Set exeId.
+     *
      * @param ?TrackEExercise $trackExercise
+     *
      * @return TrackEAttemptQualify
      */
     public function setTrackExercise(?TrackEExercise $trackExercise): static
@@ -87,7 +90,7 @@ class TrackEAttemptQualify
 
     /**
      * Set questionId.
-     * @param int $questionId
+     *
      * @return TrackEAttemptQualify
      */
     public function setQuestionId(int $questionId): static
@@ -104,8 +107,6 @@ class TrackEAttemptQualify
 
     /**
      * Set marks (score).
-     * @param float $marks
-     * @return TrackEAttemptQualify
      */
     public function setMarks(float $marks): self
     {
@@ -121,8 +122,6 @@ class TrackEAttemptQualify
 
     /**
      * Set insert date.
-     * @param DateTime $insertDate
-     * @return TrackEAttemptQualify
      */
     public function setInsertDate(DateTime $insertDate): self
     {
@@ -138,7 +137,7 @@ class TrackEAttemptQualify
 
     /**
      * Set author.
-     * @param int $author
+     *
      * @return TrackEAttemptQualify
      */
     public function setAuthor(int $author): static
@@ -153,10 +152,6 @@ class TrackEAttemptQualify
         return $this->teacherComment;
     }
 
-    /**
-     * @param string $teacherComment
-     * @return TrackEAttemptQualify
-     */
     public function setTeacherComment(string $teacherComment): self
     {
         $this->teacherComment = $teacherComment;
@@ -171,7 +166,7 @@ class TrackEAttemptQualify
 
     /**
      * Set sessionId.
-     * @param int $sessionId
+     *
      * @return TrackEAttemptQualify
      */
     public function setSessionId(int $sessionId): static

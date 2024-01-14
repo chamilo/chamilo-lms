@@ -153,7 +153,7 @@ class Database
     }
 
     /**
-     * Gets the array from a SQL result (as returned by Database::query).
+     * Gets the (associative) array from a SQL result (as returned by Database::query).
      *
      * @throws \Doctrine\DBAL\Exception
      */

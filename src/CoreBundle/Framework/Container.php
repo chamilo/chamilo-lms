@@ -27,6 +27,7 @@ use Chamilo\CoreBundle\Repository\Node\TicketMessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\PromotionRepository;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
@@ -256,6 +257,11 @@ class Container
     public static function getAssetRepository(): AssetRepository
     {
         return self::$container->get(AssetRepository::class);
+    }
+
+    public static function getResourceNodeRepository(): ResourceNodeRepository
+    {
+        return self::$container->get(ResourceNodeRepository::class);
     }
 
     public static function getAttendanceRepository(): CAttendanceRepository

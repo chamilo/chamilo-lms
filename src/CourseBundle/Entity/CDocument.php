@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityDocument;
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
@@ -165,13 +166,17 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
     #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected ?string $comment;
     #[Groups(['document:read', 'document:write'])]
-    #[Assert\Choice(['folder', 'file'], message: 'Choose a valid filetype.')]
-    #[ORM\Column(name: 'filetype', type: 'string', length: 10, nullable: false)]
+    #[Assert\Choice(['folder', 'file', 'certificate'], message: 'Choose a valid filetype.')]
+    #[ORM\Column(name: 'filetype', type: 'string', length: 15, nullable: false)]
     protected string $filetype;
     #[ORM\Column(name: 'readonly', type: 'boolean', nullable: false)]
     protected bool $readonly;
     #[ORM\Column(name: 'template', type: 'boolean', nullable: false)]
     protected bool $template;
+    #[ORM\OneToOne(mappedBy: 'document', targetEntity: GradebookCategory::class)]
+    #[Groups(['document:read'])]
+    protected GradebookCategory|null $gradebookCategory = null;
+
     public function __construct()
     {
         $this->comment = '';
@@ -249,5 +254,10 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
     public function setResourceName(string $name): self
     {
         return $this->setTitle($name);
+    }
+
+    public function getGradebookCategory(): GradebookCategory|null
+    {
+        return $this->gradebookCategory;
     }
 }

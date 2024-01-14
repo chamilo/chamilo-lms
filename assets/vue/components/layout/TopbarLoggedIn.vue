@@ -104,7 +104,7 @@ const userSubmenuItems = computed(() => [
       },
       {
         label: t("Settings"),
-        to: { name: "AccountHome" },
+        command: async () => await router.push({ name: "AccountHome" }),
       },
       {
         separator: true,

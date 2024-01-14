@@ -67,6 +67,9 @@
     "Delete": "Lernpfad l\u00f6schen",
     "{resource} created": "{resource} created",
     "{resource} deleted": "{resource} deleted",
+    "Course: {course}": "Course: {course}",
+    "Session: {session}": "Session: {session}",
+    "Status: {status}": "Status: {status}",
     "Edit event": "Eintrag \u00e4ndern",
     "Add event": "Neuen Eintrag hinzuf\u00fcgen",
     "Add": "hinzuf\u00fcgen",
@@ -162,5 +165,6 @@
     "Current session tab": "Current session tab",
     "Upcoming session tab": "Upcoming session tab",
     "Past session tab": "Past session tab",
-    "Sticky courses": "Sticky courses"
+    "Sticky courses": "Sticky courses",
+    "Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:": "Zertifikat mit diesen Platzhaltern speichern"
 }

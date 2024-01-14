@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\EventSubscriber;
 
-use Chamilo\CoreBundle\Entity\TrackEAttemptRecording;
+use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\User;
@@ -170,7 +170,7 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
 
     private function handleAttemptRecordings(TrackEExercise $exercise): void
     {
-        $trackEAttemptRecordingRepository = $this->entityManager->getRepository(TrackEAttemptRecording::class);
+        $trackEAttemptRecordingRepository = $this->entityManager->getRepository(TrackEAttemptQualify::class);
 
         $attemptRecordings = $trackEAttemptRecordingRepository->findBy(['trackExercise' => $exercise->getExeId()]);
 

@@ -7,7 +7,9 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\SystemTemplate;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Chamilo\Kernel;
 use Doctrine\DBAL\Schema\Schema;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class Version20230315115019 extends AbstractMigrationChamilo
 {
@@ -35,8 +37,8 @@ final class Version20230315115019 extends AbstractMigrationChamilo
         if ($table->hasColumn('image')) {
             foreach ($all as $systemTemplate) {
                 if (!empty($systemTemplate['image'])) {
-                    /** @var SystemTemplate $template */
-                    $template = $em->find('ChamiloCoreBundle:SystemTemplate', $systemTemplate['id']);
+                    /** @var SystemTemplate|null $template */
+                    $template = $em->find(SystemTemplate::class, $systemTemplate['id']);
                     if ($template->hasImage()) {
                         continue;
                     }

@@ -1917,11 +1917,11 @@ HOTSPOT;
             api_is_student_boss() ||
             api_is_session_admin();
         $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
-        $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
+        $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_GROUP_REL_USER = Database::get_course_table(TABLE_GROUP_USER);
         $TBL_GROUP = Database::get_course_table(TABLE_GROUP);
-        $TBL_TRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+        $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $tblTrackAttemptQualify = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_QUALIFY);
 
         $session_id_and = '';
         $sessionCondition = '';
@@ -1939,8 +1939,8 @@ HOTSPOT;
         $sql_inner_join_tbl_track_exercices = "
         (
             SELECT DISTINCT ttte.*, if(tr.exe_id,1, 0) as revised
-            FROM $TBL_TRACK_EXERCICES ttte
-            LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr
+            FROM $TBL_TRACK_EXERCISES ttte
+            LEFT JOIN $tblTrackAttemptQualify tr
             ON (ttte.exe_id = tr.exe_id) AND tr.author > 0
             WHERE
                 c_id = $courseId AND
@@ -2081,7 +2081,7 @@ HOTSPOT;
             }
 
             $sql = " $sql_select
-                FROM $TBL_EXERCICES AS ce
+                FROM $TBL_EXERCISES AS ce
                 INNER JOIN $sql_inner_join_tbl_track_exercices AS te
                 ON (te.exe_exo_id = ce.iid)
                 INNER JOIN $sql_inner_join_tbl_user AS user

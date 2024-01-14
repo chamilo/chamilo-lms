@@ -160,6 +160,9 @@
     },
     "config": {
         "optimize-autoloader": true,
+        "platform": {
+            "php": "8.1"
+        },
         "component-dir": "public/assets",
         "sort-packages": true,
         "allow-plugins": {

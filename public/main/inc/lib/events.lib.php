@@ -5,7 +5,7 @@
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\Course as CourseEntity;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
-use Chamilo\CoreBundle\Entity\TrackEAttemptRecording;
+use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
@@ -516,7 +516,7 @@ class Event
         $position = (int) $position;
         $course_id = (int) $course_id;
         $now = api_get_utc_datetime();
-        $recording = ('true' === api_get_setting('exercise.quiz_answer_extra_recording'));
+        $recordingLog = ('true' === api_get_setting('exercise.quiz_answer_extra_recording'));
 
         // check user_id or get from context
         if (empty($user_id)) {
@@ -611,20 +611,19 @@ class Event
             error_log($sql);
         }
 
-        $recording_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
         $em = Database::getManager();
         if (false == $updateResults) {
             $attempt_id = Database::insert($TBL_TRACK_ATTEMPT, $attempt);
             $trackExercise = $em->find(TrackEExercise::class, $exe_id);
 
-            if ($attempt_id) {
-                $recording = new TrackEAttemptRecording();
+            if ($recordingLog) {
+                $recording = new TrackEAttemptQualify();
                 $recording
                     ->setTrackExercise($trackExercise)
                     ->setQuestionId($question_id)
                     ->setAnswer($answer)
                     ->setMarks((int) $score)
-                    //->setAuthor('')
+                    ->setAuthor(api_get_user_id())
                     ->setSessionId($session_id)
                 ;
                 $em->persist($recording);
@@ -646,28 +645,26 @@ class Event
                 ]
             );
 
-            if ($recording) {
-                $attempt_recording = [
-                    'exe_id' => $exe_id,
-                    'question_id' => $question_id,
-                    'answer' => $answer,
-                    'marks' => $score,
-                    'insert_date' => $now,
-                    'author' => '',
-                    'session_id' => $session_id,
-                ];
-
-                Database::update(
-                    $recording_table,
-                    $attempt_recording,
+            if ($recordingLog) {
+                $repoTrackQualify = $em->getRepository(TrackEAttemptQualify::class);
+                $trackQualify = $repoTrackQualify->findBy(
                     [
-                        'exe_id = ? AND question_id = ? AND session_id = ? ' => [
-                            $exe_id,
-                            $question_id,
-                            $session_id,
-                        ],
+                        'exeId' => $exe_id,
+                        'questionId' => $question_id,
+                        'sessionId' => $session_id,
                     ]
                 );
+                /** @var TrackEAttemptQualify $trackQualify */
+                $trackQualify
+                    ->setTrackExercise($exe_id)
+                    ->setQuestionId($question_id)
+                    ->setAnswer($answer)
+                    ->setMarks((int) $score)
+                    ->setAuthor(api_get_user_id())
+                    ->setSessionId($session_id)
+                ;
+                $em->persist($trackQualify);
+                $em->flush();
             }
             $attempt_id = $exe_id;
         }
@@ -1104,7 +1101,7 @@ class Event
 
         $track_e_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $track_attempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $recording_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+        $tblTrackAttemptQualify = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_QUALIFY);
         $sessionCondition = api_get_session_condition($session_id);
         // Make sure we have the exact lp_view_id
         $sql = "SELECT iid FROM $lp_view_table
@@ -1174,7 +1171,7 @@ class Event
                     WHERE exe_id IN ($exeListString)";
                 Database::query($sql);
 
-                $sql = "DELETE FROM $recording_table
+                $sql = "DELETE FROM $tblTrackAttemptQualify
                     WHERE exe_id IN ($exeListString)";
                 Database::query($sql);
             }
@@ -1411,7 +1408,7 @@ class Event
     {
         $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $table_track_attempt_recording = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+        $tblTrackAttemptQualify = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_QUALIFY);
         $exe_id = (int) $exe_id;
 
         $status = Database::escape_string($status);
@@ -1425,7 +1422,7 @@ class Event
             $row = Database::fetch_array($res, 'ASSOC');
 
             //Checking if this attempt was revised by a teacher
-            $sql_revised = "SELECT exe_id FROM $table_track_attempt_recording
+            $sql_revised = "SELECT exe_id FROM $tblTrackAttemptQualify
                             WHERE author != '' AND exe_id = $exe_id
                             LIMIT 1";
             $res_revised = Database::query($sql_revised);
@@ -1470,7 +1467,7 @@ class Event
     ) {
         $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $table_track_attempt_recording = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+        $tblTrackAttemptQualify = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_QUALIFY);
         $courseId = (int) $courseId;
         $exercise_id = (int) $exercise_id;
         $session_id = (int) $session_id;
@@ -1499,7 +1496,7 @@ class Event
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             // Checking if this attempt was revised by a teacher
             $exeId = $row['exe_id'];
-            $sql = "SELECT exe_id FROM $table_track_attempt_recording
+            $sql = "SELECT exe_id FROM $tblTrackAttemptQualify
                     WHERE author != '' AND exe_id = $exeId
                     LIMIT 1";
             $res_revised = Database::query($sql);
@@ -1710,7 +1707,7 @@ class Event
         $session_id = 0
     ) {
         $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+        $tblTrackAttemptQualify = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_QUALIFY);
         $courseId = (int) $courseId;
         $session_id = (int) $session_id;
         $exercise_id = (int) $exercise_id;
@@ -1719,7 +1716,7 @@ class Event
 
         $sql = "SELECT count(e.exe_id) as count
                 FROM $table_track_exercises e
-                LEFT JOIN $table_track_attempt a
+                LEFT JOIN $tblTrackAttemptQualify a
                 ON e.exe_id = a.exe_id
                 WHERE
                     exe_exo_id = $exercise_id AND

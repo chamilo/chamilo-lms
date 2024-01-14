@@ -3450,15 +3450,17 @@ function api_is_anonymous()
 /**
  * Displays message "You are not allowed here..." and exits the entire script.
  *
- * @param bool   $print_headers Whether or not to print headers (default = false -> does not print them)
+ * @param bool $print_headers Whether to print headers (default = false -> does not print them)
  * @param string $message
- * @param int    $responseCode
+ * @param int $responseCode
+ *
+ * @throws Exception
  */
 function api_not_allowed(
     $print_headers = false,
     $message = null,
     $responseCode = 0
-) {
+): never {
     throw new Exception('You are not allowed');
 }
 

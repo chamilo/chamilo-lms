@@ -20,7 +20,7 @@ class Version20230321154019 extends AbstractMigrationChamilo
     {
         if (!$schema->hasTable('track_e_attempt_qualify')) {
             $this->addSql(
-            "CREATE TABLE track_e_attempt_qualify (
+                "CREATE TABLE track_e_attempt_qualify (
                 id INT AUTO_INCREMENT NOT NULL,
                 exe_id INT NOT NULL,
                 question_id INT NOT NULL,

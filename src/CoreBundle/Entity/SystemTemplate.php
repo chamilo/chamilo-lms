@@ -30,7 +30,6 @@ class SystemTemplate
     #[ORM\JoinColumn(name: 'image_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?Asset $image = null;
 
-
     #[ORM\Column(name: 'content', type: 'text', nullable: false)]
     protected string $content;
 

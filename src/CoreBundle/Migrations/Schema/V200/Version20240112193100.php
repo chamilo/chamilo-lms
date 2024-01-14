@@ -15,7 +15,7 @@ final class Version20240112193100 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Migrate tool display_order as resource order';
+        return 'Add color field to sys_calendar table';
     }
 
     public function up(Schema $schema): void

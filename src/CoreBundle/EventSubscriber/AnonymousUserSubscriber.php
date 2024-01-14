@@ -146,8 +146,6 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
             ->setCreatorId(1)
             ->addRole('ROLE_ANONYMOUS')
         ;
-
-        $this->entityManager->persist($anonymousUser);
         $this->entityManager->flush();
 
         return $anonymousUser->getId();
@@ -155,27 +153,12 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
 
     private function handleRelatedEntities(User $user): void
     {
-        $trackEExercisesRepository = $this->entityManager->getRepository(TrackEExercise::class);
-
-        $exercises = $trackEExercisesRepository->findBy(['user' => $user->getId()]);
-
-        foreach ($exercises as $exercise) {
-            $this->handleAttemptRecordings($exercise);
-
-            $this->entityManager->remove($exercise);
-        }
-
-        $this->entityManager->flush();
-    }
-
-    private function handleAttemptRecordings(TrackEExercise $exercise): void
-    {
-        $trackEAttemptRecordingRepository = $this->entityManager->getRepository(TrackEAttemptRecording::class);
-
-        $attemptRecordings = $trackEAttemptRecordingRepository->findBy(['trackExercise' => $exercise->getExeId()]);
-
-        foreach ($attemptRecordings as $attemptRecording) {
-            $this->entityManager->remove($attemptRecording);
-        }
+        try {
+            $trackEExercisesRepository = $this->entityManager->getRepository(TrackEExercise::class);
+            $exercises = $trackEExercisesRepository->findBy(['user' => $user->getId()]);
+            foreach ($exercises as $exercise) {
+                $this->entityManager->remove($exercise);
+            }
+        } catch (\Exception $e) {}
     }
 }

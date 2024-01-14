@@ -154,7 +154,7 @@ export default {
     const { relativeDatetime } = useFormatDate()
 
     return {
-      relativeDatetime
+      relativeDatetime,
     }
   },
   computed: {

@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
@@ -19,7 +19,7 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_survey')]
-#[ORM\Index(name: 'idx_survey_code', columns: ['code'])]
+#[ORM\Index(columns: ['code'], name: 'idx_survey_code')]
 #[Gedmo\Tree(type: 'nested')]
 #[ORM\Entity(repositoryClass: CSurveyRepository::class)]
 class CSurvey extends AbstractResource implements ResourceInterface, Stringable
@@ -96,27 +96,27 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
     protected string $surveyVersion;
 
     #[Gedmo\TreeLeft]
-    #[ORM\Column(name: 'lft', type: 'integer', nullable: true, unique: false)]
+    #[ORM\Column(name: 'lft', type: 'integer', unique: false, nullable: true)]
     protected ?int $lft = null;
 
     #[Gedmo\TreeRight]
-    #[ORM\Column(name: 'rgt', type: 'integer', nullable: true, unique: false)]
+    #[ORM\Column(name: 'rgt', type: 'integer', unique: false, nullable: true)]
     protected ?int $rgt = null;
 
     #[Gedmo\TreeLevel]
-    #[ORM\Column(name: 'lvl', type: 'integer', nullable: true, unique: false)]
+    #[ORM\Column(name: 'lvl', type: 'integer', unique: false, nullable: true)]
     protected ?int $lvl = null;
 
     /**
-     * @var Collection|CSurveyQuestion[]
+     * @var Collection<int, CSurveyQuestion>
      */
-    #[ORM\OneToMany(targetEntity: CSurveyQuestion::class, mappedBy: 'survey', cascade: ['remove'])]
+    #[ORM\OneToMany(mappedBy: 'survey', targetEntity: CSurveyQuestion::class, cascade: ['remove'])]
     protected Collection $questions;
 
     /**
-     * @var Collection|CSurveyInvitation[]
+     * @var Collection<int, CSurveyInvitation>
      */
-    #[ORM\OneToMany(targetEntity: CSurveyInvitation::class, mappedBy: 'survey', cascade: ['remove'])]
+    #[ORM\OneToMany(mappedBy: 'survey', targetEntity: CSurveyInvitation::class, cascade: ['remove'])]
     protected Collection $invitations;
 
     #[Gedmo\TreeParent]
@@ -125,16 +125,16 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
     protected ?CSurvey $surveyParent = null;
 
     /**
-     * @var Collection|CSurvey[]
+     * @var Collection<int, CSurvey>
      */
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'surveyParent')]
+    #[ORM\OneToMany(mappedBy: 'surveyParent', targetEntity: self::class)]
     protected Collection $children;
 
     /**
-     * @var Collection|CSurveyQuestionOption[]
+     * @var Collection<int, CSurveyQuestionOption>
      */
     #[ORM\OrderBy(['sort' => 'ASC'])]
-    #[ORM\OneToMany(targetEntity: CSurveyQuestionOption::class, mappedBy: 'survey', cascade: ['remove'])]
+    #[ORM\OneToMany(mappedBy: 'survey', targetEntity: CSurveyQuestionOption::class, cascade: ['remove'])]
     protected Collection $options;
 
     #[ORM\Column(name: 'survey_type', type: 'integer', nullable: false)]
@@ -152,8 +152,12 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
     #[ORM\Column(name: 'is_mandatory', type: 'boolean', options: ['default' => false])]
     protected bool $isMandatory = false;
 
+    #[ORM\Column(name: 'display_question_number', type: 'boolean', options: ['default' => true])]
+    protected bool $displayQuestionNumber;
+
     public function __construct()
     {
+        $this->title = '';
         $this->creationDate = new DateTime();
         $this->invited = 0;
         $this->answered = 0;
@@ -173,16 +177,17 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         $this->children = new ArrayCollection();
         $this->invitations = new ArrayCollection();
         $this->options = new ArrayCollection();
+        $this->displayQuestionNumber = true;
     }
 
     public function __toString(): string
     {
-        return $this->getCode();
+        return (string) $this->getCode();
     }
 
-    public function getIid(): ?int
+    public function getCode(): ?string
     {
-        return $this->iid;
+        return $this->code;
     }
 
     public function setCode(string $code): self
@@ -192,14 +197,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get code.
-     *
-     * @return string
-     */
-    public function getCode()
+    public function getTitle(): string
     {
-        return $this->code;
+        return $this->title;
     }
 
     public function setTitle(string $title): self
@@ -209,9 +209,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    public function getTitle(): string
+    public function getSubtitle(): ?string
     {
-        return $this->title;
+        return $this->subtitle;
     }
 
     public function setSubtitle(string $subtitle): self
@@ -221,9 +221,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    public function getSubtitle(): ?string
+    public function getLang(): ?string
     {
-        return $this->subtitle;
+        return $this->lang;
     }
 
     public function setLang(string $lang): self
@@ -233,14 +233,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get lang.
-     *
-     * @return string
-     */
-    public function getLang()
+    public function getAvailFrom(): ?DateTime
     {
-        return $this->lang;
+        return $this->availFrom;
     }
 
     public function setAvailFrom(DateTime $availFrom = null): self
@@ -253,9 +248,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    public function getAvailFrom(): ?DateTime
+    public function getAvailTill(): ?DateTime
     {
-        return $this->availFrom;
+        return $this->availTill;
     }
 
     public function setAvailTill(DateTime $availTill = null): self
@@ -268,9 +263,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    public function getAvailTill(): ?DateTime
+    public function getIsShared(): ?string
     {
-        return $this->availTill;
+        return $this->isShared;
     }
 
     public function setIsShared(string $isShared): self
@@ -280,14 +275,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get isShared.
-     *
-     * @return string
-     */
-    public function getIsShared()
+    public function getTemplate(): ?string
     {
-        return $this->isShared;
+        return $this->template;
     }
 
     public function setTemplate(string $template): self
@@ -297,14 +287,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get template.
-     *
-     * @return string
-     */
-    public function getTemplate()
+    public function getIntro(): ?string
     {
-        return $this->template;
+        return $this->intro;
     }
 
     public function setIntro(string $intro): self
@@ -314,14 +299,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get intro.
-     *
-     * @return string
-     */
-    public function getIntro()
+    public function getSurveythanks(): ?string
     {
-        return $this->intro;
+        return $this->surveyThanks;
     }
 
     public function setSurveythanks(string $surveythanks): self
@@ -331,14 +311,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get surveythanks.
-     *
-     * @return string
-     */
-    public function getSurveythanks()
+    public function getCreationDate(): DateTime
     {
-        return $this->surveyThanks;
+        return $this->creationDate;
     }
 
     public function setCreationDate(DateTime $creationDate): self
@@ -348,14 +323,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get creationDate.
-     *
-     * @return DateTime
-     */
-    public function getCreationDate()
+    public function getInvited(): int
     {
-        return $this->creationDate;
+        return $this->invited;
     }
 
     public function setInvited(int $invited): self
@@ -365,14 +335,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get invited.
-     *
-     * @return int
-     */
-    public function getInvited()
+    public function getAnswered(): int
     {
-        return $this->invited;
+        return $this->answered;
     }
 
     public function setAnswered(int $answered): self
@@ -382,14 +347,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get answered.
-     *
-     * @return int
-     */
-    public function getAnswered()
+    public function getInviteMail(): string
     {
-        return $this->answered;
+        return $this->inviteMail;
     }
 
     public function setInviteMail(string $inviteMail): self
@@ -399,14 +359,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get inviteMail.
-     *
-     * @return string
-     */
-    public function getInviteMail()
+    public function getReminderMail(): string
     {
-        return $this->inviteMail;
+        return $this->reminderMail;
     }
 
     public function setReminderMail(string $reminderMail): self
@@ -416,14 +371,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get reminderMail.
-     *
-     * @return string
-     */
-    public function getReminderMail()
+    public function getMailSubject(): string
     {
-        return $this->reminderMail;
+        return $this->mailSubject;
     }
 
     public function setMailSubject(string $mailSubject): self
@@ -433,14 +383,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get mailSubject.
-     *
-     * @return string
-     */
-    public function getMailSubject()
+    public function getAnonymous(): string
     {
-        return $this->mailSubject;
+        return $this->anonymous;
     }
 
     public function setAnonymous(string $anonymous): self
@@ -450,14 +395,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get anonymous.
-     *
-     * @return string
-     */
-    public function getAnonymous()
+    public function getAccessCondition(): ?string
     {
-        return $this->anonymous;
+        return $this->accessCondition;
     }
 
     public function setAccessCondition(string $accessCondition): self
@@ -467,14 +407,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get accessCondition.
-     *
-     * @return string
-     */
-    public function getAccessCondition()
+    public function getShuffle(): bool
     {
-        return $this->accessCondition;
+        return $this->shuffle;
     }
 
     public function setShuffle(bool $shuffle): self
@@ -484,14 +419,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get shuffle.
-     *
-     * @return bool
-     */
-    public function getShuffle()
+    public function getOneQuestionPerPage(): bool
     {
-        return $this->shuffle;
+        return $this->oneQuestionPerPage;
     }
 
     public function setOneQuestionPerPage(bool $oneQuestionPerPage): self
@@ -501,14 +431,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get oneQuestionPerPage.
-     *
-     * @return bool
-     */
-    public function getOneQuestionPerPage()
+    public function getSurveyVersion(): string
     {
-        return $this->oneQuestionPerPage;
+        return $this->surveyVersion;
     }
 
     public function setSurveyVersion(string $surveyVersion): self
@@ -518,14 +443,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get surveyVersion.
-     *
-     * @return string
-     */
-    public function getSurveyVersion()
+    public function getSurveyType(): int
     {
-        return $this->surveyVersion;
+        return $this->surveyType;
     }
 
     public function setSurveyType(int $surveyType): self
@@ -535,14 +455,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get surveyType.
-     *
-     * @return int
-     */
-    public function getSurveyType()
+    public function getShowFormProfile(): int
     {
-        return $this->surveyType;
+        return $this->showFormProfile;
     }
 
     public function setShowFormProfile(int $showFormProfile): self
@@ -552,14 +467,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get showFormProfile.
-     *
-     * @return int
-     */
-    public function getShowFormProfile()
+    public function getFormFields(): string
     {
-        return $this->showFormProfile;
+        return $this->formFields;
     }
 
     public function setFormFields(string $formFields): self
@@ -569,14 +479,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get formFields.
-     *
-     * @return string
-     */
-    public function getFormFields()
+    public function getVisibleResults(): ?int
     {
-        return $this->formFields;
+        return $this->visibleResults;
     }
 
     public function setVisibleResults(int $visibleResults): self
@@ -586,14 +491,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    /**
-     * Get visibleResults.
-     *
-     * @return int
-     */
-    public function getVisibleResults()
+    public function isMandatory(): bool
     {
-        return $this->visibleResults;
+        return $this->isMandatory;
     }
 
     public function setIsMandatory(bool $isMandatory): self
@@ -603,15 +503,10 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    public function isMandatory(): bool
-    {
-        return $this->isMandatory;
-    }
-
     /**
-     * @return CSurveyQuestion[]|Collection
+     * @return Collection<int, CSurveyQuestion>
      */
-    public function getQuestions(): array|Collection
+    public function getQuestions(): Collection
     {
         return $this->questions;
     }
@@ -672,17 +567,17 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
     }
 
     /**
-     * @return CSurvey[]|Collection
+     * @return Collection<int, CSurvey>
      */
-    public function getChildren(): array|Collection
+    public function getChildren(): Collection
     {
         return $this->children;
     }
 
     /**
-     * @param CSurvey[]|Collection $children
+     * @param Collection<int, CSurvey> $children
      */
-    public function setChildren(array|Collection $children): self
+    public function setChildren(Collection $children): self
     {
         $this->children = $children;
 
@@ -690,9 +585,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
     }
 
     /**
-     * @return CSurveyQuestionOption[]|Collection
+     * @return Collection<int, CSurveyQuestionOption>
      */
-    public function getOptions(): array|Collection
+    public function getOptions(): Collection
     {
         return $this->options;
     }
@@ -705,17 +600,14 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
     }
 
     /**
-     * @return CSurveyInvitation[]|Collection
+     * @return Collection<int, CSurveyInvitation>
      */
-    public function getInvitations(): array|Collection
+    public function getInvitations(): Collection
     {
         return $this->invitations;
     }
 
-    /**
-     * @param CSurveyInvitation[]|Collection $invitations
-     */
-    public function setInvitations(array|Collection $invitations): self
+    public function setInvitations(Collection $invitations): self
     {
         $this->invitations = $invitations;
 
@@ -724,16 +616,33 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
 
     public function getResourceIdentifier(): int|Uuid
     {
-        return $this->getIid();
+        return (int) $this->getIid();
+    }
+
+    public function getIid(): ?int
+    {
+        return $this->iid;
     }
 
     public function getResourceName(): string
     {
-        return $this->getCode();
+        return (string) $this->getCode();
     }
 
     public function setResourceName(string $name): self
     {
         return $this->setCode($name);
+    }
+
+    public function isDisplayQuestionNumber(): bool
+    {
+        return $this->displayQuestionNumber;
+    }
+
+    public function setDisplayQuestionNumber(bool $displayQuestionNumber): static
+    {
+        $this->displayQuestionNumber = $displayQuestionNumber;
+
+        return $this;
     }
 }

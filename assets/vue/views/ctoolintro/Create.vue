@@ -22,9 +22,6 @@ import { useRoute, useRouter } from "vue-router"
 import isEmpty from "lodash/isEmpty"
 import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility.js"
 import axios from "axios"
-import { ENTRYPOINT } from "../../config/entrypoint"
-import useNotification from "../../components/Notification"
-import { useI18n } from "vue-i18n"
 import { useCidReq } from "../../composables/cidReq"
 
 const servicePrefix = "ctoolintro"
@@ -37,20 +34,18 @@ const { mapFields } = createHelpers({
 export default {
   name: "ToolIntroCreate",
   servicePrefix,
-  mixins: [CreateMixin],
   components: {
     Loading,
     Toolbar,
     ToolIntroForm,
   },
+  mixins: [CreateMixin],
   setup() {
     const users = ref([])
     const isLoadingSelect = ref(false)
     const item = ref({})
     const route = useRoute()
     const router = useRouter()
-    //const { showNotification } = useNotification()
-    const { t } = useI18n()
 
     let id = route.params.id
     if (isEmpty(id)) {
@@ -61,7 +56,6 @@ export default {
 
     let courseId = route.query.cid
     let sessionId = route.query.sid
-    let toolId = route.query.ctoolIntroId
     let ctoolId = route.params.courseTool
 
     async function getIntro() {
@@ -105,7 +99,7 @@ export default {
           cid: route.query.cid,
           sid: route.query.sid,
         })
-        .then((response) => {
+        .then(() => {
           router.go(-1)
         })
         .catch(function (error) {

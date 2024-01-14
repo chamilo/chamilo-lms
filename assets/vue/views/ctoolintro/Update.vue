@@ -17,13 +17,11 @@ import Loading from "../../components/Loading.vue"
 import Toolbar from "../../components/Toolbar.vue"
 import UpdateMixin from "../../mixins/UpdateMixin"
 import { ref } from "vue"
-import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import useVuelidate from "@vuelidate/core"
 import axios from "axios"
 import { ENTRYPOINT } from "../../config/entrypoint"
 import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
-import useNotification from "../../components/Notification"
 import { useCidReq } from "../../composables/cidReq"
 
 const servicePrefix = "ctoolintro"
@@ -31,19 +29,18 @@ const servicePrefix = "ctoolintro"
 export default {
   name: "ToolIntroUpdate",
   servicePrefix,
-  mixins: [UpdateMixin],
   components: {
     Loading,
     Toolbar,
     ToolIntroForm,
   },
+  mixins: [UpdateMixin],
   setup() {
     const route = useRoute()
     const router = useRouter()
     //const { showNotification } = useNotification()
     const item = ref({})
     const { cid, sid } = useCidReq()
-    const { t } = useI18n()
 
     let toolId = route.query.ctoolId
     let ctoolintroId = route.query.ctoolintroIid
@@ -68,7 +65,7 @@ export default {
       },
     ]
 
-    function onUpdated(val) {
+    function onUpdated() {
       //showNotification(t("Updated"))
       router.go(-1)
     }

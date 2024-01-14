@@ -120,7 +120,8 @@ switch ($_GET['type']) {
 }
 
 // We are editing a question
-if (isset($_GET['question_id']) && !empty($_GET['question_id'])) {
+if (!empty($_GET['question_id']) &&
+    !(isset($_POST['buttons']['remove_answer']) || isset($_POST['buttons']['add_answer']) || isset($_POST['delete_answer']))) {
     $formData = SurveyManager::get_question($_GET['question_id']);
 }
 

@@ -421,7 +421,7 @@ class survey_question
                 if ($key > $deleted) {
                     // swap with previous (deleted) option slot
                     $newAnswers[$key - 1] = $formData['answers'][$key];
-                    $newAnswersId[$key - 1] = $formData['answersid'][$key];
+                    $newAnswersId[$key - 1] = $formData['answersid'][$key] ?? 0;
                     unset($formData['answers'][$key]);
                     unset($formData['answersid'][$key]);
                 } elseif ($key === $deleted) {

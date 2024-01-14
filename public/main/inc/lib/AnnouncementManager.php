@@ -657,8 +657,6 @@ class AnnouncementManager
             $end_date = api_get_utc_datetime();
         }
 
-        $order = self::getLastAnnouncementOrder($courseInfo);
-
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
         $group = api_get_group_entity();
@@ -670,7 +668,6 @@ class AnnouncementManager
             ->setContent($content)
             ->setTitle($title)
             ->setEndDate(new DateTime($end_date))
-            ->setDisplayOrder($order)
             ->setParent($course)
         ;
 
@@ -740,7 +737,6 @@ class AnnouncementManager
         $sendToUsersInSession = false
     ) {
         $courseInfo = api_get_course_info();
-        $order = self::getLastAnnouncementOrder($courseInfo);
         $em = Database::getManager();
         $now = api_get_utc_datetime();
         $courseId = api_get_course_int_id();
@@ -754,7 +750,6 @@ class AnnouncementManager
             ->setContent($newContent)
             ->setTitle($title)
             ->setEndDate(new DateTime($now))
-            ->setDisplayOrder($order)
             ->setParent($course)
             ;
 

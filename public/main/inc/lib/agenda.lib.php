@@ -368,6 +368,7 @@ class Agenda
             case 'admin':
                 if (api_is_platform_admin()) {
                     $event = new SysCalendar();
+                    $color = SysCalendar::COLOR_SYSTEM_EVENT;
                     $event
                         ->setTitle($title)
                         ->setContent($content)
@@ -375,6 +376,7 @@ class Agenda
                         ->setEndDate($end)
                         ->setAllDay($allDay)
                         ->setUrl(api_get_url_entity())
+                        ->setColor($color)
                     ;
                     $em->persist($event);
                     $em->flush();

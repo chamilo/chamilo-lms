@@ -810,7 +810,7 @@ if (!empty($selectCat)) {
     }
     $course_id = CourseManager::get_course_by_category($selectCat);
     $show_message = Category::show_message_resource_delete($course_id);
-    if ('' == $show_message) {
+    if (empty($show_message)) {
         // Student
         if (!api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
             if ($category) {

@@ -231,7 +231,7 @@ class GradebookUtils
         $selectcat = $selectcat->get_id();
         $modify_icons = null;
 
-        if (false === $show_message) {
+        if ('' === $show_message) {
             $visibility_icon = (0 == $cat->is_visible()) ? ActionIcon::INVISIBLE : ActionIcon::VISIBLE;
             $visibility_command = (0 == $cat->is_visible()) ? 'set_visible' : 'set_invisible';
 
@@ -339,7 +339,7 @@ class GradebookUtils
         $message_eval = Category::show_message_resource_delete($eval->getCourseId());
         $courseParams = api_get_cidreq_params($eval->getCourseId(), $eval->getSessionId());
 
-        if (false === $message_eval && api_is_allowed_to_edit(null, true)) {
+        if ('' === $message_eval && api_is_allowed_to_edit(null, true)) {
             $visibility_icon = 0 == $eval->is_visible() ? ActionIcon::INVISIBLE : ActionIcon::VISIBLE;
             $visibility_command = 0 == $eval->is_visible() ? 'set_visible' : 'set_invisible';
             if ($is_locked && !api_is_platform_admin()) {
@@ -407,7 +407,7 @@ class GradebookUtils
 
         $courseParams = api_get_cidreq_params($link->getCourseId(), $link->get_session_id());
 
-        if (false === $message_link) {
+        if ('' === $message_link) {
             $visibility_icon = 0 == $link->is_visible() ? ActionIcon::INVISIBLE : ActionIcon::VISIBLE;
             $visibility_command = 0 == $link->is_visible() ? 'set_visible' : 'set_invisible';
 
@@ -753,7 +753,7 @@ class GradebookUtils
         // Generate document HTML
         $content_html = DocumentManager::replace_user_info_into_html(
             $user_id,
-            api_get_course_info($course_code),
+            api_get_course_info_by_id($course_code),
             $sessionId,
             $is_preview
         );

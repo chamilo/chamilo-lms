@@ -141,7 +141,7 @@ if (false == $accessGranted) {
             $repo = Container::getGradeBookCategoryRepository();
             $category = $repo->find($categoryId);
 
-            if (false === $show_message && !api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
+            if (empty($show_message) && !api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
                 $certificate = Category::generateUserCertificate($category, $userId);
 
                 if (!empty($certificate['pdf_url']) ||

@@ -86,7 +86,7 @@
         "laminas/laminas-filter": "~2.9",
         "laminas/laminas-permissions-acl": "~2.8",
         "league/csv": "^9.7",
-        "league/glide-symfony": "dev-master",
+        "league/glide-symfony": "^2.0",
         "league/mime-type-detection": "^1.7",
         "lexik/jwt-authentication-bundle": "*",
         "maennchen/zipstream-php": "^2.1",

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex gap-4 items-center">
+  <div class="section-header section-header--h2">
     <h2
       class="mr-auto"
       v-text="title"
@@ -97,13 +97,14 @@
         paginator
         paginator-template="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
         responsive-layout="scroll"
-        sort-by="sendDate"
+        sort-field="sendDate"
+        :sort-order="-1"
         @page="onPage($event)"
         @row-click="onRowClick"
         @sort="sortingChanged($event)"
       >
         <Column selection-mode="multiple" />
-        <Column :header="t('From')" :sortable="true" field="sender">
+        <Column :header="t('From')">
           <template #body="slotProps">
             <div
               v-if="slotProps.data.sender"
@@ -271,10 +272,7 @@ const rowClass = (data) => {
   return [{ "font-semibold": !myReceiver.read }]
 }
 
-let fetchPayload = {
-  itemsPerPage: initialRowsPerPage,
-  page: 1,
-}
+let fetchPayload = {}
 
 function loadMessages(reset = true) {
   if (reset) {
@@ -351,10 +349,12 @@ function refreshMessages() {
 }
 
 function onPage(event) {
+  delete fetchPayload["order[title]"]
+  delete fetchPayload["order[sendDate]"]
+
   fetchPayload.page = event.page + 1
   fetchPayload.itemsPerPage = event.rows
-  fetchPayload.sortBy = event.sortField
-  fetchPayload.sortDesc = event.sortOrder === -1
+  fetchPayload[`order[${event.sortField}]`] = event.sortOrder === -1 ? "desc" : "asc"
 
   loadMessages(false)
 }
@@ -369,9 +369,10 @@ function onRowClick({ data }) {
 }
 
 function sortingChanged(event) {
-  fetchPayload.sortBy = event.sortField
-  fetchPayload.sortDesc = event.sortOrder === -1
-  fetchPayload["order[sendDate]"] = event.sortOrder === -1 ? "desc" : "asc"
+  delete fetchPayload["order[title]"]
+  delete fetchPayload["order[sendDate]"]
+
+  fetchPayload[`order[${event.sortField}]`] = event.sortOrder === -1 ? "desc" : "asc"
 
   loadMessages(true)
 }

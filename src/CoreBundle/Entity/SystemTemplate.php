@@ -26,10 +26,8 @@ class SystemTemplate
     #[ORM\Column(name: 'comment', type: 'text', nullable: false)]
     protected string $comment;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Asset", cascade={"persist"} )
-     * @ORM\JoinColumn(name="image_id", referencedColumnName="id", onDelete="SET NULL")
-     */
+    #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'image_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?Asset $image = null;
 
 

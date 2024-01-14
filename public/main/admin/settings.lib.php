@@ -1085,7 +1085,7 @@ function searchImageFilter($id)
     $em = Database::getManager();
 
     /** @var SystemTemplate $template */
-    $template = $em->find('ChamiloCoreBundle:SystemTemplate', $id);
+    $template = $em->find(SystemTemplate::class, $id);
 
     $assetRepo = Container::getAssetRepository();
     $imageUrl = $assetRepo->getAssetUrl($template->getImage());
@@ -1115,7 +1115,7 @@ function addEditTemplate()
     $assetRepo = Container::getAssetRepository();
 
     /** @var SystemTemplate $template */
-    $template = $id ? $em->find('ChamiloCoreBundle:SystemTemplate', $id) : new SystemTemplate();
+    $template = $id ? $em->find(SystemTemplate::class, $id) : new SystemTemplate();
 
     $form = new FormValidator(
         'template',
@@ -1156,7 +1156,7 @@ function addEditTemplate()
         $form->addRule('template_image', get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(',', $allowedPictureTypes).')', 'filetype', $allowedPictureTypes);
     }
 
-    // Setting the form elements: a little bit information about the template image.
+    // Setting the form elements: a little bit of information about the template image.
     $form->addElement('static', 'file_comment', '', get_lang('This image will represent the template in the templates list. It should be no larger than 100x70 pixels'));
 
     // Getting all the information of the template when editing a template.
@@ -1299,7 +1299,7 @@ function deleteTemplateImage($id)
     $em = Database::getManager();
 
     /** @var SystemTemplate $template */
-    $template = $em->find('ChamiloCoreBundle:SystemTemplate', $id);
+    $template = $em->find(SystemTemplate::class, $id);
 
     if ($template && $template->hasImage()) {
         $image = $template->getImage();

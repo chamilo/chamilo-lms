@@ -26,7 +26,6 @@ class CLinkCategoryRepositoryTest extends AbstractApiTest
         $category = (new CLinkCategory())
             ->setTitle('cat')
             ->setDescription('desc')
-            ->setDisplayOrder(1)
             ->setParent($course)
             ->setCreator($teacher)
         ;
@@ -39,7 +38,6 @@ class CLinkCategoryRepositoryTest extends AbstractApiTest
         $this->assertSame('cat', (string) $category);
         $this->assertSame('desc', $category->getDescription());
         $this->assertSame('cat', $category->getCategoryTitle());
-        $this->assertSame(1, $category->getDisplayOrder());
 
         $this->assertSame(1, $repo->count([]));
     }

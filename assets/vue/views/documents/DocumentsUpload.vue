@@ -68,6 +68,7 @@ const router = useRouter()
 const { gid, sid, cid } = useCidReq()
 const { onCreated, onError } = useUpload()
 const { t } = useI18n()
+const filetype = route.query?.cert === '1' ? 'certificate' : 'file';
 
 const showAdvancedSettings = ref(false)
 
@@ -87,7 +88,6 @@ const fileExistsOption = ref("")
 
 let uppy = ref()
 uppy.value = new Uppy()
-  .use(Webcam)
   .use(ImageEditor, {
     cropperOptions: {
       viewMode: 1,
@@ -118,8 +118,14 @@ uppy.value = new Uppy()
   })
 
 uppy.value.setMeta({
-  filetype: "file",
+  filetype,
   parentResourceNodeId: parentResourceNodeId.value,
   resourceLinkList: resourceLinkList.value,
 })
+
+if (filetype === 'certificate') {
+  uppy.value.opts.restrictions.allowedFileTypes = ['.html']
+} else {
+  uppy.value.use(Webcam)
+}
 </script>

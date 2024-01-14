@@ -439,9 +439,8 @@ class DisplayGradebook
                                 $my_api_cidreq.'&origin=gradebook&selectcat='.$catobj->get_id().'">'.
                                 Display::getMdiIcon('certificate', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Attach certificate')).'</a>';
                         } else {
-                            $actionsRight .= '<a href="'.api_get_path(WEB_CODE_PATH).
-                                'document/document.php?curdirpath=/certificates&'.
-                                $my_api_cidreq.'&origin=gradebook&selectcat='.$catobj->get_id().'">'.
+                            $actionsRight .= '<a href="'.api_get_path(WEB_COURSE_PATH).$courseId.
+                                '/tool/document?cert=1">'.
                                 Display::getMdiIcon('certificate', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Attach certificate')).'</a>';
                         }
 

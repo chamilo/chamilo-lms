@@ -2120,10 +2120,14 @@ class Category implements GradebookItem
 
         $html = [];
         if (!empty($my_certificate)) {
+            $pathToCertificate = $category->getDocument()->getResourceNode()->getResourceFile()->getFile()->getPathname();
+
             $certificate_obj = new Certificate(
                 $my_certificate['id'],
                 0,
-                $sendNotification
+                $sendNotification,
+                true,
+                $pathToCertificate
             );
 
             $fileWasGenerated = $certificate_obj->isHtmlFileGenerated();

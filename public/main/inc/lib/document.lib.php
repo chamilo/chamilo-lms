@@ -2829,7 +2829,7 @@ class DocumentManager
         $comment = null;
         $title = get_lang('Default certificate');
         $fileName = api_replace_dangerous_char($title);
-        $fileType = 'file';
+        $fileType = 'certificate';
         $templateContent = file_get_contents(api_get_path(SYS_CODE_PATH).'gradebook/certificate_template/template.html');
 
         $search = ['{CSS}', '{IMG_DIR}', '{REL_CODE_PATH}', '{COURSE_DIR}'];

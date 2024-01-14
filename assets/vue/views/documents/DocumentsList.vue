@@ -32,6 +32,7 @@
       @click="goToUploadFile"
     />
     <BaseButton
+      v-if="$route.query.cert !== '1'"
       :label="t('New folder')"
       icon="folder-plus"
       type="black"
@@ -151,6 +152,14 @@
             type="black"
             @click="btnChangeVisibilityOnClick(slotProps.data)"
           />
+
+          <BaseButton
+￼            v-if="securityStore.isAuthenticated && isCurrentTeacher && $route.query.cert === '1'"
+￼            :icon="null === slotProps.data.gradebookCategory ? 'mdi mdi-file-plus' : 'mdi mdi-file-plus-outline'"
+￼            class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
+             type="black"
+￼            @click="btnChangeAttachedCertificateOnClick(slotProps.data)"
+￼          />
 
           <BaseButton
             v-if="securityStore.isAuthenticated && isCurrentTeacher"
@@ -306,6 +315,7 @@ import DocumentAudioRecorder from "../../components/documents/DocumentAudioRecor
 import { useNotification } from "../../composables/notification"
 import { useSecurityStore } from "../../store/securityStore"
 import prettyBytes from "pretty-bytes"
+import { ENTRYPOINT } from "../../config/entrypoint"
 
 const store = useStore()
 const route = useRoute()
@@ -603,5 +613,37 @@ function recordedAudioSaved() {
 function recordedAudioNotSaved(error) {
   notification.showErrorNotification(t("Document not saved"))
   console.error(error)
+}
+
+function btnChangeAttachedCertificateOnClick (item) {
+  const folderParams = route.query;
+
+  folderParams.id = item['@id'];
+  if (null === item.gradebookCategory) {
+    axios
+      .get(ENTRYPOINT + 'gradebook_categories?course=' + cid)
+      .then(response => {
+        if (200 === response.status){
+          item.gradebookCategory = updateAttachedCertificate(response.data['hydra:member'][0]['id'], folderParams.id);
+        }
+      })
+    ;
+  } else {
+    item.gradebookCategory  = updateAttachedCertificate(item.gradebookCategory['id'], folderParams.id);
+  }
+}
+
+function updateAttachedCertificate(gradebookCertificateId, documentId){
+
+  axios
+    .patch(ENTRYPOINT + 'gradebook_categories/' + gradebookCertificateId,
+      {"document": documentId},
+      {headers: {'Content-Type': 'application/merge-patch+json'}}
+    )
+    .then(response => {
+      return response.data;
+    })
+  ;
+
 }
 </script>

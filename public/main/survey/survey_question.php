@@ -370,6 +370,7 @@ class survey_question
         }
 
         if (isset($_POST['answers'])) {
+            $formData['question'] = $_POST['question'];
             $formData['answers'] = $_POST['answers'];
         }
 

@@ -206,7 +206,7 @@ class survey_question
         $icon = Display::getMdiIcon(
                 SurveyManager::icon_question($type),
                 'ch-tool-icon',
-                ['align' => 'middle'],
+                null,
                 ICON_SIZE_SMALL,
                 $toolName
             ).' ';

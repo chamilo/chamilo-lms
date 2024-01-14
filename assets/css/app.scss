@@ -122,6 +122,9 @@
   .ch-tool-icon {
     @apply font-extrabold text-primary;
   }
+  .ch-toolbar-icon {
+    @apply font-extrabold text-primary leading-none;
+  }
   .ch-tool-icon-disabled {
     @apply font-extrabold text-gray-50;
   }

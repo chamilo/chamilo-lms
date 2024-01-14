@@ -180,7 +180,7 @@ class TrackEExercise
     protected Collection $attempts;
 
     #[Groups(['track_e_exercise:read'])]
-    #[ORM\OneToMany(mappedBy: 'trackExercise', targetEntity: TrackEAttemptRecording::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'trackExercise', targetEntity: TrackEAttemptQualify::class, orphanRemoval: true)]
     private Collection $revisedAttempts;
 
     public function __construct()

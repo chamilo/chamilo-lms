@@ -1,6 +1,5 @@
 <template>
-  <q-form>
-
+  <form>
     <div class="p-field">
       <InputText
         id="item_title"
@@ -46,7 +45,7 @@
     />
     <!-- For extra content-->
     <slot></slot>
-  </q-form>
+  </form>
 </template>
 
 <script>

@@ -1,11 +1,11 @@
 <template>
-  <ButtonToolbar>
+  <BaseToolbar>
     <BaseButton
       icon="back"
       type="black"
       @click="goToBack"
     />
-  </ButtonToolbar>
+  </BaseToolbar>
 
   <div class="flex flex-row pt-2">
     <div class="w-full">
@@ -42,7 +42,7 @@ import { computed, ref } from "vue"
 import axios from "axios"
 import { ENTRYPOINT } from "../../config/entrypoint"
 import useVuelidate from "@vuelidate/core"
-import ButtonToolbar from "../../components/basecomponents/ButtonToolbar.vue"
+import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
@@ -52,7 +52,7 @@ export default {
   servicePrefix: "userreluser",
   components: {
     BaseButton,
-    ButtonToolbar,
+    BaseToolbar,
     VueMultiselect,
   },
   setup() {

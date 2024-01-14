@@ -1,5 +1,5 @@
 <template>
-  <ButtonToolbar>
+  <BaseToolbar>
     <BaseButton
       :disabled="loadingFriends"
       :label="t('Add friend')"
@@ -15,7 +15,7 @@
       type="black"
       @click="reloadHandler"
     />
-  </ButtonToolbar>
+  </BaseToolbar>
 
   <div class="flex flex-col lg:flex-row gap-4">
     <div class="basis-auto lg:basis-3/4">
@@ -96,7 +96,7 @@
 <script setup>
 import { useStore } from "vuex"
 import { onMounted, ref } from "vue"
-import ButtonToolbar from "../../components/basecomponents/ButtonToolbar.vue"
+import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import Skeleton from "primevue/skeleton"
 import { useI18n } from "vue-i18n"

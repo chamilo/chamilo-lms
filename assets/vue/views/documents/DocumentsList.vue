@@ -1,5 +1,5 @@
 <template>
-  <ButtonToolbar v-if="securityStore.isAuthenticated && isCurrentTeacher">
+  <BaseToolbar v-if="securityStore.isAuthenticated && isCurrentTeacher">
     <BaseButton
       v-if="showBackButtonIfNotRootFolder"
       :label="t('Back')"
@@ -62,7 +62,7 @@
       icon="download"
       type="black"
     />
-  </ButtonToolbar>
+  </BaseToolbar>
 
   <DataTable
     v-model:filters="filters"
@@ -172,7 +172,7 @@
     </Column>
   </DataTable>
 
-  <ButtonToolbar
+  <BaseToolbar
     v-if="securityStore.isAuthenticated && isCurrentTeacher"
     show-top-border
   >
@@ -195,7 +195,7 @@
       type="danger"
       @click="showDeleteMultipleDialog"
     />
-  </ButtonToolbar>
+  </BaseToolbar>
 
   <BaseDialogConfirmCancel
     v-model:is-visible="isNewFolderDialogVisible"
@@ -296,7 +296,7 @@ import { useFormatDate } from "../../composables/formatDate"
 import axios from "axios"
 import DocumentEntry from "../../components/documents/DocumentEntry.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import ButtonToolbar from "../../components/basecomponents/ButtonToolbar.vue"
+import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseDialogConfirmCancel from "../../components/basecomponents/BaseDialogConfirmCancel.vue"
 import { useFileUtils } from "../../composables/fileUtils"

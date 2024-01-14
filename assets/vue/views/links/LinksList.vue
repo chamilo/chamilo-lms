@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ButtonToolbar v-if="securityStore.isAuthenticated && isCurrentTeacher">
+    <BaseToolbar v-if="securityStore.isAuthenticated && isCurrentTeacher">
       <BaseButton
         :label="t('Add a link')"
         icon="link-add"
@@ -20,7 +20,7 @@
         @click="exportToPDF"
       />
       <StudentViewButton />
-    </ButtonToolbar>
+    </BaseToolbar>
 
     <LinkCategoryCard v-if="isLoading">
       <template #header>
@@ -167,7 +167,7 @@
 <script setup>
 import EmptyState from "../../components/EmptyState.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import ButtonToolbar from "../../components/basecomponents/ButtonToolbar.vue"
+import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { computed, onMounted, ref } from "vue"
 import { useStore } from "vuex"
 import { useRoute, useRouter } from "vue-router"

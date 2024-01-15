@@ -371,7 +371,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->innerJoin('node.resourceLinks', 'links')
             ->innerJoin('node.resourceType', 'type')
             ->leftJoin('node.resourceFile', 'file')
-            ->where('type.name = :type')
+            ->where('type.title = :type')
             ->setParameter('type', $resourceTypeName, Types::STRING)
             ->addSelect('node')
             ->addSelect('links')

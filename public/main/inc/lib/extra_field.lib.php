@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Framework\Container;
-
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 class ExtraField extends Model
 {
     public const FIELD_TYPE_TEXT = 1;
@@ -1676,7 +1676,7 @@ class ExtraField extends Model
                                     );
 
                                     $linkToDelete = '&nbsp;'.Display::url(
-                                        Display::return_icon('delete.png', get_lang('Delete')),
+                                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
                                         'javascript:void(0)',
                                         ['id' => $deleteId]
                                     );
@@ -2109,20 +2109,10 @@ class ExtraField extends Model
     public function display()
     {
         $actions = '<a href="../admin/index.php">';
-        $actions .= Display::return_icon(
-            'back.png',
-            get_lang('Back to').' '.get_lang('Administration'),
-            '',
-            ICON_SIZE_MEDIUM
-        );
+        $actions .= Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Administration'));
         $actions .= '</a>';
         $actions .= '<a href="'.api_get_self().'?action=add&type='.$this->type.'">';
-        $actions .= Display::return_icon(
-            'add_user_fields.png',
-            get_lang('Add'),
-            '',
-            ICON_SIZE_MEDIUM
-        );
+        $actions .= Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add'));
         $actions .= '</a>';
 
         echo Display::toolbarAction('toolbar', [$actions]);
@@ -2406,8 +2396,8 @@ class ExtraField extends Model
     public function getJqgridActionLinks($token)
     {
         //With this function we can add actions to the jgrid (edit, delete, etc)
-        $editIcon = Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL);
-        $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
+        $editIcon = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'));
+        $deleteIcon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'));
         $confirmMessage = addslashes(
             api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES)
         );
@@ -3217,7 +3207,7 @@ JAVASCRIPT;
                 } else {
                     if ($optionsExists) {
                         // Adding always the default value
-                        if ($option_details['id'] == $defaultValueId) {
+                        /*if ($option_details['id'] == $defaultValueId) {
                             $options[$option_details['option_value']] = $option_details['display_text'];
                         } else {
                             if (isset($addOptions) && !empty($addOptions)) {
@@ -3226,7 +3216,7 @@ JAVASCRIPT;
                                     $options[$option_details['option_value']] = $option_details['display_text'];
                                 }
                             }
-                        }
+                        }*/
                     } else {
                         // Normal behaviour
                         $options[$option_details['option_value']] = $option_details['display_text'];

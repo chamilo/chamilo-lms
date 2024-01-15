@@ -2,6 +2,16 @@
   <div class="flex flex-col md:flex-row gap-4">
     <div class="md:basis-1/3 lg:basis-1/4 2xl:basis-1/6 flex flex-col">
       <UserProfileCard />
+      <BaseCard plain>
+        <img
+          :src="user.illustrationUrl"
+          class="mb-2 p-3 rounded-full"
+        />
+        <div class="flex flex-col text-center">
+          <div class="text-xl">{{ user.fullName }}</div>
+          <div class="text-lg">{{ user.username }}</div>
+        </div>
+      </BaseCard>
       <SocialSideMenu />
     </div>
 

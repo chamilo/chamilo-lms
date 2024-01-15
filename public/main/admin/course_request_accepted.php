@@ -10,6 +10,9 @@
  * Centro de Supercomputacion de Galicia (CESGA)
  * @author Ivan Tcholakov <ivantcholakov@gmail.com> (technical adaptation for Chamilo 1.8.8), 2010
  */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -92,7 +95,7 @@ function get_request_data($from, $number_of_items, $column, $direction)
     $sql = "SELECT
                 id AS col0,
                code AS col1,
-               title AS col2,
+               course.title AS col2,
                course_category.code AS col3,
                tutor_name AS col4,
                request_date AS col5,
@@ -103,7 +106,7 @@ function get_request_data($from, $number_of_items, $column, $direction)
 
     if ('' != $keyword) {
         $sql .= " AND (
-                title LIKE '%".$keyword."%' OR
+                course.title LIKE '%".$keyword."%' OR
                 code LIKE '%".$keyword."%' OR
                 visual_code LIKE '%".$keyword."%'
             )";
@@ -129,15 +132,14 @@ function modify_filter($id)
     $code = CourseRequestManager::get_course_request_code($id);
 
     return '<a href="course_request_edit.php?id='.$id.'&caller=1">'.
-        Display::return_icon('edit.png', get_lang('Edit'), ['style' => 'vertical-align: middle;']).'</a>'.
-        '&nbsp;<a href="?delete_course_request='.$id.'">'.
-        Display::return_icon(
-            'delete.png',
-            get_lang('Delete this course request'),
-            [
-                'style' => 'vertical-align: middle;',
-                'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('The course request %s is going to be deleted. Is it OK to proceed?'), $code), ENT_QUOTES)).'\')) return false;',
-            ]
+        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', 'vertical-align: middle;', ICON_SIZE_SMALL, get_lang('Edit')).'</a>'.
+        '&nbsp;<a href="?delete_course_request='.$id.'" script="onclick:if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('The course request %s is going to be deleted. Is it OK to proceed?'), $code), ENT_QUOTES)).'\')) return false;">'.
+        Display::getMdiIcon(
+            ActionIcon::DELETE,
+            'ch-tool-icon',
+            'vertical-align: middle;',
+            ICON_SIZE_SMALL,
+            get_lang('Delete this course request')
         ).
         '</a>';
 }
@@ -172,9 +174,9 @@ $form->addButtonSearch(get_lang('Search'));
 // The action bar.
 echo '<div style="float: right; margin-top: 5px; margin-right: 5px;">';
 echo ' <a href="course_request_review.php">'.
-    Display::return_icon('course_request_pending.png', get_lang('Review incoming course requests')).get_lang('Review incoming course requests').'</a>';
+    Display::getMdiIcon('notebook-heart-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Review incoming course requests')).get_lang('Review incoming course requests').'</a>';
 echo ' <a href="course_request_rejected.php">'.
-    Display::return_icon('course_request_rejected.gif', get_lang('Rejected course requests')).get_lang('Rejected course requests').'</a>';
+    Display::getMdiIcon('notebook-remove-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Rejected course requests')).get_lang('Rejected course requests').'</a>';
 echo '</div>';
 echo '<div class="actions">';
 $form->display();

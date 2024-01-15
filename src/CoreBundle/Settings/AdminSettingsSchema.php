@@ -80,7 +80,6 @@ class AdminSettingsSchema extends AbstractSettingsSchema
                         $this->settingArrayHelpValue('user_status_option_show_only_for_admin'),
                 ]
             )
-
         ;
     }
 

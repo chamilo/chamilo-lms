@@ -175,6 +175,7 @@ class ResourceNodeRepositoryTest extends AbstractApiTest
         $resourceNode = $repo->find($resourceNode->getId());
 
         $this->assertSame(1, $resourceNode->getResourceLinks()->count());
+
         /** @var ResourceLink $link */
         $link = $resourceNode->getResourceLinks()->first();
 
@@ -217,7 +218,7 @@ class ResourceNodeRepositoryTest extends AbstractApiTest
         $uploadedFile = $this->getUploadedFile();
 
         $resourceFile = (new ResourceFile())
-            ->setName($uploadedFile->getFilename())
+            ->setTitle($uploadedFile->getFilename())
             ->setOriginalName($uploadedFile->getFilename())
             ->setFile($uploadedFile)
             ->setDescription('desc')

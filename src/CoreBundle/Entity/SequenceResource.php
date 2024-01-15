@@ -6,10 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'sequence_resource')]
-#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\SequenceResourceRepository::class)]
+#[ORM\Entity(repositoryClass: SequenceResourceRepository::class)]
 class SequenceResource
 {
     public const COURSE_TYPE = 1;
@@ -20,7 +21,7 @@ class SequenceResource
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Sequence::class)]
+    #[ORM\ManyToOne(targetEntity: Sequence::class)]
     #[ORM\JoinColumn(name: 'sequence_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Sequence $sequence;
 

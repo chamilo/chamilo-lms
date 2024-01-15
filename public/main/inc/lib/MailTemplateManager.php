@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Symfony\Component\Finder\Finder;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Class MailTemplateManager.
@@ -53,20 +54,10 @@ class MailTemplateManager extends Model
         // Action links
         $html = '<div class="actions" style="margin-bottom:20px">';
         $html .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin">'.
-            Display::return_icon(
-                'back.png',
-                get_lang('Back'),
-                '',
-                '32'
-            )
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back'))
             .'</a>';
         $html .= '<a href="'.api_get_self().'?action=add">'.
-            Display::return_icon(
-                'add.png',
-                get_lang('Add'),
-                '',
-                '32'
-            ).'</a>';
+            Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')).'</a>';
         $html .= '</div>';
         $html .= Display::grid_html('mail_template');
 

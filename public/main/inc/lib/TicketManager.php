@@ -12,6 +12,8 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * Class TicketManager.
@@ -958,26 +960,28 @@ class TicketManager
 
             switch ($row['source']) {
                 case self::SOURCE_PRESENTIAL:
-                    $img_source = 'icons/32/user.png';
+                    $img_source = ObjectIcon::USER;
                     break;
                 case self::SOURCE_EMAIL:
-                    $img_source = 'icons/32/mail.png';
+                    $img_source = ObjectIcon::EMAIL;
                     break;
                 case self::SOURCE_PHONE:
-                    $img_source = 'icons/32/event.png';
+                    $img_source = ObjectIcon::PHONE;
                     break;
                 default:
-                    $img_source = 'icons/32/ticket.png';
+                    $img_source = ObjectIcon::TICKET;
                     break;
             }
 
             $row['start_date'] = Display::dateToStringAgoAndLongDate($row['start_date']);
             $row['sys_lastedit_datetime'] = Display::dateToStringAgoAndLongDate($row['sys_lastedit_datetime']);
 
-            $icon = Display::return_icon(
+            $icon = Display::getMdiIcon(
                 $img_source,
+                'ch-tool-icon',
+                'margin-right: 10px; float: left;',
+                ICON_SIZE_SMALL,
                 get_lang('Information'),
-                ['style' => 'margin-right: 10px; float: left;']
             );
 
             $icon .= '<a href="ticket_details.php?ticket_id='.$row['id'].'">'.$row['code'].'</a>';
@@ -1261,7 +1265,7 @@ class TicketManager
 
                         $row['lp_url'] = '<a
                             href="'.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.$urlParamsLp.'">'.
-                            $lp->getName().
+                            $lp->getTitle().
                         '</a>';
                     }
                 }
@@ -1281,7 +1285,7 @@ class TicketManager
                         message.ticket_id = '$ticketId' ";
             $result = Database::query($sql);
             $ticket['messages'] = [];
-            $attach_icon = Display::return_icon('attachment.gif', '');
+            $attach_icon = Display::getMdiIcon(ObjectIcon::ATTACHMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL);
 
             while ($row = Database::fetch_assoc($result)) {
                 $message = $row;
@@ -1873,7 +1877,7 @@ class TicketManager
         $list = [];
         /** @var TicketStatus $row */
         foreach ($items as $row) {
-            $list[$row->getId()] = $row->getName();
+            $list[$row->getId()] = $row->getTitle();
         }
 
         return $list;
@@ -1924,7 +1928,7 @@ class TicketManager
         $list = [];
         /** @var TicketPriority $row */
         foreach ($projects as $row) {
-            $list[$row->getId()] = $row->getName();
+            $list[$row->getId()] = $row->getTitle();
         }
 
         return $list;
@@ -1943,7 +1947,7 @@ class TicketManager
             $list[] = [
                 'id' => $row->getId(),
                 '0' => $row->getId(),
-                '1' => $row->getName(),
+                '1' => $row->getTitle(),
                 '2' => $row->getDescription(),
                 '3' => $row->getId(),
             ];
@@ -1965,7 +1969,7 @@ class TicketManager
                 'id' => $row->getId(),
                 '0' => $row->getId(),
                 '1' => Display::url(
-                    $row->getName(),
+                    $row->getTitle(),
                     api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$row->getId()
                 ),
                 '2' => $row->getDescription(),
@@ -1992,7 +1996,7 @@ class TicketManager
     public static function addProject($params)
     {
         $project = new TicketProject();
-        $project->setName($params['name']);
+        $project->setTitle($params['name']);
         $project->setDescription($params['description']);
         $project->setInsertUserId(api_get_user_id());
 
@@ -2017,7 +2021,7 @@ class TicketManager
     public static function updateProject($id, $params)
     {
         $project = self::getProject($id);
-        $project->setName($params['name']);
+        $project->setTitle($params['name']);
         $project->setDescription($params['description']);
         $project->setLastEditDateTime(new DateTime($params['sys_lastedit_datetime']));
         $project->setLastEditUserId($params['sys_lastedit_user_id']);
@@ -2066,7 +2070,7 @@ class TicketManager
                 'id' => $row->getId(),
                 'code' => $row->getCode(),
                 '0' => $row->getId(),
-                '1' => $row->getName(),
+                '1' => $row->getTitle(),
                 '2' => $row->getDescription(),
                 '3' => $row->getId(),
             ];
@@ -2113,7 +2117,7 @@ class TicketManager
     {
         $item = new TicketStatus();
         $item->setCode(URLify::filter($params['name']));
-        $item->setName($params['name']);
+        $item->setTitle($params['name']);
         $item->setDescription($params['description']);
 
         Database::getManager()->persist($item);
@@ -2137,7 +2141,7 @@ class TicketManager
     public static function updateStatus($id, $params)
     {
         $item = self::getStatus($id);
-        $item->setName($params['name']);
+        $item->setTitle($params['name']);
         $item->setDescription($params['description']);
 
         Database::getManager()->persist($item);
@@ -2185,7 +2189,7 @@ class TicketManager
                 'id' => $row->getId(),
                 'code' => $row->getCode(),
                 '0' => $row->getId(),
-                '1' => $row->getName(),
+                '1' => $row->getTitle(),
                 '2' => $row->getDescription(),
                 '3' => $row->getId(),
             ];
@@ -2213,7 +2217,7 @@ class TicketManager
         $item = new TicketPriority();
         $item
             ->setCode(URLify::filter($params['name']))
-            ->setName($params['name'])
+            ->setTitle($params['name'])
             ->setDescription($params['description'])
             ->setColor('')
             ->setInsertUserId(api_get_user_id())
@@ -2241,7 +2245,7 @@ class TicketManager
     public static function updatePriority($id, $params)
     {
         $item = self::getPriority($id);
-        $item->setName($params['name']);
+        $item->setTitle($params['name']);
         $item->setDescription($params['description']);
 
         Database::getManager()->persist($item);
@@ -2285,17 +2289,17 @@ class TicketManager
     public static function getSettingsMenuItems($exclude = null)
     {
         $project = [
-            'icon' => 'project.png',
+            'icon' => ObjectIcon::PROJECT,
             'url' => 'projects.php',
             'content' => get_lang('Projects'),
         ];
         $status = [
-            'icon' => 'check-circle.png',
+            'icon' => StateIcon::COMPLETE,
             'url' => 'status.php',
             'content' => get_lang('Status'),
         ];
         $priority = [
-            'icon' => 'tickets_urgent.png',
+            'icon' => StateIcon::EXPIRED,
             'url' => 'priorities.php',
             'content' => get_lang('Priority'),
         ];

@@ -59,7 +59,7 @@ class Gradebook extends Model
         $c_id = $c_id ? intval($c_id) : api_get_course_int_id();
         $table = Database::get_course_table(TABLE_TOOL_LIST);
         $sql = "SELECT * from $table
-                WHERE c_id = $c_id and name='$name'
+                WHERE c_id = $c_id and title = '$name'
                 LIMIT 1";
         $result = Database::query($sql);
         $item = Database::store_result($result, 'ASSOC');

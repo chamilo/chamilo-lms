@@ -14,16 +14,15 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 
-//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
-//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
+// use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
+// use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 
-final class PageExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
+final class PageExtension implements QueryCollectionExtensionInterface // , QueryItemExtensionInterface
 {
     public function __construct(
         private readonly Security $security,
         private readonly RequestStack $requestStack
-    ) {
-    }
+    ) {}
 
     public function applyToCollection(
         QueryBuilder $queryBuilder,
@@ -43,7 +42,7 @@ final class PageExtension implements QueryCollectionExtensionInterface //, Query
         string $operationName = null,
         array $context = []
     ): void {
-        //$this->addWhere($queryBuilder, $resourceClass);
+        // $this->addWhere($queryBuilder, $resourceClass);
     }
 
     private function addWhere(QueryBuilder $qb, string $resourceClass): void

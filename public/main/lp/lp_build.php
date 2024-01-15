@@ -6,6 +6,8 @@ exit;
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php.
@@ -66,13 +68,13 @@ if (isset($is_success) && true === $is_success) {
         'lp_controller.php?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.$learnPath->get_id(),
         get_lang("Add learning object or activity"),
         get_lang('Add learning object or activityComment'),
-        'tools.png'
+        ObjectIcon::RESOURCE
     );
     $rightColumn .= show_block(
         'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnPath->get_id(),
         get_lang("Ranking"),
         get_lang('RankingComment'),
-        'view.png'
+        ActionIcon::PREVIEW_CONTENT
     );
     $rightColumn .= '</ul>';
 }
@@ -90,7 +92,7 @@ function show_block($link, $title, $subtitle, $icon)
     $html = '<li class="col-md-4">';
     $html .= '<div class="thumbnail">';
     $html .= '<a href="'.$link.'" title="'.$title.'">';
-    $html .= Display::return_icon($icon, $title, [], ICON_SIZE_BIG);
+    $html .= Display::getMdiIcon($icon, 'ch-tool-icon', null, ICON_SIZE_BIG, $title);
     $html .= '</a>';
     $html .= '<div class="caption">';
     $html .= '<strong>'.$title.'</strong></a> '.$subtitle;

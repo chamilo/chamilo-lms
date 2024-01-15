@@ -17,6 +17,9 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
+/**
+ * Extend Twig with specifics from Chamilo. For globals, look into TwigListener.php.
+ */
 class ChamiloExtension extends AbstractExtension
 {
     private IllustrationRepository $illustrationRepository;
@@ -37,7 +40,8 @@ class ChamiloExtension extends AbstractExtension
         return [
             new TwigFilter('var_dump', 'var_dump'),
             new TwigFilter('icon', 'Display::get_icon_path'),
-            new TwigFilter('mdi_icon', 'Display::getMdiIcon'),
+            new TwigFilter('mdi_icon', 'Display::getMdiIconSimple'),
+            new TwigFilter('mdi_icon_t', 'Display::getMdiIconTranslate'),
             new TwigFilter('get_lang', 'get_lang'),
             new TwigFilter('get_plugin_lang', 'get_plugin_lang'),
             new TwigFilter('api_get_local_time', 'api_get_local_time'),

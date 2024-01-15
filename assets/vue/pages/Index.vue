@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue"
+import { ref } from "vue"
 import { useStore } from "vuex"
 import { useI18n } from "vue-i18n"
 import Login from "../components/Login"
@@ -39,6 +39,4 @@ const findAllPages = () => {
 }
 
 findAllPages()
-
-watch(locale, () => findAllPages())
 </script>

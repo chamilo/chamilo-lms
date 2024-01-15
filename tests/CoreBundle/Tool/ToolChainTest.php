@@ -87,7 +87,7 @@ class ToolChainTest extends AbstractApiTest
         $tools = $toolChain->getTools();
 
         foreach ($tools as $tool) {
-            $name = $tool->getName();
+            $name = $tool->getTitle();
             $this->assertNotEmpty($name);
 
             $link = $tool->getLink();
@@ -96,9 +96,9 @@ class ToolChainTest extends AbstractApiTest
             $this->assertNotEmpty($link, sprintf('Link for tool %s is empty', $name));
 
             $types = $tool->getResourceTypes();
-            //$icon = $tool->getIcon();
-            //$this->assertNotEmpty($icon, sprintf("Icons for tool %s doesnt exists", $name));
-            //$em = $this->getEntityManager();
+            // $icon = $tool->getIcon();
+            // $this->assertNotEmpty($icon, sprintf("Icons for tool %s doesnt exists", $name));
+            // $em = $this->getEntityManager();
             /*if (!empty($types)) {
                 foreach ($types as $entityName) {
                     $repo = $em->getRepository($entityName);
@@ -166,7 +166,7 @@ class ToolChainTest extends AbstractApiTest
         $this->assertNotEmpty($items);
 
         $resourceType = (new ResourceType())
-            ->setName('test')
+            ->setTitle('test')
         ;
         $this->assertHasNoEntityViolations($resourceType);
         $em->persist($resourceType);
@@ -175,7 +175,7 @@ class ToolChainTest extends AbstractApiTest
         $collection->add($resourceType);
 
         $tool = (new Tool())
-            ->setName('lasagna')
+            ->setTitle('lasagna')
             ->setResourceTypes($collection)
         ;
         $this->assertHasNoEntityViolations($tool);

@@ -93,8 +93,8 @@ class Version20180904175500 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE track_e_access_complete ADD CONSTRAINT FK_57FAFDBFA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
             $this->addSql('CREATE INDEX IDX_57FAFDBFA76ED395 ON track_e_access_complete (user_id)');
         }
-        //$this->addSql('ALTER TABLE track_e_hotpotatoes CHANGE exe_result score SMALLINT NOT NULL');
-        //$this->addSql('ALTER TABLE track_e_hotpotatoes CHANGE exe_weighting max_score SMALLINT NOT NULL');
+        // $this->addSql('ALTER TABLE track_e_hotpotatoes CHANGE exe_result score SMALLINT NOT NULL');
+        // $this->addSql('ALTER TABLE track_e_hotpotatoes CHANGE exe_weighting max_score SMALLINT NOT NULL');
 
         $table = $schema->getTable('track_e_exercises');
 
@@ -208,7 +208,5 @@ class Version20180904175500 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

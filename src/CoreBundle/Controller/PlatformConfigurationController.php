@@ -44,7 +44,7 @@ class PlatformConfigurationController extends AbstractController
                 'platform.cookie_warning',
                 'platform.show_tabs',
 
-                //'admin.admin_chamilo_announcements_disable',
+                // 'admin.admin_chamilo_announcements_disable',
                 'admin.administrator_name',
                 'admin.administrator_surname',
 
@@ -56,7 +56,7 @@ class PlatformConfigurationController extends AbstractController
                 'registration.allow_terms_conditions',
 
                 'agenda.personal_calendar_show_sessions_occupation',
-                //'agenda.agenda_reminders',
+                // 'agenda.agenda_reminders',
                 'agenda.agenda_collective_invitations',
 
                 'social.social_enable_messages_feedback',
@@ -69,11 +69,18 @@ class PlatformConfigurationController extends AbstractController
 
                 'course.course_validation',
                 'course.student_view_enabled',
+                'course.allow_edit_tool_visibility_in_session',
 
                 'session.limit_session_admin_role',
                 'session.allow_session_admin_read_careers',
                 'session.limit_session_admin_list_users',
                 'platform.redirect_index_to_url_for_logged_users',
+
+                'language.platform_language',
+                'language.language_priority_1',
+                'language.language_priority_2',
+                'language.language_priority_3',
+                'language.language_priority_4',
             ];
 
             /** @var User|null $user */

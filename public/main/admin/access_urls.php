@@ -8,6 +8,11 @@
  * @author Julio Montoya <gugli100@gmail.com>
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
+
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -20,6 +25,8 @@ if (!api_get_multiple_access_url()) {
     exit;
 }
 
+$httpRequest = HttpRequest::createFromGlobals();
+
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 $tool_name = get_lang('Multiple access URL / Branding');
 Display :: display_header($tool_name);
@@ -29,10 +36,10 @@ $current_access_url_id = api_get_current_access_url_id();
 $url_list = UrlManager::get_url_data();
 
 // Actions
-if (isset($_GET['action'])) {
-    $url_id = empty($_GET['url_id']) ? 0 : (int) $_GET['url_id'];
+if ($httpRequest->query->has('action')) {
+    $url_id = $httpRequest->query->getInt('url_id');
 
-    switch ($_GET['action']) {
+    switch ($httpRequest->query->get('action')) {
         case 'delete_url':
             $result = UrlManager::delete($url_id);
             if ($result) {
@@ -115,28 +122,28 @@ if (-1 == $current_access_url_id) {
 }
 
 $actions = Display::url(
-    Display::return_icon('new_link.png', get_lang('Add URL'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon('new_link', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add URL')),
     api_get_path(WEB_CODE_PATH).'admin/access_url_edit.php'
 );
 $actions .= Display::url(
-    Display::return_icon('user.png', get_lang('Manage users'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon('user', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Manage users')),
     api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php'
 );
 $actions .= Display::url(
-    Display::return_icon('course.png', get_lang('Manage courses'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon('course', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Manage courses')),
     api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php'
 );
 
 $userGroup = new UserGroupModel();
 if ($userGroup->getUseMultipleUrl()) {
     $actions .= Display::url(
-        Display::return_icon('class.png', get_lang('Manage user groups'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon('class', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Manage user groups')),
         api_get_path(WEB_CODE_PATH).'admin/access_url_edit_usergroup_to_url.php'
     );
 }
 
 $actions .= Display::url(
-    Display::return_icon('folder.png', get_lang('Manage course categories'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon('folder', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Manage course categories')),
     api_get_path(WEB_CODE_PATH).'admin/access_url_edit_course_category_to_url.php'
 );
 
@@ -153,27 +160,27 @@ foreach ($data as $row) {
     //Status
     $active = $row['active'];
     $action = 'unlock';
-    $image = 'wrong';
+    $image = StateIcon::ACTIVE;
     if ('1' == $active) {
         $action = 'lock';
-        $image = 'right';
+        $image = StateIcon::ACTIVE;
     }
     // you cannot lock the default
     if ('1' == $row['id']) {
-        $status = Display::return_icon($image.'.gif', get_lang(ucfirst($action)));
+        $status = Display::getMdiIcon($image, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang(ucfirst($action)));
     } else {
         $status = '<a href="access_urls.php?action='.$action.'&amp;url_id='.$row['id'].'">'.
-            Display::return_icon($image.'.gif', get_lang(ucfirst($action))).'</a>';
+            Display::getMdiIcon($image, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang(ucfirst($action))).'</a>';
     }
     // Actions
     $url_id = $row['id'];
     $actions = Display::url(
-        Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
+        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
         "access_url_edit.php?url_id=$url_id"
     );
     if ('1' != $url_id) {
         $actions .= '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;">'.
-            Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
+            Display::getMdiIcon('delete', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
     }
     $urls[] = [$url, $description, $status, $createdAt, $actions];
 }

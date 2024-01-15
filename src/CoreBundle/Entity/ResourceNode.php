@@ -35,7 +35,7 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 
-//*     attributes={"security"="is_granted('ROLE_ADMIN')"},
+// *     attributes={"security"="is_granted('ROLE_ADMIN')"},
 
 /**
  * Base entity for all resources.
@@ -71,14 +71,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial'])]
 class ResourceNode implements Stringable
 {
-    use TimestampableTypedEntity;
     use TimestampableAgoTrait;
+    use TimestampableTypedEntity;
 
     public const PATH_SEPARATOR = '/';
 
-    #[Groups(['resource_node:read', 'document:read', 'ctool:read', 'user_json:read'])]
+    #[Groups(['resource_node:read', 'document:read', 'ctool:read', 'user_json:read', 'course:read'])]
     #[ORM\Id]
-    #[ORM\Column(type: 'bigint')]
+    #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
@@ -110,6 +110,7 @@ class ResourceNode implements Stringable
     #[Groups(['ctool:read', 'c_tool_intro:read'])]
     #[ORM\OneToMany(mappedBy: 'resourceNode', targetEntity: ResourceLink::class, cascade: ['persist', 'remove'])]
     protected Collection $resourceLinks;
+
     /**
      * ResourceFile available file for this node.
      */
@@ -120,7 +121,7 @@ class ResourceNode implements Stringable
 
     #[Assert\NotNull]
     #[Groups(['resource_node:read', 'resource_node:write', 'document:write'])]
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, cascade: ['persist'], inversedBy: 'resourceNodes')]
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'resourceNodes')]
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected User $creator;
 
@@ -154,7 +155,7 @@ class ResourceNode implements Stringable
      *
      * ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Illustration", mappedBy="resourceNode")
      */
-    //protected $illustration;
+    // protected $illustration;
 
     /**
      * @var Collection<int, ResourceComment>
@@ -216,7 +217,7 @@ class ResourceNode implements Stringable
     public function getPathForDisplay(): string
     {
         return $this->path;
-        //return $this->convertPathForDisplay($this->path);
+        // return $this->convertPathForDisplay($this->path);
     }
 
     public function getUuid(): ?UuidV4
@@ -290,7 +291,7 @@ class ResourceNode implements Stringable
     /**
      * @return Collection|ResourceComment[]
      */
-    public function getComments(): Collection|array
+    public function getComments(): array|Collection
     {
         return $this->comments;
     }
@@ -303,7 +304,7 @@ class ResourceNode implements Stringable
         return $this;
     }
 
-    public function getPathForDisplayToArray(?int $baseRoot = null): array
+    public function getPathForDisplayToArray(int $baseRoot = null): array
     {
         $parts = explode(self::PATH_SEPARATOR, $this->path);
         $list = [];
@@ -440,7 +441,7 @@ class ResourceNode implements Stringable
         return $this->resourceFile;
     }
 
-    public function setResourceFile(?ResourceFile $resourceFile = null): self
+    public function setResourceFile(ResourceFile $resourceFile = null): self
     {
         $this->resourceFile = $resourceFile;
 
@@ -500,7 +501,7 @@ class ResourceNode implements Stringable
                 $params = [
                     'id' => $this->getId(),
                     'tool' => $this->getResourceType()->getTool(),
-                    'type' => $this->getResourceType()->getName(),
+                    'type' => $this->getResourceType()->getTitle(),
                     'filter' => 'editor_thumbnail',
                 ];
                 $url = $router->generate('chamilo_core_resource_view', $params);

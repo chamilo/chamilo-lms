@@ -29,7 +29,7 @@ class CShortcutRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
 
         $resource = (new CForum())
-            ->setForumTitle('forum')
+            ->setTitle('forum')
             ->setParent($course)
             ->setCreator($teacher)
             ->addCourseLink($course)
@@ -38,7 +38,7 @@ class CShortcutRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $shortcut = (new CShortcut())
-            ->setName($resource->getResourceName())
+            ->setTitle($resource->getResourceName())
             ->setShortCutNode($resource->getResourceNode())
             ->setCreator($teacher)
             ->setParent($resource)

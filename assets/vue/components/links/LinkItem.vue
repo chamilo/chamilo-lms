@@ -11,7 +11,7 @@
         </a>
       </h6>
     </div>
-    <div class="flex gap-2">
+    <div class="flex gap-2" v-if="securityStore.isAuthenticated && isCurrentTeacher">
       <BaseButton
         type="black"
         icon="check"
@@ -63,6 +63,13 @@ import BaseButton from "../basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import { isVisible, VISIBLE } from "./linkVisibility"
+import { useSecurityStore } from "../../store/securityStore"
+import { useStore } from "vuex"
+import { computed } from "vue"
+
+const store = useStore()
+const securityStore = useSecurityStore()
+const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
 
 const { t } = useI18n()
 

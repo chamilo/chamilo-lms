@@ -74,7 +74,7 @@ export default {
   data() {
     return {
       headers: [
-        { text: "name", value: "name" },
+        { text: "title", value: "title" },
         { text: "code", value: "code" },
         //{ text: 'description', value: 'description' },
         {

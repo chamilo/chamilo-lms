@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
@@ -272,11 +274,11 @@ if (!empty($cats)) {
 
 $actions = '';
 $actions .= Display::url(
-    Display::return_icon('tuning.png', get_lang('Generate certificates'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Generate certificates')),
     $url.'&action=generate_all_certificates'
 );
 $actions .= Display::url(
-    Display::return_icon('delete.png', get_lang('Delete all certificates'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete all certificates')),
     $url.'&action=delete_all_certificates'
 );
 
@@ -284,19 +286,19 @@ $hideCertificateExport = api_get_setting('hide_certificate_export_link');
 
 if (count($certificate_list) > 0 && 'true' !== $hideCertificateExport) {
     $actions .= Display::url(
-        Display::return_icon('pdf.png', get_lang('Export all certificates to PDF'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export all certificates to PDF')),
         $url.'&action=export_all_certificates'
     );
 
     if ($allowCustomCertificate) {
         $actions .= Display::url(
-            Display::return_icon('file_zip.png', get_lang('ExportAllCertificatesToZIP'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::EXPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportAllCertificatesToZIP')),
             $url.'&action=export_all_certificates_zip'
         );
     }
 
     $actions .= Display::url(
-        Display::return_icon('notification_mail.png', get_lang('Send messageCertificateNotifications'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ActionIcon::SEND_MESSAGE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Send messageCertificateNotifications')),
         $url.'&action=show_notification_form'
     );
 }
@@ -336,14 +338,14 @@ if (0 == count($certificate_list)) {
 
             $url .= '&action=export';
             $pdf = Display::url(
-                Display::return_icon('pdf.png', get_lang('Download')),
+                Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Download')),
                 $url,
                 ['target' => '_blank']
             );
             echo $pdf.PHP_EOL;
 
             echo '<a onclick="return confirmation();" href="gradebook_display_certificate.php?sec_token='.$token.'&'.api_get_cidreq().'&action=delete&cat_id='.$categoryId.'&certificate_id='.$valueCertificate['id'].'">
-                    '.Display::return_icon('delete.png', get_lang('Delete')).'
+                    '.Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete')).'
                   </a>'.PHP_EOL;
             echo '</td></tr>';
         }

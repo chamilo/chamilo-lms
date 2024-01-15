@@ -7,6 +7,9 @@
  *
  *  @author Julio Montoya <gugli100@gmail.com>
  */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -33,7 +36,7 @@ echo Display::toolbarAction(
     'url',
     [
         Display::url(
-            Display::return_icon('edit.png', get_lang('Edit groups for one URL'), ''),
+            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit groups for one URL')),
             api_get_path(WEB_CODE_PATH).'admin/access_url_edit_usergroup_to_url.php'
         ),
     ]

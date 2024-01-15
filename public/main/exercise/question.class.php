@@ -1534,7 +1534,7 @@ abstract class Question
         $option = new CQuizQuestionOption();
         $option
             ->setQuestion($question)
-            ->setName($name)
+            ->setTitle($name)
             ->setPosition($position)
         ;
         $em = Database::getManager();

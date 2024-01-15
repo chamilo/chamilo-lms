@@ -6,6 +6,11 @@
  * This script shows a list of courses and allows searching for courses codes
  * and names.
  */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -52,7 +57,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
 
     $select = "SELECT
                 course.code AS col0,
-                title AS col1,
+                course.title AS col1,
                 course.code AS col2,
                 course_language AS col3,
                 subscribe AS col5,
@@ -86,7 +91,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
     if (isset($_GET['keyword'])) {
         $keyword = Database::escape_string('%'.trim($_GET['keyword']).'%');
         $sql .= " WHERE (
-            title LIKE '".$keyword."' OR
+            course.title LIKE '".$keyword."' OR
             course.code LIKE '".$keyword."' OR
             visual_code LIKE '".$keyword."'
         )
@@ -104,7 +109,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
 
         $sql .= " WHERE
                 (course.code LIKE '".$keyword_code."' OR visual_code LIKE '".$keyword_code."') AND
-                title LIKE '".$keyword_title."' AND
+                course.title LIKE '".$keyword_title."' AND
                 course_language LIKE '".$keyword_language."' AND
                 visibility LIKE '".$keyword_visibility."' AND
                 subscribe LIKE '".$keyword_subscribe."' AND
@@ -146,14 +151,14 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
         $courseInfo = api_get_course_info_by_id($course['id']);
 
         // get categories
-        $sqlCategoriesByCourseId = "SELECT category.name FROM $tblCourseCategory category
+        $sqlCategoriesByCourseId = "SELECT category.title FROM $tblCourseCategory category
             INNER JOIN $tblCourseRelCategory course_rel_category ON category.id = course_rel_category.course_category_id
             WHERE course_rel_category.course_id = ".$course['id'];
         $resultCategories = Database::query($sqlCategoriesByCourseId);
         $categories = [];
 
         while ($category = Database::fetch_array($resultCategories)) {
-            $categories[] = $category['name'];
+            $categories[] = $category['title'];
         }
 
         // Place colour icons in front of courses.
@@ -171,60 +176,60 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
         $actions = [];
         $actions[] = Display::url(
             Display::getMdiIcon(
-                'information',
+                ActionIcon::INFORMATION,
                 'ch-tool-icon',
                 null,
-                22,
+                ICON_SIZE_SMALL,
                 get_lang('Information')
             ),
             "course_information.php?id=$courseId"
         );
         $actions[] = Display::url(
             Display::getMdiIcon(
-                'home',
+                ToolIcon::COURSE_HOME,
                 'ch-tool-icon',
                 null,
-                22,
+                ICON_SIZE_SMALL,
                 get_lang('Course home')
             ),
             $courseInfo['course_public_url']
         );
         $actions[] = Display::url(
             Display::getMdiIcon(
-                'chart-box',
+                ToolIcon::TRACKING,
                 'ch-tool-icon',
                 null,
-                22,
+                ICON_SIZE_SMALL,
                 get_lang('Reporting')
             ),
             $path.'tracking/courseLog.php?'.api_get_cidreq_params($courseId)
         );
         $actions[] = Display::url(
             Display::getMdiIcon(
-                'pencil',
+                ActionIcon::EDIT,
                 'ch-tool-icon',
                 null,
-                22,
+                ICON_SIZE_SMALL,
                 get_lang('Edit')
             ),
             $path.'admin/course_edit.php?id='.$courseId
         );
         $actions[] = Display::url(
             Display::getMdiIcon(
-                'cloud-download',
+                ActionIcon::TAKE_BACKUP,
                 'ch-tool-icon',
                 null,
-                22,
+                ICON_SIZE_SMALL,
                 get_lang('Create a backup')
             ),
             $path.'course_copy/create_backup.php?'.api_get_cidreq_params($courseId)
         );
         $actions[] = Display::url(
             Display::getMdiIcon(
-                'delete',
+                ActionIcon::DELETE,
                 'ch-tool-icon',
                 null,
-                22,
+                ICON_SIZE_SMALL,
                 get_lang('Delete')
             ),
             $path.'admin/course_list.php?delete_course='.$courseCode,
@@ -347,7 +352,7 @@ function get_course_visibility_icon($visibility)
     switch ($visibility) {
         case 0:
             return Display::getMdiIcon(
-                'eye-off-outline',
+                StateIcon::CLOSED_VISIBILITY,
                 'ch-tool-icon',
                 null,
                 22,
@@ -357,7 +362,7 @@ function get_course_visibility_icon($visibility)
             break;
         case 1:
             return Display::getMdiIcon(
-                'eye-off',
+                StateIcon::PRIVATE_VISIBILITY,
                 'ch-tool-icon',
                 null,
                 22,
@@ -367,7 +372,7 @@ function get_course_visibility_icon($visibility)
             break;
         case 2:
             return Display::getMdiIcon(
-                'eye-outline',
+                StateIcon::OPEN_VISIBILITY,
                 'ch-tool-icon',
                 null,
                 22,
@@ -377,7 +382,7 @@ function get_course_visibility_icon($visibility)
             break;
         case 3:
             return Display::getMdiIcon(
-                'eye',
+                StateIcon::PUBLIC_VISIBILITY,
                 'ch-tool-icon',
                 null,
                 22,
@@ -387,7 +392,7 @@ function get_course_visibility_icon($visibility)
             break;
         case 4:
             return Display::getMdiIcon(
-                'eye-closed',
+                StateIcon::HIDDEN_VISIBILITY,
                 'ch-tool-icon',
                 null,
                 22,
@@ -536,7 +541,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $courseListUrl = api_get_self();
     $actions1 = Display::url(
         Display::getMdiIcon(
-            'book-open-page-variant',
+            ToolIcon::COURSE,
             'ch-tool-icon-gradient',
             null,
             32,
@@ -547,11 +552,12 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
 
     if ('true' === api_get_setting('course_validation')) {
         $actions1 .= Display::url(
-            Display::return_icon(
-                'course_request_pending.png',
-                get_lang('Review incoming course requests'),
-                [],
-                ICON_SIZE_MEDIUM
+            Display::getMdiIcon(
+                'book-heart-outline',
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_MEDIUM,
+                get_lang('Review incoming course requests')
             ),
             api_get_path(WEB_CODE_PATH).'admin/course_request_review.php'
         );

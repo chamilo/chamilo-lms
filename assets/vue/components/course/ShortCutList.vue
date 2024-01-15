@@ -4,7 +4,7 @@
       <div class="mx-auto">
         <a :href="goToShortCut(shortcut)">
           <img
-            :alt="shortcut.name"
+            :alt="shortcut.title"
             :src="`/img/tools/${shortcut.type}.png`"
             class="w-32 h-32 object-contain"
           >
@@ -13,7 +13,7 @@
 
       <div class="flex flex-row gap-2 text-gray-500 pt-3">
         <a>
-          {{ shortcut.name }}
+          {{ shortcut.title }}
         </a>
       </div>
     </div>

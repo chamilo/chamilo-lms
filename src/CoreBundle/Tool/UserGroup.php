@@ -6,9 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Tool;
 
+use Chamilo\CoreBundle\Entity\Usergroup as UsergroupEntity;
+
 class UserGroup extends AbstractTool implements ToolInterface
 {
-    public function getName(): string
+    public function getTitle(): string
     {
         return 'usergroup';
     }
@@ -31,7 +33,7 @@ class UserGroup extends AbstractTool implements ToolInterface
     public function getResourceTypes(): ?array
     {
         return [
-            'usergroups' => \Chamilo\CoreBundle\Entity\Usergroup::class,
+            'usergroups' => UsergroupEntity::class,
         ];
     }
 }

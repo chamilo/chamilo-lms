@@ -1,5 +1,5 @@
 <template>
-  <div class="flex gap-4 items-center">
+  <div class="section-header section-header--h2">
     <h2
       class="mr-auto"
       v-text="title"
@@ -99,9 +99,11 @@
         paginator
         paginator-template="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
         responsive-layout="scroll"
-        sort-by="sendDate"
+        sort-field="sendDate"
+        :sort-order="-1"
         @page="onPage($event)"
         @row-click="onRowClick"
+        @sort="sortingChanged($event)"
       >
         <Column selection-mode="multiple" />
         <Column :header="t('From')">
@@ -120,7 +122,7 @@
             />
           </template>
         </Column>
-        <Column :header="t('Title')">
+        <Column :header="t('Title')" :sortable="true" field="title">
           <template #body="slotProps">
             <div class="flex gap-2 pb-2">
               {{ slotProps.data.title }}
@@ -134,7 +136,7 @@
             />
           </template>
         </Column>
-        <Column :header="t('Send date')">
+        <Column :header="t('Send date')" :sortable="true" field="sendDate">
           <template #body="slotProps">
             {{ relativeDatetime(slotProps.data.sendDate) }}
           </template>
@@ -273,11 +275,7 @@ const rowClass = (data) => {
   return [{ "font-semibold": !myReceiver.read }]
 }
 
-let fetchPayload = {
-  "order[sendDate]": "desc",
-  itemsPerPage: initialRowsPerPage,
-  page: 1,
-}
+let fetchPayload = {}
 
 function loadMessages(reset = true) {
   if (reset) {
@@ -354,8 +352,12 @@ function refreshMessages() {
 }
 
 function onPage(event) {
+  delete fetchPayload["order[title]"]
+  delete fetchPayload["order[sendDate]"]
+
   fetchPayload.page = event.page + 1
   fetchPayload.itemsPerPage = event.rows
+  fetchPayload[`order[${event.sortField}]`] = event.sortOrder === -1 ? "desc" : "asc"
 
   loadMessages(false)
 }
@@ -367,6 +369,15 @@ function onRowClick({ data }) {
       id: data["@id"],
     },
   })
+}
+
+function sortingChanged(event) {
+  delete fetchPayload["order[title]"]
+  delete fetchPayload["order[sendDate]"]
+
+  fetchPayload[`order[${event.sortField}]`] = event.sortOrder === -1 ? "desc" : "asc"
+
+  loadMessages(true)
 }
 
 function findMyReceiver(message) {

@@ -32,7 +32,7 @@ class CStudentPublicationAssignment implements Stringable
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\Column(name: 'expires_on', type: 'datetime', nullable: true)]
     #[Groups(['c_student_publication:write', 'student_publication:read'])]
@@ -59,7 +59,7 @@ class CStudentPublicationAssignment implements Stringable
         return (string) $this->getIid();
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }

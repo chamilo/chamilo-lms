@@ -30,7 +30,7 @@ if (null !== $group) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('GroupSpace').' '.$group->getName(),
+        'name' => get_lang('GroupSpace').' '.$group->getTitle(),
     ];
 }
 
@@ -62,7 +62,7 @@ if ($isManager) {
             /*if (isset($meetingsGroup[$itemGroupId]) && $meetingsGroup[$itemGroupId] == 1) {
                 $groupData['name'] .= ' ('.get_lang('Active').')';
             }*/
-            $groupList[$itemGroupId] = $groupData->getName();
+            $groupList[$itemGroupId] = $groupData->getTitle();
         }
         $form->addSelect('group_id', get_lang('Groups'), $groupList, ['id' => 'group_select']);
         $form->setDefaults(['group_id' => $groupId]);

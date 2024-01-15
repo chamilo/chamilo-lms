@@ -4,6 +4,7 @@
 
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -72,7 +73,7 @@ $tpl->assign('current_url', $url);
 
 $url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/post.php?student_id='.$studentId;
 $tpl->assign('post_url', $url);
-$tpl->assign('information_icon', Display::return_icon('info.png'));
+$tpl->assign('information_icon', Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL));
 $tpl->assign('student_info', api_get_user_info($studentId));
 $tpl->assign('pagination', $pagination);
 $tpl->assign('care_title', $plugin->get_lang('Student care detail view'));

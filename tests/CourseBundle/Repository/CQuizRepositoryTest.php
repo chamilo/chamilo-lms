@@ -105,7 +105,7 @@ class CQuizRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
 
         $category = (new CExerciseCategory())
-            ->setName('cat')
+            ->setTitle('cat')
             ->setDescription('desc')
             ->setCourse($course)
             ->setParent($course)

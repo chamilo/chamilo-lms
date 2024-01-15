@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+
 // resetting the course id
 $cidReset = true;
 
@@ -64,7 +67,6 @@ function validate_filter() {
 </script>';
 
 $form_sent = 0;
-$errorMsg = '';
 $users = $sessions = [];
 $promotion = new Promotion();
 $id = (int) ($_GET['id']);
@@ -109,17 +111,17 @@ $xajax->processRequests();
 Display::display_header($tool_name);
 
 if ('multiple' === $add_type) {
-    $link_add_type_unique = '<a href="'.api_get_self().'?id='.$id.'&add_type=unique">'.Display::return_icon('single.gif').get_lang('Single registration').'</a>';
-    $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('Multiple registration');
+    $link_add_type_unique = '<a href="'.api_get_self().'?id='.$id.'&add_type=unique">'.Display::getMdiIcon(ObjectIcon::SINGLE_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL).get_lang('Single registration').'</a>';
+    $link_add_type_multiple = Display::getMdiIcon(ObjectIcon::MULTI_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL).get_lang('Multiple registration');
 } else {
-    $link_add_type_unique = Display::return_icon('single.gif').get_lang('Single registration');
-    $link_add_type_multiple = '<a href="'.api_get_self().'?id='.$id.'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('Multiple registration').'</a>';
+    $link_add_type_unique = Display::getMdiIcon(ObjectIcon::SINGLE_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL).get_lang('Single registration');
+    $link_add_type_multiple = '<a href="'.api_get_self().'?id='.$id.'&add_type=multiple">'.Display::getMdiIcon(ObjectIcon::MULTI_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL).get_lang('Multiple registration').'</a>';
 }
 
 echo Display::toolbarAction(
     'url',
     [
-        '<a href="promotions.php">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>',
+        '<a href="promotions.php">'.Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')).'</a>',
     ]
 );
 ?>
@@ -161,9 +163,6 @@ if ('multiple' == $add_type) {
 echo Display::input('hidden', 'id', $id);
 echo Display::input('hidden', 'form_sent', '1');
 echo Display::input('hidden', 'add_type', null);
-if (!empty($errorMsg)) {
-    echo Display::return_message($errorMsg, 'normal'); //main API
-}
 ?>
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">

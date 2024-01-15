@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForum;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * These files are a complete rework of the forum. The database structure is
@@ -178,7 +179,7 @@ if (!empty($groupId)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.(int) ($_GET['forum']),
-        'name' => $forumEntity->getForumTitle(),
+        'name' => $forumEntity->getTitle(),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/newthread.php?'.$cidreq.'&forum='.(int) ($_GET['forum']),
@@ -189,12 +190,12 @@ if (!empty($groupId)) {
     if ($current_forum_category) {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.$cidreq.'&forumcategory='.$current_forum_category->getIid(),
-            'name' => $current_forum_category->getCatTitle(),
+            'name' => $current_forum_category->getTitle(),
         ];
     }
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.$forumId,
-        'name' => $forumEntity->getForumTitle(),
+        'name' => $forumEntity->getTitle(),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Create thread')];
 }
@@ -223,7 +224,7 @@ Display::display_header();
 
 //$actions  '<span style="float:right;">'.search_link().'</span>';
 $actions = '<a href="viewforum.php?forum='.(int) ($_GET['forum']).'&'.$cidreq.'">'.
-    Display::return_icon('back.png', get_lang('Back to forum'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to forum')).'</a>';
 echo Display::toolbarAction('toolbar', [$actions]);
 
 // Set forum attachment data into $_SESSION

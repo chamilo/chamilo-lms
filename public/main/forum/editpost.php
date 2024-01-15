@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * These files are a complete rework of the forum. The database structure is
@@ -154,11 +155,11 @@ if ('group' === $origin && $group_id) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('Group area').' '.$groupEntity->getName(),
+        'name' => get_lang('Group area').' '.$groupEntity->getTitle(),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId,
-        'name' => prepare4display($forum->getForumTitle()),
+        'name' => prepare4display($forum->getTitle()),
     ];
     $interbreadcrumb[] = ['url' => 'javascript: void (0);', 'name' => get_lang('Edit a post')];
 } else {
@@ -168,15 +169,15 @@ if ('group' === $origin && $group_id) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/index.php?forumcategory='.$category->getIid().'&'.api_get_cidreq(),
-        'name' => prepare4display($category->getCatTitle()),
+        'name' => prepare4display($category->getTitle()),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq(),
-        'name' => prepare4display($forum->getForumTitle()),
+        'name' => prepare4display($forum->getTitle()),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.(int) ($_GET['thread']),
-        'name' => prepare4display($thread->getThreadTitle()),
+        'name' => prepare4display($thread->getTitle()),
     ];
     $interbreadcrumb[] = ['url' => 'javascript: void (0);', 'name' => get_lang('Edit a post')];
 }
@@ -194,7 +195,7 @@ $htmlHeadXtra[] = <<<JS
                 name: 'user_upload[]'
             });
             $('[name="user_upload[]"]').parent().append(newInputFile);
-        });
+        })
     });
     </script>
 JS;
@@ -248,30 +249,15 @@ if ('learnpath' !== $origin) {
     //$actions .= '<span style="float:right;">'.search_link().'</span>';
     if ('group' === $origin) {
         $actions .= '<a href="../group/group_space.php?'.api_get_cidreq().'">'.
-            Display::return_icon(
-                'back.png',
-                get_lang('Back to').' '.get_lang('Groups'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Groups')).
             '</a>';
     } else {
         $actions .= '<a href="index.php?'.api_get_cidreq().'">'.
-            Display::return_icon(
-                'back.png',
-                get_lang('Back toForumOverview'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back toForumOverview')).
             '</a>';
     }
     $actions .= '<a href="viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'">'.
-        Display::return_icon(
-            'forum.png',
-            get_lang('Back toForum'),
-            '',
-            ICON_SIZE_MEDIUM
-        ).
+        Display::getMdiIcon('comment-quote', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back toForum')).
         '</a>';
     echo Display::toolbarAction('toolbar', [$actions]);
 }
@@ -282,7 +268,7 @@ if ('learnpath' !== $origin) {
 echo '<div class="forum_title">';
 echo '<h1>';
 echo Display::url(
-    prepare4display($forum->getForumTitle()),
+    prepare4display($forum->getTitle()),
     'viewforum.php?'.api_get_cidreq().'&'.http_build_query([
         'origin' => $origin,
         'forum' => $forum->getIid(),

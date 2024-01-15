@@ -208,7 +208,8 @@ class SurveyManager
         $session_id = api_get_session_id();
         $courseCode = api_get_course_id();
         $table_survey = Database::get_course_table(TABLE_SURVEY);
-        $shared_survey_id = '';
+        $shared_survey_id = 0;
+        $displayQuestionNumber = isset($values['display_question_number']);
         $repo = Container::getSurveyRepository();
 
         if (!isset($values['survey_id'])) {
@@ -333,6 +334,7 @@ class SurveyManager
                 ->setTemplate('template')
                 ->setIntro($values['survey_introduction'])
                 ->setSurveyThanks($values['survey_thanks'])
+                ->setDisplayQuestionNumber($displayQuestionNumber)
                 ->setAnonymous((string) $values['anonymous'])
                 ->setVisibleResults((int) $values['visible_results'])
                 ->setSurveyType((int) ($values['survey_type'] ?? 1))
@@ -441,6 +443,7 @@ class SurveyManager
                 ->setSurveyThanks($values['survey_thanks'])
                 ->setAnonymous((string) $values['anonymous'])
                 ->setVisibleResults((int) $values['visible_results'])
+                ->setDisplayQuestionNumber($displayQuestionNumber)
             ;
 
             $repo->update($survey);
@@ -647,7 +650,7 @@ class SurveyManager
         while ($row = Database::fetch_assoc($res)) {
             $params = [
                 'c_id' => $targetCourseId,
-                'name' => $row['name'],
+                'name' => $row['title'],
                 'description' => $row['description'],
                 'survey_id' => $new_survey_id,
             ];
@@ -832,16 +835,16 @@ class SurveyManager
 
         // the images array
         $icon_question = [
-            'yesno' => 'yesno.png',
-            'personality' => 'yesno.png',
-            'multiplechoice' => 'mcua.png',
-            'multipleresponse' => 'mcma.png',
-            'open' => 'open_answer.png',
-            'dropdown' => 'dropdown.png',
-            'percentage' => 'percentagequestion.png',
-            'score' => 'scorequestion.png',
-            'comment' => 'commentquestion.png',
-            'pagebreak' => 'page_end.png',
+            'yesno' => 'thumbs-up-down',
+            'personality' => 'thumbs-up-down',
+            'multiplechoice' => 'format-list-bulleted',
+            'multipleresponse' => 'format-list-bulleted-square',
+            'open' => 'form-textarea',
+            'dropdown' => 'form-dropdown',
+            'percentage' => 'percent-box-outline',
+            'score' => 'format-annotation-plus',
+            'comment' => 'format-align-top',
+            'pagebreak' => 'format-page-break',
         ];
 
         if (in_array($type, $possible_types)) {
@@ -1303,7 +1306,6 @@ class SurveyManager
                 $sql = "DELETE FROM $table
 			            WHERE
 			                iid = $iid AND
-			                c_id = $course_id AND
                             question_id = '".intval($form_content['question_id'])."'
                             ";
                 Database::query($sql);
@@ -1750,7 +1752,7 @@ class SurveyManager
             while ($row = Database::fetch_assoc($res)) {
                 $params = [
                     'c_id' => $targetCourseId,
-                    'name' => $row['name'],
+                    'name' => $row['title'],
                     'description' => $row['description'],
                     'survey_id' => $newSurveyId,
                 ];
@@ -2304,7 +2306,7 @@ class SurveyManager
                 $title = Display::url($title, $url);
                 $courseTitle = $course->getTitle();
                 if (!empty($sessionId)) {
-                    $courseTitle .= ' ('.$invitation->getSession()->getName().')';
+                    $courseTitle .= ' ('.$invitation->getSession()->getTitle().')';
                 }
 
                 $surveyData = self::get_survey($survey->getIid(), 0, $courseCode);

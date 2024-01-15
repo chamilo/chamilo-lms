@@ -10,7 +10,7 @@ use Chamilo\CourseBundle\Entity\CCourseDescription;
 
 class CourseDescription extends AbstractTool implements ToolInterface
 {
-    public function getName(): string
+    public function getTitle(): string
     {
         return 'course_description';
     }

@@ -29,7 +29,7 @@ $t_user = Database::get_main_table(TABLE_MAIN_USER);
 $t_link_log = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
 $visible_link = Security::remove_XSS($_GET['visiblelink']);
 $evaledit = EvalLink:: load($visible_link);
-$sql = "SELECT lk.name,lk.description,lk.weight,lk.visible,lk.type,lk.created_at,us.username
+$sql = "SELECT lk.title,lk.description,lk.weight,lk.visible,lk.type,lk.created_at,us.username
         FROM ".$t_link_log." lk inner join ".$t_user." us
         ON lk.user_id_log=us.id
         WHERE lk.id_linkeval_log=".$evaledit[0]->get_id()." AND lk.type='link';";

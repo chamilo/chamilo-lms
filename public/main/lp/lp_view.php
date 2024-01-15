@@ -540,7 +540,7 @@ if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id()
 
 $template->assign('lp_accumulate_work_time', $lpMinTime);
 $template->assign('lp_mode', $lp->getDefaultViewMod());
-$template->assign('lp_title_scorm', $lp->getName());
+$template->assign('lp_title_scorm', $lp->getTitle());
 $template->assign('lp_item_parents', $oLP->getCurrentItemParentNames($oLP->get_current_item_id()));
 
 // @todo Fix lp_view_accordion
@@ -556,7 +556,7 @@ $template->assign('data_list', $oLP->getListArrayToc());
 //var_dump($oLP->getListArrayToc($get_toc_list));
 
 $template->assign('lp_id', $lp->getIid());
-$template->assign('lp_current_item_id', $oLP->get_current_item_id());
+$template->assign('lp_current_item_id', isset($_GET['lp_item_id']) ? (int) $_GET['lp_item_id'] : $oLP->get_current_item_id());
 
 $menuLocation = 'left';
 if ('false' !== api_get_setting('lp.lp_menu_location')) {

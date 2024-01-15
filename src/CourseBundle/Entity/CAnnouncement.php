@@ -23,7 +23,7 @@ class CAnnouncement extends AbstractResource implements ResourceInterface, Strin
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'text', nullable: false)]
@@ -34,9 +34,6 @@ class CAnnouncement extends AbstractResource implements ResourceInterface, Strin
 
     #[ORM\Column(name: 'end_date', type: 'date', nullable: true)]
     protected ?DateTime $endDate = null;
-
-    #[ORM\Column(name: 'display_order', type: 'integer', nullable: false)]
-    protected int $displayOrder;
 
     #[ORM\Column(name: 'email_sent', type: 'boolean', nullable: true)]
     protected ?bool $emailSent = null;
@@ -50,7 +47,6 @@ class CAnnouncement extends AbstractResource implements ResourceInterface, Strin
     public function __construct()
     {
         $this->content = '';
-        $this->displayOrder = 1;
         $this->attachments = new ArrayCollection();
     }
 
@@ -107,23 +103,6 @@ class CAnnouncement extends AbstractResource implements ResourceInterface, Strin
         return $this->endDate;
     }
 
-    public function setDisplayOrder(int $displayOrder): self
-    {
-        $this->displayOrder = $displayOrder;
-
-        return $this;
-    }
-
-    /**
-     * Get displayOrder.
-     *
-     * @return int
-     */
-    public function getDisplayOrder()
-    {
-        return $this->displayOrder;
-    }
-
     public function setEmailSent(bool $emailSent): self
     {
         $this->emailSent = $emailSent;
@@ -141,7 +120,7 @@ class CAnnouncement extends AbstractResource implements ResourceInterface, Strin
         return $this->emailSent;
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }

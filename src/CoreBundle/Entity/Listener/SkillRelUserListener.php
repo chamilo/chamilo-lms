@@ -23,8 +23,7 @@ class SkillRelUserListener
         private readonly RouterInterface $router,
         private readonly TranslatorInterface $translator,
         protected Security $security
-    ) {
-    }
+    ) {}
 
     public function postPersist(SkillRelUser $skillRelUser, PostPersistEventArgs $event): void
     {
@@ -40,7 +39,7 @@ class SkillRelUserListener
         $message = sprintf(
             $this->translator->trans('Hi, %s. You have achieved the skill "%s". To see the details go here: %s.'),
             $user->getFirstname(),
-            $skill->getName(),
+            $skill->getTitle(),
             Display::url($url, $url)
         );
 

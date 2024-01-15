@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 /**
  * This script gives information about a course.
@@ -105,7 +107,7 @@ echo Display::toolbarAction(
     'info',
     [
         Display::url(
-            Display::return_icon('home.png', get_lang('Course home'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ToolIcon::COURSE_HOME, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Course home')),
             $courseUrl
         ),
     ]
@@ -164,7 +166,7 @@ if (Database::num_rows($res) > 0) {
         $user[] = Display:: encrypted_mailto_link($obj->email, $obj->email);
         $user[] = 5 == $obj->course_status ? get_lang('Learner') : get_lang('Trainer');
         $user[] = '<a href="user_information.php?user_id='.$obj->user_id.'">'.
-            Display::return_icon('info2.png', get_lang('user information')).'</a>';
+            Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('user information')).'</a>';
         $users[] = $user;
     }
     $table = new SortableTableFromArray($users, 0, 20, 'user_table');

@@ -2,8 +2,8 @@
   <form class="mt-6 flex flex-col gap-2">
     <BaseInputTextWithVuelidate
       id="term-name"
-      v-model="formData.name"
-      :vuelidate-property="v$.name"
+      v-model="formData.title"
+      :vuelidate-property="v$.title"
       :label="t('Term')"
     />
     <BaseTextAreaWithVuelidate
@@ -92,7 +92,7 @@ const fetchTerm = async () => {
   }
   try {
     const glossary = await glossaryService.getGlossaryTerm(props.termId)
-    formData.name = glossary.name
+    formData.name = glossary.title
     formData.description = glossary.description
   } catch (error) {
     console.error("Error glossary term:", error)
@@ -108,7 +108,7 @@ const submitGlossaryForm = async () => {
   }
 
   const postData = {
-    name: formData.name,
+    title: formData.name,
     description: formData.description,
     parentResourceNodeId: parentResourceNodeId.value,
     resourceLinkList: resourceLinkList.value,
@@ -117,8 +117,8 @@ const submitGlossaryForm = async () => {
   }
 
   try {
-    if (props.linkId) {
-      await glossaryService.updateGlossaryTerm(props.linkId, postData)
+    if (props.termId) {
+      await glossaryService.updateGlossaryTerm(props.termId, postData)
     } else {
       await glossaryService.createGlossaryTerm(postData)
     }

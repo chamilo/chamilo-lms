@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 $cidReset = true;
 
@@ -294,7 +295,7 @@ $result = Database::query($sql);
 $Sessions = Database::store_result($result);
 
 $actions = '<a href="../session/session_list.php">'.
-        Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Session list'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Session list')).'</a>';
 echo Display::toolbarAction('toolbar', [$actions]);
 
 if (!empty($errorMsg)) {

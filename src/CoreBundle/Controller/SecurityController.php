@@ -27,8 +27,7 @@ class SecurityController extends AbstractController
     public function __construct(
         private readonly SerializerInterface $serializer,
         private readonly TrackELoginRecordRepository $trackELoginRecordRepository
-    ) {
-    }
+    ) {}
 
     #[Route('/login_json', name: 'login_json', methods: ['POST'])]
     public function loginJson(Request $request, EntityManager $entityManager, SettingsManager $settingsManager, TokenStorageInterface $tokenStorage): Response
@@ -46,9 +45,9 @@ class SecurityController extends AbstractController
         $user = $this->getUser();
         $extraFieldValuesRepository = $entityManager->getRepository(ExtraFieldValues::class);
         $legalTermsRepo = $entityManager->getRepository(Legal::class);
-        if ($user->hasRole('ROLE_STUDENT') &&
-            'true' === $settingsManager->getSetting('allow_terms_conditions') &&
-            'login' === $settingsManager->getSetting('load_term_conditions_section')
+        if ($user->hasRole('ROLE_STUDENT')
+            && 'true' === $settingsManager->getSetting('allow_terms_conditions')
+            && 'login' === $settingsManager->getSetting('load_term_conditions_section')
         ) {
             $termAndConditionStatus = false;
             $extraValue = $extraFieldValuesRepository->findLegalAcceptByItemId($user->getId());
@@ -78,8 +77,8 @@ class SecurityController extends AbstractController
                 return new JsonResponse($responseData, Response::HTTP_OK);
             }
         }
-        //$error = $authenticationUtils->getLastAuthenticationError();
-        //$lastUsername = $authenticationUtils->getLastUsername();
+        // $error = $authenticationUtils->getLastAuthenticationError();
+        // $lastUsername = $authenticationUtils->getLastUsername();
 
         $data = null;
         if ($user) {

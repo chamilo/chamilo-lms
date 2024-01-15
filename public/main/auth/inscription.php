@@ -5,6 +5,8 @@ use Chamilo\CoreBundle\Entity\User;
 use ChamiloSession as Session;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
+$kernel = null;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 /**
@@ -1109,7 +1111,6 @@ if ($form->validate()) {
 
     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
 
-    global $kernel;
     if ('AppCache' == get_class($kernel)) {
         $kernel = $kernel->getKernel();
     }

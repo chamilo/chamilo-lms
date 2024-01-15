@@ -17,4 +17,4 @@ The following versions are currently being supported with security updates.
 
 ## Reporting a Vulnerability
 
-Please follow the instructions at https://support.chamilo.org/projects/chamilo-18/wiki/Security_issues to report vulnerabilities.
+Please follow the instructions at https://github.com/chamilo/chamilo-lms/wiki/security-issues to report vulnerabilities.

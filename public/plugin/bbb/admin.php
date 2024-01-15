@@ -75,7 +75,7 @@ if ($action) {
                     1 == $meeting['status'] ? $plugin->get_lang('MeetingOpened') : $plugin->get_lang('MeetingClosed'),
                     1 == $meeting['record'] ? get_lang('Yes') : get_lang('No'),
                     $meeting['course'] ? $meeting['course']->getTitle() : '-',
-                    $meeting['session'] ? $meeting['session']->getName() : '-',
+                    $meeting['session'] ? $meeting['session']->getTitle() : '-',
                     isset($meeting['participants']) ? implode(PHP_EOL, $meeting['participants']) : null,
                 ];
             }

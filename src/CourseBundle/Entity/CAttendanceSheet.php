@@ -18,7 +18,7 @@ class CAttendanceSheet
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[Assert\NotNull]
     #[ORM\Column(name: 'presence', type: 'boolean', nullable: false)]
@@ -32,7 +32,7 @@ class CAttendanceSheet
     #[ORM\JoinColumn(name: 'attendance_calendar_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CAttendanceCalendar $attendanceCalendar;
 
-    #[ORM\Column(name: 'signature', type: 'string', nullable: false)]
+    #[ORM\Column(name: 'signature', type: 'text', nullable: true)]
     protected string $signature;
 
     public function setPresence(bool $presence): self

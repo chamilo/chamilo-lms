@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\LtiBundle\Component\OutcomeDeleteRequest;
 use Chamilo\LtiBundle\Component\OutcomeReadRequest;
 use Chamilo\LtiBundle\Component\OutcomeReplaceRequest;
+use Chamilo\LtiBundle\Component\OutcomeResponse;
 use Chamilo\LtiBundle\Component\OutcomeUnsupportedRequest;
 use Chamilo\LtiBundle\Entity\ExternalTool;
 use OAuthUtil;
@@ -85,10 +86,7 @@ class ServiceController extends BaseController
         return $response;
     }
 
-    /**
-     * @return \Chamilo\LtiBundle\Component\OutcomeResponse|null
-     */
-    private function processServiceRequest()
+    private function processServiceRequest(): ?OutcomeResponse
     {
         $requestContent = file_get_contents('php://input');
 
@@ -115,14 +113,17 @@ class ServiceController extends BaseController
                 $serviceRequest = new OutcomeReplaceRequest($xml);
 
                 break;
+
             case 'readResultRequest':
                 $serviceRequest = new OutcomeReadRequest($xml);
 
                 break;
+
             case 'deleteResultRequest':
                 $serviceRequest = new OutcomeDeleteRequest($xml);
 
                 break;
+
             default:
                 $name = str_replace(['ResultRequest', 'Request'], '', $name);
 

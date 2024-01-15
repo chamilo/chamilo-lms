@@ -26,8 +26,8 @@ export const useEnrolledStore = defineStore("enrolledStore", () => {
 
   return {
     // Computed properties for reactivity
-    isEnrolledInCourses: computed(() => isEnrolledInCourses.value),
-    isEnrolledInSessions: computed(() => isEnrolledInSessions.value),
+    isEnrolledInCourses,
+    isEnrolledInSessions,
     initialize
   };
 });

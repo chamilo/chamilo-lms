@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
@@ -267,7 +269,7 @@ function getReport($userId, $from, $to, $addTime = false)
 
     $courseSessionTable = '';
     $courseSessionTableData = [];
-    $iconCourse = Display::return_icon('course.png', null, [], ICON_SIZE_SMALL);
+    $iconCourse = Display::getMdiIcon(ToolIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_SMALL);
     foreach ($report as $sessionId => $data) {
         foreach ($data['courses'] as $courseId => $courseData) {
             if (empty($courseData)) {
@@ -545,7 +547,7 @@ if ($formByDay->validate()) {
         $courseSessionTable = $result['second'];
         $totalCourseSessionTable = $result['third'];
         $total = $result['total'];
-        $iconCalendar = Display::return_icon('calendar.png', null, [], ICON_SIZE_SMALL);
+        $iconCalendar = Display::getMdiIcon(ToolIcon::AGENDA, 'ch-tool-icon', null, ICON_SIZE_SMALL);
         $tableList .= '<div class="date-calendar">'.Display::page_subheader2(
                 $iconCalendar.get_lang('Date').': '.$dateToCheck
             ).'</div>';

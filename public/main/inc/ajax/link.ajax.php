@@ -4,6 +4,8 @@
 /**
  * Responses to AJAX calls.
  */
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
+
 require_once __DIR__.'/../global.inc.php';
 
 api_protect_course_script(true);
@@ -17,18 +19,20 @@ switch ($action) {
             $result = \Link::checkUrl($url);
 
             if ($result) {
-                echo Display::return_icon(
-                    'check-circle.png',
-                    get_lang('Validate'),
+                echo Display::getMdiIcon(
+                    StateIcon::COMPLETE,
+                    'ch-tool-icon',
                     null,
-                    ICON_SIZE_TINY
+                    ICON_SIZE_TINY,
+                    get_lang('Validate')
                 );
             } else {
-                echo Display::return_icon(
-                    'closed-circle.png',
-                    get_lang('Wrong'),
+                echo Display::getMdiIcon(
+                    StateIcon::WARNING,
+                    'ch-tool-icon',
                     null,
-                    ICON_SIZE_TINY
+                    ICON_SIZE_TINY,
+                    get_lang('Wrong')
                 );
             }
         }

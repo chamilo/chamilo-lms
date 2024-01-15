@@ -222,7 +222,6 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                         $this->settingArrayHelpValue('exercise_embeddable_extra_types'),
                 ]
             )
-
         ;
     }
 

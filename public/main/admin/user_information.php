@@ -3,6 +3,10 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * Script showing information about a user (name, e-mail, courses and sessions).
@@ -42,11 +46,12 @@ $csvContent = [];
 // only allow platform admins to login_as, or session admins only for students (not teachers nor other admins)
 $actions = [
     Display::url(
-        Display::return_icon(
-            'statistics.png',
-            get_lang('Reporting'),
-            [],
-            ICON_SIZE_MEDIUM
+        Display::getMdiIcon(
+            ToolIcon::TRACKING,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_MEDIUM,
+            get_lang('Reporting')
         ),
         api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?'.http_build_query([
             'student' => $userId,
@@ -57,11 +62,12 @@ $actions = [
 
 if (api_can_login_as($userId)) {
     $actions[] = Display::url(
-        Display::return_icon(
-            'login_as.png',
-            get_lang('Login as'),
-            [],
-            ICON_SIZE_MEDIUM
+        Display::getMdiIcon(
+            ActionIcon::LOGIN_AS,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_MEDIUM,
+            get_lang('Login as')
         ),
         api_get_path(WEB_CODE_PATH).
         'admin/user_list.php?action=login_as&user_id='.$userId.'&sec_token='.Security::getTokenFromSession()
@@ -70,46 +76,55 @@ if (api_can_login_as($userId)) {
 
 if (api_is_platform_admin()) {
     $actions[] = Display::url(
-        Display::return_icon(
-            'edit.png',
-            get_lang('Edit'),
-            [],
-            ICON_SIZE_MEDIUM
+        Display::getMdiIcon(
+            ActionIcon::EDIT,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_MEDIUM,
+            get_lang('Edit')
         ),
         api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$userId
     );
 
     $actions[] = Display::url(
-        Display::return_icon(
-            'export_csv.png',
-            get_lang('CSV export'),
-            [],
-            ICON_SIZE_MEDIUM
+        Display::getMdiIcon(
+            ActionIcon::EXPORT_CSV,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_MEDIUM,
+            get_lang('CSV export')
         ),
         api_get_self().'?user_id='.$userId.'&action=export'
     );
     $actions[] = Display::url(
-        Display::return_icon(
-            'vcard.png',
-            get_lang('user information'),
-            [],
-            ICON_SIZE_MEDIUM
+        Display::getMdiIcon(
+            ObjectIcon::VCARD,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_MEDIUM,
+            get_lang('user information')
         ),
         api_get_path(WEB_PATH).'main/social/vcard_export.php?userId='.$userId
     );
     $actions[] = Display::url(
-        Display::return_icon('new_group.png', get_lang('Add Human Resources Manager to user'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(
+            ObjectIcon::GROUP,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_MEDIUM,
+            get_lang('Add Human Resources Manager to user')
+        ),
         api_get_path(WEB_CODE_PATH).'admin/add_drh_to_user.php?u='.$userId
     );
 
     if (SkillModel::isAllowed($userId, false)) {
         $actions[] = Display::url(
-            Display::return_icon(
-                'skill-badges.png',
-                get_lang('Add skill'),
-                [],
+            Display::getMdiIcon(
+                ObjectIcon::BADGE,
+                'ch-tool-icon',
+                null,
                 ICON_SIZE_MEDIUM,
-                false
+                get_lang('Add skill')
             ),
             api_get_path(WEB_CODE_PATH).'skills/assign.php?user='.$userId
         );
@@ -186,10 +201,10 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
         $userId,
         'legal_accept'
     );
-    $icon = Display::return_icon('accept_na.png');
+    $icon = Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon-disabled');
     if (!empty($value['value'])) {
         [$legalId, $legalLanguageId, $legalTime] = explode(':', $value['value']);
-        $icon = Display::return_icon('accept.png');
+        $icon = Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon');
         $timeLegalAccept = api_get_local_time($legalTime);
         $btn = Display::url(
             get_lang('Delete legal agreement'),
@@ -289,7 +304,7 @@ if (count($sessions) > 0) {
         $personal_course_list = [];
         $sessionId = $session->getId();
 
-        $csvContent[] = [$session->getName()];
+        $csvContent[] = [$session->getTitle()];
         $csvContent[] = $headerList;
         foreach ($session->getCourses() as $sessionRelCourse) {
             $course = $sessionRelCourse->getCourse();
@@ -315,18 +330,18 @@ if (count($sessions) > 0) {
             }
 
             $tools = Display::url(
-                Display::return_icon('statistics.png', get_lang('Statistics')),
+                Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Statistics')),
                 api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?details=true&student='.$userId.'&sid='.$sessionId.'&course='.$courseCode
             );
             $tools .= '&nbsp;<a href="course_information.php?id='.$courseId.'&id_session='.$sessionId.'">'.
-                Display::return_icon('info2.png', get_lang('Overview')).'</a>'.
+                Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Overview')).'</a>'.
                 '<a href="'.$courseUrl.'">'.
-                Display::return_icon('course_home.png', get_lang('Course home')).'</a>';
+                Display::getMdiIcon(ToolIcon::COURSE_HOME, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course home')).'</a>';
 
             /*if (!empty($my_course['status']) && STUDENT == $my_course['status']) {
                 $tools .= '<a
                     href="user_information.php?action=unsubscribe_session_course&course_id='.$courseId.'&user_id='.$userId.'&id_session='.$sessionId.'">'.
-                    Display::return_icon('delete.png', get_lang('Delete')).'</a>';
+                    Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
             }*/
 
             $timeSpent = api_time_to_hms(
@@ -362,7 +377,7 @@ if (count($sessions) > 0) {
         $dates = SessionManager::parseSessionDates($session);
 
         $certificateLink = Display::url(
-            Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_SMALL),
+            Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('CertificateOfAchievement')),
             api_get_path(WEB_CODE_PATH).'my_space/session.php?'
             .http_build_query(
                 [
@@ -376,7 +391,7 @@ if (count($sessions) > 0) {
         );
         $sessionInformation .= Display::page_subheader(
             '<a href="'.api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$sessionId.'">'.
-            $session->getName().'</a>',
+            $session->getTitle().'</a>',
             $certificateLink.' '.$dates['access']
         );
 
@@ -424,18 +439,18 @@ if (count($courseRelUserList) > 0) {
 
         $courseUrl = api_get_course_url($courseId);
         $tools = Display::url(
-            Display::return_icon('statistics.png', get_lang('Statistics')),
+            Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Statistics')),
             api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?details=true&student='.$userId.'&sid=0&course='.$courseCode
         );
         $tools .= '&nbsp;<a href="course_information.php?id='.$courseId.'">'.
-            Display::return_icon('info2.png', get_lang('Overview')).'</a>'.
+            Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Overview')).'</a>'.
             '<a href="'.$courseUrl.'">'.
-            Display::return_icon('course_home.png', get_lang('Course home')).'</a>'.
+            Display::getMdiIcon(ToolIcon::COURSE_HOME, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course home')).'</a>'.
             '<a href="course_edit.php?id='.$courseId.'">'.
-            Display::return_icon('edit.png', get_lang('Edit')).'</a>';
+            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
         if (STUDENT == $courseRelUser->getStatus()) {
             $tools .= '<a href="user_information.php?action=unsubscribe&course_id='.$courseId.'&user_id='.$userId.'">'.
-                Display::return_icon('delete.png', get_lang('Delete')).'</a>';
+                Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
         }
 
         $timeSpent = api_time_to_hms(
@@ -680,7 +695,7 @@ if ('true' === api_get_setting('profile.allow_career_users')) {
         $table->setHeaderContents(0, 0, get_lang('Career'));
         $row = 1;
         foreach ($careers as $carerData) {
-            $table->setCellContents($row, 0, $carerData['name']);
+            $table->setCellContents($row, 0, $carerData['title']);
             $row++;
         }
         echo $table->toHtml();

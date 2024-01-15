@@ -11,12 +11,12 @@ use Chamilo\CourseBundle\Entity\CGroupCategory;
 
 class Group extends AbstractTool implements ToolInterface
 {
-    public function getName(): string
+    public function getTitle(): string
     {
         return 'group';
     }
 
-    public function getNameToShow(): string
+    public function getTitleToShow(): string
     {
         return 'Groups';
     }

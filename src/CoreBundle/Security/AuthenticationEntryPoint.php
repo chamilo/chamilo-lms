@@ -16,8 +16,7 @@ class AuthenticationEntryPoint implements AuthenticationEntryPointInterface
 {
     public function __construct(
         private readonly UrlGeneratorInterface $urlGenerator,
-    ) {
-    }
+    ) {}
 
     public function start(Request $request, AuthenticationException $authException = null): RedirectResponse
     {
@@ -27,8 +26,8 @@ class AuthenticationEntryPoint implements AuthenticationEntryPointInterface
             $message = $authException->getPrevious()->getMessage();
         }*/
 
-        //$session = $this->requestStack->getSession();
-        //$session->getFlashBag()->add('warning', $message);
+        // $session = $this->requestStack->getSession();
+        // $session->getFlashBag()->add('warning', $message);
 
         /*$data = [
             // you might translate this message

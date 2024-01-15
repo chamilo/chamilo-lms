@@ -28,6 +28,7 @@ use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -185,36 +186,32 @@ class CGlossary extends AbstractResource implements ResourceInterface, Stringabl
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[Groups(['glossary:read', 'glossary:write'])]
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'name', type: 'text', nullable: false)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
+    protected string $title;
 
     #[Groups(['glossary:read', 'glossary:write'])]
     #[ORM\Column(name: 'description', type: 'text', nullable: false)]
     protected ?string $description = null;
 
-    #[Groups(['glossary:read', 'glossary:write'])]
-    #[ORM\Column(name: 'display_order', type: 'integer', nullable: true)]
-    protected ?int $displayOrder = null;
-
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function setDescription(string $description): self
@@ -226,48 +223,29 @@ class CGlossary extends AbstractResource implements ResourceInterface, Stringabl
 
     /**
      * Get description.
-     *
-     * @return string
      */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function setDisplayOrder(int $displayOrder): self
-    {
-        $this->displayOrder = $displayOrder;
-
-        return $this;
-    }
-
-    /**
-     * Get displayOrder.
-     *
-     * @return int
-     */
-    public function getDisplayOrder(): ?int
-    {
-        return $this->displayOrder;
-    }
-
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }
 
     public function getResourceName(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setName($name);
+        return $this->setTitle($name);
     }
 }

@@ -39,7 +39,7 @@ class Version20191101132000 extends AbstractMigrationChamilo
         }
 
         if (!$table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE course ADD COLUMN resource_node_id BIGINT DEFAULT NULL;');
+            $this->addSql('ALTER TABLE course ADD COLUMN resource_node_id INT DEFAULT NULL;');
             $this->addSql(
                 'ALTER TABLE course ADD CONSTRAINT FK_169E6FB91BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'
             );
@@ -81,7 +81,7 @@ class Version20191101132000 extends AbstractMigrationChamilo
         }
 
         if ($schema->getTable('course')->hasColumn('category_id')) {
-            //$this->addSql('ALTER TABLE course DROP category_id');
+            // $this->addSql('ALTER TABLE course DROP category_id');
         }
 
         $table = $schema->getTable('course_rel_user');
@@ -99,7 +99,7 @@ class Version20191101132000 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('course_category');
 
-        //$this->addSql('ALTER TABLE course DROP category_code');
+        // $this->addSql('ALTER TABLE course DROP category_code');
         $em = $this->getEntityManager();
         $connection = $em->getConnection();
         $sql = 'SELECT * FROM course_category';
@@ -184,7 +184,7 @@ class Version20191101132000 extends AbstractMigrationChamilo
         $table = $schema->getTable('c_tool');
 
         if ($table->hasIndex('course')) {
-            //$this->addSql('DROP INDEX course ON c_tool');
+            // $this->addSql('DROP INDEX course ON c_tool');
         }
 
         $table = $schema->getTable('c_tool_intro');
@@ -197,7 +197,7 @@ class Version20191101132000 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_tool_intro CHANGE id id VARCHAR(255) DEFAULT NULL');
 
         if (!$table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_tool_intro ADD resource_node_id BIGINT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_tool_intro ADD resource_node_id INT DEFAULT NULL');
             $this->addSql('ALTER TABLE c_tool_intro ADD CONSTRAINT FK_D705267B1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;');
             $this->addSql('CREATE UNIQUE INDEX UNIQ_D705267B1BAD783F ON c_tool_intro (resource_node_id);');
         }
@@ -207,7 +207,5 @@ class Version20191101132000 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

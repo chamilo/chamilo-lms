@@ -186,6 +186,7 @@ class UserRepositoryTest extends AbstractApiTest
 
         $admin->addGroup($group);
         $userRepo->update($admin);
+
         /** @var User $admin */
         $admin = $userRepo->find($admin->getId());
 
@@ -229,7 +230,7 @@ class UserRepositoryTest extends AbstractApiTest
             ->setOfficialCode('ADMIN')
             ->setCreatorId(1)
             ->setSkipResourceNode(true)
-            ->addUserAsAdmin()//->addGroup($group)
+            ->addUserAsAdmin()// ->addGroup($group)
         ;
 
         $user->setRoleFromStatus(COURSEMANAGER);

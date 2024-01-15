@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 /**
  * Class GradeModel.
  */
@@ -23,7 +25,7 @@ class GradeModel extends Model
         return Database::select(
             '*',
             $this->table,
-            ['where' => $options, 'order' => 'name ASC']
+            ['where' => $options, 'order' => 'title ASC']
         );
     }
 
@@ -50,9 +52,9 @@ class GradeModel extends Model
         // action links
         echo '<div class="actions" style="margin-bottom:20px">';
         echo '<a href="grade_models.php">'.
-                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')).'</a>';
         echo '<a href="'.api_get_self().'?action=add">'.
-                Display::return_icon('add.png', get_lang('Add'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')).'</a>';
         echo '</div>';
         echo Display::grid_html('grade_model');
     }
@@ -259,11 +261,11 @@ class GradeModel extends Model
     /**
      * @param $form
      * @param string $name
-     * @param null   $default_value
+     * @param int|null   $default_value
      *
      * @return bool
      */
-    public function fill_grade_model_select_in_form(&$form, $name = 'gradebook_model_id', $default_value = null)
+    public function fill_grade_model_select_in_form(&$form, $name = 'gradebook_model_id', ?int $default_value = null)
     {
         if ('false' === api_get_setting('gradebook_enable_grade_model')) {
             return false;
@@ -274,7 +276,7 @@ class GradeModel extends Model
             $grade_model_options = ['-1' => get_lang('none')];
             if (!empty($grade_models)) {
                 foreach ($grade_models as $item) {
-                    $grade_model_options[$item['id']] = $item['name'];
+                    $grade_model_options[$item['id']] = $item['title'];
                 }
             }
             $form->addSelect($name, get_lang('Grading model'), $grade_model_options);

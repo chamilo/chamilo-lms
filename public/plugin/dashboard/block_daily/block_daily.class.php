@@ -11,6 +11,8 @@
  * required files for getting data.
  */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 /**
  * This class is used like controller for this course block plugin,
  * the class name must be registered inside path.info file
@@ -162,7 +164,7 @@ class BlockDaily extends Block
             // Attendance table
             $table_course = Database::get_course_table(TABLE_ATTENDANCE);
 
-            $sql = "SELECT id, name, attendance_qualify_max FROM $table_course
+            $sql = "SELECT id, title, attendance_qualify_max FROM $table_course
                     WHERE c_id = ".$course_info['real_id'].' AND active = 1 AND session_id = 0';
             $rs = Database::query($sql);
             $attendance = [];
@@ -175,7 +177,7 @@ class BlockDaily extends Block
                 $attendance['course_code'] = $course_info['code'];
 
                 if ('0' != $attendance['done']) {
-                    $attendances[] = '<a href="'.api_get_path(WEB_PATH).'main/attendance/index.php?cidReq='.$attendance['course_code'].'&action=attendance_sheet_print&attendance_id='.$attendance['id'].'">'.Display::return_icon('printmgr.gif', get_lang('Print')).'</a>';
+                    $attendances[] = '<a href="'.api_get_path(WEB_PATH).'main/attendance/index.php?cidReq='.$attendance['course_code'].'&action=attendance_sheet_print&attendance_id='.$attendance['id'].'">'.Display::getMdiIcon(ActionIcon::PRINT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Print')).'</a>';
                 } else {
                     $attendances[] = get_lang('Not available');
                 }

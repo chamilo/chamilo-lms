@@ -4,6 +4,8 @@
 
 use Chamilo\CourseBundle\Entity\CForumPost;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -123,12 +125,7 @@ if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
     $url = '../lp/lp_controller.php?'.api_get_cidreq()
         ."&gradebook=&action=add_item&type=step&lp_id='.$lp_id.'#resource_tab-5";
     $actionLeft .= Display::url(
-        Display::return_icon(
-            'back.png',
-            get_lang('Back to').' '.get_lang('Learning paths'),
-            null,
-            ICON_SIZE_MEDIUM
-        ),
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', '', ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Learning paths')),
         $url
     );
 }
@@ -137,34 +134,19 @@ if (api_is_allowed_to_edit(false, true)) {
 
     $url = 'index.php?'.api_get_cidreq();
     $actionLeft .= Display::url(
-        Display::return_icon(
-            'back.png',
-            get_lang('Back to').' '.get_lang('Learning paths'),
-            null,
-            ICON_SIZE_MEDIUM
-        ),
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', '', ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Learning paths')),
         $url
     );
 
     if (is_array($forumCategories) && !empty($forumCategories)) {
         $actionLeft .= Display::url(
-            Display::return_icon(
-                'new_forum.png',
-                get_lang('Add a forum'),
-                null,
-                ICON_SIZE_MEDIUM
-            ),
+            Display::getMdiIcon(ToolIcon::FORUM, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a forum')),
             api_get_self().'?'.api_get_cidreq().'&action=add_forum&lp_id='.$lp_id
         );
     }
 
     $actionLeft .= Display::url(
-        Display::return_icon(
-            'new_folder.png',
-            get_lang('Add a forumCategory'),
-            null,
-            ICON_SIZE_MEDIUM
-        ),
+        Display::getMdiIcon(ActionIcon::CREATE_FOLDER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a forumCategory')),
         api_get_self().'?'.api_get_cidreq().'&action=add_category&lp_id='.$lp_id
     );
 }
@@ -212,12 +194,7 @@ if (is_array($forumCategories)) {
             ) {
                 $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                     .'&action=edit_category&content=forumcategory&id='.$categoryId
-                    .'">'.Display::return_icon(
-                        'edit.png',
-                        get_lang('Edit'),
-                        [],
-                        ICON_SIZE_SMALL
-                    )
+                    .'">'.Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))
                     .'</a>';
 
                 $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq()
@@ -228,12 +205,7 @@ if (is_array($forumCategories)) {
                         ENT_QUOTES
                     ))
                     ."')) return false;\">"
-                    .Display::return_icon(
-                        'delete.png',
-                        get_lang('Delete'),
-                        [],
-                        ICON_SIZE_SMALL
-                    )
+                    .Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'))
                     .'</a>';
                 $tools .= returnVisibleInvisibleIcon(
                     'forumcategory',
@@ -336,7 +308,7 @@ if (is_array($forumCategories)) {
                         if (api_is_allowed_to_edit(false, true)) {
                             $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                                 .'&action=edit_forum&content=forum&id='.$forumId.'">'
-                                .Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL)
+                                .Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))
                                 .'</a>';
                             $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                                 .'&action=delete_forum&content=forum&id='.$forumId
@@ -344,7 +316,7 @@ if (is_array($forumCategories)) {
                                     api_htmlentities(get_lang('Delete forum ?'), ENT_QUOTES)
                                 )
                                 ."')) return false;\">"
-                                .Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL)
+                                .Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'))
                                 .'</a>';
 
                             $toolActions .= returnVisibleInvisibleIcon(

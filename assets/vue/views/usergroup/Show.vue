@@ -41,7 +41,6 @@
       From:
       <q-avatar size="32px">
         <img :src="item['sender']['illustrationUrl'] + '?w=80&h=80&fit=crop'" />
-        <!--              <q-icon name="person" ></q-icon>-->
       </q-avatar>
       {{ item["sender"]["username"] }}
     </p>

@@ -69,7 +69,7 @@ switch ($action) {
         api_protect_admin_script();
 
         $showDelete = isset($_REQUEST['show_delete']) ? $_REQUEST['show_delete'] : false;
-        $image = Display::return_icon('item-sequence.png', null, null, ICON_SIZE_LARGE);
+        $image = Display::getMdiIcon('notebook', 'ch-tool-icon', null, ICON_SIZE_LARGE);
 
         if (empty($id)) {
             exit;
@@ -344,7 +344,7 @@ switch ($action) {
 
         $item = $sequenceRepository->getItem($id, $type);
         $main->setAttribute('graphviz.shape', 'record');
-        $main->setAttribute('graphviz.label', $item->getName());
+        $main->setAttribute('graphviz.label', $item->getTitle());
 
         foreach ($parents as $parentId) {
             $item = $sequenceRepository->getItem($parentId, $type);
@@ -359,7 +359,7 @@ switch ($action) {
             }
 
             $parent->setAttribute('graphviz.shape', 'record');
-            $parent->setAttribute('graphviz.label', $item->getName());
+            $parent->setAttribute('graphviz.label', $item->getTitle());
         }
 
         foreach ($parents as $parentId) {

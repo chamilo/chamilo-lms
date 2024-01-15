@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\Common\Collections\Criteria;
 use Knp\Component\Pager\Paginator;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -44,7 +45,7 @@ $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 $contentForm = '';
 
 $toolbar = Display::url(
-    Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')),
     $currentUrl.'&action=add'
 );
 
@@ -65,7 +66,7 @@ $tpl = new Template($toolName);
 switch ($action) {
     case 'add':
         $toolbar = Display::url(
-            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
             $currentUrl
         );
         $form = new FormValidator(
@@ -121,7 +122,7 @@ switch ($action) {
                 }
                 $category = new GradebookCategory();
                 $category
-                    ->setName($values['name'])
+                    ->setTitle($values['name'])
                     ->setWeight($values['weight'])
                     ->setVisible(1)
                     ->setLocked(0)
@@ -166,7 +167,7 @@ switch ($action) {
         break;
     case 'edit':
         $toolbar = Display::url(
-            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
             $currentUrl
         );
         /** @var GradebookCategory $category */
@@ -221,7 +222,7 @@ switch ($action) {
 
             $form->addButtonSave(get_lang('Edit'));
             $defaults = [
-                'name' => $category->getName(),
+                'name' => $category->getTitle(),
                 'weight' => $category->getWeight(),
                 'gradebooks_to_validate_in_dependence' => $categoryData['gradebooks_to_validate_in_dependence'],
                 'depends' => array_keys($options),
@@ -231,7 +232,7 @@ switch ($action) {
             $contentForm = $form->returnForm();
             if ($form->validate()) {
                 $values = $form->getSubmitValues();
-                $category->setName($values['name']);
+                $category->setTitle($values['name']);
                 $category->setWeight($values['weight']);
                 $em->persist($category);
                 $em->flush();

@@ -54,9 +54,13 @@ class Version20180319145700 extends AbstractMigrationChamilo
         }
 
         if (false === $survey->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_survey ADD resource_node_id BIGINT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_survey ADD resource_node_id INT DEFAULT NULL');
             $this->addSql('ALTER TABLE c_survey ADD CONSTRAINT FK_F246DB301BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
             $this->addSql('CREATE UNIQUE INDEX UNIQ_F246DB301BAD783F ON c_survey (resource_node_id);');
+        }
+
+        if (!$survey->hasColumn('display_question_number')) {
+            $this->addSql('ALTER TABLE c_survey ADD display_question_number TINYINT(1) DEFAULT 1 NOT NULL');
         }
 
         $this->addSql('ALTER TABLE c_survey CHANGE avail_from avail_from DATETIME DEFAULT NULL;');
@@ -72,7 +76,7 @@ class Version20180319145700 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_survey_answer CHANGE question_id question_id INT DEFAULT NULL');
         $this->addSql('DELETE FROM c_survey_answer WHERE question_id NOT IN (select iid from c_survey_question)');
 
-        //$this->addSql('ALTER TABLE c_survey_answer CHANGE option_id option_id INT DEFAULT NULL');
+        // $this->addSql('ALTER TABLE c_survey_answer CHANGE option_id option_id INT DEFAULT NULL');
 
         if (!$table->hasForeignKey('FK_8A897DDB3FE509D')) {
             $this->addSql('ALTER TABLE c_survey_answer ADD CONSTRAINT FK_8A897DDB3FE509D FOREIGN KEY (survey_id) REFERENCES c_survey (iid);');
@@ -295,7 +299,5 @@ class Version20180319145700 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

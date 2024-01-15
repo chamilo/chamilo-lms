@@ -3105,7 +3105,7 @@ class MySpace
         if (!empty($sessionId)) {
             $session = api_get_session_entity($sessionId);
             if ($session) {
-                $sessionList[$session->getId()] = $session->getName();
+                $sessionList[$session->getId()] = $session->getTitle();
             }
         }
 

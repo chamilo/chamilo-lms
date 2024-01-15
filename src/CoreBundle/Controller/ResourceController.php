@@ -6,8 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Tool\ToolChain;
@@ -32,6 +34,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Serializer\SerializerInterface;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
@@ -42,9 +45,9 @@ use ZipStream\ZipStream;
 #[Route('/r')]
 class ResourceController extends AbstractResourceController implements CourseControllerInterface
 {
+    use ControllerTrait;
     use CourseControllerTrait;
     use ResourceControllerTrait;
-    use ControllerTrait;
 
     /**
      * @Route("/{tool}/{type}/{id}/disk_space", methods={"GET", "POST"}, name="chamilo_core_resource_disk_space")
@@ -82,7 +85,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         foreach ($sessions as $sessionRelCourse) {
             $session = $sessionRelCourse->getSession();
 
-            $labels[] = $course->getTitle().' - '.$session->getName();
+            $labels[] = $course->getTitle().' - '.$session->getTitle();
             $size = $repository->getResourceNodeRepository()->getSize(
                 $resourceNode,
                 $repository->getResourceType(),
@@ -94,7 +97,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         /*$groups = $course->getGroups();
         foreach ($groups as $group) {
-            $labels[] = $course->getTitle().' - '.$group->getName();
+            $labels[] = $course->getTitle().' - '.$group->getTitle();
             $size = $repository->getResourceNodeRepository()->getSize(
                 $resourceNode,
                 $repository->getResourceType(),
@@ -192,7 +195,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         }
 
         $zipName = $resourceNode->getSlug().'.zip';
-        //$rootNodePath = $resourceNode->getPathForDisplay();
+        // $rootNodePath = $resourceNode->getPathForDisplay();
         $resourceNodeRepo = $repo->getResourceNodeRepository();
         $type = $repo->getResourceType();
 
@@ -221,16 +224,16 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 // Define suitable options for ZipStream Archive.
                 $options = new Archive();
                 $options->setContentType('application/octet-stream');
-                //initialise zipstream with output zip filename and options.
+                // initialise zipstream with output zip filename and options.
                 $zip = new ZipStream($zipName, $options);
 
                 /** @var ResourceNode $node */
                 foreach ($children as $node) {
                     $stream = $repo->getResourceNodeFileStream($node);
                     $fileName = $node->getResourceFile()->getOriginalName();
-                    //$fileToDisplay = basename($node->getPathForDisplay());
-                    //$fileToDisplay = str_replace($rootNodePath, '', $node->getPathForDisplay());
-                    //error_log($fileToDisplay);
+                    // $fileToDisplay = basename($node->getPathForDisplay());
+                    // $fileToDisplay = str_replace($rootNodePath, '', $node->getPathForDisplay());
+                    // error_log($fileToDisplay);
                     $zip->addFileFromStream($fileName, $stream);
                 }
                 $zip->finish();
@@ -239,7 +242,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $disposition = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $zipName //Transliterator::transliterate($zipName)
+            $zipName // Transliterator::transliterate($zipName)
         );
         $response->headers->set('Content-Disposition', $disposition);
         $response->headers->set('Content-Type', 'application/octet-stream');
@@ -251,14 +254,24 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function changeVisibility(
         Request $request,
         EntityManagerInterface $entityManager,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
+        Security $security,
     ): Response {
-        $isCourseTeacher = $this->isGranted('ROLE_CURRENT_COURSE_TEACHER');
+        $user = $security->getUser();
+        $isAdmin = ($user->hasRole('ROLE_SUPER_ADMIN') || $user->hasRole('ROLE_ADMIN'));
+        $isCourseTeacher = ($user->hasRole('ROLE_CURRENT_COURSE_TEACHER') || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER'));
 
-        if (!$isCourseTeacher) {
+        if (!($isCourseTeacher || $isAdmin)) {
             throw new AccessDeniedHttpException();
         }
 
+        $session = null;
+        if ($this->getSession()) {
+            $sessionId = $this->getSession()->getId();
+            $session = $entityManager->getRepository(Session::class)->find($sessionId);
+        }
+        $courseId = $this->getCourse()->getId();
+        $course = $entityManager->getRepository(Course::class)->find($courseId);
         $id = $request->attributes->getInt('id');
         $resourceNode = $this->getResourceNodeRepository()->findOneBy(['id' => $id]);
 
@@ -266,13 +279,29 @@ class ResourceController extends AbstractResourceController implements CourseCon
             throw new NotFoundHttpException($this->trans('Resource not found'));
         }
 
-        /** @var ResourceLink $link */
-        $link = $resourceNode->getResourceLinks()->first();
+        $link = null;
+        foreach ($resourceNode->getResourceLinks() as $resourceLink) {
+            if ($resourceLink->getSession() === $session) {
+                $link = $resourceLink;
 
-        if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
-            $link->setVisibility(ResourceLink::VISIBILITY_DRAFT);
+                break;
+            }
+        }
+
+        if (null === $link) {
+            $link = new ResourceLink();
+            $link->setResourceNode($resourceNode)
+                ->setSession($session)
+                ->setCourse($course)
+                ->setVisibility(ResourceLink::VISIBILITY_DRAFT)
+            ;
+            $entityManager->persist($link);
         } else {
-            $link->setVisibility(ResourceLink::VISIBILITY_PUBLISHED);
+            if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()) {
+                $link->setVisibility(ResourceLink::VISIBILITY_DRAFT);
+            } else {
+                $link->setVisibility(ResourceLink::VISIBILITY_PUBLISHED);
+            }
         }
 
         $entityManager->flush();
@@ -298,18 +327,26 @@ class ResourceController extends AbstractResourceController implements CourseCon
         CToolRepository $toolRepository,
         CShortcutRepository $shortcutRepository,
         ToolChain $toolChain,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        Security $security
     ): Response {
-        $isCourseTeacher = $this->isGranted('ROLE_CURRENT_COURSE_TEACHER');
+        $user = $security->getUser();
+        $isAdmin = ($user->hasRole('ROLE_SUPER_ADMIN') || $user->hasRole('ROLE_ADMIN'));
+        $isCourseTeacher = ($user->hasRole('ROLE_CURRENT_COURSE_TEACHER') || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER'));
 
-        if (!$isCourseTeacher) {
+        if (!($isCourseTeacher || $isAdmin)) {
             throw new AccessDeniedHttpException();
         }
 
         $visibility = $request->attributes->get('visibility');
 
-        $course = $this->getCourse();
-        $session = $this->getSession();
+        $session = null;
+        if ($this->getSession()) {
+            $sessionId = $this->getSession()->getId();
+            $session = $entityManager->getRepository(Session::class)->find($sessionId);
+        }
+        $courseId = $this->getCourse()->getId();
+        $course = $entityManager->getRepository(Course::class)->find($courseId);
 
         $result = $toolRepository->getResourcesByCourse($course, $session)
             ->addSelect('tool')
@@ -322,17 +359,36 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         /** @var CTool $item */
         foreach ($result as $item) {
-            if (\in_array($item->getName(), $skipTools, true)) {
+            if (\in_array($item->getTitle(), $skipTools, true)) {
                 continue;
             }
-            $toolModel = $toolChain->getToolFromName($item->getTool()->getName());
+            $toolModel = $toolChain->getToolFromName($item->getTool()->getTitle());
 
             if (!\in_array($toolModel->getCategory(), ['authoring', 'interaction'], true)) {
                 continue;
             }
 
+            $resourceNode = $item->getResourceNode();
+
             /** @var ResourceLink $link */
-            $link = $item->getResourceNode()->getResourceLinks()->first();
+            $link = null;
+            foreach ($resourceNode->getResourceLinks() as $resourceLink) {
+                if ($resourceLink->getSession() === $session) {
+                    $link = $resourceLink;
+
+                    break;
+                }
+            }
+
+            if (null === $link) {
+                $link = new ResourceLink();
+                $link->setResourceNode($resourceNode)
+                    ->setSession($session)
+                    ->setCourse($course)
+                    ->setVisibility(ResourceLink::VISIBILITY_DRAFT)
+                ;
+                $entityManager->persist($link);
+            }
 
             if ('show' === $visibility) {
                 $link->setVisibility(ResourceLink::VISIBILITY_PUBLISHED);
@@ -372,6 +428,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 $forceDownload = true;
 
                 break;
+
             case 'show':
             default:
                 $forceDownload = false;
@@ -458,7 +515,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
         );
 
-        //Transliterator::transliterate($fileName)
+        // Transliterator::transliterate($fileName)
         $disposition = $response->headers->makeDisposition(
             $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
             $fileName

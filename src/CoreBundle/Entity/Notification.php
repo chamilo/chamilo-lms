@@ -16,7 +16,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Entity]
 class Notification
 {
-    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;

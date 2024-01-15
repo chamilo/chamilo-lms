@@ -8,6 +8,9 @@
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+
 // Resetting the course id.
 $cidReset = true;
 
@@ -293,7 +296,7 @@ if (!empty($selectedTeacher)) {
         $timeReport->data[] = [
             'session' => [
                 'id' => $session->getId(),
-                'name' => $session->getName(),
+                'name' => $session->getTitle(),
             ],
             'course' => [
                 'id' => $course->getId(),
@@ -399,12 +402,7 @@ $form->setDefaults([
 ]);
 
 $leftActions = Display::url(
-    Display::return_icon(
-        'session.png',
-        get_lang('Course sessions'),
-        [],
-        ICON_SIZE_MEDIUM
-    ),
+    Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Course sessions')),
     api_get_path(WEB_CODE_PATH).'admin/teachers_time_by_session_report.php'
 );
 $exportUrlParams = [
@@ -416,21 +414,11 @@ $exportUrlParams = [
     '_qf__teacher_time_report' => '',
 ];
 $rightActions = Display::url(
-    Display::return_icon(
-        'pdf.png',
-        get_lang('Export to PDF'),
-        [],
-        ICON_SIZE_MEDIUM
-    ),
+    Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')),
     api_get_self().'?export=pdf&'.http_build_query($exportUrlParams)
 );
 $rightActions .= Display::url(
-    Display::return_icon(
-        'export_excel.png',
-        get_lang('Excel export'),
-        [],
-        ICON_SIZE_MEDIUM
-    ),
+    Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Excel export')),
     api_get_self().'?export=xls&'.http_build_query($exportUrlParams)
 );
 

@@ -9,6 +9,10 @@ use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 if (!isset($_GET['course'])) {
     $cidReset = true;
@@ -267,7 +271,7 @@ switch ($action) {
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
             $numberVisits += $row['count'];
-            $courseProgress = Tracking::get_avg_student_progress($studentId, $course['code'], [], $sessionToExport);
+            $courseProgress = Tracking::get_avg_student_progress($studentId, $course['code'], [], api_get_session_entity($sessionToExport));
             $progressPerCourse[$courseId] = $courseProgress;
             $progress += $courseProgress;
         }
@@ -711,7 +715,7 @@ $pluginCalendar = 'true' === api_get_plugin_setting('learning_calendar', 'enable
 
 if ($pluginCalendar) {
     $plugin = LearningCalendarPlugin::create();
-    $plugin->setJavaScript($htmlHeadXtra);
+    $plugin->setJavaScript();
 }
 
 Display::display_header($nameTools);
@@ -719,34 +723,34 @@ $token = Security::get_token();
 
 // Actions bar
 $actions = '<a href="javascript: window.history.go(-1);">'
-    .Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+    .Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')).'</a>';
 
 $actions .= '<a href="javascript: void(0);" onclick="javascript: window.print();">'
-    .Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
+    .Display::getMdiIcon(ActionIcon::PRINT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Print')).'</a>';
 
 $actions .= '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&export=csv">'
-    .Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM).'</a> ';
+    .Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')).'</a> ';
 
 $actions .= '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&export=xls">'
-    .Display::return_icon('export_excel.png', get_lang('Excel export'), '', ICON_SIZE_MEDIUM).'</a> ';
+    .Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Excel export')).'</a> ';
 
 $actions .= Display::url(
-    Display::return_icon('attendance.png', get_lang('Access details'), '', ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ObjectIcon::ATTENDANCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Access details')),
     api_get_path(WEB_CODE_PATH).'my_space/access_details_session.php?user_id='.$studentId
 );
 $email = $user->getEmail();
 if (!empty($email)) {
     $send_mail = '<a href="mailto:'.$email.'">'.
-        Display::return_icon('mail_send.png', get_lang('Send message mail'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon(ActionIcon::SEND_MESSAGE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Send message mail')).'</a>';
 } else {
-    $send_mail = Display::return_icon('mail_send_na.png', get_lang('Send message mail'), '', ICON_SIZE_MEDIUM);
+    $send_mail = Display::getMdiIcon(ActionIcon::SEND_MESSAGE, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Send message mail'));
 }
 $actions .= $send_mail;
 if (!empty($studentId) && !empty($courseCode)) {
     // Only show link to connection details if course and student were defined in the URL
     $actions .= '<a href="access_details.php?student='.$studentId.'&course='.$courseCode.'&origin='.$origin.'&cid='
         .$courseId.'&id_session='.$sessionId.'">'
-        .Display::return_icon('statistics.png', get_lang('Access details'), '', ICON_SIZE_MEDIUM)
+        .Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Access details'))
         .'</a>';
 }
 
@@ -755,36 +759,26 @@ if ($notebookTeacherEnable && !empty($studentId) && !empty($courseCode)) {
     // link notebookteacher
     $optionsLink = 'student_id='.$studentId.'&origin='.$origin.'&cid='.$courseId.'&id_session='.$sessionId;
     $actions .= '<a href="'.api_get_path(WEB_PLUGIN_PATH).'notebookteacher/src/index.php?'.$optionsLink.'">'
-        .Display::return_icon('notebookteacher.png', get_lang('Notebook'), '', ICON_SIZE_MEDIUM)
+        .Display::getMdiIcon(ToolIcon::NOTEBOOK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Notebook'))
         .'</a>';
 }
 
 if (api_can_login_as($studentId)) {
     $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$studentId
         .'&sec_token='.$token.'">'
-        .Display::return_icon('login_as.png', get_lang('Login as'), null, ICON_SIZE_MEDIUM).'</a>&nbsp;&nbsp;';
+        .Display::getMdiIcon(ActionIcon::LOGIN_AS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Login as')).'</a>&nbsp;&nbsp;';
 }
 
 if (SkillModel::isAllowed($studentId, false)) {
     $actions .= Display::url(
-        Display::return_icon(
-            'skill-badges.png',
-            get_lang('Assign skill'),
-            null,
-            ICON_SIZE_MEDIUM
-        ),
+        Display::getMdiIcon(ObjectIcon::BADGE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Assign skill')),
         api_get_path(WEB_CODE_PATH).'skills/assign.php?'.http_build_query(['user' => $studentId])
     );
 }
 
 if (SkillModel::isAllowed($studentId, false)) {
     $actions .= Display::url(
-        Display::return_icon(
-            'attendance.png',
-            get_lang('CountDoneAttendance'),
-            null,
-            ICON_SIZE_MEDIUM
-        ),
+        Display::getMdiIcon(ObjectIcon::ATTENDANCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CountDoneAttendance')),
         api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?action=all_attendance&student='.$studentId
     );
 }
@@ -797,12 +791,7 @@ $permissions = StudentFollowUpPlugin::getPermissions(
 $isAllow = $permissions['is_allow'];
 if ($isAllow) {
     $actions .= Display::url(
-        Display::return_icon(
-            'blog.png',
-            get_lang('Blog'),
-            null,
-            ICON_SIZE_MEDIUM
-        ),
+        Display::getMdiIcon(ToolIcon::BLOG, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Blog')),
         api_get_path(WEB_PLUGIN_PATH).'studentfollowup/posts.php?student_id='.$studentId
     );
 }
@@ -980,12 +969,12 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
             $studentId,
             'legal_accept'
         );
-        $icon = Display::return_icon('accept_na.png');
+        $icon = Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL);
         $legalTime = null;
 
         if (isset($value['value']) && !empty($value['value'])) {
             [$legalId, $legalLanguageId, $legalTime] = explode(':', $value['value']);
-            $icon = Display::return_icon('accept.png');
+            $icon = Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon', null, ICON_SIZE_SMALL);
             $btn = Display::url(
                 get_lang('Delete legal agreement'),
                 api_get_self().'?action=delete_legal&student='.$studentId.'&course='.$courseCode,
@@ -1243,7 +1232,7 @@ if (empty($details)) {
         $access_start_date = '';
         $access_end_date = '';
         $date_session = '';
-        $title = Display::return_icon('course.png', get_lang('Courses')).' '.get_lang('Courses');
+        $title = Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Courses')).' '.get_lang('Courses');
 
         $session_info = api_get_session_info($sId);
         if ($session_info) {
@@ -1259,7 +1248,7 @@ if (empty($details)) {
             if (!empty($access_start_date) && !empty($access_end_date)) {
                 $date_session = get_lang('From').' '.$access_start_date.' '.get_lang('Until').' '.$access_end_date;
             }
-            $title = Display::return_icon('session.png', get_lang('Session'))
+            $title = Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Session'))
                 .' '.$session_name.($date_session ? ' ('.$date_session.')' : '');
         }
 
@@ -1440,11 +1429,11 @@ if (empty($details)) {
                         echo '<td><a href="'.api_get_self().'?student='.$studentId
                             .'&details=true&cid='.$courseId.'&id_coach='.$coachId.'&origin='.$origin
                             .'&sid='.$sId.'#infosStudent">'
-                            .Display::return_icon('2rightarrow.png', get_lang('Details')).'</a></td>';
+                            .Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Details')).'</a></td>';
                     } else {
                         echo '<td width="10"><a href="'.api_get_self().'?student='.$studentId
                             .'&details=true&cid='.$courseId.'&origin='.$origin.'&sid='.$sId.'#infosStudent">'
-                            .Display::return_icon('2rightarrow.png', get_lang('Details')).'</a></td>';
+                            .Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Details')).'</a></td>';
                     }
                     echo '</tr>';
                 }
@@ -1482,7 +1471,7 @@ if (empty($details)) {
             $csv_content[] = $csvRow;
             $exportCourseList[$sId][] = $csvRow;
             $sessionAction = Display::url(
-                Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
+                Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportAsCSV')),
                 $currentUrl.'&'
                 .http_build_query(
                     [
@@ -1493,7 +1482,7 @@ if (empty($details)) {
                 )
             );
             $sessionAction .= Display::url(
-                Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
+                Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportAsXLS')),
                 $currentUrl.'&'
                 .http_build_query(
                     [
@@ -1506,7 +1495,7 @@ if (empty($details)) {
 
             if (!empty($sId)) {
                 $sessionAction .= Display::url(
-                    Display::return_icon('pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportToPDF')),
                     api_get_path(WEB_CODE_PATH).'my_space/session.php?'
                     .http_build_query(
                         [
@@ -1518,7 +1507,7 @@ if (empty($details)) {
                     )
                 );
                 $sessionAction .= Display::url(
-                    Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CertificateOfAchievement')),
                     api_get_path(WEB_CODE_PATH).'my_space/session.php?'
                     .http_build_query(
                         [
@@ -1543,25 +1532,37 @@ if (empty($details)) {
     $columnHeaders = [
         'lp' => get_lang('Learning paths'),
         'time' => get_lang('Time').
-            Display::return_icon(
-                'info3.gif',
-                get_lang('Total time in course'),
-                ['align' => 'absmiddle', 'hspace' => '3px']
+            Display::getMdiIcon(
+                ActionIcon::INFORMATION,
+                'ch-tool-icon',
+                'align: absmiddle; hspace: 3px',
+                ICON_SIZE_SMALL,
+                get_lang('Total time in course')
             ),
         'best_score' => get_lang('Best score'),
         'latest_attempt_avg_score' => get_lang('Latest attempt average score').
-            Display::return_icon(
-                'info3.gif',
-                get_lang('Average is calculated based on the latest attempts'),
-                ['align' => 'absmiddle', 'hspace' => '3px']
+            Display::getMdiIcon(
+                ActionIcon::INFORMATION,
+                'ch-tool-icon',
+                'align: absmiddle; hspace: 3px',
+                ICON_SIZE_SMALL,
+                get_lang('Average is calculated based on the latest attempts')
             ),
         'progress' => get_lang('Progress').
-            Display::return_icon('info3.gif', get_lang('LPProgressScore'), ['align' => 'absmiddle', 'hspace' => '3px']),
+            Display::getMdiIcon(
+                ActionIcon::INFORMATION,
+                'ch-tool-icon',
+                'align: absmiddle; hspace: 3px',
+                ICON_SIZE_SMALL,
+                get_lang('LPProgressScore')
+            ),
         'last_connection' => get_lang('Latest login').
-            Display::return_icon(
-                'info3.gif',
-                get_lang('Last time learner entered the course'),
-                ['align' => 'absmiddle', 'hspace' => '3px']
+            Display::getMdiIcon(
+                ActionIcon::INFORMATION,
+                'ch-tool-icon',
+                'align: absmiddle; hspace: 3px',
+                ICON_SIZE_SMALL,
+                get_lang('Last time learner entered the course')
             ),
     ];
 
@@ -1612,7 +1613,7 @@ if (empty($details)) {
         $columnHeadersKeys = array_keys($columnHeaders);
         $categoriesTempList = learnpath::getCategories($courseId);
         $categoryTest = new CLpCategory();
-        $categoryTest->setName(get_lang('Without category'));
+        $categoryTest->setTitle(get_lang('Without category'));
         $categoryTest->setPosition(0);
         $categories = [
             $categoryTest,
@@ -1646,7 +1647,7 @@ if (empty($details)) {
             $flat_list = $list->get_flat_list();
             $i = 0;
             if (count($categories) > 1) {
-                echo Display::page_subheader2($item->getName());
+                echo Display::page_subheader2($item->getTitle());
             }
 
             echo '<div class="table-responsive">';
@@ -1817,7 +1818,7 @@ if (empty($details)) {
                         $from = '&from=myspace';
                     }
                     $link = Display::url(
-                        Display::return_icon('2rightarrow.png', get_lang('Details')),
+                        Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Details')),
                         $codePath.'my_space/lp_tracking.php?cid='.$courseId.'&course='.$courseCode.$from.'&origin='.$origin
                         .'&lp_id='.$lp_id.'&student_id='.$studentId.'&sid='.$sessionId
                     );
@@ -1831,7 +1832,7 @@ if (empty($details)) {
                             .$courseCode.'&details='.$details.'&origin='.$origin.'&lp_id='.$lp_id.'&student='
                             .$studentId.'&details=true&sid='.$sessionId;
                         echo Display::url(
-                            Display::return_icon('clean.png', get_lang('Clean')),
+                            Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Clean')),
                             $url,
                             [
                                 'onclick' => "javascript:if(!confirm('"
@@ -1858,10 +1859,12 @@ if (empty($details)) {
         echo '<th>'.get_lang('Tests').'</th>';
         echo '<th>'.get_lang('Learning paths').'</th>';
         echo '<th>'.get_lang('Average score in learning paths').' '.
-            Display::return_icon(
-                'info3.gif',
-                get_lang('Average score'),
-                ['align' => 'absmiddle', 'hspace' => '3px']
+            Display::getMdiIcon(
+                ActionIcon::INFORMATION,
+                'ch-tool-icon',
+                'align: absmiddle; hspace: 3px',
+                ICON_SIZE_SMALL,
+                get_lang('Average score')
             ).'</th>';
         echo '<th>'.get_lang('Attempts').'</th>';
         echo '<th>'.get_lang('LatestAttempt').'</th>';
@@ -1932,6 +1935,7 @@ if (empty($details)) {
 
         if ($exerciseList) {
             /** @var CQuiz $exercise */
+            $i = 0;
             foreach ($exerciseList as $exercise) {
                 $exercise_id = (int) $exercise->getIid();
                 $count_attempts = Tracking::count_student_exercise_attempts(
@@ -2021,7 +2025,7 @@ if (empty($details)) {
                             .'&sid='.$sessionId.'&student='.$studentId.'&origin='
                             .(empty($origin) ? 'tracking' : $origin).$qualifyLink;
                         echo Display::url(
-                            Display::return_icon('quiz.png', get_lang('Test')),
+                            Display::getMdiIcon(ToolIcon::QUIZ, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Test')),
                             $attemptLink
                         );
                     }
@@ -2033,12 +2037,7 @@ if (empty($details)) {
                     $all_attempt_url = "../exercise/exercise_report.php?id=$exercise_id&"
                         ."cid=".$courseId."&filter_by_user=$studentId&sid=$sessionId";
                     echo Display::url(
-                        Display::return_icon(
-                            'test_results.png',
-                            get_lang('All attempts'),
-                            [],
-                            ICON_SIZE_SMALL
-                        ),
+                        Display::getMdiIcon('format-annotation-plus', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('All attempts')),
                         $all_attempt_url
                     );
                 }
@@ -2091,19 +2090,9 @@ if (empty($details)) {
                     false,
                     $course->getId()
                 );
-                $survey_done = Display::return_icon(
-                    'accept_na.png',
-                    get_lang('There is no answer for the moment'),
-                    [],
-                    ICON_SIZE_SMALL
-                );
+                $survey_done = Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('There is no answer for the moment'));
                 if (in_array($studentId, $user_list)) {
-                    $survey_done = Display::return_icon(
-                        'accept.png',
-                        get_lang('Answered'),
-                        [],
-                        ICON_SIZE_SMALL
-                    );
+                    $survey_done = Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Answered'));
                 }
                 $data = ['title' => $survey['title'], 'done' => $survey_done];
                 $survey_data[] = $data;

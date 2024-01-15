@@ -2,6 +2,8 @@
 
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 /**
  * Class LearningCalendarPlugin.
  */
@@ -222,17 +224,17 @@ class LearningCalendarPlugin extends Plugin
                 api_get_path(WEB_PLUGIN_PATH).'learning_calendar/calendar.php?id='.$id
             );
             $actions = Display::url(
-                Display::return_icon('edit.png', get_lang('Edit')),
+                Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
                 $link.'?action=edit&id='.$id
             );
 
             $actions .= Display::url(
-                Display::return_icon('copy.png', get_lang('Copy')),
+                Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Copy')),
                 $link.'?action=copy&id='.$id
             );
 
             $actions .= Display::url(
-                Display::return_icon('delete.png', get_lang('Delete')),
+                Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
                 $link.'?action=delete&id='.$id
             );
             $row['actions'] = $actions;
@@ -697,7 +699,7 @@ class LearningCalendarPlugin extends Plugin
         $tableEvaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
         $tableResult = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-        $sql = "SELECT DISTINCT e.name, e.id
+        $sql = "SELECT DISTINCT e.title, e.id
                 FROM $tableEvaluation e
                 INNER JOIN $tableCourse c
                 ON (course_code = c.code)
@@ -798,11 +800,10 @@ class LearningCalendarPlugin extends Plugin
         return 0;
     }
 
-    /**
-     * @param array $htmlHeadXtra
-     */
-    public function setJavaScript(&$htmlHeadXtra)
+    public function setJavaScript()
     {
+        global $htmlHeadXtra;
+
         $htmlHeadXtra[] = api_get_js('jqplot/jquery.jqplot.js');
         $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.dateAxisRenderer.js');
         $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.canvasOverlay.js');

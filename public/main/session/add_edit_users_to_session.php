@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 $cidReset = true;
 
@@ -315,7 +316,7 @@ function change_select(val) {
 </script>';
 
 $form_sent = 0;
-$errorMsg = $firstLetterUser = $firstLetterSession = '';
+$firstLetterUser = $firstLetterSession = '';
 $UserList = $SessionList = [];
 $sessions = [];
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
@@ -591,26 +592,26 @@ if ($ajax_search) {
 if ('multiple' == $add_type) {
     $link_add_type_unique =
         '<a href="'.api_get_self().'?id_session='.$sessionId.'&add='.$addProcess.'&add_type=unique">'.
-        Display::return_icon('single.gif').get_lang('Single registration').'</a>';
-    $link_add_type_multiple = Display::url(Display::return_icon('multiple.gif').get_lang('Multiple registration'), '');
+        Display::getMdiIcon(ObjectIcon::SINGLE_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Single registration')).get_lang('Single registration').'</a>';
+    $link_add_type_multiple = Display::url(Display::getMdiIcon(ObjectIcon::MULTI_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Multiple registration')).get_lang('Multiple registration'), '');
 } else {
-    $link_add_type_unique = Display::url(Display::return_icon('single.gif').get_lang('Single registration'), '');
+    $link_add_type_unique = Display::url(Display::getMdiIcon(ObjectIcon::SINGLE_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Single registration')).get_lang('Single registration'), '');
     $link_add_type_multiple =
         '<a href="'.api_get_self().'?id_session='.$sessionId.'&amp;add='.$addProcess.'&amp;add_type=multiple">'
-        .Display::return_icon('multiple.gif').get_lang('Multiple registration').'</a>';
+        .Display::getMdiIcon(ObjectIcon::MULTI_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Multiple registration')).get_lang('Multiple registration').'</a>';
 }
 $link_add_group = Display::url(
-    Display::return_icon('multiple.gif', get_lang('Enrolment by classes')).get_lang('Enrolment by classes'),
+    Display::getMdiIcon(ObjectIcon::MULTI_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Enrolment by classes')).get_lang('Enrolment by classes'),
     api_get_path(WEB_CODE_PATH).'admin/usergroups.php'
 );
 
 $newLinks = Display::url(
-    Display::return_icon('teacher.png', get_lang('Enroll trainers from existing sessions'), null, ICON_SIZE_TINY).
+    Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Enroll trainers from existing sessions')).
         get_lang('Enroll trainers from existing sessions'),
     api_get_path(WEB_CODE_PATH).'session/add_teachers_to_session.php?id='.$sessionId
 );
 $newLinks .= Display::url(
-    Display::return_icon('user.png', get_lang('Enroll trainers from existing sessions'), null, ICON_SIZE_TINY).
+    Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Enroll trainers from existing sessions')).
         get_lang('Enroll students from existing sessions'),
     api_get_path(WEB_CODE_PATH).'session/add_students_to_session.php?id='.$sessionId
 );
@@ -675,11 +676,6 @@ $newLinks .= Display::url(
         <input type="hidden" name="form_sent" value="1"/>
         <input type="hidden" name="add_type"/>
 
-        <?php
-        if (!empty($errorMsg)) {
-            echo Display::return_message($errorMsg); //main API
-        }
-        ?>
         <div id="multiple-add-session" class="row">
             <div class="col-md-4">
                 <div class="form-group">

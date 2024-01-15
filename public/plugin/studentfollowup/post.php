@@ -6,6 +6,7 @@ use Chamilo\PluginBundle\Entity\StudentFollowUp\CarePost;
 use Doctrine\Common\Collections\Criteria;
 use Gaufrette\Adapter\Ftp as FtpAdapter;
 use Gaufrette\Filesystem;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -125,11 +126,11 @@ $tpl->assign('post_url', $url);
 $tpl->assign(
     'back_link',
     Display::url(
-        Display::return_icon('back.png'),
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_SMALL),
         api_get_path(WEB_PLUGIN_PATH).'studentfollowup/posts.php?student_id='.$studentId
     )
 );
-$tpl->assign('information_icon', Display::return_icon('info.png'));
+$tpl->assign('information_icon', Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL));
 $tpl->assign('student_info', api_get_user_info($studentId));
 $tpl->assign('care_title', $plugin->get_lang('Student care detail view'));
 

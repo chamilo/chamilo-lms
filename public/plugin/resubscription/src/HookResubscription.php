@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Hook\HookObserver;
 use Chamilo\CoreBundle\Hook\Interfaces\HookResubscribeEventInterface;
 use Chamilo\CoreBundle\Hook\Interfaces\HookResubscribeObserverInterface;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * Hook to limit session resubscriptions.
@@ -104,7 +105,7 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
                 if (isset($userSessionCourses[$currentSessionCourse['c_id']])) {
                     $endDate = $userSessionCourses[$currentSessionCourse['c_id']];
                     $resubscriptionDate = gmdate($limitDateFormat, strtotime($endDate." +$resubscriptionOffset"));
-                    $icon = Display::return_icon('students.gif', get_lang('Learner'));
+                    $icon = Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Learner'));
                     $canResubscribeFrom = sprintf(
                         get_plugin_lang('CanResubscribeFromX', 'resubscription'),
                         $resubscriptionDate

@@ -9,6 +9,4 @@ namespace Chamilo\CoreBundle\Entity;
 /**
  * Show base course resources inside a session.
  */
-interface ResourceShowCourseResourcesInSessionInterface
-{
-}
+interface ResourceShowCourseResourcesInSessionInterface {}

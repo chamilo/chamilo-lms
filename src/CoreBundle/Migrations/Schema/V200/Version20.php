@@ -25,7 +25,7 @@ class Version20 extends AbstractMigrationChamilo
     {
         $this->addSql('set sql_mode=""');
         // Optimize bulk operations - see https://dev.mysql.com/doc/refman/5.6/en//optimizing-innodb-bulk-data-loading.html
-        //$this->addSql('set autocommit=0');
+        // $this->addSql('set autocommit=0');
         $this->addSql('set unique_checks=0');
         $this->addSql('set foreign_key_checks=0');
 
@@ -174,6 +174,7 @@ class Version20 extends AbstractMigrationChamilo
 
         $this->addSql("UPDATE language SET isocode = 'fr_FR' WHERE isocode = 'fr' ");
         $this->addSql("UPDATE language SET isocode = 'pl_PL' WHERE isocode = 'pl' ");
+        $this->addSql("UPDATE language SET isocode = 'qu_PE' WHERE isocode = 'qu'");
 
         $this->addSql("UPDATE sys_announcement SET lang = 'english' WHERE lang IS NULL OR lang = '' ");
         $this->addSql("UPDATE course SET course_language = 'english' WHERE course_language IS NULL OR course_language = '' ");
@@ -269,7 +270,7 @@ class Version20 extends AbstractMigrationChamilo
         if ($table->hasColumn('api_service')) {
             $this->addSql("UPDATE user_api_key SET api_service = 'default' WHERE api_service = 'dokeos'");
         }
-        //$this->addSql('ALTER TABLE c_tool_intro CHANGE id tool VARCHAR(255) NOT NULL');
+        // $this->addSql('ALTER TABLE c_tool_intro CHANGE id tool VARCHAR(255) NOT NULL');
 
         /*$table = $schema->getTable('course_rel_class');
         if (!$table->hasColumn('c_id')) {
@@ -295,7 +296,7 @@ class Version20 extends AbstractMigrationChamilo
         ];
 
         foreach ($tables as $table) {
-            //$tableObj = $schema->getTable($table);
+            // $tableObj = $schema->getTable($table);
             /*if (!$tableObj->hasColumn('c_id')) {
                 $this->addSql("ALTER TABLE $table ADD c_id int NOT NULL");
 
@@ -341,7 +342,7 @@ class Version20 extends AbstractMigrationChamilo
         }
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE usergroup ADD resource_node_id BIGINT DEFAULT NULL');
+            $this->addSql('ALTER TABLE usergroup ADD resource_node_id INT DEFAULT NULL');
         }
 
         // sequence_resource.
@@ -492,7 +493,7 @@ class Version20 extends AbstractMigrationChamilo
             'c_glossary' => ['c_id', 'session_id', 'glossary_id'],
             'c_group_category' => ['c_id'],
             'c_group_info' => ['c_id', 'session_id'],
-            //'c_group_rel_tutor' => ['c_id'],
+            // 'c_group_rel_tutor' => ['c_id'],
             'c_link' => ['c_id', 'session_id'],
             'c_link_category' => ['c_id', 'session_id'],
 
@@ -501,7 +502,7 @@ class Version20 extends AbstractMigrationChamilo
             'c_lp_item' => ['c_id'],
             'c_lp_item_view' => ['c_id', 'session_id'],
             // 'c_lp_iv_interaction' => ['c_id'],
-            //'c_lp_iv_objective' => ['c_id'],
+            // 'c_lp_iv_objective' => ['c_id'],
             'c_notebook' => ['c_id', 'session_id'],
             'c_quiz' => ['c_id', 'session_id'],
             'c_quiz_answer' => ['c_id'],
@@ -553,7 +554,5 @@ class Version20 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

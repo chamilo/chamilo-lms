@@ -9,6 +9,8 @@
  *
  * @version $Id: qti2.php  2010-03-12 12:14:25Z $
  */
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);
@@ -35,7 +37,7 @@ function displayForm()
 {
     $form = '<div class="actions">';
     $form .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?show=test&'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('BackToTestsList'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to tests list')).'</a>';
     $form .= '</div>';
     $formValidator = new FormValidator(
         'qti_upload',

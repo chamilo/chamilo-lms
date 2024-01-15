@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * @author Bart Mollet
@@ -842,35 +843,37 @@ function active_filter($active, $params, $row)
 {
     $_user = api_get_user_info();
 
+    $action = 'Unlock';
+    $image = StateIcon::WARNING;
     if ('1' == $active) {
         $action = 'Lock';
-        $image = 'accept'; //mdi-check-circle
+        $image = StateIcon::COMPLETE;
     } elseif ('-1' == $active) {
         $action = 'edit';
-        $image = 'warning'; //mdi-alert-circle
-    } elseif ('0' == $active) {
-        $action = 'Unlock';
-        $image = 'error'; //mdi-minus-circle
+        $image = StateIcon::EXPIRED;
     }
 
     $result = '';
 
     if ('edit' === $action) {
-        $result = Display::return_icon(
-            $image.'.png',
-            get_lang('Account expired'),
-            [],
-            16
+        $result = Display::getMdiIcon(
+            $image,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_TINY,
+            get_lang('Account expired')
         );
     } elseif ($row['0'] != $_user['user_id']) {
         // you cannot lock yourself out otherwise you could disable all the
         // accounts including your own => everybody is locked out and nobody
         // can change it anymore.
-        $result = Display::return_icon(
-            $image.'.png',
+        $result = Display::getMdiIcon(
+            $image,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_TINY,
             get_lang(ucfirst($action)),
-            ['onclick' => 'active_user(this);', 'id' => 'img_'.$row['0']],
-            16
+            ['onclick' => 'active_user(this);', 'id' => 'img_'.$row['0']]
         );
     }
 

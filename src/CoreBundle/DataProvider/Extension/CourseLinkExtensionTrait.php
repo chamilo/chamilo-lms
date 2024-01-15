@@ -12,8 +12,7 @@ trait CourseLinkExtensionTrait
 {
     public function __construct(
         private readonly Security $security
-    ) {
-    }
+    ) {}
 
     protected function addCourseLinkWithVisibilityConditions(
         QueryBuilder $queryBuilder,
@@ -45,8 +44,8 @@ trait CourseLinkExtensionTrait
         ;
 
         $allowDraft =
-            $this->security->isGranted('ROLE_ADMIN') ||
-            $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER');
+            $this->security->isGranted('ROLE_ADMIN')
+            || $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER');
 
         if (!$allowDraft) {
             $queryBuilder

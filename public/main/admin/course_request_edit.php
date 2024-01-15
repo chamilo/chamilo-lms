@@ -7,6 +7,9 @@
  *
  * @author Ivan Tcholakov <ivantcholakov@gmail.com>, 2010
  */
+
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -346,15 +349,39 @@ if (!$course_validation_feature) {
 // The action bar.
 echo '<div class="actions">';
 echo '<a href="course_list.php">'.
-    Display::return_icon('courses.gif', get_lang('Course list')).get_lang('Course list').'</a>';
+    Display::getMdiIcon(
+        ToolIcon::COURSE,
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_SMALL,
+        get_lang('Course list')
+    ).get_lang('Course list').'</a>';
 echo '<a href="course_request_review.php">'.
-    Display::return_icon('course_request_pending.png', get_lang('Review incoming course requests')).get_lang('Review incoming course requests').
+    Display::getMdiIcon(
+        'notebook-heart-outline',
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_SMALL,
+        get_lang('Review incoming course requests')
+    ).get_lang('Review incoming course requests').
     '</a>';
 echo '<a href="course_request_accepted.php">'.
-    Display::return_icon('course_request_accepted.gif', get_lang('Accepted course requests')).get_lang('Accepted course requests').
+    Display::getMdiIcon(
+        'notebook-check-outline',
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_SMALL,
+        get_lang('Accepted course requests')
+    ).get_lang('Accepted course requests').
     '</a>';
 echo '<a href="course_request_rejected.php">'.
-    Display::return_icon('course_request_rejected.gif', get_lang('Rejected course requests')).get_lang('Rejected course requests').
+    Display::getMdiIcon(
+        'notebook-remove-outline',
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_SMALL,
+        get_lang('Rejected course requests')
+    ).get_lang('Rejected course requests').
     '</a>';
 echo '</div>';
 

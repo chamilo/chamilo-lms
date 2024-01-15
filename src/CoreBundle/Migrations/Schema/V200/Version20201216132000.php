@@ -26,22 +26,24 @@ final class Version20201216132000 extends AbstractMigrationChamilo
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
         $em = $doctrine->getManager();
+
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
         $lpItemRepo = $container->get(CLpItemRepository::class);
 
         $batchSize = self::BATCH_SIZE;
-        //$q = $em->createQuery('SELECT lp FROM Chamilo\CourseBundle\Entity\CLp lp WHERE lp.iid = 263 ORDER BY lp.iid');
+        // $q = $em->createQuery('SELECT lp FROM Chamilo\CourseBundle\Entity\CLp lp WHERE lp.iid = 263 ORDER BY lp.iid');
         $q = $em->createQuery('SELECT lp FROM Chamilo\CourseBundle\Entity\CLp lp');
         $counter = 1;
+
         /** @var CLp $lp */
         foreach ($q->toIterable() as $lp) {
             $lpId = $lp->getIid();
             error_log("LP #$lpId");
 
             /** @var CLp $resource */
-            //$resource = $lpRepo->find($lpId);
+            // $resource = $lpRepo->find($lpId);
             if (!$lp->hasResourceNode()) {
                 error_log('no resource node');
 

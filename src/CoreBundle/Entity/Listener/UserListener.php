@@ -22,8 +22,7 @@ class UserListener
         private UserRepository $userRepository,
         private Security $security,
         private readonly TranslatorInterface $translator
-    ) {
-    }
+    ) {}
 
     /**
      * This code is executed when a new user is created.

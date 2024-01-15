@@ -56,8 +56,8 @@ class ResourceVoter extends Voter
         }
 
         // Course/CGroup/ are AbstractResource, but it's checked with the CourseVoter
-        if ($subject instanceof Course ||
-            $subject instanceof CGroup
+        if ($subject instanceof Course
+            || $subject instanceof CGroup
         ) {
             return false;
         }

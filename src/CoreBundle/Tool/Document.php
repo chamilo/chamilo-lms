@@ -10,12 +10,12 @@ use Chamilo\CourseBundle\Entity\CDocument;
 
 class Document extends AbstractTool implements ToolInterface
 {
-    public function getName(): string
+    public function getTitle(): string
     {
         return 'document';
     }
 
-    public function getNameToShow(): string
+    public function getTitleToShow(): string
     {
         return 'Documents';
     }

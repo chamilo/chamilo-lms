@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * This script allows to manage answers. It is included from the
@@ -563,7 +564,7 @@ if (isset($modifyAnswers)) {
 
     Display::tag(
         'h3',
-        get_lang('Question').': '.$questionName.Display::return_icon('info3.gif', strip_tags(get_lang('To create a hotspot: select a shape next to the colour, and draw the hotspot. To move a hotspot, select the colour, click another spot in the image, and draw the hotspot. To add a hotspot: click the Add hotspot button. To close a polygon shape: right click and select Close polygon.')))
+        get_lang('Question').': '.$questionName.Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, strip_tags(get_lang('To create a hotspot: select a shape next to the colour, and draw the hotspot. To move a hotspot, select the colour, click another spot in the image, and draw the hotspot. To add a hotspot: click the Add hotspot button. To close a polygon shape: right click and select Close polygon.')))
     );
 
     if (!empty($msgErr)) {

@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\Common\Collections\Criteria;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Generate a teacher time report in platform by session only.
@@ -106,7 +107,7 @@ if (isset($_GET['export']) && $session && $coursesInfo && $usersInfo) {
     $fileName = get_lang('Teachers time report').' '.api_get_local_time();
 
     $dataToExport = [];
-    $dataToExport[] = [$toolName, $session->getName()];
+    $dataToExport[] = [$toolName, $session->getTitle()];
     $dataToExport['headers'] = [
         get_lang('Code'),
         get_lang('Coach name'),
@@ -146,7 +147,7 @@ if (isset($_GET['export']) && $session && $coursesInfo && $usersInfo) {
             $contents[] = $course['time_spent_of_course'];
         }
 
-        $dataToExport[] = [get_lang('Session'), $session->getName()];
+        $dataToExport[] = [get_lang('Session'), $session->getTitle()];
         $dataToExport[] = $headers;
         $dataToExport[] = $contents;
     }
@@ -173,16 +174,16 @@ $view = new Template($toolName);
 $view->assign('form', $form->returnForm());
 
 if ($session) {
-    $view->assign('session', ['id' => $session->getId(), 'name' => $session->getName()]);
+    $view->assign('session', ['id' => $session->getId(), 'name' => $session->getTitle()]);
     $view->assign('courses', $coursesInfo);
     $view->assign('users', $usersInfo);
 
     $actions = Display::url(
-        Display::return_icon('export_csv.png', get_lang('CSV export'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')),
         api_get_self().'?'.http_build_query(['export' => 'csv', 'session' => $session->getId()])
     );
     $actions .= Display::url(
-        Display::return_icon('export_excel.png', get_lang('Excel export'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Excel export')),
         api_get_self().'?'.http_build_query(['export' => 'xls', 'session' => $session->getId()])
     );
 

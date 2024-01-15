@@ -2,6 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
+
 /**
  * Class bbb
  * This script initiates a video conference session, calling the BigBlueButton
@@ -1282,11 +1286,11 @@ class bbb
         $isVisible = $meetingInfo['visibility'] != 0;
         $linkVisibility = $isVisible
             ? Display::url(
-                Display::return_icon('visible.png', get_lang('MakeInvisible')),
+                Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('MakeInvisible')),
                 $this->unPublishUrl($meetingInfo)
             )
             : Display::url(
-                Display::return_icon('invisible.png', get_lang('MakeVisible')),
+                Display::getMdiIcon(StateIcon::INACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('MakeVisible')),
                 $this->publishUrl($meetingInfo)
             );
 
@@ -1294,12 +1298,12 @@ class bbb
         if ($this->plugin->get('allow_regenerate_recording') === 'true' && $meetingInfo['record'] == 1) {
             if (!empty($recordInfo)) {
                 $links[] = Display::url(
-                    Display::return_icon('reload.png', get_lang('RegenerateRecord')),
+                    Display::getMdiIcon(ActionIcon::REFRESH, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('RegenerateRecord')),
                     $this->regenerateRecordUrl($meetingInfo, $recordInfo)
                 );
             } else {
                 $links[] = Display::url(
-                    Display::return_icon('reload.png', get_lang('RegenerateRecord')),
+                    Display::getMdiIcon(ActionIcon::REFRESH, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('RegenerateRecord')),
                     $this->regenerateRecordUrlFromMeeting($meetingInfo)
                 );
             }
@@ -1309,7 +1313,7 @@ class bbb
             if (!$isAdminReport) {
                 if ($meetingInfo['status'] == 0) {
                     $links[] = Display::url(
-                        Display::return_icon('delete.png', get_lang('Delete')),
+                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
                         $this->deleteRecordUrl($meetingInfo)
                     );
                     $links[] = $linkVisibility;
@@ -1318,7 +1322,7 @@ class bbb
                 return $links;
             } else {
                 $links[] = Display::url(
-                    Display::return_icon('course_home.png', get_lang('GoToCourse')),
+                    Display::getMdiIcon(ObjectIcon::HOME, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('GoToCourse')),
                     $this->getListingUrl($meetingInfo['c_id'], $meetingInfo['session_id'], $meetingInfo['group_id'])
                 );
 
@@ -1328,11 +1332,11 @@ class bbb
 
         if (!$isGlobal) {
             $links[] = Display::url(
-                Display::return_icon('link.gif', get_lang('UrlMeetingToShare')),
+                Display::getMdiIcon(ObjectIcon::LINK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('UrlMeetingToShare')),
                 $this->copyToRecordToLinkTool($meetingInfo)
             );
             $links[] = Display::url(
-                Display::return_icon('agenda.png', get_lang('AddToCalendar')),
+                Display::getMdiIcon(ObjectIcon::AGENDA, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('AddToCalendar')),
                 $this->addToCalendarUrl($meetingInfo, $recordInfo)
             );
         }
@@ -1342,13 +1346,13 @@ class bbb
         if ($hide == false) {
             if ($meetingInfo['has_video_m4v']) {
                 $links[] = Display::url(
-                    Display::return_icon('save.png', get_lang('DownloadFile')),
+                    Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('DownloadFile')),
                     $recordInfo['playbackFormatUrl'].'/capture.m4v',
                     ['target' => '_blank']
                 );
             } else {
                 $links[] = Display::url(
-                    Display::return_icon('save.png', get_lang('DownloadFile')),
+                    Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('DownloadFile')),
                     '#',
                     [
                         'id' => "btn-check-meeting-video-{$meetingInfo['id']}",
@@ -1362,13 +1366,13 @@ class bbb
 
         if (!$isAdminReport) {
             $links[] = Display::url(
-                Display::return_icon('delete.png', get_lang('Delete')),
+                Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
                 $this->deleteRecordUrl($meetingInfo)
             );
             $links[] = $linkVisibility;
         } else {
             $links[] = Display::url(
-                Display::return_icon('course_home.png', get_lang('GoToCourse')),
+                Display::getMdiIcon(ObjectIcon::HOME, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('GoToCourse')),
                 $this->getListingUrl($meetingInfo['c_id'], $meetingInfo['session_id'], $meetingInfo['group_id'])
             );
         }

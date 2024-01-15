@@ -2,6 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+
 /**
  * Class IndexManager.
  */
@@ -176,14 +180,14 @@ class IndexManager
             'false' === api_get_setting('certificate.hide_my_certificate_link')
         ) {
             $items[] = [
-                'icon' => Display::return_icon('graduation.png', get_lang('My certificates')),
+                'icon' => Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('My certificates')),
                 'link' => api_get_path(WEB_CODE_PATH).'gradebook/my_certificates.php',
                 'title' => get_lang('My certificates'),
             ];
         }
         if ('true' == api_get_setting('allow_public_certificates')) {
             $items[] = [
-                'icon' => Display::return_icon('search_graduation.png', get_lang('Search')),
+                'icon' => Display::getMdiIcon(ActionIcon::SEARCH, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Search')),
                 'link' => api_get_path(WEB_CODE_PATH).'gradebook/search.php',
                 'title' => get_lang('Search'),
             ];
@@ -196,12 +200,7 @@ class IndexManager
 
         if ($myCertificate) {
             $items[] = [
-                'icon' => Display::return_icon(
-                    'skill-badges.png',
-                    get_lang('My global certificate'),
-                    null,
-                    ICON_SIZE_SMALL
-                ),
+                'icon' => Display::getMdiIcon(ObjectIcon::BADGE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('My global certificate')),
                 'link' => api_get_path(WEB_CODE_PATH).'social/my_skills_report.php?a=generate_custom_skill',
                 'title' => get_lang('My global certificate'),
             ];
@@ -209,14 +208,14 @@ class IndexManager
 
         if (SkillModel::isAllowed(api_get_user_id(), false)) {
             $items[] = [
-                'icon' => Display::return_icon('skill-badges.png', get_lang('My skills')),
+                'icon' => Display::getMdiIcon(ObjectIcon::BADGE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('My skills')),
                 'link' => api_get_path(WEB_CODE_PATH).'social/my_skills_report.php',
                 'title' => get_lang('My skills'),
             ];
             $allowSkillsManagement = 'true' == api_get_setting('allow_hr_skills_management');
             if (($allowSkillsManagement && api_is_drh()) || api_is_platform_admin()) {
                 $items[] = [
-                    'icon' => Display::return_icon('edit-skill.png', get_lang('My skills')),
+                    'icon' => Display::getMdiIcon(ActionIcon::EDIT_BADGE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('My skills')),
                     'link' => api_get_path(WEB_CODE_PATH).'skills/skills_wheel.php',
                     'title' => get_lang('Manage skills'),
                 ];
@@ -237,7 +236,7 @@ class IndexManager
 
         if ($allow) {
             $items[] = [
-                'icon' => Display::return_icon('lp_student_publication.png', get_lang('StudentPublications')),
+                'icon' => Display::getMdiIcon(ObjectIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('StudentPublications')),
                 'link' => api_get_path(WEB_CODE_PATH).'work/publications.php',
                 'title' => get_lang('MyStudentPublications'),
             ];
@@ -304,7 +303,7 @@ class IndexManager
                         WHERE
                             access_url_id = $url_access_id AND
                             course_category.code = '$category'
-                        ORDER BY title, UPPER(visual_code)";
+                        ORDER BY course.title, UPPER(visual_code)";
                 }
             }
         }
@@ -534,7 +533,7 @@ class IndexManager
         }
         if ('' != $category) {
             $result .= '<p><a href="'.api_get_self().'">'
-                .Display:: return_icon('back.png', get_lang('Categories Overview'))
+                .Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Categories Overview'))
                 .get_lang('Categories Overview').'</a></p>';
         }
 
@@ -791,14 +790,14 @@ class IndexManager
             if ('true' == api_get_setting('course_validation') && !api_is_platform_admin()) {
                 $items[] = [
                     'class' => 'add-course',
-                    'icon' => Display::return_icon('new-course.png', get_lang('Create a course request')),
+                    'icon' => Display::getMdiIcon(ToolIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Create a course request')),
                     'link' => api_get_path(WEB_CODE_PATH).'create_course/add_course.php',
                     'title' => get_lang('Create a course request'),
                 ];
             } else {
                 $items[] = [
                     'class' => 'add-course',
-                    'icon' => Display::return_icon('new-course.png', get_lang('Create a course')),
+                    'icon' => Display::getMdiIcon(ToolIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Create a course')),
                     'link' => api_get_path(WEB_CODE_PATH).'create_course/add_course.php',
                     'title' => get_lang('Create a course'),
                 ];
@@ -807,7 +806,7 @@ class IndexManager
             if (SessionManager::allowToManageSessions()) {
                 $items[] = [
                     'class' => 'add-session',
-                    'icon' => Display::return_icon('session.png', get_lang('Add a training session')),
+                    'icon' => Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add a training session')),
                     'link' => api_get_path(WEB_CODE_PATH).'session/session_add.php',
                     'title' => get_lang('Add a training session'),
                 ];
@@ -817,7 +816,7 @@ class IndexManager
         // Sort courses
         $items[] = [
             'class' => 'order-course',
-            'icon' => Display::return_icon('order-course.png', get_lang('Sort courses')),
+            'icon' => Display::getMdiIcon(ActionIcon::SORT_ALPHA, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Sort courses')),
             'link' => api_get_path(WEB_CODE_PATH).'auth/sort_my_courses.php',
             'title' => get_lang('Sort courses'),
         ];
@@ -826,14 +825,14 @@ class IndexManager
         if (isset($_GET['history']) && 1 == intval($_GET['history'])) {
             $items[] = [
                 'class' => 'history-course',
-                'icon' => Display::return_icon('history-course.png', get_lang('Display courses list')),
+                'icon' => Display::getMdiIcon(ActionIcon::SORT_DATE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Display courses list')),
                 'link' => api_get_path(WEB_PATH).'user_portal.php',
                 'title' => get_lang('Display courses list'),
             ];
         } else {
             $items[] = [
                 'class' => 'history-course',
-                'icon' => Display::return_icon('history-course.png', get_lang('Courses history')),
+                'icon' => Display::getMdiIcon(ActionIcon::SORT_DATE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Courses history')),
                 'link' => api_get_path(WEB_PATH).'user_portal.php?history=1',
                 'title' => get_lang('Courses history'),
             ];
@@ -851,7 +850,7 @@ class IndexManager
             if (!api_is_drh()) {
                 $items[] = [
                     'class' => 'list-course',
-                    'icon' => Display::return_icon('catalog-course.png', get_lang('Course catalog')),
+                    'icon' => Display::getMdiIcon(ObjectIcon::CHAPTER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course catalog')),
                     'link' => api_get_path(WEB_CODE_PATH).'auth/courses.php',
                     'title' => get_lang('Course catalog'),
                 ];
@@ -930,7 +929,10 @@ class IndexManager
                 $this->load_directories_preview,
                 $useUserLanguageFilterIfAvailable
             );*/
-            $courses = [];
+            $courses = [
+                'in_category' => [],
+                'not_category' => [],
+            ];
 
             // Course option (show student progress)
             // This code will add new variables (Progress, Score, Certificate)
@@ -981,7 +983,6 @@ class IndexManager
                     }
                 }
 
-                if (isset($courses['in_category'])) {
                     foreach ($courses['in_category'] as $key1 => $value) {
                         if (isset($courses['in_category'][$key1]['courses'])) {
                             foreach ($courses['in_category'][$key1]['courses'] as $key2 => $courseInCatInfo) {
@@ -1043,9 +1044,7 @@ class IndexManager
                             }
                         }
                     }
-                }
 
-                if (isset($courses['not_category'])) {
                     foreach ($courses['not_category'] as $key => $courseNotInCatInfo) {
                         $courseCode = $courseNotInCatInfo['course_code'];
                         if ($studentInfoProgress) {
@@ -1100,7 +1099,6 @@ class IndexManager
                             }
                         }
                     }
-                }
             }
 
             if ($viewGridCourses) {
@@ -1871,11 +1869,12 @@ class IndexManager
         if (0 == $id) {
             return '';
         }
-        $icon = Display::return_icon(
-            'folder_yellow.png',
-            $title,
-            ['class' => 'sessionView'],
-            ICON_SIZE_LARGE
+        $icon = Display::getMdiIcon(
+            ObjectIcon::FOLDER,
+            'ch-tool-icon sessionView',
+            null,
+            ICON_SIZE_LARGE,
+            $title
         );
 
         return "<div class='session-view-user-category'>$icon<span>$title</span></div>";
@@ -1924,11 +1923,12 @@ class IndexManager
                 ).'\', \'session-view-button-'.intval($id).'\', \'+\', \'-\')" value="+" />';
         }
 
-        $icon = Display::return_icon(
-            'blackboard.png',
-            $title,
-            ['class' => 'sessionView'],
-            ICON_SIZE_LARGE
+        $icon = Display::getMdiIcon(
+            ToolIcon::COURSE,
+            'ch-tool-icon sessionView',
+            null,
+            ICON_SIZE_LARGE,
+            $title
         );
 
         $courseLink = $courseInfo['course_public_url'].'?sid=0';
@@ -1975,11 +1975,11 @@ class IndexManager
             return '';
         }
 
-        $icon = Display::return_icon(
-            'folder_blue.png',
-            $title,
-            ['class' => 'sessionView'],
-            ICON_SIZE_LARGE
+        $icon = Display::getMdiIcon(
+            ObjectIcon::FOLDER,
+            'ch-tool-icon sessionView',
+            ICON_SIZE_LARGE,
+            $title
         );
 
         return "<div class='session-view-session-category'>
@@ -2011,11 +2011,11 @@ class IndexManager
             $class2 = 'session-view-lvl-5'; // got to course in session link
         }
 
-        $icon = Display::return_icon(
-            'session.png',
-            $title,
-            ['class' => 'sessionView'],
-            ICON_SIZE_LARGE
+        $icon = Display::getMdiIcon(
+            ObjectIcon::SESSION,
+            'ch-tool-icon sessionView',
+            ICON_SIZE_LARGE,
+            $title
         );
         $courseLink = $courseInfo['course_public_url'].'?sid='.(int) $id;
 

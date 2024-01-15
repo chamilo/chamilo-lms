@@ -5,6 +5,9 @@
 /**
  * List sessions in an efficient and usable way.
  */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -74,7 +77,7 @@ $extra_params['height'] = 'auto';
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-     return \'&nbsp;<a href="add_users_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('user_subscribe_session.png', get_lang('Subscribe users to this session'), '', ICON_SIZE_SMALL).'</a>'.
+     return \'&nbsp;<a href="add_users_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::getMdiIcon('account-plus-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Subscribe users to this session')).'</a>'.
      '\';
 }';
 ?>
@@ -139,11 +142,11 @@ $(function() {
 if (api_is_platform_admin()) {
     echo '<div class="actions">';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.
-        Display::return_icon('new_session.png', get_lang('Add a training session'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a training session')).'</a>';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/add_many_session_to_category.php">'.
-        Display::return_icon('session_to_category.png', get_lang('Add a training sessionsInCategories'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon(ActionIcon::CREATE_CATEGORY, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a training sessionsInCategories')).'</a>';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_category_list.php">'.
-        Display::return_icon('folder.png', get_lang('Sessions categories list'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon('file-tree-outline', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Sessions categories list')).'</a>';
     echo '</div>';
 }
 echo Display::grid_html('sessions');

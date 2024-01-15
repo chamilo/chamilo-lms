@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 $cidReset = true;
 
@@ -78,12 +79,28 @@ function search_coachs($needle)
     return $xajax_response;
 }
 
+$urlAction = api_get_self();
+$session = null;
+$fromSessionId = null;
+$accessSelected = 0;
+if (isset($_GET['fromSessionId'])) {
+    $fromSessionId = (int) $_GET['fromSessionId'];
+    $session = api_get_session_entity($fromSessionId);
+    if ($session && 0 === (int) $session->getDuration()) {
+        $accessSelected = 1;
+    }
+    $urlAction .= '?fromSessionId=' . $fromSessionId;
+}
+
 $xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = "
 <script>
 $(function() {
-    accessSwitcher(0);
+   setTimeout(function() {
+        $('#access').val('".$accessSelected."').trigger('change');
+        accessSwitcher('".$accessSelected."');
+    }, 1000);
 });
 
 function fill_coach_field (username) {
@@ -121,8 +138,6 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
 $tool_name = get_lang('Add a training session');
 
-$urlAction = api_get_self();
-
 function check_session_name($name)
 {
     $session = SessionManager::get_session_by_name($name);
@@ -130,13 +145,6 @@ function check_session_name($name)
     return empty($session) ? true : false;
 }
 
-$session = null;
-$fromSessionId = null;
-if (isset($_GET['fromSessionId'])) {
-    $fromSessionId = (int) $_GET['fromSessionId'];
-    $session = api_get_session_entity($fromSessionId);
-    $urlAction .= '?fromSessionId=' . $fromSessionId;
-}
 $form = new FormValidator('add_session', 'post', $urlAction);
 $form->addElement('header', $tool_name);
 $result = SessionManager::setForm($form, null, $fromSessionId);
@@ -157,7 +165,9 @@ $(function() {
     function repopulateFormValues() {
         var formValues = JSON.parse(sessionStorage.getItem('formValues'));
         $.each(formValues, function(i, field) {
-            $('[name=\"' + field.name + '\"]').val(field.value);
+            if (field.name === 'coach_username' || field.name === 'name' || field.name === 'system_template') {
+                $('[name=\"' + field.name + '\"]').val(field.value);
+            }
         });
     }
 
@@ -231,7 +241,7 @@ if (!$formSent) {
                 },
                 $session->getGeneralCoaches()->getValues()
             ),
-            'session_template' => $session->getName(),
+            'session_template' => $session->getTitle(),
         ];
     } else {
         $formDefaults['access_start_date'] = $formDefaults['display_start_date'] = api_get_local_time();
@@ -272,6 +282,30 @@ if ($form->validate()) {
 
     if (isset($extraFields['extra_image']) && !empty($extraFields['extra_image']['name']) && $isThisImageCropped) {
         $extraFields['extra_image']['crop_parameters'] = $params['picture_crop_result'];
+    }
+
+    // Check if the session image will be copied from the template
+    $importImageFromSession = false;
+    $sessionIdToImport = !empty($params['extra_image_crop_result']) ? explode('::', $params['extra_image_crop_result']) : [];
+    $sessionIdToImport = isset($sessionIdToImport[1]) ? (int) $sessionIdToImport[1] : 0;
+    if (!empty($sessionIdToImport)) {
+        $extraField = new ExtraField('session');
+        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable('image');
+
+        $extraFieldValue = new ExtraFieldValue('session');
+        $extraFieldValueData = $extraFieldValue->get_values_by_handler_and_field_id(
+            $sessionIdToImport,
+            $extraFieldInfo['id']
+        );
+
+        if ($extraFieldValueData) {
+            $repo = Container::getAssetRepository();
+            /** @var Asset $asset */
+            $asset = $repo->find($extraFieldValueData);
+            if ($asset) {
+                $extraFields['extra_image']['id'] = $extraFieldValueData;
+            }
+        }
     }
 
     $return = SessionManager::create_session(
@@ -339,7 +373,7 @@ if (!empty($return)) {
 }
 
 $actions = '<a href="../session/session_list.php">'.
-    Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Administration')).'</a>';
 echo Display::toolbarAction('session', [$actions]);
 $form->display();
 

@@ -67,6 +67,9 @@
     "Delete": "Eliminar la lecci\u00f3n",
     "{resource} created": "{resource} created",
     "{resource} deleted": "{resource} deleted",
+    "Course: {course}": "Course: {course}",
+    "Session: {session}": "Session: {session}",
+    "Status: {status}": "Status: {status}",
     "Edit event": "Modificar evento",
     "Add event": "A\u00f1adir un nuevo evento",
     "Add": "A\u00f1adir",
@@ -154,9 +157,14 @@
     "Loading courses. Please wait.": "Loading courses. Please wait.",
     "Loading sessions. Please wait.": "Loading sessions. Please wait.",
     "There is no terms that matches the search: {searchTerm}": "There is no terms that matches the search: {searchTerm}",
-    "End of LearnPath": "End of LearnPath",
-    "OfajEndLPSubject": "OfajEndLPSubject",
-    "OfajEndLpDescription": "OfajEndLpDescription",
+    "Send diagnostic finalization message": "Send diagnostic finalization message",
+    "DiagnosticfinalizationmessageTitle": "DiagnosticfinalizationmessageTitle",
+    "DiagnosticfinalizationmessageContent": "DiagnosticfinalizationmessageContent",
     "Contact": "Contacto",
-    "Registration": "Registro"
+    "Registration": "Registro",
+    "Current session tab": "Actual",
+    "Upcoming session tab": "Por venir",
+    "Past session tab": "Finalizadas",
+    "Sticky courses": "Cursos especiales",
+    "Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:": "Crear certificado con estas etiquetas"
 }

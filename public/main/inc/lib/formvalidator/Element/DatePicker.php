@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+
 /**
  * Form element to select a date.
  */
@@ -131,7 +133,7 @@ class DatePicker extends HTML_QuickForm_text
                         altField: '#{$id}_alt',
                         altFormat: \"".get_lang('MM dd, yy')."\",
                         showOn: 'both',
-                        buttonImage: '".Display::return_icon('attendance.png', null, [], ICON_SIZE_TINY, true, true)."',
+                        buttonImage: '".Display::getMdiIcon(ToolIcon::ATTENDANCE, 'ch-tool-icon', null, ICON_SIZE_TINY)."',
                         buttonImageOnly: true,
                         buttonText: '".get_lang('Select date')."',
                         changeMonth: true,

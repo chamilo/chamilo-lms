@@ -31,7 +31,7 @@ class WorkSettingsSchema extends AbstractSettingsSchema
                 ]
             )
         ;
-        //$this->setMultipleAllowedTypes($allowedTypes, $builder);
+        // $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
     public function buildForm(FormBuilderInterface $builder): void
@@ -47,7 +47,6 @@ class WorkSettingsSchema extends AbstractSettingsSchema
             ->add('force_download_doc_before_upload_work', YesNoType::class)
             ->add('allow_redirect_to_main_page_after_work_upload', YesNoType::class)
             ->add('my_courses_show_pending_work', YesNoType::class)
-
         ;
     }
 }

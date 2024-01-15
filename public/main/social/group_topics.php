@@ -182,10 +182,7 @@ $interbreadcrumb[] = ['url' => 'group_view.php?id='.$group_id, 'name' => Securit
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Discussions')];
 
 $social_left_content = null; //SocialManager::show_social_menu('member_list', $group_id);
-$show_message = null;
-if (!empty($show_message)) {
-    $social_right_content .= Display::return_message($show_message, 'confirmation');
-}
+
 $group_message = MessageManager::display_message_for_group(
     $group_id,
     $topic_id,

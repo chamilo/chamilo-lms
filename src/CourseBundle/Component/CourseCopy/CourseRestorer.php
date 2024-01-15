@@ -2664,7 +2664,7 @@ class CourseRestorer
                         $tblLpCategory,
                         [
                             'WHERE' => [
-                                'c_id = ? AND name = ?' => [$this->destination_course_id, $lpCategory->getName()],
+                                'c_id = ? AND name = ?' => [$this->destination_course_id, $lpCategory->getTitle()],
                             ],
                         ],
                         'first'
@@ -2675,7 +2675,7 @@ class CourseRestorer
                     } else {
                         $values = [
                             'c_id' => $this->destination_course_id,
-                            'name' => $lpCategory->getName(),
+                            'name' => $lpCategory->getTitle(),
                         ];
                         $categoryId = learnpath::createCategory($values);
                     }

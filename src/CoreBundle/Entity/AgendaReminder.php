@@ -17,9 +17,9 @@ class AgendaReminder
     use TimestampableTypedEntity;
 
     #[ORM\Id]
-    #[ORM\Column(type: 'bigint')]
+    #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    protected int $id;
+    protected ?int $id = null;
 
     #[ORM\Column(name: 'type', type: 'string')]
     protected string $type;
@@ -38,7 +38,7 @@ class AgendaReminder
         $this->sent = false;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

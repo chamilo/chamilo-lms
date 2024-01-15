@@ -56,7 +56,7 @@ class Version20191206150030 extends AbstractMigrationChamilo
                     $em->persist($asset);
                     $em->flush();
                     $item->setAsset($asset);
-                    //$item->setValue((string) $asset->getId());
+                    // $item->setValue((string) $asset->getId());
                     $em->persist($item);
                 }
             }

@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -170,8 +172,8 @@ $counter = 0;
 if (!empty($main_question_list) && is_array($main_question_list)) {
     $html_result .= '<table  class="table table-hover table-striped data_table">';
     $html_result .= '<tr><th>'.get_lang('Question').
-                    Display::return_icon('info3.gif', get_lang('These questions have been taken from the learning paths'), ['align' => 'absmiddle', 'hspace' => '3px']).'</th>';
-    $html_result .= '<th>'.$course_info['visual_code'].' '.get_lang('Average score').Display::return_icon('info3.gif', get_lang('All learners attempts are considered'), ['align' => 'absmiddle', 'hspace' => '3px']).' </th>';
+                    Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('These questions have been taken from the learning paths')).'</th>';
+    $html_result .= '<th>'.$course_info['visual_code'].' '.get_lang('Average score').Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('All learners attempts are considered')).' </th>';
     $html_result .= '<th>'.get_lang('Quantity').'</th>';
 
     foreach ($main_question_list as $question) {

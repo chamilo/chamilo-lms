@@ -17,13 +17,14 @@ final class Version20230720222140 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Rename my_files path by resource file path';
+        return 'Add table social_post_attachments and rename my_files path by resource file path';
     }
 
     public function up(Schema $schema): void
     {
         $container = $this->getContainer();
         $em = $this->getEntityManager();
+
         /** @var Connection $connection */
         $connection = $em->getConnection();
 

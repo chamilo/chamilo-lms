@@ -2,6 +2,8 @@
 
 /* See license terms in /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -52,7 +54,7 @@ $data = [];
 $headers = [
     get_lang('Question'),
     get_lang('Question type'),
-    get_lang('Number of learners who selected it'),
+    get_lang('Number of times the question was answered'),
     get_lang('Lowest score'),
     get_lang('Average score'),
     get_lang('Highest score'),
@@ -63,7 +65,7 @@ if (!empty($question_list)) {
     foreach ($question_list as $question_id) {
         $questionObj = Question::read($question_id);
 
-        $exercise_stats = ExerciseLib::get_student_stats_by_question(
+        $exercise_stats = ExerciseLib::getStudentStatsByQuestion(
             $question_id,
             $exerciseId,
             $courseCode,
@@ -71,26 +73,16 @@ if (!empty($question_list)) {
             true
         );
 
-        $count_users = ExerciseLib::get_number_students_question_with_answer_count(
-            $question_id,
-            $exerciseId,
-            $courseCode,
-            $sessionId,
-            $questionObj->type
-        );
-
         $data[$question_id]['name'] = cut($questionObj->question, 100);
         $data[$question_id]['type'] = $questionObj->getExplanation();
-        $percentage = 0;
-        if ($count_students) {
-            $percentage = $count_users / $count_students * 100;
-        }
 
-        $data[$question_id]['students_who_try_exercise'] = Display::bar_progress(
-            $percentage,
-            false,
-            $count_users.' / '.$count_students
+        $totalTimesQuestionAnswered = ExerciseLib::getTotalQuestionAnswered(
+            $questionObj->course['id'],
+            $exerciseId,
+            $question_id,
+            true
         );
+        $data[$question_id]['students_who_try_exercise'] = $totalTimesQuestionAnswered;
         $data[$question_id]['lowest_score'] = round($exercise_stats['min'], 2);
         $data[$question_id]['average_score'] = round($exercise_stats['average'], 2);
         $data[$question_id]['highest_score'] = round($exercise_stats['max'], 2);
@@ -124,7 +116,7 @@ $headers = [
     get_lang('Question'),
     get_lang('Answer'),
     get_lang('Correct'),
-    get_lang('Number of learners who selected it'),
+    get_lang('Number of times this answer was selected'),
 ];
 
 $data = [];
@@ -133,7 +125,7 @@ if (!empty($question_list)) {
     $id = 0;
     foreach ($question_list as $question_id) {
         $questionObj = Question::read($question_id);
-        $exercise_stats = ExerciseLib::get_student_stats_by_question(
+        $exercise_stats = ExerciseLib::getStudentStatsByQuestion(
             $question_id,
             $exerciseId,
             $courseCode,
@@ -142,20 +134,20 @@ if (!empty($question_list)) {
         );
 
         $answer = new Answer($question_id);
-        $answer_count = $answer->selectNbrAnswers();
+        $answerCount = $answer->selectNbrAnswers();
 
-        for ($answer_id = 1; $answer_id <= $answer_count; $answer_id++) {
-            $answer_info = $answer->selectAnswer($answer_id);
-            $is_correct = $answer->isCorrect($answer_id);
-            $correct_answer = 1 == $is_correct ? get_lang('Yes') : get_lang('No');
-            $real_answer_id = $answer->selectAutoId($answer_id);
+        for ($answerId = 1; $answerId <= $answerCount; $answerId++) {
+            $answerInfo = $answer->selectAnswer($answerId);
+            $isCorrect = $answer->isCorrect($answerId);
+            $correctAnswer = 1 == $isCorrect ? get_lang('Yes') : get_lang('No');
+            $realAnswerId = $answer->selectAutoId($answerId);
 
-            // Overwriting values depending of the question
+            // Overwriting values depending on the question
             switch ($questionObj->type) {
                 case FILL_IN_BLANKS:
-                    $answer_info = substr($answer_info, 0, strpos($answer_info, '::'));
-                    $correct_answer = $is_correct;
-                    $answers = $objExercise->fill_in_blank_answer_to_array($answer_info);
+                    $answerInfo = substr($answerInfo, 0, strpos($answerInfo, '::'));
+                    $correctAnswer = $isCorrect;
+                    $answers = $objExercise->fill_in_blank_answer_to_array($answerInfo);
                     $counter = 0;
                     foreach ($answers as $answer_item) {
                         if (0 == $counter) {
@@ -172,17 +164,9 @@ if (!empty($question_list)) {
                         $data[$id]['correct'] = '-';
 
                         $count = ExerciseLib::getNumberStudentsFillBlanksAnswerCount($question_id, $exerciseId);
-                        $count = isset($count[$counter]) ? $count[$counter] : 0;
+                        $count = $count[$counter] ?? 0;
 
-                        $percentage = 0;
-                        if (!empty($count_students)) {
-                            $percentage = $count / $count_students * 100;
-                        }
-                        $data[$id]['attempts'] = Display::bar_progress(
-                            $percentage,
-                            false,
-                            $count.' / '.$count_students
-                        );
+                        $data[$id]['attempts'] = $count;
                         $id++;
                         $counter++;
                     }
@@ -190,96 +174,73 @@ if (!empty($question_list)) {
                     break;
                 case MATCHING:
                 case MATCHING_DRAGGABLE:
-                    if (0 == $is_correct) {
-                        if (1 == $answer_id) {
+                    if (0 == $isCorrect) {
+                        if (1 == $answerId) {
                             $data[$id]['name'] = cut($questionObj->question, 100);
                         } else {
                             $data[$id]['name'] = '-';
                         }
                         $correct = '';
-                        for ($i = 1; $i <= $answer_count; $i++) {
-                            $is_correct_i = $answer->isCorrect($i);
-                            if (0 != $is_correct_i && $is_correct_i == $answer_id) {
+                        for ($i = 1; $i <= $answerCount; $i++) {
+                            $isCorrectI = $answer->isCorrect($i);
+                            if (0 != $isCorrectI && $isCorrectI == $answerId) {
                                 $correct = $answer->selectAnswer($i);
 
                                 break;
                             }
                         }
                         $data[$id]['answer'] = $correct;
-                        $data[$id]['correct'] = $answer_info;
+                        $data[$id]['correct'] = $answerInfo;
 
-                        $count = ExerciseLib::get_number_students_answer_count(
-                            $answer_id,
+                        $countOfAnswered = ExerciseLib::getCountOfAnswers(
+                            $realAnswerId,
                             $question_id,
                             $exerciseId,
                             $courseCode,
                             $sessionId,
                             MATCHING
                         );
-                        $percentage = 0;
-                        if (!empty($count_students)) {
-                            $percentage = $count / $count_students * 100;
-                        }
-                        $data[$id]['attempts'] = Display::bar_progress(
-                            $percentage,
-                            false,
-                            $count.' / '.$count_students
-                        );
+
+                        $data[$id]['attempts'] = $countOfAnswered;
                     }
 
                     break;
                 case HOT_SPOT:
-                    if (1 == $answer_id) {
+                    if (1 == $answerId) {
                         $data[$id]['name'] = cut($questionObj->question, 100);
                     } else {
                         $data[$id]['name'] = '-';
                     }
-                    $data[$id]['answer'] = $answer_info;
+                    $data[$id]['answer'] = $answerInfo;
                     $data[$id]['correct'] = '-';
 
-                    $count = ExerciseLib::get_number_students_answer_hotspot_count(
-                        $answer_id,
+                    $count = ExerciseLib::getNumberStudentsAnswerHotspotCount(
+                        $realAnswerId,
                         $question_id,
                         $exerciseId,
                         $courseCode,
                         $sessionId
                     );
-                    $percentage = 0;
-                    if (!empty($count_students)) {
-                        $percentage = $count / $count_students * 100;
-                    }
-                    $data[$id]['attempts'] = Display::bar_progress(
-                        $percentage,
-                        false,
-                        $count.' / '.$count_students
-                    );
+                    $data[$id]['attempts'] = $count;
 
                     break;
                 default:
-                    if (1 == $answer_id) {
+                    if (1 == $answerId) {
                         $data[$id]['name'] = cut($questionObj->question, 100);
                     } else {
                         $data[$id]['name'] = '-';
                     }
-                    $data[$id]['answer'] = $answer_info;
-                    $data[$id]['correct'] = $correct_answer;
+                    $data[$id]['answer'] = $answerInfo;
+                    $data[$id]['correct'] = $correctAnswer;
 
-                    $count = ExerciseLib::get_number_students_answer_count(
-                        $real_answer_id,
+                    $countOfAnswered = ExerciseLib::getCountOfAnswers(
+                        $realAnswerId,
                         $question_id,
                         $exerciseId,
                         $courseCode,
                         $sessionId
                     );
-                    $percentage = 0;
-                    if (!empty($count_students)) {
-                        $percentage = $count / $count_students * 100;
-                    }
-                    $data[$id]['attempts'] = Display::bar_progress(
-                        $percentage,
-                        false,
-                        $count.' / '.$count_students
-                    );
+                    $data[$id]['attempts'] = $countOfAnswered;
             }
             $id++;
         }
@@ -332,15 +293,10 @@ $interbreadcrumb[] = [
 
 $tpl = new Template(get_lang('Report by question'));
 $actions = '<a href="exercise_report.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
-    Display:: return_icon(
-        'back.png',
-        get_lang('Go back to the questions list'),
-        '',
-        ICON_SIZE_MEDIUM
-    )
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go back to the questions list'))
     .'</a>';
 $actions .= Display::url(
-    Display::return_icon('pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportToPDF')),
     'stats.php?exerciseId='.$exerciseId.'&export_pdf=1&'.api_get_cidreq()
 );
 $actions = Display::toolbarAction('exercise_report', [$actions]);

@@ -68,10 +68,11 @@ class ExportGlossaryToDocumentsAction
         $html = '<h1>'.$translator->trans('Glossary').'</h1>';
         $html .= '<table>';
         $html .= '<tr><th>'.$translator->trans('Term').'</th><th>'.$translator->trans('Definition').'</th></tr>';
+
         /** @var CGlossary $item */
         foreach ($glossaryItems as $item) {
             $html .= '<tr>';
-            $html .= '<td>'.$item->getName().'</td>';
+            $html .= '<td>'.$item->getTitle().'</td>';
             $html .= '<td>'.$item->getDescription().'</td>';
             $html .= '</tr>';
         }

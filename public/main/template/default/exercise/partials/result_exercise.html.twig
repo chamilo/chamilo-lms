@@ -27,13 +27,13 @@
                         <div class="group-data">
                             <div class="list-data username">
                                 <span class="item">{{ 'Username'|trans }}</span>
-                                {{ 'account' | mdi_icon }} {{ data.username }}
+                                {{ 'ToolIcon::MEMBER' | mdi_icon }} {{ data.username }}
                             </div>
 
                             {% if data.start_date %}
                                 <div class="list-data start-date">
                                     <span class="item">{{ 'Start date'|trans }}</span>
-                                    {{ 'calendar' | mdi_icon }}
+                                    {{ 'ToolIcon::AGENDA' | mdi_icon }}
                                     {{ data.start_date }}
                                 </div>
                             {% endif %}
@@ -68,7 +68,7 @@
                                 <div class="list-data">
                                     <span class="item"></span>
                                     <a href="{{ export_url }}" class="btn btn--plain">
-                                        <img src="{{ 'export_pdf.png'|icon(32) }}" />
+                                        {{ 'ActionIcon::EXPORT_PDF'|mdi_icon_t(32, 'ch-tool-icon', 'Export response report') }}
                                         {{ 'Export response report'| trans }}
                                     </a>
                                 </div>

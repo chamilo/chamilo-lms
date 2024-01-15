@@ -56,6 +56,7 @@ class SessionController extends AbstractController
 
         /** @var EntityRepository $fieldsRepo */
         $fieldsRepo = $em->getRepository(ExtraField::class);
+
         /** @var TagRepository $tagRepo */
         $tagRepo = $em->getRepository(Tag::class);
 
@@ -83,6 +84,7 @@ class SessionController extends AbstractController
 
             $courseCoaches = $userRepo->getCoachesForSessionCourse($session, $sessionCourse);
             $coachesData = [];
+
             /** @var User $courseCoach */
             foreach ($courseCoaches as $courseCoach) {
                 $coachData = [
@@ -117,35 +119,43 @@ class SessionController extends AbstractController
             if (!empty($descriptionsData)) {
                 foreach ($descriptionsData as $descriptionInfo) {
                     $type = $descriptionInfo->getDescriptionType();
+
                     switch ($type) {
                         case CCourseDescription::TYPE_DESCRIPTION:
                             $courseDescription[] = $descriptionInfo;
 
                             break;
+
                         case CCourseDescription::TYPE_OBJECTIVES:
                             $courseObjectives[] = $descriptionInfo;
 
                             break;
+
                         case CCourseDescription::TYPE_TOPICS:
                             $courseTopics[] = $descriptionInfo;
 
                             break;
+
                         case CCourseDescription::TYPE_METHODOLOGY:
                             $courseMethodology[] = $descriptionInfo;
 
                             break;
+
                         case CCourseDescription::TYPE_COURSE_MATERIAL:
                             $courseMaterial[] = $descriptionInfo;
 
                             break;
+
                         case CCourseDescription::TYPE_RESOURCES:
                             $courseResources[] = $descriptionInfo;
 
                             break;
+
                         case CCourseDescription::TYPE_ASSESSMENT:
                             $courseAssessment[] = $descriptionInfo;
 
                             break;
+
                         case CCourseDescription::TYPE_CUSTOM:
                             $courseCustom[] = $descriptionInfo;
 
@@ -223,7 +233,7 @@ class SessionController extends AbstractController
             'essence' => $essence,
             'session_extra_fields' => $sessionValues->getAllValuesForAnItem($session->getId(), null, true),
             'has_requirements' => $hasRequirements,
-            //'sequences' => $sessionRequirements,
+            // 'sequences' => $sessionRequirements,
             'is_premium' => $sessionIsPremium,
             'show_tutor' => 'true' === api_get_setting('show_session_coach'),
             'page_url' => api_get_path(WEB_PATH).sprintf('sessions/%s/about/', $session->getId()),

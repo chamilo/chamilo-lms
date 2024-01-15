@@ -27,6 +27,7 @@ class Version20230204150030 extends AbstractMigrationChamilo
     {
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
+
         /** @var EntityManager $em */
         $em = $doctrine->getManager();
 
@@ -45,6 +46,7 @@ class Version20230204150030 extends AbstractMigrationChamilo
         ]);
 
         $sessionRepo = $container->get(SessionRepository::class);
+
         /** @var ExtraFieldValues $item */
         foreach ($q->toIterable() as $item) {
             $path = $item->getFieldValue();
@@ -68,6 +70,7 @@ class Version20230204150030 extends AbstractMigrationChamilo
                 $em->persist($item);
 
                 $sessionId = $item->getItemId();
+
                 /** @var Session $session */
                 $session = $sessionRepo->find($sessionId);
                 $session->setImage($asset);
@@ -84,7 +87,5 @@ class Version20230204150030 extends AbstractMigrationChamilo
         $em->clear();
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

@@ -27,7 +27,7 @@ class Version20170625145000 extends AbstractMigrationChamilo
         $this->addSql('UPDATE c_calendar_event SET title = "Event" WHERE title = "" AND content <> "" ');
 
         if (!$table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_calendar_event ADD resource_node_id BIGINT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_calendar_event ADD resource_node_id INT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_calendar_event ADD CONSTRAINT FK_A0622581EE3A445A FOREIGN KEY (parent_event_id) REFERENCES c_calendar_event (iid)'
             );
@@ -49,7 +49,23 @@ class Version20170625145000 extends AbstractMigrationChamilo
         }
 
         if (!$table->hasColumn('collective')) {
-            $this->addSql('ALTER TABLE c_calendar_event ADD collective TINYINT(1) NOT NULL');
+            $this->addSql('ALTER TABLE c_calendar_event ADD collective TINYINT(1) DEFAULT 0 NOT NULL');
+        }
+
+        if (!$table->hasColumn('invitation_type')) {
+            $this->addSql("ALTER TABLE c_calendar_event ADD invitaion_type VARCHAR(255) DEFAULT 'invitation' NOT NULL");
+        }
+
+        if (!$table->hasColumn('subscription_visibility')) {
+            $this->addSql('ALTER TABLE c_calendar_event ADD subscription_visibility INT DEFAULT 0 NOT NULL');
+        }
+
+        if (!$table->hasColumn('subscription_item_id')) {
+            $this->addSql('ALTER TABLE c_calendar_event ADD subscription_item_id INT DEFAULT NULL');
+        }
+
+        if (!$table->hasColumn('max_attendees')) {
+            $this->addSql('ALTER TABLE c_calendar_event ADD max_attendees INT DEFAULT 0 NOT NULL');
         }
 
         $table = $schema->getTable('c_calendar_event_attachment');
@@ -60,7 +76,7 @@ class Version20170625145000 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_calendar_event_attachment CHANGE agenda_id agenda_id INT DEFAULT NULL');
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_calendar_event_attachment ADD resource_node_id BIGINT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_calendar_event_attachment ADD resource_node_id INT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_calendar_event_attachment ADD CONSTRAINT FK_DDD745A6EA67784A FOREIGN KEY (agenda_id) REFERENCES c_calendar_event (iid) ON DELETE CASCADE'
             );
@@ -107,7 +123,5 @@ class Version20170625145000 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

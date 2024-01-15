@@ -16,6 +16,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class SysCalendar
 {
+    public const COLOR_SYSTEM_EVENT = '#FF0000';
+
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
@@ -33,12 +35,15 @@ class SysCalendar
     #[ORM\Column(name: 'end_date', type: 'datetime', nullable: true)]
     protected ?DateTime $endDate = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\AccessUrl::class)]
+    #[ORM\ManyToOne(targetEntity: AccessUrl::class)]
     #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected AccessUrl $url;
 
     #[ORM\Column(name: 'all_day', type: 'integer', nullable: false)]
     protected int $allDay;
+
+    #[ORM\Column(name: 'color', type: 'string', length: 20, nullable: true)]
+    protected ?string $color = null;
 
     public function setTitle(string $title): self
     {
@@ -133,6 +138,18 @@ class SysCalendar
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(string $color): self
+    {
+        $this->color = $color;
+
+        return $this;
     }
 
     public function getUrl(): AccessUrl

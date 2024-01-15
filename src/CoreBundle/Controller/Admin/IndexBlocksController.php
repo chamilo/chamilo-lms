@@ -19,11 +19,16 @@ class IndexBlocksController extends BaseController
 {
     private bool $isAdmin = false;
     private bool $isSessionAdmin = false;
+    private array $extAuthSource = [];
 
     public function __construct(
         private readonly TranslatorInterface $translator,
         private readonly SettingsManager $settingsManager
     ) {
+        $this->extAuthSource = [
+            'extldap' => [],
+            'ldap' => [],
+        ];
     }
 
     public function __invoke(): JsonResponse
@@ -133,7 +138,7 @@ class IndexBlocksController extends BaseController
                 'label' => $this->translator->trans('Anonymise users list'),
             ];
 
-            if (isset($extAuthSource, $extAuthSource['extldap']) && \count($extAuthSource['extldap']) > 0) {
+            if (\count($this->extAuthSource['extldap']) > 0) {
                 $items[] = [
                     'class' => 'item-user-ldap-list',
                     'url' => $this->generateUrl('legacy_main', ['name' => 'admin/ldap_users_list.php']),
@@ -266,10 +271,10 @@ class IndexBlocksController extends BaseController
             'url' => $this->generateUrl('legacy_main', ['name' => 'admin/course_user_import.php']),
             'label' => $this->translator->trans('Import users list'),
         ];
-        //$items[] = [
+        // $items[] = [
         //    'url'=>'course_intro_pdf_import.php',
         //    'label' => $this->translator->$this->trans('ImportPDFIntroToCourses'),
-        //];
+        // ];
 
         if ('true' === $this->settingsManager->getSetting('gradebook.gradebook_enable_grade_model')) {
             $items[] = [
@@ -279,7 +284,7 @@ class IndexBlocksController extends BaseController
             ];
         }
 
-        if (isset($extAuthSource, $extAuthSource['ldap']) && \count($extAuthSource['ldap']) > 0) {
+        if (\count($this->extAuthSource['ldap']) > 0) {
             $items[] = [
                 'class' => 'item-course-subscription-ldap',
                 'url' => $this->generateUrl('legacy_main', ['name' => 'admin/ldap_import_students.php']),
@@ -483,7 +488,7 @@ class IndexBlocksController extends BaseController
             'url' => $this->generateUrl('legacy_main', ['name' => 'session/session_import_drh.php']),
             'label' => $this->translator->trans('Import list of HR directors into sessions'),
         ];
-        if (isset($extAuthSource, $extAuthSource['ldap']) && \count($extAuthSource['ldap']) > 0) {
+        if (\count($this->extAuthSource['ldap']) > 0) {
             $items[] = [
                 'class' => 'item-session-subscription-ldap-import',
                 'url' => $this->generateUrl('legacy_main', ['name' => 'admin/ldap_import_students_to_session.php']),
@@ -668,7 +673,7 @@ class IndexBlocksController extends BaseController
 
     private function getItemsChamilo(): array
     {
-        $languageInterface = 'english';
+        $languageInterface = api_get_language_isocode();
 
         $items = [];
         $items[] = [

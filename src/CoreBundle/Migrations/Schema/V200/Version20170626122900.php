@@ -35,7 +35,7 @@ class Version20170626122900 extends AbstractMigrationChamilo
         }
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE user ADD resource_node_id BIGINT DEFAULT NULL;');
+            $this->addSql('ALTER TABLE user ADD resource_node_id INT DEFAULT NULL;');
             $this->addSql(
                 'ALTER TABLE user ADD CONSTRAINT FK_8D93D6491BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'
             );
@@ -51,7 +51,7 @@ class Version20170626122900 extends AbstractMigrationChamilo
                 'UPDATE user SET created_at = registration_date WHERE CAST(created_at AS CHAR(20)) = "0000-00-00 00:00:00"'
             );
             $this->addSql('UPDATE user SET created_at = registration_date WHERE created_at IS NULL');
-            //$this->addSql('UPDATE user SET created_at = NOW() WHERE created_at = NULL OR created_at = ""');
+            // $this->addSql('UPDATE user SET created_at = NOW() WHERE created_at = NULL OR created_at = ""');
             $this->addSql('ALTER TABLE user CHANGE created_at created_at DATETIME NOT NULL');
         }
 
@@ -60,7 +60,7 @@ class Version20170626122900 extends AbstractMigrationChamilo
                 'UPDATE user SET updated_at = registration_date WHERE CAST(updated_at AS CHAR(20)) = "0000-00-00 00:00:00"'
             );
             $this->addSql('UPDATE user SET updated_at = registration_date WHERE updated_at IS NULL');
-            //$this->addSql('UPDATE user SET updated_at = NOW() WHERE updated_at = NULL OR updated_at = ""');
+            // $this->addSql('UPDATE user SET updated_at = NOW() WHERE updated_at = NULL OR updated_at = ""');
             $this->addSql('ALTER TABLE user CHANGE updated_at updated_at DATETIME NOT NULL');
         }
 
@@ -120,7 +120,7 @@ class Version20170626122900 extends AbstractMigrationChamilo
         }
 
         if ($table->hasIndex('user_id')) {
-            //$this->addSql('DROP INDEX user_id ON admin');
+            // $this->addSql('DROP INDEX user_id ON admin');
         }
 
         if (false === $table->hasIndex('UNIQ_880E0D76A76ED395')) {
@@ -276,7 +276,5 @@ class Version20170626122900 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

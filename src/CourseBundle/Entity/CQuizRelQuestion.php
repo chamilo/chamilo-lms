@@ -21,18 +21,18 @@ class CQuizRelQuestion
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\Column(name: 'question_order', type: 'integer', nullable: false)]
     protected int $questionOrder;
 
     #[Assert\NotBlank]
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CQuizQuestion::class, inversedBy: 'relQuizzes', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: CQuizQuestion::class, inversedBy: 'relQuizzes', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CQuizQuestion $question;
 
     #[Assert\NotBlank]
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CQuiz::class, inversedBy: 'questions', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: CQuiz::class, inversedBy: 'questions', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'quiz_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CQuiz $quiz;
 

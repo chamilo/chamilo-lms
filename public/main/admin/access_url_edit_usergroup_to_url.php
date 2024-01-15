@@ -4,6 +4,9 @@
 /**
  * @author Julio Montoya <gugli100@gmail.com>
  */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 // resetting the course id
 $cidReset = true;
 
@@ -69,7 +72,6 @@ function remove_item(origin) {
 }
 </script>';
 
-$errorMsg = '';
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $course_list = $_POST['course_list'];
@@ -97,7 +99,7 @@ echo Display::toolbarAction(
     'url',
     [
         Display::url(
-            Display::return_icon('view_more_stats.gif', get_lang('Add group to URL'), ''),
+            Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add group to URL')),
             api_get_path(WEB_CODE_PATH).'admin/access_url_add_usergroup_to_url.php'
         ),
     ]
@@ -200,11 +202,6 @@ $url_list = UrlManager::get_url_data();
         </div>
         <input type="hidden" name="form_sent" value="1"/>
         <input type="hidden" name="add_type" value="<?php echo $add_type; ?>"/>
-        <?php
-        if (!empty($errorMsg)) {
-            echo Display::return_message($errorMsg, 'normal'); //main API
-        }
-        ?>
         <div class="row">
             <div class="col-sm-5">
                 <label for="<?php echo $ajax_search ? 'course_to_add' : 'origin_users'; ?>"><?php echo get_lang('Platform groups list'); ?></label>

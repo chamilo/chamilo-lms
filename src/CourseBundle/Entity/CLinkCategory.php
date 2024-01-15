@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Controller\Api\UpdateCLinkCategoryAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityLinkCategory;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -127,7 +128,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(SearchFilter::class, properties: ['category_title' => 'partial', 'resourceNode.parent' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['iid', 'resourceNode.title', 'resourceNode.createdAt', 'resourceNode.updatedAt'])]
 #[ORM\Table(name: 'c_link_category')]
-#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CLinkCategoryRepository::class)]
+#[ORM\Entity(repositoryClass: CLinkCategoryRepository::class)]
 class CLinkCategory extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ApiProperty(identifier: true)]
@@ -139,16 +140,12 @@ class CLinkCategory extends AbstractResource implements ResourceInterface, Strin
 
     #[Groups(['link_category:read', 'link_category:write'])]
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'category_title', type: 'string', length: 255, nullable: false)]
-    protected string $categoryTitle;
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    protected string $title;
 
     #[Groups(['link_category:read', 'link_category:write'])]
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description;
-
-    #[Groups(['link_category:read', 'link_category:write'])]
-    #[ORM\Column(name: 'display_order', type: 'integer', nullable: false)]
-    protected int $displayOrder;
 
     #[Groups(['link_category:read', 'link_category:browse'])]
     protected bool $linkCategoryVisible = true;
@@ -162,13 +159,12 @@ class CLinkCategory extends AbstractResource implements ResourceInterface, Strin
     public function __construct()
     {
         $this->description = '';
-        $this->displayOrder = 0;
         $this->links = new ArrayCollection();
     }
 
     public function __toString(): string
     {
-        return $this->getCategoryTitle();
+        return $this->getTitle();
     }
 
     public function getIid(): int
@@ -176,16 +172,16 @@ class CLinkCategory extends AbstractResource implements ResourceInterface, Strin
         return $this->iid;
     }
 
-    public function setCategoryTitle(string $categoryTitle): self
+    public function setTitle(string $title): self
     {
-        $this->categoryTitle = $categoryTitle;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getCategoryTitle(): string
+    public function getTitle(): string
     {
-        return $this->categoryTitle;
+        return $this->title;
     }
 
     public function setDescription(string $description): self
@@ -200,21 +196,9 @@ class CLinkCategory extends AbstractResource implements ResourceInterface, Strin
         return $this->description;
     }
 
-    public function setDisplayOrder(int $displayOrder): self
-    {
-        $this->displayOrder = $displayOrder;
-
-        return $this;
-    }
-
-    public function getDisplayOrder(): int
-    {
-        return $this->displayOrder;
-    }
-
     public function toggleVisibility(): void
     {
-        $this->linkCategoryVisible = !($this->getFirstResourceLink()->getVisibility());
+        $this->linkCategoryVisible = !$this->getFirstResourceLink()->getVisibility();
     }
 
     public function getLinkCategoryVisible(): bool
@@ -239,11 +223,11 @@ class CLinkCategory extends AbstractResource implements ResourceInterface, Strin
 
     public function getResourceName(): string
     {
-        return $this->getCategoryTitle();
+        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setCategoryTitle($name);
+        return $this->setTitle($name);
     }
 }

@@ -6,6 +6,8 @@
  */
 
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -94,8 +96,8 @@ foreach ($session_list as $session_item) {
             $link_to_add_user_in_url = '';
             if ($multiple_url_is_on) {
                 if ($user['access_url_id'] != $url_id) {
-                    $user_link .= ' '.Display::return_icon('warning.png', get_lang('Users not added to the URL'), [], ICON_SIZE_MEDIUM);
-                    $add = Display::return_icon('add.png', get_lang('Add users to an URL'), [], ICON_SIZE_MEDIUM);
+                    $user_link .= ' '.Display::getMdiIcon(StateIcon::WARNING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Users not added to the URL'));
+                    $add = Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add users to an URL'));
                     $link_to_add_user_in_url = '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&action=add_user_to_url&id_session='.$session_id.'&user_id='.$user['user_id'].'">'.$add.'</a>';
                 }
             }

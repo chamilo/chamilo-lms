@@ -14,8 +14,7 @@ class MessageListener
 {
     public function __construct(
         private MessageBusInterface $bus
-    ) {
-    }
+    ) {}
 
     public function postPersist(Message $message, PostPersistEventArgs $args): void
     {

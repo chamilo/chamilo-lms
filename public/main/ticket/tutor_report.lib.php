@@ -6,6 +6,9 @@
  * Helper library for weekly reports.
  */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
+
 /**
  * @param $course_code
  *
@@ -93,7 +96,7 @@ function showResults($courseInfo, $weeksCount, $page)
 
     $results = [];
     $tableExport = [];
-    $sqlHeader = "SELECT rs.id as id,rs.week_id, w.title AS work_title,  t.thread_title ,'EVALUATION' as eval_title ,'QUIZ' as pc_title
+    $sqlHeader = "SELECT rs.id as id,rs.week_id, w.title AS work_title,  t.title ,'EVALUATION' as eval_title ,'QUIZ' as pc_title
                     FROM $tableWeeklyReport rs
                     LEFT JOIN $tableThread t ON t.thread_id =  rs.forum_id
                     LEFT JOIN $tableWork w ON w.id = rs.work_id
@@ -111,7 +114,7 @@ function showResults($courseInfo, $weeksCount, $page)
         //$fila_export_encabezado[] =  utf8_decode('Eval'.$rowe['week_id']);
         //$fila_export_encabezado[] =  utf8_decode('PC'.$rowe['week_id']);
         $lineHeaderExport2[] = utf8_decode($rowe['work_title']);
-        $lineHeaderExport2[] = utf8_decode($rowe['thread_title']);
+        $lineHeaderExport2[] = utf8_decode($rowe['title']);
         //$fila_export_encabezado2[] = utf8_decode($rowe['eval_title']);
         //$fila_export_encabezado2[] = utf8_decode($rowe['pc_title']);
         $fila_export = ['Work'.$rowe['week_id'], 'Forum'.$rowe['week_id'], 'Eval'.$rowe['week_id'], 'PC'.$rowe['week_id']];
@@ -123,7 +126,7 @@ function showResults($courseInfo, $weeksCount, $page)
                 </a></th>';
             $line .= '<th>
                 <a href="#" onClick="showContent('."'foro".$rowe['week_id']."'".');">Forum'.$rowe['week_id'].'
-                        <div class="blackboard_hide" id="foro'.$rowe['week_id'].'">'.$rowe['thread_title'].'</div>
+                        <div class="blackboard_hide" id="foro'.$rowe['week_id'].'">'.$rowe['title'].'</div>
                 </a>
                 </th>';
         }
@@ -143,14 +146,14 @@ function showResults($courseInfo, $weeksCount, $page)
     if (14 == $weeksCount) {
         $html .= '<span style="float:right;"><a href="tutor.php?page='.(1 == $page ? 2 : 1).'">'.(1 == $page ? 'Siguiente' : 'Anterior').'</a></span>';
     }
-    //$html .= '<span style="float:right;"><a href="'.api_get_self().'?action=export'.$get_parameter.$get_parameter2.'">'.Display::return_icon('export_excel.png', get_lang('Export'), '', '32').'</a></span>';
+    //$html .= '<span style="float:right;"><a href="'.api_get_self().'?action=export'.$get_parameter.$get_parameter2.'">'.Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export')).'</a></span>';
 
     $html .= '</form>';
     $html .= '<table class="reports">';
     $html .= '<tr>
             <th ></th>';
     for ($i = 7 * $page - 6; $i <= $page * 7; $i++) {
-        $html .= '<th colspan="2">Week '.$i.'<a href="assign_tickets.php?id='.$ids[$i].'" class="ajax">'.Display::return_icon('edit.png', get_lang('Edit'), ['width' => '16', 'height' => '16'], 22).'</a></th>';
+        $html .= '<th colspan="2">Week '.$i.'<a href="assign_tickets.php?id='.$ids[$i].'" class="ajax">'.Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a></th>';
     }
     $html .= '</tr>';
     $html .= $line;
@@ -202,8 +205,8 @@ function showStudentResult($datos, $pagina)
 
     $fila .= '<td><a href="'.api_get_path(WEB_CODE_PATH).'user/userInfo.php?'.api_get_cidreq().'&uInfo='.$datos[$inicio]['user_id'].'">'.$datos[$inicio]['username'].'</a></td>';
     foreach ($datos as $dato) {
-        $fila .= '<td align="center">'.(1 == $dato['work_ok'] ? Display::return_icon('check.png') : Display::return_icon('aspa.png')).'</td>';
-        $fila .= '<td align="center">'.(1 == $dato['thread_ok'] ? Display::return_icon('check.png') : Display::return_icon('aspa.png')).'</td>';
+        $fila .= '<td align="center">'.(1 == $dato['work_ok'] ? Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon', null, ICON_SIZE_SMALL) : Display::getMdiIcon(StateIcon::INCOMPLETE, 'ch-tool-icon', null, ICON_SIZE_SMALL)).'</td>';
+        $fila .= '<td align="center">'.(1 == $dato['thread_ok'] ? Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon', null, ICON_SIZE_SMALL) : Display::getMdiIcon(StateIcon::INCOMPLETE, 'ch-tool-icon', null, ICON_SIZE_SMALL)).'</td>';
     }
     $fila .= '</tr>';
 

@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 $cidReset = true;
 
@@ -109,11 +110,11 @@ function getData(User $hrm, $status = HRM_REQUEST)
 
     $result = [];
 
-    $iconAccept = Display::return_icon('accept.png', get_lang('Accept'));
+    $iconAccept = Display::getMdiIcon(ActionIcon::ACCEPT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Accept'));
     $urlAccept = api_get_self().'?action=accept&hrm='.$hrm->getId().'&u=';
-    $iconReject = Display::return_icon('delete.png', get_lang('Reject'));
+    $iconReject = Display::getMdiIcon(ActionIcon::REJECT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Reject'));
     $urlReject = api_get_self().'?action=reject&hrm='.$hrm->getId().'&u=';
-    $iconRemove = Display::return_icon('delete.png', get_lang('Remove'));
+    $iconRemove = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove'));
     $urlRemove = api_get_self().'?action=remove&hrm='.$hrm->getId().'&u=';
 
     foreach ($requests as $request) {

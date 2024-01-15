@@ -124,13 +124,13 @@ if ($typeUser) {
     $userSubscriptions = $user->getSessionRelCourseRelUsers();
 
     foreach ($userSubscriptions as $userSubscription) {
-        $sessions[$userSubscription->getSession()->getId()] = $userSubscription->getSession()->getName();
+        $sessions[$userSubscription->getSession()->getId()] = $userSubscription->getSession()->getTitle();
     }
 
     $sessionsAsGeneralCoach = $user->getSessionsAsGeneralCoach();
     /** @var Session $sessionAsGeneralCoach */
     foreach ($sessionsAsGeneralCoach as $sessionAsGeneralCoach) {
-        $sessions[$sessionAsGeneralCoach->getId()] = $sessionAsGeneralCoach->getName();
+        $sessions[$sessionAsGeneralCoach->getId()] = $sessionAsGeneralCoach->getTitle();
     }
 
     if (!$sessions) {
@@ -150,7 +150,7 @@ if ($typeUser) {
         // Now get all the courses lp's
         $thisLpList = $em->getRepository('ChamiloCourseBundle:CLp')->findBy(['cId' => $course->getCourse()->getId()]);
         foreach ($thisLpList as $lp) {
-            $courseLpList[$lp->getCId()] = $lp->getName().' ('.$course->getCourse()->getTitle().')';
+            $courseLpList[$lp->getCId()] = $lp->getTitle().' ('.$course->getCourse()->getTitle().')';
         }
     }
 
@@ -169,7 +169,7 @@ if ($typeUser) {
                 //Now only we need the final item and return the current LP
                 if (TOOL_LP_FINAL_ITEM == $item->getItemType()) {
                     $checker = true;
-                    $sessionLpList[$lp->getCId()] = $lp->getName().' ('.$session->getSession()->getName().')';
+                    $sessionLpList[$lp->getCId()] = $lp->getTitle().' ('.$session->getSession()->getTitle().')';
                 }
             }
         }
@@ -183,7 +183,7 @@ if ($typeUser) {
                 //Now only we need the final item and return the current LP
                 if (TOOL_LP_FINAL_ITEM == $item->getItemType()) {
                     $checker = true;
-                    $sessionLpList[$lp->getCId()] = $lp->getName().' ('.$session->getSession()->getName().')';
+                    $sessionLpList[$lp->getCId()] = $lp->getTitle().' ('.$session->getSession()->getTitle().')';
                 }
             }
         }

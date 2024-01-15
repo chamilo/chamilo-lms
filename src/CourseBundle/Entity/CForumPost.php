@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -34,11 +35,11 @@ class CForumPost extends AbstractResource implements ResourceInterface, Stringab
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'post_title', type: 'string', length: 250, nullable: false)]
-    protected string $postTitle;
+    #[ORM\Column(name: 'title', type: 'string', length: 250, nullable: false)]
+    protected string $title;
 
     #[ORM\Column(name: 'post_text', type: 'text', nullable: true)]
     protected ?string $postText = null;
@@ -96,19 +97,19 @@ class CForumPost extends AbstractResource implements ResourceInterface, Stringab
 
     public function __toString(): string
     {
-        return $this->getPostTitle();
+        return $this->getTitle();
     }
 
-    public function setPostTitle(string $postTitle): self
+    public function setTitle(string $title): self
     {
-        $this->postTitle = $postTitle;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getPostTitle(): string
+    public function getTitle(): string
     {
-        return $this->postTitle;
+        return $this->title;
     }
 
     public function setPostText(string $postText): self
@@ -206,10 +207,8 @@ class CForumPost extends AbstractResource implements ResourceInterface, Stringab
 
     /**
      * Get iid.
-     *
-     * @return int
      */
-    public function getIid()
+    public function getIid(): ?int
     {
         return $this->iid;
     }
@@ -280,18 +279,18 @@ class CForumPost extends AbstractResource implements ResourceInterface, Stringab
         return $this;
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }
 
     public function getResourceName(): string
     {
-        return $this->getPostTitle();
+        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setPostTitle($name);
+        return $this->setTitle($name);
     }
 }

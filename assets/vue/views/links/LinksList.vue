@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ButtonToolbar v-if="securityStore.isAuthenticated && isCurrentTeacher">
+    <BaseToolbar v-if="securityStore.isAuthenticated && isCurrentTeacher">
       <BaseButton
         :label="t('Add a link')"
         icon="link-add"
@@ -20,7 +20,7 @@
         @click="exportToPDF"
       />
       <StudentViewButton />
-    </ButtonToolbar>
+    </BaseToolbar>
 
     <LinkCategoryCard v-if="isLoading">
       <template #header>
@@ -92,9 +92,9 @@
                 icon="folder-generic"
                 size="big"
               />
-              <h5>{{ category.info.name }}</h5>
+              <h5>{{ category.info.title }}</h5>
             </div>
-            <div class="flex gap-2">
+            <div class="flex gap-2" v-if="securityStore.isAuthenticated && isCurrentTeacher">
               <BaseButton
                 :label="t('Edit')"
                 icon="edit"
@@ -155,8 +155,10 @@
       @cancel-clicked="isDeleteCategoryDialogVisible = false"
     >
       <div v-if="categoryToDelete">
-        <p class="mb-2 font-semibold">{{ categoryToDelete.info.name }}</p>
-        <p>{{ t("With links") }}: {{ categoryToDelete.links.map((l) => l.title).join(", ") }}</p>
+        <p class="mb-2 font-semibold">{{ categoryToDelete.info.title }}</p>
+        <p>
+          {{ t("With links") }}: {{ (categoryToDelete.links || []).map((l) => l.title).join(", ") }}
+        </p>
       </div>
     </BaseDialogDelete>
   </div>
@@ -165,7 +167,7 @@
 <script setup>
 import EmptyState from "../../components/EmptyState.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import ButtonToolbar from "../../components/basecomponents/ButtonToolbar.vue"
+import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { computed, onMounted, ref } from "vue"
 import { useStore } from "vuex"
 import { useRoute, useRouter } from "vue-router"

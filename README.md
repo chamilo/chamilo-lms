@@ -8,6 +8,8 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/?branch=master)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/166/badge)](https://bestpractices.coreinfrastructure.org/projects/166)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/88e934aab2f34bb7a0397a6f62b078b2)](https://www.codacy.com/app/chamilo/chamilo-lms?utm_source=github.com&utm_medium=referral&utm_content=chamilo/chamilo-lms&utm_campaign=badger)
+[![type-coverage](https://shepherd.dev/github/chamilo/chamilo-lms/coverage.svg)](https://shepherd.dev/github/chamilo/chamilo-lms/coverage.svg)
+[![psalm level](https://shepherd.dev/github/chamilo/chamilo-lms/level.svg)](https://shepherd.dev/github/chamilo/chamilo-lms/level.svg)
 
 Chamilo is an e-learning platform, also called "LMS", published under the GNU/GPLv3+ license. It has been used by more than 30M people worldwide since its inception in 2010. This is a development version. For the current stable branch, please select the 1.11.x branch in the Code tab.
 
@@ -18,14 +20,14 @@ Chamilo is an e-learning platform, also called "LMS", published under the GNU/GP
 We assume you already have:
 
 - composer 2.x - https://getcomposer.org/download/
-- yarn +3.x - https://yarnpkg.com/getting-started/install
+- yarn +4.x - https://yarnpkg.com/getting-started/install
 - Node >= v18+ (lts) - https://github.com/nodesource/distributions/blob/master/README.md
 - Configuring a virtualhost in a domain, not in a sub folder inside a domain.
 - A working LAMP/WAMP server with PHP 8.1+
 
 ### Software stack install (Ubuntu)
 
-You will need PHP8+ and NodeJS v14+ to run Chamilo 2.
+You will need PHP8+ and NodeJS v18+ to run Chamilo 2.
 On a fresh Ubuntu 22.04, you can prepare your server by issuing an apt command like the following with sudo (or as root, but not recommended for security reasons):
 
 ~~~~
@@ -35,14 +37,26 @@ sudo apt -y install ca-certificates curl gnupg software-properties-common
 sudo add-apt-repository ppa:ondrej/php
 sudo apt update
 sudo apt install apache2 libapache2-mod-php8.1 mariadb-client mariadb-server php-pear php8.1-{dev,gd,curl,intl,mysql,mbstring,zip,xml,cli,apcu,bcmath,soap} git unzip
+~~~~
+If you already have nodejs installed, check the version with `node -v`
+Otherwise, install node 18 or above:
+* following the instructions here: https://deb.nodesource.com/node_20.x/.
+  The following lines use a static version of those instructions, so probably not very sustainable over time
+~~~~
 cd ~
-# If you already have nodejs 20+ installed, check the version with `node -v`
-# Otherwise, install node 20 or above following the instructions here: https://deb.nodesource.com/node_20.x/.
-# The following lines use a static version of those instructions, so probably not very sustainable over time
 curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 NODE_MAJOR=20
 echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
 apt update && apt -y install nodejs
+~~~~
+* Other option to install nodejs is by using NVM (Node Version Manager). You can install it following the instructions [here](https://github.com/nvm-sh/nvm#installing-and-updating).
+  Then, you can install the node version required. Preferably, the LTS version.
+~~~~
+sudo nvm install --lts
+sudo nvm use --lts
+~~~~
+With NodeJS installed, you must enable corepack and then continue with the requirements
+~~~~
 sudo corepack enable
 cd ~
 # follow the instructions at https://getcomposer.org/download/
@@ -64,7 +78,7 @@ composer install
 # when asked whether you want to execute the recipes or install plugins for some of the components,
 # you can safely type 'n' (for 'no').
 
-yarn set version 3.4.1
+yarn set version stable
 # delete yarn.lock as it might contain restrictive packages from a different context
 yarn up
 yarn install
@@ -93,7 +107,7 @@ git pull
 composer update
 
 # Database update
-php bin/console doctrine:schema:update --force
+php bin/console doctrine:schema:update --force --complete
 
 # Clean Symfony cache
 php bin/console cache:clear

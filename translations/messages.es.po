@@ -24088,3 +24088,18 @@ msgstr "Por venir"
 
 msgid "Past session tab"
 msgstr "Finalizadas"
+
+msgid "By checking this box, I confirm that I accept the data processing by the platform"
+msgstr "Marcando esta caja, confirmo que acepto el tratamiento de datos en este plataforma"
+
+msgid "The platform owner, responsible for the processing, implements processing of personal data to respond to your contact request. The data is mandatory. In their absence, it will not be possible to process your request."
+msgstr "El propietario de la plataforma, responsable del tratamiento, implementa el tratamiento de datos personales para responde a su solicitud de contacto. Estos datos son necesarios. Sin ellos, no será posible responder a su solicitud."
+
+msgid "Back to tests list"
+msgstr "Regresar a la lista de ejercicios"
+
+msgid "Number of times the question was answered"
+msgstr "Número de veces que la pregunta fue respondida"
+
+msgid "Number of times this answer was selected"
+msgstr "Número de veces que se seleccionó esta respuesta"

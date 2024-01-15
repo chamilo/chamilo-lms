@@ -1,13 +1,17 @@
 <?php
-declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\EventSubscriber;
 
+use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -17,11 +21,11 @@ use Symfony\Component\Security\Core\Security;
 
 class AnonymousUserSubscriber implements EventSubscriberInterface
 {
+    private const MAX_ANONYMOUS_USERS = 5;
     private Security $security;
     private EntityManagerInterface $entityManager;
     private SessionInterface $session;
     private SettingsManager $settingsManager;
-    private const MAX_ANONYMOUS_USERS = 5;
 
     public function __construct(Security $security, EntityManagerInterface $entityManager, SessionInterface $session, SettingsManager $settingsManager)
     {
@@ -33,15 +37,15 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
 
     public function onKernelRequest(RequestEvent $event): void
     {
-        if ($this->security->getUser() !== null) {
+        if (null !== $this->security->getUser()) {
             return;
         }
 
         $request = $event->getRequest();
-        $userIp = $request->getClientIp();
+        $userIp = $request->getClientIp() ?: '127.0.0.1';
 
         $anonymousUserId = $this->getOrCreateAnonymousUserId($userIp);
-        if ($anonymousUserId !== null) {
+        if (null !== $anonymousUserId) {
             $trackLoginRepository = $this->entityManager->getRepository(TrackELogin::class);
 
             // Check if a login record already exists for this user and IP
@@ -50,8 +54,9 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
                 // Record the access if it does not exist
                 $trackLogin = new TrackELogin();
                 $trackLogin->setUserIp($userIp)
-                    ->setLoginDate(new \DateTime())
-                    ->setUser($this->entityManager->getReference(User::class, $anonymousUserId));
+                    ->setLoginDate(new DateTime())
+                    ->setUser($this->entityManager->getReference(User::class, $anonymousUserId))
+                ;
 
                 $this->entityManager->persist($trackLogin);
                 $this->entityManager->flush();
@@ -88,7 +93,15 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         }
     }
 
-    private function getOrCreateAnonymousUserId(string $userIp): ?int {
+    public static function getSubscribedEvents()
+    {
+        return [
+            KernelEvents::REQUEST => 'onKernelRequest',
+        ];
+    }
+
+    private function getOrCreateAnonymousUserId(string $userIp): ?int
+    {
         $userRepository = $this->entityManager->getRepository(User::class);
         $trackLoginRepository = $this->entityManager->getRepository(TrackELogin::class);
 
@@ -102,16 +115,18 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         foreach ($anonymousUsers as $user) {
             $loginRecord = $trackLoginRepository->findOneBy(['userIp' => $userIp, 'user' => $user]);
             if ($loginRecord) {
-                error_log('Existing login found for user ID: ' . $user->getId());
                 return $user->getId();
             }
         }
 
         // Delete excess anonymous users
-        while (count($anonymousUsers) >= $maxAnonymousUsers) {
+        while (\count($anonymousUsers) >= $maxAnonymousUsers) {
             $oldestAnonymousUser = array_shift($anonymousUsers);
             if ($oldestAnonymousUser) {
-                error_log('Deleting oldest anonymous user: ' . $oldestAnonymousUser->getId());
+                error_log('Deleting oldest anonymous user: '.$oldestAnonymousUser->getId());
+
+                $this->handleRelatedEntities($oldestAnonymousUser);
+
                 $this->entityManager->remove($oldestAnonymousUser);
                 $this->entityManager->flush();
             }
@@ -123,25 +138,44 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
             ->setSkipResourceNode(true)
             ->setLastname('Joe')
             ->setFirstname('Anonymous')
-            ->setUsername('anon_' . $uniqueId)
+            ->setUsername('anon_'.$uniqueId)
             ->setStatus(User::ANONYMOUS)
             ->setPlainPassword('anon')
-            ->setEmail('anon_' . $uniqueId . '@localhost.local')
+            ->setEmail('anon_'.$uniqueId.'@localhost.local')
             ->setOfficialCode('anonymous')
             ->setCreatorId(1)
-            ->addRole('ROLE_ANONYMOUS');
+            ->addRole('ROLE_ANONYMOUS')
+        ;
 
         $this->entityManager->persist($anonymousUser);
         $this->entityManager->flush();
 
-        error_log('New anonymous user created: ' . $anonymousUser->getId());
         return $anonymousUser->getId();
     }
 
-    public static function getSubscribedEvents()
+    private function handleRelatedEntities(User $user): void
     {
-        return [
-            KernelEvents::REQUEST => 'onKernelRequest',
-        ];
+        $trackEExercisesRepository = $this->entityManager->getRepository(TrackEExercise::class);
+
+        $exercises = $trackEExercisesRepository->findBy(['user' => $user->getId()]);
+
+        foreach ($exercises as $exercise) {
+            $this->handleAttemptRecordings($exercise);
+
+            $this->entityManager->remove($exercise);
+        }
+
+        $this->entityManager->flush();
+    }
+
+    private function handleAttemptRecordings(TrackEExercise $exercise): void
+    {
+        $trackEAttemptRecordingRepository = $this->entityManager->getRepository(TrackEAttemptQualify::class);
+
+        $attemptRecordings = $trackEAttemptRecordingRepository->findBy(['trackExercise' => $exercise->getExeId()]);
+
+        foreach ($attemptRecordings as $attemptRecording) {
+            $this->entityManager->remove($attemptRecording);
+        }
     }
 }

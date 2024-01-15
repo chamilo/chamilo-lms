@@ -87,14 +87,16 @@ class ExtraField
     protected ?bool $changeable = null;
     #[ORM\Column(name: 'filter', type: 'boolean', nullable: true, unique: false)]
     protected ?bool $filter = null;
+
     /**
      * @var Collection<int, ExtraFieldOptions>
      */
     #[Groups(['extra_field:read'])]
     #[ORM\OneToMany(targetEntity: ExtraFieldOptions::class, mappedBy: 'field')]
     protected Collection $options;
+
     /**
-     * @var Tag[]|Collection
+     * @var Collection<int, Tag>
      */
     #[ORM\OneToMany(targetEntity: Tag::class, mappedBy: 'field')]
     protected Collection $tags;
@@ -111,12 +113,8 @@ class ExtraField
         $this->changeable = false;
         $this->filter = false;
     }
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -140,10 +138,8 @@ class ExtraField
 
         return $this;
     }
-    /**
-     * @return string
-     */
-    public function getVariable()
+
+    public function getVariable(): string
     {
         return $this->variable;
     }
@@ -153,10 +149,8 @@ class ExtraField
 
         return $this;
     }
-    /**
-     * @return string
-     */
-    public function getDisplayText()
+
+    public function getDisplayText(): ?string
     {
         return $this->displayText;
     }
@@ -166,10 +160,8 @@ class ExtraField
 
         return $this;
     }
-    /**
-     * @return string
-     */
-    public function getDefaultValue()
+
+    public function getDefaultValue(): ?string
     {
         return $this->defaultValue;
     }
@@ -179,10 +171,8 @@ class ExtraField
 
         return $this;
     }
-    /**
-     * @return int
-     */
-    public function getFieldOrder()
+
+    public function getFieldOrder(): ?int
     {
         return $this->fieldOrder;
     }
@@ -192,10 +182,8 @@ class ExtraField
 
         return $this;
     }
-    /**
-     * @return bool
-     */
-    public function isChangeable()
+
+    public function isChangeable(): ?bool
     {
         return $this->changeable;
     }
@@ -245,6 +233,7 @@ class ExtraField
 
         return $this;
     }
+
     /**
      * @return Collection<int, ExtraFieldOptions>
      */
@@ -258,10 +247,11 @@ class ExtraField
 
         return $this;
     }
+
     /**
-     * @return Tag[]|Collection
+     * @return Collection<int, Tag>
      */
-    public function getTags(): array|Collection
+    public function getTags(): Collection
     {
         return $this->tags;
     }
@@ -296,13 +286,13 @@ class ExtraField
 
         return $this;
     }
-    public function setTranslatableLocale($locale)
+    public function setTranslatableLocale($locale): static
     {
         $this->locale = $locale;
 
         return $this;
     }
-    public function getTranslatableLocale()
+    public function getTranslatableLocale(): ?string
     {
         return $this->locale;
     }

@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 require_once __DIR__.'/lib/fe/exportgradebook.php';
 
@@ -147,11 +149,12 @@ if (isset($_GET['action'])) {
                 Display::display_header();
                 $items[] = [
                     'url' => $backUrl,
-                    'content' => Display::return_icon(
-                        'back.png',
-                        get_lang('Back'),
-                        [],
-                        ICON_SIZE_MEDIUM
+                    'content' => Display::getMdiIcon(
+                        ActionIcon::BACK,
+                        'ch-tool-icon',
+                        null,
+                        ICON_SIZE_MEDIUM,
+                        get_lang('Back')
                     ),
                 ];
                 echo Display::actions($items);

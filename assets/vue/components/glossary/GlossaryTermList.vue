@@ -10,9 +10,9 @@
         <template #header>
           <div class="-mb-2 flex items-center justify-between gap-2 bg-gray-15 px-4 py-2">
             <div>
-              {{ term.name }}
+              {{ term.title }}
             </div>
-            <div>
+            <div v-if="securityStore.isAuthenticated && isCurrentTeacher">
               <BaseButton
                 :label="t('Edit')"
                 class="mr-2"
@@ -50,8 +50,14 @@
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
 import BaseCard from "../basecomponents/BaseCard.vue"
+import { useSecurityStore } from "../../store/securityStore"
+import { useStore } from "vuex"
+import { computed } from "vue"
 
 const { t } = useI18n()
+const securityStore = useSecurityStore()
+const store = useStore()
+const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
 
 defineProps({
   glossaries: {

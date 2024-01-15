@@ -40,7 +40,7 @@ class TestFreeAnswer extends Basic
             'wordLimit' => 'unlimited',
         ];
 
-        //$config['height'] = '200';
+        // $config['height'] = '200';
 
         return $config;
     }

@@ -32,8 +32,10 @@ final class Version20201212203625 extends AbstractMigrationChamilo
     {
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
+
         /** @var EntityManager $em */
         $em = $doctrine->getManager();
+
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
@@ -50,6 +52,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
 
         // Migrate teacher exercise audio.
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();
@@ -75,6 +78,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     preg_match('#/(.*)/#', '/'.$path, $matches);
                     if (isset($matches[1]) && !empty($matches[1])) {
                         $attemptId = $matches[1];
+
                         /** @var TrackEAttempt $attempt */
                         $attempt = $attemptRepo->find($attemptId);
                         if (null !== $attempt) {
@@ -118,6 +122,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
 
         // Migrate student exercise audio
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();
@@ -194,6 +199,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
 
         // Migrate normal documents.
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $counter = 1;
@@ -236,6 +242,9 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 if (null === $parent) {
                     $parent = $course;
                 }
+                if (null === $parent->getResourceNode()) {
+                    continue;
+                }
                 $admin = $this->getAdmin();
                 $result = $this->fixItemProperty('document', $documentRepo, $course, $admin, $document, $parent);
 
@@ -262,7 +271,5 @@ final class Version20201212203625 extends AbstractMigrationChamilo
         $em->clear();
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

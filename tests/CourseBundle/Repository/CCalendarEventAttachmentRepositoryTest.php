@@ -65,6 +65,6 @@ class CCalendarEventAttachmentRepositoryTest extends AbstractApiTest
 
         /** @var CCalendarEvent $event */
         $event = $repo->find($event->getIid());
-        //$this->assertSame(1, $event->getAttachments()->count());
+        // $this->assertSame(1, $event->getAttachments()->count());
     }
 }

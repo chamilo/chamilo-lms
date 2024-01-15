@@ -5,6 +5,8 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumThread;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 
 /**
  * @todo fix all this qualify files avoid including files, use classes POO jmontoya
@@ -174,12 +176,12 @@ if ('learnpath' === $origin) {
         ];
         $interbreadcrumb[] = [
             'url' => 'viewforum.php?'.api_get_cidreq().'&forum='.$forumId.'&search='.$search,
-            'name' => prepare4display($forumEntity->getForumTitle()),
+            'name' => prepare4display($forumEntity->getTitle()),
         ];
         if ('PostDeletedSpecial' != $message) {
             $interbreadcrumb[] = [
                 'url' => 'viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId,
-                'name' => prepare4display($threadEntity->getThreadTitle()),
+                'name' => prepare4display($threadEntity->getTitle()),
             ];
         }
 
@@ -198,17 +200,17 @@ if ('learnpath' === $origin) {
         ];
         $interbreadcrumb[] = [
             'url' => 'index.php?'.api_get_cidreq().'&forumcategory='.$category->getIid().'&search='.$search,
-            'name' => prepare4display($category->getCatTitle()),
+            'name' => prepare4display($category->getTitle()),
         ];
         $interbreadcrumb[] = [
             'url' => 'viewforum.php?'.api_get_cidreq().'&forum='.$forumId.'&search='.$search,
-            'name' => prepare4display($forumEntity->getForumTitle()),
+            'name' => prepare4display($forumEntity->getTitle()),
         ];
 
         if ('PostDeletedSpecial' != $message) {
             $interbreadcrumb[] = [
                 'url' => 'viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId,
-                'name' => prepare4display($threadEntity->getThreadTitle()),
+                'name' => prepare4display($threadEntity->getTitle()),
             ];
         }
         // the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
@@ -273,7 +275,7 @@ $url = api_get_path(WEB_CODE_PATH).'forum/forumqualify.php?'.
 $userToQualifyInfo = api_get_user_info($userIdToQualify);
 $form = new FormValidator('forum-thread-qualify', 'post', $url);
 $form->addHeader($userToQualifyInfo['complete_name']);
-$form->addLabel(get_lang('Thread'), $threadEntity->getThreadTitle());
+$form->addLabel(get_lang('Thread'), $threadEntity->getTitle());
 $form->addLabel(get_lang('Users in course'), $result['user_course']);
 $form->addLabel(get_lang('Number of posts'), $result['post']);
 $form->addLabel(get_lang('Number of posts for this user'), $result['user_post']);
@@ -339,7 +341,7 @@ if (isset($rows)) {
             echo '<tr ><td height="50%">';
             $realname = $attachment_list['path'];
             $user_filename = $attachment_list['filename'];
-            echo Display::return_icon('attachment.gif', get_lang('Attachment'));
+            echo Display::getMdiIcon('paperclip', 'ch-tool-icon', '', ICON_SIZE_SMALL, get_lang('Attachment'));
             echo '<a href="download.php?file=';
             echo $realname;
             echo ' "> '.$user_filename.' </a>';

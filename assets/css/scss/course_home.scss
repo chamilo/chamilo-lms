@@ -1,0 +1,5 @@
+.course-home {
+  &__tools {
+    @apply grid grid-cols-[repeat(auto-fill,_minmax(120px,_1fr))] gap-y-8 gap-x-20 mt-4;
+  }
+}

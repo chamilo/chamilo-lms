@@ -15,12 +15,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'c_thematic_plan')]
 #[ORM\Index(name: 'thematic_id', columns: ['thematic_id', 'description_type'])]
 #[ORM\Entity]
-class CThematicPlan implements Stringable //extends AbstractResource implements ResourceInterface
+class CThematicPlan implements Stringable // extends AbstractResource implements ResourceInterface
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
@@ -82,7 +82,7 @@ class CThematicPlan implements Stringable //extends AbstractResource implements 
         return $this->descriptionType;
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }

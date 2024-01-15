@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\EventListener;
 
@@ -15,7 +15,7 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Entity\CGroup;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
@@ -25,6 +25,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 /**
@@ -37,15 +38,18 @@ class CourseListener
 
     public function __construct(
         private readonly Environment $twig,
-        private readonly AuthorizationCheckerInterface $authorizationChecker
-    ) {
-    }
+        private readonly AuthorizationCheckerInterface $authorizationChecker,
+        private readonly TranslatorInterface $translator,
+        private readonly EntityManagerInterface $entityManager,
+    ) {}
 
     /**
      * Get request from the URL cidReq, c_id or the "ABC" in the courses url (courses/ABC/index.php).
      */
     public function onKernelRequest(RequestEvent $event): void
     {
+        global $cidReset;
+
         if (!$event->isMainRequest()) {
             // don't do anything if it's not the master request
             return;
@@ -67,9 +71,13 @@ class CourseListener
             return;
         }
 
+        if (true === $cidReset) {
+            $this->removeCourseFromSession($request);
+
+            return;
+        }
+
         $sessionHandler = $request->getSession();
-        $container = $this->container;
-        $translator = $container->get('translator');
         $twig = $this->twig;
 
         $course = null;
@@ -79,46 +87,25 @@ class CourseListener
         $courseId = (int) $request->get('cid');
         $checker = $this->authorizationChecker;
 
-        /** @var EntityManager $em */
-        $em = $container->get('doctrine')->getManager();
-
-        //dump("cid value in request: $courseId");
         if (!empty($courseId)) {
-            $course = null;
             if ($sessionHandler->has('course')) {
                 /** @var Course $courseFromSession */
                 $courseFromSession = $sessionHandler->get('course');
                 if ($courseId === $courseFromSession->getId()) {
                     $course = $courseFromSession;
                     $courseInfo = $sessionHandler->get('_course');
-                    //dump("Course #$courseId loaded from Session ");
                 }
             }
 
-            //$course = null; //force loading from database
-            //if (null === $course) {
-            $course = $em->getRepository(Course::class)->find($courseId);
             if (null === $course) {
-                throw new NotFoundHttpException($translator->trans('Course does not exist'));
+                $course = $this->entityManager->find(Course::class, $courseId);
+                $courseInfo = api_get_course_info($course->getCode());
             }
 
-            //dump("Course loaded from DB #$courseId");
-            $courseInfo = api_get_course_info($course->getCode());
-            //}
+            if (null === $course) {
+                throw new NotFoundHttpException($this->translator->trans('Course does not exist'));
+            }
 
-            /*if (null === $course) {
-                throw new NotFoundHttpException($translator->trans('Course does not exist'));
-            }*/
-        }
-
-        global $cidReset;
-        if (true === $cidReset) {
-            $this->removeCourseFromSession($request);
-
-            return;
-        }
-
-        if (null !== $course) {
             // Setting variables in the session.
             $sessionHandler->set('course', $course);
             $sessionHandler->set('_real_cid', $course->getId());
@@ -129,40 +116,35 @@ class CourseListener
             // Setting variables for the twig templates.
             $twig->addGlobal('course', $course);
 
+            if (false === $checker->isGranted(CourseVoter::VIEW, $course)) {
+                throw new AccessDeniedException($this->translator->trans('You\'re not allowed in this course'));
+            }
+
             // Checking if sid is used.
             $sessionId = (int) $request->get('sid');
-            $session = null;
+
             if (empty($sessionId)) {
                 $sessionHandler->remove('session_name');
                 $sessionHandler->remove('sid');
                 $sessionHandler->remove('session');
-                // Check if user is allowed to this course
-                // See CourseVoter.php
-                //dump("Checkisgranted");
-                if (false === $checker->isGranted(CourseVoter::VIEW, $course)) {
-                    throw new AccessDeniedException($translator->trans('You\'re not allowed in this course'));
-                }
             } else {
-                //dump("Load chamilo session from DB");
-                $session = $em->getRepository(Session::class)->find($sessionId);
+                // dump("Load chamilo session from DB");
+                $session = $this->entityManager->find(Session::class, $sessionId);
                 if (null !== $session) {
-                    if (!$session->hasCourse($course)) {
-                        throw new AccessDeniedException($translator->trans('Course is not registered in the Session'));
-                    }
-                    //$course->setCurrentSession($session);
+                    // $course->setCurrentSession($session);
                     $session->setCurrentCourse($course);
                     // Check if user is allowed to this course-session
                     // See SessionVoter.php
                     if (false === $checker->isGranted(SessionVoter::VIEW, $session)) {
-                        throw new AccessDeniedException($translator->trans('You\'re not allowed in this session'));
+                        throw new AccessDeniedException($this->translator->trans('You\'re not allowed in this session'));
                     }
-                    $sessionHandler->set('session_name', $session->getName());
+                    $sessionHandler->set('session_name', $session->getTitle());
                     $sessionHandler->set('sid', $session->getId());
                     $sessionHandler->set('session', $session);
 
                     $twig->addGlobal('session', $session);
                 } else {
-                    throw new NotFoundHttpException($translator->trans('Session not found'));
+                    throw new NotFoundHttpException($this->translator->trans('Session not found'));
                 }
             }
 
@@ -172,17 +154,17 @@ class CourseListener
             if (empty($groupId)) {
                 $sessionHandler->remove('gid');
             } else {
-                //dump('Load chamilo group from DB');
-                $group = $em->getRepository(CGroup::class)->find($groupId);
+                // dump('Load chamilo group from DB');
+                $group = $this->entityManager->getRepository(CGroup::class)->find($groupId);
 
                 if (null === $group) {
-                    throw new NotFoundHttpException($translator->trans('Group not found'));
+                    throw new NotFoundHttpException($this->translator->trans('Group not found'));
                 }
 
                 $group->setParent($course);
 
                 if (false === $checker->isGranted(GroupVoter::VIEW, $group)) {
-                    throw new AccessDeniedException($translator->trans('You\'re not allowed in this group'));
+                    throw new AccessDeniedException($this->translator->trans('You\'re not allowed in this group'));
                 }
 
                 $sessionHandler->set('gid', $groupId);
@@ -191,11 +173,11 @@ class CourseListener
                     // Check if user is allowed to this course-group
                     // See GroupVoter.php
                     if (false === $checker->isGranted(GroupVoter::VIEW, $group)) {
-                        throw new AccessDeniedException($translator->trans('Unauthorised access to group'));
+                        throw new AccessDeniedException($this->translator->trans('Unauthorised access to group'));
                     }
                     $sessionHandler->set('gid', $groupId);
                 } else {
-                    throw new AccessDeniedException($translator->trans('Group does not exist in course'));
+                    throw new AccessDeniedException($this->translator->trans('Group does not exist in course'));
                 }*/
             }
 
@@ -210,9 +192,7 @@ class CourseListener
         }
     }
 
-    public function onKernelResponse(ResponseEvent $event): void
-    {
-    }
+    public function onKernelResponse(ResponseEvent $event): void {}
 
     /**
      * Once the onKernelRequest was fired, we check if the course/session object were set and we inject them in the controller.
@@ -227,7 +207,7 @@ class CourseListener
 
         $request = $event->getRequest();
         $sessionHandler = $request->getSession();
-        //$container = $this->container;
+        // $container = $this->container;
 
         /*if ($course) {
             $courseLanguage = $course->getCourseLanguage();
@@ -240,20 +220,20 @@ class CourseListener
         }*/
 
         $courseId = (int) $request->get('cid');
-        //$groupId = (int) $request->get('gid');
-        //$sessionId = (int) $request->get('sid');
+        // $groupId = (int) $request->get('gid');
+        // $sessionId = (int) $request->get('sid');
 
         // cidReset is set in the global.inc.php files
-        //global $cidReset;
-        //$cidReset = $sessionHandler->get('cid_reset', false);
+        // global $cidReset;
+        // $cidReset = $sessionHandler->get('cid_reset', false);
 
         // This controller implements ToolInterface? Then set the course/session
-        if (\is_array($controllerList) &&
-            (
-                $controllerList[0] instanceof CourseControllerInterface ||
-                $controllerList[0] instanceof EditorController
-                //$controllerList[0] instanceof ResourceController
-                //|| $controllerList[0] instanceof LegacyController
+        if (\is_array($controllerList)
+            && (
+                $controllerList[0] instanceof CourseControllerInterface
+                || $controllerList[0] instanceof EditorController
+                // $controllerList[0] instanceof ResourceController
+                // || $controllerList[0] instanceof LegacyController
             )
         ) {
             if (!empty($courseId)) {
@@ -266,12 +246,12 @@ class CourseListener
                 if ($course) {
                     $controller->setCourse($course);
                     // Legacy code
-                    //$courseCode = $course->getCode();
-                    //$courseInfo = api_get_course_info($courseCode);
-                    //$container->get('twig')->addGlobal('course', $course);
-                    //$sessionHandler->set('_real_cid', $course->getId());
-                    //$sessionHandler->set('_cid', $course->getCode());
-                    //$sessionHandler->set('_course', $courseInfo);
+                    // $courseCode = $course->getCode();
+                    // $courseInfo = api_get_course_info($courseCode);
+                    // $container->get('twig')->addGlobal('course', $course);
+                    // $sessionHandler->set('_real_cid', $course->getId());
+                    // $sessionHandler->set('_cid', $course->getCode());
+                    // $sessionHandler->set('_course', $courseInfo);
                 }
 
                 if ($session) {
@@ -280,10 +260,10 @@ class CourseListener
             }
 
             // Example 'chamilo_notebook.controller.notebook:indexAction'
-            //$controllerAction = $request->get('_controller');
-            //$controllerActionParts = explode(':', $controllerAction);
-            //$controllerNameParts = explode('.', $controllerActionParts[0]);
-            //$controllerName = $controllerActionParts[0];
+            // $controllerAction = $request->get('_controller');
+            // $controllerActionParts = explode(':', $controllerAction);
+            // $controllerNameParts = explode('.', $controllerActionParts[0]);
+            // $controllerName = $controllerActionParts[0];
         }
     }
 
@@ -325,7 +305,7 @@ class CourseListener
             }
         }
 
-        //$request->setLocale($request->getPreferredLanguage());
+        // $request->setLocale($request->getPreferredLanguage());
     }
 
     private function generateCourseUrl(?Course $course, int $sessionId, int $groupId, ?string $origin): string

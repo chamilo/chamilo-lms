@@ -20,6 +20,9 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @template-extends AbstractType<User>
+ */
 class ProfileType extends AbstractType
 {
     private LanguageRepository $languageRepository;
@@ -37,10 +40,10 @@ class ProfileType extends AbstractType
             ->add('firstname', TextType::class, ['label' => 'Firstname', 'required' => true])
             ->add('lastname', TextType::class, ['label' => 'Lastname', 'required' => true])
             ->add('email', EmailType::class, ['label' => 'Email', 'required' => true])
-            //->add('official_code', TextType::class)
-            //->add('groups')
+            // ->add('official_code', TextType::class)
+            // ->add('groups')
             ->add('locale', LocaleType::class, [
-                //'preferred_choices' => ['en', 'fr_FR', 'es_ES', 'pt', 'nl'],
+                // 'preferred_choices' => ['en', 'fr_FR', 'es_ES', 'pt', 'nl'],
                 'choices' => $languages,
                 'choice_loader' => null,
             ])
@@ -71,7 +74,7 @@ class ProfileType extends AbstractType
                 IllustrationType::class,
                 ['label' => 'Picture', 'required' => false, 'mapped' => false]
             )
-            //->add('website', UrlType::class, ['label' => 'Website', 'required' => false])
+            // ->add('website', UrlType::class, ['label' => 'Website', 'required' => false])
         ;
 
         $builder->add('extra_fields', ExtraFieldType::class, ['mapped' => false]);

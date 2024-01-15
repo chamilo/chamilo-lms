@@ -45,9 +45,7 @@ class PersonalFile extends AbstractResource implements ResourceInterface, String
     #[Groups(['personal_file:read'])]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
-    public function __construct()
-    {
-    }
+    public function __construct() {}
     public function __toString(): string
     {
         return $this->getTitle();

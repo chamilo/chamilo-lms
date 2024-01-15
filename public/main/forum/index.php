@@ -4,6 +4,7 @@
 
 use Chamilo\CourseBundle\Entity\CForumPost;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * These files are a complete rework of the forum. The database structure is
@@ -204,11 +205,12 @@ if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
     $url = '../lp/lp_controller.php?'.api_get_cidreq()
         ."&gradebook=&action=add_item&type=step&lp_id='.$lp_id.'#resource_tab-5";
     $actionLeft .= Display::url(
-        Display::return_icon(
-            'back.png',
-            get_lang('Back to').' '.get_lang('Learning paths'),
+        Display::getMdiIcon(
+            ActionIcon::BACK,
+            'ch-tool-icon',
             null,
-            ICON_SIZE_MEDIUM
+            ICON_SIZE_MEDIUM,
+            get_lang('Back to').' '.get_lang('Learning paths')
         ),
         $url
     );
@@ -217,23 +219,13 @@ if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
 if (api_is_allowed_to_edit(false, true)) {
     if (is_array($forumCategories) && !empty($forumCategories)) {
         $actionLeft .= Display::url(
-            Display::return_icon(
-                'new_forum.png',
-                get_lang('Add a forum'),
-                null,
-                ICON_SIZE_MEDIUM
-            ),
+            Display::getMdiIcon('comment-quote', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a forum')),
             api_get_self().'?'.api_get_cidreq().'&action=add_forum&lp_id='.$lp_id
         );
     }
 
     $actionLeft .= Display::url(
-        Display::return_icon(
-            'new_folder.png',
-            get_lang('Add a forumCategory'),
-            null,
-            ICON_SIZE_MEDIUM
-        ),
+        Display::getMdiIcon('folder-multiple-plus', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a forumCategory')),
         api_get_self().'?'.api_get_cidreq().'&action=add_category&lp_id='.$lp_id
     );
 }
@@ -319,7 +311,7 @@ if (is_array($forumCategories)) {
         //$categorySessionId = $forumCategory->getSessionId();
         $categorySessionId = 0;
         $forumCategoryInfo['id'] = $categoryId;
-        $forumCategoryInfo['title'] = $forumCategory->getCatTitle();
+        $forumCategoryInfo['title'] = $forumCategory->getTitle();
         /*
         if (empty($forumCategory['cat_title'])) {
             $forumCategoryInfo['title'] = get_lang('Without category');
@@ -346,12 +338,7 @@ if (is_array($forumCategories)) {
             ) {
                 $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                     .'&action=edit_category&content=forumcategory&id='.$categoryId
-                    .'">'.Display::return_icon(
-                        'edit.png',
-                        get_lang('Edit'),
-                        [],
-                        ICON_SIZE_SMALL
-                    )
+                    .'">'.Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))
                     .'</a>';
 
                 $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq()
@@ -362,12 +349,7 @@ if (is_array($forumCategories)) {
                         ENT_QUOTES
                     ))
                     ."')) return false;\">"
-                    .Display::return_icon(
-                        'delete.png',
-                        get_lang('Delete'),
-                        [],
-                        ICON_SIZE_SMALL
-                    )
+                    .Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'))
                     .'</a>';
                 $tools .= returnVisibleInvisibleIcon(
                     'forumcategory',
@@ -427,7 +409,7 @@ if (is_array($forumCategories)) {
                         $form_count++;
                         $forumInfo['id'] = $forumId;
                         $forumInfo['forum_of_group'] = $forum->getForumOfGroup();
-                        $forumInfo['title'] = $forum->getForumTitle();
+                        $forumInfo['title'] = $forum->getTitle();
                         $forumInfo['forum_image'] = null;
                         // Showing the image
                         /*if (!empty($forum['forum_image'])) {
@@ -466,7 +448,7 @@ if (is_array($forumCategories)) {
                         if (!empty($forum->getStartTime()) && !empty($forum->getEndTime())) {
                             $res = api_is_date_in_date_range($forum->getStartTime(), $forum->getEndTime());
                             if (!$res) {
-                                $linkForum = $forum->getForumTitle();
+                                $linkForum = $forum->getTitle();
                             }
                         }
 
@@ -490,21 +472,24 @@ if (is_array($forumCategories)) {
                             if ($forum->getForumOfGroup() !== '0') {
                                 if (is_array($mywhatsnew_post_info) && !empty($mywhatsnew_post_info)) {
                                     $forumInfo['alert'] = ' '.
-                                Display::return_icon(
-                                    'alert.png',
-                                    get_lang('Forum'),
-                                    null,
-                                    ICON_SIZE_SMALL
-                                );
+                                    Display::getMdiIcon(
+                                        StateIcon::WARNING,
+                                        'ch-tool-icon',
+                                        null,
+                                        ICON_SIZE_SMALL,
+                                        get_lang('Forum')
+                                    );
                                 }
                             } else {
                                 if (is_array($mywhatsnew_post_info) && !empty($mywhatsnew_post_info)) {
-                                    $forumInfo['alert'] = ' '.Display::return_icon(
-                                    'alert.png',
-                                    get_lang('Forum'),
-                                    null,
-                                    ICON_SIZE_SMALL
-                                );
+                                    $forumInfo['alert'] = ' '.
+                                    Display::getMdiIcon(
+                                        StateIcon::WARNING,
+                                        'ch-tool-icon',
+                                        null,
+                                        ICON_SIZE_SMALL,
+                                        get_lang('Forum')
+                                    );
                                 }
                             }*/
                         }
@@ -542,7 +527,7 @@ if (is_array($forumCategories)) {
                         if (api_is_allowed_to_edit(false, true)) {
                             $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                                 .'&action=edit_forum&content=forum&id='.$forumId.'">'
-                                .Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL)
+                                .Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))
                                 .'</a>';
                             $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                                 .'&action=delete_forum&content=forum&id='.$forumId
@@ -550,7 +535,7 @@ if (is_array($forumCategories)) {
                                     api_htmlentities(get_lang('Delete forum ?'), ENT_QUOTES)
                                 )
                                 ."')) return false;\">"
-                                .Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL)
+                                .Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'))
                                 .'</a>';
 
                             $toolActions .= returnVisibleInvisibleIcon(

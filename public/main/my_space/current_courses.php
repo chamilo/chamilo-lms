@@ -5,6 +5,9 @@
 /**
  * Report for current courses followed by the user.
  */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_TRACKING;
@@ -53,7 +56,7 @@ if (!empty($my_courses)) {
         }
 
         $t_lp = Database::get_course_table(TABLE_LP_MAIN);
-        $sql_lp = "SELECT lp.name, lp.id FROM $t_lp lp
+        $sql_lp = "SELECT lp.title, lp.id FROM $t_lp lp
                    WHERE c_id = $course_id AND lp.session_id = 0";
         $rs_lp = Database::query($sql_lp);
         $t_lpi = Database::get_course_table(TABLE_LP_ITEM);
@@ -74,7 +77,7 @@ if (!empty($my_courses)) {
                 $lp_id = $learnpath['id'];
 
                 $lp_items =
-                $array[$i]['lp'] = '<a href="'.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?cidReq='.$course_code.'&amp;action=view&amp;lp_id='.$lp_id.'" target="_blank">'.$learnpath['name'].'</a>';
+                $array[$i]['lp'] = '<a href="'.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?cidReq='.$course_code.'&amp;action=view&amp;lp_id='.$lp_id.'" target="_blank">'.$learnpath['title'].'</a>';
 
                 $array[$i]['teachers'] = '';
                 if (!empty($teacher_list)) {
@@ -242,8 +245,8 @@ foreach ($array as $row_table) {
 }
 
 echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'my_space/index.php">'.Display::return_icon('back.png', get_lang('Back'), [], 32).'</a>';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'my_space/current_courses.php?export=1">'.Display::return_icon('export_excel.png', get_lang('Current coursesReport'), [], 32).'</a> ';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'my_space/index.php">'.Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')).'</a>';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'my_space/current_courses.php?export=1">'.Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Current coursesReport')).'</a> ';
 echo '</div>';
 echo '<div style="overflow:auto;">';
 echo $table->toHtml();

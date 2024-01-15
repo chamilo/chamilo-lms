@@ -24,10 +24,10 @@ class SequenceCondition
     protected string $mathOperation;
 
     #[ORM\Column(name: 'param', type: 'float')]
-    protected string $param;
+    protected float $param;
 
     #[ORM\Column(name: 'act_true', type: 'integer')]
-    protected string $actTrue;
+    protected int $actTrue;
 
     #[ORM\Column(name: 'act_false', type: 'string')]
     protected string $actFalse;
@@ -72,40 +72,31 @@ class SequenceCondition
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getParam()
+    public function getParam(): float
     {
         return $this->param;
     }
 
-    public function setParam(string $param): self
+    public function setParam(float $param): self
     {
         $this->param = $param;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getActTrue()
+    public function getActTrue(): int
     {
         return $this->actTrue;
     }
 
-    public function setActTrue(string $actTrue): self
+    public function setActTrue(int $actTrue): self
     {
         $this->actTrue = $actTrue;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getActFalse()
+    public function getActFalse(): string
     {
         return $this->actFalse;
     }

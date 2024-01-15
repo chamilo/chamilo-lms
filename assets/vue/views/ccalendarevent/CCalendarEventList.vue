@@ -190,7 +190,7 @@ async function getSessions({ startStr, endStr }) {
 
   return sessions["hydra:member"].map((sessionRelUser) => ({
     ...sessionRelUser.session,
-    title: sessionRelUser.session.name,
+    title: sessionRelUser.session.title,
     start: sessionRelUser.session.displayStartDate,
     end: sessionRelUser.session.displayEndDate,
   }))

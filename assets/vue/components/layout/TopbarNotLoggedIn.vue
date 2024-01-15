@@ -12,21 +12,29 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
+import {computed, ref} from "vue"
 import Menubar from "primevue/menubar"
 import headerLogoPath from "../../../../assets/css/themes/chamilo/images/header-logo.svg"
 import { useI18n } from "vue-i18n"
+import { useRoute, useRouter } from "vue-router";
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
+const route = useRoute()
+const router = useRouter()
 
 function setLanguage(event) {
-  const { label, isoCode } = event.item
+  const { isoCode } = event.item
 
-  const selectorIndex = menuItems.value.findIndex((item) => "language_selector" === item.key)
+  const newUrl = router.resolve(
+    {
+      path: route.path,
+      query: {
+        _locale: isoCode
+      }
+    }
+  )
 
-  menuItems.value[selectorIndex] ? (menuItems.value[selectorIndex].label = label) : null
-
-  locale.value = isoCode
+  window.location.href = newUrl.fullPath
 }
 
 const languageItems = window.languages.map((language) => ({
@@ -37,14 +45,14 @@ const languageItems = window.languages.map((language) => ({
 
 const currentLanguage = window.languages.find((language) => document.querySelector("html").lang === language.isocode)
 
-const menuItems = ref([
+const menuItems = computed(() => [
   {
     label: t("Home"),
-    to: { name: "Index" },
+    command: async () => await router.push({ name: "Index" }),
   },
   {
     label: t("FAQ"),
-    to: { name: "Faq" },
+    command: async () => await router.push({ name: "Faq" }),
   },
   {
     label: t("Registration"),
@@ -52,7 +60,7 @@ const menuItems = ref([
   },
   {
     label: t("Demo"),
-    to: { name: "Demo" },
+    command: async () => await router.push({ name: "Demo" }),
   },
   {
     label: t("Contact"),

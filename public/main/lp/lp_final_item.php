@@ -141,7 +141,7 @@ if (false == $accessGranted) {
             $repo = Container::getGradeBookCategoryRepository();
             $category = $repo->find($categoryId);
 
-            if (false === $show_message && !api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
+            if (empty($show_message) && !api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
                 $certificate = Category::generateUserCertificate($category, $userId);
 
                 if (!empty($certificate['pdf_url']) ||
@@ -245,7 +245,7 @@ function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 
                         </div>
                     </div>
                     <div class='col-md-8 col-xs-8'>
-                        <h5><b>".$skill->getName()."</b></h5>
+                        <h5><b>".$skill->getTitle()."</b></h5>
                         ".$skill->getDescription()."
                     </div>
                     <div class='col-md-2 col-xs-12'>
@@ -253,7 +253,7 @@ function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 
                         <a href='http://www.facebook.com/sharer.php?u=".api_get_path(WEB_PATH)."badge/".$skill->getId()."/user/".$userId."' target='_new'>
                             <em class='fa fa-facebook-square fa-3x text-info' aria-hidden='true'></em>
                         </a>
-                        <a href='https://twitter.com/home?status=".sprintf(get_lang('I have achieved skill %s on %s'), '"'.$skill->getName().'"', api_get_setting('siteName')).' - '.api_get_path(WEB_PATH).'badge/'.$skill->getId().'/user/'.$userId."' target='_new'>
+                        <a href='https://twitter.com/home?status=".sprintf(get_lang('I have achieved skill %s on %s'), '"'.$skill->getTitle().'"', api_get_setting('siteName')).' - '.api_get_path(WEB_PATH).'badge/'.$skill->getId().'/user/'.$userId."' target='_new'>
                             <em class='fa fa-twitter-square fa-3x text-light' aria-hidden='true'></em>
                         </a>
                     </div>

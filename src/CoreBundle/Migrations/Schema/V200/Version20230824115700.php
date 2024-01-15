@@ -16,9 +16,6 @@ class Version20230824115700 extends AbstractMigrationChamilo
         return 'Changes in Course dependent tables';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function up(Schema $schema): void
     {
         $accessUrlRelCourse = $schema->getTable('access_url_rel_course');

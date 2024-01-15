@@ -7,6 +7,8 @@ use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
 use Chamilo\CourseBundle\Entity\CThematicPlan;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -161,7 +163,7 @@ $attendance_list = $attendance->getAttendanceList($course, $session);
 $attendance_select = [];
 $attendance_select[0] = get_lang('Select an attendance');
 foreach ($attendance_list as $attendanceEntity) {
-    $attendance_select[$attendanceEntity->getIid()] = $attendanceEntity->getName();
+    $attendance_select[$attendanceEntity->getIid()] = $attendanceEntity->getTitle();
 }
 
 $token = Security::get_token();
@@ -340,11 +342,12 @@ switch ($action) {
         break;
     case 'thematic_import_select':
         $actionLeft = '<a href="index.php?'.api_get_cidreq().'">';
-        $actionLeft .= Display::return_icon(
-            'back.png',
-            get_lang('Back to').' '.get_lang('Thematic view with details'),
-            '',
-            ICON_SIZE_MEDIUM
+        $actionLeft .= Display::getMdiIcon(
+            ActionIcon::BACK,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_MEDIUM,
+            get_lang('Back to').' '.get_lang('Thematic view with details')
         );
         $actionLeft .= '</a>';
 
@@ -501,20 +504,15 @@ switch ($action) {
         break;
     case 'thematic_details':
         $actionLeft = '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.
-            Display::return_icon(
-                'new_course_progress.png',
-                get_lang('New thematic section'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).'</a>';
+            Display::getMdiIcon('progress-star', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('New thematic section')).'</a>';
         $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_import_select'.$url_token.'">'.
-            Display::return_icon('import_csv.png', get_lang('Import course progress'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon('file-delimited', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import course progress')).'</a>';
         $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_export'.$url_token.'">'.
-            Display::return_icon('export_csv.png', get_lang('Export course progress'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export course progress')).'</a>';
         $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_export_pdf'.$url_token.'">'.
-            Display::return_icon('pdf.png', get_lang('Export to PDF'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')).'</a>';
         /*$actionLeft .= Display::url(
-            Display::return_icon('export_to_documents.png', get_lang('Export latest version of this page to Documents'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon('export_to_documents', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export latest version of this page to Documents')),
             api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['action' => 'export_documents']).$url_token
         );*/
         $total_average_of_advances = null;
@@ -547,20 +545,10 @@ switch ($action) {
         if (isset($last_id) && $last_id) {
             $link_to_thematic_plan = '<a
                 href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$last_id.'">'.
-                Display::return_icon(
-                    'lesson_plan.png',
-                    get_lang('Thematic plan'),
-                    ['style' => 'vertical-align:middle;float:none;'],
-                    ICON_SIZE_SMALL
-                ).'</a>';
+                Display::getMdiIcon('progress-check', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Thematic plan')).'</a>';
             $link_to_thematic_advance = '<a
                 href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$last_id.'">'.
-                Display::return_icon(
-                    'lesson_plan_calendar.png',
-                    get_lang('Thematic advance'),
-                    ['style' => 'vertical-align:middle;float:none;'],
-                    ICON_SIZE_SMALL
-                ).'</a>';
+                Display::getMdiIcon('progress-clock', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Thematic advance')).'</a>';
             Display::addFlash(
                 Display::return_message(
                     get_lang('Thematic section has been created successfully').'<br />'.sprintf(
@@ -602,12 +590,7 @@ switch ($action) {
                 if (api_is_allowed_to_edit(null, true)) {
                     // Thematic title
                     $toolbarThematic = Display::url(
-                        Display::return_icon(
-                            'cd.png',
-                            get_lang('Copy'),
-                            null,
-                            ICON_SIZE_TINY
-                        ),
+                        Display::getMdiIcon('disc', 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Copy')),
                         'index.php?'.api_get_cidreq().'&action=thematic_copy&thematic_id='.$id.$params.$url_token,
                         ['class' => 'btn btn--plain']
                     );
@@ -616,27 +599,27 @@ switch ($action) {
                             $toolbarThematic .= ' <a
                                 class="btn btn--plain"
                                 href="'.api_get_self().'?action=moveup&'.api_get_cidreq().'&thematic_id='.$id.$params.$url_token.'">'.
-                                Display::return_icon('up.png', get_lang('Up'), '', ICON_SIZE_TINY).'</a>';
+                                Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Up')).'</a>';
                         } else {
                             $toolbarThematic .= '<div class="btn btn--plain">'.
-                                Display::return_icon('up_na.png', '&nbsp;', '', ICON_SIZE_TINY).'</div>';
+                                Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon-disabled', null, ICON_SIZE_TINY, get_lang('Up')).'</div>';
                         }
                         //$thematic->getDisplayOrder()
                         if ($thematic->getDisplayOrder() < $max_thematic_item) {
                             $toolbarThematic .= ' <a
                                 class="btn btn--plain"
                                 href="'.api_get_self().'?action=movedown&a'.api_get_cidreq().'&thematic_id='.$id.$params.$url_token.'">'.
-                                Display::return_icon('down.png', get_lang('down'), '', ICON_SIZE_TINY).'</a>';
+                                Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Down')).'</a>';
                         } else {
                             $toolbarThematic .= '<div class="btn btn--plain">'.
-                                Display::return_icon('down_na.png', '&nbsp;', '', ICON_SIZE_TINY).'</div>';
+                                Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon-disabled', null, ICON_SIZE_TINY, get_lang('Down')).'</div>';
                         }
                     }
 
                     if (true) {
                         //if (api_get_session_id() == $thematic->getSessionId()) {
                         $toolbarThematic .= Display::url(
-                            Display::return_icon('pdf.png', get_lang('Export to PDF'), null, ICON_SIZE_TINY),
+                            Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Export to PDF')),
                             api_get_self().'?'.api_get_cidreq()."$url_token&".http_build_query(
                                 [
                                     'action' => 'export_single_thematic',
@@ -646,12 +629,7 @@ switch ($action) {
                             ['class' => 'btn btn--plain']
                         );
                         /*$toolbarThematic .= Display::url(
-                            Display::return_icon(
-                                'export_to_documents.png',
-                                get_lang('Export latest version of this page to Documents'),
-                                [],
-                                ICON_SIZE_TINY
-                            ),
+                            Display::getMdiIcon(ActionIcon::EXPORT_DOC, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Export latest version of this page to Documents')),
                             api_get_self().'?'.api_get_cidreq().$url_token.'&'.http_build_query(
                                 ['action' => 'export_single_documents', 'thematic_id' => $id]
                             ),
@@ -660,14 +638,14 @@ switch ($action) {
                         $toolbarThematic .= '<a
                             class="btn btn--plain"
                             href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$id.$params.$url_token.'">'
-                            .Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_TINY).'</a>';
+                            .Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Edit')).'</a>';
                         $toolbarThematic .= '<a
                             class="btn btn--plain"
                             onclick="javascript:if(!confirm(\''
                             .get_lang('Are you sure you want to delete')
                             .'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='
                             .$id.$params.$url_token.'">'
-                            .Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_TINY).'</a>';
+                            .Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Delete')).'</a>';
                     }
                 }
                 $extra[$thematic->getIid()]['toolbar'] = $toolbarThematic;
@@ -678,7 +656,7 @@ switch ($action) {
             if (api_is_allowed_to_edit(null, true)) {
                 $noData = Display::noDataView(
                     get_lang('Educational programming'),
-                    Display::return_icon('course_progress.png', '', [], 64),
+                    Display::getMdiIcon(ToolIcon::COURSE_PROGRESS, 'ch-tool-icon', null, ICON_SIZE_BIG),
                     get_lang('Add thematic'),
                     api_get_path(WEB_CODE_PATH).'course_progress/index.php?'.api_get_cidreq().'&action=thematic_add'
                 );
@@ -694,12 +672,7 @@ switch ($action) {
     case 'thematic_list':
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Thematic control')];
         $actionLeft = '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.
-            Display::return_icon(
-                'new_course_progress.png',
-                get_lang('New thematic section'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).'</a>';
+            Display::getMdiIcon('progress-star', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('New thematic section')).'</a>';
 
         $table = new SortableTable(
             'thematic_list',
@@ -858,7 +831,7 @@ switch ($action) {
             ];
         }
         /*$actionLeft = '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.
-            Display::return_icon('new_course_progress.png', get_lang('New thematic section'), '', ICON_SIZE_MEDIUM).'</a>';*/
+            Display::getMdiIcon('progress-star', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('New thematic section')).'</a>';*/
         $htmlHeadXtra[] = "
                 <script>
                     $(function () {
@@ -1263,10 +1236,10 @@ switch ($action) {
 
         // thematic advance list
         $actions = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=thematic_details">'.
-            Display::return_icon('back.png', get_lang('Back to'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to')).'</a>';
         if (api_is_allowed_to_edit(false, true)) {
             $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=thematic_advance_add&thematic_id='.$thematicId.'"> '.
-                Display::return_icon('add.png', get_lang('New thematic advance'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::getMdiIcon('progress-clock', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('New thematic advance')).'</a>';
         }
         $content = Display::toolbarAction('thematic', [$actions]);
 

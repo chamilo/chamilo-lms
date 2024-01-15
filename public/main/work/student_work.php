@@ -4,6 +4,8 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
@@ -39,7 +41,7 @@ if (!empty($group_id)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('Group area').' '.$group->getName(),
+        'name' => get_lang('Group area').' '.$group->getTitle(),
     ];
 } else {
     if (!(api_is_allowed_to_edit() || api_is_coach())) {
@@ -91,24 +93,24 @@ $interbreadcrumb[] = [
 Display::display_header(null);
 
 $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('Back to Assignments list'), '', ICON_SIZE_MEDIUM).
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to Assignments list')).
     '</a>';
 
 if (api_is_allowed_to_edit()) {
     $actions .= '<a
         href="'.api_get_path(WEB_CODE_PATH).'work/student_work.php?action=export_to_pdf&studentId='.$studentId.'&'.api_get_cidreq().'">'.
-        Display::return_icon('pdf.png', get_lang('Export to PDF'), '', ICON_SIZE_MEDIUM).
+        Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')).
         '</a>';
 
     $actions .= '<a
         href="'.api_get_path(WEB_CODE_PATH).'work/student_work.php?action=download&studentId='.$studentId.'&'.api_get_cidreq().'">'.
-        Display::return_icon('save.png', get_lang('Download'), '', ICON_SIZE_MEDIUM).
+        Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Download')).
         '</a>';
 
     $actions .= '<a
             onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;"
             href="'.api_get_path(WEB_CODE_PATH).'work/student_work.php?action=delete_all&studentId='.$studentId.'&'.api_get_cidreq().'">'.
-        Display::return_icon('delete.png', get_lang('Delete all papers'), '', ICON_SIZE_MEDIUM).
+        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete all papers')).
         '</a>';
 }
 echo Display::toolbarAction('toolbar', [$actions]);
@@ -162,17 +164,17 @@ foreach ($works as $workData) {
         $links = null;
         // is a text
         $url = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$itemId;
-        $links .= Display::url(Display::return_icon('default.png', get_lang('View')), $url);
+        $links .= Display::url(Display::getMdiIcon(ObjectIcon::DEFAULT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('View')), $url);
         if ($userResult->getResourceNode()->hasResourceFile()) {
             $url = $repo->getResourceFileDownloadUrl($userResult).'?'.api_get_cidreq();
-            $links .= Display::url(Display::return_icon('save.png', get_lang('Download')), $url);
+            $links .= Display::url(Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Download')), $url);
         }
 
         if (api_is_allowed_to_edit()) {
             $url = api_get_path(WEB_CODE_PATH).
                 'work/edit.php?'.api_get_cidreq().'&item_id='.$itemId.'&id='.$workId.'&parent_id='.$workId;
             $links .= Display::url(
-                Display::return_icon('edit.png', get_lang('Comment')),
+                Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Comment')),
                 $url
             );
         }

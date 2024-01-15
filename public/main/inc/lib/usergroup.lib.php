@@ -6,6 +6,9 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 /**
  * Class UserGroup.
@@ -331,24 +334,25 @@ class UserGroupModel extends Model
         $actions = '';
         if (api_is_platform_admin()) {
             $actions .= '<a href="../admin/index.php">'.
-                Display::return_icon(
-                    'back.png',
-                    get_lang('Back to').' '.get_lang('Administration'),
-                    '',
-                    ICON_SIZE_MEDIUM
+                Display::getMdiIcon(
+                    ActionIcon::BACK,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_MEDIUM,
+                    get_lang('Back to').' '.get_lang('Administration')
                 ).
                 '</a>';
         }
 
         $actions .= '<a href="'.api_get_self().'?action=add">'.
-            Display::return_icon('new_class.png', get_lang('Add classes'), '', ICON_SIZE_MEDIUM).
+            Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add classes')).
             '</a>';
         $actions .= Display::url(
-            Display::return_icon('import_csv.png', get_lang('Import'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::IMPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import')),
             'usergroup_import.php'
         );
         $actions .= Display::url(
-            Display::return_icon('export_csv.png', get_lang('Export'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export')),
             'usergroup_export.php'
         );
         $html .= Display::toolbarAction('toolbar', [$actions]);
@@ -367,11 +371,23 @@ class UserGroupModel extends Model
         $courseInfo = api_get_course_info();
         if (empty($courseInfo)) {
             echo '<a href="../admin/usergroups.php">'.
-                Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', '32').
+                Display::getMdiIcon(
+                    ActionIcon::BACK,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_MEDIUM,
+                    get_lang('Back to').' '.get_lang('Administration')
+                ).
                 '</a>';
         } else {
             echo Display::url(
-                Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', '32'),
+                Display::getMdiIcon(
+                    ActionIcon::BACK,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_MEDIUM,
+                    get_lang('Back to').' '.get_lang('Administration')
+                ),
                 api_get_path(WEB_CODE_PATH).'user/class.php?'.api_get_cidreq()
             );
         }
@@ -1530,7 +1546,7 @@ class UserGroupModel extends Model
             $userGroup = new Usergroup();
             $repo = Container::getUsergroupRepository();
             $userGroup
-                ->setName(trim($params['name']))
+                ->setTitle(trim($params['name']))
                 ->setDescription($params['description'])
                 ->setUrl($params['url'])
                 ->setVisibility($params['visibility'])
@@ -2538,23 +2554,23 @@ class UserGroupModel extends Model
                 // I'm just a reader
                 $relation_group_title = get_lang('I am a reader');
                 $links .= '<li class="'.('invite_friends' == $show ? 'active' : '').'"><a href="group_invitation.php?id='.$group_id.'">'.
-                            Display::return_icon('invitation_friend.png', get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
+                            Display::getMdiIcon(ObjectIcon::INVITATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
                 if (self::canLeave($group_info)) {
                     $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
-                        Display::return_icon('group_leave.png', get_lang('Leave group')).get_lang('Leave group').'</a></li>';
+                        Display::getMdiIcon(ActionIcon::EXIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Leave group')).get_lang('Leave group').'</a></li>';
                 }
                 break;
             case GROUP_USER_PERMISSION_ADMIN:
                 $relation_group_title = get_lang('I am an admin');
                 $links .= '<li class="'.('group_edit' == $show ? 'active' : '').'"><a href="group_edit.php?id='.$group_id.'">'.
-                            Display::return_icon('group_edit.png', get_lang('Edit this group')).get_lang('Edit this group').'</a></li>';
+                            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit this group')).get_lang('Edit this group').'</a></li>';
                 $links .= '<li class="'.('member_list' == $show ? 'active' : '').'"><a href="group_waiting_list.php?id='.$group_id.'">'.
-                            Display::return_icon('waiting_list.png', get_lang('Waiting list')).get_lang('Waiting list').'</a></li>';
+                            Display::getMdiIcon(ObjectIcon::WAITING_LIST, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Waiting list')).get_lang('Waiting list').'</a></li>';
                 $links .= '<li class="'.('invite_friends' == $show ? 'active' : '').'"><a href="group_invitation.php?id='.$group_id.'">'.
-                            Display::return_icon('invitation_friend.png', get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
+                            Display::getMdiIcon(ObjectIcon::INVITATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
                 if (self::canLeave($group_info)) {
                     $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
-                        Display::return_icon('group_leave.png', get_lang('Leave group')).get_lang('Leave group').'</a></li>';
+                        Display::getMdiIcon(ActionIcon::EXIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Leave group')).get_lang('Leave group').'</a></li>';
                 }
                 break;
             case GROUP_USER_PERMISSION_PENDING_INVITATION:
@@ -2565,32 +2581,32 @@ class UserGroupModel extends Model
                 break;
             case GROUP_USER_PERMISSION_MODERATOR:
                 $relation_group_title = get_lang('I am a moderator');
-                //$links .=  '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('Compose message').'">'.Display::return_icon('compose_message.png', get_lang('Create thread'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('Create thread').'</span></a></li>';
-                //$links .=  '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('message_list.png', get_lang('Messages list'), array('hspace'=>'6')).'<span class="'.($show=='messages_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Messages list').'</span></a></li>';
-                //$links .=  '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('member_list.png', get_lang('Members list'), array('hspace'=>'6')).'<span class="'.($show=='member_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Members list').'</span></a></li>';
+                //$links .=  '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('Compose message').'">'.Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Create thread')).'<span class="social-menu-text4" >'.get_lang('Create thread').'</span></a></li>';
+                //$links .=  '<li><a href="groups.php?id='.$group_id.'">'.				Display::getMdiIcon(ToolIcon::MESSAGE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Messages list')).'<span class="'.($show=='messages_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Messages list').'</span></a></li>';
+                //$links .=  '<li><a href="group_members.php?id='.$group_id.'">'.		Display::getMdiIcon(ObjectIcon::GROUP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Members list')).'<span class="'.($show=='member_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Members list').'</span></a></li>';
                 if (GROUP_PERMISSION_CLOSED == $group_info['visibility']) {
                     $links .= '<li><a href="group_waiting_list.php?id='.$group_id.'">'.
-                                Display::return_icon('waiting_list.png', get_lang('Waiting list')).get_lang('Waiting list').'</a></li>';
+                                Display::getMdiIcon(ObjectIcon::WAITING_LIST, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Waiting list')).get_lang('Waiting list').'</a></li>';
                 }
                 $links .= '<li><a href="group_invitation.php?id='.$group_id.'">'.
-                            Display::return_icon('invitation_friend.png', get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
+                            Display::getMdiIcon(ObjectIcon::INVITATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
                 if (self::canLeave($group_info)) {
                     $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
-                        Display::return_icon('group_leave.png', get_lang('Leave group')).get_lang('Leave group').'</a></li>';
+                        Display::getMdiIcon(ActionIcon::EXIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Leave group')).get_lang('Leave group').'</a></li>';
                 }
                 break;
             case GROUP_USER_PERMISSION_HRM:
                 $relation_group_title = get_lang('I am a human resources manager');
                 $links .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="ajax" title="'.get_lang('Compose message').'" data-size="lg" data-title="'.get_lang('Compose message').'">'.
-                            Display::return_icon('new-message.png', get_lang('Create thread')).get_lang('Create thread').'</a></li>';
+                            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Create thread')).get_lang('Create thread').'</a></li>';
                 $links .= '<li><a href="group_view.php?id='.$group_id.'">'.
-                            Display::return_icon('message_list.png', get_lang('Messages list')).get_lang('Messages list').'</a></li>';
+                            Display::getMdiIcon(ToolIcon::MESSAGE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Messages list')).get_lang('Messages list').'</a></li>';
                 $links .= '<li><a href="group_invitation.php?id='.$group_id.'">'.
-                            Display::return_icon('invitation_friend.png', get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
+                            Display::getMdiIcon(ObjectIcon::INVITATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
                 $links .= '<li><a href="group_members.php?id='.$group_id.'">'.
-                            Display::return_icon('member_list.png', get_lang('Members list')).get_lang('Members list').'</a></li>';
+                            Display::getMdiIcon(ObjectIcon::GROUP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Members list')).get_lang('Members list').'</a></li>';
                 $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
-                            Display::return_icon('delete_data.gif', get_lang('Leave group')).get_lang('Leave group').'</a></li>';
+                            Display::getMdiIcon(ActionIcon::EXIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Leave group')).get_lang('Leave group').'</a></li>';
                 break;
             default:
                 //$links .=  '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('addd.gif', get_lang('Join group'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('Join group').'</a></span></li>';

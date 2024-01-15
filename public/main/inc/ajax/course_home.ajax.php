@@ -6,6 +6,8 @@
 /**
  * Responses to AJAX calls.
  */
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+
 $action = $_GET['a'];
 
 switch ($action) {
@@ -105,17 +107,17 @@ switch ($action) {
 
                 if (empty($lp_item['modified_on'])) {
                     $lp_date = api_get_local_time($lp_item['created_on']);
-                    $image = 'new.gif';
+                    $image = ObjectIcon::STAR;
                     $label = get_lang('Course added');
                 } else {
                     $lp_date = api_get_local_time($lp_item['modified_on']);
-                    $image = 'moderator_star.png';
+                    $image = ObjectIcon::STAR_EMPTY;
                     $label = get_lang('Learning path updated');
                 }
 
                 $icons = '';
                 if (strtotime($last_date) < strtotime($lp_date)) {
-                    $icons = Display::return_icon($image, get_lang('Since your latest visit').': '.$label.' - '.$lp_date);
+                    $icons = Display::getMdiIcon($image, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Since your latest visit').': '.$label.' - '.$lp_date);
                 }
 
                 if (!empty($lp_item['published_on'])) {
@@ -252,7 +254,7 @@ switch ($action) {
                 }
 
                 if (strtotime($last_date) < strtotime($lp_date)) {
-                    $icons = Display::return_icon($image, get_lang('Since your latest visit').': '.$label.' - '.$lp_date);
+                    $icons = Display::getMdiIcon($image, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Since your latest visit').': '.$label.' - '.$lp_date);
                 }
 
                 if (!empty($lp_item['published_on'])) {
@@ -391,7 +393,7 @@ switch ($action) {
                 }
                 $icons = '';
                 if (strtotime($last_date) < strtotime($lp_date)) {
-                    $icons = Display::return_icon($image, get_lang('Since your latest visit').': '.$label.' - '.$lp_date);
+                    $icons = Display::getMdiIcon($image, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Since your latest visit').': '.$label.' - '.$lp_date);
                 }
                 if (!empty($lp_item['published_on'])) {
                     $date = substr($lp_item['published_on'], 0, 10);

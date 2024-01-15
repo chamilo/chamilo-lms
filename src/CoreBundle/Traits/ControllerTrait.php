@@ -29,7 +29,9 @@ use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use Chamilo\CourseBundle\Repository\CToolRepository;
 use Chamilo\LtiBundle\Repository\ExternalToolRepository;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,7 +50,7 @@ trait ControllerTrait
         $services = AbstractController::getSubscribedServices();
         $services['translator'] = TranslatorInterface::class;
         $services['glide'] = Glide::class;
-        //$services['chamilo_settings.form_factory.settings'] = SettingsFormFactory::class;
+        // $services['chamilo_settings.form_factory.settings'] = SettingsFormFactory::class;
 
         $services[] = SettingsManager::class;
         $services[] = MessageAttachmentRepository::class;
@@ -109,9 +111,10 @@ trait ControllerTrait
     }
 
     /**
-     * @return Glide
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    public function getGlide()
+    public function getGlide(): Glide
     {
         return $this->container->get('glide');
     }

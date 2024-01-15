@@ -39,9 +39,7 @@ class ScheduledAnnouncement
     #[ORM\Column(name: 'c_id', type: 'integer', nullable: true)]
     protected ?int $cId = null;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function getId(): int
     {

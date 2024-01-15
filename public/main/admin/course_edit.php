@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 $cidReset = true;
 
@@ -150,7 +152,7 @@ $courseCategoryNames = [];
 $courseCategoryIds = [];
 
 foreach ($categories as $category) {
-    $courseCategoryNames[$category->getId()] = $category->getName();
+    $courseCategoryNames[$category->getId()] = $category->getTitle();
     $courseCategoryIds[] = $category->getId();
 }
 
@@ -283,7 +285,7 @@ $(function() {
 $form->addButtonUpdate(get_lang('Edit course information'));
 
 // Set some default values
-$courseInfo['disk_quota'] = round(DocumentManager::get_course_quota($courseInfo['code']) / 1024 / 1024, 1);
+$courseInfo['disk_quota'] = round(DocumentManager::get_course_quota($courseInfo['code']), 1);
 $courseInfo['real_code'] = $courseInfo['code'];
 $courseInfo['add_teachers_to_sessions_courses'] = $courseInfo['add_teachers_to_sessions_courses'] ?? 0;
 
@@ -355,7 +357,7 @@ if ($form->validate()) {
         ->setVisualCode($visual_code)
         ->setDepartmentName($course['department_name'])
         ->setDepartmentUrl($department_url)
-        ->setDiskQuota($course['disk_quota'] * 1024 * 1024)
+        ->setDiskQuota($course['disk_quota'])
         ->setSubscribe($course['subscribe'])
         ->setUnsubscribe($course['unsubscribe'])
         ->setVisibility($visibility)
@@ -441,16 +443,16 @@ if ($form->validate()) {
 Display::display_header($tool_name);
 
 $actions = Display::url(
-    Display::return_icon('back.png', get_lang('Back')),
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Back')),
     api_get_path(WEB_CODE_PATH).'admin/course_list.php'
 );
 $actions .= Display::url(
-    Display::return_icon('course_home.png', get_lang('Course homepage')),
+    Display::getMdiIcon(ToolIcon::COURSE_HOME, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course homepage')),
     $courseInfo['course_public_url'],
     ['target' => '_blank']
 );
 $actions .= Display::url(
-    Display::return_icon('info2.png', get_lang('Information')),
+    Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Information')),
     api_get_path(WEB_CODE_PATH)."admin/course_information.php?id=$courseId"
 );
 

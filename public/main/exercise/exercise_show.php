@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  *  Shows the exercise results.
@@ -184,7 +185,7 @@ if ('export' != $action) {
 
     echo Display::toolbarAction('toolbar', [
         Display::url(
-            Display::return_icon('pdf.png', get_lang('Export')),
+            Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Export')),
             api_get_self().'?'.api_get_cidreq().'&id='.$id.'&action=export&'
         ),
     ]); ?>

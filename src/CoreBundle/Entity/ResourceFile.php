@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 //
-//*     attributes={"security"="is_granted('ROLE_ADMIN')"},
+// *     attributes={"security"="is_granted('ROLE_ADMIN')"},
 /**
  * @Vich\Uploadable
  */
@@ -83,13 +83,13 @@ class ResourceFile implements Stringable
     use TimestampableEntity;
     #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'message:read'])]
     #[ORM\Id]
-    #[ORM\Column(type: 'bigint')]
+    #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
     #[Assert\NotBlank]
     #[Groups(['resource_file:read', 'resource_node:read', 'document:read'])]
     #[ORM\Column(type: 'string', length: 255)]
-    protected ?string $name = null;
+    protected ?string $title = null;
     #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'message:read'])]
     #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $mimeType = null;
@@ -102,10 +102,11 @@ class ResourceFile implements Stringable
     #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'message:read'])]
     #[ORM\Column(type: 'integer')]
     protected ?int $size = 0;
+
     /**
      * @Vich\UploadableField(
      *     mapping="resources",
-     *     fileNameProperty="name",
+     *     fileNameProperty="title",
      *     size="size",
      *     mimeType="mimeType",
      *     originalName="originalName",
@@ -114,7 +115,7 @@ class ResourceFile implements Stringable
      */
     //    #[Vich\UploadableField(
     //        mapping: 'resources',
-    //        fileNameProperty: 'name',
+    //        fileNameProperty: 'title',
     //        size: 'size',
     //        mimeType: 'mimeType',
     //        originalName: 'originalName',
@@ -125,6 +126,7 @@ class ResourceFile implements Stringable
     protected ?string $crop = null;
     #[ORM\OneToOne(mappedBy: 'resourceFile', targetEntity: ResourceNode::class)]
     protected ResourceNode $resourceNode;
+
     /**
      * @var string[]
      */
@@ -140,6 +142,7 @@ class ResourceFile implements Stringable
     protected ?bool $text = null;
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
+
     /**
      * @var DateTime|DateTimeImmutable
      */
@@ -180,13 +183,13 @@ class ResourceFile implements Stringable
 
         return str_contains($mimeType, 'audio');
     }
-    public function getName(): ?string
+    public function getTitle(): ?string
     {
-        return $this->name;
+        return $this->title;
     }
-    public function setName(?string $name): self
+    public function setTitle(?string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
@@ -194,6 +197,7 @@ class ResourceFile implements Stringable
     {
         return $this->crop;
     }
+
     /**
      * $crop example: 100,100,100,100 = width,height,x,y.
      */
@@ -283,7 +287,7 @@ class ResourceFile implements Stringable
     {
         $data = $this->getDimensions();
         if ([] !== $data) {
-            //$data = explode(',', $data);
+            // $data = explode(',', $data);
             return (int) $data[0];
         }
 
@@ -293,7 +297,7 @@ class ResourceFile implements Stringable
     {
         $data = $this->getDimensions();
         if ([] !== $data) {
-            //$data = explode(',', $data);
+            // $data = explode(',', $data);
             return (int) $data[1];
         }
 
@@ -324,7 +328,7 @@ class ResourceFile implements Stringable
         return $this->file;
     }
 
-    public function setFile(File|UploadedFile|null $file = null): self
+    public function setFile(File|UploadedFile $file = null): self
     {
         $this->file = $file;
         if (null !== $file) {

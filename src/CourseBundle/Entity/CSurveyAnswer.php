@@ -15,7 +15,7 @@ class CSurveyAnswer
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\ManyToOne(targetEntity: CSurvey::class)]
     #[ORM\JoinColumn(name: 'survey_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
@@ -34,8 +34,8 @@ class CSurveyAnswer
     #[ORM\Column(name: 'user', type: 'string', length: 250, nullable: false)]
     protected string $user;
 
-    #[ORM\Column(name: 'session_id', type: 'integer', nullable: false)]
-    protected int $sessionId;
+    #[ORM\Column(name: 'session_id', type: 'integer', nullable: true)]
+    protected ?int $sessionId;
 
     #[ORM\Column(name: 'c_lp_item_id', type: 'integer', nullable: false)]
     protected int $lpItemId;
@@ -45,7 +45,7 @@ class CSurveyAnswer
         $this->lpItemId = 0;
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }
@@ -120,24 +120,12 @@ class CSurveyAnswer
         return $this;
     }
 
-    /**
-     * Get session Id.
-     *
-     * @return int
-     */
-    public function getSessionId()
+    public function getSessionId(): ?int
     {
         return $this->sessionId;
     }
 
-    /**
-     * Set session Id.
-     *
-     * @param int $sessionId
-     *
-     * @return CSurveyAnswer
-     */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId = null): static
     {
         $this->sessionId = $sessionId;
 

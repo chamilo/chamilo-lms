@@ -15,8 +15,7 @@ use Exception;
 class UserRelUserListener
 {
     public function __construct(
-    ) {
-    }
+    ) {}
 
     public function prePersist(UserRelUser $userRelUser, PrePersistEventArgs $args): void
     {

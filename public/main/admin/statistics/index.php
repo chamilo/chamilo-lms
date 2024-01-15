@@ -3,12 +3,12 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 /**
  * This tool show global Statistics on general platform events.
  */
-
-use Chamilo\CoreBundle\Framework\Container;
-
 $cidReset = true;
 
 require_once __DIR__.'/../../inc/global.inc.php';
@@ -586,7 +586,7 @@ switch ($report) {
                 }
             }
             $link = Display::url(
-                Display::return_icon('excel.png').'&nbsp;'.get_lang('ExportAsXLS'),
+                Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon').'&nbsp;'.get_lang('ExportAsXLS'),
                 $url,
                 ['class' => 'btn btn--plain']
             );
@@ -696,7 +696,8 @@ switch ($report) {
         $content .= '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
         // total amount of courses
         foreach ($categories as $category) {
-            $courses[$category->getName()] = $category->getCourses()->count();
+            /* @var Chamilo\CoreBundle\Entity\CourseCategory $category */
+            $courses[$category->getTitle()] = $category->getCourses()->count();
         }
         // courses for each course category
         $content .= Statistics::printStats(get_lang('Courses'), $courses);
@@ -769,7 +770,7 @@ switch ($report) {
             $table->actionButtons = [
                 'export' => [
                     'label' => get_lang('ExportAsXLS'),
-                    'icon' => Display::return_icon('excel.png'),
+                    'icon' => Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET,'ch-tool-icon'),
                 ],
             ];
 
@@ -1456,8 +1457,9 @@ switch ($report) {
         $courseCategoryRepo = Container::getCourseCategoryRepository();
         $categories = $courseCategoryRepo->findAll();
         foreach ($categories as $category) {
+            /* @var Chamilo\CoreBundle\Entity\CourseCategory $category */
             $code = $category->getCode();
-            $name = $category->getName();
+            $name = $category->getTitle();
             $name = str_replace(get_lang('Department'), '', $name);
             $teachers[$name] = Statistics::countUsers(COURSEMANAGER, $code, $countInvisible);
             $students[$name] = Statistics::countUsers(STUDENT, $code, $countInvisible);

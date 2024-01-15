@@ -30,7 +30,8 @@ class JWTClient extends Client
                 'iss' => $apiKey,
                 'exp' => (time() + 60) * 1000, // will expire in one minute
             ],
-            $apiSecret
+            $apiSecret,
+            'HS256'
         );
         self::register($this);
     }

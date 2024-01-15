@@ -1,9 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"Language: fr_FR\n"
+"PO-Revision-Date: 2024-01-13 02:40+0000\n"
+"Last-Translator: Weblate admin <ywarnier@beeznest.org>\n"
+"Language-Team: French <https://translation.chamilo.org/projects/chamilo-lms/"
+"translations/fr/>\n"
+"Language: fr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.3.1\n"
 
 msgid "You can generate badges for the skills learnt by your users, to give them recognition for their effort, through which they will be able to show off their acquired skills and competencies with icons that will be shown on their user profile. For more information on OpenBadges, check <a href='http://openbadges.org'>http://openbadges.org/</a>."
 msgstr "Vous pouvez maintenant créer des insignes qui reconnaissent les compétences apprisent par vos utilisateurs, les récompenses pour leurs efforts et au travers desquels ils pourront démontrer leurs compétences acquises sur leur page de profil. Pour plus d'informations au sujet d'OpenBadges: <a href='http://openbadges.org'>http://openbadges.org</a>."
@@ -718,6 +724,8 @@ msgstr "Utiliser le score sur mesure pour toutes les questions"
 
 msgid "You should add some items to your learning path, otherwise you won't be able to attach audio files to them"
 msgstr ""
+"Vous devriez ajouter quelques éléments à votre parcours, sans quoi vous ne "
+"pourrez pas y attacher de fichiers audio"
 
 msgid "Inactive days"
 msgstr "Jours inactifs"
@@ -24064,6 +24072,8 @@ msgstr "Déplacer les résultats utilisateurs de tout un cours dans/vers une ses
 
 msgid "If your quiz have hotspot questions included, you should select the images related from the documents."
 msgstr ""
+"Si votre test comporte des questions sur image, vous devriez sélectionner "
+"les images liées depuis l'outil documents."
 
 msgid "Back to the attempt list"
 msgstr "Retour à la liste des tentatives"

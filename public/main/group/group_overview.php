@@ -13,6 +13,10 @@
  * @author Roan Embrechts, initial self-unsubscribe code, code cleaning, virtual course support
  * @author Bart Mollet, code cleaning, use of Display-library, list of courseAdmin-tools, use of GroupManager
  */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GROUP;
@@ -127,32 +131,32 @@ if ('learnpath' !== $origin) {
 }
 
 $actions = '<a href="group_creation.php?'.api_get_cidreq().'">'.
-        Display::return_icon('add.png', get_lang('Create new group(s)'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Create new group(s)')).'</a>';
 
 if ('true' === api_get_setting('allow_group_categories')) {
     $actions .= '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.
-        Display::return_icon('new_folder.png', get_lang('Add category'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon(ActionIcon::CREATE_CATEGORY, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add category')).'</a>';
 } else {
     $actions .= '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.
-        Display::return_icon('settings.png', get_lang('Edit settings'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon(ActionIcon::CONFIGURE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit settings')).'</a>';
 }
 $actions .= '<a href="import.php?'.api_get_cidreq().'&action=import">'.
-    Display::return_icon('import_csv.png', get_lang('Import'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ActionIcon::IMPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import')).'</a>';
 
 $actions .= '<a href="group_overview.php?'.api_get_cidreq().'&action=export_all&type=csv">'.
-    Display::return_icon('export_csv.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export')).'</a>';
 
 $actions .= '<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.
-Display::return_icon('export_excel.png', get_lang('Excel export'), '', ICON_SIZE_MEDIUM).'</a>';
+Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Excel export')).'</a>';
 
 $actions .= '<a href="group_overview.php?'.api_get_cidreq().'&action=export_pdf">'.
-    Display::return_icon('pdf.png', get_lang('Export to PDF'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')).'</a>';
 
 $actions .= '<a href="group.php?'.api_get_cidreq().'">'.
-    Display::return_icon('group.png', get_lang('Groups'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ToolIcon::GROUP, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Groups')).'</a>';
 
 $actions .= '<a href="../user/user.php?'.api_get_cidreq().'">'.
-Display::return_icon('user.png', get_lang('Go to').' '.get_lang('Users'), '', ICON_SIZE_MEDIUM).'</a>';
+Display::getMdiIcon(ToolIcon::MEMBER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go to').' '.get_lang('Users')).'</a>';
 
 // Action links
 echo Display::toolbarAction('actions', [$actions, GroupManager::getSearchForm()]);

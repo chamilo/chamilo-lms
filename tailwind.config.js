@@ -64,9 +64,6 @@ module.exports = {
         caption: ["13px", "16px"],
         tiny: ["11px", "16px"],
       },
-      gridTemplateColumns: {
-        "course-tools": "repeat(auto-fit, 120px)",
-      },
     },
   },
   corePlugins: {

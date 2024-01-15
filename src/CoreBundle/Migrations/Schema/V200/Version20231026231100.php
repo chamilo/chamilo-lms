@@ -29,6 +29,7 @@ final class Version20231026231100 extends AbstractMigrationChamilo
     {
         $container = $this->getContainer();
         $em = $this->getEntityManager();
+
         /** @var Connection $connection */
         $connection = $em->getConnection();
 

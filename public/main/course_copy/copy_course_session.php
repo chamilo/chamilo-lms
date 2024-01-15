@@ -5,6 +5,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Copy resources from one course in a session to another one.
@@ -92,7 +93,7 @@ function display_form()
 
     // Link back to the documents overview
     $actionsLeft = '<a href="../admin/index.php">'.
-        Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', ICON_SIZE_MEDIUM).
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Administration')).
         '</a>';
 
     $html .= Display::toolbarAction('toolbar-copysession', [$actionsLeft]);
@@ -398,10 +399,12 @@ if (Security::check_token('post') && (
         $hiddenFields['sec_token'] = Security::get_token();
         CourseSelectForm :: display_form($course, $hiddenFields, true);
         echo '<div style="float:right"><a href="javascript:window.history.go(-1);">'.
-            Display::return_icon(
-                'back.png',
-                get_lang('Back').' '.get_lang('To').' '.get_lang('Administration'),
-                ['style' => 'vertical-align:middle']
+            Display::getMdiIcon(
+                ActionIcon::BACK,
+                'ch-tool-icon',
+                'vertical-align:middle',
+                ICON_SIZE_SMALL,
+                get_lang('Back').' '.get_lang('To').' '.get_lang('Administration')
             ).
             get_lang('Back').'</a></div>';
     } else {

@@ -12,13 +12,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
 abstract class AbstractTool
 {
     #[Groups(['ctool:read'])]
-    protected string $name;
+    protected string $title;
 
     #[Groups(['ctool:read'])]
-    protected string $nameToShow = '';
+    protected string $titleToShow = '';
 
     #[Groups(['ctool:read'])]
     protected string $icon = '';
+
+    #[Groups(['ctool:read'])]
     protected string $category = '';
     protected string $link;
     protected string $image;
@@ -27,12 +29,14 @@ abstract class AbstractTool
     protected array $resourceTypes = [];
 
     /**
-     * @var string
+     * Tool scope.
      *
-     *  00 disabled tool
-     *  01 course tool
-     *  10 global tool
-     *  11 global or course or both
+     * Values can be the following.
+     *
+     * - 00 disabled tool
+     * - 01 course tool
+     * - 10 global tool
+     * - 11 global or course or both
      */
     protected string $scope;
 
@@ -40,17 +44,17 @@ abstract class AbstractTool
     abstract public function getLink(): string;
 
     /*public function __construct(
-        string $name,
+        string $title,
         string $category,
         string $link,
         ?SchemaInterface $settings = null,
         ?array $resourceTypes = []
     ) {
-        $this->name = $name;
-        $this->nameToShow = $name;
+        $this->title = $title;
+        $this->titleToShow = $title;
         $this->category = $category;
         $this->link = $link;
-        $this->image = $name.'.png';
+        $this->image = $title.'.png';
         $this->settings = $settings;
         $this->resourceTypes = $resourceTypes;
         $this->icon = 'mdi-crop-square';
@@ -66,9 +70,9 @@ abstract class AbstractTool
         return true;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function getTarget(): string
@@ -113,15 +117,15 @@ abstract class AbstractTool
         return $this;
     }
 
-    public function getNameToShow(): string
+    public function getTitleToShow(): string
     {
-        //return $this->getName();
-        return ucfirst(str_replace('_', ' ', $this->getName()));
+        // return $this->getTitle();
+        return ucfirst(str_replace('_', ' ', $this->getTitle()));
     }
 
-    public function setNameToShow(string $nameToShow): self
+    public function setTitleToShow(string $titleToShow): self
     {
-        $this->nameToShow = $nameToShow;
+        $this->titleToShow = $titleToShow;
 
         return $this;
     }

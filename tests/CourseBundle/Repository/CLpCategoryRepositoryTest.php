@@ -25,7 +25,7 @@ class CLpCategoryRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
 
         $category = (new CLpCategory())
-            ->setName('cat')
+            ->setTitle('cat')
             ->setPosition(1)
             ->setParent($course)
             ->setCreator($teacher)
@@ -54,7 +54,7 @@ class CLpCategoryRepositoryTest extends AbstractApiTest
         $student2 = $this->createUser('student2');
 
         $category = (new CLpCategory())
-            ->setName('cat')
+            ->setTitle('cat')
             ->setPosition(1)
             ->setParent($course)
             ->setCreator($teacher)
@@ -71,6 +71,7 @@ class CLpCategoryRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $this->assertSame(1, $repo->count([]));
+
         /** @var CLpCategory $category */
         $category = $repo->find($category->getIid());
 

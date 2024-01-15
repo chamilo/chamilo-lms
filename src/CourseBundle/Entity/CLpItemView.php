@@ -20,7 +20,7 @@ class CLpItemView
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\ManyToOne(targetEntity: CLpItem::class)]
     #[ORM\JoinColumn(name: 'lp_item_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
@@ -63,7 +63,7 @@ class CLpItemView
         $this->coreExit = 'none';
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }

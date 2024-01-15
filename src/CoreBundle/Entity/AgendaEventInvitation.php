@@ -24,9 +24,9 @@ class AgendaEventInvitation
     use TimestampableTypedEntity;
 
     #[ORM\Id]
-    #[ORM\Column(type: 'bigint')]
+    #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    protected int $id;
+    protected ?int $id = null;
 
     #[ORM\OneToMany(
         mappedBy: 'invitation',
@@ -45,7 +45,7 @@ class AgendaEventInvitation
         $this->invitees = new ArrayCollection();
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

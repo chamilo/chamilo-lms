@@ -63,6 +63,10 @@
     @apply flex flex-row justify-start gap-2 border rounded-sm px-3 py-3 items-center;
   }
 
+  #lp_item_list .list-group-item {
+    align-items: normal !important;
+  }
+
   // Alerts
 
   .alert {
@@ -117,6 +121,9 @@
 
   .ch-tool-icon {
     @apply font-extrabold text-primary;
+  }
+  .ch-toolbar-icon {
+    @apply font-extrabold text-primary leading-none;
   }
   .ch-tool-icon-disabled {
     @apply font-extrabold text-gray-50;
@@ -449,6 +456,50 @@ table#skill_holder {
 
 .category-forum .forum_display {
   padding: 20px 0px;
+}
+
+#date_fields label {
+  top: 0px;
+  left: 0.5rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+  --tw-text-opacity: 1;
+  color: rgb(46 117 163 / var(--tw-text-opacity));
+}
+
+.question_description img, .question_options img {
+  display: inherit !important;
+}
+
+.question_options .droppable {
+  padding: 5px;
+  text-align: center;
+  background-color: #ECF0F1;
+  border: dotted #dddddd 2px;
+  border-radius: 4px;
+  color: #666666;
+  display: inline-block;
+  width: 85%;
+  margin-bottom: 0;
+}
+
+.question_options .droppable-item {
+  background-color: #84bd00;
+  color: #FFF;
+  padding: 3px 0 3px 5px;
+  width: 20%;
+}
+
+.question_options .droppable-item .number {
+  font-size: 16px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.hide-label-title {
+  color: #0a0a0a;
 }
 
 /* ****************************************************

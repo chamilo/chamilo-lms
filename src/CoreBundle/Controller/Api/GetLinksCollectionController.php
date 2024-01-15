@@ -36,9 +36,8 @@ class GetLinksCollectionController extends BaseResourceFileAction
             $session = $em->getRepository(Session::class)->find($sid);
         }
 
-        $qb = $repo->getResourcesByCourse($course, $session);
+        $qb = $repo->getResourcesByCourse($course, $session, null, null, true, true);
         $qb->andWhere('resource.category = 0 OR resource.category is null');
-        $qb->addOrderBy('resource.displayOrder', 'ASC');
         $links = $qb->getQuery()->getResult();
 
         if ($links) {
@@ -51,12 +50,12 @@ class GetLinksCollectionController extends BaseResourceFileAction
                       'url' => $link->getUrl(),
                       'iid' => $link->getIid(),
                       'linkVisible' => $link->getFirstResourceLink()->getVisibility(),
-                      'position' => $link->getDisplayOrder(),
+                      'position' => $link->getResourceNode()->getDisplayOrder(),
                   ];
             }
         }
 
-        $qb = $repoCategory->getResourcesByCourse($course, $session);
+        $qb = $repoCategory->getResourcesByCourse($course, $session, null, null, true, true);
         $categories = $qb->getQuery()->getResult();
         if ($categories) {
             /** @var CLinkCategory $category */
@@ -64,7 +63,6 @@ class GetLinksCollectionController extends BaseResourceFileAction
                 $categoryId = $category->getIid();
                 $qbLink = $repo->getResourcesByCourse($course, $session);
                 $qbLink->andWhere('resource.category = '.$categoryId);
-                $qbLink->addOrderBy('resource.displayOrder', 'ASC');
                 $links = $qbLink->getQuery()->getResult();
 
                 $categoryInfo = [
@@ -75,6 +73,7 @@ class GetLinksCollectionController extends BaseResourceFileAction
                 $dataResponse['categories'][$categoryId]['info'] = $categoryInfo;
                 if ($links) {
                     $items = [];
+
                     /** @var CLink $link */
                     foreach ($links as $link) {
                         $items[] = [
@@ -83,7 +82,7 @@ class GetLinksCollectionController extends BaseResourceFileAction
                             'url' => $link->getUrl(),
                             'iid' => $link->getIid(),
                             'linkVisible' => $link->getFirstResourceLink()->getVisibility(),
-                            'position' => $link->getDisplayOrder(),
+                            'position' => $link->getResourceNode()->getDisplayOrder(),
                         ];
 
                         $dataResponse['categories'][$categoryId]['links'] = $items;

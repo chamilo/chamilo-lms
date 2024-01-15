@@ -4,6 +4,10 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 require_once __DIR__.'/../global.inc.php';
 
@@ -285,6 +289,7 @@ if (($search || $forceSearch) && ('false' !== $search)) {
 if (!$sidx) {
     $sidx = 1;
 }
+$options = [];
 
 //2. Selecting the count FIRST
 //@todo rework this
@@ -1044,7 +1049,7 @@ switch ($action) {
         foreach ($items as $item) {
             $result[] = [
                 'id' => $item->getId(),
-                'name' => $item->getName(),
+                'name' => $item->getTitle(),
             ];
         }
         /*$result = $manager->get_all([
@@ -1861,7 +1866,7 @@ switch ($action) {
 
         $result = [];
         if (!empty($sessions)) {
-            $pdfIcon = Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_SMALL);
+            $pdfIcon = Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('CertificateOfAchievement'));
             foreach ($sessions as $session) {
                 $sessionEntity = api_get_session_entity($session['id']);
                 if (api_drh_can_access_all_session_content()) {
@@ -1904,11 +1909,11 @@ switch ($action) {
                     ['target' => '_blank']
                 );
                 $detailButtons[] = Display::url(
-                    Display::return_icon('works.png', get_lang('WorksReport')),
+                    Display::getMdiIcon(ObjectIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('WorksReport')),
                     api_get_path(WEB_CODE_PATH).'my_space/works_in_session_report.php?session='.$session['id']
                 );
                 $detailButtons[] = Display::url(
-                    Display::return_icon('2rightarrow.png'),
+                    Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL,),
                     api_get_path(WEB_CODE_PATH).'my_space/course.php?sid='.$session['id']
                 );
 
@@ -1953,9 +1958,9 @@ switch ($action) {
                 $sord = 'DESC';
             }
         } else {
-            $sidx = in_array($sidx, $columns) ? $sidx : 'name';
+            $sidx = in_array($sidx, $columns) ? $sidx : 'title';
         }
-        $orderBy = "$sidx $sord, s.name";
+        $orderBy = "$sidx $sord, s.title";
         $limit = 20;
         $total_pages = 0;
         if ($count > 0) {
@@ -2056,6 +2061,8 @@ switch ($action) {
         break;
     case 'get_session_lp_progress':
         $sessionId = 0;
+        $date_from = $_GET['date_from'];
+        $date_to = $_GET['date_to'];
         if (!empty($_GET['session_id']) && !empty($_GET['course_id'])) {
             $sessionId = (int) $_GET['session_id'];
             $courseId = (int) $_GET['course_id'];
@@ -2259,19 +2266,21 @@ switch ($action) {
             );
 
             if (!empty($item['certif_min_score']) && !empty($item['document_id'])) {
-                $item['certificates'] = Display::return_icon(
-                    'accept.png',
-                    get_lang('With Certificate'),
-                    [],
-                    ICON_SIZE_SMALL
+                $item['certificates'] = Display::getMdiIcon(
+                    StateIcon::COMPLETE,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('With Certificate')
                 );
                 $item['has_certificates'] = '1';
             } else {
-                $item['certificates'] = Display::return_icon(
-                    'warning.png',
-                    get_lang('No certificate'),
-                    [],
-                    ICON_SIZE_SMALL
+                $item['certificates'] = Display::getMdiIcon(
+                    StateIcon::WARNING,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('No certificate')
                 );
                 $item['has_certificates'] = '0';
             }
@@ -2312,7 +2321,7 @@ switch ($action) {
         }
 
         $result = Database::select(
-            'p.id,p.name, p.description, c.name as career, p.status',
+            'p.id,p.name, p.description, c.title as career, p.status',
             "$obj->table p LEFT JOIN ".Database::get_main_table(TABLE_CAREER)." c  ON c.id = p.career_id ",
             ['order' => "$sidx $sord", 'LIMIT' => "$start , $limit"]
         );
@@ -2390,12 +2399,18 @@ switch ($action) {
         $result = $obj->getAllGrid($sidx, $sord, $start, $limit);
         $new_result = [];
         if (!empty($result)) {
-            $checkIcon = Display::return_icon(
-                'check-circle.png',
+            $checkIcon = Display::getMdiIcon(
+                ActionIcon::ACCEPT,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_SMALL,
                 get_lang('Yes')
             );
-            $timesIcon = Display::return_icon(
-                'closed-circle.png',
+            $timesIcon = Display::getMdiIcon(
+                ActionIcon::REJECT,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_SMALL,
                 get_lang('No')
             );
             foreach ($result as $item) {
@@ -2569,11 +2584,11 @@ switch ($action) {
                 )) {
                     $url = 'class.php?action=remove_class_from_course&id='.$group['id'].'&'.api_get_cidreq(
                         ).'&id_session='.api_get_session_id();
-                    $icon = Display::return_icon('delete.png', get_lang('Remove'));
+                    $icon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove'));
                 } else {
                     $url = 'class.php?action=add_class_to_course&id='.$group['id'].'&'.api_get_cidreq(
                         ).'&type=not_registered';
-                    $icon = Display::return_icon('add.png', get_lang('Add'));
+                    $icon = Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add'));
                 }
 
                 switch ($group['group_type']) {
@@ -2592,7 +2607,7 @@ switch ($action) {
                 if ($isAllow) {
                     if ($obj->allowTeachers() && $group['author_id'] == $currentUserId) {
                         $group['actions'] .= Display::url(
-                                Display::return_icon('statistics.png', get_lang('Statistics')),
+                                Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Statistics')),
                                 $urlUserGroup.'&id='.$group['id']
                             ).'&nbsp;';
                     }

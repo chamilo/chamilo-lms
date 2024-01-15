@@ -94,7 +94,7 @@ final class IllustrationRepository extends ResourceRepository
             ->innerJoin('node.resourceType', 'type')
             ->innerJoin('node.resourceFile', 'file')
             ->where('node.parent = :parent')
-            ->andWhere('type.name = :name')
+            ->andWhere('type.title = :name')
             ->setParameters([
                 'parent' => $resourceNode->getId(),
                 'name' => $name,
@@ -130,7 +130,13 @@ final class IllustrationRepository extends ResourceRepository
         string $filter = '',
         int $size = 32
     ): string {
-        $illustration = $this->getIllustrationUrlFromNode($resource->getResourceNode(), $filter);
+        $node = $resource->getResourceNode();
+
+        if (null === $node) {
+            return $resource->getDefaultIllustration($size);
+        }
+
+        $illustration = $this->getIllustrationUrlFromNode($node, $filter);
 
         if (empty($illustration)) {
             $illustration = $resource->getDefaultIllustration($size);
@@ -147,7 +153,7 @@ final class IllustrationRepository extends ResourceRepository
             $params = [
                 'id' => $node->getUuid(),
                 'tool' => $node->getResourceType()->getTool(),
-                'type' => $node->getResourceType()->getName(),
+                'type' => $node->getResourceType()->getTitle(),
             ];
 
             if (!empty($filter)) {

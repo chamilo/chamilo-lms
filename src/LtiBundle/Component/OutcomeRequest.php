@@ -54,10 +54,13 @@ abstract class OutcomeRequest
         switch ($this->responseType) {
             case OutcomeResponse::TYPE_REPLACE:
                 return new OutcomeReplaceResponse($this->statusInfo, $this->responseBodyParam);
+
             case OutcomeResponse::TYPE_READ:
                 return new OutcomeReadResponse($this->statusInfo, $this->responseBodyParam);
+
             case OutcomeResponse::TYPE_DELETE:
                 return new OutcomeDeleteResponse($this->statusInfo, $this->responseBodyParam);
+
             default:
                 return new OutcomeUnsupportedResponse($this->statusInfo, $this->responseBodyParam);
         }

@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use UserManager;
 
-//class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
+// class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 class LoginSuccessHandler
 {
     protected UrlGeneratorInterface $router;
@@ -37,19 +37,20 @@ class LoginSuccessHandler
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
         $request = $event->getRequest();
+
         /** @var User $user */
         $user = $event->getAuthenticationToken()->getUser();
         $userId = $user->getId();
         $session = $request->getSession();
 
-        //$userInfo = api_get_user_info($user->getId());
-        //$userInfo['is_anonymous'] = false;
+        // $userInfo = api_get_user_info($user->getId());
+        // $userInfo['is_anonymous'] = false;
 
         // Backward compatibility.
-        //$ip = $request->getClientIp();
+        // $ip = $request->getClientIp();
 
         // Setting user info.
-        //$session->set('_user', $user);
+        // $session->set('_user', $user);
 
         // Setting admin permissions for.
         if ($this->checker->isGranted('ROLE_ADMIN')) {
@@ -79,10 +80,12 @@ class LoginSuccessHandler
                     $url = $legacyIndex;
 
                     break;
+
                 case 'user_portal.php':
                     $url = $legacyIndex.'user_portal.php';
 
                     break;
+
                 case 'main/auth/courses.php':
                     $url = $legacyIndex.'/'.$pageAfterLogin;
 
@@ -93,9 +96,9 @@ class LoginSuccessHandler
         $goToCourse = $this->settingsManager->getSetting('course.go_to_course_after_login');
 
         $session->set('_uid', $user->getId());
-        //$session->set('_user', $userInfo);
-        //$session->set('is_platformAdmin', \UserManager::is_admin($userId));
-        //$session->set('is_allowedCreateCourse', $userInfo['status'] === 1);
+        // $session->set('_user', $userInfo);
+        // $session->set('is_platformAdmin', \UserManager::is_admin($userId));
+        // $session->set('is_allowedCreateCourse', $userInfo['status'] === 1);
         // Redirecting to a course or a session.
         if ('true' === $goToCourse) {
             // Get the courses list

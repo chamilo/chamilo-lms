@@ -22,8 +22,7 @@ class SocialPostVoter extends Voter
 
     public function __construct(
         private SettingsManager $settingsManager
-    ) {
-    }
+    ) {}
 
     protected function supports(string $attribute, $subject): bool
     {
@@ -70,8 +69,8 @@ class SocialPostVoter extends Voter
                 }
 
                 if (
-                    $userReceiver &&
-                    !$currentUser->hasFriendWithRelationType($userReceiver, UserRelUser::USER_RELATION_TYPE_FRIEND)
+                    $userReceiver
+                    && !$currentUser->hasFriendWithRelationType($userReceiver, UserRelUser::USER_RELATION_TYPE_FRIEND)
                 ) {
                     return false;
                 }
@@ -81,6 +80,7 @@ class SocialPostVoter extends Voter
                 }
 
                 return true;
+
             case self::EDIT:
             case self::DELETE:
                 if ($sender === $currentUser) {
@@ -88,6 +88,7 @@ class SocialPostVoter extends Voter
                 }
 
                 break;
+
             case self::VIEW:
                 return true;
         }

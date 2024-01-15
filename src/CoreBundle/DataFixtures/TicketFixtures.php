@@ -34,7 +34,7 @@ class TicketFixtures extends Fixture implements ContainerAwareInterface
 
         $ticketProject = new TicketProject();
         $ticketProject
-            ->setName('Ticket System')
+            ->setTitle('Ticket System')
             ->setInsertUserId($adminId)
         ;
 
@@ -55,7 +55,7 @@ class TicketFixtures extends Fixture implements ContainerAwareInterface
             // Online evaluation requires a course
             $ticketCategory = new TicketCategory();
             $ticketCategory
-                ->setName($category)
+                ->setTitle($category)
                 ->setDescription($description)
                 ->setProject($ticketProject)
                 ->setInsertUserId($adminId)
@@ -78,7 +78,7 @@ class TicketFixtures extends Fixture implements ContainerAwareInterface
         foreach ($defaultPriorities as $code => $priority) {
             $ticketPriority = new TicketPriority();
             $ticketPriority
-                ->setName($priority)
+                ->setTitle($priority)
                 ->setCode($code)
                 ->setInsertUserId($adminId)
             ;
@@ -100,7 +100,7 @@ class TicketFixtures extends Fixture implements ContainerAwareInterface
         foreach ($defaultStatus as $code => $status) {
             $ticketStatus = new TicketStatus();
             $ticketStatus
-                ->setName($status)
+                ->setTitle($status)
                 ->setCode($code)
             ;
             $manager->persist($ticketStatus);

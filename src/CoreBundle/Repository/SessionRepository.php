@@ -88,7 +88,7 @@ class SessionRepository extends ServiceEntityRepository
         }
 
         if (!$session->hasCourse($course)) {
-            $msg = sprintf('Course %s is not subscribed to the session %s', $course->getTitle(), $session->getName());
+            $msg = sprintf('Course %s is not subscribed to the session %s', $course->getTitle(), $session->getTitle());
 
             throw new Exception($msg);
         }
@@ -104,6 +104,7 @@ class SessionRepository extends ServiceEntityRepository
                 }
 
                 break;
+
             case Session::STUDENT:
                 $session
                     ->addUserInSession(Session::STUDENT, $user)
@@ -111,6 +112,7 @@ class SessionRepository extends ServiceEntityRepository
                 ;
 
                 break;
+
             case Session::COURSE_COACH:
                 if ($user->hasRole('ROLE_TEACHER')) {
                     $session

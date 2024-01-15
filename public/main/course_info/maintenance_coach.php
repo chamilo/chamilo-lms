@@ -6,6 +6,9 @@
  * @author Julio Montoya <julio.montoya@beeznest.com>
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
@@ -24,8 +27,11 @@ if ('true' !== $sessionsCopy) {
 Display::display_header($nameTools);
 
 echo Display::page_subheader(
-    Display::return_icon(
-        'save_import.gif',
+    Display::getMdiIcon(
+        ActionIcon::IMPORT_ARCHIVE,
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_SMALL,
         get_lang('Backup and import and import')
     ).'&nbsp;&nbsp;'.get_lang('Backup and import and import')
 );

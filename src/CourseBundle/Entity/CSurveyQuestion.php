@@ -19,22 +19,22 @@ class CSurveyQuestion
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'iid', onDelete: 'SET NULL')]
     protected ?CSurveyQuestion $parent = null;
 
     /**
-     * @var Collection|CSurveyQuestion[]
+     * @var Collection<int, CSurveyQuestion>
      */
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     protected Collection $children;
 
     /**
-     * @var Collection|CSurveyQuestionOption[]
+     * @var Collection<int, CSurveyQuestionOption>
      */
-    #[ORM\OneToMany(targetEntity: CSurveyQuestionOption::class, mappedBy: 'question', cascade: ['remove'])]
+    #[ORM\OneToMany(mappedBy: 'question', targetEntity: CSurveyQuestionOption::class, cascade: ['remove'])]
     protected Collection $options;
 
     #[ORM\ManyToOne(targetEntity: CSurveyQuestionOption::class, cascade: ['remove'])]
@@ -46,9 +46,9 @@ class CSurveyQuestion
     protected CSurvey $survey;
 
     /**
-     * @var Collection|CSurveyAnswer[]
+     * @var Collection<int, CSurveyAnswer>
      */
-    #[ORM\OneToMany(targetEntity: CSurveyAnswer::class, mappedBy: 'question', cascade: ['remove'])]
+    #[ORM\OneToMany(mappedBy: 'question', targetEntity: CSurveyAnswer::class, cascade: ['remove'])]
     protected Collection $answers;
 
     #[Assert\NotBlank]
@@ -95,7 +95,7 @@ class CSurveyQuestion
         $this->surveyGroupSec2 = 0;
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }
@@ -121,10 +121,8 @@ class CSurveyQuestion
 
     /**
      * Get surveyQuestionComment.
-     *
-     * @return string
      */
-    public function getSurveyQuestionComment()
+    public function getSurveyQuestionComment(): ?string
     {
         return $this->surveyQuestionComment;
     }
@@ -138,10 +136,8 @@ class CSurveyQuestion
 
     /**
      * Get type.
-     *
-     * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
@@ -155,10 +151,8 @@ class CSurveyQuestion
 
     /**
      * Get display.
-     *
-     * @return string
      */
-    public function getDisplay()
+    public function getDisplay(): string
     {
         return $this->display;
     }
@@ -172,10 +166,8 @@ class CSurveyQuestion
 
     /**
      * Get sort.
-     *
-     * @return int
      */
-    public function getSort()
+    public function getSort(): int
     {
         return $this->sort;
     }
@@ -189,10 +181,8 @@ class CSurveyQuestion
 
     /**
      * Get sharedQuestionId.
-     *
-     * @return int
      */
-    public function getSharedQuestionId()
+    public function getSharedQuestionId(): ?int
     {
         return $this->sharedQuestionId;
     }
@@ -206,10 +196,8 @@ class CSurveyQuestion
 
     /**
      * Get maxValue.
-     *
-     * @return int
      */
-    public function getMaxValue()
+    public function getMaxValue(): ?int
     {
         return $this->maxValue;
     }
@@ -219,7 +207,7 @@ class CSurveyQuestion
      *
      * @return CSurveyQuestion
      */
-    public function setSurveyGroupPri(int $surveyGroupPri)
+    public function setSurveyGroupPri(int $surveyGroupPri): static
     {
         $this->surveyGroupPri = $surveyGroupPri;
 
@@ -228,10 +216,8 @@ class CSurveyQuestion
 
     /**
      * Get surveyGroupPri.
-     *
-     * @return int
      */
-    public function getSurveyGroupPri()
+    public function getSurveyGroupPri(): int
     {
         return $this->surveyGroupPri;
     }
@@ -241,7 +227,7 @@ class CSurveyQuestion
      *
      * @return CSurveyQuestion
      */
-    public function setSurveyGroupSec1(int $surveyGroupSec1)
+    public function setSurveyGroupSec1(int $surveyGroupSec1): static
     {
         $this->surveyGroupSec1 = $surveyGroupSec1;
 
@@ -250,10 +236,8 @@ class CSurveyQuestion
 
     /**
      * Get surveyGroupSec1.
-     *
-     * @return int
      */
-    public function getSurveyGroupSec1()
+    public function getSurveyGroupSec1(): int
     {
         return $this->surveyGroupSec1;
     }
@@ -263,7 +247,7 @@ class CSurveyQuestion
      *
      * @return CSurveyQuestion
      */
-    public function setSurveyGroupSec2(int $surveyGroupSec2)
+    public function setSurveyGroupSec2(int $surveyGroupSec2): static
     {
         $this->surveyGroupSec2 = $surveyGroupSec2;
 
@@ -272,10 +256,8 @@ class CSurveyQuestion
 
     /**
      * Get surveyGroupSec2.
-     *
-     * @return int
      */
-    public function getSurveyGroupSec2()
+    public function getSurveyGroupSec2(): int
     {
         return $this->surveyGroupSec2;
     }
@@ -305,17 +287,14 @@ class CSurveyQuestion
     }
 
     /**
-     * @return Collection|CSurveyQuestion[]
+     * @return Collection<int, CSurveyQuestion>
      */
-    public function getChildren(): Collection|array
+    public function getChildren(): Collection
     {
         return $this->children;
     }
 
-    /**
-     * @param Collection|CSurveyQuestion[] $children
-     */
-    public function setChildren(Collection|array $children): self
+    public function setChildren(Collection $children): self
     {
         $this->children = $children;
 
@@ -347,25 +326,22 @@ class CSurveyQuestion
     }
 
     /**
-     * @return CSurveyAnswer[]|Collection
+     * @return Collection<int, CSurveyAnswer>
      */
-    public function getAnswers(): array|Collection
+    public function getAnswers(): Collection
     {
         return $this->answers;
     }
 
     /**
-     * @return CSurveyQuestionOption[]|Collection
+     * @return Collection<int, CSurveyQuestionOption>
      */
-    public function getOptions(): array|Collection
+    public function getOptions(): Collection
     {
         return $this->options;
     }
 
-    /**
-     * @param CSurveyQuestionOption[]|Collection $options
-     */
-    public function setOptions(array|Collection $options): self
+    public function setOptions(Collection $options): self
     {
         $this->options = $options;
 

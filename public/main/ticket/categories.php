@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * This script is the Tickets plugin main entry point.
@@ -64,7 +65,7 @@ $interbreadcrumb[] = [
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/projects.php',
-    'name' => $project->getName(),
+    'name' => $project->getTitle(),
 ];
 
 switch ($action) {
@@ -161,19 +162,19 @@ function modify_filter($id, $params, $row)
     $result = '';
     if ('true' === api_get_setting('ticket_allow_category_edition')) {
         $result .= Display::url(
-            Display::return_icon('edit.png', get_lang('Edit')),
+            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
             "categories.php?action=edit&id={$row['id']}&project_id=".$projectId
         );
     }
 
     $result .= Display::url(
-        Display::return_icon('user.png', get_lang('Assign user')),
+        Display::getMdiIcon(ActionIcon::ADD_USER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Assign user')),
         "categories_add_user.php?id={$row['id']}&project_id=".$projectId
     );
 
     if ('true' === api_get_setting('ticket_allow_category_edition')) {
         $result .= Display::url(
-            Display::return_icon('delete.png', get_lang('Delete')),
+            Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
             "categories.php?action=delete&id={$row['id']}&project_id=".$projectId
         );
     }
@@ -193,7 +194,7 @@ Display::display_header($toolName);
 $items = [
     [
         'url' => 'categories.php?action=add&project_id='.$projectId,
-        'content' => Display::return_icon('new_folder.png', null, null, ICON_SIZE_MEDIUM),
+        'content' => Display::getMdiIcon(ActionIcon::CREATE_FOLDER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM),
     ],
 ];
 

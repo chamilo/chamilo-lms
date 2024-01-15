@@ -27,7 +27,7 @@ class Version20190110182615 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('c_lp');
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_lp ADD resource_node_id BIGINT DEFAULT NULL;');
+            $this->addSql('ALTER TABLE c_lp ADD resource_node_id INT DEFAULT NULL;');
             $this->addSql(
                 'ALTER TABLE c_lp ADD CONSTRAINT FK_F67ABBEB1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'
             );
@@ -65,7 +65,7 @@ class Version20190110182615 extends AbstractMigrationChamilo
         }
 
         if (false === $table->hasIndex('session')) {
-            //$this->addSql('DROP INDEX session ON c_lp');
+            // $this->addSql('DROP INDEX session ON c_lp');
         }
 
         $this->addSql('UPDATE c_lp SET category_id = NULL WHERE category_id = 0');
@@ -81,7 +81,7 @@ class Version20190110182615 extends AbstractMigrationChamilo
         }
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_lp_category ADD resource_node_id BIGINT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_lp_category ADD resource_node_id INT DEFAULT NULL');
         }
 
         if ($table->hasIndex('course')) {
@@ -205,7 +205,7 @@ class Version20190110182615 extends AbstractMigrationChamilo
         }
 
         if (!$table->hasIndex('IDX_2D2F4F7DFE54D947')) {
-            //$this->addSql('CREATE INDEX IDX_2D2F4F7DFE54D947 ON c_lp_view (group_id)');
+            // $this->addSql('CREATE INDEX IDX_2D2F4F7DFE54D947 ON c_lp_view (group_id)');
         }
 
         $table = $schema->getTable('c_lp_item_view');

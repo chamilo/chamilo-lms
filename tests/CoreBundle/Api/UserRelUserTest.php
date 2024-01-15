@@ -103,6 +103,7 @@ class UserRelUserTest extends AbstractApiTest
         /** @var User $user */
         $user = $userRepo->find($user->getId());
         $this->assertSame(1, $user->getFriends()->count());
+
         /** @var UserRelUser $userRelUser */
         $userRelUser = $user->getFriends()->first();
         $this->assertSame(UserRelUser::USER_RELATION_TYPE_FRIEND, $userRelUser->getRelationType());
@@ -110,6 +111,7 @@ class UserRelUserTest extends AbstractApiTest
         // friend has a new friend
         /** @var User $friend */
         $friend = $userRepo->find($friend->getId());
+
         /** @var UserRelUser $userRelUser */
         $userRelUser = $friend->getFriends()->first();
         $this->assertSame(1, $friend->getFriends()->count());

@@ -29,6 +29,7 @@ use Doctrine\Common\Collections\Criteria;
 use PhpZip\ZipFile;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * Class learnpath
@@ -136,7 +137,7 @@ class learnpath
             //$this->entity = $entity;
             $this->lp_id = $lp_id;
             $this->type = $entity->getLpType();
-            $this->name = stripslashes($entity->getName());
+            $this->name = stripslashes($entity->getTitle());
             $this->proximity = $entity->getContentLocal();
             $this->theme = $entity->getTheme();
             $this->maker = $entity->getContentLocal();
@@ -612,7 +613,7 @@ class learnpath
 
                 $lp = (new CLp())
                     ->setLpType($type)
-                    ->setName($name)
+                    ->setTitle($name)
                     ->setDescription($description)
                     ->setDisplayOrder($dsp)
                     ->setCategory($category)
@@ -3475,7 +3476,7 @@ class learnpath
             ")
             ->setParameters([
                 'course' => $courseId,
-                'name' => strip_tags($category->getName()),
+                'name' => strip_tags($category->getTitle()),
                 'link' => "$link%",
             ])
             ->getResult();
@@ -4674,18 +4675,14 @@ class learnpath
                 $iconName = str_replace(' ', '', $type);
                 $icon = '';
                 switch ($iconName) {
+                    case 'category':
                     case 'chapter':
                     case 'folder':
                     case 'dir':
-                        $icon = Display::getMdiIcon('bookmark-multiple', 'ch-tool-icon', '', 16);
+                        $icon = Display::getMdiIcon(ObjectIcon::CHAPTER, 'ch-tool-icon', '', ICON_SIZE_TINY);
                         break;
                     default:
-                        $icon = Display::return_icon(
-                            'lp_'.$iconName.'.png',
-                            '',
-                            [],
-                            ICON_SIZE_TINY
-                        );
+                        $icon = Display::getMdiIcon(ObjectIcon::SINGLE_ELEMENT, 'ch-tool-icon', '', ICON_SIZE_TINY);
                         break;
                 }
 
@@ -6129,12 +6126,17 @@ class learnpath
                 $itemId = $item['iid'];
                 $type = $item['itemType'];
                 $iconName = str_replace(' ', '', $type);
-                $icon = Display::return_icon(
-                    'lp_'.$iconName.'.png',
-                    '',
-                    [],
-                    ICON_SIZE_TINY
-                );
+                switch ($iconName) {
+                    case 'category':
+                    case 'chapter':
+                    case 'folder':
+                    case 'dir':
+                        $icon = Display::getMdiIcon(ObjectIcon::CHAPTER, 'ch-tool-icon', '', ICON_SIZE_TINY);
+                        break;
+                    default:
+                        $icon = Display::getMdiIcon(ObjectIcon::SINGLE_ELEMENT, 'ch-tool-icon', '', ICON_SIZE_TINY);
+                        break;
+                }
 
                 if ($itemId == $currentItemId) {
                     return '';
@@ -6286,7 +6288,7 @@ class learnpath
             if ($myLpId == $lp_id) {
                 continue;
             }
-            $items[$myLpId] = $lp->getName();
+            $items[$myLpId] = $lp->getTitle();
             /*$return .= '<option
                 value="'.$myLpId.'" '.(($myLpId == $prerequisiteId) ? ' selected ' : '').'>'.
                 $lp->getName().
@@ -6582,7 +6584,7 @@ class learnpath
                 $categories[0] = get_lang('Uncategorized');
             } else {
                 $category = $link->getCategory();
-                $categories[$categoryId] = $category->getCategoryTitle();
+                $categories[$categoryId] = $category->getTitle();
             }
             $categorizedLinks[$categoryId][$link->getIid()] = $link;
         }
@@ -6602,7 +6604,7 @@ class learnpath
 
         <ul class="mt-2 bg-white list-group lp_resource">
             <li class="list-group-item lp_resource_element disable_drag ">
-                '.Display::return_icon('linksnew.gif').'
+                '.Display::getMdiIcon(ObjectIcon::LINK, 'ch-tool-icon', null, ICON_SIZE_SMALL).'
                 <a
                 href="'.api_get_path(WEB_CODE_PATH).'link/link.php?'.$courseIdReq.'&action=addlink&lp_id='.$this->lp_id.'"
                 title="'.get_lang('Add a link').'">'.
@@ -6786,7 +6788,7 @@ class learnpath
         $moveIcon = Display::getMdiIcon('cursor-move', 'ch-tool-icon', '', 16, get_lang('Move'));
         foreach ($a_forums as $forum) {
             $forumId = $forum->getIid();
-            $title = Security::remove_XSS($forum->getForumTitle());
+            $title = Security::remove_XSS($forum->getTitle());
             $link = Display::url(
                 Display::getMdiIcon('magnify-plus-outline', 'ch-tool-icon', null, 22, get_lang('Preview')),
                 api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId,
@@ -6849,10 +6851,10 @@ class learnpath
                         class="moved link_with_id"
                         data-id="'.$threadId.'"
                         data_type="'.TOOL_THREAD.'"
-                        title="'.$thread->getThreadTitle().'"
+                        title="'.$thread->getTitle().'"
                         href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_THREAD.'&thread_id='.$threadId.'&lp_id='.$this->lp_id.'"
                         >'.
-                        Security::remove_XSS($thread->getThreadTitle()).' '.$link.'</a>';
+                        Security::remove_XSS($thread->getTitle()).' '.$link.'</a>';
                     $return .= '</li>';
                 }
             }
@@ -7101,7 +7103,7 @@ class learnpath
 
         $item = new CLpCategory();
         $item
-            ->setName($params['name'])
+            ->setTitle($params['name'])
             ->setParent($courseEntity)
             ->addCourseLink($courseEntity, api_get_session_entity())
         ;
@@ -7121,7 +7123,7 @@ class learnpath
         /** @var CLpCategory $item */
         $item = $em->find(CLpCategory::class, $params['id']);
         if ($item) {
-            $item->setName($params['name']);
+            $item->setTitle($params['name']);
             $em->persist($item);
             $em->flush();
         }
@@ -7258,7 +7260,7 @@ class learnpath
 
         if (!empty($items)) {
             foreach ($items as $cat) {
-                $cats[$cat->getIid()] = $cat->getName();
+                $cats[$cat->getIid()] = $cat->getTitle();
             }
         }
 
@@ -8022,7 +8024,7 @@ class learnpath
                 $TBL_FORUMS = Database::get_course_table(TABLE_FORUM);
                 $result = Database::query("SELECT * FROM $TBL_FORUMS WHERE c_id = $course_id AND forum_id = $id");
                 $myrow = Database::fetch_array($result);
-                $output = $myrow['forum_name'];
+                $output = $myrow['title'];
                 break;
             case TOOL_THREAD:
                 $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
@@ -8030,14 +8032,14 @@ class learnpath
                 $sql_title = "SELECT * FROM $tbl_post WHERE c_id = $course_id AND post_id=".$id;
                 $result_title = Database::query($sql_title);
                 $myrow_title = Database::fetch_array($result_title);
-                $output = $myrow_title['post_title'];
+                $output = $myrow_title['title'];
                 break;
             case TOOL_POST:
                 $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
                 $sql = "SELECT * FROM $tbl_post p WHERE c_id = $course_id AND p.post_id = $id";
                 $result = Database::query($sql);
                 $post = Database::fetch_array($result);
-                $output = $post['post_title'];
+                $output = $post['title'];
                 break;
             case 'dir':
             case TOOL_DOCUMENT:

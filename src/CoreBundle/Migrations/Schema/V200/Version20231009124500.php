@@ -16,9 +16,6 @@ class Version20231009124500 extends AbstractMigrationChamilo
         return 'Changes for track_e_attempt_recording';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function up(Schema $schema): void
     {
         $this->addSql('ALTER TABLE track_e_attempt_recording CHANGE marks marks DOUBLE PRECISION NOT NULL');

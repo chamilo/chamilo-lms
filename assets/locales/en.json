@@ -67,6 +67,9 @@
     "Delete": "Delete",
     "{resource} created": "{resource} created",
     "{resource} deleted": "{resource} deleted",
+    "Course: {course}": "Course: {course}",
+    "Session: {session}": "Session: {session}",
+    "Status: {status}": "Status: {status}",
     "Edit event": "Edit event",
     "Add event": "Add event",
     "Add": "Add",
@@ -155,12 +158,13 @@
     "Loading sessions. Please wait.": "Loading sessions. Please wait.",
     "There is no terms that matches the search: {searchTerm}": "There is no terms that matches the search: {searchTerm}",
     "Send diagnostic finalization message": "Send diagnostic finalization message",
-    "DiagnosticfinalizationmessageTitle": "Diagnostic finalization",
-    "DiagnosticfinalizationmessageContent": "Hi %s, I'm %s and I'm reviewing your diagnotic to define the course you will be folling.",
+    "DiagnosticfinalizationmessageTitle": "DiagnosticfinalizationmessageTitle",
+    "DiagnosticfinalizationmessageContent": "DiagnosticfinalizationmessageContent",
     "Contact": "Contact",
     "Registration": "Registration",
     "Current session tab": "Current session tab",
     "Upcoming session tab": "Upcoming session tab",
     "Past session tab": "Past session tab",
-    "Sticky courses": "Sticky courses"
+    "Sticky courses": "Sticky courses",
+    "Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:": "Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:"
 }

@@ -20,6 +20,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * This is a code library for Chamilo.
@@ -2188,14 +2190,11 @@ function api_format_course_array(Course $course = null)
     $courseData['about_url'] = $coursePath.$courseData['real_id'].'/about';
     $courseData['add_teachers_to_sessions_courses'] = $course->isAddTeachersToSessionsCourses();
 
-    $image = Display::return_icon(
-        'course.png',
+    $image = Display::getMdiIcon(
+        ObjectIcon::COURSE,
+        'ch-tool-icon',
         null,
-        null,
-        ICON_SIZE_BIG,
-        null,
-        true,
-        false
+        ICON_SIZE_BIG
     );
 
     $illustration = Container::getIllustrationRepository()->getIllustrationUrl($course);
@@ -2529,11 +2528,12 @@ function api_get_session_image($sessionId, User $user)
     if (!$user->hasRole('ROLE_STUDENT')) {
         // Check whether is not a student
         if ($sessionId > 0) {
-            $image = '&nbsp;&nbsp;'.Display::return_icon(
-                'star.png',
-                get_lang('Session-specific resource'),
-                ['align' => 'absmiddle'],
-                ICON_SIZE_SMALL
+            $image = '&nbsp;&nbsp;'.Display::getMdiIcon(
+                ObjectIcon::STAR,
+                'ch-tool-icon',
+                'align:absmiddle;',
+                ICON_SIZE_SMALL,
+                get_lang('Session-specific resource')
             );
         }
     }
@@ -2970,7 +2970,7 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
     $sessionIsCoach = [];
 
     if (!empty($courseId)) {
-        $sql = "SELECT DISTINCT s.id, name, access_start_date, access_end_date
+        $sql = "SELECT DISTINCT s.id, title, access_start_date, access_end_date
                 FROM $session_table s
                 INNER JOIN $session_rel_course_rel_user_table session_rc_ru
                 ON session_rc_ru.session_id = s.id AND session_rc_ru.user_id = '".$userId."'
@@ -2991,7 +2991,7 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
                     sru.user_id = $userId AND
                     s.id = $session_id AND
                     sru.relation_type = ".SessionEntity::GENERAL_COACH."
-                ORDER BY s.access_start_date, s.access_end_date, s.name";
+                ORDER BY s.access_start_date, s.access_end_date, s.title";
         $result = Database::query($sql);
         if (!empty($sessionIsCoach)) {
             $sessionIsCoach = array_merge(
@@ -3450,15 +3450,17 @@ function api_is_anonymous()
 /**
  * Displays message "You are not allowed here..." and exits the entire script.
  *
- * @param bool   $print_headers Whether or not to print headers (default = false -> does not print them)
+ * @param bool $print_headers Whether to print headers (default = false -> does not print them)
  * @param string $message
- * @param int    $responseCode
+ * @param int $responseCode
+ *
+ * @throws Exception
  */
 function api_not_allowed(
     $print_headers = false,
     $message = null,
     $responseCode = 0
-) {
+): never {
     throw new Exception('You are not allowed');
 }
 
@@ -3811,10 +3813,12 @@ function api_time_to_hms($seconds, $space = ':', $showSeconds = true, $roundMinu
     if (-1 == $seconds) {
         return
             get_lang('Unknown').
-            Display::return_icon(
-                'info2.gif',
-                get_lang('The datas about this user were registered when the calculation of time spent on the platform wasn\'t possible.'),
-                ['align' => 'absmiddle', 'hspace' => '3px']
+            Display::getMdiIcon(
+                ActionIcon::INFORMATION,
+                'ch-tool-icon',
+                'align: absmiddle; hspace: 3px',
+                ICON_SIZE_SMALL,
+                get_lang('The datas about this user were registered when the calculation of time spent on the platform wasn\'t possible.')
             );
     }
 
@@ -5333,7 +5337,7 @@ function api_get_tool_information_by_name($name)
     $course_id = api_get_course_int_id();
 
     $sql = "SELECT id FROM tool
-            WHERE name = '".Database::escape_string($name)."' ";
+            WHERE title = '".Database::escape_string($name)."' ";
     $rs = Database::query($sql);
     $data = Database::fetch_array($rs);
     if ($data) {

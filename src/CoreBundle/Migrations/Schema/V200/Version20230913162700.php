@@ -404,7 +404,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
         }
     }
 
-    private function replaceOldURLsWithNew($itemDataText, $courseDirectory, $courseId, $connection, $documentRepo): array|string|null
+    private function replaceOldURLsWithNew($itemDataText, $courseDirectory, $courseId, $connection, $documentRepo): null|array|string
     {
         $contentText = $itemDataText;
 

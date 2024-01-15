@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class SearchEngineRef
 {
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class, inversedBy: 'searchEngineRefs')]
+    #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'searchEngineRefs')]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
     protected ?Course $course = null;
 
@@ -39,7 +39,7 @@ class SearchEngineRef
     /**
      * Set course.
      *
-     * @return \Chamilo\CoreBundle\Entity\SearchEngineRef
+     * @return SearchEngineRef
      */
     public function setCourse(Course $course)
     {

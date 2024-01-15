@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\LtiBundle\Controller;
 
 use Category;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
@@ -53,6 +54,7 @@ class CourseController extends ToolBaseController
     public function editAction($id, Request $request): Response
     {
         $em = $this->getDoctrine()->getManager();
+
         /** @var ExternalTool $tool */
         $tool = $em->find(ExternalTool::class, $id);
 
@@ -106,7 +108,7 @@ class CourseController extends ToolBaseController
                 throw $this->createNotFoundException('Course tool not found.');
             }
 
-            $courseTool->setName($tool->getName());
+            $courseTool->setTitle($tool->getTitle());
 
             $em->persist($courseTool);
         }
@@ -130,6 +132,7 @@ class CourseController extends ToolBaseController
     public function launchAction(int $id, Utils $ltiUtil): Response
     {
         $em = $this->getDoctrine()->getManager();
+
         /** @var null|ExternalTool $tool */
         $tool = $em->find(ExternalTool::class, $id);
 
@@ -165,13 +168,13 @@ class CourseController extends ToolBaseController
             );
             $params['accept_media_types'] = '*/*';
             $params['accept_presentation_document_targets'] = 'iframe';
-            $params['title'] = $tool->getName();
+            $params['title'] = $tool->getTitle();
             $params['text'] = $tool->getDescription();
             $params['data'] = 'tool:'.$tool->getId();
         } else {
             $params['lti_message_type'] = 'basic-lti-launch-request';
             $params['resource_link_id'] = $tool->getId();
-            $params['resource_link_title'] = $tool->getName();
+            $params['resource_link_title'] = $tool->getTitle();
             $params['resource_link_description'] = $tool->getDescription();
 
             $toolEval = $tool->getGradebookEval();
@@ -340,7 +343,7 @@ class CourseController extends ToolBaseController
                     'success',
                     sprintf(
                         $this->trans('External tool added: %s'),
-                        $newTool->getName()
+                        $newTool->getTitle()
                     )
                 );
             }
@@ -426,7 +429,7 @@ class CourseController extends ToolBaseController
 
             if (!empty($categories)) {
                 $actions .= Display::url(
-                    Display::return_icon('gradebook.png', get_lang('Add to gradebook'), [], ICON_SIZE_MEDIUM),
+                    Display::getMdiIcon(ToolIcon::GRADEBOOK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add to gradebook')),
                     $this->generateUrl(
                         'chamilo_lti_grade',
                         [
@@ -467,6 +470,7 @@ class CourseController extends ToolBaseController
         $em->flush();
 
         $this->addFlash('success', $this->trans('External tool added'));
+
         /** @var User $user */
         $user = $this->getUser();
 
@@ -503,6 +507,7 @@ class CourseController extends ToolBaseController
         $em = $this->getDoctrine()->getManager();
         $toolRepo = $em->getRepository(ExternalTool::class);
         $course = $this->getCourse();
+
         /** @var User $user */
         $user = $this->getUser();
 
@@ -538,6 +543,7 @@ class CourseController extends ToolBaseController
         );
         $form->removeElement('name');
         $form->removeElement('addresult');
+
         /** @var HTML_QuickForm_select $slcLtiTools */
         $slcLtiTools = $form->createElement('select', 'name', $this->trans('External tool'));
         $form->insertElementBefore($slcLtiTools, 'hid_category_id');
@@ -550,7 +556,7 @@ class CourseController extends ToolBaseController
 
         /** @var ExternalTool $tool */
         foreach ($tools as $tool) {
-            $slcLtiTools->addOption($tool->getName(), $tool->getId());
+            $slcLtiTools->addOption($tool->getTitle(), $tool->getId());
         }
 
         if (!$form->validate()) {
@@ -571,7 +577,7 @@ class CourseController extends ToolBaseController
         }
 
         $eval = new Evaluation();
-        $eval->set_name($tool->getName());
+        $eval->set_name($tool->getTitle());
         $eval->set_description($values['description']);
         $eval->set_user_id($values['hid_user_id']);
 
@@ -603,7 +609,7 @@ class CourseController extends ToolBaseController
 
     private function variableSubstitution(
         array $params,
-        array & $customParams,
+        array &$customParams,
         User $user,
         Course $course,
         Session $session = null
@@ -665,7 +671,7 @@ class CourseController extends ToolBaseController
             '$Person.address.country' => false,
             '$Person.address.postcode' => false,
             '$Person.address.timezone' => false,
-            //$user->getTimezone(),
+            // $user->getTimezone(),
             '$Person.phone.mobile' => false,
             '$Person.phone.primary' => $user->getPhone(),
             '$Person.phone.home' => false,
@@ -673,7 +679,7 @@ class CourseController extends ToolBaseController
             '$Person.email.primary' => $user->getEmail(),
             '$Person.email.personal' => false,
             '$Person.webaddress' => false,
-            //$user->getWebsite(),
+            // $user->getWebsite(),
             '$Person.sms' => false,
 
             '$CourseTemplate.sourcedId' => false,
@@ -757,14 +763,14 @@ class CourseController extends ToolBaseController
         ];
     }
 
-    private function createLtiLink(array & $contentItem, ExternalTool $baseTool): ExternalTool
+    private function createLtiLink(array &$contentItem, ExternalTool $baseTool): ExternalTool
     {
         $newTool = clone $baseTool;
         $newTool->setToolParent($baseTool);
         $newTool->setActiveDeepLinking(false);
 
         if (!empty($contentItem['title'])) {
-            $newTool->setName($contentItem['title']);
+            $newTool->setTitle($contentItem['title']);
         }
 
         if (!empty($contentItem['text'])) {

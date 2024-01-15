@@ -7,6 +7,9 @@
  *
  * @author Julio Montoya <gugli100@gmail.com>
  */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -34,7 +37,7 @@ echo Display::toolbarAction(
     'url',
     [
         Display::url(
-            Display::return_icon('edit.png', get_lang('Edit users and URLs'), ''),
+            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit users and URLs')),
             api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php'
         ),
     ]
@@ -44,12 +47,9 @@ Display::page_subheader2($tool_name);
 
 if ($_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
-    $users = is_array($_POST['user_list']) ? $_POST['user_list'] : [];
+    $users = is_array($_POST['user_list']) ? array_map('intval', $_POST['user_list']) : [];
     $url_list = is_array($_POST['url_list']) ? $_POST['url_list'] : [];
     $first_letter_user = $_POST['first_letter_user'];
-    foreach ($users as $key => $value) {
-        $users[$key] = (int) $value;
-    }
 
     if (1 == $form_sent) {
         if (0 == count($users) || 0 == count($url_list)) {

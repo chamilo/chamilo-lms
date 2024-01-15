@@ -15,26 +15,23 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class CQuizRelQuestionCategory
 {
-    #[ORM\Column(name: 'iid', type: 'bigint')]
+    #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CQuizQuestionCategory::class, cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: CQuizQuestionCategory::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CQuizQuestionCategory $category;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CQuiz::class, inversedBy: 'questionsCategories', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: CQuiz::class, inversedBy: 'questionsCategories', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'exercise_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CQuiz $quiz;
 
     #[ORM\Column(name: 'count_questions', type: 'integer', nullable: false)]
     protected int $countQuestions;
 
-    /**
-     * @return int
-     */
-    public function getIid()
+    public function getIid(): ?int
     {
         return $this->iid;
     }

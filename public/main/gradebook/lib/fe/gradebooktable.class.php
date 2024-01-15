@@ -3,6 +3,7 @@
 /* For licensing terms, see license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
@@ -37,27 +38,17 @@ class GradebookTable extends SortableTable
 
     /**
      * GradebookTable constructor.
-     *
-     * @param Category $currentcat
-     * @param array    $cats
-     * @param array    $evals
-     * @param array    $links
-     * @param null     $addparams
-     * @param bool     $exportToPdf
-     * @param null     $showTeacherView
-     * @param int      $userId
-     * @param array    $studentList
      */
     public function __construct(
-        $currentcat,
-        $cats = [],
-        $evals = [],
-        $links = [],
-        $addparams = null,
-        $exportToPdf = false,
-        $showTeacherView = null,
-        $userId = null,
-        $studentList = [],
+        Category $currentcat,
+        array $cats = [],
+        array $evals = [],
+        array $links = [],
+        array $addparams = [],
+        bool $exportToPdf = false,
+        ?bool $showTeacherView = null,
+        ?int $userId = null,
+        array $studentList = [],
         array $loadStats = []
     ) {
         $this->teacherView = is_null($showTeacherView) ? api_is_allowed_to_edit(null, true) : $showTeacherView;
@@ -88,7 +79,7 @@ class GradebookTable extends SortableTable
             $this->datagen->userId = $userId;
         }
 
-        if (isset($addparams)) {
+        if (!empty($addparams)) {
             $this->set_additional_parameters($addparams);
         }
 
@@ -468,7 +459,7 @@ class GradebookTable extends SortableTable
                 // Edit (for admins).
                 if ($this->teacherView) {
                     $show_message = Category::show_message_resource_delete($item->getCourseId());
-                    if (false === $show_message) {
+                    if (empty($show_message)) {
                         $row[] = $this->build_edit_column($item);
                     }
                 } else {
@@ -480,12 +471,14 @@ class GradebookTable extends SortableTable
                     $totalResult = [];
                     if (isset($data['result_score'])) {
                         $totalResult = [
-                            $data['result_score'][0],
-                            $data['result_score'][1],
+                            $data['result_score'][0] ?? 0,
+                            $data['result_score'][1] ?? 0,
                         ];
                     }
 
                     if (empty($model)) {
+                        $data['best_score'][0] = $data['best_score'][0] ?? 0;
+                        $data['best_score'][1] = $data['best_score'][1] ?? 0;
                         $totalBest = [
                             $scoredisplay->format_score($totalBest[0] + $data['best_score'][0]),
                             $scoredisplay->format_score($totalBest[1] + $data['best_score'][1]),
@@ -537,7 +530,7 @@ class GradebookTable extends SortableTable
 
                     $this->dataForGraph['my_result'][] = floatval($totalResultAverageValue);
                     $this->dataForGraph['average'][] = floatval($totalAverageValue);
-                    $this->dataForGraph['my_result_no_float'][] = $data['result_score'][0];
+                    $this->dataForGraph['my_result_no_float'][] = $data['result_score'][0] ?? 0;
 
                     if (empty($model)) {
                         // Ranking
@@ -619,7 +612,7 @@ class GradebookTable extends SortableTable
                             }
 
                             // Type
-                            $row[] = $this->build_type_column($item, ['style' => 'padding-left:5px']);
+                            $row[] = $this->build_type_column($item, 'padding-left:5px');
                             // Name.
                             $row[] = $invisibility_span_open.'&nbsp;&nbsp;&nbsp; '.
                                 $this->build_name_link($item, $type, 4).$invisibility_span_close;
@@ -643,7 +636,7 @@ class GradebookTable extends SortableTable
                                 (isset($_GET['action']) && 'export_all' != $_GET['action'] || !isset($_GET['action']))
                             ) {
                                 $show_message = Category::show_message_resource_delete($item->getCourseId());
-                                if (false === $show_message) {
+                                if (empty($show_message)) {
                                     if (false == $this->exportToPdf) {
                                         $row[] = $this->build_edit_column($item);
                                     }
@@ -704,8 +697,11 @@ class GradebookTable extends SortableTable
                                         ]
                                     );
                                 } else {
-                                    $label = Display::return_icon(
-                                        'warning.png',
+                                    $label = Display::getMdiIcon(
+                                        StateIcon::WARNING,
+                                        'ch-tool-icon',
+                                        null,
+                                        ICON_SIZE_SMALL,
                                         sprintf(get_lang('The sum of all weights of activities must be %s'), $categoryWeight)
                                     );
                                     $total = Display::label($totalWeight.' / '.$categoryWeight, 'warning');
@@ -1198,13 +1194,13 @@ class GradebookTable extends SortableTable
 
     /**
      * @param $item
-     * @param array $attributes
+     * @param string $style
      *
      * @return string
      */
-    private function build_type_column($item, $attributes = [])
+    private function build_type_column($item, $style = null)
     {
-        return GradebookUtils::build_type_icon_tag($item->get_icon_name(), $attributes);
+        return GradebookUtils::build_type_icon_tag($item->get_icon_name(), $style);
     }
 
     /**
@@ -1242,7 +1238,7 @@ class GradebookTable extends SortableTable
                 $show_message = Category::show_message_resource_delete($course_id);
 
                 // course/platform admin can go to the view_results page
-                if (api_is_allowed_to_edit() && false === $show_message) {
+                if (api_is_allowed_to_edit() && empty($show_message)) {
                     if ('presence' == $item->get_type()) {
                         return '&nbsp;'
                             .'<a href="gradebook_view_result.php?cidReq='.$course_id.'&amp;selecteval='.$item->get_id().'">'
@@ -1259,13 +1255,13 @@ class GradebookTable extends SortableTable
                             .$item->get_name()
                             .'</a>&nbsp;'.$extra;
                     }
-                } elseif (ScoreDisplay::instance()->is_custom() && false === $show_message) {
+                } elseif (ScoreDisplay::instance()->is_custom() && empty($show_message)) {
                     // students can go to the statistics page (if custom display enabled)
                     return '&nbsp;'
                         .'<a href="gradebook_statistics.php?'.api_get_cidreq().'&selecteval='.$item->get_id().'">'
                         .$item->get_name()
                         .'</a>';
-                } elseif (false === $show_message && !api_is_allowed_to_edit() && !ScoreDisplay::instance()->is_custom()) {
+                } elseif (empty($show_message) && !api_is_allowed_to_edit() && !ScoreDisplay::instance()->is_custom()) {
                     return '&nbsp;'
                         .'<a href="gradebook_statistics.php?'.api_get_cidreq().'&selecteval='.$item->get_id().'">'
                         .$item->get_name()
@@ -1281,7 +1277,7 @@ class GradebookTable extends SortableTable
 
                 $url = $item->get_link();
                 $text = $item->get_name();
-                if (isset($url) && false === $show_message) {
+                if (isset($url) && empty($show_message)) {
                     $text = '&nbsp;<a href="'.$item->get_link().'">'
                         .$item->get_name()
                         .'</a>';

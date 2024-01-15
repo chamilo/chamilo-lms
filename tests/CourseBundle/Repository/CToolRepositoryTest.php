@@ -32,7 +32,7 @@ class CToolRepositoryTest extends AbstractApiTest
         $this->assertNotNull($tool);
 
         $cTool = (new CTool())
-            ->setName('test')
+            ->setTitle('test')
             ->setCourse($course)
             ->setTool($tool)
             ->setParent($course)

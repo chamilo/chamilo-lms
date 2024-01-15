@@ -38,8 +38,8 @@ class SessionCategory implements Stringable
     protected Collection $sessions;
     #[Groups(['session_category:read', 'session_category:write', 'session:read', 'session_rel_user:read'])]
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'name', type: 'string', length: 100, nullable: false, unique: false)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'string', length: 100, nullable: false, unique: false)]
+    protected string $title;
     #[ORM\Column(name: 'date_start', type: 'date', nullable: true, unique: false)]
     protected ?DateTime $dateStart = null;
     #[ORM\Column(name: 'date_end', type: 'date', nullable: true, unique: false)]
@@ -50,7 +50,7 @@ class SessionCategory implements Stringable
     }
     public function __toString(): string
     {
-        return $this->name;
+        return $this->title;
     }
     public function setUrl(AccessUrl $url): self
     {
@@ -62,6 +62,7 @@ class SessionCategory implements Stringable
     {
         return $this->url;
     }
+
     /**
      * Get id.
      *
@@ -71,15 +72,15 @@ class SessionCategory implements Stringable
     {
         return $this->id;
     }
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
     public function setDateStart(DateTime $dateStart): self
     {
@@ -87,6 +88,7 @@ class SessionCategory implements Stringable
 
         return $this;
     }
+
     /**
      * Get dateStart.
      *
@@ -102,6 +104,7 @@ class SessionCategory implements Stringable
 
         return $this;
     }
+
     /**
      * Get dateEnd.
      *

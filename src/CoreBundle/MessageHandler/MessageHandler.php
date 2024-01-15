@@ -17,8 +17,7 @@ class MessageHandler implements MessageHandlerInterface
 {
     public function __construct(
         private readonly Mailer $mailer
-    ) {
-    }
+    ) {}
 
     public function __invoke(Message $message): void
     {

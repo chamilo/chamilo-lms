@@ -17,8 +17,7 @@ class SocialPostExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(
         private readonly SettingsManager $settingsManager
-    ) {
-    }
+    ) {}
 
     public function applyToCollection(
         QueryBuilder $queryBuilder,

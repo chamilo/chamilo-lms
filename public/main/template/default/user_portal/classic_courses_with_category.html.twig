@@ -14,7 +14,7 @@
                                             <img src="{{ item.thumbnails }}" title="{{ item.title }}"
                                                  alt="{{ item.title }}"/>
                                         {% else %}
-                                            {{ 'blackboard.png' | img(48, item.title ) }}
+                                            {{ 'ObjectIcon::COURSE'|mdi_icon(48, 'ch-tool-icon', item.title) }}
                                         {% endif %}
                                     </span>
                             {% else %}
@@ -23,7 +23,7 @@
                                         <img src="{{ item.thumbnails }}" title="{{ item.title }}"
                                              alt="{{ item.title }}"/>
                                     {% else %}
-                                        {{ 'blackboard.png' | img(48, item.title ) }}
+                                        {{ 'ObjectIcon::COURSE'|mdi_icon(48, 'ch-tool-icon', item.title) }}
                                     {% endif %}
                                 </a>
                             {% endif %}
@@ -58,7 +58,7 @@
                             <div class="course-items-session">
                                 <div class="list-teachers">
                                     {% if item.teachers|length > 0 %}
-                                        <img src="{{ 'teacher.png'|icon(16) }}" width="16" height="16">&nbsp;
+                                        {{ 'ObjectIcon::TEACHER'|mdi_icon(16) }}
                                         {% for teacher in item.teachers %}
                                             {% set counter = counter + 1 %}
                                             {% if counter > 1 %} | {% endif %}

@@ -4,6 +4,7 @@
 
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * Exercise submission
@@ -1298,13 +1299,11 @@ if ($allowBlockCategory &&
         }
     }
 }
-    $saveIcon = Display::return_icon(
-        'save.png',
-        '',
-        [],
-        ICON_SIZE_SMALL,
-        false,
-        true
+    $saveIcon = Display::getMdiIcon(
+        ActionIcon::SAVE_FORM,
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_SMALL
     );
     $loading = Display::getMdiIcon('loading', 'animate-spin');
 
@@ -1341,7 +1340,7 @@ if ($allowBlockCategory &&
         '.$questionTimeCondition.'
             //This pre-load the save.png icon
             var saveImage = new Image();
-            saveImage.src = "'.$saveIcon.'";
+            saveImage.src = "'.htmlspecialchars($saveIcon).'";
 
             // Block form submition on enter
             $(".block_on_enter").keypress(function(event) {
@@ -1494,7 +1493,7 @@ if ($allowBlockCategory &&
                 success: function(return_value) {
                     if (return_value.ok) {
                         $("#save_for_now_"+question_id).html(\''.
-                        Display::getMdiIcon(ActionIcon::FORM_SAVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Saved')).'\');
+                        Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Saved')).'\');
                 } else if (return_value.error) {
                         $("#save_for_now_"+question_id).html(\''.
                             Display::getMdiIcon('alert-circle', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Error')).'\');
@@ -1520,7 +1519,7 @@ if ($allowBlockCategory &&
                         }
 
                         $("#save_for_now_"+question_id).html(\''.
-                        Display::getMdiIcon(ActionIcon::FORM_SAVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Saved')).'\' + return_value.savedAnswerMessage);
+                        Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Saved')).'\' + return_value.savedAnswerMessage);
 
                     // Show popup
                     if ("check_answers" === url_extra) {
@@ -1618,10 +1617,10 @@ if ($allowBlockCategory &&
                             $("#save_all_response").html(return_value.savedAnswerMessage);
                             window.location = "'.$script_php.'?'.$params.'";
                         } else {
-                            $("#save_all_response").html(\''.Display::return_icon('accept.png').'\');
+                            $("#save_all_response").html(\''.Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon').'\');
                         }
                     } else {
-                        $("#save_all_response").html(\''.Display::return_icon('wrong.gif').'\');
+                        $("#save_all_response").html(\''.Display::getMdiIcon(StateIcon::INCOMPLETE, 'ch-tool-icon').'\');
                     }
                 }
             });

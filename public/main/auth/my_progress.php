@@ -4,6 +4,9 @@
 /**
  * Reporting page on the user's own progress.
  */
+
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -13,6 +16,8 @@ if (('true' === api_get_setting('platform.block_my_progress_page'))) {
     api_not_allowed(true);
 }
 
+$httpRequest = HttpRequest::createFromGlobals();
+
 $this_section = SECTION_TRACKING;
 $nameTools = get_lang('Progress');
 
@@ -20,14 +25,14 @@ $pluginCalendar = 'true' === api_get_plugin_setting('learning_calendar', 'enable
 
 if ($pluginCalendar) {
     $plugin = LearningCalendarPlugin::create();
-    $plugin->setJavaScript($htmlHeadXtra);
+    $plugin->setJavaScript();
 }
 
 $user_id = api_get_user_id();
 $courseUserList = CourseManager::get_courses_list_by_user_id($user_id);
 $dates = $issues = '';
-$sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : 0;
-$courseId = isset($_GET['cid']) ? (int) $_GET['cid'] : 0;
+$sessionId = $httpRequest->query->getInt('sid');
+$courseId = $httpRequest->query->get('cid');
 
 /*
 if (!empty($courseUserList)) {
@@ -118,7 +123,7 @@ if ($show) {
 
         $row = 1;
         foreach ($careers as $careerData) {
-            $table->setCellContents($row, 0, $careerData['name']);
+            $table->setCellContents($row, 0, $careerData['title']);
             $url = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?career_id='.$careerData['id'];
             $diagram = Display::url(get_lang('Diagram'), $url);
             $table->setCellContents($row, 1, $diagram);

@@ -1,6 +1,8 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 $calendarId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
@@ -16,12 +18,7 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $formToString = '';
 $template = new Template();
 $actionLeft = Display::url(
-    Display::return_icon(
-        'back.png',
-        get_lang('Add'),
-        null,
-        ICON_SIZE_MEDIUM
-    ),
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
     api_get_path(WEB_PLUGIN_PATH).'learning_calendar/start.php'
 );
 
@@ -58,7 +55,7 @@ $extraParams['sortname'] = 'name';
 $extraParams['sortorder'] = 'desc';
 $extraParams['multiselect'] = true;
 
-$deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), null, ICON_SIZE_SMALL);
+$deleteIcon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'));
 $urlStats = api_get_path(WEB_CODE_PATH);
 $action_links = '';
 $deleteUrl = '';
@@ -100,7 +97,7 @@ Display::display_header();
 // action links
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?id='.$calendarId.'">'.
-    Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', '32').
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Administration')).
     '</a>';
 echo '</div>';
 echo Display::grid_html('usergroups');

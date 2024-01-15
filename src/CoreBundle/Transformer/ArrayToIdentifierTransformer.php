@@ -12,6 +12,8 @@ use Symfony\Component\Form\DataTransformerInterface;
  * Object to identifier transformer.
  *
  * @author Julio Montoya
+ *
+ * @template-implements DataTransformerInterface<array, string>
  */
 class ArrayToIdentifierTransformer implements DataTransformerInterface
 {

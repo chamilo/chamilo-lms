@@ -50,6 +50,8 @@ import { useSecurityStore } from "./store/securityStore"
 import { usePlatformConfig } from "./store/platformConfig"
 import Toast from "primevue/toast"
 import { useNotification } from "./composables/notification"
+import { useLocale } from "./composables/locale"
+import { useI18n } from "vue-i18n"
 
 const apolloClient = new ApolloClient({
   link: createHttpLink({
@@ -62,6 +64,7 @@ provide(DefaultApolloClient, apolloClient)
 
 const route = useRoute()
 const router = useRouter()
+const i18n = useI18n()
 
 const layout = computed(() => {
   const queryParams = new URLSearchParams(window.location.search)
@@ -161,4 +164,18 @@ axios.interceptors.response.use(
 
 const platformConfigurationStore = usePlatformConfig()
 platformConfigurationStore.initialize()
+
+watch(
+  () => route.params,
+  () => {
+    const { appLocale } = useLocale()
+
+    if (i18n.locale.value !== appLocale.value) {
+      i18n.locale.value = appLocale.value
+    }
+  },
+  {
+    inmediate: true
+  }
+)
 </script>

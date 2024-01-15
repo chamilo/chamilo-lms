@@ -35,7 +35,7 @@ class SkillRepositoryTest extends AbstractApiTest
         $accessUrl = $this->getAccessUrl();
 
         $skill = (new Skill())
-            ->setName('php')
+            ->setTitle('php')
             ->setShortCode('php')
             ->setDescription('desc')
             ->setStatus(Skill::STATUS_ENABLED)
@@ -75,17 +75,17 @@ class SkillRepositoryTest extends AbstractApiTest
 
         $skillProfile = (new SkillProfile())
             ->setDescription('desc')
-            ->setName('title')
+            ->setTitle('title')
         ;
         $em->persist($skillProfile);
 
         $profile = (new Profile())
-            ->setName('profile')
+            ->setTitle('profile')
         ;
         $em->persist($profile);
 
         $level = (new Level())
-            ->setName('level')
+            ->setTitle('level')
             ->setPosition(1)
             ->setProfile($profile)
             ->setShortName('level')
@@ -93,7 +93,7 @@ class SkillRepositoryTest extends AbstractApiTest
         $em->persist($level);
 
         $skill = (new Skill())
-            ->setName('Dev')
+            ->setTitle('Dev')
             ->setShortCode('Dev')
             ->setStatus(Skill::STATUS_ENABLED)
             ->setAccessUrlId($accessUrl->getId())
@@ -102,7 +102,7 @@ class SkillRepositoryTest extends AbstractApiTest
         $skillRepo->update($skill);
 
         $subSkill = (new Skill())
-            ->setName('php')
+            ->setTitle('php')
             ->setShortCode('php')
             ->setStatus(Skill::STATUS_ENABLED)
             ->setAccessUrlId($accessUrl->getId())
@@ -148,7 +148,7 @@ class SkillRepositoryTest extends AbstractApiTest
         $skill->addToCourse($skillRelCourse);
 
         $gradeBookCategory = (new GradebookCategory())
-            ->setName('title')
+            ->setTitle('title')
             ->setCourse($course)
             ->setVisible(true)
             ->setWeight(100)
@@ -186,7 +186,7 @@ class SkillRepositoryTest extends AbstractApiTest
 
         $this->assertTrue($skill->hasCourseAndSession($skillRelCourse));
 
-        $this->assertSame('profile', $profile->getName());
+        $this->assertSame('profile', $profile->getTitle());
         $this->assertSame('profile', (string) $profile);
         $this->assertSame(1, $profile->getLevels()->count());
         $this->assertSame(1, $profile->getSkills()->count());
@@ -205,7 +205,7 @@ class SkillRepositoryTest extends AbstractApiTest
         $accessUrl = $this->getAccessUrl();
 
         $skill = (new Skill())
-            ->setName('php')
+            ->setTitle('php')
             ->setShortCode('php')
             ->setDescription('desc')
             ->setStatus(Skill::STATUS_ENABLED)
@@ -247,7 +247,7 @@ class SkillRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $skillRepo->count([]));
 
         $skill = (new Skill())
-            ->setName('php')
+            ->setTitle('php')
             ->setShortCode('php')
             ->setAccessUrlId($accessUrl->getId())
         ;
@@ -272,7 +272,7 @@ class SkillRepositoryTest extends AbstractApiTest
 
         // Create skill.
         $skill = (new Skill())
-            ->setName('php')
+            ->setTitle('php')
             ->setShortCode('php')
             ->setAccessUrlId($accessUrl->getId())
         ;
@@ -281,7 +281,7 @@ class SkillRepositoryTest extends AbstractApiTest
 
         // Create asset.
         $asset = (new Asset())
-            ->setTitle($skill->getName())
+            ->setTitle($skill->getTitle())
             ->setCategory(Asset::SKILL)
             ->setFile($file)
         ;
@@ -310,7 +310,7 @@ class SkillRepositoryTest extends AbstractApiTest
         $accessUrl = $this->getAccessUrl();
 
         $skill = (new Skill())
-            ->setName('php')
+            ->setTitle('php')
             ->setShortCode('php')
             ->setAccessUrlId($accessUrl->getId())
         ;
@@ -318,7 +318,7 @@ class SkillRepositoryTest extends AbstractApiTest
         $this->assertHasNoEntityViolations($skill);
 
         $asset = (new Asset())
-            ->setTitle($skill->getName())
+            ->setTitle($skill->getTitle())
             ->setCategory(Asset::SKILL)
             ->setFile($file)
         ;

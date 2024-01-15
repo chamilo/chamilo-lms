@@ -32,9 +32,11 @@ final class Version20201211114900 extends AbstractMigrationChamilo
         if ($schema->hasTable('c_survey_answer')) {
             $table = $schema->getTable('c_survey_answer');
             if (!$table->hasColumn('session_id')) {
-                $this->addSql(
-                    'ALTER TABLE c_survey_answer ADD session_id INT NOT NULL'
-                );
+                $this->addSql('ALTER TABLE c_survey_answer ADD session_id INT NULL');
+            } else {
+                $this->addSql('ALTER TABLE c_survey_answer CHANGE session_id session_id INT DEFAULT NULL');
+                $this->addSql('UPDATE c_survey_answer SET session_id = NULL WHERE session_id = 0');
+                $this->addSql('DELETE FROM c_survey_answer WHERE session_id IS NOT NULL AND session_id NOT IN (SELECT id FROM session)');
             }
             if (!$table->hasColumn('c_lp_item_id')) {
                 $this->addSql(
@@ -74,7 +76,7 @@ final class Version20201211114900 extends AbstractMigrationChamilo
             $table = $schema->getTable('c_attendance_sheet');
             if (!$table->hasColumn('signature')) {
                 $this->addSql(
-                    'ALTER TABLE c_attendance_sheet ADD signature VARCHAR(255) DEFAULT NULL'
+                    'ALTER TABLE c_attendance_sheet ADD signature LONGTEXT DEFAULT NULL'
                 );
             }
         }

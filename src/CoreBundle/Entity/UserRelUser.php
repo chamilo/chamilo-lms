@@ -67,23 +67,23 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 class UserRelUser
 {
-    use UserTrait;
     use TimestampableTypedEntity;
+    use UserTrait;
 
     public const USER_UNKNOWN = 0;
-    //public const USER_RELATION_TYPE_UNKNOWN = 1;
-    //public const USER_RELATION_TYPE_PARENT = 2;
+    // public const USER_RELATION_TYPE_UNKNOWN = 1;
+    // public const USER_RELATION_TYPE_PARENT = 2;
     public const USER_RELATION_TYPE_FRIEND = 3;
     public const USER_RELATION_TYPE_GOODFRIEND = 4;
     // should be deprecated is useless
-    //public const USER_RELATION_TYPE_ENEMY = 5; // should be deprecated is useless
+    // public const USER_RELATION_TYPE_ENEMY = 5; // should be deprecated is useless
     public const USER_RELATION_TYPE_DELETED = 6;
     public const USER_RELATION_TYPE_RRHH = 7;
     public const USER_RELATION_TYPE_BOSS = 8;
     public const USER_RELATION_TYPE_HRM_REQUEST = 9;
     public const USER_RELATION_TYPE_FRIEND_REQUEST = 10;
 
-    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;

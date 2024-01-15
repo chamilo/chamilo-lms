@@ -25,8 +25,7 @@ class SessionListener
     public function __construct(
         protected RequestStack $request,
         protected Security $security
-    ) {
-    }
+    ) {}
 
     /**
      * This code is executed when a new session is created.
@@ -45,15 +44,13 @@ class SessionListener
             }
             $session->addAccessUrl($accessUrl);
         }
-        //$this->checkLimit($repo, $url);
+        // $this->checkLimit($repo, $url);
     }
 
     /**
      * This code is executed when a session is updated.
      */
-    public function preUpdate(Session $session, PreUpdateEventArgs $args): void
-    {
-    }
+    public function preUpdate(Session $session, PreUpdateEventArgs $args): void {}
 
     /*protected function checkLimit(SessionRepository $repo, AccessUrl $url): void
     {

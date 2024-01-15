@@ -17,7 +17,7 @@
         class="course-card__home-link"
       >
         <span v-if="session">
-          {{ session.name }} -
+          {{ session.title }} -
         </span>
         {{ course.title }}
       </router-link>

@@ -15,7 +15,7 @@ class CPlagiarismCompilatioDocs
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $id;
+    protected ?int $id = null;
 
     #[ORM\Column(name: 'c_id', type: 'integer', nullable: false)]
     protected int $cId;
@@ -26,11 +26,9 @@ class CPlagiarismCompilatioDocs
     #[ORM\Column(name: 'compilatio_id', type: 'string', length: 32, nullable: true)]
     protected ?string $compilatioId = null;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

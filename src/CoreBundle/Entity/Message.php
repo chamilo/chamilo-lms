@@ -78,7 +78,7 @@ class Message
     public const MESSAGE_STATUS_INVITATION_ACCEPTED = 6;
     public const MESSAGE_STATUS_INVITATION_DENIED = 7;
 
-    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[Groups(['message:read'])]
@@ -180,7 +180,8 @@ class Message
         return $this->receivers
             ->filter(
                 fn (MessageRelUser $messageRelUser) => MessageRelUser::TYPE_TO === $messageRelUser->getReceiverType()
-            )->getValues();
+            )->getValues()
+        ;
     }
 
     #[Groups(['message:read'])]

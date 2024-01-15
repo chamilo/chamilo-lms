@@ -79,6 +79,7 @@ class CourseVoter extends Voter
             /** @var Session $session */
             $session = $sessionRepository->find($sessionId);
         }
+
         switch ($attribute) {
             case self::VIEW:
                 // Course is hidden then is not visible for nobody expect admins.
@@ -96,7 +97,7 @@ class CourseVoter extends Voter
                 }
 
                 // User should be instance of UserInterface.
-                if (!($user instanceof UserInterface)) {
+                if (!$user instanceof UserInterface) {
                     return false;
                 }
 
@@ -153,6 +154,7 @@ class CourseVoter extends Voter
                 }
 
                 break;
+
             case self::EDIT:
             case self::DELETE:
                 // Only teacher can edit/delete stuff.

@@ -1,9 +1,9 @@
 <template>
   <div class="course-tool">
     <router-link
-      v-if="to"
-      :aria-labelledby="`course-tool-${tool.ctool.iid}`"
-      :to="to"
+      v-if="tool.to"
+      :aria-labelledby="`course-tool-${tool.iid}`"
+      :to="tool.to"
       class="course-tool__link hover:primary-gradient"
       :class="cardCustomClass"
     >
@@ -15,8 +15,8 @@
     </router-link>
     <a
       v-else
-      :aria-labelledby="`course-tool-${tool.ctool.iid}`"
-      :href="url"
+      :aria-labelledby="`course-tool-${tool.iid}`"
+      :href="tool.url"
       class="course-tool__link"
       :class="cardCustomClass"
     >
@@ -28,27 +28,27 @@
     </a>
 
     <router-link
-      v-if="to"
-      :id="`course-tool-${tool.ctool.iid}`"
+      v-if="tool.to"
+      :id="`course-tool-${tool.iid}`"
       :class="titleCustomClass"
-      :to="to"
+      :to="tool.to"
       class="course-tool__title"
     >
-      {{ tool.tool.nameToShow }}
+      {{ tool.tool.titleToShow }}
     </router-link>
     <a
       v-else
-      :id="`course-tool-${tool.ctool.iid}`"
-      v-t="tool.tool.nameToShow"
-      :href="url"
+      :id="`course-tool-${tool.iid}`"
+      v-t="tool.tool.titleToShow"
+      :href="tool.url"
       class="course-tool__title"
       :class="titleCustomClass"
     />
 
     <div class="course-tool__options">
       <button
-        v-if="isCurrentTeacher && !isSorting && !isCustomizing"
-        @click="changeVisibility(course, tool)"
+        v-if="(securityStore.isCourseAdmin) && !isSorting && !isCustomizing && (session?.id ? 'true' === getSetting('course.allow_edit_tool_visibility_in_session') : true)"
+        @click="changeVisibility(tool)"
       >
         <BaseIcon
           v-if="isVisible"
@@ -62,7 +62,7 @@
       </button>
 
       <a
-        v-if="isCurrentTeacher && isCustomizing"
+        v-if="securityStore.isCurrentTeacher && isCustomizing"
         href="#"
       >
         <BaseIcon
@@ -72,8 +72,8 @@
       </a>
 
       <!-- a
-        v-if="isCurrentTeacher"
-        :href="goToSettingCourseTool(course, tool)"
+        v-if="securityStore.isCurrentTeacher"
+        :href="goToSettingCourseTool(tool)"
       >
         <BaseIcon
           icon="cog"
@@ -85,34 +85,28 @@
 </template>
 
 <script setup>
-import { useStore } from "vuex"
 import { computed, inject } from "vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
+import {useSecurityStore} from "../../store/securityStore";
+import { usePlatformConfig } from "../../store/platformConfig"
+import { storeToRefs } from "pinia"
+import { useCidReqStore } from "../../store/cidReq"
 
-const store = useStore()
+const securityStore = useSecurityStore()
+const platformConfigStore = usePlatformConfig()
+const cidReqStore = useCidReqStore()
+
+const { session } = storeToRefs(cidReqStore)
+const { getSetting } = storeToRefs(platformConfigStore)
 
 const isSorting = inject("isSorting")
 const isCustomizing = inject("isCustomizing")
 
 // eslint-disable-next-line no-undef
 const props = defineProps({
-  course: {
-    type: Object,
-    required: true,
-  },
   tool: {
     type: Object,
     required: true,
-  },
-  url: {
-    type: String,
-    required: false,
-    default: () => null,
-  },
-  to: {
-    type: String,
-    required: false,
-    default: () => null,
   },
   changeVisibility: {
     type: Function,
@@ -124,7 +118,6 @@ const props = defineProps({
   },
 })
 
-const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
 const cardCustomClass = computed(() => {
   if (!isVisible.value) {
     return "bg-primary-bgdisabled hover:bg-gray-50/25 border-primary-borderdisabled shadow-none "
@@ -146,5 +139,5 @@ const titleCustomClass = computed(() => {
   }
   return ""
 })
-const isVisible = computed(() => props.tool.ctool.resourceNode.resourceLinks[0].visibility === 2)
+const isVisible = computed(() => props.tool.resourceNode.resourceLinks[0].visibility === 2)
 </script>

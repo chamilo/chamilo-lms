@@ -19,8 +19,6 @@ class Version20231004220000 extends AbstractMigrationChamilo
     }
 
     /**
-     * @inheritDoc
-     *
      * @throws ORMException
      * @throws Exception
      */

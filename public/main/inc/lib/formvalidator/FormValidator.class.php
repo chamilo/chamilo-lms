@@ -334,7 +334,7 @@ EOT;
 
     /**
      * @param string $name
-     * @param string $value
+     * @param string|mixed $value
      * @param array  $attributes
      */
     public function addHidden($name, $value, $attributes = [])
@@ -1036,7 +1036,7 @@ EOT;
 
         $htmlIcon = '';
         if ($icon) {
-            $htmlIcon = Display::return_icon($icon, null, ['style' => 'float:left;'], ICON_SIZE_SMALL);
+            $htmlIcon = Display::getMdiIcon($icon, 'ch-tool-icon', 'float:left;', ICON_SIZE_SMALL);
         }
         $html = '
         <div class="mt-4 rounded-lg">
@@ -1049,7 +1049,7 @@ EOT;
                         aria-expanded="'.(($open) ? 'true' : 'false').'"
                         aria-controls="collapse_'.$id.'"
                     >
-                        '.$htmlIcon.' '.$title.'
+                        '.$htmlIcon.'&nbsp;'.$title.'
                     </a>
                 </h5>
             </div>
@@ -1800,7 +1800,7 @@ EOT;
         if (!empty($urlToRedirect)) {
             $redirectCondition = "window.location.replace('$urlToRedirect'); ";
         }
-        $icon = Display::return_icon('file_txt.gif');
+        $icon = Display::getMdiIcon('text-box-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL);
         $this->addHtml("
         <script>
         $(function () {

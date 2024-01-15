@@ -1,16 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Settings;
 
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Finder\Finder;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class StylesheetsSettingsSchema extends AbstractSettingsSchema
@@ -30,7 +30,8 @@ class StylesheetsSettingsSchema extends AbstractSettingsSchema
                 [
                     'stylesheets' => 'chamilo',
                 ]
-            );
+            )
+        ;
         $allowedTypes = [
             'stylesheets' => ['string'],
         ];
@@ -50,7 +51,7 @@ class StylesheetsSettingsSchema extends AbstractSettingsSchema
     private function getThemeChoices(): array
     {
         $projectDir = $this->parameterBag->get('kernel.project_dir');
-        $themesDirectory = $projectDir . '/assets/css/themes/';
+        $themesDirectory = $projectDir.'/assets/css/themes/';
 
         $finder = new Finder();
         $choices = [];
@@ -65,7 +66,6 @@ class StylesheetsSettingsSchema extends AbstractSettingsSchema
 
         return $choices;
     }
-
 
     private function formatFolderName(string $name): string
     {

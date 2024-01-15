@@ -14,10 +14,12 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *     name="c_attendance_result_comment",
  *     indexes={
+ *
  *         @ORM\Index(name="attendance_sheet_id", columns={"attendance_sheet_id"}),
  *         @ORM\Index(name="user_id", columns={"user_id"})
  *     }
  * )
+ *
  * @ORM\Entity
  */
 class CAttendanceResultComment
@@ -25,7 +27,7 @@ class CAttendanceResultComment
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\Column(name: 'attendance_sheet_id', type: 'integer', nullable: false)]
     protected int $attendanceSheetId;

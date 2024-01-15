@@ -9,6 +9,9 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
+
 class Version20230216122900 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
@@ -109,6 +112,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'course_creation_form_set_extra_fields_mandatory',
                 'course_configuration_tool_extra_fields_to_show_and_edit',
                 'course_creation_user_course_extra_field_relation_to_prefill',
+                'allow_edit_tool_visibility_in_session',
             ],
             'Language' => [
                 'show_language_selector_in_menu',
@@ -1049,6 +1053,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'show_language_selector_in_menu',
             ],
             'Course' => [
+                'allow_edit_tool_visibility_in_session',
                 'course_creation_user_course_extra_field_relation_to_prefill',
                 'course_configuration_tool_extra_fields_to_show_and_edit',
                 'course_creation_form_set_extra_fields_mandatory',
@@ -1272,7 +1277,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
         $container = $this->getContainer();
         $kernel = $container->get('kernel');
         $rootPath = $kernel->getProjectDir();
-        $oldConfigPath = $rootPath.'/config/configuration.php';
+        $oldConfigPath = $rootPath.'/app/config/configuration.php';
         $configFileLoaded = \in_array($oldConfigPath, get_included_files(), true);
         if (!$configFileLoaded) {
             include_once $oldConfigPath;

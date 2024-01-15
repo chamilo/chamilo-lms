@@ -22,8 +22,7 @@ class MessageVoter extends Voter
 
     public function __construct(
         private readonly Security $security
-    ) {
-    }
+    ) {}
 
     protected function supports(string $attribute, $subject): bool
     {
@@ -68,12 +67,14 @@ class MessageVoter extends Voter
                 }
 
                 break;
+
             case self::VIEW:
                 if ($message->hasUserReceiver($user) || $message->getSender() === $user) {
                     return true;
                 }
 
                 break;
+
             case self::DELETE:
                 // @todo
                 break;

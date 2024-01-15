@@ -67,7 +67,7 @@ class AttendanceLink extends AbstractLink
             if (!empty($title)) {
                 $cats[] = [$link->getIid(), $title];
             } else {
-                $cats[] = [$link->getIid(), $link->getName()];
+                $cats[] = [$link->getIid(), $link->getTitle()];
             }
         }
 

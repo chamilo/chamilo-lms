@@ -6,6 +6,8 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
@@ -209,23 +211,13 @@ if (($isDrhOfCourse || $allowEdition || $isDrhOfSession || user_is_author($id)) 
         if ($work->getContainsFile()) {
             if ($work->getResourceNode()->hasResourceFile()) {
                 $actions = Display::url(
-                    Display::return_icon(
-                        'back.png',
-                        get_lang('Back to Assignments list'),
-                        null,
-                        ICON_SIZE_MEDIUM
-                    ),
+                    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to Assignments list')),
                     api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq()
                 );
                 $url = $repo->getResourceFileDownloadUrl($work).'?'.api_get_cidreq();
 
                 $actions .= Display::url(
-                    Display::return_icon(
-                        'save.png',
-                        get_lang('Download'),
-                        null,
-                        ICON_SIZE_MEDIUM
-                    ),
+                    Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Download')),
                     $url
                 );
             }
@@ -245,23 +237,13 @@ if (($isDrhOfCourse || $allowEdition || $isDrhOfSession || user_is_author($id)) 
             ).'?'.api_get_cidreq();
 
             $actions .= Display::url(
-                Display::return_icon(
-                    'check-circle.png',
-                    get_lang('Correction'),
-                    null,
-                    ICON_SIZE_MEDIUM
-                ),
+                Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Correction')),
                 $url
             );
 
             if ($allowEdition) {
                 $actions .= Display::url(
-                    Display::return_icon(
-                        'delete.png',
-                        get_lang('Delete').': '.get_lang('Correction'),
-                        null,
-                        ICON_SIZE_MEDIUM
-                    ),
+                    Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete').': '.get_lang('Correction')),
                     api_get_self().'?action=delete_correction&id='.$id.'&'.api_get_cidreq()
                 );
             }

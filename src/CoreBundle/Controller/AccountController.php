@@ -26,7 +26,7 @@ class AccountController extends BaseController
 {
     use ControllerTrait;
 
-    #[Route('/edit', name: 'chamilo_core_account_edit', methods:['GET', 'POST'])]
+    #[Route('/edit', name: 'chamilo_core_account_edit', methods: ['GET', 'POST'])]
     public function editAction(Request $request, UserRepository $userRepository, IllustrationRepository $illustrationRepo, SettingsManager $settingsManager): Response
     {
         $user = $this->getUser();
@@ -52,6 +52,8 @@ class AccountController extends BaseController
             $userRepository->updateUser($user);
             $this->addFlash('success', $this->trans('Updated'));
             $url = $this->generateUrl('chamilo_core_account_home');
+
+            $request->getSession()->set('_locale_user', $user->getLocale());
 
             return new RedirectResponse($url);
         }

@@ -8,21 +8,23 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CThematicRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_thematic')]
-#[ORM\Index(name: 'active', columns: ['active'])]
-#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CThematicRepository::class)]
+#[ORM\Index(columns: ['active'], name: 'active')]
+#[ORM\Entity(repositoryClass: CThematicRepository::class)]
 class CThematic extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'text', nullable: false)]
@@ -38,16 +40,16 @@ class CThematic extends AbstractResource implements ResourceInterface, Stringabl
     protected bool $active;
 
     /**
-     * @var Collection|CThematicPlan[]
+     * @var Collection<int, CThematicPlan>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CThematicPlan::class, mappedBy: 'thematic', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'thematic', targetEntity: CThematicPlan::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $plans;
 
     /**
-     * @var Collection|CThematicAdvance[]
+     * @var Collection<int, CThematicAdvance>
      */
     #[ORM\OrderBy(['startDate' => 'ASC'])]
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CThematicAdvance::class, mappedBy: 'thematic', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'thematic', targetEntity: CThematicAdvance::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $advances;
 
     public function __construct()
@@ -72,10 +74,8 @@ class CThematic extends AbstractResource implements ResourceInterface, Stringabl
 
     /**
      * Get title.
-     *
-     * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -101,10 +101,8 @@ class CThematic extends AbstractResource implements ResourceInterface, Stringabl
 
     /**
      * Get displayOrder.
-     *
-     * @return int
      */
-    public function getDisplayOrder()
+    public function getDisplayOrder(): int
     {
         return $this->displayOrder;
     }
@@ -118,36 +116,34 @@ class CThematic extends AbstractResource implements ResourceInterface, Stringabl
 
     /**
      * Get active.
-     *
-     * @return bool
      */
-    public function getActive()
+    public function getActive(): bool
     {
         return $this->active;
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }
 
     /**
-     * @return Collection|CThematicPlan[]
+     * @return Collection<int, CThematicPlan>
      */
-    public function getPlans(): Collection|array
+    public function getPlans(): Collection
     {
         return $this->plans;
     }
 
     /**
-     * @return Collection|CThematicAdvance[]
+     * @return Collection<int, CThematicAdvance>
      */
-    public function getAdvances(): Collection|array
+    public function getAdvances(): Collection
     {
         return $this->advances;
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }

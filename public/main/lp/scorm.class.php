@@ -272,7 +272,7 @@ class scorm extends learnpath
             $name = $oOrganization->get_name();
             $lp = (new CLp())
                 ->setLpType(CLp::SCORM_TYPE)
-                ->setName($name)
+                ->setTitle($name)
                 ->setRef($oOrganization->get_ref())
                 ->setPath($this->subdir)
                 ->setDefaultEncoding($this->manifest_encoding)

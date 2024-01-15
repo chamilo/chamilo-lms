@@ -65,7 +65,7 @@ foreach ($userSkills as $index => $skillRelUser) {
     $skillRelUserDate = api_get_local_time($skillRelUser->getAcquiredSkillAt());
     $currentSkillLevel = get_lang('No level acquired yet');
     if ($skillRelUser->getAcquiredLevel()) {
-        $currentSkillLevel = $skillLevelRepo->find($skillRelUser->getAcquiredLevel()->getId())->getName();
+        $currentSkillLevel = $skillLevelRepo->find($skillRelUser->getAcquiredLevel()->getId())->getTitle();
     }
     $argumentationAuthor = api_get_user_info($skillRelUser->getArgumentationAuthorId());
 
@@ -84,7 +84,7 @@ foreach ($userSkills as $index => $skillRelUser) {
         'user_complete_name' => UserManager::formatUserFullName($skillRelUser->getUser()),
         'skill_id' => $skillRelUser->getSkill()->getId(),
         'skill_badge_image' => SkillModel::getWebIconPath($skillRelUser->getSkill()),
-        'skill_name' => $skillRelUser->getSkill()->getName(),
+        'skill_name' => $skillRelUser->getSkill()->getTitle(),
         'skill_short_code' => $skillRelUser->getSkill()->getShortCode(),
         'skill_description' => $skillRelUser->getSkill()->getDescription(),
         'skill_criteria' => $skillRelUser->getSkill()->getCriteria(),
@@ -138,7 +138,7 @@ foreach ($userSkills as $index => $skillRelUser) {
         ]);
 
         foreach ($levels as $level) {
-            $profileLevels[$level->getPosition()][$level->getId()] = $level->getName();
+            $profileLevels[$level->getPosition()][$level->getId()] = $level->getTitle();
         }
 
         ksort($profileLevels); // Sort the array by Position.

@@ -24,7 +24,7 @@ class SequenceMethod
     protected string $formula;
 
     #[ORM\Column(name: 'assign', type: 'integer')]
-    protected string $assign;
+    protected int $assign;
 
     #[ORM\Column(name: 'met_type', type: 'string')]
     protected string $metType;
@@ -72,25 +72,19 @@ class SequenceMethod
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getAssign()
+    public function getAssign(): int
     {
         return $this->assign;
     }
 
-    public function setAssign(string $assign): self
+    public function setAssign(int $assign): self
     {
         $this->assign = $assign;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getMetType()
+    public function getMetType(): string
     {
         return $this->metType;
     }

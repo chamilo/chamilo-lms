@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Get;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
@@ -17,12 +16,13 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Course groups.
  */
-#[ApiResource(security: 'is_granted(\'ROLE_ADMIN\')', normalizationContext: ['groups' => ['group:read']])]
+#[ApiResource(normalizationContext: ['groups' => ['group:read']], security: "is_granted('ROLE_ADMIN')")]
 #[ORM\Table(name: 'c_group_info')]
 #[ORM\Entity(repositoryClass: CGroupRepository::class)]
 class CGroup extends AbstractResource implements ResourceInterface, Stringable
@@ -35,11 +35,11 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[Groups(['group:read', 'group:write'])]
-    protected int $iid;
+    protected ?int $iid = null;
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'name', type: 'string', length: 100, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'string', length: 100, nullable: false)]
     #[Groups(['group:read', 'group:write'])]
-    protected string $name;
+    protected string $title;
     #[Assert\NotNull]
     #[ORM\Column(name: 'status', type: 'boolean', nullable: false)]
     protected bool $status;
@@ -71,15 +71,17 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
     protected bool $selfUnregistrationAllowed;
     #[ORM\Column(name: 'document_access', type: 'integer', options: ['default' => 0])]
     protected int $documentAccess;
+
     /**
-     * @var CGroupRelUser[]|Collection<int, CGroupRelUser>
+     * @var Collection<int, CGroupRelUser>
      */
-    #[ORM\OneToMany(targetEntity: CGroupRelUser::class, mappedBy: 'group')]
+    #[ORM\OneToMany(mappedBy: 'group', targetEntity: CGroupRelUser::class)]
     protected Collection $members;
+
     /**
-     * @var CGroupRelTutor[]|Collection<int, CGroupRelTutor>
+     * @var Collection<int, CGroupRelTutor>
      */
-    #[ORM\OneToMany(targetEntity: CGroupRelTutor::class, mappedBy: 'group')]
+    #[ORM\OneToMany(mappedBy: 'group', targetEntity: CGroupRelTutor::class)]
     protected Collection $tutors;
     public function __construct()
     {
@@ -101,26 +103,24 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
     }
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
-    /**
-     * Get iid.
-     *
-     * @return int
-     */
-    public function getIid()
+
+    public function getIid(): ?int
     {
         return $this->iid;
     }
-    public function setName(string $name): self
+
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
-    public function getName(): string
+
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
     public function setStatus(bool $status): self
     {
@@ -158,12 +158,8 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
 
         return $this;
     }
-    /**
-     * Get docState.
-     *
-     * @return int
-     */
-    public function getDocState()
+
+    public function getDocState(): int
     {
         return $this->docState;
     }
@@ -173,12 +169,8 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
 
         return $this;
     }
-    /**
-     * Get calendarState.
-     *
-     * @return int
-     */
-    public function getCalendarState()
+
+    public function getCalendarState(): int
     {
         return $this->calendarState;
     }
@@ -188,12 +180,8 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
 
         return $this;
     }
-    /**
-     * Get workState.
-     *
-     * @return int
-     */
-    public function getWorkState()
+
+    public function getWorkState(): int
     {
         return $this->workState;
     }
@@ -203,12 +191,8 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
 
         return $this;
     }
-    /**
-     * Get announcementsState.
-     *
-     * @return int
-     */
-    public function getAnnouncementsState()
+
+    public function getAnnouncementsState(): int
     {
         return $this->announcementsState;
     }
@@ -228,12 +212,8 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
 
         return $this;
     }
-    /**
-     * Get wikiState.
-     *
-     * @return int
-     */
-    public function getWikiState()
+
+    public function getWikiState(): int
     {
         return $this->wikiState;
     }
@@ -243,12 +223,8 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
 
         return $this;
     }
-    /**
-     * Get chatState.
-     *
-     * @return int
-     */
-    public function getChatState()
+
+    public function getChatState(): int
     {
         return $this->chatState;
     }
@@ -258,12 +234,8 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
 
         return $this;
     }
-    /**
-     * Get selfRegistrationAllowed.
-     *
-     * @return bool
-     */
-    public function getSelfRegistrationAllowed()
+
+    public function getSelfRegistrationAllowed(): bool
     {
         return $this->selfRegistrationAllowed;
     }
@@ -273,12 +245,8 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
 
         return $this;
     }
-    /**
-     * Get selfUnregistrationAllowed.
-     *
-     * @return bool
-     */
-    public function getSelfUnregistrationAllowed()
+
+    public function getSelfUnregistrationAllowed(): bool
     {
         return $this->selfUnregistrationAllowed;
     }
@@ -292,17 +260,16 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
 
         return $this;
     }
+
     /**
-     * @return CGroupRelUser[]|Collection
+     * @return Collection<int, CGroupRelUser>
      */
-    public function getMembers(): array|Collection
+    public function getMembers(): Collection
     {
         return $this->members;
     }
-    /**
-     * @param CGroupRelUser[]|Collection<int, CGroupRelUser> $members
-     */
-    public function setMembers(array|Collection $members): self
+
+    public function setMembers(Collection $members): self
     {
         $this->members = $members;
 
@@ -330,17 +297,16 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
 
         return $list->count() > 0;
     }
+
     /**
-     * @return CGroupRelTutor[]|Collection
+     * @return Collection<int, CGroupRelTutor>
      */
-    public function getTutors(): array|Collection
+    public function getTutors(): Collection
     {
         return $this->tutors;
     }
-    /**
-     * @param CGroupRelTutor[]|Collection<int, CGroupRelTutor> $tutors
-     */
-    public function setTutors(array|Collection $tutors): self
+
+    public function setTutors(Collection $tutors): self
     {
         $this->tutors = $tutors;
 
@@ -360,16 +326,17 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
 
         return $this;
     }
-    public function getResourceIdentifier(): int
+
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->iid;
     }
     public function getResourceName(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
     public function setResourceName(string $name): self
     {
-        return $this->setName($name);
+        return $this->setTitle($name);
     }
 }

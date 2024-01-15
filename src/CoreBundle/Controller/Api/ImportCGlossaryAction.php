@@ -107,6 +107,7 @@ class ImportCGlossaryAction
                     ->andWhere('resource.name = :name')
                     ->setParameter('name', $termToUpdate)
                 ;
+
                 /** @var CGlossary $existingGlossaryTerm */
                 $existingGlossaryTerm = $qb->getQuery()->getOneOrNullResult();
                 if (null !== $existingGlossaryTerm) {
@@ -122,11 +123,12 @@ class ImportCGlossaryAction
                 ->andWhere('resource.name = :name')
                 ->setParameter('name', $term)
             ;
+
             /** @var CGlossary $existingNewGlossaryTerm */
             $existingNewGlossaryTerm = $qb->getQuery()->getOneOrNullResult();
             if (!$existingNewGlossaryTerm) {
                 $newGlossary = (new CGlossary())
-                    ->setName($term)
+                    ->setTitle($term)
                     ->setDescription($description)
                     ->setParent($course)
                     ->addCourseLink($course, $session)

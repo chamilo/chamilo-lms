@@ -4,6 +4,9 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * Code to display the course settings form (for the course admin)
@@ -41,7 +44,7 @@ if (!$isAllowToEdit) {
 }
 
 $router = Container::getRouter();
-$translator = Container::getTranslator();
+$translator = Container::$container->get('translator');
 
 $show_delete_watermark_text_message = false;
 if ('true' === api_get_setting('pdf_export_watermark_by_course')) {
@@ -149,7 +152,7 @@ if ('true' === api_get_setting('pdf_export_watermark_by_course')) {
     $form->addText('pdf_export_watermark_text', get_lang('PDF watermark text'), false, ['size' => '60']);
     $form->addElement('file', 'pdf_export_watermark_path', get_lang('Upload a watermark image'));
     if (false != $url) {
-        $delete_url = '<a href="?delete_watermark">'.Display::return_icon('delete.png', get_lang('Remove picture')).'</a>';
+        $delete_url = '<a href="?delete_watermark">'.Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove picture')).'</a>';
         $form->addElement(
             'html',
             '<div class="row"><div class="form"><a href="'.$url.'">'.$url.' '.$delete_url.'</a></div></div>'
@@ -262,7 +265,7 @@ $form->addPanelOption(
     'course_access',
     get_lang('Course access'),
     $elements,
-    'course.png',
+    ToolIcon::COURSE,
     false
 );
 
@@ -304,7 +307,7 @@ $form->addPanelOption(
     'documents',
     get_lang('Documents'),
     $globalGroup,
-    'folder.png',
+    ToolIcon::DOCUMENT,
     false
 );
 
@@ -447,7 +450,7 @@ $form->addPanelOption(
     'email-notifications',
     get_lang('E-mail notifications'),
     $globalGroup,
-    'mail.png',
+    ActionIcon::SEND_MESSAGE,
     false
 );
 
@@ -528,7 +531,7 @@ $form->addPanelOption(
     'users',
     get_lang('User rights'),
     $globalGroup,
-    'user.png',
+    ToolIcon::MEMBER,
     false
 );
 
@@ -559,7 +562,7 @@ $form->addPanelOption(
     'chat',
     get_lang('Chat settings'),
     $globalGroup,
-    'chat.png',
+    ToolIcon::CHAT,
     false
 );
 
@@ -680,7 +683,7 @@ $form->addPanelOption(
     'config_lp',
     get_lang('Learning path settings'),
     $globalGroup,
-    'scorms.png',
+    ToolIcon::LP,
     false
 );
 
@@ -722,7 +725,7 @@ if ('true' === api_get_setting('exercise.allow_exercise_auto_launch')) {
         'config_exercise',
         get_lang('Test'),
         $globalGroup,
-        'quiz.png',
+        ToolIcon::QUIZ,
         false
     );
 }
@@ -768,7 +771,7 @@ $form->addPanelOption(
     'thematic',
     get_lang('Thematic advance configuration'),
     $globalGroup,
-    'course_progress.png',
+    ToolIcon::COURSE_PROGRESS,
     false
 );
 
@@ -793,7 +796,7 @@ if ('true' === api_get_setting('allow_public_certificates')) {
         'certificate',
         get_lang('Certificates'),
         $globalGroup,
-        null,
+        ObjectIcon::CERTIFICATE,
         false
     );
 }
@@ -827,7 +830,7 @@ $form->addPanelOption(
     'forum',
     get_lang('Forum'),
     $globalGroup,
-    'forum.png',
+    ToolIcon::FORUM,
     false
 );
 
@@ -852,7 +855,7 @@ $form->addPanelOption(
     'student-publication',
     get_lang('Assignments'),
     $globalGroup,
-    'work.png',
+    ToolIcon::ASSIGNMENT,
     false
 );
 
@@ -870,7 +873,7 @@ $html = [
     'lti_tool',
     $translator->trans('External tools'),
     $html,
-    'plugin.png',
+    ToolIcon::PLUGIN,
     false
 );*/
 

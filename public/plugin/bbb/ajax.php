@@ -2,6 +2,9 @@
 /**
  * This script initiates a video conference session, calling the BigBlueButton API.
  */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 $cidReset = true;
 
@@ -33,7 +36,7 @@ switch ($action) {
 
             $url = $meetingInfo['video_url'].'/capture.m4v';
             $link = Display::url(
-                Display::return_icon('save.png', get_lang('Download file')),
+                Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Download file')),
                 $meetingInfo['video_url'].'/capture.m4v',
                 ['target' => '_blank']
             );

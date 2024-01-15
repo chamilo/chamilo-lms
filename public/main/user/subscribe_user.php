@@ -4,6 +4,8 @@
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 use ExtraField as ExtraFieldModel;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * This script allows teachers to subscribe existing users
@@ -185,7 +187,7 @@ $actionsLeft = Display::url(
 
 if (isset($_GET['subscribe_user_filter_value']) && !empty($_GET['subscribe_user_filter_value'])) {
     $actionsLeft .= '<a href="subscribe_user.php?type='.$type.'">'.
-        Display::return_icon('clean_group.gif').' '.get_lang('Clear filter results').'</a>';
+        Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Clear filter results')).' '.get_lang('Clear filter results').'</a>';
 }
 $extraForm = '';
 if ('true' === api_get_setting('ProfilingFilterAddingUsers')) {
@@ -710,7 +712,6 @@ function get_user_data($from, $number_of_items, $column, $direction)
     $from = (int) $from;
     $number_of_items = (int) $number_of_items;
     $sql .= " LIMIT $from, $number_of_items";
-    error_log($sql);
     $res = Database::query($sql);
     $users = [];
     while ($user = Database::fetch_row($res)) {
@@ -768,22 +769,24 @@ function active_filter($active, $url_params, $row)
     $_user = api_get_user_info();
     if ('1' == $active) {
         $action = 'Accountactive';
-        $image = 'accept';
+        $image = StateIcon::COMPLETE;
     }
 
     if ('0' == $active) {
         $action = 'AccountInactive';
-        $image = 'error';
+        $image = StateIcon::INCOMPLETE;
     }
     $result = '';
     if ($row['0'] != $_user['user_id']) {
         // you cannot lock yourself out otherwise you could disable all the accounts
         // including your own => everybody is locked out and nobody can change it anymore.
-        $result = Display::return_icon(
-            $image.'.png',
-            get_lang(ucfirst($action)),
-            [],
-            ICON_SIZE_TINY
+        $result = Display::getMdiIcon(
+            $image,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_TINY,
+            get_lang(ucfirst($action))
+
         );
     }
 

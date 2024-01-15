@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 /**
  * This script displays an area where teachers can edit the group properties and member list.
@@ -31,7 +32,7 @@ if (null === $groupEntity) {
 
 $nameTools = get_lang('Edit this group');
 $interbreadcrumb[] = ['url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups')];
-$interbreadcrumb[] = ['url' => 'group_space.php?'.api_get_cidreq(), 'name' => $groupEntity->getName()];
+$interbreadcrumb[] = ['url' => 'group_space.php?'.api_get_cidreq(), 'name' => $groupEntity->getTitle()];
 $groupMember = GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity);
 
 if (!$groupMember && !api_is_allowed_to_edit(false, true)) {
@@ -123,7 +124,7 @@ $group = [
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('user.png', get_lang('Registration')).
+    Display::getMdiIcon(ToolIcon::MEMBER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Registration')).
     '<span>'.get_lang('Registration').'</span>',
     null,
     false
@@ -146,7 +147,7 @@ $group = [
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('folder.png', get_lang('Documents')).'<span>'.get_lang('Documents').'</span>',
+    Display::getMdiIcon(ToolIcon::DOCUMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Documents')).'<span>'.get_lang('Documents').'</span>',
     null,
     false
 );
@@ -181,9 +182,7 @@ if ($allowDocumentGroupAccess) {
     $form->addGroup(
         $group,
         '',
-        Display::return_icon(
-            'folder.png',
-            get_lang('DocumentsAccess')
+        Display::getMdiIcon(ToolIcon::DOCUMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('DocumentsAccess')
         ).'<span>'.get_lang('DocumentsAccess').'</span>',
         null,
         false
@@ -219,7 +218,7 @@ $form->addElement('html', '<div class="col-md-6">');
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('works.png', get_lang('Assignments')).'<span>'.get_lang('Assignments').'</span>',
+    Display::getMdiIcon(ToolIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Assignments')).'<span>'.get_lang('Assignments').'</span>',
     null,
     false
 );
@@ -237,7 +236,7 @@ $form->addElement('html', '<div class="col-md-6">');
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('agenda.png', get_lang('Agenda')).'<span>'.get_lang('Agenda').'</span>',
+    Display::getMdiIcon(ToolIcon::AGENDA, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Agenda')).'<span>'.get_lang('Agenda').'</span>',
     null,
     false
 );
@@ -261,7 +260,7 @@ $group = [
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('announce.png', get_lang('Announcements')).'<span>'.get_lang('Announcements').'</span>',
+    Display::getMdiIcon(ToolIcon::ANNOUNCEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Announcements')).'<span>'.get_lang('Announcements').'</span>',
     null,
     false
 );
@@ -279,7 +278,7 @@ $group = [
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('forum.png', get_lang('Group Forum')).'<span>'.get_lang('Group Forum').'</span>',
+    Display::getMdiIcon(ToolIcon::FORUM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Group Forum')).'<span>'.get_lang('Group Forum').'</span>',
     null,
     false
 );
@@ -301,7 +300,7 @@ $group = [
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('wiki.png', get_lang('Wiki')).'<span>'.get_lang('Wiki').'</span>',
+    Display::getMdiIcon(ToolIcon::WIKI, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Wiki')).'<span>'.get_lang('Wiki').'</span>',
     '',
     false
 );
@@ -318,7 +317,7 @@ $group = [
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('chat.png', get_lang('Chat')).'<span>'.get_lang('Chat').'</span>',
+    Display::getMdiIcon(ToolIcon::CHAT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Chat')).'<span>'.get_lang('Chat').'</span>',
     null,
     false
 );

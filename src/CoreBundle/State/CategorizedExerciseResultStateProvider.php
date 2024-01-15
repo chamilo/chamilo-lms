@@ -11,7 +11,6 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\CategorizedExerciseResult;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Security\Authorization\Voter\TrackEExerciseVoter;
-use function count;
 use Doctrine\ORM\EntityManagerInterface;
 use Event;
 use Exception;
@@ -24,19 +23,23 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use TestCategory;
 
+use function count;
+
+/**
+ * @template-implements ProviderInterface<CategorizedExerciseResult>
+ */
 class CategorizedExerciseResultStateProvider implements ProviderInterface
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly AuthorizationCheckerInterface $security,
         private readonly RequestStack $requestStack
-    ) {
-    }
+    ) {}
 
     /**
      * @throws Exception
      */
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): null|array|object
     {
         $trackExercise = $this->entityManager->find(TrackEExercise::class, $uriVariables['exeId']);
 
@@ -122,8 +125,8 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
         }
 
         // Not display expected answer, but score, and feedback
-        if (RESULT_DISABLE_SHOW_SCORE_ONLY === $objExercise->results_disabled &&
-            EXERCISE_FEEDBACK_TYPE_END === $objExercise->getFeedbackType()
+        if (RESULT_DISABLE_SHOW_SCORE_ONLY === $objExercise->results_disabled
+            && EXERCISE_FEEDBACK_TYPE_END === $objExercise->getFeedbackType()
         ) {
             $show_results = true;
             $show_only_score = false;
@@ -302,7 +305,10 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
         }
 
         if (($show_results || $show_only_score) && $showTotalScore) {
-            if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY !== $result['answer_type']) {
+            if ($result
+                && isset($result['answer_type'])
+                && MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY !== $result['answer_type']
+            ) {
                 $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
                 if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
                     $formula = $pluginEvaluation->getFormulaForExercise($objExercise->getId());

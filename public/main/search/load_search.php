@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 $cidReset = true;
 
@@ -953,14 +954,15 @@ if (!empty($filterToSend)) {
                         }
                     }
                     break;
+                case 'extra_filiere':
+                    $filterItem['data'] = $filterItem['data']['extra_filiere'];
+                    break;
             }
         }
 
         if ($deleteFiliere) {
-            foreach ($filterToSend['rules'] as &$filterItem) {
-                if (isset($filterItem['field']) && 'extra_filiere' == $filterItem['field']) {
-                    $filterItem = [];
-                }
+            if (isset($filterItem['field']) && 'extra_filiere' == $filterItem['field']) {
+                $filterItem = [];
             }
         }
     }
@@ -1012,19 +1014,21 @@ $actionLinks = 'function action_formatter(cellvalue, options, rowObject) {
     var id = options.rowId.toString();
     if (sessionList.indexOf(id) == -1) {
         return \'<a href="'.api_get_self(
-    ).'?action=subscribe_user&user_id='.$userToLoad.'&session_id=\'+id+\'">'.Display::return_icon(
-        'add.png',
-        addslashes(get_lang('Subscribe')),
-        '',
-        ICON_SIZE_SMALL
+    ).'?action=subscribe_user&user_id='.$userToLoad.'&session_id=\'+id+\'">'.Display::getMdiIcon(
+        ActionIcon::ADD,
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_SMALL,
+        addslashes(get_lang('Subscribe'))
     ).'</a>'.'\';
     } else {
         return \'<a href="'.api_get_self(
-    ).'?action=unsubscribe_user&user_id='.$userToLoad.'&session_id=\'+id+\'">'.Display::return_icon(
-        'delete.png',
-        addslashes(get_lang('Delete')),
-        '',
-        ICON_SIZE_SMALL
+    ).'?action=unsubscribe_user&user_id='.$userToLoad.'&session_id=\'+id+\'">'.Display::getMdiIcon(
+        ActionIcon::DELETE,
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_SMALL,
+        addslashes(get_lang('Delete'))
     ).'</a>'.'\';
     }
 }';

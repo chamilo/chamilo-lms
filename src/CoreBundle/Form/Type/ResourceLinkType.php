@@ -13,6 +13,9 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @template-extends AbstractType<ResourceLink>
+ */
 class ResourceLinkType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void

@@ -50,7 +50,6 @@ class MessageSettingsSchema extends AbstractSettingsSchema
             ->add('enable_message_tags', YesNoType::class)
             ->add('allow_user_message_tracking', YesNoType::class)
             ->add('filter_interactivity_messages', YesNoType::class)
-
         ;
     }
 }

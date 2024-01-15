@@ -469,15 +469,15 @@ if ('true' === $allowTutors) {
 
     if ('multiple' === $add_type) {
         $link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.
-            Display::return_icon('single.gif').get_lang('Single registration').'</a>';
-        $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('Multiple registration');
+            Display::getMdiIcon('note-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL).get_lang('Single registration').'</a>';
+        $link_add_type_multiple = Display::getMdiIcon('note-multiple-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL).get_lang('Multiple registration');
     } else {
-        $link_add_type_unique = Display::return_icon('single.gif').get_lang('Single registration');
+        $link_add_type_unique = Display::getMdiIcon('note-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL).get_lang('Single registration');
         $link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.
-            Display::return_icon('multiple.gif').get_lang('Multiple registration').'</a>';
+            Display::getMdiIcon('note-multiple-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL).get_lang('Multiple registration').'</a>';
     }
     $link_add_group = '<a href="usergroups.php">'.
-            Display::return_icon('multiple.gif', get_lang('Enrolment by classes')).get_lang('Enrolment by classes').'</a>'; ?>
+            Display::getMdiIcon('note-multiple-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Enrolment by classes')).get_lang('Enrolment by classes').'</a>'; ?>
     <div class="actions">
         <?php echo $link_add_type_unique; ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple; ?>&nbsp;|&nbsp;<?php echo $link_add_group; ?>
     </div>
@@ -487,7 +487,7 @@ if ('true' === $allowTutors) {
             } ?>" style="margin:0px;" <?php if ($ajax_search) {
                 echo ' onsubmit="valide();"';
             } ?>>
-    <?php echo '<legend>'.$tool_name.' ('.$session->getName().') </legend>'; ?>
+    <?php echo '<legend>'.$tool_name.' ('.$session->getTitle().') </legend>'; ?>
     <?php
     if ('multiple' === $add_type) {
         if (is_array($extra_field_list)) {

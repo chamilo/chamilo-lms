@@ -1,31 +1,32 @@
 <?php
-declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\Form;
 
+use Chamilo\CoreBundle\Entity\ContactCategory;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Chamilo\CoreBundle\Entity\ContactCategory;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * @template-extends AbstractType<array>
+ */
 class ContactType extends AbstractType
 {
-    private $translator;
-
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
-    }
+    public function __construct(
+        private readonly TranslatorInterface $translator
+    ) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -81,7 +82,8 @@ class ContactType extends AbstractType
                     'class' => 'btn btn--primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer',
                     'style' => 'border: none;',
                 ],
-            ]);
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

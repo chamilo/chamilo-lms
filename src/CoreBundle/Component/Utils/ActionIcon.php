@@ -14,6 +14,10 @@ enum ActionIcon: string
     case EDIT = 'pencil';
     // Delete
     case DELETE = 'delete';
+    // Reject (not same as delete)
+    case REJECT = 'close-octagon-outline';
+    // Accept
+    case ACCEPT = 'clipboard-check';
     // Configure
     case CONFIGURE = 'hammer-wrench';
     // Download
@@ -25,27 +29,31 @@ enum ActionIcon: string
     // Go back one page
     case BACK = 'arrow-left-bold-box';
     // Assign groups of users to some resource
-    case ASSIGN_GROUP_USERS_TO_RESOURCE = 'account-multiple-plus';
+    case SUBSCRIBE_GROUP_USERS_TO_RESOURCE = 'account-multiple-plus';
     // Handle to move an element by drag & drop
     case MOVE_DRAG_DROP = 'cursor-move';
     // Move backward one page (learning paths)
-    case LP_MOVE_BACKWARD = 'chevron-left';
+    case MOVE_LP_BACKWARD = 'chevron-left';
     // Move forward one page (learning paths)
-    case LP_MOVE_FORWARD = 'chevron-right';
+    case MOVE_LP_FORWARD = 'chevron-right';
     // Move something up
     case UP = 'arrow-up-bold';
     // Move something down or show some unfolded interface component
     case DOWN = 'arrow-down-bold';
     // Move something (from one folder to another) or unfold some interface component
     case MOVE = 'arrow-right-bold';
+    // Previous step
+    case PREVIOUS = 'arrow-left-bold-circle-outline';
+    // Next step
+    case NEXT = 'arrow-right-bold-circle-outline';
     // Preview some content
-    case CONTENT_PREVIEW = 'magnify-plus-outline';
+    case PREVIEW_CONTENT = 'magnify-plus-outline';
     // Import some kind of archive/packaged
-    case ARCHIVE_IMPORT = 'archive-arrow-up';
+    case IMPORT_ARCHIVE = 'archive-arrow-up';
     // Create a category
-    case CATEGORY_CREATE = 'folder-multiple-plus';
+    case CREATE_CATEGORY = 'folder-multiple-plus';
     // Create a folder
-    case FOLDER_CREATE = 'folder-plus';
+    case CREATE_FOLDER = 'folder-plus';
     // Alert the user of something important/unexpected/undesired
     case ALERT = 'alert';
     // Inform of something completed
@@ -57,33 +65,33 @@ enum ActionIcon: string
     // Invisible state
     case INVISIBLE = 'eye-off';
     // Hide from course homepage (unpublish)
-    case COURSE_TOOL_UNPUBLISHED = 'checkbox-multiple-blank';
+    case UNPUBLISH_COURSE_TOOL = 'checkbox-multiple-blank';
     // Show on course homepage
-    case COURSE_TOOL_PUBLISHED = 'checkbox-multiple-blank-outline';
+    case PUBLISH_COURSE_TOOL = 'checkbox-multiple-blank-outline';
     // Disable multiple attempts (or show multiple attempts are currently enabled)
-    case MULTIPLE_ATTEMPTS_DISABLE = 'sync';
+    case DISABLE_MULTIPLE_ATTEMPTS = 'sync';
     // Enable multiple attempts (or show multiple attempts are currently disabled)
-    case MULTIPLE_ATTEMPTS_ENABLE = 'sync-circle';
+    case ENABLE_MULTIPLE_ATTEMPTS = 'sync-circle';
     // Display mode 1
-    case DISPLAY_MODE_1 = 'fullscreen';
+    case SET_DISPLAY_MODE_1 = 'fullscreen';
     // Display mode 2
-    case LP_DISPLAY_MODE_2 = 'fullscreen-exit';
+    case SET_DISPLAY_MODE_2 = 'fullscreen-exit';
     // Display mode 3
-    case LP_DISPLAY_MODE_3 = 'overscan';
+    case SET_DISPLAY_MODE_3 = 'overscan';
     // Display mode 4
-    case LP_DISPLAY_4 = 'play-box-outline';
+    case SET_DISPLAY_MODE_4 = 'play-box-outline';
     // Equivalent to fullscreen-exit?
-    case LP_FULLSCREEN_EXIT = 'fit-to-screen';
+    case EXIT_FULLSCREEN = 'fit-to-screen';
     // Enable debug
-    case DEBUG_ENABLE = 'bug-check';
+    case ENABLE_DEBUG = 'bug-check';
     // Disable debug
-    case DEBUG_DISABLE = 'bug-outline';
+    case DISABLE_DEBUG = 'bug-outline';
     // Export in some type of archive/package
-    case ARCHIVE_EXPORT = 'archive-arrow-down';
+    case EXPORT_ARCHIVE = 'archive-arrow-down';
     // Copy content
-    case CONTENT_COPY = 'text-box-plus';
+    case COPY_CONTENT = 'text-box-plus';
     // Enable/Disable auto-launch of some content
-    case AUTO_LAUNCH = 'rocket-launch';
+    case AUTOLAUNCH = 'rocket-launch';
     // Export to PDF
     case EXPORT_PDF = 'file-pdf-box';
     // CSV export
@@ -93,13 +101,13 @@ enum ActionIcon: string
     // Export to Document
     case EXPORT_DOC = 'microsoft-word';
     // Save the current form
-    case FORM_SAVE = 'content-save';
+    case SAVE_FORM = 'content-save';
     // Send a message
-    case MESSAGE_SEND = 'send';
+    case SEND_MESSAGE = 'send';
     // Add an attachment
-    case ATTACHMENT_ADD = 'file-plus';
-    // ?
-    //case CLOUD_UPLOAD = 'cloud-upload';
+    case ADD_ATTACHMENT = 'paperclip-plus';
+    // ? See RESTORE_BACKUP
+    // case UPLOAD_CLOUD = 'cloud-upload';
     // Three vertical dots to indicate the possibility to extend a menu/set of options
     case VERTICAL_DOTS = 'dots-vertical';
     // Information icon - Get more info
@@ -113,11 +121,11 @@ enum ActionIcon: string
     // Print
     case PRINT = 'printer';
     // See details/View details
-    case DETAILS = 'fast-forward-outline';
+    case VIEW_DETAILS = 'fast-forward-outline';
     // Clean/Reset
     case RESET = 'broom';
     // Add audio
-    case AUDIO_ADD = 'music-note-plus';
+    case ADD_AUDIO = 'music-note-plus';
     // Collapse/Contract
     case COLLAPSE = 'arrow-collapse-all';
     // Expand
@@ -130,4 +138,24 @@ enum ActionIcon: string
     case UNLOCK = 'lock-open-variant';
     // Refresh/reload
     case REFRESH = 'file-document-refresh';
+    // Add user
+    case ADD_USER = 'account-plus';
+    // Fill something
+    case FILL = 'format-color-fill';
+    // Search / find
+    case SEARCH = 'magnify';
+    // Comment
+    case COMMENT = 'comment-arrow-right-outline';
+    // Sort alphabetically
+    case SORT_ALPHA = 'sort-alphabetical-ascending';
+    // Sort by date
+    case SORT_DATE = 'sort-calendar-descending';
+    // View more (by opposition to view less)
+    case VIEW_MORE = 'unfold-more-horizontal';
+    // View less (by opposition to view more)
+    case VIEW_LESS = 'unfold-less-horizontal';
+    // Exit/Leave (a group, a course, etc)
+    case EXIT = 'exit-run';
+    // Edit badges/skills
+    case EDIT_BADGE = 'shield-edit-outline';
 }

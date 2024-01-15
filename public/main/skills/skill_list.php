@@ -4,6 +4,8 @@
 
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * Skill list for management.
@@ -53,7 +55,7 @@ switch ($action) {
 
             Display::addFlash(
                 Display::return_message(
-                    sprintf(get_lang('Skill "%s" enabled'), $skill->getName()),
+                    sprintf(get_lang('Skill "%s" enabled'), $skill->getTitle()),
                     'success'
                 )
             );
@@ -103,7 +105,7 @@ switch ($action) {
 
             Display::addFlash(
                 Display::return_message(
-                    sprintf(get_lang('Skill "%s" disabled'), $skill->getName()),
+                    sprintf(get_lang('Skill "%s" disabled'), $skill->getTitle()),
                     'success'
                 )
             );
@@ -117,34 +119,19 @@ switch ($action) {
         $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
         $toolbar = Display::url(
-            Display::return_icon(
-                'add.png',
-                get_lang('Create skill'),
-                null,
-                ICON_SIZE_MEDIUM
-            ),
+            Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Create skill')),
             api_get_path(WEB_CODE_PATH).'skills/skill_create.php',
             ['title' => get_lang('Create skill')]
         );
 
         $toolbar .= Display::url(
-            Display::return_icon(
-                'wheel_skill.png',
-                get_lang('Skills wheel'),
-                null,
-                ICON_SIZE_MEDIUM
-            ),
+            Display::getMdiIcon(ObjectIcon::WHEEL, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Skills wheel')),
             api_get_path(WEB_CODE_PATH).'skills/skills_wheel.php',
             ['title' => get_lang('Skills wheel')]
         );
 
         $toolbar .= Display::url(
-            Display::return_icon(
-                'import_csv.png',
-                get_lang('Import skills from a CSV file'),
-                null,
-                ICON_SIZE_MEDIUM
-            ),
+            Display::getMdiIcon(ActionIcon::IMPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import skills from a CSV file')),
             api_get_path(WEB_CODE_PATH).'skills/skills_import.php',
             ['title' => get_lang('Import skills from a CSV file')]
         );

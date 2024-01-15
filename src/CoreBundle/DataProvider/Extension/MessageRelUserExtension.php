@@ -18,8 +18,7 @@ class MessageRelUserExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(
         private readonly Security $security
-    ) {
-    }
+    ) {}
 
     public function applyToCollection(
         QueryBuilder $queryBuilder,
@@ -39,7 +38,7 @@ class MessageRelUserExtension implements QueryCollectionExtensionInterface
 
         $queryBuilder
             ->andWhere("$alias.receiver = :current")
-            ->setParameter('current', $user)
+            ->setParameter('current', $user->getId())
         ;
     }
 }

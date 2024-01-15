@@ -10,7 +10,7 @@ use Chamilo\CourseBundle\Entity\CToolIntro;
 
 class ToolIntro extends AbstractTool implements ToolInterface
 {
-    public function getName(): string
+    public function getTitle(): string
     {
         return 'tool_intro';
     }

@@ -23,7 +23,7 @@ class ExceptionController extends AbstractController
         }
 
         $showException = true;
-        //$name = $showException ? 'exception' : 'error';
+        // $name = $showException ? 'exception' : 'error';
         $name = 'exception';
         $code = $exception->getCode();
         $format = 'html';
@@ -44,8 +44,8 @@ class ExceptionController extends AbstractController
         }
 
         // default to a generic HTML exception
-        //$request->setRequestFormat('html');
-        //$template = sprintf('@ChamiloCore/Exception/%s.html.twig', $showException ? 'exception_full' : $name);
+        // $request->setRequestFormat('html');
+        // $template = sprintf('@ChamiloCore/Exception/%s.html.twig', $showException ? 'exception_full' : $name);
 
         return $this->render($templateToLoad, [
             'exception' => $exception,
@@ -64,7 +64,7 @@ class ExceptionController extends AbstractController
         $exception->setMessage($message);
 
         $showException = true;
-        //$name = $showException ? 'exception' : 'error';
+        // $name = $showException ? 'exception' : 'error';
         $name = 'exception';
         $code = $exception->getCode();
         $format = 'html';
@@ -73,12 +73,12 @@ class ExceptionController extends AbstractController
         $templateToLoad = sprintf('@ChamiloCore/Exception/%s.html.twig', 'exception_full');
 
         // when not in debug, try to find a template for the specific HTTP status code and format
-        //if (!$showException) {
+        // if (!$showException) {
         $template = sprintf('@ChamiloCore/Exception/%s%s.%s.twig', $name, $code, $format);
         if ($loader->exists($template)) {
             $templateToLoad = $template;
         }
-        //}
+        // }
 
         // try to find a template for the given format
         $template = sprintf('@ChamiloCore/Exception/%s.%s.twig', $name, $format);
@@ -87,7 +87,7 @@ class ExceptionController extends AbstractController
         }
 
         // default to a generic HTML exception
-        //$request->setRequestFormat('html');
+        // $request->setRequestFormat('html');
 
         return $this->render($templateToLoad, [
             'exception' => $exception,

@@ -5,6 +5,8 @@
 /**
  * @author Julio Montoya - fixes in order to use gradebook models + some code cleaning
  */
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GRADEBOOK;
@@ -160,7 +162,7 @@ foreach ($links as &$row) {
 
 $sql = "SELECT * FROM $table_evaluation
         WHERE category_id = $my_selectcat
-        ORDER BY name";
+        ORDER BY title";
 $result = Database::query($sql);
 $evaluations = Database::store_result($result);
 foreach ($evaluations as $evaluationRow) {
@@ -177,7 +179,7 @@ foreach ($evaluations as $evaluationRow) {
 
     $output .= '<tr>
                 <td>'.GradebookUtils::build_type_icon_tag('evalnotempty').'</td>
-                <td>'.$evaluationRow['name'].' '.Display::label(get_lang('Score')).'</td>';
+                <td>'.$evaluationRow['title'].' '.Display::label(get_lang('Score')).'</td>';
     $output .= '<td>
                     <input type="hidden" name="eval_'.$evaluationRow['id'].'" value="1" />
                     <input
@@ -280,11 +282,12 @@ if (!isset($_GET['exportpdf']) && !isset($_GET['export_certificate'])) {
 }
 
 $actions = '<a href="'.Category::getUrl().'&selectcat='.$my_selectcat.'">
-            '.Display::return_icon(
-        'back.png',
-        get_lang('Assessment home'),
-        '',
-        ICON_SIZE_MEDIUM
+            '.Display::getMdiIcon(
+                ActionIcon::BACK,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_MEDIUM,
+                get_lang('Assessment home')
     ).'
     </a>';
 

@@ -12,12 +12,12 @@ use Chamilo\CoreBundle\Entity\GradebookLink;
 
 class Gradebook extends AbstractTool implements ToolInterface
 {
-    public function getName(): string
+    public function getTitle(): string
     {
         return 'gradebook';
     }
 
-    public function getNameToShow(): string
+    public function getTitleToShow(): string
     {
         return 'Assessments';
     }

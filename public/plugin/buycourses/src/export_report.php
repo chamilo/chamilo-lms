@@ -1,5 +1,8 @@
 <?php
 /* For license terms, see /license.txt */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 //Initialization
 $cidReset = true;
 
@@ -48,7 +51,7 @@ $interbreadcrumb[] = [
 
 $templateName = $plugin->get_lang('ExportReport');
 $toolbar = Display::url(
-    Display::return_icon('back.png', get_lang('GoBack'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('GoBack')),
     api_get_path(WEB_PLUGIN_PATH).'buycourses/src/sales_report.php'
 );
 $template = new Template($templateName);

@@ -21,7 +21,7 @@ final class Version20200821224242 extends AbstractMigrationChamilo
         $connection = $this->getEntityManager()->getConnection();
 
         $table = $schema->getTable('message');
-        $this->addSql('ALTER TABLE message CHANGE parent_id parent_id BIGINT DEFAULT NULL');
+        $this->addSql('ALTER TABLE message CHANGE parent_id parent_id INT DEFAULT NULL');
 
         if ($table->hasColumn('msg_status')) {
             $this->addSql('ALTER TABLE message CHANGE msg_status msg_type SMALLINT NOT NULL');
@@ -54,19 +54,19 @@ final class Version20200821224242 extends AbstractMigrationChamilo
             }
         }
 
-        //$this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id NOT IN (SELECT id FROM message)');
+        // $this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id NOT IN (SELECT id FROM message)');
 
         $this->addSql('ALTER TABLE message CHANGE group_id group_id INT DEFAULT NULL');
         $this->addSql('UPDATE message SET group_id = NULL WHERE group_id = 0');
 
-        //$this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id in (select id FROM message WHERE user_sender_id NOT IN (SELECT id FROM user))');
-        //$this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id in (select id FROM message WHERE user_receiver_id NOT IN (SELECT id FROM user))');
+        // $this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id in (select id FROM message WHERE user_sender_id NOT IN (SELECT id FROM user))');
+        // $this->addSql('DELETE FROM message WHERE parent_id IS NOT NULL AND parent_id in (select id FROM message WHERE user_receiver_id NOT IN (SELECT id FROM user))');
 
         // Replace user_sender_id = 0 with the admin.
         $adminId = $this->getAdmin()->getId();
         $this->addSql("UPDATE message SET user_sender_id = $adminId WHERE user_sender_id IS NOT NULL AND user_sender_id NOT IN (SELECT id FROM user) ");
 
-        //$this->addSql('DELETE FROM message WHERE user_sender_id NOT IN (SELECT id FROM user)');
+        // $this->addSql('DELETE FROM message WHERE user_sender_id NOT IN (SELECT id FROM user)');
         $this->addSql('DELETE FROM message WHERE user_receiver_id IS NOT NULL AND user_receiver_id NOT IN (SELECT id FROM user)');
 
         if (!$table->hasForeignKey('FK_B6BD307FFE54D947')) {
@@ -87,10 +87,10 @@ final class Version20200821224242 extends AbstractMigrationChamilo
 
         if (!$schema->hasTable('message_rel_user')) {
             $this->addSql(
-                'CREATE TABLE message_rel_user (id BIGINT AUTO_INCREMENT NOT NULL, message_id BIGINT NOT NULL, user_id INT NOT NULL, msg_read TINYINT(1) NOT NULL, starred TINYINT(1) NOT NULL, receiver_type SMALLINT NOT NULL, INDEX IDX_325D70B9537A1329 (message_id), INDEX IDX_325D70B9A76ED395 (user_id), UNIQUE INDEX message_receiver (message_id, user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
+                'CREATE TABLE message_rel_user (id INT AUTO_INCREMENT NOT NULL, message_id INT NOT NULL, user_id INT NOT NULL, msg_read TINYINT(1) NOT NULL, starred TINYINT(1) NOT NULL, receiver_type SMALLINT NOT NULL, INDEX IDX_325D70B9537A1329 (message_id), INDEX IDX_325D70B9A76ED395 (user_id), UNIQUE INDEX message_receiver (message_id, user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
             );
             $this->addSql(
-                'CREATE TABLE message_rel_user_rel_tags (message_rel_user_id BIGINT NOT NULL, message_tag_id BIGINT NOT NULL, INDEX IDX_B4B37A20962B5422 (message_rel_user_id), INDEX IDX_B4B37A208DF5FE1E (message_tag_id), PRIMARY KEY(message_rel_user_id, message_tag_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
+                'CREATE TABLE message_rel_user_rel_tags (message_rel_user_id INT NOT NULL, message_tag_id INT NOT NULL, INDEX IDX_B4B37A20962B5422 (message_rel_user_id), INDEX IDX_B4B37A208DF5FE1E (message_tag_id), PRIMARY KEY(message_rel_user_id, message_tag_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
             );
             $this->addSql(
                 'ALTER TABLE message_rel_user ADD CONSTRAINT FK_325D70B9537A1329 FOREIGN KEY (message_id) REFERENCES message (id)'
@@ -103,7 +103,7 @@ final class Version20200821224242 extends AbstractMigrationChamilo
             );
         }
 
-        //$this->addSql('ALTER TABLE message CHANGE user_receiver_id user_receiver_id INT DEFAULT NULL');
+        // $this->addSql('ALTER TABLE message CHANGE user_receiver_id user_receiver_id INT DEFAULT NULL');
         $this->addSql('UPDATE message SET user_receiver_id = NULL WHERE user_receiver_id = 0');
 
         /*$connection = $this->getEntityManager()->getConnection();
@@ -163,9 +163,9 @@ final class Version20200821224242 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX idx_message_type ON message (msg_type)');
         }
 
-        //$this->addSql('ALTER TABLE message CHANGE msg_status msg_status SMALLINT NOT NULL;');
+        // $this->addSql('ALTER TABLE message CHANGE msg_status msg_status SMALLINT NOT NULL;');
 
-        $this->addSql("CREATE TABLE social_post (id BIGINT AUTO_INCREMENT NOT NULL, sender_id INT NOT NULL, user_receiver_id INT DEFAULT NULL, group_receiver_id INT DEFAULT NULL, parent_id BIGINT DEFAULT NULL, subject LONGTEXT DEFAULT NULL, content LONGTEXT NOT NULL, type SMALLINT NOT NULL, status SMALLINT NOT NULL, send_date DATETIME NOT NULL COMMENT '(DC2Type:datetime)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_159BBFE9727ACA70 (parent_id), INDEX idx_social_post_sender (sender_id), INDEX idx_social_post_user (user_receiver_id), INDEX idx_social_post_group (group_receiver_id), INDEX idx_social_post_type (type), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
+        $this->addSql("CREATE TABLE social_post (id INT AUTO_INCREMENT NOT NULL, sender_id INT NOT NULL, user_receiver_id INT DEFAULT NULL, group_receiver_id INT DEFAULT NULL, parent_id INT DEFAULT NULL, subject LONGTEXT DEFAULT NULL, content LONGTEXT NOT NULL, type SMALLINT NOT NULL, status SMALLINT NOT NULL, send_date DATETIME NOT NULL COMMENT '(DC2Type:datetime)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_159BBFE9727ACA70 (parent_id), INDEX idx_social_post_sender (sender_id), INDEX idx_social_post_user (user_receiver_id), INDEX idx_social_post_group (group_receiver_id), INDEX idx_social_post_type (type), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
 
         $sql = 'INSERT INTO social_post (id, sender_id, user_receiver_id, group_receiver_id, parent_id, subject, content, type, status, send_date, updated_at)
             SELECT DISTINCT m.id,
@@ -223,20 +223,20 @@ final class Version20200821224242 extends AbstractMigrationChamilo
                 $this->addSql('DROP INDEX idx_message_feedback_uid_mid ON message_feedback');
             }
 
-            $this->addSql('ALTER TABLE message_feedback CHANGE message_id social_post_id BIGINT NOT NULL');
+            $this->addSql('ALTER TABLE message_feedback CHANGE message_id social_post_id INT NOT NULL');
             $this->addSql('RENAME TABLE message_feedback TO social_post_feedback');
             $this->addSql('DELETE FROM social_post_feedback WHERE social_post_id NOT IN (SELECT id FROM social_post)');
             $this->addSql('CREATE INDEX IDX_DB7E436DA76ED395 ON social_post_feedback (user_id)');
             $this->addSql('CREATE INDEX IDX_DB7E436DC4F2D6B1 ON social_post_feedback (social_post_id)');
             $this->addSql('CREATE INDEX idx_social_post_uid_spid ON social_post_feedback (social_post_id, user_id)');
         } else {
-            $this->addSql("CREATE TABLE social_post_feedback (id BIGINT AUTO_INCREMENT NOT NULL, social_post_id BIGINT NOT NULL, user_id INT NOT NULL, liked TINYINT(1) DEFAULT '0' NOT NULL, disliked TINYINT(1) DEFAULT '0' NOT NULL, updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_DB7E436DC4F2D6B1 (social_post_id), INDEX IDX_DB7E436DA76ED395 (user_id), INDEX idx_social_post_uid_spid (social_post_id, user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
+            $this->addSql("CREATE TABLE social_post_feedback (id INT AUTO_INCREMENT NOT NULL, social_post_id INT NOT NULL, user_id INT NOT NULL, liked TINYINT(1) DEFAULT '0' NOT NULL, disliked TINYINT(1) DEFAULT '0' NOT NULL, updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_DB7E436DC4F2D6B1 (social_post_id), INDEX IDX_DB7E436DA76ED395 (user_id), INDEX idx_social_post_uid_spid (social_post_id, user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
         }
 
         $this->addSql('ALTER TABLE social_post_feedback ADD CONSTRAINT FK_DB7E436DA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE social_post_feedback ADD CONSTRAINT FK_DB7E436DC4F2D6B1 FOREIGN KEY (social_post_id) REFERENCES social_post (id) ON DELETE CASCADE');
 
-        //ALTER TABLE message DROP user_receiver_id;
+        // ALTER TABLE message DROP user_receiver_id;
 
         $this->addSql('DELETE FROM message_attachment WHERE message_id NOT IN (SELECT id FROM message)');
 
@@ -244,14 +244,14 @@ final class Version20200821224242 extends AbstractMigrationChamilo
         if (false === $table->hasIndex('IDX_B68FF524537A1329')) {
             $this->addSql('CREATE INDEX IDX_B68FF524537A1329 ON message_attachment (message_id)');
         }
-        $this->addSql('ALTER TABLE message_attachment CHANGE message_id message_id BIGINT NOT NULL');
+        $this->addSql('ALTER TABLE message_attachment CHANGE message_id message_id INT NOT NULL');
 
         if (false === $table->hasForeignKey('FK_B68FF524537A1329')) {
             $this->addSql('ALTER TABLE message_attachment ADD CONSTRAINT FK_B68FF524537A1329 FOREIGN KEY (message_id) REFERENCES message (id)');
         }
 
         if (!$table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE message_attachment ADD resource_node_id BIGINT DEFAULT NULL;');
+            $this->addSql('ALTER TABLE message_attachment ADD resource_node_id INT DEFAULT NULL;');
             $this->addSql('CREATE UNIQUE INDEX UNIQ_B68FF5241BAD783F ON message_attachment (resource_node_id);');
         }
 
@@ -260,13 +260,13 @@ final class Version20200821224242 extends AbstractMigrationChamilo
         }
 
         if (!$schema->hasTable('c_chat_conversation')) {
-            $this->addSql('CREATE TABLE c_chat_conversation (id INT AUTO_INCREMENT NOT NULL, resource_node_id BIGINT DEFAULT NULL, name VARCHAR(255) DEFAULT NULL, UNIQUE INDEX UNIQ_CD09E33F1BAD783F (resource_node_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
+            $this->addSql('CREATE TABLE c_chat_conversation (id INT AUTO_INCREMENT NOT NULL, resource_node_id INT DEFAULT NULL, name VARCHAR(255) DEFAULT NULL, UNIQUE INDEX UNIQ_CD09E33F1BAD783F (resource_node_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
             $this->addSql('ALTER TABLE c_chat_conversation ADD CONSTRAINT FK_CD09E33F1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
         }
 
         if (!$schema->hasTable('message_tag')) {
-            $this->addSql("CREATE TABLE message_tag (id BIGINT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, tag VARCHAR(255) NOT NULL, color VARCHAR(255) NOT NULL, position INT NOT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_2ABC3D6FA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;");
-            $this->addSql('CREATE TABLE message_rel_tags (message_id BIGINT NOT NULL, message_tag_id BIGINT NOT NULL, INDEX IDX_D07232D6537A1329 (message_id), INDEX IDX_D07232D68DF5FE1E (message_tag_id), PRIMARY KEY(message_id, message_tag_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
+            $this->addSql("CREATE TABLE message_tag (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, tag VARCHAR(255) NOT NULL, color VARCHAR(255) NOT NULL, position INT NOT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_2ABC3D6FA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;");
+            $this->addSql('CREATE TABLE message_rel_tags (message_id INT NOT NULL, message_tag_id INT NOT NULL, INDEX IDX_D07232D6537A1329 (message_id), INDEX IDX_D07232D68DF5FE1E (message_tag_id), PRIMARY KEY(message_id, message_tag_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
             $this->addSql('ALTER TABLE message_tag ADD CONSTRAINT FK_2ABC3D6FA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
             $this->addSql('ALTER TABLE message_rel_tags ADD CONSTRAINT FK_D07232D6537A1329 FOREIGN KEY (message_id) REFERENCES message (id) ON DELETE CASCADE');
             $this->addSql('ALTER TABLE message_rel_tags ADD CONSTRAINT FK_D07232D68DF5FE1E FOREIGN KEY (message_tag_id) REFERENCES message_tag (id) ON DELETE CASCADE');
@@ -278,7 +278,5 @@ final class Version20200821224242 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

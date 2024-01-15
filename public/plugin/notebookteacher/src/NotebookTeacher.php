@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * This class provides methods for the notebook management.
@@ -262,31 +263,26 @@ class NotebookTeacher
             if (!api_is_anonymous()) {
                 if (empty($sessionId)) {
                     echo '<a href="'.$currentUrl.'&action=addnote">'.
-                        Display::return_icon(
-                            'new_note.png',
-                            get_lang('Add new note in my personal notebook'),
-                            '',
-                            '32'
-                        ).'</a>';
+                        Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add new note in my personal notebook')).'</a>';
                 } elseif (api_is_allowed_to_session_edit(false, true)) {
                     echo '<a href="'.$currentUrl.'&action=addnote">'.
-                        Display::return_icon('new_note.png', get_lang('Add new note in my personal notebook'), '', '32').'</a>';
+                        Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add new note in my personal notebook')).'</a>';
                 }
             } else {
                 echo '<a href="javascript:void(0)">'.
-                    Display::return_icon('new_note.png', get_lang('Add new note in my personal notebook'), '', '32').'</a>';
+                    Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add new note in my personal notebook')).'</a>';
             }
         }
 
         echo '<a href="'.$currentUrl.
                 '&action=changeview&view=creation_date&direction='.$linkSortDirection.'">'.
-            Display::return_icon('notes_order_by_date_new.png', get_lang('Sort by date created'), '', '32').'</a>';
+            Display::getMdiIcon(ActionIcon::SORT_DATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Sort by date created')).'</a>';
         echo '<a href="'.$currentUrl.
                 '&action=changeview&view=update_date&direction='.$linkSortDirection.'">'.
-            Display::return_icon('notes_order_by_date_mod.png', get_lang('Sort by date last modified'), '', '32').'</a>';
+            Display::getMdiIcon(ActionIcon::SORT_DATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Sort by date last modified')).'</a>';
         echo '<a href="'.$currentUrl.
                 '&action=changeview&view=title&direction='.$linkSortDirection.'">'.
-            Display::return_icon('notes_order_by_title.png', get_lang('Sort by title'), '', '32').'</a>';
+            Display::getMdiIcon(ActionIcon::SORT_ALPHA, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Sort by title')).'</a>';
 
         echo '</div>';
         echo '<div class="row">'.$selectStudent.'</div>';
@@ -349,12 +345,12 @@ class NotebookTeacher
                         $actions = '<a href="'.
                                 api_get_self().'?'.
                                 api_get_cidreq().'&student_id='.$studentId.'&action=editnote&notebook_id='.$row['id'].'">'.
-                                Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>';
+                                Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
                         $actions .= '<a href="'.
                                 api_get_self().
                                 '?action=deletenote&student_id='.$studentId.'&notebook_id='.$row['id'].
                                 '" onclick="return confirmation(\''.$row['title'].'\');">'.
-                                Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
+                                Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
                     }
                     echo Display::panel(
                         $row['description'],
@@ -401,16 +397,11 @@ class NotebookTeacher
                         if ((int) ($row['user_id']) == api_get_user_id()) {
                             $actions = '<a href="'.api_get_self().
                                 '?action=editnote&notebook_id='.$row['id'].'&'.api_get_cidreq().'">'.
-                                    Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>';
+                                    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
                             $actions .= '<a href="'.api_get_self().
                                     '?action=deletenote&notebook_id='.$row['id'].
                                     '" onclick="return confirmation(\''.$row['title'].'\');">'.
-                                    Display::return_icon(
-                                        'delete.png',
-                                        get_lang('Delete'),
-                                        '',
-                                        ICON_SIZE_SMALL
-                                    ).'</a>';
+                                    Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
                         }
 
                         echo Display::panel(
@@ -452,11 +443,11 @@ class NotebookTeacher
                     if ((int) ($row['user_id']) == api_get_user_id()) {
                         $actions = '<a href="'.api_get_self().
                                 '?action=editnote&notebook_id='.$row['id'].'&'.api_get_cidreq().'">'.
-                                Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>';
+                                Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
                         $actions .= '<a href="'.api_get_self().
                                 '?action=deletenote&notebook_id='.$row['id'].
                                 '" onclick="return confirmation(\''.$row['title'].'\');">'.
-                                Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
+                                Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
                     }
 
                     echo Display::panel(

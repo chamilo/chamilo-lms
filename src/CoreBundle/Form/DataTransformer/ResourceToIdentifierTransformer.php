@@ -10,13 +10,16 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Webmozart\Assert\Assert;
 
+/**
+ * @template-implements DataTransformerInterface<object, int|string>
+ */
 final class ResourceToIdentifierTransformer implements DataTransformerInterface
 {
     private ObjectRepository $repository;
 
     private string $identifier;
 
-    public function __construct(ObjectRepository $repository, ?string $identifier = null)
+    public function __construct(ObjectRepository $repository, string $identifier = null)
     {
         $this->repository = $repository;
         $this->identifier = $identifier ?? 'id';

@@ -6,44 +6,53 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use Chamilo\CoreBundle\ApiResource\CourseTool;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tool;
+use Chamilo\CoreBundle\Filter\CidFilter;
+use Chamilo\CoreBundle\Filter\SidFilter;
+use Chamilo\CoreBundle\State\CToolProvider;
 use Chamilo\CourseBundle\Repository\CToolRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Stringable;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
+    operations: [
+        new GetCollection(),
+    ],
     normalizationContext: ['groups' => ['ctool:read']],
-    denormalizationContext: ['groups' => ['ctool:write']],
-    security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_CURRENT_COURSE_TEACHER')"
+    output: CourseTool::class,
+    provider: CToolProvider::class,
 )]
 #[ORM\Table(name: 'c_tool')]
 #[ORM\Index(columns: ['c_id'], name: 'course')]
 #[ORM\Index(columns: ['session_id'], name: 'session_id')]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: CToolRepository::class)]
+#[ApiFilter(CidFilter::class)]
+#[ApiFilter(SidFilter::class)]
+#[ApiFilter(OrderFilter::class, properties: ['position' => 'ASC'])]
 class CTool extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
-    #[Groups(['ctool:read'])]
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $iid = null;
 
     #[Assert\NotBlank]
-    #[Groups(['ctool:read'])]
-    #[ORM\Column(name: 'name', type: 'text', nullable: false)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
+    protected string $title;
 
-    #[Groups(['ctool:read'])]
     #[ORM\Column(name: 'visibility', type: 'boolean', nullable: true)]
     protected ?bool $visibility = null;
 
@@ -65,9 +74,6 @@ class CTool extends AbstractResource implements ResourceInterface, ResourceShowC
     #[ORM\Column(name: 'position', type: 'integer')]
     protected int $position;
 
-    #[Groups(['ctool:read'])]
-    protected string $nameToTranslate;
-
     public function __construct()
     {
         $this->visibility = true;
@@ -76,24 +82,24 @@ class CTool extends AbstractResource implements ResourceInterface, ResourceShowC
 
     public function __toString(): string
     {
-        return $this->getName();
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
+        return $this->getTitle();
     }
 
     public function getNameToTranslate(): string
     {
-        return ucfirst(str_replace('_', ' ', $this->name));
+        return ucfirst(str_replace('_', ' ', $this->title));
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
     }
 
     public function getIid(): ?int
@@ -168,11 +174,11 @@ class CTool extends AbstractResource implements ResourceInterface, ResourceShowC
 
     public function getResourceName(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setName($name);
+        return $this->setTitle($name);
     }
 }

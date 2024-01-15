@@ -5,6 +5,10 @@
 /**
  * Careers dashboard.
  */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -59,32 +63,17 @@ $form->addButtonSearch(get_lang('Filter'));
 
 // action links
 $actionLeft = Display::url(
-    Display::return_icon(
-        'back.png',
-        get_lang('Back to').' '.get_lang('Administration'),
-        null,
-        ICON_SIZE_MEDIUM
-    ),
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Administration')),
     '../admin/index.php'
 );
 $actionLeft .= Display::url(
-    Display::return_icon(
-        'career.png',
-        get_lang('Careers'),
-        null,
-        ICON_SIZE_MEDIUM
-    ),
+    Display::getMdiIcon(ToolIcon::CAREER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Careers')),
     'careers.php'
 );
 
 if (api_is_platform_admin()) {
     $actionLeft .= Display::url(
-        Display::return_icon(
-            'promotion.png',
-            get_lang('Promotions'),
-            null,
-            ICON_SIZE_MEDIUM
-        ),
+        Display::getMdiIcon(ToolIcon::PROMOTION, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Promotions')),
         'promotions.php'
     );
 }
@@ -104,7 +93,7 @@ if (!empty($careers)) {
         // Getting all promotions
         $promotions = $promotion->get_all_promotions_by_career_id(
             $career_item['id'],
-            'name ASC'
+            'title ASC'
         );
         $career_content = '';
         $promotion_array = [];
@@ -128,13 +117,13 @@ if (!empty($careers)) {
                 }
                 $promotion_array[$promotion_item['id']] = [
                     'id' => $promotion_item['id'],
-                    'name' => $promotion_item['name'],
+                    'name' => $promotion_item['title'],
                     'sessions' => $session_list,
                 ];
             }
         }
         $career_array[$career_item['id']] = [
-            'name' => $career_item['name'],
+            'name' => $career_item['title'],
             'promotions' => $promotion_array,
         ];
         $careerList = [

@@ -98,7 +98,7 @@ if (isset($typeSelected) && '0' != $typeSelected) {
             5 == $typeSelected &&
             (isset($addvalues['select_link']) && "" != $addvalues['select_link'])
         ) {
-            $sql1 = 'SELECT thread_title from '.$tbl_forum_thread.'
+            $sql1 = 'SELECT title from '.$tbl_forum_thread.'
 					 WHERE
 					    c_id = '.$course_info['real_id'].' AND
 					    iid  = '.$addvalues['select_link'];

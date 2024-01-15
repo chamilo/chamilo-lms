@@ -27,10 +27,10 @@ class WebServiceSettingsSchema extends AbstractSettingsSchema
         ;
         $allowedTypes = [
             // commenting this line allows setting to be null
-            //'header_extra_content' => array('string'),
-            //'footer_extra_content' => array('string'),
-            //'messaging_gdc_project_number' => ['string'],
-            //'messaging_gdc_api_key' => ['string'],
+            // 'header_extra_content' => array('string'),
+            // 'footer_extra_content' => array('string'),
+            // 'messaging_gdc_project_number' => ['string'],
+            // 'messaging_gdc_api_key' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }

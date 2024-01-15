@@ -41,7 +41,5 @@ class Version20220614165020 extends AbstractMigrationChamilo
         $this->addSql('CREATE INDEX session_id ON track_e_links (session_id)');
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

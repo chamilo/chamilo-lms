@@ -1,22 +1,21 @@
 <template>
-  <q-card
-      v-if="announcement"
-      elevation="4"
-  >
-    <q-card-section>
-      <div class="text-h6">
-        {{ announcement.title }}
+  <BaseCard plain>
+    <template #header>
+      <div class="-mb-2 flex items-center justify-between gap-2 bg-gray-15 px-4 py-2">
+        <h6 v-text="announcement.title" />
+
+        <BaseButton
+          v-if="isAdmin"
+          icon="edit"
+          label="Edit"
+          type="black"
+          @click="handleAnnouncementClick(announcement)"
+        />
       </div>
-    </q-card-section>
+    </template>
 
-    <q-card-section>
-        <p v-html="announcement.content"/>
-    </q-card-section>
-
-    <q-card-actions v-if="isAdmin">
-      <q-btn flat label="Edit" color="primary" v-close-popup @click="handleAnnouncementClick(announcement)"/>
-    </q-card-actions>
-  </q-card>
+    <div v-html="announcement.content" />
+  </BaseCard>
 </template>
 
 <script>
@@ -24,9 +23,12 @@
 import {mapGetters, useStore} from "vuex";
 import {useRouter} from "vue-router";
 import {reactive, toRefs} from "vue";
+import BaseButton from "../basecomponents/BaseButton.vue";
+import BaseCard from "../basecomponents/BaseCard.vue"
 
 export default {
   name: 'SystemAnnouncementCard',
+  components: { BaseCard, BaseButton },
   props: {
     announcement: Object,
   },

@@ -49,7 +49,7 @@ final class Version20210930130343 extends AbstractMigrationChamilo
                 $admin = $this->getAdmin();
                 $tool = $toolRepo->findOneBy(['name' => 'course_homepage']);
                 $cTool = (new CTool())
-                    ->setName('course_homepage')
+                    ->setTitle('course_homepage')
                     ->setCourse($course)
                     ->setTool($tool)
                     ->setCreator($admin)
@@ -92,7 +92,7 @@ final class Version20210930130343 extends AbstractMigrationChamilo
                     $course = $courseRepo->find($courseId);
 
                     $cTool = (new CTool())
-                        ->setName('course_homepage')
+                        ->setTitle('course_homepage')
                         ->setCourse($course)
                         ->setSession($session)
                         ->setTool($tool)
@@ -125,7 +125,5 @@ final class Version20210930130343 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

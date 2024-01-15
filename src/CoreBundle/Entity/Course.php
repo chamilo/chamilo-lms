@@ -151,7 +151,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * @var Collection<int, CTool>
      */
-    #[Groups(['course:read'])]
     #[ORM\OneToMany(
         mappedBy: 'course',
         targetEntity: CTool::class,
@@ -230,12 +229,12 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SpecificFieldValues", mappedBy="course").
      */
-    //protected $specificFieldValues;
+    // protected $specificFieldValues;
 
     /**
      * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SharedSurvey", mappedBy="course").
      */
-    //protected $sharedSurveys;
+    // protected $sharedSurveys;
 
     #[ORM\Column(name: 'directory', type: 'string', length: 40, unique: false, nullable: true)]
     protected ?string $directory = null;
@@ -292,7 +291,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     #[ORM\Column(name: 'sticky', type: 'boolean')]
     protected bool $sticky;
 
-    #[ORM\Column(name: 'disk_quota', type: 'bigint', unique: false, nullable: true)]
+    #[ORM\Column(name: 'disk_quota', type: 'integer', unique: false, nullable: true)]
     protected ?int $diskQuota = null;
 
     #[ORM\Column(name: 'last_visit', type: 'datetime', unique: false, nullable: true)]
@@ -334,7 +333,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     /**
      * ORM\OneToMany(targetEntity="CurriculumCategory", mappedBy="course").
      */
-    //protected $curriculumCategories;
+    // protected $curriculumCategories;
 
     #[ORM\ManyToOne(targetEntity: Room::class)]
     #[ORM\JoinColumn(name: 'room_id', referencedColumnName: 'id')]
@@ -374,8 +373,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->subscribe = true;
         $this->unsubscribe = false;
         $this->sticky = false;
-        //$this->specificFieldValues = new ArrayCollection();
-        //$this->sharedSurveys = new ArrayCollection();
+        // $this->specificFieldValues = new ArrayCollection();
+        // $this->sharedSurveys = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -449,12 +448,17 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     public function hasSubscriptionByUser(User $user): bool
     {
-        if (0 === $this->users->count()) {
+        $users = $this->getUsers();
+
+        if (0 === $users->count()) {
             return false;
         }
-        $criteria = Criteria::create()->where(Criteria::expr()->eq('user', $user));
 
-        return $this->users->matching($criteria)->count() > 0;
+        $matching = $users->filter(
+            fn (CourseRelUser $subscription) => $subscription->getUser()->getId() === $user->getId()
+        );
+
+        return $matching->count() > 0;
     }
 
     /**
@@ -543,17 +547,30 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     public function hasUserAsTeacher(User $user): bool
     {
-        $criteria = Criteria::create()->where(Criteria::expr()->eq('user', $user));
+        $users = $this->getTeachersSubscriptions();
 
-        return $this->getTeachersSubscriptions()->matching($criteria)->count() > 0;
+        if (0 === $users->count()) {
+            return false;
+        }
+
+        $matching = $users->filter(
+            fn (CourseRelUser $subscription) => $subscription->getUser()->getId() === $user->getId()
+        );
+
+        return $matching->count() > 0;
     }
 
     public function getTeachersSubscriptions(): Collection
     {
-        $criteria = Criteria::create();
-        $criteria->where(Criteria::expr()->eq('status', CourseRelUser::TEACHER));
+        $teacherSubscriptions = new ArrayCollection();
 
-        return $this->users->matching($criteria);
+        foreach ($this->users as $subscription) {
+            if (CourseRelUser::TEACHER === $subscription->getStatus()) {
+                $teacherSubscriptions->add($subscription);
+            }
+        }
+
+        return $teacherSubscriptions;
     }
 
     public function addUserAsTeacher(User $user): self
@@ -568,7 +585,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         /*$criteria = Criteria::create()->where(
               Criteria::expr()->eq('groups', $group)
           );*/
-        //return $this->getGroups()->contains($group);
+        // return $this->getGroups()->contains($group);
     }
 
     public function getId(): ?int
@@ -594,11 +611,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->courseLanguage = $courseLanguage;
 
         return $this;
-    }
-
-    public function getName(): string
-    {
-        return $this->getTitle();
     }
 
     public function getTitleAndCode(): string
@@ -918,6 +930,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
               $this->currentSession = $session;
           }*/
         $list = $this->getSessions();
+
         /** @var SessionRelCourse $item */
         foreach ($list as $item) {
             if ($item->getSession()->getId() === $session->getId()) {
@@ -946,6 +959,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public function setCurrentUrl(AccessUrl $url): self
     {
         $urlList = $this->getUrls();
+
         /** @var AccessUrlRelCourse $item */
         foreach ($urlList as $item) {
             if ($item->getUrl()->getId() === $url->getId()) {

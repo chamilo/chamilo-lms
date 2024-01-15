@@ -1,9 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
+"PO-Revision-Date: 2024-01-13 02:40+0000\n"
+"Last-Translator: Weblate admin <ywarnier@beeznest.org>\n"
+"Language-Team: German <https://translation.chamilo.org/projects/chamilo-lms/"
+"translations/de/>\n"
 "Language: de\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.3.1\n"
 
 msgid "You can generate badges for the skills learnt by your users, to give them recognition for their effort, through which they will be able to show off their acquired skills and competencies with icons that will be shown on their user profile. For more information on OpenBadges, check <a href='http://openbadges.org'>http://openbadges.org/</a>."
 msgstr "Sie können Badges für die Kompetenzen erstellen, die die User erlernen. Diese werden im Userprofil angezeigt und dienen als Anzeige und Anerkennung des Fortschritts. Für mehr Informationen gehen Sie bitte auf <a href=\"http://openbadges.org/\">http://openbadges.org/</a>."
@@ -11127,7 +11133,7 @@ msgid "Your password is encrypted for security reasons. Thus, after pressing the
 msgstr "Ihr Passwort wurde zur Sicherheit verschlüsselt. Daher wird nach dem Klick auf den Link eine E-Mail mit Ihrem Passwort an Ihre E-Mail Adresse verschickt."
 
 msgid "Extra fields"
-msgstr ""
+msgstr "Zusätzliche Felder"
 
 msgid "This OpenID could not be found in our database. Please register for a new account. If you have already an account with us, please edit your profile inside your account to add this OpenID"
 msgstr "Diese OpenID konnte in unserer Datenbank nicht gefunden werden. Registrieren Sie sich bitte für einen neuen Zugang. Sollten Sie bereits einen Zugang bei uns haben, bearbeiten Sie bitte Ihr Profil in Ihrem Zugang, und fügen Sie diese OpenID hinzu."
@@ -16483,6 +16489,8 @@ msgstr "Ihr Zugang zu %s wurde soben von einem unserer Administratoren freigesch
 
 msgid "A student has obtained the number of sub-skills needed to validate the mother skill."
 msgstr ""
+"Der Student hat die Anzahl an Teilfähigkeiten erworben, die notwendig sind, "
+"um die übergeordnete Fähigkeit zu bestätigen."
 
 msgid "Off"
 msgstr "Aus"
@@ -18708,7 +18716,7 @@ msgid "%m/%d/%Y"
 msgstr "%d/%m/%Y"
 
 msgid "%B %d, %Y at %H:%M"
-msgstr ""
+msgstr "%B %d, %Y um %H:%M"
 
 msgid "Enable legal terms"
 msgstr "Nutzungsbedingungen aktivieren"
@@ -22041,31 +22049,40 @@ msgid "Avatar"
 msgstr "Benutzerbild"
 
 msgid "Semester"
-msgstr ""
+msgstr "Semester"
 
 msgid "Reading comprehension"
-msgstr ""
+msgstr "Leseverständnis"
 
 msgid "Sorry, it seems like a speed of %s words/minute was too fast for this text of %s words."
 msgstr ""
+"Es scheint, als wäre eine Geschwindigkeit von %s Wörtern pro Minute für "
+"diesen Text von %s Wörtern zu schnell gewesen."
 
 msgid "Congratulations, you have reached and correctly understood, at a speed of %s words per minute, a text of a total %s words."
 msgstr ""
+"Herzlichen Glückwunsch, Sie haben einen Text von insgesamt %s Wörtern mit "
+"einer Geschwindigkeit von %s Wörtern pro Minute korrekt verstanden und "
+"erreicht."
 
 msgid "%s words per minute"
 msgstr "%s Wörter pro Minute"
 
 msgid "Tutor %s is no subscribed to this course"
-msgstr ""
+msgstr "Tutor %s ist nicht für diesen Kurs angemeldet"
 
 msgid "Update this title in learning paths"
 msgstr "Diese Überschrift in Lernpfaden ersetzen"
 
 msgid "To enable video chat in your browser (if it supports it), make sure you click on the information icon on the left of the URL and then authorize the use of the webcam and microphone."
 msgstr ""
+"Um die Videochat-Funktion in Ihrem Browser zu aktivieren (sofern dieser dies "
+"unterstützt), stellen Sie sicher, dass Sie auf das Informations-Symbol links "
+"von der URL klicken und dann die Verwendung der Webcam und des Mikrofons "
+"autorisieren."
 
 msgid "Update file"
-msgstr ""
+msgstr "Datei Aktualisieren"
 
 msgid "Paranoid: E-mail teacher when a student starts an exercise"
 msgstr "E-Mail an den Tutor senden, wenn der Lernende eine Übung startet"
@@ -22080,40 +22097,44 @@ msgid "Relaxed audio: E-mail teacher when a student ends an exercise, only if an
 msgstr "E-Mail an den Tutor senden, wenn der Lernende eine Übung beendet hat, aber nur wenn er eine mündliche Frage beantwortet hat"
 
 msgid "Student just started an exercise"
-msgstr ""
+msgstr "Der Student hat gerade mit einer Übung begonnen."
 
 msgid "Temporary score: %s open question(s) not corrected yet."
 msgstr "Temporäre Auswertung: %s offene Frage(n) noch nicht korrigiert."
 
 msgid "Annotation"
-msgstr ""
+msgstr "Anmerkung"
 
 msgid "Teacher picture"
-msgstr ""
+msgstr "Lehrerbild"
 
 msgid "Feedback if not correct"
-msgstr ""
+msgstr "Rückmeldung, falls nicht korrekt"
 
 msgid "Scheduled announcements"
-msgstr ""
+msgstr "Geplante Ankündigungen"
 
 msgid "Specific dispatch date"
-msgstr ""
+msgstr "Bestimmtes Versanddatum"
 
 msgid "Dispatch based on the session's start/end dates"
-msgstr ""
+msgstr "Versand basierend auf den Start-/Enddaten der Sitzung"
 
 msgid "After or before"
-msgstr ""
+msgstr "Vorher oder nachher"
 
 msgid "Before"
 msgstr ""
 
 msgid "This form allows scheduling announcements to be sent automatically to the students who are taking a course in a session."
 msgstr ""
+"Dieses Formular ermöglicht es, Ankündigungen für die Planung automatisch an "
+"Studierende zu senden, die an einem Kurs in einer Sitzung teilnehmen."
 
 msgid "A mandatory survey is waiting your answer. To enter the course, you must first complete the survey."
 msgstr ""
+"Eine obligatorische Umfrage erwartet Ihre Antwort. Um den Kurs zu betreten, "
+"müssen Sie zunächst die Umfrage ausfüllen."
 
 msgid "Show previous button"
 msgstr ""

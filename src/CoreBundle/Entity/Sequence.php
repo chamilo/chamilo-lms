@@ -6,13 +6,14 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Fhaculty\Graph\Graph;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Stringable;
 
 #[ORM\Table(name: 'sequence')]
-#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\SequenceRepository::class)]
+#[ORM\Entity(repositoryClass: SequenceRepository::class)]
 class Sequence implements Stringable
 {
     use TimestampableEntity;
@@ -22,15 +23,15 @@ class Sequence implements Stringable
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'name', type: 'string')]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'string')]
+    protected string $title;
 
     #[ORM\Column(name: 'graph', type: 'text', nullable: true)]
     protected ?string $graph = null;
 
     public function __toString(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     /**
@@ -44,14 +45,14 @@ class Sequence implements Stringable
     /**
      * @return string
      */
-    public function getName()
+    public function getTitle()
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }

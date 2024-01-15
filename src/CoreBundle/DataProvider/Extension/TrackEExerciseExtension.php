@@ -19,8 +19,7 @@ final class TrackEExerciseExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(
         private readonly Security $security
-    ) {
-    }
+    ) {}
 
     public function applyToCollection(
         QueryBuilder $queryBuilder,
@@ -55,7 +54,7 @@ final class TrackEExerciseExtension implements QueryCollectionExtensionInterface
                 $queryBuilder->expr()->eq("$alias.user", ':user')
             );
 
-            $queryBuilder->setParameter('user', $user);
+            $queryBuilder->setParameter('user', $user->getId());
         }
     }
 }

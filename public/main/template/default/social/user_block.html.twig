@@ -14,7 +14,7 @@
                                title="{{ "Edit"|get_lang }}"
                                href="{{ url('index') }}main/admin/user_edit.php?user_id={{ user.id }}"
                             >
-                                {{ 'pencil' | mdi_icon }}
+                                {{ 'ActionIcon::EDIT' | mdi_icon }}
                             </a>
                         </div>
                     {% endif %}
@@ -77,7 +77,7 @@
                             {% if user.email %}
                                 <li class="item">
                                     <a href="{{ url('index') }}main/messages/new_message.php">
-                                        {{ "sn-message.png"|icon(22, "Email" | get_lang) }}
+                                        {{ 'ObjectIcon::EMAIL'|mdi_icon_t(22, 'ch-tool-icon', 'Email') }}
                                         <div class="email-overflow">{{ user.email }}</div>
                                     </a>
                                 </li>
@@ -86,7 +86,7 @@
                             {% if vcard_user_link %}
                                 <li class="item">
                                     <a href="{{ vcard_user_link }}">
-                                        {{ "vcard.png"|icon(22, "BusinessCard" | get_lang) }}
+                                        {{ 'ObjectIcon::VCARD'|mdi_icon_t(22, 'ch-tool-icon', 'BusinessCard') }}
                                         {{ "BusinessCard" | get_lang }}
                                     </a>
                                 </li>

@@ -45,6 +45,7 @@
 @import "organisms/modals";
 @import "organisms/menu";
 @import "organisms/sidebar";
+@import "organisms/section_header";
 @import "organisms/tables";
 @import "organisms/install";
 
@@ -56,6 +57,10 @@
 @import 'layout/main_container';
 
 @import "admin_index";
+
+@import "course_home";
+
+@import "documents";
 
 @import 'login';
 

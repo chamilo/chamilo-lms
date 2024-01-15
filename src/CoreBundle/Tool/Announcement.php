@@ -11,7 +11,7 @@ use Chamilo\CourseBundle\Entity\CAnnouncementAttachment;
 
 class Announcement extends AbstractTool implements ToolInterface
 {
-    public function getName(): string
+    public function getTitle(): string
     {
         return 'announcement';
     }

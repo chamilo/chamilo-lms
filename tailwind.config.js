@@ -29,6 +29,7 @@ module.exports = {
         DEFAULT: colorWithOpacity("--color-secondary-base"),
         gradient: colorWithOpacity("--color-secondary-gradient"),
         bgdisabled: '#e4e9ed',
+        hover: "#d35e0f",
       },
       tertiary: {
         DEFAULT: colorWithOpacity("--color-tertiary-base"),

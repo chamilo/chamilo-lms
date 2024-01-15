@@ -61,7 +61,7 @@ class UserRelUserTest extends AbstractApiTest
             ]
         );
 
-        $id = $response->toArray()['@id'];
+        $user_iri = $response->toArray()['@id'];
 
         // 2. friend accepts request from user
         $tokenFriend = $this->getUserToken(
@@ -74,7 +74,7 @@ class UserRelUserTest extends AbstractApiTest
 
         $this->createClientWithCredentials($tokenFriend)->request(
             'PUT',
-            $id,
+            $user_iri,
             [
                 'json' => [
                     'relationType' => UserRelUser::USER_RELATION_TYPE_FRIEND,
@@ -110,11 +110,13 @@ class UserRelUserTest extends AbstractApiTest
 
         // friend has a new friend
         /** @var User $friend */
+        $friend_id = $friend->getId();
         $friend = $userRepo->find($friend->getId());
+        $this->assertSame($friend_id, $friend->getId());
 
         /** @var UserRelUser $userRelUser */
-        $userRelUser = $friend->getFriends()->first();
-        $this->assertSame(1, $friend->getFriends()->count());
+        $this->assertSame(1, $friend->getFriendsWithMe()->count());
+        $userRelUser = $friend->getFriendsWithMe()->first();
         $this->assertSame(UserRelUser::USER_RELATION_TYPE_FRIEND, $userRelUser->getRelationType());
 
         $em->clear();
@@ -122,7 +124,7 @@ class UserRelUserTest extends AbstractApiTest
         // 3. friend removes user :(
         $this->createClientWithCredentials($tokenFriend)->request(
             'DELETE',
-            $id,
+            $user_iri,
         );
         $this->assertResponseIsSuccessful();
 

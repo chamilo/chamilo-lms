@@ -32,6 +32,6 @@ class LearnPathCategory extends Resource
     public function show()
     {
         parent::show();
-        echo $this->object->getName();
+        echo $this->object->getTitle();
     }
 }

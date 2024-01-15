@@ -72,7 +72,7 @@ class ExportGlossaryToDocumentsAction
         /** @var CGlossary $item */
         foreach ($glossaryItems as $item) {
             $html .= '<tr>';
-            $html .= '<td>'.$item->getName().'</td>';
+            $html .= '<td>'.$item->getTitle().'</td>';
             $html .= '<td>'.$item->getDescription().'</td>';
             $html .= '</tr>';
         }

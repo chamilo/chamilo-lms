@@ -43,7 +43,7 @@ class CourseCategoryRepositoryTest extends AbstractApiTest
         $this->assertSame('Course cat', $item->getCode());
         $this->assertSame('Course cat (Course cat)', (string) $item);
         $this->assertSame('desc', $item->getDescription());
-        $this->assertSame('Course cat', $item->getName());
+        $this->assertSame('Course cat', $item->getTitle());
 
         $this->assertFalse($item->hasAsset());
         $accessUrl = $this->getAccessUrl();

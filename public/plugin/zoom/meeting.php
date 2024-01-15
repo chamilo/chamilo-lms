@@ -35,7 +35,7 @@ if ($meeting->isCourseMeeting()) {
         ];
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.$urlExtra,
-            'name' => get_lang('GroupSpace').' '.$meeting->getGroup()->getName(),
+            'name' => get_lang('GroupSpace').' '.$meeting->getGroup()->getTitle(),
         ];
     }
 }

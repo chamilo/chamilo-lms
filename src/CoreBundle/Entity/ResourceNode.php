@@ -501,7 +501,7 @@ class ResourceNode implements Stringable
                 $params = [
                     'id' => $this->getId(),
                     'tool' => $this->getResourceType()->getTool(),
-                    'type' => $this->getResourceType()->getName(),
+                    'type' => $this->getResourceType()->getTitle(),
                     'filter' => 'editor_thumbnail',
                 ];
                 $url = $router->generate('chamilo_core_resource_view', $params);

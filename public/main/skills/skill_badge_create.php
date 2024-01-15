@@ -41,7 +41,7 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
     ) {
         $assetRepo = Container::getAssetRepository();
         $skillRepo->deleteAsset($skill);
-        $title = sprintf("%s.png", $skill->getName());
+        $title = sprintf("%s.png", $skill->getTitle());
 
         $asset = (new Asset())
             ->setCategory(Asset::SKILL)

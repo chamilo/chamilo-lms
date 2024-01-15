@@ -245,7 +245,7 @@ function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 
                         </div>
                     </div>
                     <div class='col-md-8 col-xs-8'>
-                        <h5><b>".$skill->getName()."</b></h5>
+                        <h5><b>".$skill->getTitle()."</b></h5>
                         ".$skill->getDescription()."
                     </div>
                     <div class='col-md-2 col-xs-12'>

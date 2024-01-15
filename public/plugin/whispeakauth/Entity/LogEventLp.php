@@ -74,7 +74,7 @@ class LogEventLp extends LogEvent
      */
     public function getTypeString()
     {
-        $lpName = $this->lp->getName();
+        $lpName = $this->lp->getTitle();
         $itemTitle = $this->getLpItem()->getTitle();
 
         return "$lpName > $itemTitle";

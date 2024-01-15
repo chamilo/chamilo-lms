@@ -244,7 +244,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $resourceFile
             ->setFile($file)
             ->setDescription($description)
-            ->setName($resource->getResourceName())
+            ->setTitle($resource->getResourceName())
             ->setResourceNode($resourceNode)
         ;
         $em->persist($resourceFile);
@@ -589,15 +589,15 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
         // if ($resourceNode->hasResourceFile()) {
         // $resourceNode->getResourceFile()->getFile()->
-        // $resourceNode->getResourceFile()->setName($title);
-        // $resourceFile->setName($title);
+        // $resourceNode->getResourceFile()->setTitle($title);
+        // $resourceFile->setTitle($title);
 
         /*$fileName = $this->getResourceNodeRepository()->getFilename($resourceFile);
         error_log('$fileName');
         error_log($fileName);
         error_log($title);
         $this->getResourceNodeRepository()->getFileSystem()->rename($fileName, $title);
-        $resourceFile->setName($title);
+        $resourceFile->setTitle($title);
         $resourceFile->setOriginalName($title);*/
         // }
     }

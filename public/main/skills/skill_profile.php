@@ -43,7 +43,7 @@ $form->addHidden('id', $id);
 $form->addButtonSave(get_lang('Save'));
 
 if (!empty($item)) {
-    $form->setDefaults(['name' => $item->getName()]);
+    $form->setDefaults(['name' => $item->getTitle()]);
 }
 $formToDisplay = $form->returnForm();
 

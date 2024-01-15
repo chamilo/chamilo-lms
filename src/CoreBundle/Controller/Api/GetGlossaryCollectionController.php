@@ -48,7 +48,7 @@ class GetGlossaryCollectionController extends BaseResourceFileAction
                     [
                         'iid' => $item->getIid(),
                         'id' => $item->getIid(),
-                        'name' => $item->getName(),
+                        'name' => $item->getTitle(),
                         'description' => $item->getDescription(),
                     ];
             }

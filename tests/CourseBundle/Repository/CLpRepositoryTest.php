@@ -27,7 +27,7 @@ class CLpRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
 
         $lp = (new CLp())
-            ->setName('lp')
+            ->setTitle('lp')
             ->setDescription('desc')
             ->setTheme('chamilo')
             ->setAccumulateScormTime(100)
@@ -51,7 +51,7 @@ class CLpRepositoryTest extends AbstractApiTest
         $this->assertHasNoEntityViolations($lp);
         $repo->createLp($lp);
 
-        $this->assertSame('lp', $lp->getName());
+        $this->assertSame('lp', $lp->getTitle());
         $this->assertSame('desc', $lp->getDescription());
         $this->assertSame('chamilo', $lp->getTheme());
         $this->assertSame('author', $lp->getAuthor());
@@ -77,14 +77,14 @@ class CLpRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
 
         $category = (new CLpCategory())
-            ->setName('cat')
+            ->setTitle('cat')
             ->setParent($course)
             ->setCreator($teacher)
         ;
         $categoryRepo->create($category);
 
         $lp = (new CLp())
-            ->setName('lp')
+            ->setTitle('lp')
             ->setTheme('chamilo')
             ->setAuthor('author')
             ->setParent($course)
@@ -131,7 +131,7 @@ class CLpRepositoryTest extends AbstractApiTest
         $forumRepo->create($forum2);
 
         $lp = (new CLp())
-            ->setName('lp')
+            ->setTitle('lp')
             ->setParent($course)
             ->setCreator($teacher)
             ->setLpType(CLp::LP_TYPE)
@@ -156,7 +156,7 @@ class CLpRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
 
         $lp = (new CLp())
-            ->setName('lp')
+            ->setTitle('lp')
             ->setParent($course)
             ->setCreator($teacher)
             ->setLpType(CLp::LP_TYPE)

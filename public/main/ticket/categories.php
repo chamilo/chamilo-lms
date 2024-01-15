@@ -65,7 +65,7 @@ $interbreadcrumb[] = [
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/projects.php',
-    'name' => $project->getName(),
+    'name' => $project->getTitle(),
 ];
 
 switch ($action) {

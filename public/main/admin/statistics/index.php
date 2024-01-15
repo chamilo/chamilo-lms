@@ -696,7 +696,8 @@ switch ($report) {
         $content .= '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
         // total amount of courses
         foreach ($categories as $category) {
-            $courses[$category->getName()] = $category->getCourses()->count();
+            /* @var Chamilo\CoreBundle\Entity\CourseCategory $category */
+            $courses[$category->getTitle()] = $category->getCourses()->count();
         }
         // courses for each course category
         $content .= Statistics::printStats(get_lang('Courses'), $courses);
@@ -1456,8 +1457,9 @@ switch ($report) {
         $courseCategoryRepo = Container::getCourseCategoryRepository();
         $categories = $courseCategoryRepo->findAll();
         foreach ($categories as $category) {
+            /* @var Chamilo\CoreBundle\Entity\CourseCategory $category */
             $code = $category->getCode();
-            $name = $category->getName();
+            $name = $category->getTitle();
             $name = str_replace(get_lang('Department'), '', $name);
             $teachers[$name] = Statistics::countUsers(COURSEMANAGER, $code, $countInvisible);
             $students[$name] = Statistics::countUsers(STUDENT, $code, $countInvisible);

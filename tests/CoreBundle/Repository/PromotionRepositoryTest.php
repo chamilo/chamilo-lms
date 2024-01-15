@@ -38,7 +38,7 @@ class PromotionRepositoryTest extends AbstractApiTest
         $em->persist($promotion);
         $em->flush();
 
-        $this->assertSame('2000', $promotion->getName());
+        $this->assertSame('2000', $promotion->getTitle());
         $this->assertSame('Promotion of 2000', $promotion->getDescription());
         $this->assertNotNull($promotion->getId());
         $this->assertSame(0, $promotion->getAnnouncements()->count());

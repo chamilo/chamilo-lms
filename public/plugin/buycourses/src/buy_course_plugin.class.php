@@ -824,7 +824,7 @@ class BuyCoursesPlugin extends Plugin
         $globalParameters = $this->getGlobalParameters();
         $sessionInfo = [
             'id' => $session->getId(),
-            'name' => $session->getName(),
+            'name' => $session->getTitle(),
             'description' => $session->getDescription(),
             'dates' => $sessionDates,
             'courses' => [],
@@ -913,7 +913,7 @@ class BuyCoursesPlugin extends Plugin
                 return false;
             }
 
-            $productName = $session->getName();
+            $productName = $session->getTitle();
         }
 
         $price = $item['price'];

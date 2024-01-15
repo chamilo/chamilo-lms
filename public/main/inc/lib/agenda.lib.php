@@ -1942,7 +1942,7 @@ class Agenda
                 $count = $group->getMembers()->count();
                 $countUsers = " &ndash; $count ".get_lang('Users');
                 $option = [
-                    'text' => $group->getName().$countUsers,
+                    'text' => $group->getTitle().$countUsers,
                     'value' => "GROUP:".$groupId,
                 ];
 

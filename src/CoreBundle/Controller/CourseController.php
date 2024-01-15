@@ -287,7 +287,7 @@ class CourseController extends ToolBaseController
             throw new NotFoundHttpException($this->trans('Tool not found'));
         }
 
-        $tool = $toolChain->getToolFromName($tool->getTool()->getName());
+        $tool = $toolChain->getToolFromName($tool->getTool()->getTitle());
         $link = $tool->getLink();
 
         if (strpos($link, 'nodeId')) {
@@ -587,7 +587,7 @@ class CourseController extends ToolBaseController
             }
             $responseData['c_tool'] = [
                 'iid' => $ctool->getIid(),
-                'name' => $ctool->getName(),
+                'name' => $ctool->getTitle(),
             ];
         }
 
@@ -615,7 +615,7 @@ class CourseController extends ToolBaseController
             $toolEntity = $toolRepo->findOneBy(['name' => 'course_homepage']);
             $courseTool = (new CTool())
                 ->setTool($toolEntity)
-                ->setName('course_homepage')
+                ->setTitle('course_homepage')
                 ->setCourse($course)
                 ->setPosition(1)
                 ->setVisibility(true)

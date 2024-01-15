@@ -33,7 +33,7 @@ class BranchType extends AbstractType
         }
 
         $builder
-            ->add('branch_name', 'text')
+            ->add('title', 'text')
             ->add(
                 'branch_type',
                 'choice',
@@ -93,7 +93,7 @@ class BranchType extends AbstractType
         );
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
         return 'branch';
     }

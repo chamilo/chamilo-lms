@@ -30,7 +30,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
 
         /** @var AbstractTool $tool */
         foreach ($this->toolChain->getTools() as $tool) {
-            $name = $tool->getName();
+            $name = $tool->getTitle();
             $tools[$name] = $name;
         }
 

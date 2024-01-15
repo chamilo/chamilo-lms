@@ -41,7 +41,7 @@ $items = $em->getRepository(SkillRelCourse::class)->findBy(
 );
 /** @var SkillRelCourse $skillRelCourse */
 foreach ($items as $skillRelCourse) {
-    $skillList[$skillRelCourse->getSkill()->getId()] = $skillRelCourse->getSkill()->getName();
+    $skillList[$skillRelCourse->getSkill()->getId()] = $skillRelCourse->getSkill()->getTitle();
 }
 
 $form->addHidden('course_id', $courseId);

@@ -55,7 +55,7 @@ switch ($action) {
 
             Display::addFlash(
                 Display::return_message(
-                    sprintf(get_lang('Skill "%s" enabled'), $skill->getName()),
+                    sprintf(get_lang('Skill "%s" enabled'), $skill->getTitle()),
                     'success'
                 )
             );
@@ -105,7 +105,7 @@ switch ($action) {
 
             Display::addFlash(
                 Display::return_message(
-                    sprintf(get_lang('Skill "%s" disabled'), $skill->getName()),
+                    sprintf(get_lang('Skill "%s" disabled'), $skill->getTitle()),
                     'success'
                 )
             );

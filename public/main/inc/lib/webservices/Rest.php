@@ -914,7 +914,7 @@ class Rest extends WebService
 
             $categoryData[] = [
                 'id' => $category->getId(),
-                'name' => $category->getName(),
+                'name' => $category->getTitle(),
                 'learnpaths' => $listData,
             ];
         }

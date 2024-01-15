@@ -46,7 +46,7 @@ class CreateCGlossaryAction extends BaseResourceFileAction
         }
 
         $glossary = (new CGlossary())
-            ->setName($title)
+            ->setTitle($title)
             ->setDescription($description)
         ;
 

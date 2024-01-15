@@ -345,7 +345,7 @@ if ($form->validate()) {
         Display::return_message(
             sprintf(
                 get_lang('The skill %s has been assigned to user %s'),
-                $skill->getName(),
+                $skill->getTitle(),
                 UserManager::formatUserFullName($user)
             ),
             'success'

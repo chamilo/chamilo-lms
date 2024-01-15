@@ -106,7 +106,7 @@ class ResourceListener
         $name = $this->toolChain->getResourceTypeNameByEntity($entityClass);
 
         $resourceType = $resourceTypeRepo->findOneBy([
-            'name' => $name,
+            'title' => $name,
         ]);
 
         if (null === $resourceType) {
@@ -217,7 +217,7 @@ class ResourceListener
         $resourceFormatRepo = $em->getRepository(ResourceFormat::class);
         $formatName = (\in_array($name, $txtTypes, true) ? 'txt' : 'html');
         $resourceFormat = $resourceFormatRepo->findOneBy([
-            'name' => $formatName,
+            'title' => $formatName,
         ]);
         if ($resourceFormat) {
             $resourceNode->setResourceFormat($resourceFormat);

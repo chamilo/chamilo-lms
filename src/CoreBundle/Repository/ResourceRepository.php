@@ -264,7 +264,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $repo = $this->getEntityManager()->getRepository(ResourceType::class);
 
         return $repo->findOneBy([
-            'name' => $resourceTypeName,
+            'title' => $resourceTypeName,
         ]);
     }
 

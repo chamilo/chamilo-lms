@@ -79,7 +79,7 @@ class ToolChain
         foreach ($tools as $tool) {
             $name = $tool->getName();
             $toolFromDatabase = $toolRepo->findOneBy([
-                'name' => $name,
+                'title' => $name,
             ]);
 
             if (null !== $toolFromDatabase) {

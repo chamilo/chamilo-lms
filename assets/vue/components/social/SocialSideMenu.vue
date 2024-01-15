@@ -3,28 +3,28 @@
     <div class="text-center text-lg font-bold mb-4">{{ t("Social Network") }}</div>
     <ul class="nav nav-pills nav-stacked">
       <li class="home-icon active">
-        <a href="/social">
+        <router-link :to="{ name: 'SocialWall' }">
           <i class="mdi mdi-home" aria-hidden="true"></i>
           {{ t("Social Wall") }}
-        </a>
+        </router-link>
       </li>
       <li class="messages-icon">
-        <a href="resources/messages">
+        <router-link :to="{ name: 'MessageList' }">
           <i class="mdi mdi-email" aria-hidden="true"></i>
           {{ t("Messages") }} <span class="badge badge-warning"></span>
-        </a>
+        </router-link>
       </li>
       <li class="shared-profile-icon">
-        <a href="/account/home">
+        <router-link :to="{ name: 'AccountHome' }">
           <i class="mdi mdi-account-circle" aria-hidden="true"></i>
           {{ t("My Profile") }}
-        </a>
+        </router-link>
       </li>
       <li class="friends-icon">
-        <a href="/resources/friends">
+        <router-link :to="{ name: 'UserRelUserList' }">
           <i class="mdi mdi-handshake" aria-hidden="true"></i>
           {{ t("My Friends") }}
-        </a>
+        </router-link>
       </li>
     </ul>
   </BaseCard>

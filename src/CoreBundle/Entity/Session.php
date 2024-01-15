@@ -46,7 +46,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: ['groups' => ['session:write']],
     security: "is_granted('ROLE_ADMIN')"
 )]
-
 #[ORM\Table(name: 'session')]
 #[ORM\UniqueConstraint(name: 'title', columns: ['title'])]
 #[ORM\EntityListeners([SessionListener::class])]
@@ -55,7 +54,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial'])]
 #[ApiFilter(filterClass: PropertyFilter::class)]
 #[ApiFilter(filterClass: OrderFilter::class, properties: ['id', 'title'])]
-class Session implements ResourceWithAccessUrlInterface, \Stringable
+class Session implements ResourceWithAccessUrlInterface, Stringable
 {
     public const VISIBLE = 1;
     public const READ_ONLY = 2;

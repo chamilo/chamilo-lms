@@ -81,7 +81,7 @@ const primePlainProperty = computed(() => {
 
 const buttonClass = computed(() => {
   if (props.onlyIcon) {
-    return "p-3"
+    return "p-3 text-tertiary hover:bg-tertiary-gradient/30"
   }
   let result = ""
   switch (props.size) {
@@ -92,8 +92,28 @@ const buttonClass = computed(() => {
       result += "py-2 px-3.5 "
   }
 
-  return result
-})
+  let commonDisabled =
+    "disabled:bg-primary-bgdisabled disabled:border disabled:border-primary-borderdisabled disabled:text-fontdisabled";
+  switch (props.type) {
+    case "primary":
+      result += `border-primary hover:bg-primary text-primary hover:text-white ${commonDisabled} `;
+      break;
+    case "secondary":
+      result +=
+        "bg-secondary text-white hover:bg-secondary-gradient disabled:bg-secondary-bgdisabled disabled:text-fontdisabled";
+      break;
+    case "success":
+      result += `bg-success hover:bg-success-gradient ${commonDisabled} `;
+      break;
+    case "danger":
+      result += `border-error hover:bg-error text-error hover:text-white ${commonDisabled} `;
+      break;
+    case "black":
+      result += "bg-white text-tertiary border-tertiary hover:bg-tertiary-gradient hover:text-white";
+      break;
+  }
+  return result;
+});
 
 // https://primevue.org/button/#outlined
 const primeOutlinedProperty = computed(() => {

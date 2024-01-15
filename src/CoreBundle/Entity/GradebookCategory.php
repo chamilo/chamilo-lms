@@ -35,7 +35,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(SearchFilter::class, properties: [
     'course' => 'exact',
 ])]
-
 class GradebookCategory
 {
     use CourseTrait;
@@ -45,7 +44,6 @@ class GradebookCategory
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[Groups(['document:read', 'gradebookCategory:read'])]
-
     protected ?int $id = null;
 
     #[Assert\NotBlank]
@@ -62,7 +60,6 @@ class GradebookCategory
     #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'gradebookCategories')]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     #[Groups(['gradebookCategory:read'])]
-
     protected Course $course;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'subCategories')]
@@ -119,7 +116,7 @@ class GradebookCategory
     protected ?int $certifMinScore = null;
 
     #[ORM\OneToOne(inversedBy: 'gradebookCategory', targetEntity: CDocument::class)]
-    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'iid', onDelete: "set null")]
+    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'iid', onDelete: 'set null')]
     #[ApiSubresource]
     #[Groups(['gradebookCategory:read', 'gradebookCategory:write'])]
     protected ?CDocument $document = null;
@@ -251,6 +248,8 @@ class GradebookCategory
 
     /**
      * Set documentId.
+     *
+     * @param mixed $document
      *
      * @return GradebookCategory
      */

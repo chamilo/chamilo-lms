@@ -42,7 +42,7 @@
         :title="$t('Delete')"
         class="p-button-outlined"
         icon="mdi mdi-delete"
-        @click="confirmDeleteClick = true"
+        @click="onHandleDelete"
       />
 
       <PrimeButton
@@ -68,13 +68,6 @@
         icon="mdi mdi-cloud-upload"
         @click="uploadDocument"
       />
-
-      <ConfirmDelete
-        v-if="handleDelete"
-        :show="confirmDeleteClick"
-        :handle-delete="handleDelete"
-        :handle-cancel="() => confirmDeleteClick = false"
-      />
     </template>
   </PrimeToolbar>
 </template>
@@ -82,18 +75,12 @@
 <script>
 import PrimeToolbar from 'primevue/toolbar';
 import PrimeButton from 'primevue/button';
-import ConfirmDelete from './ConfirmDelete.vue';
-import DocumentsFilterForm from './documents/Filter.vue';
-import DataFilter from './DataFilter.vue';
 
 export default {
   name: 'Toolbar',
   components: {
     PrimeToolbar,
     PrimeButton,
-    ConfirmDelete,
-    DocumentsFilterForm,
-    DataFilter
   },
   props: {
     filters: {
@@ -157,11 +144,6 @@ export default {
       default: () => false
     }
   },
-  data() {
-    return {
-      confirmDeleteClick: false
-    };
-  },
   methods: {
     listItem() {
       if (this.handleList) {
@@ -197,6 +179,15 @@ export default {
       if (this.handleSubmit) {
         this.handleSubmit();
       }
+    },
+    onHandleDelete() {
+      this.$confirm.require({
+        header: "Confirmation",
+        message: "Are you sure you want to delete this item?",
+        accept: () => {
+          this.handleDelete()
+        },
+      })
     },
     resetItem() {
       if (this.handleReset) {

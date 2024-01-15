@@ -34,9 +34,7 @@ import Index from "../pages/Index.vue"
 import Home from "../pages/Home.vue"
 import Login from "../pages/Login.vue"
 import Faq from "../pages/Faq.vue"
-//import Contact from "../pages/Contact.vue"
 import Demo from "../pages/Demo.vue"
-import personalDataRoutes from "./personaldata"
 
 import { useCidReqStore } from "../store/cidReq"
 import courseService from "../services/courseService";
@@ -173,7 +171,6 @@ const router = createRouter({
     calendarEventRoutes,
     toolIntroRoutes,
     pageRoutes,
-    personalDataRoutes,
   ],
 })
 

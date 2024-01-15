@@ -10,6 +10,8 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\TrackEDownloads;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Tool\ToolChain;
@@ -171,7 +173,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      * @return RedirectResponse|StreamedResponse
      */
     #[Route('/{tool}/{type}/{id}/download', name: 'chamilo_core_resource_download', methods: ['GET'])]
-    public function downloadAction(Request $request)
+    public function downloadAction(Request $request, EntityManagerInterface $entityManager)
     {
         $id = $request->get('id');
         $resourceNode = $this->getResourceNodeRepository()->findOneBy(['uuid' => $id]);
@@ -190,6 +192,14 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         // If resource node has a file just download it. Don't download the children.
         if ($resourceNode->hasResourceFile()) {
+
+            /** @var ?User $user */
+            $user = $this->getUser();
+            $resourceLinkId = $resourceNode->getResourceLinks()->first()->getId();
+            $url = $resourceNode->getResourceFile()->getOriginalName();
+            $downloadRepository = $entityManager->getRepository(TrackEDownloads::class);
+            $downloadId = $downloadRepository->saveDownload($user->getId(), $resourceLinkId, $url);
+
             // Redirect to download single file.
             return $this->processFile($request, $resourceNode, 'download');
         }

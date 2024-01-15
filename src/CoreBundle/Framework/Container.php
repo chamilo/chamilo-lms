@@ -35,6 +35,7 @@ use Chamilo\CoreBundle\Repository\SkillRepository;
 use Chamilo\CoreBundle\Repository\SocialPostRepository;
 use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
+use Chamilo\CoreBundle\Repository\TrackEDownloadsRepository;
 use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
@@ -572,6 +573,11 @@ class Container
     public static function getTrackEExerciseRepository(): TrackEExerciseRepository
     {
         return self::$container->get(TrackEExerciseRepository::class);
+    }
+
+    public static function getTrackEDownloadsRepository(): TrackEDownloadsRepository
+    {
+        return self::$container->get(TrackEDownloadsRepository::class);
     }
 
     public static function getWikiRepository(): CWikiRepository

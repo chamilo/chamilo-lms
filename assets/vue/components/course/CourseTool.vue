@@ -34,12 +34,12 @@
       :to="tool.to"
       class="course-tool__title"
     >
-      {{ tool.tool.nameToShow }}
+      {{ tool.tool.titleToShow }}
     </router-link>
     <a
       v-else
       :id="`course-tool-${tool.iid}`"
-      v-t="tool.tool.nameToShow"
+      v-t="tool.tool.titleToShow"
       :href="tool.url"
       class="course-tool__title"
       :class="titleCustomClass"

@@ -271,7 +271,7 @@ courseService.loadCTools(course.value.id, session.value?.id)
       return false
     })
     .map(adminTool => ({
-      label: adminTool.tool.nameToShow,
+      label: adminTool.tool.titleToShow,
       url: adminTool.url,
     }))
 

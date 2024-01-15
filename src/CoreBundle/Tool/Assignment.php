@@ -13,12 +13,12 @@ use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;
 
 class Assignment extends AbstractTool implements ToolInterface
 {
-    public function getName(): string
+    public function getTitle(): string
     {
         return 'student_publication';
     }
 
-    public function getNameToShow(): string
+    public function getTitleToShow(): string
     {
         return 'Assignments';
     }

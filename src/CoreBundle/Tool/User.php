@@ -13,12 +13,12 @@ use Chamilo\CoreBundle\Entity\TicketMessageAttachment;
 
 class User extends AbstractTool implements ToolInterface
 {
-    public function getName(): string
+    public function getTitle(): string
     {
         return 'user';
     }
 
-    public function getNameToShow(): string
+    public function getTitleToShow(): string
     {
         return 'Users';
     }

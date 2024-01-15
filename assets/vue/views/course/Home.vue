@@ -291,7 +291,7 @@ axios
 
     if (tools.value.admin) {
       courseItems.value = tools.value.admin.map(tool => ({
-        label: tool.tool.nameToShow,
+        label: tool.tool.titleToShow,
         url: goToCourseTool(course, tool)
       }));
     }

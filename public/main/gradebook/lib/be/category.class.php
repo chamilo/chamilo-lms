@@ -557,7 +557,7 @@ class Category implements GradebookItem
             }
 
             $category = new GradebookCategory();
-            $category->setName($this->name);
+            $category->setTitle($this->name);
             $category->setDescription($this->description);
             $category->setUser(api_get_user_entity($this->user_id));
             $category->setCourse($course);
@@ -648,7 +648,7 @@ class Category implements GradebookItem
         }
         $course = api_get_course_entity();
 
-        $category->setName($this->name);
+        $category->setTitle($this->name);
         $category->setDescription($this->description);
         $category->setUser(api_get_user_entity($this->user_id));
         $category->setCourse($course);
@@ -733,8 +733,9 @@ class Category implements GradebookItem
 
     /**
      * Delete this evaluation from the database.
+     * @throws Exception
      */
-    public function delete()
+    public function delete(): void
     {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $sql = 'DELETE FROM '.$table.' WHERE id = '.intval($this->id);
@@ -742,51 +743,56 @@ class Category implements GradebookItem
     }
 
     /**
-     * @param int $course_id
+     * Return an HTML span block if the given resource has been deleted
+     * @param ?int $courseId
      *
-     * @return bool|string
+     * @return string
+     * @throws \Doctrine\DBAL\Exception
+     * @throws Exception
      */
-    public static function show_message_resource_delete($course_id)
+    public static function show_message_resource_delete(?int $courseId): string
     {
-        $course_id = (int) $course_id;
+        if (empty($courseId)) {
+            return '';
+        }
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = 'SELECT count(*) AS num
-                FROM '.$table.'
+        $sql = "SELECT count(*) AS num
+                FROM $table
                 WHERE
-                    c_id = "'.$course_id.'" AND
-                    visible = 3';
+                    c_id = $courseId AND
+                    visible = 3";
         $res = Database::query($sql);
-        $option = Database::fetch_array($res, 'ASSOC');
+        $option = Database::fetch_array($res);
         if ($option['num'] >= 1) {
             return '&nbsp;&nbsp;<span class="resource-deleted">
                 (&nbsp;'.get_lang('The resource has been deleted').'&nbsp;)
                 </span>';
         }
 
-        return false;
+        return '';
     }
 
     /**
-     * Shows all information of an category.
+     * Shows all information of a category.
      *
      * @param int $categoryId
      *
      * @return array
+     * @throws \Doctrine\DBAL\Exception
+     * @throws Exception
      */
-    public function showAllCategoryInfo($categoryId)
+    public function showAllCategoryInfo(int $categoryId): array
     {
-        $categoryId = (int) $categoryId;
         if (empty($categoryId)) {
             return [];
         }
 
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = 'SELECT * FROM '.$table.'
-                WHERE id = '.$categoryId;
+        $sql = "SELECT * FROM $table
+                WHERE id = $categoryId";
         $result = Database::query($sql);
-        $row = Database::fetch_array($result, 'ASSOC');
 
-        return $row;
+        return Database::fetch_array($result);
     }
 
     /**
@@ -2055,10 +2061,7 @@ class Category implements GradebookItem
         $user_id = (int) $user_id;
         $categoryId = $category->getId();
         $sessionId = $category->getSession() ? $category->getSession()->getId() : 0;
-        $courseCode = $category->getCourse()->getId();
-        $courseInfo = api_get_course_info($courseCode);
-        $courseId = $courseInfo['real_id'];
-
+        $courseId = $category->getCourse()->getId();
         $userFinishedCourse = self::userFinishedCourse($user_id, $category, true);
         if (!$userFinishedCourse) {
             return false;
@@ -2117,10 +2120,14 @@ class Category implements GradebookItem
 
         $html = [];
         if (!empty($my_certificate)) {
+            $pathToCertificate = $category->getDocument()->getResourceNode()->getResourceFile()->getFile()->getPathname();
+
             $certificate_obj = new Certificate(
                 $my_certificate['id'],
                 0,
-                $sendNotification
+                $sendNotification,
+                true,
+                $pathToCertificate
             );
 
             $fileWasGenerated = $certificate_obj->isHtmlFileGenerated();
@@ -2550,7 +2557,7 @@ class Category implements GradebookItem
         while ($data = Database::fetch_array($result)) {
             $cat = new Category();
             $cat->set_id($data['id']);
-            $cat->set_name($data['name']);
+            $cat->set_name($data['title']);
             $cat->set_description($data['description']);
             $cat->set_user_id($data['user_id']);
             $courseInfo = api_get_course_info_by_id($data['c_id']);

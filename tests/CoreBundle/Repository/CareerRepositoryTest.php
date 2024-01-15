@@ -21,7 +21,7 @@ class CareerRepositoryTest extends AbstractApiTest
         $repo = self::getContainer()->get(CareerRepository::class);
 
         $career = (new Career())
-            ->setName('Julio')
+            ->setTitle('Julio')
             ->setDescription('test')
             ->setStatus(1)
         ;
@@ -30,7 +30,7 @@ class CareerRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $this->assertSame(1, $repo->count([]));
-        $this->assertSame('Julio', $career->getName());
+        $this->assertSame('Julio', $career->getTitle());
         $this->assertNotNull($career->getId());
     }
 }

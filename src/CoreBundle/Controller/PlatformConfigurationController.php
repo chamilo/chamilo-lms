@@ -43,6 +43,7 @@ class PlatformConfigurationController extends AbstractController
                 'platform.load_term_conditions_section',
                 'platform.cookie_warning',
                 'platform.show_tabs',
+                'platform.catalog_show_courses_sessions',
 
                 // 'admin.admin_chamilo_announcements_disable',
                 'admin.administrator_name',

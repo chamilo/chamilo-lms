@@ -30,8 +30,8 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
     protected ?int $iid = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'forum_title', type: 'string', length: 255, nullable: false)]
-    protected string $forumTitle;
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    protected string $title;
 
     #[ORM\Column(name: 'forum_comment', type: 'text', nullable: true)]
     protected ?string $forumComment;
@@ -124,19 +124,19 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
 
     public function __toString(): string
     {
-        return $this->getForumTitle();
+        return $this->getTitle();
     }
 
-    public function setForumTitle(string $forumTitle): self
+    public function setTitle(string $title): self
     {
-        $this->forumTitle = $forumTitle;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getForumTitle(): string
+    public function getTitle(): string
     {
-        return $this->forumTitle;
+        return $this->title;
     }
 
     public function setForumComment(string $forumComment): self
@@ -410,11 +410,11 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
 
     public function getResourceName(): string
     {
-        return $this->getForumTitle();
+        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setForumTitle($name);
+        return $this->setTitle($name);
     }
 }

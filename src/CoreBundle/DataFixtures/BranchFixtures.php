@@ -22,7 +22,7 @@ class BranchFixtures extends Fixture
         $url = $this->getReference(AccessUserFixtures::ACCESS_URL_REFERENCE);
 
         $branch = (new BranchSync())
-            ->setBranchName('localhost')
+            ->setTitle('localhost')
             ->setUniqueId(sha1(Uuid::v1()->toRfc4122()))
             ->setSslPubKey(sha1(Uuid::v1()->toRfc4122()))
             ->setUrl($url)

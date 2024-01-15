@@ -35,7 +35,7 @@ class CThematicAdvanceRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
 
         $attendance = (new CAttendance())
-            ->setName('item')
+            ->setTitle('item')
             ->setAttendanceWeight(100)
             ->setParent($course)
             ->setCreator($teacher)
@@ -108,7 +108,7 @@ class CThematicAdvanceRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
 
         $attendance = (new CAttendance())
-            ->setName('item')
+            ->setTitle('item')
             ->setAttendanceWeight(100)
             ->setParent($course)
             ->setCreator($teacher)

@@ -44,13 +44,13 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="https://twitter.com/home?{{ {'status': session.getName() ~ ' ' ~ page_url }|url_encode }}"
+                                        <a href="https://twitter.com/home?{{ {'status': session.getTitle() ~ ' ' ~ page_url }|url_encode }}"
                                            target="_blank" class="btn btn-twitter btn-inverse btn-xs">
                                             <em class="fa fa-twitter"></em> Twitter
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': page_url , 'title': session.getName() }|url_encode }}"
+                                        <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': page_url , 'title': session.getTitle() }|url_encode }}"
                                            target="_blank" class="btn btn-linkedin btn-inverse btn-xs">
                                             <em class="fa fa-linkedin"></em> Linkedin
                                         </a>
@@ -107,7 +107,7 @@
                                                 {{ sequence.name }} :
                                                 {% for requirement in sequence.requirements %}
                                                     <a href="{{ _p.web ~ 'session/' ~ requirement.getId ~ '/about/' }}">
-                                                        {{ requirement.getName }}
+                                                        {{ requirement.getTitle }}
                                                     </a>
                                                 {% endfor %}
                                             </p>

@@ -216,7 +216,7 @@ class Link extends Model
                         $row = Database:: fetch_array($result);
                         $ic_slide->addValue(
                             'category',
-                            $row['category_title']
+                            $row['title']
                         );
                     }
                 }
@@ -316,7 +316,7 @@ class Link extends Model
         $sessionEntity = api_get_session_entity($session_id);
 
         $category = (new CLinkCategory())
-            ->setCategoryTitle($category_title)
+            ->setTitle($category_title)
             ->setDescription($description)
          //   ->setDisplayOrder($order)
             ->setParent($courseEntity)
@@ -605,7 +605,7 @@ class Link extends Model
                         $row = Database:: fetch_array($result);
                         $ic_slide->addValue(
                             'category',
-                            $row['category_title']
+                            $row['title']
                         );
                     }
                 }
@@ -663,7 +663,7 @@ class Link extends Model
         /** @var CLinkCategory $category */
         $category = $repo->find($id);
         $category
-            ->setCategoryTitle($values['category_title'])
+            ->setTitle($values['category_title'])
             ->setDescription($values['description'])
         ;
 
@@ -1443,7 +1443,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
                     href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$categoryItemId.'">';
                 $header .= Display::getMdiIcon(StateIcon::LIST_VIEW, 'ch-tool-icon', null, ICON_SIZE_SMALL);
             }
-            $header .= Security::remove_XSS($category->getCategoryTitle()).'</a>';
+            $header .= Security::remove_XSS($category->getTitle()).'</a>';
 
             if ($showActionLinks) {
                 if ($allowToEdit) {
@@ -1547,7 +1547,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
         $options = ['0' => '--'];
         if (!empty($resultcategories)) {
             foreach ($resultcategories as $myrow) {
-                $options[$myrow->getIid()] = $myrow->getCategoryTitle();
+                $options[$myrow->getIid()] = $myrow->getTitle();
             }
         }
 

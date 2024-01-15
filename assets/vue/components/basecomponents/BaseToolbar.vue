@@ -24,5 +24,3 @@ const toolbarClass = computed(() => {
   return "";
 });
 </script>
-
-<style scoped></style>

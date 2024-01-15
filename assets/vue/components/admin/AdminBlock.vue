@@ -10,7 +10,7 @@
 
       <div class="space-y-4">
         <p v-if="props.description" class="text-body-4" v-text="props.description" />
-
+      
         <form v-if="props.searchUrl" :action="props.searchUrl" method="get">
           <BaseInputGroup
             :button-label="t('Search')"
@@ -37,6 +37,7 @@
               </a>
             </div>
           </li>
+          <slot></slot>
         </ul>
       </div>
     </div>

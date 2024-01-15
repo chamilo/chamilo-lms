@@ -116,7 +116,7 @@ if ('group' === $origin) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?origin='.$origin.'&forum='.$forumId.'&'.api_get_cidreq(),
-        'name' => prepare4display($forumEntity->getForumTitle()),
+        'name' => prepare4display($forumEntity->getTitle()),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/forumsearch.php?'.api_get_cidreq(),

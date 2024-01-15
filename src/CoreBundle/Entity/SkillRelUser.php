@@ -240,7 +240,7 @@ class SkillRelUser
     {
         $source = '';
         if (null !== $this->session) {
-            $source .= sprintf('[%s] ', $this->session->getName());
+            $source .= sprintf('[%s] ', $this->session->getTitle());
         }
 
         if (null !== $this->course) {

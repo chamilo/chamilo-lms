@@ -8,12 +8,12 @@ namespace Chamilo\CoreBundle\Tool;
 
 class Mobidico extends AbstractTool implements ToolInterface
 {
-    public function getName(): string
+    public function getTitle(): string
     {
         return 'mobidico';
     }
 
-    public function getNameToShow(): string
+    public function getTitleToShow(): string
     {
         return 'Mobidico';
     }

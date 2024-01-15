@@ -433,7 +433,7 @@ if ('true' !== api_get_setting('exercise.allow_exercise_categories')) {
                     $down = Display::url(Display::getMdiIcon('arrow-down-bold', 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Move down')), '#');
                 }
             }
-            echo Display::page_subheader($category->getName().$up.$down);
+            echo Display::page_subheader($category->getTitle().$up.$down);
             echo Exercise::exerciseGridResource($category->getId(), $keyword);
         }
     } else {

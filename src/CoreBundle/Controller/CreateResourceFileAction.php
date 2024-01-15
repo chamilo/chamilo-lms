@@ -20,7 +20,7 @@ class CreateResourceFileAction
         }
 
         $resourceFile = new ResourceFile();
-        $resourceFile->setName($uploadedFile->getFilename());
+        $resourceFile->setTitle($uploadedFile->getFilename());
         $resourceFile->setFile($uploadedFile);
 
         return $resourceFile;

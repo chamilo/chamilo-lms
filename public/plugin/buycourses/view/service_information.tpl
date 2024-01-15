@@ -35,13 +35,13 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="https://twitter.com/home?{{ {'status': session.getName() ~ ' ' ~ pageUrl}|url_encode }}"
+                                    <a href="https://twitter.com/home?{{ {'status': session.getTitle() ~ ' ' ~ pageUrl}|url_encode }}"
                                        target="_blank" class="btn btn-twitter btn-inverse btn-xs">
                                         <em class="fa fa-twitter"></em> Twitter
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': pageUrl, 'title': session.getName() }|url_encode }}"
+                                    <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': pageUrl, 'title': session.getTitle() }|url_encode }}"
                                        target="_blank" class="btn btn-linkedin btn-inverse btn-xs">
                                         <em class="fa fa-linkedin"></em> Linkedin
                                     </a>

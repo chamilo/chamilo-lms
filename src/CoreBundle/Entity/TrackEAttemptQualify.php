@@ -18,12 +18,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
     ],
     security: 'is_granted("ROLE_USER")'
 )]
-#[ORM\Table(name: 'track_e_attempt_recording')]
+#[ORM\Table(name: 'track_e_attempt_qualify')]
 #[ORM\Index(columns: ['exe_id'], name: 'exe_id')]
 #[ORM\Index(columns: ['question_id'], name: 'question_id')]
 #[ORM\Index(columns: ['session_id'], name: 'session_id')]
 #[ORM\Entity]
-class TrackEAttemptRecording
+class TrackEAttemptQualify
 {
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -69,6 +69,13 @@ class TrackEAttemptRecording
         return $this->trackExercise;
     }
 
+    /**
+     * Set exeId.
+     *
+     * @param ?TrackEExercise $trackExercise
+     *
+     * @return TrackEAttemptQualify
+     */
     public function setTrackExercise(?TrackEExercise $trackExercise): static
     {
         $this->trackExercise = $trackExercise;
@@ -81,6 +88,11 @@ class TrackEAttemptRecording
         return $this->questionId;
     }
 
+    /**
+     * Set questionId.
+     *
+     * @return TrackEAttemptQualify
+     */
     public function setQuestionId(int $questionId): static
     {
         $this->questionId = $questionId;
@@ -93,6 +105,9 @@ class TrackEAttemptRecording
         return $this->marks;
     }
 
+    /**
+     * Set marks (score).
+     */
     public function setMarks(float $marks): self
     {
         $this->marks = $marks;
@@ -105,6 +120,9 @@ class TrackEAttemptRecording
         return $this->insertDate;
     }
 
+    /**
+     * Set insert date.
+     */
     public function setInsertDate(DateTime $insertDate): self
     {
         $this->insertDate = $insertDate;
@@ -117,6 +135,11 @@ class TrackEAttemptRecording
         return $this->author;
     }
 
+    /**
+     * Set author.
+     *
+     * @return TrackEAttemptQualify
+     */
     public function setAuthor(int $author): static
     {
         $this->author = $author;
@@ -141,6 +164,11 @@ class TrackEAttemptRecording
         return $this->sessionId;
     }
 
+    /**
+     * Set sessionId.
+     *
+     * @return TrackEAttemptQualify
+     */
     public function setSessionId(int $sessionId): static
     {
         $this->sessionId = $sessionId;

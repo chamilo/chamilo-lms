@@ -241,7 +241,7 @@ if (!$formSent) {
                 },
                 $session->getGeneralCoaches()->getValues()
             ),
-            'session_template' => $session->getName(),
+            'session_template' => $session->getTitle(),
         ];
     } else {
         $formDefaults['access_start_date'] = $formDefaults['display_start_date'] = api_get_local_time();
@@ -282,6 +282,30 @@ if ($form->validate()) {
 
     if (isset($extraFields['extra_image']) && !empty($extraFields['extra_image']['name']) && $isThisImageCropped) {
         $extraFields['extra_image']['crop_parameters'] = $params['picture_crop_result'];
+    }
+
+    // Check if the session image will be copied from the template
+    $importImageFromSession = false;
+    $sessionIdToImport = !empty($params['extra_image_crop_result']) ? explode('::', $params['extra_image_crop_result']) : [];
+    $sessionIdToImport = isset($sessionIdToImport[1]) ? (int) $sessionIdToImport[1] : 0;
+    if (!empty($sessionIdToImport)) {
+        $extraField = new ExtraField('session');
+        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable('image');
+
+        $extraFieldValue = new ExtraFieldValue('session');
+        $extraFieldValueData = $extraFieldValue->get_values_by_handler_and_field_id(
+            $sessionIdToImport,
+            $extraFieldInfo['id']
+        );
+
+        if ($extraFieldValueData) {
+            $repo = Container::getAssetRepository();
+            /** @var Asset $asset */
+            $asset = $repo->find($extraFieldValueData);
+            if ($asset) {
+                $extraFields['extra_image']['id'] = $extraFieldValueData;
+            }
+        }
     }
 
     $return = SessionManager::create_session(

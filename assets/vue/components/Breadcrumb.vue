@@ -117,7 +117,7 @@ const foo = computed(() => {
     let sessionTitle = ""
 
     if (session.value) {
-      sessionTitle = " (" + session.value.name + ") "
+      sessionTitle = " (" + session.value.title + ") "
     }
 
     items.push({

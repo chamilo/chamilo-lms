@@ -3987,7 +3987,7 @@ function getWorkComment(CStudentPublicationComment $commentEntity, array $course
             $filePath = '';
             $deleteUrl = api_get_path(WEB_CODE_PATH).
                 'work/view.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_attachment&comment_id='.$id;
-            $fileName = $commentEntity->getResourceNode()->getResourceFile()->getName();
+            $fileName = $commentEntity->getResourceNode()->getResourceFile()->getTitle();
         }
         $comment['comment'] = $commentEntity->getComment();
         $comment['delete_file_url'] = $deleteUrl;
@@ -5969,7 +5969,7 @@ function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false, 
             $title = $titleCorrection = $studentPublication->getCorrection()->getTitle();
         }
         if ($hasFile) {
-            $title = $studentPublication->getResourceNode()->getResourceFile()->getName();
+            $title = $studentPublication->getResourceNode()->getResourceFile()->getTitle();
         }
 
         $title = str_replace(' ', '_', $title);

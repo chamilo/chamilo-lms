@@ -24,7 +24,7 @@ class CExerciseCategoryRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
 
         $item = (new CExerciseCategory())
-            ->setName('cat')
+            ->setTitle('cat')
             ->setDescription('desc')
             ->setCourse($course)
             ->setParent($course)
@@ -38,7 +38,7 @@ class CExerciseCategoryRepositoryTest extends AbstractApiTest
         $this->assertSame('cat', (string) $item);
         $this->assertSame($item->getId(), $item->getResourceIdentifier());
         $this->assertSame('desc', $item->getDescription());
-        $this->assertSame('cat', $item->getName());
+        $this->assertSame('cat', $item->getTitle());
 
         $this->assertSame(1, $repo->count([]));
         $this->assertCount(1, $repo->getCategories($course->getId()));

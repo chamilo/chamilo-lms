@@ -56,6 +56,9 @@
     "Delete": "\u5220\u9664",
     "{resource} created": "{resource} created",
     "{resource} deleted": "{resource} deleted",
+    "Course: {course}": "Course: {course}",
+    "Session: {session}": "Session: {session}",
+    "Status: {status}": "Status: {status}",
     "Edit event": "\u4fee\u6539\u4e8b\u4ef6",
     "Add event": "\u6dfb\u52a0\u65b0\u65e5\u7a0b",
     "Add": "\u6dfb\u52a0",
@@ -134,5 +137,6 @@
     "Current session tab": "Current session tab",
     "Upcoming session tab": "Upcoming session tab",
     "Past session tab": "Past session tab",
-    "Sticky courses": "Sticky courses"
+    "Sticky courses": "Sticky courses",
+    "Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:": "\u521b\u5efa\u8bc1\u4e66\u5e76\u52a0\u5165\u6b64\u6807\u8bc6"
 }

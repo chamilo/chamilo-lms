@@ -244,7 +244,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $resourceFile
             ->setFile($file)
             ->setDescription($description)
-            ->setName($resource->getResourceName())
+            ->setTitle($resource->getResourceName())
             ->setResourceNode($resourceNode)
         ;
         $em->persist($resourceFile);
@@ -264,7 +264,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $repo = $this->getEntityManager()->getRepository(ResourceType::class);
 
         return $repo->findOneBy([
-            'name' => $resourceTypeName,
+            'title' => $resourceTypeName,
         ]);
     }
 
@@ -371,7 +371,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->innerJoin('node.resourceLinks', 'links')
             ->innerJoin('node.resourceType', 'type')
             ->leftJoin('node.resourceFile', 'file')
-            ->where('type.name = :type')
+            ->where('type.title = :type')
             ->setParameter('type', $resourceTypeName, Types::STRING)
             ->addSelect('node')
             ->addSelect('links')
@@ -589,15 +589,15 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
         // if ($resourceNode->hasResourceFile()) {
         // $resourceNode->getResourceFile()->getFile()->
-        // $resourceNode->getResourceFile()->setName($title);
-        // $resourceFile->setName($title);
+        // $resourceNode->getResourceFile()->setTitle($title);
+        // $resourceFile->setTitle($title);
 
         /*$fileName = $this->getResourceNodeRepository()->getFilename($resourceFile);
         error_log('$fileName');
         error_log($fileName);
         error_log($title);
         $this->getResourceNodeRepository()->getFileSystem()->rename($fileName, $title);
-        $resourceFile->setName($title);
+        $resourceFile->setTitle($title);
         $resourceFile->setOriginalName($title);*/
         // }
     }
@@ -771,7 +771,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             return '';
         }
 
-        return '<img title="'.$session->getName().'" src="/img/icons/22/star.png" />';
+        return '<img title="'.$session->getTitle().'" src="/img/icons/22/star.png" />';
     }
 
     public function isGranted(string $subject, AbstractResource $resource): bool

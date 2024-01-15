@@ -27,7 +27,7 @@ class CGlossaryRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
 
         $glossary = (new CGlossary())
-            ->setName('glossary')
+            ->setTitle('glossary')
             ->setDescription('desc')
             ->setDisplayOrder(1)
             ->setParent($course)

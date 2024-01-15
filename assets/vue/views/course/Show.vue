@@ -53,7 +53,7 @@
               </td>
               <td>
                 <div v-if="item['category']">
-                  {{ item["category"].name }}
+                  {{ item["category"].title }}
                 </div>
                 <div v-else>-</div>
               </td>

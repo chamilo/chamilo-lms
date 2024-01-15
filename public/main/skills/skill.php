@@ -48,7 +48,7 @@ if (!empty($item)) {
             ]
         );
     }
-    $form->addHeader($item->getName());
+    $form->addHeader($item->getTitle());
 }
 $formToDisplay = $form->returnForm();
 

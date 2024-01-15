@@ -140,11 +140,11 @@ export default {
     Toolbar,
     ShowLinks,
   },
-  data () {
+  data() {
     const { relativeDatetime } = useFormatDate()
 
     return {
-      relativeDatetime
+      relativeDatetime,
     }
   },
   mixins: [ShowMixin],

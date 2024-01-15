@@ -1,0 +1,34 @@
+.document-show {
+
+  &__section {
+    @apply flex flex-row mt-4 gap-4;
+  }
+
+  &__content-side {
+    @apply w-2/3 flex justify-center;
+
+    img {
+      @apply block;
+    }
+
+    video {
+      @apply w-full;
+    }
+
+    div:has(iframe) {
+      @apply w-full;
+    }
+
+    iframe {
+      @apply aspect-square w-full border-0;
+    }
+  }
+
+  &__details-side {
+    @apply w-1/3;
+
+    table {
+      @apply mb-4;
+    }
+  }
+}

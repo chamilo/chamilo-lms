@@ -40,7 +40,7 @@ export default {
     {
       name: 'DocumentsShow',
       path: 'show',
-      component: () => import('../views/documents/Show.vue')
+      component: () => import('../views/documents/DocumentShow.vue')
     },
     {
       name: 'DocumentForHtmlEditor',

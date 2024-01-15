@@ -32,7 +32,7 @@ class CAttendanceRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
 
         $item = (new CAttendance())
-            ->setName('item')
+            ->setTitle('item')
             ->setResourceName('item')
             ->setDescription('desc')
             ->setLocked(1)
@@ -75,7 +75,7 @@ class CAttendanceRepositoryTest extends AbstractApiTest
         $student = $this->createUser('student');
 
         $attendance = (new CAttendance())
-            ->setName('item')
+            ->setTitle('item')
             ->setAttendanceWeight(100)
             ->setParent($course)
             ->setCreator($teacher)

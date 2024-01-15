@@ -25,7 +25,7 @@ $result1 = $qb1
 
 /** @var CLp $lp */
 foreach ($result1 as $i => $lp) {
-    echo ($i + 1)." LP {$lp->getId()}: {$lp->getName()}".PHP_EOL;
+    echo ($i + 1)." LP {$lp->getId()}: {$lp->getTitle()}".PHP_EOL;
 
     $qb2 = $em->createQueryBuilder();
 
@@ -42,7 +42,7 @@ foreach ($result1 as $i => $lp) {
         )
         ->setParameters([
             'link' => 'lp/lp_controller.php?action=view&lp_id=$new_lp_id&id_session=0',
-            'name' => $lp->getName(),
+            'name' => $lp->getTitle(),
             'cid' => $lp->getCId()
         ])
         ->getQuery()
@@ -53,6 +53,6 @@ foreach ($result1 as $i => $lp) {
     $em->persist($tool);
     $em->flush();
 
-    echo "\tTool: {$tool->getId()}: {$tool->getName()}".PHP_EOL;
+    echo "\tTool: {$tool->getId()}: {$tool->getTitle()}".PHP_EOL;
     echo "\tNew link: {$tool->getLink()}".PHP_EOL;
 }

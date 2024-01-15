@@ -106,7 +106,7 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
             // Creating node
             $node = new ResourceNode();
             $node
-                ->setName($documentData['title'])
+                ->setTitle($documentData['title'])
                 ->setDescription($documentData['comment'] ?? '')
                 ->setCreator($author)
                 ->setParent($parentNode)
@@ -191,7 +191,7 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
 
                     $resourceFile = new ResourceFile();
                     $resourceFile->setMedia($media);
-                    $resourceFile->setName($documentData['title']);
+                    $resourceFile->setTitle($documentData['title']);
                     $node->setResourceFile($resourceFile);
 
                     $em->persist($resourceFile);

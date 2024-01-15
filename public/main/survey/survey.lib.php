@@ -650,7 +650,7 @@ class SurveyManager
         while ($row = Database::fetch_assoc($res)) {
             $params = [
                 'c_id' => $targetCourseId,
-                'name' => $row['name'],
+                'name' => $row['title'],
                 'description' => $row['description'],
                 'survey_id' => $new_survey_id,
             ];
@@ -1306,7 +1306,6 @@ class SurveyManager
                 $sql = "DELETE FROM $table
 			            WHERE
 			                iid = $iid AND
-			                c_id = $course_id AND
                             question_id = '".intval($form_content['question_id'])."'
                             ";
                 Database::query($sql);
@@ -1753,7 +1752,7 @@ class SurveyManager
             while ($row = Database::fetch_assoc($res)) {
                 $params = [
                     'c_id' => $targetCourseId,
-                    'name' => $row['name'],
+                    'name' => $row['title'],
                     'description' => $row['description'],
                     'survey_id' => $newSurveyId,
                 ];
@@ -2307,7 +2306,7 @@ class SurveyManager
                 $title = Display::url($title, $url);
                 $courseTitle = $course->getTitle();
                 if (!empty($sessionId)) {
-                    $courseTitle .= ' ('.$invitation->getSession()->getName().')';
+                    $courseTitle .= ' ('.$invitation->getSession()->getTitle().')';
                 }
 
                 $surveyData = self::get_survey($survey->getIid(), 0, $courseCode);

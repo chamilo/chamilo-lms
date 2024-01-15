@@ -42,7 +42,7 @@ $interbreadcrumb[] = [
 $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
 $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_EXERCISES_QUESTION = Database::get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+$tblTrackAttemptQualify = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_QUALIFY);
 Display::display_header(get_lang('Test'));
 
 if (isset($_GET['message'])) {
@@ -68,7 +68,7 @@ echo Display::toolbarAction('toolbar', [$actions]);
 <?php
 
 $sql = "SELECT *, quiz_question.question, firstname, lastname
-        FROM $TBL_TRACK_ATTEMPT_RECORDING t, $TBL_USER,
+        FROM $tblTrackAttemptQualify t, $TBL_USER,
         $TBL_EXERCISES_QUESTION quiz_question
         WHERE
             quiz_question.id = question_id AND

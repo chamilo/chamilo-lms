@@ -23,7 +23,7 @@ class CreateCGlossaryAction extends BaseResourceFileAction
         $description = $data['description'];
         $parentResourceNodeId = $data['parentResourceNodeId'];
         $resourceLinkList = json_decode($data['resourceLinkList'], true);
-        $sid = (int) $data['sid'];
+        $sid = isset($data['sid']) ? (int) $data['sid'] : null;
         $cid = (int) $data['cid'];
 
         $course = null;
@@ -46,7 +46,7 @@ class CreateCGlossaryAction extends BaseResourceFileAction
         }
 
         $glossary = (new CGlossary())
-            ->setName($title)
+            ->setTitle($title)
             ->setDescription($description)
         ;
 

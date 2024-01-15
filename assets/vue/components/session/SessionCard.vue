@@ -1,5 +1,5 @@
 <template>
-  <div class="text-h6 mt-4">{{ session.name }}</div>
+  <div class="text-h6 mt-4">{{ session.title }}</div>
   <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
     <div
         v-for="course in courses"

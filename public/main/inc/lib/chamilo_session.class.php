@@ -59,7 +59,7 @@ class ChamiloSession implements \ArrayAccess
         $session = Container::getSession();
 
         $result = null;
-        if (isset($session) && $session) {
+        if (isset($session) && $session && $variable) {
             $result = $session->get($variable);
         }
 

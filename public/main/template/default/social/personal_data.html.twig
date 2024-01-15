@@ -12,26 +12,8 @@
     </div>
     <div class="col-md-9">
         {{ macro.panel('PersonalDataIntroductionTitle' | get_lang , 'PersonalDataIntroductionText' | get_lang) }}
-        {{ display.collapse('', 'PersonalDataKeptOnYou' | get_lang, personal_data.data, false, 'false') }}
-
-        {% if personal_data.responsible %}
-            {{ macro.panel('PersonalDataResponsibleOrganizationTitle' | get_lang , personal_data.responsible ) }}
-        {% endif %}
-
-        {% if personal_data.treatment %}
-        <div class="panel personal-data-treatment">
-            <div class="panel-title">{{ 'PersonalDataTreatmentTitle' | get_lang }}</div>
-            <div class="personal-data-treatment-description">
-                {% for treatment in personal_data.treatment %}
-                    {% if treatment.content %}
-                    <div class="sub-section">
-                        <div class="panel-sub-title">{{ treatment.title }}</div>
-                        <div class="panel-body">{{ treatment.content }}</div>
-                    </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </div>
+        {% if display is defined %}
+            {{ display.collapse('', 'PersonalDataKeptOnYou' | get_lang, personal_data.data, false, 'false') }}
         {% endif %}
         {% if personal_data.officer_name %}
             <div class="panel personal-data-responsible">

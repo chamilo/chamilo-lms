@@ -152,7 +152,7 @@ $courseCategoryNames = [];
 $courseCategoryIds = [];
 
 foreach ($categories as $category) {
-    $courseCategoryNames[$category->getId()] = $category->getName();
+    $courseCategoryNames[$category->getId()] = $category->getTitle();
     $courseCategoryIds[] = $category->getId();
 }
 

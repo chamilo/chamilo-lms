@@ -167,7 +167,7 @@ if (!empty($groupId)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.$forumId,
-        'name' => $forum->getForumTitle(),
+        'name' => $forum->getTitle(),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/newthread.php?'.$cidreq.'&forum='.$forumId,
@@ -177,11 +177,11 @@ if (!empty($groupId)) {
     $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.$cidreq, 'name' => $nameTools];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.$cidreq.'&forumcategory='.$category->getIid(),
-        'name' => $category->getCatTitle(),
+        'name' => $category->getTitle(),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.$forumId,
-        'name' => $forum->getForumTitle(),
+        'name' => $forum->getTitle(),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit thread')];
 }

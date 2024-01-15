@@ -181,7 +181,7 @@ class Attendance
         foreach ($attendances as $attendance) {
             $row = [];
             $id = $attendance->getIid();
-            $name = $attendance->getName();
+            $name = $attendance->getTitle();
             $active = $attendance->getActive();
             $session_star = '';
             /*if ($session_id == $attendance[6]) {
@@ -347,7 +347,7 @@ class Attendance
         $course = api_get_course_entity();
         $attendance = new CAttendance();
         $attendance
-            ->setName($this->name)
+            ->setTitle($this->name)
             ->setDescription($this->description)
             ->setAttendanceQualifyTitle($titleGradebook)
             ->setAttendanceWeight($weightCalification)
@@ -411,7 +411,7 @@ class Attendance
         if ($attendance) {
             $attendanceId = $attendance->getIid();
             $attendance
-                ->setName($this->name)
+                ->setTitle($this->name)
                 ->setDescription($this->description)
                 ->setAttendanceQualifyTitle($title_gradebook)
                 ->setAttendanceWeight($weight_calification)
@@ -2225,8 +2225,8 @@ class Attendance
                             $attendancesProcess[3] = $courseItem['real_id'];
                             $attendancesProcess['courseId'] = $courseItem['real_id'];
 
-                            $attendancesProcess[4] = $attendanceData->getName();
-                            $attendancesProcess['attendanceName'] = $attendanceData->getName();
+                            $attendancesProcess[4] = $attendanceData->getTitle();
+                            $attendancesProcess['attendanceName'] = $attendanceData->getTitle();
                             $attendancesProcess['courseCode'] = $courseItem['course_code'];
 
                             $attendancesProcess[5] = $attendanceId;
@@ -2300,8 +2300,8 @@ class Attendance
                             $attendancesProcess['courseTitle'] = $courseItem['title'];
                             $attendancesProcess[3] = $courseItem['real_id'];
                             $attendancesProcess['courseId'] = $courseItem['real_id'];
-                            $attendancesProcess[4] = $attendanceData->getName();
-                            $attendancesProcess['attendanceName'] = $attendanceData->getName();
+                            $attendancesProcess[4] = $attendanceData->getTitle();
+                            $attendancesProcess['attendanceName'] = $attendanceData->getTitle();
                             $attendancesProcess[5] = $attendanceId;
                             $attendancesProcess['attendanceId'] = $attendanceId;
                             $attendancesProcess['courseCode'] = $courseItem['official_code'];
@@ -2406,7 +2406,7 @@ class Attendance
 
         if ($attendance) {
             $default = [];
-            $default['title'] = Security::remove_XSS($attendance->getName());
+            $default['title'] = Security::remove_XSS($attendance->getTitle());
             $default['description'] = Security::remove_XSS($attendance->getDescription(), STUDENT);
             $default['attendance_qualify_title'] = $attendance->getAttendanceQualifyTitle();
             $default['attendance_weight'] = $attendance->getAttendanceWeight();

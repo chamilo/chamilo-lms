@@ -1,5 +1,5 @@
 <template>
-  <ButtonToolbar v-if="securityStore.isAuthenticated && isCurrentTeacher">
+  <BaseToolbar v-if="securityStore.isAuthenticated && isCurrentTeacher">
     <BaseButton
       v-if="showBackButtonIfNotRootFolder"
       :label="t('Back')"
@@ -32,6 +32,7 @@
       @click="goToUploadFile"
     />
     <BaseButton
+      v-if="$route.query.cert !== '1'"
       :label="t('New folder')"
       icon="folder-plus"
       type="black"
@@ -62,7 +63,7 @@
       icon="download"
       type="black"
     />
-  </ButtonToolbar>
+  </BaseToolbar>
 
   <DataTable
     v-model:filters="filters"
@@ -153,6 +154,14 @@
           />
 
           <BaseButton
+            v-if="securityStore.isAuthenticated && isCurrentTeacher && $route.query.cert === '1'"
+            :icon="null === slotProps.data.gradebookCategory ? 'mdi mdi-file-plus' : 'mdi mdi-file-plus-outline'"
+            class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
+            type="black"
+            @click="btnChangeAttachedCertificateOnClick(slotProps.data)"
+          />
+
+          <BaseButton
             v-if="securityStore.isAuthenticated && isCurrentTeacher"
             icon="edit"
             size="small"
@@ -172,7 +181,7 @@
     </Column>
   </DataTable>
 
-  <ButtonToolbar
+  <BaseToolbar
     v-if="securityStore.isAuthenticated && isCurrentTeacher"
     show-top-border
   >
@@ -195,7 +204,7 @@
       type="danger"
       @click="showDeleteMultipleDialog"
     />
-  </ButtonToolbar>
+  </BaseToolbar>
 
   <BaseDialogConfirmCancel
     v-model:is-visible="isNewFolderDialogVisible"
@@ -212,12 +221,12 @@
         :class="{ 'p-invalid': submitted && !item.title }"
         autocomplete="off"
         autofocus
-        name="name"
+        name="title"
         required="true"
       />
       <label
         v-t="'Name'"
-        for="name"
+        for="title"
       />
     </div>
     <small
@@ -296,7 +305,7 @@ import { useFormatDate } from "../../composables/formatDate"
 import axios from "axios"
 import DocumentEntry from "../../components/documents/DocumentEntry.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import ButtonToolbar from "../../components/basecomponents/ButtonToolbar.vue"
+import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseDialogConfirmCancel from "../../components/basecomponents/BaseDialogConfirmCancel.vue"
 import { useFileUtils } from "../../composables/fileUtils"
@@ -306,6 +315,7 @@ import DocumentAudioRecorder from "../../components/documents/DocumentAudioRecor
 import { useNotification } from "../../composables/notification"
 import { useSecurityStore } from "../../store/securityStore"
 import prettyBytes from "pretty-bytes"
+import { ENTRYPOINT } from "../../config/entrypoint"
 
 const store = useStore()
 const route = useRoute()
@@ -382,7 +392,7 @@ const showBackButtonIfNotRootFolder = computed(() => {
   if (!resourceNode.value) {
     return false
   }
-  return resourceNode.value.resourceType.name !== "courses"
+  return resourceNode.value.resourceType.title !== "courses"
 })
 
 function back() {
@@ -603,5 +613,33 @@ function recordedAudioSaved() {
 function recordedAudioNotSaved(error) {
   notification.showErrorNotification(t("Document not saved"))
   console.error(error)
+}
+
+function btnChangeAttachedCertificateOnClick (item) {
+  const folderParams = route.query;
+
+  folderParams.id = item['@id'];
+  if (null === item.gradebookCategory) {
+    axios
+      .get(ENTRYPOINT + 'gradebook_categories?course=' + cid)
+      .then(response => {
+        if (200 === response.status){
+          item.gradebookCategory = updateAttachedCertificate(response.data['hydra:member'][0]['id'], folderParams.id);
+        }
+      })
+    ;
+  } else {
+    item.gradebookCategory  = updateAttachedCertificate(item.gradebookCategory['id'], folderParams.id);
+  }
+}
+
+async function updateAttachedCertificate(gradebookCertificateId, documentId){
+  const { data } = await axios.patch(ENTRYPOINT + 'gradebook_categories/' + gradebookCertificateId,
+  {"document": documentId},
+  {headers: {'Content-Type': 'application/merge-patch+json'}}
+  );
+
+  return data;
+
 }
 </script>

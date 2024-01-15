@@ -5,11 +5,17 @@
         :id="id"
         :model-value="modelValue"
         :class="{ 'p-invalid': isInvalid }"
+        class="border-primary-gradient hover:border-primary focus:ring-primary"
         :aria-label="label"
         type="text"
         @update:model-value="$emit('update:modelValue', $event)"
       />
-      <label v-t="label" :class="{ 'p-error': isInvalid }" :for="id" />
+      <label
+        v-t="label"
+        :class="{ 'p-error': isInvalid }"
+        :for="id"
+        class="text-primary/40"
+      />
     </div>
     <slot name="errors">
       <small v-if="isInvalid" v-t="errorText" class="p-error" />

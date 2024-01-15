@@ -3,7 +3,7 @@
     <DataTable
       v-model:expandedRows="expandedRows"
       v-model:filters="filters"
-      :global-filter-fields="['name', 'description', 'category', 'category.name', 'course.courseLanguage']"
+      :global-filter-fields="['title', 'description', 'category.title', 'course.courseLanguage']"
       :loading="status"
       :paginator="true"
       :rows="9"
@@ -39,7 +39,7 @@
                 @click="clearFilter()"
               />
               <span class="p-input-icon-left">
-                <i class="pi pi-search" />
+                <i class="mdi mdi-search" />
                 <InputText
                   v-model="filters['global'].value"
                   :placeholder="$t('Search')"
@@ -63,11 +63,11 @@
         :header="$t('Title')"
         :sortable="true"
         class="session-name"
-        field="name"
+        field="title"
         style="min-width: 12rem"
       >
         <template #body="{ data }">
-          {{ data.name }}
+          {{ data.title }}
         </template>
       </Column>
       <Column
@@ -90,7 +90,7 @@
         <template #body="{ data }">
           <span v-if="data.category">
             <em class="pi pi-tag course-category-icon" />
-            {{ data.category.name }}
+            {{ data.category.title }}
           </span>
         </template>
       </Column>
@@ -125,7 +125,7 @@
       </Column>
       <template #expansion="item">
         <div class="orders-subtable">
-          <h5>{{ $t("Courses in this session") + " - " + item.data.name }}</h5>
+          <h5>{{ $t("Courses in this session") + " - " + item.data.title }}</h5>
           <DataTable
             :value="item.data.courses"
             responsive-layout="scroll"
@@ -171,7 +171,7 @@
                   :key="category.id"
                 >
                   <em class="pi pi-tag course-category-icon" />
-                  <span class="course-category">{{ category.name }}</span
+                  <span class="course-category">{{ category.title }}</span
                   ><br />
                 </span>
               </template>

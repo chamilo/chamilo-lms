@@ -180,7 +180,7 @@ class TrackEExercise
     protected Collection $attempts;
 
     #[Groups(['track_e_exercise:read'])]
-    #[ORM\OneToMany(mappedBy: 'trackExercise', targetEntity: TrackEAttemptRecording::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'trackExercise', targetEntity: TrackEAttemptQualify::class, orphanRemoval: true)]
     private Collection $revisedAttempts;
 
     public function __construct()
@@ -461,14 +461,14 @@ class TrackEExercise
     }
 
     /**
-     * @return Collection<int, TrackEAttemptRecording>
+     * @return Collection<int, TrackEAttemptQualify>
      */
     public function getRevisedAttempts(): Collection
     {
         return $this->revisedAttempts;
     }
 
-    public function addRevisedAttempt(TrackEAttemptRecording $revisedAttempt): static
+    public function addRevisedAttempt(TrackEAttemptQualify $revisedAttempt): static
     {
         if (!$this->revisedAttempts->contains($revisedAttempt)) {
             $this->revisedAttempts->add($revisedAttempt);
@@ -478,7 +478,7 @@ class TrackEExercise
         return $this;
     }
 
-    public function removeRevisedAttempt(TrackEAttemptRecording $revisedAttempt): static
+    public function removeRevisedAttempt(TrackEAttemptQualify $revisedAttempt): static
     {
         if ($this->revisedAttempts->removeElement($revisedAttempt)) {
             // set the owning side to null (unless already changed)

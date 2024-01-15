@@ -304,7 +304,7 @@ if (count($sessions) > 0) {
         $personal_course_list = [];
         $sessionId = $session->getId();
 
-        $csvContent[] = [$session->getName()];
+        $csvContent[] = [$session->getTitle()];
         $csvContent[] = $headerList;
         foreach ($session->getCourses() as $sessionRelCourse) {
             $course = $sessionRelCourse->getCourse();
@@ -391,7 +391,7 @@ if (count($sessions) > 0) {
         );
         $sessionInformation .= Display::page_subheader(
             '<a href="'.api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$sessionId.'">'.
-            $session->getName().'</a>',
+            $session->getTitle().'</a>',
             $certificateLink.' '.$dates['access']
         );
 
@@ -695,7 +695,7 @@ if ('true' === api_get_setting('profile.allow_career_users')) {
         $table->setHeaderContents(0, 0, get_lang('Career'));
         $row = 1;
         foreach ($careers as $carerData) {
-            $table->setCellContents($row, 0, $carerData['name']);
+            $table->setCellContents($row, 0, $carerData['title']);
             $row++;
         }
         echo $table->toHtml();

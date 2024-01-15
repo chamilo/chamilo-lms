@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityDocument;
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
@@ -157,21 +158,31 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $iid = null;
+
     #[Groups(['document:read', 'document:write', 'document:browse'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
+
     #[Groups(['document:read', 'document:write'])]
     #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected ?string $comment;
+
     #[Groups(['document:read', 'document:write'])]
-    #[Assert\Choice(['folder', 'file'], message: 'Choose a valid filetype.')]
-    #[ORM\Column(name: 'filetype', type: 'string', length: 10, nullable: false)]
+    #[Assert\Choice(['folder', 'file', 'certificate'], message: 'Choose a valid filetype.')]
+    #[ORM\Column(name: 'filetype', type: 'string', length: 15, nullable: false)]
     protected string $filetype;
+
     #[ORM\Column(name: 'readonly', type: 'boolean', nullable: false)]
     protected bool $readonly;
+
     #[ORM\Column(name: 'template', type: 'boolean', nullable: false)]
     protected bool $template;
+
+    #[ORM\OneToOne(mappedBy: 'document', targetEntity: GradebookCategory::class)]
+    #[Groups(['document:read'])]
+    protected ?GradebookCategory $gradebookCategory = null;
+
     public function __construct()
     {
         $this->comment = '';
@@ -179,75 +190,94 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
         $this->readonly = false;
         $this->template = false;
     }
+
     public function __toString(): string
     {
         return $this->getTitle();
     }
-    public function isTemplate(): bool
-    {
-        return $this->template;
-    }
-    public function setTemplate(bool $template): self
-    {
-        $this->template = $template;
 
-        return $this;
-    }
-    public function setComment(?string $comment): self
+    public function getTitle(): string
     {
-        $this->comment = $comment;
+        return $this->title;
+    }
 
-        return $this;
-    }
-    public function getComment(): ?string
-    {
-        return $this->comment;
-    }
     public function setTitle(string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
-    public function getTitle(): string
+
+    public function isTemplate(): bool
     {
-        return $this->title;
+        return $this->template;
     }
+
+    public function setTemplate(bool $template): self
+    {
+        $this->template = $template;
+
+        return $this;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?string $comment): self
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    public function getFiletype(): string
+    {
+        return $this->filetype;
+    }
+
     public function setFiletype(string $filetype): self
     {
         $this->filetype = $filetype;
 
         return $this;
     }
-    public function getFiletype(): string
+
+    public function getReadonly(): bool
     {
-        return $this->filetype;
+        return $this->readonly;
     }
+
     public function setReadonly(bool $readonly): self
     {
         $this->readonly = $readonly;
 
         return $this;
     }
-    public function getReadonly(): bool
+
+    public function getResourceIdentifier(): int|Uuid
     {
-        return $this->readonly;
+        return $this->getIid();
     }
 
     public function getIid(): ?int
     {
         return $this->iid;
     }
-    public function getResourceIdentifier(): int|Uuid
-    {
-        return $this->getIid();
-    }
+
     public function getResourceName(): string
     {
         return $this->getTitle();
     }
+
     public function setResourceName(string $name): self
     {
         return $this->setTitle($name);
+    }
+
+    public function getGradebookCategory(): ?GradebookCategory
+    {
+        return $this->gradebookCategory;
     }
 }

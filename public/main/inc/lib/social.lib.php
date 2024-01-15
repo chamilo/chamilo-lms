@@ -878,8 +878,8 @@ class SocialManager extends UserManager
                         $thread = $repoThread->find($row['thread_id']);
                         if ($post && $thread) {
                             //$courseInfo = api_get_course_info_by_id($post->getCId());
-                            $row['post_title'] = $post->getForum()->getForumTitle();
-                            $row['forum_title'] = $thread->getThreadTitle();
+                            $row['post_title'] = $post->getForum()->getTitle();
+                            $row['forum_title'] = $thread->getTitle();
                             $row['thread_url'] = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.http_build_query([
                                     //'cid' => $courseInfo['real_id'],
                                     'forum' => $post->getForum()->getIid(),
@@ -1071,15 +1071,17 @@ class SocialManager extends UserManager
         }
 
         $userInfo['is_admin'] = UserManager::is_admin($userId);
-        $languageId = api_get_language_from_iso($userInfo['language']);
-        $languageInfo = api_get_language_info($languageId);
-        if ($languageInfo) {
+        $language = api_get_language_from_iso($userInfo['language']);
+
+        if ($language) {
             $userInfo['language'] = [
-                'label' => $languageInfo['original_name'],
-                'value' => $languageInfo['english_name'],
-                'code' => $languageInfo['isocode'],
+                'label' => $language->getOriginalName(),
+                'value' => $language->getEnglishName(),
+                'code' => $language->getIsocode(),
             ];
         }
+
+        error_log('$userInfo ->'.print_r($userInfo['language'], true));
 
         if (isset($options['language']) && false === $options['language']) {
             $userInfo['language'] = '';
@@ -1758,11 +1760,11 @@ class SocialManager extends UserManager
                         $threads[] = [
                             'id' => $threadId,
                             'url' => Display::url(
-                                $thread->getThreadTitle(),
+                                $thread->getTitle(),
                                 $threadUrl
                             ),
                             'name' => Display::url(
-                                $thread->getThreadTitle(),
+                                $thread->getTitle(),
                                 $threadUrl
                             ),
                             'description' => '',

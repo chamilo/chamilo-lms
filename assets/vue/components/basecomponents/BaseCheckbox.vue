@@ -6,13 +6,23 @@
       :name="name"
       :input-id="id"
       @update:model-value="$emit('update:modelValue', $event)"
-    />
+    >
+      <template #icon="{checked}">
+        <BaseIcon
+          v-if="checked"
+          icon="confirm"
+          size="small"
+          class="bg-primary text-white rounded"
+        />
+      </template>
+    </Checkbox>
     <label :for="id" class="ml-2 cursor-pointer">{{ label }}</label>
   </div>
 </template>
 
 <script setup>
 import Checkbox from "primevue/checkbox";
+import BaseIcon from "./BaseIcon.vue";
 
 defineProps({
   id: {

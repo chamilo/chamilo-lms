@@ -23,8 +23,8 @@ class TrackEHotpotatoes
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'exe_name', type: 'string', length: 255, nullable: false)]
-    protected string $exeName;
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    protected string $title;
 
     #[ORM\Column(name: 'exe_user_id', type: 'integer', nullable: true)]
     protected ?int $exeUserId = null;
@@ -42,25 +42,25 @@ class TrackEHotpotatoes
     protected int $maxScore;
 
     /**
-     * Set exeName.
+     * Set title.
      *
      * @return TrackEHotpotatoes
      */
-    public function setExeName(string $exeName)
+    public function setTitle(string $title)
     {
-        $this->exeName = $exeName;
+        $this->title = $title;
 
         return $this;
     }
 
     /**
-     * Get exeName.
+     * Get title.
      *
      * @return string
      */
-    public function getExeName()
+    public function getTitle()
     {
-        return $this->exeName;
+        return $this->title;
     }
 
     /**

@@ -45,14 +45,14 @@
               slot="item.visibility"
               slot-scope="{ item }"
             >
-              {{ $n(item["visibility"]) }}
+              {{ item }}
             </template>
 
             <template
               slot="item.expirationDate"
               slot-scope="{ item }"
             >
-              {{ formatDateTime(item["expirationDate"], "long") }}
+              {{ item }}
             </template>
 
             <ActionCell

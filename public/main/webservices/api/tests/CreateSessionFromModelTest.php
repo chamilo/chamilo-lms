@@ -58,7 +58,7 @@ class CreateSessionFromModelTest extends V2TestCase
         $this->assertIsObject($newSession);
 
         // assert the new session got the right data
-        $this->assertSame($name, $newSession->getName());
+        $this->assertSame($name, $newSession->getTitle());
         // FIXME account for UTC / local timezone shift
         // $this->assertSame($endDate, $newSession->getDisplayEndDate());
         // $this->assertSame($startDate, $newSession->getAccessStartDate());
@@ -79,7 +79,7 @@ class CreateSessionFromModelTest extends V2TestCase
     {
         // create a promotion
         $career = new Career();
-        $careerId = $career->save(['name' => 'test career'.time()]);
+        $careerId = $career->save(['title' => 'test career'.time()]);
         $promotion = new Promotion();
         $promotionId = $promotion->save(['career_id' => $careerId, 'name' => 'test promo'.time()]);
 

@@ -93,7 +93,7 @@ switch ($action) {
         $form = TicketManager::getProjectForm($url);
 
         $form->setDefaults([
-            'name' => $item->getName(),
+            'name' => $item->getTitle(),
             'description' => $item->getDescription(),
         ]);
 

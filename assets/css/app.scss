@@ -2,17 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-.btn-blue {
-  @apply bg-primary text-white;
-}
-.btn-blue:hover {
-}
-
 @import '~cropper/dist/cropper.css';
 //@import "~flag-icons/sass/flag-icons.scss";
 @import "~select2/dist/css/select2.css";
 @import "~bootstrap-daterangepicker/daterangepicker.css";
 //@import '~jquery-ui/themes/base/all.css';
+
+// TAILWIND COLOR DEFINITION https://tailwindcss.com/docs/customizing-colors#using-css-variables
+@layer base {
+  :root {
+    --color-primary-base: 46, 117, 163;
+    --color-primary-gradient: 156, 194, 218;
+
+    --color-secondary-base: 243, 126, 47;
+    --color-secondary-gradient: 224, 100, 16;
+
+    --color-tertiary-base: 0, 0, 0;
+    --color-tertiary-gradient: 51, 51, 51;
+
+    --color-success-base: 119, 170, 12;
+    --color-success-gradient: 84, 119, 8;
+
+    --color-danger-base: 223, 59, 59;
+  }
+}
 
 @layer utilities {
   .custom-collapse {
@@ -121,6 +134,9 @@
 
   .ch-tool-icon {
     @apply font-extrabold text-primary;
+  }
+  .ch-toolbar-icon {
+    @apply font-extrabold text-primary leading-none;
   }
   .ch-tool-icon-disabled {
     @apply font-extrabold text-gray-50;
@@ -239,9 +255,6 @@
   text-decoration: underline;
 }
 
-/* ****************************************************
-                     CSS SKILL
- **************************************************** */
 #skillList .header-title{
   padding: 8px;
   border-bottom: 2px solid #ddd;
@@ -498,10 +511,6 @@ table#skill_holder {
 .hide-label-title {
   color: #0a0a0a;
 }
-
-/* ****************************************************
-                     END SKILL
- **************************************************** */
 
 //@import 'primevue-md-light-indigo/theme.css';
 //@import '~primevue/resources/primevue.min.css';

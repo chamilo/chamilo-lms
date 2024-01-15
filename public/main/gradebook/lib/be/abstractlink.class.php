@@ -478,7 +478,7 @@ abstract class AbstractLink implements GradebookItem
 
         $params = [
             'id_linkeval_log' => $arreval['id'],
-            'name' => $name_log,
+            'title' => $name_log,
             'description' => $description_log,
             'created_at' => $now,
             'weight' => $arreval['weight'],

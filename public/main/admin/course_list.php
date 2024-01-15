@@ -57,7 +57,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
 
     $select = "SELECT
                 course.code AS col0,
-                title AS col1,
+                course.title AS col1,
                 course.code AS col2,
                 course_language AS col3,
                 subscribe AS col5,
@@ -91,7 +91,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
     if (isset($_GET['keyword'])) {
         $keyword = Database::escape_string('%'.trim($_GET['keyword']).'%');
         $sql .= " WHERE (
-            title LIKE '".$keyword."' OR
+            course.title LIKE '".$keyword."' OR
             course.code LIKE '".$keyword."' OR
             visual_code LIKE '".$keyword."'
         )
@@ -109,7 +109,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
 
         $sql .= " WHERE
                 (course.code LIKE '".$keyword_code."' OR visual_code LIKE '".$keyword_code."') AND
-                title LIKE '".$keyword_title."' AND
+                course.title LIKE '".$keyword_title."' AND
                 course_language LIKE '".$keyword_language."' AND
                 visibility LIKE '".$keyword_visibility."' AND
                 subscribe LIKE '".$keyword_subscribe."' AND
@@ -151,14 +151,14 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
         $courseInfo = api_get_course_info_by_id($course['id']);
 
         // get categories
-        $sqlCategoriesByCourseId = "SELECT category.name FROM $tblCourseCategory category
+        $sqlCategoriesByCourseId = "SELECT category.title FROM $tblCourseCategory category
             INNER JOIN $tblCourseRelCategory course_rel_category ON category.id = course_rel_category.course_category_id
             WHERE course_rel_category.course_id = ".$course['id'];
         $resultCategories = Database::query($sqlCategoriesByCourseId);
         $categories = [];
 
         while ($category = Database::fetch_array($resultCategories)) {
-            $categories[] = $category['name'];
+            $categories[] = $category['title'];
         }
 
         // Place colour icons in front of courses.

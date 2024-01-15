@@ -206,7 +206,7 @@ class survey_question
         $icon = Display::getMdiIcon(
                 SurveyManager::icon_question($type),
                 'ch-tool-icon',
-                ['align' => 'middle'],
+                null,
                 ICON_SIZE_SMALL,
                 $toolName
             ).' ';
@@ -250,7 +250,7 @@ class survey_question
         // When survey type = 1??
         if (1 == $surveyData['survey_type']) {
             $table_survey_question_group = Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);
-            $sql = 'SELECT id,name FROM '.$table_survey_question_group.'
+            $sql = 'SELECT id, title FROM '.$table_survey_question_group.'
                     WHERE survey_id = '.$surveyId.'
                     ORDER BY name';
             $rs = Database::query($sql);
@@ -370,6 +370,7 @@ class survey_question
         }
 
         if (isset($_POST['answers'])) {
+            $formData['question'] = $_POST['question'];
             $formData['answers'] = $_POST['answers'];
         }
 
@@ -421,7 +422,7 @@ class survey_question
                 if ($key > $deleted) {
                     // swap with previous (deleted) option slot
                     $newAnswers[$key - 1] = $formData['answers'][$key];
-                    $newAnswersId[$key - 1] = $formData['answersid'][$key];
+                    $newAnswersId[$key - 1] = $formData['answersid'][$key] ?? 0;
                     unset($formData['answers'][$key]);
                     unset($formData['answersid'][$key]);
                 } elseif ($key === $deleted) {

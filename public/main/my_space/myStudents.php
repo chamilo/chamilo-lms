@@ -1613,7 +1613,7 @@ if (empty($details)) {
         $columnHeadersKeys = array_keys($columnHeaders);
         $categoriesTempList = learnpath::getCategories($courseId);
         $categoryTest = new CLpCategory();
-        $categoryTest->setName(get_lang('Without category'));
+        $categoryTest->setTitle(get_lang('Without category'));
         $categoryTest->setPosition(0);
         $categories = [
             $categoryTest,
@@ -1647,7 +1647,7 @@ if (empty($details)) {
             $flat_list = $list->get_flat_list();
             $i = 0;
             if (count($categories) > 1) {
-                echo Display::page_subheader2($item->getName());
+                echo Display::page_subheader2($item->getTitle());
             }
 
             echo '<div class="table-responsive">';

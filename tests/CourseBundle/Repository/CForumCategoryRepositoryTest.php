@@ -28,7 +28,7 @@ class CForumCategoryRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
 
         $category = (new CForumCategory())
-            ->setCatTitle('cat 1')
+            ->setTitle('cat 1')
             ->setCatComment('comment')
             ->setCatOrder(1)
             ->setLocked(1)
@@ -47,7 +47,7 @@ class CForumCategoryRepositoryTest extends AbstractApiTest
         $this->assertSame('cat 1', (string) $category);
 
         $forum = (new CForum())
-            ->setForumTitle('forum')
+            ->setTitle('forum')
             ->setParent($course)
             ->setCreator($teacher)
             ->setForumCategory($category)

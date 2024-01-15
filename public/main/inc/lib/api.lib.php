@@ -2970,7 +2970,7 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
     $sessionIsCoach = [];
 
     if (!empty($courseId)) {
-        $sql = "SELECT DISTINCT s.id, name, access_start_date, access_end_date
+        $sql = "SELECT DISTINCT s.id, title, access_start_date, access_end_date
                 FROM $session_table s
                 INNER JOIN $session_rel_course_rel_user_table session_rc_ru
                 ON session_rc_ru.session_id = s.id AND session_rc_ru.user_id = '".$userId."'
@@ -2991,7 +2991,7 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
                     sru.user_id = $userId AND
                     s.id = $session_id AND
                     sru.relation_type = ".SessionEntity::GENERAL_COACH."
-                ORDER BY s.access_start_date, s.access_end_date, s.name";
+                ORDER BY s.access_start_date, s.access_end_date, s.title";
         $result = Database::query($sql);
         if (!empty($sessionIsCoach)) {
             $sessionIsCoach = array_merge(
@@ -3450,15 +3450,17 @@ function api_is_anonymous()
 /**
  * Displays message "You are not allowed here..." and exits the entire script.
  *
- * @param bool   $print_headers Whether or not to print headers (default = false -> does not print them)
+ * @param bool $print_headers Whether to print headers (default = false -> does not print them)
  * @param string $message
- * @param int    $responseCode
+ * @param int $responseCode
+ *
+ * @throws Exception
  */
 function api_not_allowed(
     $print_headers = false,
     $message = null,
     $responseCode = 0
-) {
+): never {
     throw new Exception('You are not allowed');
 }
 
@@ -5335,7 +5337,7 @@ function api_get_tool_information_by_name($name)
     $course_id = api_get_course_int_id();
 
     $sql = "SELECT id FROM tool
-            WHERE name = '".Database::escape_string($name)."' ";
+            WHERE title = '".Database::escape_string($name)."' ";
     $rs = Database::query($sql);
     $data = Database::fetch_array($rs);
     if ($data) {

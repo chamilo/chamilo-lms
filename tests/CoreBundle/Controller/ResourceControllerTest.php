@@ -175,7 +175,7 @@ class ResourceControllerTest extends WebTestCase
         $lpRepo = self::getContainer()->get(CLpRepository::class);
 
         $lp = (new CLp())
-            ->setName('lp')
+            ->setTitle('lp')
             ->setParent($course)
             ->setCreator($admin)
             ->setLpType(CLp::LP_TYPE)

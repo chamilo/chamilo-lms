@@ -19,8 +19,8 @@ class SpecificField
     #[ORM\Column(name: 'code', type: 'string', length: 1, nullable: false)]
     protected string $code;
 
-    #[ORM\Column(name: 'name', type: 'string', length: 200, nullable: false)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'string', length: 200, nullable: false)]
+    protected string $title;
 
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -50,25 +50,25 @@ class SpecificField
     }
 
     /**
-     * Set name.
+     * Set title.
      *
      * @return SpecificField
      */
-    public function setName(string $name)
+    public function setTitle(string $title)
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
 
     /**
-     * Get name.
+     * Get title.
      *
      * @return string
      */
-    public function getName()
+    public function getTitle()
     {
-        return $this->name;
+        return $this->title;
     }
 
     /**

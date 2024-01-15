@@ -23,13 +23,13 @@ class PromotionRepositoryTest extends AbstractApiTest
         $defaultCount = $repo->count([]);
 
         $career = (new Career())
-            ->setName('Doctor')
+            ->setTitle('Doctor')
         ;
         $em->persist($career);
         $em->flush();
 
         $promotion = (new Promotion())
-            ->setName('2000')
+            ->setTitle('2000')
             ->setDescription('Promotion of 2000')
             ->setCareer($career)
             ->setStatus(1)
@@ -38,7 +38,7 @@ class PromotionRepositoryTest extends AbstractApiTest
         $em->persist($promotion);
         $em->flush();
 
-        $this->assertSame('2000', $promotion->getName());
+        $this->assertSame('2000', $promotion->getTitle());
         $this->assertSame('Promotion of 2000', $promotion->getDescription());
         $this->assertNotNull($promotion->getId());
         $this->assertSame(0, $promotion->getAnnouncements()->count());

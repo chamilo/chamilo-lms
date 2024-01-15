@@ -77,7 +77,6 @@ if ($form->validate()) {
     $sql = 'UPDATE '.$tbl_forum_thread.' SET
                 thread_weight = '.api_float_val($final_weight).'
             WHERE
-			    c_id = '.$course_id.' AND
 			    iid = (
                     SELECT ref_id FROM '.$tbl_grade_links.'
 			        WHERE id='.intval($_GET['editlink']).' AND type = 5
@@ -89,15 +88,13 @@ if ($form->validate()) {
         ->createQuery('
             UPDATE ChamiloCourseBundle:CStudentPublication w
             SET w.weight = :final_weight
-            WHERE w.cId = :course
-                AND w.iid = (
+            WHERE w.iid = (
                     SELECT l.refId FROM ChamiloCoreBundle:GradebookLink l
                     WHERE l.id = :link AND l.type = :type
                 )
         ')
         ->execute([
             'final_weight' => $final_weight,
-            'course' => $course_id,
             'link' => intval($_GET['editlink']),
             'type' => LINK_STUDENTPUBLICATION,
         ]);

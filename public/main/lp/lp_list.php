@@ -110,7 +110,7 @@ if ($allowCategory) {
 }
 
 $categoryTest = new CLpCategory();
-$categoryTest->setName(get_lang('Without category'));
+$categoryTest->setTitle(get_lang('Without category'));
 $categoryTest->setPosition(0);
 $categories = [$categoryTest];
 
@@ -130,7 +130,7 @@ if ($filteredCategoryId) {
         }
 
         $interbreadcrumb[] = ['name' => $nameTools, 'url' => api_get_self()];
-        $nameTools = strip_tags($category->getName());
+        $nameTools = strip_tags($category->getTitle());
     }
 }
 

@@ -46,7 +46,7 @@ switch ($action) {
         $data = [];
         if (!empty($lps)) {
             foreach ($lps as $lp) {
-                $data[] = ['id' => $lp->getIid(), 'text' => html_entity_decode($lp->getName())];
+                $data[] = ['id' => $lp->getIid(), 'text' => html_entity_decode($lp->getTitle())];
             }
         }
         echo json_encode($data);
@@ -241,7 +241,7 @@ switch ($action) {
             if (null === $forumCategory) {
                 $forumCategory = new CForumCategory();
                 $forumCategory
-                    ->setCatTitle(get_lang('Learning paths'))
+                    ->setTitle(get_lang('Learning paths'))
                     ->setParent($course)
                     ->addCourseLink($course, $session)
                 ;
@@ -250,7 +250,7 @@ switch ($action) {
 
             $forum = new CForum();
             $forum
-                ->setForumTitle('forum2')
+                ->setTitle('forum2')
                 ->setForumCategory($forumCategory)
                 ->setParent($course)
                 ->setLp($lp)
@@ -266,7 +266,7 @@ switch ($action) {
         if (null === $thread) {
             $thread = new CForumThread();
             $thread
-                ->setThreadTitle($title)
+                ->setTitle($title)
                 ->setForum($forum)
                 ->setUser(api_get_user_entity())
                 ->setParent($forum)

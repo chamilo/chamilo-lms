@@ -20,15 +20,15 @@ class HandlerCollection
         $this->handlers = $handlers;
     }
 
-    public function getHandler(string $name): AbstractTool
+    public function getHandler(string $title): AbstractTool
     {
         foreach ($this->handlers as $handler) {
-            if ($name === $handler->getName()) {
+            if ($title === $handler->getTitle()) {
                 return $handler;
             }
         }
 
-        throw new InvalidArgumentException(sprintf('Cannot handle tool "%s"', $name));
+        throw new InvalidArgumentException(sprintf('Cannot handle tool "%s"', $title));
     }
 
     /**

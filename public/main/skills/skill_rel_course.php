@@ -29,7 +29,7 @@ if (!empty($sessionId)) {
     if (!$courseExistsInSession) {
         api_not_allowed(true);
     }
-    $sessionName = ' '.$session->getName().' - '.$course->getTitleAndCode();
+    $sessionName = ' '.$session->getTitle().' - '.$course->getTitleAndCode();
 }
 
 $form->addHeader(get_lang('Add skills').$sessionName);
@@ -41,7 +41,7 @@ $items = $em->getRepository(SkillRelCourse::class)->findBy(
 );
 /** @var SkillRelCourse $skillRelCourse */
 foreach ($items as $skillRelCourse) {
-    $skillList[$skillRelCourse->getSkill()->getId()] = $skillRelCourse->getSkill()->getName();
+    $skillList[$skillRelCourse->getSkill()->getId()] = $skillRelCourse->getSkill()->getTitle();
 }
 
 $form->addHidden('course_id', $courseId);

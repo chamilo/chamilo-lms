@@ -25,12 +25,12 @@ class ResourceFormat
 
     #[ORM\Column]
     #[Assert\NotBlank]
-    protected string $name;
+    protected string $title;
 
     /**
      * @var Collection<int, ResourceNode>
      */
-    #[ORM\OneToMany(targetEntity: ResourceNode::class, mappedBy: 'resourceFormat', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'resourceFormat', targetEntity: ResourceNode::class)]
     protected Collection $resourceNodes;
 
     public function __construct()
@@ -40,7 +40,7 @@ class ResourceFormat
 
     public function __toString(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function getId(): int
@@ -48,14 +48,14 @@ class ResourceFormat
         return $this->id;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }

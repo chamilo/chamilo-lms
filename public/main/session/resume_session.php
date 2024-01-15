@@ -111,7 +111,7 @@ switch ($action) {
 }
 
 $sessionHeader = Display::page_header(
-    Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon-gradient', null, 32, get_lang('Session')).' '.$session->getName(),
+    Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon-gradient', null, 32, get_lang('Session')).' '.$session->getTitle(),
     null,
     'h3'
 );

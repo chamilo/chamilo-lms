@@ -24,7 +24,7 @@ class CLinkCategoryRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
 
         $category = (new CLinkCategory())
-            ->setCategoryTitle('cat')
+            ->setTitle('cat')
             ->setDescription('desc')
             ->setDisplayOrder(1)
             ->setParent($course)

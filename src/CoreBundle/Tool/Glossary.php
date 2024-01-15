@@ -10,7 +10,7 @@ use Chamilo\CourseBundle\Entity\CGlossary;
 
 class Glossary extends AbstractTool implements ToolInterface
 {
-    public function getName(): string
+    public function getTitle(): string
     {
         return 'glossary';
     }

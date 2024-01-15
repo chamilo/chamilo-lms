@@ -87,7 +87,7 @@ class ToolChainTest extends AbstractApiTest
         $tools = $toolChain->getTools();
 
         foreach ($tools as $tool) {
-            $name = $tool->getName();
+            $name = $tool->getTitle();
             $this->assertNotEmpty($name);
 
             $link = $tool->getLink();
@@ -166,7 +166,7 @@ class ToolChainTest extends AbstractApiTest
         $this->assertNotEmpty($items);
 
         $resourceType = (new ResourceType())
-            ->setName('test')
+            ->setTitle('test')
         ;
         $this->assertHasNoEntityViolations($resourceType);
         $em->persist($resourceType);
@@ -175,7 +175,7 @@ class ToolChainTest extends AbstractApiTest
         $collection->add($resourceType);
 
         $tool = (new Tool())
-            ->setName('lasagna')
+            ->setTitle('lasagna')
             ->setResourceTypes($collection)
         ;
         $this->assertHasNoEntityViolations($tool);

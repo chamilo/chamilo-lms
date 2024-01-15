@@ -9,7 +9,7 @@
       :class="{ 'text-right text-body-2': editStatus }"
     >
       <span class="mdi mdi-book" />
-      {{ t('Course: {0}', [ link.course.resourceNode.title ]) }}
+      {{ t("Course: {0}", [link.course.resourceNode.title]) }}
     </div>
 
     <div
@@ -17,7 +17,7 @@
       :class="{ 'text-right text-body-2': editStatus }"
     >
       <span class="mdi mdi-book-open" />
-      {{ t('Session: {0}', [ link.session.name ]) }}
+      {{ t("Session: {0}", [link.session.name]) }}
     </div>
 
     <div
@@ -25,17 +25,15 @@
       :class="{ 'text-right text-body-2': editStatus }"
     >
       <span class="mdi mdi-people" />
-      {{ t('Group: {0}', [ link.group.resourceNode.title ]) }}
+      {{ t("Group: {0}", [link.group.resourceNode.title]) }}
     </div>
 
     <div
       v-if="link.userGroup"
-      v-t="{ path: 'Class: {0}', args: [ link.userGroup.resourceNode.title ] }"
+      v-t="{ path: 'Class: {0}', args: [link.userGroup.resourceNode.title] }"
     />
 
-    <div
-      v-if="link.user"
-    >
+    <div v-if="link.user">
       <span class="mdi mdi-account" />
       <!--  @todo add avatar        -->
       <!--  <q-avatar size="32px">-->
@@ -49,9 +47,7 @@
       v-t="{ path: 'Status: {0}', args: [link.visibilityName] }"
     />
 
-    <div
-      v-if="editStatus"
-    >
+    <div v-if="editStatus">
       <div class="p-float-label">
         <Dropdown
           v-model="link.visibility"
@@ -70,10 +66,10 @@
 </template>
 
 <script setup>
-import { RESOURCE_LINK_PUBLISHED, RESOURCE_LINK_DRAFT } from "./visibility";
-import { useI18n } from 'vue-i18n';
+import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "./visibility"
+import { useI18n } from "vue-i18n"
 
-const { t } = useI18n();
+const { t } = useI18n()
 
 defineProps({
   item: {
@@ -81,22 +77,22 @@ defineProps({
     required: true,
     default: () => ({
       resourceLinkListFromEntity: [],
-    })
+    }),
   },
   showStatus: {
     type: Boolean,
     required: false,
-    default: true
+    default: true,
   },
   editStatus: {
     type: Boolean,
     required: false,
-    default: false
-  }
-});
+    default: false,
+  },
+})
 
 const visibilityOptions = [
-  { value: RESOURCE_LINK_PUBLISHED, label: t('Published') },
-  { value: RESOURCE_LINK_DRAFT, label: t('Draft') },
-];
+  { value: RESOURCE_LINK_PUBLISHED, label: t("Published") },
+  { value: RESOURCE_LINK_DRAFT, label: t("Draft") },
+]
 </script>

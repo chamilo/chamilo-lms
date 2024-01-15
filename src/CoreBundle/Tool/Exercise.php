@@ -13,12 +13,12 @@ use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 
 class Exercise extends AbstractTool implements ToolInterface
 {
-    public function getName(): string
+    public function getTitle(): string
     {
         return 'quiz';
     }
 
-    public function getNameToShow(): string
+    public function getTitleToShow(): string
     {
         return 'Tests';
     }

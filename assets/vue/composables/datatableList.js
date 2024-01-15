@@ -5,6 +5,7 @@ import { isEmpty } from 'lodash'
 
 import { useCidReq } from './cidReq'
 import { useI18n } from 'vue-i18n';
+import { useNotification } from "./notification"
 
 export function useDatatableList (servicePrefix) {
   const moduleName = servicePrefix.toLowerCase()
@@ -16,7 +17,7 @@ export function useDatatableList (servicePrefix) {
 
   const { cid, sid, gid } = useCidReq()
 
-  const flashMessageList = inject('flashMessageList')
+  const notification = useNotification()
 
   const filters = ref({})
 
@@ -121,11 +122,7 @@ export function useDatatableList (servicePrefix) {
 
     onUpdateOptions(options.value);
 
-    toast.add({
-      severity: 'success',
-      detail: t('Deleted'),
-      life: 3500,
-    });
+    notification.showSuccessNotification(t('Deleted'))
   }
 
   return {

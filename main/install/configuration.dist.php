@@ -2530,3 +2530,6 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 
 // Add the user first connexion column to the page main/admin/user_list.php
 // $_configuration['admin_user_list_add_first_connexion_column'] = false;
+
+// Set the following parameter to true to enable student to be assign as teacher of a course
+//$_configuration['course_allow_student_role_to_be_teacher'] = false;

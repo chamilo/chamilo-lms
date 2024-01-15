@@ -7855,10 +7855,18 @@ SQL;
 
     public static function getAllowedRolesAsTeacher(): array
     {
-        return [
-            COURSEMANAGER,
-            SESSIONADMIN,
-        ];
+        if (api_get_configuration_value('course_allow_student_role_to_be_teacher')) {
+            return [
+                STUDENT,
+                COURSEMANAGER,
+                SESSIONADMIN,
+            ];
+        } else {
+            return [
+                COURSEMANAGER,
+                SESSIONADMIN,
+            ];
+        }
     }
 
     /**

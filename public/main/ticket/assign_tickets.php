@@ -27,7 +27,7 @@ $sql_tasks = 'SELECT id AS colid, title as coltitle
                 course_code = '$course_code' AND
                 id != $id
         )";
-$sql_forum = 'SELECT thread_id AS colid, thread_title AS coltitle
+$sql_forum = 'SELECT thread_id AS colid, title AS coltitle
     FROM '.Database::get_course_table(TABLE_FORUM_THREAD)."
     WHERE thread_id NOT IN (
         SELECT forum_id

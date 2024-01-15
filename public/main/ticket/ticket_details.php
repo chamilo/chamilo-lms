@@ -267,14 +267,14 @@ if ($allowEdition
                 );
                 $newPriorityTitle = '-';
                 if ($newPriority) {
-                    $newPriorityTitle = $newPriority->getName();
+                    $newPriorityTitle = $newPriority->getTitle();
                 }
                 $oldPriority = TicketManager::getPriority(
                     $ticket['ticket']['priority_id']
                 );
                 $oldPriorityTitle = '-';
                 if ($oldPriority) {
-                    $oldPriorityTitle = $oldPriority->getName();
+                    $oldPriorityTitle = $oldPriority->getTitle();
                 }
                 $messageToSend .= sprintf(
                     get_lang('Priority changed from %s to %s'),
@@ -289,7 +289,7 @@ if ($allowEdition
                 );
                 $newTitle = '-';
                 if ($newStatus) {
-                    $newTitle = $newStatus->getName();
+                    $newTitle = $newStatus->getTitle();
                 }
                 $oldStatus = TicketManager::getStatus(
                     $ticket['ticket']['status_id']

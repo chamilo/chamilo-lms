@@ -30,8 +30,8 @@ class CDropboxCategory
     protected int $catId;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'cat_name', type: 'text', nullable: false)]
-    protected string $catName;
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
+    protected string $title;
 
     #[ORM\Column(name: 'received', type: 'boolean', nullable: false)]
     protected bool $received;
@@ -46,25 +46,25 @@ class CDropboxCategory
     protected int $sessionId;
 
     /**
-     * Set catName.
+     * Set title.
      *
      * @return CDropboxCategory
      */
-    public function setCatName(string $catName)
+    public function setTitle(string $title)
     {
-        $this->catName = $catName;
+        $this->title = $title;
 
         return $this;
     }
 
     /**
-     * Get catName.
+     * Get title.
      *
      * @return string
      */
-    public function getCatName()
+    public function getTitle()
     {
-        return $this->catName;
+        return $this->title;
     }
 
     /**

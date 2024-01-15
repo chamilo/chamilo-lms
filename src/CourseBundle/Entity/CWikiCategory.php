@@ -23,8 +23,8 @@ class CWikiCategory
     #[ORM\Column(name: 'id', type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'name', type: 'string')]
-    private string $name;
+    #[ORM\Column(name: 'title', type: 'string')]
+    private string $title;
 
     #[ORM\ManyToMany(targetEntity: CWiki::class, mappedBy: 'categories')]
     private Collection $wikiPages;
@@ -71,7 +71,7 @@ class CWikiCategory
 
     public function __toString(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function getId(): ?int
@@ -79,19 +79,19 @@ class CWikiCategory
         return $this->id;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function getNodeName(): string
     {
-        return str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', $this->lvl).$this->name;
+        return str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', $this->lvl).$this->title;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }

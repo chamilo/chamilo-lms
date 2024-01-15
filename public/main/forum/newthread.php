@@ -179,7 +179,7 @@ if (!empty($groupId)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.(int) ($_GET['forum']),
-        'name' => $forumEntity->getForumTitle(),
+        'name' => $forumEntity->getTitle(),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/newthread.php?'.$cidreq.'&forum='.(int) ($_GET['forum']),
@@ -190,12 +190,12 @@ if (!empty($groupId)) {
     if ($current_forum_category) {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.$cidreq.'&forumcategory='.$current_forum_category->getIid(),
-            'name' => $current_forum_category->getCatTitle(),
+            'name' => $current_forum_category->getTitle(),
         ];
     }
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.$forumId,
-        'name' => $forumEntity->getForumTitle(),
+        'name' => $forumEntity->getTitle(),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Create thread')];
 }

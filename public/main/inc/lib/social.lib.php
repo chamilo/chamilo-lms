@@ -878,8 +878,8 @@ class SocialManager extends UserManager
                         $thread = $repoThread->find($row['thread_id']);
                         if ($post && $thread) {
                             //$courseInfo = api_get_course_info_by_id($post->getCId());
-                            $row['post_title'] = $post->getForum()->getForumTitle();
-                            $row['forum_title'] = $thread->getThreadTitle();
+                            $row['post_title'] = $post->getForum()->getTitle();
+                            $row['forum_title'] = $thread->getTitle();
                             $row['thread_url'] = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.http_build_query([
                                     //'cid' => $courseInfo['real_id'],
                                     'forum' => $post->getForum()->getIid(),
@@ -1758,11 +1758,11 @@ class SocialManager extends UserManager
                         $threads[] = [
                             'id' => $threadId,
                             'url' => Display::url(
-                                $thread->getThreadTitle(),
+                                $thread->getTitle(),
                                 $threadUrl
                             ),
                             'name' => Display::url(
-                                $thread->getThreadTitle(),
+                                $thread->getTitle(),
                                 $threadUrl
                             ),
                             'description' => '',

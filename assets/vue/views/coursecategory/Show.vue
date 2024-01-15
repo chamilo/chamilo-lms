@@ -32,7 +32,7 @@
                 <strong>{{ $t("name") }}</strong>
               </td>
               <td>
-                {{ item["name"] }}
+                {{ item["title"] }}
               </td>
 
               <td>

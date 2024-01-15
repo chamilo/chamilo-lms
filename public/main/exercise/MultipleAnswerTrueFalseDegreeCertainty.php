@@ -250,7 +250,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
 
         if (!$options->isEmpty()) {
             foreach ($options as $optionData) {
-                $optionData->setName($optionData->getName());
+                $optionData->setTitle($optionData->getTitle());
             }
         } else {
             for ($i = 1; $i <= 8; $i++) {

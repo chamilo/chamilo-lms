@@ -650,7 +650,7 @@ class SurveyManager
         while ($row = Database::fetch_assoc($res)) {
             $params = [
                 'c_id' => $targetCourseId,
-                'name' => $row['name'],
+                'name' => $row['title'],
                 'description' => $row['description'],
                 'survey_id' => $new_survey_id,
             ];
@@ -1752,7 +1752,7 @@ class SurveyManager
             while ($row = Database::fetch_assoc($res)) {
                 $params = [
                     'c_id' => $targetCourseId,
-                    'name' => $row['name'],
+                    'name' => $row['title'],
                     'description' => $row['description'],
                     'survey_id' => $newSurveyId,
                 ];

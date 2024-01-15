@@ -65,8 +65,8 @@ class Skill implements Stringable
     protected Collection $gradeBookCategories;
     #[Assert\NotBlank]
     #[Groups(['skill:read', 'skill:write'])]
-    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    protected string $title;
     #[Assert\NotBlank]
     #[Groups(['skill:read', 'skill:write'])]
     #[ORM\Column(name: 'short_code', type: 'string', length: 100, nullable: false)]
@@ -102,17 +102,19 @@ class Skill implements Stringable
     }
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
-    public function setName(string $name): self
+
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
-    public function getName(): string
+
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
     public function getShortCode(): string
     {

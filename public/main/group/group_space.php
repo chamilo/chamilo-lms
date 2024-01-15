@@ -67,7 +67,7 @@ if (!empty($_GET['selfUnReg']) &&
 }
 
 Display::display_header(
-    $nameTools.' '.Security::remove_XSS($groupEntity->getName()),
+    $nameTools.' '.Security::remove_XSS($groupEntity->getTitle()),
     'Group'
 );
 
@@ -112,7 +112,7 @@ if (api_is_allowed_to_edit(false, true) ||
 }
 
 echo Display::page_header(
-    Security::remove_XSS($groupEntity->getName()).' '.$edit_url.' '.$subscribe_group.' '.$unsubscribe_group
+    Security::remove_XSS($groupEntity->getTitle()).' '.$edit_url.' '.$subscribe_group.' '.$unsubscribe_group
 );
 
 if (!empty($groupEntity->getDescription())) {
@@ -134,7 +134,7 @@ if (api_is_allowed_to_edit(false, true) ||
                     $actions_array[] = [
                         'url' => api_get_path(WEB_CODE_PATH).
                             'forum/viewforum.php?forum='.$forum->getIid().'&'.api_get_cidreq().'&origin=group',
-                        'content' => Display::getMdiIcon(ToolIcon::FORUM, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Forum').': '.$forum->getForumTitle()),
+                        'content' => Display::getMdiIcon(ToolIcon::FORUM, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Forum').': '.$forum->getTitle()),
                     ];
                 }
             }

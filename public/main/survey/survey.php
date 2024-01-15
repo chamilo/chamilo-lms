@@ -83,7 +83,7 @@ if ($is_survey_type_1 && ('addgroup' === $action || 'deletegroup' === $action)) 
                              WHERE c_id = '.$course_id.' AND id = \''.Database::escape_string($_POST['group_id']).'\'');
             Display::addFlash(Display::return_message(get_lang('Update successful')));
         } elseif (!empty($_POST['name'])) {
-            Database::query('INSERT INTO '.$table_survey_question_group.' (c_id, name,description,survey_id) values ('.$course_id.', \''.Database::escape_string($_POST['name']).'\',\''.Database::escape_string($_POST['description']).'\',\''.$survey_id.'\') ');
+            Database::query('INSERT INTO '.$table_survey_question_group.' (c_id, title,description,survey_id) values ('.$course_id.', \''.Database::escape_string($_POST['name']).'\',\''.Database::escape_string($_POST['description']).'\',\''.$survey_id.'\') ');
             Display::addFlash(Display::return_message(get_lang('Item added')));
         } else {
             Display::addFlash(Display::return_message(get_lang('Group need name'), 'warning'));
@@ -393,12 +393,12 @@ if ($is_survey_type_1) {
     echo '<form
         action="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?action=addgroup&survey_id='.$survey_id.'" method="post">';
     if ('editgroup' === $_GET['action']) {
-        $sql = 'SELECT name,description FROM '.$table_survey_question_group.'
+        $sql = 'SELECT title, description FROM '.$table_survey_question_group.'
                 WHERE id = '.intval($_GET['gid']).' AND survey_id = '.$survey_id.'
                 LIMIT 1';
         $rs = Database::query($sql);
         $editedrow = Database::fetch_array($rs, 'ASSOC');
-        echo '<input type="text" maxlength="20" name="name" value="'.$editedrow['name'].'" size="10" disabled>';
+        echo '<input type="text" maxlength="20" name="name" value="'.$editedrow['title'].'" size="10" disabled>';
         echo '<input type="text" maxlength="150" name="description" value="'.$editedrow['description'].'" size="40">';
         echo '<input type="hidden" name="group_id" value="'.Security::remove_XSS($_GET['gid']).'">';
         echo '<input
@@ -419,7 +419,7 @@ if ($is_survey_type_1) {
     echo '		<th width="100">'.get_lang('Edit').'</th>';
     echo '	</tr>';
 
-    $sql = 'SELECT id,name,description
+    $sql = 'SELECT id, title, description
             FROM '.$table_survey_question_group.'
             WHERE
                 c_id = '.$course_id.' AND
@@ -429,12 +429,12 @@ if ($is_survey_type_1) {
     $rs = Database::query($sql);
     $grouplist = '';
     while ($row = Database::fetch_array($rs, 'ASSOC')) {
-        $grouplist .= '<tr><td>'.$row['name'].'</td><td>'.$row['description'].'</td><td>'.
+        $grouplist .= '<tr><td>'.$row['title'].'</td><td>'.$row['description'].'</td><td>'.
         '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&gid='.$row['id'].'&action=editgroup">'.
         Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a> '.
         '<a
             href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&gid='.$row['id'].'&action=deletegroup"
-            onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('Delete surveyGroup'), $row['name']).'?', ENT_QUOTES)).'\')) return false;">'.
+            onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('Delete surveyGroup'), $row['title']).'?', ENT_QUOTES)).'\')) return false;">'.
         Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>'.
         '</td></tr>';
     }

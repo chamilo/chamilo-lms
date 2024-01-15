@@ -88,7 +88,7 @@ class SessionRepository extends ServiceEntityRepository
         }
 
         if (!$session->hasCourse($course)) {
-            $msg = sprintf('Course %s is not subscribed to the session %s', $course->getTitle(), $session->getName());
+            $msg = sprintf('Course %s is not subscribed to the session %s', $course->getTitle(), $session->getTitle());
 
             throw new Exception($msg);
         }

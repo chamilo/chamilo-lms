@@ -78,7 +78,7 @@ if (!empty($group_id)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?gid='.$group_id,
-        'name' => get_lang('Group area').' '.$group_properties->getName(),
+        'name' => get_lang('Group area').' '.$group_properties->getTitle(),
     ];
 }
 

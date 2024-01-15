@@ -24145,3 +24145,9 @@ msgstr "The platform owner, responsible for the processing, implements processin
 
 msgid "Back to tests list"
 msgstr "Back to tests list"
+
+msgid "Number of times the question was answered"
+msgstr "Number of times the question was answered"
+
+msgid "Number of times this answer was selected"
+msgstr "Number of times this answer was selected"

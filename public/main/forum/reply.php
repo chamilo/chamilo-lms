@@ -161,11 +161,11 @@ if (!empty($groupId)) {
 
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq(),
-        'name' => $forum->getForumTitle(),
+        'name' => $forum->getTitle(),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&thread='.$threadId.'&'.api_get_cidreq(),
-        'name' => $threadEntity->getThreadTitle(),
+        'name' => $threadEntity->getTitle(),
     ];
 
     $interbreadcrumb[] = [
@@ -179,15 +179,15 @@ if (!empty($groupId)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/index.php?forumcategory='.$current_forum_category->getIid().'&'.api_get_cidreq(),
-        'name' => $current_forum_category->getCatTitle(),
+        'name' => $current_forum_category->getTitle(),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq(),
-        'name' => $forum->getForumTitle(),
+        'name' => $forum->getTitle(),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&thread='.$threadId.'&'.api_get_cidreq(),
-        'name' => $threadEntity->getThreadTitle(),
+        'name' => $threadEntity->getTitle(),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Reply')];
 }
@@ -248,7 +248,7 @@ if ('learnpath' !== $origin) {
 echo '<div class="forum_title">';
 echo '<h1>';
 echo Display::url(
-    prepare4display($forum->getForumTitle()),
+    prepare4display($forum->getTitle()),
     'viewforum.php?'.api_get_cidreq().'&'.http_build_query(['forum' => $forumId]),
     ['class' => empty($forum->isVisible($courseEntity)) ? 'text-muted' : null]
 );

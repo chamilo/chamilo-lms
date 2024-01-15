@@ -153,7 +153,7 @@ final class IllustrationRepository extends ResourceRepository
             $params = [
                 'id' => $node->getUuid(),
                 'tool' => $node->getResourceType()->getTool(),
-                'type' => $node->getResourceType()->getName(),
+                'type' => $node->getResourceType()->getTitle(),
             ];
 
             if (!empty($filter)) {

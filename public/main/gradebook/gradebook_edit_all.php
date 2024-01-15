@@ -162,7 +162,7 @@ foreach ($links as &$row) {
 
 $sql = "SELECT * FROM $table_evaluation
         WHERE category_id = $my_selectcat
-        ORDER BY name";
+        ORDER BY title";
 $result = Database::query($sql);
 $evaluations = Database::store_result($result);
 foreach ($evaluations as $evaluationRow) {
@@ -179,7 +179,7 @@ foreach ($evaluations as $evaluationRow) {
 
     $output .= '<tr>
                 <td>'.GradebookUtils::build_type_icon_tag('evalnotempty').'</td>
-                <td>'.$evaluationRow['name'].' '.Display::label(get_lang('Score')).'</td>';
+                <td>'.$evaluationRow['title'].' '.Display::label(get_lang('Score')).'</td>';
     $output .= '<td>
                     <input type="hidden" name="eval_'.$evaluationRow['id'].'" value="1" />
                     <input

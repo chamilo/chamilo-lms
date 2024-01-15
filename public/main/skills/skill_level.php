@@ -37,8 +37,8 @@ if (!empty($id)) {
 }
 
 $form = new FormValidator('level', 'GET', api_get_self().'?action='.$action.'&id='.$id);
-$form->addText('name', get_lang('Name'));
-$form->addText('short_name', get_lang('Short name'));
+$form->addText('title', get_lang('Name'));
+$form->addText('short_title', get_lang('Short name'));
 $form->addSelectFromCollection('profile_id', get_lang('Profile'), $profiles);
 $form->addHidden('action', $action);
 $form->addHidden('id', $id);
@@ -46,8 +46,8 @@ $form->addButtonSave(get_lang('Save'));
 
 if (!empty($item)) {
     $form->setDefaults([
-        'name' => $item->getName(),
-        'short_name' => $item->getShortName(),
+        'title' => $item->getTitle(),
+        'short_title' => $item->getShortTitle(),
         'profile_id' => $item->getProfile()->getId(),
     ]);
 }
@@ -67,8 +67,8 @@ switch ($action) {
                 $profile = $em->getRepository(Profile::class)->find($values['profile_id']);
                 if ($profile) {
                     $item = new Level();
-                    $item->setName($values['name']);
-                    $item->setShortName($values['short_name']);
+                    $item->setTitle($values['title']);
+                    $item->setShortTitle($values['short_title']);
                     $item->setProfile($profile);
                     $em->persist($item);
                     $em->flush();
@@ -99,8 +99,8 @@ switch ($action) {
         if ($form->validate()) {
             $values = $form->exportValues();
 
-            $item->setName($values['name']);
-            $item->setShortName($values['short_name']);
+            $item->setTitle($values['title']);
+            $item->setShortTitle($values['short_title']);
             $profile = $em->getRepository(Profile::class)->find($values['profile_id']);
             if ($profile) {
                 $item->setProfile($profile);

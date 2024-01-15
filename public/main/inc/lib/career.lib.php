@@ -240,7 +240,7 @@ class Career extends Model
     {
         $career = new CareerEntity();
         $career
-            ->setName($params['name'])
+            ->setTitle($params['name'])
             ->setStatus((int) $params['status'])
             ->setDescription($params['description']);
 

@@ -2,7 +2,7 @@
   <div class="card">
     <DataTable
       v-model:filters="filters"
-      :global-filter-fields="['title', 'description', 'category.name', 'courseLanguage']"
+      :global-filter-fields="['title', 'description', 'category.title', 'courseLanguage']"
       :loading="status"
       :paginator="true"
       :rows="9"
@@ -108,7 +108,7 @@
             :key="category.id"
           >
             <em class="pi pi-tag course-category-icon" />
-            <span class="course-category">{{ category.name }}</span
+            <span class="course-category">{{ category.title }}</span
             ><br />
           </span>
         </template>

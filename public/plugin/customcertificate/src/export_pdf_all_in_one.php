@@ -484,7 +484,7 @@ foreach ($userList as $userInfo) {
             $categoriesTempList = learnpath::getCategories($courseId);
             $categoryTest = new CLpCategory();
             $categoryTest->setId(0);
-            $categoryTest->setName($plugin->get_lang('WithOutCategory'));
+            $categoryTest->setTitle($plugin->get_lang('WithOutCategory'));
             $categoryTest->setPosition(0);
             $categories = [$categoryTest];
 
@@ -526,8 +526,8 @@ foreach ($userList as $userInfo) {
                 }
 
                 if (count($categories) > 1 && count($flat_list) > 0) {
-                    if ($item->getName() != $plugin->get_lang('WithOutCategory')) {
-                        $items[] = '<h4 style="margin:0">'.$item->getName().'</h4>';
+                    if ($item->getTitle() != $plugin->get_lang('WithOutCategory')) {
+                        $items[] = '<h4 style="margin:0">'.$item->getTitle().'</h4>';
                     }
                 }
 

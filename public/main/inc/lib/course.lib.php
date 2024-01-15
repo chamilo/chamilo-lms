@@ -639,7 +639,7 @@ class CourseManager
                 $endDate = new DateTime();
                 $endDate->add($duration);
                 $session = new SessionEntity();
-                $session->setName(
+                $session->setTitle(
                     sprintf(get_lang('FirstnameLastnameCourses'), $user->getFirstname(), $user->getLastname())
                 );
                 $session->setAccessEndDate($endDate);
@@ -4111,7 +4111,7 @@ class CourseManager
 
             $output['skill'] = null;
             if ($skill) {
-                $output['skill']['name'] = $skill->getName();
+                $output['skill']['name'] = $skill->getTitle();
                 $output['skill']['icon'] = $skill->getIcon();
             }
         }
@@ -5845,7 +5845,7 @@ class CourseManager
                             'disabled' => $userDisabled,
                             'value' => "GROUP:".$groupId,
                             // The space before "G" is needed in order to advmultiselect.php js puts groups first
-                            'content' => " G: ".$thisGroup->getName()." - ".$userCount." ".$userLabel,
+                            'content' => " G: ".$thisGroup->getTitle()." - ".$userCount." ".$userLabel,
                         ];
                     }
                 }
@@ -5887,18 +5887,19 @@ class CourseManager
     /**
      * Returns course code from a given gradebook category's id.
      *
-     * @param int  Category ID
+     * @param int $category_id Category ID
      *
-     * @return string Course code
+     * @return ?int Course ID
+     * @throws Exception
      */
-    public static function get_course_by_category($category_id)
+    public static function get_course_by_category(int $category_id): ?int
     {
         $category_id = (int) $category_id;
         $sql = 'SELECT c_id FROM '.Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY).'
                 WHERE id='.$category_id;
-        $info = Database::fetch_array(Database::query($sql), 'ASSOC');
+        $info = Database::fetch_array(Database::query($sql));
 
-        return $info ? $info['c_id'] : false;
+        return $info ? $info['c_id'] : null;
     }
 
     /**

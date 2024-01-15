@@ -296,7 +296,7 @@ if (!empty($selectedTeacher)) {
         $timeReport->data[] = [
             'session' => [
                 'id' => $session->getId(),
-                'name' => $session->getName(),
+                'name' => $session->getTitle(),
             ],
             'course' => [
                 'id' => $course->getId(),

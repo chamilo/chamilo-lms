@@ -1869,7 +1869,7 @@ class Exercise
             if (!empty($categories)) {
                 /** @var CExerciseCategory $category */
                 foreach ($categories as $category) {
-                    $options[$category->getId()] = $category->getName();
+                    $options[$category->getId()] = $category->getTitle();
                 }
             }
 
@@ -9720,7 +9720,7 @@ class Exercise
             $sessionId = (int) $sessionId;
 
             foreach ($this->lpList as $lp) {
-                if ((int) $lp['session_id'] == $sessionId) {
+                if (isset($lp['session_id']) && (int) $lp['session_id'] == $sessionId) {
                     return $lp;
                 }
             }
@@ -9913,7 +9913,7 @@ class Exercise
         $courseId = (int) $courseId;
 
         $sql = "SELECT
-                    lp.name,
+                    lp.title,
                     lpi.lp_id,
                     lpi.max_score
                 FROM $tableLpItem lpi

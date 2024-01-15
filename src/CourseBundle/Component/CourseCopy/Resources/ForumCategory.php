@@ -26,6 +26,6 @@ class ForumCategory extends Resource
     public function show()
     {
         parent::show();
-        echo $this->obj->cat_title;
+        echo $this->obj->title;
     }
 }

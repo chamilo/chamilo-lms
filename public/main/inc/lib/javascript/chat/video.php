@@ -45,7 +45,7 @@ Display::addFlash(
 );
 
 $template = new Template();
-$template->assign('room_name', $chatVideo->getRoomName());
+$template->assign('room_name', $chatVideo->getTitle());
 $template->assign('chat_user', $chatUser);
 $template->assign('user_local', $userLocal);
 $template->assign('block_friends', $friend_html);
@@ -55,7 +55,7 @@ $tpl = $template->get_template('chat/video.tpl');
 $content = $template->fetch($tpl);
 
 $templateHeader = Display::getMdiIcon('video')
-    . $chatVideo->getRoomName();
+    . $chatVideo->getTitle();
 
 $template->assign('header', $templateHeader);
 $template->assign('content', $content);

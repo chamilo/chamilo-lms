@@ -80,7 +80,7 @@ $nameTools = get_lang('Learnpath details');
 $lpRepo = \Chamilo\CoreBundle\Framework\Container::getLpRepository();
 /** @var \Chamilo\CourseBundle\Entity\CLp $lp */
 $lp = $lpRepo->find($lp_id);
-$lp_title = $lp->getName();
+$lp_title = $lp->getTitle();
 $origin = 'tracking';
 $action = $_REQUEST['action'] ?? '';
 switch ($action) {
@@ -222,7 +222,7 @@ switch ($action) {
         $duration = learnpathItem::getScormTimeFromParameter('js', $itemView->getTotalTime());
 
         $dataLpInfo = [
-            'name' => $lp->getName(),
+            'name' => $lp->getTitle(),
             'attempt' => $itemView->getViewCount(),
             'score' => $score,
             'duration' => $duration,
@@ -266,7 +266,7 @@ switch ($action) {
         $pdf->content_to_pdf(
             $content,
             null,
-            $courseInfo['code'].'_'.$lp->getName().'_'.api_get_local_time(),
+            $courseInfo['code'].'_'.$lp->getTitle().'_'.api_get_local_time(),
             $courseInfo['code'],
             'D',
             false,

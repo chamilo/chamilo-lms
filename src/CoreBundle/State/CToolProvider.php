@@ -60,7 +60,7 @@ class CToolProvider implements ProviderInterface
         /** @var CTool $cTool */
         foreach ($result as $cTool) {
             $toolModel = $this->toolChain->getToolFromName(
-                $cTool->getTool()->getName()
+                $cTool->getTool()->getTitle()
             );
 
             if (!$isAllowToEdit && 'admin' === $toolModel->getCategory()) {

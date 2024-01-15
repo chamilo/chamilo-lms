@@ -242,7 +242,7 @@ class DashboardManager
                             $plugin_controller = Database::escape_string($plugin_info['controller']);
                         }
 
-                        $ins = "INSERT INTO $tbl_block(name, description, path, controller, active)
+                        $ins = "INSERT INTO $tbl_block(title, description, path, controller, active)
                                VALUES ('$plugin_name', '$plugin_description', '$plugin_path', '$plugin_controller', 1)";
                         $result = Database::query($ins);
                         $affected_rows = Database::affected_rows($result);
@@ -309,6 +309,9 @@ class DashboardManager
         $rs_block = Database::query($sql);
         if (Database::num_rows($rs_block) > 0) {
             while ($row_block = Database::fetch_array($rs_block)) {
+                if (!isset($row_block['name'])) {
+                    $row_block['name'] = $row_block['title'];
+                }
                 $block_data[] = $row_block;
             }
         }
@@ -395,7 +398,7 @@ class DashboardManager
                     $html .= '<tr>';
                     // checkboxes
                     $html .= self::display_user_dashboard_list_checkboxes($user_id, $block['id']);
-                    $html .= '<td>'.$block['name'].'</td>';
+                    $html .= '<td>'.$block['title'].'</td>';
                     $html .= '<td>'.$block['description'].'</td>';
                     $html .= '<td>
                             <select class="selectpicker show-tick form-control" name="columns['.$block['id'].']">

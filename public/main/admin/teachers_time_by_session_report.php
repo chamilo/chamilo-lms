@@ -107,7 +107,7 @@ if (isset($_GET['export']) && $session && $coursesInfo && $usersInfo) {
     $fileName = get_lang('Teachers time report').' '.api_get_local_time();
 
     $dataToExport = [];
-    $dataToExport[] = [$toolName, $session->getName()];
+    $dataToExport[] = [$toolName, $session->getTitle()];
     $dataToExport['headers'] = [
         get_lang('Code'),
         get_lang('Coach name'),
@@ -147,7 +147,7 @@ if (isset($_GET['export']) && $session && $coursesInfo && $usersInfo) {
             $contents[] = $course['time_spent_of_course'];
         }
 
-        $dataToExport[] = [get_lang('Session'), $session->getName()];
+        $dataToExport[] = [get_lang('Session'), $session->getTitle()];
         $dataToExport[] = $headers;
         $dataToExport[] = $contents;
     }
@@ -174,7 +174,7 @@ $view = new Template($toolName);
 $view->assign('form', $form->returnForm());
 
 if ($session) {
-    $view->assign('session', ['id' => $session->getId(), 'name' => $session->getName()]);
+    $view->assign('session', ['id' => $session->getId(), 'name' => $session->getTitle()]);
     $view->assign('courses', $coursesInfo);
     $view->assign('users', $usersInfo);
 

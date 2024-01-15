@@ -46,15 +46,16 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: ['groups' => ['session:write']],
     security: "is_granted('ROLE_ADMIN')"
 )]
+
 #[ORM\Table(name: 'session')]
-#[ORM\UniqueConstraint(name: 'name', columns: ['name'])]
+#[ORM\UniqueConstraint(name: 'title', columns: ['title'])]
 #[ORM\EntityListeners([SessionListener::class])]
 #[ORM\Entity(repositoryClass: SessionRepository::class)]
-#[UniqueEntity('name')]
-#[ApiFilter(filterClass: SearchFilter::class, properties: ['name' => 'partial'])]
+#[UniqueEntity('title')]
+#[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial'])]
 #[ApiFilter(filterClass: PropertyFilter::class)]
-#[ApiFilter(filterClass: OrderFilter::class, properties: ['id', 'name'])]
-class Session implements ResourceWithAccessUrlInterface, Stringable
+#[ApiFilter(filterClass: OrderFilter::class, properties: ['id', 'title'])]
+class Session implements ResourceWithAccessUrlInterface, \Stringable
 {
     public const VISIBLE = 1;
     public const READ_ONLY = 2;
@@ -171,8 +172,8 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'course:read',
         'track_e_exercise:read',
     ])]
-    #[ORM\Column(name: 'name', type: 'string', length: 150)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'string', length: 150)]
+    protected string $title;
 
     #[Groups([
         'session:read',
@@ -327,7 +328,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     public static function getRelationTypeList(): array
@@ -507,11 +508,23 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this;
     }
 
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
     public function getCourseSubscription(Course $course): ?SessionRelCourse
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq('course', $course));
 
         return $this->courses->matching($criteria)->current();
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
     }
 
     public function getNbrUsers(): int

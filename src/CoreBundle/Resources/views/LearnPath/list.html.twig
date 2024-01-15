@@ -30,7 +30,7 @@
                             text-gray-800
                             {% endif %}
                             ">
-                                {{ lp_data.category.getName() | trim }}
+                                {{ lp_data.category.getTitle() | trim }}
 
                                 {% if lp_data.category.iid > 0 %}
                                     {% if not session %}
@@ -103,7 +103,7 @@
                                 {% endif %}
                             </h3>
                         {% elseif lp_data.lp_list is not empty %}
-                            <h3 class="page-header">{{ lp_data.category.getName() }}</h3>
+                            <h3 class="page-header">{{ lp_data.category.getTitle() }}</h3>
                         {% endif %}
                     {% endif %}
 
@@ -422,10 +422,16 @@
                                     </div>
                                 {% endif %}
                                 <h4 class="panel-title">
-                                    {{ lp_data.category.getName() }}
+                                    <a role="button" data-toggle="collapse" data-parent="#lp-accordion"
+                                       href="#collapse-{{ lp_data.category.iid }}" aria-expanded="true"
+                                       aria-controls="collapse-{{ lp_data.category.iid }}">
+                                        {{ lp_data.category.getTitle() }}
+                                    </a>
                                 </h4>
                             </div>
-                            <div>
+                            {% set number = 1 %}
+                            <div id="collapse-{{ lp_data.category.iid }}" class="panel-collapse collapse {{ (categories|length > 1 ? 'in':'') }}"
+                                 role="tabpanel" aria-labelledby="heading-{{ lp_data.category.iid }}">
                                 <div class="panel-body">
                                     {% if lp_data.lp_list %}
 

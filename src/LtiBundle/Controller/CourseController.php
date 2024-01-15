@@ -108,7 +108,7 @@ class CourseController extends ToolBaseController
                 throw $this->createNotFoundException('Course tool not found.');
             }
 
-            $courseTool->setName($tool->getName());
+            $courseTool->setTitle($tool->getTitle());
 
             $em->persist($courseTool);
         }
@@ -168,13 +168,13 @@ class CourseController extends ToolBaseController
             );
             $params['accept_media_types'] = '*/*';
             $params['accept_presentation_document_targets'] = 'iframe';
-            $params['title'] = $tool->getName();
+            $params['title'] = $tool->getTitle();
             $params['text'] = $tool->getDescription();
             $params['data'] = 'tool:'.$tool->getId();
         } else {
             $params['lti_message_type'] = 'basic-lti-launch-request';
             $params['resource_link_id'] = $tool->getId();
-            $params['resource_link_title'] = $tool->getName();
+            $params['resource_link_title'] = $tool->getTitle();
             $params['resource_link_description'] = $tool->getDescription();
 
             $toolEval = $tool->getGradebookEval();
@@ -343,7 +343,7 @@ class CourseController extends ToolBaseController
                     'success',
                     sprintf(
                         $this->trans('External tool added: %s'),
-                        $newTool->getName()
+                        $newTool->getTitle()
                     )
                 );
             }
@@ -556,7 +556,7 @@ class CourseController extends ToolBaseController
 
         /** @var ExternalTool $tool */
         foreach ($tools as $tool) {
-            $slcLtiTools->addOption($tool->getName(), $tool->getId());
+            $slcLtiTools->addOption($tool->getTitle(), $tool->getId());
         }
 
         if (!$form->validate()) {
@@ -577,7 +577,7 @@ class CourseController extends ToolBaseController
         }
 
         $eval = new Evaluation();
-        $eval->set_name($tool->getName());
+        $eval->set_name($tool->getTitle());
         $eval->set_description($values['description']);
         $eval->set_user_id($values['hid_user_id']);
 
@@ -770,7 +770,7 @@ class CourseController extends ToolBaseController
         $newTool->setActiveDeepLinking(false);
 
         if (!empty($contentItem['title'])) {
-            $newTool->setName($contentItem['title']);
+            $newTool->setTitle($contentItem['title']);
         }
 
         if (!empty($contentItem['text'])) {

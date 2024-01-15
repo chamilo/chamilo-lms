@@ -6,15 +6,36 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Chamilo\CoreBundle\Traits\UserTrait;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'gradebook_category')]
 #[ORM\Entity]
+#[ApiResource(
+    attributes: [
+        'security' => "is_granted('ROLE_USER')",
+    ],
+    denormalizationContext: [
+        'groups' => ['gradebookCategory:write'],
+    ],
+    normalizationContext: [
+        'groups' => ['gradebookCategory:read'],
+    ],
+)]
+#[ApiFilter(SearchFilter::class, properties: [
+    'course' => 'exact',
+])]
+
 class GradebookCategory
 {
     use CourseTrait;
@@ -23,11 +44,13 @@ class GradebookCategory
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
+    #[Groups(['document:read', 'gradebookCategory:read'])]
+
     protected ?int $id = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'name', type: 'text', nullable: false)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
+    protected string $title;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description;
@@ -38,6 +61,8 @@ class GradebookCategory
 
     #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'gradebookCategories')]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[Groups(['gradebookCategory:read'])]
+
     protected Course $course;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'subCategories')]
@@ -93,8 +118,11 @@ class GradebookCategory
     #[ORM\Column(name: 'certif_min_score', type: 'integer', nullable: true)]
     protected ?int $certifMinScore = null;
 
-    #[ORM\Column(name: 'document_id', type: 'integer', nullable: true)]
-    protected ?int $documentId = null;
+    #[ORM\OneToOne(inversedBy: 'gradebookCategory', targetEntity: CDocument::class)]
+    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'iid', onDelete: "set null")]
+    #[ApiSubresource]
+    #[Groups(['gradebookCategory:read', 'gradebookCategory:write'])]
+    protected ?CDocument $document = null;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'locked', type: 'integer', nullable: false)]
@@ -146,16 +174,16 @@ class GradebookCategory
         return $this->id;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function setDescription(?string $description): self
@@ -226,9 +254,9 @@ class GradebookCategory
      *
      * @return GradebookCategory
      */
-    public function setDocumentId(int $documentId)
+    public function setDocument($document)
     {
-        $this->documentId = $documentId;
+        $this->document = $document;
 
         return $this;
     }
@@ -236,11 +264,11 @@ class GradebookCategory
     /**
      * Get documentId.
      *
-     * @return int
+     * @return CDocument|null
      */
-    public function getDocumentId()
+    public function getDocument()
     {
-        return $this->documentId;
+        return $this->document;
     }
 
     public function setLocked(int $locked): self

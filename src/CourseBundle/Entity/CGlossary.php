@@ -190,8 +190,8 @@ class CGlossary extends AbstractResource implements ResourceInterface, Stringabl
 
     #[Groups(['glossary:read', 'glossary:write'])]
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'name', type: 'text', nullable: false)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
+    protected string $title;
 
     #[Groups(['glossary:read', 'glossary:write'])]
     #[ORM\Column(name: 'description', type: 'text', nullable: false)]
@@ -199,19 +199,19 @@ class CGlossary extends AbstractResource implements ResourceInterface, Stringabl
 
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function setDescription(string $description): self
@@ -241,11 +241,11 @@ class CGlossary extends AbstractResource implements ResourceInterface, Stringabl
 
     public function getResourceName(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setName($name);
+        return $this->setTitle($name);
     }
 }

@@ -48,7 +48,7 @@ class CourseRepositoryTest extends AbstractApiTest
         $em = $this->getEntityManager();
         $category = (new CourseCategory())
             ->setCode('Course cat')
-            ->setName('Course cat')
+            ->setTitle('Course cat')
             ->setDescription('desc')
             ->setAuthCatChild('cat')
             ->setAuthCourseChild('cat')

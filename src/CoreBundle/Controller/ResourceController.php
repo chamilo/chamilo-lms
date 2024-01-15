@@ -359,10 +359,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         /** @var CTool $item */
         foreach ($result as $item) {
-            if (\in_array($item->getName(), $skipTools, true)) {
+            if (\in_array($item->getTitle(), $skipTools, true)) {
                 continue;
             }
-            $toolModel = $toolChain->getToolFromName($item->getTool()->getName());
+            $toolModel = $toolChain->getToolFromName($item->getTool()->getTitle());
 
             if (!\in_array($toolModel->getCategory(), ['authoring', 'interaction'], true)) {
                 continue;

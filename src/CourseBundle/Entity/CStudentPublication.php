@@ -419,7 +419,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         if ($this->hasResourceNode()) {
             $children = $this->getResourceNode()->getChildren();
             foreach ($children as $child) {
-                $name = $child->getResourceType()->getName();
+                $name = $child->getResourceType()->getTitle();
                 if ('student_publications_corrections' === $name) {
                     return $child;
                 }

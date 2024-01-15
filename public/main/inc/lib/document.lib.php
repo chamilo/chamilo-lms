@@ -907,6 +907,7 @@ class DocumentManager
         $courseParam = '&cid='.$course_id.'&id='.$id.'&sid='.$session_id.'&gid='.$groupId;
         if ($result && 1 == Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
+
             //@todo need to clarify the name of the URLs not nice right now
             $url_path = urlencode($row['path']);
             $path = str_replace('%2F', '/', $url_path);
@@ -2829,7 +2830,7 @@ class DocumentManager
         $comment = null;
         $title = get_lang('Default certificate');
         $fileName = api_replace_dangerous_char($title);
-        $fileType = 'file';
+        $fileType = 'certificate';
         $templateContent = file_get_contents(api_get_path(SYS_CODE_PATH).'gradebook/certificate_template/template.html');
 
         $search = ['{CSS}', '{IMG_DIR}', '{REL_CODE_PATH}', '{COURSE_DIR}'];

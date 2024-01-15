@@ -60,7 +60,7 @@ class CQuizQuestionRepositoryTest extends AbstractApiTest
         ;
 
         $option = (new CQuizQuestionOption())
-            ->setName('option 1')
+            ->setTitle('option 1')
             ->setQuestion($question)
             ->setPosition(1)
         ;

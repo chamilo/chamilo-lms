@@ -339,7 +339,7 @@ class SkillModel extends Model
                     $row['asset'] = $assetRepo->getAssetUrl($skill->getAsset());
                 }
 
-                $row['name'] = self::translateName($skill->getName());
+                $row['name'] = self::translateName($skill->getTitle());
                 $row['short_code'] = self::translateCode($skill->getShortCode());
                 $skillRelSkill = new SkillRelSkillModel();
                 $parents = $skillRelSkill->getSkillParents($skillId);
@@ -2094,7 +2094,7 @@ class SkillModel extends Model
                 /** @var CForumThread $item */
                 $item = $em->getRepository(CForumThread::class)->find($itemId);
                 if ($item) {
-                    $itemInfo['name'] = $item->getThreadTitle();
+                    $itemInfo['name'] = $item->getTitle();
                 }
                 break;
         }

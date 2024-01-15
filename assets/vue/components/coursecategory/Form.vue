@@ -4,12 +4,12 @@
       <v-row>
         <v-col cols="12" sm="6" md="6">
           <v-text-field
-                  v-model="item.name"
+                  v-model="item.title"
                   :error-messages="nameErrors"
                   :label="$t('name')"
                   required
-                  @input="$v.item.name.$touch()"
-                  @blur="$v.item.name.$touch()"
+                  @input="$v.item.title.$touch()"
+                  @blur="$v.item.title.$touch()"
           />
           </v-col>
 
@@ -72,11 +72,11 @@ export default {
     nameErrors() {
       const errors = [];
 
-      if (!this.$v.item.name.$dirty) return errors;
+      if (!this.$v.item.title.$dirty) return errors;
 
-      has(this.violations, 'name') && errors.push(this.violations.name);
+      has(this.violations, 'title') && errors.push(this.violations.title);
 
-      !this.$v.item.name.required && errors.push(this.$t('Field is required'));
+      !this.$v.item.title.required && errors.push(this.$t('Field is required'));
 
       return errors;
     },

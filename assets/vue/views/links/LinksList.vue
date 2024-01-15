@@ -92,7 +92,7 @@
                 icon="folder-generic"
                 size="big"
               />
-              <h5>{{ category.info.name }}</h5>
+              <h5>{{ category.info.title }}</h5>
             </div>
             <div class="flex gap-2" v-if="securityStore.isAuthenticated && isCurrentTeacher">
               <BaseButton
@@ -155,7 +155,7 @@
       @cancel-clicked="isDeleteCategoryDialogVisible = false"
     >
       <div v-if="categoryToDelete">
-        <p class="mb-2 font-semibold">{{ categoryToDelete.info.name }}</p>
+        <p class="mb-2 font-semibold">{{ categoryToDelete.info.title }}</p>
         <p>
           {{ t("With links") }}: {{ (categoryToDelete.links || []).map((l) => l.title).join(", ") }}
         </p>

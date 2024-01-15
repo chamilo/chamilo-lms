@@ -242,30 +242,37 @@ class CourseController extends ToolBaseController
      * Redirects the page to a tool, following the tools settings.
      */
     #[Route('/{cid}/tool/{toolName}', name: 'chamilo_core_course_redirect_tool')]
-    public function redirectTool(string $toolName, CToolRepository $repo, ToolChain $toolChain): RedirectResponse
-    {
+    public function redirectTool(
+        Request $request,
+        string $toolName,
+        CToolRepository $repo,
+        ToolChain $toolChain
+    ): RedirectResponse {
         /** @var CTool|null $tool */
         $tool = $repo->findOneBy([
-            'name' => $toolName,
+            'title' => $toolName,
         ]);
 
         if (null === $tool) {
             throw new NotFoundHttpException($this->trans('Tool not found'));
         }
 
-        $tool = $toolChain->getToolFromName($tool->getTool()->getName());
+        $tool = $toolChain->getToolFromName($tool->getTool()->getTitle());
         $link = $tool->getLink();
 
         if (null === $this->getCourse()) {
             throw new NotFoundHttpException($this->trans('Course not found'));
         }
+        $optionalParams = '';
+
+        $optionalParams = $request->query->get('cert') ? '&cert='.$request->query->get('cert') : '';
 
         if (strpos($link, 'nodeId')) {
             $nodeId = (string) $this->getCourse()->getResourceNode()->getId();
             $link = str_replace(':nodeId', $nodeId, $link);
         }
 
-        $url = $link.'?'.$this->getCourseUrlQuery();
+        $url = $link.'?'.$this->getCourseUrlQuery().$optionalParams;
 
         return $this->redirect($url);
     }

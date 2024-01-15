@@ -24,12 +24,12 @@ class CChatConversation extends AbstractResource implements ResourceInterface, S
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: true)]
-    protected ?string $name = null;
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: true)]
+    protected ?string $title = null;
 
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     public function getId(): int
@@ -37,14 +37,14 @@ class CChatConversation extends AbstractResource implements ResourceInterface, S
         return $this->id;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
@@ -59,11 +59,11 @@ class CChatConversation extends AbstractResource implements ResourceInterface, S
 
     public function getResourceName(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setName($name);
+        return $this->setTitle($name);
     }
 }

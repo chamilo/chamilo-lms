@@ -123,7 +123,7 @@ if ($show) {
 
         $row = 1;
         foreach ($careers as $careerData) {
-            $table->setCellContents($row, 0, $careerData['name']);
+            $table->setCellContents($row, 0, $careerData['title']);
             $url = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?career_id='.$careerData['id'];
             $diagram = Display::url(get_lang('Diagram'), $url);
             $table->setCellContents($row, 1, $diagram);

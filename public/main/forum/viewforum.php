@@ -154,11 +154,11 @@ if (!empty($groupId)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('Group area').' '.$groupEntity->getName(),
+        'name' => get_lang('Group area').' '.$groupEntity->getTitle(),
     ];
     $interbreadcrumb[] = [
         'url' => '#',
-        'name' => get_lang('Forum').' '.Security::remove_XSS($forumEntity->getForumTitle()),
+        'name' => get_lang('Forum').' '.Security::remove_XSS($forumEntity->getTitle()),
     ];
 } else {
     $interbreadcrumb[] = [
@@ -167,11 +167,11 @@ if (!empty($groupId)) {
     ];
     $interbreadcrumb[] = [
         'url' => $forumUrl.'index.php?forumcategory='.$category->getIid().'&'.api_get_cidreq(),
-        'name' => prepare4display($category->getCatTitle()),
+        'name' => prepare4display($category->getTitle()),
     ];
     $interbreadcrumb[] = [
         'url' => '#',
-        'name' => Security::remove_XSS($forumEntity->getForumTitle()),
+        'name' => Security::remove_XSS($forumEntity->getTitle()),
     ];
 }
 
@@ -330,7 +330,7 @@ $header = '';
 if ('learnpath' !== $origin) {
     $header .= Display::tag(
         'h3',
-        $iconForum.' '.$forumEntity->getForumTitle(),
+        $iconForum.' '.$forumEntity->getTitle(),
         [
             'class' => 'title-forum', ]
     );
@@ -364,7 +364,7 @@ if (is_array($threads)) {
             $title = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId
                 ."&thread={$threadId}&search="
                 .Security::remove_XSS(urlencode($my_search)).'">'
-                .$thread->getThreadTitle().'</a>';
+                .$thread->getTitle().'</a>';
 
             // display the author name
             $author = $thread->getUser();

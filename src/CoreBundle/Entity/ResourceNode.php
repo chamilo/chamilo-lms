@@ -100,7 +100,7 @@ class ResourceNode implements Stringable
     #[Gedmo\SortableGroup]
     protected ResourceType $resourceType;
 
-    #[ORM\ManyToOne(targetEntity: ResourceFormat::class, cascade: ['persist', 'remove'], inversedBy: 'resourceNodes')]
+    #[ORM\ManyToOne(targetEntity: ResourceFormat::class, cascade: ['persist'], inversedBy: 'resourceNodes')]
     #[ORM\JoinColumn(name: 'resource_format_id', referencedColumnName: 'id')]
     protected ResourceFormat $resourceFormat;
 

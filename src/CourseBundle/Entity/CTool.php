@@ -50,7 +50,6 @@ class CTool extends AbstractResource implements ResourceInterface, ResourceShowC
     protected ?int $iid = null;
 
     #[Assert\NotBlank]
-    #[Groups(['ctool:read'])]
     #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 

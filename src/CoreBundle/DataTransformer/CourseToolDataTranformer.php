@@ -40,7 +40,7 @@ class CourseToolDataTranformer implements DataTransformerInterface
 
         $cTool = new CourseTool();
         $cTool->iid = $object->getIid();
-        $cTool->name = $object->getTitle();
+        $cTool->title = $object->getTitle();
         $cTool->visibility = $object->getVisibility();
         $cTool->resourceNode = $object->resourceNode;
         $cTool->illustrationUrl = $object->illustrationUrl;

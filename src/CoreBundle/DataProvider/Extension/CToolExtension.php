@@ -37,7 +37,7 @@ class CToolExtension implements QueryCollectionExtensionInterface
             ->innerJoin("$alias.resourceNode", 'resource_node')
             ->innerJoin('resource_node.resourceLinks', 'resource_links')
             ->andWhere(
-                $queryBuilder->expr()->notIn("$alias.name", ['course_tool', 'course_homepage'])
+                $queryBuilder->expr()->notIn("$alias.title", ['course_tool', 'course_homepage'])
             )
             ->andWhere('resource_links.visibility != :visibility_deleted')
             ->setParameter('visibility_deleted', ResourceLink::VISIBILITY_DELETED)

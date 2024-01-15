@@ -244,13 +244,13 @@ class CourseController extends ToolBaseController
     #[Route('/{cid}/tool/{toolName}', name: 'chamilo_core_course_redirect_tool')]
     public function redirectTool(
         Request $request,
-        string $toolName,
+        string $toolTitle,
         CToolRepository $repo,
         ToolChain $toolChain
     ): RedirectResponse {
         /** @var CTool|null $tool */
         $tool = $repo->findOneBy([
-            'title' => $toolName,
+            'title' => $toolTitle,
         ]);
 
         if (null === $tool) {
@@ -518,14 +518,14 @@ class CourseController extends ToolBaseController
         ]);
     }
 
-    private function findIntroOfCourse(Course $course)
+    private function findIntroOfCourse(Course $course): ?CTool
     {
         $qb = $this->em->createQueryBuilder();
 
         $query = $qb->select('ct')
             ->from(CTool::class, 'ct')
             ->where('ct.course = :c_id')
-            ->andWhere('ct.name = :name')
+            ->andWhere('ct.title = :title')
             ->andWhere(
                 $qb->expr()->orX(
                     $qb->expr()->eq('ct.session', ':session_id'),
@@ -534,7 +534,7 @@ class CourseController extends ToolBaseController
             )
             ->setParameters([
                 'c_id' => $course->getId(),
-                'name' => 'course_homepage',
+                'title' => 'course_homepage',
                 'session_id' => 0,
             ])
             ->getQuery()
@@ -563,7 +563,7 @@ class CourseController extends ToolBaseController
         $ctool = $this->findIntroOfCourse($course);
 
         if ($session) {
-            $ctoolSession = $ctoolRepo->findOneBy(['name' => 'course_homepage', 'course' => $course, 'session' => $session]);
+            $ctoolSession = $ctoolRepo->findOneBy(['title' => 'course_homepage', 'course' => $course, 'session' => $session]);
 
             if (!$ctoolSession) {
                 $createInSession = true;
@@ -587,7 +587,7 @@ class CourseController extends ToolBaseController
             }
             $responseData['c_tool'] = [
                 'iid' => $ctool->getIid(),
-                'name' => $ctool->getTitle(),
+                'title' => $ctool->getTitle(),
             ];
         }
 
@@ -609,10 +609,10 @@ class CourseController extends ToolBaseController
         }
 
         $ctool = $em->getRepository(CTool::class);
-        $check = $ctool->findOneBy(['name' => 'course_homepage', 'course' => $course, 'session' => $session]);
+        $check = $ctool->findOneBy(['title' => 'course_homepage', 'course' => $course, 'session' => $session]);
         if (!$check) {
             $toolRepo = $em->getRepository(Tool::class);
-            $toolEntity = $toolRepo->findOneBy(['name' => 'course_homepage']);
+            $toolEntity = $toolRepo->findOneBy(['title' => 'course_homepage']);
             $courseTool = (new CTool())
                 ->setTool($toolEntity)
                 ->setTitle('course_homepage')

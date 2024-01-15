@@ -31,7 +31,7 @@ class CLpItemRepositoryTest extends AbstractApiTest
         $student = $this->createUser('student');
 
         $lp = (new CLp())
-            ->setName('lp')
+            ->setTitle('lp')
             ->setParent($course)
             ->setCreator($teacher)
             ->setLpType(CLp::LP_TYPE)

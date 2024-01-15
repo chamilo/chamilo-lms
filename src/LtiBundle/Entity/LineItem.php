@@ -117,7 +117,7 @@ class LineItem
 
         $data = [
             'scoreMaximum' => $this->evaluation->getMax(),
-            'label' => $this->evaluation->getName(),
+            'label' => $this->evaluation->getTitle(),
             'tag' => $this->tag,
             'resourceLinkId' => (string) $baseTool->getId(),
             'resourceId' => $this->resourceId,

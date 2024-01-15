@@ -128,7 +128,7 @@ class ImportCGlossaryAction
             $existingNewGlossaryTerm = $qb->getQuery()->getOneOrNullResult();
             if (!$existingNewGlossaryTerm) {
                 $newGlossary = (new CGlossary())
-                    ->setName($term)
+                    ->setTitle($term)
                     ->setDescription($description)
                     ->setParent($course)
                     ->addCourseLink($course, $session)

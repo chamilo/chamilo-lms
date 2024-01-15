@@ -38,7 +38,7 @@
                 <ul class="list-course">
                     {% for session in sessions %}
                     <li><a href="{{ _p.self ~ '?' ~ {"session_id": session.getId}|url_encode() }}" class="list-course-item {{ current_session and session.getId == current_session.getId ? 'active' }}">
-                            <em class="fa fa-chevron-circle-right"></em> {{ session.getName }}
+                            <em class="fa fa-chevron-circle-right"></em> {{ session.getTitle }}
                         </a>
                     </li>
                     {% endfor %}
@@ -50,7 +50,7 @@
     <div class="col-md-9">
         {% if current_session %}
             <div class="panel panel-default">
-                <div class="panel-heading"><em class="fa fa-book"></em> {{ current_session.getName() }}</div>
+                <div class="panel-heading"><em class="fa fa-book"></em> {{ current_session.getTitle() }}</div>
                 <div class="panel-body">
                     {% for course_id, course in session_data %}
                     <h3> {{ 'ToolIcon::COURSE'|mdi_icon(32) }} {{ course.title }}</h3>

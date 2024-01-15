@@ -1,6 +1,7 @@
 <template>
   <div class="flex flex-col md:flex-row gap-4">
-    <div class="md:basis-1/3 lg:basis-1/4 2xl:basis-1/6 flex justify-center">
+    <div class="md:basis-1/3 lg:basis-1/4 2xl:basis-1/6 flex flex-col">
+      <UserProfileCard />
       <BaseCard plain>
         <img
           :src="user.illustrationUrl"
@@ -11,9 +12,15 @@
           <div class="text-lg">{{ user.username }}</div>
         </div>
       </BaseCard>
+      <SocialSideMenu />
     </div>
-    <div class="md:basis-2/3 lg:basis-3/4 2xl:basis-5/6">
+
+    <div class="md:basis-2/3 lg:basis-1/2 2xl:basis-4/6">
       <SocialNetworkWall />
+    </div>
+
+    <div class="md:basis-1/3 lg:basis-1/4 2xl:basis-1/6">
+      <AddFriendSidebar />
     </div>
   </div>
 </template>
@@ -23,7 +30,9 @@ import { useStore } from "vuex"
 import { onMounted, provide, readonly, ref, watch } from "vue"
 import SocialNetworkWall from "./SocialWall.vue"
 import { useRoute } from "vue-router"
-import BaseCard from "../../components/basecomponents/BaseCard.vue"
+import SocialSideMenu from "../../components/social/SocialSideMenu.vue"
+import AddFriendSidebar from "../../components/userreluser/AddFriendSidebar.vue";
+import UserProfileCard from "../../components/userreluser/UserProfileCard.vue";
 
 const store = useStore()
 const route = useRoute()

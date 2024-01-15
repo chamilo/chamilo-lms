@@ -21,7 +21,7 @@ $skill = $entityManager->find(\Chamilo\CoreBundle\Entity\Skill::class, $_GET['id
 
 if ($skill) {
     $skillInfo = [
-        'name' => $skill->getName(),
+        'name' => $skill->getTitle(),
         'short_code' => $skill->getShortCode(),
         'description' => $skill->getDescription(),
         'criteria' => $skill->getCriteria(),

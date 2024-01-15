@@ -387,7 +387,7 @@ switch ($action) {
         foreach ($skills as $skill) {
             $returnSkills[] = [
                 'id' => $skill->getSkill()->getId(),
-                'text' => $skill->getSkill()->getName(),
+                'text' => $skill->getSkill()->getTitle(),
             ];
         }
         echo json_encode([

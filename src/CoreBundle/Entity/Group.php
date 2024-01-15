@@ -36,8 +36,8 @@ class Group implements Stringable
 
     public function __construct(
         #[Assert\NotBlank]
-        #[ORM\Column(name: 'name', type: 'string', length: 255, unique: true, nullable: false)]
-        protected string $name,
+        #[ORM\Column(name: 'title', type: 'string', length: 255, unique: true, nullable: false)]
+        protected string $title,
         #[ORM\Column(name: 'roles', type: 'array')]
         protected array $roles = [
         ]
@@ -47,7 +47,7 @@ class Group implements Stringable
 
     public function __toString(): string
     {
-        return $this->getName() ?: '';
+        return $this->getTitle() ?: '';
     }
 
     public function addRole(string $role): self
@@ -79,14 +79,14 @@ class Group implements Stringable
         return $this;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }

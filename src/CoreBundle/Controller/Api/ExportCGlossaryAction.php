@@ -81,7 +81,7 @@ class ExportCGlossaryAction
 
         /** @var CGlossary $item */
         foreach ($glossaryItems as $item) {
-            $csvContent .= $item->getName().','.$item->getDescription()."\n";
+            $csvContent .= $item->getTitle().','.$item->getDescription()."\n";
         }
         file_put_contents($csvFilePath, $csvContent);
 
@@ -97,7 +97,7 @@ class ExportCGlossaryAction
         /** @var CGlossary $item */
         foreach ($glossaryItems as $index => $item) {
             $row = $index + 1;
-            $sheet->setCellValue('A'.$row, $item->getName());
+            $sheet->setCellValue('A'.$row, $item->getTitle());
             $sheet->setCellValue('B'.$row, $item->getDescription());
         }
 
@@ -120,7 +120,7 @@ class ExportCGlossaryAction
         /** @var CGlossary $item */
         foreach ($glossaryItems as $item) {
             $html .= '<tr>';
-            $html .= '<td>'.$item->getName().'</td>';
+            $html .= '<td>'.$item->getTitle().'</td>';
             $html .= '<td>'.$item->getDescription().'</td>';
             $html .= '</tr>';
         }

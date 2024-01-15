@@ -866,7 +866,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $group = (new CGroup())
-            ->setName('Group')
+            ->setTitle('Group')
             ->setParent($course)
             ->setCreator($teacher)
             ->setMaxStudent(100)
@@ -916,7 +916,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertSame($thirdLink->getGroup(), null);
 
         $group2 = (new CGroup())
-            ->setName('Group2')
+            ->setTitle('Group2')
             ->setParent($course)
             ->setCreator($teacher)
             ->setMaxStudent(100)

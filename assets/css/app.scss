@@ -506,6 +506,175 @@ table#skill_holder {
                      END SKILL
  **************************************************** */
 
+/* Grid System */
+#legacy_content .section-content .row h3 {
+  width: 100%;
+  display: block;
+  margin: 0;
+}
+
+#legacy_content .row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 15px -15px;
+  width: 100%;
+}
+
+#legacy_content .col-md-2 {
+  position: relative;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  flex: 0 0 16.666667%;
+  max-width: 16.666667%;
+}
+
+#legacy_content .col-md-10 {
+  position: relative;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  flex: 0 0 83.333333%;
+  max-width: 83.333333%;
+}
+
+#legacy_content .col-md-6 {
+  position: relative;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  flex: 0 0 50%;
+  max-width: 50%;
+}
+
+#legacy_content .col-md-4 {
+  position: relative;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  flex: 0 0 33.333333%;
+  max-width: 33.333333%;
+}
+
+.pull-right {
+  float: right;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+  border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.btn--plain {
+  background-color: transparent;
+  color: #007bff;
+}
+
+.btn--primary {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn--primary:hover {
+  color: #fff;
+  background-color: #0069d9;
+  border-color: #0062cc;
+}
+
+/* Images */
+.social-groups-image {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Style for the tabs */
+.nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Style for the navigation tabs */
+.nav-tabs {
+  border-bottom: 2px solid #ddd;
+}
+
+.nav-item {
+  display: inline-block;
+  margin-bottom: -1px;
+}
+
+.nav-link {
+  text-decoration: none;
+  padding: 10px 20px;
+  color: #333;
+}
+
+.nav-link:hover {
+  background-color: #f5f5f5;
+}
+
+.panel {
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 20px;
+}
+
+.panel-title {
+  color: #333;
+  font-size: 24px;
+}
+
+.panel-text {
+  color: #666;
+  font-size: 16px;
+}
+
+.panel-header {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px;
+}
+
+.panel-body {
+  background-color: #fff;
+  padding: 10px;
+}
+
+/* Style for the tab content */
+.tab-content {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 .25rem .25rem;
+}
+
+/* Custom style for a button with class btn--plain */
+.btn.btn--plain {
+  background-color: transparent;
+  border: 1px solid #333;
+  color: #333;
+}
+
+.btn.btn--plain:hover {
+  background-color: #333;
+  color: #fff;
+}
+
 //@import 'primevue-md-light-indigo/theme.css';
 //@import '~primevue/resources/primevue.min.css';
 //@import '~primeflex/primeflex.css';

@@ -95,7 +95,7 @@ class CForumRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
 
         $lp = (new CLp())
-            ->setName('lp')
+            ->setTitle('lp')
             ->setParent($course)
             ->setCreator($teacher)
             ->setLpType(CLp::LP_TYPE)

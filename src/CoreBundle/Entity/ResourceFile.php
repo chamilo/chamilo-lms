@@ -89,7 +89,7 @@ class ResourceFile implements Stringable
     #[Assert\NotBlank]
     #[Groups(['resource_file:read', 'resource_node:read', 'document:read'])]
     #[ORM\Column(type: 'string', length: 255)]
-    protected ?string $name = null;
+    protected ?string $title = null;
     #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'message:read'])]
     #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $mimeType = null;
@@ -106,7 +106,7 @@ class ResourceFile implements Stringable
     /**
      * @Vich\UploadableField(
      *     mapping="resources",
-     *     fileNameProperty="name",
+     *     fileNameProperty="title",
      *     size="size",
      *     mimeType="mimeType",
      *     originalName="originalName",
@@ -115,7 +115,7 @@ class ResourceFile implements Stringable
      */
     //    #[Vich\UploadableField(
     //        mapping: 'resources',
-    //        fileNameProperty: 'name',
+    //        fileNameProperty: 'title',
     //        size: 'size',
     //        mimeType: 'mimeType',
     //        originalName: 'originalName',
@@ -183,13 +183,13 @@ class ResourceFile implements Stringable
 
         return str_contains($mimeType, 'audio');
     }
-    public function getName(): ?string
+    public function getTitle(): ?string
     {
-        return $this->name;
+        return $this->title;
     }
-    public function setName(?string $name): self
+    public function setTitle(?string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }

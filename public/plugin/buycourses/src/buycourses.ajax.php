@@ -477,7 +477,7 @@ switch ($action) {
                         $nodeType = get_lang('TemplateTitleCertificate');
                         /** @var CLp $lp */
                         $lp = $em->find('ChamiloCourseBundle:CLp', $serviceSale['node_id']);
-                        $nodeName = $lp ? $lp->getName() : null;
+                        $nodeName = $lp ? $lp->getTitle() : null;
                     }
                 }
             }

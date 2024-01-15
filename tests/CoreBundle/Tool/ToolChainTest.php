@@ -87,7 +87,7 @@ class ToolChainTest extends AbstractApiTest
         $tools = $toolChain->getTools();
 
         foreach ($tools as $tool) {
-            $name = $tool->getName();
+            $name = $tool->getTitle();
             $this->assertNotEmpty($name);
 
             $link = $tool->getLink();

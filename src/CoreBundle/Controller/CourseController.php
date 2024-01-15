@@ -287,7 +287,7 @@ class CourseController extends ToolBaseController
             throw new NotFoundHttpException($this->trans('Tool not found'));
         }
 
-        $tool = $toolChain->getToolFromName($tool->getTool()->getName());
+        $tool = $toolChain->getToolFromName($tool->getTool()->getTitle());
         $link = $tool->getLink();
 
         if (strpos($link, 'nodeId')) {

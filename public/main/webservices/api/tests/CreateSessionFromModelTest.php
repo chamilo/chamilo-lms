@@ -58,7 +58,7 @@ class CreateSessionFromModelTest extends V2TestCase
         $this->assertIsObject($newSession);
 
         // assert the new session got the right data
-        $this->assertSame($name, $newSession->getName());
+        $this->assertSame($name, $newSession->getTitle());
         // FIXME account for UTC / local timezone shift
         // $this->assertSame($endDate, $newSession->getDisplayEndDate());
         // $this->assertSame($startDate, $newSession->getAccessStartDate());

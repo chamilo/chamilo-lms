@@ -237,7 +237,7 @@ class ResourceListener
             // File upload.
             if ($uploadedFile instanceof UploadedFile) {
                 $resourceFile = (new ResourceFile())
-                    ->setName($uploadedFile->getFilename())
+                    ->setTitle($uploadedFile->getFilename())
                     ->setOriginalName($uploadedFile->getFilename())
                     ->setFile($uploadedFile)
                 ;

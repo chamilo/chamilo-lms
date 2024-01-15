@@ -36,7 +36,7 @@ final class CShortcutRepository extends ResourceRepository
 
         if (null === $shortcut) {
             $shortcut = (new CShortcut())
-                ->setName($resource->getResourceName())
+                ->setTitle($resource->getResourceName())
                 ->setShortCutNode($resource->getResourceNode())
                 ->setCreator($user)
                 ->setParent($course)

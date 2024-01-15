@@ -804,6 +804,33 @@ class MessageManager
     }
 
     /**
+     * Get message list by id.
+     *
+     * @param int $messageId
+     *
+     * @return array
+     */
+    public static function get_message_by_id($messageId)
+    {
+        $table = Database::get_main_table(TABLE_MESSAGE);
+        $messageId = (int) $messageId;
+        $sql = "SELECT * FROM $table
+                WHERE
+                    id = '$messageId' AND
+                    msg_type <> 3";
+
+        echo $sql;
+
+        $res = Database::query($sql);
+        $item = [];
+        if (Database::num_rows($res) > 0) {
+            $item = Database::fetch_array($res, 'ASSOC');
+        }
+
+        return $item;
+    }
+
+    /**
      * Displays messages of a group with nested view.
      *
      * @param $groupId
@@ -813,11 +840,9 @@ class MessageManager
      */
     public static function display_message_for_group($groupId, $topic_id)
     {
-        return '';
-
-        /*global $my_group_role;
-        $message = Container::getMessageRepository()->find($topic_id);
-        if (null === $message) {
+        global $my_group_role;
+        $main_message = self::get_message_by_id($topic_id);
+        if (empty($main_message)) {
             return false;
         }
 
@@ -842,28 +867,29 @@ class MessageManager
         $html = '';
         $items_page_nr = null;
 
-        $filesAttachments = self::getAttachmentLinkList($message);
-        $name = UserManager::formatUserFullName($message->getSender());
+        $user_sender_info = api_get_user_info($main_message['user_sender_id']);
+        $files_attachments = self::getAttachmentLinkList($main_message['id'], 0);
+        $name = $user_sender_info['complete_name'];
 
         $topic_page_nr = isset($_GET['topics_page_nr']) ? (int) $_GET['topics_page_nr'] : null;
 
         $links .= '<div class="pull-right">';
         $links .= '<div class="btn-group btn-group-sm">';
 
-        if ((GROUP_USER_PERMISSION_ADMIN == $my_group_role || GROUP_USER_PERMISSION_MODERATOR == $my_group_role) ||
-            $message->getSender()->getId() == $current_user_id
+        if (($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) ||
+            $main_message['user_sender_id'] == $current_user_id
         ) {
             $urlEdit = $webCodePath.'social/message_for_group_form.inc.php?'
                 .http_build_query(
                     [
                         'user_friend' => $current_user_id,
                         'group_id' => $groupId,
-                        'message_id' => $message->getId(),
+                        'message_id' => $main_message['id'],
                         'action' => 'edit_message_group',
-                        'anchor_topic' => 'topic_'.$message->getId(),
+                        'anchor_topic' => 'topic_'.$main_message['id'],
                         'topics_page_nr' => $topic_page_nr,
                         'items_page_nr' => $items_page_nr,
-                        'topic_id' => $message->getId(),
+                        'topic_id' => $main_message['id'],
                     ]
                 );
 
@@ -877,18 +903,18 @@ class MessageManager
             );
         }
 
-        $links .= self::getLikesButton($message->getId(), $current_user_id, $groupId);
+        $links .= self::getLikesButton($main_message['id'], $current_user_id, $groupId);
 
         $urlReply = $webCodePath.'social/message_for_group_form.inc.php?'
             .http_build_query(
                 [
                     'user_friend' => $current_user_id,
                     'group_id' => $groupId,
-                    'message_id' => $message->getId(),
+                    'message_id' => $main_message['id'],
                     'action' => 'reply_message_group',
-                    'anchor_topic' => 'topic_'.$message->getId(),
+                    'anchor_topic' => 'topic_'.$main_message['id'],
                     'topics_page_nr' => $topic_page_nr,
-                    'topic_id' => $message->getId(),
+                    'topic_id' => $main_message['id'],
                 ]
             );
 
@@ -915,8 +941,9 @@ class MessageManager
         $links .= '</div>';
         $links .= '</div>';
 
-        $title = '<h4>'.Security::remove_XSS($message->getTitle(), STUDENT, true).$links.'</h4>';
+        $title = '<h4>'.Security::remove_XSS($main_message['title'], STUDENT, true).$links.'</h4>';
 
+        $userPicture = $user_sender_info['avatar'];
         $main_content .= '<div class="row">';
         $main_content .= '<div class="col-md-2">';
         $main_content .= '<div class="avatar-author">';
@@ -944,7 +971,7 @@ class MessageManager
                 .'</div>';
         }
         $attachment = '<div class="message-attach">'
-            .(!empty($filesAttachments) ? implode('<br />', $filesAttachments) : '')
+            .(!empty($files_attachments) ? implode('<br />', $files_attachments) : '')
             .'</div>';
         $main_content .= '<div class="col-md-10">';
         $user_link = Display::url(
@@ -983,31 +1010,31 @@ class MessageManager
                 $links .= '<div class="pull-right">';
                 $html_items = '';
                 $user_sender_info = api_get_user_info($topic['user_sender_id']);
-                $filesAttachments = self::getAttachmentLinkList($topic['id'], 0);
+                $files_attachments = self::getAttachmentLinkList($topic['id'], 0);
                 $name = $user_sender_info['complete_name'];
 
                 $links .= '<div class="btn-group btn-group-sm">';
                 if (
-                    (GROUP_USER_PERMISSION_ADMIN == $my_group_role ||
-                        GROUP_USER_PERMISSION_MODERATOR == $my_group_role
+                    ($my_group_role == GROUP_USER_PERMISSION_ADMIN ||
+                        $my_group_role == GROUP_USER_PERMISSION_MODERATOR
                     ) ||
                     $topic['user_sender_id'] == $current_user_id
                 ) {
                     $links .= Display::toolbarButton(
                         $langEdit,
                         $webCodePath.'social/message_for_group_form.inc.php?'
-                            .http_build_query(
-                                [
-                                    'user_friend' => $current_user_id,
-                                    'group_id' => $groupId,
-                                    'message_id' => $topic['id'],
-                                    'action' => 'edit_message_group',
-                                    'anchor_topic' => 'topic_'.$topic_id,
-                                    'topics_page_nr' => $topic_page_nr,
-                                    'items_page_nr' => $items_page_nr,
-                                    'topic_id' => $topic_id,
-                                ]
-                            ),
+                        .http_build_query(
+                            [
+                                'user_friend' => $current_user_id,
+                                'group_id' => $groupId,
+                                'message_id' => $topic['id'],
+                                'action' => 'edit_message_group',
+                                'anchor_topic' => 'topic_'.$topic_id,
+                                'topics_page_nr' => $topic_page_nr,
+                                'items_page_nr' => $items_page_nr,
+                                'topic_id' => $topic_id,
+                            ]
+                        ),
                         'pencil',
                         'default',
                         ['class' => 'ajax', 'data-title' => $langEdit, 'data-size' => 'lg'],
@@ -1020,18 +1047,18 @@ class MessageManager
                 $links .= Display::toolbarButton(
                     $langReply,
                     $webCodePath.'social/message_for_group_form.inc.php?'
-                        .http_build_query(
-                            [
-                                'user_friend' => $current_user_id,
-                                'group_id' => $groupId,
-                                'message_id' => $topic['id'],
-                                'action' => 'reply_message_group',
-                                'anchor_topic' => 'topic_'.$topic_id,
-                                'topics_page_nr' => $topic_page_nr,
-                                'items_page_nr' => $items_page_nr,
-                                'topic_id' => $topic_id,
-                            ]
-                        ),
+                    .http_build_query(
+                        [
+                            'user_friend' => $current_user_id,
+                            'group_id' => $groupId,
+                            'message_id' => $topic['id'],
+                            'action' => 'reply_message_group',
+                            'anchor_topic' => 'topic_'.$topic_id,
+                            'topics_page_nr' => $topic_page_nr,
+                            'items_page_nr' => $items_page_nr,
+                            'topic_id' => $topic_id,
+                        ]
+                    ),
                     'commenting',
                     'default',
                     ['class' => 'ajax', 'data-title' => $langReply, 'data-size' => 'lg'],
@@ -1072,7 +1099,7 @@ class MessageManager
                         .'</div>';
                 }
                 $attachment = '<div class="message-attach">'
-                    .(!empty($filesAttachments) ? implode('<br />', $filesAttachments) : '')
+                    .(!empty($files_attachments) ? implode('<br />', $files_attachments) : '')
                     .'</div>';
                 $html_items .= '<div class="col-md-10">'
                     .'<div class="message-content">'
@@ -1087,7 +1114,7 @@ class MessageManager
 
                 $base_padding = 20;
 
-                if (0 == $topic['indent_cnt']) {
+                if ($topic['indent_cnt'] == 0) {
                     $indent = $base_padding;
                 } else {
                     $indent = (int) $topic['indent_cnt'] * $base_padding + $base_padding;
@@ -1119,7 +1146,8 @@ class MessageManager
                     $style_class
                 );
             }
-        }*/
+        }
+
 
         return $html;
     }

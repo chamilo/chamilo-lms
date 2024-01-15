@@ -77,7 +77,7 @@ class CToolIntro extends AbstractResource implements ResourceInterface, Resource
     }
     public function getResourceName(): string
     {
-        return $this->getCourseTool()->getName();
+        return $this->getCourseTool()->getTitle();
     }
     public function setResourceName(string $name): self
     {

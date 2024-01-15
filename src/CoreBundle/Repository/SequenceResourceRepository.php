@@ -133,7 +133,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
             $from = $vertex->getVerticesEdgeFrom();
 
             $sequenceInfo = [
-                'name' => $sequence->getName(),
+                'name' => $sequence->getTitle(),
                 'requirements' => [],
             ];
 
@@ -201,7 +201,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
             $dependencies = $this->findVerticesEdges($to, $type);
 
             $result[$sequence->getId()] = [
-                'name' => $sequence->getName(),
+                'name' => $sequence->getTitle(),
                 'requirements' => $requirements,
                 'dependencies' => $dependencies,
             ];
@@ -249,7 +249,7 @@ class SequenceResourceRepository extends ServiceEntityRepository
                     case SequenceResource::SESSION_TYPE:
                         $id = $resource->getId();
                         $resourceItem = [
-                            'name' => $resource->getName(),
+                            'name' => $resource->getTitle(),
                             'status' => true,
                         ];
 

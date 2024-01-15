@@ -1081,7 +1081,7 @@ class AnnouncementManager
                     }
                     $output[] =
                         '<br />'.
-                        Display::label($groupList[$group_id]->getName(), 'info').
+                        Display::label($groupList[$group_id]->getTitle(), 'info').
                         '&nbsp;'.implode(', ', $userToArray);
                 }
             }
@@ -1116,7 +1116,7 @@ class AnnouncementManager
                 }
                 $output[] =
                     '<br />'.
-                    Display::label($groupList[$group_id]->getName(), 'info').
+                    Display::label($groupList[$group_id]->getTitle(), 'info').
                     '&nbsp;'.implode(', ', $userToArray);
             }
             if (empty($sent_to_array['groups']) && empty($sent_to_array['users'])) {

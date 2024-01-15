@@ -69,8 +69,8 @@ final class ResourceNormalizer implements ContextAwareNormalizerInterface, Norma
                 'cid' => $courseId,
                 'sid' => $sessionId,
                 'gid' => $groupId,
-                'tool' => $resourceNode->getResourceType()->getTool()->getName(),
-                'type' => $resourceNode->getResourceType()->getName(),
+                'tool' => $resourceNode->getResourceType()->getTool()->getTitle(),
+                'type' => $resourceNode->getResourceType()->getTitle(),
             ];
 
             // if ($getFile) {

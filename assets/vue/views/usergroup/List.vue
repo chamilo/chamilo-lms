@@ -334,6 +334,7 @@ import { ENTRYPOINT } from "../../config/entrypoint"
 import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
 import { MESSAGE_TYPE_INBOX, MESSAGE_TYPE_OUTBOX } from "../../components/message/constants"
 import { useFormatDate } from "../../composables/formatDate"
+import { useI18n } from "vue-i18n"
 
 export default {
   name: "UserGroupList",
@@ -348,6 +349,7 @@ export default {
   },
   mixins: [ListMixin],
   setup() {
+    const { t } = useI18n()
     const { relativeDatetime } = useFormatDate()
 
     const store = useStore()
@@ -434,14 +436,16 @@ export default {
     }
   },
   data() {
+    const {t} = useI18n()
+
     return {
       columns: [
-        { label: this.$i18n.t("Title"), field: "title", name: "title", sortable: true },
-        { label: this.$i18n.t("Sender"), field: "sender", name: "userSender", sortable: true },
-        { label: this.$i18n.t("Modified"), field: "sendDate", name: "updatedAt", sortable: true },
-        { label: this.$i18n.t("Actions"), name: "action", sortable: false },
+        { label: t("Title"), field: "title", name: "title", sortable: true },
+        { label: t("Sender"), field: "sender", name: "userSender", sortable: true },
+        { label: t("Modified"), field: "sendDate", name: "updatedAt", sortable: true },
+        { label: t("Actions"), name: "action", sortable: false },
       ],
-      pageOptions: [10, 20, 50, this.$i18n.t("All")],
+      pageOptions: [10, 20, 50, t("All")],
       selected: [],
       isBusy: false,
       options: {

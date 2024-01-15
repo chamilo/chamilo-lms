@@ -464,7 +464,7 @@ class CourseChatUtils
         if (null === $resourceNode) {
             $em = Database::getManager();
             $resource = new CChatConversation();
-            $resource->setName($filename_chat);
+            $resource->setTitle($filename_chat);
 
             $handle = tmpfile();
             fwrite($handle, '');

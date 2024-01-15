@@ -30,7 +30,7 @@ class ResourceFormat
     /**
      * @var Collection<int, ResourceNode>
      */
-    #[ORM\OneToMany(targetEntity: ResourceNode::class, mappedBy: 'resourceFormat', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'resourceFormat', targetEntity: ResourceNode::class)]
     protected Collection $resourceNodes;
 
     public function __construct()

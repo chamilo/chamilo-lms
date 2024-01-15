@@ -1868,7 +1868,7 @@ class SkillModel extends Model
         if ($addHeader) {
             $label .= '<span id="'.$skill->getId().'" class="user_skill" style="cursor:pointer">';
         }
-        $label .= Display::label($skill->getName(), $type);
+        $label .= Display::label($skill->getTitle(), $type);
         if ($addHeader) {
             $label .= '</span>&nbsp;';
         }
@@ -1982,7 +1982,7 @@ class SkillModel extends Model
             );
             /** @var SkillRelItem $skillRelItem */
             foreach ($items as $skillRelItem) {
-                $skillList[$skillRelItem->getSkill()->getId()] = $skillRelItem->getSkill()->getName();
+                $skillList[$skillRelItem->getSkill()->getId()] = $skillRelItem->getSkill()->getTitle();
             }
         }
 
@@ -2063,7 +2063,7 @@ class SkillModel extends Model
                 /** @var CLp $item */
                 $item = $em->getRepository(CLp::class)->find($itemId);
                 if ($item) {
-                    $itemInfo['name'] = $item->getName();
+                    $itemInfo['name'] = $item->getTitle();
                 }
                 break;
             case ITEM_TYPE_GRADEBOOK:
@@ -2080,7 +2080,7 @@ class SkillModel extends Model
                 /** @var CAttendance $item */
                 $item = $em->getRepository(CAttendance::class)->find($itemId);
                 if ($item) {
-                    $itemInfo['name'] = $item->getName();
+                    $itemInfo['name'] = $item->getTitle();
                 }
                 break;
             case ITEM_TYPE_SURVEY:
@@ -2136,7 +2136,7 @@ class SkillModel extends Model
             /** @var SkillRelItem $skillRelItem */
             $skillList = [];
             foreach ($skills as $skillRelItem) {
-                $skillList[] = Display::label($skillRelItem->getSkill()->getName(), 'success');
+                $skillList[] = Display::label($skillRelItem->getSkill()->getTitle(), 'success');
             }
             $skillToString = '&nbsp;'.implode(' ', $skillList);
         }

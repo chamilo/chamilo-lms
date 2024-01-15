@@ -138,7 +138,7 @@ class CourseListener
                     if (false === $checker->isGranted(SessionVoter::VIEW, $session)) {
                         throw new AccessDeniedException($this->translator->trans('You\'re not allowed in this session'));
                     }
-                    $sessionHandler->set('session_name', $session->getName());
+                    $sessionHandler->set('session_name', $session->getTitle());
                     $sessionHandler->set('sid', $session->getId());
                     $sessionHandler->set('session', $session);
 

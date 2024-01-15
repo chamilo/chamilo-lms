@@ -2259,7 +2259,7 @@ class CourseManager
                 }
             }
             if ($asArray) {
-                $groupList[$group->getIid()] = ['id' => $group->getIid(), 'name' => $group->getName()];
+                $groupList[$group->getIid()] = ['id' => $group->getIid(), 'name' => $group->getTitle()];
             } else {
                 $groupList[$group->getIid()] = $group;
             }

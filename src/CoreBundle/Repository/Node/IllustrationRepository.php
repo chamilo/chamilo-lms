@@ -94,7 +94,7 @@ final class IllustrationRepository extends ResourceRepository
             ->innerJoin('node.resourceType', 'type')
             ->innerJoin('node.resourceFile', 'file')
             ->where('node.parent = :parent')
-            ->andWhere('type.name = :name')
+            ->andWhere('type.title = :name')
             ->setParameters([
                 'parent' => $resourceNode->getId(),
                 'name' => $name,

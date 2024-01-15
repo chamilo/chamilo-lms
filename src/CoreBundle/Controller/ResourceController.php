@@ -85,7 +85,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         foreach ($sessions as $sessionRelCourse) {
             $session = $sessionRelCourse->getSession();
 
-            $labels[] = $course->getTitle().' - '.$session->getName();
+            $labels[] = $course->getTitle().' - '.$session->getTitle();
             $size = $repository->getResourceNodeRepository()->getSize(
                 $resourceNode,
                 $repository->getResourceType(),
@@ -97,7 +97,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         /*$groups = $course->getGroups();
         foreach ($groups as $group) {
-            $labels[] = $course->getTitle().' - '.$group->getName();
+            $labels[] = $course->getTitle().' - '.$group->getTitle();
             $size = $repository->getResourceNodeRepository()->getSize(
                 $resourceNode,
                 $repository->getResourceType(),

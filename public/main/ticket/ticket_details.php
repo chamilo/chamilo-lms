@@ -296,7 +296,7 @@ if ($allowEdition
                 );
                 $oldStatusTitle = '-';
                 if ($oldStatus) {
-                    $oldStatusTitle = $oldStatus->getName();
+                    $oldStatusTitle = $oldStatus->getTitle();
                 }
 
                 $messageToSend .= sprintf(

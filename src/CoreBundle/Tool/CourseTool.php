@@ -11,7 +11,7 @@ use Chamilo\CourseBundle\Entity\CToolIntro;
 
 class CourseTool extends AbstractTool implements ToolInterface
 {
-    public function getName(): string
+    public function getTitle(): string
     {
         return 'course_tool';
     }

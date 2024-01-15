@@ -344,7 +344,7 @@ switch ($action) {
 
         $item = $sequenceRepository->getItem($id, $type);
         $main->setAttribute('graphviz.shape', 'record');
-        $main->setAttribute('graphviz.label', $item->getName());
+        $main->setAttribute('graphviz.label', $item->getTitle());
 
         foreach ($parents as $parentId) {
             $item = $sequenceRepository->getItem($parentId, $type);
@@ -359,7 +359,7 @@ switch ($action) {
             }
 
             $parent->setAttribute('graphviz.shape', 'record');
-            $parent->setAttribute('graphviz.label', $item->getName());
+            $parent->setAttribute('graphviz.label', $item->getTitle());
         }
 
         foreach ($parents as $parentId) {

@@ -613,11 +613,6 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this;
     }
 
-    public function getName(): string
-    {
-        return $this->getTitle();
-    }
-
     public function getTitleAndCode(): string
     {
         return $this->getTitle().' ('.$this->getCode().')';

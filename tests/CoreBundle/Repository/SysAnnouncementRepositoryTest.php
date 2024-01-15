@@ -86,7 +86,7 @@ class SysAnnouncementRepositoryTest extends WebTestCase
         $session = $this->createSession('session');
 
         $career = (new Career())
-            ->setName('Doctor')
+            ->setTitle('Doctor')
         ;
         $em->persist($career);
 
@@ -108,7 +108,7 @@ class SysAnnouncementRepositoryTest extends WebTestCase
         $this->assertCount(1, $items);
 
         $promotion = (new Promotion())
-            ->setName('2000')
+            ->setTitle('2000')
             ->setDescription('Promotion of 2000')
             ->setCareer($career)
             ->setStatus(1)

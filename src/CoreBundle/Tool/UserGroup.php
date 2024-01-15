@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Entity\Usergroup as UsergroupEntity;
 
 class UserGroup extends AbstractTool implements ToolInterface
 {
-    public function getName(): string
+    public function getTitle(): string
     {
         return 'usergroup';
     }

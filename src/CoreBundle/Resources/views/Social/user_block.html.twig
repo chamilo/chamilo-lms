@@ -36,8 +36,10 @@
                             <!-- Language flag -->
                             <div class="avatar-lm">
                                 {% set lang_flags = ['fr', 'de', 'es', 'it', 'pl'] %}
-                                {% if user.language and user.language.code in lang_flags %}
-                                    <span class="fi fi-{{ user.language.code }}"></span>
+                                {% if user.language is iterable %}
+                                    {% if user.language.code and user.language.code in lang_flags %}
+                                        <span class="fi fi-{{ user.language.code }}"></span>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                             <!-- End language flag -->

@@ -100,9 +100,9 @@ class ResourceNode implements Stringable
     #[Gedmo\SortableGroup]
     protected ResourceType $resourceType;
 
-    #[ORM\ManyToOne(targetEntity: ResourceFormat::class, cascade: ['persist', 'remove'], inversedBy: 'resourceNodes')]
+    #[ORM\ManyToOne(targetEntity: ResourceFormat::class, inversedBy: 'resourceNodes')]
     #[ORM\JoinColumn(name: 'resource_format_id', referencedColumnName: 'id')]
-    protected ResourceFormat $resourceFormat;
+    protected ?ResourceFormat $resourceFormat = null;
 
     /**
      * @var Collection<int, ResourceLink>
@@ -388,7 +388,7 @@ class ResourceNode implements Stringable
         return $this->resourceFormat;
     }
 
-    public function setResourceFormat(ResourceFormat $resourceFormat): self
+    public function setResourceFormat(?ResourceFormat $resourceFormat): self
     {
         $this->resourceFormat = $resourceFormat;
 
@@ -501,7 +501,7 @@ class ResourceNode implements Stringable
                 $params = [
                     'id' => $this->getId(),
                     'tool' => $this->getResourceType()->getTool(),
-                    'type' => $this->getResourceType()->getName(),
+                    'type' => $this->getResourceType()->getTitle(),
                     'filter' => 'editor_thumbnail',
                 ];
                 $url = $router->generate('chamilo_core_resource_view', $params);

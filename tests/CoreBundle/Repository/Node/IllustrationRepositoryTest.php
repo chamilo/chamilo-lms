@@ -69,7 +69,7 @@ class IllustrationRepositoryTest extends WebTestCase
         $user = $this->createUser('test');
 
         $illustration = (new Illustration())
-            ->setName('test')
+            ->setTitle('test')
             ->setResourceName('test')
             ->setCreator($user)
             ->setParent($user)

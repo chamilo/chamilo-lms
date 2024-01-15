@@ -77,16 +77,16 @@ class ToolChain
         $toolRepo = $manager->getRepository(Tool::class);
 
         foreach ($tools as $tool) {
-            $name = $tool->getName();
+            $title = $tool->getTitle();
             $toolFromDatabase = $toolRepo->findOneBy([
-                'name' => $name,
+                'title' => $title,
             ]);
 
             if (null !== $toolFromDatabase) {
                 $toolEntity = $toolFromDatabase;
             } else {
                 $toolEntity = (new Tool())
-                    ->setTitle($name)
+                    ->setTitle($title)
                 ;
                 if ($tool->isCourseTool()) {
                     $this->setToolPermissions($toolEntity);
@@ -97,7 +97,7 @@ class ToolChain
             $types = $tool->getResourceTypes();
 
             if (!empty($types)) {
-                foreach ($types as $key => $typeName) {
+                foreach ($types as $key => $typeTitle) {
                     $resourceType = (new ResourceType())
                         ->setTitle($key)
                     ;
@@ -172,27 +172,27 @@ class ToolChain
         $tools = $this->handlerCollection->getCollection();
 
         foreach ($tools as $tool) {
-            $visibility = \in_array($tool->getName(), $toolVisibility, true);
+            $visibility = \in_array($tool->getTitle(), $toolVisibility, true);
             $criteria = [
-                'name' => $tool->getName(),
+                'title' => $tool->getTitle(),
             ];
-            if (!isset($toolList[$tool->getName()])) {
+            if (!isset($toolList[$tool->getTitle()])) {
                 continue;
             }
 
             $linkVisibility = ResourceLink::VISIBILITY_PUBLISHED;
-            if (\in_array($tool->getName(), ['course_setting', 'course_maintenance'])) {
+            if (\in_array($tool->getTitle(), ['course_setting', 'course_maintenance'])) {
                 $linkVisibility = ResourceLink::VISIBILITY_DRAFT;
             }
 
             /** @var Tool $toolEntity */
             $toolEntity = $toolRepo->findOneBy($criteria);
             if ($toolEntity) {
-                $position = $toolList[$tool->getName()] + 1;
+                $position = $toolList[$tool->getTitle()] + 1;
 
                 $courseTool = (new CTool())
                     ->setTool($toolEntity)
-                    ->setName($tool->getName())
+                    ->setTitle($tool->getTitle())
                     ->setPosition($position)
                     ->setVisibility($visibility)
                     ->setParent($course)
@@ -211,9 +211,9 @@ class ToolChain
         return $this->handlerCollection->getCollection();
     }
 
-    public function getToolFromName(string $name): AbstractTool
+    public function getToolFromName(string $title): AbstractTool
     {
-        return $this->handlerCollection->getHandler($name);
+        return $this->handlerCollection->getHandler($title);
     }
 
     /*public function getToolFromEntity(string $entityClass): AbstractTool
@@ -223,15 +223,15 @@ class ToolChain
 
     public function getResourceTypeNameByEntity(string $entityClass): ?string
     {
-        $name = $this->getResourceTypeList()[$entityClass] ?? null;
+        $title = $this->getResourceTypeList()[$entityClass] ?? null;
 
-        if (null === $name) {
+        if (null === $title) {
             return null;
         }
 
-        $name = explode('::', $name);
+        $title = explode('::', $title);
 
-        return $name[1];
+        return $title[1];
     }
 
     public function getResourceTypeList(): array
@@ -239,11 +239,11 @@ class ToolChain
         $tools = $this->handlerCollection->getCollection();
 
         foreach ($tools as $tool) {
-            $toolName = $tool->getName();
+            $toolTitle = $tool->getTitle();
             $typeList = $tool->getResourceTypes();
             if (!empty($typeList)) {
-                foreach ($typeList as $name => $entityClass) {
-                    $this->resourceTypeList[$entityClass] = $toolName.'::'.$name;
+                foreach ($typeList as $title => $entityClass) {
+                    $this->resourceTypeList[$entityClass] = $toolTitle.'::'.$title;
                 }
             }
         }

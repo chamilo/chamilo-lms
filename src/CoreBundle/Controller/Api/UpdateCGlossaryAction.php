@@ -45,7 +45,7 @@ class UpdateCGlossaryAction extends BaseResourceFileAction
             throw new BadRequestHttpException('The glossary term already exists.');
         }
 
-        $glossary->setName($title);
+        $glossary->setTitle($title);
         $glossary->setDescription($description);
 
         if (!empty($parentResourceNodeId)) {

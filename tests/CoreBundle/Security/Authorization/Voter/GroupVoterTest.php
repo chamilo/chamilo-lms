@@ -53,7 +53,7 @@ class GroupVoterTest extends WebTestCase
         $em->persist($publicCourse);
 
         $group = (new CGroup())
-            ->setName('Group')
+            ->setTitle('Group')
             ->setParent($publicCourse)
             ->setCreator($admin)
             ->setMaxStudent(100)
@@ -99,7 +99,7 @@ class GroupVoterTest extends WebTestCase
         $admin = $this->getAdmin();
 
         $group2 = (new CGroup())
-            ->setName('Group2')
+            ->setTitle('Group2')
             ->setParent($registeredCourse)
             ->setCreator($admin)
             ->setStatus(false)

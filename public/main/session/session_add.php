@@ -241,7 +241,7 @@ if (!$formSent) {
                 },
                 $session->getGeneralCoaches()->getValues()
             ),
-            'session_template' => $session->getName(),
+            'session_template' => $session->getTitle(),
         ];
     } else {
         $formDefaults['access_start_date'] = $formDefaults['display_start_date'] = api_get_local_time();

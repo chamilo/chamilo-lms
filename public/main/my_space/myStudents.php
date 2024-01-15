@@ -1647,7 +1647,7 @@ if (empty($details)) {
             $flat_list = $list->get_flat_list();
             $i = 0;
             if (count($categories) > 1) {
-                echo Display::page_subheader2($item->getName());
+                echo Display::page_subheader2($item->getTitle());
             }
 
             echo '<div class="table-responsive">';

@@ -11,12 +11,12 @@ use Chamilo\CourseBundle\Entity\CLpCategory;
 
 class LearningPath extends AbstractTool implements ToolInterface
 {
-    public function getName(): string
+    public function getTitle(): string
     {
         return 'learnpath';
     }
 
-    public function getNameToShow(): string
+    public function getTitleToShow(): string
     {
         return 'Learning paths';
     }

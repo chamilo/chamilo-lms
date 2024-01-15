@@ -954,7 +954,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         /** @var UsergroupRelUser $subscription */
         foreach ($classSubscription as $subscription) {
             $class = $subscription->getUsergroup();
-            $classList[] = $class->getName();
+            $classList[] = $class->getTitle();
         }
         $classString = empty($classList) ? null : ' ['.implode(', ', $classList).']';
 
@@ -1375,7 +1375,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     {
         $names = [];
         foreach ($this->getGroups() as $group) {
-            $names[] = $group->getName();
+            $names[] = $group->getTitle();
         }
 
         return $names;

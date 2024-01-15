@@ -10,7 +10,7 @@ use Chamilo\CourseBundle\Entity\CChatConversation;
 
 class Chat extends AbstractTool implements ToolInterface
 {
-    public function getName(): string
+    public function getTitle(): string
     {
         return 'chat';
     }

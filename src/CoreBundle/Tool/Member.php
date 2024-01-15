@@ -8,7 +8,7 @@ namespace Chamilo\CoreBundle\Tool;
 
 class Member extends AbstractTool implements ToolInterface
 {
-    public function getName(): string
+    public function getTitle(): string
     {
         return 'member';
     }

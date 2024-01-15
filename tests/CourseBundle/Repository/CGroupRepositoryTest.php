@@ -29,7 +29,7 @@ class CGroupRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
 
         $group = (new CGroup())
-            ->setName('Group')
+            ->setTitle('Group')
             ->setParent($course)
             ->setCreator($teacher)
             ->setStatus(true)
@@ -95,7 +95,7 @@ class CGroupRepositoryTest extends AbstractApiTest
         $em->flush();
 
         $group = (new CGroup())
-            ->setName('Group')
+            ->setTitle('Group')
             ->setCategory($category)
             ->setParent($course)
             ->setCreator($teacher)
@@ -128,7 +128,7 @@ class CGroupRepositoryTest extends AbstractApiTest
         $courseId = $course->getId();
 
         $group = (new CGroup())
-            ->setName('Group')
+            ->setTitle('Group')
             ->setParent($course)
             ->setCreator($teacher)
             ->setMaxStudent(100)
@@ -192,7 +192,7 @@ class CGroupRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
 
         $group = (new CGroup())
-            ->setName('Group')
+            ->setTitle('Group')
             ->setParent($course)
             ->setCreator($teacher)
             ->setMaxStudent(100)

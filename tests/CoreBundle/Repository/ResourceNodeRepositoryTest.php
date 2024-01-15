@@ -218,7 +218,7 @@ class ResourceNodeRepositoryTest extends AbstractApiTest
         $uploadedFile = $this->getUploadedFile();
 
         $resourceFile = (new ResourceFile())
-            ->setName($uploadedFile->getFilename())
+            ->setTitle($uploadedFile->getFilename())
             ->setOriginalName($uploadedFile->getFilename())
             ->setFile($uploadedFile)
             ->setDescription('desc')

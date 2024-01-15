@@ -178,7 +178,8 @@ switch ($action) {
             // total amount of courses
             $all = [];
             foreach ($categories as $category) {
-                $all[$category->getName()] = $category->getCourses()->count();
+                /* @var Chamilo\CoreBundle\Entity\CourseCategory $category */
+                $all[$category->getTitle()] = $category->getCourses()->count();
             }
         } elseif ('courses_by_language' == $action) {
             $statsName = 'CountCourseByLanguage';
@@ -202,8 +203,9 @@ switch ($action) {
             $countInvisible = isset($_GET['count_invisible']) ? (int) $_GET['count_invisible'] : null;
             $all = [];
             foreach ($categories as $category) {
+                /* @var Chamilo\CoreBundle\Entity\CourseCategory $category */
                 $code = $category->getCode();
-                $name = $category->getName();
+                $name = $category->getTitle();
                 $name = str_replace(get_lang('Department'), '', $name);
                 $all[$name] = Statistics::countUsers(COURSEMANAGER, $code, $countInvisible);
             }
@@ -219,8 +221,9 @@ switch ($action) {
             $countInvisible = isset($_GET['count_invisible']) ? (int) $_GET['count_invisible'] : null;
             $all = [];
             foreach ($categories as $category) {
+                /* @var Chamilo\CoreBundle\Entity\CourseCategory $category */
                 $code = $category->getCode();
-                $name = $category->getName();
+                $name = $category->getTitle();
                 $name = str_replace(get_lang('Department'), '', $name);
                 $all[$name] = Statistics::countUsers(STUDENT, $code, $countInvisible);
             }

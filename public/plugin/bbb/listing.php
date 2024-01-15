@@ -430,7 +430,7 @@ if (false === $bbb->isGlobalConference() &&
         foreach ($groups as $groupData) {
             if ($groupData instanceof \Chamilo\CourseBundle\Entity\CGroup) {
                 $itemGroupId = $groupData->getIid();
-                $name = $groupData->getName();
+                $name = $groupData->getTitle();
             } else {
                 $itemGroupId = $groupData['iid'];
                 $name = $groupData['name'];

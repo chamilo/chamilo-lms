@@ -11,7 +11,7 @@ use Chamilo\LtiBundle\Entity\ExternalTool;
 
 class Shortcut extends AbstractTool implements ToolInterface
 {
-    public function getName(): string
+    public function getTitle(): string
     {
         return 'shortcuts';
     }

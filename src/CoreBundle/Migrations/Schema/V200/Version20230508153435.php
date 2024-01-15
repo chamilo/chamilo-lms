@@ -232,7 +232,6 @@ final class Version20230508153435 extends AbstractMigrationChamilo
             );
         }
 
-
         if ($schema->hasTable('specific_field')) {
             $this->addSql(
                 'ALTER TABLE specific_field CHANGE name title VARCHAR(200) NOT NULL'
@@ -310,7 +309,6 @@ final class Version20230508153435 extends AbstractMigrationChamilo
                 'ALTER TABLE skill_level_profile CHANGE name title VARCHAR(255) NOT NULL'
             );
         }
-
     }
 
     public function down(Schema $schema): void

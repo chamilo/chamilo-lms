@@ -16,7 +16,6 @@ final class Version20240114212100 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-
         if ($schema->hasTable('contact_form_contact_category')) {
             $this->addSql(
                 'ALTER TABLE contact_form_contact_category CHANGE name title VARCHAR(255) NOT NULL'
@@ -43,12 +42,10 @@ final class Version20240114212100 extends AbstractMigrationChamilo
                 'ALTER TABLE fos_group CHANGE name title VARCHAR(255) NOT NULL'
             );
         }
-
     }
 
     public function down(Schema $schema): void
     {
-
         $table = $schema->getTable('resource_file');
         if ($table->hasColumn('title')) {
             $this->addSql('ALTER TABLE resource_file CHANGE title name VARCHAR(255) NOT NULL');
@@ -71,6 +68,5 @@ final class Version20240114212100 extends AbstractMigrationChamilo
         if ($table->hasColumn('title')) {
             $this->addSql('ALTER TABLE contact_form_contact_category CHANGE title name VARCHAR(255) NOT NULL');
         }
-
     }
 }

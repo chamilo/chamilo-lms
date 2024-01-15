@@ -90,12 +90,10 @@ final class Version20240114174300 extends AbstractMigrationChamilo
                 'ALTER TABLE lti_external_tool CHANGE name title VARCHAR(255) NOT NULL'
             );
         }
-
     }
 
     public function down(Schema $schema): void
     {
-
         $table = $schema->getTable('lti_external_tool');
         if ($table->hasColumn('title')) {
             $this->addSql('ALTER TABLE lti_external_tool CHANGE title name VARCHAR(255) NOT NULL');

@@ -500,7 +500,7 @@ class SessionRepositoryTest extends AbstractApiTest
         $this->assertNotNull($category->getDateEnd());
         $this->assertNotNull($category->getUrl());
 
-        $session = ($sessionRepo->create())
+        $session = $sessionRepo->create()
             ->setTitle('session 1')
             ->addGeneralCoach($coach)
             ->addAccessUrl($url)
@@ -549,7 +549,7 @@ class SessionRepositoryTest extends AbstractApiTest
         $coach = $this->createUser('coach');
         $course = $this->createCourse('new');
 
-        $session = ($sessionRepo->create())
+        $session = $sessionRepo->create()
             ->setTitle('session 1')
             ->addGeneralCoach($coach)
             ->addAccessUrl($url)

@@ -12,6 +12,7 @@ export function useSidebarMenu() {
   const platformConfigStore = usePlatformConfig()
   const enrolledStore = useEnrolledStore()
   const showTabsSetting = platformConfigStore.getSetting("platform.show_tabs")
+  const showCatalogue = platformConfigStore.getSetting("platform.catalog_show_courses_sessions")
 
   const menuItems = computed(() => {
     const items = []
@@ -48,6 +49,23 @@ export function useSidebarMenu() {
           items: courseItems.length > 1 ? courseItems : undefined,
           command: 1 === courseItems.length ? courseItems[0].command : undefined,
         })
+      }
+
+      if (showCatalogue > -1) {
+        if (showCatalogue == 0 || showCatalogue == 2) {
+          items.push({
+            icon: "mdi mdi-home",
+            label: t("Courses catalogue"),
+            command: () => router.push({ name: "CatalogueCourses" }),
+          })
+        }
+        if (showCatalogue > 0) {
+          items.push({
+            icon: "mdi mdi-home",
+            label: t("Sessions catalogue"),
+            command: () => router.push({ name: "CatalogueSessions" }),
+          })
+        }
       }
 
       if (showTabsSetting.indexOf("my_agenda") > -1) {

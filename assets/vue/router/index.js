@@ -23,11 +23,8 @@ import MySessionList from "../views/user/sessions/SessionsCurrent.vue"
 import MySessionListPast from "../views/user/sessions/SessionsPast.vue"
 import MySessionListUpcoming from "../views/user/sessions/SessionsUpcoming.vue"
 
-import CatalogLayout from "../layouts/Catalog.vue"
 import MyCoursesLayout from "../layouts/MyCourses.vue"
 
-import CourseCatalog from "../views/course/Catalog.vue"
-import SessionCatalog from "../views/course/CatalogSession.vue"
 import CourseHome from "../views/course/CourseHome.vue"
 
 import Index from "../pages/Index.vue"
@@ -37,7 +34,10 @@ import Faq from "../pages/Faq.vue"
 import Demo from "../pages/Demo.vue"
 
 import { useCidReqStore } from "../store/cidReq"
-import courseService from "../services/courseService";
+import courseService from "../services/courseService"
+
+import catalogueCourses from "./cataloguecourses"
+import catalogueSessions from "./cataloguesessions"
 
 const router = createRouter({
   history: createWebHistory(),
@@ -138,23 +138,8 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     socialNetworkRoutes,
-    {
-      path: "/catalog",
-      redirect: "/catalog/course",
-      name: "Catalog",
-      component: CatalogLayout,
-      children: [
-        {
-          path: "course",
-          component: CourseCatalog,
-        },
-        {
-          path: "session",
-          component: SessionCatalog,
-        },
-      ],
-      meta: { requiresAuth: true },
-    },
+    catalogueCourses,
+    catalogueSessions,
     adminRoutes,
     courseRoutes,
     //courseCategoryRoutes,

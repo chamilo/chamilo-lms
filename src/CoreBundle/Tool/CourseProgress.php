@@ -10,7 +10,7 @@ use Chamilo\CourseBundle\Entity\CThematic;
 
 class CourseProgress extends AbstractTool implements ToolInterface
 {
-    public function getName(): string
+    public function getTitle(): string
     {
         return 'course_progress';
     }

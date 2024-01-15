@@ -8,7 +8,7 @@ namespace Chamilo\CoreBundle\Tool;
 
 interface ToolInterface
 {
-    public function getName(): string;
+    public function getTitle(): string;
 
     public function getCategory(): string;
 

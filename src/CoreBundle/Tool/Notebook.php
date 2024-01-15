@@ -10,7 +10,7 @@ use Chamilo\CourseBundle\Entity\CNotebook;
 
 class Notebook extends AbstractTool implements ToolInterface
 {
-    public function getName(): string
+    public function getTitle(): string
     {
         return 'notebook';
     }

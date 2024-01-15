@@ -14,7 +14,7 @@ use Chamilo\CourseBundle\Entity\CForumThread;
 
 class Forum extends AbstractTool implements ToolInterface
 {
-    public function getName(): string
+    public function getTitle(): string
     {
         return 'forum';
     }

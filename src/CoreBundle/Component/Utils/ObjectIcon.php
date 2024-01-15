@@ -24,7 +24,7 @@ enum ObjectIcon: string
     case FORUM_THREAD = 'format-quote-open-outline';
     // Forum post
     case FORUM_POST = 'format-quote-open';
-    // Chapter (in LP or elsewhere) / folder type
+    // Chapter (in LP or elsewhere) / folder type / Courses catalogue
     case CHAPTER = 'bookmark-multiple';
     // Certificate
     case CERTIFICATE = 'certificate';
@@ -152,4 +152,6 @@ enum ObjectIcon: string
     case SEQUENCE = 'arrow-decision';
     // Map marker/geolocalization
     case MAP_MARKER = 'map-marker';
+    // Sessions catalogue
+    case CATALOGUE = 'bookmark-multiple-outline';
 }

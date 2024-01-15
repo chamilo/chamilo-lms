@@ -16,7 +16,7 @@ class CourseTool extends AbstractResource
     public ?int $iid = null;
 
     #[Groups(['ctool:read'])]
-    public string $name;
+    public string $title;
 
     #[Groups(['ctool:read'])]
     public ?bool $visibility = null;
@@ -36,6 +36,6 @@ class CourseTool extends AbstractResource
     #[Groups(['ctool:read'])]
     public function getNameToTranslate(): string
     {
-        return ucfirst(str_replace('_', ' ', $this->name));
+        return ucfirst(str_replace('_', ' ', $this->title));
     }
 }

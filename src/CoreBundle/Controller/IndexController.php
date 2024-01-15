@@ -30,6 +30,7 @@ class IndexController extends BaseController
      */
     #[Route('/sessions', name: 'sessions')]
     #[Route('/sessions/{extra}', name: 'sessions_options')]
+    #[Route('/admin/configuration/colors', name: 'configuration_colors')]
     public function indexAction(): Response
     {
         return $this->render('@ChamiloCore/Index/vue.html.twig');

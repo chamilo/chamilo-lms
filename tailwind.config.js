@@ -1,5 +1,15 @@
 const colors = require("tailwindcss/colors");
 
+// from tailwind youtube channel https://youtu.be/MAtaT8BZEAo?t=1023
+const colorWithOpacity = (variableName) => {
+  return ({opacityValue}) => {
+    if (opacityValue !== undefined) {
+      return `rgba(var(${variableName}), ${opacityValue})`
+    }
+    return `rgb(var(${variableName}))`
+  }
+}
+
 module.exports = {
   important: true,
   content: [
@@ -10,16 +20,19 @@ module.exports = {
   theme: {
     colors: {
       primary: {
-        DEFAULT: "#2e75a3",
-        gradient: "#9cc2da",
-        bgdisabled: '#fafafa',
-        borderdisabled: '#e4e9eD',
+        DEFAULT: colorWithOpacity("--color-primary-base"),
+        gradient: colorWithOpacity("--color-primary-gradient"),
+        bgdisabled: "#fafafa",
+        borderdisabled: "#e4e9ed",
       },
       secondary: {
-        DEFAULT: "#f37e2f",
-        gradient: "#e06410",
-        hover: "#d35e0f",
+        DEFAULT: colorWithOpacity("--color-secondary-base"),
+        gradient: colorWithOpacity("--color-secondary-gradient"),
         bgdisabled: '#e4e9ed',
+      },
+      tertiary: {
+        DEFAULT: colorWithOpacity("--color-tertiary-base"),
+        gradient: colorWithOpacity("--color-tertiary-gradient"),
       },
       gray: {
         5: "#fcfcfc",
@@ -41,10 +54,10 @@ module.exports = {
       },
       warning: "#f5ce01",
       success: {
-        DEFAULT: "#77aa0c",
-        gradient: "#547708",
+        DEFAULT: colorWithOpacity("--color-success-base"),
+        gradient: colorWithOpacity("--color-success-gradient"),
       },
-      error: "#df3b3b",
+      error: colorWithOpacity("--color-danger-base"),
       info: "#0d7bfd",
 
       white: colors.white,

@@ -21,6 +21,24 @@
         </form>
       </div>
 
+    <div class="p-menu p-component p-ripple-disabled">
+      <ul class="p-menu-list p-reset" role="menu">
+        <li
+          v-for="(item, index) in visibleItems"
+          :key="index"
+          :aria-label="t(item.label)"
+          :class="item.className"
+          class="p-menuitem"
+          role="menuitem"
+        >
+          <div class="p-menuitem-content">
+            <a :href="item.url" class="p-menuitem-link">
+              <span class="p-menuitem-text" v-text="item.label" />
+            </a>
+          </div>
+        </li>
+        <slot></slot>
+      </ul>
       <div class="p-menu p-component p-ripple-disabled">
         <ul class="p-menu-list p-reset" role="menu">
           <li

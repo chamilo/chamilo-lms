@@ -78,7 +78,7 @@
         <template #body="{ data }">
           <TeacherBar
             :teachers="
-              data.teachers.map((teacher) => ({
+              data?.teachers.map((teacher) => ({
                 id: teacher.id,
                 ...teacher.user,
               }))

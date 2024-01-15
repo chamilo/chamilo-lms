@@ -3,7 +3,7 @@
     <DataTable
       v-model:expandedRows="expandedRows"
       v-model:filters="filters"
-      :global-filter-fields="['title', 'description', 'category', 'category.title', 'course.courseLanguage']"
+      :global-filter-fields="['title', 'description', 'category.title', 'course.courseLanguage']"
       :loading="status"
       :paginator="true"
       :rows="9"
@@ -39,7 +39,7 @@
                 @click="clearFilter()"
               />
               <span class="p-input-icon-left">
-                <i class="pi pi-search" />
+                <i class="mdi mdi-search" />
                 <InputText
                   v-model="filters['global'].value"
                   :placeholder="$t('Search')"

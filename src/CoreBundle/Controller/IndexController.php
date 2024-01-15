@@ -22,7 +22,7 @@ class IndexController extends BaseController
      * @Route("/demo", name="demo", methods={"GET", "POST"}, options={"expose"=true})
      * @Route("/course/{cid}/home", name="chamilo_core_course_home")
      * @Route("/courses", name="courses", methods={"GET", "POST"}, options={"expose"=true})
-     * @Route("/catalog/{slug}", name="catalog", methods={"GET", "POST"}, options={"expose"=true})
+     * @Route("/catalogue/{slug}", name="catalogue", methods={"GET", "POST"}, options={"expose"=true})
      * @Route("/resources/document/{nodeId}/manager", methods={"GET"}, name="resources_filemanager")
      * @Route("/account/home", name="account", options={"expose"=true}, name="chamilo_core_account_home")
      * @Route("/social", name="social", options={"expose"=true}, name="chamilo_core_socialnetwork")

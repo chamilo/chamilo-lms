@@ -17,16 +17,16 @@ class CGroupRelTutor
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\Column(name: 'c_id', type: 'integer')]
     protected int $cId;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'courseGroupsAsTutor')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'courseGroupsAsTutor')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     protected User $user;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CGroup::class, inversedBy: 'tutors')]
+    #[ORM\ManyToOne(targetEntity: CGroup::class, inversedBy: 'tutors')]
     #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'iid', nullable: false, onDelete: 'CASCADE')]
     protected CGroup $group;
 

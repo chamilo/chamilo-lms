@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * CCalendarEventAttachment.
@@ -22,7 +23,7 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected ?string $comment = null;
@@ -30,7 +31,7 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
     #[ORM\Column(name: 'filename', type: 'string', length: 255, nullable: false)]
     protected string $filename;
 
-    #[ORM\ManyToOne(targetEntity: 'CCalendarEvent', cascade: ['persist'], inversedBy: 'attachments')]
+    #[ORM\ManyToOne(targetEntity: CCalendarEvent::class, cascade: ['persist'], inversedBy: 'attachments')]
     #[ORM\JoinColumn(name: 'agenda_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CCalendarEvent $event;
 
@@ -46,12 +47,7 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
         return $this;
     }
 
-    /**
-     * Get comment.
-     *
-     * @return string
-     */
-    public function getComment()
+    public function getComment(): ?string
     {
         return $this->comment;
     }
@@ -63,20 +59,12 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
         return $this;
     }
 
-    /**
-     * Get filename.
-     *
-     * @return string
-     */
-    public function getFilename()
+    public function getFilename(): string
     {
         return $this->filename;
     }
 
-    /**
-     * @return int
-     */
-    public function getIid()
+    public function getIid(): ?int
     {
         return $this->iid;
     }
@@ -93,10 +81,7 @@ class CCalendarEventAttachment extends AbstractResource implements ResourceInter
         return $this;
     }
 
-    /**
-     * Resource identifier.
-     */
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }

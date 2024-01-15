@@ -1,16 +1,26 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Doctrine\Common\Filter\OrderFilterInterface;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\State\CStudentPublicationStateProcessor;
+use Chamilo\CoreBundle\State\CStudentPublicationPostProcessor;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -23,16 +33,48 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'c_student_publication')]
 #[ORM\Entity(repositoryClass: CStudentPublicationRepository::class)]
 #[ApiResource(
+    operations: [
+        new Put(security: "is_granted('EDIT', object.resourceNode)"),
+        new Get(
+            normalizationContext: [
+                'groups' => ['student_publication:read', 'student_publication:item:get'],
+            ],
+            security: "is_granted('VIEW', object.resourceNode)",
+        ),
+        new GetCollection(),
+        new Delete(security: "is_granted('DELETE', object.resourceNode)"),
+        new Post(
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            processor: CStudentPublicationPostProcessor::class
+        ),
+    ],
     normalizationContext: [
         'groups' => ['student_publication:read'],
     ],
     denormalizationContext: [
         'groups' => ['c_student_publication:write'],
     ],
-    processor: CStudentPublicationStateProcessor::class
+    order: ['sentDate' => 'DESC'],
+)]
+#[ApiFilter(
+    OrderFilter::class,
+    properties: [
+        'title',
+        'sentDate' => ['nulls_comparison' => OrderFilterInterface::NULLS_SMALLEST],
+        'assignment.expiresOn' => ['nulls_comparison' => OrderFilterInterface::NULLS_SMALLEST],
+        'assingment.endsOn' => ['nulls_comparison' => OrderFilterInterface::NULLS_SMALLEST],
+    ]
 )]
 class CStudentPublication extends AbstractResource implements ResourceInterface, Stringable
 {
+    #[Groups(['c_student_publication:write'])]
+    public bool $addToGradebook = false;
+
+    #[Groups(['c_student_publication:write'])]
+    public int $gradebookCategoryId = 0;
+
+    #[Groups(['c_student_publication:write'])]
+    public bool $addToCalendar = false;
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -40,11 +82,11 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
-    #[Groups(['c_student_publication:write'])]
+    #[Groups(['c_student_publication:write', 'student_publication:read'])]
     protected string $title;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
-    #[Groups(['c_student_publication:write'])]
+    #[Groups(['c_student_publication:write', 'student_publication:item:get'])]
     protected ?string $description;
 
     #[ORM\Column(name: 'author', type: 'string', length: 255, nullable: true)]
@@ -60,6 +102,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     protected int $postGroupId;
 
     #[ORM\Column(name: 'sent_date', type: 'datetime', nullable: true)]
+    #[Groups(['student_publication:read'])]
     protected ?DateTime $sentDate;
 
     #[Assert\NotBlank]
@@ -74,7 +117,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     protected ?bool $viewProperties = null;
 
     #[ORM\Column(name: 'qualification', type: 'float', precision: 6, scale: 2, nullable: false)]
-    #[Groups(['c_student_publication:write'])]
+    #[Groups(['c_student_publication:write', 'student_publication:read'])]
     protected float $qualification;
 
     #[ORM\Column(name: 'date_of_qualification', type: 'datetime', nullable: true)]
@@ -100,7 +143,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
     protected User $user;
 
-    #[Groups(['c_student_publication:write'])]
+    #[Groups(['c_student_publication:write', 'student_publication:read'])]
     #[ORM\OneToOne(mappedBy: 'publication', targetEntity: CStudentPublicationAssignment::class, cascade: ['persist'])]
     #[Assert\Valid]
     protected ?CStudentPublicationAssignment $assignment = null;
@@ -108,19 +151,13 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     #[ORM\Column(name: 'qualificator_id', type: 'integer', nullable: false)]
     protected int $qualificatorId;
 
-    #[Groups(['c_student_publication:write'])]
-    public bool $addToGradebook = false;
-
-    #[Groups(['c_student_publication:write'])]
-    public int $gradebookCategoryId = 0;
-
     #[Assert\NotBlank]
     #[ORM\Column(name: 'weight', type: 'float', precision: 6, scale: 2, nullable: false)]
-    #[Groups(['c_student_publication:write'])]
+    #[Groups(['c_student_publication:write', 'student_publication:read'])]
     protected float $weight = 0;
 
     #[ORM\Column(name: 'allow_text_assignment', type: 'integer', nullable: false)]
-    #[Groups(['c_student_publication:write'])]
+    #[Groups(['c_student_publication:write', 'student_publication:item:get'])]
     protected int $allowTextAssignment;
 
     #[ORM\Column(name: 'contains_file', type: 'integer', nullable: false)]
@@ -131,9 +168,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
 
     #[ORM\Column(name: 'filesize', type: 'integer', nullable: true)]
     protected ?int $fileSize = null;
-
-    #[Groups(['c_student_publication:write'])]
-    public bool $addToCalendar = false;
 
     public function __construct()
     {
@@ -224,9 +258,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         return $this;
     }
 
-    /**
-     * Get postGroupId.
-     */
     public function getPostGroupId(): int
     {
         return $this->postGroupId;
@@ -388,7 +419,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         if ($this->hasResourceNode()) {
             $children = $this->getResourceNode()->getChildren();
             foreach ($children as $child) {
-                $name = $child->getResourceType()->getName();
+                $name = $child->getResourceType()->getTitle();
                 if ('student_publications_corrections' === $name) {
                     return $child;
                 }
@@ -486,5 +517,54 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     public function setResourceName(string $name): self
     {
         return $this->setTitle($name);
+    }
+
+    #[Groups(['student_publication:read'])]
+    public function getUniqueStudentAttemptsTotal(): int
+    {
+        $userIdList = [];
+
+        $reduce = $this->children
+            ->filter(function (self $child) {
+                return $child->postGroupId === $this->postGroupId;
+            })
+            ->reduce(function (int $accumulator, self $child) use (&$userIdList): int {
+                $user = $child->getUser();
+
+                if (!\in_array($user->getId(), $userIdList, true)) {
+                    $userIdList[] = $user->getId();
+
+                    return $accumulator + 1;
+                }
+
+                return $accumulator;
+            })
+        ;
+
+        return $reduce ?: 0;
+    }
+
+    #[Groups(['student_publication:read'])]
+    public function getStudentSubscribedToWork(): int
+    {
+        $firstLink = $this->getFirstResourceLink();
+
+        $course = $firstLink->getCourse();
+        $session = $firstLink->getSession();
+        $group = $firstLink->getGroup();
+
+        if ($group) {
+            return $group->getMembers()->count();
+        }
+
+        if ($session) {
+            return $session->getSessionRelCourseRelUsersByStatus($course, Session::STUDENT)->count();
+        }
+
+        if ($course) {
+            return $course->getStudentSubscriptions()->count();
+        }
+
+        return 0;
     }
 }

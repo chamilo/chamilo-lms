@@ -1,23 +1,27 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+
 if ($currentUserId == $user->getId()) {
     if ($allowEdit) {
         $actions[] = Display::url(
-            Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')),
             $baseUrl.'action=add_item'
         );
         $actions[] = Display::url(
-            Display::return_icon('folder.png', get_lang('Add category'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ObjectIcon::FOLDER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add category')),
             $baseUrl.'action=add_category'
         );
         $actions[] = Display::url(
-            Display::return_icon('shared_setting.png', get_lang('Preview'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ToolIcon::SETTINGS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Preview')),
             $baseUrl.'preview=&user='.$user->getId()
         );
     } else {
         $actions[] = Display::url(
-            Display::return_icon('shared_setting_na.png', get_lang('Preview'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ToolIcon::SETTINGS, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Preview')),
             $baseUrl
         );
     }

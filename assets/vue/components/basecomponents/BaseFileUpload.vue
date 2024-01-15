@@ -1,5 +1,5 @@
 <template>
-  <div class="flex gap-2 items-center">
+  <div class="flex items-center gap-2">
     <BaseButton
       :label="label"
       :size="size"
@@ -10,19 +10,19 @@
     <p class="text-gray-90">
       {{ fileName }}
     </p>
+    <input
+      ref="inputFile"
+      type="file"
+      class="hidden"
+      :accept="acceptFileType"
+    />
   </div>
-  <input
-    ref="inputFile"
-    type="file"
-    class="hidden"
-    :accept="acceptFileType"
-  >
 </template>
 
 <script setup>
 import BaseButton from "./BaseButton.vue"
-import {computed, onMounted, ref} from "vue";
-import {sizeValidator} from "./validators";
+import { computed, onMounted, ref } from "vue"
+import { sizeValidator } from "./validators"
 
 const props = defineProps({
   modelValue: {
@@ -31,14 +31,16 @@ const props = defineProps({
   },
   label: {
     type: String,
-    required: true
+    required: true,
   },
   accept: {
     type: String,
-    default: '',
+    default: "",
     validator: (value) => {
-      if (value === '') { return true }
-      return ['image'].includes(value);
+      if (value === "") {
+        return true
+      }
+      return ["image"].includes(value)
     },
   },
   size: {
@@ -48,30 +50,30 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['fileSelected'])
+const emit = defineEmits(["fileSelected"])
 
 const inputFile = ref(null)
-const fileName = ref('')
+const fileName = ref("")
 
 const acceptFileType = computed(() => {
   switch (props.accept) {
-    case '':
-      return ''
-    case 'image':
-      return 'image/*'
+    case "":
+      return ""
+    case "image":
+      return "image/*"
     default:
-      return ''
+      return ""
   }
 })
 
 onMounted(() => {
-  inputFile.value.addEventListener("change", fileSelected);
+  inputFile.value.addEventListener("change", fileSelected)
 })
 
 const fileSelected = () => {
-  let file = inputFile.value.files[0];
+  let file = inputFile.value.files[0]
   fileName.value = file.name
-  emit('fileSelected', file)
+  emit("fileSelected", file)
 }
 
 const showFileDialog = () => {

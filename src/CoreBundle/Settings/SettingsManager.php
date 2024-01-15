@@ -292,6 +292,7 @@ class SettingsManager implements SettingsManagerInterface
         ]);
 
         $persistedParametersMap = [];
+
         /** @var SettingsCurrent $parameter */
         foreach ($persistedParameters as $parameter) {
             $persistedParametersMap[$parameter->getVariable()] = $parameter;
@@ -358,7 +359,7 @@ class SettingsManager implements SettingsManagerInterface
         ]);
         $persistedParametersMap = [];
         foreach ($persistedParameters as $parameter) {
-            $persistedParametersMap[$parameter->getTitle()] = $parameter;
+            $persistedParametersMap[$parameter->getVariable()] = $parameter;
         }
 
         // @var SettingsEvent $event
@@ -472,6 +473,7 @@ class SettingsManager implements SettingsManagerInterface
         ;
         $parametersFromDb = $query->getQuery()->getResult();
         $parameters = [];
+
         /** @var SettingsCurrent $parameter */
         foreach ($parametersFromDb as $parameter) {
             $parameters[$parameter->getCategory()][] = $parameter;
@@ -506,6 +508,7 @@ class SettingsManager implements SettingsManagerInterface
             return $parametersFromDb;
         }
         $parameters = [];
+
         /** @var SettingsCurrent $parameter */
         foreach ($parametersFromDb as $parameter) {
             $parameters[$parameter->getVariable()] = $parameter->getSelectedValue();
@@ -517,7 +520,7 @@ class SettingsManager implements SettingsManagerInterface
     private function validateSetting(string $name): string
     {
         if (!str_contains($name, '.')) {
-            //throw new \InvalidArgumentException(sprintf('Parameter must be in format "namespace.name", "%s" given.', $name));
+            // throw new \InvalidArgumentException(sprintf('Parameter must be in format "namespace.name", "%s" given.', $name));
 
             // This code allows the possibility of calling
             // api_get_setting('allow_skills_tool') instead of
@@ -553,6 +556,7 @@ class SettingsManager implements SettingsManagerInterface
     {
         $parameters = [];
         $category = $this->repository->findBy(['category' => $namespace]);
+
         /** @var SettingsCurrent $parameter */
         foreach ($category as $parameter) {
             $parameters[$parameter->getVariable()] = $parameter->getSelectedValue();
@@ -565,6 +569,7 @@ class SettingsManager implements SettingsManagerInterface
     {
         $parameters = [];
         $all = $this->repository->findAll();
+
         /** @var SettingsCurrent $parameter */
         foreach ($all as $parameter) {
             $parameters[$parameter->getCategory()][$parameter->getVariable()] = $parameter->getSelectedValue();
@@ -597,7 +602,7 @@ class SettingsManager implements SettingsManagerInterface
             'siteName' => 'Platform',
             'site_name' => 'Platform',
             'emailAdministrator' => 'admin',
-            //'emailAdministrator' => 'Platform',
+            // 'emailAdministrator' => 'Platform',
             'administratorSurname' => 'admin',
             'administratorTelephone' => 'admin',
             'administratorName' => 'admin',
@@ -639,8 +644,8 @@ class SettingsManager implements SettingsManagerInterface
             'account_valid_duration' => 'Platform',
             'use_session_mode' => 'Session',
             'allow_email_editor' => 'Tools',
-            //'registered' => null',
-            //'donotlistcampus' =>'null',
+            // 'registered' => null',
+            // 'donotlistcampus' =>'null',
             'show_email_addresses' => 'Platform',
             'service_ppt2lp' => 'NULL',
             'stylesheets' => 'stylesheets',
@@ -707,14 +712,14 @@ class SettingsManager implements SettingsManagerInterface
             'allow_send_message_to_all_platform_users' => 'Message',
             'message_max_upload_filesize' => 'Tools',
             'use_users_timezone' => 'profile',
-            //'use_users_timezone' => 'Timezones',
+            // 'use_users_timezone' => 'Timezones',
             'timezone_value' => 'platform',
-            //'timezone_value' => 'Timezones',
+            // 'timezone_value' => 'Timezones',
             'allow_user_course_subscription_by_course_admin' => 'Security',
             'show_link_bug_notification' => 'Platform',
             'show_link_ticket_notification' => 'Platform',
             'course_validation' => 'course',
-            //'course_validation' => 'Platform',
+            // 'course_validation' => 'Platform',
             'course_validation_terms_and_conditions_url' => 'Platform',
             'enabled_wiris' => 'Editor',
             'allow_spellcheck' => 'Editor',

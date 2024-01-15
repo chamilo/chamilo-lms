@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ApiResource(security: 'is_granted(\'ROLE_ADMIN\')', normalizationContext: ['groups' => ['usergroup:read']])]
 #[ORM\Table(name: 'usergroup')]
-#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\Node\UsergroupRepository::class)]
+#[ORM\Entity(repositoryClass: UsergroupRepository::class)]
 class Usergroup extends AbstractResource implements ResourceInterface, ResourceIllustrationInterface, ResourceWithAccessUrlInterface, Stringable
 {
     use TimestampableEntity;
@@ -31,8 +32,8 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     #[ORM\GeneratedValue]
     protected ?int $id = null;
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'name', type: 'string', length: 255)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'string', length: 255)]
+    protected string $title;
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
     #[Assert\NotBlank]
@@ -46,34 +47,39 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     #[ORM\Column(name: 'visibility', type: 'string', length: 255, nullable: false)]
     protected string $visibility;
     #[ORM\Column(name: 'author_id', type: 'integer', nullable: true)]
-    protected ?string $authorId = null;
+    protected ?int $authorId = null;
     #[Assert\NotBlank]
     #[ORM\Column(name: 'allow_members_leave_group', type: 'integer')]
     protected int $allowMembersToLeaveGroup;
+
     /**
-     * @var Collection|UsergroupRelUser[]
+     * @var Collection<int, UsergroupRelUser>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\UsergroupRelUser::class, mappedBy: 'usergroup', cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'usergroup', targetEntity: UsergroupRelUser::class, cascade: ['persist'])]
     protected Collection $users;
+
     /**
-     * @var Collection|UsergroupRelCourse[]
+     * @var Collection<int, UsergroupRelCourse>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\UsergroupRelCourse::class, mappedBy: 'usergroup', cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'usergroup', targetEntity: UsergroupRelCourse::class, cascade: ['persist'])]
     protected Collection $courses;
+
     /**
-     * @var Collection|UsergroupRelSession[]
+     * @var Collection<int, UsergroupRelSession>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\UsergroupRelSession::class, mappedBy: 'usergroup', cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'usergroup', targetEntity: UsergroupRelSession::class, cascade: ['persist'])]
     protected Collection $sessions;
+
     /**
-     * @var Collection|UsergroupRelQuestion[]
+     * @var Collection<int, UsergroupRelQuestion>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\UsergroupRelQuestion::class, mappedBy: 'usergroup', cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'usergroup', targetEntity: UsergroupRelQuestion::class, cascade: ['persist'])]
     protected Collection $questions;
+
     /**
-     * @var AccessUrlRelUserGroup[]|Collection
+     * @var Collection<int, AccessUrlRelUserGroup>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\AccessUrlRelUserGroup::class, mappedBy: 'userGroup', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'userGroup', targetEntity: AccessUrlRelUserGroup::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $urls;
     public function __construct()
     {
@@ -88,15 +94,20 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     }
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
+
     /**
-     * @return UsergroupRelUser[]|Collection
+     * @return Collection<int, UsergroupRelUser>
      */
-    public function getUsers(): array|Collection
+    public function getUsers(): Collection
     {
         return $this->users;
     }
+
+    /**
+     * @return Collection<int, AccessUrlRelUserGroup>
+     */
     public function getUrls(): Collection
     {
         return $this->urls;
@@ -139,24 +150,23 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
             }
         }
     }
+
     /**
      * Get id.
-     *
-     * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
     public function setDescription(string $description): self
     {
@@ -168,10 +178,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     {
         return $this->description;
     }
-    /**
-     * @return int
-     */
-    public function getGroupType()
+    public function getGroupType(): int
     {
         return $this->groupType;
     }
@@ -201,11 +208,11 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
 
         return $this;
     }
-    public function getAuthorId(): string
+    public function getAuthorId(): ?int
     {
         return $this->authorId;
     }
-    public function setAuthorId(string $authorId): self
+    public function setAuthorId(?int $authorId): self
     {
         $this->authorId = $authorId;
 
@@ -221,10 +228,11 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
 
         return $this;
     }
+
     /**
-     * @return UsergroupRelCourse[]|Collection
+     * @return Collection<int, UsergroupRelCourse>
      */
-    public function getCourses(): array|Collection
+    public function getCourses(): Collection
     {
         return $this->courses;
     }
@@ -234,10 +242,11 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
 
         return $this;
     }
+
     /**
-     * @return UsergroupRelSession[]|Collection
+     * @return Collection<int, UsergroupRelSession>
      */
-    public function getSessions(): array|Collection
+    public function getSessions(): Collection
     {
         return $this->sessions;
     }
@@ -247,10 +256,11 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
 
         return $this;
     }
+
     /**
-     * @return UsergroupRelQuestion[]|Collection
+     * @return Collection<int, UsergroupRelQuestion>
      */
-    public function getQuestions(): array|Collection
+    public function getQuestions(): Collection
     {
         return $this->questions;
     }
@@ -276,10 +286,10 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     }
     public function getResourceName(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
     public function setResourceName(string $name): self
     {
-        return $this->setName($name);
+        return $this->setTitle($name);
     }
 }

@@ -1,38 +1,44 @@
 <template>
-  <MegaMenu :model="menuItems" class="app-topbar">
-    <template #start>
+  <div class="app-topbar">
+    <div class="app-topbar__start">
       <img
-        alt="Chamilo LMS"
         :src="headerLogo"
+        alt="Chamilo LMS"
       />
-    </template>
+    </div>
+    <div class="app-topbar__items">
+      <PrimeButton
+        v-if="'false' !== platformConfigStore.getSetting('display.show_link_ticket_notification')"
+        :icon="chamiloIconToClass['ticket']"
+        class="item-button"
+        icon-class="item-button__icon"
+        link
+        unstyled
+        @click="btnTicketsOnClick"
+      />
 
-    <template #item="{ item }">
-      <router-link v-if="item.to" :to="item.to" class="p-menuitem-link">
-        <span :class="item.icon" class="p-menuitem-icon mx-0" />
-        <span class="p-menuitem-text hidden">{{ item.label }}</span>
-      </router-link>
-      <a
-        v-if="item.url"
-        :href="item.url"
-        aria-controls="user-submenu"
-        aria-haspopup="true"
-        class="p-menuitem-link"
-      >
-        <span :class="item.icon" class="p-menuitem-icon mx-0" />
-        <span class="p-menuitem-text hidden">{{ item.label }}</span>
-      </a>
-    </template>
-
-    <template #end>
+      <PrimeButton
+        :badge="btnInboxBadge"
+        :class="{ 'item-button--unread': btnInboxBadge }"
+        :icon="chamiloIconToClass['inbox']"
+        badge-class="item-button__badge"
+        class="item-button"
+        icon-class="item-button__icon"
+        link
+        unstyled
+        @click="btnInboxOnClick"
+      />
+    </div>
+    <div class="app-topbar__end">
       <Avatar
         :image="currentUser.illustrationUrl"
-        class="cursor-pointer"
+        class="user-avatar"
         shape="circle"
+        unstyled
         @click="toogleUserMenu"
       />
-    </template>
-  </MegaMenu>
+    </div>
+  </div>
 
   <Menu
     id="user-submenu"
@@ -44,15 +50,22 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useRoute } from "vue-router";
+import { computed, ref } from "vue"
+import { useRouter } from "vue-router"
 
-import MegaMenu from "primevue/megamenu";
-import Avatar from "primevue/avatar";
-import Menu from "primevue/menu";
-import { usePlatformConfig } from "../../store/platformConfig";
+import Avatar from "primevue/avatar"
+import Menu from "primevue/menu"
+import PrimeButton from "primevue/button"
+import { usePlatformConfig } from "../../store/platformConfig"
+import { chamiloIconToClass } from "../basecomponents/ChamiloIcons"
+import { useCidReq } from "../../composables/cidReq"
+import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 
-import headerLogoPath from "../../../../assets/css/themes/chamilo/images/header-logo.svg";
+import headerLogoPath from "../../../../assets/css/themes/chamilo/images/header-logo.svg"
+import { useNotification } from "../../composables/notification"
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
 
 // eslint-disable-next-line no-undef
 const props = defineProps({
@@ -60,61 +73,60 @@ const props = defineProps({
     required: true,
     type: Object,
   },
-});
+})
 
-const route = useRoute();
+const router = useRouter()
 
-const platformConfigStore = usePlatformConfig();
+const platformConfigStore = usePlatformConfig()
+const messageRelUserStore = useMessageRelUserStore()
+const notification = useNotification()
 
-const menuItems = ref([
-  {
-    label: "Tickets",
-    icon: "pi pi-fw pi-ticket",
-    url: (function () {
-      const queryParams = new URLSearchParams(window.location.href);
+const btnTicketsOnClick = () => {
+  const { cid, sid, gid } = useCidReq()
 
-      const cid =
-        route.query.cid || route.params.id || queryParams.get("cid") || 0;
-      const sid = route.query.sid || queryParams.get("sid") || 0;
-      const gid = route.query.gid || queryParams.get("gid") || 0;
+  window.location = window.location.origin + `/main/ticket/tickets.php?project_id=1&cid=${cid}&sid=${sid}&gid=${gid}`
+}
 
-      return `/main/ticket/tickets.php?project_id=1&cid=${cid}&sid=${sid}&gid=${gid}`;
-    })(),
-    visible:
-      "true" !==
-      platformConfigStore.getSetting("display.show_link_ticket_notification"),
-    items: [],
-  },
-  {
-    label: "Profile",
-    icon: "pi pi-fw pi-user",
-    to: "/account/home",
-    items: [],
-  },
-  {
-    label: "Inbox",
-    icon: "pi pi-fw pi-inbox",
-    to: "/resources/messages",
-    items: [],
-  },
-]);
+const btnInboxOnClick = async () => await router.push({ name: "MessageList" })
 
-const elUserSubmenu = ref(null);
-const userSubmenuItems = [
+const elUserSubmenu = ref(null)
+const userSubmenuItems = computed(() => [
   {
     label: props.currentUser.fullName,
     items: [
       {
-        label: "Settings",
-        url: "/account/edit",
+        label: t("My General Certificate"),
+        url: "/main/social/my_skills_report.php?a=generate_custom_skill",
+      },
+      {
+        label: t("My Skills"),
+        url: "/main/social/my_skills_report.php",
+      },
+      {
+        label: t("Settings"),
+        command: async () => await router.push({ name: "AccountHome" }),
+      },
+      {
+        separator: true,
+      },
+      {
+        label: t("Sign out"),
+        url: "/logout",
+        icon: "mdi mdi-logout-variant",
       },
     ],
   },
-];
+])
 
 function toogleUserMenu(event) {
-  elUserSubmenu.value.toggle(event);
+  elUserSubmenu.value.toggle(event)
 }
 
-const headerLogo = headerLogoPath;
+const headerLogo = headerLogoPath
+
+const btnInboxBadge = computed(() =>
+  messageRelUserStore.countUnread > 9 ? "9+" : messageRelUserStore.countUnread.toString(),
+)
+
+messageRelUserStore.findUnreadCount().catch((e) => notification.showErrorNotification(e))
 </script>

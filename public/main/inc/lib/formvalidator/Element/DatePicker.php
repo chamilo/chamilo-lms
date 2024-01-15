@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+
 /**
  * Form element to select a date.
  */
@@ -41,16 +43,27 @@ class DatePicker extends HTML_QuickForm_text
             $value = api_format_date($value, DATE_FORMAT_LONG_NO_DAY);
         }
 
+        $label = $this->getLabel();
+        $requiredFields = api_get_setting('registration.required_extra_fields_in_inscription', true);
+        if (!empty($requiredFields) && $requiredFields['options']) {
+            $requiredFields = $requiredFields['options'];
+        }
+        $variable = str_replace('extra_', '',$id);
+        $requiredSymbol = '';
+        if (!empty($requiredFields) && in_array($variable, $requiredFields)) {
+            $requiredSymbol = '<span class="form_required">*</span>';
+        }
         return '
+            <div>'.$requiredSymbol.$label.'</div>
             <div id="'.$id.'" class="flex flex-row mt-1">
                 <input '.$this->_getAttrString($this->_attributes).'
                     class="form-control border" type="text" value="'.$value.'" placeholder="'.get_lang('Select date ..').'" data-input>
                 <div class="ml-1" id="button-addon3">
                     <button class="btn btn--secondary-outline"  type="button" data-toggle>
-                        <i class="fas fa-calendar-alt"></i>
+                        <i class="pi pi-calendar pi-lg"></i>
                     </button>
                     <button class="btn btn--secondary-outline" type="button" data-clear>
-                        <i class="fas fa-times"></i>
+                        <i class="pi pi-times pi-lg"></i>
                     </button>
               </div>
             </div>
@@ -97,6 +110,9 @@ class DatePicker extends HTML_QuickForm_text
                     }
                 };
                 $('#{$id}').flatpickr(config);
+                if ($('label[for=\"".$id."\"]').length > 0) {
+                    $('label[for=\"".$id."\"]').hide();
+                }
              });
         </script>";
 
@@ -117,7 +133,7 @@ class DatePicker extends HTML_QuickForm_text
                         altField: '#{$id}_alt',
                         altFormat: \"".get_lang('MM dd, yy')."\",
                         showOn: 'both',
-                        buttonImage: '".Display::return_icon('attendance.png', null, [], ICON_SIZE_TINY, true, true)."',
+                        buttonImage: '".Display::getMdiIcon(ToolIcon::ATTENDANCE, 'ch-tool-icon', null, ICON_SIZE_TINY)."',
                         buttonImageOnly: true,
                         buttonText: '".get_lang('Select date')."',
                         changeMonth: true,

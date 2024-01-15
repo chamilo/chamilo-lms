@@ -35,7 +35,7 @@ class SkillRepositoryTest extends AbstractApiTest
         $accessUrl = $this->getAccessUrl();
 
         $skill = (new Skill())
-            ->setName('php')
+            ->setTitle('php')
             ->setShortCode('php')
             ->setDescription('desc')
             ->setStatus(Skill::STATUS_ENABLED)
@@ -75,7 +75,7 @@ class SkillRepositoryTest extends AbstractApiTest
 
         $skillProfile = (new SkillProfile())
             ->setDescription('desc')
-            ->setName('title')
+            ->setTitle('title')
         ;
         $em->persist($skillProfile);
 

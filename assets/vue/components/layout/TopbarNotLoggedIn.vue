@@ -1,57 +1,77 @@
 <template>
   <div class="app-topbar">
-    <Menubar
-      :model="menuItems"
-    >
+    <Menubar :model="menuItems">
       <template #start>
         <img
-          alt="Chamilo LMS"
           :src="headerLogo"
-        >
+          alt="Chamilo LMS"
+        />
       </template>
     </Menubar>
   </div>
 </template>
 
 <script setup>
-import {ref} from 'vue';
-import Menubar from 'primevue/menubar';
-import headerLogoPath from "../../../../assets/css/themes/chamilo/images/header-logo.svg";
+import {computed, ref} from "vue"
+import Menubar from "primevue/menubar"
+import headerLogoPath from "../../../../assets/css/themes/chamilo/images/header-logo.svg"
+import { useI18n } from "vue-i18n"
+import { useRoute, useRouter } from "vue-router";
+
+const { t } = useI18n()
+const route = useRoute()
+const router = useRouter()
 
 function setLanguage(event) {
-  const {label} = event.item;
+  const { isoCode } = event.item
 
-  const selectorIndex = menuItems.value.findIndex(item => 'language_selector' === item.key);
+  const newUrl = router.resolve(
+    {
+      path: route.path,
+      query: {
+        _locale: isoCode
+      }
+    }
+  )
 
-  menuItems.value[selectorIndex] ? menuItems.value[selectorIndex].label = label : null;
+  window.location.href = newUrl.fullPath
 }
 
-const menuItems = ref([
-  {
-    label: 'Buy courses',
-  },
-  {
-    label: 'Help',
-  },
-  {
-    key: 'language_selector',
-    label: 'English',
-    items: [
-      {
-        label: 'English',
-        command: setLanguage,
-      },
-      {
-        label: 'French',
-        command: setLanguage,
-      },
-      {
-        label: 'Spanish',
-        command: setLanguage,
-      },
-    ],
-  }
-]);
+const languageItems = window.languages.map((language) => ({
+  label: language.originalName,
+  isoCode: language.isocode,
+  command: setLanguage,
+}))
 
-const headerLogo = headerLogoPath;
+const currentLanguage = window.languages.find((language) => document.querySelector("html").lang === language.isocode)
+
+const menuItems = computed(() => [
+  {
+    label: t("Home"),
+    command: async () => await router.push({ name: "Index" }),
+  },
+  {
+    label: t("FAQ"),
+    command: async () => await router.push({ name: "Faq" }),
+  },
+  {
+    label: t("Registration"),
+    url: "/main/auth/inscription.php",
+  },
+  {
+    label: t("Demo"),
+    command: async () => await router.push({ name: "Demo" }),
+  },
+  {
+    label: t("Contact"),
+    url: "/contact",
+  },
+  {
+    key: "language_selector",
+    label: currentLanguage ? currentLanguage.originalName : "English",
+    items: languageItems,
+  },
+])
+
+const headerLogo = headerLogoPath
 </script>

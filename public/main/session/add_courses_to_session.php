@@ -102,6 +102,6 @@ if (!api_is_platform_admin() && api_is_teacher()) {
     );
 }
 
-echo Display::page_header($tool_name.' ('.$session->getName().')');
+echo Display::page_header($tool_name.' ('.$session->getTitle().')');
 echo $contentForm;
 Display::display_footer();

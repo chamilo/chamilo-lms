@@ -43,6 +43,7 @@ class LogoutListener
         $request = $event->getRequest();
 
         // Chamilo logout
+        $request->getSession()->remove('_selected_locale');
         $request->getSession()->remove('_locale');
         $request->getSession()->remove('_locale_user');
 
@@ -95,6 +96,6 @@ class LogoutListener
         $login = $this->router->generate('index');
 
         return new RedirectResponse($login);
-        //return new JsonResponse('logout out', 200);
+        // return new JsonResponse('logout out', 200);
     }
 }

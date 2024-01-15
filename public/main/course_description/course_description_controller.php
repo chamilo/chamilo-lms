@@ -44,22 +44,12 @@ class CourseDescriptionController
             foreach ($categories as $id => $title) {
                 if (ADD_BLOCK == $i) {
                     $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=add">'.
-                        Display::return_icon(
-                            $iconList[$id],
-                            $title,
-                            '',
-                            ICON_SIZE_MEDIUM
-                        ).
+                        Display::getMdiIcon($iconList[$id], 'ch-tool-icon', null, 32, $title).
                         '</a>';
                     break;
                 } else {
                     $actionLeft .= '<a href="index.php?action=edit&'.api_get_cidreq().'&description_type='.$id.'">'.
-                        Display::return_icon(
-                            $iconList[$id],
-                            $title,
-                            '',
-                            ICON_SIZE_MEDIUM
-                        ).
+                        Display::getMdiIcon($iconList[$id], 'ch-tool-icon', null, 32, $title).
                         '</a>';
                     $i++;
                 }

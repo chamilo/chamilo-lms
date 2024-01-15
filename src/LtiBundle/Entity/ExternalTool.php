@@ -30,8 +30,8 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'name', type: 'string')]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'string')]
+    protected string $title;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description;
@@ -115,7 +115,7 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
 
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     public function getId(): int
@@ -123,14 +123,14 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
         return $this->id;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): static
+    public function setTitle(string $title): static
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
@@ -541,12 +541,12 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
 
     public function getResourceName(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
-    public function setResourceName(string $name): static
+    public function setResourceName(string $title): static
     {
-        return $this->setName($name);
+        return $this->setTitle($title);
     }
 
     public function getResourceIdentifier(): int

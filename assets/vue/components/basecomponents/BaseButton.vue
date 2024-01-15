@@ -2,28 +2,23 @@
   <Button
     :class="buttonClass"
     :disabled="disabled"
+    :icon="chamiloIconToClass[icon]"
     :label="label"
     :outlined="primeOutlinedProperty"
+    :plain="primePlainProperty"
+    :severity="primeSeverityProperty"
     :size="size"
     :text="primeTextProperty"
-    :type="isSubmit ? 'submit': 'button'"
-    class="cursor-pointer"
-    plain
+    :type="isSubmit ? 'submit' : 'button'"
     @click="$emit('click', $event)"
-  >
-    <BaseIcon :icon="icon" :size="size" class="text-inherit" />
-    <span v-if="!onlyIcon && label" class="hidden md:block text-inherit">
-      {{ label }}
-    </span>
-  </Button>
+  />
 </template>
 
 <script setup>
-import Button from "primevue/button";
+import Button from "primevue/button"
+import { computed } from "vue"
 import { chamiloIconToClass } from "./ChamiloIcons";
-import BaseIcon from "./BaseIcon.vue";
-import { computed } from "vue";
-import {sizeValidator} from "./validators";
+import { buttonTypeValidator, iconValidator, sizeValidator } from "./validators"
 
 const props = defineProps({
   label: {
@@ -38,22 +33,12 @@ const props = defineProps({
   icon: {
     type: String,
     required: true,
-    validator: (value) => {
-      if (typeof value !== "string") {
-        return false;
-      }
-      return Object.keys(chamiloIconToClass).includes(value);
-    },
+    validator: iconValidator,
   },
   type: {
     type: String,
     required: true,
-    validator: (value) => {
-      if (typeof value !== "string") {
-        return false;
-      }
-      return ["primary", "secondary", "black", "success", "danger"].includes(value);
-    },
+    validator: buttonTypeValidator,
   },
   // associate this button to a popup through its identifier, this will make this button toggle the popup
   popupIdentifier: {
@@ -73,23 +58,40 @@ const props = defineProps({
     type: Boolean,
     required: false,
     default: false,
-  }
-});
+  },
+})
 
-defineEmits(["click"]);
+defineEmits(["click"])
+
+const primeSeverityProperty = computed(() => {
+  if (["primary", "secondary", "success", "danger"].includes(props.type)) {
+    return props.type
+  }
+
+  return undefined
+})
+
+const primePlainProperty = computed(() => {
+  if ("black" === props.type) {
+    return true
+  }
+
+  return undefined
+})
 
 const buttonClass = computed(() => {
   if (props.onlyIcon) {
     return "p-3 text-tertiary hover:bg-tertiary-gradient/30"
   }
-  let result = "";
+  let result = ""
   switch (props.size) {
     case "normal":
-      result += "py-2.5 px-4 ";
-      break;
+      result += "py-2.5 px-4 "
+      break
     case "small":
-      result += "py-2 px-3.5 ";
+      result += "py-2 px-3.5 "
   }
+
   let commonDisabled =
     "disabled:bg-primary-bgdisabled disabled:border disabled:border-primary-borderdisabled disabled:text-fontdisabled";
   switch (props.type) {
@@ -116,20 +118,20 @@ const buttonClass = computed(() => {
 // https://primevue.org/button/#outlined
 const primeOutlinedProperty = computed(() => {
   if (props.onlyIcon) {
-    return false;
+    return false
   }
   switch (props.type) {
     case "primary":
     case "danger":
     case "black":
-      return true;
+      return true
     default:
-      return false;
+      return false
   }
-});
+})
 
 // https://primevue.org/button/#text
 const primeTextProperty = computed(() => {
-  return props.onlyIcon;
-});
+  return props.onlyIcon
+})
 </script>

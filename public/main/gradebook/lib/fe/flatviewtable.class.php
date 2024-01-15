@@ -6,6 +6,7 @@ set_time_limit(0);
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Class FlatViewTable
@@ -23,25 +24,15 @@ class FlatViewTable extends SortableTable
     private $offset;
     private $mainCourseCategory;
 
-    /**
-     * @param Category $selectcat
-     * @param array    $users
-     * @param array    $evals
-     * @param array    $links
-     * @param bool     $limit_enabled
-     * @param int      $offset
-     * @param null     $addparams
-     * @param Category $mainCourseCategory
-     */
     public function __construct(
-        $selectcat,
-        $users = [],
-        $evals = [],
-        $links = [],
-        $limit_enabled = false,
-        $offset = 0,
-        $addparams = null,
-        $mainCourseCategory = null
+        Category $selectcat,
+        array $users = [],
+        array $evals = [],
+        array $links = [],
+        bool $limit_enabled = false,
+        int $offset = 0,
+        array $addparams = [],
+        ?Category $mainCourseCategory = null
     ) {
         parent:: __construct(
             'flatviewlist',
@@ -61,7 +52,7 @@ class FlatViewTable extends SortableTable
 
         $this->limit_enabled = $limit_enabled;
         $this->offset = $offset;
-        if (isset($addparams)) {
+        if (!empty($addparams)) {
             $this->set_additional_parameters($addparams);
         }
 
@@ -359,19 +350,21 @@ class FlatViewTable extends SortableTable
                     .'?selectcat='.Security::remove_XSS($_GET['selectcat'])
                     .'&offset='.(($this->offset) - GRADEBOOK_ITEM_LIMIT)
                     .(isset($_GET['search']) ? '&search='.Security::remove_XSS($_GET['search']) : '').'">'
-                    .Display::return_icon(
-                        'action_prev.png',
-                        get_lang('Previous page'),
-                        [],
-                        ICON_SIZE_MEDIUM
+                    .Display::getMdiIcon(
+                        ActionIcon::PREVIOUS,
+                        'ch-tool-icon',
+                        null,
+                        ICON_SIZE_MEDIUM,
+                        get_lang('Previous page')
                     )
                     .'</a>';
             } else {
-                $header .= Display::return_icon(
-                    'action_prev_na.png',
-                    get_lang('Previous page'),
-                    [],
-                    ICON_SIZE_MEDIUM
+                $header .= Display::getMdiIcon(
+                    ActionIcon::PREVIOUS,
+                    'ch-tool-icon-disabled',
+                    null,
+                    ICON_SIZE_MEDIUM,
+                    get_lang('Previous page')
                 );
             }
             $header .= ' ';
@@ -384,14 +377,15 @@ class FlatViewTable extends SortableTable
                     .'?selectcat='.Security::remove_XSS($_GET['selectcat'])
                     .'&offset='.($this->offset + GRADEBOOK_ITEM_LIMIT)
                     .(isset($_GET['search']) ? '&search='.Security::remove_XSS($_GET['search']) : '').'">'
-                    .Display::return_icon('action_next.png', get_lang('Next page'), [], ICON_SIZE_MEDIUM)
+                    .Display::getMdiIcon(ActionIcon::NEXT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Next page'))
                     .'</a>';
             } else {
-                $header .= Display::return_icon(
-                    'action_next_na.png',
-                    get_lang('Next page'),
-                    [],
-                    ICON_SIZE_MEDIUM
+                $header .= Display::getMdiIcon(
+                    ActionIcon::NEXT,
+                    'ch-tool-icon-disabled',
+                    null,
+                    ICON_SIZE_MEDIUM,
+                    get_lang('Next page')
                 );
             }
             $header .= '</td>';

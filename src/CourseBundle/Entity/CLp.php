@@ -17,6 +17,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Stringable;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -33,15 +34,15 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'lp_type', type: 'integer', nullable: false)]
     protected int $lpType;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    protected string $title;
 
     #[ORM\Column(name: 'ref', type: 'text', nullable: true)]
     protected ?string $ref = null;
@@ -138,13 +139,13 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     #[ORM\Column(name: 'next_lp_id', type: 'integer', nullable: false, options: ['default' => 0])]
     protected int $nextLpId;
 
-    #[ORM\OneToMany(targetEntity: CLpItem::class, mappedBy: 'lp', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'lp', targetEntity: CLpItem::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $items;
 
     /**
-     * @var Collection|CForum[]
+     * @var Collection<int, CForum>
      */
-    #[ORM\OneToMany(targetEntity: CForum::class, mappedBy: 'lp', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'lp', targetEntity: CForum::class, cascade: ['persist', 'remove'])]
     protected Collection $forums;
 
     #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['persist', 'remove'])]
@@ -187,7 +188,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
 
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     public function setLpType(int $lpType): self
@@ -197,26 +198,21 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this;
     }
 
-    /**
-     * Get lpType.
-     *
-     * @return int
-     */
-    public function getLpType()
+    public function getLpType(): int
     {
         return $this->lpType;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function setRef(string $ref): self
@@ -226,12 +222,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this;
     }
 
-    /**
-     * Get ref.
-     *
-     * @return string
-     */
-    public function getRef()
+    public function getRef(): ?string
     {
         return $this->ref;
     }
@@ -255,12 +246,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this;
     }
 
-    /**
-     * Get path.
-     *
-     * @return string
-     */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }
@@ -272,12 +258,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this;
     }
 
-    /**
-     * Get forceCommit.
-     *
-     * @return bool
-     */
-    public function getForceCommit()
+    public function getForceCommit(): bool
     {
         return $this->forceCommit;
     }
@@ -289,12 +270,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this;
     }
 
-    /**
-     * Get defaultViewMod.
-     *
-     * @return string
-     */
-    public function getDefaultViewMod()
+    public function getDefaultViewMod(): string
     {
         return $this->defaultViewMod;
     }
@@ -306,12 +282,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this;
     }
 
-    /**
-     * Get defaultEncoding.
-     *
-     * @return string
-     */
-    public function getDefaultEncoding()
+    public function getDefaultEncoding(): string
     {
         return $this->defaultEncoding;
     }
@@ -323,12 +294,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this;
     }
 
-    /**
-     * Get displayOrder.
-     *
-     * @return int
-     */
-    public function getDisplayOrder()
+    public function getDisplayOrder(): int
     {
         return $this->displayOrder;
     }
@@ -340,12 +306,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this;
     }
 
-    /**
-     * Get contentMaker.
-     *
-     * @return string
-     */
-    public function getContentMaker()
+    public function getContentMaker(): string
     {
         return $this->contentMaker;
     }
@@ -357,12 +318,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this;
     }
 
-    /**
-     * Get contentLocal.
-     *
-     * @return string
-     */
-    public function getContentLocal()
+    public function getContentLocal(): string
     {
         return $this->contentLocal;
     }
@@ -374,12 +330,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this;
     }
 
-    /**
-     * Get contentLicense.
-     *
-     * @return string
-     */
-    public function getContentLicense()
+    public function getContentLicense(): string
     {
         return $this->contentLicense;
     }
@@ -391,12 +342,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this;
     }
 
-    /**
-     * Get preventReinit.
-     *
-     * @return bool
-     */
-    public function getPreventReinit()
+    public function getPreventReinit(): bool
     {
         return $this->preventReinit;
     }
@@ -408,12 +354,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this;
     }
 
-    /**
-     * Get jsLib.
-     *
-     * @return string
-     */
-    public function getJsLib()
+    public function getJsLib(): string
     {
         return $this->jsLib;
     }
@@ -425,12 +366,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this;
     }
 
-    /**
-     * Get debug.
-     *
-     * @return bool
-     */
-    public function getDebug()
+    public function getDebug(): bool
     {
         return $this->debug;
     }
@@ -466,12 +402,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this;
     }
 
-    /**
-     * Get prerequisite.
-     *
-     * @return int
-     */
-    public function getPrerequisite()
+    public function getPrerequisite(): int
     {
         return $this->prerequisite;
     }
@@ -495,12 +426,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this;
     }
 
-    /**
-     * Get seriousgameMode.
-     *
-     * @return bool
-     */
-    public function getSeriousgameMode()
+    public function getSeriousgameMode(): bool
     {
         return $this->seriousgameMode;
     }
@@ -512,12 +438,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this;
     }
 
-    /**
-     * Get useMaxScore.
-     *
-     * @return int
-     */
-    public function getUseMaxScore()
+    public function getUseMaxScore(): int
     {
         return $this->useMaxScore;
     }
@@ -529,12 +450,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this;
     }
 
-    /**
-     * Get autolaunch.
-     *
-     * @return int
-     */
-    public function getAutolaunch()
+    public function getAutolaunch(): int
     {
         return $this->autolaunch;
     }
@@ -546,12 +462,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this;
     }
 
-    /**
-     * Get createdOn.
-     *
-     * @return DateTime
-     */
-    public function getCreatedOn()
+    public function getCreatedOn(): DateTime
     {
         return $this->createdOn;
     }
@@ -563,17 +474,12 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this;
     }
 
-    /**
-     * Get modifiedOn.
-     *
-     * @return DateTime
-     */
-    public function getModifiedOn()
+    public function getModifiedOn(): DateTime
     {
         return $this->modifiedOn;
     }
 
-    public function setPublishedOn(DateTime $publishedOn): self
+    public function setPublishedOn(?DateTime $publishedOn): self
     {
         $this->publishedOn = $publishedOn;
 
@@ -656,29 +562,19 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     }
 
     /**
-     * @return CLpItem[]|Collection
+     * @return Collection<int, CLpItem>
      */
-    public function getItems(): array|Collection
+    public function getItems(): Collection
     {
         return $this->items;
     }
 
-    /**
-     * Get iid.
-     *
-     * @return int
-     */
-    public function getIid()
+    public function getIid(): ?int
     {
         return $this->iid;
     }
 
-    /**
-     * Get subscribeUsers.
-     *
-     * @return int
-     */
-    public function getSubscribeUsers()
+    public function getSubscribeUsers(): int
     {
         return $this->subscribeUsers;
     }
@@ -691,9 +587,9 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     }
 
     /**
-     * @return ArrayCollection|Collection|CForum[]
+     * @return Collection<int, CForum>
      */
-    public function getForums(): ArrayCollection|Collection|array
+    public function getForums(): Collection
     {
         return $this->forums;
     }
@@ -722,18 +618,18 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return $this;
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }
 
     public function getResourceName(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setName($name);
+        return $this->setTitle($name);
     }
 }

@@ -11,6 +11,10 @@
  *
  * @todo move to main/inc/lib
  */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+
 class DashboardController
 {
     private $user_id;
@@ -70,21 +74,16 @@ class DashboardController
         $link_blocks_view = $link_list_view = null;
         if ('list' == $view) {
             $link_blocks_view = '<a href="'.api_get_self().'?view=blocks">'.
-                Display::return_icon('blocks.png', get_lang('Dashboard blocks'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::getMdiIcon('monitor-dashboard', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Dashboard blocks')).'</a>';
         } else {
             $link_list_view = '<a href="'.api_get_self().'?view=list">'.
-                Display::return_icon('edit.png', get_lang('Edit blocks'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit blocks')).'</a>';
         }
 
         $configuration_link = null;
         if (api_is_platform_admin()) {
             $configuration_link = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'
-                .Display::return_icon(
-                    'settings.png',
-                    get_lang('Configure Dashboard Plugin'),
-                    '',
-                    ICON_SIZE_MEDIUM
-                ).'</a>';
+                .Display::getMdiIcon(ToolIcon::SETTINGS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Configure Dashboard Plugin')).'</a>';
         }
 
         $actions = Display::toolbarAction('toolbar', [$link_blocks_view.$link_list_view.$configuration_link]);

@@ -7,6 +7,9 @@
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
+ini_set('memory_limit', '512M');
+ini_set('max_execution_time', 300);
+
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
@@ -20,149 +23,10 @@ $tool_name = get_lang('Create sub-language');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 $interbreadcrumb[] = ['url' => 'languages.php', 'name' => get_lang('Chamilo Portal Languages')];
 
-/**
- * Add sub-language.
- *
- * @deprecated
- *
- * @param   string  Original language name (Occitan, Wallon, Vlaams)
- * @param   string  English language name (occitan, wallon, flanders)
- * @param   string  ISO code (fr_FR, ...)
- * @param   int     Whether the sublanguage is published (0=unpublished, 1=published)
- * @param   int     ID del idioma padre
- *
- * @return false|string New sub language ID or false on error
- */
-function add_sub_language($original_name, $english_name, $isocode, $sublanguage_available, $parent_id)
-{
-    $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-    $original_name = Database::escape_string($original_name);
-    $english_name = Database::escape_string($english_name);
-    $isocode = Database::escape_string($isocode);
-    $sublanguage_available = Database::escape_string($sublanguage_available);
-    $parent_id = intval($parent_id);
-
-    $sql = 'INSERT INTO '.$tbl_admin_languages.'(original_name,english_name,isocode,dokeos_folder,available,parent_id)
-    	  VALUES ("'.$original_name.'","'.$english_name.'","'.$isocode.'","'.$english_name.'","'.$sublanguage_available.'","'.$parent_id.'")';
-    $res = Database::query($sql);
-    if (false === $res) {
-        return false;
-    }
-
-    return Database::insert_id();
-}
-
-/**
- * Check if language exists.
- *
- * @param   string  Original language name (Occitan, Wallon, Vlaams)
- * @param   string  English language name (occitan, wallon, flanders)
- * @param   string  ISO code (fr_FR, ...)
- * @param   int     Whether the sublanguage is published (0=unpublished, 1=published)
- *
- * @return array Array describing the number of items found that match the
- *               current language insert attempt (original_name => true,
- *               english_name => true, isocode => true,
- *               execute_add => true/false). If execute_add is true, then we
- *               can proceed.
- *
- * @todo This function is not transaction-safe and should probably be included
- *       inside the add_sub_language function.
- */
-function check_if_language_exist($original_name, $english_name, $isocode, $sublanguage_available)
-{
-    $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-    $sql_original_name = 'SELECT count(*) AS count_original_name FROM '.$tbl_admin_languages.'
-                          WHERE original_name="'.Database::escape_string($original_name).'" ';
-    $sql_english_name = 'SELECT count(*) AS count_english_name FROM '.$tbl_admin_languages.'
-                         WHERE english_name="'.Database::escape_string($english_name).'" ';
-    $rs_original_name = Database::query($sql_original_name);
-    $rs_english_name = Database::query($sql_english_name);
-    $count_original_name = Database::result($rs_original_name, 0, 'count_original_name');
-    $count_english_name = Database::result($rs_english_name, 0, 'count_english_name');
-
-    $has_error = false;
-    $message_information = [];
-
-    if (1 == $count_original_name) {
-        $has_error = true;
-        $message_information['original_name'] = true;
-    }
-    if (1 == $count_english_name) {
-        $has_error = true;
-        $message_information['english_name'] = true;
-    }
-
-    $iso_list = api_get_platform_isocodes();
-    $iso_list = array_values($iso_list);
-
-    if (!in_array($isocode, $iso_list)) {
-        $has_error = true;
-        $message_information['isocode'] = true;
-    }
-    if (true === $has_error) {
-        $message_information['execute_add'] = false;
-    }
-    if (false === $has_error) {
-        $message_information['execute_add'] = true;
-    }
-
-    return $message_information;
-}
-
-/**
- * Check if language exist, given its ID. This is just a wrapper for the
- * SubLanguageManager::check_if_exist_language_by_id() method and should not exist.
- *
- * @param   int     Language ID
- *
- * @return bool
- *
- * @todo    deprecate this function and use the static method directly
- */
-function check_if_exist_language_by_id($language_id)
-{
-    return SubLanguageManager::check_if_exist_language_by_id($language_id);
-}
-
-/**
- * Check if the given language is a parent of any sub-language.
- *
- * @param   int     Language ID of the presumed parent
- *
- * @return bool True if this language has children, false otherwise
- */
-function ckeck_if_is_parent_of_sub_language($parent_id)
-{
-    $sql = 'SELECT count(*) AS count FROM language WHERE parent_id= '.intval($parent_id);
-    $rs = Database::query($sql);
-    if (Database::num_rows($rs) > 0 && 1 == Database::result($rs, 0, 'count')) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/**
- * Get all information of sub-language.
- *
- * @param   int     Parent language ID
- * @param   int     Child language ID
- *
- * @return array
- */
-function allow_get_all_information_of_sub_language($parent_id, $sub_language_id)
-{
-    return SubLanguageManager::get_all_information_of_sub_language($parent_id, $sub_language_id);
-}
-
-/*end declare functions*/
-
 //add data
-
 if (isset($_GET['sub_language_id']) && $_GET['sub_language_id'] == strval(intval($_GET['sub_language_id']))) {
     $language_name = SubLanguageManager::get_name_of_language_by_id($_GET['sub_language_id']);
-    if (true === check_if_exist_language_by_id($_GET['sub_language_id'])) {
+    if (true === SubLanguageManager::languageExistsById($_GET['sub_language_id'])) {
         $sub_language_id = $_GET['sub_language_id'];
         $sub_language_id_exist = true;
     } else {
@@ -174,8 +38,8 @@ $language_name = '';
 if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
     $language_details = SubLanguageManager::get_all_information_of_language($_GET['id']);
     $language_name = $language_details['original_name'];
-    if (true === check_if_exist_language_by_id($_GET['id'])) {
-        $parent_id = $_GET['id'];
+    if (true === SubLanguageManager::languageExistsById($_GET['id'])) {
+        $parent_id = (int) $_GET['id'];
         $language_id_exist = true;
     } else {
         $language_id_exist = false;
@@ -189,8 +53,8 @@ if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
 if ((isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) &&
     (isset($_GET['sub_language_id']) && $_GET['sub_language_id'] == strval(intval($_GET['sub_language_id'])))
 ) {
-    if (true === check_if_exist_language_by_id($_GET['id']) && true === check_if_exist_language_by_id($_GET['sub_language_id'])) {
-        $get_all_information = allow_get_all_information_of_sub_language($_GET['id'], $_GET['sub_language_id']);
+    if (true === SubLanguageManager::languageExistsById($_GET['id']) && true === SubLanguageManager::languageExistsById($_GET['sub_language_id'])) {
+        $get_all_information = SubLanguageManager::getAllInformationOfSubLanguage((int) $_GET['id'], (int) $_GET['sub_language_id']);
         $original_name = $get_all_information['original_name'];
         $english_name = $get_all_information['english_name'];
         $isocode = $get_all_information['isocode'];
@@ -199,7 +63,7 @@ if ((isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) &&
 
 $language_name = get_lang('Create sub-languageForLanguage').' ( '.strtolower($language_name).' )';
 
-if (true === ckeck_if_is_parent_of_sub_language($parent_id) &&
+if (true ===  SubLanguageManager::isParentOfSubLanguage($parent_id) &&
     isset($_GET['action']) && 'deletesublanguage' == $_GET['action']
 ) {
     $language_name = get_lang('Delete sub-language');
@@ -214,9 +78,9 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
     $english_name = str_replace(' ', '_', $english_name);
     $isocode = str_replace(' ', '_', $isocode);
 
-    $sublanguage_available = $_POST['sub_language_is_visible'];
+    $sublanguage_available = isset($_POST['sub_language_is_visible']) ? (int) $_POST['sub_language_is_visible'] : 0;
     $check_information = [];
-    $check_information = check_if_language_exist($original_name, $english_name, $isocode, $sublanguage_available);
+    $check_information = SubLanguageManager::checkIfLanguageExists($original_name, $english_name, $isocode);
     foreach ($check_information as $index_information => $value_information) {
         $allow_insert_info = false;
         if ('original_name' == $index_information) {
@@ -245,23 +109,23 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
             //Fixes BT#1636
             $english_name = api_strtolower($english_name);
 
+            $firstIso = substr($language_details['isocode'], 0, 2);
+            $english_name = str_starts_with($english_name, $firstIso.'_') ? $english_name : $firstIso.'_'.$english_name;
+
             $isocode = str_replace(' ', '_', $isocode);
             $str_info = '<br/>'.get_lang('Original name').' : '.$original_name.'<br/>'.get_lang('English name').' : '.$english_name.'<br/>'.get_lang('Character set').' : '.$isocode;
 
-            $mkdir_result = SubLanguageManager::add_language_directory($english_name);
+            $mkdir_result = SubLanguageManager::addPoFileForSubLanguage($english_name);
             if ($mkdir_result) {
-                $sl_id = add_sub_language($original_name, $english_name, $isocode, $sublanguage_available, $parent_id);
+                $sl_id = SubLanguageManager::addSubLanguage($original_name, $english_name, $sublanguage_available, $parent_id);
                 if (false === $sl_id) {
-                    SubLanguageManager::remove_language_directory($english_name);
+                    SubLanguageManager::removePoFileForSubLanguage($english_name);
                     $msg .= Display::return_message(get_lang('The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message.'), 'error');
                 } else {
                     Display::addFlash(
                         Display::return_message(get_lang('The new sub-language has been added').$str_info, null, false)
                     );
-                    unset($interbreadcrumb);
-                    $_GET['sub_language_id'] = $_REQUEST['sub_language_id'] = $sl_id;
-                    require 'sub_language.php';
-                    exit();
+                    api_location(api_get_path(WEB_CODE_PATH).'admin/languages.php?sub_language_id='.$sl_id);
                 }
             } else {
                 $msg .= Display::return_message(get_lang('The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message.'), 'error');
@@ -276,19 +140,24 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
     }
 }
 
+if (isset($_POST['SubmitAddDeleteLanguage'])) {
+    $removed = SubLanguageManager::removeSubLanguage($_GET['id'], $_GET['sub_language_id']);
+    if ($removed) {
+        Display::addFlash(
+            Display::return_message(
+                get_lang(
+                    'The sub language has been removed.'
+                )
+            )
+        );
+        api_location(api_get_path(WEB_CODE_PATH).'admin/languages.php');
+    }
+}
+
 Display:: display_header($language_name);
 
 echo $msg;
 
-if (isset($_POST['SubmitAddDeleteLanguage'])) {
-    $rs = SubLanguageManager::remove_sub_language($_GET['id'], $_GET['sub_language_id']);
-    if (true === $rs) {
-        echo Display::return_message(get_lang('The sub language has been removed'), 'confirm');
-    } else {
-        echo Display::return_message(get_lang('The sub-language has not been removed.'), 'error');
-    }
-}
-// ckeck_if_is_parent_of_sub_language($parent_id)===false
 if (isset($_GET['action']) && 'definenewsublanguage' == $_GET['action']) {
     $text = $language_name;
     $form = new FormValidator(

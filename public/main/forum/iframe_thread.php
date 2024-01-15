@@ -53,9 +53,9 @@ $sessionEntity = api_get_session_entity(api_get_session_id());
 /* Is the user allowed here? */
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
-if (!api_is_allowed_to_edit(false, true) &&
-    (false == $forumEntity->isVisible($courseEntity, $sessionEntity) ||
-        false == $threadEntity->isVisible($courseEntity, $sessionEntity)
+if (!api_is_allowed_to_create_course() &&
+    (false == $forumEntity->isVisible($courseEntity) ||
+        false == $threadEntity->isVisible($courseEntity)
     )
 ) {
     api_not_allowed(false);
@@ -66,7 +66,7 @@ $course_id = api_get_course_int_id();
 $table_posts = Database::get_course_table(TABLE_FORUM_POST);
 $table_users = Database::get_main_table(TABLE_MAIN_USER);
 
-$sql = "SELECT username, firstname, lastname, u.id, post_date, post_title, post_text
+$sql = "SELECT username, firstname, lastname, u.id, post_date, title as post_title, post_text
         FROM $table_posts posts
         INNER JOIN $table_users u
         ON (posts.poster_id = u.id)

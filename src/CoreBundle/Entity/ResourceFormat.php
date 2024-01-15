@@ -13,24 +13,24 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
-#[ORM\Table(name: "resource_format")]
+#[ORM\Table(name: 'resource_format')]
 class ResourceFormat
 {
     use TimestampableEntity;
 
     #[ORM\Id]
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
     #[ORM\Column]
     #[Assert\NotBlank]
-    protected string $name;
+    protected string $title;
 
     /**
      * @var Collection<int, ResourceNode>
      */
-    #[ORM\OneToMany(targetEntity: ResourceNode::class, mappedBy: "resourceFormat", cascade: ["persist", "remove"])]
+    #[ORM\OneToMany(targetEntity: ResourceNode::class, mappedBy: 'resourceFormat', cascade: ['persist', 'remove'])]
     protected Collection $resourceNodes;
 
     public function __construct()
@@ -40,7 +40,7 @@ class ResourceFormat
 
     public function __toString(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function getId(): int
@@ -48,14 +48,14 @@ class ResourceFormat
         return $this->id;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
@@ -68,9 +68,6 @@ class ResourceFormat
         return $this->resourceNodes;
     }
 
-    /**
-     * @param Rollection<int, ResourceNode>
-     */
     public function setResourceNodes(Collection $resourceNodes): self
     {
         $this->resourceNodes = $resourceNodes;

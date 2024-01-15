@@ -13,14 +13,13 @@ use Chamilo\CoreBundle\Entity\MessageTag;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Security;
 
-//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
+// use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 
-final class MessageTagExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
+final class MessageTagExtension implements QueryCollectionExtensionInterface // , QueryItemExtensionInterface
 {
     public function __construct(
         private readonly Security $security
-    ) {
-    }
+    ) {}
 
     public function applyToCollection(
         QueryBuilder $queryBuilder,

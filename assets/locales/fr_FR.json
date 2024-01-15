@@ -67,6 +67,9 @@
     "Delete": "Supprimer",
     "{resource} created": "{resource} created",
     "{resource} deleted": "{resource} deleted",
+    "Course: {course}": "Course: {course}",
+    "Session: {session}": "Session: {session}",
+    "Status: {status}": "Status: {status}",
     "Edit event": "Modifier l'\u00e9v\u00e8nement",
     "Add event": "Ajouter un \u00e9v\u00e9nement",
     "Add": "Ajouter",
@@ -152,5 +155,16 @@
     "No course available": "Pas de cours",
     "There are no sessions available": "Il n'y a pas encore de session",
     "Loading courses. Please wait.": "Loading courses. Please wait.",
-    "Loading sessions. Please wait.": "Loading sessions. Please wait."
+    "Loading sessions. Please wait.": "Loading sessions. Please wait.",
+    "There is no terms that matches the search: {searchTerm}": "There is no terms that matches the search: {searchTerm}",
+    "Send diagnostic finalization message": "Send diagnostic finalization message",
+    "DiagnosticfinalizationmessageTitle": "DiagnosticfinalizationmessageTitle",
+    "DiagnosticfinalizationmessageContent": "DiagnosticfinalizationmessageContent",
+    "Contact": "Contact",
+    "Registration": "Inscription",
+    "Current session tab": "En cours",
+    "Upcoming session tab": "\u00c0 venir",
+    "Past session tab": "Termin\u00e9es",
+    "Sticky courses": "Cours sp\u00e9ciaux",
+    "Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:": "Cr\u00e9er le certificat avec ces marqueurs"
 }

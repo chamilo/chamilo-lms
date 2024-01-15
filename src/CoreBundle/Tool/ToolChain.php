@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Tool;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\ToolResourceRight;
@@ -85,7 +86,7 @@ class ToolChain
                 $toolEntity = $toolFromDatabase;
             } else {
                 $toolEntity = (new Tool())
-                    ->setName($name)
+                    ->setTitle($name)
                 ;
                 if ($tool->isCourseTool()) {
                     $this->setToolPermissions($toolEntity);
@@ -98,7 +99,7 @@ class ToolChain
             if (!empty($types)) {
                 foreach ($types as $key => $typeName) {
                     $resourceType = (new ResourceType())
-                        ->setName($key)
+                        ->setTitle($key)
                     ;
 
                     if ($toolEntity->hasResourceType($resourceType)) {
@@ -124,8 +125,8 @@ class ToolChain
             ->setMask(ResourceNodeVoter::getReaderMask())
         ;
 
-        //$tool->addToolResourceRight($toolResourceRight);
-        //$tool->addToolResourceRight($toolResourceRightReader);
+        // $tool->addToolResourceRight($toolResourceRight);
+        // $tool->addToolResourceRight($toolResourceRightReader);
     }
 
     public function addToolsInCourse(Course $course): Course
@@ -153,9 +154,9 @@ class ToolChain
             'chat',
             'student_publication',
             'survey',
-            //'wiki',
+            'wiki',
             'notebook',
-            //'blog',
+            // 'blog',
             'course_tool',
             'course_homepage',
             'tracking',
@@ -179,6 +180,11 @@ class ToolChain
                 continue;
             }
 
+            $linkVisibility = ResourceLink::VISIBILITY_PUBLISHED;
+            if (\in_array($tool->getName(), ['course_setting', 'course_maintenance'])) {
+                $linkVisibility = ResourceLink::VISIBILITY_DRAFT;
+            }
+
             /** @var Tool $toolEntity */
             $toolEntity = $toolRepo->findOneBy($criteria);
             if ($toolEntity) {
@@ -191,7 +197,8 @@ class ToolChain
                     ->setVisibility($visibility)
                     ->setParent($course)
                     ->setCreator($course->getCreator())
-                    ->addCourseLink($course);
+                    ->addCourseLink($course, null, null, $linkVisibility)
+                ;
                 $course->addTool($courseTool);
             }
         }
@@ -199,7 +206,7 @@ class ToolChain
         return $course;
     }
 
-    public function getTools()
+    public function getTools(): iterable
     {
         return $this->handlerCollection->getCollection();
     }

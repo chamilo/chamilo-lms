@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Responses to AJAX calls.
@@ -46,7 +47,7 @@ switch ($action) {
         if (api_is_platform_admin()) {
             $sessions = SessionManager::get_sessions_list(
                 [
-                    's.name' => [
+                    's.title' => [
                         'operator' => 'LIKE',
                         'value' => "%".$_REQUEST['q']."%",
                     ],
@@ -76,7 +77,7 @@ switch ($action) {
         if (api_is_platform_admin()) {
             $results = SessionManager::get_sessions_list(
                 [
-                    's.name' => ['operator' => 'like', 'value' => "%".$_REQUEST['q']."%"],
+                    's.title' => ['operator' => 'like', 'value' => "%".$_REQUEST['q']."%"],
                     'c.id' => ['operator' => '=', 'value' => $_REQUEST['course_id']],
                 ]
             );
@@ -105,7 +106,7 @@ switch ($action) {
         if (api_is_platform_admin()) {
             $results = SessionManager::get_sessions_list(
                 [
-                    's.name' => ['operator' => 'like', 'value' => "%".$_REQUEST['q']."%"],
+                    's.title' => ['operator' => 'like', 'value' => "%".$_REQUEST['q']."%"],
                     'c.id' => ['operator' => '=', 'value' => $_REQUEST['course_id']],
                 ]
             );
@@ -329,12 +330,12 @@ switch ($action) {
                         ."</small></div>";
 
                     $row[] = Display::url(
-                            Display::return_icon('save.png', get_lang('Download')),
+                            Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Download')),
                             $downloadUrl
                         )
                         .PHP_EOL
                         .Display::url(
-                            Display::return_icon('delete.png', get_lang('Delete')),
+                            Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
                             $deleteUrl,
                             [
                                 'class' => 'delete_document',
@@ -439,7 +440,11 @@ switch ($action) {
         }
 
         $q = strtolower(trim($_GET['q']));
-
+        $options = [];
+        if ('true' === api_get_setting('session.session_model_list_field_ordered_by_id')) {
+            $orderBy = "s.id";
+            $options['order'] = $orderBy;
+        }
         $list = array_map(
             function ($session) {
                 return [
@@ -447,7 +452,7 @@ switch ($action) {
                     'text' => strip_tags($session['name']),
                 ];
             },
-            SessionManager::formatSessionsAdminForGrid()
+            SessionManager::formatSessionsAdminForGrid($options)
         );
 
         $list = array_filter(

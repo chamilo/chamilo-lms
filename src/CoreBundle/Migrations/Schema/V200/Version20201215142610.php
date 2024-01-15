@@ -35,6 +35,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
         $em = $doctrine->getManager();
+
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
@@ -51,6 +52,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
         $admin = $this->getAdmin();
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();
@@ -76,6 +78,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
+
                 /** @var CQuiz $resource */
                 $resource = $quizRepo->find($id);
                 if ($resource->hasResourceNode()) {
@@ -127,6 +130,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
             $course = $courseRepo->find($courseId);
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
+
                 /** @var CQuizQuestionCategory $resource */
                 $resource = $quizQuestionCategoryRepo->find($id);
                 if ($resource->hasResourceNode()) {
@@ -158,6 +162,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
                 $course = $courseRepo->find($courseId);
+
                 /** @var CQuizQuestion $question */
                 $question = $quizQuestionRepo->find($id);
                 if ($resource->hasResourceNode()) {

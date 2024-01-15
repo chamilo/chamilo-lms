@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 if (!api_is_platform_admin() && 'true' !== api_get_setting('ticket_allow_student_add')) {
@@ -346,7 +348,7 @@ Display::display_header(get_lang('Compose message'));
 
 echo '<div class="actions">';
 echo Display::url(
-    Display::return_icon('back.png', get_lang('Tickets'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Tickets')),
     api_get_path(WEB_CODE_PATH).'ticket/tickets.php'
 );
 echo '</div>';

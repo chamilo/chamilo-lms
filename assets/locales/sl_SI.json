@@ -67,6 +67,9 @@
     "Delete": "Odstrani u\u010dno pot",
     "{resource} created": "{resource} created",
     "{resource} deleted": "{resource} deleted",
+    "Course: {course}": "Course: {course}",
+    "Session: {session}": "Session: {session}",
+    "Status: {status}": "Status: {status}",
     "Edit event": "Uredi dogodek",
     "Add event": "Dodaj nov dogodek",
     "Add": "Dodaj",
@@ -152,5 +155,16 @@
     "No course available": "brez te\u010daja",
     "There are no sessions available": "Tu \u0161e vedno ni seje",
     "Loading courses. Please wait.": "Loading courses. Please wait.",
-    "Loading sessions. Please wait.": "Loading sessions. Please wait."
+    "Loading sessions. Please wait.": "Loading sessions. Please wait.",
+    "There is no terms that matches the search: {searchTerm}": "There is no terms that matches the search: {searchTerm}",
+    "Send diagnostic finalization message": "Send diagnostic finalization message",
+    "DiagnosticfinalizationmessageTitle": "DiagnosticfinalizationmessageTitle",
+    "DiagnosticfinalizationmessageContent": "DiagnosticfinalizationmessageContent",
+    "Contact": "Kontakt",
+    "Registration": "Dovoljenje za samoregistracijo",
+    "Current session tab": "Current session tab",
+    "Upcoming session tab": "Upcoming session tab",
+    "Past session tab": "Past session tab",
+    "Sticky courses": "Sticky courses",
+    "Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:": "Ustvari certifikat s to oznako"
 }

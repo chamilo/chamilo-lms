@@ -34,15 +34,15 @@ class GradebookLink
     #[ORM\Column(name: 'ref_id', type: 'integer', nullable: false)]
     protected int $refId;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'gradeBookLinks')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'gradeBookLinks')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class, inversedBy: 'gradebookLinks')]
+    #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'gradebookLinks')]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Course $course;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\GradebookCategory::class, inversedBy: 'links')]
+    #[ORM\ManyToOne(targetEntity: GradebookCategory::class, inversedBy: 'links')]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected GradebookCategory $category;
 

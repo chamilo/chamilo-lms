@@ -2,7 +2,7 @@ api_platform:
     title: 'Chamilo Api'
     version: '1.0.0'
     mapping:
-        paths: ['%kernel.project_dir%/src/CoreBundle/Entity', '%kernel.project_dir%/src/CourseBundle/Entity']
+        paths: ['%kernel.project_dir%/src/CoreBundle/Entity', '%kernel.project_dir%/src/CourseBundle/Entity', '%kernel.project_dir%/src/CoreBundle/ApiResource',]
     patch_formats:
         json: ['application/merge-patch+json']
     swagger:

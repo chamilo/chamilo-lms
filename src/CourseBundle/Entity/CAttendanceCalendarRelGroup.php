@@ -18,7 +18,7 @@ class CAttendanceCalendarRelGroup
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\ManyToOne(targetEntity: CGroup::class)]
     #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'iid')]
@@ -28,10 +28,7 @@ class CAttendanceCalendarRelGroup
     #[ORM\JoinColumn(name: 'calendar_id', referencedColumnName: 'iid')]
     protected CAttendanceCalendar $attendanceCalendar;
 
-    /**
-     * @return int
-     */
-    public function getIid()
+    public function getIid(): ?int
     {
         return $this->iid;
     }

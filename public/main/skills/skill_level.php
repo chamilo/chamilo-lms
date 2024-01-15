@@ -3,7 +3,8 @@
 
 use Chamilo\CoreBundle\Entity\Level;
 use Chamilo\CoreBundle\Entity\Profile;
-
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 /**
  * Add a skill Level.
  */
@@ -36,8 +37,8 @@ if (!empty($id)) {
 }
 
 $form = new FormValidator('level', 'GET', api_get_self().'?action='.$action.'&id='.$id);
-$form->addText('name', get_lang('Name'));
-$form->addText('short_name', get_lang('Short name'));
+$form->addText('title', get_lang('Name'));
+$form->addText('short_title', get_lang('Short name'));
 $form->addSelectFromCollection('profile_id', get_lang('Profile'), $profiles);
 $form->addHidden('action', $action);
 $form->addHidden('id', $id);
@@ -45,8 +46,8 @@ $form->addButtonSave(get_lang('Save'));
 
 if (!empty($item)) {
     $form->setDefaults([
-        'name' => $item->getName(),
-        'short_name' => $item->getShortName(),
+        'title' => $item->getTitle(),
+        'short_title' => $item->getShortTitle(),
         'profile_id' => $item->getProfile()->getId(),
     ]);
 }
@@ -66,8 +67,8 @@ switch ($action) {
                 $profile = $em->getRepository(Profile::class)->find($values['profile_id']);
                 if ($profile) {
                     $item = new Level();
-                    $item->setName($values['name']);
-                    $item->setShortName($values['short_name']);
+                    $item->setTitle($values['title']);
+                    $item->setShortTitle($values['short_title']);
                     $item->setProfile($profile);
                     $em->persist($item);
                     $em->flush();
@@ -82,12 +83,7 @@ switch ($action) {
             exit;
         }
         $toolbarAction = Display::url(
-            Display::return_icon(
-                'list_badges.png',
-                get_lang('List'),
-                null,
-                ICON_SIZE_MEDIUM
-            ),
+            Display::getMdiIcon(ObjectIcon::LIST, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('List')),
             $listAction,
             ['title' => get_lang('List')]
         );
@@ -95,12 +91,7 @@ switch ($action) {
     case 'edit':
         $formToDisplay = $form->returnForm();
         $toolbarAction = Display::url(
-            Display::return_icon(
-                'list_badges.png',
-                get_lang('List'),
-                null,
-                ICON_SIZE_MEDIUM
-            ),
+            Display::getMdiIcon(ObjectIcon::LIST, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('List')),
             $listAction,
             ['title' => get_lang('List')]
         );
@@ -108,8 +99,8 @@ switch ($action) {
         if ($form->validate()) {
             $values = $form->exportValues();
 
-            $item->setName($values['name']);
-            $item->setShortName($values['short_name']);
+            $item->setTitle($values['title']);
+            $item->setShortTitle($values['short_title']);
             $profile = $em->getRepository(Profile::class)->find($values['profile_id']);
             if ($profile) {
                 $item->setProfile($profile);
@@ -123,12 +114,7 @@ switch ($action) {
         break;
     case 'delete':
         $toolbarAction = Display::url(
-            Display::return_icon(
-                'list_badges.png',
-                get_lang('List'),
-                null,
-                ICON_SIZE_MEDIUM
-            ),
+            Display::getMdiIcon(ObjectIcon::LIST, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('List')),
             $listAction,
             ['title' => get_lang('List')]
         );
@@ -143,12 +129,7 @@ switch ($action) {
         break;
     default:
         $toolbarAction = Display::url(
-            Display::return_icon(
-                'add.png',
-                get_lang('Add'),
-                null,
-                ICON_SIZE_MEDIUM
-            ),
+            Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')),
             api_get_self().'?action=add',
             ['title' => get_lang('Add')]
         );

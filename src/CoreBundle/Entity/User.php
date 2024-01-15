@@ -26,6 +26,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\ReadableCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Stringable;
@@ -39,8 +40,6 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use UserManager;
-
-use function in_array;
 
 /**
  * EquatableInterface is needed to check if the user needs to be refreshed.
@@ -72,15 +71,7 @@ use function in_array;
     ]
 )]
 #[ApiFilter(filterClass: BooleanFilter::class, properties: ['isActive'])]
-class User implements
-    UserInterface,
-    EquatableInterface,
-    ResourceInterface,
-    ResourceIllustrationInterface,
-    PasswordAuthenticatedUserInterface,
-    LegacyPasswordAuthenticatedUserInterface,
-    ExtraFieldItemInterface,
-    Stringable
+class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface, LegacyPasswordAuthenticatedUserInterface, ExtraFieldItemInterface, Stringable
 {
     use TimestampableEntity;
     use UserCreatorTrait;
@@ -125,6 +116,7 @@ class User implements
         'user_json:read',
         'message:read',
         'user_rel_user:read',
+        'session:item:read',
     ])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -144,6 +136,7 @@ class User implements
         'page:read',
         'user_rel_user:read',
         'social_post:read',
+        'track_e_exercise:read',
     ])]
     #[ORM\Column(name: 'username', type: 'string', length: 100, unique: true)]
     protected string $username;
@@ -153,11 +146,11 @@ class User implements
 
     #[ApiProperty(iris: ['http://schema.org/name'])]
     #[Assert\NotBlank]
-    #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read'])]
+    #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read', 'track_e_exercise:read'])]
     #[ORM\Column(name: 'firstname', type: 'string', length: 64, nullable: true)]
     protected ?string $firstname = null;
 
-    #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read'])]
+    #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read', 'track_e_exercise:read'])]
     #[ORM\Column(name: 'lastname', type: 'string', length: 64, nullable: true)]
     protected ?string $lastname = null;
 
@@ -282,7 +275,7 @@ class User implements
     /**
      * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\JuryMembers", mappedBy="user").
      */
-    //protected $jurySubscriptions;
+    // protected $jurySubscriptions;
 
     /**
      * @var Collection<int, Group>
@@ -670,8 +663,7 @@ class User implements
     #[ORM\OneToMany(
         mappedBy: 'sender',
         targetEntity: Message::class,
-        cascade: ['persist', 'remove'],
-        orphanRemoval: true
+        cascade: ['persist']
     )]
     protected Collection $sentMessages;
 
@@ -776,7 +768,7 @@ class User implements
         $this->receivedMessages = new ArrayCollection();
         $this->surveyInvitations = new ArrayCollection();
         $this->logins = new ArrayCollection();
-        //$this->extraFields = new ArrayCollection();
+        // $this->extraFields = new ArrayCollection();
         $this->createdAt = new DateTime();
         $this->updatedAt = new DateTime();
         $this->registrationDate = new DateTime();
@@ -789,6 +781,11 @@ class User implements
         $this->sentSocialPosts = new ArrayCollection();
         $this->receivedSocialPosts = new ArrayCollection();
         $this->socialPostsFeedbacks = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->username;
     }
 
     public static function getPasswordConstraints(): array
@@ -809,9 +806,9 @@ class User implements
 
     public static function loadValidatorMetadata(ClassMetadata $metadata): void
     {
-        //$metadata->addPropertyConstraint('firstname', new Assert\NotBlank());
-        //$metadata->addPropertyConstraint('lastname', new Assert\NotBlank());
-        //$metadata->addPropertyConstraint('email', new Assert\Email());
+        // $metadata->addPropertyConstraint('firstname', new Assert\NotBlank());
+        // $metadata->addPropertyConstraint('lastname', new Assert\NotBlank());
+        // $metadata->addPropertyConstraint('email', new Assert\Email());
         /*
                 $metadata->addPropertyConstraint('password',
                     new Assert\Collection(self::getPasswordConstraints())
@@ -829,11 +826,6 @@ class User implements
                   'maxMessage' => 'This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.',
               ))
           );*/
-    }
-
-    public function __toString(): string
-    {
-        return $this->username;
     }
 
     public function getUuid(): Uuid
@@ -871,9 +863,9 @@ class User implements
     }
 
     /**
-     * @param Collection<int, ResourceNode>|ResourceNode[] $resourceNodes
+     * @param Collection<int, ResourceNode> $resourceNodes
      */
-    public function setResourceNodes(Collection|array $resourceNodes): self
+    public function setResourceNodes(Collection $resourceNodes): self
     {
         $this->resourceNodes = $resourceNodes;
 
@@ -907,9 +899,9 @@ class User implements
     }
 
     /**
-     * @param Collection<int, CourseRelUser>|CourseRelUser[] $courses
+     * @param Collection<int, CourseRelUser> $courses
      */
-    public function setCourses(Collection|array $courses): self
+    public function setCourses(Collection $courses): self
     {
         $this->courses = $courses;
 
@@ -958,6 +950,7 @@ class User implements
     {
         $classSubscription = $this->getClasses();
         $classList = [];
+
         /** @var UsergroupRelUser $subscription */
         foreach ($classSubscription as $subscription) {
             $class = $subscription->getUsergroup();
@@ -1375,7 +1368,7 @@ class User implements
 
     public function hasGroup(string $name): bool
     {
-        return in_array($name, $this->getGroupNames(), true);
+        return \in_array($name, $this->getGroupNames(), true);
     }
 
     public function getGroupNames(): array
@@ -1438,7 +1431,7 @@ class User implements
     public function isAccountNonLocked(): bool
     {
         return true;
-        //return !$this->locked;
+        // return !$this->locked;
     }
 
     public function isCredentialsNonExpired(): bool
@@ -1517,9 +1510,9 @@ class User implements
     }
 
     /**
-     * @param Collection<int, SkillRelUser>|SkillRelUser[] $value
+     * @param Collection<int, SkillRelUser> $value
      */
-    public function setAchievedSkills(Collection|array $value): self
+    public function setAchievedSkills(Collection $value): self
     {
         $this->achievedSkills = $value;
 
@@ -1585,9 +1578,9 @@ class User implements
     }
 
     /**
-     * @return SessionRelUser[]|Collection
+     * @return Collection<int, SessionRelUser>
      */
-    public function getSessionsRelUser(): array|Collection
+    public function getSessionsRelUser(): Collection
     {
         return $this->sessionsRelUser;
     }
@@ -1603,9 +1596,9 @@ class User implements
     }
 
     /**
-     * @param Collection<int, SkillRelUserComment>|SkillRelUserComment[] $commentedUserSkills
+     * @param Collection<int, SkillRelUserComment> $commentedUserSkills
      */
-    public function setCommentedUserSkills(Collection|array $commentedUserSkills): self
+    public function setCommentedUserSkills(Collection $commentedUserSkills): self
     {
         $this->commentedUserSkills = $commentedUserSkills;
 
@@ -1656,6 +1649,9 @@ class User implements
         return $this->username;
     }
 
+    /**
+     * @return Collection<int, Message>
+     */
     public function getSentMessages(): Collection
     {
         return $this->sentMessages;
@@ -1696,7 +1692,7 @@ class User implements
 
     public function hasRole(string $role): bool
     {
-        return in_array(strtoupper($role), $this->getRoles(), true);
+        return \in_array(strtoupper($role), $this->getRoles(), true);
     }
 
     /**
@@ -1749,7 +1745,7 @@ class User implements
         if ($role === static::ROLE_DEFAULT || empty($role)) {
             return $this;
         }
-        if (!in_array($role, $this->roles, true)) {
+        if (!\in_array($role, $this->roles, true)) {
             $this->roles[] = $role;
         }
 
@@ -1900,9 +1896,9 @@ class User implements
     }
 
     /**
-     * @param Collection<int, GradebookCertificate>|GradebookCertificate[] $gradeBookCertificates
+     * @param Collection<int, GradebookCertificate> $gradeBookCertificates
      */
-    public function setGradeBookCertificates(Collection|array $gradeBookCertificates): self
+    public function setGradeBookCertificates(Collection $gradeBookCertificates): self
     {
         $this->gradeBookCertificates = $gradeBookCertificates;
 
@@ -1947,113 +1943,110 @@ class User implements
     }
 
     /**
-     * @return GradebookCategory[]|Collection
+     * @return Collection<int, GradebookCategory>
      */
-    public function getGradeBookCategories(): array|Collection
+    public function getGradeBookCategories(): Collection
     {
         return $this->gradeBookCategories;
     }
 
     /**
-     * @return GradebookComment[]|Collection
+     * @return Collection<int, GradebookComment>
      */
-    public function getGradeBookComments(): array|Collection
+    public function getGradeBookComments(): Collection
     {
         return $this->gradeBookComments;
     }
 
     /**
-     * @return GradebookEvaluation[]|Collection
+     * @return Collection<int, GradebookEvaluation>
      */
-    public function getGradeBookEvaluations(): array|Collection
+    public function getGradeBookEvaluations(): Collection
     {
         return $this->gradeBookEvaluations;
     }
 
     /**
-     * @return GradebookLink[]|Collection
+     * @return Collection<int, GradebookLink>
      */
-    public function getGradeBookLinks(): array|Collection
+    public function getGradeBookLinks(): Collection
     {
         return $this->gradeBookLinks;
     }
 
     /**
-     * @return GradebookResult[]|Collection
+     * @return Collection<int, GradebookResult>
      */
-    public function getGradeBookResults(): array|Collection
+    public function getGradeBookResults(): Collection
     {
         return $this->gradeBookResults;
     }
 
     /**
-     * @return GradebookResultLog[]|Collection
+     * @return Collection<int, GradebookResultLog>
      */
-    public function getGradeBookResultLogs(): array|Collection
+    public function getGradeBookResultLogs(): Collection
     {
         return $this->gradeBookResultLogs;
     }
 
     /**
-     * @return GradebookScoreLog[]|Collection
+     * @return Collection<int, GradebookScoreLog>
      */
-    public function getGradeBookScoreLogs(): array|Collection
+    public function getGradeBookScoreLogs(): Collection
     {
         return $this->gradeBookScoreLogs;
     }
 
     /**
-     * @return GradebookLinkevalLog[]|Collection
+     * @return Collection<int, GradebookLinkevalLog>
      */
-    public function getGradeBookLinkEvalLogs(): array|Collection
+    public function getGradeBookLinkEvalLogs(): Collection
     {
         return $this->gradeBookLinkEvalLogs;
     }
 
     /**
-     * @return UserRelCourseVote[]|Collection
+     * @return Collection<int, UserRelCourseVote>
      */
-    public function getUserRelCourseVotes(): array|Collection
+    public function getUserRelCourseVotes(): Collection
     {
         return $this->userRelCourseVotes;
     }
 
     /**
-     * @return UserRelTag[]|Collection
+     * @return Collection<int, UserRelTag>
      */
-    public function getUserRelTags(): array|Collection
+    public function getUserRelTags(): Collection
     {
         return $this->userRelTags;
     }
 
     /**
-     * @return PersonalAgenda[]|Collection
+     * @return Collection<int, PersonalAgenda>
      */
-    public function getPersonalAgendas(): array|Collection
+    public function getPersonalAgendas(): Collection
     {
         return $this->personalAgendas;
     }
 
-    /**
-     * @return Collection|mixed[]
-     */
-    public function getCurriculumItems(): Collection|array
+    public function getCurriculumItems(): Collection
     {
         return $this->curriculumItems;
     }
 
     /**
-     * @return UserRelUser[]|Collection
+     * @return Collection<int, UserRelUser>
      */
-    public function getFriends(): array|Collection
+    public function getFriends(): Collection
     {
         return $this->friends;
     }
 
     /**
-     * @return UserRelUser[]|Collection
+     * @return Collection<int, UserRelUser>
      */
-    public function getFriendsWithMe(): array|Collection
+    public function getFriendsWithMe(): Collection
     {
         return $this->friendsWithMe;
     }
@@ -2072,62 +2065,62 @@ class User implements
     }
 
     /**
-     * @return Templates[]|Collection
+     * @return Collection<int, Templates>
      */
-    public function getTemplates(): array|Collection
+    public function getTemplates(): Collection
     {
         return $this->templates;
     }
 
-    public function getDropBoxReceivedFiles(): ArrayCollection|Collection
+    public function getDropBoxReceivedFiles(): Collection
     {
         return $this->dropBoxReceivedFiles;
     }
 
     /**
-     * @return SequenceValue[]|Collection
+     * @return Collection<int, SequenceValue>
      */
-    public function getSequenceValues(): array|Collection
+    public function getSequenceValues(): Collection
     {
         return $this->sequenceValues;
     }
 
     /**
-     * @return TrackEExerciseConfirmation[]|Collection
+     * @return Collection<int, TrackEExerciseConfirmation>
      */
-    public function getTrackEExerciseConfirmations(): array|Collection
+    public function getTrackEExerciseConfirmations(): Collection
     {
         return $this->trackEExerciseConfirmations;
     }
 
     /**
-     * @return TrackEAttempt[]|Collection
+     * @return Collection<int, TrackEAttempt>
      */
-    public function getTrackEAccessCompleteList(): array|Collection
+    public function getTrackEAccessCompleteList(): Collection
     {
         return $this->trackEAccessCompleteList;
     }
 
     /**
-     * @return TrackEAttempt[]|Collection
+     * @return Collection<int, TrackEAttempt>
      */
-    public function getTrackEAttempts(): array|Collection
+    public function getTrackEAttempts(): Collection
     {
         return $this->trackEAttempts;
     }
 
     /**
-     * @return TrackECourseAccess[]|Collection
+     * @return Collection<int, TrackECourseAccess>
      */
-    public function getTrackECourseAccess(): array|Collection
+    public function getTrackECourseAccess(): Collection
     {
         return $this->trackECourseAccess;
     }
 
     /**
-     * @return UserCourseCategory[]|Collection
+     * @return Collection<int, UserCourseCategory>
      */
-    public function getUserCourseCategories(): array|Collection
+    public function getUserCourseCategories(): Collection
     {
         return $this->userCourseCategories;
     }
@@ -2211,9 +2204,7 @@ class User implements
         $this->setUsername($name);
     }
 
-    public function setParent(AbstractResource $parent): void
-    {
-    }
+    public function setParent(AbstractResource $parent): void {}
 
     public function getDefaultIllustration(int $size): string
     {
@@ -2246,27 +2237,30 @@ class User implements
         return $this;
     }
 
-    public function getSessionsByStatusInCourseSubscription(int $status): Collection
+    public function getSessionsByStatusInCourseSubscription(int $status): ReadableCollection
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq('status', $status));
 
-        return $this->getSessionRelCourseRelUsers()->matching($criteria)->map(
-            fn(SessionRelCourseRelUser $sessionRelCourseRelUser) => $sessionRelCourseRelUser->getSession()
+        /** @var ArrayCollection $subscriptions */
+        $subscriptions = $this->getSessionRelCourseRelUsers();
+
+        return $subscriptions->matching($criteria)->map(
+            fn (SessionRelCourseRelUser $sessionRelCourseRelUser) => $sessionRelCourseRelUser->getSession()
         );
     }
 
     /**
-     * @return SessionRelCourseRelUser[]|Collection
+     * @return Collection<int, SessionRelCourseRelUser>
      */
-    public function getSessionRelCourseRelUsers(): array|Collection
+    public function getSessionRelCourseRelUsers(): Collection
     {
         return $this->sessionRelCourseRelUsers;
     }
 
     /**
-     * @param SessionRelCourseRelUser[]|Collection $sessionRelCourseRelUsers
+     * @param Collection<int, SessionRelCourseRelUser> $sessionRelCourseRelUsers
      */
-    public function setSessionRelCourseRelUsers(array|Collection $sessionRelCourseRelUsers): self
+    public function setSessionRelCourseRelUsers(Collection $sessionRelCourseRelUsers): self
     {
         $this->sessionRelCourseRelUsers = $sessionRelCourseRelUsers;
 
@@ -2286,9 +2280,9 @@ class User implements
     }
 
     /**
-     * @return CSurveyInvitation[]|Collection
+     * @return Collection<int, CSurveyInvitation>
      */
-    public function getSurveyInvitations(): array|Collection
+    public function getSurveyInvitations(): Collection
     {
         return $this->surveyInvitations;
     }
@@ -2301,9 +2295,9 @@ class User implements
     }
 
     /**
-     * @return TrackELogin[]|Collection
+     * @return Collection<int, TrackELogin>
      */
-    public function getLogins(): array|Collection
+    public function getLogins(): Collection
     {
         return $this->logins;
     }
@@ -2316,17 +2310,17 @@ class User implements
     }
 
     /**
-     * @return MessageTag[]|Collection
+     * @return Collection<int, MessageTag>
      */
-    public function getMessageTags(): array|Collection
+    public function getMessageTags(): Collection
     {
         return $this->messageTags;
     }
 
     /**
-     * @param MessageTag[]|Collection $messageTags
+     * @param Collection<int, MessageTag> $messageTags
      */
-    public function setMessageTags(array|Collection $messageTags): self
+    public function setMessageTags(Collection $messageTags): self
     {
         $this->messageTags = $messageTags;
 
@@ -2335,6 +2329,7 @@ class User implements
 
     /**
      * @param null|UserCourseCategory $userCourseCategory the user_course_category
+     *
      * @todo move in a repo
      * Find the largest sort value in a given UserCourseCategory
      * This method is used when we are moving a course to a different category
@@ -2342,9 +2337,8 @@ class User implements
      *
      * Used to be implemented in global function \api_max_sort_value.
      * Reimplemented using the ORM cache.
-     *
      */
-    public function getMaxSortValue(?UserCourseCategory $userCourseCategory = null): int
+    public function getMaxSortValue(UserCourseCategory $userCourseCategory = null): int
     {
         $categoryCourses = $this->courses->matching(
             Criteria::create()->where(Criteria::expr()->neq('relationType', COURSE_RELATION_TYPE_RRHH))->andWhere(
@@ -2353,7 +2347,7 @@ class User implements
         );
 
         return $categoryCourses->isEmpty() ? 0 : max(
-            $categoryCourses->map(fn($courseRelUser) => $courseRelUser->getSort())->toArray()
+            $categoryCourses->map(fn ($courseRelUser) => $courseRelUser->getSort())->toArray()
         );
     }
 
@@ -2361,7 +2355,15 @@ class User implements
     {
         $friends = $this->getFriendsByRelationType($relationType);
 
-        return $friends->exists(fn(int $index, UserRelUser $userRelUser) => $userRelUser->getFriend() === $friend);
+        return $friends->exists(fn (int $index, UserRelUser $userRelUser) => $userRelUser->getFriend() === $friend);
+    }
+
+    public function isFriendWithMeByRelationType(self $friend, int $relationType): bool
+    {
+        return $this
+            ->getFriendsWithMeByRelationType($relationType)
+            ->exists(fn (int $index, UserRelUser $userRelUser) => $userRelUser->getUser() === $friend)
+        ;
     }
 
     /**
@@ -2375,6 +2377,14 @@ class User implements
         $criteria->where(Criteria::expr()->eq('relationType', $relationType));
 
         return $this->friends->matching($criteria);
+    }
+
+    public function getFriendsWithMeByRelationType(int $relationType): Collection
+    {
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->eq('relationType', $relationType));
+
+        return $this->friendsWithMe->matching($criteria);
     }
 
     /**
@@ -2416,7 +2426,7 @@ class User implements
     public function getSocialPostFeedbackBySocialPost(SocialPost $post): ?SocialPostFeedback
     {
         $filtered = $this->getSocialPostsFeedbacks()->filter(
-            fn(SocialPostFeedback $postFeedback) => $postFeedback->getSocialPost() === $post
+            fn (SocialPostFeedback $postFeedback) => $postFeedback->getSocialPost() === $post
         );
         if ($filtered->count() > 0) {
             return $filtered->first();

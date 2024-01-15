@@ -12,11 +12,11 @@ export const GET_SESSION_REL_USER_CURRENT = gql`
                 node {
                     session {
                         _id
-                        name
+                        title
                         category {
                             _id
                             id
-                            name
+                            title
                         }
                         displayStartDate
                         displayEndDate
@@ -70,11 +70,11 @@ export const GET_SESSION_REL_USER = gql`
                 node {
                     session {
                         _id
-                        name
+                        title
                         category {
                             _id
                             id
-                            name
+                            title
                         }
                         displayStartDate
                         displayEndDate

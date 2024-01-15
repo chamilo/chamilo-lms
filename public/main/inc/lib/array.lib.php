@@ -7,7 +7,7 @@
 
  * Removes duplicate values from a dimensional array.
  *
- * @param array $array dimensional array
+ * @param array|mixed $array dimensional array
  *
  * @return array an array with unique values
  */

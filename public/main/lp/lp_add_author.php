@@ -133,7 +133,7 @@ foreach ($_SESSION['oLP']->items as $item) {
     $form->addCheckBox(
         "itemSelected[$itemId]",
         null,
-        Display::return_icon('lp_document.png', $itemName).$itemName.$authorName
+        Display::getMdiIcon('bookshelf', 'ch-tool-icon', null, 22, get_lang('Document')).$itemName.$authorName
     );
     $default['itemSelected'][$itemId] = false;
 }

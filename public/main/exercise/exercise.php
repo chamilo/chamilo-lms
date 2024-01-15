@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -317,45 +318,40 @@ $limit = Exercise::PAGINATION_ITEMS_PER_PAGE;
 $token = Security::get_token();
 if ($is_allowedToEdit && 'learnpath' !== $origin) {
     $actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'">'.
-        Display::return_icon('new_exercice.png', get_lang('Create a new test'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Create a new test')).'</a>';
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/question_create.php?'.api_get_cidreq().'">'.
-        Display::return_icon('new_question.png', get_lang('Add a question'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon('help-box', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a question')).'</a>';
 
     if ('true' === api_get_setting('exercise.allow_exercise_categories')) {
         $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/category.php?'.api_get_cidreq().'">';
-        $actionsLeft .= Display::return_icon('folder.png', get_lang('Category'), '', ICON_SIZE_MEDIUM);
+        $actionsLeft .= Display::getMdiIcon('folder-multiple', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Category'));
         $actionsLeft .= '</a>';
     }
 
     // Question category
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/tests_category.php?'.api_get_cidreq().'">';
-    $actionsLeft .= Display::return_icon('green_open.png', get_lang('Questions category'), '', ICON_SIZE_MEDIUM);
+    $actionsLeft .= Display::getMdiIcon('folder-multiple', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Questions category'));
     $actionsLeft .= '</a>';
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/question_pool.php?'.api_get_cidreq().'">';
-    $actionsLeft .= Display::return_icon('database.png', get_lang('Recycle existing questions'), '', ICON_SIZE_MEDIUM);
+    $actionsLeft .= Display::getMdiIcon('database', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Recycle existing questions'));
     $actionsLeft .= '</a>';
 
-    //echo Display::url(Display::return_icon('looknfeel.png', get_lang('Media')), 'media.php?' . api_get_cidreq());
+    //echo Display::url(Display::getMdiIcon('eye', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Media')), 'media.php?' . api_get_cidreq());
     // end question category
     /*$actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/hotpotatoes.php?'.api_get_cidreq().'">'.
-        Display::return_icon('import_hotpotatoes.png', get_lang('Import Hotpotatoes'), '', ICON_SIZE_MEDIUM).'</a>';*/
+        Display::getMdiIcon('fire-circle', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import Hotpotatoes')).'</a>';*/
     // link to import qti2 ...
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/qti2.php?'.api_get_cidreq().'">'.
-        Display::return_icon('import_qti2.png', get_lang('Import exercises Qti2'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon('archive-arrow-up', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import exercises Qti2')).'</a>';
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/aiken.php?'.api_get_cidreq().'">'.
-        Display::return_icon('import_aiken.png', get_lang('Import Aiken quiz'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon('microsoft-word', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import Aiken quiz')).'</a>';
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/upload_exercise.php?'.api_get_cidreq().'">'.
-        Display::return_icon('import_excel.png', get_lang('Import quiz from Excel'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon('microsoft-excel	', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import quiz from Excel')).'</a>';
 
     $cleanAll = null;
     if ($allowClean) {
         $cleanAll = Display::url(
-            Display::return_icon(
-                'clean_all.png',
-                get_lang('Are you sure to delete all test\'s results ?'),
-                '',
-                ICON_SIZE_MEDIUM
-            ),
+            Display::getMdiIcon('clean_all', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Are you sure to delete all test\'s results ?')),
             '#',
             [
                 'data-item-question' => addslashes(get_lang('Clear all learners results for every exercises ?')),
@@ -419,8 +415,8 @@ if ('true' !== api_get_setting('exercise.allow_exercise_categories')) {
         $categories = $manager->getCategories($courseId);
         $modifyUrl = api_get_self().'?'.api_get_cidreq();
         $total = count($categories);
-        $upIcon = Display::return_icon('up.png', get_lang('Move up'));
-        $downIcon = Display::return_icon('down.png', get_lang('Move down'));
+        $upIcon = Display::getMdiIcon('arrow-up-bold', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Move up'));
+        $downIcon = Display::getMdiIcon('arrow-down-bold', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Move down'));
         /** @var CExerciseCategory $category */
         foreach ($categories as $category) {
             $categoryIdItem = $category->getId();
@@ -429,15 +425,15 @@ if ('true' !== api_get_setting('exercise.allow_exercise_categories')) {
             if ($is_allowedToEdit) {
                 $up = Display::url($upIcon, $modifyUrl.'&action=up_category&category_id_edit='.$categoryIdItem);
                 if (0 === $counter) {
-                    $up = Display::url(Display::return_icon('up_na.png'), '#');
+                    $up = Display::url(Display::getMdiIcon('arrow-up-bold', 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Move up')), '#');
                 }
                 $down = Display::url($downIcon, $modifyUrl.'&action=down_category&category_id_edit='.$categoryIdItem);
                 $counter++;
                 if ($total === $counter) {
-                    $down = Display::url(Display::return_icon('down_na.png'), '#');
+                    $down = Display::url(Display::getMdiIcon('arrow-down-bold', 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Move down')), '#');
                 }
             }
-            echo Display::page_subheader($category->getName().$up.$down);
+            echo Display::page_subheader($category->getTitle().$up.$down);
             echo Exercise::exerciseGridResource($category->getId(), $keyword);
         }
     } else {

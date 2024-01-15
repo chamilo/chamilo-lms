@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -265,14 +267,14 @@ if ($allowEdition
                 );
                 $newPriorityTitle = '-';
                 if ($newPriority) {
-                    $newPriorityTitle = $newPriority->getName();
+                    $newPriorityTitle = $newPriority->getTitle();
                 }
                 $oldPriority = TicketManager::getPriority(
                     $ticket['ticket']['priority_id']
                 );
                 $oldPriorityTitle = '-';
                 if ($oldPriority) {
-                    $oldPriorityTitle = $oldPriority->getName();
+                    $oldPriorityTitle = $oldPriority->getTitle();
                 }
                 $messageToSend .= sprintf(
                     get_lang('Priority changed from %s to %s'),
@@ -287,7 +289,7 @@ if ($allowEdition
                 );
                 $newTitle = '-';
                 if ($newStatus) {
-                    $newTitle = $newStatus->getName();
+                    $newTitle = $newStatus->getTitle();
                 }
                 $oldStatus = TicketManager::getStatus(
                     $ticket['ticket']['status_id']
@@ -331,7 +333,7 @@ if ($allowEdition
 
 Display::display_header();
 $actions = Display::url(
-    Display::return_icon('back.png', get_lang('Tickets'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Tickets')),
     api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId
 );
 echo Display::toolbarAction('ticket', [$actions]);

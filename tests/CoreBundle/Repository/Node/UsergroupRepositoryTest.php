@@ -27,7 +27,7 @@ class UsergroupRepositoryTest extends KernelTestCase
         $repo = self::getContainer()->get(UsergroupRepository::class);
 
         $group = (new Usergroup())
-            ->setName('test')
+            ->setTitle('test')
             ->setDescription('desc')
             ->setGroupType(1)
             ->setUrl('url')
@@ -46,7 +46,7 @@ class UsergroupRepositoryTest extends KernelTestCase
         $this->assertSame('/img/icons/64/group_na.png', $group->getDefaultIllustration(64));
         $this->assertSame(1, $repo->count([]));
 
-        $group->setName('test2');
+        $group->setTitle('test2');
         $repo->update($group);
 
         $this->assertSame(1, $repo->count([]));
@@ -62,7 +62,7 @@ class UsergroupRepositoryTest extends KernelTestCase
         $em = $this->getEntityManager();
 
         $group = (new Usergroup())
-            ->setName('test')
+            ->setTitle('test')
             ->addAccessUrl($this->getAccessUrl())
             ->setCreator($this->getUser('admin'))
         ;
@@ -115,7 +115,7 @@ class UsergroupRepositoryTest extends KernelTestCase
         ;
         $em->persist($userGroupRelUser);
 
-        //UserGroupRelUserGroup.php
+        // UserGroupRelUserGroup.php
 
         $group->getCourses()->add($userGroupRelCourse);
         $group->getQuestions()->add($userGroupRelQuestion);

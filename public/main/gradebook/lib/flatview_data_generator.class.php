@@ -575,7 +575,7 @@ class FlatViewDataGenerator
             $item_total += $result['item_total'];
             $item_value_total += $result['item_value_total'];
             $total_score = [$item_value_total, $item_total];
-            $style = api_get_setting('gradebook.gradebook_report_score_style')
+            $style = api_get_setting('gradebook.gradebook_report_score_style');
             $customDisplayIsStandalone = ('true' === api_get_setting('gradebook.gradebook_score_display_custom_standalone'))
                 && $scoreDisplay->is_custom();
 

@@ -24,10 +24,10 @@ class Version20180904175500 extends AbstractMigrationChamilo
         $this->addSql('DELETE FROM track_e_exercises WHERE exe_user_id = 0 OR exe_user_id IS NULL');
         $this->addSql('ALTER TABLE track_e_exercises CHANGE exe_user_id exe_user_id INT NOT NULL');
 
+        $this->addSql('ALTER TABLE track_e_exercises CHANGE session_id session_id INT DEFAULT NULL');
         $this->addSql('UPDATE track_e_exercises SET session_id = NULL WHERE session_id = 0');
 
         $this->addSql('DELETE FROM track_e_exercises WHERE session_id IS NOT NULL AND session_id NOT IN (SELECT id FROM session)');
-        $this->addSql('ALTER TABLE track_e_exercises CHANGE session_id session_id INT NOT NULL');
 
         if (!$schema->hasTable('attempt_file')) {
             $this->addSql("CREATE TABLE attempt_file (id BINARY(16) NOT NULL COMMENT '(DC2Type:uuid)', attempt_id INT DEFAULT NULL, asset_id BINARY(16) DEFAULT NULL COMMENT '(DC2Type:uuid)', comment LONGTEXT NOT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_4F22BDF0B191BE6B (attempt_id), INDEX IDX_4F22BDF05DA1941 (asset_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;");
@@ -93,8 +93,8 @@ class Version20180904175500 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE track_e_access_complete ADD CONSTRAINT FK_57FAFDBFA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
             $this->addSql('CREATE INDEX IDX_57FAFDBFA76ED395 ON track_e_access_complete (user_id)');
         }
-        //$this->addSql('ALTER TABLE track_e_hotpotatoes CHANGE exe_result score SMALLINT NOT NULL');
-        //$this->addSql('ALTER TABLE track_e_hotpotatoes CHANGE exe_weighting max_score SMALLINT NOT NULL');
+        // $this->addSql('ALTER TABLE track_e_hotpotatoes CHANGE exe_result score SMALLINT NOT NULL');
+        // $this->addSql('ALTER TABLE track_e_hotpotatoes CHANGE exe_weighting max_score SMALLINT NOT NULL');
 
         $table = $schema->getTable('track_e_exercises');
 
@@ -208,7 +208,5 @@ class Version20180904175500 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

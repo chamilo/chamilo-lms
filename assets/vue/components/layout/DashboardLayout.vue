@@ -1,9 +1,9 @@
 <template>
   <Topbar />
-  <Sidebar v-if="isAuthenticated" />
+  <Sidebar v-if="securityStore.isAuthenticated" />
   <div
     class="app-main"
-    :class="{ 'app-main--no-sidebar': !isAuthenticated }"
+    :class="{ 'app-main--no-sidebar': !securityStore.isAuthenticated }"
   >
     <Breadcrumb
       v-if="showBreadcrumb"
@@ -18,8 +18,7 @@
 import Breadcrumb from '../../components/Breadcrumb.vue';
 import Topbar from '../../components/layout/Topbar.vue';
 import Sidebar from '../../components/layout/Sidebar.vue';
-import {useStore} from "vuex";
-import {computed} from "vue";
+import { useSecurityStore } from "../../store/securityStore"
 
 // eslint-disable-next-line no-undef
 defineProps({
@@ -29,8 +28,7 @@ defineProps({
   },
 });
 
-const store = useStore();
-const isAuthenticated = computed(() => store.getters['security/isAuthenticated']);
+const securityStore = useSecurityStore()
 
 let breadcrumb = [];
 

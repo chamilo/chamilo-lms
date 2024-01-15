@@ -75,8 +75,8 @@ if (is_object($objQuestion)) {
             } else {
                 // New question
                 $page = 1;
-                $length = api_get_setting('exercise.question_pagination_length');
-                if (!empty($length)) {
+                $length = (int) api_get_setting('exercise.question_pagination_length');
+                if ($length > 0) {
                     $page = round($objExercise->getQuestionCount() / $length);
                 }
                 Display::addFlash(Display::return_message(get_lang('Item added')));

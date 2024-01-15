@@ -2,11 +2,11 @@
 <head>
     <meta charset="utf-8" />
 	<title>Chamilo Optimization Guide</title>
-    <link rel="stylesheet" href="../build/css/app.css" type="text/css" media="screen,projection" />
-    <link rel="stylesheet" href="../build/css/themes/chamilo/default.css" type="text/css" media="screen,projection" />
-    <link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
-    <link rel="stylesheet" href="../build/css/print.css" type="text/css" media="print" />
-    <script src="../build/app.js"></script>
+    <link rel="stylesheet" href="../build/legacy_app.css" />
+    <link rel="stylesheet" href="../build/app.css" />
+    <link rel="stylesheet" href="../build/vue.css" />
+    <link rel="stylesheet" href="default.css" />
+    <script src="../build/legacy_app.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -61,7 +61,7 @@
   <li><a href="#13.increasing-php-limits">Increasing PHP limits</a></li>
 </ol>
 
-<h2><a name="1.Using-XCache"></a>1. Using opcaches</h2>
+<h2><a id="1.Using-XCache"></a>1. Using opcaches</h2>
     <h3>Zend OpCode (Zend Optimizer+)</h3>
     From version 5.5, PHP includes the Zend OpCache Optimizer, which can
     bring considerable efficiency improvements and is very reliable.
@@ -165,7 +165,7 @@
 </pre>
 <hr />
 
-<h2><a name="2.Slow-queries"></a>2. Slow queries</h2>
+<h2><a id="2.Slow-queries"></a>2. Slow queries</h2>
 Enable slow_queries in /etc/mysqld/my.cnf, restart MySQL then follow using sudo tail -f /var/log/mysql/mysql-slow.log
 <br /><br />
 In Chamilo 1.9 in particular, due to the merge of all databases into one, you might experience performance issues.<br />
@@ -212,11 +212,11 @@ ALTER TABLE c_lp_item_view ADD INDEX idx_clpiv_c_i_v (c_id, id, view_count);
         ALTER TABLE gradebook_result ADD INDEX idx_gb_uid_eid (user_id, evaluation_id);
     </pre>
 <hr />
-<h2><a name="3.Indexes-caching"></a>3. Indexes caching</h2>
+<h2><a id="3.Indexes-caching"></a>3. Indexes caching</h2>
 One good reference: <a href="http://dev.mysql.com/doc/refman/5.6/en/multiple-key-caches.html">MySQL documentation on multiple key caches</a><br />
 <hr />
 
-<h2><a name="4.Sessions-directories"></a>4. Sessions directories</h2>
+<h2><a id="4.Sessions-directories"></a>4. Sessions directories</h2>
 
     <p>On large implementations, the users sessions might be stored in numbers too large (hundreds of thousands) to be
     efficiently managed by the filesystem is stored in one single folder. In order to avoid that, you can either store
@@ -230,11 +230,11 @@ One good reference: <a href="http://dev.mysql.com/doc/refman/5.6/en/multiple-key
     your system's session cleaning procedure, which is usually defined under /etc/cron.d/php, so that it cleans
     this specific directory as well.</p>
 <hr />
-<h2><a name="5.Users-upload-directories"></a>5. Users upload directories</h2>
+<h2><a id="5.Users-upload-directories"></a>5. Users upload directories</h2>
 The default in Chamilo is now to spread user accounts in 10 different directories inside app/upload/users/ to avoid
     overloading that specific directory. Nothing to be done here. Please move on.
 <hr />
-<h2><a name="6.Zlib-compression"></a>6. Zlib compressed output</h2>
+<h2><a id="6.Zlib-compression"></a>6. Zlib compressed output</h2>
 Although this will not make your server faster, compressing the pages you are sending to the users will definitely
     make them feel like your website's responses are a lot faster, and thus increase their well-being when using Chamilo.<br /><br />
 Zlib output compression has to be set at two levels: PHP configuration for PHP pages and Apache for images and CSS.<br /><br />
@@ -253,7 +253,7 @@ AddOutputFilterByType DEFLATE text/html text/plain text/xml
 <br />
 Advanced mode:
 <pre>
-<Location />
+&lt;Location /&gt;
 # Insert filter
 SetOutputFilter DEFLATE
 
@@ -277,7 +277,7 @@ SetEnvIfNoCase Request_URI \
 
 # Make sure proxies don't deliver the wrong content
 Header append Vary User-Agent env=!dont-vary
-</Location>
+&lt;/Location&gt;
 </pre>
 <hr />
 Don't have time or resources to optimize your Chamilo installation yourself? Hire an <a href="http://www.chamilo.org/en/providers">official Chamilo provider</a> and get it sorted out professionally by specialists.
@@ -287,13 +287,13 @@ Don't have time or resources to optimize your Chamilo installation yourself? Hir
 	</a>
 <hr />
 
-<h2><a name="7.High-numbers-memory"></a>Memory considerations for high numbers of users</h2>
+<h2><a id="7.High-numbers-memory"></a>Memory considerations for high numbers of users</h2>
 Some administration scripts *have to* handle lists of all users, and this might have a considerable impact on portals with very high numbers of users. For example, the main/admin/add_users_to_session.php script that handles the registration of users into a specific session, if used with the (non-default) full list of users, will devour about 3KB per user, which, for 100,000 users, translates into the need for around 300MB of RAM just to show this page, and to around 3GB for 1,000,000 users.<br />
 This mode is not loaded by default, but could still be selected, leading to a "Fatal error: Allowed memory size ... exhausted" message.<br />
 The only non-scripted solution here is to allow for the corresponding amount of RAM for your PHP configuration (<em>memory_limit = 300M</em>) or your specific VirtualHost if you use mod-php5 (<em>php_value memory_limit 300M</em>).<br/>
 <hr />
 
-<h2><a name="8.Avoid-non-fixed-values"></a>Avoiding dynamic values</h2>
+<h2><a id="8.Avoid-non-fixed-values"></a>Avoiding dynamic values</h2>
 Many things in Chamilo are written focusing on the ease of use, even for the
     administrator. Sometimes, these settings are weighing a little bit more on
     the system. This is the case, between others, of the mail.conf.php file
@@ -324,7 +324,7 @@ As an additional node, on very active portals with a lot of courses
     main/inc/lib/display.lib.php, in function show_notification().
 </p>
 <hr />
-<h2><a name="9.xsendfile"></a>Speeding file downloads with mod_xsendfile</h2>
+<h2><a id="9.xsendfile"></a>Speeding file downloads with mod_xsendfile</h2>
 <p>It might have come to your attention that file downloads through Chamilo
     might get slow, under default conditions, in particular using Apache 2.</p>
 <p>There are several ways to fix this, one of which is removing the .htaccess
@@ -366,9 +366,8 @@ Done! Now your downloads should go substantially faster. This is still a
     feature in observation. We're not sure the benefits are sufficient, so
     don't hesitate to let us know in
     <a href="https://support.chamilo.org/issues/6853">the related issue in Chamilo's tracking system</a>
-</p>
 <hr />
-<h2><a name="10.igbinary"></a>IGBinary for courses backups and better
+<h2><a id="10.igbinary"></a>IGBinary for courses backups and better
     sessions management</h2>
 <p>
 <a href="http://pecl.php.net/package/igbinary">IGBinary</a> is a small PECL
@@ -379,7 +378,7 @@ Done! Now your downloads should go substantially faster. This is still a
     <a href="http://www.neanderthal-technology.com/2011/11/ubuntu-10-install-php-memcached-with-igbinary-support/">to boost sessions management</a>.
 </p>
 <hr />
-<h2><a name="11.permissions-check"></a>Removing files download permissions check</h2>
+<h2><a id="11.permissions-check"></a>Removing files download permissions check</h2>
 <p>
 This measure is not cumulative with mod_xsendfile explained above. It is not *recommended*
     either, as it removes an important security layer.<br />
@@ -403,28 +402,27 @@ Furthermore, using a PHP script for the download (unless you have special rules)
     and use large amount of additional bandwidth.<br /><br />
 Typically, the .htaccess will look like this (with additional comments):<br />
 <pre>
-<IfModule mod_rewrite.c>
+&lt;IfModule mod_rewrite.c&gt;
 RewriteEngine On
 RewriteBase /courses/
 RewriteCond %{REQUEST_URI} !^/main/
 RewriteRule ([^/]+)/scorm/(.*)$ /main/document/download_scorm.php?doc_url=/$2&cDir=$1 [QSA,L]
 RewriteRule ([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
-</IfModule>
+&lt;/IfModule&gt;
 </pre><br />
 The idea is to allow direct access (without access validation) to resources in the "scorm" directory with:
 <pre>
-<IfModule mod_rewrite.c>
+&lt;IfModule mod_rewrite.c&gt;
 RewriteEngine On
 RewriteBase /courses/
 RewriteCond %{REQUEST_URI} !^/main/
 RewriteRule ([^/]+)/scorm/(.*)$ /app/courses/$1/scorm/$2 [QSA,L]
 RewriteRule ([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
-</IfModule>
+&lt;/IfModule&gt;
 </pre><br />
 This is easy, doesn't require a server reload and you should see the results pretty
     quickly. As mentioned above, if security of your content is an issue, though,
     you should avoid using this technique.
-</p>
 <p>
 You can also mitigate the risk by disabling permissions check only
 for some static resource like css,js and fonts files.
@@ -445,9 +443,8 @@ add theses line after RewriteBase /courses/:
 # also adjust files here
 RewriteRule (\.(html|gif|jpg|jpeg|png|js|pdf|ico|icon|css|swf|avi|mp3|ogg|wav|ttf|otf|eot|woff))$ - [L]
 </pre>
-</p>
 <hr />
-<h2><a name="12.MySQL-compression"></a>MySQL/MariaDB compression</h2>
+<h2><a id="12.MySQL-compression"></a>MySQL/MariaDB compression</h2>
 <p>
 If your database server is separate from your web server, you have to play with
     bandwidth, firewalls, and network restrictions in general.<br />
@@ -468,9 +465,8 @@ In 1.10.0, we have added the possibility to enable this compression very
 //$_configuration['db_client_flags'] = MYSQL_CLIENT_COMPRESS;
 </pre>
 This should have an immediate effect on the load average on your server.
-</p>
 <hr />
-<h2><a name="13.increasing-php-limits"></a>Increasing PHP limits</h2>
+<h2><a id="13.increasing-php-limits"></a>Increasing PHP limits</h2>
 <p>
     As your use of Chamilo increases and you get above the thousands of users,
     you're likely to hit a few milestones set by PHP to avoid hacks.
@@ -497,7 +493,6 @@ This should have an immediate effect on the load average on your server.
     in the installation process for these values, but remember that if you
     have a larger portal than anyone else, you probably need to give it more
     care than anyone else.
-</p>
 <hr />
 <h2>Authors</h2>
 <ul>

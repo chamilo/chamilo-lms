@@ -136,6 +136,7 @@ abstract class AbstractResource
                     $sendTo['groups'][] = (int) $id;
 
                     break;
+
                 case 'USER':
                     $sendTo['users'][] = (int) $id;
 
@@ -172,16 +173,19 @@ abstract class AbstractResource
             ->setVisibility($visibility)
             ->setCourse($course)
             ->setSession($session)
-            ->setGroup($group);
+            ->setGroup($group)
+        ;
 
         $rights = [];
+
         switch ($visibility) {
             case ResourceLink::VISIBILITY_PENDING:
             case ResourceLink::VISIBILITY_DRAFT:
                 $editorMask = ResourceNodeVoter::getEditorMask();
                 $resourceRight = (new ResourceRight())
                     ->setMask($editorMask)
-                    ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER);
+                    ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
+                ;
                 $rights[] = $resourceRight;
 
                 break;
@@ -196,9 +200,9 @@ abstract class AbstractResource
         if ($this->hasResourceNode()) {
             $resourceNode = $this->getResourceNode();
             $exists = $resourceNode->getResourceLinks()->exists(
-                fn($key, $element) => $course === $element->getCourse() &&
-                    $session === $element->getSession() &&
-                    $group === $element->getGroup()
+                fn ($key, $element) => $course === $element->getCourse()
+                    && $session === $element->getSession()
+                    && $group === $element->getGroup()
             );
 
             if ($exists) {
@@ -277,7 +281,8 @@ abstract class AbstractResource
             ->setUser($user)
             ->setCourse($course)
             ->setSession($session)
-            ->setGroup($group);
+            ->setGroup($group)
+        ;
 
         if ($this->hasResourceNode()) {
             $resourceNode = $this->getResourceNode();
@@ -321,7 +326,8 @@ abstract class AbstractResource
             ->setCourse($course)
             ->setSession($session)
             ->setGroup($group)
-            ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED);
+            ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED)
+        ;
 
         if ($this->hasResourceNode()) {
             $resourceNode = $this->getResourceNode();
@@ -417,6 +423,9 @@ abstract class AbstractResource
         return $this;
     }
 
+    #[Groups([
+        'student_publication:read',
+    ])]
     public function getFirstResourceLink(): ?ResourceLink
     {
         $resourceNode = $this->getResourceNode();
@@ -454,10 +463,18 @@ abstract class AbstractResource
             $found = false;
             $link = null;
             foreach ($links as $link) {
-                if ($link->getCourse() === $course && $link->getSession() === $session) {
-                    $found = true;
+                if ($session) {
+                    if ($link->getCourse() === $course && $link->getSession() === $session) {
+                        $found = true;
 
-                    break;
+                        break;
+                    }
+                } else {
+                    if ($link->getCourse() === $course) {
+                        $found = true;
+
+                        break;
+                    }
                 }
             }
 

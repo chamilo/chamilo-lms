@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
@@ -83,7 +84,7 @@ $possible_types = [
 
 $actions = '<div class="actions">';
 $actions .= '<a href="'.$surveyUrl.'">'.
-    Display::return_icon('back.png', get_lang('Back to survey'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to survey')).'</a>';
 $actions .= '</div>';
 // Checking if it is a valid type
 if (!in_array($_GET['type'], $possible_types)) {
@@ -119,7 +120,7 @@ switch ($_GET['type']) {
 }
 
 // We are editing a question
-if (isset($_GET['question_id']) && !empty($_GET['question_id'])) {
+if (!empty($_GET['question_id'])) {
     $formData = SurveyManager::get_question($_GET['question_id']);
 }
 
@@ -132,7 +133,6 @@ if ($surveyQuestion->getForm()->validate()) {
     $values = $surveyQuestion->getForm()->getSubmitValues();
     $survey = Container::getSurveyRepository()->find($surveyId);
     $surveyQuestion->save($survey, $values, $formData);
-    api_location($surveyUrl);
 }
 
 Display::display_header($tool_name, 'Survey');

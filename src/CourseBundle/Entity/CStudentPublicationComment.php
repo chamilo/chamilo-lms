@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -13,6 +14,7 @@ use Cocur\Slugify\Slugify;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Table(name: 'c_student_publication_comment')]
 #[ORM\Entity(repositoryClass: CStudentPublicationCommentRepository::class)]
@@ -21,7 +23,7 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\ManyToOne(targetEntity: CStudentPublication::class, inversedBy: 'comments')]
     #[ORM\JoinColumn(name: 'work_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
@@ -50,7 +52,7 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
         return (string) $this->getIid();
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }
@@ -103,7 +105,7 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
         return $this;
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }

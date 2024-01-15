@@ -1,341 +1,380 @@
 <template>
   <div>
-    <ButtonToolbar v-if="isAuthenticated && isCurrentTeacher">
+    <BaseToolbar v-if="securityStore.isAuthenticated && isCurrentTeacher">
       <BaseButton
-        label="Add a link"
-        icon="new_link"
-        class="mr-2 mb-2"
+        :label="t('Add a link')"
+        icon="link-add"
         type="black"
         @click="redirectToCreateLink"
       />
       <BaseButton
-        label="Add a category"
-        icon="new_folder"
-        class="mr-2 mb-2"
+        :label="t('Add a category')"
+        icon="folder-plus"
         type="black"
         @click="redirectToCreateLinkCategory"
       />
       <BaseButton
-        label="Export to PDF"
-        icon="pdf"
-        class="mr-2 mb-2"
+        :label="t('Export to PDF')"
+        icon="file-pdf"
         type="black"
         @click="exportToPDF"
       />
-    </ButtonToolbar>
+      <StudentViewButton />
+    </BaseToolbar>
+
+    <LinkCategoryCard v-if="isLoading">
+      <template #header>
+        <Skeleton class="h-6 w-48" />
+      </template>
+      <div class="flex flex-col gap-4">
+        <Skeleton class="ml-2 h-6 w-52" />
+        <Skeleton class="ml-2 h-6 w-64" />
+        <Skeleton class="ml-2 h-6 w-60" />
+        <Skeleton class="ml-2 h-6 w-52" />
+        <Skeleton class="ml-2 h-6 w-60" />
+      </div>
+    </LinkCategoryCard>
 
     <div v-if="!linksWithoutCategory && !categories">
       <!-- Render the image and create button -->
       <EmptyState
-        icon="mdi mdi-link"
-        summary="Add your first link to this course"
+        :summary="t('Add your first link to this course')"
+        icon="link"
       >
         <BaseButton
-          label="Create Link"
+          :label="t('Add a link')"
           class="mt-4"
-          icon="plus"
+          icon="link-add"
           type="primary"
           @click="redirectToCreateLink"
         />
       </EmptyState>
     </div>
 
-    <div>
+    <div
+      v-if="!isLoading"
+      class="flex flex-col gap-4"
+    >
       <!-- Render the list of links -->
-      <ul>
-        <li v-if="linksWithoutCategory && linksWithoutCategory.length > 0">
-          <h3>General</h3>
-          <ul>
-            <li v-for="link in linksWithoutCategory" :key="link.id">
-              <span>{{ link.title }}</span>
-              <span>{{ link.url }}</span>
-              <div>
-                <a @click="checkLink(link.iid, link.url)" title="Check link" class="btn btn--secondary btn-sm">
-                  <i class="mdi-check-circle mdi v-icon notranslate v-icon--size-default" aria-hidden="true"></i>
-                </a>
-                <a @click="editLink(link)" title="Edit" class="btn btn--secondary btn-sm">
-                  <i class="mdi-pencil mdi v-icon notranslate v-icon--size-default" aria-hidden="true"></i>
-                </a>
-                <a @click="toggleVisibility(link)" title="Toggle visibility" class="btn btn--secondary btn-sm">
-                  <i :class="link.linkVisible ? 'mdi-eye mdi' : 'mdi-eye-off mdi'" v-icon="true" aria-hidden="true"></i>
-                </a>
-                <a @click="moveUp(link.iid, link.position)" class="btn btn--secondary btn-sm disabled" title="Move up">
-                  <i class="mdi-level-up-alt mdi v-icon notranslate v-icon--size-default"></i>
-                  <span class="sr-only">Move up</span>
-                </a>
-                <a @click="moveDown(link.iid, link.position)" class="btn btn--secondary btn-sm" title="Move down">
-                  <i class="mdi-level-down-alt mdi v-icon notranslate v-icon--size-default"></i>
-                  <span class="sr-only">Move down</span>
-                </a>
-                <a @click="deleteLink(link.iid)" title="Delete" class="btn btn--secondary btn-sm">
-                  <i class="mdi-delete mdi v-icon notranslate v-icon--size-default" aria-hidden="true"></i>
-                </a>
-              </div>
-            </li>
-          </ul>
-        </li>
-        <li v-for="category in categories" :key="category.info.id">
-          <div class="category-header">
-            <h3>{{ category.info.name }}</h3>
-            <div>
-              <a @click="editCategory(category)" title="Edit" class="btn btn--secondary btn-sm">
-                <i class="mdi-pencil mdi v-icon notranslate v-icon--size-default" aria-hidden="true"></i>
-              </a>
-              <a @click="deleteCategory(category)" title="Delete" class="btn btn--secondary btn-sm">
-                <i class="mdi-delete mdi v-icon notranslate v-icon--size-default" aria-hidden="true"></i>
-              </a>
-              <a @click="toggleCategoryVisibility(category)" title="Toggle visibility" class="btn btn--secondary btn-sm">
-                <i :class="category.info.visible ? 'mdi-eye mdi' : 'mdi-eye-off mdi'" v-icon="true" aria-hidden="true"></i>
-              </a>
+      <LinkCategoryCard v-if="linksWithoutCategory && linksWithoutCategory.length > 0">
+        <template #header>
+          <h5>{{ t("General") }}</h5>
+        </template>
+
+        <ul>
+          <li
+            v-for="link in linksWithoutCategory"
+            :key="link.id"
+            class="mb-4"
+          >
+            <LinkItem
+              :link="link"
+              @check="checkLink(link.iid, link.url)"
+              @delete="confirmDeleteLink(link)"
+              @edit="editLink"
+              @toggle="toggleVisibility"
+              @move-up="moveUp(link.iid, link.position)"
+              @move-down="moveDown(link.iid, link.position)"
+            />
+          </li>
+        </ul>
+      </LinkCategoryCard>
+
+      <LinkCategoryCard
+        v-for="category in categories"
+        :key="category.info.id"
+      >
+        <template #header>
+          <div class="flex justify-between">
+            <div class="flex items-center">
+              <BaseIcon
+                class="mr-2"
+                icon="folder-generic"
+                size="big"
+              />
+              <h5>{{ category.info.title }}</h5>
+            </div>
+            <div class="flex gap-2" v-if="securityStore.isAuthenticated && isCurrentTeacher">
+              <BaseButton
+                :label="t('Edit')"
+                icon="edit"
+                size="small"
+                type="black"
+                @click="editCategory(category)"
+              />
+              <BaseButton
+                :icon="isVisible(category.info.visible) ? 'eye-on' : 'eye-off'"
+                :label="t('Change visibility')"
+                size="small"
+                type="black"
+                @click="toggleCategoryVisibility(category)"
+              />
+              <BaseButton
+                :label="t('Delete')"
+                icon="delete"
+                size="small"
+                type="danger"
+                @click="confirmDeleteCategory(category)"
+              />
             </div>
           </div>
-          <ul>
-            <li v-for="link in category.links" :key="link.id">
-              <span>{{ link.title }}</span>
-              <span>{{ link.url }}</span>
-              <div>
-                <a @click="checkLink(link.iid, link.url)" title="Check link" class="btn btn--secondary btn-sm">
-                  <i class="mdi-check-circle mdi v-icon notranslate v-icon--size-default" aria-hidden="true"></i>
-                </a>
-                <a @click="editLink(link)" title="Edit" class="btn btn--secondary btn-sm">
-                  <i class="mdi-pencil mdi v-icon notranslate v-icon--size-default" aria-hidden="true"></i>
-                </a>
-                <a @click="toggleVisibility(link)" title="Toggle visibility" class="btn btn--secondary btn-sm">
-                  <i :class="link.linkVisible ? 'mdi-eye mdi' : 'mdi-eye-off mdi'" v-icon="true" aria-hidden="true"></i>
-                </a>
-                <a @click="moveUp(link.iid, link.position)" class="btn btn--secondary btn-sm disabled" title="Move up">
-                  <i class="mdi mdi-arrow-up-bold v-icon notranslate v-icon--size-default" aria-hidden="true"></i>
-                  <span class="sr-only">Move up</span>
-                </a>
-                <a @click="moveDown(link.iid, link.position)" class="btn btn--secondary btn-sm" title="Move down">
-                  <i class="mdi mdi-arrow-down-bold v-icon notranslate v-icon--size-default" aria-hidden="true"></i>
-                  <span class="sr-only">Move down</span>
-                </a>
-                <a @click="deleteLink(link.iid)" title="Delete" class="btn btn--secondary btn-sm">
-                  <i class="mdi-delete mdi v-icon notranslate v-icon--size-default" aria-hidden="true"></i>
-                </a>
-              </div>
-            </li>
-          </ul>
-        </li>
-      </ul>
+          <p v-if="category.info.description">{{ category.info.description }}</p>
+        </template>
 
+        <ul>
+          <li
+            v-for="link in category.links"
+            :key="link.id"
+          >
+            <LinkItem
+              :link="link"
+              @check="checkLink(link.iid, link.url)"
+              @delete="confirmDeleteLink(link)"
+              @edit="editLink"
+              @toggle="toggleVisibility"
+              @move-up="moveUp(link.iid, link.position)"
+              @move-down="moveDown(link.iid, link.position)"
+            />
+          </li>
+        </ul>
+        <p v-if="!category.links || category.links === 0">
+          {{ t("There are no links in this category") }}
+        </p>
+      </LinkCategoryCard>
     </div>
+
+    <BaseDialogDelete
+      v-model:is-visible="isDeleteLinkDialogVisible"
+      :item-to-delete="linkToDeleteString"
+      @confirm-clicked="deleteLink"
+      @cancel-clicked="isDeleteLinkDialogVisible = false"
+    />
+    <BaseDialogDelete
+      v-model:is-visible="isDeleteCategoryDialogVisible"
+      @confirm-clicked="deleteCategory"
+      @cancel-clicked="isDeleteCategoryDialogVisible = false"
+    >
+      <div v-if="categoryToDelete">
+        <p class="mb-2 font-semibold">{{ categoryToDelete.info.title }}</p>
+        <p>
+          {{ t("With links") }}: {{ (categoryToDelete.links || []).map((l) => l.title).join(", ") }}
+        </p>
+      </div>
+    </BaseDialogDelete>
   </div>
 </template>
 
 <script setup>
-import EmptyState from "../../components/EmptyState.vue";
-import BaseButton from "../../components/basecomponents/BaseButton.vue";
-import ButtonToolbar from "../../components/basecomponents/ButtonToolbar.vue";
-import { computed, onMounted, ref } from "vue";
-import { useStore } from "vuex";
-import { useRoute, useRouter } from "vue-router";
-import { useI18n } from "vue-i18n";
-import axios from "axios";
-import { ENTRYPOINT } from "../../config/entrypoint";
+import EmptyState from "../../components/EmptyState.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
+import { computed, onMounted, ref } from "vue"
+import { useStore } from "vuex"
+import { useRoute, useRouter } from "vue-router"
+import { useI18n } from "vue-i18n"
+import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import LinkItem from "../../components/links/LinkItem.vue"
+import { useNotification } from "../../composables/notification"
+import LinkCategoryCard from "../../components/links/LinkCategoryCard.vue"
+import linkService from "../../services/linkService"
+import BaseDialogDelete from "../../components/basecomponents/BaseDialogDelete.vue"
+import Skeleton from "primevue/skeleton"
+import StudentViewButton from "../../components/StudentViewButton.vue"
+import { isVisible, toggleVisibilityProperty, visibilityFromBoolean } from "../../components/links/linkVisibility"
+import { useSecurityStore } from "../../store/securityStore"
 
-const store = useStore();
-const route = useRoute();
-const router = useRouter();
+const store = useStore()
+const route = useRoute()
+const router = useRouter()
+const securityStore = useSecurityStore()
 
-const { t } = useI18n();
+const { t } = useI18n()
 
-const isAuthenticated = computed(() => store.getters["security/isAuthenticated"]);
-const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"]);
+const notifications = useNotification()
 
-const linksWithoutCategory = ref([]);
-const categories = ref([]);
+const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
 
-const selectedLink = ref(null);
-const selectedCategory = ref(null);
+const linksWithoutCategory = ref([])
+const categories = ref({})
+
+const selectedLink = ref(null)
+const selectedCategory = ref(null)
+
+const isDeleteLinkDialogVisible = ref(false)
+const linkToDelete = ref(null)
+const linkToDeleteString = computed(() => {
+  if (linkToDelete.value === null) {
+    return ""
+  }
+  return linkToDelete.value.title
+})
+
+const isDeleteCategoryDialogVisible = ref(false)
+const categoryToDelete = ref(null)
+
+const isLoading = ref(true)
+
+onMounted(() => {
+  linksWithoutCategory.value = []
+  categories.value = {}
+  fetchLinks()
+})
 
 function editLink(link) {
-  selectedLink.value = { ...link };
+  selectedLink.value = { ...link }
   router.push({
     name: "UpdateLink",
     params: { id: link.iid },
     query: route.query,
-  });
+  })
 }
 
-function deleteLink(id) {
-  axios
-    .delete(`${ENTRYPOINT}links/${id}`)
-    .then(response => {
-      console.log('Link deleted:', response.data);
-      fetchLinks();
-    })
-    .catch(error => {
-      console.error('Error deleting link:', error);
-    });
+function confirmDeleteLink(link) {
+  linkToDelete.value = link
+  isDeleteLinkDialogVisible.value = true
+}
+
+async function deleteLink() {
+  try {
+    await linkService.deleteLink(linkToDelete.value.id)
+    isDeleteLinkDialogVisible.value = true
+    linkToDelete.value = null
+    notifications.showSuccessNotification(t("Link deleted"))
+    await fetchLinks()
+  } catch (error) {
+    console.error("Error deleting link:", error)
+    notifications.showErrorNotification(t("Could not delete link"))
+  }
 }
 
 function checkLink(id, url) {
   // Implement the logic to check the link using the provided id and url
 }
 
-function toggleVisibility(link) {
-  const makeVisible = !link.visible;
-
-  const endpoint = `${ENTRYPOINT}links/${link.iid}/toggle_visibility`;
-
-  axios
-    .put(endpoint, { visible: makeVisible })
-    .then(response => {
-      const updatedLink = response.data;
-      console.log('Link visibility updated:', updatedLink.linkVisible);
-    })
-    .catch(error => {
-      console.error('Error updating link visibility:', error);
-    });
-
-  linksWithoutCategory.value.forEach((item) => {
-    if (item.iid === link.iid) {
-      item.linkVisible = !item.linkVisible;
-    }
-  });
-}
-
-function moveUp(id, position) {
-
-  console.log('linkIndex Down position', position);
-  // Send the updated position to the server
-  const endpoint = `${ENTRYPOINT}links/${id}/move`;
-  let newPosition = parseInt(position) - 1;
-
-  if (newPosition < 0) {
-    newPosition = 0;
+async function toggleVisibility(link) {
+  try {
+    const visibility = toggleVisibilityProperty(!link.linkVisible)
+    let newLink = await linkService.toggleLinkVisibility(link.iid, isVisible(visibility))
+    notifications.showSuccessNotification(t("Link visibility updated"))
+    linksWithoutCategory.value
+      .filter((l) => l.iid === link.iid)
+      .forEach((l) => (l.linkVisible = visibilityFromBoolean(newLink.linkVisible)))
+    Object.values(categories.value)
+      .map((c) => c.links)
+      .flat()
+      .filter((l) => l.iid === link.iid)
+      .forEach((l) => (l.linkVisible = visibilityFromBoolean(newLink.linkVisible)))
+  } catch (error) {
+    console.error("Error deleting link:", error)
+    notifications.showErrorNotification(t("Could not change visibility of link"))
   }
-
-  console.log('linkIndex Up newPosition', newPosition);
-
-  axios
-    .put(endpoint, { position: newPosition })
-    .then((response) => {
-      console.log("Link moved up:", response.data);
-      // Perform any additional actions or updates if needed
-      fetchLinks();
-    })
-    .catch((error) => {
-      console.error("Error moving link up:", error);
-    });
-
 }
 
-function moveDown(id, position) {
+async function moveUp(id, position) {
+  let newPosition = parseInt(position) - 1
+  if (newPosition < 0) {
+    newPosition = 0
+  }
+  try {
+    await linkService.moveLink(id, newPosition)
+    notifications.showSuccessNotification(t("Link moved up"))
+    await fetchLinks()
+  } catch (error) {
+    console.error("Error moving link up:", error)
+    notifications.showErrorNotification(t("Could not moved link up"))
+  }
+}
 
-  console.log('linkIndex Down position', position);
-
-    // Send the updated position to the server
-    const endpoint = `${ENTRYPOINT}links/${id}/move`;
-    const newPosition = parseInt(position) + 1;
-
-    console.log('linkIndex Down newPosition', newPosition);
-
-    axios
-    .put(endpoint, { position: newPosition })
-    .then((response) => {
-      console.log("Link moved down:", response.data);
-      // Perform any additional actions or updates if needed
-      fetchLinks();
-    })
-    .catch((error) => {
-      console.error("Error moving link down:", error);
-    });
+async function moveDown(id, position) {
+  const newPosition = parseInt(position) + 1
+  try {
+    await linkService.moveLink(id, newPosition)
+    notifications.showSuccessNotification(t("Link moved down"))
+    await fetchLinks()
+  } catch (error) {
+    console.error("Error moving link down:", error)
+    notifications.showErrorNotification(t("Could not moved link down"))
+  }
 }
 
 function redirectToCreateLink() {
   router.push({
     name: "CreateLink",
     query: route.query,
-  });
+  })
 }
 
 function redirectToCreateLinkCategory() {
   router.push({
     name: "CreateLinkCategory",
     query: route.query,
-  });
+  })
 }
-
-function fetchLinks() {
-  const params = {
-    'resourceNode.parent': route.query.parent || null,
-    'cid': route.query.cid || null,
-    'sid': route.query.sid || null
-  };
-
-  axios
-    .get(ENTRYPOINT + 'links', { params })
-    .then(response => {
-
-      console.log('responsedata:', response.data);
-
-      const data = response.data;
-      linksWithoutCategory.value = data.linksWithoutCategory;
-      categories.value = data.categories;
-      console.log('linksWithoutCategory:', linksWithoutCategory.value);
-      console.log('categories:', categories.value);
-    })
-    .catch(error => {
-      console.error('Error fetching links:', error);
-    });
-}
-
-onMounted(() => {
-  linksWithoutCategory.value = [];
-  categories.value = [];
-  fetchLinks();
-});
 
 function editCategory(category) {
-  console.log('category.info.id', category.info.id);
-  selectedCategory.value = { ...category };
+  selectedCategory.value = { ...category }
   router.push({
     name: "UpdateLinkCategory",
     params: { id: category.info.id },
     query: route.query,
-  });
+  })
 }
 
-function deleteCategory(category) {
-  axios
-    .delete(`${ENTRYPOINT}link_categories/${category.info.id}`)
-    .then(response => {
-      console.log('Category deleted:', response.data);
-      fetchLinks();
-    })
-    .catch(error => {
-      console.error('Error deleting category:', error);
-    });
+function confirmDeleteCategory(category) {
+  categoryToDelete.value = category
+  isDeleteCategoryDialogVisible.value = true
 }
 
-function toggleCategoryVisibility(category) {
-
-  const makeVisible = !category.info.visible;
-  const endpoint = `${ENTRYPOINT}link_categories/${category.info.id}/toggle_visibility`;
-
-  axios
-    .put(endpoint, { visible: makeVisible })
-    .then(response => {
-      const updatedLinkCategory = response.data;
-      console.log('Link visibility updated:', updatedLinkCategory);
-
-      category.info.visible = updatedLinkCategory.linkCategoryVisible;
-
-    })
-    .catch(error => {
-      console.error('Error updating link visibility:', error);
-    });
+async function deleteCategory() {
+  try {
+    await linkService.deleteCategory(categoryToDelete.value.info.id)
+    categoryToDelete.value = null
+    isDeleteCategoryDialogVisible.value = false
+    notifications.showSuccessNotification(t("Category deleted"))
+    await fetchLinks()
+  } catch (error) {
+    console.error("Error deleting category:", error)
+    notifications.showErrorNotification(t("Could not delete category"))
+  }
 }
 
+async function toggleCategoryVisibility(category) {
+  const visibility = toggleVisibilityProperty(category.info.visible)
+  try {
+    const updatedLinkCategory = await linkService.toggleCategoryVisibility(category.info.id, isVisible(visibility))
+    category.info.visible = visibilityFromBoolean(updatedLinkCategory.linkCategoryVisible)
+    notifications.showSuccessNotification(t("Visibility of category changed"))
+  } catch (error) {
+    console.error("Error updating link visibility:", error)
+    notifications.showErrorNotification(t("Could not change visibility of category"))
+  }
+}
+
+function exportToPDF() {
+  // TODO
+}
+
+function toggleTeacherStudent() {
+  // TODO
+}
+
+async function fetchLinks() {
+  isLoading.value = true
+  const params = {
+    "resourceNode.parent": route.query.parent || null,
+    cid: route.query.cid || null,
+    sid: route.query.sid || null,
+  }
+
+  try {
+    const data = await linkService.getLinks(params)
+    linksWithoutCategory.value = data.linksWithoutCategory
+    categories.value = data.categories
+  } catch (error) {
+    console.error("Error fetching links:", error)
+    notifications.showErrorNotification(t("Could not retrieve links"))
+  } finally {
+    isLoading.value = false
+  }
+}
 </script>
-<style scoped>
-.category-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-</style>

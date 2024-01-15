@@ -21,16 +21,16 @@ class SequenceValue
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'sequenceValues')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'sequenceValues')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\SequenceRowEntity::class)]
+    #[ORM\ManyToOne(targetEntity: SequenceRowEntity::class)]
     #[ORM\JoinColumn(name: 'sequence_row_entity_id', referencedColumnName: 'id')]
     protected ?SequenceRowEntity $entity = null;
 
     #[ORM\Column(name: 'advance', type: 'float')]
-    protected int $advance;
+    protected float $advance;
 
     #[ORM\Column(name: 'complete_items', type: 'integer')]
     protected int $completeItems;
@@ -39,13 +39,13 @@ class SequenceValue
     protected int $totalItems;
 
     #[ORM\Column(name: 'success', type: 'boolean')]
-    protected int $success;
+    protected bool $success;
 
     #[ORM\Column(name: 'success_date', type: 'datetime', nullable: true)]
     protected ?DateTime $successDate = null;
 
     #[ORM\Column(name: 'available', type: 'boolean')]
-    protected int $available;
+    protected bool $available;
 
     #[ORM\Column(name: 'available_start_date', type: 'datetime', nullable: true)]
     protected ?DateTime $availableStartDate = null;
@@ -53,12 +53,7 @@ class SequenceValue
     #[ORM\Column(name: 'available_end_date', type: 'datetime', nullable: true)]
     protected ?DateTime $availableEndDate = null;
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -75,28 +70,19 @@ class SequenceValue
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getAdvance()
+    public function getAdvance(): float
     {
         return $this->advance;
     }
 
-    /**
-     * @return SequenceValue
-     */
-    public function setAdvance(int $advance)
+    public function setAdvance(float $advance): static
     {
         $this->advance = $advance;
 
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getCompleteItems()
+    public function getCompleteItems(): int
     {
         return $this->completeItems;
     }
@@ -108,10 +94,7 @@ class SequenceValue
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getTotalItems()
+    public function getTotalItems(): int
     {
         return $this->totalItems;
     }
@@ -123,25 +106,19 @@ class SequenceValue
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getSuccess()
+    public function getSuccess(): bool
     {
         return $this->success;
     }
 
-    public function setSuccess(int $success): self
+    public function setSuccess(bool $success): self
     {
         $this->success = $success;
 
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getSuccessDate()
+    public function getSuccessDate(): ?DateTime
     {
         return $this->successDate;
     }
@@ -153,25 +130,19 @@ class SequenceValue
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getAvailable()
+    public function getAvailable(): bool
     {
         return $this->available;
     }
 
-    public function setAvailable(int $available): self
+    public function setAvailable(bool $available): self
     {
         $this->available = $available;
 
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getAvailableStartDate()
+    public function getAvailableStartDate(): ?DateTime
     {
         return $this->availableStartDate;
     }
@@ -183,10 +154,7 @@ class SequenceValue
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
-    public function getAvailableEndDate()
+    public function getAvailableEndDate(): ?DateTime
     {
         return $this->availableEndDate;
     }

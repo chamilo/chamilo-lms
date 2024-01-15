@@ -17,8 +17,7 @@ class UserItemDataProvider implements ItemDataProviderInterface, RestrictedDataP
     public function __construct(
         private readonly UserRepository $repository,
         private readonly NameConvention $nameConvention
-    ) {
-    }
+    ) {}
 
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = [])
     {

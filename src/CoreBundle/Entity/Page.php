@@ -53,7 +53,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Page
 {
     use TimestampableTypedEntity;
-    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
@@ -80,17 +80,17 @@ class Page
     protected string $locale;
     #[Assert\NotNull]
     #[Groups(['page:read', 'page:write'])]
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\AccessUrl::class, cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: AccessUrl::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected AccessUrl $url;
     #[Assert\NotNull]
     #[Groups(['page:read', 'page:write'])]
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected User $creator;
     #[Groups(['page:read', 'page:write'])]
     #[Gedmo\SortableGroup]
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\PageCategory::class, inversedBy: 'pages')]
+    #[ORM\ManyToOne(targetEntity: PageCategory::class, inversedBy: 'pages')]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?PageCategory $category = null;
     public function __construct()

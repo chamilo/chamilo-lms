@@ -15,13 +15,13 @@ class CSurveyAnswer
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CSurvey::class)]
+    #[ORM\ManyToOne(targetEntity: CSurvey::class)]
     #[ORM\JoinColumn(name: 'survey_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CSurvey $survey;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CSurveyQuestion::class, inversedBy: 'answers')]
+    #[ORM\ManyToOne(targetEntity: CSurveyQuestion::class, inversedBy: 'answers')]
     #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'iid')]
     protected CSurveyQuestion $question;
 
@@ -34,26 +34,20 @@ class CSurveyAnswer
     #[ORM\Column(name: 'user', type: 'string', length: 250, nullable: false)]
     protected string $user;
 
-    #[ORM\Column(name: 'session_id', type: 'integer', nullable: false)]
-    protected $sessionId;
+    #[ORM\Column(name: 'session_id', type: 'integer', nullable: true)]
+    protected ?int $sessionId;
 
     #[ORM\Column(name: 'c_lp_item_id', type: 'integer', nullable: false)]
-    protected $lpItemId;
+    protected int $lpItemId;
 
     public function __construct()
     {
+        $this->lpItemId = 0;
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
-    }
-
-    public function setValue(int $value): self
-    {
-        $this->value = $value;
-
-        return $this;
     }
 
     /**
@@ -64,6 +58,13 @@ class CSurveyAnswer
     public function getValue()
     {
         return $this->value;
+    }
+
+    public function setValue(int $value): self
+    {
+        $this->value = $value;
+
+        return $this;
     }
 
     public function getSurvey(): CSurvey
@@ -90,13 +91,6 @@ class CSurveyAnswer
         return $this;
     }
 
-    public function setUser(string $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
     /**
      * Get user.
      *
@@ -105,6 +99,13 @@ class CSurveyAnswer
     public function getUser()
     {
         return $this->user;
+    }
+
+    public function setUser(string $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
     public function getOptionId(): string
@@ -119,24 +120,12 @@ class CSurveyAnswer
         return $this;
     }
 
-    /**
-     * Get session Id.
-     *
-     * @return int
-     */
-    public function getSessionId()
+    public function getSessionId(): ?int
     {
         return $this->sessionId;
     }
 
-    /**
-     * Set session Id.
-     *
-     * @param int $sessionId
-     *
-     * @return CSurveyAnswer
-     */
-    public function setSessionId($sessionId)
+    public function setSessionId(int $sessionId = null): static
     {
         $this->sessionId = $sessionId;
 

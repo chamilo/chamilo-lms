@@ -76,6 +76,10 @@ if ((!isset($_GET['course']) || !isset($_GET['invitationcode'])) && !isset($_GET
 $repo = Container::getSurveyRepository();
 $surveyId = isset($_GET['iid']) ? (int) $_GET['iid'] : 0;
 
+if (empty($surveyId) && (isset($_POST['language']) && is_numeric($_POST['language']))) {
+    $surveyId = (int) $_POST['language'];
+}
+
 /** @var CSurvey $survey */
 $survey = $repo->find($surveyId);
 if (null === $survey) {
@@ -197,7 +201,7 @@ $sql = "SELECT * FROM $table_survey
 $result = Database::query($sql);
 
 if (Database::num_rows($result) > 1) {
-    if ($_POST['language']) {
+    if (isset($_POST['language'])) {
         $survey_invitation['survey_id'] = $_POST['language'];
     } else {
         Display::display_header(get_lang('Surveys'));
@@ -210,7 +214,7 @@ if (Database::num_rows($result) > 1) {
         echo '<form id="language" name="language" method="POST" action="'.$frmLangUrl.'">';
         echo '<select name="language">';
         while ($row = Database::fetch_array($result, 'ASSOC')) {
-            echo '<option value="'.$row['survey_id'].'">'.$row['lang'].'</option>';
+            echo '<option value="'.$row['iid'].'">'.$row['lang'].'</option>';
         }
         echo '</select>';
         echo '<button type="submit" name="Submit" class="next">'.get_lang('Validate').'</button>';
@@ -1276,7 +1280,7 @@ if (isset($questions) && is_array($questions)) {
 
         // @todo move this in a function.
         $form->addHtml('<div class="survey_question '.$ch_type.' '.$parentClass.'">');
-        if ($showNumber) {
+        if ($showNumber && $survey->isDisplayQuestionNumber()) {
             $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$questionNumber.'. </div>');
         }
         $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div> ');
@@ -1396,7 +1400,7 @@ if ('0' == $survey->getSurveyType()) {
             $paged_questions_sec = [];
         }
 
-        if (0 == $personality) {
+        if (0 === $personality) {
             if (($show <= $numberOfPages) || !$_GET['show']) {
                 $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right', 'success');
                 if (0 == $survey->getOneQuestionPerPage()) {
@@ -1415,7 +1419,7 @@ if ('0' == $survey->getSurveyType()) {
             }
         }
 
-        if ($show > $numberOfPages && $_GET['show'] && 0 == $personality) {
+        if ($show > $numberOfPages && $_GET['show'] && 0 === $personality) {
             $form->addHidden('personality', $personality);
         } elseif ($personality > 0) {
             if (1 == $survey->getOneQuestionPerPage()) {

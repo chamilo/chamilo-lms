@@ -49,8 +49,18 @@ final class Version20200821224243 extends AbstractMigrationChamilo
                     $sql = "INSERT INTO message_rel_user (message_id, user_id, msg_read, starred, receiver_type) VALUES('$messageId', '$receiverId', 1, 0, 1) ";
                     $this->addSql($sql);
                 }
-                //$this->addSql("UPDATE message SET user_receiver_id = NULL WHERE id = $messageId");
+                // $this->addSql("UPDATE message SET user_receiver_id = NULL WHERE id = $messageId");
             }
+        }
+
+        $tblMessage = $schema->getTable('message');
+
+        if ($tblMessage->hasIndex('idx_message_user_receiver')) {
+            $this->addSql('DROP INDEX idx_message_user_receiver ON message');
+        }
+
+        if ($tblMessage->hasColumn('user_receiver_id')) {
+            $this->addSql('ALTER TABLE message DROP user_receiver_id');
         }
 
         $newTypeQueries = [];
@@ -105,7 +115,5 @@ final class Version20200821224243 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

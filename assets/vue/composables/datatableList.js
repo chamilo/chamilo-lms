@@ -1,11 +1,10 @@
 import { useStore } from 'vuex'
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { isEmpty } from 'lodash'
 
 import { useCidReq } from './cidReq'
 import { useI18n } from 'vue-i18n';
-import { useToast } from 'primevue/usetoast';
 
 export function useDatatableList (servicePrefix) {
   const moduleName = servicePrefix.toLowerCase()
@@ -17,7 +16,7 @@ export function useDatatableList (servicePrefix) {
 
   const { cid, sid, gid } = useCidReq()
 
-  const toast = useToast();
+  const flashMessageList = inject('flashMessageList')
 
   const filters = ref({})
 
@@ -33,10 +32,15 @@ export function useDatatableList (servicePrefix) {
   function onUpdateOptions ({ page, itemsPerPage, sortBy, sortDesc }) {
     page = page || options.value.page
 
+    if (!isEmpty(route.query.cert) && route.query.cert === '1') {
+        filters.value.filetype = 'certificate'
+    } else {
+        filters.value.filetype = ['file', 'folder']
+    }
+
     let params = { ...filters.value }
 
     if (1 === filters.value.loadNode) {
-      console.log('params', route.params)
       params['resourceNode.parent'] = route.params.node
     }
 
@@ -112,7 +116,7 @@ export function useDatatableList (servicePrefix) {
     });
   }
 
-  async function deleteItem (item) {
+ async function deleteItem (item) {
     await store.dispatch(`${moduleName}/del`, item.value)
 
     onUpdateOptions(options.value);

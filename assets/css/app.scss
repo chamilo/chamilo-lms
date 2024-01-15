@@ -8,7 +8,6 @@
 @import "~bootstrap-daterangepicker/daterangepicker.css";
 //@import '~jquery-ui/themes/base/all.css';
 
-
 // TAILWIND COLOR DEFINITION https://tailwindcss.com/docs/customizing-colors#using-css-variables
 @layer base {
   :root {
@@ -25,6 +24,18 @@
     --color-success-gradient: 84, 119, 8;
 
     --color-danger-base: 223, 59, 59;
+  }
+}
+
+@layer utilities {
+  .custom-collapse {
+    display: none;
+  }
+  .custom-collapse.active {
+    display: block;
+  }
+  .collapse {
+    visibility: inherit !important;
   }
 }
 
@@ -62,7 +73,11 @@
   }
 
   .list-group-item {
-    @apply flex flex-row justify-start gap-2 border rounded-sm px-3 py-3;
+    @apply flex flex-row justify-start gap-2 border rounded-sm px-3 py-3 items-center;
+  }
+
+  #lp_item_list .list-group-item {
+    align-items: normal !important;
   }
 
   // Alerts
@@ -120,6 +135,9 @@
   .ch-tool-icon {
     @apply font-extrabold text-primary;
   }
+  .ch-toolbar-icon {
+    @apply font-extrabold text-primary leading-none;
+  }
   .ch-tool-icon-disabled {
     @apply font-extrabold text-gray-50;
   }
@@ -146,7 +164,25 @@
   .progress {
     @apply rounded-sm ring-1 text-center min-h-full ml-12 mr-4;
   }
-  .progress .progress-bar {
+
+  .log-container {
+    height: 300px;
+    overflow-y: scroll;
+    background-color: #000;
+    padding: 10px;
+  }
+
+  .terminal {
+    color: #00ff00; /* Green */
+    font-family: monospace;
+  }
+
+  .terms-container {
+    overflow-y: scroll;
+    height: 180px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 20px;
   }
 
   // Pager
@@ -182,13 +218,307 @@
   }
 }
 
+.col-md-offset-0 {
+  margin-left: 0 !important;
+}
+
+.col-md-offset-1 {
+  margin-left: 5% !important;
+}
+
+.col-md-offset-2 {
+  margin-left: 10% !important;
+}
+
+.col-md-offset-3 {
+  margin-left: 15% !important;
+}
+
+.col-md-offset-4 {
+  margin-left: 20% !important;
+}
+
+.custom-message {
+  padding: 15px;
+}
+
+.custom-message {
+  ol,
+  ul,
+  menu {
+    list-style: initial;
+  }
+}
+
+.custom-link {
+  color: blue;
+  text-decoration: underline;
+}
+
+#skillList .header-title{
+  padding: 8px;
+  border-bottom: 2px solid #ddd;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+.skills-badges{
+  display: grid;
+  grid-gap: 1rem;
+  grid-row-gap: 16px;
+  grid-template-columns: repeat(6, 1fr);
+}
+.skills-badges .item{
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+.skills-badges a .caption{
+  text-align: center;
+}
+.list-horizontal .list-skills{
+  display: grid;
+  grid-gap: 1rem;
+  grid-row-gap: 16px;
+  grid-template-columns: repeat(4, 1fr);
+}
+.list-vertical .list-skills{
+  display: grid;
+  grid-gap: 1rem;
+  grid-row-gap: 16px;
+  grid-template-columns: repeat(2, 1fr);
+}
+.list-skills .item{
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+.skill-options .legend {
+  border: 1px dashed #cccccc;
+  padding: 1em;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  margin-bottom: 1em;
+  margin-top: 1em;
+  background-color: #FFFFFF;
+}
+
+.skill-options .skill-home {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.skill-options .btn-block {
+  box-sizing: border-box;
+  display: block;
+  padding-left: 0;
+  padding-right: 0;
+  width: 100%;
+}
+
+.skill-options .accordion-inner {
+  padding: 9px 15px;
+  /*border: 1px solid #dadada;*/
+  background-color: #FFFFFF;
+}
+
+.skill-options .load_wheel {
+}
+
+.skill-options .skill-winner {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.skill-options .skill-winner li {
+  float: left;
+  margin-right: 1em;
+  padding-bottom: 1em;
+}
+
+.skill-options .skill-winner li a {
+  /*background: url("/main/img/icons/16/winner.png") no-repeat;*/
+  padding-left: 1.5em;
+  padding-bottom: 1em;
+}
+
+.search-skill ul.holder li.bit-input input {
+  width: 100%;
+}
+
+.skill-legend-basic {
+  color: #3A87AD;
+}
+
+.skill-legend-add {
+  color: #F89406;
+}
+
+.skill-legend-search {
+  color: #B94A48;
+}
+
+.skill-legend-badges {
+  color: #31A354;
+}
+
+.page-skill .panel-default {
+  border-color: #DDDDDD;
+}
+
+.page-skill .btn-default {
+  background-color: #F6F6F6;
+}
+
+.page-skill .btn-default:hover {
+  background-color: #E6E6E6;
+}
+
+.page-skill #skill_info {
+  font-size: 12px;
+}
+
+.page-skill #skill_wheel tspan {
+  font-size: 12px;
+}
+
+.page-skill .holder_simple li.bit-box a {
+  color: #8A6D3B;
+}
+
+.skill_partition {
+  cursor: pointer;
+  stroke: #000000;
+  stroke-width: 0.5px;
+}
+
+.items-user .avatar-user {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.items-user p {
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.items-user .list-group {
+  font-size: 12px;
+}
+
+table#skill_holder {
+  margin-top: 15px;
+}
+
+.badges-sidebar {
+  height: 250px;
+}
+
+.panel figure figcaption {
+  background: none;
+  text-align: center;
+}
+
+.skill_root {
+  box-shadow: 2px 2px 19px #aaa;
+  border-radius: 6px;
+  background-color: #ccc;
+  border: 0.1em dotted #D4E06B;
+  color: black;
+  font-size: 0.9em;
+  height: 4em;
+  opacity: 0.8;
+  padding-top: 0.9em;
+  text-align: center;
+  width: 120px;
+  z-index: 40;
+  position: relative;
+}
+
+.skill_child {
+  box-shadow: 2px 2px 19px #aaa;
+  border-radius: 6px;
+  background-color: white;
+  border: 0.1em dotted #D4E06B;
+  color: black;
+  font-size: 0.9em;
+  height: 4em;
+  opacity: 0.8;
+  padding-top: 0.9em;
+  text-align: center;
+  width: 120px;
+  z-index: 40;
+  float: left;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  position: relative;
+}
+
+.category-forum .custom-panel-group {
+  width: 100%;
+}
+
+.category-forum .forum_display {
+  padding: 20px 0px;
+}
+
+#date_fields label {
+  top: 0px;
+  left: 0.5rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+  --tw-text-opacity: 1;
+  color: rgb(46 117 163 / var(--tw-text-opacity));
+}
+
+.question_description img, .question_options img {
+  display: inherit !important;
+}
+
+.question_options .droppable {
+  padding: 5px;
+  text-align: center;
+  background-color: #ECF0F1;
+  border: dotted #dddddd 2px;
+  border-radius: 4px;
+  color: #666666;
+  display: inline-block;
+  width: 85%;
+  margin-bottom: 0;
+}
+
+.question_options .droppable-item {
+  background-color: #84bd00;
+  color: #FFF;
+  padding: 3px 0 3px 5px;
+  width: 20%;
+}
+
+.question_options .droppable-item .number {
+  font-size: 16px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.hide-label-title {
+  color: #0a0a0a;
+}
+
 //@import 'primevue-md-light-indigo/theme.css';
 //@import '~primevue/resources/primevue.min.css';
 //@import '~primeflex/primeflex.css';
 //@import "~primeicons/primeicons.css";
 
-@import 'primeflex/src/_variables.scss';
-@import 'primeflex/src/_formlayout.scss';
+@import 'primeflex/core/_variables.scss';
+@import 'primeflex/core/_formlayout.scss';
 
 //@import "~jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css";
 @import "~@fancyapps/fancybox/dist/jquery.fancybox.css";

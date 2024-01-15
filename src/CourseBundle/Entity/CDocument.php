@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityDocument;
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
@@ -28,6 +29,7 @@ use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
@@ -37,7 +39,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller: UpdateDocumentFileAction::class,
             security: "is_granted('EDIT', object.resourceNode)",
             validationContext: [
-                'groups' => ['media_object_create', 'document:write']
+                'groups' => ['media_object_create', 'document:write'],
             ],
             deserialize: false
         ),
@@ -61,13 +63,13 @@ use Symfony\Component\Validator\Constraints as Assert;
                                     'title' => ['type' => 'string'],
                                     'filetype' => [
                                         'type' => 'string',
-                                        'enum' => ['folder', 'file']
+                                        'enum' => ['folder', 'file'],
                                     ],
                                     'comment' => ['type' => 'string'],
                                     'contentFile' => ['type' => 'string'],
                                     'uploadFile' => [
                                         'type' => 'string',
-                                        'format' => 'binary'
+                                        'format' => 'binary',
                                     ],
                                     'parentResourceNodeId' => ['type' => 'integer'],
                                     'resourceLinkList' => [
@@ -78,15 +80,15 @@ use Symfony\Component\Validator\Constraints as Assert;
                                                 'visibility' => ['type' => 'integer'],
                                                 'cid' => ['type' => 'integer'],
                                                 'gid' => ['type' => 'integer'],
-                                                'sid' => ['type' => 'integer']
-                                            ]
-                                        ]
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
+                                                'sid' => ['type' => 'integer'],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
             ],
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
             validationContext: ['groups' => ['Default', 'media_object_create', 'document:write']],
@@ -100,7 +102,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                         'in' => 'query',
                         'required' => true,
                         'description' => 'Resource node Parent',
-                        'schema' => ['type' => 'integer']
+                        'schema' => ['type' => 'integer'],
                     ],
                     [
                         'name' => 'cid',
@@ -108,8 +110,8 @@ use Symfony\Component\Validator\Constraints as Assert;
                         'required' => true,
                         'description' => 'Course id',
                         'schema' => [
-                            'type' => 'integer'
-                        ]
+                            'type' => 'integer',
+                        ],
                     ],
                     [
                         'name' => 'sid',
@@ -117,18 +119,18 @@ use Symfony\Component\Validator\Constraints as Assert;
                         'required' => false,
                         'description' => 'Session id',
                         'schema' => [
-                            'type' => 'integer'
-                        ]
-                    ]
-                ]
+                            'type' => 'integer',
+                        ],
+                    ],
+                ],
             ]
-        )
+        ),
     ],
     normalizationContext: [
-        'groups' => ['document:read', 'resource_node:read']
+        'groups' => ['document:read', 'resource_node:read'],
     ],
     denormalizationContext: [
-        'groups' => ['document:write']
+        'groups' => ['document:write'],
     ]
 )]
 #[ORM\Table(name: 'c_document')]
@@ -145,7 +147,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         'resourceNode.title',
         'resourceNode.createdAt',
         'resourceNode.resourceFile.size',
-        'resourceNode.updatedAt'
+        'resourceNode.updatedAt',
     ]
 )]
 class CDocument extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
@@ -155,7 +157,7 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
     #[Groups(['document:read', 'document:write', 'document:browse'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
@@ -164,13 +166,17 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
     #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected ?string $comment;
     #[Groups(['document:read', 'document:write'])]
-    #[Assert\Choice(['folder', 'file'], message: 'Choose a valid filetype.')]
-    #[ORM\Column(name: 'filetype', type: 'string', length: 10, nullable: false)]
+    #[Assert\Choice(['folder', 'file', 'certificate'], message: 'Choose a valid filetype.')]
+    #[ORM\Column(name: 'filetype', type: 'string', length: 15, nullable: false)]
     protected string $filetype;
     #[ORM\Column(name: 'readonly', type: 'boolean', nullable: false)]
     protected bool $readonly;
     #[ORM\Column(name: 'template', type: 'boolean', nullable: false)]
     protected bool $template;
+    #[ORM\OneToOne(mappedBy: 'document', targetEntity: GradebookCategory::class)]
+    #[Groups(['document:read'])]
+    protected GradebookCategory|null $gradebookCategory = null;
+
     public function __construct()
     {
         $this->comment = '';
@@ -232,14 +238,12 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
     {
         return $this->readonly;
     }
-    /**
-     * @return int
-     */
-    public function getIid()
+
+    public function getIid(): ?int
     {
         return $this->iid;
     }
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }
@@ -250,5 +254,10 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
     public function setResourceName(string $name): self
     {
         return $this->setTitle($name);
+    }
+
+    public function getGradebookCategory(): GradebookCategory|null
+    {
+        return $this->gradebookCategory;
     }
 }

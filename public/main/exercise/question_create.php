@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -107,7 +108,7 @@ if ($form->validate()) {
 } else {
     Display::display_header($nameTools);
     $actions = '<a href="exercise.php?show=test">'.
-        Display::return_icon('back.png', get_lang('BackToTestsList'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to tests list')).'</a>';
     echo Display::toolbarAction('toolbar', [$actions]);
 
     $form->display();

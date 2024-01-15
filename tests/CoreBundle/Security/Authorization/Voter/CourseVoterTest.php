@@ -52,9 +52,13 @@ class CourseVoterTest extends WebTestCase
         $granted = VoterInterface::ACCESS_GRANTED;
 
         yield 'admin access to course' => [$granted, $admin, $publicCourse];
+
         yield 'student access to course' => [$granted, $student, $publicCourse];
+
         yield 'student access to course' => [$granted, $studentWithAccess, $publicCourse];
+
         yield 'teacher no access to course' => [$granted, $teacher, $publicCourse];
+
         yield 'teacher with access to course' => [$granted, $teacherWithAccess, $publicCourse];
 
         // REGISTERED course.
@@ -68,9 +72,13 @@ class CourseVoterTest extends WebTestCase
         $admin = $this->getAdmin();
 
         yield 'admin access to reg course' => [$granted, $admin, $registeredCourse];
+
         yield 'teacher access to reg course' => [$granted, $teacherWithAccess, $registeredCourse];
+
         yield 'student access to reg course ' => [$granted, $studentWithAccess, $registeredCourse];
+
         yield 'teacher no access to reg course' => [$denied, $teacher, $registeredCourse];
+
         yield 'student no access to reg course' => [$denied, $student, $registeredCourse];
 
         // Hidden
@@ -79,9 +87,13 @@ class CourseVoterTest extends WebTestCase
         $em->flush();
 
         yield 'admin access to reg course' => [$granted, $admin, $registeredCourse];
+
         yield 'teacher access to reg course' => [$denied, $teacherWithAccess, $registeredCourse];
+
         yield 'student access to reg course ' => [$denied, $studentWithAccess, $registeredCourse];
+
         yield 'teacher no access to reg course' => [$denied, $teacher, $registeredCourse];
+
         yield 'student no access to reg course' => [$denied, $student, $registeredCourse];
     }
 }

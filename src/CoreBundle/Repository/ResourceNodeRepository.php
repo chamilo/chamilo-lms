@@ -21,6 +21,9 @@ use Symfony\Component\Routing\RouterInterface;
 use Throwable;
 use Vich\UploaderBundle\Storage\FlysystemStorage;
 
+/**
+ * @template-extends MaterializedPathRepository<ResourceNode>
+ */
 class ResourceNodeRepository extends MaterializedPathRepository
 {
     protected FlysystemStorage $storage;
@@ -96,7 +99,7 @@ class ResourceNodeRepository extends MaterializedPathRepository
         }
     }
 
-    public function getResourceFileUrl(ResourceNode $resourceNode, array $extraParams = [], ?int $referenceType = null): string
+    public function getResourceFileUrl(ResourceNode $resourceNode, array $extraParams = [], int $referenceType = null): string
     {
         try {
             if ($resourceNode->hasResourceFile()) {
@@ -119,6 +122,7 @@ class ResourceNodeRepository extends MaterializedPathRepository
                 switch ($mode) {
                     case 'download':
                         return $this->router->generate('chamilo_core_resource_download', $params, $referenceType);
+
                     case 'view':
                         return $this->router->generate('chamilo_core_resource_view', $params, $referenceType);
                 }

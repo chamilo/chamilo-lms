@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\MessageHandler;
 
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageRelUser;
-use Chamilo\CoreBundle\Repository\MessageRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -16,14 +15,9 @@ use Symfony\Component\Mime\Address;
 
 class MessageHandler implements MessageHandlerInterface
 {
-    private Mailer $mailer;
-    private MessageRepository $repo;
-
-    public function __construct(Mailer $mailer, MessageRepository $repo)
-    {
-        $this->mailer = $mailer;
-        $this->repo = $repo;
-    }
+    public function __construct(
+        private readonly Mailer $mailer
+    ) {}
 
     public function __invoke(Message $message): void
     {

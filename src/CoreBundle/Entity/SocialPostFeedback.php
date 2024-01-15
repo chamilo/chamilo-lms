@@ -19,16 +19,16 @@ class SocialPostFeedback
 {
     use UserTrait;
 
-    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\SocialPost::class, inversedBy: 'feedbacks')]
+    #[ORM\ManyToOne(targetEntity: SocialPost::class, inversedBy: 'feedbacks')]
     #[ORM\JoinColumn(name: 'social_post_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected SocialPost $socialPost;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'socialPostsFeedbacks')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'socialPostsFeedbacks')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $user;
 

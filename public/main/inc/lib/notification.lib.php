@@ -318,7 +318,7 @@ class Notification extends Model
                 }
 
                 // Saving the notification to be sent some day.
-                $content = cut($content, $this->max_content_length);
+                //$content = cut($content, $this->max_content_length);
                 $params = [
                     'sent_at' => $sendDate,
                     'dest_user_id' => $user_id,
@@ -478,7 +478,7 @@ class Notification extends Model
                 continue;
             }
 
-            $gcmRegistrationIds[] = $valueInfo['value'];
+            $gcmRegistrationIds[] = $valueInfo['field_value'];
         }
 
         if (!$gcmRegistrationIds) {

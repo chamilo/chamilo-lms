@@ -15,12 +15,12 @@ use Stringable;
 
 #[ORM\Table(name: 'c_thematic_advance')]
 #[ORM\Entity]
-class CThematicAdvance implements Stringable //extends AbstractResource implements ResourceInterface
+class CThematicAdvance implements Stringable // extends AbstractResource implements ResourceInterface
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\ManyToOne(targetEntity: CThematic::class, inversedBy: 'advances')]
     #[ORM\JoinColumn(name: 'thematic_id', referencedColumnName: 'iid')]
@@ -161,10 +161,7 @@ class CThematicAdvance implements Stringable //extends AbstractResource implemen
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getIid()
+    public function getIid(): ?int
     {
         return $this->iid;
     }

@@ -22,7 +22,7 @@ class CDropboxPost
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\Column(name: 'feedback_date', type: 'datetime', nullable: false)]
     protected DateTime $feedbackDate;

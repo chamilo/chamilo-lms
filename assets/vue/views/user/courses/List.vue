@@ -1,6 +1,8 @@
 <template>
   <StickyCourses />
 
+  <hr>
+
   <div v-if="isLoading" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
     <Skeleton height="16rem" />
     <Skeleton class="hidden md:block" height="16rem" />
@@ -18,7 +20,7 @@
     v-else-if="!isLoading && 0 === courses.length"
     :detail="t('Go to Explore to find a topic of interest, or wait for someone to subscribe you')"
     :summary="t('You don\'t have any course yet')"
-    icon="mdi mdi-book-open-page-variant"
+    icon="courses"
   />
 </template>
 

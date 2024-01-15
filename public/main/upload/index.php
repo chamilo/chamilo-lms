@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Main script for the documents tool.
@@ -119,7 +120,7 @@ $content_origins = [
 
 echo Display::toolbarAction('lp', [
     '<a href="'.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'">'.
-    Display::return_icon('back.png', get_lang('Back to learning paths'), '', ICON_SIZE_MEDIUM).'</a>',
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to learning paths')).'</a>',
 ]);
 
 $form = new FormValidator(

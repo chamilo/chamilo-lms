@@ -93,11 +93,11 @@ class CForumPostRepository extends ResourceRepository
     {
         /** @var CForumPost $resource */
         $attachments = $resource->getAttachments();
-        if (!empty($attachments)) {
-            foreach ($attachments as $attachment) {
-                $this->getEntityManager()->remove($attachment);
-            }
+
+        foreach ($attachments as $attachment) {
+            $this->getEntityManager()->remove($attachment);
         }
+
         parent::delete($resource);
     }
 }

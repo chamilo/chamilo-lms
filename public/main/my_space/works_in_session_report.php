@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -116,7 +117,7 @@ if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
     $fileName = 'works_in_session_'.api_get_local_time();
 
     $dataToExport = [];
-    $dataToExport[] = [$toolName, $session->getName()];
+    $dataToExport[] = [$toolName, $session->getTitle()];
     $dataToExport['headers'][] = get_lang('Code');
     $dataToExport['headers'][] = get_lang('Learner name');
     $dataToExport['headers'][] = get_lang('Time spent in portal');
@@ -153,11 +154,11 @@ $actions = null;
 
 if ($session) {
     $actions = Display::url(
-        Display::return_icon('export_csv.png', get_lang('CSV export'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')),
         api_get_self().'?'.http_build_query(['export' => 'csv', 'session' => $session->getId()])
     );
     $actions .= Display::url(
-        Display::return_icon('export_excel.png', get_lang('Excel export'), [], ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Excel export')),
         api_get_self().'?'.http_build_query(['export' => 'xls', 'session' => $session->getId()])
     );
 }
@@ -166,7 +167,7 @@ $view = new Template($toolName);
 $view->assign('form', $form->returnForm());
 
 if ($session) {
-    $view->assign('session', ['name' => $session->getName()]);
+    $view->assign('session', ['name' => $session->getTitle()]);
     $view->assign('courses', $coursesInfo);
     $view->assign('users', $usersInfo);
 }

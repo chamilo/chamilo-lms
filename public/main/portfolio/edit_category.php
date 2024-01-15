@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 $form = new FormValidator('edit_category', 'post', $baseUrl."action=edit_category&id={$category->getId()}");
 if ('true' === api_get_setting('editor.save_titles_as_html')) {
     $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'TitleAsHtml']);
@@ -39,7 +41,7 @@ $interbreadcrumb[] = [
     'url' => $baseUrl,
 ];
 $actions[] = Display::url(
-    Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
     $baseUrl
 );
 $content = $form->returnForm();

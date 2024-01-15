@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -196,13 +197,13 @@ $interbreadcrumb[] = [
 ];
 
 if ($attendanceEntity) {
-    $interbreadcrumb[] = ['url' => '#', 'name' => $attendanceEntity->getName()];
+    $interbreadcrumb[] = ['url' => '#', 'name' => $attendanceEntity->getTitle()];
 }
 
 if ('calendar_list' === $action || 'calendar_edit' === $action) {
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendanceId,
-        'name' => $attendanceEntity->getName(),
+        'name' => $attendanceEntity->getTitle(),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Attendance calendar')];
 }
@@ -214,12 +215,7 @@ switch ($action) {
     case 'attendance_list':
         if ($allowToEdit) {
             $actions = '<a href="index.php?'.api_get_cidreq().'&action=attendance_add">';
-            $actions .= Display::return_icon(
-                'new_attendance_list.png',
-                get_lang('Create a new attendance list'),
-                '',
-                ICON_SIZE_MEDIUM
-            );
+            $actions .= Display::getMdiIcon('av-timer', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Create a new attendance list'));
             $actions .= '</a>';
             $content .= Display::toolbarAction('toolbar', [$actions]);
         }
@@ -461,7 +457,7 @@ switch ($action) {
         $groupList = isset($_POST['groups']) ? [$_POST['groups']] : [];
         $interbreadcrumb[] = [
             'url' => 'index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendanceId,
-            'name' => $attendanceEntity->getName(),
+            'name' => $attendanceEntity->getTitle(),
         ];
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add a date and time')];
 
@@ -649,15 +645,15 @@ switch ($action) {
             $actions = '';
             if ('calendar_add' === $action) {
                 $actions .= '<a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendanceId.'">'.
-                    Display::return_icon('back.png', get_lang('Attendance calendar'), '', ICON_SIZE_MEDIUM).'</a>';
+                    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Attendance calendar')).'</a>';
             } else {
                 $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendanceId.'">'.
-                    Display::return_icon('back.png', get_lang('Attendance sheet'), '', ICON_SIZE_MEDIUM).'</a>';
+                    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Attendance sheet')).'</a>';
                 if (api_is_allowed_to_edit()) {
                     $actions .= '<a href="index.php?'.api_get_cidreq().'&action=calendar_add&attendance_id='.$attendanceId.'">'.
-                        Display::return_icon('add.png', get_lang('Add a date and time'), '', ICON_SIZE_MEDIUM).'</a>';
+                        Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a date and time')).'</a>';
                     $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete all dates?').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_all_delete&attendance_id='.$attendanceId.'">'.
-                        Display::return_icon('clean.png', get_lang('Clean the calendar of all lists'), '', ICON_SIZE_MEDIUM).'</a>';
+                        Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Clean the calendar of all lists')).'</a>';
                 }
             }
             $content .= Display::toolbarAction('toolbar', [$actions]);
@@ -692,12 +688,7 @@ switch ($action) {
         if (!empty($attendance_calendar)) {
             foreach ($attendance_calendar as $calendar) {
                 $content .= '<li class="list-group-item">';
-                $content .= Display::return_icon(
-                        'lp_calendar_event.png',
-                        get_lang('Date DateTime time'),
-                        null,
-                        ICON_SIZE_MEDIUM
-                    ).' '.
+                $content .= Display::getMdiIcon('calendar-month', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Date DateTime time')).' '.
                     substr(
                         $calendar['date_time'],
                         0,
@@ -715,9 +706,9 @@ switch ($action) {
                     if (api_is_allowed_to_edit()) {
                         $content .= '<div class="pull-right">';
                         $content .= '<a href="index.php?'.api_get_cidreq().'&action=calendar_edit&calendar_id='.(int) ($calendar['iid']).'&attendance_id='.$attendanceId.'">'.
-                            Display::return_icon('edit.png', get_lang('Edit'), ['style' => 'vertical-align:middle'], ICON_SIZE_SMALL).'</a>&nbsp;';
+                            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', 'vertical-align: middle;', ICON_SIZE_SMALL, get_lang('Edit')).'</a>&nbsp;';
                         $content .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_delete&calendar_id='.(int) ($calendar['iid']).'&attendance_id='.$attendanceId.'">'.
-                            Display::return_icon('delete.png', get_lang('Delete'), ['style' => 'vertical-align:middle'], ICON_SIZE_SMALL).'</a>';
+                            Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', 'vertical-align: middle;', ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
                         $content .= '</div>';
                     }
                 }
@@ -736,7 +727,7 @@ switch ($action) {
         if (api_is_course_admin() || api_is_drh()) {
             $result = $attendance->getAttendanceBaseInLogin(false, true);
             $actions = '<a href="index.php?'.api_get_cidreq().'&action=calendar_list">'.
-                Display::return_icon('back.png', get_lang('AttendanceCalendar'), '', ICON_SIZE_MEDIUM).
+                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('AttendanceCalendar')).
                 '</a>';
             $content .= Display::toolbarAction('toolbar', [$actions]);
             $content .= $result['form'];

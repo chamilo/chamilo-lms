@@ -31,11 +31,12 @@ final class Version20201216110722 extends AbstractMigrationChamilo
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
         $em = $doctrine->getManager();
+
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
         $attendanceRepo = $container->get(CAttendanceRepository::class);
-        //$attendanceRepo = $container->get(CAttendanceCalendar::class);
+        // $attendanceRepo = $container->get(CAttendanceCalendar::class);
         $courseRepo = $container->get(CourseRepository::class);
         $sessionRepo = $container->get(SessionRepository::class);
         $groupRepo = $container->get(CGroupRepository::class);
@@ -47,6 +48,7 @@ final class Version20201216110722 extends AbstractMigrationChamilo
         $admin = $this->getAdmin();
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();
@@ -59,6 +61,7 @@ final class Version20201216110722 extends AbstractMigrationChamilo
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
+
                 /** @var CAttendance $resource */
                 $resource = $attendanceRepo->find($id);
                 if ($resource->hasResourceNode()) {

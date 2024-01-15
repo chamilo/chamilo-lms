@@ -230,7 +230,7 @@ class ExerciseLink extends AbstractLink
                                 $lpList[] = $lpData['lp_id'];
                             }
                         } else {
-                            if ((int) $lpData['session_id'] == $sessionId) {
+                            if (in_array('session_id', $lpData) && (int) $lpData['session_id'] == $sessionId) {
                                 $lpList[] = $lpData['lp_id'];
                             }
                         }
@@ -265,7 +265,7 @@ class ExerciseLink extends AbstractLink
         } else {
             $sql = "SELECT * FROM $tblHp hp
                     INNER JOIN $tblDoc doc
-                    ON (hp.exe_name = doc.path AND doc.c_id = hp.c_id)
+                    ON (hp.title = doc.path AND doc.c_id = hp.c_id)
                     WHERE
                         hp.c_id = $courseId AND
                         doc.iid = $exerciseId";
@@ -567,7 +567,6 @@ class ExerciseLink extends AbstractLink
                 // Try with iid
                 $sql = 'SELECT * FROM '.$table.'
                     WHERE
-                        c_id = '.$this->course_id.' AND
                         iid = '.$exerciseId;
                 $result = Database::query($sql);
                 $rows = Database::num_rows($result);

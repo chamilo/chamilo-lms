@@ -10,6 +10,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @template-extends AbstractType<object>
+ */
 class CurriculumItemRelUserCollectionType extends AbstractType
 {
     /**
@@ -46,7 +49,7 @@ class CurriculumItemRelUserCollectionType extends AbstractType
         );
 
         // Save button per item
-        //$builder->add('submit', 'submit', array('attr' => array('class' => 'btn btn--success', 'onclick' => 'save(this);')));
+        // $builder->add('submit', 'submit', array('attr' => array('class' => 'btn btn--success', 'onclick' => 'save(this);')));
     }
 
     public function configureOptions(OptionsResolver $resolver): void

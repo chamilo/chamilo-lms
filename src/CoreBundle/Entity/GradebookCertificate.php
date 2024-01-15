@@ -18,16 +18,16 @@ class GradebookCertificate
 {
     use UserTrait;
 
-    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\GradebookCategory::class)]
+    #[ORM\ManyToOne(targetEntity: GradebookCategory::class)]
     #[ORM\JoinColumn(name: 'cat_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected GradebookCategory $category;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'gradeBookCertificates')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'gradeBookCertificates')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 

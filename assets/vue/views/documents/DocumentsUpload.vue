@@ -13,10 +13,15 @@
       />
     </div>
 
-    <BaseAdvancedSettingsButton>
+    <BaseAdvancedSettingsButton v-model="showAdvancedSettings">
       <div class="flex flex-row mb-2">
         <label class="font-semibold w-28">{{ t("Options") }}:</label>
-        <BaseCheckbox id="uncompress" v-model="isUncompressZipEnabled" :label="t('Uncompres zip')" name="uncompress" />
+        <BaseCheckbox
+          id="uncompress"
+          v-model="isUncompressZipEnabled"
+          :label="t('Uncompres zip')"
+          name="uncompress"
+        />
       </div>
 
       <div class="flex flex-row mb-2">
@@ -37,34 +42,37 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import "@uppy/core/dist/style.css";
-import "@uppy/dashboard/dist/style.css";
-import "@uppy/image-editor/dist/style.css";
+import { ref } from "vue"
+import "@uppy/core/dist/style.css"
+import "@uppy/dashboard/dist/style.css"
+import "@uppy/image-editor/dist/style.css"
 
-import Uppy from "@uppy/core";
-import Webcam from "@uppy/webcam";
-import { Dashboard } from "@uppy/vue";
-import { useRoute, useRouter } from "vue-router";
-import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility";
-import { ENTRYPOINT } from "../../config/entrypoint";
-import { useCidReq } from "../../composables/cidReq";
-import { useUpload } from "../../composables/upload";
-import { useI18n } from "vue-i18n";
-import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue";
-import BaseRadioButtons from "../../components/basecomponents/BaseRadioButtons.vue";
-import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue";
+import Uppy from "@uppy/core"
+import Webcam from "@uppy/webcam"
+import { Dashboard } from "@uppy/vue"
+import { useRoute, useRouter } from "vue-router"
+import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
+import { ENTRYPOINT } from "../../config/entrypoint"
+import { useCidReq } from "../../composables/cidReq"
+import { useUpload } from "../../composables/upload"
+import { useI18n } from "vue-i18n"
+import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
+import BaseRadioButtons from "../../components/basecomponents/BaseRadioButtons.vue"
+import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue"
 
-const XHRUpload = require("@uppy/xhr-upload");
-const ImageEditor = require("@uppy/image-editor");
+const XHRUpload = require("@uppy/xhr-upload")
+const ImageEditor = require("@uppy/image-editor")
 
-const route = useRoute();
-const router = useRouter();
-const { gid, sid, cid } = useCidReq();
-const { onCreated, onError } = useUpload();
-const { t } = useI18n();
+const route = useRoute()
+const router = useRouter()
+const { gid, sid, cid } = useCidReq()
+const { onCreated, onError } = useUpload()
+const { t } = useI18n()
+const filetype = route.query?.cert === '1' ? 'certificate' : 'file';
 
-const parentResourceNodeId = ref(Number(route.params.node));
+const showAdvancedSettings = ref(false)
+
+const parentResourceNodeId = ref(Number(route.params.node))
 const resourceLinkList = ref(
   JSON.stringify([
     {
@@ -73,14 +81,13 @@ const resourceLinkList = ref(
       cid,
       visibility: RESOURCE_LINK_PUBLISHED,
     },
-  ])
-);
-const isUncompressZipEnabled = ref(false);
-const fileExistsOption = ref("");
+  ]),
+)
+const isUncompressZipEnabled = ref(false)
+const fileExistsOption = ref("")
 
-let uppy = ref();
+let uppy = ref()
 uppy.value = new Uppy()
-  .use(Webcam)
   .use(ImageEditor, {
     cropperOptions: {
       viewMode: 1,
@@ -106,13 +113,19 @@ uppy.value = new Uppy()
     fieldName: "uploadFile",
   })
   .on("upload-success", (item, response) => {
-    onCreated(response.body);
-    router.back();
-  });
+    onCreated(response.body)
+    router.back()
+  })
 
 uppy.value.setMeta({
-  filetype: "file",
+  filetype,
   parentResourceNodeId: parentResourceNodeId.value,
   resourceLinkList: resourceLinkList.value,
-});
+})
+
+if (filetype === 'certificate') {
+  uppy.value.opts.restrictions.allowedFileTypes = ['.html']
+} else {
+  uppy.value.use(Webcam)
+}
 </script>

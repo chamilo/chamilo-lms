@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
@@ -13,17 +13,17 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CQuizAnswer.
  */
 #[ORM\Table(name: 'c_quiz_answer')]
-#[ORM\Index(name: 'idx_cqa_q', columns: ['question_id'])]
+#[ORM\Index(columns: ['question_id'], name: 'idx_cqa_q')]
 #[ORM\Entity]
 class CQuizAnswer
 {
     #[ORM\Column(name: 'iid', type: 'integer', options: ['unsigned' => true])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[Assert\NotBlank]
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CQuizQuestion::class, inversedBy: 'answers', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: CQuizQuestion::class, cascade: ['persist'], inversedBy: 'answers')]
     #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CQuizQuestion $question;
 
@@ -86,12 +86,7 @@ class CQuizAnswer
         return $this;
     }
 
-    /**
-     * Get correct.
-     *
-     * @return int
-     */
-    public function getCorrect()
+    public function getCorrect(): ?int
     {
         return $this->correct;
     }
@@ -108,19 +103,14 @@ class CQuizAnswer
         return $this->comment;
     }
 
-    public function setPonderation($weight): self
+    public function setPonderation(float|string $weight): self
     {
         $this->ponderation = empty($weight) ? 0.0 : (float) $weight;
 
         return $this;
     }
 
-    /**
-     * Get weight.
-     *
-     * @return float
-     */
-    public function getPonderation()
+    public function getPonderation(): float
     {
         return $this->ponderation;
     }
@@ -132,12 +122,7 @@ class CQuizAnswer
         return $this;
     }
 
-    /**
-     * Get position.
-     *
-     * @return int
-     */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -149,12 +134,7 @@ class CQuizAnswer
         return $this;
     }
 
-    /**
-     * Get hotspotCoordinates.
-     *
-     * @return string
-     */
-    public function getHotspotCoordinates()
+    public function getHotspotCoordinates(): ?string
     {
         return $this->hotspotCoordinates;
     }
@@ -166,17 +146,12 @@ class CQuizAnswer
         return $this;
     }
 
-    /**
-     * Get hotspotType.
-     *
-     * @return string
-     */
-    public function getHotspotType()
+    public function getHotspotType(): ?string
     {
         return $this->hotspotType;
     }
 
-    public function setDestination(?string $destination)
+    public function setDestination(?string $destination): self
     {
         $this->destination = empty($destination) ? null : $destination;
 
@@ -197,20 +172,16 @@ class CQuizAnswer
 
     /**
      * Get answerCode.
-     *
-     * @return string
      */
-    public function getAnswerCode()
+    public function getAnswerCode(): ?string
     {
         return $this->answerCode;
     }
 
     /**
      * Get iid.
-     *
-     * @return int
      */
-    public function getIid()
+    public function getIid(): ?int
     {
         return $this->iid;
     }

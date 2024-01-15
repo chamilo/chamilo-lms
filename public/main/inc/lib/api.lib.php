@@ -20,6 +20,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * This is a code library for Chamilo.
@@ -2188,14 +2190,11 @@ function api_format_course_array(Course $course = null)
     $courseData['about_url'] = $coursePath.$courseData['real_id'].'/about';
     $courseData['add_teachers_to_sessions_courses'] = $course->isAddTeachersToSessionsCourses();
 
-    $image = Display::return_icon(
-        'course.png',
+    $image = Display::getMdiIcon(
+        ObjectIcon::COURSE,
+        'ch-tool-icon',
         null,
-        null,
-        ICON_SIZE_BIG,
-        null,
-        true,
-        false
+        ICON_SIZE_BIG
     );
 
     $illustration = Container::getIllustrationRepository()->getIllustrationUrl($course);
@@ -2226,7 +2225,7 @@ function api_generate_password(int $length = 8, $useRequirements = true): string
     $minUpperCase = $length - $minLowerCase;
 
     $password = '';
-    $passwordRequirements = $useRequirements ? api_get_setting('security.password_requirements', true) : [];
+    $passwordRequirements = $useRequirements ? Security::getPasswordRequirements() : [];
 
     $factory = new RandomLib\Factory();
     $generator = $factory->getGenerator(new SecurityLib\Strength(SecurityLib\Strength::MEDIUM));
@@ -2529,11 +2528,12 @@ function api_get_session_image($sessionId, User $user)
     if (!$user->hasRole('ROLE_STUDENT')) {
         // Check whether is not a student
         if ($sessionId > 0) {
-            $image = '&nbsp;&nbsp;'.Display::return_icon(
-                'star.png',
-                get_lang('Session-specific resource'),
-                ['align' => 'absmiddle'],
-                ICON_SIZE_SMALL
+            $image = '&nbsp;&nbsp;'.Display::getMdiIcon(
+                ObjectIcon::STAR,
+                'ch-tool-icon',
+                'align:absmiddle;',
+                ICON_SIZE_SMALL,
+                get_lang('Session-specific resource')
             );
         }
     }
@@ -2627,8 +2627,18 @@ function api_get_setting($variable, $isArray = false, $key = null)
             return $newResult;
             break;
         default:
-            $settingValue = $settingsManager->getSetting($variable);
+            $settingValue = $settingsManager->getSetting($variable, true);
             if ($isArray && !empty($settingValue)) {
+                // Check if the value is a valid JSON string
+                $decodedValue = json_decode($settingValue, true);
+
+                // If it's a valid JSON string and the result is an array, return it
+                if (is_array($decodedValue)) {
+                    return $decodedValue;
+                }
+
+                // If it's not an array, continue with the normal flow
+                // Optional: If you need to evaluate the value using eval
                 $strArrayValue = rtrim($settingValue, ';');
                 $value = eval("return $strArrayValue;");
                 if (is_array($value)) {
@@ -2636,6 +2646,7 @@ function api_get_setting($variable, $isArray = false, $key = null)
                 }
             }
 
+            // If the value is not a JSON array or wasn't returned previously, continue with the normal flow
             if (!empty($key) && isset($settingValue[$variable][$key])) {
                 return $settingValue[$variable][$key];
             }
@@ -3439,15 +3450,17 @@ function api_is_anonymous()
 /**
  * Displays message "You are not allowed here..." and exits the entire script.
  *
- * @param bool   $print_headers Whether or not to print headers (default = false -> does not print them)
+ * @param bool $print_headers Whether to print headers (default = false -> does not print them)
  * @param string $message
- * @param int    $responseCode
+ * @param int $responseCode
+ *
+ * @throws Exception
  */
 function api_not_allowed(
     $print_headers = false,
     $message = null,
     $responseCode = 0
-) {
+): never {
     throw new Exception('You are not allowed');
 }
 
@@ -3578,7 +3591,7 @@ function api_get_language_id($language)
 
     // We check the language by iscocode
     $langInfo = api_get_language_from_iso($language);
-    if (!empty($langInfo->getId())) {
+    if (null !== $langInfo && !empty($langInfo->getId())) {
         return $langInfo->getId();
     }
 
@@ -3800,10 +3813,12 @@ function api_time_to_hms($seconds, $space = ':', $showSeconds = true, $roundMinu
     if (-1 == $seconds) {
         return
             get_lang('Unknown').
-            Display::return_icon(
-                'info2.gif',
-                get_lang('The datas about this user were registered when the calculation of time spent on the platform wasn\'t possible.'),
-                ['align' => 'absmiddle', 'hspace' => '3px']
+            Display::getMdiIcon(
+                ActionIcon::INFORMATION,
+                'ch-tool-icon',
+                'align: absmiddle; hspace: 3px',
+                ICON_SIZE_SMALL,
+                get_lang('The datas about this user were registered when the calculation of time spent on the platform wasn\'t possible.')
             );
     }
 
@@ -5322,7 +5337,7 @@ function api_get_tool_information_by_name($name)
     $course_id = api_get_course_int_id();
 
     $sql = "SELECT id FROM tool
-            WHERE name = '".Database::escape_string($name)."' ";
+            WHERE title = '".Database::escape_string($name)."' ";
     $rs = Database::query($sql);
     $data = Database::fetch_array($rs);
     if ($data) {
@@ -5825,8 +5840,8 @@ function api_get_jquery_ui_js()
 
 function api_get_jqgrid_js()
 {
-    return api_get_build_css('free-jqgrid.css').PHP_EOL
-        .api_get_build_js('free-jqgrid.js');
+    return api_get_build_css('legacy_free-jqgrid.css').PHP_EOL
+        .api_get_build_js('legacy_free-jqgrid.js');
 }
 
 /**
@@ -6301,6 +6316,21 @@ function api_get_roles()
     return $roles;
 }
 
+function api_get_user_roles(): array
+{
+    $roles = [
+        'ROLE_TEACHER',
+        'ROLE_STUDENT',
+        'ROLE_RRHH',
+        'ROLE_SESSION_MANAGER',
+        'ROLE_STUDENT_BOSS',
+        'ROLE_INVITEE',
+        'ROLE_USER',
+    ];
+
+    return array_combine($roles, $roles);
+}
+
 /**
  * @param string $file
  *
@@ -6430,53 +6460,71 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
         return null;
     }
 
-    $translations = [
-        'wordLength' => get_lang('The password is too short'),
-        'wordNotEmail' => get_lang('Your password cannot be the same as your email'),
-        'wordSimilarToUsername' => get_lang('Your password cannot contain your username'),
-        'wordTwoCharacterClasses' => get_lang('Use different character classes'),
-        'wordRepetitions' => get_lang('Too many repetitions'),
-        'wordSequences' => get_lang('Your password contains sequences'),
-        'errorList' => get_lang('errors found'),
-        'veryWeak' => get_lang('Very weak'),
-        'weak' => get_lang('Weak'),
-        'normal' => get_lang('Normal'),
-        'medium' => get_lang('Medium'),
-        'strong' => get_lang('Strong'),
-        'veryStrong' => get_lang('Very strong'),
+    $minRequirements = Security::getPasswordRequirements()['min'];
+
+    $options = [
+        'rules' => [],
     ];
 
-    $js = api_get_asset('pwstrength-bootstrap/dist/pwstrength-bootstrap.js');
-    $js .= "<script>
-    var errorMessages = {
-        password_to_short : \"".get_lang('The password is too short')."\",
-        same_as_username : \"".get_lang('Your password cannot be the same as your username')."\"
-    };
+    if ($minRequirements['length'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['length'],
+            'pattern' => '.',
+            'helpText' => sprintf(
+                get_lang('Minimum %s characters in total'),
+                $minRequirements['length']
+            ),
+        ];
+    }
 
+    if ($minRequirements['lowercase'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['lowercase'],
+            'pattern' => '[a-z]',
+            'helpText' => sprintf(
+                get_lang('Minimum %s lowercase characters'),
+                $minRequirements['lowercase']
+            ),
+        ];
+    }
+
+    if ($minRequirements['uppercase'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['uppercase'],
+            'pattern' => '[A-Z]',
+            'helpText' => sprintf(
+                get_lang('Minimum %s uppercase characters'),
+                $minRequirements['uppercase']
+            ),
+        ];
+    }
+
+    if ($minRequirements['numeric'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['numeric'],
+            'pattern' => '[0-9]',
+            'helpText' => sprintf(
+                get_lang('Minimum %s numerical (0-9) characters'),
+                $minRequirements['numeric']
+            ),
+        ];
+    }
+
+    if ($minRequirements['specials'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['specials'],
+            'pattern' => '[!"#$%&\'()*+,\-./\\\:;<=>?@[\\]^_`{|}~]',
+            'helpText' => sprintf(
+                get_lang('Minimum %s special characters'),
+                $minRequirements['specials']
+            ),
+        ];
+    }
+
+    $js = api_get_js('password-checker/password-checker.js');
+    $js .= "<script>
     $(function() {
-        var lang = ".json_encode($translations).";
-        var options = {
-            onLoad : function () {
-                //$('#messages').text('Start typing password');
-            },
-            onKeyUp: function (evt) {
-                $(evt.target).pwstrength('outputErrorList');
-            },
-            errorMessages : errorMessages,
-            viewports: {
-                progress: '#password_progress',
-                verdict: '#password-verdict',
-                errors: '#password-errors'
-            },
-            usernameField: '$usernameInputId'
-        };
-        options.i18n = {
-            t: function (key) {
-                var result = lang[key];
-                return result === key ? '' : result; // This assumes you return the
-            }
-        };
-        $('".$passwordInputId."').pwstrength(options);
+        $('".$passwordInputId."').passwordChecker(".json_encode($options).");
     });
     </script>";
 

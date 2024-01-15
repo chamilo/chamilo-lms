@@ -24,11 +24,16 @@ class AgendaEventInvitation
     use TimestampableTypedEntity;
 
     #[ORM\Id]
-    #[ORM\Column(type: 'bigint')]
+    #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    protected int $id;
+    protected ?int $id = null;
 
-    #[ORM\OneToMany(targetEntity: 'AgendaEventInvitee', mappedBy: 'invitation', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy: 'invitation',
+        targetEntity: AgendaEventInvitee::class,
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
     protected Collection $invitees;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'resourceNodes')]
@@ -40,7 +45,7 @@ class AgendaEventInvitation
         $this->invitees = new ArrayCollection();
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

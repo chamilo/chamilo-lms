@@ -31,17 +31,17 @@ class BranchSyncRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('a');
 
-        //Selecting user info
+        // Selecting user info
         $qb->select('DISTINCT b');
 
         $qb->from(BranchSync::class, 'b');
 
-        //Selecting courses for users
-        //$qb->innerJoin('u.courses', 'c');
+        // Selecting courses for users
+        // $qb->innerJoin('u.courses', 'c');
 
         //@todo check app settings
-        $qb->addOrderBy('b.branchName', 'ASC');
-        $qb->where('b.branchName LIKE :keyword');
+        $qb->addOrderBy('b.title', 'ASC');
+        $qb->where('b.title LIKE :keyword');
         $qb->setParameter('keyword', "%$keyword%", Types::STRING);
         $q = $qb->getQuery();
 
@@ -55,7 +55,7 @@ class BranchSyncRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('a');
 
-        //Selecting user info
+        // Selecting user info
         $qb->select('DISTINCT b');
 
         $qb->from(BranchSync::class, 'b');

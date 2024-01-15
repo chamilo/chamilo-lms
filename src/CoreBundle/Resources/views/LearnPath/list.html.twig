@@ -30,41 +30,41 @@
                             text-gray-800
                             {% endif %}
                             ">
-                                {{ lp_data.category.getName() | trim }}
+                                {{ lp_data.category.getTitle() | trim }}
 
                                 {% if lp_data.category.iid > 0 %}
                                     {% if not session %}
                                         <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=add_lp_category&id=' ~ lp_data.category.iid }}"
                                            title="{{ "Edit"|trans }}">
-                                            <i class="mdi-pencil mdi v-icon ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "Edit"|trans }}"></i>
+                                            <i class="mdi-pencil mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Edit"|trans }}"></i>
                                         </a>
 
                                         {% if subscription_settings.allow_add_users_to_lp_category %}
                                             <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=add_users_to_category&id=' ~ lp_data.category.iid }}"
                                                title="{{ "Add users"|trans }}">
-                                                <i class="mdi-account-multiple-plus mdi v-icon ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "Add users"|trans }}"></i>
+                                                <i class="mdi-account-multiple-plus mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Add users"|trans }}"></i>
                                             </a>
                                         {% endif %}
 
                                         {% if loop.index0 == 1 %}
                                             <a href="#">
-                                                <i class="mdi-arrow-up-bold mdi v-icon ch-tool-icon-disabled" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "Move"|trans }}"></i>
+                                                <i class="mdi-arrow-up-bold mdi ch-tool-icon-disabled" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move"|trans }}"></i>
                                             </a>
                                         {% else %}
                                             <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=move_up_category&id=' ~ lp_data.category.iid }}"
                                                title="{{ "Move"|trans }}">
-                                                <i class="mdi-arrow-up-bold mdi v-icon ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "Move"|trans }}"></i>
+                                                <i class="mdi-arrow-up-bold mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move"|trans }}"></i>
                                             </a>
                                         {% endif %}
 
                                         {% if (data|length - 1) == loop.index0 %}
                                             <a href="#">
-                                                <i class="mdi-arrow-down-bold mdi v-icon ch-tool-icon-disabled" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "Move"|trans }}"></i>
+                                                <i class="mdi-arrow-down-bold mdi ch-tool-icon-disabled" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move"|trans }}"></i>
                                             </a>
                                         {% else %}
                                             <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=move_down_category&id=' ~ lp_data.category.iid }}"
                                                title="{{ "Move"|trans }}">
-                                                <i class="mdi-arrow-down-bold mdi v-icon ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "Move"|trans }}"></i>
+                                                <i class="mdi-arrow-down-bold mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move"|trans }}"></i>
                                             </a>
                                         {% endif %}
                                     {% endif %}
@@ -72,38 +72,38 @@
                                     {% if lp_data.category_visibility == 0 %}
                                         <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.iid, 'new_status':1}|url_encode }}"
                                            title="{{ 'Show'|trans }}">
-                                            <i class="mdi-eye-off mdi v-icon ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "Show"|trans }}"></i>
+                                            <i class="mdi-eye-off mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Show"|trans }}"></i>
                                         </a>
                                     {% else %}
                                         <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.iid, 'new_status':0}|url_encode }}"
                                            title="{{ 'Hide'|trans }}">
-                                            <i class="mdi-eye mdi v-icon ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "Hide"|trans }}"></i>
+                                            <i class="mdi-eye mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Hide"|trans }}"></i>
                                         </a>
                                     {% endif %}
 
                                     {% if lp_data.category_is_published == 0 %}
                                         <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.iid, 'new_status':1}|url_encode }}"
                                            title="{{ 'LearnpathPublish'|trans }}">
-                                            <i class="mdi-checkbox-multiple-blank-outline mdi v-icon ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "LearnpathPublish"|trans }}"></i>
+                                            <i class="mdi-checkbox-multiple-blank-outline mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "LearnpathPublish"|trans }}"></i>
                                         </a>
                                     {% else %}
                                         <a
                                            href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.iid, 'new_status':0}|url_encode }}"
                                            title="{{ 'Do not publish'|trans }}"
                                         >
-                                            <i class="mdi-checkbox-multiple-blank mdi v-icon ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "Hide"|trans }}"></i>
+                                            <i class="mdi-checkbox-multiple-blank mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Hide"|trans }}"></i>
                                         </a>
                                     {% endif %}
                                     {% if not session %}
                                         <a href="{{ 'lp_controller.php?' ~ course_url_params  ~ '&action=delete_lp_category&id=' ~ lp_data.category.iid }}"
                                            title="{{ "Delete"|trans }}">
-                                            <i class="mdi-delete mdi v-icon ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "Delete"|trans }}"></i>
+                                            <i class="mdi-delete mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Delete"|trans }}"></i>
                                         </a>
                                     {% endif %}
                                 {% endif %}
                             </h3>
                         {% elseif lp_data.lp_list is not empty %}
-                            <h3 class="page-header">{{ lp_data.category.getName() }}</h3>
+                            <h3 class="page-header">{{ lp_data.category.getTitle() }}</h3>
                         {% endif %}
                     {% endif %}
 
@@ -351,35 +351,35 @@
                                             {% if not session %}
                                                 <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=add_lp_category&id=' ~ lp_data.category.iid }}"
                                                    title="{{ "Edit"|trans }}">
-                                                    <i class="mdi-pencil mdi v-icon ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "Edit"|trans }}"></i>
+                                                    <i class="mdi-pencil mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Edit"|trans }}"></i>
                                                 </a>
 
                                                 {% if subscription_settings.allow_add_users_to_lp_category %}
                                                     <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=add_users_to_category&id=' ~ lp_data.category.iid }}"
                                                        title="{{ "Add users"|trans }}">
-                                                        <i class="mdi-account-multiple-plus mdi v-icon ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "Add users"|trans }}"></i>
+                                                        <i class="mdi-account-multiple-plus mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Add users"|trans }}"></i>
                                                     </a>
                                                 {% endif %}
 
                                                 {% if loop.index0 == 1 %}
                                                     <a href="#">
-                                                        <i class="mdi-arrow-up-bold mdi v-icon ch-tool-icon-disabled" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "Move"|trans }}"></i>
+                                                        <i class="mdi-arrow-up-bold mdi ch-tool-icon-disabled" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move"|trans }}"></i>
                                                     </a>
                                                 {% else %}
                                                     <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=move_up_category&id=' ~ lp_data.category.iid }}"
                                                        title="{{ "Move"|trans }}">
-                                                        <i class="mdi-arrow-up-bold mdi v-icon ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "Move"|trans }}"></i>
+                                                        <i class="mdi-arrow-up-bold mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move"|trans }}"></i>
                                                     </a>
                                                 {% endif %}
 
                                                 {% if (data|length - 1) == loop.index0 %}
                                                     <a href="#">
-                                                        <i class="mdi-arrow-down-bold mdi v-icon ch-tool-icon-disabled" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "Move"|trans }}"></i>
+                                                        <i class="mdi-arrow-down-bold mdi ch-tool-icon-disabled" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move"|trans }}"></i>
                                                     </a>
                                                 {% else %}
                                                     <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=move_down_category&id=' ~ lp_data.category.iid }}"
                                                        title="{{ "Move"|trans }}">
-                                                        <i class="mdi-arrow-down-bold mdi v-icon ch-tool-icon-disabled" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "Move"|trans }}"></i>
+                                                        <i class="mdi-arrow-down-bold mdi ch-tool-icon-disabled" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move"|trans }}"></i>
                                                     </a>
                                                 {% endif %}
                                             {% endif %}
@@ -387,12 +387,12 @@
                                             {% if lp_data.category_visibility == 0 %}
                                                 <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.iid, 'new_status':1}|url_encode }}"
                                                    title="{{ 'Show'|trans }}">
-                                                    <i class="mdi-eye-off mdi v-icon ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "Show"|trans }}"></i>
+                                                    <i class="mdi-eye-off mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Show"|trans }}"></i>
                                                 </a>
                                             {% else %}
                                                 <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_visibility', 'id':lp_data.category.iid, 'new_status':0}|url_encode }}"
                                                    title="{{ 'Hide'|trans }}">
-                                                    <i class="mdi-eye mdi v-icon ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "Hide"|trans }}"></i>
+                                                    <i class="mdi-eye mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Hide"|trans }}"></i>
                                                 </a>
                                             {% endif %}
 
@@ -400,32 +400,38 @@
                                                 {% if lp_data.category_is_published == 0 %}
                                                     <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.iid, 'new_status':1}|url_encode }}"
                                                        title="{{ 'LearnpathPublish'|trans }}">
-                                                        <i class="mdi-checkbox-multiple-blank-outline mdi v-icon ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "LearnpathPublish"|trans }}"></i>
+                                                        <i class="mdi-checkbox-multiple-blank-outline mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "LearnpathPublish"|trans }}"></i>
                                                     </a>
                                                 {% else %}
                                                     <a href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.iid, 'new_status':0}|url_encode }}"
                                                        title="{{ 'LearnpathDoNotPublish'|trans }}">
-                                                        <i class="mdi-checkbox-multiple-blank mdi v-icon ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "Hide"|trans }}"></i>
+                                                        <i class="mdi-checkbox-multiple-blank mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Hide"|trans }}"></i>
                                                     </a>
                                                 {% endif %}
                                             {% else %}
-                                                <i class="mdi-checkbox-multiple-blank-outline mdi v-icon ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "LearnpathPublish"|trans }}"></i>
+                                                <i class="mdi-checkbox-multiple-blank-outline mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "LearnpathPublish"|trans }}"></i>
                                             {% endif %}
 
                                             {% if not session %}
                                                 <a href="{{ 'lp_controller.php?' ~ course_url_params  ~ '&action=delete_lp_category&id=' ~ lp_data.category.iid }}"
                                                    title="{{ "Delete"|trans }}">
-                                                    <i class="mdi-delete mdi v-icon ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" medium="" title="{{ "Delete"|trans }}"></i>
+                                                    <i class="mdi-delete mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Delete"|trans }}"></i>
                                                 </a>
                                             {% endif %}
                                         {% endif %}
                                     </div>
                                 {% endif %}
                                 <h4 class="panel-title">
-                                    {{ lp_data.category.getName() }}
+                                    <a role="button" data-toggle="collapse" data-parent="#lp-accordion"
+                                       href="#collapse-{{ lp_data.category.iid }}" aria-expanded="true"
+                                       aria-controls="collapse-{{ lp_data.category.iid }}">
+                                        {{ lp_data.category.getTitle() }}
+                                    </a>
                                 </h4>
                             </div>
-                            <div>
+                            {% set number = 1 %}
+                            <div id="collapse-{{ lp_data.category.iid }}" class="panel-collapse collapse {{ (categories|length > 1 ? 'in':'') }}"
+                                 role="tabpanel" aria-labelledby="heading-{{ lp_data.category.iid }}">
                                 <div class="panel-body">
                                     {% if lp_data.lp_list %}
 

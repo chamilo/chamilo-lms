@@ -76,7 +76,7 @@ class ForumThreadLink extends AbstractLink
         $result = Database::query($sql);*/
         $cats = [];
         foreach ($threads as $thread) {
-            $title = $thread->getThreadTitle();
+            $title = $thread->getTitle();
             $threadQualify = $thread->getThreadTitleQualify();
             if (!empty($threadQualify)) {
                 $title = $threadQualify;
@@ -246,7 +246,7 @@ class ForumThreadLink extends AbstractLink
     public function get_name()
     {
         $this->getThreadData();
-        $thread_title = isset($this->exercise_data['thread_title']) ? $this->exercise_data['thread_title'] : '';
+        $thread_title = isset($this->exercise_data['title']) ? $this->exercise_data['title'] : '';
         $thread_title_qualify = isset($this->exercise_data['thread_title_qualify']) ? $this->exercise_data['thread_title_qualify'] : '';
         if (isset($thread_title_qualify) && '' != $thread_title_qualify) {
             return $this->exercise_data['thread_title_qualify'];

@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -35,7 +37,7 @@ $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('List')];
 $social_right_content = '';
 $keyword = '';
 $actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'social/new_promoted_message.php">'.
-    Display::return_icon('new-message.png', get_lang('Compose message'), [], 32).'</a>';
+    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Compose message')).'</a>';
 
 $form = MessageManager::getSearchForm(api_get_self());
 if ($form->validate()) {

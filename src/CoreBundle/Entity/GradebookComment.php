@@ -14,19 +14,19 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 #[ORM\Entity]
 class GradebookComment
 {
-    use UserTrait;
     use TimestampableEntity;
+    use UserTrait;
 
-    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'gradeBookComments')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'gradeBookComments')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\GradebookCategory::class, inversedBy: 'comments')]
+    #[ORM\ManyToOne(targetEntity: GradebookCategory::class, inversedBy: 'comments')]
     #[ORM\JoinColumn(name: 'gradebook_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected GradebookCategory $gradeBook;
 

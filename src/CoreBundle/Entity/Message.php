@@ -78,16 +78,17 @@ class Message
     public const MESSAGE_STATUS_INVITATION_ACCEPTED = 6;
     public const MESSAGE_STATUS_INVITATION_DENIED = 7;
 
-    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
+    #[Groups(['message:read'])]
     protected ?int $id = null;
 
     #[Assert\NotBlank]
     #[Groups(['message:read', 'message:write'])]
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'sentMessages')]
-    #[ORM\JoinColumn(name: 'user_sender_id', referencedColumnName: 'id', nullable: false)]
-    protected User $sender;
+    #[ORM\JoinColumn(name: 'user_sender_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    protected ?User $sender = null;
 
     /**
      * @var Collection<int, MessageRelUser>
@@ -178,8 +179,9 @@ class Message
     {
         return $this->receivers
             ->filter(
-                fn(MessageRelUser $messageRelUser) => MessageRelUser::TYPE_TO === $messageRelUser->getReceiverType()
-            )->getValues();
+                fn (MessageRelUser $messageRelUser) => MessageRelUser::TYPE_TO === $messageRelUser->getReceiverType()
+            )->getValues()
+        ;
     }
 
     #[Groups(['message:read'])]
@@ -187,9 +189,10 @@ class Message
     {
         return $this->receivers
             ->filter(
-                fn(MessageRelUser $messageRelUser) => MessageRelUser::TYPE_CC === $messageRelUser->getReceiverType()
+                fn (MessageRelUser $messageRelUser) => MessageRelUser::TYPE_CC === $messageRelUser->getReceiverType()
             )
-            ->getValues();
+            ->getValues()
+        ;
     }
 
     #[Groups(['message:read'])]
@@ -211,7 +214,8 @@ class Message
                 )
                 ->andWhere(
                     Criteria::expr()->eq('message', $this)
-                );
+                )
+            ;
 
             return $this->receivers->matching($criteria)->count() > 0;
         }
@@ -223,7 +227,8 @@ class Message
     {
         $messageRelUser = (new MessageRelUser())
             ->setReceiver($receiver)
-            ->setReceiverType(MessageRelUser::TYPE_TO);
+            ->setReceiverType(MessageRelUser::TYPE_TO)
+        ;
 
         $this->addReceiver($messageRelUser);
 
@@ -245,7 +250,8 @@ class Message
     {
         $messageRelUser = (new MessageRelUser())
             ->setReceiver($receiver)
-            ->setReceiverType(MessageRelUser::TYPE_CC);
+            ->setReceiverType(MessageRelUser::TYPE_CC)
+        ;
 
         $this->addReceiver($messageRelUser);
 
@@ -259,12 +265,12 @@ class Message
         return $this;
     }
 
-    public function getSender(): User
+    public function getSender(): ?User
     {
         return $this->sender;
     }
 
-    public function setSender(User $sender): self
+    public function setSender(?User $sender): self
     {
         $this->sender = $sender;
 

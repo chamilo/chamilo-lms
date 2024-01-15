@@ -2,7 +2,7 @@ export default {
   path: '/resources/document/:node/',
   meta: { requiresAuth: true, showBreadcrumb: true },
   name: 'documents',
-  component: () => import('../components/documents/DocumentsLayout.vue'),
+  component: () => import('../components/layout/SimpleRouterViewLayout.vue'),
   redirect: { name: 'DocumentsList' },
   children: [
     {
@@ -40,7 +40,7 @@ export default {
     {
       name: 'DocumentsShow',
       path: 'show',
-      component: () => import('../views/documents/Show.vue')
+      component: () => import('../views/documents/DocumentShow.vue')
     },
     {
       name: 'DocumentForHtmlEditor',

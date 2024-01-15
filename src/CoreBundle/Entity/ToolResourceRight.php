@@ -28,7 +28,7 @@ class ToolResourceRight implements Stringable
     #[ORM\Column(name: 'mask', type: 'integer', nullable: false)]
     protected int $mask;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Tool::class, cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Tool::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'tool_id', referencedColumnName: 'id')]
     protected ?Tool $tool = null;
 

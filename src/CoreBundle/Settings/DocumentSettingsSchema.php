@@ -20,8 +20,8 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
         $builder
             ->setDefaults(
                 [
-                    'default_document_quotum' => '100000000',
-                    'default_group_quotum' => '100000000',
+                    'default_document_quotum' => '1000',
+                    'default_group_quotum' => '250',
                     'permanently_remove_deleted_files' => 'false',
                     'upload_extensions_list_type' => 'blacklist',
                     'upload_extensions_blacklist' => '',
@@ -40,7 +40,7 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                     'show_users_folders' => 'true',
                     'show_default_folders' => 'true',
                     'enabled_text2audio' => 'false',
-                    //'enable_nanogong' => 'false',
+                    // 'enable_nanogong' => 'false',
                     'show_documents_preview' => 'false',
                     'enable_wami_record' => 'false',
                     'enable_webcam_clip' => 'false',
@@ -128,7 +128,7 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
             ->add('show_users_folders', YesNoType::class)
             ->add('show_default_folders', YesNoType::class)
             ->add('enabled_text2audio', YesNoType::class)
-            //->add('enable_nanogong', YesNoType::class)
+            // ->add('enable_nanogong', YesNoType::class)
             ->add('show_documents_preview', YesNoType::class)
             ->add('enable_wami_record', YesNoType::class)
             ->add('enable_webcam_clip', YesNoType::class)
@@ -203,7 +203,6 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                         $this->settingArrayHelpValue('documents_custom_cloud_link_list'),
                 ]
             )
-
         ;
     }
 

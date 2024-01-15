@@ -33,14 +33,14 @@ class CForumPostRepositoryTest extends AbstractApiTest
         $attachmentRepo = self::getContainer()->get(CForumAttachmentRepository::class);
 
         $forum = (new CForum())
-            ->setForumTitle('forum')
+            ->setTitle('forum')
             ->setParent($course)
             ->setCreator($teacher)
         ;
         $forumRepo->create($forum);
 
         $thread = (new CForumThread())
-            ->setThreadTitle('thread title')
+            ->setTitle('thread title')
             ->setForum($forum)
             ->setParent($course)
             ->setCreator($teacher)
@@ -48,7 +48,7 @@ class CForumPostRepositoryTest extends AbstractApiTest
         $threadRepo->create($thread);
         $date = new DateTime();
         $post = (new CForumPost())
-            ->setPostTitle('post')
+            ->setTitle('post')
             ->setPostText('text')
             ->setPostDate($date)
             ->setPostNotification(true)
@@ -107,6 +107,7 @@ class CForumPostRepositoryTest extends AbstractApiTest
 
         /** @var CForumThread $thread */
         $thread = $threadRepo->find($thread->getIid());
+
         /** @var CForum $forum */
         $forum = $forumRepo->find($forum->getIid());
 

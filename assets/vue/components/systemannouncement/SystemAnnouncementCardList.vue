@@ -9,17 +9,13 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import SystemAnnouncementCard from './SystemAnnouncementCard.vue';
 
-import SystemAnnouncementCard from './SystemAnnouncementCard';
-
-export default {
-  name: 'SystemAnnouncementCardList',
-  components: {
-    SystemAnnouncementCard
+defineProps({
+  announcements: {
+    type: Array,
+    required: true,
   },
-  props: {
-    announcements: Array,
-  }
-};
+})
 </script>

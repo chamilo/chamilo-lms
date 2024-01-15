@@ -9,13 +9,14 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_shortcut')]
-#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CShortcutRepository::class)]
+#[ORM\Entity(repositoryClass: CShortcutRepository::class)]
 class CShortcut extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'id', type: 'integer')]
@@ -25,10 +26,10 @@ class CShortcut extends AbstractResource implements ResourceInterface, Stringabl
 
     #[Assert\NotBlank]
     #[Groups(['cshortcut:read'])]
-    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    protected string $title;
 
-    #[ORM\OneToOne(targetEntity: \Chamilo\CoreBundle\Entity\ResourceNode::class, inversedBy: 'shortCut')]
+    #[ORM\OneToOne(targetEntity: ResourceNode::class, inversedBy: 'shortCut')]
     #[ORM\JoinColumn(name: 'shortcut_node_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ResourceNode $shortCutNode;
 
@@ -43,35 +44,35 @@ class CShortcut extends AbstractResource implements ResourceInterface, Stringabl
 
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function getUrl(): string
     {
-        return '/r/'.$this->getShortCutNode()->getResourceType()->getTool()->getName().
-            '/'.$this->getShortCutNode()->getResourceType()->getName().
+        return '/r/'.$this->getShortCutNode()->getResourceType()->getTool()->getTitle().
+            '/'.$this->getShortCutNode()->getResourceType()->getTitle().
             '/'.$this->getShortCutNode()->getId().
             '/link';
     }
 
     public function getTool(): string
     {
-        return $this->getShortCutNode()->getResourceType()->getTool()->getName();
+        return $this->getShortCutNode()->getResourceType()->getTool()->getTitle();
     }
 
     public function getType(): string
     {
-        return $this->getShortCutNode()->getResourceType()->getName();
+        return $this->getShortCutNode()->getResourceType()->getTitle();
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
@@ -100,11 +101,11 @@ class CShortcut extends AbstractResource implements ResourceInterface, Stringabl
 
     public function getResourceName(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setName($name);
+        return $this->setTitle($name);
     }
 }

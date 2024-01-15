@@ -37,10 +37,12 @@ class CNotebookRepository extends ResourceRepository
                 $orderField = 'N.creationDate';
 
                 break;
+
             case 'update_date':
                 $orderField = 'N.updateDate';
 
                 break;
+
             case 'title':
                 $orderField = 'N.title';
 

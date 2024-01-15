@@ -11,6 +11,9 @@ use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationAssignment;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  *  @author Thomas, Hugues, Christophe - original version
@@ -42,7 +45,7 @@ function displayWorkActionLinks($id, $action, $isTutor)
 
     if (!empty($id)) {
         $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_back_id.'">'.
-            Display::return_icon('back.png', get_lang('Back to Assignments list'), '', ICON_SIZE_MEDIUM).
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to Assignments list')).
             '</a>';
     }
 
@@ -52,24 +55,14 @@ function displayWorkActionLinks($id, $action, $isTutor)
         // Create dir
         if (empty($id)) {
             $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=create_dir">';
-            $output .= Display::return_icon(
-                'new_work.png',
-                get_lang('Create assignment'),
-                '',
-                ICON_SIZE_MEDIUM
-            );
+            $output .= Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Create assignment'));
             $output .= '</a>';
         }
     }
 
     if (api_is_allowed_to_edit(null, true) && 'learnpath' !== $origin && 'list' === $action) {
         $output .= '<a id="open-view-list" href="#">'.
-            Display::return_icon(
-                'listwork.png',
-                get_lang('View students'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).
+            Display::getMdiIcon(StateIcon::LIST_VIEW, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('View students')).
             '</a>';
     }
 
@@ -1270,7 +1263,7 @@ function getWorkListStudent(
     $studentPublications = $qb->getQuery()->getResult();
     $urlOthers = api_get_path(WEB_CODE_PATH).'work/work_list_others.php?'.api_get_cidreq().'&id=';
     //while ($work = Database::fetch_array($result, 'ASSOC')) {
-    $icon = Display::return_icon('work.png');
+    $icon = Display::getMdiIcon(ObjectIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL);
 
     /** @var CStudentPublication $studentPublication */
     foreach ($studentPublications as $studentPublication) {
@@ -1325,7 +1318,7 @@ function getWorkListStudent(
 
         $work['title'] = Display::url($title, $url.'&id='.$workId);
         $work['others'] = Display::url(
-            Display::return_icon('group.png', get_lang('Others')),
+            Display::getMdiIcon(ObjectIcon::GROUP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Others')),
             $urlOthers.$workId
         );
         $works[] = $work;
@@ -1485,7 +1478,7 @@ function getAllWorkListStudent(
             continue;
         }*/
 
-        $work['type'] = Display::return_icon('work.png');
+        $work['type'] = Display::getMdiIcon(ObjectIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL);
         $work['expires_on'] = empty($work['expires_on']) ? null : api_get_local_time($work['expires_on']);
 
         if (empty($work['title'])) {
@@ -1538,21 +1531,22 @@ function getAllWorkListStudent(
 /**
  * @param int    $start
  * @param int    $limit
- * @param string $column
- * @param string $direction
- * @param string $where_condition
- * @param bool   $getCount
+ * @param ?string $column
+ * @param ?string $direction
+ * @param ?string $where_condition
+ * @param ?bool   $getCount
  *
  * @return array
+ * @throws Exception
  */
 function getWorkListTeacher(
-    $start,
-    $limit,
-    $column,
-    $direction,
-    $where_condition,
-    $getCount = false
-) {
+    int $start,
+    int $limit,
+    ?string $column,
+    ?string $direction,
+    ?string $where_condition,
+    ?bool $getCount = false
+): array {
     $course_id = api_get_course_int_id();
     $session_id = api_get_session_id();
     $group_id = api_get_group_id();
@@ -1562,7 +1556,7 @@ function getWorkListTeacher(
         $groupIid = $groupInfo['iid'];
     }
     $is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
-    if (!in_array($direction, ['asc', 'desc'])) {
+    if (empty($direction) || !in_array($direction, ['asc', 'desc'])) {
         $direction = 'desc';
     }
     if (!empty($where_condition)) {
@@ -1628,7 +1622,7 @@ function getWorkListTeacher(
         $blockEdition = ('true' === api_get_setting('work.block_student_publication_edition'));
 
         //while ($work = Database::fetch_array($result, 'ASSOC')) {
-        $icon = Display::return_icon('work.png');
+        $icon = Display::getMdiIcon(ObjectIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL);
         /** @var CStudentPublication $studentPublication */
         foreach ($studentPublications as $studentPublication) {
             $workId = $studentPublication->getIid();
@@ -1661,19 +1655,19 @@ function getWorkListTeacher(
             //$visibility = api_get_item_visibility($courseInfo, 'work', $workId, $session_id);
             $isVisible = $studentPublication->isVisible($course, $session);
             if ($isVisible) {
-                $icon = 'visible.png';
+                $icon = ActionIcon::VISIBLE;
                 $text = get_lang('Visible');
                 $action = 'invisible';
                 $class = '';
             } else {
-                $icon = 'invisible.png';
+                $icon = ActionIcon::INVISIBLE;
                 $text = get_lang('invisible');
                 $action = 'visible';
                 $class = 'muted';
             }
 
             $visibilityLink = Display::url(
-                Display::return_icon($icon, $text, [], ICON_SIZE_SMALL),
+                Display::getMdiIcon($icon, 'ch-tool-icon', null, ICON_SIZE_SMALL, $text),
                 api_get_path(WEB_CODE_PATH).'work/work.php?id='.$workId.'&action='.$action.'&'.api_get_cidreq()
             );
 
@@ -1686,34 +1680,24 @@ function getWorkListTeacher(
                 $editLink = '';
             } else {
                 $editLink = Display::url(
-                    Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
+                    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
                     api_get_path(WEB_CODE_PATH).'work/edit_work.php?id='.$workId.'&'.api_get_cidreq()
                 );
             }
 
             $correctionLink = '&nbsp;'.Display::url(
-                Display::return_icon('upload_package.png', get_lang('Upload corrections'), '', ICON_SIZE_SMALL),
+                Display::getMdiIcon(ActionIcon::UPLOAD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Upload corrections')),
                 api_get_path(WEB_CODE_PATH).'work/upload_corrections.php?'.api_get_cidreq().'&id='.$workId
             ).'&nbsp;';
 
             if ($countUniqueAttempts > 0) {
                 $downloadLink = Display::url(
-                    Display::return_icon(
-                        'save_pack.png',
-                        get_lang('Save'),
-                        [],
-                        ICON_SIZE_SMALL
-                    ),
+                    Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Save')),
                     api_get_path(WEB_CODE_PATH).'work/downloadfolder.inc.php?id='.$workId.'&'.api_get_cidreq()
                 );
             } else {
                 $downloadLink = Display::url(
-                    Display::return_icon(
-                        'save_pack_na.png',
-                        get_lang('Save'),
-                        [],
-                        ICON_SIZE_SMALL
-                    ),
+                    Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Save')),
                     '#'
                 );
             }
@@ -1869,16 +1853,11 @@ function get_work_user_list_from_documents(
     $urlView = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq();
     $urlDownload = api_get_path(WEB_CODE_PATH).'work/download.php?'.api_get_cidreq();
 
-    $editIcon = Display::return_icon('edit.png', get_lang('Edit'));
-    $addIcon = Display::return_icon('add.png', get_lang('Add'));
-    $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'));
-    $viewIcon = Display::return_icon('default.png', get_lang('View'));
-    $saveIcon = Display::return_icon(
-        'save.png',
-        get_lang('Save'),
-        [],
-        ICON_SIZE_SMALL
-    );
+    $editIcon = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'));
+    $addIcon = Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add'));
+    $deleteIcon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'));
+    $viewIcon = Display::getMdiIcon(ObjectIcon::DEFAULT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('View'));
+    $saveIcon = Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Save'));
     $allowEdition = 1 == api_get_course_setting('student_delete_own_publication');
 
     $workList = [];
@@ -2136,39 +2115,19 @@ function get_work_user_list(
         $loadingText = addslashes(get_lang('Loading'));
         $uploadedText = addslashes(get_lang('Uploaded.'));
         $failsUploadText = addslashes(get_lang('No file was uploaded..'));
-        $failsUploadIcon = Display::return_icon(
-            'closed-circle.png',
-            '',
-            [],
-            ICON_SIZE_TINY
-        );
-        $saveIcon = Display::return_icon(
-            'save.png',
-            get_lang('Save'),
-            [],
-            ICON_SIZE_SMALL
-        );
-
-        $correctionIcon = Display::return_icon(
-            'check-circle.png',
-            get_lang('Correction'),
-            null,
-            ICON_SIZE_SMALL
-        );
-
-        $correctionIconSmall = Display::return_icon(
-            'check-circle.png',
-            get_lang('Correction'),
+        $failsUploadIcon = Display::getMdiIcon(
+            StateIcon::INCOMPLETE,
+            'ch-tool-icon',
             null,
             ICON_SIZE_TINY
         );
+        $saveIcon = Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Save'));
 
-        $rateIcon = Display::return_icon(
-            'rate_work.png',
-            get_lang('Correct and rate'),
-            [],
-            ICON_SIZE_SMALL
-        );
+        $correctionIcon = Display::getMdiIcon(ActionIcon::ACCEPT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Correction'));
+
+        $correctionIconSmall = Display::getMdiIcon(ActionIcon::ACCEPT, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Correction'));
+
+        $rateIcon = Display::getMdiIcon(ActionIcon::GRADE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Correct and rate'));
 
         $blockEdition = ('true' === api_get_setting('work.block_student_publication_edition'));
         $blockScoreEdition = ('true' === api_get_setting('work.block_student_publication_score_edition'));
@@ -2326,7 +2285,7 @@ function get_work_user_list(
                         $action .= '<a
                             href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=export_to_doc&item_id='.$item_id.'"
                             title="'.get_lang('Export to .doc').'" >'.
-                            Display::return_icon('export_doc.png', get_lang('Export to .doc'), [], ICON_SIZE_SMALL).'</a> ';
+                            Display::getMdiIcon(ActionIcon::EXPORT_DOC, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Export to .doc')).'</a> ';
                     }
 
                     $alreadyUploaded = '';
@@ -2345,7 +2304,7 @@ function get_work_user_list(
                         >
                         <div id="progress_'.$item_id.'" class="text-center button-load">
                             '.addslashes(get_lang('Click or drop one file here')).'
-                            '.Display::return_icon('upload_file.png', get_lang('Correction'), [], ICON_SIZE_TINY).'
+                            '.Display::getMdiIcon(ActionIcon::UPLOAD, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Correction')).'
                             '.$alreadyUploaded.'
                         </div>
                         <input id="file_'.$item_id.'" type="file" name="file" class="" multiple>
@@ -2388,14 +2347,9 @@ function get_work_user_list(
 
                     if ($locked) {
                         if ($qualification_exists) {
-                            $action .= Display::return_icon(
-                                'edit_na.png',
-                                get_lang('Correct and rate'),
-                                [],
-                                ICON_SIZE_SMALL
-                            );
+                            $action .= Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Correct and rate'));
                         } else {
-                            $action .= Display::return_icon('edit_na.png', get_lang('Comment'), [], ICON_SIZE_SMALL);
+                            $action .= Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Comment'));
                         }
                     } else {
                         if ($blockEdition && !api_is_platform_admin()) {
@@ -2405,12 +2359,12 @@ function get_work_user_list(
                                 $editLink = '<a
                                     href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$workId.'"
                                     title="'.get_lang('Edit').'"  >'.
-                                    Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
+                                    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
                             } else {
                                 $editLink = '<a
                                     href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$workId.'"
                                     title="'.get_lang('Edit').'">'.
-                                    Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
+                                    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
                             }
                         }
                         $action .= $editLink;
@@ -2418,17 +2372,12 @@ function get_work_user_list(
 
                     if ($assignment->getContainsFile()) {
                         if ($locked) {
-                            $action .= Display::return_icon(
-                                'move_na.png',
-                                get_lang('Move'),
-                                [],
-                                ICON_SIZE_SMALL
-                            );
+                            $action .= Display::getMdiIcon(ActionIcon::MOVE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Move'));
                         } else {
                             $action .= '<a
                                 href="'.$url.'work.php?'.api_get_cidreq().'&action=move&item_id='.$item_id.'&id='.$workId.'"
                                 title="'.get_lang('Move').'">'.
-                                Display::return_icon('move.png', get_lang('Move'), [], ICON_SIZE_SMALL).'</a>';
+                                Display::getMdiIcon(ActionIcon::MOVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Move')).'</a>';
                         }
                     }
 
@@ -2436,30 +2385,30 @@ function get_work_user_list(
                         $action .= '<a
                             href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=make_invisible&item_id='.$item_id.'"
                             title="'.get_lang('invisible').'" >'.
-                            Display::return_icon('visible.png', get_lang('invisible'), [], ICON_SIZE_SMALL).
+                            Display::getMdiIcon(ActionIcon::INVISIBLE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('invisible')).
                             '</a>';
                     } else {
                         $action .= '<a
                             href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=make_visible&item_id='.$item_id.'"
                             title="'.get_lang('Visible').'" >'.
-                            Display::return_icon('invisible.png', get_lang('Visible'), [], ICON_SIZE_SMALL).
+                            Display::getMdiIcon(ActionIcon::VISIBLE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Visible')).
                             '</a> ';
                     }
 
                     if ($locked) {
-                        $action .= Display::return_icon('delete_na.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
+                        $action .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Delete'));
                     } else {
                         $action .= '<a
                             href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=delete&item_id='.$item_id.'"
                             onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;"
                             title="'.get_lang('Delete').'" >'.
-                            Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
+                            Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
                     }
                 } elseif ($is_author && (empty($qualificatorId) || 0 == $qualificatorId)) {
                     $action .= '<a
                             href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'"
                             title="'.get_lang('View').'">'.
-                        Display::return_icon('default.png', get_lang('View'), [], ICON_SIZE_SMALL).
+                        Display::getMdiIcon(ObjectIcon::DEFAULT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('View')).
                         '</a>';
 
                     if (1 == $studentDeleteOwnPublication) {
@@ -2467,20 +2416,20 @@ function get_work_user_list(
                             $action .= '<a
                                 href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$workId.'"
                                 title="'.get_lang('Edit').'">'.
-                                Display::return_icon('edit.png', get_lang('Comment'), [], ICON_SIZE_SMALL).
+                                Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Comment')).
                                 '</a>';
                         }
                         $action .= ' <a
                             href="'.$url.'work_list.php?'.api_get_cidreq().'&action=delete&item_id='.$item_id.'&id='.$workId.'"
                             onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;"
                             title="'.get_lang('Delete').'"  >'.
-                            Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
+                            Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
                     }
                 } else {
                     $action .= '<a
                         href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'"
                         title="'.get_lang('View').'">'.
-                        Display::return_icon('default.png', get_lang('View'), [], ICON_SIZE_SMALL).
+                        Display::getMdiIcon(ObjectIcon::DEFAULT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('View')).
                         '</a>';
                 }
 
@@ -2667,39 +2616,19 @@ function getAllWork(
     $loadingText = addslashes(get_lang('Loading'));
     $uploadedText = addslashes(get_lang('Uploaded'));
     $failsUploadText = addslashes(get_lang('UplNoFileUploaded'));
-    $failsUploadIcon = Display::return_icon(
-        'closed-circle.png',
-        '',
-        [],
-        ICON_SIZE_TINY
-    );
-    $saveIcon = Display::return_icon(
-        'save.png',
-        get_lang('Save'),
-        [],
-        ICON_SIZE_SMALL
-    );
-
-    $correctionIcon = Display::return_icon(
-        'check-circle.png',
-        get_lang('Correction'),
-        null,
-        ICON_SIZE_SMALL
-    );
-
-    $correctionIconSmall = Display::return_icon(
-        'check-circle.png',
-        get_lang('Correction'),
+    $failsUploadIcon = Display::getMdiIcon(
+        StateIcon::INCOMPLETE,
+        'ch-tool-icon',
         null,
         ICON_SIZE_TINY
     );
+    $saveIcon = Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Save'));
 
-    $rateIcon = Display::return_icon(
-        'rate_work.png',
-        get_lang('CorrectAndRate'),
-        [],
-        ICON_SIZE_SMALL
-    );
+    $correctionIcon = Display::getMdiIcon(ActionIcon::ACCEPT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Correction'));
+
+    $correctionIconSmall = Display::getMdiIcon(ActionIcon::ACCEPT, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Correction'));
+
+    $rateIcon = Display::getMdiIcon(ActionIcon::GRADE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('CorrectAndRate'));
     $parentList = [];
     $blockEdition = ('true' === api_get_setting('work.block_student_publication_edition'));
     $blockScoreEdition = ('true' === api_get_setting('work.block_student_publication_score_edition'));
@@ -2804,7 +2733,7 @@ function getAllWork(
                     $feedback .= ' ';
                 }
                 $feedback .= Display::url(
-                    $count.' '.Display::getMdiIcon('comment-multiple-outline'),
+                    $count.' '.Display::getMdiIcon('comment-multiple-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL),
                     $url.'view.php?'.$cidReq.'&id='.$item_id
                 );
             }
@@ -2861,7 +2790,7 @@ function getAllWork(
                     $action .= '<a
                         href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$workId.'&action=export_to_doc&item_id='.$item_id.'"
                         title="'.get_lang('ExportToDoc').'" >'.
-                        Display::return_icon('export_doc.png', get_lang('ExportToDoc'), [], ICON_SIZE_SMALL).'</a> ';
+                        Display::getMdiIcon(ActionIcon::EXPORT_DOC, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('ExportToDoc')).'</a> ';
                 }
 
                 $alreadyUploaded = '';
@@ -2879,7 +2808,7 @@ function getAllWork(
                     >
                     <div id="progress_'.$item_id.'" class="text-center button-load">
                         '.addslashes(get_lang('ClickOrDropOneFileHere')).'
-                        '.Display::return_icon('upload_file.png', get_lang('Correction'), [], ICON_SIZE_TINY).'
+                        '.Display::getMdiIcon(ActionIcon::UPLOAD, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Correction')).'
                         '.$alreadyUploaded.'
                     </div>
                     <input id="file_'.$item_id.'" type="file" name="file" class="" multiple>
@@ -2922,20 +2851,15 @@ function getAllWork(
 
                 if ($locked) {
                     if ($qualification_exists) {
-                        $action .= Display::return_icon(
-                            'edit_na.png',
-                            get_lang('CorrectAndRate'),
-                            [],
-                            ICON_SIZE_SMALL
-                        );
+                        $action .= Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('CorrectAndRate'));
                     } else {
-                        $action .= Display::return_icon('edit_na.png', get_lang('Comment'), [], ICON_SIZE_SMALL);
+                        $action .= Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Comment'));
                     }
                 } else {
                     if ($blockEdition && !api_is_platform_admin()) {
                         $editLink = '';
                     } else {
-                        $editIcon = Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL);
+                        $editIcon = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'));
                         if ($qualification_exists) {
                             $editLink = '<a
                                 href="'.$url.'edit.php?'.$cidReq.'&item_id='.$item_id.'&id='.$work['parent_id'].'"
@@ -2954,46 +2878,41 @@ function getAllWork(
 
                 /*if ($work['contains_file']) {
                     if ($locked) {
-                        $action .= Display::return_icon(
-                            'move_na.png',
-                            get_lang('Move'),
-                            [],
-                            ICON_SIZE_SMALL
-                        );
+                        $action .= Display::getMdiIcon(ActionIcon::MOVE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Move'));
                     } else {
                         $action .= '<a href="'.$url.'work.php?'.$cidReq.'&action=move&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Move').'">'.
-                            Display::return_icon('move.png', get_lang('Move'), [], ICON_SIZE_SMALL).'</a>';
+                            Display::getMdiIcon(ActionIcon::MOVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Move')).'</a>';
                     }
                 }*/
 
                 /*if ($work['accepted'] == '1') {
                     $action .= '<a href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$workId.'&action=make_invisible&item_id='.$item_id.'" title="'.get_lang('Invisible').'" >'.
-                        Display::return_icon('visible.png', get_lang('Invisible'), [], ICON_SIZE_SMALL).'</a>';
+                        Display::getMdiIcon(ActionIcon::INVISIBLE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Invisible')).'</a>';
                 } else {
                     $action .= '<a href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$workId.'&action=make_visible&item_id='.$item_id.'" title="'.get_lang('Visible').'" >'.
-                        Display::return_icon('invisible.png', get_lang('Visible'), [], ICON_SIZE_SMALL).'</a> ';
+                        Display::getMdiIcon(ActionIcon::VISIBLE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Visible')).'</a> ';
                 }*/
                 /*if ($locked) {
-                    $action .= Display::return_icon('delete_na.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
+                    $action .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Delete'));
                 } else {
                     $action .= '<a href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$workId.'&action=delete&item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'" >'.
-                        Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
+                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
                 }*/
             } elseif ($is_author && (empty($work['qualificator_id']) || 0 == $work['qualificator_id'])) {
                 $action .= '<a href="'.$url.'view.php?'.$cidReq.'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                    Display::return_icon('default.png', get_lang('View'), [], ICON_SIZE_SMALL).'</a>';
+                    Display::getMdiIcon(ObjectIcon::DEFAULT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('View')).'</a>';
 
                 if (1 == api_get_course_setting('student_delete_own_publication')) {
                     if (api_is_allowed_to_session_edit(false, true)) {
                         $action .= '<a href="'.$url.'edit.php?'.$cidReq.'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Modify').'">'.
-                            Display::return_icon('edit.png', get_lang('Comment'), [], ICON_SIZE_SMALL).'</a>';
+                            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Comment')).'</a>';
                     }
                     $action .= ' <a href="'.$url.'work_list.php?'.$cidReq.'&action=delete&item_id='.$item_id.'&id='.$work['parent_id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'"  >'.
-                        Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
+                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
                 }
             } else {
                 $action .= '<a href="'.$url.'view.php?'.$cidReq.'&id='.$item_id.'" title="'.get_lang('View').'">'.
-                    Display::return_icon('default.png', get_lang('View'), [], ICON_SIZE_SMALL).'</a>';
+                    Display::getMdiIcon(ObjectIcon::DEFAULT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('View')).'</a>';
             }
 
             // Status.

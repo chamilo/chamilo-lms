@@ -26,22 +26,24 @@ final class Version20201216132000 extends AbstractMigrationChamilo
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
         $em = $doctrine->getManager();
+
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
         $lpItemRepo = $container->get(CLpItemRepository::class);
 
         $batchSize = self::BATCH_SIZE;
-        //$q = $em->createQuery('SELECT lp FROM Chamilo\CourseBundle\Entity\CLp lp WHERE lp.iid = 263 ORDER BY lp.iid');
+        // $q = $em->createQuery('SELECT lp FROM Chamilo\CourseBundle\Entity\CLp lp WHERE lp.iid = 263 ORDER BY lp.iid');
         $q = $em->createQuery('SELECT lp FROM Chamilo\CourseBundle\Entity\CLp lp');
         $counter = 1;
+
         /** @var CLp $lp */
         foreach ($q->toIterable() as $lp) {
             $lpId = $lp->getIid();
             error_log("LP #$lpId");
 
             /** @var CLp $resource */
-            //$resource = $lpRepo->find($lpId);
+            // $resource = $lpRepo->find($lpId);
             if (!$lp->hasResourceNode()) {
                 error_log('no resource node');
 
@@ -54,6 +56,12 @@ final class Version20201216132000 extends AbstractMigrationChamilo
             if (null === $rootItem) {
                 continue;
             }
+
+            // Execute the update query for item_root
+            $connection->executeUpdate('UPDATE c_lp_item SET item_root = :rootId WHERE lp_id = :lpId', [
+                'rootId' => $rootItem->getIid(),
+                'lpId' => $lpId,
+            ]);
 
             // Migrate c_lp_item
             $sql = "SELECT * FROM c_lp_item WHERE lp_id = $lpId AND path <> 'root'
@@ -73,7 +81,7 @@ final class Version20201216132000 extends AbstractMigrationChamilo
                 $orderList[] = $object;
             }
 
-            learnpath::sortItemByOrderList($rootItem, $orderList, true);
+            learnpath::sortItemByOrderList($rootItem, $orderList, true, $lpItemRepo, $em);
             if (($counter % $batchSize) === 0) {
                 $em->flush();
                 $em->clear(); // Detaches all objects from Doctrine!

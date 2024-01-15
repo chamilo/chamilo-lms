@@ -14,17 +14,17 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Table(name: 'c_wiki_category')]
-#[ORM\Entity(repositoryClass: 'Chamilo\\CourseBundle\\Entity\\Repository\\CWikiCategoryRepository')]
+#[ORM\Entity]
 #[Gedmo\Tree(type: 'nested')]
 class CWikiCategory
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'id', type: 'integer')]
-    private int $id;
+    private ?int $id = null;
 
-    #[ORM\Column(name: 'name', type: 'string')]
-    private string $name;
+    #[ORM\Column(name: 'title', type: 'string')]
+    private string $title;
 
     #[ORM\ManyToMany(targetEntity: CWiki::class, mappedBy: 'categories')]
     private Collection $wikiPages;
@@ -39,26 +39,26 @@ class CWikiCategory
 
     #[Gedmo\TreeLeft]
     #[ORM\Column(name: 'lft', type: 'integer')]
-    private int $lft;
+    private int $lft = 0;
 
     #[Gedmo\TreeLevel]
     #[ORM\Column(name: 'lvl', type: 'integer')]
-    private int $lvl;
+    private int $lvl = 0;
 
     #[Gedmo\TreeRight]
     #[ORM\Column(name: 'rgt', type: 'integer')]
-    private int $rgt;
+    private int $rgt = 0;
 
-    #[ORM\ManyToOne(targetEntity: CWikiCategory::class)]
+    #[ORM\ManyToOne(targetEntity: self::class)]
     #[ORM\JoinColumn(name: 'tree_root', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    private ?CWikiCategory $root;
+    private ?CWikiCategory $root = null;
 
     #[Gedmo\TreeParent]
-    #[ORM\ManyToOne(targetEntity: CWikiCategory::class, inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?CWikiCategory $parent;
 
-    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: CWikiCategory::class)]
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     #[ORM\OrderBy(['lft' => 'ASC'])]
     private Collection $children;
 
@@ -71,27 +71,27 @@ class CWikiCategory
 
     public function __toString(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function getNodeName(): string
     {
-        return str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', $this->lvl).$this->name;
+        return str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', $this->lvl).$this->title;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
@@ -165,10 +165,5 @@ class CWikiCategory
     public function getWikiPages(): Collection
     {
         return $this->wikiPages;
-    }
-
-    public function getLvl(): ?int
-    {
-        return $this->lvl;
     }
 }

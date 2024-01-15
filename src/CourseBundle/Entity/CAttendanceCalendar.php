@@ -11,16 +11,16 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'c_attendance_calendar')]
-#[ORM\Index(name: 'done_attendance', columns: ['done_attendance'])]
+#[ORM\Index(columns: ['done_attendance'], name: 'done_attendance')]
 #[ORM\Entity]
 class CAttendanceCalendar
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CourseBundle\Entity\CAttendance::class, inversedBy: 'calendars', cascade: ['remove'])]
+    #[ORM\ManyToOne(targetEntity: CAttendance::class, cascade: ['remove'], inversedBy: 'calendars')]
     #[ORM\JoinColumn(name: 'attendance_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CAttendance $attendance;
 
@@ -34,12 +34,16 @@ class CAttendanceCalendar
     protected bool $blocked;
 
     /**
-     * @var Collection|CAttendanceSheet[]
+     * @var Collection<int, CAttendanceSheet>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CAttendanceSheet::class, mappedBy: 'attendanceCalendar', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(
+        mappedBy: 'attendanceCalendar',
+        targetEntity: CAttendanceSheet::class,
+        cascade: ['persist', 'remove']
+    )]
     protected Collection $sheets;
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }
@@ -63,12 +67,7 @@ class CAttendanceCalendar
         return $this;
     }
 
-    /**
-     * Get dateTime.
-     *
-     * @return DateTime
-     */
-    public function getDateTime()
+    public function getDateTime(): DateTime
     {
         return $this->dateTime;
     }
@@ -85,7 +84,7 @@ class CAttendanceCalendar
         return $this->doneAttendance;
     }
 
-    public function setBlocked($blocked): self
+    public function setBlocked(bool $blocked): self
     {
         $this->blocked = $blocked;
 
@@ -98,17 +97,17 @@ class CAttendanceCalendar
     }
 
     /**
-     * @return CAttendanceSheet[]|Collection
+     * @return Collection<int, CAttendanceSheet>
      */
-    public function getSheets(): array|Collection
+    public function getSheets(): Collection
     {
         return $this->sheets;
     }
 
     /**
-     * @param CAttendanceSheet[]|Collection $sheets
+     * @param Collection<int, CAttendanceSheet> $sheets
      */
-    public function setSheets(array|Collection $sheets): self
+    public function setSheets(Collection $sheets): self
     {
         $this->sheets = $sheets;
 

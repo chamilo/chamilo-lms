@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
@@ -28,7 +27,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ApiResource(
     shortName: 'Links',
@@ -37,7 +35,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
             controller: UpdateCLinkAction::class,
             security: "is_granted('EDIT', object.resourceNode)",
             validationContext: [
-                'groups' => ['media_object_create', 'link:write']
+                'groups' => ['media_object_create', 'link:write'],
             ],
             deserialize: false
         ),
@@ -68,7 +66,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
                                     'title' => ['type' => 'string'],
                                     'description' => ['type' => 'string'],
                                     'category_id' => ['type' => 'int'],
-                                    'displayOrder' => ['type' => 'integer'],
                                     'target' => ['type' => 'string'],
                                     'parentResourceNodeId' => ['type' => 'integer'],
                                     'resourceLinkList' => [
@@ -79,9 +76,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
                                                 'visibility' => ['type' => 'integer'],
                                                 'cid' => ['type' => 'integer'],
                                                 'gid' => ['type' => 'integer'],
-                                                'sid' => ['type' => 'integer']
-                                            ]
-                                        ]
+                                                'sid' => ['type' => 'integer'],
+                                            ],
+                                        ],
                                     ],
                                 ],
                                 'required' => ['url', 'title'],
@@ -103,7 +100,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
                         'in' => 'query',
                         'required' => true,
                         'description' => 'Resource node Parent',
-                        'schema' => ['type' => 'integer']
+                        'schema' => ['type' => 'integer'],
                     ],
                     [
                         'name' => 'cid',
@@ -111,8 +108,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
                         'required' => true,
                         'description' => 'Course id',
                         'schema' => [
-                            'type' => 'integer'
-                        ]
+                            'type' => 'integer',
+                        ],
                     ],
                     [
                         'name' => 'sid',
@@ -120,12 +117,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
                         'required' => false,
                         'description' => 'Session id',
                         'schema' => [
-                            'type' => 'integer'
-                        ]
-                    ]
-                ]
+                            'type' => 'integer',
+                        ],
+                    ],
+                ],
             ]
-        )
+        ),
     ],
     normalizationContext: [
         'groups' => ['link:read', 'resource_node:read'],
@@ -134,9 +131,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
         'groups' => ['link:write'],
     ],
 )]
-
 #[ApiFilter(SearchFilter::class, properties: ['title' => 'partial', 'resourceNode.parent' => 'exact'])]
-#[ApiFilter(OrderFilter::class, properties: ["resourceNode.displayOrder"])]
 #[ORM\Table(name: 'c_link')]
 #[ORM\Entity(repositoryClass: CLinkRepository::class)]
 class CLink extends AbstractResource implements ResourceInterface, Stringable
@@ -165,12 +160,7 @@ class CLink extends AbstractResource implements ResourceInterface, Stringable
     #[Groups(['link:read', 'link:write', 'link:browse'])]
     #[ORM\ManyToOne(targetEntity: CLinkCategory::class, inversedBy: 'links')]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'iid', onDelete: 'SET NULL')]
-    #[Gedmo\SortableGroup]
     protected ?CLinkCategory $category = null;
-
-    #[ORM\Column(name: 'display_order', type: 'integer', nullable: false)]
-    #[Gedmo\SortablePosition]
-    protected int $displayOrder;
 
     #[Groups(['link:read', 'link:write', 'link:browse'])]
     #[ORM\Column(name: 'target', type: 'string', length: 10, nullable: true)]
@@ -181,7 +171,6 @@ class CLink extends AbstractResource implements ResourceInterface, Stringable
 
     public function __construct()
     {
-        $this->displayOrder = 0;
         $this->description = '';
     }
 
@@ -226,23 +215,6 @@ class CLink extends AbstractResource implements ResourceInterface, Stringable
         return $this->description;
     }
 
-    public function setDisplayOrder(int $displayOrder): self
-    {
-        $this->displayOrder = $displayOrder;
-
-        return $this;
-    }
-
-    /**
-     * Get displayOrder.
-     *
-     * @return int
-     */
-    public function getDisplayOrder()
-    {
-        return $this->displayOrder;
-    }
-
     public function setTarget(string $target): self
     {
         $this->target = $target;
@@ -279,7 +251,7 @@ class CLink extends AbstractResource implements ResourceInterface, Stringable
 
     public function toggleVisibility(): void
     {
-        $this->linkVisible = !($this->getFirstResourceLink()->getVisibility());
+        $this->linkVisible = !$this->getFirstResourceLink()->getVisibility();
     }
 
     public function getLinkVisible(): bool

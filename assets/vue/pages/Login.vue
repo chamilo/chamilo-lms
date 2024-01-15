@@ -11,19 +11,16 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 
 import Login from '../components/Login';
+import { useSecurityStore } from "../store/securityStore"
 
 const router = useRouter();
-const store = useStore();
-
-const isAuthenticated = computed(() => store.getters["security/isAuthenticated"]);
+const securityStore = useSecurityStore()
 
 // If user is already logged in redirect to home.
-if (isAuthenticated.value) {
+if (securityStore.isAuthenticated) {
     router.push({path: "/home"});
 }
 </script>

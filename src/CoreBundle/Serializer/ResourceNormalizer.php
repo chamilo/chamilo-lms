@@ -22,21 +22,18 @@ final class ResourceNormalizer implements ContextAwareNormalizerInterface, Norma
 
     private const ALREADY_CALLED = 'MEDIA_OBJECT_NORMALIZER_ALREADY_CALLED';
 
-    private ResourceNodeRepository $resourceNodeRepository;
-    private IllustrationRepository $illustrationRepository;
-    private RequestStack $requestStack;
-    private UrlGeneratorInterface $generator;
+    public function __construct(
+        private readonly ResourceNodeRepository $resourceNodeRepository,
+        private readonly IllustrationRepository $illustrationRepository,
+        private readonly RequestStack $requestStack,
+        private readonly UrlGeneratorInterface $generator
+    ) {}
 
-    public function __construct(ResourceNodeRepository $resourceNodeRepository, IllustrationRepository $illustrationRepository, RequestStack $requestStack, UrlGeneratorInterface $generator)
-    {
-        $this->resourceNodeRepository = $resourceNodeRepository;
-        $this->requestStack = $requestStack;
-        $this->generator = $generator;
-        $this->illustrationRepository = $illustrationRepository;
-    }
-
-    public function normalize($object, ?string $format = null, array $context = []): float|int|bool|ArrayObject|array|string|null
-    {
+    public function normalize(
+        $object,
+        string $format = null,
+        array $context = []
+    ): null|array|ArrayObject|bool|float|int|string {
         $context[self::ALREADY_CALLED] = true;
 
         $request = $this->requestStack->getCurrentRequest();
@@ -76,15 +73,14 @@ final class ResourceNormalizer implements ContextAwareNormalizerInterface, Norma
                 'type' => $resourceNode->getResourceType()->getName(),
             ];
 
-            //if ($getFile) {
+            // if ($getFile) {
             // Get all links from resource.
             if ($object instanceof AbstractResource) {
                 $object->setResourceLinkListFromEntity();
+                $object->contentUrl = $this->generator->generate('chamilo_core_resource_view', $params);
+                $object->downloadUrl = $this->generator->generate('chamilo_core_resource_download', $params);
             }
-            //}
-
-            $object->contentUrl = $this->generator->generate('chamilo_core_resource_view', $params);
-            $object->downloadUrl = $this->generator->generate('chamilo_core_resource_download', $params);
+            // }
 
             // Get illustration of a resource, instead of looking for the node children to get the illustration.
             if ($object instanceof ResourceIllustrationInterface) {
@@ -92,9 +88,9 @@ final class ResourceNormalizer implements ContextAwareNormalizerInterface, Norma
             }
 
             // This gets the file contents, usually use to get HTML/Text data to be edited.
-            if ($getFile &&
-                $resourceNode->hasResourceFile() &&
-                $resourceNode->hasEditableTextContent()
+            if ($getFile
+                && $resourceNode->hasResourceFile()
+                && $resourceNode->hasEditableTextContent()
             ) {
                 $object->contentFile = $this->resourceNodeRepository->getResourceNodeFileContent(
                     $resourceNode
@@ -105,7 +101,7 @@ final class ResourceNormalizer implements ContextAwareNormalizerInterface, Norma
         return $this->normalizer->normalize($object, $format, $context);
     }
 
-    public function supportsNormalization($data, ?string $format = null, array $context = []): bool
+    public function supportsNormalization($data, string $format = null, array $context = []): bool
     {
         if (isset($context[self::ALREADY_CALLED])) {
             return false;

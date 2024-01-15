@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
@@ -11,17 +12,13 @@ use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CLinkCategory;
 use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
-use DateTime;
 use Doctrine\ORM\EntityManager;
-use Exception;
-
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 class GetLinksCollectionController extends BaseResourceFileAction
 {
-
     public function __invoke(Request $request, CLinkRepository $repo, EntityManager $em, CLinkCategoryRepository $repoCategory): Response
     {
         $params = $request->query->all();
@@ -39,13 +36,12 @@ class GetLinksCollectionController extends BaseResourceFileAction
             $session = $em->getRepository(Session::class)->find($sid);
         }
 
-        $qb = $repo->getResourcesByCourse($course, $session);
+        $qb = $repo->getResourcesByCourse($course, $session, null, null, true, true);
         $qb->andWhere('resource.category = 0 OR resource.category is null');
-        $qb->addOrderBy('resource.displayOrder', 'ASC');
         $links = $qb->getQuery()->getResult();
 
         if ($links) {
-            /* @var CLink $link */
+            /** @var CLink $link */
             foreach ($links as $link) {
                 $dataResponse['linksWithoutCategory'][] =
                   [
@@ -54,20 +50,19 @@ class GetLinksCollectionController extends BaseResourceFileAction
                       'url' => $link->getUrl(),
                       'iid' => $link->getIid(),
                       'linkVisible' => $link->getFirstResourceLink()->getVisibility(),
-                      'position' => $link->getDisplayOrder(),
+                      'position' => $link->getResourceNode()->getDisplayOrder(),
                   ];
             }
         }
 
-        $qb = $repoCategory->getResourcesByCourse($course, $session);
+        $qb = $repoCategory->getResourcesByCourse($course, $session, null, null, true, true);
         $categories = $qb->getQuery()->getResult();
         if ($categories) {
-            /* @var CLinkCategory $category */
+            /** @var CLinkCategory $category */
             foreach ($categories as $category) {
                 $categoryId = $category->getIid();
                 $qbLink = $repo->getResourcesByCourse($course, $session);
                 $qbLink->andWhere('resource.category = '.$categoryId);
-                $qbLink->addOrderBy('resource.displayOrder', 'ASC');
                 $links = $qbLink->getQuery()->getResult();
 
                 $categoryInfo = [
@@ -78,17 +73,17 @@ class GetLinksCollectionController extends BaseResourceFileAction
                 $dataResponse['categories'][$categoryId]['info'] = $categoryInfo;
                 if ($links) {
                     $items = [];
-                    /* @var CLink $link */
-                    foreach ($links as $link) {
 
+                    /** @var CLink $link */
+                    foreach ($links as $link) {
                         $items[] = [
-                                'id' => $link->getIid(),
-                                'title' => $link->getTitle(),
-                                'url' => $link->getUrl(),
-                                'iid' => $link->getIid(),
-                                'linkVisible' => $link->getFirstResourceLink()->getVisibility(),
-                                'position' => $link->getDisplayOrder(),
-                            ];
+                            'id' => $link->getIid(),
+                            'title' => $link->getTitle(),
+                            'url' => $link->getUrl(),
+                            'iid' => $link->getIid(),
+                            'linkVisible' => $link->getFirstResourceLink()->getVisibility(),
+                            'position' => $link->getResourceNode()->getDisplayOrder(),
+                        ];
 
                         $dataResponse['categories'][$categoryId]['links'] = $items;
                     }

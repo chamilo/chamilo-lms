@@ -44,7 +44,7 @@ if (empty($skillLevels)) {
     ]);
     /** @var Skill $skill */
     foreach ($skills as $skill) {
-        $skillsOptions[$skill->getId()] = $skill->getName();
+        $skillsOptions[$skill->getId()] = $skill->getTitle();
     }
 } else {
     // Get only root elements
@@ -134,7 +134,7 @@ if ($profile) {
     ]);
     $profileLevels = [];
     foreach ($levels as $level) {
-        $profileLevels[$level->getPosition()][$level->getId()] = $level->getName();
+        $profileLevels[$level->getPosition()][$level->getId()] = $level->getTitle();
     }
 
     ksort($profileLevels); // Sort the array by Position.
@@ -178,7 +178,7 @@ if (!empty($skillIdFromGet)) {
         }
         $skillsOptions = [];
         if ($oldSkill) {
-            $skillsOptions = [$oldSkill->getId() => ' -- '.$oldSkill->getName()];
+            $skillsOptions = [$oldSkill->getId() => ' -- '.$oldSkill->getTitle()];
         }
 
         if ($counter < count($subSkillList) - 1) {
@@ -202,7 +202,7 @@ if (!empty($skillIdFromGet)) {
             $skillsOptions,
             [
                 'id' => 'sub_skill_id_'.($counter + 1),
-                'class' => 'sub_skill',
+                'class' => 'sub_skill ',
             ]
         );
 
@@ -275,7 +275,7 @@ if ($form->validate()) {
                 sprintf(
                     get_lang('The user %s has already achieved the skill %s'),
                     UserManager::formatUserFullName($user),
-                    $skill->getName()
+                    $skill->getTitle()
                 ),
                 'warning'
             )
@@ -304,9 +304,9 @@ if ($form->validate()) {
         $parentData = $skillModel->get($parentId);
 
         $data = $extraFieldValue->get_values_by_handler_and_field_variable($parentId, 'children_auto_threshold');
-        if (!empty($data) && !empty($data['value'])) {
-            // Search X children
-            $requiredSkills = $data['value'];
+        // Search X children
+        $requiredSkills = isset($data['value']) ? (int) $data['value'] : 0;
+        if ($requiredSkills > 0) {
             $children = $skillRelSkill->getChildren($parentId);
             $counter = 0;
             foreach ($children as $child) {
@@ -321,9 +321,9 @@ if ($form->validate()) {
                     Display::addFlash(Display::return_message(get_lang('Message Sent')));
                     $url = api_get_path(WEB_CODE_PATH).'skills/assign.php?user='.$userId.'&id='.$parentId;
                     $link = Display::url($url, $url);
-                    $subject = get_lang('A student has obtained the number of sub-skills needed to validate the mother skill.');
+                    $subject = get_lang('A student has obtained the number of sub-skills needed to validate the mother skill');
                     $message = sprintf(
-                        get_lang('Learner %s has enough sub-skill to get skill %s. To assign this skill it is possible to go here : %s'),
+                        get_lang('Learner %s has enough sub-skill to get skill %s . To assign this skill it is possible to go here : %s'),
                         UserManager::formatUserFullName($user),
                         $parentData['name'],
                         $link
@@ -349,17 +349,6 @@ if ($form->validate()) {
                 UserManager::formatUserFullName($user)
             ),
             'success'
-        )
-    );
-
-    Display::addFlash(
-        Display::return_message(
-            sprintf(
-                get_lang('To assign a new skill to this user, click <a href="%s">here</a>'),
-                api_get_self().'?'.http_build_query(['user' => $user->getId()])
-            ),
-            'info',
-            false
         )
     );
 

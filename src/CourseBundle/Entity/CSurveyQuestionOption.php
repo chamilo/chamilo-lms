@@ -16,7 +16,7 @@ class CSurveyQuestionOption
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\ManyToOne(targetEntity: CSurveyQuestion::class, inversedBy: 'options')]
     #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
@@ -35,11 +35,9 @@ class CSurveyQuestionOption
     #[ORM\Column(name: 'value', type: 'integer', nullable: false)]
     protected int $value;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }

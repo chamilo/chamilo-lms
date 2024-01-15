@@ -25,7 +25,7 @@ class ResourceFormatFixtures extends Fixture
 
         foreach ($list as $key => $data) {
             $resourceFormat = (new ResourceFormat())
-                ->setName($data['name'])
+                ->setTitle($data['name'])
             ;
             $manager->persist($resourceFormat);
         }

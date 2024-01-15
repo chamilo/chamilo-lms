@@ -29,7 +29,7 @@ if (!empty($sessionId)) {
     if (!$courseExistsInSession) {
         api_not_allowed(true);
     }
-    $sessionName = ' '.$session->getName().' - '.$course->getTitleAndCode();
+    $sessionName = ' '.$session->getTitle().' - '.$course->getTitleAndCode();
 }
 
 $form->addHeader(get_lang('Add skills').$sessionName);

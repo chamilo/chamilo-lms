@@ -544,11 +544,12 @@ class Security
                 'uppercase' => 0,
                 'numeric' => 2,
                 'length' => 5,
+                'specials' => 1,
             ],
         ];
 
         $passwordRequirements = api_get_setting('security.password_requirements', true);
-        if (!empty($passwordRequirements)) {
+        if (is_array($passwordRequirements)) {
             $requirements = $passwordRequirements;
         }
 

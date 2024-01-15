@@ -35,7 +35,7 @@ class AccessUserFixtures extends Fixture implements ContainerAwareInterface
         $toolChain->createTools();
 
         // Defined in AccessGroupFixtures.php.
-        //$group = $this->getReference('GROUP_ADMIN');
+        // $group = $this->getReference('GROUP_ADMIN');
 
         $admin = (new User())
             ->setSkipResourceNode(true)
@@ -50,7 +50,7 @@ class AccessUserFixtures extends Fixture implements ContainerAwareInterface
             ->setTimezone($timezone)
             ->addUserAsAdmin()
             ->addRole('ROLE_GLOBAL_ADMIN') // Only for the first user
-            //->addGroup($group)
+            // ->addGroup($group)
         ;
 
         $manager->persist($admin);

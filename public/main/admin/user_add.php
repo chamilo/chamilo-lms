@@ -136,7 +136,7 @@ $form->addElement(
 $form->applyFilter('official_code', 'html_filter');
 $form->applyFilter('official_code', 'trim');
 // e-mail
-$form->addElement('text', 'email', get_lang('e-mail'), ['size' => '40', 'autocomplete' => 'off', 'id' => 'email']);
+$form->addElement('text', 'email', get_lang('E-mail'), ['size' => '40', 'autocomplete' => 'off', 'id' => 'email']);
 $form->addEmailRule('email');
 if ('true' == api_get_setting('registration', 'email')) {
     $form->addRule('email', get_lang('Required field'), 'required');
@@ -347,7 +347,7 @@ if ($form->validate()) {
         $official_code = $user['official_code'];
         $email = $user['email'];
         $phone = $user['phone'];
-        $username = $user['username'];
+        $username = 'true' !== api_get_setting('login_is_email') ? $user['username'] : '';
         $status = (int) $user['status'];
         $language = $user['locale'];
         $picture = $_FILES['picture'];
@@ -462,7 +462,9 @@ if ($form->validate()) {
 
         Display::addFlash(Display::return_message($message, 'normal', false));
 
-        if (isset($_POST['submit_plus'])) {
+        if (isset($_POST['submit_plus'])
+            || (api_is_session_admin() && 'true' === api_get_setting('session.limit_session_admin_list_users'))
+        ) {
             //we want to add more. Prepare report message and redirect to the same page (to clean the form)
             header('Location: user_add.php?sec_token='.$tok);
             exit;

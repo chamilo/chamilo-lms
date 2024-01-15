@@ -8,16 +8,23 @@ namespace Chamilo\CoreBundle\Entity;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-#[ORM\Entity(repositoryClass: PortfolioCommentRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'portfolio_comment')]
 #[Gedmo\Tree(type: 'nested')]
 class PortfolioComment
 {
     public const VISIBILITY_VISIBLE = 1;
     public const VISIBILITY_PER_USER = 2;
+
+    /**
+     * Add @ to the next line if portfolio_advanced_sharing config setting is true
+     * ORM\Column(name="visibility", type="smallint", options={"default": 1}).
+     */
+    protected int $visibility = 1;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -65,7 +72,7 @@ class PortfolioComment
 
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     #[ORM\OrderBy(['lft' => 'DESC'])]
-    private ArrayCollection $children;
+    private Collection $children;
 
     #[ORM\Column(type: 'float', nullable: true)]
     private ?float $score;
@@ -145,7 +152,7 @@ class PortfolioComment
         return $this;
     }
 
-    public function getChildren(): ArrayCollection
+    public function getChildren(): Collection
     {
         return $this->children;
     }

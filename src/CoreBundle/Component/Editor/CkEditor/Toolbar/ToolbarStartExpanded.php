@@ -6,6 +6,4 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
-class ToolbarStartExpanded extends Basic
-{
-}
+class ToolbarStartExpanded extends Basic {}

@@ -49,7 +49,7 @@ $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
     'name' => get_lang('Learning paths'),
 ];
-$interbreadcrumb[] = ['url' => '#', 'name' => strip_tags($category->getName())];
+$interbreadcrumb[] = ['url' => '#', 'name' => strip_tags($category->getTitle())];
 
 $url = api_get_self().'?'.api_get_cidreq().'&action=add_users_to_category&id='.$categoryId;
 

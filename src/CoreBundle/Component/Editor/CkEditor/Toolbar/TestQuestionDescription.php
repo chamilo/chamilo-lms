@@ -31,7 +31,7 @@ class TestQuestionDescription extends Basic
                 'name' => 'editing',
                 'groups' => ['clipboard', 'undo'],
             ],
-            //array('name' => 'forms',    'groups' =>array('clipboard', 'undo', )),
+            // array('name' => 'forms',    'groups' =>array('clipboard', 'undo', )),
             '/',
             [
                 'name' => 'basicstyles',

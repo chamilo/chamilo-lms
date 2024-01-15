@@ -7,13 +7,13 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
-use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Entity\CLpRelUser;
 use Chamilo\CourseBundle\Repository\CLpRelUserRepository;
+use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\Kernel;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
@@ -30,25 +30,26 @@ final class Version20230215072918 extends AbstractMigrationChamilo
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
         $em = $doctrine->getManager();
+
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
-        $lpRepo = $container->get(CLp::class);
+        $lpRepo = $container->get(CLpRepository::class);
 
         /** @var CLpRelUserRepository $cLpRelUserRepo */
-        $cLpRelUserRepo = $container->get(CLpRelUser::class);
+        $cLpRelUserRepo = $container->get(CLpRelUserRepository::class);
 
         $courseRepo = $container->get(CourseRepository::class);
-        $sessionRepo = $container->get(Session::class);
-        $userRepo = $container->get(User::class);
+        $sessionRepo = $container->get(SessionRepository::class);
+        $userRepo = $container->get(UserRepository::class);
 
         /** @var Kernel $kernel */
         $kernel = $container->get('kernel');
         $rootPath = $kernel->getProjectDir();
         $admin = $this->getAdmin();
 
-
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();
@@ -76,7 +77,8 @@ final class Version20230215072918 extends AbstractMigrationChamilo
                         $item
                             ->setUser($user)
                             ->setCourse($course)
-                            ->setLp($lp);
+                            ->setLp($lp)
+                        ;
                         if (!empty($session)) {
                             $item->setSession($session);
                         }
@@ -88,7 +90,5 @@ final class Version20230215072918 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

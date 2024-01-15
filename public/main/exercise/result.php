@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Shows the exercise results.
@@ -68,7 +69,7 @@ if ($student_id === $current_user_id && ExerciseSignaturePlugin::exerciseHasSign
 }
 
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
-$htmlHeadXtra[] = api_get_build_js('exercise.js');
+$htmlHeadXtra[] = api_get_build_js('legacy_exercise.js');
 
 if ($show_headers) {
     $interbreadcrumb[] = [
@@ -84,7 +85,7 @@ if ($show_headers) {
 
     if ('mobileapp' === $origin) {
         $actions = '<a href="javascript:window.history.go(-1);">'.
-            Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('GoBackToQuestionList')).'</a>';
         echo Display::toolbarAction('toolbar', [$actions]);
     }
 }

@@ -20,6 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * Class AdminController.
  *
  * @Route("/admin/lti")
+ *
  * @Security("is_granted('ROLE_ADMIN')")
  */
 class AdminController extends BaseController
@@ -73,6 +74,7 @@ class AdminController extends BaseController
         $em = $this->getDoctrine()
             ->getManager()
         ;
+
         /** @var ExternalTool $tool */
         $tool = $em->find(ExternalTool::class, $toolId);
 
@@ -112,6 +114,7 @@ class AdminController extends BaseController
     public function adminDeleteAction(int $toolId): Response
     {
         $em = $this->getDoctrine()->getManager();
+
         /** @var ExternalTool $tool */
         $tool = $em->find(ExternalTool::class, $toolId);
 

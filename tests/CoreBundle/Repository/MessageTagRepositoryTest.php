@@ -29,7 +29,7 @@ class MessageTagRepositoryTest extends AbstractApiTest
                 ->setTag('my tag')
                 ->setColor('red')
                 ->setUser($testUser)
-            ;
+        ;
 
         $this->assertHasNoEntityViolations($tag);
         $tagRepo->update($tag);
@@ -90,7 +90,7 @@ class MessageTagRepositoryTest extends AbstractApiTest
             (new MessageTag())
                 ->setTag('unique')
                 ->setUser($testUser)
-            ;
+        ;
         $this->assertHasNoEntityViolations($tag);
         $tagRepo->update($tag);
 
@@ -99,7 +99,7 @@ class MessageTagRepositoryTest extends AbstractApiTest
             (new MessageTag())
                 ->setTag('unique')
                 ->setUser($testUser)
-            ;
+        ;
         $violations = $this->getViolations($tag);
         $this->assertSame(1, $violations->count());
 

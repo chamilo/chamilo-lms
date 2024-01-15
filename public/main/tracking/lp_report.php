@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -403,7 +404,7 @@ $headers[] = get_lang('FirstName');
 $headers[] = get_lang('LastName');
 $headers[] = get_lang('Username');
 foreach ($lps as $lp) {
-    $lpName = $lp->getName();
+    $lpName = $lp->getTitle();
     $headers[] = get_lang('Progress').': '.$lpName;
     $headers[] = get_lang('FirstAccess').': '.$lpName;
     $headers[] = get_lang('LastAccess').': '.$lpName;
@@ -426,7 +427,7 @@ if (!empty($action)) {
 $actionsLeft = TrackingCourseLog::actionsLeft('lp', api_get_session_id(), false);
 $actionsCenter = '';
 $actionsRight = Display::url(
-    Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), null, ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportAsXLS')),
     api_get_self().'?action=export&'.api_get_cidreq()
 );
 

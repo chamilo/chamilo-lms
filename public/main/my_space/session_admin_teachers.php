@@ -5,6 +5,11 @@
 /**
  * Teacher report.
  */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -158,7 +163,7 @@ function get_users($from, $limit, $column, $direction)
         $row[] = $string_date;
 
         $detailsLink = Display::url(
-            Display::return_icon('2rightarrow.png', get_lang('Details').' '.$student_data['username']),
+            Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Details').' '.$student_data['username']),
             $urlDetails,
             ['id' => 'details_'.$student_data['username']]
         );
@@ -180,17 +185,17 @@ $actionsLeft = '';
 if (api_is_drh()) {
     $menu_items = [
         Display::url(
-            Display::return_icon('statistics.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('MyStats')),
             api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
         ),
-        Display::url(Display::return_icon('user.png', get_lang('Students'), [], ICON_SIZE_MEDIUM), 'student.php'),
+        Display::url(Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Students')), 'student.php'),
         Display::url(
-            Display::return_icon('teacher_na.png', get_lang('Trainers'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Trainers')),
             'teachers.php'
         ),
-        Display::url(Display::return_icon('course.png', get_lang('Courses'), [], ICON_SIZE_MEDIUM), 'course.php'),
+        Display::url(Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Courses')), 'course.php'),
         Display::url(
-            Display::return_icon('session.png', get_lang('Sessions'), [], ICON_SIZE_MEDIUM),
+            Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Sessions')),
             'session.php'
         ),
     ];
@@ -204,12 +209,12 @@ if (api_is_drh()) {
 }
 
 $actionsRight = Display::url(
-    Display::return_icon('printer.png', get_lang('Print'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ActionIcon::PRINT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Print')),
     'javascript: void(0);',
     ['onclick' => 'javascript: window.print();']
 );
 $actionsRight .= Display::url(
-    Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportAsCSV')),
     api_get_self().'?export=csv&keyword='.$keyword
 );
 

@@ -4,6 +4,8 @@
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 /**
  * This script shows the group space for one specific group, possibly displaying
@@ -65,19 +67,14 @@ if (!empty($_GET['selfUnReg']) &&
 }
 
 Display::display_header(
-    $nameTools.' '.Security::remove_XSS($groupEntity->getName()),
+    $nameTools.' '.Security::remove_XSS($groupEntity->getTitle()),
     'Group'
 );
 
 Display::display_introduction_section(TOOL_GROUP);
 
 $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq().'">'.
-    Display::return_icon(
-        'back.png',
-        get_lang('Back to Groups list'),
-        '',
-        ICON_SIZE_MEDIUM
-    ).
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to Groups list')).
     '</a>';
 
 $confirmationMessage = addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES));
@@ -110,12 +107,12 @@ if (api_is_allowed_to_edit(false, true) ||
 ) {
     $edit_url = '<a
         href="'.api_get_path(WEB_CODE_PATH).'group/settings.php?'.api_get_cidreq().'">'.
-        Display::return_icon('edit.png', get_lang('Edit this group'), '', ICON_SIZE_SMALL).
+        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit this group')).
         '</a>';
 }
 
 echo Display::page_header(
-    Security::remove_XSS($groupEntity->getName()).' '.$edit_url.' '.$subscribe_group.' '.$unsubscribe_group
+    Security::remove_XSS($groupEntity->getTitle()).' '.$edit_url.' '.$subscribe_group.' '.$unsubscribe_group
 );
 
 if (!empty($groupEntity->getDescription())) {
@@ -137,12 +134,7 @@ if (api_is_allowed_to_edit(false, true) ||
                     $actions_array[] = [
                         'url' => api_get_path(WEB_CODE_PATH).
                             'forum/viewforum.php?forum='.$forum->getIid().'&'.api_get_cidreq().'&origin=group',
-                        'content' => Display::return_icon(
-                            'forum.png',
-                            get_lang('Forum').': '.$forum->getForumTitle(),
-                            [],
-                            32
-                        ),
+                        'content' => Display::getMdiIcon(ToolIcon::FORUM, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Forum').': '.$forum->getTitle()),
                     ];
                 }
             }
@@ -157,7 +149,7 @@ if (api_is_allowed_to_edit(false, true) ||
         $url = Container::getRouter()->generate('chamilo_core_course_redirect_tool', $params).'?'.api_get_cidreq();
         $actions_array[] = [
             'url' => $url,
-            'content' => Display::return_icon('folder.png', get_lang('Documents'), [], 32),
+            'content' => Display::getMdiIcon(ToolIcon::DOCUMENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Documents')),
         ];
     }
 
@@ -174,7 +166,7 @@ if (api_is_allowed_to_edit(false, true) ||
         // Link to a group-specific part of agenda
         $actions_array[] = [
             'url' => $url,
-            'content' => Display::return_icon('agenda.png', get_lang('Agenda'), [], 32),
+            'content' => Display::getMdiIcon(ToolIcon::AGENDA, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Agenda')),
         ];
     }
 
@@ -182,14 +174,14 @@ if (api_is_allowed_to_edit(false, true) ||
         // Link to the works area of this group
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-            'content' => Display::return_icon('work.png', get_lang('Assignments'), [], 32),
+            'content' => Display::getMdiIcon(ToolIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Assignments')),
         ];
     }
     if (GroupManager::TOOL_NOT_AVAILABLE != $groupEntity->getAnnouncementsState()) {
         // Link to a group-specific part of announcements
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
-            'content' => Display::return_icon('announce.png', get_lang('Announcements'), [], 32),
+            'content' => Display::getMdiIcon(ToolIcon::ANNOUNCEMENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Announcements')),
         ];
     }
 
@@ -198,7 +190,7 @@ if (api_is_allowed_to_edit(false, true) ||
         /*$actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).
                 'wiki/index.php?'.api_get_cidreq().'&action=show&title=index&sid='.api_get_session_id().'&group_id='.$groupEntity->getIid(),
-            'content' => Display::return_icon('wiki.png', get_lang('Wiki'), [], 32),
+            'content' => Display::getMdiIcon(ToolIcon::WIKI, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Wiki')),
         ];*/
     }
 
@@ -207,7 +199,7 @@ if (api_is_allowed_to_edit(false, true) ||
         /*if (api_get_course_setting('allow_open_chat_window')) {
             $actions_array[] = [
                 'url' => 'javascript: void(0);',
-                'content' => Display::return_icon('chat.png', get_lang('Chat'), [], 32),
+                'content' => Display::getMdiIcon(ToolIcon::CHAT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Chat')),
                 'url_attributes' => [
                     'onclick' => " window.open('../chat/chat.php?".api_get_cidreq().'&toolgroup='.$groupEntity->getIid()."','window_chat_group_".api_get_course_id().'_'.api_get_group_id()."','height=380, width=625, left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no')",
                 ],
@@ -215,7 +207,7 @@ if (api_is_allowed_to_edit(false, true) ||
         } else {
             $actions_array[] = [
                 'url' => api_get_path(WEB_CODE_PATH).'chat/chat.php?'.api_get_cidreq().'&gid='.$groupEntity->getIid(),
-                'content' => Display::return_icon('chat.png', get_lang('Chat'), [], 32),
+                'content' => Display::getMdiIcon(ToolIcon::CHAT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Chat')),
             ];
         }*/
     }
@@ -226,7 +218,7 @@ if (api_is_allowed_to_edit(false, true) ||
         if ($bbb->hasGroupSupport()) {
             $actions_array[] = [
                 'url' => api_get_path(WEB_PLUGIN_PATH).'bbb/start.php?'.api_get_cidreq(),
-                'content' => Display::return_icon('bbb.png', get_lang('Videoconference'), [], 32),
+                'content' => Display::getMdiIcon(ToolIcon::VIDEOCONFERENCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Videoconference')),
             ];
         }
     }
@@ -235,7 +227,7 @@ if (api_is_allowed_to_edit(false, true) ||
     if ('true' === $enabled) {
         $actions_array[] = [
             'url' => api_get_path(WEB_PLUGIN_PATH).'zoom/start.php?'.api_get_cidreq(),
-            'content' => Display::return_icon('bbb.png', get_lang('VideoConference'), [], 32),
+            'content' => Display::getMdiIcon(ToolIcon::VIDEOCONFERENCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('VideoConference')),
         ];
     }
 
@@ -252,12 +244,7 @@ if (api_is_allowed_to_edit(false, true) ||
                         'url' => api_get_path(WEB_CODE_PATH).
                             'forum/viewforum.php?cid='.api_get_course_int_id().
                             '&forum='.$forum->getIid().'&gid='.$groupEntity->getIid().'&origin=group',
-                        'content' => Display::return_icon(
-                            'forum.png',
-                            get_lang('Group Forum'),
-                            [],
-                            ICON_SIZE_MEDIUM
-                        ),
+                        'content' => Display::getMdiIcon(ToolIcon::FORUM, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Group Forum')),
                     ];
                 }
             }
@@ -268,7 +255,7 @@ if (api_is_allowed_to_edit(false, true) ||
         // Link to the documents area of this group
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(),
-            'content' => Display::return_icon('folder.png', get_lang('Documents'), [], ICON_SIZE_MEDIUM),
+            'content' => Display::getMdiIcon(ToolIcon::DOCUMENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Documents')),
         ];
     }
 
@@ -280,7 +267,7 @@ if (api_is_allowed_to_edit(false, true) ||
         // Link to a group-specific part of agenda
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?'.api_get_cidreq().$groupFilter,
-            'content' => Display::return_icon('agenda.png', get_lang('Agenda'), [], 32),
+            'content' => Display::getMdiIcon(ToolIcon::AGENDA, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Agenda')),
         ];
     }
 
@@ -288,7 +275,7 @@ if (api_is_allowed_to_edit(false, true) ||
         // Link to the works area of this group
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-            'content' => Display::return_icon('work.png', get_lang('Assignments'), [], ICON_SIZE_MEDIUM),
+            'content' => Display::getMdiIcon(ToolIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Assignments')),
         ];
     }
 
@@ -296,7 +283,7 @@ if (api_is_allowed_to_edit(false, true) ||
         // Link to a group-specific part of announcements
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
-            'content' => Display::return_icon('announce.png', get_lang('Announcements'), [], ICON_SIZE_MEDIUM),
+            'content' => Display::getMdiIcon(ToolIcon::ANNOUNCEMENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Announcements')),
         ];
     }
 
@@ -305,7 +292,7 @@ if (api_is_allowed_to_edit(false, true) ||
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'wiki/index.php?'.
                 api_get_cidreq().'&action=show&title=index&sid='.api_get_session_id().'&gid='.$group_id,
-            'content' => Display::return_icon('wiki.png', get_lang('Wiki'), [], 32),
+            'content' => Display::getMdiIcon(ToolIcon::WIKI, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Wiki')),
         ];
     }
 
@@ -314,12 +301,12 @@ if (api_is_allowed_to_edit(false, true) ||
         if (api_get_course_setting('allow_open_chat_window')) {
             $actions_array[] = [
                 'url' => "javascript: void(0);\" onclick=\"window.open('../chat/chat.php?".api_get_cidreq().'&toolgroup='.$group_id."','window_chat_group_".api_get_course_id().'_'.api_get_group_id()."','height=380, width=625, left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no') \"",
-                'content' => Display::return_icon('chat.png', get_lang('Chat'), [], 32),
+                'content' => Display::getMdiIcon(ToolIcon::CHAT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Chat')),
             ];
         } else {
             $actions_array[] = [
                 'url' => api_get_path(WEB_CODE_PATH).'chat/chat.php?'.api_get_cidreq().'&toolgroup='.$group_id,
-                'content' => Display::return_icon('chat.png', get_lang('Chat'), [], 32),
+                'content' => Display::getMdiIcon(ToolIcon::CHAT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Chat')),
             ];
         }
     }
@@ -560,10 +547,10 @@ function email_filter($email)
 function activeFilter($isActive)
 {
     if ($isActive) {
-        return Display::return_icon('accept.png', get_lang('active'), [], ICON_SIZE_TINY);
+        return Display::getMdiIcon('toggle-switch', 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('active'));
     }
 
-    return Display::return_icon('error.png', get_lang('inactive'), [], ICON_SIZE_TINY);
+    return Display::getMdiIcon('toggle-switch-off', 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('inactive'));
 }
 
 if ('learnpath' != $origin) {

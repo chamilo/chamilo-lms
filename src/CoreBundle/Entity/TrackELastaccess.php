@@ -34,7 +34,7 @@ class TrackELastaccess
     #[ORM\Column(name: 'session_id', type: 'integer', nullable: true)]
     protected ?int $sessionId = null;
 
-    #[ORM\Column(name: 'access_id', type: 'bigint')]
+    #[ORM\Column(name: 'access_id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected int $accessId;

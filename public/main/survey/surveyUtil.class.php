@@ -14,6 +14,10 @@ use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 use Chamilo\CourseBundle\Entity\CSurveyQuestion;
 use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * This class offers a series of general utility functions for survey querying and display.
@@ -108,6 +112,7 @@ class SurveyUtil
             $optionId = $optionId.'@:@'.$otherOption;
         }
 
+        $sessionId = api_get_session_id();
         $answer = new CSurveyAnswer();
         $answer
             ->setUser($user)
@@ -115,6 +120,7 @@ class SurveyUtil
             ->setQuestion($question)
             ->setOptionId($optionId)
             ->setValue((int) $optionValue)
+            ->setSessionId($sessionId ?: null)
         ;
 
         $em = Database::getManager();
@@ -440,26 +446,21 @@ class SurveyUtil
         // Actions bar
         if ($addActionBar) {
             $actions = '<a href="'.$reportingUrl.'">'.
-                Display::return_icon(
-                    'back.png',
-                    get_lang('Back to').' '.get_lang('Reporting overview'),
-                    '',
-                    ICON_SIZE_MEDIUM
-                )
+                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Reporting overview'))
                 .'</a>';
             if (isset($_GET['user'])) {
                 if (api_is_allowed_to_edit()) {
                     // The delete link
                     $actions .= '<a
                         href="'.$reportingUrl.'&action=deleteuserreport&user='.Security::remove_XSS($_GET['user']).'" >'.
-                        Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_MEDIUM).'</a>';
+                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete')).'</a>';
                 }
 
                 // Export the user report
                 $actions .= '<a href="javascript: void(0);" onclick="document.form1a.submit();">'
-                    .Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM).'</a> ';
+                    .Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')).'</a> ';
                 $actions .= '<a href="javascript: void(0);" onclick="document.form1b.submit();">'
-                    .Display::return_icon('export_excel.png', get_lang('Excel export'), '', ICON_SIZE_MEDIUM).'</a> ';
+                    .Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Excel export')).'</a> ';
                 $actions .= '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?action='
                     .Security::remove_XSS($_GET['action']).'&survey_id='.$surveyId.'&'.api_get_cidreq().'&user_id='
                     .Security::remove_XSS($_GET['user']).'">';
@@ -518,19 +519,12 @@ class SurveyUtil
 
         $actions = '<a
             href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'.
-            Display::return_icon(
-                'back.png',
-                get_lang('Back to').' '.get_lang('Reporting overview'),
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Reporting overview'),
                 '',
                 ICON_SIZE_MEDIUM
             ).'</a>';
         $actions .= Display::url(
-            Display::return_icon(
-                'pdf.png',
-                get_lang('ExportToPdf'),
-                '',
-                ICON_SIZE_MEDIUM
-            ),
+            Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportToPdf')),
             'javascript: void(0);',
             ['onclick' => 'exportToPdf();']
         );
@@ -961,19 +955,17 @@ class SurveyUtil
         if ($addActionBar) {
             $actions = '<a
                 href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'
-                .Display::return_icon(
-                    'back.png',
-                    get_lang('Back to').' '.get_lang('Reporting overview'),
+                .Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Reporting overview'),
                     [],
                     ICON_SIZE_MEDIUM
                 )
                 .'</a>';
             $actions .= '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1a.submit();">'
-                .Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM).'</a>';
+                .Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')).'</a>';
             $actions .= '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1b.submit();">'
-                .Display::return_icon('export_excel.png', get_lang('Excel export'), '', ICON_SIZE_MEDIUM).'</a>';
+                .Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Excel export')).'</a>';
             $actions .= '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1c.submit();">'
-                .Display::return_icon('export_compact_csv.png', get_lang('ExportAsCompactCSV'), '', ICON_SIZE_MEDIUM).'</a>';
+                .Display::getMdiIcon(ActionIcon::EXPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportAsCompactCSV')).'</a>';
 
             $content .= Display::toolbarAction('survey', [$actions]);
 
@@ -1996,12 +1988,7 @@ class SurveyUtil
                 WEB_CODE_PATH
             ).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq()
             .'">'
-            .Display::return_icon(
-                'back.png',
-                get_lang('Back to').' '.get_lang('Reporting overview'),
-                [],
-                ICON_SIZE_MEDIUM
-            )
+            .Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Reporting overview'))
             .'</a>';
         echo Display::toolbarAction('survey', [$actions]);
 
@@ -2936,16 +2923,18 @@ class SurveyUtil
     {
         $hideSurveyEdition = api_get_setting('survey.hide_survey_edition', true);
 
-        if (false === $hideSurveyEdition) {
+        if (empty($hideSurveyEdition) || 'false' === $hideSurveyEdition) {
             return false;
         }
 
-        if ('*' === $hideSurveyEdition['codes']) {
-            return true;
-        }
+        if (is_array($hideSurveyEdition)) {
+            if ('*' === $hideSurveyEdition['codes']) {
+                return true;
+            }
 
-        if (in_array($surveyCode, $hideSurveyEdition['codes'])) {
-            return true;
+            if (in_array($surveyCode, $hideSurveyEdition['codes'])) {
+                return true;
+            }
         }
 
         return false;
@@ -2987,7 +2976,7 @@ class SurveyUtil
         parse_str(api_get_cidreq(), $params);
 
         $reportingLink = Display::url(
-            Display::return_icon('statistics.png', get_lang('Reporting')),
+            Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Reporting')),
             $codePath.'survey/reporting.php?'.http_build_query($params + ['survey_id' => $survey_id])
         );
 
@@ -3009,48 +2998,48 @@ class SurveyUtil
             }
 
             $actions[] = Display::url(
-                Display::return_icon('edit.png', get_lang('Edit')),
+                Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
                 $editUrl
             );
             $actions[] = Display::url(
-                Display::return_icon('settings.png', get_lang('Configure')),
+                Display::getMdiIcon(ToolIcon::SETTINGS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Configure')),
                 $configUrl
             );
 
             if (SurveyManager::survey_generation_hash_available()) {
                 $actions[] = Display::url(
-                    Display::return_icon('new_link.png', get_lang('Generate survey access link')),
+                    Display::getMdiIcon(ToolIcon::LINK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Generate survey access link')),
                     $codePath.'survey/generate_link.php?'.http_build_query($params + ['survey_id' => $survey_id])
                 );
             }
 
             if (3 != $type) {
                 $actions[] = Display::url(
-                    Display::return_icon('backup.png', get_lang('Copy survey')),
+                    Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Copy survey')),
                     $codePath.'survey/copy_survey.php?'.http_build_query($params + ['survey_id' => $survey_id])
                 );
 
                 $actions[] = Display::url(
-                    Display::return_icon('copy.png', get_lang('Duplicate survey')),
+                    Display::getMdiIcon(ObjectIcon::MULTI_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Duplicate survey')),
                     $codePath.'survey/survey_list.php?'
                     .http_build_query($params + ['action' => 'copy_survey', 'survey_id' => $survey_id])
                 );
 
                 $actions[] = Display::url(
-                    Display::return_icon('multiplicate_survey.png', get_lang('Multiplicate questions')),
+                    Display::getMdiIcon('view-grid-plus-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Multiplicate questions')),
                     $codePath.'survey/survey_list.php?'
                     .http_build_query($params + ['action' => 'multiplicate', 'survey_id' => $survey_id])
                 );
 
                 $actions[] = Display::url(
-                    Display::return_icon('multiplicate_survey_na.png', get_lang('RemoveMultiplicate questions')),
+                    Display::getMdiIcon('view-grid-plus-outline', 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('RemoveMultiplicate questions')),
                     $codePath.'survey/survey_list.php?'
                     .http_build_query($params + ['action' => 'remove_multiplicate', 'survey_id' => $survey_id])
                 );
 
                 $warning = addslashes(api_htmlentities(get_lang('Empty survey').'?', ENT_QUOTES));
                 $actions[] = Display::url(
-                    Display::return_icon('clean.png', get_lang('Empty survey')),
+                    Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Empty survey')),
                     $codePath.'survey/survey_list.php?'
                     .http_build_query($params + ['action' => 'empty', 'survey_id' => $survey_id]),
                     [
@@ -3062,13 +3051,13 @@ class SurveyUtil
 
         if (3 != $type) {
             $actions[] = Display::url(
-                Display::return_icon('preview_view.png', get_lang('Preview')),
+                Display::getMdiIcon(ActionIcon::PREVIEW_CONTENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Preview')),
                 $codePath.'survey/preview.php?'.http_build_query($params + ['survey_id' => $survey_id])
             );
         }
 
         $actions[] = Display::url(
-            Display::return_icon('mail_send.png', get_lang('Publish')),
+            Display::getMdiIcon(StateIcon::MAIL_NOTIFICATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Publish')),
             $codePath.'survey/survey_invite.php?'.http_build_query($params + ['survey_id' => $survey_id])
         );
 
@@ -3076,7 +3065,7 @@ class SurveyUtil
         $groupData = $extraFieldValue->get_values_by_handler_and_field_variable($survey_id, 'group_id');
         if ($groupData && !empty($groupData['value'])) {
             $actions[] = Display::url(
-                Display::return_icon('teacher.png', get_lang('SendToGroupTutors')),
+                Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('SendToGroupTutors')),
                 $codePath.'survey/survey_list.php?action=send_to_tutors&'.http_build_query($params + ['survey_id' => $survey_id])
             );
         }
@@ -3092,7 +3081,7 @@ class SurveyUtil
 
             $warning = addslashes(api_htmlentities(get_lang('Delete survey').'?', ENT_QUOTES));
             $actions[] = Display::url(
-                Display::return_icon('delete.png', get_lang('Delete')),
+                Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
                 $codePath.'survey/survey_list.php?'
                 .http_build_query($params + ['action' => 'delete', 'survey_id' => $survey_id]),
                 [
@@ -3116,19 +3105,24 @@ class SurveyUtil
     {
         $additionalActions = api_get_setting('survey.survey_additional_teacher_modify_actions', true) ?: [];
 
-        if (empty($additionalActions)) {
+        if (empty($additionalActions) || ('false' === $additionalActions)) {
             return '';
         }
 
-        $actions = [];
-        foreach ($additionalActions as $additionalAction) {
-            $actions[] = call_user_func(
-                $additionalAction,
-                ['survey_id' => $surveyId, 'icon_size' => $iconSize]
-            );
+        $action = '';
+        if (is_array($additionalActions)) {
+            $actions = [];
+            foreach ($additionalActions as $additionalAction) {
+                $actions[] = call_user_func(
+                    $additionalAction,
+                    ['survey_id' => $surveyId, 'icon_size' => $iconSize]
+                );
+            }
+            $action = implode(PHP_EOL, $actions);
         }
 
-        return implode(PHP_EOL, $actions);
+
+        return $action;
     }
 
     /**
@@ -3144,16 +3138,16 @@ class SurveyUtil
         $params = [];
         parse_str(api_get_cidreq(), $params);
         $actions[] = Display::url(
-            Display::return_icon('preview_view.png', get_lang('Preview')),
+            Display::getMdiIcon(ActionIcon::PREVIEW_CONTENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Preview')),
             $codePath.'survey/preview.php?'.http_build_query($params + ['survey_id' => $survey_id])
         );
         $actions[] = Display::url(
-            Display::return_icon('mail_send.png', get_lang('Publish')),
+            Display::getMdiIcon(StateIcon::MAIL_NOTIFICATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Publish')),
             $codePath.'survey/survey_invite.php?'.http_build_query($params + ['survey_id' => $survey_id])
         );
         $warning = addslashes(api_htmlentities(get_lang('Empty survey').'?', ENT_QUOTES));
         $actions[] = Display::url(
-            Display::return_icon('clean.png', get_lang('Empty survey')),
+            Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Empty survey')),
             $codePath.'survey/survey_list.php?'
                 .http_build_query($params + ['action' => 'empty', 'survey_id' => $survey_id]),
             [
@@ -3590,12 +3584,7 @@ class SurveyUtil
             if (0 == $survey->getAnswered()) {
                 echo '<td>';
                 $url = self::generateFillSurveyLink($survey, $row['invitation_code'], $course, $row['session_id']);
-                $icon = Display::return_icon(
-                    'survey.png',
-                    get_lang('ClickHereToAnswerTheSurvey'),
-                    ['style' => 'margin-top: -4px'],
-                    ICON_SIZE_TINY
-                );
+                $icon = Display::getMdiIcon(ToolIcon::SURVEY, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('ClickHereToAnswerTheSurvey'));
                 echo '<a href="'.$url.'">
                     '.$icon
                     .$row['title']
@@ -3605,12 +3594,7 @@ class SurveyUtil
                     $user_id,
                     $_course
                 );
-                $icon = Display::return_icon(
-                    'survey_na.png',
-                    get_lang('SurveysDone'),
-                    [],
-                    ICON_SIZE_TINY
-                );
+                $icon = Display::getMdiIcon(ObjectIcon::SURVEY, 'ch-tool-icon-disabled', null, ICON_SIZE_TINY, get_lang('SurveysDone'));
                 $showLink = (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse)
                     && SURVEY_VISIBLE_TUTOR != $row['visible_results'];
 

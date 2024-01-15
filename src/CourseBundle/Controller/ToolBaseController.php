@@ -12,11 +12,9 @@ use Chamilo\CoreBundle\Traits\CourseControllerTrait;
 
 /**
  * Each entity controller must extend this class.
- *
- * @abstract
  */
 abstract class ToolBaseController extends BaseController implements CourseControllerInterface
 {
-    use CourseControllerTrait;
     use ControllerTrait;
+    use CourseControllerTrait;
 }

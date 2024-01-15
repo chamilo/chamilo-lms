@@ -50,10 +50,9 @@ public/plugin/vchamilo/templates/*
 
 # Stuff updated through composer - Remove just before release
 vendor
-composer.lock
-symfony.lock
 
 ###> symfony/framework-bundle ###
+/.env
 /.env.local
 /.env.local.php
 /.env.*.local

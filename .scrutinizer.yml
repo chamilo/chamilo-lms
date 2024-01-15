@@ -1,4 +1,7 @@
 build:
+    environment:
+        php: 8.1.2
+
     nodes:
         analysis:
             project_setup:

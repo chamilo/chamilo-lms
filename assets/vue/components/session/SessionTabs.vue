@@ -29,15 +29,15 @@ const selected = computed(() => {
 
 const sessionTabs = [
   {
-    title: t('Current'),
+    title: t('Current session tab'),
     to: {name: 'MySessions'},
   },
   {
-    title: t('Upcoming'),
+    title: t('Upcoming session tab'),
     to: {name: 'MySessionsUpcoming'},
   },
   {
-    title: t('Past'),
+    title: t('Past session tab'),
     to: {name: 'MySessionsPast'},
   },
 ]

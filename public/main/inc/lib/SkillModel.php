@@ -24,6 +24,7 @@ use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 class SkillModel extends Model
 {
@@ -192,7 +193,7 @@ class SkillModel extends Model
                 break;
         }
 
-        $isHierarchicalTable = ('true' === api_get_setting('skill.table_of_hierarchical_skill_presentation'));
+        $isHierarchicalTable = ('true' === api_get_setting('skill.skills_hierarchical_view_in_user_tracking'));
         $skillRepo = Container::getSkillRepository();
         $html = '';
         foreach ($skills as $skill) {
@@ -338,7 +339,7 @@ class SkillModel extends Model
                     $row['asset'] = $assetRepo->getAssetUrl($skill->getAsset());
                 }
 
-                $row['name'] = self::translateName($skill->getName());
+                $row['name'] = self::translateName($skill->getTitle());
                 $row['short_code'] = self::translateCode($skill->getShortCode());
                 $skillRelSkill = new SkillRelSkillModel();
                 $parents = $skillRelSkill->getSkillParents($skillId);
@@ -711,7 +712,7 @@ class SkillModel extends Model
      */
     public function processVertex(Vertex $vertex, $skills = [], $level = 0)
     {
-        $isHierarchicalTable = ('true' === api_get_setting('skill.table_of_hierarchical_skill_presentation'));
+        $isHierarchicalTable = ('true' === api_get_setting('skill.skills_hierarchical_view_in_user_tracking'));
         $subTable = '';
         if ($vertex->getVerticesEdgeTo()->count() > 0) {
             if ($isHierarchicalTable) {
@@ -788,6 +789,7 @@ class SkillModel extends Model
             }
         }
 
+        $assetRepo = Container::getAssetRepository();
         foreach ($skills as $resultData) {
             $courseId = $resultData['course_id'];
             if (!empty($courseId)) {
@@ -800,9 +802,18 @@ class SkillModel extends Model
             } else {
                 $courseInfo = [];
             }
+            $asset = $assetRepo->find($resultData['asset_id']);
+            $image = $assetRepo->getAssetUrl($asset);
+            $badgeImage = Display::img(
+                $image,
+                '',
+                ['width' => '40'],
+                false
+            );;
             $tableRow = [
                 'skill_id' => $resultData['id'],
                 'asset_id' => $resultData['asset_id'],
+                'skill_badge' => $badgeImage,
                 'skill_name' => self::translateName($resultData['name']),
                 'short_code' => $resultData['short_code'],
                 'skill_url' => $resultData['url'],
@@ -818,7 +829,7 @@ class SkillModel extends Model
             $tableRows[] = $tableRow;
         }
 
-        $isHierarchicalTable = ('true' === api_get_setting('skill.table_of_hierarchical_skill_presentation'));
+        $isHierarchicalTable = ('true' === api_get_setting('skill.skills_hierarchical_view_in_user_tracking'));
         $allowLevels = api_get_setting('skill.skill_levels_names', true);
 
         $tableResult = '<div id="skillList">';
@@ -1829,12 +1840,7 @@ class SkillModel extends Model
     public function getToolBar()
     {
         $toolbar = Display::url(
-            Display::return_icon(
-                'back.png',
-                get_lang('Manage skills'),
-                null,
-                ICON_SIZE_MEDIUM
-            ),
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Manage skills')),
             api_get_path(WEB_CODE_PATH).'skills/skill_list.php'
         );
 
@@ -2088,7 +2094,7 @@ class SkillModel extends Model
                 /** @var CForumThread $item */
                 $item = $em->getRepository(CForumThread::class)->find($itemId);
                 if ($item) {
-                    $itemInfo['name'] = $item->getThreadTitle();
+                    $itemInfo['name'] = $item->getTitle();
                 }
                 break;
         }

@@ -11,22 +11,22 @@ use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 
-//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
+// use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 
 /**
  * Extension is called when loading api/personal_files.json.
  */
-final class PersonalFileExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
+final class PersonalFileExtension implements QueryCollectionExtensionInterface // , QueryItemExtensionInterface
 {
     public function __construct(
         private readonly Security $security,
         private readonly RequestStack $requestStack
-    ) {
-    }
+    ) {}
 
     public function applyToCollection(
         QueryBuilder $queryBuilder,
@@ -55,6 +55,7 @@ final class PersonalFileExtension implements QueryCollectionExtensionInterface /
             return;
         }*/
 
+        /** @var User|null $user */
         if (null === $user = $this->security->getUser()) {
             return;
         }
@@ -82,11 +83,11 @@ final class PersonalFileExtension implements QueryCollectionExtensionInterface /
 
             $queryBuilder
                 ->andWhere('links.user = :userLink')
-                ->setParameter('userLink', $user)
+                ->setParameter('userLink', $user->getId())
             ;
         } else {
             $queryBuilder->orWhere('node.creator = :current');
-            $queryBuilder->setParameter('current', $user);
+            $queryBuilder->setParameter('current', $user->getId());
         }
     }
 }

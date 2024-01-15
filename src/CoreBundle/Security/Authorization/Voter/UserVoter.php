@@ -22,8 +22,7 @@ class UserVoter extends Voter
 
     public function __construct(
         private Security $security
-    ) {
-    }
+    ) {}
 
     protected function supports(string $attribute, $subject): bool
     {
@@ -64,6 +63,13 @@ class UserVoter extends Voter
             }
 
             if ($user->hasFriendWithRelationType($currentUSer, UserRelUser::USER_RELATION_TYPE_FRIEND)) {
+                return true;
+            }
+
+            if (
+                $user->hasFriendWithRelationType($currentUSer, UserRelUser::USER_RELATION_TYPE_BOSS)
+                || $user->isFriendWithMeByRelationType($currentUSer, UserRelUser::USER_RELATION_TYPE_BOSS)
+            ) {
                 return true;
             }
         }

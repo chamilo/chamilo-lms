@@ -1,66 +1,111 @@
 <template>
-    <Toolbar
-        :handle-submit="onSendFormData"
-        :handle-reset="resetForm"
-    />
-    <DocumentsForm
-      ref="createForm"
-      :values="item"
-      :errors="violations"
-    />
-
-    <Loading :visible="isLoading" />
+  <Toolbar
+    :handle-reset="resetForm"
+    :handle-submit="onSendFormData"
+  />
+  <DocumentsForm
+    ref="createForm"
+    :errors="violations"
+    :values="item"
+  />
+  <Panel
+    v-if="$route.query.cert === '1'"
+    :header="$t('Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:')"
+  >
+    <div v-html="finalTags" />
+  </Panel>
+  <Loading :visible="isLoading" />
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import { createHelpers } from 'vuex-map-fields';
-import DocumentsForm from '../../components/documents/FormNewDocument.vue';
-import Loading from '../../components/Loading.vue';
-import Toolbar from '../../components/Toolbar.vue';
-import CreateMixin from '../../mixins/CreateMixin';
-import {RESOURCE_LINK_PUBLISHED} from "../../components/resource_links/visibility";
+import { mapActions } from "vuex"
+import { createHelpers } from "vuex-map-fields"
+import DocumentsForm from "../../components/documents/FormNewDocument.vue"
+import Loading from "../../components/Loading.vue"
+import Toolbar from "../../components/Toolbar.vue"
+import CreateMixin from "../../mixins/CreateMixin"
+import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
+import Panel from "primevue/panel"
 
-const servicePrefix = 'Documents';
+const servicePrefix = "Documents"
 
 const { mapFields } = createHelpers({
-  getterType: 'documents/getField',
-  mutationType: 'documents/updateField'
-});
+  getterType: "documents/getField",
+  mutationType: "documents/updateField",
+})
 
 export default {
-  name: 'DocumentsCreateFile',
+  name: "DocumentsCreateFile",
   servicePrefix,
   components: {
     Loading,
     Toolbar,
-    DocumentsForm
+    DocumentsForm,
+    Panel
   },
   mixins: [CreateMixin],
   data() {
+    const filetype = this.$route.query.cert === '1' ? 'certificate' : 'file';
+    const finalTags = this.getCertificateTags();
     return {
       item: {
         newDocument: true, // Used in FormNewDocument.vue to show the editor
-        filetype: 'file',
+        filetype: filetype,
         parentResourceNodeId: null,
         resourceLinkList: null,
-        contentFile: null
+        contentFile: null,
       },
+      finalTags,
     };
   },
   computed: {
-    ...mapFields(['error', 'isLoading', 'created', 'violations'])
+    ...mapFields(["error", "isLoading", "created", "violations"]),
   },
   created() {
-    this.item.parentResourceNodeId = this.$route.params.node;
-    this.item.resourceLinkList = JSON.stringify([{
-      gid: this.$route.query.gid,
-      sid: this.$route.query.sid,
-      cid: this.$route.query.cid,
-      visibility: RESOURCE_LINK_PUBLISHED,
-    }]);
+    this.item.parentResourceNodeId = this.$route.params.node
+    this.item.resourceLinkList = JSON.stringify([
+      {
+        gid: this.$route.query.gid,
+        sid: this.$route.query.sid,
+        cid: this.$route.query.cid,
+        visibility: RESOURCE_LINK_PUBLISHED,
+      },
+    ])
   },
+
   methods: {
+      getCertificateTags(){
+          let finalTags = "";
+          let tags = [
+            '((user_firstname))',
+            '((user_lastname))',
+            '((user_username))',
+            '((gradebook_institution))',
+            '((gradebook_sitename))',
+            '((teacher_firstname))',
+            '((teacher_lastname))',
+            '((official_code))',
+            '((date_certificate))',
+            '((date_certificate_no_time))',
+            '((course_code))',
+            '((course_title))',
+            '((gradebook_grade))',
+            '((certificate_link))',
+            '((certificate_link_html))',
+            '((certificate_barcode))',
+            '((external_style))',
+            '((time_in_course))',
+            '((time_in_course_in_all_sessions))',
+            '((start_date_and_end_date))',
+            '((course_objectives))',
+          ];
+
+          for (const tag of tags){
+              finalTags += "<p class=\"m-0\">"+tag+"</p>"
+          }
+
+          return finalTags;
+      },
     ...mapActions('documents', ['createWithFormData', 'reset'])
   }
 };

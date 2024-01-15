@@ -46,6 +46,20 @@ class CreateDefaultPages
         ;
         $this->pageCategoryRepository->update($indexCategory);
 
+        $indexCategory = (new PageCategory())
+            ->setTitle('faq')
+            ->setType('grid')
+            ->setCreator($user)
+        ;
+        $this->pageCategoryRepository->update($indexCategory);
+
+        $indexCategory = (new PageCategory())
+            ->setTitle('demo')
+            ->setType('grid')
+            ->setCreator($user)
+        ;
+        $this->pageCategoryRepository->update($indexCategory);
+
         $page = (new Page())
             ->setTitle('Welcome')
             ->setContent('Welcome to Chamilo')

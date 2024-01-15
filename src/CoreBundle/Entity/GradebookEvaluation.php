@@ -27,21 +27,21 @@ class GradebookEvaluation
     protected ?int $id = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'name', type: 'text', nullable: false)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
+    protected string $title;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'gradeBookEvaluations')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'gradeBookEvaluations')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\Course::class, inversedBy: 'gradebookEvaluations')]
+    #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'gradebookEvaluations')]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Course $course;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\GradebookCategory::class, inversedBy: 'evaluations')]
+    #[ORM\ManyToOne(targetEntity: GradebookCategory::class, inversedBy: 'evaluations')]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected GradebookCategory $category;
 
@@ -87,21 +87,21 @@ class GradebookEvaluation
         $this->visible = 1;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
 
     /**
-     * Get name.
+     * Get title.
      *
      * @return string
      */
-    public function getName()
+    public function getTitle()
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function setDescription(?string $description): self

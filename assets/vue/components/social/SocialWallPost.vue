@@ -26,7 +26,7 @@
           </div>
 
           <small>
-            {{ $filters.relativeDatetime(post.sendDate) }}
+            {{ relativeDatetime(post.sendDate) }}
           </small>
         </div>
 
@@ -39,22 +39,17 @@
       </div>
 
       <div class="flex flex-col gap-2">
-        <img
-          v-if="containsImage"
-          :alt="attachment.comment"
-          :src="attachment.contentUrl"
-        >
-        <video
-          v-if="containsVideo"
-          width="320"
-          height="240"
-          controls
-        >
-          <source
-            :src="attachment.contentUrl"
+        <div v-for="(attachment, index) in computedAttachments" :key="index">
+          <img
+            v-if="isImageAttachment(attachment)"
+            :src="attachment.path"
+            :alt="attachment.filename"
           >
-          {{ attachment.comment }}
-        </video>
+
+          <video v-if="isVideoAttachment(attachment)" controls>
+            <source :src="attachment.path" :type="attachment.mimeType">
+          </video>
+        </div>
 
         <div v-html="post.content"/>
 
@@ -85,7 +80,7 @@
 
 <script setup>
 import WallCommentForm from "./SocialWallCommentForm.vue";
-import {computed, onMounted, reactive} from "vue";
+import {ref, computed, onMounted, reactive} from "vue";
 import WallComment from "./SocialWallComment.vue";
 import WallActions from "./Actions";
 import axios from "axios";
@@ -93,6 +88,7 @@ import {ENTRYPOINT} from "../../config/entrypoint";
 import {useStore} from "vuex";
 import BaseCard from "../basecomponents/BaseCard.vue";
 import {SOCIAL_TYPE_PROMOTED_MESSAGE} from "./constants";
+import { useFormatDate } from "../../composables/formatDate"
 
 const props = defineProps({
   post: {
@@ -104,18 +100,36 @@ const props = defineProps({
 const emit = defineEmits(["post-deleted"]);
 
 const store = useStore();
+import { useSecurityStore } from "../../store/securityStore"
+const { relativeDatetime } = useFormatDate()
 
-const attachment = null;//props.post.attachments.length ? props.post.attachments[0] : null;
 let comments = reactive([]);
+const attachments = ref([]);
+const securityStore = useSecurityStore()
 
-const containsImage = false; //attachment && attachment.resourceNode.resourceFile.mimeType.includes('image/');
-const containsVideo = false; //attachment && attachment.resourceNode.resourceFile.mimeType.includes('video/');
-
-const currentUser = store.getters['security/getUser'];
-
+const currentUser = computed(() => securityStore.user)
 const isOwner = computed(() => currentUser['@id'] === props.post.sender['@id'])
 
-onMounted(loadComments);
+onMounted(async () => {
+  loadComments();
+
+  await loadAttachments();
+});
+
+const computedAttachments = computed(() => {
+  return attachments.value;
+});
+
+async function loadAttachments() {
+  try {
+    const postIri = props.post["@id"]
+
+    const response = await axios.get(`${postIri}/attachments`)
+    attachments.value = response.data
+  } catch (error) {
+    console.error("There was an error loading the attachments!", error)
+  }
+}
 
 function loadComments() {
   axios
@@ -145,4 +159,22 @@ function onCommentPosted(newComment) {
 function onPostDeleted(post) {
   emit('post-deleted', post);
 }
+
+const isImageAttachment = (attachment) => {
+  if (attachment.filename) {
+    const fileExtension = attachment.filename.split('.').pop().toLowerCase();
+    return ['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension);
+  }
+  
+  return false;
+};
+
+const isVideoAttachment = (attachment) => {
+  if (attachment.filename) {
+    const fileExtension = attachment.filename.split('.').pop().toLowerCase();
+    return ['mp4', 'webm', 'ogg'].includes(fileExtension);
+  }
+
+  return false;
+};
 </script>

@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 /**
  * Class Template.
@@ -105,8 +106,21 @@ class Template
 
         $this->twig = Container::getTwig();
 
-        // Setting system variables
-        //$this->set_system_parameters();
+        // Setting app paths/URLs
+        $this->assign('_p', $this->getWebPaths());
+
+        // Here we can add system parameters that can be use in any template
+        $_s = [
+            'software_name' => api_get_configuration_value('software_name'),
+            'system_version' => api_get_configuration_value('system_version'),
+            'site_name' => api_get_setting('siteName'),
+            'institution' => api_get_setting('Institution'),
+            'institution_url' => api_get_setting('InstitutionUrl'),
+            'date' => api_format_date('now', DATE_FORMAT_LONG),
+            'timezone' => api_get_timezone(),
+            'gamification_mode' => api_get_setting('gamification_mode'),
+        ];
+        $this->assign('_s', $_s);
 
         // Setting user variables
         //$this->set_user_parameters();
@@ -128,6 +142,31 @@ class Template
         }
     }
 
+    private function getWebPaths()
+    {
+        $queryString = empty($_SERVER['QUERY_STRING']) ? '' : $_SERVER['QUERY_STRING'];
+        $requestURI = empty($_SERVER['REQUEST_URI']) ? '' : $_SERVER['REQUEST_URI'];
+
+        return [
+            'web' => api_get_path(WEB_PATH),
+            'web_relative' => api_get_path(REL_PATH),
+            'web_course' => api_get_path(WEB_COURSE_PATH),
+            'web_main' => api_get_path(WEB_CODE_PATH),
+            'web_css' => api_get_path(WEB_CSS_PATH),
+            'web_css_theme' => api_get_path(WEB_CSS_PATH).$this->themeDir,
+            'web_ajax' => api_get_path(WEB_AJAX_PATH),
+            'web_img' => api_get_path(WEB_IMG_PATH),
+            'web_plugin' => api_get_path(WEB_PLUGIN_PATH),
+            'web_lib' => api_get_path(WEB_LIBRARY_PATH),
+            'web_self' => api_get_self(),
+            'self_basename' => basename(api_get_self()),
+            'web_query_vars' => api_htmlentities($queryString),
+            'web_self_query_vars' => api_htmlentities($requestURI),
+            'web_cid_query' => api_get_cidreq(),
+            'web_rel_code' => api_get_path(REL_CODE_PATH),
+        ];
+    }
+
     /**
      * @param string $helpInput
      */
@@ -145,7 +184,7 @@ class Template
                 $help = Security::remove_XSS($help);
                 $content = '<div class="help">';
                 $content .= Display::url(
-                    Display::return_icon('help.png', get_lang('Help'), null, ICON_SIZE_LARGE),
+                    Display::getMdiIcon(ToolIcon::HELP, 'ch-tool-icon', null, ICON_SIZE_LARGE, get_lang('Help')),
                     api_get_path(WEB_CODE_PATH).'help/help.php?open='.$help,
                     [
                         'class' => 'ajax',
@@ -960,12 +999,7 @@ class Template
     {
         //@todo move this in the template
         $rightFloatMenu = '';
-        $iconBug = Display::return_icon(
-            'bug.png',
-            get_lang('Report a bug'),
-            [],
-            ICON_SIZE_LARGE
-        );
+        $iconBug = Display::getMdiIcon(ToolIcon::BUG_REPORT, 'ch-tool-icon', null, ICON_SIZE_LARGE, get_lang('Report a bug'));
         if ('true' === api_get_setting('show_link_bug_notification') && $this->user_is_logged_in) {
             $rightFloatMenu = '<div class="report">
 		        <a href="https://github.com/chamilo/chamilo-lms/wiki/How-to-report-issues" target="_blank">
@@ -979,12 +1013,7 @@ class Template
         ) {
             // by default is project_id = 1
             $defaultProjectId = 1;
-            $iconTicket = Display::return_icon(
-                'help.png',
-                get_lang('Ticket'),
-                [],
-                ICON_SIZE_LARGE
-            );
+            $iconTicket = Display::getMdiIcon(ToolIcon::HELP, 'ch-tool-icon', null, ICON_SIZE_LARGE, get_lang('Ticket'));
             $courseInfo = api_get_course_info();
             $courseParams = '';
             if (!empty($courseInfo)) {
@@ -1248,8 +1277,8 @@ class Template
                     // If we are on a session "about" screen, publish info about the session
                     $session = api_get_session_entity($sessionId);
 
-                    $socialMeta .= '<meta property="og:title" content="'.$session->getName().' - '.$metaTitle.'" />'."\n";
-                    $socialMeta .= '<meta property="twitter:title" content="'.$session->getName().' - '.$metaTitle.'" />'."\n";
+                    $socialMeta .= '<meta property="og:title" content="'.$session->getTitle().' - '.$metaTitle.'" />'."\n";
+                    $socialMeta .= '<meta property="twitter:title" content="'.$session->getTitle().' - '.$metaTitle.'" />'."\n";
                     $socialMeta .= '<meta property="og:url" content="'.api_get_path(WEB_PATH)."sessions/{$session->getId()}/about/".'" />'."\n";
 
                     $sessionValues = new ExtraFieldValue('session');
@@ -1261,7 +1290,7 @@ class Template
                         if (!empty($sessionImagePath)) {
                             $socialMeta .= '<meta property="og:image" content="'.$sessionImagePath.'" />'."\n";
                             $socialMeta .= '<meta property="twitter:image" content="'.$sessionImagePath.'" />'."\n";
-                            $socialMeta .= '<meta property="twitter:image:alt" content="'.$session->getName().' - '.$metaTitle.'" />'."\n";
+                            $socialMeta .= '<meta property="twitter:image:alt" content="'.$session->getTitle().' - '.$metaTitle.'" />'."\n";
                         }
                     } else {
                         $socialMeta .= $this->getMetaPortalImagePath($metaTitle);

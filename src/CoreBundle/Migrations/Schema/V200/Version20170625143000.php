@@ -20,7 +20,7 @@ class Version20170625143000 extends AbstractMigrationChamilo
     {
         $table = $schema->getTable('c_thematic');
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_thematic ADD resource_node_id BIGINT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_thematic ADD resource_node_id INT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_thematic ADD CONSTRAINT FK_6D8F59B91BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
             );
@@ -35,11 +35,11 @@ class Version20170625143000 extends AbstractMigrationChamilo
         }
 
         if ($table->hasColumn('c_id')) {
-            //$this->addSql('ALTER TABLE c_thematic DROP c_id');
+            // $this->addSql('ALTER TABLE c_thematic DROP c_id');
         }
 
         if ($table->hasColumn('session_id')) {
-            //$this->addSql('ALTER TABLE c_thematic DROP session_id');
+            // $this->addSql('ALTER TABLE c_thematic DROP session_id');
         }
 
         if ($table->hasIndex('active')) {
@@ -52,7 +52,7 @@ class Version20170625143000 extends AbstractMigrationChamilo
         }
 
         if ($table->hasColumn('c_id')) {
-            //$this->addSql('ALTER TABLE c_thematic_advance DROP c_id;');
+            // $this->addSql('ALTER TABLE c_thematic_advance DROP c_id;');
         }
 
         if ($table->hasIndex('thematic_id')) {
@@ -83,7 +83,7 @@ class Version20170625143000 extends AbstractMigrationChamilo
 
         /*
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_thematic_advance ADD resource_node_id BIGINT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_thematic_advance ADD resource_node_id INT DEFAULT NULL');
 
             //$this->addSql('ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E971BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
             $this->addSql('CREATE UNIQUE INDEX UNIQ_62798E971BAD783F ON c_thematic_advance (resource_node_id)');
@@ -97,7 +97,7 @@ class Version20170625143000 extends AbstractMigrationChamilo
         }
 
         if ($table->hasColumn('c_id')) {
-            //$this->addSql('ALTER TABLE c_thematic_plan DROP c_id;');
+            // $this->addSql('ALTER TABLE c_thematic_plan DROP c_id;');
         }
         if (false === $table->hasForeignKey('FK_1197487C2395FCED')) {
             $this->addSql(
@@ -111,7 +111,7 @@ class Version20170625143000 extends AbstractMigrationChamilo
 
         /*
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_thematic_plan ADD resource_node_id BIGINT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_thematic_plan ADD resource_node_id INT DEFAULT NULL');
 
             $this->addSql('ALTER TABLE c_thematic_plan ADD CONSTRAINT FK_1197487C1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
             $this->addSql('CREATE UNIQUE INDEX UNIQ_1197487C1BAD783F ON c_thematic_plan (resource_node_id)');
@@ -120,7 +120,7 @@ class Version20170625143000 extends AbstractMigrationChamilo
         // CLink
         $table = $schema->getTable('c_link');
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_link ADD resource_node_id BIGINT DEFAULT NULL;');
+            $this->addSql('ALTER TABLE c_link ADD resource_node_id INT DEFAULT NULL;');
             $this->addSql(
                 'ALTER TABLE c_link ADD CONSTRAINT FK_9209C2A01BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;'
             );
@@ -146,7 +146,7 @@ class Version20170625143000 extends AbstractMigrationChamilo
 
         $table = $schema->getTable('c_link_category');
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_link_category ADD resource_node_id BIGINT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_link_category ADD resource_node_id INT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_link_category ADD CONSTRAINT FK_319D6C9C1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
             );
@@ -171,7 +171,7 @@ class Version20170625143000 extends AbstractMigrationChamilo
         }
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE c_glossary ADD resource_node_id BIGINT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_glossary ADD resource_node_id INT DEFAULT NULL');
             $this->addSql(
                 'ALTER TABLE c_glossary ADD CONSTRAINT FK_A1168D881BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE'
             );
@@ -179,7 +179,5 @@ class Version20170625143000 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

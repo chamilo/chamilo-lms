@@ -5,6 +5,8 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 /**
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of
@@ -79,7 +81,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
 }
 
 $listUrl = api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq();
-$surveyId = $_GET['survey_id'] ?? 0;
+$surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
 $repo = Container::getSurveyRepository();
 $survey = null;
 if (!empty($surveyId)) {
@@ -574,15 +576,15 @@ $actions = '';
 if (!api_is_session_general_coach() || 'true' === $extend_rights_for_coachs) {
     $actions .= '<a
         href="'.api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.
-        Display::return_icon('new_survey.png', get_lang('Create survey'), '', ICON_SIZE_MEDIUM).'</a> ';
+        Display::getMdiIcon(ObjectIcon::SURVEY, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Create survey')).'</a> ';
     $url = api_get_path(WEB_CODE_PATH).'survey/create_meeting.php?'.api_get_cidreq();
     $actions .= Display::url(
-        Display::return_icon('add_doodle.png', get_lang('Create surveyDoodle'), '', ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ObjectIcon::SURVEY_DOODLE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Create surveyDoodle')),
         $url
     );
 }
 $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.
-    Display::return_icon('search.png', get_lang('Search'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ActionIcon::SEARCH, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Search')).'</a>';
 
 echo Display::toolbarAction('toolbar', [$actions]);
 

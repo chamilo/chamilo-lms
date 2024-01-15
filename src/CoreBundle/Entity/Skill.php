@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use Chamilo\CoreBundle\Repository\SkillRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -19,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(security: 'is_granted(\'ROLE_ADMIN\')', normalizationContext: ['groups' => ['skill:read']])]
 #[ORM\Table(name: 'skill')]
-#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\SkillRepository::class)]
+#[ORM\Entity(repositoryClass: SkillRepository::class)]
 class Skill implements Stringable
 {
     public const STATUS_DISABLED = 0;
@@ -32,35 +33,40 @@ class Skill implements Stringable
     #[ORM\ManyToOne(targetEntity: Profile::class, inversedBy: 'skills')]
     #[ORM\JoinColumn(name: 'profile_id', referencedColumnName: 'id')]
     protected ?Profile $profile = null;
+
     /**
-     * @var SkillRelUser[]|Collection
+     * @var Collection<int, SkillRelUser>
      */
     #[ORM\OneToMany(targetEntity: SkillRelUser::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $issuedSkills;
+
     /**
-     * @var Collection|SkillRelItem[]
+     * @var Collection<int, SkillRelItem>
      */
     #[ORM\OneToMany(targetEntity: SkillRelItem::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $items;
+
     /**
-     * @var Collection|SkillRelSkill[]
+     * @var Collection<int, SkillRelSkill>
      */
     #[ORM\OneToMany(targetEntity: SkillRelSkill::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $skills;
+
     /**
-     * @var Collection|SkillRelCourse[]
+     * @var Collection<int, SkillRelCourse>
      */
     #[ORM\OneToMany(targetEntity: SkillRelCourse::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $courses;
+
     /**
-     * @var Collection|SkillRelGradebook[]
+     * @var Collection<int, SkillRelGradebook>
      */
     #[ORM\OneToMany(targetEntity: SkillRelGradebook::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $gradeBookCategories;
     #[Assert\NotBlank]
     #[Groups(['skill:read', 'skill:write'])]
-    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    protected string $title;
     #[Assert\NotBlank]
     #[Groups(['skill:read', 'skill:write'])]
     #[ORM\Column(name: 'short_code', type: 'string', length: 100, nullable: false)]
@@ -96,17 +102,19 @@ class Skill implements Stringable
     }
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
-    public function setName(string $name): self
+
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
-    public function getName(): string
+
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
     public function getShortCode(): string
     {
@@ -128,6 +136,7 @@ class Skill implements Stringable
     {
         return $this->description;
     }
+
     /**
      * Set accessUrlId.
      *
@@ -139,6 +148,7 @@ class Skill implements Stringable
 
         return $this;
     }
+
     /**
      * Get accessUrlId.
      *
@@ -154,6 +164,7 @@ class Skill implements Stringable
 
         return $this;
     }
+
     /**
      * Get icon.
      *
@@ -169,6 +180,7 @@ class Skill implements Stringable
 
         return $this;
     }
+
     /**
      * Get criteria.
      *
@@ -184,6 +196,7 @@ class Skill implements Stringable
 
         return $this;
     }
+
     /**
      * Get status.
      *
@@ -193,6 +206,7 @@ class Skill implements Stringable
     {
         return $this->status;
     }
+
     /**
      * Set updatedAt.
      *
@@ -206,6 +220,7 @@ class Skill implements Stringable
 
         return $this;
     }
+
     /**
      * Get updatedAt.
      *
@@ -215,6 +230,7 @@ class Skill implements Stringable
     {
         return $this->updatedAt;
     }
+
     /**
      * Get id.
      *
@@ -224,6 +240,7 @@ class Skill implements Stringable
     {
         return $this->id;
     }
+
     /**
      * @return Profile
      */
@@ -237,19 +254,19 @@ class Skill implements Stringable
 
         return $this;
     }
+
     /**
-     * Get issuedSkills.
-     *
-     * @return Collection
+     * @return Collection<int, SkillRelUser>
      */
-    public function getIssuedSkills()
+    public function getIssuedSkills(): Collection
     {
         return $this->issuedSkills;
     }
+
     /**
-     * @return Collection
+     * @return Collection<int, SkillRelItem>
      */
-    public function getItems()
+    public function getItems(): Collection
     {
         return $this->items;
     }
@@ -263,6 +280,7 @@ class Skill implements Stringable
     {
         if (0 !== $this->getItems()->count()) {
             $found = false;
+
             /** @var SkillRelItem $item */
             foreach ($this->getItems() as $item) {
                 if ($item->getItemId() === $itemId && $item->getItemType() === $typeId) {
@@ -282,6 +300,7 @@ class Skill implements Stringable
         $skillRelItem->setSkill($this);
         $this->items[] = $skillRelItem;
     }
+
     /**
      * @return Collection
      */
@@ -295,6 +314,7 @@ class Skill implements Stringable
 
         return $this;
     }
+
     /**
      * @return SkillRelSkill[]|Collection
      */
@@ -302,6 +322,7 @@ class Skill implements Stringable
     {
         return $this->skills;
     }
+
     /**
      * @param SkillRelSkill[]|Collection $skills
      */
@@ -311,6 +332,7 @@ class Skill implements Stringable
 
         return $this;
     }
+
     /**
      * @return SkillRelGradebook[]|Collection
      */
@@ -318,6 +340,7 @@ class Skill implements Stringable
     {
         return $this->gradeBookCategories;
     }
+
     /**
      * @param SkillRelGradebook[]|Collection $gradeBookCategories
      */
@@ -345,6 +368,7 @@ class Skill implements Stringable
     {
         if (0 !== $this->getCourses()->count()) {
             $found = false;
+
             /** @var SkillRelCourse $item */
             foreach ($this->getCourses() as $item) {
                 $sessionPassFilter = false;

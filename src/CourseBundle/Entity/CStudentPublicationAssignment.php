@@ -1,10 +1,14 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Action\NotFoundAction;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use Chamilo\CourseBundle\Repository\CStudentPublicationAssignmentRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,23 +18,33 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_student_publication_assignment')]
 #[ORM\Entity(repositoryClass: CStudentPublicationAssignmentRepository::class)]
+#[ApiResource(
+    operations: [
+        new Get(
+            controller: NotFoundAction::class,
+            output: false,
+            read: false,
+        ),
+    ],
+)]
 class CStudentPublicationAssignment implements Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\Column(name: 'expires_on', type: 'datetime', nullable: true)]
-    #[Groups(['c_student_publication:write'])]
+    #[Groups(['c_student_publication:write', 'student_publication:read'])]
     protected ?DateTime $expiresOn = null;
 
     #[ORM\Column(name: 'ends_on', type: 'datetime', nullable: true)]
-    #[Groups(['c_student_publication:write'])]
+    #[Groups(['c_student_publication:write', 'student_publication:read'])]
     #[Assert\GreaterThanOrEqual(propertyPath: 'expiresOn')]
     protected ?DateTime $endsOn = null;
 
     #[ORM\Column(name: 'add_to_calendar', type: 'integer', nullable: false)]
+    #[Groups(['student_publication:item:get'])]
     protected int $eventCalendarId = 0;
 
     #[ORM\Column(name: 'enable_qualification', type: 'boolean', nullable: false)]
@@ -45,7 +59,7 @@ class CStudentPublicationAssignment implements Stringable
         return (string) $this->getIid();
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }

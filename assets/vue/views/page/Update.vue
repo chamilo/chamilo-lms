@@ -7,16 +7,11 @@
 </template>
 
 <script setup>
-import Loading from '../../components/Loading.vue';
-import PageForm from '../../components/page/Form.vue';
-import { useDatatableUpdate } from '../../composables/datatableUpdate';
+import Loading from "../../components/Loading.vue"
+import PageForm from "../../components/page/Form.vue"
+import { useDatatableUpdate } from "../../composables/datatableUpdate"
 
-const {
-  item,
-  isLoading,
-  retrieve,
-  updateItem
-} = useDatatableUpdate('Page');
+const { item, isLoading, retrieve, updateItem } = useDatatableUpdate("Page")
 
-retrieve();
+retrieve()
 </script>

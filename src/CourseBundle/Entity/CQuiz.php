@@ -17,6 +17,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -33,7 +34,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'text', nullable: false)]
@@ -131,21 +132,21 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     protected array $pageResultConfiguration = [];
 
     /**
-     * @var Collection|CQuizRelQuestion[]
+     * @var Collection<int, CQuizRelQuestion>
      */
-    #[ORM\OneToMany(targetEntity: CQuizRelQuestion::class, mappedBy: 'quiz', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'quiz', targetEntity: CQuizRelQuestion::class, cascade: ['persist'], orphanRemoval: true)]
     protected Collection $questions;
 
     /**
-     * @var Collection|CQuizRelQuestionCategory[]
+     * @var Collection<int, CQuizRelQuestionCategory>
      */
-    #[ORM\OneToMany(targetEntity: CQuizRelQuestionCategory::class, mappedBy: 'quiz', cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'quiz', targetEntity: CQuizRelQuestionCategory::class, cascade: ['persist'])]
     protected Collection $questionsCategories;
 
     /**
      * @var Collection<int, TrackEExercise>
      */
-    #[ORM\OneToMany(targetEntity: TrackEExercise::class, mappedBy: 'quiz')]
+    #[ORM\OneToMany(mappedBy: 'quiz', targetEntity: TrackEExercise::class)]
     protected Collection $attempts;
 
     public function __construct()
@@ -171,6 +172,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
         $this->reviewAnswers = 0;
         $this->randomByCategory = 0;
         $this->displayCategoryName = 0;
+        $this->hideAttemptsTable = false;
         $this->pageResultConfiguration = [];
         $this->attempts = new ArrayCollection();
     }
@@ -181,11 +183,13 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     }
 
     /**
-     * @return Collection|CQuizRelQuestion[]
+     * @return ArrayCollection<int, CQuizRelQuestion>
      */
-    public function getQuestions(): Collection|array
+    public function getQuestions(): Collection
     {
-        return $this->questions;
+        return $this->questions instanceof ArrayCollection ?
+            $this->questions :
+            new ArrayCollection($this->questions->toArray());
     }
 
     public function setTitle(string $title): self
@@ -224,12 +228,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
         return $this;
     }
 
-    /**
-     * Get sound.
-     *
-     * @return string
-     */
-    public function getSound()
+    public function getSound(): ?string
     {
         return $this->sound;
     }
@@ -270,12 +269,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
         return $this;
     }
 
-    /**
-     * Get randomAnswers.
-     *
-     * @return bool
-     */
-    public function getRandomAnswers()
+    public function getRandomAnswers(): bool
     {
         return $this->randomAnswers;
     }
@@ -299,12 +293,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
         return $this;
     }
 
-    /**
-     * Get resultsDisabled.
-     *
-     * @return int
-     */
-    public function getResultsDisabled()
+    public function getResultsDisabled(): int
     {
         return $this->resultsDisabled;
     }
@@ -316,12 +305,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
         return $this;
     }
 
-    /**
-     * Get accessCondition.
-     *
-     * @return string
-     */
-    public function getAccessCondition()
+    public function getAccessCondition(): ?string
     {
         return $this->accessCondition;
     }
@@ -333,12 +317,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
         return $this;
     }
 
-    /**
-     * Get maxAttempt.
-     *
-     * @return int
-     */
-    public function getMaxAttempt()
+    public function getMaxAttempt(): int
     {
         return $this->maxAttempt;
     }
@@ -350,12 +329,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
         return $this;
     }
 
-    /**
-     * Get startTime.
-     *
-     * @return DateTime
-     */
-    public function getStartTime()
+    public function getStartTime(): ?DateTime
     {
         return $this->startTime;
     }
@@ -367,12 +341,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
         return $this;
     }
 
-    /**
-     * Get endTime.
-     *
-     * @return DateTime
-     */
-    public function getEndTime()
+    public function getEndTime(): ?DateTime
     {
         return $this->endTime;
     }
@@ -384,12 +353,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
         return $this;
     }
 
-    /**
-     * Get feedbackType.
-     *
-     * @return int
-     */
-    public function getFeedbackType()
+    public function getFeedbackType(): int
     {
         return $this->feedbackType;
     }
@@ -401,12 +365,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
         return $this;
     }
 
-    /**
-     * Get expiredTime.
-     *
-     * @return int
-     */
-    public function getExpiredTime()
+    public function getExpiredTime(): int
     {
         return $this->expiredTime;
     }
@@ -420,10 +379,8 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
 
     /**
      * Get propagateNeg.
-     *
-     * @return int
      */
-    public function getPropagateNeg()
+    public function getPropagateNeg(): int
     {
         return $this->propagateNeg;
     }
@@ -435,10 +392,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getSaveCorrectAnswers()
+    public function getSaveCorrectAnswers(): ?int
     {
         return $this->saveCorrectAnswers;
     }
@@ -452,10 +406,8 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
 
     /**
      * Get reviewAnswers.
-     *
-     * @return int
      */
-    public function getReviewAnswers()
+    public function getReviewAnswers(): int
     {
         return $this->reviewAnswers;
     }
@@ -469,10 +421,8 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
 
     /**
      * Get randomByCategory.
-     *
-     * @return int
      */
-    public function getRandomByCategory()
+    public function getRandomByCategory(): int
     {
         return $this->randomByCategory;
     }
@@ -486,10 +436,8 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
 
     /**
      * Get textWhenFinished.
-     *
-     * @return string
      */
-    public function getTextWhenFinished()
+    public function getTextWhenFinished(): ?string
     {
         return $this->textWhenFinished;
     }
@@ -503,10 +451,8 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
 
     /**
      * Get displayCategoryName.
-     *
-     * @return int
      */
-    public function getDisplayCategoryName()
+    public function getDisplayCategoryName(): int
     {
         return $this->displayCategoryName;
     }
@@ -520,10 +466,8 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
 
     /**
      * Get passPercentage.
-     *
-     * @return int
      */
-    public function getPassPercentage()
+    public function getPassPercentage(): ?int
     {
         return $this->passPercentage;
     }
@@ -540,10 +484,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getQuestionSelectionType()
+    public function getQuestionSelectionType(): ?int
     {
         return $this->questionSelectionType;
     }
@@ -591,7 +532,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
         return $this;
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }
@@ -675,14 +616,16 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     }
 
     /**
-     * @return CQuizRelQuestionCategory[]|Collection
+     * @return Collection<int, CQuizRelQuestionCategory>
      */
-    public function getQuestionsCategories(): array|Collection
+    public function getQuestionsCategories(): Collection
     {
-        return $this->questionsCategories;
+        return $this->questionsCategories instanceof ArrayCollection ?
+            $this->questionsCategories :
+            new ArrayCollection($this->questionsCategories->toArray());
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }

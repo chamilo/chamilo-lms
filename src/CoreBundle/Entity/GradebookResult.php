@@ -23,11 +23,11 @@ class GradebookResult
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\GradebookEvaluation::class)]
+    #[ORM\ManyToOne(targetEntity: GradebookEvaluation::class)]
     #[ORM\JoinColumn(name: 'evaluation_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected GradebookEvaluation $evaluation;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, inversedBy: 'gradeBookResults')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'gradeBookResults')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 

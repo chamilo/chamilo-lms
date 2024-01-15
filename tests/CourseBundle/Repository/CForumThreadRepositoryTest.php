@@ -31,7 +31,7 @@ class CForumThreadRepositoryTest extends AbstractApiTest
         $qualifyRepo = $em->getRepository(CForumThreadQualify::class);
 
         $forum = (new CForum())
-            ->setForumTitle('forum')
+            ->setTitle('forum')
             ->setParent($course)
             ->setCreator($teacher)
             ->addCourseLink($course)
@@ -39,7 +39,7 @@ class CForumThreadRepositoryTest extends AbstractApiTest
         $forumRepo->create($forum);
 
         $thread = (new CForumThread())
-            ->setThreadTitle('thread title')
+            ->setTitle('thread title')
             ->setThreadPeerQualify(true)
             ->setThreadReplies(0)
             ->setThreadDate(new DateTime())
@@ -103,7 +103,7 @@ class CForumThreadRepositoryTest extends AbstractApiTest
         $threadRepo = self::getContainer()->get(CForumThreadRepository::class);
 
         $forum = (new CForum())
-            ->setForumTitle('forum')
+            ->setTitle('forum')
             ->setParent($course)
             ->setCreator($teacher)
             ->addCourseLink($course)
@@ -111,7 +111,7 @@ class CForumThreadRepositoryTest extends AbstractApiTest
         $forumRepo->create($forum);
 
         $thread = (new CForumThread())
-            ->setThreadTitle('thread title')
+            ->setTitle('thread title')
             ->setForum($forum)
             ->setParent($course)
             ->setCreator($teacher)

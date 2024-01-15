@@ -15,6 +15,9 @@ use Symfony\Component\Serializer\SerializerInterface;
 use TicketManager;
 use Twig\Environment;
 
+/**
+ * Twig-related event listener. For filters, look into ChamiloExtension.php.
+ */
 class TwigListener
 {
     private SerializerInterface $serializer;
@@ -71,6 +74,7 @@ class TwigListener
 
             'social.social_enable_messages_feedback',
             'social.disable_dislike_option',
+            'platform.redirect_index_to_url_for_logged_users',
         ];
 
         // @todo get variables in 1 query.
@@ -88,7 +92,7 @@ class TwigListener
 
         $languages = $this->languageRepository->getAllAvailable()->getQuery()->getArrayResult();
 
-        //$this->twig->addGlobal('text_direction', api_get_text_direction());
+        // $this->twig->addGlobal('text_direction', api_get_text_direction());
         $this->twig->addGlobal('from_vue', $request->request->get('from_vue') ? 1 : 0);
         $this->twig->addGlobal('is_authenticated', json_encode($isAuth));
         $this->twig->addGlobal('user_json', $data ?? json_encode([]));

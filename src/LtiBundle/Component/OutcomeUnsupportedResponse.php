@@ -22,7 +22,5 @@ class OutcomeUnsupportedResponse extends OutcomeResponse
         parent::__construct($statusInfo);
     }
 
-    protected function generateBody(SimpleXMLElement $xmlBody): void
-    {
-    }
+    protected function generateBody(SimpleXMLElement $xmlBody): void {}
 }

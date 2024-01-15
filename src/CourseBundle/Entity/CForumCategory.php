@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
@@ -13,6 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_forum_category')]
@@ -22,11 +23,11 @@ class CForumCategory extends AbstractResource implements ResourceInterface, Stri
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'cat_title', type: 'string', length: 255, nullable: false)]
-    protected string $catTitle;
+    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    protected string $title;
 
     #[ORM\Column(name: 'cat_comment', type: 'text', nullable: true)]
     protected ?string $catComment;
@@ -38,9 +39,9 @@ class CForumCategory extends AbstractResource implements ResourceInterface, Stri
     protected int $locked;
 
     /**
-     * @var Collection|CForum[]
+     * @var Collection<int, CForum>
      */
-    #[ORM\OneToMany(targetEntity: CForum::class, mappedBy: 'forumCategory')]
+    #[ORM\OneToMany(mappedBy: 'forumCategory', targetEntity: CForum::class)]
     protected Collection $forums;
 
     public function __construct()
@@ -53,34 +54,29 @@ class CForumCategory extends AbstractResource implements ResourceInterface, Stri
 
     public function __toString(): string
     {
-        return $this->getCatTitle();
+        return $this->getTitle();
     }
 
-    /**
-     * Get iid.
-     *
-     * @return int
-     */
-    public function getIid()
+    public function getIid(): ?int
     {
         return $this->iid;
     }
 
-    public function setCatTitle(string $catTitle): self
+    public function setTitle(string $title): self
     {
-        $this->catTitle = $catTitle;
+        $this->title = $title;
 
         return $this;
     }
 
     /**
-     * Get catTitle.
+     * Get title.
      *
      * @return string
      */
-    public function getCatTitle()
+    public function getTitle(): string
     {
-        return $this->catTitle;
+        return $this->title;
     }
 
     public function setCatComment(string $catComment): self
@@ -102,12 +98,7 @@ class CForumCategory extends AbstractResource implements ResourceInterface, Stri
         return $this;
     }
 
-    /**
-     * Get catOrder.
-     *
-     * @return int
-     */
-    public function getCatOrder()
+    public function getCatOrder(): int
     {
         return $this->catOrder;
     }
@@ -119,38 +110,31 @@ class CForumCategory extends AbstractResource implements ResourceInterface, Stri
         return $this;
     }
 
-    /**
-     * Get locked.
-     *
-     * @return int
-     */
-    public function getLocked()
+    public function getLocked(): int
     {
         return $this->locked;
     }
 
     /**
-     * Get forums.
-     *
-     * @return Collection|CForum[]
+     * @return Collection<int, CForum>
      */
-    public function getForums(): Collection|array
+    public function getForums(): Collection
     {
         return $this->forums;
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }
 
     public function getResourceName(): string
     {
-        return $this->getCatTitle();
+        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setCatTitle($name);
+        return $this->setTitle($name);
     }
 }

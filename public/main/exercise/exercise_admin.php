@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Exercise administration
@@ -183,7 +184,7 @@ if ($form->validate()) {
     $actions = '';
     if (0 != $objExercise->getId()) {
         $actions .= '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->getId().'">'.
-            Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go back to the questions list')).'</a>';
     } else {
         if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
             if (!empty($_POST['lp_id'])) {
@@ -195,10 +196,10 @@ if ($form->validate()) {
             $lp_id = (int) $lp_id;
             $actions .= '<a
                 href="../lp/lp_controller.php?'.api_get_cidreq().'&gradebook=&action=add_item&type=step&lp_id='.$lp_id.'#resource_tab-2">'.
-                Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Learning paths'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::getMdiIcon('back', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Learning paths')).'</a>';
         } else {
             $actions .= '<a href="exercise.php?'.api_get_cidreq().'">'.
-                Display::return_icon('back.png', get_lang('Back to test list'), '', ICON_SIZE_MEDIUM).
+                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to test list')).
                 '</a>';
         }
     }

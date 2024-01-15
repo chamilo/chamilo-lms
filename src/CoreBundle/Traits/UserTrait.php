@@ -10,12 +10,12 @@ use Chamilo\CoreBundle\Entity\User;
 
 trait UserTrait
 {
-    public function getUser(): User
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(User $user): self
+    public function setUser(?User $user): self
     {
         $this->user = $user;
 

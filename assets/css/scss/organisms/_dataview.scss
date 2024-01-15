@@ -1,0 +1,41 @@
+.p-dataview {
+  .p-paginator-top {
+    @apply border border-solid rounded-none;
+  }
+
+  .p-paginator-bottom {
+    @apply border border-solid rounded-none;
+  }
+
+  .p-dataview-header {
+    @apply bg-support-1 text-gray-90 border border-solid p-4 font-semibold;
+  }
+
+  .p-dataview-content {
+    @apply text-gray-90;
+  }
+
+  &.p-dataview-list {
+    .p-dataview-content {
+      > .p-grid {
+        > div {
+          @apply border border-solid;
+        }
+      }
+    }
+  }
+
+  &.p-dataview-grid {
+    .p-dataview-content {
+      > .p-grid {
+        @apply grid grid-cols-1 gap-6
+          sm:grid-cols-2
+          lg:grid-cols-3;
+      }
+    }
+  }
+
+  .p-dataview-footer {
+    @apply bg-support-1;
+  }
+}

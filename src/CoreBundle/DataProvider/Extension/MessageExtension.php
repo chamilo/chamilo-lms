@@ -15,15 +15,14 @@ use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Security;
 
-//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
-//use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
+// use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
+// use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 
-final class MessageExtension implements QueryCollectionExtensionInterface //, QueryItemExtensionInterface
+final class MessageExtension implements QueryCollectionExtensionInterface // , QueryItemExtensionInterface
 {
     public function __construct(
         private readonly Security $security
-    ) {
-    }
+    ) {}
 
     public function applyToCollection(
         QueryBuilder $queryBuilder,
@@ -57,8 +56,8 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
         string $operationName = null,
         array $context = []
     ): void {
-        //error_log('applyToItem1');
-        //$this->addWhere($queryBuilder, $resourceClass);
+        // error_log('applyToItem1');
+        // $this->addWhere($queryBuilder, $resourceClass);
     }
 
     private function addWhere(QueryBuilder $qb, string $resourceClass): void
@@ -75,10 +74,10 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
         $user = $this->security->getUser();
         $alias = $qb->getRootAliases()[0];
 
-        //$qb->leftJoin("$alias.receivers", 'r');
+        // $qb->leftJoin("$alias.receivers", 'r');
 
         $qb->leftJoin("$alias.receivers", 'r', Join::WITH, "r.receiver = :current OR $alias.sender = :current ");
-        //$qb->leftJoin("$alias.receivers", 'r');
+        // $qb->leftJoin("$alias.receivers", 'r');
         /*$qb->andWhere(
             $qb->expr()->orX(
                 $qb->andWhere(
@@ -94,12 +93,12 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
 
         $qb->andWhere(
             "
-            ($alias.sender = :current AND $alias.status <> :deleted) OR 
-                ($alias.sender <> :current AND r.receiver = :current AND (
+            ($alias.sender = :current AND $alias.status <> :deleted) OR
+                (r.receiver = :current AND (
                     ($alias.msgType = :inbox) OR
                     ($alias.msgType = :invitation) OR
                     ($alias.msgType = :conversation)
-                ) 
+                )
             )
         "
         );
@@ -107,9 +106,9 @@ final class MessageExtension implements QueryCollectionExtensionInterface //, Qu
         $qb->setParameters([
             'current' => $user,
             'deleted' => Message::MESSAGE_STATUS_DELETED,
-            //'currentList' => [$user->getId()],
+            // 'currentList' => [$user->getId()],
             'inbox' => Message::MESSAGE_TYPE_INBOX,
-            //'outbox' => Message::MESSAGE_TYPE_OUTBOX,
+            // 'outbox' => Message::MESSAGE_TYPE_OUTBOX,
             'invitation' => Message::MESSAGE_TYPE_INVITATION,
             'conversation' => Message::MESSAGE_TYPE_CONVERSATION,
         ]);

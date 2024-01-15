@@ -6,9 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use bbb;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
-use Chamilo\CoreBundle\Traits\CourseControllerTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,6 +29,7 @@ class PlatformConfigurationController extends AbstractController
         $configuration = [
             'settings' => [],
             'studentview' => $requestSession->get('studentview'),
+            'plugins' => [],
         ];
         $variables = [];
 
@@ -36,14 +38,15 @@ class PlatformConfigurationController extends AbstractController
                 'platform.site_name',
                 'platform.timezone',
                 'platform.theme',
-                'platform.administrator_name',
-                'platform.administrator_surname',
                 'platform.registered',
                 'platform.donotlistcampus',
                 'platform.load_term_conditions_section',
                 'platform.cookie_warning',
+                'platform.show_tabs',
 
-                //'admin.admin_chamilo_announcements_disable',
+                // 'admin.admin_chamilo_announcements_disable',
+                'admin.administrator_name',
+                'admin.administrator_surname',
 
                 'editor.enabled_mathjax',
                 'editor.translate_html',
@@ -53,7 +56,8 @@ class PlatformConfigurationController extends AbstractController
                 'registration.allow_terms_conditions',
 
                 'agenda.personal_calendar_show_sessions_occupation',
-                //'agenda.agenda_reminders',
+                // 'agenda.agenda_reminders',
+                'agenda.agenda_collective_invitations',
 
                 'social.social_enable_messages_feedback',
                 'social.disable_dislike_option',
@@ -65,11 +69,21 @@ class PlatformConfigurationController extends AbstractController
 
                 'course.course_validation',
                 'course.student_view_enabled',
+                'course.allow_edit_tool_visibility_in_session',
 
                 'session.limit_session_admin_role',
                 'session.allow_session_admin_read_careers',
+                'session.limit_session_admin_list_users',
+                'platform.redirect_index_to_url_for_logged_users',
+
+                'language.platform_language',
+                'language.language_priority_1',
+                'language.language_priority_2',
+                'language.language_priority_3',
+                'language.language_priority_4',
             ];
 
+            /** @var User|null $user */
             $user = $this->getUser();
 
             $configuration['settings']['display.show_link_ticket_notification'] = 'false';
@@ -83,10 +97,18 @@ class PlatformConfigurationController extends AbstractController
                     $configuration['settings']['display.show_link_ticket_notification'] = 'true';
                 }
             }
+
+            $configuration['plugins']['bbb'] = [
+                'show_global_conference_link' => bbb::showGlobalConferenceLink([
+                    'username' => $user->getUserIdentifier(),
+                    'status' => $user->getStatus(),
+                ]),
+                'listingURL' => (new bbb('', '', true, $user->getId()))->getListingUrl(),
+            ];
         }
 
         foreach ($variables as $variable) {
-            $value = $settingsManager->getSetting($variable);
+            $value = $settingsManager->getSetting($variable, true);
 
             $configuration['settings'][$variable] = $value;
         }

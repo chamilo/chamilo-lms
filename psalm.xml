@@ -1,9 +1,12 @@
 <?xml version="1.0"?>
 <psalm
-    resolveFromConfigFile="true"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="https://getpsalm.org/schema/config"
-    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+        errorLevel="7"
+        resolveFromConfigFile="true"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://getpsalm.org/schema/config"
+        xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+        findUnusedBaselineEntry="false"
+        findUnusedCode="false"
 >
     <projectFiles>
         <directory name="src"/>
@@ -11,47 +14,47 @@
         <directory name="tests/CourseBundle"/>
 
         <file name="public/legacy.php"/>
-        <directory name="public/main/admin" />
+        <directory name="public/main/admin"/>
         <directory name="public/main/announcements"/>
         <directory name="public/main/attendance"/>
         <directory name="public/main/auth"/>
-<!--        <directory name="public/main/badge"/>-->
+        <!--        <directory name="public/main/badge" />-->
         <directory name="public/main/calendar"/>
-<!--        <directory name="public/main/chat"/>-->
+        <!--        <directory name="public/main/chat" />-->
         <directory name="public/main/course_description"/>
         <directory name="public/main/course_home"/>
         <directory name="public/main/course_info"/>
         <directory name="public/main/course_progress"/>
         <directory name="public/main/course_copy"/>
         <directory name="public/main/create_course"/>
-<!--        <directory name="public/main/cron"/>-->
+        <!--        <directory name="public/main/cron" />-->
         <directory name="public/main/dashboard"/>
-<!--        <directory name="public/main/dropbox"/>-->
-<!--        <directory name="public/main/exercise"/>-->
+        <!--        <directory name="public/main/dropbox" />-->
+        <!--        <directory name="public/main/exercise" />-->
         <file name="public/main/exercise/oral_expression.class.php"/>
         <file name="public/main/exercise/TestCategory.php"/>
         <file name="public/main/exercise/*.class.php"/>
 
         <directory name="public/main/forum"/>
-<!--        <directory name="public/main/gamification"/>-->
+        <!--        <directory name="public/main/gamification" />-->
         <directory name="public/main/glossary"/>
         <directory name="public/main/gradebook"/>
         <directory name="public/main/group"/>
-<!--        <directory name="public/main/inc/ajax" />-->
+        <!--        <directory name="public/main/inc/ajax" />-->
 
-        <directory name="public/main/link" />
-<!--        <directory name="public/main/lp" />-->
-<!--        <directory name="public/main/my_space" />-->
-        <directory name="public/main/notebook" />
-        <directory name="public/main/session" />
-        <directory name="public/main/social" />
-        <directory name="public/main/survey" />
-        <directory name="public/main/ticket" />
-        <directory name="public/main/tracking" />
-<!--        <directory name="public/main/upload" />-->
-        <directory name="public/main/user" />
-<!--        <directory name="public/main/webservices" />-->
-        <directory name="public/main/work" />
+        <directory name="public/main/link"/>
+        <!--        <directory name="public/main/lp" />-->
+        <!--        <directory name="public/main/my_space" />-->
+        <directory name="public/main/notebook"/>
+        <directory name="public/main/session"/>
+        <directory name="public/main/social"/>
+        <directory name="public/main/survey"/>
+        <directory name="public/main/ticket"/>
+        <directory name="public/main/tracking"/>
+        <!--        <directory name="public/main/upload" />-->
+        <directory name="public/main/user"/>
+        <!--        <directory name="public/main/webservices" />-->
+        <directory name="public/main/work"/>
 
         <file name="public/main/inc/lib/access_url_edit_courses_to_url_functions.lib.php"/>
         <file name="public/main/inc/lib/access_url_edit_sessions_to_url_functions.lib.php"/>
@@ -64,23 +67,23 @@
         <file name="public/main/inc/lib/array.lib.php"/>
         <file name="public/main/inc/lib/attendance.lib.php"/>
         <file name="public/main/inc/lib/auth.lib.php"/>
-<!--        <file name="public/main/inc/lib/baker.lib.php"/>-->
+        <!--        <file name="public/main/inc/lib/baker.lib.php" />-->
         <file name="public/main/inc/lib/career.lib.php"/>
         <file name="public/main/inc/lib/certificate.lib.php"/>
         <file name="public/main/inc/lib/course.lib.php"/>
         <file name="public/main/inc/lib/course_category.lib.php"/>
-<!--        <file name="public/main/inc/lib/course_description.lib.php"/>-->
+        <!--        <file name="public/main/inc/lib/course_description.lib.php" />-->
         <file name="public/main/inc/lib/course_request.lib.php"/>
         <file name="public/main/inc/lib/display.lib.php"/>
-<!--        <file name="public/main/inc/lib/document.lib.php"/>-->
+        <!--        <file name="public/main/inc/lib/document.lib.php" />-->
 
-<!--        <file name="public/main/inc/lib/CoursesAndSessionsCatalog.class.php"/>-->
+        <!--        <file name="public/main/inc/lib/CoursesAndSessionsCatalog.class.php" />-->
         <file name="public/main/inc/lib/dashboard.lib.php"/>
-<!--        <file name="public/main/inc/lib/database.lib.php"/>-->
-<!--        <file name="public/main/inc/lib/diagnoser.lib.php"/>-->
+        <!--        <file name="public/main/inc/lib/database.lib.php" />-->
+        <!--        <file name="public/main/inc/lib/diagnoser.lib.php" />-->
 
-<!--        <file name="public/main/inc/lib/events.lib.php"/>-->
-<!--        <file name="public/main/inc/lib/exercise.lib.php"/>-->
+        <!--        <file name="public/main/inc/lib/events.lib.php" />-->
+        <!--        <file name="public/main/inc/lib/exercise.lib.php" />-->
         <file name="public/main/inc/lib/exercise_show_functions.lib.php"/>
         <file name="public/main/inc/lib/ExerciseCategoryManager.php"/>
         <file name="public/main/inc/lib/export.lib.inc.php"/>
@@ -100,18 +103,18 @@
         <file name="public/main/inc/lib/MailTemplateManager.php"/>
         <file name="public/main/inc/lib/message.lib.php"/>
         <file name="public/main/inc/lib/model.lib.php"/>
-<!--        <file name="public/main/inc/lib/MoodleImport.php"/>-->
-<!--        <file name="public/main/inc/lib/myspace.lib.php"/>-->
+        <!--        <file name="public/main/inc/lib/MoodleImport.php" />-->
+        <!--        <file name="public/main/inc/lib/myspace.lib.php" />-->
         <file name="public/main/inc/lib/notebook.lib.php"/>
         <file name="public/main/inc/lib/notification.lib.php"/>
         <file name="public/main/inc/lib/NotificationEvent.php"/>
         <file name="public/main/inc/lib/online.inc.php"/>
-<!--        <file name="public/main/inc/lib/pdf.lib.php"/>-->
-<!--        <file name="public/main/inc/lib/plugin.class.php"/>-->
-<!--        <file name="public/main/inc/lib/plugin.lib.php"/>-->
+        <!--        <file name="public/main/inc/lib/pdf.lib.php" />-->
+        <!--        <file name="public/main/inc/lib/plugin.class.php" />-->
+        <!--        <file name="public/main/inc/lib/plugin.lib.php" />-->
         <file name="public/main/inc/lib/redirect.class.php"/>
         <file name="public/main/inc/lib/ScheduledAnnouncement.php"/>
-<!--        <file name="public/main/inc/lib/security.lib.php"/>-->
+        <!--        <file name="public/main/inc/lib/security.lib.php" />-->
 
         <file name="public/main/inc/lib/sessionmanager.lib.php"/>
         <file name="public/main/inc/lib/skill.visualizer.lib.php"/>
@@ -137,7 +140,7 @@
         <file name="public/main/inc/lib/thematic.lib.php"/>
         <file name="public/main/inc/lib/TicketManager.php"/>
         <file name="public/main/inc/lib/UnserializeApi.php"/>
-<!--        <file name="public/main/inc/lib/tracking.lib.php"/>-->
+        <!--        <file name="public/main/inc/lib/tracking.lib.php" />-->
         <file name="public/main/inc/lib/urlmanager.lib.php"/>
         <file name="public/main/inc/lib/usergroup.lib.php"/>
         <file name="public/main/inc/lib/usermanager.lib.php"/>
@@ -145,41 +148,19 @@
         <file name="public/main/inc/lib/VideoChat.php"/>
 
         <ignoreFiles>
-            <directory name="vendor/*"/>
+            <directory name="vendor"/>
 
             <directory name="src/CoreBundle/Component/Editor"/>
+            <directory name="src/CoreBundle/Hook"/>
             <directory name="src/CourseBundle/Component/CourseCopy"/>
             <directory name="src/LtiBundle"/>
 
-            <directory name="public/main/inc/lib/javascript" />
-            <directory name="public/main/inc/lib/kses-0.2.2" />
-            <directory name="public/main/inc/lib/nusoap" />
-            <directory name="public/main/inc/lib/pear" />
-            <directory name="public/main/inc/lib/ppt2png" />
-            <directory name="public/main/inc/lib/search" />
-            <directory name="public/main/inc/lib/zombie" />
-            <directory name="public/main/exercise/export/qti2" />
-
-            <file name="public/main/admin/index.php"/>
-            <file name="public/main/admin/settings.php"/>
-            <file name="public/main/admin/periodic_export.php"/>
-            <file name="public/main/admin/user_move_stats.php"/>
-            <file name="public/main/admin/settings.lib.php"/>
-            <file name="public/main/admin/user_update_import.php"/>
-            <file name="public/main/admin/teachers_time_by_session_report.php"/>
-            <file name="public/main/admin/specific_fields.php"/>
-            <file name="public/main/admin/sub_language*"/>
-            <file name="public/main/admin/ldap_*"/>
-            <file name="public/main/admin/special_exports.php"/>
+            <file name="public/main/**/**"/>
 
             <file name="public/main/lp/openoffice_presentation.class.php"/>
             <file name="public/main/lp/openoffice_document.class.php"/>
             <file name="public/main/lp/openoffice_text.class.php"/>
             <file name="public/main/lp/openoffice_text_document.class.php"/>
-            <file name="public/main/lp/aicc.class.php"/>
-
-            <file name="public/main/exercise/admin.php"/>
-            <file name="public/main/survey/survey_list.php"/>
 
             <file name="src/CoreBundle/Component/Utils/AssetDirectoryNamer.php"/>
             <file name="src/CoreBundle/Controller/EditorController.php"/>
@@ -188,137 +169,28 @@
         </ignoreFiles>
     </projectFiles>
 
+    <plugins>
+        <pluginClass class="Weirdan\DoctrinePsalmPlugin\Plugin"/>
+
+        <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin">
+            <containerXml>var/cache/dev/Chamilo_KernelDevDebugContainer.xml</containerXml>
+
+            <extraFiles>
+                <directory name="var/cache/dev/Symfony/Config"/>
+            </extraFiles>
+        </pluginClass>
+    </plugins>
+
     <issueHandlers>
-        <MismatchingDocblockPropertyType errorLevel="info"/>
-        <RedundantCastGivenDocblockType errorLevel="info"/>
-
-        <MismatchingDocblockParamType errorLevel="info"/>
-
-        <InvalidClass errorLevel="info"/>
-
-        <LessSpecificReturnType errorLevel="info"/>
-
-        <LessSpecificReturnType errorLevel="info"/>
-
-        <UndefinedDocblockClass errorLevel="info"/>
-
-        <!-- level 3 issues - slightly lazy code writing, but provably low false-negatives -->
-
-        <DeprecatedClass errorLevel="info"/>
-        <DeprecatedInterface errorLevel="info"/>
-
-        <MissingClosureReturnType errorLevel="info"/>
-        <MissingReturnType errorLevel="info"/>
-        <MissingPropertyType errorLevel="info"/>
-        <InvalidDocblock errorLevel="info"/>
-
-        <PropertyNotSetInConstructor errorLevel="info"/>
-        <MissingConstructor errorLevel="info"/>
-        <MissingClosureParamType errorLevel="info"/>
-        <MissingParamType errorLevel="info"/>
-
-        <RedundantCondition errorLevel="info"/>
-
-        <DocblockTypeContradiction errorLevel="info"/>
-        <RedundantConditionGivenDocblockType errorLevel="info"/>
-
-        <UnresolvableInclude errorLevel="info"/>
-
-        <RawObjectIteration errorLevel="info"/>
-
-        <InvalidStringClass errorLevel="info"/>
-
-        <!-- level 4 issues - points to possible deficiencies in logic, higher false-positives -->
-
-        <MoreSpecificReturnType errorLevel="info"/>
-        <LessSpecificReturnStatement errorLevel="info"/>
-        <ArgumentTypeCoercion errorLevel="info"/>
-
-        <PossiblyFalseArgument errorLevel="info"/>
-        <PossiblyFalseIterator errorLevel="info"/>
-        <PossiblyFalseOperand errorLevel="info"/>
-        <PossiblyFalsePropertyAssignmentValue errorLevel="info"/>
-        <PossiblyFalseReference errorLevel="info"/>
-        <PossiblyInvalidArgument errorLevel="info"/>
-        <PossiblyInvalidArrayAccess errorLevel="info"/>
-        <PossiblyInvalidArrayAssignment errorLevel="info"/>
-        <PossiblyInvalidArrayOffset errorLevel="info"/>
-        <PossiblyInvalidCast errorLevel="info"/>
-        <PossiblyInvalidFunctionCall errorLevel="info"/>
-        <PossiblyInvalidIterator errorLevel="info"/>
-        <PossiblyInvalidMethodCall errorLevel="info"/>
-        <PossiblyInvalidOperand errorLevel="info"/>
-        <PossiblyInvalidPropertyAssignment errorLevel="info"/>
-        <PossiblyInvalidPropertyAssignmentValue errorLevel="info"/>
-        <PossiblyInvalidPropertyFetch errorLevel="info"/>
-        <PossiblyNullArgument errorLevel="info"/>
-        <PossiblyNullArrayAccess errorLevel="info"/>
-        <PossiblyNullArrayAssignment errorLevel="info"/>
-        <PossiblyNullArrayOffset errorLevel="info"/>
-        <PossiblyNullFunctionCall errorLevel="info"/>
-        <PossiblyNullIterator errorLevel="info"/>
-        <PossiblyNullOperand errorLevel="info"/>
-        <PossiblyNullPropertyAssignment errorLevel="info"/>
-        <PossiblyNullPropertyAssignmentValue errorLevel="info"/>
-        <PossiblyNullPropertyFetch errorLevel="info"/>
-        <PossiblyNullReference errorLevel="info"/>
-        <PossiblyUndefinedGlobalVariable errorLevel="info"/>
-        <PossiblyUndefinedVariable errorLevel="info"/>
-        <PossiblyUndefinedArrayOffset errorLevel="info"/>
-        <PossiblyUndefinedMethod errorLevel="info"/>
-        <PossibleRawObjectIteration errorLevel="info"/>
-
-        <!-- level 5 issues - should be avoided at most costs... -->
-
-        <ForbiddenCode errorLevel="info"/>
-        <ImplicitToStringCast errorLevel="info"/>
-        <InternalMethod errorLevel="info"/>
-        <InvalidScalarArgument errorLevel="info"/>
-        <InvalidToString errorLevel="info"/>
-        <InvalidOperand errorLevel="info"/>
-        <NoInterfaceProperties errorLevel="info"/>
-        <TooManyArguments errorLevel="info"/>
-        <TypeDoesNotContainType errorLevel="info"/>
-        <TypeDoesNotContainNull errorLevel="info"/>
-        <MissingDocblockType errorLevel="info"/>
-        <ImplementedReturnTypeMismatch errorLevel="info"/>
-        <ImplementedParamTypeMismatch errorLevel="info"/>
-
-        <!-- level 6 issues - really bad things -->
-
-        <InvalidNullableReturnType errorLevel="info"/>
-        <NullableReturnStatement errorLevel="info"/>
-        <InvalidFalsableReturnType errorLevel="info"/>
-        <FalsableReturnStatement errorLevel="info"/>
-
-        <MoreSpecificImplementedParamType errorLevel="info"/>
-        <LessSpecificImplementedReturnType errorLevel="info"/>
-
-        <InvalidReturnStatement errorLevel="info"/>
-        <InvalidReturnType errorLevel="info"/>
-        <UndefinedThisPropertyAssignment errorLevel="info"/>
-        <UndefinedInterfaceMethod errorLevel="info"/>
-
-        <!-- level 7 issues - even worse -->
-
-        <UndefinedThisPropertyAssignment errorLevel="info"/>
-        <UndefinedPropertyAssignment errorLevel="info"/>
-        <UndefinedThisPropertyFetch errorLevel="info"/>
-        <UndefinedPropertyFetch errorLevel="info"/>
-
-        <InvalidReturnStatement errorLevel="info"/>
-        <InvalidReturnType errorLevel="info"/>
-        <InvalidArgument errorLevel="info"/>
-        <InvalidPropertyAssignmentValue errorLevel="info"/>
-        <InvalidArrayOffset errorLevel="info"/>
-        <InvalidArrayAssignment errorLevel="info"/>
-        <InvalidArrayAccess errorLevel="info"/>
-        <InvalidClone errorLevel="info"/>
+        <PluginIssue name="PrivateService" errorLevel="suppress">
+            <errorLevel type="suppress">
+                <file name="src/CoreBundle/Framework/Container.php"/>
+            </errorLevel>
+        </PluginIssue>
+        <PluginIssue name="ServiceNotFound">
+            <errorLevel type="suppress">
+                <file name="src/CoreBundle/Traits/ControllerTrait.php"/>
+            </errorLevel>
+        </PluginIssue>
     </issueHandlers>
-<plugins>
-    <pluginClass class="Weirdan\DoctrinePsalmPlugin\Plugin"/>
-<!--    <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin">-->
-<!--        <containerXml>var/cache/dev/Chamilo_KernelDevDebugContainer.xml</containerXml>-->
-<!--    </pluginClass>-->
-</plugins>
 </psalm>

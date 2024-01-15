@@ -25,7 +25,7 @@ class Assignment extends AbstractTool implements ToolInterface
 
     public function getLink(): string
     {
-        return '/main/work/work.php';
+        return '/resources/assignment/:nodeId';
     }
 
     public function getIcon(): string

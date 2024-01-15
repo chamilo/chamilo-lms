@@ -14,6 +14,7 @@
   [multiple],
   textarea,
   select {
+    @apply focus:ring-0 focus:outline-0;
   }
 
   label {
@@ -80,6 +81,7 @@
   .p-inputwrapper-filled {
     ~ label {
       @apply bg-white px-1 text-primary top-0 left-2;
+      top: 0 !important;
     }
   }
 

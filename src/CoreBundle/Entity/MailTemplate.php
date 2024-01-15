@@ -20,8 +20,8 @@ class MailTemplate
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'name', type: 'string', nullable: false)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'string', nullable: false)]
+    protected string $title;
 
     #[ORM\Column(name: 'template', type: 'text', nullable: true)]
     protected ?string $template = null;
@@ -39,5 +39,5 @@ class MailTemplate
     protected bool $defaultTemplate;
 
     #[ORM\Column(name: '`system`', type: 'integer', nullable: false, options: ['default' => 0])]
-    protected bool $system;
+    protected int $system;
 }

@@ -31,7 +31,7 @@ if (!empty($courses)) {
     }
 
     $courseCondition = " AND lp.cId IN ('".implode("', '", $courseIdList)."') ";
-    $order = ' ORDER BY lp.createdOn ASC, lp.name ASC';
+    $order = ' ORDER BY lp.createdOn ASC, lp.title ASC';
     $now = api_get_utc_datetime();
     $conditions = " (
                 (lp.publishedOn IS NOT NULL AND lp.publishedOn < '$now' AND lp.expiredOn IS NOT NULL AND lp.expiredOn > '$now') OR
@@ -45,7 +45,7 @@ if (!empty($courses)) {
             WHERE
                 $conditions
                 $courseCondition
-            ORDER BY lp.createdOn ASC, lp.name ASC
+            ORDER BY lp.createdOn ASC, lp.title ASC
             ";
 
     $learningPaths = Database::getManager()->createQuery($dql)->getResult();
@@ -70,14 +70,11 @@ if (!empty($courses)) {
         $params = '&cid='.$course->getId().'&sid='.$sessionId;
         $link = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=view'.$params.'&lp_id='.$id;
         $icon = Display::url(
-            Display::return_icon(
-                'learnpath.png',
-                get_lang('Lp')
-            ),
+            Display::getMdiIcon('map-marker-path', 'ch-tool-icon', null, 22, get_lang('Lp')),
             $link
         );
 
-        $name = trim(strip_tags(Security::remove_XSS($lp->getName())));
+        $name = trim(strip_tags(Security::remove_XSS($lp->getTitle())));
         $lps[] = [
             'name' => $name,
             'link' => $link,

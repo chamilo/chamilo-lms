@@ -6,7 +6,7 @@
         {% for course in item.requirements %}
             <div class="parent">
                 <div class="big-icon">
-                    <img src="{{ 'item-sequence.png'|icon(48) }}" width="48" height="48">
+                    {{ 'ObjectIcon::SEQUENCE'|mdi_icon(48) }}
                     <p class="sequence-course">{{ course.name }}</p>
 
                     {% if _u.logged %}

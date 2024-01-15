@@ -21,10 +21,10 @@ class UserCareer
     protected ?int $id = null;
 
     #[ORM\Column(name: 'user_id', type: 'integer', nullable: false)]
-    protected User $user;
+    protected int $user;
 
     #[ORM\Column(name: 'career_id', type: 'integer', nullable: false)]
-    protected Career $career;
+    protected int $career;
 
     #[ORM\Column(name: 'extra_data', type: 'text', nullable: true)]
     protected string $extraData;

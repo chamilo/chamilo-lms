@@ -22,12 +22,12 @@ class ToolRepositoryTest extends AbstractApiTest
         $defaultCount = $repo->count([]);
 
         $tool = (new Tool())
-            ->setName('test')
+            ->setTitle('test')
         ;
         $em->persist($tool);
         $em->flush();
 
         $this->assertSame($defaultCount + 1, $repo->count([]));
-        $this->assertSame('test', $tool->getName());
+        $this->assertSame('test', $tool->getTitle());
     }
 }

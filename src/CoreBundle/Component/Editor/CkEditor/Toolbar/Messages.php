@@ -26,7 +26,7 @@ class Messages extends Basic
         }
 
         $config['fullPage'] = true;
-        //$config['height'] = '200';
+        // $config['height'] = '200';
 
         return $config;
     }

@@ -28,13 +28,13 @@ class Tool implements Stringable
 
     #[Assert\NotBlank]
     #[Groups(['tool:read'])]
-    #[ORM\Column(name: 'name', type: 'string', nullable: false, unique: true)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'string', nullable: false, unique: true)]
+    protected string $title;
 
     /**
-     * @var ResourceType[]|Collection
+     * @var Collection<int, ResourceType>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CoreBundle\Entity\ResourceType::class, mappedBy: 'tool', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: ResourceType::class, mappedBy: 'tool', cascade: ['persist', 'remove'])]
     protected Collection $resourceTypes;
 
     public function __construct()
@@ -44,7 +44,7 @@ class Tool implements Stringable
 
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     /*public function getToolResourceRight()
@@ -86,22 +86,22 @@ class Tool implements Stringable
         return $this->id;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     /**
-     * @return Collection
+     * @return Collection<int, ResourceType>
      */
-    public function getResourceTypes()
+    public function getResourceTypes(): Collection
     {
         return $this->resourceTypes;
     }
@@ -110,7 +110,7 @@ class Tool implements Stringable
     {
         if (0 !== $this->resourceTypes->count()) {
             $criteria = Criteria::create()->where(
-                Criteria::expr()->eq('name', $resourceType->getName())
+                Criteria::expr()->eq('title', $resourceType->getTitle())
             );
             $relation = $this->resourceTypes->matching($criteria);
 
@@ -127,9 +127,9 @@ class Tool implements Stringable
         return $this;
     }
 
-    /*public function getResourceTypeByName(string $name): ?ResourceType
+    /*public function getResourceTypeByName(string $title): ?ResourceType
     {
-        $criteria = Criteria::create()->where(Criteria::expr()->eq('name', $name));
+        $criteria = Criteria::create()->where(Criteria::expr()->eq('title', $title));
 
         return $this->getResourceTypes()->matching($criteria)->first();
     }*/

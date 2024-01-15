@@ -1,28 +1,30 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
+use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_quiz_question_category')]
-#[ORM\Entity(repositoryClass: \Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository::class)]
+#[ORM\Entity(repositoryClass: CQuizQuestionCategoryRepository::class)]
 class CQuizQuestionCategory extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
@@ -34,7 +36,7 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     /**
      * @var Collection|CQuizQuestion[]
      */
-    #[ORM\ManyToMany(targetEntity: \Chamilo\CourseBundle\Entity\CQuizQuestion::class, mappedBy: 'categories')]
+    #[ORM\ManyToMany(targetEntity: CQuizQuestion::class, mappedBy: 'categories')]
     protected Collection $questions;
 
     public function __construct()
@@ -67,7 +69,7 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
         $question->removeCategory($this);
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }
@@ -93,33 +95,28 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
 
     /**
      * Get description.
-     *
-     * @return string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
     /**
-     * @return Collection|CQuizQuestion[]
+     * @return Collection<int, CQuizQuestion>
      */
-    public function getQuestions(): Collection|array
+    public function getQuestions(): Collection
     {
         return $this->questions;
     }
 
-    /**
-     * @param Collection|CQuizQuestion[] $questions
-     */
-    public function setQuestions(Collection|array $questions): self
+    public function setQuestions(Collection $questions): self
     {
         $this->questions = $questions;
 
         return $this;
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }

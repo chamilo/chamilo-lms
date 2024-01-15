@@ -175,7 +175,6 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
             ->add('gradebook_hide_table', YesNoType::class)
             ->add('gradebook_hide_link_to_item_for_student', YesNoType::class)
             ->add('gradebook_enable_subcategory_skills_independant_assignement', YesNoType::class)
-
         ;
     }
 

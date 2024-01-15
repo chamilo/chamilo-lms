@@ -33,8 +33,8 @@ class BranchSync
     #[ORM\Column(name: 'unique_id', type: 'string', length: 50, nullable: false, unique: true)]
     protected string $uniqueId;
 
-    #[ORM\Column(name: 'branch_name', type: 'string', length: 250)]
-    protected string $branchName;
+    #[ORM\Column(name: 'title', type: 'string', length: 250)]
+    protected string $title;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
@@ -43,10 +43,10 @@ class BranchSync
     protected ?string $branchIp = null;
 
     #[ORM\Column(name: 'latitude', type: 'decimal', nullable: true, unique: false)]
-    protected ?float $latitude = null;
+    protected ?string $latitude = null;
 
     #[ORM\Column(name: 'longitude', type: 'decimal', nullable: true, unique: false)]
-    protected ?float $longitude = null;
+    protected ?string $longitude = null;
 
     #[ORM\Column(name: 'dwn_speed', type: 'integer', nullable: true, unique: false)]
     protected ?int $dwnSpeed = null;
@@ -66,7 +66,7 @@ class BranchSync
     #[ORM\Column(name: 'admin_phone', type: 'string', length: 250, nullable: true, unique: false)]
     protected ?string $adminPhone = null;
 
-    #[ORM\Column(name: 'last_sync_trans_id', type: 'bigint', nullable: true, unique: false)]
+    #[ORM\Column(name: 'last_sync_trans_id', type: 'integer', nullable: true, unique: false)]
     protected ?int $lastSyncTransId = null;
 
     #[ORM\Column(name: 'last_sync_trans_date', type: 'datetime', nullable: true, unique: false)]
@@ -128,21 +128,21 @@ class BranchSync
         return $this->id;
     }
 
-    public function setBranchName(string $branchName): self
+    public function setTitle(string $title): self
     {
-        $this->branchName = $branchName;
+        $this->title = $title;
 
         return $this;
     }
 
     /**
-     * Get branchName.
+     * Get title.
      *
      * @return string
      */
-    public function getBranchName()
+    public function getTitle()
     {
-        return $this->branchName;
+        return $this->title;
     }
 
     public function setBranchIp(string $branchIp): self
@@ -162,7 +162,7 @@ class BranchSync
         return $this->branchIp;
     }
 
-    public function setLatitude(float $latitude): self
+    public function setLatitude(?string $latitude): self
     {
         $this->latitude = $latitude;
 
@@ -171,15 +171,13 @@ class BranchSync
 
     /**
      * Get latitude.
-     *
-     * @return float
      */
-    public function getLatitude()
+    public function getLatitude(): ?string
     {
         return $this->latitude;
     }
 
-    public function setLongitude(float $longitude): self
+    public function setLongitude(?string $longitude): self
     {
         $this->longitude = $longitude;
 
@@ -188,10 +186,8 @@ class BranchSync
 
     /**
      * Get longitude.
-     *
-     * @return float
      */
-    public function getLongitude()
+    public function getLongitude(): ?string
     {
         return $this->longitude;
     }

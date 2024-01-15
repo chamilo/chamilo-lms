@@ -15,7 +15,7 @@ class NotificationEvent
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $id;
+    protected ?int $id = null;
 
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
@@ -38,7 +38,7 @@ class NotificationEvent
     #[ORM\Column(name: 'event_id', type: 'integer', nullable: true)]
     protected int $eventId;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

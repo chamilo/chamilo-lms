@@ -17,6 +17,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Controller\Api\DislikeSocialPostController;
 use Chamilo\CoreBundle\Controller\Api\LikeSocialPostController;
+use Chamilo\CoreBundle\Controller\Api\SocialPostAttachmentsController;
 use Chamilo\CoreBundle\Filter\SocialWallFilter;
 use Chamilo\CoreBundle\Repository\SocialPostRepository;
 use DateTime;
@@ -54,6 +55,11 @@ use Symfony\Component\Validator\Constraints as Assert;
             denormalizationContext: ['groups' => []],
             security: "is_granted('ROLE_USER')"
         ),
+        new Get(
+            uriTemplate: '/social_posts/{id}/attachments',
+            controller: SocialPostAttachmentsController::class,
+            normalizationContext: ['groups' => ['attachment:read']],
+        ),
         new GetCollection(security: "is_granted('ROLE_USER')"),
     ],
     normalizationContext: ['groups' => ['social_post:read']],
@@ -73,7 +79,7 @@ class SocialPost
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(name: 'id', type: 'bigint')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     protected ?int $id = null;
 
     #[Groups(['social_post:read', 'social_post:write'])]
@@ -139,6 +145,14 @@ class SocialPost
     #[ApiFilter(filterClass: SocialWallFilter::class)]
     protected User $wallOwner;
 
+    #[ORM\OneToMany(
+        targetEntity: SocialPostAttachment::class,
+        mappedBy: 'socialPost',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
+    private Collection $attachments;
+
     public function __construct()
     {
         $this->userReceiver = null;
@@ -151,6 +165,7 @@ class SocialPost
         $this->type = self::TYPE_WALL_POST;
         $this->countFeedbackLikes = 0;
         $this->countFeedbackDislikes = 0;
+        $this->attachments = new ArrayCollection();
     }
 
     public function getId(): int
@@ -335,6 +350,21 @@ class SocialPost
     public function setType(int $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getAttachments(): Collection
+    {
+        return $this->attachments;
+    }
+
+    public function addAttachment(SocialPostAttachment $attachment): self
+    {
+        if (!$this->attachments->contains($attachment)) {
+            $this->attachments[] = $attachment;
+            $attachment->setSocialPost($this);
+        }
 
         return $this;
     }

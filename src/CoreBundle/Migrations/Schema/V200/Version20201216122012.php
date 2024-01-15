@@ -30,6 +30,7 @@ final class Version20201216122012 extends AbstractMigrationChamilo
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
         $em = $doctrine->getManager();
+
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
@@ -42,6 +43,7 @@ final class Version20201216122012 extends AbstractMigrationChamilo
         $admin = $this->getAdmin();
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();
@@ -54,6 +56,7 @@ final class Version20201216122012 extends AbstractMigrationChamilo
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
+
                 /** @var CLpCategory $resource */
                 $resource = $lpCategoryRepo->find($id);
                 if ($resource->hasResourceNode()) {
@@ -112,7 +115,7 @@ final class Version20201216122012 extends AbstractMigrationChamilo
                 }
 
                 $em->persist($resource);
-                //$em->flush();
+                // $em->flush();
 
                 $rootItem = $lpItemRepo->getRootItem($lpId);
 
@@ -127,7 +130,7 @@ final class Version20201216122012 extends AbstractMigrationChamilo
                     ->setItemType('root')
                 ;
                 $em->persist($rootItem);
-                //$em->flush();
+                // $em->flush();
 
                 if (($counter % $batchSize) === 0) {
                     $em->flush();

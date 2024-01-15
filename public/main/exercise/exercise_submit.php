@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * Exercise submission
@@ -68,7 +70,7 @@ if ($showGlossary) {
 //$htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
 //$htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
 //$htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
-$htmlHeadXtra[] = api_get_build_js('exercise.js');
+$htmlHeadXtra[] = api_get_build_js('legacy_exercise.js');
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
 //$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 if ('true' === api_get_setting('exercise.quiz_prevent_copy_paste')) {
@@ -1049,7 +1051,7 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
 if ('mobileapp' == $origin) {
     echo '<div class="actions">';
     echo '<a href="javascript:window.history.go(-1);">'.
-        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('GoBackToQuestionList')).'</a>';
     echo '</div>';
 }
 
@@ -1060,10 +1062,11 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
     $actions = '';
     if (false == $show_quiz_edition) {
         $actions .= '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
-            Display::return_icon('settings.png', get_lang('Edit test name and settings'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon('cog', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit test name and settings')).'</a>';
     } else {
         $actions .= '<a href="#">'.
-            Display::return_icon('settings_na.png', get_lang('Edit test name and settings'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon('cog', 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Edit test name and settings')).
+            '</a>';
     }
     echo Display::toolbarAction('toolbar', [$actions]);
 }
@@ -1296,13 +1299,11 @@ if ($allowBlockCategory &&
         }
     }
 }
-    $saveIcon = Display::return_icon(
-        'save.png',
-        get_lang('Saved...'),
-        [],
-        ICON_SIZE_SMALL,
-        false,
-        true
+    $saveIcon = Display::getMdiIcon(
+        ActionIcon::SAVE_FORM,
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_SMALL
     );
     $loading = Display::getMdiIcon('loading', 'animate-spin');
 
@@ -1339,7 +1340,7 @@ if ($allowBlockCategory &&
         '.$questionTimeCondition.'
             //This pre-load the save.png icon
             var saveImage = new Image();
-            saveImage.src = "'.$saveIcon.'";
+            saveImage.src = "'.htmlspecialchars($saveIcon).'";
 
             // Block form submition on enter
             $(".block_on_enter").keypress(function(event) {
@@ -1492,10 +1493,10 @@ if ($allowBlockCategory &&
                 success: function(return_value) {
                     if (return_value.ok) {
                         $("#save_for_now_"+question_id).html(\''.
-                        Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
+                        Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Saved')).'\');
                 } else if (return_value.error) {
                         $("#save_for_now_"+question_id).html(\''.
-                            Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_SMALL).'\');
+                            Display::getMdiIcon('alert-circle', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Error')).'\');
                 } else if (return_value.type == "one_per_page") {
                         var url = "";
                         if ('.$reminder.' == 1 ) {
@@ -1518,7 +1519,7 @@ if ($allowBlockCategory &&
                         }
 
                         $("#save_for_now_"+question_id).html(\''.
-                        Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\' + return_value.savedAnswerMessage);
+                        Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Saved')).'\' + return_value.savedAnswerMessage);
 
                     // Show popup
                     if ("check_answers" === url_extra) {
@@ -1569,7 +1570,7 @@ if ($allowBlockCategory &&
                 },
                 error: function() {
                     $("#save_for_now_"+question_id).html(\''.
-                        Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_SMALL).'\');
+                        Display::getMdiIcon('alert-circle', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Error')).'\');
                 }
             });
         }
@@ -1616,10 +1617,10 @@ if ($allowBlockCategory &&
                             $("#save_all_response").html(return_value.savedAnswerMessage);
                             window.location = "'.$script_php.'?'.$params.'";
                         } else {
-                            $("#save_all_response").html(\''.Display::return_icon('accept.png').'\');
+                            $("#save_all_response").html(\''.Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon').'\');
                         }
                     } else {
-                        $("#save_all_response").html(\''.Display::return_icon('wrong.gif').'\');
+                        $("#save_all_response").html(\''.Display::getMdiIcon(StateIcon::INCOMPLETE, 'ch-tool-icon').'\');
                     }
                 }
             });

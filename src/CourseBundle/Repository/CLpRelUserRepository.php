@@ -14,9 +14,6 @@ use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpRelUser;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * Class CLpRelUserRepository.
- */
 final class CLpRelUserRepository extends ResourceRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -26,10 +23,6 @@ final class CLpRelUserRepository extends ResourceRepository
 
     /**
      * Get users subscribed to a item LP.
-     *
-     * @param CLp $lp
-     * @param Course $course
-     * @param Session $session
      *
      * @return array
      */
@@ -50,12 +43,9 @@ final class CLpRelUserRepository extends ResourceRepository
     /**
      * Subscribe users to a LP.
      *
-     * @param User    $currentUser
-     * @param Course  $course
-     * @param Session $session
-     * @param CLp     $lp
-     * @param array   $newUserList
-     * @param bool    $deleteUsers
+     * @param User  $currentUser
+     * @param array $newUserList
+     * @param bool  $deleteUsers
      */
     public function subscribeUsersToItem(
         $currentUser,
@@ -64,7 +54,7 @@ final class CLpRelUserRepository extends ResourceRepository
         CLp $lp,
         $newUserList = [],
         $deleteUsers = true
-    ) {
+    ): void {
         $em = $this->getEntityManager();
         $user = $em->getRepository(User::class);
 
@@ -79,7 +69,7 @@ final class CLpRelUserRepository extends ResourceRepository
             /** @var CLpRelUser $lpUser */
             foreach ($usersSubscribedToItem as $lpUser) {
                 $getToUser = $lpUser->getUser();
-                if (!empty($getToUser)) {
+                if ($getToUser) {
                     $alreadyAddedUsers[] = $lpUser->getUser()->getId();
                 }
             }
@@ -102,7 +92,7 @@ final class CLpRelUserRepository extends ResourceRepository
         }
 
         foreach ($newUserList as $userId) {
-            if (!in_array($userId, $alreadyAddedUsers)) {
+            if (!\in_array($userId, $alreadyAddedUsers, true)) {
                 $userObj = $user->find($userId);
                 if ($userObj) {
                     $item = new CLpRelUser();
@@ -111,12 +101,13 @@ final class CLpRelUserRepository extends ResourceRepository
                         ->setCourse($course)
                         ->setLp($lp)
                         ->setCreatedAt(api_get_utc_datetime(null, false, true))
-                        ->setCreatorUser(api_get_user_entity());
+                        ->setCreatorUser(api_get_user_entity())
+                    ;
 
                     if (!empty($session)) {
                         $item->setSession($session);
                     }
-                    $em->persist($item); //$em is an instance of EntityManager
+                    $em->persist($item); // $em is an instance of EntityManager
                 }
             }
         }
@@ -127,17 +118,14 @@ final class CLpRelUserRepository extends ResourceRepository
     /**
      * Unsubscribe users to Lp.
      *
-     * @param Course  $course
-     * @param Session $session
-     * @param CLp     $lp
-     * @param array   $usersToDelete
+     * @param array $usersToDelete
      */
     public function unsubcribeUsersToItem(
         Course $course,
         Session $session = null,
         CLp $lp,
         $usersToDelete
-    ) {
+    ): void {
         $em = $this->getEntityManager();
 
         if (!empty($usersToDelete)) {
@@ -158,5 +146,4 @@ final class CLpRelUserRepository extends ResourceRepository
             $em->flush();
         }
     }
-
 }

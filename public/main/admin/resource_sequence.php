@@ -35,7 +35,7 @@ $em = Database::getManager();
 if ($formSequence->validate()) {
     $values = $formSequence->exportValues();
     $sequence = new Sequence();
-    $sequence->setName($values['name']);
+    $sequence->setTitle($values['name']);
     $em->persist($sequence);
     $em->flush();
     Display::addFlash(Display::return_message(get_lang('Saved')));

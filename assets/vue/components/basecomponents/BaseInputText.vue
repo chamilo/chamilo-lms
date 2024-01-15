@@ -6,6 +6,7 @@
         :model-value="modelValue"
         :class="{ 'p-invalid': isInvalid }"
         class="border-primary-gradient hover:border-primary focus:ring-primary"
+        :aria-label="label"
         type="text"
         @update:model-value="$emit('update:modelValue', $event)"
       />
@@ -25,7 +26,7 @@
 <script setup>
 import InputText from "primevue/inputtext";
 
-defineProps({
+const props = defineProps({
   id: {
     type: String,
     require: true,
@@ -52,5 +53,5 @@ defineProps({
   },
 });
 
-defineEmits(["update:modelValue"]);
+defineEmits(["update:modelValue"])
 </script>

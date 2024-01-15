@@ -73,7 +73,7 @@ trait ChamiloTestTrait
         $repo = static::getContainer()->get(SessionRepository::class);
 
         $session = (new Session())
-            ->setName($title)
+            ->setTitle($title)
             ->addGeneralCoach($this->getUser('admin'))
             ->addAccessUrl($this->getAccessUrl())
         ;
@@ -87,7 +87,7 @@ trait ChamiloTestTrait
         $em = $this->getEntityManager();
 
         $group = (new CGroup())
-            ->setName($title)
+            ->setTitle($title)
             ->setParent($course)
             ->setCreator($this->getUser('admin'))
             ->setMaxStudent(100)
@@ -104,7 +104,7 @@ trait ChamiloTestTrait
         $creator = $this->createUser('usergroup_creator');
 
         $group = (new Usergroup())
-            ->setName($title)
+            ->setTitle($title)
             ->setDescription('desc')
             ->setCreator($creator)
             ->addAccessUrl($this->getAccessUrl())

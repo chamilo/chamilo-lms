@@ -293,7 +293,7 @@ class BBBPlugin extends Plugin
             Database::query($sql);
 
             // hack to get rid of Database::query warning (please add c_id...)
-            $sql = "DELETE FROM $t_tool WHERE name = 'bbb' AND c_id != 0";
+            $sql = "DELETE FROM $t_tool WHERE title = 'bbb' AND c_id != 0";
             Database::query($sql);
 
             if ($sm->tablesExist('plugin_bbb_room')) {

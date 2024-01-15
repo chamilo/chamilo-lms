@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
  * Main page for the group module.
@@ -201,27 +202,27 @@ Display::display_introduction_section(TOOL_GROUP);
 $actionsLeft = '';
 if (api_is_allowed_to_edit(false, true)) {
     $actionsLeft .= '<a href="group_creation.php?'.api_get_cidreq().'">'.
-        Display::return_icon('add-groups.png', get_lang('Create new group(s)'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Create new group(s)')).'</a>';
 
     if (empty($sessionId) && 'true' === api_get_setting('allow_group_categories')) {
         $actionsLeft .= '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.
-            Display::return_icon('new_folder.png', get_lang('AddCategory'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::getMdiIcon(ActionIcon::CREATE_FOLDER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('AddCategory')).'</a>';
     }
 
     $actionsLeft .= '<a href="import.php?'.api_get_cidreq().'&action=import">'.
-        Display::return_icon('import_csv.png', get_lang('Import'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon(ActionIcon::IMPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import')).'</a>';
 
     $actionsLeft .= '<a href="group_overview.php?'.api_get_cidreq().'&action=export_all&type=csv">'.
-        Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')).'</a>';
 
     $actionsLeft .= '<a href="group_overview.php?'.api_get_cidreq().'&action=export_all&type=xls">'.
-        Display::return_icon('export_excel.png', get_lang('Excel export'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Excel export')).'</a>';
 
     $actionsLeft .= '<a href="group_overview.php?'.api_get_cidreq().'&action=export_pdf">'.
-        Display::return_icon('pdf.png', get_lang('Export to PDF'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')).'</a>';
 
     $actionsLeft .= '<a href="group_overview.php?'.api_get_cidreq().'">'.
-        Display::return_icon('group_summary.png', get_lang('Groups overview'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::getMdiIcon('view-dashboard', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Groups overview')).'</a>';
 }
 
 $actionsRight = GroupManager::getSearchForm();
@@ -263,11 +264,11 @@ if ('true' === api_get_setting('allow_group_categories')) {
             // Edit
             $actions .= '<a
                 href="group_category.php?'.api_get_cidreq().'&id='.$categoryId.'" title="'.get_lang('Edit').'">'.
-                Display::return_icon('edit.png', get_lang('Edit this category'), '', ICON_SIZE_SMALL).'</a>';
+                Display::getMdiIcon('edit', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit this category')).'</a>';
 
             // Delete
             $actions .= Display::url(
-                Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL),
+                Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
                 'group.php?'.api_get_cidreq().'&action=delete_category&category_id='.$categoryId,
                 [
                     'onclick' => 'javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;',
@@ -277,12 +278,12 @@ if ('true' === api_get_setting('allow_group_categories')) {
             if (0 != $index) {
                 $actions .= ' <a
                     href="group.php?'.api_get_cidreq().'&action=swap_cat_order&id1='.$categoryId.'&id2='.$categories[$index - 1]['iid'].'">'.
-                    Display::return_icon('up.png', '&nbsp;', '', ICON_SIZE_SMALL).'</a>';
+                    Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon', null, ICON_SIZE_SMALL).'</a>';
             }
             if ($index != count($categories) - 1) {
                 $actions .= ' <a
                     href="group.php?'.api_get_cidreq().'&action=swap_cat_order&id1='.$categoryId.'&id2='.$categories[$index + 1]['iid'].'">'.
-                    Display::return_icon('down.png', '&nbsp;', '', ICON_SIZE_SMALL).'</a>';
+                    Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon', null, ICON_SIZE_SMALL).'</a>';
             }
         }
 

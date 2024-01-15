@@ -17,14 +17,14 @@ class ResourceTag
     use TimestampableEntity;
 
     #[ORM\Id]
-    #[ORM\Column(type: 'bigint')]
+    #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'name', type: 'string', nullable: false)]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'string', nullable: false)]
+    protected string $title;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?User $author = null;
 }

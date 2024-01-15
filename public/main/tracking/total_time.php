@@ -3,6 +3,9 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
@@ -133,47 +136,42 @@ Display::display_header($nameTools, 'Tracking');
 
 /* MAIN CODE */
 
-$actionsLeft = Display::return_icon(
-    'user_na.png',
-    get_lang('StudentsReporting'),
-    [],
-    ICON_SIZE_MEDIUM
-);
+$actionsLeft = Display::getMdiIcon(ToolIcon::MEMBER, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('StudentsReporting'));
 $actionsLeft .= Display::url(
-    Display::return_icon('group.png', get_lang('Group reporting'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ToolIcon::GROUP, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Group reporting')),
     'course_log_groups.php?'.api_get_cidreq()
 );
 $actionsLeft .= Display::url(
-    Display::return_icon('course.png', get_lang('CourseReporting'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ToolIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CourseReporting')),
     'course_log_tools.php?'.api_get_cidreq()
 );
 
 /*$actionsLeft .= Display::url(
-    Display::return_icon('tools.png', get_lang('ResourcesReporting'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ObjectIcon::RESOURCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ResourcesReporting')),
     'course_log_resources.php?'.api_get_cidreq()
 );*/
 $actionsLeft .= Display::url(
-    Display::return_icon('quiz.png', get_lang('ExamReporting'), [], ICON_SIZE_MEDIUM),
+    Display::getMdiIcon(ToolIcon::QUIZ, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExamReporting')),
     api_get_path(WEB_CODE_PATH).'tracking/exams.php?'.api_get_cidreq()
 );
 
 if (!empty($sessionId)) {
     $actionsLeft .= Display::url(
-        Display::return_icon('attendance_list.png', get_lang('Logins'), '', ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ToolIcon::ATTENDANCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Logins')),
         api_get_path(WEB_CODE_PATH).'attendance/index.php?'.api_get_cidreq().'&action=calendar_logins'
     );
 }
 
 $actionsRight = '<div class="pull-right">';
 $actionsRight .= '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
-    Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ActionIcon::PRINT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Print')).'</a>';
 
 $users_tracking_per_page = '';
 if (isset($_GET['users_tracking_per_page'])) {
     $users_tracking_per_page = '&users_tracking_per_page='.intval($_GET['users_tracking_per_page']);
 }
 $actionsRight .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$users_tracking_per_page.'">
-     '.Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM).'</a>';
+     '.Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')).'</a>';
 $actionsRight .= '</div>';
 // Create a search-box.
 $form_search = new FormValidator(
@@ -196,25 +194,10 @@ echo Display::toolbarAction(
 
 $course_name = get_lang('Course').' '.$courseInfo['name'];
 if ($session_id) {
-    $titleSession = Display::return_icon(
-        'session.png',
-        get_lang('Session'),
-        [],
-        ICON_SIZE_SMALL
-    ).' '.api_get_session_name($session_id);
-    $titleCourse = Display::return_icon(
-        'course.png',
-        get_lang('Course'),
-        [],
-        ICON_SIZE_SMALL
-    ).' '.$course_name;
+    $titleSession = Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Session')).' '.api_get_session_name($session_id);
+    $titleCourse = Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course')).' '.$course_name;
 } else {
-    $titleSession = Display::return_icon(
-        'course.png',
-        get_lang('Course'),
-        [],
-        ICON_SIZE_SMALL
-    ).' '.$courseInfo['name'];
+    $titleSession = Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course')).' '.$courseInfo['name'];
 }
 $teacherList = CourseManager::getTeacherListFromCourseCodeToString(
     $courseInfo['code'],
@@ -252,9 +235,9 @@ if (api_is_platform_admin(true) ||
 
     if (!empty($sessionList)) {
         $html .= Display::page_subheader2(get_lang('Session list'));
-        $icon = Display::return_icon(
-            'session.png',
-            null,
+        $icon = Display::getMdiIcon(
+            ObjectIcon::SESSION,
+            'ch-tool-icon',
             null,
             ICON_SIZE_TINY
         );
@@ -313,11 +296,7 @@ if (count($a_students) > 0) {
     $table->set_header(
         4,
         get_lang('Time').'&nbsp;'.
-        Display::return_icon(
-            'info3.gif',
-            get_lang('Time spent in the course'),
-            ['align' => 'absmiddle', 'hspace' => '3px']
-        ),
+        Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Time spent in the course')),
         false,
         ['style' => 'width:110px;']
     );
@@ -326,11 +305,7 @@ if (count($a_students) > 0) {
     $table->set_header(
         5,
         get_lang('Total learnpath time').'&nbsp;'.
-        Display::return_icon(
-            'info3.gif',
-            get_lang('Total learnpath time'),
-            ['align' => 'absmiddle', 'hspace' => '3px']
-        ),
+        Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Total learnpath time')),
         false,
         ['style' => 'width:110px;']
     );

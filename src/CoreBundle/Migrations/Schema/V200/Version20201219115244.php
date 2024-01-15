@@ -30,6 +30,7 @@ final class Version20201219115244 extends AbstractMigrationChamilo
         $container = $this->getContainer();
         $doctrine = $container->get('doctrine');
         $em = $doctrine->getManager();
+
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
@@ -38,6 +39,7 @@ final class Version20201219115244 extends AbstractMigrationChamilo
         $sessionRepo = $container->get(SessionRepository::class);
         $groupRepo = $container->get(CGroupRepository::class);
         $userRepo = $container->get(UserRepository::class);
+
         /** @var Kernel $kernel */
         $kernel = $container->get('kernel');
         $rootPath = $kernel->getProjectDir();
@@ -45,6 +47,7 @@ final class Version20201219115244 extends AbstractMigrationChamilo
         $admin = $this->getAdmin();
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();
@@ -55,6 +58,7 @@ final class Version20201219115244 extends AbstractMigrationChamilo
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
+
                 /** @var CWiki $resource */
                 $resource = $wikiRepo->find($id);
                 if ($resource->hasResourceNode()) {

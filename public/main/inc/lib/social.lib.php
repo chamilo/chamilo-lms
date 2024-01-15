@@ -11,6 +11,9 @@ use Chamilo\CourseBundle\Entity\CForumThread;
 use ChamiloSession as Session;
 use Laminas\Feed\Reader\Entry\Rss;
 use Laminas\Feed\Reader\Reader;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * Class SocialManager.
@@ -455,7 +458,7 @@ class SocialManager extends UserManager
                     $iconRss = '';
                     if (!empty($feed)) {
                         $iconRss = Display::url(
-                            Display::return_icon('social_rss.png', '', [], 22),
+                            Display::getMdiIcon('rss', 'ch-tool-icon', null, ICON_SIZE_SMALL),
                             Security::remove_XSS($feed['rssfeeds']),
                             ['target' => '_blank']
                         );
@@ -593,12 +596,12 @@ class SocialManager extends UserManager
             $lastname = $user_info['lastname'];
             $firstname = $user_info['firstname'];
             $completeName = $firstname.', '.$lastname;
-            $user_rol = 1 == $user_info['status'] ? Display::return_icon('teacher.png', get_lang('Trainer'), null, ICON_SIZE_TINY) : Display::return_icon('user.png', get_lang('Learner'), null, ICON_SIZE_TINY);
+            $user_rol = 1 == $user_info['status'] ? Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Trainer')) : Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Learner'));
             $status_icon_chat = null;
             if (isset($user_info['user_is_online_in_chat']) && 1 == $user_info['user_is_online_in_chat']) {
-                $status_icon_chat = Display::return_icon('online.png', get_lang('Online'));
+                $status_icon_chat = Display::getMdiIcon(StateIcon::ONLINE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Online'));
             } else {
-                $status_icon_chat = Display::return_icon('offline.png', get_lang('Offline'));
+                $status_icon_chat = Display::getMdiIcon(StateIcon::OFFLINE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Offline'));
             }
 
             $userPicture = $user_info['avatar'];
@@ -875,8 +878,8 @@ class SocialManager extends UserManager
                         $thread = $repoThread->find($row['thread_id']);
                         if ($post && $thread) {
                             //$courseInfo = api_get_course_info_by_id($post->getCId());
-                            $row['post_title'] = $post->getForum()->getForumTitle();
-                            $row['forum_title'] = $thread->getThreadTitle();
+                            $row['post_title'] = $post->getForum()->getTitle();
+                            $row['forum_title'] = $thread->getTitle();
                             $row['thread_url'] = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.http_build_query([
                                     //'cid' => $courseInfo['real_id'],
                                     'forum' => $post->getForum()->getIid(),
@@ -1161,10 +1164,10 @@ class SocialManager extends UserManager
                 $name_user = api_get_person_name($friend['firstName'], $friend['lastName']);
                 $user_info_friend = api_get_user_info($friend['friend_user_id'], true);
 
-                $statusIcon = Display::return_icon('statusoffline.png', get_lang('Offline'));
+                $statusIcon = Display::getMdiIcon(StateIcon::OFFLINE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Offline'));
                 $status = 0;
                 if (!empty($user_info_friend['user_is_online_in_chat'])) {
-                    $statusIcon = Display::return_icon('statusonline.png', get_lang('Online'));
+                    $statusIcon = Display::getMdiIcon(StateIcon::ONLINE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Online'));
                     $status = 1;
                 }
 
@@ -1755,11 +1758,11 @@ class SocialManager extends UserManager
                         $threads[] = [
                             'id' => $threadId,
                             'url' => Display::url(
-                                $thread->getThreadTitle(),
+                                $thread->getTitle(),
                                 $threadUrl
                             ),
                             'name' => Display::url(
-                                $thread->getThreadTitle(),
+                                $thread->getTitle(),
                                 $threadUrl
                             ),
                             'description' => '',
@@ -2012,7 +2015,7 @@ class SocialManager extends UserManager
 
         if ($canEdit) {
             $htmlDelete = Display::url(
-                Display::getMdiIcon('delete'),
+                Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL),
                 'javascript:void(0)',
                 [
                     'id' => 'message_'.$message['id'],

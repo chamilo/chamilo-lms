@@ -81,7 +81,7 @@ $div_upload_limit = get_lang('Upload max size').' : '.ini_get('post_max_size');
 $form = new FormValidator('upload_ppt', 'POST', '?'.api_get_cidreq(), '');
 $form->addElement('header', get_lang("A PowerPoint to SCORM Courses converter"));
 $form->addElement('html', Display::return_message($message, 'info', false));
-$form->addElement('file', 'user_file', [Display::return_icon('powerpoint_big.gif'), $div_upload_limit]);
+$form->addElement('file', 'user_file', [Display::getMdiIcon('file-presentation-box', 'ch-tool-icon', null, ICON_SIZE_SMALL), $div_upload_limit]);
 $form->addElement('checkbox', 'take_slide_name', '', get_lang('Use the slides names as course learning object names'));
 $options = ChamiloApi::getDocumentConversionSizes();
 $form->addSelect('slide_size', get_lang('Size of the slides'), $options);

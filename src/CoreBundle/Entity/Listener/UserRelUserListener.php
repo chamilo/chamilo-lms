@@ -6,20 +6,18 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity\Listener;
 
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PostRemoveEventArgs;
+use Doctrine\ORM\Event\PostUpdateEventArgs;
+use Doctrine\ORM\Event\PrePersistEventArgs;
 use Exception;
-use Symfony\Component\Security\Core\Security;
 
 class UserRelUserListener
 {
     public function __construct(
-        private Security $security
-    ) {
-    }
+    ) {}
 
-    public function prePersist(UserRelUser $userRelUser, LifecycleEventArgs $args): void
+    public function prePersist(UserRelUser $userRelUser, PrePersistEventArgs $args): void
     {
         // User cannot be connected to himself
         if ($userRelUser->getFriend()->getUsername() === $userRelUser->getUser()->getUsername()) {
@@ -27,7 +25,7 @@ class UserRelUserListener
         }
     }
 
-    public function postUpdate(UserRelUser $userRelUser, LifecycleEventArgs $args): void
+    public function postUpdate(UserRelUser $userRelUser, PostUpdateEventArgs $args): void
     {
         // If user accepts the relationship
         /*if (UserRelUser::USER_RELATION_TYPE_FRIEND === $userRelUser->getRelationType()) {
@@ -51,7 +49,7 @@ class UserRelUserListener
         }*/
     }
 
-    public function postRemove(UserRelUser $userRelUser, LifecycleEventArgs $args): void
+    public function postRemove(UserRelUser $userRelUser, PostRemoveEventArgs $args): void
     {
         // Deletes the other connection.
         $em = $args->getObjectManager();

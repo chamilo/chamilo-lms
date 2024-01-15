@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
@@ -631,8 +632,9 @@ class ExerciseLib
                             $s .= Display::tag('td', $answer);
 
                             if (!empty($quizQuestionOptions)) {
+                                $j = 1;
                                 foreach ($quizQuestionOptions as $id => $item) {
-                                    if (isset($myChoice[$numAnswer]) && $id == $myChoice[$numAnswer]) {
+                                    if (isset($myChoice[$numAnswer]) && $item['iid'] == $myChoice[$numAnswer]) {
                                         $attributes = [
                                             'checked' => 1,
                                             'selected' => 1,
@@ -642,7 +644,7 @@ class ExerciseLib
                                     }
 
                                     if ($debug_mark_answer) {
-                                        if ($id == $answerCorrect) {
+                                        if ($j == $answerCorrect) {
                                             $attributes['checked'] = 1;
                                             $attributes['selected'] = 1;
                                         }
@@ -652,11 +654,12 @@ class ExerciseLib
                                         Display::input(
                                             'radio',
                                             'choice['.$questionId.']['.$numAnswer.']',
-                                            $id,
+                                            $item['iid'],
                                             $attributes
                                         ),
                                         ['style' => '']
                                     );
+                                    $j++;
                                 }
                             }
 
@@ -685,6 +688,7 @@ class ExerciseLib
                             $s .= Display::tag('td', $answer);
 
                             if (!empty($quizQuestionOptions)) {
+                                $j = 1;
                                 foreach ($quizQuestionOptions as $id => $item) {
                                     if (isset($myChoice[$numAnswer]) && $id == $myChoice[$numAnswer]) {
                                         $attributes = ['checked' => 1, 'selected' => 1];
@@ -705,7 +709,7 @@ class ExerciseLib
                                     $attributes1['onChange'] = 'RadioValidator('.$questionId.', '.$numAnswer.')';
 
                                     if ($debug_mark_answer) {
-                                        if ($id == $answerCorrect) {
+                                        if ($j == $answerCorrect) {
                                             $attributes['checked'] = 1;
                                             $attributes['selected'] = 1;
                                         }
@@ -738,6 +742,7 @@ class ExerciseLib
                                             ]
                                         );
                                     }
+                                    $j++;
                                 }
                             }
 
@@ -1653,7 +1658,7 @@ HOTSPOT;
                 $tmp[2] = $row['quiz_title'];
                 // Send do other test with r=1 to reset current test session variables
                 $urlToQuiz = api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$row['quiz_id'].'&r=1';
-                $tmp[3] = '<a href="'.$urlToQuiz.'">'.Display::return_icon('quiz.png', get_lang('Edit')).'</a>';
+                $tmp[3] = '<a href="'.$urlToQuiz.'">'.Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
                 if (0 == (int) $row['session_id']) {
                     $tmp[1] = '-';
                 }
@@ -1912,11 +1917,11 @@ HOTSPOT;
             api_is_student_boss() ||
             api_is_session_admin();
         $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
-        $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
+        $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_GROUP_REL_USER = Database::get_course_table(TABLE_GROUP_USER);
         $TBL_GROUP = Database::get_course_table(TABLE_GROUP);
-        $TBL_TRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+        $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $tblTrackAttemptQualify = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_QUALIFY);
 
         $session_id_and = '';
         $sessionCondition = '';
@@ -1934,9 +1939,9 @@ HOTSPOT;
         $sql_inner_join_tbl_track_exercices = "
         (
             SELECT DISTINCT ttte.*, if(tr.exe_id,1, 0) as revised
-            FROM $TBL_TRACK_EXERCICES ttte
-            LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr
-            ON (ttte.exe_id = tr.exe_id)
+            FROM $TBL_TRACK_EXERCISES ttte
+            LEFT JOIN $tblTrackAttemptQualify tr
+            ON (ttte.exe_id = tr.exe_id) AND tr.author > 0
             WHERE
                 c_id = $courseId AND
                 exe_exo_id = $exercise_id
@@ -2076,7 +2081,7 @@ HOTSPOT;
             }
 
             $sql = " $sql_select
-                FROM $TBL_EXERCICES AS ce
+                FROM $TBL_EXERCISES AS ce
                 INNER JOIN $sql_inner_join_tbl_track_exercices AS te
                 ON (te.exe_exo_id = ce.iid)
                 INNER JOIN $sql_inner_join_tbl_user AS user
@@ -2272,16 +2277,14 @@ HOTSPOT;
                                 $results[$i]['exe_user_id'],
                                 $teacher_id_list
                             )) {
-                                $actions .= Display::return_icon('teacher.png', get_lang('Trainer'));
+                                $actions .= Display::getMdiIcon('human-male-board', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Trainer'));
                             }
                         }
                         $revisedLabel = '';
                         switch ($revised) {
                             case 0:
                                 $actions .= "<a href='exercise_show.php?".api_get_cidreq()."&action=qualify&id=$id'>".
-                                    Display:: return_icon(
-                                        'quiz.png',
-                                        get_lang('Grade activity')
+                                    Display::getMdiIcon(ActionIcon::GRADE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Grade activity')
                                     );
                                 $actions .= '</a>';
                                 $revisedLabel = Display::label(
@@ -2291,12 +2294,7 @@ HOTSPOT;
                                 break;
                             case 1:
                                 $actions .= "<a href='exercise_show.php?".api_get_cidreq()."&action=edit&id=$id'>".
-                                    Display:: return_icon(
-                                        'edit.png',
-                                        get_lang('Edit'),
-                                        [],
-                                        ICON_SIZE_SMALL
-                                    );
+                                    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'));
                                 $actions .= '</a>';
                                 $revisedLabel = Display::label(
                                     get_lang('Validated'),
@@ -2311,12 +2309,7 @@ HOTSPOT;
                                     .'&a=close&id='
                                     .$id
                                     .'">'.
-                                    Display:: return_icon(
-                                        'lock.png',
-                                        get_lang('Mark attempt as closed'),
-                                        [],
-                                        ICON_SIZE_SMALL
-                                    );
+                                    Display::getMdiIcon(ActionIcon::LOCK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Mark attempt as closed'));
                                 $actions .= '</a>';
                                 $revisedLabel = Display::label(
                                     get_lang('Unclosed'),
@@ -2324,12 +2317,7 @@ HOTSPOT;
                                 );
                                 break;
                             case 3: //still ongoing
-                                $actions .= Display:: return_icon(
-                                    'clock.png',
-                                    get_lang('Attempt still going on. Please wait.'),
-                                    [],
-                                    ICON_SIZE_SMALL
-                                );
+                                $actions .= Display::getMdiIcon('clock', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Attempt still going on. Please wait.'));
                                 $actions .= '';
                                 $revisedLabel = Display::label(
                                     get_lang('Ongoing'),
@@ -2340,9 +2328,7 @@ HOTSPOT;
 
                         if (2 == $filter) {
                             $actions .= ' <a href="exercise_history.php?'.api_get_cidreq().'&exe_id='.$id.'">'.
-                                Display:: return_icon(
-                                    'history.png',
-                                    get_lang('View changes history')
+                                Display::getMdiIcon('clipboard-text-clock', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('View changes history')
                                 ).'</a>';
                         }
 
@@ -2354,7 +2340,7 @@ HOTSPOT;
                                 false
                             );
                             $actions .= '<a href="http://www.whatsmyip.org/ip-geo-location/?ip='.$ip.'" target="_blank">'
-                                .Display::return_icon('info.png', $ip)
+                                .Display::getMdiIcon('information', 'ch-tool-icon', null, ICON_SIZE_SMALL, $ip)
                                 .'</a>';
 
                             $recalculateUrl = api_get_path(WEB_CODE_PATH).'exercise/recalculate.php?'.
@@ -2365,7 +2351,7 @@ HOTSPOT;
                                     'user' => $results[$i]['exe_user_id'],
                                 ]);
                             $actions .= Display::url(
-                                Display::return_icon('reload.png', get_lang('Recalculate results')),
+                                Display::getMdiIcon(ActionIcon::REFRESH, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Recalculate results')),
                                 $recalculateUrl,
                                 [
                                     'data-exercise' => $exercise_id,
@@ -2381,7 +2367,7 @@ HOTSPOT;
                                 onclick=
                                 "javascript:if(!confirm(\''.sprintf(addslashes(get_lang('Delete attempt?')), $results[$i]['username'], $dt).'\')) return false;"
                                 >';
-                            $delete_link .= Display::return_icon('delete.png', addslashes(get_lang('Delete'))).'</a>';
+                            $delete_link .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, addslashes(get_lang('Delete'))).'</a>';
 
                             if (api_is_drh() && !api_is_platform_admin()) {
                                 $delete_link = null;
@@ -2932,20 +2918,10 @@ EOT;
 
             if ($isSuccess) {
                 $html = get_lang('Congratulations you passed the test!');
-                $icon = Display::return_icon(
-                    'completed.png',
-                    get_lang('Correct'),
-                    [],
-                    ICON_SIZE_MEDIUM
-                );
+                $icon = Display::getMdiIcon('check-circle', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Correct'));
             } else {
                 $html = get_lang('You didn\'t reach the minimum score');
-                $icon = Display::return_icon(
-                    'warning.png',
-                    get_lang('Wrong'),
-                    [],
-                    ICON_SIZE_MEDIUM
-                );
+                $icon = Display::getMdiIcon('alert', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Wrong'));
             }
             $html = Display::tag('h4', $html);
             $html .= Display::tag(
@@ -3550,37 +3526,32 @@ EOT;
     /**
      * Get student results (only in completed exercises) stats by question.
      *
-     * @param int    $question_id
-     * @param int    $exercise_id
-     * @param string $course_code
-     * @param int    $session_id
-     * @param bool   $onlyStudent Filter only enrolled students
-     *
-     * @return array
+     * @throws \Doctrine\DBAL\Exception
      */
-    public static function get_student_stats_by_question(
-        $question_id,
-        $exercise_id,
-        $course_code,
-        $session_id,
-        $onlyStudent = false
-    ) {
-        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    public static function getStudentStatsByQuestion(
+        int $questionId,
+        int $exerciseId,
+        string $courseCode,
+        int $sessionId,
+        bool $onlyStudent = false
+    ): array
+    {
+        $trackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $trackAttempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-        $question_id = (int) $question_id;
-        $exercise_id = (int) $exercise_id;
-        $course_code = Database::escape_string($course_code);
-        $session_id = (int) $session_id;
-        $courseId = api_get_course_int_id($course_code);
+        $questionId = (int) $questionId;
+        $exerciseId = (int) $exerciseId;
+        $courseCode = Database::escape_string($courseCode);
+        $sessionId = (int) $sessionId;
+        $courseId = api_get_course_int_id($courseCode);
 
         $sql = "SELECT MAX(marks) as max, MIN(marks) as min, AVG(marks) as average
-                FROM $track_exercises e ";
-        $sessionCondition = api_get_session_condition($session_id, true, false, 'e.session_id');
-        if (true == $onlyStudent) {
+                FROM $trackExercises e ";
+        $sessionCondition = api_get_session_condition($sessionId, true, false, 'e.session_id');
+        if ($onlyStudent) {
             $courseCondition = '';
-            if (empty($session_id)) {
+            if (empty($sessionId)) {
                 $courseCondition = "
                 INNER JOIN $courseUser c
                 ON (
@@ -3603,14 +3574,14 @@ EOT;
             $sql .= $courseCondition;
         }
         $sql .= "
-    		INNER JOIN $track_attempt a
+    		INNER JOIN $trackAttempt a
     		ON (
     		    a.exe_id = e.exe_id
             )
     		WHERE
-    		    exe_exo_id 	= $exercise_id AND
-                a.c_id = $courseId AND
-                question_id = $question_id AND
+    		    exe_exo_id 	= $exerciseId AND
+                e.c_id = $courseId AND
+                question_id = $questionId AND
                 e.status = ''
                 $sessionCondition
             LIMIT 1";
@@ -3763,35 +3734,28 @@ EOT;
 
     /**
      * Get number of answers to hotspot questions.
-     *
-     * @param int    $answer_id
-     * @param int    $question_id
-     * @param int    $exercise_id
-     * @param string $courseId
-     * @param int    $session_id
-     *
-     * @return int
      */
-    public static function get_number_students_answer_hotspot_count(
-        $answer_id,
-        $question_id,
-        $exercise_id,
-        $courseId,
-        $session_id
-    ) {
-        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $track_hotspot = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+    public static function getNumberStudentsAnswerHotspotCount(
+        int    $answerId,
+        int    $questionId,
+        int    $exerciseId,
+        string $courseCode,
+        int $sessionId
+    ): int
+    {
+        $trackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $trackHotspot = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
         $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $courseUserSession = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-        $question_id = (int) $question_id;
-        $answer_id = (int) $answer_id;
-        $exercise_id = (int) $exercise_id;
-        $courseId = (int) $courseId;
-        $session_id = (int) $session_id;
+        $questionId = (int) $questionId;
+        $answerId = (int) $answerId;
+        $exerciseId = (int) $exerciseId;
+        $courseId = api_get_course_int_id($courseCode);
+        $sessionId = (int) $sessionId;
 
-        if (empty($session_id)) {
+        if (empty($sessionId)) {
             $courseCondition = "
             INNER JOIN $courseUser cu
             ON cu.c_id = c.id AND cu.user_id  = exe_user_id";
@@ -3803,25 +3767,24 @@ EOT;
             $courseConditionWhere = ' AND cu.status = '.SessionEntity::STUDENT;
         }
 
-        $sessionCondition = api_get_session_condition($session_id, true, false, 'e.session_id');
+        $sessionCondition = api_get_session_condition($sessionId, true, false, 'e.session_id');
         $sql = "SELECT DISTINCT exe_user_id
-                FROM $track_exercises e
-                INNER JOIN $track_hotspot a
+                FROM $trackExercises e
+                INNER JOIN $trackHotspot a
                 ON (a.hotspot_exe_id = e.exe_id)
                 INNER JOIN $courseTable c
                 ON (a.c_id = c.id)
                 $courseCondition
                 WHERE
-                    exe_exo_id              = $exercise_id AND
+                    exe_exo_id              = $exerciseId AND
                     a.c_id 	= $courseId AND
-                    hotspot_answer_id       = $answer_id AND
-                    hotspot_question_id     = $question_id AND
+                    hotspot_answer_id       = $answerId AND
+                    hotspot_question_id     = $questionId AND
                     hotspot_correct         =  1 AND
                     e.status                = ''
                     $courseConditionWhere
                     $sessionCondition
             ";
-
         $result = Database::query($sql);
         $return = 0;
         if ($result) {
@@ -3897,7 +3860,7 @@ EOT;
                     a.exe_id = e.exe_id
                 )
                 INNER JOIN $courseTable c
-                ON c.id = a.c_id
+                ON c.id = e.c_id
                 $courseCondition
                 WHERE
                     exe_exo_id = $exercise_id AND
@@ -3934,6 +3897,75 @@ EOT;
             }
         }
 
+        return $return;
+    }
+
+    /**
+     * Get the number of times an answer was selected.
+     */
+    public static function getCountOfAnswers(
+        int $answerId,
+        int $questionId,
+        int $exerciseId,
+        string $courseCode,
+        int $sessionId,
+        $questionType = null,
+    ): int
+    {
+        $trackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $trackAttempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $courseUserSession = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+
+        $answerId = (int) $answerId;
+        $questionId = (int) $questionId;
+        $exerciseId = (int) $exerciseId;
+        $courseId = api_get_course_int_id($courseCode);
+        $sessionId = (int) $sessionId;
+        $return = 0;
+
+        $answerCondition = match ($questionType) {
+            FILL_IN_BLANKS => '',
+            default => " answer = $answerId AND ",
+        };
+
+        if (empty($sessionId)) {
+            $courseCondition = "
+            INNER JOIN $courseUser cu
+            ON cu.c_id = c.id AND cu.user_id = exe_user_id";
+            $courseConditionWhere = " AND relation_type <> 2 AND cu.status = ".STUDENT;
+        } else {
+            $courseCondition = "
+            INNER JOIN $courseUserSession cu
+            ON (cu.c_id = a.c_id AND cu.user_id = e.exe_user_id AND e.session_id = cu.session_id)";
+            $courseConditionWhere = ' AND cu.status = '.SessionEntity::STUDENT;
+        }
+
+        $sessionCondition = api_get_session_condition($sessionId, true, false, 'e.session_id');
+        $sql = "SELECT count(a.answer) as total
+                FROM $trackExercises e
+                INNER JOIN $trackAttempt a
+                ON (
+                    a.exe_id = e.exe_id
+                )
+                INNER JOIN $courseTable c
+                ON c.id = e.c_id
+                $courseCondition
+                WHERE
+                    exe_exo_id = $exerciseId AND
+                    e.c_id = $courseId AND
+                    $answerCondition
+                    question_id = $questionId AND
+                    e.status = ''
+                    $courseConditionWhere
+                    $sessionCondition
+            ";
+        $result = Database::query($sql);
+        if ($result) {
+            $count = Database::fetch_array($result);
+            $return = (int) $count['total'];
+        }
         return $return;
     }
 
@@ -5092,17 +5124,16 @@ EOT;
      *
      * @param int $attemptId
      * @param int $questionId
-     * @param int $userId
      *
      * @return string
      */
-    public static function getOralFeedbackForm($attemptId, $questionId, $userId)
+    public static function getOralFeedbackForm($attemptId, $questionId)
     {
         $view = new Template('', false, false, false, false, false, false);
         $view->assign('type', Asset::EXERCISE_FEEDBACK);
         $view->assign('question_id', $questionId);
-        $view->assign('attempt', $attemptId);
-        $template = $view->get_template('exercise/oral_expression.tpl');
+        $view->assign('t_exercise_id', $attemptId);
+        $template = $view->get_template('exercise/oral_expression.html.twig');
 
         return $view->fetch($template);
     }
@@ -5138,8 +5169,12 @@ EOT;
         foreach ($qAttempt->getAttemptFeedbacks() as $attemptFeedback) {
             $html .= Display::tag(
                 'audio',
-                null,
-                ['src' => $assetRepo->getAssetUrl($attemptFeedback->getAsset())]
+                '',
+                [
+                    'src' => $assetRepo->getAssetUrl($attemptFeedback->getAsset()),
+                    'controls' => '',
+                ]
+
             );
         }
 
@@ -5169,12 +5204,14 @@ EOT;
         $additionalActions = api_get_setting('exercise.exercise_additional_teacher_modify_actions', true) ?: [];
         $actions = [];
 
-        foreach ($additionalActions as $additionalAction) {
-            $actions[] = call_user_func(
-                $additionalAction,
-                $exerciseId,
-                $iconSize
-            );
+        if (is_array($additionalActions)) {
+            foreach ($additionalActions as $additionalAction) {
+                $actions[] = call_user_func(
+                    $additionalAction,
+                    $exerciseId,
+                    $iconSize
+                );
+            }
         }
 
         return implode(PHP_EOL, $actions);
@@ -5339,7 +5376,7 @@ EOT;
         }
 
         $resourceDeletedMessage = Category::show_message_resource_delete($courseId);
-        if (false !== $resourceDeletedMessage || api_is_allowed_to_edit() || api_is_excluded_user_type()) {
+        if (!empty($resourceDeletedMessage) || api_is_allowed_to_edit() || api_is_excluded_user_type()) {
             return '';
         }
 
@@ -5463,7 +5500,7 @@ EOT;
         return $trackedExercise;
     }
 
-    public static function getTotalQuestionAnswered($courseId, $exerciseId, $questionId)
+    public static function getTotalQuestionAnswered($courseId, $exerciseId, $questionId, $onlyStudents = false): int
     {
         $courseId = (int) $courseId;
         $exerciseId = (int) $exerciseId;
@@ -5471,16 +5508,27 @@ EOT;
 
         $attemptTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $trackTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $courseUserJoin = "";
+        $studentsWhere = "";
+        if ($onlyStudents) {
+            $courseUserJoin = "
+            INNER JOIN $courseUser cu
+            ON cu.c_id = te.c_id AND cu.user_id = exe_user_id";
+            $studentsWhere = " AND relation_type <> 2 AND cu.status = ".STUDENT;
+        }
 
-        $sql = "SELECT count(te.exe_id) total
+        $sql = "SELECT count(distinct (te.exe_id)) total
             FROM $attemptTable t
             INNER JOIN $trackTable te
             ON (t.exe_id = te.exe_id)
+            $courseUserJoin
             WHERE
                 te.c_id = $courseId AND
                 exe_exo_id = $exerciseId AND
                 t.question_id = $questionId AND
-                status != 'incomplete'
+                te.status != 'incomplete'
+                $studentsWhere
         ";
         $queryTotal = Database::query($sql);
         $totalRow = Database::fetch_array($queryTotal, 'ASSOC');

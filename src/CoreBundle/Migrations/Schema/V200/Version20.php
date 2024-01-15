@@ -25,7 +25,7 @@ class Version20 extends AbstractMigrationChamilo
     {
         $this->addSql('set sql_mode=""');
         // Optimize bulk operations - see https://dev.mysql.com/doc/refman/5.6/en//optimizing-innodb-bulk-data-loading.html
-        //$this->addSql('set autocommit=0');
+        // $this->addSql('set autocommit=0');
         $this->addSql('set unique_checks=0');
         $this->addSql('set foreign_key_checks=0');
 
@@ -174,6 +174,7 @@ class Version20 extends AbstractMigrationChamilo
 
         $this->addSql("UPDATE language SET isocode = 'fr_FR' WHERE isocode = 'fr' ");
         $this->addSql("UPDATE language SET isocode = 'pl_PL' WHERE isocode = 'pl' ");
+        $this->addSql("UPDATE language SET isocode = 'qu_PE' WHERE isocode = 'qu'");
 
         $this->addSql("UPDATE sys_announcement SET lang = 'english' WHERE lang IS NULL OR lang = '' ");
         $this->addSql("UPDATE course SET course_language = 'english' WHERE course_language IS NULL OR course_language = '' ");
@@ -269,7 +270,7 @@ class Version20 extends AbstractMigrationChamilo
         if ($table->hasColumn('api_service')) {
             $this->addSql("UPDATE user_api_key SET api_service = 'default' WHERE api_service = 'dokeos'");
         }
-        //$this->addSql('ALTER TABLE c_tool_intro CHANGE id tool VARCHAR(255) NOT NULL');
+        // $this->addSql('ALTER TABLE c_tool_intro CHANGE id tool VARCHAR(255) NOT NULL');
 
         /*$table = $schema->getTable('course_rel_class');
         if (!$table->hasColumn('c_id')) {
@@ -295,7 +296,7 @@ class Version20 extends AbstractMigrationChamilo
         ];
 
         foreach ($tables as $table) {
-            //$tableObj = $schema->getTable($table);
+            // $tableObj = $schema->getTable($table);
             /*if (!$tableObj->hasColumn('c_id')) {
                 $this->addSql("ALTER TABLE $table ADD c_id int NOT NULL");
 
@@ -341,7 +342,7 @@ class Version20 extends AbstractMigrationChamilo
         }
 
         if (false === $table->hasColumn('resource_node_id')) {
-            $this->addSql('ALTER TABLE usergroup ADD resource_node_id BIGINT DEFAULT NULL');
+            $this->addSql('ALTER TABLE usergroup ADD resource_node_id INT DEFAULT NULL');
         }
 
         // sequence_resource.
@@ -378,9 +379,17 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('CREATE TABLE IF NOT EXISTS ext_translations (id INT AUTO_INCREMENT NOT NULL, locale VARCHAR(8) NOT NULL, object_class VARCHAR(191) NOT NULL, field VARCHAR(32) NOT NULL, foreign_key VARCHAR(64) NOT NULL, content LONGTEXT DEFAULT NULL, INDEX translations_lookup_idx (locale, object_class, foreign_key), UNIQUE INDEX lookup_unique_idx (locale, object_class, field, foreign_key), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
 
         // Rename extra_field field_type and extra_field_type to item_type and value_type, also, the term "value" in exta_field_values.value renamed to field_value
-        $this->addSql('ALTER TABLE extra_field CHANGE extra_field_type item_type INT NOT NULL');
-        $this->addSql('ALTER TABLE extra_field CHANGE field_type value_type INT NOT NULL');
-        $this->addSql('ALTER TABLE extra_field_values CHANGE `value` field_value LONGTEXT DEFAULT NULL');
+        $table = $schema->getTable('extra_field');
+        if ($table->hasColumn('extra_field_type')) {
+            $this->addSql('ALTER TABLE extra_field CHANGE extra_field_type item_type INT NOT NULL');
+        }
+        if ($table->hasColumn('field_type')) {
+            $this->addSql('ALTER TABLE extra_field CHANGE field_type value_type INT NOT NULL');
+        }
+        $table = $schema->getTable('extra_field_values');
+        if ($table->hasColumn('value')) {
+            $this->addSql('ALTER TABLE extra_field_values CHANGE `value` field_value LONGTEXT DEFAULT NULL');
+        }
 
         // Drop unused columns
         $dropColumnsAndIndex = [
@@ -484,7 +493,7 @@ class Version20 extends AbstractMigrationChamilo
             'c_glossary' => ['c_id', 'session_id', 'glossary_id'],
             'c_group_category' => ['c_id'],
             'c_group_info' => ['c_id', 'session_id'],
-            //'c_group_rel_tutor' => ['c_id'],
+            // 'c_group_rel_tutor' => ['c_id'],
             'c_link' => ['c_id', 'session_id'],
             'c_link_category' => ['c_id', 'session_id'],
 
@@ -493,7 +502,7 @@ class Version20 extends AbstractMigrationChamilo
             'c_lp_item' => ['c_id'],
             'c_lp_item_view' => ['c_id', 'session_id'],
             // 'c_lp_iv_interaction' => ['c_id'],
-            //'c_lp_iv_objective' => ['c_id'],
+            // 'c_lp_iv_objective' => ['c_id'],
             'c_notebook' => ['c_id', 'session_id'],
             'c_quiz' => ['c_id', 'session_id'],
             'c_quiz_answer' => ['c_id'],
@@ -545,7 +554,5 @@ class Version20 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

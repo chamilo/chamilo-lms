@@ -2,7 +2,7 @@ export default {
   path: '/resources/messages',
   meta: { requiresAuth: true },
   name: 'messages',
-  component: () => import('../components/message/Layout.vue'),
+  component: () => import('../components/message/MessageLayout.vue'),
   redirect: { name: 'MessageList' },
   children: [
     {
@@ -18,7 +18,7 @@ export default {
     {
       name: 'MessageReply',
       path: 'reply',
-      component: () => import('../views/message/Reply.vue')
+      component: () => import('../views/message/MessageReply.vue')
     },
     /*{
       name: 'MessageUpdate',

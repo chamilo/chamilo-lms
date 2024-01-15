@@ -5,6 +5,8 @@
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\CourseCategory as CourseCategoryEntity;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 
 class CourseCategory
 {
@@ -15,7 +17,7 @@ class CourseCategory
      *
      * @return array
      */
-    public static function getCategory(string $categoryCode = null)
+    public static function getCategory(string $categoryCode = null): array
     {
         if (!empty($categoryCode)) {
             $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
@@ -97,7 +99,7 @@ class CourseCategory
 
         $sql = "SELECT
                 t1.id,
-                t1.name,
+                t1.title,
                 t1.code,
                 t1.parent_id,
                 t1.tree_pos,
@@ -110,7 +112,7 @@ class CourseCategory
                 WHERE 1=1
                     $whereCondition
                 GROUP BY
-                    t1.name,
+                    t1.title,
                     t1.code,
                     t1.parent_id,
                     t1.tree_pos,
@@ -150,7 +152,7 @@ class CourseCategory
         $repo = Container::getCourseCategoryRepository();
         $category = new CourseCategoryEntity();
         $category
-            ->setName($name)
+            ->setTitle($name)
             ->setCode($code)
             ->setDescription($description)
             ->setTreePos($tree_pos)
@@ -191,7 +193,7 @@ class CourseCategory
         // First get to the highest level possible in the tree
         $result = Database::query("SELECT parent_id FROM $table WHERE id = '$categoryId'");
         $row = Database::fetch_array($result);
-        if (false !== $row && 0 != $row['parent_id']) {
+        if (false !== $row && !empty($row['parent_id'])) {
             // if a parent was found, enter there to see if he's got one more parent
             self::updateParentCategoryChildrenCount($row['parent_id'], $delta);
         }
@@ -214,7 +216,7 @@ class CourseCategory
         $name = trim($name);
         $category
             ->setCode($name)
-            ->setName($name)
+            ->setTitle($name)
             ->setDescription($description)
             ->setAuthCourseChild($canHaveCourses)
         ;
@@ -381,25 +383,10 @@ class CourseCategory
             $row++;
             $mainUrl = api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.$categoryCode;
 
-            $editIcon = Display::return_icon(
-                'edit.png',
-                get_lang('Edit'),
-                null,
-                ICON_SIZE_SMALL
-            );
-            $exportIcon = Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '');
-            $deleteIcon = Display::return_icon(
-                'delete.png',
-                get_lang('Delete'),
-                null,
-                ICON_SIZE_SMALL
-            );
-            $moveIcon = Display::return_icon(
-                'up.png',
-                get_lang('Up in same level'),
-                null,
-                ICON_SIZE_SMALL
-            );
+            $editIcon = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'));
+            $exportIcon = Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('ExportAsCSV'), '');
+            $deleteIcon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'));
+            $moveIcon = Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Up in same level'));
 
             $urlId = api_get_current_access_url_id();
             foreach ($categories as $category) {
@@ -435,12 +422,13 @@ class CourseCategory
 
                 $url = api_get_path(WEB_CODE_PATH).'admin/course_category.php?id='.$categoryId;
                 $title = Display::url(
-                    Display::return_icon(
-                        'folder_document.gif',
-                        get_lang('Open this category'),
+                    Display::getMdiIcon(
+                        ObjectIcon::FOLDER,
+                        'ch-tool-icon',
                         null,
-                        ICON_SIZE_SMALL
-                    ).' '.$category->getName().' ('.$code.')',
+                        ICON_SIZE_SMALL,
+                        get_lang('Open this category')
+                    ).' '.$category->getTitle().' ('.$code.')',
                     $url
                 );
 
@@ -489,7 +477,7 @@ class CourseCategory
     public static function getCategoriesToDisplayInHomePage()
     {
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql = "SELECT name FROM $table
+        $sql = "SELECT title FROM $table
                 WHERE parent_id IS NULL
                 ORDER BY tree_pos";
 
@@ -508,7 +496,7 @@ class CourseCategory
         $whereCondition = ' AND a.access_url_id = '.api_get_current_access_url_id();
 
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql = "SELECT c.id, c.code, name
+        $sql = "SELECT c.id, c.code, c.title
                 FROM $tbl_category c
                 $conditions
                 WHERE (auth_course_child = 'TRUE' OR code = '".Database::escape_string($categoryCode)."')
@@ -526,7 +514,7 @@ class CourseCategory
             if (!empty($categoryToAvoid) && $categoryToAvoid == $categoryCode) {
                 continue;
             }
-            $categories[$cat['id']] = '('.$cat['code'].') '.$cat['name'];
+            $categories[$cat['id']] = '('.$cat['code'].') '.$cat['title'];
             ksort($categories);
         }
 
@@ -620,11 +608,11 @@ class CourseCategory
 
         $keyword = Database::escape_string($keyword);
 
-        $sql = "SELECT c.*, c.name as text
+        $sql = "SELECT c.*, c.title as text
                 FROM $tableCategory c $conditions
                 WHERE
                 (
-                    c.code LIKE '%$keyword%' OR name LIKE '%$keyword%'
+                    c.code LIKE '%$keyword%' OR c.title LIKE '%$keyword%'
                 ) AND auth_course_child = 'TRUE'
                 $whereCondition ";
         $result = Database::query($sql);

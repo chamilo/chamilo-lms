@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
-use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
 use Doctrine\ORM\EntityManager;
@@ -22,7 +21,11 @@ class UpdatePositionLink extends AbstractController
         $requestData = json_decode($request->getContent(), true);
         $newPosition = (int) $requestData['position'];
 
-        $link->setDisplayOrder($newPosition);
+        $resourceNode = $link->getResourceNode();
+        if ($resourceNode) {
+            $resourceNode->setDisplayOrder($newPosition);
+            $em->flush();
+        }
 
         return $link;
     }

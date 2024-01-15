@@ -39,7 +39,7 @@ class OutcomeReplaceRequest extends OutcomeRequest
 
         $resultScore = (float) $resultScore;
 
-        if (0 > $resultScore || 1 < $resultScore) {
+        if ($resultScore < 0 || $resultScore > 1) {
             $this->statusInfo
                 ->setSeverity(OutcomeResponseStatus::SEVERITY_WARNING)
                 ->setCodeMajor(OutcomeResponseStatus::CODEMAJOR_FAILURE)
@@ -61,6 +61,7 @@ class OutcomeReplaceRequest extends OutcomeRequest
 
         /** @var GradebookEvaluation $evaluation */
         $evaluation = $this->entityManager->find(GradebookEvaluation::class, $sourcedParts['e']);
+
         /** @var User $user */
         $user = $this->entityManager->find(User::class, $sourcedParts['u']);
 

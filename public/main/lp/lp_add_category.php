@@ -72,7 +72,7 @@ if ($form->validate()) {
         $item = $repo->find($id);
         $defaults = [
             'id' => $item->getIid(),
-            'name' => $item->getName(),
+            'name' => $item->getTitle(),
         ];
         $form->setDefaults($defaults);
     }
@@ -81,12 +81,7 @@ if ($form->validate()) {
 Display::display_header(get_lang('Create new learning path'), 'Path');
 
 $actions = '<a href="lp_controller.php?'.api_get_cidreq().'">'.
-    Display::return_icon(
-        'back.png',
-        get_lang('ReturnToLearning paths'),
-        '',
-        ICON_SIZE_MEDIUM
-    ).
+    Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', null, 32, get_lang('ReturnToLearning paths')).
     '</a>';
 
 echo Display::toolbarAction('toolbar', [$actions]);

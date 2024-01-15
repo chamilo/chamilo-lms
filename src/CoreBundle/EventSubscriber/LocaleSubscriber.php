@@ -51,65 +51,51 @@ class LocaleSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $loadFromDb = $request->getSession()->get('check_locale_from_db', true);
+        $sessionHandler = $request->getSession();
 
-        if (false === $loadFromDb &&
-            $request->getSession()->has('_locale') &&
-            !empty($request->getSession()->get('_locale'))
-        ) {
-            $locale = $request->getSession()->get('_locale');
-            $request->setLocale($locale);
-
-            return;
+        if ($attrLocale = $request->query->get('_locale')) {
+            $sessionHandler->set('_selected_locale', $attrLocale);
         }
 
-        if ($loadFromDb) {
-            $locale = $this->getCurrentLanguage($request);
-            // if no explicit locale has been set on this request, use one from the session
-            $request->setLocale($locale);
-            $request->getSession()->set('_locale', $locale);
-            $request->getSession()->set('check_locale_from_db', false);
-        }
+        $locale = $this->getCurrentLanguage($request);
+        // if no explicit locale has been set on this request, use one from the session
+        $request->setLocale($locale);
+        $sessionHandler->set('_locale', $locale);
     }
 
     public function getCurrentLanguage(Request $request): string
     {
+        $sessionHandler = $request->getSession();
         $localeList = [];
 
-        // 1. Check platform locale
-        $platformLocale = $this->settingsManager->getSetting('language.platform_language');
-
-        if (!empty($platformLocale)) {
+        // 1. Check platform locale;
+        if ($platformLocale = $this->settingsManager->getSetting('language.platform_language')) {
             $localeList['platform_lang'] = $platformLocale;
         }
 
         // 2. Check user locale
         // _locale_user is set when user logins the system check UserLocaleListener
-        $userLocale = $request->getSession()->get('_locale_user');
-
-        if (!empty($userLocale)) {
+        if ($userLocale = $sessionHandler->get('_locale_user')) {
             $localeList['user_profil_lang'] = $userLocale;
         }
 
         // 3. Check course locale
-        $courseId = $request->get('cid');
-
-        if (!empty($courseId)) {
-            /** @var Course $course */
-            $course = $request->getSession()->get('course');
+        if ($request->query->getInt('cid')
+            || $request->request->getInt('cid')
+            || $request->attributes->getInt('cid')
+        ) {
+            /** @var Course|null $course */
             // 3. Check course locale
-            if (!empty($course)) {
-                $courseLocale = $course->getCourseLanguage();
-                if (!empty($courseLocale)) {
-                    $localeList['course_lang'] = $platformLocale;
+            if ($course = $sessionHandler->get('course')) {
+                if ($courseLocale = $course->getCourseLanguage()) {
+                    $localeList['course_lang'] = $courseLocale;
                 }
             }
         }
 
         // 4. force locale if it was selected from the URL
-        $localeFromUrl = $request->get('_locale');
-        if (!empty($localeFromUrl)) {
-            $localeList['user_selected_lang'] = $platformLocale;
+        if ($localeFromUrl = $sessionHandler->get('_selected_locale')) {
+            $localeList['user_selected_lang'] = $localeFromUrl;
         }
 
         $priorityList = [
@@ -122,7 +108,7 @@ class LocaleSubscriber implements EventSubscriberInterface
         $locale = '';
         foreach ($priorityList as $setting) {
             $priority = $this->settingsManager->getSetting(sprintf('language.%s', $setting));
-            if (!empty($priority) && isset($localeList[$priority]) && !empty($localeList[$priority])) {
+            if (!empty($priority) && !empty($localeList[$priority])) {
                 $locale = $localeList[$priority];
 
                 break;
@@ -138,7 +124,7 @@ class LocaleSubscriber implements EventSubscriberInterface
                 'user_selected_lang',
             ];
             foreach ($priorityList as $setting) {
-                if (isset($localeList[$setting]) && !empty($localeList[$setting])) {
+                if (!empty($localeList[$setting])) {
                     $locale = $localeList[$setting];
                 }
             }

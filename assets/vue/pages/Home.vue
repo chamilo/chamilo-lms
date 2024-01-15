@@ -1,25 +1,30 @@
 <template>
-  <div v-if="announcements.length">
-    <SystemAnnouncementCardList :announcements="announcements" />
-  </div>
+  <!-- Homepage for logged-in users -->
+  <div class="flex flex-col gap-4">
+    <div v-if="announcements.length">
+      <SystemAnnouncementCardList :announcements="announcements" />
+    </div>
 
-  <div v-if="pages.length" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 mt-2">
-    <PageCardList :pages="pages" />
+    <PageCardList class="grid gap-4 grid-cols-1" />
   </div>
 </template>
 
 <script setup>
 import axios from "axios";
 import { ref } from "vue";
-import { useStore } from "vuex";
-import { useI18n } from "vue-i18n";
+import { useRouter } from 'vue-router';
 import PageCardList from "../components/page/PageCardList";
 import SystemAnnouncementCardList from "../components/systemannouncement/SystemAnnouncementCardList";
-
-const store = useStore();
+import { usePlatformConfig } from "../store/platformConfig";
 
 const announcements = ref([]);
-const pages = ref([]);
+const router = useRouter();
+const platformConfigStore = usePlatformConfig();
+
+const redirectValue = platformConfigStore.getSetting("platform.redirect_index_to_url_for_logged_users");
+if (typeof redirectValue === 'string' && redirectValue.trim() !== '') {
+  router.push(`/${redirectValue}`);
+}
 
 axios
   .get("/news/list")
@@ -30,17 +35,5 @@ axios
   })
   .catch(function (error) {
     console.log(error);
-  });
-
-const { locale } = useI18n();
-
-store
-  .dispatch("page/findAll", {
-    "category.title": "home",
-    enabled: "1",
-    locale: locale.value,
-  })
-  .then((response) => {
-    pages.value = response;
   });
 </script>

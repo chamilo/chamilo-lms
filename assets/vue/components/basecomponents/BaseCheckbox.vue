@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center">
+  <div class="field-checkbox">
     <Checkbox
       :model-value="modelValue"
       :binary="true"

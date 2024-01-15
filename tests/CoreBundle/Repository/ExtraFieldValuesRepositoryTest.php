@@ -21,6 +21,7 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
     public function testCreate(): void
     {
         $em = $this->getEntityManager();
+
         /** @var AssetRepository $assetRepo */
         $assetRepo = self::getContainer()->get(AssetRepository::class);
         $extraFieldValueRepo = self::getContainer()->get(ExtraFieldValuesRepository::class);

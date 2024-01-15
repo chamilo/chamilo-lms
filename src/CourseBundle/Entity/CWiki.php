@@ -10,9 +10,11 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CourseBundle\Repository\CWikiRepository;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_wiki', options: ['row_format' => 'DYNAMIC'])]
@@ -27,7 +29,7 @@ class CWiki extends AbstractResource implements ResourceInterface, Stringable
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected int $iid;
+    protected ?int $iid = null;
 
     #[ORM\Column(name: 'c_id', type: 'integer')]
     protected int $cId;
@@ -112,11 +114,16 @@ class CWiki extends AbstractResource implements ResourceInterface, Stringable
     /**
      * @var Collection<int, CWikiCategory>
      */
-    #[ORM\ManyToMany(targetEntity: CWikiCategory::class, inversedBy: "wikiPages")]
+    #[ORM\ManyToMany(targetEntity: CWikiCategory::class, inversedBy: 'wikiPages')]
     #[ORM\JoinTable(name: 'c_wiki_rel_category')]
     #[ORM\JoinColumn(name: 'wiki_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     #[ORM\InverseJoinColumn(name: 'category_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private Collection $categories;
+
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+    }
 
     public function __toString(): string
     {
@@ -435,12 +442,12 @@ class CWiki extends AbstractResource implements ResourceInterface, Stringable
         return $this;
     }
 
-    public function getResourceIdentifier(): int
+    public function getResourceIdentifier(): int|Uuid
     {
         return $this->getIid();
     }
 
-    public function getIid(): int
+    public function getIid(): ?int
     {
         return $this->iid;
     }

@@ -5,6 +5,12 @@
 /**
  * Index page of the admin tools.
  */
+
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
+
 // Resetting the course id.
 $cidReset = true;
 
@@ -47,12 +53,12 @@ $blocks = [];
 
 /* Users */
 $blocks['users']['mdi_icon'] = 'account';
-$blocks['users']['icon'] = Display::return_icon(
-    'members.png',
-    get_lang('User management'),
-    [],
+$blocks['users']['icon'] = Display::getMdiIcon(
+    ObjectIcon::USER,
+    'ch-tool-icon',
+    null,
     ICON_SIZE_MEDIUM,
-    false
+    get_lang('User management')
 );
 $blocks['users']['description'] = get_lang('Here you can manage registered users within your platform');
 $blocks['users']['label'] = get_lang('User management');
@@ -124,12 +130,12 @@ $blocks['users']['extra'] = null;
 if (api_is_platform_admin()) {
     /* Courses */
     $blocks['courses']['mdi_icon'] = 'book-open-page-variant';
-    $blocks['courses']['icon'] = Display::return_icon(
-        'course.png',
-        get_lang('Course management'),
-        [],
+    $blocks['courses']['icon'] = Display::getMdiIcon(
+        ObjectIcon::COURSE,
+        'ch-tool-icon',
+        null,
         ICON_SIZE_MEDIUM,
-        false
+        get_lang('Course management')
     );
     $blocks['courses']['label'] = get_lang('Course management');
     $blocks['courses']['description'] = get_lang('Create and manage your courses in a simple way');
@@ -184,12 +190,12 @@ if (api_is_platform_admin()) {
 
     /* Sessions */
     $blocks['sessions']['mdi_icon'] = 'google-classroom';
-    $blocks['sessions']['icon'] = Display::return_icon(
-        'session.png',
-        get_lang('Sessions management'),
-        [],
+    $blocks['sessions']['icon'] = Display::getMdiIcon(
+        ObjectIcon::SESSION,
+        'ch-tool-icon',
+        null,
         ICON_SIZE_MEDIUM,
-        false
+        get_lang('Sessions management')
     );
     $blocks['sessions']['label'] = get_lang('Sessions management');
     $blocks['sessions']['description'] = get_lang('Create course packages for a certain time with training sessions.');
@@ -258,12 +264,12 @@ if (api_is_platform_admin()) {
     // Skills
     if (SkillModel::isToolAvailable()) {
         $blocks['skills']['mdi_icon'] = 'certificate';
-        $blocks['skills']['icon'] = Display::return_icon(
-            'skill-badges.png',
-            get_lang('Skills'),
-            [],
+        $blocks['skills']['icon'] = Display::getMdiIcon(
+            ObjectIcon::BADGE,
+            'ch-tool-icon',
+            null,
             ICON_SIZE_MEDIUM,
-            false
+            get_lang('Skills')
         );
         $blocks['skills']['label'] = get_lang('Skills and gradebook');
         $blocks['skills']['description'] = get_lang('Manage the skills of your users, through courses and badges');
@@ -397,12 +403,12 @@ if (api_is_platform_admin()) {
 /* Settings */
 if (api_is_platform_admin()) {
     $blocks['settings']['mdi_icon'] = 'tools';
-    $blocks['settings']['icon'] = Display::return_icon(
-        'settings.png',
-        get_lang('System'),
-        [],
+    $blocks['settings']['icon'] = Display::getMdiIcon(
+        ToolIcon::SETTINGS,
+        'ch-tool-icon',
+        null,
         ICON_SIZE_MEDIUM,
-        false
+        get_lang('System')
     );
     $blocks['settings']['label'] = get_lang('System');
     $blocks['settings']['description'] = get_lang('View the status of your server, perform performance tests');
@@ -477,12 +483,12 @@ if (api_is_platform_admin()) {
 
         if ($menuAdministratorItems) {
             $blocks['plugins']['mdi_icon'] = 'puzzle';
-            $blocks['plugins']['icon'] = Display::return_icon(
-                'plugins.png',
-                get_lang('Plugins'),
-                [],
+            $blocks['plugins']['icon'] = Display::getMdiIcon(
+                ToolIcon::PLUGIN,
+                'ch-tool-icon',
+                null,
                 ICON_SIZE_MEDIUM,
-                false
+                get_lang('Plugins')
             );
             $blocks['plugins']['label'] = get_lang('Plugins');
             $blocks['plugins']['class'] = 'block-admin-platform';
@@ -514,12 +520,12 @@ if (api_is_platform_admin()) {
 
     /* Chamilo.org */
     $blocks['chamilo']['mdi_icon'] = 'cogs';
-    $blocks['chamilo']['icon'] = Display::return_icon(
-        'platform.png',
-        'Chamilo.org',
-        [],
+    $blocks['chamilo']['icon'] = Display::getMdiIcon(
+        ActionIcon::INFORMATION,
+        'ch-tool-icon',
+        null,
         ICON_SIZE_MEDIUM,
-        false
+        'Chamilo.org'
     );
     $blocks['chamilo']['label'] = 'Chamilo.org';
     $blocks['chamilo']['description'] = get_lang('Learn more about Chamilo and its use, official references links');
@@ -546,12 +552,12 @@ if (api_is_platform_admin()) {
 
     // Version check
     $blocks['version_check']['mdi_icon'] = '';
-    $blocks['version_check']['icon'] = Display::return_icon(
-        'platform.png',
-        'Chamilo.org',
-        [],
+    $blocks['version_check']['icon'] = Display::getMdiIcon(
+        StateIcon::COMPLETE,
+        'ch-tool-icon',
+        null,
         ICON_SIZE_MEDIUM,
-        false
+        'Chamilo.org'
     );
     $blocks['version_check']['label'] = get_lang('Version Check');
     $blocks['version_check']['extra'] = '<div class="admin-block-version"></div>';

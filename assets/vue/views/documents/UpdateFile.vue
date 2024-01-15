@@ -1,35 +1,39 @@
 <template>
-    <div v-if="!isLoading && item && isCurrentTeacher">
-      <!--    :handle-delete="del"-->
-      <Toolbar
-          :handle-submit="onSendFormData"
-          :handle-reset="resetForm"
+  <div v-if="!isLoading && item && isCurrentTeacher">
+    <!--    :handle-delete="del"-->
+    <Toolbar
+      :handle-reset="resetForm"
+      :handle-submit="onSendFormData"
+    />
+    <DocumentsForm
+      ref="updateForm"
+      :errors="violations"
+      :values="item"
+    >
+      <EditLinks
+        :item="item"
+        :show-share-with-user="false"
+        links-type="users"
       />
-      <DocumentsForm
-          ref="updateForm"
-          :values="item"
-          :errors="violations"
-      >
-        <EditLinks :item="item" links-type="users" :show-share-with-user="false" />
-      </DocumentsForm>
+    </DocumentsForm>
 
-      <Loading :visible="isLoading || deleteLoading" />
-    </div>
+    <Loading :visible="isLoading || deleteLoading" />
+  </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import { mapFields } from 'vuex-map-fields';
-import DocumentsForm from '../../components/documents/FormNewDocument.vue';
-import Loading from '../../components/Loading.vue';
-import Toolbar from '../../components/Toolbar.vue';
-import UpdateMixin from '../../mixins/UpdateMixin';
-import EditLinks from "../../components/resource_links/EditLinks.vue";
+import { mapActions, mapGetters } from "vuex"
+import { mapFields } from "vuex-map-fields"
+import DocumentsForm from "../../components/documents/FormNewDocument.vue"
+import Loading from "../../components/Loading.vue"
+import Toolbar from "../../components/Toolbar.vue"
+import UpdateMixin from "../../mixins/UpdateMixin"
+import EditLinks from "../../components/resource_links/EditLinks.vue"
 
-const servicePrefix = 'Documents';
+const servicePrefix = "Documents"
 
 export default {
-  name: 'DocumentsUpdate',
+  name: "DocumentsUpdate",
   servicePrefix,
   components: {
     EditLinks,
@@ -39,27 +43,27 @@ export default {
   },
   mixins: [UpdateMixin],
   computed: {
-    ...mapFields('documents', {
-      deleteLoading: 'isLoading',
-      isLoading: 'isLoading',
-      error: 'error',
-      updated: 'updated',
-      violations: 'violations'
+    ...mapFields("documents", {
+      deleteLoading: "isLoading",
+      isLoading: "isLoading",
+      error: "error",
+      updated: "updated",
+      violations: "violations",
     }),
-    ...mapGetters('documents', ['find']),
+    ...mapGetters("documents", ["find"]),
     ...mapGetters({
-      'isCurrentTeacher': 'security/isCurrentTeacher',
+      isCurrentTeacher: "security/isCurrentTeacher",
     }),
   },
   methods: {
-    ...mapActions('documents', {
-      createReset: 'resetCreate',
-      deleteItem: 'del',
-      delReset: 'resetDelete',
-      retrieve: 'load',
-      updateWithFormData: 'updateWithFormData',
-      updateReset: 'resetUpdate'
-    })
-  }
-};
+    ...mapActions("documents", {
+      createReset: "resetCreate",
+      deleteItem: "del",
+      delReset: "resetDelete",
+      retrieve: "load",
+      updateWithFormData: "updateWithFormData",
+      updateReset: "resetUpdate",
+    }),
+  },
+}
 </script>

@@ -15,7 +15,7 @@ module.exports = {
   content: [
     "./assets/**/*.{js,vue}",
     "./public/main/**/*.{php,twig}",
-    "./src/CoreBudnle/Resources/views/**/*.html.twig",
+    "./src/CoreBundle/Resources/views/**/*.html.twig",
   ],
   theme: {
     colors: {
@@ -76,9 +76,6 @@ module.exports = {
         "body-2": ["14px", "16px"],
         caption: ["13px", "16px"],
         tiny: ["11px", "16px"],
-      },
-      gridTemplateColumns: {
-        "course-tools": "repeat(auto-fit, 120px)",
       },
     },
   },

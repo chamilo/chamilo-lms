@@ -110,7 +110,7 @@ if ($allowCategory) {
 }
 
 $categoryTest = new CLpCategory();
-$categoryTest->setName(get_lang('Without category'));
+$categoryTest->setTitle(get_lang('Without category'));
 $categoryTest->setPosition(0);
 $categories = [$categoryTest];
 
@@ -130,7 +130,7 @@ if ($filteredCategoryId) {
         }
 
         $interbreadcrumb[] = ['name' => $nameTools, 'url' => api_get_self()];
-        $nameTools = strip_tags($category->getName());
+        $nameTools = strip_tags($category->getTitle());
     }
 }
 
@@ -626,21 +626,21 @@ foreach ($categories as $category) {
                 /*
                 if (1 == $details['lp_type']) {
                     $dsp_disk = Display::url(
-                        Display::getMdiIcon('package', 'ch-tool-icon', '', 22),
+                        Display::getMdiIcon('archive-arrow-down', 'ch-tool-icon', '', 22),
                         api_get_self()."?$cidReq&action=export&lp_id=$id",
                         ['title' => htmlentities(get_lang('Export as SCORM'))]
                     );
                 } elseif (2 == $details['lp_type']) {
                     $dsp_disk = Display::url(
-                        Display::getMdiIcon('package', 'ch-tool-icon', '', 22),
+                        Display::getMdiIcon('archive-arrow-down', 'ch-tool-icon', '', 22),
                         api_get_self()."?$cidReq&action=export&lp_id=$id&export_name="
                             .api_replace_dangerous_char($name).'.zip',
                         ['title' => htmlentities(get_lang('Export as SCORM'))]
                     );
                 } else {
-                    $dsp_disk = Display::getMdiIcon('package', 'ch-tool-icon-disabled', '', 22, get_lang('Export as SCORM'));
+                    $dsp_disk = Display::getMdiIcon('archive-arrow-down', 'ch-tool-icon-disabled', '', 22, get_lang('Export as SCORM'));
                 }*/
-                $dsp_disk = Display::getMdiIcon('package', 'ch-tool-icon-disabled', '', 22, get_lang('Export as SCORM'));
+                $dsp_disk = Display::getMdiIcon('archive-arrow-down', 'ch-tool-icon-disabled', '', 22, get_lang('Export as SCORM'));
 
                 // Copy temporarily disabled until course copy works
                 /*

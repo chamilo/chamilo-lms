@@ -65,7 +65,7 @@ $actions = function ($row) use ($plugin, $url, $courseId, $sessionId) {
     );
 
     $actions .= '&nbsp;'.Display::url(
-        Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_MEDIUM),
+        Display::getMdiIcon(ObjectIcon::RESULTS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Results')),
         api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['iid']
     );
 

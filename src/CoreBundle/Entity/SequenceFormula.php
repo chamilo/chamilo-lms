@@ -17,11 +17,11 @@ class SequenceFormula
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\SequenceMethod::class)]
+    #[ORM\ManyToOne(targetEntity: SequenceMethod::class)]
     #[ORM\JoinColumn(name: 'sequence_method_id', referencedColumnName: 'id')]
     protected ?SequenceMethod $method = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\SequenceVariable::class)]
+    #[ORM\ManyToOne(targetEntity: SequenceVariable::class)]
     #[ORM\JoinColumn(name: 'sequence_variable_id', referencedColumnName: 'id')]
     protected ?SequenceVariable $variable = null;
 

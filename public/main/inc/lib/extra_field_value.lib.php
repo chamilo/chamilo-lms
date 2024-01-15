@@ -383,7 +383,7 @@ class ExtraFieldValue extends Model
 
         // ofaj
         // Set user.profile_completed = 1
-        if ('user' === $this->type) {
+        /*if ('user' === $this->type) {
             if ('true' === api_get_setting('show_terms_if_profile_completed')) {
                 $justTermResults = [];
                 foreach ($resultsExist as $term => $value) {
@@ -410,7 +410,7 @@ class ExtraFieldValue extends Model
                 Database::query($sql);
                 Session::write('profile_completed_result', $justTermResults);
             }
-        }
+        }*/
     }
 
     /**
@@ -725,6 +725,7 @@ class ExtraFieldValue extends Model
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $result = Database::fetch_array($result, 'ASSOC');
+            $result['value'] = $result['field_value'];
             if ($transform) {
                 $fieldType = $result['value_type'];
                 if (ExtraField::FIELD_TYPE_DOUBLE_SELECT == $fieldType) {
@@ -911,7 +912,7 @@ class ExtraFieldValue extends Model
         $itemId = (int) $itemId;
         $extraFieldType = $this->getExtraField()->getItemType();
 
-        $sql = "SELECT s.field_value, sf.variable, sf.value_type, sf.id, sf.display_text
+        $sql = "SELECT s.field_value, s.field_value as value, sf.variable, sf.value_type, sf.id, sf.display_text
                 FROM {$this->table} s
                 INNER JOIN {$this->table_handler_field} sf
                 ON (s.field_id = sf.id)

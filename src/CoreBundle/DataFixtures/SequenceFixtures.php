@@ -32,8 +32,8 @@ class SequenceFixtures extends Fixture
         $sequenceCondition1 = (new SequenceCondition())
             ->setDescription('<= 100%')
             ->setMathOperation('<=')
-            ->setParam('100.0')
-            ->setActTrue('2')
+            ->setParam(100.0)
+            ->setActTrue(2)
             ->setActFalse('0')
         ;
         $manager->persist($sequenceCondition1);
@@ -41,8 +41,8 @@ class SequenceFixtures extends Fixture
         $sequenceCondition2 = (new SequenceCondition())
             ->setDescription('>= 70%')
             ->setMathOperation('>=')
-            ->setParam('70.0')
-            ->setActTrue('0')
+            ->setParam(70.0)
+            ->setActTrue(0)
             ->setActFalse('')
         ;
         $manager->persist($sequenceCondition2);
@@ -150,7 +150,7 @@ class SequenceFixtures extends Fixture
             $sequenceMethod = (new SequenceMethod())
                 ->setDescription($item['description'])
                 ->setFormula($item['formula'])
-                ->setAssign((string) $item['assign'])
+                ->setAssign((int) $item['assign'])
                 ->setMetType($item['met_type'])
                 ->setActFalse($item['act_false'])
             ;
@@ -212,7 +212,7 @@ class SequenceFixtures extends Fixture
         $variables = [];
         foreach ($list as $item) {
             $sequenceVariable = (new SequenceVariable())
-                ->setName($item['name'])
+                ->setTitle($item['name'])
                 ->setDescription($item['description'])
                 ->setDefaultValue($item['default_val'])
             ;
@@ -315,7 +315,7 @@ class SequenceFixtures extends Fixture
 
         foreach ($list as $item) {
             $sequenceType = (new SequenceTypeEntity())
-                ->setName($item['name'])
+                ->setTitle($item['name'])
                 ->setDescription($item['description'])
                 ->setEntityTable($item['entity_table'])
             ;

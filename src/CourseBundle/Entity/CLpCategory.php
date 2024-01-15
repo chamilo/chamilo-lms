@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Sortable\Entity\Repository\SortableRepository;
 use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -21,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Learning paths categories.
  */
 #[ORM\Table(name: 'c_lp_category')]
-#[ORM\Entity(repositoryClass: \Gedmo\Sortable\Entity\Repository\SortableRepository::class)]
+#[ORM\Entity(repositoryClass: SortableRepository::class)]
 class CLpCategory extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
@@ -30,23 +31,23 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Stringa
     protected ?int $iid = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'name', type: 'text')]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'text')]
+    protected string $title;
 
     #[Gedmo\SortablePosition]
     #[ORM\Column(name: 'position', type: 'integer')]
     protected int $position;
 
     /**
-     * @var Collection|CLpCategoryRelUser[]
+     * @var Collection<int, CLpCategoryRelUser>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CLpCategoryRelUser::class, mappedBy: 'category', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: CLpCategoryRelUser::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $users;
 
     /**
-     * @var Collection|CLp[]
+     * @var Collection<int, CLp>
      */
-    #[ORM\OneToMany(targetEntity: \Chamilo\CourseBundle\Entity\CLp::class, mappedBy: 'category', cascade: ['detach'])]
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: CLp::class, cascade: ['detach'])]
     protected Collection $lps;
 
     public function __construct()
@@ -57,7 +58,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Stringa
 
     public function __toString(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     public function getIid(): ?int
@@ -65,9 +66,9 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Stringa
         return $this->iid;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
@@ -75,9 +76,9 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Stringa
     /**
      * Get category name.
      */
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function setPosition(int $position): self
@@ -87,26 +88,23 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Stringa
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
 
     /**
-     * @return Collection|CLp[]
+     * @return Collection<int, CLp>
      */
-    public function getLps(): Collection|array
+    public function getLps(): Collection
     {
         return $this->lps;
     }
 
     /**
-     * @return Collection
+     * @return Collection<int, CLpCategoryRelUser>
      */
-    public function getUsers()
+    public function getUsers(): Collection
     {
         return $this->users;
     }
@@ -175,11 +173,11 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Stringa
 
     public function getResourceName(): string
     {
-        return $this->getName();
+        return $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
-        return $this->setName($name);
+        return $this->setTitle($name);
     }
 }

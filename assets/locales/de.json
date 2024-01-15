@@ -67,6 +67,9 @@
     "Delete": "Lernpfad l\u00f6schen",
     "{resource} created": "{resource} created",
     "{resource} deleted": "{resource} deleted",
+    "Course: {course}": "Course: {course}",
+    "Session: {session}": "Session: {session}",
+    "Status: {status}": "Status: {status}",
     "Edit event": "Eintrag \u00e4ndern",
     "Add event": "Neuen Eintrag hinzuf\u00fcgen",
     "Add": "hinzuf\u00fcgen",
@@ -152,5 +155,16 @@
     "No course available": "kein Kurs verf\u00fcgbar",
     "There are no sessions available": "Keine Kurs-Sessions verf\u00fcgbar",
     "Loading courses. Please wait.": "Loading courses. Please wait.",
-    "Loading sessions. Please wait.": "Loading sessions. Please wait."
+    "Loading sessions. Please wait.": "Loading sessions. Please wait.",
+    "There is no terms that matches the search: {searchTerm}": "There is no terms that matches the search: {searchTerm}",
+    "Send diagnostic finalization message": "Send diagnostic finalization message",
+    "DiagnosticfinalizationmessageTitle": "DiagnosticfinalizationmessageTitle",
+    "DiagnosticfinalizationmessageContent": "DiagnosticfinalizationmessageContent",
+    "Contact": "Kontakt",
+    "Registration": "Selbst-Registrierung",
+    "Current session tab": "Current session tab",
+    "Upcoming session tab": "Upcoming session tab",
+    "Past session tab": "Past session tab",
+    "Sticky courses": "Sticky courses",
+    "Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:": "Zertifikat mit diesen Platzhaltern speichern"
 }

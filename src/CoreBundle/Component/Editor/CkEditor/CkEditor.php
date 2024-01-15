@@ -71,9 +71,8 @@ class CkEditor extends Editor
 
         return "<script>
             document.addEventListener('DOMContentLoaded', function() {
-                tinymce.init(
-                    $javascript
-                );
+                window.chEditors = window.chEditors || [];
+                window.chEditors.push($javascript)
            });
            </script>";
     }
@@ -93,7 +92,7 @@ class CkEditor extends Editor
             $cssTheme,
             api_get_path(REL_CODE_PATH).'img/',
             api_get_path(REL_PATH),
-            //api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH),
+            // api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH),
             '',
         ];
 

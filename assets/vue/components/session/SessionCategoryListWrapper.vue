@@ -3,7 +3,7 @@
     <div v-for="category in categories" :key="category.id">
       <h5 class="mb-2">
         <BaseIcon icon="folder-generic"/>
-        {{ category.name }}
+        {{ category.title }}
       </h5>
       <SessionListCategoryWrapper :sessions="getSessionsFromCategory(category)"/>
     </div>

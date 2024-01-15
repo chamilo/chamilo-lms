@@ -23,11 +23,11 @@ class SkillRelItemRelUser
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\SkillRelItem::class, cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: SkillRelItem::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'skill_rel_item_id', referencedColumnName: 'id', nullable: false)]
     protected SkillRelItem $skillRelItem;
 
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\User::class, cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     protected User $user;
 
@@ -42,9 +42,7 @@ class SkillRelItemRelUser
     #[ORM\Column(name: 'updated_by', type: 'integer', nullable: false)]
     protected int $updatedBy;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
      * @return int

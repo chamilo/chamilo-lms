@@ -5,6 +5,9 @@
 /**
  * @author Julio Montoya <gugli100@gmail.com>
  */
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjetIcon;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -92,11 +95,11 @@ foreach ($users as $user) {
     switch ($user['relation_type']) {
         case GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER:
             $user['link'] = '<a href="group_waiting_list.php?id='.$group_id.'&u='.$userId.'&action=accept">'.
-                Display::return_icon('invitation_friend.png', get_lang('Add as simple user')).'</a>';
+                Display::getMdiIcon(ActionIcon::ADD_USER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add as simple user')).'</a>';
             $user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$userId.'&action=set_moderator">'.
-                Display::return_icon('social_moderator_add.png', get_lang('Add as moderator')).'</a>';
+                Display::getMdiIcon(ObjectIcon::MODERATOR_USER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add as moderator')).'</a>';
             $user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$userId.'&action=deny">'.
-                Display::return_icon('user_delete.png', get_lang('Deny access')).'</a>';
+                Display::getMdiIcon('account-cancel', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Deny access')).'</a>';
             break;
     }
     $new_member_list[] = $user;

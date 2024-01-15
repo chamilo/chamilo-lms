@@ -6,12 +6,13 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\ExtraFieldOptionsRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'extra_field_options')]
-#[ORM\Entity(repositoryClass: \Chamilo\CoreBundle\Repository\ExtraFieldOptionsRepository::class)]
+#[ORM\Entity(repositoryClass: ExtraFieldOptionsRepository::class)]
 #[ORM\MappedSuperclass]
 class ExtraFieldOptions
 {
@@ -21,7 +22,7 @@ class ExtraFieldOptions
     protected ?int $id = null;
 
     #[Assert\NotNull]
-    #[ORM\ManyToOne(targetEntity: \Chamilo\CoreBundle\Entity\ExtraField::class, inversedBy: 'options')]
+    #[ORM\ManyToOne(targetEntity: ExtraField::class, inversedBy: 'options')]
     #[ORM\JoinColumn(name: 'field_id', referencedColumnName: 'id')]
     protected ExtraField $field;
 

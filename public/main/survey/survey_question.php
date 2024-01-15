@@ -19,7 +19,7 @@ class survey_question
      */
     public function addParentMenu($formData, FormValidator $form, $surveyData)
     {
-        $surveyId = $surveyData['survey_id'];
+        $surveyId = $surveyData['iid'];
         $questionId = isset($formData['question_id']) ? $formData['question_id'] : 0;
         $parentId = isset($formData['parent_id']) ? $formData['parent_id'] : 0;
         $optionId = isset($formData['parent_option_id']) ? $formData['parent_option_id'] : 0;
@@ -203,10 +203,12 @@ class survey_question
             $allowParent = false;
         }
 
-        $icon = Display::return_icon(
+        $icon = Display::getMdiIcon(
                 SurveyManager::icon_question($type),
-                $toolName,
-                ['align' => 'middle', 'height' => '22px']
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_SMALL,
+                $toolName
             ).' ';
 
         $toolName = $icon.$actionHeader.$toolName;
@@ -248,7 +250,7 @@ class survey_question
         // When survey type = 1??
         if (1 == $surveyData['survey_type']) {
             $table_survey_question_group = Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);
-            $sql = 'SELECT id,name FROM '.$table_survey_question_group.'
+            $sql = 'SELECT id, title FROM '.$table_survey_question_group.'
                     WHERE survey_id = '.$surveyId.'
                     ORDER BY name';
             $rs = Database::query($sql);
@@ -368,6 +370,7 @@ class survey_question
         }
 
         if (isset($_POST['answers'])) {
+            $formData['question'] = $_POST['question'];
             $formData['answers'] = $_POST['answers'];
         }
 
@@ -419,7 +422,7 @@ class survey_question
                 if ($key > $deleted) {
                     // swap with previous (deleted) option slot
                     $newAnswers[$key - 1] = $formData['answers'][$key];
-                    $newAnswersId[$key - 1] = $formData['answersid'][$key];
+                    $newAnswersId[$key - 1] = $formData['answersid'][$key] ?? 0;
                     unset($formData['answers'][$key]);
                     unset($formData['answersid'][$key]);
                 } elseif ($key === $deleted) {
@@ -429,7 +432,9 @@ class survey_question
                 } else {
                     // keep as is
                     $newAnswers[$key] = $value;
-                    $newAnswersId[$key] = $formData['answersid'][$key];
+                    if (isset($formData['answersid'])) {
+                        $newAnswersId[$key] = $formData['answersid'][$key];
+                    }
                 }
             }
             unset($formData['answers']);
@@ -495,10 +500,9 @@ class survey_question
         if (isset($_POST['buttons']) && isset($_POST['buttons']['save'])) {
             Session::erase('answer_count');
             Session::erase('answer_list');
-            $message = SurveyManager::saveQuestion($survey, $formData, true, $dataFromDatabase);
-
-            if ('QuestionAdded' === $message || 'QuestionUpdated' === $message) {
-                Display::addFlash(Display::return_message($message));
+            $result = SurveyManager::saveQuestion($survey, $formData, true, $dataFromDatabase);
+            if (false === $result['error']) {
+                Display::addFlash(Display::return_message($result['message']));
                 $url = api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey->getIid().'&'.api_get_cidreq();
                 header('Location: '.$url);
                 exit;

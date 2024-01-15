@@ -6,15 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CLinkCategory;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
-use DateTime;
 use Doctrine\ORM\EntityManager;
-use Exception;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
 
 class CreateCLinkAction extends BaseResourceFileAction
 {
@@ -40,7 +36,8 @@ class CreateCLinkAction extends BaseResourceFileAction
         if (0 !== $categoryId) {
             $linkCategory = $em
                 ->getRepository(CLinkCategory::class)
-                ->find($categoryId);
+                ->find($categoryId)
+            ;
 
             if ($linkCategory) {
                 $link->setCategory($linkCategory);

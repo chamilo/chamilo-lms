@@ -56,7 +56,7 @@ class ResourceControllerTest extends WebTestCase
         $content = (string) $client->getResponse()->getContent();
         $fileSize = $resourceFile->getSize();
 
-        //$this->assertStringContainsString((string) $diskQuota, $content);
+        // $this->assertStringContainsString((string) $diskQuota, $content);
         $this->assertStringContainsString((string) $fileSize, $content);
         $this->assertStringContainsString((string) ($diskQuota - $fileSize), $content);
     }
@@ -175,7 +175,7 @@ class ResourceControllerTest extends WebTestCase
         $lpRepo = self::getContainer()->get(CLpRepository::class);
 
         $lp = (new CLp())
-            ->setName('lp')
+            ->setTitle('lp')
             ->setParent($course)
             ->setCreator($admin)
             ->setLpType(CLp::LP_TYPE)

@@ -15,6 +15,7 @@ use Doctrine\Migrations\DependencyFactory;
 use Doctrine\Migrations\Query\Query;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\Container as SymfonyContainer;
+use Symfony\Component\Dotenv\Dotenv;
 
 /*
  * Chamilo LMS
@@ -362,9 +363,12 @@ function get_config_param_from_db($param = '')
  * @param string $username
  * @param string $password
  * @param string $databaseName
- * @param int    $port
+ * @param int $port
  *
- * @return \Database
+ * @throws \Doctrine\DBAL\Exception
+ * @throws \Doctrine\ORM\ORMException
+ *
+ * @return void
  */
 function connectToDatabase(
     $host,
@@ -372,9 +376,9 @@ function connectToDatabase(
     $password,
     $databaseName,
     $port = 3306
-) {
-    $database = new \Database();
-    $database->connect(
+): void
+{
+    Database::connect(
         [
             'driver' => 'pdo_mysql',
             'host' => $host,
@@ -384,8 +388,6 @@ function connectToDatabase(
             'dbname' => $databaseName,
         ]
     );
-
-    return $database;
 }
 
 /**
@@ -727,8 +729,8 @@ function display_requirements(
         'status' => is_writable($basePath.'var'),
     ];
     $pathPermissions[] = [
-        'item' => $basePath.'.env.local',
-        'status' => checkCanCreateFile($basePath.'.env.local'),
+        'item' => $basePath.'.env',
+        'status' => checkCanCreateFile($basePath.'.env'),
     ];
     $pathPermissions[] = [
         'item' => $basePath.'config/',
@@ -754,12 +756,6 @@ function display_requirements(
         $perm = octdec('0777');
         //$perm_file = api_get_permissions_for_new_files();
         $perm_file = octdec('0666');
-
-        $checked_writable = api_get_path(SYS_PUBLIC_PATH);
-        if (!is_writable($checked_writable)) {
-            $notWritable[] = $checked_writable;
-            @chmod($checked_writable, $perm);
-        }
 
         if (!$course_test_was_created) {
             error_log('Installer: Could not create test course - Make sure permissions are fine.');
@@ -981,8 +977,7 @@ function display_database_settings_form(
 
     try {
         if ('update' === $installType) {
-            /** @var \Database $manager */
-            $manager = connectToDatabase(
+            connectToDatabase(
                 $dbHostForm,
                 $dbUsernameForm,
                 $dbPassForm,
@@ -990,6 +985,7 @@ function display_database_settings_form(
                 $dbPortForm
             );
 
+            $manager = Database::getManager();
             $connection = $manager->getConnection();
             $connection->connect();
             $schemaManager = $connection->getSchemaManager();
@@ -1007,7 +1003,7 @@ function display_database_settings_form(
                 $tableDropWorks = false === $schemaManager->tablesExist($table);
             }
         } else {
-            $manager = connectToDatabase(
+            connectToDatabase(
                 $dbHostForm,
                 $dbUsernameForm,
                 $dbPassForm,
@@ -1015,6 +1011,7 @@ function display_database_settings_form(
                 $dbPortForm
             );
 
+            $manager = Database::getManager();
             $schemaManager = $manager->getConnection()->createSchemaManager();
             $databases = $schemaManager->listDatabases();
             $databaseExists = in_array($dbNameForm, $databases);
@@ -1347,21 +1344,21 @@ function migrate(EntityManager $manager)
         $versionCounter = 1;
         foreach ($versions as $version => $queries) {
             $total = count($queries);
-            echo '----------------------------------------------<br />';
+            //echo '----------------------------------------------<br />';
             $message = "VERSION: $version";
-            echo "$message<br/>";
+            //echo "$message<br/>";
             error_log('-------------------------------------');
             error_log($message);
             $counter = 1;
             foreach ($queries as $query) {
                 $sql = $query->getStatement();
-                echo "<code>$sql</code><br>";
+                //echo "<code>$sql</code><br>";
                 error_log("$counter/$total : $sql");
                 $counter++;
             }
             $versionCounter++;
         }
-        echo '<br/>DONE!<br />';
+        //echo '<br/>DONE!<br />';
         error_log('DONE!');
     }
 
@@ -1387,7 +1384,7 @@ function updateEnvFile($distFile, $envFile, $params)
 
     foreach ($requirements as $requirement) {
         if (!isset($params['{{'.$requirement.'}}'])) {
-            throw new \Exception("The parameter $requirement is needed in order to edit the .env.local file");
+            throw new \Exception("The parameter $requirement is needed in order to edit the .env file");
         }
     }
 
@@ -1661,6 +1658,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
         case '1.11.10':
         case '1.11.12':
         case '1.11.14':
+        case '1.11.16':
             $start = time();
             // Migrate using the migration files located in:
             // /srv/http/chamilo2/src/CoreBundle/Migrations/Schema/V200
@@ -1723,4 +1721,115 @@ function checkCanCreateFile(string $file): bool
     }
 
     return false;
+}
+
+/**
+ * Checks if the update option is available.
+ *
+ * Checks the existence of the "app" folder and the "configuration.php" file
+ * to determine if an update is available from version 1.11.x.
+ *
+ * @param string $baseDir The base directory.
+ * @return bool True if the update is available, false otherwise.
+ */
+function isUpdateAvailable(string $baseDir): bool
+{
+    // Path to the "app" folder
+    $appFolder = $baseDir.'/../app';
+
+    // Path to the "configuration.php" file
+    $configFile = $baseDir.'/../app/config/configuration.php';
+
+    // Check the existence of the "app" folder and the "configuration.php" file
+    return is_dir($appFolder) && file_exists($configFile);
+}
+
+function checkMigrationStatus(): array
+{
+    $resultStatus = [
+        'status' => false,
+        'message' => 'Error executing migrations status command.',
+        'current_migration' => null,
+        'progress_percentage' => 0
+    ];
+
+    $dotenv = new Dotenv();
+    $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env';
+    $dotenv->loadEnv($envFile);
+
+    try {
+        connectToDatabase(
+            $_ENV['DATABASE_HOST'],
+            $_ENV['DATABASE_USER'],
+            $_ENV['DATABASE_PASSWORD'],
+            $_ENV['DATABASE_NAME'],
+            $_ENV['DATABASE_PORT']
+        );
+
+        $manager = Database::getManager();
+
+        $connection = $manager->getConnection();
+
+        // Loading migration configuration.
+        $config = new PhpFile('./migrations.php');
+        $dependency = DependencyFactory::fromConnection($config, new ExistingConnection($connection));
+
+        // Check if old "version" table exists from 1.11.x, use new version.
+        $schema = $manager->getConnection()->createSchemaManager();
+        $hasOldVersionTable = false;
+        $anyVersionYet = !$schema->tablesExist('version');
+        $isVersionEmpty = false;
+        $executedMigrations = 0;
+        $currentMigration = '';
+        if ($schema->tablesExist('version')) {
+            $columns = $schema->listTableColumns('version');
+            if (in_array('id', array_keys($columns), true)) {
+                $hasOldVersionTable = true;
+            }
+            $query = $connection->createQueryBuilder()
+                ->select('*')
+                ->from('version');
+            $result = $query->execute();
+            $executedMigrations = $result->rowCount();
+            $isVersionEmpty = ($executedMigrations == 0);
+            if (!$isVersionEmpty) {
+                $query = $connection->createQueryBuilder()
+                    ->select('*')
+                    ->from('version')
+                    ->orderBy('executed_at', 'DESC')
+                    ->setMaxResults(1);
+                $result = $query->execute()->fetch();
+                $currentMigration = $result['version'];
+            }
+        }
+
+        if (!$hasOldVersionTable) {
+            // Loading migrations.
+            $migratorConfigurationFactory = $dependency->getConsoleInputMigratorConfigurationFactory();
+            $result = '';
+            $input = new Symfony\Component\Console\Input\StringInput($result);
+            $planCalculator = $dependency->getMigrationPlanCalculator();
+            $migrations = $planCalculator->getMigrations();
+            $totalMigrations = $migrations->count();
+            $lastVersion = $migrations->getLast();
+
+            if ($anyVersionYet || $isVersionEmpty) {
+                $currentMigration = '';
+                $executedMigrations = 0;
+            }
+
+            // Calculate progress percentage
+            $progressPercentage = ceil(($executedMigrations / $totalMigrations) * 100);
+            $resultStatus = [
+                'status' => ($progressPercentage >= 100),
+                'message' => ($progressPercentage >= 100) ? 'All migrations have been executed.' : 'Migrations are pending.',
+                'current_migration' => ($progressPercentage >= 100) ? null : $currentMigration,
+                'progress_percentage' => $progressPercentage
+            ];
+        }
+    } catch (Exception) {
+        return $resultStatus;
+    }
+
+    return $resultStatus;
 }

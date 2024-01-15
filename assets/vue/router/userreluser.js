@@ -8,13 +8,13 @@ export default {
     {
       name: 'UserRelUserList',
       path: '',
-      component: () => import('../views/userreluser/List.vue')
+      component: () => import('../views/userreluser/UserRelUserList.vue')
     },
     {
       name: 'UserRelUserAdd',
       //path: ':id',
       path: 'add',
-      component: () => import('../views/userreluser/Add.vue')
+      component: () => import('../views/userreluser/UserRelUserAdd.vue')
     }
   ]
 };

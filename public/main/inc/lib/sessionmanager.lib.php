@@ -17,6 +17,9 @@ use Chamilo\CourseBundle\Entity\CSurvey;
 use ExtraField as ExtraFieldModel;
 use Monolog\Logger;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 /**
  * This is the session library for Chamilo
@@ -64,7 +67,7 @@ class SessionManager
         $result = [
             'id' => $session->getId(),
             'session_category_id' => $session->getCategory() ? $session->getCategory()->getId() : null,
-            'name' => $session->getName(),
+            'name' => $session->getTitle(),
             'description' => $session->getDescription(),
             'show_description' => $session->getShowDescription(),
             'duration' => $session->getDuration(),
@@ -216,7 +219,7 @@ class SessionManager
                     return $msg;
                 }
             } else {
-                $rs = Database::query("SELECT 1 FROM $tbl_session WHERE name='".$name."'");
+                $rs = Database::query("SELECT 1 FROM $tbl_session WHERE title='".$name."'");
                 if (Database::num_rows($rs)) {
                     $msg = get_lang('Session name already exists');
 
@@ -229,7 +232,7 @@ class SessionManager
                 $sessionAdminId = !empty($sessionAdminId) ? $sessionAdminId : api_get_user_id();
                 $session = new Session();
                 $session
-                    ->setName($name)
+                    ->setTitle($name)
                     ->addSessionAdmin(api_get_user_entity($sessionAdminId))
                     ->setVisibility($visibility)
                     ->setDescription($description)
@@ -329,7 +332,7 @@ class SessionManager
     {
         $name = Database::escape_string($name);
         $sql = "SELECT COUNT(*) as count FROM ".Database::get_main_table(TABLE_MAIN_SESSION)."
-                WHERE name = '$name'";
+                WHERE title = '$name'";
         $result = Database::fetch_array(Database::query($sql));
 
         return $result['count'] > 0;
@@ -375,12 +378,12 @@ class SessionManager
             $where_condition = str_replace('category_name', 'sc.name', $where_condition);
             $where_condition = str_replace(
                 ["AND session_active = '1'  )", " AND (  session_active = '1'  )"],
-                [') GROUP BY s.name HAVING session_active = 1 ', " GROUP BY s.name HAVING session_active = 1 "],
+                [') GROUP BY s.title HAVING session_active = 1 ', " GROUP BY s.title HAVING session_active = 1 "],
                 $where_condition
             );
             $where_condition = str_replace(
                 ["AND session_active = '0'  )", " AND (  session_active = '0'  )"],
-                [') GROUP BY s.name HAVING session_active = 0 ', " GROUP BY s.name HAVING session_active = '0' "],
+                [') GROUP BY s.title HAVING session_active = 0 ', " GROUP BY s.title HAVING session_active = '0' "],
                 $where_condition
             );
         } else {
@@ -470,7 +473,8 @@ class SessionManager
         $columns = [],
         $listType = 'all',
         $extraFieldsToLoad = [],
-        $formatted = false
+        $formatted = false,
+        $language = ''
     ) {
         $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
         $sessionCategoryTable = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -487,7 +491,7 @@ class SessionManager
         $where .= $conditions['where'];
         $sqlInjectWhere = $conditions['inject_where'];
         $injectExtraFields = $conditions['inject_extra_fields'];
-        $order = empty($conditions['order']) ? ' ORDER BY s.name ASC' : $conditions['order'];
+        $order = empty($conditions['order']) ? ' ORDER BY s.title ASC' : $conditions['order'];
         $limit = $conditions['limit'];
 
         $isMakingOrder = false;
@@ -507,14 +511,13 @@ class SessionManager
 
             $select =
                 "SELECT DISTINCT
-                     s.name,
+                     s.title,
                      s.display_start_date,
                      s.display_end_date,
                      access_start_date,
                      access_end_date,
                      s.visibility,
                      s.session_category_id,
-                     $injectExtraFields
                      s.id
              ";
 
@@ -547,6 +550,38 @@ class SessionManager
             }
         }
 
+        if (!empty($language)) {
+            $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+            $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+            $sqlInjectJoins .= " INNER JOIN $table sc ON (sc.session_id = s.id)
+                               INNER JOIN $tableCourse c ON (sc.c_id = c.id)";
+            $language = Database::escape_string($language);
+
+            // Get the isoCode to filter course_language
+            $isoCode = '';
+            $languageId = api_get_language_id($language);
+            if (!empty($languageId)) {
+                $languageInfo = api_get_language_info($languageId);
+                $isoCode = $languageInfo['isocode'];
+            }
+            if ('true' === api_get_setting('language.allow_course_multiple_languages')) {
+                $tblExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
+                $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+                $extraFieldType = ExtraField::COURSE_FIELD_TYPE;
+                $sql = "SELECT id FROM $tblExtraField WHERE item_type = $extraFieldType AND variable = 'multiple_language'";
+                $rs = Database::query($sql);
+                if (Database::num_rows($rs) > 0) {
+                    $fieldId = Database::result($rs, 0, 0);
+                    $sqlInjectJoins .= " LEFT JOIN $tblExtraFieldValue cfv ON (c.id = cfv.item_id AND cfv.field_id = $fieldId)";
+                    $where .= " AND (c.course_language = '$isoCode' OR cfv.field_value LIKE '%$language%')";
+                } else {
+                    $where .= " AND c.course_language = '$isoCode' ";
+                }
+            } else {
+                $where .= " AND c.course_language = '$isoCode' ";
+            }
+        }
+
         $allowSessionAdminsToManageAllSessions = !api_is_platform_admin()
             && api_is_session_admin()
             && 'false' === api_get_setting('allow_session_admins_to_manage_all_sessions');
@@ -571,7 +606,12 @@ class SessionManager
             $where .= " AND (sru.user_id = $userId AND sru.relation_type IN(".implode(',', $relationTypeList)."))";
         }
 
-        $query = "$select FROM $tblSession s $sqlInjectJoins $where $sqlInjectWhere";
+        $query = "$select";
+        if (!empty($injectExtraFields)) {
+            $injectExtraFields = rtrim(trim($injectExtraFields), ',');
+            $query .= ", $injectExtraFields";
+        }
+        $query .= " FROM $tblSession s $sqlInjectJoins $where $sqlInjectWhere";
 
         if (api_is_multiple_url_enabled()) {
             $tblAccessUrlRelSession = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
@@ -660,27 +700,23 @@ class SessionManager
                 return $sessions[0]['total_rows'];
             }
 
-            $activeIcon = Display::return_icon(
-                'accept.png',
-                get_lang('Active'),
-                [],
-                ICON_SIZE_SMALL
-            );
-            $inactiveIcon = Display::return_icon(
-                'error.png',
-                get_lang('Inactive'),
-                [],
-                ICON_SIZE_SMALL
-            );
+            $activeIcon = Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Active'));
+            $inactiveIcon = Display::getMdiIcon(StateIcon::INACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Inactive'));
 
             foreach ($sessions as $session) {
                 $session_id = $session['id'];
                 if ($showCountUsers) {
                     $session['users'] = self::get_users_by_session(
                         $session['id'],
-                        null,
+                        0,
                         true
                     );
+                    $usersLang = self::getCountUsersLangBySession($session['id']);
+                    $tooltipUserLangs = '';
+                    if (!empty($usersLang)) {
+                        $tooltipUserLangs = implode(' | ', $usersLang);
+                    }
+                    $session['users'] = '<a href="#" title="'.$tooltipUserLangs.'">'.$session['users'].'</a>';
                     $courses = self::getCoursesInSession($session_id);
                     $teachers = '';
                     foreach ($courses as $courseId) {
@@ -688,14 +724,11 @@ class SessionManager
 
                         // Ofaj
                         $teachers = CourseManager::get_coachs_from_course_to_string($session_id, $courseInfo['real_id']);
-                        /*$teachers .= CourseManager::get_teacher_list_from_course_code_to_string(
-                            $courseInfo['code']
-                        );*/
                     }
                     // ofaj
                     $session['teachers'] = '';
                     if (!empty($teachers)) {
-                        $session['teachers'] = Display::return_icon('teacher.png', addslashes($teachers));
+                        $session['teachers'] = Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_SMALL, addslashes($teachers));
                     }
                 }
                 $url = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session['id'];
@@ -743,7 +776,7 @@ class SessionManager
                         $fieldDataToString = '';
                         if (!empty($fieldData)) {
                             foreach ($fieldData as $data) {
-                                $fieldDataArray[] = $data['value'];
+                                $fieldDataArray[] = $data['field_value'];
                             }
                             $fieldDataToString = implode(', ', $fieldDataArray);
                         }
@@ -762,6 +795,55 @@ class SessionManager
         }
 
         return $formattedSessions;
+    }
+
+    /**
+     * Get the count of users by language and session
+     *
+     * @param $sid
+     * @param int $urlId
+     * @param null $status
+     *
+     * @return array A list of ISO lang of users registered in the session , ex: FR 6
+     */
+    public static function getCountUsersLangBySession(
+        $sid,
+        $urlId = 0,
+        $status = null
+    ): array
+    {
+        $sid = (int) $sid;
+        $urlId = empty($urlId) ? api_get_current_access_url_id() : (int) $urlId;
+
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tableAccessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $tableLanguage = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+
+        $sql = "SELECT l.isocode, count(u.id) as cLang
+                FROM $tblSessionUser su
+                INNER JOIN $tblUser u ON (u.id = su.user_id)
+                INNER JOIN $tableLanguage l ON (l.english_name = u.language)
+                LEFT OUTER JOIN $tableAccessUrlUser au ON (au.user_id = u.id)
+                ";
+
+        if (is_numeric($status)) {
+            $status = (int) $status;
+            $sql .= " WHERE su.relation_type = $status AND (au.access_url_id = $urlId OR au.access_url_id is null)";
+        } else {
+            $sql .= " WHERE (au.access_url_id = $urlId OR au.access_url_id is null )";
+        }
+        $sql .= " AND su.session_id = $sid GROUP BY l.isocode";
+
+        $rs = Database::query($sql);
+        $usersLang = [];
+        if (Database::num_rows($rs) > 0) {
+            while ($row = Database::fetch_assoc($rs)) {
+                $usersLang[] = strtoupper($row['isocode'])." ".$row['cLang'];
+            }
+        }
+
+        return $usersLang;
     }
 
     /**
@@ -807,8 +889,8 @@ class SessionManager
             }
         }
 
-        $activeIcon = Display::return_icon('accept.png', get_lang('active'));
-        $inactiveIcon = Display::return_icon('error.png', get_lang('inactive'));
+        $activeIcon = Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('active'));
+        $inactiveIcon = Display::getMdiIcon(StateIcon::INACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('inactive'));
 
         foreach ($sessions as $session) {
             if ($showCountUsers) {
@@ -819,7 +901,7 @@ class SessionManager
                 $url = api_get_path(WEB_PATH).'sessions/'.$session['id'].'/about/';
             }
 
-            $session['name'] = Display::url($session['name'], $url);
+            $session['name'] = Display::url($session['title'], $url);
 
             if (!empty($extraFieldsToLoad)) {
                 foreach ($extraFieldsToLoad as $field) {
@@ -832,7 +914,7 @@ class SessionManager
                     $fieldDataToString = '';
                     if (!empty($fieldData)) {
                         foreach ($fieldData as $data) {
-                            $fieldDataArray[] = $data['value'];
+                            $fieldDataArray[] = $data['field_value'];
                         }
                         $fieldDataToString = implode(', ', $fieldDataArray);
                     }
@@ -1607,7 +1689,7 @@ class SessionManager
                 'clicks' => $info['counter'], //+ $clicks[$info['user_id']],
                 'ip' => '',
                 'timeLoggedIn' => gmdate("H:i:s", strtotime($info['logout_course_date']) - strtotime($info['login_course_date'])),
-                'session' => $session['name'],
+                'session' => $session['title'],
             ];
         }
 
@@ -1655,7 +1737,7 @@ class SessionManager
             $table = Database::get_main_table(TABLE_MAIN_SESSION);
             $session_name = Database::escape_string($session_name);
             $sql = "SELECT count(*) as count FROM $table
-                    WHERE name LIKE '$session_name%'";
+                    WHERE title LIKE '$session_name%'";
             $result = Database::query($sql);
             if (Database::num_rows($result) > 0) {
                 $row = Database::fetch_array($result);
@@ -1780,7 +1862,7 @@ class SessionManager
             } else {
                 $sessionEntity = api_get_session_entity($id);
                 $sessionEntity
-                    ->setName($name)
+                    ->setTitle($name)
                     ->setDuration($duration)
                     ->setDescription($description)
                     ->setShowDescription(1 === $showDescription)
@@ -1956,7 +2038,7 @@ class SessionManager
             }*/
         }
 
-        $sessionName = $sessionEntity->getName();
+        $sessionName = $sessionEntity->getTitle();
         $em->remove($sessionEntity);
         $em->flush();
 
@@ -2114,7 +2196,7 @@ class SessionManager
                 );
                 // Variables for default template
                 $tplContent->assign('complete_name', stripslashes($user_info['complete_name']));
-                $tplContent->assign('session_name', $session->getName());
+                $tplContent->assign('session_name', $session->getTitle());
                 $tplContent->assign(
                     'session_coaches',
                     $session->getGeneralCoaches()->map(fn(User $coach) => UserManager::formatUserFullName($coach))
@@ -2359,7 +2441,7 @@ class SessionManager
             return false;
         }
 
-        is_array($courseInfo) ? $courseId = $courseInfo['real_id'] : $courseId = $courseInfo;
+        $courseId = is_array($courseInfo) ? $courseInfo['real_id'] : $courseInfo;
 
         $statusCondition = null;
         if (isset($status) && !is_null($status)) {
@@ -2691,7 +2773,7 @@ class SessionManager
                         if (empty($sessionCategory)) {
                             // There is no category for this course+session, so create one
                             $cat = new Category();
-                            $sessionName = $session->getName();
+                            $sessionName = $session->getTitle();
                             $cat->set_name($courseInfo['code'].' - '.get_lang('Session').' '.$sessionName);
                             $cat->set_session_id($sessionId);
                             $cat->set_course_code($courseInfo['code']);
@@ -2993,7 +3075,7 @@ class SessionManager
 
         $sql = 'SELECT *
 		        FROM '.$tbl_session.'
-		        WHERE name = "'.$name.'"';
+		        WHERE title = "'.$name.'"';
         $result = Database::query($sql);
         $num = Database::num_rows($result);
         if ($num > 0) {
@@ -3021,7 +3103,7 @@ class SessionManager
 
         $sql = "SELECT *
 		        FROM $table
-		        WHERE name = '$name' AND id <> $sessionId ";
+		        WHERE title = '$name' AND id <> $sessionId ";
         $result = Database::query($sql);
         $num = Database::num_rows($result);
         if ($num > 0) {
@@ -3089,7 +3171,7 @@ class SessionManager
 
         $access_url_id = api_get_current_access_url_id();
         $params = [
-            'name' => $name,
+            'title' => $name,
             'date_start' => $date_start,
             'access_url_id' => $access_url_id,
         ];
@@ -3174,13 +3256,13 @@ class SessionManager
         if (null != $date_end) {
             $sql = "UPDATE $tbl_session_category
                     SET
-                        name = '".Database::escape_string($name)."',
+                        title = '".Database::escape_string($name)."',
                         date_start = '$date_start' ,
                         date_end = '$date_end'
                     WHERE id= $id";
         } else {
             $sql = "UPDATE $tbl_session_category SET
-                        name = '".Database::escape_string($name)."',
+                        title = '".Database::escape_string($name)."',
                         date_start = '$date_start',
                         date_end = NULL
                     WHERE id= $id";
@@ -3275,7 +3357,7 @@ class SessionManager
 
         $sql_query = " SELECT
                     DISTINCT(s.id),
-                    s.name,
+                    s.title,
                     s.nbr_courses,
                     s.access_start_date,
                     s.access_end_date,
@@ -3290,7 +3372,7 @@ class SessionManager
 
         $availableFields = [
             's.id',
-            's.name',
+            's.title',
             'c.id',
         ];
 
@@ -3317,7 +3399,7 @@ class SessionManager
             $sql_query .= " AND s.id IN ('$onlyThisSessionList') ";
         }
 
-        $orderAvailableList = ['name'];
+        $orderAvailableList = ['title'];
         if (count($order_by) > 0) {
             $order = null;
             $direction = null;
@@ -3391,7 +3473,7 @@ class SessionManager
 
         $sql = "SELECT
                 s.id,
-                s.name,
+                s.title,
                 s.session_category_id,
                 c.name as category_name,
                 s.description,
@@ -3443,7 +3525,7 @@ class SessionManager
         $id = api_get_current_access_url_id();
         $sql = 'SELECT * FROM '.$table.'
                 WHERE access_url_id = '.$id.'
-                ORDER BY name ASC';
+                ORDER BY title ASC';
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             $data = Database::store_result($result, 'ASSOC');
@@ -3836,7 +3918,7 @@ class SessionManager
         }
 
         if (empty($orderCondition)) {
-            $orderCondition = ' ORDER BY s.name ';
+            $orderCondition = ' ORDER BY s.title ';
         }
 
         $whereConditions = null;
@@ -3877,10 +3959,10 @@ class SessionManager
         $keywordCondition = '';
         if (!empty($keyword)) {
             $keyword = Database::escape_string($keyword);
-            $keywordCondition = " AND (s.name LIKE '%$keyword%' ) ";
+            $keywordCondition = " AND (s.title LIKE '%$keyword%' ) ";
             if (!empty($description)) {
                 $description = Database::escape_string($description);
-                $keywordCondition = " AND (s.name LIKE '%$keyword%' OR s.description LIKE '%$description%' ) ";
+                $keywordCondition = " AND (s.title LIKE '%$keyword%' OR s.description LIKE '%$description%' ) ";
             }
         }
 
@@ -4333,11 +4415,15 @@ class SessionManager
 
             if (-1 != $access_url_id) {
                 $innerJoin .= " INNER JOIN $tblSessionRelAccessUrl session_rel_url
-                    ON (s.id = session_rel_url.session_id)";
-                $whereConditions .= " AND session_rel_url.access_url_id = $access_url_id";
+                    ON (s.id = access_url_rel_session.session_id)";
+                $whereConditions .= " AND access_url_rel_session.access_url_id = $access_url_id";
             }
         }
-        $sql = "SELECT s.* FROM $sessionTable AS s $innerJoin WHERE $whereConditions ORDER BY s.name";
+        $sql = "SELECT s.* FROM $sessionTable AS s $innerJoin ";
+        if (!empty($whereConditions)) {
+            $sql .= "WHERE $whereConditions ";
+        }
+        $sql .= "ORDER BY s.title";
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');
@@ -4538,7 +4624,7 @@ class SessionManager
 
         // Now try to create the session
         $sid = self::create_session(
-            $s['name'].' '.get_lang('Copy'),
+            $s['title'].' '.get_lang('Copy'),
             $s['access_start_date'],
             $s['access_end_date'],
             $s['display_start_date'],
@@ -5076,7 +5162,7 @@ class SessionManager
                             $suffix = ' - '.$i;
                         }
                         $sql = 'SELECT id FROM '.$tbl_session.'
-                                WHERE name="'.Database::escape_string($session_name).$suffix.'"';
+                                WHERE title="'.Database::escape_string($session_name).$suffix.'"';
                         $rs = Database::query($sql);
                         if (Database::result($rs, 0, 0)) {
                             $i++;
@@ -5087,7 +5173,7 @@ class SessionManager
                     }
 
                     $sessionParams = [
-                        'name' => $session_name,
+                        'title' => $session_name,
                         'access_start_date' => $dateStart,
                         'access_end_date' => $dateEnd,
                         'display_start_date' => $displayAccessStartDate,
@@ -5170,7 +5256,7 @@ class SessionManager
                         }
 
                         $sessionParams = [
-                            'name' => $session_name,
+                            'title' => $session_name,
                             'access_start_date' => $dateStart,
                             'access_end_date' => $dateEnd,
                             'display_start_date' => $displayAccessStartDate,
@@ -5274,7 +5360,7 @@ class SessionManager
                                 $sessionExistsWithName = self::get_session_by_name($session_name);
                                 if (false === $sessionExistsWithName) {
                                     $sessionName = Database::escape_string($enreg['SessionName']);
-                                    $sql = "UPDATE $tbl_session SET name = '$sessionName' WHERE id = $session_id";
+                                    $sql = "UPDATE $tbl_session SET title = '$sessionName' WHERE id = $session_id";
                                     Database::query($sql);
                                     $logger->debug(
                                         "Session #$session_id name IS updated with: '$session_name' External id: ".$enreg['extra_'.$extraFieldId]
@@ -6010,7 +6096,7 @@ class SessionManager
             foreach ($sessions as $session) {
                 $courseList = self::get_course_list_by_session_id($session['id']);
                 foreach ($courseList as $course) {
-                    $coursesFromSession[$course['code'].':'.$session['id']] = $course['visual_code'].' - '.$course['title'].' ('.$session['name'].')';
+                    $coursesFromSession[$course['code'].':'.$session['id']] = $course['visual_code'].' - '.$course['title'].' ('.$session['title'].')';
                 }
             }
         }
@@ -6324,8 +6410,8 @@ class SessionManager
                                     get_lang(
                                         'AddingStudentsFromSessionXToSessionY'
                                     ),
-                                    $sessionInfo['name'],
-                                    $sessionDestinationInfo['name']
+                                    $sessionInfo['title'],
+                                    $sessionDestinationInfo['title']
                                 ),
                                 'info',
                                 false
@@ -6354,7 +6440,7 @@ class SessionManager
                     }
                 } else {
                     $messages[] = Display::return_message(
-                        get_lang('No student found for the session').' #'.$sessionInfo['name'],
+                        get_lang('No student found for the session').' #'.$sessionInfo['title'],
                         'warning'
                     );
                 }
@@ -6413,7 +6499,7 @@ class SessionManager
                     $sessionInfo = self::fetch($sessionId);
                     $htmlResult .= '<br />';
                     $htmlResult .= Display::url(
-                        get_lang('Session').': '.$sessionInfo['name'].' <br />',
+                        get_lang('Session').': '.$sessionInfo['title'].' <br />',
                         $sessionUrl.$sessionId,
                         ['target' => '_blank']
                     );
@@ -6699,7 +6785,7 @@ class SessionManager
                     if (!empty($data['session_list'])) {
                         foreach ($data['session_list'] as $sessionInfo) {
                             if (in_array($sessionInfo['session_id'], $sessionListSubscribed)) {
-                                $sessionList[] = $sessionInfo['session_info']['name'];
+                                $sessionList[] = $sessionInfo['session_info']['title'];
                             }
                         }
                     }
@@ -7779,6 +7865,8 @@ class SessionManager
             case 3:
                 return api_ucfirst(get_lang('invisible'));
         }
+
+        return '';
     }
 
     /**
@@ -7818,7 +7906,7 @@ class SessionManager
     /**
      * @throws Exception
      */
-    public static function setForm(FormValidator $form, Session $session = null): array
+    public static function setForm(FormValidator $form, Session $session = null, $fromSessionId = null): array
     {
         $categoriesList = self::get_all_session_category();
 
@@ -7828,7 +7916,7 @@ class SessionManager
 
         if (false != $categoriesList) {
             foreach ($categoriesList as $categoryItem) {
-                $categoriesOptions[$categoryItem['id']] = $categoryItem['name'];
+                $categoriesOptions[$categoryItem['id']] = $categoryItem['title'];
             }
         }
 
@@ -7861,7 +7949,7 @@ class SessionManager
             $rs = Database::query($sql);
             $countUsers = (int) Database::result($rs, 0, '0');
 
-            if ($countUsers < 50) {
+            if ($countUsers < 1) {
                 $orderClause = 'ORDER BY ';
                 $orderClause .= api_sort_by_first_name() ? 'firstname, lastname, username' : 'lastname, firstname, username';
 
@@ -7930,7 +8018,7 @@ class SessionManager
         $form->addHtml('<div id="ajax_list_coachs"></div>');
 
         $form->addButtonAdvancedSettings('advanced_params');
-        $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+        $form->addElement('html', '<div id="advanced_params_options" style="'.(isset($fromSessionId) ? 'display:block' : 'display:none').'">');
 
         if (null === $session) {
             $form->addSelectAjax(
@@ -7944,6 +8032,9 @@ class SessionManager
             );
         }
 
+        if (isset($fromSessionId)) {
+            $session = api_get_session_entity($fromSessionId);
+        }
         $form->addSelect(
             'session_category',
             get_lang('Sessions categories'),
@@ -8003,7 +8094,7 @@ class SessionManager
         ];
 
         $form->addSelect('access', get_lang('Access'), $options, [
-            'onchange' => 'accessSwitcher()',
+            'onchange' => 'accessSwitcher(this.value)',
             'id' => 'access',
         ]);
 
@@ -8097,9 +8188,6 @@ class SessionManager
 
         $form->addCheckBox(
             'send_subscription_notification',
-            [
-                //get_lang('Send mail notification to students to inform of subscription'),
-            ],
             get_lang('Send an email when a user being subscribed to session'),
         );
 
@@ -8113,9 +8201,16 @@ class SessionManager
         $form->addRule('picture', get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(',', $allowedPictureTypes).')', 'filetype', $allowedPictureTypes);
 
         if ($session && $session->getImage()) {
-            $form->addElement('checkbox', 'delete_picture', null, get_lang('Delete picture'));
-            $imageUrl = self::getSessionPictureUrl($session);
-            $form->addLabel(get_lang('Image'), "<img src = '$imageUrl' />");
+            if (isset($fromSessionId)) {
+                $imageUrl = self::getSessionPictureUrl($session);
+                $form->addLabel(get_lang('Image'), "<img src = '$imageUrl' />");
+                $form->addHidden('image_session_template', $imageUrl);
+
+            } else {
+                $form->addElement('checkbox', 'delete_picture', null, get_lang('Delete picture'));
+                $imageUrl = self::getSessionPictureUrl($session);
+                $form->addLabel(get_lang('Image'), "<img src = '$imageUrl' />");
+            }
         }
 
         // Extra fields
@@ -8239,13 +8334,13 @@ class SessionManager
 
             $options['where'] = str_replace(
                 ["AND session_active = '1'  )", " AND (  session_active = '1'  )"],
-                [') GROUP BY s.name HAVING session_active = 1 ', " GROUP BY s.name HAVING session_active = 1 "],
+                [') GROUP BY s.title HAVING session_active = 1 ', " GROUP BY s.title HAVING session_active = 1 "],
                 $options['where']
             );
 
             $options['where'] = str_replace(
                 ["AND session_active = '0'  )", " AND (  session_active = '0'  )"],
-                [') GROUP BY s.name HAVING session_active = 0 ', " GROUP BY s.name HAVING session_active = '0' "],
+                [') GROUP BY s.title HAVING session_active = 0 ', " GROUP BY s.title HAVING session_active = '0' "],
                 $options['where']
             );
 
@@ -8266,7 +8361,7 @@ class SessionManager
         }
 
         $today = api_get_utc_datetime();
-        $query_rows = "SELECT count(*) as total_rows, c.title as course_title, s.name,
+        $query_rows = "SELECT count(*) as total_rows, c.title as course_title, s.title,
                         IF (
                             (s.access_start_date <= '$today' AND '$today' < s.access_end_date) OR
                             (s.access_start_date = '0000-00-00 00:00:00' AND s.access_end_date = '0000-00-00 00:00:00' ) OR
@@ -8341,26 +8436,23 @@ class SessionManager
                 ];
 
                 $columnModel = [
-                    ['name' => 'name', 'index' => 'name', 'width' => '255', 'align' => 'left'],
-                    ['name' => 'date', 'index' => 'access_start_date', 'width' => '150', 'align' => 'left'],
+                    ['name' => 'name', 'index' => 'name', 'align' => 'left'],
+                    ['name' => 'date', 'index' => 'access_start_date', 'align' => 'left'],
                     [
                         'name' => 'course_per_session',
                         'index' => 'course_per_session',
-                        'width' => '150',
                         'sortable' => 'false',
                         'search' => 'false',
                     ],
                     [
                         'name' => 'student_per_session',
                         'index' => 'student_per_session',
-                        'width' => '100',
                         'sortable' => 'false',
                         'search' => 'false',
                     ],
                     [
                         'name' => 'actions',
                         'index' => 'actions',
-                        'width' => '100',
                         'sortable' => 'false',
                         'search' => 'false',
                     ],
@@ -8382,12 +8474,11 @@ class SessionManager
                     [
                         'name' => 'id',
                         'index' => 's.id',
-                        'width' => '160',
                         'hidden' => 'true',
                     ],
                     [
                         'name' => 'name',
-                        'index' => 's.name',
+                        'index' => 's.title',
                         'width' => '160',
                         'align' => 'left',
                         'search' => 'true',
@@ -8396,7 +8487,6 @@ class SessionManager
                     [
                         'name' => 'category_name',
                         'index' => 'category_name',
-                        'width' => '40',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => ['sopt' => $operators],
@@ -8404,7 +8494,6 @@ class SessionManager
                     [
                         'name' => 'display_start_date',
                         'index' => 'display_start_date',
-                        'width' => '50',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => [
@@ -8415,7 +8504,6 @@ class SessionManager
                     [
                         'name' => 'display_end_date',
                         'index' => 'display_end_date',
-                        'width' => '50',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => [
@@ -8426,7 +8514,6 @@ class SessionManager
                     [
                         'name' => 'visibility',
                         'index' => 'visibility',
-                        'width' => '40',
                         'align' => 'left',
                         'search' => 'false',
                     ],
@@ -8437,7 +8524,6 @@ class SessionManager
                     $columnModel[] = [
                         'name' => 'users',
                         'index' => 'users',
-                        'width' => '20',
                         'align' => 'left',
                         'search' => 'false',
                     ];
@@ -8447,7 +8533,6 @@ class SessionManager
                     $columnModel[] = [
                         'name' => 'teachers',
                         'index' => 'teachers',
-                        'width' => '20',
                         'align' => 'left',
                         'search' => 'false',
                     ];
@@ -8464,7 +8549,6 @@ class SessionManager
                     $columnModel[] = [
                         'name' => 'status',
                         'index' => 'status',
-                        'width' => '25',
                         'align' => 'left',
                         'search' => 'true',
                         'stype' => 'select',
@@ -8491,12 +8575,11 @@ class SessionManager
                     [
                         'name' => 'id',
                         'index' => 's.id',
-                        'width' => '160',
                         'hidden' => 'true',
                     ],
                     [
                         'name' => 'name',
-                        'index' => 's.name',
+                        'index' => 's.title',
                         'width' => '160',
                         'align' => 'left',
                         'search' => 'true',
@@ -8505,7 +8588,6 @@ class SessionManager
                     [
                         'name' => 'category_name',
                         'index' => 'category_name',
-                        'width' => '40',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => ['sopt' => $operators],
@@ -8513,7 +8595,6 @@ class SessionManager
                     [
                         'name' => 'display_start_date',
                         'index' => 'display_start_date',
-                        'width' => '50',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => [
@@ -8524,7 +8605,6 @@ class SessionManager
                     [
                         'name' => 'display_end_date',
                         'index' => 'display_end_date',
-                        'width' => '50',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => [
@@ -8535,7 +8615,6 @@ class SessionManager
                     [
                         'name' => 'visibility',
                         'index' => 'visibility',
-                        'width' => '40',
                         'align' => 'left',
                         'search' => 'false',
                     ],
@@ -8546,7 +8625,6 @@ class SessionManager
                     $columnModel[] = [
                         'name' => 'users',
                         'index' => 'users',
-                        'width' => '20',
                         'align' => 'left',
                         'search' => 'false',
                     ];
@@ -8556,7 +8634,6 @@ class SessionManager
                     $columnModel[] = [
                         'name' => 'teachers',
                         'index' => 'teachers',
-                        'width' => '20',
                         'align' => 'left',
                         'search' => 'false',
                     ];
@@ -8570,7 +8647,7 @@ class SessionManager
                         $listToString .= $statusId.':'.$status.';';
                     }
 
-                    $columnModel[] = ['name' => 'status', 'index' => 'status', 'width' => '25', 'align' => 'left', 'search' => 'true', 'stype' => 'select',
+                    $columnModel[] = ['name' => 'status', 'index' => 'status', 'align' => 'left', 'search' => 'true', 'stype' => 'select',
                         // for the bottom bar
                         'searchoptions' => [
                             'defaultValue' => '1',
@@ -8592,7 +8669,7 @@ class SessionManager
                 $columnModel = [
                     [
                         'name' => 'name',
-                        'index' => 's.name',
+                        'index' => 's.title',
                         'width' => '200',
                         'align' => 'left',
                         'search' => 'true',
@@ -8601,7 +8678,6 @@ class SessionManager
                     [
                         'name' => 'display_start_date',
                         'index' => 'display_start_date',
-                        'width' => '70',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => ['dataInit' => 'date_pick_today', 'sopt' => $date_operators],
@@ -8609,7 +8685,6 @@ class SessionManager
                     [
                         'name' => 'display_end_date',
                         'index' => 'display_end_date',
-                        'width' => '70',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => ['dataInit' => 'date_pick_one_month', 'sopt' => $date_operators],
@@ -8617,7 +8692,6 @@ class SessionManager
                     [
                         'name' => 'coach_name',
                         'index' => 'coach_name',
-                        'width' => '70',
                         'align' => 'left',
                         'search' => 'false',
                         'searchoptions' => ['sopt' => $operators],
@@ -8625,7 +8699,6 @@ class SessionManager
                     [
                         'name' => 'session_active',
                         'index' => 'session_active',
-                        'width' => '25',
                         'align' => 'left',
                         'search' => 'true',
                         'stype' => 'select',
@@ -8644,14 +8717,12 @@ class SessionManager
                     [
                         'name' => 'visibility',
                         'index' => 'visibility',
-                        'width' => '40',
                         'align' => 'left',
                         'search' => 'false',
                     ],
                     [
                         'name' => 'course_title',
                         'index' => 'course_title',
-                        'width' => '50',
                         'hidden' => 'true',
                         'search' => 'true',
                         'searchoptions' => ['searchhidden' => 'true', 'sopt' => $operators],
@@ -8673,12 +8744,11 @@ class SessionManager
                     [
                         'name' => 'id',
                         'index' => 's.id',
-                        'width' => '160',
                         'hidden' => 'true',
                     ],
                     [
                         'name' => 'name',
-                        'index' => 's.name',
+                        'index' => 's.title',
                         'width' => '160',
                         'align' => 'left',
                         'search' => 'true',
@@ -8687,7 +8757,6 @@ class SessionManager
                     [
                         'name' => 'category_name',
                         'index' => 'category_name',
-                        'width' => '40',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => ['sopt' => $operators],
@@ -8695,7 +8764,6 @@ class SessionManager
                     [
                         'name' => 'display_start_date',
                         'index' => 'display_start_date',
-                        'width' => '50',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => [
@@ -8706,7 +8774,6 @@ class SessionManager
                     [
                         'name' => 'display_end_date',
                         'index' => 'display_end_date',
-                        'width' => '50',
                         'align' => 'left',
                         'search' => 'true',
                         'searchoptions' => [
@@ -8717,7 +8784,6 @@ class SessionManager
                     [
                         'name' => 'visibility',
                         'index' => 'visibility',
-                        'width' => '40',
                         'align' => 'left',
                         'search' => 'false',
                     ],
@@ -8728,7 +8794,6 @@ class SessionManager
                     $columnModel[] = [
                         'name' => 'users',
                         'index' => 'users',
-                        'width' => '20',
                         'align' => 'left',
                         'search' => 'false',
                     ];
@@ -8738,7 +8803,6 @@ class SessionManager
                     $columnModel[] = [
                         'name' => 'teachers',
                         'index' => 'teachers',
-                        'width' => '20',
                         'align' => 'left',
                         'search' => 'false',
                     ];
@@ -8755,7 +8819,6 @@ class SessionManager
                     $columnModel[] = [
                         'name' => 'status',
                         'index' => 'status',
-                        'width' => '25',
                         'align' => 'left',
                         'search' => 'true',
                         'stype' => 'select',
@@ -8776,7 +8839,6 @@ class SessionManager
                 $columnModel[] = [
                     'name' => $field['variable'],
                     'index' => $field['variable'],
-                    'width' => '80',
                     'align' => 'center',
                     'search' => 'false',
                 ];
@@ -8794,7 +8856,6 @@ class SessionManager
             $columnModel[] = [
                 'name' => 'actions',
                 'index' => 'actions',
-                'width' => '80',
                 'align' => 'left',
                 'formatter' => 'action_formatter',
                 'sortable' => 'false',
@@ -8961,7 +9022,7 @@ class SessionManager
                             (s.access_start_date <= '$today' AND ('0000-00-00 00:00:00' = s.access_end_date OR s.access_end_date IS NULL )) OR
                             ('$today' < s.access_end_date AND ('0000-00-00 00:00:00' = s.access_start_date OR s.access_start_date IS NULL) )
                         , 1, 0) as session_active,
-                s.name,
+                s.title,
                 s.nbr_courses,
                 s.nbr_users,
                 s.display_start_date,
@@ -8987,13 +9048,13 @@ class SessionManager
             $options['where'] = str_replace("( session_active = '0' )", '1=1', $options['where']);
             $options['where'] = str_replace(
                 ["AND session_active = '1'  )", " AND (  session_active = '1'  )"],
-                [') GROUP BY s.name HAVING session_active = 1 ', " GROUP BY s.name HAVING session_active = 1 "],
+                [') GROUP BY s.title HAVING session_active = 1 ', " GROUP BY s.title HAVING session_active = 1 "],
                 $options['where']
             );
 
             $options['where'] = str_replace(
                 ["AND session_active = '0'  )", " AND (  session_active = '0'  )"],
-                [') GROUP BY s.name HAVING session_active = 0 ', " GROUP BY s.name HAVING session_active = '0' "],
+                [') GROUP BY s.title HAVING session_active = 0 ', " GROUP BY s.title HAVING session_active = '0' "],
                 $options['where']
             );
 
@@ -9060,19 +9121,9 @@ class SessionManager
 
         $result = Database::query($query);
 
-        $acceptIcon = Display::return_icon(
-            'accept.png',
-            get_lang('Active'),
-            [],
-            ICON_SIZE_SMALL
-        );
+        $acceptIcon = Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Active'));
 
-        $errorIcon = Display::return_icon(
-            'error.png',
-            get_lang('Inactive'),
-            [],
-            ICON_SIZE_SMALL
-        );
+        $errorIcon = Display::getMdiIcon(StateIcon::INACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Inactive'));
 
         $formatted_sessions = [];
         if (Database::num_rows($result)) {
@@ -9683,7 +9734,7 @@ class SessionManager
         $default = 'all';
         $view = api_get_setting('session.default_session_list_view');
 
-        if (!empty($view)) {
+        if ('false' !== $view && !empty($view)) {
             $default = $view;
         }
 
@@ -9717,7 +9768,7 @@ class SessionManager
                 'url' => api_get_path(WEB_CODE_PATH).'session/session_list_simple.php?list_type=complete',
             ],*/
         ];
-
+        $default = null;
         switch ($listType) {
             case 'all':
                 $default = 1;
@@ -9924,23 +9975,23 @@ class SessionManager
         $user = api_get_user_entity();
 
         if (api_is_session_admin() &&
-            'true' !== api_get_setting('allow_session_admins_to_manage_all_sessions')
+            'true' !== api_get_setting('session.allow_session_admins_to_manage_all_sessions')
         ) {
 
-            if ($session->hasUserAsSessionAdmin($user)) {
-                return true;
+            if (!$session->hasUserAsSessionAdmin($user)) {
+                return false;
             }
         }
 
         if (api_is_teacher() &&
-            'true' === api_get_setting('allow_teachers_to_create_sessions')
+            'true' === api_get_setting('session.allow_teachers_to_create_sessions')
         ) {
-            if ($session->hasUserAsGeneralCoach($user))  {
-                return true;
+            if (!$session->hasUserAsGeneralCoach($user))  {
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     /**

@@ -4,6 +4,8 @@
 
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 $cidReset = true;
 
@@ -77,12 +79,28 @@ function search_coachs($needle)
     return $xajax_response;
 }
 
+$urlAction = api_get_self();
+$session = null;
+$fromSessionId = null;
+$accessSelected = 0;
+if (isset($_GET['fromSessionId'])) {
+    $fromSessionId = (int) $_GET['fromSessionId'];
+    $session = api_get_session_entity($fromSessionId);
+    if ($session && 0 === (int) $session->getDuration()) {
+        $accessSelected = 1;
+    }
+    $urlAction .= '?fromSessionId=' . $fromSessionId;
+}
+
 $xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = "
 <script>
 $(function() {
-    accessSwitcher(0);
+   setTimeout(function() {
+        $('#access').val('".$accessSelected."').trigger('change');
+        accessSwitcher('".$accessSelected."');
+    }, 1000);
 });
 
 function fill_coach_field (username) {
@@ -120,8 +138,6 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
 $tool_name = get_lang('Add a training session');
 
-$urlAction = api_get_self();
-
 function check_session_name($name)
 {
     $session = SessionManager::get_session_by_name($name);
@@ -131,7 +147,7 @@ function check_session_name($name)
 
 $form = new FormValidator('add_session', 'post', $urlAction);
 $form->addElement('header', $tool_name);
-$result = SessionManager::setForm($form);
+$result = SessionManager::setForm($form, null, $fromSessionId);
 
 $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php';
 $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
@@ -139,220 +155,98 @@ $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
 $htmlHeadXtra[] = "
 <script>
 $(function() {
-    ".$result['js']."
-    $('#system_template').on('change', function() {
-        var sessionId = $(this).find('option:selected').val();
+    var currentSessionId = new URL(window.location.href).searchParams.get('fromSessionId');
 
-        $.ajax({
-            type: 'GET',
-            dataType: 'json',
-            url: '".$url."',
-            data: 'a=session_info&load_empty_extra_fields=true&session_id=' + sessionId,
-            success: function(data) {
-                /*if (data.session_category_id > 0) {
-                    $('#session_category').val(data.session_category_id);
-                    $('#session_category').selectpicker('render');
-                } else {
-                    $('#session_category').val(0);
-                    $('#session_category').selectpicker('render');
-                }*/
+    function storeFormValues() {
+        var formValues = $('#add_session').serializeArray();
+        sessionStorage.setItem('formValues', JSON.stringify(formValues));
+    }
 
-                $('#session_category').val(data.session_category_id);
-                $('#session_category').trigger('change');
-
-                setContentFromEditor('description', data.description);
-
-                if (data.duration > 0) {
-                    $('#access').val(0);
-                    $('#access').trigger('change');
-                    accessSwitcher(0);
-                    $('#duration').val(parseInt(data.duration));
-                } else {
-                    $('#access').val(1);
-                    $('#access').trigger('change');
-                    accessSwitcher(1);
-
-                    var variables = [
-                        'display_start_date',
-                        'access_start_date',
-                        'coach_access_start_date',
-                        'display_end_date',
-                        'access_end_date',
-                        'coach_access_end_date'
-                    ];
-                    variables.forEach(function(variable) {
-                        var variableName = variable + '_to_local_time';
-                        if (data[variableName]) {
-                            console.log(data[variableName]);
-                            let parsedDate = data[variableName];
-                            if (parsedDate) {
-                                 var item = $('#'+variable);
-                                 flatpickr = item[0]._flatpickr;
-                                 flatpickr.setDate(parsedDate);
-                            }
-                        }
-                    });
-                }
-
-                $('[name=\'show_description\']').prop('checked', false);
-                if (data.show_description) {
-                    $('[name=\'show_description\']').prop('checked', true);
-                }
-
-                $('[name=\'send_subscription_notification\']').prop('checked', false);
-                if (data.send_subscription_notification) {
-                    $('[name=\'send_subscription_notification\']').prop('checked', true);
-                }
-
-                $.each(data.extra_fields, function(i, item) {
-                    var fieldName = 'extra_'+item.variable;
-                    /*
-                    const FIELD_TYPE_TEXT = 1;
-                    const FIELD_TYPE_TEXTAREA = 2;
-                    const FIELD_TYPE_RADIO = 3;
-                    const FIELD_TYPE_SELECT = 4;
-                    const FIELD_TYPE_SELECT_MULTIPLE = 5;
-                    const FIELD_TYPE_DATE = 6;
-                    const FIELD_TYPE_DATETIME = 7;
-                    const FIELD_TYPE_DOUBLE_SELECT = 8;
-                    const FIELD_TYPE_DIVIDER = 9;
-                    const FIELD_TYPE_TAG = 10;
-                    const FIELD_TYPE_TIMEZONE = 11;
-                    const FIELD_TYPE_SOCIAL_PROFILE = 12;
-                    const FIELD_TYPE_CHECKBOX = 13;
-                    const FIELD_TYPE_MOBILE_PHONE_NUMBER = 14;
-                    const FIELD_TYPE_INTEGER = 15;
-                    const FIELD_TYPE_FILE_IMAGE = 16;
-                    const FIELD_TYPE_FLOAT = 17;
-                    const FIELD_TYPE_FILE = 18;
-                    const FIELD_TYPE_VIDEO_URL = 19;
-                    const FIELD_TYPE_LETTERS_ONLY = 20;
-                    const FIELD_TYPE_ALPHANUMERIC = 21;
-                    const FIELD_TYPE_LETTERS_SPACE = 22;
-                    const FIELD_TYPE_ALPHANUMERIC_SPACE = 23;*/
-                    switch (item.value_type) {
-                        case '1': // text
-                        case '6': // date
-                        case '7': // datetime
-                        case '15': // integer
-                        case '17': // float
-                        case '20': // letters only
-                        case '21': // alphanum
-                            $('input[name='+fieldName+']').val(item.value);
-                            break;
-                        case '2': // textarea
-                            setContentFromEditor(fieldName, item.value);
-                            break;
-                        case '3': // radio
-                            var radio = fieldName+'['+fieldName+']';
-                            $('[name=\''+radio+'\']').val([item.value]);
-                            break;
-                        case '4': // simple select
-                        case '5': // multiple select
-                            var options = item.value.split(';');
-                            $('#'+fieldName+'').val(options);
-                            $('#'+fieldName+'').selectpicker('render');
-                            break;
-                        case '8': // double
-                            var first = 'first_'+fieldName;
-                            var second = 'second_'+fieldName;
-                            // item.value has format : 85::86
-                            if (item.value) {
-                                var values = item.value.split('::');
-                                var firstFieldId = values[0];
-                                var secondFieldId = values[1];
-                                $('#'+first+'').val(firstFieldId);
-                                $('#'+first+'').selectpicker('render');
-
-                                // Remove all options
-                                 $('#'+second+'')
-                                .find('option')
-                                .remove()
-                                .end();
-
-                                // Load items for this item then update:
-                                $.ajax({
-                                    url: '".$urlAjaxExtraField."&a=get_second_select_options',
-                                    dataType: 'json',
-                                    data: 'type=session&field_id='+item.id+'&option_value_id='+firstFieldId,
-                                    success: function(data) {
-                                        $.each(data, function(index, value) {
-                                            var my_select = $('#'+second+'');
-                                            my_select.append($(\"<option/>\", {
-                                                value: index,
-                                                text: value
-                                            }));
-                                        });
-                                        $('#'+second+'').selectpicker('refresh');
-                                    }
-                                });
-
-                                $('#'+second+'').val(secondFieldId);
-                                $('#'+second+'').selectpicker('render');
-                            }
-                            break;
-                        case '10': // tags
-                             // Remove all options
-                            $('#'+fieldName+' option').each(function(i, optionItem) {
-                                $(this).remove();
-                            });
-
-                            $('#'+fieldName).next().find('.bit-box').each(function(i, optionItem) {
-                                $(this).remove();
-                            });
-
-                            // Add new options
-                            if (item.value) {
-                                $.each(item.value, function(i, tagItem) {
-                                    // Select2 changes
-                                    //console.log(tagItem.value);
-                                    //$('#'+fieldName)[0].addItem(tagItem.value, tagItem.value);
-                                    var option = new Option(tagItem.value, tagItem.value);
-                                    option.selected = true;
-                                    $('#'+fieldName).append(option);
-                                    $('#'+fieldName).trigger(\"change\");
-                                });
-                            }
-                            break;
-                        case '13': // check
-                            var check = fieldName+'['+fieldName+']';
-                            // Default is uncheck
-                            $('[name=\''+check+'\']').prop('checked', false);
-
-                            if (item.value == 1) {
-                               $('[name=\''+check+'\']').prop('checked', true);
-                            }
-                            break;
-                        case '16':
-                            if (item.url) {
-                                var url = item.url;
-                                var divFormGroup = fieldName + '-form-group';
-                                var divWrapper = fieldName + '_crop_image';
-                                var divPreview = fieldName + '_preview_image';
-                                var divCropButton = fieldName + '_crop_button';
-                                var cropResult = fieldName + '_crop_result';
-
-                                $('[name=\''+cropResult+'\']').val('import_file_from_session::' + sessionId);
-                                $('#' + divFormGroup).show();
-                                $('#' + divWrapper).show();
-                                $('#' + divCropButton).hide();
-                                $('#' + divPreview).attr('src', url);
-                                //$('[name=\''+fieldName+'\']')
-                            }
-                            break;
-                    }
-                });
+    function repopulateFormValues() {
+        var formValues = JSON.parse(sessionStorage.getItem('formValues'));
+        $.each(formValues, function(i, field) {
+            if (field.name === 'coach_username' || field.name === 'name' || field.name === 'system_template') {
+                $('[name=\"' + field.name + '\"]').val(field.value);
             }
         });
-    })
-})
+    }
+
+    function storeSelect2Values(selectId) {
+        var selectedValues = $('#' + selectId).select2('data').map(function(item) {
+            return {id: item.id, text: item.text};
+        });
+        sessionStorage.setItem(selectId + 'Values', JSON.stringify(selectedValues));
+    }
+
+    function repopulateSelect2Values(selectId) {
+        if(sessionStorage.getItem(selectId + 'Values')) {
+            var storedValues = JSON.parse(sessionStorage.getItem(selectId + 'Values'));
+            $('#' + selectId).empty(); // Clear the select
+            storedValues.forEach(function(item) {
+                var newOption = new Option(item.text, item.id, true, true);
+                $('#' + selectId).append(newOption).trigger('change');
+            });
+        }
+    }
+
+    if(currentSessionId) {
+        if(sessionStorage.getItem('formValues')) {
+            repopulateFormValues();
+        }
+        repopulateSelect2Values('coach_username');
+        repopulateSelect2Values('system_template');
+    } else {
+        sessionStorage.clear(); // Clear session storage if no currentSessionId
+    }
+
+    $('#system_template').on('change', function() {
+        storeFormValues();
+        storeSelect2Values('coach_username');
+        storeSelect2Values('system_template');
+        var selectedSessionId = $(this).find('option:selected').val();
+        window.location.href = '/main/session/session_add.php?fromSessionId=' + selectedSessionId;
+    });
+
+    // Attach event to form submit to clear sessionStorage
+    $('#add_session').on('submit', function() {
+        sessionStorage.removeItem('coach_usernameValues');
+        sessionStorage.removeItem('system_templateValues');
+        sessionStorage.removeItem('formValues');
+    });
+});
 </script>";
 
 $form->addButtonNext(get_lang('Next step'));
 
+$formDefaults = [];
 if (!$formSent) {
-    $formDefaults['access_start_date'] = $formDefaults['display_start_date'] = api_get_local_time();
-    $formDefaults['coach_username'] = [api_get_user_id()];
+    if ($session) {
+        $formDefaults = [
+            'id' => $session->getId(),
+            'session_category' => $session->getCategory()?->getId(),
+            'description' => $session->getDescription(),
+            'show_description' => $session->getShowDescription(),
+            'duration' => $session->getDuration(),
+            'session_visibility' => $session->getVisibility(),
+            'display_start_date' => $session->getDisplayStartDate() ? api_get_local_time($session->getDisplayStartDate()) : null,
+            'display_end_date' => $session->getDisplayEndDate() ? api_get_local_time($session->getDisplayEndDate()) : null,
+            'access_start_date' => $session->getAccessStartDate() ? api_get_local_time($session->getAccessStartDate()) : null,
+            'access_end_date' => $session->getAccessEndDate() ? api_get_local_time($session->getAccessEndDate()) : null,
+            'coach_access_start_date' => $session->getCoachAccessStartDate() ? api_get_local_time($session->getCoachAccessStartDate()) : null,
+            'coach_access_end_date' => $session->getCoachAccessEndDate() ? api_get_local_time($session->getCoachAccessEndDate()) : null,
+            'send_subscription_notification' => $session->getSendSubscriptionNotification(),
+            'coach_username' => array_map(
+                function (User $user) {
+                    return $user->getId();
+                },
+                $session->getGeneralCoaches()->getValues()
+            ),
+            'session_template' => $session->getName(),
+        ];
+    } else {
+        $formDefaults['access_start_date'] = $formDefaults['display_start_date'] = api_get_local_time();
+        $formDefaults['coach_username'] = [api_get_user_id()];
+    }
 }
 
 $form->setDefaults($formDefaults);
@@ -370,7 +264,7 @@ if ($form->validate()) {
     }
     $coachEndDate = $params['coach_access_end_date'];
     $coachUsername = $params['coach_username'];
-    $id_session_category = $params['session_category'];
+    $id_session_category = (int) $params['session_category'];
     $id_visibility = $params['session_visibility'];
     $duration = isset($params['duration']) ? $params['duration'] : null;
     $description = $params['description'];
@@ -388,6 +282,30 @@ if ($form->validate()) {
 
     if (isset($extraFields['extra_image']) && !empty($extraFields['extra_image']['name']) && $isThisImageCropped) {
         $extraFields['extra_image']['crop_parameters'] = $params['picture_crop_result'];
+    }
+
+    // Check if the session image will be copied from the template
+    $importImageFromSession = false;
+    $sessionIdToImport = !empty($params['extra_image_crop_result']) ? explode('::', $params['extra_image_crop_result']) : [];
+    $sessionIdToImport = isset($sessionIdToImport[1]) ? (int) $sessionIdToImport[1] : 0;
+    if (!empty($sessionIdToImport)) {
+        $extraField = new ExtraField('session');
+        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable('image');
+
+        $extraFieldValue = new ExtraFieldValue('session');
+        $extraFieldValueData = $extraFieldValue->get_values_by_handler_and_field_id(
+            $sessionIdToImport,
+            $extraFieldInfo['id']
+        );
+
+        if ($extraFieldValueData) {
+            $repo = Container::getAssetRepository();
+            /** @var Asset $asset */
+            $asset = $repo->find($extraFieldValueData);
+            if ($asset) {
+                $extraFields['extra_image']['id'] = $extraFieldValueData;
+            }
+        }
     }
 
     $return = SessionManager::create_session(
@@ -413,15 +331,33 @@ if ($form->validate()) {
     );
 
     if ($return == strval(intval($return))) {
-
-        // Add image
-        $picture = $_FILES['picture'];
-        if (!empty($picture['name'])) {
-            SessionManager::updateSessionPicture(
-                $return,
-                $picture,
-                $params['picture_crop_result']
-            );
+        if (!empty($_FILES['picture']['tmp_name'])) {
+            // Add image
+            $picture = $_FILES['picture'];
+            if (!empty($picture['name'])) {
+                SessionManager::updateSessionPicture(
+                    $return,
+                    $picture,
+                    $params['picture_crop_result']
+                );
+            }
+        } else {
+            if (isset($_POST['image_session_template'])) {
+                $assetUrl = Security::remove_XSS($_POST['image_session_template']);
+                $path = parse_url($assetUrl, PHP_URL_PATH);
+                $filename = basename($path);
+                $tmpName = api_get_path(SYS_PATH).'../var/upload'.$path;
+                $fileArray = [
+                    'tmp_name' => $tmpName,
+                    'name' => $filename,
+                    'error' => 0,
+                    'size' => filesize($tmpName),
+                ];
+                SessionManager::updateSessionPicture(
+                    $return,
+                    $fileArray
+                );
+            }
         }
 
         // integer => no error on session creation
@@ -437,7 +373,7 @@ if (!empty($return)) {
 }
 
 $actions = '<a href="../session/session_list.php">'.
-    Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Administration')).'</a>';
 echo Display::toolbarAction('session', [$actions]);
 $form->display();
 

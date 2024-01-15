@@ -18,6 +18,18 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class PlatformSettingsSchema extends AbstractSettingsSchema
 {
+    private static array $tabs = [
+        'TabsCampusHomepage' => 'campus_homepage',
+        'TabsMyCourses' => 'my_courses',
+        'TabsReporting' => 'reporting',
+        'TabsPlatformAdministration' => 'platform_administration',
+        'mypersonalopenarea' => 'my_agenda',
+        'TabsMyAgenda' => 'my_profile',
+        'TabsMyGradebook' => 'my_gradebook',
+        'TabsSocial' => 'social',
+        'TabsDashboard' => 'dashboard',
+    ];
+
     public function buildSettings(AbstractSettingsBuilder $builder): void
     {
         $builder
@@ -27,10 +39,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'institution_url' => 'http://www.chamilo.org',
                     'institution_address' => '',
                     'site_name' => 'Chamilo site',
-                    //                    'administrator_email' => 'admin@example.org',
-                    //                    'administrator_name' => 'Jane',
-                    //                    'administrator_surname' => 'Doe',
-                    //                    'administrator_phone' => '123456',
                     'timezone' => 'Europe/Paris',
                     'theme' => 'chamilo',
                     'gravatar_enabled' => 'false',
@@ -48,13 +56,8 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'keep_old_images_after_delete' => 'true',
                     'load_term_conditions_section' => 'login',
                     'server_type' => 'prod',
-                    // Chamilo mode
-                    'show_tabs' => [],
+                    'show_tabs' => array_values(self::$tabs),
                     'chamilo_database_version' => '2.0.0',
-                    //
-                    //('catalog_show_courses_sessions', '0', 'CatalogueShowOnlyCourses'),
-                    //('catalog_show_courses_sessions', '1', 'CatalogueShowOnlySessions'),
-                    //('catalog_show_courses_sessions', '2', 'CatalogueShowCoursesAndSessions'),
                     'theme_fallback' => 'chamilo',
                     'unoconv_binaries' => '/usr/bin/unoconv',
                     'packager' => 'chamilo',
@@ -63,7 +66,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'pdf_img_dpi' => '96',
                     'tracking_skip_generic_data' => 'false',
                     'hide_complete_name_in_whoisonline' => 'false',
-                    'table_default_row' => '50',
+                    'table_default_row' => '0',
                     'allow_double_validation_in_registration' => 'false',
                     'block_my_progress_page' => 'false',
                     'generate_random_login' => 'false',
@@ -97,9 +100,10 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'webservice_enable_adminonly_api' => 'false',
                     'plugin_settings' => '',
                     'allow_working_time_edition' => 'false',
-                    'ticket_project_user_roles' => '',
                     'disable_user_conditions_sender_id' => '0',
                     'portfolio_advanced_sharing' => 'false',
+                    'redirect_index_to_url_for_logged_users' => '',
+                    'default_menu_entry_for_course_or_session' => 'my_courses',
                 ]
             )
             ->setTransformer(
@@ -111,15 +115,10 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             'institution' => ['string'],
             'institution_url' => ['string'],
             'site_name' => ['string'],
-            //                    'administrator_email' => array('string'),
-            //                    'administrator_name' => array('string'),
-            //                    'administrator_surname' => array('string'),
-            //                    'administrator_phone' => array('string'),
             'timezone' => ['string'],
             'gravatar_enabled' => ['string'],
             'gravatar_type' => ['string'],
             'show_tabs' => ['array', 'null'],
-            //'gamification_mode' => array('string'),
         ];
 
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
@@ -127,27 +126,11 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
 
     public function buildForm(FormBuilderInterface $builder): void
     {
-        $tabs = [
-            'TabsCampusHomepage' => 'campus_homepage',
-            'TabsMyCourses' => 'my_courses',
-            'TabsReporting' => 'reporting',
-            'TabsPlatformAdministration' => 'platform_administration',
-            'mypersonalopenarea' => 'my_agenda',
-            'TabsMyAgenda' => 'my_profile',
-            'TabsMyGradebook' => 'my_gradebook',
-            'TabsSocial' => 'social',
-            'TabsDashboard' => 'dashboard',
-        ];
-
         $builder
             ->add('institution')
             ->add('institution_url', UrlType::class)
             ->add('institution_address')
             ->add('site_name')
-//            ->add('administrator_email', 'email')
-//            ->add('administrator_name')
-//            ->add('administrator_surname')
-//            ->add('administrator_phone')
             ->add('timezone', TimezoneType::class)
             ->add('theme')
             ->add('gravatar_enabled', YesNoType::class)
@@ -191,8 +174,8 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'Login' => '0',
-                        'Course' => '1',
+                        'Login' => 'login',
+                        'Course' => 'course',
                     ],
                 ]
             )
@@ -201,7 +184,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 ChoiceType::class,
                 [
                     'multiple' => true,
-                    'choices' => $tabs,
+                    'choices' => self::$tabs,
                     'label' => 'ShowTabsTitle',
                     'help' => 'ShowTabsComment',
                 ],
@@ -348,18 +331,19 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('allow_working_time_edition', YesNoType::class)
-            ->add(
-                'ticket_project_user_roles',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => get_lang('Allow ticket projects to be access by specific chamilo roles').
-                        $this->settingArrayHelpValue('ticket_project_user_roles'),
-                ]
-            )
             ->add('disable_user_conditions_sender_id', TextType::class)
             ->add('portfolio_advanced_sharing', TextType::class)
-
+            ->add('redirect_index_to_url_for_logged_users', TextType::class)
+            ->add(
+                'default_menu_entry_for_course_or_session',
+                ChoiceType::class,
+                [
+                    'choices' => [
+                        'My Courses' => 'my_courses',
+                        'My Sessions' => 'my_sessions',
+                    ],
+                ]
+            )
         ;
     }
 
@@ -433,13 +417,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                         'tool_enable' => 'true', // string value
                         'host' => 'https://www.example.com',
                         'salt' => 'abc123'
-                    ]
-                ]
-                </pre>",
-            'ticket_project_user_roles' => "<pre>
-                [
-                    'permissions' => [
-                        1 => [17] // project_id = 1, STUDENT_BOSS = 17
                     ]
                 ]
                 </pre>",

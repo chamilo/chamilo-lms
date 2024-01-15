@@ -4,13 +4,15 @@
 /**
  * This script displays a help window.
  */
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $help_name = isset($_GET['open']) ? Security::remove_XSS($_GET['open']) : null;
 
 Display::display_header(get_lang('Frequently Asked Question'));
 
 if (api_is_platform_admin()) {
-    echo '&nbsp;<a href="faq.php?edit=true">'.Display::return_icon('edit.png').'</a>';
+    echo '&nbsp;<a href="faq.php?edit=true">'.Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL).'</a>';
 }
 
 echo Display::page_header(get_lang('Frequently Asked Question'));

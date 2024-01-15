@@ -72,6 +72,7 @@ class Version20181025064351 extends AbstractMigrationChamilo
         $this->addSql('UPDATE gradebook_category SET parent_id = NULL WHERE parent_id = 0');
 
         $this->addSql('DELETE FROM gradebook_category WHERE session_id IS NOT NULL AND session_id NOT IN (SELECT id FROM session)');
+        $this->addSql('DELETE FROM gradebook_category WHERE parent_id IS NOT NULL AND parent_id NOT IN (SELECT id FROM gradebook_category)');
 
         if (false === $table->hasForeignKey('FK_96A4C705727ACA70')) {
             $this->addSql('ALTER TABLE gradebook_category ADD CONSTRAINT FK_96A4C705727ACA70 FOREIGN KEY (parent_id) REFERENCES gradebook_category (id) ON DELETE CASCADE');
@@ -117,7 +118,7 @@ class Version20181025064351 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_96A4C705A76ED395 ON gradebook_category (user_id)');
         }
 
-        $this->addSql('UPDATE gradebook_category SET grade_model_id = NULL WHERE grade_model_id = 0');
+        $this->addSql('UPDATE gradebook_category SET grade_model_id = NULL WHERE grade_model_id = 0 OR grade_model_id = -1');
 
         if (!$table->hasForeignKey('FK_96A4C705378B7921')) {
             $this->addSql('ALTER TABLE gradebook_category ADD CONSTRAINT FK_96A4C705378B7921 FOREIGN KEY (grade_model_id) REFERENCES grade_model (id) ON DELETE CASCADE;');
@@ -147,7 +148,7 @@ class Version20181025064351 extends AbstractMigrationChamilo
                 'ALTER TABLE gradebook_evaluation ADD CONSTRAINT FK_DDDED80491D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE'
             );
             $this->addSql('CREATE INDEX IDX_DDDED80491D79BD3 ON gradebook_evaluation (c_id)');
-            //$this->addSql('ALTER TABLE gradebook_evaluation RENAME INDEX fk_ddded80491d79bd3 TO IDX_DDDED80491D79BD3;');
+            // $this->addSql('ALTER TABLE gradebook_evaluation RENAME INDEX fk_ddded80491d79bd3 TO IDX_DDDED80491D79BD3;');
         }
         if (false === $table->hasIndex('idx_ge_cat')) {
             $this->addSql('CREATE INDEX idx_ge_cat ON gradebook_evaluation (category_id)');
@@ -291,7 +292,7 @@ class Version20181025064351 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE gradebook_certificate ADD downloaded_at DATETIME DEFAULT NULL;');
             $this->addSql(
                 'UPDATE gradebook_certificate gc SET downloaded_at = (
-                        SELECT value from extra_field e
+                        SELECT field_value from extra_field e
                         INNER JOIN extra_field_values v on v.field_id = e.id
                         WHERE variable = "downloaded_at" and item_type = 11 and item_id = gc.id
                     )'
@@ -376,7 +377,7 @@ class Version20181025064351 extends AbstractMigrationChamilo
 
         $table = $schema->hasTable('gradebook_comment');
         if (false === $table) {
-            $this->addSql('CREATE TABLE gradebook_comment (id BIGINT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, gradebook_id INT DEFAULT NULL, comment LONGTEXT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_C3B70763A76ED395 (user_id), INDEX IDX_C3B70763AD3ED51C (gradebook_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
+            $this->addSql('CREATE TABLE gradebook_comment (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, gradebook_id INT DEFAULT NULL, comment LONGTEXT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_C3B70763A76ED395 (user_id), INDEX IDX_C3B70763AD3ED51C (gradebook_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
             $this->addSql('ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;');
             $this->addSql('ALTER TABLE gradebook_comment ADD CONSTRAINT FK_C3B70763AD3ED51C FOREIGN KEY (gradebook_id) REFERENCES gradebook_category (id) ON DELETE CASCADE;');
         }
@@ -390,7 +391,5 @@ class Version20181025064351 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

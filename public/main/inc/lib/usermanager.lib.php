@@ -56,11 +56,12 @@ class UserManager
 
     /**
      * Validates the password.
-     *
-     * @return bool
      */
-    public static function isPasswordValid(User $user, $plainPassword)
+    public static function isPasswordValid(User $user, string $plainPassword): bool
     {
+        /**
+         * @psalm-suppress PrivateService
+         */
         $hasher = Container::$container->get('security.user_password_hasher');
 
         return $hasher->isPasswordValid($user, $plainPassword);
@@ -334,9 +335,9 @@ class UserManager
                 $userFieldValue->saveFieldValues(
                     $extra,
                     true,
-                    null,
-                    null,
-                    null,
+                    false,
+                    [],
+                    [],
                     true
                 );
             } else {
@@ -487,7 +488,7 @@ class UserManager
                     if (!empty($emailBodyTemplate)) {
                         $emailBody = $emailBodyTemplate;
                     }
-                    $sendToInbox = ('true' === api_get_setting('mail.send_inscription_msg_to_inbox'));
+                    $sendToInbox = ('true' === api_get_setting('registration.send_inscription_msg_to_inbox'));
                     if ($sendToInbox) {
                         $adminList = self::get_all_administrators();
                         $senderId = 1;
@@ -1066,7 +1067,11 @@ class UserManager
             $expiration_date = new \DateTime($expiration_date, new DateTimeZone('UTC'));
         }
 
+        $previousStatus = $user->getStatus();
+        $previousRole = $user->getRoleFromStatus($previousStatus);
+
         $user
+            ->removeRole($previousRole)
             ->setLastname($lastname)
             ->setFirstname($firstname)
             ->setUsername($username)
@@ -1717,6 +1722,56 @@ class UserManager
     }
 
     /**
+     * Get user path from user ID (returns an array).
+     * The return format is a complete path to a folder ending with "/"
+     * In case the first level of subdirectory of users/ does not exist, the
+     * function will attempt to create it. Probably not the right place to do it
+     * but at least it avoids headaches in many other places.
+     *
+     * @param int    $id   User ID
+     * @param string $type Type of path to return (can be 'system', 'web', 'last')
+     *
+     * @return string User folder path (i.e. /var/www/chamilo/app/upload/users/1/1/)
+     */
+    public static function getUserPathById($id, $type)
+    {
+        $id = (int) $id;
+        if (!$id) {
+            return null;
+        }
+
+        $userPath = "users/$id/";
+        if (api_get_setting('split_users_upload_directory') === 'true') {
+            $userPath = 'users/'.substr((string) $id, 0, 1).'/'.$id.'/';
+            // In exceptional cases, on some portals, the intermediate base user
+            // directory might not have been created. Make sure it is before
+            // going further.
+
+            $rootPath = api_get_path(SYS_PATH).'../app/upload/users/'.substr((string) $id, 0, 1);
+            if (!is_dir($rootPath)) {
+                $perm = api_get_permissions_for_new_directories();
+                try {
+                    mkdir($rootPath, $perm);
+                } catch (Exception $e) {
+                    error_log($e->getMessage());
+                }
+            }
+        }
+        switch ($type) {
+            case 'system': // Base: absolute system path.
+                $userPath = api_get_path(SYS_PATH).'../app/upload/'.$userPath;
+                break;
+            case 'web': // Base: absolute web path.
+                $userPath = api_get_path(WEB_PATH).'../app/upload/'.$userPath;
+                break;
+            case 'last': // Only the last part starting with users/
+                break;
+        }
+
+        return $userPath;
+    }
+
+    /**
      * Gets the current user image.
      *
      * @param string $userId
@@ -2220,7 +2275,7 @@ class UserManager
                     $tags = self::get_user_tags_to_string($user_id, $row['id'], false);
                     $extra_data['extra_'.$row['fvar']] = $tags;
                 } else {
-                    $sqlu = "SELECT value as fval
+                    $sqlu = "SELECT field_value as fval
                             FROM $t_ufv
                             WHERE field_id=".$row['id']." AND item_id = ".$user_id;
                     $resu = Database::query($sqlu);
@@ -2523,7 +2578,7 @@ class UserManager
         if (!$getCount) {
             $dqlSelect = " DISTINCT
                 s.id,
-                s.name,
+                s.title,
                 s.accessStartDate AS access_start_date,
                 s.accessEndDate AS access_end_date,
                 s.duration,
@@ -2557,7 +2612,7 @@ class UserManager
             WHERE (su.user = :user AND su.relationType = ".SessionEntity::GENERAL_COACH.") AND url.url = :url ";
 
         // Default order
-        $order = 'ORDER BY sc.name, s.name';
+        $order = 'ORDER BY sc.name, s.title';
 
         // Order by date if showing all sessions
         $showAllSessions = ('true' === api_get_setting('course.show_all_sessions_on_my_course_page'));
@@ -2588,7 +2643,7 @@ class UserManager
                     }
                     break;
                 case 'name':
-                    $order = " ORDER BY s.name $orderSetting ";
+                    $order = " ORDER BY s.title $orderSetting ";
                     break;
             }
         }
@@ -2897,14 +2952,14 @@ class UserManager
         }
 
         $sql = "SELECT DISTINCT
-                s.id, s.name, s.access_start_date, s.access_end_date
+                s.id, s.title, s.access_start_date, s.access_end_date
                 FROM $tbl_session s
                 INNER JOIN $tbl_session_user sru ON sru.session_id = s.id
                 WHERE (
                     sru.user_id = $user_id AND sru.relation_type = ".SessionEntity::GENERAL_COACH."
                 )
                 $coachCourseConditions
-                ORDER BY s.access_start_date, s.access_end_date, s.name";
+                ORDER BY s.access_start_date, s.access_end_date, s.title";
 
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -2960,7 +3015,7 @@ class UserManager
                     $result_row['access_start_date'] = $session->getAccessStartDate()?->format('Y-m-d H:i:s');
                     $result_row['access_end_date'] = $session->getAccessEndDate()?->format('Y-m-d H:i:s');
                     $result_row['session_id'] = $session->getId();
-                    $result_row['session_name'] = $session->getName();
+                    $result_row['session_name'] = $session->getTitle();
                     $result_row['course_info'] = api_get_course_info($result_row['code']);
                     $key = $result_row['session_id'].' - '.$result_row['code'];
                     $personal_course_list[$key] = $result_row;
@@ -5986,7 +6041,7 @@ SQL;
         $tableCareer = Database::get_main_table(TABLE_CAREER);
         $userId = (int) $userId;
 
-        $sql = "SELECT c.id, c.name
+        $sql = "SELECT c.id, c.title
                 FROM $table uc
                 INNER JOIN $tableCareer c
                 ON uc.career_id = c.id

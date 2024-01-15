@@ -143,7 +143,7 @@ if ('add_user' !== $action) {
     $userRepo = Container::getUserRepository();
     $bossList = $userRepo->findByRole('ROLE_STUDENT_BOSS', '', api_get_current_access_url_id());
     //$bossList = UserManager::get_user_list($conditions, ['firstname']);
-    $tableContent .= '<div class="container-fluid"><div class="row flex-row flex-nowrap">';
+    $tableContent .= '<div class="container-fluid"><div class="row flex-row flex-nowrap overflow-y-auto">';
     foreach ($bossList as $boss) {
         if (!empty($languageFilter) && $languageFilter !== $boss->getLocale()) {
             continue;

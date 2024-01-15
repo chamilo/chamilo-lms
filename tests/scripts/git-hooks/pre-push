@@ -23,6 +23,7 @@ remote="$1"
 url="$2"
 
 z40=0000000000000000000000000000000000000000
+composer=${composer-'composer'}
 
 while read local_ref local_sha remote_ref remote_sha
 do
@@ -46,6 +47,18 @@ do
         then
             echo >&2 "Found WIP commit in $local_ref, not pushing"
             exit 1
+        fi
+
+        # Run coding standards check over modified files.
+        modified_files=`git diff --diff-filter=d --name-only "$range"`
+        if [ -n "$modified_files" ]
+        then
+            $composer phpcs $modified_files
+            if [ $? -ne 0 ]
+            then
+                echo >&2 "A coding standards regressions was introduced, please fix it before pushing."
+                exit 1
+            fi
         fi
     fi
 done

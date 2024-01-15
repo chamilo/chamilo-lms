@@ -54,14 +54,14 @@ export function useSidebarMenu() {
       if (showCatalogue > -1) {
         if (showCatalogue == 0 || showCatalogue == 2) {
           items.push({
-            icon: "mdi mdi-home",
+            icon: "mdi mdi-bookmark-multiple",
             label: t("Courses catalogue"),
             command: () => router.push({ name: "CatalogueCourses" }),
           })
         }
         if (showCatalogue > 0) {
           items.push({
-            icon: "mdi mdi-home",
+            icon: "mdi mdi-bookmark-multiple-outline",
             label: t("Sessions catalogue"),
             command: () => router.push({ name: "CatalogueSessions" }),
           })

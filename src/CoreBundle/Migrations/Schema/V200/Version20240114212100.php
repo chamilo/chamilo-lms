@@ -24,8 +24,17 @@ final class Version20240114212100 extends AbstractMigrationChamilo
         }
 
         if ($schema->hasTable('fos_group')) {
+            $table = $schema->getTable('tool');
+            if ($table->hasIndex('UNIQ_4B019DDB5E237E06')) {
+                $this->addSql(
+                    'DROP INDEX UNIQ_4B019DDB5E237E06 on fos_group'
+                );
+            }
             $this->addSql(
                 'ALTER TABLE fos_group CHANGE name title VARCHAR(255) NOT NULL'
+            );
+            $this->addSql(
+                'CREATE UNIQUE INDEX UNIQ_4B019DDB2B36786B ON fos_group (title)'
             );
         }
 
@@ -46,9 +55,17 @@ final class Version20240114212100 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('fos_group');
+        if ($table->hasIndex('UNIQ_4B019DDB2B36786B')) {
+            $this->addSql(
+                'DROP INDEX UNIQ_4B019DDB2B36786B on fos_group'
+            );
+        }
         if ($table->hasColumn('title')) {
             $this->addSql('ALTER TABLE fos_group CHANGE title name VARCHAR(255) NOT NULL');
         }
+        $this->addSql(
+            'CREATE UNIQUE INDEX UNIQ_4B019DDB5E237E06 ON fos_group (title)'
+        );
 
         $table = $schema->getTable('contact_form_contact_category');
         if ($table->hasColumn('title')) {

@@ -71,8 +71,6 @@ class CForumCategory extends AbstractResource implements ResourceInterface, Stri
 
     /**
      * Get title.
-     *
-     * @return string
      */
     public function getTitle(): string
     {

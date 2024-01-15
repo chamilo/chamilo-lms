@@ -47,8 +47,8 @@ class JuryType extends AbstractType
                 'property' => 'title',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
-                            //->where('u.role LIKE :role')
-                            //->setParameter(':role', 'ROLE_JURY%')
+                            // ->where('u.role LIKE :role')
+                            // ->setParameter(':role', 'ROLE_JURY%')
                         ->orderBy('u.title', Criteria::DESC)
                     ;
                 },

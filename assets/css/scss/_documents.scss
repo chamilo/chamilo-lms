@@ -15,6 +15,10 @@
       @apply w-full;
     }
 
+    div:has(iframe) {
+      @apply w-full;
+    }
+
     iframe {
       @apply aspect-square w-full border-0;
     }

@@ -154,12 +154,12 @@
           />
 
           <BaseButton
-￼            v-if="securityStore.isAuthenticated && isCurrentTeacher && $route.query.cert === '1'"
-￼            :icon="null === slotProps.data.gradebookCategory ? 'mdi mdi-file-plus' : 'mdi mdi-file-plus-outline'"
-￼            class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
-             type="black"
-￼            @click="btnChangeAttachedCertificateOnClick(slotProps.data)"
-￼          />
+            v-if="securityStore.isAuthenticated && isCurrentTeacher && $route.query.cert === '1'"
+            :icon="null === slotProps.data.gradebookCategory ? 'mdi mdi-file-plus' : 'mdi mdi-file-plus-outline'"
+            class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
+            type="black"
+            @click="btnChangeAttachedCertificateOnClick(slotProps.data)"
+          />
 
           <BaseButton
             v-if="securityStore.isAuthenticated && isCurrentTeacher"

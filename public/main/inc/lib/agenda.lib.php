@@ -1737,13 +1737,13 @@ class Agenda
                     $sentTo[] = $link->getUser()->getFirstname();
                 }
                 if ($link->getCourse()) {
-                    $sentTo[] = $link->getCourse()->getName();
+                    $sentTo[] = $link->getCourse()->getTitle();
                 }
                 if ($link->getSession()) {
-                    $sentTo[] = $link->getSession()->getName();
+                    $sentTo[] = $link->getSession()->getTitle();
                 }
                 if ($link->getGroup()) {
-                    $sentTo[] = $link->getGroup()->getName();
+                    $sentTo[] = $link->getGroup()->getTitle();
                 }
             }
 

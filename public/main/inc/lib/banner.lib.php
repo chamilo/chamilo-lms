@@ -350,7 +350,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         $sessionName = '';
         if (!empty($sessionId)) {
             $session = api_get_session_entity($sessionId);
-            $sessionName = $session ? ' ('.cut($session->getName(), MAX_LENGTH_BREADCRUMB).')' : '';
+            $sessionName = $session ? ' ('.cut($session->getTitle(), MAX_LENGTH_BREADCRUMB).')' : '';
         }
 
         $courseInfo['name'] = api_htmlentities($courseInfo['name']);

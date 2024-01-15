@@ -346,18 +346,6 @@ class Session implements ResourceWithAccessUrlInterface, \Stringable
         ];
     }
 
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
     public function getDuration(): ?int
     {
         return $this->duration;

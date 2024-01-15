@@ -858,7 +858,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
 
         $session = (new Session())
-            ->setName('session 1')
+            ->setTitle('session 1')
             ->addGeneralCoach($teacher)
             ->addAccessUrl($this->getAccessUrl())
         ;

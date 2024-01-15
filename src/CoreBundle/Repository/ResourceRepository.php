@@ -771,7 +771,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             return '';
         }
 
-        return '<img title="'.$session->getName().'" src="/img/icons/22/star.png" />';
+        return '<img title="'.$session->getTitle().'" src="/img/icons/22/star.png" />';
     }
 
     public function isGranted(string $subject, AbstractResource $resource): bool

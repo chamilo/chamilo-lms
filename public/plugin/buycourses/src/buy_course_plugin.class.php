@@ -1674,7 +1674,7 @@ class BuyCoursesPlugin extends Plugin
         $sessionItem = [
             'item_id' => null,
             'session_id' => $session->getId(),
-            'session_name' => $session->getName(),
+            'session_name' => $session->getTitle(),
             'session_visibility' => $session->getVisibility(),
             'session_display_start_date' => null,
             'session_display_end_date' => null,

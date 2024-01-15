@@ -2306,7 +2306,7 @@ class SurveyManager
                 $title = Display::url($title, $url);
                 $courseTitle = $course->getTitle();
                 if (!empty($sessionId)) {
-                    $courseTitle .= ' ('.$invitation->getSession()->getName().')';
+                    $courseTitle .= ' ('.$invitation->getSession()->getTitle().')';
                 }
 
                 $surveyData = self::get_survey($survey->getIid(), 0, $courseCode);

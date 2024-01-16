@@ -2227,6 +2227,7 @@ class DocumentManager
     public static function enough_space($file_size, $max_dir_space)
     {
         if ($max_dir_space) {
+            $max_dir_space = $max_dir_space * 1024 * 1024;
             $courseEntity = api_get_course_entity();
             $repo = Container::getDocumentRepository();
             $total = $repo->getFolderSize($courseEntity->getResourceNode(), $courseEntity);

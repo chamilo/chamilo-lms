@@ -1,21 +1,31 @@
 <template>
   <div
-      v-for="announcement in announcements"
-      :key="announcement.id"
+    v-if="announcements.length > 0"
   >
     <SystemAnnouncementCard
-        :announcement="announcement"
+      v-for="announcement in announcements"
+      :key="announcement.id"
+      :announcement="announcement"
     />
   </div>
 </template>
 
 <script setup>
+import { ref } from "vue"
+import axios from "axios"
+
 import SystemAnnouncementCard from './SystemAnnouncementCard.vue';
 
-defineProps({
-  announcements: {
-    type: Array,
-    required: true,
-  },
-})
+const announcements = ref([]);
+
+axios
+  .get("/news/list")
+  .then((response) => {
+    if (Array.isArray(response.data)) {
+      announcements.value = response.data;
+    }
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
 </script>

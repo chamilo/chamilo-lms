@@ -78,8 +78,7 @@
         <template #body="{ data }">
           <TeacherBar
             :teachers="
-              data?.teachers.map((teacher) => ({
-                id: teacher.id,
+              data.teachers.map((teacher) => ({
                 ...teacher.user,
               }))
             "
@@ -154,7 +153,8 @@
     </DataTable>
   </div>
 </template>
-<script>
+<script setup>
+import { ref } from "vue"
 import { ENTRYPOINT } from "../../config/entrypoint"
 import axios from "axios"
 import { FilterMatchMode } from "primevue/api"
@@ -164,124 +164,103 @@ import Column from "primevue/column"
 import Rating from "primevue/rating"
 import TeacherBar from "../../components/TeacherBar.vue"
 
-export default {
-  name: "Catalog",
-  components: {
-    DataTable,
-    Column,
-    Button,
-    TeacherBar,
-    Rating,
-  },
+const status = ref(null)
+const courses = ref([])
+const filters = ref(null)
 
-  data() {
-    return {
-      status: null,
-      courses: [],
-      filters: null,
-      teachers: [],
-    }
-  },
-
-  created: function () {
-    this.load()
-    this.initFilters()
-  },
-  mounted: function () {},
-  methods: {
-    load: function () {
-      this.status = true
-      axios
-        .get(ENTRYPOINT + "courses.json")
-        .then((response) => {
-          this.status = false
-          if (Array.isArray(response.data)) {
-            response.data.forEach(
-              (course) => (course.courseLanguage = this.getOriginalLanguageName(course.courseLanguage)),
-            )
-            this.courses = response.data
-          }
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
-    },
-    updateRating: function (id, value) {
-      this.status = true
-      axios
-        .patch(
-          ENTRYPOINT + "track_course_rankings/" + id,
-          { totalScore: value },
-          { headers: { "Content-Type": "application/merge-patch+json" } },
-        )
-        .then((response) => {
-          this.courses.forEach((course) => {
-            if (course.trackCourseRanking && course.trackCourseRanking.id === id) {
-              course.trackCourseRanking.realTotalScore = response.data.realTotalScore
-            }
-          })
-          this.status = false
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
-    },
-    newRating: function (courseId, value) {
-      this.status = true
-      axios
-        .post(
-          ENTRYPOINT + "track_course_rankings",
-          {
-            totalScore: value,
-            course: ENTRYPOINT + "courses/" + courseId,
-            url_id: window.access_url_id,
-            sessionId: 0,
-          },
-          { headers: { "Content-Type": "application/ld+json" } },
-        )
-        .then((response) => {
-          this.courses.forEach((course) => {
-            if (course.id === courseId) {
-              course.trackCourseRanking = response.data
-            }
-          })
-          this.status = false
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
-    },
-    clearFilter() {
-      this.initFilters()
-    },
-    initFilters() {
-      this.filters = {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+const load = function () {
+  status.value = true
+  axios
+    .get(ENTRYPOINT + "courses.json")
+    .then((response) => {
+      status.value = false
+      if (Array.isArray(response.data)) {
+        response.data.forEach((course) => (course.courseLanguage = getOriginalLanguageName(course.courseLanguage)))
+        courses.value = response.data
       }
-    },
-    getOriginalLanguageName(courseLanguage) {
-      const languages = window.languages
-      let language = languages.find((element) => element.isocode === courseLanguage)
-      if (language) {
-        return language.originalName
-      } else {
-        return ""
-      }
-    },
-    onRatingChange(event, trackCourseRanking, courseId) {
-      let { value } = event
-      if (value > 0) {
-        if (trackCourseRanking) this.updateRating(trackCourseRanking.id, value)
-        else this.newRating(courseId, value)
-      } else {
-        event.preventDefault()
-      }
-    },
-    onNewRatingChange(event, courseId) {
-      let { value } = event
-      if (value > 0) this.newRating(courseId, value)
-      else event.preventDefault()
-    },
-  },
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
 }
+
+const updateRating = function (id, value) {
+  status.value = true
+  axios
+    .patch(
+      ENTRYPOINT + "track_course_rankings/" + id,
+      { totalScore: value },
+      { headers: { "Content-Type": "application/merge-patch+json" } },
+    )
+    .then((response) => {
+      courses.value.forEach((course) => {
+        if (course.trackCourseRanking && course.trackCourseRanking.id === id) {
+          course.trackCourseRanking.realTotalScore = response.data.realTotalScore
+        }
+      })
+      status.value = false
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
+}
+
+const newRating = function (courseId, value) {
+  status.value = true
+  axios
+    .post(
+      ENTRYPOINT + "track_course_rankings",
+      {
+        totalScore: value,
+        course: ENTRYPOINT + "courses/" + courseId,
+        url_id: window.access_url_id,
+        sessionId: 0,
+      },
+      { headers: { "Content-Type": "application/ld+json" } },
+    )
+    .then((response) => {
+      courses.value.forEach((course) => {
+        if (course.id === courseId) {
+          course.trackCourseRanking = response.data
+        }
+      })
+      status.value = false
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
+}
+
+const clearFilter = function () {
+  initFilters()
+}
+
+const initFilters = function () {
+  filters.value = {
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  }
+}
+
+const getOriginalLanguageName = function (courseLanguage) {
+  const languages = window.languages
+  let language = languages.find((element) => element.isocode === courseLanguage)
+  if (language) {
+    return language.originalName
+  } else {
+    return ""
+  }
+}
+
+const onRatingChange = function (event, trackCourseRanking, courseId) {
+  let { value } = event
+  if (value > 0) {
+    if (trackCourseRanking) updateRating(trackCourseRanking.id, value)
+    else newRating(courseId, value)
+  } else {
+    event.preventDefault()
+  }
+}
+
+load()
+initFilters()
 </script>

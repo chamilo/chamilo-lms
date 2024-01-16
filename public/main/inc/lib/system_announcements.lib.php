@@ -297,25 +297,34 @@ class SystemAnnouncementManager
     /**
      * Gets the groups of this announce.
      *
-     * @param int announcement id
+     * @param int $announcement_id announcement id
      *
      * @return array array of group id
+     * @throws Exception
      */
-    public static function get_announcement_groups($announcement_id)
+    public static function get_announcement_groups(int $announcement_id): array
     {
+        if (empty($announcement_id)) {
+            return [];
+        }
         $tbl_announcement_group = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
         $tbl_group = Database::get_main_table(TABLE_USERGROUP);
         //first delete all group associations for this announcement
         $sql = "SELECT
                     g.id as group_id,
-                    g.name as group_name
+                    g.title as group_name
                 FROM $tbl_group g , $tbl_announcement_group ag
                 WHERE
-                    announcement_id =".intval($announcement_id)." AND
+                    announcement_id = $announcement_id AND
                     ag.group_id = g.id";
         $res = Database::query($sql);
 
-        return Database::fetch_array($res);
+        $array = Database::fetch_array($res);
+        if (!empty($array)) {
+            return $array;
+        }
+
+        return [];
     }
 
     /**

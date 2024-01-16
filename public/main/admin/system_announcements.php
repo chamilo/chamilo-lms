@@ -80,7 +80,7 @@ function showCareer() {
         );
         $.each(data, function(index, value) {
             $("#promotion_id").append(
-                $("<option>", {value: value.id, text: value.name})
+                $("<option>", {value: value.id, text: value.title})
             );
         });
         $("#promotion_id").selectpicker("refresh");
@@ -210,7 +210,7 @@ if ($action_todo) {
     if ($allowCareers) {
         $career = new Career();
         $careerList = $career->get_all();
-        $list = array_column($careerList, 'name', 'id');
+        $list = array_column($careerList, 'title', 'id');
 
         $form->addSelect(
             'career_id',
@@ -229,7 +229,7 @@ if ($action_todo) {
             $promotion = new Promotion();
             $promotion = $promotion->get($values['promotion_id']);
             if ($promotion) {
-                $options = [$promotion['id'] => $promotion['name']];
+                $options = [$promotion['id'] => $promotion['title']];
                 $display = 'block';
             }
         }
@@ -287,7 +287,7 @@ if ($action_todo) {
     $group_list = $userGroup->get_all();
 
     if (!empty($group_list)) {
-        $group_list = array_column($group_list, 'name', 'id');
+        $group_list = array_column($group_list, 'title', 'id');
         $group_list[0] = get_lang('All');
         $form->addSelect(
             'group',

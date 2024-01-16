@@ -28,6 +28,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
@@ -560,6 +561,8 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $matching->count() > 0;
     }
 
+    #[SerializedName('teachers')]
+    #[Groups(['course:read'])]
     public function getTeachersSubscriptions(): Collection
     {
         $teacherSubscriptions = new ArrayCollection();

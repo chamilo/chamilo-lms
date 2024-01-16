@@ -1,16 +1,11 @@
 <template>
   <form>
-    <div class="p-field">
-      <InputText
-        id="item_title"
-        v-model.trim="item.title"
-        :error="v$.item.title.$error"
-        :error-message="titleErrors"
-        :placeholder="$t('Title')"
-        @blur="v$.item.title.$touch()"
-        @input="v$.item.title.$touch()"
-      />
-    </div>
+    <BaseInputTextWithVuelidate
+      id="item_title"
+      v-model.trim="item.title"
+      vuelidate-property="v$.item.title"
+      :label="$t('Title')"
+    />
 
     <TinyEditor
       v-if="
@@ -21,7 +16,6 @@
       "
       id="item_content"
       v-model="item.contentFile"
-      :error-message="contentFileErrors"
       :init="{
         skin_url: '/build/libs/tinymce/skins/ui/oxide',
         content_css: '/build/libs/tinymce/skins/content/default/content.css',
@@ -53,9 +47,11 @@ import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { ref } from "vue";
 import { usePlatformConfig } from "../../store/platformConfig";
+import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue"
 
 export default {
   name: "DocumentsForm",
+  components: { BaseInputTextWithVuelidate },
   props: {
     values: {
       type: Object,
@@ -105,17 +101,6 @@ export default {
 
       return errors;
     },
-    contentFileErrors() {
-      const errors = [];
-
-      /*if (this.item.resourceNode && this.item.resourceNode.resourceFile && this.item.resourceNode.resourceFile.text) {
-              if (!this.$v.item.contentFile.$dirty) return errors;
-              has(this.violations, 'contentFile') && errors.push(this.violations.contentFile);
-              !this.$v.item.contentFile.required && errors.push(this.$t('Content is required'));
-            }*/
-
-      return errors;
-    },
     violations() {
       return this.errors || {};
     },
@@ -160,7 +145,7 @@ export default {
         },
         {
           oninsert: function (file, fm) {
-            var url, reg, info;
+            var url, info;
 
             // URL normalization
             url = fm.convAbsUrl(file.url);

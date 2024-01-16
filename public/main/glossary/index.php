@@ -90,14 +90,14 @@ switch ($action) {
         $form->addElement('header', get_lang('Add new glossary term'));
         if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $form->addHtmlEditor(
-                'name',
+                'title',
                 get_lang('Term'),
                 false,
                 false,
                 ['ToolbarSet' => 'TitleAsHtml']
             );
         } else {
-            $form->addElement('text', 'name', get_lang('Term'), ['id' => 'glossary_title']);
+            $form->addElement('text', 'title', get_lang('Term'), ['id' => 'glossary_title']);
         }
 
         $form->addHtmlEditor(
@@ -109,7 +109,7 @@ switch ($action) {
         );
         $form->addButtonCreate(get_lang('Save term'), 'SubmitGlossary');
         // setting the rules
-        $form->addRule('name', get_lang('Required field'), 'required');
+        $form->addRule('title', get_lang('Required field'), 'required');
         // The validation or display
         if ($form->validate()) {
             $check = Security::check_token('post');
@@ -155,14 +155,14 @@ switch ($action) {
             $form->addElement('hidden', 'glossary_id');
             if ('true' === api_get_setting('editor.save_titles_as_html')) {
                 $form->addHtmlEditor(
-                    'name',
+                    'title',
                     get_lang('Term'),
                     false,
                     false,
                     ['ToolbarSet' => 'TitleAsHtml']
                 );
             } else {
-                $form->addElement('text', 'name', get_lang('Term'), ['id' => 'glossary_title']);
+                $form->addElement('text', 'title', get_lang('Term'), ['id' => 'glossary_title']);
             }
 
             $form->addElement(
@@ -200,13 +200,13 @@ switch ($action) {
             $form->addButtonUpdate(get_lang('Update term'), 'SubmitGlossary');
             $default = [
                 'glossary_id' => $glossaryData->getIid(),
-                'name' => $glossaryData->getTitle(),
+                'title' => $glossaryData->getTitle(),
                 'description' => $glossaryData->getDescription(),
             ];
             $form->setDefaults($default);
 
             // setting the rules
-            $form->addRule('name', get_lang('Required field'), 'required');
+            $form->addRule('title', get_lang('Required field'), 'required');
 
             // The validation or display
             if ($form->validate()) {
@@ -309,7 +309,7 @@ switch ($action) {
                             Display::return_message(get_lang('Cannot delete glossary').':'.$term['id'], 'error')
                         );
                     } else {
-                        $termsDeleted[] = $term['name'];
+                        $termsDeleted[] = $term['title'];
                     }
                 }
             }
@@ -341,7 +341,7 @@ switch ($action) {
                         continue;
                     }
                     $items = [
-                        'name' => $item['term'],
+                        'title' => $item['term'],
                         'description' => $item['definition'],
                     ];
                     $termsToAdd[] = $items;
@@ -356,7 +356,7 @@ switch ($action) {
                     exit;
                 }
 
-                $repeatItems = array_count_values(array_column($termsToAdd, 'name'));
+                $repeatItems = array_count_values(array_column($termsToAdd, 'title'));
                 foreach ($repeatItems as $item => $count) {
                     if ($count > 1) {
                         $doubles[] = $item;
@@ -369,26 +369,26 @@ switch ($action) {
                     $item = $termsPerKey[$itemTerm];
 
                     if ($updateTerms) {
-                        $glossaryInfo = GlossaryManager::get_glossary_term_by_glossary_name($item['name']);
+                        $glossaryInfo = GlossaryManager::get_glossary_term_by_glossary_name($item['title']);
 
                         if (!empty($glossaryInfo)) {
                             $glossaryInfo['description'] = $item['description'];
                             GlossaryManager::update_glossary($glossaryInfo, false);
-                            $updatedList[] = $item['name'];
+                            $updatedList[] = $item['title'];
                         } else {
                             $result = GlossaryManager::save_glossary($item, false);
                             if ($result) {
-                                $addedList[] = $item['name'];
+                                $addedList[] = $item['title'];
                             } else {
-                                $badList[] = $item['name'];
+                                $badList[] = $item['title'];
                             }
                         }
                     } else {
                         $result = GlossaryManager::save_glossary($item, false);
                         if ($result) {
-                            $addedList[] = $item['name'];
+                            $addedList[] = $item['title'];
                         } else {
-                            $badList[] = $item['name'];
+                            $badList[] = $item['title'];
                         }
                     }
                 }

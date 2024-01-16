@@ -67,7 +67,8 @@ class SessionManager
         $result = [
             'id' => $session->getId(),
             'session_category_id' => $session->getCategory() ? $session->getCategory()->getId() : null,
-            'name' => $session->getTitle(),
+            'name' => $session->getTitle(), // only provided for backwards compatibility - should be removed in the long run
+            'title' => $session->getTitle(),
             'description' => $session->getDescription(),
             'show_description' => $session->getShowDescription(),
             'duration' => $session->getDuration(),
@@ -188,7 +189,7 @@ class SessionManager
         $endDate = Database::escape_string($endDate);
 
         if (empty($name)) {
-            $msg = get_lang('A name is required for the session');
+            $msg = get_lang('A title is required for the session');
 
             return $msg;
         } elseif (!empty($startDate) && !api_is_valid_date($startDate, 'Y-m-d H:i') &&
@@ -214,14 +215,14 @@ class SessionManager
                 if ($name) {
                     $ready_to_create = true;
                 } else {
-                    $msg = get_lang('Session name already exists');
+                    $msg = get_lang('Session title already exists');
 
                     return $msg;
                 }
             } else {
                 $rs = Database::query("SELECT 1 FROM $tbl_session WHERE title='".$name."'");
                 if (Database::num_rows($rs)) {
-                    $msg = get_lang('Session name already exists');
+                    $msg = get_lang('Session title already exists');
 
                     return $msg;
                 }
@@ -375,7 +376,7 @@ class SessionManager
         if (!empty($where_condition)) {
             $where_condition = str_replace("(  session_active = ':'  )", '1=1', $where_condition);
 
-            $where_condition = str_replace('category_name', 'sc.name', $where_condition);
+            $where_condition = str_replace('category_name', 'sc.title', $where_condition);
             $where_condition = str_replace(
                 ["AND session_active = '1'  )", " AND (  session_active = '1'  )"],
                 [') GROUP BY s.title HAVING session_active = 1 ', " GROUP BY s.title HAVING session_active = 1 "],
@@ -536,17 +537,17 @@ class SessionManager
         }
 
         $isFilteringSessionCategory = false !== strpos($where, 'category_name');
-        $isFilteringSessionCategoryWithName = false !== strpos($where, 'sc.name');
+        $isFilteringSessionCategoryWithName = false !== strpos($where, 'sc.title');
 
         if ($isMakingOrder || $isFilteringSessionCategory || $isFilteringSessionCategoryWithName) {
             $sqlInjectJoins .= " LEFT JOIN $sessionCategoryTable sc ON s.session_category_id = sc.id ";
 
             if ($isFilteringSessionCategory) {
-                $where = str_replace('category_name', 'sc.name', $where);
+                $where = str_replace('category_name', 'sc.title', $where);
             }
 
             if ($isMakingOrder) {
-                $order = str_replace('category_name', 'sc.name', $order);
+                $order = str_replace('category_name', 'sc.title', $order);
             }
         }
 
@@ -689,7 +690,7 @@ class SessionManager
         $orderedCategories = [];
         if (!empty($categories)) {
             foreach ($categories as $category) {
-                $orderedCategories[$category['id']] = $category['name'];
+                $orderedCategories[$category['id']] = $category['title'];
             }
         }
         $result = Database::query($query);
@@ -742,7 +743,7 @@ class SessionManager
                 if ($extraFieldsToLoad) {
                     $url = api_get_path(WEB_CODE_PATH).'session/about.php?session_id='.$session['id'];
                 }
-                $session['name'] = Display::url($session['name'], $url);
+                $session['title'] = Display::url($session['name'], $url);
 
                 if (isset($session['session_active']) && $session['session_active'] == 1) {
                     $session['session_active'] = $activeIcon;
@@ -885,7 +886,7 @@ class SessionManager
         $orderedCategories = [];
         if (!empty($categories)) {
             foreach ($categories as $category) {
-                $orderedCategories[$category['id']] = $category['name'];
+                $orderedCategories[$category['id']] = $category['title'];
             }
         }
 
@@ -901,7 +902,7 @@ class SessionManager
                 $url = api_get_path(WEB_PATH).'sessions/'.$session['id'].'/about/';
             }
 
-            $session['name'] = Display::url($session['title'], $url);
+            $session['title'] = Display::url($session['title'], $url);
 
             if (!empty($extraFieldsToLoad)) {
                 foreach ($extraFieldsToLoad as $field) {
@@ -1107,7 +1108,7 @@ class SessionManager
      *
      * @todo fix the query
      *
-     * @return array table with user name, lp name, progress
+     * @return array table with username, lp name, progress
      */
     public static function get_survey_overview(
         $sessionId,
@@ -1216,7 +1217,7 @@ class SessionManager
      * @param int $courseId
      * @param array options order and limit keys
      *
-     * @return array table with user name, lp name, progress
+     * @return array table with username, lp name, progress
      */
     public static function get_session_progress(
         $sessionId,
@@ -1672,7 +1673,7 @@ class SessionManager
 
         foreach ($data as $key => $info) {
             $sql = "SELECT
-                    name
+                    title
                     FROM $sessionTable
                     WHERE
                     id = {$info['session_id']}";
@@ -3442,7 +3443,7 @@ class SessionManager
     {
         $table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
         $id = (int) $id;
-        $sql = "SELECT id, name, date_start, date_end
+        $sql = "SELECT id, title, date_start, date_end
                 FROM $table
                 WHERE id= $id";
         $result = Database::query($sql);
@@ -3475,7 +3476,7 @@ class SessionManager
                 s.id,
                 s.title,
                 s.session_category_id,
-                c.name as category_name,
+                c.title as category_name,
                 s.description,
                 s.nbr_users as users,
 				(SELECT COUNT(*) FROM $tbl_lp WHERE session_id = s.id) as lessons ";
@@ -4890,7 +4891,7 @@ class SessionManager
             return [];
         }
 
-        $sql = "SELECT name, s.id
+        $sql = "SELECT title, s.id
                 FROM $table_session_course sc
                 INNER JOIN $table_session s
                 ON (sc.session_id = s.id)
@@ -5162,7 +5163,7 @@ class SessionManager
                             $suffix = ' - '.$i;
                         }
                         $sql = 'SELECT id FROM '.$tbl_session.'
-                                WHERE title="'.Database::escape_string($session_name).$suffix.'"';
+                                WHERE title = "'.Database::escape_string($session_name).$suffix.'"';
                         $rs = Database::query($sql);
                         if (Database::result($rs, 0, 0)) {
                             $i++;
@@ -7381,7 +7382,7 @@ class SessionManager
             }
             // Get the session list from session category and target
             $sessionList = Database::select(
-                'id, name, access_start_date, access_end_date',
+                'id, title, access_start_date, access_end_date',
                 $sTable,
                 [
                     'where' => [
@@ -7470,7 +7471,7 @@ class SessionManager
                 $sessionCategoryTable,
                 [
                     'where' => [
-                        'name = ?' => $categoryName,
+                        'title = ?' => $categoryName,
                     ],
                 ]
             );
@@ -7685,7 +7686,7 @@ class SessionManager
         if (is_array($extraFieldsToInclude) && count($extraFieldsToInclude) > 0) {
             $resultData = Database::select('*', $sTable, [
                 'where' => [
-                    "name LIKE %?% " => $term,
+                    "title LIKE %?% " => $term,
                     " OR description LIKE %?% " => $term,
                     " OR id IN (
                     SELECT item_id
@@ -7698,7 +7699,7 @@ class SessionManager
         } else {
             $resultData = Database::select('*', $sTable, [
                 'where' => [
-                    "name LIKE %?% " => $term,
+                    "title LIKE %?% " => $term,
                     "OR description LIKE %?% " => $term,
                 ],
             ]);
@@ -7924,12 +7925,12 @@ class SessionManager
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
         $form->addText(
-            'name',
+            'title',
             get_lang('Session name'),
             true,
             ['maxlength' => 150, 'aria-label' => get_lang('Session name')]
         );
-        $form->addRule('name', get_lang('Session name already exists'), 'callback', 'check_session_name');
+        $form->addRule('title', get_lang('Session name already exists'), 'callback', 'check_session_name');
 
         if (!api_is_platform_admin() && api_is_teacher()) {
             $form->addSelectFromCollection(
@@ -9130,7 +9131,7 @@ class SessionManager
             $sessions = Database::store_result($result, 'ASSOC');
             foreach ($sessions as $session) {
                 $session_id = $session['id'];
-                $session['name'] = Display::url($session['name'], "resume_session.php?id_session=".$session['id']);
+                $session['title'] = Display::url($session['title'], "resume_session.php?id_session=".$session['id']);
                 $session['coach_name'] = Display::url($session['coach_name'], "user_information.php?user_id=".$session['user_id']);
                 if (1 == $session['session_active']) {
                     $session['session_active'] = $acceptIcon;
@@ -9451,14 +9452,14 @@ class SessionManager
                     if ($listCatInfo) {
                         $listCat[$catId] = [];
                         $listCat[$catId]['catSessionId'] = $catId;
-                        $listCat[$catId]['catSessionName'] = $listCatInfo['name'];
+                        $listCat[$catId]['catSessionName'] = $listCatInfo['title'];
                         $listCat[$catId]['sessionList'] = [];
                     }
                 }
                 $listSessionInfo = self::fetch($sessionId);
                 $listSessionIdName = [
                     'sessionId' => $sessionId,
-                    'sessionName' => $listSessionInfo['name'],
+                    'sessionName' => $listSessionInfo['title'],
                 ];
                 $listCat[$catId]['sessionList'][] = $listSessionIdName;
             }

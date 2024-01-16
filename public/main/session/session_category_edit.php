@@ -27,7 +27,7 @@ $interbreadcrumb[] = [
     "name" => get_lang('Sessions categories list'),
 ];
 
-$sql = "SELECT * FROM $tbl_session_category WHERE id='".$id."' ORDER BY name";
+$sql = "SELECT * FROM $tbl_session_category WHERE id='".$id."' ORDER BY title";
 $result = Database::query($sql);
 if (!$infos = Database::fetch_array($result)) {
     header('Location: session_list.php');
@@ -50,7 +50,7 @@ if (!api_is_platform_admin() && !SessionManager::sessionHasSessionAdmin($id, $us
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     $formSent = 1;
-    $name = $_POST['name'];
+    $title = $_POST['name'];
     $year_start = $_POST['year_start'];
     $month_start = $_POST['month_start'];
     $day_start = $_POST['day_start'];
@@ -59,7 +59,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     $day_end = $_POST['day_end'];
     $return = SessionManager::edit_category_session(
         $id,
-        $name,
+        $title,
         $year_start,
         $month_start,
         $day_start,
@@ -93,9 +93,9 @@ if (!empty($return)) {
             <label class="col-sm-3 control-label"><?php echo get_lang('Name'); ?></label>
             <div class="col-sm-6">
                 <input class="form-control" type="text" name="name" size="50" maxlength="50" value="<?php if ($formSent) {
-    echo api_htmlentities($name, ENT_QUOTES);
+    echo api_htmlentities($title, ENT_QUOTES);
 } else {
-    echo api_htmlentities($infos['name'], ENT_QUOTES);
+    echo api_htmlentities($infos['title'], ENT_QUOTES);
 } ?>">
             </div>
             <div class="col-sm-3"></div>

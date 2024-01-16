@@ -1817,7 +1817,7 @@ switch ($action) {
 
         if (api_is_drh()) {
             $orderByName = Database::escape_string($sidx);
-            $orderByName = in_array($orderByName, ['name', 'access_start_date']) ? $orderByName : 'name';
+            $orderByName = in_array($orderByName, ['title', 'access_start_date']) ? $orderByName : 'title';
             $orderBy = " ORDER BY $orderByName $sord";
             $sessions = SessionManager::get_sessions_followed_by_drh(
                 api_get_user_id(),
@@ -1833,7 +1833,7 @@ switch ($action) {
             );
         } elseif (api_is_session_admin()) {
             $orderByName = Database::escape_string($sidx);
-            $orderByName = in_array($orderByName, ['name', 'access_start_date']) ? $orderByName : 'name';
+            $orderByName = in_array($orderByName, ['title', 'access_start_date']) ? $orderByName : 'title';
             $orderBy = " ORDER BY $orderByName $sord";
             $sessions = SessionManager::getSessionsFollowedByUser(
                 api_get_user_id(),
@@ -1866,7 +1866,13 @@ switch ($action) {
 
         $result = [];
         if (!empty($sessions)) {
-            $pdfIcon = Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('CertificateOfAchievement'));
+            $pdfIcon = Display::getMdiIcon(
+                ActionIcon::EXPORT_PDF,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_SMALL,
+                get_lang('CertificateOfAchievement')
+            );
             foreach ($sessions as $session) {
                 $sessionEntity = api_get_session_entity($session['id']);
                 if (api_drh_can_access_all_session_content()) {

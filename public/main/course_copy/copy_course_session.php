@@ -74,7 +74,7 @@ function make_select_session_list($name, $sessions, $attr = [])
             }
 
             $output .= '<option value="'.$session['id'].'">'.
-                $session['name'].' '.$categoryName.
+                $session['title'].' '.$categoryName.
             '</option>';
         }
     }
@@ -89,7 +89,7 @@ function make_select_session_list($name, $sessions, $attr = [])
 function display_form()
 {
     $html = '';
-    $sessions = SessionManager::get_sessions_list([], ['name', 'ASC']);
+    $sessions = SessionManager::get_sessions_list([], ['title', 'ASC']);
 
     // Link back to the documents overview
     $actionsLeft = '<a href="../admin/index.php">'.
@@ -178,7 +178,7 @@ function search_courses($id_session, $type)
 
             // Build select for destination sessions where is not included current session from select origin
             if (!empty($id_session)) {
-                $sessions = SessionManager::get_sessions_list([], ['name', 'ASC']);
+                $sessions = SessionManager::get_sessions_list([], ['title', 'ASC']);
                 $select_destination .= '<select name="sessions_list_destination" class="form-control" onchange = "javascript: xajax_search_courses(this.value,\'destination\');">';
                 $select_destination .= '<option value = "0">-- '.get_lang('Select a session').' --</option>';
                 foreach ($sessions as $session) {
@@ -188,7 +188,7 @@ function search_courses($id_session, $type)
                     if (!empty($session['category_name'])) {
                         $session['category_name'] = ' ('.$session['category_name'].') ';
                     }
-                    $select_destination .= '<option value="'.$session['id'].'">'.$session['name'].' '.$session['category_name'].'</option>';
+                    $select_destination .= '<option value="'.$session['id'].'">'.$session['title'].' '.$session['category_name'].'</option>';
                 }
                 $select_destination .= '</select>';
                 $xajax_response->addAssign('ajax_sessions_list_destination', 'innerHTML', api_utf8_encode($select_destination));

@@ -264,7 +264,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                     $suffix = ' - '.$i;
                                 }
                                 $sql = 'SELECT id FROM '.$tblSession.'
-                                        WHERE name="'.Database::escape_string($sessionName.$suffix).'"';
+                                        WHERE title = "'.Database::escape_string($sessionName.$suffix).'"';
                                 $rs = Database::query($sql);
                                 if (Database::result($rs, 0, 0)) {
                                     $i++;
@@ -276,7 +276,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
                             // Creating the session.
                             $sqlSession = "INSERT IGNORE INTO $tblSession SET
-                                    name = '".Database::escape_string($sessionName)."',
+                                    title = '".Database::escape_string($sessionName)."',
                                     access_start_date = '$dStart',
                                     access_end_date = '$dateEnd',
                                     visibility = '$visibilityAfterExpirationPerSession',
@@ -315,7 +315,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                             if (false === $mySessionResult) {
                                 // Creating the session.
                                 $sqlSession = "INSERT IGNORE INTO $tblSession SET
-                                        name = '".Database::escape_string($sessionName)."',
+                                        title = '".Database::escape_string($sessionName)."',
                                         access_start_date = '$dStart',
                                         access_end_date = '$dateEnd',
                                         visibility = '$visibilityAfterExpirationPerSession',
@@ -355,9 +355,9 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                         access_end_date = '$dateEnd',
                                         visibility = '$visibilityAfterExpirationPerSession',
                                         session_category_id = '$sessionCategoryId'
-                                    WHERE name = '$sessionName'";
+                                    WHERE title = '$sessionName'";
                                 $rsSession = Database::query($sqlSession);
-                                $sessionId = Database::query("SELECT id FROM $tblSession WHERE name='$sessionName'");
+                                $sessionId = Database::query("SELECT id FROM $tblSession WHERE title='$sessionName'");
                                 [$sessionId] = Database::fetch_array($sessionId);
                                 Database::query("DELETE FROM $tblSessionUser WHERE session_id ='$sessionId'");
                                 Database::query("DELETE FROM $tblSessionCourse WHERE session_id='$sessionId'");

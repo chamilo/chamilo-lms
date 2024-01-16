@@ -4005,7 +4005,7 @@ function WSCreateSession($params)
     $orig_session_id_value = [];
 
     foreach ($sessions_params as $session_param) {
-        $name = trim($session_param['name']);
+        $name = trim($session_param['title']);
         $year_start = intval($session_param['year_start']);
         $month_start = intval($session_param['month_start']);
         $day_start = intval($session_param['day_start']);
@@ -4074,7 +4074,7 @@ function WSCreateSession($params)
             }
             continue;
         } else {
-            $rs = Database::query("SELECT 1 FROM $tbl_session WHERE name='".addslashes($name)."'");
+            $rs = Database::query("SELECT 1 FROM $tbl_session WHERE title = '".addslashes($name)."'");
             if (Database::num_rows($rs)) {
                 if ($debug) {
                     error_log("Session with name '$name' already exists");
@@ -6242,8 +6242,8 @@ function WSListCourses($params)
         } else {
             $category = CourseManager::get_course_category($course['category_code']);
             if ($category) {
-                $category_names[$course['category_code']] = $category['name'];
-                $course_tmp['category_name'] = $category['name'];
+                $category_names[$course['category_code']] = $category['title'];
+                $course_tmp['category_name'] = $category['title'];
             }
         }
 
@@ -6432,7 +6432,7 @@ function WSListSessions($params)
     foreach ($sessions_list as $session) {
         $return_list[] = [
             'id' => $session['id'],
-            'title' => $session['name'],
+            'title' => $session['title'],
             // something like http://my.chamilo.net/main/session/index.php?session_id=5
             'url' => api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session['id'],
             'date_start' => $session['access_start_date'],
@@ -6826,7 +6826,7 @@ function WSCreateGroup($params)
     }
     $userGroup = new UserGroupModel();
     $params = [
-        'name' => $params['name'],
+        'title' => $params['name'],
     ];
 
     return $userGroup->save($params);

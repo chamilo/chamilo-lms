@@ -16,7 +16,7 @@ require_once('../auth/ldap/authldap.php');
 $annee_base = date('Y');
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
-//api_protect_admin_script(); // on vire la secu... qui n'a pas lieu d'etre ici (script de synchro)
+api_protect_admin_script(); // make sure you don't need to protect this script against external access before removing
 
 // setting breadcrumbs
 $interbreadcrumb[] = array('url' => 'index.php', "name" => get_lang('Administration'));
@@ -35,7 +35,7 @@ $tbl_session_rel_etape = "session_rel_etape";
 
 $message = "";
 
-$result = Database::query("SELECT id, name FROM $tbl_session");
+$result = Database::query("SELECT id, title FROM $tbl_session");
 $Sessions = Database::store_result($result);
 
 $result = Database::query($sql);
@@ -43,12 +43,12 @@ $users = Database::store_result($result);
 
 foreach ($Sessions as $session) {
 	$id_session = $session['id'];
-	$name_session = $session['name'];
+	$name_session = $session['title'];
 	$UserList = array();
 	$UserUpdate = array();
 	$UserAdd = array();
 
-	// Parse des code etape de la session
+	// Parsing of code_etape in sessions
 	/*
 	$sql = "SELECT  id_session, code_etape, etape_description, code_ufr, annee
 		FROM $tbl_session_rel_etape
@@ -58,7 +58,7 @@ foreach ($Sessions as $session) {
 	*/
 	$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAP Connection Error'));
 	ldap_set_version($ds);
-	// Import des utilisateurs des etapes dans la session
+	// Import of users of "etape" in the session
 	if ($ds)
 	{
 		$r = false;
@@ -150,8 +150,8 @@ foreach ($Sessions as $session) {
 			print "> $name_session: ".count($UserAdd).get_lang('Added').' '.get_lang('and').' '.count($UserUpdate).' '.get_lang('Modified')."\n";
 		}
 
-		// Une fois les utilisateurs importer dans la base des utilisateurs, on peux les affecter la session
-		$result = Database::query("SELECT c_id FROM $tbl_session_rel_course WHERE session_id='$id_session'");
+		// Once users have been imported, they can be added to the session
+		$result = Database::query("SELECT c_id FROM $tbl_session_rel_course WHERE session_id = $id_session");
 		$CourseList = array();
 		while ($row = Database::fetch_array($result)) {
 			$CourseList[] = $row['c_id'];

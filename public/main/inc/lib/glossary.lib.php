@@ -44,7 +44,7 @@ class GlossaryManager
         foreach ($glossaries as $item) {
             $glossaryData[] = [
                 'id' => $item->getIid(),
-                'name' => $item->getTitle(),
+                'title' => $item->getTitle(),
                 'description' => $item->getDescription(),
             ];
         }
@@ -57,7 +57,7 @@ class GlossaryManager
         $sql_filter = api_get_session_condition($session_id);
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT glossary_id as id, name, description
+        $sql = "SELECT glossary_id as id, title, description
                 FROM $table
                 WHERE c_id = $course_id $sql_filter";
         $rs = Database::query($sql);
@@ -165,7 +165,7 @@ class GlossaryManager
      */
     public static function save_glossary($values, $showMessage = true)
     {
-        if (!is_array($values) || !isset($values['name'])) {
+        if (!is_array($values) || !isset($values['title'])) {
             return false;
         }
 
@@ -173,7 +173,7 @@ class GlossaryManager
         $max_glossary_item = self::get_max_glossary_item();
 
         // check if the glossary term already exists
-        if (self::glossary_exists($values['name'])) {
+        if (self::glossary_exists($values['title'])) {
             // display the feedback message
             if ($showMessage) {
                 Display::addFlash(
@@ -192,7 +192,7 @@ class GlossaryManager
             $sessionId = api_get_session_id();
 
             $glossary
-                ->setTitle($values['name'])
+                ->setTitle($values['title'])
                 ->setDescription($values['description'])
                 ->setDisplayOrder($max_glossary_item + 1)
             ;
@@ -232,7 +232,7 @@ class GlossaryManager
 
         */
         // check if the glossary term already exists
-        if (self::glossary_exists($values['name'], $values['glossary_id'])) {
+        if (self::glossary_exists($values['title'], $values['glossary_id'])) {
             // display the feedback message
             if ($showMessage) {
                 Display::addFlash(
@@ -251,14 +251,14 @@ class GlossaryManager
             $glossary = $repo->find($values['glossary_id']);
             if (null !== $glossary) {
                 $glossary
-                    ->setTitle($values['name'])
+                    ->setTitle($values['title'])
                     ->setDescription($values['description']);
                 $repo->update($glossary);
             }
             /*
 
             $sql = "UPDATE $table SET
-                        name = '".Database::escape_string($values['name'])."',
+                        name = '".Database::escape_string($values['title'])."',
                         description	= '".Database::escape_string($values['description'])."'
                     WHERE
                         c_id = $course_id AND
@@ -303,7 +303,7 @@ class GlossaryManager
         $findArray  = [
             'cId' => api_get_course_int_id(),
             'sessionId' => api_get_session_id(),
-            'name'=>$term,
+            'title' => $term,
         ];
         $glossary = $repo->findBy($findArray);
         */

@@ -354,12 +354,12 @@ class UrlManager
             $where = " WHERE $table_url_rel_usergroup.access_url_id = ".$urlId;
         }
 
-        $sql = "SELECT u.id, u.name, access_url_id
+        $sql = "SELECT u.id, u.title, access_url_id
                 FROM $table_user_group u
                 INNER JOIN $table_url_rel_usergroup
                 ON $table_url_rel_usergroup.usergroup_id = u.id
                 $where
-                ORDER BY name";
+                ORDER BY u.title";
 
         $result = Database::query($sql);
         $courses = Database::store_result($result);
@@ -393,7 +393,7 @@ class UrlManager
                 INNER JOIN $table_url_rel
                 ON $table_url_rel.course_category_id = u.id
                 $where
-                ORDER BY name";
+                ORDER BY u.title";
 
         $result = Database::query($sql);
         $courses = Database::store_result($result, 'ASSOC');

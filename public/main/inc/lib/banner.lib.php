@@ -377,7 +377,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
                     'ch-tool-icon',
                     null,
                     ICON_SIZE_TINY,
-                    $courseInfo['name'].$sessionName
+                    $courseInfo['title'].$sessionName
                 )
                 .' '.$course_title.$sessionName;
 

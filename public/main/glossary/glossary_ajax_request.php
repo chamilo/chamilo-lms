@@ -31,7 +31,7 @@ if (!empty($glossaryId)) {
     $glossary_all_data = [];
     if (count($glossary_data) > 0) {
         foreach ($glossary_data as $glossary_index => $glossary_value) {
-            $glossary_all_data[] = $glossary_value['id'].'__|__|'.$glossary_value['name'];
+            $glossary_all_data[] = $glossary_value['id'].'__|__|'.$glossary_value['title'];
         }
         $description = implode('[|.|_|.|-|.|]', $glossary_all_data);
     }

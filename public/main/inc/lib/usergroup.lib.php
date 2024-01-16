@@ -1301,21 +1301,22 @@ class UserGroupModel extends Model
     }
 
     /**
-     * @param string $name
+     * @param string $title
      *
      * @return bool
+     * @throws Exception
      */
-    public function usergroup_exists($name)
+    public function usergroup_exists(string $title): bool
     {
-        $name = Database::escape_string($name);
+        $title = Database::escape_string($title);
         if ($this->getUseMultipleUrl()) {
             $urlId = api_get_current_access_url_id();
             $sql = "SELECT * FROM $this->table u
                     INNER JOIN {$this->access_url_rel_usergroup} a
                     ON (a.usergroup_id = u.id)
-                    WHERE name = '".$name."' AND access_url_id = $urlId";
+                    WHERE title = '".$title."' AND access_url_id = $urlId";
         } else {
-            $sql = "SELECT * FROM $this->table WHERE name = '".$name."'";
+            $sql = "SELECT * FROM $this->table WHERE title = '".$title."'";
         }
 
         $res = Database::query($sql);
@@ -1368,7 +1369,7 @@ class UserGroupModel extends Model
         }
 
         $result = Database::store_result(
-            Database::query("SELECT u.* FROM $sqlFrom WHERE $sqlWhere ORDER BY name $sord LIMIT $start, $limit")
+            Database::query("SELECT u.* FROM $sqlFrom WHERE $sqlWhere ORDER BY title $sord LIMIT $start, $limit")
         );
 
         $new_result = [];

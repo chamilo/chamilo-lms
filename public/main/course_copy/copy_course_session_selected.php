@@ -88,7 +88,7 @@ function make_select_session_list($name, $sessions, $attr = [])
                 $category_name = ' ('.$session['category_name'].')';
             }
 
-            $output .= '<option value="'.$session['id'].'">'.$session['name'].' '.$category_name.'</option>';
+            $output .= '<option value="'.$session['id'].'">'.$session['title'].' '.$category_name.'</option>';
         }
     }
     $output .= '</select>';
@@ -164,7 +164,7 @@ function displayForm()
                 continue;
             }
 
-            $html .= '<option value="'.$session['id'].'">'.$session['name'].'</option>';
+            $html .= '<option value="'.$session['id'].'">'.$session['title'].'</option>';
         }
     }
 

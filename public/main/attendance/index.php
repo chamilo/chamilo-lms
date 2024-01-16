@@ -221,7 +221,7 @@ switch ($action) {
         }
 
         if (0 === $attendance->getNumberOfAttendances()) {
-            $attendance->set_name(get_lang('Attendances'));
+            $attendance->set_title(get_lang('Attendances'));
             $attendance->set_description(get_lang('Attendances'));
             $attendance->attendance_add();
         }
@@ -272,7 +272,7 @@ switch ($action) {
         $attendance->setAttendanceForm($form);
 
         if ($form->validate()) {
-            $attendance->set_name($_POST['title']);
+            $attendance->set_title($_POST['title']);
             $attendance->set_description($_POST['description']);
             $attendance->set_attendance_qualify_title($_POST['attendance_qualify_title']);
             $attendance->set_attendance_weight($_POST['attendance_weight']);
@@ -311,7 +311,7 @@ switch ($action) {
         $attendance->setAttendanceForm($form, $attendanceEntity);
 
         if (!empty($_POST['title'])) {
-            $attendance->set_name($_POST['title']);
+            $attendance->set_title($_POST['title']);
             $attendance->set_description($_POST['description']);
             if (isset($_POST['attendance_qualify_title'])) {
                 $attendance->set_attendance_qualify_title($_POST['attendance_qualify_title']);

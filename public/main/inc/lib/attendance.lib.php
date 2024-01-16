@@ -23,13 +23,13 @@ class Attendance
     private $session_id;
     private $course_id;
     private $date_time;
-    private $name;
+    private $title;
     private $description;
     private $attendance_qualify_title;
     private $attendance_weight;
 
     /**
-     * Get attendance list only the id, name and attendance_qualify_max fields.
+     * Get attendance list only the id, title and attendance_qualify_max fields.
      *
      * @return CAttendance[]
      */
@@ -52,7 +52,7 @@ class Attendance
         $condition_session = api_get_session_condition($session_id);
 
         // Get attendance data
-        $sql = "SELECT iid, name, attendance_qualify_max
+        $sql = "SELECT iid, title, attendance_qualify_max
                 FROM $table
                 WHERE active = 1 $condition_session ";
         $result = Database::query($sql);
@@ -181,7 +181,7 @@ class Attendance
         foreach ($attendances as $attendance) {
             $row = [];
             $id = $attendance->getIid();
-            $name = $attendance->getTitle();
+            $title = $attendance->getTitle();
             $active = $attendance->getActive();
             $session_star = '';
             /*if ($session_id == $attendance[6]) {
@@ -194,13 +194,13 @@ class Attendance
                 ) || api_is_drh();
                 if ($isDrhOfCourse || api_is_allowed_to_edit(null, true)) {
                     // Link to edit
-                    $row[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$id.$student_param.'">'.$name.'</a>'.$session_star;
+                    $row[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$id.$student_param.'">'.$title.'</a>'.$session_star;
                 } else {
                     // Link to view
-                    $row[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list_no_edit&attendance_id='.$id.$student_param.'">'.$name.'</a>'.$session_star;
+                    $row[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list_no_edit&attendance_id='.$id.$student_param.'">'.$title.'</a>'.$session_star;
                 }
             } else {
-                $row[1] = '<a class="muted" href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$id.$student_param.'">'.$name.'</a>'.$session_star;
+                $row[1] = '<a class="muted" href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$id.$student_param.'">'.$title.'</a>'.$session_star;
             }
 
             if (1 == $active) {
@@ -347,7 +347,7 @@ class Attendance
         $course = api_get_course_entity();
         $attendance = new CAttendance();
         $attendance
-            ->setTitle($this->name)
+            ->setTitle($this->title)
             ->setDescription($this->description)
             ->setAttendanceQualifyTitle($titleGradebook)
             ->setAttendanceWeight($weightCalification)
@@ -411,7 +411,7 @@ class Attendance
         if ($attendance) {
             $attendanceId = $attendance->getIid();
             $attendance
-                ->setTitle($this->name)
+                ->setTitle($this->title)
                 ->setDescription($this->description)
                 ->setAttendanceQualifyTitle($title_gradebook)
                 ->setAttendanceWeight($weight_calification)
@@ -421,7 +421,7 @@ class Attendance
             $repo->update($attendance);
 
             /*$params = [
-                'name' => $this->name,
+                'title' => $this->title,
                 'description' => $this->description,
                 'attendance_qualify_title' => $title_gradebook,
                 'attendance_weight' => $weight_calification,
@@ -1920,9 +1920,9 @@ class Attendance
         $this->date_time = $datetime;
     }
 
-    public function set_name($name)
+    public function set_title($title)
     {
-        $this->name = $name;
+        $this->title = $title;
     }
 
     public function set_description($description)
@@ -1956,9 +1956,9 @@ class Attendance
         return $this->date_time;
     }
 
-    public function get_name()
+    public function get_title()
     {
-        return $this->name;
+        return $this->title;
     }
 
     public function get_description()
@@ -2554,7 +2554,7 @@ class Attendance
             $groupList = GroupManager::get_group_list(null, null, 1);
             $groupIdList = ['--'];
             foreach ($groupList as $group) {
-                $groupIdList[$group['iid']] = $group['name'];
+                $groupIdList[$group['iid']] = $group['title'];
             }
 
             if (!empty($groupList)) {
@@ -3044,7 +3044,7 @@ class Attendance
             'course_code' => $courseInfo['code'],
             'add_signatures' => ['Drh', 'Teacher', 'Date'],
             'pdf_teachers' => $teacherName,
-            'pdf_course_category' => $courseCategory ? $courseCategory['name'] : '',
+            'pdf_course_category' => $courseCategory ? $courseCategory['title'] : '',
             'format' => 'A4-L',
             'orientation' => 'L',
         ];

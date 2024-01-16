@@ -121,7 +121,7 @@ $where = '';
 $rows_category_session = [];
 if ((isset($_POST['CategorySessionId']) && 0 == $_POST['formSent']) || isset($_GET['id_category'])) {
     $where = 'WHERE session_category_id != '.$categoryId.' OR session_category_id IS NULL';
-    $sql = 'SELECT id, name  FROM '.$tbl_session.' WHERE session_category_id ='.$categoryId.' ORDER BY name';
+    $sql = 'SELECT id, title  FROM '.$tbl_session.' WHERE session_category_id = '.$categoryId.' ORDER BY title';
     $result = Database::query($sql);
     $rows_category_session = Database::store_result($result);
 }
@@ -136,9 +136,9 @@ if (empty($rows_session_category)) {
 if (api_get_multiple_access_url()) {
     $table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
     $access_url_id = api_get_current_access_url_id();
-    $sql = "SELECT s.id, s.name  FROM $tbl_session s INNER JOIN $table_access_url_rel_session u ON s.id = u.session_id $where AND u.access_url_id = $access_url_id ORDER BY name";
+    $sql = "SELECT s.id, s.title  FROM $tbl_session s INNER JOIN $table_access_url_rel_session u ON s.id = u.session_id $where AND u.access_url_id = $access_url_id ORDER BY title";
 } else {
-    $sql = "SELECT id, name  FROM $tbl_session $where ORDER BY name";
+    $sql = "SELECT id, title  FROM $tbl_session $where ORDER BY title";
 }
 $result = Database::query($sql);
 $rows_session = Database::store_result($result);
@@ -188,9 +188,9 @@ if (!empty($OkMsg)) {
         if (!empty($rows_session_category)) {
             foreach ($rows_session_category as $category) {
                 if ($category['id'] == $categoryId) {
-                    echo '<option value="'.$category['id'].'" selected>'.$category['name'].'</option>';
+                    echo '<option value="'.$category['id'].'" selected>'.$category['title'].'</option>';
                 } else {
-                    echo '<option value="'.$category['id'].'">'.$category['name'].'</option>';
+                    echo '<option value="'.$category['id'].'">'.$category['title'].'</option>';
                 }
             }
         }
@@ -217,10 +217,10 @@ if (!empty($OkMsg)) {
     <?php
     foreach ($rows_session as $enreg) {
         ?>
-        <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'], ENT_QUOTES).'"';
+        <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'], ENT_QUOTES).'"';
         if (in_array($enreg['id'], $CourseList)) {
             echo 'selected="selected"';
-        } ?>><?php echo $enreg['name']; ?></option>
+        } ?>><?php echo $enreg['title']; ?></option>
     <?php
     } ?>
     </select></div>
@@ -243,10 +243,10 @@ if (!empty($OkMsg)) {
     <?php
     foreach ($rows_category_session as $enreg) {
         ?>
-        <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'], ENT_QUOTES).'"';
+        <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'], ENT_QUOTES).'"';
         if (in_array($enreg['id'], $CourseList)) {
             echo 'selected="selected"';
-        } ?>><?php echo $enreg['name']; ?></option>
+        } ?>><?php echo $enreg['title']; ?></option>
     <?php
     } ?>
   </select></td>

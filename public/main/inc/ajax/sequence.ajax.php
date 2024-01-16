@@ -82,13 +82,13 @@ switch ($action) {
             case SequenceResource::SESSION_TYPE:
                 $resourceData = api_get_session_info($id);
                 if ($resourceData) {
-                    $resourceName = $resourceData['name'];
+                    $resourceName = $resourceData['title'];
                 }
                 break;
             case SequenceResource::COURSE_TYPE:
                 $resourceData = api_get_course_info_by_id($id);
                 if ($resourceData) {
-                    $resourceName = $resourceData['name'];
+                    $resourceName = $resourceData['title'];
                 }
                 break;
         }
@@ -409,7 +409,7 @@ switch ($action) {
         switch ($type) {
             case SequenceResource::SESSION_TYPE:
                 $resourceData = api_get_session_info($id);
-                $resourceName = $resourceData['name'];
+                $resourceName = $resourceData['title'];
                 $template = 'session_requirements.tpl';
                 break;
             case SequenceResource::COURSE_TYPE:

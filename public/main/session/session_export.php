@@ -41,7 +41,7 @@ if (isset($_POST['formSent'])) {
     if (empty($session_id)) {
         $sql = "SELECT
                     s.id,
-                    s.name,
+                    s.title,
                     u.username,
                     s.access_start_date,
                     s.access_end_date,
@@ -58,7 +58,7 @@ if (isset($_POST['formSent'])) {
             $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if (-1 != $access_url_id) {
-                $sql = "SELECT s.id, s.name,u.username,s.access_start_date,s.access_end_date,s.visibility,s.session_category_id
+                $sql = "SELECT s.id, s.title, u.username,s.access_start_date,s.access_end_date,s.visibility,s.session_category_id
                     FROM $tblSession s
                     INNER JOIN $tbl_session_rel_access_url as session_rel_url
                     ON (s.id= session_rel_url.session_id)
@@ -72,7 +72,7 @@ if (isset($_POST['formSent'])) {
 
         $result = Database::query($sql);
     } else {
-        $sql = "SELECT s.id,s.name,u.username,s.access_start_date,s.access_end_date,s.visibility,s.session_category_id
+        $sql = "SELECT s.id, s.title,u.username,s.access_start_date,s.access_end_date,s.visibility,s.session_category_id
                 FROM $tblSession s
                 INNER JOIN $tblSessionRelUser sru
                     ON (s.id = sru.session_id AND sru.relation_type = ".Session::GENERAL_COACH.")
@@ -119,7 +119,7 @@ if (isset($_POST['formSent'])) {
         }
 
         while ($row = Database::fetch_array($result)) {
-            $row['name'] = str_replace(';', ',', $row['name']);
+            $row['title'] = str_replace(';', ',', $row['title']);
             $row['username'] = str_replace(';', ',', $row['username']);
             $row['access_start_date'] = str_replace(';', ',', $row['access_start_date']);
             $row['access_end_date'] = str_replace(';', ',', $row['access_end_date']);
@@ -231,7 +231,7 @@ if (isset($_POST['formSent'])) {
 
             if (in_array($file_type, ['csv', 'xls'])) {
                 $sessionListToExport[] = [
-                    $row['name'],
+                    $row['title'],
                     $row['username'],
                     $row['access_start_date'],
                     $row['access_end_date'],
@@ -242,7 +242,7 @@ if (isset($_POST['formSent'])) {
                 ];
             } else {
                 $add = "\t<Session>\n"
-                         ."\t\t<SessionName>$row[name]</SessionName>\n"
+                         ."\t\t<SessionName>$row[title]</SessionName>\n"
                          ."\t\t<Coach>$row[username]</Coach>\n"
                          ."\t\t<DateStart>$row[access_start_date]</DateStart>\n"
                          ."\t\t<DateEnd>$row[access_end_date]</DateEnd>\n"
@@ -278,21 +278,21 @@ if (isset($_POST['formSent'])) {
 Display::display_header($tool_name);
 
 //select of sessions
-$sql = "SELECT id, name FROM $tblSession ORDER BY name";
+$sql = "SELECT id, title FROM $tblSession ORDER BY title";
 
 if (api_is_multiple_url_enabled()) {
     $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
     $access_url_id = api_get_current_access_url_id();
     if (-1 != $access_url_id) {
-        $sql = "SELECT s.id, name FROM $tblSession s
+        $sql = "SELECT s.id, title FROM $tblSession s
                 INNER JOIN $tbl_session_rel_access_url as session_rel_url
                 ON (s.id = session_rel_url.session_id)
                 WHERE access_url_id = $access_url_id
-                ORDER BY name";
+                ORDER BY title";
     }
 }
 $result = Database::query($sql);
-$Sessions = Database::store_result($result);
+$sessions = Database::store_result($result);
 
 $actions = '<a href="../session/session_list.php">'.
         Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Session list')).'</a>';
@@ -310,8 +310,8 @@ $form->addElement('radio', 'file_type', null, 'XML', 'xml', null, ['id' => 'file
 
 $options = [];
 $options['0'] = get_lang('All the sessions');
-foreach ($Sessions as $enreg) {
-    $options[$enreg['id']] = $enreg['name'];
+foreach ($sessions as $enreg) {
+    $options[$enreg['id']] = $enreg['title'];
 }
 
 $form->addSelect('session_id', get_lang('Choose the session to export'), $options);

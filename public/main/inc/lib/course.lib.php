@@ -1341,7 +1341,7 @@ class CourseManager
                         course.*,
                         course.id AS c_id
                          '.$injectExtraFields.'
-                        session.name as session_name
+                        session.title as session_name
                     ';
             if ($return_count) {
                 $sql = ' SELECT COUNT(user.id) as count';

@@ -2163,7 +2163,7 @@ function api_format_course_array(Course $course = null)
 
     // Added
     $courseData['code'] = $courseData['sysCode'] = $course->getCode();
-    $courseData['name'] = $courseData['title'] = $course->getTitle();
+    $courseData['name'] = $courseData['title'] = $course->getTitle(); // 'name' only used for backwards compatibility - should be removed in the long run
     $courseData['official_code'] = $courseData['visual_code'] = $course->getVisualCode();
     $courseData['creation_date'] = $course->getCreationDate()->format('Y-m-d H:i:s');
     $courseData['titular'] = $course->getTutorName();
@@ -2377,7 +2377,7 @@ function api_get_session_name($session_id = 0)
         }
     }
     $t = Database::get_main_table(TABLE_MAIN_SESSION);
-    $s = "SELECT name FROM $t WHERE id = ".(int) $session_id;
+    $s = "SELECT title FROM $t WHERE id = ".(int) $session_id;
     $r = Database::query($s);
     $c = Database::num_rows($r);
     if ($c > 0) {

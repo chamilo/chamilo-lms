@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\Course as CourseEntity;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
+use Chamilo\CoreBundle\Entity\TrackEDownloads;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
@@ -272,24 +273,19 @@ class Event
             return false;
         }
 
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
-        $documentUrl = Database::escape_string($documentUrl);
+        $user = api_get_user_entity();
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
 
-        $reallyNow = api_get_utc_datetime();
-        $userId = api_get_user_id();
-        $courseId = api_get_course_int_id();
-        $sessionId = api_get_session_id();
+        $em = Database::getManager();
 
-        return Database::insert(
-            $table,
-            [
-                'down_user_id' => $userId,
-                'c_id' => $courseId,
-                'down_doc_path' => $documentUrl,
-                'down_date' => $reallyNow,
-                'session_id' => $sessionId,
-            ]
-        );
+        $repository = $em->getRepository(TrackEDownloads::class);
+
+        $resourceLinkId = $course->getFirstResourceLink()->getId();
+
+        $downloadId = $repository->saveDownload($user->getId(), $resourceLinkId, $documentUrl);
+
+        return $downloadId;
     }
 
     /**

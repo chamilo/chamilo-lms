@@ -133,7 +133,13 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         }
 
         // Create a new anonymous user
-        $uniqueId = uniqid();
+        $uniqueId = uniqid('anon_');
+        $email = $uniqueId.'@localhost.local';
+
+        if ('true' === $this->settingsManager->getSetting('profile.login_is_email')) {
+            $uniqueId = $email;
+        }
+
         $anonymousUser = (new User())
             ->setSkipResourceNode(true)
             ->setLastname('Joe')
@@ -141,7 +147,7 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
             ->setUsername('anon_'.$uniqueId)
             ->setStatus(User::ANONYMOUS)
             ->setPlainPassword('anon')
-            ->setEmail('anon_'.$uniqueId.'@localhost.local')
+            ->setEmail($email)
             ->setOfficialCode('anonymous')
             ->setCreatorId(1)
             ->addRole('ROLE_ANONYMOUS')

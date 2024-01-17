@@ -2407,6 +2407,13 @@ class UserManager
 
         $sql_query .= ' WHERE 1 = 1 ';
         if (count($conditions) > 0) {
+
+            $andActive = "";
+            if (isset($conditions['active'])) {
+                $andActive = " AND active = " . (int) $conditions['active'];
+                unset($conditions['active']);
+            }
+
             $temp_conditions = [];
             foreach ($conditions as $field => $value) {
                 $field = Database::escape_string($field);
@@ -2418,12 +2425,13 @@ class UserManager
                 }
             }
             if (!empty($temp_conditions)) {
-                $sql_query .= ' AND '.implode(' '.$condition.' ', $temp_conditions);
+                $sql_query .= ' AND ('.implode(' '.$condition.' ', $temp_conditions).') ';
             }
 
             if (api_is_multiple_url_enabled()) {
                 $sql_query .= ' AND auru.access_url_id = '.api_get_current_access_url_id();
             }
+            $sql_query .= $andActive;
         } else {
             if (api_is_multiple_url_enabled()) {
                 $sql_query .= ' AND auru.access_url_id = '.api_get_current_access_url_id();
@@ -8216,7 +8224,7 @@ SQL;
     * @param int user_id id of the user for whom we need the hash
     *
     * @return string containing the hash
-    */ 
+    */
     public static function generateUserHash(int $user_id): string
     {
         $currentUserId = api_get_user_id();
@@ -8235,7 +8243,7 @@ SQL;
     * @param string hash    hash that is to be decrypted
     *
     * @return string
-    */ 
+    */
     public static function decryptUserHash(string $hash): string
     {
         $currentUserId = api_get_user_id();

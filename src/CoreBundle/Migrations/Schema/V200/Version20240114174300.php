@@ -66,9 +66,6 @@ final class Version20240114174300 extends AbstractMigrationChamilo
                 );
             }
             $this->addSql(
-                'ALTER TABLE tool CHANGE name title VARCHAR(255) NOT NULL'
-            );
-            $this->addSql(
                 'CREATE UNIQUE INDEX UNIQ_20F33ED12B36786B ON tool (title)'
             );
         }

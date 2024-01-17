@@ -26,7 +26,7 @@
     {% if session.category  %}
     <tr>
         <td>{{ 'Session category' | trans}} </td>
-        <td>{{ session.category.name }}</td>
+        <td>{{ session.category.title }}</td>
     </tr>
     {% endif %}
 
@@ -81,7 +81,7 @@
                 <a
                     href="{{ _p.web_main }}admin/career_dashboard.php?filter={{ session.promotion.career.id }}&submit=&_qf__filter_form="
                 >
-                    {{ session.promotion.career.name }}
+                    {{ session.promotion.career.title }}
                 </a>
             </td>
         </tr>
@@ -89,7 +89,7 @@
             <td>{{ 'Promotion' | trans}}</td>
             <td>
                 <a href="{{ _p.web_main }}admin/promotions.php?action=edit&id={{ session.promotion.id }}">
-                    {{ session.promotion.name }}
+                    {{ session.promotion.title }}
                 </a>
             </td>
         </tr>

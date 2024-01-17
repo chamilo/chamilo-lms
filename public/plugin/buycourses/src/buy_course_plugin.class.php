@@ -298,6 +298,13 @@ class BuyCoursesPlugin extends Plugin
         $fielddefault = '';
         UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
+        $table = self::TABLE_TRANSFER;
+        $sql = "ALTER TABLE $table CHANGE COLUMN name title varchar(255)";
+        Database::query($sql);
+        $table = self::TABLE_SERVICES;
+        $sql = "ALTER TABLE $table CHANGE COLUMN name title varchar(255)";
+        Database::query($sql);
+
         header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses');
         exit;
     }
@@ -2508,7 +2515,7 @@ class BuyCoursesPlugin extends Plugin
         ];
 
         if (!empty($name)) {
-            $whereConditions['AND s.name LIKE %?%'] = $name;
+            $whereConditions['AND s.title LIKE %?%'] = $name;
         }
 
         if (!empty($min)) {
@@ -3011,7 +3018,7 @@ class BuyCoursesPlugin extends Plugin
         ];
 
         if (!empty($name)) {
-            $whereConditions['AND s.name LIKE %?%'] = $name;
+            $whereConditions['AND s.title LIKE %?%'] = $name;
         }
 
         if (!empty($min)) {

@@ -18,7 +18,7 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-8">
-                        <h2 class="session-title">{{ session.name }}</h2>
+                        <h2 class="session-title">{{ session.title }}</h2>
                         {% if show_tutor and session.generalCoach %}
                             <div class="session-tutor">
                                 <em class="fa fa-user"></em> {{ 'SessionGeneralCoach'|trans }}:
@@ -104,7 +104,7 @@
                                     {% for sequence in sequences %}
                                         {% if sequence.requirements %}
                                             <p>
-                                                {{ sequence.name }} :
+                                                {{ sequence.title }} :
                                                 {% for requirement in sequence.requirements %}
                                                     <a href="{{ _p.web ~ 'session/' ~ requirement.getId ~ '/about/' }}">
                                                         {{ requirement.getTitle }}

@@ -13,7 +13,7 @@
 
             {% for item in list %}
                 <tr>
-                    <td >{{ item.name }} ({{ item.code }})</td>
+                    <td >{{ item.title }} ({{ item.code }})</td>
                     <td >{{ item.validity_duration }}</td>
 
                     <td >{{ item.date_manual_on }}</td>

@@ -5,19 +5,19 @@
                 <div class="btn-group btn-group-sm" role="group" aria-label="">
                     {% for item in toolbar %}
                         <a href="{{ item.url }}"
-                           title="{{ item.name }}" class="btn btn-light {{ item.class }}">
+                           title="{{ item.title }}" class="btn btn-light {{ item.class }}">
                             <i class="{{ item.icon }}"></i>
                         </a>
                     {% endfor %}
                 </div>
             </div>
             {% if intro.text !='' %}
-                <div id="{{ intro.name }}" class="content">
+                <div id="{{ intro.title }}" class="content">
                     {{ intro.text }}
                 </div>
             {% else %}
                 <div class="help">
-                    <h1>{{ intro.name }}</h1>
+                    <h1>{{ intro.title }}</h1>
                     <p>{{ intro.help }}</p>
                 </div>
             {% endif %}

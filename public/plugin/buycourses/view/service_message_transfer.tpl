@@ -9,11 +9,11 @@
         <dt>{{ 'UserName'|get_lang }}</dt>
         <dd>{{ service_sale.buyer }}</dd>
         <dt>{{ 'Service'|get_plugin_lang('BuyCoursesPlugin') }}</dt>
-        <dd>{{ service_sale.name }}</dd>
+        <dd>{{ service_sale.title }}</dd>
         <dt>{{ 'SalePrice'|get_plugin_lang('BuyCoursesPlugin') }}</dt>
         <dd>{{ service_sale.currency ~ ' ' ~ service_sale.price }}</dd>
     </dl>
-    <p>{{ 'BankAccountIntro'|get_plugin_lang('BuyCoursesPlugin')|format(service_sale.name) }}</p>
+    <p>{{ 'BankAccountIntro'|get_plugin_lang('BuyCoursesPlugin')|format(service_sale.title) }}</p>
     <table>
         <thead>
         <tr>
@@ -25,7 +25,7 @@
         <tbody>
         {% for account in transfer_accounts %}
             <tr>
-                <td>{{ account.name }}</td>
+                <td>{{ account.title }}</td>
                 <td>{{ account.account }}</td>
                 <td>{{ account.swift }}</td>
             </tr>

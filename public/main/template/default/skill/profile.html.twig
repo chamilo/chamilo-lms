@@ -4,7 +4,7 @@
         <ul class="holder">
             {% for search_skill_id in search_skill_list %}
                 <li class="bit-box">
-                    {{ skill_list[search_skill_id].name}}
+                    {{ skill_list[search_skill_id].title}}
                     <a class="closebutton" href="?a=remove_skill&id={{search_skill_id}}"></a>
                 </li>
             {% endfor %}
@@ -21,7 +21,7 @@
         <ul class="holder">
             {%for profile in profiles %}
                 <li class="bit-box">
-                    <a href="?a=load_profile&id={{profile.id}}">{{profile.name}}</a>
+                    <a href="?a=load_profile&id={{profile.id}}">{{profile.title}}</a>
                 </li>
             {% endfor %}
         </ul>
@@ -68,15 +68,15 @@
                             {% for skill_data in user.skills %}
                                 <li class="list-group-item {{ skill_data.found ? '' : 'text-muted' }}">
                                     {% if skill_list[skill_data.skill_id].icon %}
-                                        <img src="{{ _p.web_upload ~ skill_list[skill_data.skill_id].icon_small }}" width="22" height="22" alt="{{ skill_list[skill_data.skill_id].name }}">
+                                        <img src="{{ _p.web_upload ~ skill_list[skill_data.skill_id].icon_small }}" width="22" height="22" alt="{{ skill_list[skill_data.skill_id].title }}">
                                     {% else %}
-                                        {{ 'ObjectIcon::BADGE'|mdi_icon(22, 'ch-tool-icon', skill_list[skill_data.skill_id].name) }}">
+                                        {{ 'ObjectIcon::BADGE'|mdi_icon(22, 'ch-tool-icon', skill_list[skill_data.skill_id].title) }}">
                                     {% endif %}
 
                                     {% if skill_data.found %}
-                                        <b>{{ skill_list[skill_data.skill_id].name }}</b>
+                                        <b>{{ skill_list[skill_data.skill_id].title }}</b>
                                     {% else %}
-                                        {{ skill_list[skill_data.skill_id].name }}
+                                        {{ skill_list[skill_data.skill_id].title }}
                                     {% endif %}
                                 </li>
                             {% endfor %}

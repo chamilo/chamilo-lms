@@ -4,32 +4,32 @@
     {{ form }}
 {% endif %}
 
-{% for item in list %}
-    <h4>{{ item.name }}
-        {#<a href="{{ _p.web_main }}skills/skill_level.php?action=add_level&id={{ item.id }}">#}
+{% for profile in list %}
+    <h4>{{ profile.title }}
+        {#<a href="{{ _p.web_main }}skills/skill_level.php?action=add_level&id={{ profile.id }}">#}
         {#{{ 'ActionIcon::ADD'|mdi_icon }}#}
         {#</a>#}
         <a
-            href="{{ url('legacy_main', {'name' : 'skills/skill_profile.php'}) }}?action=edit&id={{ item.id }}"
+            href="{{ url('legacy_main', {'name' : 'skills/skill_profile.php'}) }}?action=edit&id={{ profile.id }}"
         >
             {{ 'ActionIcon::EDIT'|mdi_icon }}
         </a>
 
         <a
-            href="{{ url('legacy_main', {'name' : 'skills/skill_profile.php'}) }}?action=delete&id={{ item.id }}"
+            href="{{ url('legacy_main', {'name' : 'skills/skill_profile.php'}) }}?action=delete&id={{ profile.id }}"
         >
             {{ 'ActionIcon::DELETE'|mdi_icon }}
         </a>
     </h4>
     <ul>
-        {% for level in item.levels %}
+        {% for level in profile.levels %}
             <li>
                 {{ level }}
                 {% if loop.first %}
                     {{ 'ActionIcon::UP'|mdi_icon(22, 'ch-tool-icon-disabled') }}
                 {% else %}
                     <a
-                        href="{{ url('legacy_main', {'name' : 'skills/skill_profile.php'}) }}?action=move_up&level_id={{ level.id }}&id={{ item.id }}"
+                        href="{{ url('legacy_main', {'name' : 'skills/skill_profile.php'}) }}?action=move_up&level_id={{ level.id }}&id={{ profile.id }}"
                     >
                         {{ 'ActionIcon::UP'|mdi_icon(22) }}
                     </a>
@@ -39,7 +39,7 @@
                     {{ 'ActionIcon::DOWN'|mdi_icon(22, 'ch-tool-icon-disabled') }}
                 {% else %}
                     <a
-                        href="{{ url('legacy_main', {'name' : 'skills/skill_profile.php'}) }}?action=move_down&level_id={{ level.id }}&id={{ item.id }}"
+                        href="{{ url('legacy_main', {'name' : 'skills/skill_profile.php'}) }}?action=move_down&level_id={{ level.id }}&id={{ profile.id }}"
                     >
                         {{ 'ActionIcon::DOWN'|mdi_icon(22) }}
                     </a>

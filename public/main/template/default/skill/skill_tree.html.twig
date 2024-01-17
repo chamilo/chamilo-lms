@@ -87,7 +87,7 @@ jsPlumb.ready(function() {
         function(data) {
             $.each(data, function(n, parent) {
                 // add a new option with the JSON-specified value and text
-                $("<option />").attr("value", parent.id).text(parent.name).appendTo("#parent_id");
+                $("<option />").attr("value", parent.id).text(parent.title).appendTo("#parent_id");
             });
         }
     );*/
@@ -97,7 +97,7 @@ jsPlumb.ready(function() {
         function(data) {
             $.each(data, function(n, gradebook) {
                 // add a new option with the JSON-specified value and text
-                $("<option />").attr("value", gradebook.id).text(gradebook.name).appendTo("#gradebook_id");
+                $("<option />").attr("value", gradebook.id).text(gradebook.title).appendTo("#gradebook_id");
             });
         }
     );
@@ -124,7 +124,7 @@ jsPlumb.ready(function() {
             function(data) {
                 $.each(data, function(n, parent) {
                     // add a new option with the JSON-specified value and text
-                    $("<option />").attr("value", parent.id).text(parent.name).appendTo("#parent_id");
+                    $("<option />").attr("value", parent.id).text(parent.title).appendTo("#parent_id");
                 });
             }
         );
@@ -281,7 +281,7 @@ jsPlumb.ready(function() {
             url: url+'&a=get_skill_info&id='+my_id,
             success: function(json) {
                 var skill = jQuery.parseJSON(json);
-                $("#name").attr('value', skill.name);
+                $("#name").attr('value', skill.title);
                 $("#id").attr('value',   skill.id);
                 $("#description").attr('value', skill.description);
                 //filling parent_id

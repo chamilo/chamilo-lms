@@ -65,7 +65,7 @@
                     {% elseif buying_session %}
                         <div class="row">
                             <div class="col-md-3">
-                                <img alt="{{ session.name }}" class="img-rounded img-responsive"
+                                <img alt="{{ session.title }}" class="img-rounded img-responsive"
                                      src="{{ session.image ? session.image : 'session_default.png'|icon() }}">
                                 {% if session.tax_enable %}
                                     <div class="price-details-tax">
@@ -83,7 +83,7 @@
                             </div>
                             <div class="col-md-9">
                                 <div class="buy-item">
-                                    <h3 class="title">{{ session.name }}</h3>
+                                    <h3 class="title">{{ session.title }}</h3>
                                     {% if session.description %}
                                         <div class="description">
                                             {{ session.description }}

@@ -21,18 +21,18 @@
     {{ form }}
 {% endif %}
 
-{% for item in list %}
+{% for skill in list %}
     <h4>
-        {{ item.name }}
-        {% if item.shortCode %}
-            ({{ item.shortCode }})
+        {{ skill.title }}
+        {% if skill.shortCode %}
+            ({{ skill.shortCode }})
         {% endif %}
         <a
-            href="{{ url('legacy_main', {'name' : 'skills/skill.php'}) ~ '?action=edit&id='  ~  item.id}}"
+            href="{{ url('legacy_main', {'name' : 'skills/skill.php'}) ~ '?action=edit&id='  ~  skill.id}}"
         >
             {{ 'ActionIcon::EDIT'|mdi_icon(22) }}
         </a>
     </h4>
-    {{ item.profile }}
+    {{ skill.profile }}
 {% endfor %}
 {% endautoescape %}

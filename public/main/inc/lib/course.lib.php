@@ -2268,15 +2268,15 @@ class CourseManager
         /* 0 != $session_id ? $session_condition = ' WHERE g.session_id IN(1,'.intval($session_id).')' : $session_condition = ' WHERE g.session_id = 0';
          if (0 == $in_get_empty_group) {
              // get only groups that are not empty
-             $sql = "SELECT DISTINCT g.iid, g.name
+             $sql = "SELECT DISTINCT g.iid, g.title
                      FROM ".Database::get_course_table(TABLE_GROUP)." AS g
                      INNER JOIN ".Database::get_course_table(TABLE_GROUP_USER)." gu
                      ON (g.iid = gu.group_id)
                      $session_condition
-                     ORDER BY g.name";
+                     ORDER BY g.title";
          } else {
              // get all groups even if they are empty
-             $sql = "SELECT g.iid, g.name
+             $sql = "SELECT g.iid, g.title
                      FROM ".Database::get_course_table(TABLE_GROUP)." AS g
                      $session_condition
                      AND c_id = $course_id";

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>{{ "MailTitle"| get_plugin_lang('AdvancedSubscriptionPlugin') | format(session.name) }}</title>
+    <title>{{ "MailTitle"| get_plugin_lang('AdvancedSubscriptionPlugin') | format(session.title) }}</title>
 </head>
 
 <body>
@@ -49,7 +49,7 @@
                     <td height="356">&nbsp;</td>
                     <td valign="top"><p>{{ "MailDear" | get_plugin_lang("AdvancedSubscriptionPlugin") }}</p>
                         <h2>{{ superior.complete_name }}</h2>
-                        <p>{{ "MailContentReminderSuperior" | get_plugin_lang("AdvancedSubscriptionPlugin") | format(session.name, session.date_start, session.description) }}</p>
+                        <p>{{ "MailContentReminderSuperior" | get_plugin_lang("AdvancedSubscriptionPlugin") | format(session.title, session.date_start, session.description) }}</p>
                         <p>{{ "MailContentReminderSuperiorSecond" | get_plugin_lang("AdvancedSubscriptionPlugin") }}</p>
                         <table width="100%" border="0" cellspacing="3" cellpadding="4" style="background:#EDE9EA">
                             {% for student in students %}

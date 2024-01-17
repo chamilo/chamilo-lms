@@ -15,7 +15,7 @@
             </tr>
             {% for item in list %}
                 <tr>
-                    <td >{{ item.justification.name }} </td>
+                    <td >{{ item.justification.title }} </td>
                     <td >{{ item.file_path }} </td>
                     <td >
                         {{ item.date_validity }}

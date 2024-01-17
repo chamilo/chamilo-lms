@@ -2,7 +2,7 @@
 
 {% block content %}
     {% autoescape false %}
-        <h3>{{ resource.name }}</h3>
+        <h3>{{ resource.title }}</h3>
         <p>{{ resource.description }}</p>
 
         {% include '@ChamiloCore/Resource/toolbar_view_resource.html.twig' %}

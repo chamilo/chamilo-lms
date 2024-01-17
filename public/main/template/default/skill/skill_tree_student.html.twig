@@ -126,7 +126,7 @@ jsPlumb.bind("ready", function() {
             url: url+'&a=get_skill_info&id='+my_id,
             success: function(json) {
                 var skill = jQuery.parseJSON(json);
-                $("#name").html(skill.name);
+                $("#name").html(skill.title);
                 $("#id").attr('value',   skill.id);
                 $("#description").html(skill.description);
                 //filling parent_id
@@ -134,7 +134,7 @@ jsPlumb.bind("ready", function() {
                 //filling the gradebook_id
                 $("#gradebook_id").html('');
                 jQuery.each(skill.gradebooks, function(index, data) {
-                    $("#gradebook_id").append('<span class="label_tag gradebook">'+data.name+'</div>');
+                    $("#gradebook_id").append('<span class="label_tag gradebook">'+data.title+'</div>');
                 });
             },
         });

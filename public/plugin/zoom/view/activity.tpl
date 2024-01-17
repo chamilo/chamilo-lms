@@ -23,7 +23,7 @@
                 {{ activity.type }}
             </td>
             <td>
-                {{ activity.name }}
+                {{ activity.title }}
             </td>
             <td>
                 {{ activity.createdAt | api_convert_and_format_date(3)}}

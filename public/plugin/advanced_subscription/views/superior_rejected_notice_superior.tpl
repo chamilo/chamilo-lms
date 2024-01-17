@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>{{ "MailTitle"| get_plugin_lang('AdvancedSubscriptionPlugin') | format(session.name) }}</title>
+    <title>{{ "MailTitle"| get_plugin_lang('AdvancedSubscriptionPlugin') | format(session.title) }}</title>
 </head>
 
 <body>
@@ -49,7 +49,7 @@
                     <td height="356">&nbsp;</td>
                     <td valign="top"><p>{{ "MailDear" | get_plugin_lang("AdvancedSubscriptionPlugin") }}</p>
                         <h2>{{ superior.complete_name }}</h2>
-                        <p>{{ "MailContentSuperiorRejectToSuperior"| get_plugin_lang("AdvancedSubscriptionPlugin") | format(session.name, student.complete_name) }}</p>
+                        <p>{{ "MailContentSuperiorRejectToSuperior"| get_plugin_lang("AdvancedSubscriptionPlugin") | format(session.title, student.complete_name) }}</p>
                         <p>{{ "MailThankYouCollaboration" | get_plugin_lang("AdvancedSubscriptionPlugin") }}</p>
                         <h3>{{ signature }}</h3></td>
                     <td>&nbsp;</td>

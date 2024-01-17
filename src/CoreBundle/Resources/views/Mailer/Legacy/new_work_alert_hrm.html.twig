@@ -1,10 +1,10 @@
 <p>{{ 'DearXComma'|trans|format(hrm_name) }}</p>
-<p>{{ 'AsHRMYouReceiveThisMailToAlertThatXHasNewWorkInCourseY'|trans | format(student.complete_name, course.name) }}</p>
+<p>{{ 'AsHRMYouReceiveThisMailToAlertThatXHasNewWorkInCourseY'|trans | format(student.complete_name, course.title) }}</p>
 <dl>
     <dt>{{ 'Student'|trans }}</dt>
     <dd>{{ student.complete_name }}</dd>
     <dt>{{ 'Course'|trans }}</dt>
-    <dd>{{ course.name }} - {{ course.code }}</dd>
+    <dd>{{ course.title }} - {{ course.code }}</dd>
     <dt>{{ 'AssignmentName'|trans }}</dt>
     <dd>{{ work.title }}</dd>
     <dd>{{ work.description }}</dd>

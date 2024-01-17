@@ -23,10 +23,10 @@ var SkillWheel = {
             var getSkillParentInfo = SkillWheel.getSkillInfo(skillInfo.extra.parent_id);
 
             $.when(getSkillParentInfo).done(function(skillParentInfo) {
-                formSkill.find('p#parent').text(skillParentInfo.name);
+                formSkill.find('p#parent').text(skillParentInfo.title);
             });
 
-            formSkill.find('p#name').text(skillInfo.name);
+            formSkill.find('p#name').text(skillInfo.title);
 
             if (skillInfo.short_code.length > 0) {
                 formSkill.find('p#short_code').text(skillInfo.short_code).parent().parent().show();
@@ -44,7 +44,7 @@ var SkillWheel = {
                 formSkill.find('ul#gradebook').empty().parent().parent().show();
 
                 $.each(skillInfo.gradebooks, function(index, gradebook) {
-                    $('<li>').text(gradebook.name).appendTo(formSkill.find('ul#gradebook'));
+                    $('<li>').text(gradebook.title).appendTo(formSkill.find('ul#gradebook'));
                 });
             } else {
                 formSkill.find('ul#gradebook').parent().parent().hide();
@@ -183,7 +183,7 @@ function get_color(d) {
             //part_color = $.xcolor.gradientlevel(family1, family2, position, 100);
             part_color = $.xcolor.lighten(family1, position, 15);
             color = part_color.getHex();
-            //console.log(d.depth + " - " + d.name + " + "+ color+ "+ " +d.counter);
+            //console.log(d.depth + " - " + d.title + " + "+ color+ "+ " +d.counter);
         } else {
             color = colors[d.family_id];
         }
@@ -335,7 +335,7 @@ function click_partition(d, path, text, icon, arc, x, y, r, p, vis) {
         };
     })
     .attrTween("transform", function(d) {
-        var multiline = is_multiline(d.name); //(d.name || "").split(" ").length > 1;
+        var multiline = is_multiline(d.title); //(d.title || "").split(" ").length > 1;
         return function() {
             var angle = x(d.x + d.dx / 2) * 180 / Math.PI - 90,
             rotate = angle + (multiline ? -.5 : 0);
@@ -571,12 +571,12 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
         })
         .attr("rel", "tooltip_skill")
         .attr("title", function(d) {
-            return d.name;
+            return d.title;
         })
         .attr("dy", ".2em")
         .attr("transform", function(d) {
             /** Get the text details and define the rotation and general position */
-            var multiline = is_multiline(d.name); //(d.name || "").split(" ").length > 1,
+            var multiline = is_multiline(d.title); //(d.title || "").split(" ").length > 1,
             angle = x(d.x + d.dx / 2) * 180 / Math.PI - 90,
             rotate = angle + (multiline ? -.5 : 0);
             return "rotate(" + rotate + ")translate(" + (y(d.y) + padding) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
@@ -605,8 +605,8 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
                 return d.short_code;
             }
 
-            if (d.depth && d.name) {
-                var nameParts = d.name.split(' ');
+            if (d.depth && d.title) {
+                var nameParts = d.title.split(' ');
 
                 if (nameParts[0].length > max_size_text_length) {
                     return nameParts[0].substring(0, max_size_text_length - 3)  + '...';
@@ -615,7 +615,7 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
                 return nameParts[0];
             }
 
-            return d.depth ? d.name : '';
+            return d.depth ? d.title : '';
         });
 
         textEnter.append("tspan")
@@ -626,8 +626,8 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
                 return null;
             }
 
-            if (d.depth && d.name) {
-                var nameParts = d.name.split(' ');
+            if (d.depth && d.title) {
+                var nameParts = d.title.split(' ');
 
                 if (nameParts.length >= 2) {
                     if (nameParts[1].length > max_size_text_length) {
@@ -640,7 +640,7 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
                 return '';
             }
 
-            return d.depth ? d.name : '';
+            return d.depth ? d.title : '';
         });
 
         /* Icon settings */

@@ -433,7 +433,7 @@ if (false === $bbb->isGlobalConference() &&
                 $name = $groupData->getTitle();
             } else {
                 $itemGroupId = $groupData['iid'];
-                $name = $groupData['name'];
+                $name = $groupData['title'];
             }
             if (isset($meetingsGroup[$itemGroupId]) && 1 == $meetingsGroup[$itemGroupId]) {
                 $name .= ' ('.get_lang('Active').')';

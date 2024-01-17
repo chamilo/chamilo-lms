@@ -1,13 +1,13 @@
 <h2 class="page-header">{{ 'RequiredCourses'|trans }}</h2>
 
 {% for key, item in sequences %}
-    <h4>{{ item.name }}</h4>
+    <h4>{{ item.title }}</h4>
     <div id="parents">
         {% for course in item.requirements %}
             <div class="parent">
                 <div class="big-icon">
                     {{ 'ObjectIcon::SEQUENCE'|mdi_icon(48) }}
-                    <p class="sequence-course">{{ course.name }}</p>
+                    <p class="sequence-course">{{ course.title }}</p>
 
                     {% if _u.logged %}
                         <span class="label {{ course.status ? 'label-success' : 'label-danger' }}">

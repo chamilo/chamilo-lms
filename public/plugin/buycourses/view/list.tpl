@@ -117,7 +117,7 @@
                     {% for item in sessions %}
                         <tr data-item="{{ item.id }}" data-type="session">
                             <td>
-                                <a href="{{ _p.web_main ~ 'session/index.php?' ~ {'session_id': item.id}|url_encode() }}">{{ item.name }}</a>
+                                <a href="{{ _p.web_main ~ 'session/index.php?' ~ {'session_id': item.id}|url_encode() }}">{{ item.title }}</a>
                             </td>
                             <td class="text-center">
                                 {{ item.displayStartDate | api_convert_and_format_date(6)}}
@@ -182,7 +182,7 @@
                     {% for item in services %}
                         <tr data-item="{{ item.id }}" data-type="service">
                             <td>
-                                {{ item.name }}
+                                {{ item.title }}
                             </td>
                             <td>
                                 {{ item.description }}

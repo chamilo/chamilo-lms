@@ -10,10 +10,10 @@
                     <h4>
                         {% if is_granted('ROLE_ADMIN') %}
                             <a href="{{ url('legacy_main', { 'name' : 'admin/careers.php', 'action' : 'edit', 'id' : item.id }) }}">
-                                {{ item.name }}
+                                {{ item.title }}
                             </a>
                         {% else %}
-                            {{ item.name }}
+                            {{ item.title }}
                         {% endif %}
                     </h4>
                 </div>
@@ -31,10 +31,10 @@
                                 <tr>
                                     <td class="promo" rowspan="{{ line }}">
                                         <h4 id="promotion-id-{{ prom.id }}">
-                                            <a title="{{ prom.name }}"
+                                            <a title="{{ prom.title }}"
                                                href="{{ url('legacy_main', { 'name' : 'admin/promotions.php', 'action' : 'edit', 'id' : prom.id }) }}"
                                            >
-                                                {{ prom.name }}
+                                                {{ prom.title }}
                                             </a>
                                         </h4>
                                     </td>
@@ -48,9 +48,9 @@
                                     <tr>
                                         <td class="cycles">
                                             <h4 id="session-id-{{ sessionid }}">
-                                                <a title="{{ session.data.name }}"
+                                                <a title="{{ session.data.title }}"
                                                    href="{{ _p.web }}main/session/resume_session.php?id_session={{ sessionid }}">
-                                                    {{ session.data.name }}
+                                                    {{ session.data.title }}
                                                 </a>
                                             </h4>
                                         </td>

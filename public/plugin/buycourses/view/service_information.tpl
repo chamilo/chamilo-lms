@@ -1,6 +1,6 @@
 <div id="service" class="service">
     <div class="page-header">
-        <h2>{{ service.name }}</h2>
+        <h2>{{ service.title }}</h2>
     </div>
     <section id="service-info">
         <div class="panel panel-default">
@@ -17,7 +17,7 @@
                             {% elseif service.image %}
                             <div class="service-image">
                                 <a href="{{ _p.web }}service/{{ service.id }}">
-                                    <img alt="{{ service.name }}" class="img-rounded img-responsive"
+                                    <img alt="{{ service.title }}" class="img-rounded img-responsive"
                                          src="{{ service.image ? service.image : 'session_default.png'|icon() }}">
                                 </a>
                             </div>

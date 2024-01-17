@@ -20,7 +20,7 @@
                 {% endfor %}
 
                 <a {{ a_params }} >
-                    <img src="{{ item.tool.image|replace({'.gif': '.png'})|icon() }}" alt="{{ item.name }}"
+                    <img src="{{ item.tool.image|replace({'.gif': '.png'})|icon() }}" alt="{{ item.item }}"
                          id="toolimage_{{ item.tool.iid }}">
                 </a>
                 {{ item.link }}

@@ -2125,7 +2125,7 @@ function api_get_url_entity($id = 0): ?AccessUrl
  *
  * @param int $id Numeric ID of the course
  *
- * @return array The course info as an array formatted by api_format_course_array, including category.name
+ * @return array The course info as an array formatted by api_format_course_array, including category.title
  */
 function api_get_course_info_by_id($id = 0)
 {

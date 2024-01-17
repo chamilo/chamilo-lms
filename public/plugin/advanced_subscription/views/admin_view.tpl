@@ -8,13 +8,13 @@
                 </option>
                 {% for sessionItem in sessionItems %}
                 <option value="{{ sessionItem.id }}" {{ sessionItem.selected }}>
-                {{ sessionItem.name }}
+                {{ sessionItem.title }}
                 </option>
                 {% endfor %}
             </select>
 
             <h4>{{ "SessionName" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</h4>
-            <h3 class="title-name-session">{{ session.name }}</h3>
+            <h3 class="title-name-session">{{ session.title }}</h3>
             <h4>{{ "Target" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</h4>
             <p>{{ session.target }}</p>
 

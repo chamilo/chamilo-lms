@@ -16,7 +16,7 @@
 
                         {% if course.categories %}
                             {% for category in course.categories %}
-                                <p><strong>{{ 'Category'|get_lang }}</strong><br>{{ category.name }}</p>
+                                <p><strong>{{ 'Category'|get_lang }}</strong><br>{{ category.title }}</p>
                             {% endfor %}
                         {% endif %}
                     </div>

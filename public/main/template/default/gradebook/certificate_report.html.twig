@@ -20,7 +20,7 @@ $(function () {
                 $.each(courseList, function (index, course) {
                     $('<option>', {
                         value: course.id,
-                        text: course.name
+                        text: course.title
                     }).appendTo($selectCourse);
                 });
             }

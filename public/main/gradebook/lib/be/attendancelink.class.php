@@ -53,7 +53,7 @@ class AttendanceLink extends AbstractLink
         $links = $qb->getQuery()->getResult();
 
         /*$tbl_attendance = $this->get_attendance_table();
-        $sql = 'SELECT att.iid, att.name, att.attendance_qualify_title
+        $sql = 'SELECT att.iid, att.title, att.attendance_qualify_title
                 FROM '.$tbl_attendance.' att
                 WHERE
                     att.c_id = '.$this->course_id.' AND

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>{{ "MailTitle" | get_plugin_lang('AdvancedSubscriptionPlugin') | format(session.name) }}</title>
+    <title>{{ "MailTitle" | get_plugin_lang('AdvancedSubscriptionPlugin') | format(session.title) }}</title>
 </head>
 
 <body>
@@ -32,7 +32,7 @@
                 </tr>
                 <tr>
                     <td>&nbsp;</td>
-                    <td style="color: #93c5cd; font-family: Times New Roman, Times, serif; font-size: 24px; font-weight: bold; border-bottom-width: 2px; border-bottom-style: solid; border-bottom-color: #93c5cd;">{{ "MailTitleAdminAcceptToStudent" | get_plugin_lang('AdvancedSubscriptionPlugin') | format(session.name) }}</td>
+                    <td style="color: #93c5cd; font-family: Times New Roman, Times, serif; font-size: 24px; font-weight: bold; border-bottom-width: 2px; border-bottom-style: solid; border-bottom-color: #93c5cd;">{{ "MailTitleAdminAcceptToStudent" | get_plugin_lang('AdvancedSubscriptionPlugin') | format(session.title) }}</td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
@@ -49,7 +49,7 @@
                     <td height="356">&nbsp;</td>
                     <td valign="top"><p> {{ "MailDear" | get_plugin_lang('AdvancedSubscriptionPlugin') }} </p>
                         <h2>{{ student.complete_name }}</h2>
-                        <p>{{ "MailContentAdminAcceptToStudent" | get_plugin_lang('AdvancedSubscriptionPlugin') | format(session.name, session.date_start) }}</p>
+                        <p>{{ "MailContentAdminAcceptToStudent" | get_plugin_lang('AdvancedSubscriptionPlugin') | format(session.title, session.date_start) }}</p>
                         <p>{{ "MailThankYou" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</p>
                         <h3>{{ signature }}</h3></td>
                     <td>&nbsp;</td>

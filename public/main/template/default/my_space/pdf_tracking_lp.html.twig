@@ -1,5 +1,5 @@
 
-<h3 style="text-align: center; text-transform: uppercase; font-size: 20px; font-weight: bold;">{{ data.name }}</h3>
+<h3 style="text-align: center; text-transform: uppercase; font-size: 20px; font-weight: bold;">{{ data.title }}</h3>
 <br>
 <p>{{ 'Candidate' | get_lang }} : {{ data.candidate }}</p>
 <p>{{ 'ScormStartAttemptDate' | get_lang }} : {{ data.start_date }}</p>
@@ -58,7 +58,7 @@
     {% for item in categories %}
     <tr>
         <td style="height:40px; width: 40%; text-align: left; padding: 5px; display: block; border-bottom: 1px solid #cdcdcd;">
-            {{ item.name }}
+            {{ item.title }}
         </td>
         <td style="text-align: center; padding: 5px; display: block; border-bottom: 1px solid #cdcdcd;">
             {% if item.score_numeric == 0 %}

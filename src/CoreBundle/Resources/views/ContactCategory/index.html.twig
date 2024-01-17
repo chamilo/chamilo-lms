@@ -22,7 +22,7 @@
         <tbody>
         {% for contact_category in contact_categories %}
             <tr>
-                <td>{{ contact_category.name }}</td>
+                <td>{{ contact_category.title }}</td>
                 <td>{{ contact_category.email }}</td>
                 <td class="flex items-center">
                     <a href="{{ path('chamilo_contact_category_edit', {'id': contact_category.id}) }}" class="btn btn--info inline-flex items-center mr-2">

@@ -3330,7 +3330,7 @@ class SessionManager
      *
      * @param array $conditions          a list of condition example :
      *                                   array('status' => STUDENT) or
-     *                                   array('s.name' => array('operator' => 'LIKE', value = '%$needle%'))
+     *                                   array('s.title' => array('operator' => 'LIKE', value = '%$needle%'))
      * @param array $order_by            a list of fields on which sort
      * @param int   $urlId
      * @param array $onlyThisSessionList
@@ -9012,7 +9012,7 @@ class SessionManager
             $options_by_double['extra_'.$double['field_variable']] = $my_options;
         }
 
-        //sc.name as category_name,
+        //sc.title as category_name,
         $select = "
                 SELECT * FROM (
                     SELECT DISTINCT

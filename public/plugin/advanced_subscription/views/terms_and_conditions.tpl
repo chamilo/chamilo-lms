@@ -23,7 +23,7 @@
 </h2>
 {% if termsRejected == 1 %}
 <div class="error-message legal-terms-popup">
-    {{ "YouMustAcceptTermsAndConditions"  | get_plugin_lang("AdvancedSubscriptionPlugin") | format(session.name) }}
+    {{ "YouMustAcceptTermsAndConditions"  | get_plugin_lang("AdvancedSubscriptionPlugin") | format(session.title) }}
 </div>
 {% endif %}
 

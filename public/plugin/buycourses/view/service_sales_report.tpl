@@ -37,7 +37,7 @@
                 <tbody>
                 {% for sale in sale_list %}
                     <tr>
-                        <td class="text-center">{{ sale.name }}</td>
+                        <td class="text-center">{{ sale.title }}</td>
                         <td class="text-center">{{ sale.reference }}</td>
                         <td class="text-center">
                             {% if sale.status == sale_status_cancelled %}

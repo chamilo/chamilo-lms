@@ -25,7 +25,7 @@
         <tbody>
         {% for account in transfer_accounts %}
             <tr>
-                <td>{{ account.name }}</td>
+                <td>{{ account.title }}</td>
                 <td>{{ account.account }}</td>
                 <td>{{ account.swift }}</td>
             </tr>

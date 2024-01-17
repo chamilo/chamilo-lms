@@ -37,12 +37,12 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-xs-12">
                             <p>
-                                <img alt="{{ session.name }}" class="img-responsive" style="width: 100%;"
+                                <img alt="{{ session.title }}" class="img-responsive" style="width: 100%;"
                                      src="{{ session.image ? session.image : 'session_default.png'|icon() }}">
                             </p>
                         </div>
                         <div class="col-sm-12 col-md-12 col-xs-12">
-                            <h3>{{ session.name }}</h3>
+                            <h3>{{ session.title }}</h3>
                             <p><em class="fa fa-calendar fa-fw"></em> {{ session.dates.display }}</p>
                             <ul class="list-unstyled">
                                 {% for course in session.courses %}
@@ -70,7 +70,7 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-xs-12">
                             <a href='{{ _p.web }}service/{{ service.id }}'>
-                                <img alt="{{ service.name }}" class="img-responsive"
+                                <img alt="{{ service.title }}" class="img-responsive"
                                      src="{{ service.image ? _p.web ~ 'plugin/buycourses/uploads/services/images/' ~ service.image : 'session_default.png'|icon() }}">
                             </a>
                         </div>
@@ -78,7 +78,7 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-xs-12">
                             <h3>
-                                <a href='{{ _p.web }}service/{{ service.id }}'>{{ service.name }}</a>
+                                <a href='{{ _p.web }}service/{{ service.id }}'>{{ service.title }}</a>
                             </h3>
                             <ul class="list-unstyled">
                                 {% if service.applies_to == 0 %}
@@ -165,7 +165,7 @@
                     <tbody>
                     {% for account in transfer_accounts %}
                         <tr>
-                            <td>{{ account.name }}</td>
+                            <td>{{ account.title }}</td>
                             <td class="text-center">{{ account.account }}</td>
                             <td class="text-center">{{ account.swift }}</td>
                         </tr>

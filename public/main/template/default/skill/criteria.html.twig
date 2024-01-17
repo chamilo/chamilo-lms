@@ -3,9 +3,9 @@
     <div class="row">
         <div class="col-md-3">
             <figure class="thumbnail">
-                <img class="img-fluid" src="{{ skill_info.badge_image }}" alt="{{ skill_info.name }}">
+                <img class="img-fluid" src="{{ skill_info.badge_image }}" alt="{{ skill_info.title }}">
                 <figcaption class="caption">
-                    <p class="name-badge text-center">{{ skill_info.name }}</p>
+                    <p class="name-badge text-center">{{ skill_info.title }}</p>
                     {% if skill_info.short_code %}
                         <p class="code-badge text-center">
                             {{ 'ObjectIcon::BADGE' | mdi_icon }}
@@ -16,7 +16,7 @@
         </div>
         <div class="col-md-9">
             <h4 class="title-badge">{{ 'Name'|trans }}</h4>
-            <p class="lead">{{ skill_info.name }}</p>
+            <p class="lead">{{ skill_info.title }}</p>
             <h4 class="title-badge">{{ 'Description'|trans }}</h4>
             <p>{{ skill_info.description }}</p>
             <h4 class="title-badge">{{ 'CriteriaToEarnTheBadge'|trans }}</h4>

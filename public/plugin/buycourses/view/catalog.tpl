@@ -80,12 +80,12 @@
                                 <div class="col-md-4 col-sm-6">
                                     <article class="items-course">
                                         <div class="items-course-image">
-                                            <img alt="{{ session.name }}" class="img-responsive"
+                                            <img alt="{{ session.title }}" class="img-responsive"
                                                  src="{{ session.image ? session.image : 'session_default.png'|icon() }}">
                                         </div>
                                         <div class="items-course-info">
                                             <h4 class="title">
-                                                <a href="{{ _p.web ~ 'session/' ~ session.id ~ '/about/' }}">{{ session.name }}</a>
+                                                <a href="{{ _p.web ~ 'session/' ~ session.id ~ '/about/' }}">{{ session.title }}</a>
                                             </h4>
                                             {% if 'show_session_coach'|api_get_setting == 'true' %}
                                                 {% for coach in session.coaches %}
@@ -138,15 +138,15 @@
                                     <div class="items-course">
                                         <div class="items-course-image">
                                             <a href="{{ _p.web }}service/{{ service.id }}">
-                                                <img alt="{{ service.name }}"
+                                                <img alt="{{ service.title }}"
                                                     class="img-responsive"
                                                     src="{{ service.image ? service.image : 'session_default.png'|icon() }}"></a>
                                         </div>
                                         <div class="items-course-info">
                                             <h4 class="title">
-                                                <a title="{{ service.name }}"
+                                                <a title="{{ service.title }}"
                                                    href="{{ _p.web }}service/{{ service.id }}">
-                                                    {{ service.name }}
+                                                    {{ service.title }}
                                                 </a>
                                             </h4>
                                             <ul class="list-unstyled">

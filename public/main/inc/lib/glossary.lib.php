@@ -615,7 +615,7 @@ class GlossaryManager
         $keyword = isset($_GET['keyword']) ? Database::escape_string($_GET['keyword']) : '';
         if(!empty($keyword)){
             $qb->andWhere(
-                $qb->expr()->like('resource.name',':keyword')
+                $qb->expr()->like('resource.title',':keyword')
             )->andWhere(
                 $qb->expr()->like('resource.description',':keyword')
             )->setParameter('keyword', '%'.$keyword.'%');
@@ -748,10 +748,10 @@ class GlossaryManager
         $keyword = isset($_GET['keyword']) ? Database::escape_string($_GET['keyword']) : '';
         $keywordCondition = '';
         if (!empty($keyword)) {
-            $keywordCondition = "AND (glossary.name LIKE '%$keyword%' OR glossary.description LIKE '%$keyword%')";
+            $keywordCondition = "AND (glossary.title LIKE '%$keyword%' OR glossary.description LIKE '%$keyword%')";
         }
         $sql = "SELECT
-                    glossary.name as col0,
+                    glossary.title as col0,
                     glossary.description as col1,
                     $col2
                     glossary.session_id

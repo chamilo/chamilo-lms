@@ -92,7 +92,7 @@
     {% for event in events %}
     <tr>
         <td>
-            {{ event.name }}:
+            {{ event.title }}:
         </td>
         <td>
             <span style="display:block;height:20px;width:100px; background-color: {{ event.color }}"></span>

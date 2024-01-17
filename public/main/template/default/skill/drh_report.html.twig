@@ -35,7 +35,7 @@
                 <option value="0">{{ 'Select' | trans }}</option>
                 {% for skill in skills %}
                     <option value="{{ skill.id }}" {{ (skill.id == selected_skill) ? 'selected' : '' }}>
-                        {{ skill.name }}
+                        {{ skill.title }}
                     </option>
                 {% endfor %}
             </select>

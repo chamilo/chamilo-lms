@@ -44,8 +44,8 @@
     {% for row in rows %}
         <tr>
             {% if with_filter %}
-                <td>{{ row.session ? row.session.name : '&nbsp' }}</td>
-                <td>{{ row.course.name }}</td>
+                <td>{{ row.session ? row.session.title : '&nbsp' }}</td>
+                <td>{{ row.course.title }}</td>
             {% endif %}
             <td>{{ row.coach.complete_name }} ({{ row.coach.username }})</td>
             <td class="text-center">{{ row.total_time }}</td>

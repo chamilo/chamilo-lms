@@ -3,7 +3,7 @@
 {% block content %}
     {% autoescape false %}
         <h3>
-            {{ gradebook_category.name }}
+            {{ gradebook_category.title }}
             {% if gradebook_category.courseCode is not empty %}
                 ({{ gradebook_category.courseCode }})
             {% endif %}

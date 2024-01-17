@@ -42,7 +42,7 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_TRANSFER)) {
         \Doctrine\DBAL\Types\Type::INTEGER,
         ['autoincrement' => true, 'unsigned' => true]
     );
-    $transferTable->addColumn('name', \Doctrine\DBAL\Types\Type::STRING);
+    $transferTable->addColumn('title', \Doctrine\DBAL\Types\Type::STRING);
     $transferTable->addColumn('account', \Doctrine\DBAL\Types\Type::STRING);
     $transferTable->addColumn('swift', \Doctrine\DBAL\Types\Type::STRING);
     $transferTable->setPrimaryKey(['id']);
@@ -255,7 +255,7 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SERVICES)) {
         \Doctrine\DBAL\Types\Type::INTEGER,
         ['autoincrement' => true, 'unsigned' => true]
     );
-    $servicesTable->addColumn('name', \Doctrine\DBAL\Types\Type::STRING);
+    $servicesTable->addColumn('title', \Doctrine\DBAL\Types\Type::STRING);
     $servicesTable->addColumn('description', \Doctrine\DBAL\Types\Type::TEXT);
     $servicesTable->addColumn(
         'price',

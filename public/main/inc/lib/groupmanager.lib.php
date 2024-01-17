@@ -140,7 +140,7 @@ class GroupManager
 
         /*$table_group = Database::get_course_table(TABLE_GROUP);
         $select = ' g.iid,
-                    g.name,
+                    g.title,
                     g.description,
                     g.category_id,
                     g.max_student maximum_number_of_members,
@@ -182,7 +182,7 @@ class GroupManager
         if (!empty($session_condition)) {
             $sql .= $session_condition;
         }
-        $sql .= ' ORDER BY UPPER(g.name)';
+        $sql .= ' ORDER BY UPPER(g.title)';
 
         $result = Database::query($sql);
 

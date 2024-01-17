@@ -7,7 +7,7 @@
         {% set image %}
             {% if item.category %}
                 <div class="category" style="background: {{ item.color.color }}; color:{{ item.color.luminosity }}">
-                    {{ item.category.name }}
+                    {{ item.category.title }}
                 </div>
             {% endif %}
             <img src="{{ item.image }}" class="img-fluid">
@@ -57,10 +57,10 @@
         {% set content %}
 
             <ul class="list-group list-group-flush">
-                {% for row in item.courses %}
+                {% for course in item.courses %}
                     <li class="list-group-item">
-                        <img src="{{ row.icon }}" width="32px">
-                        <a href="{{ row.link }}">{{ row.name }}</a>
+                        <img src="{{ course.icon }}" width="32px">
+                        <a href="{{ course.link }}">{{ course.title }}</a>
                     </li>
                 {% endfor %}
             </ul>

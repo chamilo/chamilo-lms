@@ -39,7 +39,7 @@ $globalSettingsParams = $plugin->getGlobalParameters();
 $service = $plugin->getService($serviceId);
 
 $formDefaultValues = [
-    'name' => $service['name'],
+    'name' => $service['title'],
     'description' => $service['description'],
     'price' => $service['price'],
     'tax_perc' => $service['tax_perc'],

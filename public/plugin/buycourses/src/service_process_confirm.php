@@ -128,7 +128,7 @@ switch ($serviceSale['payment_type']) {
             $messageTemplate->assign(
                 'service_sale',
                 [
-                    'name' => $serviceSale['service']['name'],
+                    'name' => $serviceSale['service']['title'],
                     'buyer' => $serviceSale['buyer']['name'],
                     'buy_date' => $serviceSale['buy_date'],
                     'start_date' => $serviceSale['start_date'],
@@ -206,7 +206,7 @@ switch ($serviceSale['payment_type']) {
 
         $template = new Template();
         $template->assign('terms', $globalParameters['terms_and_conditions']);
-        $template->assign('title', $serviceSale['service']['name']);
+        $template->assign('title', $serviceSale['service']['title']);
         $template->assign('price', $serviceSale['price']);
         $template->assign('currency', $serviceSale['currency_id']);
         $template->assign('buying_service', $serviceSale);

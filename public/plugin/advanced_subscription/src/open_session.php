@@ -35,7 +35,7 @@ if (SessionManager::isUserSubscribedAsStudent(
         'errorMessages',
         [sprintf(
             $plugin->get_lang('YouAreAlreadySubscribedToSessionX'),
-            $sessionInfo['name']
+            $sessionInfo['title']
         )]
     );
 } else {

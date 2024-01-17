@@ -200,7 +200,7 @@ class CourseLegalPlugin extends Plugin
         $sesstionTitle = null;
 
         if (!empty($sessionInfo)) {
-            $sesstionTitle = ' ('.$sessionInfo['name'].')';
+            $sesstionTitle = ' ('.$sessionInfo['title'].')';
         }
 
         $courseTitle = $courseInfo['title'].$sesstionTitle;

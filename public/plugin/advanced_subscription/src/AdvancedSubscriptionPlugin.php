@@ -1260,7 +1260,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * List all session (id, name) for select input.
+     * List all session (id, title) for select input.
      *
      * @param int $limit
      *
@@ -1270,11 +1270,11 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     {
         $limit = (int) $limit;
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
-        $columns = 'id, name';
+        $columns = 'id, title';
         $conditions = [];
         if ($limit > 0) {
             $conditions = [
-                'order' => 'name',
+                'order' => 'title',
                 'limit' => $limit,
             ];
         }

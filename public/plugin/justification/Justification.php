@@ -57,7 +57,7 @@ class Justification extends Plugin
 
     public function getList()
     {
-        $sql = 'SELECT * FROM justification_document ORDER BY name ';
+        $sql = 'SELECT * FROM justification_document ORDER BY title ';
         $query = Database::query($sql);
 
         return Database::store_result($query, 'ASSOC');
@@ -71,7 +71,7 @@ class Justification extends Plugin
         $sql = "CREATE TABLE IF NOT EXISTS justification_document (
             id INT unsigned NOT NULL auto_increment PRIMARY KEY,
             code TEXT NULL,
-            name TEXT NULL,
+            title TEXT NULL,
             validity_duration INT,
             comment TEXT NULL,
             date_manual_on INT

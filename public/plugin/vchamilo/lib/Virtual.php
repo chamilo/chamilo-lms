@@ -43,7 +43,7 @@ class Virtual
 
         if ($result->rowCount()) {
             $data = $result->fetch();
-            $excludes = ['id', 'name'];
+            $excludes = ['id', 'title'];
             $query = "SELECT * FROM settings_current WHERE subkey = 'vchamilo'";
             $virtualSettings = $connection->executeQuery($query);
             $virtualSettings = $virtualSettings->fetchAll();

@@ -93,7 +93,7 @@ class LearningCalendarPlugin extends Plugin
         $sql = "
             CREATE TABLE IF NOT EXISTS learning_calendar_events(
               id int not null AUTO_INCREMENT primary key,
-              name varchar(255) default '',
+              title varchar(255) default '',
               calendar_id int not null,
               start_date date not null,
               end_date date not null,
@@ -651,7 +651,7 @@ class LearningCalendarPlugin extends Plugin
 
         $html = '';
         if (!empty($list)) {
-            $html = implode('&nbsp;', array_column($list, 'name'));
+            $html = implode('&nbsp;', array_column($list, 'title'));
         }
 
         return $html;
@@ -1011,7 +1011,7 @@ class LearningCalendarPlugin extends Plugin
             }
         } else {
             $params = [
-                'name' => '',
+                'title' => '',
                 'calendar_id' => $calendarId,
                 'start_date' => $startDate,
                 'end_date' => $startDate,

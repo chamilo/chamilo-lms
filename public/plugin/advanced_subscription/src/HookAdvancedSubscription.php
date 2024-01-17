@@ -263,7 +263,7 @@ class HookAdvancedSubscription extends HookObserver implements HookAdminBlockObs
                         'name' => 'coach_id',
                         'type' => 'xsd:int',
                     ],
-                    // session.name
+                    // session.title
                     'name' => [
                         'name' => 'name',
                         'type' => 'xsd:string',

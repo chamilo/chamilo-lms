@@ -89,7 +89,7 @@ class BlockSession extends Block
             $i = 1;
             foreach ($sessions as $session) {
                 $session_id = (int) ($session['id']);
-                $title = $session['name'];
+                $title = $session['title'];
 
                 if (!empty($session['access_start_date'])) {
                     $dateFrom = api_convert_and_format_date(

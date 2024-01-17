@@ -2096,7 +2096,7 @@ class BuyCoursesPlugin extends Plugin
         $return = Database::insert(
             $servicesTable,
             [
-                'name' => Security::remove_XSS($service['name']),
+                'title' => Security::remove_XSS($service['name']),
                 'description' => Security::remove_XSS($service['description']),
                 'price' => $service['price'],
                 'tax_perc' => '' != $service['tax_perc'] ? (int) $service['tax_perc'] : null,
@@ -2151,7 +2151,7 @@ class BuyCoursesPlugin extends Plugin
         return Database::update(
             $servicesTable,
             [
-                'name' => Security::remove_XSS($service['name']),
+                'title' => Security::remove_XSS($service['name']),
                 'description' => Security::remove_XSS($service['description']),
                 'price' => $service['price'],
                 'tax_perc' => '' != $service['tax_perc'] ? (int) $service['tax_perc'] : null,
@@ -2419,7 +2419,7 @@ class BuyCoursesPlugin extends Plugin
         $isoCode = $currency['iso_code'];
 
         $servicesSale = Database::select(
-            'ss.*, s.name, s.description, s.price as service_price, s.duration_days, s.applies_to, s.owner_id, s.visibility, s.image',
+            'ss.*, s.title, s.description, s.price as service_price, s.duration_days, s.applies_to, s.owner_id, s.visibility, s.image',
             "$servicesSaleTable ss $innerJoins",
             $conditions,
             'first'
@@ -2428,7 +2428,7 @@ class BuyCoursesPlugin extends Plugin
         $buyer = api_get_user_info($servicesSale['buyer_id']);
 
         $servicesSale['service']['id'] = $servicesSale['service_id'];
-        $servicesSale['service']['name'] = $servicesSale['name'];
+        $servicesSale['service']['title'] = $servicesSale['title'];
         $servicesSale['service']['description'] = $servicesSale['description'];
         $servicesSale['service']['price'] = $servicesSale['service_price'];
         $servicesSale['service']['currency'] = $isoCode;

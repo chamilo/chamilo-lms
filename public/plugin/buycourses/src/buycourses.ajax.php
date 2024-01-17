@@ -386,7 +386,7 @@ switch ($action) {
                 "moneda" => $serviceSale['currency'],
                 "monto" => intval(floatval($serviceSale['price']) * 100),
                 "usuario" => $user['username'],
-                "descripcion" => $serviceSale['service']['name'],
+                "descripcion" => $serviceSale['service']['title'],
                 "pedido" => $serviceSale['reference'],
                 "codigo_pais" => "PE",
                 "direccion" => get_lang('None'),
@@ -405,7 +405,7 @@ switch ($action) {
                         Display::return_message(
                             sprintf(
                                 $plugin->get_lang('SubscriptionToCourseXSuccessful'),
-                                $serviceSale['service']['name']
+                                $serviceSale['service']['title']
                             ),
                             'success'
                         )
@@ -453,7 +453,7 @@ switch ($action) {
         $html .= "<br />";
         $html .= "<legend>{$plugin->get_lang('ServiceInformation')}</legend>";
         $html .= "<ul>";
-        $html .= "<li><b>{$plugin->get_lang('ServiceName')}:</b> {$serviceSale['service']['name']}</li> ";
+        $html .= "<li><b>{$plugin->get_lang('ServiceName')}:</b> {$serviceSale['service']['title']}</li> ";
         $html .= "<li><b>{$plugin->get_lang('Description')}:</b> {$serviceSale['service']['description']}</li> ";
         $nodeType = $serviceSale['node_type'];
         $nodeName = '';
@@ -563,7 +563,7 @@ switch ($action) {
 
         if ($response) {
             $html .= Display::return_message(
-                sprintf($plugin->get_lang('SubscriptionToServiceXSuccessful'), $serviceSale['service']['name']),
+                sprintf($plugin->get_lang('SubscriptionToServiceXSuccessful'), $serviceSale['service']['title']),
                 'success'
             );
         } else {

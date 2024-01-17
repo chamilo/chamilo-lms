@@ -165,7 +165,7 @@ $form->addText(
 );
 
 if (!empty($fullSessionList)) {
-    $options = array_column($fullSessionList, 'name', 'id');
+    $options = array_column($fullSessionList, 'title', 'id');
     $options[0] = get_lang('Please select an option');
     ksort($options);
     $form->addSelect('session_id', get_lang('Session'), $options);

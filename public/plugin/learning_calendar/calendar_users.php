@@ -51,7 +51,7 @@ $column_model = [
 $extraParams['autowidth'] = 'true';
 // height auto
 $extraParams['height'] = 'auto';
-$extraParams['sortname'] = 'name';
+$extraParams['sortname'] = 'title';
 $extraParams['sortorder'] = 'desc';
 $extraParams['multiselect'] = true;
 

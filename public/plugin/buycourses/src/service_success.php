@@ -84,7 +84,7 @@ if ($form->validate()) {
             if ($serviceSaleIsCompleted) {
                 Display::addFlash(
                     Display::return_message(
-                        sprintf($plugin->get_lang('SubscriptionToServiceXSuccessful'), $serviceSale['service']['name']),
+                        sprintf($plugin->get_lang('SubscriptionToServiceXSuccessful'), $serviceSale['service']['title']),
                         'success'
                     )
                 );
@@ -171,7 +171,7 @@ $interbreadcrumb[] = [
 
 $templateName = $plugin->get_lang('PaymentMethods');
 $tpl = new Template($templateName);
-$tpl->assign('title', $serviceSale['service']['name']);
+$tpl->assign('title', $serviceSale['service']['title']);
 $tpl->assign('price', $serviceSale['price']);
 $tpl->assign('currency', $serviceSale['currency_id']);
 $tpl->assign('service', $serviceSale);

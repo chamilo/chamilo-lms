@@ -26,7 +26,7 @@ $sql = "
     root_web varchar(120),
     db_host varchar(80) NOT NULL,
     db_user varchar(16) DEFAULT 'root',
-    db_password varchar(32),  
+    db_password varchar(32),
     table_prefix varchar(16),
     db_prefix varchar(16),
     main_database varchar(60) DEFAULT 'chamilo',
@@ -57,9 +57,9 @@ $table = 'vchamilo_config';
 $tablename = Database::get_main_table($table);
 // TODO: rename "name" and "value" fields - these are reserved keywords
 $sql = "CREATE TABLE IF NOT EXISTS $tablename (
-    id int(11) NOT NULL AUTO_INCREMENT, 
+    id int(11) NOT NULL AUTO_INCREMENT,
     component int(11) NOT NULL,
-    `name` varchar(64) NOT NULL,
+    title varchar(64) NOT NULL,
     `value` varchar(255) NOT NULL,
     longvalue varchar(255) NOT NULL,
     PRIMARY KEY (id)

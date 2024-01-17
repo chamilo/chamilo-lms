@@ -512,6 +512,13 @@ table#skill_holder {
   color: #0a0a0a;
 }
 
+#global-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
 //@import 'primevue-md-light-indigo/theme.css';
 //@import '~primevue/resources/primevue.min.css';
 //@import '~primeflex/primeflex.css';

@@ -11,14 +11,20 @@ import '../../../public/main/inc/lib/javascript/hotspot/js/hotspot.js';
 import '../../../public/main/inc/lib/javascript/d3/jquery.xcolor.js';
 
 document.addEventListener("DOMContentLoaded", function() {
+  // Mapping French paths to their English equivalents
+  var routeMapping = {
+    "enregistrement-audio": "audio-recording-help"
+  };
+
   var links = document.querySelectorAll('a[href*="web"]');
   links.forEach(function(link) {
     link.classList.add("ajax");
     var href = link.getAttribute("href");
     var pathSegments = href.split("/");
     if (pathSegments.length >= 3) {
-      var contentIdentifier = pathSegments[2];
-      link.setAttribute("href", "/main/inc/ajax/exercise.ajax.php?a=" + contentIdentifier);
+      var frenchPath = pathSegments[2];
+      var englishEquivalent = routeMapping[frenchPath] || frenchPath;
+      link.setAttribute("href", "/main/inc/ajax/exercise.ajax.php?a=" + englishEquivalent);
       link.setAttribute("data-title", link.textContent.trim());
     }
   });

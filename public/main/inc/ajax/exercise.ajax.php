@@ -1065,7 +1065,7 @@ switch ($action) {
         }
         echo 0;
         break;
-    case 'enregistrement-audio':
+    case 'audio-recording-help':
         $content = get_lang('While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on “Stop recording” then select “End exercise”. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.');
 
         $html = '

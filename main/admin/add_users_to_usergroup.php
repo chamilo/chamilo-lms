@@ -287,7 +287,9 @@ foreach ($list_in as $listedUserId) {
 $user_with_any_group = !empty($_REQUEST['user_with_any_group']);
 $user_list = [];
 
-$user_list = UserManager::getUserListLike($conditions, $order, true, 'OR');
+if (!(!$showAllStudentByDefault && !isset($_POST['firstLetterUser']) && !isset($_REQUEST['active_users'])) && !$user_with_any_group) {
+    $user_list = UserManager::getUserListLike($conditions, $order, true, 'OR');
+}
 
 if ($user_with_any_group) {
     $new_user_list = [];

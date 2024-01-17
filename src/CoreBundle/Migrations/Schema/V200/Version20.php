@@ -140,7 +140,7 @@ class Version20 extends AbstractMigrationChamilo
             $this->addSql(
                 'CREATE TABLE IF NOT EXISTS tool (id INT AUTO_INCREMENT NOT NULL, title VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;'
             );
-            $this->addSql('CREATE UNIQUE INDEX UNIQ_20F33ED15E237E06 ON tool (name)');
+            $this->addSql('CREATE UNIQUE INDEX UNIQ_20F33ED12B36786B ON tool (title)');
         }
 
         $table = $schema->getTable('language');

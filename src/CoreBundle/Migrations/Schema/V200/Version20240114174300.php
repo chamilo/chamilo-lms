@@ -58,18 +58,6 @@ final class Version20240114174300 extends AbstractMigrationChamilo
             );
         }
 
-        if ($schema->hasTable('tool')) {
-            $table = $schema->getTable('tool');
-            if ($table->hasIndex('UNIQ_20F33ED15E237E06')) {
-                $this->addSql(
-                    'DROP INDEX UNIQ_20F33ED15E237E06 on tool'
-                );
-            }
-            $this->addSql(
-                'CREATE UNIQUE INDEX UNIQ_20F33ED12B36786B ON tool (title)'
-            );
-        }
-
         if ($schema->hasTable('resource_tag')) {
             $this->addSql(
                 'ALTER TABLE resource_tag CHANGE name title VARCHAR(255) NOT NULL'

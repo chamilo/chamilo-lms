@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
@@ -29,19 +30,24 @@ class Version20230321164019 extends AbstractMigrationChamilo
         $items = $result->fetchAllAssociative();
 
         foreach ($items as $item) {
-            $trackQualify = new TrackEAttemptQualify();
-            $trackQualify
-                ->setExeId($item['exe_id'])
+            $attemptQualify = new TrackEAttemptQualify();
+            $attemptQualify
                 ->setQuestionId($item['question_id'])
                 ->setAnswer($item['answer'])
-                ->setMarks((int) $item['marks'])
+                ->setMarks($item['marks'])
                 ->setAuthor($item['author'])
                 ->setTeacherComment($item['teacher_comment'])
                 ->setSessionId($item['session_id'])
             ;
-            $em->persist($trackQualify);
-            $em->flush();
+
+            $trackEExercise = $em->getRepository(TrackEExercise::class)->find($item['exe_id']);
+            if ($trackEExercise) {
+                $attemptQualify->setTrackExercise($trackEExercise);
+                $em->persist($attemptQualify);
+            }
         }
+
+        $em->flush();
     }
 
     public function down(Schema $schema): void {}

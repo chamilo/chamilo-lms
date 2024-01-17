@@ -49,6 +49,7 @@ function listPosts() {
       params: {
         socialwall_wallOwner: user.value['id'],
         'order[sendDate]': 'desc',
+        'exists[parent]': false,
       }
     })
     .then(response => {

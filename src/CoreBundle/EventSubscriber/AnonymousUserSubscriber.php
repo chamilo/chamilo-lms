@@ -6,8 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\EventSubscriber;
 
-use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
-use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -119,16 +117,24 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
             }
         }
 
-        // Delete excess anonymous users
-        while (\count($anonymousUsers) >= $maxAnonymousUsers) {
-            $oldestAnonymousUser = array_shift($anonymousUsers);
+        if (\count($anonymousUsers) >= $maxAnonymousUsers) {
+            $oldestAnonymousUser = reset($anonymousUsers);
             if ($oldestAnonymousUser) {
-                error_log('Deleting oldest anonymous user: '.$oldestAnonymousUser->getId());
+                error_log('Updating oldest anonymous user: '.$oldestAnonymousUser->getId());
 
-                $this->handleRelatedEntities($oldestAnonymousUser);
+                $newUniqueId = uniqid('anon_');
+                $newEmail = $newUniqueId.'@localhost.local';
 
-                $this->entityManager->remove($oldestAnonymousUser);
+                $oldestAnonymousUser->setUsername('anon_'.$newUniqueId)
+                    ->setEmail($newEmail)
+                    ->setLastLogin(new DateTime());
+
+                $this->entityManager->persist($oldestAnonymousUser);
                 $this->entityManager->flush();
+
+                $this->updateOrCreateTrackELogin($userIp, $oldestAnonymousUser);
+
+                return $oldestAnonymousUser->getId();
             }
         }
 
@@ -159,29 +165,20 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         return $anonymousUser->getId();
     }
 
-    private function handleRelatedEntities(User $user): void
+    private function updateOrCreateTrackELogin(string $userIp, User $user): void
     {
-        $trackEExercisesRepository = $this->entityManager->getRepository(TrackEExercise::class);
-
-        $exercises = $trackEExercisesRepository->findBy(['user' => $user->getId()]);
-
-        foreach ($exercises as $exercise) {
-            $this->handleAttemptRecordings($exercise);
-
-            $this->entityManager->remove($exercise);
+        $trackLoginRepository = $this->entityManager->getRepository(TrackELogin::class);
+        $existingLogin = $trackLoginRepository->findOneBy(['userIp' => $userIp, 'user' => $user]);
+        if (!$existingLogin) {
+            $trackLogin = new TrackELogin();
+            $trackLogin->setUserIp($userIp)
+                ->setLoginDate(new DateTime())
+                ->setUser($user);
+            $this->entityManager->persist($trackLogin);
+        } else {
+            $existingLogin->setLoginDate(new DateTime());
+            $this->entityManager->persist($existingLogin);
         }
-
         $this->entityManager->flush();
-    }
-
-    private function handleAttemptRecordings(TrackEExercise $exercise): void
-    {
-        $trackEAttemptRecordingRepository = $this->entityManager->getRepository(TrackEAttemptQualify::class);
-
-        $attemptRecordings = $trackEAttemptRecordingRepository->findBy(['trackExercise' => $exercise->getExeId()]);
-
-        foreach ($attemptRecordings as $attemptRecording) {
-            $this->entityManager->remove($attemptRecording);
-        }
     }
 }

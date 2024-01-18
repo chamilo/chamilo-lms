@@ -22,7 +22,6 @@ use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
@@ -129,9 +128,7 @@ class CourseController extends ToolBaseController
     #[Entity('course', expr: 'repository.find(cid)')]
     public function indexJson(
         Request $request,
-        CToolRepository $toolRepository,
         CShortcutRepository $shortcutRepository,
-        ToolChain $toolChain,
         EntityManagerInterface $em,
     ): Response {
         $requestData = json_decode($request->getContent(), true);
@@ -849,19 +846,6 @@ class CourseController extends ToolBaseController
                 )
             );
         }
-    }
-
-    private function generateToolUrl(AbstractTool $tool): string
-    {
-        $link = $tool->getLink();
-        $course = $this->getCourse();
-
-        if (strpos($link, 'nodeId')) {
-            $nodeId = (string) $course->getResourceNode()->getId();
-            $link = str_replace(':nodeId', $nodeId, $link);
-        }
-
-        return $link.'?'.$this->getCourseUrlQuery();
     }
 
     // Implement the real logic to check course enrollment

@@ -37,19 +37,10 @@ final class Version20240114212100 extends AbstractMigrationChamilo
             );
         }
 
-        if ($schema->hasTable('resource_file')) {
-            $this->addSql(
-                'ALTER TABLE fos_group CHANGE name title VARCHAR(255) NOT NULL'
-            );
-        }
     }
 
     public function down(Schema $schema): void
     {
-        $table = $schema->getTable('resource_file');
-        if ($table->hasColumn('title')) {
-            $this->addSql('ALTER TABLE resource_file CHANGE title name VARCHAR(255) NOT NULL');
-        }
 
         $table = $schema->getTable('fos_group');
         if ($table->hasIndex('UNIQ_4B019DDB2B36786B')) {

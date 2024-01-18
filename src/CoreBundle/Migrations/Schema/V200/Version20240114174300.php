@@ -34,36 +34,6 @@ final class Version20240114174300 extends AbstractMigrationChamilo
             );
         }
 
-        if ($schema->hasTable('c_shortcut')) {
-            $this->addSql(
-                'ALTER TABLE c_shortcut CHANGE name title VARCHAR(255) NOT NULL'
-            );
-        }
-
-        if ($schema->hasTable('illustration')) {
-            $this->addSql(
-                'ALTER TABLE illustration CHANGE name title VARCHAR(255) NOT NULL'
-            );
-        }
-
-        if ($schema->hasTable('resource_type')) {
-            $this->addSql(
-                'ALTER TABLE resource_type CHANGE name title VARCHAR(255) NOT NULL'
-            );
-        }
-
-        if ($schema->hasTable('resource_format')) {
-            $this->addSql(
-                'ALTER TABLE resource_format CHANGE name title VARCHAR(255) NOT NULL'
-            );
-        }
-
-        if ($schema->hasTable('resource_tag')) {
-            $this->addSql(
-                'ALTER TABLE resource_tag CHANGE name title VARCHAR(255) NOT NULL'
-            );
-        }
-
         if ($schema->hasTable('track_e_hotpotatoes')) {
             $this->addSql(
                 'ALTER TABLE track_e_hotpotatoes CHANGE exe_name title VARCHAR(255) NOT NULL'
@@ -89,11 +59,6 @@ final class Version20240114174300 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE track_e_hotpotatoes CHANGE title exe_name VARCHAR(255) NOT NULL');
         }
 
-        $table = $schema->getTable('resource_tag');
-        if ($table->hasColumn('title')) {
-            $this->addSql('ALTER TABLE resource_tag CHANGE title name VARCHAR(255) NOT NULL');
-        }
-
         $table = $schema->getTable('tool');
         if ($table->hasIndex('UNIQ_20F33ED12B36786B')) {
             $this->addSql(
@@ -106,26 +71,6 @@ final class Version20240114174300 extends AbstractMigrationChamilo
         $this->addSql(
             'CREATE UNIQUE INDEX UNIQ_20F33ED15E237E06 ON tool (title)'
         );
-
-        $table = $schema->getTable('resource_format');
-        if ($table->hasColumn('title')) {
-            $this->addSql('ALTER TABLE resource_format CHANGE title name VARCHAR(255) NOT NULL');
-        }
-
-        $table = $schema->getTable('resource_type');
-        if ($table->hasColumn('title')) {
-            $this->addSql('ALTER TABLE resource_type CHANGE title name VARCHAR(255) NOT NULL');
-        }
-
-        $table = $schema->getTable('illustration');
-        if ($table->hasColumn('title')) {
-            $this->addSql('ALTER TABLE illustration CHANGE title name VARCHAR(255) NOT NULL');
-        }
-
-        $table = $schema->getTable('c_shortcut');
-        if ($table->hasColumn('title')) {
-            $this->addSql('ALTER TABLE c_shortcut CHANGE title name VARCHAR(255) NOT NULL');
-        }
 
         $table = $schema->getTable('c_wiki_category');
         if ($table->hasColumn('title')) {

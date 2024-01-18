@@ -84,6 +84,11 @@ use Symfony\Component\Validator\Constraints as Assert;
                                             ],
                                         ],
                                     ],
+                                    'isUncompressZipEnabled' => ['type' => 'boolean'],
+                                    'fileExistsOption' => [
+                                        'type' => 'string',
+                                        'enum' => ['overwrite', 'skip', 'rename']
+                                    ],
                                 ],
                             ],
                         ],

@@ -19,22 +19,25 @@
         <BaseCheckbox
           id="uncompress"
           v-model="isUncompressZipEnabled"
-          :label="t('Uncompres zip')"
+          :label="t('Uncompress zip')"
           name="uncompress"
+          @input="handleUncompressZipEnabledChange"
         />
       </div>
 
       <div class="flex flex-row mb-2">
         <label class="font-semibold w-28">{{ t("If file exists") }}:</label>
         <BaseRadioButtons
+          id="fileExistsOption"
           v-model="fileExistsOption"
           :options="[
             { label: t('Do nothing'), value: 'nothing' },
             { label: t('Overwrite the existing file'), value: 'overwrite' },
             { label: t('Rename the uploaded file if it exists'), value: 'rename' },
           ]"
-          initial-value="rename"
-          name="file-exists-options"
+          :initial-value="'rename'"
+          name="fileExistsOption"
+          @input="handleFileExistsOptionChange"
         />
       </div>
     </BaseAdvancedSettingsButton>
@@ -71,6 +74,8 @@ const { t } = useI18n()
 const filetype = route.query?.cert === '1' ? 'certificate' : 'file';
 
 const showAdvancedSettings = ref(false)
+const isUncompressZipEnabled = ref(false)
+const fileExistsOption = ref("rename")
 
 const parentResourceNodeId = ref(Number(route.params.node))
 const resourceLinkList = ref(
@@ -81,12 +86,10 @@ const resourceLinkList = ref(
       cid,
       visibility: RESOURCE_LINK_PUBLISHED,
     },
-  ]),
+  ])
 )
-const isUncompressZipEnabled = ref(false)
-const fileExistsOption = ref("")
 
-let uppy = ref()
+let uppy = ref();
 uppy.value = new Uppy()
   .use(ImageEditor, {
     cropperOptions: {
@@ -121,6 +124,8 @@ uppy.value.setMeta({
   filetype,
   parentResourceNodeId: parentResourceNodeId.value,
   resourceLinkList: resourceLinkList.value,
+  isUncompressZipEnabled: isUncompressZipEnabled.value,
+  fileExistsOption: fileExistsOption.value,
 })
 
 if (filetype === 'certificate') {
@@ -128,4 +133,20 @@ if (filetype === 'certificate') {
 } else {
   uppy.value.use(Webcam)
 }
+
+const handleUncompressZipEnabledChange = () => {
+  uppy.value.setOptions({
+    meta: {
+      isUncompressZipEnabled: isUncompressZipEnabled.value,
+    },
+  });
+};
+
+const handleFileExistsOptionChange = () => {
+  uppy.value.setOptions({
+    meta: {
+      fileExistsOption: fileExistsOption.value,
+    },
+  });
+};
 </script>

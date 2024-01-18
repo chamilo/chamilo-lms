@@ -2239,7 +2239,7 @@ class UserGroupModel extends Model
 
         $sql = 'SELECT
                     g.picture,
-                    g.name,
+                    g.title,
                     g.description,
                     g.id ,
                     gu.relation_type';

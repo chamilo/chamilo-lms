@@ -21,7 +21,6 @@
           v-model="isUncompressZipEnabled"
           :label="t('Uncompress zip')"
           name="uncompress"
-          @input="handleUncompressZipEnabledChange"
         />
       </div>
 
@@ -37,7 +36,6 @@
           ]"
           :initial-value="'rename'"
           name="fileExistsOption"
-          @input="handleFileExistsOptionChange"
         />
       </div>
     </BaseAdvancedSettingsButton>
@@ -45,7 +43,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { ref, watch } from "vue"
 import "@uppy/core/dist/style.css"
 import "@uppy/dashboard/dist/style.css"
 import "@uppy/image-editor/dist/style.css"
@@ -134,19 +132,19 @@ if (filetype === 'certificate') {
   uppy.value.use(Webcam)
 }
 
-const handleUncompressZipEnabledChange = () => {
+watch(isUncompressZipEnabled, () => {
   uppy.value.setOptions({
     meta: {
       isUncompressZipEnabled: isUncompressZipEnabled.value,
     },
-  });
-};
+  })
+})
 
-const handleFileExistsOptionChange = () => {
+watch(fileExistsOption, () => {
   uppy.value.setOptions({
     meta: {
       fileExistsOption: fileExistsOption.value,
     },
-  });
-};
+  })
+})
 </script>

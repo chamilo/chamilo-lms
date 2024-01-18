@@ -77,7 +77,7 @@ class SessionRelCourseRelUser
     ])]
     #[ORM\ManyToOne(targetEntity: UserAlias::class, cascade: ['persist'], inversedBy: 'sessionRelCourseRelUsers')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
-    protected User $user;
+    protected UserAlias $user;
 
     #[Groups([
         'session_rel_course_rel_user:read',

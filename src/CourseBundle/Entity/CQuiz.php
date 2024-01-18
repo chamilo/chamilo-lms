@@ -82,7 +82,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     #[ORM\Column(name: 'propagate_neg', type: 'integer', nullable: false)]
     protected int $propagateNeg;
 
-    #[ORm\Column(name: 'save_correct_answers', type: 'integer', nullable: true)]
+    #[ORM\Column(name: 'save_correct_answers', type: 'integer', nullable: true)]
     protected ?int $saveCorrectAnswers;
 
     #[ORM\Column(name: 'review_answers', type: 'integer', nullable: false)]

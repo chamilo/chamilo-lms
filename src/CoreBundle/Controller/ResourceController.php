@@ -192,7 +192,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         // If resource node has a file just download it. Don't download the children.
         if ($resourceNode->hasResourceFile()) {
-
             /** @var ?User $user */
             $user = $this->getUser();
             $resourceLinkId = $resourceNode->getResourceLinks()->first()->getId();

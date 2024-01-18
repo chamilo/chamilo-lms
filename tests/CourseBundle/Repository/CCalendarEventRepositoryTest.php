@@ -410,7 +410,7 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
         $event = $calendarRepo->createFromAnnouncement(
             $announcement,
             new Datetime('now'),
-            new DateTime('now +30 days'),
+            new Datetime('now +30 days'),
             ['everyone'],
             $course,
         );
@@ -430,7 +430,7 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
         $event = $calendarRepo->createFromAnnouncement(
             $announcement2,
             new Datetime('now'),
-            new DateTime('now +30 days'),
+            new Datetime('now +30 days'),
             ['USER:'.$student->getId(), 'GROUP:'.$group->getIid()],
             $course,
         );

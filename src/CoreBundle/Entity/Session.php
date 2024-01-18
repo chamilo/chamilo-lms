@@ -767,7 +767,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
      */
     public function isActive(): bool
     {
-        $now = new Datetime('now');
+        $now = new DateTime('now');
 
         return $now > $this->getAccessStartDate();
     }
@@ -844,7 +844,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
      */
     public function isCurrentlyAccessible(): bool
     {
-        $now = new Datetime();
+        $now = new DateTime();
 
         return (null === $this->accessStartDate || $this->accessStartDate < $now)
             && (null === $this->accessEndDate || $now < $this->accessEndDate);
@@ -1163,7 +1163,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
     protected function compareDates(?DateTime $start, DateTime $end = null): bool
     {
-        $now = new Datetime('now');
+        $now = new DateTime('now');
 
         if (!empty($start) && !empty($end) && ($now >= $start && $now <= $end)) {
             return true;

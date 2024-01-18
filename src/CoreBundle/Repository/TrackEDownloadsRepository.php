@@ -26,7 +26,7 @@ class TrackEDownloadsRepository extends ServiceEntityRepository
         $download->setDownUserId($userId);
         $download->setDownDate(new DateTime());
 
-        $resourceLink =  $this->_em->getRepository(ResourceLink::class)->find($resourceLinkId);
+        $resourceLink = $this->_em->getRepository(ResourceLink::class)->find($resourceLinkId);
         if ($resourceLink) {
             $download->setResourceLink($resourceLink);
         }

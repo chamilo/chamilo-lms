@@ -114,9 +114,6 @@ class TrackEDownloads
 
     /**
      * Set resourceLink.
-     *
-     * @param ResourceLink|null $resourceLink
-     * @return TrackEDownloads
      */
     public function setResourceLink(?ResourceLink $resourceLink): self
     {

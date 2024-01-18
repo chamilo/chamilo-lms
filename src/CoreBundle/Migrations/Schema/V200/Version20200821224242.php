@@ -21,7 +21,7 @@ final class Version20200821224242 extends AbstractMigrationChamilo
         $connection = $this->getEntityManager()->getConnection();
 
         $table = $schema->getTable('message');
-        $this->addSql('ALTER TABLE message CHANGE parent_id parent_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE message CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE parent_id parent_id INT DEFAULT NULL;');
 
         if ($table->hasColumn('msg_status')) {
             $this->addSql('ALTER TABLE message CHANGE msg_status msg_type SMALLINT NOT NULL');

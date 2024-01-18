@@ -66,8 +66,8 @@ class Version20180928172830 extends AbstractMigrationChamilo
         $this->addSql('UPDATE c_tool SET session_id = NULL WHERE session_id = 0');
 
         // Delete c_tool not registered in tool. @todo migrate BBB/LP/mobidico plugins
-        $this->addSql('DELETE FROM c_tool WHERE name NOT IN (SELECT name FROM tool)');
-        $this->addSql('UPDATE c_tool SET tool_id = (SELECT id FROM tool WHERE name = c_tool.name) WHERE tool_id IS NOT NULL');
+        $this->addSql('DELETE FROM c_tool WHERE name NOT IN (SELECT title FROM tool)');
+        $this->addSql('UPDATE c_tool SET tool_id = (SELECT id FROM tool WHERE title = c_tool.name) WHERE tool_id IS NOT NULL');
 
         if (!$table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_tool ADD resource_node_id INT DEFAULT NULL');

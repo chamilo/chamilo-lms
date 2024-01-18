@@ -7,7 +7,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-final class Version20240114174300 extends AbstractMigrationChamilo
+final class Version20170524110000 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
@@ -43,6 +43,12 @@ final class Version20240114174300 extends AbstractMigrationChamilo
         if ($schema->hasTable('lti_external_tool')) {
             $this->addSql(
                 'ALTER TABLE lti_external_tool CHANGE name title VARCHAR(255) NOT NULL'
+            );
+        }
+
+        if ($schema->hasTable('plugin_ims_lti_tool')) {
+            $this->addSql(
+                'ALTER TABLE plugin_ims_lti_tool CHANGE name title VARCHAR(255) NOT NULL'
             );
         }
     }

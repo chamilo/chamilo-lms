@@ -20,7 +20,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
     {
         if (false === $schema->hasTable('c_exercise_category')) {
             $this->addSql(
-                'CREATE TABLE c_exercise_category (id INT AUTO_INCREMENT NOT NULL, c_id INT NOT NULL, name VARCHAR(255) NOT NULL, description LONGTEXT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, position INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB'
+                'CREATE TABLE c_exercise_category (id INT AUTO_INCREMENT NOT NULL, c_id INT NOT NULL, title VARCHAR(255) NOT NULL, description LONGTEXT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, position INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB'
             );
             $this->addSql('ALTER TABLE c_exercise_category ADD resource_node_id INT DEFAULT NULL');
             $this->addSql(

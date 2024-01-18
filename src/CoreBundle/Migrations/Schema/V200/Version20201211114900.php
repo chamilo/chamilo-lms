@@ -116,7 +116,7 @@ final class Version20201211114900 extends AbstractMigrationChamilo
 
         if (!$schema->hasTable('c_wiki_category')) {
             $this->addSql(
-                'CREATE TABLE c_wiki_category (id INT AUTO_INCREMENT NOT NULL, c_id INT NOT NULL, session_id INT DEFAULT NULL, tree_root INT DEFAULT NULL, parent_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, lft INT NOT NULL, lvl INT NOT NULL, rgt INT NOT NULL, INDEX IDX_17F1099A91D79BD3 (c_id), INDEX IDX_17F1099A613FECDF (session_id), INDEX IDX_17F1099AA977936C (tree_root), INDEX IDX_17F1099A727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
+                'CREATE TABLE c_wiki_category (id INT AUTO_INCREMENT NOT NULL, c_id INT NOT NULL, session_id INT DEFAULT NULL, tree_root INT DEFAULT NULL, parent_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, lft INT NOT NULL, lvl INT NOT NULL, rgt INT NOT NULL, INDEX IDX_17F1099A91D79BD3 (c_id), INDEX IDX_17F1099A613FECDF (session_id), INDEX IDX_17F1099AA977936C (tree_root), INDEX IDX_17F1099A727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
             );
             $this->addSql(
                 'ALTER TABLE c_wiki_category ADD CONSTRAINT FK_17F1099A91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE'

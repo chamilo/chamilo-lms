@@ -31,7 +31,7 @@ class Version20181126174500 extends AbstractMigrationChamilo
                 c_id INT DEFAULT NULL,
                 gradebook_eval_id INT DEFAULT NULL,
                 parent_id INT DEFAULT NULL,
-                name VARCHAR(255) NOT NULL,
+                title VARCHAR(255) NOT NULL,
                 description LONGTEXT DEFAULT NULL,
                 launch_url VARCHAR(255) NOT NULL,
                 consumer_key VARCHAR(255) DEFAULT NULL,

@@ -25,14 +25,14 @@ class Version20180928172830 extends AbstractMigrationChamilo
             );
         }
         $this->addSql('ALTER TABLE c_tool CHANGE link link VARCHAR(255) DEFAULT NULL;');
-        $this->addSql('UPDATE c_tool SET name = "blog" WHERE name = "blog_management" ');
-        $this->addSql('UPDATE c_tool SET name = "agenda" WHERE name = "calendar_event" ');
-        $this->addSql('UPDATE c_tool SET name = "member" WHERE link = "user/user.php" ');
-        $this->addSql('UPDATE c_tool SET name = "course_description/index.php" WHERE link = "course_description/" ');
+        $this->addSql('UPDATE c_tool SET title = "blog" WHERE title = "blog_management" ');
+        $this->addSql('UPDATE c_tool SET title = "agenda" WHERE title = "calendar_event" ');
+        $this->addSql('UPDATE c_tool SET title = "member" WHERE link = "user/user.php" ');
+        $this->addSql('UPDATE c_tool SET title = "course_description/index.php" WHERE link = "course_description/" ');
 
-        // $this->addSql('UPDATE c_tool SET name = "maintenance" WHERE name = "course_maintenance" ');
-        // $this->addSql('UPDATE c_tool SET name = "assignment" WHERE name = "student_publication" ');
-        // $this->addSql('UPDATE c_tool SET name = "settings" WHERE name = "course_setting" ');
+        // $this->addSql('UPDATE c_tool SET title = "maintenance" WHERE title = "course_maintenance" ');
+        // $this->addSql('UPDATE c_tool SET title = "assignment" WHERE title = "student_publication" ');
+        // $this->addSql('UPDATE c_tool SET title = "settings" WHERE title = "course_setting" ');
 
         if (!$table->hasColumn('tool_id')) {
             $this->addSql('ALTER TABLE c_tool ADD tool_id INT NOT NULL');
@@ -66,8 +66,8 @@ class Version20180928172830 extends AbstractMigrationChamilo
         $this->addSql('UPDATE c_tool SET session_id = NULL WHERE session_id = 0');
 
         // Delete c_tool not registered in tool. @todo migrate BBB/LP/mobidico plugins
-        $this->addSql('DELETE FROM c_tool WHERE name NOT IN (SELECT title FROM tool)');
-        $this->addSql('UPDATE c_tool SET tool_id = (SELECT id FROM tool WHERE title = c_tool.name) WHERE tool_id IS NOT NULL');
+        $this->addSql('DELETE FROM c_tool WHERE title NOT IN (SELECT title FROM tool)');
+        $this->addSql('UPDATE c_tool SET tool_id = (SELECT id FROM tool WHERE title = c_tool.title) WHERE tool_id IS NOT NULL');
 
         if (!$table->hasColumn('resource_node_id')) {
             $this->addSql('ALTER TABLE c_tool ADD resource_node_id INT DEFAULT NULL');

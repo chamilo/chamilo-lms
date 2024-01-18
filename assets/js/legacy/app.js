@@ -176,9 +176,6 @@ $(function () {
       globalModalBody.html(modalContent);
 
       globalModalBody.css({'max-height' : "500px", "overflow" : "auto"});
-
-      $('#global-modal').css({'top' : "10%", "z-index" : "10000", "width" : "60%", "left" : "20%", "border" : "1px solid #ccc"});
-
       toggleModal('global-modal');
     });
   });

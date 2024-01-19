@@ -24157,3 +24157,15 @@ msgstr "Text appearing at the end of the test when the user has succeeded or if 
 
 msgid "Text appearing at the end of the test when the user has failed."
 msgstr "Text appearing at the end of the test when the user has failed."
+
+msgid "Hide question numbering"
+msgstr "Hide question numbering"
+
+msgid "Show score by category on a radar/spiderweb chart"
+msgstr "Show score by category on a radar/spiderweb chart"
+
+msgid "Direct pop-up mode"
+msgstr "Direct pop-up mode"
+
+msgid "Prevent moving backwards between questions"
+msgstr "Prevent moving backwards between questions"

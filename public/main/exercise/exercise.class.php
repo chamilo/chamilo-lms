@@ -2110,7 +2110,7 @@ class Exercise
                 $form->createElement('radio', 'hide_question_number', null, get_lang('Yes'), '1'),
                 $form->createElement('radio', 'hide_question_number', null, get_lang('No'), '0'),
             ];
-            $form->addGroup($group, null, get_lang('HideQuestionNumber'));
+            $form->addGroup($group, null, get_lang('Hide question numbering'));
 
             $displayMatrix = 'none';
             $displayRandom = 'none';
@@ -2292,7 +2292,7 @@ class Exercise
                 ]
             );
             $form->addElement('html', '</div>');
-            $form->addCheckBox('prevent_backwards', null, get_lang('QuizPreventBackwards'));
+            $form->addCheckBox('prevent_backwards', null, get_lang('Prevent moving backwards between questions'));
             $form->addElement(
                 'text',
                 'pass_percentage',
@@ -2574,7 +2574,7 @@ class Exercise
                 'radio',
                 'exerciseFeedbackType',
                 null,
-                get_lang('ExerciseDirectPopUp'),
+                get_lang('Direct pop-up mode'),
                 EXERCISE_FEEDBACK_TYPE_POPUP,
                 ['id' => 'exerciseType_'.EXERCISE_FEEDBACK_TYPE_POPUP, 'onclick' => 'check_direct_feedback()']
             );
@@ -10903,7 +10903,7 @@ class Exercise
             'radio',
             'results_disabled',
             null,
-            get_lang('ExerciseCategoriesRadarMode'),
+            get_lang('Show score by category on a radar/spiderweb chart'),
             RESULT_DISABLE_RADAR,
             ['id' => 'result_disabled_9']
         );

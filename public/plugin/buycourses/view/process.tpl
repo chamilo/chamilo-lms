@@ -1,6 +1,7 @@
 <div class="actions">
     <a href="{{ _p.web }}main/auth/courses.php" title="{{ "Back"|get_lang }}">
-        {{ 'ActionIcon::BACK' | mdi_icon(32, 'ch-tool-icon', 'Back') }}
+        <img src="{{ "back.png"|icon(32) }}" width="32" height="32" alt="{{ "Back"|get_lang }}"
+             title="{{ "Back"|get_lang }}"/>
     </a>
 </div>
 <div class="page-header">

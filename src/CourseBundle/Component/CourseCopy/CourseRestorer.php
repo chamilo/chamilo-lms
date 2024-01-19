@@ -1885,6 +1885,7 @@ class CourseRestorer
                         'review_answers' => (int) $quiz->review_answers,
                         'propagate_neg' => (int) $quiz->propagate_neg,
                         'text_when_finished' => (string) $quiz->text_when_finished,
+                        'text_when_finished_failure' => (string) $quiz->text_when_finished_failure,
                         'expired_time' => (int) $quiz->expired_time,
                         'start_time' => $quiz->start_time,
                         'end_time' => $quiz->end_time,

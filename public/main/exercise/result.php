@@ -142,7 +142,6 @@ switch ($action) {
             api_not_allowed(true);
         }
         exit;
-        break;
 }
 
 $lpId = (int) $track_exercise_info['orig_lp_id'];

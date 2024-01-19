@@ -4378,15 +4378,6 @@ EOT;
             );
         }
 
-        // Display text when test is finished #4074 and for LP #4227
-        $endOfMessage = $objExercise->getTextWhenFinished();
-        if (!empty($endOfMessage)) {
-            echo Display::div(
-                $endOfMessage,
-                ['id' => 'quiz_end_message']
-            );
-        }
-
         $question_list_answers = [];
         $category_list = [];
         $loadChoiceFromSession = false;
@@ -4604,6 +4595,15 @@ EOT;
                     }
                 }
             }
+        }
+
+        // Display text when test is finished #4074 and for LP #4227
+        $endOfMessage = $objExercise->getFinishText($total_score, $total_weight);
+        if (!empty($endOfMessage)) {
+            echo Display::div(
+                $endOfMessage,
+                ['id' => 'quiz_end_message']
+            );
         }
 
         $totalScoreText = null;

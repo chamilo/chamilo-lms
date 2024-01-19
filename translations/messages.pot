@@ -24150,3 +24150,9 @@ msgstr ""
 
 msgid "Number of times this answer was selected"
 msgstr ""
+
+msgid "Text appearing at the end of the test when the user has succeeded or if no pass percentage was set."
+msgstr ""
+
+msgid "Text appearing at the end of the test when the user has failed."
+msgstr ""

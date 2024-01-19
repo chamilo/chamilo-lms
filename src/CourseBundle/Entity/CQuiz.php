@@ -94,6 +94,9 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     #[ORM\Column(name: 'text_when_finished', type: 'text', nullable: true)]
     protected ?string $textWhenFinished = null;
 
+    #[ORM\Column(name: 'text_when_finished_failure', type: 'text', nullable: true)]
+    protected ?string $textWhenFinishedFailure = null;
+
     #[ORM\Column(name: 'display_category_name', type: 'integer', nullable: false)]
     protected int $displayCategoryName;
 
@@ -428,6 +431,10 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
         return $this->randomByCategory;
     }
 
+    /**
+     * Set text to display to user when they succeed to the test or, when no pass percentage has been set, when the
+     * test is finished.
+     */
     public function setTextWhenFinished(string $textWhenFinished): self
     {
         $this->textWhenFinished = $textWhenFinished;
@@ -436,11 +443,34 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     }
 
     /**
-     * Get textWhenFinished.
+     * Get text to display to user when they succeed to the test or, when no pass percentage has been set, when the
+     * test is finished.
      */
     public function getTextWhenFinished(): ?string
     {
         return $this->textWhenFinished;
+    }
+
+    /**
+     * Set text to display to user when they fail to the test (when pass percentage has been set).
+     */
+    public function setTextWhenFinishedFailure(string $textWhenFinished): self
+    {
+        $this->textWhenFinishedFailure = $textWhenFinished;
+
+        return $this;
+    }
+
+    /**
+     * Get text to display to user when they fail to the test (when pass percentage has been set).
+     */
+    public function getTextWhenFinishedFailure(): ?string
+    {
+        if (empty($this->textWhenFinishedFailure)) {
+            return '';
+        }
+
+        return $this->textWhenFinishedFailure;
     }
 
     public function setDisplayCategoryName(int $displayCategoryName): self

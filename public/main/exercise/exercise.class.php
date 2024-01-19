@@ -53,6 +53,7 @@ class Exercise
     public $review_answers;
     public $randomByCat;
     public $text_when_finished;
+    public $text_when_finished_failure;
     public $display_category_name;
     public $pass_percentage;
     public $edit_exercise_in_lp = false;
@@ -125,6 +126,7 @@ class Exercise
         $this->review_answers = false;
         $this->randomByCat = 0;
         $this->text_when_finished = '';
+        $this->text_when_finished_failure = '';
         $this->display_category_name = 0;
         $this->pass_percentage = 0;
         $this->modelType = 1;
@@ -200,6 +202,7 @@ class Exercise
             $this->saveCorrectAnswers = $object->save_correct_answers;
             $this->randomByCat = $object->random_by_category;
             $this->text_when_finished = $object->text_when_finished;
+            $this->text_when_finished_failure = $object->text_when_finished_failure;
             $this->display_category_name = $object->display_category_name;
             $this->pass_percentage = $object->pass_percentage;
             $this->is_gradebook_locked = api_resource_is_locked_by_gradebook($id, LINK_EXERCISE);
@@ -414,7 +417,7 @@ class Exercise
      *
      * @author hubert borderiou 28-11-11
      */
-    public function getTextWhenFinished()
+    public function getTextWhenFinished(): string
     {
         return $this->text_when_finished;
     }
@@ -424,9 +427,31 @@ class Exercise
      *
      * @author hubert borderiou 28-11-11
      */
-    public function updateTextWhenFinished($text)
+    public function setTextWhenFinished(string $text): void
     {
         $this->text_when_finished = $text;
+    }
+
+    /**
+     * Get the text to display when the user has failed the test
+     * @return string html text : the text to display ay the end of the test
+     */
+    public function getTextWhenFinishedFailure(): string
+    {
+        if (empty($this->text_when_finished_failure)) {
+            return '';
+        }
+
+        return $this->text_when_finished_failure;
+    }
+
+    /**
+     * Set the text to display when the user has succeeded in the test
+     * @param string $text
+     */
+    public function setTextWhenFinishedFailure(string $text): void
+    {
+        $this->text_when_finished_failure = $text;
     }
 
     /**
@@ -1554,6 +1579,7 @@ class Exercise
         $review_answers = isset($this->review_answers) && $this->review_answers ? 1 : 0;
         $randomByCat = (int) $this->randomByCat;
         $text_when_finished = $this->text_when_finished;
+        $text_when_finished_failure = $this->text_when_finished_failure;
         $display_category_name = (int) $this->display_category_name;
         $pass_percentage = (int) $this->pass_percentage;
 
@@ -1603,6 +1629,7 @@ class Exercise
             ->setReviewAnswers($review_answers)
             ->setRandomByCategory($randomByCat)
             ->setTextWhenFinished($text_when_finished)
+            ->setTextWhenFinishedFailure($text_when_finished_failure)
             ->setDisplayCategoryName($display_category_name)
             ->setPassPercentage($pass_percentage)
             ->setSaveCorrectAnswers($saveCorrectAnswers)
@@ -2280,7 +2307,14 @@ class Exercise
             // add the text_when_finished textbox
             $form->addHtmlEditor(
                 'text_when_finished',
-                get_lang('Text appearing at the end of the test'),
+                get_lang('Text appearing at the end of the test when the user has succeeded or if no pass percentage was set.'),
+                false,
+                false,
+                $editor_config
+            );
+            $form->addHtmlEditor(
+                'text_when_finished_failure',
+                get_lang('Text appearing at the end of the test when the user has failed.'),
                 false,
                 false,
                 $editor_config
@@ -2389,6 +2423,7 @@ class Exercise
                 $defaults['review_answers'] = $this->review_answers;
                 $defaults['randomByCat'] = $this->getRandomByCategory();
                 $defaults['text_when_finished'] = $this->getTextWhenFinished();
+                $defaults['text_when_finished_failure'] = $this->getTextWhenFinishedFailure();
                 $defaults['display_category_name'] = $this->selectDisplayCategoryName();
                 $defaults['pass_percentage'] = $this->selectPassPercentage();
                 $defaults['question_selection_type'] = $this->getQuestionSelectionType();
@@ -2432,6 +2467,7 @@ class Exercise
                 $defaults['results_disabled'] = 0;
                 $defaults['randomByCat'] = 0;
                 $defaults['text_when_finished'] = '';
+                $defaults['text_when_finished_failure'] = '';
                 $defaults['start_time'] = date('Y-m-d 12:00:00');
                 $defaults['display_category_name'] = 1;
                 $defaults['end_time'] = date('Y-m-d 12:00:00', time() + 84600);
@@ -2599,7 +2635,8 @@ class Exercise
         $this->updatePropagateNegative($form->getSubmitValue('propagate_neg'));
         $this->updateSaveCorrectAnswers($form->getSubmitValue('save_correct_answers'));
         $this->updateRandomByCat($form->getSubmitValue('randomByCat'));
-        $this->updateTextWhenFinished($form->getSubmitValue('text_when_finished'));
+        $this->setTextWhenFinished($form->getSubmitValue('text_when_finished'));
+        $this->setTextWhenFinishedFailure($form->getSubmitValue('text_when_finished_failure'));
         $this->updateDisplayCategoryName($form->getSubmitValue('display_category_name'));
         $this->updateReviewAnswers($form->getSubmitValue('review_answers'));
         $this->updatePassPercentage($form->getSubmitValue('pass_percentage'));
@@ -10885,5 +10922,31 @@ class Exercise
             null,
             get_lang('Show score to learner')
         );
+    }
+
+    /**
+     * Return the text to display, based on the score and the max score.
+     * @param int|float $score
+     * @param int|float $maxScore
+     * @return string
+     */
+    public function getFinishText(int|float $score, int|float $maxScore): string
+    {
+        $passPercentage = $this->selectPassPercentage();
+        if (!empty($passPercentage)) {
+            $percentage = float_format(
+                ($score / (0 != $maxScore ? $maxScore : 1)) * 100,
+                1
+            );
+            if ($percentage >= $passPercentage) {
+                return $this->getTextWhenFinished();
+            } else {
+                return $this->getTextWhenFinishedFailure();
+            }
+        } else {
+            return $this->getTextWhenFinished();
+        }
+
+        return '';
     }
 }

@@ -16,8 +16,8 @@ class ExerciseShowFunctions
      * @param int      $id                           Exercise ID
      * @param int      $questionId                   Question ID
      * @param int      $resultsDisabled
-     * @param string   $originalStudentAnswer
      * @param bool     $showTotalScoreAndUserChoices
+     * @param string   $originalStudentAnswer
      */
     public static function display_fill_in_blanks_answer(
         $exercise,
@@ -26,8 +26,8 @@ class ExerciseShowFunctions
         $id,
         $questionId,
         $resultsDisabled,
-        $originalStudentAnswer = '',
-        $showTotalScoreAndUserChoices
+        $showTotalScoreAndUserChoices,
+        $originalStudentAnswer = ''
     ) {
         $answerHTML = FillBlanks::getHtmlDisplayForAnswer(
             $answer,

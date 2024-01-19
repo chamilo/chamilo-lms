@@ -60,12 +60,12 @@ class CourseRelUser implements Stringable
     protected ?int $id = null;
 
     #[Groups(['course:read', 'user:read', 'course_rel_user:read'])]
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'courses', cascade: ['persist'])]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'courses')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
     #[Groups(['course_rel_user:read'])]
-    #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'users', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Course::class, cascade: ['persist'], inversedBy: 'users')]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Course $course;
 

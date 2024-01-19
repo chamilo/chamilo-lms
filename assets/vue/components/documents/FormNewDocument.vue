@@ -7,36 +7,44 @@
       :label="$t('Title')"
     />
 
-    <TinyEditor
-      v-if="
-        (item.resourceNode &&
-          item.resourceNode.resourceFile &&
-          item.resourceNode.resourceFile.text) ||
-        item.newDocument
-      "
-      id="item_content"
-      v-model="item.contentFile"
-      :init="{
-        skin_url: '/build/libs/tinymce/skins/ui/oxide',
-        content_css: '/build/libs/tinymce/skins/content/default/content.css',
-        branding: false,
-        relative_urls: false,
-        height: 500,
-        toolbar_mode: 'sliding',
-        file_picker_callback: browser,
-        autosave_ask_before_unload: true,
-        plugins: [
-          'fullpage advlist autolink lists link image charmap print preview anchor',
-          'searchreplace visualblocks code fullscreen',
-          'insertdatetime media table paste wordcount emoticons ' +
+    <div class="field">
+      <div class="p-float-label">
+        <div class="html-editor-container">
+          <TinyEditor
+            v-if="
+          (item.resourceNode &&
+            item.resourceNode.resourceFile &&
+            item.resourceNode.resourceFile.text) ||
+          item.newDocument
+        "
+            id="item_content"
+            v-model="item.contentFile"
+            :init="{
+          skin_url: '/build/libs/tinymce/skins/ui/oxide',
+          content_css: '/build/libs/tinymce/skins/content/default/content.css',
+          branding: false,
+          relative_urls: false,
+          height: 500,
+          toolbar_mode: 'sliding',
+          file_picker_callback: browser,
+          autosave_ask_before_unload: true,
+          plugins: [
+            'fullpage advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste wordcount emoticons ' +
+              extraPlugins,
+          ],
+          toolbar:
+            'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl | ' +
             extraPlugins,
-        ],
-        toolbar:
-          'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl | ' +
-          extraPlugins,
-      }"
-      required
-    />
+        }"
+            required
+          />
+        </div>
+        <label v-t="'Content'"/>
+      </div>
+    </div>
+
     <!-- For extra content-->
     <slot></slot>
   </form>

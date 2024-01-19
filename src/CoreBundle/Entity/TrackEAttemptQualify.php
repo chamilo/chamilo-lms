@@ -53,7 +53,7 @@ class TrackEAttemptQualify
     protected ?string $answer;
 
     #[ORM\ManyToOne(inversedBy: 'revisedAttempts')]
-    #[ORM\JoinColumn(name: 'exe_id', referencedColumnName: 'exe_id', nullable: false)]
+    #[ORM\JoinColumn(name: 'exe_id', referencedColumnName: 'exe_id', nullable: false, onDelete: 'CASCADE')]
     private ?TrackEExercise $trackExercise = null;
 
     public function __construct()

@@ -253,7 +253,7 @@ $form->setDefaults($formDefaults);
 
 if ($form->validate()) {
     $params = $form->getSubmitValues();
-    $name = $params['name'];
+    $title = $params['title'];
     $startDate = $params['access_start_date'];
     $endDate = $params['access_end_date'];
     $displayStartDate = $params['display_start_date'];
@@ -309,7 +309,7 @@ if ($form->validate()) {
     }
 
     $return = SessionManager::create_session(
-        $name,
+        $title,
         $startDate,
         $endDate,
         $displayStartDate,

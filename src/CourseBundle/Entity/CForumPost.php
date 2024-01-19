@@ -68,7 +68,7 @@ class CForumPost extends AbstractResource implements ResourceInterface, Stringab
 
     #[Assert\NotBlank]
     #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'poster_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'poster_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?User $user = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]

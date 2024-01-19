@@ -20,7 +20,7 @@ class CAttendanceResult
     protected ?int $iid = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
     #[ORM\ManyToOne(targetEntity: CAttendance::class, inversedBy: 'results')]

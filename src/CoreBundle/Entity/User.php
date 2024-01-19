@@ -243,7 +243,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @var Collection<int, CourseRelUser>
      */
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: CourseRelUser::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: CourseRelUser::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $courses;
 
     /**
@@ -305,7 +305,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @var Collection<int, ResourceNode>
      */
-    #[ORM\OneToMany(mappedBy: 'creator', targetEntity: ResourceNode::class)]
+    #[ORM\OneToMany(mappedBy: 'creator', targetEntity: ResourceNode::class, cascade: ['persist', 'remove'])]
     protected Collection $resourceNodes;
 
     /**
@@ -676,13 +676,13 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * @var Collection<int, CSurveyInvitation>
      */
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: CSurveyInvitation::class, cascade: ['remove'])]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: CSurveyInvitation::class, cascade: ['persist', 'remove'])]
     protected Collection $surveyInvitations;
 
     /**
      * @var Collection<int, TrackELogin>
      */
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: TrackELogin::class, cascade: ['remove'])]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: TrackELogin::class, cascade: ['persist', 'remove'])]
     protected Collection $logins;
 
     #[ORM\OneToOne(mappedBy: 'user', targetEntity: Admin::class, cascade: ['persist', 'remove'], orphanRemoval: true)]

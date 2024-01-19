@@ -39,7 +39,7 @@ class CForumThread extends AbstractResource implements ResourceInterface, String
     protected ?CForum $forum = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'thread_poster_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'thread_poster_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
     #[ORM\ManyToOne(targetEntity: CForumPost::class, cascade: ['persist', 'remove'])]

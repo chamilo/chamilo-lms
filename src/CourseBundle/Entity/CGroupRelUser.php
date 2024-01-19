@@ -29,7 +29,7 @@ class CGroupRelUser
     protected int $cId;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'courseGroupsAsMember')]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $user;
 
     #[ORM\ManyToOne(targetEntity: CGroup::class, inversedBy: 'members')]

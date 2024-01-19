@@ -41,7 +41,7 @@ class CLpRelUser
     protected ?Session $session = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $user;
 
     #[Gedmo\Timestampable(on: 'create')]
@@ -49,7 +49,7 @@ class CLpRelUser
     protected DateTime $createdAt;
 
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'])]
-    #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?User $creatorUser;
 
     public function getIid(): ?int

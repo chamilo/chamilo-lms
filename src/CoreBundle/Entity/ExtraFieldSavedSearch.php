@@ -27,10 +27,10 @@ class ExtraFieldSavedSearch
     protected ExtraField $field;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    #[ORM\Column(name: 'value', type: 'array', nullable: true, unique: false)]
+    #[ORM\Column(name: 'value', type: 'array', unique: false, nullable: true)]
     protected ?array $value;
 
     public function __construct()

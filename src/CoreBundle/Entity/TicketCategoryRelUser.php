@@ -25,6 +25,6 @@ class TicketCategoryRelUser
     protected TicketCategory $category;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected TicketCategory $user;
 }

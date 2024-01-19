@@ -25,11 +25,11 @@ class UserRelTag
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'userRelTags', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'userRelTags')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    #[ORM\ManyToOne(targetEntity: Tag::class, inversedBy: 'userRelTags', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Tag::class, cascade: ['persist'], inversedBy: 'userRelTags')]
     #[ORM\JoinColumn(name: 'tag_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected Tag $tag;
 

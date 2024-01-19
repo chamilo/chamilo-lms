@@ -226,7 +226,7 @@ switch ($action) {
             $attendance->attendance_add();
         }
         $default_column = isset($default_column) ? $default_column : null;
-        $parameters = isset($parameters) ? $parameters : null;
+        $parameters = $parameters ?? [];
         $table = new SortableTable(
             'attendance_list',
             ['Attendance', 'getNumberOfAttendances'],

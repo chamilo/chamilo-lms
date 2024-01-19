@@ -468,7 +468,7 @@ table#skill_holder {
   padding: 20px 0px;
 }
 
-#date_fields label {
+#date_fields label, .p-float-label label[for='date_time'] {
   top: 0px;
   left: 0.5rem;
   --tw-bg-opacity: 1;
@@ -477,6 +477,7 @@ table#skill_holder {
   padding-right: 0.25rem;
   --tw-text-opacity: 1;
   color: rgb(46 117 163 / var(--tw-text-opacity));
+  font-size: 12px;
 }
 
 .question_description img, .question_options img {

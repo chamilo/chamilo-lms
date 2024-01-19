@@ -31,10 +31,10 @@ if (empty($session_id)) {
 $form = new FormValidator('search_simple', 'POST', '', '', null, false);
 
 //Get session list
-$session_list = SessionManager::get_sessions_list([], ['name']);
+$session_list = SessionManager::get_sessions_list([], ['title']);
 $my_session_list = [];
 foreach ($session_list as $sesion_item) {
-    $my_session_list[$sesion_item['id']] = $sesion_item['name'];
+    $my_session_list[$sesion_item['id']] = $sesion_item['title'];
 }
 if (0 == count($session_list)) {
     $my_session_list[0] = get_lang('none');

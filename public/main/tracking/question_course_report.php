@@ -52,12 +52,12 @@ foreach ($temp_course_list as $temp_course_item) {
 }
 
 //Get session list
-$session_list = SessionManager::get_sessions_list([], ['name']);
+$session_list = SessionManager::get_sessions_list([], ['title']);
 
 $my_session_list = [];
 $my_session_list[0] = get_lang('none');
 foreach ($session_list as $sesion_item) {
-    $my_session_list[$sesion_item['id']] = $sesion_item['name'];
+    $my_session_list[$sesion_item['id']] = $sesion_item['title'];
 }
 
 $form = new FormValidator('search_simple', 'POST', '', '', null, false);

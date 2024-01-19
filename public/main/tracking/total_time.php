@@ -192,12 +192,12 @@ echo Display::toolbarAction(
     [$actionsLeft, $form_search->returnForm(), $actionsRight]
 );
 
-$course_name = get_lang('Course').' '.$courseInfo['name'];
+$course_name = get_lang('Course').' '.$courseInfo['title'];
 if ($session_id) {
     $titleSession = Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Session')).' '.api_get_session_name($session_id);
     $titleCourse = Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course')).' '.$course_name;
 } else {
-    $titleSession = Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course')).' '.$courseInfo['name'];
+    $titleSession = Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course')).' '.$courseInfo['title'];
 }
 $teacherList = CourseManager::getTeacherListFromCourseCodeToString(
     $courseInfo['code'],
@@ -246,7 +246,7 @@ if (api_is_platform_admin(true) ||
         foreach ($sessionList as $session) {
             $url = api_get_path(WEB_CODE_PATH).'my_space/course.php?sid='
                 .$session['id'].'&cidReq='.$courseInfo['code'];
-            $html .= Display::tag('li', $icon.' '.Display::url($session['name'], $url));
+            $html .= Display::tag('li', $icon.' '.Display::url($session['title'], $url));
         }
         $html .= '</ul>';
     }

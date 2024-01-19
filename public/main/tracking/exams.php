@@ -185,7 +185,7 @@ if (!empty($courseList)) {
         $newSessionList = [];
         if (!empty($sessionList)) {
             foreach ($sessionList as $session) {
-                $newSessionList[$session['id']] = $session['name'];
+                $newSessionList[$session['id']] = $session['title'];
             }
         }
 

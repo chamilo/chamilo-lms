@@ -307,7 +307,7 @@ if ($showReporting) {
             }
             //$url = $urlWebCode.'my_space/course.php?sid='.$session['id'].'&cid='.$courseId;
             $url = $urlWebCode.'tracking/courseLog.php?cid='.$courseId.'&sid='.$session['id'].'&gid=0';
-            $table->setCellContents($row++, 0, $icon.' '.Display::url($session['name'], $url));
+            $table->setCellContents($row++, 0, $icon.' '.Display::url($session['title'], $url));
         }
         if ($row > 0) {
             $html .= $table->toHtml();
@@ -340,13 +340,13 @@ if ($nbStudents > 0) {
     $select = $formClass->addSelect('class_id', get_lang('Class').'/'.get_lang('Group'), $groupIdList);
     $groupIdList = [];
     foreach ($classes as $class) {
-        //$groupIdList['class_'.$class['id']] = $class['name'];
-        $groupIdList[] = ['text' => $class['name'], 'value' => 'class_'.$class['id']];
+        //$groupIdList['class_'.$class['id']] = $class['title'];
+        $groupIdList[] = ['text' => $class['title'], 'value' => 'class_'.$class['id']];
     }
     $select->addOptGroup($groupIdList, get_lang('Class'));
     $groupIdList = [];
     foreach ($groupList as $group) {
-        $groupIdList[] = ['text' => $group['name'], 'value' => 'group_'.$group['iid']];
+        $groupIdList[] = ['text' => $group['title'], 'value' => 'group_'.$group['iid']];
     }
     $select->addOptGroup($groupIdList, get_lang('Group'));
     $formClass->addButtonSearch(get_lang('Search'));
@@ -361,7 +361,7 @@ if ($nbStudents > 0) {
     $formGroup->addHidden('id_session', $sessionId);
     $groupIdList = ['--'];
     foreach ($groupList as $group) {
-        $groupIdList[$group['id']] = $group['name'];
+        $groupIdList[$group['id']] = $group['title'];
     }
     $formGroup->addSelect('group_id', get_lang('Group'), $groupIdList);
     $formGroup->addButtonSearch(get_lang('Search'));*/
@@ -806,7 +806,7 @@ if (!empty($groupList)) {
     $row = 1;
     foreach ($groupList as $groupInfo) {
         $column = 0;
-        $groupTable->setCellContents($row, $column++, $groupInfo['name']);
+        $groupTable->setCellContents($row, $column++, $groupInfo['title']);
         $usersInGroup = GroupManager::getStudents($groupInfo['iid']);
 
         $time = null;

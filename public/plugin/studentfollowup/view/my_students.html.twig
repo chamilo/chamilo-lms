@@ -11,10 +11,10 @@
             <td>{{ user.user.completeNameWithUsername }}</td>
             <td>
                 <a href="{{ my_students_url }}student={{ user.user.id }}">
-                    {{ 'ActionIcon::VIEW_DETAILS' | mdi_icon }}
+                    <img src="{{ '2rightarrow.png'|icon() }}">
                 </a>
                 <a href="{{ post_url }}student_id={{ user.user.id }}">
-                    {{ 'ToolIcon::BLOG' | mdi_icon }}
+                    <img src="{{ 'blog.png'|icon() }}">
                 </a>
             </td>
         </tr>

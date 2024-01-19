@@ -67,7 +67,7 @@ function add_image_form() {
 	document.getElementById("filepath_"+counter_image).innerHTML = "\n\
         <input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />\n\
         <a href=\"javascript:remove_image_form("+id_elem1+")\">\n\
-            '.Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_TINY).'\n\
+            <img src=\"'.Display::returnIconPath('delete.gif').'\">\n\
         </a>\n\
     ";
 

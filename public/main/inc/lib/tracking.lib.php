@@ -4491,19 +4491,27 @@ class Tracking
         $data = [];
 
         $TABLETRACK_DOWNLOADS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
+        $tableResourceLink = Database::get_main_table('resource_link');
+        $tableResourceNode = Database::get_main_table('resource_node');
         $condition_session = '';
         $session_id = intval($session_id);
         if (!empty($session_id)) {
-            $condition_session = ' AND session_id = '.$session_id;
+            $condition_session = ' AND l.session_id = '.$session_id;
         }
-        $sql = "SELECT
-                    down_doc_path,
-                    COUNT(DISTINCT down_user_id),
-                    COUNT(down_doc_path) as count_down
-                FROM $TABLETRACK_DOWNLOADS
-                WHERE c_id = $courseId
+        $sql = "SELECT t.resource_link_id as lid,
+                       n.path as npath,
+                       n.title as ntitle,
+                       n.uuid as uuid,
+                       n.id as nid,
+                    COUNT(t.down_id) as count_down
+                FROM $TABLETRACK_DOWNLOADS t
+                    INNER JOIN $tableResourceLink l
+                    ON t.resource_link_id = l.id
+                    INNER JOIN $tableResourceNode n
+                    ON l.resource_node_id = n.id
+                WHERE l.c_id = $courseId
                     $condition_session
-                GROUP BY down_doc_path
+                GROUP BY nid
                 ORDER BY count_down DESC
                 LIMIT 0,  $limit";
         $rs = Database::query($sql);

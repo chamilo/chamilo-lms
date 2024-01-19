@@ -29,7 +29,7 @@ class TrackEDownloads
     #[ORM\Column(name: 'down_date', type: 'datetime', nullable: false)]
     protected DateTime $downDate;
 
-    #[ORM\Column(name: 'down_doc_path', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'down_doc_path', type: 'string', length: 255, nullable: true)]
     protected string $downDocPath;
 
     #[ORM\ManyToOne(targetEntity: ResourceLink::class, cascade: ['persist', 'remove'])]

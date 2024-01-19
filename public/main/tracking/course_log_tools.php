@@ -389,20 +389,23 @@ if ($documentReporting) {
 
     if (!empty($documents_most_downloaded)) {
         foreach ($documents_most_downloaded as $row) {
+            ///* @var CDocument $document */
+            //$document = Container::getDocumentRepository()->findOneBy(['resourceNode' => $row['nid']]);
+            // Only show path to documents tool for now.
+            //$viewLink = api_get_path(WEB_PATH).'resources/document/'.$course->getResourceNode()->getId().'/show?'.$course_path_params.'&id=/api/documents/'.$document->getIid();
+            $viewLink = api_get_path(WEB_PATH).'resources/document/'.$course->getResourceNode()->getId().'/show?'.$course_path_params;
             echo '<tr>
                     <td>';
             echo Display::url(
-                $row['down_doc_path'],
-                api_get_path(
-                    WEB_CODE_PATH
-                ).'document/show_content.php?file='.$row['down_doc_path'].$course_path_params
+                $row['ntitle'],
+                $viewLink
             );
             echo '</td>
                     <td align="right">'.$row['count_down'].' '.get_lang('clicks').'</td>
                   </tr>';
             if ($export_csv) {
                 $temp = [
-                    $row['down_doc_path'],
+                    $row['npath'],
                     $row['count_down'].' '.get_lang('clicks', ''),
                 ];
                 $csv_content[] = $temp;

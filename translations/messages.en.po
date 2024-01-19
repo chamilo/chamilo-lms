@@ -24172,3 +24172,6 @@ msgstr "Prevent moving backwards between questions"
 
 msgid "Your browser does not support Javascript"
 msgstr "Your browser does not support Javascript"
+
+msgid "Unauthorised view access to resource"
+msgstr "Unauthorised view - access to resource forbidden"

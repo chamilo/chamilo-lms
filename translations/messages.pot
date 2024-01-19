@@ -24171,3 +24171,6 @@ msgstr ""
 
 msgid "Your browser does not support Javascript"
 msgstr ""
+
+msgid "Unauthorised view access to resource"
+msgstr ""

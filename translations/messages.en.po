@@ -24169,3 +24169,6 @@ msgstr "Direct pop-up mode"
 
 msgid "Prevent moving backwards between questions"
 msgstr "Prevent moving backwards between questions"
+
+msgid "Your browser does not support Javascript"
+msgstr "Your browser does not support Javascript"

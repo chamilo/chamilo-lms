@@ -104,4 +104,36 @@ class HtmlEditor extends HTML_QuickForm_textarea
 
         return $result;
     }
+
+    public function getTemplate(string $layout): string
+    {
+        if (FormValidator::LAYOUT_HORIZONTAL === $layout) {
+            return '
+                <div class="field">
+                    <div class="p-float-label">
+                        <div class="html-editor-container">
+                            {element}
+                            {icon}
+                        </div>
+                        <label {label-for}>
+                            <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                            {label}
+                        </label>
+                    </div>
+                    <!-- BEGIN label_2 -->
+                        <small>{label_2}</small>
+                    <!-- END label_2 -->
+
+                     <!-- BEGIN label_3 -->
+                        <small>{label_3}</small>
+                    <!-- END label_3 -->
+
+                    <!-- BEGIN error -->
+                        <small class="p-error">{error}</small>
+                    <!-- END error -->
+                </div>';
+        }
+
+        return parent::getTemplate($layout);
+    }
 }

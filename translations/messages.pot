@@ -24168,3 +24168,6 @@ msgstr ""
 
 msgid "Prevent moving backwards between questions"
 msgstr ""
+
+msgid "Your browser does not support Javascript"
+msgstr ""

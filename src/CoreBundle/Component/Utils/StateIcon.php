@@ -47,9 +47,9 @@ enum StateIcon: string
     // Checkbox intermediate 3
     case CHECKBOX_INTERMEDIATE3 = 'checkbox-blank-off-outline';
     // Radiobox marked
-    case RADIOBOX_MARKED = 'radiobox_marked';
+    case RADIOBOX_MARKED = 'radiobox-marked';
     // Radiobox empty
-    case RADIOBOX_BLANK = 'radiobox_blank';
+    case RADIOBOX_BLANK = 'radiobox-blank';
     // List view (as opposed to detailed_view)
     case LIST_VIEW = 'format-list-bulleted';
     // Detailed view (as opposed to list_view)

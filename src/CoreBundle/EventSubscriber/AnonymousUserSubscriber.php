@@ -6,8 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\EventSubscriber;
 
-use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
-use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -125,8 +123,6 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
             if ($oldestAnonymousUser) {
                 error_log('Deleting oldest anonymous user: '.$oldestAnonymousUser->getId());
 
-                $this->handleRelatedEntities($oldestAnonymousUser);
-
                 $this->entityManager->remove($oldestAnonymousUser);
                 $this->entityManager->flush();
             }
@@ -157,31 +153,5 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         $this->entityManager->flush();
 
         return $anonymousUser->getId();
-    }
-
-    private function handleRelatedEntities(User $user): void
-    {
-        $trackEExercisesRepository = $this->entityManager->getRepository(TrackEExercise::class);
-
-        $exercises = $trackEExercisesRepository->findBy(['user' => $user->getId()]);
-
-        foreach ($exercises as $exercise) {
-            $this->handleAttemptRecordings($exercise);
-
-            $this->entityManager->remove($exercise);
-        }
-
-        $this->entityManager->flush();
-    }
-
-    private function handleAttemptRecordings(TrackEExercise $exercise): void
-    {
-        $trackEAttemptRecordingRepository = $this->entityManager->getRepository(TrackEAttemptQualify::class);
-
-        $attemptRecordings = $trackEAttemptRecordingRepository->findBy(['trackExercise' => $exercise->getExeId()]);
-
-        foreach ($attemptRecordings as $attemptRecording) {
-            $this->entityManager->remove($attemptRecording);
-        }
     }
 }

@@ -26,6 +26,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
+use ZipArchive;
 
 class BaseResourceFileAction
 {
@@ -184,7 +185,7 @@ class BaseResourceFileAction
     /**
      * Function loaded when creating a resource using the api, then the ResourceListener is executed.
      */
-    protected function handleCreateFileRequest(AbstractResource $resource, ResourceRepository $resourceRepository, Request $request, EntityManager $em, String $fileExistsOption = ''): array
+    protected function handleCreateFileRequest(AbstractResource $resource, ResourceRepository $resourceRepository, Request $request, EntityManager $em, string $fileExistsOption = ''): array
     {
         $contentData = $request->getContent();
 
@@ -248,50 +249,57 @@ class BaseResourceFileAction
                         // Check if a document with the same title and parent resource node already exists
                         $existingDocument = $resourceRepository->findByTitleAndParentResourceNode($title, $parentResourceNodeId);
                         if ($existingDocument) {
-                            switch ($fileExistsOption) {
-                                case 'overwrite':
-                                    // Perform actions when file exists and 'overwrite' option is selected
-                                    $resource->setResourceName($title);
-                                    $existingDocument->setTitle($title);
-                                    $existingDocument->setComment($comment);
-                                    $em->persist($existingDocument);
-                                    $em->flush();
+                            if ('overwrite' == $fileExistsOption) {
+                                // Perform actions when file exists and 'overwrite' option is selected
+                                $resource->setResourceName($title);
+                                $existingDocument->setTitle($title);
+                                $existingDocument->setComment($comment);
+                                $em->persist($existingDocument);
+                                $em->flush();
 
-                                    // Return any data you need for further processing
-                                    return [
-                                        'filetype' => 'file',
-                                        'comment' => $comment,
-                                    ];
-                                case 'rename':
-                                    // Perform actions when file exists and 'rename' option is selected
-                                    $newTitle = $this->generateUniqueTitle($title); // Generate a unique title
-                                    $resource->setResourceName($newTitle);
-                                    $resource->setUploadFile($uploadedFile);
-                                    if (!empty($resourceLinkList)) {
-                                        $resource->setResourceLinkArray($resourceLinkList);
-                                    }
-                                    $em->persist($resource);
-                                    $em->flush();
-
-                                    // Return any data you need for further processing
-                                    return [
-                                        'filetype' => 'file',
-                                        'comment' => $comment,
-                                    ];
-                                case 'nothing':
-                                    // Perform actions when file exists and 'nothing' option is selected
-                                    // Display a message indicating that the file already exists
-                                    // or perform any other desired actions based on your application's requirements
-                                    $resource->setResourceName($title);
-                                    $flashBag = $request->getSession()->getFlashBag();
-                                    $flashBag->add('warning', 'Upload Already Exists');
-                                    return [
-                                        'filetype' => 'file',
-                                        'comment' => $comment,
-                                    ];
-                                default:
-                                    throw new InvalidArgumentException('Invalid fileExistsOption');
+                                // Return any data you need for further processing
+                                return [
+                                    'title' => $title,
+                                    'filetype' => 'file',
+                                    'comment' => $comment,
+                                ];
                             }
+
+                            if ('rename' == $fileExistsOption) {
+                                // Perform actions when file exists and 'rename' option is selected
+                                $newTitle = $this->generateUniqueTitle($title); // Generate a unique title
+                                $resource->setResourceName($newTitle);
+                                $resource->setUploadFile($uploadedFile);
+                                if (!empty($resourceLinkList)) {
+                                    $resource->setResourceLinkArray($resourceLinkList);
+                                }
+                                $em->persist($resource);
+                                $em->flush();
+
+                                // Return any data you need for further processing
+                                return [
+                                    'title' => $title,
+                                    'filetype' => 'file',
+                                    'comment' => $comment,
+                                ];
+                            }
+
+                            if ('nothing' == $fileExistsOption) {
+                                // Perform actions when file exists and 'nothing' option is selected
+                                // Display a message indicating that the file already exists
+                                // or perform any other desired actions based on your application's requirements
+                                $resource->setResourceName($title);
+                                $flashBag = $request->getSession()->getFlashBag();
+                                $flashBag->add('warning', 'Upload Already Exists');
+
+                                return [
+                                    'title' => $title,
+                                    'filetype' => 'file',
+                                    'comment' => $comment,
+                                ];
+                            }
+
+                            throw new InvalidArgumentException('Invalid fileExistsOption');
                         } else {
                             $resource->setResourceName($title);
                             $resource->setUploadFile($uploadedFile);
@@ -323,6 +331,7 @@ class BaseResourceFileAction
         }
 
         return [
+            'title' => $title,
             'filetype' => $fileType,
             'comment' => $comment,
         ];
@@ -335,7 +344,7 @@ class BaseResourceFileAction
         $fileType = $request->get('filetype');
         $resourceLinkList = $request->get('resourceLinkList', []);
         if (!empty($resourceLinkList)) {
-            $resourceLinkList = false === strpos($resourceLinkList, '[') ? json_decode('['.$resourceLinkList.']', true) : json_decode($resourceLinkList, true);
+            $resourceLinkList = !str_contains($resourceLinkList, '[') ? json_decode('['.$resourceLinkList.']', true) : json_decode($resourceLinkList, true);
             if (empty($resourceLinkList)) {
                 $message = 'resourceLinkList is not a valid json. Use for example: [{"cid":1, "visibility":1}]';
 
@@ -447,7 +456,7 @@ class BaseResourceFileAction
         $documents = [];
 
         foreach ($folderStructure as $key => $item) {
-            if (is_array($item)) {
+            if (\is_array($item)) {
                 $folderName = $key;
                 $subFolderStructure = $item;
 
@@ -455,7 +464,7 @@ class BaseResourceFileAction
                 $document->setTitle($folderName);
                 $document->setFiletype('folder');
 
-                if ($parentResourceId !== null) {
+                if (null !== $parentResourceId) {
                     $document->setParentResourceNode($parentResourceId);
                 }
 
@@ -469,10 +478,10 @@ class BaseResourceFileAction
                 $documentId = $document->getResourceNode()->getId();
                 $documents[$documentId] = [
                     'name' => $document->getTitle(),
-                    'files' => []
+                    'files' => [],
                 ];
 
-                $subDocuments = $this->saveZipContentsAsDocuments($subFolderStructure, $em, $resourceLinkList, $documentId, $currentPath . $folderName . '/', $extractPath, $processedItems);
+                $subDocuments = $this->saveZipContentsAsDocuments($subFolderStructure, $em, $resourceLinkList, $documentId, $currentPath.$folderName.'/', $extractPath, $processedItems);
                 $documents[$documentId]['files'] = $subDocuments;
             } else {
                 $fileName = $item;
@@ -481,7 +490,7 @@ class BaseResourceFileAction
                 $document->setTitle($fileName);
                 $document->setFiletype('file');
 
-                if ($parentResourceId !== null) {
+                if (null !== $parentResourceId) {
                     $document->setParentResourceNode($parentResourceId);
                 }
 
@@ -489,7 +498,7 @@ class BaseResourceFileAction
                     $document->setResourceLinkArray($resourceLinkList);
                 }
 
-                $filePath = $extractPath . '/'. $currentPath . $fileName;
+                $filePath = $extractPath.'/'.$currentPath.$fileName;
 
                 if (file_exists($filePath)) {
                     $uploadedFile = new UploadedFile(
@@ -504,10 +513,11 @@ class BaseResourceFileAction
                     $documentId = $document->getResourceNode()->getId();
                     $documents[$documentId] = [
                         'name' => $document->getTitle(),
-                        'files' => []
+                        'files' => [],
                     ];
                 } else {
-                    error_log('File does not exist: ' . $filePath);
+                    error_log('File does not exist: '.$filePath);
+
                     continue;
                 }
             }
@@ -522,11 +532,11 @@ class BaseResourceFileAction
         $zipFilePath = $file->getRealPath();
 
         // Create an instance of the ZipArchive class
-        $zip = new \ZipArchive();
+        $zip = new ZipArchive();
         $zip->open($zipFilePath);
 
         $cacheDirectory = $kernel->getCacheDir();
-        $extractPath = $cacheDirectory . '/' . uniqid('extracted_', true);
+        $extractPath = $cacheDirectory.'/'.uniqid('extracted_', true);
         mkdir($extractPath);
 
         // Extract the contents of the ZIP file
@@ -538,7 +548,7 @@ class BaseResourceFileAction
         // Iterate over each file or directory in the ZIP file
         for ($i = 0; $i < $zip->numFiles; $i++) {
             $filename = $zip->getNameIndex($i);
-            $extractedPaths[] = $extractPath . '/' . $filename;
+            $extractedPaths[] = $extractPath.'/'.$filename;
         }
 
         // Close the ZIP file
@@ -550,7 +560,7 @@ class BaseResourceFileAction
         // Return the array of folder structure and the extraction path
         return [
             'folderStructure' => $folderStructure,
-            'extractPath' => $extractPath
+            'extractPath' => $extractPath,
         ];
     }
 
@@ -559,7 +569,7 @@ class BaseResourceFileAction
         $folderStructure = [];
 
         foreach ($paths as $path) {
-            $relativePath = str_replace($extractPath . '/', '', $path);
+            $relativePath = str_replace($extractPath.'/', '', $path);
             $parts = explode('/', $relativePath);
 
             $currentLevel = &$folderStructure;
@@ -595,9 +605,6 @@ class BaseResourceFileAction
 
     private function generateUniqueTitle(string $title): string
     {
-        $uniqueTitle = $title . '_' . uniqid();
-
-        return $uniqueTitle;
+        return $title.'_'.uniqid();
     }
-
 }

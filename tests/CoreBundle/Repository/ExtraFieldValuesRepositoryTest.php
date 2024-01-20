@@ -83,6 +83,7 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
 
     public function testUpdateItemData(): void
     {
+        /* @var ExtraFieldValuesRepository $repo */
         $repo = self::getContainer()->get(ExtraFieldValuesRepository::class);
 
         $em = $this->getEntityManager();
@@ -100,6 +101,7 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
 
         $user = $this->createUser('test');
 
+        /* @var ExtraFieldValues $extraFieldValue */
         $extraFieldValue = $repo->updateItemData($field, $user, 'test');
 
         $items = $repo->getExtraFieldValuesFromItem($user, ExtraField::USER_FIELD_TYPE);
@@ -124,11 +126,11 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
         $this->assertSame($course->getResourceIdentifier(), $course->getId());
         $extraFieldValue = $repo->updateItemData($field, $course, 'julio');
 
-        $this->assertSame('julio', $extraFieldValue->getValue());
+        $this->assertSame('julio', $extraFieldValue->getFieldValue());
 
         $extraFieldValue = $repo->updateItemData($field, $course, 'casa');
 
-        $this->assertSame('casa', $extraFieldValue->getValue());
+        $this->assertSame('casa', $extraFieldValue->getFieldValue());
 
         $items = $repo->getExtraFieldValuesFromItem($course, ExtraField::COURSE_FIELD_TYPE);
         $this->assertNotNull($extraFieldValue);

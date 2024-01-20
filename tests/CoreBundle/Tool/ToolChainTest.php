@@ -72,7 +72,7 @@ class ToolChainTest extends AbstractApiTest
 
         $em = $this->getEntityManager();
         $toolRepo = $em->getRepository(Tool::class);
-        $agendaTool = $toolRepo->findOneBy(['name' => 'agenda']);
+        $agendaTool = $toolRepo->findOneBy(['title' => 'agenda']);
         $this->assertNotNull($agendaTool);
 
         $toolChain->setToolPermissions($agendaTool);

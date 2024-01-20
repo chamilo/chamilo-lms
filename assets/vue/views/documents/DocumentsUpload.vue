@@ -115,6 +115,8 @@ uppy.value = new Uppy()
   })
   .on("upload-success", (item, response) => {
     onCreated(response.body)
+  })
+  .on('complete', () => {
     router.back()
   })
 

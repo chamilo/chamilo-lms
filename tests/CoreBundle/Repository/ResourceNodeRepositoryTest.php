@@ -32,7 +32,7 @@ class ResourceNodeRepositoryTest extends AbstractApiTest
 
         $defaultCount = $repo->count([]);
 
-        $type = $repoType->findOneBy(['name' => 'illustrations']);
+        $type = $repoType->findOneBy(['title' => 'illustrations']);
         $resourceNode = (new ResourceNode())
             ->setContent('test')
             ->setTitle('test')
@@ -80,7 +80,7 @@ class ResourceNodeRepositoryTest extends AbstractApiTest
 
         $user = $this->createUser('julio');
 
-        $type = $repoType->findOneBy(['name' => 'illustrations']);
+        $type = $repoType->findOneBy(['title' => 'illustrations']);
         $resourceNode = (new ResourceNode())
             ->setContent('test')
             ->setTitle('test')
@@ -143,7 +143,7 @@ class ResourceNodeRepositoryTest extends AbstractApiTest
         $group = $this->createGroup('group', $course);
         $userGroup = $this->createUserGroup('group');
 
-        $type = $repoType->findOneBy(['name' => 'illustrations']);
+        $type = $repoType->findOneBy(['title' => 'illustrations']);
         $resourceNode = (new ResourceNode())
             ->setContent('test')
             ->setTitle('test')
@@ -199,7 +199,7 @@ class ResourceNodeRepositoryTest extends AbstractApiTest
         $repoType = $em->getRepository(ResourceType::class);
         $user = $this->createUser('julio');
 
-        $type = $repoType->findOneBy(['name' => 'illustrations']);
+        $type = $repoType->findOneBy(['title' => 'illustrations']);
 
         $resourceNode = (new ResourceNode())
             ->setContent('test')

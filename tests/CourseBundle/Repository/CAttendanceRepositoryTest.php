@@ -86,6 +86,7 @@ class CAttendanceRepositoryTest extends AbstractApiTest
             ->setAttendance($attendance)
             ->setDateTime(new DateTime())
             ->setDoneAttendance(true)
+            ->setBlocked(false)
         ;
         $em->persist($calendar);
 
@@ -100,6 +101,7 @@ class CAttendanceRepositoryTest extends AbstractApiTest
             ->setUser($student)
             ->setAttendanceCalendar($calendar)
             ->setPresence(true)
+            ->setSignature('image-blob-here')
         ;
         $em->persist($sheet);
 

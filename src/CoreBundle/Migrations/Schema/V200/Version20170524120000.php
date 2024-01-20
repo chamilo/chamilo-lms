@@ -33,12 +33,10 @@ final class Version20170524120000 extends AbstractMigrationChamilo
                 'CREATE UNIQUE INDEX UNIQ_4B019DDB2B36786B ON fos_group (title)'
             );
         }
-
     }
 
     public function down(Schema $schema): void
     {
-
         $table = $schema->getTable('fos_group');
         if ($table->hasIndex('UNIQ_4B019DDB2B36786B')) {
             $this->addSql(

@@ -3,10 +3,10 @@
 This directory is being used for all kinds of tests and scripts and is removed from
 public releases as it may represent a risk for production systems.
 
-## Behat 
+## Behat
 
 Make sure you set the right base_url in behat/behat.yml, then run (on the command
-line, from the tests/ directory): 
+line, from the tests/ directory):
 ```
 ../vendor/behat/behat/bin/behat behat/features/login.feature
 ../vendor/behat/behat/bin/behat behat/features/createUser.feature
@@ -17,7 +17,7 @@ line, from the tests/ directory):
 ../vendor/behat/behat/bin/behat behat/features/accessCompanyReports.feature
 ```
 
-## PHPUnit 
+## PHPUnit
 
 We use the default Symfony PHPUnit settings:
 
@@ -35,7 +35,7 @@ DATABASE_USER='root'
 DATABASE_PASSWORD='root'
 ```
 
-After creating the .env.test.local file execute: 
+After creating the .env.test.local file execute:
 
 ```
 php bin/console --env=test cache:clear
@@ -52,10 +52,10 @@ Those commands will install Chamilo in the chamilo_test database.
 
 In order to delete the test database and restart the process use:
 
-`php bin/console --env=test doctrine:database:drop`
+`php bin/console --env=test doctrine:database:drop --force`
 
-### Use 
-Execute the tests with: 
+### Use
+Execute the tests with:
 
 `php bin/phpunit`
 

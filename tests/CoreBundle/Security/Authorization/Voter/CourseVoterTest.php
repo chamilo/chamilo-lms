@@ -10,8 +10,10 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\Tests\ChamiloTestTrait;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
+use Symfony\Component\Security\Core\Security;
 
 class CourseVoterTest extends WebTestCase
 {
@@ -22,7 +24,12 @@ class CourseVoterTest extends WebTestCase
     {
         $client = static::createClient();
         $tests = $this->provideVoteTests();
-        $voter = $this->getContainer()->get(CourseVoter::class);
+        $entity_manager = $this->getContainer()->get(EntityManagerInterface::class);
+        $request_stack = $this->getMockedRequestStack([
+            'query' => ['sid' => 1],
+        ]);
+        $security = $this->getContainer()->get(Security::class);
+        $voter = new CourseVoter($security, $request_stack, $entity_manager);
         foreach ($tests as $message => $test) {
             [$expected, $user, $course] = $test;
             $client->loginUser($user);

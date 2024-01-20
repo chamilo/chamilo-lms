@@ -72,7 +72,7 @@ class SessionRepositoryTest extends AbstractApiTest
             '/api/sessions',
             [
                 'json' => [
-                    'name' => 'test',
+                    'title' => 'test',
                     'generalCoach' => $user->getIri(),
                 ],
             ]
@@ -84,7 +84,7 @@ class SessionRepositoryTest extends AbstractApiTest
         $this->assertJsonContains(
             [
                 '@context' => '/api/contexts/Session',
-                'name' => 'test',
+                'title' => 'test',
             ]
         );
     }
@@ -101,7 +101,7 @@ class SessionRepositoryTest extends AbstractApiTest
             '/api/sessions/'.$session->getId(),
             [
                 'json' => [
-                    'name' => $newSessionName,
+                    'title' => $newSessionName,
                 ],
             ]
         );
@@ -111,7 +111,7 @@ class SessionRepositoryTest extends AbstractApiTest
         $this->assertJsonContains(
             [
                 '@context' => '/api/contexts/Session',
-                'name' => $newSessionName,
+                'title' => $newSessionName,
             ]
         );
     }

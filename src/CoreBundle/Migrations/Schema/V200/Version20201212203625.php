@@ -219,7 +219,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 $course = $courseRepo->find($courseId);
 
                 /** @var CDocument $document */
-                $document = $documentRepo->find($documentId);
+                $ºdocument = $documentRepo->find($documentId);
                 if ($document->hasResourceNode()) {
                     continue;
                 }

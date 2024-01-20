@@ -28,6 +28,7 @@ class CreateDocumentFileAction extends BaseResourceFileAction
             $result = $this->handleCreateFileRequest($document, $repo, $request, $em, $fileExistsOption);
         }
 
+        $document->setTitle($result['title']);
         $document->setFiletype($result['filetype']);
         $document->setComment($result['comment']);
 

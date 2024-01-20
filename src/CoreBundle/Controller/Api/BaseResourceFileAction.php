@@ -248,50 +248,57 @@ class BaseResourceFileAction
                         // Check if a document with the same title and parent resource node already exists
                         $existingDocument = $resourceRepository->findByTitleAndParentResourceNode($title, $parentResourceNodeId);
                         if ($existingDocument) {
-                            switch ($fileExistsOption) {
-                                case 'overwrite':
-                                    // Perform actions when file exists and 'overwrite' option is selected
-                                    $resource->setResourceName($title);
-                                    $existingDocument->setTitle($title);
-                                    $existingDocument->setComment($comment);
-                                    $em->persist($existingDocument);
-                                    $em->flush();
+                            if ($fileExistsOption == 'overwrite') {
+                                // Perform actions when file exists and 'overwrite' option is selected
+                                $resource->setResourceName($title);
+                                $existingDocument->setTitle($title);
+                                $existingDocument->setComment($comment);
+                                $em->persist($existingDocument);
+                                $em->flush();
 
-                                    // Return any data you need for further processing
-                                    return [
-                                        'filetype' => 'file',
-                                        'comment' => $comment,
-                                    ];
-                                case 'rename':
-                                    // Perform actions when file exists and 'rename' option is selected
-                                    $newTitle = $this->generateUniqueTitle($title); // Generate a unique title
-                                    $resource->setResourceName($newTitle);
-                                    $resource->setUploadFile($uploadedFile);
-                                    if (!empty($resourceLinkList)) {
-                                        $resource->setResourceLinkArray($resourceLinkList);
-                                    }
-                                    $em->persist($resource);
-                                    $em->flush();
-
-                                    // Return any data you need for further processing
-                                    return [
-                                        'filetype' => 'file',
-                                        'comment' => $comment,
-                                    ];
-                                case 'nothing':
-                                    // Perform actions when file exists and 'nothing' option is selected
-                                    // Display a message indicating that the file already exists
-                                    // or perform any other desired actions based on your application's requirements
-                                    $resource->setResourceName($title);
-                                    $flashBag = $request->getSession()->getFlashBag();
-                                    $flashBag->add('warning', 'Upload Already Exists');
-                                    return [
-                                        'filetype' => 'file',
-                                        'comment' => $comment,
-                                    ];
-                                default:
-                                    throw new InvalidArgumentException('Invalid fileExistsOption');
+                                // Return any data you need for further processing
+                                return [
+                                    'title' => $title,
+                                    'filetype' => 'file',
+                                    'comment' => $comment,
+                                ];
                             }
+
+                            if ($fileExistsOption == 'rename') {
+                                // Perform actions when file exists and 'rename' option is selected
+                                $newTitle = $this->generateUniqueTitle($title); // Generate a unique title
+                                $resource->setResourceName($newTitle);
+                                $resource->setUploadFile($uploadedFile);
+                                if (!empty($resourceLinkList)) {
+                                    $resource->setResourceLinkArray($resourceLinkList);
+                                }
+                                $em->persist($resource);
+                                $em->flush();
+
+                                // Return any data you need for further processing
+                                return [
+                                    'title' => $title,
+                                    'filetype' => 'file',
+                                    'comment' => $comment,
+                                ];
+                            }
+
+                            if ($fileExistsOption == 'nothing') {
+                                // Perform actions when file exists and 'nothing' option is selected
+                                // Display a message indicating that the file already exists
+                                // or perform any other desired actions based on your application's requirements
+                                $resource->setResourceName($title);
+                                $flashBag = $request->getSession()->getFlashBag();
+                                $flashBag->add('warning', 'Upload Already Exists');
+
+                                return [
+                                    'title' => $title,
+                                    'filetype' => 'file',
+                                    'comment' => $comment,
+                                ];
+                            }
+
+                            throw new InvalidArgumentException('Invalid fileExistsOption');
                         } else {
                             $resource->setResourceName($title);
                             $resource->setUploadFile($uploadedFile);
@@ -323,6 +330,7 @@ class BaseResourceFileAction
         }
 
         return [
+            'title' => $title,
             'filetype' => $fileType,
             'comment' => $comment,
         ];

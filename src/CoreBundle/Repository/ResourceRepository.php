@@ -272,6 +272,8 @@ abstract class ResourceRepository extends ServiceEntityRepository
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
 
+        // TODO Avoid global assumption for a request, and inject
+        // the request stack instead.
         $sessionStudentView = $this->getRequest()->getSession()->get('studentview');
 
         $checker = $this->getAuthorizationChecker();

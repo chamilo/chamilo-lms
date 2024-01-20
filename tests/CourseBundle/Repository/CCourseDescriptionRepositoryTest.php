@@ -44,6 +44,10 @@ class CCourseDescriptionRepositoryTest extends AbstractApiTest
     public function testGetDescriptions(): void
     {
         $repo = self::getContainer()->get(CCourseDescriptionRepository::class);
+        $request_stack = $this->getMockedRequestStack([
+            'session' => ['studentview' => 1],
+        ]);
+        $repo->setRequestStack($request_stack);
         $em = $this->getEntityManager();
 
         $course = $this->createCourse('Test');

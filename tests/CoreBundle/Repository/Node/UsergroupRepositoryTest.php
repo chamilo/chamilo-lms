@@ -26,16 +26,17 @@ class UsergroupRepositoryTest extends KernelTestCase
         self::bootKernel();
         $repo = self::getContainer()->get(UsergroupRepository::class);
 
+        $admin_user = $this->getUser('admin');
         $group = (new Usergroup())
             ->setTitle('test')
             ->setDescription('desc')
             ->setGroupType(1)
             ->setUrl('url')
-            //->setAuthorId()
+            ->setAuthorId($admin_user->getId())
             ->setAllowMembersToLeaveGroup(1)
             ->setVisibility(GROUP_PERMISSION_OPEN)
             ->addAccessUrl($this->getAccessUrl())
-            ->setCreator($this->getUser('admin'))
+            ->setCreator($admin_user)
         ;
 
         $this->assertHasNoEntityViolations($group);

@@ -192,6 +192,8 @@ class PersonalFileRepositoryTest extends AbstractApiTest
 
         // 2. Access file as another user. Result: forbidden access.
         $this->createUser('another', 'another');
+        global $_SERVER;
+        $_SERVER['REMOTE_ADDR'] = 'localhost';
         $client = $this->getClientWithGuiCredentials('another', 'another');
         $client->request(
             'GET',

@@ -29,7 +29,6 @@ class CGlossaryRepositoryTest extends AbstractApiTest
         $glossary = (new CGlossary())
             ->setTitle('glossary')
             ->setDescription('desc')
-            //->setDisplayOrder(1)
             ->setParent($course)
             ->setCreator($teacher)
             ->addCourseLink($course)
@@ -40,7 +39,6 @@ class CGlossaryRepositoryTest extends AbstractApiTest
 
         $this->assertSame('glossary', (string) $glossary);
         $this->assertSame('desc', $glossary->getDescription());
-        //$this->assertSame(1, $glossary->getDisplayOrder());
         $this->assertSame($glossary->getResourceIdentifier(), $glossary->getIid());
 
         $router = $this->getContainer()->get(RouterInterface::class);

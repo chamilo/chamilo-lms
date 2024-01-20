@@ -28,7 +28,7 @@ class CToolRepositoryTest extends AbstractApiTest
         $defaultCount = $repo->count([]);
         $admin = $this->getUser('admin');
 
-        $tool = $toolRepo->findOneBy(['name' => 'course_homepage']);
+        $tool = $toolRepo->findOneBy(['title' => 'course_homepage']);
         $this->assertNotNull($tool);
 
         $cTool = (new CTool())

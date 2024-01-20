@@ -4696,7 +4696,8 @@ function &api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $ur
     }
     $result = Database::query($sql);
     if (null === $result) {
-        return [];
+        $result = [];
+        return $result;
     }
     $result = Database::store_result($result, 'ASSOC');
 
@@ -6116,10 +6117,18 @@ function api_get_locked_settings()
  * @author Jorge Frisancho Jibaja <jrfdeft@gmail.com>, USIL - Some changes to allow the use of real IP using reverse proxy
  *
  * @version CEV CHANGE 24APR2012
+ * @throws RuntimeException
  */
-function api_get_real_ip()
+function api_get_real_ip(): string
 {
-    $ip = trim($_SERVER['REMOTE_ADDR']);
+    if ('cli' === PHP_SAPI) {
+        $ip = '127.0.0.1';
+    } else {
+        $ip = trim($_SERVER['REMOTE_ADDR']);
+        if (empty($ip)) {
+            throw new RuntimeException("Unable to retrieve remote IP address.");
+        }
+    }
     if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
         if (preg_match('/,/', $_SERVER['HTTP_X_FORWARDED_FOR'])) {
             @list($ip1, $ip2) = @explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);

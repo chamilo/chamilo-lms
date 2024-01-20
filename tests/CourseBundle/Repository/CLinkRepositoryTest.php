@@ -27,7 +27,7 @@ class CLinkRepositoryTest extends AbstractApiTest
             ->setUrl('https://chamilo.org')
             ->setTitle('link')
             ->setDescription('desc')
-            ->setDisplayOrder(1)
+            //->setDisplayOrder(1)
             ->setTarget('_blank')
             ->setCategory(null)
             ->setParent($course)
@@ -43,7 +43,7 @@ class CLinkRepositoryTest extends AbstractApiTest
         $this->assertSame('https://chamilo.org', $link->getUrl());
         $this->assertSame('link', $link->getTitle());
         $this->assertSame('desc', $link->getDescription());
-        $this->assertSame(1, $link->getDisplayOrder());
+        //$this->assertSame(1, $link->getDisplayOrder());
         $this->assertSame('_blank', $link->getTarget());
 
         $this->assertSame(1, $repo->count([]));

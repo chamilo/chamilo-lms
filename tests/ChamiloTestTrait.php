@@ -55,6 +55,7 @@ trait ChamiloTestTrait
     }
     public function createCourse(string $title): ?Course
     {
+        /* @var CourseRepository $repo */
         $repo = static::getContainer()->get(CourseRepository::class);
         $course = (new Course())
             ->setTitle($title)

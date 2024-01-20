@@ -21,7 +21,7 @@ class BranchSyncRepositoryTest extends AbstractApiTest
         $repo = self::getContainer()->get(BranchSyncRepository::class);
 
         $item = (new BranchSync())
-            ->setBranchName('Branch')
+            ->setTitle('Branch')
             ->setAdminName('Julio')
         ;
         $this->assertHasNoEntityViolations($item);
@@ -38,7 +38,7 @@ class BranchSyncRepositoryTest extends AbstractApiTest
 
         $em = $this->getEntityManager();
         $item = (new BranchSync())
-            ->setBranchName('Branch')
+            ->setTitle('Branch')
             ->setAdminName('Julio')
         ;
         $this->assertHasNoEntityViolations($item);

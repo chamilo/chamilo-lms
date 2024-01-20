@@ -33,7 +33,7 @@ class GroupRepository extends ServiceEntityRepository
     public function getAdmins()
     {
         $criteria = [
-            'name' => 'admins',
+            'title' => 'admins',
         ];
 
         /** @var Group|null $group */

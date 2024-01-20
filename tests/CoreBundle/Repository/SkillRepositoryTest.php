@@ -88,7 +88,7 @@ class SkillRepositoryTest extends AbstractApiTest
             ->setTitle('level')
             ->setPosition(1)
             ->setProfile($profile)
-            ->setShortName('level')
+            ->setShortTitle('level')
         ;
         $em->persist($level);
 
@@ -328,7 +328,7 @@ class SkillRepositoryTest extends AbstractApiTest
         $skillRepo->update($skill);
 
         $this->assertNotEmpty($assetRepo->getAssetUrl($asset));
-        $this->assertSame(1, $skillRepo->count(['name' => 'php']));
+        $this->assertSame(1, $skillRepo->count(['title' => 'php']));
         $this->assertSame(1, $assetRepo->count([]));
 
         // Remove asset from skill
@@ -338,7 +338,7 @@ class SkillRepositoryTest extends AbstractApiTest
         $this->assertSame(0, $assetRepo->count([]));
 
         // Skill exists.
-        $this->assertSame(1, $skillRepo->count(['name' => 'php']));
+        $this->assertSame(1, $skillRepo->count(['title' => 'php']));
 
         $em->clear();
 

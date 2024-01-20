@@ -31,7 +31,7 @@ class UsergroupRepositoryTest extends KernelTestCase
             ->setDescription('desc')
             ->setGroupType(1)
             ->setUrl('url')
-            ->setAuthorId('')
+            //->setAuthorId()
             ->setAllowMembersToLeaveGroup(1)
             ->setVisibility(GROUP_PERMISSION_OPEN)
             ->addAccessUrl($this->getAccessUrl())

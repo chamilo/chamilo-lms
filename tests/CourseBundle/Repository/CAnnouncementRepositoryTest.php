@@ -29,7 +29,7 @@ class CAnnouncementRepositoryTest extends AbstractApiTest
         $announcement = (new CAnnouncement())
             ->setTitle('item')
             ->setContent('content')
-            ->setDisplayOrder(1)
+            //->setDisplayOrder(1)
             ->setEmailSent(false)
             ->setEndDate(new DateTime())
             ->setParent($course)

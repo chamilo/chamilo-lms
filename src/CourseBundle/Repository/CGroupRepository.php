@@ -40,7 +40,7 @@ final class CGroupRepository extends ResourceRepository
     {
         return $this->findOneBy(
             [
-                'name' => $name,
+                'title' => $name,
             ]
         );
     }

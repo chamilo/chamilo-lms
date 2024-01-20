@@ -116,8 +116,8 @@ class CourseRepositoryTest extends AbstractApiTest
         $count = $courseRepo->count([]);
         $this->assertSame(1, $count);
 
-        // Check tools.
-        $this->assertCount(25, $course->getTools());
+        // Check tools (all declared in the ToolChain minus blog and "course_tool")
+        $this->assertCount(26, $course->getTools());
 
         // Check resource links for each Tool
         foreach ($course->getTools() as $tool) {

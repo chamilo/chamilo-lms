@@ -87,7 +87,8 @@ final class CDocumentRepository extends ResourceRepository
             ->setParameter('parentResourceNodeId', $parentResourceNodeId)
             ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getOneOrNullResult()
+        ;
     }
 
     protected function addFileTypeQueryBuilder(string $fileType, QueryBuilder $qb = null): QueryBuilder

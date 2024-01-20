@@ -72,11 +72,11 @@ class Version20170625143000 extends AbstractMigrationChamilo
                 'ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E972395FCED FOREIGN KEY (thematic_id) REFERENCES c_thematic (iid)'
             );
         }
-        if (false === $table->hasForeignKey('FK_62798E97163DDA15')) {
-            $this->addSql(
-                'ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E97163DDA15 FOREIGN KEY (attendance_id) REFERENCES c_attendance (iid) ON DELETE CASCADE'
-            );
-        }
+        /*        if (false === $table->hasForeignKey('FK_62798E97163DDA15')) {
+                    $this->addSql(
+                        'ALTER TABLE c_thematic_advance ADD CONSTRAINT FK_62798E97163DDA15 FOREIGN KEY (attendance_id) REFERENCES c_attendance (iid) ON DELETE CASCADE'
+                    );
+                }*/
         if (false === $table->hasIndex('IDX_62798E97163DDA15')) {
             $this->addSql('CREATE INDEX IDX_62798E97163DDA15 ON c_thematic_advance (attendance_id);');
         }
@@ -134,8 +134,8 @@ class Version20170625143000 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX course ON c_link');
         }
 
-        $this->addSql('ALTER TABLE c_link CHANGE on_homepage on_homepage VARCHAR(10) DEFAULT NULL');
-        $this->addSql('UPDATE c_link SET category_id = NULL WHERE category_id = 0');
+        // $this->addSql('ALTER TABLE c_link CHANGE on_homepage on_homepage VARCHAR(10) DEFAULT NULL');
+        // $this->addSql('UPDATE c_link SET category_id = NULL WHERE category_id = 0');
 
         if (false === $table->hasForeignKey('FK_9209C2A012469DE2')) {
             $this->addSql(

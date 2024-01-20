@@ -22,6 +22,10 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
     {
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CStudentPublicationRepository::class);
+        $request_stack = $this->getMockedRequestStack([
+            'session' => ['studentview' => 1],
+        ]);
+        $repo->setRequestStack($request_stack);
         $courseRepo = self::getContainer()->get(CourseRepository::class);
 
         $course = $this->createCourse('new');
@@ -116,6 +120,10 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
     {
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CStudentPublicationRepository::class);
+        $request_stack = $this->getMockedRequestStack([
+            'session' => ['studentview' => 1],
+        ]);
+        $repo->setRequestStack($request_stack);
 
         $course = $this->createCourse('new');
 
@@ -143,6 +151,10 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
     {
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CStudentPublicationRepository::class);
+        $request_stack = $this->getMockedRequestStack([
+            'session' => ['studentview' => 1],
+        ]);
+        $repo->setRequestStack($request_stack);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
@@ -186,6 +198,10 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
     {
         $em = $this->getEntityManager();
         $repo = self::getContainer()->get(CStudentPublicationRepository::class);
+        $request_stack = $this->getMockedRequestStack([
+            'session' => ['studentview' => 1],
+        ]);
+        $repo->setRequestStack($request_stack);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');

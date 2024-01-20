@@ -28,6 +28,10 @@ class CSurveyRepositoryTest extends AbstractApiTest
     {
         $em = $this->getEntityManager();
         $surveyRepo = self::getContainer()->get(CSurveyRepository::class);
+        $request_stack = $this->getMockedRequestStack([
+            'session' => ['studentview' => 1],
+        ]);
+        $surveyRepo->setRequestStack($request_stack);
         $courseRepo = self::getContainer()->get(CourseRepository::class);
 
         $course = $this->createCourse('new');

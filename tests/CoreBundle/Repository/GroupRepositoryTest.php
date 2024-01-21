@@ -52,7 +52,7 @@ class GroupRepositoryTest extends AbstractApiTest
 
     public function testGetAdmins(): void
     {
-        /* @var GroupRepository $repo */
+        /** @var GroupRepository $repo */
         $repo = self::getContainer()->get(GroupRepository::class);
         $admins = $repo->getAdmins();
         $this->assertCount(0, $admins);

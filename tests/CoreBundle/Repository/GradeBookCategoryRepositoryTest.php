@@ -36,7 +36,7 @@ class GradeBookCategoryRepositoryTest extends AbstractApiTest
             ->setTitle('cat1')
             ->setDescription('desc')
             ->setCertifMinScore(100)
-            //->setDocument()
+            // ->setDocument()
             ->setDefaultLowestEvalExclude(false)
             ->setIsRequirement(false)
             ->setMinimumToValidate(50)

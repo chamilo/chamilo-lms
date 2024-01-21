@@ -461,9 +461,9 @@ class MessageRepositoryTest extends AbstractApiTest
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertJsonContains(
             [
-                //'@context' => '/api/contexts/Message',
-                //'@type' => 'Message',
-                //'title' => 'hello',
+                // '@context' => '/api/contexts/Message',
+                // '@type' => 'Message',
+                // 'title' => 'hello',
                 'receivers' => [
                     [
                         '@type' => 'MessageRelUser',

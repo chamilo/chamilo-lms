@@ -67,5 +67,4 @@ class CToolRepositoryTest extends AbstractApiTest
 
         $this->assertSame($defaultCount - 1, $repo->count([]));
     }
-
 }

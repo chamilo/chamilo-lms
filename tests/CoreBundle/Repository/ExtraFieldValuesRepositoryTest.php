@@ -83,7 +83,7 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
 
     public function testUpdateItemData(): void
     {
-        /* @var ExtraFieldValuesRepository $repo */
+        /** @var ExtraFieldValuesRepository $repo */
         $repo = self::getContainer()->get(ExtraFieldValuesRepository::class);
 
         $em = $this->getEntityManager();
@@ -101,7 +101,7 @@ class ExtraFieldValuesRepositoryTest extends AbstractApiTest
 
         $user = $this->createUser('test');
 
-        /* @var ExtraFieldValues $extraFieldValue */
+        /** @var ExtraFieldValues $extraFieldValue */
         $extraFieldValue = $repo->updateItemData($field, $user, 'test');
 
         $items = $repo->getExtraFieldValuesFromItem($user, ExtraField::USER_FIELD_TYPE);

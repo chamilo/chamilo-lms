@@ -468,7 +468,8 @@ table#skill_holder {
   padding: 20px 0px;
 }
 
-#date_fields label, .p-float-label label[for='date_time'] {
+#date_fields label,
+.p-float-label .datepicker-label {
   top: 0px;
   left: 0.5rem;
   --tw-bg-opacity: 1;

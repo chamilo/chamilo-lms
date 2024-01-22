@@ -2425,13 +2425,22 @@ class SurveyUtil
                     ? explode(';', $already_invited['additional_users'])
                     : [];
             $my_alredy_invited = $already_invited['course_users'] ?? [];
-            if ((is_numeric($value) && !in_array($value, $my_alredy_invited)) ||
-                (!is_numeric($value) && !in_array($value, $addit_users_array))
-            ) {
+
+            $userId = 0;
+            if (is_string($value) && filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                $userInfo = api_get_user_info_from_email($value);
+                if ($userInfo && isset($userInfo['id'])) {
+                    $userId = $userInfo['id'];
+                }
+            } elseif (is_numeric($value)) {
+                $userId = $value;
+            }
+
+            if ($userId && !in_array($userId, $my_alredy_invited)) {
                 $new_user = true;
-                if (!array_key_exists($value, $survey_invitations)) {
+                if (!array_key_exists($userId, $survey_invitations)) {
                     self::saveInvitation(
-                        api_get_user_entity($value),
+                        api_get_user_entity($userId),
                         $invitation_code,
                         api_get_utc_datetime(time(), null, true),
                         $survey,
@@ -2820,7 +2829,9 @@ class SurveyUtil
     public static function display_survey_list()
     {
         $parameters = [];
-        $parameters['cidReq'] = api_get_course_id();
+        $parameters['cid'] = api_get_course_int_id();
+        $parameters['sid'] = api_get_session_id();
+        $parameters['gid'] = api_get_group_id();
         if (isset($_GET['do_search']) && $_GET['do_search']) {
             $message = get_lang('Display search results').'<br />';
             $message .= '<a href="'.api_get_self().'?'.api_get_cidreq().'">'.get_lang('Display all').'</a>';

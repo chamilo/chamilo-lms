@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CSurvey;
+use Chamilo\CourseBundle\Entity\CSurveyQuestion;
 use ChamiloSession as Session;
 
 /**
@@ -445,7 +446,7 @@ class survey_question
 
         // Adding an answer
         if (isset($_POST['buttons']) && isset($_POST['buttons']['add_answer'])) {
-            if (isset($_REQUEST['type']) && 'multiplechoiceother' === $_REQUEST['type']) {
+            if (isset($_REQUEST['type']) && 'multiplechoiceother' === $_REQUEST['type'] && $counter > 2) {
                 $counter--;
             }
             $counter++;
@@ -689,22 +690,22 @@ class survey_question
      *
      * @return array The questions that have the given question as parent
      */
-    public static function getDependency($question)
+    public static function getDependency(array $question): ?array
     {
         if ('false' === api_get_setting('survey.survey_question_dependency')) {
             return [];
         }
-        $table = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $questionId = $question['question_id'];
-        $courseId = api_get_course_int_id();
 
-        // Getting the information of the question
-        $sql = "SELECT * FROM $table
-		        WHERE c_id = $courseId AND parent_id = $questionId ";
-        $result = Database::query($sql);
-        $row = Database::store_result($result, 'ASSOC');
+        $em = Database::getManager();
 
-        return $row;
+        $queryBuilder = $em->createQueryBuilder();
+        $queryBuilder->select('q')
+            ->from(CSurveyQuestion::class, 'q')
+            ->where('q.parent = :parent')
+            ->setParameter('parent', $questionId);
+
+        return $queryBuilder->getQuery()->getArrayResult();
     }
 
     /**

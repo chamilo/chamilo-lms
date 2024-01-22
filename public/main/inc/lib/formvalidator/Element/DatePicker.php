@@ -113,50 +113,9 @@ class DatePicker extends HTML_QuickForm_text
                 if ($('label[for=\"".$id."\"]').length > 0) {
                     $('label[for=\"".$id."\"]').hide();
                 }
+
+                document.querySelector('label[for=\"' + '{$id}' + '\"]').classList.add('datepicker-label');
              });
-        </script>";
-
-        return $js;
-
-        $js .= "<script>
-            $(function() {
-                var txtDate = $('#$id'),
-                    inputGroup = txtDate.parents('.input-group'),
-                    txtDateAlt = $('#{$id}_alt'),
-                    txtDateAltText = $('#{$id}_alt_text');
-
-                txtDate
-                    .hide()
-                    .datepicker({
-                        defaultDate: '".$this->getValue()."',
-                        dateFormat: 'yy-mm-dd',
-                        altField: '#{$id}_alt',
-                        altFormat: \"".get_lang('MM dd, yy')."\",
-                        showOn: 'both',
-                        buttonImage: '".Display::getMdiIcon(ToolIcon::ATTENDANCE, 'ch-tool-icon', null, ICON_SIZE_TINY)."',
-                        buttonImageOnly: true,
-                        buttonText: '".get_lang('Select date')."',
-                        changeMonth: true,
-                        changeYear: true,
-                        yearRange: 'c-60y:c+5y'
-                    })
-                    .on('change', function (e) {
-                        txtDateAltText.text(txtDateAlt.val());
-                    });
-
-                txtDateAltText.on('click', function () {
-                    txtDate.datepicker('show');
-                });
-
-                inputGroup
-                    .find('button')
-                    .on('click', function (e) {
-                        e.preventDefault();
-
-                        $('#$id, #{$id}_alt').val('');
-                        $('#{$id}_alt_text').html('');
-                    });
-            });
         </script>";
 
         return $js;

@@ -631,6 +631,9 @@ class GradebookUtils
         $rs_exist = Database::query($sql);
         $row = Database::fetch_array($rs_exist);
         if (0 == $row['count']) {
+            if ($cat_id === 0) {
+                $cat_id = Null;
+            }
             $params = [
                 'cat_id' => $cat_id,
                 'user_id' => $user_id,

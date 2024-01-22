@@ -564,7 +564,7 @@ function modify_filter($user_id, $url_params, $row)
     $is_admin = in_array($user_id, $_admins_list);
     $statusname = api_get_status_langvars();
     $user_is_anonymous = false;
-    $current_user_status_label = $row['7'];
+    $current_user_status_label = $statusname[$row['7']];
 
     if ($current_user_status_label == $statusname[ANONYMOUS]) {
         $user_is_anonymous = true;

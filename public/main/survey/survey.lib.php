@@ -27,7 +27,7 @@ class SurveyManager
      *
      * @return string
      */
-    public static function generate_unique_code($code)
+    public static function generate_unique_code(string $code, ?int $surveyId = null)
     {
         if (empty($code)) {
             return false;
@@ -38,8 +38,15 @@ class SurveyManager
         $num = 0;
         $new_code = $code;
         while (true) {
-            $sql = "SELECT * FROM $table
-                    WHERE code = '$new_code' AND c_id = $course_id";
+
+            if (isset($surveyId)) {
+                $sql = "SELECT * FROM $table
+                    WHERE code = '$new_code' AND iid = $surveyId";
+            } else {
+                $sql = "SELECT * FROM $table
+                    WHERE code = '$new_code'";
+            }
+
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $num++;
@@ -492,7 +499,7 @@ class SurveyManager
                 $survey_weight = floatval($_POST['survey_weight']);
                 $max_score = 1;
 
-                if (!$gradebook_link_id) {
+                if (!$gradebook_link_id && isset($values['category_id'])) {
                     GradebookUtils::add_resource_to_course_gradebook(
                         $values['category_id'],
                         $courseCode,
@@ -643,7 +650,7 @@ class SurveyManager
             $new_survey_id = (int) $new_survey_id;
         }
 
-        $sql = "SELECT * FROM $table_survey_question_group
+        /*$sql = "SELECT * FROM $table_survey_question_group
                 WHERE iid = $survey_id";
 
         $res = Database::query($sql);
@@ -662,7 +669,7 @@ class SurveyManager
             Database::query($sql);
 
             $group_id[$row['id']] = $insertId;
-        }
+        }*/
 
         // Get questions
         $sql = "SELECT * FROM $table_survey_question
@@ -671,7 +678,6 @@ class SurveyManager
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
             $params = [
-                'c_id' => $targetCourseId,
                 'survey_id' => $new_survey_id,
                 'survey_question' => $row['survey_question'],
                 'survey_question_comment' => $row['survey_question_comment'],
@@ -706,7 +712,6 @@ class SurveyManager
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
             $params = [
-                'c_id' => $targetCourseId,
                 'question_id' => $question_id[$row['question_id']],
                 'survey_id' => $new_survey_id,
                 'option_text' => $row['option_text'],
@@ -714,11 +719,6 @@ class SurveyManager
                 'value' => $row['value'],
             ];
             $insertId = Database::insert($table_survey_options, $params);
-            if ($insertId) {
-                $sql = "UPDATE $table_survey_options SET question_option_id = $insertId
-                        WHERE iid = $insertId";
-                Database::query($sql);
-            }
         }
 
         return $new_survey_id;
@@ -755,16 +755,16 @@ class SurveyManager
 
         $sql = 'DELETE FROM '.$table_survey_invitation.'
 		        WHERE
-		            c_id = '.$courseId.' AND
-		            survey_code = "'.Database::escape_string($datas['code']).'" '.$session_where.' ';
+		            survey_id = "'.$surveyId.'" '.$session_where.' ';
         Database::query($sql);
 
         $sql = 'DELETE FROM '.$table_survey_answer.'
-		        WHERE c_id = '.$courseId.' AND survey_id='.$surveyId;
+		        WHERE
+		        survey_id = "'.$surveyId.'" '.$session_where.' ';
         Database::query($sql);
 
         $sql = 'UPDATE '.$table_survey.' SET invited=0, answered=0
-		        WHERE c_id = '.$courseId.' AND iid ='.$surveyId;
+		        WHERE iid ='.$surveyId;
         Database::query($sql);
 
         Event::addEvent(
@@ -1027,7 +1027,7 @@ class SurveyManager
                 $survey_data = self::get_survey($surveyId);
 
                 // Storing a new question
-                if ('' == $form_content['question_id'] || !is_numeric($form_content['question_id'])) {
+                if (empty($form_content['question_id']) || !is_numeric($form_content['question_id'])) {
                     // Finding the max sort order of the questions in the given survey
                     $sql = "SELECT max(sort) AS max_sort
 					        FROM $tbl_survey_question
@@ -1163,59 +1163,41 @@ class SurveyManager
     }
 
     /**
-     * This functions moves a question of a survey up or down.
+     * Moves a survey question within the ordered list.
      *
-     * @param string $direction
-     * @param int    $survey_question_id
-     * @param int    $survey_id
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     *
-     * @version January 2007
+     * @param string $direction The direction to move the question ('moveup' or 'movedown').
+     * @param int    $surveyQuestionId The ID of the survey question to move.
+     * @param int    $surveyId The ID of the survey to which the question belongs.
      */
-    public static function move_survey_question($direction, $survey_question_id, $survey_id)
+    public static function moveSurveyQuestion(string $direction, int $surveyQuestionId, int $surveyId): void
     {
-        // Table definition
-        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-        $course_id = api_get_course_int_id();
+        $em = Database::getManager();
+        $repo = $em->getRepository(CSurveyQuestion::class);
+        $sortDirection = $direction === 'moveup' ? 'DESC' : 'ASC';
+        $questions = $repo->findBy(['survey' => $surveyId], ['sort' => $sortDirection]);
 
-        if ('moveup' === $direction) {
-            $sort = 'DESC';
-        }
-        if ('movedown' === $direction) {
-            $sort = 'ASC';
-        }
-
-        $survey_id = (int) $survey_id;
-
-        // Finding the two questions that needs to be swapped
-        $sql = "SELECT * FROM $table_survey_question
-		        WHERE c_id = $course_id AND survey_id='".$survey_id."'
-		        ORDER BY sort $sort";
-        $result = Database::query($sql);
         $found = false;
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($questions as $question) {
             if ($found) {
-                $question_id_two = $row['question_id'];
-                $question_sort_two = $row['sort'];
+                $secondQuestion = $question;
                 $found = false;
+                break;
             }
-            if ($row['question_id'] == $survey_question_id) {
+            if ($question->getIid() == $surveyQuestionId) {
                 $found = true;
-                $question_id_one = $row['question_id'];
-                $question_sort_one = $row['sort'];
+                $firstQuestion = $question;
             }
         }
 
-        $sql = "UPDATE $table_survey_question
-                SET sort = '".Database::escape_string($question_sort_two)."'
-		        WHERE c_id = $course_id AND question_id='".intval($question_id_one)."'";
-        Database::query($sql);
+        if (isset($firstQuestion) && isset($secondQuestion)) {
+            $tempSort = $firstQuestion->getSort();
+            $firstQuestion->setSort($secondQuestion->getSort());
+            $secondQuestion->setSort($tempSort);
 
-        $sql = "UPDATE $table_survey_question
-                SET sort = '".Database::escape_string($question_sort_one)."'
-		        WHERE c_id = $course_id AND question_id='".intval($question_id_two)."'";
-        Database::query($sql);
+            $em->persist($firstQuestion);
+            $em->persist($secondQuestion);
+            $em->flush();
+        }
     }
 
     /**

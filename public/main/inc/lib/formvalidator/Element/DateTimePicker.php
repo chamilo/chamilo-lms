@@ -88,6 +88,8 @@ class DateTimePicker extends HTML_QuickForm_text
                 time_24hr: true,
                 wrap: false
             });
+
+            document.querySelector('label[for=\"' + '{$id}' + '\"]').classList.add('datepicker-label');
         });
         </script>";
 

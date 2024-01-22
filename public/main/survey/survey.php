@@ -123,7 +123,7 @@ if (!empty($action)) {
             break;
         case 'moveup':
         case 'movedown':
-            SurveyManager::move_survey_question(
+            SurveyManager::moveSurveyQuestion(
                 $action,
                 $my_question_id_survey,
                 $my_survey_id_survey

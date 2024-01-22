@@ -2568,7 +2568,7 @@ class Category implements GradebookItem
             $cat->set_visible($data['visible']);
             $cat->set_session_id($data['session_id']);
             $cat->set_certificate_min_score($data['certif_min_score']);
-            $cat->set_grade_model_id($data['grade_model_id']);
+            $cat->set_grade_model_id((int) $data['grade_model_id']);
             $cat->set_locked($data['locked']);
             $cat->setGenerateCertificates($data['generate_certificates']);
             $cat->setIsRequirement($data['is_requirement']);

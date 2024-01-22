@@ -60,7 +60,7 @@ class ZoomPlugin extends Plugin
     public function __construct()
     {
         parent::__construct(
-            '0.5',
+            '0.6',
             'Sébastien Ducoulombier, Julio Montoya, Angel Fernando Quiroz Campos',
             [
                 'tool_enable' => 'boolean',

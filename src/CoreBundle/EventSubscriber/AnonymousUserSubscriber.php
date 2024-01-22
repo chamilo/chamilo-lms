@@ -102,6 +102,16 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
     {
         $userRepository = $this->entityManager->getRepository(User::class);
         $trackLoginRepository = $this->entityManager->getRepository(TrackELogin::class);
+        $anonymousAutoProvisioning = 'true' === $this->settingsManager->getSetting('security.anonymous_autoprovisioning');
+
+        if (!$anonymousAutoProvisioning) {
+            $anonymousUser = $userRepository->findOneBy(['status' => User::ANONYMOUS], ['registrationDate' => 'ASC']);
+            if ($anonymousUser) {
+                return $anonymousUser->getId();
+            }
+
+            return $this->createAnonymousUser()->getId();
+        }
 
         $maxAnonymousUsers = (int) $this->settingsManager->getSetting('admin.max_anonymous_users');
         if (0 === $maxAnonymousUsers) {
@@ -128,7 +138,10 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
             }
         }
 
-        // Create a new anonymous user
+        return $this->createAnonymousUser()->getId();
+    }
+
+    private function createAnonymousUser(): User {
         $uniqueId = uniqid('anon_');
         $email = $uniqueId.'@localhost.local';
 
@@ -146,12 +159,11 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
             ->setEmail($email)
             ->setOfficialCode('anonymous')
             ->setCreatorId(1)
-            ->addRole('ROLE_ANONYMOUS')
-        ;
+            ->addRole('ROLE_ANONYMOUS');
 
         $this->entityManager->persist($anonymousUser);
         $this->entityManager->flush();
 
-        return $anonymousUser->getId();
+        return $anonymousUser;
     }
 }

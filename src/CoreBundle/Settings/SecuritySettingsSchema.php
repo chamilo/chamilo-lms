@@ -42,12 +42,12 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
                 'password_requirements' => '',
                 'allow_online_users_by_status' => '',
                 'security_session_cookie_samesite_none' => 'false',
+                'anonymous_autoprovisioning' => 'false',
             ]
         );
         $allowedTypes = [
             'allow_browser_sniffer' => ['string'],
             'allow_strength_pass_checker' => ['string'],
-            'captcha_number_mistakes_to_block_account' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
@@ -62,7 +62,14 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             ->add('allow_captcha', YesNoType::class)
             ->add('user_reset_password', YesNoType::class)
             ->add('user_reset_password_token_limit')
-            ->add('captcha_number_mistakes_to_block_account')
+            ->add(
+                'captcha_number_mistakes_to_block_account',
+                TextType::class,
+                [
+                    'label' => 'SecurityCaptchaNumberMistakesToBlockAccountTitle',
+                    'help' => 'SecurityCaptchaNumberMistakesToBlockAccountComment',
+                ]
+            )
             ->add('captcha_time_to_block')
             ->add('prevent_multiple_simultaneous_login', YesNoType::class)
             ->add('check_password', YesNoType::class)
@@ -158,6 +165,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('security_session_cookie_samesite_none', YesNoType::class)
+            ->add('anonymous_autoprovisioning', YesNoType::class)
         ;
     }
 

@@ -2583,7 +2583,7 @@ class UserManager
                 s.accessEndDate AS access_end_date,
                 s.duration,
                 sc.id AS session_category_id,
-                sc.name AS session_category_name,
+                sc.title AS session_category_title,
                 sc.dateStart AS session_category_date_start,
                 sc.dateEnd AS session_category_date_end,
                 s.coachAccessStartDate AS coach_access_start_date,
@@ -2612,7 +2612,7 @@ class UserManager
             WHERE (su.user = :user AND su.relationType = ".SessionEntity::GENERAL_COACH.") AND url.url = :url ";
 
         // Default order
-        $order = 'ORDER BY sc.name, s.title';
+        $order = 'ORDER BY sc.title, s.title';
 
         // Order by date if showing all sessions
         $showAllSessions = ('true' === api_get_setting('course.show_all_sessions_on_my_course_page'));
@@ -2643,6 +2643,7 @@ class UserManager
                     }
                     break;
                 case 'name':
+                case 'title':
                     $order = " ORDER BY s.title $orderSetting ";
                     break;
             }
@@ -2751,7 +2752,7 @@ class UserManager
 
             $categories[$row['session_category_id']]['session_category'] = [
                 'id' => $row['session_category_id'],
-                'name' => $row['session_category_name'],
+                'name' => $row['session_category_title'],
                 'date_start' => $categoryStart,
                 'date_end' => $categoryEnd,
             ];
@@ -2817,7 +2818,7 @@ class UserManager
             }
 
             $categories[$row['session_category_id']]['sessions'][] = [
-                'session_name' => $row['name'],
+                'session_name' => $row['title'],
                 'session_id' => $row['id'],
                 'access_start_date' => $row['access_start_date'] ? $row['access_start_date']->format('Y-m-d H:i:s') : null,
                 'access_end_date' => $row['access_end_date'] ? $row['access_end_date']->format('Y-m-d H:i:s') : null,
@@ -4766,7 +4767,7 @@ class UserManager
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
 
-        if ('' == $row['path_certificate'] || is_null($row['path_certificate'])) {
+        if (!isset($row['path_certificate']) || '' == $row['path_certificate'] || is_null($row['path_certificate'])) {
             return false;
         }
 

@@ -245,7 +245,31 @@ class Meeting
      */
     public function getRegistrants()
     {
-        return $this->registrants;
+        return $this->registrants->filter(function (Registrant $registrant) {
+            return !$registrant instanceof Presenter;
+        });
+    }
+
+    /**
+     * @return ArrayCollection<int, Presenter>
+     */
+    public function getPresenters(): ArrayCollection
+    {
+        return $this->registrants->filter(function (Registrant $registrant) {
+            return $registrant instanceof Presenter;
+        });
+    }
+
+    public function hasUserAsPresenter(User $user): bool
+    {
+        $presenters = $this->getPresenters();
+
+        $criteria = Criteria::create();
+        $criteria->where(
+            Criteria::expr()->eq('user', $user)
+        );
+
+        return $presenters->matching($criteria)->count() > 0;
     }
 
     /**

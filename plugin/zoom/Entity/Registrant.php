@@ -23,6 +23,9 @@ use Exception;
  *     }
  * )
  * @ORM\HasLifecycleCallbacks
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="type", type="string")
+ * @ORM\DiscriminatorMap({"registrant" = "Chamilo\PluginBundle\Zoom\Registrant", "presenter" = "Chamilo\PluginBundle\Zoom\Presenter"})
  */
 class Registrant
 {

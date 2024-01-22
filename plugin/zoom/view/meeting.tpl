@@ -69,45 +69,68 @@
         <hr>
         {{ registerParticipantForm }}
     {% endif %}
+
+    {% if registerPresenterForm %}
+        {{ registerPresenterForm }}
+    {% endif %}
+
     {{ fileForm }}
 
-    {#    {% if registrants and meeting.meetingInfoGet.settings.approval_type != 2 %}#}
-    {% if registrants.count > 0 %}
-        <script>
-            function copyJoinURL(event, url) {
-                event.target.textContent = '{{ 'CopyingJoinURL'|get_plugin_lang('ZoomPlugin')|escape }}';
-                navigator.clipboard.writeText(url).then(
-                    function() {
-                        event.target.textContent = '{{ 'JoinURLCopied'|get_plugin_lang('ZoomPlugin')|escape }}';
-                    }, function() {
-                        event.target.textContent = '{{ 'CouldNotCopyJoinURL'|get_plugin_lang('ZoomPlugin')|escape }}' + ' ' + url;
+    <div class="row">
+        <div class="col-m6">
+            {% if presenters %}
+                <h3>{{ 'Presenters'|get_plugin_lang('ZoomPlugin') }}</h3>
+                <table class="table">
+                    {% for presenter in presenters %}
+                        <tr>
+                            <td>
+                                {{ presenter.fullName }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </div>
+        <div class="col-m6">
+            {#    {% if registrants and meeting.meetingInfoGet.settings.approval_type != 2 %}#}
+            {% if registrants.count > 0 %}
+                <script>
+                    function copyJoinURL(event, url) {
+                        event.target.textContent = '{{ 'CopyingJoinURL'|get_plugin_lang('ZoomPlugin')|escape }}';
+                        navigator.clipboard.writeText(url).then(
+                            function() {
+                                event.target.textContent = '{{ 'JoinURLCopied'|get_plugin_lang('ZoomPlugin')|escape }}';
+                            }, function() {
+                                event.target.textContent = '{{ 'CouldNotCopyJoinURL'|get_plugin_lang('ZoomPlugin')|escape }}' + ' ' + url;
+                            }
+                        );
                     }
-                );
-            }
-        </script>
-        <h3>{{ 'Users' | get_lang }}</h3>
-        <br />
-        <table class="table">
-            {% for registrant in registrants %}
-            <tr>
-                <td>
-                {{ registrant.fullName }}
-                </td>
-               <td>
-{#               {% if registrant.joinUrl %}#}
-{#                <a class="btn btn-primary" onclick="copyJoinURL(event, '{{ registrant.joinUrl }}')">#}
-{#                    {{ 'CopyJoinAsURL'|get_plugin_lang('ZoomPlugin') }}#}
-{#                </a>#}
-{#               {% else %}#}
-{#                   <a class="btn btn-primary disabled" >#}
-{#                       {{ 'JoinURLNotAvailable'|get_plugin_lang('ZoomPlugin') }}#}
-{#                   </a>#}
-{#               {% endif %}#}
-               </td>
-            </tr>
-            {% endfor %}
-        </table>
-    {% endif %}
+                </script>
+                <h3>{{ 'Users' | get_lang }}</h3>
+                <br />
+                <table class="table">
+                    {% for registrant in registrants %}
+                        <tr>
+                            <td>
+                                {{ registrant.fullName }}
+                            </td>
+                            <td>
+                                {#               {% if registrant.joinUrl %}#}
+                                {#                <a class="btn btn-primary" onclick="copyJoinURL(event, '{{ registrant.joinUrl }}')">#}
+                                {#                    {{ 'CopyJoinAsURL'|get_plugin_lang('ZoomPlugin') }}#}
+                                {#                </a>#}
+                                {#               {% else %}#}
+                                {#                   <a class="btn btn-primary disabled" >#}
+                                {#                       {{ 'JoinURLNotAvailable'|get_plugin_lang('ZoomPlugin') }}#}
+                                {#                   </a>#}
+                                {#               {% endif %}#}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </div>
+    </div>
 {% else %}
     {% include 'zoom/view/meeting_details.tpl' %}
 {% endif %}

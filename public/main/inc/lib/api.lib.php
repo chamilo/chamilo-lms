@@ -2384,7 +2384,7 @@ function api_get_session_name($session_id = 0)
         //technically, there can be only one, but anyway we take the first
         $rec = Database::fetch_array($r);
 
-        return $rec['name'];
+        return $rec['title'];
     }
 
     return null;

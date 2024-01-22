@@ -107,10 +107,10 @@ class SkillModel extends Model
         $result['icon_small'] = $iconSmall;
         $result['icon_big'] = $iconBig;
 
-        $result['img_mini'] = Display::img($iconBig, $result['name'], ['width' => ICON_SIZE_MEDIUM]);
+        $result['img_mini'] = Display::img($iconBig, $result['title'], ['width' => ICON_SIZE_MEDIUM]);
         $result['img_big'] = Display::img($iconBig, $result['name']);
         $result['img_small'] = Display::img($iconSmall, $result['name']);*/
-        $result['name'] = self::translateName($result['name']);
+        $result['title'] = self::translateName($result['title']);
         $result['short_code'] = self::translateCode($result['short_code']);
 
         return $result;
@@ -147,7 +147,7 @@ class SkillModel extends Model
             $html .= '<li class="thumbnail">';
             $item = $skill[$imageSize];
             $item .= '<div class="caption">
-                        <p class="text-center">'.$skill['name'].'</p>
+                        <p class="text-center">'.$skill['title'].'</p>
                       </div>';
             if (isset($skill['url'])) {
                 $html .= Display::url($item, $skill['url'], ['target' => '_blank']);
@@ -209,9 +209,9 @@ class SkillModel extends Model
                 $item = '<div class="item"><img src="'.$url.$imageParams.'" /></div>';
             }
 
-            $name = '<div class="caption">'.$skill['name'].'</div>';
+            $title = '<div class="caption">'.$skill['title'].'</div>';
             if (!empty($skill['short_code'])) {
-                $name = $skill['short_code'];
+                $title = $skill['short_code'];
             }
 
             if (!$isHierarchicalTable) {
@@ -219,7 +219,7 @@ class SkillModel extends Model
             }
 
             if ($showTitle) {
-                $item .= $name;
+                $item .= $title;
             }
 
             if (isset($skill['url'])) {
@@ -272,9 +272,9 @@ class SkillModel extends Model
 
             $skill['icon_small'] = sprintf(
                 'badges/%s-small.png',
-                sha1($skill['name'])
+                sha1($skill['title'])
             );
-            $skill['name'] = self::translateName($skill['name']);
+            $skill['title'] = self::translateName($skill['title']);
             $skill['short_code'] = self::translateCode($skill['short_code']);
         }
 
@@ -315,7 +315,7 @@ class SkillModel extends Model
 
         $sql = "SELECT
                     s.id,
-                    s.name,
+                    s.title,
                     s.description,
                     ss.parent_id,
                     ss.relation_type,
@@ -339,7 +339,7 @@ class SkillModel extends Model
                     $row['asset'] = $assetRepo->getAssetUrl($skill->getAsset());
                 }
 
-                $row['name'] = self::translateName($skill->getTitle());
+                $row['title'] = self::translateName($skill->getTitle());
                 $row['short_code'] = self::translateCode($skill->getShortCode());
                 $skillRelSkill = new SkillRelSkillModel();
                 $parents = $skillRelSkill->getSkillParents($skillId);
@@ -674,7 +674,7 @@ class SkillModel extends Model
 
         $sql = 'SELECT DISTINCT
                     s.id,
-                    s.name,
+                    s.title,
                     s.icon,
                     s.asset_id,
                     u.id as issue,
@@ -814,7 +814,7 @@ class SkillModel extends Model
                 'skill_id' => $resultData['id'],
                 'asset_id' => $resultData['asset_id'],
                 'skill_badge' => $badgeImage,
-                'skill_name' => self::translateName($resultData['name']),
+                'skill_title' => self::translateName($resultData['title']),
                 'short_code' => $resultData['short_code'],
                 'skill_url' => $resultData['url'],
                 'achieved_at' => api_get_local_time($resultData['acquired_skill_at']),
@@ -981,7 +981,7 @@ class SkillModel extends Model
                     // Default root node
                     $skills[1] = [
                         'id' => '1',
-                        'name' => get_lang('Root'),
+                        'title' => get_lang('Root'),
                         'parent_id' => 0,
                         'status' => 1,
                     ];
@@ -1008,19 +1008,19 @@ class SkillModel extends Model
                     $skill['parent_id'] = 1;
                 }
 
-                // because except main keys (id, name, children) others keys
+                // because except main keys (id, title, children) others keys
                 // are not saved while in the space tree
                 $skill['data'] = ['parent_id' => $skill['parent_id']];
 
                 // If a short code was defined, send the short code to replace
-                // skill name (to shorten the text in the wheel)
+                // skill title (to shorten the text in the wheel)
                 if (!empty($skill['short_code']) &&
                     'false' === api_get_setting('show_full_skill_name_on_skill_wheel')
                 ) {
                     $skill['data']['short_code'] = $skill['short_code'];
                 }
 
-                $skill['data']['name'] = $skill['name'];
+                $skill['data']['title'] = $skill['title'];
                 $skill['data']['status'] = $skill['status'];
 
                 // In order to paint all members of a family with the same color
@@ -1090,7 +1090,7 @@ class SkillModel extends Model
             }
 
             $skills_tree = [
-                'name' => get_lang('Absolute skill'),
+                'title' => get_lang('Absolute skill'),
                 'id' => 1,
                 'children' => $refs[1]['children'],
                 'data' => [],
@@ -1135,7 +1135,7 @@ class SkillModel extends Model
                     $children = $this->getSkillToJson($element['children'], 1, $main_depth);
                 }
                 $simple_tree[] = [
-                    'name' => $element['name'],
+                    'title' => $element['title'],
                     'children' => $children,
                 ];
             }
@@ -1160,7 +1160,7 @@ class SkillModel extends Model
             $counter = 1;
             foreach ($subtree as $elem) {
                 $tmp = [];
-                $tmp['name'] = $elem['name'];
+                $tmp['title'] = $elem['title'];
                 $tmp['id'] = $elem['id'];
                 $tmp['isSearched'] = self::isSearched($elem['id']);
 
@@ -1432,7 +1432,7 @@ class SkillModel extends Model
                     user.firstname,
                     user.username,
                     skill.id skill_id,
-                    skill.name skill_name,
+                    skill.title skill_title,
                     sru.acquired_skill_at
                 FROM {$this->table_skill_rel_user} AS sru
                 INNER JOIN {$this->table_course}
@@ -1446,7 +1446,7 @@ class SkillModel extends Model
         $result = Database::query($sql);
 
         while ($row = Database::fetch_assoc($result)) {
-            $row['skill_name'] = self::translateName($row['skill_name']);
+            $row['skill_title'] = self::translateName($row['skill_title']);
             $list[] = $row;
         }
 
@@ -1478,7 +1478,7 @@ class SkillModel extends Model
                     user.firstname,
                     user.username,
                     skill.id skill_id,
-                    skill.name skill_name,
+                    skill.title skill_title,
                     sru.acquired_skill_at
                 FROM {$this->table_skill_rel_user} AS sru
                 INNER JOIN {$this->table_course}
@@ -1491,7 +1491,7 @@ class SkillModel extends Model
 
         $result = Database::query($sql);
         while ($row = Database::fetch_assoc($result)) {
-            $row['skill_name'] = self::translateName($row['skill_name']);
+            $row['skill_title'] = self::translateName($row['skill_title']);
             $list[] = $row;
         }
 
@@ -1509,7 +1509,7 @@ class SkillModel extends Model
     {
         $skillId = (int) $skillId;
 
-        $sql = "SELECT s.id, s.name
+        $sql = "SELECT s.id, s.title
                 FROM {$this->table_gradebook} g
                 INNER JOIN {$this->table_skill_rel_gradebook} sg
                 ON g.id = sg.gradebook_id
@@ -1695,7 +1695,7 @@ class SkillModel extends Model
     {
         $userId = (int) $userId;
 
-        $sql = "SELECT s.id, s.name, sru.acquired_skill_at
+        $sql = "SELECT s.id, s.title, sru.acquired_skill_at
                 FROM {$this->table} s
                 INNER JOIN {$this->table_skill_rel_user} sru
                 ON s.id = sru.skill_id
@@ -1707,7 +1707,7 @@ class SkillModel extends Model
         foreach ($result as $item) {
             if (empty($level)) {
                 $skills[] = [
-                    'name' => self::translateName($item['name']),
+                    'title' => self::translateName($item['title']),
                     'acquired_skill_at' => $item['acquired_skill_at'],
                 ];
             } else {
@@ -1715,7 +1715,7 @@ class SkillModel extends Model
                 // +2 because it takes into account the root
                 if (count($parents) == $level + 1) {
                     $skills[] = [
-                        'name' => self::translateName($item['name']),
+                        'title' => self::translateName($item['title']),
                         'acquired_skill_at' => $item['acquired_skill_at'],
                     ];
                 }
@@ -1770,7 +1770,7 @@ class SkillModel extends Model
                 continue;
             }
 
-            $skillList[$skill['id']] = $skill['name'];
+            $skillList[$skill['id']] = $skill['title'];
         }
 
         $allGradeBooks = $objGradebook->find('all');

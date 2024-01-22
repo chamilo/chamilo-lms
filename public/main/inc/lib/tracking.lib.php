@@ -112,7 +112,7 @@ class Tracking
 
                 $groupItem = [
                     'id' => $group->getIid(),
-                    'name' => $group->getTitle(),
+                    'title' => $group->getTitle(),
                     'time' => api_time_to_hms($time),
                     'progress' => $averageProgress,
                     'score' => $averageScore,
@@ -3900,11 +3900,11 @@ class Tracking
         $keywordCondition = null;
         if (!empty($keyword)) {
             $keyword = Database::escape_string($keyword);
-            $keywordCondition = " AND (name LIKE '%$keyword%' ) ";
+            $keywordCondition = " AND (title LIKE '%$keyword%' ) ";
 
             if (!empty($description)) {
                 $description = Database::escape_string($description);
-                $keywordCondition = " AND (name LIKE '%$keyword%' OR description LIKE '%$description%' ) ";
+                $keywordCondition = " AND (title LIKE '%$keyword%' OR description LIKE '%$description%' ) ";
             }
         }
 
@@ -3919,7 +3919,7 @@ class Tracking
 
         $orderBy = '';
         if (!empty($orderByName)) {
-            if (in_array($orderByName, ['name', 'access_start_date'])) {
+            if (in_array($orderByName, ['title', 'access_start_date'])) {
                 $orderByDirection = in_array(strtolower($orderByDirection), ['asc', 'desc']) ? $orderByDirection : 'asc';
                 $orderByName = Database::escape_string($orderByName);
                 $orderBy .= " ORDER BY `$orderByName` $orderByDirection";
@@ -3931,7 +3931,7 @@ class Tracking
             (
                 SELECT DISTINCT
                     s.id,
-                    name,
+                    title,
                     $injectExtraFields
                     access_start_date,
                     access_end_date
@@ -3949,7 +3949,7 @@ class Tracking
             UNION
                 SELECT DISTINCT
                     s.id,
-                    s.name,
+                    s.title,
                     $injectExtraFields
                     s.access_start_date,
                     s.access_end_date
@@ -4653,7 +4653,7 @@ class Tracking
             $courseIdList[] = $row['id'];
         }
 
-        $orderBy = ' ORDER BY name ';
+        $orderBy = ' ORDER BY title ';
         $extraInnerJoin = null;
 
         if (SessionManager::orderCourseIsEnabled() && !empty($session_id)) {
@@ -4670,7 +4670,7 @@ class Tracking
 
         // Get the list of sessions where the user is subscribed as student
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT DISTINCT c.code, s.id as session_id, name
+            $sql = "SELECT DISTINCT c.code, s.id as session_id, s.title
                     FROM $tbl_session_course_user cu
                     INNER JOIN $tbl_access_rel_session a
                     ON (a.session_id = cu.session_id)
@@ -4685,7 +4685,7 @@ class Tracking
                         $sessionCondition
                     $orderBy ";
         } else {
-            $sql = "SELECT DISTINCT c.code, s.id as session_id, name
+            $sql = "SELECT DISTINCT c.code, s.id as session_id, s.title
                     FROM $tbl_session_course_user cu
                     INNER JOIN $tbl_session s
                     ON (s.id = cu.session_id)
@@ -4703,11 +4703,11 @@ class Tracking
         while ($row = Database::fetch_array($rs, 'ASSOC')) {
             $course_info = api_get_course_info($row['code']);
             $temp_course_in_session[$row['session_id']]['course_list'][$course_info['real_id']] = $course_info;
-            $temp_course_in_session[$row['session_id']]['name'] = $row['name'];
-            $simple_session_array[$row['session_id']] = $row['name'];
+            $temp_course_in_session[$row['session_id']]['title'] = $row['title'];
+            $simple_session_array[$row['session_id']] = $row['title'];
         }
 
-        foreach ($simple_session_array as $my_session_id => $session_name) {
+        foreach ($simple_session_array as $my_session_id => $session_title) {
             $course_list = $temp_course_in_session[$my_session_id]['course_list'];
             $my_course_data = [];
             foreach ($course_list as $courseId => $course_data) {
@@ -4725,7 +4725,7 @@ class Tracking
                 }
             }
             $course_in_session[$my_session_id]['course_list'] = $final_course_data;
-            $course_in_session[$my_session_id]['name'] = $session_name;
+            $course_in_session[$my_session_id]['title'] = $session_title;
         }
 
         if ($returnArray) {
@@ -5056,7 +5056,7 @@ class Tracking
 
             foreach ($course_in_session as $my_session_id => $session_data) {
                 $course_list = $session_data['course_list'];
-                $session_name = $session_data['name'];
+                $session_name = $session_data['title'];
                 if (false == $showAllSessions) {
                     if (isset($session_id) && !empty($session_id)) {
                         if ($session_id != $my_session_id) {
@@ -5121,7 +5121,7 @@ class Tracking
                 }
                 $url = api_get_path(WEB_CODE_PATH)."session/index.php?session_id={$my_session_id}";
 
-                $html .= Display::tag('td', Display::url($session_name, $url, ['target' => SESSION_LINK_TARGET]));
+                $html .= Display::tag('td', Display::url($session_title, $url, ['target' => SESSION_LINK_TARGET]));
                 $html .= Display::tag('td', $all_exercises);
                 $html .= Display::tag('td', $all_unanswered_exercises_by_user);
                 $html .= Display::tag('td', ExerciseLib::convert_to_percentage($all_average));
@@ -5170,7 +5170,7 @@ class Tracking
                 $course_list = $session_data['course_list'];
 
                 $html .= '<a name= "course_session_list"></a>';
-                $html .= Display::tag('h3', $session_data['name'].' - '.get_lang('Course list'));
+                $html .= Display::tag('h3', $session_data['title'].' - '.get_lang('Course list'));
 
                 $html .= '<div class="table-responsive">';
                 $html .= '<table class="table table-hover table-striped">';
@@ -6351,7 +6351,7 @@ class Tracking
             $sessions[$sessionId] = api_get_session_info($sessionId);
         } elseif (empty($sessionId) && !empty($courseId)) {
             // if, to the contrary, course is defined but not sessions, get the sessions that include this course
-            // $sessions is an array like: [0] => ('id' => 3, 'name' => 'Session 35'), [1] => () etc;
+            // $sessions is an array like: [0] => ('id' => 3, 'title' => 'Session 35'), [1] => () etc;
             $course = api_get_course_info_by_id($courseId);
             $sessionsTemp = SessionManager::get_session_by_course($courseId);
             $courses[$courseId] = $course;
@@ -6511,7 +6511,7 @@ class Tracking
             foreach ($data as $id => $row) {
                 $rowQuestId = $row['question_id'];
                 $rowAnsId = $row['answer_id'];
-                $data[$id]['session'] = $sessions[$row['session_id']]['name'];
+                $data[$id]['session'] = $sessions[$row['session_id']]['title'];
                 $data[$id]['firstname'] = $users[$row['user_id']]['firstname'];
                 $data[$id]['lastname'] = $users[$row['user_id']]['lastname'];
                 $data[$id]['username'] = $users[$row['user_id']]['username'];
@@ -6525,7 +6525,7 @@ class Tracking
             /*
             The minimum expected array structure at the end is:
             attempt_id,
-            session name,
+            session title,
             exercise_id,
             quiz_title,
             username,
@@ -8178,7 +8178,7 @@ class TrackingCourseLog
                     $row_thematic = Database::fetch_array($rs_thematic);
                     $thematic_id = $row_thematic['thematic_id'];
 
-                    $sql = "SELECT s.id, s.name, u.name
+                    $sql = "SELECT s.id, s.title, u.username
                         FROM $tbl_thematic t
                         INNER JOIN $tblSessionRelUser sru
                         ON t.session_id = sru.session_id
@@ -8193,7 +8193,7 @@ class TrackingCourseLog
                     $recorset = Database::query($sql);
                 }
             } else {
-                $sql = "SELECT session.id s.id, s.name u.username
+                $sql = "SELECT s.id, s.title u.username
                           FROM c_tool t, session s, user u, $tblSessionRelUser sru
                           WHERE
                               t.c_id = $course_id AND
@@ -8210,7 +8210,7 @@ class TrackingCourseLog
                 $name_session = '';
                 $coach_name = '';
                 if (!empty($obj)) {
-                    $name_session = $obj->name;
+                    $name_session = $obj->title;
                     $coach_name = $obj->username;
                 }
 
@@ -8259,20 +8259,20 @@ class TrackingCourseLog
                         }
                         break;
                     case 'glossary':
-                        $sql = "SELECT name FROM $table_tool
+                        $sql = "SELECT title FROM $table_tool
                                 WHERE c_id = $course_id AND glossary_id = $ref";
                         $rs_document = Database::query($sql);
                         $obj_document = Database::fetch_object($rs_document);
                         if ($obj_document) {
-                            $row[5] = $obj_document->name;
+                            $row[5] = $obj_document->title;
                         }
                         break;
                     case 'lp':
-                        $sql = "SELECT name
+                        $sql = "SELECT title
                                 FROM $table_tool WHERE c_id = $course_id AND id = $ref";
                         $rs_document = Database::query($sql);
                         $obj_document = Database::fetch_object($rs_document);
-                        $row[5] = $obj_document->name;
+                        $row[5] = $obj_document->title;
                         break;
                     case 'quiz':
                         $sql = "SELECT title FROM $table_tool

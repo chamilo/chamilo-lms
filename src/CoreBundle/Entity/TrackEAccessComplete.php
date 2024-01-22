@@ -24,7 +24,7 @@ class TrackEAccessComplete
     protected ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'trackEAccessCompleteList')]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $user;
 
     #[ORM\Column(name: 'date_reg', type: 'datetime', nullable: false)]

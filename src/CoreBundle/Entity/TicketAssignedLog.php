@@ -23,7 +23,7 @@ class TicketAssignedLog
     protected Ticket $ticket;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
     #[ORM\Column(name: 'sys_insert_user_id', type: 'integer', nullable: false)]

@@ -30,7 +30,7 @@ class CLpCategoryRelUser implements Stringable
     protected CLpCategory $category;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
     public function __toString(): string

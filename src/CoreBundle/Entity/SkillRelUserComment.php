@@ -24,7 +24,7 @@ class SkillRelUserComment
     protected ?SkillRelUser $skillRelUser = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'commentedUserSkills')]
-    #[ORM\JoinColumn(name: 'feedback_giver_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'feedback_giver_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?User $feedbackGiver = null;
 
     #[ORM\Column(name: 'feedback_text', type: 'text')]

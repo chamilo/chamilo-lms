@@ -28,7 +28,7 @@ class SkillRelItemRelUser
     protected SkillRelItem $skillRelItem;
 
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'])]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $user;
 
     #[ORM\Column(name: 'result_id', type: 'integer', nullable: true)]

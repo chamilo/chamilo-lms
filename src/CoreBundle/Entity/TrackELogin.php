@@ -23,7 +23,7 @@ class TrackELogin
     #[ORM\GeneratedValue]
     protected int $loginId;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'logins', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'logins')]
     #[ORM\JoinColumn(name: 'login_user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 

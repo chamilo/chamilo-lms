@@ -77,7 +77,7 @@ class SessionRelUser
     #[Assert\NotNull]
     #[Groups(['session_rel_user:read', 'session:item:read'])]
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'sessionsRelUser')]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
     #[Groups(['session_rel_user:read', 'session:item:read'])]

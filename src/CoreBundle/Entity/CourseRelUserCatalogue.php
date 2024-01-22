@@ -24,7 +24,7 @@ class CourseRelUserCatalogue implements Stringable
     protected ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'courses', cascade: ['persist'])]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?User $user = null;
 
     #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'users', cascade: ['persist'])]

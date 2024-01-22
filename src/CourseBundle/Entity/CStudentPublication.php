@@ -140,7 +140,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     protected ?CStudentPublication $publicationParent;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
     #[Groups(['c_student_publication:write', 'student_publication:read'])]

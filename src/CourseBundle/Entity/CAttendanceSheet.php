@@ -25,7 +25,7 @@ class CAttendanceSheet
     protected bool $presence;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
     #[ORM\ManyToOne(targetEntity: CAttendanceCalendar::class, inversedBy: 'sheets')]

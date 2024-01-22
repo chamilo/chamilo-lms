@@ -54,7 +54,7 @@ class GradebookCategory
     protected ?string $description;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'gradeBookCategories')]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
     #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'gradebookCategories')]

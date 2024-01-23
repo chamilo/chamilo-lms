@@ -110,16 +110,16 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
             $english_name = api_strtolower($english_name);
 
             $firstIso = substr($language_details['isocode'], 0, 2);
-            $english_name = str_starts_with($english_name, $firstIso.'_') ? $english_name : $firstIso.'_'.$english_name;
+            //$english_name = str_starts_with($english_name, $firstIso.'_') ? $english_name : $firstIso.'_'.$english_name;
 
-            $isocode = str_replace(' ', '_', $isocode);
+            $isocode = SubLanguageManager::generateSublanguageCode($firstIso, $_POST['english_name']);
             $str_info = '<br/>'.get_lang('Original name').' : '.$original_name.'<br/>'.get_lang('English name').' : '.$english_name.'<br/>'.get_lang('Character set').' : '.$isocode;
 
-            $mkdir_result = SubLanguageManager::addPoFileForSubLanguage($english_name);
+            $mkdir_result = SubLanguageManager::addPoFileForSubLanguage($isocode);
             if ($mkdir_result) {
-                $sl_id = SubLanguageManager::addSubLanguage($original_name, $english_name, $sublanguage_available, $parent_id);
+                $sl_id = SubLanguageManager::addSubLanguage($original_name, $english_name, $sublanguage_available, $parent_id, $isocode);
                 if (false === $sl_id) {
-                    SubLanguageManager::removePoFileForSubLanguage($english_name);
+                    SubLanguageManager::removePoFileForSubLanguage($isocode);
                     $msg .= Display::return_message(get_lang('The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message.'), 'error');
                 } else {
                     Display::addFlash(

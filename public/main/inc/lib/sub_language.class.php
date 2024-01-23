@@ -716,7 +716,7 @@ class SubLanguageManager
     /**
      * Add a sub-language.
      */
-    public static function addSubLanguage(string $originalName, string $englishName, bool $isAvailable, int $parentId): bool|int
+    public static function addSubLanguage(string $originalName, string $englishName, bool $isAvailable, int $parentId, string $isoCode): bool|int
     {
         $entityManager = Database::getManager();
         $parentLanguage = $entityManager->getRepository(Language::class)->find($parentId);
@@ -727,7 +727,7 @@ class SubLanguageManager
         $subLanguage = new Language();
         $subLanguage->setOriginalName($originalName)
             ->setEnglishName($englishName)
-            ->setIsocode($englishName)
+            ->setIsocode($isoCode)
             ->setAvailable($isAvailable)
             ->setParent($parentLanguage);
 
@@ -877,5 +877,19 @@ class SubLanguageManager
         }
 
         return null; // No parent language
+    }
+
+    public static function generateSublanguageCode(string $parentCode, string $variant, int $maxLength = 10): string
+    {
+        $parentCode = strtolower(trim($parentCode));
+        $variant = strtolower(trim($variant));
+
+        // Generate a variant code by truncating the variant name
+        $variantCode = substr($variant, 0, $maxLength - strlen($parentCode) - 1);
+
+        // Build the complete code
+        $fullCode = substr($parentCode . '_' . $variantCode, 0, $maxLength);
+
+        return $fullCode;
     }
 }

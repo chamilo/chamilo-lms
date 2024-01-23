@@ -2369,7 +2369,7 @@ class DocumentManager
                 $file = $node['resourceFile'];
                 $extension = '';
                 if ($file) {
-                    $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+                    $extension = pathinfo($file['title'], PATHINFO_EXTENSION);
                 }
 
                 $folder = $folderIcon;

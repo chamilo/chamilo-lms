@@ -5219,10 +5219,12 @@ class Agenda
                 foreach ($invitation->getInvitees() as $invitee) {
                     $inviteeUser = $invitee->getUser();
 
-                    $eventInfo['invitees'][] = [
-                        'id' => $inviteeUser->getId(),
-                        'name' => $inviteeUser->getCompleteNameWithUsername(),
-                    ];
+                    if (!is_null($inviteeUser)) {
+                        $eventInfo['invitees'][] = [
+                            'id' => $inviteeUser->getId(),
+                            'name' => $inviteeUser->getCompleteNameWithUsername(),
+                        ];
+                    }
                 }
             }
 

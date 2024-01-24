@@ -33,7 +33,7 @@ api_protect_admin_script();
 $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
 // Setting breadcrumbs.
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'admin', 'name' => get_lang('Administration')];
 
 // Setting the name of the tool.
 $tool_name = get_lang('Configuration settings');

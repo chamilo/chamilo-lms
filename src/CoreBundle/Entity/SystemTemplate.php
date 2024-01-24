@@ -6,13 +6,14 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\SystemTemplateRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * SystemTemplate.
  */
 #[ORM\Table(name: 'system_template')]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: SystemTemplateRepository::class)]
 class SystemTemplate
 {
     #[ORM\Column(name: 'id', type: 'integer')]

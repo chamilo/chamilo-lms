@@ -3,11 +3,23 @@
     :handle-reset="resetForm"
     :handle-submit="onSendFormData"
   />
-  <DocumentsForm
-    ref="createForm"
-    :errors="violations"
-    :values="item"
-  />
+
+  <div class="documents-layout">
+    <div class="template-list-container">
+      <TemplateList
+        :templates="templates"
+        @template-selected="addTemplateToEditor"
+      />
+    </div>
+    <div class="documents-form-container">
+      <DocumentsForm
+        ref="createForm"
+        :errors="violations"
+        :values="item"
+      />
+    </div>
+  </div>
+
   <Panel
     v-if="$route.query.cert === '1'"
     :header="$t('Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:')"
@@ -26,6 +38,8 @@ import Toolbar from "../../components/Toolbar.vue"
 import CreateMixin from "../../mixins/CreateMixin"
 import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
 import Panel from "primevue/panel"
+import TemplateList from "../../components/documents/TemplateList.vue"
+import axios from "axios"
 
 const servicePrefix = "Documents"
 
@@ -38,6 +52,7 @@ export default {
   name: "DocumentsCreateFile",
   servicePrefix,
   components: {
+    TemplateList,
     Loading,
     Toolbar,
     DocumentsForm,
@@ -55,6 +70,7 @@ export default {
         resourceLinkList: null,
         contentFile: null,
       },
+      templates: [],
       finalTags,
     };
   },
@@ -74,6 +90,19 @@ export default {
   },
 
   methods: {
+      addTemplateToEditor(templateContent) {
+        this.item.contentFile = templateContent;
+      },
+      fetchTemplates() {
+        axios.get('/system-templates')
+          .then(response => {
+            console.log(response.data);
+            this.templates = response.data;
+          })
+          .catch(error => {
+            console.error('There was an error fetching the templates:', error);
+          });
+      },
       getCertificateTags(){
           let finalTags = "";
           let tags = [
@@ -107,6 +136,9 @@ export default {
           return finalTags;
       },
     ...mapActions('documents', ['createWithFormData', 'reset'])
-  }
+  },
+  mounted() {
+    this.fetchTemplates();
+  },
 };
 </script>

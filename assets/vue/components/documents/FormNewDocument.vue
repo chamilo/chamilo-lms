@@ -87,10 +87,15 @@ export default {
   data() {
     return {
       title: null,
-      contentFile: null,
+      contentFile: this.initialValues ? this.initialValues.contentFile : '',
       parentResourceNodeId: null,
       resourceNode: null,
     };
+  },
+  watch: {
+    contentFile(newContent) {
+      tinymce.get('item_content').setContent(newContent);
+    }
   },
   computed: {
     item() {
@@ -179,6 +184,9 @@ export default {
         }
       );
       return false;
+    },
+    updateContent(content) {
+      this.contentFile = content;
     },
   },
   validations: {

@@ -19,7 +19,7 @@ class CSurveyQuestionOption
     protected ?int $iid = null;
 
     #[ORM\ManyToOne(targetEntity: CSurveyQuestion::class, inversedBy: 'options')]
-    #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'iid', onDelete: 'SET NULL')]
     protected CSurveyQuestion $question;
 
     #[ORM\ManyToOne(targetEntity: CSurvey::class, inversedBy: 'options')]

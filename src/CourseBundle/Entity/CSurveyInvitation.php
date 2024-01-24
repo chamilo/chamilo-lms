@@ -35,11 +35,11 @@ class CSurveyInvitation
     protected ?CGroup $group = null;
 
     #[ORM\ManyToOne(targetEntity: CSurvey::class, inversedBy: 'invitations')]
-    #[ORM\JoinColumn(name: 'survey_id', referencedColumnName: 'iid')]
+    #[ORM\JoinColumn(name: 'survey_id', referencedColumnName: 'iid', onDelete: 'SET NULL')]
     protected CSurvey $survey;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'surveyInvitations')]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected User $user;
 
     protected string $externalEmail;

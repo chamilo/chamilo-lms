@@ -324,9 +324,6 @@ class SurveyManager
                 }
             }
 
-            $from = api_get_utc_datetime($values['start_date'].':00', true, true);
-            $until = api_get_utc_datetime($values['end_date'].':59', true, true);
-
             $course = api_get_course_entity();
             $session = api_get_session_entity();
 
@@ -335,8 +332,8 @@ class SurveyManager
                 ->setTitle($values['survey_title'])
                 ->setSubtitle($values['survey_title'])
                 ->setLang($values['survey_language'])
-                ->setAvailFrom($from)
-                ->setAvailTill($until)
+                ->setAvailFrom(new \DateTime($values['start_date']))
+                ->setAvailTill(new \DateTime($values['end_date']))
                 ->setIsShared($shared_survey_id)
                 ->setTemplate('template')
                 ->setIntro($values['survey_introduction'])
@@ -442,8 +439,8 @@ class SurveyManager
                 ->setTitle($values['survey_title'])
                 ->setSubtitle($values['survey_title'])
                 ->setLang($values['survey_language'])
-                ->setAvailFrom(api_get_utc_datetime($values['start_date'].' 00:00', true, true))
-                ->setAvailTill(api_get_utc_datetime($values['end_date'].' 23:59', true, true))
+                ->setAvailFrom(new \DateTime($values['start_date']))
+                ->setAvailTill(new \DateTime($values['end_date']))
                 ->setIsShared($shared_survey_id)
                 ->setTemplate('template')
                 ->setIntro($values['survey_introduction'])

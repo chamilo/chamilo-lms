@@ -213,7 +213,7 @@ if (!empty($coursesInSession) && $allowEditSessionCoaches) {
         $form->addMultiSelect(
             $groupName,
             Display::url(
-                $session['name'],
+                $session['title'],
                 $sessionUrl,
                 ['target' => '_blank']
             ).' - '.get_lang('Coaches'),

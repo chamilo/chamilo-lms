@@ -53,7 +53,7 @@ class GradebookCategory
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'gradeBookCategories')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'gradeBookCategories', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 

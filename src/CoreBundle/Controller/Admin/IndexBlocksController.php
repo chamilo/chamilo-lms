@@ -457,6 +457,12 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('Contact categories'),
         ];
 
+        $items[] = [
+            'class' => 'item-system-template-admin',
+            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/settings.php', 'category' => 'Templates']),
+            'label' => $this->translator->trans('System Templates'),
+        ];
+
         return $items;
     }
 

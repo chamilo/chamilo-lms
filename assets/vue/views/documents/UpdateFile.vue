@@ -5,17 +5,27 @@
       :handle-reset="resetForm"
       :handle-submit="onSendFormData"
     />
-    <DocumentsForm
-      ref="updateForm"
-      :errors="violations"
-      :values="item"
-    >
-      <EditLinks
-        :item="item"
-        :show-share-with-user="false"
-        links-type="users"
-      />
-    </DocumentsForm>
+    <div class="documents-layout">
+      <div class="template-list-container">
+        <TemplateList
+          :templates="templates"
+          @template-selected="addTemplateToEditor"
+        />
+      </div>
+      <div class="documents-form-container">
+        <DocumentsForm
+          ref="updateForm"
+          :errors="violations"
+          :values="item"
+        >
+          <EditLinks
+            :item="item"
+            :show-share-with-user="false"
+            links-type="users"
+          />
+        </DocumentsForm>
+      </div>
+    </div>
 
     <Loading :visible="isLoading || deleteLoading" />
   </div>
@@ -29,6 +39,8 @@ import Loading from "../../components/Loading.vue"
 import Toolbar from "../../components/Toolbar.vue"
 import UpdateMixin from "../../mixins/UpdateMixin"
 import EditLinks from "../../components/resource_links/EditLinks.vue"
+import TemplateList from "../../components/documents/TemplateList.vue"
+import axios from "axios";
 
 const servicePrefix = "Documents"
 
@@ -36,10 +48,16 @@ export default {
   name: "DocumentsUpdate",
   servicePrefix,
   components: {
+    TemplateList,
     EditLinks,
     Loading,
     Toolbar,
     DocumentsForm,
+  },
+  data() {
+    return {
+      templates: [],
+    };
   },
   mixins: [UpdateMixin],
   computed: {
@@ -56,6 +74,20 @@ export default {
     }),
   },
   methods: {
+    fetchTemplates() {
+      axios.get('/system-templates')
+        .then(response => {
+          this.templates = response.data;
+        })
+        .catch(error => {
+          console.error('Error fetching the templates:', error);
+        });
+    },
+    addTemplateToEditor(templateContent) {
+      if (this.$refs.updateForm && typeof this.$refs.updateForm.updateContent === 'function') {
+        this.$refs.updateForm.updateContent(templateContent);
+      }
+    },
     ...mapActions("documents", {
       createReset: "resetCreate",
       deleteItem: "del",
@@ -64,6 +96,9 @@ export default {
       updateWithFormData: "updateWithFormData",
       updateReset: "resetUpdate",
     }),
+  },
+  mounted() {
+    this.fetchTemplates();
   },
 }
 </script>

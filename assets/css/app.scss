@@ -520,6 +520,63 @@ table#skill_holder {
   justify-content: center;
 }
 
+.documents-layout {
+  display: flex;
+  justify-content: space-between;
+}
+
+.template-list-container {
+  flex-basis: 20%;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.documents-form-container {
+  flex-basis: 78%;
+}
+
+.template-item img {
+  border: 1px solid #ccc;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  transition: transform 0.2s ease;
+}
+
+.template-item img:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.template-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.template-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+.template-item img {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+
+.template-item:hover {
+  background-color: #ececec;
+  cursor: pointer;
+}
 
 //@import 'primevue-md-light-indigo/theme.css';
 //@import '~primevue/resources/primevue.min.css';

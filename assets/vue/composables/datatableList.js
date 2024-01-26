@@ -33,10 +33,10 @@ export function useDatatableList (servicePrefix) {
   function onUpdateOptions ({ page, itemsPerPage, sortBy, sortDesc }) {
     page = page || options.value.page
 
-    if (!isEmpty(route.query.cert) && route.query.cert === '1') {
-        filters.value.filetype = 'certificate'
+    if (!isEmpty(route.query.filetype) && route.query.filetype === 'certificate') {
+      filters.value.filetype = 'certificate';
     } else {
-        filters.value.filetype = ['file', 'folder']
+      filters.value.filetype = ['file', 'folder'];
     }
 
     let params = { ...filters.value }

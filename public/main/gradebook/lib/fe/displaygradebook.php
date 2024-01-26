@@ -439,8 +439,10 @@ class DisplayGradebook
                                 $my_api_cidreq.'&origin=gradebook&selectcat='.$catobj->get_id().'">'.
                                 Display::getMdiIcon('certificate', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Attach certificate')).'</a>';
                         } else {
-                            $actionsRight .= '<a href="'.api_get_path(WEB_COURSE_PATH).$courseId.
-                                '/tool/document?cert=1">'.
+                            $course = api_get_course_entity($courseId);
+                            $resourceId = $course->resourceNode->getId();
+                            $certificateLink = api_get_path(WEB_PATH) . 'resources/document/'.$resourceId.'/?'.api_get_cidreq().'&filetype=certificate';
+                            $actionsRight .= '<a href="'.$certificateLink.'">'.
                                 Display::getMdiIcon('certificate', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Attach certificate')).'</a>';
                         }
 

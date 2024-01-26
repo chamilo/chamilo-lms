@@ -143,7 +143,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CDocumentRepository::class)]
 #[ORM\EntityListeners([ResourceListener::class])]
 #[ApiFilter(filterClass: PropertyFilter::class)]
-#[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial', 'resourceNode.parent' => 'exact'])]
+#[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial', 'resourceNode.parent' => 'exact', 'filetype' => 'exact'])]
 #[ApiFilter(
     filterClass: OrderFilter::class,
     properties: [

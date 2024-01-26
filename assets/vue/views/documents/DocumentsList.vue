@@ -1,68 +1,84 @@
 <template>
   <BaseToolbar v-if="securityStore.isAuthenticated && isCurrentTeacher">
-    <BaseButton
-      v-if="showBackButtonIfNotRootFolder"
-      :label="t('Back')"
-      icon="back"
-      type="black"
-      @click="back"
-    />
-    <BaseButton
-      :label="t('New document')"
-      icon="file-add"
-      type="black"
-      @click="goToNewDocument"
-    />
-    <BaseButton
-      :disabled="true"
-      :label="t('New drawing')"
-      icon="drawing"
-      type="black"
-    />
-    <BaseButton
-      :label="t('Record audio')"
-      icon="record-add"
-      type="black"
-      @click="showRecordAudioDialog"
-    />
-    <BaseButton
-      :label="t('Upload')"
-      icon="file-upload"
-      type="black"
-      @click="goToUploadFile"
-    />
-    <BaseButton
-      v-if="$route.query.cert !== '1'"
-      :label="t('New folder')"
-      icon="folder-plus"
-      type="black"
-      @click="openNew"
-    />
-    <BaseButton
-      :disabled="true"
-      :label="t('New cloud file')"
-      icon="file-cloud-add"
-      type="black"
-    />
-    <BaseButton
-      :disabled="!hasImageInDocumentEntries"
-      :label="t('Slideshow')"
-      icon="view-gallery"
-      type="black"
-      @click="showSlideShowWithFirstImage"
-    />
-    <BaseButton
-      :label="t('Usage')"
-      icon="usage"
-      type="black"
-      @click="showUsageDialog"
-    />
-    <BaseButton
-      :disabled="true"
-      :label="t('Download all')"
-      icon="download"
-      type="black"
-    />
+    <template v-if="isCertificateMode">
+      <BaseButton
+        :label="t('New document')"
+        icon="file-add"
+        type="black"
+        @click="goToNewDocument"
+      />
+      <BaseButton
+        :label="t('Upload')"
+        icon="file-upload"
+        type="black"
+        @click="goToUploadFile"
+      />
+    </template>
+    <template v-else>
+      <BaseButton
+        v-if="showBackButtonIfNotRootFolder"
+        :label="t('Back')"
+        icon="back"
+        type="black"
+        @click="back"
+      />
+      <BaseButton
+        :label="t('New document')"
+        icon="file-add"
+        type="black"
+        @click="goToNewDocument"
+      />
+      <BaseButton
+        :disabled="true"
+        :label="t('New drawing')"
+        icon="drawing"
+        type="black"
+      />
+      <BaseButton
+        :label="t('Record audio')"
+        icon="record-add"
+        type="black"
+        @click="showRecordAudioDialog"
+      />
+      <BaseButton
+        :label="t('Upload')"
+        icon="file-upload"
+        type="black"
+        @click="goToUploadFile"
+      />
+      <BaseButton
+        v-if="$route.query.cert !== '1'"
+        :label="t('New folder')"
+        icon="folder-plus"
+        type="black"
+        @click="openNew"
+      />
+      <BaseButton
+        :disabled="true"
+        :label="t('New cloud file')"
+        icon="file-cloud-add"
+        type="black"
+      />
+      <BaseButton
+        :disabled="!hasImageInDocumentEntries"
+        :label="t('Slideshow')"
+        icon="view-gallery"
+        type="black"
+        @click="showSlideShowWithFirstImage"
+      />
+      <BaseButton
+        :label="t('Usage')"
+        icon="usage"
+        type="black"
+        @click="showUsageDialog"
+      />
+      <BaseButton
+        :disabled="true"
+        :label="t('Download all')"
+        icon="download"
+        type="black"
+      />
+    </template>
   </BaseToolbar>
 
   <DataTable
@@ -358,6 +374,10 @@ const hasImageInDocumentEntries = computed(() => {
   return items.value.find((i) => isImage(i)) !== undefined
 })
 
+const isCertificateMode = computed(() => {
+  return route.query.filetype === 'certificate';
+});
+
 onMounted(() => {
   filters.value.loadNode = 1
 
@@ -547,7 +567,7 @@ function btnEditOnClick(item) {
     return
   }
 
-  if ("file" === item.filetype) {
+  if ("file" === item.filetype || "certificate" === item.filetype) {
     folderParams.getFile = true
 
     if (

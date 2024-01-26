@@ -128,7 +128,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      * View file of a resource node.
      */
     #[Route('/{tool}/{type}/{id}/view', name: 'chamilo_core_resource_view', methods: ['GET'])]
-    public function viewAction(Request $request): Response
+    public function viewAction(Request $request, EntityManagerInterface $entityManager): Response
     {
         $id = $request->get('id');
         $filter = (string) $request->get('filter'); // See filters definitions in /config/services.yml.
@@ -137,6 +137,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
         if (null === $resourceNode) {
             throw new FileNotFoundException($this->trans('Resource not found'));
         }
+
+        /** @var ?User $user */
+        $user = $this->getUser();
+        $resourceLinkId = $resourceNode->getResourceLinks()->first()->getId();
+        $url = $resourceNode->getResourceFile()->getOriginalName();
+        $downloadRepository = $entityManager->getRepository(TrackEDownloads::class);
+        $downloadId = $downloadRepository->saveDownload($user->getId(), $resourceLinkId, $url);
 
         return $this->processFile($request, $resourceNode, 'show', $filter);
     }

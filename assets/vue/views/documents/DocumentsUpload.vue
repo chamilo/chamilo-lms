@@ -1,4 +1,12 @@
 <template>
+  <BaseToolbar>
+    <BaseButton
+      :label="t('Back')"
+      icon="back"
+      type="black"
+      @click="back"
+    />
+  </BaseToolbar>
   <div class="flex flex-col justify-start">
     <div class="mb-4">
       <Dashboard
@@ -43,7 +51,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue"
+import { computed, ref, watch } from "vue"
 import "@uppy/core/dist/style.css"
 import "@uppy/dashboard/dist/style.css"
 import "@uppy/image-editor/dist/style.css"
@@ -60,21 +68,26 @@ import { useI18n } from "vue-i18n"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseRadioButtons from "../../components/basecomponents/BaseRadioButtons.vue"
 import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
+import { useStore } from "vuex"
 
 const XHRUpload = require("@uppy/xhr-upload")
 const ImageEditor = require("@uppy/image-editor")
 
+const store = useStore()
 const route = useRoute()
 const router = useRouter()
 const { gid, sid, cid } = useCidReq()
 const { onCreated, onError } = useUpload()
 const { t } = useI18n()
-const filetype = route.query?.cert === '1' ? 'certificate' : 'file';
+const filetype = route.query.filetype === 'certificate' ? 'certificate' : 'file';
 
 const showAdvancedSettings = ref(false)
 const isUncompressZipEnabled = ref(false)
 const fileExistsOption = ref("rename")
 
+const resourceNode = computed(() => store.getters["resourcenode/getResourceNode"])
 const parentResourceNodeId = ref(Number(route.params.node))
 const resourceLinkList = ref(
   JSON.stringify([
@@ -149,4 +162,13 @@ watch(fileExistsOption, () => {
     },
   })
 })
+
+function back() {
+  if (!resourceNode.value) {
+    return
+  }
+
+  let queryParams = { cid, sid, gid, filetype }
+  router.push({ name: "DocumentsList", params: { node: resourceNode.value.id }, query: queryParams })
+}
 </script>

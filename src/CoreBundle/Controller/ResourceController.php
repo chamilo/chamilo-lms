@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CoreBundle\Traits\CourseControllerTrait;
+use Chamilo\CoreBundle\Traits\GradebookControllerTrait;
 use Chamilo\CoreBundle\Traits\ResourceControllerTrait;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Entity\CTool;
@@ -50,6 +51,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     use ControllerTrait;
     use CourseControllerTrait;
     use ResourceControllerTrait;
+    use GradebookControllerTrait;
 
     /**
      * @Route("/{tool}/{type}/{id}/disk_space", methods={"GET", "POST"}, name="chamilo_core_resource_disk_space")
@@ -145,7 +147,17 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $downloadRepository = $entityManager->getRepository(TrackEDownloads::class);
         $downloadId = $downloadRepository->saveDownload($user->getId(), $resourceLinkId, $url);
 
-        return $this->processFile($request, $resourceNode, 'show', $filter);
+        $cid = (int) $request->query->get('cid');
+        $sid = (int) $request->query->get('sid');
+
+        $allUserInfo = $this->getAllInfoToCertificate(
+            $user->getId(),
+            $cid,
+            $sid,
+            false
+        );
+
+        return $this->processFile($request, $resourceNode, 'show', $filter, $allUserInfo);
     }
 
     /**
@@ -421,7 +433,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     /**
      * @return mixed|StreamedResponse
      */
-    private function processFile(Request $request, ResourceNode $resourceNode, string $mode = 'show', string $filter = '')
+    private function processFile(Request $request, ResourceNode $resourceNode, string $mode = 'show', string $filter = '', array $allUserInfo = [])
     {
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
@@ -482,6 +494,12 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 // Modify the HTML content before displaying it.
                 if (str_contains($mimeType, 'html')) {
                     $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode);
+
+                    if (null !== $allUserInfo) {
+                        $tagsToReplace = $allUserInfo[0];
+                        $replacementValues = $allUserInfo[1];
+                        $content = str_replace($tagsToReplace, $replacementValues, $content);
+                    }
 
                     $response = new Response();
                     $disposition = $response->headers->makeDisposition(

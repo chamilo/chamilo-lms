@@ -109,4 +109,6 @@ export const chamiloIconToClass = {
   "anonymous": "mdi mdi-incognito",
   "settings": "mdi mdi-tools",
   "ticket": "mdi mdi-ticket-account",
+  "certificate-selected": "mdi mdi-star",
+  "certificate-not-selected": "mdi mdi-star-outline",
 };

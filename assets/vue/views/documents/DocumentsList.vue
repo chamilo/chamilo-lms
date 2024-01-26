@@ -1,68 +1,83 @@
 <template>
   <BaseToolbar v-if="securityStore.isAuthenticated && isCurrentTeacher">
-    <BaseButton
-      v-if="showBackButtonIfNotRootFolder"
-      :label="t('Back')"
-      icon="back"
-      type="black"
-      @click="back"
-    />
-    <BaseButton
-      :label="t('New document')"
-      icon="file-add"
-      type="black"
-      @click="goToNewDocument"
-    />
-    <BaseButton
-      :disabled="true"
-      :label="t('New drawing')"
-      icon="drawing"
-      type="black"
-    />
-    <BaseButton
-      :label="t('Record audio')"
-      icon="record-add"
-      type="black"
-      @click="showRecordAudioDialog"
-    />
-    <BaseButton
-      :label="t('Upload')"
-      icon="file-upload"
-      type="black"
-      @click="goToUploadFile"
-    />
-    <BaseButton
-      v-if="$route.query.cert !== '1'"
-      :label="t('New folder')"
-      icon="folder-plus"
-      type="black"
-      @click="openNew"
-    />
-    <BaseButton
-      :disabled="true"
-      :label="t('New cloud file')"
-      icon="file-cloud-add"
-      type="black"
-    />
-    <BaseButton
-      :disabled="!hasImageInDocumentEntries"
-      :label="t('Slideshow')"
-      icon="view-gallery"
-      type="black"
-      @click="showSlideShowWithFirstImage"
-    />
-    <BaseButton
-      :label="t('Usage')"
-      icon="usage"
-      type="black"
-      @click="showUsageDialog"
-    />
-    <BaseButton
-      :disabled="true"
-      :label="t('Download all')"
-      icon="download"
-      type="black"
-    />
+    <template v-if="isCertificateMode">
+      <BaseButton
+        :label="t('Create certificate')"
+        icon="file-add"
+        type="black"
+        @click="goToNewDocument"
+      />
+      <BaseButton
+        :label="t('Upload')"
+        icon="file-upload"
+        type="black"
+        @click="goToUploadFile"
+      />
+    </template>
+    <template v-else>
+      <BaseButton
+        v-if="showBackButtonIfNotRootFolder"
+        :label="t('Back')"
+        icon="back"
+        type="black"
+        @click="back"
+      />
+      <BaseButton
+        :label="t('New document')"
+        icon="file-add"
+        type="black"
+        @click="goToNewDocument"
+      />
+      <BaseButton
+        :disabled="true"
+        :label="t('New drawing')"
+        icon="drawing"
+        type="black"
+      />
+      <BaseButton
+        :label="t('Record audio')"
+        icon="record-add"
+        type="black"
+        @click="showRecordAudioDialog"
+      />
+      <BaseButton
+        :label="t('Upload')"
+        icon="file-upload"
+        type="black"
+        @click="goToUploadFile"
+      />
+      <BaseButton
+        :label="t('New folder')"
+        icon="folder-plus"
+        type="black"
+        @click="openNew"
+      />
+      <BaseButton
+        :disabled="true"
+        :label="t('New cloud file')"
+        icon="file-cloud-add"
+        type="black"
+      />
+      <BaseButton
+        :disabled="!hasImageInDocumentEntries"
+        :label="t('Slideshow')"
+        icon="view-gallery"
+        type="black"
+        @click="showSlideShowWithFirstImage"
+      />
+      <BaseButton
+        :label="t('Usage')"
+        icon="usage"
+        type="black"
+        @click="showUsageDialog"
+      />
+      <BaseButton
+        :disabled="true"
+        :label="t('Download all')"
+        icon="download"
+        type="black"
+      />
+    </template>
   </BaseToolbar>
 
   <DataTable
@@ -154,14 +169,6 @@
           />
 
           <BaseButton
-            v-if="securityStore.isAuthenticated && isCurrentTeacher && $route.query.cert === '1'"
-            :icon="null === slotProps.data.gradebookCategory ? 'mdi mdi-file-plus' : 'mdi mdi-file-plus-outline'"
-            class="p-button-icon-only p-button-plain p-button-outlined p-button-sm"
-            type="black"
-            @click="btnChangeAttachedCertificateOnClick(slotProps.data)"
-          />
-
-          <BaseButton
             v-if="securityStore.isAuthenticated && isCurrentTeacher"
             icon="edit"
             size="small"
@@ -175,6 +182,14 @@
             size="small"
             type="danger"
             @click="confirmDeleteItem(slotProps.data)"
+          />
+          <BaseButton
+            v-if="isCertificateMode"
+            :icon="slotProps.data.iid === defaultCertificateId ? 'certificate-selected' : 'certificate-not-selected'"
+            :class="{ 'selected': slotProps.data.iid === defaultCertificateId }"
+            size="small"
+            type="black"
+            @click="selectAsDefaultCertificate(slotProps.data)"
           />
         </div>
       </template>
@@ -358,6 +373,12 @@ const hasImageInDocumentEntries = computed(() => {
   return items.value.find((i) => isImage(i)) !== undefined
 })
 
+const isCertificateMode = computed(() => {
+  return route.query.filetype === 'certificate';
+});
+
+const defaultCertificateId = ref(null);
+
 onMounted(() => {
   filters.value.loadNode = 1
 
@@ -370,6 +391,7 @@ onMounted(() => {
 
   store.dispatch("resourcenode/findResourceNode", { id: `/api/resource_nodes/${nodeId}` })
 
+  loadDefaultCertificate()
   onUpdateOptions(options.value)
 })
 
@@ -547,7 +569,7 @@ function btnEditOnClick(item) {
     return
   }
 
-  if ("file" === item.filetype) {
+  if ("file" === item.filetype || "certificate" === item.filetype) {
     folderParams.getFile = true
 
     if (
@@ -615,31 +637,25 @@ function recordedAudioNotSaved(error) {
   console.error(error)
 }
 
-function btnChangeAttachedCertificateOnClick (item) {
-  const folderParams = route.query;
-
-  folderParams.id = item['@id'];
-  if (null === item.gradebookCategory) {
-    axios
-      .get(ENTRYPOINT + 'gradebook_categories?course=' + cid)
-      .then(response => {
-        if (200 === response.status){
-          item.gradebookCategory = updateAttachedCertificate(response.data['hydra:member'][0]['id'], folderParams.id);
-        }
-      })
-    ;
-  } else {
-    item.gradebookCategory  = updateAttachedCertificate(item.gradebookCategory['id'], folderParams.id);
+async function selectAsDefaultCertificate(certificate) {
+  try {
+    const response = await axios.patch(`/gradebook/set_default_certificate/${cid}/${certificate.iid}`);
+    if (response.status === 200) {
+      loadDefaultCertificate()
+      onUpdateOptions(options.value)
+      notification.showSuccessNotification("Certificate set as default successfully");
+    }
+  } catch (error) {
+    notification.showErrorNotification("Error setting certificate as default");
   }
 }
 
-async function updateAttachedCertificate(gradebookCertificateId, documentId){
-  const { data } = await axios.patch(ENTRYPOINT + 'gradebook_categories/' + gradebookCertificateId,
-  {"document": documentId},
-  {headers: {'Content-Type': 'application/merge-patch+json'}}
-  );
-
-  return data;
-
+async function loadDefaultCertificate() {
+  try {
+    const response = await axios.get(`/gradebook/default_certificate/${cid}`);
+    defaultCertificateId.value = response.data.certificateId;
+  } catch (error) {
+    console.error('Error to laod certificate', error);
+  }
 }
 </script>

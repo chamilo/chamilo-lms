@@ -2,6 +2,7 @@
   <Toolbar
     :handle-reset="resetForm"
     :handle-submit="onSendFormData"
+    :handle-back="handleBack"
   />
 
   <div class="documents-layout">
@@ -17,15 +18,14 @@
         :errors="violations"
         :values="item"
       />
+      <Panel
+        v-if="$route.query.filetype === 'certificate' "
+        :header="$t('Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:')"
+      >
+        <div v-html="finalTags" />
+      </Panel>
     </div>
   </div>
-
-  <Panel
-    v-if="$route.query.cert === '1'"
-    :header="$t('Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:')"
-  >
-    <div v-html="finalTags" />
-  </Panel>
   <Loading :visible="isLoading" />
 </template>
 
@@ -60,7 +60,7 @@ export default {
   },
   mixins: [CreateMixin],
   data() {
-    const filetype = this.$route.query.cert === '1' ? 'certificate' : 'file';
+    const filetype = this.$route.query.filetype === 'certificate' ? 'certificate' : 'file';
     const finalTags = this.getCertificateTags();
     return {
       item: {
@@ -90,6 +90,9 @@ export default {
   },
 
   methods: {
+      handleBack() {
+        this.$router.back();
+      },
       addTemplateToEditor(templateContent) {
         this.item.contentFile = templateContent;
       },

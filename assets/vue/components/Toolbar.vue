@@ -2,6 +2,14 @@
   <PrimeToolbar>
     <template #start>
       <PrimeButton
+        v-if="handleBack"
+        :label="$t('Back')"
+        icon="mdi mdi-arrow-left"
+        class="p-button-outlined"
+        @click="backAction"
+      />
+
+      <PrimeButton
         v-if="handleList"
         :label="$t('List')"
         :loading="isLoading"
@@ -98,6 +106,10 @@ export default {
       type: Function,
       required: false
     },
+    handleBack: {
+      type: Function,
+      required: false
+    },
     handleSubmit: {
       type: Function,
       required: false
@@ -145,6 +157,11 @@ export default {
     }
   },
   methods: {
+    backAction() {
+      if (this.handleBack) {
+        this.handleBack();
+      }
+    },
     listItem() {
       if (this.handleList) {
         this.handleList();

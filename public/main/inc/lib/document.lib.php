@@ -1200,7 +1200,7 @@ class DocumentManager
                 $my_content_html = $repo->getResourceFileContent($doc);
                 $all_user_info = self::get_all_info_to_certificate(
                     $user_id,
-                    $courseInfo,
+                    $course_id,
                     $is_preview
                 );
 
@@ -1230,11 +1230,12 @@ class DocumentManager
      *
      * @return array
      */
-    public static function get_all_info_to_certificate($user_id, $course_info, $sessionId, $is_preview = false)
+    public static function get_all_info_to_certificate($user_id, $courseId, $sessionId, $is_preview = false)
     {
         $info_list = [];
         $user_id = (int) $user_id;
         $sessionId = (int) $sessionId;
+        $course_info = api_get_course_info_by_id($courseId);
         $courseCode = $course_info['code'];
 
         // Portal info

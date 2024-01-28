@@ -106,6 +106,7 @@ final class Version20230720143000 extends AbstractMigrationChamilo
                 $mimeType = mime_content_type($file);
                 $uploadedFile = new UploadedFile($file, $title, $mimeType, null, true);
                 $personalFile->setUploadFile($uploadedFile);
+                $personalFile->addUserLink($userEntity);
 
                 // Save the object to the database
                 $em->persist($personalFile);

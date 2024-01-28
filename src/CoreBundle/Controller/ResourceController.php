@@ -142,20 +142,25 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         /** @var ?User $user */
         $user = $this->getUser();
-        $resourceLinkId = $resourceNode->getResourceLinks()->first()->getId();
-        $url = $resourceNode->getResourceFile()->getOriginalName();
-        $downloadRepository = $entityManager->getRepository(TrackEDownloads::class);
-        $downloadId = $downloadRepository->saveDownload($user->getId(), $resourceLinkId, $url);
+        $firstResourceLink = $resourceNode->getResourceLinks()->first();
+        if ($firstResourceLink) {
+            $resourceLinkId = $firstResourceLink->getId();
+            $url = $resourceNode->getResourceFile()->getOriginalName();
+            $downloadRepository = $entityManager->getRepository(TrackEDownloads::class);
+            $downloadId = $downloadRepository->saveDownload($user->getId(), $resourceLinkId, $url);
+        }
 
         $cid = (int) $request->query->get('cid');
         $sid = (int) $request->query->get('sid');
-
-        $allUserInfo = $this->getAllInfoToCertificate(
-            $user->getId(),
-            $cid,
-            $sid,
-            false
-        );
+        $allUserInfo = null;
+        if ($cid) {
+            $allUserInfo = $this->getAllInfoToCertificate(
+                $user->getId(),
+                $cid,
+                $sid,
+                false
+            );
+        }
 
         return $this->processFile($request, $resourceNode, 'show', $filter, $allUserInfo);
     }
@@ -213,10 +218,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
         if ($resourceNode->hasResourceFile()) {
             /** @var ?User $user */
             $user = $this->getUser();
-            $resourceLinkId = $resourceNode->getResourceLinks()->first()->getId();
-            $url = $resourceNode->getResourceFile()->getOriginalName();
-            $downloadRepository = $entityManager->getRepository(TrackEDownloads::class);
-            $downloadId = $downloadRepository->saveDownload($user->getId(), $resourceLinkId, $url);
+            $firstResourceLink = $resourceNode->getResourceLinks()->first();
+            if ($firstResourceLink) {
+                $resourceLinkId = $firstResourceLink->getId();
+                $url = $resourceNode->getResourceFile()->getOriginalName();
+                $downloadRepository = $entityManager->getRepository(TrackEDownloads::class);
+                $downloadId = $downloadRepository->saveDownload($user->getId(), $resourceLinkId, $url);
+            }
 
             // Redirect to download single file.
             return $this->processFile($request, $resourceNode, 'download');
@@ -433,7 +441,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     /**
      * @return mixed|StreamedResponse
      */
-    private function processFile(Request $request, ResourceNode $resourceNode, string $mode = 'show', string $filter = '', array $allUserInfo = [])
+    private function processFile(Request $request, ResourceNode $resourceNode, string $mode = 'show', string $filter = '', ?array $allUserInfo = null)
     {
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,

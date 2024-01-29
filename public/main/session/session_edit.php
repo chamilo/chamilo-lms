@@ -53,7 +53,7 @@ $form->addButtonUpdate(get_lang('Edit this session'));
 $formDefaults = [
     'id' => $session->getId(),
     'session_category' => $session->getCategory()?->getId(),
-    'name' => $session->getTitle(),
+    'title' => $session->getTitle(),
     'description' => $session->getDescription(),
     'show_description' => $session->getShowDescription(),
     'duration' => $session->getDuration(),
@@ -78,7 +78,7 @@ $form->setDefaults($formDefaults);
 if ($form->validate()) {
     $params = $form->getSubmitValues();
 
-    $name = $params['name'];
+    $name = $params['title'];
     $startDate = $params['access_start_date'];
     $endDate = $params['access_end_date'];
     $displayStartDate = $params['display_start_date'];

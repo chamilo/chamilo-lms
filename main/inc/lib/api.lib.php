@@ -10633,7 +10633,6 @@ function api_decrypt_ldap_password(string $encryptedText): string
  */
 function api_decrypt_hash(string $encryptedHash, string $secret): string
 {
-    $secret = hex2bin($secret);
     $iv = base64_decode(substr($encryptedHash, 0, 16), true);
     $data = base64_decode(substr($encryptedHash, 16), true);
     $tag = substr($data, strlen($data) - 16);
@@ -10663,7 +10662,6 @@ function api_decrypt_hash(string $encryptedHash, string $secret): string
  */
 function api_encrypt_hash($data, $secret)
 {
-  $secret = hex2bin($secret);
   $iv = random_bytes(12);
   $tag = '';
 

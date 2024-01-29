@@ -28,7 +28,7 @@ $categoriesOption = [
 
 if (false != $categoriesList) {
     foreach ($categoriesList as $categoryItem) {
-        $categoriesOption[$categoryItem['id']] = $categoryItem['name'];
+        $categoriesOption[$categoryItem['id']] = $categoryItem['title'];
     }
 }
 

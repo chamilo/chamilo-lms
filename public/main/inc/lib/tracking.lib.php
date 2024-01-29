@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
+use Chamilo\CoreBundle\Entity\TrackEDownloads;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Framework\Container;
@@ -4270,32 +4271,27 @@ class Tracking
         return Database::num_rows($rs);
     }
 
-    /**
-     * Get count student downloaded documents.
-     *
-     * @param    int        Student id
-     * @param int $courseId
-     * @param    int        Session id (optional)
-     *
-     * @return int Count downloaded documents
-     */
-    public static function count_student_downloaded_documents($student_id, $courseId, $session_id = 0)
+    public static function countStudentDownloadedDocuments(int $studentId, int $courseId, int $sessionId = 0): int
     {
-        $student_id = (int) $student_id;
-        $courseId = (int) $courseId;
-        $session_id = (int) $session_id;
+        $em = Database::getManager();
+        $qb = $em->createQueryBuilder();
 
-        // table definition
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
+        $qb->select('COUNT(td.downId)')
+            ->from(TrackEDownloads::class, 'td')
+            ->leftJoin('td.resourceLink', 'rl')
+            ->where('td.downUserId = :studentId')
+            ->andWhere('rl.course = :courseId')
+            ->setParameter('studentId', $studentId)
+            ->setParameter('courseId', $courseId);
 
-        $sql = 'SELECT 1
-                FROM '.$table.'
-                WHERE down_user_id = '.$student_id.'
-                AND c_id  = "'.$courseId.'"
-                AND session_id = '.$session_id.' ';
-        $rs = Database::query($sql);
+        if ($sessionId > 0) {
+            $qb->andWhere('rl.session = :sessionId')
+                ->setParameter('sessionId', $sessionId);
+        }
 
-        return Database::num_rows($rs);
+        $query = $qb->getQuery();
+
+        return (int) $query->getSingleScalarResult();
     }
 
     /**

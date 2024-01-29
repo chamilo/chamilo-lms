@@ -1139,7 +1139,7 @@ if (null !== $course) {
     $messages = Container::getForumPostRepository()->countUserForumPosts($user, $course, $session);
     $links = Tracking::count_student_visited_links($studentId, $courseId, $sessionId);
     $chat_last_connection = Tracking::chat_last_connection($studentId, $courseId, $sessionId);
-    $documents = Tracking::count_student_downloaded_documents($studentId, $courseId, $sessionId);
+    $documents = Tracking::countStudentDownloadedDocuments($studentId, $courseId, $sessionId);
     $uploaded_documents = Tracking::count_student_uploaded_documents($studentId, $courseCode, $sessionId);
 
     $tpl->assign('title', $course->getTitle());

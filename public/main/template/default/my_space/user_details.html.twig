@@ -161,10 +161,10 @@
                     <div class="col-md-4">
                         {{ display.card_widget('First login in platform'|trans, user_extra.first_connection, 'calendar') }}
                         {{ display.card_widget('Latest login in platform'|trans, user_extra.last_connection, 'calendar') }}
-                        {% if (user_extra.time_spent_course) %}
+                        {% if (user_extra.time_spent_course is defined) %}
                             {{ display.card_widget('Time spent in the course'|trans, user_extra.time_spent_course, 'clock-o') }}
                         {% endif %}
-                        {% if user_extra.legal %}
+                        {% if user_extra.legal is defined %}
                             {{ display.card_widget('Legal accepted'|trans, user_extra.legal.datetime, 'gavel', user_extra.legal.icon) }}
                         {% endif %}
                     </div>

@@ -53,9 +53,4 @@ class AccessUrlRelCourse implements EntityAccessUrlInterface, Stringable
 
         return $this;
     }
-
-    public function getCourse(): ?Course
-    {
-        return $this->course;
-    }
 }

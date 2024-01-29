@@ -124,18 +124,10 @@ class AccessUrlRepositoryTest extends KernelTestCase
         $accessUrl = $repo->find($accessUrl->getId());
 
         $course = $this->createCourse('test');
-        $accessUrlCourse = (new AccessUrlRelCourse())
-            ->setCourse($course)
-            ->setUrl($accessUrl)
-        ;
+        $accessUrl->addCourse($course);
 
-        $collection = new ArrayCollection();
-        $collection->add($accessUrlCourse);
+        $this->getEntityManager()->flush();
 
-        $accessUrl->setCourses($collection);
-
-        /** @var AccessUrl $accessUrl */
-        $accessUrl = $repo->find($accessUrl->getId());
         $this->assertSame(1, $accessUrl->getCourses()->count());
     }
 }

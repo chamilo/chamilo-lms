@@ -358,7 +358,8 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
     public function addCourse(Course $course): self
     {
         if (!$this->hasCourse($course)) {
-            $urlRelCourse = (new AccessUrlRelCourse())->setCourse($course)->setUrl($this);
+            $urlRelCourse = (new AccessUrlRelCourse())->setUrl($this);
+            $course->addUrls($urlRelCourse);
 
             $this->courses->add($urlRelCourse);
         }

@@ -982,25 +982,18 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     public function addUrls(AccessUrlRelCourse $urlRelCourse): static
     {
-        $urlRelCourse->setCourse($this);
-
-        $this->urls->add($urlRelCourse);
+        if (!$this->urls->contains($urlRelCourse)) {
+            $this->urls->add($urlRelCourse);
+            $urlRelCourse->setCourse($this);
+        }
 
         return $this;
     }
 
     public function addAccessUrl(?AccessUrl $url): self
     {
-        $urlRelCourse = (new AccessUrlRelCourse())->setCourse($this)->setUrl($url);
+        $urlRelCourse = (new AccessUrlRelCourse())->setUrl($url);
         $this->addUrls($urlRelCourse);
-
-        return $this;
-    }
-
-    public function addUrlRelCourse(AccessUrlRelCourse $accessUrlRelCourse): self
-    {
-        $accessUrlRelCourse->setCourse($this);
-        $this->urls->add($accessUrlRelCourse);
 
         return $this;
     }

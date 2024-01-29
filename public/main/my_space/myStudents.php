@@ -549,7 +549,7 @@ switch ($action) {
     case 'generate_certificate':
         $gradebookCertificateRepo = Container::getGradeBookCertificateRepository();
         $gradebookCertificateRepo->deleteCertificateAndRelatedFiles($studentId, 0);
-        $certificate = new Certificate(83, $studentId);
+        $certificate = new Certificate(0, $studentId);
         $certificate->generatePdfFromCustomCertificate();
         exit;
     case 'send_legal':

@@ -101,7 +101,8 @@ class Certificate extends Model
             //$this->checkCertificatePath();
             if ('true' === api_get_setting('document.allow_general_certificate')) {
                 // General certificate
-                $name = hash('sha256', $this->user_id . $this->certificate_data['cat_id']);
+                $categoryId = isset($this->certificate_data['cat_id']) ? (int) $this->certificate_data['cat_id'] : 0;
+                $name = hash('sha256', $this->user_id . $categoryId);
                 $fileName = $name . '.html';
                 $content = $this->generateCustomCertificate();
                 $gradebookCertificateRepo = Container::getGradeBookCertificateRepository();

@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,7 +14,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Table(name: 'gradebook_certificate')]
 #[ORM\Index(name: 'idx_gradebook_certificate_user_id', columns: ['user_id'])]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: GradebookCertificateRepository::class)]
 class GradebookCertificate
 {
     use UserTrait;
@@ -25,7 +26,7 @@ class GradebookCertificate
 
     #[ORM\ManyToOne(targetEntity: GradebookCategory::class)]
     #[ORM\JoinColumn(name: 'cat_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    protected GradebookCategory $category;
+    protected ?GradebookCategory $category = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'gradeBookCertificates')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
@@ -117,7 +118,7 @@ class GradebookCertificate
         return $this;
     }
 
-    public function getCategory(): GradebookCategory
+    public function getCategory(): ?GradebookCategory
     {
         return $this->category;
     }

@@ -544,19 +544,12 @@ switch ($action) {
             header('Location: '.$currentUrl);
             exit;
         }
+
         break;
     case 'generate_certificate':
-        // Delete old certificate
-        $myCertificate = GradebookUtils::get_certificate_by_user_id(
-            0,
-            $studentId
-        );
-        if ($myCertificate) {
-            $certificate = new Certificate($myCertificate['id'], $studentId);
-            $certificate->deleteCertificate(true);
-        }
-        // Create new one
-        $certificate = new Certificate(0, $studentId);
+        $gradebookCertificateRepo = Container::getGradeBookCertificateRepository();
+        $gradebookCertificateRepo->deleteCertificateAndRelatedFiles($studentId, 0);
+        $certificate = new Certificate(83, $studentId);
         $certificate->generatePdfFromCustomCertificate();
         exit;
     case 'send_legal':

@@ -70,7 +70,7 @@ abstract class AbstractResource
         'message:read',
         'c_tool_intro:read',
     ])]
-    #[ORM\OneToOne(targetEntity: ResourceNode::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToOne(targetEntity: ResourceNode::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'resource_node_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     public ?ResourceNode $resourceNode = null;
 
@@ -231,7 +231,7 @@ abstract class AbstractResource
         return $this->resourceNode;
     }
 
-    public function setResourceNode(ResourceNode $resourceNode): self
+    public function setResourceNode(?ResourceNode $resourceNode): self
     {
         $this->resourceNode = $resourceNode;
 

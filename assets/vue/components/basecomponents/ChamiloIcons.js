@@ -111,4 +111,6 @@ export const chamiloIconToClass = {
   "ticket": "mdi mdi-ticket-account",
   "certificate-selected": "mdi mdi-star",
   "certificate-not-selected": "mdi mdi-star-outline",
+  "template-selected": "mdi mdi-file-check",
+  "template-not-selected": "mdi mdi-file-outline",
 };

@@ -47,7 +47,7 @@ final class Version20210930130343 extends AbstractMigrationChamilo
 
             if (empty($items)) {
                 $admin = $this->getAdmin();
-                $tool = $toolRepo->findOneBy(['name' => 'course_homepage']);
+                $tool = $toolRepo->findOneBy(['title' => 'course_homepage']);
                 $cTool = (new CTool())
                     ->setTitle('course_homepage')
                     ->setCourse($course)
@@ -83,7 +83,7 @@ final class Version20210930130343 extends AbstractMigrationChamilo
 
                 $cTool = null;
                 if ('course_homepage' === $toolName) {
-                    $tool = $toolRepo->findOneBy(['name' => $toolName]);
+                    $tool = $toolRepo->findOneBy(['title' => $toolName]);
 
                     if (null === $tool) {
                         continue;

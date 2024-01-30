@@ -544,18 +544,11 @@ switch ($action) {
             header('Location: '.$currentUrl);
             exit;
         }
+
         break;
     case 'generate_certificate':
-        // Delete old certificate
-        $myCertificate = GradebookUtils::get_certificate_by_user_id(
-            0,
-            $studentId
-        );
-        if ($myCertificate) {
-            $certificate = new Certificate($myCertificate['id'], $studentId);
-            $certificate->deleteCertificate(true);
-        }
-        // Create new one
+        $gradebookCertificateRepo = Container::getGradeBookCertificateRepository();
+        $gradebookCertificateRepo->deleteCertificateAndRelatedFiles($studentId, 0);
         $certificate = new Certificate(0, $studentId);
         $certificate->generatePdfFromCustomCertificate();
         exit;
@@ -1139,7 +1132,7 @@ if (null !== $course) {
     $messages = Container::getForumPostRepository()->countUserForumPosts($user, $course, $session);
     $links = Tracking::count_student_visited_links($studentId, $courseId, $sessionId);
     $chat_last_connection = Tracking::chat_last_connection($studentId, $courseId, $sessionId);
-    $documents = Tracking::count_student_downloaded_documents($studentId, $courseId, $sessionId);
+    $documents = Tracking::countStudentDownloadedDocuments($studentId, $courseId, $sessionId);
     $uploaded_documents = Tracking::count_student_uploaded_documents($studentId, $courseCode, $sessionId);
 
     $tpl->assign('title', $course->getTitle());

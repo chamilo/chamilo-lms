@@ -58,7 +58,7 @@ final class Version20201216105331 extends AbstractMigrationChamilo
             $courseId = $course->getId();
 
             // c_thematic.
-            $sql = "SELECT * FROM c_thematic WHERE c_id = {$courseId}
+            $sql = "SELECT * FROM c_thematic WHERE c_id = {$courseId} and active = 1
                     ORDER BY iid";
             $result = $connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();

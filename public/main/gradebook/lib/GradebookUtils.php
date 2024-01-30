@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 use Chamilo\CoreBundle\Component\Utils\StateIcon;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Class GradebookUtils.
@@ -654,16 +655,10 @@ class GradebookUtils
      */
     public static function get_certificate_by_user_id($cat_id, $user_id)
     {
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        $cat_id = (int) $cat_id;
-        $user_id = (int) $user_id;
+        $repository = Container::getGradeBookCertificateRepository();
+        $certificate = $repository->getCertificateByUserId($cat_id, $user_id, true);
 
-        $sql = "SELECT * FROM $table
-                WHERE cat_id = $cat_id AND user_id = $user_id ";
-
-        $result = Database::query($sql);
-
-        return Database::fetch_array($result, 'ASSOC');
+        return $certificate;
     }
 
     /**

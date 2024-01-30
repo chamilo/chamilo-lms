@@ -204,7 +204,7 @@ if ('delete' === $action) {
     $check = Security::check_token('get');
     if ($check) {
         $certificate = new Certificate($_GET['certificate_id']);
-        $result = $certificate->deleteCertificate(true);
+        $result = $certificate->deleteCertificate();
         Security::clear_token();
         if (true == $result) {
             echo Display::return_message(get_lang('Certificate removed'), 'confirmation');

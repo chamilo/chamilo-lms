@@ -55,4 +55,15 @@ class TemplatesRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function findCourseDocumentTemplates(Course $course)
+    {
+        return $this->createQueryBuilder('t')
+            ->where('t.course = :course')
+            ->andWhere('t.refDoc IS NOT NULL')
+            ->andWhere('t.refDoc > 0')
+            ->setParameter('course', $course)
+            ->getQuery()
+            ->getResult();
+    }
 }

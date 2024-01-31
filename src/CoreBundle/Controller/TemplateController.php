@@ -5,29 +5,169 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\Asset;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Templates;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\AssetRepository;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SystemTemplateRepository;
+use Chamilo\CoreBundle\Repository\TemplatesRepository;
+use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[Route('/template')]
 class TemplateController extends AbstractController
 {
-    #[Route('/system-templates', name: 'system-templates')]
-    public function getTemplates(SystemTemplateRepository $templateRepository, AssetRepository $assetRepository): JsonResponse
+    #[Route('/document-templates/create', methods: ['POST'])]
+    public function createDocumentTemplate(Request $request, EntityManagerInterface $entityManager, AssetRepository $assetRepo): Response
     {
-        $templates = $templateRepository->findAll();
+        $documentId = (int) $request->request->get('refDoc');
+        $title = $request->request->get('title');
+        $cid = $request->request->get('cid');
+        $imageFile = $request->files->get('thumbnail');
 
-        $data = array_map(function ($template) use ($assetRepository) {
+        if (!$imageFile) {
+            return $this->json(['error' => 'No image provided.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        /** @var User $user */
+        $user = $this->getUser();
+        $course = null;
+        if ($cid) {
+            $course = $entityManager->getRepository(Course::class)->find($cid);
+        }
+
+        $asset = new Asset();
+        $asset->setCategory(Asset::TEMPLATE);
+        $asset->setFile($imageFile);
+        $asset->setTitle($imageFile->getClientOriginalName());
+        $entityManager->persist($asset);
+        $entityManager->flush();
+
+        $template = new Templates();
+        $template->setTitle($title);
+        $template->setDescription('');
+        $template->setRefDoc($documentId);
+        $template->setCourse($course);
+        $template->setUser($user);
+        $template->setImage($asset);
+        $entityManager->persist($template);
+
+        $document = $entityManager->getRepository(CDocument::class)->find($documentId);
+        if ($document) {
+            $document->setTemplate(true);
+            $entityManager->persist($document);
+        } else {
+            return $this->json(['error' => 'Document not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $entityManager->flush();
+
+        return $this->json(['message' => 'Template created successfully.']);
+    }
+
+    #[Route('/document-templates/{documentId}/is-template', methods: ['GET'])]
+    public function isDocumentTemplate(int $documentId, EntityManagerInterface $entityManager): Response
+    {
+        $template = $entityManager->getRepository(Templates::class)->findOneBy(['refDoc' => $documentId]);
+
+        return $this->json([
+            'isTemplate' => null !== $template,
+        ]);
+    }
+
+    #[Route('/document-templates/{documentId}/delete', methods: ['POST'])]
+    public function deleteDocumentTemplate(int $documentId, EntityManagerInterface $entityManager): Response
+    {
+        $template = $entityManager->getRepository(Templates::class)->findOneBy(['refDoc' => $documentId]);
+
+        if (!$template) {
+            return $this->json(['error' => 'Template not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $entityManager->remove($template);
+
+        $document = $entityManager->getRepository(CDocument::class)->find($documentId);
+        if ($document) {
+            $document->setTemplate(false);
+            $entityManager->persist($document);
+        } else {
+            return $this->json(['error' => 'Document not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $entityManager->flush();
+
+        return $this->json(['message' => 'Template deleted successfully']);
+    }
+
+    #[Route('/all-templates/{courseId}', name: 'all-templates')]
+    public function getAllTemplates($courseId, SystemTemplateRepository $systemTemplateRepository, TemplatesRepository $templatesRepository, CourseRepository $courseRepository, AssetRepository $assetRepository, CDocumentRepository $documentRepository): JsonResponse
+    {
+        $course = $courseRepository->find($courseId);
+        if (!$course) {
+            throw new NotFoundHttpException("Course not found");
+        }
+
+        $systemTemplates = $systemTemplateRepository->findAll();
+        $platformTemplates = $this->formatSystemTemplates($systemTemplates, $assetRepository);
+
+        $courseDocumentTemplates = $this->formatCourseDocumentTemplates($course, $templatesRepository, $assetRepository, $documentRepository);
+
+        $allTemplates = array_merge($platformTemplates, $courseDocumentTemplates);
+
+        return $this->json($allTemplates);
+    }
+
+
+    private function formatSystemTemplates(array $systemTemplates, AssetRepository $assetRepository): array
+    {
+        return array_map(function ($template) use ($assetRepository) {
+            $imageUrl = null;
+            if ($template->hasImage()) {
+                $imageUrl = $assetRepository->getAssetUrl($template->getImage());
+            }
+
             return [
                 'id' => $template->getId(),
                 'title' => $template->getTitle(),
                 'comment' => $template->getComment(),
                 'content' => $template->getContent(),
-                'image' => $template->getImage() ? $assetRepository->getAssetUrl($template->getImage()) : null,
+                'image' => $imageUrl,
             ];
-        }, $templates);
+        }, $systemTemplates);
+    }
 
-        return $this->json($data);
+    private function formatCourseDocumentTemplates(Course $course, TemplatesRepository $templatesRepository, AssetRepository $assetRepository, CDocumentRepository $documentRepository): array
+    {
+        $courseTemplates = $templatesRepository->findCourseDocumentTemplates($course);
+
+        return array_map(function ($template) use ($assetRepository, $documentRepository) {
+            $imageUrl = null;
+            if ($template->hasImage()) {
+                $imageUrl = $assetRepository->getAssetUrl($template->getImage());
+            }
+
+            $document = $documentRepository->find($template->getRefDoc());
+            $content = '';
+            if (null !== $document && null !== $document->getResourceNode() && null !== $document->getResourceNode()->getResourceFile()) {
+                $content = $documentRepository->getResourceFileContent($document);
+            }
+
+            return [
+                'id' => $template->getId(),
+                'title' => $template->getTitle(),
+                'comment' => $template->getDescription(),
+                'content' => $content,
+                'image' => $imageUrl,
+            ];
+        }, $courseTemplates);
     }
 }

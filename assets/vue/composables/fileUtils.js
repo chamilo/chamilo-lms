@@ -16,6 +16,12 @@ export function useFileUtils() {
     return isFile(fileData) && isAudio
   }
 
+  const isHtml = (fileData) => {
+    const mimeType = fileData.resourceNode.resourceFile.mimeType
+    const isHtml = mimeType.split("/")[1].toLowerCase() === "html"
+    return isFile(fileData) && isHtml
+  }
+
   const isFile = (fileData) => {
     return fileData.resourceNode && fileData.resourceNode.resourceFile
   }
@@ -25,5 +31,6 @@ export function useFileUtils() {
     isImage,
     isVideo,
     isAudio,
+    isHtml,
   }
 }

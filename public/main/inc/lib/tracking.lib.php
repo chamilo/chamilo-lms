@@ -2488,15 +2488,7 @@ class Tracking
                 } else {
                     if (!empty($row['lp_id'])) {
                         $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-                        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-                        $sql = "SELECT lp.title
-                                FROM $tbl_lp as lp, $tbl_course as c
-                                WHERE
-                                    c.code = '$course_code' AND
-                                    lp.iid = ".$row['lp_id']." AND
-                                    lp.c_id = c.id
-                                LIMIT 1;
-                        ";
+                        $sql = "SELECT title FROM $tbl_lp WHERE iid = ".(int) $row['lp_id'];
                         $result = Database::query($sql);
                         $row_lp = Database::fetch_row($result);
                         $lp_name = null;

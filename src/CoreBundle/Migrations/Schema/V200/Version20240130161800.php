@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
@@ -31,7 +32,7 @@ class Version20240130161800 extends AbstractMigrationChamilo
         $em = $doctrine->getManager();
         $connection = $em->getConnection();
 
-        $sql = "SELECT id, image, c_id FROM templates WHERE image IS NOT NULL";
+        $sql = 'SELECT id, image, c_id FROM templates WHERE image IS NOT NULL';
         $stmt = $connection->prepare($sql);
         $result = $stmt->executeQuery();
 
@@ -40,7 +41,7 @@ class Version20240130161800 extends AbstractMigrationChamilo
             $templateId = $row['id'];
             $courseId = $row['c_id'];
 
-            $courseDirectorySql = "SELECT directory FROM course WHERE id = :courseId";
+            $courseDirectorySql = 'SELECT directory FROM course WHERE id = :courseId';
             $courseStmt = $connection->prepare($courseDirectorySql);
             $courseResult = $courseStmt->executeQuery(['courseId' => $courseId]);
 

@@ -367,8 +367,8 @@ final class Version20240112131200 extends AbstractMigrationChamilo
         }
 
         if ($schema->hasTable('lti_external_tool')) {
-            //error_log('Perform the changes in the lti_external_tool table');
-            //$this->addSql('ALTER TABLE lti_external_tool CHANGE resource_node_id resource_node_id INT DEFAULT NULL;');
+            // error_log('Perform the changes in the lti_external_tool table');
+            // $this->addSql('ALTER TABLE lti_external_tool CHANGE resource_node_id resource_node_id INT DEFAULT NULL;');
         }
 
         if ($schema->hasTable('message')) {

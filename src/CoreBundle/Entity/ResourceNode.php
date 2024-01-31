@@ -252,7 +252,7 @@ class ResourceNode implements Stringable
         return $this->children;
     }
 
-    public function addChild(ResourceNode $resourceNode): static
+    public function addChild(self $resourceNode): static
     {
         if (!$this->children->contains($resourceNode)) {
             $this->children->add($resourceNode);

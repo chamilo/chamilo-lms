@@ -9,12 +9,12 @@ use Doctrine\DBAL\Schema\Schema;
 
 final class Version20201212114909 extends AbstractMigrationChamilo
 {
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return 'Add image_id field to templates table to link with asset table';
     }
 
-    public function up(Schema $schema) : void
+    public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE templates ADD image_id BINARY(16) DEFAULT NULL COMMENT \'(DC2Type:uuid)\'');
@@ -22,7 +22,7 @@ final class Version20201212114909 extends AbstractMigrationChamilo
         $this->addSql('CREATE INDEX IDX_6F287D8E3DA5256D ON templates (image_id)');
     }
 
-    public function down(Schema $schema) : void
+    public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE templates DROP FOREIGN KEY FK_6F287D8E3DA5256D');

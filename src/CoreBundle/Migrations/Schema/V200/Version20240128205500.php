@@ -29,15 +29,15 @@ final class Version20240128205500 extends AbstractMigrationChamilo
 
         foreach ($q->toIterable() as $userEntity) {
             $id = $userEntity->getId();
-            $path = 'users/' . substr((string) $id, 0, 1) . '/' . $id . '/';
+            $path = 'users/'.substr((string) $id, 0, 1).'/'.$id.'/';
 
-            $certificateDir = $rootPath . '/app/upload/' . $path . 'certificate/';
+            $certificateDir = $rootPath.'/app/upload/'.$path.'certificate/';
 
             if (!is_dir($certificateDir)) {
                 continue;
             }
 
-            $files = glob($certificateDir . '*');
+            $files = glob($certificateDir.'*');
 
             foreach ($files as $file) {
                 if (!is_file($file)) {
@@ -47,22 +47,23 @@ final class Version20240128205500 extends AbstractMigrationChamilo
                 $originalTitle = basename($file);
 
                 // Search in gradebook_certificate for a record with a path_certificate that matches $originalTitle
-                $certificate = $em->getRepository(GradebookCertificate::class)->findOneBy(['pathCertificate' => '/' . $originalTitle]);
+                $certificate = $em->getRepository(GradebookCertificate::class)->findOneBy(['pathCertificate' => '/'.$originalTitle]);
                 if (!$certificate) {
                     // If not found, continue with the next file
                     continue;
                 }
 
                 $catId = null !== $certificate->getCategory() ? $certificate->getCategory()->getId() : 0;
-                $newTitle = hash('sha256', $id . $catId) . '.html';
+                $newTitle = hash('sha256', $id.$catId).'.html';
 
                 $existingFile = $em->getRepository(PersonalFile::class)->findOneBy(['title' => $newTitle]);
                 if ($existingFile) {
-                    error_log('MIGRATIONS :: Skipping file -- ' . $file . ' (Already exists)');
+                    error_log('MIGRATIONS :: Skipping file -- '.$file.' (Already exists)');
+
                     continue;
                 }
 
-                error_log('MIGRATIONS :: Processing file -- ' . $file);
+                error_log('MIGRATIONS :: Processing file -- '.$file);
 
                 $personalFile = new PersonalFile();
                 $personalFile->setTitle($newTitle);
@@ -78,9 +79,8 @@ final class Version20240128205500 extends AbstractMigrationChamilo
                 $em->flush();
 
                 // Update the record in gradebook_certificate with the new title
-                $certificate->setPathCertificate('/' . $newTitle);
+                $certificate->setPathCertificate('/'.$newTitle);
                 $em->flush();
-
             }
         }
     }

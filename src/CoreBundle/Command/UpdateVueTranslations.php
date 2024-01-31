@@ -77,7 +77,8 @@ class UpdateVueTranslations extends Command
                 $newLanguage[$variable] = $this->replaceMarkers($translated);
             }
             $newLanguage = array_filter($newLanguage);
-            $newLanguageToString = json_encode($newLanguage, JSON_PRETTY_PRINT);
+            $newLanguageToString = json_encode($newLanguage, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+            $newLanguageToString = str_replace('</br>', '<br>', $newLanguageToString);
             $fileToSave = $vueLocalePath.$iso.'.json';
             file_put_contents($fileToSave, $newLanguageToString);
             $output->writeln("json file generated for iso $iso: $fileToSave");

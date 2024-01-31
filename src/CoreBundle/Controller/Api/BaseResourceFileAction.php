@@ -185,7 +185,13 @@ class BaseResourceFileAction
     /**
      * Function loaded when creating a resource using the api, then the ResourceListener is executed.
      */
-    protected function handleCreateFileRequest(AbstractResource $resource, ResourceRepository $resourceRepository, Request $request, EntityManager $em, string $fileExistsOption = ''): array
+    protected function handleCreateFileRequest(
+        AbstractResource $resource,
+        ResourceRepository $resourceRepository,
+        Request $request,
+        EntityManager $em,
+        string $fileExistsOption = ''
+    ): array
     {
         $contentData = $request->getContent();
 
@@ -316,7 +322,7 @@ class BaseResourceFileAction
                 }
 
                 if (!$fileParsed) {
-                    throw new InvalidArgumentException('filetype was set to "file" but not upload file found');
+                    throw new InvalidArgumentException('filetype was set to "file" but no upload file found');
                 }
 
                 break;

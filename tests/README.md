@@ -46,13 +46,13 @@ php bin/console --env=test doctrine:fixtures:load --no-interaction
 
 If there are DB changes you can migrate your test installation with:
 
-`php bin/console --env=test doctrine:schema:update --force`
+`php bin/console --env=test doctrine:schema:update --force --complete`
 
 Those commands will install Chamilo in the chamilo_test database.
 
 In order to delete the test database and restart the process use:
 
-`php bin/console --env=test doctrine:database:drop --force`
+`php bin/console --env=test doctrine:database:drop --force --complete`
 
 ### Use
 Execute the tests with:

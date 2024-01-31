@@ -13,6 +13,8 @@ use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use DateTime;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
+use Chamilo\CoreBundle\Entity\UserCourseCategory;
+use Chamilo\CoreBundle\Framework\Container;
 
 class UserRepositoryTest extends AbstractApiTest
 {
@@ -53,6 +55,11 @@ class UserRepositoryTest extends AbstractApiTest
 
     public function testDeleteUser(): void
     {
+        // Force loading the legacy container to avoid issue in the user deletion process
+        // using api_get_local_time() which uses api_get_setting() which uses Container::$container
+        Container::$container = self::getContainer();
+
+        /* @var UserRepository $userRepo */
         $userRepo = self::getContainer()->get(UserRepository::class);
         $student = $this->createUser('student');
         $defaultCount = $userRepo->count([]);
@@ -196,6 +203,10 @@ class UserRepositoryTest extends AbstractApiTest
 
     public function testCreateUserSkipResourceNode(): void
     {
+        // Force loading the legacy container to avoid issue in the user deletion process
+        // using api_get_local_time() which uses api_get_setting() which uses Container::$container
+        Container::$container = self::getContainer();
+
         $em = $this->getEntityManager();
         $userRepo = self::getContainer()->get(UserRepository::class);
 
@@ -352,6 +363,7 @@ class UserRepositoryTest extends AbstractApiTest
         $user = $this->createUser('user', 'user');
         $friend = $this->createUser('friend', 'friend');
 
+        /* @var UserRepository $userRepo */
         $userRepo = self::getContainer()->get(UserRepository::class);
 
         // user -> friend

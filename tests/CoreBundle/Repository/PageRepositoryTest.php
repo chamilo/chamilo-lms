@@ -303,7 +303,9 @@ class PageRepositoryTest extends AbstractApiTest
     {
         $this->testDeleteAll();
 
+        /** @var PageCategoryRepository $pageCategoryRepo */
         $pageCategoryRepo = self::getContainer()->get(PageCategoryRepository::class);
+        /** @var PageRepository $pageRepo */
         $pageRepo = self::getContainer()->get(PageRepository::class);
 
         /** @var CreateDefaultPages $createDefaultPages */
@@ -314,7 +316,7 @@ class PageRepositoryTest extends AbstractApiTest
         $result = $createDefaultPages->createDefaultPages($admin, $this->getAccessUrl(), 'en_US');
         $this->assertTrue($result);
         $this->assertSame(2, $pageRepo->count([]));
-        $this->assertSame(2, $pageCategoryRepo->count([]));
+        $this->assertSame(4, $pageCategoryRepo->count([]));
 
         $result = $createDefaultPages->createDefaultPages($admin, $this->getAccessUrl(), 'en_US');
         $this->assertFalse($result);

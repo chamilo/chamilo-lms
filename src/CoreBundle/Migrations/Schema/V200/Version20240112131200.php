@@ -46,6 +46,7 @@ final class Version20240112131200 extends AbstractMigrationChamilo
 
         if ($schema->hasTable('agenda_event_invitee')) {
             error_log('Perform the changes in the agenda_event_invitee table');
+            $this->addSql('ALTER TABLE agenda_event_invitee DROP FOREIGN KEY FK_4F5757FEA35D7AF0');
             $this->addSql('ALTER TABLE agenda_event_invitee CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE invitation_id invitation_id INT DEFAULT NULL;');
         }
 
@@ -76,6 +77,7 @@ final class Version20240112131200 extends AbstractMigrationChamilo
 
         if ($schema->hasTable('agenda_event_invitation')) {
             error_log('Perform the changes in the agenda_event_invitation table');
+            $this->addSql('ALTER TABLE personal_agenda DROP FOREIGN KEY FK_D8612460AF68C6B');
             $this->addSql('ALTER TABLE agenda_event_invitation CHANGE id id INT AUTO_INCREMENT NOT NULL;');
         }
 
@@ -365,8 +367,8 @@ final class Version20240112131200 extends AbstractMigrationChamilo
         }
 
         if ($schema->hasTable('lti_external_tool')) {
-            error_log('Perform the changes in the lti_external_tool table');
-            $this->addSql('ALTER TABLE lti_external_tool CHANGE resource_node_id resource_node_id INT DEFAULT NULL;');
+            //error_log('Perform the changes in the lti_external_tool table');
+            //$this->addSql('ALTER TABLE lti_external_tool CHANGE resource_node_id resource_node_id INT DEFAULT NULL;');
         }
 
         if ($schema->hasTable('message')) {

@@ -123,7 +123,7 @@ class ResourceNode implements Stringable
     #[Groups(['resource_node:read', 'resource_node:write', 'document:write'])]
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'resourceNodes')]
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
-    protected User $creator;
+    protected ?User $creator;
 
     #[Groups(['resource_node:read'])]
     #[MaxDepth(1)]
@@ -136,7 +136,7 @@ class ResourceNode implements Stringable
     /**
      * @var Collection<int, ResourceNode>
      */
-    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class, cascade: ['persist'])]
     #[ORM\OrderBy(['id' => 'ASC'])]
     protected Collection $children;
 
@@ -235,7 +235,7 @@ class ResourceNode implements Stringable
         return $this->creator;
     }
 
-    public function setCreator(User $creator): self
+    public function setCreator(?User $creator): self
     {
         $this->creator = $creator;
 
@@ -250,6 +250,17 @@ class ResourceNode implements Stringable
     public function getChildren(): Collection
     {
         return $this->children;
+    }
+
+    public function addChild(ResourceNode $resourceNode): static
+    {
+        if (!$this->children->contains($resourceNode)) {
+            $this->children->add($resourceNode);
+
+            $resourceNode->setParent($this);
+        }
+
+        return $this;
     }
 
     /**

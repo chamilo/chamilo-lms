@@ -85,8 +85,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
       public const DRH = 4;
       public const STUDENT = 5;
       public const ANONYMOUS = 6;*/
+
     #[Groups(['user_json:read'])]
-    #[ORM\OneToOne(targetEntity: ResourceNode::class, cascade: ['remove'], orphanRemoval: true)]
+    #[ORM\OneToOne(targetEntity: ResourceNode::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'resource_node_id', onDelete: 'CASCADE')]
     public ?ResourceNode $resourceNode = null;
 
@@ -863,12 +864,12 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->resourceNodes;
     }
 
-    /**
-     * @param Collection<int, ResourceNode> $resourceNodes
-     */
-    public function setResourceNodes(Collection $resourceNodes): self
+    public function addResourceNode(ResourceNode $resourceNode): static
     {
-        $this->resourceNodes = $resourceNodes;
+        if (!$this->resourceNodes->contains($resourceNode)) {
+            $this->resourceNodes->add($resourceNode);
+            $resourceNode->setCreator($this);
+        }
 
         return $this;
     }

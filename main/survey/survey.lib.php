@@ -49,6 +49,33 @@ class SurveyManager
     }
 
     /**
+     * Checks if the survey code is unique.
+     *
+     * @param string $courseCode
+     *
+     * @return bool
+     * @assert ('') === false
+     */
+    public static function checkUniqueCode($courseCode)
+    {
+        if (empty($courseCode)) {
+            return false;
+        }
+        $courseId = api_get_course_int_id();
+        $table = Database::get_course_table(TABLE_SURVEY);
+        $courseCode = Database::escape_string($courseCode);
+
+        $sql = "SELECT * FROM $table
+                WHERE code = '$courseCode' AND c_id = $courseId";
+        $result = Database::query($sql);
+        if (Database::num_rows($result)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
      * Deletes all survey invitations of a user.
      *
      * @param int $user_id

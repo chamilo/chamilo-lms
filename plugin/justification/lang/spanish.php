@@ -21,3 +21,5 @@ $strings['SubscribeToASession'] = "Inscribirse a una sesion de examen";
 $strings['DocumentListForUserX'] = "Lista de documentos para %s";
 $strings['JustificationsCompleted'] = "justificativos completados";
 $strings['SendNotificationToAllAdmins'] = "Enviar una notificación al administrador";
+$strings['notification_to_creator_only'] = "Enviar la notificación solo al creador del usuario";
+$strings['notification_to_creator_only_help'] = "Si esta opción esta activada entonces la notificación sera enviada solo al usuario que ha creado el usuario quien envia sus justificativo";

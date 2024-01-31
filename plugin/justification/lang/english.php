@@ -21,3 +21,5 @@ $strings['JustificationDate'] = "Justification date";
 $strings['DocumentListForUserX'] = "Document list of user %s";
 $strings['JustificationsCompleted'] = "Justifications completed";
 $strings['SendNotificationToAllAdmins'] = "Send a notification to the administrator";
+$strings['notification_to_creator_only'] = "Send notification to user's creator only";
+$strings['notification_to_creator_only_help'] = "If activated then the notification will be sent only to the user who created the user who send the justifications and not to all admins";

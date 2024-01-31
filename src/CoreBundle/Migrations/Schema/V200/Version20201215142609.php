@@ -9,7 +9,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-class Version20240118175900 extends AbstractMigrationChamilo
+class Version20201215142609 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {

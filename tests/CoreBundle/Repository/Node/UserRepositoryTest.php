@@ -352,6 +352,7 @@ class UserRepositoryTest extends AbstractApiTest
         $user = $this->createUser('user', 'user');
         $friend = $this->createUser('friend', 'friend');
 
+        /* @var UserRepository $userRepo */
         $userRepo = self::getContainer()->get(UserRepository::class);
 
         // user -> friend

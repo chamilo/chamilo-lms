@@ -62,8 +62,8 @@ class ResourceLink implements Stringable
      * @var Collection<int, ResourceRight>
      */
     #[ORM\OneToMany(
-        targetEntity: ResourceRight::class,
         mappedBy: 'resourceLink',
+        targetEntity: ResourceRight::class,
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]

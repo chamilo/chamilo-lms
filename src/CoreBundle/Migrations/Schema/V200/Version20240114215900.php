@@ -16,9 +16,13 @@ final class Version20240114215900 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $this->addSql('DROP INDEX idx_ted_c_id ON track_e_downloads;');
-        $this->addSql('DROP INDEX down_session_id ON track_e_downloads;');
-        $this->addSql('ALTER TABLE track_e_downloads ADD resource_link_id INT DEFAULT NULL, DROP c_id, DROP down_session_id;');
+        $tblTrackDownloads = $schema->getTable('track_e_downloads');
+
+        if ($tblTrackDownloads->hasIndex('idx_ted_c_id')) {
+            $this->addSql('DROP INDEX idx_ted_c_id ON track_e_downloads;');
+        }
+
+        $this->addSql('ALTER TABLE track_e_downloads ADD resource_link_id INT DEFAULT NULL, DROP c_id;');
         $this->addSql('ALTER TABLE track_e_downloads ADD CONSTRAINT FK_EEDF4DA6F004E599 FOREIGN KEY (resource_link_id) REFERENCES resource_link (id) ON DELETE SET NULL;');
         $this->addSql('CREATE INDEX IDX_EEDF4DA6F004E599 ON track_e_downloads (resource_link_id);');
     }

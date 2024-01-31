@@ -241,13 +241,13 @@ class CourseController extends ToolBaseController
     #[Route('/{cid}/tool/{toolName}', name: 'chamilo_core_course_redirect_tool')]
     public function redirectTool(
         Request $request,
-        string $toolTitle,
+        string $toolName,
         CToolRepository $repo,
         ToolChain $toolChain
     ): RedirectResponse {
         /** @var CTool|null $tool */
         $tool = $repo->findOneBy([
-            'title' => $toolTitle,
+            'title' => $toolName,
         ]);
 
         if (null === $tool) {

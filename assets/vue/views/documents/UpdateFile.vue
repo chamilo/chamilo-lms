@@ -87,9 +87,11 @@ export default {
       this.$router.back();
     },
     fetchTemplates() {
-      axios.get('/system-templates')
+      const cid = this.$route.query.cid;
+      axios.get(`/template/all-templates/${cid}`)
         .then(response => {
           this.templates = response.data;
+          console.log('Templates fetched successfully:', this.templates);
         })
         .catch(error => {
           console.error('Error fetching the templates:', error);

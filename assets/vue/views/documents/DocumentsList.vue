@@ -191,6 +191,13 @@
             type="black"
             @click="selectAsDefaultCertificate(slotProps.data)"
           />
+          <BaseButton
+            v-if="securityStore.isAuthenticated && isCurrentTeacher && isHtmlFile(slotProps.data)"
+            :icon="getTemplateIcon(slotProps.data.iid)"
+            size="small"
+            type="black"
+            @click="openTemplateForm(slotProps.data.iid)"
+          />
         </div>
       </template>
     </Column>
@@ -305,6 +312,41 @@
       @document-not-saved="recordedAudioNotSaved"
     />
   </BaseDialog>
+  <BaseDialogConfirmCancel
+    v-model:is-visible="showTemplateFormModal"
+    :cancel-label="t('Cancel')"
+    :confirm-label="t('Save')"
+    :title="t('Add as a template')"
+    @confirm-clicked="submitTemplateForm"
+    @cancel-clicked="showTemplateFormModal = false"
+  >
+    <form @submit.prevent="submitTemplateForm">
+      <div class="p-float-label">
+        <InputText
+          id="templateTitle"
+          v-model.trim="templateFormData.title"
+          class="form-control"
+          required
+        />
+        <label
+          v-t="'Name'"
+          for="templateTitle"
+        />
+      </div>
+      <small
+        v-if="submitted && !templateFormData.title"
+        v-t="'Title is required'"
+        class="p-error"
+      />
+      <BaseFileUpload
+        id="post-file"
+        :label="t('File upload')"
+        accept="image"
+        size="small"
+        @file-selected="selectedFile = $event"
+        model-value=""/>
+    </form>
+  </BaseDialogConfirmCancel>
 </template>
 
 <script setup>
@@ -331,6 +373,7 @@ import { useNotification } from "../../composables/notification"
 import { useSecurityStore } from "../../store/securityStore"
 import prettyBytes from "pretty-bytes"
 import { ENTRYPOINT } from "../../config/entrypoint"
+import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
 
 const store = useStore()
 const route = useRoute()
@@ -341,7 +384,7 @@ const { t } = useI18n()
 const { filters, options, onUpdateOptions, deleteItem } = useDatatableList("Documents")
 const notification = useNotification()
 const { cid, sid, gid } = useCidReq()
-const { isImage } = useFileUtils()
+const { isImage, isHtml } = useFileUtils();
 
 const { relativeDatetime } = useFormatDate()
 
@@ -378,6 +421,10 @@ const isCertificateMode = computed(() => {
 });
 
 const defaultCertificateId = ref(null);
+
+const isHtmlFile = (fileData) => {
+  return isHtml(fileData);
+};
 
 onMounted(() => {
   filters.value.loadNode = 1
@@ -643,10 +690,10 @@ async function selectAsDefaultCertificate(certificate) {
     if (response.status === 200) {
       loadDefaultCertificate()
       onUpdateOptions(options.value)
-      notification.showSuccessNotification("Certificate set as default successfully");
+      notification.showSuccessNotification(t("Certificate set as default successfully"));
     }
   } catch (error) {
-    notification.showErrorNotification("Error setting certificate as default");
+    notification.showErrorNotification(t("Error setting certificate as default"));
   }
 }
 
@@ -655,7 +702,96 @@ async function loadDefaultCertificate() {
     const response = await axios.get(`/gradebook/default_certificate/${cid}`);
     defaultCertificateId.value = response.data.certificateId;
   } catch (error) {
-    console.error('Error to laod certificate', error);
+    if (error.response && error.response.status === 404) {
+      console.error('Default certificate not found.');
+      defaultCertificateId.value = null;
+    } else {
+      console.error('Error loading the certificate', error);
+    }
   }
 }
+
+const showTemplateFormModal = ref(false);
+const selectedFile = ref(null);
+const templateFormData = ref({
+  title: '',
+  thumbnail: null,
+});
+
+const currentDocumentId = ref(null);
+
+const isDocumentTemplate = async (documentId) => {
+  try {
+    const response = await axios.get(`/template/document-templates/${documentId}/is-template`);
+    return response.data.isTemplate;
+  } catch (error) {
+    console.error('Error verifying the template status:', error);
+    return false;
+  }
+};
+
+const deleteDocumentTemplate = async (documentId) => {
+  try {
+    await axios.post(`/template/document-templates/${documentId}/delete`);
+    onUpdateOptions(options.value);
+    notification.showSuccessNotification(t('Template successfully deteled.'));
+  } catch (error) {
+    console.error('Error deleting the template:', error);
+    notification.showErrorNotification(t('Error deleting the template.'));
+  }
+};
+
+const getTemplateIcon = (documentId) => {
+
+  const document = items.value.find(doc => doc.iid === documentId);
+  return document && document.template ? 'template-selected' : 'template-not-selected';
+};
+
+const openTemplateForm = async (documentId) => {
+  const isTemplate = await isDocumentTemplate(documentId);
+
+  if (isTemplate) {
+    await deleteDocumentTemplate(documentId);
+    onUpdateOptions(listaoptions.value);
+  } else {
+    currentDocumentId.value = documentId;
+    showTemplateFormModal.value = true;
+  }
+};
+
+const submitTemplateForm = async () => {
+  submitted.value = true;
+
+  if (!templateFormData.value.title || !selectedFile.value) {
+    notification.showErrorNotification(t('The title and thumbnail are required.'));
+    return;
+  }
+
+  try {
+    const formData = new FormData();
+    formData.append('title', templateFormData.value.title);
+    formData.append('thumbnail', selectedFile.value);
+    formData.append('refDoc', currentDocumentId.value);
+    formData.append('cid', cid);
+
+    const response = await axios.post('/template/document-templates/create', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    if (response.status === 200 || response.status === 201) {
+      notification.showSuccessNotification(t('Template created successfully.'));
+      templateFormData.value.title = '';
+      selectedFile.value = null;
+      showTemplateFormModal.value = false;
+      onUpdateOptions(options.value);
+    } else {
+      notification.showErrorNotification(t('Error creating the template.'));
+    }
+  } catch (error) {
+    console.error('Error submitting the form:', error);
+    notification.showErrorNotification(t('Error submitting the form.'));
+  }
+};
 </script>

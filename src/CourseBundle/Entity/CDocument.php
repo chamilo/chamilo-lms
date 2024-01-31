@@ -181,6 +181,7 @@ class CDocument extends AbstractResource implements ResourceInterface, ResourceS
     #[ORM\Column(name: 'readonly', type: 'boolean', nullable: false)]
     protected bool $readonly;
 
+    #[Groups(['document:read', 'document:write'])]
     #[ORM\Column(name: 'template', type: 'boolean', nullable: false)]
     protected bool $template;
 

@@ -37,6 +37,7 @@ class Asset implements Stringable
     public const EXERCISE_ATTEMPT = 'exercise_attempt';
     public const EXERCISE_FEEDBACK = 'exercise_feedback';
     public const SYSTEM_TEMPLATE = 'system_template';
+    public const TEMPLATE = 'template';
     public const SESSION = 'session';
 
     #[ORM\Id]

@@ -41,8 +41,9 @@ class Templates
     #[ORM\Column(name: 'ref_doc', type: 'integer', nullable: false)]
     protected int $refDoc;
 
-    #[ORM\Column(name: 'image', type: 'string', length: 250, nullable: false)]
-    protected string $image;
+    #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'image_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    protected ?Asset $image = null;
 
     /**
      * Set title.
@@ -110,26 +111,21 @@ class Templates
         return $this->refDoc;
     }
 
-    /**
-     * Set image.
-     *
-     * @return Templates
-     */
-    public function setImage(string $image)
+    public function getImage(): ?Asset
+    {
+        return $this->image;
+    }
+
+    public function setImage(?Asset $image): self
     {
         $this->image = $image;
 
         return $this;
     }
 
-    /**
-     * Get image.
-     *
-     * @return string
-     */
-    public function getImage()
+    public function hasImage(): bool
     {
-        return $this->image;
+        return null !== $this->image;
     }
 
     /**

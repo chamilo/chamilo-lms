@@ -97,13 +97,14 @@ export default {
         this.item.contentFile = templateContent;
       },
       fetchTemplates() {
-        axios.get('/system-templates')
+        const courseId = this.$route.query.cid;
+        axios.get(`/template/all-templates/${courseId}`)
           .then(response => {
-            console.log(response.data);
             this.templates = response.data;
+            console.log('Templates fetched successfully:', this.templates);
           })
           .catch(error => {
-            console.error('There was an error fetching the templates:', error);
+            console.error('Error fetching templates:', error);
           });
       },
       getCertificateTags(){

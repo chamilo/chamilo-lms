@@ -1067,30 +1067,17 @@ function actionsFilter($id)
     return $return;
 }
 
-/**
- * Display the image of the template in the sortable table.
- *
- * @param string $image the image
- *
- * @return string code for the image
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
- *
- * @version August 2008
- *
- * @since v1.8.6
- */
-function searchImageFilter($id)
+function searchImageFilter(int $id): string
 {
     $em = Database::getManager();
 
     /** @var SystemTemplate $template */
     $template = $em->find(SystemTemplate::class, $id);
 
-    $assetRepo = Container::getAssetRepository();
-    $imageUrl = $assetRepo->getAssetUrl($template->getImage());
+    if (null !== $template->getImage()) {
+        $assetRepo = Container::getAssetRepository();
+        $imageUrl = $assetRepo->getAssetUrl($template->getImage());
 
-    if (!empty($imageUrl)) {
         return '<img src="'.$imageUrl.'" alt="'.get_lang('Template preview').'"/>';
     } else {
         return '<img src="'.api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/noimage.gif" alt="'.get_lang('NoTemplate preview').'"/>';

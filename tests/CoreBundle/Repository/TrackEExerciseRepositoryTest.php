@@ -33,8 +33,11 @@ class TrackEExerciseRepositoryTest extends AbstractApiTest
         $teacher = $this->createUser('teacher');
         $student = $this->createUser('student');
 
+        /** @var CourseRepository $courseRepo */
         $courseRepo = self::getContainer()->get(CourseRepository::class);
+        /** @var TrackEExerciseRepository $trackExerciseRepo */
         $trackExerciseRepo = self::getContainer()->get(TrackEExerciseRepository::class);
+        /** @var CQuizRepository $exerciseRepo */
         $exerciseRepo = self::getContainer()->get(CQuizRepository::class);
 
         $this->assertSame(1, $courseRepo->count([]));

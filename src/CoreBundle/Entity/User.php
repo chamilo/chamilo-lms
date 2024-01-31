@@ -508,6 +508,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         mappedBy: 'user',
         targetEntity: Templates::class,
         cascade: ['persist', 'remove'],
+        fetch: 'EXTRA_LAZY',
         orphanRemoval: true
     )]
     protected Collection $templates;

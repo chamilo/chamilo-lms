@@ -38,7 +38,7 @@ final class Version20240112103400 extends AbstractMigrationChamilo
             $diskQuotaInBytes = $course->getDiskQuota();
             if (null !== $diskQuotaInBytes) {
                 $diskQuotaInMegabytes = $diskQuotaInBytes / (1024 * 1024);
-                $course->setDiskQuota($diskQuotaInMegabytes);
+                $course->setDiskQuota((int) $diskQuotaInMegabytes);
                 $em->persist($course);
             }
         }

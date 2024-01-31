@@ -72,7 +72,7 @@ class Version20230904173400 extends AbstractMigrationChamilo
             $em->persist($calendarEvent);
 
             if ($collectiveInvitationsEnabled) {
-                $calendarEvent->setCollective($personalAgenda['collective']);
+                $calendarEvent->setCollective((bool) $personalAgenda['collective']);
 
                 $hasSubscriptions = false;
                 $invitationsOrSubscriptionsInfo = [];

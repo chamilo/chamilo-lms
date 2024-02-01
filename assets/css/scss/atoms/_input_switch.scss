@@ -1,21 +1,38 @@
 .p-inputswitch {
   @apply align-middle h-4 w-8;
 
+  .p-inputswitch-input {
+    @apply appearance-none absolute top-0 left-0 w-full h-full p-0 m-0 opacity-0 outline-0 outline-none;
+    z-index: 1;
+  }
+
   .p-inputswitch-slider {
-    @apply bg-gray-50 rounded-full transition-none
+    @apply bg-gray-30 rounded-full transition-none
       before:bg-white before:duration-200 before:h-3 before:left-0.5 before:-mt-1.5 before:rounded-full before:w-3;
   }
 
-  &.p-inputswitch-checked {
-    .p-inputswitch-slider {
-      @apply bg-secondary
-        before:translate-x-4;
+  &.p-highlight .p-inputswitch-slider {
+    @apply bg-secondary
+      before:bg-white before:translate-x-4;
+  }
+
+  &:not(.p-disabled) {
+    &:has(.p-inputswitch-input:hover) {
+      .p-inputswitch-slider {
+        @apply bg-gray-30;
+      }
+
+      &.p-highlight .p-inputswitch-slider {
+        @apply bg-secondary;
+      }
+    }
+
+    &:has(.p-inputswitch-input:focus-visible) .p-inputswitch-slider {
+      @apply outline-0 outline-none outline-offset-0 shadow-lg;
     }
   }
 
-  &.p-focus {
-    .p-inputswitch-slider {
-      @apply outline-none outline-offset-0;
-    }
+  &.p-invalid > .p-inputswitch-slider {
+    @apply border-error;
   }
 }

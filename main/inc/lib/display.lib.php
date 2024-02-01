@@ -1573,6 +1573,30 @@ class Display
             $latestDate = $row['access_date'];
         }
 
+
+        // Control if a date is more recent in c_lp_view (case : skip course home page by direct link to lp in a email)
+        $t_lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $t_lp_view = Database::get_course_table(TABLE_LP_VIEW);
+        $sql = "SELECT cliv.start_time FROM $t_lp_item_view cliv 
+        INNER JOIN $t_lp_view clv ON cliv.lp_view_id = clv.id 
+        WHERE 
+        clv.c_id = $course_id AND
+        clv.user_id = '$user_id' AND
+        clv.session_id ='".$sessionId."'
+        ORDER BY cliv.start_time DESC
+        LIMIT 1";
+        $resultItems = Database::query($sql);
+        if (Database::num_rows($resultItems)) {
+            $rowItems = Database::fetch_array($resultItems, 'ASSOC');
+            $controlDate = $rowItems['start_time'];
+            // convert to date
+            $controlDate = date("Y-m-d H:i:s",$controlDate);
+            // compare if controlDate is more recent than latestDate
+            if ($controlDate > $latestDate) {
+                $latestDate = $controlDate;
+            }
+        }
+
         $sessionCondition = api_get_session_condition(
             $sessionId,
             true,

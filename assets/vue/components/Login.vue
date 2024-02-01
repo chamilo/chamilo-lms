@@ -30,9 +30,8 @@
 
       <div class="field login-section__remember-me">
         <InputSwitch
-          id="binary"
           v-model="remember"
-          :binary="true"
+          input-id="binary"
           name="remember_me"
           tabindex="4"
         />

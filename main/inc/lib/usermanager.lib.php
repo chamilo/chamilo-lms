@@ -2438,6 +2438,10 @@ class UserManager
             }
         }
 
+        if (api_is_session_admin() && (api_get_setting('prevent_session_admins_to_manage_all_users') === 'true')) {
+            $sql_query .= ' AND user.creator_id = '.api_get_user_id();
+        }
+
         if (!empty($onlyThisUserList)) {
             $onlyThisUserListToString = implode("','", $onlyThisUserList);
             $sql_query .= " AND user.id IN ('$onlyThisUserListToString') ";

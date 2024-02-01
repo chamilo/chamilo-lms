@@ -194,6 +194,15 @@ if (api_is_platform_admin()) {
                 return !in_array($item['url'], $urls);
             });
         }
+
+        $allowJustification = ((api_get_plugin_setting('justification', 'tool_enable') === 'true') && (api_get_plugin_setting('justification', 'access_for_session_admin') === 'true'));
+        if ($allowJustification) {
+            $items[] = [
+                'class' => 'item-justification-list',
+                'url' => api_get_path(WEB_PLUGIN_PATH).'justification/list.php',
+                'label' => get_lang('Justification'),
+            ];
+        }
     }
 
     if (api_get_configuration_value('allow_session_admin_extra_access')) {

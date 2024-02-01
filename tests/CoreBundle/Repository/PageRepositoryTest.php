@@ -305,6 +305,7 @@ class PageRepositoryTest extends AbstractApiTest
 
         /** @var PageCategoryRepository $pageCategoryRepo */
         $pageCategoryRepo = self::getContainer()->get(PageCategoryRepository::class);
+
         /** @var PageRepository $pageRepo */
         $pageRepo = self::getContainer()->get(PageRepository::class);
 

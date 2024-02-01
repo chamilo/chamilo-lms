@@ -1041,7 +1041,7 @@ class ExtraFieldValue extends Model
      * @param int $itemId (session id, course id, etc)
      * @assert (-1,-1) == null
      */
-    public function deleteValuesByItem($itemId)
+    public function deleteValuesByItem($itemId, $forceFlush = true)
     {
         $itemId = (int) $itemId;
         $extraFieldType = $this->getExtraField()->getItemType();
@@ -1064,7 +1064,9 @@ class ExtraFieldValue extends Model
                 }
             }
         }
-        $em->flush();
+        if ($forceFlush) {
+            $em->flush();
+        }
 
         $sql = "DELETE FROM {$this->table}
                 WHERE

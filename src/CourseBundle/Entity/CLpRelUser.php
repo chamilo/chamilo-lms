@@ -29,7 +29,7 @@ class CLpRelUser
     protected ?int $iid = null;
 
     #[ORM\ManyToOne(targetEntity: CLp::class)]
-    #[ORM\JoinColumn(name: 'lp_id', referencedColumnName: 'iid')]
+    #[ORM\JoinColumn(name: 'lp_id', referencedColumnName: 'iid', onDelete: 'SET NULL')]
     protected CLp $lp;
 
     #[ORM\ManyToOne(targetEntity: Course::class)]
@@ -49,7 +49,7 @@ class CLpRelUser
     protected DateTime $createdAt;
 
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'])]
-    #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?User $creatorUser;
 
     public function getIid(): ?int

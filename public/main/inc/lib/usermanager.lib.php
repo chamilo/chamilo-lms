@@ -657,196 +657,189 @@ class UserManager
             return false;
         }
 
-        $usergroup_rel_user = Database::get_main_table(TABLE_USERGROUP_REL_USER);
-        $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $table_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
-        $table_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $table_group = Database::get_course_table(TABLE_GROUP_USER);
-        $table_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+        try {
+            $usergroup_rel_user = Database::get_main_table(TABLE_USERGROUP_REL_USER);
+            $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+            $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+            $table_session = Database::get_main_table(TABLE_MAIN_SESSION);
+            $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
+            $table_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+            $table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+            $table_group = Database::get_course_table(TABLE_GROUP_USER);
+            $table_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
-        $userInfo = api_get_user_info($user_id);
-        $repository = Container::getUserRepository();
+            $userInfo = api_get_user_info($user_id);
+            $repository = Container::getUserRepository();
 
-        /** @var User $user */
-        $user = $repository->find($user_id);
+            /** @var User $user */
+            $user = $repository->find($user_id);
 
-        $repository->deleteUser($user);
+            $repository->deleteUser($user);
 
-        // Unsubscribe the user from all groups in all his courses
-        $sql = "SELECT c.id
+            // Unsubscribe the user from all groups in all his courses
+            $sql = "SELECT c.id
                 FROM $table_course c
                 INNER JOIN $table_course_user cu
                 ON (c.id = cu.c_id)
                 WHERE
-                    cu.user_id = '".$user_id."' AND
-                    relation_type<>".COURSE_RELATION_TYPE_RRHH."
+                    cu.user_id = '" . $user_id . "' AND
+                    relation_type<>" . COURSE_RELATION_TYPE_RRHH . "
                 ";
 
-        $res = Database::query($sql);
-        while ($course = Database::fetch_object($res)) {
-            $sql = "DELETE FROM $table_group
+            $res = Database::query($sql);
+            while ($course = Database::fetch_object($res)) {
+                $sql = "DELETE FROM $table_group
                     WHERE c_id = {$course->id} AND user_id = $user_id";
-            Database::query($sql);
-        }
-
-        // Unsubscribe user from usergroup_rel_user
-        $sql = "DELETE FROM $usergroup_rel_user WHERE user_id = '".$user_id."'";
-        Database::query($sql);
-
-        // Unsubscribe user from all courses
-        $sql = "DELETE FROM $table_course_user WHERE user_id = '".$user_id."'";
-        Database::query($sql);
-
-        // Unsubscribe user from all courses in sessions
-        $sql = "DELETE FROM $table_session_course_user WHERE user_id = '".$user_id."'";
-        Database::query($sql);
-
-        // If the user was added as a general coach then set the current admin as general coach see BT#
-        $currentUserId = api_get_user_id();
-        $sql = "UPDATE session_rel_user
-            SET user_id = $currentUserId
-            WHERE user_id = $user_id AND relation_type = ".SessionEntity::GENERAL_COACH;
-        Database::query($sql);
-
-        $sql = "UPDATE session_rel_user
-            SET user_id = $currentUserId
-            WHERE user_id = $user_id AND relation_type = ".SessionEntity::SESSION_ADMIN;
-        Database::query($sql);
-
-        // Unsubscribe user from all sessions
-        $sql = "DELETE FROM $table_session_user
-                WHERE user_id = '".$user_id."'";
-        Database::query($sql);
-
-        if ('true' === api_get_setting('admin.plugin_redirection_enabled')) {
-            RedirectionPlugin::deleteUserRedirection($user_id);
-        }
-
-        // Delete user from the admin table
-        $sql = "DELETE FROM $table_admin WHERE user_id = '".$user_id."'";
-        Database::query($sql);
-
-        // Delete the personal agenda-items from this user
-        $agenda_table = Database::get_main_table(TABLE_PERSONAL_AGENDA);
-        $sql = "DELETE FROM $agenda_table WHERE user = '".$user_id."'";
-        Database::query($sql);
-
-        $gradebook_results_table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-        $sql = 'DELETE FROM '.$gradebook_results_table.' WHERE user_id = '.$user_id;
-        Database::query($sql);
-
-        $extraFieldValue = new ExtraFieldValue('user');
-        $extraFieldValue->deleteValuesByItem($user_id);
-
-        UrlManager::deleteUserFromAllUrls($user_id);
-        //UrlManager::deleteUserFromAllUrls($user_id);
-
-        if ('true' === api_get_setting('allow_social_tool')) {
-            $userGroup = new UserGroupModel();
-            //Delete user from portal groups
-            $group_list = $userGroup->get_groups_by_user($user_id);
-            if (!empty($group_list)) {
-                foreach ($group_list as $group_id => $data) {
-                    $userGroup->delete_user_rel_group($user_id, $group_id);
-                }
+                Database::query($sql);
             }
 
-            // Delete user from friend lists
-            //SocialManager::remove_user_rel_user($user_id, true);
-        }
+            // Unsubscribe user from usergroup_rel_user
+            $sql = "DELETE FROM $usergroup_rel_user WHERE user_id = '" . $user_id . "'";
+            Database::query($sql);
 
-        // Removing survey invitation
-        SurveyManager::delete_all_survey_invitations_by_user($user_id);
+            // Unsubscribe user from all courses
+            $sql = "DELETE FROM $table_course_user WHERE user_id = '" . $user_id . "'";
+            Database::query($sql);
 
-        // Delete students works
-        /*$sql = "DELETE FROM $table_work WHERE user_id = $user_id ";
-        Database::query($sql);*/
+            // Unsubscribe user from all courses in sessions
+            $sql = "DELETE FROM $table_session_course_user WHERE user_id = '" . $user_id . "'";
+            Database::query($sql);
 
-        /*$sql = "UPDATE c_item_property SET to_user_id = NULL
-                WHERE to_user_id = '".$user_id."'";
-        Database::query($sql);
+            // If the user was added as a general coach then set the current admin as general coach see BT#
+            $currentUserId = api_get_user_id();
+            $sql = "UPDATE session_rel_user
+            SET user_id = $currentUserId
+            WHERE user_id = $user_id AND relation_type = " . SessionEntity::GENERAL_COACH;
+            Database::query($sql);
 
-        $sql = "UPDATE c_item_property SET insert_user_id = NULL
-                WHERE insert_user_id = '".$user_id."'";
-        Database::query($sql);
+            $sql = "UPDATE session_rel_user
+            SET user_id = $currentUserId
+            WHERE user_id = $user_id AND relation_type = " . SessionEntity::SESSION_ADMIN;
+            Database::query($sql);
 
-        $sql = "UPDATE c_item_property SET lastedit_user_id = NULL
-                WHERE lastedit_user_id = '".$user_id."'";
-        Database::query($sql);*/
+            // Unsubscribe user from all sessions
+            $sql = "DELETE FROM $table_session_user
+                WHERE user_id = '" . $user_id . "'";
+            Database::query($sql);
 
-        // Skills
-        $em = Database::getManager();
+            if ('true' === api_get_setting('admin.plugin_redirection_enabled')) {
+                RedirectionPlugin::deleteUserRedirection($user_id);
+            }
 
-        $criteria = ['user' => $user_id];
-        $skills = $em->getRepository(SkillRelUser::class)->findBy($criteria);
-        if ($skills) {
-            /** @var SkillRelUser $skill */
-            foreach ($skills as $skill) {
-                $comments = $skill->getComments();
-                if ($comments) {
-                    /** @var SkillRelUserComment $comment */
-                    foreach ($comments as $comment) {
-                        $em->remove($comment);
+            // Delete user from the admin table
+            $sql = "DELETE FROM $table_admin WHERE user_id = '" . $user_id . "'";
+            Database::query($sql);
+
+            // Delete the personal agenda-items from this user
+            $agenda_table = Database::get_main_table(TABLE_PERSONAL_AGENDA);
+            $sql = "DELETE FROM $agenda_table WHERE user = '" . $user_id . "'";
+            Database::query($sql);
+
+            $gradebook_results_table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+            $sql = 'DELETE FROM ' . $gradebook_results_table . ' WHERE user_id = ' . $user_id;
+            Database::query($sql);
+
+            $extraFieldValue = new ExtraFieldValue('user');
+            $extraFieldValue->deleteValuesByItem($user_id, false);
+
+            UrlManager::deleteUserFromAllUrls($user_id);
+
+            if ('true' === api_get_setting('allow_social_tool')) {
+                $userGroup = new UserGroupModel();
+                //Delete user from portal groups
+                $group_list = $userGroup->get_groups_by_user($user_id);
+                if (!empty($group_list)) {
+                    foreach ($group_list as $group_id => $data) {
+                        $userGroup->delete_user_rel_group($user_id, $group_id);
                     }
                 }
-                $em->remove($skill);
             }
-        }
 
-        // ExtraFieldSavedSearch
-        $criteria = ['user' => $user_id];
-        $searchList = $em->getRepository(ExtraFieldSavedSearch::class)->findBy($criteria);
-        if ($searchList) {
-            foreach ($searchList as $search) {
-                $em->remove($search);
+            // Removing survey invitation
+            SurveyManager::delete_all_survey_invitations_by_user($user_id);
+
+            // Skills
+            $em = Database::getManager();
+
+            $criteria = ['user' => $user_id];
+            $skills = $em->getRepository(SkillRelUser::class)->findBy($criteria);
+            if ($skills) {
+                /** @var SkillRelUser $skill */
+                foreach ($skills as $skill) {
+                    $comments = $skill->getComments();
+                    if ($comments) {
+                        /** @var SkillRelUserComment $comment */
+                        foreach ($comments as $comment) {
+                            $em->remove($comment);
+                        }
+                    }
+                    $em->remove($skill);
+                }
             }
+
+            // ExtraFieldSavedSearch
+            $criteria = ['user' => $user_id];
+            $searchList = $em->getRepository(ExtraFieldSavedSearch::class)->findBy($criteria);
+            if ($searchList) {
+                foreach ($searchList as $search) {
+                    $em->remove($search);
+                }
+            }
+
+            $connection = Database::getManager()->getConnection();
+            $schemaManager = $connection->createSchemaManager();
+            $tableExists = $schemaManager->tablesExist(['plugin_bbb_room']);
+            if ($tableExists) {
+                // Delete user from database
+                $sql = "DELETE FROM plugin_bbb_room WHERE participant_id = $user_id";
+                Database::query($sql);
+            }
+
+            // Delete user/ticket relationships :(
+            $tableExists = $schemaManager->tablesExist(['ticket_ticket']);
+            if ($tableExists) {
+                TicketManager::deleteUserFromTicketSystem($user_id);
+            }
+
+            $tableExists = $schemaManager->tablesExist(['c_lp_category_user']);
+            if ($tableExists) {
+                $sql = "DELETE FROM c_lp_category_user WHERE user_id = $user_id";
+                Database::query($sql);
+            }
+
+            $app_plugin = new AppPlugin();
+            $app_plugin->performActionsWhenDeletingItem('user', $user_id);
+
+            // Add event to system log
+            $authorId = api_get_user_id();
+
+            Event::addEvent(
+                LOG_USER_DELETE,
+                LOG_USER_ID,
+                $user_id,
+                api_get_utc_datetime(),
+                $authorId,
+                null,
+                0,
+                false
+            );
+
+            Event::addEvent(
+                LOG_USER_DELETE,
+                LOG_USER_OBJECT,
+                $userInfo,
+                api_get_utc_datetime(),
+                $authorId,
+                null,
+                0,
+                false
+            );
+
+            $em->flush();
+
+        } catch (\Exception $e) {
+                error_log('Error deleting the user: ' . $e->getMessage());
         }
-
-        $connection = Database::getManager()->getConnection();
-        $schemaManager = $connection->createSchemaManager();
-        $tableExists = $schemaManager->tablesExist(['plugin_bbb_room']);
-        if ($tableExists) {
-            // Delete user from database
-            $sql = "DELETE FROM plugin_bbb_room WHERE participant_id = $user_id";
-            Database::query($sql);
-        }
-
-        // Delete user/ticket relationships :(
-        $tableExists = $schemaManager->tablesExist(['ticket_ticket']);
-        if ($tableExists) {
-            TicketManager::deleteUserFromTicketSystem($user_id);
-        }
-
-        $tableExists = $schemaManager->tablesExist(['c_lp_category_user']);
-        if ($tableExists) {
-            $sql = "DELETE FROM c_lp_category_user WHERE user_id = $user_id";
-            Database::query($sql);
-        }
-
-        $app_plugin = new AppPlugin();
-        $app_plugin->performActionsWhenDeletingItem('user', $user_id);
-
-        // Add event to system log
-        $authorId = api_get_user_id();
-
-        Event::addEvent(
-            LOG_USER_DELETE,
-            LOG_USER_ID,
-            $user_id,
-            api_get_utc_datetime(),
-            $authorId
-        );
-
-        Event::addEvent(
-            LOG_USER_DELETE,
-            LOG_USER_OBJECT,
-            $userInfo,
-            api_get_utc_datetime(),
-            $authorId
-        );
 
         return true;
     }

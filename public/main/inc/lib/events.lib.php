@@ -778,7 +778,8 @@ class Event
         $datetime = null,
         $user_id = null,
         $course_id = null,
-        $sessionId = 0
+        $sessionId = 0,
+        $forceFlush = true
     ) {
         if (empty($event_type)) {
             return false;
@@ -846,9 +847,11 @@ class Event
             ->setDefaultValue($event_value)
             ->setSessionId($sessionId);
 
-        $em = Database::getManager();
-        $em->persist($track);
-        $em->flush();
+        if ($forceFlush) {
+            $em = Database::getManager();
+            $em->persist($track);
+            $em->flush();
+        }
 
         return true;
     }

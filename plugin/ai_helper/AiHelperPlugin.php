@@ -76,7 +76,7 @@ class AiHelperPlugin extends Plugin
         $ai = new OpenAi($apiKey, $organizationId);
 
         $temperature = 0.2;
-        $model = 'text-davinci-003';
+        $model = 'gpt-3.5-turbo-instruct';
         $maxTokens = 2000;
         $frequencyPenalty = 0;
         $presencePenalty = 0.6;

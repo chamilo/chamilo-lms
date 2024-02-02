@@ -86,9 +86,9 @@ class TrackEExerciseRepositoryTest extends AbstractApiTest
         $em->remove($course);
         $em->flush();
 
-        $this->assertSame(0, $trackExerciseRepo->count([]));
-        $this->assertSame(0, $exerciseRepo->count([]));
         $this->assertSame(0, $courseRepo->count([]));
+        $this->assertSame(0, $trackExerciseRepo->count([]));
+        $this->assertSame(1, $exerciseRepo->count([]));
     }
 
     public function testCreateInSession(): void
@@ -284,9 +284,9 @@ class TrackEExerciseRepositoryTest extends AbstractApiTest
         $em->remove($course);
         $em->flush();
 
-        $this->assertSame(0, $courseRepo->count([]));
-        $this->assertSame(0, $exerciseRepo->count([]));
         $this->assertSame(0, $trackExerciseRepo->count([]));
+        $this->assertSame(1, $exerciseRepo->count([]));
+        $this->assertSame(0, $courseRepo->count([]));
 
         $teacher = $this->getUser('teacher');
         $this->assertNotNull($teacher);

@@ -55,7 +55,7 @@ final class CShortcutRepository extends ResourceRepository
         $shortcut = $this->getShortcutFromResource($resource);
         if (null !== $shortcut) {
             $em->remove($shortcut);
-            $em->flush();
+            //$em->flush();
 
             return true;
         }

@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Traits\GradebookControllerTrait;
 use Chamilo\CoreBundle\Traits\ResourceControllerTrait;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CourseBundle\Repository\CLinkRepository;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Chamilo\CourseBundle\Repository\CToolRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -171,8 +172,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
      * @return RedirectResponse|void
      */
     #[Route('/{tool}/{type}/{id}/link', name: 'chamilo_core_resource_link', methods: ['GET'])]
-    public function linkAction(Request $request, RouterInterface $router)
+    public function linkAction(Request $request, RouterInterface $router, CLinkRepository $cLinkRepository)
     {
+        $tool = $request->get('tool');
+        $type = $request->get('type');
         $id = $request->get('id');
         $resourceNode = $this->getResourceNodeRepository()->find($id);
 
@@ -180,15 +183,25 @@ class ResourceController extends AbstractResourceController implements CourseCon
             throw new FileNotFoundException('Resource not found');
         }
 
-        $repo = $this->getRepositoryFromRequest($request);
-        if ($repo instanceof ResourceWithLinkInterface) {
-            $resource = $repo->getResourceFromResourceNode($resourceNode->getId());
-            $url = $repo->getLink($resource, $router, $this->getCourseUrlQueryToArray());
+        if ('course_tool' === $tool &&  'links' === $type) {
+            $cLink = $cLinkRepository->findOneBy(['resourceNode' => $resourceNode]);
+            if ($cLink) {
+                $url = $cLink->getUrl();
+                return $this->redirect($url);
+            } else {
+                throw new FileNotFoundException('CLink not found for the given resource node');
+            }
+        } else {
+            $repo = $this->getRepositoryFromRequest($request);
+            if ($repo instanceof ResourceWithLinkInterface) {
+                $resource = $repo->getResourceFromResourceNode($resourceNode->getId());
+                $url = $repo->getLink($resource, $router, $this->getCourseUrlQueryToArray());
 
-            return $this->redirect($url);
+                return $this->redirect($url);
+            }
+
+            $this->abort('No redirect');
         }
-
-        $this->abort('No redirect');
     }
 
     /**

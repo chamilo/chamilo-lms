@@ -15,6 +15,8 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\Controller\Api\CheckCLinkAction;
+use Chamilo\CoreBundle\Controller\Api\CLinkDetailsController;
 use Chamilo\CoreBundle\Controller\Api\CreateCLinkAction;
 use Chamilo\CoreBundle\Controller\Api\GetLinksCollectionController;
 use Chamilo\CoreBundle\Controller\Api\UpdateCLinkAction;
@@ -52,6 +54,22 @@ use Symfony\Component\Validator\Constraints as Assert;
             deserialize: false
         ),
         new Get(security: "is_granted('VIEW', object.resourceNode)"),
+        new Get(
+            uriTemplate: '/links/{iid}/details',
+            controller: CLinkDetailsController::class,
+            openapiContext: [
+                'summary' => 'Gets the details of a link, including whether it is on the homepage',
+            ],
+            security: "is_granted('VIEW', object.resourceNode)"
+        ),
+        new Get(
+            uriTemplate: '/links/{iid}/check',
+            controller: CheckCLinkAction::class,
+            openapiContext: [
+                'summary' => 'Check if a link URL is valid',
+            ],
+            security: "is_granted('VIEW', object.resourceNode)"
+        ),
         new Delete(security: "is_granted('DELETE', object.resourceNode)"),
         new Post(
             controller: CreateCLinkAction::class,

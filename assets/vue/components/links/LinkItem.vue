@@ -9,6 +9,20 @@
           />
           {{ link.title }}
         </a>
+        <BaseIcon
+          v-if="isLinkValid.isValid"
+          icon="check"
+          size="small"
+          class="text-green-500"
+          :title="t('Link is valid')"
+        />
+        <BaseIcon
+          v-else-if="isLinkValid.isValid === false"
+          icon="alert"
+          size="small"
+          class="text-red-500"
+          :title="t('Link is not valid')"
+        />
       </h6>
     </div>
     <div class="flex gap-2" v-if="securityStore.isAuthenticated && isCurrentTeacher">
@@ -65,7 +79,7 @@ import BaseIcon from "../basecomponents/BaseIcon.vue"
 import { isVisible, VISIBLE } from "./linkVisibility"
 import { useSecurityStore } from "../../store/securityStore"
 import { useStore } from "vuex"
-import { computed } from "vue"
+import { computed, watch } from "vue"
 
 const store = useStore()
 const securityStore = useSecurityStore()
@@ -78,7 +92,11 @@ defineProps({
     type: Object,
     required: true,
   },
-})
+  isLinkValid: {
+    type: Object,
+    default: () => ({})
+  },
+});
 
 const emit = defineEmits(["check", "edit", "toggle", "moveUp", "moveDown", "delete"])
 </script>

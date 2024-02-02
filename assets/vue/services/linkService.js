@@ -15,7 +15,7 @@ export default {
    * @param {Number|String} linkId
    */
   getLink: async (linkId) => {
-    const response = await axios.get(ENTRYPOINT + 'links/' + linkId)
+    const response = await axios.get(ENTRYPOINT + 'links/' + linkId + '/details/')
     return response.data
   },
 
@@ -70,8 +70,8 @@ export default {
     return response.data
   },
 
-  getCategories: async () => {
-    const response = await axios.get(ENTRYPOINT + 'link_categories')
+  getCategories: async (parentId) => {
+    const response = await axios.get(`${ENTRYPOINT}link_categories?resourceNode.parent=${parentId}`)
     return response.data['hydra:member']
   },
 
@@ -119,5 +119,16 @@ export default {
     const endpoint = `${ENTRYPOINT}link_categories/${categoryId}/toggle_visibility`;
     const response = await axios.put(endpoint, {visible})
     return response.data
+  },
+
+  /**
+   * Checks if the URL is valid.
+   * @param {String} url The URL to be checked.
+   * @param linkId
+   */
+  checkLink: async (url, linkId) => {
+    const endpoint = `${ENTRYPOINT}links/${linkId}/check`;
+    const response = await axios.get(endpoint, { params: { url } });
+    return response.data;
   },
 }

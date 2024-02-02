@@ -86,7 +86,7 @@ const fetchCategory = async () => {
   if (props.categoryId) {
     try {
       let category = await linkService.getCategory(props.categoryId)
-      formData.title = category.categoryTitle
+      formData.title = category.title
       formData.description = category.description
     } catch (error) {
       console.error('Error fetching category:', error)

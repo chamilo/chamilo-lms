@@ -677,13 +677,12 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $resourceNode
             ->setTitle($resourceName)
             ->setSlug($slug)
-            ->setCreator($creator)
             ->setResourceType($resourceType)
         ;
 
-        if (null !== $parentNode) {
-            $resourceNode->setParent($parentNode);
-        }
+        $creator->addResourceNode($resourceNode);
+
+        $parentNode?->addChild($resourceNode);
 
         $resource->setResourceNode($resourceNode);
         $em->persist($resourceNode);

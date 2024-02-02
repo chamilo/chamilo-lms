@@ -40,7 +40,7 @@ class GradebookController extends AbstractController
         return new JsonResponse([
             'message' => 'Default certificate set successfully',
             'certificateId' => $certificate->getIid(),
-            'gradebookCategoryId' => $gradebookCategory->getId()
+            'gradebookCategoryId' => $gradebookCategory->getId(),
         ]);
     }
 
@@ -66,7 +66,7 @@ class GradebookController extends AbstractController
         // Return success response with the default certificate ID
         return new JsonResponse([
             'message' => 'Default certificate found',
-            'certificateId' => $defaultCertificate->getIid()
+            'certificateId' => $defaultCertificate->getIid(),
         ]);
     }
 }

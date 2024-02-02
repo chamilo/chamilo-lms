@@ -13,10 +13,11 @@ use Chamilo\CoreBundle\Entity\User;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class GradebookCertificateRepository  extends ServiceEntityRepository
+class GradebookCertificateRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -28,9 +29,10 @@ class GradebookCertificateRepository  extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('gc')
             ->where('gc.user = :userId')
             ->setParameter('userId', $userId)
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
-        if ($catId === 0) {
+        if (0 === $catId) {
             $catId = null;
         }
 
@@ -38,7 +40,8 @@ class GradebookCertificateRepository  extends ServiceEntityRepository
             $qb->andWhere('gc.category IS NULL');
         } else {
             $qb->andWhere('gc.category = :catId')
-                ->setParameter('catId', $catId);
+                ->setParameter('catId', $catId)
+            ;
         }
 
         $qb->orderBy('gc.id', 'ASC');
@@ -48,13 +51,13 @@ class GradebookCertificateRepository  extends ServiceEntityRepository
         if ($asArray) {
             try {
                 return $query->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
-            } catch (\Doctrine\ORM\NonUniqueResultException $e) {
+            } catch (NonUniqueResultException $e) {
                 return null;
             }
         } else {
             try {
                 return $query->getOneOrNullResult();
-            } catch (\Doctrine\ORM\NonUniqueResultException $e) {
+            } catch (NonUniqueResultException $e) {
                 return null;
             }
         }
@@ -62,12 +65,12 @@ class GradebookCertificateRepository  extends ServiceEntityRepository
 
     public function registerUserInfoAboutCertificate(int $catId, int $userId, float $scoreCertificate, string $fileName = ''): void
     {
-        $existingCertificate = $this->getCertificateByUserId($catId === 0 ? null : $catId, $userId);
+        $existingCertificate = $this->getCertificateByUserId(0 === $catId ? null : $catId, $userId);
 
         if (!$existingCertificate) {
             $certificate = new GradebookCertificate();
 
-            $category = $catId === 0 ? null : $this->_em->getRepository(GradebookCategory::class)->find($catId);
+            $category = 0 === $catId ? null : $this->_em->getRepository(GradebookCategory::class)->find($catId);
             $user = $this->_em->getRepository(User::class)->find($userId);
 
             if (!empty($fileName)) {
@@ -126,7 +129,6 @@ class GradebookCertificateRepository  extends ServiceEntityRepository
         $certificate = $this->getCertificateByUserId($catId, $userId);
 
         if (!$certificate) {
-
             return false;
         }
 
@@ -134,7 +136,6 @@ class GradebookCertificateRepository  extends ServiceEntityRepository
         $personalFile = $em->getRepository(PersonalFile::class)->findOneBy(['title' => $title]);
 
         if (!$personalFile) {
-
             return false;
         }
 

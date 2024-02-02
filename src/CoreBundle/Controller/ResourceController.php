@@ -50,8 +50,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
 {
     use ControllerTrait;
     use CourseControllerTrait;
-    use ResourceControllerTrait;
     use GradebookControllerTrait;
+    use ResourceControllerTrait;
 
     /**
      * @Route("/{tool}/{type}/{id}/disk_space", methods={"GET", "POST"}, name="chamilo_core_resource_disk_space")
@@ -441,7 +441,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     /**
      * @return mixed|StreamedResponse
      */
-    private function processFile(Request $request, ResourceNode $resourceNode, string $mode = 'show', string $filter = '', ?array $allUserInfo = null)
+    private function processFile(Request $request, ResourceNode $resourceNode, string $mode = 'show', string $filter = '', array $allUserInfo = null)
     {
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,

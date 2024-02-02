@@ -191,8 +191,7 @@ class BaseResourceFileAction
         Request $request,
         EntityManager $em,
         string $fileExistsOption = ''
-    ): array
-    {
+    ): array {
         $contentData = $request->getContent();
 
         if (!empty($contentData)) {

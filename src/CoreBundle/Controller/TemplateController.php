@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
@@ -113,7 +114,7 @@ class TemplateController extends AbstractController
     {
         $course = $courseRepository->find($courseId);
         if (!$course) {
-            throw new NotFoundHttpException("Course not found");
+            throw new NotFoundHttpException('Course not found');
         }
 
         $systemTemplates = $systemTemplateRepository->findAll();
@@ -125,7 +126,6 @@ class TemplateController extends AbstractController
 
         return $this->json($allTemplates);
     }
-
 
     private function formatSystemTemplates(array $systemTemplates, AssetRepository $assetRepository): array
     {

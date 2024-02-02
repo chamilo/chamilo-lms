@@ -141,7 +141,8 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         return $this->createAnonymousUser()->getId();
     }
 
-    private function createAnonymousUser(): User {
+    private function createAnonymousUser(): User
+    {
         $uniqueId = uniqid('anon_');
         $email = $uniqueId.'@localhost.local';
 
@@ -159,7 +160,8 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
             ->setEmail($email)
             ->setOfficialCode('anonymous')
             ->setCreatorId(1)
-            ->addRole('ROLE_ANONYMOUS');
+            ->addRole('ROLE_ANONYMOUS')
+        ;
 
         $this->entityManager->persist($anonymousUser);
         $this->entityManager->flush();

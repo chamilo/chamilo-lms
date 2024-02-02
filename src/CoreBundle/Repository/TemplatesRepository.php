@@ -64,6 +64,7 @@ class TemplatesRepository extends ServiceEntityRepository
             ->andWhere('t.refDoc > 0')
             ->setParameter('course', $course)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 }

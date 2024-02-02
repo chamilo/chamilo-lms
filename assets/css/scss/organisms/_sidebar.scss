@@ -57,6 +57,15 @@
     .p-button-label {
       @apply hidden;
     }
+
+    .p-togglebutton-input {
+      @apply appearance-none absolute top-0 left-0 w-full h-full p-0 m-0 opacity-0 outline-0 outline-none;
+      z-index: 1;
+    }
+
+    .p-button {
+      @apply bg-white p-0 text-primary;
+    }
   }
 
   .p-panelmenu {

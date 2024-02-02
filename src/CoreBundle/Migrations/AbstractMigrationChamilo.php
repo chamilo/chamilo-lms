@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Migrations;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\Admin;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
@@ -66,17 +67,12 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
 
     public function getAdmin(): User
     {
-        $container = $this->getContainer();
-        $em = $this->getEntityManager();
-        $connection = $em->getConnection();
-        $userRepo = $container->get(UserRepository::class);
+        $admin = $this->getEntityManager()
+            ->getRepository(Admin::class)
+            ->findOneBy([], ['id' => 'ASC'])
+        ;
 
-        $sql = 'SELECT user_id FROM admin ORDER BY id LIMIT 1';
-        $result = $connection->executeQuery($sql);
-        $adminRow = $result->fetchAssociative();
-        $adminId = $adminRow['user_id'];
-
-        return $userRepo->find($adminId);
+        return $admin->getUser();
     }
 
     /**

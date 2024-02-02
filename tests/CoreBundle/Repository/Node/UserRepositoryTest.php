@@ -8,13 +8,12 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Group;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use DateTime;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
-use Chamilo\CoreBundle\Entity\UserCourseCategory;
-use Chamilo\CoreBundle\Framework\Container;
 
 class UserRepositoryTest extends AbstractApiTest
 {
@@ -59,7 +58,7 @@ class UserRepositoryTest extends AbstractApiTest
         // using api_get_local_time() which uses api_get_setting() which uses Container::$container
         Container::$container = self::getContainer();
 
-        /* @var UserRepository $userRepo */
+        /** @var UserRepository $userRepo */
         $userRepo = self::getContainer()->get(UserRepository::class);
         $student = $this->createUser('student');
         $defaultCount = $userRepo->count([]);
@@ -363,7 +362,7 @@ class UserRepositoryTest extends AbstractApiTest
         $user = $this->createUser('user', 'user');
         $friend = $this->createUser('friend', 'friend');
 
-        /* @var UserRepository $userRepo */
+        /** @var UserRepository $userRepo */
         $userRepo = self::getContainer()->get(UserRepository::class);
 
         // user -> friend

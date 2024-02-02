@@ -15,6 +15,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_SLASHES;
 
 class UpdateVueTranslations extends Command
 {

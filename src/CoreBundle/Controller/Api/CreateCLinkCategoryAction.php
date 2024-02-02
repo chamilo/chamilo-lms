@@ -22,7 +22,7 @@ class CreateCLinkCategoryAction extends BaseResourceFileAction
         $resourceLinkList = json_decode($data['resourceLinkList'], true);
 
         $linkCategory = (new CLinkCategory())
-            ->setCategoryTitle($title)
+            ->setTitle($title)
             ->setDescription($description)
         ;
 

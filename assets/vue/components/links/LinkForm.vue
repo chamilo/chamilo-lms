@@ -25,7 +25,7 @@
       v-model="formData.category"
       :options="categories"
       :label="t('Select a category')"
-      option-label="categoryTitle"
+      option-label="title"
       option-value="iid"
       hast-empty-value
     />
@@ -129,7 +129,7 @@ onMounted(() => {
 
 const fetchCategories = async () => {
   try {
-    categories.value = await linkService.getCategories()
+    categories.value = await linkService.getCategories(parentResourceNodeId.value)
   } catch (error) {
     console.error('Error fetching categories:', error)
   }
@@ -142,10 +142,10 @@ const fetchLink = async () => {
       formData.url = response.url
       formData.title = response.title
       formData.description = response.description
-      formData.showOnHomepage = response.showOnHomepage
+      formData.showOnHomepage = response.onHomepage
       formData.target = response.target
-      formData.parentResourceNodeId = response.value
-      formData.resourceLinkList = response.value
+      formData.parentResourceNodeId = response.parentResourceNodeId
+      formData.resourceLinkList = response.resourceLinkList
       if (response.category) {
         formData.category = parseInt(response.category["@id"].split("/").pop())
       }

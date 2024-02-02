@@ -13,13 +13,13 @@
         type="black"
         @click="redirectToCreateLinkCategory"
       />
-      <BaseButton
+      <!--BaseButton
         :label="t('Export to PDF')"
         icon="file-pdf"
         type="black"
         @click="exportToPDF"
       />
-      <StudentViewButton />
+      <StudentViewButton /-->
     </BaseToolbar>
 
     <LinkCategoryCard v-if="isLoading">
@@ -69,6 +69,7 @@
           >
             <LinkItem
               :link="link"
+              :isLinkValid="linkValidationResults[link.iid]"
               @check="checkLink(link.iid, link.url)"
               @delete="confirmDeleteLink(link)"
               @edit="editLink"
@@ -128,6 +129,7 @@
           >
             <LinkItem
               :link="link"
+              :isLinkValid="linkValidationResults[link.iid]"
               @check="checkLink(link.iid, link.url)"
               @delete="confirmDeleteLink(link)"
               @edit="editLink"
@@ -214,6 +216,8 @@ const categoryToDelete = ref(null)
 
 const isLoading = ref(true)
 
+const linkValidationResults = ref({});
+
 onMounted(() => {
   linksWithoutCategory.value = []
   categories.value = {}
@@ -237,8 +241,8 @@ function confirmDeleteLink(link) {
 async function deleteLink() {
   try {
     await linkService.deleteLink(linkToDelete.value.id)
-    isDeleteLinkDialogVisible.value = true
     linkToDelete.value = null
+    isDeleteLinkDialogVisible.value = false
     notifications.showSuccessNotification(t("Link deleted"))
     await fetchLinks()
   } catch (error) {
@@ -247,8 +251,14 @@ async function deleteLink() {
   }
 }
 
-function checkLink(id, url) {
-  // Implement the logic to check the link using the provided id and url
+async function checkLink(id, url) {
+  try {
+    const result = await linkService.checkLink(url, id);
+    linkValidationResults.value = { ...linkValidationResults.value, [id]: { isValid: result.isValid } };
+  } catch (error) {
+    console.error("Error checking link:", error);
+    linkValidationResults.value = { ...linkValidationResults.value, [id]: { isValid: false, message: error.message || 'Link validation failed' } };
+  }
 }
 
 async function toggleVisibility(link) {
@@ -256,16 +266,12 @@ async function toggleVisibility(link) {
     const visibility = toggleVisibilityProperty(!link.linkVisible)
     let newLink = await linkService.toggleLinkVisibility(link.iid, isVisible(visibility))
     notifications.showSuccessNotification(t("Link visibility updated"))
-    linksWithoutCategory.value
-      .filter((l) => l.iid === link.iid)
-      .forEach((l) => (l.linkVisible = visibilityFromBoolean(newLink.linkVisible)))
     Object.values(categories.value)
       .map((c) => c.links)
       .flat()
       .filter((l) => l.iid === link.iid)
       .forEach((l) => (l.linkVisible = visibilityFromBoolean(newLink.linkVisible)))
   } catch (error) {
-    console.error("Error deleting link:", error)
     notifications.showErrorNotification(t("Could not change visibility of link"))
   }
 }

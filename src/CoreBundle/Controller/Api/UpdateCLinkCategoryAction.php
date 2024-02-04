@@ -21,7 +21,7 @@ class UpdateCLinkCategoryAction extends BaseResourceFileAction
         $parentResourceNodeId = $data['parentResourceNodeId'];
         $resourceLinkList = json_decode($data['resourceLinkList'], true);
 
-        $linkCategory->setCategoryTitle($title);
+        $linkCategory->setTitle($title);
         $linkCategory->setDescription($description);
 
         if (!empty($parentResourceNodeId)) {

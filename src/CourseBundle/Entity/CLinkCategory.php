@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Controller\Api\CreateCLinkCategoryAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateCLinkCategoryAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityLinkCategory;
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -125,10 +126,11 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['link_category:write'],
     ],
 )]
-#[ApiFilter(SearchFilter::class, properties: ['category_title' => 'partial', 'resourceNode.parent' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['title' => 'partial', 'resourceNode.parent' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['iid', 'resourceNode.title', 'resourceNode.createdAt', 'resourceNode.updatedAt'])]
 #[ORM\Table(name: 'c_link_category')]
 #[ORM\Entity(repositoryClass: CLinkCategoryRepository::class)]
+#[ORM\EntityListeners([ResourceListener::class])]
 class CLinkCategory extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ApiProperty(identifier: true)]
@@ -138,7 +140,7 @@ class CLinkCategory extends AbstractResource implements ResourceInterface, Strin
     #[ORM\GeneratedValue]
     protected ?int $iid = null;
 
-    #[Groups(['link_category:read', 'link_category:write'])]
+    #[Groups(['link_category:read', 'link_category:write', 'link_category:browse'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;

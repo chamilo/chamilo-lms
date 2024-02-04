@@ -47,6 +47,7 @@ class GetLinksCollectionController extends BaseResourceFileAction
                   [
                       'id' => $link->getIid(),
                       'title' => $link->getTitle(),
+                      'description' => $link->getDescription(),
                       'url' => $link->getUrl(),
                       'iid' => $link->getIid(),
                       'linkVisible' => $link->getFirstResourceLink()->getVisibility(),
@@ -67,7 +68,8 @@ class GetLinksCollectionController extends BaseResourceFileAction
 
                 $categoryInfo = [
                     'id' => $categoryId,
-                    'name' => $category->getCategoryTitle(),
+                    'title' => $category->getTitle(),
+                    'descritption' => $category->getDescription(),
                     'visible' => $category->getFirstResourceLink()->getVisibility(),
                 ];
                 $dataResponse['categories'][$categoryId]['info'] = $categoryInfo;
@@ -79,6 +81,7 @@ class GetLinksCollectionController extends BaseResourceFileAction
                         $items[] = [
                             'id' => $link->getIid(),
                             'title' => $link->getTitle(),
+                            'description' => $link->getDescription(),
                             'url' => $link->getUrl(),
                             'iid' => $link->getIid(),
                             'linkVisible' => $link->getFirstResourceLink()->getVisibility(),

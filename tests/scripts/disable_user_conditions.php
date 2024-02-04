@@ -1,6 +1,6 @@
 <?php
 
-/* For licensing terms, see /license.txt 
+/* For licensing terms, see /license.txt
  * This script disable users depending on 3 use cases and send an email to the user to inform him
  * The 3 cases for disabling a user are :
  *  * Case 1
@@ -8,17 +8,17 @@
  *   platform for more than 3 months then deactivate his account and send an email to the user
  *  * Case 2
  *   If a learner has validated his terms and conditions and has not connected to the plateform
- *   for more than 6 months then deactivate his account and send an email to the learner and to 
+ *   for more than 6 months then deactivate his account and send an email to the learner and to
  *   it's superior. The superior of the learner is also removed from this learner (deassignment).
  *  * Case 3
  *   If a learner has completed its courses (a learner is considered to have finished their courses
- *   if he has a generated the general certificate) and has not connected to the platfrom for more 
+ *   if he has a generated the general certificate) and has not connected to the platfrom for more
  *   than 6 months then deactivate his account and send an email to the learner.
  * */
 
 require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
-$senderId = api_get_setting('disable_user_conditions_sender_id');
+$senderId = api_get_setting('platform.disable_user_conditions_sender_id');
 
 if (empty($senderId)) {
     exit;
@@ -56,7 +56,7 @@ $sql = "SELECT u.id
         LEFT JOIN extra_field_values ev
         ON u.id = ev.item_id AND field_id = $fieldId
         WHERE
-            (ev.value IS NULL OR ev.value = '') AND
+            (ev.field_value IS NULL OR ev.field_value = '') AND
             u.active = 1
             $statusCondition
         ";
@@ -170,7 +170,7 @@ $sql = "SELECT u.id
         INNER JOIN extra_field_values ev
         ON u.id = ev.item_id AND field_id = $fieldId
         WHERE
-            ev.value = 1 AND
+            ev.field_value = 1 AND
             u.active = 1
             $statusCondition
         ";

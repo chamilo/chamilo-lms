@@ -6,13 +6,14 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Filter;
 
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\AbstractContextAwareFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Doctrine\Orm\Filter\AbstractFilter;
+use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\SocialPost;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\PropertyInfo\Type;
 
-class SocialWallFilter extends AbstractContextAwareFilter
+class SocialWallFilter extends AbstractFilter
 {
     public function getDescription(string $resourceClass): array
     {
@@ -38,7 +39,8 @@ class SocialWallFilter extends AbstractContextAwareFilter
         QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
-        string $operationName = null
+        Operation $operation = null,
+        array $context = []
     ): void {
         if ('socialwall_wallOwner' !== $property) {
             return;

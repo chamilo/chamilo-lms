@@ -6,6 +6,15 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\Controller\Api\UserSkillsController;
 use Chamilo\CoreBundle\Entity\Listener\SkillRelUserListener;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
@@ -13,8 +22,22 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
+
+#[ApiResource(
+    operations: [
+        new Get(security: "is_granted('VIEW', object)"),
+        new Put(security: "is_granted('EDIT', object)"),
+        new Delete(security: "is_granted('DELETE', object)"),
+        new Post(securityPostDenormalize: "is_granted('CREATE', object)"),
+    ],
+    normalizationContext: ['groups' => ['skill_rel_user:read']],
+    denormalizationContext: ['groups' => ['skill_rel_user:write']],
+    security: "is_granted('ROLE_USER')"
+)]
+#[ApiFilter(SearchFilter::class, properties: ['user' => 'exact'])]
 #[ORM\Table(name: 'skill_rel_user')]
 #[ORM\Index(name: 'idx_select_cs', columns: ['course_id', 'session_id'])]
 #[ORM\Index(name: 'idx_select_s_c_u', columns: ['session_id', 'course_id', 'user_id'])]
@@ -34,6 +57,7 @@ class SkillRelUser
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $user;
 
+    #[Groups(['skill_rel_user:read'])]
     #[ORM\ManyToOne(targetEntity: Skill::class, inversedBy: 'issuedSkills', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'skill_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected ?Skill $skill = null;

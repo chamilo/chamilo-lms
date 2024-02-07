@@ -1,23 +1,19 @@
 <template>
-  <div class="flex flex-col md:flex-row gap-4">
-    <div class="md:basis-1/3 lg:basis-1/4 2xl:basis-1/6 flex flex-col">
-      <BaseCard plain>
-        <img
-          :src="user.illustrationUrl"
-          class="mb-2 p-3 rounded-full"
-        />
-        <div class="flex flex-col text-center">
-          <div class="text-xl">{{ user.fullName }}</div>
-          <div class="text-lg">{{ user.username }}</div>
-        </div>
-      </BaseCard>
+  <div class="flex flex-wrap md:flex-nowrap gap-4">
+    <div class="flex flex-col w-full md:w-1/4 lg:w-1/6">
+      <UserProfileCard />
       <SocialSideMenu />
     </div>
 
-    <div class="md:basis-2/3 lg:basis-1/2 2xl:basis-4/6">
+    <div class="flex-grow w-full md:basis-1/2 lg:basis-2/3">
       <SocialNetworkWall />
     </div>
 
+    <div class="flex flex-col w-full md:w-1/4 lg:w-1/6">
+      <MyGroupsCard />
+      <MyFriendsCard />
+      <MySkillsCard />
+    </div>
   </div>
 </template>
 
@@ -27,7 +23,10 @@ import { onMounted, provide, readonly, ref, watch } from "vue"
 import SocialNetworkWall from "./SocialWall.vue"
 import { useRoute } from "vue-router"
 import SocialSideMenu from "../../components/social/SocialSideMenu.vue"
-//import AddFriendSidebar from "../../components/userreluser/AddFriendSidebar.vue";
+import UserProfileCard from "../../components/social/UserProfileCard.vue"
+import MyGroupsCard from "../../components/social/MyGroupsCard.vue"
+import MyFriendsCard from "../../components/social/MyFriendsCard.vue"
+import MySkillsCard from "../../components/social/MySkillsCard.vue"
 
 const store = useStore()
 const route = useRoute()

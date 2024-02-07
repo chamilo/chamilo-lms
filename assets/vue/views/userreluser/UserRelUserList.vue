@@ -30,6 +30,7 @@
         />
       </div>
 
+
       <DataView
         v-else
         :value="items"
@@ -37,19 +38,19 @@
         layout="grid"
       >
         <template #grid="slotProps">
-          <div class="friend-list__block">
+          <div v-for="item in slotProps.items" :key="item['@id']" class="friend-list__block">
             <div
-              v-if="slotProps.data.user['@id'] === user['@id']"
+              v-if="item.user['@id'] === user['@id']"
               class="friend-info"
             >
               <img
-                :alt="slotProps.data.friend.username"
-                :src="slotProps.data.friend.illustrationUrl"
+                :alt="item.friend.username"
+                :src="item.friend.illustrationUrl"
                 class="friend-info__avatar"
               />
               <div
                 class="friend-info__username"
-                v-text="slotProps.data.friend.username"
+                v-text="item.friend.username"
               />
             </div>
             <div
@@ -57,26 +58,26 @@
               class="friend-info"
             >
               <img
-                :alt="slotProps.data.user.username"
-                :src="slotProps.data.user.illustrationUrl"
+                :alt="item.user.username"
+                :src="item.user.illustrationUrl"
                 class="friend-info__avatar"
               />
               <div
                 class="friend-info__username"
-                v-text="slotProps.data.user.username"
+                v-text="item.user.username"
               />
             </div>
 
             <div class="friend-options">
               <span
                 class="friend-options__time"
-                v-text="relativeDatetime(slotProps.data.createdAt)"
+                v-text="relativeDatetime(item.createdAt)"
               />
               <BaseButton
                 icon="user-delete"
                 only-icon
                 type="danger"
-                @click="onClickDeleteFriend(slotProps.data)"
+                @click="onClickDeleteFriend(item)"
               />
             </div>
           </div>

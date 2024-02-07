@@ -46,6 +46,7 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
+import { useNotification } from "../../composables/notification"
 
 export default {
   name: "UserRelUserAdd",
@@ -62,6 +63,7 @@ export default {
     const router = useRouter()
     const { t } = useI18n()
     const user = store.getters["security/getUser"]
+    const { showSuccessNotification, showErrorNotification } = useNotification()
 
     function asyncFind(query) {
       if (query.toString().length < 3) {
@@ -94,10 +96,12 @@ export default {
           relationType: 10,
         })
         .then((response) => {
+          showSuccessNotification(t('Friend request sent successfully'))
           console.log(response)
           isLoadingSelect.value = false
         })
         .catch(function (error) {
+          showErrorNotification(t('Failed to send friend request'))
           isLoadingSelect.value = false
           console.log(error)
         })

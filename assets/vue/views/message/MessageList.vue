@@ -46,113 +46,107 @@
 
   <hr />
 
-  <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-    <div class="space-y-4">
-      <div class="flex md:flex-col gap-2">
-        <BaseButton
-          :label="t('Inbox')"
-          icon="inbox"
-          type="black"
-          @click="showInbox"
-        />
+  <div class="message-container">
+    <div class="message-actions">
+      <BaseButton
+        :label="t('Inbox')"
+        icon="inbox"
+        type="black"
+        @click="showInbox"
+      />
 
-        <BaseButton
-          :label="t('Unread')"
-          icon="email-unread"
-          type="black"
-          @click="showUnread"
-        />
+      <BaseButton
+        :label="t('Unread')"
+        icon="email-unread"
+        type="black"
+        @click="showUnread"
+      />
 
-        <BaseButton
-          :label="t('Sent')"
-          icon="sent"
-          type="black"
-          @click="showSent"
-        />
+      <BaseButton
+        :label="t('Sent')"
+        icon="sent"
+        type="black"
+        @click="showSent"
+      />
 
-        <BaseButton
-          v-for="tag in tags"
-          :key="tag.id"
-          :label="tag.tag"
-          icon="tag-outline"
-          type="black"
-          @click="showInboxByTag(tag)"
-        />
-      </div>
-
-      <SocialSideMenu />
+      <BaseButton
+        v-for="tag in tags"
+        :key="tag.id"
+        :label="tag.tag"
+        icon="tag-outline"
+        type="black"
+        @click="showInboxByTag(tag)"
+      />
     </div>
 
-    <div class="md:col-span-4">
-      <DataTable
-        ref="dtMessages"
-        v-model:selection="selectedItems"
-        :loading="isLoading"
-        :row-class="rowClass"
-        :rows="initialRowsPerPage"
-        :rows-per-page-options="[10, 20, 50]"
-        :total-records="totalItems"
-        :value="items"
-        current-page-report-template="{first} to {last} of {totalRecords}"
-        data-key="@id"
-        lazy
-        paginator
-        paginator-template="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-        responsive-layout="scroll"
-        sort-field="sendDate"
-        :sort-order="-1"
-        @page="onPage($event)"
-        @row-click="onRowClick"
-        @sort="sortingChanged($event)"
-      >
-        <Column selection-mode="multiple" />
-        <Column :header="t('From')">
-          <template #body="slotProps">
-            <div
-              v-if="slotProps.data.sender"
-              class="flex items-center gap-2"
-            >
-              <BaseUserAvatar :image-url="slotProps.data.sender.illustrationUrl" />
+    <DataTable
+      ref="dtMessages"
+      v-model:selection="selectedItems"
+      :loading="isLoading"
+      :row-class="rowClass"
+      :rows="initialRowsPerPage"
+      :rows-per-page-options="[10, 20, 50]"
+      :total-records="totalItems"
+      :value="items"
+      current-page-report-template="{first} to {last} of {totalRecords}"
+      data-key="@id"
+      lazy
+      paginator
+      paginator-template="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+      responsive-layout="scroll"
+      sort-field="sendDate"
+      :sort-order="-1"
+      @page="onPage($event)"
+      @row-click="onRowClick"
+      @sort="sortingChanged($event)"
+    >
+      <Column selection-mode="multiple" />
+      <Column :header="t('From')">
+        <template #body="slotProps">
+          <div
+            v-if="slotProps.data.sender"
+            class="flex items-center gap-2"
+          >
+            <BaseUserAvatar :image-url="slotProps.data.sender.illustrationUrl" />
 
-              {{ slotProps.data.sender.username }}
-            </div>
-            <div
-              v-else
-              v-t="'No sender'"
-            />
-          </template>
-        </Column>
-        <Column :header="t('Title')" :sortable="true" field="title">
-          <template #body="slotProps">
-            <div class="flex gap-2 pb-2">
-              {{ slotProps.data.title }}
-            </div>
+            {{ slotProps.data.sender.username }}
+          </div>
+          <div
+            v-else
+            v-t="'No sender'"
+          />
+        </template>
+      </Column>
+      <Column :header="t('Title')" :sortable="true" field="title">
+        <template #body="slotProps">
+          <div class="flex gap-2 pb-2">
+            {{ slotProps.data.title }}
+          </div>
 
-            <BaseTag
-              v-for="tag in findMyReceiver(slotProps.data)?.tags"
-              :key="tag.id"
-              :label="tag.tag"
-              type="info"
-            />
-          </template>
-        </Column>
-        <Column :header="t('Send date')" :sortable="true" field="sendDate">
-          <template #body="slotProps">
-            {{ relativeDatetime(slotProps.data.sendDate) }}
-          </template>
-        </Column>
-        <Column :header="t('Actions')">
-          <template #body="slotProps">
-            <BaseButton
-              icon="delete"
-              size="small"
-              type="danger"
-              @click="showDlgConfirmDeleteSingle(slotProps)"
-            />
-          </template>
-        </Column>
-      </DataTable>
-    </div>
+          <BaseTag
+            v-for="tag in findMyReceiver(slotProps.data)?.tags"
+            :key="tag.id"
+            :label="tag.tag"
+            type="info"
+          />
+        </template>
+      </Column>
+      <Column :header="t('Send date')" :sortable="true" field="sendDate">
+        <template #body="slotProps">
+          {{ relativeDatetime(slotProps.data.sendDate) }}
+        </template>
+      </Column>
+      <Column :header="t('Actions')">
+        <template #body="slotProps">
+          <BaseButton
+            icon="delete"
+            size="small"
+            type="danger"
+            @click="showDlgConfirmDeleteSingle(slotProps)"
+          />
+        </template>
+      </Column>
+    </DataTable>
   </div>
 </template>
 

@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use Chamilo\CoreBundle\Repository\SkillRepository;
@@ -19,6 +21,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(security: 'is_granted(\'ROLE_ADMIN\')', normalizationContext: ['groups' => ['skill:read']])]
+#[ApiFilter(SearchFilter::class, properties: ['issuedSkills.user' => 'exact'])]
 #[ORM\Table(name: 'skill')]
 #[ORM\Entity(repositoryClass: SkillRepository::class)]
 class Skill implements Stringable
@@ -37,6 +40,7 @@ class Skill implements Stringable
     /**
      * @var Collection<int, SkillRelUser>
      */
+    #[Groups(['skill:read'])]
     #[ORM\OneToMany(targetEntity: SkillRelUser::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $issuedSkills;
 
@@ -64,7 +68,7 @@ class Skill implements Stringable
     #[ORM\OneToMany(targetEntity: SkillRelGradebook::class, mappedBy: 'skill', cascade: ['persist'])]
     protected Collection $gradeBookCategories;
     #[Assert\NotBlank]
-    #[Groups(['skill:read', 'skill:write'])]
+    #[Groups(['skill:read', 'skill:write', 'skill_rel_user:read'])]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
     #[Assert\NotBlank]
@@ -77,6 +81,7 @@ class Skill implements Stringable
     #[Assert\NotNull]
     #[ORM\Column(name: 'access_url_id', type: 'integer', nullable: false)]
     protected int $accessUrlId;
+    #[Groups(['skill:read', 'skill_rel_user:read'])]
     #[ORM\Column(name: 'icon', type: 'string', length: 255, nullable: false)]
     protected string $icon;
     #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['persist', 'remove'])]

@@ -16,6 +16,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\Controller\Api\UserSkillsController;
 use Chamilo\CoreBundle\Entity\Listener\UserListener;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Traits\UserCreatorTrait;
@@ -52,6 +53,12 @@ use UserManager;
         new Delete(security: "is_granted('DELETE', object)"),
         new GetCollection(security: "is_granted('ROLE_USER')"),
         new Post(security: "is_granted('ROLE_ADMIN')"),
+        new GetCollection(
+            uriTemplate: '/users/{id}/skills',
+            controller: UserSkillsController::class,
+            normalizationContext: ['groups' => ['user_skills:read']],
+            name: 'get_user_skills'
+        )
     ],
     normalizationContext: ['groups' => ['user:read']],
     denormalizationContext: ['groups' => ['user:write']],

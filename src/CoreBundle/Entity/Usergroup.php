@@ -27,6 +27,15 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     use TimestampableEntity;
     public const SOCIAL_CLASS = 1;
     public const NORMAL_CLASS = 0;
+    // Definition of constants for user permissions
+    public const GROUP_USER_PERMISSION_ADMIN = 1; // The admin of a group
+    public const GROUP_USER_PERMISSION_READER = 2; // A normal user
+    public const GROUP_USER_PERMISSION_PENDING_INVITATION = 3; // When an admin/moderator invites a user
+    public const GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER = 4; // A user requests to join a group
+    public const GROUP_USER_PERMISSION_MODERATOR = 5; // A moderator of the group
+    public const GROUP_USER_PERMISSION_ANONYMOUS = 6; // An anonymous user, not part of the group
+    public const GROUP_USER_PERMISSION_HRM = 7; // A human resource manager
+
     #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
     #[ORM\Id]
     #[ORM\GeneratedValue]

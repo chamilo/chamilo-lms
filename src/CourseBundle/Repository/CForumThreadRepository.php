@@ -63,4 +63,18 @@ class CForumThreadRepository extends ResourceRepository
         }
         parent::delete($resource);
     }
+
+    public function getThreadsBySubscriptions(int $userId, int $courseId): array
+    {
+        $qb = $this->createQueryBuilder('thread')
+            ->where('thread.iid IN (
+            SELECT fn.threadId
+            FROM Chamilo\CourseBundle\Entity\CForumNotification fn
+            WHERE fn.cId = :courseId AND fn.userId = :userId
+        )')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('userId', $userId);
+
+        return $qb->getQuery()->getResult();
+    }
 }

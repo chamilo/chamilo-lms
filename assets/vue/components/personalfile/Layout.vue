@@ -1,20 +1,39 @@
 <template>
   <div class="flex flex-col md:flex-row gap-4">
     <div class="md:basis-1/3 lg:basis-1/4 2xl:basis-1/6 flex flex-col">
+      <UserProfileCard />
       <SocialSideMenu />
     </div>
     <div class="md:basis-2/3 lg:basis-3/4 2xl:basis-5/6">
-      <h2 v-t="'Friends'" class="mr-auto" />
+      <h2 v-t="'My Files'" class="mr-auto" />
       <hr />
       <router-view></router-view>
     </div>
   </div>
 </template>
-<script>
-  import SocialSideMenu from "../social/SocialSideMenu.vue";
+<script setup>
+import UserProfileCard from "../social/UserProfileCard.vue"
+import SocialSideMenu from "../social/SocialSideMenu.vue"
+import { useStore } from "vuex"
+import { useRoute } from "vue-router"
+import { onMounted, provide, readonly, ref, watch } from "vue"
 
-  export default {
-      name: 'PersonalFileLayout',
-    components: {SocialSideMenu}
+const store = useStore()
+const route = useRoute()
+
+const user = ref({})
+
+provide("social-user", readonly(user))
+
+async function loadUser() {
+  try {
+    user.value = route.query.id ? await store.dispatch("user/load", route.query.id) : store.getters["security/getUser"]
+  } catch (e) {
+    user.value = {}
   }
+}
+
+onMounted(loadUser)
+
+watch(() => route.query, loadUser)
 </script>

@@ -85,40 +85,9 @@ final class UserToJsonNormalizer
 
         // Dummy content
         $user->setDateOfBirth(null);
-        // $user->setBiography($noDataLabel);
-        /*$user->setFacebookData($noDataLabel);
-        $user->setFacebookName($noDataLabel);
-        $user->setFacebookUid($noDataLabel);*/
-        // $user->setImageName($noDataLabel);
-        // $user->setTwoStepVerificationCode($noDataLabel);
-        // $user->setGender($noDataLabel);
-        /*$user->setGplusData($noDataLabel);
-        $user->setGplusName($noDataLabel);
-        $user->setGplusUid($noDataLabel);*/
         $user->setLocale($noDataLabel);
         $user->setTimezone($noDataLabel);
-        /*$user->setTwitterData($noDataLabel);
-        $user->setTwitterName($noDataLabel);
-        $user->setTwitterUid($noDataLabel);*/
         $user->setWebsite($noDataLabel);
-        // $user->setToken($noDataLabel);
-
-        /*$friends = SocialManager::get_friends($userId);
-        $friendList = [];
-        if (!empty($friends)) {
-            foreach ($friends as $friend) {
-                $friendList[] = $friend['user_info']['complete_name'];
-            }
-        }*/
-
-        /*$agenda = new Agenda('personal');
-        $events = $agenda->getEvents(0, 0, 0, 0, $userId, 'array');
-        $eventList = [];
-        if (!empty($events)) {
-            foreach ($events as $event) {
-                $eventList[] = $event['title'].' '.$event['start_date_localtime'].' / '.$event['end_date_localtime'];
-            }
-        }*/
 
         // GradebookCertificate
         $result = $em->getRepository(GradebookCertificate::class)->findBy([
@@ -150,8 +119,6 @@ final class UserToJsonNormalizer
                 'IP: '.$item->getUserIp(),
                 'Start: '.$date,
                 'Status: '.$item->getStatus(),
-                // 'Result: '.$item->getExeResult(),
-                // 'Weighting: '.$item->getExeWeighting(),
             ];
             $trackEExercises[] = implode(', ', $list);
         }
@@ -396,20 +363,6 @@ final class UserToJsonNormalizer
             ];
             $cForumThreadList[] = implode(', ', $list);
         }
-        // CForumAttachment
-        /*$criteria = [
-            'threadPosterId' => $userId,
-        ];
-        $result = $em->getRepository('ChamiloCourseBundle:CForumAttachment')->findBy($criteria);
-        $cForumThreadList = [];
-        * @var CForumThread $item
-        foreach ($result as $item) {
-            $list = [
-                'Title: '.$item->getThreadTitle(),
-                'Creation date: '.$item->getThreadDate()->format($dateFormat),
-            ];
-            $cForumThreadList[] = implode(', ', $list);
-        }*/
 
         // cGroupRelUser
         $result = $em->getRepository(CGroupRelUser::class)->findBy([
@@ -695,87 +648,7 @@ final class UserToJsonNormalizer
             $userRelCourseVote[] = implode(', ', $list);
         }
 
-        /*$user->setDropBoxSentFiles(
-            [
-                'Friends' => $friendList,
-                'Events' => $eventList,
-                'GradebookCertificate' => $gradebookCertificate,
-
-                'TrackECourseAccess' => $trackECourseAccessList,
-                'TrackELogin' => $trackELoginList,
-                'TrackEAccess' => $trackEAccessList,
-                'TrackEDefault' => $trackEDefault,
-                'TrackEOnline' => $trackEOnlineList,
-                'TrackEUploads' => $trackEUploads,
-                'TrackELastaccess' => $trackELastaccess,
-                'GradebookResult' => $gradebookResult,
-                'Downloads' => $trackEDownloads,
-                'UserCourseCategory' => $userCourseCategory,
-                'SkillRelUserComment' => $skillRelUserComment,
-                'UserRelCourseVote' => $userRelCourseVote,
-
-                // courses
-                'AttendanceResult' => $cAttendanceResult,
-                'Blog' => $cBlog,
-                'DocumentsAdded' => $documents,
-                'Chat' => $chatFiles,
-                'ForumPost' => $cForumPostList,
-                'ForumThread' => $cForumThreadList,
-                'TrackEExercises' => $trackEExercises,
-                'TrackEAttempt' => $trackEAttempt,
-
-                'GroupRelUser' => $cGroupRelUser,
-                'Message' => $messageList,
-                'Survey' => $cSurveyAnswer,
-                'StudentPublication' => $cStudentPublication,
-                'StudentPublicationComment' => $cStudentPublicationComment,
-                'DropboxFile' => $cDropboxFile,
-                'DropboxPerson' => $cDropboxPerson,
-                'DropboxFeedback' => $cDropboxFeedback,
-
-                'LpView' => $cLpView,
-                'Notebook' => $cNotebook,
-
-                'Wiki' => $cWiki,
-                // Tickets
-
-                'Ticket' => $ticket,
-                'TicketMessage' => $ticketMessage,
-            ]
-        );*/
-
-        // $user->setDropBoxReceivedFiles([]);
-        // $user->setGroups([]);
-        // $user->setCurriculumItems([]);
-
-        /*$portals = $user->getPortals();
-        if (!empty($portals)) {
-            $list = [];
-            /** @var AccessUrlRelUser $portal */
-        /*foreach ($portals as $portal) {
-            $portalInfo = UrlManager::get_url_data_from_id($portal->getUrl()->getId());
-            $list[] = $portalInfo['url'];
-        }
-        }
-        $user->setPortals($list);*/
-
-        /*$skillRelUserList = $user->getAchievedSkills();
-        $list = [];
-        foreach ($skillRelUserList as $skillRelUser) {
-            $list[] = $skillRelUser->getSkill()->getName();
-        }
-        $user->setAchievedSkills($list);
-        $user->setCommentedUserSkills([]);*/
-
-        // $extraFieldValues = new \ExtraFieldValue('user');
-
         $lastLogin = $user->getLastLogin();
-        /*if (null === $lastLogin) {
-            $login = $this->userRepository->getLastLogin($user);
-            if (null !== $login) {
-                $lastLogin = $login->getLoginDate();
-            }
-        }*/
         $user->setLastLogin($lastLogin);
 
         $ignore = [
@@ -816,5 +689,237 @@ final class UserToJsonNormalizer
             AbstractNormalizer::IGNORED_ATTRIBUTES => $ignore,
             'groups' => ['user_export'],
         ]);
+    }
+
+    public function serializeUserData(int $userId): string
+    {
+        $em = $this->em;
+        $dateFormat = DateTimeInterface::ATOM;
+
+        /* @var User $user */
+        $user = $this->userRepository->find($userId);
+        if (!$user) {
+            throw new \Exception("User not found.");
+        }
+
+        $personalData = [];
+        $personalData['user_info'][] = [
+            'ID' => $user->getId(),
+            'Username' => $user->getUsername(),
+            'Email' => $user->getEmail(),
+            'FirstName' => $user->getFirstname(),
+            'LastName' => $user->getLastname(),
+            'Website' => $user->getWebsite(),
+            'Biography' => $user->getBiography(),
+            'Locale' => $user->getLocale(),
+            'Timezone' => $user->getTimezone(),
+            'PhoneNumber' => $user->getPhone(),
+            'Address' => $user->getAddress(),
+            'Gender' => $user->getGender(),
+            'LastLogin' => $user->getLastLogin() ? $user->getLastLogin()->format($dateFormat) : null,
+            'Roles' => $user->getRoles(),
+            'ApiToken' => $user->getApiToken(),
+        ];
+
+        $courses = $user->getCourses();
+        foreach ($courses as $course) {
+            $personalData['Courses'][] = [
+                'CourseID' => $course->getCourse()->getId(),
+                'CourseCode' => $course->getCourse()->getCode(),
+                'CourseTitle' => $course->getCourse()->getTitle(),
+            ];
+        }
+
+        $gradebookCertificates = $em->getRepository(GradebookCertificate::class)->findBy(['user' => $userId]);
+        foreach ($gradebookCertificates as $certificate) {
+            $personalData['GradebookCertificates'][] = [
+                'Score' => $certificate->getScoreCertificate(),
+                'Path' => $certificate->getPathCertificate(),
+                'CreatedAt' => $certificate->getCreatedAt()->format($dateFormat),
+            ];
+        }
+
+        $trackEExercises = $em->getRepository(TrackEExercise::class)->findBy(['user' => $userId]);
+        foreach ($trackEExercises as $exercise) {
+            $personalData['TrackEExercises'][] = [
+                'IP' => $exercise->getUserIp(),
+                'Start' => $exercise->getExeDate()->format($dateFormat),
+                'Status' => $exercise->getStatus(),
+            ];
+        }
+
+        // TrackEDownloads
+        $resourceLinkId = $user->getResourceNode()->getResourceLinks()->first();
+        if (null !== $resourceLinkId) {
+            $trackEDownloads = $em->getRepository(TrackEDownloads::class)->findBy(['resourceLink' => $resourceLinkId]);
+            foreach ($trackEDownloads as $item) {
+                $userData['Downloads'][] = [
+                    'File' => $item->getDownDocPath(),
+                    'DownloadedAt' => $item->getDownDate()->format($dateFormat),
+                ];
+            }
+        }
+
+        // UserCourseCategory
+        $userCourseCategories = $em->getRepository(UserCourseCategory::class)->findBy(['user' => $userId]);
+        foreach ($userCourseCategories as $item) {
+            $userData['CourseCategories'][] = [
+                'Title' => $item->getTitle(),
+            ];
+        }
+
+        // CForumPost
+        $cForumPosts = $em->getRepository(CForumPost::class)->findBy(['user' => $userId]);
+        foreach ($cForumPosts as $item) {
+            $userData['ForumPosts'][] = [
+                'Title' => $item->getTitle(),
+                'CreationDate' => $item->getPostDate()->format($dateFormat),
+            ];
+        }
+
+        // CForumThread
+        $cForumThreads = $em->getRepository(CForumThread::class)->findBy(['user' => $userId]);
+        foreach ($cForumThreads as $item) {
+            $userData['ForumThreads'][] = [
+                'Title' => $item->getTitle(),
+                'CreationDate' => $item->getThreadDate()->format($dateFormat),
+            ];
+        }
+
+        // CForumThread
+        $cForumThreads = $em->getRepository(CForumThread::class)->findBy(['user' => $userId]);
+        foreach ($cForumThreads as $item) {
+            $userData['ForumThreads'][] = [
+                'Title' => $item->getTitle(),
+                'CreationDate' => $item->getThreadDate()->format($dateFormat),
+            ];
+        }
+
+        // CGroupRelUser
+        $cGroupRelUsers = $em->getRepository(CGroupRelUser::class)->findBy(['user' => $userId]);
+        foreach ($cGroupRelUsers as $item) {
+            $userData['GroupRelations'][] = [
+                'CourseId' => $item->getCId(),
+                'GroupId' => $item->getGroup()->getIid(),
+                'Role' => $item->getStatus(),
+            ];
+        }
+
+        // CAttendanceSheet
+        $cAttendanceSheets = $em->getRepository(CAttendanceSheet::class)->findBy(['user' => $userId]);
+        foreach ($cAttendanceSheets as $item) {
+            $userData['AttendanceSheets'][] = [
+                'Presence' => $item->getPresence(),
+                'CalendarId' => $item->getAttendanceCalendar()->getIid(),
+            ];
+        }
+
+        // CAttendanceResult
+        $cAttendanceResults = $em->getRepository(CAttendanceResult::class)->findBy(['user' => $userId]);
+        foreach ($cAttendanceResults as $item) {
+            $userData['AttendanceResults'][] = [
+                'Score' => $item->getScore(),
+                'CalendarId' => $item->getAttendance()->getIid(),
+            ];
+        }
+
+        // Message
+        $messages = $em->getRepository(Message::class)->findBy(['sender' => $userId]);
+        foreach ($messages as $item) {
+            $receivers = array_map(fn($receiver) => $receiver->getReceiver()->getUsername(), $item->getReceivers()->toArray());
+            $userData['Messages'][] = [
+                'Title' => $item->getTitle(),
+                'SentDate' => $item->getSendDate()->format($dateFormat),
+                'ToUsers' => implode(', ', $receivers),
+                'Type' => $item->getMsgType(),
+            ];
+        }
+
+        // CSurveyAnswer
+        $cSurveyAnswers = $em->getRepository(CSurveyAnswer::class)->findBy(['user' => $userId]);
+        foreach ($cSurveyAnswers as $item) {
+            $userData['SurveyAnswers'][] = [
+                'AnswerId' => $item->getIid(),
+                'Value' => $item->getValue(),
+            ];
+        }
+
+        // CLpView
+        $cLpViews = $em->getRepository(CLpView::class)->findBy(['user' => $userId]);
+        foreach ($cLpViews as $item) {
+            $userData['LpViews'][] = [
+                'LPId' => $item->getLp()->getIid(),
+                'Progress' => $item->getProgress(),
+            ];
+        }
+
+        // CStudentPublication
+        $cStudentPublications = $em->getRepository(CStudentPublication::class)->findBy(['user' => $userId]);
+        foreach ($cStudentPublications as $item) {
+            $userData['StudentPublications'][] = [
+                'Title' => $item->getTitle(),
+            ];
+        }
+
+        // CStudentPublicationComment
+        $cStudentPublicationComments = $em->getRepository(CStudentPublicationComment::class)->findBy(['user' => $userId]);
+        foreach ($cStudentPublicationComments as $item) {
+            $userData['StudentPublicationComments'][] = [
+                'Comment' => $item->getComment(),
+                'File' => $item->getFile(),
+                'Date' => $item->getSentAt()->format($dateFormat),
+            ];
+        }
+
+        // CWiki
+        $cWikis = $em->getRepository(CWiki::class)->findBy(['userId' => $userId]);
+        foreach ($cWikis as $item) {
+            $userData['Wikis'][] = [
+                'Title' => $item->getTitle(),
+                'Progress' => $item->getProgress(),
+                'IP' => $item->getUserIp(),
+            ];
+        }
+
+        // Ticket
+        $tickets = $em->getRepository(Ticket::class)->findBy(['insertUserId' => $userId]);
+        foreach ($tickets as $item) {
+            $userData['Tickets'][] = [
+                'Code' => $item->getCode(),
+                'Subject' => $item->getSubject(),
+            ];
+        }
+
+        // TicketMessage
+        $ticketMessages = $em->getRepository(TicketMessage::class)->findBy(['insertUserId' => $userId]);
+        foreach ($ticketMessages as $item) {
+            $userData['TicketMessages'][] = [
+                'Subject' => $item->getSubject(),
+                'IP' => $item->getIpAddress(),
+                'Status' => $item->getStatus(),
+                'CreationDate' => $item->getInsertDateTime()->format($dateFormat),
+            ];
+        }
+
+        // SkillRelUserComment
+        $skillRelUserComments = $em->getRepository(SkillRelUserComment::class)->findBy(['feedbackGiver' => $userId]);
+        foreach ($skillRelUserComments as $item) {
+            $userData['SkillUserComments'][] = [
+                'Feedback' => $item->getFeedbackText(),
+                'Value' => $item->getFeedbackValue(),
+                'CreatedAt' => $item->getFeedbackDateTime()->format($dateFormat),
+            ];
+        }
+
+        // UserRelCourseVote
+        $userRelCourseVotes = $em->getRepository(UserRelCourseVote::class)->findBy(['user' => $userId]);
+        foreach ($userRelCourseVotes as $item) {
+            $userData['CourseVotes'][] = [
+                'CourseId' => $item->getCourse()->getId(),
+                'Vote' => $item->getVote(),
+            ];
+        }
+
+        return $this->serializer->serialize($personalData, 'json');
     }
 }

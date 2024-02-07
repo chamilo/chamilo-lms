@@ -67,7 +67,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: ['groups' => ['social_post:write']],
     security: "is_granted('ROLE_USER')"
 )]
-#[ApiFilter(filterClass: SearchFilter::class, properties: ['parent' => 'exact'])]
+#[ApiFilter(filterClass: SearchFilter::class, properties: ['parent' => 'exact', 'type' => 'exact'])]
 #[ApiFilter(filterClass: ExistsFilter::class, properties: ['parent'])]
 #[ApiFilter(filterClass: OrderFilter::class, properties: ['sendDate'])]
 class SocialPost

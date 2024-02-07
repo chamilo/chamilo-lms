@@ -67,4 +67,14 @@ class LanguageRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function findByIsoCode(string $isoCode): ?Language
+    {
+        $qb = $this->createQueryBuilder('l');
+        $qb->where('l.isocode = :isoCode')
+            ->setParameter('isoCode', $isoCode)
+            ->setMaxResults(1);
+
+        return $qb->getQuery()->getSingleResult();
+    }
 }

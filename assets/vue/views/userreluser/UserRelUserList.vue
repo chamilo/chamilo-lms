@@ -90,7 +90,6 @@
         </template>
       </DataView>
     </div>
-
     <div class="basis-auto lg:basis-1/4">
       <UserRelUserRequestsList
         ref="requestList"

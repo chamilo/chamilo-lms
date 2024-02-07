@@ -9,6 +9,11 @@ export default {
       //path: ':id',
       path: 'show',
       component: () => import('../views/usergroup/Show.vue')
-    }
+    },
+    {
+      name: 'PersonalData',
+      path: 'personal_data',
+      component: () => import('../views/user/PersonalData.vue')
+    },
   ]
 };

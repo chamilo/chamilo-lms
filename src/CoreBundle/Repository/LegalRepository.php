@@ -10,6 +10,8 @@ use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Legal;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 
@@ -123,5 +125,40 @@ class LegalRepository extends ServiceEntityRepository
         }
 
         return false;
+    }
+
+    public function getLastConditionByLanguage(int $languageId): ?Legal
+    {
+        try {
+            $qb = $this->createQueryBuilder('l');
+            $qb->where('l.languageId = :languageId')
+                ->setParameter('languageId', $languageId)
+                ->orderBy('l.version', 'DESC')
+                ->setMaxResults(1);
+
+            $result = $qb->getQuery()->getSingleResult();
+
+            if ($result->getContent()) {
+                $result->setContent($this->replaceTags($result->getContent()));
+            }
+
+            return $result;
+        } catch (NoResultException | NonUniqueResultException $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Replace tags in content.
+     *
+     * @param string $content The content with tags.
+     *
+     * @return string The content with tags replaced.
+     */
+    private function replaceTags(string $content): string
+    {
+        // Replace tags logic goes here
+        // For example: return str_replace('[SITE_NAME]', 'YourSiteName', $content);
+        return $content;
     }
 }

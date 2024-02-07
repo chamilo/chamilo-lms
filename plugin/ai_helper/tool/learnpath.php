@@ -33,7 +33,7 @@ switch ($apiName) {
         $addTests = ('true' === $_REQUEST['add_tests']);
         $nQ = ($addTests ? (int) $_REQUEST['nro_questions'] : 0);
 
-        $messageGetItems = 'Generate the table of contents of a course in "%s" in %d or less chapters on the topic of "%s" in a list separated with comma, without chapter number. Do not include a conclusion chapter.';
+        $messageGetItems = 'Generate the table of contents of a course in "%s" in %d or less chapters on the topic of "%s" and return it as a list of items separated by CRLF. Do not provide chapter numbering. Do not include a conclusion chapter.';
         $prompt = sprintf($messageGetItems, $courseLanguage, $chaptersCount, $topic);
         $resultText = $plugin->openAiGetCompletionText($prompt, 'learnpath');
 
@@ -54,15 +54,18 @@ switch ($apiName) {
             $style .= api_get_asset('ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js');
             $style .= '<script>hljs.initHighlightingOnLoad();</script>';
 
-            $items = explode(',', $resultText);
+            $items = explode("\n", $resultText);
             $position = 1;
             foreach ($items as $item) {
+                if (substr($item, 0, 2) === '- ') {
+                    $item = substr($item, 2);
+                }
                 $explodedItem = preg_split('/\d\./', $item);
                 $title = count($explodedItem) > 1 ? $explodedItem[1] : $explodedItem[0];
                 if (!empty($title)) {
                     $lpItems[$position]['title'] = trim($title);
-                    $messageGetItemContent = 'In the context of "%s", generate a document with HTML tags in "%s" with %d words of content or less, about "%s"';
-                    $promptItem = sprintf($messageGetItemContent, $topic, $courseLanguage, $wordsCount, $title);
+                    $messageGetItemContent = 'In the context of "%s", generate a document with HTML tags in "%s" with %d words of content or less, about "%s", as to be included as one chapter in a larger document on "%s". Consider the context is established for the reader and you do not need to repeat it.';
+                    $promptItem = sprintf($messageGetItemContent, $topic, $courseLanguage, $wordsCount, $title, $topic);
                     $resultContentText = $plugin->openAiGetCompletionText($promptItem, 'learnpath');
                     $lpItemContent = (!empty($resultContentText) ? trim($resultContentText) : '');
                     if (false !== stripos($lpItemContent, '</head>')) {

@@ -7770,6 +7770,9 @@ SQL;
             } else {
                 $now = new \DateTime(null, new DateTimeZone('UTC'));
                 // In some cases, old records might contain an incomplete Y-m-d H:i:s format
+                if (strlen($lastUpdate['password_updated_at']) == 10) {
+                    $lastUpdate['password_updated_at'] .= ' 00:00:00';
+                }
                 if (strlen($lastUpdate['password_updated_at']) == 16) {
                     $lastUpdate['password_updated_at'] .= ':00';
                 }

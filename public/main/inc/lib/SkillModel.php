@@ -30,7 +30,7 @@ class SkillModel extends Model
 {
     public $columns = [
         'id',
-        'name',
+        'title',
         'description',
         'access_url_id',
         'updated_at',
@@ -38,7 +38,7 @@ class SkillModel extends Model
         'icon',
         'criteria',
     ];
-    public array $required = ['name'];
+    public array $required = ['title'];
 
     /** Array of colours by depth, for the coffee wheel. Each depth has 4 col */
     /*var $colours = array(

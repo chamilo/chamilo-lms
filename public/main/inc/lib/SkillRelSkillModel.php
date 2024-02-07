@@ -110,7 +110,7 @@ class SkillRelSkillModel extends Model
                 INNER JOIN '.$this->table.' parent
                 ON parent.id = skill.id
                 WHERE parent_id = '.$skill_id.'
-                ORDER BY skill.name ASC';
+                ORDER BY skill.title ASC';
         $result = Database::query($sql);
         $skills = Database::store_result($result, 'ASSOC');
 

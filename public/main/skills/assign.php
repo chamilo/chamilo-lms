@@ -50,7 +50,7 @@ if (empty($skillLevels)) {
     // Get only root elements
     $skills = $skillManager->getChildren(1);
     foreach ($skills as $skill) {
-        $skillsOptions[$skill['data']['id']] = $skill['data']['name'];
+        $skillsOptions[$skill['data']['id']] = $skill['data']['title'];
     }
 }
 $skillIdFromGet = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
@@ -186,7 +186,7 @@ if (!empty($skillIdFromGet)) {
         }
 
         foreach ($children as $child) {
-            $skillsOptions[$child['id']] = $child['data']['name'];
+            $skillsOptions[$child['id']] = $child['data']['title'];
         }
 
         $levelName = get_lang('Sub-skill');
@@ -325,7 +325,7 @@ if ($form->validate()) {
                     $message = sprintf(
                         get_lang('Learner %s has enough sub-skill to get skill %s . To assign this skill it is possible to go here : %s'),
                         UserManager::formatUserFullName($user),
-                        $parentData['name'],
+                        $parentData['title'],
                         $link
                     );
                     foreach ($bossList as $boss) {

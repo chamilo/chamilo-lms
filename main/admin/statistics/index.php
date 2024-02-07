@@ -1501,7 +1501,7 @@ switch ($report) {
         foreach ($intervals as $minutes) {
             $sql = "SELECT count(distinct(user_id))
                 FROM $table WHERE
-                DATE_ADD(tms, INTERVAL '$minutes' MINUTE) > UTC_TIMESTAMP()";
+                tms > DATE_SUB(UTC_TIMESTAMP(), INTERVAL '$minutes' MINUTE)";
             $query = Database::query($sql);
             $counts[$minutes] = 0;
             if (Database::num_rows($query) > 0) {

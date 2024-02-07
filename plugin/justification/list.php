@@ -3,7 +3,8 @@
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-api_protect_admin_script();
+$allowSessionAdmins = api_get_plugin_setting('justification', 'access_for_session_admin') === 'true';
+api_protect_admin_script($allowSessionAdmins);
 
 $tool = 'justification';
 $plugin = Justification::create();
@@ -31,12 +32,15 @@ switch ($action) {
         break;
 }
 
-$actionLinks .= Display::toolbarButton(
-    $plugin->get_lang('Add'),
-    api_get_path(WEB_PLUGIN_PATH).'justification/add.php',
-    'plus',
-    'primary'
-);
+if (api_is_platform_admin()) {
+    $actionLinks .= Display::toolbarButton(
+        $plugin->get_lang('Add'),
+        api_get_path(WEB_PLUGIN_PATH).'justification/add.php',
+        'plus',
+        'primary'
+    );
+}
+
 $actionLinks .= Display::toolbarButton(
     $plugin->get_lang('Users'),
     api_get_path(WEB_PLUGIN_PATH).'justification/justification_by_user.php',
@@ -44,12 +48,14 @@ $actionLinks .= Display::toolbarButton(
     'primary'
 );
 
-$actionLinks .= Display::toolbarButton(
-    $plugin->get_lang('SetNewCourse'),
-    api_get_path(WEB_PLUGIN_PATH).'justification/set_course.php',
-    'book',
-    'primary'
-);
+if (api_is_platform_admin()) {
+    $actionLinks .= Display::toolbarButton(
+        $plugin->get_lang('SetNewCourse'),
+        api_get_path(WEB_PLUGIN_PATH).'justification/set_course.php',
+        'book',
+        'primary'
+    );
+}
 
 $tpl->assign(
     'actions',

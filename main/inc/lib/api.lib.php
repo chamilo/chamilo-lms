@@ -1820,7 +1820,8 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
     $result['profile_url'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id;
 
     // Send message link
-    $sendMessage = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$user_id;
+    $userIdHash = UserManager::generateUserHash($user_id);
+    $sendMessage = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&hash='.$userIdHash;
     $result['complete_name_with_message_link'] = Display::url(
         $result['complete_name_with_username'],
         $sendMessage,
@@ -9774,6 +9775,9 @@ function api_mail_html(
         }
         $mail->DKIM_private_string = api_get_mail_configuration_value('DKIM_PRIVATE_KEY_STRING');
         $mail->DKIM_private = api_get_mail_configuration_value('DKIM_PRIVATE_KEY');
+        if (!empty(api_get_mail_configuration_value['DKIM_PASSPHRASE'])) {
+            $mail->DKIM_passphrase = api_get_mail_configuration_value['DKIM_PASSPHRASE'];
+        }
     }
 
     // Send the mail message.
@@ -10615,9 +10619,22 @@ function api_decrypt_ldap_password(string $encryptedText): string
     } else {
         return false;
     }
-    $secret = hex2bin($secret);
-    $iv = base64_decode(substr($encryptedText, 0, 16), true);
-    $data = base64_decode(substr($encryptedText, 16), true);
+
+    return api_decrypt_hash($encryptedText,$secret);
+}
+
+/**
+ * Decrypt sent hash encoded with secret
+ *
+ * @param $encryptedText The hash text to be decrypted
+ * @param $secret        The secret used to encoded the hash
+ *
+ * @return string The decrypted text or false
+ */
+function api_decrypt_hash(string $encryptedHash, string $secret): string
+{
+    $iv = base64_decode(substr($encryptedHash, 0, 16), true);
+    $data = base64_decode(substr($encryptedHash, 16), true);
     $tag = substr($data, strlen($data) - 16);
     $data = substr($data, 0, strlen($data) - 16);
 
@@ -10633,4 +10650,31 @@ function api_decrypt_ldap_password(string $encryptedText): string
     } catch (\Exception $e) {
         return false;
     }
+}
+
+/**
+ * Encrypt sent data with secret
+ *
+ * @param $data   The text to be encrypted
+ * @param $secret The secret to use encode data
+ *
+ * @return string The encrypted text or false
+ */
+function api_encrypt_hash($data, $secret)
+{
+  $iv = random_bytes(12);
+  $tag = '';
+
+  $encrypted = openssl_encrypt(
+    $data,
+    'aes-256-gcm',
+    $secret,
+    OPENSSL_RAW_DATA,
+    $iv,
+    $tag,
+    '',
+    16
+  );
+
+  return base64_encode($iv) . base64_encode($encrypted . $tag);
 }

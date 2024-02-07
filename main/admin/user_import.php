@@ -153,6 +153,8 @@ function validate_data($users, $checkUniqueEmail = false)
                 } else {
                     $userFromEmail = api_get_user_info_from_email($user['Email']);
                     if (!empty($userFromEmail)) {
+                        $user['id'] = $userFromEmail['id'];
+                        $user['UserName'] = $userFromEmail['username'];
                         $user['message'] .= Display::return_message(get_lang('EmailUsedTwice'), 'warning');
                         $user['has_error'] = true;
                     } else {

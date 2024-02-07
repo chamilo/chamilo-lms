@@ -491,6 +491,10 @@ class SessionManager
 
         $userId = (int) $userId;
 
+	if (!api_is_platform_admin() && !api_is_session_admin() && !api_is_teacher()) {
+            api_not_allowed(true);
+        }
+
         if (!api_is_platform_admin()) {
             if (api_is_session_admin() &&
                 'false' === api_get_setting('allow_session_admins_to_manage_all_sessions')

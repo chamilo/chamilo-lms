@@ -577,7 +577,9 @@ class UserManager
                     false,
                     false,
                     false
-                );
+		);
+		// the complete_name is not used in the default Chamilo template but used in a specific template -refs BT#21334
+		$tplSubject->assign('complete_name', stripslashes(api_get_person_name($firstName, $lastName)));
                 $layoutSubject = $tplSubject->get_template('mail/subject_registration_platform.tpl');
                 $emailSubject = $tplSubject->fetch($layoutSubject);
                 $sender_name = api_get_person_name(
@@ -1742,7 +1744,18 @@ class UserManager
             $tplContent->assign('status_type', $status);
             $creatorInfo = api_get_user_info($creator_id);
             $creatorEmail = isset($creatorInfo['email']) ? $creatorInfo['email'] : '';
-            $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
+            $tplSubject = new Template(
+                null,
+                false,
+                false,
+                false,
+                false,
+                false
+            );
+            // the complete_name is not used in the default Chamilo template but used in a specific template -refs BT#21334
+            $tplSubject->assign('complete_name', stripslashes(api_get_person_name($firstName, $lastName)));
+            $layoutSubject = $tplSubject->get_template('mail/subject_user_edit.tpl');
+            $emailSubject = $tplSubject->fetch($layoutSubject);
 
             if (!is_null($password) && api_get_configuration_value('send_two_inscription_confirmation_mail')) {
                 // The user has a new password *and* we need to tell him so,
@@ -1765,7 +1778,7 @@ class UserManager
                 api_mail_html(
                     $recipient_name,
                     $email,
-                    $emailsubject,
+                    $emailSubject,
                     $emailBody,
                     $sender_name,
                     $email_admin,
@@ -1793,7 +1806,7 @@ class UserManager
                 api_mail_html(
                     $recipient_name,
                     $email,
-                    $emailsubject,
+                    $emailSubject,
                     $emailBody,
                     $sender_name,
                     $email_admin,
@@ -1821,7 +1834,7 @@ class UserManager
                 api_mail_html(
                     $recipient_name,
                     $email,
-                    $emailsubject,
+                    $emailSubject,
                     $emailBody,
                     $sender_name,
                     $email_admin,
@@ -2394,6 +2407,13 @@ class UserManager
 
         $sql_query .= ' WHERE 1 = 1 ';
         if (count($conditions) > 0) {
+
+            $andActive = "";
+            if (isset($conditions['active'])) {
+                $andActive = " AND active = " . (int) $conditions['active'];
+                unset($conditions['active']);
+            }
+
             $temp_conditions = [];
             foreach ($conditions as $field => $value) {
                 $field = Database::escape_string($field);
@@ -2405,16 +2425,21 @@ class UserManager
                 }
             }
             if (!empty($temp_conditions)) {
-                $sql_query .= ' AND '.implode(' '.$condition.' ', $temp_conditions);
+                $sql_query .= ' AND ('.implode(' '.$condition.' ', $temp_conditions).') ';
             }
 
             if (api_is_multiple_url_enabled()) {
                 $sql_query .= ' AND auru.access_url_id = '.api_get_current_access_url_id();
             }
+            $sql_query .= $andActive;
         } else {
             if (api_is_multiple_url_enabled()) {
                 $sql_query .= ' AND auru.access_url_id = '.api_get_current_access_url_id();
             }
+        }
+
+        if (api_is_session_admin() && (api_get_setting('prevent_session_admins_to_manage_all_users') === 'true')) {
+            $sql_query .= ' AND user.creator_id = '.api_get_user_id();
         }
 
         if (!empty($onlyThisUserList)) {
@@ -7842,10 +7867,18 @@ SQL;
 
     public static function getAllowedRolesAsTeacher(): array
     {
-        return [
-            COURSEMANAGER,
-            SESSIONADMIN,
-        ];
+        if (api_get_configuration_value('course_allow_student_role_to_be_teacher')) {
+            return [
+                STUDENT,
+                COURSEMANAGER,
+                SESSIONADMIN,
+            ];
+        } else {
+            return [
+                COURSEMANAGER,
+                SESSIONADMIN,
+            ];
+        }
     }
 
     /**
@@ -8187,5 +8220,43 @@ SQL;
         }
 
         return $url;
+    }
+
+   /**
+    * return user hash based on user_id and loggedin user's salt
+    *
+    * @param int user_id id of the user for whom we need the hash
+    *
+    * @return string containing the hash
+    */
+    public static function generateUserHash(int $user_id): string
+    {
+        $currentUserId = api_get_user_id();
+        $userManager = self::getManager();
+        /** @var User $user */
+        $user = self::getRepository()->find($currentUserId);
+        if (empty($user)) {
+            return false;
+        }
+        return rawurlencode(api_encrypt_hash($user_id, $user->getSalt()));
+    }
+
+   /**
+    * return decrypted hash or false
+    *
+    * @param string hash    hash that is to be decrypted
+    *
+    * @return string
+    */
+    public static function decryptUserHash(string $hash): string
+    {
+        $currentUserId = api_get_user_id();
+        $userManager = self::getManager();
+        /** @var User $user */
+        $user = self::getRepository()->find($currentUserId);
+        if (empty($user)) {
+            return false;
+        }
+        return api_decrypt_hash(rawurldecode($hash), $user->getSalt());
     }
 }

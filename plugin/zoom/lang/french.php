@@ -167,3 +167,7 @@ $strings['RegisterMeToConference'] = "M'inscrire à la visio";
 $strings['UnregisterMeToConference'] = "Me désinscrire de la visio";
 $strings['ForEveryone'] = "Tout le monde";
 $strings['SomeUsers'] = "Utilisateurs inscrits (à inscrire après)";
+$strings['Presenters'] = "Animateurs";
+$strings['RegisteredPresenters'] = "Animateurs enregistrés";
+$strings['enablePresenter_help'] = "Il est nécessaire que l'option <i>Activer l'inscription des participants</i> soit sur Oui.";
+$strings['enablePresenter'] = 'Activer les animateurs';

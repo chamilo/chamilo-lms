@@ -2521,3 +2521,15 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 // login/passwords in the main login form. Browsers might choose not to
 // support this feature.
 //$_configuration['security_login_autocomplete_disable'] = false;
+
+// Block session about page access for all users
+// $_configuration['session_about_block_all_access'] = false;
+
+// Block course about page access for all users
+// $_configuration['course_about_block_all_access'] = false;
+
+// Add the user first connexion column to the page main/admin/user_list.php
+// $_configuration['admin_user_list_add_first_connexion_column'] = false;
+
+// Set the following parameter to true to enable student to be assign as teacher of a course
+//$_configuration['course_allow_student_role_to_be_teacher'] = false;

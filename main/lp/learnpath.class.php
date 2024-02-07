@@ -1138,6 +1138,11 @@ class learnpath
         // Updates the display order of all lps.
         $this->update_display_order();
 
+        // Remove prerequisite based on the deleted LP
+        $sql = "UPDATE $lp
+                SET prerequisite = 0 where c_id = $course_id AND prerequisite = ".$this->lp_id;
+        Database::query($sql);
+
         api_item_property_update(
             api_get_course_info(),
             TOOL_LEARNPATH,

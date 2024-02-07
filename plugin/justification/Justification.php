@@ -6,10 +6,12 @@ class Justification extends Plugin
     protected function __construct()
     {
         parent::__construct(
-            '1.1',
-            'Julio Montoya',
+            '1.2',
+            'Julio Montoya, Nicolas Ducoulombier',
             [
                 'tool_enable' => 'boolean',
+                'notification_to_creator_only' => 'boolean',
+                'access_for_session_admin' => 'boolean',
                 'default_course_id' => 'text',
             ]
         );

@@ -97,6 +97,14 @@ a generic account that works for all the users that start meetings.
 
 Please, execute this queries in your database:
 
+**Updatnig to v0.6 from v.0.5**
+```sql
+UPDATE plugin_zoom_registrant SET type = 'registrant';
+
+ALTER TABLE plugin_zoom_registrant
+   ADD type VARCHAR(255) NOT NULL;
+```
+
 **Updating to v0.5 from v.0.4**
 
 ```sql

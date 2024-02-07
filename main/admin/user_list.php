@@ -476,22 +476,44 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 $user[7] = '-1';
             }
         }
-
-        // forget about the expiration date field
-        $users[] = [
-            $user[0], // id
-            $photo,
-            $user[1],
-            $user[2],
-            $user[3],
-            $user[4], // username
-            $user[5], // email
-            $user[6],
-            $user[7], // active
-            api_get_local_time($user[8]),
-            api_get_local_time($user[9], null, null, true),
-            $user[0],
-        ];
+        if (api_get_configuration_value('admin_user_list_add_first_connexion_column')) {
+            $firstConnectionDate = Tracking::get_first_connection_date($user[0]);
+            if ($firstConnectionDate == '') {
+                $firstConnectionDate = get_lang('NoConnexion');
+            }
+            // forget about the expiration date field
+            $users[] = [
+                $user[0], // id
+                $photo,
+                $user[1],
+                $user[2],
+                $user[3],
+                $user[4], // username
+                $user[5], // email
+                $user[6],
+                $user[7], // active
+                api_get_local_time($user[8]),
+                api_get_local_time($user[9], null, null, true),
+                $firstConnectionDate,
+                $user[0],
+            ];
+        } else {
+            // forget about the expiration date field
+            $users[] = [
+                $user[0], // id
+                $photo,
+                $user[1],
+                $user[2],
+                $user[3],
+                $user[4], // username
+                $user[5], // email
+                $user[6],
+                $user[7], // active
+                api_get_local_time($user[8]),
+                api_get_local_time($user[9], null, null, true),
+                $user[0],
+            ];
+        }
     }
 
     return $users;
@@ -542,7 +564,7 @@ function modify_filter($user_id, $url_params, $row)
     $is_admin = in_array($user_id, $_admins_list);
     $statusname = api_get_status_langvars();
     $user_is_anonymous = false;
-    $current_user_status_label = $row['7'];
+    $current_user_status_label = $statusname[$row['7']];
 
     if ($current_user_status_label == $statusname[ANONYMOUS]) {
         $user_is_anonymous = true;
@@ -1077,14 +1099,20 @@ $table->set_header(7, get_lang('Profile'));
 $table->set_header(8, get_lang('Active'));
 $table->set_header(9, get_lang('RegistrationDate'));
 $table->set_header(10, get_lang('LatestLogin'));
-$table->set_header(11, get_lang('Action'), false);
+if (api_get_configuration_value('admin_user_list_add_first_connexion_column')) {
+    $table->set_header(11, get_lang('FirstLoginInPlatform'), false);
+    $table->set_header(12, get_lang('Action'), false);
+    $table->set_column_filter(12, 'modify_filter');
+} else {
+    $table->set_header(11, get_lang('Action'), false);
+    $table->set_column_filter(11, 'modify_filter');
+}
 
 $table->set_column_filter(3, 'user_filter');
 $table->set_column_filter(4, 'user_filter');
 $table->set_column_filter(6, 'email_filter');
 $table->set_column_filter(7, 'status_filter');
 $table->set_column_filter(8, [UserManager::class, 'getActiveFilterForTable']);
-$table->set_column_filter(11, 'modify_filter');
 
 // Hide email column if login is email, to avoid column with same data
 if (api_get_setting('login_is_email') === 'true') {

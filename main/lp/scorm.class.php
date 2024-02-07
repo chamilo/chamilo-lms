@@ -771,6 +771,7 @@ class scorm extends learnpath
             }
 
             $zipFile->extract(
+                PCLZIP_OPT_REPLACE_NEWER,
                 PCLZIP_CB_PRE_EXTRACT,
                 $callBack
             );

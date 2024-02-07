@@ -96,7 +96,7 @@ switch ($action) {
         echo json_encode($dates);
         break;
     case 'get_user_like':
-        if (api_is_platform_admin() || api_is_drh()) {
+        if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
             $query = $_REQUEST['q'];
             $conditions = [
                 'username' => $query,
@@ -121,7 +121,8 @@ switch ($action) {
 
         $courseId = (int) $request->get('course_id');
         $sessionId = (int) $request->get('session_id');
-        $userId = (int) $request->get('user_id');
+        $hash = (string) $request->get('hash');
+        $userId = (int) UserManager::decryptUserHash($hash);
 
         $user_info = api_get_user_info($userId);
 

@@ -42,7 +42,9 @@ class CNotebookRepositoryTest extends AbstractApiTest
 
         $courseRepo->delete($course);
 
+        // Notebook resources belong to the user before anything else,
+        // and should not be cascade-deleted with the course
+        $this->assertSame(1, $notebookRepo->count([]));
         $this->assertSame(0, $courseRepo->count([]));
-        $this->assertSame(0, $notebookRepo->count([]));
     }
 }

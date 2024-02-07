@@ -80,7 +80,10 @@ class CSurveyRepositoryTest extends AbstractApiTest
         $this->assertCount(1, $qb->getQuery()->getResult());
 
         $courseRepo->delete($course);
-        $this->assertSame(0, $surveyRepo->count([]));
+
+        // A survey is a global resource that should not be cascade-deleted
+        // by the course
+        $this->assertSame(1, $surveyRepo->count([]));
         $this->assertSame(0, $courseRepo->count([]));
     }
 
@@ -192,11 +195,12 @@ class CSurveyRepositoryTest extends AbstractApiTest
         $course = $this->getCourse($course->getId());
         $courseRepo->delete($course);
 
-        $this->assertSame(0, $courseRepo->count([]));
-        $this->assertSame(0, $surveyRepo->count([]));
-        $this->assertSame(0, $surveyQuestionRepo->count([]));
-        $this->assertSame(0, $surveyAnswerRepo->count([]));
+        // Surveys are global and should not be cascade-deleted by the course
         $this->assertSame(0, $surveyInvitationRepo->count([]));
-        $this->assertSame(0, $surveyOptionRepo->count([]));
+        $this->assertSame(1, $surveyQuestionRepo->count([]));
+        $this->assertSame(1, $surveyAnswerRepo->count([]));
+        $this->assertSame(1, $surveyOptionRepo->count([]));
+        $this->assertSame(1, $surveyRepo->count([]));
+        $this->assertSame(0, $courseRepo->count([]));
     }
 }

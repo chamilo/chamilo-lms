@@ -62,7 +62,8 @@ class CForumRepositoryTest extends AbstractApiTest
 
         $courseRepo->delete($course);
 
-        $this->assertSame(0, $forumRepo->count([]));
+        // A forum can be global, so don't delete it upon course deletion
+        $this->assertSame(1, $forumRepo->count([]));
         $this->assertSame(0, $courseRepo->count([]));
     }
 

@@ -54,7 +54,8 @@ class CGlossaryRepositoryTest extends AbstractApiTest
 
         $courseRepo->delete($course);
 
+        // A glossary is a global resource, so don't cascade-delete it
+        $this->assertSame(1, $glossaryRepo->count([]));
         $this->assertSame(0, $courseRepo->count([]));
-        $this->assertSame(0, $glossaryRepo->count([]));
     }
 }

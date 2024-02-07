@@ -29,8 +29,6 @@
           height="10.5rem"
         />
       </div>
-
-
       <DataView
         v-else
         :value="items"
@@ -38,53 +36,60 @@
         layout="grid"
       >
         <template #grid="slotProps">
-          <div v-for="item in slotProps.items" :key="item['@id']" class="friend-list__block">
+          <div
+            class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          >
             <div
-              v-if="item.user['@id'] === user['@id']"
-              class="friend-info"
+              v-for="(item, index) in slotProps.items"
+              :key="index"
+              class="friend-list__block"
             >
-              <img
-                :alt="item.friend.username"
-                :src="item.friend.illustrationUrl"
-                class="friend-info__avatar"
-              />
               <div
-                class="friend-info__username"
-                v-text="item.friend.username"
-              />
-            </div>
-            <div
-              v-else
-              class="friend-info"
-            >
-              <img
-                :alt="item.user.username"
-                :src="item.user.illustrationUrl"
-                class="friend-info__avatar"
-              />
+                v-if="item.user['@id'] === user['@id']"
+                class="friend-info"
+              >
+                <img
+                  :alt="item.friend.username"
+                  :src="item.friend.illustrationUrl"
+                  class="friend-info__avatar"
+                />
+                <div
+                  class="friend-info__username"
+                  v-text="item.friend.username"
+                />
+              </div>
               <div
-                class="friend-info__username"
-                v-text="item.user.username"
-              />
-            </div>
+                v-else
+                class="friend-info"
+              >
+                <img
+                  :alt="item.user.username"
+                  :src="item.user.illustrationUrl"
+                  class="friend-info__avatar"
+                />
+                <div
+                  class="friend-info__username"
+                  v-text="item.user.username"
+                />
+              </div>
 
-            <div class="friend-options">
-              <span
-                class="friend-options__time"
-                v-text="relativeDatetime(item.createdAt)"
-              />
-              <BaseButton
-                icon="user-delete"
-                only-icon
-                type="danger"
-                @click="onClickDeleteFriend(item)"
-              />
+              <div class="friend-options">
+                <span
+                  class="friend-options__time"
+                  v-text="relativeDatetime(item.createdAt)"
+                />
+                <BaseButton
+                  icon="user-delete"
+                  only-icon
+                  type="danger"
+                  @click="onClickDeleteFriend(item)"
+                />
+              </div>
             </div>
           </div>
         </template>
       </DataView>
     </div>
-
     <div class="basis-auto lg:basis-1/4">
       <UserRelUserRequestsList
         ref="requestList"
@@ -100,6 +105,7 @@ import { onMounted, ref } from "vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import Skeleton from "primevue/skeleton"
+import DataView from "primevue/dataview"
 import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 import { useConfirm } from "primevue/useconfirm"
@@ -113,8 +119,6 @@ const router = useRouter()
 const { t } = useI18n()
 const user = store.getters["security/getUser"]
 const items = ref([])
-const friendRequests = ref([])
-const waitingRequests = ref([])
 
 const notification = useNotification()
 
@@ -138,8 +142,6 @@ function reloadHandler() {
   loadingFriends.value = true
 
   items.value = []
-  friendRequests.value = []
-  waitingRequests.value = []
 
   Promise.all([
     userRelUserService.findAll({

@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Traits\NonResourceRepository;
 use Chamilo\CoreBundle\Traits\Repository\RepositoryQueryBuilderTrait;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -909,5 +910,19 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $em->flush();
 
         return true;
+    }
+
+    public function findByTitleAndParentResourceNode(string $title, int $parentResourceNodeId): ?AbstractResource
+    {
+        return $this->createQueryBuilder('d')
+            ->innerJoin('d.resourceNode', 'node')
+            ->andWhere('d.title = :title')
+            ->andWhere('node.parent = :parentResourceNodeId')
+            ->setParameter('title', $title)
+            ->setParameter('parentResourceNodeId', $parentResourceNodeId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+       ;
     }
 }

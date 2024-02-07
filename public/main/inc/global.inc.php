@@ -58,24 +58,37 @@ if (!empty($flashBag->keys())) {
 $response = $kernel->handle($request, HttpKernelInterface::MAIN_REQUEST, false);
 $context = Container::getRouter()->getContext();
 
-$pos = strpos($currentBaseUrl, 'main');
-$posPlugin = strpos($currentBaseUrl, 'plugin');
-$posCertificate = strpos($currentBaseUrl, 'certificate');
-
-if (false === $pos && false === $posPlugin && false === $posCertificate) {
-    echo 'Cannot load current URL';
-    exit;
+$isCli =  'cli' === php_sapi_name();
+$baseUrl = null;
+if ($isCli) {
+    $cliOptions = getopt('', ['url:']);
+    if (!empty($cliOptions['url'])) {
+        $baseUrl = $cliOptions['url'];
+    }
 }
 
-if (false !== $pos) {
-    $newBaseUrl = substr($currentBaseUrl, 0, $pos - 1);
-}elseif (false !== $posPlugin) {
-    $newBaseUrl = substr($currentBaseUrl, 0, $posPlugin - 1);
-} elseif (false !== $posCertificate) {
-    $newBaseUrl = substr($currentBaseUrl, 0, $posPlugin - 1);
-}
+if ($isCli && $baseUrl) {
+    $context->setBaseUrl($baseUrl);
+} else {
+    $pos = strpos($currentBaseUrl, 'main');
+    $posPlugin = strpos($currentBaseUrl, 'plugin');
+    $posCertificate = strpos($currentBaseUrl, 'certificate');
 
-$context->setBaseUrl($newBaseUrl);
+    if (false === $pos && false === $posPlugin && false === $posCertificate) {
+        echo 'Cannot load current URL';
+        exit;
+    }
+
+    if (false !== $pos) {
+        $newBaseUrl = substr($currentBaseUrl, 0, $pos - 1);
+    }elseif (false !== $posPlugin) {
+        $newBaseUrl = substr($currentBaseUrl, 0, $posPlugin - 1);
+    } elseif (false !== $posCertificate) {
+        $newBaseUrl = substr($currentBaseUrl, 0, $posPlugin - 1);
+    }
+
+    $context->setBaseUrl($newBaseUrl);
+}
 
 try {
     // Load legacy configuration.php

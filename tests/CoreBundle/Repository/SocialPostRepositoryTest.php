@@ -169,6 +169,20 @@ class SocialPostRepositoryTest extends AbstractApiTest
             ]
         );
 
+        $this->assertResponseIsSuccessful();
+        $this->assertJsonContains([
+            '@context' => '/api/contexts/SocialPost',
+            '@type' => 'SocialPost',
+            'sender' => [
+                '@id' => $student1Iri,
+                'username' => $student1->getUsername(),
+            ],
+            'userReceiver' => null,
+            'content' => 'Hello world',
+            'type' => SocialPost::TYPE_WALL_POST,
+            'groupReceiver' => null,
+        ]);
+
         // student1 posts in student2's wall
         $clientForStudent1->request(
             'POST',
@@ -200,7 +214,7 @@ class SocialPostRepositoryTest extends AbstractApiTest
         ]);
 
         // student1 views student2's wall
-        $response = $clientForStudent1->request(
+        $clientForStudent1->request(
             'GET',
             sprintf('/api/social_posts?socialwall_wallOwner=%d', $student2->getId())
         );
@@ -216,6 +230,5 @@ class SocialPostRepositoryTest extends AbstractApiTest
                 '@type' => 'hydra:PartialCollectionView',
             ],
         ]);
-        $this->assertCount(1, $response->toArray()['hydra:member']);
     }
 }

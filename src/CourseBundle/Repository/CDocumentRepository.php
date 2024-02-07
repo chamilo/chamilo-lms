@@ -77,20 +77,6 @@ final class CDocumentRepository extends ResourceRepository
         return $this->getCount($qb);
     }
 
-    public function findByTitleAndParentResourceNode(string $title, int $parentResourceNodeId): ?CDocument
-    {
-        return $this->createQueryBuilder('d')
-            ->innerJoin('d.resourceNode', 'node')
-            ->andWhere('d.title = :title')
-            ->andWhere('node.parent = :parentResourceNodeId')
-            ->setParameter('title', $title)
-            ->setParameter('parentResourceNodeId', $parentResourceNodeId)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-
     protected function addFileTypeQueryBuilder(string $fileType, QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);

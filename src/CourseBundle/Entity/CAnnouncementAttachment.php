@@ -33,9 +33,9 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
     #[ORM\Column(name: 'size', type: 'integer', nullable: false)]
     protected int $size;
 
-    #[ORM\ManyToOne(targetEntity: CAnnouncement::class, inversedBy: 'attachments', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: CAnnouncement::class, inversedBy: 'attachments')]
     #[ORM\JoinColumn(name: 'announcement_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
-    protected CAnnouncement $announcement;
+    private ?CAnnouncement $announcement = null;
 
     #[ORM\Column(name: 'filename', type: 'string', length: 255, nullable: false)]
     protected string $filename;
@@ -123,12 +123,12 @@ class CAnnouncementAttachment extends AbstractResource implements ResourceInterf
         return $this->filename;
     }
 
-    public function getAnnouncement(): CAnnouncement
+    public function getAnnouncement(): ?CAnnouncement
     {
         return $this->announcement;
     }
 
-    public function setAnnouncement(CAnnouncement $announcement): self
+    public function setAnnouncement(?CAnnouncement $announcement): static
     {
         $this->announcement = $announcement;
 

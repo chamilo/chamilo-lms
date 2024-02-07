@@ -464,7 +464,7 @@ class MessageRepositoryTest extends AbstractApiTest
                 // '@context' => '/api/contexts/Message',
                 // '@type' => 'Message',
                 // 'title' => 'hello',
-                'receivers' => [
+                'receiversTo' => [
                     [
                         '@type' => 'MessageRelUser',
                         'receiver' => [
@@ -553,7 +553,7 @@ class MessageRepositoryTest extends AbstractApiTest
                     'content' => 'content of hello',
                     'msgType' => Message::MESSAGE_TYPE_INBOX,
                     'sender' => $fromUser->getIri(),
-                    'receivers' => [
+                    'receiversTo' => [
                         [
                             'receiver' => $toUser->getIri(),
                         ],

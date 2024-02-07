@@ -38,11 +38,8 @@ class CAnnouncement extends AbstractResource implements ResourceInterface, Strin
     #[ORM\Column(name: 'email_sent', type: 'boolean', nullable: true)]
     protected ?bool $emailSent = null;
 
-    /**
-     * @var Collection<int, CAnnouncementAttachment>
-     */
-    #[ORM\OneToMany(targetEntity: CAnnouncementAttachment::class, mappedBy: 'announcement', cascade: ['persist', 'remove'], orphanRemoval: true)]
-    protected Collection $attachments;
+    #[ORM\OneToMany(mappedBy: 'announcement', targetEntity: CAnnouncementAttachment::class, cascade: ['persist'])]
+    private Collection $attachments;
 
     public function __construct()
     {
@@ -55,14 +52,32 @@ class CAnnouncement extends AbstractResource implements ResourceInterface, Strin
         return $this->getTitle();
     }
 
+    /**
+     * @return Collection<int, CAnnouncementAttachment>
+     */
     public function getAttachments(): Collection
     {
         return $this->attachments;
     }
 
-    public function setAttachments(Collection $attachments): self
+    public function addAttachment(CAnnouncementAttachment $attachment): static
     {
-        $this->attachments = $attachments;
+        if (!$this->attachments->contains($attachment)) {
+            $this->attachments->add($attachment);
+            $attachment->setAnnouncement($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttachment(CAnnouncementAttachment $attachment): static
+    {
+        if ($this->attachments->removeElement($attachment)) {
+            // set the owning side to null (unless already changed)
+            if ($attachment->getAnnouncement() === $this) {
+                $attachment->setAnnouncement(null);
+            }
+        }
 
         return $this;
     }

@@ -13,13 +13,15 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Sortable\Entity\Repository\SortableRepository;
 use LogicException;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource]
 #[ORM\Table(name: 'resource_link')]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: SortableRepository::class)]
 class ResourceLink implements Stringable
 {
     use TimestampableTypedEntity;
@@ -38,22 +40,27 @@ class ResourceLink implements Stringable
     #[ORM\JoinColumn(name: 'resource_node_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ResourceNode $resourceNode;
 
+    #[Gedmo\SortableGroup]
     #[ORM\ManyToOne(targetEntity: Course::class)]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Course $course = null;
 
+    #[Gedmo\SortableGroup]
     #[ORM\ManyToOne(targetEntity: Session::class, inversedBy: 'resourceLinks')]
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Session $session = null;
 
-    #[ORM\ManyToOne(targetEntity: CGroup::class)]
-    #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'iid', nullable: true, onDelete: 'CASCADE')]
-    protected ?CGroup $group = null;
-
+    #[Gedmo\SortableGroup]
     #[ORM\ManyToOne(targetEntity: Usergroup::class)]
     #[ORM\JoinColumn(name: 'usergroup_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?Usergroup $userGroup = null;
 
+    #[Gedmo\SortableGroup]
+    #[ORM\ManyToOne(targetEntity: CGroup::class)]
+    #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'iid', nullable: true, onDelete: 'CASCADE')]
+    protected ?CGroup $group = null;
+
+    #[Gedmo\SortableGroup]
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     protected ?User $user = null;
@@ -84,6 +91,14 @@ class ResourceLink implements Stringable
     #[Groups(['resource_node:read', 'resource_node:write', 'document:write', 'document:read'])]
     #[ORM\Column(name: 'end_visibility_at', type: 'datetime', nullable: true)]
     protected ?DateTimeInterface $endVisibilityAt = null;
+
+    #[Gedmo\SortablePosition]
+    #[ORM\Column]
+    private int $displayOrder;
+
+    #[Gedmo\SortableGroup]
+    #[ORM\Column]
+    private ?int $resourceTypeGroup;
 
     public function __construct()
     {
@@ -294,5 +309,29 @@ class ResourceLink implements Stringable
     public function getVisibilityName(): string
     {
         return array_flip(static::getVisibilityList())[$this->getVisibility()];
+    }
+
+    public function getDisplayOrder(): int
+    {
+        return $this->displayOrder;
+    }
+
+    public function setDisplayOrder(int $displayOrder): static
+    {
+        $this->displayOrder = $displayOrder;
+
+        return $this;
+    }
+
+    public function getResourceTypeGroup(): ?int
+    {
+        return $this->resourceTypeGroup;
+    }
+
+    public function setResourceTypeGroup(int $resourceTypeGroup): static
+    {
+        $this->resourceTypeGroup = $resourceTypeGroup;
+
+        return $this;
     }
 }

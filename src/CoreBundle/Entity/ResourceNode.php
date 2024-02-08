@@ -20,10 +20,12 @@ use Chamilo\CoreBundle\Entity\Listener\ResourceNodeListener;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Traits\TimestampableAgoTrait;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CShortcut;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use InvalidArgumentException;
@@ -414,6 +416,57 @@ class ResourceNode implements Stringable
         return $this->resourceLinks;
     }
 
+    public function getResourceLinkByTypeGroup(
+        int $resourceTypeGroup,
+        ?Course $course = null,
+        ?Session $session = null,
+        ?Usergroup $usergroup = null,
+        ?CGroup $group = null,
+        ?User $user = null,
+    ): ?ResourceLink {
+        $criteria = Criteria::create();
+        $criteria->where(
+            Criteria::expr()->eq('resourceTypeGroup', $resourceTypeGroup)
+        );
+
+        if ($course) {
+            $criteria->andWhere(
+                Criteria::expr()->eq('course', $course)
+            );
+        }
+
+        if ($session) {
+            $criteria->andWhere(
+                Criteria::expr()->eq('session', $session)
+            );
+        }
+
+        if ($usergroup) {
+            $criteria->andWhere(
+                Criteria::expr()->eq('userGroup', $usergroup)
+            );
+        }
+
+        if ($group) {
+            $criteria->andWhere(
+                Criteria::expr()->eq('group', $group)
+            );
+        }
+
+        if ($user) {
+            $criteria->andWhere(
+                Criteria::expr()->eq('user', $user)
+            );
+        }
+
+        $first = $this
+            ->resourceLinks
+            ->matching($criteria)
+            ->first();
+
+        return $first ?: null;
+    }
+
     public function setResourceLinks(Collection $resourceLinks): self
     {
         $this->resourceLinks = $resourceLinks;
@@ -423,7 +476,10 @@ class ResourceNode implements Stringable
 
     public function addResourceLink(ResourceLink $link): self
     {
-        $link->setResourceNode($this);
+        $link
+            ->setResourceNode($this)
+            ->setResourceTypeGroup($link->getResourceNode()->getResourceType()->getId())
+        ;
         $this->resourceLinks->add($link);
 
         return $this;

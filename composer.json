@@ -12,8 +12,9 @@
     },
     "repositories": [
       {
-        "type": "vcs",
-        "url": "https://github.com/chamilo/OhGoogleMapFormTypeBundle"
+        "type": "github",
+        "url": "https://github.com/chamilo/OhGoogleMapFormTypeBundle.git",
+        "no-api": true
       }
     ],
     "autoload": {

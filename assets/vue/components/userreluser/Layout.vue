@@ -5,8 +5,6 @@
       <SocialSideMenu />
     </div>
     <div class="md:basis-2/3 lg:basis-3/4 2xl:basis-5/6">
-      <h2 v-t="'Friends'" class="mr-auto" />
-      <hr />
       <router-view></router-view>
     </div>
   </div>

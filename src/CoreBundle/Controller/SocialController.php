@@ -253,4 +253,21 @@ class SocialController extends AbstractController
 
         return $this->json(['groups' => $groupsArray]);
     }
+
+    #[Route('/get-forum-link', name: 'get_forum_link')]
+    public function getForumLink(
+        SettingsManager $settingsManager,
+        RequestStack $requestStack
+    ): JsonResponse {
+
+        $baseUrl = $requestStack->getCurrentRequest()->getBaseUrl();
+        $cid = (int) $settingsManager->getSetting('forum.global_forums_course_id');
+
+        $goToLink = '';
+        if (!empty($cid)) {
+            $goToLink = $baseUrl . '/main/forum/index.php?cid=' . $cid . '&sid=0&gid=0';
+        }
+
+        return $this->json(['go_to' => $goToLink]);
+    }
 }

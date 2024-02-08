@@ -44,7 +44,7 @@ if ($localization) {
 }
 
 $tableUser = Database::get_main_table(TABLE_MAIN_USER);
-$sql = "SELECT u.id, firstname, lastname, ev.value ville, ev2.value stage
+$sql = "SELECT u.id, firstname, lastname, ev.field_value ville, ev2.field_value stage
         FROM $tableUser u
         INNER JOIN extra_field_values ev
         ON ev.item_id = u.id
@@ -55,8 +55,8 @@ $sql = "SELECT u.id, firstname, lastname, ev.value ville, ev2.value stage
             ev2.field_id = ".$infoVille['id']." AND
             u.status = ".STUDENT." AND
             u.active = 1 AND
-            (ev.value <> '' OR ev2.value <> '') AND
-            (ev.value LIKE '%::%' OR ev2.value LIKE '%::%')
+            (ev.field_value <> '' OR ev2.field_value <> '') AND
+            (ev.field_value LIKE '%::%' OR ev2.field_value LIKE '%::%')
 ";
 
 $cache = new \Symfony\Component\Cache\Adapter\ApcuAdapter();

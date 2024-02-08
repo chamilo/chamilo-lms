@@ -82,6 +82,7 @@ class PlatformConfigurationController extends AbstractController
                 'language.language_priority_2',
                 'language.language_priority_3',
                 'language.language_priority_4',
+                'profile.allow_social_map_fields',
             ];
 
             /** @var User|null $user */

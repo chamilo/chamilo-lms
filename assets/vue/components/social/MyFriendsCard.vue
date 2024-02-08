@@ -33,6 +33,14 @@
         <a href="#" @click="viewAll">{{ t('View All Friends') }}</a>
       </div>
     </div>
+    <div v-if="allowSocialMap" class="text-center mt-3">
+      <BaseButton
+        :label="t('Search user by geolocalization')"
+        type="primary"
+        @click="redirectToGeolocalization"
+        icon="map-search"
+      />
+    </div>
   </BaseCard>
 </template>
 
@@ -43,15 +51,28 @@ import { ref, computed, inject, watchEffect } from "vue"
 import axios from 'axios'
 import BaseUserAvatar from "../basecomponents/BaseUserAvatar.vue"
 import { ENTRYPOINT } from "../../config/entrypoint"
+import { useRouter } from 'vue-router'
+import { usePlatformConfig } from "../../store/platformConfig"
+import BaseButton from "../basecomponents/BaseButton.vue"
 
 const { t } = useI18n()
 const friends = ref([])
 const searchQuery = ref('')
 const user = inject('social-user')
+const router = useRouter()
+const platformConfigStore = usePlatformConfig()
 
+const allowSocialMap = computed(() => platformConfigStore.getSetting("profile.allow_social_map_fields"))
+const search = () => {
+  router.push({ name: 'UserRelUserSearch', query: { search: searchQuery.value } })
+}
 const limitedFriends = computed(() => {
   return friends.value.slice(0, 10)
 })
+
+const redirectToGeolocalization = () => {
+  window.location.href = '/main/social/map.php'
+}
 async function fetchFriends(userId) {
   try {
     const response = await axios.get(`${ENTRYPOINT}user_rel_users?user=/api/users/${userId}&relationType=3`, {

@@ -51,5 +51,6 @@ const route = useRoute()
 const user = inject('social-user')
 
 const editProfile = () => {
+  window.location = "/account/edit"
 }
 </script>

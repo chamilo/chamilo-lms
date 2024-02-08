@@ -16,6 +16,7 @@ use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 trait ResourceControllerTrait
 {
@@ -112,9 +113,9 @@ trait ResourceControllerTrait
     }
 
     /**
-     * @return User|null
+     * @return ?UserInterface
      */
-    protected function getUser()
+    protected function getUser(): ?UserInterface
     {
         /*if (!$this->container->has('security.token_storage')) {
             throw new \LogicException('The SecurityBundle is not registered in your application. Try running "composer require symfony/security-bundle".');

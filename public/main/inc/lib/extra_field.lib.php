@@ -1031,7 +1031,7 @@ class ExtraField extends Model
                 //$translatedDisplayText = $field_details['display_text'];
                 /** @var \Chamilo\CoreBundle\Entity\ExtraField $extraField */
                 $extraField = $extraFieldRepo->find($field_details['id']);
-                $translatedDisplayText = $extraField->getDisplayText();
+                $translatedDisplayText = get_lang($extraField->getDisplayText());
 
                 $translatedDisplayHelpText = '';
                 if ($help) {

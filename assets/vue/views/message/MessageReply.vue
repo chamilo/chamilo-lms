@@ -77,10 +77,11 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
 import { useSecurityStore } from "../../store/securityStore"
 import { useNotification } from "../../composables/notification"
+import { formatDateTimeFromISO } from "../../utils/dates"
 
 const item = ref({})
 const store = useStore()
-const securityStore = useSecurityStore();
+const securityStore = useSecurityStore()
 const route = useRoute()
 const router = useRouter()
 
@@ -96,7 +97,11 @@ onMounted(async () => {
   const response = await store.dispatch("message/load", id)
 
   item.value = await response
-
+  const originalUserInfo = await store.dispatch("user/load", '/api/users/' + item.value.sender.id)
+  const originalSenderName = originalUserInfo.fullName
+  const originalSenderEmail = originalUserInfo.email
+  const formattedDate = formatDateTimeFromISO(item.value.sendDate)
+  const translatedHeader = t('Email reply header', { date: formattedDate, senderName: originalSenderName, senderEmail:  `<a href="mailto:${originalSenderEmail}">${originalSenderEmail}</a>` })
   delete item.value["@id"]
   delete item.value["id"]
   delete item.value["firstReceiver"]
@@ -151,7 +156,7 @@ onMounted(async () => {
   }*/
 
   // Set reply content.
-  item.value.content = `<br /><blockquote>${item.value.content}</blockquote>`
+  item.value.content = `<br /><br /><hr /><blockquote>${translatedHeader}<hr />${item.value.content}</blockquote>`
 })
 
 const isLoading = computed(() => store.state.message.isLoading)

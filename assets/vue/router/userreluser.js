@@ -15,6 +15,11 @@ export default {
       //path: ':id',
       path: 'add',
       component: () => import('../views/userreluser/UserRelUserAdd.vue')
+    },
+    {
+      name: 'UserRelUserSearch',
+      path: 'search',
+      component: () => import('../views/userreluser/UserRelUserSearch.vue')
     }
   ]
 };

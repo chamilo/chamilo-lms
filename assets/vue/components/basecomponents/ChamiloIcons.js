@@ -113,4 +113,5 @@ export const chamiloIconToClass = {
   "certificate-not-selected": "mdi mdi-star-outline",
   "template-selected": "mdi mdi-file-check",
   "template-not-selected": "mdi mdi-file-outline",
+  "map-search": "mdi mdi-map-search-outline",
 };

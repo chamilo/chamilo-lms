@@ -166,3 +166,71 @@
     text-align: center;
   }
 }
+
+.user-rel-user-search {
+  .user-card {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #e1e1e1;
+    padding: 10px 0;
+  }
+
+  .user-avatar {
+    margin-right: 15px;
+  }
+
+  .avatar-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+
+  .user-details {
+    flex-grow: 1;
+  }
+
+  .username {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .action-button {
+    padding: 5px 10px;
+    margin-right: 5px;
+    font-size: 0.9em;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    border-radius: 3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    text-decoration: none;
+  }
+
+  .action-button i {
+    margin-right: 5px;
+  }
+
+  .invite-button {
+    background-color: #3498db;
+    color: white;
+  }
+
+  .invite-button:hover {
+    background-color: #2980b9;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.24), 0 2px 10px 0 rgba(0,0,0,0.19);
+  }
+
+  .message-button {
+    background-color: #f39c12;
+    color: white;
+  }
+
+  .message-button:hover {
+    background-color: #e67e22;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.24), 0 2px 10px 0 rgba(0,0,0,0.19);
+  }
+}

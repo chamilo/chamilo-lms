@@ -1,6 +1,11 @@
 <template>
   <BaseCard class="social-side-menu mt-4">
-    <div class="text-center text-lg font-bold mb-4">{{ t("Social Network") }}</div>
+    <template #header>
+      <div class="px-4 py-2 -mb-2 bg-gray-15">
+        <h2 class="text-h5">{{ t('Social Network') }}</h2>
+      </div>
+    </template>
+    <hr class="-mt-2 mb-4 -mx-4">
     <ul class="menu-list">
       <li :class="['menu-item', { 'active': isActive('/social') }]">
         <router-link to="/social">
@@ -22,16 +27,26 @@
           {{ t("My files") }}
         </router-link>
       </li>
-      <li class="menu-item shared-profile-icon">
+      <li :class="['menu-item', { 'active': isActive('/account/home') }]">
         <router-link :to="{ name: 'AccountHome' }">
           <i class="mdi mdi-account-circle" aria-hidden="true"></i>
           {{ t("My Profile") }}
         </router-link>
       </li>
-      <li class="menu-item friends-icon">
+      <li :class="['menu-item', { 'active': isActive('/resources/friends') }]">
         <router-link :to="{ name: 'UserRelUserList' }">
           <i class="mdi mdi-handshake" aria-hidden="true"></i>
           {{ t("My Friends") }}
+        </router-link>
+      </li>
+      <li :class="['menu-item', { 'active': isActive(groupLink) }]">
+        <a v-if="isForumLink" :href="groupLink" rel="noopener noreferrer">
+          <i class="mdi mdi-group" aria-hidden="true"></i>
+          {{ t("Social Groups") }}
+        </a>
+        <router-link v-else :to="groupLink">
+          <i class="mdi mdi-group" aria-hidden="true"></i>
+          {{ t("Social Groups") }}
         </router-link>
       </li>
       <li :class="['menu-item', { 'active': isActive('/social', 'promoted') }]">
@@ -58,6 +73,7 @@ import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 import { onMounted, computed, ref, provide, readonly, inject, watchEffect } from "vue"
 import { useStore } from "vuex"
 import { useSecurityStore } from "../../store/securityStore"
+import axios from "axios"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -68,6 +84,25 @@ const messageRelUserStore = useMessageRelUserStore()
 const unreadMessagesCount = computed(() => messageRelUserStore.countUnread)
 
 const user = inject('social-user')
+const groupLink = ref({ name: 'UserGroupShow' });
+const isForumLink = ref(false);
+
+const getGroupLink = async () => {
+  try {
+    const response = await axios.get('/social-network/get-forum-link');
+    const goToLink = response.data.go_to;
+    if (goToLink) {
+      groupLink.value = goToLink;
+      isForumLink.value = true;
+    } else {
+      groupLink.value = { name: 'UserGroupShow' };
+      isForumLink.value = false;
+    }
+  } catch (error) {
+    console.error('Error fetching forum link:', error);
+    groupLink.value = { name: 'UserGroupShow' };
+  }
+};
 
 const isActive = (path, filterType = null) => {
   const pathMatch = route.path.startsWith(path)
@@ -91,4 +126,8 @@ watchEffect(() => {
     console.error('Error loading user:', e)
   }
 })
+
+onMounted(async () => {
+  getGroupLink();
+});
 </script>

@@ -62,8 +62,6 @@ function get_lang(string $variable, ?string $locale = null): string
         return $variable;
     }
 
-    $defaultLocale = 'en';
-
     // Using symfony
     $defaultDomain = 'messages';
 

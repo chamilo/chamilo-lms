@@ -166,5 +166,11 @@
     "Upcoming session tab": "Upcoming session tab",
     "Past session tab": "Past session tab",
     "Sticky courses": "Sticky courses",
+    "This message was deleted when the user was removed from the platform on %s": "This message was deleted when the user was removed from the platform on %s",
+    "My General Certicate": "My General Certicate",
+    "My Skills": "My Skills",
+    "Sign out": "Sign out",
+    "Social network": "Social network",
+    "Sessions catalogue": "Sessions catalogue",
     "Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:": "Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:"
 }

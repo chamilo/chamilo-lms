@@ -24118,3 +24118,6 @@ msgstr "Nachname"
 
 msgid "Your Reg"
 msgstr "Ihre Registrierung am"
+
+msgid "This message was deleted when the user was removed from the platform on %s"
+msgstr "Diese Nachricht wurde gelöscht, als der Benutzer am %s von der Plattform entfernt wurde"

@@ -293,7 +293,7 @@ if ($form->validate()) {
         api_get_user_id()
     );
 
-    // Send email depending of children_auto_threshold
+    // Send email depending on children_auto_threshold
     $skillRelSkill = new SkillRelSkillModel();
     $skillModel = new SkillModel();
     $parents = $skillModel->getDirectParents($skillToProcess);
@@ -321,14 +321,17 @@ if ($form->validate()) {
                     Display::addFlash(Display::return_message(get_lang('Message Sent')));
                     $url = api_get_path(WEB_CODE_PATH).'skills/assign.php?user='.$userId.'&id='.$parentId;
                     $link = Display::url($url, $url);
-                    $subject = get_lang('A student has obtained the number of sub-skills needed to validate the mother skill');
-                    $message = sprintf(
-                        get_lang('Learner %s has enough sub-skill to get skill %s . To assign this skill it is possible to go here : %s'),
-                        UserManager::formatUserFullName($user),
-                        $parentData['title'],
-                        $link
-                    );
+                    $userFullName = UserManager::formatUserFullName($user);
+
                     foreach ($bossList as $boss) {
+                        $bossInfo = api_get_user_info($boss['boss_id']);
+                        $subject = get_lang('A student has obtained the number of sub-skills needed to validate the mother skill', $bossInfo['locale']);
+                        $message = sprintf(
+                            get_lang('Learner %s has enough sub-skill to get skill %s . To assign this skill it is possible to go here : %s', $bossInfo['locale']),
+                            $userFullName,
+                            $parentData['title'],
+                            $link
+                        );
                         MessageManager::send_message_simple(
                             $boss['boss_id'],
                             $subject,

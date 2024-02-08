@@ -113,9 +113,9 @@ trait ResourceControllerTrait
     }
 
     /**
-     * @return ?UserInterface
+     * @return ?User
      */
-    protected function getUser(): ?UserInterface
+    protected function getUser(): ?User
     {
         /*if (!$this->container->has('security.token_storage')) {
             throw new \LogicException('The SecurityBundle is not registered in your application. Try running "composer require symfony/security-bundle".');

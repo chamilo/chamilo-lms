@@ -54,7 +54,7 @@ define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);
 /**
  * Returns a translated (localized) string.
  */
-function get_lang(string $variable): string
+function get_lang(string $variable, ?string $locale = null): string
 {
     $translator = Container::$translator ?: Container::$container->get('translator');
 
@@ -70,7 +70,8 @@ function get_lang(string $variable): string
     return $translator->trans(
         $variable,
         [],
-        $defaultDomain
+        $defaultDomain,
+        $locale
     );
 }
 

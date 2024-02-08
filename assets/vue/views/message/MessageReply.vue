@@ -101,7 +101,7 @@ onMounted(async () => {
   const originalSenderName = originalUserInfo.fullName
   const originalSenderEmail = originalUserInfo.email
   const formattedDate = formatDateTimeFromISO(item.value.sendDate)
-  const translatedHeader = t('Email reply header', { date: formattedDate, senderName: originalSenderName, senderEmail:  `<a href="mailto:${originalSenderEmail}">${originalSenderEmail}</a>` })
+  const translatedHeader = t('Email reply header', [formattedDate, originalSenderName, `<a href="mailto:${originalSenderEmail}">${originalSenderEmail}</a>` ])
   delete item.value["@id"]
   delete item.value["id"]
   delete item.value["firstReceiver"]

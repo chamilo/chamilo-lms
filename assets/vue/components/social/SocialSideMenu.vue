@@ -40,7 +40,7 @@
         </router-link>
       </li>
       <li :class="['menu-item', { 'active': isActive(groupLink) }]">
-        <a v-if="isForumLink" :href="groupLink" rel="noopener noreferrer">
+        <a v-if="isValidGlobalForumsCourse" :href="groupLink" rel="noopener noreferrer">
           <i class="mdi mdi-group" aria-hidden="true"></i>
           {{ t("Social Groups") }}
         </a>
@@ -70,10 +70,11 @@ import BaseCard from "../basecomponents/BaseCard.vue"
 import { useRoute } from 'vue-router'
 import { useI18n } from "vue-i18n"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
-import { onMounted, computed, ref, provide, readonly, inject, watchEffect } from "vue"
+import { onMounted, computed, ref, inject, watchEffect } from "vue"
 import { useStore } from "vuex"
 import { useSecurityStore } from "../../store/securityStore"
 import axios from "axios"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -84,25 +85,26 @@ const messageRelUserStore = useMessageRelUserStore()
 const unreadMessagesCount = computed(() => messageRelUserStore.countUnread)
 
 const user = inject('social-user')
-const groupLink = ref({ name: 'UserGroupShow' });
-const isForumLink = ref(false);
-
+const groupLink = ref({ name: 'UserGroupShow' })
+const platformConfigStore = usePlatformConfig()
+const globalForumsCourse = computed(() => platformConfigStore.getSetting("forum.global_forums_course_id"))
+const isValidGlobalForumsCourse = computed(() => {
+  const courseId = globalForumsCourse.value
+  return courseId !== null && courseId !== undefined && courseId > 0
+})
 const getGroupLink = async () => {
   try {
-    const response = await axios.get('/social-network/get-forum-link');
-    const goToLink = response.data.go_to;
-    if (goToLink) {
-      groupLink.value = goToLink;
-      isForumLink.value = true;
+    const response = await axios.get('/social-network/get-forum-link')
+    if (isValidGlobalForumsCourse.value) {
+      groupLink.value = response.data.go_to
     } else {
-      groupLink.value = { name: 'UserGroupShow' };
-      isForumLink.value = false;
+      groupLink.value = { name: 'UserGroupShow' }
     }
   } catch (error) {
-    console.error('Error fetching forum link:', error);
-    groupLink.value = { name: 'UserGroupShow' };
+    console.error('Error fetching forum link:', error)
+    groupLink.value = { name: 'UserGroupShow' }
   }
-};
+}
 
 const isActive = (path, filterType = null) => {
   const pathMatch = route.path.startsWith(path)
@@ -128,6 +130,6 @@ watchEffect(() => {
 })
 
 onMounted(async () => {
-  getGroupLink();
-});
+  await getGroupLink()
+})
 </script>

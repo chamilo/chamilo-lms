@@ -24174,3 +24174,21 @@ msgstr ""
 
 msgid "Unauthorised view access to resource"
 msgstr ""
+
+msgid "This message was deleted when the user was removed from the platform on %s"
+msgstr ""
+
+msgid "My General Certicate"
+msgstr ""
+
+msgid "My Skills"
+msgstr ""
+
+msgid "Sign out"
+msgstr ""
+
+msgid "Social network"
+msgstr ""
+
+msgid "Sessions catalogue"
+msgstr ""

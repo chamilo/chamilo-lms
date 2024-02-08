@@ -17,7 +17,7 @@
           <span v-else>{{ group.name }}</span>
         </li>
       </ul>
-      <div v-if="goToUrl" class="text-center mb-3">
+      <div v-if="isValidGlobalForumsCourse" class="text-center mb-3">
         <a :href="goToUrl" class="btn btn-primary">{{ t('See all communities') }}</a>
       </div>
       <div v-else class="input-group mb-3">
@@ -42,14 +42,21 @@
 <script setup>
 import BaseCard from "../basecomponents/BaseCard.vue"
 import { useI18n } from "vue-i18n"
-import { ref, onMounted, inject, watchEffect } from "vue"
+import { ref, inject, watchEffect, computed } from "vue"
 import axios from 'axios'
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const { t } = useI18n()
 const searchQuery = ref('')
 const groups = ref([])
 const goToUrl = ref('')
 const user = inject('social-user')
+const platformConfigStore = usePlatformConfig()
+const globalForumsCourse = computed(() => platformConfigStore.getSetting("forum.global_forums_course_id"))
+const isValidGlobalForumsCourse = computed(() => {
+  const courseId = globalForumsCourse.value
+  return courseId !== null && courseId !== undefined && courseId > 0
+})
 
 function search() {
   window.location.href = `/search?query=${searchQuery.value}`

@@ -24178,7 +24178,7 @@ msgstr ""
 msgid "This message was deleted when the user was removed from the platform on %s"
 msgstr ""
 
-msgid "My General Certicate"
+msgid "My General Certificate"
 msgstr ""
 
 msgid "My Skills"

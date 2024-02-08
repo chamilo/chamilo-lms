@@ -24179,8 +24179,8 @@ msgstr "Unauthorised view - access to resource forbidden"
 msgid "This message was deleted when the user was removed from the platform on %s"
 msgstr "This message was deleted when the user was removed from the platform on %s"
 
-msgid "My General Certicate"
-msgstr "My General Certicate"
+msgid "My General Certificate"
+msgstr "My General Certificate"
 
 msgid "My Skills"
 msgstr "My Skills"

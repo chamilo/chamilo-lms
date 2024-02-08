@@ -24177,7 +24177,7 @@ msgstr "a participé à une formation en ligne sur la plateforme %s de l’Offic
 msgid "This message was deleted when the user was removed from the platform on %s"
 msgstr "Ce message a été supprimé lorsque l'utilisateur a été effacé de la plateforme le %s"
 
-msgid "My General Certicate"
+msgid "My General Certificate"
 msgstr "Mon certificat"
 
 msgid "My Skills"

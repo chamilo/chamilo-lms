@@ -27,7 +27,7 @@ import MyCoursesLayout from "../layouts/MyCourses.vue"
 
 import CourseHome from "../views/course/CourseHome.vue"
 
-import Index from "../pages/Index.vue"
+import AppIndex from "../pages/AppIndex.vue"
 import Home from "../pages/Home.vue"
 import Login from "../pages/Login.vue"
 import Faq from "../pages/Faq.vue"
@@ -45,7 +45,7 @@ const router = createRouter({
     {
       path: "/",
       name: "Index",
-      component: Index,
+      component: AppIndex,
       meta: {
         requiresAuth: false,
         showBreadcrumb: false,

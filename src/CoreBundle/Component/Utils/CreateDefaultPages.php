@@ -83,6 +83,22 @@ class CreateDefaultPages
         ;
         $this->pageRepository->update($indexPage);
 
+        $footerPublicCategory = (new PageCategory())
+            ->setTitle('footer_public')
+            ->setType('grid')
+            ->setCreator($user)
+        ;
+
+        $this->pageCategoryRepository->update($footerPublicCategory);
+
+        $footerPrivateCategory = (new PageCategory())
+            ->setTitle('footer_private')
+            ->setType('grid')
+            ->setCreator($user)
+        ;
+
+        $this->pageCategoryRepository->update($footerPrivateCategory);
+
         return true;
     }
 }

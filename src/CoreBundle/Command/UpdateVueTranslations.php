@@ -62,7 +62,8 @@ class UpdateVueTranslations extends Command
                 // Only update with the same variables.
                 $newLanguage = [];
                 foreach ($translations as $variable => $translation) {
-                    $newLanguage[$variable] = $variable;
+                    $translated = $this->getTranslationWithFallback($variable, $language);
+                    $newLanguage[$variable] = $this->replaceMarkers($translated);
                 }
                 $newLanguageToString = json_encode($newLanguage, JSON_PRETTY_PRINT);
                 $fileToSave = $vueLocalePath.'en.json';

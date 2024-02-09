@@ -24195,4 +24195,4 @@ msgid "Sessions catalogue"
 msgstr "Sessions catalogue"
 
 msgid "Email reply header"
-msgstr "The %s, Mentioned by %s (%s) wrote:"
+msgstr "The %s, %s (%s) wrote:"

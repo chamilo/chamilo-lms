@@ -24103,3 +24103,9 @@ msgstr "Número de veces que la pregunta fue respondida"
 
 msgid "Number of times this answer was selected"
 msgstr "Número de veces que se seleccionó esta respuesta"
+
+msgid "Your browser does not support Javascript"
+msgstr "Su navegador no soporta el JavaScript"
+
+msgid "Email reply header"
+msgstr "El %s, %s (%s) escribió:"

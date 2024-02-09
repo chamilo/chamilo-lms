@@ -121,7 +121,7 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRAR
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_JS_PATH).'map/oms.min.js"></script>';
 
 $tpl = new Template(null);
-$tpl->assign('url', api_get_path(WEB_CODE_PATH).'social/profile.php');
+$tpl->assign('url', api_get_path(WEB_PATH).'social');
 $tpl->assign(
     'image_city',
     Display::return_icon(

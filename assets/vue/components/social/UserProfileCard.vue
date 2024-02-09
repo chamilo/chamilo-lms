@@ -27,6 +27,7 @@
         </p>
       </div>
       <BaseButton
+        v-if="isCurrentUser"
         :label="t('Edit profile')"
         type="primary"
         class="mt-4"
@@ -49,6 +50,7 @@ const { t } = useI18n()
 const store = useStore()
 const route = useRoute()
 const user = inject('social-user')
+const isCurrentUser = inject('is-current-user')
 
 const editProfile = () => {
   window.location = "/account/edit"

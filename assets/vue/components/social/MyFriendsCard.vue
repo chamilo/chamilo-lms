@@ -7,7 +7,7 @@
     </template>
     <hr class="-mt-2 mb-4 -mx-4">
     <div>
-      <div class="input-group mb-3">
+      <div v-if="isCurrentUser" class="input-group mb-3">
         <input
           type="search"
           class="form-control"
@@ -33,7 +33,7 @@
         <a href="#" @click="viewAll">{{ t('View All Friends') }}</a>
       </div>
     </div>
-    <div v-if="allowSocialMap" class="text-center mt-3">
+    <div v-if="allowSocialMap && isCurrentUser" class="text-center mt-3">
       <BaseButton
         :label="t('Search user by geolocalization')"
         type="primary"
@@ -59,6 +59,7 @@ const { t } = useI18n()
 const friends = ref([])
 const searchQuery = ref('')
 const user = inject('social-user')
+const isCurrentUser = inject('is-current-user')
 const router = useRouter()
 const platformConfigStore = usePlatformConfig()
 
@@ -87,7 +88,11 @@ async function fetchFriends(userId) {
 }
 
 const viewAll = () => {
-  router.push('/resources/friends')
+  if (isCurrentUser) {
+    router.push('/resources/friends')
+  } else {
+    router.push('/resources/friends?id=' + user.value.id)
+  }
 }
 watchEffect(() => {
   if (user.value && user.value.id) {

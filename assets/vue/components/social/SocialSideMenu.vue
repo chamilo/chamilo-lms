@@ -6,7 +6,7 @@
       </div>
     </template>
     <hr class="-mt-2 mb-4 -mx-4">
-    <ul class="menu-list">
+    <ul v-if="isCurrentUser" class="menu-list">
       <li :class="['menu-item', { 'active': isActive('/social') }]">
         <router-link to="/social">
           <i class="mdi mdi-home" aria-hidden="true"></i>
@@ -40,7 +40,7 @@
         </router-link>
       </li>
       <li :class="['menu-item', { 'active': isActive(groupLink) }]">
-        <a v-if="isForumLink" :href="groupLink" rel="noopener noreferrer">
+        <a v-if="isValidGlobalForumsCourse" :href="groupLink" rel="noopener noreferrer">
           <i class="mdi mdi-group" aria-hidden="true"></i>
           {{ t("Social Groups") }}
         </a>
@@ -62,6 +62,20 @@
         </router-link>
       </li>
     </ul>
+    <ul v-else class="menu-list">
+      <li class="menu-item">
+        <router-link to="/social">
+          <i class="mdi mdi-home" aria-hidden="true"></i>
+          {{ t("Home") }}
+        </router-link>
+      </li>
+      <li class="menu-item">
+        <a href="/main/inc/ajax/user_manager.ajax.php?a=get_user_popup&user_id={{user.id}}" class="ajax" rel="noopener noreferrer">
+          <i class="mdi mdi-email" aria-hidden="true"></i>
+          {{ t("Send message") }}
+        </a>
+      </li>
+    </ul>
   </BaseCard>
 </template>
 
@@ -70,10 +84,11 @@ import BaseCard from "../basecomponents/BaseCard.vue"
 import { useRoute } from 'vue-router'
 import { useI18n } from "vue-i18n"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
-import { onMounted, computed, ref, provide, readonly, inject, watchEffect } from "vue"
+import { onMounted, computed, ref, inject, watchEffect } from "vue"
 import { useStore } from "vuex"
 import { useSecurityStore } from "../../store/securityStore"
 import axios from "axios"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -84,25 +99,27 @@ const messageRelUserStore = useMessageRelUserStore()
 const unreadMessagesCount = computed(() => messageRelUserStore.countUnread)
 
 const user = inject('social-user')
-const groupLink = ref({ name: 'UserGroupShow' });
-const isForumLink = ref(false);
-
+const isCurrentUser = inject('is-current-user')
+const groupLink = ref({ name: 'UserGroupShow' })
+const platformConfigStore = usePlatformConfig()
+const globalForumsCourse = computed(() => platformConfigStore.getSetting("forum.global_forums_course_id"))
+const isValidGlobalForumsCourse = computed(() => {
+  const courseId = globalForumsCourse.value
+  return courseId !== null && courseId !== undefined && courseId > 0
+})
 const getGroupLink = async () => {
   try {
-    const response = await axios.get('/social-network/get-forum-link');
-    const goToLink = response.data.go_to;
-    if (goToLink) {
-      groupLink.value = goToLink;
-      isForumLink.value = true;
+    const response = await axios.get('/social-network/get-forum-link')
+    if (isValidGlobalForumsCourse.value) {
+      groupLink.value = response.data.go_to
     } else {
-      groupLink.value = { name: 'UserGroupShow' };
-      isForumLink.value = false;
+      groupLink.value = { name: 'UserGroupShow' }
     }
   } catch (error) {
-    console.error('Error fetching forum link:', error);
-    groupLink.value = { name: 'UserGroupShow' };
+    console.error('Error fetching forum link:', error)
+    groupLink.value = { name: 'UserGroupShow' }
   }
-};
+}
 
 const isActive = (path, filterType = null) => {
   const pathMatch = route.path.startsWith(path)
@@ -128,6 +145,6 @@ watchEffect(() => {
 })
 
 onMounted(async () => {
-  getGroupLink();
-});
+  await getGroupLink()
+})
 </script>

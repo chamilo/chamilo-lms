@@ -18,7 +18,7 @@
   }
 
   &__bottom {
-    @apply border-b border-solid border-gray-25 p-6 text-tiny font-semibold;
+    @apply flex flex-col border-b border-solid border-gray-25 p-6 text-tiny font-semibold gap-2;
   }
 
   &__logout-link {

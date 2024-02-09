@@ -264,8 +264,7 @@ $border-color_12: #9333EA;
   }
 
   .p-button-label {
-    @apply align-middle font-semibold hidden
-      md:inline;
+    @apply align-middle font-semibold;
   }
 
   &.p-button-icon-only {

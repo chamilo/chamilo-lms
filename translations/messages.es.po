@@ -24109,3 +24109,6 @@ msgstr "Su navegador no soporta el JavaScript"
 
 msgid "Email reply header"
 msgstr "El %s, %s (%s) escribió:"
+
+msgid "My profile"
+msgstr "Mi perfil"

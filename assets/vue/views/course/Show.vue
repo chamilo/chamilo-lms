@@ -42,7 +42,7 @@
 
             <tr>
               <td>
-                <strong>{{ $t("courseLanguage") }}</strong>
+                <strong>{{ $t("Course language") }}</strong>
               </td>
               <td>
                 {{ item["courseLanguage"] }}
@@ -68,7 +68,7 @@
               </td>
 
               <td>
-                <strong>{{ $t("departmentName") }}</strong>
+                <strong>{{ $t("Department") }}</strong>
               </td>
               <td>
                 {{ item["departmentName"] }}
@@ -77,14 +77,14 @@
 
             <tr>
               <td>
-                <strong>{{ $t("departmentUrl") }}</strong>
+                <strong>{{ $t("Department URL") }}</strong>
               </td>
               <td>
                 {{ item["departmentUrl"] }}
               </td>
 
               <td>
-                <strong>{{ $t("expirationDate") }}</strong>
+                <strong>{{ $t("Expiration date") }}</strong>
               </td>
               <td>
                 {{ formatDateTime(item["expirationDate"], "long") }}

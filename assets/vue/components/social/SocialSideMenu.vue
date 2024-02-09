@@ -2,7 +2,7 @@
   <BaseCard class="social-side-menu mt-4">
     <template #header>
       <div class="px-4 py-2 -mb-2 bg-gray-15">
-        <h2 class="text-h5">{{ t('Social Network') }}</h2>
+        <h2 class="text-h5">{{ t('Social network') }}</h2>
       </div>
     </template>
     <hr class="-mt-2 mb-4 -mx-4">
@@ -30,35 +30,35 @@
       <li :class="['menu-item', { 'active': isActive('/account/home') }]">
         <router-link :to="{ name: 'AccountHome' }">
           <i class="mdi mdi-account-circle" aria-hidden="true"></i>
-          {{ t("My Profile") }}
+          {{ t("My profile") }}
         </router-link>
       </li>
       <li :class="['menu-item', { 'active': isActive('/resources/friends') }]">
         <router-link :to="{ name: 'UserRelUserList' }">
           <i class="mdi mdi-handshake" aria-hidden="true"></i>
-          {{ t("My Friends") }}
+          {{ t("My friends") }}
         </router-link>
       </li>
       <li :class="['menu-item', { 'active': isActive(groupLink) }]">
         <a v-if="isValidGlobalForumsCourse" :href="groupLink" rel="noopener noreferrer">
           <i class="mdi mdi-group" aria-hidden="true"></i>
-          {{ t("Social Groups") }}
+          {{ t("Social groups") }}
         </a>
         <router-link v-else :to="groupLink">
           <i class="mdi mdi-group" aria-hidden="true"></i>
-          {{ t("Social Groups") }}
+          {{ t("Social groups") }}
         </router-link>
       </li>
       <li :class="['menu-item', { 'active': isActive('/social', 'promoted') }]">
         <router-link :to="{ path: '/social', query: { filterType: 'promoted' } }">
           <i class="mdi mdi-star" aria-hidden="true"></i>
-          {{ t("Promoted Messages") }}
+          {{ t("Promoted messages") }}
         </router-link>
       </li>
       <li :class="['menu-item', { 'active': isActive('/resources/users/personal_data') }]">
         <router-link to="/resources/users/personal_data">
           <i class="mdi mdi-account" aria-hidden="true"></i>
-          {{ t("Personal Data") }}
+          {{ t("Personal data") }}
         </router-link>
       </li>
     </ul>

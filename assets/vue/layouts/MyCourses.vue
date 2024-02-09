@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-between items-center">
-    <h2 v-t="'My Courses'" />
+    <h2 v-t="'My courses'" />
     <Button
       v-if="isTeacher"
       :label="t('Course')"

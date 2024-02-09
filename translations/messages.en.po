@@ -24196,3 +24196,6 @@ msgstr "Sessions catalogue"
 
 msgid "Email reply header"
 msgstr "The %s, %s (%s) wrote:"
+
+msgid "My profile"
+msgstr "My profile"

@@ -325,9 +325,9 @@ if ($form->validate()) {
 
                     foreach ($bossList as $boss) {
                         $bossInfo = api_get_user_info($boss['boss_id']);
-                        $subject = get_lang('A student has obtained the number of sub-skills needed to validate the mother skill.');
+                        $subject = get_lang('A student has obtained the number of sub-skills needed to validate the mother skill.', $bossInfo['locale']);
                         $message = sprintf(
-                            get_lang('Learner %s has enough sub-skill to get skill %s. To assign this skill it is possible to go here : %s'),
+                            get_lang('Learner %s has enough sub-skill to get skill %s. To assign this skill it is possible to go here : %s', $bossInfo['locale']),
                             $userFullName,
                             $parentData['title'],
                             $link

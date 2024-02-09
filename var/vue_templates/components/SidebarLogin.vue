@@ -45,7 +45,11 @@ async function performLogin() {
 </script>
 
 <template>
-  <div class="sidebar__login-form py-3 px-6">
+  <div
+    class="sidebar__login-form py-3 px-6"
+    @click="$event.stopPropagation()"
+    @keydown="$event.stopPropagation()"
+  >
     <form
       class="login-section__form p-input-filled"
       @submit.prevent="performLogin"

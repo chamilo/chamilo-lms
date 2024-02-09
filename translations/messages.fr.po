@@ -24194,3 +24194,6 @@ msgstr "Catalogue de sessions"
 
 msgid "Your browser does not support Javascript"
 msgstr "Votre navigateur ne supporte pas le JavaScript"
+
+msgid "Email reply header"
+msgstr "Le %s, %s (%s) a écrit:"

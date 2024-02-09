@@ -172,5 +172,6 @@
     "Social network": "Social network",
     "Sessions catalogue": "Sessions catalogue",
     "Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:": "Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:",
-    "Your browser does not support Javascript": "Your browser does not support Javascript"
+    "Your browser does not support Javascript": "Your browser does not support Javascript",
+    "Email reply header": "The {0}, Mentioned by {1} ({2}) wrote:"
 }

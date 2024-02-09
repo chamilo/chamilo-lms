@@ -24124,3 +24124,6 @@ msgstr "Diese Nachricht wurde gelöscht, als der Benutzer am %s von der Plattfor
 
 msgid "Your browser does not support Javascript"
 msgstr "Ihr Browser unterstützt kein JavaScript"
+
+msgid "Email reply header"
+msgstr "Am %s schrieb %s (%s):"

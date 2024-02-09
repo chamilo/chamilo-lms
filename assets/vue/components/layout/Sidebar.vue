@@ -8,6 +8,8 @@
         <PanelMenu :model="menuItems" />
       </div>
       <div class="app-sidebar__bottom">
+        <PageList category-title="footer_private" />
+
         <p>{{ t("Created with Chamilo &copy; {year}", { year: 2022 }) }}</p>
       </div>
       <a
@@ -45,6 +47,7 @@ import ToggleButton from "primevue/togglebutton"
 import { useI18n } from "vue-i18n"
 import { useSecurityStore } from "../../store/securityStore"
 import { useSidebarMenu } from "../../composables/sidebarMenu"
+import PageList from "../page/PageList.vue"
 
 const { t } = useI18n()
 const securityStore = useSecurityStore()

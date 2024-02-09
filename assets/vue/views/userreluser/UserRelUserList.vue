@@ -1,7 +1,7 @@
 <template>
   <h2 v-t="'Friends'" class="mr-auto" />
   <hr />
-  <BaseToolbar>
+  <BaseToolbar v-if="isCurrentUser">
     <BaseButton
       :disabled="loadingFriends"
       :label="t('Add friend')"
@@ -75,7 +75,7 @@
                 />
               </div>
 
-              <div class="friend-options">
+              <div class="friend-options" v-if="isCurrentUser">
                 <span
                   class="friend-options__time"
                   v-text="relativeDatetime(item.createdAt)"
@@ -92,7 +92,7 @@
         </template>
       </DataView>
     </div>
-    <div class="basis-auto lg:basis-1/4">
+    <div v-if="isCurrentUser" class="basis-auto lg:basis-1/4">
       <UserRelUserRequestsList
         ref="requestList"
         @accept-friend="reloadHandler"
@@ -103,7 +103,7 @@
 
 <script setup>
 import { useStore } from "vuex"
-import { onMounted, ref } from "vue"
+import { inject, onMounted, ref } from "vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import Skeleton from "primevue/skeleton"
@@ -119,7 +119,8 @@ import UserRelUserRequestsList from "../../components/userreluser/UserRelUserReq
 const store = useStore()
 const router = useRouter()
 const { t } = useI18n()
-const user = store.getters["security/getUser"]
+const user = inject('social-user')
+const isCurrentUser = inject('is-current-user')
 const items = ref([])
 
 const notification = useNotification()

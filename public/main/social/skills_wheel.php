@@ -72,7 +72,10 @@ $tpl->assign('user_info', $userInfo);
 $tpl->assign('ranking', $ranking);
 $tpl->assign('skills', $skills);
 
-$template = $tpl->get_template('skill/skill_wheel_student.tpl');
+$skillId = isset($_GET['skill_id']) ? (int) $_GET['skill_id'] : 0;
+$tpl->assign('skill_id_to_load', $skillId);
+
+$template = $tpl->get_template('skill/skill_wheel_student.html.twig');
 $content = $tpl->fetch($template);
 $tpl->assign('content', $content);
 $tpl->display_no_layout_template();

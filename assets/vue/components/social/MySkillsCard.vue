@@ -13,10 +13,10 @@
           <div class="skill-name">{{ skill.name }}</div>
         </div>
       </div>
-      <div class="skills-links mt-2">
+      <!--div class="skills-links mt-2">
         <a href="/main/social/skills_wheel.php">{{ t('Skills Wheel') }}</a> |
         <a href="/main/social/skills_ranking.php">{{ t('Your skill ranking') }}</a>
-      </div>
+      </div-->
     </div>
     <div v-else>
       <p>{{ t('Without achieved skills') }}</p>

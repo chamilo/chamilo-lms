@@ -32,14 +32,23 @@ const store = useStore()
 const route = useRoute()
 
 const user = ref({})
+const isCurrentUser = ref(true)
 
 provide("social-user", readonly(user))
+provide("is-current-user", readonly(isCurrentUser))
 
 async function loadUser() {
   try {
-    user.value = route.query.id ? await store.dispatch("user/load", route.query.id) : store.getters["security/getUser"]
+    if (route.query.id) {
+      user.value = await store.dispatch("user/load", '/api/users/' + route.query.id)
+      isCurrentUser.value = false
+    } else {
+      user.value = store.getters["security/getUser"]
+      isCurrentUser.value = true
+    }
   } catch (e) {
     user.value = {}
+    isCurrentUser.value = true
   }
 }
 

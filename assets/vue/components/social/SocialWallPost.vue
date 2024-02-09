@@ -80,7 +80,7 @@
 
 <script setup>
 import WallCommentForm from "./SocialWallCommentForm.vue";
-import {ref, computed, onMounted, reactive} from "vue";
+import { ref, computed, onMounted, reactive, inject } from "vue"
 import WallComment from "./SocialWallComment.vue";
 import WallActions from "./Actions";
 import axios from "axios";
@@ -107,7 +107,8 @@ let comments = reactive([]);
 const attachments = ref([]);
 const securityStore = useSecurityStore()
 
-const currentUser = computed(() => securityStore.user)
+const currentUser = inject('social-user')
+const isCurrentUser = inject('is-current-user')
 const isOwner = computed(() => currentUser['@id'] === props.post.sender['@id'])
 
 onMounted(async () => {
@@ -165,7 +166,7 @@ const isImageAttachment = (attachment) => {
     const fileExtension = attachment.filename.split('.').pop().toLowerCase();
     return ['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension);
   }
-  
+
   return false;
 };
 

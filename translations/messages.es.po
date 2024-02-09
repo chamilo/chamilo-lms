@@ -24114,7 +24114,7 @@ msgid "My profile"
 msgstr "Mi perfil"
 
 msgid "View all friends"
-msgstr "View all friends"
+msgstr "Todos mis amigos"
 
 msgid "Mark as promoted message"
-msgstr "Mark as promoted message"
+msgstr "Marcar como mensaje importante"

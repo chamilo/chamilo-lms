@@ -1,4 +1,8 @@
 const Encore = require("@symfony/webpack-encore")
+const dotenv = require('dotenv');
+const webpack = require('webpack');
+
+const env = dotenv.config()
 
 if (!Encore.isRuntimeEnvironmentConfigured()) {
   Encore.configureRuntimeEnvironment(process.env.NODE_ENV || "dev")
@@ -99,6 +103,11 @@ Encore.setOutputPath("public/build/")
         to: 'libs/mathjax/MathJax.js'
     },*/
   ])
+  .addPlugin(
+    new webpack.DefinePlugin({
+      'ENV_CUSTOM_VUE_TEMPLATE': JSON.stringify(env.parsed?.APP_CUSTOM_VUE_TEMPLATE),
+    })
+  )
 
 Encore.copyFiles({
   from: "./node_modules/mediaelement/build",

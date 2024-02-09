@@ -52,6 +52,8 @@ import Toast from "primevue/toast"
 import { useNotification } from "./composables/notification"
 import { useLocale } from "./composables/locale"
 import { useI18n } from "vue-i18n"
+import { customVueTemplateEnabled } from "./config/env"
+import CustomDashboardLayout from "../../var/vue_templates/components/layout/DashboardLayout.vue"
 
 const apolloClient = new ApolloClient({
   link: createHttpLink({
@@ -71,6 +73,10 @@ const layout = computed(() => {
 
   if (queryParams.has("lp") || (queryParams.has("origin") && "learnpath" === queryParams.get("origin"))) {
     return "EmptyLayout"
+  }
+
+  if (customVueTemplateEnabled) {
+    return CustomDashboardLayout
   }
 
   return `${router.currentRoute.value.meta.layout ?? "Dashboard"}Layout`

@@ -24112,3 +24112,9 @@ msgstr "El %s, %s (%s) escribió:"
 
 msgid "My profile"
 msgstr "Mi perfil"
+
+msgid "View all friends"
+msgstr "View all friends"
+
+msgid "Mark as promoted message"
+msgstr "Mark as promoted message"

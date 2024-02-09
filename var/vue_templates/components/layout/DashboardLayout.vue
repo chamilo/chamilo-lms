@@ -22,3 +22,13 @@ const securityStore = useSecurityStore()
     <router-view />
   </div>
 </template>
+
+<style scoped lang="scss">
+@media (min-width: 640px) {
+  #app.app--sidebar-inactive {
+    .app-main {
+      margin-left: 15rem !important;
+    }
+  }
+}
+</style>

@@ -17,6 +17,7 @@ const menuItems = computed(() => [])
           alt="Chamilo LMS"
         />
       </template>
+      <template #end />
     </Menubar>
   </div>
 </template>

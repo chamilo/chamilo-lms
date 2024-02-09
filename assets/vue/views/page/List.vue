@@ -207,7 +207,9 @@ import { computed, inject, onMounted, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useToast } from "primevue/usetoast"
 import { useSecurityStore } from "../../store/securityStore"
+import { useRouter } from "vue-router"
 
+const router = useRouter()
 const store = useStore()
 const securityStore = useSecurityStore()
 
@@ -229,7 +231,9 @@ onMounted(() => {
     layoutMenuItems.value = [
       {
         label: t("New page"),
-        to: { name: "PageCreate" },
+        command: () => {
+          router.push({ name: "PageCreate" })
+        },
       }
     ]
   }

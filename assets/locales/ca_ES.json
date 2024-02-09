@@ -164,5 +164,11 @@
     "Upcoming session tab": "Upcoming session tab",
     "Past session tab": "Past session tab",
     "Sticky courses": "Sticky courses",
-    "Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:": "Crear certificat amb aquestes etiquetes"
+    "This message was deleted when the user was removed from the platform on %s": "This message was deleted when the user was removed from the platform on {0}",
+    "My General Certificate": "My General Certificate",
+    "My Skills": "My Skills",
+    "Social network": "Xarxa social",
+    "Sessions catalogue": "Sessions catalogue",
+    "Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:": "Crear certificat amb aquestes etiquetes",
+    "Your browser does not support Javascript": "Your browser does not support Javascript"
 }

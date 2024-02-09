@@ -112,5 +112,11 @@
     "Current session tab": "Current session tab",
     "Upcoming session tab": "Upcoming session tab",
     "Past session tab": "Past session tab",
-    "Sticky courses": "Sticky courses"
+    "Sticky courses": "Sticky courses",
+    "This message was deleted when the user was removed from the platform on %s": "This message was deleted when the user was removed from the platform on {0}",
+    "My General Certificate": "My General Certificate",
+    "My Skills": "My Skills",
+    "Social network": "Social network",
+    "Sessions catalogue": "Sessions catalogue",
+    "Your browser does not support Javascript": "Your browser does not support Javascript"
 }

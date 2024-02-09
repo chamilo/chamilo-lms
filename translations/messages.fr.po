@@ -24191,3 +24191,6 @@ msgstr "Réseau social"
 
 msgid "Sessions catalogue"
 msgstr "Catalogue de sessions"
+
+msgid "Your browser does not support Javascript"
+msgstr "Votre navigateur ne supporte pas le JavaScript"

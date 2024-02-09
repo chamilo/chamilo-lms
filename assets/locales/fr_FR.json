@@ -42,7 +42,7 @@
     "Inbox": "Bo\u00eete de r\u00e9ception",
     "Signed in as": "Connect\u00e9 comme",
     "Settings": "Param\u00e8tres",
-    "Sign out": "Sign out",
+    "Sign out": "D\u00e9connexion",
     "My sessions": "Mes sessions",
     "Events": "\u00c9v\u00e9nements",
     "My progress": "Mon statut",
@@ -166,5 +166,11 @@
     "Upcoming session tab": "\u00c0 venir",
     "Past session tab": "Termin\u00e9es",
     "Sticky courses": "Cours sp\u00e9ciaux",
-    "Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:": "Cr\u00e9er le certificat avec ces marqueurs"
+    "This message was deleted when the user was removed from the platform on %s": "Ce message a \u00e9t\u00e9 supprim\u00e9 lorsque l'utilisateur a \u00e9t\u00e9 effac\u00e9 de la plateforme le {0}",
+    "My General Certificate": "Mon certificat",
+    "My Skills": "Mes comp\u00e9tences",
+    "Social network": "R\u00e9seau social",
+    "Sessions catalogue": "Catalogue de sessions",
+    "Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:": "Cr\u00e9er le certificat avec ces marqueurs",
+    "Your browser does not support Javascript": "Votre navigateur ne supporte pas le JavaScript"
 }

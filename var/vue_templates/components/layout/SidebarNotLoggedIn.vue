@@ -6,6 +6,7 @@ import PanelMenu from "primevue/panelmenu"
 import Dropdown from "primevue/dropdown"
 import Login from "../../../../assets/vue/components/Login.vue"
 import SidebarLogin from "../SidebarLogin.vue"
+import PageList from "../../../../assets/vue/components/page/PageList.vue"
 
 const { t } = useI18n()
 const router = useRouter()
@@ -74,7 +75,7 @@ const menuItems = computed(() => [
         {{ t("Menu") }}
       </h3>
 
-      <div class="app-sidebar__panel">
+      <div class="app-sidebar__panel flex flex-col">
         <div class="px-6 my-4">
           <Dropdown
             v-model="selectedCity"
@@ -138,6 +139,8 @@ const menuItems = computed(() => [
             </a>
           </template>
         </PanelMenu>
+
+        <PageList category-title="footer_public" />
       </div>
     </div>
   </aside>

@@ -6,7 +6,7 @@
       </div>
     </template>
     <hr class="-mt-2 mb-4 -mx-4">
-    <ul class="menu-list">
+    <ul v-if="isCurrentUser" class="menu-list">
       <li :class="['menu-item', { 'active': isActive('/social') }]">
         <router-link to="/social">
           <i class="mdi mdi-home" aria-hidden="true"></i>
@@ -62,6 +62,20 @@
         </router-link>
       </li>
     </ul>
+    <ul v-else class="menu-list">
+      <li class="menu-item">
+        <router-link to="/social">
+          <i class="mdi mdi-home" aria-hidden="true"></i>
+          {{ t("Home") }}
+        </router-link>
+      </li>
+      <li class="menu-item">
+        <a href="/main/inc/ajax/user_manager.ajax.php?a=get_user_popup&user_id={{user.id}}" class="ajax" rel="noopener noreferrer">
+          <i class="mdi mdi-email" aria-hidden="true"></i>
+          {{ t("Send message") }}
+        </a>
+      </li>
+    </ul>
   </BaseCard>
 </template>
 
@@ -85,6 +99,7 @@ const messageRelUserStore = useMessageRelUserStore()
 const unreadMessagesCount = computed(() => messageRelUserStore.countUnread)
 
 const user = inject('social-user')
+const isCurrentUser = inject('is-current-user')
 const groupLink = ref({ name: 'UserGroupShow' })
 const platformConfigStore = usePlatformConfig()
 const globalForumsCourse = computed(() => platformConfigStore.getSetting("forum.global_forums_course_id"))

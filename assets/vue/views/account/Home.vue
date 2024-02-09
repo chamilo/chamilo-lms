@@ -53,7 +53,7 @@ provide("social-user", readonly(user))
 
 async function loadUser() {
   try {
-    user.value = route.query.id ? await store.dispatch("user/load", route.query.id) : store.getters["security/getUser"]
+    user.value = route.query.id ? await store.dispatch("user/load", '/api/users/' + route.query.id) : store.getters["security/getUser"]
   } catch (e) {
     user.value = {}
   }

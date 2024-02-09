@@ -21,19 +21,21 @@
         <a :href="goToUrl" class="btn btn-primary">{{ t('See all communities') }}</a>
       </div>
       <div v-else class="input-group mb-3">
-        <input
-          type="search"
-          class="form-control"
-          placeholder="Search"
-          v-model="searchQuery"
-        >
-        <button
-          class="btn btn-outline-secondary"
-          type="button"
-          @click="search"
-        >
-          <i class="mdi mdi-magnify"></i>
-        </button>
+        <div v-if="isCurrentUser">
+          <input
+            type="search"
+            class="form-control"
+            placeholder="Search"
+            v-model="searchQuery"
+          >
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            @click="search"
+          >
+            <i class="mdi mdi-magnify"></i>
+          </button>
+        </div>
       </div>
     </div>
   </BaseCard>
@@ -51,6 +53,7 @@ const searchQuery = ref('')
 const groups = ref([])
 const goToUrl = ref('')
 const user = inject('social-user')
+const isCurrentUser = inject('is-current-user')
 const platformConfigStore = usePlatformConfig()
 const globalForumsCourse = computed(() => platformConfigStore.getSetting("forum.global_forums_course_id"))
 const isValidGlobalForumsCourse = computed(() => {

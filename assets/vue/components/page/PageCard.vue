@@ -8,6 +8,7 @@
           icon="edit"
           label="Edit"
           type="black"
+          size="small"
           @click="handleClick(page)"
         />
       </div>

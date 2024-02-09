@@ -28,6 +28,7 @@ import MyCoursesLayout from "../layouts/MyCourses.vue"
 import CourseHome from "../views/course/CourseHome.vue"
 
 import AppIndex from "../pages/AppIndex.vue"
+import CustomAppIndex from "../../../var/vue_templates/pages/AppIndex.vue"
 import Home from "../pages/Home.vue"
 import Login from "../pages/Login.vue"
 import Faq from "../pages/Faq.vue"
@@ -38,6 +39,7 @@ import courseService from "../services/courseService"
 
 import catalogueCourses from "./cataloguecourses"
 import catalogueSessions from "./cataloguesessions"
+import { customVueTemplateEnabled } from "../config/env"
 
 const router = createRouter({
   history: createWebHistory(),
@@ -45,7 +47,7 @@ const router = createRouter({
     {
       path: "/",
       name: "Index",
-      component: AppIndex,
+      component: customVueTemplateEnabled ? CustomAppIndex : AppIndex,
       meta: {
         requiresAuth: false,
         showBreadcrumb: false,

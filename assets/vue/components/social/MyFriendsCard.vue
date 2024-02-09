@@ -30,7 +30,7 @@
         </li>
       </ul>
       <div v-if="friends.length > 10" class="mt-2 text-center">
-        <a href="#" @click="viewAll">{{ t('View All Friends') }}</a>
+        <a href="#" @click="viewAll">{{ t('View all friends') }}</a>
       </div>
     </div>
     <div v-if="allowSocialMap && isCurrentUser" class="text-center mt-3">

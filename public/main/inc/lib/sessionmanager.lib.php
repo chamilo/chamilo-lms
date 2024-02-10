@@ -743,7 +743,7 @@ class SessionManager
                 if ($extraFieldsToLoad) {
                     $url = api_get_path(WEB_CODE_PATH).'session/about.php?session_id='.$session['id'];
                 }
-                $session['title'] = Display::url($session['name'], $url);
+                $session['title'] = Display::url($session['title'], $url);
 
                 if (isset($session['session_active']) && $session['session_active'] == 1) {
                     $session['session_active'] = $activeIcon;
@@ -3362,7 +3362,7 @@ class SessionManager
                     s.nbr_courses,
                     s.access_start_date,
                     s.access_end_date,
-                    sc.name as category_name,
+                    sc.title as category_name,
                     s.promotion_id
 				FROM $session_table s
 				INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
@@ -8437,7 +8437,7 @@ class SessionManager
                 ];
 
                 $columnModel = [
-                    ['name' => 'name', 'index' => 'name', 'align' => 'left'],
+                    ['name' => 'title', 'index' => 'title', 'align' => 'left'],
                     ['name' => 'date', 'index' => 'access_start_date', 'align' => 'left'],
                     [
                         'name' => 'course_per_session',
@@ -8464,7 +8464,7 @@ class SessionManager
             case 'close':
                 $columns = [
                     '#',
-                    get_lang('Name'),
+                    get_lang('Title'),
                     get_lang('Category'),
                     get_lang('Start date to display'),
                     get_lang('End date to display'),
@@ -8478,7 +8478,7 @@ class SessionManager
                         'hidden' => 'true',
                     ],
                     [
-                        'name' => 'name',
+                        'name' => 'title',
                         'index' => 's.title',
                         'width' => '160',
                         'align' => 'left',
@@ -8565,7 +8565,7 @@ class SessionManager
             case 'simple':
                 $columns = [
                     '#',
-                    get_lang('Name'),
+                    get_lang('Title'),
                     get_lang('Category'),
                     get_lang('Session Display Start Date'),
                     get_lang('Session Display End Date'),
@@ -8579,7 +8579,7 @@ class SessionManager
                         'hidden' => 'true',
                     ],
                     [
-                        'name' => 'name',
+                        'name' => 'title',
                         'index' => 's.title',
                         'width' => '160',
                         'align' => 'left',
@@ -8659,7 +8659,7 @@ class SessionManager
                 break;
             case 'complete':
                 $columns = [
-                    get_lang('Name'),
+                    get_lang('Title'),
                     get_lang('Start date to display'),
                     get_lang('End date to display'),
                     get_lang('Coach'),
@@ -8669,7 +8669,7 @@ class SessionManager
                 ];
                 $columnModel = [
                     [
-                        'name' => 'name',
+                        'name' => 'title',
                         'index' => 's.title',
                         'width' => '200',
                         'align' => 'left',
@@ -8735,7 +8735,7 @@ class SessionManager
             case 'custom':
                 $columns = [
                     '#',
-                    get_lang('Name'),
+                    get_lang('Title'),
                     get_lang('Category'),
                     get_lang('Start date to display'),
                     get_lang('End date to display'),
@@ -8748,7 +8748,7 @@ class SessionManager
                         'hidden' => 'true',
                     ],
                     [
-                        'name' => 'name',
+                        'name' => 'title',
                         'index' => 's.title',
                         'width' => '160',
                         'align' => 'left',

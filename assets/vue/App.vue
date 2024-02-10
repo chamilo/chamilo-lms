@@ -143,11 +143,13 @@ onUpdated(() => {
 
   const flashes = JSON.parse(app.dataset.flashes)
 
-  for (const key in flashes) {
-    const notificationType = key === 'danger' ? 'Error' : capitalize(key);
+  if (!Array.isArray(flashes)) {
+    for (const key in flashes) {
+      const notificationType = key === 'danger' ? 'Error' : capitalize(key);
 
-    for (const flashText of flashes[key]) {
-      notification[`show${notificationType}Notification`](flashText);
+      for (const flashText of flashes[key]) {
+        notification[`show${notificationType}Notification`](flashText);
+      }
     }
   }
 

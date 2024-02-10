@@ -107,15 +107,19 @@ class UpdateVueTranslations extends Command
         $translated = $this->translator->trans($variable, [], 'messages', $iso);
 
         // Check if the translation is not found and if there is a parent language
-        if ($translated === $variable && $language->getParent()) {
-            // Get the parent language entity and its ISO code
-            $parentLanguage = $language->getParent();
-            $parentIso = $parentLanguage->getIsocode();
-            // Try to translate the variable in the parent language
-            $translated = $this->translator->trans($variable, [], 'messages', $parentIso);
+        if ($translated === $variable) {
+            if ($language->getParent()) {
+                // Get the parent language entity and its ISO code
+                $parentLanguage = $language->getParent();
+                $parentIso = $parentLanguage->getIsocode();
+                // Try to translate the variable in the parent language
+                $translated = $this->translator->trans($variable, [], 'messages', $parentIso);
 
-            // Check if translation is still not found and use the base language (English)
-            if ($translated === $variable) {
+                // Check if translation is still not found and use the base language (English)
+                if ($translated === $variable) {
+                    $translated = $this->translator->trans($variable, [], 'messages', 'en');
+                }
+            } else {
                 $translated = $this->translator->trans($variable, [], 'messages', 'en');
             }
         }

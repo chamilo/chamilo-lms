@@ -145,6 +145,7 @@ watch(
               class="p-panelmenu-header-action"
               tabindex="-1"
               data-pc-section="headeraction"
+              :href="item.url ? item.url : undefined"
             >
               <span
                 class="p-menuitem-text"

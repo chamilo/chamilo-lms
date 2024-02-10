@@ -10,7 +10,7 @@
       <div class="app-sidebar__bottom">
         <PageList category-title="footer_private" />
 
-        <p>{{ t("Created with Chamilo &copy; {year}", { year: 2022 }) }}</p>
+        <p v-html="t('Created with Chamilo copyright year', [ currentYear ])" />
       </div>
       <a
         v-if="securityStore.isAuthenticated"
@@ -55,6 +55,8 @@ const securityStore = useSecurityStore()
 const { menuItems } = useSidebarMenu()
 
 const sidebarIsOpen = ref(window.localStorage.getItem("sidebarIsOpen") === "true")
+
+const currentYear = new Date().getFullYear();
 
 watch(
   sidebarIsOpen,

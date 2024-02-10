@@ -24205,3 +24205,9 @@ msgstr "View all friends"
 
 msgid "Mark as promoted message"
 msgstr "Mark as promoted message"
+
+msgid "FAQ"
+msgstr "FAQ"
+
+msgid "Created with Chamilo copyright year"
+msgstr "Created with Chamilo © %s"

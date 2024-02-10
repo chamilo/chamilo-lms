@@ -356,7 +356,8 @@ function onCreateEventForm() {
     if (cidReqStore.course) {
       itemModel.resourceLinkListFromEntity = [
         {
-          cid: cidReqStore.course["id"],
+          cid: cidReqStore.course.id,
+          sid: cidReqStore.session?.id ?? null,
           visibility: RESOURCE_LINK_PUBLISHED,
         },
       ]

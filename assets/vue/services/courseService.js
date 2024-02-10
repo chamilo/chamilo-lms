@@ -66,10 +66,18 @@ const courseService = {
 
   /**
    * @param {number} courseId
+   * @param {number=} sessionId
    * @returns {Promise<Object>}
    */
-  checkLegal: async (courseId) => {
-    const { data } = await axios.get(ENTRYPOINT + `../course/${courseId}/checkLegal.json`)
+  checkLegal: async (courseId, sessionId = 0) => {
+    const { data } = await axios.get(
+      `/course/${courseId}/checkLegal.json`,
+      {
+        params: {
+          sid: sessionId,
+        },
+      }
+    )
 
     return data
   },

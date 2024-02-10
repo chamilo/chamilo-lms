@@ -17,6 +17,7 @@ const securityStore = useSecurityStore()
   />
   <div
     class="app-main"
+    :class="{ 'app-main--no-sidebar': !securityStore.isAuthenticated, 'app-main--no-loggedin': !securityStore.isAuthenticated }"
   >
     <slot />
     <router-view />
@@ -25,9 +26,17 @@ const securityStore = useSecurityStore()
 
 <style scoped lang="scss">
 @media (min-width: 640px) {
-  #app.app--sidebar-inactive {
-    .app-main {
-      margin-left: 15rem !important;
+  #app {
+    &.app--sidebar-inactive {
+      .app-main.app-main--no-loggedin {
+        margin-left: 15rem !important;
+      }
+    }
+
+    &:not(.app--sidebar-inactive) {
+      .app-main.app-main--no-loggedin {
+        margin-left: 15rem !important;
+      }
     }
   }
 }

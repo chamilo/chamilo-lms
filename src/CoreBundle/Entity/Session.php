@@ -578,7 +578,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return false;
     }
 
-    public function getSessionRelCourseByUser(User $user, int $status = null): Collection
+    public function getSessionRelCourseByUser(User $user, ?int $status = null): Collection
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq('user', $user));
         if (null !== $status) {
@@ -1104,7 +1104,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return false;
     }
 
-    public function hasCourseCoachInCourse(User $user, Course $course = null): bool
+    public function hasCourseCoachInCourse(User $user, ?Course $course = null): bool
     {
         if (null === $course) {
             return false;
@@ -1117,14 +1117,14 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
      * @param int $status if not set it will check if the user is registered
      *                    with any status
      */
-    public function hasUserInCourse(User $user, Course $course, int $status = null): bool
+    public function hasUserInCourse(User $user, Course $course, ?int $status = null): bool
     {
         $relation = $this->getUserInCourse($user, $course, $status);
 
         return $relation->count() > 0;
     }
 
-    public function getUserInCourse(User $user, Course $course, int $status = null): Collection
+    public function getUserInCourse(User $user, Course $course, ?int $status = null): Collection
     {
         $criteria = Criteria::create()
             ->where(
@@ -1161,7 +1161,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this->hasUserInCourse($user, $course, self::STUDENT);
     }
 
-    protected function compareDates(?DateTime $start, DateTime $end = null): bool
+    protected function compareDates(?DateTime $start, ?DateTime $end = null): bool
     {
         $now = new DateTime('now');
 

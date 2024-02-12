@@ -21,7 +21,7 @@ class CForumThreadRepository extends ResourceRepository
         parent::__construct($registry, CForumThread::class);
     }
 
-    public function getForumThread(string $title, Course $course, Session $session = null): ?CForumThread
+    public function getForumThread(string $title, Course $course, ?Session $session = null): ?CForumThread
     {
         $qb = $this->getResourcesByCourse($course, $session);
         $qb
@@ -34,8 +34,8 @@ class CForumThreadRepository extends ResourceRepository
 
     public function findAllByCourse(
         Course $course,
-        Session $session = null,
-        string $title = null
+        ?Session $session = null,
+        ?string $title = null
     ): QueryBuilder {
         $qb = $this->getResourcesByCourse($course, $session);
 
@@ -73,7 +73,8 @@ class CForumThreadRepository extends ResourceRepository
             WHERE fn.cId = :courseId AND fn.userId = :userId
         )')
             ->setParameter('courseId', $courseId)
-            ->setParameter('userId', $userId);
+            ->setParameter('userId', $userId)
+        ;
 
         return $qb->getQuery()->getResult();
     }

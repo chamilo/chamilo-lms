@@ -161,8 +161,8 @@ abstract class AbstractResource
      */
     public function addCourseLink(
         Course $course,
-        Session $session = null,
-        CGroup $group = null,
+        ?Session $session = null,
+        ?CGroup $group = null,
         int $visibility = ResourceLink::VISIBILITY_PUBLISHED
     ): self {
         if (null === $this->getParent()) {
@@ -257,9 +257,9 @@ abstract class AbstractResource
 
     public function addResourceToUserList(
         array $userList,
-        Course $course = null,
-        Session $session = null,
-        CGroup $group = null
+        ?Course $course = null,
+        ?Session $session = null,
+        ?CGroup $group = null
     ): static {
         if (!empty($userList)) {
             foreach ($userList as $user) {
@@ -272,9 +272,9 @@ abstract class AbstractResource
 
     public function addUserLink(
         User $user,
-        Course $course = null,
-        Session $session = null,
-        CGroup $group = null
+        ?Course $course = null,
+        ?Session $session = null,
+        ?CGroup $group = null
     ): static {
         $resourceLink = (new ResourceLink())
             ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED)
@@ -310,8 +310,8 @@ abstract class AbstractResource
 
     public function addResourceToGroupList(
         array $groupList,
-        Course $course = null,
-        Session $session = null,
+        ?Course $course = null,
+        ?Session $session = null,
     ): static {
         foreach ($groupList as $group) {
             $this->addGroupLink($course, $group, $session);
@@ -320,7 +320,7 @@ abstract class AbstractResource
         return $this;
     }
 
-    public function addGroupLink(Course $course, CGroup $group, Session $session = null): static
+    public function addGroupLink(Course $course, CGroup $group, ?Session $session = null): static
     {
         $resourceLink = (new ResourceLink())
             ->setCourse($course)
@@ -440,7 +440,7 @@ abstract class AbstractResource
         return null;
     }
 
-    public function isVisible(Course $course, Session $session = null): bool
+    public function isVisible(Course $course, ?Session $session = null): bool
     {
         $link = $this->getFirstResourceLinkFromCourseSession($course, $session);
 
@@ -455,7 +455,7 @@ abstract class AbstractResource
         return ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility();
     }
 
-    public function getFirstResourceLinkFromCourseSession(Course $course, Session $session = null): ?ResourceLink
+    public function getFirstResourceLinkFromCourseSession(Course $course, ?Session $session = null): ?ResourceLink
     {
         $resourceNode = $this->getResourceNode();
         if ($resourceNode && $resourceNode->getResourceLinks()->count() > 0) {

@@ -56,7 +56,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                                             'properties' => [
                                                 'visibility' => ['type' => 'integer'],
                                                 'c_id' => ['type' => 'integer'],
-                                                'session_id' => ['type' => 'integer']
+                                                'session_id' => ['type' => 'integer'],
                                             ],
                                         ],
                                     ],

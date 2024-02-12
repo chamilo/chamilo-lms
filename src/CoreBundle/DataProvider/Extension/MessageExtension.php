@@ -28,7 +28,7 @@ final class MessageExtension implements QueryCollectionExtensionInterface // , Q
         QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
-        Operation $operation = null,
+        ?Operation $operation = null,
         array $context = []
     ): void {
         /*if ($this->security->isGranted('ROLE_ADMIN')) {
@@ -53,7 +53,7 @@ final class MessageExtension implements QueryCollectionExtensionInterface // , Q
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
         array $identifiers,
-        string $operationName = null,
+        ?string $operationName = null,
         array $context = []
     ): void {
         // error_log('applyToItem1');

@@ -28,7 +28,7 @@ class CNotebookRepository extends ResourceRepository
     public function findByUser(
         User $user,
         Course $course,
-        Session $session = null,
+        ?Session $session = null,
         string $orderField = 'creation_date',
         string $orderDirection = 'DESC'
     ) {

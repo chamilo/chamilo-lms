@@ -238,7 +238,7 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this->availFrom;
     }
 
-    public function setAvailFrom(DateTime $availFrom = null): self
+    public function setAvailFrom(?DateTime $availFrom = null): self
     {
         if (null === $availFrom) {
             $availFrom = new DateTime();
@@ -253,7 +253,7 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
         return $this->availTill;
     }
 
-    public function setAvailTill(DateTime $availTill = null): self
+    public function setAvailTill(?DateTime $availTill = null): self
     {
         if (null === $availTill) {
             $availTill = new DateTime();

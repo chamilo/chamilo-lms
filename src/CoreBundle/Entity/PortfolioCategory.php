@@ -121,7 +121,7 @@ class PortfolioCategory implements Stringable
      *
      * @return ArrayCollection
      */
-    public function getItems(Course $course = null, Session $session = null, bool $onlyVisibles = false)
+    public function getItems(?Course $course = null, ?Session $session = null, bool $onlyVisibles = false)
     {
         $criteria = Criteria::create();
 

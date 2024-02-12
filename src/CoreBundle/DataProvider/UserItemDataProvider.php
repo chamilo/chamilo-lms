@@ -19,7 +19,7 @@ class UserItemDataProvider implements ItemDataProviderInterface, RestrictedDataP
         private readonly NameConvention $nameConvention
     ) {}
 
-    public function getItem(string $resourceClass, $id, string $operationName = null, array $context = [])
+    public function getItem(string $resourceClass, $id, ?string $operationName = null, array $context = [])
     {
         $user = $this->repository->find($id);
 
@@ -28,7 +28,7 @@ class UserItemDataProvider implements ItemDataProviderInterface, RestrictedDataP
         return $user;
     }
 
-    public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
+    public function supports(string $resourceClass, ?string $operationName = null, array $context = []): bool
     {
         return User::class === $resourceClass;
     }

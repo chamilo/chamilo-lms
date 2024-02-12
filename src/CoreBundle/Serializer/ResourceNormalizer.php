@@ -31,9 +31,9 @@ final class ResourceNormalizer implements ContextAwareNormalizerInterface, Norma
 
     public function normalize(
         $object,
-        string $format = null,
+        ?string $format = null,
         array $context = []
-    ): null|array|ArrayObject|bool|float|int|string {
+    ): array|ArrayObject|bool|float|int|string|null {
         $context[self::ALREADY_CALLED] = true;
 
         $request = $this->requestStack->getCurrentRequest();
@@ -101,7 +101,7 @@ final class ResourceNormalizer implements ContextAwareNormalizerInterface, Norma
         return $this->normalizer->normalize($object, $format, $context);
     }
 
-    public function supportsNormalization($data, string $format = null, array $context = []): bool
+    public function supportsNormalization($data, ?string $format = null, array $context = []): bool
     {
         if (isset($context[self::ALREADY_CALLED])) {
             return false;

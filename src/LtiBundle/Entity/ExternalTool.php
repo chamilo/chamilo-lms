@@ -250,7 +250,7 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
         return $this->course;
     }
 
-    public function setCourse(Course $course = null): static
+    public function setCourse(?Course $course = null): static
     {
         $this->course = $course;
 

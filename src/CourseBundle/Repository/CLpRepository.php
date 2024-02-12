@@ -42,7 +42,7 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
         $this->create($lp);
     }
 
-    public function findForumByCourse(CLp $lp, Course $course, Session $session = null): ?CForum
+    public function findForumByCourse(CLp $lp, Course $course, ?Session $session = null): ?CForum
     {
         $forums = $lp->getForums();
         $result = null;
@@ -62,11 +62,11 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
 
     public function findAllByCourse(
         Course $course,
-        Session $session = null,
-        string $title = null,
-        int $active = null,
+        ?Session $session = null,
+        ?string $title = null,
+        ?int $active = null,
         bool $onlyPublished = true,
-        int $categoryId = null
+        ?int $categoryId = null
     ): QueryBuilder {
         $qb = $this->getResourcesByCourse($course, $session);
 
@@ -95,7 +95,7 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
         return $router->generate('legacy_main', $params);
     }
 
-    protected function addNotDeletedQueryBuilder(QueryBuilder $qb = null): QueryBuilder
+    protected function addNotDeletedQueryBuilder(?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
 

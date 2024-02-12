@@ -116,7 +116,7 @@ class Container
         self::$container = $container;
     }
 
-    public static function getParameter(string $parameter): null|array|bool|float|int|string|UnitEnum
+    public static function getParameter(string $parameter): array|bool|float|int|string|UnitEnum|null
     {
         if (self::$container->hasParameter($parameter)) {
             return self::$container->getParameter($parameter);
@@ -199,7 +199,7 @@ class Container
         self::$request = $request;
     }
 
-    public static function getSession(): null|bool|HttpSessionInterface|Session
+    public static function getSession(): bool|HttpSessionInterface|Session|null
     {
         if (null !== self::$session) {
             return self::$session;

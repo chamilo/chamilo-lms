@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -22,7 +23,6 @@ class UserSkillsController
 
         $skillsData = [];
         foreach ($skillRelUsers as $skillRelUser) {
-
             $skillAsset = $skillRelUser->getSkill()->getAsset();
 
             $skillData = [

@@ -32,7 +32,7 @@ class SettingsCourseManager extends SettingsManager
         $this->course = $course;
     }
 
-    public function load(string $schemaAlias, string $namespace = null, bool $ignoreUnknown = true): SettingsInterface
+    public function load(string $schemaAlias, ?string $namespace = null, bool $ignoreUnknown = true): SettingsInterface
     {
         $settings = new Settings();
         $schemaAliasNoPrefix = $schemaAlias;

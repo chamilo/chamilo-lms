@@ -132,7 +132,7 @@ class SessionRepository extends ServiceEntityRepository
     /**
      * @return array<SessionRelCourse>
      */
-    public function getSessionCoursesByStatusInUserSubscription(User $user, Session $session, int $relationType, AccessUrl $url = null): array
+    public function getSessionCoursesByStatusInUserSubscription(User $user, Session $session, int $relationType, ?AccessUrl $url = null): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -180,7 +180,7 @@ class SessionRepository extends ServiceEntityRepository
     /**
      * @return array<SessionRelCourse>
      */
-    public function getSessionCoursesByStatusInCourseSubscription(User $user, Session $session, int $status, AccessUrl $url = null): array
+    public function getSessionCoursesByStatusInCourseSubscription(User $user, Session $session, int $status, ?AccessUrl $url = null): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 

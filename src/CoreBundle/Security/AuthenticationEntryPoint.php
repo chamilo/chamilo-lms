@@ -18,7 +18,7 @@ class AuthenticationEntryPoint implements AuthenticationEntryPointInterface
         private readonly UrlGeneratorInterface $urlGenerator,
     ) {}
 
-    public function start(Request $request, AuthenticationException $authException = null): RedirectResponse
+    public function start(Request $request, ?AuthenticationException $authException = null): RedirectResponse
     {
         /*error_log('start');
         $message = $authException->getMessage();

@@ -20,7 +20,7 @@ class CForumCategoryRepository extends ResourceRepository
         parent::__construct($registry, CForumCategory::class);
     }
 
-    public function getForumCategoryByTitle(string $title, Course $course, Session $session = null): ?ResourceInterface
+    public function getForumCategoryByTitle(string $title, Course $course, ?Session $session = null): ?ResourceInterface
     {
         return $this->findCourseResourceByTitle(
             $title,

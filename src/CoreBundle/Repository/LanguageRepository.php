@@ -73,7 +73,8 @@ class LanguageRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('l');
         $qb->where('l.isocode = :isoCode')
             ->setParameter('isoCode', $isoCode)
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
         return $qb->getQuery()->getSingleResult();
     }

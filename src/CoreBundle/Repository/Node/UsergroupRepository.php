@@ -18,10 +18,7 @@ class UsergroupRepository extends ResourceRepository
     }
 
     /**
-     * @param int $userId
      * @param int|array $relationType
-     * @param bool $withImage
-     * @return array
      */
     public function getGroupsByUser(int $userId, int $relationType = Usergroup::GROUP_USER_PERMISSION_READER, bool $withImage = false): array
     {
@@ -30,15 +27,18 @@ class UsergroupRepository extends ResourceRepository
             ->where('gu.user = :userId')
             ->setParameter('userId', $userId)
             ->andWhere('g.groupType = :socialClass')
-            ->setParameter('socialClass', Usergroup::SOCIAL_CLASS);
+            ->setParameter('socialClass', Usergroup::SOCIAL_CLASS)
+        ;
 
-        if ($relationType !== 0) {
-            if (is_array($relationType)) {
+        if (0 !== $relationType) {
+            if (\is_array($relationType)) {
                 $qb->andWhere('gu.relationType IN (:relationType)')
-                    ->setParameter('relationType', $relationType);
+                    ->setParameter('relationType', $relationType)
+                ;
             } else {
                 $qb->andWhere('gu.relationType = :relationType')
-                    ->setParameter('relationType', $relationType);
+                    ->setParameter('relationType', $relationType)
+                ;
             }
         }
 
@@ -46,16 +46,15 @@ class UsergroupRepository extends ResourceRepository
             $urlId = $this->getCurrentAccessUrlId();
             $qb->innerJoin('g.urls', 'u')
                 ->andWhere('u.accessUrl = :urlId')
-                ->setParameter('urlId', $urlId);
+                ->setParameter('urlId', $urlId)
+            ;
         }
-
 
         $qb->orderBy('g.createdAt', 'DESC');
 
         $query = $qb->getQuery();
-        $groups = $query->getResult();
 
-        return $groups;
+        return $query->getResult();
     }
 
     public function searchGroupsByQuery(string $query): array
@@ -64,24 +63,25 @@ class UsergroupRepository extends ResourceRepository
 
         if (!empty($query)) {
             $qb->where('g.title LIKE :query OR g.description LIKE :query')
-                ->setParameter('query', '%' . $query . '%');
+                ->setParameter('query', '%'.$query.'%')
+            ;
         }
 
         if ($this->getUseMultipleUrl()) {
             $urlId = $this->getCurrentAccessUrlId();
             $qb->innerJoin('g.urls', 'u')
                 ->andWhere('u.accessUrl = :urlId')
-                ->setParameter('urlId', $urlId);
+                ->setParameter('urlId', $urlId)
+            ;
         }
 
         return $qb->getQuery()->getResult();
     }
 
-
     /**
      * Determines whether to use the multi-URL feature.
      *
-     * @return bool True if multi-URLs should be used, false otherwise.
+     * @return bool true if multi-URLs should be used, false otherwise
      */
     public function getUseMultipleUrl(): bool
     {
@@ -93,7 +93,7 @@ class UsergroupRepository extends ResourceRepository
     /**
      * Gets the current access URL ID.
      *
-     * @return int The ID of the current access URL.
+     * @return int the ID of the current access URL
      */
     public function getCurrentAccessUrlId(): int
     {
@@ -101,6 +101,4 @@ class UsergroupRepository extends ResourceRepository
         // For now, returning 1 as a default value.
         return 1;
     }
-
-
 }

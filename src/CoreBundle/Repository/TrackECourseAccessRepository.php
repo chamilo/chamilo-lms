@@ -24,7 +24,7 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
     /**
      * Get the last registered access by an user.
      */
-    public function getLastAccessByUser(User $user = null): ?TrackECourseAccess
+    public function getLastAccessByUser(?User $user = null): ?TrackECourseAccess
     {
         if (null === $user) {
             return null;

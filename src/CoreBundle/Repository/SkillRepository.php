@@ -52,7 +52,7 @@ class SkillRepository extends ServiceEntityRepository
     /**
      * Get the last acquired skill by a user on course and/or session.
      */
-    public function getLastByUser(User $user, Course $course = null, Session $session = null): ?Skill
+    public function getLastByUser(User $user, ?Course $course = null, ?Session $session = null): ?Skill
     {
         $qb = $this->createQueryBuilder('s');
 

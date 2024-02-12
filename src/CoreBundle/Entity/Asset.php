@@ -265,7 +265,7 @@ class Asset implements Stringable
         return $this->file;
     }
 
-    public function setFile(File|UploadedFile $file = null): self
+    public function setFile(File|UploadedFile|null $file = null): self
     {
         $this->file = $file;
 

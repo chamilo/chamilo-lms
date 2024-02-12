@@ -36,7 +36,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         $this->manager = $manager;
     }
 
-    public function setContainer(ContainerInterface $container = null): void
+    public function setContainer(?ContainerInterface $container = null): void
     {
         $this->container = $container;
     }

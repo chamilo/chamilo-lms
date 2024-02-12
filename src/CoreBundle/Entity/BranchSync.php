@@ -522,7 +522,7 @@ class BranchSync
         return $this->root;
     }
 
-    public function setParent(self $parent = null): self
+    public function setParent(?self $parent = null): self
     {
         $this->parent = $parent;
 

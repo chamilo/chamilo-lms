@@ -58,7 +58,7 @@ use UserManager;
             controller: UserSkillsController::class,
             normalizationContext: ['groups' => ['user_skills:read']],
             name: 'get_user_skills'
-        )
+        ),
     ],
     normalizationContext: ['groups' => ['user:read']],
     denormalizationContext: ['groups' => ['user:write']],
@@ -1250,7 +1250,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->lastLogin;
     }
 
-    public function setLastLogin(DateTime $lastLogin = null): self
+    public function setLastLogin(?DateTime $lastLogin = null): self
     {
         $this->lastLogin = $lastLogin;
 
@@ -1280,7 +1280,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->passwordRequestedAt;
     }
 
-    public function setPasswordRequestedAt(DateTime $date = null): self
+    public function setPasswordRequestedAt(?DateTime $date = null): self
     {
         $this->passwordRequestedAt = $date;
 
@@ -1328,7 +1328,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * Sets the credentials expiration date.
      */
-    public function setCredentialsExpireAt(DateTime $date = null): self
+    public function setCredentialsExpireAt(?DateTime $date = null): self
     {
         $this->credentialsExpireAt = $date;
 
@@ -1860,7 +1860,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->dateOfBirth;
     }
 
-    public function setDateOfBirth(DateTime $dateOfBirth = null): self
+    public function setDateOfBirth(?DateTime $dateOfBirth = null): self
     {
         $this->dateOfBirth = $dateOfBirth;
 
@@ -2347,7 +2347,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      * Used to be implemented in global function \api_max_sort_value.
      * Reimplemented using the ORM cache.
      */
-    public function getMaxSortValue(UserCourseCategory $userCourseCategory = null): int
+    public function getMaxSortValue(?UserCourseCategory $userCourseCategory = null): int
     {
         $categoryCourses = $this->courses->matching(
             Criteria::create()->where(Criteria::expr()->neq('relationType', COURSE_RELATION_TYPE_RRHH))->andWhere(

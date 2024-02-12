@@ -27,7 +27,7 @@ final class CourseRelUserExtension implements QueryCollectionExtensionInterface 
         QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
-        Operation $operation = null,
+        ?Operation $operation = null,
         array $context = []
     ): void {
         if ($this->security->isGranted('ROLE_ADMIN')) {

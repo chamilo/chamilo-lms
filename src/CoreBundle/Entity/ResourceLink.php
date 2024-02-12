@@ -159,7 +159,7 @@ class ResourceLink implements Stringable
         return $this->course;
     }
 
-    public function setCourse(Course $course = null): self
+    public function setCourse(?Course $course = null): self
     {
         $this->course = $course;
 
@@ -171,7 +171,7 @@ class ResourceLink implements Stringable
         return $this->session;
     }
 
-    public function setSession(Session $session = null): self
+    public function setSession(?Session $session = null): self
     {
         $this->session = $session;
 
@@ -198,7 +198,7 @@ class ResourceLink implements Stringable
         return $this->group;
     }
 
-    public function setGroup(CGroup $group = null): self
+    public function setGroup(?CGroup $group = null): self
     {
         $this->group = $group;
 
@@ -210,7 +210,7 @@ class ResourceLink implements Stringable
         return $this->userGroup;
     }
 
-    public function setUserGroup(Usergroup $group = null): self
+    public function setUserGroup(?Usergroup $group = null): self
     {
         $this->userGroup = $group;
 
@@ -222,7 +222,7 @@ class ResourceLink implements Stringable
         return $this->user;
     }
 
-    public function setUser(User $user = null): self
+    public function setUser(?User $user = null): self
     {
         $this->user = $user;
 

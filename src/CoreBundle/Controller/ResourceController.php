@@ -183,14 +183,15 @@ class ResourceController extends AbstractResourceController implements CourseCon
             throw new FileNotFoundException('Resource not found');
         }
 
-        if ('course_tool' === $tool &&  'links' === $type) {
+        if ('course_tool' === $tool && 'links' === $type) {
             $cLink = $cLinkRepository->findOneBy(['resourceNode' => $resourceNode]);
             if ($cLink) {
                 $url = $cLink->getUrl();
+
                 return $this->redirect($url);
-            } else {
-                throw new FileNotFoundException('CLink not found for the given resource node');
             }
+
+            throw new FileNotFoundException('CLink not found for the given resource node');
         } else {
             $repo = $this->getRepositoryFromRequest($request);
             if ($repo instanceof ResourceWithLinkInterface) {
@@ -454,7 +455,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     /**
      * @return mixed|StreamedResponse
      */
-    private function processFile(Request $request, ResourceNode $resourceNode, string $mode = 'show', string $filter = '', array $allUserInfo = null)
+    private function processFile(Request $request, ResourceNode $resourceNode, string $mode = 'show', string $filter = '', ?array $allUserInfo = null)
     {
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,

@@ -460,7 +460,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                                 if (this.files[0]) {
                                     fileName = this.files[0].name;
                                 }
-                                the_return.innerHTML = fileName;
+                                the_return.textContent = fileName;
                             });
                         </script>
                     ';

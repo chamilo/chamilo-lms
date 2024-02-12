@@ -1277,6 +1277,7 @@ class TicketManager
 
                 $result_attach = Database::query($sql);
                 while ($row2 = Database::fetch_assoc($result_attach)) {
+                    $row2['filename'] = Security::remove_XSS($row2['filename']);
                     $archiveURL = $webPath.'ticket/download.php?ticket_id='.$ticketId.'&id='.$row2['id'];
                     $row2['attachment_link'] = $attach_icon.
                         '&nbsp;<a href="'.$archiveURL.'">'.$row2['filename'].'</a>&nbsp;('.$row2['size'].')';

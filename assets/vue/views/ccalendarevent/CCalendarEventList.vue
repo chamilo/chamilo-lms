@@ -177,6 +177,10 @@ async function getCalendarEvents({ startStr, endStr }) {
 }
 
 async function getSessions({ startStr, endStr }) {
+  if (cidReqStore.course) {
+    return []
+  }
+
   if ("true" !== platformConfigStore.getSetting("agenda.personal_calendar_show_sessions_occupation")) {
     return []
   }

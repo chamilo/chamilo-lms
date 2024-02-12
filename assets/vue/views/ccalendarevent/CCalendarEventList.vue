@@ -183,8 +183,8 @@ async function getSessions({ startStr, endStr }) {
 
   const sessions = await sessionRelUserService.findAll({
     user: currentUser.value["@id"],
-    "displayStartDate[after]": startStr,
-    "displayEndDate[before]": endStr,
+    "session.displayStartDate[after]": startStr,
+    "session.displayEndDate[before]": endStr,
     relationType: 3,
   })
 

@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Doctrine\Common\Filter\DateFilterInterface;
 use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
@@ -53,12 +54,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(
     filterClass: DateFilter::class,
     properties: [
-        'session.displayStartDate',
-        'session.displayEndDate',
-        'session.accessStartDate',
-        'session.accessEndDate',
-        'session.coachAccessStartDate',
-        'session.coachAccessEndDate',
+        'session.displayStartDate' => DateFilterInterface::INCLUDE_NULL_BEFORE_AND_AFTER,
+        'session.displayEndDate' => DateFilterInterface::INCLUDE_NULL_BEFORE_AND_AFTER,
+        'session.accessStartDate' => DateFilterInterface::INCLUDE_NULL_BEFORE_AND_AFTER,
+        'session.accessEndDate' => DateFilterInterface::INCLUDE_NULL_BEFORE_AND_AFTER,
+        'session.coachAccessStartDate' => DateFilterInterface::INCLUDE_NULL_BEFORE_AND_AFTER,
+        'session.coachAccessEndDate' => DateFilterInterface::INCLUDE_NULL_BEFORE_AND_AFTER,
     ]
 )]
 class SessionRelUser

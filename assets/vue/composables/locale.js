@@ -62,3 +62,16 @@ export function useLocale() {
     appLocale
   }
 }
+
+/**
+ * @param {string} localeName
+ */
+export function useParentLocale(localeName) {
+  const parts = localeName.split('_')
+
+  if (parts.length > 0) {
+    return parts[0]
+  }
+
+  return localeName
+}

@@ -43,25 +43,20 @@ import { useI18n } from "vue-i18n"
 import SocialSideMenu from "../../components/social/SocialSideMenu.vue";
 import UserProfileCard from "../../components/social/UserProfileCard.vue"
 import { useRoute } from "vue-router"
+import { useSocialInfo } from "../../composables/useSocialInfo"
 
 const store = useStore()
 const route = useRoute()
 const { t } = useI18n()
-const user = ref({})
 
-provide("social-user", readonly(user))
+const { user, isCurrentUser, groupInfo, isGroup, loadUser } = useSocialInfo();
 
-async function loadUser() {
-  try {
-    user.value = route.query.id ? await store.dispatch("user/load", '/api/users/' + route.query.id) : store.getters["security/getUser"]
-  } catch (e) {
-    user.value = {}
-  }
-}
+provide("social-user", user);
+provide("is-current-user", isCurrentUser);
+provide("group-info", groupInfo);
+provide("is-group", isGroup);
 
-onMounted(loadUser)
-
-watch(() => route.query, loadUser)
+onMounted(loadUser);
 
 function btnEditProfileOnClick() {
   window.location = "/account/edit"

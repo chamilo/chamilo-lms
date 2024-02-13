@@ -20,8 +20,8 @@
       <div v-if="isValidGlobalForumsCourse" class="text-center mb-3">
         <a :href="goToUrl" class="btn btn-primary">{{ t('See all communities') }}</a>
       </div>
-      <div v-else class="input-group mb-3">
-        <div v-if="isCurrentUser">
+      <div v-else >
+        <div v-if="isCurrentUser" class="input-group mb-3">
           <input
             type="search"
             class="form-control"

@@ -1,6 +1,16 @@
 <template>
   <BaseCard plain>
-    <div class="p-4 text-center">
+    <div v-if="isGroup" class="p-4 text-center">
+      <img
+        :src="groupInfo.image"
+        class="mb-4 w-24 h-24 mx-auto rounded-full"
+        alt="Group picture"
+      />
+      <div class="text-xl font-bold">{{ groupInfo.name }}</div>
+      <div class="text-lg">{{ groupInfo.description }}</div>
+    </div>
+
+    <div v-else class="p-4 text-center">
       <img
         :src="user.illustrationUrl"
         class="mb-4 w-24 h-24 mx-auto rounded-full"
@@ -50,7 +60,9 @@ const { t } = useI18n()
 const store = useStore()
 const route = useRoute()
 const user = inject('social-user')
+const groupInfo = inject('group-info')
 const isCurrentUser = inject('is-current-user')
+const isGroup = inject('is-group')
 
 const editProfile = () => {
   window.location = "/account/edit"

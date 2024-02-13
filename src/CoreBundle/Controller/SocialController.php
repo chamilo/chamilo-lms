@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\LegalRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
@@ -242,7 +243,7 @@ class SocialController extends AbstractController
                     'id' => $group->getId(),
                     'name' => $group->getTitle(),
                     'description' => $group->getDescription(),
-                    'url' => '#',
+                    'url' => $baseUrl.'/resources/usergroups/show/'.$group->getId(),
                 ];
             }
         }
@@ -270,4 +271,22 @@ class SocialController extends AbstractController
 
         return $this->json(['go_to' => $goToLink]);
     }
+
+    /**
+     * @Route("/upload-group-picture/{id}", name="chamilo_core_social_upload_group_picture", methods={"POST"})
+     */
+    #[Route('/upload-group-picture/{id}', name: 'chamilo_core_social_upload_group_picture')]
+    public function uploadGroupPicture(Request $request, Usergroup $usergroup)
+    {
+        $file = $request->files->get('picture');
+        if ($file) {
+
+        }
+
+        return $this->json([
+            'success' => true,
+            'message' => 'Imagen del grupo actualizada correctamente.',
+        ]);
+    }
+
 }

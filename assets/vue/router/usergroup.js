@@ -12,9 +12,9 @@ export default {
     },
     {
       name: 'UserGroupShow',
-      //path: ':id',
-      path: 'show',
-      component: () => import('../views/usergroup/Show.vue')
+      path: 'show/:group_id?',
+      component: () => import('../views/usergroup/Show.vue'),
+      props: true
     }
   ]
 };

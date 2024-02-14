@@ -689,18 +689,18 @@ class IndexBlocksController extends BaseController
         ];
 
         // Custom linking to user guides in the existing languages
-        $guideLinks = [
+        /*$guideLinks = [
             'french' => 'v/1.11.x-fr/',
             'spanish' => 'v/1.11.x-es/',
             'dutch' => 'v/1.11.x-nl/',
             'galician' => 'v/1.11.x-ga/',
-        ];
+        ];*/
 
         $guideLink = 'https://docs.chamilo.org/';
 
-        if (!empty($guideLinks[$languageInterface])) {
+        /*if (!empty($guideLinks[$languageInterface])) {
             $guideLink .= $guideLinks[$languageInterface];
-        }
+        }*/
 
         $items[] = [
             'class' => 'item-user-guides',
@@ -709,32 +709,32 @@ class IndexBlocksController extends BaseController
         ];
         $items[] = [
             'class' => 'item-forum',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'https://forum.chamilo.org/']),
+            'url' => 'https://github.com/chamilo/chamilo-lms/discussions/',
             'label' => $this->translator->trans('Chamilo forum'),
         ];
         $items[] = [
             'class' => 'item-installation-guide',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'documentation/installation_guide.html']),
+            'url' => $this->generateUrl('legacy_main', ['name' => '../documentation/installation.html']),
             'label' => $this->translator->trans('Installation guide'),
         ];
         $items[] = [
             'class' => 'item-changelog',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'documentation/changelog.html']),
+            'url' => $this->generateUrl('legacy_main', ['name' => '../documentation/changelog.html']),
             'label' => $this->translator->trans('Changes in last version'),
         ];
         $items[] = [
             'class' => 'item-credits',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'documentation/credits.html']),
+            'url' => $this->generateUrl('legacy_main', ['name' => '../documentation/credits.html']),
             'label' => $this->translator->trans('Contributors list'),
         ];
         $items[] = [
             'class' => 'item-security',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'documentation/security.html']),
+            'url' => $this->generateUrl('legacy_main', ['name' => '../documentation/security.html']),
             'label' => $this->translator->trans('Security guide'),
         ];
         $items[] = [
             'class' => 'item-optimization',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'documentation/optimization.html']),
+            'url' => $this->generateUrl('legacy_main', ['name' => '../documentation/optimization.html']),
             'label' => $this->translator->trans('Optimization guide'),
         ];
         $items[] = [

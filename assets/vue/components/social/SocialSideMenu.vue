@@ -113,11 +113,11 @@ const getGroupLink = async () => {
     if (isValidGlobalForumsCourse.value) {
       groupLink.value = response.data.go_to
     } else {
-      groupLink.value = { name: 'UserGroupShow' }
+      groupLink.value = { name: 'UserGroupList' }
     }
   } catch (error) {
     console.error('Error fetching forum link:', error)
-    groupLink.value = { name: 'UserGroupShow' }
+    groupLink.value = { name: 'UserGroupList' }
   }
 }
 

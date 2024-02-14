@@ -46,12 +46,11 @@ const props = defineProps({
 
 const emit = defineEmits(['comment-deleted'])
 
-const store = useStore();
-const currentUser = store.getters['security/getUser'];
-
+const store = useStore()
+const currentUser = store.getters['security/getUser']
 const isOwner = computed(() =>  currentUser['@id'] === props.comment.sender['@id'])
 
 function onCommentDeleted(event) {
-  emit('comment-deleted', event);
+  emit('comment-deleted', event)
 }
 </script>

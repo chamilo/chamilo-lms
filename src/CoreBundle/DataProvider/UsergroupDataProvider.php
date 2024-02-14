@@ -35,19 +35,43 @@ final class UsergroupDataProvider implements ProviderInterface
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): iterable
     {
         $operationName = $operation->getName();
-        $userId = $context['request_attributes']['_api_filters']['userId'] ?? null;
+        if ($operationName === 'get_usergroup') {
+            $groupId = $uriVariables['id'] ?? null;
 
-        if (!$userId) {
-            $user = $this->security->getUser();
-            $userId = $user ? $user->getId() : null;
+            if (!$groupId) {
+                throw new \Exception("Group ID is required for 'get_usergroup' operation");
+            }
+
+            $group = $this->usergroupRepository->findGroupById($groupId);
+
+            if (!$group) {
+                throw new \Exception("Group not found");
+            }
+
+            $this->setGroupDetails($group);
+
+            return [$group];
         }
 
-        if (!$userId) {
-            throw new \Exception("User ID is required");
+        if ($operationName === 'search_usergroups') {
+            $searchTerm = $context['filters']['search'] ?? '';
+            $groups = $this->usergroupRepository->searchGroups($searchTerm);
+            foreach ($groups as $group) {
+                $this->setGroupDetails($group);
+            }
+            return $groups;
         }
 
         switch ($operationName) {
             case 'get_my_usergroups':
+                $userId = $context['request_attributes']['_api_filters']['userId'] ?? null;
+                if (!$userId) {
+                    $user = $this->security->getUser();
+                    $userId = $user ? $user->getId() : null;
+                }
+                if (!$userId) {
+                    throw new \Exception("User ID is required");
+                }
                 $groups = $this->usergroupRepository->getGroupsByUser($userId, 0);
                 break;
 
@@ -67,13 +91,7 @@ final class UsergroupDataProvider implements ProviderInterface
         if (in_array($operationName, ['get_my_usergroups', 'get_newest_usergroups', 'get_popular_usergroups'])) {
             /* @var Usergroup $group */
             foreach ($groups as $group) {
-                $memberCount = $this->usergroupRepository->countMembers($group->getId());
-                $group->setMemberCount($memberCount);
-                if ($this->illustrationRepository->hasIllustration($group)) {
-                    $picture = $this->illustrationRepository->getIllustrationUrl($group);
-                    $group->setPictureUrl($picture);
-                }
-
+                $this->setGroupDetails($group);
             }
         }
 
@@ -84,5 +102,16 @@ final class UsergroupDataProvider implements ProviderInterface
     public function supports(Operation $operation, array $uriVariables = [], array $context = []): bool
     {
         return Usergroup::class === $operation->getClass();
+    }
+
+    private function setGroupDetails(Usergroup $group): void
+    {
+        $memberCount = $this->usergroupRepository->countMembers($group->getId());
+        $group->setMemberCount($memberCount);
+
+        if ($this->illustrationRepository->hasIllustration($group)) {
+            $picture = $this->illustrationRepository->getIllustrationUrl($group);
+            $group->setPictureUrl($picture);
+        }
     }
 }

@@ -18,17 +18,23 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import axios from 'axios'
 import GroupDiscussions from "../../components/usergroup/GroupDiscussions.vue"
 import GroupMembers from "../../components/usergroup/GroupMembers.vue"
-
 const route = useRoute()
 const activeTab = ref('discussions')
-const groupId = ref(route.query.group_id)
-
-onMounted(() => {
+const groupId = ref(route.params.group_id)
+const group = ref(null)
+onMounted(async () => {
   if (groupId.value) {
+    try {
+      const response = await axios.get(`/api/usergroup/${groupId.value}`)
+      group.value = response.data
+    } catch (error) {
+      console.error('Error fetching group details:', error)
+    }
   }
 })
 </script>

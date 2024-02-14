@@ -15,6 +15,12 @@ export default {
       path: 'show/:group_id?',
       component: () => import('../views/usergroup/Show.vue'),
       props: true
+    },
+    {
+      name: 'UserGroupSearch',
+      path: 'search',
+      component: () => import('../views/usergroup/Search.vue'),
+      props: (route) => ({ q: route.query.q })
     }
   ]
 };

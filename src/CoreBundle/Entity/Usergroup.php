@@ -29,26 +29,37 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [
-        new Get(security: "is_granted('VIEW', object)"),
+        new Get(
+            uriTemplate: '/usergroup/{id}',
+            normalizationContext: ['groups' => ['usergroup:read']],
+            security: "is_granted('ROLE_USER')",
+            name: 'get_usergroup'
+        ),
         new Put(security: "is_granted('EDIT', object)"),
         new Delete(security: "is_granted('DELETE', object)"),
         new GetCollection(
-            uriTemplate: '/usergroup/my',
+            uriTemplate: '/usergroup/list/my',
             normalizationContext: ['groups' => ['usergroup:read']],
             security: "is_granted('ROLE_USER')",
             name: 'get_my_usergroups'
         ),
         new GetCollection(
-            uriTemplate: '/usergroup/newest',
+            uriTemplate: '/usergroup/list/newest',
             normalizationContext: ['groups' => ['usergroup:read']],
             security: "is_granted('ROLE_USER')",
             name: 'get_newest_usergroups'
         ),
         new GetCollection(
-            uriTemplate: '/usergroup/popular',
+            uriTemplate: '/usergroup/list/popular',
             normalizationContext: ['groups' => ['usergroup:read']],
             security: "is_granted('ROLE_USER')",
             name: 'get_popular_usergroups'
+        ),
+        new GetCollection(
+            uriTemplate: '/usergroups/search',
+            normalizationContext: ['groups' => ['usergroup:read']],
+            security: "is_granted('ROLE_USER')",
+            name: 'search_usergroups'
         ),
         new Post(
             securityPostDenormalize: "is_granted('CREATE', object)",

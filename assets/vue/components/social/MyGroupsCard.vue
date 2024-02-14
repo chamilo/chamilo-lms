@@ -47,6 +47,7 @@ import { useI18n } from "vue-i18n"
 import { ref, inject, watchEffect, computed } from "vue"
 import axios from 'axios'
 import { usePlatformConfig } from "../../store/platformConfig"
+import { useRouter } from "vue-router"
 
 const { t } = useI18n()
 const searchQuery = ref('')
@@ -61,8 +62,9 @@ const isValidGlobalForumsCourse = computed(() => {
   return courseId !== null && courseId !== undefined && courseId > 0
 })
 
+const router = useRouter()
 function search() {
-  window.location.href = `/search?query=${searchQuery.value}`
+  router.push({ name: 'UserGroupSearch', query: { q: searchQuery.value } })
 }
 
 async function fetchGroups(userId) {

@@ -8,10 +8,10 @@
       <TabView class="social-group-tabs">
         <TabPanel header="Newest" headerClass="tab-header" :class="{ 'active-tab': activeTab === 'Newest' }">
           <div class="group-list">
-            <div class="group-item" v-for="group in newestGroups" :key="group.id">
+            <div class="group-item" v-for="group in newestGroups" :key="group['@id']">
               <i class="mdi mdi-account-group-outline group-icon"></i>
               <div class="group-details">
-                <div class="group-title">{{ group.title }}</div>
+                <a :href="`/resources/usergroups/show/${extractGroupId(group)}`" class="group-title">{{ group.title }}</a>
                 <div class="group-info">
                   <span class="group-member-count">{{ group.memberCount }} Member</span>
                   <span class="group-description">{{ group.description }}</span>
@@ -22,10 +22,10 @@
         </TabPanel>
         <TabPanel header="Popular" headerClass="tab-header" :class="{ 'active-tab': activeTab === 'Popular' }">
           <div class="group-list">
-            <div class="group-item" v-for="group in popularGroups" :key="group.id">
+            <div class="group-item" v-for="group in popularGroups" :key="group['@id']">
               <i class="mdi mdi-account-group-outline group-icon"></i>
               <div class="group-details">
-                <div class="group-title">{{ group.title }}</div>
+                <a :href="`/resources/usergroups/show/${extractGroupId(group)}`" class="group-title">{{ group.title }}</a>
                 <div class="group-info">
                   <span class="group-member-count">{{ group.memberCount }} Member</span>
                   <span class="group-description">{{ group.description }}</span>
@@ -35,10 +35,10 @@
           </div>        </TabPanel>
         <TabPanel header="My groups" headerClass="tab-header" :class="{ 'active-tab': activeTab === 'My groups' }">
           <div class="group-list">
-            <div class="group-item" v-for="group in myGroups" :key="group.id">
+            <div class="group-item" v-for="group in myGroups" :key="group['@id']">
               <i class="mdi mdi-account-group-outline group-icon"></i>
               <div class="group-details">
-                <div class="group-title">{{ group.title }}</div>
+                <a :href="`/resources/usergroups/show/${extractGroupId(group)}`" class="group-title">{{ group.title }}</a>
                 <div class="group-info">
                   <span class="group-member-count">{{ group.memberCount }} Member</span>
                   <span class="group-description">{{ group.description }}</span>
@@ -99,24 +99,25 @@
 </template>
 
 <script setup>
-import Button from 'primevue/button';
-import TabView from 'primevue/tabview';
-import TabPanel from 'primevue/tabpanel';
-import { ref, onMounted } from 'vue';
-import useVuelidate from '@vuelidate/core';
-import { required } from '@vuelidate/validators';
+import Button from 'primevue/button'
+import TabView from 'primevue/tabview'
+import TabPanel from 'primevue/tabpanel'
+import { ref, onMounted } from 'vue'
+import useVuelidate from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
 import BaseInputTextWithVuelidate from "../../components/basecomponents/BaseInputTextWithVuelidate.vue"
 import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import { useI18n } from "vue-i18n"
 import axios from "axios"
+import { ENTRYPOINT } from "../../config/entrypoint"
 
 const {t} = useI18n()
-const newestGroups = ref([]);
-const popularGroups = ref([]);
-const myGroups = ref([]);
-const activeTab = ref('Newest');
-const showCreateGroupDialog = ref(false);
+const newestGroups = ref([])
+const popularGroups = ref([])
+const myGroups = ref([])
+const activeTab = ref('Newest')
+const showCreateGroupDialog = ref(false)
 const selectedFile = ref(null)
 
 const groupForm = ref({
@@ -124,23 +125,20 @@ const groupForm = ref({
   description: '',
   url: '',
   picture: null,
-});
-
+})
 const v$ = useVuelidate({
   groupForm: {
     name: { required },
     description: {},
     url: {},
   }
-}, { groupForm });
-
+}, { groupForm })
 const permissionsOptions = [
   { label: 'Open', value: '1' },
   { label: 'Closed', value: '2' },
-];
-
+]
 const createGroup = async () => {
-  v$.value.$touch();
+  v$.value.$touch()
   if (!v$.value.$invalid) {
     const groupData = {
       title: groupForm.value.name,
@@ -149,58 +147,59 @@ const createGroup = async () => {
       visibility: groupForm.value.permissions.value,
       allowMembersToLeaveGroup: groupForm.value.allowLeave ? 1 : 0,
       groupType: 1,
-    };
-
+    }
     try {
-      const response = await axios.post('/api/usergroups', groupData, {
+      const response = await axios.post(ENTRYPOINT + 'usergroups', groupData, {
         headers: {
           'Content-Type': 'application/json',
         },
-      });
-
+      })
       /*if (selectedFile.value && response.data && response.data.id) {
-        const formData = new FormData();
-        formData.append('picture', selectedFile.value);
-
+        const formData = new FormData()
+        formData.append('picture', selectedFile.value)
         await axios.post(`/social-network/upload-group-picture/${response.data.id}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
-        });
+        })
       }*/
 
-      showCreateGroupDialog.value = false;
-      await updateGroupsList();
+      showCreateGroupDialog.value = false
+      await updateGroupsList()
     } catch (error) {
-      console.error('Failed to create group or upload picture:', error.response.data);
+      console.error('Failed to create group or upload picture:', error.response.data)
     }
   }
-};
-
+}
 const fetchGroups = async (endpoint) => {
   try {
-    const response = await fetch(`/api${endpoint}`);
+    const response = await fetch(ENTRYPOINT + `${endpoint}`)
     if (!response.ok) {
-      throw new Error('Failed to fetch groups');
+      throw new Error('Failed to fetch groups')
     }
-    const data = await response.json();
-
+    const data = await response.json()
     console.log('hidra menber ::: ', data['hydra:member'])
 
-    return data['hydra:member'];
+    return data['hydra:member']
   } catch (error) {
-    console.error(error);
-    return [];
+    console.error(error)
+    return []
   }
-};
-
+}
 const updateGroupsList = async () => {
-  newestGroups.value = await fetchGroups('/usergroup/newest');
-  popularGroups.value = await fetchGroups('/usergroup/popular');
-  myGroups.value = await fetchGroups('/usergroup/my');
+  newestGroups.value = await fetchGroups('usergroup/list/newest')
+  popularGroups.value = await fetchGroups('usergroup/list/popular')
+  myGroups.value = await fetchGroups('usergroup/list/my')
 }
 
+const extractGroupId = (group) => {
+  const match = group['@id'].match(/\/api\/usergroup\/(\d+)/)
+  return match ? match[1] : null
+}
+const redirectToGroupDetails = (groupId) => {
+  router.push({ name: 'UserGroupShow', params: { group_id: groupId } })
+}
 onMounted(async () => {
-  await updateGroupsList();
-});
+  await updateGroupsList()
+})
 </script>

@@ -69,4 +69,16 @@ class MessageRepository extends ServiceEntityRepository
 
         return $qb;
     }
+
+    public function findByGroupId(int $groupId)
+    {
+        $qb = $this->createQueryBuilder('m');
+        $qb->where('m.group = :groupId')
+            ->andWhere('m.status NOT IN (:excludedStatuses)')
+            ->setParameter('groupId', $groupId)
+            ->setParameter('excludedStatuses', [Message::MESSAGE_STATUS_DRAFT, Message::MESSAGE_STATUS_DELETED])
+            ->orderBy('m.id', 'ASC');
+
+        return $qb->getQuery()->getResult();
+    }
 }

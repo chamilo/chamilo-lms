@@ -116,6 +116,23 @@ class UsergroupRepository extends ResourceRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function findGroupById($id)
+    {
+        return $this->createQueryBuilder('ug')
+            ->where('ug.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function searchGroups(string $searchTerm): array
+    {
+        $queryBuilder = $this->createQueryBuilder('g');
+        $queryBuilder->where('g.title LIKE :searchTerm')
+            ->setParameter('searchTerm', '%' . $searchTerm . '%');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 
     /**
      * Determines whether to use the multi-URL feature.

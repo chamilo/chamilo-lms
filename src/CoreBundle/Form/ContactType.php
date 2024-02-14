@@ -33,7 +33,7 @@ class ContactType extends AbstractType
         $builder
             ->add('category', EntityType::class, [
                 'class' => ContactCategory::class,
-                'choice_label' => 'name',
+                'choice_label' => 'title',
                 'label' => $this->translator->trans('Category'),
                 'constraints' => [
                     new NotBlank(),

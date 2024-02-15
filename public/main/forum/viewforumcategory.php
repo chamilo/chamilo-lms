@@ -174,7 +174,7 @@ if (is_array($forumCategories)) {
         }
         $categorySessionId = 0;
         $forumCategoryInfo['id'] = $categoryId;
-        $forumCategoryInfo['title'] = $forumCategory->getCatTitle();
+        $forumCategoryInfo['title'] = $forumCategory->getTitle();
         $forumCategoryInfo['icon_session'] = '';
 
         // Validation when belongs to a session

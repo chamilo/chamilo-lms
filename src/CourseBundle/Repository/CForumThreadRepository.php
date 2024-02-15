@@ -25,7 +25,7 @@ class CForumThreadRepository extends ResourceRepository
     {
         $qb = $this->getResourcesByCourse($course, $session);
         $qb
-            ->andWhere('resource.threadTitle = :title')
+            ->andWhere('resource.title = :title')
             ->setParameter('title', $title)
         ;
 

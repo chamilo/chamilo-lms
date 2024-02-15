@@ -171,7 +171,7 @@ class Notification extends Model
                 break;
             case self::NOTIFICATION_TYPE_GROUP:
                 if (!empty($senderInfo)) {
-                    $senderName = $senderInfo['group_info']['name'];
+                    $senderName = $senderInfo['group_info']['title'];
                     $newTitle .= sprintf(get_lang('You have received a new message in group %s'), $senderName);
                     $senderName = api_get_person_name(
                         $senderInfo['user_info']['firstname'],
@@ -397,7 +397,7 @@ class Notification extends Model
             case self::NOTIFICATION_TYPE_GROUP:
                 $topicPage = isset($_REQUEST['topics_page_nr']) ? (int) $_REQUEST['topics_page_nr'] : 0;
                 if (!empty($senderInfo)) {
-                    $senderName = $senderInfo['group_info']['name'];
+                    $senderName = $senderInfo['group_info']['title'];
                     $newMessageText = sprintf(get_lang('You have received a new message in group %s'), $senderName);
                     $senderName = Display::url(
                         $senderInfoName,
@@ -405,7 +405,7 @@ class Notification extends Model
                     );
                     $newMessageText .= '<br />'.get_lang('User').': '.$senderName;
                 }
-                $groupUrl = api_get_path(WEB_CODE_PATH).'social/group_topics.php?id='.$senderInfo['group_info']['id'].'&topic_id='.$senderInfo['group_info']['topic_id'].'&msg_id='.$senderInfo['group_info']['msg_id'].'&topics_page_nr='.$topicPage;
+                $groupUrl = api_get_path(WEB_PATH).'resources/usergroups/show/'.$senderInfo['group_info']['id'];
                 $linkToNewMessage = Display::url(get_lang('See message'), $groupUrl);
                 break;
         }
@@ -519,6 +519,8 @@ class Notification extends Model
         /** @var array $decodedResult */
         $decodedResult = json_decode($result, true);
 
-        return intval($decodedResult['success']);
+        $return = isset($decodedResult['success']) ? (int) $decodedResult['success'] : 0;
+
+        return $return;
     }
 }

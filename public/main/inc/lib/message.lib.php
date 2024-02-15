@@ -366,7 +366,7 @@ class MessageManager
                     );
 
                     // Adding more sense to the message group
-                    $subject = sprintf(get_lang('There is a new message in group %s'), $group_info['name']);
+                    $subject = sprintf(get_lang('There is a new message in group %s'), $group_info['title']);
                     $new_user_list = [];
                     foreach ($user_list as $user_data) {
                         $new_user_list[] = $user_data['id'];

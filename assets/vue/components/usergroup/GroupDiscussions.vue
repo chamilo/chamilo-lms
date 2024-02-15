@@ -2,7 +2,7 @@
   <div>
     <div class="discussions-header">
       <h2>Discussions</h2>
-      <a :href="threadCreationUrl" class="btn btn-primary create-thread-btn">
+      <a :href="threadCreationUrl" class="btn btn-primary create-thread-btn ajax">
         <i class="pi pi-plus"></i> {{ t("Create thread") }}
       </a>
     </div>
@@ -29,9 +29,11 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
+import { useI18n } from "vue-i18n"
 const route = useRoute()
 const discussions = ref([])
 const groupId = ref(route.params.group_id)
+const { t } = useI18n()
 
 onMounted(async () => {
   if (groupId.value) {

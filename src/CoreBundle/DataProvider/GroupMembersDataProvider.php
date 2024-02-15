@@ -32,8 +32,7 @@ final class GroupMembersDataProvider implements ProviderInterface
         }
 
         $usergroupRepository = $this->entityManager->getRepository(Usergroup::class);
-        $users = $usergroupRepository->getUsersByGroup((int)$groupId);
 
-        return $users;
+        return $usergroupRepository->getUsersByGroup((int) $groupId);
     }
 }

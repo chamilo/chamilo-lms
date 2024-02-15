@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\DataProvider;
@@ -8,7 +9,7 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 
-final class MessageByGroupDataProvider implements  ProviderInterface
+final class MessageByGroupDataProvider implements ProviderInterface
 {
     private MessageRepository $messageRepository;
 
@@ -27,7 +28,6 @@ final class MessageByGroupDataProvider implements  ProviderInterface
         $groupId = $context['filters']['groupId'] ?? null;
 
         if (null === $groupId) {
-
             return [];
         }
 

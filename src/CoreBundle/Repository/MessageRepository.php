@@ -77,7 +77,8 @@ class MessageRepository extends ServiceEntityRepository
             ->andWhere('m.status NOT IN (:excludedStatuses)')
             ->setParameter('groupId', $groupId)
             ->setParameter('excludedStatuses', [Message::MESSAGE_STATUS_DRAFT, Message::MESSAGE_STATUS_DELETED])
-            ->orderBy('m.id', 'ASC');
+            ->orderBy('m.id', 'ASC')
+        ;
 
         return $qb->getQuery()->getResult();
     }

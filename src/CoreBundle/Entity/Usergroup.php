@@ -27,7 +27,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Classes and social groups.
  */
-
 #[ApiResource(
     operations: [
         new Get(

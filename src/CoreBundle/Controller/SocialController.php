@@ -7,10 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\LegalRepository;
-use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
@@ -18,6 +16,7 @@ use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
 use DateTime;
+use Exception;
 use ExtraFieldValue;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -290,7 +289,7 @@ class SocialController extends AbstractController
         $friendsList = array_map(function ($friend) use ($illustrationRepository) {
             return [
                 'id' => $friend->getId(),
-                'name' => $friend->getFirstName() . ' ' . $friend->getLastName(),
+                'name' => $friend->getFirstName().' '.$friend->getLastName(),
                 'avatar' => $illustrationRepository->getIllustrationUrl($friend),
             ];
         }, $friends);
@@ -306,9 +305,10 @@ class SocialController extends AbstractController
 
         try {
             $usergroupRepository->addUserToGroup($userIds, $groupId);
+
             return $this->json(['success' => true, 'message' => 'Users added to group successfully.']);
-        } catch (\Exception $e) {
-            return $this->json(['success' => false, 'message' => 'An error occurred: ' . $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        } catch (Exception $e) {
+            return $this->json(['success' => false, 'message' => 'An error occurred: '.$e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -317,11 +317,11 @@ class SocialController extends AbstractController
     {
         $invitedUsers = $usergroupRepository->getInvitedUsersByGroup($groupId);
 
-        $invitedUsersList = array_map(function ($user) use ($illustrationRepository) {
+        $invitedUsersList = array_map(function ($user) {
             return [
                 'id' => $user['id'],
                 'name' => $user['username'],
-               // 'avatar' => $illustrationRepository->getIllustrationUrl($user),
+                // 'avatar' => $illustrationRepository->getIllustrationUrl($user),
             ];
         }, $invitedUsers);
 

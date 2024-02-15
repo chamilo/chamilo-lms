@@ -707,7 +707,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->from(UsergroupRelUser::class, 'ugr')
             ->where('ugr.usergroup = :subGroupId')
             ->andWhere('ugr.relationType IN (:subRelationTypes)')
-            ->getDQL();
+            ->getDQL()
+        ;
 
         $queryBuilder = $entityManager->createQueryBuilder();
         $query = $queryBuilder
@@ -720,9 +721,9 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->setParameter('userId', $userId)
             ->setParameter('subGroupId', $groupId)
             ->setParameter('subRelationTypes', [Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION])
-            ->getQuery();
+            ->getQuery()
+        ;
 
         return $query->getResult();
     }
-
 }

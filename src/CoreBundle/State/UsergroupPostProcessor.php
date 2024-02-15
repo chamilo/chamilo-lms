@@ -44,7 +44,7 @@ class UsergroupPostProcessor implements ProcessorInterface
         return $usergroup;
     }
 
-    private function associateCurrentUser(Usergroup $usergroup)
+    private function associateCurrentUser(Usergroup $usergroup): void
     {
         $currentUser = $this->security->getUser();
         if ($currentUser) {

@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 
 class UsergroupRepository extends ResourceRepository
 {
@@ -64,7 +65,8 @@ class UsergroupRepository extends ResourceRepository
             ->select('count(gu.id)')
             ->innerJoin('g.users', 'gu')
             ->where('g.id = :usergroupId')
-            ->setParameter('usergroupId', $usergroupId);
+            ->setParameter('usergroupId', $usergroupId)
+        ;
 
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
@@ -78,23 +80,25 @@ class UsergroupRepository extends ResourceRepository
             ->setParameter('socialClass', Usergroup::SOCIAL_CLASS)
             ->groupBy('g')
             ->orderBy('g.createdAt', 'DESC')
-            ->setMaxResults($limit);
+            ->setMaxResults($limit)
+        ;
 
         if ($this->getUseMultipleUrl()) {
             $urlId = $this->getCurrentAccessUrlId();
             $qb->innerJoin('g.urls', 'u')
                 ->andWhere('u.accessUrl = :urlId')
-                ->setParameter('urlId', $urlId);
+                ->setParameter('urlId', $urlId)
+            ;
         }
 
         if (!empty($query)) {
             $qb->andWhere('g.title LIKE :query OR g.description LIKE :query')
-               ->setParameter('query', '%'.$query.'%');
+                ->setParameter('query', '%'.$query.'%')
+            ;
         }
 
         return $qb->getQuery()->getResult();
     }
-
 
     public function getPopularGroups(int $limit = 6): array
     {
@@ -107,11 +111,12 @@ class UsergroupRepository extends ResourceRepository
             ->setParameter('relationTypes', [
                 Usergroup::GROUP_USER_PERMISSION_ADMIN,
                 Usergroup::GROUP_USER_PERMISSION_READER,
-                Usergroup::GROUP_USER_PERMISSION_HRM
+                Usergroup::GROUP_USER_PERMISSION_HRM,
             ])
             ->groupBy('g')
             ->orderBy('memberCount', 'DESC')
-            ->setMaxResults($limit);
+            ->setMaxResults($limit)
+        ;
 
         if ($this->getUseMultipleUrl()) {
             $urlId = $this->getCurrentAccessUrlId();
@@ -130,14 +135,16 @@ class UsergroupRepository extends ResourceRepository
             ->where('ug.id = :id')
             ->setParameter('id', $id)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getOneOrNullResult()
+        ;
     }
 
     public function searchGroups(string $searchTerm): array
     {
         $queryBuilder = $this->createQueryBuilder('g');
         $queryBuilder->where('g.title LIKE :searchTerm')
-            ->setParameter('searchTerm', '%' . $searchTerm . '%');
+            ->setParameter('searchTerm', '%'.$searchTerm.'%')
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -153,9 +160,10 @@ class UsergroupRepository extends ResourceRepository
             ->setParameter('relationTypes', [
                 Usergroup::GROUP_USER_PERMISSION_ADMIN,
                 Usergroup::GROUP_USER_PERMISSION_READER,
-                Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION
+                Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION,
             ])
-            ->select('u.id, u.username, u.email, gu.relationType');
+            ->select('u.id, u.username, u.email, gu.relationType')
+        ;
 
         return $qb->getQuery()->getResult();
     }
@@ -164,7 +172,7 @@ class UsergroupRepository extends ResourceRepository
     {
         $group = $this->find($groupId);
         if (!$group) {
-            throw new \Exception("Group not found");
+            throw new Exception('Group not found');
         }
 
         foreach ($userIds as $userId) {
@@ -190,11 +198,11 @@ class UsergroupRepository extends ResourceRepository
             ->setParameter('groupID', $groupID)
             ->andWhere('gu.relationType = :relationType')
             ->setParameter('relationType', Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION)
-            ->select('u.id, u.username, u.email, gu.relationType');
+            ->select('u.id, u.username, u.email, gu.relationType')
+        ;
 
         return $qb->getQuery()->getResult();
     }
-
 
     public function getInvitedUsers(int $groupId): array
     {
@@ -205,12 +213,12 @@ class UsergroupRepository extends ResourceRepository
             ->andWhere('rel.relationType = :relationType')
             ->setParameter('groupId', $groupId)
             ->setParameter('relationType', Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION)
-            ->select('u');
+            ->select('u')
+        ;
 
         return $qb->getQuery()->getResult();
     }
 
-  
     /**
      * Determines whether to use the multi-URL feature.
      *

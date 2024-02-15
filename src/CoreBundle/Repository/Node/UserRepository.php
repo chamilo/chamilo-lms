@@ -14,6 +14,8 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Datetime;
@@ -694,4 +696,33 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 
         return $qb;
     }
+
+    public function getFriendsNotInGroup(int $userId, int $groupId)
+    {
+        $entityManager = $this->getEntityManager();
+
+        $subQueryBuilder = $entityManager->createQueryBuilder();
+        $subQuery = $subQueryBuilder
+            ->select('IDENTITY(ugr.user)')
+            ->from(UsergroupRelUser::class, 'ugr')
+            ->where('ugr.usergroup = :subGroupId')
+            ->andWhere('ugr.relationType IN (:subRelationTypes)')
+            ->getDQL();
+
+        $queryBuilder = $entityManager->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('u')
+            ->from(User::class, 'u')
+            ->leftJoin('u.friendsWithMe', 'uruf')
+            ->leftJoin('u.friends', 'urut')
+            ->where('uruf.friend = :userId OR urut.user = :userId')
+            ->andWhere($queryBuilder->expr()->notIn('u.id', $subQuery))
+            ->setParameter('userId', $userId)
+            ->setParameter('subGroupId', $groupId)
+            ->setParameter('subRelationTypes', [Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION])
+            ->getQuery();
+
+        return $query->getResult();
+    }
+
 }

@@ -626,3 +626,122 @@
     border-top: none;
   }
 }
+
+.invite-friends {
+  .invite-friends-container {
+    max-width: 600px;
+    margin: auto;
+  }
+
+  .invite-friends-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .invite-friends-body {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .friends-list, .selected-friends-list {
+    width: 48%;
+  }
+
+  .list-header {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  .list-content {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    height: 300px;
+    overflow-y: auto;
+  }
+
+  .friend-entry {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .friend-avatar {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+  }
+
+  .friend-info {
+    display: flex;
+    align-items: center;
+  }
+
+  .invite-btn, .remove-btn {
+    border: none;
+    background-color: #5cb85c;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .remove-btn {
+    background-color: #d9534f;
+  }
+
+  .send-invites-btn {
+    width: 100%;
+    padding: 10px 20px;
+    background-color: #0275d8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .send-invites-btn:hover {
+    background-color: #025aa5;
+  }
+
+  .invited-users-container {
+    margin-top: 20px;
+  }
+
+  .invited-users-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+  }
+
+  .user-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+
+  .user-avatar {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin-bottom: 10px;
+  }
+
+  .user-name {
+    text-align: center;
+  }
+}
+
+.admin-icon {
+  color: gold;
+  margin-left: 5px;
+  vertical-align: middle;
+}

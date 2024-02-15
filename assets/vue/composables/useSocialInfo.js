@@ -19,7 +19,14 @@ export function useSocialInfo() {
     if (groupId) {
       try {
         const response = await axios.get(`/api/usergroup/${groupId}`);
-        groupInfo.value = response.data;
+        const groupData = response.data;
+        const extractedId = groupData['@id'].split('/').pop();
+
+        groupInfo.value = {
+          ...groupData,
+          id: extractedId
+        };
+
         isGroup.value = true;
       } catch (error) {
         console.error("Error loading group:", error);
@@ -50,9 +57,9 @@ export function useSocialInfo() {
 
   onMounted(async () => {
     try {
-      if (!route.params.group_id) {
+      //if (!route.params.group_id) {
         await loadUser();
-      }
+      //}
       if (route.params.group_id) {
         await loadGroup(route.params.group_id);
       }

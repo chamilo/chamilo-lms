@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\DataProvider\GroupMembersDataProvider;
 use Chamilo\CoreBundle\DataProvider\UsergroupDataProvider;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\State\UsergroupPostProcessor;
@@ -60,6 +61,13 @@ use Symfony\Component\Validator\Constraints as Assert;
             normalizationContext: ['groups' => ['usergroup:read']],
             security: "is_granted('ROLE_USER')",
             name: 'search_usergroups'
+        ),
+        new GetCollection(
+            uriTemplate: '/usergroups/{id}/members',
+            normalizationContext: ['groups' => ['usergroup:read']],
+            security: "is_granted('ROLE_USER')",
+            name: 'get_group_members',
+            provider: GroupMembersDataProvider::class
         ),
         new Post(
             securityPostDenormalize: "is_granted('CREATE', object)",

@@ -6,7 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository\Node;
 
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -132,6 +134,74 @@ class UsergroupRepository extends ResourceRepository
             ->setParameter('searchTerm', '%' . $searchTerm . '%');
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function getUsersByGroup(int $groupID)
+    {
+        $qb = $this->createQueryBuilder('g')
+            ->innerJoin('g.users', 'gu')
+            ->innerJoin('gu.user', 'u')
+            ->where('g.id = :groupID')
+            ->setParameter('groupID', $groupID)
+            ->andWhere('gu.relationType IN (:relationTypes)')
+            ->setParameter('relationTypes', [
+                Usergroup::GROUP_USER_PERMISSION_ADMIN,
+                Usergroup::GROUP_USER_PERMISSION_READER,
+                Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION
+            ])
+            ->select('u.id, u.username, u.email, gu.relationType');
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function addUserToGroup(array $userIds, int $groupId): void
+    {
+        $group = $this->find($groupId);
+        if (!$group) {
+            throw new \Exception("Group not found");
+        }
+
+        foreach ($userIds as $userId) {
+            $user = $this->_em->getRepository(User::class)->find($userId);
+            if ($user) {
+                $groupRelUser = new UsergroupRelUser();
+                $groupRelUser->setUsergroup($group);
+                $groupRelUser->setUser($user);
+                $groupRelUser->setRelationType(Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION);
+                $this->_em->persist($groupRelUser);
+            }
+        }
+
+        $this->_em->flush();
+    }
+
+    public function getInvitedUsersByGroup(int $groupID)
+    {
+        $qb = $this->createQueryBuilder('g')
+            ->innerJoin('g.users', 'gu')
+            ->innerJoin('gu.user', 'u')
+            ->where('g.id = :groupID')
+            ->setParameter('groupID', $groupID)
+            ->andWhere('gu.relationType = :relationType')
+            ->setParameter('relationType', Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION)
+            ->select('u.id, u.username, u.email, gu.relationType');
+
+        return $qb->getQuery()->getResult();
+    }
+
+
+    public function getInvitedUsers(int $groupId): array
+    {
+        $qb = $this->createQueryBuilder('g')
+            ->innerJoin('g.users', 'rel')
+            ->innerJoin('rel.user', 'u')
+            ->where('g.id = :groupId')
+            ->andWhere('rel.relationType = :relationType')
+            ->setParameter('groupId', $groupId)
+            ->setParameter('relationType', Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION)
+            ->select('u');
+
+        return $qb->getQuery()->getResult();
     }
 
     /**

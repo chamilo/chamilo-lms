@@ -15,18 +15,12 @@
         </li>
         <li class="menu-item">
           <router-link :to="{ name: '', params: { group_id: groupInfo.id } }">
-            <i class="mdi mdi-account-edit" aria-hidden="true"></i>
-            {{ t("Edit this group") }}
-          </router-link>
-        </li>
-        <li class="menu-item">
-          <router-link :to="{ name: '', params: { group_id: groupInfo.id } }">
             <i class="mdi mdi-account-multiple-outline" aria-hidden="true"></i>
             {{ t("Waiting list") }}
           </router-link>
         </li>
         <li class="menu-item">
-          <router-link :to="{ name: '', params: { group_id: groupInfo.id } }">
+          <router-link :to="{ name: 'UserGroupInvite', params: { group_id: groupInfo.id } }">
             <i class="mdi mdi-account-plus" aria-hidden="true"></i>
             {{ t("Invite friends") }}
           </router-link>

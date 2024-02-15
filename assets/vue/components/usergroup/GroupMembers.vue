@@ -12,10 +12,13 @@
     <div class="members-grid">
       <div class="member-card" v-for="member in members" :key="member.id">
         <div class="member-avatar">
-          <img v-if="member.image" :src="member.image" alt="Member avatar">
+          <img v-if="member.avatar" :src="member.avatar" alt="Member avatar">
           <i v-else class="mdi mdi-account-circle-outline"></i>
         </div>
-        <div class="member-name">{{ member.name }}</div>
+        <div class="member-name">
+          {{ member.name }}
+          <i v-if="member.isAdmin" class="mdi mdi-star-outline admin-icon"></i>
+        </div>
         <div class="member-role" v-if="member.role">{{ member.role }}</div>
       </div>
     </div>
@@ -23,24 +26,38 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import BaseButton from "../basecomponents/BaseButton.vue"
+import axios from "axios"
 
 const route = useRoute()
-//const members = ref([])
-const members = ref([
-  { name: 'John Doe', role: 'Admin', avatar: '/path/to/avatar.jpg' },
-  { name: 'Jane Doe', role: 'Miembro', avatar: '/path/to/avatar2.jpg' },
-  // ...
-])
+const members = ref([])
+const groupId = ref(route.params.group_id)
+
+const fetchMembers = async (groupId) => {
+  if (groupId.value) {
+    try {
+      const response = await axios.get(`/api/usergroups/${groupId.value}/members`)
+      members.value = response.data['hydra:member'].map(member => ({
+        id: member.id,
+        name: member.username,
+        role: member.relationType === 1 ? 'Admin' : 'Member',
+        avatar: null,
+        isAdmin: member.relationType === 1
+      }))
+    } catch (error) {
+      console.error('Error fetching group members:', error)
+      members.value = []
+    }
+  }
+}
 const editMembers = () => {
 }
-/*
-watchEffect(() => {
-  const groupId = route.query.group_id
+
+onMounted(() => {
   if (groupId) {
-    // members.value = fetchMembers(groupId)
+    fetchMembers(groupId)
   }
-});*/
+})
 </script>

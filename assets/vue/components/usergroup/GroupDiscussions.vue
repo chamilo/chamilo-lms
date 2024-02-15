@@ -3,7 +3,7 @@
     <div class="discussions-header">
       <h2>Discussions</h2>
       <a :href="threadCreationUrl" class="btn btn-primary create-thread-btn">
-        <i class="pi pi-plus"></i> Create thread
+        <i class="pi pi-plus"></i> {{ t("Create thread") }}
       </a>
     </div>
     <div class="discussion-item" v-for="discussion in discussions" :key="discussion.id">
@@ -11,7 +11,7 @@
         <div class="discussion-title" v-html="discussion.title"></div>
         <div class="discussion-details">
           <i class="mdi mdi-message-reply-text icon"></i>
-          <span>{{ discussion.repliesCount }} Replies</span>
+          <span>{{ discussion.repliesCount }} {{ t("Replies") }}</span>
           <i class="mdi mdi-clock-outline icon"></i>
           <span>Created {{ new Date(discussion.sendDate).toLocaleDateString() }}</span>
         </div>

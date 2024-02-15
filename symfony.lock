@@ -19,6 +19,9 @@
             "src/Entity/.gitignore"
         ]
     },
+    "chamilo/google-map-form-type-bundle": {
+        "version": "v1.5"
+    },
     "dama/doctrine-test-bundle": {
         "version": "6.7",
         "recipe": {

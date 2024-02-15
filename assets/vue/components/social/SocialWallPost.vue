@@ -79,15 +79,15 @@
 </template>
 
 <script setup>
-import WallCommentForm from "./SocialWallCommentForm.vue";
+import WallCommentForm from "./SocialWallCommentForm.vue"
 import { ref, computed, onMounted, reactive, inject } from "vue"
-import WallComment from "./SocialWallComment.vue";
-import WallActions from "./Actions";
-import axios from "axios";
-import {ENTRYPOINT} from "../../config/entrypoint";
-import {useStore} from "vuex";
-import BaseCard from "../basecomponents/BaseCard.vue";
-import {SOCIAL_TYPE_PROMOTED_MESSAGE} from "./constants";
+import WallComment from "./SocialWallComment.vue"
+import WallActions from "./Actions"
+import axios from "axios"
+import {ENTRYPOINT} from "../../config/entrypoint"
+import {useStore} from "vuex"
+import BaseCard from "../basecomponents/BaseCard.vue"
+import {SOCIAL_TYPE_PROMOTED_MESSAGE} from "./constants"
 import { useFormatDate } from "../../composables/formatDate"
 
 const props = defineProps({
@@ -95,16 +95,14 @@ const props = defineProps({
     type: Object,
     required: true
   }
-});
-
-const emit = defineEmits(["post-deleted"]);
-
-const store = useStore();
+})
+const emit = defineEmits(["post-deleted"])
+const store = useStore()
 import { useSecurityStore } from "../../store/securityStore"
 const { relativeDatetime } = useFormatDate()
 
-let comments = reactive([]);
-const attachments = ref([]);
+let comments = reactive([])
+const attachments = ref([])
 const securityStore = useSecurityStore()
 
 const currentUser = inject('social-user')
@@ -112,15 +110,12 @@ const isCurrentUser = inject('is-current-user')
 const isOwner = computed(() => currentUser['@id'] === props.post.sender['@id'])
 
 onMounted(async () => {
-  loadComments();
-
-  await loadAttachments();
-});
-
+  loadComments()
+  await loadAttachments()
+})
 const computedAttachments = computed(() => {
-  return attachments.value;
-});
-
+  return attachments.value
+})
 async function loadAttachments() {
   try {
     const postIri = props.post["@id"]
@@ -142,40 +137,38 @@ function loadComments() {
       }
     })
     .then(response => comments.push(...response.data['hydra:member']))
-  ;
+
 }
 
 function onCommentDeleted(event) {
-  const index = comments.findIndex(comment => comment['@id'] === event.comment['@id']);
-
+  const index = comments.findIndex(comment => comment['@id'] === event.comment['@id'])
   if (-1 !== index) {
-    comments.splice(index, 1);
+    comments.splice(index, 1)
   }
 }
 
 function onCommentPosted(newComment) {
-  comments.unshift(newComment);
+  comments.unshift(newComment)
 }
 
 function onPostDeleted(post) {
-  emit('post-deleted', post);
+  emit('post-deleted', post)
 }
 
 const isImageAttachment = (attachment) => {
   if (attachment.filename) {
-    const fileExtension = attachment.filename.split('.').pop().toLowerCase();
-    return ['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension);
+    const fileExtension = attachment.filename.split('.').pop().toLowerCase()
+    return ['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)
   }
 
-  return false;
-};
-
+  return false
+}
 const isVideoAttachment = (attachment) => {
   if (attachment.filename) {
-    const fileExtension = attachment.filename.split('.').pop().toLowerCase();
-    return ['mp4', 'webm', 'ogg'].includes(fileExtension);
+    const fileExtension = attachment.filename.split('.').pop().toLowerCase()
+    return ['mp4', 'webm', 'ogg'].includes(fileExtension)
   }
 
-  return false;
-};
+  return false
+}
 </script>

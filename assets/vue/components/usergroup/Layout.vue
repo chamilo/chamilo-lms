@@ -1,9 +1,34 @@
 <template>
-  <router-view></router-view>
+  <div class="flex flex-col md:flex-row gap-4">
+    <div class="md:basis-1/3 lg:basis-1/4 2xl:basis-1/6 flex flex-col">
+      <UserProfileCard v-if="!isLoading && !isGroup" />
+      <GroupInfoCard v-if="!isLoading && isGroup" />
+      <SocialSideMenu v-if="!isLoading && !isGroup" />
+      <SocialGroupMenu v-if="!isLoading && isGroup" />
+    </div>
+    <div class="md:basis-2/3 lg:basis-3/4 2xl:basis-5/6">
+      <router-view></router-view>
+    </div>
+  </div>
 </template>
+<script setup>
+import UserProfileCard from "../social/UserProfileCard.vue"
+import SocialSideMenu from "../social/SocialSideMenu.vue"
+import { useStore } from "vuex"
+import { useRoute } from "vue-router"
+import { onMounted, provide, readonly, ref, watch } from "vue"
+import { useSocialInfo } from "../../composables/useSocialInfo"
+import SocialGroupMenu from "../social/SocialGroupMenu.vue"
+import GroupInfoCard from "../social/GroupInfoCard.vue"
 
-<script>
-  export default {
-      name: 'UserGroupLayout'
-  }
+const store = useStore()
+const route = useRoute()
+
+const { user, isCurrentUser, groupInfo, isGroup, loadGroup, loadUser, isLoading } = useSocialInfo()
+
+provide("social-user", user)
+provide("is-current-user", isCurrentUser)
+provide("group-info", groupInfo)
+provide("is-group", isGroup)
+
 </script>

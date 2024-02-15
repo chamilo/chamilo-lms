@@ -36,7 +36,7 @@ if (!empty($group_id) && $allowed_action) {
         api_not_allowed(true);
     }
 
-    $to_group = $group_info['name'];
+    $to_group = $group_info['title'];
     if (!empty($message_id)) {
         /*$message_info = MessageManager::get_message_by_id($message_id);
         if ('reply_message_group' === $allowed_action) {

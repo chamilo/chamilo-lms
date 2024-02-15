@@ -68,7 +68,7 @@ if (isset($_POST['action'])) {
     if ('edit_message_group' === $_POST['action']) {
         $edit_message_id = intval($_POST['message_id']);
         $res = MessageManager::send_message(
-            0,
+            api_get_user_id(),
             $title,
             $content,
             $_FILES,
@@ -83,7 +83,7 @@ if (isset($_POST['action'])) {
             api_not_allowed(true);
         }
         $res = MessageManager::send_message(
-            0,
+            api_get_user_id(),
             $title,
             $content,
             $_FILES,
@@ -99,6 +99,9 @@ if (isset($_POST['action'])) {
     if (!$res) {
         Display::addFlash(Display::return_message(get_lang('Error'), 'error'));
     }
+
+    header('Location: ' . api_get_path(WEB_PATH).'resources/usergroups/show/'.$group_id);
+    exit;
     $topic_id = isset($_GET['topic_id']) ? intval($_GET['topic_id']) : null;
     if ('add_message_group' === $_POST['action']) {
         $topic_id = $res;
@@ -178,7 +181,7 @@ $(function() {
 
 $this_section = SECTION_SOCIAL;
 $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
-$interbreadcrumb[] = ['url' => 'group_view.php?id='.$group_id, 'name' => Security::remove_XSS($group_info['name'])];
+$interbreadcrumb[] = ['url' => 'group_view.php?id='.$group_id, 'name' => Security::remove_XSS($group_info['title'])];
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Discussions')];
 
 $social_left_content = null; //SocialManager::show_social_menu('member_list', $group_id);

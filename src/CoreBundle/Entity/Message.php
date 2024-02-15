@@ -16,6 +16,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\DataProvider\MessageByGroupDataProvider;
 use Chamilo\CoreBundle\Entity\Listener\MessageListener;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use DateTime;
@@ -38,7 +39,17 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(security: "is_granted('VIEW', object)"),
         new Put(security: "is_granted('EDIT', object)"),
         new Delete(security: "is_granted('DELETE', object)"),
-        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new GetCollection(
+            uriTemplate: '/messages',
+            security: "is_granted('ROLE_USER')",
+            name: 'get_all_messages'
+        ),
+        new GetCollection(
+            uriTemplate: '/messages/by-group/list',
+            security: "is_granted('ROLE_USER')",
+            name: 'get_messages_by_group',
+            provider: MessageByGroupDataProvider::class
+        ),
         new Post(securityPostDenormalize: "is_granted('CREATE', object)"),
     ],
     normalizationContext: [
@@ -121,6 +132,7 @@ class Message
     #[ORM\Column(name: 'content', type: 'text', nullable: false)]
     protected string $content;
 
+    #[Groups(['message:read', 'message:write'])]
     #[ORM\ManyToOne(targetEntity: Usergroup::class)]
     #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?Usergroup $group = null;

@@ -7,8 +7,11 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\LegalRepository;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
@@ -20,6 +23,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
@@ -240,7 +244,7 @@ class SocialController extends AbstractController
                     'id' => $group->getId(),
                     'name' => $group->getTitle(),
                     'description' => $group->getDescription(),
-                    'url' => '#',
+                    'url' => $baseUrl.'/resources/usergroups/show/'.$group->getId(),
                 ];
             }
         }
@@ -266,5 +270,61 @@ class SocialController extends AbstractController
         }
 
         return $this->json(['go_to' => $goToLink]);
+    }
+
+    #[Route('/invite-friends/{userId}/{groupId}', name: 'chamilo_core_social_invite_friends')]
+    public function inviteFriends(int $userId, int $groupId, UserRepository $userRepository, UsergroupRepository $usergroupRepository, IllustrationRepository $illustrationRepository): JsonResponse
+    {
+        $user = $userRepository->find($userId);
+        if (!$user) {
+            return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $group = $usergroupRepository->find($groupId);
+        if (!$group) {
+            return $this->json(['error' => 'Group not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $friends = $userRepository->getFriendsNotInGroup($userId, $groupId);
+
+        $friendsList = array_map(function ($friend) use ($illustrationRepository) {
+            return [
+                'id' => $friend->getId(),
+                'name' => $friend->getFirstName() . ' ' . $friend->getLastName(),
+                'avatar' => $illustrationRepository->getIllustrationUrl($friend),
+            ];
+        }, $friends);
+
+        return $this->json(['friends' => $friendsList]);
+    }
+
+    #[Route('/add-users-to-group/{groupId}', name: 'chamilo_core_social_add_users_to_group')]
+    public function addUsersToGroup(Request $request, int $groupId, UsergroupRepository $usergroupRepository): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $userIds = $data['userIds'] ?? [];
+
+        try {
+            $usergroupRepository->addUserToGroup($userIds, $groupId);
+            return $this->json(['success' => true, 'message' => 'Users added to group successfully.']);
+        } catch (\Exception $e) {
+            return $this->json(['success' => false, 'message' => 'An error occurred: ' . $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    #[Route('/group/{groupId}/invited-users', name: 'chamilo_core_social_group_invited_users')]
+    public function groupInvitedUsers(int $groupId, UsergroupRepository $usergroupRepository, IllustrationRepository $illustrationRepository): JsonResponse
+    {
+        $invitedUsers = $usergroupRepository->getInvitedUsersByGroup($groupId);
+
+        $invitedUsersList = array_map(function ($user) use ($illustrationRepository) {
+            return [
+                'id' => $user['id'],
+                'name' => $user['username'],
+               // 'avatar' => $illustrationRepository->getIllustrationUrl($user),
+            ];
+        }, $invitedUsers);
+
+        return $this->json(['invitedUsers' => $invitedUsersList]);
     }
 }

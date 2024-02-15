@@ -15,32 +15,17 @@ import SocialSideMenu from "../social/SocialSideMenu.vue"
 import { useStore } from "vuex"
 import { useRoute } from "vue-router"
 import { onMounted, provide, readonly, ref, watch } from "vue"
+import { useSocialInfo } from "../../composables/useSocialInfo"
 
 const store = useStore()
 const route = useRoute()
 
-const user = ref({})
-const isCurrentUser = ref(true)
+const { user, isCurrentUser, groupInfo, isGroup, loadUser } = useSocialInfo()
 
-provide("social-user", readonly(user))
-provide("is-current-user", readonly(isCurrentUser))
-
-async function loadUser() {
-  try {
-    if (route.query.id) {
-      user.value = await store.dispatch("user/load", '/api/users/' + route.query.id)
-      isCurrentUser.value = false
-    } else {
-      user.value = store.getters["security/getUser"]
-      isCurrentUser.value = true
-    }
-  } catch (e) {
-    user.value = {}
-    isCurrentUser.value = true
-  }
-}
+provide("social-user", user)
+provide("is-current-user", isCurrentUser)
+provide("group-info", groupInfo)
+provide("is-group", isGroup)
 
 onMounted(loadUser)
-
-watch(() => route.query, loadUser)
 </script>

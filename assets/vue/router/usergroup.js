@@ -12,9 +12,21 @@ export default {
     },
     {
       name: 'UserGroupShow',
-      //path: ':id',
-      path: 'show',
-      component: () => import('../views/usergroup/Show.vue')
+      path: 'show/:group_id?',
+      component: () => import('../views/usergroup/Show.vue'),
+      props: true
+    },
+    {
+      name: 'UserGroupSearch',
+      path: 'search',
+      component: () => import('../views/usergroup/Search.vue'),
+      props: (route) => ({ q: route.query.q })
+    },
+    {
+      name: 'UserGroupInvite',
+      path: 'invite/:group_id?',
+      component: () => import('../views/usergroup/Invite.vue'),
+      props: true
     }
   ]
 };

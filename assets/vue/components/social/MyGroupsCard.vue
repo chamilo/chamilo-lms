@@ -20,8 +20,8 @@
       <div v-if="isValidGlobalForumsCourse" class="text-center mb-3">
         <a :href="goToUrl" class="btn btn-primary">{{ t('See all communities') }}</a>
       </div>
-      <div v-else class="input-group mb-3">
-        <div v-if="isCurrentUser">
+      <div v-else >
+        <div v-if="isCurrentUser" class="input-group mb-3">
           <input
             type="search"
             class="form-control"
@@ -47,6 +47,7 @@ import { useI18n } from "vue-i18n"
 import { ref, inject, watchEffect, computed } from "vue"
 import axios from 'axios'
 import { usePlatformConfig } from "../../store/platformConfig"
+import { useRouter } from "vue-router"
 
 const { t } = useI18n()
 const searchQuery = ref('')
@@ -61,8 +62,9 @@ const isValidGlobalForumsCourse = computed(() => {
   return courseId !== null && courseId !== undefined && courseId > 0
 })
 
+const router = useRouter()
 function search() {
-  window.location.href = `/search?query=${searchQuery.value}`
+  router.push({ name: 'UserGroupSearch', query: { q: searchQuery.value } })
 }
 
 async function fetchGroups(userId) {

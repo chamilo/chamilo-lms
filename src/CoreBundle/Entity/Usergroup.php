@@ -7,19 +7,82 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\DataProvider\GroupMembersDataProvider;
+use Chamilo\CoreBundle\DataProvider\UsergroupDataProvider;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
+use Chamilo\CoreBundle\State\UsergroupPostProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Stringable;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Classes and social groups.
  */
-#[ApiResource(security: 'is_granted(\'ROLE_ADMIN\')', normalizationContext: ['groups' => ['usergroup:read']])]
+
+#[ApiResource(
+    operations: [
+        new Get(
+            uriTemplate: '/usergroup/{id}',
+            normalizationContext: ['groups' => ['usergroup:read']],
+            security: "is_granted('ROLE_USER')",
+            name: 'get_usergroup'
+        ),
+        new Put(security: "is_granted('EDIT', object)"),
+        new Delete(security: "is_granted('DELETE', object)"),
+        new GetCollection(
+            uriTemplate: '/usergroup/list/my',
+            normalizationContext: ['groups' => ['usergroup:read']],
+            security: "is_granted('ROLE_USER')",
+            name: 'get_my_usergroups'
+        ),
+        new GetCollection(
+            uriTemplate: '/usergroup/list/newest',
+            normalizationContext: ['groups' => ['usergroup:read']],
+            security: "is_granted('ROLE_USER')",
+            name: 'get_newest_usergroups'
+        ),
+        new GetCollection(
+            uriTemplate: '/usergroup/list/popular',
+            normalizationContext: ['groups' => ['usergroup:read']],
+            security: "is_granted('ROLE_USER')",
+            name: 'get_popular_usergroups'
+        ),
+        new GetCollection(
+            uriTemplate: '/usergroups/search',
+            normalizationContext: ['groups' => ['usergroup:read']],
+            security: "is_granted('ROLE_USER')",
+            name: 'search_usergroups'
+        ),
+        new GetCollection(
+            uriTemplate: '/usergroups/{id}/members',
+            normalizationContext: ['groups' => ['usergroup:read']],
+            security: "is_granted('ROLE_USER')",
+            name: 'get_group_members',
+            provider: GroupMembersDataProvider::class
+        ),
+        new Post(
+            securityPostDenormalize: "is_granted('CREATE', object)",
+            processor: UsergroupPostProcessor::class
+        ),
+    ],
+    normalizationContext: [
+        'groups' => ['usergroup:read'],
+    ],
+    denormalizationContext: [
+        'groups' => ['usergroup:write'],
+    ],
+    security: "is_granted('ROLE_USER')",
+    provider: UsergroupDataProvider::class
+)]
 #[ORM\Table(name: 'usergroup')]
 #[ORM\Entity(repositoryClass: UsergroupRepository::class)]
 class Usergroup extends AbstractResource implements ResourceInterface, ResourceIllustrationInterface, ResourceWithAccessUrlInterface, Stringable
@@ -41,23 +104,29 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     #[ORM\GeneratedValue]
     protected ?int $id = null;
     #[Assert\NotBlank]
+    #[Groups(['usergroup:read', 'usergroup:write'])]
     #[ORM\Column(name: 'title', type: 'string', length: 255)]
     protected string $title;
+    #[Groups(['usergroup:read', 'usergroup:write'])]
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description = null;
     #[Assert\NotBlank]
+    #[Groups(['usergroup:read', 'usergroup:write'])]
     #[ORM\Column(name: 'group_type', type: 'integer', nullable: false)]
     protected int $groupType;
     #[ORM\Column(name: 'picture', type: 'string', length: 255, nullable: true)]
     protected ?string $picture = null;
+    #[Groups(['usergroup:read', 'usergroup:write'])]
     #[ORM\Column(name: 'url', type: 'string', length: 255, nullable: true)]
     protected ?string $url = null;
     #[Assert\NotBlank]
+    #[Groups(['usergroup:read', 'usergroup:write'])]
     #[ORM\Column(name: 'visibility', type: 'string', length: 255, nullable: false)]
     protected string $visibility;
     #[ORM\Column(name: 'author_id', type: 'integer', nullable: true)]
     protected ?int $authorId = null;
     #[Assert\NotBlank]
+    #[Groups(['usergroup:read', 'usergroup:write'])]
     #[ORM\Column(name: 'allow_members_leave_group', type: 'integer')]
     protected int $allowMembersToLeaveGroup;
 
@@ -90,6 +159,13 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
      */
     #[ORM\OneToMany(mappedBy: 'userGroup', targetEntity: AccessUrlRelUserGroup::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected Collection $urls;
+
+    #[Groups(['usergroup:read'])]
+    private ?int $memberCount = null;
+
+    #[Groups(['usergroup:read'])]
+    private ?string $pictureUrl = '';
+
     public function __construct()
     {
         $this->groupType = self::NORMAL_CLASS;
@@ -283,6 +359,38 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     {
         return $this->picture;
     }
+
+    public function setPicture(?string $picture): self
+    {
+        $this->picture = $picture;
+
+        return $this;
+    }
+
+    public function getPictureUrl(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function setPictureUrl(?string $pictureUrl): self
+    {
+        $this->pictureUrl = $pictureUrl;
+
+        return $this;
+    }
+
+    public function getMemberCount(): ?int
+    {
+        return $this->memberCount;
+    }
+
+    public function setMemberCount(int $memberCount): self
+    {
+        $this->memberCount = $memberCount;
+
+        return $this;
+    }
+
     public function getDefaultIllustration(int $size): string
     {
         $size = empty($size) ? 32 : $size;

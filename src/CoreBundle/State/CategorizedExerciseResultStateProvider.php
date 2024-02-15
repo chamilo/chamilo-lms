@@ -39,7 +39,7 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
     /**
      * @throws Exception
      */
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): null|array|object
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
     {
         $trackExercise = $this->entityManager->find(TrackEExercise::class, $uriVariables['exeId']);
 

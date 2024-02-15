@@ -99,7 +99,7 @@ const userSubmenuItems = computed(() => [
         url: "/main/social/my_skills_report.php?a=generate_custom_skill",
       },
       {
-        label: t("My Skills"),
+        label: t("My skills"),
         url: "/main/social/my_skills_report.php",
       },
       {

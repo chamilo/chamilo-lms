@@ -124,7 +124,7 @@ class CTool extends AbstractResource implements ResourceInterface, ResourceShowC
         return $this->session;
     }
 
-    public function setSession(Session $session = null): self
+    public function setSession(?Session $session = null): self
     {
         $this->session = $session;
 

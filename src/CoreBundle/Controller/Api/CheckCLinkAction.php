@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
@@ -10,6 +11,15 @@ use Chamilo\CourseBundle\Entity\CLink;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+
+use const CURLINFO_HTTP_CODE;
+use const CURLOPT_FOLLOWLOCATION;
+use const CURLOPT_HEADER;
+use const CURLOPT_PROXY;
+use const CURLOPT_PROXYPORT;
+use const CURLOPT_RETURNTRANSFER;
+use const CURLOPT_TIMEOUT;
+use const CURLOPT_URL;
 
 class CheckCLinkAction extends AbstractController
 {
@@ -57,7 +67,7 @@ class CheckCLinkAction extends AbstractController
         curl_close($ch);
 
         // Check for any errors
-        if ($result === false || curl_getinfo($ch, CURLINFO_HTTP_CODE) != 200) {
+        if (false === $result || 200 != curl_getinfo($ch, CURLINFO_HTTP_CODE)) {
             return false;
         }
 

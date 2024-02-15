@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
@@ -28,7 +29,7 @@ class CLinkDetailsController extends AbstractController
                 $resourceLinkList[] = [
                     'visibility' => $resourceLink->getVisibility(),
                     'cid' => $resourceLink->getCourse()->getId(),
-                    'sid' => $resourceLink->getSession()->getId()
+                    'sid' => $resourceLink->getSession()->getId(),
                 ];
             }
         }

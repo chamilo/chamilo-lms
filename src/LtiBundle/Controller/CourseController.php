@@ -612,7 +612,7 @@ class CourseController extends ToolBaseController
         array &$customParams,
         User $user,
         Course $course,
-        Session $session = null
+        ?Session $session = null
     ): void {
         $replaceable = self::getReplaceableVariables($user, $course, $session);
         $variables = array_keys($replaceable);
@@ -648,7 +648,7 @@ class CourseController extends ToolBaseController
     /**
      * @return array
      */
-    private static function getReplaceableVariables(User $user, Course $course, Session $session = null)
+    private static function getReplaceableVariables(User $user, Course $course, ?Session $session = null)
     {
         return [
             '$User.id' => $user->getId(),

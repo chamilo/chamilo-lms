@@ -30,7 +30,7 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
         QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
-        Operation $operation = null,
+        ?Operation $operation = null,
         array $context = []
     ): void {
         /*if ($this->security->isGranted('ROLE_ADMIN')) {
@@ -55,7 +55,7 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
         array $identifiers,
-        string $operationName = null,
+        ?string $operationName = null,
         array $context = []
     ): void {
         // $this->addWhere($queryBuilder, $resourceClass);

@@ -134,7 +134,8 @@ class LegalRepository extends ServiceEntityRepository
             $qb->where('l.languageId = :languageId')
                 ->setParameter('languageId', $languageId)
                 ->orderBy('l.version', 'DESC')
-                ->setMaxResults(1);
+                ->setMaxResults(1)
+            ;
 
             $result = $qb->getQuery()->getSingleResult();
 
@@ -143,7 +144,7 @@ class LegalRepository extends ServiceEntityRepository
             }
 
             return $result;
-        } catch (NoResultException | NonUniqueResultException $e) {
+        } catch (NoResultException|NonUniqueResultException $e) {
             return null;
         }
     }
@@ -151,9 +152,9 @@ class LegalRepository extends ServiceEntityRepository
     /**
      * Replace tags in content.
      *
-     * @param string $content The content with tags.
+     * @param string $content the content with tags
      *
-     * @return string The content with tags replaced.
+     * @return string the content with tags replaced
      */
     private function replaceTags(string $content): string
     {

@@ -45,7 +45,7 @@ class SysAnnouncementRepository extends ServiceEntityRepository
         return $roles;
     }
 
-    public function getAnnouncementsQueryBuilder(string $iso, AccessUrl $url, User $user = null): QueryBuilder
+    public function getAnnouncementsQueryBuilder(string $iso, AccessUrl $url, ?User $user = null): QueryBuilder
     {
         $qb = $this->createQueryBuilder('s');
         $qb
@@ -153,7 +153,7 @@ class SysAnnouncementRepository extends ServiceEntityRepository
         return $list;
     }
 
-    public function addRoleListQueryBuilder(array $roles, QueryBuilder $qb = null): QueryBuilder
+    public function addRoleListQueryBuilder(array $roles, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
 
@@ -172,7 +172,7 @@ class SysAnnouncementRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function addDateQueryBuilder(QueryBuilder $qb = null): QueryBuilder
+    public function addDateQueryBuilder(?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
         $qb

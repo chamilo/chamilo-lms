@@ -23,7 +23,7 @@ class SocialPostExtension implements QueryCollectionExtensionInterface
         QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
-        Operation $operation = null,
+        ?Operation $operation = null,
         array $context = []
     ): void {
         if ('true' !== $this->settingsManager->getSetting('social.allow_social_tool')) {

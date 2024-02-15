@@ -123,7 +123,7 @@ class SettingsCurrent
         return $this->selectedValue;
     }
 
-    public function setSelectedValue(null|float|int|string $selectedValue): self
+    public function setSelectedValue(float|int|string|null $selectedValue): self
     {
         $this->selectedValue = $selectedValue;
 

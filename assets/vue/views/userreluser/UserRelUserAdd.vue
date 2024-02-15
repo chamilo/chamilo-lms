@@ -1,5 +1,5 @@
 <template>
-  <h2 v-t="'Add Friends'" class="mr-auto" />
+  <h2 v-t="'Add friends'" class="mr-auto" />
   <hr />
   <BaseToolbar>
     <BaseButton

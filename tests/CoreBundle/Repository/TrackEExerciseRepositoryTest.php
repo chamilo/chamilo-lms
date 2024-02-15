@@ -35,8 +35,10 @@ class TrackEExerciseRepositoryTest extends AbstractApiTest
 
         /** @var CourseRepository $courseRepo */
         $courseRepo = self::getContainer()->get(CourseRepository::class);
+
         /** @var TrackEExerciseRepository $trackExerciseRepo */
         $trackExerciseRepo = self::getContainer()->get(TrackEExerciseRepository::class);
+
         /** @var CQuizRepository $exerciseRepo */
         $exerciseRepo = self::getContainer()->get(CQuizRepository::class);
 

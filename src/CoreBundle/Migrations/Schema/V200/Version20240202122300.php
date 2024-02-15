@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
@@ -10,6 +11,7 @@ use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Doctrine\DBAL\Schema\Schema;
+use Exception;
 
 class Version20240202122300 extends AbstractMigrationChamilo
 {
@@ -38,11 +40,12 @@ class Version20240202122300 extends AbstractMigrationChamilo
         while ($row = $result->fetchAssociative()) {
             $linkId = $row['iid'];
 
-            /* @var CLink $link */
+            /** @var CLink $link */
             $link = $linkRepo->find($linkId);
 
             if (!$link) {
                 error_log("Link with ID $linkId not found");
+
                 continue;
             }
 
@@ -54,8 +57,8 @@ class Version20240202122300 extends AbstractMigrationChamilo
                 try {
                     $shortcutRepo->addShortCut($link, $admin, $course, $session);
                     error_log("Shortcut created for link ID $linkId");
-                } catch (\Exception $e) {
-                    error_log("Failed to create shortcut for link ID $linkId: " . $e->getMessage());
+                } catch (Exception $e) {
+                    error_log("Failed to create shortcut for link ID $linkId: ".$e->getMessage());
                 }
             } else {
                 error_log("Shortcut already exists for link ID $linkId");
@@ -65,8 +68,5 @@ class Version20240202122300 extends AbstractMigrationChamilo
         $em->flush();
     }
 
-    public function down(Schema $schema): void
-    {
-
-    }
+    public function down(Schema $schema): void {}
 }

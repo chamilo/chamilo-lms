@@ -513,7 +513,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         return null !== $this->category;
     }
 
-    public function setCategory(CLpCategory $category = null): self
+    public function setCategory(?CLpCategory $category = null): self
     {
         $this->category = $category;
 

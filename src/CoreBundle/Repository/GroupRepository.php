@@ -91,7 +91,7 @@ class GroupRepository extends ServiceEntityRepository
         ];
     }
 
-    public function createDefaultGroups(AccessGroupFixtures $accessGroupFixtures = null): void
+    public function createDefaultGroups(?AccessGroupFixtures $accessGroupFixtures = null): void
     {
         $em = $this->getEntityManager();
         $groups = $this->getDefaultGroups();

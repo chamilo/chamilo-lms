@@ -125,6 +125,7 @@ import cCalendarEventService from "../../services/ccalendarevent"
 import sessionRelUserService from "../../services/sessionRelUserService"
 import { useCidReqStore } from "../../store/cidReq"
 import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
+import { useLocale, useParentLocale } from "../../composables/locale"
 
 const store = useStore()
 const confirm = useConfirm()
@@ -139,7 +140,8 @@ const dialogShow = ref(false)
 const isEventEditable = ref(false)
 
 const currentUser = computed(() => store.getters["security/getUser"])
-const { t, locale } = useI18n()
+const { t } = useI18n()
+const { appLocale } = useLocale()
 
 let currentEvent = null
 
@@ -177,14 +179,18 @@ async function getCalendarEvents({ startStr, endStr }) {
 }
 
 async function getSessions({ startStr, endStr }) {
+  if (cidReqStore.course) {
+    return []
+  }
+
   if ("true" !== platformConfigStore.getSetting("agenda.personal_calendar_show_sessions_occupation")) {
     return []
   }
 
   const sessions = await sessionRelUserService.findAll({
     user: currentUser.value["@id"],
-    "displayStartDate[after]": startStr,
-    "displayEndDate[before]": endStr,
+    "session.displayStartDate[after]": startStr,
+    "session.displayEndDate[before]": endStr,
     relationType: 3,
   })
 
@@ -196,24 +202,15 @@ async function getSessions({ startStr, endStr }) {
   }))
 }
 
-// @todo fix locale connection between fullcalendar + chamilo
-
-if ("en_US" === locale.value) {
-  locale.value = "en"
-}
-
-if ("fr_FR" === locale.value) {
-  locale.value = "fr"
-}
-
-if ("pl_PL" === locale.value) {
-  locale.value = "pl"
-}
+const calendarLocale = allLocales.find(
+  (calLocale) =>
+    calLocale.code === appLocale.value.replace("_", "-") || calLocale.code === useParentLocale(appLocale.value),
+)
 
 const calendarOptions = ref({
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
   locales: allLocales,
-  locale: locale.value,
+  locale: calendarLocale?.code ?? "en-GB",
   customButtons: {
     addEvent: {
       text: t("Add event"),
@@ -356,7 +353,8 @@ function onCreateEventForm() {
     if (cidReqStore.course) {
       itemModel.resourceLinkListFromEntity = [
         {
-          cid: cidReqStore.course["id"],
+          cid: cidReqStore.course.id,
+          sid: cidReqStore.session?.id ?? null,
           visibility: RESOURCE_LINK_PUBLISHED,
         },
       ]

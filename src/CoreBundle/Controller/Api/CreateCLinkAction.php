@@ -74,7 +74,7 @@ class CreateCLinkAction extends BaseResourceFileAction
         bool $onHomepage
     ): void {
         $firstLink = reset($resourceLinkList);
-        if (isset($firstLink['sid']) && isset($firstLink['cid'])) {
+        if (isset($firstLink['sid'], $firstLink['cid'])) {
             $sid = $firstLink['sid'];
             $cid = $firstLink['cid'];
             $course = $cid ? $em->getRepository(Course::class)->find($cid) : null;

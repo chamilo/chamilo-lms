@@ -22,10 +22,10 @@ final class CGroupRepository extends ResourceRepository
 
     public function findAllByCourse(
         Course $course,
-        Session $session = null,
-        string $title = null,
-        int $status = null,
-        int $categoryId = null
+        ?Session $session = null,
+        ?string $title = null,
+        ?int $status = null,
+        ?int $categoryId = null
     ): QueryBuilder {
         $qb = $this->getResourcesByCourse($course, $session);
 
@@ -45,7 +45,7 @@ final class CGroupRepository extends ResourceRepository
         );
     }
 
-    private function addStatusQueryBuilder(int $status = null, QueryBuilder $qb = null): QueryBuilder
+    private function addStatusQueryBuilder(?int $status = null, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
 
@@ -59,7 +59,7 @@ final class CGroupRepository extends ResourceRepository
         return $qb;
     }
 
-    private function addCategoryQueryBuilder(int $categoryId = null, QueryBuilder $qb = null): QueryBuilder
+    private function addCategoryQueryBuilder(?int $categoryId = null, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
 

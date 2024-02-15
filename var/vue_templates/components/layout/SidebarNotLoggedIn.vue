@@ -4,7 +4,6 @@ import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import PanelMenu from "primevue/panelmenu"
 import Dropdown from "primevue/dropdown"
-import Login from "../../../../assets/vue/components/Login.vue"
 import SidebarLogin from "../SidebarLogin.vue"
 import PageList from "../../../../assets/vue/components/page/PageList.vue"
 
@@ -66,6 +65,22 @@ const menuItems = computed(() => [
     url: "/contact",
   },
 ])
+
+const sidebarIsOpen = ref(window.localStorage.getItem("sidebarIsOpen") === "true")
+
+watch(
+  sidebarIsOpen,
+  (newValue) => {
+    const appEl = document.querySelector("#app")
+
+    window.localStorage.setItem("sidebarIsOpen", newValue.toString())
+
+    appEl.classList.toggle("app--sidebar-inactive", !newValue)
+  },
+  {
+    immediate: true,
+  },
+)
 </script>
 
 <template>
@@ -130,6 +145,7 @@ const menuItems = computed(() => [
               class="p-panelmenu-header-action"
               tabindex="-1"
               data-pc-section="headeraction"
+              :href="item.url ? item.url : undefined"
             >
               <span
                 class="p-menuitem-text"
@@ -144,4 +160,37 @@ const menuItems = computed(() => [
       </div>
     </div>
   </aside>
+
+  <Teleport to=".app-topbar .p-menubar-end">
+    <a
+      class="app-sidebar__topbar-button item-button"
+      tabindex="0"
+      @click="sidebarIsOpen = !sidebarIsOpen"
+    >
+      <i class="mdi mdi-close" />
+    </a>
+  </Teleport>
 </template>
+
+<style scoped lang="scss">
+#app {
+  &.app--sidebar-inactive {
+    .app-sidebar {
+      @apply hidden
+      sm:block sm:w-60;
+
+      .p-panelmenu-header {
+        > .p-panelmenu-header-content a {
+          .p-submenu-icon {
+            @apply block;
+          }
+
+          .p-menuitem-text {
+            @apply block;
+          }
+        }
+      }
+    }
+  }
+}
+</style>

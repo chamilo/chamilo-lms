@@ -88,7 +88,7 @@ class Portfolio
      *
      * @return Portfolio
      */
-    public function setCourse(Course $course = null)
+    public function setCourse(?Course $course = null)
     {
         $this->course = $course;
 
@@ -120,7 +120,7 @@ class Portfolio
      *
      * @return Portfolio
      */
-    public function setSession(Session $session = null)
+    public function setSession(?Session $session = null)
     {
         $this->session = $session;
 
@@ -257,7 +257,7 @@ class Portfolio
      *
      * @return Portfolio
      */
-    public function setCategory(PortfolioCategory $category = null)
+    public function setCategory(?PortfolioCategory $category = null)
     {
         $this->category = $category;
 

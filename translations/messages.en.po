@@ -7560,7 +7560,7 @@ msgid "No posts"
 msgstr "No posts"
 
 msgid "Without achieved skills"
-msgstr "Without achieved skills"
+msgstr "No achieved skills yet"
 
 msgid "Please type your message!"
 msgstr "Please type your message!"
@@ -24117,7 +24117,7 @@ msgid "DiagnosticfinalizationmessageTitle"
 msgstr "Diagnostic finalization"
 
 msgid "DiagnosticfinalizationmessageContent"
-msgstr "Hi %s, I'm %s and I'm reviewing your diagnotic to define the course you will be folling."
+msgstr "Hi %s, I'm %s and I'm reviewing your diagnostic to define the course you will be following."
 
 msgid "Add a forumCategory"
 msgstr "Add a forum Category"
@@ -24195,4 +24195,19 @@ msgid "Sessions catalogue"
 msgstr "Sessions catalogue"
 
 msgid "Email reply header"
-msgstr "The %s, Mentioned by %s (%s) wrote:"
+msgstr "The %s, %s (%s) wrote:"
+
+msgid "My profile"
+msgstr "My profile"
+
+msgid "View all friends"
+msgstr "View all friends"
+
+msgid "Mark as promoted message"
+msgstr "Mark as promoted message"
+
+msgid "FAQ"
+msgstr "FAQ"
+
+msgid "Created with Chamilo copyright year"
+msgstr "Created with Chamilo © %s"

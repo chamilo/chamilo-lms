@@ -47,7 +47,7 @@ class MessageRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    protected function addReceiverQueryBuilder(User $user, QueryBuilder $qb = null): QueryBuilder
+    protected function addReceiverQueryBuilder(User $user, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'm');
         $qb
@@ -59,7 +59,7 @@ class MessageRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    protected function addMessageTypeQueryBuilder(int $type, QueryBuilder $qb = null): QueryBuilder
+    protected function addMessageTypeQueryBuilder(int $type, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'm');
         $qb

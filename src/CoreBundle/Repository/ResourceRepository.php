@@ -131,8 +131,8 @@ abstract class ResourceRepository extends ServiceEntityRepository
         string $title,
         ResourceNode $parentNode,
         Course $course,
-        Session $session = null,
-        CGroup $group = null
+        ?Session $session = null,
+        ?CGroup $group = null
     ): ?ResourceInterface {
         $qb = $this->getResourcesByCourse($course, $session, $group, $parentNode);
         $this->addTitleQueryBuilder($title, $qb);
@@ -145,8 +145,8 @@ abstract class ResourceRepository extends ServiceEntityRepository
         string $title,
         ResourceNode $parentNode,
         Course $course,
-        Session $session = null,
-        CGroup $group = null
+        ?Session $session = null,
+        ?CGroup $group = null
     ): ?ResourceInterface {
         $qb = $this->getResourcesByCourse($course, $session, $group, $parentNode);
         $this->addSlugQueryBuilder($title, $qb);
@@ -162,8 +162,8 @@ abstract class ResourceRepository extends ServiceEntityRepository
         string $title,
         ResourceNode $parentNode,
         Course $course,
-        Session $session = null,
-        CGroup $group = null
+        ?Session $session = null,
+        ?CGroup $group = null
     ): ?ResourceInterface {
         $qb = $this->getResourcesByCourseIgnoreVisibility($course, $session, $group, $parentNode);
         $this->addSlugQueryBuilder($title, $qb);
@@ -179,8 +179,8 @@ abstract class ResourceRepository extends ServiceEntityRepository
         string $title,
         ResourceNode $parentNode,
         Course $course,
-        Session $session = null,
-        CGroup $group = null
+        ?Session $session = null,
+        ?CGroup $group = null
     ) {
         $qb = $this->getResourcesByCourse($course, $session, $group, $parentNode);
         $this->addTitleQueryBuilder($title, $qb);
@@ -269,7 +269,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         ]);
     }
 
-    public function addVisibilityQueryBuilder(QueryBuilder $qb = null, bool $checkStudentView = false, bool $displayOnlyPublished = true): QueryBuilder
+    public function addVisibilityQueryBuilder(?QueryBuilder $qb = null, bool $checkStudentView = false, bool $displayOnlyPublished = true): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
 
@@ -314,7 +314,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function addCourseSessionGroupQueryBuilder(Course $course, Session $session = null, CGroup $group = null, QueryBuilder $qb = null): QueryBuilder
+    public function addCourseSessionGroupQueryBuilder(Course $course, ?Session $session = null, ?CGroup $group = null, ?QueryBuilder $qb = null): QueryBuilder
     {
         $reflectionClass = $this->getClassMetadata()->getReflectionClass();
 
@@ -364,7 +364,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $this->toolChain->getResourceTypeNameByEntity($this->getClassName());
     }
 
-    public function getResources(ResourceNode $parentNode = null): QueryBuilder
+    public function getResources(?ResourceNode $parentNode = null): QueryBuilder
     {
         $resourceTypeName = $this->getResourceTypeName();
 
@@ -390,7 +390,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function getResourcesByCourse(Course $course, Session $session = null, CGroup $group = null, ResourceNode $parentNode = null, bool $displayOnlyPublished = true, bool $displayOrder = false): QueryBuilder
+    public function getResourcesByCourse(Course $course, ?Session $session = null, ?CGroup $group = null, ?ResourceNode $parentNode = null, bool $displayOnlyPublished = true, bool $displayOrder = false): QueryBuilder
     {
         $qb = $this->getResources($parentNode);
         $this->addVisibilityQueryBuilder($qb, true, $displayOnlyPublished);
@@ -403,7 +403,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function getResourcesByCourseIgnoreVisibility(Course $course, Session $session = null, CGroup $group = null, ResourceNode $parentNode = null): QueryBuilder
+    public function getResourcesByCourseIgnoreVisibility(Course $course, ?Session $session = null, ?CGroup $group = null, ?ResourceNode $parentNode = null): QueryBuilder
     {
         $qb = $this->getResources($parentNode);
         $this->addCourseSessionGroupQueryBuilder($course, $session, $group, $qb);
@@ -414,7 +414,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
     /**
      * Get resources only from the base course.
      */
-    public function getResourcesByCourseOnly(Course $course, ResourceNode $parentNode = null): QueryBuilder
+    public function getResourcesByCourseOnly(Course $course, ?ResourceNode $parentNode = null): QueryBuilder
     {
         $qb = $this->getResources($parentNode);
         $this->addCourseQueryBuilder($course, $qb);
@@ -437,7 +437,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function getResourcesByCreator(User $user, ResourceNode $parentNode = null): QueryBuilder
+    public function getResourcesByCreator(User $user, ?ResourceNode $parentNode = null): QueryBuilder
     {
         $qb = $this->createQueryBuilder('resource')
             ->select('resource')
@@ -457,9 +457,9 @@ abstract class ResourceRepository extends ServiceEntityRepository
     public function getResourcesByCourseLinkedToUser(
         User $user,
         Course $course,
-        Session $session = null,
-        CGroup $group = null,
-        ResourceNode $parentNode = null
+        ?Session $session = null,
+        ?CGroup $group = null,
+        ?ResourceNode $parentNode = null
     ): QueryBuilder {
         $qb = $this->getResourcesByCourse($course, $session, $group, $parentNode);
         $qb->andWhere('node.creator = :user OR (links.user = :user OR links.user IS NULL)');
@@ -468,7 +468,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function getResourcesByLinkedUser(User $user, ResourceNode $parentNode = null): QueryBuilder
+    public function getResourcesByLinkedUser(User $user, ?ResourceNode $parentNode = null): QueryBuilder
     {
         $qb = $this->getResources($parentNode);
         $qb
@@ -553,14 +553,14 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $this->resourceNodeRepository->getResourceNodeFileStream($resourceNode);
     }
 
-    public function getResourceFileDownloadUrl(AbstractResource $resource, array $extraParams = [], int $referenceType = null): string
+    public function getResourceFileDownloadUrl(AbstractResource $resource, array $extraParams = [], ?int $referenceType = null): string
     {
         $extraParams['mode'] = 'download';
 
         return $this->getResourceFileUrl($resource, $extraParams, $referenceType);
     }
 
-    public function getResourceFileUrl(AbstractResource $resource, array $extraParams = [], int $referenceType = null): string
+    public function getResourceFileUrl(AbstractResource $resource, array $extraParams = [], ?int $referenceType = null): string
     {
         return $this->getResourceNodeRepository()->getResourceFileUrl(
             $resource->getResourceNode(),
@@ -658,7 +658,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
     /**
      * @todo remove this function and merge it with addResourceNode()
      */
-    public function createNodeForResource(ResourceInterface $resource, User $creator, ResourceNode $parentNode, UploadedFile $file = null): ResourceNode
+    public function createNodeForResource(ResourceInterface $resource, User $creator, ResourceNode $parentNode, ?UploadedFile $file = null): ResourceNode
     {
         $em = $this->getEntityManager();
 
@@ -720,7 +720,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $resourceNode;
     }
 
-    public function getTotalSpaceByCourse(Course $course, CGroup $group = null, Session $session = null): int
+    public function getTotalSpaceByCourse(Course $course, ?CGroup $group = null, ?Session $session = null): int
     {
         $qb = $this->createQueryBuilder('resource');
         $qb
@@ -762,7 +762,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return (int) $query->getSingleScalarResult();
     }
 
-    public function addTitleDecoration(AbstractResource $resource, Course $course, Session $session = null): string
+    public function addTitleDecoration(AbstractResource $resource, Course $course, ?Session $session = null): string
     {
         if (null === $session) {
             return '';
@@ -818,7 +818,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return true;
     }
 
-    protected function addSlugQueryBuilder(?string $slug, QueryBuilder $qb = null): QueryBuilder
+    protected function addSlugQueryBuilder(?string $slug, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
         if (null === $slug) {
@@ -834,7 +834,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    protected function addTitleQueryBuilder(?string $title, QueryBuilder $qb = null): QueryBuilder
+    protected function addTitleQueryBuilder(?string $title, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
         if (null === $title) {
@@ -849,7 +849,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    protected function addCreatorQueryBuilder(?User $user, QueryBuilder $qb = null): QueryBuilder
+    protected function addCreatorQueryBuilder(?User $user, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
         if (null === $user) {
@@ -923,6 +923,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult()
-       ;
+        ;
     }
 }

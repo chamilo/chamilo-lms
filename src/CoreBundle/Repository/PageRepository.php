@@ -23,7 +23,7 @@ class PageRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
-    public function delete(Page $page = null): void
+    public function delete(?Page $page = null): void
     {
         if (null !== $page) {
             $this->getEntityManager()->remove($page);

@@ -29,7 +29,7 @@ final class CLpRelUserRepository extends ResourceRepository
     public function getUsersSubscribedToItem(
         CLp $lp,
         Course $course,
-        Session $session = null
+        ?Session $session = null
     ) {
         $criteria = [
             'lp' => $lp,
@@ -50,7 +50,7 @@ final class CLpRelUserRepository extends ResourceRepository
     public function subscribeUsersToItem(
         $currentUser,
         Course $course,
-        Session $session = null,
+        ?Session $session = null,
         CLp $lp,
         $newUserList = [],
         $deleteUsers = true
@@ -122,7 +122,7 @@ final class CLpRelUserRepository extends ResourceRepository
      */
     public function unsubcribeUsersToItem(
         Course $course,
-        Session $session = null,
+        ?Session $session = null,
         CLp $lp,
         $usersToDelete
     ): void {

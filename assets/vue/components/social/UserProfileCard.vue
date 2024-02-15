@@ -15,7 +15,7 @@
         </p>
         <p class="flex items-center justify-center mb-2">
           <i class="mdi mdi-card-account-details-outline mr-2"></i>
-          Business card
+          {{ t('Business card') }}
         </p>
         <p class="flex items-center justify-center mb-2">
           <i class="mdi mdi-skype mr-2"></i>

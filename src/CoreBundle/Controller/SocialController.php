@@ -39,8 +39,7 @@ class SocialController extends AbstractController
         SettingsManager $settingsManager,
         UserToJsonNormalizer $userToJsonNormalizer
     ): JsonResponse {
-
-        $propertiesToJson =  $userToJsonNormalizer->serializeUserData($userId);
+        $propertiesToJson = $userToJsonNormalizer->serializeUserData($userId);
         $properties = $propertiesToJson ? json_decode($propertiesToJson, true) : [];
 
         $officerData = [
@@ -106,11 +105,11 @@ class SocialController extends AbstractController
             ];
         }
 
-        $formattedDate = new DateTime('@' . $term->getDate());
+        $formattedDate = new DateTime('@'.$term->getDate());
 
         $dataForVue = [
             'terms' => $termsContent,
-            'date_text' => $translator->trans('PublicationDate', [], 'messages', $isoCode) . ': ' . $formattedDate->format('Y-m-d H:i:s'),
+            'date_text' => $translator->trans('PublicationDate', [], 'messages', $isoCode).': '.$formattedDate->format('Y-m-d H:i:s'),
         ];
 
         return $this->json($dataForVue);
@@ -127,7 +126,7 @@ class SocialController extends AbstractController
 
         if (!$allowTermsConditions) {
             return $this->json([
-                'message' => $translator->trans('No terms and conditions available', [], 'messages')
+                'message' => $translator->trans('No terms and conditions available', [], 'messages'),
             ]);
         }
 
@@ -142,7 +141,7 @@ class SocialController extends AbstractController
         if (empty($value['value'])) {
             return $this->json([
                 'isAccepted' => false,
-                'message' => $translator->trans('Send legal agreement', [], 'messages')
+                'message' => $translator->trans('Send legal agreement', [], 'messages'),
             ]);
         }
 
@@ -151,7 +150,7 @@ class SocialController extends AbstractController
         $response = [
             'isAccepted' => true,
             'acceptDate' => $dateTime->format('Y-m-d H:i:s'),
-            'message' => ''
+            'message' => '',
         ];
 
         return $this->json($response);
@@ -170,23 +169,23 @@ class SocialController extends AbstractController
         $explanation = $data['explanation'] ?? '';
         $requestType = $data['requestType'] ?? '';
 
-        /* @var User $user */
+        /** @var User $user */
         $user = $userRepo->find($userId);
 
         if (!$user) {
             return $this->json(['success' => false, 'message' => 'User not found']);
         }
 
-        if ($requestType === 'delete_account') {
+        if ('delete_account' === $requestType) {
             $fieldToUpdate = 'request_for_delete_account';
             $justificationFieldToUpdate = 'request_for_delete_account_justification';
             $emailSubject = 'Request for account removal';
-            $emailContent = sprintf($translator->trans("User %s asked for the deletion of his/her account, explaining that : ") . $explanation, $user->getFullName());
-        } elseif ($requestType === 'delete_legal') {
+            $emailContent = sprintf($translator->trans('User %s asked for the deletion of his/her account, explaining that : ').$explanation, $user->getFullName());
+        } elseif ('delete_legal' === $requestType) {
             $fieldToUpdate = 'request_for_legal_agreement_consent_removal';
             $justificationFieldToUpdate = 'request_for_legal_agreement_consent_removal_justification';
             $emailSubject = 'Request for consent withdrawal on legal terms';
-            $emailContent = sprintf($translator->trans("User %s asked for the removal of his/her consent to our legal terms, explaining that: ") . $explanation, $user->getFullName());
+            $emailContent = sprintf($translator->trans('User %s asked for the removal of his/her consent to our legal terms, explaining that: ').$explanation, $user->getFullName());
         } else {
             return $this->json(['success' => false, 'message' => 'Invalid action type']);
         }
@@ -202,13 +201,14 @@ class SocialController extends AbstractController
             ->from($user->getEmail())
             ->to($emailPlatform)
             ->subject($emailSubject)
-            ->html($emailContent);
+            ->html($emailContent)
+        ;
 
         $mailer->send($email);
 
         return $this->json([
             'success' => true,
-            'message' => $translator->trans('Your request has been received.')
+            'message' => $translator->trans('Your request has been received.'),
         ]);
     }
 
@@ -220,7 +220,6 @@ class SocialController extends AbstractController
         SettingsManager $settingsManager,
         RequestStack $requestStack
     ): JsonResponse {
-
         $baseUrl = $requestStack->getCurrentRequest()->getBaseUrl();
         $cid = (int) $settingsManager->getSetting('forum.global_forums_course_id');
         $groupsArray = [];
@@ -262,13 +261,12 @@ class SocialController extends AbstractController
         SettingsManager $settingsManager,
         RequestStack $requestStack
     ): JsonResponse {
-
         $baseUrl = $requestStack->getCurrentRequest()->getBaseUrl();
         $cid = (int) $settingsManager->getSetting('forum.global_forums_course_id');
 
         $goToLink = '';
         if (!empty($cid)) {
-            $goToLink = $baseUrl . '/main/forum/index.php?cid=' . $cid . '&sid=0&gid=0';
+            $goToLink = $baseUrl.'/main/forum/index.php?cid='.$cid.'&sid=0&gid=0';
         }
 
         return $this->json(['go_to' => $goToLink]);

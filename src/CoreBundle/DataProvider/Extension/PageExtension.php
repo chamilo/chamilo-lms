@@ -28,7 +28,7 @@ final class PageExtension implements QueryCollectionExtensionInterface // , Quer
         QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
-        Operation $operation = null,
+        ?Operation $operation = null,
         array $context = []
     ): void {
         $this->addWhere($queryBuilder, $resourceClass);
@@ -39,7 +39,7 @@ final class PageExtension implements QueryCollectionExtensionInterface // , Quer
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
         array $identifiers,
-        string $operationName = null,
+        ?string $operationName = null,
         array $context = []
     ): void {
         // $this->addWhere($queryBuilder, $resourceClass);

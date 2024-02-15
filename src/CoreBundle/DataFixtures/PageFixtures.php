@@ -17,7 +17,7 @@ class PageFixtures extends Fixture implements ContainerAwareInterface
 {
     private ContainerInterface $container;
 
-    public function setContainer(ContainerInterface $container = null): void
+    public function setContainer(?ContainerInterface $container = null): void
     {
         $this->container = $container;
     }

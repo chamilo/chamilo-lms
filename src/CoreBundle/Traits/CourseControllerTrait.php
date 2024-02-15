@@ -152,7 +152,7 @@ trait CourseControllerTrait
         return $this->session;
     }
 
-    public function setSession(Session $session = null): void
+    public function setSession(?Session $session = null): void
     {
         $this->session = $session;
     }

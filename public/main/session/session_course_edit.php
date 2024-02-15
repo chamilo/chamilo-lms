@@ -29,14 +29,14 @@ $tblSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tblSessionRelCourseRelUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 $courseId = $course_info['real_id'];
-$tool_name = $course_info['name'];
-$sql = "SELECT s.name, c.title
+$tool_name = $course_info['title'];
+$sql = "SELECT s.title, c.title
         FROM $tblSessionRelCourse sc, $tblSession s, $tblCourse c
         WHERE
             sc.session_id = s.id AND
             sc.c_id = c.id AND
-            sc.session_id='$sessionId' AND
-            sc.c_id ='".$courseId."'";
+            sc.session_id = '$sessionId' AND
+            sc.c_id = '".$courseId."'";
 $result = Database::query($sql);
 
 if (!list($session_name, $course_title) = Database::fetch_row($result)) {

@@ -125,7 +125,7 @@ class CSurveyAnswer
         return $this->sessionId;
     }
 
-    public function setSessionId(int $sessionId = null): static
+    public function setSessionId(?int $sessionId = null): static
     {
         $this->sessionId = $sessionId;
 

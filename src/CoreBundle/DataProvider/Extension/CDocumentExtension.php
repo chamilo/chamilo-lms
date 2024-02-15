@@ -32,7 +32,7 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface // ,
         QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
-        Operation $operation = null,
+        ?Operation $operation = null,
         array $context = []
     ): void {
         $this->addWhere($queryBuilder, $resourceClass);

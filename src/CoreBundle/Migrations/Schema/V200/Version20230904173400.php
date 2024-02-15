@@ -132,7 +132,7 @@ class Version20230904173400 extends AbstractMigrationChamilo
         bool $allDay,
         string $color,
         User $creator,
-        CCalendarEvent $parentEvent = null
+        ?CCalendarEvent $parentEvent = null
     ): CCalendarEvent {
         $calendarEvent = new CCalendarEvent();
 

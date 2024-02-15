@@ -16,7 +16,6 @@ use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 trait ResourceControllerTrait
 {
@@ -48,7 +47,7 @@ trait ResourceControllerTrait
         return $this->getResourceRepositoryFactory()->getRepositoryService($tool, $type);
     }
 
-    public function denyAccessUnlessValidResource(ResourceInterface $resource = null): void
+    public function denyAccessUnlessValidResource(?ResourceInterface $resource = null): void
     {
         if (null === $resource) {
             throw new EntityNotFoundException($this->trans("Resource doesn't exists."));
@@ -112,9 +111,6 @@ trait ResourceControllerTrait
         return $parentResourceNode;
     }
 
-    /**
-     * @return ?User
-     */
     protected function getUser(): ?User
     {
         /*if (!$this->container->has('security.token_storage')) {

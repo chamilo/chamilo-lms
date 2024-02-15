@@ -2,7 +2,7 @@
   <BaseCard plain class="my-groups-card bg-white mb-3">
     <template #header>
       <div class="px-4 py-2 -mb-2 bg-gray-15">
-        <h2 class="text-h5">{{ t('My Friends') }}</h2>
+        <h2 class="text-h5">{{ t('My friends') }}</h2>
       </div>
     </template>
     <hr class="-mt-2 mb-4 -mx-4">
@@ -30,7 +30,7 @@
         </li>
       </ul>
       <div v-if="friends.length > 10" class="mt-2 text-center">
-        <a href="#" @click="viewAll">{{ t('View All Friends') }}</a>
+        <a href="#" @click="viewAll">{{ t('View all friends') }}</a>
       </div>
     </div>
     <div v-if="allowSocialMap && isCurrentUser" class="text-center mt-3">

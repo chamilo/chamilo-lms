@@ -246,7 +246,7 @@ class ChamiloApi
      *
      * @throws Exception
      */
-    public static function getCourseIdByDirectory(string $directory = null): int
+    public static function getCourseIdByDirectory(?string $directory = null): int
     {
         if (!empty($directory)) {
             $directory = Database::escape_string($directory);
@@ -340,7 +340,7 @@ class ChamiloApi
     public static function getColorPalette(
         bool $decimalOpacity = false,
         bool $wrapInRGBA = false,
-        int $fillUpTo = null
+        ?int $fillUpTo = null
     ): array {
         // Get the common colors from the palette used for pchart
         $paletteFile = api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color';
@@ -380,7 +380,7 @@ class ChamiloApi
      *
      * @throws Exception
      */
-    public static function getServerMidnightTime(string $utcTime = null): DateTime
+    public static function getServerMidnightTime(?string $utcTime = null): DateTime
     {
         $localTime = api_get_local_time($utcTime);
         $localTimeZone = api_get_timezone();

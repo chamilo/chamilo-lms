@@ -320,7 +320,7 @@ class CGroup extends AbstractResource implements ResourceInterface, Stringable
     {
         return $this->category;
     }
-    public function setCategory(CGroupCategory $category = null): self
+    public function setCategory(?CGroupCategory $category = null): self
     {
         $this->category = $category;
 

@@ -274,7 +274,7 @@ class ResourceNode implements Stringable
     /**
      * Sets the parent resource.
      */
-    public function setParent(self $parent = null): self
+    public function setParent(?self $parent = null): self
     {
         $this->parent = $parent;
 
@@ -315,7 +315,7 @@ class ResourceNode implements Stringable
         return $this;
     }
 
-    public function getPathForDisplayToArray(int $baseRoot = null): array
+    public function getPathForDisplayToArray(?int $baseRoot = null): array
     {
         $parts = explode(self::PATH_SEPARATOR, $this->path);
         $list = [];
@@ -452,7 +452,7 @@ class ResourceNode implements Stringable
         return $this->resourceFile;
     }
 
-    public function setResourceFile(ResourceFile $resourceFile = null): self
+    public function setResourceFile(?ResourceFile $resourceFile = null): self
     {
         $this->resourceFile = $resourceFile;
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Serializer;
 
-use Agenda;
 use Chamilo\CoreBundle\Entity\GradebookCertificate;
 use Chamilo\CoreBundle\Entity\GradebookResult;
 use Chamilo\CoreBundle\Entity\Message;
@@ -44,7 +43,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Exception\NotSupported;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
-use SocialManager;
+use Exception;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -696,10 +695,10 @@ final class UserToJsonNormalizer
         $em = $this->em;
         $dateFormat = DateTimeInterface::ATOM;
 
-        /* @var User $user */
+        /** @var User $user */
         $user = $this->userRepository->find($userId);
         if (!$user) {
-            throw new \Exception("User not found.");
+            throw new Exception('User not found.');
         }
 
         $personalData = [];
@@ -826,7 +825,7 @@ final class UserToJsonNormalizer
         // Message
         $messages = $em->getRepository(Message::class)->findBy(['sender' => $userId]);
         foreach ($messages as $item) {
-            $receivers = array_map(fn($receiver) => $receiver->getReceiver()->getUsername(), $item->getReceivers()->toArray());
+            $receivers = array_map(fn ($receiver) => $receiver->getReceiver()->getUsername(), $item->getReceivers()->toArray());
             $userData['Messages'][] = [
                 'Title' => $item->getTitle(),
                 'SentDate' => $item->getSendDate()->format($dateFormat),

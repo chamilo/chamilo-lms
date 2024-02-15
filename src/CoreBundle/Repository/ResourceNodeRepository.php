@@ -99,7 +99,7 @@ class ResourceNodeRepository extends MaterializedPathRepository
         }
     }
 
-    public function getResourceFileUrl(ResourceNode $resourceNode, array $extraParams = [], int $referenceType = null): string
+    public function getResourceFileUrl(ResourceNode $resourceNode, array $extraParams = [], ?int $referenceType = null): string
     {
         try {
             if ($resourceNode->hasResourceFile()) {
@@ -137,7 +137,7 @@ class ResourceNodeRepository extends MaterializedPathRepository
     /**
      * @todo filter files, check status
      */
-    public function getSize(ResourceNode $resourceNode, ResourceType $type, Course $course = null, Session $session = null): int
+    public function getSize(ResourceNode $resourceNode, ResourceType $type, ?Course $course = null, ?Session $session = null): int
     {
         $qb = $this->createQueryBuilder('node')
             ->select('SUM(file.size) as total')

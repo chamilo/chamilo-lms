@@ -171,7 +171,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         return $resourceNode;
     }
 
-    public function addRoleListQueryBuilder(array $roles, QueryBuilder $qb = null): QueryBuilder
+    public function addRoleListQueryBuilder(array $roles, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
         if (!empty($roles)) {
@@ -480,7 +480,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
      *
      * @return User[]
      */
-    public function findUsersToSendMessage(int $currentUserId, string $searchFilter = null, int $limit = 10)
+    public function findUsersToSendMessage(int $currentUserId, ?string $searchFilter = null, int $limit = 10)
     {
         $allowSendMessageToAllUsers = api_get_setting('allow_send_message_to_all_platform_users');
         $accessUrlId = api_get_multiple_access_url() ? api_get_current_access_url_id() : 1;
@@ -591,7 +591,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         ;
     }
 
-    public function addAccessUrlQueryBuilder(int $accessUrlId, QueryBuilder $qb = null): QueryBuilder
+    public function addAccessUrlQueryBuilder(int $accessUrlId, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
         $qb
@@ -603,7 +603,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         return $qb;
     }
 
-    public function addActiveAndNotAnonUserQueryBuilder(QueryBuilder $qb = null): QueryBuilder
+    public function addActiveAndNotAnonUserQueryBuilder(?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
         $qb
@@ -615,7 +615,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         return $qb;
     }
 
-    public function addExpirationDateQueryBuilder(QueryBuilder $qb = null): QueryBuilder
+    public function addExpirationDateQueryBuilder(?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
         $qb
@@ -626,7 +626,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         return $qb;
     }
 
-    private function addRoleQueryBuilder(string $role, QueryBuilder $qb = null): QueryBuilder
+    private function addRoleQueryBuilder(string $role, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
         $qb
@@ -637,7 +637,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         return $qb;
     }
 
-    private function addSearchByKeywordQueryBuilder(string $keyword, QueryBuilder $qb = null): QueryBuilder
+    private function addSearchByKeywordQueryBuilder(string $keyword, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
         $qb
@@ -654,7 +654,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         return $qb;
     }
 
-    private function addUserRelUserQueryBuilder(int $userId, int $relationType, QueryBuilder $qb = null): QueryBuilder
+    private function addUserRelUserQueryBuilder(int $userId, int $relationType, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
         $qb->leftJoin('u.friends', 'relations');
@@ -668,7 +668,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         return $qb;
     }
 
-    private function addOnlyMyFriendsQueryBuilder(int $userId, QueryBuilder $qb = null): QueryBuilder
+    private function addOnlyMyFriendsQueryBuilder(int $userId, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
         $qb
@@ -686,7 +686,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         return $qb;
     }
 
-    private function addNotCurrentUserQueryBuilder(int $userId, QueryBuilder $qb = null): QueryBuilder
+    private function addNotCurrentUserQueryBuilder(int $userId, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb, 'u');
         $qb

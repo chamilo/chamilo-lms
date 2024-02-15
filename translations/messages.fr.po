@@ -24197,3 +24197,9 @@ msgstr "Votre navigateur ne supporte pas le JavaScript"
 
 msgid "Email reply header"
 msgstr "Le %s, %s (%s) a écrit:"
+
+msgid "FAQ"
+msgstr "FAQ"
+
+msgid "Created with Chamilo copyright year"
+msgstr "Créé avec Chamilo © %s"

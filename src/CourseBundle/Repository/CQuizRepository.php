@@ -26,11 +26,11 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
 
     public function findAllByCourse(
         Course $course,
-        Session $session = null,
-        string $title = null,
-        int $active = null,
+        ?Session $session = null,
+        ?string $title = null,
+        ?int $active = null,
         bool $onlyPublished = true,
-        int $categoryId = null
+        ?int $categoryId = null
     ): QueryBuilder {
         $qb = $this->getResourcesByCourse($course, $session);
 
@@ -58,7 +58,7 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         return $router->generate('legacy_main', $params);
     }
 
-    private function addDateFilterQueryBuilder(DateTime $dateTime, QueryBuilder $qb = null): QueryBuilder
+    private function addDateFilterQueryBuilder(DateTime $dateTime, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
         $qb
@@ -80,7 +80,7 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         return $qb;
     }
 
-    private function addNotDeletedQueryBuilder(QueryBuilder $qb = null): QueryBuilder
+    private function addNotDeletedQueryBuilder(?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
 
@@ -89,7 +89,7 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         return $qb;
     }
 
-    private function addCategoryQueryBuilder(int $categoryId = null, QueryBuilder $qb = null): QueryBuilder
+    private function addCategoryQueryBuilder(?int $categoryId = null, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
 
@@ -114,7 +114,7 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
      * - 1 = active exercises
      * - 2 = all exercises (active and inactive)
      */
-    private function addActiveQueryBuilder(int $active = null, QueryBuilder $qb = null): QueryBuilder
+    private function addActiveQueryBuilder(?int $active = null, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
 

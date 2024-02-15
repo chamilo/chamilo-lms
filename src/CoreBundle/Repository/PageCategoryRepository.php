@@ -23,7 +23,7 @@ class PageCategoryRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
-    public function delete(PageCategory $category = null): void
+    public function delete(?PageCategory $category = null): void
     {
         if (null !== $category) {
             $this->getEntityManager()->remove($category);

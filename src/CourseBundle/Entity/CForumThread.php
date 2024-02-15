@@ -140,7 +140,7 @@ class CForumThread extends AbstractResource implements ResourceInterface, String
         return $this->title;
     }
 
-    public function setForum(CForum $forum = null): self
+    public function setForum(?CForum $forum = null): self
     {
         if (null !== $forum) {
             $forum->getThreads()->add($this);

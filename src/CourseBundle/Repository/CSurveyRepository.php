@@ -28,10 +28,10 @@ final class CSurveyRepository extends ResourceRepository
 
     public function findAllByCourse(
         Course $course,
-        Session $session = null,
-        string $title = null,
-        string $language = null,
-        User $author = null
+        ?Session $session = null,
+        ?string $title = null,
+        ?string $language = null,
+        ?User $author = null
     ): QueryBuilder {
         $qb = $this->getResourcesByCourse($course, $session);
 
@@ -42,7 +42,7 @@ final class CSurveyRepository extends ResourceRepository
         return $qb;
     }
 
-    protected function addTitleQueryBuilder(?string $title, QueryBuilder $qb = null): QueryBuilder
+    protected function addTitleQueryBuilder(?string $title, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
         if (null === $title) {
@@ -58,7 +58,7 @@ final class CSurveyRepository extends ResourceRepository
         return $qb;
     }
 
-    private function addLanguageQueryBuilder(string $language = null, QueryBuilder $qb = null): QueryBuilder
+    private function addLanguageQueryBuilder(?string $language = null, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
 

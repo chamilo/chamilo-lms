@@ -39,7 +39,7 @@ final class CDocumentRepository extends ResourceRepository
         return null;
     }
 
-    public function getFolderSize(ResourceNode $resourceNode, Course $course, Session $session = null): int
+    public function getFolderSize(ResourceNode $resourceNode, Course $course, ?Session $session = null): int
     {
         return $this->getResourceNodeRepository()->getSize($resourceNode, $this->getResourceType(), $course, $session);
     }
@@ -65,7 +65,7 @@ final class CDocumentRepository extends ResourceRepository
         return $query->getResult();
     }
 
-    public function countUserDocuments(User $user, Course $course, Session $session = null, CGroup $group = null): int
+    public function countUserDocuments(User $user, Course $course, ?Session $session = null, ?CGroup $group = null): int
     {
         $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session, $group);
 
@@ -77,7 +77,7 @@ final class CDocumentRepository extends ResourceRepository
         return $this->getCount($qb);
     }
 
-    protected function addFileTypeQueryBuilder(string $fileType, QueryBuilder $qb = null): QueryBuilder
+    protected function addFileTypeQueryBuilder(string $fileType, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
         $qb

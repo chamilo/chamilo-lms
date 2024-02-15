@@ -15,7 +15,7 @@
     <BaseCard plain class="bg-white">
       <template #header>
         <div class="px-4 py-2 -mb-2 bg-gray-15">
-          <h2 class="text-h5">{{ t('Personal Data We Keep About You') }}</h2>
+          <h2 class="text-h5">{{ t('Personal data we keep about you') }}</h2>
         </div>
       </template>
       <hr class="-mt-2 mb-4 -mx-4">
@@ -50,7 +50,7 @@
     <BaseCard plain class="bg-white">
       <template #header>
         <div class="px-4 py-2 -mb-2 bg-gray-15">
-          <h2 class="text-h5">{{ t('Permissions You Gave Us') }}</h2>
+          <h2 class="text-h5">{{ t('Permissions you gave us') }}</h2>
         </div>
       </template>
       <hr class="-mt-2 mb-4 -mx-4">
@@ -79,7 +79,7 @@
               />
               <LayoutFormButtons>
                 <BaseButton
-                  :label="t('Delete Legal')"
+                  :label="t('Delete legal agreement')"
                   type="danger"
                   icon="delete"
                   @click="submitDeleteTerm"

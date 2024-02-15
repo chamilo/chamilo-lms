@@ -49,7 +49,7 @@ final class IllustrationRepository extends ResourceRepository
     public function addIllustration(
         ResourceInterface $resource,
         User $creator,
-        UploadedFile $uploadFile = null,
+        ?UploadedFile $uploadFile = null,
         string $crop = ''
     ): ?ResourceFile {
         if (null === $uploadFile) {

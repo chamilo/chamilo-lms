@@ -180,7 +180,7 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
         return $this->forumPosts;
     }
 
-    public function setForumCategory(CForumCategory $forumCategory = null): self
+    public function setForumCategory(?CForumCategory $forumCategory = null): self
     {
         $forumCategory?->getForums()->add($this);
         $this->forumCategory = $forumCategory;

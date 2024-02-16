@@ -1,13 +1,23 @@
+# 2.4 
+# (The directives provided by mod_access_compat have been deprecated by mod_authz_host)
 <IfModule mod_authz_core.c>
-    Require all denied
+   Require all denied
+
+    # pChart generated files should be allowed
+     <FilesMatch "^[0-9a-f]+$">
+          Require all granted
+      </FilesMatch>
+
 </IfModule>
+
+# 2.2
 <IfModule !mod_authz_core.c>
     Order deny,allow
     Deny from all
 </IfModule>
 # pChart generated files should be allowed
 <FilesMatch "^[0-9a-f]+$">
-    order allow,deny
+    order deny,allow
     allow from all
 </FilesMatch>
 php_flag engine off

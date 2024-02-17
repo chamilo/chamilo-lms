@@ -8,6 +8,8 @@ namespace Chamilo\CoreBundle\Repository\Node;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
@@ -273,37 +275,6 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         return $query->getResult();
     }
 
-    /*
-    public function getTeachers()
-    {
-        $queryBuilder = $this->repository->createQueryBuilder('u');
-
-        // Selecting course info.
-        $queryBuilder
-            ->select('u')
-            ->where('u.groups.id = :groupId')
-            ->setParameter('groupId', 1);
-
-        $query = $queryBuilder->getQuery();
-
-        return $query->execute();
-    }*/
-
-    /*public function getUsers($group)
-    {
-        $queryBuilder = $this->repository->createQueryBuilder('u');
-
-        // Selecting course info.
-        $queryBuilder
-            ->select('u')
-            ->where('u.groups = :groupId')
-            ->setParameter('groupId', $group);
-
-        $query = $queryBuilder->getQuery();
-
-        return $query->execute();
-    }*/
-
     /**
      * Get the coaches for a course within a session.
      *
@@ -331,68 +302,6 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 
         return $qb->getQuery()->getResult();
     }
-
-    /**
-     * Get course user relationship based in the course_rel_user table.
-     *
-     * @return array
-     */
-    /*public function getCourses(User $user)
-    {
-        $qb = $this->createQueryBuilder('user');
-
-        // Selecting course info.
-        $qb->select('c');
-
-        // Loading User.
-        //$qb->from('Chamilo\CoreBundle\Entity\User', 'u');
-
-        // Selecting course
-        $qb->innerJoin('Chamilo\CoreBundle\Entity\Course', 'c');
-
-        //@todo check app settings
-        //$qb->add('orderBy', 'u.lastname ASC');
-
-        $wherePart = $qb->expr()->andx();
-
-        // Get only users subscribed to this course
-        $wherePart->add($qb->expr()->eq('user.userId', $user->getUserId()));
-
-        $qb->where($wherePart);
-        $query = $qb->getQuery();
-
-        return $query->execute();
-    }
-
-    public function getTeachers()
-    {
-        $qb = $this->createQueryBuilder('u');
-
-        // Selecting course info.
-        $qb
-            ->select('u')
-            ->where('u.groups.id = :groupId')
-            ->setParameter('groupId', 1);
-
-        $query = $qb->getQuery();
-
-        return $query->execute();
-    }*/
-
-    /*public function getUsers($group)
-    {
-        $qb = $this->createQueryBuilder('u');
-
-        // Selecting course info.
-        $qb
-            ->select('u')
-            ->where('u.groups = :groupId')
-            ->setParameter('groupId', $group);
-
-        $query = $qb->getQuery();
-
-        return $query->execute();
-    }*/
 
     /**
      * Get the sessions admins for a user.
@@ -725,5 +634,97 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         ;
 
         return $query->getResult();
+    }
+
+    public function getExtraUserData(int $userId, bool $prefix = false, bool $allVisibility = true, bool $splitMultiple = false, ?int $fieldFilter = null): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        // Start building the query
+        $qb->select('ef.id', 'ef.variable as fvar', 'ef.valueType as type', 'efv.fieldValue as fval', 'ef.defaultValue as fval_df')
+            ->from(ExtraField::class, 'ef')
+            ->leftJoin(ExtraFieldValues::class, 'efv', Join::WITH, 'efv.field = ef.id AND efv.itemId = :userId')
+            ->where('ef.itemType = :itemType')
+            ->setParameter('userId', $userId)
+            ->setParameter('itemType', ExtraField::USER_FIELD_TYPE);
+
+        // Apply visibility filters
+        if (!$allVisibility) {
+            $qb->andWhere('ef.visibleToSelf = true');
+        }
+
+        // Apply field filter if provided
+        if (null !== $fieldFilter) {
+            $qb->andWhere('ef.id = :fieldFilter')
+                ->setParameter('fieldFilter', $fieldFilter);
+        }
+
+        // Order by field order
+        $qb->orderBy('ef.fieldOrder', 'ASC');
+
+        // Execute the query
+        $results = $qb->getQuery()->getResult();
+
+        // Process results
+        $extraData = [];
+        foreach ($results as $row) {
+            $value = $row['fval'] ?? $row['fval_df'];
+
+            // Handle multiple values if necessary
+            if ($splitMultiple && in_array($row['type'], [ExtraField::USER_FIELD_TYPE_SELECT_MULTIPLE], true)) {
+                $value = explode(';', $value);
+            }
+
+            // Handle prefix if needed
+            $key = $prefix ? 'extra_' . $row['fvar'] : $row['fvar'];
+
+            // Special handling for certain field types
+            if ($row['type'] == ExtraField::USER_FIELD_TYPE_TAG) {
+                // Implement your logic to handle tags
+            } elseif ($row['type'] == ExtraField::USER_FIELD_TYPE_RADIO && $prefix) {
+                $extraData[$key][$key] = $value;
+            } else {
+                $extraData[$key] = $value;
+            }
+        }
+
+        return $extraData;
+    }
+
+    public function getExtraUserDataByField(int $userId, string $fieldVariable, bool $allVisibility = true): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select('e.id, e.variable, e.valueType, v.fieldValue')
+            ->from(ExtraFieldValues::class, 'v')
+            ->innerJoin('v.field', 'e')
+            ->where('v.itemId = :userId')
+            ->andWhere('e.variable = :fieldVariable')
+            ->andWhere('e.itemType = :itemType')
+            ->setParameters([
+                'userId' => $userId,
+                'fieldVariable' => $fieldVariable,
+                'itemType' => ExtraField::USER_FIELD_TYPE,
+            ]);
+
+        if (!$allVisibility) {
+            $qb->andWhere('e.visibleToSelf = true');
+        }
+
+        $qb->orderBy('e.fieldOrder', 'ASC');
+
+        $result = $qb->getQuery()->getResult();
+
+        $extraData = [];
+        foreach ($result as $row) {
+            $value = $row['fieldValue'];
+            if (ExtraField::USER_FIELD_TYPE_SELECT_MULTIPLE == $row['valueType']) {
+                $value = explode(';', $row['fieldValue']);
+            }
+
+            $extraData[$row['variable']] = $value;
+        }
+
+        return $extraData;
     }
 }

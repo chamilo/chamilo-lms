@@ -6,12 +6,16 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\ExtraFieldOptionsRepository;
+use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\LegalRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
@@ -326,5 +330,120 @@ class SocialController extends AbstractController
         }, $invitedUsers);
 
         return $this->json(['invitedUsers' => $invitedUsersList]);
+    }
+
+    #[Route('/user-profile/{userId}', name: 'chamilo_core_social_user_profile')]
+    public function getUserProfile(
+        int $userId,
+        SettingsManager $settingsManager,
+        LanguageRepository $languageRepository,
+        UserRepository $userRepository,
+        RequestStack $requestStack,
+        TrackEOnlineRepository $trackOnlineRepository,
+        ExtraFieldRepository $extraFieldRepository,
+        ExtraFieldOptionsRepository $extraFieldOptionsRepository
+    ): JsonResponse {
+        $user = $userRepository->find($userId);
+        if (!$user) {
+            return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $baseUrl = $requestStack->getCurrentRequest()->getBaseUrl();
+        $profileFieldsVisibilityJson = $settingsManager->getSetting('profile.profile_fields_visibility');
+        $profileFieldsVisibility = json_decode($profileFieldsVisibilityJson, true)['options'] ?? [];
+
+        $vCardUserLink = $profileFieldsVisibility['vcard'] ?? true ? $baseUrl.'/main/social/vcard_export.php?userId='.intval($userId) : '';
+
+        $languageInfo = null;
+        if ($profileFieldsVisibility['language'] ?? true) {
+            $language = $languageRepository->findByIsoCode($user->getLocale());
+            if ($language) {
+                $languageInfo = [
+                    'label' => $language->getOriginalName(),
+                    'value' => $language->getEnglishName(),
+                    'code'  => $language->getIsocode(),
+                ];
+            }
+        }
+
+        $isUserOnline = $trackOnlineRepository->isUserOnline($userId);
+        $userOnlyInChat = $this->checkUserStatus($userId, $userRepository);
+        $extraFields = $this->getExtraFieldBlock($userId, $userRepository, $settingsManager, $extraFieldRepository, $extraFieldOptionsRepository);
+
+        $response = [
+            'vCardUserLink' => $vCardUserLink,
+            'language'      => $languageInfo,
+            'visibility'    => $profileFieldsVisibility,
+            'isUserOnline' => $isUserOnline,
+            'userOnlyInChat' => $userOnlyInChat,
+            'extraFields'  => $extraFields,
+        ];
+
+        return $this->json($response);
+    }
+
+    private function getExtraFieldBlock(
+        int $userId,
+        UserRepository $userRepository,
+        SettingsManager $settingsManager,
+        ExtraFieldRepository $extraFieldRepository,
+        ExtraFieldOptionsRepository $extraFieldOptionsRepository
+    ): array {
+        $user = $userRepository->find($userId);
+        if (!$user) {
+            return [];
+        }
+
+        $fieldVisibilityConfig = $settingsManager->getSetting('profile.profile_fields_visibility');
+        $fieldVisibility = $fieldVisibilityConfig ? json_decode($fieldVisibilityConfig, true)['options'] : [];
+
+        $extraUserData = $userRepository->getExtraUserData($userId);
+        $extraFieldsFormatted = [];
+        foreach ($extraUserData as $key => $value) {
+            $fieldVariable = str_replace('extra_', '', $key);
+
+            $extraField = $extraFieldRepository->getHandlerFieldInfoByFieldVariable($fieldVariable, ExtraField::USER_FIELD_TYPE);
+            if (!$extraField || !isset($fieldVisibility[$fieldVariable]) || !$fieldVisibility[$fieldVariable]) {
+                continue;
+            }
+
+            $fieldValue = is_array($value) ? implode(', ', $value) : $value;
+
+            switch ($extraField['type']) {
+                case ExtraField::FIELD_TYPE_RADIO:
+                case ExtraField::FIELD_TYPE_SELECT:
+                    $extraFieldOptions = $extraFieldOptionsRepository->getFieldOptionByFieldAndOption($extraField['id'], $fieldValue, ExtraField::USER_FIELD_TYPE);
+                    if (!empty($extraFieldOptions)) {
+                        $optionTexts = array_map(function ($option) {
+                            return $option['display_text'];
+                        }, $extraFieldOptions);
+                        $fieldValue = implode(', ', $optionTexts);
+                    }
+                    break;
+                case ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
+                case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
+                    $geoData = explode('::', $fieldValue);
+                    $locationName = $geoData[0];
+                    $coordinates = $geoData[1] ?? '';
+                    $fieldValue = $locationName;
+                    break;
+
+            }
+
+            $extraFieldsFormatted[] = [
+                'variable' => $fieldVariable,
+                'label' => $extraField['display_text'],
+                'value' => $fieldValue,
+            ];
+        }
+
+        return $extraFieldsFormatted;
+    }
+
+    private function checkUserStatus(int $userId, UserRepository $userRepository): bool
+    {
+        $userStatus = $userRepository->getExtraUserDataByField($userId, 'user_chat_status');
+
+        return !empty($userStatus) && isset($userStatus['user_chat_status']) && (int) $userStatus['user_chat_status'] === 1;
     }
 }

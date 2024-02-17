@@ -48,6 +48,28 @@ class ExtraField
     public const TRACK_EXERCISE_FIELD_TYPE = 18;
     public const PORTFOLIO_TYPE = 19;
     public const LP_VIEW_TYPE = 20;
+
+    public const USER_FIELD_TYPE_RADIO = 3;
+    public const USER_FIELD_TYPE_SELECT_MULTIPLE = 5;
+    public const USER_FIELD_TYPE_TAG = 10;
+    public const FIELD_TYPE_TEXT = 1;
+    public const FIELD_TYPE_TEXTAREA = 2;
+    public const FIELD_TYPE_RADIO = 3;
+    public const FIELD_TYPE_SELECT = 4;
+    public const FIELD_TYPE_SELECT_MULTIPLE = 5;
+    public const FIELD_TYPE_DATE = 6;
+    public const FIELD_TYPE_DATETIME = 7;
+    public const FIELD_TYPE_DOUBLE_SELECT = 8;
+    public const FIELD_TYPE_TAG = 10;
+    public const FIELD_TYPE_SOCIAL_PROFILE = 12;
+    public const FIELD_TYPE_CHECKBOX = 13;
+    public const FIELD_TYPE_INTEGER = 15;
+    public const FIELD_TYPE_FILE_IMAGE = 16;
+    public const FIELD_TYPE_FLOAT = 17;
+    public const FIELD_TYPE_FILE = 18;
+    public const FIELD_TYPE_GEOLOCALIZATION = 24;
+    public const FIELD_TYPE_GEOLOCALIZATION_COORDINATES = 25;
+
     #[Groups(['extra_field:read'])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]

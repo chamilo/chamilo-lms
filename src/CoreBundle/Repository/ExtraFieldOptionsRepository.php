@@ -23,7 +23,7 @@ class ExtraFieldOptionsRepository extends ServiceEntityRepository
      *
      * @return array
      */
-    public function findSecondaryOptions(ExtraFieldOptions $option)
+    public function findSecondaryOptions(ExtraFieldOptions $option): array
     {
         $qb = $this->createQueryBuilder('so');
         $qb
@@ -40,5 +40,32 @@ class ExtraFieldOptionsRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    public function getFieldOptionByFieldAndOption(int $fieldId, string $optionValue, int $itemType): array
+    {
+        $qb = $this->createQueryBuilder('o');
+        $qb->innerJoin('o.field', 'f')
+            ->where('o.field = :fieldId')
+            ->andWhere('o.value = :optionValue')
+            ->andWhere('f.itemType = :itemType')
+            ->setParameters([
+                'fieldId' => $fieldId,
+                'optionValue' => $optionValue,
+                'itemType' => $itemType,
+            ]);
+
+        $result = $qb->getQuery()->getResult();
+
+        $options = [];
+        foreach ($result as $option) {
+            $options[] = [
+                'id' => $option->getId(),
+                'value' => $option->getValue(),
+                'display_text' => $option->getDisplayText(),
+            ];
+        }
+
+        return $options;
     }
 }

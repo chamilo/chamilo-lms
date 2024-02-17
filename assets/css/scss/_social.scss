@@ -745,3 +745,35 @@
   margin-left: 5px;
   vertical-align: middle;
 }
+
+.user-profile-card {
+  .extra-info-container {
+    margin-top: 0;
+    background: #f5f5f5;
+    padding: 0;
+    border-radius: 0.5rem;
+    text-align: left;
+  }
+
+  .extra-info-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .extra-info-list dt {
+    font-weight: bold;
+  }
+
+  .extra-info-list dd {
+    margin: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .language-target {
+    margin-top: 1rem;
+  }
+
+  .p-card .p-card-body {
+    padding: 1px;
+  }
+}

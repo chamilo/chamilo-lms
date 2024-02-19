@@ -95,7 +95,7 @@ async function fetchFriendsList() {
     const response = await axios.get(`${ENTRYPOINT}user_rel_users`, {
       params: { user: user.id, relationType: [3, 10] }
     })
-    friendsList.value = response.data['hydra:member'].map(friendship => friendship.friend)
+    friendsList.value = response.data['hydra:member'].map(friendship => friendship.friend.id).concat(user.id)
   } catch (error) {
     showErrorNotification(t('Error fetching friends list'))
     console.error('Error fetching friends list:', error)
@@ -107,7 +107,7 @@ const asyncFind = async (query) => {
   isLoadingSelect.value = true
   try {
     const { data } = await axios.get(`${ENTRYPOINT}users`, { params: { username: query } })
-    foundUsers.value = data['hydra:member'].filter(user => !isFriend(user))
+    foundUsers.value = data['hydra:member'].filter(foundUser => !friendsList.value.includes(foundUser.id))
   } catch (error) {
     showErrorNotification(t('Error fetching users'))
   } finally {

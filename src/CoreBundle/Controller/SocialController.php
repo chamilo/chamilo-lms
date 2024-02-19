@@ -518,6 +518,24 @@ class SocialController extends AbstractController
         ]);
     }
 
+    #[Route('/invitations/count/{userId}', name: 'chamilo_core_social_invitations_count')]
+    public function getInvitationsCount(
+        int $userId,
+        MessageRepository $messageRepository,
+        UsergroupRepository $usergroupRepository
+    ): JsonResponse {
+        $user = $this->getUser();
+        if ($userId !== $user->getId()) {
+            return $this->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $receivedMessagesCount = count($messageRepository->findReceivedInvitationsByUser($user));
+        $pendingGroupInvitationsCount = count($usergroupRepository->getGroupsByUser($userId, Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION));
+        $totalInvitationsCount = $receivedMessagesCount + $pendingGroupInvitationsCount;
+
+        return $this->json(['totalInvitationsCount' => $totalInvitationsCount]);
+    }
+
     #[Route('/search', name: 'chamilo_core_social_search')]
     public function search(
         Request $request,
@@ -659,37 +677,37 @@ class SocialController extends AbstractController
             return $this->json(['error' => 'Missing parameters'], Response::HTTP_BAD_REQUEST);
         }
 
-        $userSender = $userRepository->find($userId);
-        $userReceiver = $userRepository->find($targetUserId);
+        $currentUser = $userRepository->find($userId);
+        $friendUser = $userRepository->find($targetUserId);
 
-        if (null === $userSender || null === $userReceiver) {
+        if (null === $currentUser || null === $friendUser) {
             return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
         }
 
         try {
             switch ($action) {
                 case 'send_invitation':
-                    $result = $messageRepository->sendInvitationToFriend($userSender, $userReceiver, $subject, $content);
+                    $result = $messageRepository->sendInvitationToFriend($currentUser, $friendUser, $subject, $content);
                     if (!$result) {
                         return $this->json(['error' => 'Invitation already exists or could not be sent'], Response::HTTP_BAD_REQUEST);
                     }
                     break;
 
                 case 'send_message':
-                    $result = MessageManager::send_message($targetUserId, $subject, $content);
+                    $result = MessageManager::send_message($friendUser, $subject, $content);
                     break;
 
                 case 'add_friend':
                     $relationType = $isMyFriend ? UserRelUser::USER_RELATION_TYPE_FRIEND : UserRelUser::USER_UNKNOWN;
 
-                    $userRepository->relateUsers($userSender, $userReceiver, $relationType);
-                    $userRepository->relateUsers($userReceiver, $userSender, $relationType);
+                    $userRepository->relateUsers($currentUser, $friendUser, $relationType);
+                    $userRepository->relateUsers($friendUser, $currentUser, $relationType);
 
-                    $messageRepository->invitationAccepted($userSender, $userReceiver);
+                    $messageRepository->invitationAccepted($friendUser, $currentUser);
                     break;
 
                 case 'deny_friend':
-                    $messageRepository->invitationDenied($userSender, $userReceiver);
+                    $messageRepository->invitationDenied($friendUser, $currentUser);
                     break;
 
                 default:

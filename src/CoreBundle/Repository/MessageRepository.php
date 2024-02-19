@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Repository;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Traits\Repository\RepositoryQueryBuilderTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -188,6 +189,19 @@ class MessageRepository extends ServiceEntityRepository
             if ($messageRelUser) {
                 $invitation = $messageRelUser->getMessage();
                 $invitation->setStatus(Message::MESSAGE_STATUS_INVITATION_ACCEPTED);
+
+                $this->_em->flush();
+
+                $friendship = $this->_em->getRepository(UserRelUser::class)->findOneBy([
+                    'user' => $sender,
+                    'friend' => $receiver,
+                ]) ?: new UserRelUser();
+
+                $friendship->setUser($sender);
+                $friendship->setFriend($receiver);
+                $friendship->setRelationType(UserRelUser::USER_RELATION_TYPE_FRIEND);
+
+                $this->_em->persist($friendship);
                 $this->_em->flush();
                 return true;
             }

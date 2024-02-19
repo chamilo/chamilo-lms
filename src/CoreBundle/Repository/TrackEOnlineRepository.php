@@ -8,18 +8,18 @@ namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 class TrackEOnlineRepository extends ServiceEntityRepository
 {
-    private $settingsManager;
-
-    public function __construct(ManagerRegistry $registry, SettingsManager $settingsManager)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        private readonly SettingsManager $settingsManager
+    ) {
         parent::__construct($registry, TrackEOnline::class);
-        $this->settingsManager = $settingsManager;
     }
 
     public function isUserOnline(int $userId): bool
@@ -27,7 +27,7 @@ class TrackEOnlineRepository extends ServiceEntityRepository
         $accessUrlId = 1;
         $timeLimit = $this->settingsManager->getSetting('display.time_limit_whosonline');
 
-        $onlineTime = new \DateTime();
+        $onlineTime = new DateTime();
         $onlineTime->modify("-{$timeLimit} minutes");
 
         $qb = $this->createQueryBuilder('t')
@@ -38,10 +38,12 @@ class TrackEOnlineRepository extends ServiceEntityRepository
             ->setParameter('userId', $userId)
             ->setParameter('accessUrlId', $accessUrlId)
             ->setParameter('limitDate', $onlineTime)
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
         try {
             $count = $qb->getQuery()->getSingleScalarResult();
+
             return $count > 0;
         } catch (NonUniqueResultException $e) {
             // Handle exception

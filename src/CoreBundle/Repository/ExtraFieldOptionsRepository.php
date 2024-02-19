@@ -20,8 +20,6 @@ class ExtraFieldOptionsRepository extends ServiceEntityRepository
 
     /**
      * Get the secondary options. For double select extra field.
-     *
-     * @return array
      */
     public function findSecondaryOptions(ExtraFieldOptions $option): array
     {
@@ -53,7 +51,8 @@ class ExtraFieldOptionsRepository extends ServiceEntityRepository
                 'fieldId' => $fieldId,
                 'optionValue' => $optionValue,
                 'itemType' => $itemType,
-            ]);
+            ])
+        ;
 
         $result = $qb->getQuery()->getResult();
 

@@ -6,7 +6,7 @@
       </div>
     </template>
     <hr class="-mt-2 mb-4 -mx-4">
-      <ul class="menu-list">
+      <ul v-if="groupInfo.isMember" class="menu-list">
         <li class="menu-item">
           <router-link to="/social">
             <i class="mdi mdi-home" aria-hidden="true"></i>
@@ -26,9 +26,18 @@
           </router-link>
         </li>
         <li class="menu-item">
-          <router-link :to="{ name: '', params: { group_id: groupInfo.id } }">
+          <button @click="leaveGroup">
             <i class="mdi mdi-exit-to-app" aria-hidden="true"></i>
             {{ t("Leave group") }}
+          </button>
+        </li>
+
+      </ul>
+      <ul v-else>
+        <li class="menu-item">
+          <router-link to="/social">
+            <i class="mdi mdi-home" aria-hidden="true"></i>
+            {{ t("Home") }}
           </router-link>
         </li>
       </ul>
@@ -37,20 +46,39 @@
 
 <script setup>
 import BaseCard from "../basecomponents/BaseCard.vue"
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { onMounted, computed, ref, inject, watchEffect } from "vue"
 import { useStore } from "vuex"
 import { useSecurityStore } from "../../store/securityStore"
+import axios from 'axios'
+import { useNotification } from "../../composables/notification"
+import { useSocialInfo } from "../../composables/useSocialInfo"
+
 
 const { t } = useI18n()
 const route = useRoute()
+const router = useRouter()
 const store = useStore()
 const securityStore = useSecurityStore()
+const notification = useNotification()
 
-const groupInfo = inject('group-info')
-const isGroup = inject('is-group')
-
+const { user, groupInfo, isGroup, loadGroup, isLoading } = useSocialInfo()
+const leaveGroup = async () => {
+  try {
+    const response = await axios.post('/social-network/group-action', {
+      userId: user.value.id,
+      groupId: groupInfo.value.id,
+      action: 'leave'
+    })
+    if (response.data.success) {
+      notification.showSuccessNotification(t('You have left the group successfully'))
+      router.push('/social')
+    }
+  } catch (error) {
+    console.error('Error leaving the group:', error)
+  }
+}
 const isActive = (path, filterType = null) => {
   const pathMatch = route.path.startsWith(path)
   const hasQueryParams = Object.keys(route.query).length > 0

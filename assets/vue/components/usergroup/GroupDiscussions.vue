@@ -13,13 +13,15 @@
           <i class="mdi mdi-message-reply-text icon"></i>
           <span>{{ discussion.repliesCount }} {{ t("Replies") }}</span>
           <i class="mdi mdi-clock-outline icon"></i>
-          <span>Created {{ new Date(discussion.sendDate).toLocaleDateString() }}</span>
+          <span>{{ t("Created") }} {{ relativeDatetime(discussion.sendDate) }}</span>
         </div>
       </div>
       <div class="discussion-author">
-        <img v-if="discussion.sender.illustrationUrl" :src="discussion.sender.illustrationUrl" class="author-avatar-icon">
-        <i v-else class="mdi mdi-account-circle-outline author-avatar-icon"></i>
-        <span class="author-name">{{ discussion.sender.name }}</span>
+        <div class="author-avatar">
+          <img v-if="discussion.sender.illustrationUrl" :src="discussion.sender.illustrationUrl" alt="Author avatar">
+          <i v-else class="mdi mdi-account-circle-outline"></i>
+        </div>
+        <div class="author-name mt-4">{{ discussion.sender.username }}</div>
       </div>
     </div>
   </div>
@@ -30,11 +32,15 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 import { useI18n } from "vue-i18n"
+import { useFormatDate } from "../../composables/formatDate"
+import { useSocialInfo } from "../../composables/useSocialInfo"
+
 const route = useRoute()
 const discussions = ref([])
 const groupId = ref(route.params.group_id)
 const { t } = useI18n()
-
+const { relativeDatetime } = useFormatDate()
+const { user, groupInfo, isGroup, loadGroup, isLoading } = useSocialInfo()
 onMounted(async () => {
   if (groupId.value) {
     try {

@@ -97,7 +97,7 @@ jobs:
                   php bin/console --env=test doctrine:fixtures:load --no-interaction
 
             - name: Run PHPUnit tests
-              run: php bin/phpunit  --coverage-clover clover.xml
+              run: php bin/phpunit --testdox --coverage-clover clover.xml
 
             - name: Coverage
               uses: codecov/codecov-action@v3

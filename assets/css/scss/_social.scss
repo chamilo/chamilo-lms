@@ -431,7 +431,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
+    padding: 20px 0;
     border-bottom: 1px solid #ccc;
   }
 
@@ -460,13 +460,10 @@
     align-items: center;
   }
 
-  .author-avatar-icon {
-    font-size: 50px;
-    margin-right: 10px;
-  }
-
-  .author-name {
-    font-size: 0.9rem;
+  .author-avatar img, .author-avatar .mdi {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
   }
 
   .author-avatar {
@@ -474,41 +471,26 @@
     height: 30px;
     border-radius: 50%;
     margin-right: 10px;
-  }
-
-  .author-avatar-icon {
-    font-size: 30px;
-    margin-right: 10px;
+    display: flex;
+    justify-content: center;
   }
 
   .author-name {
-    font-size: 0.9em;
-  }
-
-  .discussion-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    margin-right: 10px;
   }
 
   .discussion-author {
     display: flex;
+    flex-direction: column;
     align-items: center;
   }
 
-  .author-name {
-    margin-right: 10px;
-  }
-
-  .author-avatar {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-  }
-
   .author-avatar-icon {
-    font-size: 30px;
+    font-size: 50px;
+    margin-right: 10px;
   }
 
   .discussions-container {
@@ -557,13 +539,15 @@
   }
 
   .member-avatar {
-    margin-bottom: 10px;
+    border-radius: 50%;
+    margin:auto;
   }
 
   .member-avatar img {
     width: 100px;
     height: 100px;
     border-radius: 50%;
+    margin: auto;
   }
 
   .member-avatar i {
@@ -583,13 +567,6 @@
     border-bottom: 1px solid #ccc;
     display: flex;
     align-items: center;
-  }
-
-  .member-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 16px;
   }
 
   .member-name {
@@ -775,5 +752,217 @@
 
   .p-card .p-card-body {
     padding: 1px;
+  }
+}
+
+.social-search {
+  .invitation-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+
+  .invitation-modal {
+    background: white;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .invitation-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .close-button {
+    border: none;
+    background: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  .invitation-modal-textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none;
+  }
+
+  .invitation-modal-send {
+    width: 100%;
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .invitation-modal-send:hover {
+    background-color: #0056b3;
+  }
+  .group-card {
+    background: #fff;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .group-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .group-info {
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .group-info h3 {
+    margin-top: 1rem;
+    font-size: 1.25rem;
+  }
+
+  .group-info p {
+    font-size: 0.875rem;
+    color: #666;
+  }
+
+  .message-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .message-modal {
+    background: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 400px;
+    position: relative;
+  }
+
+  .message-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+
+  .message-modal-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .message-user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+
+  .message-user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  .message-user-name {
+    font-weight: bold;
+  }
+
+  .message-modal-input,
+  .message-modal-textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+  }
+
+  .message-modal-textarea {
+    height: 100px;
+    resize: vertical;
+  }
+
+  .message-modal-send {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .message-modal-send:hover {
+    background-color: #0056b3;
+  }
+}
+
+.friends-invitations {
+  .invitation-list {
+    width: 100%;
+  }
+
+  .invitation-item {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .invitation-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .item-picture {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+  }
+
+  .invitation-info {
+    flex-grow: 1;
+  }
+
+  .invitation-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 600px) {
+    .invitation-actions {
+      flex-direction: column;
+    }
   }
 }

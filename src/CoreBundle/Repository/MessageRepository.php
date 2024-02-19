@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Message;
+use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Traits\Repository\RepositoryQueryBuilderTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -82,4 +83,147 @@ class MessageRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function findReceivedInvitationsByUser(User $user): array
+    {
+        return $this->createQueryBuilder('m')
+            ->join('m.receivers', 'mr')
+            ->where('mr.receiver = :user')
+            ->andWhere('m.msgType = :msgType')
+            ->andWhere('m.status = :status')
+            ->setParameters([
+                'user' => $user,
+                'msgType' => Message::MESSAGE_TYPE_INVITATION,
+                'status' => Message::MESSAGE_STATUS_INVITATION_PENDING,
+            ])
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findSentInvitationsByUser(User $user): array
+    {
+        return $this->createQueryBuilder('m')
+            ->where('m.sender = :user')
+            ->andWhere('m.msgType = :msgType')
+            ->andWhere('m.status = :status')
+            ->setParameters([
+                'user' => $user,
+                'msgType' => Message::MESSAGE_TYPE_INVITATION,
+                'status' => Message::MESSAGE_STATUS_INVITATION_PENDING,
+            ])
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function sendInvitationToFriend(User $userSender, User $userReceiver, string $messageTitle, string $messageContent): bool
+    {
+        $existingInvitations = $this->findSentInvitationsByUserAndStatus($userSender, $userReceiver, [
+            Message::MESSAGE_STATUS_INVITATION_PENDING,
+            Message::MESSAGE_STATUS_INVITATION_ACCEPTED,
+            Message::MESSAGE_STATUS_INVITATION_DENIED
+        ]);
+
+        if (count($existingInvitations) > 0) {
+            // Invitation already exists
+            return false;
+        }
+
+        $message = new Message();
+        $message->setSender($userSender);
+        $message->setMsgType(Message::MESSAGE_TYPE_INVITATION);
+        $message->setStatus(Message::MESSAGE_STATUS_INVITATION_PENDING);
+        $message->setSendDate(new \DateTime());
+        $message->setTitle($messageTitle);
+        $message->setContent(nl2br($messageContent));
+
+        $messageRelUser = new MessageRelUser();
+        $messageRelUser->setReceiver($userReceiver);
+        $messageRelUser->setReceiverType(MessageRelUser::TYPE_TO);
+        $message->addReceiver($messageRelUser);
+
+        $this->_em->persist($message);
+        $this->_em->persist($messageRelUser);
+        $this->_em->flush();
+
+        return true;
+    }
+
+    public function findSentInvitationsByUserAndStatus(User $userSender, User $userReceiver, array $statuses): array
+    {
+        $qb = $this->createQueryBuilder('m');
+        $qb->join('m.receivers', 'mr')
+            ->where('m.sender = :sender')
+            ->andWhere('mr.receiver = :receiver')
+            ->andWhere('m.msgType = :msgType')
+            ->andWhere($qb->expr()->in('m.status', ':statuses'))
+            ->setParameters([
+                'sender' => $userSender,
+                'receiver' => $userReceiver,
+                'msgType' => Message::MESSAGE_TYPE_INVITATION,
+                'statuses' => $statuses,
+            ]);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function invitationAccepted(User $sender, User $receiver): bool
+    {
+        $queryBuilder = $this->_em->createQueryBuilder();
+
+        $queryBuilder->select('m')
+            ->from(Message::class, 'm')
+            ->where('m.sender = :sender')
+            ->andWhere('m.status = :status')
+            ->setParameter('sender', $sender)
+            ->setParameter('status', Message::MESSAGE_STATUS_INVITATION_PENDING);
+
+        $messages = $queryBuilder->getQuery()->getResult();
+
+        foreach ($messages as $message) {
+            $messageRelUser = $this->_em->getRepository(MessageRelUser::class)->findOneBy([
+                'message' => $message,
+                'receiver' => $receiver
+            ]);
+
+            if ($messageRelUser) {
+                $invitation = $messageRelUser->getMessage();
+                $invitation->setStatus(Message::MESSAGE_STATUS_INVITATION_ACCEPTED);
+                $this->_em->flush();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    public function invitationDenied(User $sender, User $receiver): bool
+    {
+        $queryBuilder = $this->_em->createQueryBuilder();
+
+        $queryBuilder->select('m')
+            ->from(Message::class, 'm')
+            ->where('m.sender = :sender')
+            ->andWhere('m.status = :status')
+            ->setParameter('sender', $sender)
+            ->setParameter('status', Message::MESSAGE_STATUS_INVITATION_PENDING);
+
+        $messages = $queryBuilder->getQuery()->getResult();
+
+        foreach ($messages as $message) {
+            $messageRelUser = $this->_em->getRepository(MessageRelUser::class)->findOneBy([
+                'message' => $message,
+                'receiver' => $receiver
+            ]);
+
+            if ($messageRelUser) {
+                $this->_em->remove($messageRelUser);
+                $this->_em->flush();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

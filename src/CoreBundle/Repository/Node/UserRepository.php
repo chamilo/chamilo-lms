@@ -13,11 +13,13 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
+use Chamilo\CoreBundle\Entity\UserRelTag;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Datetime;
@@ -37,10 +39,17 @@ use const MB_CASE_LOWER;
 class UserRepository extends ResourceRepository implements PasswordUpgraderInterface
 {
     protected ?UserPasswordHasherInterface $hasher = null;
+    private $illustrationRepository;
 
-    public function __construct(ManagerRegistry $registry)
+    const USER_IMAGE_SIZE_SMALL = 1;
+    const USER_IMAGE_SIZE_MEDIUM = 2;
+    const USER_IMAGE_SIZE_BIG = 3;
+    const USER_IMAGE_SIZE_ORIGINAL = 4;
+
+    public function __construct(ManagerRegistry $registry, IllustrationRepository $illustrationRepository)
     {
         parent::__construct($registry, User::class);
+        $this->illustrationRepository = $illustrationRepository;
     }
 
     public function loadUserByIdentifier(string $identifier): ?User
@@ -726,5 +735,168 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         }
 
         return $extraData;
+    }
+
+    public function searchUsersByTags(
+        string $tag,
+        int $excludeUserId = null,
+        int $fieldId = 0,
+        int $from = 0,
+        int $number_of_items = 10,
+        bool $getCount = false
+    ): array {
+        $qb = $this->createQueryBuilder('u');
+
+        if ($getCount) {
+            $qb->select('COUNT(DISTINCT u.id)');
+        } else {
+            $qb->select('DISTINCT u.id, u.username, u.firstname, u.lastname, u.email, u.pictureUri, u.status');
+        }
+
+        $qb->innerJoin('u.portals', 'urlRelUser')
+            ->leftJoin(UserRelTag::class, 'uv', 'WITH', 'u = uv.user')
+            ->leftJoin(Tag::class, 'ut', 'WITH', 'uv.tag = ut');
+
+        if ($fieldId !== 0) {
+            $qb->andWhere('ut.field = :fieldId')
+                ->setParameter('fieldId', $fieldId);
+        }
+
+        if ($excludeUserId !== null) {
+            $qb->andWhere('u.id != :excludeUserId')
+                ->setParameter('excludeUserId', $excludeUserId);
+        }
+
+        $qb->andWhere(
+            $qb->expr()->orX(
+                $qb->expr()->like('ut.tag', ':tag'),
+                $qb->expr()->like('u.firstname', ':likeTag'),
+                $qb->expr()->like('u.lastname', ':likeTag'),
+                $qb->expr()->like('u.username', ':likeTag'),
+                $qb->expr()->like(
+                    $qb->expr()->concat('u.firstname', $qb->expr()->literal(' '), 'u.lastname'),
+                    ':likeTag'
+                ),
+                $qb->expr()->like(
+                    $qb->expr()->concat('u.lastname', $qb->expr()->literal(' '), 'u.firstname'),
+                    ':likeTag'
+                )
+            )
+        )
+            ->setParameter('tag', $tag . '%')
+            ->setParameter('likeTag', '%' . $tag . '%');
+
+        // Only active users and not anonymous
+        $qb->andWhere('u.active = :active')
+            ->andWhere('u.status != :anonymous')
+            ->setParameter('active', true)
+            ->setParameter('anonymous', 6);
+
+        if (!$getCount) {
+            $qb->orderBy('u.username')
+                ->setFirstResult($from)
+                ->setMaxResults($number_of_items);
+        }
+
+        return $getCount ? $qb->getQuery()->getSingleScalarResult() : $qb->getQuery()->getResult();
+    }
+
+    public function getUserRelationWithType(int $userId, int $friendId): ?array
+    {
+        $qb = $this->createQueryBuilder('u');
+        $qb->select('u.id AS userId', 'u.username AS userName', 'ur.relationType', 'f.id AS friendId', 'f.username AS friendName')
+            ->innerJoin('u.friends', 'ur')
+            ->innerJoin('ur.friend', 'f')
+            ->where('u.id = :userId AND f.id = :friendId')
+            ->setParameter('userId', $userId)
+            ->setParameter('friendId', $friendId)
+            ->setMaxResults(1);
+
+        $result = $qb->getQuery()->getOneOrNullResult();
+
+        return $result;
+    }
+
+    public function relateUsers(User $user1, User $user2, int $relationType): void
+    {
+        $em = $this->getEntityManager();
+
+        $existingRelation = $em->getRepository(UserRelUser::class)->findOneBy([
+            'user' => $user1,
+            'friend' => $user2,
+        ]);
+
+        if (!$existingRelation) {
+            $newRelation = new UserRelUser();
+            $newRelation->setUser($user1);
+            $newRelation->setFriend($user2);
+            $newRelation->setRelationType($relationType);
+            $em->persist($newRelation);
+        } else {
+            $existingRelation->setRelationType($relationType);
+        }
+
+        $existingRelationInverse = $em->getRepository(UserRelUser::class)->findOneBy([
+            'user' => $user2,
+            'friend' => $user1,
+        ]);
+
+        if (!$existingRelationInverse) {
+            $newRelationInverse = new UserRelUser();
+            $newRelationInverse->setUser($user2);
+            $newRelationInverse->setFriend($user1);
+            $newRelationInverse->setRelationType($relationType);
+            $em->persist($newRelationInverse);
+        } else {
+            $existingRelationInverse->setRelationType($relationType);
+        }
+
+        $em->flush();
+    }
+
+    public function getUserPicture(
+        $userId,
+        int $size = self::USER_IMAGE_SIZE_MEDIUM,
+        $addRandomId = true,
+    ) {
+
+        $user = $this->find($userId);
+        if (!$user) {
+
+            return '/img/icons/64/unknown.png';
+        }
+
+        switch ($size) {
+            case self::USER_IMAGE_SIZE_SMALL:
+                $width = 32;
+                break;
+            case self::USER_IMAGE_SIZE_MEDIUM:
+                $width = 64;
+                break;
+            case self::USER_IMAGE_SIZE_BIG:
+                $width = 128;
+                break;
+            case self::USER_IMAGE_SIZE_ORIGINAL:
+            default:
+                $width = 0;
+                break;
+        }
+
+        $url = $this->illustrationRepository->getIllustrationUrl($user);
+        $params = [];
+        if (!empty($width)) {
+            $params['w'] = $width;
+        }
+
+        if ($addRandomId) {
+            $params['rand'] = uniqid('u_', true);
+        }
+
+        $paramsToString = '';
+        if (!empty($params)) {
+            $paramsToString = '?'.http_build_query($params);
+        }
+
+        return $url.$paramsToString;
     }
 }

@@ -8,10 +8,13 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Repository\ExtraFieldOptionsRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\LegalRepository;
+use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
@@ -20,8 +23,10 @@ use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use ExtraFieldValue;
+use MessageManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -276,8 +281,13 @@ class SocialController extends AbstractController
     }
 
     #[Route('/invite-friends/{userId}/{groupId}', name: 'chamilo_core_social_invite_friends')]
-    public function inviteFriends(int $userId, int $groupId, UserRepository $userRepository, UsergroupRepository $usergroupRepository, IllustrationRepository $illustrationRepository): JsonResponse
-    {
+    public function inviteFriends(
+        int $userId,
+        int $groupId,
+        UserRepository $userRepository,
+        UsergroupRepository $usergroupRepository,
+        IllustrationRepository $illustrationRepository
+    ): JsonResponse {
         $user = $userRepository->find($userId);
         if (!$user) {
             return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
@@ -438,6 +448,260 @@ class SocialController extends AbstractController
         }
 
         return $extraFieldsFormatted;
+    }
+
+    #[Route('/invitations/{userId}', name: 'chamilo_core_social_invitations')]
+    public function getInvitations(
+        int $userId,
+        MessageRepository $messageRepository,
+        UsergroupRepository $usergroupRepository,
+        UserRepository $userRepository
+    ): JsonResponse {
+        $user = $this->getUser();
+        if ($userId !== $user->getId()) {
+            return $this->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $receivedMessages = $messageRepository->findReceivedInvitationsByUser($user);
+        $receivedInvitations = [];
+        foreach ($receivedMessages as $message) {
+            $sender = $message->getSender();
+            $receivedInvitations[] = [
+                'id' => $message->getId(),
+                'itemId' => $sender->getId(),
+                'itemName' => $sender->getFirstName() . ' ' . $sender->getLastName(),
+                'itemPicture' => $userRepository->getUserPicture($sender->getId()),
+                'content' => $message->getContent(),
+                'date' => $message->getSendDate()->format('Y-m-d H:i:s'),
+                'canAccept' => true,
+                'canDeny' => true,
+            ];
+        }
+
+        $sentMessages = $messageRepository->findSentInvitationsByUser($user);
+        $sentInvitations = [];
+        foreach ($sentMessages as $message) {
+            foreach ($message->getReceivers() as $receiver) {
+                $receiverUser = $receiver->getReceiver();
+                $sentInvitations[] = [
+                    'id' => $message->getId(),
+                    'itemId' => $receiverUser->getId(),
+                    'itemName' => $receiverUser->getFirstName() . ' ' . $receiverUser->getLastName(),
+                    'itemPicture' => $userRepository->getUserPicture($receiverUser->getId()),
+                    'content' => $message->getContent(),
+                    'date' => $message->getSendDate()->format('Y-m-d H:i:s'),
+                    'canAccept' => false,
+                    'canDeny' => false,
+                ];
+            }
+        }
+
+        $pendingGroupInvitations = [];
+        $pendingGroups = $usergroupRepository->getGroupsByUser($userId, Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION);
+        foreach ($pendingGroups as $group) {
+            $pendingGroupInvitations[] = [
+                'id' => $group->getId(),
+                'itemId' => $group->getId(),
+                'itemName' => $group->getTitle(),
+                'itemPicture' => $usergroupRepository->getUsergroupPicture($group->getId()),
+                'content' => $group->getDescription(),
+                'date' => $group->getCreatedAt()->format('Y-m-d H:i:s'),
+                'canAccept' => true,
+                'canDeny' => true,
+            ];
+        }
+
+        return $this->json([
+            'receivedInvitations' => $receivedInvitations,
+            'sentInvitations' => $sentInvitations,
+            'pendingGroupInvitations' => $pendingGroupInvitations,
+        ]);
+    }
+
+    #[Route('/search', name: 'chamilo_core_social_search')]
+    public function search(
+        Request $request,
+        UserRepository $userRepository,
+        UsergroupRepository $usergroupRepository,
+        TrackEOnlineRepository $trackOnlineRepository
+    ): JsonResponse {
+        $query = $request->query->get('query', '');
+        $type = $request->query->get('type', 'user');
+        $from = $request->query->getInt('from', 0);
+        $numberOfItems = $request->query->getInt('number_of_items', 1000);
+
+        $formattedResults = [];
+        if ($type === 'user') {
+            /* @var User $user */
+            $user = $this->getUser();
+            $results = $userRepository->searchUsersByTags($query, $user->getId(), 0, $from, $numberOfItems);
+            foreach ($results as $item) {
+                $isUserOnline = $trackOnlineRepository->isUserOnline($item['id']);
+                $relation = $userRepository->getUserRelationWithType($user->getId(), $item['id']);
+                $formattedResults[] = [
+                    'id' => $item['id'],
+                    'name' => $item['firstname'] . ' ' . $item['lastname'],
+                    'avatar' => $userRepository->getUserPicture($item['id']),
+                    'role' => $item['status'] === 5 ? 'student' : 'teacher',
+                    'status' => $isUserOnline ? 'online' : 'offline',
+                    'url' => '/social?id=' . $item['id'],
+                    'relationType' => $relation['relationType'] ?? null,
+                ];
+            }
+        } elseif ($type === 'group') {
+            // Perform group search
+            $results = $usergroupRepository->searchGroupsByTags($query, $from, $numberOfItems);
+            foreach ($results as $item) {
+                $formattedResults[] = [
+                    'id' => $item['id'],
+                    'name' => $item['title'],
+                    'description' => $item['description'] ?? '',
+                    'image' => $usergroupRepository->getUsergroupPicture($item['id']),
+                    'url' => '/resources/usergroups/show/' . $item['id'],
+                ];
+            }
+        }
+
+        return $this->json(['results' => $formattedResults]);
+    }
+
+    #[Route('/group-details/{groupId}', name: 'chamilo_core_social_group_details')]
+    public function groupDetails(
+        int $groupId,
+        UsergroupRepository $usergroupRepository,
+        TrackEOnlineRepository $trackOnlineRepository
+    ): JsonResponse {
+        /* @var User $user */
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->json(['error' => 'User not authenticated'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        /* @var Usergroup $group */
+        $group = $usergroupRepository->find($groupId);
+        if (!$group) {
+            return $this->json(['error' => 'Group not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $isMember = $usergroupRepository->isGroupMember($groupId, $user);
+        $role = $usergroupRepository->getUserGroupRole($groupId, $user->getId());
+        $isUserOnline = $trackOnlineRepository->isUserOnline($user->getId());
+        $isModerator = $usergroupRepository->isGroupModerator($groupId, $user->getId());
+
+        $groupDetails = [
+            'id' => $group->getId(),
+            'title' => $group->getTitle(),
+            'description' => $group->getDescription(),
+            'image' => $usergroupRepository->getUsergroupPicture($group->getId()),
+            'isMember' => $isMember,
+            'isModerator' => $isModerator,
+            'role' => $role,
+            'isUserOnline' => $isUserOnline,
+            'visibility' => (int) $group->getVisibility(),
+        ];
+
+        return $this->json($groupDetails);
+    }
+
+    #[Route('/group-action', name: 'chamilo_core_social_group_action')]
+    public function groupAction(Request $request, UsergroupRepository $usergroupRepository, EntityManagerInterface $em): JsonResponse
+    {
+
+        $data = json_decode($request->getContent(), true);
+
+        $userId = $data['userId'] ?? null;
+        $groupId = $data['groupId'] ?? null;
+        $action = $data['action'] ?? null;
+
+        if (!$userId || !$groupId || !$action) {
+            return $this->json(['error' => 'Missing parameters'], Response::HTTP_BAD_REQUEST);
+        }
+
+        try {
+            switch ($action) {
+                case 'join':
+                    $usergroupRepository->addUserToGroup($userId, $groupId);
+                    break;
+
+                case 'leave':
+                    $usergroupRepository->removeUserFromGroup($userId, $groupId);
+                    break;
+
+                default:
+                    return $this->json(['error' => 'Invalid action'], Response::HTTP_BAD_REQUEST);
+            }
+
+            $em->flush();
+
+            return $this->json(['success' => 'Action completed successfully']);
+        } catch (\Exception $e) {
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    #[Route('/user-action', name: 'chamilo_core_social_user_action')]
+    public function userAction(
+        Request $request,
+        UserRepository $userRepository,
+        MessageRepository $messageRepository,
+        EntityManagerInterface $em
+    ): JsonResponse {
+        $data = json_decode($request->getContent(), true);
+
+        $userId = $data['userId'] ?? null;
+        $targetUserId = $data['targetUserId'] ?? null;
+        $action = $data['action'] ?? null;
+        $isMyFriend = $data['is_my_friend'] ?? false;
+        $subject = $data['subject'] ?? '';
+        $content = $data['content'] ?? '';
+
+        if (!$userId || !$targetUserId || !$action) {
+            return $this->json(['error' => 'Missing parameters'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $userSender = $userRepository->find($userId);
+        $userReceiver = $userRepository->find($targetUserId);
+
+        if (null === $userSender || null === $userReceiver) {
+            return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        try {
+            switch ($action) {
+                case 'send_invitation':
+                    $result = $messageRepository->sendInvitationToFriend($userSender, $userReceiver, $subject, $content);
+                    if (!$result) {
+                        return $this->json(['error' => 'Invitation already exists or could not be sent'], Response::HTTP_BAD_REQUEST);
+                    }
+                    break;
+
+                case 'send_message':
+                    $result = MessageManager::send_message($targetUserId, $subject, $content);
+                    break;
+
+                case 'add_friend':
+                    $relationType = $isMyFriend ? UserRelUser::USER_RELATION_TYPE_FRIEND : UserRelUser::USER_UNKNOWN;
+
+                    $userRepository->relateUsers($userSender, $userReceiver, $relationType);
+                    $userRepository->relateUsers($userReceiver, $userSender, $relationType);
+
+                    $messageRepository->invitationAccepted($userSender, $userReceiver);
+                    break;
+
+                case 'deny_friend':
+                    $messageRepository->invitationDenied($userSender, $userReceiver);
+                    break;
+
+                default:
+                    return $this->json(['error' => 'Invalid action'], Response::HTTP_BAD_REQUEST);
+            }
+
+            $em->flush();
+
+            return $this->json(['success' => 'Action completed successfully']);
+        } catch (\Exception $e) {
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     private function checkUserStatus(int $userId, UserRepository $userRepository): bool

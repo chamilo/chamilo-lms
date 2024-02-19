@@ -362,7 +362,7 @@ class SocialController extends AbstractController
         $profileFieldsVisibilityJson = $settingsManager->getSetting('profile.profile_fields_visibility');
         $profileFieldsVisibility = json_decode($profileFieldsVisibilityJson, true)['options'] ?? [];
 
-        $vCardUserLink = $profileFieldsVisibility['vcard'] ?? true ? $baseUrl.'/main/social/vcard_export.php?userId='.intval($userId) : '';
+        $vCardUserLink = $profileFieldsVisibility['vcard'] ?? true ? $baseUrl.'/main/social/vcard_export.php?userId='.(int) $userId : '';
 
         $languageInfo = null;
         if ($profileFieldsVisibility['language'] ?? true) {
@@ -371,7 +371,7 @@ class SocialController extends AbstractController
                 $languageInfo = [
                     'label' => $language->getOriginalName(),
                     'value' => $language->getEnglishName(),
-                    'code'  => $language->getIsocode(),
+                    'code' => $language->getIsocode(),
                 ];
             }
         }
@@ -382,11 +382,11 @@ class SocialController extends AbstractController
 
         $response = [
             'vCardUserLink' => $vCardUserLink,
-            'language'      => $languageInfo,
-            'visibility'    => $profileFieldsVisibility,
+            'language' => $languageInfo,
+            'visibility' => $profileFieldsVisibility,
             'isUserOnline' => $isUserOnline,
             'userOnlyInChat' => $userOnlyInChat,
-            'extraFields'  => $extraFields,
+            'extraFields' => $extraFields,
         ];
 
         return $this->json($response);
@@ -417,7 +417,7 @@ class SocialController extends AbstractController
                 continue;
             }
 
-            $fieldValue = is_array($value) ? implode(', ', $value) : $value;
+            $fieldValue = \is_array($value) ? implode(', ', $value) : $value;
 
             switch ($extraField['type']) {
                 case ExtraField::FIELD_TYPE_RADIO:
@@ -429,15 +429,17 @@ class SocialController extends AbstractController
                         }, $extraFieldOptions);
                         $fieldValue = implode(', ', $optionTexts);
                     }
+
                     break;
+
                 case ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
                 case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
                     $geoData = explode('::', $fieldValue);
                     $locationName = $geoData[0];
                     $coordinates = $geoData[1] ?? '';
                     $fieldValue = $locationName;
-                    break;
 
+                    break;
             }
 
             $extraFieldsFormatted[] = [
@@ -469,7 +471,7 @@ class SocialController extends AbstractController
             $receivedInvitations[] = [
                 'id' => $message->getId(),
                 'itemId' => $sender->getId(),
-                'itemName' => $sender->getFirstName() . ' ' . $sender->getLastName(),
+                'itemName' => $sender->getFirstName().' '.$sender->getLastName(),
                 'itemPicture' => $userRepository->getUserPicture($sender->getId()),
                 'content' => $message->getContent(),
                 'date' => $message->getSendDate()->format('Y-m-d H:i:s'),
@@ -486,7 +488,7 @@ class SocialController extends AbstractController
                 $sentInvitations[] = [
                     'id' => $message->getId(),
                     'itemId' => $receiverUser->getId(),
-                    'itemName' => $receiverUser->getFirstName() . ' ' . $receiverUser->getLastName(),
+                    'itemName' => $receiverUser->getFirstName().' '.$receiverUser->getLastName(),
                     'itemPicture' => $userRepository->getUserPicture($receiverUser->getId()),
                     'content' => $message->getContent(),
                     'date' => $message->getSendDate()->format('Y-m-d H:i:s'),
@@ -549,8 +551,8 @@ class SocialController extends AbstractController
         $numberOfItems = $request->query->getInt('number_of_items', 1000);
 
         $formattedResults = [];
-        if ($type === 'user') {
-            /* @var User $user */
+        if ('user' === $type) {
+            /** @var User $user */
             $user = $this->getUser();
             $results = $userRepository->searchUsersByTags($query, $user->getId(), 0, $from, $numberOfItems);
             foreach ($results as $item) {
@@ -558,15 +560,15 @@ class SocialController extends AbstractController
                 $relation = $userRepository->getUserRelationWithType($user->getId(), $item['id']);
                 $formattedResults[] = [
                     'id' => $item['id'],
-                    'name' => $item['firstname'] . ' ' . $item['lastname'],
+                    'name' => $item['firstname'].' '.$item['lastname'],
                     'avatar' => $userRepository->getUserPicture($item['id']),
-                    'role' => $item['status'] === 5 ? 'student' : 'teacher',
+                    'role' => 5 === $item['status'] ? 'student' : 'teacher',
                     'status' => $isUserOnline ? 'online' : 'offline',
-                    'url' => '/social?id=' . $item['id'],
+                    'url' => '/social?id='.$item['id'],
                     'relationType' => $relation['relationType'] ?? null,
                 ];
             }
-        } elseif ($type === 'group') {
+        } elseif ('group' === $type) {
             // Perform group search
             $results = $usergroupRepository->searchGroupsByTags($query, $from, $numberOfItems);
             foreach ($results as $item) {
@@ -575,7 +577,7 @@ class SocialController extends AbstractController
                     'name' => $item['title'],
                     'description' => $item['description'] ?? '',
                     'image' => $usergroupRepository->getUsergroupPicture($item['id']),
-                    'url' => '/resources/usergroups/show/' . $item['id'],
+                    'url' => '/resources/usergroups/show/'.$item['id'],
                 ];
             }
         }
@@ -589,13 +591,13 @@ class SocialController extends AbstractController
         UsergroupRepository $usergroupRepository,
         TrackEOnlineRepository $trackOnlineRepository
     ): JsonResponse {
-        /* @var User $user */
+        /** @var User $user */
         $user = $this->getUser();
         if (!$user) {
             return $this->json(['error' => 'User not authenticated'], Response::HTTP_UNAUTHORIZED);
         }
 
-        /* @var Usergroup $group */
+        /** @var Usergroup $group */
         $group = $usergroupRepository->find($groupId);
         if (!$group) {
             return $this->json(['error' => 'Group not found'], Response::HTTP_NOT_FOUND);
@@ -624,7 +626,6 @@ class SocialController extends AbstractController
     #[Route('/group-action', name: 'chamilo_core_social_group_action')]
     public function groupAction(Request $request, UsergroupRepository $usergroupRepository, EntityManagerInterface $em): JsonResponse
     {
-
         $data = json_decode($request->getContent(), true);
 
         $userId = $data['userId'] ?? null;
@@ -639,10 +640,12 @@ class SocialController extends AbstractController
             switch ($action) {
                 case 'join':
                     $usergroupRepository->addUserToGroup($userId, $groupId);
+
                     break;
 
                 case 'leave':
                     $usergroupRepository->removeUserFromGroup($userId, $groupId);
+
                     break;
 
                 default:
@@ -652,7 +655,7 @@ class SocialController extends AbstractController
             $em->flush();
 
             return $this->json(['success' => 'Action completed successfully']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -717,7 +720,7 @@ class SocialController extends AbstractController
             $em->flush();
 
             return $this->json(['success' => 'Action completed successfully']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -726,6 +729,6 @@ class SocialController extends AbstractController
     {
         $userStatus = $userRepository->getExtraUserDataByField($userId, 'user_chat_status');
 
-        return !empty($userStatus) && isset($userStatus['user_chat_status']) && (int) $userStatus['user_chat_status'] === 1;
+        return !empty($userStatus) && isset($userStatus['user_chat_status']) && 1 === (int) $userStatus['user_chat_status'];
     }
 }

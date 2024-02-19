@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Traits\Repository\RepositoryQueryBuilderTrait;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -98,7 +99,8 @@ class MessageRepository extends ServiceEntityRepository
                 'status' => Message::MESSAGE_STATUS_INVITATION_PENDING,
             ])
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     public function findSentInvitationsByUser(User $user): array
@@ -113,7 +115,8 @@ class MessageRepository extends ServiceEntityRepository
                 'status' => Message::MESSAGE_STATUS_INVITATION_PENDING,
             ])
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     public function sendInvitationToFriend(User $userSender, User $userReceiver, string $messageTitle, string $messageContent): bool
@@ -121,10 +124,10 @@ class MessageRepository extends ServiceEntityRepository
         $existingInvitations = $this->findSentInvitationsByUserAndStatus($userSender, $userReceiver, [
             Message::MESSAGE_STATUS_INVITATION_PENDING,
             Message::MESSAGE_STATUS_INVITATION_ACCEPTED,
-            Message::MESSAGE_STATUS_INVITATION_DENIED
+            Message::MESSAGE_STATUS_INVITATION_DENIED,
         ]);
 
-        if (count($existingInvitations) > 0) {
+        if (\count($existingInvitations) > 0) {
             // Invitation already exists
             return false;
         }
@@ -133,7 +136,7 @@ class MessageRepository extends ServiceEntityRepository
         $message->setSender($userSender);
         $message->setMsgType(Message::MESSAGE_TYPE_INVITATION);
         $message->setStatus(Message::MESSAGE_STATUS_INVITATION_PENDING);
-        $message->setSendDate(new \DateTime());
+        $message->setSendDate(new DateTime());
         $message->setTitle($messageTitle);
         $message->setContent(nl2br($messageContent));
 
@@ -162,7 +165,8 @@ class MessageRepository extends ServiceEntityRepository
                 'receiver' => $userReceiver,
                 'msgType' => Message::MESSAGE_TYPE_INVITATION,
                 'statuses' => $statuses,
-            ]);
+            ])
+        ;
 
         return $qb->getQuery()->getResult();
     }
@@ -176,14 +180,15 @@ class MessageRepository extends ServiceEntityRepository
             ->where('m.sender = :sender')
             ->andWhere('m.status = :status')
             ->setParameter('sender', $sender)
-            ->setParameter('status', Message::MESSAGE_STATUS_INVITATION_PENDING);
+            ->setParameter('status', Message::MESSAGE_STATUS_INVITATION_PENDING)
+        ;
 
         $messages = $queryBuilder->getQuery()->getResult();
 
         foreach ($messages as $message) {
             $messageRelUser = $this->_em->getRepository(MessageRelUser::class)->findOneBy([
                 'message' => $message,
-                'receiver' => $receiver
+                'receiver' => $receiver,
             ]);
 
             if ($messageRelUser) {
@@ -203,13 +208,13 @@ class MessageRepository extends ServiceEntityRepository
 
                 $this->_em->persist($friendship);
                 $this->_em->flush();
+
                 return true;
             }
         }
 
         return false;
     }
-
 
     public function invitationDenied(User $sender, User $receiver): bool
     {
@@ -220,24 +225,25 @@ class MessageRepository extends ServiceEntityRepository
             ->where('m.sender = :sender')
             ->andWhere('m.status = :status')
             ->setParameter('sender', $sender)
-            ->setParameter('status', Message::MESSAGE_STATUS_INVITATION_PENDING);
+            ->setParameter('status', Message::MESSAGE_STATUS_INVITATION_PENDING)
+        ;
 
         $messages = $queryBuilder->getQuery()->getResult();
 
         foreach ($messages as $message) {
             $messageRelUser = $this->_em->getRepository(MessageRelUser::class)->findOneBy([
                 'message' => $message,
-                'receiver' => $receiver
+                'receiver' => $receiver,
             ]);
 
             if ($messageRelUser) {
                 $this->_em->remove($messageRelUser);
                 $this->_em->flush();
+
                 return true;
             }
         }
 
         return false;
     }
-
 }

@@ -39,17 +39,17 @@ use const MB_CASE_LOWER;
 class UserRepository extends ResourceRepository implements PasswordUpgraderInterface
 {
     protected ?UserPasswordHasherInterface $hasher = null;
-    private $illustrationRepository;
 
-    const USER_IMAGE_SIZE_SMALL = 1;
-    const USER_IMAGE_SIZE_MEDIUM = 2;
-    const USER_IMAGE_SIZE_BIG = 3;
-    const USER_IMAGE_SIZE_ORIGINAL = 4;
+    public const USER_IMAGE_SIZE_SMALL = 1;
+    public const USER_IMAGE_SIZE_MEDIUM = 2;
+    public const USER_IMAGE_SIZE_BIG = 3;
+    public const USER_IMAGE_SIZE_ORIGINAL = 4;
 
-    public function __construct(ManagerRegistry $registry, IllustrationRepository $illustrationRepository)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        private readonly IllustrationRepository $illustrationRepository
+    ) {
         parent::__construct($registry, User::class);
-        $this->illustrationRepository = $illustrationRepository;
     }
 
     public function loadUserByIdentifier(string $identifier): ?User
@@ -655,7 +655,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->leftJoin(ExtraFieldValues::class, 'efv', Join::WITH, 'efv.field = ef.id AND efv.itemId = :userId')
             ->where('ef.itemType = :itemType')
             ->setParameter('userId', $userId)
-            ->setParameter('itemType', ExtraField::USER_FIELD_TYPE);
+            ->setParameter('itemType', ExtraField::USER_FIELD_TYPE)
+        ;
 
         // Apply visibility filters
         if (!$allVisibility) {
@@ -665,7 +666,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         // Apply field filter if provided
         if (null !== $fieldFilter) {
             $qb->andWhere('ef.id = :fieldFilter')
-                ->setParameter('fieldFilter', $fieldFilter);
+                ->setParameter('fieldFilter', $fieldFilter)
+            ;
         }
 
         // Order by field order
@@ -680,17 +682,17 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             $value = $row['fval'] ?? $row['fval_df'];
 
             // Handle multiple values if necessary
-            if ($splitMultiple && in_array($row['type'], [ExtraField::USER_FIELD_TYPE_SELECT_MULTIPLE], true)) {
+            if ($splitMultiple && \in_array($row['type'], [ExtraField::USER_FIELD_TYPE_SELECT_MULTIPLE], true)) {
                 $value = explode(';', $value);
             }
 
             // Handle prefix if needed
-            $key = $prefix ? 'extra_' . $row['fvar'] : $row['fvar'];
+            $key = $prefix ? 'extra_'.$row['fvar'] : $row['fvar'];
 
             // Special handling for certain field types
-            if ($row['type'] == ExtraField::USER_FIELD_TYPE_TAG) {
+            if (ExtraField::USER_FIELD_TYPE_TAG == $row['type']) {
                 // Implement your logic to handle tags
-            } elseif ($row['type'] == ExtraField::USER_FIELD_TYPE_RADIO && $prefix) {
+            } elseif (ExtraField::USER_FIELD_TYPE_RADIO == $row['type'] && $prefix) {
                 $extraData[$key][$key] = $value;
             } else {
                 $extraData[$key] = $value;
@@ -714,7 +716,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
                 'userId' => $userId,
                 'fieldVariable' => $fieldVariable,
                 'itemType' => ExtraField::USER_FIELD_TYPE,
-            ]);
+            ])
+        ;
 
         if (!$allVisibility) {
             $qb->andWhere('e.visibleToSelf = true');
@@ -739,7 +742,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 
     public function searchUsersByTags(
         string $tag,
-        int $excludeUserId = null,
+        ?int $excludeUserId = null,
         int $fieldId = 0,
         int $from = 0,
         int $number_of_items = 10,
@@ -755,16 +758,19 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 
         $qb->innerJoin('u.portals', 'urlRelUser')
             ->leftJoin(UserRelTag::class, 'uv', 'WITH', 'u = uv.user')
-            ->leftJoin(Tag::class, 'ut', 'WITH', 'uv.tag = ut');
+            ->leftJoin(Tag::class, 'ut', 'WITH', 'uv.tag = ut')
+        ;
 
-        if ($fieldId !== 0) {
+        if (0 !== $fieldId) {
             $qb->andWhere('ut.field = :fieldId')
-                ->setParameter('fieldId', $fieldId);
+                ->setParameter('fieldId', $fieldId)
+            ;
         }
 
-        if ($excludeUserId !== null) {
+        if (null !== $excludeUserId) {
             $qb->andWhere('u.id != :excludeUserId')
-                ->setParameter('excludeUserId', $excludeUserId);
+                ->setParameter('excludeUserId', $excludeUserId)
+            ;
         }
 
         $qb->andWhere(
@@ -783,19 +789,22 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
                 )
             )
         )
-            ->setParameter('tag', $tag . '%')
-            ->setParameter('likeTag', '%' . $tag . '%');
+            ->setParameter('tag', $tag.'%')
+            ->setParameter('likeTag', '%'.$tag.'%')
+        ;
 
         // Only active users and not anonymous
         $qb->andWhere('u.active = :active')
             ->andWhere('u.status != :anonymous')
             ->setParameter('active', true)
-            ->setParameter('anonymous', 6);
+            ->setParameter('anonymous', 6)
+        ;
 
         if (!$getCount) {
             $qb->orderBy('u.username')
                 ->setFirstResult($from)
-                ->setMaxResults($number_of_items);
+                ->setMaxResults($number_of_items)
+            ;
         }
 
         return $getCount ? $qb->getQuery()->getSingleScalarResult() : $qb->getQuery()->getResult();
@@ -810,11 +819,10 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->where('u.id = :userId AND f.id = :friendId')
             ->setParameter('userId', $userId)
             ->setParameter('friendId', $friendId)
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
-        $result = $qb->getQuery()->getOneOrNullResult();
-
-        return $result;
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     public function relateUsers(User $user1, User $user2, int $relationType): void
@@ -859,26 +867,31 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         int $size = self::USER_IMAGE_SIZE_MEDIUM,
         $addRandomId = true,
     ) {
-
         $user = $this->find($userId);
         if (!$user) {
-
             return '/img/icons/64/unknown.png';
         }
 
         switch ($size) {
             case self::USER_IMAGE_SIZE_SMALL:
                 $width = 32;
+
                 break;
+
             case self::USER_IMAGE_SIZE_MEDIUM:
                 $width = 64;
+
                 break;
+
             case self::USER_IMAGE_SIZE_BIG:
                 $width = 128;
+
                 break;
+
             case self::USER_IMAGE_SIZE_ORIGINAL:
             default:
                 $width = 0;
+
                 break;
         }
 

@@ -3936,12 +3936,12 @@ class SessionManager
                     fn(Session $session) => $session->getId(),
                     $user->getSessionsByStatusInCourseSubscription(Session::COURSE_COACH)->getValues()
                 );
-                $adminSessions = array_map(
+                $generalCoachSessions = array_map(
                     fn(Session $session) => $session->getId(),
-                    $user->getSessionsAsAdmin()
+                    $user->getSessionsAsGeneralCoach()
                 );
 
-                $sessionsQuery = array_merge($coachSessions, $adminSessions);
+                $sessionsQuery = array_merge($coachSessions, $generalCoachSessions);
                 break;
             case SESSIONADMIN:
                 $sessionsQuery = array_map(

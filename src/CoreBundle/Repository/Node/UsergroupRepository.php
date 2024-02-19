@@ -15,12 +15,11 @@ use Exception;
 
 class UsergroupRepository extends ResourceRepository
 {
-    private $illustrationRepository;
-
-    public function __construct(ManagerRegistry $registry, IllustrationRepository $illustrationRepository)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        private readonly IllustrationRepository $illustrationRepository
+    ) {
         parent::__construct($registry, Usergroup::class);
-        $this->illustrationRepository = $illustrationRepository;
     }
 
     /**
@@ -193,14 +192,13 @@ class UsergroupRepository extends ResourceRepository
             'user' => $user,
         ]);
 
-
         if (!$existingRelation) {
             $existingRelation = new UsergroupRelUser();
             $existingRelation->setUsergroup($group);
             $existingRelation->setUser($user);
         }
 
-        if ($group->getVisibility() === Usergroup::GROUP_PERMISSION_CLOSED) {
+        if (Usergroup::GROUP_PERMISSION_CLOSED === $group->getVisibility()) {
             $relationType = Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION;
         }
 
@@ -212,7 +210,7 @@ class UsergroupRepository extends ResourceRepository
 
     public function removeUserFromGroup(int $userId, int $groupId): bool
     {
-        /* @var Usergroup $group */
+        /** @var Usergroup $group */
         $group = $this->find($groupId);
         $user = $this->_em->getRepository(User::class)->find($userId);
 
@@ -283,7 +281,8 @@ class UsergroupRepository extends ResourceRepository
             $urlId = $this->getCurrentAccessUrlId();
             $qb->innerJoin('g.accessUrls', 'a', 'WITH', 'g.id = a.usergroup')
                 ->andWhere('a.accessUrl = :urlId')
-                ->setParameter('urlId', $urlId);
+                ->setParameter('urlId', $urlId)
+            ;
         }
 
         $qb->where(
@@ -293,12 +292,14 @@ class UsergroupRepository extends ResourceRepository
                 $qb->expr()->like('g.url', ':tag')
             )
         )
-            ->setParameter('tag', '%' . $tag . '%');
+            ->setParameter('tag', '%'.$tag.'%')
+        ;
 
         if (!$getCount) {
             $qb->orderBy('g.title', 'ASC')
                 ->setFirstResult($from)
-                ->setMaxResults($number_of_items);
+                ->setMaxResults($number_of_items)
+            ;
         }
 
         return $getCount ? $qb->getQuery()->getSingleScalarResult() : $qb->getQuery()->getResult();
@@ -306,10 +307,8 @@ class UsergroupRepository extends ResourceRepository
 
     public function getUsergroupPicture($userGroupId): string
     {
-
         $usergroup = $this->find($userGroupId);
         if (!$usergroup) {
-
             return '/img/icons/64/group_na.png';
         }
 
@@ -336,7 +335,7 @@ class UsergroupRepository extends ResourceRepository
             Usergroup::GROUP_USER_PERMISSION_HRM,
         ];
 
-        return in_array($userRole, $allowedRoles, true);
+        return \in_array($userRole, $allowedRoles, true);
     }
 
     public function getUserGroupRole(int $groupId, int $userId): ?int
@@ -346,9 +345,11 @@ class UsergroupRepository extends ResourceRepository
             ->where('g.id = :groupId AND gu.user = :userId')
             ->setParameter('groupId', $groupId)
             ->setParameter('userId', $userId)
-            ->select('gu.relationType');
+            ->select('gu.relationType')
+        ;
 
         $result = $qb->getQuery()->getOneOrNullResult();
+
         return $result ? $result['relationType'] : null;
     }
 
@@ -356,7 +357,7 @@ class UsergroupRepository extends ResourceRepository
     {
         $relationType = $this->getUserGroupRole($groupId, $userId);
 
-        return in_array($relationType, [
+        return \in_array($relationType, [
             Usergroup::GROUP_USER_PERMISSION_ADMIN,
             Usergroup::GROUP_USER_PERMISSION_MODERATOR,
         ]);

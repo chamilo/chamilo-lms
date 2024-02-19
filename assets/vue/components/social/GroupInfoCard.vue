@@ -8,6 +8,7 @@
       />
       <hr />
       <BaseButton
+        v-if="groupInfo.isModerator"
         :label="t('Edit this group')"
         type="primary"
         class="mt-4"

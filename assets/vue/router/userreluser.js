@@ -20,6 +20,11 @@ export default {
       name: 'UserRelUserSearch',
       path: 'search',
       component: () => import('../views/userreluser/UserRelUserSearch.vue')
+    },
+    {
+      name: 'Invitations',
+      path: 'invitations',
+      component: () => import('../views/userreluser/Invitations.vue')
     }
   ]
 };

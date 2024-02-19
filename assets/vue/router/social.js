@@ -9,5 +9,10 @@ export default {
       path: ':filterType?',
       component: () => import('../views/social/SocialWall.vue')
     },
+    {
+      name: 'SocialSearch',
+      path: 'search',
+      component: () => import('../views/social/SocialSearch.vue')
+    }
   ]
 }

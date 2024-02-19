@@ -15,9 +15,12 @@ use Exception;
 
 class UsergroupRepository extends ResourceRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $illustrationRepository;
+
+    public function __construct(ManagerRegistry $registry, IllustrationRepository $illustrationRepository)
     {
         parent::__construct($registry, Usergroup::class);
+        $this->illustrationRepository = $illustrationRepository;
     }
 
     /**
@@ -162,31 +165,78 @@ class UsergroupRepository extends ResourceRepository
                 Usergroup::GROUP_USER_PERMISSION_READER,
                 Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION,
             ])
-            ->select('u.id, u.username, u.email, gu.relationType')
+            ->select('u.id, u.username, u.email, gu.relationType, u.pictureUri')
         ;
 
-        return $qb->getQuery()->getResult();
+        $results = $qb->getQuery()->getResult();
+
+        $userRepository = $this->_em->getRepository(User::class);
+
+        foreach ($results as &$user) {
+            $user['pictureUri'] = $userRepository->getUserPicture($user['id']);
+        }
+
+        return $results;
     }
 
-    public function addUserToGroup(array $userIds, int $groupId): void
+    public function addUserToGroup(int $userId, int $groupId, int $relationType = Usergroup::GROUP_USER_PERMISSION_READER): void
     {
         $group = $this->find($groupId);
-        if (!$group) {
-            throw new Exception('Group not found');
+        $user = $this->_em->getRepository(User::class)->find($userId);
+
+        if (!$group || !$user) {
+            throw new Exception('Group or User not found');
         }
 
-        foreach ($userIds as $userId) {
-            $user = $this->_em->getRepository(User::class)->find($userId);
-            if ($user) {
-                $groupRelUser = new UsergroupRelUser();
-                $groupRelUser->setUsergroup($group);
-                $groupRelUser->setUser($user);
-                $groupRelUser->setRelationType(Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION);
-                $this->_em->persist($groupRelUser);
-            }
+        $existingRelation = $this->_em->getRepository(UsergroupRelUser::class)->findOneBy([
+            'usergroup' => $group,
+            'user' => $user,
+        ]);
+
+
+        if (!$existingRelation) {
+            $existingRelation = new UsergroupRelUser();
+            $existingRelation->setUsergroup($group);
+            $existingRelation->setUser($user);
         }
 
+        if ($group->getVisibility() === Usergroup::GROUP_PERMISSION_CLOSED) {
+            $relationType = Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION;
+        }
+
+        $existingRelation->setRelationType($relationType);
+
+        $this->_em->persist($existingRelation);
         $this->_em->flush();
+    }
+
+    public function removeUserFromGroup(int $userId, int $groupId): bool
+    {
+        /* @var Usergroup $group */
+        $group = $this->find($groupId);
+        $user = $this->_em->getRepository(User::class)->find($userId);
+
+        if (!$group || !$user) {
+            throw new Exception('Group or User not found');
+        }
+
+        if (!$group->getAllowMembersToLeaveGroup()) {
+            throw new Exception('Members are not allowed to leave this group');
+        }
+
+        $relation = $this->_em->getRepository(UsergroupRelUser::class)->findOneBy([
+            'usergroup' => $group,
+            'user' => $user,
+        ]);
+
+        if ($relation) {
+            $this->_em->remove($relation);
+            $this->_em->flush();
+
+            return true;
+        }
+
+        return false;
     }
 
     public function getInvitedUsersByGroup(int $groupID)
@@ -217,6 +267,99 @@ class UsergroupRepository extends ResourceRepository
         ;
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function searchGroupsByTags(string $tag, int $from = 0, int $number_of_items = 10, bool $getCount = false)
+    {
+        $qb = $this->createQueryBuilder('g');
+
+        if ($getCount) {
+            $qb->select('COUNT(g.id)');
+        } else {
+            $qb->select('g.id, g.title, g.description, g.url, g.picture');
+        }
+
+        if ($this->getUseMultipleUrl()) {
+            $urlId = $this->getCurrentAccessUrlId();
+            $qb->innerJoin('g.accessUrls', 'a', 'WITH', 'g.id = a.usergroup')
+                ->andWhere('a.accessUrl = :urlId')
+                ->setParameter('urlId', $urlId);
+        }
+
+        $qb->where(
+            $qb->expr()->orX(
+                $qb->expr()->like('g.title', ':tag'),
+                $qb->expr()->like('g.description', ':tag'),
+                $qb->expr()->like('g.url', ':tag')
+            )
+        )
+            ->setParameter('tag', '%' . $tag . '%');
+
+        if (!$getCount) {
+            $qb->orderBy('g.title', 'ASC')
+                ->setFirstResult($from)
+                ->setMaxResults($number_of_items);
+        }
+
+        return $getCount ? $qb->getQuery()->getSingleScalarResult() : $qb->getQuery()->getResult();
+    }
+
+    public function getUsergroupPicture($userGroupId): string
+    {
+
+        $usergroup = $this->find($userGroupId);
+        if (!$usergroup) {
+
+            return '/img/icons/64/group_na.png';
+        }
+
+        $url = $this->illustrationRepository->getIllustrationUrl($usergroup);
+        $params['w'] = 64;
+        $params['rand'] = uniqid('u_', true);
+        $paramsToString = '?'.http_build_query($params);
+
+        return $url.$paramsToString;
+    }
+
+    public function isGroupMember(int $groupId, User $user): bool
+    {
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+
+        $userRole = $this->getUserGroupRole($groupId, $user->getId());
+
+        $allowedRoles = [
+            Usergroup::GROUP_USER_PERMISSION_ADMIN,
+            Usergroup::GROUP_USER_PERMISSION_MODERATOR,
+            Usergroup::GROUP_USER_PERMISSION_READER,
+            Usergroup::GROUP_USER_PERMISSION_HRM,
+        ];
+
+        return in_array($userRole, $allowedRoles, true);
+    }
+
+    public function getUserGroupRole(int $groupId, int $userId): ?int
+    {
+        $qb = $this->createQueryBuilder('g');
+        $qb->innerJoin('g.users', 'gu')
+            ->where('g.id = :groupId AND gu.user = :userId')
+            ->setParameter('groupId', $groupId)
+            ->setParameter('userId', $userId)
+            ->select('gu.relationType');
+
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $result ? $result['relationType'] : null;
+    }
+
+    public function isGroupModerator(int $groupId, int $userId): bool
+    {
+        $relationType = $this->getUserGroupRole($groupId, $userId);
+
+        return in_array($relationType, [
+            Usergroup::GROUP_USER_PERMISSION_ADMIN,
+            Usergroup::GROUP_USER_PERMISSION_MODERATOR,
+        ]);
     }
 
     /**

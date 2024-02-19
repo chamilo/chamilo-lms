@@ -6,10 +6,10 @@
     </div>
 
     <div class="flex-grow w-full md:basis-1/2 lg:basis-2/3">
-      <SocialNetworkWall />
+      <component :is="currentComponent" />
     </div>
 
-    <div class="flex flex-col w-full md:w-1/4 lg:w-1/6">
+    <div class="flex flex-col w-full md:w-1/4 lg:w-1/6" v-if="!isSearchPage">
       <MyGroupsCard />
       <MyFriendsCard />
       <MySkillsCard />
@@ -19,11 +19,12 @@
 
 <script setup>
 import { useStore } from "vuex"
-import { onMounted, provide, readonly, ref, watch } from "vue"
-import SocialNetworkWall from "./SocialWall.vue"
+import { onMounted, provide, computed, readonly, ref, watch } from "vue"
 import { useRoute } from "vue-router"
-import SocialSideMenu from "../../components/social/SocialSideMenu.vue"
+import SocialWall from "./SocialWall.vue"
+import SocialSearch from "./SocialSearch.vue"
 import UserProfileCard from "../../components/social/UserProfileCard.vue"
+import SocialSideMenu from "../../components/social/SocialSideMenu.vue"
 import MyGroupsCard from "../../components/social/MyGroupsCard.vue"
 import MyFriendsCard from "../../components/social/MyFriendsCard.vue"
 import MySkillsCard from "../../components/social/MySkillsCard.vue"
@@ -40,4 +41,10 @@ provide("group-info", groupInfo)
 provide("is-group", isGroup)
 
 onMounted(loadUser)
+
+const isSearchPage = computed(() => route.path.includes('/social/search'))
+
+const currentComponent = computed(() => {
+  return isSearchPage.value ? SocialSearch : SocialWall
+})
 </script>

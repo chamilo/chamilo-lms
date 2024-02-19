@@ -1,6 +1,6 @@
 <template>
   <div class="group-members">
-    <div class="edit-members">
+    <div v-if="groupInfo.isModerator" class="edit-members">
       <BaseButton
         label="Edit members list"
         type="primary"
@@ -30,11 +30,12 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import BaseButton from "../basecomponents/BaseButton.vue"
 import axios from "axios"
+import { useSocialInfo } from "../../composables/useSocialInfo"
 
 const route = useRoute()
 const members = ref([])
 const groupId = ref(route.params.group_id)
-
+const { user, groupInfo, isGroup, loadGroup, isLoading } = useSocialInfo()
 const fetchMembers = async (groupId) => {
   if (groupId.value) {
     try {
@@ -43,7 +44,7 @@ const fetchMembers = async (groupId) => {
         id: member.id,
         name: member.username,
         role: member.relationType === 1 ? 'Admin' : 'Member',
-        avatar: null,
+        avatar: member.pictureUri,
         isAdmin: member.relationType === 1
       }))
     } catch (error) {

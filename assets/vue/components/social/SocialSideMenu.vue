@@ -20,11 +20,10 @@
           <span class="badge badge-warning">{{ unreadMessagesCount }}</span>
         </router-link>
       </li>
-
-      <li :class="['menu-item', { 'active': isActive('/resources/personal_files') }]">
-        <router-link :to="{ name: 'PersonalFileList', params: { node: currentNodeId } }">
-        <i class="mdi mdi-briefcase"></i>
-          {{ t("My files") }}
+      <li :class="['menu-item', { 'active': isActive('/resources/friends/invitations') }]">
+        <router-link :to="{ name: 'Invitations' }">
+          <i class="mdi mdi-mailbox" aria-hidden="true"></i> <!-- Cambiado a mdi-invitation -->
+          {{ t("Invitations") }}
         </router-link>
       </li>
       <li :class="['menu-item', { 'active': isActive('/account/home') }]">
@@ -49,16 +48,28 @@
           {{ t("Social groups") }}
         </router-link>
       </li>
-      <li :class="['menu-item', { 'active': isActive('/social', 'promoted') }]">
-        <router-link :to="{ path: '/social', query: { filterType: 'promoted' } }">
-          <i class="mdi mdi-star" aria-hidden="true"></i>
-          {{ t("Promoted messages") }}
+      <li :class="['menu-item', { 'active': isActive('/social/search') }]">
+        <router-link to="/social/search">
+          <i class="mdi mdi-magnify" aria-hidden="true"></i>
+          {{ t("Search") }}
+        </router-link>
+      </li>
+      <li :class="['menu-item', { 'active': isActive('/resources/personal_files') }]">
+        <router-link :to="{ name: 'PersonalFileList', params: { node: currentNodeId } }">
+          <i class="mdi mdi-briefcase"></i>
+          {{ t("My files") }}
         </router-link>
       </li>
       <li :class="['menu-item', { 'active': isActive('/resources/users/personal_data') }]">
         <router-link to="/resources/users/personal_data">
           <i class="mdi mdi-account" aria-hidden="true"></i>
           {{ t("Personal data") }}
+        </router-link>
+      </li>
+      <li :class="['menu-item', { 'active': isActive('/social', 'promoted') }]">
+        <router-link :to="{ path: '/social', query: { filterType: 'promoted' } }">
+          <i class="mdi mdi-star" aria-hidden="true"></i>
+          {{ t("Promoted messages") }}
         </router-link>
       </li>
     </ul>
@@ -122,12 +133,15 @@ const getGroupLink = async () => {
 }
 
 const isActive = (path, filterType = null) => {
+  if (path === '/resources/friends/invitations') {
+    return route.path === path
+  }
+
   const pathMatch = route.path.startsWith(path)
   const hasQueryParams = Object.keys(route.query).length > 0
   const filterMatch = filterType ? (route.query.filterType === filterType && hasQueryParams) : !hasQueryParams
-  return pathMatch && filterMatch
+  return pathMatch && filterMatch && !route.path.startsWith('/resources/friends/invitations')
 }
-
 watchEffect(() => {
   try {
     if (user.value && user.value.resourceNode) {

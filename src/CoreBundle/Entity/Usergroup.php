@@ -98,6 +98,9 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     public const GROUP_USER_PERMISSION_ANONYMOUS = 6; // An anonymous user, not part of the group
     public const GROUP_USER_PERMISSION_HRM = 7; // A human resource manager
 
+    public const GROUP_PERMISSION_OPEN = 1;
+    public const GROUP_PERMISSION_CLOSED = 2;
+
     #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
     #[ORM\Id]
     #[ORM\GeneratedValue]

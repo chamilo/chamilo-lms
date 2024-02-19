@@ -65,7 +65,7 @@ const platformConfigStore = usePlatformConfig()
 
 const allowSocialMap = computed(() => platformConfigStore.getSetting("profile.allow_social_map_fields"))
 const search = () => {
-  router.push({ name: 'UserRelUserSearch', query: { search: searchQuery.value } })
+  router.push({ name: 'SocialSearch', query: { query: searchQuery.value, type: 'user' } });
 }
 const limitedFriends = computed(() => {
   return friends.value.slice(0, 10)

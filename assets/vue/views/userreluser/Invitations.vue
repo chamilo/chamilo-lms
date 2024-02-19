@@ -77,7 +77,7 @@ const acceptInvitation = async (invitationId) => {
     const response = await axios.post('/social-network/user-action', data)
     if (response.data.success) {
       console.log('Invitation accepted successfully')
-      fetchInvitations(user.value.id)
+      await fetchInvitations(user.value.id)
     } else {
       console.error('Failed to accept invitation')
     }

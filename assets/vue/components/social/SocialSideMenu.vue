@@ -17,13 +17,14 @@
         <router-link to="/resources/messages">
           <i class="mdi mdi-email" aria-hidden="true"></i>
           {{ t("Messages") }}
-          <span class="badge badge-warning">{{ unreadMessagesCount }}</span>
+          <span class="badge badge-warning" v-if="unreadMessagesCount > 0">{{ unreadMessagesCount }}</span>
         </router-link>
       </li>
       <li :class="['menu-item', { 'active': isActive('/resources/friends/invitations') }]">
         <router-link :to="{ name: 'Invitations' }">
-          <i class="mdi mdi-mailbox" aria-hidden="true"></i> <!-- Cambiado a mdi-invitation -->
+          <i class="mdi mdi-mailbox" aria-hidden="true"></i>
           {{ t("Invitations") }}
+          <span class="badge badge-warning" v-if="invitationsCount > 0">{{ invitationsCount }}</span>
         </router-link>
       </li>
       <li :class="['menu-item', { 'active': isActive('/account/home') }]">
@@ -108,6 +109,7 @@ const securityStore = useSecurityStore()
 const currentNodeId = ref(0)
 const messageRelUserStore = useMessageRelUserStore()
 const unreadMessagesCount = computed(() => messageRelUserStore.countUnread)
+const invitationsCount = ref(0)
 
 const user = inject('social-user')
 const isCurrentUser = inject('is-current-user')
@@ -132,15 +134,14 @@ const getGroupLink = async () => {
   }
 }
 
-const isActive = (path, filterType = null) => {
-  if (path === '/resources/friends/invitations') {
-    return route.path === path
+const fetchInvitationsCount = async (userId) => {
+  if (!userId) return
+  try {
+    const { data } = await axios.get(`/social-network/invitations/count/${userId}`)
+    invitationsCount.value = data.totalInvitationsCount
+  } catch (error) {
+    console.error('Error fetching invitations count:', error)
   }
-
-  const pathMatch = route.path.startsWith(path)
-  const hasQueryParams = Object.keys(route.query).length > 0
-  const filterMatch = filterType ? (route.query.filterType === filterType && hasQueryParams) : !hasQueryParams
-  return pathMatch && filterMatch && !route.path.startsWith('/resources/friends/invitations')
 }
 watchEffect(() => {
   try {
@@ -153,12 +154,29 @@ watchEffect(() => {
       }
     }
     messageRelUserStore.findUnreadCount()
+    if (user.value && user.value.id) {
+      fetchInvitationsCount(user.value.id)
+    }
   } catch (e) {
     console.error('Error loading user:', e)
   }
 })
 
+const isActive = (path, filterType = null) => {
+  if (path === '/resources/friends/invitations' || path === '/social/search') {
+    return route.path === path
+  }
+
+  const pathMatch = route.path.startsWith(path)
+  const hasQueryParams = Object.keys(route.query).length > 0
+  const filterMatch = filterType ? (route.query.filterType === filterType && hasQueryParams) : !hasQueryParams
+  return pathMatch && filterMatch && !route.path.startsWith('/resources/friends/invitations') && !route.path.startsWith('/social/search')
+}
+
 onMounted(async () => {
   await getGroupLink()
+  if (user.value && user.value.id) {
+    await fetchInvitationsCount(user.value.id)
+  }
 })
 </script>

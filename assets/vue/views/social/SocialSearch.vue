@@ -30,7 +30,7 @@
         <BaseButton
           label="Search"
           icon="search"
-          @click="performSearch"
+          @click="handleFormSearch"
           type="secondary"
           class="self-end"
         />
@@ -130,8 +130,7 @@
 </template>
 
 <script setup>
-
-import { nextTick, ref, computed } from "vue"
+import { nextTick, ref, computed, watch } from "vue"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
@@ -139,7 +138,9 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
 import { useNotification } from "../../composables/notification"
 import { useSocialInfo } from "../../composables/useSocialInfo"
+import { useRoute } from "vue-router"
 
+const route = useRoute()
 const query = ref('')
 const searchType = ref('user')
 const searchPerformed = ref(false)
@@ -190,7 +191,7 @@ const performSearch = async () => {
 
       users.value = data.results.map(item => ({
         ...item,
-        showInvitationButton: ![3, 4].includes(item.relationType) && item.id !== user.value.id
+        showInvitationButton: ![3, 4, 10].includes(item.relationType) || item.id !== user.value.id
       }))
       groups.value = []
     } else if (searchType.value === 'group') {
@@ -288,5 +289,21 @@ const sendMessage = async () => {
   }
 
   closeMessageModal()
+}
+
+watch(route, (currentRoute) => {
+  query.value = currentRoute.query.query || ''
+  searchType.value = currentRoute.query.type || 'user'
+  if (query.value) {
+    performSearch()
+  }
+}, { immediate: true })
+const handleFormSearch = async () => {
+  if (!query.value.trim()) {
+    notification.showWarningNotification('Please enter a search term.')
+    return
+  }
+
+  await performSearch()
 }
 </script>

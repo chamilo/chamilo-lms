@@ -24,7 +24,7 @@
           @click="sharedDocumentHandler()"
         />
         <Button
-          :disabled="!selectedItems || !selectedItems.length"
+          v-if="selectedItems.length"
           class="btn btn--danger"
           icon="pi pi-trash"
           label="Delete"
@@ -108,13 +108,13 @@
         <div class="flex flex-row gap-2">
           <Button
             class="btn btn--primary"
-            icon="fa fa-info-circle"
+            icon="pi pi-info-circle"
             @click="showHandler(slotProps.data)"
           />
           <Button
             v-if="isAuthenticated"
             class="btn btn--primary p-mr-2"
-            icon="pi pi-pencil"
+            icon="pi pi-share-alt"
             @click="editHandler(slotProps.data)"
           />
           <Button
@@ -131,6 +131,7 @@
       <template #body="slotProps">
         <div class="flex flex-row gap-2">
           <Button
+            v-if="isFromEditor"
             class="p-button-sm p-button p-mr-2"
             label="Select"
             @click="returnToEditor(slotProps.data)"
@@ -138,13 +139,6 @@
         </div>
       </template>
     </Column>
-
-    <!--    <template #paginatorLeft>-->
-    <!--      <Button type="button" icon="pi pi-refresh" class="p-button-text" />-->
-    <!--    </template>-->
-    <!--    <template #paginatorRight>-->
-    <!--      <Button type="button" icon="pi pi-cloud" class="p-button-text" />-->
-    <!--    </template>-->
   </DataTable>
 
   <Dialog
@@ -187,35 +181,14 @@
     </template>
   </Dialog>
 
-  <Dialog
-    v-model:visible="deleteItemDialog"
-    :modal="true"
-    :style="{ width: '450px' }"
-    header="Confirm"
-  >
+  <Dialog v-model:visible="deleteItemDialog" :modal="true" :style="{ width: '450px' }" header="Confirm">
     <div class="confirmation-content">
-      <i
-        class="pi pi-exclamation-triangle p-mr-3"
-        style="font-size: 2rem"
-      />
-      <span v-if="item"
-        >Are you sure you want to delete <b>{{ item.title }}</b
-        >?</span
-      >
+      <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem"></i>
+      <span>Are you sure you want to delete <b>{{ itemToDelete?.title }}</b>?</span>
     </div>
     <template #footer>
-      <Button
-        class="p-button-text"
-        icon="pi pi-times"
-        label="No"
-        @click="deleteItemDialog = false"
-      />
-      <Button
-        class="p-button-text"
-        icon="pi pi-check"
-        label="Yes"
-        @click="deleteItemButton"
-      />
+      <Button class="p-button-text" icon="pi pi-times" label="No" @click="deleteItemDialog = false" />
+      <Button class="p-button-text" icon="pi pi-check" label="Yes" @click="deleteItemButton" />
     </template>
   </Dialog>
 
@@ -230,7 +203,7 @@
         class="pi pi-exclamation-triangle p-mr-3"
         style="font-size: 2rem"
       />
-      <span v-if="item">Are you sure you want to delete the selected items?</span>
+      <span v-if="item">{{ $t('Are you sure you want to delete the selected items?') }}</span>
     </div>
     <template #footer>
       <Button
@@ -247,6 +220,19 @@
       />
     </template>
   </Dialog>
+
+  <Dialog v-model:visible="detailsDialogVisible" :header="selectedItem.title || 'Item Details'" :modal="true" :style="{ width: '50%' }">
+    <div v-if="Object.keys(selectedItem).length > 0">
+      <p><strong>Title:</strong> {{ selectedItem.resourceNode.title }}</p>
+      <p><strong>Modified:</strong> {{ relativeDatetime(selectedItem.resourceNode.updatedAt) }}</p>
+      <p><strong>Size:</strong> {{ prettyBytes(selectedItem.resourceNode.resourceFile.size) }}</p>
+      <p><strong>URL:</strong> <a :href="selectedItem.contentUrl" target="_blank">Open File</a></p>
+    </div>
+    <template #footer>
+      <Button class="p-button-text" label="Close" @click="closeDetailsDialog" />
+    </template>
+  </Dialog>
+
 </template>
 
 <script>
@@ -267,11 +253,9 @@ export default {
   name: "PersonalFileList",
   servicePrefix: "PersonalFile",
   components: {
-    //8Toolbar,
     ActionCell,
     ResourceIcon,
     ResourceFileLink,
-    //DocumentsFilterForm,
     DataFilter,
   },
   mixins: [ListMixin],
@@ -311,14 +295,13 @@ export default {
       options: [],
       selectedItems: [],
       // prime vue
-      itemDialog: false,
-      deleteItemDialog: false,
       deleteMultipleDialog: false,
       item: {},
       filters: { shared: 0, loadNode: 1 },
       submitted: false,
       prettyBytes,
-      relativeDatetime
+      relativeDatetime,
+      t,
     }
 
     return data
@@ -326,11 +309,8 @@ export default {
   created() {
     this.resetList = true
     this.onUpdateOptions(this.options)
+    this.isFromEditor = window.location.search.includes('editor=tinymce');
   },
-  /*mounted() {
-    this.resetList = true;
-    this.onUpdateOptions(this.options);
-  },*/
   computed: {
     // From crud.js list function
     ...mapGetters("resourcenode", {
@@ -358,7 +338,24 @@ export default {
       view: "view",
     }),
   },
+  data() {
+    return {
+      itemDialog: false,
+      detailsDialogVisible: false,
+      deleteItemDialog: false,
+      selectedItem: {},
+      itemToDelete: null,
+      isFromEditor: false,
+    };
+  },
   methods: {
+    showHandler(item) {
+      this.selectedItem = item;
+      this.detailsDialogVisible = true;
+    },
+    closeDetailsDialog() {
+      this.detailsDialogVisible = false;
+    },
     // prime
     onPage(event) {
       this.options.itemsPerPage = event.rows
@@ -405,7 +402,7 @@ export default {
               gid: 0,
               sid: 0,
               cid: 0,
-              visibility: RESOURCE_LINK_PUBLISHED, // visible by default
+              visibility: RESOURCE_LINK_PUBLISHED,
             },
           ])
 
@@ -422,7 +419,9 @@ export default {
       this.itemDialog = true
     },
     confirmDeleteItem(item) {
-      this.item = item
+      console.log('confirmDeleteItem :::', item)
+      this.item = { ...item }
+      this.itemToDelete = { ...item }
       this.deleteItemDialog = true
     },
     confirmDeleteMultiple() {
@@ -437,15 +436,24 @@ export default {
       })
       this.deleteMultipleDialog = false
       this.selectedItems = null
-      //this.$toast.add({severity:'success', summary: 'Successful', detail: 'Products Deleted', life: 3000});*/
     },
     deleteItemButton() {
-      console.log("deleteItem")
-      this.deleteItem(this.item)
-      //this.items = this.items.filter(val => val.iid !== this.item.iid);
-      this.deleteItemDialog = false
-      this.item = {}
-      this.onUpdateOptions(this.options)
+      console.log("deleteItem", this.itemToDelete);
+      if (this.itemToDelete && this.itemToDelete.id) {
+        this.deleteItem(this.itemToDelete)
+          .then(() => {
+            this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Item deleted successfully', life: 3000 });
+            this.deleteItemDialog = false;
+            this.itemToDelete = null;
+            this.onUpdateOptions(this.options);
+          })
+          .catch(error => {
+            console.error("Error deleting the item:", error);
+            this.$toast.add({ severity: 'error', summary: 'Error', detail: 'An error occurred while deleting the item', life: 3000 });
+          });
+      } else {
+        console.error("No item to delete or item ID is missing");
+      }
     },
     onRowSelected(items) {
       this.selected = items
@@ -486,20 +494,12 @@ export default {
     },
     async deleteSelected() {
       console.log("deleteSelected")
-      /*for (let i = 0; i < this.selected.length; i++) {
-        let item = this.selected[i];
-        //this.deleteHandler(item);
-        this.deleteItem(item);
-      }*/
-
       this.deleteMultipleAction(this.selected)
       this.onRequest({
         pagination: this.pagination,
       })
       console.log("end -- deleteSelected")
     },
-    //...actions,
-    // From ListMixin
     ...mapActions("personalfile", {
       getPage: "fetchAll",
       createWithFormData: "createWithFormData",

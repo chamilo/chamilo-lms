@@ -1,4 +1,5 @@
 <template>
+  <Button :label="$t('Back')" icon="pi pi-chevron-left" @click="goBack" />
   <DataTable
     v-model:filters="filters"
     v-model:selection="selectedItems"
@@ -70,7 +71,7 @@
         <div class="flex flex-row gap-2">
           <Button
             class="btn btn--primary"
-            icon="fa fa-info-circle"
+            icon="pi pi-info-circle"
             @click="showHandler(slotProps.data)"
           />
         </div>
@@ -89,6 +90,7 @@ import DataFilter from "../../components/DataFilter"
 import isEmpty from "lodash/isEmpty"
 import { useFormatDate } from "../../composables/formatDate"
 import prettyBytes from "pretty-bytes"
+import { useI18n } from "vue-i18n"
 
 export default {
   name: "PersonalFileShared",
@@ -101,18 +103,19 @@ export default {
     DataFilter,
   },
   data() {
+    const { t } = useI18n()
     const { relativeDatetime } = useFormatDate()
 
     return {
       sortBy: "title",
       sortDesc: false,
       columns: [
-        { label: this.$i18n.t("Title"), field: "title", name: "title", sortable: true },
-        { label: this.$i18n.t("Modified"), field: "resourceNode.updatedAt", name: "updatedAt", sortable: true },
-        { label: this.$i18n.t("Size"), field: "resourceNode.resourceFile.size", name: "size", sortable: true },
-        { label: this.$i18n.t("Actions"), name: "action", sortable: false },
+        { label: t("Title"), field: "title", name: "title", sortable: true },
+        { label: t("Modified"), field: "resourceNode.updatedAt", name: "updatedAt", sortable: true },
+        { label: t("Size"), field: "resourceNode.resourceFile.size", name: "size", sortable: true },
+        { label: t("Actions"), name: "action", sortable: false },
       ],
-      pageOptions: [10, 20, 50, this.$i18n.t("All")],
+      pageOptions: [10, 20, 50, t("All")],
       selected: [],
       isBusy: true,
       options: [],
@@ -126,6 +129,7 @@ export default {
       submitted: false,
       relativeDatetime,
       prettyBytes,
+      t,
     }
   },
   created() {
@@ -164,6 +168,9 @@ export default {
     }),
   },
   methods: {
+    goBack() {
+      this.$router.go(-1)
+    },
     // This is a copy of the ListMixin, it doesnt adds the resourceNode
     onUpdateOptions({ page, itemsPerPage, sortBy, sortDesc, totalItems } = {}) {
       console.log("onUpdateOptions")

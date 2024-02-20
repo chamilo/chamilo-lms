@@ -2318,6 +2318,7 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 
 // Relation to prefill course extra field with user extra field on course creation
 // on main/create_course/add_course.php and main/admin/course_add.php
+// Fill the array with the course extra field to fill => user extra field where the value comes from
 /*$_configuration['course_creation_user_course_extra_field_relation_to_prefill'] = [
     'fields' => [
         'CourseExtrafieldLabel1' => 'UserExtrafieldLabel1',

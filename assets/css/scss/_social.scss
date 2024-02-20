@@ -98,6 +98,21 @@
 }
 
 .my-groups-card, .my-friends-card {
+  .friend-item {
+    display: flex;
+    align-items: center;
+    border: none;
+    padding: 10px 0;
+  }
+
+  .friend-name {
+    margin-right: auto;
+  }
+
+  .friend-username {
+    white-space: nowrap;
+  }
+
   .list-group-item {
     cursor: pointer;
   }
@@ -130,11 +145,6 @@
 
   .input-group .mdi {
     font-size: 1.25rem;
-  }
-
-  .friend-item {
-    border: none;
-    padding: 10px 0;
   }
 
   .friend-item:not(:last-child) {

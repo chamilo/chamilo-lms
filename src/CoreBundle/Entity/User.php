@@ -154,11 +154,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     #[ApiProperty(iris: ['http://schema.org/name'])]
     #[Assert\NotBlank]
-    #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read', 'track_e_exercise:read'])]
+    #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read', 'track_e_exercise:read', 'user_rel_user:read'])]
     #[ORM\Column(name: 'firstname', type: 'string', length: 64, nullable: true)]
     protected ?string $firstname = null;
 
-    #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read', 'track_e_exercise:read'])]
+    #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read', 'track_e_exercise:read', 'user_rel_user:read'])]
     #[ORM\Column(name: 'lastname', type: 'string', length: 64, nullable: true)]
     protected ?string $lastname = null;
 
@@ -2394,6 +2394,17 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $criteria->where(Criteria::expr()->eq('relationType', $relationType));
 
         return $this->friendsWithMe->matching($criteria);
+    }
+
+    public function getFriendsOfFriends(): array
+    {
+        $friendsOfFriends = [];
+        foreach ($this->getFriends() as $friendRelation) {
+            foreach ($friendRelation->getFriend()->getFriends() as $friendOfFriendRelation) {
+                $friendsOfFriends[] = $friendOfFriendRelation->getFriend();
+            }
+        }
+        return $friendsOfFriends;
     }
 
     /**

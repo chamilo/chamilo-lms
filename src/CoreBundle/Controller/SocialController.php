@@ -528,7 +528,7 @@ class SocialController extends AbstractController
     ): JsonResponse {
         $user = $this->getUser();
         if ($userId !== $user->getId()) {
-            return $this->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
+            return $this->json(['error' => 'Unauthorized']);
         }
 
         $receivedMessagesCount = count($messageRepository->findReceivedInvitationsByUser($user));
@@ -677,14 +677,14 @@ class SocialController extends AbstractController
         $content = $data['content'] ?? '';
 
         if (!$userId || !$targetUserId || !$action) {
-            return $this->json(['error' => 'Missing parameters'], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => 'Missing parameters']);
         }
 
         $currentUser = $userRepository->find($userId);
         $friendUser = $userRepository->find($targetUserId);
 
         if (null === $currentUser || null === $friendUser) {
-            return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
+            return $this->json(['error' => 'User not found']);
         }
 
         try {
@@ -692,7 +692,7 @@ class SocialController extends AbstractController
                 case 'send_invitation':
                     $result = $messageRepository->sendInvitationToFriend($currentUser, $friendUser, $subject, $content);
                     if (!$result) {
-                        return $this->json(['error' => 'Invitation already exists or could not be sent'], Response::HTTP_BAD_REQUEST);
+                        return $this->json(['error' => 'Invitation already exists or could not be sent']);
                     }
                     break;
 
@@ -714,7 +714,7 @@ class SocialController extends AbstractController
                     break;
 
                 default:
-                    return $this->json(['error' => 'Invalid action'], Response::HTTP_BAD_REQUEST);
+                    return $this->json(['error' => 'Invalid action']);
             }
 
             $em->flush();
@@ -724,6 +724,73 @@ class SocialController extends AbstractController
             return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    #[Route('/user-relation/{currentUserId}/{profileUserId}', name: 'chamilo_core_social_get_user_relation')]
+    public function getUserRelation(int $currentUserId, int $profileUserId, EntityManagerInterface $em): JsonResponse
+    {
+
+        $isAllowed = $this->checkUserRelationship($currentUserId, $profileUserId, $em);
+
+        return $this->json([
+            'isAllowed' => $isAllowed,
+        ]);
+    }
+
+    /**
+     * Checks the relationship between the current user and another user.
+     *
+     * This method first checks for a direct relationship between the two users. If no direct relationship is found,
+     * it then checks for indirect relationships through common friends (friends of friends).
+     */
+    private function checkUserRelationship(int $currentUserId, int $otherUserId, EntityManagerInterface $em): bool
+    {
+        if ($currentUserId === $otherUserId) {
+            return true;
+        }
+
+        $relation = $em->getRepository(UserRelUser::class)
+            ->findOneBy([
+                'relationType' => [
+                    UserRelUser::USER_RELATION_TYPE_FRIEND,
+                    UserRelUser::USER_RELATION_TYPE_GOODFRIEND,
+                ],
+                'friend' => $otherUserId,
+                'user' => $currentUserId,
+            ]);
+
+        if (null !== $relation) {
+            return true;
+        }
+
+        $friendsOfCurrentUser = $em->getRepository(UserRelUser::class)
+            ->findBy([
+                'relationType' => [
+                    UserRelUser::USER_RELATION_TYPE_FRIEND,
+                    UserRelUser::USER_RELATION_TYPE_GOODFRIEND,
+                ],
+                'user' => $currentUserId,
+            ]);
+
+        foreach ($friendsOfCurrentUser as $friendRelation) {
+            $friendId = $friendRelation->getFriend()->getId();
+            $relationThroughFriend = $em->getRepository(UserRelUser::class)
+                ->findOneBy([
+                    'relationType' => [
+                        UserRelUser::USER_RELATION_TYPE_FRIEND,
+                        UserRelUser::USER_RELATION_TYPE_GOODFRIEND,
+                    ],
+                    'friend' => $otherUserId,
+                    'user' => $friendId,
+                ]);
+
+            if (null !== $relationThroughFriend) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     private function checkUserStatus(int $userId, UserRepository $userRepository): bool
     {

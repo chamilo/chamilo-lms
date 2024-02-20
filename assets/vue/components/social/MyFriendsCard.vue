@@ -25,8 +25,10 @@
       </div>
       <ul class="list-group">
         <li v-for="friend in limitedFriends" :key="friend.id" class="list-group-item friend-item d-flex align-items-center">
-          <BaseUserAvatar :image-url="friend.friend.illustrationUrl" />
-          <span>{{ friend.friend.username }}</span>
+          <a :href="`/social?id=${friend.friend.id}`" class="d-flex align-items-center text-decoration-none">
+            <BaseUserAvatar :image-url="friend.friend.illustrationUrl" class="mr-2" />
+            <span>{{ friend.friend.firstname }} {{ friend.friend.lastname }} <small class="text-muted">({{ friend.friend.username }})</small></span>
+          </a>
         </li>
       </ul>
       <div v-if="friends.length > 10" class="mt-2 text-center">

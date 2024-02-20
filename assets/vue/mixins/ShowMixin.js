@@ -53,6 +53,9 @@ export default {
     },
   },
   methods: {
+    goBack() {
+      this.$router.go(-1);
+    },
     list() {
       console.log('show mixin list');
       this.$router

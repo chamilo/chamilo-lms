@@ -119,6 +119,10 @@ class PersonalFile extends AbstractResource implements ResourceInterface, String
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
 
+    #[Groups(['personal_file:read'])]
+    #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
+    private ?string $comment = null;
+
     public function __toString(): string
     {
         return $this->getTitle();
@@ -138,6 +142,17 @@ class PersonalFile extends AbstractResource implements ResourceInterface, String
     {
         $this->title = $title;
 
+        return $this;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?string $comment): self
+    {
+        $this->comment = $comment;
         return $this;
     }
 

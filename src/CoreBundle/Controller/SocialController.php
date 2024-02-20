@@ -725,7 +725,7 @@ class SocialController extends AbstractController
         }
     }
 
-    #[Route('/user-relation/{currentUserId}/{profileUserId}', name: 'api_user_relation')]
+    #[Route('/user-relation/{currentUserId}/{profileUserId}', name: 'chamilo_core_social_get_user_relation')]
     public function getUserRelation(int $currentUserId, int $profileUserId, EntityManagerInterface $em): JsonResponse
     {
 

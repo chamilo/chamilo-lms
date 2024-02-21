@@ -38,7 +38,7 @@ class CidFilter extends AbstractFilter
             'cid' => [
                 'property' => null,
                 'type' => 'int',
-                'required' => true,
+                'required' => false,
                 'description' => 'Course identifier',
             ],
         ];

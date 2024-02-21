@@ -242,4 +242,35 @@ class SessionRepository extends ServiceEntityRepository
 
         return $qb;
     }
+
+    public function getUserFollowedSessionsInAccessUrl(User $user, AccessUrl $url): QueryBuilder
+    {
+        $callback = fn (Session $session) => $session->getId();
+
+        if ($user->isHRM()) {
+            $idList = array_map($callback, $user->getDRHSessions());
+        } elseif ($user->isTeacher() || COURSEMANAGER === $user->getStatus()) {
+            $idListAsCoach = $user
+                ->getSessionsByStatusInCourseSubscription(Session::COURSE_COACH)
+                ->map($callback)
+                ->getValues()
+            ;
+            $idListAsGeneralCoach = array_map($callback, $user->getSessionsAsGeneralCoach());
+            $idList = array_merge($idListAsCoach, $idListAsGeneralCoach);
+        } elseif ($user->isSessionAdmin()) {
+            $idList = array_map($callback, $user->getSessionsAsAdmin());
+        } else {
+            $idList = array_map($callback, $user->getSessionsAsStudent());
+        }
+
+        $qb = $this->createQueryBuilder('s');
+        $qb
+            ->innerJoin('s.urls', 'u')
+            ->where($qb->expr()->eq('u.url', $url->getId()))
+            ->andWhere($qb->expr()->in('s.id', ':id_list'))
+            ->setParameter('id_list', $idList)
+        ;
+
+        return $qb;
+    }
 }

@@ -6,8 +6,13 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\EventListener;
 
+use Chamilo\CoreBundle\Entity\TrackELogin;
+use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\TrackELoginRepository;
+use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -20,15 +25,18 @@ class LoginSuccessHandler
     protected UrlGeneratorInterface $router;
     protected AuthorizationCheckerInterface $checker;
     protected SettingsManager $settingsManager;
+    protected EntityManagerInterface $entityManager;
 
     public function __construct(
         UrlGeneratorInterface $urlGenerator,
         AuthorizationCheckerInterface $checker,
-        SettingsManager $settingsManager
+        SettingsManager $settingsManager,
+        EntityManagerInterface $entityManager
     ) {
         $this->router = $urlGenerator;
         $this->checker = $checker;
         $this->settingsManager = $settingsManager;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -37,6 +45,7 @@ class LoginSuccessHandler
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
         $request = $event->getRequest();
+        $session = $request->getSession();
 
         /** @var User $user */
         $user = $event->getAuthenticationToken()->getUser();
@@ -126,6 +135,21 @@ class LoginSuccessHandler
                 $course_info = $personal_course_list[$key[0]]['course_info'];
                 $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?sid=0';
             }
+        }
+
+        if (!$session->get('login_records_created')) {
+            $userIp = $request->getClientIp();
+
+            /** @var TrackEOnlineRepository $trackEOnlineRepository */
+            $trackEOnlineRepository = $this->entityManager->getRepository(TrackEOnline::class);
+
+            /** @var TrackELoginRepository $trackELoginRepository */
+            $trackELoginRepository = $this->entityManager->getRepository(TrackELogin::class);
+
+            $trackELoginRepository->createLoginRecord($user, new \DateTime(), $userIp);
+            $trackEOnlineRepository->createOnlineSession($user, $userIp);
+
+            $session->set('login_records_created', true);
         }
 
         if (!empty($url)) {

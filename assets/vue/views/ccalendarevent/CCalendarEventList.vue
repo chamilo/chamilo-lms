@@ -108,7 +108,6 @@ import { useStore } from "vuex"
 import { useI18n } from "vue-i18n"
 import { useConfirm } from "primevue/useconfirm"
 import { useFormatDate } from "../../composables/formatDate"
-import { usePlatformConfig } from "../../store/platformConfig"
 
 import Loading from "../../components/Loading.vue"
 import FullCalendar from "@fullcalendar/vue3"
@@ -122,14 +121,12 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useToast } from "primevue/usetoast"
 import { useCidReq } from "../../composables/cidReq"
 import cCalendarEventService from "../../services/ccalendarevent"
-import sessionRelUserService from "../../services/sessionRelUserService"
 import { useCidReqStore } from "../../store/cidReq"
 import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
 import { useLocale, useParentLocale } from "../../composables/locale"
 
 const store = useStore()
 const confirm = useConfirm()
-const platformConfigStore = usePlatformConfig()
 const cidReqStore = useCidReqStore()
 
 const { abbreviatedDatetime } = useFormatDate()
@@ -159,46 +156,31 @@ const sessionState = reactive({
 const { cid, sid, gid } = useCidReq()
 
 async function getCalendarEvents({ startStr, endStr }) {
+  const params = {
+    'startDate[after]': startStr,
+    'endDate[before]': endStr,
+  };
+
+  if (cid) {
+    params.cid = cid;
+  }
+
+  if (sid) {
+    params.sid = sid;
+  }
+
+  if (gid) {
+    params.gid = gid;
+  }
+
   const calendarEvents = await cCalendarEventService
-    .findAll({
-      params: {
-        startDate: startStr,
-        endDate: endStr,
-        cid,
-        sid,
-        gid,
-      },
-    })
+    .findAll({ params })
     .then((response) => response.json())
 
   return calendarEvents["hydra:member"].map((event) => ({
     ...event,
     start: event.startDate,
     end: event.endDate,
-  }))
-}
-
-async function getSessions({ startStr, endStr }) {
-  if (cidReqStore.course) {
-    return []
-  }
-
-  if ("true" !== platformConfigStore.getSetting("agenda.personal_calendar_show_sessions_occupation")) {
-    return []
-  }
-
-  const sessions = await sessionRelUserService.findAll({
-    user: currentUser.value["@id"],
-    "session.displayStartDate[after]": startStr,
-    "session.displayEndDate[before]": endStr,
-    relationType: 3,
-  })
-
-  return sessions["hydra:member"].map((sessionRelUser) => ({
-    ...sessionRelUser.session,
-    title: sessionRelUser.session.title,
-    start: sessionRelUser.session.displayStartDate,
-    end: sessionRelUser.session.displayEndDate,
   }))
 }
 
@@ -233,13 +215,14 @@ const calendarOptions = ref({
   startParam: "startDate[after]",
   endParam: "endDate[before]",
   selectable: true,
-  eventClick(EventClickArg) {
-    let event = EventClickArg.event.toPlainObject()
+  eventClick(eventClickInfo) {
+    eventClickInfo.jsEvent.preventDefault()
+
+    let event = eventClickInfo.event.toPlainObject()
 
     if (event.extendedProps["@type"] && event.extendedProps["@type"] === "Session") {
       sessionState.sessionAsEvent = event
       sessionState.showSessionDialog = true
-      EventClickArg.jsEvent.preventDefault()
 
       return
     }
@@ -288,11 +271,7 @@ const calendarOptions = ref({
     dialog.value = true
   },
   events(info, successCallback) {
-    Promise.all([getCalendarEvents(info), getSessions(info)]).then((values) => {
-      const events = values[0].concat(values[1])
-
-      successCallback(events)
-    })
+    getCalendarEvents(info).then((events) => successCallback(events))
   },
 })
 

@@ -736,6 +736,20 @@ class SocialController extends AbstractController
         ]);
     }
 
+    #[Route('/online-status', name: 'chamilo_core_social_get_online_status', methods: ['POST'])]
+    public function getOnlineStatus(Request $request, TrackEOnlineRepository $trackOnlineRepository): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $userIds = $data['userIds'] ?? [];
+
+        $onlineStatuses = [];
+        foreach ($userIds as $userId) {
+            $onlineStatuses[$userId] = $trackOnlineRepository->isUserOnline($userId);
+        }
+
+        return $this->json($onlineStatuses);
+    }
+
     /**
      * Checks the relationship between the current user and another user.
      *

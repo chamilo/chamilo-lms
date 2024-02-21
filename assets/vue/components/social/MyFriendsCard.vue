@@ -28,6 +28,8 @@
           <a :href="`/social?id=${friend.friend.id}`" class="d-flex align-items-center text-decoration-none">
             <BaseUserAvatar :image-url="friend.friend.illustrationUrl" class="mr-2" />
             <span>{{ friend.friend.firstname }} {{ friend.friend.lastname }} <small class="text-muted">({{ friend.friend.username }})</small></span>
+            <span v-if="friend.friend.isOnline" class="mdi mdi-circle circle-green mx-2" title="Online"></span>
+            <span v-else class="mdi mdi-circle circle-gray mx-2" title="Offline"></span>
           </a>
         </li>
       </ul>
@@ -84,6 +86,14 @@ async function fetchFriends(userId) {
       },
     })
     friends.value = response.data['hydra:member']
+
+    const friendIds = friends.value.map(friend => friend.friend.id)
+    const onlineStatusResponse = await axios.post(`/social-network/online-status`, { userIds: friendIds })
+    const onlineStatuses = onlineStatusResponse.data
+
+    friends.value.forEach(friend => {
+      friend.friend.isOnline = onlineStatuses[friend.friend.id] || false
+    })
   } catch (error) {
     console.error('Error fetching friends:', error)
   }

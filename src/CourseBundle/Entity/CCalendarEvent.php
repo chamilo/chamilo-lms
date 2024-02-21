@@ -30,6 +30,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -77,22 +78,27 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     public const SUBSCRIPTION_VISIBILITY_ALL = 1;
     public const SUBSCRIPTION_VISIBILITY_CLASS = 2;
 
+    #[Groups(['calendar_event:read'])]
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $iid = null;
 
+    #[Groups(['calendar_event:read'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
 
+    #[Groups(['calendar_event:read'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'content', type: 'text', nullable: true)]
     protected ?string $content = null;
 
+    #[Groups(['calendar_event:read'])]
     #[ORM\Column(name: 'start_date', type: 'datetime', nullable: true)]
     protected ?DateTime $startDate = null;
 
+    #[Groups(['calendar_event:read'])]
     #[ORM\Column(name: 'end_date', type: 'datetime', nullable: true)]
     protected ?DateTime $endDate = null;
 

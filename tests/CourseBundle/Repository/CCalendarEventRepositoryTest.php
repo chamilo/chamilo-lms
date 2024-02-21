@@ -141,8 +141,8 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
         // 3. Get events filter by date, search for a very old date. Result: no events.
         $response = $this->createClientWithCredentials($token)->request('GET', '/api/c_calendar_events', [
             'query' => [
-                'startDate' => '2009-02-14T18:00:00+02:00',
-                'endDate' => '2009-02-14T19:00:00+02:00',
+                'startDate[after]' => '2009-02-14T18:00:00+02:00',
+                'endDate[before]' => '2009-02-14T19:00:00+02:00',
             ],
         ]);
         $this->assertCount(0, $response->toArray()['hydra:member']);
@@ -150,8 +150,8 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
         // 4. Get events for valid date.
         $response = $this->createClientWithCredentials($token)->request('GET', '/api/c_calendar_events', [
             'query' => [
-                'startDate' => '2040-06-01T09:00:00+02:00',
-                'endDate' => '2040-06-30T23:00:00+02:00',
+                'startDate[after]' => '2040-06-01T09:00:00+02:00',
+                'endDate[before]' => '2040-06-30T23:00:00+02:00',
             ],
         ]);
         $this->assertCount(1, $response->toArray()['hydra:member']);

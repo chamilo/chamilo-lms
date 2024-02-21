@@ -27,12 +27,6 @@
           <span class="badge badge-warning" v-if="invitationsCount > 0">{{ invitationsCount }}</span>
         </router-link>
       </li>
-      <li :class="['menu-item', { 'active': isActive('/account/home') }]">
-        <router-link :to="{ name: 'AccountHome' }">
-          <i class="mdi mdi-account-circle" aria-hidden="true"></i>
-          {{ t("My profile") }}
-        </router-link>
-      </li>
       <li :class="['menu-item', { 'active': isActive('/resources/friends') }]">
         <router-link :to="{ name: 'UserRelUserList' }">
           <i class="mdi mdi-handshake" aria-hidden="true"></i>

@@ -25,8 +25,12 @@
       </div>
       <ul class="list-group">
         <li v-for="friend in limitedFriends" :key="friend.id" class="list-group-item friend-item d-flex align-items-center">
-          <BaseUserAvatar :image-url="friend.friend.illustrationUrl" />
-          <span>{{ friend.friend.username }}</span>
+          <a :href="`/social?id=${friend.friend.id}`" class="d-flex align-items-center text-decoration-none">
+            <BaseUserAvatar :image-url="friend.friend.illustrationUrl" class="mr-2" />
+            <span>{{ friend.friend.firstname }} {{ friend.friend.lastname }} <small class="text-muted">({{ friend.friend.username }})</small></span>
+            <span v-if="friend.friend.isOnline" class="mdi mdi-circle circle-green mx-2" title="Online"></span>
+            <span v-else class="mdi mdi-circle circle-gray mx-2" title="Offline"></span>
+          </a>
         </li>
       </ul>
       <div v-if="friends.length > 10" class="mt-2 text-center">
@@ -65,7 +69,7 @@ const platformConfigStore = usePlatformConfig()
 
 const allowSocialMap = computed(() => platformConfigStore.getSetting("profile.allow_social_map_fields"))
 const search = () => {
-  router.push({ name: 'SocialSearch', query: { query: searchQuery.value, type: 'user' } });
+  router.push({ name: 'SocialSearch', query: { query: searchQuery.value, type: 'user' } })
 }
 const limitedFriends = computed(() => {
   return friends.value.slice(0, 10)
@@ -82,6 +86,14 @@ async function fetchFriends(userId) {
       },
     })
     friends.value = response.data['hydra:member']
+
+    const friendIds = friends.value.map(friend => friend.friend.id)
+    const onlineStatusResponse = await axios.post(`/social-network/online-status`, { userIds: friendIds })
+    const onlineStatuses = onlineStatusResponse.data
+
+    friends.value.forEach(friend => {
+      friend.friend.isOnline = onlineStatuses[friend.friend.id] || false
+    })
   } catch (error) {
     console.error('Error fetching friends:', error)
   }

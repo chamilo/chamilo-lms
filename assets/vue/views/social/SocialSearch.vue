@@ -49,8 +49,8 @@
           <div class="flex items-center">
             <img :src="user.avatar" class="w-16 h-16 rounded-full mr-4">
             <span>{{ user.name }}</span>
-            <span v-if="user.status === 'online'" class="mdi mdi-circle green mx-2" title="Online"></span>
-            <span v-else class="mdi mdi-circle gray mx-2" title="Offline"></span>
+            <span v-if="user.status === 'online'" class="mdi mdi-circle circle-green mx-2" title="Online"></span>
+            <span v-else class="mdi mdi-circle circle-gray mx-2" title="Offline"></span>
             <span :class="getRoleIcon(user.role)" class="mx-2"></span>
           </div>
           <div>

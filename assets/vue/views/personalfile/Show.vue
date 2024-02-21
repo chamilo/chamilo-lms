@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Button :label="$t('Back')" icon="pi pi-chevron-left" @click="goBack" />
     <Toolbar
       v-if="item && isCurrentTeacher"
       :handle-delete="del"
@@ -160,6 +161,9 @@ export default {
     }),
   },
   methods: {
+    goBack() {
+      this.$router.go(-1);
+    },
     ...mapActions("personalfile", {
       deleteItem: "del",
       reset: "resetShow",

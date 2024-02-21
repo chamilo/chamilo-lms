@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\TrackEOnline;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -49,5 +50,30 @@ class TrackEOnlineRepository extends ServiceEntityRepository
             // Handle exception
             return false;
         }
+    }
+
+    public function createOnlineSession(User $user, string $userIp, int $cId = 0, int $sessionId = 0, int $accessUrlId = 1): void
+    {
+        $trackEOnline = new TrackEOnline();
+        $trackEOnline->setLoginUserId($user->getId());
+        $trackEOnline->setLoginDate(new \DateTime());
+        $trackEOnline->setUserIp($userIp);
+        $trackEOnline->setCId($cId);
+        $trackEOnline->setSessionId($sessionId);
+        $trackEOnline->setAccessUrlId($accessUrlId);
+
+        $this->_em->persist($trackEOnline);
+        $this->_em->flush();
+    }
+
+    public function removeOnlineSessionsByUser(int $userId): void
+    {
+        $sessions = $this->findBy(['loginUserId' => $userId]);
+
+        foreach ($sessions as $session) {
+            $this->_em->remove($session);
+        }
+
+        $this->_em->flush();
     }
 }

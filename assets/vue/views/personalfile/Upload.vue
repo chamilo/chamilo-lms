@@ -25,7 +25,7 @@ import "@uppy/image-editor/dist/style.css"
 import Uppy from "@uppy/core"
 import Webcam from "@uppy/webcam"
 import { Dashboard } from "@uppy/vue"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { ENTRYPOINT } from "../../config/entrypoint"
 
 const XHRUpload = require("@uppy/xhr-upload")
@@ -48,6 +48,7 @@ export default {
   setup() {
     const parentResourceNodeId = ref(null)
     const route = useRoute()
+    const router = useRouter();
 
     const store = useStore()
     const user = computed(() => store.getters["security/getUser"])
@@ -90,6 +91,10 @@ export default {
       filetype: "file",
       parentResourceNodeId: parentResourceNodeId.value,
     })
+
+    uppy.value.on("complete", (result) => {
+      router.push({ name: "PersonalFileList" });
+    });
 
     return {
       uppy,

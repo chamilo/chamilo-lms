@@ -15,11 +15,6 @@ export default {
           path: '',
           component: () => import('../views/personalfile/List.vue')
         },
-        // {
-        //   name: 'PersonalFileCreate',
-        //   path: 'new',
-        //   component: () => import('../views/personalfile/Create.vue')
-        // },
         {
           name: 'PersonalFileUploadFile',
           path: 'upload',

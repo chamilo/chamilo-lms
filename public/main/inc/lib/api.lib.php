@@ -1334,6 +1334,47 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
         $result['avatar_no_query'] = '';
         $result['avatar_small'] = '';
         $result['avatar_medium'] = '';
+
+        if (empty($user['avatar'])) {
+            $originalFile = UserManager::getUserPicture(
+                $user_id,
+                USER_IMAGE_SIZE_ORIGINAL,
+                null,
+                $result
+            );
+            $result['avatar'] = $originalFile;
+            $avatarString = explode('?', $result['avatar']);
+            $result['avatar_no_query'] = reset($avatarString);
+        } else {
+            $result['avatar'] = $user['avatar'];
+            $avatarString = explode('?', $user['avatar']);
+            $result['avatar_no_query'] = reset($avatarString);
+        }
+
+        if (!isset($user['avatar_small'])) {
+            $smallFile = UserManager::getUserPicture(
+                $user_id,
+                USER_IMAGE_SIZE_SMALL,
+                null,
+                $result
+            );
+            $result['avatar_small'] = $smallFile;
+        } else {
+            $result['avatar_small'] = $user['avatar_small'];
+        }
+
+        if (!isset($user['avatar_medium'])) {
+            $mediumFile = UserManager::getUserPicture(
+                $user_id,
+                USER_IMAGE_SIZE_MEDIUM,
+                null,
+                $result
+            );
+            $result['avatar_medium'] = $mediumFile;
+        } else {
+            $result['avatar_medium'] = $user['avatar_medium'];
+        }
+
         $urlImg = api_get_path(WEB_IMG_PATH);
         $iconStatus = '';
         $iconStatusMedium = '';

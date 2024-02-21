@@ -1,7 +1,59 @@
 {% include '@ChamiloCore/Skill/skill_wheel.js.html.twig' %}
 {% autoescape false %}
-<script>
-    /* Skill search input in the left menu */
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var accordionLinks = document.querySelectorAll('[data-toggle="collapse"]');
+        accordionLinks.forEach(function(link) {
+          link.addEventListener('click', function(event) {
+            event.preventDefault();
+
+            var collapseTargetId = this.getAttribute('href');
+            var collapseTarget = document.querySelector(collapseTargetId);
+
+            if (collapseTarget.classList.contains('in')) {
+              collapseTarget.classList.remove('in');
+            } else {
+              var parentAccordionId = this.getAttribute('data-parent');
+              var parentAccordion = document.querySelector(parentAccordionId);
+              var allPanels = parentAccordion.querySelectorAll('.panel-collapse');
+
+              allPanels.forEach(function(panel) {
+                panel.classList.remove('in');
+              });
+
+              collapseTarget.classList.add('in');
+            }
+          });
+        });
+
+        var modalToggles = document.querySelectorAll('[data-toggle="modal"]');
+
+        modalToggles.forEach(function(toggle) {
+          toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            var target = document.querySelector(this.getAttribute('data-target'));
+            target.style.display = 'block';
+            setTimeout(function() {
+              target.classList.add('in');
+            }, 10);
+          });
+        });
+
+        var closeButtons = document.querySelectorAll('[data-dismiss="modal"], .modal .close');
+
+        closeButtons.forEach(function(button) {
+          button.addEventListener('click', function() {
+            var modal = this.closest('.modal');
+            modal.classList.remove('in');
+            setTimeout(function() {
+              modal.style.display = 'none';
+            }, 150);
+          });
+        });
+
+      });
+
+  /* Skill search input in the left menu */
     function check_skills_sidebar() {
         //Selecting only selected skills
         $("#skill_id option:selected").each(function () {
@@ -10,12 +62,9 @@
                 $.ajax({
                     url: "{{ url }}&a=skill_exists",
                     data: "skill_id=" + skill_id,
-//                async: false,
                     success: function (return_value) {
                         if (return_value == 0) {
                             alert("{{ 'SkillDoesNotExist'|trans }}");
-                            //Deleting select option tag
-                            //$("#skill_id option[value="+skill_id+"]").remove();
                             $("#skill_id").empty();
 
                             //Deleting holder
@@ -56,7 +105,7 @@
                 <td>' + skill_name + '</td>\n\
                 <td class="text-right">\n\
                     <button type="button" id="skill_to_select_id_' + skill_id + '" class="btn btn--warning btn-sm load_wheel" data-id="' + skill_id + '" title="{{ 'PlaceOnTheWheel'|trans }}" aria-label="{{ 'PlaceOnTheWheel'|trans }}">\n\
-                        <span class="fa fa-crosshairs fa-fw" aria-hidden="true"></span>\n\
+                        <span class="mdi mdi-crosshairs mdi-fw" aria-hidden="true"></span>\n\
                     </button>\n\
                 </td>\n\
             </tr>';
@@ -139,7 +188,7 @@
                 }
             },
             cache: false,
-            placeholder: '{{ 'EnterTheSkillNameToSearch'|trans }}'
+            placeholder: '{{ 'Enter the skill name to search'|trans }}'
         }).on('change', function () {
             check_skills_sidebar();
         });
@@ -162,10 +211,10 @@
                 <div class="col-md-3 skill-options">
                     <p class="skill-home">
                         <a class="btn btn-large btn-block btn--primary" href="{{ _p.web }}social">
-                            <em class="fa fa-home"></em> {{ "Return "|trans }}
+                            <em class="mdi mdi-home"></em> {{ "Return "|trans }}
                         </a>
                     </p>
-                    <div class="panel panel-default">
+                    <div class="panel panel-default skill-profile-block">
                         <div class="panel-body">
                             <figure class="text-center">
                                 <img width="100px" src="{{ user_info.avatar }}" class="img-circle center-block">
@@ -173,7 +222,7 @@
                             </figure>
                             <p class="text-center">
                                 <a href="{{ _p.web_main }}social/skills_ranking.php" class="btn btn--plain" target="_blank">
-                                    {{ 'YourSkillRankingX'|trans|format(ranking) }}
+                                    {{ 'Your skill ranking X'|trans|format(ranking) }}
                                 </a>
                             </p>
                             <div class="text-center">
@@ -195,14 +244,14 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <a data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                                    {{ 'GetNewSkills'|trans }}
+                                    {{ 'Get new skills'|trans }}
                                 </a>
                             </div>
                             <div id="collapseTwo" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <!-- SEARCH -->
                                     <div class="search-skill">
-                                        <h5 class="page-header">{{ 'SkillsSearch'|trans }}</h5>
+                                        <h5 class="page-header">{{ 'Skills search'|trans }}</h5>
                                         <form id="skill_search" class="form-search">
                                             <select id="skill_id" name="skill_id" multiple style="width: 100%;"></select>
                                             <table id="skill_holder" class="table table-condensed"></table>
@@ -210,12 +259,12 @@
                                     </div>
                                     <!-- END SEARCH -->
                                     <!-- INFO SKILL -->
-                                    <h5 class="page-header">{{ 'SkillInfo'|trans }}</h5>
+                                    <h5 class="page-header">{{ 'Skill information'|trans }}</h5>
                                     <div id="skill_info"></div>
                                     <!-- END INFO SKILL -->
                                     <p>
                                         <a class="btn btn--plain btn-block load_root" rel="0" href="#">
-                                            <em class="fa fa-eye"></em> {{ "ViewSkillsWheel"|trans }}
+                                            <em class="mdi mdi-eye"></em> {{ "View skills wheel"|trans }}
                                         </a>
                                     </p>
                                 </div>
@@ -233,18 +282,18 @@
                             </div>
                             <div id="wheel-legend-collapse" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="wheel-legend-heading">
                                 <div class="panel-body">
-                                    <ul class="fa-ul">
+                                    <ul class="mdi-ul">
                                         <li>
-                                            <em class="fa fa-li fa-square skill-legend-basic"></em> {{ "BasicSkills"|trans }}
+                                            <em class="mdi mdi-li mdi-square skill-legend-basic"></em> {{ "Basic skills"|trans }}
                                         </li>
                                         <li>
-                                            <em class="fa fa-li fa-square skill-legend-badges"></em> {{ "SkillsYouAcquired"|trans }}
+                                            <em class="mdi mdi-li mdi-square skill-legend-badges"></em> {{ "Skills you acquired"|trans }}
                                         </li>
                                         <li>
-                                            <em class="fa fa-li fa-square skill-legend-add"></em> {{ "SkillsYouCanLearn"|trans }}
+                                            <em class="mdi mdi-li mdi-square skill-legend-add"></em> {{ "Skills sou can learn"|trans }}
                                         </li>
                                         <li>
-                                            <em class="fa fa-li fa-square skill-legend-search"></em> {{ "SkillsSearchedFor"|trans }}
+                                            <em class="mdi mdi-li mdi-square skill-legend-search"></em> {{ "Skills searched for"|trans }}
                                         </li>
                                     </ul>
                                 </div>
@@ -254,17 +303,17 @@
                             <div class="panel-heading" role="tab" id="wheel-display-heading">
                                 <h4 class="panel-title">
                                     <a class="collapsed" role="button" data-toggle="collapse" data-parent="#wheel-second-accordion" href="#wheel-display-collapse" aria-expanded="false" aria-controls="wheel-display-collapse">
-                                        {{ 'DisplayOptions'|trans }}
+                                        {{ 'Display options'|trans }}
                                     </a>
                                 </h4>
                             </div>
                             <div id="wheel-display-collapse" class="panel-collapse collapse" role="tabpanel" aria-labelledby="wheel-display-heading">
                                 <div class="panel-body">
-                                    <p>{{ 'ChooseABackgroundColor'|trans }}</p>
+                                    <p>{{ 'Choose a background color'|trans }}</p>
                                     <ul class="list-unstyled" id="skill-change-background-options">
                                         <li><a href="#" data-color="#FFFFFF">{{ 'White'|trans }}</a></li>
                                         <li><a href="#" data-color="#000000">{{ 'Black'|trans }}</a></li>
-                                        <li><a href="#" data-color="#A9E2F3">{{ 'LightBlue' }}</a></li>
+                                        <li><a href="#" data-color="#A9E2F3">{{ 'Light blue' }}</a></li>
                                         <li><a href="#" data-color="#848484">{{ 'Gray'|trans }}</a></li>
                                         <li><a href="#" data-color="#F7F8E0">{{ 'Corn'|trans }}</a></li>
                                     </ul>
@@ -311,7 +360,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="{{ "Close" | trans }}">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title" id="form-course-info-title">{{ "ChooseCourse" | trans }}</h4>
+                    <h4 class="modal-title" id="form-course-info-title">{{ "Choose course" | trans }}</h4>
                 </div>
                 <div class="modal-body"></div>
                 <div class="modal-footer">

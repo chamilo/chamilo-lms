@@ -33,32 +33,7 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
         ?Operation $operation = null,
         array $context = []
     ): void {
-        /*if ($this->security->isGranted('ROLE_ADMIN')) {
-            return;
-        }*/
-        /*
-        if ('collection_query' === $operationName) {
-            if (null === $user = $this->security->getUser()) {
-                throw new AccessDeniedException('Access Denied.');
-            }
-
-            $rootAlias = $queryBuilder->getRootAliases()[0];
-            $queryBuilder->andWhere(sprintf('%s.user = :current_user', $rootAlias));
-            $queryBuilder->setParameter('current_user', $user);
-        }*/
-
         $this->addWhere($queryBuilder, $resourceClass);
-    }
-
-    public function applyToItem(
-        QueryBuilder $queryBuilder,
-        QueryNameGeneratorInterface $queryNameGenerator,
-        string $resourceClass,
-        array $identifiers,
-        ?string $operationName = null,
-        array $context = []
-    ): void {
-        // $this->addWhere($queryBuilder, $resourceClass);
     }
 
     private function addWhere(QueryBuilder $qb, string $resourceClass): void
@@ -67,17 +42,13 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
             return;
         }
 
-        /*if ($this->security->isGranted('ROLE_ADMIN')) {
-            return;
-        }*/
-
         /** @var User $user */
         $user = $this->security->getUser();
         $alias = $qb->getRootAliases()[0];
 
         $qb
             ->innerJoin("$alias.resourceNode", 'node')
-            ->leftJoin('node.resourceLinks', 'links')
+            ->leftJoin('node.resourceLinks', 'resource_links')
         ;
 
         $request = $this->requestStack->getCurrentRequest();
@@ -85,58 +56,22 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
         $sessionId = $request->query->getInt('sid');
         $groupId = $request->query->getInt('gid');
 
-        $startDate = $request->query->get('startDate');
-        $endDate = $request->query->get('endDate');
+        $inCourseBase = !empty($courseId);
+        $inSession = !empty($sessionId);
+        $inCourseSession = $inCourseBase && $inSession;
 
-        if (!empty($startDate) && !empty($endDate)) {
-            $qb->andWhere(
-                "
-                $alias.startDate BETWEEN :start AND :end OR
-                $alias.endDate BETWEEN :start AND :end
-            "
-            );
-            $qb
-                ->setParameter('start', $startDate)
-                ->setParameter('end', $endDate)
-            ;
-        }
+        $inPersonalList = !$inCourseBase && !$inCourseSession;
 
-        if (empty($courseId)) {
+        if ($inPersonalList) {
             $qb
-                ->andWhere('links.user = :user OR node.creator = :user')
+                ->andWhere(
+                    $qb->expr()->orX(
+                        $qb->expr()->eq('resource_links.user', ':user'),
+                        $qb->expr()->eq('node.creator', ':user')
+                    )
+                )
                 ->setParameter('user', $user->getId())
             ;
-        } else {
-            $this->addCourseLinkCondition($qb, $courseId, $sessionId, $groupId);
         }
-
-        // $qb->leftJoin("$alias.receivers", 'r');
-        // $qb->leftJoin("$alias.receivers", 'r', Join::WITH, "r.receiver = :current OR $alias.sender = :current ");
-        // $qb->leftJoin("$alias.receivers", 'r');
-        /*$qb->andWhere(
-            $qb->expr()->orX(
-                $qb->andWhere(
-                    $qb->expr()->eq("$alias.sender", $user->getId()),
-                    $qb->expr()->eq("$alias.msgType", Message::MESSAGE_TYPE_OUTBOX)
-                ),
-                $qb->andWhere(
-                    $qb->expr()->in("r", $user->getId()),
-                    $qb->expr()->eq("$alias.msgType", Message::MESSAGE_TYPE_INBOX)
-                )
-            ),
-        );*/
     }
-
-    /*public function generateBetweenRange($qb, $alias, $field, $range)
-    {
-        $value = $range['between'];
-        $rangeValue = explode('..', $value);
-        $valueParameter = $field.'1';
-        $qb
-            ->andWhere(sprintf('%1$s.%2$s BETWEEN :%3$s_1 AND :%3$s_2', $alias, $field, $valueParameter))
-            ->setParameter(sprintf('%s_1', $valueParameter), $rangeValue[0])
-            ->setParameter(sprintf('%s_2', $valueParameter), $rangeValue[1]);
-
-        return $qb;
-    }*/
 }

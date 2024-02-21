@@ -15,18 +15,21 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\ApiResource\CalendarEvent;
 use Chamilo\CoreBundle\Controller\Api\CreateCCalendarEventAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateCCalendarEventAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Room;
+use Chamilo\CoreBundle\Filter\CidFilter;
+use Chamilo\CoreBundle\Filter\SidFilter;
+use Chamilo\CoreBundle\State\CalendarEventProvider;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -42,7 +45,12 @@ use Symfony\Component\Validator\Constraints as Assert;
             deserialize: false
         ),
         new Delete(security: "is_granted('DELETE', object)"),
-        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new GetCollection(
+            paginationEnabled: false,
+            security: "is_granted('ROLE_USER')",
+            output: CalendarEvent::class,
+            provider: CalendarEventProvider::class,
+        ),
         new Post(
             controller: CreateCCalendarEventAction::class,
             securityPostDenormalize: "is_granted('CREATE', object)"
@@ -56,6 +64,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CCalendarEventRepository::class)]
 #[ApiFilter(filterClass: SearchFilter::class, properties: ['allDay' => 'boolean'])]
 #[ApiFilter(filterClass: DateFilter::class, strategy: 'exclude_null')]
+#[ApiFilter(filterClass: CidFilter::class)]
+#[ApiFilter(filterClass: SidFilter::class)]
 class CCalendarEvent extends AbstractResource implements ResourceInterface, Stringable
 {
     public const COLOR_STUDENT_PUBLICATION = '#FF8C00';
@@ -67,27 +77,22 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     public const SUBSCRIPTION_VISIBILITY_ALL = 1;
     public const SUBSCRIPTION_VISIBILITY_CLASS = 2;
 
-    #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $iid = null;
 
     #[Assert\NotBlank]
-    #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
 
     #[Assert\NotBlank]
-    #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[ORM\Column(name: 'content', type: 'text', nullable: true)]
     protected ?string $content = null;
 
-    #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[ORM\Column(name: 'start_date', type: 'datetime', nullable: true)]
     protected ?DateTime $startDate = null;
 
-    #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[ORM\Column(name: 'end_date', type: 'datetime', nullable: true)]
     protected ?DateTime $endDate = null;
 
@@ -112,7 +117,6 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     )]
     protected Collection $repeatEvents;
 
-    #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[Assert\NotNull]
     #[ORM\Column(name: 'all_day', type: 'boolean', nullable: false)]
     protected bool $allDay;
@@ -120,7 +124,6 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected ?string $comment = null;
 
-    #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[ORM\Column(name: 'color', type: 'string', length: 20, nullable: true)]
     protected ?string $color = null;
 
@@ -134,7 +137,6 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: CCalendarEventAttachment::class, cascade: ['persist', 'remove'])]
     protected Collection $attachments;
 
-    #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[Assert\NotNull]
     #[ORM\Column(name: 'collective', type: 'boolean', nullable: false, options: ['default' => false])]
     protected bool $collective = false;

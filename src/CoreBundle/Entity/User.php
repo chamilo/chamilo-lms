@@ -2419,6 +2419,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
                 $friendsOfFriends[] = $friendOfFriendRelation->getFriend();
             }
         }
+
         return $friendsOfFriends;
     }
 

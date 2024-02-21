@@ -531,8 +531,8 @@ class SocialController extends AbstractController
             return $this->json(['error' => 'Unauthorized']);
         }
 
-        $receivedMessagesCount = count($messageRepository->findReceivedInvitationsByUser($user));
-        $pendingGroupInvitationsCount = count($usergroupRepository->getGroupsByUser($userId, Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION));
+        $receivedMessagesCount = \count($messageRepository->findReceivedInvitationsByUser($user));
+        $pendingGroupInvitationsCount = \count($usergroupRepository->getGroupsByUser($userId, Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION));
         $totalInvitationsCount = $receivedMessagesCount + $pendingGroupInvitationsCount;
 
         return $this->json(['totalInvitationsCount' => $totalInvitationsCount]);
@@ -694,10 +694,12 @@ class SocialController extends AbstractController
                     if (!$result) {
                         return $this->json(['error' => 'Invitation already exists or could not be sent']);
                     }
+
                     break;
 
                 case 'send_message':
                     $result = MessageManager::send_message($friendUser, $subject, $content);
+
                     break;
 
                 case 'add_friend':
@@ -707,10 +709,12 @@ class SocialController extends AbstractController
                     $userRepository->relateUsers($friendUser, $currentUser, $relationType);
 
                     $messageRepository->invitationAccepted($friendUser, $currentUser);
+
                     break;
 
                 case 'deny_friend':
                     $messageRepository->invitationDenied($friendUser, $currentUser);
+
                     break;
 
                 default:
@@ -728,7 +732,6 @@ class SocialController extends AbstractController
     #[Route('/user-relation/{currentUserId}/{profileUserId}', name: 'chamilo_core_social_get_user_relation')]
     public function getUserRelation(int $currentUserId, int $profileUserId, EntityManagerInterface $em): JsonResponse
     {
-
         $isAllowed = $this->checkUserRelationship($currentUserId, $profileUserId, $em);
 
         return $this->json([
@@ -770,7 +773,8 @@ class SocialController extends AbstractController
                 ],
                 'friend' => $otherUserId,
                 'user' => $currentUserId,
-            ]);
+            ])
+        ;
 
         if (null !== $relation) {
             return true;
@@ -783,7 +787,8 @@ class SocialController extends AbstractController
                     UserRelUser::USER_RELATION_TYPE_GOODFRIEND,
                 ],
                 'user' => $currentUserId,
-            ]);
+            ])
+        ;
 
         foreach ($friendsOfCurrentUser as $friendRelation) {
             $friendId = $friendRelation->getFriend()->getId();
@@ -795,7 +800,8 @@ class SocialController extends AbstractController
                     ],
                     'friend' => $otherUserId,
                     'user' => $friendId,
-                ]);
+                ])
+            ;
 
             if (null !== $relationThroughFriend) {
                 return true;
@@ -804,7 +810,6 @@ class SocialController extends AbstractController
 
         return false;
     }
-
 
     private function checkUserStatus(int $userId, UserRepository $userRepository): bool
     {

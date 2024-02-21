@@ -153,6 +153,7 @@ class PersonalFile extends AbstractResource implements ResourceInterface, String
     public function setComment(?string $comment): self
     {
         $this->comment = $comment;
+
         return $this;
     }
 

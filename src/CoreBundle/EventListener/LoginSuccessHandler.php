@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\TrackELoginRepository;
 use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -146,7 +147,7 @@ class LoginSuccessHandler
             /** @var TrackELoginRepository $trackELoginRepository */
             $trackELoginRepository = $this->entityManager->getRepository(TrackELogin::class);
 
-            $trackELoginRepository->createLoginRecord($user, new \DateTime(), $userIp);
+            $trackELoginRepository->createLoginRecord($user, new DateTime(), $userIp);
             $trackEOnlineRepository->createOnlineSession($user, $userIp);
 
             $session->set('login_records_created', true);

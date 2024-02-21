@@ -67,7 +67,7 @@ class UserVoter extends Voter
             }
 
             $friendsOfFriends = $currentUSer->getFriendsOfFriends();
-            if (in_array($user, $friendsOfFriends, true)) {
+            if (\in_array($user, $friendsOfFriends, true)) {
                 return true;
             }
 

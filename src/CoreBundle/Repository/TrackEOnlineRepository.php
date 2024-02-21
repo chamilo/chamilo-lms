@@ -56,7 +56,7 @@ class TrackEOnlineRepository extends ServiceEntityRepository
     {
         $trackEOnline = new TrackEOnline();
         $trackEOnline->setLoginUserId($user->getId());
-        $trackEOnline->setLoginDate(new \DateTime());
+        $trackEOnline->setLoginDate(new DateTime());
         $trackEOnline->setUserIp($userIp);
         $trackEOnline->setCId($cId);
         $trackEOnline->setSessionId($sessionId);

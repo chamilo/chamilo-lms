@@ -8,9 +8,9 @@ namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\User;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use DateTime;
 
 class TrackELoginRepository extends ServiceEntityRepository
 {
@@ -42,7 +42,8 @@ class TrackELoginRepository extends ServiceEntityRepository
             ->orderBy('t.loginDate', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleScalarResult()
+        ;
 
         if ($lastLoginId) {
             $qb = $this->createQueryBuilder('t')
@@ -50,7 +51,8 @@ class TrackELoginRepository extends ServiceEntityRepository
                 ->set('t.logoutDate', ':logoutDate')
                 ->where('t.loginId = :loginId')
                 ->setParameter('loginId', $lastLoginId)
-                ->setParameter('logoutDate', $logoutDate);
+                ->setParameter('logoutDate', $logoutDate)
+            ;
 
             $qb->getQuery()->execute();
         }

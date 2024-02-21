@@ -9,6 +9,8 @@ namespace Chamilo\CoreBundle\EventListener;
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Entity\User;
+use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -62,7 +64,7 @@ class LogoutListener
             $trackELoginRepository = $this->em->getRepository(TrackELogin::class);
             $loginAs = $this->checker->isGranted('ROLE_PREVIOUS_ADMIN');
             if (!$loginAs) {
-                $currentDate = new \DateTime("now", new \DateTimeZone('UTC'));
+                $currentDate = new DateTime('now', new DateTimeZone('UTC'));
                 $trackELoginRepository->updateLastLoginLogoutDate($userId, $currentDate);
             }
 

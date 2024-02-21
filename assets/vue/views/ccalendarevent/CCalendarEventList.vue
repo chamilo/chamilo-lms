@@ -68,25 +68,26 @@
       v-model:visible="sessionState.showSessionDialog"
       :header="t('Session')"
       :modal="true"
+      :style="{ width: '35rem' }"
     >
       <div class="flex flex-col gap-4">
         <h5 v-text="sessionState.sessionAsEvent.title" />
         <p
-          v-if="sessionState.sessionAsEvent.start"
+          v-show="sessionState.sessionAsEvent.start"
           v-t="{
-            path: 'From: {date}',
-            args: {
-              date: abbreviatedDatetime(sessionState.sessionAsEvent.start),
-            },
+            path: 'From %s',
+            args: [
+              abbreviatedDatetime(sessionState.sessionAsEvent.start),
+            ],
           }"
         />
         <p
-          v-if="sessionState.sessionAsEvent.end"
+          v-show="sessionState.sessionAsEvent.end"
           v-t="{
-            path: 'Until: {date}',
-            args: {
-              date: abbreviatedDatetime(sessionState.sessionAsEvent.end),
-            },
+            path: 'Until %s',
+            args: [
+              abbreviatedDatetime(sessionState.sessionAsEvent.end),
+            ],
           }"
         />
       </div>
@@ -94,7 +95,7 @@
       <template #footer>
         <a
           v-t="'Go to session'"
-          :href="`/sessions/${sessionState.sessionAsEvent.id}/about`"
+          :href="sessionState.sessionAsEvent.url"
           class="btn btn--secondary"
         />
       </template>

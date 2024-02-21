@@ -1934,6 +1934,21 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->hasRole('ROLE_STUDENT_BOSS');
     }
 
+    public function isSessionAdmin(): bool
+    {
+        return $this->hasRole('ROLE_SESSION_MANAGER');
+    }
+
+    public function isInvitee(): bool
+    {
+        return $this->hasRole('ROLE_INVITEE');
+    }
+
+    public function isHRM(): bool
+    {
+        return $this->hasRole('ROLE_RRHH');
+    }
+
     public function getStatus(): int
     {
         return $this->status;

@@ -33,52 +33,52 @@ $column_model = [
     [
         'name' => 'photo',
         'index' => 'photo',
-        'width' => '10',
+        'width' => '150px',
         'align' => 'center',
         'sortable' => 'false',
     ],
     [
         'name' => 'firstname',
         'index' => 'firstname',
-        'width' => '70',
+        'width' => '250px',
         'align' => 'center',
         'sortable' => 'false',
     ],
     [
         'name' => 'lastname',
         'index' => 'lastname',
-        'width' => '70',
+        'width' => '250px',
         'align' => 'center',
         'sortable' => 'false',
     ],
     [
         'name' => 'skills_acquired',
         'index' => 'skills_acquired',
-        'width' => '30	',
+        'width' => '100px',
         'align' => 'center',
         'sortable' => 'false',
     ],
     [
         'name' => 'currently_learning',
         'index' => 'currently_learning',
-        'width' => '30',
+        'width' => '150px',
         'align' => 'center',
         'sortable' => 'false',
     ],
     [
         'name' => 'rank',
         'index' => 'rank',
-        'width' => '30',
+        'width' => '100px',
         'align' => 'center',
         'sortable' => 'false',
     ],
 ];
 
 //Autowidth
-$extra_params['autowidth'] = 'true';
+//$extra_params['autowidth'] = 'true';
 
 //height auto
-$extra_params['height'] = 'auto';
+//$extra_params['height'] = 'auto';
 //$extra_params['excel'] = 'excel';
 //$extra_params['rowList'] = array(10, 20 ,30);
 
@@ -87,7 +87,7 @@ $jqgrid = Display::grid_js(
     $url,
     $columns,
     $column_model,
-    $extra_params,
+    [],
     [],
     null,
     true

@@ -1286,12 +1286,12 @@ class SkillModel extends Model
      */
     public function getCountSkillsByCourse($courseCode)
     {
-        $courseCode = Database::escape_string($courseCode);
+        $cid = api_get_course_int_id($courseCode);
         $sql = "SELECT count(skill_id) as count
                 FROM {$this->table_gradebook} g
                 INNER JOIN {$this->table_skill_rel_gradebook} sg
                 ON g.id = sg.gradebook_id
-                WHERE course_code = '$courseCode'";
+                WHERE c_id = '$cid'";
 
         $result = Database::query($sql);
         if (Database::num_rows($result)) {

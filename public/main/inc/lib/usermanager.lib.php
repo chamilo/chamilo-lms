@@ -2933,7 +2933,7 @@ class UserManager
             $sessionLimitRestriction = "LIMIT $sessionLimit";
         }
 
-        $sql = "SELECT DISTINCT s.id, name, access_start_date, access_end_date
+        $sql = "SELECT DISTINCT s.id, s.title, access_start_date, access_end_date
                 FROM $tbl_session_user su INNER JOIN $tbl_session s
                 ON (s.id = su.session_id)
                 WHERE (
@@ -2941,7 +2941,7 @@ class UserManager
                     su.relation_type = ".SessionEntity::STUDENT."
                 )
                 $coachCourseConditions
-                ORDER BY access_start_date, access_end_date, name
+                ORDER BY access_start_date, access_end_date, s.title
                 $sessionLimitRestriction
         ";
 
@@ -3042,7 +3042,7 @@ class UserManager
                 access_start_date,
                 access_end_date,
                 session.id as session_id,
-                session.name as session_name,
+                session.title as session_name,
                 IF((session_course_user.user_id = 3 AND session_course_user.status = ".SessionEntity::COURSE_COACH."),'2', '5')
             FROM $tbl_session_course_user as session_course_user
             INNER JOIN $tbl_course AS course

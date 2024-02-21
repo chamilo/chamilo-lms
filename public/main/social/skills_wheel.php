@@ -21,7 +21,7 @@ $htmlHeadXtra[] = api_get_js('skills.js');
 $tpl = new Template(null, false, false);
 
 $userId = api_get_user_id();
-$userInfo = api_get_user_info();
+$userInfo = api_get_user_info($userId);
 
 $skill = new SkillModel();
 $ranking = $skill->getUserSkillRanking($userId);

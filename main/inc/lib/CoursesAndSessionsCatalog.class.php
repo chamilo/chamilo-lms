@@ -320,11 +320,11 @@ class CoursesAndSessionsCatalog
      * @param string $categoryCode
      * @param int    $randomValue
      * @param array  $limit        will be used if $randomValue is not set.
-     *                             This array should contains 'start' and 'length' keys
+     *                             This array should contain 'start' and 'length' keys
      *
      * @return array
      */
-    public static function getCoursesInCategory($categoryCode, $randomValue = null, $limit = [])
+    public static function getCoursesInCategory(string $categoryCode, $randomValue = null, $limit = [])
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $avoidCoursesCondition = self::getAvoidCourseCondition();
@@ -1990,7 +1990,7 @@ class CoursesAndSessionsCatalog
         $action = isset($action) ? Security::remove_XSS($action) : $requestAction;
         $searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : '';
         $keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : '';
-        $searchTag = $_REQUEST['search_tag'] ?? '';
+        $searchTag = $_REQUEST['search_tag'] ? Security::remove_XSS($_REQUEST['search_tag']) : '';
 
         if ($action === 'subscribe_user_with_password') {
             $action = 'subscribe';

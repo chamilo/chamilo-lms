@@ -12,11 +12,60 @@
         :label="t('Edit this group')"
         type="primary"
         class="mt-4"
-        @click="editGroup"
+        @click="showEditGroupDialog = true"
         icon="edit"
       />
     </div>
   </BaseCard>
+
+  <Dialog header="Edit Group" v-model:visible="showEditGroupDialog" :modal="true" :closable="true">
+    <form @submit.prevent="submitGroupEdit">
+      <div class="p-fluid">
+        <BaseInputTextWithVuelidate
+          v-model="editGroupForm.name"
+          label="Name*"
+          :vuelidate-property="v$.editGroupForm.name"
+        />
+
+        <BaseInputTextWithVuelidate
+          v-model="editGroupForm.description"
+          label="Description"
+          :vuelidate-property="v$.editGroupForm.description"
+          as="textarea"
+          rows="3"
+        />
+
+        <BaseInputTextWithVuelidate
+          v-model="editGroupForm.url"
+          label="URL"
+          :vuelidate-property="v$.editGroupForm.url"
+        />
+
+        <BaseFileUpload
+          :label="t('Add a picture')"
+          accept="image"
+          size="small"
+          @file-selected="selectedFile = $event"
+        />
+
+        <div class="p-field mt-2">
+          <label for="groupPermissions">Group Permissions</label>
+          <Dropdown id="groupPermissions" v-model="editGroupForm.permissions" :options="permissionsOptions" optionLabel="label" placeholder="Select Permission" />
+        </div>
+
+        <div class="p-field-checkbox mt-2">
+          <BaseCheckbox
+            id="leaveGroup"
+            v-model="editGroupForm.allowLeave"
+            :label="$t('Allow members to leave group')"
+            name="leaveGroup"
+          />
+        </div>
+      </div>
+      <Button label="Save" icon="pi pi-check" class="p-button-rounded p-button-text" @click="submitGroupEdit" />
+      <Button label="Close" class="p-button-text" @click="closeEditDialog" />
+    </form>
+  </Dialog>
 </template>
 
 <script setup>
@@ -25,15 +74,87 @@ import { useStore } from 'vuex'
 import BaseCard from "../basecomponents/BaseCard.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
+import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue"
+import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
+import BaseFileUpload from "../basecomponents/BaseFileUpload.vue"
+import useVuelidate from "@vuelidate/core"
+import { required } from '@vuelidate/validators'
+import axios from "axios"
+import { ENTRYPOINT } from "../../config/entrypoint"
 
 const { t } = useI18n()
 const store = useStore()
 const route = useRoute()
+const router = useRouter()
 const groupInfo = inject('group-info')
 const isGroup = inject('is-group')
 
-const editGroup = () => {
-  window.location = "/account/edit"
+const showEditGroupDialog = ref(false)
+const selectedFile = ref(null)
+
+const permissionsOptions = [
+  { label: 'Open', value: 1 },
+  { label: 'Closed', value: 2 },
+]
+
+const editGroupForm = ref({
+  name: groupInfo.value.title,
+  description: groupInfo.value.description,
+  url: groupInfo.value.url,
+  permissions: permissionsOptions.find(option => option.value === groupInfo.value.visibility),
+  allowLeave: Boolean(groupInfo.value.allowMembersToLeaveGroup),
+})
+
+const v$ = useVuelidate({
+  editGroupForm: {
+    name: { required },
+    description: {},
+    url: {},
+    permissions: { required },
+  }
+}, { editGroupForm })
+
+const submitGroupEdit = () => {
+  v$.value.$touch()
+  if (!v$.value.$invalid) {
+    const updatedGroupData = {
+      title: editGroupForm.value.name,
+      description: editGroupForm.value.description,
+      url: editGroupForm.value.url,
+      visibility: String(editGroupForm.value.permissions.value),
+      allowMembersToLeaveGroup: editGroupForm.value.allowLeave ? 1 : 0,
+    }
+
+    axios.put(`${ENTRYPOINT}usergroups/${groupInfo.value.id}`, updatedGroupData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .then((response) => {
+      if (selectedFile.value && response.data && response.data.id) {
+        const formData = new FormData()
+        formData.append('picture', selectedFile.value)
+        return axios.post(`/social-network/upload-group-picture/${response.data.id}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+      }
+    })
+    .then(() => {
+      showEditGroupDialog.value = false
+      router.push('/dummy').then(() => {
+        router.go(-1)
+      })
+    })
+    .catch((error) => {
+      console.error('Error updating group:', error)
+    })
+  }
+}
+
+const closeEditDialog = () => {
+  showEditGroupDialog.value = false
 }
 </script>

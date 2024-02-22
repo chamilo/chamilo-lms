@@ -105,10 +105,39 @@ const denyInvitation = async (invitationId) => {
     console.error('Error denying invitation:', error)
   }
 }
-const acceptGroupInvitation = (groupId) => {
-  console.log(`Accepted group invitation with ID: ${groupId}`)
+const acceptGroupInvitation = async (groupId) => {
+  try {
+    const response = await axios.post('/social-network/group-action', {
+      userId: user.value.id,
+      groupId: groupId,
+      action: 'accept',
+    });
+    if (response.data.success) {
+      console.log('Group invitation accepted successfully');
+      await fetchInvitations(user.value.id)
+    } else {
+      console.error('Failed to accept group invitation');
+    }
+  } catch (error) {
+    console.error('Error accepting group invitation:', error);
+  }
 }
-const denyGroupInvitation = (groupId) => {
-  console.log(`Denied group invitation with ID: ${groupId}`)
+
+const denyGroupInvitation = async (groupId) => {
+  try {
+    const response = await axios.post('/social-network/group-action', {
+      userId: user.value.id,
+      groupId: groupId,
+      action: 'deny',
+    });
+    if (response.data.success) {
+      console.log('Group invitation denied successfully');
+      await fetchInvitations(user.value.id)
+    } else {
+      console.error('Failed to deny group invitation');
+    }
+  } catch (error) {
+    console.error('Error denying group invitation:', error);
+  }
 }
 </script>

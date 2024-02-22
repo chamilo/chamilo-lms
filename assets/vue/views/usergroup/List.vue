@@ -9,11 +9,12 @@
         <TabPanel header="Newest" headerClass="tab-header" :class="{ 'active-tab': activeTab === 'Newest' }">
           <div class="group-list">
             <div class="group-item" v-for="group in newestGroups" :key="group['@id']">
-              <i class="mdi mdi-account-group-outline group-icon"></i>
+              <img v-if="group.pictureUrl" :src="group.pictureUrl" class="group-image" alt="Group Image" />
+              <i v-else class="mdi mdi-account-group-outline group-icon"></i>
               <div class="group-details">
                 <a :href="`/resources/usergroups/show/${extractGroupId(group)}`" class="group-title">{{ group.title }}</a>
                 <div class="group-info">
-                  <span class="group-member-count">{{ group.memberCount }} Member</span>
+                  <span class="group-member-count">{{ group.memberCount }} {{ t('Member') }}</span>
                   <span class="group-description">{{ group.description }}</span>
                 </div>
               </div>
@@ -23,11 +24,12 @@
         <TabPanel header="Popular" headerClass="tab-header" :class="{ 'active-tab': activeTab === 'Popular' }">
           <div class="group-list">
             <div class="group-item" v-for="group in popularGroups" :key="group['@id']">
-              <i class="mdi mdi-account-group-outline group-icon"></i>
+              <img v-if="group.pictureUrl" :src="group.pictureUrl" class="group-image" alt="Group Image" />
+              <i v-else class="mdi mdi-account-group-outline group-icon"></i>
               <div class="group-details">
                 <a :href="`/resources/usergroups/show/${extractGroupId(group)}`" class="group-title">{{ group.title }}</a>
                 <div class="group-info">
-                  <span class="group-member-count">{{ group.memberCount }} Member</span>
+                  <span class="group-member-count">{{ group.memberCount }} {{ t('Member') }}</span>
                   <span class="group-description">{{ group.description }}</span>
                 </div>
               </div>
@@ -36,11 +38,12 @@
         <TabPanel header="My groups" headerClass="tab-header" :class="{ 'active-tab': activeTab === 'My groups' }">
           <div class="group-list">
             <div class="group-item" v-for="group in myGroups" :key="group['@id']">
-              <i class="mdi mdi-account-group-outline group-icon"></i>
+              <img v-if="group.pictureUrl" :src="group.pictureUrl" class="group-image" alt="Group Image" />
+              <i v-else class="mdi mdi-account-group-outline group-icon"></i>
               <div class="group-details">
                 <a :href="`/resources/usergroups/show/${extractGroupId(group)}`" class="group-title">{{ group.title }}</a>
                 <div class="group-info">
-                  <span class="group-member-count">{{ group.memberCount }} Member</span>
+                  <span class="group-member-count">{{ group.memberCount }} {{ t('Member') }}</span>
                   <span class="group-description">{{ group.description }}</span>
                 </div>
               </div>
@@ -51,7 +54,7 @@
     </div>
   </div>
 
-  <Dialog header="Add" :visible="showCreateGroupDialog" :modal="true" :closable="true" @hide="showCreateGroupDialog = false">
+  <Dialog header="Add" v-model:visible="showCreateGroupDialog" modal="true" closable="true">
     <form @submit.prevent="createGroup">
       <div class="p-fluid">
         <BaseInputTextWithVuelidate
@@ -94,6 +97,7 @@
 
       </div>
       <Button label="Add" icon="pi pi-check" class="p-button-rounded p-button-text" @click="createGroup" />
+      <Button label="Close" class="p-button-text" @click="showCreateGroupDialog = false" />
     </form>
   </Dialog>
 </template>
@@ -154,7 +158,8 @@ const createGroup = async () => {
           'Content-Type': 'application/json',
         },
       })
-      /*if (selectedFile.value && response.data && response.data.id) {
+
+      if (selectedFile.value && response.data && response.data.id) {
         const formData = new FormData()
         formData.append('picture', selectedFile.value)
         await axios.post(`/social-network/upload-group-picture/${response.data.id}`, formData, {
@@ -162,9 +167,10 @@ const createGroup = async () => {
             'Content-Type': 'multipart/form-data',
           },
         })
-      }*/
+      }
 
       showCreateGroupDialog.value = false
+      resetForm()
       await updateGroupsList()
     } catch (error) {
       console.error('Failed to create group or upload picture:', error.response.data)
@@ -202,4 +208,20 @@ const redirectToGroupDetails = (groupId) => {
 onMounted(async () => {
   await updateGroupsList()
 })
+
+const closeDialog = () => {
+  showCreateGroupDialog.value = false
+}
+const resetForm = () => {
+  groupForm.value = {
+    name: '',
+    description: '',
+    url: '',
+    picture: null,
+    permissions: '',
+    allowLeave: false,
+  }
+  selectedFile.value = null
+  v$.value.$reset()
+}
 </script>

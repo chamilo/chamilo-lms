@@ -28,6 +28,7 @@ use Exception;
 use ExtraFieldValue;
 use MessageManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -457,7 +458,8 @@ class SocialController extends AbstractController
         int $userId,
         MessageRepository $messageRepository,
         UsergroupRepository $usergroupRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        TranslatorInterface $translator
     ): JsonResponse {
         $user = $this->getUser();
         if ($userId !== $user->getId()) {
@@ -500,15 +502,19 @@ class SocialController extends AbstractController
 
         $pendingGroupInvitations = [];
         $pendingGroups = $usergroupRepository->getGroupsByUser($userId, Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION);
+
+        /* @var Usergroup $group */
         foreach ($pendingGroups as $group) {
+            $isGroupVisible = (int) $group->getVisibility() === 1;
+            $infoVisibility = !$isGroupVisible ? ' - '.$translator->trans('This group is closed.') : '';
             $pendingGroupInvitations[] = [
                 'id' => $group->getId(),
                 'itemId' => $group->getId(),
-                'itemName' => $group->getTitle(),
+                'itemName' => $group->getTitle().$infoVisibility,
                 'itemPicture' => $usergroupRepository->getUsergroupPicture($group->getId()),
                 'content' => $group->getDescription(),
                 'date' => $group->getCreatedAt()->format('Y-m-d H:i:s'),
-                'canAccept' => true,
+                'canAccept' => $isGroupVisible,
                 'canDeny' => true,
             ];
         }
@@ -612,12 +618,15 @@ class SocialController extends AbstractController
             'id' => $group->getId(),
             'title' => $group->getTitle(),
             'description' => $group->getDescription(),
+            'url' => $group->getUrl(),
             'image' => $usergroupRepository->getUsergroupPicture($group->getId()),
+            'visibility' => (int) $group->getVisibility(),
+            'allowMembersToLeaveGroup' => $group->getAllowMembersToLeaveGroup(),
             'isMember' => $isMember,
             'isModerator' => $isModerator,
             'role' => $role,
             'isUserOnline' => $isUserOnline,
-            'visibility' => (int) $group->getVisibility(),
+            'isAllowedToLeave' => $group->getAllowMembersToLeaveGroup() === 1,
         ];
 
         return $this->json($groupDetails);
@@ -638,11 +647,26 @@ class SocialController extends AbstractController
 
         try {
             switch ($action) {
+                case 'accept':
+                    $userRole = $usergroupRepository->getUserGroupRole($groupId, $userId);
+                    if (in_array(
+                        $userRole,
+                        [
+                            Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER,
+                            Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION,
+                        ]
+                    )) {
+                        $usergroupRepository->updateUserRole($userId, $groupId, Usergroup::GROUP_USER_PERMISSION_READER);
+                    }
+
+                    break;
+
                 case 'join':
                     $usergroupRepository->addUserToGroup($userId, $groupId);
 
                     break;
 
+                case 'deny':
                 case 'leave':
                     $usergroupRepository->removeUserFromGroup($userId, $groupId);
 
@@ -751,6 +775,22 @@ class SocialController extends AbstractController
         }
 
         return $this->json($onlineStatuses);
+    }
+
+    #[Route('/upload-group-picture/{groupId}', name: 'chamilo_core_social_upload_group_picture')]
+    public function uploadGroupPicture(
+        Request $request,
+        int $groupId,
+        UsergroupRepository $usergroupRepository,
+        IllustrationRepository $illustrationRepository
+    ): JsonResponse {
+        $file = $request->files->get('picture');
+        if ($file instanceof UploadedFile) {
+            $userGroup = $usergroupRepository->find($groupId);
+            $illustrationRepository->addIllustration($userGroup, $this->getUser(), $file);
+        }
+
+        return new JsonResponse(['success' => 'Group and image saved successfully'], Response::HTTP_OK);
     }
 
     /**

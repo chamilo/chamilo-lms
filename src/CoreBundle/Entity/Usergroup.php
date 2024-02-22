@@ -41,25 +41,29 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriTemplate: '/usergroup/list/my',
             normalizationContext: ['groups' => ['usergroup:read']],
             security: "is_granted('ROLE_USER')",
-            name: 'get_my_usergroups'
+            name: 'get_my_usergroups',
+            provider: UsergroupDataProvider::class
         ),
         new GetCollection(
             uriTemplate: '/usergroup/list/newest',
             normalizationContext: ['groups' => ['usergroup:read']],
             security: "is_granted('ROLE_USER')",
-            name: 'get_newest_usergroups'
+            name: 'get_newest_usergroups',
+            provider: UsergroupDataProvider::class
         ),
         new GetCollection(
             uriTemplate: '/usergroup/list/popular',
             normalizationContext: ['groups' => ['usergroup:read']],
             security: "is_granted('ROLE_USER')",
-            name: 'get_popular_usergroups'
+            name: 'get_popular_usergroups',
+            provider: UsergroupDataProvider::class
         ),
         new GetCollection(
             uriTemplate: '/usergroups/search',
             normalizationContext: ['groups' => ['usergroup:read']],
             security: "is_granted('ROLE_USER')",
-            name: 'search_usergroups'
+            name: 'search_usergroups',
+            provider: UsergroupDataProvider::class
         ),
         new GetCollection(
             uriTemplate: '/usergroups/{id}/members',
@@ -80,7 +84,6 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['usergroup:write'],
     ],
     security: "is_granted('ROLE_USER')",
-    provider: UsergroupDataProvider::class
 )]
 #[ORM\Table(name: 'usergroup')]
 #[ORM\Entity(repositoryClass: UsergroupRepository::class)]
@@ -101,6 +104,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     public const GROUP_PERMISSION_OPEN = 1;
     public const GROUP_PERMISSION_CLOSED = 2;
 
+    #[Groups(['usergroup:read'])]
     #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -165,7 +169,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
     #[Groups(['usergroup:read'])]
     private ?int $memberCount = null;
 
-    #[Groups(['usergroup:read'])]
+    #[Groups(['usergroup:read', 'usergroup:write'])]
     private ?string $pictureUrl = '';
 
     public function __construct()
@@ -371,7 +375,7 @@ class Usergroup extends AbstractResource implements ResourceInterface, ResourceI
 
     public function getPictureUrl(): ?string
     {
-        return $this->picture;
+        return $this->pictureUrl;
     }
 
     public function setPictureUrl(?string $pictureUrl): self

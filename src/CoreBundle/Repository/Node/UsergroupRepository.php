@@ -73,7 +73,7 @@ class UsergroupRepository extends ResourceRepository
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function getNewestGroups(int $limit = 6, string $query = ''): array
+    public function getNewestGroups(int $limit = 30, string $query = ''): array
     {
         $qb = $this->createQueryBuilder('g')
             ->select('g, COUNT(gu) AS HIDDEN memberCount')
@@ -102,7 +102,7 @@ class UsergroupRepository extends ResourceRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function getPopularGroups(int $limit = 6): array
+    public function getPopularGroups(int $limit = 30): array
     {
         $qb = $this->createQueryBuilder('g')
             ->select('g, COUNT(gu) as HIDDEN memberCount')
@@ -187,6 +187,10 @@ class UsergroupRepository extends ResourceRepository
             throw new Exception('Group or User not found');
         }
 
+        if (Usergroup::GROUP_PERMISSION_CLOSED === (int) $group->getVisibility()) {
+            $relationType = Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION;
+        }
+
         $existingRelation = $this->_em->getRepository(UsergroupRelUser::class)->findOneBy([
             'usergroup' => $group,
             'user' => $user,
@@ -198,15 +202,40 @@ class UsergroupRepository extends ResourceRepository
             $existingRelation->setUser($user);
         }
 
-        if (Usergroup::GROUP_PERMISSION_CLOSED === $group->getVisibility()) {
-            $relationType = Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION;
-        }
-
         $existingRelation->setRelationType($relationType);
 
         $this->_em->persist($existingRelation);
         $this->_em->flush();
     }
+
+    public function updateUserRole($userId, $groupId, $relationType = Usergroup::GROUP_USER_PERMISSION_READER)
+    {
+        $qb = $this->createQueryBuilder('g');
+        $qb->delete(UsergroupRelUser::class, 'gu')
+            ->where('gu.usergroup = :groupId')
+            ->andWhere('gu.user = :userId')
+            ->setParameter('groupId', $groupId)
+            ->setParameter('userId', $userId);
+
+        $query = $qb->getQuery();
+        $query->execute();
+
+        $group = $this->find($groupId);
+        $user = $this->_em->getRepository(User::class)->find($userId);
+
+        if (!$group || !$user) {
+            throw new Exception('Group or User not found');
+        }
+
+        $usergroupRelUser = new UsergroupRelUser();
+        $usergroupRelUser->setUsergroup($group);
+        $usergroupRelUser->setUser($user);
+        $usergroupRelUser->setRelationType($relationType);
+
+        $this->_em->persist($usergroupRelUser);
+        $this->_em->flush();
+    }
+
 
     public function removeUserFromGroup(int $userId, int $groupId): bool
     {
@@ -345,8 +374,9 @@ class UsergroupRepository extends ResourceRepository
             ->where('g.id = :groupId AND gu.user = :userId')
             ->setParameter('groupId', $groupId)
             ->setParameter('userId', $userId)
+            ->orderBy('gu.id', 'DESC')
             ->select('gu.relationType')
-        ;
+            ->setMaxResults(1);
 
         $result = $qb->getQuery()->getOneOrNullResult();
 

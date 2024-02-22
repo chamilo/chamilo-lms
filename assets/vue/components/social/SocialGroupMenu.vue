@@ -25,13 +25,12 @@
             {{ t("Invite friends") }}
           </router-link>
         </li>
-        <li class="menu-item">
+        <li class="menu-item" v-if="groupInfo.isAllowedToLeave">
           <button @click="leaveGroup">
             <i class="mdi mdi-exit-to-app" aria-hidden="true"></i>
             {{ t("Leave group") }}
           </button>
         </li>
-
       </ul>
       <ul v-else>
         <li class="menu-item">

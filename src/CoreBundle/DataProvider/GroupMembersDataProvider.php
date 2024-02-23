@@ -9,6 +9,9 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * @template-implements ProviderInterface<array<int, Usergroup>>
+ */
 final class GroupMembersDataProvider implements ProviderInterface
 {
     private EntityManagerInterface $entityManager;

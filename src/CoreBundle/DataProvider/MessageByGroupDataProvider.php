@@ -9,6 +9,9 @@ use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 
+/**
+ * @template-implements ProviderInterface<array<int, Message>>
+ */
 final class MessageByGroupDataProvider implements ProviderInterface
 {
     private MessageRepository $messageRepository;

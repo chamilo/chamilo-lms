@@ -15,6 +15,9 @@ use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Exception;
 use Symfony\Component\Security\Core\Security;
 
+/**
+ * @template-implements ProviderInterface<array<int, Usergroup>>
+ */
 final class UsergroupDataProvider implements ProviderInterface
 {
     public function __construct(

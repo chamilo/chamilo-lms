@@ -208,14 +208,15 @@ class UsergroupRepository extends ResourceRepository
         $this->_em->flush();
     }
 
-    public function updateUserRole($userId, $groupId, $relationType = Usergroup::GROUP_USER_PERMISSION_READER)
+    public function updateUserRole($userId, $groupId, $relationType = Usergroup::GROUP_USER_PERMISSION_READER): void
     {
         $qb = $this->createQueryBuilder('g');
         $qb->delete(UsergroupRelUser::class, 'gu')
             ->where('gu.usergroup = :groupId')
             ->andWhere('gu.user = :userId')
             ->setParameter('groupId', $groupId)
-            ->setParameter('userId', $userId);
+            ->setParameter('userId', $userId)
+        ;
 
         $query = $qb->getQuery();
         $query->execute();
@@ -235,7 +236,6 @@ class UsergroupRepository extends ResourceRepository
         $this->_em->persist($usergroupRelUser);
         $this->_em->flush();
     }
-
 
     public function removeUserFromGroup(int $userId, int $groupId): bool
     {
@@ -376,7 +376,8 @@ class UsergroupRepository extends ResourceRepository
             ->setParameter('userId', $userId)
             ->orderBy('gu.id', 'DESC')
             ->select('gu.relationType')
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
         $result = $qb->getQuery()->getOneOrNullResult();
 

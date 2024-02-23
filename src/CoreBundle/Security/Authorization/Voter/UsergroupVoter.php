@@ -21,7 +21,7 @@ class UsergroupVoter extends Voter
     public const DELETE = 'DELETE';
 
     public function __construct(
-        private Security            $security,
+        private Security $security,
         private UsergroupRepository $usergroupRepository
     ) {}
 
@@ -42,7 +42,6 @@ class UsergroupVoter extends Voter
         // only vote on Post objects inside this voter
         return $subject instanceof Usergroup;
     }
-
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {

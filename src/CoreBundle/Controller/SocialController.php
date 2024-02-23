@@ -503,9 +503,9 @@ class SocialController extends AbstractController
         $pendingGroupInvitations = [];
         $pendingGroups = $usergroupRepository->getGroupsByUser($userId, Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION);
 
-        /* @var Usergroup $group */
+        /** @var Usergroup $group */
         foreach ($pendingGroups as $group) {
-            $isGroupVisible = (int) $group->getVisibility() === 1;
+            $isGroupVisible = 1 === (int) $group->getVisibility();
             $infoVisibility = !$isGroupVisible ? ' - '.$translator->trans('This group is closed.') : '';
             $pendingGroupInvitations[] = [
                 'id' => $group->getId(),
@@ -626,7 +626,7 @@ class SocialController extends AbstractController
             'isModerator' => $isModerator,
             'role' => $role,
             'isUserOnline' => $isUserOnline,
-            'isAllowedToLeave' => $group->getAllowMembersToLeaveGroup() === 1,
+            'isAllowedToLeave' => 1 === $group->getAllowMembersToLeaveGroup(),
         ];
 
         return $this->json($groupDetails);
@@ -649,7 +649,7 @@ class SocialController extends AbstractController
             switch ($action) {
                 case 'accept':
                     $userRole = $usergroupRepository->getUserGroupRole($groupId, $userId);
-                    if (in_array(
+                    if (\in_array(
                         $userRole,
                         [
                             Usergroup::GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER,

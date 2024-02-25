@@ -1,5 +1,17 @@
 <template>
   <div>
+    <SectionHeader
+      :title="t('Agenda')"
+    >
+      <BaseButton
+        v-if="canAddEvent"
+        icon="plus"
+        only-icon
+        type="black"
+        @click="showAddEventDialog"
+      />
+    </SectionHeader>
+
     <FullCalendar
       ref="cal"
       :options="calendarOptions"
@@ -115,6 +127,7 @@ import FullCalendar from "@fullcalendar/vue3"
 import dayGridPlugin from "@fullcalendar/daygrid"
 import interactionPlugin from "@fullcalendar/interaction"
 import timeGridPlugin from "@fullcalendar/timegrid"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 import CCalendarEventForm from "../../components/ccalendarevent/CCalendarEventForm.vue"
 import CCalendarEventInfo from "../../components/ccalendarevent/CCalendarEventInfo"
 import allLocales from "@fullcalendar/core/locales-all"
@@ -123,12 +136,14 @@ import { useToast } from "primevue/usetoast"
 import { useCidReq } from "../../composables/cidReq"
 import cCalendarEventService from "../../services/ccalendarevent"
 import { useCidReqStore } from "../../store/cidReq"
+import { useSecurityStore } from "../../store/securityStore"
 import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
 import { useLocale, useParentLocale } from "../../composables/locale"
 
 const store = useStore()
 const confirm = useConfirm()
 const cidReqStore = useCidReqStore()
+const securityStore = useSecurityStore()
 
 const { abbreviatedDatetime } = useFormatDate()
 
@@ -190,24 +205,22 @@ const calendarLocale = allLocales.find(
     calLocale.code === appLocale.value.replace("_", "-") || calLocale.code === useParentLocale(appLocale.value),
 )
 
+const canAddEvent = computed(() => !cidReqStore.course || (cidReqStore.course && securityStore.isCurrentTeacher))
+
+const showAddEventDialog = () => {
+  item.value = {}
+  item.value["parentResourceNodeId"] = currentUser.value.resourceNode["id"]
+  item.value["collective"] = false
+
+  dialog.value = true
+}
+
 const calendarOptions = ref({
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
   locales: allLocales,
   locale: calendarLocale?.code ?? "en-GB",
-  customButtons: {
-    addEvent: {
-      text: t("Add event"),
-      click: function () {
-        item.value = {}
-        item.value["parentResourceNodeId"] = currentUser.value.resourceNode["id"]
-        item.value["collective"] = false
-
-        dialog.value = true
-      },
-    },
-  },
   headerToolbar: {
-    left: "prev,next today,addEvent",
+    left: "today prev,next",
     center: "title",
     right: "dayGridMonth,timeGridWeek,timeGridDay",
   },

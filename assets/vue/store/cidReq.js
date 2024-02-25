@@ -7,6 +7,7 @@ import { computed, ref } from "vue"
 export const useCidReqStore = defineStore("cidReq", () => {
   const course = ref(null)
   const session = ref(null)
+  const group = ref(null)
 
   const userIsCoach = computed(() => {
     const platformConfigStore = usePlatformConfig()
@@ -47,6 +48,7 @@ export const useCidReqStore = defineStore("cidReq", () => {
   const resetCid = () => {
     course.value = null
     session.value = null
+    group.value = null
   }
 
   const setCourseByIri = async (iri, sid = 0) => {
@@ -92,6 +94,7 @@ export const useCidReqStore = defineStore("cidReq", () => {
   return {
     course,
     session,
+    group,
 
     userIsCoach,
 

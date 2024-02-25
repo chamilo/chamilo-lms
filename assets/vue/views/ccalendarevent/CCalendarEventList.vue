@@ -133,17 +133,19 @@ import CCalendarEventInfo from "../../components/ccalendarevent/CCalendarEventIn
 import allLocales from "@fullcalendar/core/locales-all"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useToast } from "primevue/usetoast"
-import { useCidReq } from "../../composables/cidReq"
 import cCalendarEventService from "../../services/ccalendarevent"
 import { useCidReqStore } from "../../store/cidReq"
 import { useSecurityStore } from "../../store/securityStore"
 import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
 import { useLocale, useParentLocale } from "../../composables/locale"
+import { storeToRefs } from "pinia"
 
 const store = useStore()
 const confirm = useConfirm()
 const cidReqStore = useCidReqStore()
 const securityStore = useSecurityStore()
+
+const { course, session, group } = storeToRefs(cidReqStore)
 
 const { abbreviatedDatetime } = useFormatDate()
 
@@ -169,24 +171,22 @@ const sessionState = reactive({
   showSessionDialog: false,
 })
 
-const { cid, sid, gid } = useCidReq()
-
 async function getCalendarEvents({ startStr, endStr }) {
   const params = {
     'startDate[after]': startStr,
     'endDate[before]': endStr,
   };
 
-  if (cid) {
-    params.cid = cid;
+  if (course.value) {
+    params.cid = course.value.id;
   }
 
-  if (sid) {
-    params.sid = sid;
+  if (session.value) {
+    params.sid = session.value.id;
   }
 
-  if (gid) {
-    params.gid = gid;
+  if (group.value) {
+    params.gid = group.value.id;
   }
 
   const calendarEvents = await cCalendarEventService
@@ -205,7 +205,7 @@ const calendarLocale = allLocales.find(
     calLocale.code === appLocale.value.replace("_", "-") || calLocale.code === useParentLocale(appLocale.value),
 )
 
-const canAddEvent = computed(() => !cidReqStore.course || (cidReqStore.course && securityStore.isCurrentTeacher))
+const canAddEvent = computed(() => !course.value || (course.value && securityStore.isCurrentTeacher))
 
 const showAddEventDialog = () => {
   item.value = {}
@@ -343,11 +343,11 @@ function onCreateEventForm() {
   if (itemModel["@id"]) {
     store.dispatch("ccalendarevent/update", itemModel)
   } else {
-    if (cidReqStore.course) {
+    if (course.value) {
       itemModel.resourceLinkListFromEntity = [
         {
-          cid: cidReqStore.course.id,
-          sid: cidReqStore.session?.id ?? null,
+          cid: course.value.id,
+          sid: session.value?.id ?? null,
           visibility: RESOURCE_LINK_PUBLISHED,
         },
       ]

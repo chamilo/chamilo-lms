@@ -927,6 +927,79 @@ class ExtraField extends Model
     }
 
     /**
+     * Fetches extra field data with various display and permission checks.
+     *
+     * This function retrieves the data for extra fields, applies various filters
+     * and checks to determine if each field should be displayed based on
+     * admin permissions, visibility settings, and specific field inclusion or
+     * exclusion lists. It also handles ordering of fields if an order list is provided.
+     */
+    public function getExtraFieldsData(
+        array $extraData,
+        bool $adminPermissions = false,
+        array $extra = [],
+        array $exclude = [],
+        array $showOnlyTheseFields = [],
+        array $orderFields = []
+    ): array {
+        $fieldsData = [];
+
+        if (!empty($extra)) {
+            $orderedExtraFields = [];
+            if (!empty($orderFields)) {
+                foreach ($orderFields as $order) {
+                    foreach ($extra as $fieldDetails) {
+                        if ($order == $fieldDetails['variable']) {
+                            $orderedExtraFields[] = $fieldDetails;
+                        }
+                    }
+                }
+                $extra = $orderedExtraFields;
+            }
+
+            foreach ($extra as $fieldDetails) {
+                $variable = $fieldDetails['variable'];
+
+                if (!empty($showOnlyTheseFields) && !in_array($variable, $showOnlyTheseFields)) {
+                    continue;
+                }
+
+                if (!$adminPermissions && 0 == $fieldDetails['visible_to_self']) {
+                    continue;
+                }
+
+                if (in_array($variable, $exclude)) {
+                    continue;
+                }
+
+                $fieldData = [
+                    'type' => $fieldDetails['value_type'],
+                    'variable' => $variable,
+                    'title' => get_lang($fieldDetails['display_text']),
+                    'defaultValue' => $fieldDetails['field_default_value'] ?? '',
+                ];
+
+                if (!empty($fieldDetails['options'])) {
+                    $fieldData['options'] = array_map(function ($option) {
+                        return [
+                            'value' => $option['option_value'],
+                            'label' => $option['display_text'],
+                        ];
+                    }, $fieldDetails['options']);
+                }
+
+                if (isset($extraData['extra_' . $variable])) {
+                    $fieldData['value'] = $extraData['extra_' . $variable];
+                }
+
+                $fieldsData[] = $fieldData;
+            }
+        }
+
+        return $fieldsData;
+    }
+
+    /**
      * Add an element that matches the given extra field to the given $form object.
      *
      * @param FormValidator $form                The form these fields are to be attached to

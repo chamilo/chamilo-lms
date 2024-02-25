@@ -414,7 +414,7 @@ class IndexBlocksController extends BaseController
         if ('true' === $this->settingsManager->getSetting('registration.allow_terms_conditions')) {
             $items[] = [
                 'class' => 'item-terms-and-conditions',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/legal_add.php']),
+                'url' => '/resources/terms-conditions',
                 'label' => $this->translator->trans('Terms and Conditions'),
             ];
         }

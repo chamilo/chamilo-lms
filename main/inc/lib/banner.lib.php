@@ -89,19 +89,22 @@ function get_tabs($courseId = null)
             $navigation['session_my_space']['key'] = 'my-space';
             $navigation['session_my_space']['icon'] = 'my-space.png';
         } else {
-            $navigation['session_my_progress']['url'] = api_get_path(WEB_CODE_PATH);
-            // Link to my progress
-            switch (api_get_setting('gamification_mode')) {
-                case 1:
-                    $navigation['session_my_progress']['url'] .= 'gamification/my_progress.php';
-                    break;
-                default:
-                    $navigation['session_my_progress']['url'] .= 'auth/my_progress.php';
-            }
+            $hideMyProgressTab = api_get_configuration_value('hide_my_progress_tab');
+            if (true !== $hideMyProgressTab) {
+                $navigation['session_my_progress']['url'] = api_get_path(WEB_CODE_PATH);
+                // Link to my progress
+                switch (api_get_setting('gamification_mode')) {
+                    case 1:
+                        $navigation['session_my_progress']['url'] .= 'gamification/my_progress.php';
+                        break;
+                    default:
+                        $navigation['session_my_progress']['url'] .= 'auth/my_progress.php';
+                }
 
-            $navigation['session_my_progress']['title'] = get_lang('MyProgress');
-            $navigation['session_my_progress']['key'] = 'my-progress';
-            $navigation['session_my_progress']['icon'] = 'my-progress.png';
+                $navigation['session_my_progress']['title'] = get_lang('MyProgress');
+                $navigation['session_my_progress']['key'] = 'my-progress';
+                $navigation['session_my_progress']['icon'] = 'my-progress.png';
+            }
         }
     }
 

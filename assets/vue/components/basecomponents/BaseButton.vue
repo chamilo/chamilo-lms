@@ -1,14 +1,16 @@
 <template>
   <Button
+    :aria-label="onlyIcon ? label : undefined"
     :class="buttonClass"
     :disabled="disabled"
     :icon="chamiloIconToClass[icon]"
-    :label="label"
+    :label="onlyIcon ? undefined : label"
     :outlined="primeOutlinedProperty"
     :plain="primePlainProperty"
     :severity="primeSeverityProperty"
     :size="size"
-    :text="primeTextProperty"
+    :text="onlyIcon"
+    :title="onlyIcon ? label : undefined"
     :type="isSubmit ? 'submit' : 'button'"
     @click="$emit('click', $event)"
   />
@@ -118,7 +120,7 @@ const buttonClass = computed(() => {
 // https://primevue.org/button/#outlined
 const primeOutlinedProperty = computed(() => {
   if (props.onlyIcon) {
-    return false
+    return undefined
   }
   switch (props.type) {
     case "primary":
@@ -128,10 +130,5 @@ const primeOutlinedProperty = computed(() => {
     default:
       return false
   }
-})
-
-// https://primevue.org/button/#text
-const primeTextProperty = computed(() => {
-  return props.onlyIcon
 })
 </script>

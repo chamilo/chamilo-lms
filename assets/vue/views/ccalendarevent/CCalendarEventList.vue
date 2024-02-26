@@ -82,18 +82,14 @@
           v-show="sessionState.sessionAsEvent.start"
           v-t="{
             path: 'From %s',
-            args: [
-              abbreviatedDatetime(sessionState.sessionAsEvent.start),
-            ],
+            args: [abbreviatedDatetime(sessionState.sessionAsEvent.start)],
           }"
         />
         <p
           v-show="sessionState.sessionAsEvent.end"
           v-t="{
             path: 'Until %s',
-            args: [
-              abbreviatedDatetime(sessionState.sessionAsEvent.end),
-            ],
+            args: [abbreviatedDatetime(sessionState.sessionAsEvent.end)],
           }"
         />
       </div>
@@ -165,25 +161,23 @@ const sessionState = reactive({
 
 async function getCalendarEvents({ startStr, endStr }) {
   const params = {
-    'startDate[after]': startStr,
-    'endDate[before]': endStr,
-  };
+    "startDate[after]": startStr,
+    "endDate[before]": endStr,
+  }
 
   if (course.value) {
-    params.cid = course.value.id;
+    params.cid = course.value.id
   }
 
   if (session.value) {
-    params.sid = session.value.id;
+    params.sid = session.value.id
   }
 
   if (group.value) {
-    params.gid = group.value.id;
+    params.gid = group.value.id
   }
 
-  const calendarEvents = await cCalendarEventService
-    .findAll({ params })
-    .then((response) => response.json())
+  const calendarEvents = await cCalendarEventService.findAll({ params }).then((response) => response.json())
 
   return calendarEvents["hydra:member"].map((event) => ({
     ...event,
@@ -206,11 +200,11 @@ const showAddEventDialog = () => {
 }
 
 const goToMyStudentsSchedule = () => {
-  window.location.href = '/main/calendar/planification.php'
+  window.location.href = "/main/calendar/planification.php"
 }
 
 const goToSessionPanning = () => {
-  window.location.href = '/main/my_space/calendar_plan.php'
+  window.location.href = "/main/my_space/calendar_plan.php"
 }
 
 const calendarOptions = ref({

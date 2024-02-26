@@ -15,6 +15,8 @@
 
     <div
       v-if="event.resourceLinkListFromEntity && event.resourceLinkListFromEntity.length"
+      aria-invalid="spelling"
+      @click="window.alert('asdfsadf')"
     >
       <h6 v-t="'Invitees'" />
 

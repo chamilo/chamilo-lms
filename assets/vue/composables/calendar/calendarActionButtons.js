@@ -8,20 +8,20 @@ import { checkIsAllowedToEdit } from "../userPermissions"
 /**
  * Extracted from Agenda::displayActions
  */
-export function useCalendarActionButtons () {
+export function useCalendarActionButtons() {
   const cidReqStore = useCidReqStore()
   const platformConfigStore = usePlatformConfig()
   const securityStore = useSecurityStore()
 
   const { course } = storeToRefs(cidReqStore)
 
-  const isAllowedToEdit = ref(false);
+  const isAllowedToEdit = ref(false)
 
-  checkIsAllowedToEdit(false, true).then(response => isAllowedToEdit.value = response)
+  checkIsAllowedToEdit(false, true).then((response) => (isAllowedToEdit.value = response))
 
   const isAllowedToSessionEdit = false
 
-  const courseAllowUserEditAgenda = '0';
+  const courseAllowUserEditAgenda = "0"
 
   const showAddButton = ref(false)
   const showImportICalButton = ref(false)
@@ -30,15 +30,18 @@ export function useCalendarActionButtons () {
   const showMyStudentsScheduleButton = ref(false)
 
   watchEffect(() => {
-    if (isAllowedToEdit.value
-      || !course.value && !securityStore.isAuthenticated && platformConfigStore.getSetting('agenda.allow_personal_agenda')
-      || ('1' === courseAllowUserEditAgenda && !securityStore.isAuthenticated && isAllowedToSessionEdit)
+    if (
+      isAllowedToEdit.value ||
+      (!course.value &&
+        !securityStore.isAuthenticated &&
+        platformConfigStore.getSetting("agenda.allow_personal_agenda")) ||
+      ("1" === courseAllowUserEditAgenda && !securityStore.isAuthenticated && isAllowedToSessionEdit)
     ) {
       showAddButton.value = true
       showImportICalButton.value = true
 
       if (course.value) {
-        if ('true' === platformConfigStore.getSetting('agenda.agenda_reminders') && isAllowedToEdit) {
+        if ("true" === platformConfigStore.getSetting("agenda.agenda_reminders") && isAllowedToEdit) {
           showImportCourseEventsButton.value = true
         }
       }
@@ -58,6 +61,6 @@ export function useCalendarActionButtons () {
     showImportICalButton,
     showImportCourseEventsButton,
     showSessionPlanningButton,
-    showMyStudentsScheduleButton
+    showMyStudentsScheduleButton,
   }
 }

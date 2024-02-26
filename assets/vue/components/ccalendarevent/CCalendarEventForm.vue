@@ -73,7 +73,7 @@
           ],
           toolbar:
             'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl',
-          }"
+        }"
         required
       />
 
@@ -120,9 +120,9 @@ import { useI18n } from "vue-i18n"
 import { usePlatformConfig } from "../../store/platformConfig"
 
 const store = useStore()
-const platformConfigStore = usePlatformConfig();
+const platformConfigStore = usePlatformConfig()
 
-const agendaCollectiveInvitations = 'true' === platformConfigStore.getSetting('agenda.agenda_collective_invitations')
+const agendaCollectiveInvitations = "true" === platformConfigStore.getSetting("agenda.agenda_collective_invitations")
 
 const { t } = useI18n()
 

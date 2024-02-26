@@ -14,20 +14,36 @@ use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class SecurityController extends AbstractController
 {
+    private $entityManager;
+    private $settingsManager;
+    private $tokenStorage;
+    private $authorizationChecker;
+
     public function __construct(
-        private readonly SerializerInterface $serializer,
-        private readonly TrackELoginRecordRepository $trackELoginRecordRepository
-    ) {}
+        private SerializerInterface         $serializer,
+        private TrackELoginRecordRepository $trackELoginRecordRepository,
+        EntityManagerInterface              $entityManager,
+        SettingsManager                     $settingsManager,
+        TokenStorageInterface               $tokenStorage,
+        AuthorizationCheckerInterface       $authorizationChecker
+    ) {
+        $this->entityManager = $entityManager;
+        $this->settingsManager = $settingsManager;
+        $this->tokenStorage = $tokenStorage;
+        $this->authorizationChecker = $authorizationChecker;
+    }
 
     #[Route('/login_json', name: 'login_json', methods: ['POST'])]
     public function loginJson(Request $request, EntityManager $entityManager, SettingsManager $settingsManager, TokenStorageInterface $tokenStorage): Response
@@ -43,11 +59,11 @@ class SecurityController extends AbstractController
 
         /** @var User $user */
         $user = $this->getUser();
-        $extraFieldValuesRepository = $entityManager->getRepository(ExtraFieldValues::class);
-        $legalTermsRepo = $entityManager->getRepository(Legal::class);
+        $extraFieldValuesRepository = $this->entityManager->getRepository(ExtraFieldValues::class);
+        $legalTermsRepo = $this->entityManager->getRepository(Legal::class);
         if ($user->hasRole('ROLE_STUDENT')
-            && 'true' === $settingsManager->getSetting('allow_terms_conditions')
-            && 'login' === $settingsManager->getSetting('load_term_conditions_section')
+            && 'true' === $this->settingsManager->getSetting('allow_terms_conditions')
+            && 'login' === $this->settingsManager->getSetting('load_term_conditions_section')
         ) {
             $termAndConditionStatus = false;
             $extraValue = $extraFieldValuesRepository->findLegalAcceptByItemId($user->getId());
@@ -61,24 +77,24 @@ class SecurityController extends AbstractController
             }
 
             if (false === $termAndConditionStatus) {
-                $request->getSession()->set('term_and_condition', ['user_id' => $user->getId()]);
-            } else {
-                $request->getSession()->remove('term_and_condition');
-            }
+                $tempTermAndCondition = ['user_id' => $user->getId()];
 
-            $termsAndCondition = $request->getSession()->get('term_and_condition');
-            if (null !== $termsAndCondition) {
-                $tokenStorage->setToken(null);
+                $this->tokenStorage->setToken(null);
+                $request->getSession()->invalidate();
+
+                $request->getSession()->start();
+                $request->getSession()->set('term_and_condition', $tempTermAndCondition);
+
                 $responseData = [
                     'redirect' => '/main/auth/inscription.php',
                     'load_terms' => true,
                 ];
 
                 return new JsonResponse($responseData, Response::HTTP_OK);
+            } else {
+                $request->getSession()->remove('term_and_condition');
             }
         }
-        // $error = $authenticationUtils->getLastAuthenticationError();
-        // $lastUsername = $authenticationUtils->getLastUsername();
 
         $data = null;
         if ($user) {

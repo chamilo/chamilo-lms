@@ -78,7 +78,7 @@ function prepare_user_sql_query($getCount)
               ON (
                     u.id = v.item_id AND
                     (field_id = $extraFieldId OR field_id = $extraFieldIdDeleteAccount) AND
-                    v.value = 1
+                    v.field_value = 1
               ) ";
 
     $keywordList = [
@@ -317,7 +317,7 @@ function modify_filter($user_id, $url_params, $row): string
 
     $result .= Display::url(
         Display::getMdiIcon(ActionIcon::SEND_MESSAGE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Send message')),
-        api_get_path(WEB_CODE_PATH).'messages/new_message.php?send_to_user='.$user_id
+        api_get_path(WEB_PATH).'resources/messages/new'
     );
     $result .= '&nbsp;&nbsp;';
     $extraFields = Session::read('data_privacy_extra_fields');

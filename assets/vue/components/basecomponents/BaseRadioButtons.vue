@@ -1,12 +1,12 @@
 <template>
   <div class="flex flex-col">
+    <label v-if="title" :for="name" class="mb-2">{{ title }}</label>
     <div v-for="(option, index) in options" :key="option.value" class="flex items-center mr-2">
       <RadioButton
-        :input-id="name + index"
-        :model-value="value"
+        :input-id="`${name}-${index}`"
+        v-model="value"
         :name="name"
         :value="option.value"
-        @update:model-value="value = $event"
       />
       <label :for="name + index" class="ml-2 cursor-pointer">{{ option.label }}</label>
     </div>
@@ -14,19 +14,18 @@
 </template>
 
 <script setup>
-import RadioButton from 'primevue/radiobutton';
-import {ref} from "vue";
-
+import RadioButton from 'primevue/radiobutton'
+import { ref, watch } from 'vue'
 const props = defineProps({
   modelValue: {
-    type: String,
+    type: [String, Number],
     required: true
   },
   name: {
     type: String,
     required: true,
   },
-  // Array with {label: x, value: y} for every option you want to support
+  title: String,
   options: {
     type: Array,
     required: true,
@@ -36,8 +35,12 @@ const props = defineProps({
     default: ''
   },
 })
-
-defineEmits(['update:modelValue'])
-
-const value = ref(props.initialValue)
+const emit = defineEmits(['update:modelValue'])
+const value = ref(props.modelValue)
+watch(() => props.modelValue, (newValue) => {
+  value.value = newValue
+})
+watch(value, (newValue) => {
+  emit('update:modelValue', newValue)
+})
 </script>

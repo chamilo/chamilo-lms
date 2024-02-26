@@ -6,36 +6,49 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Platform languages.
  */
+#[ApiResource]
+#[ApiFilter(BooleanFilter::class, properties: ['available'])]
+#[ApiFilter(OrderFilter::class, properties: ['english_name' => 'DESC'])]
 #[ORM\Table(name: 'language', options: ['row_format' => 'DYNAMIC'])]
 #[ORM\Entity(repositoryClass: LanguageRepository::class)]
 class Language
 {
+    #[Groups(['language:read'])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
+    #[Groups(['language:read', 'language:write'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'original_name', type: 'string', length: 255, nullable: true)]
     protected ?string $originalName = null;
 
+    #[Groups(['language:read', 'language:write'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'english_name', type: 'string', length: 255)]
     protected string $englishName;
 
+    #[Groups(['language:read', 'language:write'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'isocode', type: 'string', length: 10)]
     protected string $isocode;
 
+    #[Groups(['language:read', 'language:write'])]
     #[ORM\Column(name: 'available', type: 'boolean', nullable: false)]
     protected bool $available;
 
@@ -43,6 +56,7 @@ class Language
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true)]
     protected ?Language $parent = null;
 
+    #[Groups(['language:read', 'language:write'])]
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     protected Collection $subLanguages;
 

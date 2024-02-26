@@ -41,6 +41,8 @@ $webserviceUrl = '';
 $hash = '';
 
 if ($isTccEnabled) {
+    // Configure TCC plugin settings and JavaScript for the form
+    // (This section includes the JavaScript code for the TCC plugin integration)
     $webserviceUrl = api_get_plugin_setting('logintcc', 'webservice_url');
     $hash = api_get_plugin_setting('logintcc', 'hash');
     $htmlHeadXtra[] = '<script>
@@ -580,7 +582,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
             $termPreview = LegalManager::get_last_condition($language);
             if (!$termPreview) {
                 //look for the default language
-                $language = api_get_setting('platformLanguage');
+                $language = api_get_setting('language.platform_language');
                 $language = api_get_language_id($language);
                 $termPreview = LegalManager::get_last_condition($language);
             }
@@ -599,7 +601,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
             } else {
                 echo get_lang('Coming soon...');
             }
-            Display::display_footer();
+            //Display::display_footer();
             exit;
         }
     }
@@ -675,13 +677,13 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
     }
 
     // Ofaj
-    if (!api_is_anonymous() || 'login' === api_get_setting('load_term_conditions_section')) {
+    if (!api_is_anonymous() || 'course' !== api_get_setting('platform.load_term_conditions_section')) {
         $language = api_get_language_isocode();
         $language = api_get_language_id($language);
         $termPreview = LegalManager::get_last_condition($language);
         if (!$termPreview) {
             //we load from the platform
-            $language = api_get_setting('platformLanguage');
+            $language = api_get_setting('language.platform_language');
             $language = api_get_language_id($language);
             if (!empty($language)) {
                 $termPreview = LegalManager::get_last_condition($language);

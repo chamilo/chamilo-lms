@@ -1,48 +1,55 @@
 <?php
-
 declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Chamilo\CoreBundle\Repository\LegalRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * Legal.
- */
+#[ApiResource]
+#[ApiFilter(SearchFilter::class, properties: ['languageId' => 'exact'])]
+#[ApiFilter(OrderFilter::class, properties: ['version' => 'DESC'])]
 #[ORM\Table(name: 'legal')]
 #[ORM\Entity(repositoryClass: LegalRepository::class)]
 class Legal
 {
-    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'date', type: 'integer', nullable: false)]
+    #[Groups(['legal:read', 'legal:write'])]
+    #[ORM\Column(type: 'integer')]
     protected int $date;
 
-    #[ORM\Column(name: 'content', type: 'text', nullable: true)]
+    #[Groups(['legal:read', 'legal:write'])]
+    #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $content = null;
 
-    #[ORM\Column(name: 'type', type: 'integer', nullable: false)]
+    #[Groups(['legal:read', 'legal:write'])]
+    #[ORM\Column(type: 'integer')]
     protected int $type;
 
-    #[ORM\Column(name: 'changes', type: 'text', nullable: false)]
+    #[Groups(['legal:read', 'legal:write'])]
+    #[ORM\Column(type: 'text')]
     protected string $changes;
 
-    #[ORM\Column(name: 'version', type: 'integer', nullable: true)]
+    #[Groups(['legal:read', 'legal:write'])]
+    #[ORM\Column(type: 'integer', nullable: true)]
     protected ?int $version = null;
 
-    #[ORM\Column(name: 'language_id', type: 'integer')]
+    #[Groups(['legal:read', 'legal:write'])]
+    #[ORM\Column(type: 'integer')]
     protected int $languageId;
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -59,26 +66,26 @@ class Legal
      *
      * @return int
      */
-    public function getDate()
+    public function getDate(): int
     {
         return $this->date;
     }
 
-    public function setContent(string $content): self
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    public function setContent(?string $content): self
     {
         $this->content = $content;
 
         return $this;
     }
 
-    /**
-     * Get content.
-     *
-     * @return string
-     */
-    public function getContent()
+    public function getType(): int
     {
-        return $this->content;
+        return $this->type;
     }
 
     public function setType(int $type): self
@@ -88,14 +95,9 @@ class Legal
         return $this;
     }
 
-    /**
-     * Get type.
-     *
-     * @return int
-     */
-    public function getType()
+    public function getChanges(): string
     {
-        return $this->type;
+        return $this->changes;
     }
 
     public function setChanges(string $changes): self
@@ -105,31 +107,20 @@ class Legal
         return $this;
     }
 
-    /**
-     * Get changes.
-     *
-     * @return string
-     */
-    public function getChanges()
+    public function getVersion(): ?int
     {
-        return $this->changes;
+        return $this->version;
     }
 
-    public function setVersion(int $version): self
+    public function setVersion(?int $version): self
     {
         $this->version = $version;
-
         return $this;
     }
 
-    /**
-     * Get version.
-     *
-     * @return int
-     */
-    public function getVersion()
+    public function getLanguageId(): int
     {
-        return $this->version;
+        return $this->languageId;
     }
 
     public function setLanguageId(int $languageId): self
@@ -137,15 +128,5 @@ class Legal
         $this->languageId = $languageId;
 
         return $this;
-    }
-
-    /**
-     * Get languageId.
-     *
-     * @return int
-     */
-    public function getLanguageId()
-    {
-        return $this->languageId;
     }
 }

@@ -1,7 +1,7 @@
 import fetch from '../utils/fetch';
 
-export default function makeService(endpoint) {
-  return {
+export default function makeService(endpoint, extensions = {}) {
+  const baseService = {
     find(id, params) {
       console.log('api.js find');
       const currentParams = new URLSearchParams(window.location.search);
@@ -65,4 +65,6 @@ export default function makeService(endpoint) {
       });
     }
   };
+
+  return { ...baseService, ...extensions };
 }

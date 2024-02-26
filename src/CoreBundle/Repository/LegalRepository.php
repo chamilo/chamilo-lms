@@ -149,6 +149,17 @@ class LegalRepository extends ServiceEntityRepository
         }
     }
 
+    public function findLastConditionByLanguage(int $languageId): ?Legal
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.languageId = :languageId')
+            ->setParameter('languageId', $languageId)
+            ->orderBy('l.version', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     /**
      * Replace tags in content.
      *

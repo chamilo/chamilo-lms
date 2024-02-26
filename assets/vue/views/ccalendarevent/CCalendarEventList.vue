@@ -1,16 +1,10 @@
 <template>
-  <div>
-    <SectionHeader
-      :title="t('Agenda')"
-    >
-      <BaseButton
-        v-if="canAddEvent"
-        icon="plus"
-        only-icon
-        type="black"
-        @click="showAddEventDialog"
-      />
-    </SectionHeader>
+  <div class="flex flex-col gap-4">
+    <CalendarSectionHeader
+      @add-click="showAddEventDialog"
+      @my-students-schedule-click="goToMyStudentsSchedule"
+      @session-planning-click="goToSessionPanning"
+    />
 
     <FullCalendar
       ref="cal"
@@ -127,7 +121,6 @@ import FullCalendar from "@fullcalendar/vue3"
 import dayGridPlugin from "@fullcalendar/daygrid"
 import interactionPlugin from "@fullcalendar/interaction"
 import timeGridPlugin from "@fullcalendar/timegrid"
-import SectionHeader from "../../components/layout/SectionHeader.vue"
 import CCalendarEventForm from "../../components/ccalendarevent/CCalendarEventForm.vue"
 import CCalendarEventInfo from "../../components/ccalendarevent/CCalendarEventInfo"
 import allLocales from "@fullcalendar/core/locales-all"
@@ -135,15 +128,14 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useToast } from "primevue/usetoast"
 import cCalendarEventService from "../../services/ccalendarevent"
 import { useCidReqStore } from "../../store/cidReq"
-import { useSecurityStore } from "../../store/securityStore"
 import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
 import { useLocale, useParentLocale } from "../../composables/locale"
 import { storeToRefs } from "pinia"
+import CalendarSectionHeader from "../../components/ccalendarevent/CalendarSectionHeader.vue"
 
 const store = useStore()
 const confirm = useConfirm()
 const cidReqStore = useCidReqStore()
-const securityStore = useSecurityStore()
 
 const { course, session, group } = storeToRefs(cidReqStore)
 
@@ -205,14 +197,20 @@ const calendarLocale = allLocales.find(
     calLocale.code === appLocale.value.replace("_", "-") || calLocale.code === useParentLocale(appLocale.value),
 )
 
-const canAddEvent = computed(() => !course.value || (course.value && securityStore.isCurrentTeacher))
-
 const showAddEventDialog = () => {
   item.value = {}
   item.value["parentResourceNodeId"] = currentUser.value.resourceNode["id"]
   item.value["collective"] = false
 
   dialog.value = true
+}
+
+const goToMyStudentsSchedule = () => {
+  window.location.href = '/main/calendar/planification.php'
+}
+
+const goToSessionPanning = () => {
+  window.location.href = '/main/my_space/calendar_plan.php'
 }
 
 const calendarOptions = ref({

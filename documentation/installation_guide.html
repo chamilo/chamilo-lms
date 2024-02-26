@@ -330,6 +330,7 @@ As this is only a minor version change from previous 1.11.* versions of Chamilo,
   <li> clean your app/cache/twig directory: delete all the contents *in* this directory (do NOT remove the directory itself, only its contents!).
        It will all be re-generated.
       You can also delete the contents of this directory through the "Cleanup of cache and temporary files " option in the "System" box of the Administration page.</li>
+   <li> edit app/config/configuration.php and change manually the <i>$_configuration['system_version']</i> setting to the new version number</li>
   <li> you're done! No other upgrade procedure is required</li>
 </ul>
     <div><em>Important:</em> If you are updating to 1.11.16 on a system that was initially installed before 2016 (before version 1.11.0),

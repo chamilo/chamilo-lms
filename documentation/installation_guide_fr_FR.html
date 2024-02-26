@@ -421,11 +421,10 @@
                 <li> dézippez les nouveaux fichiers de Chamilo 1.11 par dessus les fichiers de
                     l'ancienne version (ou dézippez les fichiers dans un répertoire et copiez-les ensuite
                     là où se trouve votre version actuelle de Chamilo)</li>
-                <li> éditez le fichier app/config/configuration.php: à la fin du fichier,
-                    localisez le numéro de version antérieur (p.ex. '1.11.0') et remplacez-le
-                    par le numéro de la nouvelle version (p.ex. '1.11.2')</li>
-                <li> Videz votre dossier archive/ : faites une copie temporaire de index.html, supprimez touss les contenus *dans* ce dossier (ne supprimer pas le dossier, juste ses contenus). Vous pouvez également vider ce dossier depuis le lien "Vidange du répertoire archive" du bloc "Système" de l'interface d'administration.</li>
-                <li> fini! Il n'y a pas d'autre procédure requise</li>
+                <li> éditez le fichier app/config/configuration.php : localisez le numéro de version antérieur dans le paramètre <i>$_configuration['system_version']</i> (p.ex. '1.11.18') et remplacez-le
+                    par le numéro de la nouvelle version (p.ex. '1.11.26')</li>
+                <li> videz votre dossier archive/ : faites une copie temporaire de index.html, supprimez touss les contenus *dans* ce dossier (ne supprimer pas le dossier, juste ses contenus). Vous pouvez également vider ce dossier depuis le lien "Vidange du répertoire archive" du bloc "Système" de l'interface d'administration.</li>
+                <li> c'est fini! Il n'y a pas d'autre étape requise.</li>
             </ul>
 
             <br />

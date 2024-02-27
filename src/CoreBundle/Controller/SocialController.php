@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\Legal;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UserRelUser;
@@ -80,14 +81,13 @@ class SocialController extends AbstractController
         }
 
         $isoCode = $user->getLocale();
-        $language = $languageRepo->findByIsoCode($isoCode);
-        $languageId = (int) $language->getId();
-
-        $term = $legalTermsRepo->getLastConditionByLanguage($languageId);
-
-        if (!$term) {
-            $defaultLanguage = $settingsManager->getSetting('platform.platform_language');
-            $term = $legalTermsRepo->getLastConditionByLanguage((int) $defaultLanguage);
+        $extraFieldValue = new ExtraFieldValue('user');
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
+        if ($value && !empty($value['value'])) {
+            [$legalId, $legalLanguageId, $legalTime] = explode(':', $value['value']);
+            $term = $legalTermsRepo->find($legalId);
+        } else {
+            $term = $this->getLastConditionByLanguage($languageRepo, $isoCode, $legalTermsRepo, $settingsManager);
         }
 
         if (!$term) {
@@ -163,6 +163,68 @@ class SocialController extends AbstractController
         ];
 
         return $this->json($response);
+    }
+
+    #[Route('/send-legal-term', name: 'chamilo_core_social_send_legal_term')]
+    public function sendLegalTerm(
+        Request $request,
+        SettingsManager $settingsManager,
+        TranslatorInterface $translator,
+        LegalRepository $legalTermsRepo,
+        UserRepository $userRepo,
+        LanguageRepository $languageRepo
+    ): JsonResponse {
+        $data = json_decode($request->getContent(), true);
+        $userId = $data['userId'] ?? null;
+
+        /* @var User $user */
+        $user = $userRepo->find($userId);
+        if (!$user) {
+            return $this->json(['error' => 'User not found']);
+        }
+
+        $isoCode = $user->getLocale();
+        /* @var Legal $term */
+        $term = $this->getLastConditionByLanguage($languageRepo, $isoCode, $legalTermsRepo, $settingsManager);
+
+        if (!$term) {
+            return $this->json(['error' => 'Terms not found']);
+        }
+
+        $legalAcceptType =  $term->getVersion().':'.$term->getLanguageId().':'.time();
+        UserManager::update_extra_field_value(
+            $userId,
+            'legal_accept',
+            $legalAcceptType
+        );
+
+        $bossList = UserManager::getStudentBossList($userId);
+        if (!empty($bossList)) {
+            $bossList = array_column($bossList, 'boss_id');
+            foreach ($bossList as $bossId) {
+                $subjectEmail = sprintf(
+                    $translator->trans('User %s signed the agreement'),
+                    $user->getFullname()
+                );
+                $contentEmail = sprintf(
+                    $translator->trans('User %s signed the agreement.TheDateY'),
+                    $user->getFullname(),
+                    api_get_local_time()
+                );
+
+                MessageManager::send_message_simple(
+                    $bossId,
+                    $subjectEmail,
+                    $contentEmail,
+                    $userId
+                );
+            }
+        }
+
+        return $this->json([
+            'success' => true,
+            'message' => $translator->trans('Terms accepted successfully.'),
+        ]);
     }
 
     #[Route('/handle-privacy-request', name: 'chamilo_core_social_handle_privacy_request')]
@@ -851,10 +913,39 @@ class SocialController extends AbstractController
         return false;
     }
 
+    /**
+     * Checks the chat status of a user based on their user ID. It verifies if the user's chat status
+     * is active (indicated by a status of 1).
+     */
     private function checkUserStatus(int $userId, UserRepository $userRepository): bool
     {
         $userStatus = $userRepository->getExtraUserDataByField($userId, 'user_chat_status');
 
         return !empty($userStatus) && isset($userStatus['user_chat_status']) && 1 === (int) $userStatus['user_chat_status'];
+    }
+
+    /**
+     * Retrieves the most recent legal terms for a specified language. If no terms are found for the given language,
+     * the function attempts to retrieve terms for the platform's default language. If terms are still not found,
+     * it defaults to English ('en_US').
+     */
+    private function getLastConditionByLanguage(LanguageRepository $languageRepo, string $isoCode, LegalRepository $legalTermsRepo, SettingsManager $settingsManager): ?Legal
+    {
+        $language = $languageRepo->findByIsoCode($isoCode);
+        $languageId = (int) $language->getId();
+        $term = $legalTermsRepo->getLastConditionByLanguage($languageId);
+        if (!$term) {
+            $defaultLanguage = $settingsManager->getSetting('language.platform_language');
+            $language = $languageRepo->findByIsoCode($defaultLanguage);
+            $languageId = (int) $language->getId();
+            $term = $legalTermsRepo->getLastConditionByLanguage((int) $languageId);
+            if (!$term) {
+                $language = $languageRepo->findByIsoCode('en_US');
+                $languageId = (int) $language->getId();
+                $term = $legalTermsRepo->getLastConditionByLanguage((int) $languageId);
+            }
+        }
+
+        return $term;
     }
 }

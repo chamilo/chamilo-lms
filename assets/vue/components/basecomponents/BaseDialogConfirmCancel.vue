@@ -1,6 +1,7 @@
 <template>
   <BaseDialog
     :is-visible="isVisible"
+    :style="{ width: '28rem' }"
     :title="title"
     @update:is-visible="$emit('update:isVisible', $event)"
   >

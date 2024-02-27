@@ -30,7 +30,6 @@ defineEmits(["update:isVisible"])
 <template>
   <Dialog
     :modal="true"
-    :style="{ width: '450px' }"
     :visible="isVisible"
     class="p-fluid"
     @update:visible="$emit('update:isVisible', $event)"

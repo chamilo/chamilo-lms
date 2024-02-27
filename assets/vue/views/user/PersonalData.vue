@@ -115,6 +115,7 @@
   <BaseDialog
     v-if="termsAndConditions.length > 0"
     v-model:is-visible="termsAndConditionsDialogVisible"
+    :style="{ width: '28rem' }"
     :title="t('Read the Terms and Conditions')"
   >
     <template v-for="(term, index) in termsAndConditions" :key="`term-${index}`">

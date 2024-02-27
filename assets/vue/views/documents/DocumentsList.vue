@@ -126,11 +126,7 @@
       field="resourceNode.resourceFile.size"
     >
       <template #body="slotProps">
-        {{
-          slotProps.data.resourceNode.resourceFile
-            ? prettyBytes(slotProps.data.resourceNode.resourceFile.size)
-            : ""
-        }}
+        {{ slotProps.data.resourceNode.resourceFile ? prettyBytes(slotProps.data.resourceNode.resourceFile.size) : "" }}
       </template>
     </Column>
 
@@ -160,8 +156,8 @@
               RESOURCE_LINK_PUBLISHED === slotProps.data.resourceLinkListFromEntity[0].visibility
                 ? 'eye-on'
                 : RESOURCE_LINK_DRAFT === slotProps.data.resourceLinkListFromEntity[0].visibility
-                ? 'eye-off'
-                : ''
+                  ? 'eye-off'
+                  : ''
             "
             size="small"
             type="black"
@@ -295,6 +291,7 @@
 
   <BaseDialog
     v-model:is-visible="isFileUsageDialogVisible"
+    :style="{ width: '28rem' }"
     :title="t('Space available')"
   >
     <p>This feature is in development, this is a mockup with placeholder data!</p>
@@ -303,6 +300,7 @@
 
   <BaseDialog
     v-model:is-visible="isRecordAudioDialogVisible"
+    :style="{ width: '28rem' }"
     :title="t('Record audio')"
     header-icon="record-add"
   >
@@ -344,7 +342,8 @@
         accept="image"
         size="small"
         @file-selected="selectedFile = $event"
-        model-value=""/>
+        model-value=""
+      />
     </form>
   </BaseDialogConfirmCancel>
 </template>
@@ -418,13 +417,13 @@ const hasImageInDocumentEntries = computed(() => {
 
 const isCertificateMode = computed(() => {
   return route.query.filetype === 'certificate';
-});
+})
 
 const defaultCertificateId = ref(null);
 
 const isHtmlFile = (fileData) => {
   return isHtml(fileData);
-};
+}
 
 onMounted(() => {
   filters.value.loadNode = 1
@@ -690,10 +689,10 @@ async function selectAsDefaultCertificate(certificate) {
     if (response.status === 200) {
       loadDefaultCertificate()
       onUpdateOptions(options.value)
-      notification.showSuccessNotification(t("Certificate set as default successfully"));
+      notification.showSuccessNotification(t('Certificate set as default successfully'));
     }
   } catch (error) {
-    notification.showErrorNotification(t("Error setting certificate as default"));
+    notification.showErrorNotification(t('Error setting certificate as default'));
   }
 }
 
@@ -716,7 +715,7 @@ const selectedFile = ref(null);
 const templateFormData = ref({
   title: '',
   thumbnail: null,
-});
+})
 
 const currentDocumentId = ref(null);
 
@@ -726,9 +725,9 @@ const isDocumentTemplate = async (documentId) => {
     return response.data.isTemplate;
   } catch (error) {
     console.error('Error verifying the template status:', error);
-    return false;
+    return false
   }
-};
+}
 
 const deleteDocumentTemplate = async (documentId) => {
   try {
@@ -739,25 +738,24 @@ const deleteDocumentTemplate = async (documentId) => {
     console.error('Error deleting the template:', error);
     notification.showErrorNotification(t('Error deleting the template.'));
   }
-};
+}
 
 const getTemplateIcon = (documentId) => {
-
-  const document = items.value.find(doc => doc.iid === documentId);
+  const document = items.value.find((doc) => doc.iid === documentId);
   return document && document.template ? 'template-selected' : 'template-not-selected';
-};
+}
 
 const openTemplateForm = async (documentId) => {
   const isTemplate = await isDocumentTemplate(documentId);
 
   if (isTemplate) {
-    await deleteDocumentTemplate(documentId);
+    await deleteDocumentTemplate(documentId)
     onUpdateOptions(listaoptions.value);
   } else {
     currentDocumentId.value = documentId;
     showTemplateFormModal.value = true;
   }
-};
+}
 
 const submitTemplateForm = async () => {
   submitted.value = true;
@@ -768,7 +766,7 @@ const submitTemplateForm = async () => {
   }
 
   try {
-    const formData = new FormData();
+    const formData = new FormData()
     formData.append('title', templateFormData.value.title);
     formData.append('thumbnail', selectedFile.value);
     formData.append('refDoc', currentDocumentId.value);
@@ -790,7 +788,7 @@ const submitTemplateForm = async () => {
       notification.showErrorNotification(t('Error creating the template.'));
     }
   } catch (error) {
-    console.error('Error submitting the form:', error);
+    console.error('Error submitting the form:', error)
     notification.showErrorNotification(t('Error submitting the form.'));
   }
 };

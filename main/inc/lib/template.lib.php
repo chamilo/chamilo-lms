@@ -1361,11 +1361,11 @@ class Template
                 </button>
             </div>'
         );
+        $form->protect();
 
         if ($form->validate()) {
             api_set_site_use_cookie_warning_cookie();
         } else {
-            $form->protect();
             $this->assign('frmDisplayCookieUsageWarning', $form->returnForm());
         }
     }

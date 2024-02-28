@@ -8,16 +8,24 @@
         :min="min"
         :model-value="modelValue"
         :step="step"
+        :disabled="disabled"
         @update:model-value="$emit('update:modelValue', $event)"
       />
-      <label :for="id" v-text="label" />
+      <label
+        :for="id"
+        v-text="label"
+      />
     </div>
-    <small v-if="isInvalid" :class="{ 'p-error': isInvalid }" v-text="errorText" />
+    <small
+      v-if="isInvalid"
+      :class="{ 'p-error': isInvalid }"
+      v-text="errorText"
+    />
   </div>
 </template>
 
 <script setup>
-import InputNumber from "primevue/inputnumber";
+import InputNumber from "primevue/inputnumber"
 
 defineProps({
   modelValue: {
@@ -57,7 +65,12 @@ defineProps({
     required: false,
     default: "",
   },
-});
+  disabled: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+})
 
-defineEmits(["update:modelValue"]);
+defineEmits(["update:modelValue"])
 </script>

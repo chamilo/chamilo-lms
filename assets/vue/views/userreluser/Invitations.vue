@@ -32,6 +32,7 @@ import { inject, onMounted, ref, watchEffect } from "vue"
 import InvitationList from "../../components/userreluser/InvitationList.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useRouter } from "vue-router"
+import socialService from "../../services/socialService"
 
 const receivedInvitations = ref([])
 const sentInvitations = ref([])
@@ -47,97 +48,61 @@ watchEffect(() => {
     fetchInvitations(user.value.id)
   }
 })
-const fetchInvitations = async (userId) => {
-  if (!userId) return
-  try {
-    const response = await axios.get(`/social-network/invitations/${userId}`)
-    console.log('Invitations :::', response.data)
-    receivedInvitations.value = response.data.receivedInvitations
-    sentInvitations.value = response.data.sentInvitations
-    pendingInvitations.value = response.data.pendingGroupInvitations
-  } catch (error) {
-    console.error('Error fetching invitations:', error)
-  }
-}
+
 function goToSearch() {
   router.push({ name: 'SocialSearch' })
 }
 
-const acceptInvitation = async (invitationId) => {
-  const invitation = receivedInvitations.value.find(invite => invite.id === invitationId)
-  if (!invitation) return
-  console.log('Invitation object:', invitation)
-  const data = {
-    userId: user.value.id,
-    targetUserId: invitation.itemId,
-    action: 'add_friend',
-    is_my_friend: true,
-  }
+const fetchInvitations = async (userId) => {
+  if (!userId) return
   try {
-    const response = await axios.post('/social-network/user-action', data)
-    if (response.data.success) {
-      console.log('Invitation accepted successfully')
-      await fetchInvitations(user.value.id)
-    } else {
-      console.error('Failed to accept invitation')
-    }
+    const data = await socialService.fetchInvitations(userId)
+    console.log('Invitations :::', data)
+    receivedInvitations.value = data.receivedInvitations
+    sentInvitations.value = data.sentInvitations
+    pendingInvitations.value = data.pendingGroupInvitations
+  } catch (error) {
+    console.error('Error fetching invitations:', error)
+  }
+}
+
+const acceptInvitation = async (invitationId) => {
+  try {
+    await socialService.acceptInvitation(user.value.id, invitationId)
+    console.log('Invitation accepted successfully')
+    await fetchInvitations(user.value.id)
   } catch (error) {
     console.error('Error accepting invitation:', error)
   }
 }
+
 const denyInvitation = async (invitationId) => {
-  const invitation = receivedInvitations.value.find(invite => invite.id === invitationId)
-  if (!invitation) return
-  const data = {
-    userId: user.value.id,
-    targetUserId: invitation.itemId,
-    action: 'deny_friend',
-  }
   try {
-    const response = await axios.post('/social-network/user-action', data)
-    if (response.data.success) {
-      console.log('Invitation denied successfully')
-      await fetchInvitations(user.value.id)
-    } else {
-      console.error('Failed to deny invitation')
-    }
+    await socialService.denyInvitation(user.value.id, invitationId)
+    console.log('Invitation denied successfully')
+    await fetchInvitations(user.value.id)
   } catch (error) {
     console.error('Error denying invitation:', error)
   }
 }
+
 const acceptGroupInvitation = async (groupId) => {
   try {
-    const response = await axios.post('/social-network/group-action', {
-      userId: user.value.id,
-      groupId: groupId,
-      action: 'accept',
-    });
-    if (response.data.success) {
-      console.log('Group invitation accepted successfully');
-      await fetchInvitations(user.value.id)
-    } else {
-      console.error('Failed to accept group invitation');
-    }
+    await socialService.acceptGroupInvitation(user.value.id, groupId)
+    console.log('Group invitation accepted successfully')
+    await fetchInvitations(user.value.id)
   } catch (error) {
-    console.error('Error accepting group invitation:', error);
+    console.error('Error accepting group invitation:', error)
   }
 }
 
 const denyGroupInvitation = async (groupId) => {
   try {
-    const response = await axios.post('/social-network/group-action', {
-      userId: user.value.id,
-      groupId: groupId,
-      action: 'deny',
-    });
-    if (response.data.success) {
-      console.log('Group invitation denied successfully');
-      await fetchInvitations(user.value.id)
-    } else {
-      console.error('Failed to deny group invitation');
-    }
+    await socialService.denyGroupInvitation(user.value.id, groupId)
+    console.log('Group invitation denied successfully')
+    await fetchInvitations(user.value.id)
   } catch (error) {
-    console.error('Error denying group invitation:', error);
+    console.error('Error denying group invitation:', error)
   }
 }
 </script>

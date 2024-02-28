@@ -27,6 +27,12 @@ export default {
       path: 'invite/:group_id?',
       component: () => import('../views/usergroup/Invite.vue'),
       props: true
+    },
+    {
+      name: 'UserGroupDiscussions',
+      path: 'show/:group_id/discussions/:discussion_id',
+      component: () => import('../components/usergroup/GroupDiscussionTopics.vue'),
+      props: true
     }
   ]
 };

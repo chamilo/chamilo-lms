@@ -117,4 +117,5 @@ export const chamiloIconToClass = {
   "template-not-selected": "mdi mdi-file-outline",
   "map-search": "mdi mdi-map-search-outline",
   "join-group": "mdi mdi-account-multiple-plus",
+  "add-topic": "mdi mdi-forum-outline",
 };

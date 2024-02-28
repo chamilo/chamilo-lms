@@ -58,4 +58,85 @@ export default {
       throw error;
     }
   },
+
+  async fetchInvitations(userId) {
+    try {
+      const response = await axios.get(`${API_URL}/invitations/${userId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching invitations:', error);
+      throw error;
+    }
+  },
+
+  async acceptInvitation(userId, targetUserId) {
+    try {
+      const response = await axios.post(`${API_URL}/user-action`, {
+        userId,
+        targetUserId,
+        action: 'add_friend',
+        is_my_friend: true,
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error accepting invitation:', error);
+      throw error;
+    }
+  },
+
+  async denyInvitation(userId, targetUserId) {
+    try {
+      const response = await axios.post(`${API_URL}/user-action`, {
+        userId,
+        targetUserId,
+        action: 'deny_friend',
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error denying invitation:', error);
+      throw error;
+    }
+  },
+
+  async acceptGroupInvitation(userId, groupId) {
+    try {
+      const response = await axios.post(`${API_URL}/group-action`, {
+        userId,
+        groupId,
+        action: 'accept',
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error accepting group invitation:', error);
+      throw error;
+    }
+  },
+
+  async denyGroupInvitation(userId, groupId) {
+    try {
+      const response = await axios.post(`${API_URL}/group-action`, {
+        userId,
+        groupId,
+        action: 'deny',
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error denying group invitation:', error);
+      throw error;
+    }
+  },
+
+  async joinGroup(userId, groupId) {
+    try {
+      const response = await axios.post(`${API_URL}/group-action`, {
+        userId,
+        groupId,
+        action: 'join',
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error joining the group:', error);
+      throw error;
+    }
+  },
 };

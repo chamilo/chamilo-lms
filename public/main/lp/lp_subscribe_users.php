@@ -201,9 +201,9 @@ if ($allowUserGroups) {
                     $userList = $userGroup->get_users_by_usergroup($userGroupId);
                     $cLpRelUserRepo->unsubcribeUsersToItem(
                         $course,
-                        $session,
                         $entity,
-                        $userList
+                        $userList,
+                        $session
                     );
                 }
             }
@@ -253,9 +253,9 @@ if ($allowUserGroups) {
                 $userList = $userGroup->get_users_by_usergroup($group['id']);
                 $cLpRelUserRepo->unsubcribeUsersToItem(
                     $course,
-                    $session,
                     $entity,
-                    $userList
+                    $userList,
+                    $session
                 );
             }
 

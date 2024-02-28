@@ -84,9 +84,9 @@ final class CLpRelUserRepository extends ResourceRepository
             if ($usersToDelete) {
                 $this->unsubcribeUsersToItem(
                     $course,
-                    $session,
                     $lp,
-                    $usersToDelete
+                    $usersToDelete,
+                    $session
                 );
             }
         }
@@ -122,9 +122,9 @@ final class CLpRelUserRepository extends ResourceRepository
      */
     public function unsubcribeUsersToItem(
         Course $course,
-        ?Session $session = null,
         CLp $lp,
-        $usersToDelete
+        $usersToDelete,
+        ?Session $session = null
     ): void {
         $em = $this->getEntityManager();
 

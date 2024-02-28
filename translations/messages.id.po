@@ -3470,7 +3470,7 @@ msgstr "Pengunduran diri tidak diijinkan dalam mata kuliah ini."
 msgid "You are a trainer in this course"
 msgstr "Anda adalah pengelola mata kuliah ini."
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Pengelolan Mata Kuliah"
 
 msgid "Sort courses"

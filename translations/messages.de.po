@@ -3476,7 +3476,7 @@ msgstr "Abmelden von diesem Kurs ist nicht gestattet."
 msgid "You are a trainer in this course"
 msgstr "Sie sind Kursleiter in diesem Kurs"
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Kursauswahl"
 
 msgid "Sort courses"

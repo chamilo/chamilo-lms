@@ -3470,8 +3470,8 @@ msgstr "Jūs nevarat atteikties no šī kursa !"
 msgid "You are a trainer in this course"
 msgstr "Jūs esat šī kursa veidotājs /administrators"
 
-msgid "Courses catalog"
-msgstr "<b>Kursu vadība :</b><br>- Pieteikšanās Kursiem<br> - Kursu organizācija<br> - Kursu kārtošana"
+msgid "Courses catalogue"
+msgstr "Kursu vadība"
 
 msgid "Sort courses"
 msgstr "Sakārtot / organizēt manus kursus"

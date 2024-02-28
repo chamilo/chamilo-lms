@@ -3470,7 +3470,7 @@ msgstr "Erről a kurzosról a leiratkozás nem engedélyezet."
 msgid "You are a trainer in this course"
 msgstr "Ön a kurzus adminisztrátora ennek a kurzusnak!"
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Kurzus menedzsment"
 
 msgid "Sort courses"

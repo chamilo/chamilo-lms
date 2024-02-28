@@ -3478,7 +3478,7 @@ msgstr "La désinscription n'est pas autorisée pour ce cours."
 msgid "You are a trainer in this course"
 msgstr "Vous êtes l'administrateur de ce cours."
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Catalogue de cours"
 
 msgid "Sort courses"

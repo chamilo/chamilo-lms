@@ -3470,7 +3470,7 @@ msgstr "ไม่อนุญาตให้ถอนการสมัครใ
 msgid "You are a trainer in this course"
 msgstr "คุณคือเจ้าของวิชานี้"
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "การบริหารจัดการรายวิชา"
 
 msgid "Sort courses"

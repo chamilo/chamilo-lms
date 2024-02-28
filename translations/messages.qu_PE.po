@@ -3470,7 +3470,7 @@ msgstr "Kay yachachinapiqa kikin haykuqmasikuna qelqachikusqankuta manan qechuku
 msgid "You are a trainer in this course"
 msgstr "Qanqa kashanki kay yachachinamanta kamachiq"
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Yachachinakuyniypa Kamachinay"
 
 msgid "Sort courses"

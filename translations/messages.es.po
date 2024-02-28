@@ -3470,7 +3470,7 @@ msgstr "En este curso no está permitido que los propios usuarios puedan anular 
 msgid "You are a trainer in this course"
 msgstr "Actualmente es el administrador de este curso"
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Catálogo de cursos"
 
 msgid "Sort courses"

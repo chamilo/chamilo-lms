@@ -3470,7 +3470,7 @@ msgstr "No està permès abandonar el curs abans que finalitzi"
 msgid "You are a trainer in this course"
 msgstr "Ets l'administrador d'aquest curs"
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Catálogo de cursos"
 
 msgid "Sort courses"

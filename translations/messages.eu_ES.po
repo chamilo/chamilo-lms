@@ -3470,7 +3470,7 @@ msgstr "Ikastaro honetan erabiltzaileek beraiek ezin izango dute beren inskripzi
 msgid "You are a trainer in this course"
 msgstr "Orain zu ikastaro honetako kudeatzailea zara"
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Ikastaroen katalogoa"
 
 msgid "Sort courses"

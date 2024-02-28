@@ -3470,7 +3470,7 @@ msgstr "Δεν επιτρέπεται η ακύρωση εγγραφής από 
 msgid "You are a trainer in this course"
 msgstr "Είσαι εκπαιδευτικός σε αυτό το μάθημα"
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Κατάλογος μαθημάτων"
 
 msgid "Sort courses"

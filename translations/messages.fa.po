@@ -3470,7 +3470,7 @@ msgstr "اجازه ابطال ثبت نام در این درس داده نشده
 msgid "You are a trainer in this course"
 msgstr "شما اداره کننده این درس هستید"
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "کتالوگ دروس"
 
 msgid "Sort courses"

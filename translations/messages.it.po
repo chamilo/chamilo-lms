@@ -3470,7 +3470,7 @@ msgstr "Non è possibile cancellarsi da questo corso"
 msgid "You are a trainer in this course"
 msgstr "Sei gestore del corso"
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Gestione corsi"
 
 msgid "Sort courses"

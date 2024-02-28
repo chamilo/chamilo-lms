@@ -3470,7 +3470,7 @@ msgstr "Otillåtet att registreras i denna kurs."
 msgid "You are a trainer in this course"
 msgstr "Du är kursadministratör för denna kurs."
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Kursadministration"
 
 msgid "Sort courses"

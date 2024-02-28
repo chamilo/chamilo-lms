@@ -3470,7 +3470,7 @@ msgstr "Nemůžete se odepsat z tohoto kurzu."
 msgid "You are a trainer in this course"
 msgstr "Jste administrátor tohoto kurzu."
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Správa kurzů"
 
 msgid "Sort courses"

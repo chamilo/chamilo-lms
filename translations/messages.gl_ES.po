@@ -3470,7 +3470,7 @@ msgstr "Non se permite a desubscrición deste curso."
 msgid "You are a trainer in this course"
 msgstr "Vostede é administrador deste curso"
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Catálogo de cursos"
 
 msgid "Sort courses"

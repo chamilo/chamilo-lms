@@ -3470,7 +3470,7 @@ msgstr "不允许取消注册"
 msgid "You are a trainer in this course"
 msgstr "您是课程管理员"
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "课程管理"
 
 msgid "Sort courses"

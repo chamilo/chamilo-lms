@@ -3470,7 +3470,7 @@ msgstr "Afmelding ikke tilladt for dette kursus."
 msgid "You are a trainer in this course"
 msgstr "Du er kursusadministrator på kursussiden."
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Kursushåndtering"
 
 msgid "Sort courses"

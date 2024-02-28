@@ -3470,7 +3470,7 @@ msgstr "Bu ders için kayıt silme izni bulunmuyor"
 msgid "You are a trainer in this course"
 msgstr "Bu dersin Yetkilisisiniz."
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Ders Yönetimi"
 
 msgid "Sort courses"

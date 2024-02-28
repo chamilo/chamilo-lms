@@ -240,8 +240,8 @@ if ($allowUserGroups) {
                 $cLpRelUserRepo->subscribeUsersToItem(
                     $currentUser,
                     $course,
-                    $session,
                     $entity,
+                    $session,
                     $userList,
                     false
                 );
@@ -296,8 +296,8 @@ if ($form->validate()) {
         $cLpRelUserRepo->subscribeUsersToItem(
             $currentUser,
             $course,
-            $session,
             $entity,
+            $session,
             $users
         );
         Display::addFlash(Display::return_message(get_lang('Update successful')));

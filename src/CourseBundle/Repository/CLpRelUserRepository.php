@@ -50,8 +50,8 @@ final class CLpRelUserRepository extends ResourceRepository
     public function subscribeUsersToItem(
         $currentUser,
         Course $course,
-        ?Session $session = null,
         CLp $lp,
+        ?Session $session = null,
         $newUserList = [],
         $deleteUsers = true
     ): void {

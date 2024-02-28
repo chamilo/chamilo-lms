@@ -1,5 +1,10 @@
 <template>
-  <Button :label="$t('Back')" icon="pi pi-chevron-left" @click="goBack" class="mb-4" />
+  <Button
+    :label="$t('Back')"
+    class="mb-4"
+    icon="pi pi-chevron-left"
+    @click="goBack"
+  />
   <div v-if="!isLoading && item">
     <!--      :handle-delete="del"-->
     <Toolbar
@@ -53,7 +58,7 @@ export default {
   },
   methods: {
     goBack() {
-      this.$router.go(-1);
+      this.$router.go(-1)
     },
     ...mapActions("personalfile", {
       createReset: "resetCreate",

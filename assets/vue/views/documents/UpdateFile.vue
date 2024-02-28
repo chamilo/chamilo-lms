@@ -2,9 +2,9 @@
   <div v-if="!isLoading && item && isCurrentTeacher">
     <!--    :handle-delete="del"-->
     <Toolbar
+      :handle-back="handleBack"
       :handle-reset="resetForm"
       :handle-submit="onSendFormData"
-      :handle-back="handleBack"
     />
     <div class="documents-layout">
       <div class="template-list-container">
@@ -26,8 +26,12 @@
           />
         </DocumentsForm>
         <Panel
-          v-if="$route.query.filetype === 'certificate' "
-          :header="$t('Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:')"
+          v-if="$route.query.filetype === 'certificate'"
+          :header="
+            $t(
+              'Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:',
+            )
+          "
         >
           <div v-html="finalTags" />
         </Panel>
@@ -47,7 +51,7 @@ import Toolbar from "../../components/Toolbar.vue"
 import UpdateMixin from "../../mixins/UpdateMixin"
 import EditLinks from "../../components/resource_links/EditLinks.vue"
 import TemplateList from "../../components/documents/TemplateList.vue"
-import axios from "axios";
+import axios from "axios"
 
 const servicePrefix = "Documents"
 
@@ -61,14 +65,14 @@ export default {
     Toolbar,
     DocumentsForm,
   },
+  mixins: [UpdateMixin],
   data() {
-    const finalTags = this.getCertificateTags();
+    const finalTags = this.getCertificateTags()
     return {
       templates: [],
       finalTags,
-    };
+    }
   },
-  mixins: [UpdateMixin],
   computed: {
     ...mapFields("documents", {
       deleteLoading: "isLoading",
@@ -84,55 +88,56 @@ export default {
   },
   methods: {
     handleBack() {
-      this.$router.back();
+      this.$router.back()
     },
     fetchTemplates() {
-      const cid = this.$route.query.cid;
-      axios.get(`/template/all-templates/${cid}`)
-        .then(response => {
-          this.templates = response.data;
-          console.log('Templates fetched successfully:', this.templates);
+      const cid = this.$route.query.cid
+      axios
+        .get(`/template/all-templates/${cid}`)
+        .then((response) => {
+          this.templates = response.data
+          console.log("Templates fetched successfully:", this.templates)
         })
-        .catch(error => {
-          console.error('Error fetching the templates:', error);
-        });
+        .catch((error) => {
+          console.error("Error fetching the templates:", error)
+        })
     },
     addTemplateToEditor(templateContent) {
-      if (this.$refs.updateForm && typeof this.$refs.updateForm.updateContent === 'function') {
-        this.$refs.updateForm.updateContent(templateContent);
+      if (this.$refs.updateForm && typeof this.$refs.updateForm.updateContent === "function") {
+        this.$refs.updateForm.updateContent(templateContent)
       }
     },
-    getCertificateTags(){
-      let finalTags = "";
+    getCertificateTags() {
+      let finalTags = ""
       let tags = [
-        '((user_firstname))',
-        '((user_lastname))',
-        '((user_username))',
-        '((gradebook_institution))',
-        '((gradebook_sitename))',
-        '((teacher_firstname))',
-        '((teacher_lastname))',
-        '((official_code))',
-        '((date_certificate))',
-        '((date_certificate_no_time))',
-        '((course_code))',
-        '((course_title))',
-        '((gradebook_grade))',
-        '((certificate_link))',
-        '((certificate_link_html))',
-        '((certificate_barcode))',
-        '((external_style))',
-        '((time_in_course))',
-        '((time_in_course_in_all_sessions))',
-        '((start_date_and_end_date))',
-        '((course_objectives))',
-      ];
+        "((user_firstname))",
+        "((user_lastname))",
+        "((user_username))",
+        "((gradebook_institution))",
+        "((gradebook_sitename))",
+        "((teacher_firstname))",
+        "((teacher_lastname))",
+        "((official_code))",
+        "((date_certificate))",
+        "((date_certificate_no_time))",
+        "((course_code))",
+        "((course_title))",
+        "((gradebook_grade))",
+        "((certificate_link))",
+        "((certificate_link_html))",
+        "((certificate_barcode))",
+        "((external_style))",
+        "((time_in_course))",
+        "((time_in_course_in_all_sessions))",
+        "((start_date_and_end_date))",
+        "((course_objectives))",
+      ]
 
-      for (const tag of tags){
-        finalTags += "<p class=\"m-0\">"+tag+"</p>"
+      for (const tag of tags) {
+        finalTags += '<p class="m-0">' + tag + "</p>"
       }
 
-      return finalTags;
+      return finalTags
     },
     ...mapActions("documents", {
       createReset: "resetCreate",
@@ -144,7 +149,7 @@ export default {
     }),
   },
   mounted() {
-    this.fetchTemplates();
+    this.fetchTemplates()
   },
 }
 </script>

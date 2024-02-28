@@ -34,6 +34,6 @@ final class MessageByGroupDataProvider implements ProviderInterface
             return [];
         }
 
-        return $this->messageRepository->findByGroupId((int) $groupId);
+        return $this->messageRepository->getMessagesByGroup((int) $groupId, true);
     }
 }

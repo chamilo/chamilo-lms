@@ -47,7 +47,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(
             uriTemplate: '/messages/by-group/list',
             security: "is_granted('ROLE_USER')",
-            name: 'get_messages_by_group',
+            name: 'get_messages_by_social_group',
             provider: MessageByGroupDataProvider::class
         ),
         new Post(securityPostDenormalize: "is_granted('CREATE', object)"),

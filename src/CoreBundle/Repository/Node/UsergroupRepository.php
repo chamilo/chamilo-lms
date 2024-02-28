@@ -237,7 +237,7 @@ class UsergroupRepository extends ResourceRepository
         $this->_em->flush();
     }
 
-    public function removeUserFromGroup(int $userId, int $groupId): bool
+    public function removeUserFromGroup(int $userId, int $groupId, bool $checkLeaveRestriction = true): bool
     {
         /** @var Usergroup $group */
         $group = $this->find($groupId);
@@ -247,7 +247,7 @@ class UsergroupRepository extends ResourceRepository
             throw new Exception('Group or User not found');
         }
 
-        if (!$group->getAllowMembersToLeaveGroup()) {
+        if ($checkLeaveRestriction && !$group->getAllowMembersToLeaveGroup()) {
             throw new Exception('Members are not allowed to leave this group');
         }
 

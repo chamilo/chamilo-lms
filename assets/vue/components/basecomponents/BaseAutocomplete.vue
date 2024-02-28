@@ -8,19 +8,27 @@
         :suggestions="suggestions"
         force-selection
         :option-label="optionLabel"
+        :disabled="disabled"
         @complete="onComplete"
         @item-select="$emit('item-select', $event)"
         @update:model-value="$emit('update:modelValue', $event)"
       />
-      <label :for="id" v-t="label" />
+      <label
+        v-t="label"
+        :for="id"
+      />
     </div>
-    <small v-if="isInvalid" v-t="helpText" class="p-error" />
+    <small
+      v-if="isInvalid"
+      v-t="helpText"
+      class="p-error"
+    />
   </div>
 </template>
 
 <script setup>
-import AutoComplete from "primevue/autocomplete";
-import { ref } from "vue";
+import AutoComplete from "primevue/autocomplete"
+import { ref } from "vue"
 
 const props = defineProps({
   id: {
@@ -53,6 +61,11 @@ const props = defineProps({
     require: false,
     default: false,
   },
+  disabled: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
   search: {
     type: Function,
     required: true,
@@ -61,15 +74,15 @@ const props = defineProps({
   optionLabel: {
     type: String,
     required: false,
-    default: () => 'name',
-  }
-});
+    default: () => "name",
+  },
+})
 
-defineEmits(["update:modelValue", "item-select"]);
+defineEmits(["update:modelValue", "item-select"])
 
-const baseModel = ref([]);
+const baseModel = ref([])
 
-const suggestions = ref([]);
+const suggestions = ref([])
 
 const onComplete = (event) => {
   if (event.query.length >= 3) {
@@ -77,12 +90,12 @@ const onComplete = (event) => {
       if (members.length > 0) {
         suggestions.value = members
       } else {
-        let fakeSuggestion = {};
-        fakeSuggestion[`${props.optionLabel}`] = event.query;
+        let fakeSuggestion = {}
+        fakeSuggestion[`${props.optionLabel}`] = event.query
 
-        suggestions.value = [fakeSuggestion];
+        suggestions.value = [fakeSuggestion]
       }
-    });
+    })
   }
-};
+}
 </script>

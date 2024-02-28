@@ -101,7 +101,7 @@ if (api_is_student_boss()) {
         api_get_path(WEB_CODE_PATH).'my_space/company_reports.php'
     );
     $actions .= Display::url(
-        Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('GradebookSeeListOfLearnersCertificates')),
+        Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('See list of learner certificates')),
         api_get_path(WEB_CODE_PATH).'gradebook/certificate_report.php'
     );
 }

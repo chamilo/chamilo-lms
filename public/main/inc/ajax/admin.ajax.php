@@ -146,7 +146,7 @@ function check_system_version()
     }
 
     // the chamilo version of your installation
-    $ystem_version = '';
+    $system_version = '';
     $versionStatus = '';
     $versionFile =__DIR__.'/../../install/version.php';
     if (is_file($versionFile)) {
@@ -166,7 +166,7 @@ function check_system_version()
         $number_of_active_users = Statistics::countUsers(
             null,
             null,
-            null,
+            true,
             true
         );
 
@@ -179,7 +179,7 @@ function check_system_version()
 
         $uniqueId = '';
         $entityManager = Database::getManager();
-        /** @var BranchSyncRepository $branch */
+        /** @var BranchSyncRepository $repository */
         $repository = $entityManager->getRepository(BranchSync::class);
         /** @var BranchSync $branch */
         $branch = $repository->getTopBranch();
@@ -232,7 +232,7 @@ function check_system_version()
                 get_lang('Your version is').' <b>Chamilo '.$system_version.$versionStatus.'</b>.  <br />'.
                 str_replace(
                     'http://www.chamilo.org',
-                    '<a href="http://www.chamilo.org">http://www.chamilo.org</a>',
+                    '<a href="https://chamilo.org/download">https://chamilo.org/download</a>',
                     get_lang('Please visit our website: http://www.chamilo.org')
                 ).
                 '</span>';

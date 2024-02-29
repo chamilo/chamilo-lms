@@ -1,41 +1,19 @@
-$color_1: rgba(0, 0, 0, 0.87);
-$color_2: rgba(0, 0, 0, 0.6);
+.app-breadcrumb {
+  @apply bg-white pb-3 mb-2 text-tiny font-semibold leading-4;
 
-.app-breadcrumb.p-breadcrumb {
-  @apply bg-white pb-3 mb-4;
+  ol {
+    @apply mb-1 flex gap-1 text-gray-90;
 
-  ul {
     li {
-      .p-menuitem-link {
-        @apply rounded transition-none;
-
-        &:focus {
-          @apply outline-none;
-        }
-
-        .p-menuitem-text {
-          color: $color_1;
-        }
-
-        .p-menuitem-icon {
-          color: $color_2;
-        }
-      }
-
       &:last-child {
         .p-menuitem-text {
-          color: $color_1;
-        }
-
-        .p-menuitem-icon {
-          color: $color_2;
+          @apply text-gray-50;
         }
       }
     }
+  }
 
-    li.p-breadcrumb-chevron {
-      @apply my-0 mx-2;
-      color: $color_2;
-    }
+  &__session-title {
+    @apply text-tiny font-semibold text-gray-50 uppercase;
   }
 }

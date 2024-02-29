@@ -1,13 +1,49 @@
 <template>
-  <Breadcrumb
-    :home="home"
-    :model="foo"
-    class="app-breadcrumb"
-  />
+  <div class="app-breadcrumb">
+    <Breadcrumb
+      :home="home"
+      :model="foo"
+      unstyled
+    >
+      <template #item="{ item, props }">
+        <router-link
+          v-if="item.route"
+          v-slot="{ href, navigate }"
+          :to="item.route"
+          custom
+        >
+          <a
+            :href="href"
+            v-bind="props.action"
+            @click="navigate"
+          >
+            <span :class="[item.icon]" />
+            <span
+              v-if="item.label"
+              v-text="item.label"
+            />
+          </a>
+        </router-link>
+        <a
+          v-else
+          :href="item.url"
+          v-bind="props.action"
+        >
+          <span>{{ item.label }}</span>
+        </a>
+      </template>
+
+      <template #separator> / </template>
+    </Breadcrumb>
+    <div
+      v-if="session"
+      class="app-breadcrumb__session-title"
+      v-text="session.title"
+    />
+  </div>
 </template>
 
 <script setup>
-import { useStore } from "vuex"
 import { computed } from "vue"
 import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
@@ -16,7 +52,7 @@ import { useCidReqStore } from "../store/cidReq"
 import { storeToRefs } from "pinia"
 
 // eslint-disable-next-line no-undef
-const props = defineProps({
+const componentProps = defineProps({
   layoutClass: {
     type: String,
     default: null,
@@ -27,20 +63,15 @@ const props = defineProps({
   },
 })
 
-const store = useStore()
 const cidReqStore = useCidReqStore()
 const route = useRoute()
 const { t } = useI18n()
 
 const { course, session } = storeToRefs(cidReqStore)
 
-const resourceNode = computed(() => store.getters["resourcenode/getResourceNode"])
-
 const home = {
-  icon: "pi pi-home",
-  command: () => {
-    window.location.href = '/';
-  },
+  icon: "mdi mdi-home-variant",
+  route: { name: "Home" },
 }
 
 const foo = computed(() => {
@@ -78,11 +109,11 @@ const foo = computed(() => {
     return items
   }
 
-  if (props.legacy.length > 0) {
+  if (componentProps.legacy.length > 0) {
     const mainUrl = window.location.href
     const mainPath = mainUrl.indexOf("main/")
 
-    props.legacy.forEach((item) => {
+    componentProps.legacy.forEach((item) => {
       let url = item.url.toString()
       let newUrl = url
 
@@ -99,45 +130,29 @@ const foo = computed(() => {
         url: newUrl,
       })
     })
-  }
-
-  let queryParams = ""
-
-  Object.keys(route.query)
-    .filter((key) => !!key)
-    .forEach((key) => {
-      if ("" !== queryParams) {
-        queryParams += "&"
-      }
-
-      queryParams += key + "=" + encodeURIComponent(route.query[key].toString())
-    })
-
-  if (course.value) {
-    let sessionTitle = ""
-
-    if (session.value) {
-      sessionTitle = " (" + session.value.title + ") "
-    }
-
-    items.push({
-      label: course.value.title + sessionTitle,
-      to: "/course/" + course.value.id + "/home?" + queryParams,
-    })
-  }
-
-  const { path, matched } = route
-  const lastItem = matched[matched.length - 1]
-
-  matched.forEach((pathItem) => {
-    if (pathItem.path) {
+  } else {
+    if (course.value) {
       items.push({
-        label: pathItem.name,
-        disabled: route.path === path || lastItem.path === route.path,
-        url: pathItem.path,
+        label: course.value.title,
+        route: { name: "CourseHome", params: { id: course.value.id }, query: route.query },
       })
     }
-  })
+
+    const { path, matched } = route
+    const lastItem = matched[matched.length - 1]
+
+    matched.forEach((pathItem) => {
+      if (pathItem.path) {
+        const isDisabled = route.path === path || lastItem.path === route.path
+
+        items.push({
+          label: pathItem.name,
+          disabled: isDisabled,
+          url: isDisabled ? undefined : pathItem.path,
+        })
+      }
+    })
+  }
 
   return items
 })

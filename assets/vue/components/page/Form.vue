@@ -50,7 +50,25 @@
           relative_urls: false,
           height: 500,
           toolbar_mode: 'sliding',
-          file_picker_callback : browser,
+          file_picker_callback: function(callback, value, meta) {
+            if (meta.filetype === 'image') {
+              var input = document.createElement('input');
+              input.setAttribute('type', 'file');
+              input.setAttribute('accept', 'image/*');
+              input.onchange = function() {
+                var file = this.files[0];
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                  // Esta es la URL de la imagen que se pasará al editor
+                  callback(e.target.result, {
+                    alt: file.name
+                  });
+                };
+                reader.readAsDataURL(file);
+              };
+              input.click();
+            }
+          },
           autosave_ask_before_unload: true,
           plugins: [
             'fullpage advlist autolink lists link image charmap print preview anchor',

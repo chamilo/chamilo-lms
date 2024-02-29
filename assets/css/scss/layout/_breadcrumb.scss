@@ -1,5 +1,5 @@
 .app-breadcrumb {
-  @apply bg-white pb-3 mb-2 text-tiny font-semibold leading-4;
+  @apply bg-white pb-3 text-tiny font-semibold leading-4 space-y-1;
 
   ol {
     @apply mb-1 flex gap-1 text-gray-90;

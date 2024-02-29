@@ -1,8 +1,10 @@
 <template>
-  <div class="app-breadcrumb">
+  <div
+    v-show="itemList.length > 0"
+    class="app-breadcrumb"
+  >
     <Breadcrumb
-      :home="home"
-      :model="foo"
+      :model="itemList"
       unstyled
     >
       <template #item="{ item, props }">
@@ -69,14 +71,8 @@ const { t } = useI18n()
 
 const { course, session } = storeToRefs(cidReqStore)
 
-const home = {
-  icon: "mdi mdi-home-variant",
-  route: { name: "Home" },
-}
-
-const foo = computed(() => {
+const itemList = computed(() => {
   const list = [
-    "CourseHome",
     "MyCourses",
     "MySessions",
     "MySessionsUpcoming",
@@ -109,6 +105,18 @@ const foo = computed(() => {
     return items
   }
 
+  if (course.value) {
+    if (session.value) {
+      items.push({
+        label: t("My sessions"),
+      })
+    } else {
+      items.push({
+        label: t("My courses"),
+      })
+    }
+  }
+
   if (componentProps.legacy.length > 0) {
     const mainUrl = window.location.href
     const mainPath = mainUrl.indexOf("main/")
@@ -137,21 +145,6 @@ const foo = computed(() => {
         route: { name: "CourseHome", params: { id: course.value.id }, query: route.query },
       })
     }
-
-    const { path, matched } = route
-    const lastItem = matched[matched.length - 1]
-
-    matched.forEach((pathItem) => {
-      if (pathItem.path) {
-        const isDisabled = route.path === path || lastItem.path === route.path
-
-        items.push({
-          label: pathItem.name,
-          disabled: isDisabled,
-          url: isDisabled ? undefined : pathItem.path,
-        })
-      }
-    })
   }
 
   return items

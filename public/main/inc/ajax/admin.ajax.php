@@ -146,7 +146,16 @@ function check_system_version()
     }
 
     // the chamilo version of your installation
-    $system_version = trim(api_get_configuration_value('system_version'));
+    $ystem_version = '';
+    $versionStatus = '';
+    $versionFile =__DIR__.'/../../install/version.php';
+    if (is_file($versionFile)) {
+        $versionDetails = include($versionFile);
+        $system_version = trim($versionDetails['new_version']);
+        if (!empty($versionDetails['new_version_status']) &&  $versionDetails['new_version_status'] != 'stable') {
+            $versionStatus = ' ('.$versionDetails['new_version_status'].')';
+        }
+    }
 
     if ($urlValidated) {
         // The number of courses
@@ -220,7 +229,7 @@ function check_system_version()
             $output = '<span style="color:red">'.
                 get_lang('Your version is not up-to-date').'<br />'.
                 get_lang('The latest version is').' <b>Chamilo '.$version.'</b>.  <br />'.
-                get_lang('Your version is').' <b>Chamilo '.$system_version.'</b>.  <br />'.
+                get_lang('Your version is').' <b>Chamilo '.$system_version.$versionStatus.'</b>.  <br />'.
                 str_replace(
                     'http://www.chamilo.org',
                     '<a href="http://www.chamilo.org">http://www.chamilo.org</a>',
@@ -229,7 +238,10 @@ function check_system_version()
                 '</span>';
         } else {
             $output = '<span style="color:green">'.
-                get_lang('Your version is up-to-date').': Chamilo '.$version.'</span>';
+                get_lang('Your version is up-to-date').'<br />'.
+                get_lang('The latest version is').' <b>Chamilo '.$version.'</b>.  <br />'.
+                get_lang('Your version is').' <b>Chamilo '.$system_version.$versionStatus.'</b>.  <br />'.
+                '</span>';
         }
 
         return $output;

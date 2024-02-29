@@ -953,7 +953,7 @@ if ('true' === $details) {
 $icon = '';
 $timeLegalAccept = '';
 $btn = '';
-$userInfoExtra['legal'] = [];
+//$userInfoExtra['legal'] = [];
 if ('true' === api_get_setting('allow_terms_conditions')) {
     $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $studentId);
     if ($isBoss || api_is_platform_admin()) {

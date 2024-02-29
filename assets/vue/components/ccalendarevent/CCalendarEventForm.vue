@@ -1,15 +1,16 @@
 <template>
   <form>
     <BaseInputText
-      v-model="v$.item.title.$model"
+      v-model="item.title"
       :error-text="v$.item.title.$errors.map((error) => error.$message).join('<br>')"
-      :is-invalid="v$.item.title.$error"
+      :is-invalid="v$.item.title.$invalid"
       :label="t('Title')"
     />
 
     <BaseCalendar
       v-model="dateRange"
-      :label="'Date'"
+      :is-invalid="v$.item.startDate.$invalid || v$.item.endDate.$invalid"
+      :label="t('Date')"
       show-icon
       show-time
       type="range"
@@ -17,7 +18,7 @@
 
     <div class="field">
       <tiny-editor
-        v-model="v$.item.content.$model"
+        v-model="item.content"
         :init="{
           skin_url: '/build/libs/tinymce/skins/ui/oxide',
           content_css: '/build/libs/tinymce/skins/content/default/content.css',
@@ -66,15 +67,11 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue"
-import { useStore } from "vuex"
+import { computed, ref, watch } from "vue"
 import { useVuelidate } from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
-import EditLinks from "../resource_links/EditLinks.vue"
-import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import { useI18n } from "vue-i18n"
-import { usePlatformConfig } from "../../store/platformConfig"
 import BaseCalendar from "../basecomponents/BaseCalendar.vue"
 import Fieldset from "primevue/fieldset"
 
@@ -130,15 +127,10 @@ defineExpose({
   v$,
 })
 
-const linksType = ref("users")
-const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
-const isAdmin = computed(() => store.getters["security/isAdmin"])
+const dateRange = ref()
 
-if (!isAdmin.value) {
-  if (isCurrentTeacher.value) {
-    linksType.value = "course_students"
-  } else {
-    linksType.value = "user_rel_users"
-  }
-}
+watch(dateRange, (newValue) => {
+  item.value.startDate = newValue[0]
+  item.value.endDate = newValue[1]
+})
 </script>

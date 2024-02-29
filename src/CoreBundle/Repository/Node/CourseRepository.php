@@ -85,6 +85,44 @@ class CourseRepository extends ResourceRepository
     }
 
     /**
+     * Get info from courses where the user has the given role.
+     * @param User $user
+     * @param AccessUrl $url
+     * @param int $status
+     * @param string $keyword
+     * @return Course[]
+     */
+    public function getCoursesInfoByUser(User $user, AccessUrl $url, int $status, string $keyword = ''): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb
+            ->select('DISTINCT c.id')
+            ->from(Course::class, 'c')
+            ->innerJoin(CourseRelUser::class, 'courseRelUser')
+            ->innerJoin('c.urls', 'accessUrlRelCourse')
+            ->where('accessUrlRelCourse.url = :url')
+            ->andWhere('courseRelUser.user = :user')
+            ->andWhere('courseRelUser.status = :status')
+            ->setParameters([
+                'user' => $user,
+                'url' => $url,
+                'status' => $status
+            ])
+        ;
+        if (!empty($keyword)) {
+            $qb
+                ->andWhere('c.title like = :keyword OR c.code like = :keyword')
+                ->setParameter('keyword', $keyword)
+            ;
+        }
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
+
+    /**
      * Get all users that are registered in the course. No matter the status.
      *
      * @return QueryBuilder

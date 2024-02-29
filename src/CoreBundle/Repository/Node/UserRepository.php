@@ -243,48 +243,6 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     }
 
     /**
-     * Get course user relationship based in the course_rel_user table.
-     *
-     * @return Course[]
-     */
-    public function getCourses(User $user, AccessUrl $url, int $status, string $keyword = '')
-    {
-        $qb = $this->createQueryBuilder('u');
-
-        $qb
-            // ->select('DISTINCT course')
-            ->innerJoin('u.courses', 'courseRelUser')
-            ->innerJoin('courseRelUser.course', 'course')
-            ->innerJoin('course.urls', 'accessUrlRelCourse')
-            ->innerJoin('accessUrlRelCourse.url', 'url')
-            ->where('url = :url')
-            ->andWhere('courseRelUser.user = :user')
-            ->andWhere('courseRelUser.status = :status')
-            ->setParameters(
-                [
-                    'user' => $user,
-                    'url' => $url,
-                    'status' => $status,
-                ]
-            )
-        //    ->addSelect('courseRelUser')
-        ;
-
-        if (!empty($keyword)) {
-            $qb
-                ->andWhere('course.title like = :keyword OR course.code like = :keyword')
-                ->setParameter('keyword', $keyword)
-            ;
-        }
-
-        $qb->orderBy('course.title', Criteria::DESC);
-
-        $query = $qb->getQuery();
-
-        return $query->getResult();
-    }
-
-    /**
      * Get the coaches for a course within a session.
      *
      * @return Collection|array

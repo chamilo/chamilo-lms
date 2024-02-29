@@ -25,9 +25,9 @@ $i = 0;
 $session_id = 0;
 if (!empty($my_courses)) {
     foreach ($my_courses as $course) {
-        $course_code = $course['code'];
-        $course_id = $course['real_id'];
-        $course_info = api_get_course_info($course_code);
+        $course_info = api_get_course_info_by_id($course['id']);
+        $course_id = $course['id'];
+        $course_code = $course_info['code'];
 
         //Only show open courses
         if (0 == $course_info['visibility']) {
@@ -43,7 +43,7 @@ if (!empty($my_courses)) {
             }
         }
 
-        $tmp_students = CourseManager :: get_student_list_from_course_code($course_code, false);
+        $tmp_students = CourseManager::get_student_list_from_course_code($course_code, false);
 
         //Cleaning students only REAL students
         $students = [];
@@ -56,8 +56,9 @@ if (!empty($my_courses)) {
         }
 
         $t_lp = Database::get_course_table(TABLE_LP_MAIN);
-        $sql_lp = "SELECT lp.title, lp.id FROM $t_lp lp
-                   WHERE c_id = $course_id AND lp.session_id = 0";
+        $sql_lp = "SELECT lp.title, lp.iid FROM $t_lp lp
+                   INNER JOIN resource_link li ON lp.resource_node_id = li.id
+                   WHERE li.c_id = $course_id AND li.session_id = 0";
         $rs_lp = Database::query($sql_lp);
         $t_lpi = Database::get_course_table(TABLE_LP_ITEM);
         $t_news = Database::get_course_table(TABLE_ANNOUNCEMENT);
@@ -74,7 +75,7 @@ if (!empty($my_courses)) {
 
         if (Database :: num_rows($rs_lp) > 0) {
             while ($learnpath = Database :: fetch_array($rs_lp)) {
-                $lp_id = $learnpath['id'];
+                $lp_id = $learnpath['iid'];
 
                 $lp_items =
                 $array[$i]['lp'] = '<a href="'.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?cidReq='.$course_code.'&amp;action=view&amp;lp_id='.$lp_id.'" target="_blank">'.$learnpath['title'].'</a>';
@@ -213,12 +214,14 @@ $headers = [
 ];
 
 if (isset($_GET['export'])) {
-    $list = [
-        0 => $headers,
-        1 => $array[0],
-    ];
-    Export::arrayToXls($list, $filename);
-    exit;
+    if (!empty($array[0])) {
+        $list = [
+            0 => $headers,
+            1 => $array[0],
+        ];
+        Export::arrayToXls($list, $filename);
+        exit;
+    }
 }
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Reporting')];

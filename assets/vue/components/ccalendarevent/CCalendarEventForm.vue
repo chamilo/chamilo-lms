@@ -1,60 +1,21 @@
 <template>
   <form>
-    <div class="grid lg:grid-cols-2 md:gap-4">
-      <BaseInputText
-        v-model="v$.item.title.$model"
-        :error-text="v$.item.title.$errors.map((error) => error.$message).join('<br>')"
-        :is-invalid="v$.item.title.$error"
-        :label="t('Title')"
-      />
+    <BaseInputText
+      v-model="v$.item.title.$model"
+      :error-text="v$.item.title.$errors.map((error) => error.$message).join('<br>')"
+      :is-invalid="v$.item.title.$error"
+      :label="t('Title')"
+    />
 
-      <div class="grid md:grid-cols-2 md:gap-4">
-        <div class="field">
-          <div class="p-float-label">
-            <Calendar
-              id="start_date"
-              v-model="v$.item.startDate.$model"
-              :class="{ 'p-invalid': v$.item.startDate.$invalid }"
-              :show-icon="true"
-              :show-time="true"
-            />
-            <label
-              v-t="'From'"
-              for="start_date"
-            />
-          </div>
-          <small
-            v-if="v$.item.startDate.$invalid || v$.item.startDate.$pending.$response"
-            v-t="v$.item.startDate.required.$message"
-            class="p-error"
-          />
-        </div>
+    <BaseCalendar
+      v-model="dateRange"
+      :label="'Date'"
+      show-icon
+      show-time
+      type="range"
+    />
 
-        <div class="field">
-          <div class="p-float-label">
-            <Calendar
-              id="end_date"
-              v-model="v$.item.endDate.$model"
-              :class="{ 'p-invalid': v$.item.endDate.$invalid }"
-              :manual-input="false"
-              :show-icon="true"
-              :show-time="true"
-            />
-            <label
-              v-t="'Until'"
-              for="end_date"
-            />
-          </div>
-          <small
-            v-if="v$.item.endDate.$invalid || v$.item.endDate.$pending.$response"
-            v-t="v$.item.endDate.required.$message"
-            class="p-error"
-          />
-        </div>
-      </div>
-    </div>
-
-    <div class="grid md:grid-cols-2 md:gap-4">
+    <div class="field">
       <tiny-editor
         v-model="v$.item.content.$model"
         :init="{
@@ -76,32 +37,29 @@
         }"
         required
       />
-
-      <div
-        v-if="agendaCollectiveInvitations"
-        class="flex flex-col"
-      >
-        <div
-          v-t="'Invitees'"
-          class="text-h6"
-        />
-
-        <EditLinks
-          :edit-status="false"
-          :item="item"
-          :links-type="linksType"
-          :show-status="false"
-          show-share-with-user
-        />
-
-        <BaseCheckbox
-          id="is_collective"
-          v-model="item.collective"
-          :label="t('Is it editable by the invitees?')"
-          name="is_collective"
-        />
-      </div>
     </div>
+
+    <Fieldset
+      v-if="agendaCollectiveInvitations"
+      :legend="'Invitees'"
+      collapsed
+      toggleable
+    >
+      <EditLinks
+        :edit-status="false"
+        :item="item"
+        :links-type="linksType"
+        :show-status="false"
+        show-share-with-user
+      />
+
+      <BaseCheckbox
+        id="is_collective"
+        v-model="item.collective"
+        :label="t('Is it editable by the invitees?')"
+        name="is_collective"
+      />
+    </Fieldset>
 
     <slot />
   </form>
@@ -113,11 +71,14 @@ import { useStore } from "vuex"
 import { useVuelidate } from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
-import Calendar from "primevue/calendar"
 import EditLinks from "../resource_links/EditLinks.vue"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import { useI18n } from "vue-i18n"
 import { usePlatformConfig } from "../../store/platformConfig"
+import BaseCalendar from "../basecomponents/BaseCalendar.vue"
+import Fieldset from "primevue/fieldset"
+
+const dateRange = ref()
 
 const store = useStore()
 const platformConfigStore = usePlatformConfig()

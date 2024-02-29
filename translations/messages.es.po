@@ -10160,6 +10160,9 @@ msgstr "No hay estudiantes sin calificar"
 msgid "Social network"
 msgstr "Red social"
 
+msgid "Sessions catalogue"
+msgstr "Catálogo de sesiones"
+
 msgid "Back to outbox"
 msgstr "Volver a la bandeja de salida"
 

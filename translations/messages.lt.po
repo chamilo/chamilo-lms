@@ -3470,7 +3470,7 @@ msgstr "Atsisakymas yra negalimas šiame kurse."
 msgid "You are a trainer in this course"
 msgstr "Jūs esate kurso vadovas šiame kurse."
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Kursų valdymas"
 
 msgid "Sort courses"

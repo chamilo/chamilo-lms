@@ -35,7 +35,6 @@ const defaultEditorConfig = {
   relative_urls: false,
   height: 280,
   toolbar_mode: 'sliding',
-  file_picker_callback: browser,
   autosave_ask_before_unload: true,
   plugins: [
     'fullpage advlist autolink lists link image charmap print preview anchor',

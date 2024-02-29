@@ -106,14 +106,19 @@
 
         </div>
         <div v-else>
-          <p>{{ legalStatus.message }}</p>
+          <BaseButton
+            :label="t(legalStatus.message)"
+            @click="submitAcceptTerm"
+            type="primary"
+            icon="send"
+          />
         </div>
       </div>
     </BaseCard>
   </div>
 
   <BaseDialog
-    v-if="termsAndConditions.length > 0"
+    v-if="termsAndConditions"
     v-model:is-visible="termsAndConditionsDialogVisible"
     :style="{ width: '28rem' }"
     :title="t('Read the Terms and Conditions')"
@@ -127,9 +132,8 @@
 </template>
 
 <script setup>
-import axios from 'axios';
 import { onMounted, reactive, ref, computed } from "vue"
-import { useI18n } from 'vue-i18n';
+import { useI18n } from 'vue-i18n'
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import { useStore } from "vuex"
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
@@ -138,6 +142,7 @@ import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
 import LayoutFormButtons from "../../components/layout/LayoutFormButtons.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useNotification } from "../../composables/notification"
+import socialService from "../../services/socialService"
 
 const { t } = useI18n()
 const store = useStore()
@@ -170,31 +175,6 @@ const openTermsDialog = () => {
   termsAndConditionsDialogVisible.value = true
 }
 
-const submitPrivacyRequest = async (requestType) => {
-  const explanation = requestType === 'delete_account' ? deleteAccountExplanation.value : deleteTermExplanation.value
-
-  if (explanation.trim() === '') {
-    showErrorNotification('Explanation is required')
-    return
-  }
-
-  try {
-    const response = await axios.post('/social-network/handle-privacy-request', {
-      explanation,
-      userId: user.value["@id"].split('/').pop(),
-      requestType
-    })
-
-    if (response.data.success) {
-      showSuccessNotification(response.data.message)
-    } else {
-      showErrorNotification(response.data.message)
-    }
-  } catch (error) {
-    showErrorNotification('Error submitting privacy request:', error)
-  }
-}
-
 const submitDeleteTerm = () => submitPrivacyRequest('delete_legal')
 const submitDeleteAccount = () => submitPrivacyRequest('delete_account')
 
@@ -214,10 +194,9 @@ async function fetchPersonalData() {
   }
   try {
     const userId = user.value["@id"].split('/').pop()
-    const response = await axios.get(`/social-network/personal-data/${userId}`)
-    personalData.data = response.data.personalData
+    personalData.data = await socialService.fetchPersonalData(userId)
   } catch (error) {
-    console.error('Error fetching personal data:', error)
+    showErrorNotification('Error fetching personal data:', error)
   }
 }
 
@@ -228,10 +207,47 @@ async function fetchTermsAndConditions() {
   }
   try {
     const userId = user.value["@id"].split('/').pop()
-    const response = await axios.get(`/social-network/terms-and-conditions/${userId}`)
-    termsAndConditions.value = response.data.terms
+    termsAndConditions.value = await socialService.fetchTermsAndConditions(userId)
   } catch (error) {
-    console.error('Error fetching terms and conditions:', error)
+    showErrorNotification('Error fetching terms and conditions:', error)
+  }
+}
+
+async function submitPrivacyRequest(requestType) {
+  const explanation = requestType === 'delete_account' ? deleteAccountExplanation.value : deleteTermExplanation.value
+  if (explanation.trim() === '') {
+    showErrorNotification('Explanation is required')
+    return
+  }
+  try {
+    const userId = user.value["@id"].split('/').pop()
+    const response = await socialService.submitPrivacyRequest({ userId, explanation, requestType })
+    if (response.success) {
+      showSuccessNotification(response.message)
+      deleteTermExplanation.value = ''
+      deleteAccountExplanation.value = ''
+      await updateUserData()
+    } else {
+      showErrorNotification(response.message)
+    }
+  } catch (error) {
+    showErrorNotification('Error submitting privacy request:', error)
+  }
+}
+
+async function submitAcceptTerm() {
+  try {
+    const userId = user.value["@id"].split('/').pop()
+    const response = await socialService.submitAcceptTerm(userId)
+
+    if (response.success) {
+      showSuccessNotification(response.message)
+      await updateUserData()
+    } else {
+      showErrorNotification(response.message)
+    }
+  } catch (error) {
+    showErrorNotification('Error accepting the term:', error)
   }
 }
 
@@ -242,16 +258,26 @@ async function fetchLegalStatus() {
   }
   try {
     const userId = user.value["@id"].split('/').pop()
-    const response = await axios.get(`/social-network/legal-status/${userId}`)
-    Object.assign(legalStatus, response.data)
+    const legalStatusData = await socialService.fetchLegalStatus(userId)
+    Object.assign(legalStatus, legalStatusData)
   } catch (error) {
-    console.error('Error fetching legal status:', error)
+    showErrorNotification('Error fetching legal status:', error)
+  }
+}
+
+async function updateUserData() {
+  try {
+    await Promise.all([
+      fetchPersonalData(),
+      fetchTermsAndConditions(),
+      fetchLegalStatus(),
+    ])
+  } catch (error) {
+    showErrorNotification('Error updating user data:', error)
   }
 }
 
 onMounted(async () => {
-  await fetchPersonalData()
-  await fetchTermsAndConditions()
-  await fetchLegalStatus()
+  await updateUserData()
 })
 </script>

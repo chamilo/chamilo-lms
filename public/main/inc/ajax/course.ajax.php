@@ -116,7 +116,7 @@ switch ($action) {
                 }
                 $list['items'][] = [
                     'id' => $item['id'],
-                    'text' => strip_tags($item['name']),
+                    'text' => strip_tags($item['title']),
                 ];
             }
 

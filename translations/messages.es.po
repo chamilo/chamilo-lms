@@ -3470,7 +3470,7 @@ msgstr "En este curso no está permitido que los propios usuarios puedan anular 
 msgid "You are a trainer in this course"
 msgstr "Actualmente es el administrador de este curso"
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Catálogo de cursos"
 
 msgid "Sort courses"
@@ -10159,6 +10159,9 @@ msgstr "No hay estudiantes sin calificar"
 
 msgid "Social network"
 msgstr "Red social"
+
+msgid "Sessions catalogue"
+msgstr "Catálogo de sesiones"
 
 msgid "Back to outbox"
 msgstr "Volver a la bandeja de salida"

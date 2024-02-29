@@ -86,6 +86,28 @@ class MessageRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function getMessagesByGroup(int $groupId, bool $mainMessagesOnly = false): array
+    {
+        $qb = $this->createQueryBuilder('m');
+
+        $qb->where('m.group = :group')
+            ->andWhere('m.msgType = :msgType')
+            ->setParameter('group', $groupId)
+            ->setParameter('msgType', Message::MESSAGE_TYPE_GROUP);
+
+        if ($mainMessagesOnly) {
+            $qb->andWhere($qb->expr()->orX(
+                $qb->expr()->isNull('m.parent'),
+                $qb->expr()->eq('m.parent', ':zeroParent')
+            ))
+                ->setParameter('zeroParent', 0);
+        }
+
+        $qb->orderBy('m.id', 'ASC');
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function findReceivedInvitationsByUser(User $user): array
     {
         return $this->createQueryBuilder('m')
@@ -244,6 +266,90 @@ class MessageRepository extends ServiceEntityRepository
             }
         }
 
+        return false;
+    }
+
+    public function getMessagesByGroupAndMessage(int $groupId, int $messageId): array {
+        $qb = $this->createQueryBuilder('m')
+            ->where('m.group = :groupId')
+            ->andWhere('m.msgType = :msgType')
+            ->setParameter('groupId', $groupId)
+            ->setParameter('msgType', Message::MESSAGE_TYPE_GROUP)
+            ->orderBy('m.id', 'ASC');
+
+        $allMessages = $qb->getQuery()->getResult();
+
+        return $this->filterMessagesStartingFromId($allMessages, $messageId);
+    }
+
+    public function deleteTopicAndChildren(int $groupId, int $topicId): void
+    {
+        $entityManager = $this->getEntityManager();
+        $messages = $this->createQueryBuilder('m')
+            ->where('m.group = :groupId AND (m.id = :topicId OR m.parent = :topicId)')
+            ->setParameter('groupId', $groupId)
+            ->setParameter('topicId', $topicId)
+            ->getQuery()
+            ->getResult();
+
+        /* @var Message $message */
+        foreach ($messages as $message) {
+            $message->setMsgType(Message::MESSAGE_STATUS_DELETED);
+            $entityManager->persist($message);
+        }
+
+        $entityManager->flush();
+    }
+
+    /**
+     * Filters messages starting from a specific message ID.
+     * This function first adds the message with the given start ID to the filtered list.
+     * Then, it checks all messages to find descendants of the message with the start ID
+     * and adds them to the filtered list as well.
+     */
+    private function filterMessagesStartingFromId(array $messages, int $startId): array
+    {
+        $filtered = [];
+
+        foreach ($messages as $message) {
+            if ($message->getId() == $startId) {
+                $filtered[] = $message;
+                break;
+            }
+        }
+
+        foreach ($messages as $message) {
+            if ($this->isDescendantOf($message, $startId, $messages)) {
+                $filtered[] = $message;
+            }
+        }
+
+        return $filtered;
+    }
+
+    /**
+     * Determines if a given message is a descendant of another message identified by startId.
+     * A descendant is a message that has a chain of parent messages leading up to the message
+     * with the startId. This function iterates up the parent chain of the given message to
+     * check if any parent matches the startId.
+     */
+    private function isDescendantOf(Message $message, int $startId, array $allMessages): bool
+    {
+        while ($parent = $message->getParent()) {
+            if ($parent->getId() == $startId) {
+                return true;
+            }
+
+            $filteredMessages = array_filter($allMessages, function ($m) use ($parent) {
+                return $m->getId() === $parent->getId();
+            });
+
+            $message = count($filteredMessages) ? array_values($filteredMessages)[0] : null;
+
+            if (!$message) {
+                break;
+            }
+        }
         return false;
     }
 }

@@ -3470,7 +3470,7 @@ msgstr "Nu este permisa renuntare la acest curs."
 msgid "You are a trainer in this course"
 msgstr "Esti administratorul cursului."
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Administrarea cursului"
 
 msgid "Sort courses"

@@ -101,70 +101,38 @@ $(() => {
 </script>
 
 <div class="tracking-course-summary">
-    <div class="row">
-        <div class="col-lg-3 col-sm-3">
-            <div class="panel panel-default tracking tracking-student">
-                <div class="panel-body">
-                    <span class="tracking-icon">
-                        <i class="fa fa-graduation-cap" aria-hidden="true"></i>
-                    </span>
-                    <div class="tracking-info">
-                        <div class="tracking-text"> {{ "Number of users"|trans }}</div>
-                        <div class="tracking-number">
-                            {{ number_students }}
-                        </div>
-                    </div>
-                </div>
+    <div class="grid grid-cols-4 gap-8 mt-4" style="display: flex; margin-bottom: 16pt;">
+        <div class="pt-2 flex justify-center rounded-md h-16 text-4xl border-0 hover:shadow-lg hover:border-0 hover:shadow-black" style="flex: 1; padding: 8pt;">
+            <i class="mdi mdi-account-group ch-tool-icon" style="font-size: 64px; width: 64px; height: 64px; display: block;" aria-hidden="true"></i>
+                {{ number_students }}
+            <div class="card-title text-center p-2 text-xl">
+                {{ "Number of users"|trans }}
             </div>
         </div>
-        <div class="col-lg-3 col-sm-3">
-            <div class="panel panel-default tracking tracking-lessons">
-                <div class="panel-body">
-                    <span class="tracking-icon">
-                        <i class="fa fa-book" aria-hidden="true"></i>
-                    </span>
-                    <div class="tracking-info">
-                        <div class="tracking-text"> {{ "Course progress"|trans }}</div>
-                        <div class="tracking-number">
-                            {{ students_completed_lp }}/{{ number_students }}
-                        </div>
-                    </div>
-                </div>
+        <div class="pt-2 flex justify-center rounded-md h-16 text-4xl border-0 hover:shadow-lg hover:border-0 hover:shadow-black" style="flex: 1; padding: 8pt;">
+            <i class="mdi mdi-progress-check ch-tool-icon" style="font-size: 64px; width: 64px; height: 64px; display: block;" aria-hidden="true"></i>
+            {{ students_completed_lp }}/{{ number_students }}
+            <div class="card-title text-center p-2 text-xl">
+                {{ "Course progress"|trans }}
             </div>
         </div>
-        <div class="col-lg-3 col-sm-3">
-            <div class="panel panel-default tracking tracking-exercise">
-                <div class="panel-body">
-                    <span class="tracking-icon">
-                        <i class="fa fa-heartbeat" aria-hidden="true"></i>
-                    </span>
-                    <div class="tracking-info">
-                        <div class="tracking-text"> {{ "Exercise average"|trans }}</div>
-                        <div class="tracking-number">
-                            {{ students_test_score }}%
-                        </div>
-                    </div>
-                </div>
+        <div class="pt-2 flex justify-center rounded-md h-16 text-4xl border-0 hover:shadow-lg hover:border-0 hover:shadow-black" style="flex: 1; padding: 8pt;">
+            <i class="mdi mdi-chart-box ch-tool-icon" style="font-size: 64px; width: 64px; height: 64px; display: block;" aria-hidden="true"></i>
+            {{ students_test_score }}%
+            <div class="card-title text-center p-2 text-xl">
+                {{ "Exercise average"|trans }}
             </div>
         </div>
-        <div class="col-lg-3 col-sm-3">
-            <div class="panel panel-default tracking tracking-certificate">
-                <div class="panel-body">
-                    <span class="tracking-icon">
-                        <i class="fa fa-id-card-o" aria-hidden="true"></i>
-                    </span>
-                    <div class="tracking-info">
-                        <div class="tracking-text"> {{ "Certificates count"|trans }}</div>
-                        <div class="tracking-number">
-                            {{ certificate_count }}/{{ number_students }}
-                        </div>
-                    </div>
-                </div>
+        <div class="pt-2 flex justify-center rounded-md h-16 text-4xl border-0 hover:shadow-lg hover:border-0 hover:shadow-black" style="flex: 1; padding: 8pt;">
+            <i class="mdi mdi-certificate ch-tool-icon" style="font-size: 64px; width: 64px; height: 64px; display: block;" aria-hidden="true"></i>
+            {{ certificate_count }}/{{ number_students }}
+            <div class="card-title text-center p-2 text-xl">
+                {{ "Certificates count"|trans }}
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-4">
+    <div class="row" style="display: flex;">
+        <div class="col-md-4" style="flex: 1; margin: 8pt;">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="tracking-chart">
@@ -174,7 +142,7 @@ $(() => {
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" style="flex: 1; margin: 8pt;">
             <div class="panel panel-default tracking-top-student">
                 <div class="panel-body">
                     <h4 class="tracking-box-title">{{ 'Outstanding students'|trans }}</h4>
@@ -215,7 +183,7 @@ $(() => {
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" style="flex: 1; margin: 8pt;">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <h4 class="tracking-box-title">{{ "Total time spent in the course"|trans }}</h4>

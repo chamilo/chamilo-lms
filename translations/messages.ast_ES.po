@@ -3470,7 +3470,7 @@ msgstr "Nesti cursu nun se permite que los usuarios anulen la so matrícula ello
 msgid "You are a trainer in this course"
 msgstr "Usté ye l'alministrador d'esti cursu"
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Xestionar los mios cursos"
 
 msgid "Sort courses"

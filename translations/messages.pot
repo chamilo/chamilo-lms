@@ -3469,7 +3469,7 @@ msgstr ""
 msgid "You are a trainer in this course"
 msgstr ""
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr ""
 
 msgid "Sort courses"

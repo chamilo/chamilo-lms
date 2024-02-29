@@ -75,27 +75,25 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from "vue-router"
 import GroupDiscussions from "../../components/usergroup/GroupDiscussions.vue"
 import GroupMembers from "../../components/usergroup/GroupMembers.vue"
 import { useI18n } from "vue-i18n"
 import { useSocialInfo } from "../../composables/useSocialInfo"
-import axios from "axios"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import socialService from "../../services/socialService"
 
 const { t } = useI18n()
 const route = useRoute()
+const router = useRouter()
 const activeTab = ref('discussions')
 const { user, groupInfo, isGroup, loadGroup, isLoading } = useSocialInfo()
-const joinGroup = async () => {
+
+const joinGroup = async delta => {
   try {
-    const response = await axios.post('/social-network/group-action', {
-      userId: user.value.id,
-      groupId: groupInfo.value.id,
-      action: 'join'
-    })
-    if (response.data.success) {
-      await loadGroup(groupInfo.value.id)
+    const response = await socialService.joinGroup(user.value.id, groupInfo.value.id)
+    if (response.success) {
+      router.go(delta)
     }
   } catch (error) {
     console.error('Error joining the group:', error)

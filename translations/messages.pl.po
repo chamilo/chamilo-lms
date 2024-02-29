@@ -3470,7 +3470,7 @@ msgstr "Wypisanie z tego kursy jest niedozwolone."
 msgid "You are a trainer in this course"
 msgstr "Jesteś Trenerem tego kursu."
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Katalog kursów"
 
 msgid "Sort courses"

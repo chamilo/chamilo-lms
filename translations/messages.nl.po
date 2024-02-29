@@ -3495,7 +3495,7 @@ msgstr "Uitschrijven is niet toegelaten voor deze cursus"
 msgid "You are a trainer in this course"
 msgstr "U bent cursusbeheerder van deze cursus"
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Cursusbeheer"
 
 msgid "Sort courses"

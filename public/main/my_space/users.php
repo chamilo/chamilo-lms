@@ -260,7 +260,7 @@ if (api_is_drh()) {
         $webCodePath.'my_space/company_reports.php'
     );
     $actionsLeft .= Display::url(
-        Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('GradebookSeeListOfLearnersCertificates')),
+        Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('See list of learner certificates')),
         $webCodePath.'gradebook/certificate_report.php'
     );
 }

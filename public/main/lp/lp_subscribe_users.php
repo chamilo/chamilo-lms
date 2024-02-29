@@ -201,9 +201,9 @@ if ($allowUserGroups) {
                     $userList = $userGroup->get_users_by_usergroup($userGroupId);
                     $cLpRelUserRepo->unsubcribeUsersToItem(
                         $course,
-                        $session,
                         $entity,
-                        $userList
+                        $userList,
+                        $session
                     );
                 }
             }
@@ -240,8 +240,8 @@ if ($allowUserGroups) {
                 $cLpRelUserRepo->subscribeUsersToItem(
                     $currentUser,
                     $course,
-                    $session,
                     $entity,
+                    $session,
                     $userList,
                     false
                 );
@@ -253,9 +253,9 @@ if ($allowUserGroups) {
                 $userList = $userGroup->get_users_by_usergroup($group['id']);
                 $cLpRelUserRepo->unsubcribeUsersToItem(
                     $course,
-                    $session,
                     $entity,
-                    $userList
+                    $userList,
+                    $session
                 );
             }
 
@@ -296,8 +296,8 @@ if ($form->validate()) {
         $cLpRelUserRepo->subscribeUsersToItem(
             $currentUser,
             $course,
-            $session,
             $entity,
+            $session,
             $users
         );
         Display::addFlash(Display::return_message(get_lang('Update successful')));

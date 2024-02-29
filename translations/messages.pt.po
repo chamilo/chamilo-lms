@@ -3470,7 +3470,7 @@ msgstr "Não é permitido anular/cancelar a inscrição neste curso"
 msgid "You are a trainer in this course"
 msgstr "Você é Instrutor neste curso"
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Gestão de Cursos"
 
 msgid "Sort courses"

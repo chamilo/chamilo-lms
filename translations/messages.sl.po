@@ -3470,7 +3470,7 @@ msgstr "Izpis za ta tečaj ni dovoljen."
 msgid "You are a trainer in this course"
 msgstr "Si upravitelj tega tečaja."
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Katalog tečajev"
 
 msgid "Sort courses"

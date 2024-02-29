@@ -1058,7 +1058,7 @@ class CourseManager
      * @return array an array with the course info of all the courses (real and virtual)
      *               of which the current user is course admin
      */
-    public static function get_course_list_of_user_as_course_admin($userId, $keyword = '')
+    public static function get_course_list_of_user_as_course_admin($userId, $keyword = ''): array
     {
         $user = api_get_user_entity($userId);
 
@@ -1067,10 +1067,9 @@ class CourseManager
         }
 
         $url = api_get_url_entity();
-        $user = api_get_user_entity($userId);
-        $repo = Container::getUserRepository();
+        $repo = Container::getCourseRepository();
 
-        return $repo->getCourses($user, $url, COURSEMANAGER, $keyword);
+        return $repo->getCoursesInfoByUser($user, $url, COURSEMANAGER, $keyword);
     }
 
     /**

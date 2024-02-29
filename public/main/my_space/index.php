@@ -239,7 +239,7 @@ if (!empty($session_id) &&
                 'ch-tool-icon',
                 null,
                 32,
-                get_lang('GradebookSeeListOfLearnersCertificates')
+                get_lang('See list of learner certificates')
             ),
             api_get_path(WEB_CODE_PATH).'gradebook/certificate_report.php'
         );

@@ -3470,7 +3470,7 @@ msgstr "Нельзя отменить подписку для этого кур�
 msgid "You are a trainer in this course"
 msgstr "Для этого курса Вы являетесь его  администратором"
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Управление курсами"
 
 msgid "Sort courses"

@@ -7,6 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\Legal;
+use Chamilo\CoreBundle\Entity\Message;
+use Chamilo\CoreBundle\Entity\MessageAttachment;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UserRelUser;
@@ -16,6 +19,7 @@ use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\LegalRepository;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
+use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
@@ -23,6 +27,7 @@ use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
 use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use ExtraFieldValue;
@@ -80,14 +85,13 @@ class SocialController extends AbstractController
         }
 
         $isoCode = $user->getLocale();
-        $language = $languageRepo->findByIsoCode($isoCode);
-        $languageId = (int) $language->getId();
-
-        $term = $legalTermsRepo->getLastConditionByLanguage($languageId);
-
-        if (!$term) {
-            $defaultLanguage = $settingsManager->getSetting('platform.platform_language');
-            $term = $legalTermsRepo->getLastConditionByLanguage((int) $defaultLanguage);
+        $extraFieldValue = new ExtraFieldValue('user');
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
+        if ($value && !empty($value['value'])) {
+            [$legalId, $legalLanguageId, $legalTime] = explode(':', $value['value']);
+            $term = $legalTermsRepo->find($legalId);
+        } else {
+            $term = $this->getLastConditionByLanguage($languageRepo, $isoCode, $legalTermsRepo, $settingsManager);
         }
 
         if (!$term) {
@@ -163,6 +167,68 @@ class SocialController extends AbstractController
         ];
 
         return $this->json($response);
+    }
+
+    #[Route('/send-legal-term', name: 'chamilo_core_social_send_legal_term')]
+    public function sendLegalTerm(
+        Request $request,
+        SettingsManager $settingsManager,
+        TranslatorInterface $translator,
+        LegalRepository $legalTermsRepo,
+        UserRepository $userRepo,
+        LanguageRepository $languageRepo
+    ): JsonResponse {
+        $data = json_decode($request->getContent(), true);
+        $userId = $data['userId'] ?? null;
+
+        /* @var User $user */
+        $user = $userRepo->find($userId);
+        if (!$user) {
+            return $this->json(['error' => 'User not found']);
+        }
+
+        $isoCode = $user->getLocale();
+        /* @var Legal $term */
+        $term = $this->getLastConditionByLanguage($languageRepo, $isoCode, $legalTermsRepo, $settingsManager);
+
+        if (!$term) {
+            return $this->json(['error' => 'Terms not found']);
+        }
+
+        $legalAcceptType =  $term->getVersion().':'.$term->getLanguageId().':'.time();
+        UserManager::update_extra_field_value(
+            $userId,
+            'legal_accept',
+            $legalAcceptType
+        );
+
+        $bossList = UserManager::getStudentBossList($userId);
+        if (!empty($bossList)) {
+            $bossList = array_column($bossList, 'boss_id');
+            foreach ($bossList as $bossId) {
+                $subjectEmail = sprintf(
+                    $translator->trans('User %s signed the agreement'),
+                    $user->getFullname()
+                );
+                $contentEmail = sprintf(
+                    $translator->trans('User %s signed the agreement.TheDateY'),
+                    $user->getFullname(),
+                    api_get_local_time()
+                );
+
+                MessageManager::send_message_simple(
+                    $bossId,
+                    $subjectEmail,
+                    $contentEmail,
+                    $userId
+                );
+            }
+        }
+
+        return $this->json([
+            'success' => true,
+            'message' => $translator->trans('Terms accepted successfully.'),
+        ]);
     }
 
     #[Route('/handle-privacy-request', name: 'chamilo_core_social_handle_privacy_request')]
@@ -263,6 +329,21 @@ class SocialController extends AbstractController
         }
 
         return $this->json(['groups' => $groupsArray]);
+    }
+
+    #[Route('/group/{groupId}/discussion/{discussionId}/messages', name: 'chamilo_core_social_group_discussion_messages')]
+    public function getDiscussionMessages(
+        $groupId,
+        $discussionId,
+        MessageRepository $messageRepository,
+        UserRepository $userRepository,
+        MessageAttachmentRepository $attachmentRepository
+    ): JsonResponse {
+        $messages = $messageRepository->getMessagesByGroupAndMessage((int) $groupId, (int) $discussionId);
+
+        $formattedMessages = $this->formatMessagesHierarchy($messages, $userRepository, $attachmentRepository);
+
+        return $this->json($formattedMessages);
     }
 
     #[Route('/get-forum-link', name: 'get_forum_link')]
@@ -633,13 +714,41 @@ class SocialController extends AbstractController
     }
 
     #[Route('/group-action', name: 'chamilo_core_social_group_action')]
-    public function groupAction(Request $request, UsergroupRepository $usergroupRepository, EntityManagerInterface $em): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
+    public function groupAction(
+        Request $request,
+        UsergroupRepository $usergroupRepository,
+        EntityManagerInterface $em,
+        MessageRepository $messageRepository
+    ): JsonResponse {
+        if (0 === strpos($request->headers->get('Content-Type'), 'multipart/form-data')) {
+            $userId = $request->request->get('userId');
+            $groupId = $request->request->get('groupId');
+            $action = $request->request->get('action');
+            $title = $request->request->get('title', '');
+            $content = $request->request->get('content', '');
+            $parentId = $request->request->get('parentId', 0);
+            $editMessageId = $request->request->get('messageId', 0);
 
-        $userId = $data['userId'] ?? null;
-        $groupId = $data['groupId'] ?? null;
-        $action = $data['action'] ?? null;
+            $structuredFiles = [];
+            if ($request->files->has('files')) {
+                $files = $request->files->get('files');
+                foreach ($files as $file) {
+                    $structuredFiles[] = [
+                        'name' => $file->getClientOriginalName(),
+                        'full_path' => $file->getRealPath(),
+                        'type' => $file->getMimeType(),
+                        'tmp_name' => $file->getPathname(),
+                        'error' => $file->getError(),
+                        'size' => $file->getSize(),
+                    ];
+                }
+            }
+        } else {
+            $data = json_decode($request->getContent(), true);
+            $userId = $data['userId'] ?? null;
+            $groupId = $data['groupId'] ?? null;
+            $action = $data['action'] ?? null;
+        }
 
         if (!$userId || !$groupId || !$action) {
             return $this->json(['error' => 'Missing parameters'], Response::HTTP_BAD_REQUEST);
@@ -660,18 +769,51 @@ class SocialController extends AbstractController
                     }
 
                     break;
-
                 case 'join':
                     $usergroupRepository->addUserToGroup($userId, $groupId);
 
                     break;
-
                 case 'deny':
+                    $usergroupRepository->removeUserFromGroup($userId, $groupId, false);
+
+                    break;
                 case 'leave':
                     $usergroupRepository->removeUserFromGroup($userId, $groupId);
 
                     break;
+                case 'reply_message_group':
+                    $title = $title ?: substr(strip_tags($content), 0, 50);
+                case 'edit_message_group':
+                case 'add_message_group':
+                    $res = MessageManager::send_message(
+                        $userId,
+                        $title,
+                        $content,
+                        $structuredFiles,
+                        [],
+                        $groupId,
+                        $parentId,
+                        $editMessageId,
+                        0,
+                        $userId,
+                        false,
+                        0,
+                        false,
+                        false,
+                        Message::MESSAGE_TYPE_GROUP
+                    );
 
+                    break;
+                case 'delete_message_group':
+                    $messageId = $data['messageId'] ?? null;
+
+                    if (!$messageId) {
+                        return $this->json(['error' => 'Missing messageId parameter'], Response::HTTP_BAD_REQUEST);
+                    }
+
+                    $messageRepository->deleteTopicAndChildren($groupId, $messageId);
+
+                    break;
                 default:
                     return $this->json(['error' => 'Invalid action'], Response::HTTP_BAD_REQUEST);
             }
@@ -794,6 +936,60 @@ class SocialController extends AbstractController
     }
 
     /**
+     * Formats a hierarchical structure of messages for display.
+     *
+     * This function takes an array of Message entities and recursively formats them into a hierarchical structure.
+     * Each message is formatted with details such as user information, creation date, content, and attachments.
+     * The function also assigns a level to each message based on its depth in the hierarchy for display purposes.
+     */
+    private function formatMessagesHierarchy(array $messages, UserRepository $userRepository, MessageAttachmentRepository $attachmentRepository, ?int $parentId = null, int $level = 0): array
+    {
+        $formattedMessages = [];
+
+        /* @var Message $message */
+        foreach ($messages as $message) {
+            if (($message->getParent() ? $message->getParent()->getId() : null) === $parentId) {
+                $attachments =  $message->getAttachments();
+                $attachmentsUrls = [];
+                $attachmentSize = 0;
+                if ($attachments) {
+                    /** @var MessageAttachment $attachment */
+                    foreach ($attachments as $attachment) {
+                        $attachmentsUrls[] = [
+                            'link' => $attachmentRepository->getResourceFileDownloadUrl($attachment),
+                            'filename' => $attachment->getFilename(),
+                            'size' => $attachment->getSize(),
+                        ];
+                        $attachmentSize += $attachment->getSize();
+                    }
+                }
+                $formattedMessage = [
+                    'id' => $message->getId(),
+                    'user' => $message->getSender()->getFullName(),
+                    'created' => $message->getSendDate()->format(DateTimeInterface::ATOM),
+                    'title' => $message->getTitle(),
+                    'content' => $message->getContent(),
+                    'parentId' => $message->getParent() ? $message->getParent()->getId() : null,
+                    'avatar' => $userRepository->getUserPicture($message->getSender()->getId()),
+                    'senderId' => $message->getSender()->getId(),
+                    'attachment' => $attachmentsUrls ?? null,
+                    'attachmentSize' => $attachmentSize > 0 ? $attachmentSize : null,
+                    'level' => $level,
+                ];
+
+                $children = $this->formatMessagesHierarchy($messages, $userRepository, $attachmentRepository, $message->getId(), $level + 1);
+                if (!empty($children)) {
+                    $formattedMessage['children'] = $children;
+                }
+
+                $formattedMessages[] = $formattedMessage;
+            }
+        }
+
+        return $formattedMessages;
+    }
+
+    /**
      * Checks the relationship between the current user and another user.
      *
      * This method first checks for a direct relationship between the two users. If no direct relationship is found,
@@ -851,10 +1047,39 @@ class SocialController extends AbstractController
         return false;
     }
 
+    /**
+     * Checks the chat status of a user based on their user ID. It verifies if the user's chat status
+     * is active (indicated by a status of 1).
+     */
     private function checkUserStatus(int $userId, UserRepository $userRepository): bool
     {
         $userStatus = $userRepository->getExtraUserDataByField($userId, 'user_chat_status');
 
         return !empty($userStatus) && isset($userStatus['user_chat_status']) && 1 === (int) $userStatus['user_chat_status'];
+    }
+
+    /**
+     * Retrieves the most recent legal terms for a specified language. If no terms are found for the given language,
+     * the function attempts to retrieve terms for the platform's default language. If terms are still not found,
+     * it defaults to English ('en_US').
+     */
+    private function getLastConditionByLanguage(LanguageRepository $languageRepo, string $isoCode, LegalRepository $legalTermsRepo, SettingsManager $settingsManager): ?Legal
+    {
+        $language = $languageRepo->findByIsoCode($isoCode);
+        $languageId = (int) $language->getId();
+        $term = $legalTermsRepo->getLastConditionByLanguage($languageId);
+        if (!$term) {
+            $defaultLanguage = $settingsManager->getSetting('language.platform_language');
+            $language = $languageRepo->findByIsoCode($defaultLanguage);
+            $languageId = (int) $language->getId();
+            $term = $legalTermsRepo->getLastConditionByLanguage((int) $languageId);
+            if (!$term) {
+                $language = $languageRepo->findByIsoCode('en_US');
+                $languageId = (int) $language->getId();
+                $term = $legalTermsRepo->getLastConditionByLanguage((int) $languageId);
+            }
+        }
+
+        return $term;
     }
 }

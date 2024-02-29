@@ -3470,7 +3470,7 @@ msgstr "Malaliĝo ne estas permesita por ĉi-kurso"
 msgid "You are a trainer in this course"
 msgstr "Vi estas mastrumanto de ĉi-kurso"
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Kursmastrumado"
 
 msgid "Sort courses"

@@ -131,6 +131,7 @@ class MessageManager
         $forwardId = 0,
         $checkCurrentAudioId = false,
         $forceTitleWhenSendingEmail = false,
+        $msgType = null
     ) {
         $group_id = (int) $group_id;
         $receiverUserId = (int) $receiverUserId;
@@ -276,6 +277,7 @@ class MessageManager
             if (!empty($editMessageId)) {
                 $message = $repo->find($editMessageId);
                 if (null !== $message) {
+                    $message->setTitle($subject);
                     $message->setContent($content);
                     $em->persist($message);
                     $em->flush();
@@ -292,6 +294,11 @@ class MessageManager
                     ->setGroup($group)
                     ->setParent($parent)
                 ;
+
+                if (isset($msgType)) {
+                    $message->setMsgType($msgType);
+                }
+
                 $em->persist($message);
                 $em->flush();
                 $messageId = $message->getId();
@@ -518,12 +525,14 @@ class MessageManager
 
         // Search for files inside the $_FILES, when uploading several files from the form.
         if ($request->files->count()) {
+            $allFiles = $request->files->all();
+            $filesArray = array_key_exists('files', $allFiles) ? $allFiles['files'] : $allFiles;
             /** @var UploadedFile|null $fileRequest */
-            foreach ($request->files->all() as $fileRequest) {
+            foreach ($filesArray as $fileRequest) {
                 if (null === $fileRequest) {
                     continue;
                 }
-                if ($fileRequest->getClientOriginalName() === $file['name']) {
+                if ($fileRequest instanceof UploadedFile && $fileRequest->getClientOriginalName() === $file['name']) {
                     $fileToUpload = $fileRequest;
                     break;
                 }

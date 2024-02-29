@@ -982,7 +982,7 @@ switch ($action) {
                     $options['where'] = [' (session_id IS NULL OR session_id != ?) ' => $sessionId];
                 }
                 if (!empty($keyword)) {
-                    $options['where']['AND name like %?% '] = $keyword;
+                    $options['where']['AND title like %?% '] = $keyword;
                 }
                 $count = $obj->getUserGroupNotInCourse(
                     $options,

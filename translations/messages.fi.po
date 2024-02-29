@@ -3470,7 +3470,7 @@ msgstr "Tältä kurssilta ei voi kirjautua pois"
 msgid "You are a trainer in this course"
 msgstr "Olet tämän kurssin ylläpitäjä"
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Kurssin ylläpito"
 
 msgid "Sort courses"

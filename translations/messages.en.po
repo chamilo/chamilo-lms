@@ -3470,8 +3470,8 @@ msgstr "Unsubscribing from this course is not allowed."
 msgid "You are a trainer in this course"
 msgstr "You are a trainer in this course"
 
-msgid "Courses catalog"
-msgstr "Courses catalog"
+msgid "Courses catalogue"
+msgstr "Courses catalogue"
 
 msgid "Sort courses"
 msgstr "Sort courses"

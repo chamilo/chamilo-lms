@@ -3470,7 +3470,7 @@ msgstr "Отпишувањето не е дозволено за овој кур
 msgid "You are a trainer in this course"
 msgstr "Вие сте управувач на овој курс"
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Управување со курсот"
 
 msgid "Sort courses"

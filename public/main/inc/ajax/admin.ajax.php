@@ -146,7 +146,16 @@ function check_system_version()
     }
 
     // the chamilo version of your installation
-    $system_version = trim(api_get_configuration_value('system_version'));
+    $system_version = '';
+    $versionStatus = '';
+    $versionFile =__DIR__.'/../../install/version.php';
+    if (is_file($versionFile)) {
+        $versionDetails = include($versionFile);
+        $system_version = trim($versionDetails['new_version']);
+        if (!empty($versionDetails['new_version_status']) &&  $versionDetails['new_version_status'] != 'stable') {
+            $versionStatus = ' ('.$versionDetails['new_version_status'].')';
+        }
+    }
 
     if ($urlValidated) {
         // The number of courses
@@ -157,7 +166,7 @@ function check_system_version()
         $number_of_active_users = Statistics::countUsers(
             null,
             null,
-            null,
+            true,
             true
         );
 
@@ -170,7 +179,7 @@ function check_system_version()
 
         $uniqueId = '';
         $entityManager = Database::getManager();
-        /** @var BranchSyncRepository $branch */
+        /** @var BranchSyncRepository $repository */
         $repository = $entityManager->getRepository(BranchSync::class);
         /** @var BranchSync $branch */
         $branch = $repository->getTopBranch();
@@ -220,16 +229,19 @@ function check_system_version()
             $output = '<span style="color:red">'.
                 get_lang('Your version is not up-to-date').'<br />'.
                 get_lang('The latest version is').' <b>Chamilo '.$version.'</b>.  <br />'.
-                get_lang('Your version is').' <b>Chamilo '.$system_version.'</b>.  <br />'.
+                get_lang('Your version is').' <b>Chamilo '.$system_version.$versionStatus.'</b>.  <br />'.
                 str_replace(
                     'http://www.chamilo.org',
-                    '<a href="http://www.chamilo.org">http://www.chamilo.org</a>',
+                    '<a href="https://chamilo.org/download">https://chamilo.org/download</a>',
                     get_lang('Please visit our website: http://www.chamilo.org')
                 ).
                 '</span>';
         } else {
             $output = '<span style="color:green">'.
-                get_lang('Your version is up-to-date').': Chamilo '.$version.'</span>';
+                get_lang('Your version is up-to-date').'<br />'.
+                get_lang('The latest version is').' <b>Chamilo '.$version.'</b>.  <br />'.
+                get_lang('Your version is').' <b>Chamilo '.$system_version.$versionStatus.'</b>.  <br />'.
+                '</span>';
         }
 
         return $output;

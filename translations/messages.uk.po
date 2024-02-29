@@ -3470,7 +3470,7 @@ msgstr "Відрахування не дозволено для цього ку�
 msgid "You are a trainer in this course"
 msgstr "Ви є адміністратором цього курсу"
 
-msgid "Courses catalog"
+msgid "Courses catalogue"
 msgstr "Керування курсом"
 
 msgid "Sort courses"

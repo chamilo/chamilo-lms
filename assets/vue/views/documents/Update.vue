@@ -5,7 +5,7 @@
       @submit="updateItemWithFormData"
     >
       <EditLinks
-        :item="item"
+        v-model="item"
         :show-share-with-user="false"
         :show-status="false"
         links-type="users"

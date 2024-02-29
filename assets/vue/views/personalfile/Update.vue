@@ -17,7 +17,7 @@
       :values="item"
     >
       <EditLinks
-        :item="item"
+        v-model="item"
         links-type="users"
       />
     </DocumentsForm>

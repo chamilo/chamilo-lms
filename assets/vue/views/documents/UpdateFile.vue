@@ -20,7 +20,7 @@
           :values="item"
         >
           <EditLinks
-            :item="item"
+            v-model="item"
             :show-share-with-user="false"
             links-type="users"
           />

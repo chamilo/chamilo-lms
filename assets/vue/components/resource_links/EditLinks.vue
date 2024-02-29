@@ -1,7 +1,7 @@
 <template>
   <ShowLinks
     :edit-status="editStatus"
-    :item="item"
+    :item="model"
     :show-status="showStatus"
   />
 
@@ -16,8 +16,7 @@
       :placeholder="$t('Share with User')"
       :searchable="true"
       label="username"
-      limit="3"
-      limit-text="3"
+      :limit="3"
       track-by="id"
       @select="addUser"
       @search-change="asyncFind"
@@ -35,11 +34,10 @@ import isEmpty from "lodash/isEmpty"
 import { RESOURCE_LINK_PUBLISHED } from "./visibility.js"
 import { useSecurityStore } from "../../store/securityStore"
 
+// eslint-disable-next-line vue/require-prop-types
+const model = defineModel()
+
 const props = defineProps({
-  item: {
-    type: Object,
-    required: true,
-  },
   editStatus: {
     type: Boolean,
     required: false,
@@ -69,17 +67,17 @@ const isLoading = ref(false)
 const securityStore = useSecurityStore()
 
 function addUser(userResult) {
-  if (isEmpty(props.item.resourceLinkListFromEntity)) {
-    props.item.resourceLinkListFromEntity = []
+  if (isEmpty(model.value.resourceLinkListFromEntity)) {
+    model.value.resourceLinkListFromEntity = []
   }
 
-  const someLink = props.item.resourceLinkListFromEntity.some((link) => link.user.username === userResult.username)
+  const someLink = model.value.resourceLinkListFromEntity.some((link) => link.user.username === userResult.username)
 
   if (someLink) {
     return
   }
 
-  props.item.resourceLinkListFromEntity.push({
+  model.value.resourceLinkListFromEntity.push({
     uid: userResult.id,
     user: { username: userResult.username },
     visibility: RESOURCE_LINK_PUBLISHED,

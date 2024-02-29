@@ -9,7 +9,8 @@ api_protect_admin_script();
 /**
  * Generates a CSV model string showing how the CSV file should be structured for course updates.
  */
-function generateCsvModel(array $fields): string {
+function generateCsvModel(array $fields): string
+{
     $headerCsv = "<strong>Code</strong>;Title;CourseCategory;Language;";
 
     $exampleCsv = "<b>COURSE001</b>;Introduction to Biology;BIO;english;";
@@ -27,12 +28,12 @@ function generateCsvModel(array $fields): string {
                 $exampleValue = 'xxx'; // Example value for text fields
         }
 
-        $headerCsv .= "<span style=\"color:red;\">" . $field['field_variable'] . "</span>;";
+        $headerCsv .= "<span style=\"color:red;\">".$field['field_variable']."</span>;";
 
         $exampleCsv .= "<span style=\"color:red;\">$exampleValue</span>;";
     }
 
-    $modelCsv = $headerCsv . "\n" . $exampleCsv;
+    $modelCsv = $headerCsv."\n".$exampleCsv;
 
     return $modelCsv;
 }
@@ -61,17 +62,19 @@ function generateXmlModel(array $fields): string
                 $exampleValue = 'xxx'; // Example value for text fields
         }
 
-        $modelXml .= "        <span style=\"color:red;\">&lt;" . $field['field_variable'] . "&gt;$exampleValue&lt;/" . $field['field_variable'] . "&gt;</span>\n";
+        $modelXml .= "        <span style=\"color:red;\">&lt;".$field['field_variable']."&gt;$exampleValue&lt;/".$field['field_variable']."&gt;</span>\n";
     }
     $modelXml .= "    &lt;/Course&gt;\n";
     $modelXml .= "&lt;/Courses&gt;";
+
     return $modelXml;
 }
 
 /**
  * Function to validate course data from the CSV/XML file.
  */
-function validateCourseData(array $courses): array {
+function validateCourseData(array $courses): array
+{
     $errors = [];
     $courseCodes = [];
 
@@ -126,7 +129,8 @@ function updateCourses(array $courses): void
 /**
  * Function to parse CSV data.
  */
-function parseCsvCourseData(string $file, array $extraFields): array {
+function parseCsvCourseData(string $file, array $extraFields): array
+{
     $data = Import::csv_reader($file);
     $courses = [];
 
@@ -138,7 +142,7 @@ function parseCsvCourseData(string $file, array $extraFields): array {
             }
             if (in_array($key, array_column($extraFields, 'variable'))) {
                 $processedValue = processExtraFieldValue($key, $value, $extraFields);
-                $courseData['extra_' . $key] = $processedValue;
+                $courseData['extra_'.$key] = $processedValue;
             } else {
                 $courseData[$key] = $value;
             }
@@ -153,7 +157,8 @@ function parseCsvCourseData(string $file, array $extraFields): array {
 /**
  * Function to parse XML data.
  */
-function parseXmlCourseData(string $file, array $extraFields): array {
+function parseXmlCourseData(string $file, array $extraFields): array
+{
     $xmlContent = Import::xml($file);
     $courses = [];
 
@@ -168,7 +173,7 @@ function parseXmlCourseData(string $file, array $extraFields): array {
                 $value = $node->nodeValue;
                 if (in_array($key, array_column($extraFields, 'variable'))) {
                     $processedValue = processExtraFieldValue($key, $value, $extraFields);
-                    $courseData['extra_' . $key] = $processedValue;
+                    $courseData['extra_'.$key] = $processedValue;
                 } else {
                     $courseData[$key] = $value;
                 }
@@ -204,7 +209,7 @@ function processExtraFieldValue(string $fieldName, $value, array $extraFields)
         case ExtraField::FIELD_TYPE_CHECKBOX:
             $newValue = 0;
             if ($value == '1') {
-                $newValue =  ['extra_'.$fieldName => '1'];
+                $newValue = ['extra_'.$fieldName => '1'];
             }
             return $newValue;
         case ExtraField::FIELD_TYPE_TAG:
@@ -269,24 +274,24 @@ if ($form->validate()) {
             foreach ($courses as $course) {
                 $courseErrors = validateCourseData([$course]);
                 if (!empty($courseErrors)) {
-                    $failedUpdates[] = $course['Code'] . ': ' . implode(', ', $courseErrors);
+                    $failedUpdates[] = $course['Code'].': '.implode(', ', $courseErrors);
                     continue;
                 }
                 try {
                     updateCourses([$course]);
                     $successfulUpdates[] = $course['Code'];
                 } catch (Exception $e) {
-                    $failedUpdates[] = $course['Code'] . ': ' . $e->getMessage();
+                    $failedUpdates[] = $course['Code'].': '.$e->getMessage();
                 }
             }
 
             if (!empty($successfulUpdates)) {
-                Display::addFlash(Display::return_message(get_lang('CoursesUpdatedSuccessfully') . ': ' . implode(', ', $successfulUpdates), 'success'));
+                Display::addFlash(Display::return_message(get_lang('CoursesUpdatedSuccessfully').': '.implode(', ', $successfulUpdates), 'success'));
             }
 
             if (!empty($failedUpdates)) {
                 foreach ($failedUpdates as $error) {
-                    Display::addFlash(Display::return_message(get_lang('UpdateFailedForCourses') . ': ' . $error, 'error'));
+                    Display::addFlash(Display::return_message(get_lang('UpdateFailedForCourses').': '.$error, 'error'));
                 }
             }
         } catch (Exception $e) {
@@ -326,7 +331,7 @@ $extraFields = [];
 foreach ($allExtraFields as $field) {
     $extraFields[] = [
         'field_variable' => $field['variable'],
-        'field_type' => $field['field_type']
+        'field_type' => $field['field_type'],
     ];
 }
 

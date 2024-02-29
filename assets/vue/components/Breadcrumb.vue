@@ -109,10 +109,12 @@ const itemList = computed(() => {
     if (session.value) {
       items.push({
         label: t("My sessions"),
+        route: { name: "MySessions" },
       })
     } else {
       items.push({
         label: t("My courses"),
+        route: { name: "MyCourses" },
       })
     }
   }

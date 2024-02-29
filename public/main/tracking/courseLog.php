@@ -457,7 +457,7 @@ if ($nbStudents > 0) {
         $conditions['course_id'] = $courseId;
         $conditions['include_invited_users'] = false;
         $usersTracking = TrackingCourseLog::get_user_data(
-            null,
+            0,
             $nbStudents,
             $trackingColumn,
             $trackingDirection,
@@ -479,14 +479,14 @@ if ($nbStudents > 0) {
             if ('100' === $averageStudentTestScore) {
                 $reducedAverage = 9;
             } else {
-                $reducedAverage = floor($averageStudentTestScore / 10);
+                $reducedAverage = floor((float) $averageStudentTestScore / 10);
             }
             if (isset($scoresDistribution[$reducedAverage])) {
                 $scoresDistribution[$reducedAverage]++;
             }
-            $scoreStudent = substr($userTracking[5], 0, -1) + substr($userTracking[7], 0, -1);
+            $scoreStudent = (float) substr($userTracking[5], 0, -1) + (float) substr($userTracking[7], 0, -1);
             [$hours, $minutes, $seconds] = preg_split('/:/', $userTracking[4]);
-            $minutes = round((3600 * $hours + 60 * $minutes + $seconds) / 60);
+            $minutes = round((3600 * (int) $hours + 60 * (int) $minutes + (int) $seconds) / 60);
 
             $certificate = false;
             if (isset($category[0]) && $category[0]->is_certificate_available($userId)) {

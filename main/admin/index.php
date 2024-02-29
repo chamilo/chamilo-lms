@@ -293,6 +293,11 @@ if (api_is_platform_admin()) {
         'label' => get_lang('ImportCourses'),
     ];
     $items[] = [
+        'class' => 'item-course-import-update',
+        'url' => 'course_update_import.php',
+        'label' => get_lang('EditCourseListCSV'),
+    ];
+    $items[] = [
         'class' => 'item-course-category',
         'url' => 'course_category.php',
         'label' => get_lang('AdminCategories'),

@@ -75,7 +75,6 @@ import { useI18n } from "vue-i18n"
 import BaseCalendar from "../basecomponents/BaseCalendar.vue"
 import Fieldset from "primevue/fieldset"
 
-const dateRange = ref()
 
 const store = useStore()
 const platformConfigStore = usePlatformConfig()

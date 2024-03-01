@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\TrackELoginRecord;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,9 +18,16 @@ final class TrackELoginRecordRepository extends ServiceEntityRepository
         parent::__construct($registry, TrackELoginRecord::class);
     }
 
-    public function create(TrackELoginRecord $trackELoginRecord): void
+    public function addTrackLogin(string $username, string $userIp, bool $success): void
     {
-        $this->getEntityManager()->persist($trackELoginRecord);
-        $this->getEntityManager()->flush();
+        $trackELoginRecord = new TrackELoginRecord();
+        $trackELoginRecord
+            ->setUsername($username)
+            ->setLoginDate(new DateTime())
+            ->setUserIp($userIp)
+            ->setSuccess($success);
+
+        $this->_em->persist($trackELoginRecord);
+        $this->_em->flush();
     }
 }

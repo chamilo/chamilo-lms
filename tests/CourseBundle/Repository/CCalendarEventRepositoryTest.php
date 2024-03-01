@@ -109,7 +109,7 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
                     'content' => '<p>test event</p>',
                     'startDate' => $start->format('Y-m-d H:i:s'),
                     'endDate' => $end->format('Y-m-d H:i:s'),
-                    'parentResourceNodeId' => $resourceNodeId,
+                    'parentResourceNode' => $resourceNodeId,
                 ],
             ]
         );
@@ -191,7 +191,7 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
                     'content' => '<p>test event</p>',
                     'startDate' => $start->format('Y-m-d H:i:s'),
                     'endDate' => $end->format('Y-m-d H:i:s'),
-                    'parentResourceNodeId' => $resourceNodeId,
+                    'parentResourceNode' => $resourceNodeId,
                 ],
             ]
         );
@@ -238,7 +238,7 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
                     'content' => '<p>test event</p>',
                     'startDate' => $start->format('Y-m-d H:i:s'),
                     'endDate' => $end->format('Y-m-d H:i:s'),
-                    'parentResourceNodeId' => $resourceNodeId,
+                    'parentResourceNode' => $resourceNodeId,
                 ],
             ]
         );
@@ -360,8 +360,8 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
                     'content' => '<p>test event</p>',
                     'startDate' => $start->format('Y-m-d H:i:s'),
                     'endDate' => $end->format('Y-m-d H:i:s'),
-                    'parentResourceNodeId' => $resourceNodeId,
-                    'resourceLinkListFromEntity' => $resourceLinkList,
+                    'parentResourceNode' => $resourceNodeId,
+                    'resourceLinkList' => $resourceLinkList,
                 ],
             ]
         );

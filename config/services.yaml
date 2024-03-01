@@ -67,6 +67,12 @@ services:
         bind:
             $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
 
+    Chamilo\CoreBundle\State\CCalendarEventProcessor:
+        arguments:
+            $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
+        tags:
+            - { name: 'api_platform.state_processor' }
+
     Chamilo\CoreBundle\State\UsergroupPostProcessor:
       arguments:
         $processor: '@api_platform.doctrine.orm.state.persist_processor'

@@ -16,7 +16,6 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\ApiResource\CalendarEvent;
-use Chamilo\CoreBundle\Controller\Api\CreateCCalendarEventAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateCCalendarEventAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
@@ -24,6 +23,7 @@ use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Filter\CidFilter;
 use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CoreBundle\State\CalendarEventProvider;
+use Chamilo\CoreBundle\State\CCalendarEventProcessor;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -53,8 +53,8 @@ use Symfony\Component\Validator\Constraints as Assert;
             provider: CalendarEventProvider::class,
         ),
         new Post(
-            controller: CreateCCalendarEventAction::class,
-            securityPostDenormalize: "is_granted('CREATE', object)"
+            securityPostDenormalize: "is_granted('CREATE', object)",
+            processor: CCalendarEventProcessor::class
         ),
     ],
     normalizationContext: ['groups' => ['calendar_event:read', 'resource_node:read']],
@@ -84,21 +84,21 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     #[ORM\GeneratedValue]
     protected ?int $iid = null;
 
-    #[Groups(['calendar_event:read'])]
+    #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
 
-    #[Groups(['calendar_event:read'])]
+    #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'content', type: 'text', nullable: true)]
     protected ?string $content = null;
 
-    #[Groups(['calendar_event:read'])]
+    #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[ORM\Column(name: 'start_date', type: 'datetime', nullable: true)]
     protected ?DateTime $startDate = null;
 
-    #[Groups(['calendar_event:read'])]
+    #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[ORM\Column(name: 'end_date', type: 'datetime', nullable: true)]
     protected ?DateTime $endDate = null;
 
@@ -143,6 +143,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: CCalendarEventAttachment::class, cascade: ['persist', 'remove'])]
     protected Collection $attachments;
 
+    #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[Assert\NotNull]
     #[ORM\Column(name: 'collective', type: 'boolean', nullable: false, options: ['default' => false])]
     protected bool $collective = false;

@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -13,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Track Login Record.
  */
 #[ORM\Table(name: 'track_e_login_record')]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: TrackELoginRecordRepository::class)]
 class TrackELoginRecord
 {
     #[ORM\Column(name: 'id', type: 'integer')]

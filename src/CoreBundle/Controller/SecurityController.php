@@ -98,17 +98,6 @@ class SecurityController extends AbstractController
 
         $data = null;
         if ($user) {
-            // Log of connection attempts
-            $trackELoginRecord = new TrackELoginRecord();
-            $trackELoginRecord
-                ->setUsername($user->getUsername())
-                ->setLoginDate(new DateTime())
-                ->setUserIp(api_get_real_ip())
-                ->setSuccess(true)
-            ;
-
-            $this->trackELoginRecordRepository->create($trackELoginRecord);
-
             $data = $this->serializer->serialize($user, 'jsonld', ['groups' => ['user:read']]);
         }
 

@@ -7,10 +7,13 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\TrackELogin;
+use Chamilo\CoreBundle\Entity\TrackELoginRecord;
 use Chamilo\CoreBundle\Entity\TrackEOnline;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRepository;
 use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
+use Chamilo\CoreBundle\ServiceHelper\LoginAttemptLogger;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,17 +30,20 @@ class LoginSuccessHandler
     protected AuthorizationCheckerInterface $checker;
     protected SettingsManager $settingsManager;
     protected EntityManagerInterface $entityManager;
+    private LoginAttemptLogger $loginAttemptLogger;
 
     public function __construct(
         UrlGeneratorInterface $urlGenerator,
         AuthorizationCheckerInterface $checker,
         SettingsManager $settingsManager,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        LoginAttemptLogger $loginAttemptLogger
     ) {
         $this->router = $urlGenerator;
         $this->checker = $checker;
         $this->settingsManager = $settingsManager;
         $this->entityManager = $entityManager;
+        $this->loginAttemptLogger = $loginAttemptLogger;
     }
 
     /**
@@ -147,8 +153,15 @@ class LoginSuccessHandler
             /** @var TrackELoginRepository $trackELoginRepository */
             $trackELoginRepository = $this->entityManager->getRepository(TrackELogin::class);
 
+            /** @var TrackELoginRecordRepository $trackELoginRecordRepository */
+            $trackELoginRecordRepository = $this->entityManager->getRepository(TrackELoginRecord::class);
+
             $trackELoginRepository->createLoginRecord($user, new DateTime(), $userIp);
             $trackEOnlineRepository->createOnlineSession($user, $userIp);
+
+            // Log of connection attempts
+            $trackELoginRecordRepository->addTrackLogin($user->getUsername(), $userIp, true);
+            $this->loginAttemptLogger->logAttempt(true, $user->getUsername(), $userIp);
 
             $session->set('login_records_created', true);
         }

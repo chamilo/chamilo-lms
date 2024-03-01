@@ -86,10 +86,7 @@ class CourseRepository extends ResourceRepository
 
     /**
      * Get info from courses where the user has the given role.
-     * @param User $user
-     * @param AccessUrl $url
-     * @param int $status
-     * @param string $keyword
+     *
      * @return Course[]
      */
     public function getCoursesInfoByUser(User $user, AccessUrl $url, int $status, string $keyword = ''): array
@@ -107,7 +104,7 @@ class CourseRepository extends ResourceRepository
             ->setParameters([
                 'user' => $user,
                 'url' => $url,
-                'status' => $status
+                'status' => $status,
             ])
         ;
         if (!empty($keyword)) {

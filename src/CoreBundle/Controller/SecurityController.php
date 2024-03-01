@@ -8,11 +8,9 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Legal;
-use Chamilo\CoreBundle\Entity\TrackELoginRecord;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,12 +30,12 @@ class SecurityController extends AbstractController
     private $authorizationChecker;
 
     public function __construct(
-        private SerializerInterface         $serializer,
+        private SerializerInterface $serializer,
         private TrackELoginRecordRepository $trackELoginRecordRepository,
-        EntityManagerInterface              $entityManager,
-        SettingsManager                     $settingsManager,
-        TokenStorageInterface               $tokenStorage,
-        AuthorizationCheckerInterface       $authorizationChecker
+        EntityManagerInterface $entityManager,
+        SettingsManager $settingsManager,
+        TokenStorageInterface $tokenStorage,
+        AuthorizationCheckerInterface $authorizationChecker
     ) {
         $this->entityManager = $entityManager;
         $this->settingsManager = $settingsManager;
@@ -91,9 +89,8 @@ class SecurityController extends AbstractController
                 ];
 
                 return new JsonResponse($responseData, Response::HTTP_OK);
-            } else {
-                $request->getSession()->remove('term_and_condition');
             }
+            $request->getSession()->remove('term_and_condition');
         }
 
         $data = null;

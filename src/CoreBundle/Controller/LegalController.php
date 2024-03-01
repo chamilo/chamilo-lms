@@ -30,7 +30,7 @@ class LegalController
 
         $lang = $data['lang'] ?? null;
         $content = $data['content'] ?? null;
-        $type = isset($data['type']) ? (int)$data['type'] : null;
+        $type = isset($data['type']) ? (int) $data['type'] : null;
         $changes = $data['changes'] ?? '';
         $extraFields = $data['extraFields'] ?? [];
 
@@ -70,7 +70,6 @@ class LegalController
     #[Route('/extra-fields', name: 'chamilo_core_get_extra_fields')]
     public function getExtraFields(Request $request): JsonResponse
     {
-
         $extraField = new ExtraField('terms_and_condition');
         $types = LegalManager::getTreatmentTypeList();
 
@@ -116,16 +115,21 @@ class LegalController
                 case 'editor':
                     $extraField['props']['editorId'] = $prefix.$field['variable'];
                     $extraField['props']['modelValue'] = $field['value'] ?? '';
-                    $extraField['props']['helpText'] = 'Specific help text for ' . $field['title'];
+                    $extraField['props']['helpText'] = 'Specific help text for '.$field['title'];
+
                     break;
+
                 case 'text':
                     $extraField['props']['label'] = $field['title'];
                     $extraField['props']['modelValue'] = $field['value'] ?? '';
+
                     break;
+
                 case 'select':
                     $extraField['props']['label'] = $field['title'];
                     $extraField['props']['options'] = [];
                     $extraField['props']['modelValue'] = $field['value'] ?? '';
+
                     break;
             }
 
@@ -150,10 +154,12 @@ class LegalController
         foreach ($newValues as $key => $newValue) {
             if (isset($oldValues[$key]) && $newValue != $oldValues[$key]) {
                 return true;
-            } elseif (!isset($oldValues[$key])) {
+            }
+            if (!isset($oldValues[$key])) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -174,8 +180,10 @@ class LegalController
         switch ($type) {
             case ExtraField::FIELD_TYPE_TEXT:
                 return 'text';
+
             case ExtraField::FIELD_TYPE_TEXTAREA:
                 return 'editor';
+
             case ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
             case ExtraField::FIELD_TYPE_DATE:
             case ExtraField::FIELD_TYPE_DATETIME:
@@ -183,6 +191,7 @@ class LegalController
             case ExtraField::FIELD_TYPE_RADIO:
                 // Manage as needed
                 break;
+
             case ExtraField::FIELD_TYPE_SELECT:
                 return 'select';
         }

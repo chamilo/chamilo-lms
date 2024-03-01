@@ -1,5 +1,9 @@
 <?php
 
+/* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Metadata\Operation;
@@ -17,21 +21,21 @@ class CCalendarEventProcessor implements ProcessorInterface
     public function __construct(
         private readonly ProcessorInterface $persistProcessor,
         private readonly Security $security,
-    ) {
-    }
+    ) {}
 
     /**
+     * @param mixed $data
+     *
      * @throws Exception
      */
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): CCalendarEvent
     {
-        assert($data instanceof CCalendarEvent);
+        \assert($data instanceof CCalendarEvent);
 
         /** @var User $currentUser */
         $currentUser = $this->security->getUser();
 
         $data->setCreator($currentUser);
-
 
         if ($this->isPersonalEvent($data)) {
             if ($currentUser->getResourceNode()->getId() !== $data->getParentResourceNode()) {
@@ -40,9 +44,7 @@ class CCalendarEventProcessor implements ProcessorInterface
         }
 
         /** @var CCalendarEvent $result */
-        $result = $this->persistProcessor->process($data, $operation, $uriVariables, $context);
-
-        return $result;
+        return $this->persistProcessor->process($data, $operation, $uriVariables, $context);
     }
 
     private function isPersonalEvent(CCalendarEvent $event): bool

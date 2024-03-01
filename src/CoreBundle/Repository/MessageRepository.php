@@ -93,14 +93,16 @@ class MessageRepository extends ServiceEntityRepository
         $qb->where('m.group = :group')
             ->andWhere('m.msgType = :msgType')
             ->setParameter('group', $groupId)
-            ->setParameter('msgType', Message::MESSAGE_TYPE_GROUP);
+            ->setParameter('msgType', Message::MESSAGE_TYPE_GROUP)
+        ;
 
         if ($mainMessagesOnly) {
             $qb->andWhere($qb->expr()->orX(
                 $qb->expr()->isNull('m.parent'),
                 $qb->expr()->eq('m.parent', ':zeroParent')
             ))
-                ->setParameter('zeroParent', 0);
+                ->setParameter('zeroParent', 0)
+            ;
         }
 
         $qb->orderBy('m.id', 'ASC');
@@ -269,13 +271,15 @@ class MessageRepository extends ServiceEntityRepository
         return false;
     }
 
-    public function getMessagesByGroupAndMessage(int $groupId, int $messageId): array {
+    public function getMessagesByGroupAndMessage(int $groupId, int $messageId): array
+    {
         $qb = $this->createQueryBuilder('m')
             ->where('m.group = :groupId')
             ->andWhere('m.msgType = :msgType')
             ->setParameter('groupId', $groupId)
             ->setParameter('msgType', Message::MESSAGE_TYPE_GROUP)
-            ->orderBy('m.id', 'ASC');
+            ->orderBy('m.id', 'ASC')
+        ;
 
         $allMessages = $qb->getQuery()->getResult();
 
@@ -290,9 +294,10 @@ class MessageRepository extends ServiceEntityRepository
             ->setParameter('groupId', $groupId)
             ->setParameter('topicId', $topicId)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
 
-        /* @var Message $message */
+        /** @var Message $message */
         foreach ($messages as $message) {
             $message->setMsgType(Message::MESSAGE_STATUS_DELETED);
             $entityManager->persist($message);
@@ -314,6 +319,7 @@ class MessageRepository extends ServiceEntityRepository
         foreach ($messages as $message) {
             if ($message->getId() == $startId) {
                 $filtered[] = $message;
+
                 break;
             }
         }
@@ -344,12 +350,13 @@ class MessageRepository extends ServiceEntityRepository
                 return $m->getId() === $parent->getId();
             });
 
-            $message = count($filteredMessages) ? array_values($filteredMessages)[0] : null;
+            $message = \count($filteredMessages) ? array_values($filteredMessages)[0] : null;
 
             if (!$message) {
                 break;
             }
         }
+
         return false;
     }
 }

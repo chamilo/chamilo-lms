@@ -181,21 +181,22 @@ class SocialController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $userId = $data['userId'] ?? null;
 
-        /* @var User $user */
+        /** @var User $user */
         $user = $userRepo->find($userId);
         if (!$user) {
             return $this->json(['error' => 'User not found']);
         }
 
         $isoCode = $user->getLocale();
-        /* @var Legal $term */
+
+        /** @var Legal $term */
         $term = $this->getLastConditionByLanguage($languageRepo, $isoCode, $legalTermsRepo, $settingsManager);
 
         if (!$term) {
             return $this->json(['error' => 'Terms not found']);
         }
 
-        $legalAcceptType =  $term->getVersion().':'.$term->getLanguageId().':'.time();
+        $legalAcceptType = $term->getVersion().':'.$term->getLanguageId().':'.time();
         UserManager::update_extra_field_value(
             $userId,
             'legal_accept',
@@ -720,7 +721,7 @@ class SocialController extends AbstractController
         EntityManagerInterface $em,
         MessageRepository $messageRepository
     ): JsonResponse {
-        if (0 === strpos($request->headers->get('Content-Type'), 'multipart/form-data')) {
+        if (str_starts_with($request->headers->get('Content-Type'), 'multipart/form-data')) {
             $userId = $request->request->get('userId');
             $groupId = $request->request->get('groupId');
             $action = $request->request->get('action');
@@ -769,20 +770,26 @@ class SocialController extends AbstractController
                     }
 
                     break;
+
                 case 'join':
                     $usergroupRepository->addUserToGroup($userId, $groupId);
 
                     break;
+
                 case 'deny':
                     $usergroupRepository->removeUserFromGroup($userId, $groupId, false);
 
                     break;
+
                 case 'leave':
                     $usergroupRepository->removeUserFromGroup($userId, $groupId);
 
                     break;
+
                 case 'reply_message_group':
                     $title = $title ?: substr(strip_tags($content), 0, 50);
+
+                    // no break
                 case 'edit_message_group':
                 case 'add_message_group':
                     $res = MessageManager::send_message(
@@ -804,6 +811,7 @@ class SocialController extends AbstractController
                     );
 
                     break;
+
                 case 'delete_message_group':
                     $messageId = $data['messageId'] ?? null;
 
@@ -814,6 +822,7 @@ class SocialController extends AbstractController
                     $messageRepository->deleteTopicAndChildren($groupId, $messageId);
 
                     break;
+
                 default:
                     return $this->json(['error' => 'Invalid action'], Response::HTTP_BAD_REQUEST);
             }
@@ -946,10 +955,10 @@ class SocialController extends AbstractController
     {
         $formattedMessages = [];
 
-        /* @var Message $message */
+        /** @var Message $message */
         foreach ($messages as $message) {
             if (($message->getParent() ? $message->getParent()->getId() : null) === $parentId) {
-                $attachments =  $message->getAttachments();
+                $attachments = $message->getAttachments();
                 $attachmentsUrls = [];
                 $attachmentSize = 0;
                 if ($attachments) {

@@ -157,7 +157,8 @@ class LegalRepository extends ServiceEntityRepository
             ->orderBy('l.version', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getOneOrNullResult()
+        ;
     }
 
     /**

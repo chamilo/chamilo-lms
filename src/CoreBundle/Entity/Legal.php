@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
@@ -63,8 +64,6 @@ class Legal
 
     /**
      * Get date.
-     *
-     * @return int
      */
     public function getDate(): int
     {
@@ -115,6 +114,7 @@ class Legal
     public function setVersion(?int $version): self
     {
         $this->version = $version;
+
         return $this;
     }
 

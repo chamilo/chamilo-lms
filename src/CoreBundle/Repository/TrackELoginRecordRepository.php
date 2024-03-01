@@ -25,7 +25,8 @@ final class TrackELoginRecordRepository extends ServiceEntityRepository
             ->setUsername($username)
             ->setLoginDate(new DateTime())
             ->setUserIp($userIp)
-            ->setSuccess($success);
+            ->setSuccess($success)
+        ;
 
         $this->_em->persist($trackELoginRecord);
         $this->_em->flush();

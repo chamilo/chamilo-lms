@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\ServiceHelper;
 
-use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use DateTime;
 use SplFileObject;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+use const FILE_APPEND;
+use const LOCK_EX;
+use const PHP_INT_MAX;
 
 class LoginAttemptLogger
 {
@@ -18,7 +22,7 @@ class LoginAttemptLogger
 
     public function __construct(KernelInterface $kernel, TranslatorInterface $translator)
     {
-        $this->logDir = $kernel->getLogDir() . '/ids';
+        $this->logDir = $kernel->getLogDir().'/ids';
         $this->translator = $translator;
         $this->maxLogs = 90; // for how many iterations to keep log files
 
@@ -35,8 +39,8 @@ class LoginAttemptLogger
         }
 
         $date = new DateTime();
-        $logFilePrefix = $logDir . '/ids';
-        $logFile = $logFilePrefix . '.log';
+        $logFilePrefix = $logDir.'/ids';
+        $logFile = $logFilePrefix.'.log';
 
         // Most of the time, there will be a previous log file
         if (file_exists($logFile)) {
@@ -53,7 +57,8 @@ class LoginAttemptLogger
         $clientText = $this->translator->trans('client');
         $loginMessage = $this->translator->trans('Login %status% for username %username%', ['%status%' => $statusText, '%username%' => $username]);
 
-        $logMessage = sprintf("[%s] [%s] [%s %s] %s\n",
+        $logMessage = sprintf(
+            "[%s] [%s] [%s %s] %s\n",
             $date->format('Y-m-d H:i:s'),
             $infoText,
             $clientText,
@@ -65,9 +70,7 @@ class LoginAttemptLogger
     }
 
     /**
-     * Efficiently read the last line of the provided file, or an empty string
-     * @param string $logFilePath
-     * @return string
+     * Efficiently read the last line of the provided file, or an empty string.
      */
     private function _readLastLine(string $logFilePath): string
     {
@@ -81,8 +84,10 @@ class LoginAttemptLogger
 
         return $line;
     }
+
     /**
-     * Check if the date in a log line is same as today
+     * Check if the date in a log line is same as today.
+     *
      * @param string $line A line of type "[2024-03-01 09:44:57] [info] [client 127.0.0.1] Some text"
      */
     private function _checkDateIsToday(string $line): bool
@@ -100,10 +105,7 @@ class LoginAttemptLogger
     }
 
     /**
-     * Rotate log files
-     * @param string $baseLogFile
-     * @param int $maxLogs
-     * @return void
+     * Rotate log files.
      */
     private function _rotateLogFiles(string $baseLogFile, int $maxLogs): void
     {

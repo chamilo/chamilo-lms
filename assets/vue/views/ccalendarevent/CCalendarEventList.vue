@@ -193,7 +193,7 @@ const calendarLocale = allLocales.find(
 
 const showAddEventDialog = () => {
   item.value = {}
-  item.value["parentResourceNodeId"] = currentUser.value.resourceNode["id"]
+  item.value["parentResourceNode"] = currentUser.value.resourceNode["id"]
   item.value["collective"] = false
 
   dialog.value = true
@@ -256,23 +256,13 @@ const calendarOptions = ref({
 
     dialogShow.value = true
   },
-  dateClick(info) {
-    item.value = {}
-    item.value["parentResourceNodeId"] = currentUser.value.resourceNode["id"]
-    item.value["collective"] = false
-    item.value["allDay"] = info.allDay
-    item.value["startDate"] = info.startStr
-    item.value["endDate"] = info.endStr
-
-    dialog.value = true
-  },
   select(info) {
     item.value = {}
-    item.value["parentResourceNodeId"] = currentUser.value.resourceNode["id"]
+    item.value["parentResourceNode"] = currentUser.value.resourceNode["id"]
     item.value["collective"] = false
     item.value["allDay"] = info.allDay
-    item.value["startDate"] = info.startStr
-    item.value["endDate"] = info.endStr
+    item.value["startDate"] = info.start
+    item.value["endDate"] = info.end
 
     dialog.value = true
   },
@@ -336,7 +326,7 @@ function onCreateEventForm() {
     store.dispatch("ccalendarevent/update", itemModel)
   } else {
     if (course.value) {
-      itemModel.resourceLinkListFromEntity = [
+      itemModel.resourceLinkList = [
         {
           cid: course.value.id,
           sid: session.value?.id ?? null,

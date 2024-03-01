@@ -16,7 +16,7 @@ vich_uploader:
         assets:
             uri_prefix: ''
             upload_destination: oneup_flysystem.asset_filesystem
-            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            namer: Chamilo\CoreBundle\Component\Utils\AssetFileNameNamer
             directory_namer:
                 service: Chamilo\CoreBundle\Component\Utils\AssetDirectoryNamer
                 options: {property: 'category'}

@@ -103,20 +103,23 @@ if (securityStore.isAuthenticated) {
 }
 
 async function performLogin() {
-  let payload = { login: login.value, password: password.value }
+  let payload = {
+    login: login.value,
+    password: password.value,
+  }
   let redirect = route.query.redirect
 
   await store.dispatch("security/login", payload)
 
   if (!store.getters["security/hasError"]) {
     securityStore.user = store.state["security/user"]
-    const responseData = await store.dispatch("security/login", payload);
+    const responseData = await store.dispatch("security/login", payload)
 
     if (typeof redirect !== "undefined") {
       await router.push({ path: redirect.toString() })
     } else {
       if (responseData.load_terms) {
-        window.location.href = responseData.redirect;
+        window.location.href = responseData.redirect
       } else {
         window.location.href = "/home"
       }

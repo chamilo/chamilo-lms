@@ -61,7 +61,8 @@ class AssetDirectoryNamer implements DirectoryNamerInterface, ConfigurableInterf
 
         if (Asset::SYSTEM_TEMPLATE === $object->getCategory()) {
             return 'system_templates';
-        } elseif (Asset::TEMPLATE === $object->getCategory()) {
+        }
+        if (Asset::TEMPLATE === $object->getCategory()) {
             return 'doc_templates';
         }
 

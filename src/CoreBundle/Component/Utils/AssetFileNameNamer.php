@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Component\Utils;
 
 use Chamilo\CoreBundle\Entity\Asset;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Vich\UploaderBundle\Mapping\PropertyMapping;
@@ -31,7 +32,7 @@ class AssetFileNameNamer implements NamerInterface
     public function name($object, PropertyMapping $mapping): string
     {
         if (!$object instanceof Asset) {
-            throw new \InvalidArgumentException('Expected object of type Asset.');
+            throw new InvalidArgumentException('Expected object of type Asset.');
         }
 
         $category = $object->getCategory();

@@ -12,6 +12,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Vich\UploaderBundle\Mapping\PropertyMapping;
 use Vich\UploaderBundle\Naming\NamerInterface;
 
+use const PATHINFO_EXTENSION;
+
+/**
+ * @implements NamerInterface<Asset>
+ */
 class AssetFileNameNamer implements NamerInterface
 {
     private RequestStack $requestStack;
@@ -25,15 +30,20 @@ class AssetFileNameNamer implements NamerInterface
 
     public function name($object, PropertyMapping $mapping): string
     {
+        if (!$object instanceof Asset) {
+            throw new \InvalidArgumentException('Expected object of type Asset.');
+        }
+
         $category = $object->getCategory();
 
-        if (in_array($category, [Asset::TEMPLATE, Asset::SYSTEM_TEMPLATE])) {
+        if (\in_array($category, [Asset::TEMPLATE, Asset::SYSTEM_TEMPLATE])) {
             $request = $this->requestStack->getCurrentRequest();
             if ($request) {
                 $templateId = $object->getId();
                 $templateTitle = $request->get('title', 'default-title');
                 $titleSlug = $this->slugify($templateTitle);
                 $extension = pathinfo($mapping->getFileName($object), PATHINFO_EXTENSION);
+
                 return sprintf('%s-%s.%s', $templateId, $titleSlug, $extension);
             }
         }

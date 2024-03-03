@@ -25,7 +25,7 @@ class AssetDirectoryNamer implements DirectoryNamerInterface, ConfigurableInterf
     private int $charsPerDir = 2;
     private int $dirs = 1;
 
-    public function __construct(?PropertyAccessorInterface $propertyAccessor, ?AssetRepository $assetRepository = null, ?RequestStack $requestStack= null)
+    public function __construct(?PropertyAccessorInterface $propertyAccessor, ?AssetRepository $assetRepository = null, ?RequestStack $requestStack = null)
     {
         $this->propertyAccessor = $propertyAccessor ?: PropertyAccess::createPropertyAccessor();
         $this->assetRepository = $assetRepository;
@@ -59,9 +59,9 @@ class AssetDirectoryNamer implements DirectoryNamerInterface, ConfigurableInterf
         $fileName = $mapping->getFileName($object);
         $category = $this->propertyAccessor->getValue($object, $this->propertyPath);
 
-        if ($object->getCategory() === Asset::SYSTEM_TEMPLATE) {
+        if (Asset::SYSTEM_TEMPLATE === $object->getCategory()) {
             return 'system_templates';
-        } elseif ($object->getCategory() === Asset::TEMPLATE) {
+        } elseif (Asset::TEMPLATE === $object->getCategory()) {
             return 'doc_templates';
         }
 

@@ -24,24 +24,14 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class SecurityController extends AbstractController
 {
-    private $entityManager;
-    private $settingsManager;
-    private $tokenStorage;
-    private $authorizationChecker;
-
     public function __construct(
         private SerializerInterface $serializer,
         private TrackELoginRecordRepository $trackELoginRecordRepository,
-        EntityManagerInterface $entityManager,
-        SettingsManager $settingsManager,
-        TokenStorageInterface $tokenStorage,
-        AuthorizationCheckerInterface $authorizationChecker
-    ) {
-        $this->entityManager = $entityManager;
-        $this->settingsManager = $settingsManager;
-        $this->tokenStorage = $tokenStorage;
-        $this->authorizationChecker = $authorizationChecker;
-    }
+        private EntityManagerInterface $entityManager,
+        private SettingsManager $settingsManager,
+        private TokenStorageInterface $tokenStorage,
+        private AuthorizationCheckerInterface $authorizationChecker
+    ) {}
 
     #[Route('/login_json', name: 'login_json', methods: ['POST'])]
     public function loginJson(Request $request, EntityManager $entityManager, SettingsManager $settingsManager, TokenStorageInterface $tokenStorage): Response

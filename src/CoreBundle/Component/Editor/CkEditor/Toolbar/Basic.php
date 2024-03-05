@@ -323,7 +323,7 @@ class Basic extends Toolbar
             // Check for a specific variant of the language (e.g., de_german2)
             if (str_contains($iso, '_')) {
                 // Extract the general language code (e.g., de)
-                list($generalLangCode, ) = explode('_', $iso, 2);
+                list($generalLangCode) = explode('_', $iso, 2);
                 $generalLangFile = "libs/editor/langs/{$generalLangCode}.js";
             }
 
@@ -334,7 +334,7 @@ class Basic extends Toolbar
             }
 
             // Fallback to the general language file if specific is not available
-            elseif ($generalLangFile !== null && file_exists($sysUrl.$generalLangFile)) {
+            elseif (null !== $generalLangFile && file_exists($sysUrl.$generalLangFile)) {
                 $config['language'] = $generalLangCode;
                 $config['language_url'] = $url.$generalLangFile;
             }

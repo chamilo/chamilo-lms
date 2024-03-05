@@ -20,11 +20,7 @@ class TrackEDownloadsRepository extends ServiceEntityRepository
     }
 
     /**
-     * Save record of a resource being downloaded in track_e_downloads
-     * @param int    $userId
-     * @param int    $resourceLinkId
-     * @param string $documentUrl
-     * @return int
+     * Save record of a resource being downloaded in track_e_downloads.
      */
     public function saveDownload(int $userId, int $resourceLinkId, string $documentUrl): int
     {

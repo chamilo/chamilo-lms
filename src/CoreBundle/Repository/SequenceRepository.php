@@ -17,7 +17,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use SessionManager;
 
 /**
- * Class SequenceRepository
  * The functions inside this class should return an instance of QueryBuilder.
  */
 class SequenceRepository extends ServiceEntityRepository

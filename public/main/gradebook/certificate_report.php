@@ -47,7 +47,7 @@ if (api_is_student_boss()) {
 }
 
 foreach ($sessionsList as $session) {
-    $sessions[$session['id']] = $session['name'];
+    $sessions[$session['id']] = $session['title'];
 }
 
 $selfUrl = api_get_self();
@@ -233,7 +233,7 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
             }
 
             if (!is_null($gradebook)) {
-                $sessionName = $session['name'];
+                $sessionName = $session['title'];
                 $courseName = $sessionCourse['title'];
 
                 $certificateStudent = [

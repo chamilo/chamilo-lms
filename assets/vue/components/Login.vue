@@ -106,14 +106,14 @@ async function performLogin() {
   let payload = {
     login: login.value,
     password: password.value,
+    _remember_me: remember.value,
   }
   let redirect = route.query.redirect
 
-  await store.dispatch("security/login", payload)
+  const responseData = await store.dispatch("security/login", payload)
 
   if (!store.getters["security/hasError"]) {
     securityStore.user = store.state["security/user"]
-    const responseData = await store.dispatch("security/login", payload)
 
     if (typeof redirect !== "undefined") {
       await router.push({ path: redirect.toString() })

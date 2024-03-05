@@ -25,6 +25,7 @@ async function performLogin() {
   let payload = {
     login: login.value,
     password: password.value,
+    _remember_me: remember.value,
   }
   let redirect = route.query.redirect
 

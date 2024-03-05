@@ -108,7 +108,7 @@ export default {
     async login({ commit }, payload) {
       commit(AUTHENTICATING)
       try {
-        const response = await SecurityAPI.login(payload.login, payload.password)
+        const response = await SecurityAPI.login(payload)
         commit(AUTHENTICATING_SUCCESS, response.data)
         return response.data
       } catch (error) {

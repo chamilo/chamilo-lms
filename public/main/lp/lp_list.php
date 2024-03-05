@@ -205,7 +205,7 @@ foreach ($categories as $category) {
 
     $flat_list = $list->get_flat_list();
 
-    // Hiding categories with out LPs (only for student)
+    // Hiding categories without LPs (only for student)
     if (empty($flat_list) && !$is_allowed_to_edit) {
         continue;
     }

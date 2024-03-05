@@ -48,23 +48,23 @@
 
                                         {% if loop.index0 == 1 %}
                                             <a href="#">
-                                                <i class="mdi-arrow-up-bold mdi ch-tool-icon-disabled" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move"|trans }}"></i>
+                                                <i class="mdi-arrow-up-bold mdi ch-tool-icon-disabled" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move up"|trans }}"></i>
                                             </a>
                                         {% else %}
                                             <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=move_up_category&id=' ~ lp_data.category.iid }}"
-                                               title="{{ "Move"|trans }}">
-                                                <i class="mdi-arrow-up-bold mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move"|trans }}"></i>
+                                               title="{{ "Move up"|trans }}">
+                                                <i class="mdi-arrow-up-bold mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move up"|trans }}"></i>
                                             </a>
                                         {% endif %}
 
                                         {% if (data|length - 1) == loop.index0 %}
                                             <a href="#">
-                                                <i class="mdi-arrow-down-bold mdi ch-tool-icon-disabled" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move"|trans }}"></i>
+                                                <i class="mdi-arrow-down-bold mdi ch-tool-icon-disabled" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move down"|trans }}"></i>
                                             </a>
                                         {% else %}
                                             <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=move_down_category&id=' ~ lp_data.category.iid }}"
-                                               title="{{ "Move"|trans }}">
-                                                <i class="mdi-arrow-down-bold mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move"|trans }}"></i>
+                                               title="{{ "Move down"|trans }}">
+                                                <i class="mdi-arrow-down-bold mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move down"|trans }}"></i>
                                             </a>
                                         {% endif %}
                                     {% endif %}
@@ -363,23 +363,23 @@
 
                                                 {% if loop.index0 == 1 %}
                                                     <a href="#">
-                                                        <i class="mdi-arrow-up-bold mdi ch-tool-icon-disabled" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move"|trans }}"></i>
+                                                        <i class="mdi-arrow-up-bold mdi ch-tool-icon-disabled" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move up"|trans }}"></i>
                                                     </a>
                                                 {% else %}
                                                     <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=move_up_category&id=' ~ lp_data.category.iid }}"
-                                                       title="{{ "Move"|trans }}">
-                                                        <i class="mdi-arrow-up-bold mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move"|trans }}"></i>
+                                                       title="{{ "Move up"|trans }}">
+                                                        <i class="mdi-arrow-up-bold mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move up"|trans }}"></i>
                                                     </a>
                                                 {% endif %}
 
                                                 {% if (data|length - 1) == loop.index0 %}
                                                     <a href="#">
-                                                        <i class="mdi-arrow-down-bold mdi ch-tool-icon-disabled" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move"|trans }}"></i>
+                                                        <i class="mdi-arrow-down-bold mdi ch-tool-icon-disabled" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move down"|trans }}"></i>
                                                     </a>
                                                 {% else %}
                                                     <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=move_down_category&id=' ~ lp_data.category.iid }}"
-                                                       title="{{ "Move"|trans }}">
-                                                        <i class="mdi-arrow-down-bold mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move"|trans }}"></i>
+                                                       title="{{ "Move down"|trans }}">
+                                                        <i class="mdi-arrow-down-bold mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Move down"|trans }}"></i>
                                                     </a>
                                                 {% endif %}
                                             {% endif %}

@@ -6,10 +6,6 @@ defineProps({
     type: String,
     required: true,
   },
-  modelValue: {
-    type: [null, String, Date, Array],
-    required: true,
-  },
   id: {
     type: String,
     require: true,
@@ -38,7 +34,10 @@ defineProps({
   },
 })
 
-defineEmits(["update:modelValue"])
+const model = defineModel({
+  type: [null, String, Date, Array],
+  required: true,
+})
 </script>
 
 <template>
@@ -46,13 +45,12 @@ defineEmits(["update:modelValue"])
     <div class="p-float-label">
       <Calendar
         :id="id"
+        v-model="model"
         :class="{ 'p-invalid': isInvalid }"
         :manual-input="type !== 'range'"
-        :model-value="modelValue"
         :selection-mode="type"
         :show-icon="showIcon"
         :show-time="showTime"
-        @update:model-value="$emit('update:modelValue', $event)"
       />
       <label v-text="label" />
     </div>

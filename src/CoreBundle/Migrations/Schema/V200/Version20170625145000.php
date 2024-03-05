@@ -48,16 +48,16 @@ class Version20170625145000 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX session_id ON c_calendar_event');
         }
 
-        if (!$table->hasColumn('collective')) {
-            $this->addSql('ALTER TABLE c_calendar_event ADD collective TINYINT(1) DEFAULT 0 NOT NULL');
+        if (!$table->hasColumn('invitation_type')) {
+            $this->addSql("ALTER TABLE c_calendar_event ADD invitation_type VARCHAR(255) DEFAULT NULL");
         }
 
-        if (!$table->hasColumn('invitation_type')) {
-            $this->addSql("ALTER TABLE c_calendar_event ADD invitaion_type VARCHAR(255) DEFAULT 'invitation' NOT NULL");
+        if (!$table->hasColumn('collective')) {
+            $this->addSql('ALTER TABLE c_calendar_event ADD collective TINYINT(1) NOT NULL');
         }
 
         if (!$table->hasColumn('subscription_visibility')) {
-            $this->addSql('ALTER TABLE c_calendar_event ADD subscription_visibility INT DEFAULT 0 NOT NULL');
+            $this->addSql('ALTER TABLE c_calendar_event ADD subscription_visibility INT NOT NULL');
         }
 
         if (!$table->hasColumn('subscription_item_id')) {
@@ -65,7 +65,7 @@ class Version20170625145000 extends AbstractMigrationChamilo
         }
 
         if (!$table->hasColumn('max_attendees')) {
-            $this->addSql('ALTER TABLE c_calendar_event ADD max_attendees INT DEFAULT 0 NOT NULL');
+            $this->addSql('ALTER TABLE c_calendar_event ADD max_attendees INT NOT NULL');
         }
 
         $table = $schema->getTable('c_calendar_event_attachment');

@@ -144,20 +144,24 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     protected Collection $attachments;
 
     #[Groups(['calendar_event:read', 'calendar_event:write'])]
+    #[ORM\Column(name: 'invitation_type', type: 'string', nullable: true)]
+    protected ?string $invitationType = null;
+
+    #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[Assert\NotNull]
-    #[ORM\Column(name: 'collective', type: 'boolean', nullable: false, options: ['default' => false])]
+    #[ORM\Column(name: 'collective', type: 'boolean')]
     protected bool $collective = false;
 
-    #[ORM\Column(name: 'invitaion_type', type: 'string', options: ['default' => self::TYPE_INVITATION])]
-    protected string $invitaionType = self::TYPE_INVITATION;
-
-    #[ORM\Column(name: 'subscription_visibility', type: 'integer', options: ['default' => self::SUBSCRIPTION_VISIBILITY_NO])]
+    #[Groups(['calendar_event:read', 'calendar_event:write'])]
+    #[ORM\Column(name: 'subscription_visibility', type: 'integer')]
     protected int $subscriptionVisibility = self::SUBSCRIPTION_VISIBILITY_NO;
 
+    #[Groups(['calendar_event:read', 'calendar_event:write'])]
     #[ORM\Column(name: 'subscription_item_id', type: 'integer', nullable: true)]
     protected ?int $subscriptionItemId = null;
 
-    #[ORM\Column(name: 'max_attendees', type: 'integer', nullable: false, options: ['default' => 0])]
+    #[Groups(['calendar_event:read', 'calendar_event:write'])]
+    #[ORM\Column(name: 'max_attendees', type: 'integer')]
     protected int $maxAttendees = 0;
 
     public function __construct()
@@ -381,14 +385,14 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
         return $this;
     }
 
-    public function getInvitaionType(): string
+    public function getInvitationType(): string
     {
-        return $this->invitaionType;
+        return $this->invitationType;
     }
 
-    public function setInvitaionType(string $invitaionType): self
+    public function setInvitationType(string $invitationType): self
     {
-        $this->invitaionType = $invitaionType;
+        $this->invitationType = $invitationType;
 
         return $this;
     }

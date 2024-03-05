@@ -39,28 +39,7 @@
         required
       />
     </div>
-
-    <Fieldset
-      v-if="agendaCollectiveInvitations"
-      :legend="'Invitees'"
-      collapsed
-      toggleable
-    >
-      <EditLinks
-        :edit-status="false"
-        :item="item"
-        :links-type="linksType"
-        :show-status="false"
-        show-share-with-user
-      />
-
-      <BaseCheckbox
-        id="is_collective"
-        v-model="item.collective"
-        :label="t('Is it editable by the invitees?')"
-        name="is_collective"
-      />
-    </Fieldset>
+    <CalendarInvitations v-model="item" />
 
     <slot />
   </form>
@@ -73,13 +52,7 @@ import { required } from "@vuelidate/validators"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import { useI18n } from "vue-i18n"
 import BaseCalendar from "../basecomponents/BaseCalendar.vue"
-import Fieldset from "primevue/fieldset"
-
-
-const store = useStore()
-const platformConfigStore = usePlatformConfig()
-
-const agendaCollectiveInvitations = "true" === platformConfigStore.getSetting("agenda.agenda_collective_invitations")
+import CalendarInvitations from "./CalendarInvitations.vue"
 
 const { t } = useI18n()
 
@@ -115,7 +88,6 @@ const rules = computed(() => ({
     endDate: {
       required,
     },
-    collective: {},
   },
 }))
 
@@ -126,7 +98,7 @@ defineExpose({
   v$,
 })
 
-const dateRange = ref()
+const dateRange = ref([item.value.startDate, item.value.endDate])
 
 watch(dateRange, (newValue) => {
   item.value.startDate = newValue[0]

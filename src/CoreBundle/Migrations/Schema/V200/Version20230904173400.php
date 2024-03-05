@@ -89,12 +89,12 @@ class Version20230904173400 extends AbstractMigrationChamilo
 
                 if ($hasSubscriptions) {
                     $calendarEvent
-                        ->setInvitaionType(CCalendarEvent::TYPE_SUBSCRIPTION)
+                        ->setInvitationType(CCalendarEvent::TYPE_SUBSCRIPTION)
                         ->setSubscriptionVisibility($personalAgenda['subscription_visibility'])
                         ->setSubscriptionItemId($personalAgenda['subscription_item_id'])
                     ;
                 } else {
-                    $calendarEvent->setInvitaionType(CCalendarEvent::TYPE_INVITATION);
+                    $calendarEvent->setInvitationType(CCalendarEvent::TYPE_INVITATION);
 
                     $invitationsOrSubscriptionsInfo = $this->getInvitations($subscriptionsEnabled, (int) $personalAgenda['id']);
                 }

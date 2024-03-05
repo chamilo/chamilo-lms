@@ -194,7 +194,6 @@ const calendarLocale = allLocales.find(
 const showAddEventDialog = () => {
   item.value = {}
   item.value["parentResourceNode"] = currentUser.value.resourceNode["id"]
-  item.value["collective"] = false
 
   dialog.value = true
 }
@@ -259,7 +258,6 @@ const calendarOptions = ref({
   select(info) {
     item.value = {}
     item.value["parentResourceNode"] = currentUser.value.resourceNode["id"]
-    item.value["collective"] = false
     item.value["allDay"] = info.allDay
     item.value["startDate"] = info.start
     item.value["endDate"] = info.end

@@ -62,6 +62,16 @@
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
 }
 
+.ui-state-highlight {
+  height: 3.5em;
+  line-height: 2.2em;
+  background-color: #fafafa;
+  border: 1px dashed #ccc;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 5px;
+}
+
 .question_menu {
   @apply p-4 flex flex-row gap-1;
 }

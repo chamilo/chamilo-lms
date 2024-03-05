@@ -57,6 +57,7 @@ $ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&
             }
         });
 
+        var isDragging = false;
         $("#question_list").accordion({
             icons: null,
             heightStyle: "content",
@@ -64,6 +65,10 @@ $ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&
             collapsible: true,
             header: ".header_operations",
             beforeActivate: function (e, ui) {
+                if (isDragging) {
+                    e.preventDefault();
+                    isDragging = false;
+                }
                 var data = ui.newHeader.data();
                 if (typeof data === 'undefined') {
                     return;
@@ -95,18 +100,28 @@ $ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&
         })
         .sortable({
             cursor: "move", // works?
+            axis: "y",
+            placeholder: "ui-state-highlight", //defines the yellow highlight
+            handle: ".moved", //only the class "moved"
+            start: function(event, ui) {
+                isDragging = true;
+            },
+            stop: function(event, ui) {
+                stop = true;
+                setTimeout(function() {
+                    isDragging = false;
+                }, 50);
+            },
             update: function (event, ui) {
                 var order = $(this).sortable("serialize") + "&a=update_question_order&exercise_id=<?php echo $exerciseId; ?>";
                 $.post("<?php echo $ajax_url; ?>", order, function (result) {
                     $("#message").html(result);
                 });
-            },
-            axis: "y",
-            placeholder: "ui-state-highlight", //defines the yellow highlight
-            handle: ".moved", //only the class "moved"
-            stop: function () {
-                stop = true;
             }
+        });
+
+        $(".moved").on('click', function(event) {
+            event.stopImmediatePropagation();
         });
     });
 </script>
@@ -246,7 +261,7 @@ if (!$inATest) {
                 $title = strip_tags($title);
                 $move = '&nbsp;';
                 if ($allowQuestionOrdering) {
-                    $move = Display::getMdiIcon('cursor-move');
+                    $move = Display::getMdiIcon('cursor-move', 'moved');
                 }
 
                 // Question name

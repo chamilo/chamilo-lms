@@ -49,7 +49,7 @@ class Version20170625145000 extends AbstractMigrationChamilo
         }
 
         if (!$table->hasColumn('invitation_type')) {
-            $this->addSql("ALTER TABLE c_calendar_event ADD invitation_type VARCHAR(255) DEFAULT NULL");
+            $this->addSql('ALTER TABLE c_calendar_event ADD invitation_type VARCHAR(255) DEFAULT NULL');
         }
 
         if (!$table->hasColumn('collective')) {

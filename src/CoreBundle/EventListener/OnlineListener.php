@@ -14,7 +14,6 @@ use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
- * Class OnlineListener
  * Adds objects into the session like the old global.inc.
  */
 class OnlineListener

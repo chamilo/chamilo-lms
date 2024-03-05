@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 
 /**
- * Class SessionListener
  * Session entity listener, when a session is created/updated.
  */
 class SessionListener

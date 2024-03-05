@@ -28,7 +28,7 @@
         </router-link>
         <a
           v-else
-          :href="item.url"
+          :href="item.url !== '#' ? item.url : undefined"
           v-bind="props.action"
         >
           <span>{{ item.label }}</span>
@@ -46,24 +46,14 @@
 </template>
 
 <script setup>
-import { computed } from "vue"
+import { ref, watch } from "vue"
 import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
 import Breadcrumb from "primevue/breadcrumb"
 import { useCidReqStore } from "../store/cidReq"
 import { storeToRefs } from "pinia"
 
-// eslint-disable-next-line no-undef
-const componentProps = defineProps({
-  layoutClass: {
-    type: String,
-    default: null,
-  },
-  legacy: {
-    type: Array,
-    default: () => [],
-  },
-})
+const legacyItems = ref(window.breadcrumb)
 
 const cidReqStore = useCidReqStore()
 const route = useRoute()
@@ -71,84 +61,96 @@ const { t } = useI18n()
 
 const { course, session } = storeToRefs(cidReqStore)
 
-const itemList = computed(() => {
-  const list = [
-    "MyCourses",
-    "MySessions",
-    "MySessionsUpcoming",
-    "MySessionsPast",
-    "Home",
-    "MessageList",
-    "MessageNew",
-    "MessageShow",
-    "MessageCreate",
-  ]
+const specialRouteNames = [
+  "MyCourses",
+  "MySessions",
+  "MySessionsUpcoming",
+  "MySessionsPast",
+  "Home",
+  "MessageList",
+  "MessageNew",
+  "MessageShow",
+  "MessageCreate",
+]
 
-  const items = []
+const itemList = ref([])
 
-  if (route.name && route.name.includes("Page")) {
-    items.push({
-      label: t("Pages"),
-      to: "/resources/pages",
-    })
-  }
+watch(
+  route,
+  () => {
+    if ("/" === route.fullPath) {
+      return
+    }
 
-  if (route.name && route.name.includes("Message")) {
-    items.push({
-      label: t("Messages"),
-      //disabled: route.path === path || lastItem.path === route.path,
-      to: "/resources/messages",
-    })
-  }
+    itemList.value = []
 
-  if (list.includes(route.name)) {
-    return items
-  }
-
-  if (course.value) {
-    if (session.value) {
-      items.push({
-        label: t("My sessions"),
-        route: { name: "MySessions" },
-      })
-    } else {
-      items.push({
-        label: t("My courses"),
-        route: { name: "MyCourses" },
+    if (route.name && route.name.includes("Page")) {
+      itemList.value.push({
+        label: t("Pages"),
+        to: "/resources/pages",
       })
     }
-  }
 
-  if (componentProps.legacy.length > 0) {
-    const mainUrl = window.location.href
-    const mainPath = mainUrl.indexOf("main/")
-
-    componentProps.legacy.forEach((item) => {
-      let url = item.url.toString()
-      let newUrl = url
-
-      if (url.indexOf("main/") > 0) {
-        newUrl = "/" + url.substring(mainPath, url.length)
-      }
-
-      if (newUrl === "/") {
-        newUrl = "#"
-      }
-
-      items.push({
-        label: item["name"],
-        url: newUrl,
+    if (route.name && route.name.includes("Message")) {
+      itemList.value.push({
+        label: t("Messages"),
+        //disabled: route.path === path || lastItem.path === route.path,
+        to: "/resources/messages",
       })
-    })
-  } else {
+    }
+
+    if (specialRouteNames.includes(route.name)) {
+      return
+    }
+
     if (course.value) {
-      items.push({
-        label: course.value.title,
-        route: { name: "CourseHome", params: { id: course.value.id }, query: route.query },
-      })
+      if (session.value) {
+        itemList.value.push({
+          label: t("My sessions"),
+          route: { name: "MySessions" },
+        })
+      } else {
+        itemList.value.push({
+          label: t("My courses"),
+          route: { name: "MyCourses" },
+        })
+      }
     }
-  }
 
-  return items
-})
+    if (legacyItems.value.length > 0) {
+      const mainUrl = window.location.href
+      const mainPath = mainUrl.indexOf("main/")
+
+      legacyItems.value.forEach((item) => {
+        let url = item.url.toString()
+        let newUrl = url
+
+        if (url.indexOf("main/") > 0) {
+          newUrl = "/" + url.substring(mainPath, url.length)
+        }
+
+        if (newUrl === "/") {
+          newUrl = "#"
+        }
+
+        itemList.value.push({
+          label: item["name"],
+          url: newUrl,
+        })
+      })
+
+      legacyItems.value = []
+    } else {
+      if (course.value) {
+        itemList.value.push({
+          label: course.value.title,
+          route: { name: "CourseHome", params: { id: course.value.id }, query: route.query },
+        })
+      }
+    }
+  },
+  {
+    immediate: true,
+  },
+)
 </script>

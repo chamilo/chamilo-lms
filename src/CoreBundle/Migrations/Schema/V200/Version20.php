@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Class Version20
  * Migrate file to updated to Chamilo 2.0.
  */
 class Version20 extends AbstractMigrationChamilo

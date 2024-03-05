@@ -191,13 +191,10 @@ class Basic extends Toolbar
         $config['file_picker_callback'] = '[browser]';
 
         $iso = api_get_language_isocode();
-        $url = api_get_path(WEB_PATH);
+        $languageConfig = $this->getLanguageConfig($iso);
 
-        // Language list: https://www.tiny.cloud/get-tiny/language-packages/
-        if ('en_US' !== $iso) {
-            $config['language'] = $iso;
-            $config['language_url'] = "$url/libs/editor/langs/$iso.js";
-        }
+        // Merge the language configuration
+        $config = array_merge($config, $languageConfig);
 
         /*if (isset($this->config)) {
             $this->config = array_merge($config, $this->config);
@@ -300,5 +297,49 @@ class Basic extends Toolbar
             'true' === api_get_setting('enabled_wiris') ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['Toolbarswitch', 'Source'],
         ];
+    }
+
+    /**
+     * Determines the appropriate language configuration for the editor.
+     * Tries to load a specific language file based on the ISO code. If not found, it attempts to load a general language file.
+     * Falls back to English if neither specific nor general language files are available.
+     */
+    private function getLanguageConfig(string $iso): array
+    {
+        $url = api_get_path(WEB_PATH);
+        $sysUrl = api_get_path(SYS_PATH);
+        $defaultLang = 'en';
+        $defaultLangFile = "libs/editor/langs/{$defaultLang}.js";
+        $specificLangFile = "libs/editor/langs/{$iso}.js";
+        $generalLangFile = null;
+
+        // Default configuration set to English
+        $config = [
+            'language' => $defaultLang,
+            'language_url' => $defaultLangFile,
+        ];
+
+        if ('en_US' !== $iso) {
+            // Check for a specific variant of the language (e.g., de_german2)
+            if (str_contains($iso, '_')) {
+                // Extract the general language code (e.g., de)
+                list($generalLangCode) = explode('_', $iso, 2);
+                $generalLangFile = "libs/editor/langs/{$generalLangCode}.js";
+            }
+
+            // Attempt to load the specific language file
+            if (file_exists($sysUrl.$specificLangFile)) {
+                $config['language'] = $iso;
+                $config['language_url'] = $url.$specificLangFile;
+            }
+
+            // Fallback to the general language file if specific is not available
+            elseif (null !== $generalLangFile && file_exists($sysUrl.$generalLangFile)) {
+                $config['language'] = $generalLangCode;
+                $config['language_url'] = $url.$generalLangFile;
+            }
+        }
+
+        return $config;
     }
 }

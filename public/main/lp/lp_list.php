@@ -205,7 +205,7 @@ foreach ($categories as $category) {
 
     $flat_list = $list->get_flat_list();
 
-    // Hiding categories with out LPs (only for student)
+    // Hiding categories without LPs (only for student)
     if (empty($flat_list) && !$is_allowed_to_edit) {
         continue;
     }
@@ -714,7 +714,9 @@ foreach ($categories as $category) {
                             "lp_controller.php?$cidReq&action=move_lp_down&lp_id=$id&category_id=$categoryId",
                             ['title' => htmlentities(get_lang('Move down'))]
                         );
+                        $dsp_order .= Display::getMdiIcon('arrow-up-bold', 'ch-tool-icon-disabled', '', 22, get_lang('Move up'));
                     } elseif ($current == $max - 1 && 1 != $max) {
+                        $dsp_order .= Display::getMdiIcon('arrow-down-bold', 'ch-tool-icon-disabled', '', 22, get_lang('Move down'));
                         $dsp_order .= Display::url(
                             Display::getMdiIcon('arrow-up-bold', 'ch-tool-icon', '', 22),
                             "lp_controller.php?$cidReq&action=move_lp_up&lp_id=$id&category_id=$categoryId",

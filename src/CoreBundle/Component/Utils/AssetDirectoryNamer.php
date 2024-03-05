@@ -7,7 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Component\Utils;
 
 use Chamilo\CoreBundle\Entity\Asset;
+use Chamilo\CoreBundle\Repository\AssetRepository;
 use InvalidArgumentException;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Vich\UploaderBundle\Mapping\PropertyMapping;
@@ -17,13 +19,17 @@ use Vich\UploaderBundle\Naming\DirectoryNamerInterface;
 class AssetDirectoryNamer implements DirectoryNamerInterface, ConfigurableInterface
 {
     protected PropertyAccessorInterface $propertyAccessor;
+    private ?AssetRepository $assetRepository = null;
+    private ?RequestStack $requestStack = null;
     private string $propertyPath;
     private int $charsPerDir = 2;
     private int $dirs = 1;
 
-    public function __construct(?PropertyAccessorInterface $propertyAccessor)
+    public function __construct(?PropertyAccessorInterface $propertyAccessor, ?AssetRepository $assetRepository = null, ?RequestStack $requestStack = null)
     {
         $this->propertyAccessor = $propertyAccessor ?: PropertyAccess::createPropertyAccessor();
+        $this->assetRepository = $assetRepository;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -52,6 +58,13 @@ class AssetDirectoryNamer implements DirectoryNamerInterface, ConfigurableInterf
     {
         $fileName = $mapping->getFileName($object);
         $category = $this->propertyAccessor->getValue($object, $this->propertyPath);
+
+        if (Asset::SYSTEM_TEMPLATE === $object->getCategory()) {
+            return 'system_templates';
+        }
+        if (Asset::TEMPLATE === $object->getCategory()) {
+            return 'doc_templates';
+        }
 
         $parts[] = $category;
 

@@ -673,6 +673,11 @@ function get_number_of_users()
     $sessionId = api_get_session_id();
     $courseCode = api_get_course_id();
     $active = isset($_GET['active']) ? $_GET['active'] : null;
+    if ($active) {
+        $active = true;
+    } else {
+        $active = false;
+    }
     $type = isset($_REQUEST['type']) ? (int) $_REQUEST['type'] : STUDENT;
 
     if (empty($sessionId)) {
@@ -821,6 +826,13 @@ function get_user_data($from, $number_of_items, $column, $direction)
     }
 
     $active = $_GET['active'] ?? null;
+    if (isset($active)) {
+        if ($active) {
+            $active = true;
+        } else {
+            $active = false;
+        }
+    }
 
     if (empty($sessionId)) {
         $status = $type;
@@ -840,7 +852,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
         null,
         false,
         false,
-        null,
+        [],
         [],
         [],
         $active

@@ -45,7 +45,19 @@ services:
     Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor:
         arguments: ['@translator', '@router']
 
-    Chamilo\CoreBundle\Component\Utils\AssetDirectoryNamer: ~
+    Chamilo\CoreBundle\Component\Utils\AssetDirectoryNamer:
+      arguments:
+        - '@property_accessor'
+        - '@Chamilo\CoreBundle\Repository\AssetRepository'
+        - '@request_stack'
+
+    Chamilo\CoreBundle\Component\Utils\AssetFileNameNamer:
+      arguments:
+        - '@request_stack'
+        - '@translator'
+      tags:
+        - { name: vich_uploader.namer, mapping: assets }
+
     Chamilo\CoreBundle\Component\Utils\CreateDefaultPages: ~
     Chamilo\CoreBundle\Component\Utils\NameConvention: ~
     Chamilo\CoreBundle\Component\Utils\Glide:

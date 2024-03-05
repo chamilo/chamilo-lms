@@ -1253,7 +1253,7 @@ class CourseManager
      * @param array     $extra_field
      * @param array     $courseCodeList
      * @param array     $userIdList
-     * @param string    $filterByActive
+     * @param bool      $filterByActive
      * @param array     $sessionIdList
      * @param string    $searchByKeyword
      *

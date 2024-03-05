@@ -98,7 +98,11 @@ defineExpose({
   v$,
 })
 
-const dateRange = ref([item.value.startDate, item.value.endDate])
+const dateRange = ref()
+
+if (item.value?.startDate || item.value?.endDate) {
+  dateRange.value = [item.value?.startDate, item.value?.endDate]
+}
 
 watch(dateRange, (newValue) => {
   item.value.startDate = newValue[0]

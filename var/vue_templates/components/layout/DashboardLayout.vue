@@ -10,37 +10,23 @@ defineProps({
     type: Boolean,
     default: true,
   },
-});
+})
 
 const securityStore = useSecurityStore()
-
-let breadcrumb = [];
-
-try {
-  if (window.breadcrumb) {
-    breadcrumb = window.breadcrumb;
-  }
-} catch (e) {
-  console.log(e.message);
-}
 </script>
 
 <template>
   <Topbar />
-  <Sidebar
-    v-if="securityStore.isAuthenticated"
-  />
-  <SidebarNotLoggedIn
-    v-else
-  />
+  <Sidebar v-if="securityStore.isAuthenticated" />
+  <SidebarNotLoggedIn v-else />
   <div
     class="app-main"
-    :class="{ 'app-main--no-sidebar': !securityStore.isAuthenticated, 'app-main--no-loggedin': !securityStore.isAuthenticated }"
+    :class="{
+      'app-main--no-sidebar': !securityStore.isAuthenticated,
+      'app-main--no-loggedin': !securityStore.isAuthenticated,
+    }"
   >
-    <Breadcrumb
-      v-if="showBreadcrumb"
-      :legacy="breadcrumb"
-    />
+    <Breadcrumb v-if="showBreadcrumb" />
     <slot />
     <router-view />
   </div>

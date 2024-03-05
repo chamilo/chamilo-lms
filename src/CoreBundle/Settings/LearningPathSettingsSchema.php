@@ -113,8 +113,8 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
                 'scorm_api_extrafield_to_use_as_student_id',
                 TextType::class,
                 [
-                    'label' => 'ScormApiExtrafieldToUseAsStudentIdTitle',
-                    'help' => 'ScormApiExtrafieldToUseAsStudentIdComment',
+                    'label' => 'Extra field to use as student ID for SCORM API',
+                    'help' => 'The name provided will be used as the identifier of the user extra field containing an ID that the remote SCORM API will recognize as a user ID. This is only useful if your remote SCORM provider asked you for something similar.',
                 ]
             )
             ->add('allow_import_scorm_package_in_course_builder', YesNoType::class)

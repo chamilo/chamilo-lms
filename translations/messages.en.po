@@ -13380,13 +13380,13 @@ msgid "This type does not exist"
 msgstr "This type does not exist"
 
 msgid "The survey has been created succesfully"
-msgstr "The survey has been created succesfully"
+msgstr "The survey has been created successfully"
 
 msgid "You can now add questions to your survey"
 msgstr "You can now add questions to your survey"
 
 msgid "The survey has been updated succesfully"
-msgstr "The survey has been updated succesfully"
+msgstr "The survey has been updated successfully"
 
 msgid "The question has been added."
 msgstr "The question has been added."
@@ -13584,7 +13584,7 @@ msgid "This survey code soon exists in this language"
 msgstr "This survey code soon exists in this language"
 
 msgid "The user's answers to the survey have been succesfully removed."
-msgstr "The user's answers to the survey have been succesfully removed."
+msgstr "The user's answers to the survey have been successfully removed."
 
 msgid "Delete this user's answers"
 msgstr "Delete this user's answers"
@@ -22923,10 +22923,10 @@ msgid "Create a new Doodle type survey"
 msgstr "Create a new Doodle type survey"
 
 msgid "Remove multiplicated questions"
-msgstr "Remove multiplicated questions"
+msgstr "Remove multiplied questions"
 
 msgid "Multiplicate questions"
-msgstr "Multiplicate questions"
+msgstr "Multiply questions"
 
 msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
 msgstr "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
@@ -23469,10 +23469,10 @@ msgid "Hi %s <br/><br/>As group tutor for the group %s you are invited to partic
 msgstr "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :"
 
 msgid "Survey %s multiplicated"
-msgstr "Survey %s multiplicated"
+msgstr "Survey %s multiplied"
 
 msgid "Survey %s not multiplicated"
-msgstr "Survey %s not multiplicated"
+msgstr "Survey %s not multiplied"
 
 msgid "Export survey results"
 msgstr "Export survey results"
@@ -24211,3 +24211,12 @@ msgstr "FAQ"
 
 msgid "Created with Chamilo copyright year"
 msgstr "Created with Chamilo © %s"
+
+msgid "Multiple choice with *other* option"
+msgstr "Multiple choice with *other* option"
+
+msgid "Extra field to use as student ID for SCORM API"
+msgstr "Extra field to use as student ID for SCORM API"
+
+msgid "The name provided will be used as the identifier of the user extra field containing an ID that the remote SCORM API will recognize as a user ID. This is only useful if your remote SCORM provider asked you for something similar."
+msgstr "The name provided will be used as the identifier of the user extra field containing an ID that the remote SCORM API will recognize as a user ID. This is only useful if your remote SCORM provider asked you for something similar."

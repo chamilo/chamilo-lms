@@ -143,7 +143,7 @@ class Display
         }
 
         $params['legacy_javascript'] = $htmlHeadXtra;
-        $params['legacy_breadcrumb'] = json_encode($interbreadcrumb);
+        $params['legacy_breadcrumb'] = json_encode(array_values($interbreadcrumb));
 
         Template::setVueParams($params);
         $content = Container::getTwig()->render($tpl, $params);

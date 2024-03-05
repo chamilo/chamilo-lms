@@ -9,6 +9,7 @@
         force-selection
         :option-label="optionLabel"
         :disabled="disabled"
+        :min-length="3"
         @complete="onComplete"
         @item-select="$emit('item-select', $event)"
         @update:model-value="$emit('update:modelValue', $event)"
@@ -84,18 +85,9 @@ const baseModel = ref([])
 
 const suggestions = ref([])
 
-const onComplete = (event) => {
-  if (event.query.length >= 3) {
-    props.search(event.query).then((members) => {
-      if (members.length > 0) {
-        suggestions.value = members
-      } else {
-        let fakeSuggestion = {}
-        fakeSuggestion[`${props.optionLabel}`] = event.query
+const onComplete = async (event) => {
+  const members = await props.search(event.query)
 
-        suggestions.value = [fakeSuggestion]
-      }
-    })
-  }
+  suggestions.value = members.length > 0 ? members : []
 }
 </script>

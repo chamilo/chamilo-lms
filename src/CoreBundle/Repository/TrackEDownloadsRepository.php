@@ -19,7 +19,14 @@ class TrackEDownloadsRepository extends ServiceEntityRepository
         parent::__construct($registry, TrackEDownloads::class);
     }
 
-    public function saveDownload(int $userId, int $resourceLinkId, string $documentUrl)
+    /**
+     * Save record of a resource being downloaded in track_e_downloads
+     * @param int    $userId
+     * @param int    $resourceLinkId
+     * @param string $documentUrl
+     * @return int
+     */
+    public function saveDownload(int $userId, int $resourceLinkId, string $documentUrl): int
     {
         $download = new TrackEDownloads();
         $download->setDownDocPath($documentUrl);

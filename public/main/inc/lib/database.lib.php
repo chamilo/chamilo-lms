@@ -262,6 +262,7 @@ class Database
     }
 
     /**
+     * Wrapper to executes a query on the defined database handler.
      * @throws Exception
      */
     public static function query(string $query): ?\Doctrine\DBAL\Result
@@ -346,6 +347,7 @@ class Database
     }
 
     /**
+     * Wrapper executing an SQL update query based on the given attributes array
      * @param string $tableName       use Database::get_main_table
      * @param array  $attributes      Values to updates
      *                                Example: $params['name'] = 'Julio'; $params['lastname'] = 'Montoya';

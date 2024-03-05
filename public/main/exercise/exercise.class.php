@@ -6723,7 +6723,7 @@ class Exercise
             $exerciseAttempts = $this->selectAttempts();
 
             if ($exerciseAttempts > 0) {
-                $attemptCount = Event::get_attempt_count_not_finished(
+                $attemptCount = Event::get_attempt_count(
                     api_get_user_id(),
                     $this->getId(),
                     $lpId,
@@ -6733,7 +6733,7 @@ class Exercise
 
                 if ($attemptCount >= $exerciseAttempts) {
                     $message = sprintf(
-                        get_lang('Reachedmax. 20 characters, e.g. <i>INNOV21</i>Attempts'),
+                        get_lang('You cannot take test <b>%s</b> because you have already reached the maximum of %s attempts.'),
                         $this->name,
                         $exerciseAttempts
                     );

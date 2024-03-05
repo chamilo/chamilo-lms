@@ -16,7 +16,7 @@ class NotificationEvent extends Model
         'event_type',
         'event_id',
     ];
-    public $extraFieldName;
+    public string $extraFieldName;
 
     /**
      * Constructor.
@@ -43,7 +43,14 @@ class NotificationEvent extends Model
         ];
     }
 
-    public function getForm(FormValidator $form, $data = [])
+    /**
+     * Get a prepared FormValidator form (passed as first param) with the justification fields
+     * @param FormValidator $form
+     * @param array $data
+     * @return FormValidator
+     * @throws Exception
+     */
+    public function getForm(FormValidator $form, array $data = []): FormValidator
     {
         $options = $this->getEventsForSelect();
         $form->addSelect('event_type', get_lang('EventType'), $options);
@@ -72,7 +79,13 @@ class NotificationEvent extends Model
         return $form;
     }
 
-    public function getAddForm(FormValidator $form)
+    /**
+     * Get addition form for the justification notification
+     * @param FormValidator $form
+     * @return FormValidator
+     * @throws Exception
+     */
+    public function getAddForm(FormValidator $form): FormValidator
     {
         $options = $this->getEventsForSelect();
         $eventType = $form->getSubmitValue('event_type');
@@ -81,7 +94,7 @@ class NotificationEvent extends Model
             'event_type',
             get_lang('EventType'),
             $options,
-            ['placeholder' => get_lang('SelectAnOption'), 'onchange' => 'document.add.submit()']
+            ['placeholder' => get_lang('Please select an option'), 'onchange' => 'document.add.submit()']
         );
 
         if (!empty($eventType)) {
@@ -90,14 +103,14 @@ class NotificationEvent extends Model
             $form->addTextarea('content', get_lang('Content'));
             $form->addText('link', get_lang('Link'), false);
             $form->addCheckBox('persistent', get_lang('Persistent'));
-            $form->addNumeric('day_diff', get_lang('DayDiff'), false);
+            $form->addNumeric('day_diff', get_lang('Time difference'), false);
 
             switch ($eventType) {
                 case self::JUSTIFICATION_EXPIRATION:
                     $plugin = Justification::create();
                     $list = $plugin->getList();
                     $list = array_column($list, 'name', 'id');
-                    $form->addSelect('event_id', get_lang('JustificationType'), $list);
+                    $form->addSelect('event_id', get_lang('Justification type'), $list);
                     break;
                 default:
                     break;
@@ -108,7 +121,12 @@ class NotificationEvent extends Model
         return $form;
     }
 
-    public function getUserExtraData($userId)
+    /**
+     * Get notification-related user's extra field value
+     * @param int $userId
+     * @return string
+     */
+    public function getUserExtraData(int $userId): string
     {
         $data = UserManager::get_extra_user_data_by_field($userId, $this->extraFieldName);
 
@@ -182,7 +200,7 @@ class NotificationEvent extends Model
                             }
 
                             $eventText = $plugin->get_lang('Justification').': '.$fieldData['name'].' <br />';
-                            $eventText .= $plugin->get_lang('JustificationDate').': '.$userJustification['date_validity'];
+                            $eventText .= $plugin->get_lang('Justification expiration').': '.$userJustification['date_validity'];
 
                             $url = $event['link'];
                             if (empty($url)) {
@@ -208,7 +226,13 @@ class NotificationEvent extends Model
         return $notifications;
     }
 
-    public function isRead($id, $extraData)
+    /**
+     * Returns whether a notification has already been read by the user or not
+     * @param int    $id
+     * @param string $extraData
+     * @return bool
+     */
+    public function isRead(int $id, string $extraData): bool
     {
         $userId = api_get_user_id();
 
@@ -230,7 +254,12 @@ class NotificationEvent extends Model
         return false;
     }
 
-    public function markAsRead($id)
+    /**
+     * Mark a notification as read by the user
+     * @param int $id
+     * @return bool
+     */
+    public function markAsRead(int $id): bool
     {
         if (empty($id)) {
             return false;
@@ -250,9 +279,17 @@ class NotificationEvent extends Model
         return true;
     }
 
-    public function showNotification($date, $dayDiff)
+    /**
+     * Returns whether to show some notification or not based on dates
+     * @param string $date
+     * @param int $dayDiff
+     * @return bool
+     * @throws Exception
+     */
+    public function showNotification(string $date, int $dayDiff): bool
     {
         $today = api_get_utc_datetime();
+        $dayDiff = (string) $dayDiff;
         $expiration = api_get_utc_datetime($date, false, true);
         $interval = new DateInterval('P'.$dayDiff.'D');
         $diff = $expiration->sub($interval);
@@ -262,19 +299,5 @@ class NotificationEvent extends Model
         }
 
         return false;
-    }
-
-    public function install()
-    {
-        $sql = "CREATE TABLE IF NOT EXISTS notification_event (
-            id INT unsigned NOT NULL auto_increment PRIMARY KEY,
-            title VARCHAR(255),
-            content TEXT,
-            link TEXT,
-            persistent INT,
-            day_diff INT,
-            event_type VARCHAR(255)
-        )";
-        Database::query($sql);
     }
 }

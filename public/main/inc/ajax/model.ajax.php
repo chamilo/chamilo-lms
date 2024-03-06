@@ -1849,7 +1849,7 @@ switch ($action) {
                 ['where' => $whereCondition, 'extra' => $extra_fields]
             );
         } else {
-            $sidx = in_array($sidx, $columns) ? $sidx : 'name';
+            $sidx = in_array($sidx, $columns) ? $sidx : 'title';
             // Sessions for the coach
             $sessions = Tracking::get_sessions_coached_by_user(
                 api_get_user_id(),
@@ -1925,7 +1925,7 @@ switch ($action) {
 
                 $item = [
                     'name' => Display::url(
-                        $session['name'],
+                        $session['title'],
                         api_get_path(WEB_CODE_PATH).'my_space/course.php?sid='.$session['id']
                     ),
                     'date' => $dateToString,

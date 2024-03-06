@@ -824,7 +824,7 @@ class SessionManager
         $sql = "SELECT l.isocode, count(u.id) as cLang
                 FROM $tblSessionUser su
                 INNER JOIN $tblUser u ON (u.id = su.user_id)
-                INNER JOIN $tableLanguage l ON (l.english_name = u.language)
+                INNER JOIN $tableLanguage l ON (l.isocode = u.locale)
                 LEFT OUTER JOIN $tableAccessUrlUser au ON (au.user_id = u.id)
                 ";
 

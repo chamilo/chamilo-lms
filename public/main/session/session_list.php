@@ -27,7 +27,7 @@ switch ($action) {
             $response = SessionManager::delete($idChecked);
             if ($response) {
                 Display::addFlash(
-                    Display::return_message(get_lang('Deleted').': '.Security::remove_XSS($sessionInfo['name']))
+                    Display::return_message(get_lang('Deleted').': '.Security::remove_XSS($sessionInfo['title']))
                 );
             }
         }
@@ -79,8 +79,7 @@ $courseSelect = $sessionFilter->addSelectAjax(
 
 if (!empty($courseId)) {
     $courseInfo = api_get_course_info_by_id($courseId);
-    $parents = CourseCategory::getParentsToString($courseInfo['categoryCode']);
-    $courseSelect->addOption($parents.$courseInfo['title'], $courseInfo['code'], ['selected' => 'selected']);
+    $courseSelect->addOption($courseInfo['title'], $courseInfo['code'], ['selected' => 'selected']);
 }
 
 $url = api_get_self();
@@ -116,14 +115,14 @@ if (isset($_REQUEST['keyword'])) {
     $filter->groupOp = 'OR';
 
     $filter = json_encode($filter);
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters='.$filter.'&searchField=s.name&searchString='.Security::remove_XSS($_REQUEST['keyword']).'&searchOper=in';
+    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters='.$filter.'&searchField=s.title&searchString='.Security::remove_XSS($_REQUEST['keyword']).'&searchOper=in';
 }
 
 if (isset($_REQUEST['id_category'])) {
     $sessionCategory = SessionManager::get_session_category($_REQUEST['id_category']);
     if (!empty($sessionCategory)) {
         //Begin with see the searchOper param
-        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters=&searchField=sc.name&searchString='.Security::remove_XSS($sessionCategory['name']).'&searchOper=in';
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters=&searchField=sc.title&searchString='.Security::remove_XSS($sessionCategory['title']).'&searchOper=in';
     }
 }
 
@@ -178,14 +177,14 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             for (key in added_cols) {
                 grid.hideCol(key);
             }
-            grid.showCol('name');
+            grid.showCol('title');
             grid.showCol('display_start_date');
             grid.showCol('display_end_date');
             grid.showCol('course_title');
         }
 
         function show_cols(grid, added_cols) {
-            grid.showCol('name').trigger('reloadGrid');
+            grid.showCol('title').trigger('reloadGrid');
             for (key in added_cols) {
                 grid.showCol(key);
             }

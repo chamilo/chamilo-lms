@@ -22,14 +22,14 @@
                 label="Accept"
                 icon="check"
                 type="success"
-                @click="emitEvent('accept', invitation.id)"
+                @click="emitEvent('accept', invitation.itemId)"
               />
               <BaseButton
                 v-if="invitation.canDeny"
                 label="Deny"
                 icon="times"
                 type="danger"
-                @click="emitEvent('deny', invitation.id)"
+                @click="emitEvent('deny', invitation.itemId)"
               />
             </div>
           </div>

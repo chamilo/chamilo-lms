@@ -2143,8 +2143,17 @@ class learnpath
      */
     public function get_lp_session_id()
     {
-        if (!empty($this->lp_session_id)) {
-            return (int) $this->lp_session_id;
+        $lp = Container::getLpRepository()->find($this->lp_id);
+        if ($lp) {
+            /* @var ResourceNode $resourceNode */
+            $resourceNode = $lp->getResourceNode();
+            if ($resourceNode) {
+                $link = $resourceNode->getResourceLinks()->first();
+                if ($link && $link->getSession()) {
+
+                    return (int) $link->getSession()->getId();
+                }
+            }
         }
 
         return 0;

@@ -513,8 +513,6 @@ class DocumentManager
             if ('/chat_files' == $path) {
                 $condition .= " AND (docs.session_id = '$sessionId') ";
             }
-            // share_folder filter
-            $condition .= " AND docs.path != '/shared_folder' ";
         }
 
         return $condition;
@@ -567,10 +565,6 @@ class DocumentManager
         }
 
         $show_users_condition = '';
-        if ('false' === api_get_setting('show_users_folders')) {
-            $show_users_condition = " AND docs.path NOT LIKE '%shared_folder%'";
-        }
-
         if ($can_see_invisible) {
             $sessionId = $sessionId ?: api_get_session_id();
             $condition_session = " AND (l.session_id = '$sessionId' OR (l.session_id = '0' OR l.session_id IS NULL) )";
@@ -638,7 +632,7 @@ class DocumentManager
             }
 
             //get visible folders
-            $sql = "SELECT DISTINCT docs.id, docs.path
+            $sql = "SELECT DISTINCT docs.id
                     FROM resource_node AS n
                     INNER JOIN $TABLE_DOCUMENT  AS docs
                     ON (docs.resource_node_id = n.id)
@@ -685,7 +679,6 @@ class DocumentManager
                         INNER JOIN resource_link l
                         ON (l.resource_node_id = n.id)
                         WHERE
-                            docs.path LIKE '".Database::escape_string($row['path'].'/%')."' AND
                             docs.filetype = 'folder' AND
                             $groupCondition AND
                             l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')

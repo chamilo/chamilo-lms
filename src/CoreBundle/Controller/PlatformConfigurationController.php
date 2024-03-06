@@ -56,6 +56,7 @@ class PlatformConfigurationController extends AbstractController
 
                 'registration.allow_terms_conditions',
 
+                'agenda.allow_personal_agenda',
                 'agenda.personal_calendar_show_sessions_occupation',
                 // 'agenda.agenda_reminders',
                 'agenda.agenda_collective_invitations',

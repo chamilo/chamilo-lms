@@ -128,6 +128,7 @@ import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibil
 import { useLocale, useParentLocale } from "../../composables/locale"
 import { storeToRefs } from "pinia"
 import CalendarSectionHeader from "../../components/ccalendarevent/CalendarSectionHeader.vue"
+import { useCalendarActionButtons } from "../../composables/calendar/calendarActionButtons"
 
 const store = useStore()
 const confirm = useConfirm()
@@ -136,6 +137,8 @@ const cidReqStore = useCidReqStore()
 const { course, session, group } = storeToRefs(cidReqStore)
 
 const { abbreviatedDatetime } = useFormatDate()
+
+const { showAddButton } = useCalendarActionButtons()
 
 const item = ref({})
 const dialog = ref(false)
@@ -256,6 +259,10 @@ const calendarOptions = ref({
     dialogShow.value = true
   },
   select(info) {
+    if (!showAddButton.value) {
+      return
+    }
+
     item.value = {}
     item.value["parentResourceNode"] = currentUser.value.resourceNode["id"]
     item.value["allDay"] = info.allDay

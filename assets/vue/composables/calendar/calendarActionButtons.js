@@ -29,13 +29,15 @@ export function useCalendarActionButtons() {
   const showSessionPlanningButton = ref(false)
   const showMyStudentsScheduleButton = ref(false)
 
+  const isPersonal = !course.value
+
   watchEffect(() => {
     if (
       isAllowedToEdit.value ||
-      (!course.value &&
-        !securityStore.isAuthenticated &&
-        platformConfigStore.getSetting("agenda.allow_personal_agenda")) ||
-      ("1" === courseAllowUserEditAgenda && !securityStore.isAuthenticated && isAllowedToSessionEdit)
+      (isPersonal &&
+        securityStore.isAuthenticated &&
+        "true" === platformConfigStore.getSetting("agenda.allow_personal_agenda")) ||
+      ("1" === courseAllowUserEditAgenda && securityStore.isAuthenticated && isAllowedToSessionEdit)
     ) {
       showAddButton.value = true
       showImportICalButton.value = true

@@ -58,6 +58,11 @@ const props = defineProps({
     required: true,
     default: true,
   },
+  linkListName: {
+    type: String,
+    required: false,
+    default: "resourceLinkListFromEntity",
+  },
 })
 
 const users = ref([])
@@ -67,17 +72,17 @@ const isLoading = ref(false)
 const securityStore = useSecurityStore()
 
 function addUser(userResult) {
-  if (isEmpty(model.value.resourceLinkListFromEntity)) {
-    model.value.resourceLinkListFromEntity = []
+  if (isEmpty(model.value[props.linkListName])) {
+    model.value[props.linkListName] = []
   }
 
-  const someLink = model.value.resourceLinkListFromEntity.some((link) => link.user.username === userResult.username)
+  const someLink = model.value[props.linkListName].some((link) => link.user.username === userResult.username)
 
   if (someLink) {
     return
   }
 
-  model.value.resourceLinkListFromEntity.push({
+  model.value[props.linkListName].push({
     uid: userResult.id,
     user: { username: userResult.username },
     visibility: RESOURCE_LINK_PUBLISHED,

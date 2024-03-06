@@ -99,6 +99,7 @@ const maxSubscriptionsDisabled = computed(() => 0 === subscriptionVisibilitySele
       links-type="user_rel_users"
       :show-status="false"
       show-share-with-user
+      link-list-name="resourceLinkList"
     />
     <BaseCheckbox
       id="is_collective"

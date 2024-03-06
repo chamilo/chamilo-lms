@@ -595,25 +595,9 @@ switch ($action) {
                         ['class' => 'btn btn--plain']
                     );
                     if (0 == api_get_session_id()) {
-                        if ($thematic->getDisplayOrder() > 1) {
-                            $toolbarThematic .= ' <a
-                                class="btn btn--plain"
-                                href="'.api_get_self().'?action=moveup&'.api_get_cidreq().'&thematic_id='.$id.$params.$url_token.'">'.
-                                Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Up')).'</a>';
-                        } else {
-                            $toolbarThematic .= '<div class="btn btn--plain">'.
-                                Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon-disabled', null, ICON_SIZE_TINY, get_lang('Up')).'</div>';
-                        }
-                        //$thematic->getDisplayOrder()
-                        if ($thematic->getDisplayOrder() < $max_thematic_item) {
-                            $toolbarThematic .= ' <a
-                                class="btn btn--plain"
-                                href="'.api_get_self().'?action=movedown&a'.api_get_cidreq().'&thematic_id='.$id.$params.$url_token.'">'.
-                                Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Down')).'</a>';
-                        } else {
-                            $toolbarThematic .= '<div class="btn btn--plain">'.
-                                Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon-disabled', null, ICON_SIZE_TINY, get_lang('Down')).'</div>';
-                        }
+                        $currentOrder = $thematic->getResourceNode()->getDisplayOrder();
+                        $moveButtons = $thematicManager->getMoveActions($id, $currentOrder, count($thematic_data));
+                        $toolbarThematic .= $moveButtons;
                     }
 
                     if (true) {
@@ -1232,6 +1216,7 @@ switch ($action) {
         }
         break;
     case 'thematic_advance_list':
+
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Thematic advance').' ('.$cleanThematicTitle.')'];
 
         // thematic advance list

@@ -65,186 +65,36 @@ class Thematic
     }
 
     /**
-     * Get the thematics to display on the current page (fill the sortable-table).
-     *
-     * @param   int     offset of first user to recover
-     * @param   int     Number of users to get
-     * @param   int     Column to sort on
-     * @param   string  Order (ASC,DESC)
-     *
-     * @return array
-     *
-     * @see SortableTable#get_table_data($from)
+     * Moves a thematic item up or down in the list by adjusting its display order in the associated resource node.
      */
-    public function get_thematic_data($from, $number_of_items, $column, $direction)
+    public function moveThematic(string $direction, int $thematicId, Course $course, ?Session $session = null): bool
     {
-        $column = (int) $column;
-        $from = (int) $from;
-        $number_of_items = (int) $number_of_items;
+        $em = Database::getManager();
+        $thematicRepo = $em->getRepository(CThematic::class);
 
-        if (!in_array($direction, ['ASC', 'DESC'])) {
-            $direction = 'ASC';
-        }
-        /*
-        $course = api_get_course_entity();
-        $session = api_get_session_entity();
-
-        $sql = "SELECT id AS col0, title AS col1, display_order AS col2, session_id
-                FROM $tbl_thematic
-                WHERE c_id = $course_id AND active = 1 $condition_session
-                ORDER BY col2
-                LIMIT $from,$number_of_items ";
-        $res = Database::query($sql);
-
-        $thematics = [];
-        $user_info = api_get_user_info(api_get_user_id());
-        while ($thematic = Database::fetch_row($res)) {
-            $session_star = '';
-            if (api_get_session_id() == $thematic[3]) {
-                $session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
-            }
-            $thematic[1] = '<a href="index.php?'.api_get_cidreq().'&action=thematic_details&thematic_id='.$thematic[0].'">'.
-                Security::remove_XSS($thematic[1], STUDENT).$session_star.'</a>';
-            if (api_is_allowed_to_edit(null, true)) {
-                $actions = '';
-
-                if (api_get_session_id()) {
-                    if (api_get_session_id() == $thematic[3]) {
-                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic[0].'">'.
-                            Display::getMdiIcon(ToolIcon::COURSE_PROGRESS_PLAN, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Thematic plan')).'</a>&nbsp;';
-                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic[0].'">'.
-                            Display::getMdiIcon(ToolIcon::COURSE_PROGRESS_SCHEDULE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Thematic advance')).'</a>&nbsp;';
-
-                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$thematic[0].'">'.
-                            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
-                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$thematic[0].'">'.
-                            Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
-                    } else {
-                        $actions .= Display::getMdiIcon(ToolIcon::COURSE_PROGRESS_PLAN, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Thematic plan')).'&nbsp;';
-                        $actions .= Display::getMdiIcon(ToolIcon::COURSE_PROGRESS_SCHEDULE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Thematic advance')).'&nbsp;';
-                        $actions .= Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Edit'));
-                        $actions .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Delete')).'&nbsp;';
-                        $actions .= Display::url(
-                            Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Copy')),
-                            'index.php?'.api_get_cidreq().'&action=thematic_copy&thematic_id='.$thematic[0]
-                        );
-                    }
-                } else {
-                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic[0].'">'.
-                        Display::getMdiIcon(ToolIcon::COURSE_PROGRESS_PLAN, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Thematic plan')).'</a>&nbsp;';
-                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic[0].'">'.
-                        Display::getMdiIcon(ToolIcon::COURSE_PROGRESS_SCHEDULE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Thematic advance')).'</a>&nbsp;';
-
-                    if ($thematic[2] > 1) {
-                        $actions .= '<a href="'.api_get_self().'?action=moveup&'.api_get_cidreq().'&thematic_id='.$thematic[0].'">'.
-                            Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Up')).'</a>';
-                    } else {
-                        $actions .= Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL);
-                    }
-                    /*if ($thematic[2] < self::get_max_thematic_item()) {
-                        $actions .= '<a href="'.api_get_self().'?action=movedown&a'.api_get_cidreq().'&thematic_id='.$thematic[0].'">'.
-                            Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('down')).'</a>';
-                    } else {
-                        $actions .= Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL);
-                    }
-                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$thematic[0].'">'.
-                        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
-                    $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$thematic[0].'">'.
-                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
-                }
-                $thematics[] = [$thematic[0], $thematic[1], $actions];
-            }
-        }*/
-
-        //return $thematics;
-    }
-
-    /**
-     * Get the maximum display order of the thematic item.
-     *
-     * @return int Maximum display order
-     */
-    public function get_max_thematic_item(Course $course, Session $session = null)
-    {
-        // Database table definition
-        /*$tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
-        $session_id = api_get_session_id();
-        if ($use_session) {
-            $condition_session = api_get_session_condition($session_id);
-        } else {
-            $condition_session = '';
-        }
-        $course_id = api_get_course_int_id();
-        $sql = "SELECT MAX(display_order)
-                FROM $tbl_thematic
-                WHERE c_id = $course_id AND active = 1 $condition_session";
-        $rs = Database::query($sql);
-        $row = Database::fetch_array($rs);
-
-        return $row[0];*/
-    }
-
-    /**
-     * Move a thematic.
-     *
-     * @param string $direction   (up, down)
-     * @param int    $thematic_id
-     */
-    public function moveThematic($direction, $thematic_id, $course, $session = null)
-    {
-        // Database table definition
-        $tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
-
-        // sort direction
-        if ('up' === $direction) {
-            $sortorder = 'DESC';
-        } else {
-            $sortorder = 'ASC';
-        }
-        $course_id = api_get_course_int_id();
-        $session_id = api_get_session_id();
-        $condition_session = api_get_session_condition($session_id);
-
-        $sql = "SELECT id, display_order
-                FROM $tbl_thematic
-                WHERE c_id = $course_id AND active = 1 $condition_session
-                ORDER BY display_order $sortorder";
-        $res = Database::query($sql);
-        $found = false;
-
-        // Variable definition
-        $current_id = 0;
-        $next_id = 0;
-        while ($row = Database::fetch_array($res)) {
-            if ($found && empty($next_id)) {
-                $next_id = intval($row['id']);
-                $next_display_order = intval($row['display_order']);
-            }
-
-            if ($row['id'] == $thematic_id) {
-                $current_id = intval($thematic_id);
-                $current_display_order = intval($row['display_order']);
-                $found = true;
-            }
+        $thematic = $thematicRepo->find($thematicId);
+        if (null === $thematic) {
+            return false;
         }
 
-        // get last done thematic advance before move thematic list
-        $last_done_thematic_advance = $this->get_last_done_thematic_advance($course, $session);
+        $resourceNode = $thematic->getResourceNode();
+        if (null === $resourceNode) {
+            return false;
+        }
 
-        if (!empty($next_display_order) && !empty($current_id)) {
-            $sql = "UPDATE $tbl_thematic SET display_order = $next_display_order
-                    WHERE c_id = $course_id AND id = $current_id ";
-            Database::query($sql);
-        }
-        if (!empty($current_display_order) && !empty($next_id)) {
-            $sql = "UPDATE $tbl_thematic SET
-                    display_order = $current_display_order
-                    WHERE c_id = $course_id AND id = $next_id ";
-            Database::query($sql);
-        }
+        $currentDisplayOrder = $resourceNode->getDisplayOrder();
+
+        $newPosition = $currentDisplayOrder + ($direction === 'down' ? 1 : -1);
+        $newPosition = max(0, $newPosition);
+
+        $resourceNode->setDisplayOrder($newPosition);
+        $em->flush();
 
         // update done advances with de current thematic list
+        $last_done_thematic_advance = $this->get_last_done_thematic_advance($course, $session);
         $this->updateDoneThematicAdvance($last_done_thematic_advance, $course, $session);
+
+        return true;
     }
 
     /**
@@ -252,46 +102,36 @@ class Thematic
      *
      * @return CThematic[]
      */
-    public static function getThematicList(Course $course, Session $session = null)
+    public static function getThematicList(Course $course, Session $session = null): array
     {
-        // set current course and session
-        /*$tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
-        $course_info = api_get_course_info($course_code);
-        $course_id = $course_info['real_id'];
-
-        if (!empty($session_id)) {
-            $session_id = (int) $session_id;
-        } else {
-            $session_id = api_get_session_id();
-        }
-
-        $data = [];
-        if (empty($session_id)) {
-            $condition_session = api_get_session_condition(0);
-        } else {
-            $condition_session = api_get_session_condition($session_id, true, true);
-        }
-        $condition = " WHERE active = 1 $condition_session ";*/
-
         $repo = Container::getThematicRepository();
-        $qb = $repo->getResourcesByCourse($course, $session);
+        $qb = $repo->getResourcesByCourse($course, $session, null, null, true, true);
         $qb->andWhere('resource.active = 1');
 
         return $qb->getQuery()->getResult();
+    }
 
-        /*$sql = "SELECT *
-                FROM $tbl_thematic $condition AND c_id = $course_id
-                ORDER BY display_order ";
+    /**
+     * Generates HTML for move up and move down action buttons for a thematic item.
+     */
+    public function getMoveActions(int $thematicId, int $currentOrder, int $maxOrder): string
+    {
+        $toolbarThematic = '';
+        $params = '&thematic_id=' . $thematicId . '&sec_token=' . Security::get_token();
 
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            while ($row = Database::fetch_array($res, 'ASSOC')) {
-                $entity = $repo->find($row['iid']);
-                $data[$row['iid']] = $entity;
-            }
+        if ($currentOrder > 0) {
+            $toolbarThematic .= '<a class="btn btn--plain" href="'.api_get_self().'?action=moveup&'.api_get_cidreq().$params.'">' . Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Up')) . '</a>';
+        } else {
+            $toolbarThematic .= '<div class="btn btn--plain">' . Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon-disabled', null, ICON_SIZE_TINY, '') . '</div>';
         }
 
-        return $data;*/
+        if ($currentOrder < $maxOrder - 1) {
+            $toolbarThematic .= '<a class="btn btn--plain" href="'.api_get_self().'?action=movedown&'.api_get_cidreq().$params.'">' . Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Down')) . '</a>';
+        } else {
+            $toolbarThematic .= '<div class="btn btn--plain">' . Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon-disabled', null, ICON_SIZE_TINY, '') . '</div>';
+        }
+
+        return $toolbarThematic;
     }
 
     /**

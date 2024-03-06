@@ -7209,18 +7209,17 @@ class learnpath
             return 0;
         }
 
-        $table = Database::get_course_table(TABLE_LP_CATEGORY);
-        $id = (int) $id;
+        $repo = Container::getLpCategoryRepository();
+        /** @var CLpCategory $category */
+        $category = $repo->find($id);
 
-        $sql = "SELECT session_id FROM $table WHERE iid = $id";
-        $result = Database::query($sql);
-        $result = Database::fetch_array($result, 'ASSOC');
-
-        if ($result) {
-            return (int) $result['session_id'];
+        $sessionId = 0;
+        $link = $category->getFirstResourceLink();
+        if ($link && $link->getSession()) {
+            $sessionId = (int) $link->getSession()->getId();
         }
 
-        return 0;
+        return $sessionId;
     }
 
     /**
@@ -7259,7 +7258,7 @@ class learnpath
     public static function getCategoryFromCourseIntoSelect($courseId, $addSelectOption = false)
     {
         $repo = Container::getLpCategoryRepository();
-        $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId));
+        $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId), api_get_session_entity());
         $items = $qb->getQuery()->getResult();
 
         $cats = [];

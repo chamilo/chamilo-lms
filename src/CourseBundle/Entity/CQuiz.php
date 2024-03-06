@@ -454,7 +454,7 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     /**
      * Set text to display to user when they fail to the test (when pass percentage has been set).
      */
-    public function setTextWhenFinishedFailure(string $textWhenFinished): self
+    public function setTextWhenFinishedFailure(?string $textWhenFinished): self
     {
         $this->textWhenFinishedFailure = $textWhenFinished;
 

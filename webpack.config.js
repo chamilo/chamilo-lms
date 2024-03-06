@@ -129,6 +129,14 @@ Encore.copyFiles({
   from: "node_modules/moment/locale",
   to: "libs/locale/[path][name].[ext]",
 })
+Encore.copyFiles({
+  from: "./node_modules/select2/dist/css",
+  to: "libs/select2/css/[name].[ext]",
+})
+Encore.copyFiles({
+  from: "./node_modules/select2/dist/js",
+  to: "libs/select2/js/[name].[ext]",
+})
 
 const themes = ["chamilo"]
 

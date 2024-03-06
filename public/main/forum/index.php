@@ -254,7 +254,17 @@ if ($value && isset($value['value']) && !empty($value['value'])) {
 $searchFilter = '';
 $translate = 'true' === api_get_setting('editor.translate_html');
 if ($translate) {
-    $form = new FormValidator('search_simple', 'get', api_get_self().'?'.api_get_cidreq(), null, null, 'inline');
+    $htmlHeadXtra[] = api_get_css_asset('select2/css/select2.min.css');
+    $htmlHeadXtra[] = api_get_asset('select2/js/select2.min.js');
+    $htmlHeadXtra[] = '<script>
+        $(document).ready(function() {
+            $("#extra_language").select2({
+                placeholder: "'.get_lang('Select a language').'",
+                allowClear: true
+            });
+        });
+        </script>';
+    $form = new FormValidator('search_simple', 'get', api_get_self().'?'.api_get_cidreq(), null, null);
     $form->addHidden('cid', api_get_course_int_id());
     $form->addHidden('sid', api_get_session_id());
 

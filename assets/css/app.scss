@@ -37,6 +37,14 @@
   .collapse {
     visibility: inherit !important;
   }
+  .border-gray-300 {
+    --tw-border-opacity: 1;
+    border-color: rgba(156, 163, 175, var(--tw-border-opacity));
+  }
+  .border-gray-100 {
+    --tw-border-opacity: 1;
+    border-color: rgba(247, 250, 252, var(--tw-border-opacity));
+  }
 }
 
 @layer components {

@@ -40,11 +40,11 @@
   }
 
   &--plain {
-    @apply bg-gray-90 text-white;
+    @apply bg-gray-30 text-white mr-1.5;
 
     &:hover,
     &:focus {
-      @apply bg-black;
+      @apply bg-gray-90;
     }
   }
 

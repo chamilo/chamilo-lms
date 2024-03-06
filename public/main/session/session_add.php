@@ -82,7 +82,7 @@ function search_coachs($needle)
 $urlAction = api_get_self();
 $session = null;
 $fromSessionId = null;
-$accessSelected = 0;
+$accessSelected = 1;
 if (isset($_GET['fromSessionId'])) {
     $fromSessionId = (int) $_GET['fromSessionId'];
     $session = api_get_session_entity($fromSessionId);

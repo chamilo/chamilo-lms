@@ -509,7 +509,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     );
     $form->addButtonSearch(get_lang('Search courses'));
     $advanced = '<a class="btn btn--plain" href="'.api_get_path(WEB_CODE_PATH).'admin/course_list.php?search=advanced">
-        <em class="fa fa-search"></em> '.
+        <em class="pi pi-search"></em> '.
         get_lang('Advanced search').'</a>';
 
     // Create a filter by session

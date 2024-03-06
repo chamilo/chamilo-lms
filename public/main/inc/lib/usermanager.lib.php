@@ -283,7 +283,6 @@ class UserManager
             ->setRegistrationDate($now)
             ->setHrDeptId($hrDeptId)
             ->setActive($active)
-            ->setEnabled($active)
             ->setTimezone(api_get_timezone())
         ;
 
@@ -1084,7 +1083,6 @@ class UserManager
             ->setAddress($address)
             ->setExpirationDate($expiration_date)
             ->setActive((bool) $active)
-            ->setEnabled((bool) $active)
             ->setHrDeptId((int) $hr_dept_id)
         ;
 

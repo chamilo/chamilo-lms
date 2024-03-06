@@ -1903,7 +1903,17 @@ class Rest extends WebService
                     // see UserManager::update_user() usermanager.lib.php:1205
                     if ($user->getActive() != $value) {
                         $user->setActive($value);
-                        Event::addEvent($value ? LOG_USER_ENABLE : LOG_USER_DISABLE, LOG_USER_ID, $userId);
+                        switch ($value) {
+                            case 1:
+                                Event::addEvent(LOG_USER_ENABLE, LOG_USER_ID, $userId);
+                                break;
+                            case 0:
+                                Event::addEvent(LOG_USER_DISABLE, LOG_USER_ID, $userId);
+                                break;
+                            case -1:
+                                Event::addEvent(LOG_USER_PREDELETE, LOG_USER_ID, $userId);
+                                break;
+                        }
                     }
                     break;
                 case 'openid':

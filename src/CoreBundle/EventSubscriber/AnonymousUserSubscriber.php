@@ -76,7 +76,7 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
                     'official_code' => $user->getOfficialCode(),
                     'picture_uri' => $user->getPictureUri(),
                     'status' => $user->getStatus(),
-                    'active' => $user->getActive(),
+                    'active' => $user->isActive(),
                     'auth_source' => $user->getAuthSource(),
                     'theme' => $user->getTheme(),
                     'language' => $user->getLocale(),

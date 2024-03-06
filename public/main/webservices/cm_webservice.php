@@ -135,7 +135,7 @@ class WSCM
                 // Check the user's password
                 if ($passwordEncoded == $uData->getPassword() && (trim($login) == $uData->getUsername())) {
                     // Check if the account is active (not locked)
-                    if ($uData->getActive()) {
+                    if ($uData->isActive()) {
                         // Check if the expiration date has not been reached
                         $now = new DateTime();
                         if ($uData->getExpirationDate() > $now || !$uData->getExpirationDate()) {

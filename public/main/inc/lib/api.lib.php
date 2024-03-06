@@ -199,6 +199,7 @@ define('LOG_MESSAGE_DATA', 'message_data');
 define('LOG_MESSAGE_DELETE', 'msg_deleted');
 
 define('LOG_USER_DELETE', 'user_deleted');
+define('LOG_USER_PREDELETE', 'user_predeleted');
 define('LOG_USER_CREATE', 'user_created');
 define('LOG_USER_UPDATE', 'user_updated');
 define('LOG_USER_PASSWORD_UPDATE', 'user_password_updated');
@@ -1620,7 +1621,7 @@ function api_get_user_info_from_entity(
     $result['phone'] = $user->getPhone();
     $result['address'] = $user->getAddress();
     $result['official_code'] = $user->getOfficialCode();
-    $result['active'] = $user->getActive();
+    $result['active'] = $user->isActive();
     $result['auth_source'] = $user->getAuthSource();
     $result['language'] = $user->getLocale();
     $result['creator_id'] = $user->getCreatorId();

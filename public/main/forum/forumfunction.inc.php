@@ -990,169 +990,73 @@ function returnLockUnlockIcon(
 }
 
 /**
- * This function takes care of the display of the up and down icon.
- *
- * @param string $content what is it that we want to make (in)visible: forum category, forum, thread, post
- * @param int    $id      is the id of the item we want to display the icons for
- * @param array  $list    is an array of all the items. All items in this list should have
- *                        an up and down icon except for the first (no up icon) and the last (no down icon)
- *                        The key of this $list array is the id of the item.
- *
- * @return string HTML
+ * Generates HTML for up and down icons with links to move an item up or down in a list.
  */
-function returnUpDownIcon(string $content, int $id, array $list): string
-{
-    $total_items = count($list);
-    $position = 0;
-    $internal_counter = 0;
+function returnUpDownIcon(string $content, int $id, array $list): string {
     $forumCategory = isset($_GET['forumcategory']) ? Security::remove_XSS($_GET['forumcategory']) : null;
-
-    if (!empty($list)) {
-        foreach ($list as $item) {
-            $internal_counter++;
+    $totalItemsOfType = 0;
+    $position = 0;
+    foreach ($list as $key => $item) {
+        if (($content === 'forumcategory' && $item instanceof CForumCategory) ||
+            ($content === 'forum' && $item instanceof CForum)) {
+            $totalItemsOfType++;
             if ($id == $item->getIid()) {
-                $position = $internal_counter;
+                $position = $key + 1;
             }
         }
     }
 
-    if ($position > 1) {
-        $return_value = '<a
-                href="'.api_get_self().'?'.api_get_cidreq().'&action=move&direction=up&content='.$content.'&forumcategory='.$forumCategory.'&id='.$id.'"
-                title="'.get_lang('Move up').'">'.
-            Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Move up')).'</a>';
-    } else {
-        $return_value = Display::url(
-            Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, ''),
-            'javascript:void(0)'
-        );
-    }
+    $upIcon = $position > 1
+        ? '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&direction=up&content='.$content.'&id='.$id.'" title="'.get_lang('Move up').'">'.Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Move up')).'</a>'
+        : '<span class="ch-tool-icon-disabled">'.Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, '').'</span>';
 
-    if ($position < $total_items) {
-        $return_value .= '<a
-            href="'.api_get_self().'?'.api_get_cidreq().'&action=move&direction=down&content='.$content.'&forumcategory='.$forumCategory.'&id='.$id.'"
-            title="'.get_lang('Move down').'" >'.
-            Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Move down')).'</a>';
-    } else {
-        $return_value = Display::url(
-            Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, ''),
-            'javascript:void(0)'
-        );
-    }
+    $downIcon = $position < $totalItemsOfType
+        ? '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&direction=down&content='.$content.'&id='.$id.'" title="'.get_lang('Move down').'">'.Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Move down')).'</a>'
+        : '<span class="ch-tool-icon-disabled">'.Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, '').'</span>';
 
-    return $return_value;
+
+    return $upIcon . $downIcon;
 }
 
 /**
- * This function moves a forum or a forum category up or down.
- *
- * @param string $content   is it that we want to make (in)visible: forum category, forum, thread, post
- * @param string $direction we want to move it up or down
- * @param int    $id        id of the content we want to make invisible
- *
- * @return string language variable
- *
- * @todo consider removing the table_item_property calls here but this can
- * prevent unwanted side effects when a forum does not have an entry in
- * the item_property table but does have one in the forum table.
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @version february 2006, dokeos 1.8
+ * Moves a forum or forum category up or down in the display order.
  */
 function moveUpDown(string $content, string $direction, int $id): string
 {
-    $table_categories = Database::get_course_table(TABLE_FORUM_CATEGORY);
-    $table_forums = Database::get_course_table(TABLE_FORUM);
-    $course_id = api_get_course_int_id();
+    $em = Database::getManager();
 
-    // Determine which field holds the sort order.
+    $entity = null;
     if ('forumcategory' === $content) {
-        $table = $table_categories;
-        $sort_column = 'cat_order';
-        $id_column = 'cat_id';
-        $sort_column = 'cat_order';
+        $entityRepo = $em->getRepository(CForumCategory::class);
     } elseif ('forum' === $content) {
-        $table = $table_forums;
-        $sort_column = 'forum_order';
-        $id_column = 'forum_id';
-        $sort_column = 'forum_order';
-        // We also need the forum_category of this forum.
-        $sql = "SELECT forum_category FROM $table_forums
-                WHERE forum_id = ".$id;
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-        $forum_category = $row['forum_category'];
-    } else {
-        return '';
+        $entityRepo = $em->getRepository(CForum::class);
     }
 
-    // Determine the need for sorting ascending or descending order.
-    if ('down' === $direction) {
-        $sort_direction = 'ASC';
-    } elseif ('up' === $direction) {
-        $sort_direction = 'DESC';
-    } else {
-        return '';
+    if (null === $entityRepo) {
+        return false;
     }
 
-    // The SQL statement
-    if ('forumcategory' === $content) {
-        $sql = "SELECT *
-                FROM $table_categories forum_categories
-                WHERE
-                    forum_categories.c_id = $course_id
-                ORDER BY forum_categories.cat_order $sort_direction";
-    }
-    if ('forum' === $content) {
-        $sql = "SELECT *
-            FROM $table
-            WHERE
-                c_id = $course_id AND
-                forum_category = '".Database::escape_string($forum_category)."'
-            ORDER BY forum_order $sort_direction";
-    }
-    // Finding the items that need to be switched.
-    $result = Database::query($sql);
-    $found = false;
-    $next_sort = '';
-    $this_sort = '';
-    while ($row = Database::fetch_array($result, 'ASSOC')) {
-        if ($found) {
-            $next_id = $row[$id_column];
-            $next_sort = $row[$sort_column];
-            $found = false;
-        }
-        if ($id == $row[$id_column]) {
-            $this_id = $id;
-            $this_sort = $row[$sort_column];
-            $found = true;
-        }
+    $entity = $entityRepo->find($id);
+    if (null === $entity) {
+        return false;
     }
 
-    if ('forum' === $content && $next_sort) {
-        $repo = Container::getForumRepository();
-        /** @var CForum $forum */
-        $forum = $repo->find($id);
-        $forum->setForumOrder($next_sort);
-        $repo->update($forum);
-
-        Display::addFlash(Display::return_message(get_lang('Updated')));
-    } else {
-        if ($next_sort) {
-            $repo = Container::getForumCategoryRepository();
-            /** @var CForumCategory $forum */
-            $category = $repo->find($id);
-            if ($category) {
-                $category->setCatOrder($next_sort);
-                $repo->update($category);
-
-                Display::addFlash(Display::return_message(get_lang('Updated')));
-            }
-        }
+    $resourceNode = $entity->getResourceNode();
+    if (null === $resourceNode) {
+        return false;
     }
 
-    return '';
+    $currentDisplayOrder = $resourceNode->getDisplayOrder();
+
+    $newPosition = $currentDisplayOrder + ($direction === 'down' ? 1 : -1);
+    $newPosition = max(0, $newPosition);
+
+    $resourceNode->setDisplayOrder($newPosition);
+    $em->flush();
+
+    Display::addFlash(Display::return_message(get_lang('Updated')));
+
+    return true;
 }
 
 /**
@@ -1171,7 +1075,7 @@ function get_forum_categories(int $courseId = 0, int $sessionId = 0): Array
     $course = api_get_course_entity($courseId);
     $session = api_get_session_entity($sessionId);
 
-    $qb = $repo->getResourcesByCourse($course, $session, null, $course->getResourceNode());
+    $qb = $repo->getResourcesByCourse($course, $session, null, $course->getResourceNode(), true, true);
 
     return $qb->getQuery()->getResult();
 }
@@ -1197,7 +1101,7 @@ function get_forums_in_category(int $categoryId, int $courseId = 0)
     $qb
         ->andWhere('resource.forumCategory = :catId')
         ->setParameter('catId', $categoryId)
-        ->orderBy('resource.forumOrder')
+        ->orderBy('node.displayOrder')
     ;
 
     return $qb->getQuery()->getResult();

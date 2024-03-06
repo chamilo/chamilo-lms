@@ -137,9 +137,10 @@ class LearnpathList
                 }
             }
 
+            $link = $lp->getFirstResourceLink();
             $this->list[$lp->getIid()] = [
                 'lp_type' => $lp->getLpType(),
-                'lp_session' => 0,
+                'lp_session' => $link && $link->getSession() ? (int) $link->getSession()->getId() : 0,
                 'lp_name' => stripslashes($lp->getTitle()),
                 'lp_desc' => stripslashes($lp->getDescription()),
                 'lp_path' => $lp->getPath(),

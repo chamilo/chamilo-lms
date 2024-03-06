@@ -1047,7 +1047,7 @@ class UserManager
         }
 
         $change_active = 0;
-        $isUserActive = $user->getActive();
+        $isUserActive = $user->isActive();
         if ($isUserActive != $active) {
             $change_active = 1;
         }

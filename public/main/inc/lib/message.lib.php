@@ -158,7 +158,7 @@ class MessageManager
         }
 
         // Disabling messages for inactive users.
-        if (!$userRecipient->getActive()) {
+        if (!$userRecipient->isActive()) {
             return false;
         }
 

@@ -27,6 +27,17 @@
                 });
             });
         });
+
+        $(document).ready(function() {
+          var selectedLanguage = localStorage.getItem('selectedLanguage');
+          if (selectedLanguage) {
+            $('#extra_language').val(selectedLanguage).trigger('change');
+          }
+          $('#extra_language').on('change', function() {
+            var selectedLanguage = $(this).val();
+            localStorage.setItem('selectedLanguage', selectedLanguage);
+          });
+        });
     </script>
     {% endif %}
 

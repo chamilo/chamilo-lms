@@ -20,7 +20,7 @@ class UserGroupModel extends Model
 {
     public $columns = [
         'id',
-        'name',
+        'title',
         'description',
         'group_type',
         'picture',
@@ -156,7 +156,7 @@ class UserGroupModel extends Model
             while ($data = Database::fetch_array($result)) {
                 $userId = $data['user_id'];
                 $userInfo = api_get_user_info($userId);
-                $data['name'] = $userInfo['complete_name_with_username'];
+                $data['title'] = $userInfo['complete_name_with_username'];
 
                 if ($showCalendar) {
                     $calendar = $calendarPlugin->getUserCalendar($userId);
@@ -314,7 +314,7 @@ class UserGroupModel extends Model
         $row = Database::select(
             'id',
             $this->table,
-            ['where' => ['name = ?' => $name]],
+            ['where' => ['title = ?' => $name]],
             'first'
         );
 
@@ -1401,10 +1401,10 @@ class UserGroupModel extends Model
             }
             $result = $new_result;
         }
-        $columns = ['name', 'users', 'courses', 'sessions', 'group_type'];
+        $columns = ['title', 'users', 'courses', 'sessions', 'group_type'];
 
         if (!in_array($sidx, $columns)) {
-            $sidx = 'name';
+            $sidx = 'title';
         }
 
         // Multidimensional sort
@@ -1429,12 +1429,12 @@ class UserGroupModel extends Model
             if ($this->allowTeachers()) {
                 $options['where'] = [' author_id = ? ' => api_get_user_id()];
             }
-            $classes = Database::select('a.id, name, description', $from, $options);
+            $classes = Database::select('a.id, title, description', $from, $options);
         } else {
             if ($this->allowTeachers()) {
                 $options['where'] = [' author_id = ? ' => api_get_user_id()];
             }
-            $classes = Database::select('id, name, description', $this->table, $options);
+            $classes = Database::select('id, title, description', $this->table, $options);
         }
 
         $result = [];
@@ -1468,7 +1468,7 @@ class UserGroupModel extends Model
         $firstLetter = Database::escape_string($firstLetter);
         $limit = (int) $limit;
 
-        $sql = ' SELECT g.id, name ';
+        $sql = ' SELECT g.id, title ';
 
         $urlCondition = '';
         if ($this->getUseMultipleUrl()) {
@@ -1482,10 +1482,10 @@ class UserGroupModel extends Model
         }
         $sql .= "
 		        WHERE
-		            name LIKE '".$firstLetter."%' OR
-		            name LIKE '".api_strtolower($firstLetter)."%'
+		            title LIKE '".$firstLetter."%' OR
+		            title LIKE '".api_strtolower($firstLetter)."%'
 		            $urlCondition
-		        ORDER BY name DESC ";
+		        ORDER BY title DESC ";
 
         if (!empty($limit)) {
             $sql .= " LIMIT $limit ";
@@ -1542,12 +1542,12 @@ class UserGroupModel extends Model
         $params['group_type'] = isset($params['group_type']) ? Usergroup::SOCIAL_CLASS : Usergroup::NORMAL_CLASS;
         $params['allow_members_leave_group'] = isset($params['allow_members_leave_group']) ? 1 : 0;
 
-        $userGroupExists = $this->usergroup_exists(trim($params['name']));
+        $userGroupExists = $this->usergroup_exists(trim($params['title']));
         if (false === $userGroupExists) {
             $userGroup = new Usergroup();
             $repo = Container::getUsergroupRepository();
             $userGroup
-                ->setTitle(trim($params['name']))
+                ->setTitle(trim($params['title']))
                 ->setDescription($params['description'])
                 ->setUrl($params['url'])
                 ->setVisibility($params['visibility'])
@@ -1726,10 +1726,10 @@ class UserGroupModel extends Model
             $needle = api_convert_encoding($needle, $charset, 'utf-8');
             $needle = Database::escape_string($needle);
 
-            $sql = 'SELECT id, name
+            $sql = 'SELECT id, title
                     FROM '.Database::get_main_table(TABLE_USERGROUP).' u
-                    WHERE name LIKE "'.$needle.'%"
-                    ORDER BY name
+                    WHERE title LIKE "'.$needle.'%"
+                    ORDER BY title
                     LIMIT 11';
             $result = Database::query($sql);
             $i = 0;
@@ -1738,7 +1738,7 @@ class UserGroupModel extends Model
                 if ($i <= 10) {
                     $return .= '<a
                     href="javascript: void(0);"
-                    onclick="javascript: add_user_to_url(\''.addslashes($data['id']).'\',\''.addslashes($data['name']).' \')">'.$data['name'].' </a><br />';
+                    onclick="javascript: add_user_to_url(\''.addslashes($data['id']).'\',\''.addslashes($data['title']).' \')">'.$data['title'].' </a><br />';
                 } else {
                     $return .= '...<br />';
                 }
@@ -1793,11 +1793,11 @@ class UserGroupModel extends Model
         $form->addHeader($header);
 
         // Name
-        $form->addElement('text', 'name', get_lang('Name'), ['maxlength' => 255]);
-        $form->applyFilter('name', 'trim');
+        $form->addElement('text', 'title', get_lang('Title'), ['maxlength' => 255]);
+        $form->applyFilter('title', 'trim');
 
-        $form->addRule('name', get_lang('Required field'), 'required');
-        $form->addRule('name', '', 'maxlength', 255);
+        $form->addRule('title', get_lang('Required field'), 'required');
+        $form->addRule('title', '', 'maxlength', 255);
 
         // Description
         $form->addHtmlEditor(
@@ -2304,7 +2304,7 @@ class UserGroupModel extends Model
                               gu.relation_type IN
                               ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."', '".GROUP_USER_PERMISSION_HRM."') ";
 
-        $sql = 'SELECT DISTINCT count(user_id) as count, g.picture, g.name, g.description, g.id ';
+        $sql = 'SELECT DISTINCT count(user_id) as count, g.picture, g.title, g.description, g.id ';
 
         $urlCondition = '';
         if ($this->getUseMultipleUrl()) {
@@ -2375,7 +2375,7 @@ class UserGroupModel extends Model
         $sql = 'SELECT DISTINCT
                   count(user_id) as count,
                   g.picture,
-                  g.name,
+                  g.title,
                   g.description,
                   g.id ';
 
@@ -2706,7 +2706,7 @@ class UserGroupModel extends Model
         $return = [];
 
         $keyword = $tag;
-        $sql = 'SELECT  g.id, g.name, g.description, g.url, g.picture ';
+        $sql = 'SELECT  g.id, g.title, g.description, g.url, g.picture ';
         $urlCondition = '';
         if ($this->getUseMultipleUrl()) {
             $urlId = api_get_current_access_url_id();
@@ -2719,7 +2719,7 @@ class UserGroupModel extends Model
         }
         if (isset($keyword)) {
             $sql .= " WHERE (
-                        g.name LIKE '%".$keyword."%' OR
+                        g.title LIKE '%".$keyword."%' OR
                         g.description LIKE '%".$keyword."%' OR
                         g.url LIKE '%".$keyword."%'
                      ) $urlCondition
@@ -2942,7 +2942,7 @@ class UserGroupModel extends Model
     {
         $userClasses = $this->getUserGroupListByUser($userId, $filterByType);
 
-        return array_column($userClasses, 'name');
+        return array_column($userClasses, 'title');
     }
 
     /**

@@ -27,7 +27,7 @@ $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = [
-    get_lang('Name'),
+    get_lang('Title'),
     get_lang('Users'),
     get_lang('Courses'),
     get_lang('Course sessions'),
@@ -37,15 +37,15 @@ $columns = [
 
 //Column config
 $column_model = [
-    ['name' => 'name', 'index' => 'name', 'width' => '35', 'align' => 'left'],
-    ['name' => 'users', 'index' => 'users', 'width' => '15', 'align' => 'left', 'search' => 'false'],
-    ['name' => 'courses', 'index' => 'courses', 'width' => '15', 'align' => 'left', 'search' => 'false'],
-    ['name' => 'sessions', 'index' => 'sessions', 'width' => '15', 'align' => 'left', 'search' => 'false'],
-    ['name' => 'group_type', 'index' => 'group_type', 'width' => '15', 'align' => 'center', 'search' => 'false'],
+    ['name' => 'title', 'index' => 'title', 'align' => 'left'],
+    ['name' => 'users', 'index' => 'users', 'align' => 'left', 'search' => 'false'],
+    ['name' => 'courses', 'index' => 'courses', 'align' => 'left', 'search' => 'false'],
+    ['name' => 'sessions', 'index' => 'sessions', 'align' => 'left', 'search' => 'false'],
+    ['name' => 'group_type', 'index' => 'group_type', 'align' => 'center', 'search' => 'false'],
     [
         'name' => 'actions',
         'index' => 'actions',
-        'width' => '20',
+        'width' => '170',
         'align' => 'center',
         'sortable' => 'false',
         'formatter' => 'action_formatter',
@@ -57,7 +57,7 @@ $column_model = [
 $extra_params['autowidth'] = 'true';
 // Height auto
 $extra_params['height'] = 'auto';
-$extra_params['sortname'] = 'name';
+$extra_params['sortname'] = 'title';
 $extra_params['sortorder'] = 'desc';
 // With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
@@ -99,7 +99,7 @@ switch ($action) {
                 Display::addFlash(Display::return_message(get_lang('Item added'), 'confirmation'));
             } else {
                 Display::addFlash(Display::return_message(
-                    Security::remove_XSS($values['name']).': '.
+                    Security::remove_XSS($values['title']).': '.
                     get_lang('Already exists'),
                     'warning'
                 ));
@@ -150,7 +150,7 @@ switch ($action) {
                 Display::addFlash(Display::return_message(get_lang('Update successful'), 'confirmation'));
             } else {
                 Display::addFlash(Display::return_message(
-                    Security::remove_XSS($values['name']).': '.
+                    Security::remove_XSS($values['title']).': '.
                     get_lang('Already exists'),
                     'warning'
                 ));

@@ -2385,8 +2385,8 @@ switch ($action) {
         break;
     case 'get_usergroups':
         $obj->protectScript();
-        $columns = ['name', 'users', 'courses', 'sessions', 'group_type', 'actions'];
-        $sidx = in_array($sidx, $columns) ? $sidx : 'name';
+        $columns = ['title', 'users', 'courses', 'sessions', 'group_type', 'actions'];
+        $sidx = in_array($sidx, $columns) ? $sidx : 'title';
         $result = $obj->getUsergroupsPagination($sidx, $sord, $start, $limit, $whereCondition);
         break;
     case 'get_extra_fields':

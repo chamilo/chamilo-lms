@@ -153,7 +153,11 @@
     @apply font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-primary to-primary-gradient;
   }
   .ch-tool-icon-button {
-    @apply font-extrabold bg-clip-text text-gray-90;
+    @apply font-extrabold bg-clip-text;
+  }
+
+  #course-search-keyword {
+    @apply w-auto;
   }
 
   // Forms

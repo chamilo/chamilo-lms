@@ -133,7 +133,8 @@ const maxSubscriptionsDisabled = computed(() => 0 === subscriptionVisibilitySele
       id="max_subscription"
       v-model="model.maxAttendees"
       :disabled="maxSubscriptionsDisabled"
-      :label="t('Maximum number of subscriptions allowed. Leave at 0 to not limit it.')"
+      :help-text="t('Maximum number of subscriptions allowed. Leave at 0 to not limit it.')"
+      :label="t('Maximum number of subscriptions')"
       min="0"
       step="1"
     />

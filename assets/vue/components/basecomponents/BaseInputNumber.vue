@@ -17,17 +17,18 @@
       />
     </div>
     <small
-      v-if="isInvalid"
+      v-if="smallText"
       :class="{ 'p-error': isInvalid }"
-      v-text="errorText"
+      v-text="smallText"
     />
   </div>
 </template>
 
 <script setup>
 import InputNumber from "primevue/inputnumber"
+import { computed } from "vue"
 
-defineProps({
+const props = defineProps({
   modelValue: {
     type: Number,
     required: true,
@@ -70,7 +71,20 @@ defineProps({
     required: false,
     default: false,
   },
+  helpText: {
+    type: String,
+    required: false,
+    default: null,
+  },
 })
 
 defineEmits(["update:modelValue"])
+
+const smallText = computed(() => {
+  if (props.errorText && props.isInvalid) {
+    return props.errorText
+  }
+
+  return props.helpText
+})
 </script>

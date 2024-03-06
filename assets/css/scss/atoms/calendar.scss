@@ -1,0 +1,11 @@
+.p-calendar {
+  @apply flex;
+
+  .p-inputtext {
+    @apply rounded-r-none;
+  }
+
+  .p-button {
+    @apply rounded-l-none;
+  }
+}

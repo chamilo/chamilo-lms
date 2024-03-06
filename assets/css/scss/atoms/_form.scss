@@ -56,7 +56,7 @@
 
 .field {
   > small {
-    @apply text-caption;
+    @apply text-caption text-primary;
   }
 }
 
@@ -81,7 +81,7 @@
   .p-inputwrapper-focus,
   .p-inputwrapper-filled {
     ~ label {
-      @apply bg-white px-1 text-primary top-0 left-2 text-tiny;
+      @apply bg-white px-1 text-primary top-0 left-2 text-caption;
       top: 0 !important;
     }
   }

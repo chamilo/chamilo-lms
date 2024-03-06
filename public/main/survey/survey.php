@@ -210,16 +210,16 @@ if (0 == $survey_data['survey_type']) {
         $urlQuestion.'&type=comment&survey_id='.$survey_id
     );
     $questions .= Display::url(
-        Display::getMdiIcon('format-list-bulleted-type', 'ch-toolbar-icon', null, ICON_SIZE_BIG, get_lang('SurveyMultipleAnswerWithOther')),
+        Display::getMdiIcon('format-list-bulleted-type', 'ch-toolbar-icon', null, ICON_SIZE_BIG, get_lang('Multiple choice with *other* option')),
         $urlQuestion.'&type=multiplechoiceother&survey_id='.$survey_id
     );
     if (0 == $survey_data['one_question_per_page']) {
         $questions .= Display::url(
-            Display::getMdiIcon('thumbs-up-down', 'ch-toolbar-icon', null, ICON_SIZE_BIG, get_lang('SurveyQuestionSelectiveDisplay')),
+            Display::getMdiIcon('thumbs-up-down', 'ch-toolbar-icon', null, ICON_SIZE_BIG, get_lang('Selective display')),
             $urlQuestion.'&type=selectivedisplay&survey_id='.$survey_id
         );
         $questions .= Display::url(
-            Display::getMdiIcon('format-page-break', 'ch-toolbar-icon', null, ICON_SIZE_BIG, get_lang('Pagebreak')),
+            Display::getMdiIcon('format-page-break', 'ch-toolbar-icon', null, ICON_SIZE_BIG, get_lang('Page break (distinct questions)')),
             $urlQuestion.'&type=pagebreak&survey_id='.$survey_id
         );
     }
@@ -305,13 +305,13 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
     }
 
     if ('yesno' === $row['type']) {
-        $tool_name = get_lang('YesNo');
+        $tool_name = get_lang('Yes / No');
     } elseif ('multiplechoice' === $row['type']) {
         $tool_name = get_lang('UniqueSelect');
     } elseif ('multipleresponse' === $row['type']) {
-        $tool_name = get_lang('MultipleChoiceMultipleAnswers');
+        $tool_name = get_lang('Multiple choice, multiple answers');
     } elseif ('selectivedisplay' === $row['type']) {
-        $tool_name = get_lang('SurveyQuestionSelectiveDisplay');
+        $tool_name = get_lang('Selective display');
     } else {
         $tool_name = get_lang(api_ucfirst(Security::remove_XSS($row['type'])));
     }
@@ -335,7 +335,7 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
     echo '<a
         href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?'.
         api_get_cidreq().'&action=delete&survey_id='.$survey_id.'&question_id='.$questionId.'"
-        onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("DeleteSurveyQuestion").'?', ENT_QUOTES)).'\')) return false;">'.
+        onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("Are you sure you want to delete the question?").'?', ENT_QUOTES)).'\')) return false;">'.
         Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete')).'</a>';
     if (3 != $survey_data['survey_type']) {
         if ($question_counter > 1) {
@@ -434,7 +434,7 @@ if ($is_survey_type_1) {
         Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a> '.
         '<a
             href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&gid='.$row['id'].'&action=deletegroup"
-            onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('Delete surveyGroup'), $row['title']).'?', ENT_QUOTES)).'\')) return false;">'.
+            onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('Are you sure you want to delete %s?'), $row['title']).'?', ENT_QUOTES)).'\')) return false;">'.
         Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>'.
         '</td></tr>';
     }

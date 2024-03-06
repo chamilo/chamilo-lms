@@ -51,7 +51,8 @@ $anonymizeUserAccountsDisbaledFor3Years = false;
 //$extraLdapAttributes[0][] = 'description';
 //$extraLdapAttributes[0][] = 'userAccountControl';
 
-
+// Extra field to be emptied when user is anonimized to really make it anonyme, for example the sso id of the user
+// extraFieldToEmpty = "cas_user";
 
 
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
@@ -477,6 +478,9 @@ if ($anonymizeUserAccountsDisbaledFor3Years) {
                     or die("could not anonymize user $userId\n");
                 } catch (Exception $exception) {
                     die($exception->getMessage()."\n");
+		}
+                if (isset($extraFieldToEmpty)) {
+                    UserManager::update_extra_field_value($userId,$extraFieldToEmpty,'');
                 }
             }
             if ($debug) {

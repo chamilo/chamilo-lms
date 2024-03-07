@@ -60,4 +60,6 @@ enum StateIcon: string
     case ONLINE = 'account-check';
     // Offline (for a user)
     case OFFLINE = 'account-off';
+    // Soft deleted (for a user)
+    case REJECT = 'cancel';
 }

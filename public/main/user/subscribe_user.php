@@ -253,7 +253,7 @@ function get_number_of_users()
                         c_id = $courseId AND
                         session_id = $sessionId
                     WHERE
-                        u.active <> -1 AND
+                        u.active <> ".USER_SOFT_DELETED." AND
                         cu.user_id IS NULL
                         $teacherRoleFilter AND
                         (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
@@ -271,7 +271,7 @@ function get_number_of_users()
                             INNER JOIN  $tbl_url_rel_user as url_rel_user
                             ON (url_rel_user.user_id = u.id)
                             WHERE
-                                u.active <> -1 AND
+                                u.active <> ".USER_SOFT_DELETED." AND
                                 cu.user_id IS NULL AND
                                 access_url_id = $url_access_id
                                 $teacherRoleFilter AND
@@ -285,7 +285,7 @@ function get_number_of_users()
                     LEFT JOIN $course_user_table cu
                     ON u.id = cu.user_id and c_id = $courseId
                     WHERE
-                          u.active <> -1 AND
+                          u.active <> ".USER_SOFT_DELETED." AND
                           cu.user_id IS NULL
                           $teacherRoleFilter  ";
 
@@ -301,7 +301,7 @@ function get_number_of_users()
                         INNER JOIN  $tbl_url_rel_user as url_rel_user
                         ON (url_rel_user.user_id = u.id)
                         WHERE
-                            u.active <> -1 AND
+                            u.active <> ".USER_SOFT_DELETED." AND
                             cu.user_id IS NULL
                             $teacherRoleFilter AND
                             access_url_id = $url_access_id ";
@@ -319,7 +319,7 @@ function get_number_of_users()
                         c_id = $courseId AND
                         session_id = $sessionId
                     WHERE
-                        u.active <> -1 AND
+                        u.active <> ".USER_SOFT_DELETED." AND
                         cu.user_id IS NULL
                         $studentRoleFilter AND
                         (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
@@ -338,7 +338,7 @@ function get_number_of_users()
                             INNER JOIN $tbl_url_rel_user as url_rel_user
                             ON (url_rel_user.user_id = u.id)
                             WHERE
-                                u.active <> -1 AND
+                                u.active <> ".USER_SOFT_DELETED." AND
                                 cu.user_id IS NULL
                                 $studentRoleFilter AND
                                 access_url_id = $url_access_id AND
@@ -422,7 +422,7 @@ function get_number_of_users()
             $users_of_course[] = $course_user['user_id'];
         }
     }
-    $sql .= " AND u.status <> ".ANONYMOUS." AND u.active <> -1 ";
+    $sql .= " AND u.status <> ".ANONYMOUS." AND u.active <> ".USER_SOFT_DELETED." ";
     $res = Database::query($sql);
     $count_user = 0;
 
@@ -710,7 +710,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
         }
     }
 
-    $sql .= " AND u.status != ".ANONYMOUS." AND u.active <> -1 ";
+    $sql .= " AND u.status != ".ANONYMOUS." AND u.active <> ".USER_SOFT_DELETED." ";
     $column = (int) $column;
     $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
     // Sorting and pagination (used by the sortable table)

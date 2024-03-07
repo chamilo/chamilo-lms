@@ -1,7 +1,10 @@
 <template>
   <Toolbar :class="toolbarClass">
-    <template #start>
-      <slot></slot>
+    <template v-slot:start>
+      <slot name="start"></slot>
+    </template>
+    <template v-slot:end>
+      <slot name="end"></slot>
     </template>
   </Toolbar>
 </template>
@@ -21,6 +24,13 @@ const toolbarClass = computed(() => {
   if (props.showTopBorder) {
     return "pt-5 border-t border-b";
   }
-  return "";
+  return "p-toolbar";
 });
 </script>
+
+<style scoped>
+.p-toolbar {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+</style>

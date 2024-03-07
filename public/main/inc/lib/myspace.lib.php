@@ -518,7 +518,7 @@ class MySpace
                         MAX(login_date) as login_date
                         FROM $tbl_user u, $tbl_session_course_user scu, $tbl_track_login
                         WHERE
-                            u.active <> -1 AND scu.user_id = u.id AND scu.status=".SessionEntity::COURSE_COACH." AND login_user_id=u.id
+                            u.active <> ".USER_SOFT_DELETED." AND scu.user_id = u.id AND scu.status=".SessionEntity::COURSE_COACH." AND login_user_id=u.id
                         GROUP BY user_id ";
 
         if (api_is_multiple_url_enabled()) {
@@ -1958,7 +1958,7 @@ class MySpace
                     FROM $tbl_user AS u
                     INNER JOIN $tbl_session_rel_course_rel_user AS scu
                     ON u.id = scu.user_id
-                    WHERE u.active <> -1 AND scu.session_id = '".$session_id."' AND scu.c_id = '".$courseId."'";
+                    WHERE u.active <> ".USER_SOFT_DELETED." AND scu.session_id = '".$session_id."' AND scu.c_id = '".$courseId."'";
             $result_users = Database::query($sql);
             $time_spent = 0;
             $progress = 0;
@@ -2138,7 +2138,7 @@ class MySpace
                         FROM $tbl_user AS u
                         INNER JOIN $tbl_session_rel_course_rel_user AS scu
                         ON u.id = scu.user_id
-                        WHERE u.active <> -1 AND scu.session_id = '".$session_id."' AND scu.c_id = '".$courseId."'";
+                        WHERE u.active <> ".USER_SOFT_DELETED." AND scu.session_id = '".$session_id."' AND scu.c_id = '".$courseId."'";
                 $result_users = Database::query($sql);
                 $time_spent = 0;
                 $progress = 0;

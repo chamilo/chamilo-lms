@@ -1028,7 +1028,7 @@ class UserManager
 
         $change_active = 0;
         $isUserActive = $user->isActive();
-        if ($active != -1) {
+        if ($active != USER_SOFT_DELETED) {
             if ($isUserActive != $active) {
                 $change_active = 1;
             }
@@ -3894,7 +3894,7 @@ class UserManager
                     INNER JOIN $table_user u
                     ON (u.id=admin.user_id)";
         }
-        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active <> -1' : ' AND u.active <> -1';
+        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active <> '.USER_SOFT_DELETED : ' AND u.active <> '.USER_SOFT_DELETED;
         $result = Database::query($sql);
         $return = [];
         if (Database::num_rows($result) > 0) {

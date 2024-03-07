@@ -9,8 +9,15 @@ namespace Chamilo\CoreBundle\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use Chamilo\CoreBundle\DataProvider\SkillDataProvider;
+use Chamilo\CoreBundle\Dto\SkillInputDto;
 use Chamilo\CoreBundle\Repository\SkillRepository;
+use Chamilo\CoreBundle\State\SkillPostProcessor;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -20,7 +27,55 @@ use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiResource(security: 'is_granted(\'ROLE_ADMIN\')', normalizationContext: ['groups' => ['skill:read']])]
+#[ApiResource(
+    operations: [
+        new GetCollection(
+            uriTemplate: '/skills/options',
+            normalizationContext: ['groups' => ['skill:read']],
+            security: "is_granted('ROLE_USER')",
+            name: 'get_skill_options',
+            provider: SkillDataProvider::class
+        ),
+        new GetCollection(
+            uriTemplate: '/skills/gradebook/options',
+            normalizationContext: ['groups' => ['skill:read']],
+            security: "is_granted('ROLE_USER')",
+            name: 'get_skill_gradebook_options',
+            provider: SkillDataProvider::class
+        ),
+        new GetCollection(
+            uriTemplate: '/skills/all',
+            normalizationContext: ['groups' => ['skill:read']],
+            security: "is_granted('ROLE_USER')",
+            name: 'get_all_skills',
+            provider: SkillDataProvider::class
+        ),
+        new GetCollection(
+            uriTemplate: '/skills/user/{user_id}',
+            normalizationContext: ['groups' => ['skill:read']],
+            security: "is_granted('ROLE_USER')",
+            name: 'get_skills_by_user',
+            provider: SkillDataProvider::class
+        ),
+        new Post(
+            securityPostDenormalize: "is_granted('ROLE_USER')",
+            input: SkillInputDto::class,
+            processor: SkillPostProcessor::class
+        ),
+        new Get(
+            security: "is_granted('ROLE_USER')"
+        ),
+        new Delete(security: "is_granted('DELETE', object)"),
+        new Put(security: "is_granted('EDIT', object)"),
+    ],
+    normalizationContext: [
+        'groups' => ['skill:read'],
+    ],
+    denormalizationContext: [
+        'groups' => ['skill:write'],
+    ],
+    security: "is_granted('ROLE_USER')",
+)]
 #[ApiFilter(SearchFilter::class, properties: ['issuedSkills.user' => 'exact'])]
 #[ORM\Table(name: 'skill')]
 #[ORM\Entity(repositoryClass: SkillRepository::class)]
@@ -79,6 +134,7 @@ class Skill implements Stringable
     #[ORM\Column(name: 'description', type: 'text', nullable: false)]
     protected string $description;
     #[Assert\NotNull]
+    #[Groups(['skill:read', 'skill:write'])]
     #[ORM\Column(name: 'access_url_id', type: 'integer', nullable: false)]
     protected int $accessUrlId;
     #[Groups(['skill:read', 'skill_rel_user:read'])]
@@ -87,6 +143,7 @@ class Skill implements Stringable
     #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(name: 'asset_id', referencedColumnName: 'id')]
     protected ?Asset $asset = null;
+    #[Groups(['skill:read', 'skill:write'])]
     #[ORM\Column(name: 'criteria', type: 'text', nullable: true)]
     protected ?string $criteria = null;
     #[ORM\Column(name: 'status', type: 'integer', nullable: false, options: ['default' => 1])]

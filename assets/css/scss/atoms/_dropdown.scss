@@ -1,4 +1,4 @@
-.p-dropdown {
+.p-dropdown, .p-multiselect {
   @apply border border-support-3 bg-white rounded-lg transition w-full duration-200
     hover:border-primary hover:text-gray-90 hover:outline-0 hover:outline-none;
 
@@ -29,7 +29,7 @@
   }
 }
 
-.p-dropdown-panel {
+.p-dropdown-panel, .multi-select-panel {
   @apply bg-white rounded-lg text-gray-90 shadow-lg;
 
   .p-dropdown-header {
@@ -88,4 +88,16 @@
     }
   }
 }
+
+.multi-select-panel {
+  @apply border border-gray-300 shadow-md rounded-md p-2;
+}
+.multi-select-panel .p-checkbox {
+  @apply mr-1;
+}
+
+.p-multiselect-label {
+  @apply py-2;
+}
+
 

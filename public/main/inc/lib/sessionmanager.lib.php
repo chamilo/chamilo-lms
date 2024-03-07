@@ -447,7 +447,7 @@ class SessionManager
             }
         }
 
-        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active <> -1' : ' AND u.active <> -1';
+        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active <> '.USER_SOFT_DELETED : ' AND u.active <> '.USER_SOFT_DELETED;
 
         $result_rows = Database::query($sql);
         $row = Database::fetch_array($result_rows);
@@ -4370,7 +4370,7 @@ class SessionManager
             $sql .= " WHERE (au.access_url_id = $urlId OR au.access_url_id is null )";
         }
 
-        $sql .= ' AND u.active <> -1 ORDER BY su.relation_type, ';
+        $sql .= ' AND u.active <> '.USER_SOFT_DELETED.' ORDER BY su.relation_type, ';
         $sql .= api_sort_by_first_name() ? ' u.firstname, u.lastname' : '  u.lastname, u.firstname';
 
         $result = Database::query($sql);
@@ -6166,7 +6166,7 @@ class SessionManager
 
         $sessionConditions = '';
         $courseConditions = '';
-        $userConditions = ' AND u.active <> -1 ';
+        $userConditions = ' AND u.active <> '.USER_SOFT_DELETED.' ';
 
         if (isset($active)) {
             $active = (int) $active;
@@ -7948,7 +7948,7 @@ class SessionManager
                 'getFullname'
             );
         } else {
-            $sql = "SELECT COUNT(1) FROM $tbl_user WHERE active <> -1 AND status = 1";
+            $sql = "SELECT COUNT(1) FROM $tbl_user WHERE active <> ".USER_SOFT_DELETED." AND status = 1";
             $rs = Database::query($sql);
             $countUsers = (int) Database::result($rs, 0, '0');
 

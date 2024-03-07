@@ -93,6 +93,12 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
       public const STUDENT = 5;
       public const ANONYMOUS = 6;*/
 
+    // User active field constants
+    public const ACTIVE = 1;
+    public const INACTIVE = 0;
+    public const INACTIVE_AUTOMATIC = -1;
+    public const SOFT_DELETED = -2;
+
     #[Groups(['user_json:read'])]
     #[ORM\OneToOne(targetEntity: ResourceNode::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'resource_node_id', onDelete: 'CASCADE')]
@@ -931,7 +937,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         }*/
 
     /**
-     * Get a bool on whether the user is active or not. Active can be "-1" which means pre-deleted, and is returned as false (not active)
+     * Get a bool on whether the user is active or not. Active can be "-1" which means pre-deleted, and is returned as false (not active).
+     *
      * @return bool True if active = 1, false in any other case (0 = inactive, -1 = predeleted)
      */
     public function getIsActive(): bool

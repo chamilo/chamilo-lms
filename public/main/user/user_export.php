@@ -77,7 +77,7 @@ if (strlen($course_code) > 0) {
                 ON (u.id = cu.user_id)
                 $extraUrlJoin
 					WHERE
-					    u.active <> -1 AND
+					    u.active <> ".USER_SOFT_DELETED." AND
 						cu.c_id = $courseId AND
 						cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
                     $extraUrlCondition
@@ -89,7 +89,7 @@ if (strlen($course_code) > 0) {
                 ON (u.id = scu.user_id)
                 $extraUrlJoin
 					WHERE
-					    u.active <> -1 AND
+					    u.active <> ".USER_SOFT_DELETED." AND
 						scu.c_id = $courseSessionId AND
 						scu.session_id = $sessionId
                     $extraUrlCondition
@@ -101,7 +101,7 @@ if (strlen($course_code) > 0) {
                 ON (u.id = su.user_id)
                 $extraUrlJoin
 					WHERE
-					    u.active <> -1 AND
+					    u.active <> ".USER_SOFT_DELETED." AND
 						su.session_id = $sessionId
                     $extraUrlCondition
 					ORDER BY lastname,firstname";
@@ -114,11 +114,11 @@ if (strlen($course_code) > 0) {
             $sql .= " FROM $userTable u
 					INNER JOIN $tbl_user_rel_access_url as user_rel_url
                     ON (u.id = user_rel_url.user_id)
-				WHERE u.active <> -1 AND access_url_id = $access_url_id
+				WHERE u.active <> ".USER_SOFT_DELETED." AND access_url_id = $access_url_id
 				ORDER BY lastname,firstname";
         }
     } else {
-        $sql .= " FROM $userTable u WHERE u.active <> -1 ORDER BY lastname,firstname";
+        $sql .= " FROM $userTable u WHERE u.active <> ".USER_SOFT_DELETED." ORDER BY lastname,firstname";
     }
     $filename = 'export_users_'.api_get_local_time();
 }

@@ -41,7 +41,7 @@ foreach ($urlList as $url) {
                     v.value = 1
               ) ";
 
-    $sql .= " WHERE 1 = 1 AND u.active <> -1 ";
+    $sql .= " WHERE 1 = 1 AND u.active <> ".USER_SOFT_DELETED;
 
     if (api_get_multiple_access_url()) {
         $sql .= " AND url_rel_user.access_url_id = ".api_get_current_access_url_id();

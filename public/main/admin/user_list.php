@@ -384,9 +384,9 @@ function prepare_user_sql_query(bool $getCount, bool $showDeletedUsers = false):
     }
 
     if ($showDeletedUsers) {
-        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active = -1' : ' AND u.active = -1';
+        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active = '.USER_SOFT_DELETED : ' AND u.active = '.USER_SOFT_DELETED;
     } else {
-        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active <> -1' : ' AND u.active <> -1';
+        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active <> '.USER_SOFT_DELETED : ' AND u.active <> '.USER_SOFT_DELETED;
     }
 
     return $sql;
@@ -865,23 +865,26 @@ function active_filter(int $active, string $params, array $row): string
 
     $action = 'Unlock';
     $image = StateIcon::WARNING;
-    if ('1' == $active) {
+    if (USER_ACTIVE == $active) {
         $action = 'Lock';
         $image = StateIcon::COMPLETE;
-    } elseif ('-1' == $active) {
+    } elseif (USER_INACTIVE_AUTOMATIC == $active) {
         $action = 'edit';
         $image = StateIcon::EXPIRED;
+    } elseif (USER_SOFT_DELETED == $active) {
+        $action = 'soft_deleted';
+        $image = StateIcon::REJECT;
     }
 
     $result = '';
 
-    if ('edit' === $action) {
+    if (in_array($action, ['edit', 'soft_deleted'])) {
         $result = Display::getMdiIcon(
             $image,
             'ch-tool-icon',
             null,
             ICON_SIZE_TINY,
-            get_lang('Account expired')
+            'edit' === $action ? get_lang('Account expired') : get_lang('Account is removed temporally')
         );
     } elseif ($row['0'] != $_user['user_id']) {
         // you cannot lock yourself out otherwise you could disable all the

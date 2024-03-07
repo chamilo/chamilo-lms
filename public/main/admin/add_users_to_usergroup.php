@@ -143,7 +143,7 @@ if (isset($_GET['action']) && 'export' === $_GET['action']) {
             ['UserName', 'ClassName'],
         ];
         foreach ($users as $user) {
-            $data[] = [$user['username'], $groupInfo['name']];
+            $data[] = [$user['username'], $groupInfo['title']];
         }
         $filename = 'export_user_class_'.api_get_local_time();
         Export::arrayToCsv($data, $filename);
@@ -345,7 +345,7 @@ echo Display::toolbarAction('add_users', [$actions]);
 echo '<div id="advanced_search_options" style="display:none">';
 $searchForm->display();
 echo '</div>';
-echo Display::page_header($tool_name.': '.$data['name']);
+echo Display::page_header($tool_name.': '.$data['title']);
 
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if (!empty($_GET['add'])) {

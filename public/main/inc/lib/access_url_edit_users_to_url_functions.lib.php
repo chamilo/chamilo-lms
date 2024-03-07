@@ -39,7 +39,7 @@ class AccessUrlEditUsersToUrl
             $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
             $sql = 'SELECT u.id as user_id, username, lastname, firstname
                     FROM '.$tbl_user.' u
-                    WHERE u.active <> -1 AND
+                    WHERE u.active <> '.USER_SOFT_DELETED.' AND
                     (
                         username LIKE "'.$needle.'%" OR
                         firstname LIKE "'.$needle.'%" OR

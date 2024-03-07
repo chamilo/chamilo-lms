@@ -159,7 +159,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 
             $em->remove($user);
         } else {
-            $user->setActive(-1);
+            $user->setActive(User::SOFT_DELETED);
             $em->persist($user);
         }
 

@@ -225,7 +225,7 @@ class UrlManager
     public static function get_url_rel_user_data($urlId = 0, $order_by = null)
     {
         $urlId = (int) $urlId;
-        $where = ' WHERE u.active <> -1 ';
+        $where = ' WHERE u.active <> '.USER_SOFT_DELETED.' ';
         $table_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         if (!empty($urlId)) {

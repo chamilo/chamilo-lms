@@ -316,7 +316,7 @@ function who_is_online(
         $query = "SELECT DISTINCT login_user_id, login_date
                     FROM ".$track_online_table." e
                     INNER JOIN ".$table_user." u ON (u.id = e.login_user_id)
-                  WHERE u.active <> -1 AND u.status != ".ANONYMOUS." AND login_date >= '".$current_date."'
+                  WHERE u.active <> ".USER_SOFT_DELETED." AND u.status != ".ANONYMOUS." AND login_date >= '".$current_date."'
                   ORDER BY `$column` $direction
                   LIMIT $from, $number_of_items";
     }
@@ -341,7 +341,7 @@ function who_is_online(
                           FROM ".$track_online_table." track
                           INNER JOIN ".$table_user." u
                           ON (u.id=track.login_user_id)
-                          WHERE u.active <> -1 AND u.status != ".ANONYMOUS." AND track.access_url_id =  $access_url_id AND
+                          WHERE u.active <> ".USER_SOFT_DELETED." AND u.status != ".ANONYMOUS." AND track.access_url_id =  $access_url_id AND
                                 login_date >= '".$current_date."'
                           ORDER BY `$column` $direction
                           LIMIT $from, $number_of_items";
@@ -400,7 +400,7 @@ function who_is_online_count($time_limit = null, $friends = false)
         $query = "SELECT count(login_id) as count
                   FROM $track_online_table track INNER JOIN $table_user u
                   ON (u.id=track.login_user_id)
-                  WHERE u.active <> -1 AND u.status != ".ANONYMOUS." AND login_date >= '$current_date'  ";
+                  WHERE u.active <> ".USER_SOFT_DELETED." AND u.status != ".ANONYMOUS." AND login_date >= '$current_date'  ";
     }
 
     if (api_get_multiple_access_url()) {
@@ -421,7 +421,7 @@ function who_is_online_count($time_limit = null, $friends = false)
                 $query = "SELECT count(login_id) as count FROM $track_online_table  track
                           INNER JOIN $table_user u ON (u.id=track.login_user_id)
 						  WHERE
-						    u.active <> -1 AND
+						    u.active <> ".USER_SOFT_DELETED." AND
 						    u.status != ".ANONYMOUS." AND
 						    track.access_url_id =  $access_url_id AND
 						    login_date >= '$current_date' ";
@@ -489,7 +489,7 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
               ON (o.login_user_id = u.id)
               $urlJoin
               WHERE
-                u.active <> -1 AND
+                u.active <> ".USER_SOFT_DELETED." AND
                 u.status <> '".ANONYMOUS."' AND
                 o.c_id = $courseId AND
                 o.login_date >= '$current_date'
@@ -547,7 +547,7 @@ function who_is_online_in_this_course_count(
               ON (login_user_id = u.id)
               $urlJoin
               WHERE
-                u.active <> -1 AND
+                u.active <> ".USER_SOFT_DELETED." AND
                 u.status <> '".ANONYMOUS."' AND
                 c_id = $courseId AND
                 login_date >= '$current_date'
@@ -597,7 +597,7 @@ function whoIsOnlineInThisSessionCount($timeLimit, $sessionId)
               ON (login_user_id = u.id)
               $urlJoin
               WHERE
-                    u.active <> -1 AND
+                    u.active <> ".USER_SOFT_DELETED." AND
                     u.status <> '".ANONYMOUS."' AND
                     session_id = $sessionId AND
                     login_date >= '$current_date'

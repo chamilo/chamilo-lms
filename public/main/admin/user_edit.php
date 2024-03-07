@@ -436,9 +436,9 @@ if ($form->validate()) {
         }
 
         if (isset($user['active'])) {
-            $active = $user_data['platform_admin'] ? 1 : intval($user['active']);
+            $active = $user_data['platform_admin'] ? USER_ACTIVE : intval($user['active']);
         } else {
-            $active = -1;
+            $active = USER_SOFT_DELETED;
         }
 
         //If the user is set to admin the status will be overwrite by COURSEMANAGER = 1

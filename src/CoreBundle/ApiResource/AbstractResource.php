@@ -14,4 +14,9 @@ abstract class AbstractResource
         'ctool:read',
     ])]
     public ?string $illustrationUrl = null;
+
+    #[Groups([
+        'calendar_event:read',
+    ])]
+    public ?array $resourceLinkListFromEntity = null;
 }

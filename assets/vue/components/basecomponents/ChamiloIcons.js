@@ -118,4 +118,5 @@ export const chamiloIconToClass = {
   "map-search": "mdi mdi-map-search-outline",
   "join-group": "mdi mdi-account-multiple-plus",
   "add-topic": "mdi mdi-forum-outline",
+  'badge-account': "mdi mdi-badge-account-horizontal",
 };

@@ -220,6 +220,10 @@
 
 @import "scss/index.scss";
 
+.field > small.p-error {
+  @apply text-error;
+}
+
 // tabs
 .tab-content {
   > .tab-pane {

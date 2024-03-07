@@ -1133,7 +1133,7 @@ class GroupManager
                 ON (gu.group_id = g.iid)
                 INNER JOIN $user_table u
                 ON (u.id = gu.user_id)
-                WHERE u.active <> -1 AND
+                WHERE u.active <> ".USER_SOFT_DELETED." AND
                     g.iid = $group_id";
 
         if (!empty($column) && !empty($direction)) {

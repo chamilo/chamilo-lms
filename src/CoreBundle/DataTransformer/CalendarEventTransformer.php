@@ -38,6 +38,8 @@ class CalendarEventTransformer implements DataTransformerInterface
     {
         \assert($object instanceof CCalendarEvent);
 
+        $object->setResourceLinkListFromEntity();
+
         return new CalendarEvent(
             'calendar_event_'.$object->getIid(),
             $object->getTitle(),
@@ -46,7 +48,13 @@ class CalendarEventTransformer implements DataTransformerInterface
             $object->getEndDate(),
             $object->isAllDay(),
             null,
+            $object->getInvitationType(),
+            $object->isCollective(),
+            $object->getSubscriptionVisibility(),
+            $object->getSubscriptionItemId(),
+            $object->getMaxAttendees(),
             $object->getResourceNode(),
+            $object->getResourceLinkListFromEntity(),
         );
     }
 

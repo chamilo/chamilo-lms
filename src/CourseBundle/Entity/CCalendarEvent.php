@@ -84,21 +84,21 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     #[ORM\GeneratedValue]
     protected ?int $iid = null;
 
-    #[Groups(['calendar_event:read', 'calendar_event:write'])]
+    #[Groups(['calendar_event:write'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
 
-    #[Groups(['calendar_event:read', 'calendar_event:write'])]
+    #[Groups(['calendar_event:write'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'content', type: 'text', nullable: true)]
     protected ?string $content = null;
 
-    #[Groups(['calendar_event:read', 'calendar_event:write'])]
+    #[Groups(['calendar_event:write'])]
     #[ORM\Column(name: 'start_date', type: 'datetime', nullable: true)]
     protected ?DateTime $startDate = null;
 
-    #[Groups(['calendar_event:read', 'calendar_event:write'])]
+    #[Groups(['calendar_event:write'])]
     #[ORM\Column(name: 'end_date', type: 'datetime', nullable: true)]
     protected ?DateTime $endDate = null;
 
@@ -143,24 +143,24 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: CCalendarEventAttachment::class, cascade: ['persist', 'remove'])]
     protected Collection $attachments;
 
-    #[Groups(['calendar_event:read', 'calendar_event:write'])]
+    #[Groups(['calendar_event:write'])]
     #[ORM\Column(name: 'invitation_type', type: 'string', nullable: true)]
     protected ?string $invitationType = null;
 
-    #[Groups(['calendar_event:read', 'calendar_event:write'])]
+    #[Groups(['calendar_event:write'])]
     #[Assert\NotNull]
     #[ORM\Column(name: 'collective', type: 'boolean')]
     protected bool $collective = false;
 
-    #[Groups(['calendar_event:read', 'calendar_event:write'])]
+    #[Groups(['calendar_event:write'])]
     #[ORM\Column(name: 'subscription_visibility', type: 'integer')]
     protected int $subscriptionVisibility = self::SUBSCRIPTION_VISIBILITY_NO;
 
-    #[Groups(['calendar_event:read', 'calendar_event:write'])]
+    #[Groups(['calendar_event:write'])]
     #[ORM\Column(name: 'subscription_item_id', type: 'integer', nullable: true)]
     protected ?int $subscriptionItemId = null;
 
-    #[Groups(['calendar_event:read', 'calendar_event:write'])]
+    #[Groups(['calendar_event:write'])]
     #[ORM\Column(name: 'max_attendees', type: 'integer')]
     protected int $maxAttendees = 0;
 
@@ -385,7 +385,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
         return $this;
     }
 
-    public function getInvitationType(): string
+    public function getInvitationType(): ?string
     {
         return $this->invitationType;
     }

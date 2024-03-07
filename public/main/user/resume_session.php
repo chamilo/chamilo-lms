@@ -230,14 +230,14 @@ if ('true' === $allowTutors) {
                     INNER JOIN $tbl_session_rel_user su
                     ON u.id = su.user_id AND su.relation_type = ".Session::STUDENT."
                     LEFT OUTER JOIN $table_access_url_user uu ON (uu.user_id = u.id)
-                    WHERE u.active <> -1 AND su.session_id = $id_session AND (access_url_id = $url_id OR access_url_id is null )
+                    WHERE u.active <> ".USER_SOFT_DELETED." AND su.session_id = $id_session AND (access_url_id = $url_id OR access_url_id is null )
                     $order_clause";
         } else {
             $sql = "SELECT u.id as user_id, lastname, firstname, username
                     FROM $tbl_user u
                     INNER JOIN $tbl_session_rel_user su
                     ON u.id = su.user_id AND su.relation_type = ".Session::STUDENT."
-                    AND su.session_id = ".$id_session." WHERE u.active <> -1 ".$order_clause;
+                    AND su.session_id = ".$id_session." WHERE u.active <> ".USER_SOFT_DELETED.$order_clause;
         }
 
         $result = Database::query($sql);

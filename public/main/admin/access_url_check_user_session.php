@@ -78,7 +78,7 @@ foreach ($session_list as $session_item) {
             ON u.id = su.user_id AND su.relation_type <> ".Session::DRH."
             LEFT OUTER JOIN $table_access_url_user uu
             ON (uu.user_id = u.id)
-            WHERE su.session_id = $session_id AND $access_where AND u.active <> -1
+            WHERE su.session_id = $session_id AND $access_where AND u.active <> ".USER_SOFT_DELETED."
             $order_clause";
 
     $result = Database::query($sql);

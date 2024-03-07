@@ -1763,7 +1763,7 @@ class UserGroupModel extends Model
         $sql = "SELECT u.* FROM $this->table_user u
                 INNER JOIN $this->usergroup_rel_user_table c
                 ON c.user_id = u.id
-                WHERE u.active <> -1 AND c.usergroup_id = $id"
+                WHERE u.active <> ".USER_SOFT_DELETED." AND c.usergroup_id = $id"
                 ;
         if (!empty($orderBy)) {
             $orderBy = Database::escape_string($orderBy);
@@ -2475,7 +2475,7 @@ class UserGroupModel extends Model
     		    INNER JOIN $table_group_rel_user gu
     			ON (gu.user_id = u.id)
     			WHERE
-    			    u.active <> -1 AND
+    			    u.active <> ".USER_SOFT_DELETED." AND
     			    gu.usergroup_id= $group_id
     			    $where_relation_condition
     			ORDER BY relation_type, firstname
@@ -2520,7 +2520,7 @@ class UserGroupModel extends Model
                 FROM $tbl_user u
 			    INNER JOIN $table_group_rel_user gu
 			    ON (gu.user_id = u.id)
-			    WHERE u.active <> -1 AND gu.usergroup_id= $group_id
+			    WHERE u.active <> ".USER_SOFT_DELETED." AND gu.usergroup_id= $group_id
 			    ORDER BY relation_type, firstname";
 
         $result = Database::query($sql);

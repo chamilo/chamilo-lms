@@ -18,6 +18,8 @@ $urlId = api_get_current_access_url_id();
 $currentUserId = api_get_user_id();
 
 $action = $_REQUEST['action'] ?? '';
+$view = $_GET['view'] ?? 'all';
+$showDeletedUsers = 'deleted' === $view;
 
 // Login as can be used by different roles
 if (isset($_GET['user_id']) && 'login_as' === $action) {
@@ -73,37 +75,27 @@ if ($variables) {
 Session::write('variables_to_show', $variablesToShow);
 
 $htmlHeadXtra[] = '<script>
-function active_user(element_div) {
-    id_image=$(element_div).attr("id");
-    image_clicked=$(element_div).attr("src");
-    image_clicked_info = image_clicked.split("/");
-    image_real_clicked = image_clicked_info[image_clicked_info.length-1];
-    var status = 1;
-    if (image_real_clicked == "accept.png") {
-        status = 0;
-    }
-    user_id=id_image.split("_");
-    ident="#img_"+user_id[1];
-    if (confirm("'.get_lang('AreYouSureToEditTheUserStatus', '').'")) {
-         $.ajax({
+function active_user(element) {
+    var userId = $(element).attr("id").split("_")[1];
+    var isActive = $(element).hasClass("mdi-check-circle");
+    var newStatus = isActive ? 0 : 1;
+    var confirmMessage = isActive ? "'.get_lang('Are you sure you want to lock this user?', '').'" : "'.get_lang('Are you sure you want to unlock this user?', '').'";
+    if (confirm(confirmMessage)) {
+        $.ajax({
             contentType: "application/x-www-form-urlencoded",
-            beforeSend: function(myObject) {
-                $(ident).attr("src","'.Display::returnIconPath('loading1.gif').'"); }, //candy eye stuff
+            beforeSend: function() {
+                $(element).attr("class", "mdi mdi-loading mdi-spin ch-tool-icon");
+            },
             type: "GET",
             url: "'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=active_user",
-            data: "user_id="+user_id[1]+"&status="+status,
+            data: "user_id=" + userId + "&status=" + newStatus,
             success: function(data) {
                 if (data == 1) {
-                    $(ident).attr("src", "'.Display::returnIconPath('accept.png', ICON_SIZE_TINY).'");
-                    $(ident).attr("title","'.get_lang('Lock').'");
-                }
-                if (data == 0) {
-                    $(ident).attr("src","'.Display::returnIconPath('error.png').'");
-                    $(ident).attr("title","'.get_lang('Unlock').'");
-                }
-                if (data == -1) {
-                    $(ident).attr("src", "'.Display::returnIconPath('warning.png').'");
-                    $(ident).attr("title","'.get_lang('Action not allowed').'");
+                    $(element).attr("class", "mdi mdi-check-circle ch-tool-icon");
+                    $(element).attr("title", "'.get_lang('Lock').'");
+                } else {
+                    $(element).attr("class", "mdi mdi-alert ch-tool-icon");
+                    $(element).attr("title", "'.get_lang('Unlock').'");
                 }
             }
         });
@@ -171,7 +163,7 @@ function trimVariables()
  *
  * @return string SQL query
  */
-function prepare_user_sql_query($getCount)
+function prepare_user_sql_query(bool $getCount, $showDeletedUsers = false)
 {
     $sql = '';
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -393,6 +385,12 @@ function prepare_user_sql_query($getCount)
         }
     }
 
+    if ($showDeletedUsers) {
+        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active = -1' : ' AND u.active = -1';
+    } else {
+        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active <> -1' : ' AND u.active <> -1';
+    }
+
     return $sql;
 }
 
@@ -401,9 +399,9 @@ function prepare_user_sql_query($getCount)
  *
  * @see SortableTable#get_total_number_of_items()
  */
-function get_number_of_users()
+function get_number_of_users($showDeletedUsers = false)
 {
-    $sql = prepare_user_sql_query(true);
+    $sql = prepare_user_sql_query(true, $showDeletedUsers);
     $res = Database::query($sql);
     $obj = Database::fetch_object($res);
 
@@ -422,9 +420,9 @@ function get_number_of_users()
  *
  * @see SortableTable#get_table_data($from)
  */
-function get_user_data($from, $number_of_items, $column, $direction)
+function get_user_data($from, $number_of_items, $column, $direction, $showDeletedUsers = false): array
 {
-    $sql = prepare_user_sql_query(false);
+    $sql = prepare_user_sql_query(false, $showDeletedUsers);
     if (!in_array($direction, ['ASC', 'DESC'])) {
         $direction = 'ASC';
     }
@@ -506,6 +504,50 @@ function user_filter($name, $params, $row)
     $name = cut($name, 26);
 
     return '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$row[0].'">'.$name.'</a>';
+}
+
+function modify_deleted_filter($user_id, $url_params, $row) {
+
+    $result = '';
+    $editProfileUrl = Display::getProfileEditionLink($user_id, true);
+    $result .= '<a href="'.$editProfileUrl.'">'.
+        Display::getMdiIcon('pencil', 'ch-tool-icon', null, 22, get_lang('Edit')).'</a>';
+
+    $restoreUrl = "user_list.php?$url_params&".
+        http_build_query([
+            'action' => 'restore',
+            'user_id' => $user_id,
+            'sec_token' => Security::getTokenFromSession(),
+            'view' => Security::remove_XSS($_GET['view']),
+        ]);
+    $result .= Display::url(
+        Display::getMdiIcon('restore', 'ch-tool-icon', null, 22, get_lang('Restore')),
+        $restoreUrl,
+        [
+            'title' => get_lang('Restore'),
+            'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
+            'class' => 'delete-swal',
+        ]
+    );
+
+    $deleteUrl = "user_list.php?$url_params&".
+        http_build_query([
+            'action' => 'destroy',
+            'user_id' => $user_id,
+            'sec_token' => Security::getTokenFromSession(),
+            'view' => Security::remove_XSS($_GET['view']),
+        ]);
+    $result .= Display::url(
+        Display::getMdiIcon('delete-forever', 'ch-tool-icon', null, 22, get_lang('DeletePermanently')),
+        $deleteUrl,
+        [
+            'title' => get_lang('DeletePermanently'),
+            'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
+            'class' => 'delete-swal',
+        ]
+    );
+
+    return $result;
 }
 
 /**
@@ -1006,6 +1048,106 @@ if (!empty($action)) {
                     }
                 }
                 break;
+            case 'restore':
+                $userIds = [];
+                $isMassDeletion = false;
+                if (api_is_platform_admin() && !empty($_POST['id']) && is_array($_POST['id'])) {
+                    $userIds = $_POST['id'];
+                    $isMassDeletion = true;
+                } elseif (!empty($_GET['user_id'])) {
+                    $userIds[] = $_GET['user_id'];
+                }
+
+                $numberOfAffectedUsers = 0;
+                foreach ($userIds as $userId) {
+                    if ($userId != $currentUserId && UserManager::change_active_state($userId, 1)) {
+                        $numberOfAffectedUsers++;
+                    }
+                }
+
+                if ($isMassDeletion) {
+                    if (count($userIds) == $numberOfAffectedUsers) {
+                        $message = Display::return_message(
+                            get_lang('Selected users restored'),
+                            'confirmation'
+                        );
+                    } else {
+                        $message = Display::return_message(
+                            get_lang('Some of the selected users have not been restored. We recommend you confirm which, by using the advanced search.'),
+                            'error'
+                        );
+                    }
+                } else {
+                    if ($numberOfAffectedUsers > 0) {
+                        $message = Display::return_message(
+                            get_lang('The user has been restored.'),
+                            'confirmation'
+                        );
+                    } else {
+                        $message = Display::return_message(
+                            get_lang('The user has not been restored. Please confirm the user ID and try again.'),
+                            'error'
+                        );
+                    }
+                }
+
+                Display::addFlash($message);
+
+                if (!$isMassDeletion) {
+                    header('Location: '.api_get_self().'?view='.$view);
+                    exit;
+                }
+                break;
+            case 'destroy':
+                $userIds = [];
+                $isMassDeletion = false;
+                if (api_is_platform_admin() && !empty($_POST['id']) && is_array($_POST['id'])) {
+                    $userIds = $_POST['id'];
+                    $isMassDeletion = true;
+                } elseif (!empty($_GET['user_id'])) {
+                    $userIds[] = $_GET['user_id'];
+                }
+
+                $numberOfAffectedUsers = 0;
+                foreach ($userIds as $userId) {
+                    if ($userId != $currentUserId && UserManager::delete_user($userId, true)) {
+                        $numberOfAffectedUsers++;
+                    }
+                }
+
+                if ($isMassDeletion) {
+                    if (count($userIds) == $numberOfAffectedUsers) {
+                        $message = Display::return_message(
+                            get_lang('Selected users deleted permanently'),
+                            'confirmation'
+                        );
+                    } else {
+                        $message = Display::return_message(
+                            get_lang('Some of the selected users have not been deleted. We recommend you confirm which, by using the advanced search.'),
+                            'error'
+                        );
+                    }
+                } else {
+                    if ($numberOfAffectedUsers > 0) {
+                        $message = Display::return_message(
+                            get_lang('The user has been deleted permanently'),
+                            'confirmation'
+                        );
+                    } else {
+                        $message = Display::return_message(
+                            get_lang('The user has not been deleted. Please confirm the user ID and try again.'),
+                            'error'
+                        );
+                    }
+                }
+
+                Display::addFlash($message);
+
+                if (!$isMassDeletion) {
+                    header('Location: '.api_get_self().'?view='.$view);
+                    exit;
+                }
+                break;
             case 'anonymize':
                 $message = UserManager::anonymizeUserWithVerification($_GET['user_id']);
                 Display::addFlash($message);
@@ -1027,6 +1169,7 @@ $form->addText(
         'placeholder' => get_lang('Search users'),
     ]
 );
+$form->addElement('hidden', 'view', $view);
 $form->addButtonSearch(get_lang('Search'));
 
 $searchAdvanced = '
@@ -1039,7 +1182,7 @@ $searchAdvanced = '
 $actionsLeft = '';
 $actionsCenter = '';
 $actionsRight = '';
-if (api_is_platform_admin()) {
+if (api_is_platform_admin() && !$showDeletedUsers) {
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
          Display::getMdiIcon('account-plus', 'ch-tool-icon-gradient', null, 32, get_lang('Add a user')).'</a>';
 }
@@ -1065,6 +1208,7 @@ if (isset($_GET['keyword'])) {
 }
 // Create a sortable table with user-data
 $parameters['sec_token'] = Security::get_token();
+$parameters['view'] = $view;
 
 $_admins_list = array_keys(UserManager::get_all_administrators());
 Session::write('admin_list', $_admins_list);
@@ -1077,7 +1221,7 @@ $form = new FormValidator(
     [],
     FormValidator::LAYOUT_HORIZONTAL
 );
-
+$form->addElement('hidden', 'view', $view);
 $form->addElement('header', get_lang('Advanced search'));
 $form->addText('keyword_firstname', get_lang('First name'), false);
 $form->addText('keyword_lastname', get_lang('Last name'), false);
@@ -1142,8 +1286,8 @@ $form = '<div id="advanced_search_form" style="display:none;">'.$form->returnFor
 
 $table = new SortableTable(
     'users',
-    'get_number_of_users',
-    'get_user_data',
+    function() use ($showDeletedUsers) { return get_number_of_users($showDeletedUsers); },
+    function($from, $number_of_items, $column, $direction) use ($showDeletedUsers) { return get_user_data($from, $number_of_items, $column, $direction, $showDeletedUsers); },
     (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2,
     20,
     'ASC'
@@ -1173,23 +1317,31 @@ $table->set_column_filter(4, 'user_filter');
 $table->set_column_filter(6, 'email_filter');
 $table->set_column_filter(7, 'status_filter');
 $table->set_column_filter(8, 'active_filter');
-$table->set_column_filter(11, 'modify_filter');
+$actionsList = [];
+if ($showDeletedUsers) {
+    $table->set_column_filter(11, 'modify_deleted_filter');
+    $actionsList['restore'] = get_lang('Restore');
+    if (api_is_platform_admin() &&
+        !api_get_configuration_value('deny_delete_users')
+    ) {
+        $actionsList['destroy'] = get_lang('Destroy');
+    }
+} else {
+    $table->set_column_filter(11, 'modify_filter');
+    if (api_is_platform_admin() &&
+        !api_get_configuration_value('deny_delete_users')
+    ) {
+        $actionsList['delete'] = get_lang('Remove from portal');
+    }
+    $actionsList['disable'] = get_lang('Disable');
+    $actionsList['enable'] = get_lang('Enable');
+}
+$table->set_form_actions($actionsList);
 
 // Hide email column if login is email, to avoid column with same data
 if ('true' === api_get_setting('login_is_email')) {
     $table->setHideColumn(6);
 }
-
-// Only show empty actions bar if delete users has been blocked
-$actionsList = [];
-if (api_is_platform_admin() &&
-    !api_get_configuration_value('deny_delete_users')
-) {
-    $actionsList['delete'] = get_lang('Remove from portal');
-}
-$actionsList['disable'] = get_lang('Disable');
-$actionsList['enable'] = get_lang('Enable');
-$table->set_form_actions($actionsList);
 
 $table_result = $table->return_table();
 $extra_search_options = '';
@@ -1259,7 +1411,21 @@ if (0 == $table->get_total_number_of_items()) {
         }
     }
 }
-$toolbarActions = Display::toolbarAction('toolbarUser', [$actionsLeft, $actionsCenter.$actionsRight]);
+
+$tabsHtml = '
+<div class="users-list">
+    <ul class="nav nav-tabs">
+      <li class="nav-item '.($view == 'all' ? 'active' : '').'">
+        <a class="nav-link '.($view == 'all' ? 'active' : '').'" href="user_list.php?view=all">Todos los Usuarios</a>
+      </li>
+      <li class="nav-item '.($view == 'deleted' ? 'active' : '').'">
+        <a class="nav-link '.($view == 'deleted' ? 'active' : '').'" href="user_list.php?view=deleted">Usuarios Eliminados</a>
+      </li>
+    </ul>
+</div>';
+
+$toolbarActions = $tabsHtml;
+$toolbarActions .= Display::toolbarAction('toolbarUser', [$actionsLeft, $actionsCenter.$actionsRight]);
 
 $tpl = new Template($tool_name);
 $tpl->assign('actions', $toolbarActions);

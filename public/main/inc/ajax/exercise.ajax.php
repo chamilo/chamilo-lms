@@ -237,6 +237,7 @@ switch ($action) {
                     GROUP BY exe_user_id
                 ) as aa
                 ON aa.exe_user_id = u.id
+                WHERE u.active <> -1
                 ORDER BY `$sidx` $sord
                 LIMIT $start, $limit";
 

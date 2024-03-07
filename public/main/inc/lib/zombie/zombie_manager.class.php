@@ -86,6 +86,7 @@ class ZombieManager
             $sql .= ' AND user.active = 1';
         }
 
+        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE user.active <> -1' : ' AND user.active <> -1';
         $sql .= " ORDER BY `$column` $direction";
         if (!is_null($from) && !is_null($count)) {
             $count = (int) $count;

@@ -117,7 +117,7 @@ if ('true' === $allowTutors) {
                     // search users where username or firstname or lastname begins likes $needle
                     $sql = 'SELECT user.user_id, username, lastname, firstname
                             FROM '.$tbl_user.' user
-                            WHERE (username LIKE "'.$needle.'%" OR firstname LIKE "'.$needle.'%"
+                            WHERE user.active <> -1 AND (username LIKE "'.$needle.'%" OR firstname LIKE "'.$needle.'%"
                                 OR lastname LIKE "'.$needle.'%") AND user.status<>6 AND user.status<>'.DRH.''.
                                 $order_clause.
                                 ' LIMIT 11';
@@ -125,7 +125,7 @@ if ('true' === $allowTutors) {
                 case 'multiple':
                     $sql = 'SELECT user.user_id, username, lastname, firstname
                             FROM '.$tbl_user.' user
-                            WHERE '.(api_sort_by_first_name() ? 'firstname' : 'lastname').'
+                            WHERE user.active <> -1 AND '.(api_sort_by_first_name() ? 'firstname' : 'lastname').'
                             LIKE "'.$needle.'%" AND
                             user.status<>'.DRH.' AND
                             user.status<>6 '.$cond_user_id.
@@ -136,6 +136,7 @@ if ('true' === $allowTutors) {
                             FROM '.$tbl_user.' user
                             LEFT OUTER JOIN '.$tbl_session_rel_user.' s ON (s.user_id = user.user_id)
                             WHERE
+                                user.active <> -1 AND
                                 s.user_id IS NULL AND
                                 user.status <>'.DRH.' AND
                                 user.status <> 6 '.$cond_user_id.
@@ -154,6 +155,7 @@ if ('true' === $allowTutors) {
                                     INNER JOIN '.$tbl_user_rel_access_url.' url_user
                                     ON (url_user.user_id=user.user_id)
                                     WHERE
+                                        user.active <> -1 AND
                                         access_url_id = '.$access_url_id.' AND
                                         (username LIKE "'.$needle.'%" OR firstname LIKE "'.$needle.'%" OR lastname LIKE "'.$needle.'%") AND
                                         user.status<>6 AND
@@ -166,7 +168,7 @@ if ('true' === $allowTutors) {
                                     FROM '.$tbl_user.' user
                                     INNER JOIN '.$tbl_user_rel_access_url.' url_user
                                     ON (url_user.user_id=user.user_id)
-                                    WHERE access_url_id = '.$access_url_id.' AND
+                                    WHERE user.active <> -1 AND access_url_id = '.$access_url_id.' AND
                                     '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user.status<>'.DRH.' AND user.status<>6 '.$cond_user_id.
                                     $order_clause;
                             break;
@@ -178,6 +180,7 @@ if ('true' === $allowTutors) {
                                     INNER JOIN '.$tbl_user_rel_access_url.' url_user
                                     ON (url_user.user_id=user.user_id)
                                     WHERE
+                                        user.active <> -1 AND
                                         access_url_id = '.$access_url_id.' AND
                                         s.user_id IS null AND
                                         user.status<>'.DRH.' AND
@@ -296,7 +299,7 @@ if ('true' === $allowTutors) {
                     $tbl_session_rel_user.user_id = u.id AND
                     $tbl_session_rel_user.relation_type = ".Session::STUDENT." AND
                     $tbl_session_rel_user.session_id = ".intval($id_session)."
-                WHERE u.status <> ".DRH." AND u.status<>6 $order_clause";
+                WHERE u.active <> -1 AND u.status <> ".DRH." AND u.status<>6 $order_clause";
 
         if (api_is_multiple_url_enabled()) {
             $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -311,7 +314,7 @@ if ('true' === $allowTutors) {
                             $tbl_session_rel_user.session_id = ".intval($id_session)."
                         INNER JOIN $tbl_user_rel_access_url url_user
                         ON (url_user.user_id=u.user_id)
-                        WHERE access_url_id = $access_url_id AND u.status<>".DRH." AND u.status<>6
+                        WHERE u.active <> -1 AND access_url_id = $access_url_id AND u.status<>".DRH." AND u.status<>6
                     $order_clause";
             }
         }
@@ -382,7 +385,7 @@ if ('true' === $allowTutors) {
                     ON $tbl_session_rel_user.user_id = u.id AND
                     $tbl_session_rel_user.session_id = '$id_session' AND
                     $tbl_session_rel_user.relation_type = ".Session::STUDENT."
-                    $where_filter AND u.status<>".DRH." AND u.status<>6
+                    $where_filter AND u.status<>".DRH." AND u.status<>6 AND u.active <> -1
                     $order_clause";
         } else {
             $sql = "SELECT u.id as user_id, lastname, firstname, username, session_id
@@ -391,7 +394,7 @@ if ('true' === $allowTutors) {
                     ON $tbl_session_rel_user.user_id = u.id AND
                     $tbl_session_rel_user.session_id = '$id_session' AND
                     $tbl_session_rel_user.relation_type = ".Session::STUDENT."
-                    WHERE u.status <> ".DRH." AND u.status<>6
+                    WHERE u.status <> ".DRH." AND u.status<>6 AND u.active <> -1
                     $order_clause";
         }
 
@@ -407,7 +410,7 @@ if ('true' === $allowTutors) {
                             $tbl_session_rel_user.session_id = '$id_session' AND
                             $tbl_session_rel_user.relation_type = ".Session::STUDENT."
                         INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
-                        WHERE access_url_id = $access_url_id  $where_filter AND u.status<>".DRH." AND u.status<>6
+                        WHERE access_url_id = $access_url_id  $where_filter AND u.status<>".DRH." AND u.status<>6 AND u.active <> -1
                         $order_clause";
             }
         }
@@ -435,7 +438,7 @@ if ('true' === $allowTutors) {
                     $tbl_session_rel_user.user_id = u.id AND
                     $tbl_session_rel_user.session_id = '$id_session' AND
                     $tbl_session_rel_user.relation_type = ".Session::STUDENT."
-                WHERE u.status <> ".DRH." AND u.status<>6 $order_clause";
+                WHERE u.active <> -1 AND u.status <> ".DRH." AND u.status<>6 $order_clause";
 
         if (api_is_multiple_url_enabled()) {
             $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -449,7 +452,7 @@ if ('true' === $allowTutors) {
                             $tbl_session_rel_user.session_id = '$id_session' AND
                             $tbl_session_rel_user.relation_type = ".Session::STUDENT."
                         INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
-                        WHERE access_url_id = $access_url_id AND u.status<>".DRH." AND u.status<>6
+                        WHERE u.active <> -1 AND access_url_id = $access_url_id AND u.status<>".DRH." AND u.status<>6
                     $order_clause";
             }
         }

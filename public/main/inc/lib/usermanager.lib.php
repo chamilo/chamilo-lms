@@ -631,20 +631,15 @@ class UserManager
     }
 
     /**
-     * Delete a user from the platform, and all its belongings. This is a
-     * very dangerous function that should only be accessible by
-     * super-admins. Other roles should only be able to disable a user,
-     * which removes access to the platform but doesn't delete anything.
+     * Deletes a user from the system or marks the user as deleted based on the $destroy flag.
+     * If $destroy is false, the user is only marked as deleted (e.g., active = -1) but not actually removed from the database.
+     * This allows for the possibility of restoring the user at a later time. If $destroy is true, the user and all their relations
+     * are permanently removed from the database.
      *
-     * @param int The ID of th user to be deleted
-     *
-     * @throws Exception
-     *
-     * @return bool true if user is successfully deleted, false otherwise
-     * @assert (null) === false
-     * @assert ('abc') === false
+     * Note: When $destroy is false, the user's relations are not removed, allowing for potential restoration. When $destroy is true,
+     * the function proceeds to remove all the user's relations, effectively cleaning up all references to the user in the system.
      */
-    public static function delete_user($user_id)
+    public static function delete_user(int $user_id, bool $destroy = false): bool
     {
         $user_id = (int) $user_id;
 
@@ -654,6 +649,17 @@ class UserManager
 
         if (!self::canDeleteUser($user_id)) {
             return false;
+        }
+
+        $repository = Container::getUserRepository();
+
+        /** @var User $user */
+        $user = $repository->find($user_id);
+
+        $repository->deleteUser($user, $destroy);
+
+        if (!$destroy) {
+            return true;
         }
 
         $usergroup_rel_user = Database::get_main_table(TABLE_USERGROUP_REL_USER);
@@ -667,12 +673,6 @@ class UserManager
         $table_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
         $userInfo = api_get_user_info($user_id);
-        $repository = Container::getUserRepository();
-
-        /** @var User $user */
-        $user = $repository->find($user_id);
-
-        $repository->deleteUser($user);
 
         // Unsubscribe the user from all groups in all his courses
         $sql = "SELECT c.id
@@ -752,29 +752,10 @@ class UserManager
                     $userGroup->delete_user_rel_group($user_id, $group_id);
                 }
             }
-
-            // Delete user from friend lists
-            //SocialManager::remove_user_rel_user($user_id, true);
         }
 
         // Removing survey invitation
         SurveyManager::delete_all_survey_invitations_by_user($user_id);
-
-        // Delete students works
-        /*$sql = "DELETE FROM $table_work WHERE user_id = $user_id ";
-        Database::query($sql);*/
-
-        /*$sql = "UPDATE c_item_property SET to_user_id = NULL
-                WHERE to_user_id = '".$user_id."'";
-        Database::query($sql);
-
-        $sql = "UPDATE c_item_property SET insert_user_id = NULL
-                WHERE insert_user_id = '".$user_id."'";
-        Database::query($sql);
-
-        $sql = "UPDATE c_item_property SET lastedit_user_id = NULL
-                WHERE lastedit_user_id = '".$user_id."'";
-        Database::query($sql);*/
 
         // Skills
         $em = Database::getManager();
@@ -1047,8 +1028,10 @@ class UserManager
 
         $change_active = 0;
         $isUserActive = $user->isActive();
-        if ($isUserActive != $active) {
-            $change_active = 1;
+        if ($active != -1) {
+            if ($isUserActive != $active) {
+                $change_active = 1;
+            }
         }
 
         $originalUsername = $user->getUsername();
@@ -1082,7 +1065,7 @@ class UserManager
             ->setPhone($phone)
             ->setAddress($address)
             ->setExpirationDate($expiration_date)
-            ->setActive((bool) $active)
+            ->setActive($active)
             ->setHrDeptId((int) $hr_dept_id)
         ;
 
@@ -3911,6 +3894,7 @@ class UserManager
                     INNER JOIN $table_user u
                     ON (u.id=admin.user_id)";
         }
+        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active <> -1' : ' AND u.active <> -1';
         $result = Database::query($sql);
         $return = [];
         if (Database::num_rows($result) > 0) {
@@ -5736,7 +5720,7 @@ SQL;
      *
      * @return string
      */
-    public static function deleteUserWithVerification($userId)
+    public static function deleteUserWithVerification($userId, bool $destroy = false)
     {
         $allowDelete = ('true' === api_get_setting('session.allow_delete_user_for_session_admin'));
         $message = Display::return_message(get_lang('You cannot delete this user'), 'error');
@@ -5758,7 +5742,7 @@ SQL;
             ($allowDelete && api_is_session_admin())
         ) {
             if (api_global_admin_can_edit_admin($userId, null, $allowDelete)) {
-                if (self::delete_user($userId)) {
+                if (self::delete_user($userId, $destroy)) {
                     $message = Display::return_message(
                         get_lang('The user has been deleted').': '.$userToUpdateInfo['complete_name_with_username'],
                         'confirmation'
@@ -6140,7 +6124,7 @@ SQL;
      * @assert (-1,0) === false
      * @assert (1,1) === true
      */
-    private static function change_active_state($user_id, $active)
+    public static function change_active_state($user_id, $active)
     {
         $user_id = (int) $user_id;
         $active = (int) $active;

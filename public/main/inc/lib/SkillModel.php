@@ -1243,7 +1243,7 @@ class SkillModel extends Model
                     ON (s.id = su.skill_id)
                     INNER JOIN {$this->table_user} u
                     ON u.id = su.user_id, (SELECT @rownum:=0) r
-                    WHERE 1=1 $where_condition
+                    WHERE 1=1 AND u.active <> -1 $where_condition
                     GROUP BY username
                     ORDER BY skills_acquired desc
                     LIMIT $start , $limit)  AS T1, (SELECT @rownum:=0) r";

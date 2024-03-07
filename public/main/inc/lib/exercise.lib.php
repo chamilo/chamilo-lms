@@ -2094,6 +2094,8 @@ HOTSPOT;
                 ";
         }
 
+        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE user.active <> -1' : ' AND user.active <> -1';
+
         if (empty($sql)) {
             return false;
         }

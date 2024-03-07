@@ -25,7 +25,7 @@ foreach ($urlList as $url) {
     // adding the filter to see the user's only of the current access_url
     if (api_get_multiple_access_url()) {
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $sql .= " INNER JOIN $access_url_rel_user_table url_rel_user 
+        $sql .= " INNER JOIN $access_url_rel_user_table url_rel_user
                    ON (u.id = url_rel_user.user_id)";
     }
 
@@ -36,12 +36,12 @@ foreach ($urlList as $url) {
     $extraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
     $sql .= " INNER JOIN $extraFieldValue v
               ON (
-                    u.id = v.item_id AND 
+                    u.id = v.item_id AND
                     (field_id = $extraFieldId OR field_id = $extraFieldIdDeleteAccount) AND
                     v.value = 1
               ) ";
 
-    $sql .= " WHERE 1 = 1 ";
+    $sql .= " WHERE 1 = 1 AND u.active <> -1 ";
 
     if (api_get_multiple_access_url()) {
         $sql .= " AND url_rel_user.access_url_id = ".api_get_current_access_url_id();
@@ -67,7 +67,7 @@ foreach ($urlList as $url) {
         $userInfo = api_get_user_info($userId);
         if ($userInfo) {
             $content = sprintf(
-                get_lang('The user %s is waiting for an action about it\'s personal data request. 
+                get_lang('The user %s is waiting for an action about it\'s personal data request.
 
  To manage personal data requests you can follow this link : %s'),
                 $userInfo['complete_name'],

@@ -21,6 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SecurityController extends AbstractController
 {
@@ -34,7 +35,7 @@ class SecurityController extends AbstractController
     ) {}
 
     #[Route('/login_json', name: 'login_json', methods: ['POST'])]
-    public function loginJson(Request $request, EntityManager $entityManager, SettingsManager $settingsManager, TokenStorageInterface $tokenStorage): Response
+    public function loginJson(Request $request, EntityManager $entityManager, SettingsManager $settingsManager, TokenStorageInterface $tokenStorage, TranslatorInterface $translator): Response
     {
         if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->json(
@@ -47,6 +48,20 @@ class SecurityController extends AbstractController
 
         /** @var User $user */
         $user = $this->getUser();
+
+        if ($user->getActive() !== 1) {
+            if ($user->getActive() === 0) {
+                $message = $translator->trans('Account not activated.');
+            } else {
+                $message = $translator->trans('Invalid credentials. Please try again or contact support if you continue to experience issues.');
+            }
+
+            $tokenStorage->setToken(null);
+            $request->getSession()->invalidate();
+
+            return $this->json(['error' => $message], 401);
+        }
+
         $extraFieldValuesRepository = $this->entityManager->getRepository(ExtraFieldValues::class);
         $legalTermsRepo = $this->entityManager->getRepository(Legal::class);
         if ($user->hasRole('ROLE_STUDENT')

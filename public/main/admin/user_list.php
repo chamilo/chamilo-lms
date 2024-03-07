@@ -156,14 +156,12 @@ function trimVariables()
 }
 
 /**
- * Prepares the shared SQL query for the user table.
- * See get_user_data() and get_number_of_users().
- *
- * @param bool $getCount Whether to count, or get data
- *
- * @return string SQL query
+ * Prepares a shared SQL query for retrieving user data from the user table.
+ * This function is utilized by both get_user_data() and get_number_of_users()
+ * to construct the base SQL query. It supports filtering for active, inactive,
+ * and deleted users based on the provided parameters.
  */
-function prepare_user_sql_query(bool $getCount, $showDeletedUsers = false)
+function prepare_user_sql_query(bool $getCount, bool $showDeletedUsers = false): string
 {
     $sql = '';
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -395,11 +393,11 @@ function prepare_user_sql_query(bool $getCount, $showDeletedUsers = false)
 }
 
 /**
- * Get the total number of users on the platform.
- *
- * @see SortableTable#get_total_number_of_items()
+ * Retrieves the total number of users from the database. This function can be
+ * configured to either include or exclude users marked as deleted based on the
+ * provided parameter.
  */
-function get_number_of_users($showDeletedUsers = false)
+function get_number_of_users(bool $showDeletedUsers = false): int
 {
     $sql = prepare_user_sql_query(true, $showDeletedUsers);
     $res = Database::query($sql);
@@ -409,18 +407,11 @@ function get_number_of_users($showDeletedUsers = false)
 }
 
 /**
- * Get the users to display on the current page (fill the sortable-table).
- *
- * @param   int     offset of first user to recover
- * @param   int     Number of users to get
- * @param   int     Column to sort on
- * @param   string  Order (ASC,DESC)
- *
- * @return array Users list
- *
- * @see SortableTable#get_table_data($from)
+ * Fetches a subset of user data from the database based on provided parameters. This function
+ * is used to populate a sortable and paginated table of users, allowing for dynamic data retrieval
+ * based on user interaction with the table (such as sorting and pagination).
  */
-function get_user_data($from, $number_of_items, $column, $direction, $showDeletedUsers = false): array
+function get_user_data(int $from, int $number_of_items, int $column, string $direction, bool $showDeletedUsers = false): array
 {
     $sql = prepare_user_sql_query(false, $showDeletedUsers);
     if (!in_array($direction, ['ASC', 'DESC'])) {
@@ -506,7 +497,13 @@ function user_filter($name, $params, $row)
     return '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$row[0].'">'.$name.'</a>';
 }
 
-function modify_deleted_filter($user_id, $url_params, $row) {
+/**
+ * Generates action links for each user in the deleted users list. This function creates HTML
+ * links for editing user profiles, restoring deleted users, and permanently deleting users.
+ * It is designed to be used in a table that lists users marked as deleted.
+ */
+function modify_deleted_filter(int $user_id, string $url_params, array $row): string
+{
 
     $result = '';
     $editProfileUrl = Display::getProfileEditionLink($user_id, true);
@@ -553,15 +550,15 @@ function modify_deleted_filter($user_id, $url_params, $row) {
 /**
  * Build the modify-column of the table.
  *
- * @param   int     The user id
- * @param   string  URL params to add to table links
- * @param   array   Row of elements to alter
+ * @param   int $user_id The user id
+ * @param   string $url_params URL params to add to table links
+ * @param   array $row Row of elements to alter
  *
  * @throws Exception
  *
  * @return string Some HTML-code with modify-buttons
  */
-function modify_filter($user_id, $url_params, $row)
+function modify_filter($user_id, $url_params, $row): string
 {
     $_admins_list = Session::read('admin_list', []);
     $is_admin = in_array($user_id, $_admins_list);
@@ -690,17 +687,6 @@ function modify_filter($user_id, $url_params, $row)
     }
 
     if (api_is_platform_admin()) {
-        /* Temporarily disabled until improved
-        $result .= ' <a data-title="'.get_lang('Free/Busy calendar').'" href="'.api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?a=get_user_agenda&user_id='.$user_id.'&modal_size=lg" class="agenda_opener ajax">'.
-            Display::getMdiIcon(
-                'calendar-text',
-                'ch-tool-icon',
-                null,
-                22,
-                get_lang('Free/Busy calendar')
-            ).
-            '</a>';
-        */
         if ($user_id != $currentUserId &&
             !$user_is_anonymous &&
             api_global_admin_can_edit_admin($user_id)
@@ -872,16 +858,8 @@ function modify_filter($user_id, $url_params, $row)
 /**
  * Build the active-column of the table to lock or unlock a certain user
  * lock = the user can no longer use this account.
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @param int    $active the current state of the account
- * @param string $params
- * @param array  $row
- *
- * @return string Some HTML-code with the lock/unlock button
  */
-function active_filter($active, $params, $row)
+function active_filter(int $active, string $params, array $row): string
 {
     $_user = api_get_user_info();
 
@@ -924,16 +902,8 @@ function active_filter($active, $params, $row)
 
 /**
  * Instead of displaying the integer of the status, we give a translation for the status.
- *
- * @param int $status
- *
- * @return string translation
- *
- * @version march 2008
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  */
-function status_filter($status)
+function status_filter(int $status): string
 {
     $name = api_get_status_langvars();
 
@@ -1416,10 +1386,10 @@ $tabsHtml = '
 <div class="users-list">
     <ul class="nav nav-tabs">
       <li class="nav-item '.($view == 'all' ? 'active' : '').'">
-        <a class="nav-link '.($view == 'all' ? 'active' : '').'" href="user_list.php?view=all">Todos los Usuarios</a>
+        <a class="nav-link '.($view == 'all' ? 'active' : '').'" href="user_list.php?view=all">'.get_lang('All users').'</a>
       </li>
       <li class="nav-item '.($view == 'deleted' ? 'active' : '').'">
-        <a class="nav-link '.($view == 'deleted' ? 'active' : '').'" href="user_list.php?view=deleted">Usuarios Eliminados</a>
+        <a class="nav-link '.($view == 'deleted' ? 'active' : '').'" href="user_list.php?view=deleted">'.get_lang('Deleted Users').'</a>
       </li>
     </ul>
 </div>';

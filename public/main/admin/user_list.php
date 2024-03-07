@@ -1392,7 +1392,7 @@ $tabsHtml = '
         <a class="nav-link '.($view == 'all' ? 'active' : '').'" href="user_list.php?view=all">'.get_lang('All users').'</a>
       </li>
       <li class="nav-item '.($view == 'deleted' ? 'active' : '').'">
-        <a class="nav-link '.($view == 'deleted' ? 'active' : '').'" href="user_list.php?view=deleted">'.get_lang('Deleted Users').'</a>
+        <a class="nav-link '.($view == 'deleted' ? 'active' : '').'" href="user_list.php?view=deleted">'.get_lang('Deleted users').'</a>
       </li>
     </ul>
 </div>';

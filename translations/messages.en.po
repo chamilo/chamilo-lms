@@ -24220,3 +24220,6 @@ msgstr "Extra field to use as student ID for SCORM API"
 
 msgid "The name provided will be used as the identifier of the user extra field containing an ID that the remote SCORM API will recognize as a user ID. This is only useful if your remote SCORM provider asked you for something similar."
 msgstr "The name provided will be used as the identifier of the user extra field containing an ID that the remote SCORM API will recognize as a user ID. This is only useful if your remote SCORM provider asked you for something similar."
+
+msgid "Deleted users"
+msgstr "Deleted users"

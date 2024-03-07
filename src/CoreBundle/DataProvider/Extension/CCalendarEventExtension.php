@@ -7,20 +7,18 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\DataProvider\Extension;
 
 use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
-// use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
-// use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\ServiceHelper\CidReqHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Doctrine\ORM\QueryBuilder;
-use phpDocumentor\Reflection\Types\Integer;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
+use UserGroupModel;
 
-final class CCalendarEventExtension implements QueryCollectionExtensionInterface // , QueryItemExtensionInterface
+final class CCalendarEventExtension implements QueryCollectionExtensionInterface
 {
     use CourseLinkExtensionTrait;
 
@@ -81,6 +79,39 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
                 )
             )
             ->setParameter('user', $user->getId())
+        ;
+
+        if ('true' === $this->settingsManager->getSetting('agenda.agenda_event_subscriptions')) {
+            $this->addSubscriptionsConditions($qb, $user);
+        }
+    }
+
+    private function addSubscriptionsConditions(QueryBuilder $qb, User $user): void
+    {
+        $groupList = (new UserGroupModel())->getUserGroupListByUser($user->getId(), Usergroup::NORMAL_CLASS);
+        $groupIdList = $groupList ? array_column($groupList, 'id') : [];
+
+        $alias = $qb->getRootAliases()[0];
+
+        $expr = $qb->expr()->orX(
+            $qb->expr()->eq("$alias.subscriptionVisibility", ':visibility_all'),
+        );
+
+        if ($groupIdList) {
+            $expr->add(
+                $qb->expr()->orX(
+                    $qb->expr()->eq("$alias.subscriptionVisibility", ':visibility_class'),
+                    $qb->expr()->in("$alias.subscriptionItemId", ':item_id_list')
+                )
+            );
+
+            $qb->setParameter('visibility_class', CCalendarEvent::SUBSCRIPTION_VISIBILITY_CLASS);
+            $qb->setParameter('item_id_list', $groupIdList);
+        }
+
+        $qb
+            ->orWhere($expr)
+            ->setParameter(':visibility_all', CCalendarEvent::SUBSCRIPTION_VISIBILITY_ALL)
         ;
     }
 }

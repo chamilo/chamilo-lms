@@ -7,7 +7,6 @@
         :class="{ 'p-invalid': isInvalid }"
         :aria-label="label"
         type="text"
-        :required="required"
         @update:model-value="$emit('update:modelValue', $event)"
       />
       <label
@@ -55,7 +54,6 @@ const props = defineProps({
     required: false,
     default: false,
   },
-  required: Boolean,
 })
 
 defineEmits(["update:modelValue"])

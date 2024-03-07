@@ -12,7 +12,6 @@ import toolIntroRoutes from "./ctoolintro"
 import pageRoutes from "./page"
 import socialNetworkRoutes from "./social"
 import termsRoutes from "./terms"
-import skillsRoutes from "./skill"
 
 //import courseCategoryRoutes from './coursecategory';
 import documents from "./documents"
@@ -141,7 +140,6 @@ const router = createRouter({
       component: MySessionListUpcoming,
       meta: { requiresAuth: true },
     },
-    skillsRoutes,
     termsRoutes,
     socialNetworkRoutes,
     catalogueCourses,

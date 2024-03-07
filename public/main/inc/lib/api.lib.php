@@ -662,6 +662,12 @@ define('SE_DOCTYPE_EXERCISE_QUESTION', 1);
 define('XAPIAN_PREFIX_COURSEID', 'C');
 define('XAPIAN_PREFIX_TOOLID', 'O');
 
+// User active field constants
+define('USER_ACTIVE', 1);
+define('USER_INACTIVE', 0);
+define('USER_INACTIVE_AUTOMATIC', -1);
+define('USER_SOFT_DELETED', -2);
+
 /**
  * Returns a path to a certain resource within Chamilo.
  *

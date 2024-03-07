@@ -2094,6 +2094,8 @@ HOTSPOT;
                 ";
         }
 
+        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE user.active <> '.USER_SOFT_DELETED : ' AND user.active <> '.USER_SOFT_DELETED;
+
         if (empty($sql)) {
             return false;
         }

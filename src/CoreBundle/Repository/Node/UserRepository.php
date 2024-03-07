@@ -136,28 +136,33 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         return $rootUser;
     }
 
-    public function deleteUser(User $user): void
+    public function deleteUser(User $user, bool $destroy = false): void
     {
         $em = $this->getEntityManager();
-        $type = $user->getResourceNode()->getResourceType();
-        $rootUser = $this->getRootUser();
 
-        // User children will be set to the root user.
-        $criteria = Criteria::create()->where(Criteria::expr()->eq('resourceType', $type));
-        $userNodeCreatedList = $user->getResourceNodes()->matching($criteria);
+        if ($destroy) {
+            $type = $user->getResourceNode()->getResourceType();
+            $rootUser = $this->getRootUser();
 
-        /** @var ResourceNode $userCreated */
-        foreach ($userNodeCreatedList as $userCreated) {
-            $userCreated->setCreator($rootUser);
+            $criteria = Criteria::create()->where(Criteria::expr()->eq('resourceType', $type));
+            $userNodeCreatedList = $user->getResourceNodes()->matching($criteria);
+
+            foreach ($userNodeCreatedList as $userCreated) {
+                $userCreated->setCreator($rootUser);
+            }
+
+            $em->remove($user->getResourceNode());
+
+            foreach ($user->getGroups() as $group) {
+                $user->removeGroup($group);
+            }
+
+            $em->remove($user);
+        } else {
+            $user->setActive(User::SOFT_DELETED);
+            $em->persist($user);
         }
 
-        $em->remove($user->getResourceNode());
-
-        foreach ($user->getGroups() as $group) {
-            $user->removeGroup($group);
-        }
-
-        $em->remove($user);
         $em->flush();
     }
 

@@ -143,6 +143,7 @@ class Statistics
             $sql = "SELECT COUNT(DISTINCT(u.id)) AS number
                     FROM $user_table as u, $access_url_rel_user_table as url
                     WHERE
+                        u.active <> ".USER_SOFT_DELETED." AND
                         u.id = url.user_id AND
                         access_url_id = $urlId
                         $status_filter $active_filter";
@@ -162,7 +163,7 @@ class Statistics
         } else {
             $sql = "SELECT COUNT(DISTINCT(id)) AS number
                     FROM $user_table
-                    WHERE 1 = 1 $status_filter $active_filter";
+                    WHERE 1 = 1 AND active <> ".USER_SOFT_DELETED." AND $status_filter $active_filter";
             if (isset($categoryCode)) {
                 $categoryCode = Database::escape_string($categoryCode);
                 $status_filter = isset($status) ? ' AND status = '.intval($status) : '';
@@ -232,14 +233,14 @@ class Statistics
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT count(default_id) AS total_number_of_items
                     FROM $track_e_default, $table_user user, $access_url_rel_user_table url
-                    WHERE
+                    WHERE user.active <> ".USER_SOFT_DELETED." AND
                         default_user_id = user.id AND
                         user.id=url.user_id AND
                         access_url_id = '".$urlId."'";
         } else {
             $sql = "SELECT count(default_id) AS total_number_of_items
                     FROM $track_e_default, $table_user user
-                    WHERE default_user_id = user.id ";
+                    WHERE user.active <> ".USER_SOFT_DELETED." AND default_user_id = user.id ";
         }
 
         if (!empty($courseId)) {
@@ -309,6 +310,7 @@ class Statistics
                     $table_user as user,
                     $access_url_rel_user_table as url
                     WHERE
+                        user.active <> -1 AND
                         track_default.default_user_id = user.id AND
                         url.user_id = user.id AND
                         access_url_id= $urlId ";
@@ -323,7 +325,7 @@ class Statistics
                        user.id         as col6,
                        default_date         as col7
                    FROM $track_e_default track_default, $table_user user
-                   WHERE track_default.default_user_id = user.id ";
+                   WHERE user.active <> ".USER_SOFT_DELETED." AND track_default.default_user_id = user.id ";
         }
 
         if (!empty($_GET['keyword'])) {
@@ -864,6 +866,9 @@ class Statistics
         $count1 = Database::fetch_object($res);
         $sql = "SELECT COUNT(*) AS n FROM $user_table as u $table ".
                "WHERE LENGTH(picture_uri) > 0 $url_condition2";
+
+        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active <> '.USER_SOFT_DELETED : ' AND u.active <> '.USER_SOFT_DELETED;
+
         $res = Database::query($sql);
         $count2 = Database::fetch_object($res);
         // #users without picture
@@ -1043,14 +1048,14 @@ class Statistics
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT lastname, firstname, username, COUNT($field) AS count_message
                 FROM $access_url_rel_user_table as url, $message_table m
-                LEFT JOIN $user_table u ON m.$field = u.id
+                LEFT JOIN $user_table u ON m.$field = u.id AND u.active <> ".USER_SOFT_DELETED."
                 WHERE  url.user_id = m.$field AND  access_url_id='".$urlId."'
                 GROUP BY m.$field
                 ORDER BY count_message DESC ";
         } else {
             $sql = "SELECT lastname, firstname, username, COUNT($field) AS count_message
                 FROM $message_table m
-                LEFT JOIN $user_table u ON m.$field = u.id
+                LEFT JOIN $user_table u ON m.$field = u.id AND u.active <> ".USER_SOFT_DELETED."
                 GROUP BY m.$field ORDER BY count_message DESC ";
         }
         $res = Database::query($sql);
@@ -1083,7 +1088,7 @@ class Statistics
             $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend
                     FROM $access_url_rel_user_table as url, $user_friend_table uf
                     LEFT JOIN $user_table u
-                    ON (uf.user_id = u.id)
+                    ON (uf.user_id = u.id) AND u.active <> ".USER_SOFT_DELETED."
                     WHERE
                         uf.relation_type <> '".UserRelUser::USER_RELATION_TYPE_RRHH."' AND
                         uf.user_id = url.user_id AND
@@ -1094,7 +1099,7 @@ class Statistics
             $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend
                     FROM $user_friend_table uf
                     LEFT JOIN $user_table u
-                    ON (uf.user_id = u.id)
+                    ON (uf.user_id = u.id) AND u.active <> ".USER_SOFT_DELETED."
                     WHERE uf.relation_type <> '".UserRelUser::USER_RELATION_TYPE_RRHH."'
                     GROUP BY uf.user_id
                     ORDER BY count_friend DESC ";
@@ -1467,7 +1472,7 @@ class Statistics
                 INNER JOIN $tblLogin l
                 ON u.id = l.login_user_id
                 $urlJoin
-                WHERE l.login_date BETWEEN '$startDate' AND '$endDate'
+                WHERE u.active <> ".USER_SOFT_DELETED." AND l.login_date BETWEEN '$startDate' AND '$endDate'
                 $urlWhere
                 GROUP BY u.id";
 

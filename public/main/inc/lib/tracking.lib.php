@@ -6490,7 +6490,7 @@ class Tracking
             // Now fill users data
             $sqlUsers = "SELECT id as user_id, username, lastname, firstname
                          FROM $tuser
-                         WHERE id IN (".implode(',', $userIds).")";
+                         WHERE active <> ".USER_SOFT_DELETED." AND id IN (".implode(',', $userIds).")";
             $resUsers = Database::query($sqlUsers);
             while ($rowUser = Database::fetch_assoc($resUsers)) {
                 $users[$rowUser['user_id']] = $rowUser;

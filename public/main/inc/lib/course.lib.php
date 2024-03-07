@@ -1375,6 +1375,7 @@ class CourseManager
                     $sqlInjectJoins
                    ";
             $where[] = ' session_course_user.c_id IS NOT NULL ';
+            $where[] = ' user.active <> '.USER_SOFT_DELETED.' ';
 
             // 2 = coach
             // 0 = student
@@ -1451,7 +1452,7 @@ class CourseManager
             }
         }
 
-        $sql .= " WHERE
+        $sql .= " WHERE user.active <> ".USER_SOFT_DELETED." AND
             $filter_by_status_condition
             ".implode(' OR ', $where);
 
@@ -1758,7 +1759,7 @@ class CourseManager
             $sql .= " LEFT JOIN $tblUrlUser au ON (au.user_id = user.id) ";
         }
 
-        $sql .= ' WHERE '.implode(' OR ', $where);
+        $sql .= ' WHERE user.active <> '.USER_SOFT_DELETED.' AND '.implode(' OR ', $where);
 
         if ($multiple_access_url) {
             $current_access_url_id = api_get_current_access_url_id();
@@ -1880,7 +1881,7 @@ class CourseManager
                         FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." cu
                         INNER JOIN $userTable u
                         ON cu.user_id = u.id
-                        WHERE c_id = $courseId AND cu.status = ".STUDENT;
+                        WHERE u.active <> ".USER_SOFT_DELETED." AND c_id = $courseId AND cu.status = ".STUDENT;
 
                 if (!$includeInvitedUsers) {
                     $sql .= " AND u.status != ".INVITEE;
@@ -1923,7 +1924,7 @@ class CourseManager
                       $joinSession
                       INNER JOIN $userTable u
                       ON scu.user_id = u.id
-                      WHERE scu.c_id = $courseId AND scu.status = ".SessionEntity::STUDENT;
+                      WHERE u.active <> ".USER_SOFT_DELETED." AND scu.c_id = $courseId AND scu.status = ".SessionEntity::STUDENT;
 
             if (!empty($date_from) && !empty($date_to)) {
                 $date_from = Database::escape_string($date_from);

@@ -103,7 +103,7 @@ function search_users($needle, $type = 'multiple')
             $sql = "SELECT user.id as user_id, username, lastname, firstname
                     FROM $tbl_user user
                     LEFT JOIN $tbl_access_url_rel_user au ON (au.user_id = user.id)
-                    WHERE
+                    WHERE user.active <> ".USER_SOFT_DELETED." AND
                         ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND
                         status NOT IN(".DRH.', '.SESSIONADMIN.', '.STUDENT_BOSS.") AND
                         user.id NOT IN ($user_anonymous, $current_user_id, $user_id)
@@ -114,7 +114,7 @@ function search_users($needle, $type = 'multiple')
         } else {
             $sql = "SELECT id as user_id, username, lastname, firstname
                     FROM $tbl_user user
-                    WHERE
+                    WHERE user.active <> ".USER_SOFT_DELETED." AND
                         ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND
                         status NOT IN(".DRH.', '.SESSIONADMIN.', '.STUDENT_BOSS.") AND
                         id NOT IN ($user_anonymous, $current_user_id, $user_id)
@@ -132,7 +132,7 @@ function search_users($needle, $type = 'multiple')
             $sql = 'SELECT user.id as user_id, username, lastname, firstname
                     FROM '.$tbl_user.' user
                     INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.id)
-                    WHERE
+                    WHERE user.active <> '.USER_SOFT_DELETED.' AND
                         access_url_id = '.$access_url_id.'  AND
                         (
                             username LIKE "'.$needle.'%" OR
@@ -400,7 +400,7 @@ if (api_is_multiple_url_enabled()) {
             FROM $tbl_user user
             LEFT JOIN $tbl_access_url_rel_user au
             ON (au.user_id = user.id)
-            WHERE
+            WHERE user.active <> ".USER_SOFT_DELETED." AND
                 $without_assigned_users
                 user.id NOT IN ($user_anonymous, $current_user_id, $user_id) AND
                 status NOT IN(".DRH.', '.SESSIONADMIN.', '.ANONYMOUS.") $search_user AND
@@ -410,7 +410,7 @@ if (api_is_multiple_url_enabled()) {
 } else {
     $sql = "SELECT id as user_id, username, lastname, firstname
             FROM $tbl_user user
-            WHERE
+            WHERE user.active <> -1 AND
                 $without_assigned_users
                 id NOT IN ($user_anonymous, $current_user_id, $user_id) AND
                 status NOT IN(".DRH.', '.SESSIONADMIN.', '.ANONYMOUS.")

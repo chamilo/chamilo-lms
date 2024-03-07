@@ -273,12 +273,12 @@ class SubLanguageManager
      *
      * @return bool
      */
-    public static function check_if_language_is_used($language_id)
+    public static function check_if_language_is_used(int $language_id): bool
     {
         $language_info = self::get_all_information_of_language($language_id);
         $table = Database::get_main_table(TABLE_MAIN_USER);
         $sql = 'SELECT count(*) AS count FROM '.$table.'
-                WHERE locale ="'.Database::escape_string($language_info['english_name']).'"';
+                WHERE locale ="'.Database::escape_string($language_info['english_name']).'" AND active <> '.USER_SOFT_DELETED;
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0 && Database::result($rs, '0', 'count') >= 1) {
             return true;

@@ -233,7 +233,7 @@ if (isset($_GET['action'])) {
                     $sql .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
                 }
                 $sql .= "
-                    WHERE c_id = $courseId
+                    WHERE user.active <> ".USER_SOFT_DELETED." AND c_id = $courseId
                         AND session_course_user.user_id = user.id
                         AND session_id = $sessionId
                 ";
@@ -321,6 +321,7 @@ if (isset($_GET['action'])) {
                     $sql .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
                 }
                 $sql .= " WHERE
+                        user.active <> ".USER_SOFT_DELETED." AND
                         c_id = '$courseId' AND
                         course_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
                         course_user.user_id = user.id ";

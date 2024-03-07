@@ -220,6 +220,10 @@
 
 @import "scss/index.scss";
 
+.field > small.p-error {
+  @apply text-error;
+}
+
 // tabs
 .tab-content {
   > .tab-pane {
@@ -383,6 +387,43 @@
 .template-item:hover {
   background-color: #ececec;
   cursor: pointer;
+}
+
+.users-list {
+  .nav-tabs {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    border-bottom: 1px solid #ddd;
+    margin: 0 0 20px;
+  }
+
+  .nav-tabs .nav-item {
+    margin-bottom: -1px;
+  }
+
+  .nav-tabs .nav-link {
+    display: block;
+    padding: 0.5rem 1rem;
+    margin-right: 0.1rem;
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem 0.25rem 0 0;
+    text-decoration: none;
+    color: #555;
+  }
+
+  .nav-tabs .nav-link:hover {
+    background-color: #e9ecef;
+  }
+
+  .nav-tabs .nav-link.active {
+    color: #495057;
+    background-color: #fff;
+    border-color: #ddd #ddd #fff;
+    border-bottom-color: transparent;
+    font-weight: bolder;
+  }
 }
 
 //@import 'primevue-md-light-indigo/theme.css';

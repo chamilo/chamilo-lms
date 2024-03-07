@@ -18,6 +18,8 @@ $urlId = api_get_current_access_url_id();
 $currentUserId = api_get_user_id();
 
 $action = $_REQUEST['action'] ?? '';
+$view = $_GET['view'] ?? 'all';
+$showDeletedUsers = 'deleted' === $view;
 
 // Login as can be used by different roles
 if (isset($_GET['user_id']) && 'login_as' === $action) {
@@ -73,37 +75,27 @@ if ($variables) {
 Session::write('variables_to_show', $variablesToShow);
 
 $htmlHeadXtra[] = '<script>
-function active_user(element_div) {
-    id_image=$(element_div).attr("id");
-    image_clicked=$(element_div).attr("src");
-    image_clicked_info = image_clicked.split("/");
-    image_real_clicked = image_clicked_info[image_clicked_info.length-1];
-    var status = 1;
-    if (image_real_clicked == "accept.png") {
-        status = 0;
-    }
-    user_id=id_image.split("_");
-    ident="#img_"+user_id[1];
-    if (confirm("'.get_lang('AreYouSureToEditTheUserStatus', '').'")) {
-         $.ajax({
+function active_user(element) {
+    var userId = $(element).attr("id").split("_")[1];
+    var isActive = $(element).hasClass("mdi-check-circle");
+    var newStatus = isActive ? 0 : 1;
+    var confirmMessage = isActive ? "'.get_lang('Are you sure you want to lock this user?', '').'" : "'.get_lang('Are you sure you want to unlock this user?', '').'";
+    if (confirm(confirmMessage)) {
+        $.ajax({
             contentType: "application/x-www-form-urlencoded",
-            beforeSend: function(myObject) {
-                $(ident).attr("src","'.Display::returnIconPath('loading1.gif').'"); }, //candy eye stuff
+            beforeSend: function() {
+                $(element).attr("class", "mdi mdi-loading mdi-spin ch-tool-icon");
+            },
             type: "GET",
             url: "'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=active_user",
-            data: "user_id="+user_id[1]+"&status="+status,
+            data: "user_id=" + userId + "&status=" + newStatus,
             success: function(data) {
                 if (data == 1) {
-                    $(ident).attr("src", "'.Display::returnIconPath('accept.png', ICON_SIZE_TINY).'");
-                    $(ident).attr("title","'.get_lang('Lock').'");
-                }
-                if (data == 0) {
-                    $(ident).attr("src","'.Display::returnIconPath('error.png').'");
-                    $(ident).attr("title","'.get_lang('Unlock').'");
-                }
-                if (data == -1) {
-                    $(ident).attr("src", "'.Display::returnIconPath('warning.png').'");
-                    $(ident).attr("title","'.get_lang('Action not allowed').'");
+                    $(element).attr("class", "mdi mdi-check-circle ch-tool-icon");
+                    $(element).attr("title", "'.get_lang('Lock').'");
+                } else {
+                    $(element).attr("class", "mdi mdi-alert ch-tool-icon");
+                    $(element).attr("title", "'.get_lang('Unlock').'");
                 }
             }
         });
@@ -164,14 +156,12 @@ function trimVariables()
 }
 
 /**
- * Prepares the shared SQL query for the user table.
- * See get_user_data() and get_number_of_users().
- *
- * @param bool $getCount Whether to count, or get data
- *
- * @return string SQL query
+ * Prepares a shared SQL query for retrieving user data from the user table.
+ * This function is utilized by both get_user_data() and get_number_of_users()
+ * to construct the base SQL query. It supports filtering for active, inactive,
+ * and deleted users based on the provided parameters.
  */
-function prepare_user_sql_query($getCount)
+function prepare_user_sql_query(bool $getCount, bool $showDeletedUsers = false): string
 {
     $sql = '';
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -393,17 +383,23 @@ function prepare_user_sql_query($getCount)
         }
     }
 
+    if ($showDeletedUsers) {
+        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active = '.USER_SOFT_DELETED : ' AND u.active = '.USER_SOFT_DELETED;
+    } else {
+        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active <> '.USER_SOFT_DELETED : ' AND u.active <> '.USER_SOFT_DELETED;
+    }
+
     return $sql;
 }
 
 /**
- * Get the total number of users on the platform.
- *
- * @see SortableTable#get_total_number_of_items()
+ * Retrieves the total number of users from the database. This function can be
+ * configured to either include or exclude users marked as deleted based on the
+ * provided parameter.
  */
-function get_number_of_users()
+function get_number_of_users(bool $showDeletedUsers = false): int
 {
-    $sql = prepare_user_sql_query(true);
+    $sql = prepare_user_sql_query(true, $showDeletedUsers);
     $res = Database::query($sql);
     $obj = Database::fetch_object($res);
 
@@ -411,20 +407,13 @@ function get_number_of_users()
 }
 
 /**
- * Get the users to display on the current page (fill the sortable-table).
- *
- * @param   int     offset of first user to recover
- * @param   int     Number of users to get
- * @param   int     Column to sort on
- * @param   string  Order (ASC,DESC)
- *
- * @return array Users list
- *
- * @see SortableTable#get_table_data($from)
+ * Fetches a subset of user data from the database based on provided parameters. This function
+ * is used to populate a sortable and paginated table of users, allowing for dynamic data retrieval
+ * based on user interaction with the table (such as sorting and pagination).
  */
-function get_user_data($from, $number_of_items, $column, $direction)
+function get_user_data(int $from, int $number_of_items, int $column, string $direction, bool $showDeletedUsers = false): array
 {
-    $sql = prepare_user_sql_query(false);
+    $sql = prepare_user_sql_query(false, $showDeletedUsers);
     if (!in_array($direction, ['ASC', 'DESC'])) {
         $direction = 'ASC';
     }
@@ -509,17 +498,67 @@ function user_filter($name, $params, $row)
 }
 
 /**
+ * Generates action links for each user in the deleted users list. This function creates HTML
+ * links for editing user profiles, restoring deleted users, and permanently deleting users.
+ * It is designed to be used in a table that lists users marked as deleted.
+ */
+function modify_deleted_filter(int $user_id, string $url_params, array $row): string
+{
+
+    $result = '';
+    $editProfileUrl = Display::getProfileEditionLink($user_id, true);
+    $result .= '<a href="'.$editProfileUrl.'">'.
+        Display::getMdiIcon('pencil', 'ch-tool-icon', null, 22, get_lang('Edit')).'</a>';
+
+    $restoreUrl = "user_list.php?$url_params&".
+        http_build_query([
+            'action' => 'restore',
+            'user_id' => $user_id,
+            'sec_token' => Security::getTokenFromSession(),
+            'view' => Security::remove_XSS($_GET['view']),
+        ]);
+    $result .= Display::url(
+        Display::getMdiIcon('restore', 'ch-tool-icon', null, 22, get_lang('Restore')),
+        $restoreUrl,
+        [
+            'title' => get_lang('Restore'),
+            'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
+            'class' => 'delete-swal',
+        ]
+    );
+
+    $deleteUrl = "user_list.php?$url_params&".
+        http_build_query([
+            'action' => 'destroy',
+            'user_id' => $user_id,
+            'sec_token' => Security::getTokenFromSession(),
+            'view' => Security::remove_XSS($_GET['view']),
+        ]);
+    $result .= Display::url(
+        Display::getMdiIcon('delete-forever', 'ch-tool-icon', null, 22, get_lang('DeletePermanently')),
+        $deleteUrl,
+        [
+            'title' => get_lang('DeletePermanently'),
+            'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
+            'class' => 'delete-swal',
+        ]
+    );
+
+    return $result;
+}
+
+/**
  * Build the modify-column of the table.
  *
- * @param   int     The user id
- * @param   string  URL params to add to table links
- * @param   array   Row of elements to alter
+ * @param   int $user_id The user id
+ * @param   string $url_params URL params to add to table links
+ * @param   array $row Row of elements to alter
  *
  * @throws Exception
  *
  * @return string Some HTML-code with modify-buttons
  */
-function modify_filter($user_id, $url_params, $row)
+function modify_filter($user_id, $url_params, $row): string
 {
     $_admins_list = Session::read('admin_list', []);
     $is_admin = in_array($user_id, $_admins_list);
@@ -648,17 +687,6 @@ function modify_filter($user_id, $url_params, $row)
     }
 
     if (api_is_platform_admin()) {
-        /* Temporarily disabled until improved
-        $result .= ' <a data-title="'.get_lang('Free/Busy calendar').'" href="'.api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?a=get_user_agenda&user_id='.$user_id.'&modal_size=lg" class="agenda_opener ajax">'.
-            Display::getMdiIcon(
-                'calendar-text',
-                'ch-tool-icon',
-                null,
-                22,
-                get_lang('Free/Busy calendar')
-            ).
-            '</a>';
-        */
         if ($user_id != $currentUserId &&
             !$user_is_anonymous &&
             api_global_admin_can_edit_admin($user_id)
@@ -830,38 +858,33 @@ function modify_filter($user_id, $url_params, $row)
 /**
  * Build the active-column of the table to lock or unlock a certain user
  * lock = the user can no longer use this account.
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @param int    $active the current state of the account
- * @param string $params
- * @param array  $row
- *
- * @return string Some HTML-code with the lock/unlock button
  */
-function active_filter($active, $params, $row)
+function active_filter(int $active, string $params, array $row): string
 {
     $_user = api_get_user_info();
 
     $action = 'Unlock';
     $image = StateIcon::WARNING;
-    if ('1' == $active) {
+    if (USER_ACTIVE == $active) {
         $action = 'Lock';
         $image = StateIcon::COMPLETE;
-    } elseif ('-1' == $active) {
+    } elseif (USER_INACTIVE_AUTOMATIC == $active) {
         $action = 'edit';
         $image = StateIcon::EXPIRED;
+    } elseif (USER_SOFT_DELETED == $active) {
+        $action = 'soft_deleted';
+        $image = StateIcon::REJECT;
     }
 
     $result = '';
 
-    if ('edit' === $action) {
+    if (in_array($action, ['edit', 'soft_deleted'])) {
         $result = Display::getMdiIcon(
             $image,
             'ch-tool-icon',
             null,
             ICON_SIZE_TINY,
-            get_lang('Account expired')
+            'edit' === $action ? get_lang('Account expired') : get_lang('Account is removed temporally')
         );
     } elseif ($row['0'] != $_user['user_id']) {
         // you cannot lock yourself out otherwise you could disable all the
@@ -882,16 +905,8 @@ function active_filter($active, $params, $row)
 
 /**
  * Instead of displaying the integer of the status, we give a translation for the status.
- *
- * @param int $status
- *
- * @return string translation
- *
- * @version march 2008
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  */
-function status_filter($status)
+function status_filter(int $status): string
 {
     $name = api_get_status_langvars();
 
@@ -1006,6 +1021,106 @@ if (!empty($action)) {
                     }
                 }
                 break;
+            case 'restore':
+                $userIds = [];
+                $isMassDeletion = false;
+                if (api_is_platform_admin() && !empty($_POST['id']) && is_array($_POST['id'])) {
+                    $userIds = $_POST['id'];
+                    $isMassDeletion = true;
+                } elseif (!empty($_GET['user_id'])) {
+                    $userIds[] = $_GET['user_id'];
+                }
+
+                $numberOfAffectedUsers = 0;
+                foreach ($userIds as $userId) {
+                    if ($userId != $currentUserId && UserManager::change_active_state($userId, 1)) {
+                        $numberOfAffectedUsers++;
+                    }
+                }
+
+                if ($isMassDeletion) {
+                    if (count($userIds) == $numberOfAffectedUsers) {
+                        $message = Display::return_message(
+                            get_lang('Selected users restored'),
+                            'confirmation'
+                        );
+                    } else {
+                        $message = Display::return_message(
+                            get_lang('Some of the selected users have not been restored. We recommend you confirm which, by using the advanced search.'),
+                            'error'
+                        );
+                    }
+                } else {
+                    if ($numberOfAffectedUsers > 0) {
+                        $message = Display::return_message(
+                            get_lang('The user has been restored.'),
+                            'confirmation'
+                        );
+                    } else {
+                        $message = Display::return_message(
+                            get_lang('The user has not been restored. Please confirm the user ID and try again.'),
+                            'error'
+                        );
+                    }
+                }
+
+                Display::addFlash($message);
+
+                if (!$isMassDeletion) {
+                    header('Location: '.api_get_self().'?view='.$view);
+                    exit;
+                }
+                break;
+            case 'destroy':
+                $userIds = [];
+                $isMassDeletion = false;
+                if (api_is_platform_admin() && !empty($_POST['id']) && is_array($_POST['id'])) {
+                    $userIds = $_POST['id'];
+                    $isMassDeletion = true;
+                } elseif (!empty($_GET['user_id'])) {
+                    $userIds[] = $_GET['user_id'];
+                }
+
+                $numberOfAffectedUsers = 0;
+                foreach ($userIds as $userId) {
+                    if ($userId != $currentUserId && UserManager::delete_user($userId, true)) {
+                        $numberOfAffectedUsers++;
+                    }
+                }
+
+                if ($isMassDeletion) {
+                    if (count($userIds) == $numberOfAffectedUsers) {
+                        $message = Display::return_message(
+                            get_lang('Selected users deleted permanently'),
+                            'confirmation'
+                        );
+                    } else {
+                        $message = Display::return_message(
+                            get_lang('Some of the selected users have not been deleted. We recommend you confirm which, by using the advanced search.'),
+                            'error'
+                        );
+                    }
+                } else {
+                    if ($numberOfAffectedUsers > 0) {
+                        $message = Display::return_message(
+                            get_lang('The user has been deleted permanently'),
+                            'confirmation'
+                        );
+                    } else {
+                        $message = Display::return_message(
+                            get_lang('The user has not been deleted. Please confirm the user ID and try again.'),
+                            'error'
+                        );
+                    }
+                }
+
+                Display::addFlash($message);
+
+                if (!$isMassDeletion) {
+                    header('Location: '.api_get_self().'?view='.$view);
+                    exit;
+                }
+                break;
             case 'anonymize':
                 $message = UserManager::anonymizeUserWithVerification($_GET['user_id']);
                 Display::addFlash($message);
@@ -1027,6 +1142,7 @@ $form->addText(
         'placeholder' => get_lang('Search users'),
     ]
 );
+$form->addElement('hidden', 'view', $view);
 $form->addButtonSearch(get_lang('Search'));
 
 $searchAdvanced = '
@@ -1039,7 +1155,7 @@ $searchAdvanced = '
 $actionsLeft = '';
 $actionsCenter = '';
 $actionsRight = '';
-if (api_is_platform_admin()) {
+if (api_is_platform_admin() && !$showDeletedUsers) {
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
          Display::getMdiIcon('account-plus', 'ch-tool-icon-gradient', null, 32, get_lang('Add a user')).'</a>';
 }
@@ -1065,6 +1181,7 @@ if (isset($_GET['keyword'])) {
 }
 // Create a sortable table with user-data
 $parameters['sec_token'] = Security::get_token();
+$parameters['view'] = $view;
 
 $_admins_list = array_keys(UserManager::get_all_administrators());
 Session::write('admin_list', $_admins_list);
@@ -1077,7 +1194,7 @@ $form = new FormValidator(
     [],
     FormValidator::LAYOUT_HORIZONTAL
 );
-
+$form->addElement('hidden', 'view', $view);
 $form->addElement('header', get_lang('Advanced search'));
 $form->addText('keyword_firstname', get_lang('First name'), false);
 $form->addText('keyword_lastname', get_lang('Last name'), false);
@@ -1142,8 +1259,8 @@ $form = '<div id="advanced_search_form" style="display:none;">'.$form->returnFor
 
 $table = new SortableTable(
     'users',
-    'get_number_of_users',
-    'get_user_data',
+    function() use ($showDeletedUsers) { return get_number_of_users($showDeletedUsers); },
+    function($from, $number_of_items, $column, $direction) use ($showDeletedUsers) { return get_user_data($from, $number_of_items, $column, $direction, $showDeletedUsers); },
     (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2,
     20,
     'ASC'
@@ -1173,23 +1290,31 @@ $table->set_column_filter(4, 'user_filter');
 $table->set_column_filter(6, 'email_filter');
 $table->set_column_filter(7, 'status_filter');
 $table->set_column_filter(8, 'active_filter');
-$table->set_column_filter(11, 'modify_filter');
+$actionsList = [];
+if ($showDeletedUsers) {
+    $table->set_column_filter(11, 'modify_deleted_filter');
+    $actionsList['restore'] = get_lang('Restore');
+    if (api_is_platform_admin() &&
+        !api_get_configuration_value('deny_delete_users')
+    ) {
+        $actionsList['destroy'] = get_lang('Destroy');
+    }
+} else {
+    $table->set_column_filter(11, 'modify_filter');
+    if (api_is_platform_admin() &&
+        !api_get_configuration_value('deny_delete_users')
+    ) {
+        $actionsList['delete'] = get_lang('Remove from portal');
+    }
+    $actionsList['disable'] = get_lang('Disable');
+    $actionsList['enable'] = get_lang('Enable');
+}
+$table->set_form_actions($actionsList);
 
 // Hide email column if login is email, to avoid column with same data
 if ('true' === api_get_setting('login_is_email')) {
     $table->setHideColumn(6);
 }
-
-// Only show empty actions bar if delete users has been blocked
-$actionsList = [];
-if (api_is_platform_admin() &&
-    !api_get_configuration_value('deny_delete_users')
-) {
-    $actionsList['delete'] = get_lang('Remove from portal');
-}
-$actionsList['disable'] = get_lang('Disable');
-$actionsList['enable'] = get_lang('Enable');
-$table->set_form_actions($actionsList);
 
 $table_result = $table->return_table();
 $extra_search_options = '';
@@ -1259,7 +1384,21 @@ if (0 == $table->get_total_number_of_items()) {
         }
     }
 }
-$toolbarActions = Display::toolbarAction('toolbarUser', [$actionsLeft, $actionsCenter.$actionsRight]);
+
+$tabsHtml = '
+<div class="users-list">
+    <ul class="nav nav-tabs">
+      <li class="nav-item '.($view == 'all' ? 'active' : '').'">
+        <a class="nav-link '.($view == 'all' ? 'active' : '').'" href="user_list.php?view=all">'.get_lang('All users').'</a>
+      </li>
+      <li class="nav-item '.($view == 'deleted' ? 'active' : '').'">
+        <a class="nav-link '.($view == 'deleted' ? 'active' : '').'" href="user_list.php?view=deleted">'.get_lang('Deleted Users').'</a>
+      </li>
+    </ul>
+</div>';
+
+$toolbarActions = $tabsHtml;
+$toolbarActions .= Display::toolbarAction('toolbarUser', [$actionsLeft, $actionsCenter.$actionsRight]);
 
 $tpl = new Template($tool_name);
 $tpl->assign('actions', $toolbarActions);

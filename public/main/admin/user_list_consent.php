@@ -173,6 +173,8 @@ function prepare_user_sql_query($getCount)
         $sql .= " AND url_rel_user.access_url_id = ".api_get_current_access_url_id();
     }
 
+    $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active <> '.USER_SOFT_DELETED : ' AND u.active <> '.USER_SOFT_DELETED;
+
     return $sql;
 }
 

@@ -1281,7 +1281,7 @@ class TicketManager
                     FROM $table_support_messages message
                     INNER JOIN $table_main_user user
                     ON (message.sys_insert_user_id = user.id)
-                    WHERE
+                    WHERE user.active <> ".USER_SOFT_DELETED." AND
                         message.ticket_id = '$ticketId' ";
             $result = Database::query($sql);
             $ticket['messages'] = [];
@@ -1812,6 +1812,7 @@ class TicketManager
             }
         }
 
+        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE user.active <> '.USER_SOFT_DELETED : ' AND user.active <> '.USER_SOFT_DELETED;
         $sql .= " LIMIT $from,$number_of_items";
 
         $result = Database::query($sql);

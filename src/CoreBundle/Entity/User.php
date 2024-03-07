@@ -93,6 +93,12 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
       public const STUDENT = 5;
       public const ANONYMOUS = 6;*/
 
+    // User active field constants
+    public const ACTIVE = 1;
+    public const INACTIVE = 0;
+    public const INACTIVE_AUTOMATIC = -1;
+    public const SOFT_DELETED = -2;
+
     #[Groups(['user_json:read'])]
     #[ORM\OneToOne(targetEntity: ResourceNode::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'resource_node_id', onDelete: 'CASCADE')]
@@ -635,8 +641,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[ORM\Column(name: 'expiration_date', type: 'datetime', unique: false, nullable: true)]
     protected ?DateTime $expirationDate = null;
 
-    #[ORM\Column(name: 'active', type: 'boolean')]
-    protected bool $active;
+    #[ORM\Column(name: 'active', type: 'integer')]
+    protected int $active;
 
     #[ORM\Column(name: 'openid', type: 'string', length: 255, unique: false, nullable: true)]
     protected ?string $openid = null;
@@ -728,7 +734,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->authSource = 'platform';
         $this->status = CourseRelUser::STUDENT;
         $this->salt = sha1(uniqid('', true));
-        $this->active = true;
+        $this->active = 1;
         $this->locked = false;
         $this->expired = false;
         $this->courses = new ArrayCollection();
@@ -937,11 +943,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     public function getIsActive(): bool
     {
-        if (1 == $this->active) {
-            return true;
-        }
-
-        return false;
+        return $this->active === 1;
     }
 
     public function isEnabled(): bool
@@ -1138,7 +1140,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    public function getActive(): bool
+    public function getActive(): int
     {
         return $this->active;
     }
@@ -1148,7 +1150,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->getIsActive();
     }
 
-    public function setActive(bool $active): self
+    public function setActive(int $active): self
     {
         $this->active = $active;
 

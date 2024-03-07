@@ -447,6 +447,8 @@ class SessionManager
             }
         }
 
+        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active <> '.USER_SOFT_DELETED : ' AND u.active <> '.USER_SOFT_DELETED;
+
         $result_rows = Database::query($sql);
         $row = Database::fetch_array($result_rows);
         $num = $row['total_rows'];
@@ -4368,7 +4370,7 @@ class SessionManager
             $sql .= " WHERE (au.access_url_id = $urlId OR au.access_url_id is null )";
         }
 
-        $sql .= ' ORDER BY su.relation_type, ';
+        $sql .= ' AND u.active <> '.USER_SOFT_DELETED.' ORDER BY su.relation_type, ';
         $sql .= api_sort_by_first_name() ? ' u.firstname, u.lastname' : '  u.lastname, u.firstname';
 
         $result = Database::query($sql);
@@ -6164,7 +6166,7 @@ class SessionManager
 
         $sessionConditions = '';
         $courseConditions = '';
-        $userConditions = '';
+        $userConditions = ' AND u.active <> '.USER_SOFT_DELETED.' ';
 
         if (isset($active)) {
             $active = (int) $active;
@@ -7946,7 +7948,7 @@ class SessionManager
                 'getFullname'
             );
         } else {
-            $sql = "SELECT COUNT(1) FROM $tbl_user WHERE status = 1";
+            $sql = "SELECT COUNT(1) FROM $tbl_user WHERE active <> ".USER_SOFT_DELETED." AND status = 1";
             $rs = Database::query($sql);
             $countUsers = (int) Database::result($rs, 0, '0');
 
@@ -7956,7 +7958,7 @@ class SessionManager
 
                 $sql = "SELECT id as user_id, lastname, firstname, username
                         FROM $tbl_user
-                        WHERE status = '1' ".
+                        WHERE active <> -1 AND status = '1' ".
                         $orderClause;
 
                 if (api_is_multiple_url_enabled()) {
@@ -7968,6 +7970,7 @@ class SessionManager
                         INNER JOIN $userRelAccessUrlTable url_user
                         ON (url_user.user_id = user.id)
                         WHERE
+                            user.active <> -1 AND
                             access_url_id = $accessUrlId AND
                             status = 1 "
                             .$orderClause;
@@ -8317,7 +8320,7 @@ class SessionManager
         $tbl_session_field_options = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
         $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
-        $where = 'WHERE 1 = 1 ';
+        $where = 'WHERE 1 = 1 AND u.active <> -1 ';
 
         if (api_is_session_admin() &&
             'false' == api_get_setting('allow_session_admins_to_see_all_sessions')

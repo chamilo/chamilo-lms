@@ -7,10 +7,11 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\ApiResource;
 
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use DateTime;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-class CalendarEvent
+class CalendarEvent extends AbstractResource
 {
     public function __construct(
         #[Groups(['calendar_event:read'])]
@@ -28,6 +29,19 @@ class CalendarEvent
         #[Groups(['calendar_event:read'])]
         public ?string $url = null,
         #[Groups(['calendar_event:read'])]
+        public ?string $invitationType = null,
+        #[Groups(['calendar_event:read'])]
+        public bool $collective = false,
+        #[Groups(['calendar_event:read'])]
+        public int $subscriptionVisibility = CCalendarEvent::SUBSCRIPTION_VISIBILITY_NO,
+        #[Groups(['calendar_event:read'])]
+        public ?int $subscriptionItemId = null,
+        #[Groups(['calendar_event:read'])]
+        public int $maxAttendees = 0,
+        #[Groups(['calendar_event:read'])]
         public ?ResourceNode $resourceNode = null,
-    ) {}
+        ?array $resourceLinkListFromEntity = null,
+    ) {
+        $this->resourceLinkListFromEntity = $resourceLinkListFromEntity;
+    }
 }

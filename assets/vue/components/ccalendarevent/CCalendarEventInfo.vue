@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col space-y-4">
     <h5 v-text="event.title" />
 
     <p v-text="abbreviatedDatetime(event.startDate)" />
@@ -13,11 +13,7 @@
 
     <div v-html="event.content" />
 
-    <div
-      v-if="event.resourceLinkListFromEntity && event.resourceLinkListFromEntity.length"
-      aria-invalid="spelling"
-      @click="window.alert('asdfsadf')"
-    >
+    <div v-if="allowCollectiveInvitations && type.invitation === event.invitationType">
       <h6 v-t="'Invitees'" />
 
       <ShowLinks
@@ -30,10 +26,12 @@
 
 <script setup>
 import { useFormatDate } from "../../composables/formatDate"
-
 import ShowLinks from "../resource_links/ShowLinks"
+import { useCalendarInvitations } from "../../composables/calendar/calendarInvitations"
+import { type } from "../../constants/entity/ccalendarevent"
 
 const { abbreviatedDatetime } = useFormatDate()
+const { allowCollectiveInvitations } = useCalendarInvitations()
 
 // eslint-disable-next-line no-undef
 defineProps({

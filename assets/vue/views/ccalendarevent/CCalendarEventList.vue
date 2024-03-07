@@ -61,7 +61,7 @@
           @click="confirmDelete"
         />
         <BaseButton
-          v-if="isEventEditable"
+          v-if="allowToEdit"
           :label="t('Edit')"
           type="secondary"
           @click="dialog = true"
@@ -129,6 +129,7 @@ import { useLocale, useParentLocale } from "../../composables/locale"
 import { storeToRefs } from "pinia"
 import CalendarSectionHeader from "../../components/ccalendarevent/CalendarSectionHeader.vue"
 import { useCalendarActionButtons } from "../../composables/calendar/calendarActionButtons"
+import { useCalendarEvent } from "../../composables/calendar/calendarEvent"
 
 const store = useStore()
 const confirm = useConfirm()
@@ -140,10 +141,12 @@ const { abbreviatedDatetime } = useFormatDate()
 
 const { showAddButton } = useCalendarActionButtons()
 
+const { isEditableByUser } = useCalendarEvent()
+
 const item = ref({})
 const dialog = ref(false)
 const dialogShow = ref(false)
-const isEventEditable = ref(false)
+const allowToEdit = ref(false)
 
 const currentUser = computed(() => store.getters["security/getUser"])
 const { t } = useI18n()
@@ -244,17 +247,7 @@ const calendarOptions = ref({
     item.value["endDate"] = event.end
     item.value["parentResourceNodeId"] = event.extendedProps.resourceNode.creator.id
 
-    isEventEditable.value = item.value["parentResourceNodeId"] === currentUser.value["id"]
-
-    if (!isEventEditable.value && event.extendedProps.collective && event.extendedProps.resourceLinkListFromEntity) {
-      const resourceLink = event.extendedProps.resourceLinkListFromEntity.find(
-        (linkEntity) => linkEntity.user.id === currentUser.value.id,
-      )
-
-      if (resourceLink) {
-        isEventEditable.value = true
-      }
-    }
+    allowToEdit.value = isEditableByUser(item.value, currentUser.value.id)
 
     dialogShow.value = true
   },

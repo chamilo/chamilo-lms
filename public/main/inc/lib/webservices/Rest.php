@@ -1830,9 +1830,6 @@ class Rest extends WebService
                 case 'email':
                     $user->setEmail($value);
                     break;
-                case 'enabled':
-                    $user->setEnabled($value);
-                    break;
                 case 'lastname':
                     $user->setLastname($value);
                     break;

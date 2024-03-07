@@ -200,11 +200,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected bool $locked;
 
     #[Groups(['user:read', 'user:write'])]
-    #[Assert\NotNull]
-    #[ORM\Column(name: 'enabled', type: 'boolean')]
-    protected bool $enabled;
-
-    #[Groups(['user:read', 'user:write'])]
     #[ORM\Column(name: 'expired', type: 'boolean')]
     protected bool $expired;
 
@@ -734,7 +729,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->status = CourseRelUser::STUDENT;
         $this->salt = sha1(uniqid('', true));
         $this->active = true;
-        $this->enabled = true;
         $this->locked = false;
         $this->expired = false;
         $this->courses = new ArrayCollection();
@@ -952,13 +946,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function isEnabled(): bool
     {
         return $this->isActive();
-    }
-
-    public function setEnabled(bool $boolean): self
-    {
-        $this->enabled = $boolean;
-
-        return $this;
     }
 
     /**

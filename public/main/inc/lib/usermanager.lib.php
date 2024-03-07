@@ -4645,18 +4645,18 @@ class UserManager
     }
 
     /**
-     * This function check if an user is followed by human resources manager.
+     * This function checks if a user is followed by provided human resources managers.
      *
      * @param int $user_id
      * @param int $hr_dept_id Human resources manager
      *
      * @return bool
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
      */
-    public static function is_user_followed_by_drh($user_id, $hr_dept_id)
+    public static function is_user_followed_by_drh(int $user_id, int $hr_dept_id): bool
     {
         $tbl_user_rel_user = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-        $user_id = (int) $user_id;
-        $hr_dept_id = (int) $hr_dept_id;
         $result = false;
 
         $sql = "SELECT user_id FROM $tbl_user_rel_user
@@ -4677,9 +4677,11 @@ class UserManager
      *
      * @param array $courseInfo
      *
-     * @return mixed The user id, or false if the session ID was negative
+     * @return int The user id, or 0 if the session ID was negative
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
      */
-    public static function get_user_id_of_course_admin_or_session_admin($courseInfo)
+    public static function get_user_id_of_course_admin_or_session_admin(array $courseInfo): int
     {
         $session = api_get_session_id();
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -4687,12 +4689,12 @@ class UserManager
         $table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
         if (empty($courseInfo)) {
-            return false;
+            return 0;
         }
 
         $courseId = $courseInfo['real_id'];
 
-        if (0 == $session || is_null($session)) {
+        if (0 == $session) {
             $sql = 'SELECT u.id uid FROM '.$table_user.' u
                     INNER JOIN '.$table_course_user.' ru
                     ON ru.user_id = u.id
@@ -4707,24 +4709,25 @@ class UserManager
                 return $row['uid'];
             } else {
                 $my_num_rows = $num_rows;
-                $my_user_id = Database::result($rs, $my_num_rows - 1, 'uid');
 
-                return $my_user_id;
+                return Database::result($rs, $my_num_rows - 1, 'uid');
             }
         } elseif ($session > 0) {
-            $sql = 'SELECT u.id uid FROM '.$table_user.' u
+            $sql = 'SELECT u.id as uid FROM '.$table_user.' u
                     INNER JOIN '.$table_session_course_user.' sru
-                    ON sru.user_id=u.id
+                    ON sru.user_id = u.id
                     WHERE
-                        sru.c_id="'.$courseId.'" AND
+                        sru.c_id = '.$courseId.' AND
                         sru.status = '.SessionEntity::COURSE_COACH;
             $rs = Database::query($sql);
-            $row = Database::fetch_array($rs);
+            if (Database::num_rows($rs) > 0) {
+                $row = Database::fetch_assoc($rs);
 
-            return $row['uid'];
+                return $row['uid'];
+            }
         }
 
-        return false;
+        return 0;
     }
 
     /**

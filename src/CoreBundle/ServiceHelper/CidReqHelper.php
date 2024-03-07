@@ -20,8 +20,7 @@ class CidReqHelper
 {
     public function __construct(
         private readonly RequestStack $requestStack,
-    ) {
-    }
+    ) {}
 
     private function getRequest(): ?Request
     {

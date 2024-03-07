@@ -931,16 +931,17 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         }*/
 
     /**
-     * Get a bool on whether the user is active or not. Active can be "-1" which means pre-deleted, and is returned as false (not active)
+     * Get a bool on whether the user is active or not. Active can be "-1" which means pre-deleted, and is returned as false (not active).
+     *
      * @return bool True if active = 1, false in any other case (0 = inactive, -1 = predeleted)
      */
     public function getIsActive(): bool
     {
-        if ($this->active == 1) {
+        if (1 == $this->active) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function isEnabled(): bool

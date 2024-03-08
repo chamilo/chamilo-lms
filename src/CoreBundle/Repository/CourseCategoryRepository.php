@@ -32,7 +32,7 @@ class CourseCategoryRepository extends ServiceEntityRepository
      *
      * @return CourseCategory[]
      */
-    public function findAllInAccessUrl(int $accessUrl, bool $allowBaseCategories = false, int $parentId = 0)
+    public function findAllInAccessUrl(int $accessUrl, bool $allowBaseCategories = false, int $parentId = 0): array
     {
         $qb = $this->createQueryBuilder('c');
         $qb

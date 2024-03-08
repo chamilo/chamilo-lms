@@ -1,4 +1,4 @@
-.p-dropdown {
+.p-dropdown, .p-multiselect {
   @apply border border-support-3 bg-white rounded-lg transition w-full duration-200
     hover:border-primary hover:text-gray-90 hover:outline-0 hover:outline-none;
 
@@ -8,7 +8,7 @@
     }
   }
 
-  .p-dropdown-label {
+  .p-dropdown-label, .p-multiselect-label {
     @apply bg-transparent border-none
       focus:outline-0 focus:outline-none;
 
@@ -29,7 +29,7 @@
   }
 }
 
-.p-dropdown-panel {
+.p-dropdown-panel, .p-autocomplete-panel, .p-multiselect-panel {
   @apply bg-white rounded-lg text-gray-90 shadow-lg;
 
   .p-dropdown-header {
@@ -87,5 +87,8 @@
       //background: $inputListItemBg;
     }
   }
+}
+.p-multiselect-label-container {
+  @apply p-2;
 }
 

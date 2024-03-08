@@ -7198,7 +7198,7 @@ class learnpath
     {
         // Using doctrine extensions
         $repo = Container::getLpCategoryRepository();
-        $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId), api_get_session_entity());
+        $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId), api_get_session_entity(), null, null, true, true);
 
         return $qb->getQuery()->getResult();
     }
@@ -8617,20 +8617,25 @@ class learnpath
         $lp = Container::getLpRepository()->find($lpId);
         if ($lp) {
             $resourceNode = $lp->getResourceNode();
-            $position = $resourceNode->getDisplayOrder();
-            $resourceNodeId = $resourceNode->getId();
+            $resourceTypeGroup = $resourceNode->getResourceType()->getId();
+            $course = api_get_course_entity();
+            $session = api_get_session_entity();
+            $group = api_get_group_entity();
 
-            $item = $em->find(ResourceNode::class, $resourceNodeId);
-            if ($item) {
-                $newPosition = 0;
+            $link = $resourceNode->getResourceLinkByTypeGroup($resourceTypeGroup, $course, $session, null, $group);
+
+            if ($link) {
                 if ('down' === $direction) {
-                    $newPosition = $position + 1;
+                    $link->setDisplayOrder(
+                        $link->getDisplayOrder() + 1
+                    );
                 }
                 if ('up' === $direction) {
-                    $newPosition = $position - 1;
+                    $link->setDisplayOrder(
+                        $link->getDisplayOrder() - 1
+                    );
                 }
-                $item->setDisplayOrder($newPosition);
-                $em->persist($item);
+
                 $em->flush();
             }
         }

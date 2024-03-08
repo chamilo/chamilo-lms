@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
@@ -70,7 +72,19 @@ final class Version20240112191200 extends AbstractMigrationChamilo
                 if ($resource && $resource->hasResourceNode()) {
                     $resourceNode = $resource->getResourceNode();
                     if ($resourceNode) {
-                        $resourceNode->setDisplayOrder($resourcePosition);
+                        $resourceTypeGroup = $resourceNode->getResourceType()->getId();
+                        $course = $em->find(Course::class, $resourceData['c_id']);
+                        $session = isset($resourceData['session_id'])
+                            ? $em->find(Session::class, $resourceData['session_id'])
+                            : null;
+
+                        $link = $resourceNode->getResourceLinkByTypeGroup($resourceTypeGroup, $course, $session);
+
+                        if ($link) {
+                            $link->setDisplayOrder(
+                                $resourcePosition > 0 ? $resourcePosition - 1 : 0
+                            );
+                        }
                     }
                 }
             }

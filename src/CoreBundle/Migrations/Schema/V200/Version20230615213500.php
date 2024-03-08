@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -52,12 +52,19 @@ final class Version20230615213500 extends AbstractMigrationChamilo
                 $resource = $lpRepo->find($lpId);
                 if ($resource->hasResourceNode()) {
                     $resourceNode = $resource->getResourceNode();
-                    $resourceNodeId = $resourceNode->getId();
 
-                    $item = $em->find(ResourceNode::class, $resourceNodeId);
-                    if ($item) {
-                        $item->setDisplayOrder($position);
-                        $em->persist($item);
+                    $resourceTypeGroup = $resourceNode->getResourceType()->getId();
+                    $course = $em->find(Course::class, $lp['c_id']);
+                    $session = isset($lp['session_id'])
+                        ? $em->find(Session::class, $lp['session_id'])
+                        : null;
+
+                    $link = $resourceNode->getResourceLinkByTypeGroup($resourceTypeGroup, $course, $session);
+
+                    if ($link) {
+                        $link->setDisplayOrder(
+                            $position > 0 ? $position - 1 : 0
+                        );
                     }
                 }
             }

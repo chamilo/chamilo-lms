@@ -397,7 +397,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $this->addCourseSessionGroupQueryBuilder($course, $session, $group, $qb);
 
         if ($displayOrder) {
-            $qb->orderBy('node.displayOrder', 'ASC');
+            $qb->orderBy('links.displayOrder', 'ASC');
         }
 
         return $qb;

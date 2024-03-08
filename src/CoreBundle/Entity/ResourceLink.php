@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Chamilo\CourseBundle\Entity\CGroup;
 use DateTimeInterface;
@@ -14,14 +15,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Sortable\Entity\Repository\SortableRepository;
 use LogicException;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource]
 #[ORM\Table(name: 'resource_link')]
-#[ORM\Entity(repositoryClass: SortableRepository::class)]
+#[ORM\Entity(repositoryClass: ResourceLinkRepository::class)]
 class ResourceLink implements Stringable
 {
     use TimestampableTypedEntity;

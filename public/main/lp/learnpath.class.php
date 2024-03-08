@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CourseBundle\Entity\CLpRelUser;
@@ -787,39 +788,43 @@ class learnpath
             return false;
         }
 
-        $lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $lp_view = Database::get_course_table(TABLE_LP_VIEW);
-        $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
+
+        //$lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        //$lp_view = Database::get_course_table(TABLE_LP_VIEW);
+        //$lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
         // Delete lp item id.
-        foreach ($this->items as $lpItemId => $dummy) {
-            $sql = "DELETE FROM $lp_item_view
-                    WHERE lp_item_id = '".$lpItemId."'";
-            Database::query($sql);
-        }
+        //foreach ($this->items as $lpItemId => $dummy) {
+        //    $sql = "DELETE FROM $lp_item_view
+        //            WHERE lp_item_id = '".$lpItemId."'";
+        //    Database::query($sql);
+        //}
 
         // Proposed by Christophe (nickname: clefevre)
-        $sql = "DELETE FROM $lp_item
-                WHERE lp_id = ".$this->lp_id;
-        Database::query($sql);
+        //$sql = "DELETE FROM $lp_item
+        //        WHERE lp_id = ".$this->lp_id;
+        //Database::query($sql);
 
-        $sql = "DELETE FROM $lp_view
-                WHERE lp_id = ".$this->lp_id;
-        Database::query($sql);
+        //$sql = "DELETE FROM $lp_view
+        //        WHERE lp_id = ".$this->lp_id;
+        //Database::query($sql);
 
-        $table = Database::get_course_table(TABLE_LP_REL_USERGROUP);
-        $sql = "DELETE FROM $table
-                WHERE
-                    lp_id = {$this->lp_id}";
-        Database::query($sql);
+        //$table = Database::get_course_table(TABLE_LP_REL_USERGROUP);
+        //$sql = "DELETE FROM $table
+        //        WHERE
+        //            lp_id = {$this->lp_id}";
+        //Database::query($sql);
 
-        $repo = Container::getLpRepository();
-        $lp = $repo->find($this->lp_id);
-        Database::getManager()->remove($lp);
-        Database::getManager()->flush();
+        $lp = Container::getLpRepository()->find($this->lp_id);
+        $link = $lp->resourceNode->getResourceLinkByTypeGroup($lp->resourceNode->getResourceType()->getId(), $course, $session);
 
-        // Updates the display order of all lps.
-        $this->update_display_order();
+        if (!$link) {
+            return false;
+        }
+
+        Database::getManager()->getRepository(ResourceLink::class)->remove($link);
 
         $link_info = GradebookUtils::isResourceInCourseGradebook(
             api_get_course_id(),
@@ -832,9 +837,9 @@ class learnpath
             GradebookUtils::remove_resource_from_course_gradebook($link_info['id']);
         }
 
-        if ('true' === api_get_setting('search_enabled')) {
-            delete_all_values_for_item($this->cc, TOOL_LEARNPATH, $this->lp_id);
-        }
+        //if ('true' === api_get_setting('search_enabled')) {
+        //    delete_all_values_for_item($this->cc, TOOL_LEARNPATH, $this->lp_id);
+        //}
     }
 
     /**

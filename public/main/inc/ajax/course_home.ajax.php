@@ -222,7 +222,7 @@ switch ($action) {
                 api_get_user_id(),
                 api_get_course_info($item['code']),
                 $session_id,
-                'lp.publishedOn DESC'
+                'resource.publishedOn DESC'
             );
             $flat_list = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;

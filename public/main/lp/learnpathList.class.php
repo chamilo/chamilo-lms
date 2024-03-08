@@ -55,16 +55,15 @@ class LearnpathList
         $course_id = $courseInfo['real_id'];
         $this->user_id = $user_id;
 
-        $order = ' ORDER BY lp.displayOrder ASC, lp.title ASC';
-        if (isset($order_by)) {
-            $order = Database::parse_conditions(['order' => $order_by]);
-        }
-
         $repo = Container::getLpRepository();
 
         $course = api_get_course_entity($course_id);
         $session = api_get_session_entity($session_id);
         $qb = $repo->getResourcesByCourse($course, $session, null, null, true, true);
+
+        if (!empty($order_by)) {
+            $qb->addOrderBy($order_by);
+        }
 
         $now = api_get_utc_datetime();
         if ($check_publication_dates) {

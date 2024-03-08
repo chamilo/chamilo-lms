@@ -1083,6 +1083,8 @@ function get_forum_categories(int $courseId = 0, int $sessionId = 0): Array
 /**
  * This function retrieves all the fora in a given forum category.
  *
+ * @todo: Fixes error if there forums with no category.
+ *
  * @param int $categoryId the id of the forum category
  * @param int $courseId   Optional. The course ID
  *
@@ -1101,7 +1103,6 @@ function get_forums_in_category(int $categoryId, int $courseId = 0)
     $qb
         ->andWhere('resource.forumCategory = :catId')
         ->setParameter('catId', $categoryId)
-        ->orderBy('node.displayOrder')
     ;
 
     return $qb->getQuery()->getResult();

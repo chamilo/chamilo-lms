@@ -9046,4 +9046,10 @@ $PasswordExpiredPleaseSetNewPassword = "Your password has expired. Please set a 
 $CopyIframeCodeToIncludeExercise = "Copy iframe code below to include the exercise :";
 $MyMissingSignatures = "My missing signatures";
 $OnlyShowActiveUsers = "Only show active users";
+$UpdateCourseListXMLCSV = "Update courses list";
+$CodeIsRequired = "A code is required";
+$CourseCodeDoesNotExist = "This course code does not exist";
+$DuplicateCode = "Duplicate code";
+$CoursesUpdatedSuccessfully = "Courses updated successfully";
+$UpdateFailedForCourses = "The update failed for the following courses";
 ?>

@@ -163,7 +163,7 @@ class Statistics
         } else {
             $sql = "SELECT COUNT(DISTINCT(id)) AS number
                     FROM $user_table
-                    WHERE 1 = 1 AND active <> ".USER_SOFT_DELETED." AND $status_filter $active_filter";
+                    WHERE 1 = 1 AND active <> ".USER_SOFT_DELETED." $status_filter $active_filter";
             if (isset($categoryCode)) {
                 $categoryCode = Database::escape_string($categoryCode);
                 $status_filter = isset($status) ? ' AND status = '.intval($status) : '';

@@ -1025,7 +1025,6 @@ function moveUpDown(string $content, string $direction, int $id): string
 {
     $em = Database::getManager();
 
-    $entity = null;
     if ('forumcategory' === $content) {
         $entityRepo = $em->getRepository(CForumCategory::class);
     } elseif ('forum' === $content) {
@@ -1046,12 +1045,25 @@ function moveUpDown(string $content, string $direction, int $id): string
         return false;
     }
 
-    $currentDisplayOrder = $resourceNode->getDisplayOrder();
+    $course = api_get_course_entity();
+    $session = api_get_session_entity();
 
-    $newPosition = $currentDisplayOrder + ($direction === 'down' ? 1 : -1);
-    $newPosition = max(0, $newPosition);
+    $link = $resourceNode->getResourceLinkByContext($course, $session);
 
-    $resourceNode->setDisplayOrder($newPosition);
+    if (!$link) {
+        return false;
+    }
+
+    $currentDisplayOrder = $link->getDisplayOrder();
+
+    if ('down' === $direction) {
+        $currentDisplayOrder++;
+    } else {
+        $currentDisplayOrder--;
+    }
+
+    $link->setDisplayOrder($currentDisplayOrder);
+
     $em->flush();
 
     Display::addFlash(Display::return_message(get_lang('Updated')));
@@ -1099,7 +1111,7 @@ function get_forums_in_category(int $categoryId, int $courseId = 0)
     $repo = Container::getForumRepository();
     $course = api_get_course_entity($courseId);
 
-    $qb = $repo->getResourcesByCourse($course, null);
+    $qb = $repo->getResourcesByCourse($course, null, null, null, true, true);
     $qb
         ->andWhere('resource.forumCategory = :catId')
         ->setParameter('catId', $categoryId)

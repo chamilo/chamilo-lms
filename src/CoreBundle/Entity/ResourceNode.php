@@ -409,17 +409,16 @@ class ResourceNode implements Stringable
         return $this->resourceLinks;
     }
 
-    public function getResourceLinkByTypeGroup(
-        int $resourceTypeGroup,
+    public function getResourceLinkByContext(
         ?Course $course = null,
         ?Session $session = null,
-        ?Usergroup $usergroup = null,
         ?CGroup $group = null,
+        ?Usergroup $usergroup = null,
         ?User $user = null,
     ): ?ResourceLink {
         $criteria = Criteria::create();
         $criteria->where(
-            Criteria::expr()->eq('resourceTypeGroup', $resourceTypeGroup)
+            Criteria::expr()->eq('resourceTypeGroup', $this->resourceType->getId())
         );
 
         if ($course) {
@@ -471,7 +470,7 @@ class ResourceNode implements Stringable
     {
         $link
             ->setResourceNode($this)
-            ->setResourceTypeGroup($link->getResourceNode()->getResourceType()->getId())
+            ->setResourceTypeGroup($this->resourceType->getId())
         ;
         $this->resourceLinks->add($link);
 

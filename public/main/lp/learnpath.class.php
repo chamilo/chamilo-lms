@@ -818,7 +818,7 @@ class learnpath
         //Database::query($sql);
 
         $lp = Container::getLpRepository()->find($this->lp_id);
-        $link = $lp->resourceNode->getResourceLinkByTypeGroup($lp->resourceNode->getResourceType()->getId(), $course, $session);
+        $link = $lp->resourceNode->getResourceLinkByContext($course, $session);
 
         if (!$link) {
             return false;
@@ -8621,13 +8621,11 @@ class learnpath
         /** @var CLp $lp */
         $lp = Container::getLpRepository()->find($lpId);
         if ($lp) {
-            $resourceNode = $lp->getResourceNode();
-            $resourceTypeGroup = $resourceNode->getResourceType()->getId();
             $course = api_get_course_entity();
             $session = api_get_session_entity();
             $group = api_get_group_entity();
 
-            $link = $resourceNode->getResourceLinkByTypeGroup($resourceTypeGroup, $course, $session, null, $group);
+            $link = $lp->getResourceNode()->getResourceLinkByContext($course, $session, $group);
 
             if ($link) {
                 if ('down' === $direction) {

@@ -53,13 +53,12 @@ final class Version20230615213500 extends AbstractMigrationChamilo
                 if ($resource->hasResourceNode()) {
                     $resourceNode = $resource->getResourceNode();
 
-                    $resourceTypeGroup = $resourceNode->getResourceType()->getId();
                     $course = $em->find(Course::class, $lp['c_id']);
                     $session = isset($lp['session_id'])
                         ? $em->find(Session::class, $lp['session_id'])
                         : null;
 
-                    $link = $resourceNode->getResourceLinkByTypeGroup($resourceTypeGroup, $course, $session);
+                    $link = $resourceNode->getResourceLinkByContext($course, $session);
 
                     if ($link) {
                         $link->setDisplayOrder(

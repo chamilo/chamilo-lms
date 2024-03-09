@@ -53,13 +53,7 @@ class GetLinksCollectionController extends BaseResourceFileAction
                       'url' => $link->getUrl(),
                       'iid' => $link->getIid(),
                       'linkVisible' => $link->getFirstResourceLink()->getVisibility(),
-                      'position' => $resourceNode
-                          ->getResourceLinkByTypeGroup(
-                              $resourceNode->getResourceType()->getId(),
-                              $course,
-                              $session
-                          )
-                          ?->getDisplayOrder(),
+                      'position' => $resourceNode->getResourceLinkByContext($course, $session)?->getDisplayOrder(),
                   ];
             }
         }
@@ -95,13 +89,7 @@ class GetLinksCollectionController extends BaseResourceFileAction
                             'url' => $link->getUrl(),
                             'iid' => $link->getIid(),
                             'linkVisible' => $link->getFirstResourceLink()->getVisibility(),
-                            'position' => $resourceNode
-                                ->getResourceLinkByTypeGroup(
-                                    $resourceNode->getResourceType()->getId(),
-                                    $course,
-                                    $session
-                                )
-                                ?->getDisplayOrder(),
+                            'position' => $resourceNode->getResourceLinkByContext($course, $session)?->getDisplayOrder(),
                         ];
 
                         $dataResponse['categories'][$categoryId]['links'] = $items;

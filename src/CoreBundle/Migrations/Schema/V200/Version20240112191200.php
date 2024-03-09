@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
@@ -68,17 +69,17 @@ final class Version20240112191200 extends AbstractMigrationChamilo
                 $resourceId = (int) $resourceData['iid'];
                 $resourcePosition = (int) $resourceData['display_order'];
 
+                /** @var AbstractResource $resource */
                 $resource = $resourceRepo->find($resourceId);
                 if ($resource && $resource->hasResourceNode()) {
                     $resourceNode = $resource->getResourceNode();
                     if ($resourceNode) {
-                        $resourceTypeGroup = $resourceNode->getResourceType()->getId();
                         $course = $em->find(Course::class, $resourceData['c_id']);
                         $session = isset($resourceData['session_id'])
                             ? $em->find(Session::class, $resourceData['session_id'])
                             : null;
 
-                        $link = $resourceNode->getResourceLinkByTypeGroup($resourceTypeGroup, $course, $session);
+                        $link = $resourceNode->getResourceLinkByContext($course, $session);
 
                         if ($link) {
                             $link->setDisplayOrder(

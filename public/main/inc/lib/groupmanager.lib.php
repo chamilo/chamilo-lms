@@ -1080,8 +1080,8 @@ class GroupManager
             $node2 = $cat2->getResourceNode();
 
             if ($node1 && $node2) {
-                $link1 = $node1->getResourceLinkByTypeGroup($node1->getResourceType()->getId(), $course, $session);
-                $link2 = $node2->getResourceLinkByTypeGroup($node2->getResourceType()->getId(), $course, $session);
+                $link1 = $node1->getResourceLinkByContext($course, $session);
+                $link2 = $node2->getResourceLinkByContext($course, $session);
 
                 if ($link1 && $link2) {
                     $order1 = $link1->getDisplayOrder();

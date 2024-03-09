@@ -10,7 +10,6 @@
             }
         }
     </script>
-    {% set configuration = 1 %}
     <div class="panel-group my-8" role="tablist">
         {% for lp_data in data %}
             {% set show_category = true %}
@@ -19,19 +18,20 @@
             {% endif %}
 
             {% if show_category %}
-                {% if configuration == 0 %}
+                {% if 'false' == chamilo_settings_get('lp.lp_category_accordion') %}
                     <!--- old view -->
                     {% if categories|length > 1 and lp_data.category.iid %}
-                        {% if is_allowed_to_edit %}
-                            <h3 class="page-header my-8
-                            {% if lp_data.category_visibility == 0 %}
-                            text-gray-400
-                            {% else %}
-                            text-gray-800
-                            {% endif %}
-                            ">
-                                {{ lp_data.category.getTitle() | trim }}
-
+                        <div class="section-header section-header--h6">
+                            {% if is_allowed_to_edit %}
+                                <h6 class="section-header__title
+                                {% if lp_data.category_visibility == 0 %}
+                                text-gray-400
+                                {% else %}
+                                text-gray-800
+                                {% endif %}
+                                ">
+                                    {{ lp_data.category.getTitle() | trim }}
+                                </h6>
                                 {% if lp_data.category.iid > 0 %}
                                     {% if not session %}
                                         <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=add_lp_category&id=' ~ lp_data.category.iid }}"
@@ -88,8 +88,8 @@
                                         </a>
                                     {% else %}
                                         <a
-                                           href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.iid, 'new_status':0}|url_encode }}"
-                                           title="{{ 'Do not publish'|trans }}"
+                                                href="lp_controller.php?{{ course_url_params ~ '&' ~ {'action':'toggle_category_publish', 'id':lp_data.category.iid, 'new_status':0}|url_encode }}"
+                                                title="{{ 'Do not publish'|trans }}"
                                         >
                                             <i class="mdi-checkbox-multiple-blank mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Hide"|trans }}"></i>
                                         </a>
@@ -101,10 +101,10 @@
                                         </a>
                                     {% endif %}
                                 {% endif %}
-                            </h3>
-                        {% elseif lp_data.lp_list is not empty %}
-                            <h3 class="page-header">{{ lp_data.category.getTitle() }}</h3>
-                        {% endif %}
+                            {% elseif lp_data.lp_list is not empty %}
+                                <h6 class="section-header__title">{{ lp_data.category.getTitle() }}</h6>
+                            {% endif %}
+                        </div>
                     {% endif %}
 
                     {% if lp_data.lp_list %}

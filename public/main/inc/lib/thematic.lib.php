@@ -82,12 +82,16 @@ class Thematic
             return false;
         }
 
-        $currentDisplayOrder = $resourceNode->getDisplayOrder();
+        $link = $resourceNode->getResourceLinkByContext($course, $session);
 
-        $newPosition = $currentDisplayOrder + ($direction === 'down' ? 1 : -1);
-        $newPosition = max(0, $newPosition);
+        if (!$link) {
+            return false;
+        }
 
-        $resourceNode->setDisplayOrder($newPosition);
+        $currentDisplayOrder = $link->getDisplayOrder();
+
+        $link->setDisplayOrder('down' === $direction ? $currentDisplayOrder + 1 : $currentDisplayOrder - 1);
+
         $em->flush();
 
         // update done advances with de current thematic list

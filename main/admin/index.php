@@ -932,7 +932,7 @@ if (api_is_platform_admin()) {
     ];
     $items[] = [
         'class' => 'item-forum',
-        'url' => 'https://forum.chamilo.org/',
+        'url' => 'https://chamilo.org/en/forum',
         'label' => get_lang('ChamiloForum'),
     ];
     $items[] = [

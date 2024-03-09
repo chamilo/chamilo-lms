@@ -50,28 +50,6 @@ class CourseManager
         $accessUrlId = !empty($accessUrlId) ? (int) $accessUrlId : api_get_current_access_url_id();
         $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
 
-        // @todo Check that this was move inside the CourseListener in a pre persist throw an Exception
-        /*if (isset($_configuration[$accessUrlId]) && is_array($_configuration[$accessUrlId])) {
-            $return = self::checkCreateCourseAccessUrlParam(
-                $_configuration,
-                $accessUrlId,
-                'hosting_limit_courses',
-                'PortalCoursesLimitReached'
-            );
-            if (false != $return) {
-                return $return;
-            }
-            $return = self::checkCreateCourseAccessUrlParam(
-                $_configuration,
-                $accessUrlId,
-                'hosting_limit_active_courses',
-                'PortalActiveCoursesLimitReached'
-            );
-            if (false != $return) {
-                return $return;
-            }
-        }*/
-
         if (empty($params['title'])) {
             return false;
         }
@@ -97,7 +75,7 @@ class CourseManager
             $params['directory'] = $keys['currentCourseRepository'];
             $courseInfo = api_get_course_info($params['code']);
             if (empty($courseInfo)) {
-                $course = AddCourse::register_course($params, $accessUrlId);
+                $course = AddCourse::register_course($params);
                 if (null !== $course) {
                     self::fillCourse($course, $params, $authorId);
 
@@ -2373,14 +2351,6 @@ class CourseManager
                     GroupManager::delete_category($category['iid'], $course->getCode());
                 }
             }
-            // Cleaning groups
-            // @todo should be cleaned by the resource.
-            /*$groups = GroupManager::get_groups($courseId);
-            if (!empty($groups)) {
-                foreach ($groups as $group) {
-                    GroupManager::deleteGroup($group, $course['code']);
-                }
-            }*/
 
             $course_tables = AddCourse::get_course_tables();
             // Cleaning c_x tables
@@ -2391,10 +2361,11 @@ class CourseManager
                         continue;
                     }
                     $table = Database::get_course_table($table);
-                    //$sql = "DELETE FROM $table WHERE c_id = $courseId ";
-                    //Database::query($sql);
                 }
             }
+
+            $resourceLink = $course->getFirstResourceLink();
+            $resourceLinkId = $resourceLink?->getId();
 
             // Unsubscribe all users from the course
             $sql = "DELETE FROM $table_course_user WHERE c_id = $courseId";
@@ -2426,8 +2397,10 @@ class CourseManager
             // but give information on the course history
             //$sql = "DELETE FROM $table_stats_default WHERE c_id = $courseId";
             //Database::query($sql);
-            $sql = "DELETE FROM $table_stats_downloads WHERE c_id = $courseId";
-            Database::query($sql);
+            if ($resourceLinkId) {
+                $sql = "DELETE FROM $table_stats_downloads WHERE resource_link_id = $resourceLinkId";
+                Database::query($sql);
+            }
             $sql = "DELETE FROM $table_stats_links WHERE c_id = $courseId";
             Database::query($sql);
             $sql = "DELETE FROM $table_stats_uploads WHERE c_id = $courseId";

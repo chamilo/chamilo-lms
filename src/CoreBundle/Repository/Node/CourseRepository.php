@@ -93,8 +93,7 @@ class CourseRepository extends ResourceRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-        $qb
-            ->select('DISTINCT c.id')
+        $qb->select('DISTINCT c.id, c.title, c.code')
             ->from(Course::class, 'c')
             ->innerJoin(CourseRelUser::class, 'courseRelUser')
             ->innerJoin('c.urls', 'accessUrlRelCourse')
@@ -105,18 +104,19 @@ class CourseRepository extends ResourceRepository
                 'user' => $user,
                 'url' => $url,
                 'status' => $status,
-            ])
-        ;
+            ]);
+
         if (!empty($keyword)) {
-            $qb
-                ->andWhere('c.title like = :keyword OR c.code like = :keyword')
-                ->setParameter('keyword', $keyword)
-            ;
+            $qb->andWhere($qb->expr()->orX(
+                $qb->expr()->like('c.title', ':keyword'),
+                $qb->expr()->like('c.code', ':keyword')
+            ))
+                ->setParameter('keyword', '%'.$keyword.'%');
         }
 
         $query = $qb->getQuery();
 
-        return $query->getResult();
+        return $query->getArrayResult();
     }
 
     /**

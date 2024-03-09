@@ -4,6 +4,8 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGroupCategory;
 use Chamilo\CourseBundle\Entity\CToolIntro;
@@ -224,33 +226,57 @@ class AddCourse
     }
 
     /**
-     * Fills the course database with some required content and example content.
+     * Populates the course with essential settings, group categories, example content, and installs course plugins.
      *
-     * @param bool Whether to fill the course with example content
-     * @param int $authorId
+     * This method initializes a new course by setting up various course settings, creating a default group category,
+     * inserting example content if required, and installing course-specific plugins. The method can also fill the course
+     * with exemplary content based on the parameter provided or the system setting for example content creation.
      *
-     * @return bool False on error, true otherwise
+     * @param Course $course The course entity to be populated.
+     * @param bool|null $fillWithExemplaryContent Determines whether to fill the course with exemplary content. If null,
+     *                                            the system setting for example material course creation is used.
+     * @param int $authorId The ID of the user who is considered the author of the exemplary content. Defaults to the
+     *                      current user if not specified.
      *
-     * @version 1.2
-     * @assert (null, '', '', null) === false
-     * @assert (1, 'ABC', null, null) === false
-     * @assert (1, 'TEST', 'spanish', true) === true
+     * @return bool Returns true if the course is successfully populated, false otherwise.
+     *
+     * @throws Exception Throws exception on error.
      */
-    public static function fillCourse(
-        Course $course,
-        $fill_with_exemplary_content = null,
-        $authorId = 0
-    ) {
-        if (is_null($fill_with_exemplary_content)) {
-            $fill_with_exemplary_content = 'false' !== api_get_setting('example_material_course_creation');
+    public static function fillCourse(Course $course, bool $fillWithExemplaryContent = null, int $authorId = 0): bool
+    {
+        $entityManager = Database::getManager();
+        $authorId = $authorId ?: api_get_user_id();
+
+        self::insertCourseSettings($course);
+        self::createGroupCategory($course);
+
+        if ($fillWithExemplaryContent ?? api_get_setting('example_material_course_creation') !== 'false') {
+            self::insertExampleContent($course, $authorId, $entityManager);
         }
 
-        $course_id = $course->getId();
-        $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
+        self::installCoursePlugins($course->getId());
+
+        return true;
+    }
+
+    /**
+     * Inserts default and specified settings for a given course.
+     *
+     * This method takes a Course object as input and applies a predefined
+     * set of settings. These settings include configurations for email alerts,
+     * permissions for users to edit various components like agenda and announcements,
+     * theme settings, and more. It also handles the case where a course needs to
+     * enable certain features by default based on platform-wide settings.
+     *
+     * @param Course $course The course object to which the settings will be applied.
+     *
+     * @return void
+     * @throws Exception
+     */
+    private static function insertCourseSettings(Course $course): void
+    {
 
         $TABLESETTING = Database::get_course_table(TABLE_COURSE_SETTING);
-        $TABLEGRADEBOOK = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $TABLEGRADEBOOKLINK = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
         $settingsManager = Container::getCourseSettingsManager();
         $settingsManager->setCourse($course);
@@ -294,13 +320,26 @@ class AddCourse
             $title = $setting['title'] ?? '';
             Database::query(
                 "INSERT INTO $TABLESETTING (c_id, title, variable, value, category)
-                      VALUES ($course_id, '".$title."', '".$variable."', '".$setting['default']."', '".$setting['category']."')"
+                      VALUES ({$course->getId()}, '".$title."', '".$variable."', '".$setting['default']."', '".$setting['category']."')"
             );
             $counter++;
         }
+    }
 
-        /* Course homepage tools for platform admin only */
-        /* Group tool */
+    /**
+     * Creates a default group category for the specified course.
+     *
+     * This method initializes a new group category with a default title
+     * and associates it with the given course. The default group category
+     * is essential for organizing groups within the course, allowing for
+     * better management and classification of course participants.
+     *
+     * @param Course $course The course object for which the default group category is created.
+     *
+     * @return void
+     */
+    private static function createGroupCategory(Course $course): void
+    {
         $groupCategory = new CGroupCategory();
         $groupCategory
             ->setTitle(get_lang('Default groups'))
@@ -309,278 +348,302 @@ class AddCourse
         ;
         Database::getManager()->persist($groupCategory);
         Database::getManager()->flush();
+    }
 
+    /**
+     * Inserts example content into a given course.
+     *
+     * This method populates the specified course with a predefined set of example
+     * content, including documents, links, announcements, and exercises. This content
+     * serves as a template or starting point for instructors, showcasing the various
+     * types of materials and activities that can be included in a course. The content
+     * is added under the authority of the specified author ID.
+     *
+     * @param Course $course The course object into which the example content will be inserted.
+     * @param int $authorId The ID of the user who will be listed as the author of the inserted content.
+     *
+     * @return void
+     * @throws Exception
+     */
+    private static function insertExampleContent(Course $course, int $authorId): void
+    {
         $now = api_get_utc_datetime();
-        /*$files = [
-            ['path' => '/shared_folder', 'title' => get_lang('Folders of users'), 'filetype' => 'folder', 'size' => 0],
-            [
-                'path' => '/chat_files',
-                'title' => get_lang('Chat conversations history'),
-                'filetype' => 'folder',
-                'size' => 0,
-            ],
-            ['path' => '/certificates', 'title' => get_lang('Certificates'), 'filetype' => 'folder', 'size' => 0],
+        $files = [
+            ['path' => '/audio', 'title' => get_lang('Audio'), 'filetype' => 'folder', 'size' => 0],
+            ['path' => '/images', 'title' => get_lang('Images'), 'filetype' => 'folder', 'size' => 0],
+            ['path' => '/images/gallery', 'title' => get_lang('Gallery'), 'filetype' => 'folder', 'size' => 0],
+            ['path' => '/video', 'title' => get_lang('Video'), 'filetype' => 'folder', 'size' => 0],
         ];
-
+        $paths = [];
+        $courseInfo = ['real_id' => $course->getId(), 'code' => $course->getCode()];
         $counter = 1;
         foreach ($files as $file) {
-            self::insertDocument($courseInfo, $counter, $file, $authorId);
+            $doc = self::insertDocument($courseInfo, $counter, $file, $authorId);
+            $paths[$file['path']] = $doc->getIid();
             $counter++;
-        }*/
+        }
 
-        $certificateId = 'NULL';
-        /*    Documents   */
-        if ($fill_with_exemplary_content) {
-            $files = [
-                ['path' => '/audio', 'title' => get_lang('Audio'), 'filetype' => 'folder', 'size' => 0],
-                //['path' => '/flash', 'title' => get_lang('Flash'), 'filetype' => 'folder', 'size' => 0],
-                ['path' => '/images', 'title' => get_lang('Images'), 'filetype' => 'folder', 'size' => 0],
-                ['path' => '/images/gallery', 'title' => get_lang('Gallery'), 'filetype' => 'folder', 'size' => 0],
-                ['path' => '/video', 'title' => get_lang('Video'), 'filetype' => 'folder', 'size' => 0],
-                //['path' => '/video/flv', 'title' => 'flv', 'filetype' => 'folder', 'size' => 0],
-            ];
-            $paths = [];
-            $courseInfo = ['real_id' => $course->getId()];
-            foreach ($files as $file) {
-                $doc = self::insertDocument($courseInfo, $counter, $file, $authorId);
-                $paths[$file['path']] = $doc->getIid();
-                $counter++;
+        $finder = new Symfony\Component\Finder\Finder();
+        $defaultPath = api_get_path(SYS_PUBLIC_PATH).'img/document';
+        $finder->in($defaultPath);
+
+        /** @var SplFileInfo $file */
+        foreach ($finder as $file) {
+            $parentName = dirname(str_replace($defaultPath, '', $file->getRealPath()));
+            if ('/' === $parentName || '/certificates' === $parentName) {
+                continue;
             }
 
-            $finder = new Symfony\Component\Finder\Finder();
-            $defaultPath = api_get_path(SYS_PUBLIC_PATH).'img/document';
-            $finder->in($defaultPath);
+            $title = $file->getFilename();
+            $parentId = $paths[$parentName];
 
-            /** @var SplFileInfo $file */
-            foreach ($finder as $file) {
-                $parentName = dirname(str_replace($defaultPath, '', $file->getRealPath()));
-                if ('/' === $parentName || '/certificates' === $parentName) {
-                    continue;
-                }
+            if ($file->isDir()) {
+                $realPath = str_replace($defaultPath, '', $file->getRealPath());
+                $document = DocumentManager::addDocument(
+                    $courseInfo,
+                    $realPath,
+                    'folder',
+                    null,
+                    $title,
+                    '',
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    false,
+                    null,
+                    $parentId,
+                    $file->getRealPath()
+                );
+                $paths[$realPath] = $document->getIid();
+            } else {
+                $realPath = str_replace($defaultPath, '', $file->getRealPath());
+                $document = DocumentManager::addDocument(
+                    $courseInfo,
+                    $realPath,
+                    'file',
+                    $file->getSize(),
+                    $title,
+                    '',
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    false,
+                    null,
+                    $parentId,
+                    $file->getRealPath()
+                );
 
-                $title = $file->getFilename();
-                $parentId = $paths[$parentName];
-
-                if ($file->isDir()) {
-                    $realPath = str_replace($defaultPath, '', $file->getRealPath());
-                    $document = DocumentManager::addDocument(
-                        $courseInfo,
-                        $realPath,
-                        'folder',
-                        null,
-                        $title,
-                        '',
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        false,
-                        null,
-                        $parentId,
-                        $file->getRealPath()
-                    );
-                    $paths[$realPath] = $document->getIid();
-                } else {
-                    $realPath = str_replace($defaultPath, '', $file->getRealPath());
-                    $document = DocumentManager::addDocument(
-                        $courseInfo,
-                        $realPath,
-                        'file',
-                        $file->getSize(),
-                        $title,
-                        '',
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        false,
-                        null,
-                        $parentId,
-                        $file->getRealPath()
-                    );
-
-                    if ($document && 'default.html' === $document->getTitle()) {
-                        $certificateId = $document->getIid();
-                    }
+                if ($document && 'default.html' === $document->getTitle()) {
+                    $certificateId = $document->getIid();
                 }
             }
+        }
 
-            $agenda = new Agenda('course');
-            $agenda->set_course($courseInfo);
-            $agenda->addEvent(
-                $now,
-                $now,
-                0,
-                get_lang('Course creation'),
-                get_lang('This course was created at this time')
-            );
+        $agenda = new Agenda('course');
+        $agenda->set_course($courseInfo);
+        $agenda->addEvent(
+            $now,
+            $now,
+            0,
+            get_lang('Course creation'),
+            get_lang('This course was created at this time')
+        );
 
-            /*  Links tool */
-            $link = new Link();
-            $link->setCourse($courseInfo);
-            $links = [
-                [
-                    'c_id' => $course_id,
-                    'url' => 'http://www.google.com',
-                    'title' => 'Quick and powerful search engine',
-                    'description' => get_lang('Quick and powerful search engine'),
-                    'category_id' => 0,
-                    'on_homepage' => 0,
-                    'target' => '_self',
-                    'session_id' => 0,
-                ],
-                [
-                    'c_id' => $course_id,
-                    'url' => 'http://www.wikipedia.org',
-                    'title' => 'Free online encyclopedia',
-                    'description' => get_lang('Free online encyclopedia'),
-                    'category_id' => 0,
-                    'on_homepage' => 0,
-                    'target' => '_self',
-                    'session_id' => 0,
-                ],
-            ];
+        /*  Links tool */
+        $link = new Link();
+        $link->setCourse($courseInfo);
+        $links = [
+            [
+                'c_id' => $course->getId(),
+                'url' => 'http://www.google.com',
+                'title' => 'Quick and powerful search engine',
+                'description' => get_lang('Quick and powerful search engine'),
+                'category_id' => 0,
+                'on_homepage' => 0,
+                'target' => '_self',
+                'session_id' => 0,
+            ],
+            [
+                'c_id' => $course->getId(),
+                'url' => 'http://www.wikipedia.org',
+                'title' => 'Free online encyclopedia',
+                'description' => get_lang('Free online encyclopedia'),
+                'category_id' => 0,
+                'on_homepage' => 0,
+                'target' => '_self',
+                'session_id' => 0,
+            ],
+        ];
 
-            foreach ($links as $params) {
-                $link->save($params, false, false);
-            }
+        foreach ($links as $params) {
+            $link->save($params, false, false);
+        }
 
-            /* Announcement tool */
-            AnnouncementManager::add_announcement(
-                $courseInfo,
-                0,
-                get_lang('This is an announcement example'),
-                get_lang('This is an announcement example. Only trainers are allowed to publish announcements.'),
-                ['everyone' => 'everyone'],
-                null,
-                null,
-                $now
-            );
+        /* Announcement tool */
+        AnnouncementManager::add_announcement(
+            $courseInfo,
+            0,
+            get_lang('This is an announcement example'),
+            get_lang('This is an announcement example. Only trainers are allowed to publish announcements.'),
+            ['everyone' => 'everyone'],
+            null,
+            null,
+            $now
+        );
 
-            $manager = Database::getManager();
-
-            /* Introduction text */
-            $intro_text = '<p style="text-align: center;">
-                            <img src="'.api_get_path(REL_CODE_PATH).'img/mascot.png" alt="Mr. Chamilo" title="Mr. Chamilo" />
-                            <h2>'.get_lang('Introduction text').'</h2>
-                         </p>';
-
-            $toolIntro = (new CToolIntro())
-                ->setIntroText($intro_text)
-                ->addCourseLink($course)
-            ;
-            $manager->persist($toolIntro);
-
-            $toolIntro = (new CToolIntro())
-                ->setIntroText(get_lang('This page allows users and groups to publish documents.'))
-                ->addCourseLink($course)
-            ;
-            $manager->persist($toolIntro);
-
-            $toolIntro = (new CToolIntro())
-                ->setIntroText(
-                    get_lang(
-                        'The word Wiki is short for WikiWikiWeb. Wikiwiki is a Hawaiian word, meaning "fast" or "speed". In a wiki, people write pages together. If one person writes something wrong, the next person can correct it. The next person can also add something new to the page. Because of this, the pages improve continuously.'
-                    )
-                )
-                ->addCourseLink($course)
-            ;
-            $manager->persist($toolIntro);
-            $manager->flush();
-
-            /*  Exercise tool */
-            $exercise = new Exercise($course_id);
-            $exercise->exercise = get_lang('Sample test');
-            $html = '<table width="100%" border="0" cellpadding="0" cellspacing="0">
+        /*  Exercise tool */
+        $exercise = new Exercise($course->getId());
+        $exercise->exercise = get_lang('Sample test');
+        $html = '<table width="100%" border="0" cellpadding="0" cellspacing="0">
                         <tr>
                         <td width="220" valign="top" align="left">
                             <img src="'.api_get_path(WEB_PUBLIC_PATH).'img/document/images/mr_chamilo/doubts.png">
                         </td>
                         <td valign="top" align="left">'.get_lang('Irony').'</td></tr>
                     </table>';
-            $exercise->type = 1;
-            $exercise->setRandom(0);
-            $exercise->active = 1;
-            $exercise->results_disabled = 0;
-            $exercise->description = $html;
-            $exercise->save();
+        $exercise->type = 1;
+        $exercise->setRandom(0);
+        $exercise->active = 1;
+        $exercise->results_disabled = 0;
+        $exercise->description = $html;
+        $exercise->save();
 
-            $exercise_id = $exercise->id;
+        $question = new MultipleAnswer();
+        $question->course = $courseInfo;
+        $question->question = get_lang('Socratic irony is...');
+        $question->description = get_lang('(more than one answer can be true)');
+        $question->weighting = 10;
+        $question->position = 1;
+        $question->course = $courseInfo;
+        $question->save($exercise);
+        $questionId = $question->id;
 
-            $question = new MultipleAnswer();
-            $question->course = $courseInfo;
-            $question->question = get_lang('Socratic irony is...');
-            $question->description = get_lang('(more than one answer can be true)');
-            $question->weighting = 10;
-            $question->position = 1;
-            $question->course = $courseInfo;
-            $question->save($exercise);
-            $questionId = $question->id;
+        $answer = new Answer($questionId, $courseInfo['real_id']);
+        $answer->createAnswer(get_lang('Ridiculise one\'s interlocutor in order to have him concede he is wrong.'), 0, get_lang('No. Socratic irony is not a matter of psychology, it concerns argumentation.'), -5, 1);
+        $answer->createAnswer(get_lang('Admit one\'s own errors to invite one\'s interlocutor to do the same.'), 0, get_lang('No. Socratic irony is not a seduction strategy or a method based on the example.'), -5, 2);
+        $answer->createAnswer(get_lang('Compell one\'s interlocutor, by a series of questions and sub-questions, to admit he doesn\'t know what he claims to know.'), 1, get_lang('Indeed'), 5, 3);
+        $answer->createAnswer(get_lang('Use the Principle of Non Contradiction to force one\'s interlocutor into a dead end.'), 1, get_lang('This answer is not false. It is true that the revelation of the interlocutor\'s ignorance means showing the contradictory conclusions where lead his premisses.'), 5, 4);
+        $answer->save();
+        // Forums.
+        $params = [
+            'forum_category_title' => get_lang('Example Forum Category'),
+            'forum_category_comment' => '',
+        ];
 
-            $answer = new Answer($questionId, $courseInfo['real_id']);
-            $answer->createAnswer(get_lang('Ridiculise one\'s interlocutor in order to have him concede he is wrong.'), 0, get_lang('No. Socratic irony is not a matter of psychology, it concerns argumentation.'), -5, 1);
-            $answer->createAnswer(get_lang('Admit one\'s own errors to invite one\'s interlocutor to do the same.'), 0, get_lang('No. Socratic irony is not a seduction strategy or a method based on the example.'), -5, 2);
-            $answer->createAnswer(get_lang('Compell one\'s interlocutor, by a series of questions and sub-questions, to admit he doesn\'t know what he claims to know.'), 1, get_lang('Indeed'), 5, 3);
-            $answer->createAnswer(get_lang('Use the Principle of Non Contradiction to force one\'s interlocutor into a dead end.'), 1, get_lang('This answer is not false. It is true that the revelation of the interlocutor\'s ignorance means showing the contradictory conclusions where lead his premisses.'), 5, 4);
-            $answer->save();
-            // Forums.
-            $params = [
-                'forum_category_title' => get_lang('Example Forum Category'),
-                'forum_category_comment' => '',
-            ];
+        $forumCategoryId = saveForumCategory($params, $courseInfo, false);
 
-            $forumCategoryId = saveForumCategory($params, $courseInfo, false);
+        $params = [
+            'forum_category' => $forumCategoryId,
+            'forum_title' => get_lang('Example Forum'),
+            'forum_comment' => '',
+            'default_view_type_group' => ['default_view_type' => 'flat'],
+        ];
 
-            $params = [
-                'forum_category' => $forumCategoryId,
-                'forum_title' => get_lang('Example Forum'),
-                'forum_comment' => '',
-                'default_view_type_group' => ['default_view_type' => 'flat'],
-            ];
+        $forumId = store_forum($params, $courseInfo, true);
+        $repo = Container::getForumRepository();
+        $forumEntity = $repo->find($forumId);
 
-            $forumId = store_forum($params, $courseInfo, true);
-            $repo = Container::getForumRepository();
-            $forumEntity = $repo->find($forumId);
+        $params = [
+            'post_title' => get_lang('Example Thread'),
+            'forum_id' => $forumId,
+            'post_text' => get_lang('Example ThreadContent'),
+            'calification_notebook_title' => '',
+            'numeric_calification' => '',
+            'weight_calification' => '',
+            'forum_category' => $forumCategoryId,
+            'thread_peer_qualify' => 0,
+        ];
 
-            $params = [
-                'post_title' => get_lang('Example Thread'),
-                'forum_id' => $forumId,
-                'post_text' => get_lang('Example ThreadContent'),
-                'calification_notebook_title' => '',
-                'numeric_calification' => '',
-                'weight_calification' => '',
-                'forum_category' => $forumCategoryId,
-                'thread_peer_qualify' => 0,
-            ];
+        saveThread($forumEntity, $params, $courseInfo, false);
 
-            saveThread($forumEntity, $params, $courseInfo, false);
+        self::createGradebookStructure($course, $exercise->id);
+    }
 
-            /* Gradebook tool */
-            $course_code = $courseInfo['code'];
-            // father gradebook
-            Database::query(
-                "INSERT INTO $TABLEGRADEBOOK (title, locked, generate_certificates, description, user_id, c_id, parent_id, weight, visible, certif_min_score, session_id, document_id)
-                VALUES ('$course_code','0',0,'',1,$course_id,0,100,0,75,NULL,$certificateId)"
-            );
-            $gbid = Database::insert_id();
-            Database::query(
-                "INSERT INTO $TABLEGRADEBOOK (title, locked, generate_certificates, description, user_id, c_id, parent_id, weight, visible, certif_min_score, session_id, document_id)
-                VALUES ('$course_code','0',0,'',1,$course_id,$gbid,100,1,75,NULL,$certificateId)"
-            );
-            $gbid = Database:: insert_id();
-            Database::query(
-                "INSERT INTO $TABLEGRADEBOOKLINK (type, ref_id, user_id, c_id, category_id, created_at, weight, visible, locked)
-                VALUES (1,$exercise_id,1,$course_id,$gbid,'$now',100,1,0)"
-            );
-        }
+    /**
+     * Creates the gradebook structure for a course.
+     *
+     * This method sets up the initial gradebook categories and links for a new course.
+     * It creates a parent gradebook category representing the course itself and a child
+     * gradebook category for course activities. It then creates a gradebook link associated
+     * with a specific course activity, identified by the $refId parameter.
+     *
+     * @param Course $course The course entity for which the gradebook structure will be created.
+     * @param int $refId  The reference ID of the course activity to link in the gradebook.
+     *
+     * @return void
+     */
+    private static function createGradebookStructure(Course $course, int $refId): void
+    {
+        $manager = Database::getManager();
 
-        // Installing plugins in course
+        /* Gradebook tool */
+        $courseCode = $course->getCode();
+
+        $parentGradebookCategory = new GradebookCategory();
+        $parentGradebookCategory->setTitle($courseCode);
+        $parentGradebookCategory->setLocked(0);
+        $parentGradebookCategory->setGenerateCertificates(false);
+        $parentGradebookCategory->setDescription('');
+        $parentGradebookCategory->setCourse($course);
+        $parentGradebookCategory->setWeight(100);
+        $parentGradebookCategory->setVisible(false);
+        $parentGradebookCategory->setCertifMinScore(75);
+        $parentGradebookCategory->setUser(api_get_user_entity());
+
+        $manager->persist($parentGradebookCategory);
+        $manager->flush();
+
+        $childGradebookCategory = new GradebookCategory();
+        $childGradebookCategory->setTitle($courseCode);
+        $childGradebookCategory->setLocked(0);
+        $childGradebookCategory->setGenerateCertificates(false);
+        $childGradebookCategory->setDescription('');
+        $childGradebookCategory->setCourse($course);
+        $childGradebookCategory->setWeight(100);
+        $childGradebookCategory->setVisible(true);
+        $childGradebookCategory->setCertifMinScore(75);
+        $childGradebookCategory->setParent($parentGradebookCategory);
+        $childGradebookCategory->setUser(api_get_user_entity());
+
+        $manager->persist($childGradebookCategory);
+        $manager->flush();
+
+        $gradebookLink = new GradebookLink();
+
+        $gradebookLink->setType(1);
+        $gradebookLink->setRefId($refId);
+        $gradebookLink->setUser(api_get_user_entity());
+        $gradebookLink->setCourse($course);
+        $gradebookLink->setCategory($childGradebookCategory);
+        $gradebookLink->setCreatedAt(new \DateTime());
+        $gradebookLink->setWeight(100);
+        $gradebookLink->setVisible(1);
+        $gradebookLink->setLocked(0);
+
+        $manager->persist($gradebookLink);
+        $manager->flush();
+    }
+
+    /**
+     * Installs plugins for a given course.
+     *
+     * This method takes a course ID and uses the AppPlugin service to install
+     * all necessary or default plugins for that specific course. These plugins
+     * can enhance the functionality of the course by adding new features or
+     * tools that are not part of the core Chamilo platform.
+     *
+     * @param int $courseId The ID of the course for which the plugins will be installed.
+     *
+     * @return void
+     */
+    private static function installCoursePlugins(int $courseId): void
+    {
         $app_plugin = new AppPlugin();
-        $app_plugin->install_course_plugins($course_id);
-
-        return true;
+        $app_plugin->install_course_plugins($courseId);
     }
 
     /**

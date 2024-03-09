@@ -1,26 +1,29 @@
 <template>
   <Toolbar :class="toolbarClass">
-    <template #start>
-      <slot></slot>
+    <template v-slot:start>
+      <slot name="start"></slot>
+    </template>
+    <template v-slot:end>
+      <slot name="end"></slot>
     </template>
   </Toolbar>
 </template>
 
 <script setup>
-import Toolbar from "primevue/toolbar";
-import { computed } from "vue";
+import Toolbar from "primevue/toolbar"
+import { computed } from "vue"
 
 const props = defineProps({
   showTopBorder: {
     type: Boolean,
     default: false,
   },
-});
+})
 
 const toolbarClass = computed(() => {
   if (props.showTopBorder) {
-    return "pt-5 border-t border-b";
+    return "pt-5 border-t border-b"
   }
-  return "";
-});
+  return "p-toolbar"
+})
 </script>

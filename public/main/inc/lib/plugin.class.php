@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CourseBundle\Entity\CTool;
 
 /**
@@ -1043,18 +1044,14 @@ class Plugin
      * Add an link for a course tool.
      *
      * @param string $name     The tool name
-     * @param int    $courseId The course ID
-     * @param string $iconName Optional. Icon file name
-     * @param string $link     Optional. Link URL
+     * @param int $courseId The course ID
+     * @param string|null $iconName Optional. Icon file name
+     * @param string|null $link     Optional. Link URL
      *
      * @return CTool|null
      */
-    protected function createLinkToCourseTool(
-        $name,
-        $courseId,
-        $iconName = null,
-        $link = null
-    ) {
+    protected function createLinkToCourseTool(string $name, int $courseId, string $iconName = null, string $link = null): ?CTool
+    {
         if (!$this->addCourseTool) {
             return null;
         }
@@ -1065,31 +1062,23 @@ class Plugin
         $em = Database::getManager();
 
         /** @var CTool $tool */
-        $tool = $em
-            ->getRepository(CTool::class)
-            ->findOneBy([
-                'title' => $name,
-                'course' => $courseId,
-                'category' => 'plugin',
-            ]);
+        $tool = $em->getRepository(CTool::class)->findOneBy([
+            'title' => $name,
+            'course' => api_get_course_entity($courseId),
+        ]);
 
         if (!$tool) {
-            $cToolId = AddCourse::generateToolId($courseId);
             $pluginName = $this->get_name();
 
+            $toolEntity = new Tool();
+            $toolEntity->setTitle($pluginName);
+
             $tool = new CTool();
-            $tool
-                ->setCourse(api_get_course_entity($courseId))
+            $tool->setCourse(api_get_course_entity($courseId))
                 ->setTitle($name.$visibilityPerStatus)
-                ->setLink($link ?: "$pluginName/start.php")
-                ->setImage($iconName ?: "$pluginName.png")
                 ->setVisibility($visibility)
-                ->setAdmin(0)
-                ->setAddress('squaregrey.gif')
-                ->setAddedTool(false)
-                ->setTarget('_self')
-                ->setCategory('plugin')
-                ->setSessionId(0);
+                ->setTool($toolEntity)
+                ->setPosition(0);
 
             $em->persist($tool);
             $em->flush();

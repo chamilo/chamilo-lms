@@ -86,8 +86,12 @@ const baseModel = ref([])
 const suggestions = ref([])
 
 const onComplete = async (event) => {
-  const members = await props.search(event.query)
-
-  suggestions.value = members.length > 0 ? members : []
+  try {
+    const members = await props.search(event.query)
+    suggestions.value = members && members.length ? members : []
+  } catch (error) {
+    console.error('Error during onComplete:', error)
+    suggestions.value = []
+  }
 }
 </script>

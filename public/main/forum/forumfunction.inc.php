@@ -2777,7 +2777,8 @@ function store_reply(CForum $forum, CForumThread $thread, $values, $courseId = 0
             send_notification_mails(
                 $forum,
                 $thread,
-                $values
+                $values,
+                $course
             );
             add_forum_attachment_file('', $post);
 
@@ -3175,9 +3176,14 @@ function get_unaproved_messages($forum_id)
  * This function sends the notification mails to everybody who stated that they wanted to be informed when a new post
  * was added to a given thread.
  */
-function send_notification_mails(CForum $forum, CForumThread $thread, $reply_info)
+function send_notification_mails(CForum $forum, CForumThread $thread, $reply_info, ?Course $course = null)
 {
     $courseEntity = api_get_course_entity();
+
+    if (null !== $course) {
+        $courseEntity = $course;
+    }
+
     $courseId = $courseEntity->getId();
 
     $sessionId = api_get_session_id();

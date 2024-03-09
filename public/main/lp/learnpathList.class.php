@@ -154,13 +154,6 @@ class LearnpathList
                 'lp_prevent_reinit' => $lp->getPreventReinit(),
                 'seriousgame_mode' => $lp->getSeriousgameMode(),
                 'lp_scorm_debug' => $lp->getDebug(),
-                'lp_display_order' => $resourceNode
-                    ->getResourceLinkByTypeGroup(
-                        $resourceNode->getResourceType()->getId(),
-                        $course,
-                        $session
-                    )
-                    ?->getDisplayOrder(),
                 'autolaunch' => $lp->getAutolaunch(),
                 'created_on' => $lp->getCreatedOn() ? $lp->getCreatedOn()->format('Y-m-d H:i:s') : null,
                 'modified_on' => $lp->getModifiedOn() ? $lp->getModifiedOn()->format('Y-m-d H:i:s') : null,

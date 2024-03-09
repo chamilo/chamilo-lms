@@ -7143,37 +7143,45 @@ class learnpath
         }
     }
 
-    /**
-     * @param int $id
-     */
-    public static function moveUpCategory($id)
+    public static function moveUpCategory(int $id): void
     {
-        $id = (int) $id;
         $em = Database::getManager();
         /** @var CLpCategory $item */
         $item = $em->find(CLpCategory::class, $id);
         if ($item) {
-            $position = $item->getPosition() - 1;
-            $item->setPosition($position);
-            $em->persist($item);
-            $em->flush();
+            $course = api_get_course_entity();
+            $session = api_get_session_entity();
+
+            $link = $item->resourceNode->getResourceLinkByContext($course, $session);
+
+            if ($link) {
+                $link->setDisplayOrder(
+                    $link->getDisplayOrder() - 1
+                );
+
+                $em->flush();
+            }
         }
     }
 
-    /**
-     * @param int $id
-     */
-    public static function moveDownCategory($id)
+    public static function moveDownCategory(int $id): void
     {
-        $id = (int) $id;
         $em = Database::getManager();
         /** @var CLpCategory $item */
         $item = $em->find(CLpCategory::class, $id);
         if ($item) {
-            $position = $item->getPosition() + 1;
-            $item->setPosition($position);
-            $em->persist($item);
-            $em->flush();
+            $course = api_get_course_entity();
+            $session = api_get_session_entity();
+
+            $link = $item->resourceNode->getResourceLinkByContext($course, $session);
+
+            if ($link) {
+                $link->setDisplayOrder(
+                    $link->getDisplayOrder() + 1
+                );
+
+                $em->flush();
+            }
         }
     }
 

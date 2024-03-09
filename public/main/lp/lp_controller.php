@@ -440,7 +440,7 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (isset($_REQUEST['id'])) {
-            learnpath::moveUpCategory($_REQUEST['id']);
+            learnpath::moveUpCategory((int) $_REQUEST['id']);
         }
         require 'lp_list.php';
         break;
@@ -449,7 +449,7 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (isset($_REQUEST['id'])) {
-            learnpath::moveDownCategory($_REQUEST['id']);
+            learnpath::moveDownCategory((int) $_REQUEST['id']);
         }
         require 'lp_list.php';
         break;

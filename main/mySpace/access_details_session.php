@@ -131,7 +131,7 @@ function getReport($userId, $from, $to, $addTime = false)
                     $record = [
                         customDate($item['login'], true),
                         customDate($item['logout'], true),
-                        api_format_time($item['duration'], 'js'),
+                        api_format_time($item['duration'], 'lang'),
                     ];
 
                     $totalDuration += $item['duration'];
@@ -166,7 +166,7 @@ function getReport($userId, $from, $to, $addTime = false)
                     $record = [
                         customDate($partialMinLogin, true),
                         customDate($partialMaxLogin, true),
-                        api_format_time($partialDuration, 'js'),
+                        api_format_time($partialDuration, 'lang'),
                     ];
                     $report[$sessionId]['courses'][$course['real_id']][] = $record;
                     $report[$sessionId]['name'][$course['real_id']] = $courseInfo['title'].'&nbsp; ('.$session['session_name'].')';
@@ -202,7 +202,7 @@ function getReport($userId, $from, $to, $addTime = false)
             $record = [
                 customDate($item['login'], true),
                 customDate($item['logout'], true),
-                api_format_time($item['duration'], 'js'),
+                api_format_time($item['duration'], 'lang'),
             ];
             $report[0]['courses'][$course['course_id']][] = $record;
             $report[0]['name'][$course['course_id']] = $course['title'];
@@ -236,7 +236,7 @@ function getReport($userId, $from, $to, $addTime = false)
             $record = [
                 customDate($partialMinLogin, true),
                 customDate($partialMaxLogin, true),
-                api_format_time($partialDuration, 'js'),
+                api_format_time($partialDuration, 'lang'),
             ];
 
             $report[0]['courses'][$course['course_id']][] = $record;
@@ -261,7 +261,7 @@ function getReport($userId, $from, $to, $addTime = false)
     $table->setCellContents($row, $column++, customDate($minLogin));
     $table->setCellContents($row, $column++, customDate($maxLogin));
     $table->setRowAttributes($row, ['style' => 'font-weight:bold']);
-    $table->setCellContents($row, $column++, api_format_time($totalDuration, 'js'));
+    $table->setCellContents($row, $column++, api_format_time($totalDuration, 'lang'));
 
     $first = $table->toHtml();
 
@@ -529,7 +529,7 @@ if ($formByDay->validate()) {
         $column = 0;
         $table->setCellContents($row, $column++, customDate($data['login_date'], true));
         $table->setCellContents($row, $column++, customDate($data['logout_date'], true));
-        $table->setCellContents($row, $column, api_format_time($data['diff'], 'js'));
+        $table->setCellContents($row, $column, api_format_time($data['diff'], 'lang'));
 
         $result = getReport($userId, $dateToCheck, $dateToCheck, true);
         $first = $result['first'];
@@ -542,7 +542,7 @@ if ($formByDay->validate()) {
             ).'</div>';
         $tableList .= $table->toHtml();
         if (!$reduced && !empty($total)) {
-            $diff = get_lang('NotInCourse').' '.api_format_time($data['diff'] - $total, 'js');
+            $diff = get_lang('NotInCourse').' '.api_format_time($data['diff'] - $total, 'lang');
             $tableList .= $courseSessionTable;
             $tableList .= $totalCourseSessionTable;
             $tableList .= '<div style="text-align: center;">'.Display::page_subheader3($diff).'</div>';

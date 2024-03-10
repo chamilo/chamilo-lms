@@ -9442,8 +9442,11 @@ function api_site_use_cookie_warning_cookie_exist()
  * Given a number of seconds, format the time to show hours, minutes and seconds.
  *
  * @param int    $time         The time in seconds
- * @param string $originFormat Optional. PHP o JS
- *
+ * @param string $originFormat Optional. 
+ * PHP (used for scorm)
+ * JS (used in most cases and understood by excel)
+ * LANG (used to present unit in the user language)
+ * 
  * @return string (00h00'00")
  */
 function api_format_time($time, $originFormat = 'php')
@@ -9461,6 +9464,8 @@ function api_format_time($time, $originFormat = 'php')
 
     if ($originFormat == 'js') {
         $formattedTime = trim(sprintf("%02d : %02d : %02d", $hours, $mins, $secs));
+    } elseif ($originFormat == 'lang') {
+        $formattedTime = trim(sprintf(get_lang('HoursMinutesSeconds'), $hours, $mins, $secs));
     } else {
         $formattedTime = trim(sprintf("%02d$h%02d'%02d\"", $hours, $mins, $secs));
     }

@@ -54,6 +54,7 @@ class ExtraField extends Model
         //Enable this when field_loggeable is introduced as a table field (2.0)
         //'field_loggeable',
         'created_at',
+        'auto_remove',
     ];
 
     public $ops = [
@@ -595,10 +596,13 @@ class ExtraField extends Model
             case 'filter':
                 $sidx = 'e.filter';
                 break;
+            case 'auto_remove':
+                $sidx = 'e.autoRemove';
+                break;
         }
         $em = Database::getManager();
         $query = $em->getRepository(EntityExtraField::class)->createQueryBuilder('e');
-        $query->select('e')
+        $query->select('e.id', 'e.itemType', 'e.valueType', 'e.variable', 'e.displayText', 'e.autoRemove', 'e.changeable', 'e.visibleToOthers', 'e.filter', 'e.visibleToSelf')
             ->where('e.itemType = :type')
             ->setParameter('type', $this->getItemType())
             ->orderBy($sidx, $sord)
@@ -2197,7 +2201,7 @@ class ExtraField extends Model
      */
     public function getJqgridColumnNames()
     {
-        return [
+        $columns = [
             get_lang('Name'),
             get_lang('Field label'),
             get_lang('Type'),
@@ -2208,6 +2212,12 @@ class ExtraField extends Model
             get_lang('Order'),
             get_lang('Detail'),
         ];
+
+        if ($this->type === 'user') {
+            array_splice($columns, -1, 0, get_lang('Auto remove'));
+        }
+
+        return $columns;
     }
 
     /**
@@ -2215,7 +2225,7 @@ class ExtraField extends Model
      */
     public function getJqgridColumnModel()
     {
-        return [
+        $columnModel = [
             [
                 'name' => 'display_text',
                 'index' => 'display_text',
@@ -2240,46 +2250,60 @@ class ExtraField extends Model
                 'name' => 'changeable',
                 'index' => 'changeable',
                 'width' => '35',
-                'align' => 'left',
+                'align' => 'center',
                 'sortable' => 'true',
             ],
             [
                 'name' => 'visible_to_self',
                 'index' => 'visible_to_self',
                 'width' => '45',
-                'align' => 'left',
+                'align' => 'center',
                 'sortable' => 'true',
             ],
             [
                 'name' => 'visible_to_others',
                 'index' => 'visible_to_others',
                 'width' => '35',
-                'align' => 'left',
+                'align' => 'center',
                 'sortable' => 'true',
             ],
             [
                 'name' => 'filter',
                 'index' => 'filter',
                 'width' => '30',
-                'align' => 'left',
+                'align' => 'center',
                 'sortable' => 'true',
             ],
             [
                 'name' => 'field_order',
                 'index' => 'field_order',
                 'width' => '25',
-                'align' => 'left',
+                'align' => 'center',
                 'sortable' => 'true',
             ],
             [
                 'name' => 'actions',
                 'index' => 'actions',
                 'width' => '40',
-                'align' => 'left',
+                'align' => 'center',
                 'formatter' => 'action_formatter',
                 'sortable' => 'false',
             ],
         ];
+
+        if ($this->type === 'user') {
+            $autoRemoveColumnModel = [
+                'name' => 'auto_remove',
+                'index' => 'auto_remove',
+                'width' => '25',
+                'align' => 'center',
+                'sortable' => 'true',
+            ];
+
+            array_splice($columnModel, -1, 0, [$autoRemoveColumnModel]);
+        }
+
+        return $columnModel;
     }
 
     /**
@@ -2412,6 +2436,15 @@ class ExtraField extends Model
 
         $form->addElement('text', 'field_order', get_lang('Order'));
 
+        if ($this->type == 'user') {
+            $form->addElement(
+                'checkbox',
+                'auto_remove',
+                get_lang('Remove on anonymisation'),
+                get_lang('Remove this value when anonymising a user, because it could otherwise help identify the user despite the anonymisation.')
+            );
+        }
+
         if ('edit' == $action) {
             $option = new ExtraFieldOption($this->type);
             $defaults['field_options'] = $option->get_field_options_by_field_to_string($id);
@@ -2421,6 +2454,7 @@ class ExtraField extends Model
             $defaults['visible_to_others'] = 0;
             $defaults['changeable'] = 0;
             $defaults['filter'] = 0;
+            $defaults['auto_remove'] = 0;
             $form->addButtonCreate(get_lang('Add'));
         }
 

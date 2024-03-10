@@ -125,6 +125,11 @@ class ExtraField
     #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(name: 'created_at', type: 'datetime')]
     protected DateTime $createdAt;
+
+    #[Groups(['extra_field:read'])]
+    #[ORM\Column(name: "auto_remove", type: "boolean", options: ["default" => false])]
+    protected bool $autoRemove = false;
+
     public function __construct()
     {
         $this->options = new ArrayCollection();
@@ -134,6 +139,7 @@ class ExtraField
         $this->visibleToSelf = false;
         $this->changeable = false;
         $this->filter = false;
+        $this->autoRemove = false;
     }
 
     public function getId(): ?int
@@ -317,5 +323,17 @@ class ExtraField
     public function getTranslatableLocale(): ?string
     {
         return $this->locale;
+    }
+
+    public function getAutoRemove(): bool
+    {
+        return $this->autoRemove;
+    }
+
+    public function setAutoRemove(bool $autoRemove): self
+    {
+        $this->autoRemove = $autoRemove;
+
+        return $this;
     }
 }

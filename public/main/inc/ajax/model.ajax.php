@@ -2401,6 +2401,10 @@ switch ($action) {
             'filter',
             'field_order',
         ];
+
+        if ($type === 'user') {
+            $columns[] = 'auto_remove';
+        }
         $sidx = in_array($sidx, $columns) ? $sidx : 'display_text';
         $result = $obj->getAllGrid($sidx, $sord, $start, $limit);
         $new_result = [];
@@ -2426,6 +2430,11 @@ switch ($action) {
                 $item['visible_to_self'] = $item['visibleToSelf'] ? $checkIcon : $timesIcon;
                 $item['visible_to_others'] = $item['visibleToOthers'] ? $checkIcon : $timesIcon;
                 $item['filter'] = $item['filter'] ? $checkIcon : $timesIcon;
+
+                if (isset($item['autoRemove'])) {
+                    $item['auto_remove'] = $item['autoRemove'] ? $checkIcon : $timesIcon;
+                }
+
                 $new_result[] = $item;
             }
             $result = $new_result;

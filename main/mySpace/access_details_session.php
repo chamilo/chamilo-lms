@@ -103,7 +103,7 @@ function validateDate($value)
 
 function getReport($userId, $from, $to, $addTime = false)
 {
-    $sessionCategories = UserManager::get_sessions_by_category($userId, false);
+    $sessionCategories = UserManager::get_sessions_by_category($userId, false, true, true);
     $report = [];
     $minLogin = 0;
     $maxLogin = 0;

@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use LogicException;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -22,9 +23,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource]
 #[ORM\Table(name: 'resource_link')]
 #[ORM\Entity(repositoryClass: ResourceLinkRepository::class)]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class ResourceLink implements Stringable
 {
     use TimestampableTypedEntity;
+    use SoftDeleteableEntity;
 
     public const VISIBILITY_DRAFT = 0;
     public const VISIBILITY_PENDING = 1;

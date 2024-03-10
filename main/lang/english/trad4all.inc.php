@@ -9052,5 +9052,5 @@ $CourseCodeDoesNotExist = "This course code does not exist";
 $DuplicateCode = "Duplicate code";
 $CoursesUpdatedSuccessfully = "Courses updated successfully";
 $UpdateFailedForCourses = "The update failed for the following courses";
-$HoursMinutesSeconds = "%s h %s m %s s";
+$HoursMinutesSeconds = "%02d h %02d m %02d s";
 ?>

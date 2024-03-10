@@ -8986,5 +8986,5 @@ $CourseCodeDoesNotExist = "Ce code de cours n'existe pas";
 $DuplicateCode = "Code dupliqué";
 $CoursesUpdatedSuccessfully = "Mise à jour des cours réussie";
 $UpdateFailedForCourses = "La mise à jour a échoué pour les cours suivants";
-$HoursMinutesSeconds = "%s h %s m %s s";
+$HoursMinutesSeconds = "%02d h %02d m %02d s";
 ?>

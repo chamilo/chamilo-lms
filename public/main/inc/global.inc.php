@@ -43,17 +43,17 @@ $request = Request::createFromGlobals();
 $request->request->set('load_legacy', true);
 $currentBaseUrl = $request->getBaseUrl();
 $kernel->boot();
-
+$currentUri = $request->getRequestUri();
+if (empty($currentBaseUrl)) {
+    $currentBaseUrl = $request->getSchemeAndHttpHost() . $request->getBasePath();
+}
 $container = $kernel->getContainer();
 $router = $container->get('router');
 $context = $router->getContext();
 $router->setContext($context);
 /** @var FlashBag $flashBag */
-$saveFlashBag = null;
 $flashBag = $container->get('session')->getFlashBag();
-if (!empty($flashBag->keys())) {
-    $saveFlashBag = $flashBag->all();
-}
+$saveFlashBag = !empty($flashBag->keys()) ? $flashBag->all() : null;
 
 $response = $kernel->handle($request, HttpKernelInterface::MAIN_REQUEST, false);
 $context = Container::getRouter()->getContext();
@@ -70,21 +70,25 @@ if ($isCli) {
 if ($isCli && $baseUrl) {
     $context->setBaseUrl($baseUrl);
 } else {
-    $pos = strpos($currentBaseUrl, 'main');
-    $posPlugin = strpos($currentBaseUrl, 'plugin');
-    $posCertificate = strpos($currentBaseUrl, 'certificate');
+    $fullUrl = $currentBaseUrl . $currentUri;
+    $posMain = strpos($fullUrl, '/main');
+    $posPlugin = strpos($fullUrl, '/plugin');
+    $posCourse = strpos($fullUrl, '/course');
+    $posCertificate = strpos($fullUrl, '/certificate');
 
-    if (false === $pos && false === $posPlugin && false === $posCertificate) {
+    if (false === $posMain && false === $posPlugin && false === $posCourse && false === $posCertificate) {
         echo 'Cannot load current URL';
         exit;
     }
 
-    if (false !== $pos) {
-        $newBaseUrl = substr($currentBaseUrl, 0, $pos - 1);
-    }elseif (false !== $posPlugin) {
-        $newBaseUrl = substr($currentBaseUrl, 0, $posPlugin - 1);
+    if (false !== $posMain) {
+        $newBaseUrl = substr($fullUrl, 0, $posMain);
+    } elseif (false !== $posPlugin) {
+        $newBaseUrl = substr($fullUrl, 0, $posPlugin);
+    } elseif (false !== $posCourse) {
+        $newBaseUrl = substr($fullUrl, 0, $posCourse);
     } elseif (false !== $posCertificate) {
-        $newBaseUrl = substr($currentBaseUrl, 0, $posPlugin - 1);
+        $newBaseUrl = substr($fullUrl, 0, $posCertificate);
     }
 
     $context->setBaseUrl($newBaseUrl);

@@ -1,174 +1,174 @@
 <template>
-  <v-form>
-    <v-container fluid>
-      <v-row>
-        <v-col cols="12" sm="6" md="6">
-          <v-text-field
-                  v-model="item.title"
-                  :error-messages="titleErrors"
-                  :label="$t('Title')"
-                  required
-                  @input="$v.item.title.$touch()"
-                  @blur="$v.item.title.$touch()"
-          />
-        </v-col>
-
-        <v-col cols="12" sm="6" md="6">
-          <v-text-field
-                  v-model="item.code"
-                  :error-messages="codeErrors"
-                  :label="$t('code')"
-                  required
-                  @input="$v.item.code.$touch()"
-                  @blur="$v.item.code.$touch()"
-          />
-        </v-col>
-      </v-row>
-
-      <v-row>
-        <v-col cols="12" sm="6" md="6">
-          <v-combobox
-                  v-model="item.category"
-                  :items="categorySelectItems"
-                  :error-messages="categoryErrors"
-                  :no-data-text="$t('No results')"
-                  :label="$t('category')"
-                  item-text="name"
-                  item-value="@id"
-          />
-        </v-col>
-
-        <v-col cols="12" sm="6" md="6">
-          <v-text-field
-                  v-model.number="item.visibility"
-                  :error-messages="visibilityErrors"
-                  :label="$t('visibility')"
-                  required
-                  @input="$v.item.visibility.$touch()"
-                  @blur="$v.item.visibility.$touch()"
-          />
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-form>
+  <div class="course-form-container">
+    <div class="form-header">
+      <BaseInputText
+        id="course-name"
+        :label="t('Course name')"
+        :help-text="t('Write a short and striking course name, For example: Innovation Management')"
+        v-model="courseName"
+        :error-text="courseNameError"
+        :is-invalid="isCourseNameInvalid"
+        required
+      />
+      <BaseAdvancedSettingsButton v-model="showAdvancedSettings"></BaseAdvancedSettingsButton>
+    </div>
+    <div v-if="showAdvancedSettings" class="advanced-settings">
+      <BaseMultiSelect
+        id="category-multiselect"
+        v-model="courseCategory"
+        :options="categoryOptions"
+        :label="t('Category')"
+        input-id="multiselect-category"
+      />
+      <BaseInputText
+        id="course-code"
+        :label="t('Course code')"
+        :help-text="t('Only letters (a-z) and numbers (0-9)')"
+        v-model="courseCode"
+        :maxlength="40"
+        :error-text="courseCodeError"
+        :is-invalid="isCodeInvalid"
+        validation-message="Only letters (a-z) and numbers (0-9) are allowed."
+      />
+      <BaseDropdown
+        name="language"
+        v-model="courseLanguage"
+        :options="languageOptions"
+        :placeholder="t('Select Language')"
+        input-id="language-dropdown"
+        :label="t('Language')"
+        option-label="name"
+      />
+      <BaseCheckbox
+        id="demo-content"
+        :label="t('Fill with demo content')"
+        v-model="fillDemoContent"
+       name=""
+      />
+      <BaseAutocomplete
+        id="template"
+        v-model="courseTemplate"
+        :label="t('Select Template')"
+        :search="searchTemplates"
+      />
+    </div>
+    <!-- Form Footer -->
+    <div class="form-footer">
+      <BaseButton
+        label="Back"
+        icon="back"
+        type="secondary"
+        @click="goBack"
+        class="mr-4"
+      />
+      <BaseButton
+        :label="t('Create this course')"
+        icon="plus"
+        type="primary"
+        @click="submitForm"
+      />
+    </div>
+  </div>
 </template>
 
-<script>
-  import has from 'lodash/has';
-  import useVuelidate from '@vuelidate/core';
-  import { required } from '@vuelidate/validators';
-  import { mapActions } from 'vuex';
-  import { mapFields } from 'vuex-map-fields';
+<script setup>
+import { onMounted, ref, watch } from "vue"
+import BaseInputText from "../basecomponents/BaseInputText.vue"
+import BaseAdvancedSettingsButton from "../basecomponents/BaseAdvancedSettingsButton.vue"
+import BaseDropdown from "../basecomponents/BaseDropdown.vue"
+import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
+import BaseButton from "../basecomponents/BaseButton.vue"
+import { useRouter } from "vue-router"
+import courseService from "../../services/courseService"
+import languageService from "../../services/languageService"
+import BaseAutocomplete from "../basecomponents/BaseAutocomplete.vue"
+import BaseMultiSelect from "../basecomponents/BaseMultiSelect.vue"
+import { useI18n } from "vue-i18n"
 
-  export default {
-    name: 'CourseForm',
-    setup () {
-      return { v$: useVuelidate() }
-    },
-    props: {
-      values: {
-        type: Object,
-        required: true
-      },
+const { t } = useI18n()
+const courseName = ref('')
+const courseCategory = ref([])
+const courseCode = ref('')
+const courseLanguage = ref(null)
+const fillDemoContent = ref(false)
+const courseTemplate = ref(null);
+const showAdvancedSettings = ref(false)
+const router = useRouter()
 
-      errors: {
-        type: Object,
-        default: () => {}
-      },
+const categoryOptions = ref([])
+const languageOptions = ref([])
 
-      initialValues: {
-        type: Object,
-        default: () => {}
-      }
-    },
-    data() {
-      return {
-        title: null,
-        code: null,
-        category: null,
-        visibility: null,
-      };
-    },
-    computed: {
-      ...mapFields('coursecategory', {
-        categorySelectItems: 'selectItems'
-      }),
+const courseNameError = ref('')
+const courseCodeError = ref('')
+const isCodeInvalid = ref(false)
+const isCourseNameInvalid = ref(false)
 
-      // eslint-disable-next-line
-      item() {
-        return this.initialValues || this.values;
-      },
+const formSubmitted = ref(false)
 
-      titleErrors() {
-        const errors = [];
+const emit = defineEmits(['submit'])
 
-        if (!this.$v.item.title.$dirty) return errors;
+const validateCourseCode = () => {
+  const pattern = /^[a-zA-Z0-9]*$/
+  if (!pattern.test(courseCode.value)) {
+    isCodeInvalid.value = true
+    courseCodeError.value = 'Only letters (a-z) and numbers (0-9) are allowed.'
+    return false
+  }
+  courseCodeError.value = ''
+  return true
+}
 
-        has(this.violations, 'title') && errors.push(this.violations.title);
+const submitForm = () => {
+  formSubmitted.value = true
+  if (!courseName.value) {
+    isCourseNameInvalid.value = true
+    courseNameError.value = 'This field is required'
+    return
+  }
 
-        !this.$v.item.title.required && errors.push(this.$t('Field is required'));
+  if (!validateCourseCode()) {
+    return
+  }
 
-        return errors;
-      },
-      codeErrors() {
-        const errors = [];
+  emit('submit', {
+    name: courseName.value,
+    category: courseCategory.value ? courseCategory.value : null,
+    code: courseCode.value,
+    language: courseLanguage.value,
+    template: courseTemplate.value ? courseTemplate.value.value : null,
+    fillDemoContent: fillDemoContent.value
+  })
+}
 
-        if (!this.$v.item.code.$dirty) return errors;
+onMounted(async () => {
+  try {
+    const categoriesResponse = await courseService.getCategories('categories');
+    categoryOptions.value = categoriesResponse.map(category => ({
+      name: category.name,
+      id: category.id,
+    }))
 
-        has(this.violations, 'code') && errors.push(this.violations.code);
+    const languagesResponse = await languageService.findAll()
+    const data = await languagesResponse.json()
+    languageOptions.value = data['hydra:member'].map(language => ({
+      name: language.englishName,
+      id: language.isocode,
+    }))
 
-        !this.$v.item.code.required && errors.push(this.$t('Field is required'));
+  } catch (error) {
+    console.error('Failed to load dropdown data', error)
+  }
+});
 
-        return errors;
-      },
-      categoryErrors() {
-        const errors = [];
+const searchTemplates = async (query) => {
+  if (query && query.length >= 3) {
+    return courseService.searchTemplates(query)
+  } else {
+    return []
+  }
+}
 
-        if (!this.$v.item.category.$dirty) return errors;
-
-        has(this.violations, 'category') && errors.push(this.violations.category);
-
-
-        return errors;
-      },
-      visibilityErrors() {
-        const errors = [];
-
-        if (!this.$v.item.visibility.$dirty) return errors;
-
-        has(this.violations, 'visibility') && errors.push(this.violations.visibility);
-
-        !this.$v.item.visibility.required && errors.push(this.$t('Field is required'));
-
-        return errors;
-      },
-
-      violations() {
-        return this.errors || {};
-      }
-    },
-    mounted() {
-      this.categoryGetSelectItems();
-    },
-    methods: {
-      ...mapActions({
-        categoryGetSelectItems: 'coursecategory/load'
-      }),
-    },
-    validations: {
-      item: {
-        title: {
-          required,
-        },
-        code: {
-          required,
-        },
-        category: {
-        },
-        visibility: {
-          required,
-        },
-      }
-    }
-  };
+const goBack = () => {
+  router.go(-1)
+}
 </script>

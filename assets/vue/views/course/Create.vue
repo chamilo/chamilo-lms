@@ -1,53 +1,64 @@
 <template>
-  <div>
+  <div class="create-course-page m-10">
+
+    <div class="message-container mb-4">
+      <Message severity="info">
+        {{ t('Once you click on "Create a course", a course is created with a section for Tests, Project based learning, Assessments, Courses, Dropbox, Agenda and much more. Logging in as teacher provides you with editing privileges for this course.') }}
+      </Message>
+    </div>
+
+    <h1 class="page-title text-xl text-gray-90">{{ t('Add a new course') }}</h1>
+    <hr />
+
     <CourseForm
       ref="createForm"
       :errors="violations"
       :values="item"
+      @submit="submitCourse"
     />
     <Loading :visible="isLoading" />
-
-    <Toolbar
-      :handle-reset="resetForm"
-      :handle-submit="onSendForm"
-    ></Toolbar>
   </div>
 </template>
 
-<script>
-import { mapActions } from "vuex"
-import { createHelpers } from "vuex-map-fields"
-import CourseForm from "../../components/course/Form.vue"
-import Loading from "../../components/Loading.vue"
-import Toolbar from "../../components/Toolbar.vue"
-import CreateMixin from "../../mixins/CreateMixin"
+<script setup>
+import { ref, computed } from 'vue'
+import { useStore } from 'vuex'
+import CourseForm from '../../components/course/Form.vue'
+import Loading from '../../components/Loading.vue'
+import { useRouter } from "vue-router"
+import Message from 'primevue/message'
+import courseService from "../../services/courseService"
+import { useI18n } from "vue-i18n"
 
-const servicePrefix = "Course"
+const store = useStore()
+const item = ref({})
+const router = useRouter()
+const { t } = useI18n()
 
-const { mapFields } = createHelpers({
-  getterType: "course/getField",
-  mutationType: "course/updateField",
-})
+const isLoading = computed(() => store.getters['course/getField']('isLoading'))
+const violations = computed(() => store.getters['course/getField']('violations'))
+const courseData = ref({})
 
-export default {
-  name: "CourseCreate",
-  servicePrefix,
-  mixins: [CreateMixin],
-  components: {
-    Loading,
-    Toolbar,
-    CourseForm,
-  },
-  data() {
-    return {
-      item: {},
+const submitCourse = async (formData) => {
+  isLoading.value = true
+  try {
+    let tempResponse = await courseService.createCourse(formData)
+    if (tempResponse.success) {
+      const courseId = tempResponse.courseId
+      const sessionId = 0
+      await router.push(`/course/${courseId}/home?sid=${sessionId}`)
+    } else {
+      console.error(tempResponse.message)
     }
-  },
-  computed: {
-    ...mapFields(["error", "isLoading", "created", "violations"]),
-  },
-  methods: {
-    ...mapActions("course", ["create", "reset"]),
-  },
+  } catch (error) {
+    console.error(error)
+    if (error.response && error.response.data) {
+      violations.value = error.response.data
+    } else {
+      console.error('An unexpected error occurred.')
+    }
+  } finally {
+    isLoading.value = false
+  }
 }
 </script>

@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Repository\GroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues as EntityExtraFieldValues;
 
 /**
  * This library provides functions for user management.
@@ -5664,6 +5665,25 @@ SQL;
                 error_log("Could not anonymize IP address for user $userId ($sql)");
             }
         }
+
+        $extraFieldRepository = $em->getRepository(EntityExtraField::class);
+        $autoRemoveFields = $extraFieldRepository->findBy([
+            'autoRemove' => 1,
+            'itemType' => EntityExtraField::USER_FIELD_TYPE
+        ]);
+
+        foreach ($autoRemoveFields as $field) {
+            $extraFieldValueRepository = $em->getRepository(EntityExtraFieldValues::class);
+            $extraFieldValue = $extraFieldValueRepository->findOneBy([
+                'field' => $field,
+                'itemId' => $userId
+            ]);
+
+            if ($extraFieldValue) {
+                $em->remove($extraFieldValue);
+            }
+        }
+
         $em->persist($user);
         $em->flush();
         Event::addEvent(LOG_USER_ANONYMIZE, LOG_USER_ID, $userId);

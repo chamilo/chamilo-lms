@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseCategory;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Session;
@@ -15,12 +16,15 @@ use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\LegalRepository;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
@@ -48,6 +52,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use UserManager;
 
 /**
@@ -667,6 +672,106 @@ class CourseController extends ToolBaseController
             'isEnrolledInCourses' => $isEnrolledInCourses,
             'isEnrolledInSessions' => $isEnrolledInSessions,
         ]);
+    }
+
+    #[Route('/categories', name: 'chamilo_core_course_form_lists')]
+    public function getCategories(
+        SettingsManager $settingsManager,
+        AccessUrlHelper $accessUrlHelper,
+        CourseCategoryRepository $courseCategoriesRepo
+    ): JsonResponse {
+        $allowBaseCourseCategory = 'true' === $settingsManager->getSetting('course.allow_base_course_category');
+        $accessUrlId = $accessUrlHelper->getCurrent()->getId();
+
+        $categories = $courseCategoriesRepo->findAllInAccessUrl(
+            $accessUrlId,
+            $allowBaseCourseCategory
+        );
+
+        $data = [];
+        $categoryToAvoid = '';
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $categoryToAvoid = $settingsManager->getSetting('course.course_category_code_to_use_as_model');
+        }
+
+        foreach ($categories as $category) {
+            $categoryCode = $category->getCode();
+            if (!empty($categoryToAvoid) && $categoryToAvoid == $categoryCode) {
+                continue;
+            }
+            $data[] = ['id' => $category->getId(), 'name' => $category->__toString()];
+        }
+
+        return new JsonResponse($data);
+    }
+
+    #[Route('/search_templates', name: 'chamilo_core_course_search_templates')]
+    public function searchCourseTemplates(
+        Request $request,
+        AccessUrlHelper $accessUrlHelper,
+        CourseRepository $courseRepository
+    ): JsonResponse {
+
+        $searchTerm = $request->query->get('search', '');
+        $accessUrl = $accessUrlHelper->getCurrent();
+
+        /** @var User|null $user */
+        $user = $this->getUser();
+
+        $courseList = $courseRepository->getCoursesInfoByUser($user, $accessUrl, 1, $searchTerm);
+        $results = ['items' => []];
+        foreach ($courseList as $course) {
+            $title = $course['title'];
+            $results['items'][] = [
+                'id' => $course['code'],
+                'name' => $title.' ('.$course['code'].') ',
+            ];
+        }
+
+        return new JsonResponse($results);
+    }
+
+    #[Route('/create', name: 'chamilo_core_course_create')]
+    public function createCourse(Request $request, TranslatorInterface $translator): JsonResponse
+    {
+        $courseData = json_decode($request->getContent(), true);
+
+        $wantedCode = $courseData['code'] ?? null;
+        $categoryCode = $courseData['category'] ?? null;
+        $title = $courseData['name'];
+        $courseLanguage = isset($courseData['language']) ? $courseData['language']['id'] : '';
+        $exemplaryContent = $courseData['fillDemoContent'] ?? false;
+        $template = $courseData['template'] ?? '';
+
+        if (empty($wantedCode)) {
+            $wantedCode = CourseManager::generate_course_code(substr($title, 0, CourseManager::MAX_COURSE_LENGTH_CODE));
+        }
+
+        $courseCodeOk = !CourseManager::course_code_exists($wantedCode);
+        if ($courseCodeOk) {
+            $params = [
+                'title' => $title,
+                'exemplary_content' => $exemplaryContent,
+                'wanted_code' => $wantedCode,
+                'course_language' => $courseLanguage,
+                'course_template' => $template,
+            ];
+
+            if ($categoryCode) {
+                $params['course_categories'] = $categoryCode;
+            }
+
+            $course = CourseManager::create_course($params);
+            if ($course) {
+                return new JsonResponse([
+                    'success' => true,
+                    'message' => $translator->trans('Course created successfully.'),
+                    'courseId' => $course->getId(),
+                ]);
+            }
+        }
+
+        return new JsonResponse(['success' => false, 'message' => $translator->trans('An error occurred while creating the course.')]);
     }
 
     private function autoLaunch(): void

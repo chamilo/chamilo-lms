@@ -15,11 +15,12 @@
       <label :for="inputId" v-text="label" />
     </div>
     <small v-if="isInvalid" :class="{ 'p-error': isInvalid }" v-text="errorText" />
+    <small v-if="helpText" class="form-text text-muted">{{ helpText }}</small>
   </div>
 </template>
 
 <script setup>
-import Dropdown from "primevue/dropdown";
+import Dropdown from "primevue/dropdown"
 
 defineProps({
   name: {
@@ -71,7 +72,8 @@ defineProps({
     required: false,
     default: false,
   },
-});
+  helpText: String,
+})
 
-defineEmits(["update:modelValue"]);
+defineEmits(["update:modelValue"])
 </script>

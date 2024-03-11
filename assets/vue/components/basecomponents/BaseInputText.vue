@@ -7,22 +7,12 @@
         :class="{ 'p-invalid': isInvalid }"
         :aria-label="label"
         type="text"
-        @update:model-value="$emit('update:modelValue', $event)"
+        @update:model-value="updateValue"
       />
-      <label
-        v-t="label"
-        :class="{ 'p-error': isInvalid }"
-        :for="id"
-        class="text-primary/40"
-      />
+      <label :for="id" :class="{ 'p-error': isInvalid }">{{ label }}</label>
     </div>
-    <slot name="errors">
-      <small
-        v-if="isInvalid"
-        v-t="errorText"
-        class="p-error"
-      />
-    </slot>
+    <small v-if="formSubmitted && isInvalid" class="p-error">{{ errorText }}</small>
+    <small v-if="helpText" class="form-text text-muted">{{ helpText }}</small>
   </div>
 </template>
 
@@ -47,14 +37,26 @@ const props = defineProps({
   errorText: {
     type: String,
     required: false,
-    default: null,
+    default: "",
   },
   isInvalid: {
     type: Boolean,
     required: false,
     default: false,
   },
+  required: {
+    type: Boolean,
+    default: false,
+  },
+  helpText: String,
+  formSubmitted: {
+    type: Boolean,
+    default: false
+  },
 })
 
-defineEmits(["update:modelValue"])
+const emits = defineEmits(["update:modelValue"])
+const updateValue = (value) => {
+  emits("update:modelValue", value)
+}
 </script>

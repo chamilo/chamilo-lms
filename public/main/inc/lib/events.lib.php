@@ -1347,7 +1347,7 @@ class Event
      *
      * @param int     $user_id
      * @param int     $exercise_id
-     * @param int     $course_id
+     * @param int     $courseId
      * @param ?int    $session_id
      * @param ?int    $lp_id
      * @param ?int    $lp_item_id

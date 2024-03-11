@@ -458,7 +458,7 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (isset($_REQUEST['id'])) {
-            $result = learnpath::deleteCategory($_REQUEST['id']);
+            $result = learnpath::deleteCategory((int) $_REQUEST['id']);
             if ($result) {
                 Display::addFlash(Display::return_message(get_lang('Deleted')));
             }

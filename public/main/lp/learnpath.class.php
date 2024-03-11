@@ -7235,10 +7235,7 @@ class learnpath
         return $sessionId;
     }
 
-    /**
-     * @param int $id
-     */
-    public static function deleteCategory($id): bool
+    public static function deleteCategory(int $id): bool
     {
         $repo = Container::getLpCategoryRepository();
         /** @var CLpCategory $category */
@@ -7249,11 +7246,19 @@ class learnpath
 
             foreach ($lps as $lp) {
                 $lp->setCategory(null);
-                $em->persist($lp);
             }
 
-            // Removing category.
-            $em->remove($category);
+            $em->persist($lp);
+
+            $course = api_get_course_entity();
+            $session = api_get_session_entity();
+
+            $link = $category->getResourceNode()->getResourceLinkByContext($course, $session);
+
+            if ($link) {
+                $em->getRepository(ResourceLink::class)->remove($link);
+            }
+
             $em->flush();
 
             return true;

@@ -102,17 +102,39 @@ function validateCourseData(array $courses): array
 function updateCourse(array $courseData, int $courseId): void
 {
     $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-    $params = [
-        'title' => $courseData['Title'],
-        'course_language' => $courseData['Language'],
-        'category_code' => $courseData['CourseCategory'],
-        'visual_code' => $courseData['Code'],
+    $params = ['visual_code' => $courseData['Code']];
+    $fieldsMapping = [
+        'Title' => 'title',
+        'Language' => 'course_language',
+        'CourseCategory' => 'category_code',
     ];
+
+    foreach ($fieldsMapping as $inputField => $dbField) {
+        if (isset($courseData[$inputField])) {
+            $params[$dbField] = $courseData[$inputField];
+        }
+    }
+
     Database::update($courseTable, $params, ['id = ?' => $courseId]);
-    $courseData['code'] = $courseData['Code'];
-    $courseData['item_id'] = $courseId;
-    $courseFieldValue = new ExtraFieldValue('course');
-    $courseFieldValue->saveFieldValues($courseData);
+
+    if (isset($courseData['extra'])) {
+        $courseData['extra']['code'] = $courseData['Code'];
+        $courseData['extra']['item_id'] = $courseId;
+        $saveOnlyThisFields = [];
+        foreach ($courseData['extra'] as $key => $value) {
+            $newKey = preg_replace('/^extra_/', '', $key);
+            $saveOnlyThisFields[] = $newKey;
+        }
+        $courseFieldValue = new ExtraFieldValue('course');
+        $courseFieldValue->saveFieldValues(
+            $courseData['extra'],
+            false,
+            false,
+            $saveOnlyThisFields,
+            [],
+            true
+        );
+    }
 }
 
 /**
@@ -142,7 +164,7 @@ function parseCsvCourseData(string $file, array $extraFields): array
             }
             if (in_array($key, array_column($extraFields, 'variable'))) {
                 $processedValue = processExtraFieldValue($key, $value, $extraFields);
-                $courseData['extra_'.$key] = $processedValue;
+                $courseData['extra']['extra_'.$key] = $processedValue;
             } else {
                 $courseData[$key] = $value;
             }
@@ -173,7 +195,7 @@ function parseXmlCourseData(string $file, array $extraFields): array
                 $value = $node->nodeValue;
                 if (in_array($key, array_column($extraFields, 'variable'))) {
                     $processedValue = processExtraFieldValue($key, $value, $extraFields);
-                    $courseData['extra_'.$key] = $processedValue;
+                    $courseData['extra']['extra_'.$key] = $processedValue;
                 } else {
                     $courseData[$key] = $value;
                 }

@@ -1,6 +1,6 @@
 <template>
   <div class="terms-list-view mt-4">
-    <BaseToolbar>
+    <BaseToolbar showTopBorder>
         <BaseButton
           :label="t('Edit Terms and Conditions')"
           icon="edit"
@@ -45,6 +45,8 @@ import { useRouter } from "vue-router"
 import Message from "primevue/message"
 import languageService from "../../services/languageService"
 import legalService from "../../services/legalService"
+import Dropdown from "primevue/dropdown"
+import Button from "primevue/button"
 
 const { t } = useI18n()
 const router = useRouter()

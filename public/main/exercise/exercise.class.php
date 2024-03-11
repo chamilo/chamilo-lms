@@ -1831,11 +1831,7 @@ class Exercise
         $course = api_get_course_entity();
         $session = api_get_session_entity();
 
-        $link = $exercise->resourceNode->getResourceLinkByContext($course, $session);
-
-        if ($link) {
-            $linksRepo->remove($link);
-        }
+        $linksRepo->removeByResourceInContext($exercise, $course, $session);
 
         SkillModel::deleteSkillsFromItem($exerciseId, ITEM_TYPE_EXERCISE);
 

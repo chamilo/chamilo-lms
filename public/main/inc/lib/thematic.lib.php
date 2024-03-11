@@ -189,20 +189,12 @@ class Thematic
             foreach ($thematicId as $id) {
                 /** @var CThematic $resource */
                 $resource = $repo->find($id);
-                $link = $resource->getResourceNode()->getResourceLinkByContext($course, $session);
-
-                if ($link) {
-                    $linksRepo->remove($link);
-                }
+                $linksRepo->removeByResourceInContext($resource, $course, $session);
             }
         } else {
             /** @var CThematic $resource */
             $resource = $repo->find($thematicId);
-            $link = $resource->getResourceNode()->getResourceLinkByContext($course, $session);
-
-            if ($link) {
-                $linksRepo->remove($link);
-            }
+            $linksRepo->removeByResourceInContext($resource, $course, $session);
         };
     }
 

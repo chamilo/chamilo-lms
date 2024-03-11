@@ -818,13 +818,10 @@ class learnpath
         //Database::query($sql);
 
         $lp = Container::getLpRepository()->find($this->lp_id);
-        $link = $lp->resourceNode->getResourceLinkByContext($course, $session);
 
-        if (!$link) {
-            return false;
-        }
-
-        Database::getManager()->getRepository(ResourceLink::class)->remove($link);
+        Database::getManager()
+            ->getRepository(ResourceLink::class)
+            ->removeByResourceInContext($lp, $course, $session);
 
         $link_info = GradebookUtils::isResourceInCourseGradebook(
             api_get_course_id(),
@@ -7253,13 +7250,7 @@ class learnpath
             $course = api_get_course_entity();
             $session = api_get_session_entity();
 
-            $link = $category->getResourceNode()->getResourceLinkByContext($course, $session);
-
-            if ($link) {
-                $em->getRepository(ResourceLink::class)->remove($link);
-            }
-
-            $em->flush();
+            $em->getRepository(ResourceLink::class)->removeByResourceInContext($category, $course, $session);
 
             return true;
         }

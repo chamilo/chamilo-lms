@@ -6,7 +6,13 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
 
@@ -28,5 +34,20 @@ class ResourceLinkRepository extends SortableRepository
         // soft delete handled by Gedmo\SoftDeleteable
         $em->remove($resourceLink);
         $em->flush();
+    }
+
+    public function removeByResourceInContext(
+        AbstractResource $resource,
+        Course $course,
+        ?Session $session = null,
+        ?CGroup $group = null,
+        ?Usergroup $usergroup = null,
+        ?User $user = null,
+    ): void {
+        $link = $resource->getResourceNode()->getResourceLinkByContext($course, $session, $group, $usergroup, $user);
+
+        if ($link) {
+            $this->remove($link);
+        }
     }
 }

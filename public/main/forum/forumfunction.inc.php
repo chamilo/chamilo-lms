@@ -150,11 +150,7 @@ function handleForum($url)
                 break;
             case 'delete_category':
                 if ($resource) {
-                    $link = $resource->getResourceNode()->getResourceLinkByContext($course, $session);
-
-                    if ($link) {
-                        $linksRepo->remove($link);
-                    }
+                    $linksRepo->removeByResourceInContext($resource, $course, $session);
 
                     Display::addFlash(
                         Display::return_message(get_lang('Forum category deleted'), 'confirmation', false)
@@ -165,11 +161,7 @@ function handleForum($url)
                 break;
             case 'delete_forum':
                 if ($resource) {
-                    $link = $resource->getResourceNode()->getResourceLinkByContext($course, $session);
-
-                    if ($link) {
-                        $linksRepo->remove($link);
-                    }
+                    $linksRepo->removeByResourceInContext($resource, $course, $session);
 
                     Display::addFlash(Display::return_message(get_lang('Forum deleted'), 'confirmation', false));
                 }
@@ -180,11 +172,7 @@ function handleForum($url)
             case 'delete_thread':
                 $locked = api_resource_is_locked_by_gradebook($id, LINK_FORUM_THREAD);
                 if ($resource && false === $locked) {
-                    $link = $resource->getResourceNode()->getResourceLinkByContext($course, $session);
-
-                    if ($link) {
-                        $linksRepo->remove($link);
-                    }
+                    $linksRepo->removeByResourceInContext($resource, $course, $session);
 
                     SkillModel::deleteSkillsFromItem($id, ITEM_TYPE_FORUM_THREAD);
                     $link_info = GradebookUtils::isResourceInCourseGradebook(

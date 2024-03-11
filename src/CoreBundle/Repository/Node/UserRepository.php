@@ -141,29 +141,167 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         $em = $this->getEntityManager();
 
         if ($destroy) {
-            $type = $user->getResourceNode()->getResourceType();
-            $rootUser = $this->getRootUser();
+            $fallbackUser = $this->getFallbackUser();
 
-            $criteria = Criteria::create()->where(Criteria::expr()->eq('resourceType', $type));
-            $userNodeCreatedList = $user->getResourceNodes()->matching($criteria);
+            if ($fallbackUser) {
+                $this->reassignUserResourcesToFallback($user, $fallbackUser);
 
-            foreach ($userNodeCreatedList as $userCreated) {
-                $userCreated->setCreator($rootUser);
+                $type = $user->getResourceNode()->getResourceType();
+                $rootUser = $this->getRootUser();
+
+                $criteria = Criteria::create()->where(Criteria::expr()->eq('resourceType', $type));
+                $userNodeCreatedList = $user->getResourceNodes()->matching($criteria);
+
+                foreach ($userNodeCreatedList as $userCreated) {
+                    $userCreated->setCreator($rootUser);
+                }
+
+                $em->remove($user->getResourceNode());
+
+                foreach ($user->getGroups() as $group) {
+                    $user->removeGroup($group);
+                }
+
+                $em->remove($user);
             }
-
-            $em->remove($user->getResourceNode());
-
-            foreach ($user->getGroups() as $group) {
-                $user->removeGroup($group);
-            }
-
-            $em->remove($user);
         } else {
             $user->setActive(User::SOFT_DELETED);
             $em->persist($user);
         }
 
         $em->flush();
+    }
+
+    protected function reassignUserResourcesToFallback(User $userToDelete, User $fallbackUser): void
+    {
+        $relations = [
+            ['bundle' => 'CoreBundle', 'entity' => 'AccessUrlRelUser', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'Admin', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'AgendaEventInvitee', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'AttemptFeedback', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'Chat', 'field' => 'toUser', 'type' => 'int'],
+            ['bundle' => 'CoreBundle', 'entity' => 'ChatVideo', 'field' => 'toUser', 'type' => 'int'],
+            ['bundle' => 'CoreBundle', 'entity' => 'CourseRelUser', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'CourseRelUserCatalogue', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'CourseRequest', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CAttendanceResult', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CAttendanceResultComment', 'field' => 'userId', 'type' => 'int'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CAttendanceSheet', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CAttendanceSheetLog', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CChatConnected', 'field' => 'userId', 'type' => 'int'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CDropboxCategory', 'field' => 'userId', 'type' => 'int'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CDropboxFeedback', 'field' => 'authorUserId', 'type' => 'int'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CDropboxPerson', 'field' => 'userId', 'type' => 'int'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CDropboxPost', 'field' => 'destUserId', 'type' => 'int'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CForumMailcue', 'field' => 'userId', 'type' => 'int'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CForumNotification', 'field' => 'userId', 'type' => 'int'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CForumPost', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CForumThread', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CForumThreadQualify', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CForumThreadQualifyLog', 'field' => 'userId', 'type' => 'int'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CGroupRelTutor', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CGroupRelUser', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CLpCategoryRelUser', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CLpRelUser', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CLpView', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CStudentPublicationComment', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CStudentPublicationRelUser', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CSurveyInvitation', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CWiki', 'field' => 'userId', 'type' => 'int'],
+            ['bundle' => 'CourseBundle', 'entity' => 'CWikiMailcue', 'field' => 'userId', 'type' => 'int'],
+            ['bundle' => 'CoreBundle', 'entity' => 'ExtraFieldSavedSearch', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'GradebookCategory', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'GradebookCertificate', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'GradebookComment', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'GradebookEvaluation', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'GradebookLink', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'GradebookLinkevalLog', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'GradebookResult', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'GradebookResultLog', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'GradebookScoreLog', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'Message', 'field' => 'sender', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'MessageFeedback', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'MessageRelUser', 'field' => 'receiver', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'MessageTag', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'Notification', 'field' => 'destUserId', 'type' => 'int'],
+            ['bundle' => 'CoreBundle', 'entity' => 'PageCategory', 'field' => 'creator', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'PersonalAgenda', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'Portfolio', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'PortfolioCategory', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'PortfolioComment', 'field' => 'author', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'ResourceComment', 'field' => 'author', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'SequenceValue', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'SessionRelCourseRelUser', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'SessionRelUser', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'SkillRelItemRelUser', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'SkillRelUser', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'SkillRelUserComment', 'field' => 'feedbackGiver', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'SocialPost', 'field' => 'sender', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'SocialPost', 'field' => 'userReceiver', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'SocialPostAttachment', 'field' => 'insertUserId', 'type' => 'int'],
+            ['bundle' => 'CoreBundle', 'entity' => 'SocialPostFeedback', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'Templates', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'TicketAssignedLog', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'TicketCategory', 'field' => 'insertUserId', 'type' => 'int'],
+            ['bundle' => 'CoreBundle', 'entity' => 'TicketCategoryRelUser', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'TicketMessage', 'field' => 'insertUserId', 'type' => 'int'],
+            ['bundle' => 'CoreBundle', 'entity' => 'TicketMessageAttachment', 'field' => 'lastEditUserId', 'type' => 'int'],
+            ['bundle' => 'CoreBundle', 'entity' => 'TicketPriority', 'field' => 'insertUserId', 'type' => 'int'],
+            ['bundle' => 'CoreBundle', 'entity' => 'TicketProject', 'field' => 'insertUserId', 'type' => 'int'],
+            ['bundle' => 'CoreBundle', 'entity' => 'TicketProject', 'field' => 'lastEditUserId', 'type' => 'int'],
+            ['bundle' => 'CoreBundle', 'entity' => 'TrackEAccess', 'field' => 'accessUserId', 'type' => 'int'],
+            ['bundle' => 'CoreBundle', 'entity' => 'TrackEAccessComplete', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'TrackEAttempt', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'TrackECourseAccess', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'TrackEDefault', 'field' => 'defaultUserId', 'type' => 'int'],
+            ['bundle' => 'CoreBundle', 'entity' => 'TrackEDownloads', 'field' => 'downUserId', 'type' => 'int'],
+            ['bundle' => 'CoreBundle', 'entity' => 'TrackEExercise', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'TrackEExerciseConfirmation', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'TrackEHotpotatoes', 'field' => 'exeUserId', 'type' => 'int'],
+            ['bundle' => 'CoreBundle', 'entity' => 'TrackEHotspot', 'field' => 'hotspotUserId', 'type' => 'int'],
+            ['bundle' => 'CoreBundle', 'entity' => 'TrackELastaccess', 'field' => 'accessUserId', 'type' => 'int'],
+            ['bundle' => 'CoreBundle', 'entity' => 'TrackELinks', 'field' => 'linksUserId', 'type' => 'int'],
+            ['bundle' => 'CoreBundle', 'entity' => 'TrackELogin', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'TrackEOnline', 'field' => 'loginUserId', 'type' => 'int'],
+            ['bundle' => 'CoreBundle', 'entity' => 'TrackEUploads', 'field' => 'uploadUserId', 'type' => 'int'],
+            ['bundle' => 'CoreBundle', 'entity' => 'UsergroupRelUser', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'UserRelTag', 'field' => 'user', 'type' => 'object'],
+            ['bundle' => 'CoreBundle', 'entity' => 'UserRelUser', 'field' => 'user', 'type' => 'object'],
+        ];
+
+        foreach ($relations as $relation) {
+            $entityClass = 'Chamilo\\' . $relation['bundle'] . '\\Entity\\' . $relation['entity'];
+            $repository = $this->getEntityManager()->getRepository($entityClass);
+            $records = $repository->findBy([$relation['field'] => $userToDelete]);
+
+            foreach ($records as $record) {
+                $setter = 'set' . ucfirst($relation['field']);
+                if (method_exists($record, $setter)) {
+                    $valueToSet = $relation['type'] === 'object' ? $fallbackUser : $fallbackUser->getId();
+                    $record->$setter($valueToSet);
+                    if (method_exists($record, 'getResourceFile') && $record->getResourceFile()) {
+                        $resourceFile = $record->getResourceFile();
+                        if (!$this->getEntityManager()->contains($resourceFile)) {
+                            $this->getEntityManager()->persist($resourceFile);
+                        }
+                    }
+                    $this->getEntityManager()->persist($record);
+                }
+            }
+        }
+
+        $this->getEntityManager()->flush();
+    }
+
+    public function getFallbackUser(): ?User
+    {
+        $fallbackUser = $this->findOneBy(['status' => User::FALLBACK], ['id' => 'ASC']);
+
+        if (!$fallbackUser) {
+            throw new \Exception("User not found.");
+        }
+
+        return $fallbackUser;
     }
 
     public function addUserToResourceNode(int $userId, int $creatorId): ResourceNode

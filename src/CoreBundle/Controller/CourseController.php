@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\CourseCategory;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Session;
@@ -711,7 +710,6 @@ class CourseController extends ToolBaseController
         AccessUrlHelper $accessUrlHelper,
         CourseRepository $courseRepository
     ): JsonResponse {
-
         $searchTerm = $request->query->get('search', '');
         $accessUrl = $accessUrlHelper->getCurrent();
 

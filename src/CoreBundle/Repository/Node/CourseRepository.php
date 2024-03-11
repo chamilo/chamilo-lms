@@ -104,14 +104,16 @@ class CourseRepository extends ResourceRepository
                 'user' => $user,
                 'url' => $url,
                 'status' => $status,
-            ]);
+            ])
+        ;
 
         if (!empty($keyword)) {
             $qb->andWhere($qb->expr()->orX(
                 $qb->expr()->like('c.title', ':keyword'),
                 $qb->expr()->like('c.code', ':keyword')
             ))
-                ->setParameter('keyword', '%'.$keyword.'%');
+                ->setParameter('keyword', '%'.$keyword.'%')
+            ;
         }
 
         $query = $qb->getQuery();

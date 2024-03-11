@@ -2,8 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
@@ -30,6 +32,10 @@ function handleForum($url)
     $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
 
     if (api_is_allowed_to_edit(false, true)) {
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
+        $linksRepo = Database::getManager()->getRepository(ResourceLink::class);
+
         //if is called from a learning path lp_id
         $lp_id = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : null;
         $content = $_REQUEST['content'] ?? '';
@@ -47,6 +53,7 @@ function handleForum($url)
                 break;
         }
 
+        /** @var AbstractResource|null $resource */
         $resource = null;
         if ($repo && $id) {
             $resource = $repo->find($id);
@@ -143,7 +150,11 @@ function handleForum($url)
                 break;
             case 'delete_category':
                 if ($resource) {
-                    $repo->delete($resource);
+                    $link = $resource->getResourceNode()->getResourceLinkByContext($course, $session);
+
+                    if ($link) {
+                        $linksRepo->remove($link);
+                    }
 
                     Display::addFlash(
                         Display::return_message(get_lang('Forum category deleted'), 'confirmation', false)
@@ -154,8 +165,12 @@ function handleForum($url)
                 break;
             case 'delete_forum':
                 if ($resource) {
-                    $resource = Container::getForumRepository()->find($id);
-                    $repo->delete($resource);
+                    $link = $resource->getResourceNode()->getResourceLinkByContext($course, $session);
+
+                    if ($link) {
+                        $linksRepo->remove($link);
+                    }
+
                     Display::addFlash(Display::return_message(get_lang('Forum deleted'), 'confirmation', false));
                 }
 
@@ -165,7 +180,12 @@ function handleForum($url)
             case 'delete_thread':
                 $locked = api_resource_is_locked_by_gradebook($id, LINK_FORUM_THREAD);
                 if ($resource && false === $locked) {
-                    $repo->delete($resource);
+                    $link = $resource->getResourceNode()->getResourceLinkByContext($course, $session);
+
+                    if ($link) {
+                        $linksRepo->remove($link);
+                    }
+
                     SkillModel::deleteSkillsFromItem($id, ITEM_TYPE_FORUM_THREAD);
                     $link_info = GradebookUtils::isResourceInCourseGradebook(
                         api_get_course_id(),

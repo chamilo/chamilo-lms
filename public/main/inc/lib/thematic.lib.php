@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
@@ -176,25 +177,32 @@ class Thematic
         return $thematic;
     }
 
-    /**
-     * Delete logically (set active field to 0) a thematic.
-     *
-     * @param int|array $thematicId One or many thematic ids
-     *
-     * @return void
-     */
     public function delete(int|array $thematicId): void
     {
         $repo = Container::getThematicRepository();
+        $linksRepo = Container::$container->get(ResourceLinkRepository::class);
+
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
 
         if (is_array($thematicId)) {
             foreach ($thematicId as $id) {
+                /** @var CThematic $resource */
                 $resource = $repo->find($id);
-                $repo->delete($resource);
+                $link = $resource->getResourceNode()->getResourceLinkByContext($course, $session);
+
+                if ($link) {
+                    $linksRepo->remove($link);
+                }
             }
         } else {
+            /** @var CThematic $resource */
             $resource = $repo->find($thematicId);
-            $repo->delete($resource);
+            $link = $resource->getResourceNode()->getResourceLinkByContext($course, $session);
+
+            if ($link) {
+                $linksRepo->remove($link);
+            }
         };
     }
 

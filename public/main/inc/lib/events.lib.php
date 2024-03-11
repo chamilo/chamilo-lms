@@ -1369,6 +1369,12 @@ class Event
         $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $tblTrackAttemptQualify = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_QUALIFY);
+        if (!isset($lp_id)) {
+            $lp_id = '0';
+        }
+        if (!isset($lp_item_id)) {
+            $lp_item_id = '0';
+        }
 
         if (!in_array(strtolower($order), ['asc', 'desc'])) {
             $order = 'asc';

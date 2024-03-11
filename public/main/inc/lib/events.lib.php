@@ -12,17 +12,19 @@ use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\Exception\NotSupported;
 
 /**
  * Class Event
- * Functions of this library are used to record informations when some kind
- * of event occur. Each event has his own types of informations then each event
+ * Functions of this library are used to record information when some kind
+ * of event occur. Each event has his own types of information then each event
  * use its own function.
  */
 class Event
 {
     /**
-     * Record information for login event when an user identifies himself with username & password
+     * Record information for login event when a user identifies himself with username & password
      * @param int $userId
      *
      * @return bool
@@ -214,7 +216,7 @@ class Event
      *
      * @return int
      *
-     * @throws \Doctrine\ORM\Exception\NotSupported
+     * @throws NotSupported
      * @author Evie Embrechts
      * @author Sebastien Piraux <piraux_seb@hotmail.com>
      */
@@ -245,7 +247,7 @@ class Event
      * @throws Exception
      * @author Sebastien Piraux <piraux_seb@hotmail.com>
      */
-    public static function event_upload($documentId): int
+    public static function event_upload(int $documentId): int
     {
         if (Session::read('login_as')) {
             return 0;
@@ -255,7 +257,6 @@ class Event
         $courseId = api_get_course_int_id();
         $reallyNow = api_get_utc_datetime();
         $userId = api_get_user_id();
-        $documentId = (int) $documentId;
         $sessionId = api_get_session_id();
 
         $sql = "INSERT INTO $table
@@ -297,7 +298,6 @@ class Event
         $reallyNow = api_get_utc_datetime();
         $userId = api_get_user_id();
         $courseId = api_get_course_int_id();
-        $linkId = (int) $linkId;
         $sessionId = api_get_session_id();
         $sql = "INSERT INTO ".$table."
                     ( links_user_id,
@@ -323,7 +323,7 @@ class Event
      *
      * @param int    $exeId
      * @param int    $exoId
-     * @param mixed  $score
+     * @param float  $score
      * @param int    $weighting
      * @param int    $sessionId
      * @param ?int    $learnpathId
@@ -361,7 +361,7 @@ class Event
             return false;
         }
 
-        if (!isset($status) || empty($status)) {
+        if (empty($status)) {
             $status = '';
         } else {
             $status = Database::escape_string($status);
@@ -449,10 +449,6 @@ class Event
     ) {
         global $debug;
         $questionDuration = (int) $questionDuration;
-        $question_id = (int) $question_id;
-        $exe_id = (int) $exe_id;
-        $position = (int) $position;
-        $course_id = (int) $course_id;
         $now = api_get_utc_datetime();
         $recordingLog = ('true' === api_get_setting('exercise.quiz_answer_extra_recording'));
 
@@ -463,10 +459,6 @@ class Event
             if (empty($user_id)) {
                 $user_id = api_get_anonymous_id();
             }
-        }
-        // check course_id or get from context
-        if (empty($course_id)) {
-            $course_id = api_get_course_int_id();
         }
         // check session_id or get from context
         $session_id = (int) $session_id;
@@ -614,20 +606,22 @@ class Event
     /**
      * Record a hotspot spot for this attempt at answering a hotspot question.
      *
-     * @param int    $exeId
-     * @param int    $questionId Question ID
-     * @param int    $answerId Answer ID
-     * @param int    $correct
-     * @param string $coords Coordinates of this point (e.g. 123;324)
-     * @param bool   $updateResults
-     * @param ?int   $exerciseId Deprecated param
-     * @param ?int   $lpId
-     * @param ?int   $lpItemId
+     * @param Exercise $exercise
+     * @param int      $exeId
+     * @param int      $questionId Question ID
+     * @param int      $answerId Answer ID
+     * @param int      $correct
+     * @param string   $coords Coordinates of this point (e.g. 123;324)
+     * @param bool     $updateResults
+     * @param ?int     $exerciseId Deprecated param
+     * @param ?int     $lpId
+     * @param ?int     $lpItemId
      *
      * @return int Result of the insert query, or 0 on error
      *
      * @throws \Doctrine\DBAL\Exception
-     * @uses \Course code and user_id from global scope $_cid and $_user
+     * @throws Exception
+     * @uses Course code and user_id from global scope $_cid and $_user
      */
     public static function saveExerciseAttemptHotspot(
         Exercise $exercise,
@@ -644,7 +638,7 @@ class Event
     {
         $debug = false;
 
-        if (false == $updateResults) {
+        if (!$updateResults) {
             // Validation in case of fraud with activated control time
             if (!ExerciseLib::exercise_time_control_is_valid($exercise, $lpId, $lpItemId)) {
                 if ($debug) {
@@ -726,7 +720,7 @@ class Event
      *
      * @return bool
      * @assert ('','','') === false
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      * @throws Exception
      * @author Yannick Warnier <yannick.warnier@beeznest.com>
      *
@@ -976,7 +970,7 @@ class Event
      * @return bool
      * @throws Exception
      * @throws \Doctrine\DBAL\Exception
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     public static function delete_student_lp_events(
         int $user_id,
@@ -1108,7 +1102,8 @@ class Event
      * @param int  $exercise_id
      * @param int  $course_id
      * @param ?int $session_id
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
+     * @throws Exception
      */
     public static function delete_all_incomplete_attempts(
         int $user_id,
@@ -1208,12 +1203,13 @@ class Event
     /**
      * Gets all exercise results (NO Exercises in LPs ) from a given exercise id, course, session.
      *
-     * @param int  $courseId
+     * @param int   $courseId
      * @param ?int  $session_id
      * @param ?bool $get_count
      *
-     * @return array with the results
+     * @return mixed Array with the results or count if $get_count == true
      * @throws \Doctrine\DBAL\Exception
+     * @throws Exception
      */
     public static function get_all_exercise_results_by_course(
         int $courseId,
@@ -1252,12 +1248,13 @@ class Event
     /**
      * Gets all exercise results (NO Exercises in LPs) from a given exercise id, course, session.
      *
-     * @param int $user_id
-     * @param int $courseId
+     * @param int  $user_id
+     * @param int  $courseId
      * @param ?int $session_id
      *
      * @return array with the results
      * @throws \Doctrine\DBAL\Exception
+     * @throws Exception
      */
     public static function get_all_exercise_results_by_user(
         int $user_id,
@@ -1298,7 +1295,7 @@ class Event
      * Gets exercise results (NO Exercises in LPs) from a given exercise id, course, session.
      *
      * @param int    $exe_id attempt id
-     * @param string $status
+     * @param ?string $status
      *
      * @return array with the results
      * @throws \Doctrine\DBAL\Exception
@@ -1365,7 +1362,8 @@ class Event
         ?int $lp_id = 0,
         ?int $lp_item_id = 0,
         ?string $order = null
-    ) {
+    ): array
+    {
         $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $tblTrackAttemptQualify = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_QUALIFY);
@@ -1547,7 +1545,8 @@ class Event
         int $courseId,
         ?int $session_id = 0,
         ?bool $skipLpResults = true
-    ) {
+    ):array
+    {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
         $sessionCondition = api_get_session_condition($session_id);
@@ -1683,11 +1682,10 @@ class Event
                     exe_id = $exe_id AND
                     question_id = $question_id
                 ORDER by question_id";
-        $sqlres = Database::query($sql);
-        $comm = strval(Database::result($sqlres, 0, 'teacher_comment'));
-        $comm = trim($comm);
+        $sqlResult = Database::query($sql);
+        $comm = strval(Database::result($sqlResult, 0, 'teacher_comment'));
 
-        return $comm;
+        return trim($comm);
     }
 
     /**
@@ -1738,7 +1736,7 @@ class Event
         $result = Database::query($sql);
         $attempt = [];
         if (Database::num_rows($result)) {
-            $attempt = Database::fetch_array($result, 'ASSOC');
+            $attempt = Database::fetch_assoc($result);
         }
 
         return $attempt;
@@ -1754,7 +1752,7 @@ class Event
      * @param int $courseId The course in which it happened (already contained in exe_id)
      * @param int $session_id The session in which it happened (already contained in exe_id)
      * @param int $question_id The c_quiz_question.iid
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      * @throws Exception
      */
     public static function delete_attempt(
@@ -1794,7 +1792,7 @@ class Event
      * @param int $courseId
      * @param int $question_id
      * @param ?int $sessionId
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      * @throws Exception
      */
     public static function delete_attempt_hotspot(
@@ -1845,7 +1843,6 @@ class Event
             return false;
         }
 
-        $sessionId = (int) $sessionId;
         if (false === self::isSessionLogNeedToBeSave($sessionId)) {
             return false;
         }
@@ -2051,6 +2048,7 @@ class Event
      *
      * @return bool true on successful insertion, false otherwise
      * @throws \Doctrine\DBAL\Exception
+     * @throws Exception
      */
     public static function eventAddVirtualCourseTime(
         int $courseId,
@@ -2096,7 +2094,6 @@ class Event
         Database::insert($platformTrackingTable, $params);
 
         if (Tracking::minimumTimeAvailable($sessionId, $courseId)) {
-            $workId = (int) $workId;
             $uniqueId = time();
             $logInfo = [
                 'c_id' => $courseId,
@@ -2325,7 +2322,7 @@ class Event
         $now = time();
         $questionStart = Session::read('question_start', []);
         if (!empty($questionStart) &&
-            isset($questionStart[$questionId]) && !empty($questionStart[$questionId])
+            !empty($questionStart[$questionId])
         ) {
             $time = $questionStart[$questionId];
         } else {
@@ -2345,7 +2342,7 @@ class Event
      * @param User         $subscribedUser
      * @param CourseEntity $course
      * @return void
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     public static function logSubscribedUserInCourse(
         User $subscribedUser,
@@ -2380,7 +2377,7 @@ class Event
      * @param CourseEntity  $course
      * @param SessionEntity $session
      * @return void
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     public static function logUserSubscribedInCourseSession(
         User $userSubscribed,

@@ -581,7 +581,7 @@ class DocumentManager
                         docs.filetype = 'folder' AND
                         $groupCondition AND
                         n.path NOT LIKE '%shared_folder%' AND
-                        l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')
+                        l.deleted_at IS NULL
                         $condition_session ";
 
             if (0 != $groupIid) {
@@ -681,7 +681,7 @@ class DocumentManager
                         WHERE
                             docs.filetype = 'folder' AND
                             $groupCondition AND
-                            l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')
+                            l.deleted_at IS NULL
                             $condition_session AND
                             l.c_id = $courseId ";
                 $folder_in_invisible_result = Database::query($sql);
@@ -3058,7 +3058,7 @@ class DocumentManager
                         l.c_id = $course_id AND
                         docs.filetype = 'folder' AND
                         n.path IN ('".$folder_sql."') AND
-                        l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')
+                        l.deleted_at IS NULL
                          ";
 
             /*$sql = "SELECT path, title

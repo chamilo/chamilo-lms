@@ -25,6 +25,7 @@ class ResourceLinkRepository extends SortableRepository
         $resourceLink->setDisplayOrder(-1);
 
         $em->flush();
+        // soft delete handled by Gedmo\SoftDeleteable
         $em->remove($resourceLink);
         $em->flush();
     }

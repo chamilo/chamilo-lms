@@ -54,10 +54,8 @@ final class CDocumentRepository extends ResourceRepository
             ->innerJoin('d.resourceNode', 'node')
             ->innerJoin('node.resourceLinks', 'l')
             ->where('l.user = :user')
-            ->andWhere('l.visibility <> :visibility')
             ->setParameters([
                 'user' => $userId,
-                'visibility' => ResourceLink::VISIBILITY_DELETED,
             ])
             ->getQuery()
         ;

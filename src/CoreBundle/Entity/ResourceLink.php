@@ -32,7 +32,6 @@ class ResourceLink implements Stringable
     public const VISIBILITY_DRAFT = 0;
     public const VISIBILITY_PENDING = 1;
     public const VISIBILITY_PUBLISHED = 2;
-    public const VISIBILITY_DELETED = 3;
 
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
@@ -295,7 +294,6 @@ class ResourceLink implements Stringable
             'Draft' => self::VISIBILITY_DRAFT,
             'Pending' => self::VISIBILITY_PENDING,
             'Published' => self::VISIBILITY_PUBLISHED,
-            'Deleted' => self::VISIBILITY_DELETED,
         ];
     }
 

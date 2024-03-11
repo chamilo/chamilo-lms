@@ -37,12 +37,6 @@ trait CourseLinkExtensionTrait
 
     protected function addVisibilityCondition(QueryBuilder $queryBuilder): void
     {
-        // Do not show deleted resources.
-        $queryBuilder
-            ->andWhere('links.visibility != :visibilityDeleted')
-            ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED)
-        ;
-
         $allowDraft =
             $this->security->isGranted('ROLE_ADMIN')
             || $this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER');

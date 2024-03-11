@@ -11,12 +11,14 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use LogicException;
+use PHPUnit\Framework\Assert;
 use Symfony\Component\HttpFoundation\Request;
 
 class CDocumentRepositoryTest extends AbstractApiTest
@@ -982,6 +984,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
     {
         $course = $this->createCourse('Test');
         $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $linksRepo = self::getContainer()->get(ResourceLinkRepository::class);
         $admin = $this->getUser('admin');
 
         $document = (new CDocument())
@@ -1031,15 +1034,9 @@ class CDocumentRepositoryTest extends AbstractApiTest
         $this->assertSame(ResourceLink::VISIBILITY_PENDING, $link->getVisibility());
         $this->assertSame('Pending', $link->getVisibilityName());
 
-        $documentRepo->setVisibilityDeleted($document);
         $link = $document->getFirstResourceLink();
-        $this->assertSame(ResourceLink::VISIBILITY_DELETED, $link->getVisibility());
-        $this->assertSame('Deleted', $link->getVisibilityName());
-
-        $documentRepo->softDelete($document);
-        $link = $document->getFirstResourceLink();
-        $this->assertSame(ResourceLink::VISIBILITY_DELETED, $link->getVisibility());
-        $this->assertSame('Deleted', $link->getVisibilityName());
+        $linksRepo->remove($link);
+        $this->assertTrue($link->isDeleted());
     }
 
     public function testGetTotalSpaceByCourse(): void

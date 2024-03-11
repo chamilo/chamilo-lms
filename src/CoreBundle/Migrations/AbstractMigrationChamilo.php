@@ -260,6 +260,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
             $userId = (int) $item['insert_user_id'];
             $sessionId = $item['session_id'] ?? 0;
             $groupId = $item['to_group_id'] ?? 0;
+            $lastUpdatedAt = new \DateTime($item['lastedit_date'], new \DateTimeZone('UTC'));
 
             $newVisibility = ResourceLink::VISIBILITY_DRAFT;
 
@@ -272,11 +273,6 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
 
                 case 1:
                     $newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
-
-                    break;
-
-                case 2:
-                    $newVisibility = ResourceLink::VISIBILITY_DELETED;
 
                     break;
             }
@@ -321,6 +317,12 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
                 $em->persist($resourceNode);
             }
             $resource->addCourseLink($course, $session, $group, $newVisibility);
+
+            if (2 === $visibility) {
+                $link = $resource->getResourceNode()->getResourceLinkByContext($course, $session, $group);
+                $link->setDeletedAt($lastUpdatedAt);
+            }
+
             $em->persist($resource);
         }
 

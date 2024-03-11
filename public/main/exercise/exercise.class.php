@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestionCategory;
@@ -1805,7 +1806,9 @@ class Exercise
         $exerciseId = $this->iId;
 
         $repo = Container::getQuizRepository();
+        /** @var CQuiz $exercise */
         $exercise = $repo->find($exerciseId);
+        $linksRepo = Container::$container->get(ResourceLinkRepository::class);
 
         if (null === $exercise) {
             return false;
@@ -1825,7 +1828,14 @@ class Exercise
                 WHERE iid = $exerciseId";
         Database::query($sql);
 
-        $repo->softDelete($exercise);
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
+
+        $link = $exercise->resourceNode->getResourceLinkByContext($course, $session);
+
+        if ($link) {
+            $linksRepo->remove($link);
+        }
 
         SkillModel::deleteSkillsFromItem($exerciseId, ITEM_TYPE_EXERCISE);
 

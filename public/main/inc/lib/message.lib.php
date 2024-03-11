@@ -469,17 +469,6 @@ class MessageManager
         return $result;
     }
 
-    public static function softDeleteAttachments(Message $message): void
-    {
-        $attachments = $message->getAttachments();
-        if (!empty($attachments)) {
-            $repo = Container::getMessageAttachmentRepository();
-            foreach ($attachments as $file) {
-                $repo->softDelete($file);
-            }
-        }
-    }
-
     /**
      * Saves a message attachment files.
      *

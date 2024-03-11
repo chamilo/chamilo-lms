@@ -39,8 +39,6 @@ class CToolExtension implements QueryCollectionExtensionInterface
             ->andWhere(
                 $queryBuilder->expr()->notIn("$alias.title", ['course_tool', 'course_homepage'])
             )
-            ->andWhere('resource_links.visibility != :visibility_deleted')
-            ->setParameter('visibility_deleted', ResourceLink::VISIBILITY_DELETED)
         ;
     }
 }

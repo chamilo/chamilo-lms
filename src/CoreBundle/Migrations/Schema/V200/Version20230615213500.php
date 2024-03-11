@@ -32,7 +32,6 @@ final class Version20230615213500 extends AbstractMigrationChamilo
         $connection = $em->getConnection();
 
         $lpRepo = $container->get(CLpRepository::class);
-        $courseRepo = $container->get(CourseRepository::class);
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
@@ -53,18 +52,14 @@ final class Version20230615213500 extends AbstractMigrationChamilo
                 if ($resource->hasResourceNode()) {
                     $resourceNode = $resource->getResourceNode();
 
-                    $course = $em->find(Course::class, $lp['c_id']);
-                    $session = isset($lp['session_id'])
-                        ? $em->find(Session::class, $lp['session_id'])
-                        : null;
+                    $course = $this->findCourse((int) $lp['c_id']);
+                    $session = $this->findSession((int) ($lp['session_id'] ?? 0));
 
                     $link = $resourceNode->getResourceLinkByContext($course, $session);
 
-                    if ($link) {
-                        $link->setDisplayOrder(
-                            $position > 0 ? $position - 1 : 0
-                        );
-                    }
+                    $link?->setDisplayOrder(
+                        $position > 0 ? $position - 1 : 0
+                    );
                 }
             }
         }

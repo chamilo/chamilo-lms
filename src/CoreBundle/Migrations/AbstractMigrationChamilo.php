@@ -9,8 +9,10 @@ namespace Chamilo\CoreBundle\Migrations;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Admin;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\SettingsOptions;
 use Chamilo\CoreBundle\Entity\User;
@@ -332,5 +334,23 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
     public function fileExists($filePath): bool
     {
         return file_exists($filePath) && !is_dir($filePath) && is_readable($filePath);
+    }
+
+    public function findCourse(int $id): ?Course
+    {
+        if (0 === $id) {
+            return null;
+        }
+
+        return $this->getEntityManager()->find(Course::class, $id);
+    }
+
+    public function findSession(int $id): ?Session
+    {
+        if (0 === $id) {
+            return null;
+        }
+
+        return $this->getEntityManager()->find(Session::class, $id);
     }
 }

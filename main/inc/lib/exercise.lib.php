@@ -2226,7 +2226,8 @@ HOTSPOT;
         $courseCode = '',
         $showSession = false,
         $searchAllTeacherCourses = false,
-        $status = 0
+        $status = 0,
+        $showAttemptsInSessions = false
     ) {
         return self::get_exam_results_data(
             null,
@@ -2244,7 +2245,8 @@ HOTSPOT;
             false,
             false,
             $searchAllTeacherCourses,
-            $status
+            $status,
+            $showAttemptsInSessions
         );
     }
 
@@ -2531,7 +2533,8 @@ HOTSPOT;
         $roundValues = false,
         $getOnlyIds = false,
         $searchAllTeacherCourses = false,
-        $status = 0
+        $status = 0,
+        $showAttemptsInSessions = false
     ) {
         //@todo replace all this globals
         global $filter;
@@ -2573,7 +2576,7 @@ HOTSPOT;
                 return [];
             }
         } else {
-            $courses = CourseManager::get_courses_list_by_user_id(api_get_user_id(), false, false, false);
+            $courses = CourseManager::get_courses_list_by_user_id(api_get_user_id(), $showAttemptsInSessions, false, false);
 
             if (empty($courses)) {
                 return [];

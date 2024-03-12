@@ -3196,6 +3196,7 @@ class CourseManager
             $sql = "SELECT DISTINCT (c.code),
                         c.id as real_id,
                         c.category_code AS category,
+                        c.title as title,
                         s.id as session_id,
                         s.name as session_name
                     FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." scu

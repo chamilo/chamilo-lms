@@ -1986,124 +1986,22 @@ class DocumentManager
         $orig_source_html = self::get_resources_from_source_html($content_html);
         $orig_course_info = api_get_course_info($origin_course_code);
 
-        // Course does not exist in the current DB probably this came from a zip file?
-        if (empty($orig_course_info)) {
-            if (!empty($origin_course_path_from_zip)) {
-                $orig_course_path = $origin_course_path_from_zip.'/';
-                $orig_course_info_path = $origin_course_info_path;
-            }
-        } else {
-            $orig_course_path = api_get_path(SYS_COURSE_PATH).$orig_course_info['path'].'/';
-            $orig_course_info_path = $orig_course_info['path'];
-        }
-
         $destination_course_code = CourseManager::getCourseCodeFromDirectory($destination_course_directory);
         $destination_course_info = api_get_course_info($destination_course_code);
-        $dest_course_path = api_get_path(SYS_COURSE_PATH).$destination_course_directory.'/';
-        $dest_course_path_rel = api_get_path(REL_COURSE_PATH).$destination_course_directory.'/';
-
-        $user_id = api_get_user_id();
 
         if (!empty($orig_source_html)) {
             foreach ($orig_source_html as $source) {
-                // Get information about source url
-                $real_orig_url = $source[0]; // url
-                $scope_url = $source[1]; // scope (local, remote)
-                $type_url = $source[2]; // type (rel, abs, url)
 
-                // Get path and query from origin url
-                $orig_parse_url = parse_url($real_orig_url);
-                $real_orig_path = isset($orig_parse_url['path']) ? $orig_parse_url['path'] : null;
-                $real_orig_query = isset($orig_parse_url['query']) ? $orig_parse_url['query'] : null;
+                $real_orig_url = $source[0];
+                $scope_url = $source[1];
+                $type_url = $source[2];
 
-                // Replace origin course code by destination course code from origin url query
-                $dest_url_query = '';
+                if ('local' === $scope_url) {
+                    $document_file = strstr($real_orig_url, 'document');
 
-                if (!empty($real_orig_query)) {
-                    $dest_url_query = '?'.$real_orig_query;
-                    if (false !== strpos($dest_url_query, $origin_course_code)) {
-                        $dest_url_query = str_replace($origin_course_code, $destination_course_code, $dest_url_query);
-                    }
-                }
-
-                if ('local' == $scope_url) {
-                    if ('abs' == $type_url || 'rel' == $type_url) {
-                        $document_file = strstr($real_orig_path, 'document');
-
-                        if (false !== strpos($real_orig_path, $document_file)) {
-                            $origin_filepath = $orig_course_path.$document_file;
-                            $destination_filepath = $dest_course_path.$document_file;
-
-                            // copy origin file inside destination course
-                            if (file_exists($origin_filepath)) {
-                                $filepath_dir = dirname($destination_filepath);
-
-                                if (!is_dir($filepath_dir)) {
-                                    $perm = api_get_permissions_for_new_directories();
-                                    $result = @mkdir($filepath_dir, $perm, true);
-                                    if ($result) {
-                                        $filepath_to_add = str_replace(
-                                            [$dest_course_path, 'document'],
-                                            '',
-                                            $filepath_dir
-                                        );
-
-                                        // Add to item properties to the new folder
-                                        self::addDocument(
-                                            $destination_course_info,
-                                            $filepath_to_add,
-                                            'folder',
-                                            0,
-                                            basename($filepath_to_add)
-                                        );
-                                    }
-                                }
-
-                                if (!file_exists($destination_filepath)) {
-                                    $result = @copy($origin_filepath, $destination_filepath);
-                                    if ($result) {
-                                        $filepath_to_add = str_replace(
-                                            [$dest_course_path, 'document'],
-                                            '',
-                                            $destination_filepath
-                                        );
-                                        $size = filesize($destination_filepath);
-
-                                        // Add to item properties to the file
-                                        self::addDocument(
-                                            $destination_course_info,
-                                            $filepath_to_add,
-                                            'file',
-                                            $size,
-                                            basename($filepath_to_add)
-                                        );
-                                    }
-                                }
-                            }
-
-                            // Replace origin course path by destination course path.
-                            if (false !== strpos($content_html, $real_orig_url)) {
-                                $url_course_path = str_replace(
-                                    $orig_course_info_path.'/'.$document_file,
-                                    '',
-                                    $real_orig_path
-                                );
-                                // See BT#7780
-                                $destination_url = $dest_course_path_rel.$document_file.$dest_url_query;
-                                // If the course code doesn't exist in the path? what we do? Nothing! see BT#1985
-                                if (false === strpos($real_orig_path, $origin_course_code)) {
-                                    $url_course_path = $real_orig_path;
-                                    $destination_url = $real_orig_path;
-                                }
-                                $content_html = str_replace($real_orig_url, $destination_url, $content_html);
-                            }
-                        }
-
-                        // replace origin course code by destination course code  from origin url
-                        if (0 === strpos($real_orig_url, '?')) {
-                            $dest_url = str_replace($origin_course_code, $destination_course_code, $real_orig_url);
-                            $content_html = str_replace($real_orig_url, $dest_url, $content_html);
-                        }
+                    if (false !== $document_file) {
+                        $new_url = self::generateNewUrlForCourseResource($destination_course_info, $document_file);
+                        $content_html = str_replace($real_orig_url, $new_url, $content_html);
                     }
                 }
             }
@@ -2111,6 +2009,27 @@ class DocumentManager
 
         return $content_html;
     }
+
+    /**
+     * Generates a new URL for a resource within the context of the target course.
+     *
+     * This function constructs a URL to access a given resource, such as a document
+     * or image, which has been copied into the target course. It's essential for
+     * updating resource links in course content to point to the correct location
+     * after resources have been duplicated or moved between courses.
+     */
+    public static function generateNewUrlForCourseResource(array $destination_course_info, string $document_file): string
+    {
+        $courseCode = $destination_course_info['code'];
+        $courseWebPath = api_get_path(WEB_COURSE_PATH) . $courseCode . "/document/";
+
+        $document_file = ltrim($document_file, '/');
+
+        $newUrl = $courseWebPath . $document_file;
+
+        return $newUrl;
+    }
+
 
     /**
      * Obtains the text inside the file with the right parser.

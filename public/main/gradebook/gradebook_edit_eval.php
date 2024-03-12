@@ -2,6 +2,11 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Entity\GradebookEvaluation;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Course;
+
 require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 GradebookUtils::block_students();
@@ -20,37 +25,45 @@ $form = new EvalForm(
 );
 if ($form->validate()) {
     $values = $form->exportValues();
-    $eval = new Evaluation();
-    $eval->set_id($values['hid_id']);
-    $eval->set_name($values['name']);
-    $eval->set_description($values['description']);
-    $eval->set_user_id($values['hid_user_id']);
-    $eval->set_course_code($values['hid_course_code']);
-    $eval->set_category_id($values['hid_category_id']);
 
-    $parent_cat = Category :: load($values['hid_category_id']);
-    $final_weight = $values['weight_mask'];
+    $entityManager = Database::getManager();
 
-    $eval->set_weight($final_weight);
-    $eval->set_max($values['max']);
-    if (empty($values['visible'])) {
-        $visible = 0;
+    $evaluationId = $values['hid_id'];
+    if ($evaluationId) {
+        $evaluation = $entityManager->getRepository(GradebookEvaluation::class)->find($evaluationId);
     } else {
-        $visible = 1;
+        $evaluation = new GradebookEvaluation();
+        $entityManager->persist($evaluation);
     }
-    $eval->set_visible($visible);
-    $eval->save();
+
+    $evaluation->setTitle($values['name']);
+    $evaluation->setDescription($values['description']);
+
+    $user = $entityManager->getRepository(User::class)->find($values['hid_user_id']);
+    $evaluation->setUser($user);
+
+    $course = $entityManager->getRepository(Course::class)->findOneBy(['code' => $values['hid_course_code']]);
+    $evaluation->setCourse($course);
+
+    $category = $entityManager->getRepository(GradebookCategory::class)->find($values['hid_category_id']);
+    $evaluation->setCategory($category);
+
+    $evaluation->setWeight($values['weight_mask']);
+    $evaluation->setMax($values['max']);
+    $evaluation->setVisible(empty($values['visible']) ? 0 : 1);
+
+    $entityManager->flush();
 
     $logInfo = [
         'tool' => TOOL_GRADEBOOK,
         'tool_id' => 0,
         'tool_id_detail' => 0,
-        'action' => 'edit-eval',
+        'action' => $evaluationId ? 'edit-eval' : 'new-eval',
         'action_details' => '',
     ];
     Event::registerLog($logInfo);
 
-    header('Location: '.Category::getUrl().'editeval=&selectcat='.$eval->get_category_id());
+    header('Location: '.Category::getUrl().'editeval=&selectcat='.$evaluation->getCategory()->getId());
     exit;
 }
 $selectcat_inter = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;

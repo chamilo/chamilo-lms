@@ -156,7 +156,6 @@ class ResourceNodeRepositoryTest extends AbstractApiTest
 
         $link = (new ResourceLink())
             ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED)
-            ->setResourceNode($resourceNode)
             ->setUser($student)
             ->setCourse($course)
             ->setSession($session)
@@ -167,7 +166,9 @@ class ResourceNodeRepositoryTest extends AbstractApiTest
             ->setStartVisibilityAt(new DateTime())
             ->setEndVisibilityAt(new DateTime())
         ;
-        $em->persist($link);
+
+        $resourceNode->addResourceLink($link);
+
         $em->flush();
         $em->clear();
 

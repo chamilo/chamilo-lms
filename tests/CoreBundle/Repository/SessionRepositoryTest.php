@@ -255,7 +255,7 @@ class SessionRepositoryTest extends AbstractApiTest
 
         $session->setAccessStartDate(new DateTime());
         $sessionRepo->update($session);
-        $student->setActive(false);
+        $student->setActive(User::INACTIVE);
         $userRepo->update($student);
 
         $this->expectException(Exception::class);

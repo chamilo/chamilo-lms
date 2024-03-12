@@ -62,7 +62,9 @@ class UserRepositoryTest extends AbstractApiTest
         $userRepo = self::getContainer()->get(UserRepository::class);
         $student = $this->createUser('student');
         $defaultCount = $userRepo->count([]);
-        $userRepo->deleteUser($student);
+        $userRepo->deleteUser($student); // soft delete
+        $this->assertSame($defaultCount, $userRepo->count([]));
+        $userRepo->deleteUser($student, true); // hard delete
         $this->assertSame($defaultCount - 1, $userRepo->count([]));
     }
 
@@ -213,7 +215,6 @@ class UserRepositoryTest extends AbstractApiTest
             ->setLastname('Doe')
             ->setFirstname('Joe')
             ->setUsername('admin2')
-            ->setEnabled(true)
             ->setSalt('')
             ->setRegistrationDate(new DateTime())
             ->setExpirationDate(new DateTime())
@@ -222,7 +223,7 @@ class UserRepositoryTest extends AbstractApiTest
             ->setConfirmationToken('conf')
             ->setRoles(['ROLE_TEST'])
             ->setStatus(1)
-            ->setActive(true)
+            ->setActive(User::ACTIVE)
             ->setDateOfBirth(new DateTime())
             ->setBiography('bio')
             ->setExpired(false)

@@ -204,7 +204,7 @@ class Gradebook extends Model
     public function getSkillsByGradebook($id)
     {
         $id = (int) $id;
-        $sql = "SELECT skill.id, skill.name
+        $sql = "SELECT skill.id, skill.title as name
                 FROM {$this->table_skill} skill
                 INNER JOIN {$this->table_skill_rel_gradebook} skill_rel_gradebook
                 ON skill.id = skill_rel_gradebook.skill_id

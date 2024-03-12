@@ -49,8 +49,8 @@ class SecurityController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        if ($user->getActive() !== 1) {
-            if ($user->getActive() === 0) {
+        if (1 !== $user->getActive()) {
+            if (0 === $user->getActive()) {
                 $message = $translator->trans('Account not activated.');
             } else {
                 $message = $translator->trans('Invalid credentials. Please try again or contact support if you continue to experience issues.');

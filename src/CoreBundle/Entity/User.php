@@ -944,7 +944,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     public function getIsActive(): bool
     {
-        return $this->active === 1;
+        return 1 === $this->active;
     }
 
     public function isEnabled(): bool

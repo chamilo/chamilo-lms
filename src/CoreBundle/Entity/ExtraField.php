@@ -127,7 +127,7 @@ class ExtraField
     protected DateTime $createdAt;
 
     #[Groups(['extra_field:read'])]
-    #[ORM\Column(name: "auto_remove", type: "boolean", options: ["default" => false])]
+    #[ORM\Column(name: 'auto_remove', type: 'boolean', options: ['default' => false])]
     protected bool $autoRemove = false;
 
     public function __construct()

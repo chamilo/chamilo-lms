@@ -3074,39 +3074,32 @@ EOT;
         $course_id = 0,
         $only_active_exercises = true
     ) {
-        $table = Database::get_course_table(TABLE_QUIZ_TEST);
+        $course = api_get_course_entity($course_id);
+        $session = api_get_session_entity($session_id);
+
+        $repo = Container::getQuizRepository();
+
+        $qb = $repo->getResourcesByCourse($course, $session);
 
         if ($only_active_exercises) {
-            // Only active exercises.
-            $sql_active_exercises = "active = 1 AND ";
+            $qb->andWhere('resource.active = 1');
         } else {
-            // Not only active means visible and invisible NOT deleted (-2)
-            $sql_active_exercises = "active IN (1, 0) AND ";
+            $qb->andWhere('resource.active IN (1, 0)');
         }
 
-        if (-1 == $session_id) {
-            $session_id = 0;
-        }
+        $qb->orderBy('resource.title', 'ASC');
 
-        $params = [
-            $session_id,
-            $course_id,
-        ];
+        $exercises = $qb->getQuery()->getResult();
 
-        if (empty($session_id)) {
-            $conditions = [
-                'where' => ["$sql_active_exercises (session_id = 0 OR session_id IS NULL) AND c_id = ?" => [$course_id]],
-                'order' => 'title',
-            ];
-        } else {
-            // All exercises
-            $conditions = [
-                'where' => ["$sql_active_exercises (session_id = 0 OR session_id IS NULL OR session_id = ? ) AND c_id=?" => $params],
-                'order' => 'title',
+        $exerciseList = [];
+        foreach ($exercises as $exercise) {
+            $exerciseList[] = [
+                'iid' => $exercise->getIid(),
+                'title' => $exercise->getTitle(),
             ];
         }
 
-        return Database::select('*', $table, $conditions);
+        return $exerciseList;
     }
 
     /**

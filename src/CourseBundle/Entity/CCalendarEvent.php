@@ -84,21 +84,21 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     #[ORM\GeneratedValue]
     protected ?int $iid = null;
 
-    #[Groups(['calendar_event:write'])]
+    #[Groups(['calendar_event:write', 'calendar_event:read'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
 
-    #[Groups(['calendar_event:write'])]
+    #[Groups(['calendar_event:write', 'calendar_event:read'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'content', type: 'text', nullable: true)]
     protected ?string $content = null;
 
-    #[Groups(['calendar_event:write'])]
+    #[Groups(['calendar_event:write', 'calendar_event:read'])]
     #[ORM\Column(name: 'start_date', type: 'datetime', nullable: true)]
     protected ?DateTime $startDate = null;
 
-    #[Groups(['calendar_event:write'])]
+    #[Groups(['calendar_event:write', 'calendar_event:read'])]
     #[ORM\Column(name: 'end_date', type: 'datetime', nullable: true)]
     protected ?DateTime $endDate = null;
 

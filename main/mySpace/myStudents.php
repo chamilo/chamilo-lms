@@ -2406,7 +2406,7 @@ if ($allow && (api_is_drh() || api_is_platform_admin())) {
     } else {
         $users = MessageManager::getUsersThatHadConversationWithUser($student_id);
     }
-    $users = MessageManager::getUsersThatHadConversationWithUser($student_id);
+
     echo Display::page_subheader2(get_lang('MessageTracking'));
 
     $table = new HTML_Table(['class' => 'table']);

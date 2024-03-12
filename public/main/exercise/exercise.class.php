@@ -3012,8 +3012,8 @@ class Exercise
                 if ($newQuestionId) {
                     $newQuestionObj = Question::read($newQuestionId, null, false);
                     if (isset($newQuestionObj) && $newQuestionObj) {
-                        $sql = "INSERT INTO $exerciseRelQuestionTable (c_id, question_id, quiz_id, question_order)
-                                VALUES ($courseId, ".$newQuestionId.", ".$newId.", '$count')";
+                        $sql = "INSERT INTO $exerciseRelQuestionTable (question_id, quiz_id, question_order)
+                                VALUES (".$newQuestionId.", ".$newId.", '$count')";
                         Database::query($sql);
                         $count++;
                         if (!empty($oldQuestionObj->category)) {
@@ -8994,7 +8994,7 @@ class Exercise
                         '.$alt_title.'
                         id="tooltip_'.$exerciseId.'"
                         href="overview.php?'.api_get_cidreq().$mylpid.$mylpitemid.'&exerciseId='.$exerciseId.'"
-                        style = "'.$style.'"
+                        style = "'.$style.';float:left;"
                         >
                          '.Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, ICON_SIZE_SMALL, $title).$title.
                         '</a>';
@@ -9485,12 +9485,12 @@ class Exercise
             $table->set_header($i++, get_lang('Test name'), false);
 
             if ($is_allowedToEdit) {
-                $table->set_header($i++, get_lang('Questions'), false);
-                $table->set_header($i++, get_lang('Actions'), false, ['class' => 'text-right']);
+                $table->set_header($i++, get_lang('Questions'), false, [], ['class' => 'text-center']);
+                $table->set_header($i++, get_lang('Actions'), false, [], ['class' => 'text-center']);
             } else {
                 $table->set_header($i++, get_lang('Status'), false);
                 if ($isDrhOfCourse) {
-                    $table->set_header($i++, get_lang('Actions'), false, ['class' => 'text-right']);
+                    $table->set_header($i++, get_lang('Actions'), false, [], ['class' => 'text-center']);
                 }
             }
 

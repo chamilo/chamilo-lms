@@ -3,6 +3,8 @@
 
 use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use ChamiloSession as Session;
 use Knp\Component\Pager\Paginator;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
@@ -576,8 +578,8 @@ function getQuestions(
     $length,
     $exerciseId,
     $courseCategoryId,
-    $selected_course,
-    $session_id,
+    $selectedCourse,
+    $sessionId,
     $exerciseLevel,
     $answerType,
     $questionId,
@@ -585,254 +587,84 @@ function getQuestions(
     $fromExercise = 0,
     $formValues = []
 ) {
-    $start = (int) $start;
-    $length = (int) $length;
-    $exerciseId = (int) $exerciseId;
-    $courseCategoryId = (int) $courseCategoryId;
-    $selected_course = (int) $selected_course;
-    $session_id = (int) $session_id;
-    $exerciseLevel = (int) $exerciseLevel;
-    $answerType = (int) $answerType;
-    $questionId = (int) $questionId;
-    $fromExercise = (int) $fromExercise;
-    $description = Database::escape_string($description);
+    $entityManager = Database::getManager();
+    $qb = $entityManager->createQueryBuilder();
 
-    $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-    $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
-    $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-    $TBL_COURSE_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
+    $qb->select('qq', 'IDENTITY(qr.quiz) as exerciseId')
+        ->from(CQuizQuestion::class, 'qq')
+        ->leftJoin('qq.relQuizzes', 'qr');
 
-    $currentExerciseCondition = '';
-    if (!empty($fromExercise)) {
-        $currentCourseId = api_get_course_int_id();
-        $currentExerciseCondition = "
-            AND qu.iid NOT IN (
-                SELECT question_id FROM $TBL_EXERCISE_QUESTION
-                WHERE quiz_id = $fromExercise AND c_id = $currentCourseId
-            )";
+    if ($exerciseId > 0) {
+        $qb->andWhere('qr.quiz = :exerciseId')
+            ->setParameter('exerciseId', $exerciseId);
+    } elseif ($exerciseId == -1) {
+        $qb->andWhere($qb->expr()->isNull('qr.quiz'));
     }
 
-    // if we have selected an exercise in the list-box 'Filter'
-    if ($exerciseId > 0) {
-        $efConditions = getExtraFieldConditions($formValues, 'from');
+    if ($courseCategoryId > 0) {
+        $qb->join('qq.categories', 'qc')
+            ->andWhere('qc.id = :categoryId')
+            ->setParameter('categoryId', $courseCategoryId);
+    }
 
-        $where = '';
-        $from = '';
-        if (isset($courseCategoryId) && $courseCategoryId > 0) {
-            $from = ", $TBL_COURSE_REL_CATEGORY crc ";
-            $where .= " AND
-                    crc.c_id = $selected_course AND
-                    crc.question_id = qu.iid AND
-                    crc.category_id = $courseCategoryId";
-        }
-        if (isset($exerciseLevel) && -1 != $exerciseLevel) {
-            $where .= ' AND level='.$exerciseLevel;
-        }
-        if (isset($answerType) && $answerType > 0) {
-            $where .= ' AND type='.$answerType;
-        }
+    if ($exerciseLevel !== null && $exerciseLevel != -1) {
+        $qb->andWhere('qq.level = :level')
+            ->setParameter('level', $exerciseLevel);
+    }
 
-        if (!empty($questionId)) {
-            $where .= ' AND qu.iid='.$questionId;
-        }
+    if ($answerType !== null && $answerType > 0) {
+        $qb->andWhere('qq.type = :type')
+            ->setParameter('type', $answerType);
+    }
 
-        if (!empty($description)) {
-            $where .= " AND qu.description LIKE '%$description%'";
-        }
+    if (!empty($questionId)) {
+        $qb->andWhere('qq.iid = :questionId')
+            ->setParameter('questionId', $questionId);
+    }
 
-        $select = 'DISTINCT
-                    iid,
-                    question,
-                    type,
-                    level,
-                    qt.quiz_id exerciseId';
-        if ($getCount) {
-            $select = 'count(qu.iid) as count';
-        }
-        $sql = "SELECT $select
-                FROM
-                $TBL_EXERCISE_QUESTION qt
-                INNER JOIN $TBL_QUESTIONS qu
-                ON qt.question_id = qu.iid
-                    $from
-                    {$efConditions['from']}
-                WHERE
-                    qt.quiz_id = $exerciseId AND
-                    qt.c_id = $selected_course  AND
-                    qu.c_id = $selected_course
-                    $where
-                    $currentExerciseCondition
-                    {$efConditions['where']}
-                ORDER BY BINARY qu.question ASC
-                 ";
-    } elseif (-1 == $exerciseId) {
-        $efConditions = getExtraFieldConditions($formValues, 'join');
-        // If we have selected the option 'Orphan questions' in the list-box 'Filter'
-        $level_where = '';
-        $from = '';
-        if (isset($courseCategoryId) && $courseCategoryId > 0) {
-            $from = " INNER JOIN $TBL_COURSE_REL_CATEGORY crc
-                      ON crc.question_id = q.iid AND crc.c_id = q.c_id ";
-            $level_where .= " AND
-                    crc.c_id = $selected_course AND
-                    crc.category_id = $courseCategoryId";
-        }
-        if (isset($exerciseLevel) && -1 != $exerciseLevel) {
-            $level_where = ' AND level='.$exerciseLevel;
-        }
-        $answer_where = '';
-        if (isset($answerType) && $answerType > 0 - 1) {
-            $answer_where = ' AND qu.type='.$answerType;
-        }
+    if (!empty($description)) {
+        $qb->andWhere('qq.description LIKE :description')
+            ->setParameter('description', '%' . $description . '%');
+    }
 
-        if (!empty($questionId)) {
-            $answer_where .= ' AND q.iid='.$questionId;
-        }
+    if (!empty($fromExercise)) {
+        $subQb = $entityManager->createQueryBuilder();
+        $subQb->select('IDENTITY(sq.question)')
+            ->from(CQuizRelQuestion::class, 'sq')
+            ->where('sq.quiz = :fromExercise');
 
-        if (!empty($description)) {
-            $answer_where .= " AND q.description LIKE '%$description%'";
-        }
-
-        $select = ' qu.*, r.quiz_id exerciseId  ';
-        if ($getCount) {
-            $select = 'count(qu.iid) as count';
-        }
-
-        // @todo fix this query with the new id field
-        $sql = " (
-                    SELECT $select
-                    FROM $TBL_QUESTIONS qu
-                    INNER JOIN $TBL_EXERCISE_QUESTION r
-                    ON (qu.c_id = r.c_id AND qu.iid = r.question_id)
-                    INNER JOIN $TBL_EXERCISES ex
-                    ON (ex.iid = r.quiz_id AND ex.c_id = r.c_id)
-                    $from
-                    {$efConditions['from']}
-                    WHERE
-                        ex.c_id = '$selected_course' AND
-                        ex.active = '-1'
-                        $level_where
-                        $answer_where
-                        {$efConditions['where']}
-                )
-                UNION
-                (
-                    SELECT $select
-                    FROM $TBL_QUESTIONS qu
-                    LEFT OUTER JOIN $TBL_EXERCISE_QUESTION r
-                    ON (qu.c_id = r.c_id AND qu.iid = r.question_id)
-                    $from
-                    {$efConditions['from']}
-                    WHERE
-                        qu.c_id = '$selected_course' AND
-                        r.question_id is null
-                        $level_where
-                        $answer_where
-                        {$efConditions['where']}
-                )
-                UNION
-                (
-                        SELECT $select
-                        FROM $TBL_QUESTIONS qu
-                        INNER JOIN $TBL_EXERCISE_QUESTION r
-                        ON (qu.c_id = r.c_id AND qu.iid = r.question_id)
-                        $from
-                        {$efConditions['from']}
-                        WHERE
-                            r.c_id = '$selected_course' AND
-                            (r.quiz_id = '-1' OR r.quiz_id = '0')
-                            $level_where
-                            $answer_where
-                            {$efConditions['where']}
-                    )
-                 ";
-        if ($getCount) {
-            $sql = "SELECT SUM(count) count FROM ($sql) as total";
-        }
-    } else {
-        $efConditions = getExtraFieldConditions($formValues, 'from');
-        // All tests for selected course
-        // If we have not selected any option in the list-box 'Filter'
-        $filter = '';
-        $from = '';
-        if (isset($courseCategoryId) && $courseCategoryId > 0) {
-            $from = ", $TBL_COURSE_REL_CATEGORY crc ";
-            $filter .= " AND
-                        crc.c_id = $selected_course AND
-                        crc.question_id = qu.iid AND
-                        crc.category_id = $courseCategoryId";
-        }
-        if (isset($exerciseLevel) && -1 != $exerciseLevel) {
-            $filter .= ' AND level='.$exerciseLevel.' ';
-        }
-        if (isset($answerType) && $answerType > 0) {
-            $filter .= ' AND qu.type='.$answerType.' ';
-        }
-
-        if (!empty($questionId)) {
-            $filter .= ' AND qu.iid='.$questionId;
-        }
-
-        if (!empty($description)) {
-            $filter .= " AND qu.description LIKE '%$description%'";
-        }
-
-        if (-1 == $session_id || empty($session_id)) {
-            $session_id = 0;
-        }
-        $sessionCondition = api_get_session_condition($session_id, true, 'q.session_id');
-
-        $select = 'qu.iid, question, qu.type, level, q.session_id, qt.quiz_id exerciseId  ';
-        if ($getCount) {
-            $select = 'count(qu.iid) as count';
-        }
-
-        // All tests for the course selected, not in session
-        $sql = "SELECT DISTINCT
-                    $select
-                FROM
-                $TBL_QUESTIONS as qu
-                INNER JOIN $TBL_EXERCISE_QUESTION as qt
-                ON (qu.iid = qt.question_id AND qu.c_id = qt.c_id)
-                INNER JOIN $TBL_EXERCISES as q
-                ON (q.c_id = qu.c_id AND q.iid = qt.quiz_id)
-                {$efConditions['from']}
-                $from
-                WHERE
-                    qu.c_id = $selected_course AND
-                    qt.c_id = $selected_course AND
-                    q.c_id = $selected_course
-                    $sessionCondition
-                    $filter
-                    $currentExerciseCondition
-                    {$efConditions['where']}
-                GROUP BY qu.iid
-                ORDER BY BINARY qu.question ASC
-                ";
+        $qb->andWhere($qb->expr()->notIn('qq.iid', $subQb->getDQL()))
+            ->setParameter('fromExercise', $fromExercise);
     }
 
     if ($getCount) {
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result, 'ASSOC');
-        if ($row) {
-            return (int) $row['count'];
+        $qb->select('COUNT(qq.iid)');
+        try {
+            return (int) $qb->getQuery()->getSingleScalarResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            return 0;
+        }
+    } else {
+        $qb->select('qq.iid as id', 'qq.question', 'qq.type', 'qq.level', 'IDENTITY(qr.quiz) as exerciseId')
+            ->setFirstResult($start)
+            ->setMaxResults($length);
+
+        $results = $qb->getQuery()->getArrayResult();
+
+        $questions = [];
+        foreach ($results as $result) {
+            $question = [
+                'iid' => $result['id'],
+                'question' => $result['question'],
+                'type' => $result['type'],
+                'level' => $result['level'],
+                'exerciseId' => $result['exerciseId'],
+            ];
+            $questions[] = $question;
         }
 
-        return 0;
+        return $questions;
     }
-
-    $sql .= " LIMIT $start, $length";
-    $result = Database::query($sql);
-    $mainQuestionList = [];
-    while ($row = Database::fetch_array($result, 'ASSOC')) {
-        if (-1 == $exerciseId && isQuestionInActiveQuiz($row['iid'])) {
-            continue;
-        }
-
-        $mainQuestionList[] = $row;
-    }
-
-    return $mainQuestionList;
 }
 
 $formValues = $form->validate() ? $form->exportValues() : [];
@@ -853,11 +685,11 @@ $nbrQuestions = getQuestions(
     $formValues
 );
 
-$length = api_get_setting('exercise.question_pagination_length');
+$length = intval(api_get_setting('exercise.question_pagination_length'));
 if (empty($length)) {
     $length = 20;
 }
-
+$page = intval($page);
 $start = ($page - 1) * $length;
 
 $mainQuestionList = getQuestions(
@@ -883,18 +715,35 @@ $pagination->setTotalItemCount($nbrQuestions);
 $pagination->setItemNumberPerPage($length);
 $pagination->setCurrentPageNumber($page);
 $pagination->renderer = function ($data) use ($url) {
-    $render = '';
-    if ($data['pageCount'] > 1) {
-        $render = '<ul class="pagination">';
-        for ($i = 1; $i <= $data['pageCount']; $i++) {
-            $pageContent = '<li><a href="'.$url.'&page='.$i.'">'.$i.'</a></li>';
-            if ($data['current'] == $i) {
-                $pageContent = '<li class="active"><a href="#" >'.$i.'</a></li>';
-            }
-            $render .= $pageContent;
-        }
-        $render .= '</ul>';
+    $render = '<nav aria-label="Page navigation" style="display: flex; justify-content: center;">';
+    $render .= '<ul class="pagination">';
+
+    if ($data['current'] > 1) {
+        $render .= '<li class="page-item"><a class="page-link" href="'.$url.'&page=1" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a></li>';
     }
+
+    if ($data['current'] > 1) {
+        $prevPage = $data['current'] - 1;
+        $render .= '<li class="page-item"><a class="page-link" href="'.$url.'&page='.$prevPage.'" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>';
+    }
+
+    $startPage = max(1, $data['current'] - 2);
+    $endPage = min($data['pageCount'], $data['current'] + 2);
+    for ($i = $startPage; $i <= $endPage; $i++) {
+        $isActive = $data['current'] == $i ? ' active' : '';
+        $render .= '<li class="page-item'.$isActive.'"><a class="page-link" href="'.$url.'&page='.$i.'">'.$i.'</a></li>';
+    }
+
+    if ($data['current'] < $data['pageCount']) {
+        $nextPage = $data['current'] + 1;
+        $render .= '<li class="page-item"><a class="page-link" href="'.$url.'&page='.$nextPage.'" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>';
+    }
+
+    if ($data['current'] < $data['pageCount']) {
+        $render .= '<li class="page-item"><a class="page-link" href="'.$url.'&page='.$data['pageCount'].'" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a></li>';
+    }
+
+    $render .= '</ul></nav>';
 
     return $render;
 };
@@ -1051,7 +900,9 @@ echo '<script>$(function () {
     <div class="clear"></div>
 <?php
 
+echo '<div class="text-center">';
 echo $pagination;
+echo '</div>';
 $tableId = 'question_pool_id';
 echo '<form id="'.$tableId.'" method="get" action="'.$url.'">';
 echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';

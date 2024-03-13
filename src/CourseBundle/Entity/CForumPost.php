@@ -134,7 +134,7 @@ class CForumPost extends AbstractResource implements ResourceInterface, Stringab
         return $this;
     }
 
-    public function getThread(): CForumThread
+    public function getThread(): ?CForumThread
     {
         return $this->thread;
     }

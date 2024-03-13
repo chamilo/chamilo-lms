@@ -115,7 +115,7 @@ class ResourceNode implements Stringable
      * ResourceFile available file for this node.
      */
     #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write', 'message:read'])]
-    #[ORM\OneToOne(inversedBy: 'resourceNode', targetEntity: ResourceFile::class, orphanRemoval: true)]
+    #[ORM\OneToOne(inversedBy: 'resourceNode', targetEntity: ResourceFile::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\JoinColumn(name: 'resource_file_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected ?ResourceFile $resourceFile = null;
 
@@ -128,7 +128,7 @@ class ResourceNode implements Stringable
     #[Groups(['resource_node:read'])]
     #[MaxDepth(1)]
     #[ORM\JoinColumn(name: 'parent_id', onDelete: 'CASCADE')]
-    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: self::class, cascade: ['persist'], inversedBy: 'children')]
     #[Gedmo\TreeParent]
     #[Gedmo\SortableGroup]
     protected ?ResourceNode $parent = null;

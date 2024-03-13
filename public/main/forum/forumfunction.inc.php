@@ -1057,15 +1057,11 @@ function moveUpDown(string $content, string $direction, int $id): string
         return false;
     }
 
-    $currentDisplayOrder = $link->getDisplayOrder();
-
     if ('down' === $direction) {
-        $currentDisplayOrder++;
+        $link->moveDownPosition();
     } else {
-        $currentDisplayOrder--;
+        $link->moveUpPosition();
     }
-
-    $link->setDisplayOrder($currentDisplayOrder);
 
     $em->flush();
 

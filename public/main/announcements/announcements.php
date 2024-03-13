@@ -125,11 +125,12 @@ switch ($action) {
             $link = $resourceNode->getResourceLinkByContext($course, $session, $group);
 
             if ($link) {
-                $currentDisplayOrder = $link->getDisplayOrder();
+                if ('down' === $sortDirection) {
+                    $link->moveDownPosition();
+                } else {
+                    $link->moveUpPosition();
+                }
 
-                $newPosition = $currentDisplayOrder + ($sortDirection === 'down' ? 1 : -1);
-
-                $link->setDisplayOrder($newPosition);
                 $em->flush();
             }
         }

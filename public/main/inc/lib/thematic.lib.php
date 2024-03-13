@@ -89,9 +89,11 @@ class Thematic
             return false;
         }
 
-        $currentDisplayOrder = $link->getDisplayOrder();
-
-        $link->setDisplayOrder('down' === $direction ? $currentDisplayOrder + 1 : $currentDisplayOrder - 1);
+        if ('down' === $direction) {
+            $link->moveDownPosition();
+        } else {
+            $link->moveUpPosition();
+        }
 
         $em->flush();
 

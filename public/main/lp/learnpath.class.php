@@ -7150,9 +7150,7 @@ class learnpath
             $link = $item->resourceNode->getResourceLinkByContext($course, $session);
 
             if ($link) {
-                $link->setDisplayOrder(
-                    $link->getDisplayOrder() - 1
-                );
+                $link->moveUpPosition();
 
                 $em->flush();
             }
@@ -7171,9 +7169,7 @@ class learnpath
             $link = $item->resourceNode->getResourceLinkByContext($course, $session);
 
             if ($link) {
-                $link->setDisplayOrder(
-                    $link->getDisplayOrder() + 1
-                );
+                $link->moveDownPosition();
 
                 $em->flush();
             }
@@ -8631,14 +8627,10 @@ class learnpath
 
             if ($link) {
                 if ('down' === $direction) {
-                    $link->setDisplayOrder(
-                        $link->getDisplayOrder() + 1
-                    );
+                    $link->moveDownPosition();
                 }
                 if ('up' === $direction) {
-                    $link->setDisplayOrder(
-                        $link->getDisplayOrder() - 1
-                    );
+                    $link->moveUpPosition();
                 }
 
                 $em->flush();

@@ -335,4 +335,18 @@ class ResourceLink implements Stringable
 
         return $this;
     }
+
+    public function moveUpPosition(): static
+    {
+        $this->displayOrder--;
+
+        return $this;
+    }
+
+    public function moveDownPosition(): static
+    {
+        $this->displayOrder++;
+
+        return $this;
+    }
 }

@@ -604,7 +604,6 @@ class learnpath
                     $dsp = $row[0] + 1;
                 }*/
 
-                $dsp = 1;
                 $category = null;
                 if (!empty($categoryId)) {
                     $category = Container::getLpCategoryRepository()->find($categoryId);
@@ -616,7 +615,6 @@ class learnpath
                     ->setLpType($type)
                     ->setTitle($name)
                     ->setDescription($description)
-                    ->setDisplayOrder($dsp)
                     ->setCategory($category)
                     ->setPublishedOn($published_on)
                     ->setExpiredOn($expired_on)

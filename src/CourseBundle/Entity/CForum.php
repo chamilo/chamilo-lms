@@ -46,7 +46,6 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
     #[ORM\JoinColumn(name: 'forum_last_post', referencedColumnName: 'iid')]
     protected ?CForumPost $forumLastPost = null;
 
-    #[Gedmo\SortableGroup]
     #[ORM\ManyToOne(targetEntity: CForumCategory::class, inversedBy: 'forums')]
     #[ORM\JoinColumn(name: 'forum_category', referencedColumnName: 'iid', nullable: true, onDelete: 'SET NULL')]
     protected ?CForumCategory $forumCategory = null;
@@ -74,10 +73,6 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
 
     #[ORM\Column(name: 'forum_group_public_private', type: 'string', length: 20, nullable: true)]
     protected ?string $forumGroupPublicPrivate;
-
-    #[Gedmo\SortablePosition]
-    #[ORM\Column(name: 'forum_order', type: 'integer', nullable: true)]
-    protected ?int $forumOrder = null;
 
     #[ORM\Column(name: 'locked', type: 'integer', nullable: false)]
     protected int $locked;
@@ -287,18 +282,6 @@ class CForum extends AbstractResource implements ResourceInterface, Stringable
         $this->forumGroupPublicPrivate = $forumGroupPublicPrivate;
 
         return $this;
-    }
-
-    public function setForumOrder(int $forumOrder): self
-    {
-        $this->forumOrder = $forumOrder;
-
-        return $this;
-    }
-
-    public function getForumOrder(): ?int
-    {
-        return $this->forumOrder;
     }
 
     public function setLocked(int $locked): self

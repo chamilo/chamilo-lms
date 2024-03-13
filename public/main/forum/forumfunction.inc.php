@@ -672,8 +672,6 @@ function store_forum(array $values, array $courseInfo = [], bool $returnId = fal
         $new_max = $row['sort_max'] + 1;*/
     }
 
-    $new_max = 0;
-
     // Forum images
     $has_attachment = false;
     $image_moved = true;
@@ -720,7 +718,6 @@ function store_forum(array $values, array $courseInfo = [], bool $returnId = fal
 
     if (!isset($values['forum_id'])) {
         $forum = new CForum();
-        $forum->setForumOrder($new_max ?? null);
     } else {
         /** @var CForum $forum */
         $forum = $repo->find($values['forum_id']);

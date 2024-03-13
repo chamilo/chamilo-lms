@@ -13,7 +13,7 @@ class Version20240313111800 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Removing display_order, position, cat_order columns from c_lp, c_lp_category, c_forum_category tables';
+        return 'Removing display_order, position, cat_order, forum_order columns from c_lp, c_lp_category, c_forum_category tables, c_forum_forum';
     }
 
     /**
@@ -24,5 +24,6 @@ class Version20240313111800 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_lp DROP display_order');
         $this->addSql('ALTER TABLE c_lp_category DROP position');
         $this->addSql('ALTER TABLE c_forum_category DROP cat_order');
+        $this->addSql('ALTER TABLE c_forum_forum DROP forum_order');
     }
 }

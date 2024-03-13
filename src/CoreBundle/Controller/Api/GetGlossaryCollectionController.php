@@ -34,8 +34,8 @@ class GetGlossaryCollectionController extends BaseResourceFileAction
 
         $qb = $repo->getResourcesByCourse($course, $session, null, null, true, true);
         if ($q) {
-            $qb->andWhere($qb->expr()->like('resource.name', ':name'))
-                ->setParameter('name', '%'.$q.'%')
+            $qb->andWhere($qb->expr()->like('resource.title', ':title'))
+                ->setParameter('title', '%'.$q.'%')
             ;
         }
         $glossaries = $qb->getQuery()->getResult();
@@ -48,7 +48,7 @@ class GetGlossaryCollectionController extends BaseResourceFileAction
                     [
                         'iid' => $item->getIid(),
                         'id' => $item->getIid(),
-                        'name' => $item->getTitle(),
+                        'title' => $item->getTitle(),
                         'description' => $item->getDescription(),
                     ];
             }

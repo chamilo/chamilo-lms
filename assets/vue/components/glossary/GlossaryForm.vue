@@ -69,15 +69,15 @@ const resourceLinkList = ref(
       cid,
       visibility: RESOURCE_LINK_PUBLISHED, // visible by default
     },
-  ])
+  ]),
 )
 
 const formData = reactive({
-  name: "",
+  title: "",
   description: "",
 })
 const rules = {
-  name: { required },
+  title: { required },
   description: { required },
 }
 const v$ = useVuelidate(rules, formData)
@@ -92,7 +92,7 @@ const fetchTerm = async () => {
   }
   try {
     const glossary = await glossaryService.getGlossaryTerm(props.termId)
-    formData.name = glossary.title
+    formData.title = glossary.title
     formData.description = glossary.description
   } catch (error) {
     console.error("Error glossary term:", error)
@@ -108,7 +108,7 @@ const submitGlossaryForm = async () => {
   }
 
   const postData = {
-    title: formData.name,
+    title: formData.title,
     description: formData.description,
     parentResourceNodeId: parentResourceNodeId.value,
     resourceLinkList: resourceLinkList.value,
@@ -126,7 +126,7 @@ const submitGlossaryForm = async () => {
     notification.showSuccessNotification(t("Glossary term saved"))
 
     await router.push({
-      name: "GlossaryList",
+      title: "GlossaryList",
       query: route.query,
     })
   } catch (error) {

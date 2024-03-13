@@ -19,11 +19,11 @@ class CreateCGlossaryAction extends BaseResourceFileAction
     public function __invoke(Request $request, CGlossaryRepository $repo, EntityManager $em): CGlossary
     {
         $data = json_decode($request->getContent(), true);
-        $title = $data['name'];
+        $title = $data['title'];
         $description = $data['description'];
         $parentResourceNodeId = $data['parentResourceNodeId'];
         $resourceLinkList = json_decode($data['resourceLinkList'], true);
-        $sid = isset($data['sid']) ? (int) $data['sid'] : null;
+        $sid = isset($data['sid']) ? (int) $data['sid'] : 0;
         $cid = (int) $data['cid'];
 
         $course = null;
@@ -37,8 +37,8 @@ class CreateCGlossaryAction extends BaseResourceFileAction
 
         // Check if the term already exists
         $qb = $repo->getResourcesByCourse($course, $session)
-            ->andWhere('resource.name = :name')
-            ->setParameter('name', $title)
+            ->andWhere('resource.title = :title')
+            ->setParameter('title', $title)
         ;
         $existingGlossaryTerm = $qb->getQuery()->getOneOrNullResult();
         if (null !== $existingGlossaryTerm) {

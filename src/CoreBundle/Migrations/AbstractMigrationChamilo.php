@@ -20,6 +20,8 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
+use DateTime;
+use DateTimeZone;
 use Doctrine\Migrations\AbstractMigration;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -262,7 +264,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
             $userId = (int) $item['insert_user_id'];
             $sessionId = $item['session_id'] ?? 0;
             $groupId = $item['to_group_id'] ?? 0;
-            $lastUpdatedAt = new \DateTime($item['lastedit_date'], new \DateTimeZone('UTC'));
+            $lastUpdatedAt = new DateTime($item['lastedit_date'], new DateTimeZone('UTC'));
 
             $newVisibility = ResourceLink::VISIBILITY_DRAFT;
 

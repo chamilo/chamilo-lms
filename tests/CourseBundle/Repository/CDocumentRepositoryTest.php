@@ -18,7 +18,6 @@ use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use LogicException;
-use PHPUnit\Framework\Assert;
 use Symfony\Component\HttpFoundation\Request;
 
 class CDocumentRepositoryTest extends AbstractApiTest

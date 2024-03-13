@@ -16,9 +16,6 @@ class Version20240313111800 extends AbstractMigrationChamilo
         return 'Removing display_order, position, cat_order, forum_order columns from c_lp, c_lp_category, c_forum_category tables, c_forum_forum, c_thematic';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function up(Schema $schema): void
     {
         $this->addSql('ALTER TABLE c_lp DROP display_order');

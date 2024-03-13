@@ -26,8 +26,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class ResourceLink implements Stringable
 {
-    use TimestampableTypedEntity;
     use SoftDeleteableEntity;
+    use TimestampableTypedEntity;
 
     public const VISIBILITY_DRAFT = 0;
     public const VISIBILITY_PENDING = 1;

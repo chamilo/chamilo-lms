@@ -454,7 +454,8 @@ class ResourceNode implements Stringable
         $first = $this
             ->resourceLinks
             ->matching($criteria)
-            ->first();
+            ->first()
+        ;
 
         return $first ?: null;
     }

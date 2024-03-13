@@ -156,8 +156,6 @@ class Thematic
             $thematic
                 ->setTitle($title)
                 ->setContent($content)
-                //->setDisplayOrder($max_thematic_item + 1)
-                ->setDisplayOrder(0)
                 ->setParent($course)
                 ->addCourseLink($course, $session)
             ;

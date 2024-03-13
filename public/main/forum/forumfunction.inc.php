@@ -584,7 +584,6 @@ function saveForumCategory(array $values, array $courseInfo = [], bool $showMess
 {
     $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
     $course_id = $courseInfo['real_id'];
-    $new_max = 1;
     $session_id = api_get_session_id();
     $clean_cat_title = $values['forum_category_title'];
     $repo = Container::getForumCategoryRepository();
@@ -617,7 +616,6 @@ function saveForumCategory(array $values, array $courseInfo = [], bool $showMess
         $category
             ->setTitle($clean_cat_title)
             ->setCatComment($values['forum_category_comment'] ?? '')
-            ->setCatOrder($new_max)
             ->setParent($course)
             ->addCourseLink($course, $session)
         ;

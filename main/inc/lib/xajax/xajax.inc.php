@@ -186,6 +186,7 @@ class xajax
 		$this->setCharEncoding($sEncoding);
 		$this->bDecodeUTF8Input = false;
 		$this->bOutputEntities = false;
+        $this->sPreFunction = '';
 	}
 
 	/**
@@ -562,7 +563,7 @@ class xajax
 			set_error_handler("xajaxErrorHandler");
 		}
 
-		if ($this->sPreFunction) {
+		if (!empty($this->sPreFunction)) {
 			if (!$this->_isFunctionCallable($this->sPreFunction)) {
 				$bFoundFunction = false;
 				$objResponse = new xajaxResponse();
@@ -866,7 +867,7 @@ class xajax
 		}
 
 		if (!empty($aURL['query'])) {
-			$aURL['query'] = '?'.Security::remove_XSS($aURL['query']);
+			$aURL['query'] = '?'.$aURL['query'];
 		}
 
 		// Build the URL: Start with scheme, user and pass

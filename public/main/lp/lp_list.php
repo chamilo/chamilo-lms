@@ -111,7 +111,6 @@ if ($allowCategory) {
 
 $categoryTest = new CLpCategory();
 $categoryTest->setTitle(get_lang('Without category'));
-$categoryTest->setPosition(0);
 $categories = [$categoryTest];
 
 if (!empty($categoriesTempList)) {

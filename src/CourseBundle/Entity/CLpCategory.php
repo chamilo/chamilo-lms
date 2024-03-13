@@ -34,10 +34,6 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Stringa
     #[ORM\Column(name: 'title', type: 'text')]
     protected string $title;
 
-    #[Gedmo\SortablePosition]
-    #[ORM\Column(name: 'position', type: 'integer')]
-    protected int $position;
-
     /**
      * @var Collection<int, CLpCategoryRelUser>
      */
@@ -79,18 +75,6 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Stringa
     public function getTitle(): string
     {
         return $this->title;
-    }
-
-    public function setPosition(int $position): self
-    {
-        $this->position = $position;
-
-        return $this;
-    }
-
-    public function getPosition(): int
-    {
-        return $this->position;
     }
 
     /**

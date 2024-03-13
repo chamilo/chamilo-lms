@@ -821,7 +821,6 @@ class Rest extends WebService
 
         $categoryNone = new CLpCategory();
         $categoryNone->setTitle(get_lang('WithOutCategory'));
-        $categoryNone->setPosition(0);
 
         $categories = array_merge([$categoryNone], $categoriesTempList);
         $categoryData = [];

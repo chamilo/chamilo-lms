@@ -18,6 +18,7 @@ class Version20240313111800 extends AbstractMigrationChamilo
         'c_forum_forum' => 'forum_order',
         'c_thematic' => 'display_order',
         'c_announcement' => 'display_order',
+        'c_glossary' => 'display_order',
     ];
 
     public function getDescription(): string

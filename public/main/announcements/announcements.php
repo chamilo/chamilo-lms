@@ -26,9 +26,12 @@ api_protect_course_group(GroupManager::GROUP_TOOL_ANNOUNCEMENT);
 $token = Security::get_existing_token();
 
 $courseId = api_get_course_int_id();
+$course = api_get_course_entity();
 $_course = api_get_course_info_by_id($courseId);
 $group_id = api_get_group_id();
+$group = api_get_group_entity();
 $sessionId = api_get_session_id();
+$session = api_get_session_entity();
 $current_course_tool = TOOL_ANNOUNCEMENT;
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('Announcements');
@@ -115,16 +118,20 @@ switch ($action) {
             $sortDirection = 'up';
         }
 
+        /** @var CAnnouncement $currentAnnouncement */
         $currentAnnouncement = $repo->find($thisAnnouncementId);
         if ($currentAnnouncement) {
             $resourceNode = $currentAnnouncement->getResourceNode();
-            $currentDisplayOrder = $resourceNode->getDisplayOrder();
+            $link = $resourceNode->getResourceLinkByContext($course, $session, $group);
 
-            $newPosition = $currentDisplayOrder + ($sortDirection === 'down' ? 1 : -1);
-            $newPosition = max(0, $newPosition);
+            if ($link) {
+                $currentDisplayOrder = $link->getDisplayOrder();
 
-            $resourceNode->setDisplayOrder($newPosition);
-            $em->flush();
+                $newPosition = $currentDisplayOrder + ($sortDirection === 'down' ? 1 : -1);
+
+                $link->setDisplayOrder($newPosition);
+                $em->flush();
+            }
         }
 
         header('Location: '.$homeUrl);

@@ -1394,7 +1394,7 @@ class AnnouncementManager
 
         $announcements = $qb->getQuery()->getResult();
 
-        $iterator = 1;
+        $iterator = 0;
         $bottomAnnouncement = $announcement_number;
         $displayed = [];
 
@@ -1582,7 +1582,7 @@ class AnnouncementManager
                         .$iconVisibility."</a>";
 
                     // Move up action
-                    if ($iterator == 1) {
+                    if ($iterator == 0 ) {
                         $move1 = $iconUpDisabled;
                     } else {
                         $move1 = "<a href=\"".$actionUrl."&action=move&up=".$announcementId."&sec_token=".$stok."\">".$iconUp."</a>";
@@ -1590,7 +1590,7 @@ class AnnouncementManager
                     $modify_icons .= $move1;
 
                     // Move down action
-                    if ($iterator == 4) {
+                    if ($iterator === count($announcements) - 1) {
                         $move2 = $iconDownDisabled;
                     } else {
                         $move2 = "<a href=\"".$actionUrl."&action=move&down=".$announcementId."&sec_token=".$stok."\">".$iconDown."</a>";;

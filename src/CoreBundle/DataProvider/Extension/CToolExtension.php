@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\DataProvider\Extension;
 use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
-use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CoreBundle\Traits\CourseControllerTrait;
 use Chamilo\CourseBundle\Entity\CTool;
@@ -39,8 +38,6 @@ class CToolExtension implements QueryCollectionExtensionInterface
             ->andWhere(
                 $queryBuilder->expr()->notIn("$alias.title", ['course_tool', 'course_homepage'])
             )
-            ->andWhere('resource_links.visibility != :visibility_deleted')
-            ->setParameter('visibility_deleted', ResourceLink::VISIBILITY_DELETED)
         ;
     }
 }

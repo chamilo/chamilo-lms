@@ -43,6 +43,8 @@ class GetLinksCollectionController extends BaseResourceFileAction
         if ($links) {
             /** @var CLink $link */
             foreach ($links as $link) {
+                $resourceNode = $link->getResourceNode();
+
                 $dataResponse['linksWithoutCategory'][] =
                   [
                       'id' => $link->getIid(),
@@ -51,7 +53,7 @@ class GetLinksCollectionController extends BaseResourceFileAction
                       'url' => $link->getUrl(),
                       'iid' => $link->getIid(),
                       'linkVisible' => $link->getFirstResourceLink()->getVisibility(),
-                      'position' => $link->getResourceNode()->getDisplayOrder(),
+                      'position' => $resourceNode->getResourceLinkByContext($course, $session)?->getDisplayOrder(),
                   ];
             }
         }
@@ -78,6 +80,8 @@ class GetLinksCollectionController extends BaseResourceFileAction
 
                     /** @var CLink $link */
                     foreach ($links as $link) {
+                        $resourceNode = $link->getResourceNode();
+
                         $items[] = [
                             'id' => $link->getIid(),
                             'title' => $link->getTitle(),
@@ -85,7 +89,7 @@ class GetLinksCollectionController extends BaseResourceFileAction
                             'url' => $link->getUrl(),
                             'iid' => $link->getIid(),
                             'linkVisible' => $link->getFirstResourceLink()->getVisibility(),
-                            'position' => $link->getResourceNode()->getDisplayOrder(),
+                            'position' => $resourceNode->getResourceLinkByContext($course, $session)?->getDisplayOrder(),
                         ];
 
                         $dataResponse['categories'][$categoryId]['links'] = $items;

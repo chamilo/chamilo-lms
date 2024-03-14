@@ -485,7 +485,6 @@ foreach ($userList as $userInfo) {
             $categoryTest = new CLpCategory();
             $categoryTest->setId(0);
             $categoryTest->setTitle($plugin->get_lang('WithOutCategory'));
-            $categoryTest->setPosition(0);
             $categories = [$categoryTest];
 
             if (!empty($categoriesTempList)) {

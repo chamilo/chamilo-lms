@@ -33,9 +33,6 @@ class CThematic extends AbstractResource implements ResourceInterface, Stringabl
     #[ORM\Column(name: 'content', type: 'text', nullable: true)]
     protected ?string $content = null;
 
-    #[ORM\Column(name: 'display_order', type: 'integer', nullable: false)]
-    protected int $displayOrder;
-
     #[ORM\Column(name: 'active', type: 'boolean', nullable: false)]
     protected bool $active;
 
@@ -57,7 +54,6 @@ class CThematic extends AbstractResource implements ResourceInterface, Stringabl
         $this->plans = new ArrayCollection();
         $this->advances = new ArrayCollection();
         $this->active = true;
-        $this->displayOrder = 0;
     }
 
     public function __toString(): string
@@ -90,21 +86,6 @@ class CThematic extends AbstractResource implements ResourceInterface, Stringabl
     public function getContent(): ?string
     {
         return $this->content;
-    }
-
-    public function setDisplayOrder(int $displayOrder): self
-    {
-        $this->displayOrder = $displayOrder;
-
-        return $this;
-    }
-
-    /**
-     * Get displayOrder.
-     */
-    public function getDisplayOrder(): int
-    {
-        return $this->displayOrder;
     }
 
     public function setActive(bool $active): self

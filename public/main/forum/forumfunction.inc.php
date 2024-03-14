@@ -2,8 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
@@ -30,6 +32,10 @@ function handleForum($url)
     $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
 
     if (api_is_allowed_to_edit(false, true)) {
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
+        $linksRepo = Database::getManager()->getRepository(ResourceLink::class);
+
         //if is called from a learning path lp_id
         $lp_id = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : null;
         $content = $_REQUEST['content'] ?? '';
@@ -47,6 +53,7 @@ function handleForum($url)
                 break;
         }
 
+        /** @var AbstractResource|null $resource */
         $resource = null;
         if ($repo && $id) {
             $resource = $repo->find($id);
@@ -143,7 +150,7 @@ function handleForum($url)
                 break;
             case 'delete_category':
                 if ($resource) {
-                    $repo->delete($resource);
+                    $linksRepo->removeByResourceInContext($resource, $course, $session);
 
                     Display::addFlash(
                         Display::return_message(get_lang('Forum category deleted'), 'confirmation', false)
@@ -154,8 +161,8 @@ function handleForum($url)
                 break;
             case 'delete_forum':
                 if ($resource) {
-                    $resource = Container::getForumRepository()->find($id);
-                    $repo->delete($resource);
+                    $linksRepo->removeByResourceInContext($resource, $course, $session);
+
                     Display::addFlash(Display::return_message(get_lang('Forum deleted'), 'confirmation', false));
                 }
 
@@ -165,7 +172,8 @@ function handleForum($url)
             case 'delete_thread':
                 $locked = api_resource_is_locked_by_gradebook($id, LINK_FORUM_THREAD);
                 if ($resource && false === $locked) {
-                    $repo->delete($resource);
+                    $linksRepo->removeByResourceInContext($resource, $course, $session);
+
                     SkillModel::deleteSkillsFromItem($id, ITEM_TYPE_FORUM_THREAD);
                     $link_info = GradebookUtils::isResourceInCourseGradebook(
                         api_get_course_id(),
@@ -576,7 +584,6 @@ function saveForumCategory(array $values, array $courseInfo = [], bool $showMess
 {
     $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
     $course_id = $courseInfo['real_id'];
-    $new_max = 1;
     $session_id = api_get_session_id();
     $clean_cat_title = $values['forum_category_title'];
     $repo = Container::getForumCategoryRepository();
@@ -609,7 +616,6 @@ function saveForumCategory(array $values, array $courseInfo = [], bool $showMess
         $category
             ->setTitle($clean_cat_title)
             ->setCatComment($values['forum_category_comment'] ?? '')
-            ->setCatOrder($new_max)
             ->setParent($course)
             ->addCourseLink($course, $session)
         ;
@@ -666,8 +672,6 @@ function store_forum(array $values, array $courseInfo = [], bool $returnId = fal
         $new_max = $row['sort_max'] + 1;*/
     }
 
-    $new_max = 0;
-
     // Forum images
     $has_attachment = false;
     $image_moved = true;
@@ -714,7 +718,6 @@ function store_forum(array $values, array $courseInfo = [], bool $returnId = fal
 
     if (!isset($values['forum_id'])) {
         $forum = new CForum();
-        $forum->setForumOrder($new_max ?? null);
     } else {
         /** @var CForum $forum */
         $forum = $repo->find($values['forum_id']);
@@ -1025,7 +1028,6 @@ function moveUpDown(string $content, string $direction, int $id): string
 {
     $em = Database::getManager();
 
-    $entity = null;
     if ('forumcategory' === $content) {
         $entityRepo = $em->getRepository(CForumCategory::class);
     } elseif ('forum' === $content) {
@@ -1046,12 +1048,21 @@ function moveUpDown(string $content, string $direction, int $id): string
         return false;
     }
 
-    $currentDisplayOrder = $resourceNode->getDisplayOrder();
+    $course = api_get_course_entity();
+    $session = api_get_session_entity();
 
-    $newPosition = $currentDisplayOrder + ($direction === 'down' ? 1 : -1);
-    $newPosition = max(0, $newPosition);
+    $link = $resourceNode->getResourceLinkByContext($course, $session);
 
-    $resourceNode->setDisplayOrder($newPosition);
+    if (!$link) {
+        return false;
+    }
+
+    if ('down' === $direction) {
+        $link->moveDownPosition();
+    } else {
+        $link->moveUpPosition();
+    }
+
     $em->flush();
 
     Display::addFlash(Display::return_message(get_lang('Updated')));
@@ -1083,6 +1094,8 @@ function get_forum_categories(int $courseId = 0, int $sessionId = 0): Array
 /**
  * This function retrieves all the fora in a given forum category.
  *
+ * @todo: Fixes error if there forums with no category.
+ *
  * @param int $categoryId the id of the forum category
  * @param int $courseId   Optional. The course ID
  *
@@ -1097,11 +1110,10 @@ function get_forums_in_category(int $categoryId, int $courseId = 0)
     $repo = Container::getForumRepository();
     $course = api_get_course_entity($courseId);
 
-    $qb = $repo->getResourcesByCourse($course, null);
+    $qb = $repo->getResourcesByCourse($course, null, null, null, true, true);
     $qb
         ->andWhere('resource.forumCategory = :catId')
         ->setParameter('catId', $categoryId)
-        ->orderBy('node.displayOrder')
     ;
 
     return $qb->getQuery()->getResult();

@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
@@ -14,7 +15,6 @@ use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
-use Exception;
 
 final class Version20240112191200 extends AbstractMigrationChamilo
 {
@@ -38,44 +38,53 @@ final class Version20240112191200 extends AbstractMigrationChamilo
         $glossaryRepo = $container->get(CGlossaryRepository::class);
         $announcementRepo = $container->get(CAnnouncementRepository::class);
 
-        $this->updateResourceNodeDisplayOrder($linkCategoryRepo, 'c_link_category', $em);
-        $this->updateResourceNodeDisplayOrder($linkRepo, 'c_link', $em);
-        $this->updateResourceNodeDisplayOrder($groupCategoryRepo, 'c_group_category', $em);
-        $this->updateResourceNodeDisplayOrder($glossaryRepo, 'c_glossary', $em);
-        $this->updateResourceNodeDisplayOrder($announcementRepo, 'c_announcement', $em);
+        $this->updateResourceNodeDisplayOrder($linkCategoryRepo, 'c_link_category', $em, $schema);
+        $this->updateResourceNodeDisplayOrder($linkRepo, 'c_link', $em, $schema);
+        $this->updateResourceNodeDisplayOrder($groupCategoryRepo, 'c_group_category', $em, $schema);
+        $this->updateResourceNodeDisplayOrder($glossaryRepo, 'c_glossary', $em, $schema);
+        $this->updateResourceNodeDisplayOrder($announcementRepo, 'c_announcement', $em, $schema);
     }
 
-    private function updateResourceNodeDisplayOrder($resourceRepo, $tableName, $em): void
+    private function updateResourceNodeDisplayOrder($resourceRepo, $tableName, $em, Schema $schema): void
     {
         /** @var Connection $connection */
         $connection = $em->getConnection();
 
-        try {
-            $testResult = $connection->executeQuery("SELECT display_order FROM $tableName LIMIT 1");
-            $columnExists = true;
-        } catch (Exception $e) {
-            $columnExists = false;
+        $table = $schema->getTable($tableName);
+
+        if (!$table->hasColumn('display_order')) {
+            return;
         }
 
-        if ($columnExists) {
-            $sql = "SELECT * FROM $tableName ORDER BY display_order";
-            $result = $connection->executeQuery($sql);
-            $resources = $result->fetchAllAssociative();
+        $sql = "SELECT * FROM $tableName ORDER BY display_order";
+        $result = $connection->executeQuery($sql);
+        $resources = $result->fetchAllAssociative();
 
-            foreach ($resources as $resourceData) {
-                $resourceId = (int) $resourceData['iid'];
-                $resourcePosition = (int) $resourceData['display_order'];
+        foreach ($resources as $resourceData) {
+            $resourceId = (int) $resourceData['iid'];
+            $resourcePosition = (int) $resourceData['display_order'];
 
-                $resource = $resourceRepo->find($resourceId);
-                if ($resource && $resource->hasResourceNode()) {
-                    $resourceNode = $resource->getResourceNode();
-                    if ($resourceNode) {
-                        $resourceNode->setDisplayOrder($resourcePosition);
-                    }
-                }
+            /** @var AbstractResource $resource */
+            $resource = $resourceRepo->find($resourceId);
+
+            if (!$resource || !$resource->hasResourceNode()) {
+                continue;
             }
 
-            $em->flush();
+            $resourceNode = $resource->getResourceNode();
+
+            if ($resourceNode) {
+                $course = $this->findCourse((int) $resourceData['c_id']);
+                $session = $this->findSession((int) ($resourceData['session_id'] ?? 0));
+
+                $link = $resourceNode->getResourceLinkByContext($course, $session);
+
+                $link?->setDisplayOrder(
+                    $resourcePosition > 0 ? $resourcePosition - 1 : 0
+                );
+            }
         }
+
+        $em->flush();
     }
 }

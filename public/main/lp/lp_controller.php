@@ -440,7 +440,7 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (isset($_REQUEST['id'])) {
-            learnpath::moveUpCategory($_REQUEST['id']);
+            learnpath::moveUpCategory((int) $_REQUEST['id']);
         }
         require 'lp_list.php';
         break;
@@ -449,7 +449,7 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (isset($_REQUEST['id'])) {
-            learnpath::moveDownCategory($_REQUEST['id']);
+            learnpath::moveDownCategory((int) $_REQUEST['id']);
         }
         require 'lp_list.php';
         break;
@@ -458,7 +458,7 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (isset($_REQUEST['id'])) {
-            $result = learnpath::deleteCategory($_REQUEST['id']);
+            $result = learnpath::deleteCategory((int) $_REQUEST['id']);
             if ($result) {
                 Display::addFlash(Display::return_message(get_lang('Deleted')));
             }

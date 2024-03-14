@@ -111,7 +111,6 @@ if ($allowCategory) {
 
 $categoryTest = new CLpCategory();
 $categoryTest->setTitle(get_lang('Without category'));
-$categoryTest->setPosition(0);
 $categories = [$categoryTest];
 
 if (!empty($categoriesTempList)) {
@@ -708,7 +707,7 @@ foreach ($categories as $category) {
                 /* COLUMN ORDER	 */
                 // Only active while session mode is not active
                 if (0 == $sessionId) {
-                    if (1 == $details['lp_display_order'] && 1 != $max) {
+                    if (0 == $current && 1 != $max) {
                         $dsp_order .= Display::url(
                             Display::getMdiIcon('arrow-down-bold', 'ch-tool-icon', '', 22),
                             "lp_controller.php?$cidReq&action=move_lp_down&lp_id=$id&category_id=$categoryId",

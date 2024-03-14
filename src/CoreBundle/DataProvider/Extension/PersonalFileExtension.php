@@ -71,11 +71,6 @@ final class PersonalFileExtension implements QueryCollectionExtensionInterface /
         if ($isShared) {
             $queryBuilder->leftJoin('node.resourceLinks', 'links');
 
-            /*$queryBuilder
-                ->andWhere('links.visibility != :visibilityDeleted')
-                ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED)
-            ;*/
-
             $queryBuilder
                 ->andWhere('links.visibility = :visibility')
                 ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)

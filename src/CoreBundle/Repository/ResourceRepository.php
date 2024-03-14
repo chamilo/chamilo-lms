@@ -282,12 +282,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
             $checker->isGranted('ROLE_ADMIN')
             || $checker->isGranted('ROLE_CURRENT_COURSE_TEACHER');
 
-        // Do not show deleted resources.
-        $qb
-            ->andWhere('links.visibility != :visibilityDeleted')
-            ->setParameter('visibilityDeleted', ResourceLink::VISIBILITY_DELETED, Types::INTEGER)
-        ;
-
         if ($displayOnlyPublished) {
             if (!$isAdminOrTeacher
                 || ($checkStudentView && 'studentview' === $sessionStudentView)
@@ -397,7 +391,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $this->addCourseSessionGroupQueryBuilder($course, $session, $group, $qb);
 
         if ($displayOrder) {
-            $qb->orderBy('node.displayOrder', 'ASC');
+            $qb->orderBy('links.displayOrder', 'ASC');
         }
 
         return $qb;
@@ -605,14 +599,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
         // }
     }
 
-    /**
-     * Change all links visibility to DELETED.
-     */
-    public function softDelete(AbstractResource $resource): void
-    {
-        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DELETED);
-    }
-
     public function toggleVisibilityPublishedDraft(AbstractResource $resource): void
     {
         $firstLink = $resource->getFirstResourceLink();
@@ -636,11 +622,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
     public function setVisibilityDraft(AbstractResource $resource): void
     {
         $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DRAFT);
-    }
-
-    public function setVisibilityDeleted(AbstractResource $resource): void
-    {
-        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DELETED);
     }
 
     public function setVisibilityPending(AbstractResource $resource): void
@@ -729,12 +710,10 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->innerJoin('node.resourceLinks', 'l')
             ->innerJoin('node.resourceFile', 'file')
             ->where('l.course = :course')
-            ->andWhere('l.visibility <> :visibility')
             ->andWhere('file IS NOT NULL')
             ->setParameters(
                 [
                     'course' => $course,
-                    'visibility' => ResourceLink::VISIBILITY_DELETED,
                 ]
             )
         ;

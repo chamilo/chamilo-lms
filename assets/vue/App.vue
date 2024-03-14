@@ -23,11 +23,11 @@
         class="p-toast-message-icon mdi"
       />
       <div class="p-toast-message-text">
-          <span
-            v-if="slotProps.message.summary"
-            class="p-toast-summary"
-            v-text="slotProps.message.summary"
-          />
+        <span
+          v-if="slotProps.message.summary"
+          class="p-toast-summary"
+          v-text="slotProps.message.summary"
+        />
         <div
           class="p-toast-detail"
           v-html="slotProps.message.detail"
@@ -70,9 +70,8 @@ const router = useRouter()
 const i18n = useI18n()
 
 const layout = computed(() => {
-
   if (route.meta.emptyLayout) {
-    return EmptyLayout;
+    return EmptyLayout
   }
 
   const queryParams = new URLSearchParams(window.location.search)
@@ -90,11 +89,14 @@ const layout = computed(() => {
 
 const legacyContainer = ref(null)
 
-watch(() => route.name, () => {
-  if (legacyContainer.value) {
-    legacyContainer.value.innerHTML = ""
-  }
-})
+watch(
+  () => route.name,
+  () => {
+    if (legacyContainer.value) {
+      legacyContainer.value.innerHTML = ""
+    }
+  },
+)
 
 watchEffect(() => {
   if (!legacyContainer.value) {
@@ -151,15 +153,15 @@ onUpdated(() => {
 
   if (!Array.isArray(flashes)) {
     for (const key in flashes) {
-      const notificationType = key === 'danger' ? 'Error' : capitalize(key);
+      const notificationType = key === "danger" ? "Error" : capitalize(key)
 
       for (const flashText of flashes[key]) {
-        notification[`show${notificationType}Notification`](flashText);
+        notification[`show${notificationType}Notification`](flashText)
       }
     }
   }
 
-  app.dataset.flashes = "";
+  app.dataset.flashes = ""
 })
 
 axios.interceptors.response.use(
@@ -189,7 +191,7 @@ watch(
     }
   },
   {
-    inmediate: true
-  }
+    inmediate: true,
+  },
 )
 </script>

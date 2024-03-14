@@ -11,11 +11,11 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 #[Route('/file-manager')]
 class FileManagerController extends AbstractController
@@ -106,7 +106,7 @@ class FileManagerController extends AbstractController
     {
         // Implement logic to download files
         // Replace 'path/to/your/files' with the actual path where the files are stored
-        $filePath = 'path/to/your/files/' . $filename;
+        $filePath = 'path/to/your/files/'.$filename;
 
         return new BinaryFileResponse($filePath);
     }

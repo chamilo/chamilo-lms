@@ -1791,7 +1791,9 @@ abstract class Question
         }
 
         $form->addButtonAdvancedSettings('advanced_params');
-        $form->addHtml('<div id="advanced_params_options" style="display:none">');
+
+        $displayAdvancedParamsOptions = api_get_configuration_value('quiz_question_edit_open_advanced_params_by_default') ? 'block' : 'none';
+        $form->addHtml('<div id="advanced_params_options" style="display:'.$displayAdvancedParamsOptions.'">');
 
         if (isset($zoomOptions['options'])) {
             $form->addElement('text', 'imageZoom', get_lang('ImageURL'));

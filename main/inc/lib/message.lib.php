@@ -3073,7 +3073,7 @@ class MessageManager
                  WHERE user_receiver_id = $userId" .
                  ($startDate ? " AND send_date >= '$startDate'" : "") .
                  ($endDate ? " AND send_date <= '$endDate'" : "") .
-               "UNION
+               " UNION
                SELECT DISTINCT user_receiver_id
                  FROM $messagesTable
                  WHERE user_sender_id = $userId" .

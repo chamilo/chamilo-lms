@@ -116,7 +116,7 @@ function filePickerCallback(callback, value, meta) {
 
   let url;
   if (props.mode === 'personal_files') {
-    url = '/resources/filemanager/personal_list/1477'
+    url = '/resources/filemanager/personal_list/' + parentResourceNodeId.value;
   } else if (props.mode === 'documents') {
     const cidReqStore = useCidReqStore();
     const { course, session } = storeToRefs(cidReqStore);

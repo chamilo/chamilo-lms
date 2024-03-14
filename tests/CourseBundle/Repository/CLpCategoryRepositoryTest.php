@@ -26,16 +26,18 @@ class CLpCategoryRepositoryTest extends AbstractApiTest
 
         $category = (new CLpCategory())
             ->setTitle('cat')
-            ->setPosition(1)
             ->setParent($course)
             ->setCreator($teacher)
         ;
+        $category->addCourseLink($course);
         $this->assertHasNoEntityViolations($category);
         $em->persist($category);
         $em->flush();
 
+        $link = $category->getResourceNode()->getResourceLinkByContext($course);
+
         $this->assertSame($category->getResourceIdentifier(), $category->getIid());
-        $this->assertSame(1, $category->getPosition());
+        $this->assertSame(0, $link?->getDisplayOrder());
         $this->assertSame('cat', (string) $category);
         $this->assertSame(1, $repo->count([]));
 
@@ -55,7 +57,6 @@ class CLpCategoryRepositoryTest extends AbstractApiTest
 
         $category = (new CLpCategory())
             ->setTitle('cat')
-            ->setPosition(1)
             ->setParent($course)
             ->setCreator($teacher)
         ;

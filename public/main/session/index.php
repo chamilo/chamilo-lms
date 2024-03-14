@@ -115,7 +115,7 @@ if (!empty($courseList)) {
             api_get_user_id(),
             api_get_course_info($course_data['code']),
             $session_id,
-            'lp.publishedOn ASC',
+            'resource.publishedOn ASC',
             true,
             null,
             true

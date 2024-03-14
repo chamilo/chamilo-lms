@@ -62,9 +62,6 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     #[ORM\Column(name: 'default_encoding', type: 'string', length: 32, nullable: false, options: ['default' => 'UTF-8'])]
     protected string $defaultEncoding;
 
-    #[ORM\Column(name: 'display_order', type: 'integer', nullable: false, options: ['default' => 0])]
-    protected int $displayOrder;
-
     #[ORM\Column(name: 'content_maker', type: 'text', nullable: false)]
     protected string $contentMaker;
 
@@ -168,7 +165,6 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         $this->defaultEncoding = 'UTF-8';
         $this->defaultViewMod = 'embedded';
         $this->description = '';
-        $this->displayOrder = 0;
         $this->debug = false;
         $this->forceCommit = false;
         $this->hideTocFrame = false;
@@ -285,18 +281,6 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     public function getDefaultEncoding(): string
     {
         return $this->defaultEncoding;
-    }
-
-    public function setDisplayOrder(int $displayOrder): self
-    {
-        $this->displayOrder = $displayOrder;
-
-        return $this;
-    }
-
-    public function getDisplayOrder(): int
-    {
-        return $this->displayOrder;
     }
 
     public function setContentMaker(string $contentMaker): self

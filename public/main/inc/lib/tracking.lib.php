@@ -5690,7 +5690,7 @@ class Tracking
             api_get_user_id(),
             ['real_id' => $courseId],
             $sessionId,
-            'lp.publishedOn ASC',
+            'resource.publishedOn ASC',
             true,
             null,
             true
@@ -6931,7 +6931,7 @@ class Tracking
                     $userId,
                      $courseInfo,
                     0,
-                    'lp.publishedOn ASC',
+                    'resource.publishedOn ASC',
                     true,
                     null,
                     true
@@ -7871,7 +7871,7 @@ class Tracking
             api_get_user_id(),
             $courseInfo,
             $sessionId,
-            'lp.publishedOn ASC',
+            'resource.publishedOn ASC',
             true,
             null,
             true

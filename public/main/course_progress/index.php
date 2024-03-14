@@ -595,7 +595,8 @@ switch ($action) {
                         ['class' => 'btn btn--plain']
                     );
                     if (0 == api_get_session_id()) {
-                        $currentOrder = $thematic->getResourceNode()->getDisplayOrder();
+                        $link = $thematic->getResourceNode()->getResourceLinkByContext($course, $session);
+                        $currentOrder = $link ? $link->getDisplayOrder() : 0;
                         $moveButtons = $thematicManager->getMoveActions($id, $currentOrder, count($thematic_data));
                         $toolbarThematic .= $moveButtons;
                     }

@@ -1068,6 +1068,9 @@ class GroupManager
     {
         $em = Database::getManager();
 
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
+
         $groupCategoryRepo = $em->getRepository(CGroupCategory::class);
         $cat1 = $groupCategoryRepo->find($id1);
         $cat2 = $groupCategoryRepo->find($id2);
@@ -1077,11 +1080,16 @@ class GroupManager
             $node2 = $cat2->getResourceNode();
 
             if ($node1 && $node2) {
-                $order1 = $node1->getDisplayOrder();
-                $order2 = $node2->getDisplayOrder();
+                $link1 = $node1->getResourceLinkByContext($course, $session);
+                $link2 = $node2->getResourceLinkByContext($course, $session);
 
-                $node1->setDisplayOrder($order2);
-                $node2->setDisplayOrder($order1);
+                if ($link1 && $link2) {
+                    $order1 = $link1->getDisplayOrder();
+                    $order2 = $link2->getDisplayOrder();
+
+                    $link1->setDisplayOrder($order2);
+                    $link2->setDisplayOrder($order1);
+                }
 
                 $em->flush();
             }

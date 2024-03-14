@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CourseBundle\Entity\CLpRelUser;
@@ -603,7 +604,6 @@ class learnpath
                     $dsp = $row[0] + 1;
                 }*/
 
-                $dsp = 1;
                 $category = null;
                 if (!empty($categoryId)) {
                     $category = Container::getLpCategoryRepository()->find($categoryId);
@@ -615,7 +615,6 @@ class learnpath
                     ->setLpType($type)
                     ->setTitle($name)
                     ->setDescription($description)
-                    ->setDisplayOrder($dsp)
                     ->setCategory($category)
                     ->setPublishedOn($published_on)
                     ->setExpiredOn($expired_on)
@@ -787,39 +786,40 @@ class learnpath
             return false;
         }
 
-        $lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $lp_view = Database::get_course_table(TABLE_LP_VIEW);
-        $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
+
+        //$lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        //$lp_view = Database::get_course_table(TABLE_LP_VIEW);
+        //$lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
         // Delete lp item id.
-        foreach ($this->items as $lpItemId => $dummy) {
-            $sql = "DELETE FROM $lp_item_view
-                    WHERE lp_item_id = '".$lpItemId."'";
-            Database::query($sql);
-        }
+        //foreach ($this->items as $lpItemId => $dummy) {
+        //    $sql = "DELETE FROM $lp_item_view
+        //            WHERE lp_item_id = '".$lpItemId."'";
+        //    Database::query($sql);
+        //}
 
         // Proposed by Christophe (nickname: clefevre)
-        $sql = "DELETE FROM $lp_item
-                WHERE lp_id = ".$this->lp_id;
-        Database::query($sql);
+        //$sql = "DELETE FROM $lp_item
+        //        WHERE lp_id = ".$this->lp_id;
+        //Database::query($sql);
 
-        $sql = "DELETE FROM $lp_view
-                WHERE lp_id = ".$this->lp_id;
-        Database::query($sql);
+        //$sql = "DELETE FROM $lp_view
+        //        WHERE lp_id = ".$this->lp_id;
+        //Database::query($sql);
 
-        $table = Database::get_course_table(TABLE_LP_REL_USERGROUP);
-        $sql = "DELETE FROM $table
-                WHERE
-                    lp_id = {$this->lp_id}";
-        Database::query($sql);
+        //$table = Database::get_course_table(TABLE_LP_REL_USERGROUP);
+        //$sql = "DELETE FROM $table
+        //        WHERE
+        //            lp_id = {$this->lp_id}";
+        //Database::query($sql);
 
-        $repo = Container::getLpRepository();
-        $lp = $repo->find($this->lp_id);
-        Database::getManager()->remove($lp);
-        Database::getManager()->flush();
+        $lp = Container::getLpRepository()->find($this->lp_id);
 
-        // Updates the display order of all lps.
-        $this->update_display_order();
+        Database::getManager()
+            ->getRepository(ResourceLink::class)
+            ->removeByResourceInContext($lp, $course, $session);
 
         $link_info = GradebookUtils::isResourceInCourseGradebook(
             api_get_course_id(),
@@ -832,9 +832,9 @@ class learnpath
             GradebookUtils::remove_resource_from_course_gradebook($link_info['id']);
         }
 
-        if ('true' === api_get_setting('search_enabled')) {
-            delete_all_values_for_item($this->cc, TOOL_LEARNPATH, $this->lp_id);
-        }
+        //if ('true' === api_get_setting('search_enabled')) {
+        //    delete_all_values_for_item($this->cc, TOOL_LEARNPATH, $this->lp_id);
+        //}
     }
 
     /**
@@ -7138,37 +7138,41 @@ class learnpath
         }
     }
 
-    /**
-     * @param int $id
-     */
-    public static function moveUpCategory($id)
+    public static function moveUpCategory(int $id): void
     {
-        $id = (int) $id;
         $em = Database::getManager();
         /** @var CLpCategory $item */
         $item = $em->find(CLpCategory::class, $id);
         if ($item) {
-            $position = $item->getPosition() - 1;
-            $item->setPosition($position);
-            $em->persist($item);
-            $em->flush();
+            $course = api_get_course_entity();
+            $session = api_get_session_entity();
+
+            $link = $item->resourceNode->getResourceLinkByContext($course, $session);
+
+            if ($link) {
+                $link->moveUpPosition();
+
+                $em->flush();
+            }
         }
     }
 
-    /**
-     * @param int $id
-     */
-    public static function moveDownCategory($id)
+    public static function moveDownCategory(int $id): void
     {
-        $id = (int) $id;
         $em = Database::getManager();
         /** @var CLpCategory $item */
         $item = $em->find(CLpCategory::class, $id);
         if ($item) {
-            $position = $item->getPosition() + 1;
-            $item->setPosition($position);
-            $em->persist($item);
-            $em->flush();
+            $course = api_get_course_entity();
+            $session = api_get_session_entity();
+
+            $link = $item->resourceNode->getResourceLinkByContext($course, $session);
+
+            if ($link) {
+                $link->moveDownPosition();
+
+                $em->flush();
+            }
         }
     }
 
@@ -7198,7 +7202,7 @@ class learnpath
     {
         // Using doctrine extensions
         $repo = Container::getLpCategoryRepository();
-        $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId), api_get_session_entity());
+        $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId), api_get_session_entity(), null, null, true, true);
 
         return $qb->getQuery()->getResult();
     }
@@ -7222,10 +7226,7 @@ class learnpath
         return $sessionId;
     }
 
-    /**
-     * @param int $id
-     */
-    public static function deleteCategory($id): bool
+    public static function deleteCategory(int $id): bool
     {
         $repo = Container::getLpCategoryRepository();
         /** @var CLpCategory $category */
@@ -7236,12 +7237,14 @@ class learnpath
 
             foreach ($lps as $lp) {
                 $lp->setCategory(null);
-                $em->persist($lp);
             }
 
-            // Removing category.
-            $em->remove($category);
-            $em->flush();
+            $em->persist($lp);
+
+            $course = api_get_course_entity();
+            $session = api_get_session_entity();
+
+            $em->getRepository(ResourceLink::class)->removeByResourceInContext($category, $course, $session);
 
             return true;
         }
@@ -8616,21 +8619,20 @@ class learnpath
         /** @var CLp $lp */
         $lp = Container::getLpRepository()->find($lpId);
         if ($lp) {
-            $resourceNode = $lp->getResourceNode();
-            $position = $resourceNode->getDisplayOrder();
-            $resourceNodeId = $resourceNode->getId();
+            $course = api_get_course_entity();
+            $session = api_get_session_entity();
+            $group = api_get_group_entity();
 
-            $item = $em->find(ResourceNode::class, $resourceNodeId);
-            if ($item) {
-                $newPosition = 0;
+            $link = $lp->getResourceNode()->getResourceLinkByContext($course, $session, $group);
+
+            if ($link) {
                 if ('down' === $direction) {
-                    $newPosition = $position + 1;
+                    $link->moveDownPosition();
                 }
                 if ('up' === $direction) {
-                    $newPosition = $position - 1;
+                    $link->moveUpPosition();
                 }
-                $item->setDisplayOrder($newPosition);
-                $em->persist($item);
+
                 $em->flush();
             }
         }

@@ -9,8 +9,10 @@ namespace Chamilo\CoreBundle\Migrations;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Admin;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\SettingsOptions;
 use Chamilo\CoreBundle\Entity\User;
@@ -18,6 +20,8 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
+use DateTime;
+use DateTimeZone;
 use Doctrine\Migrations\AbstractMigration;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -260,6 +264,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
             $userId = (int) $item['insert_user_id'];
             $sessionId = $item['session_id'] ?? 0;
             $groupId = $item['to_group_id'] ?? 0;
+            $lastUpdatedAt = new DateTime($item['lastedit_date'], new DateTimeZone('UTC'));
 
             $newVisibility = ResourceLink::VISIBILITY_DRAFT;
 
@@ -272,11 +277,6 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
 
                 case 1:
                     $newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
-
-                    break;
-
-                case 2:
-                    $newVisibility = ResourceLink::VISIBILITY_DELETED;
 
                     break;
             }
@@ -321,6 +321,12 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
                 $em->persist($resourceNode);
             }
             $resource->addCourseLink($course, $session, $group, $newVisibility);
+
+            if (2 === $visibility) {
+                $link = $resource->getResourceNode()->getResourceLinkByContext($course, $session, $group);
+                $link->setDeletedAt($lastUpdatedAt);
+            }
+
             $em->persist($resource);
         }
 
@@ -330,5 +336,23 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
     public function fileExists($filePath): bool
     {
         return file_exists($filePath) && !is_dir($filePath) && is_readable($filePath);
+    }
+
+    public function findCourse(int $id): ?Course
+    {
+        if (0 === $id) {
+            return null;
+        }
+
+        return $this->getEntityManager()->find(Course::class, $id);
+    }
+
+    public function findSession(int $id): ?Session
+    {
+        if (0 === $id) {
+            return null;
+        }
+
+        return $this->getEntityManager()->find(Session::class, $id);
     }
 }

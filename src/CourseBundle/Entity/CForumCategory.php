@@ -32,9 +32,6 @@ class CForumCategory extends AbstractResource implements ResourceInterface, Stri
     #[ORM\Column(name: 'cat_comment', type: 'text', nullable: true)]
     protected ?string $catComment;
 
-    #[ORM\Column(name: 'cat_order', type: 'integer', nullable: false)]
-    protected int $catOrder;
-
     #[ORM\Column(name: 'locked', type: 'integer', nullable: false)]
     protected int $locked;
 
@@ -87,18 +84,6 @@ class CForumCategory extends AbstractResource implements ResourceInterface, Stri
     public function getCatComment(): ?string
     {
         return $this->catComment;
-    }
-
-    public function setCatOrder(int $catOrder): self
-    {
-        $this->catOrder = $catOrder;
-
-        return $this;
-    }
-
-    public function getCatOrder(): int
-    {
-        return $this->catOrder;
     }
 
     public function setLocked(int $locked): self

@@ -155,11 +155,6 @@ class ResourceNodeVoter extends Voter
 
         // @todo implement view, edit, delete.
         foreach ($links as $link) {
-            // Block access if visibility is deleted. Creator and admin have already access.
-            if (ResourceLink::VISIBILITY_DELETED === $link->getVisibility()) {
-                continue;
-            }
-
             // Check if resource was sent to the current user.
             $linkUser = $link->getUser();
             if ($linkUser instanceof UserInterface

@@ -23,7 +23,7 @@ class UpdatePositionLink extends AbstractController
 
         $resourceNode = $link->getResourceNode();
         if ($resourceNode) {
-            $resourceNode->setDisplayOrder($newPosition);
+            // $resourceNode->setDisplayOrder($newPosition);
             $em->flush();
         }
 

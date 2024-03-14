@@ -20,10 +20,12 @@ use Chamilo\CoreBundle\Entity\Listener\ResourceNodeListener;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Traits\TimestampableAgoTrait;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CShortcut;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use InvalidArgumentException;
@@ -97,7 +99,6 @@ class ResourceNode implements Stringable
     #[Assert\NotNull]
     #[ORM\ManyToOne(targetEntity: ResourceType::class, inversedBy: 'resourceNodes')]
     #[ORM\JoinColumn(name: 'resource_type_id', referencedColumnName: 'id', nullable: false)]
-    #[Gedmo\SortableGroup]
     protected ResourceType $resourceType;
 
     #[ORM\ManyToOne(targetEntity: ResourceFormat::class, inversedBy: 'resourceNodes')]
@@ -130,7 +131,6 @@ class ResourceNode implements Stringable
     #[ORM\JoinColumn(name: 'parent_id', onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[Gedmo\TreeParent]
-    #[Gedmo\SortableGroup]
     protected ?ResourceNode $parent = null;
 
     /**
@@ -189,10 +189,6 @@ class ResourceNode implements Stringable
     #[ORM\Column(type: 'uuid', unique: true)]
     protected ?UuidV4 $uuid = null;
 
-    #[ORM\Column(name: 'display_order', type: 'integer', nullable: false)]
-    #[Gedmo\SortablePosition]
-    protected int $displayOrder;
-
     public function __construct()
     {
         $this->public = false;
@@ -202,7 +198,6 @@ class ResourceNode implements Stringable
         $this->comments = new ArrayCollection();
         $this->createdAt = new DateTime();
         $this->fileEditableText = false;
-        $this->displayOrder = 0;
     }
 
     public function __toString(): string
@@ -414,6 +409,57 @@ class ResourceNode implements Stringable
         return $this->resourceLinks;
     }
 
+    public function getResourceLinkByContext(
+        ?Course $course = null,
+        ?Session $session = null,
+        ?CGroup $group = null,
+        ?Usergroup $usergroup = null,
+        ?User $user = null,
+    ): ?ResourceLink {
+        $criteria = Criteria::create();
+        $criteria->where(
+            Criteria::expr()->eq('resourceTypeGroup', $this->resourceType->getId())
+        );
+
+        if ($course) {
+            $criteria->andWhere(
+                Criteria::expr()->eq('course', $course)
+            );
+        }
+
+        if ($session) {
+            $criteria->andWhere(
+                Criteria::expr()->eq('session', $session)
+            );
+        }
+
+        if ($usergroup) {
+            $criteria->andWhere(
+                Criteria::expr()->eq('userGroup', $usergroup)
+            );
+        }
+
+        if ($group) {
+            $criteria->andWhere(
+                Criteria::expr()->eq('group', $group)
+            );
+        }
+
+        if ($user) {
+            $criteria->andWhere(
+                Criteria::expr()->eq('user', $user)
+            );
+        }
+
+        $first = $this
+            ->resourceLinks
+            ->matching($criteria)
+            ->first()
+        ;
+
+        return $first ?: null;
+    }
+
     public function setResourceLinks(Collection $resourceLinks): self
     {
         $this->resourceLinks = $resourceLinks;
@@ -423,7 +469,10 @@ class ResourceNode implements Stringable
 
     public function addResourceLink(ResourceLink $link): self
     {
-        $link->setResourceNode($this);
+        $link
+            ->setResourceNode($this)
+            ->setResourceTypeGroup($this->resourceType->getId())
+        ;
         $this->resourceLinks->add($link);
 
         return $this;
@@ -579,18 +628,6 @@ class ResourceNode implements Stringable
     public function setPublic(bool $public): self
     {
         $this->public = $public;
-
-        return $this;
-    }
-
-    public function getDisplayOrder(): int
-    {
-        return $this->displayOrder;
-    }
-
-    public function setDisplayOrder(int $displayOrder): self
-    {
-        $this->displayOrder = $displayOrder;
 
         return $this;
     }

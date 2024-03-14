@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
-use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
@@ -145,7 +144,6 @@ class ResourceNodeRepository extends MaterializedPathRepository
             ->innerJoin('node.resourceLinks', 'l')
             ->where('node.resourceType = :type')
             ->andWhere('node.parent = :parentNode')
-            ->andWhere('l.visibility <> :visibility')
             ->andWhere('file IS NOT NULL')
         ;
 
@@ -154,7 +152,6 @@ class ResourceNodeRepository extends MaterializedPathRepository
             $qb->andWhere('l.course = :course');
             $params['course'] = $course;
         }
-        $params['visibility'] = ResourceLink::VISIBILITY_DELETED;
         $params['parentNode'] = $resourceNode;
         $params['type'] = $type;
 

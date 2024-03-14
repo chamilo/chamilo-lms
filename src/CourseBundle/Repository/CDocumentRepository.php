@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
@@ -54,10 +53,8 @@ final class CDocumentRepository extends ResourceRepository
             ->innerJoin('d.resourceNode', 'node')
             ->innerJoin('node.resourceLinks', 'l')
             ->where('l.user = :user')
-            ->andWhere('l.visibility <> :visibility')
             ->setParameters([
                 'user' => $userId,
-                'visibility' => ResourceLink::VISIBILITY_DELETED,
             ])
             ->getQuery()
         ;

@@ -1607,7 +1607,6 @@ if (empty($details)) {
         $categoriesTempList = learnpath::getCategories($courseId);
         $categoryTest = new CLpCategory();
         $categoryTest->setTitle(get_lang('Without category'));
-        $categoryTest->setPosition(0);
         $categories = [
             $categoryTest,
         ];

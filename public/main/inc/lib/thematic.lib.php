@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CThematicAdvance;
@@ -82,12 +83,18 @@ class Thematic
             return false;
         }
 
-        $currentDisplayOrder = $resourceNode->getDisplayOrder();
+        $link = $resourceNode->getResourceLinkByContext($course, $session);
 
-        $newPosition = $currentDisplayOrder + ($direction === 'down' ? 1 : -1);
-        $newPosition = max(0, $newPosition);
+        if (!$link) {
+            return false;
+        }
 
-        $resourceNode->setDisplayOrder($newPosition);
+        if ('down' === $direction) {
+            $link->moveDownPosition();
+        } else {
+            $link->moveUpPosition();
+        }
+
         $em->flush();
 
         // update done advances with de current thematic list
@@ -151,8 +158,6 @@ class Thematic
             $thematic
                 ->setTitle($title)
                 ->setContent($content)
-                //->setDisplayOrder($max_thematic_item + 1)
-                ->setDisplayOrder(0)
                 ->setParent($course)
                 ->addCourseLink($course, $session)
             ;
@@ -172,25 +177,24 @@ class Thematic
         return $thematic;
     }
 
-    /**
-     * Delete logically (set active field to 0) a thematic.
-     *
-     * @param int|array $thematicId One or many thematic ids
-     *
-     * @return void
-     */
     public function delete(int|array $thematicId): void
     {
         $repo = Container::getThematicRepository();
+        $linksRepo = Container::$container->get(ResourceLinkRepository::class);
+
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
 
         if (is_array($thematicId)) {
             foreach ($thematicId as $id) {
+                /** @var CThematic $resource */
                 $resource = $repo->find($id);
-                $repo->delete($resource);
+                $linksRepo->removeByResourceInContext($resource, $course, $session);
             }
         } else {
+            /** @var CThematic $resource */
             $resource = $repo->find($thematicId);
-            $repo->delete($resource);
+            $linksRepo->removeByResourceInContext($resource, $course, $session);
         };
     }
 

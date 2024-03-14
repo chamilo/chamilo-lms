@@ -142,9 +142,6 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
                 case '1':
                     $newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
                     break;
-                case '2':
-                    $newVisibility = ResourceLink::VISIBILITY_DELETED;
-                    break;
             }
 
             $link = new ResourceLink();
@@ -156,6 +153,10 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
                 ->setResourceNode($node)
                 ->setVisibility($newVisibility)
             ;
+
+            if (2 === (int) $row['visibility']) {
+                $link->setDeletedAt($lastUpdatedAt);
+            }
 
             if (!empty($rights)) {
                 foreach ($rights as $right) {

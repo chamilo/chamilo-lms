@@ -3670,7 +3670,7 @@ __metadata:
     lodash: "npm:^4.17.21"
     luxon: "npm:^2.5.2"
     mathjax: "npm:^2.7.9"
-    mediaelement: "npm:^5.1.1"
+    mediaelement: "npm:^7.0.3"
     mediaelement-plugins: "https://github.com/AngelFQC/mediaelement-plugins.git#commit=0bbb4eaad7673725b94ab955bba1790c8a4ddc3c"
     mini-css-extract-plugin: "npm:^1.6.2"
     moment: "npm:^2.30.1"
@@ -6740,13 +6740,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mediaelement@npm:^5.0.1, mediaelement@npm:^5.1.1":
+"mediaelement@npm:^5.0.1":
   version: 5.1.1
   resolution: "mediaelement@npm:5.1.1"
   dependencies:
     global: "npm:^4.3.1"
     svg4everybody: "npm:^2.1.9"
   checksum: 10c0/f0253c10f68d9dc6fa5da91739db1801f5896379a433b9c0057ec4eff0ffb35169479be0c736d53d653bdc1cc75e2c9b764a8c6a0a7eb69ba7da3cf0eb6ac3d8
+  languageName: node
+  linkType: hard
+
+"mediaelement@npm:^7.0.3":
+  version: 7.0.3
+  resolution: "mediaelement@npm:7.0.3"
+  dependencies:
+    global: "npm:^4.3.1"
+    svg4everybody: "npm:^2.1.9"
+  checksum: 10c0/e510300c86e2e935a2fe0d6deccd4376b06e0d9c5cfe747ac9213f372c40131fa9b3209180557f4d5fbfb0774ac3c4b3377523916fea5ba5d794b2f10e0da9b2
   languageName: node
   linkType: hard
 

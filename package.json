@@ -68,7 +68,7 @@
     "lodash": "^4.17.21",
     "luxon": "^2.5.2",
     "mathjax": "^2.7.9",
-    "mediaelement": "^5.1.1",
+    "mediaelement": "^7.0.3",
     "mediaelement-plugins": "https://github.com/AngelFQC/mediaelement-plugins.git#commit=0bbb4eaad7673725b94ab955bba1790c8a4ddc3c",
     "mini-css-extract-plugin": "^1.6.2",
     "moment": "^2.30.1",

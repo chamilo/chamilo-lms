@@ -23,11 +23,11 @@
         class="p-toast-message-icon mdi"
       />
       <div class="p-toast-message-text">
-          <span
-            v-if="slotProps.message.summary"
-            class="p-toast-summary"
-            v-text="slotProps.message.summary"
-          />
+        <span
+          v-if="slotProps.message.summary"
+          class="p-toast-summary"
+          v-text="slotProps.message.summary"
+        />
         <div
           class="p-toast-detail"
           v-html="slotProps.message.detail"
@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { computed, onUpdated, provide, ref, watch, watchEffect } from "vue"
+import { computed, onMounted, onUpdated, provide, ref, watch, watchEffect } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { DefaultApolloClient } from "@vue/apollo-composable"
 import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client/core"
@@ -55,6 +55,7 @@ import { useI18n } from "vue-i18n"
 import { customVueTemplateEnabled } from "./config/env"
 import CustomDashboardLayout from "../../var/vue_templates/components/layout/DashboardLayout.vue"
 import EmptyLayout from "./components/layout/EmptyLayout.vue"
+import { useMediaElementLoader } from "./composables/mediaElementLoader"
 
 const apolloClient = new ApolloClient({
   link: createHttpLink({
@@ -69,10 +70,11 @@ const route = useRoute()
 const router = useRouter()
 const i18n = useI18n()
 
-const layout = computed(() => {
+const { loader: mejsLoader } = useMediaElementLoader()
 
+const layout = computed(() => {
   if (route.meta.emptyLayout) {
-    return EmptyLayout;
+    return EmptyLayout
   }
 
   const queryParams = new URLSearchParams(window.location.search)
@@ -90,11 +92,14 @@ const layout = computed(() => {
 
 const legacyContainer = ref(null)
 
-watch(() => route.name, () => {
-  if (legacyContainer.value) {
-    legacyContainer.value.innerHTML = ""
-  }
-})
+watch(
+  () => route.name,
+  () => {
+    if (legacyContainer.value) {
+      legacyContainer.value.innerHTML = ""
+    }
+  },
+)
 
 watchEffect(() => {
   if (!legacyContainer.value) {
@@ -151,15 +156,15 @@ onUpdated(() => {
 
   if (!Array.isArray(flashes)) {
     for (const key in flashes) {
-      const notificationType = key === 'danger' ? 'Error' : capitalize(key);
+      const notificationType = key === "danger" ? "Error" : capitalize(key)
 
       for (const flashText of flashes[key]) {
-        notification[`show${notificationType}Notification`](flashText);
+        notification[`show${notificationType}Notification`](flashText)
       }
     }
   }
 
-  app.dataset.flashes = "";
+  app.dataset.flashes = ""
 })
 
 axios.interceptors.response.use(
@@ -189,7 +194,11 @@ watch(
     }
   },
   {
-    inmediate: true
-  }
+    inmediate: true,
+  },
 )
+
+onMounted(() => {
+  mejsLoader()
+})
 </script>

@@ -27,7 +27,7 @@ class Version20240313111800 extends AbstractMigrationChamilo
         $columns = array_values($this->changes);
 
         return sprintf(
-            'Removing %s columns from % tables',
+            'Removing %s columns from %s tables',
             implode(', ', $columns),
             implode(', ', $tables)
         );

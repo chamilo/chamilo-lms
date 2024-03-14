@@ -26,6 +26,11 @@ export default {
       //path: ':id',
       path: 'show',
       component: () => import('../views/page/Show.vue')
-    }
+    },
+    {
+      name: 'PageEditorDemo',
+      path: 'editor-demo',
+      component: () => import('../views/page/EditorDemo.vue')
+    },
   ]
 };

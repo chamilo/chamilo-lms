@@ -185,7 +185,7 @@ class BaseResourceFileAction
     /**
      * Function loaded when creating a resource using the api, then the ResourceListener is executed.
      */
-    protected function handleCreateFileRequest(
+    public function handleCreateFileRequest(
         AbstractResource $resource,
         ResourceRepository $resourceRepository,
         Request $request,

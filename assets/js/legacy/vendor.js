@@ -1,4 +1,3 @@
-// require('mediaelement');
 // import('multiselect-two-sides');
 
 require("image-map-resizer/js/imageMapResizer.js")

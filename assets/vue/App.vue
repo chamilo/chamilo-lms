@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { computed, onUpdated, provide, ref, watch, watchEffect } from "vue"
+import { computed, onMounted, onUpdated, provide, ref, watch, watchEffect } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { DefaultApolloClient } from "@vue/apollo-composable"
 import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client/core"
@@ -55,6 +55,7 @@ import { useI18n } from "vue-i18n"
 import { customVueTemplateEnabled } from "./config/env"
 import CustomDashboardLayout from "../../var/vue_templates/components/layout/DashboardLayout.vue"
 import EmptyLayout from "./components/layout/EmptyLayout.vue"
+import { useMediaElementLoader } from "./composables/mediaElementLoader"
 
 const apolloClient = new ApolloClient({
   link: createHttpLink({
@@ -68,6 +69,8 @@ provide(DefaultApolloClient, apolloClient)
 const route = useRoute()
 const router = useRouter()
 const i18n = useI18n()
+
+const { loader: mejsLoader } = useMediaElementLoader()
 
 const layout = computed(() => {
   if (route.meta.emptyLayout) {
@@ -194,4 +197,8 @@ watch(
     inmediate: true,
   },
 )
+
+onMounted(() => {
+  mejsLoader()
+})
 </script>

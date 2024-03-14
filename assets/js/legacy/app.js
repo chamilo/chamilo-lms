@@ -63,7 +63,10 @@ require('bootstrap-daterangepicker/daterangepicker.js');
 
 require('blueimp-file-upload');
 require('blueimp-load-image');
-import('mediaelement');
+import 'mediaelement';
+import 'mediaelement/build/mediaelementplayer.min.css';
+import '/public/build/libs/mediaelement/plugins/speed/speed.js'
+import '/public/build/libs/mediaelement/plugins/vrview/vrview.js'
 require('multiselect-two-sides');
 require('datepair.js');
 require('timepicker');
@@ -430,6 +433,22 @@ $(document).scroll(function () {
       }
     }
   }
+});
+
+// Initialize MediaElementPlayer for each video and audio element
+document.addEventListener('DOMContentLoaded', function() {
+  const players = document.querySelectorAll('video, audio');
+  players.forEach(function(playerElement) {
+    const player = new MediaElementPlayer(playerElement, {
+      features: ['playpause','progress','current','duration','tracks','volume','fullscreen','speed','vrview'],
+      success: function(mediaElement, originalNode, instance) {
+        console.log('MediaElementPlayer successfully initialized');
+      },
+      error: function(mediaElement, originalNode) {
+        console.error("Error initializing MediaElementPlayer for element", originalNode);
+      }
+    });
+  });
 });
 
 function get_url_params(q, attribute)

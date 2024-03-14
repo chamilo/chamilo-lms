@@ -249,7 +249,7 @@ function inputFileHandler(callback, input) {
 
 function getUrlForTinyEditor(mode) {
   if (props.mode === TINYEDITOR_MODE_PERSONAL_FILES) {
-    return url = "/resources/filemanager/personal_list/" + parentResourceNodeId.value;
+    return "/resources/filemanager/personal_list/" + parentResourceNodeId.value
   } else if (props.mode === TINYEDITOR_MODE_DOCUMENTS) {
     const cidReqStore = useCidReqStore()
     const { course } = storeToRefs(cidReqStore)

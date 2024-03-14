@@ -54,6 +54,7 @@ import { useLocale } from "./composables/locale"
 import { useI18n } from "vue-i18n"
 import { customVueTemplateEnabled } from "./config/env"
 import CustomDashboardLayout from "../../var/vue_templates/components/layout/DashboardLayout.vue"
+import EmptyLayout from "./components/layout/EmptyLayout.vue"
 
 const apolloClient = new ApolloClient({
   link: createHttpLink({
@@ -69,6 +70,11 @@ const router = useRouter()
 const i18n = useI18n()
 
 const layout = computed(() => {
+
+  if (route.meta.emptyLayout) {
+    return EmptyLayout;
+  }
+
   const queryParams = new URLSearchParams(window.location.search)
 
   if (queryParams.has("lp") || (queryParams.has("origin") && "learnpath" === queryParams.get("origin"))) {

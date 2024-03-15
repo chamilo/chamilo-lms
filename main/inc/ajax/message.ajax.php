@@ -36,6 +36,7 @@ switch ($action) {
         }
         break;
     case 'get_count_message':
+        api_block_anonymous_users(false);
         $userId = api_get_user_id();
         $invitations = MessageManager::getMessagesCountForUser($userId);
         header('Content-type:application/json');

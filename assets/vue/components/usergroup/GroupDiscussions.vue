@@ -34,7 +34,7 @@
   <Dialog header="Create Thread" v-model:visible="showCreateThreadDialog" modal closable>
     <form @submit.prevent="handleSubmit">
       <BaseInputText id="title" label="Title" v-model="title" :isInvalid="titleError" />
-      <BaseEditor editorId="messageEditor" v-model="message" title="Message" />
+      <BaseTinyEditor v-model="message" editor-id="messageEditor" title="Message" />
       <BaseFileUploadMultiple v-model="files" label="Add files" accept="image/png, image/jpeg" />
       <BaseButton type="button" label="Send message" icon="save" @click="handleSubmit" class="mt-8" />
     </form>
@@ -50,8 +50,8 @@ import { useFormatDate } from "../../composables/formatDate"
 import { useSocialInfo } from "../../composables/useSocialInfo"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
-import BaseEditor from "../basecomponents/BaseEditor.vue"
 import BaseFileUploadMultiple from "../basecomponents/BaseFileUploadMultiple.vue"
+import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 
 const route = useRoute()
 const discussions = ref([])

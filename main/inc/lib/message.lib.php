@@ -1941,7 +1941,9 @@ class MessageManager
         $main_content .= '<div class="message-content"> ';
         $main_content .= '<div class="username">'.$user_link.'</div>';
         $main_content .= $date;
-        $main_content .= '<div class="message">'.$main_message['content'].$attachment.'</div></div>';
+        $main_content .= '<div class="message">'
+            .Security::remove_XSS($main_message['content'], STUDENT, true)
+            .$attachment.'</div></div>';
         $main_content .= '</div>';
         $main_content .= '</div>';
 

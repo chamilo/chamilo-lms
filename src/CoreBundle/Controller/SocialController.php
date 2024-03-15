@@ -238,7 +238,8 @@ class SocialController extends AbstractController
         SettingsManager $settingsManager,
         UserRepository $userRepo,
         TranslatorInterface $translator,
-        MailerInterface $mailer
+        MailerInterface $mailer,
+        RequestStack $requestStack
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         $userId = $data['userId'] ? (int) $data['userId'] : null;
@@ -255,12 +256,12 @@ class SocialController extends AbstractController
         if ('delete_account' === $requestType) {
             $fieldToUpdate = 'request_for_delete_account';
             $justificationFieldToUpdate = 'request_for_delete_account_justification';
-            $emailSubject = 'Request for account removal';
+            $emailSubject = $translator->trans('Request for account deletion');
             $emailContent = sprintf($translator->trans('User %s asked for the deletion of his/her account, explaining that : ').$explanation, $user->getFullName());
         } elseif ('delete_legal' === $requestType) {
             $fieldToUpdate = 'request_for_legal_agreement_consent_removal';
             $justificationFieldToUpdate = 'request_for_legal_agreement_consent_removal_justification';
-            $emailSubject = 'Request for consent withdrawal on legal terms';
+            $emailSubject = $translator->trans('Request for consent withdrawal on legal terms');
             $emailContent = sprintf($translator->trans('User %s asked for the removal of his/her consent to our legal terms, explaining that: ').$explanation, $user->getFullName());
         } else {
             return $this->json(['success' => false, 'message' => 'Invalid action type']);
@@ -270,17 +271,25 @@ class SocialController extends AbstractController
         UserManager::update_extra_field_value($userId, $fieldToUpdate, 1);
         UserManager::update_extra_field_value($userId, $justificationFieldToUpdate, $explanation);
 
-        $emailPlatform = $settingsManager->getSetting('admin.administrator_email');
+        $request = $requestStack->getCurrentRequest();
+        $baseUrl = $request->getSchemeAndHttpHost() . $request->getBasePath();
+        $specificPath = '/main/admin/user_list_consent.php';
+        $link = $baseUrl . $specificPath;
+        $emailContent .=  $translator->trans('Go here : '). '<a href="' . $link . '">' . $link . '</a>';
 
-        $email = new Email();
-        $email
-            ->from($user->getEmail())
-            ->to($emailPlatform)
-            ->subject($emailSubject)
-            ->html($emailContent)
-        ;
-
-        $mailer->send($email);
+        $emailOfficer = $settingsManager->getSetting('profile.data_protection_officer_email');
+        if (!empty($emailOfficer)) {
+            $email = new Email();
+            $email
+                ->from($user->getEmail())
+                ->to($emailOfficer)
+                ->subject($emailSubject)
+                ->html($emailContent)
+            ;
+            $mailer->send($email);
+        } else {
+            MessageManager::sendMessageToAllAdminUsers($user->getId(), $emailSubject, $emailContent);
+        }
 
         return $this->json([
             'success' => true,

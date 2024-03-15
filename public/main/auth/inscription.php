@@ -679,6 +679,10 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
     // Ofaj
     if (!api_is_anonymous() || 'course' !== api_get_setting('platform.load_term_conditions_section')) {
         $language = api_get_language_isocode();
+        if (isset($termRegistered['user_id'])) {
+            $userInfo = api_get_user_info($termRegistered['user_id']);
+            $language = $userInfo['locale'];
+        }
         $language = api_get_language_id($language);
         $termPreview = LegalManager::get_last_condition($language);
         if (!$termPreview) {
@@ -712,12 +716,12 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
                     'checkbox',
                     'legal_accept',
                     null,
-                    get_lang('IHaveReadAndAgree') . '&nbsp;<a href="inscription.php?legal" target="_blank">' .
-                    get_lang('TermsAndConditions') . '</a>'
+                    get_lang('I have read and agree') . '&nbsp;<a href="inscription.php?legal" target="_blank">' .
+                    get_lang('Terms and conditions') . '</a>'
                 );
                 $form->addRule(
                     'legal_accept',
-                    get_lang('ThisFieldIsRequired'),
+                    get_lang('This field is required'),
                     'required'
                 );
             } else {
@@ -731,6 +735,17 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
                         $form->addLabel($value['display_text'], $value['field_value']);
                     }
                 }
+                $form->addElement(
+                    'checkbox',
+                    'legal_accept',
+                    null,
+                    get_lang('I have read and agree')
+                );
+                $form->addRule(
+                    'legal_accept',
+                    get_lang('This field is required'),
+                    'required'
+                );
             }
         }
     }

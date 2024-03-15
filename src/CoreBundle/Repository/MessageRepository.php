@@ -145,13 +145,7 @@ class MessageRepository extends ServiceEntityRepository
 
     public function sendInvitationToFriend(User $userSender, User $userReceiver, string $messageTitle, string $messageContent): bool
     {
-        $existingInvitations = $this->findSentInvitationsByUserAndStatus($userSender, $userReceiver, [
-            Message::MESSAGE_STATUS_INVITATION_PENDING,
-            Message::MESSAGE_STATUS_INVITATION_ACCEPTED,
-            Message::MESSAGE_STATUS_INVITATION_DENIED,
-        ]);
-
-        if (\count($existingInvitations) > 0) {
+        if ($this->existingInvitations($userSender, $userReceiver)) {
             // Invitation already exists
             return false;
         }
@@ -174,6 +168,17 @@ class MessageRepository extends ServiceEntityRepository
         $this->_em->flush();
 
         return true;
+    }
+
+    public function existingInvitations(User $userSender, User $userReceiver): bool
+    {
+        $existingInvitations = $this->findSentInvitationsByUserAndStatus($userSender, $userReceiver, [
+            Message::MESSAGE_STATUS_INVITATION_PENDING,
+            Message::MESSAGE_STATUS_INVITATION_ACCEPTED,
+            Message::MESSAGE_STATUS_INVITATION_DENIED,
+        ]);
+
+        return \count($existingInvitations) > 0;
     }
 
     public function findSentInvitationsByUserAndStatus(User $userSender, User $userReceiver, array $statuses): array

@@ -24,16 +24,12 @@
 
     <div v-if="termsLoaded">
       <form @submit.prevent="saveTerms">
-        <BaseEditor
-          :editorId="'item_content'"
+        <BaseTinyEditor
           v-model="termData.content"
+          editor-id="item_content"
           :title="t('Personal Data Collection')"
-        >
-          <template #help-text>
-            <p>{{ t('Why do we collect this data?') }}</p>
-          </template>
-        </BaseEditor>
-
+          :help-text="t('Why do we collect this data?')"
+        />
 
         <BaseRadioButtons
           :options="typeOptions"
@@ -48,10 +44,12 @@
 
         <!-- Extra fields -->
         <div v-for="field in extraFields" :key="field.id" class="extra-field">
-          <component :is="getFieldComponent(field.type)" v-bind="field.props" @update:modelValue="field.props.modelValue = $event">
-            <template v-if="field.type === 'editor'" #help-text>
-              <p>{{ field.props.helpText }}</p>
-            </template>
+          <component
+            :is="getFieldComponent(field.type)"
+            v-bind="field.props"
+            :help-text="field.type === 'editor' ? field.props.helpText : '' "
+            @update:model-value="field.props.modelValue = $event"
+          >
           </component>
         </div>
 
@@ -81,10 +79,10 @@ import Message from "primevue/message"
 import BaseDropdown from "../../components/basecomponents/BaseDropdown.vue"
 import BaseRadioButtons from "../../components/basecomponents/BaseRadioButtons.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
-import BaseEditor from "../../components/basecomponents/BaseEditor.vue"
 import { useI18n } from "vue-i18n"
 import languageService from "../../services/languageService"
 import legalService from "../../services/legalService"
+import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 
 const { t } = useI18n()
 
@@ -169,7 +167,7 @@ function getFieldComponent(type) {
   const componentMap = {
     text: BaseInputText,
     select: BaseDropdown,
-    editor: BaseEditor,
+    editor: BaseTinyEditor,
     // Add more mappings as needed
   }
   return componentMap[type] || 'div'

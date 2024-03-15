@@ -1534,6 +1534,23 @@ function finishInstallationWithContainer(
         ['english_name = ?' => $languageForm]
     );
 
+    $fallbackUser = new User();
+    $fallbackUser
+        ->setUsername('fallback_user')
+        ->setEmail('fallback@example.com')
+        ->setPlainPassword($passForm)
+        ->setStatus(ROLE_FALLBACK)
+        ->setLastname('Fallback')
+        ->setFirstname('User')
+        ->setCreatorId(1)
+        ->setOfficialCode('FALLBACK')
+        ->setAuthSource(PLATFORM_AUTH_SOURCE)
+        ->setPhone('0000000000')
+        ->setLocale($languageForm)
+        ->setTimezone($timezone)
+        ->setActive(USER_SOFT_DELETED);
+    $repo->updateUser($fallbackUser);
+
     // Install settings
     installSettings(
         $institutionForm,

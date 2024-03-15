@@ -57,7 +57,7 @@ class TrackEAttempt
     protected ?int $id = null;
 
     #[Assert\NotNull]
-    #[ORM\ManyToOne(targetEntity: TrackEExercise::class, inversedBy: 'attempts')]
+    #[ORM\ManyToOne(targetEntity: TrackEExercise::class, cascade: ['persist'], inversedBy: 'attempts')]
     #[ORM\JoinColumn(name: 'exe_id', referencedColumnName: 'exe_id', nullable: false, onDelete: 'CASCADE')]
     protected TrackEExercise $trackExercise;
 

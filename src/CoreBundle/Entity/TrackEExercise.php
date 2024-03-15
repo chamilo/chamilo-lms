@@ -83,7 +83,7 @@ class TrackEExercise
 
     #[Assert\NotNull]
     #[Groups(['track_e_exercise:read'])]
-    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'exe_user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected User $user;
 

@@ -3,8 +3,9 @@
     <label
       v-if="title"
       :for="editorId"
-      >{{ title }}</label
     >
+      {{ title }}
+    </label>
     <TinyEditor
       :id="editorId"
       :model-value="modelValue"

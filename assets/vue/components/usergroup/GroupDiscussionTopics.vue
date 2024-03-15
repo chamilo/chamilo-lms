@@ -43,7 +43,6 @@ import MessageItem from "./MessageItem.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
-import BaseEditor from "../basecomponents/BaseEditor.vue"
 import BaseFileUploadMultiple from "../basecomponents/BaseFileUploadMultiple.vue"
 import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 

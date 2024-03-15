@@ -27,7 +27,7 @@
   <Dialog header="Reply/Edit Message" v-model:visible="showMessageDialog" modal closable>
     <form @submit.prevent="handleSubmit">
       <BaseInputText v-if="isEditMode" id="title" :label="t('Title')" v-model="messageTitle" :isInvalid="titleError" />
-      <BaseEditor editorId="messageEditor" v-model="messageContent" title="Message" />
+      <BaseTinyEditor v-model="messageContent" editor-id="messageEditor" title="Message" />
       <BaseFileUploadMultiple v-model="files" :label="t('Add files')" accept="image/png, image/jpeg" />
       <BaseButton type="button" :label="t('Send message')" icon="save" @click="handleSubmit" class="mt-8" />
     </form>
@@ -45,6 +45,7 @@ import { useI18n } from "vue-i18n"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import BaseEditor from "../basecomponents/BaseEditor.vue"
 import BaseFileUploadMultiple from "../basecomponents/BaseFileUploadMultiple.vue"
+import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 
 const router = useRouter()
 const route = useRoute()

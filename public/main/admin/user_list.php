@@ -388,6 +388,7 @@ function prepare_user_sql_query(bool $getCount, bool $showDeletedUsers = false):
     } else {
         $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active <> '.USER_SOFT_DELETED : ' AND u.active <> '.USER_SOFT_DELETED;
     }
+    $sql .= ' AND u.status <> '.ROLE_FALLBACK;
 
     return $sql;
 }

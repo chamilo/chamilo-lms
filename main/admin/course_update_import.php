@@ -102,7 +102,6 @@ function validateCourseData(array $courses): array
 function updateCourse(array $courseData, int $courseId): void
 {
     $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-    $params = ['visual_code' => $courseData['Code']];
     $fieldsMapping = [
         'Title' => 'title',
         'Language' => 'course_language',

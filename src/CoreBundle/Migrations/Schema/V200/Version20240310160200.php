@@ -38,7 +38,7 @@ class Version20240310160200 extends AbstractMigrationChamilo
             ->setEmail('fallback@example.com')
             ->setPassword($encodedPassword)
             ->setCreatorId(1)
-            ->setStatus(User::FALLBACK)
+            ->setStatus(User::ROLE_FALLBACK)
             ->setLastname('Fallback')
             ->setFirstname('User')
             ->setOfficialCode('FALLBACK')

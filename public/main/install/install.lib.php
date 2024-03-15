@@ -1539,7 +1539,7 @@ function finishInstallationWithContainer(
         ->setUsername('fallback_user')
         ->setEmail('fallback@example.com')
         ->setPlainPassword($passForm)
-        ->setStatus(FALLBACK)
+        ->setStatus(ROLE_FALLBACK)
         ->setLastname('Fallback')
         ->setFirstname('User')
         ->setCreatorId(1)

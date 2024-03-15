@@ -316,7 +316,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 
     public function getFallbackUser(): ?User
     {
-        $fallbackUser = $this->findOneBy(['status' => User::FALLBACK], ['id' => 'ASC']);
+        $fallbackUser = $this->findOneBy(['status' => User::ROLE_FALLBACK], ['id' => 'ASC']);
 
         if (!$fallbackUser) {
             throw new \Exception("User not found.");

@@ -57,7 +57,7 @@ define('COURSEMANAGERLOWSECURITY', 10);
  * or fallback for content ownership when regular users are deleted.
  * This ensures data integrity and prevents orphaned content within the system.
  */
-define('FALLBACK', 99);
+define('ROLE_FALLBACK', 99);
 // Soft user status
 define('PLATFORM_ADMIN', 11);
 define('SESSION_COURSE_COACH', 12);

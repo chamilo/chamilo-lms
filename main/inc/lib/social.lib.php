@@ -2409,7 +2409,6 @@ class SocialManager extends UserManager
     public static function displayWallForm(string $urlForm): string
     {
         $form = self::getWallForm($urlForm);
-        $form->protect();
 
         return Display::panel($form->returnForm(), get_lang('SocialWall'));
     }
@@ -3397,6 +3396,7 @@ class SocialManager extends UserManager
         $form->addHtml('</div></div>');
         $form->addHtml('</div>');
         $form->addHidden('url_content', '');
+        $form->protect();
 
         return $form;
     }

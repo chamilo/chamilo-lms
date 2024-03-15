@@ -640,7 +640,8 @@ class SocialController extends AbstractController
         Request $request,
         UserRepository $userRepository,
         UsergroupRepository $usergroupRepository,
-        TrackEOnlineRepository $trackOnlineRepository
+        TrackEOnlineRepository $trackOnlineRepository,
+        MessageRepository $messageRepository
     ): JsonResponse {
         $query = $request->query->get('query', '');
         $type = $request->query->get('type', 'user');
@@ -655,6 +656,8 @@ class SocialController extends AbstractController
             foreach ($results as $item) {
                 $isUserOnline = $trackOnlineRepository->isUserOnline($item['id']);
                 $relation = $userRepository->getUserRelationWithType($user->getId(), $item['id']);
+                $userReceiver = $userRepository->find($item['id']);
+                $existingInvitations = $messageRepository->existingInvitations($user, $userReceiver);
                 $formattedResults[] = [
                     'id' => $item['id'],
                     'name' => $item['firstname'].' '.$item['lastname'],
@@ -663,6 +666,7 @@ class SocialController extends AbstractController
                     'status' => $isUserOnline ? 'online' : 'offline',
                     'url' => '/social?id='.$item['id'],
                     'relationType' => $relation['relationType'] ?? null,
+                    'existingInvitations' => $existingInvitations
                 ];
             }
         } elseif ('group' === $type) {
@@ -882,7 +886,7 @@ class SocialController extends AbstractController
                     break;
 
                 case 'send_message':
-                    $result = MessageManager::send_message($friendUser, $subject, $content);
+                    $result = MessageManager::send_message($friendUser->getId(), $subject, $content);
 
                     break;
 

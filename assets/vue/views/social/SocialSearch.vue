@@ -120,8 +120,8 @@
             <img :src="selectedUser.avatar" class="message-user-avatar" alt="User avatar">
             <span class="message-user-name">{{ selectedUser.name }}</span>
           </div>
-          <input type="text" class="message-modal-input" placeholder="{{ t('Subject') }}" v-model="messageSubject">
-          <textarea class="message-modal-textarea" placeholder="{{ t('Message') }}" v-model="messageContent"></textarea>
+          <input type="text" class="message-modal-input" :placeholder="t('Subject')" v-model="messageSubject">
+          <textarea class="message-modal-textarea" :placeholder="t('Message')" v-model="messageContent"></textarea>
           <button class="message-modal-send" @click="sendMessage">{{ t('Send message') }}</button>
         </div>
       </div>
@@ -191,7 +191,7 @@ const performSearch = async () => {
 
       users.value = data.results.map(item => ({
         ...item,
-        showInvitationButton: ![3, 4, 10].includes(item.relationType) || item.id !== user.value.id
+        showInvitationButton: (![3, 4, 10].includes(item.relationType) || item.id !== user.value.id) && !item.existingInvitations
       }))
       groups.value = []
     } else if (searchType.value === 'group') {
@@ -246,7 +246,7 @@ const sendInvitation = async () => {
       users.value = users.value.filter((user) => user.id !== selectedUser.value.id)
       selectedUser.value = null
     } else {
-      notification.showErrorNotification('Failed to send invitation.')
+      notification.showErrorNotification(result.error)
     }
   } catch (error) {
     notification.showErrorNotification('An error occurred while sending the invitation.')

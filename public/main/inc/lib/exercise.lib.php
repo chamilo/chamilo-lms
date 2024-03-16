@@ -3060,29 +3060,25 @@ EOT;
      * from a course from a session
      * (if a session_id is provided we will show all the exercises in the
      * course + all exercises in the session).
-     *
-     * @param   array   course data
-     * @param   int     session id
-     * @param    int        course c_id
-     * @param bool $only_active_exercises
-     *
-     * @return array array with exercise data
-     *               modified by Hubert Borderiou
      */
     public static function get_all_exercises_for_course_id(
-        $course_info = null,
-        $session_id = 0,
-        $course_id = 0,
-        $only_active_exercises = true
-    ) {
-        $course = api_get_course_entity($course_id);
-        $session = api_get_session_entity($session_id);
+        int $courseId,
+        int $sessionId = 0,
+        bool $onlyActiveExercises = true
+    ): array {
+
+        if (!($courseId > 0)) {
+            return [];
+        }
+
+        $course = api_get_course_entity($courseId);
+        $session = api_get_session_entity($sessionId);
 
         $repo = Container::getQuizRepository();
 
         $qb = $repo->getResourcesByCourse($course, $session);
 
-        if ($only_active_exercises) {
+        if ($onlyActiveExercises) {
             $qb->andWhere('resource.active = 1');
         } else {
             $qb->andWhere('resource.active IN (1, 0)');

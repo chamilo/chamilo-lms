@@ -17,9 +17,11 @@ export function useFileUtils() {
   }
 
   const isHtml = (fileData) => {
+    if (!isFile(fileData)) {
+      return false;
+    }
     const mimeType = fileData.resourceNode.resourceFile.mimeType
-    const isHtml = mimeType.split("/")[1].toLowerCase() === "html"
-    return isFile(fileData) && isHtml
+    return mimeType.split("/")[1].toLowerCase() === "html"
   }
 
   const isFile = (fileData) => {

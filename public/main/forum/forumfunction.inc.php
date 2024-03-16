@@ -1864,7 +1864,8 @@ function saveThread(
     send_notification_mails(
         $forum,
         $thread,
-        $reply_info
+        $reply_info,
+        $course
     );
 
     Session::erase('formelements');

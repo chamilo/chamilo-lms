@@ -55,7 +55,7 @@ api_protect_course_script(true);
 $is_allowedToEdit = api_is_allowed_to_edit(null, true, false, false);
 $sessionId = api_get_session_id();
 $studentViewActive = api_is_student_view_active();
-$showPagination = api_get_setting('exercise.show_question_pagination');
+$showPagination = 'true' === api_get_setting('exercise.show_question_pagination');
 
 if (!$is_allowedToEdit) {
     api_not_allowed(true);
@@ -338,7 +338,7 @@ if ($inATest) {
     if ($editQuestion && $objQuestion->existsInAnotherExercise()) {
         echo Display::return_message(
             Display::getMdiIcon('alert', 'ch-tool-icon', null, ICON_SIZE_SMALL)
-                .get_lang('ThisQuestionExistsInAnotherTestsWarning'),
+                .get_lang('Warning: This question exists in another tests'),
             'warning',
             false
         );

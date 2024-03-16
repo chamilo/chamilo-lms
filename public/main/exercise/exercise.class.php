@@ -8834,8 +8834,8 @@ class Exercise
         }
 
         if (!empty($keyword)) {
-            $qb->andWhere($qb->expr()->eq('resource.title', ':keyword'));
-            $qb->setParameter('keyword', $keyword);
+            $qb->andWhere($qb->expr()->like('resource.title', ':keyword'));
+            $qb->setParameter('keyword', '%'.$keyword.'%');
         }
 
         // Only for administrators
@@ -9455,12 +9455,19 @@ class Exercise
 
         if (empty($tableRows) && empty($categoryId)) {
             if ($is_allowedToEdit && 'learnpath' !== $origin) {
-                $content .= Display::noDataView(
-                    get_lang('Quiz'),
-                    Display::getMdiIcon(ToolIcon::QUIZ, 'ch-tool-icon', null, ICON_SIZE_BIG),
-                    get_lang('Create a new test'),
-                    'exercise_admin.php?'.api_get_cidreq()
-                );
+                if (!empty($_GET['keyword'])) {
+                    $content .= Display::return_message(
+                        get_lang('No Results for keyword: ').Security::remove_XSS($_GET['keyword']),
+                        'warning'
+                    );
+                } else {
+                    $content .= Display::noDataView(
+                        get_lang('Quiz'),
+                        Display::getMdiIcon(ToolIcon::QUIZ, 'ch-tool-icon', null, ICON_SIZE_BIG),
+                        get_lang('Create a new test'),
+                        'exercise_admin.php?'.api_get_cidreq()
+                    );
+                }
             }
         } else {
             if (empty($tableRows)) {

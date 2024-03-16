@@ -1969,6 +1969,7 @@ HOTSPOT;
                     ON (gru.user_id = u.id AND gru.c_id= $courseId )
                     INNER JOIN $TBL_GROUP g
                     ON (gru.group_id = g.id AND g.c_id= $courseId )
+                    WHERE u.active <> ".USER_SOFT_DELETED."
                 )";
             }
 
@@ -2001,6 +2002,7 @@ HOTSPOT;
                         '' as group_name,
                         '' as group_id
                     FROM $TBL_USER u
+                    WHERE u.active <> ".USER_SOFT_DELETED."
                 )";
                 $sql_inner_join_tbl_user = null;
             }
@@ -2032,6 +2034,7 @@ HOTSPOT;
                 ON (gru.user_id = u.id AND gru.c_id= $courseId )
                 LEFT OUTER JOIN $TBL_GROUP g
                 ON (gru.group_id = g.id AND g.c_id = $courseId )
+                WHERE u.active <> ".USER_SOFT_DELETED."
             )";
             }
 
@@ -2043,7 +2046,7 @@ HOTSPOT;
             (
                 SELECT u.id as user_id, firstname, lastname, email, username, ' ' as group_name, '' as group_id, official_code
                 FROM $TBL_USER u
-                WHERE u.status NOT IN(".api_get_users_status_ignored_in_reports('string').")
+                WHERE u.active <> ".USER_SOFT_DELETED." AND u.status NOT IN(".api_get_users_status_ignored_in_reports('string').")
             )";
             }
 
@@ -2093,8 +2096,6 @@ HOTSPOT;
                     $extra_where_conditions
                 ";
         }
-
-        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE user.active <> '.USER_SOFT_DELETED : ' AND user.active <> '.USER_SOFT_DELETED;
 
         if (empty($sql)) {
             return false;

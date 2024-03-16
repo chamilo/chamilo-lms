@@ -182,7 +182,7 @@ if (!$inATest) {
         $objExercise->questionSelectionType = $originalQuestionSelectType;
 
         echo '
-            <div class="row gt-xs my-4">
+            <div class="row gt-xs my-4 question-header">
                 <div class="col-sm-5"><strong>'.get_lang('Questions').'</strong></div>
                 <div class="col-sm-1 text-center"><strong>'.get_lang('Type').'</strong></div>
                 <div class="col-sm-2"><strong>'.get_lang('Category').'</strong></div>

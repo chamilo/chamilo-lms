@@ -229,7 +229,7 @@ EOT;
      */
     public function addCourseHiddenParams()
     {
-        $this->addHidden('cid', api_get_course_id());
+        $this->addHidden('cid', api_get_course_int_id());
         $this->addHidden('sid', api_get_session_id());
     }
 

@@ -423,12 +423,12 @@ class SortableTable extends HTML_Table
         if (count($this->form_actions) > 0) {
             $html .= '<div class="flex flex-row justify-between" role="group">';
             $html .= '<a
-                class="btn btn--primary"
+                class="btn btn--primary mr-2"
                 href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1"
                 onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'.
                 get_lang('Select all').'</a>';
             $html .= '<a
-                class="btn btn--primary"
+                class="btn btn--primary mr-2"
                 href="?'.$params.'"
                 onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'.
                 get_lang('Deselect all').'</a> ';

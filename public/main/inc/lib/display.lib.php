@@ -453,11 +453,11 @@ class Display
      *
      * @param string $message
      * @param string $type    Example: confirm, normal, warning, error
-     * @param bool   $filter  Whether to XSS-filter or not
+     * @param bool $filter  Whether to XSS-filter or not
      *
      * @return string Message wrapped into an HTML div
      */
-    public static function return_message($message, $type = 'normal', $filter = true)
+    public static function return_message(string $message, string $type = 'normal', bool $filter = true): string
     {
         if (empty($message)) {
             return '';

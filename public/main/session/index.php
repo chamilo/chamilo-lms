@@ -59,10 +59,8 @@ foreach ($courseList as $course) {
     }
 
     $exerciseList = ExerciseLib::get_all_exercises_for_course_id(
-        $course,
-        $session_id,
         $course['real_id'],
-        true
+        $session_id
     );
 
     $exerciseListNew = [];

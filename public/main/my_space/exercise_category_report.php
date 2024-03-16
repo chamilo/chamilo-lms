@@ -62,12 +62,7 @@ if (empty($courseId)) {
             ['target' => '_blank']
         );
         $form->addLabel(get_lang('Course'), $courseLabel);
-        $exerciseList = ExerciseLib::get_all_exercises_for_course_id(
-            $courseInfo,
-            0,
-            $courseId,
-            true
-        );
+        $exerciseList = ExerciseLib::get_all_exercises_for_course_id($courseId);
 
         if (!empty($exerciseList)) {
             $options = [];

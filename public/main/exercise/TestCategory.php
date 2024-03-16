@@ -1080,9 +1080,9 @@ class TestCategory
      *
      * @return CQuizQuestionCategory[]
      */
-    public static function getCategories($courseId, $sessionId = 0)
+    public static function getCategories(int $courseId, int $sessionId = 0): array
     {
-        if (empty($courseId)) {
+        if (!($courseId > 0)) {
             return [];
         }
 

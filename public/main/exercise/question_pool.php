@@ -384,9 +384,8 @@ $categoryList = TestCategory::getCategoriesIdAndName($selected_course);
 
 // Get exercise list for this course
 $exercise_list = ExerciseLib::get_all_exercises_for_course_id(
-    $course_info,
-    $session_id,
     $selected_course,
+    $session_id,
     false
 );
 
@@ -898,7 +897,7 @@ if (isset($fromExercise) && $fromExercise > 0) {
 } else {
     $actions .= '<a href="exercise.php?'.api_get_cidreq().'">'.
         Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to tests list')).'</a>';
-    $actions .= "<a href='admin.php?exerciseId=0'>".
+    $actions .= '<a href="question_create.php?'.api_get_cidreq().'">'.
         Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('New question')).'</a>';
 }
 echo Display::toolbarAction('toolbar', [$actions]);

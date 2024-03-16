@@ -24,9 +24,8 @@ switch ($action) {
         $data = [];
         $onlyActiveExercises = !(api_is_platform_admin(true) || api_is_course_admin());
         $results = ExerciseLib::get_all_exercises_for_course_id(
-            null,
-            $session_id,
             $course_id,
+            $session_id,
             $onlyActiveExercises
         );
 
@@ -952,9 +951,8 @@ switch ($action) {
         break;
     case 'get_quiz_embeddable':
         $exercises = ExerciseLib::get_all_exercises_for_course_id(
-            api_get_course_info(),
-            api_get_session_id(),
             api_get_course_int_id(),
+            api_get_session_id(),
             false
         );
 

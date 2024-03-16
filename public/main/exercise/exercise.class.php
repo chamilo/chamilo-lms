@@ -8989,9 +8989,8 @@ class Exercise
                     }
 
                     $style = '';
-                    if (0 === $exerciseEntity->getActive() || false === $visibility) {
+                    if (!$visibility) {
                         $style = 'color:grey';
-                        //$title = Display::tag('font', $cut_title, ['style' => 'color:grey']);
                     }
 
                     $title = $cut_title;
@@ -9108,12 +9107,12 @@ class Exercise
                             $visibility = Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('AddedToLPCannotBeAccessed')
                             );
                         } else {
-                            if (0 === $exerciseEntity->getActive()) {
+                            if (!$exerciseEntity->isVisible($course, $session)) {
                                 $visibility = Display::url(
                                     Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Activate')
                                     ),
                                     'exercise.php?'.api_get_cidreq(
-                                    ).'&choice=enable&sec_token='.$token.'&exerciseId='.$exerciseId
+                                    ).'&action=enable&sec_token='.$token.'&exerciseId='.$exerciseId
                                 );
                             } else {
                                 // else if not active
@@ -9121,7 +9120,7 @@ class Exercise
                                     Display::getMdiIcon(StateIcon::PUBLIC_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Deactivate')
                                     ),
                                     'exercise.php?'.api_get_cidreq(
-                                    ).'&choice=disable&sec_token='.$token.'&exerciseId='.$exerciseId
+                                    ).'&action=disable&sec_token='.$token.'&exerciseId='.$exerciseId
                                 );
                             }
                         }
@@ -9164,7 +9163,7 @@ class Exercise
                                     Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Activate')
                                     ),
                                     'exercise.php?'.api_get_cidreq(
-                                    ).'&choice=enable&sec_token='.$token.'&exerciseId='.$exerciseId
+                                    ).'&action=enable&sec_token='.$token.'&exerciseId='.$exerciseId
                                 );
                             } else {
                                 // else if not active
@@ -9172,7 +9171,7 @@ class Exercise
                                     Display::getMdiIcon(StateIcon::PUBLIC_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Deactivate')
                                     ),
                                     'exercise.php?'.api_get_cidreq(
-                                    ).'&choice=disable&sec_token='.$token.'&exerciseId='.$exerciseId
+                                    ).'&action=disable&sec_token='.$token.'&exerciseId='.$exerciseId
                                 );
                             }
                         }
@@ -9192,7 +9191,7 @@ class Exercise
                                         api_htmlentities(get_lang('Are you sure to copy'), ENT_QUOTES)
                                     )." ".addslashes($title)."?"."')) return false;",
                                 'href' => 'exercise.php?'.api_get_cidreq(
-                                    ).'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$exerciseId,
+                                    ).'&action=copy_exercise&sec_token='.$token.'&exerciseId='.$exerciseId,
                             ]
                         );
                     }

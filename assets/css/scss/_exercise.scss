@@ -72,42 +72,6 @@
   padding: 5px;
 }
 
-.data_table, .table-striped  {
-  @apply border-collapse w-full mt-2;
-
-  thead th {
-    @apply bg-gray-20 text-gray-90 font-semibold text-left px-4 py-3 border-b border-gray-30 border-l border-r border-gray-30 text-center;
-  }
-
-  tbody td {
-    @apply px-4 py-3 border-b border-gray-30 border-l border-r border-gray-30;
-  }
-
-  tbody tr:nth-child(odd) {
-    @apply bg-gray-5;
-  }
-
-  tbody tr:hover {
-    background-color: #eff6ff;
-  }
-
-  .checkbox label {
-    @apply pl-4;
-  }
-
-  i.mdi {
-    @apply align-middle;
-  }
-
-  .mdi::before {
-    @apply inline-block;
-    font-size: inherit;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-    transform: translate(0, 0);
-  }
-}
-
 .question-pool-table-actions {
   display: flex;
   align-items: center;
@@ -283,22 +247,13 @@
 }
 
 .question-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @apply flex items-center justify-center border border-gray-30 rounded shadow-md mb-5;
   background-color: #f8f9fa;
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 2px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
 
   > div {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 0.75rem;
+    @apply flex items-center justify-center text-center p-3;
   }
 
   .col-sm-5 {
@@ -315,17 +270,14 @@
 
   .col-sm-1.text-right,
   .col-sm-2.text-right {
-    justify-content: flex-end;
-    text-align: right;
+    @apply justify-end;
   }
 
   @media (max-width: 768px) {
-    flex-direction: column;
+    @apply flex-col;
 
     > div {
-      text-align: left;
-      width: 100%;
-      padding: 0.5rem 0;
+      @apply text-left w-full py-2;
     }
   }
 }
@@ -368,6 +320,45 @@
       }
     }
   }
+}
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  background-color: #fff;
+  margin-bottom: 20px;
+}
+
+.card .flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+}
+
+.card .flex .relative {
+  position: relative;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.card .flex a {
+  margin-left: 10px;
+  font-size: 22px;
+  color: #333;
+}
+
+.card .sectioncomment {
+  padding: 15px;
+  background-color: #f7f7f7;
+}
+
+.card span {
+  float: right;
+  margin-right: 15px;
+  font-size: 14px;
+  color: #666;
 }
 
 .question_menu {

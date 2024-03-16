@@ -196,6 +196,24 @@ if (!$is_allowedToEdit) {
 $confirmYourChoice = addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES));
 $htmlHeadXtra[] = "
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var actionButton = document.querySelector('.action-button');
+      var dropdownMenu = document.getElementById('action-dropdown');
+
+      function toggleDropdown(event) {
+        event.preventDefault();
+        var isDisplayed = dropdownMenu.style.display === 'block';
+        dropdownMenu.style.display = isDisplayed ? 'none' : 'block';
+      }
+
+      actionButton.addEventListener('click', toggleDropdown);
+      document.addEventListener('click', function(event) {
+        if (!dropdownMenu.contains(event.target) && !actionButton.contains(event.target)) {
+          dropdownMenu.style.display = 'none';
+        }
+      });
+    });
+
     function submit_form(obj) {
         document.question_pool.submit();
     }
@@ -715,32 +733,30 @@ $pagination->setTotalItemCount($nbrQuestions);
 $pagination->setItemNumberPerPage($length);
 $pagination->setCurrentPageNumber($page);
 $pagination->renderer = function ($data) use ($url) {
-    $render = '<nav aria-label="Page navigation" style="display: flex; justify-content: center;">';
+    $render = '<nav aria-label="Page navigation" class="question-pool-pagination-nav">';
     $render .= '<ul class="pagination">';
 
-    if ($data['current'] > 1) {
-        $render .= '<li class="page-item"><a class="page-link" href="'.$url.'&page=1" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a></li>';
-    }
+    $link = function($page, $text, $label, $isActive = false) use ($url) {
+        $activeClass = $isActive ? ' active' : '';
+        return '<li class="page-item'.$activeClass.'"><a class="page-link" href="'.$url.'&page='.$page.'" aria-label="'.$label.'">'.$text.'</a></li>';
+    };
 
     if ($data['current'] > 1) {
+        $render .= $link(1, '&laquo;&laquo;', 'First');
         $prevPage = $data['current'] - 1;
-        $render .= '<li class="page-item"><a class="page-link" href="'.$url.'&page='.$prevPage.'" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>';
+        $render .= $link($prevPage, '&laquo;', 'Previous');
     }
 
     $startPage = max(1, $data['current'] - 2);
     $endPage = min($data['pageCount'], $data['current'] + 2);
     for ($i = $startPage; $i <= $endPage; $i++) {
-        $isActive = $data['current'] == $i ? ' active' : '';
-        $render .= '<li class="page-item'.$isActive.'"><a class="page-link" href="'.$url.'&page='.$i.'">'.$i.'</a></li>';
+        $render .= $link($i, $i, 'Page '.$i, $data['current'] == $i);
     }
 
     if ($data['current'] < $data['pageCount']) {
         $nextPage = $data['current'] + 1;
-        $render .= '<li class="page-item"><a class="page-link" href="'.$url.'&page='.$nextPage.'" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>';
-    }
-
-    if ($data['current'] < $data['pageCount']) {
-        $render .= '<li class="page-item"><a class="page-link" href="'.$url.'&page='.$data['pageCount'].'" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a></li>';
+        $render .= $link($nextPage, '&raquo;', 'Next');
+        $render .= $link($data['pageCount'], '&raquo;&raquo;', 'Last');
     }
 
     $render .= '</ul></nav>';
@@ -914,21 +930,29 @@ echo '<input type="hidden" name="action">';
 $table = new HTML_Table(['class' => 'table table-hover table-striped table-bordered data_table'], false);
 $row = 0;
 $column = 0;
+$widths = ['10px', '250px', '50px', '200px', '50px', '100px'];
 foreach ($headers as $header) {
     $table->setHeaderContents($row, $column, $header);
+    $width = array_key_exists($column, $widths) ? $widths[$column] : 'auto';
+    $table->setCellAttributes($row, $column, ['style' => "width:$width;"]);
     $column++;
 }
 
+$alignments = ['center', 'left', 'center', 'left', 'center', 'center'];
 $row = 1;
-foreach ($data as $rows) {
+foreach ($data as $rowData) {
     $column = 0;
-    foreach ($rows as $value) {
+    foreach ($rowData as $value) {
         $table->setCellContents($row, $column, $value);
-        $table->updateCellAttributes(
-            $row,
-            $column,
-            $value
-        );
+        if (array_key_exists($column, $alignments)) {
+            $alignment = $alignments[$column];
+            $table->setCellAttributes(
+                $row,
+                $column,
+                ['style' => "text-align:{$alignment};"]
+            );
+        }
+
         $column++;
     }
     $row++;
@@ -936,7 +960,7 @@ foreach ($data as $rows) {
 $table->display();
 echo '</form>';
 
-$html = '<div class="btn-toolbar">';
+$html = '<div class="btn-toolbar question-pool-table-actions">';
 $html .= '<div class="btn-group">';
 $html .= '<a
         class="btn btn--plain"
@@ -950,11 +974,8 @@ $html .= '<a
             '.get_lang('Unselect all').'</a> ';
 $html .= '</div>';
 $html .= '<div class="btn-group">
-            <button class="btn btn--plain" onclick="javascript:return false;">'.get_lang('Actions').'</button>
-            <button class="btn btn--plain dropdown-toggle" data-toggle="dropdown">
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">';
+            <button class="btn btn--plain action-button">' .get_lang('Actions').'</button>
+            <ul class="dropdown-menu" id="action-dropdown" style="display: none;">';
 
 $actionLabel = get_lang('Re-use a copy inside the current test');
 $actions = ['clone' => get_lang('Re-use a copy inside the current test')];

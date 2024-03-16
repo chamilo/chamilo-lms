@@ -380,7 +380,7 @@ class SortableTable extends HTML_Table
             if ($this->get_pager()->numPages() > 1) {
                 $form = $this->get_page_select_form();
                 $nav = $this->get_navigation_html();
-                $html = '<div class="q-card">';
+                $html = '<div class="q-card sortable-buttons-actions">';
                 $html .= '<div class="flex flex-row justify-between pager-bar">';
                 $html .= '<div class="col">';
                 $html .= '<div class="pb-2 pt-2 pager-select">'.$form.'</div>';
@@ -417,18 +417,18 @@ class SortableTable extends HTML_Table
             }
         }
         $html .= '<input type="hidden" name="action">';
-        $html .= '<div class="q-card p-2 mb-4">';
+        $html .= '<div class="q-card p-2 mb-4 sortable-buttons-actions">';
         $html .= '<div class="flex flex-row justify-between">';
 
         if (count($this->form_actions) > 0) {
             $html .= '<div class="flex flex-row justify-between" role="group">';
             $html .= '<a
-                class="btn btn--primary mr-2"
+                class="btn btn--action mr-2"
                 href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1"
                 onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'.
                 get_lang('Select all').'</a>';
             $html .= '<a
-                class="btn btn--primary mr-2"
+                class="btn btn--action mr-2"
                 href="?'.$params.'"
                 onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'.
                 get_lang('Deselect all').'</a> ';

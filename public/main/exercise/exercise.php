@@ -196,9 +196,8 @@ if ($is_allowedToEdit && !empty($action)) {
                 // list of exercises in a course/session
                 // we got variable $courseId $courseInfo session api_get_session_id()
                 $exerciseList = ExerciseLib::get_all_exercises_for_course_id(
-                    $courseInfo,
-                    $sessionId,
                     $courseId,
+                    $sessionId,
                     false
                 );
 

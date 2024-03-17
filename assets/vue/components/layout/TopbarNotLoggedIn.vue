@@ -37,13 +37,14 @@ function setLanguage(event) {
   window.location.href = newUrl.fullPath
 }
 
-const languageItems = window.languages.map((language) => ({
+const languages = window.languages || [{ originalName: "English", isocode: "en" }]
+const languageItems = languages.map((language) => ({
   label: language.originalName,
   isoCode: language.isocode,
   command: setLanguage,
 }))
 
-const currentLanguage = window.languages.find((language) => document.querySelector("html").lang === language.isocode)
+const currentLanguage = languages.find((language) => document.querySelector("html").lang === language.isocode)
 
 const menuItems = computed(() => [
   {

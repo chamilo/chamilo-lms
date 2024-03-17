@@ -6,33 +6,52 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\EventListener;
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Twig\Environment;
 
 class ExceptionListener
 {
     protected Environment $twig;
+    protected TokenStorageInterface $tokenStorage;
+    protected UrlGeneratorInterface $router;
 
-    public function __construct(Environment $twig)
+    public function __construct(Environment $twig, TokenStorageInterface $tokenStorage, UrlGeneratorInterface $router)
     {
         $this->twig = $twig;
+        $this->tokenStorage = $tokenStorage;
+        $this->router = $router;
     }
 
     public function onKernelException(ExceptionEvent $event): void
     {
+        // You get the exception object from the received event
+        $exception = $event->getThrowable();
+        $request = $event->getRequest();
+
+        if ($exception instanceof AccessDeniedException || $exception instanceof NotAllowedException) {
+            if (null === $this->tokenStorage->getToken()) {
+                $currentUrl = $request->getUri();
+                $parsedUrl = parse_url($currentUrl);
+                $baseUrl = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
+                $path = rtrim($parsedUrl['path'], '/') ?: '';
+                $query = $parsedUrl['query'] ?? '';
+                $redirectUrl = $baseUrl . $path . ($query ? '?' . $query : '');
+
+                $loginUrl = $this->router->generate('login', ['redirect' => $redirectUrl], UrlGeneratorInterface::ABSOLUTE_URL);
+                ChamiloApi::redirectTo($loginUrl);
+            }
+        }
+
         if (isset($_SERVER['APP_ENV']) && \in_array($_SERVER['APP_ENV'], ['dev', 'test'], true)) {
             return;
         }
-
-        // You get the exception object from the received event
-        $exception = $event->getThrowable();
-        /*$message = sprintf(
-            'My Error says: %s with code: %s',
-            $exception->getMessage(),
-            $exception->getCode()
-        );*/
 
         $message = $this->twig->render(
             '@ChamiloCore/Exception/error.html.twig',

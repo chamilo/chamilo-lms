@@ -115,7 +115,12 @@ async function performLogin() {
   if (!store.getters["security/hasError"]) {
     securityStore.user = store.state["security/user"]
 
-    if (typeof redirect !== "undefined") {
+    // Check if 'redirect' is an absolute URL
+    if (typeof redirect !== "undefined" && isValidHttpUrl(redirect.toString())) {
+      // If it's an absolute URL, redirect directly
+      window.location.href = redirect.toString()
+    } else if (typeof redirect !== "undefined") {
+      // If 'redirect' is a relative path, use 'router.push' to navigate
       await router.push({ path: redirect.toString() })
     } else {
       if (responseData.load_terms) {
@@ -125,5 +130,17 @@ async function performLogin() {
       }
     }
   }
+}
+
+function isValidHttpUrl(string) {
+  let url
+
+  try {
+    url = new URL(string)
+  } catch (_) {
+    return false
+  }
+
+  return url.protocol === "http:" || url.protocol === "https:"
 }
 </script>

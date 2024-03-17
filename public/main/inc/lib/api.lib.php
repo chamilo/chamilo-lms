@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserCourseCategory;
+use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -3516,7 +3517,7 @@ function api_not_allowed(
     $message = null,
     $responseCode = 0
 ): never {
-    throw new Exception('You are not allowed');
+    throw new NotAllowedException($message ?: 'You are not allowed', $responseCode);
 }
 
 /**

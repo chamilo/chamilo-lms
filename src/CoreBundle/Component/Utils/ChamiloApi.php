@@ -428,4 +428,21 @@ class ChamiloApi
                 instance.buildmarkersrolls(instance, instance.controls, instance.layers, instance.media);
         ";
     }
+
+    /**
+     * Performs a redirection to the specified URL.
+     *
+     * This method sends a direct HTTP Location header to the client,
+     * causing the browser to navigate to the specified URL. It should be
+     * used with caution and only in scenarios where Symfony's standard
+     * response handling is not applicable. The method terminates script
+     * execution after sending the header.
+     */
+    public static function redirectTo(string $url): void
+    {
+        if (!empty($url)) {
+            header("Location: $url");
+            exit;
+        }
+    }
 }

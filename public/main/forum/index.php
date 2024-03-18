@@ -262,6 +262,13 @@ if ($translate) {
                 placeholder: "'.get_lang('Select a language').'",
                 allowClear: true
             });
+
+            $("#extra_language").on("change", function() {
+                var selectedLanguages = $(this).val();
+                if (selectedLanguages.length === 0) {
+                    window.location.reload();
+                }
+            });
         });
         </script>';
     $form = new FormValidator('search_simple', 'get', api_get_self().'?'.api_get_cidreq(), null, null);
@@ -447,9 +454,7 @@ if (is_array($forumCategories)) {
 
                         $groupId = $forum->getForumOfGroup();
                         $forumInfo['visibility'] = $forumVisibility = $forum->isVisible($courseEntity);
-                        /*$forumInfo['number_threads'] = isset($forum['number_of_threads'])
-                            ? (int) $forum['number_of_threads']
-                            : 0;*/
+                        $forumInfo['number_threads'] = (int) get_threads($forumId, api_get_course_int_id(), api_get_session_id(), true);
 
                         $linkForum = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq()
                             .'&gid='.$groupId.'&forum='.$forumId;

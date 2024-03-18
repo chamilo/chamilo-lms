@@ -385,7 +385,7 @@ $categoryList = TestCategory::getCategoriesIdAndName($selected_course);
 // Get exercise list for this course
 $exercise_list = ExerciseLib::get_all_exercises_for_course_id(
     $selected_course,
-    $session_id,
+    (empty($session_id) ? 0 : $session_id),
     false
 );
 

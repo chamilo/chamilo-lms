@@ -126,6 +126,9 @@ function save_courses_data($courses)
         $params['user_id'] = $creatorId;
         $addMeAsTeacher = isset($_POST['add_me_as_teacher']) ? $_POST['add_me_as_teacher'] : false;
         $params['add_user_as_teacher'] = $addMeAsTeacher;
+        if (isset($course['Visibility'])) {
+            $params['visibility'] = $course['Visibility'];
+        }
 
         // Check if there is a course template stated for this course. In that case, we check if that code exists in DB:
         if (array_key_exists('CourseTemplate', $course) && $course['CourseTemplate'] != '') {
@@ -267,10 +270,10 @@ $form->display();
 
 <blockquote>
 <pre>
-<strong>Code</strong>;<strong>Title</strong>;<strong>CourseCategory</strong>;<strong>CourseCategoryName</strong>;Teacher;Language;CourseTemplate;CloneHomepageTools
-BIO0015;Biology;BIO;Science;teacher1;english;TEMPLATE1;true
-BIO0016;Maths;MATH;Engineerng;teacher2|teacher3;english;;
-BIO0017;Language;LANG;;;english;;
+<strong>Code</strong>;<strong>Title</strong>;<strong>CourseCategory</strong>;<strong>CourseCategoryName</strong>;Teacher;Language;Visibility;CourseTemplate;CloneHomepageTools
+BIO0015;Biology;BIO;Science;teacher1;english;1;TEMPLATE1;true
+BIO0016;Maths;MATH;Engineerng;teacher2|teacher3;english;1;;
+BIO0017;Language;LANG;;;english;1;;
 </pre>
     </blockquote>
 

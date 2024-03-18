@@ -11,9 +11,9 @@ api_protect_admin_script();
  */
 function generateCsvModel(array $fields): string
 {
-    $headerCsv = "<strong>Code</strong>;Title;CourseCategory;Language;";
+    $headerCsv = "<strong>Code</strong>;Title;CourseCategory;Language;Visibility;";
 
-    $exampleCsv = "<b>COURSE001</b>;Introduction to Biology;BIO;english;";
+    $exampleCsv = "<b>COURSE001</b>;Introduction to Biology;BIO;english;1;";
 
     foreach ($fields as $field) {
         $fieldType = (int) $field['field_type'];
@@ -50,6 +50,7 @@ function generateXmlModel(array $fields): string
     $modelXml .= "        &lt;Title&gt;Introduction to Biology&lt;/Title&gt;\n";
     $modelXml .= "        &lt;CourseCategory&gt;BIO&lt;/CourseCategory&gt;\n";
     $modelXml .= "        &lt;Language&gt;english&lt;/Language&gt;\n";
+    $modelXml .= "        &lt;Visibility&gt;1&lt;/Visibility&gt;\n";
     foreach ($fields as $field) {
         switch ($field['field_type']) {
             case ExtraField::FIELD_TYPE_CHECKBOX:
@@ -102,12 +103,19 @@ function validateCourseData(array $courses): array
 function updateCourse(array $courseData, int $courseId): void
 {
     $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-    $params = [
-        'title' => $courseData['Title'],
-        'course_language' => $courseData['Language'],
-        'category_code' => $courseData['CourseCategory'],
-        'visual_code' => $courseData['Code'],
-    ];
+    $params = [];
+    if (isset($courseData['Title'])) {
+        $params['title'] = $courseData['Title'];
+    }
+    if (isset($courseData['Language'])) {
+        $params['course_language'] = $courseData['Language'];
+    }
+    if (isset($courseData['CourseCategory'])) {
+        $params['category_code'] = $courseData['CourseCategory'];
+    }
+    if (isset($courseData['Visibility'])) {
+        $params['visibility'] = $courseData['Visibility'];
+    }
     Database::update($courseTable, $params, ['id = ?' => $courseId]);
     $courseData['code'] = $courseData['Code'];
     $courseData['item_id'] = $courseId;

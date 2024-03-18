@@ -9,9 +9,9 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: "c_attendance_result_comment")]
-#[ORM\Index(columns: ["attendance_sheet_id"], name: "attendance_sheet_id")]
-#[ORM\Index(columns: ["user_id"], name: "user_id")]
+#[ORM\Table(name: 'c_attendance_result_comment')]
+#[ORM\Index(columns: ['attendance_sheet_id'], name: 'attendance_sheet_id')]
+#[ORM\Index(columns: ['user_id'], name: 'user_id')]
 class CAttendanceResultComment
 {
     #[ORM\Column(name: 'iid', type: 'integer')]

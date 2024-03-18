@@ -29,6 +29,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -166,8 +167,9 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
 
             $em->flush();
             $em->getConnection()->commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $em->getConnection()->rollBack();
+
             throw $e;
         }
     }
@@ -289,17 +291,17 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         ];
 
         foreach ($relations as $relation) {
-            $entityClass = 'Chamilo\\' . $relation['bundle'] . '\\Entity\\' . $relation['entity'];
+            $entityClass = 'Chamilo\\'.$relation['bundle'].'\\Entity\\'.$relation['entity'];
             $repository = $em->getRepository($entityClass);
             $records = $repository->findBy([$relation['field'] => $userToDelete]);
 
             foreach ($records as $record) {
-                $setter = 'set' . ucfirst($relation['field']);
-                if ($relation['action'] === 'delete') {
+                $setter = 'set'.ucfirst($relation['field']);
+                if ('delete' === $relation['action']) {
                     $em->remove($record);
                 } elseif (method_exists($record, $setter)) {
-                    $valueToSet = $relation['type'] === 'object' ? $fallbackUser : $fallbackUser->getId();
-                    $record->$setter($valueToSet);
+                    $valueToSet = 'object' === $relation['type'] ? $fallbackUser : $fallbackUser->getId();
+                    $record->{$setter}($valueToSet);
                     if (method_exists($record, 'getResourceFile') && $record->getResourceFile()) {
                         $resourceFile = $record->getResourceFile();
                         if (!$em->contains($resourceFile)) {
@@ -319,7 +321,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         $fallbackUser = $this->findOneBy(['status' => User::ROLE_FALLBACK], ['id' => 'ASC']);
 
         if (!$fallbackUser) {
-            throw new \Exception("User not found.");
+            throw new Exception('User not found.');
         }
 
         return $fallbackUser;

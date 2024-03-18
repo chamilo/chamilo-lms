@@ -50,9 +50,9 @@
                     </div>
                     {% for subitem in item.forums %}
                         <div class="forum_display w-full">
-                            <div class="card">
-                                <div class="flex flex-row">
-                                    <div class="w-1/5">
+                            <div class="card-forum">
+                                <div class="flex flex-row forum-row">
+                                    <div class="w-1/5 float-left">
                                         <div class="number-post">
                                             <a href="{{ subitem.url }}" title="{{subitem.title}}">
                                                 {% if subitem.forum_image is not empty %}
@@ -67,9 +67,8 @@
                                             </a>
                                         </div>
                                     </div>
-                                    <div class="w-4/5 flex flex-row justify-between">
+                                    <div class="w-4/5 justify-between float-right">
                                         <h3 class="text-lg flex flex-row">
-                                            {{ 'ObjectIcon::FORUM'|mdi_icon(32) }}
                                             <a href="{{ subitem.url }}" title="{{ subitem.title }}" class="{{ subitem.visibility != '1' ? 'text-muted': '' }}">{{ subitem.title }}</a>
                                             {{ subitem.icon_session }}
                                         </h3>

@@ -265,7 +265,7 @@ if (is_array($forumCategories)) {
                         $form_count++;
                         $forumInfo['id'] = $forumId;
                         $forumInfo['forum_of_group'] = $forum->getForumOfGroup();
-                        $forumInfo['title'] = $forum->getForumTitle();
+                        $forumInfo['title'] = $forum->getTitle();
                         $forumInfo['forum_image'] = null;
                         $forumInfo['icon_session'] = '';
                         if ('0' != $forum->getForumOfGroup()) {
@@ -286,7 +286,7 @@ if (is_array($forumCategories)) {
                         if (!empty($forum->getStartTime()) && !empty($forum->getEndTime())) {
                             $res = api_is_date_in_date_range($forum->getStartTime(), $forum->getEndTime());
                             if (!$res) {
-                                $linkForum = $forum->getForumTitle();
+                                $linkForum = $forum->getTitle();
                             }
                         }
 

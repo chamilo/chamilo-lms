@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Platform languages.
  */
-#[ApiResource(attributes: ["pagination_enabled" => false])]
+#[ApiResource(attributes: ['pagination_enabled' => false])]
 #[ApiFilter(BooleanFilter::class, properties: ['available'])]
 #[ApiFilter(OrderFilter::class, properties: ['english_name' => 'DESC'])]
 #[ORM\Table(name: 'language', options: ['row_format' => 'DYNAMIC'])]

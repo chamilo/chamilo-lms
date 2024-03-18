@@ -272,10 +272,10 @@ class SocialController extends AbstractController
         UserManager::update_extra_field_value($userId, $justificationFieldToUpdate, $explanation);
 
         $request = $requestStack->getCurrentRequest();
-        $baseUrl = $request->getSchemeAndHttpHost() . $request->getBasePath();
+        $baseUrl = $request->getSchemeAndHttpHost().$request->getBasePath();
         $specificPath = '/main/admin/user_list_consent.php';
-        $link = $baseUrl . $specificPath;
-        $emailContent .=  $translator->trans('Go here : '). '<a href="' . $link . '">' . $link . '</a>';
+        $link = $baseUrl.$specificPath;
+        $emailContent .= $translator->trans('Go here : ').'<a href="'.$link.'">'.$link.'</a>';
 
         $emailOfficer = $settingsManager->getSetting('profile.data_protection_officer_email');
         if (!empty($emailOfficer)) {
@@ -666,7 +666,7 @@ class SocialController extends AbstractController
                     'status' => $isUserOnline ? 'online' : 'offline',
                     'url' => '/social?id='.$item['id'],
                     'relationType' => $relation['relationType'] ?? null,
-                    'existingInvitations' => $existingInvitations
+                    'existingInvitations' => $existingInvitations,
                 ];
             }
         } elseif ('group' === $type) {

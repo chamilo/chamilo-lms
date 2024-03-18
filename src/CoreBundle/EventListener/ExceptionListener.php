@@ -13,7 +13,6 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Twig\Environment;
 
 class ExceptionListener
@@ -39,10 +38,10 @@ class ExceptionListener
             if (null === $this->tokenStorage->getToken()) {
                 $currentUrl = $request->getUri();
                 $parsedUrl = parse_url($currentUrl);
-                $baseUrl = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
+                $baseUrl = $parsedUrl['scheme'].'://'.$parsedUrl['host'];
                 $path = rtrim($parsedUrl['path'], '/') ?: '';
                 $query = $parsedUrl['query'] ?? '';
-                $redirectUrl = $baseUrl . $path . ($query ? '?' . $query : '');
+                $redirectUrl = $baseUrl.$path.($query ? '?'.$query : '');
 
                 $loginUrl = $this->router->generate('login', ['redirect' => $redirectUrl], UrlGeneratorInterface::ABSOLUTE_URL);
                 ChamiloApi::redirectTo($loginUrl);

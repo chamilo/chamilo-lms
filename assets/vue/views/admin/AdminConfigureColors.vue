@@ -192,10 +192,12 @@ let successColor = getColorTheme("--color-success-base")
 let successColorGradient = getColorTheme("--color-success-gradient")
 let dangerColor = getColorTheme("--color-danger-base")
 
-const saveColors = () => {
+const saveColors = async () => {
   let colors = getColors()
   // TODO send colors to backend, then notify if was correct or incorrect
-  console.log(colors)
+  await axios.post("/api/color_themes", {
+    variables: colors,
+  })
 }
 
 const menu = ref("menu")

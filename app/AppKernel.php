@@ -12,6 +12,20 @@ class AppKernel extends Kernel
 {
     protected $rootDir;
 
+    /*
+    Update for PHP 8 support DamienR : AppKernel implements the Serializable interface, which is deprecated. 
+    Implement __serialize() and __unserialize() instead (or in addition, if support for old PHP versions is necessary) 
+    */
+    public function __serialize(): array
+    {
+        return [];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        // Implement the logic to unserialize the object
+    }
+    
     public function registerBundles()
     {
         $bundles = array(

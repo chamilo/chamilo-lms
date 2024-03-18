@@ -35,7 +35,7 @@ class ExceptionListener
         $exception = $event->getThrowable();
         $request = $event->getRequest();
 
-        if ($exception instanceof AccessDeniedException || $exception instanceof NotAllowedException) {
+        if ($exception instanceof NotAllowedException) {
             if (null === $this->tokenStorage->getToken()) {
                 $currentUrl = $request->getUri();
                 $parsedUrl = parse_url($currentUrl);

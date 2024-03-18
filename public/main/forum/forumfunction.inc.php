@@ -1164,14 +1164,9 @@ function getForum(
 }
 
 /**
- * Retrieve all the threads of a given forum.
- *
- * @param int|null $courseId  Optional If is null then it is considered the current course
- * @param int|null $sessionId Optional. If is null then it is considered the current session
- *
- * @return CForumThread[]
+ * Retrieves all the threads for a given forum or counts them.
  */
-function get_threads(int $forumId, int $courseId = null, int $sessionId = null): Array
+function get_threads(int $forumId, int $courseId = null, int $sessionId = null, bool $count = false): array|int
 {
     $repo = Container::getForumThreadRepository();
     $courseId = empty($courseId) ? api_get_course_int_id() : $courseId;
@@ -1181,7 +1176,12 @@ function get_threads(int $forumId, int $courseId = null, int $sessionId = null):
     $qb = $repo->getResourcesByCourse($course, $session);
     $qb->andWhere('resource.forum = :forum')->setParameter('forum', $forumId);
 
-    return $qb->getQuery()->getResult();
+    if ($count) {
+        $qb->select('COUNT(resource.iid)');
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    } else {
+        return $qb->getQuery()->getResult();
+    }
 }
 
 /**
@@ -1985,8 +1985,8 @@ function show_add_post_form(CForum $forum, CForumThread $thread, CForumPost $pos
             'add_attachment',
             get_lang('Add attachment'),
             'paperclip',
-            'default',
-            'default',
+            'plain',
+            'plain',
             null,
             ['id' => 'reply-add-attachment']
         );
@@ -3286,7 +3286,6 @@ function handle_mail_cue($content, $id)
         $sql = "SELECT users.firstname, users.lastname, users.id as user_id, users.email
                 FROM $table_mailcue mailcue, $table_posts posts, $table_users users
                 WHERE
-                    posts.c_id = $course_id AND
                     mailcue.c_id = $course_id AND
                     posts.thread_id = $thread_id AND
                     posts.post_notification = '1' AND
@@ -3326,14 +3325,14 @@ function handle_mail_cue($content, $id)
         Database::query($sql);
     } elseif ('forum' === $content) {
         $sql = "SELECT iid FROM $table_threads
-                WHERE c_id = $course_id AND forum_id = $id";
+                WHERE forum_id = $id";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             handle_mail_cue('thread', $row['iid']);
         }
     } elseif ('forum_category' === $content) {
         $sql = "SELECT iid FROM $table_forums
-                WHERE c_id = $course_id AND forum_category = $id";
+                WHERE forum_category = $id";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             handle_mail_cue('forum', $row['iid']);
@@ -3550,22 +3549,22 @@ function store_move_post($values)
 
         // Moving the post to the newly created thread.
         $sql = "UPDATE $table_posts SET thread_id='".$new_thread_id."', post_parent_id = NULL
-                WHERE c_id = $course_id AND iid ='".(int) ($values['post_id'])."'";
+                WHERE iid ='".(int) ($values['post_id'])."'";
         Database::query($sql);
 
         // Resetting the parent_id of the thread to 0 for all those who had this moved post as parent.
         $sql = "UPDATE $table_posts SET post_parent_id = NULL
-                WHERE c_id = $course_id AND post_parent_id='".(int) ($values['post_id'])."'";
+                WHERE post_parent_id='".(int) ($values['post_id'])."'";
         Database::query($sql);
 
         // Updating updating the number of threads in the forum.
         $sql = "UPDATE $table_forums SET forum_threads=forum_threads+1
-                WHERE c_id = $course_id AND iid ='".$forumId."'";
+                WHERE iid ='".$forumId."'";
         Database::query($sql);
 
         // Resetting the last post of the old thread and decreasing the number of replies and the thread.
         $sql = "SELECT * FROM $table_posts
-                WHERE c_id = $course_id AND thread_id='".$threadId."'
+                WHERE thread_id='".$threadId."'
                 ORDER BY iid DESC";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
@@ -3573,19 +3572,18 @@ function store_move_post($values)
                     thread_last_post='".$row['iid']."',
                     thread_replies=thread_replies-1
                 WHERE
-                    c_id = $course_id AND
                     iid ='".$threadId."'";
         Database::query($sql);
     } else {
         // Moving to the chosen thread.
         $sql = 'SELECT thread_id FROM '.$table_posts."
-                WHERE c_id = $course_id AND iid = '".$values['post_id']."' ";
+                WHERE iid = '".$values['post_id']."' ";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
 
         $original_thread_id = $row['thread_id'];
         $sql = 'SELECT thread_last_post FROM '.$table_threads."
-                WHERE c_id = $course_id AND iid = '".$original_thread_id."' ";
+                WHERE iid = '".$original_thread_id."' ";
 
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
@@ -3595,7 +3593,6 @@ function store_move_post($values)
         if ($thread_is_last_post == $values['post_id']) {
             $sql = 'SELECT iid as post_id FROM '.$table_posts."
                     WHERE
-                        c_id = $course_id AND
                         thread_id = '".$original_thread_id."' AND
                         iid <> '".$values['post_id']."'
                     ORDER BY post_date DESC LIMIT 1";
@@ -3606,26 +3603,26 @@ function store_move_post($values)
 
             $sql = 'UPDATE '.$table_threads."
                     SET thread_last_post = '".$thread_new_last_post."'
-                    WHERE c_id = $course_id AND iid = '".$original_thread_id."' ";
+                    WHERE iid = '".$original_thread_id."' ";
             Database::query($sql);
         }
 
         $sql = "UPDATE $table_threads SET thread_replies=thread_replies-1
-                WHERE c_id = $course_id AND iid ='".$original_thread_id."'";
+                WHERE iid ='".$original_thread_id."'";
         Database::query($sql);
 
         // moving to the chosen thread
         $sql = "UPDATE $table_posts SET thread_id='".(int) ($_POST['thread'])."', post_parent_id = NULL
-                WHERE c_id = $course_id AND iid ='".(int) ($values['post_id'])."'";
+                WHERE iid ='".(int) ($values['post_id'])."'";
         Database::query($sql);
 
         // resetting the parent_id of the thread to 0 for all those who had this moved post as parent
         $sql = "UPDATE $table_posts SET post_parent_id = NULL
-                WHERE c_id = $course_id AND post_parent_id='".(int) ($values['post_id'])."'";
+                WHERE post_parent_id='".(int) ($values['post_id'])."'";
         Database::query($sql);
 
         $sql = "UPDATE $table_threads SET thread_replies=thread_replies+1
-                WHERE c_id = $course_id AND iid ='".(int) ($_POST['thread'])."'";
+                WHERE iid ='".(int) ($_POST['thread'])."'";
         Database::query($sql);
     }
 

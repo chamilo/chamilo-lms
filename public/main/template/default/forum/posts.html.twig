@@ -16,15 +16,16 @@
     {% for post in posts %}
         {% set post_data %}
             <div class="flex flex-row">
-                <div class="w-1/5">
+                <div class="w-1/5 post-col1">
                     {% set image %}
                         <img src="{{ post.author | illustration }}?w=80&h=80&fit=crop" />
                     {% endset %}
                     {{ display.avatar(image, 80) }}
+                    {{ post.author }}
 
                     {{ post.post_date_to_display }}
 
-                    <div class='flex flex-row'>
+                    <div class='flex flex-row border border-gray-25'>
                         {{ post.tool_icons }}
                     </div>
 

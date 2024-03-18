@@ -82,6 +82,10 @@ services:
       tags:
         - { name: 'api_platform.state_processor' }
 
+    Chamilo\CoreBundle\State\ColorThemeProcessor:
+      bind:
+        $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
+
     Chamilo\CoreBundle\EventSubscriber\AnonymousUserSubscriber:
       tags:
         - name: kernel.event_subscriber

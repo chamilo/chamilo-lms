@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Controller\EditorController;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
@@ -117,7 +118,7 @@ class CourseListener
             $twig->addGlobal('course', $course);
 
             if (false === $checker->isGranted(CourseVoter::VIEW, $course)) {
-                throw new AccessDeniedException($this->translator->trans('You\'re not allowed in this course'));
+                throw new NotAllowedException($this->translator->trans('You\'re not allowed in this course'));
             }
 
             // Checking if sid is used.

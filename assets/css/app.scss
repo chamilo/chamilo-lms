@@ -141,6 +141,45 @@
     }
   }
 
+  // Card
+  .card {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    background-color: #fff;
+    margin-bottom: 20px;
+  }
+
+  .card .flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .card .flex .relative {
+    position: relative;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .card .flex a {
+    margin-left: 10px;
+    font-size: 18px;
+    color: #333;
+  }
+
+  .card .sectioncomment {
+    padding: 15px;
+    background-color: #f7f7f7;
+  }
+
+  .card span {
+    float: right;
+    margin-right: 15px;
+    font-size: 14px;
+    color: #666;
+  }
+
   // Alerts
 
   .alert {
@@ -335,14 +374,6 @@
 .custom-link {
   color: blue;
   text-decoration: underline;
-}
-
-.category-forum .custom-panel-group {
-  width: 100%;
-}
-
-.category-forum .forum_display {
-  padding: 20px 0px;
 }
 
 #date_fields label,

@@ -446,7 +446,7 @@ foreach ($posts as $post) {
                 get_lang('Edit'),
                 $editUrl,
                 'pencil',
-                'default'
+                'plain'
             );
         }
     }

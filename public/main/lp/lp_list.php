@@ -99,6 +99,14 @@ if ($allowCategory) {
     foreach ($categoriesTempList as $category) {
         $categorySessionId = (int) learnpath::getCategorySessionId($category->getIid());
         if ($categorySessionId === $sessionId || 0 === $categorySessionId) {
+            if (!empty($categorySessionId)) {
+                $sessionImage = api_get_session_image(
+                    $categorySessionId,
+                    api_get_user_entity()
+                );
+                $newTitle = $category->getTitle().' '.$sessionImage;
+                $category->setTitle($newTitle);
+            }
             $newCategoryFiltered[] = $category;
         }
         if (!empty($sessionId) && empty($firstSessionCategoryId) && $categorySessionId == $sessionId) {
@@ -846,13 +854,21 @@ foreach ($categories as $category) {
     }
 
     $shortcut = false;
+    $canEditCategory = false;
     if ($category->hasResourceNode()) {
         $shortcut = $shortcutRepository->getShortcutFromResource($category);
+        $categorySession = 0;
+        $categoryLink = $category->getResourceNode()->getResourceLinks()->first();
+        if ($categoryLink && $categoryLink->getSession()) {
+            $categorySession = (int) $categoryLink->getSession()->getId();
+        }
+        $canEditCategory = api_get_session_id() === $categorySession;
     }
 
     $data[] = [
         'category' => $category,
         'category_visibility' => $visibility,
+        'can_edit_category' => $canEditCategory,
         'category_is_published' => $shortcut ? 1 : 0,
         'lp_list' => $listData,
     ];

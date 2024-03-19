@@ -1,6 +1,5 @@
 <?php
 
-
 declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
@@ -11,6 +10,8 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Doctrine\DBAL\Schema\Schema;
+
+use const PASSWORD_DEFAULT;
 
 class Version20240310160200 extends AbstractMigrationChamilo
 {
@@ -26,7 +27,7 @@ class Version20240310160200 extends AbstractMigrationChamilo
 
         $em = $doctrine->getManager();
 
-        /* @var UserRepository $repo*/
+        /** @var UserRepository $repo */
         $repo = $container->get(UserRepository::class);
 
         $plainPassword = 'fallback_user';
@@ -46,7 +47,8 @@ class Version20240310160200 extends AbstractMigrationChamilo
             ->setPhone('0000000000')
             ->setLocale('en')
             ->setActive(User::SOFT_DELETED)
-            ->setTimezone('UTC');
+            ->setTimezone('UTC')
+        ;
         $em->flush();
 
         error_log($fallbackUser->getFullname());

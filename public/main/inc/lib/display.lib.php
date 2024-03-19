@@ -2455,9 +2455,9 @@ class Display
             });
         </script>';
             $html = '
-        <div class="mt-4 rounded-lg bg-gray-50 p-2">
-            <div class="px-4 bg-gray-100 border border-gray-50" id="card_'.$idAccordion.'">
-                <h5>
+        <div class="mt-4 rounded-lg bg-gray-15 display-panel-collapse mr-4">
+            <div class="px-4 bg-gray-25 border border-gray-30" id="card_'.$idAccordion.'">
+                <h5 class="p-2">
                     <a role="button"
                         class="cursor-pointer"
                         data-toggle="collapse"
@@ -2471,7 +2471,7 @@ class Display
             </div>
             <div
                 id="collapse_'.$idAccordion.'"
-                class="px-4 border border-gray-50 bg-white collapse custom-collapse '.(($open) ? 'active' : '').'"
+                class="px-4 border border-gray-30 bg-white collapse custom-collapse '.(($open) ? 'active' : '').'"
             >
                 <div id="collapse_contant_'.$idAccordion.'"  class="card-body ">';
 

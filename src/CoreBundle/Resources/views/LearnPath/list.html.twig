@@ -33,7 +33,7 @@
                                     {{ lp_data.category.getTitle() | trim }}
                                 </h6>
                                 {% if lp_data.category.iid > 0 %}
-                                    {% if not session %}
+                                    {% if lp_data.can_edit_category %}
                                         <a href="{{ 'lp_controller.php?' ~ course_url_params ~ '&action=add_lp_category&id=' ~ lp_data.category.iid }}"
                                            title="{{ "Edit"|trans }}">
                                             <i class="mdi-pencil mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Edit"|trans }}"></i>
@@ -94,11 +94,11 @@
                                             <i class="mdi-checkbox-multiple-blank mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Hide"|trans }}"></i>
                                         </a>
                                     {% endif %}
-                                    {% if not session %}
-                                        <a href="{{ 'lp_controller.php?' ~ course_url_params  ~ '&action=delete_lp_category&id=' ~ lp_data.category.iid }}"
-                                           title="{{ "Delete"|trans }}">
-                                            <i class="mdi-delete mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Delete"|trans }}"></i>
-                                        </a>
+                                    {% if lp_data.can_edit_category %}
+                                    <a href="{{ 'lp_controller.php?' ~ course_url_params  ~ '&action=delete_lp_category&id=' ~ lp_data.category.iid }}"
+                                       title="{{ "Delete"|trans }}">
+                                        <i class="mdi-delete mdi ch-tool-icon" style="font-size: 22px; width: 22px; height: 22px;" aria-hidden="true" title="{{ "Delete"|trans }}"></i>
+                                    </a>
                                     {% endif %}
                                 {% endif %}
                             {% elseif lp_data.lp_list is not empty %}

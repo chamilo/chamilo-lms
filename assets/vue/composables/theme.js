@@ -1,7 +1,6 @@
-import {onMounted, ref, watch} from "vue";
+import { onMounted, ref, watch } from "vue"
 
 export const useTheme = () => {
-
   let colors = {}
 
   onMounted(() => {
@@ -16,7 +15,7 @@ export const useTheme = () => {
     if (Object.hasOwn(colors, variableName)) {
       return colors[variableName]
     }
-    const colorRef =  ref(getCssVariableValue(variableName))
+    const colorRef = ref(getCssVariableValue(variableName))
     watch(colorRef, (newColor) => {
       setCssVariableValue(variableName, newColor)
     })
@@ -25,9 +24,7 @@ export const useTheme = () => {
   }
 
   const getCssVariableValue = (variableName) => {
-    const colorVariable = getComputedStyle(document.body)
-      .getPropertyValue(variableName)
-      .split(", ")
+    const colorVariable = getComputedStyle(document.body).getPropertyValue(variableName).split(", ")
     return {
       r: parseInt(colorVariable[0]),
       g: parseInt(colorVariable[1]),
@@ -36,14 +33,13 @@ export const useTheme = () => {
   }
 
   const setCssVariableValue = (variableName, color) => {
-    document.documentElement.style
-      .setProperty(variableName, `${color.r}, ${color.g}, ${color.b}`)
+    document.documentElement.style.setProperty(variableName, `${color.r}, ${color.g}, ${color.b}`)
   }
 
   const getColors = () => {
     let colorsPlainObject = {}
     for (const [key, value] of Object.entries(colors)) {
-      colorsPlainObject[key] = `${value.value.r} ${value.value.g} ${value.value.b}`
+      colorsPlainObject[key] = `${value.value.r}, ${value.value.g}, ${value.value.b}`
     }
     return colorsPlainObject
   }

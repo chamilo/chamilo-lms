@@ -1,9 +1,13 @@
-import { type } from "../../constants/entity/ccalendarevent"
+import { type, subscriptionVisibility } from "../../constants/entity/ccalendarevent"
 
 export function useCalendarEvent() {
   return {
     findUserLink,
     isEditableByUser,
+    isSubscribeable,
+    canSubscribeToEvent,
+    allowSubscribeToEvent,
+    allowUnsubscribeToEvent,
   }
 }
 
@@ -35,4 +39,36 @@ function isEditableByUser(event, userId) {
   }
 
   return false
+}
+
+function isSubscribeable(event) {
+  if (type.subscription !== event.invitationType) {
+    return false
+  }
+
+  return subscriptionVisibility.no !== event.subscriptionVisibility
+}
+
+/**
+ * @param {Object} event
+ * @returns {boolean}
+ */
+function canSubscribeToEvent(event) {
+  return event.resourceLinkListFromEntity.length < event.maxAttendees || 0 === event.maxAttendees
+}
+
+function allowSubscribeToEvent(event) {
+  if (!isSubscribeable(event)) {
+    return false
+  }
+
+  return canSubscribeToEvent(event)
+}
+
+function allowUnsubscribeToEvent(event, userId) {
+  if (!isSubscribeable(event)) {
+    return false
+  }
+
+  return !!findUserLink(event, userId)
 }

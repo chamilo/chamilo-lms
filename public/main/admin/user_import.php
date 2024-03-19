@@ -94,7 +94,7 @@ function validate_data($users, $checkUniqueEmail = false)
             if (isset($user['Email'])) {
                 $userFromEmail = api_get_user_info_from_email($user['Email']);
                 if (!empty($userFromEmail)) {
-                    $user['message'] .= Display::return_message(get_lang('This email is not available'), 'warning');
+                    $user['message'] .= Display::return_message(get_lang('This email is already in use on the platform.'), 'warning');
                     $user['has_error'] = true;
                 }
             }

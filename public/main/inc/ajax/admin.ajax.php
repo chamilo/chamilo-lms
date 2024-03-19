@@ -231,9 +231,9 @@ function check_system_version()
                 get_lang('The latest version is').' <b>Chamilo '.$version.'</b>.  <br />'.
                 get_lang('Your version is').' <b>Chamilo '.$system_version.$versionStatus.'</b>.  <br />'.
                 str_replace(
-                    'http://www.chamilo.org',
+                    'https://chamilo.org/download',
                     '<a href="https://chamilo.org/download">https://chamilo.org/download</a>',
-                    get_lang('Please visit our website: http://www.chamilo.org')
+                    get_lang('Please visit our website: https://chamilo.org/download')
                 ).
                 '</span>';
         } else {

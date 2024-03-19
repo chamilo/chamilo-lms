@@ -2616,7 +2616,6 @@ HOTSPOT;
             $sessionCondition = '';
         }
 
-        $showAttemptsInSessions = api_get_configuration_value('show_exercise_attempts_in_all_user_sessions');
         if ($showAttemptsInSessions) {
             $sessions = SessionManager::get_sessions_by_general_coach(api_get_user_id());
             if (!empty($sessions)) {

@@ -7237,9 +7237,8 @@ class learnpath
 
             foreach ($lps as $lp) {
                 $lp->setCategory(null);
+                $em->persist($lp);
             }
-
-            $em->persist($lp);
 
             $course = api_get_course_entity();
             $session = api_get_session_entity();
@@ -7753,7 +7752,7 @@ class learnpath
                     $values['title']
                 );
                 $this->add_item(
-                    0,
+                    null,
                     $lastItemId,
                     'final_item',
                     $documentId,

@@ -377,7 +377,7 @@ msgstr "Številka mobilnega telefona"
 msgid "Check unique e-mail"
 msgstr "Preveri enoličnost e-poštnega naslova"
 
-msgid "This email is not available"
+msgid "This email is already in use on the platform."
 msgstr "Ta poštni naslov ni na voljo"
 
 msgid "Total posts in all forums."
@@ -495,10 +495,10 @@ msgid "Excel export"
 msgstr "Izvoz v Excel"
 
 msgid "Corporate report, short version"
-msgstr "Poročilo podjetja - kratka inačica"
+msgstr "Poslovno poročilo - kratka inačica"
 
 msgid "Corporate report"
-msgstr "Poročilo podjetja"
+msgstr "Poslovno poročilo"
 
 msgid "Report"
 msgstr "Poročilo"
@@ -729,7 +729,7 @@ msgid "The text you entered doesn't match the picture."
 msgstr "Vneseno besedilo ne ustreza sliki"
 
 msgid "Remove previous relationships"
-msgstr "Odstrani predhodno relacijo"
+msgstr "Odstrani predhodne povezave"
 
 msgid "Import list of HR directors into sessions"
 msgstr "Uvozi seznam HR upraviteljev v seje"
@@ -744,7 +744,7 @@ msgid "Allow only files"
 msgstr "Dovoli zgolj datoteke"
 
 msgid "Allow only text"
-msgstr "Dovoli zgolj bsedilo"
+msgstr "Dovoli zgolj besedilo"
 
 msgid "Allow files or online text"
 msgstr "Dovoli datoteke ali besedilo"
@@ -753,7 +753,7 @@ msgid "Document type"
 msgstr "Vrsta dokumenta"
 
 msgid "Send an email to myself for testing purposes."
-msgstr "Pošlji MI e-pošto (testno sporočilo)"
+msgstr "Pošlji mi e-pošto (testno sporočilo)"
 
 msgid "Delete all selected attendances"
 msgstr "Odstrani vse izbrane prisotnosti"
@@ -771,7 +771,7 @@ msgid "Import groups"
 msgstr "Uvozi skupine"
 
 msgid "Here is your feedback"
-msgstr "Povpratna informacija učitelja"
+msgstr "Tvoje povratne informacije"
 
 msgid "Session Search"
 msgstr "Iskanje po sejah"
@@ -2133,7 +2133,7 @@ msgid "Upload failed, please check maximum file size limits and folder rights."
 msgstr "Nalaganje je bilo neuspešno. Preverite največjo dovoljeno dolžino datoteke in pravice za dostop do mape, kamor nalagate."
 
 msgid "Documents will be added too"
-msgstr "Pripadajači dokumenti bodo tudi dodani"
+msgstr "Pripadajači dokumenti bodo dodani izvozu avtomatično."
 
 msgid "If you want to export a course containing a test, you have to make sure the corresponding tests are included in the export, so you have to select them in the list of tests."
 msgstr "V primeru, da želite izvoziti učno pot, ki vsebuje teste/vaje, morate zagotoviti, da so ustrezni testi/vaje vključeni v izvoz; izberete jih iz seznama testov."
@@ -2457,7 +2457,7 @@ msgid "No. Socratic irony is not a seduction strategy or a method based on the e
 msgstr "No. Socratic irony is not a seduction strategy or a method based on the example."
 
 msgid "Compell one's interlocutor, by a series of questions and sub-questions, to admit he doesn't know what he claims to know."
-msgstr "Compell one's interlocutor, by a series of questions and sub-questions, to admit he doesn't know what he claims to know."
+msgstr "Z nizom vprašanj in podvprašanj prisilite sogovornika, da prizna, da ne ve, za kar trdi, da ve."
 
 msgid "Indeed. Socratic irony is an interrogative method. The Greek \"eirotao\" means \"ask questions\""
 msgstr "Indeed. Socratic irony is an interrogative method. The Greek \"eirotao\" means \"ask questions\""
@@ -2475,7 +2475,7 @@ msgid "Tuesday the 11th of December - First meeting. Room: LIN 18"
 msgstr "Torek, 11. december - Prva lekcija : Newton 18"
 
 msgid "General introduction to project management"
-msgstr "General introduction to philosophy and methodology principles"
+msgstr "Splošen uvod v filozofijo in metodologijo principov"
 
 msgid "Street interviews"
 msgstr "Ulične ankete"
@@ -4572,13 +4572,13 @@ msgid "Assignments"
 msgstr "Naloge"
 
 msgid "Deleted files cannot be restored"
-msgstr "Brisanih datotek ni možno restavrrati"
+msgstr "Brisanih datotek ni možno obnoviti"
 
 msgid "Deleting a file in the documents tool permanently deletes it. The file cannot be restored"
 msgstr "Brisanje datoteke v orodju dokumenti trajno odstrani datoteko. Brisane datoteke ni možno restavrirati."
 
 msgid "Dropbox: Maximum file size of a document"
-msgstr "Nabiralnik: Največja dolžina dokumenta v nabiralniku"
+msgstr "Nabiralnik: Največja velikost dokumenta v nabiralniku"
 
 msgid "How big (in MB) can a dropbox document be?"
 msgstr "Kako velik (v MB) je lahko dokument v nabiralniku?"
@@ -5964,7 +5964,7 @@ msgid "Course score"
 msgstr "Rezultati testov učnih poti"
 
 msgid "Average of tests in Learning Paths"
-msgstr "Povprečje skupnih rezultatov iz SCORM in učnih poti"
+msgstr "Povprečje rezultatov testov v učnih poteh"
 
 msgid "Import courses list"
 msgstr "Uvozi tečaje iz datoteke"
@@ -7569,10 +7569,10 @@ msgid "Do you really want to delete all messages?"
 msgstr "Želis odstraniti vsa sporočila?"
 
 msgid "Dear %s,"
-msgstr "Spoštovani %s. Našo pozornost je pritegnilo dejstvo, da niste zaključili s tečajem %s čeprav je datum poteka tečaja nastavljen na %s. Pomeni da je preostanek dni za dokončanje zgolj še %s. Naj vas opomnimo, da se tečaj izvaja le enkrat letno, zato vas s tem sporočilom še enkrat vabimo, da tečaj zaključite pravočasno. V tečaj se lahko vrnete z obiskom platfome preko naslova %s. Z lepimi pozdravi, ekipa %s"
+msgstr "Spoštovani %s. Našo pozornost je pritegnilo dejstvo, da niste zaključili s tečajem %s, čeprav je datum poteka tečaja nastavljen na %s. Pomeni da je preostanek dni za dokončanje zgolj še %s. Naj vas opomnimo, da se tečaj izvaja le enkrat letno, zato vas s tem sporočilom še enkrat vabimo, da tečaj zaključite pravočasno. V tečaj se lahko vrnete z obiskom platfome preko naslova %s. Z lepimi pozdravi, ekipa %s"
 
 msgid "Urgent: %s course expiration reminder"
-msgstr "Nujno: Opozorilo o poteku tečaja %s"
+msgstr "Nujno: Opomnik o poteku tečaja %s"
 
 msgid "Exercise and learning path"
 msgstr "Testi in učne poti"
@@ -7620,7 +7620,7 @@ msgid "Create a new test"
 msgstr "Ustvari nov test"
 
 msgid "Questions"
-msgstr "Vprašanj"
+msgstr "Vprašanja"
 
 msgid "Answers"
 msgstr "Odgovori"
@@ -8640,10 +8640,10 @@ msgid "Advanced search"
 msgstr "Napredno iskanje"
 
 msgid "Open"
-msgstr "Prost odgovor"
+msgstr "Odprta"
 
 msgid "Import"
-msgstr "Uveljavi"
+msgstr "Uvozi"
 
 msgid "Add another"
 msgstr "Dodaj naslednjega"
@@ -8982,7 +8982,7 @@ msgid "Portal Admin"
 msgstr "Admin portala"
 
 msgid "none"
-msgstr "noben"
+msgstr "brez"
 
 msgid "First select a course"
 msgstr "Najprej izberite tečaj"
@@ -11127,7 +11127,7 @@ msgid "Your password is encrypted for security reasons. Thus, after pressing the
 msgstr "Vaše geslo je bilo kriptirano iz varnostnih razlogov. Zato vam bo geslo po kliku na dano povezavo poslano na vaš e-poštni naslov."
 
 msgid "Extra fields"
-msgstr "DOdatno polje"
+msgstr "Dodatna polja"
 
 msgid "This OpenID could not be found in our database. Please register for a new account. If you have already an account with us, please edit your profile inside your account to add this OpenID"
 msgstr "Ta OpenID ne obstaja v naši podatkovni bazi. Prosimo, da se registrirajte za dodelitev novega uporabniškega računa. V primeru, da uporabniški račun na tem portalu že imate, ustrezno spremenite vaš profil, tako da dodate ta OpenID."
@@ -12432,7 +12432,7 @@ msgid "If file exists:"
 msgstr "če datoteka s tem imenom že obstaja :"
 
 msgid "Do nothing"
-msgstr "ne naredi ničesar"
+msgstr "Ne naredi ničesar"
 
 msgid "Don't upload if file exists"
 msgstr "Ne prepiši, če datoteka že obstaja"
@@ -16277,6 +16277,12 @@ msgstr "Odstrani vse certifikate"
 msgid "There are users using this language. Do you want to disable this language and set all this users with the default portal language?"
 msgstr "Ta jezik trenutno uporablja nekaj tečajnikov. Ali želite onemogočiti ta jezik in tem tečajnikom dodeliti privzeti jezik platforme?"
 
+msgid "Click to show graphics"
+msgstr ""
+
+msgid "Quarterly report"
+msgstr ""
+
 msgid "%d %B %Y"
 msgstr "%d %B %Y"
 
@@ -16326,7 +16332,7 @@ msgid "The XML import lets you add more info and create resources (courses, user
 msgstr "XML uvoz omogoča dodajanje več informacije in hkrati pri uvozu ustvari zahtevane elemente (tečaje, uporabnike). CSV uvoz zgolj kreira seje in omogoča prirejanje obstoječih resursov sejam."
 
 msgid "Show link to report bug"
-msgstr "Pokoži povezavo za poročanje o napakah"
+msgstr "Pokaži povezavo za poročanje o napakah"
 
 msgid "Show a link in the header to report a bug inside of our support platform (http://support.chamilo.org). When clicking on the link, the user is sent to the support platform, on a wiki page that describes the bug reporting process."
 msgstr "V glavi prikaže povezavo na stran za poročanje o napakah (http://support.chamilo.org). S klikom na povezavo se prestavite na podporno stran z Wiki stranjo, ki opisuje proces poročanja o odkritih napakah."
@@ -16488,7 +16494,7 @@ msgid "Off"
 msgstr "Off"
 
 msgid "Web server"
-msgstr "spletni strežnik"
+msgstr "Spletni strežnik"
 
 msgid "Not inserted"
 msgstr "Ni vstavljeno"
@@ -16821,7 +16827,7 @@ msgid "Course validation - a link to the terms and conditions"
 msgstr "Validacija tečajev - povezava k pogojem rabe"
 
 msgid "This is the URL to the \"Terms and Conditions\" document that is valid for making a course request. If the address is set here, the user should read and agree with these terms and conditions before sending a course request.<br />If you enable Chamilo's \"Terms and Conditions\" module and if you want its URL to be used, then leave this setting empty."
-msgstr "Predstavlja URL k dokuemntu \"Pogoji rabe\", ki je veljaven ob zahtevi po kreiranju tečaja. V primeru, da je naslov podan, mora uporabnik pred pošiljanjem zahteve prebrati in sprejeti pogoje predstavljene v dokumentu.<br />"
+msgstr "Predstavlja URL k dokumentu \"Pogoji rabe\", ki je veljaven ob zahtevi po kreiranju tečaja. V primeru, da je naslov podan, mora uporabnik pred pošiljanjem zahteve prebrati in sprejeti pogoje predstavljene v dokumentu.<br />"
 
 msgid "The course has not been created due to an internal error."
 msgstr "Tečaj ni bil ustvarjen zaradi interne napake."
@@ -17643,10 +17649,10 @@ msgid "Evaluation has been locked"
 msgstr "Ocenjevanje je zaklenjeno"
 
 msgid "All done"
-msgstr "Vse je bilo izvršeno"
+msgstr "potekli"
 
 msgid "All not done"
-msgstr "Ni bilo vse izvršeno"
+msgstr "prihodnji"
 
 msgid "If your Learning paths have audio files included, you should select them from the documents"
 msgstr "V primeru, da vaša učna pot vsebuje zvočne datoteke, jih morate izbrati iz področja dokumentov"
@@ -19041,7 +19047,7 @@ msgid "Report by question"
 msgstr "Poročilo po vprašanjih"
 
 msgid "Live results"
-msgstr "Reultati v živo"
+msgstr "Rezultati v živo"
 
 msgid "Skill not found"
 msgstr "Kompetence ni mogoče najti"
@@ -19515,7 +19521,7 @@ msgid "This slideshow will resize automatically to your screen size. This is the
 msgstr "Velikost predstavitve se bo avtomatično prilagodila velikosti zaslona. To dejanje je privzeto."
 
 msgid "You should create the \"Term and Conditions\" for all the available languages."
-msgstr "Priporočljivo je, da za vsakega izmed jezikov kreirate dokuemnt za \"Pogoji rabe\"."
+msgstr "Priporočljivo je, da za vsakega izmed jezikov kreirate dokument s \"Pogoji rabe\"."
 
 msgid "Select an audio file from documents"
 msgstr "Izberi avdio datoteko iz dokumentov"
@@ -19641,7 +19647,7 @@ msgid "This page will be loaded after login for all teachers"
 msgstr "Ta stran se bo naložila po prijavi učitelja"
 
 msgid "Human resources manager page after login"
-msgstr "Stran po prijavi HRM"
+msgstr "Stran po prijavi za HRM"
 
 msgid "This page will load after login for all human resources managers"
 msgstr "Ta stran se bo naložila po prijavi HRM"
@@ -19733,8 +19739,8 @@ msgstr "Uporabniki, ki niso registrirani v nobeni seji"
 msgid "Command line interpreter (CLI)"
 msgstr "Tolmač ukazne vrstice (CLI - command line interp.)"
 
-msgid "Please visit our website: http://www.chamilo.org"
-msgstr "Obiščite našo spletno stran: http://www.chamilo.org"
+msgid "Please visit our website: https://chamilo.org/download"
+msgstr "Obiščite našo spletno stran: https://chamilo.org/download"
 
 msgid "The space used on disk cannot be measured properly on Windows-based systems."
 msgstr "Meritev porabljenega prostora na disku na Windows platformah ne more bit izvedena korektno."
@@ -20154,7 +20160,7 @@ msgid "Whether you want to show only courses, only sessions or both courses *and
 msgstr "Prikazovanje zgolj tečajev, zgolj sej ali tečajev in sej v katalogu tečajev."
 
 msgid "Enable language auto-detect in custom pages"
-msgstr "Omogoči avtomatično detekcijo jeziki na lastnih (custom) straneh portala."
+msgstr "Omogoči avtomatično detekcijo jezika na lastnih (custom) straneh portala."
 
 msgid "If you use custom pages, enable this if you want to have a language detector there present the page in the user's browser language, or disable to force the language to be the default platform language."
 msgstr "Če uporabljate lastne (uporabniško definirane) strani in želite na strani uporabiti detekcijo jezika, potem omogočite to možnost. Možnost izklopite v primeru, da stran želite prikazano v jeziku, privzeto definiranem za portal."
@@ -20229,7 +20235,7 @@ msgid "Cookie privacy notification"
 msgstr "Piškotki: obvestilo o zasebnosti"
 
 msgid "If enabled, this option shows a banner on top of your platform that asks users to acknowledge that the platform is using cookies necessary to provide the user experience. The banner can easily be acknowledged and hidden by the user. This allows Chamilo to comply with EU web cookies regulations."
-msgstr "Ko je možnost omogočena, se prikaže pasica, ki uporabnika obvešča o uporabi piškotkov. Pasico je na enostaven način mogoče potrditi in jo skriti s strani uporabnika. Paica omogoča platformi, da zadosti regulativi EU Parlamenta o uporabi piškotkov."
+msgstr "Ko je možnost omogočena, se prikaže pasica, ki uporabnika obvešča o uporabi piškotkov. Pasico je na enostaven način mogoče potrditi in jo skriti s strani uporabnika. Pasica omogoča platformi, da zadosti regulativi EU Parlamenta o uporabi piškotkov."
 
 msgid "If enabled *and* the sessions catalogue is enabled, users will be able to subscribe to active sessions by themselves using the 'Subscribe' button, without any type of restriction."
 msgstr "Če je omogočena *IN* je katalog seje omogočen, se uporabniki v aktivne seje lahko brez vsakršnih omejitev vpisujejo sami preko gumba za vpis v sejo."
@@ -21717,13 +21723,13 @@ msgid "You have been assigned the learner %s"
 msgstr "Dodeljeni ste bili učečemu %s"
 
 msgid "You have been assigned as tutor for the learner %s.<br/>"
-msgstr ""
+msgstr "Dodeljeni ste bilo kot tutor učeči/učečemu %s.<br />"
 
 msgid "Short name"
 msgstr "Kratko ime"
 
 msgid "Course user document"
-msgstr ""
+msgstr "Dokumenti uporabnika tečaja"
 
 msgid "Destination"
 msgstr "Cilj"
@@ -21750,7 +21756,7 @@ msgid "Error importing file"
 msgstr "Napaka pri uvozu arhiva"
 
 msgid "Hidden"
-msgstr ""
+msgstr "Skrito"
 
 msgid "Imported"
 msgstr "Uvoženo"
@@ -21948,7 +21954,7 @@ msgid "Social data"
 msgstr "Socialni podatki"
 
 msgid "Wall messages posted by him/herself"
-msgstr ""
+msgstr "Sporočila objavljena na njenem/njegovem zidu"
 
 msgid "See accesses"
 msgstr "Poglej dostope"
@@ -22062,7 +22068,7 @@ msgid "Update this title in learning paths"
 msgstr "Ažuriraj ta naslov v učnih poteh"
 
 msgid "To enable video chat in your browser (if it supports it), make sure you click on the information icon on the left of the URL and then authorize the use of the webcam and microphone."
-msgstr ""
+msgstr "Da bi omogočili video klepet v vašem brskalniku (če brskalnik to omogoča), kliknite informacijsko ikono levo od URL in dovolite rabo spletne kamere in mikrofona med klepetom."
 
 msgid "Update file"
 msgstr "Ažuriraj datoteko"
@@ -22086,7 +22092,7 @@ msgid "Temporary score: %s open question(s) not corrected yet."
 msgstr "Trenutni rezultat: %s odprtih vprašanj še ni ocenjenih"
 
 msgid "Annotation"
-msgstr ""
+msgstr "Označevanje"
 
 msgid "Teacher picture"
 msgstr "Slika učitelja"
@@ -22377,7 +22383,7 @@ msgid "Skill level"
 msgstr ""
 
 msgid "Add item to portfolio"
-msgstr ""
+msgstr "Dodaj element v portfelj"
 
 msgid "New document added to course %s"
 msgstr "Nov dokument je bil dodan v tečaj %s"
@@ -22413,10 +22419,10 @@ msgid "Teach courses"
 msgstr "Poučevati v tečaju"
 
 msgid "Edit portfolio item"
-msgstr ""
+msgstr "Uredi element portfelja"
 
 msgid "Portfolio item added"
-msgstr ""
+msgstr "Element je bil dodan v portfelj"
 
 msgid "Explore more courses"
 msgstr "Razišči več tečajev"
@@ -22746,10 +22752,10 @@ msgid "There is a sequence resource linked to this session. You must delete this
 msgstr ""
 
 msgid "Add annotation text"
-msgstr ""
+msgstr "Označi z besedilom"
 
 msgid "Add annotation path"
-msgstr ""
+msgstr "Nariši označbo"
 
 msgid "Driver"
 msgstr ""
@@ -22860,7 +22866,7 @@ msgid "User %s asked for the deletion of his/her account, explaining that \"%s\"
 msgstr "Uporabnica/uporabnik %s ja zaprosil-a za odstranitev svojega računa z obrazložitvijo: \"%s\". Zahtevek lahko obravnavate tule: %s"
 
 msgid "User %s asked for the removal of his/her consent to our legal terms, explaining that \"%s\". You can process the request here: %s"
-msgstr "Uporabnica/uporabnik je zaprosil za preklic svojih soglasij v skladu s pravnimi pogoji portala z obrazložitvijo: \"%s\". Zahtevek lahko obravnavate tule: %s"
+msgstr "Uporabnica/uporabnik %s je zaprosil za preklic svojih soglasij v skladu s pravnimi pogoji portala z obrazložitvijo: \"%s\". Zahtevek lahko obravnavate tule: %s"
 
 msgid "Request for consent withdrawal on legal terms"
 msgstr "Zahteva za umik soglasja pod zakonskimi pogoji"
@@ -22932,7 +22938,7 @@ msgid "You can use the tags {{class_name}} and {{student_full_name}} in the ques
 msgstr ""
 
 msgid "Create meeting poll"
-msgstr ""
+msgstr "Ustvari anketo sestanka"
 
 msgid "Question for next class"
 msgstr "Vprašanja za naslednjo učno uro"
@@ -22973,7 +22979,7 @@ msgstr "Končal sem z lekcijo, obvesti učitelja"
 msgid "The student <b>%s</b> has finished the learning paths from the course <b>%s</b>"
 msgstr "<b>%s</b> je končal(a) z učno potjo v tečaju <b>%s</b>"
 
-msgid "This question is used in another exercises. If you continue its edition, the changes will affect all exercises that contain this question."
+msgid "This question is used in at least one other exercise. If you continue its edition, the changes will affect all exercises that contain this question."
 msgstr "Vprašanje je uporabljeno tudi v drugem testu. Če boste nadaljevali z urejanjem, bodo spremembe vplivale na vse teste, v katerih je to vprašanje vsebovano."
 
 msgid "Time spent / Time required"
@@ -23166,13 +23172,13 @@ msgid "Resume import"
 msgstr ""
 
 msgid "Candidate"
-msgstr ""
+msgstr "Kandidat"
 
 msgid "General total"
 msgstr ""
 
 msgid "Domains"
-msgstr ""
+msgstr "Domene"
 
 msgid "Logins by date"
 msgstr "Prijave po datumih"
@@ -23244,7 +23250,7 @@ msgid "Extraction from %s"
 msgstr ""
 
 msgid "Compilatio"
-msgstr ""
+msgstr "Compilatio"
 
 msgid "Verify that it contains text (and not only images)"
 msgstr "Preverite, da vsebuje besedilo (ne zgolj slik)"
@@ -23253,10 +23259,10 @@ msgid "and that it is not corrupted"
 msgstr "in da ni okvarjen"
 
 msgid "Analyse"
-msgstr ""
+msgstr "Analiziraj"
 
 msgid "(Pourcentage of file analysis)"
-msgstr ""
+msgstr "(procent analize datoteke)"
 
 msgid "Pending Analysis"
 msgstr "Čakajoča analiza"
@@ -23271,31 +23277,31 @@ msgid "If the file is in pdf format, check that it is not protected by modificat
 msgstr "Če je datoteka v PDF obliki preverite, da ni zaščitena pred spreminjanjem."
 
 msgid "Connecting with the Compilatio server"
-msgstr ""
+msgstr "Povezovanje s Compilatio strežnikom"
 
 msgid "with Compilatio"
-msgstr ""
+msgstr "s Compilatio"
 
 msgid "Start Compilatio analysis"
-msgstr ""
+msgstr "Začni analizo s Compilatio"
 
 msgid "See report"
 msgstr "Poglej poročilo"
 
 msgid "Your selection contains no jobs to analyze. Only jobs managed by Compilatio and not already scanned can be sent."
-msgstr ""
+msgstr "Vaša izbira ne vsebuje opravil za analizo. Poslana so lahko zgolj še NE-skenirana opravila and opravila upravljana s Compilatio."
 
 msgid "AJAX communication with the Compilatio server impossible. Please retry later."
-msgstr ""
+msgstr "AJAX komunikacija s Compilatio strežnikom ni mogoča. Prosimo da skušate ponoviti kasneje."
 
 msgid "Information: The list of classes below contains the list of classes you have already registered in your course. If this list is empty, use the + green above to add classes."
-msgstr "Info: Seznam razredov spodaj vključuje razrede v katere ste že vpisani v vašem tečaju. Če je seznam praze, uporabite +zelen zgoraj za dodajanje želenih razredov."
+msgstr "Info: Seznam razredov spodaj vključuje razrede, ki ste jih že vpisani v ta tečaj. Če je seznam prazen, uporabite ikono zgoraj z zelenim + znakom za dodajanje želenih razredov."
 
 msgid "Insert your two names"
-msgstr ""
+msgstr "Vpiši svoji dve imeni"
 
 msgid "Add right logo"
-msgstr ""
+msgstr "Dodaj desni logotip"
 
 msgid "Use score as progress"
 msgstr "Uporabi rezultat kot napredek"
@@ -23385,7 +23391,7 @@ msgid "Outside courses"
 msgstr "Zunanji tečaji"
 
 msgid "Learnpaths category"
-msgstr ""
+msgstr "Kategorije učnih poti"
 
 msgid "Mail templates"
 msgstr "Predloge e-poštnih sporočil"
@@ -23400,13 +23406,13 @@ msgid "Number of matching courses"
 msgstr "Število ujemajočih se tečajev"
 
 msgid "Sessions by date"
-msgstr ""
+msgstr "Seje po datumu"
 
 msgid "Global statistics"
 msgstr "Generalna statistika"
 
 msgid "Weeks"
-msgstr ""
+msgstr "Tedni"
 
 msgid "Sessions count"
 msgstr "Število sej"
@@ -23427,7 +23433,7 @@ msgid "Sessions per language"
 msgstr "Seje po jezikih"
 
 msgid "Courses in sessions"
-msgstr ""
+msgstr "Tečaji v sejah"
 
 msgid "Users statistics"
 msgstr ""
@@ -23466,7 +23472,7 @@ msgid "Group survey for %s"
 msgstr ""
 
 msgid "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :"
-msgstr ""
+msgstr "Pozdravljen %s<br /><br />"
 
 msgid "Survey %s multiplicated"
 msgstr ""
@@ -23490,22 +23496,22 @@ msgid "Your browser could not be verified. Please try again, or try another brow
 msgstr "Vašega brskalnika ne moremo preveriti. Prosimo, da poskusite znova, ali pa poskusite z drugim brskalnikom /napravo predenj pričnete s svojim testom."
 
 msgid "Partially correct"
-msgstr ""
+msgstr "Delno pravilno"
 
 msgid "%d / %d answers saved."
-msgstr ""
+msgstr "%d / %d odgovorov je bilo shranjenih."
 
 msgid "Test your browser"
-msgstr ""
+msgstr "Preskusi svoj brskalnik"
 
 msgid "Sort the following options from the list as you see fit by dragging them to the lower areas. You can put them back in this area to modify your answer."
 msgstr ""
 
 msgid "Average time in the course"
-msgstr ""
+msgstr "Povprečen čas v tečaju"
 
 msgid "Users active in a test"
-msgstr ""
+msgstr "Uporabniki aktivni v testu"
 
 msgid "Selective display"
 msgstr ""
@@ -23517,118 +23523,118 @@ msgid "Multiple choice with free text"
 msgstr ""
 
 msgid "Offer some pre-defined options, then let the user answer by text if no option matches."
-msgstr ""
+msgstr "Podajte nekaj pred-definiranih možnosti, potem pa pustite uporabniku, da možnost izbere ali pa odgovori z besedilom, če mu nobena od podanih možnosti ne ustreza."
 
 msgid "Multiple choice with 'other' option"
 msgstr ""
 
 msgid "Other..."
-msgstr ""
+msgstr "Drugo:"
 
 msgid "Please specify:"
-msgstr ""
+msgstr "Prosim, opredelite:"
 
 msgid "User %s has posted a document in the Assignments tool in the course %s"
-msgstr ""
+msgstr "Tečajnik %s je oddal dokument v orodje Zadolžitve v tečaju %s"
 
 msgid "Download documents first"
-msgstr ""
+msgstr "Najprej prenesite dokument."
 
 msgid "File %s is empty or only contains empty lines."
-msgstr ""
+msgstr "Datoteka %s je prazna ali vsebuje zgolj prazne vrstice."
 
 msgid "File %s has %d non-empty lines."
-msgstr ""
+msgstr "Datoteka %s vsebuje %d nepraznih vrstic."
 
 msgid "There are duplicates: only %d unique user names were extracted."
-msgstr ""
+msgstr "Prepoznani duplikati: pridobljenih je bilo zgolj %d enoličnih uporabniških imen."
 
 msgid "No line matched any actual user name."
-msgstr ""
+msgstr "Nobena izmed vrstic ne ustreza nobenemu izmed dejanskih uporabniških imen."
 
 msgid "Only %d lines matched actual users."
-msgstr ""
+msgstr "Zgolj %d vrstic ustreza dejanskim uporabniškim imenom."
 
 msgid "The following %d line(s) do not match any actual user:"
-msgstr ""
+msgstr "Naslednjih %d vrstic ne ustreza nobenemu izmed dejanskih uporabnikov:"
 
 msgid "%d users are about to be anonymized :"
-msgstr ""
+msgstr "%d uporabnikov bo anonimizirano:"
 
 msgid "Loading %d users..."
-msgstr ""
+msgstr "Nalagam uporabnike %d ..."
 
 msgid "Anonymizing %d users..."
-msgstr ""
+msgstr "Anonimiziram uporabnike: %d ..."
 
 msgid "All %d users were anonymized."
-msgstr ""
+msgstr "Vseh %d uporabnikov je bilo anonimiziranih."
 
 msgid "Only %d users were anonymized."
-msgstr ""
+msgstr "Zgolj %d uporabnikov je bilo anonimizirano."
 
 msgid "Attempted anonymization of the following %d users failed:"
-msgstr ""
+msgstr "Poskus anonimizacije sledečih %d uporabnikov ni uspel:"
 
 msgid "Please upload a text file listing the users to be anonymized, one username per line."
-msgstr ""
+msgstr "Prosim, naložite besedilno datoteko s seznamom uporabnikov, ki jih želite anonimizirati. Specificirajte eno uporabniško ime na vrstico datoteke."
 
 msgid "Internal inconsistency found : %d users found from %d submitted usernames. Please start over."
-msgstr ""
+msgstr "Ugotovljena notranja nedoslednost: ugotovljenih je bilo %d uporabnikov iz posredovanih %d uporabniških imen. Prosimo da  pričnete ponovno."
 
 msgid "Anonymise users list"
-msgstr ""
+msgstr "Anonimiziraj seznam uporabnikov"
 
 msgid "Username list"
-msgstr ""
+msgstr "Seznam uporabniških imen"
 
 msgid "Users about to be anonymized:"
-msgstr ""
+msgstr "Uporabniki, ki bodo anonimizirani"
 
 msgid "Could not read file."
-msgstr ""
+msgstr "Ne morem brati datoteke."
 
 msgid "Could not read file lines."
-msgstr ""
+msgstr "Ne morem prebrati vrstic datoteke."
 
 msgid "Certificates in sessions"
-msgstr ""
+msgstr "Certifikati v sejah"
 
 msgid "Filter certificates in sessions"
-msgstr ""
+msgstr "Filtriraj certifikate v sejah"
 
 msgid "Update user list"
-msgstr ""
+msgstr "Ažuriraj seznam uporabnikov"
 
 msgid "Chamilo is an Open Source project and this portal is provided to our community free of charge by the Chamilo Association, which pursues the goal of improving the availability of a quality education around the globe.<br /><br />"
-msgstr ""
+msgstr "Chamilo je odprtokodni (Open Source) projekt in je s strani združenja Chamilo (Chamilo Association)  uporabnikov zagotovljen brezplačno s tendenco zasledovanja cilja izboljšanja dostopnosti do kvalitetnega izobraževanja po vsem svetu.<br /><br />"
 
 msgid "My assignments"
-msgstr ""
+msgstr "Moje zadolžitve"
 
 msgid "Add to editor"
-msgstr ""
+msgstr "Dodaj v urejevalnik"
 
 msgid "Image URL"
-msgstr ""
+msgstr "URL slike"
 
 msgid "px width"
-msgstr ""
+msgstr "širina v px"
 
 msgid "Add image with zoom"
 msgstr ""
 
 msgid "Delete in all languages"
-msgstr ""
+msgstr "Odstrani v vseh jezikih"
 
 msgid "My students schedule"
 msgstr ""
 
 msgid "I accept the number of saved responses in this section."
-msgstr ""
+msgstr "Sprejemam število sranjenih odgovorov v tem razdelku."
 
 msgid "If you are not satisfied, do not check the acceptance box and consult the course manager or the platform administrator."
-msgstr ""
+msgstr "Če se ne strinjate, ne potrdite strinjanja. V tem primeru vam priporočamo, da se posvetujte z upraviteljem tečaja ali upraviteljem platforme."
 
 msgid "Student's superior follow up"
 msgstr ""
@@ -23637,49 +23643,49 @@ msgid "General Coaches planning"
 msgstr ""
 
 msgid "Sent or past assignments"
-msgstr ""
+msgstr "Poslane ali pretekle zadolžitve"
 
 msgid "Pending assignments"
-msgstr ""
+msgstr "Čakajoče zadolžitve"
 
 msgid "All Assignments"
-msgstr ""
+msgstr "Vse zadolžitve"
 
 msgid "You will find below all your assignment from all the courses and session in which you are registered."
-msgstr ""
+msgstr "Spodaj se nahajajo vse vaše zadolžitve iz vseh tečajev in sej v katere ste vpisani."
 
 msgid "Required courses"
-msgstr ""
+msgstr "Zahtevani tečaji"
 
 msgid "Standard List"
-msgstr ""
+msgstr "Običajen seznam"
 
 msgid "Management List"
-msgstr ""
+msgstr "Upravljalni seznam"
 
 msgid "Anonymize user's sessions"
-msgstr ""
+msgstr "Anonimiziraj uporabnikovo sejo"
 
 msgid "Continue last import"
-msgstr ""
+msgstr "Nadaljuj zadnji uvoz"
 
 msgid "Notifications"
-msgstr ""
+msgstr "Obvestila"
 
 msgid "Justification"
-msgstr ""
+msgstr "Dokazilo"
 
 msgid "Periodic export"
-msgstr ""
+msgstr "Periodični izvoz"
 
 msgid "Dates"
-msgstr ""
+msgstr "Datumi"
 
 msgid "Error: Some of the files inside the zip package have unauthorized extensions."
-msgstr ""
+msgstr "Napaka: nekatere datoteke znotraj zip paketa imajo nedovoljene končnice."
 
 msgid "Users by status"
-msgstr ""
+msgstr "Uporabniki po statusih"
 
 msgid "Sessions per status"
 msgstr ""
@@ -23694,49 +23700,49 @@ msgid "Users by contract"
 msgstr ""
 
 msgid "Users by certificate"
-msgstr ""
+msgstr "Uporabniki po certifikatih"
 
 msgid "Users by age"
-msgstr ""
+msgstr "Uporabniki po starosti"
 
 msgid "Continue the import"
-msgstr ""
+msgstr "Nadaljuj uvoz"
 
 msgid "LDAP connect operation failed."
-msgstr ""
+msgstr "LDAPP connect operacija ni uspela."
 
 msgid "ldap_bind() failed."
-msgstr ""
+msgstr "LDAP_bind() operacija ni uspela."
 
 msgid "ldap_search() failed."
-msgstr ""
+msgstr "LDAP_search() operacija ni uspela."
 
 msgid "ldap_first_entry() failed."
-msgstr ""
+msgstr "LDAP_first_entry() operacija ni uspela."
 
 msgid "ldap_get_values() failed."
-msgstr ""
+msgstr "LDAP_get_values() ni uspela."
 
 msgid "More than one attribute value was found."
-msgstr ""
+msgstr "Več kot ena vrednost za atribut je bila najdena."
 
 msgid "More than one user matched."
-msgstr ""
+msgstr "Več kot en sam uporabnik ustreza kriteriju."
 
 msgid "Course code confirmation"
 msgstr ""
 
 msgid "Unsupported IMS/QTI version."
-msgstr ""
+msgstr "Nepodprta IMS/QTI različica."
 
 msgid "Export all certificates to ZIP"
-msgstr ""
+msgstr "Izvozi vse certifikate v ZIP datoteko."
 
 msgid "Current score"
-msgstr ""
+msgstr "Trenutni dosežek"
 
 msgid "Add attempt"
-msgstr ""
+msgstr "Dodaj poskus"
 
 msgid "survey"
 msgstr ""
@@ -23745,25 +23751,25 @@ msgid "Private between users"
 msgstr ""
 
 msgid "Nothing"
-msgstr ""
+msgstr "Nič"
 
 msgid "Compilatio analysis in progress"
-msgstr ""
+msgstr "Izvajanje analize Compilatio ...v teku..."
 
 msgid "Account expiration"
 msgstr ""
 
 msgid "Justification expiration"
-msgstr ""
+msgstr "Potek dokazila"
 
 msgid "Justification type"
-msgstr ""
+msgstr "Tip dokazila"
 
 msgid "Persistent"
 msgstr ""
 
 msgid "Logout from your %s account"
-msgstr ""
+msgstr "Odjavi se s svojega računa %s ."
 
 msgid "Days difference"
 msgstr ""
@@ -23775,13 +23781,13 @@ msgid "Absent"
 msgstr ""
 
 msgid "Internal database error"
-msgstr ""
+msgstr "Napaka sistema podatkovne zbirke (notranja)"
 
 msgid "Wrong number of days"
-msgstr ""
+msgstr "Napačno število dni"
 
 msgid "Subscription not allowed"
-msgstr ""
+msgstr "Vpis ni dovoljen"
 
 msgid "You have passed the %s minutes limit to see the results."
 msgstr ""
@@ -23790,82 +23796,82 @@ msgid "Last updated"
 msgstr ""
 
 msgid "Export to XLS"
-msgstr ""
+msgstr "Izvozi v XLS"
 
 msgid "Learning paths generic stats"
 msgstr ""
 
 msgid "Failed to create extra field cas_user."
-msgstr ""
+msgstr "Dodatnega polja cas_user ni mogoče ustvariti."
 
 msgid "Failed to create user."
-msgstr ""
+msgstr "Uporabnika ni bilo mogoče ustvariti."
 
 msgid "No such user in LDAP."
-msgstr ""
+msgstr "Takega uporabnika ni v LDAP."
 
 msgid "No such user in the internal database."
-msgstr ""
+msgstr "Tak uporabnik v notranji podatkov zbirki ne obstaja."
 
 msgid "The user could not be updated."
-msgstr ""
+msgstr "Uporabnika ni mogoče ažurirati."
 
 msgid "The template session does not exist."
-msgstr ""
+msgstr "Predloga seje ne obstaja."
 
 msgid "Session not registered."
-msgstr ""
+msgstr "Seja ni registrirana."
 
 msgid "Courses not added to session."
-msgstr ""
+msgstr "Tečaji niso bili dodani k seji."
 
 msgid "Session not found."
-msgstr ""
+msgstr "Seje ni mogoče najti."
 
 msgid "User not found."
-msgstr ""
+msgstr "Uporabnika ni bilo mogoče najti."
 
 msgid "User not subscribed."
-msgstr ""
+msgstr "Uporabnik ni vpisan."
 
 msgid "No session matched."
-msgstr ""
+msgstr "Nobena seja ne ustreza."
 
 msgid "More than one session matched."
-msgstr ""
+msgstr "Več kot ena seja ustreza."
 
 msgid "Could not load user."
-msgstr ""
+msgstr "Ne morem naložiti uporabnika."
 
 msgid "Language unavailable."
-msgstr ""
+msgstr "Jezik ni na voljo."
 
 msgid "Could not update extra field value."
-msgstr ""
+msgstr "Vrednosti dodatnega polja ni mogoče ažurirati."
 
 msgid "Unsupported update."
-msgstr ""
+msgstr "Nepodprta nadgradnja ali ažuriranje."
 
 msgid "No user matched."
-msgstr ""
+msgstr "Noben uporabnik ne ustreza."
 
 msgid "Resume"
 msgstr ""
 
 msgid "Attendance from %s to %s"
-msgstr ""
+msgstr "Prisotnosti od %s to %s"
 
 msgid "Add time"
-msgstr ""
+msgstr "Dodaj čas"
 
 msgid "Add user"
-msgstr ""
+msgstr "Dodaj uporabnika"
 
 msgid "Time spent on assignment"
 msgstr ""
 
 msgid "User %s signed the agreement on %s"
-msgstr ""
+msgstr "Uporabnik %s je podpisal soglasje na %s"
 
 msgid "Available"
 msgstr ""
@@ -23880,37 +23886,37 @@ msgid "Credits: %s on %s"
 msgstr ""
 
 msgid "SOAP connection test..."
-msgstr ""
+msgstr "Preskus povezave s SOAP strežnkom..."
 
 msgid "Connection to Compilatio's SOAP server"
-msgstr ""
+msgstr "Povezava Compilatio SOAP strežnik"
 
 msgid "Connection successful."
-msgstr ""
+msgstr "Povezava je uspela."
 
 msgid "Sending text to the Compilatio server"
-msgstr ""
+msgstr "Pošiljam besedilo k Compilatio strežniku"
 
 msgid "This is a text sending test to the Compilatio server via its API.\nCompilatio key used: %s"
-msgstr ""
+msgstr "Tole je besedilo poslanega testa na Compilatio strežnik preko njegovega API.\nCompilatio ključ uporabljen pri povezavi: %s"
 
 msgid "Transfer successful."
-msgstr ""
+msgstr "Prenos je bil uspešen."
 
 msgid "Transfer failed."
-msgstr ""
+msgstr "Prenos ni uspel."
 
 msgid "Could not connect to Compilatio's SOAP server."
-msgstr ""
+msgstr "Povezava s Compilatio SOAP strežnikom ni uspela."
 
 msgid "Check your key, your server ports and possibly your proxy settings."
-msgstr ""
+msgstr "Preverite vaš ključ, št. strežnikovih vrat in morebitne nastavitve vašega proxy strežnika."
 
 msgid "Last visited course"
-msgstr ""
+msgstr "Zadnji obiskan tečaj"
 
 msgid "You haven't visited any courses yet, here is the list of your courses."
-msgstr ""
+msgstr "Niste obiskali še nobenega tečaja, tu je seznam vaših tečajev."
 
 msgid "No organization"
 msgstr ""
@@ -23925,25 +23931,25 @@ msgid "Import assignments from base course"
 msgstr ""
 
 msgid "Redirect to the platform home page"
-msgstr ""
+msgstr "Preusmeritev na domačo stran platforme"
 
 msgid "My learning paths"
-msgstr ""
+msgstr "Moje učne poti"
 
 msgid "Last visited learning path"
-msgstr ""
+msgstr "Zadnja obiskana učna pot"
 
 msgid "You haven't visited any learning paths yet, here is the list of your learning paths."
-msgstr ""
+msgstr "Niste obiskali še nobene učne poti. Tu je spisek vaših učnih poti."
 
 msgid "This course is used in at least one other portal"
-msgstr ""
+msgstr "Ta tečaj je uporavljen na vsaj še enem izmed drugih portalov"
 
 msgid "Add classes to a learning path"
-msgstr ""
+msgstr "Dodaj razede k učni poti"
 
 msgid "Replace file"
-msgstr ""
+msgstr "Nadomesti datoteko"
 
 msgid "Subscribe classes to category"
 msgstr ""
@@ -23961,7 +23967,7 @@ msgid "Question stats"
 msgstr ""
 
 msgid "Wrong answer"
-msgstr ""
+msgstr "Napačen odgovor"
 
 msgid "Failure on attempt %s at %s"
 msgstr ""
@@ -23970,16 +23976,16 @@ msgid "Validation of exercise at %s"
 msgstr ""
 
 msgid "You finished the questions related to this question category, it's your last chance to go back and revise those questions. Once you click on follow exercise you will go to the next question category and will not be able to go back to this part of the test."
-msgstr ""
+msgstr "Dokončali ste vsa vprašanja v tej kategoriji in to je vaša zadnja možnost, da se vrnete in pregledate svoje odgovore. S klikom na nadaljevanje boste prešli na naslednjo kategorijo vprašanj, s tem pa vračanje na predhodni razdelek testa/vaje ne bo več mogoč."
 
 msgid "Remaining time to finish exercise"
-msgstr ""
+msgstr "Preostanek časa za dokončanje vaje/testa"
 
 msgid "Remaining time to finish question"
-msgstr ""
+msgstr "Preostanek časa za dokončanje vprašanja"
 
 msgid "Detailed questions stats"
-msgstr ""
+msgstr "Podrobno poročilo o vprašanjih"
 
 msgid "A short presentation of yourself, your professional or personal experiences and beliefs."
 msgstr ""
@@ -23997,19 +24003,19 @@ msgid "User guides"
 msgstr ""
 
 msgid "You have written a paper that you can share, or want to attach your CV for download? Add those here."
-msgstr ""
+msgstr "Napisali ste članek, razpravo, objavo.. ki bi jo želeli deliti, ali pa želite pripeti vaš CV za prenos zainteresiranim? DOdajte te tule."
 
 msgid "Correct attempts"
-msgstr ""
+msgstr "Pravilni poskusi"
 
 msgid "Incorrect attempts"
-msgstr ""
+msgstr "Nepravilni poskusi"
 
 msgid "Students with correct answers"
-msgstr ""
+msgstr "Tečajniki s pravilnimi odgovori"
 
 msgid "Students with incorrect answers"
-msgstr ""
+msgstr "Tečajniki z nepravilnimi odgovori"
 
 msgid "List of contents"
 msgstr ""
@@ -24021,7 +24027,7 @@ msgid "To invoice"
 msgstr ""
 
 msgid "LP item by author"
-msgstr ""
+msgstr "Elementi učnih poti po avtorjih"
 
 msgid "Delete also the exercise attempts. If not check then the exercise results will still be available in the exercise tool."
 msgstr ""
@@ -24029,17 +24035,17 @@ msgstr ""
 msgid "Only show a radar of scores by category, instead of a table of categories. Do not show individual scores or feedback."
 msgstr ""
 
-msgid "All attemps blocked because you did not reach the minimum score of %s % at one of your attemps."
+msgid "All attempts blocked because you did not reach the minimum score of %s %% at one of your attempts."
 msgstr ""
 
 msgid "Authors that have been registered :"
 msgstr ""
 
 msgid "Price"
-msgstr ""
+msgstr "Cena"
 
 msgid "Price updated"
-msgstr ""
+msgstr "Cena je bila ažurirana"
 
 msgid "Remove selected authors"
 msgstr ""
@@ -24054,20 +24060,995 @@ msgid "Only %d questions will be selected based on the test configuration, for a
 msgstr ""
 
 msgid "This question is also used in the following tests"
-msgstr ""
+msgstr "To vprašanje je uporabljeno še v naslednjih testih"
 
 msgid "Link to test edition"
 msgstr ""
 
 msgid "Move users results from base course to a session"
-msgstr ""
+msgstr "Prestavi uporabnikove rezultate iz osnovnega tečaja v sejo"
 
 msgid "If your quiz have hotspot questions included, you should select the images related from the documents."
 msgstr ""
 
 msgid "Back to the attempt list"
-msgstr ""
+msgstr "Nazaj na seznam poskusov"
 
 msgid "Show the result to the learner: Show the score, the learner's choice and his feedback on each attempt, add the correct answer and his feedback when the chosen limit of attempts is reached."
+msgstr ""
+
+msgid "Latest login in a course"
+msgstr "Zadnja prijava v tečaj"
+
+msgid "The"
+msgstr ""
+
+msgid "Multiplicate questions by class"
+msgstr ""
+
+msgid "Multiplicate questions by user"
+msgstr ""
+
+msgid "Questions about next user"
+msgstr ""
+
+msgid "Course code to be entered in capital letters to confirm the deletion: %s"
+msgstr ""
+
+msgid "Badge: %s"
+msgstr "Značka: %s"
+
+msgid "Comment by %s"
+msgstr "Komentar s strani %s"
+
+msgid "Portfolio item by %s"
+msgstr ""
+
+msgid "Copy to my portfolio"
+msgstr "Kopiraj v moj portfelj"
+
+msgid "Copy to student portfolio"
+msgstr "Kopiraj v tečajnikov portfelj"
+
+msgid "Originally published as \"%s\" by %s"
+msgstr ""
+
+msgid "Originally commented by %s in \"%s\""
+msgstr ""
+
+msgid "Item added to students own portfolio"
+msgstr ""
+
+msgid "Mark comment as important"
+msgstr "Označi komentar kot pomemben"
+
+msgid "Unmark comment as important"
+msgstr "Razveljavi pomembnost komentarja"
+
+msgid "Portfolio item marked as important"
+msgstr ""
+
+msgid "Select a learner portfolio"
+msgstr ""
+
+msgid "See my portfolio in this course"
+msgstr ""
+
+msgid "Portfolio details"
+msgstr "Podrobnosti portfelja"
+
+msgid "Item title"
+msgstr "Naziv elementa"
+
+msgid "Creation date: %s"
+msgstr "Datum nastanka: %s"
+
+msgid "Update date: %s"
+msgstr "Datum ažuriranja: %s"
+
+msgid "Category: %s"
+msgstr "Kategorija: %s"
+
+msgid "Date: %s"
+msgstr "Datum: %s"
+
+msgid "Item title: %s"
+msgstr "Naziv elementa: %s"
+
+msgid "No items in your portfolio"
+msgstr "V tvojem portfelju ni elementov"
+
+msgid "You have not commented"
+msgstr ""
+
+msgid "Portfolio items"
+msgstr "Elementi portfelja"
+
+msgid "Portfolio comments"
+msgstr "Komentarji portfelja"
+
+msgid "Comments made"
+msgstr ""
+
+msgid "Grade this item"
+msgstr "Oceni ta element"
+
+msgid "Portfolio item was graded"
+msgstr "Element portfelja je bil ocenjen"
+
+msgid "Context for the comment to be grade"
+msgstr ""
+
+msgid "Grade this comment"
+msgstr "Oceni ta komentar"
+
+msgid "Portfolio comment was graded"
+msgstr "Komentar portfelja je bil ocenjen"
+
+msgid "Grade items"
+msgstr "Oceni elemente"
+
+msgid "Grade comments"
+msgstr "Oceni komentarje"
+
+msgid "Hide correct answered questions"
+msgstr ""
+
+msgid "The setting \"%s\" will change to \"%s\""
+msgstr ""
+
+msgid "Verification of answered questions"
+msgstr ""
+
+msgid "Student's assignments to be corrected"
+msgstr ""
+
+msgid "You will find below all the work that have been submitted by students in one of your course (it could be in the base course or in a course in a session). You can filter the list selecting a specific course or a work status."
+msgstr ""
+
+msgid "Back to the main course portfolio"
+msgstr ""
+
+msgid "Export my portfolio data in a PDF file"
+msgstr ""
+
+msgid "Export my portfolio data in a ZIP file"
+msgstr ""
+
+msgid "Categories are for organization only in personal portfolio."
+msgstr ""
+
+msgid "Export my portfolio data to a PDF file"
+msgstr "Izvozi podatke mojega portfelja v PDF"
+
+msgid "Export my portfolio data to a ZIP file"
+msgstr "Izvozi podatke mojega portfelja v ZIP datoteko"
+
+msgid "New learning path available"
+msgstr "Nova učna pot je na voljo"
+
+msgid "There is a new learning path called %s that has been added to your %s course. Go to this learning path here : %s"
+msgstr "Tu je nova učna pot imenovana %s, ki je bila dodana v tvoj tečaj %s. Dostopite do učne poti preko te povezave: %s"
+
+msgid "%s %% Completed"
+msgstr ""
+
+msgid "E-mail to teachers on new user's post in the portfolio tool"
+msgstr ""
+
+msgid "There is a new post by %s in the portfolio of course %s. To view it <a href='%s'>go here</a>."
+msgstr ""
+
+msgid "[Portfolio] New post in course %s"
+msgstr ""
+
+msgid "Ongoing training"
+msgstr ""
+
+msgid "Dear %s,<br /><br /> A new test/quiz %s has been added to course %s.<br /><br />Course: %s <br />Test/Quiz name: %s <br />"
+msgstr ""
+
+msgid "Visit the test/quiz page <a href=\"%s\">%s</a><br />"
+msgstr ""
+
+msgid "Dear %s,<br /><br />As his/her parent, you are receiving this e-mail to let you know that %s just got a new test/quiz %s in course %s.<br /><br />Learner: %s<br /> Course: %s<br />Test/Quiz name: %s<br />"
+msgstr ""
+
+msgid "Test duration: %s <br />"
+msgstr "Trajanje testa: %s"
+
+msgid "Test start date: %s <br />"
+msgstr "Začetni datum testa: %s"
+
+msgid "Test end date: %s <br />"
+msgstr "Končni datum testa: %s"
+
+msgid "Career Diagram Legend"
+msgstr ""
+
+msgid "Career Diagram Disclaimer"
+msgstr ""
+
+msgid "Successful Attempt"
+msgstr "Uspešen poskus"
+
+msgid "Failed attempt"
+msgstr "Neuspešen poskus"
+
+msgid "Students with successful attempt"
+msgstr "Tečajniki z uspešnim poskusom"
+
+msgid "Students with failed attempt"
+msgstr "Tečajniki z neuspešnim poskusom"
+
+msgid "Exercise attempt stats report"
+msgstr ""
+
+msgid "Comparative group report"
+msgstr "Primerjalno poročilo skupin"
+
+msgid "Courses usage"
+msgstr "Uporaba tečaja"
+
+msgid "Hide connection time"
+msgstr "Skrij trajanje povezave"
+
+msgid "Course in which the question was initially created."
+msgstr "Tečaj, v katerem je bilo vprašanje izhodiščno ustvarjeno."
+
+msgid "Apprenticeship contract"
+msgstr "Praksa/vajeništvo - kontakti"
+
+msgid "Export Common Cartridge v1.3"
+msgstr "Izvozi Common Cartridge v1.3"
+
+msgid "Import Common Cartridge v1.3"
+msgstr "Uvoz Common Cartridge v1.3"
+
+msgid "Export your course content in the IMS Common Cartridge 1.3 format, to share it on other platforms."
+msgstr "Izvozi vsebine tečaja v obliki IMS Common Cartridge 1.3, za deljenje na drugih platformah"
+
+msgid "Import a course in IMS Common Cartridge 1.3 format, from another platform compatible with this format. The version is important."
+msgstr "Uvozi tečaj v IMS Common Cartridge 1.3 formatu, iz druge platforme, ki je s to obliko združljiva. Verzija formata je pomembna!"
+
+msgid "IMS CC file created."
+msgstr "IMS CC datoteka je bila ustvarjena."
+
+msgid "IMS CC file"
+msgstr "IMS CC datoteka"
+
+msgid "IMS CC file imported."
+msgstr "IMS CC datoteka je bila uvožena."
+
+msgid "Upload any IMS CC (.imscc or .zip) file in the right version and it will be extracted directly into your course."
+msgstr "Naloži poljubno IMS CC (.imscc ali .zip) datoteko prave različice. Datoteka bo razširjena direktno v področje tega tečaja."
+
+msgid "IMS Common Cartridge v1.3"
+msgstr "IMS Common Cartridge v1.3"
+
+msgid "Hide question number"
+msgstr "Skrij številko vprašanja"
+
+msgid "Pending attempts"
+msgstr "Čakajoči poskusi"
+
+msgid "Edit in profile"
+msgstr "Uredi v profilu"
+
+msgid "Guidance"
+msgstr ""
+
+msgid "Remove time"
+msgstr "Odstrani čas"
+
+msgid "Copy with session content"
+msgstr ""
+
+msgid "Export by class"
+msgstr ""
+
+msgid "Upload answer"
+msgstr "Naloži odgovor"
+
+msgid "Token expired, action already realized"
+msgstr ""
+
+msgid "Corrector"
+msgstr "Korektor"
+
+msgid "Correction date"
+msgstr "Datum korekcije"
+
+msgid "Hide attempts table on start page"
+msgstr "Skrij tabelo poskusov na začetni strani"
+
+msgid "Maximum progress in learning paths"
+msgstr ""
+
+msgid "Hide skills"
+msgstr ""
+
+msgid "Options for hiding in export"
+msgstr ""
+
+msgid "Hide assignments"
+msgstr "Skrij zadolžitve"
+
+msgid "Add survey to course"
+msgstr ""
+
+msgid "Move the current survey"
+msgstr "Premakni trenuten vprašalnik"
+
+msgid "Share events in course sessions"
+msgstr "Deli dogodke v sejah tečaja"
+
+msgid "Agenda events in the course will be visible in sessions"
+msgstr "Dogodki agende tečaja bodo vidni v sejah"
+
+msgid "Agenda events only visible in current course"
+msgstr "Dogodki agende vidni zgolj v trenutnem tečaju"
+
+msgid "Test result"
+msgstr "Rezultat testa"
+
+msgid "Filter by Learning Path"
+msgstr ""
+
+msgid "Share forums in all sessions"
+msgstr "Deli forume v vseh sejah"
+
+msgid "You have achieved a new skill."
+msgstr ""
+
+msgid "Hi, %s. You have achieved the skill \"%s\". To see the details go here: %s."
+msgstr ""
+
+msgid "To assign a new skill to this user, click <a href=\"%s\">here</a>"
+msgstr ""
+
+msgid "Add event in course calendar"
+msgstr "Dodaj dogodek v koledar tečaja"
+
+msgid "Hours"
+msgstr ""
+
+msgid "Reminder for event : %s"
+msgstr "Opomnik za dogodek %s"
+
+msgid "Add notification"
+msgstr "Dodaj obvestilo"
+
+msgid "Notification to remind the event"
+msgstr "Obvestilo v opomin na dogodek"
+
+msgid "Add tags"
+msgstr ""
+
+msgid "Event editable by the invitees"
+msgstr ""
+
+msgid "Invitees"
+msgstr "Vabljeni"
+
+msgid "Reminder number %s for the course %s"
+msgstr "Opomnik št. %s v tečaju %s"
+
+msgid "Hello %s"
+msgstr "Pozdravček %s"
+
+msgid "You are registered in the training %s since the %s"
+msgstr "Vpisani ste v usposabljanje %s od %s"
+
+msgid "You are receiving this message because you have completed a learning path with a %s% progress of your training.<br/>Your progress must be 100 to consider that your training was carried out.<br/>If you have the slightest problem, you should contact with your trainer."
+msgstr ""
+
+msgid "As a reminder, to access the training platform:<br/>1. Connect to the platform at the address: %s <br/>2. Then enter: <br/>Your username: %s <br/>Your password: This was emailed to you.<br/>if you forgot it and can't find it, you can retrieve it by going to %s <br/><br/>Thank you for doing what is necessary."
+msgstr "Kot opomnik, za dostop do platforme za usposabljanje:<br />1. Dostopite do platforme na naslovu: %s<br />2. Nato vnesite:<br />Vaše uporabniško ime: %s<br />Vaše geslo: Vam je bilo poslano preko e-poštnega sporočila.<br />Če ste ga pozabili ali ga ne morete najti, ga skušajte restavrirati preko: %s<br /><br />Hvala, ker vestno sledite navodilom."
+
+msgid "The training center<p>%s</p>Trainers:<br/>%s"
+msgstr "Učni center<br /><br />"
+
+msgid "Get embedable link"
+msgstr "Pridobi povezavo za vključitev (embedable link)"
+
+msgid "Link to embed the exercise"
+msgstr ""
+
+msgid "Copy this url to include this exercise in an iframe:"
+msgstr "Kopiraj ta URL za vključitev te vaje/testa v iframe"
+
+msgid "Export extra fields"
+msgstr "Izvozi dodatna polja"
+
+msgid "Hide ex-learners"
+msgstr "Skrij bivše učeče"
+
+msgid "Certificate of achievement per learning path"
+msgstr ""
+
+msgid "You have obtained the following results in the training course:"
+msgstr ""
+
+msgid "You have obtained the following results in the tests:"
+msgstr ""
+
+msgid "Export LP Quiz results"
+msgstr "Izvozi rezultate kviza/testa učne poti"
+
+msgid "Learning path results"
+msgstr "Rezultati učne poti"
+
+msgid "Active users in sessions per URL"
+msgstr "Aktivni uporabniki v sejah po posameznih URL"
+
+msgid "Next LP"
+msgstr "Naslednja učna pot"
+
+msgid "No notification"
+msgstr ""
+
+msgid "Allow skills assignation by sub category"
+msgstr ""
+
+msgid "It allows the acquisition of skills by sub categories independently."
+msgstr ""
+
+msgid "Minimum score"
+msgstr ""
+
+msgid "In LP"
+msgstr "V učni poti"
+
+msgid "Courses reports"
+msgstr ""
+
+msgid "Fill blanks or form with global score"
+msgstr ""
+
+msgid "Matching with global score"
+msgstr ""
+
+msgid "Image zones with global score"
+msgstr ""
+
+msgid "Match by dragging with global score"
+msgstr ""
+
+msgid "Progress in session report"
+msgstr "Poročilo napredka v sejah"
+
+msgid "This question is shared with other exercises, are you sure you want to delete it?"
+msgstr "Vprašanje je deljeno z večimi drugimi vajami/testi. Ste prepričani, da ga želite odstraniti?"
+
+msgid "View for tablet"
+msgstr ""
+
+msgid "Disable signature"
+msgstr "Onemogoči podpis"
+
+msgid "Enable signature"
+msgstr "Omogoči podpis"
+
+msgid "Sign"
+msgstr "Podpis"
+
+msgid "View signature"
+msgstr "Poglej podpis"
+
+msgid "Download QR for attendance signature"
+msgstr "Prenesi QR kodo podpisa prisotnosti"
+
+msgid "Password requirement passed"
+msgstr "Ustreza zahtevam za geslo."
+
+msgid "Pending password requirement"
+msgstr "Čakanje na izpolnitev zahtev za geslo"
+
+msgid "Minimum %s special characters"
+msgstr "Najmanj %s posebnih znakov"
+
+msgid "The new password cannot be same as the current password"
+msgstr "Novo geslo ne sme biti enako obstoječemu"
+
+msgid "Filter by class"
+msgstr ""
+
+msgid "Not in any class"
+msgstr ""
+
+msgid "The account for username <i>%s</i> was disabled after %d failed login attempts."
+msgstr ""
+
+msgid "Answer list"
+msgstr ""
+
+msgid "Enter a list of answers (one answer by line)"
+msgstr ""
+
+msgid "Or select a CSV file with a list of answers"
+msgstr ""
+
+msgid "Convert to multiple answer dropdown"
+msgstr ""
+
+msgid "Multiple answer dropdown"
+msgstr ""
+
+msgid "Highlighted"
+msgstr ""
+
+msgid "See highlights"
+msgstr ""
+
+msgid "%d added / %d required"
+msgstr ""
+
+msgid "Required number of items"
+msgstr ""
+
+msgid "Required number of comments"
+msgstr ""
+
+msgid "Unmark as highlighted"
+msgstr ""
+
+msgid "Mark as highlighted"
+msgstr ""
+
+msgid "Updated %s"
+msgstr ""
+
+msgid "Updated on %s by %s"
+msgstr ""
+
+msgid "Updated %s by %s"
+msgstr ""
+
+msgid "Marked as highlighted"
+msgstr ""
+
+msgid "Unmarked as highlighted"
+msgstr ""
+
+msgid "Portfolio item set as a new template"
+msgstr ""
+
+msgid "Portfolio item unset as template"
+msgstr ""
+
+msgid "Global multiple answer dropdown"
+msgstr ""
+
+msgid "[Portfolio] New comment in post %s"
+msgstr ""
+
+msgid "There is a new comment in the post <i>%s</i> from the <i>%s</i> course portfolio. To view it <a href='%s'>go here</a>."
+msgstr ""
+
+msgid "Portfolio comment set as a new template"
+msgstr ""
+
+msgid "Portfolio comment unset as template"
+msgstr ""
+
+msgid "Make visible for teachers"
+msgstr ""
+
+msgid "Email alert to Teachers and Student on new comment in Portfolio"
+msgstr ""
+
+msgid "Tag"
+msgstr ""
+
+msgid "Tag saved"
+msgstr ""
+
+msgid "Tag deleted"
+msgstr ""
+
+msgid "Comment by %s in <em>%s</em>"
+msgstr ""
+
+msgid "Portfolio tool introduction"
+msgstr ""
+
+msgid "Access through LTI to Learning Path"
+msgstr ""
+
+msgid "User %s has not been registered to course %s"
+msgstr ""
+
+msgid "Open content in a new tab"
+msgstr ""
+
+msgid "There are users or courses using this language. Do you want to disable this language and set all these users and courses with the default portal language?"
+msgstr ""
+
+msgid "Number of users registered and connected"
+msgstr ""
+
+msgid "Number of users registered (total)"
+msgstr ""
+
+msgid "Number of users registered (new vs previous quarter)"
+msgstr ""
+
+msgid "Number of users who connected"
+msgstr ""
+
+msgid "*: Current quarter, incomplete data"
+msgstr ""
+
+msgid "Q%s %s"
+msgstr ""
+
+msgid "YoY"
+msgstr ""
+
+msgid "Number of existing and available courses"
+msgstr ""
+
+msgid "Number of existing courses (total)"
+msgstr ""
+
+msgid "Number of available courses (not closed or hidden, total)"
+msgstr ""
+
+msgid "Hours of training"
+msgstr ""
+
+msgid "Number of hours of training followed (total)"
+msgstr ""
+
+msgid "Number of certificates generated"
+msgstr ""
+
+msgid "Number of certificates generated (total)"
+msgstr ""
+
+msgid "Number of sessions per duration"
+msgstr ""
+
+msgid "Sessions per duration (by quarter)"
+msgstr ""
+
+msgid "Number of courses, sessions and subscribed users"
+msgstr ""
+
+msgid "List of course codes"
+msgstr ""
+
+msgid "Number of subscribed users"
+msgstr ""
+
+msgid "Number of users who finished the course (as defined in gradebook)"
+msgstr ""
+
+msgid "List of course codes and sessions"
+msgstr ""
+
+msgid "*: All users, including inactive, are included"
+msgstr ""
+
+msgid "Total disk usage"
+msgstr ""
+
+msgid "Edit portfolio comment"
+msgstr ""
+
+msgid "Test '%s' not deleted"
+msgstr ""
+
+msgid "Don't include users"
+msgstr ""
+
+msgid "The report doesn't include the list of users neither for session nor for each course"
+msgstr ""
+
+msgid "Include extra fields"
+msgstr ""
+
+msgid "Skill levels"
+msgstr ""
+
+msgid "Import course events"
+msgstr ""
+
+msgid "Tags can be used"
+msgstr ""
+
+msgid "Invitation to the ((course_title)) course"
+msgstr ""
+
+msgid "<p>Hello ((user_complete_name)).</p>"
+msgstr ""
+
+msgid "%s's portfolio items"
+msgstr ""
+
+msgid "Scored"
+msgstr ""
+
+msgid "Edited"
+msgstr ""
+
+msgid "Downloaded"
+msgstr ""
+
+msgid "You can only copy this course to a course for which you are a teacher"
+msgstr ""
+
+msgid "Remove users"
+msgstr ""
+
+msgid "Send file to other users"
+msgstr ""
+
+msgid "Remove file from selected users"
+msgstr ""
+
+msgid "Send to other users"
+msgstr ""
+
+msgid "Send to users"
+msgstr ""
+
+msgid "Force users to change their password when they first log in"
+msgstr ""
+
+msgid "Please note that your username to access is %s"
+msgstr ""
+
+msgid "Note: If you do not remember your password, click on <a href=\"%s\">\"Forgot your password?\"</a>, enter your username and follow the instructions."
+msgstr ""
+
+msgid "Bi-weekly"
+msgstr ""
+
+msgid "Every x days"
+msgstr ""
+
+msgid "Number of days"
+msgstr ""
+
+msgid "Leave a comment"
+msgstr ""
+
+msgid "Please leave a comment first"
+msgstr ""
+
+msgid "Last quiz finalization date"
+msgstr ""
+
+msgid "Last lp's finalization date"
+msgstr ""
+
+msgid "Must be in ALL the selected categories"
+msgstr ""
+
+msgid "Report by attempts"
+msgstr ""
+
+msgid "Questions topic"
+msgstr ""
+
+msgid "The questions topic will be used as the name of the test and will be sent to the AI generator to generate questions in the language configured for this course, asking for them to be generated in the Aiken format so they can easily be imported into this course."
+msgstr ""
+
+msgid "AI Questions Generator"
+msgstr ""
+
+msgid "Most AI generators are limited in the number of characters they can return, and often your organization will be charged based on the number of characters returned, so please use with moderation, asking for smaller numbers first, then extending as you gain confidence."
+msgstr ""
+
+msgid "Use one (or more) of the following proposed tags to automatically generate a certificate or a skill and show them here when the student gets to this step, which requires all other steps to be finished first."
+msgstr ""
+
+msgid "Hi ((user_complete_name))."
+msgstr ""
+
+msgid "Invitation to session ((session_name))"
+msgstr ""
+
+msgid "Fill blanks or form with exact selection"
+msgstr ""
+
+msgid "Matching with exact selection"
+msgstr ""
+
+msgid "Image zones with exact selection"
+msgstr ""
+
+msgid "Match by dragging with exact selection"
+msgstr ""
+
+msgid "Multiple answer dropdown with exact selection"
+msgstr ""
+
+msgid "AI learning path generator"
+msgstr ""
+
+msgid "Topic"
+msgstr ""
+
+msgid "Type the topic on which you want the AI Helper to develop a learning path. The more detailed the topic, the more precise the result will be."
+msgstr ""
+
+msgid "Number of learning path items"
+msgstr ""
+
+msgid "This is the number of pages you want the AI Helper to generate in your learning path. Splitting the learning path in several pages, chapters, sections (however you want to call them) will help structure the course and also let you redistribute the content for better presentation."
+msgstr ""
+
+msgid "Rough maximum number of words (actually number of tokens) you want to get per page. More tokens will probably generate better content, but will also take more time to generate and cost more to your organisation, so use this carefully."
+msgstr ""
+
+msgid "Only selected users will see the content"
+msgstr ""
+
+msgid "Leave empty to enable the content for everyone"
+msgstr ""
+
+msgid "Export courses reports complete"
+msgstr ""
+
+msgid "The number of questions is limited to between %d and %d."
+msgstr ""
+
+msgid "Add a test after each page"
+msgstr ""
+
+msgid "Hidden but visible for me"
+msgstr ""
+
+msgid "Conclusion"
+msgstr ""
+
+msgid "Unable to access temp file"
+msgstr ""
+
+msgid "Duplicated users"
+msgstr ""
+
+msgid "This report only lists users that have the same firstname and lastname."
+msgstr ""
+
+msgid "By checking this box, you will remove all relationships of the HR manager with other sessions and courses. If what you want is to maintain those relationships, do NOT check this box."
+msgstr ""
+
+msgid "There is no class with the name \"%s\""
+msgstr ""
+
+msgid "Maximum number of subscriptions allowed. Leave at 0 to not limit it."
+msgstr ""
+
+msgid "Subscriptions"
+msgstr ""
+
+msgid "Allow subscriptions"
+msgstr ""
+
+msgid "Maximum number of subscriptions"
+msgstr ""
+
+msgid "No longer available"
+msgstr ""
+
+msgid "Export all results from an exercise"
+msgstr ""
+
+msgid "No result found for export in this test."
+msgstr ""
+
+msgid "User %s has been changed to %s. To cancel, click <a href='%s'>here</a>."
+msgstr ""
+
+msgid "Ex-learner"
+msgstr ""
+
+msgid "File size is too big"
+msgstr ""
+
+msgid "An error occured"
+msgstr ""
+
+msgid "Image for headers"
+msgstr ""
+
+msgid "Add picture for headers"
+msgstr ""
+
+msgid "This picture will be used in the course header and in the e-mails sent and PDFs generated from this course. The picture will have a ratio of 25:7. You can crop the picture you upload."
+msgstr ""
+
+msgid "Delete picture for headers"
+msgstr ""
+
+msgid "The final picture must be in a 16:9 ratio, but you can crop the picture you upload."
+msgstr ""
+
+msgid "Export all results of all tests"
+msgstr ""
+
+msgid "Click to view details"
+msgstr ""
+
+msgid "This report applies to all plateform activities of the user."
+msgstr ""
+
+msgid "dd/mm/yyyy"
+msgstr ""
+
+msgid "Export certificates issue report"
+msgstr ""
+
+msgid "Hide hierarchies"
+msgstr ""
+
+msgid "Show hierarchies"
+msgstr ""
+
+msgid "Parent career"
+msgstr ""
+
+msgid "This career cannot be deleted until all of its children have been deleted or moved to another career."
+msgstr ""
+
+msgid "This email is already in use by another user in the same file."
+msgstr ""
+
+msgid "You have new posts in the following forums of your courses."
+msgstr ""
+
+msgid "This identifier is internal to the system and should not contain spaces nor special characters. It can be used from plugins as well, to filter the elements it is attached to."
+msgstr ""
+
+msgid "Include last login"
+msgstr ""
+
+msgid "Duplicated users by e-mail"
+msgstr ""
+
+msgid "This report only lists users that have the same email."
+msgstr ""
+
+msgid "Stop notifying me"
+msgstr ""
+
+msgid "Expiration date cannot be empty."
+msgstr ""
+
+msgid "E-mail not sent. You might have introduced an incorrect address, the address might belong to an inactive user, or the mail server is not correctly configured (check the mail.conf.php file)."
+msgstr ""
+
+msgid "Your password has expired. Please set a new password before you continue."
+msgstr ""
+
+msgid "Copy iframe code below to include the exercise :"
+msgstr ""
+
+msgid "My missing signatures"
+msgstr ""
+
+msgid "Only show active users"
+msgstr ""
+
+msgid "Update courses list"
+msgstr ""
+
+msgid "A code is required"
+msgstr ""
+
+msgid "This course code does not exist"
+msgstr ""
+
+msgid "Duplicate code"
+msgstr ""
+
+msgid "The update failed for the following courses"
+msgstr ""
+
+msgid "%02d h %02d m %02d s"
 msgstr ""
 

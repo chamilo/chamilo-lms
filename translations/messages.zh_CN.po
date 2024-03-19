@@ -377,7 +377,7 @@ msgstr ""
 msgid "Check unique e-mail"
 msgstr ""
 
-msgid "This email is not available"
+msgid "This email is already in use on the platform."
 msgstr ""
 
 msgid "Total posts in all forums."
@@ -5298,7 +5298,7 @@ msgid "What should be the default option when creating a new forum. Any trainer 
 msgstr ""
 
 msgid "Courses tab"
-msgstr ""
+msgstr "我的课程"
 
 msgid "Portal homepage tab"
 msgstr ""
@@ -16277,6 +16277,12 @@ msgstr ""
 msgid "There are users using this language. Do you want to disable this language and set all this users with the default portal language?"
 msgstr ""
 
+msgid "Click to show graphics"
+msgstr ""
+
+msgid "Quarterly report"
+msgstr ""
+
 msgid "%d %B %Y"
 msgstr ""
 
@@ -19733,7 +19739,7 @@ msgstr ""
 msgid "Command line interpreter (CLI)"
 msgstr ""
 
-msgid "Please visit our website: http://www.chamilo.org"
+msgid "Please visit our website: https://chamilo.org/download"
 msgstr ""
 
 msgid "The space used on disk cannot be measured properly on Windows-based systems."
@@ -22973,7 +22979,7 @@ msgstr ""
 msgid "The student <b>%s</b> has finished the learning paths from the course <b>%s</b>"
 msgstr ""
 
-msgid "This question is used in another exercises. If you continue its edition, the changes will affect all exercises that contain this question."
+msgid "This question is used in at least one other exercise. If you continue its edition, the changes will affect all exercises that contain this question."
 msgstr ""
 
 msgid "Time spent / Time required"
@@ -24029,7 +24035,7 @@ msgstr ""
 msgid "Only show a radar of scores by category, instead of a table of categories. Do not show individual scores or feedback."
 msgstr ""
 
-msgid "All attemps blocked because you did not reach the minimum score of %s % at one of your attemps."
+msgid "All attempts blocked because you did not reach the minimum score of %s %% at one of your attempts."
 msgstr ""
 
 msgid "Authors that have been registered :"
@@ -24069,5 +24075,980 @@ msgid "Back to the attempt list"
 msgstr ""
 
 msgid "Show the result to the learner: Show the score, the learner's choice and his feedback on each attempt, add the correct answer and his feedback when the chosen limit of attempts is reached."
+msgstr ""
+
+msgid "Latest login in a course"
+msgstr ""
+
+msgid "The"
+msgstr ""
+
+msgid "Multiplicate questions by class"
+msgstr ""
+
+msgid "Multiplicate questions by user"
+msgstr ""
+
+msgid "Questions about next user"
+msgstr ""
+
+msgid "Course code to be entered in capital letters to confirm the deletion: %s"
+msgstr ""
+
+msgid "Badge: %s"
+msgstr ""
+
+msgid "Comment by %s"
+msgstr ""
+
+msgid "Portfolio item by %s"
+msgstr ""
+
+msgid "Copy to my portfolio"
+msgstr ""
+
+msgid "Copy to student portfolio"
+msgstr ""
+
+msgid "Originally published as \"%s\" by %s"
+msgstr ""
+
+msgid "Originally commented by %s in \"%s\""
+msgstr ""
+
+msgid "Item added to students own portfolio"
+msgstr ""
+
+msgid "Mark comment as important"
+msgstr ""
+
+msgid "Unmark comment as important"
+msgstr ""
+
+msgid "Portfolio item marked as important"
+msgstr ""
+
+msgid "Select a learner portfolio"
+msgstr ""
+
+msgid "See my portfolio in this course"
+msgstr ""
+
+msgid "Portfolio details"
+msgstr ""
+
+msgid "Item title"
+msgstr ""
+
+msgid "Creation date: %s"
+msgstr ""
+
+msgid "Update date: %s"
+msgstr ""
+
+msgid "Category: %s"
+msgstr ""
+
+msgid "Date: %s"
+msgstr ""
+
+msgid "Item title: %s"
+msgstr ""
+
+msgid "No items in your portfolio"
+msgstr ""
+
+msgid "You have not commented"
+msgstr ""
+
+msgid "Portfolio items"
+msgstr ""
+
+msgid "Portfolio comments"
+msgstr ""
+
+msgid "Comments made"
+msgstr ""
+
+msgid "Grade this item"
+msgstr ""
+
+msgid "Portfolio item was graded"
+msgstr ""
+
+msgid "Context for the comment to be grade"
+msgstr ""
+
+msgid "Grade this comment"
+msgstr ""
+
+msgid "Portfolio comment was graded"
+msgstr ""
+
+msgid "Grade items"
+msgstr ""
+
+msgid "Grade comments"
+msgstr ""
+
+msgid "Hide correct answered questions"
+msgstr ""
+
+msgid "The setting \"%s\" will change to \"%s\""
+msgstr ""
+
+msgid "Verification of answered questions"
+msgstr ""
+
+msgid "Student's assignments to be corrected"
+msgstr ""
+
+msgid "You will find below all the work that have been submitted by students in one of your course (it could be in the base course or in a course in a session). You can filter the list selecting a specific course or a work status."
+msgstr ""
+
+msgid "Back to the main course portfolio"
+msgstr ""
+
+msgid "Export my portfolio data in a PDF file"
+msgstr ""
+
+msgid "Export my portfolio data in a ZIP file"
+msgstr ""
+
+msgid "Categories are for organization only in personal portfolio."
+msgstr ""
+
+msgid "Export my portfolio data to a PDF file"
+msgstr ""
+
+msgid "Export my portfolio data to a ZIP file"
+msgstr ""
+
+msgid "New learning path available"
+msgstr ""
+
+msgid "There is a new learning path called %s that has been added to your %s course. Go to this learning path here : %s"
+msgstr ""
+
+msgid "%s %% Completed"
+msgstr ""
+
+msgid "E-mail to teachers on new user's post in the portfolio tool"
+msgstr ""
+
+msgid "There is a new post by %s in the portfolio of course %s. To view it <a href='%s'>go here</a>."
+msgstr ""
+
+msgid "[Portfolio] New post in course %s"
+msgstr ""
+
+msgid "Ongoing training"
+msgstr ""
+
+msgid "Dear %s,<br /><br /> A new test/quiz %s has been added to course %s.<br /><br />Course: %s <br />Test/Quiz name: %s <br />"
+msgstr ""
+
+msgid "Visit the test/quiz page <a href=\"%s\">%s</a><br />"
+msgstr ""
+
+msgid "Dear %s,<br /><br />As his/her parent, you are receiving this e-mail to let you know that %s just got a new test/quiz %s in course %s.<br /><br />Learner: %s<br /> Course: %s<br />Test/Quiz name: %s<br />"
+msgstr ""
+
+msgid "Test duration: %s <br />"
+msgstr ""
+
+msgid "Test start date: %s <br />"
+msgstr ""
+
+msgid "Test end date: %s <br />"
+msgstr ""
+
+msgid "Career Diagram Legend"
+msgstr ""
+
+msgid "Career Diagram Disclaimer"
+msgstr ""
+
+msgid "Successful Attempt"
+msgstr ""
+
+msgid "Failed attempt"
+msgstr ""
+
+msgid "Students with successful attempt"
+msgstr ""
+
+msgid "Students with failed attempt"
+msgstr ""
+
+msgid "Exercise attempt stats report"
+msgstr ""
+
+msgid "Comparative group report"
+msgstr ""
+
+msgid "Courses usage"
+msgstr ""
+
+msgid "Hide connection time"
+msgstr ""
+
+msgid "Course in which the question was initially created."
+msgstr ""
+
+msgid "Apprenticeship contract"
+msgstr ""
+
+msgid "Export Common Cartridge v1.3"
+msgstr ""
+
+msgid "Import Common Cartridge v1.3"
+msgstr ""
+
+msgid "Export your course content in the IMS Common Cartridge 1.3 format, to share it on other platforms."
+msgstr ""
+
+msgid "Import a course in IMS Common Cartridge 1.3 format, from another platform compatible with this format. The version is important."
+msgstr ""
+
+msgid "IMS CC file created."
+msgstr ""
+
+msgid "IMS CC file"
+msgstr ""
+
+msgid "IMS CC file imported."
+msgstr ""
+
+msgid "Upload any IMS CC (.imscc or .zip) file in the right version and it will be extracted directly into your course."
+msgstr ""
+
+msgid "IMS Common Cartridge v1.3"
+msgstr ""
+
+msgid "Hide question number"
+msgstr ""
+
+msgid "Pending attempts"
+msgstr ""
+
+msgid "Edit in profile"
+msgstr ""
+
+msgid "Guidance"
+msgstr ""
+
+msgid "Remove time"
+msgstr ""
+
+msgid "Copy with session content"
+msgstr ""
+
+msgid "Export by class"
+msgstr ""
+
+msgid "Upload answer"
+msgstr ""
+
+msgid "Token expired, action already realized"
+msgstr ""
+
+msgid "Corrector"
+msgstr ""
+
+msgid "Correction date"
+msgstr ""
+
+msgid "Hide attempts table on start page"
+msgstr ""
+
+msgid "Maximum progress in learning paths"
+msgstr ""
+
+msgid "Hide skills"
+msgstr ""
+
+msgid "Options for hiding in export"
+msgstr ""
+
+msgid "Hide assignments"
+msgstr ""
+
+msgid "Add survey to course"
+msgstr ""
+
+msgid "Move the current survey"
+msgstr ""
+
+msgid "Share events in course sessions"
+msgstr ""
+
+msgid "Agenda events in the course will be visible in sessions"
+msgstr ""
+
+msgid "Agenda events only visible in current course"
+msgstr ""
+
+msgid "Test result"
+msgstr ""
+
+msgid "Filter by Learning Path"
+msgstr ""
+
+msgid "Share forums in all sessions"
+msgstr ""
+
+msgid "You have achieved a new skill."
+msgstr ""
+
+msgid "Hi, %s. You have achieved the skill \"%s\". To see the details go here: %s."
+msgstr ""
+
+msgid "To assign a new skill to this user, click <a href=\"%s\">here</a>"
+msgstr ""
+
+msgid "Add event in course calendar"
+msgstr ""
+
+msgid "Hours"
+msgstr ""
+
+msgid "Reminder for event : %s"
+msgstr ""
+
+msgid "Add notification"
+msgstr ""
+
+msgid "Notification to remind the event"
+msgstr ""
+
+msgid "Add tags"
+msgstr ""
+
+msgid "Event editable by the invitees"
+msgstr ""
+
+msgid "Invitees"
+msgstr ""
+
+msgid "Reminder number %s for the course %s"
+msgstr ""
+
+msgid "Hello %s"
+msgstr ""
+
+msgid "You are registered in the training %s since the %s"
+msgstr ""
+
+msgid "You are receiving this message because you have completed a learning path with a %s% progress of your training.<br/>Your progress must be 100 to consider that your training was carried out.<br/>If you have the slightest problem, you should contact with your trainer."
+msgstr ""
+
+msgid "As a reminder, to access the training platform:<br/>1. Connect to the platform at the address: %s <br/>2. Then enter: <br/>Your username: %s <br/>Your password: This was emailed to you.<br/>if you forgot it and can't find it, you can retrieve it by going to %s <br/><br/>Thank you for doing what is necessary."
+msgstr ""
+
+msgid "The training center<p>%s</p>Trainers:<br/>%s"
+msgstr ""
+
+msgid "Get embedable link"
+msgstr ""
+
+msgid "Link to embed the exercise"
+msgstr ""
+
+msgid "Copy this url to include this exercise in an iframe:"
+msgstr ""
+
+msgid "Export extra fields"
+msgstr ""
+
+msgid "Hide ex-learners"
+msgstr ""
+
+msgid "Certificate of achievement per learning path"
+msgstr ""
+
+msgid "You have obtained the following results in the training course:"
+msgstr ""
+
+msgid "You have obtained the following results in the tests:"
+msgstr ""
+
+msgid "Export LP Quiz results"
+msgstr ""
+
+msgid "Learning path results"
+msgstr ""
+
+msgid "Active users in sessions per URL"
+msgstr ""
+
+msgid "Next LP"
+msgstr ""
+
+msgid "No notification"
+msgstr ""
+
+msgid "Allow skills assignation by sub category"
+msgstr ""
+
+msgid "It allows the acquisition of skills by sub categories independently."
+msgstr ""
+
+msgid "Minimum score"
+msgstr ""
+
+msgid "In LP"
+msgstr ""
+
+msgid "Courses reports"
+msgstr ""
+
+msgid "Fill blanks or form with global score"
+msgstr ""
+
+msgid "Matching with global score"
+msgstr ""
+
+msgid "Image zones with global score"
+msgstr ""
+
+msgid "Match by dragging with global score"
+msgstr ""
+
+msgid "Progress in session report"
+msgstr ""
+
+msgid "This question is shared with other exercises, are you sure you want to delete it?"
+msgstr ""
+
+msgid "View for tablet"
+msgstr ""
+
+msgid "Disable signature"
+msgstr ""
+
+msgid "Enable signature"
+msgstr ""
+
+msgid "Sign"
+msgstr ""
+
+msgid "View signature"
+msgstr ""
+
+msgid "Download QR for attendance signature"
+msgstr ""
+
+msgid "Password requirement passed"
+msgstr ""
+
+msgid "Pending password requirement"
+msgstr ""
+
+msgid "Minimum %s special characters"
+msgstr ""
+
+msgid "The new password cannot be same as the current password"
+msgstr ""
+
+msgid "Filter by class"
+msgstr ""
+
+msgid "Not in any class"
+msgstr ""
+
+msgid "The account for username <i>%s</i> was disabled after %d failed login attempts."
+msgstr ""
+
+msgid "Answer list"
+msgstr ""
+
+msgid "Enter a list of answers (one answer by line)"
+msgstr ""
+
+msgid "Or select a CSV file with a list of answers"
+msgstr ""
+
+msgid "Convert to multiple answer dropdown"
+msgstr ""
+
+msgid "Multiple answer dropdown"
+msgstr ""
+
+msgid "Highlighted"
+msgstr ""
+
+msgid "See highlights"
+msgstr ""
+
+msgid "%d added / %d required"
+msgstr ""
+
+msgid "Required number of items"
+msgstr ""
+
+msgid "Required number of comments"
+msgstr ""
+
+msgid "Unmark as highlighted"
+msgstr ""
+
+msgid "Mark as highlighted"
+msgstr ""
+
+msgid "Updated %s"
+msgstr ""
+
+msgid "Updated on %s by %s"
+msgstr ""
+
+msgid "Updated %s by %s"
+msgstr ""
+
+msgid "Marked as highlighted"
+msgstr ""
+
+msgid "Unmarked as highlighted"
+msgstr ""
+
+msgid "Portfolio item set as a new template"
+msgstr ""
+
+msgid "Portfolio item unset as template"
+msgstr ""
+
+msgid "Global multiple answer dropdown"
+msgstr ""
+
+msgid "[Portfolio] New comment in post %s"
+msgstr ""
+
+msgid "There is a new comment in the post <i>%s</i> from the <i>%s</i> course portfolio. To view it <a href='%s'>go here</a>."
+msgstr ""
+
+msgid "Portfolio comment set as a new template"
+msgstr ""
+
+msgid "Portfolio comment unset as template"
+msgstr ""
+
+msgid "Make visible for teachers"
+msgstr ""
+
+msgid "Email alert to Teachers and Student on new comment in Portfolio"
+msgstr ""
+
+msgid "Tag"
+msgstr ""
+
+msgid "Tag saved"
+msgstr ""
+
+msgid "Tag deleted"
+msgstr ""
+
+msgid "Comment by %s in <em>%s</em>"
+msgstr ""
+
+msgid "Portfolio tool introduction"
+msgstr ""
+
+msgid "Access through LTI to Learning Path"
+msgstr ""
+
+msgid "User %s has not been registered to course %s"
+msgstr ""
+
+msgid "Open content in a new tab"
+msgstr ""
+
+msgid "There are users or courses using this language. Do you want to disable this language and set all these users and courses with the default portal language?"
+msgstr ""
+
+msgid "Number of users registered and connected"
+msgstr ""
+
+msgid "Number of users registered (total)"
+msgstr ""
+
+msgid "Number of users registered (new vs previous quarter)"
+msgstr ""
+
+msgid "Number of users who connected"
+msgstr ""
+
+msgid "*: Current quarter, incomplete data"
+msgstr ""
+
+msgid "Q%s %s"
+msgstr ""
+
+msgid "YoY"
+msgstr ""
+
+msgid "Number of existing and available courses"
+msgstr ""
+
+msgid "Number of existing courses (total)"
+msgstr ""
+
+msgid "Number of available courses (not closed or hidden, total)"
+msgstr ""
+
+msgid "Hours of training"
+msgstr ""
+
+msgid "Number of hours of training followed (total)"
+msgstr ""
+
+msgid "Number of certificates generated"
+msgstr ""
+
+msgid "Number of certificates generated (total)"
+msgstr ""
+
+msgid "Number of sessions per duration"
+msgstr ""
+
+msgid "Sessions per duration (by quarter)"
+msgstr ""
+
+msgid "Number of courses, sessions and subscribed users"
+msgstr ""
+
+msgid "List of course codes"
+msgstr ""
+
+msgid "Number of subscribed users"
+msgstr ""
+
+msgid "Number of users who finished the course (as defined in gradebook)"
+msgstr ""
+
+msgid "List of course codes and sessions"
+msgstr ""
+
+msgid "*: All users, including inactive, are included"
+msgstr ""
+
+msgid "Total disk usage"
+msgstr ""
+
+msgid "Edit portfolio comment"
+msgstr ""
+
+msgid "Test '%s' not deleted"
+msgstr ""
+
+msgid "Don't include users"
+msgstr ""
+
+msgid "The report doesn't include the list of users neither for session nor for each course"
+msgstr ""
+
+msgid "Include extra fields"
+msgstr ""
+
+msgid "Skill levels"
+msgstr ""
+
+msgid "Import course events"
+msgstr ""
+
+msgid "Tags can be used"
+msgstr ""
+
+msgid "Invitation to the ((course_title)) course"
+msgstr ""
+
+msgid "<p>Hello ((user_complete_name)).</p>"
+msgstr ""
+
+msgid "%s's portfolio items"
+msgstr ""
+
+msgid "Scored"
+msgstr ""
+
+msgid "Edited"
+msgstr ""
+
+msgid "Downloaded"
+msgstr ""
+
+msgid "You can only copy this course to a course for which you are a teacher"
+msgstr ""
+
+msgid "Remove users"
+msgstr ""
+
+msgid "Send file to other users"
+msgstr ""
+
+msgid "Remove file from selected users"
+msgstr ""
+
+msgid "Send to other users"
+msgstr ""
+
+msgid "Send to users"
+msgstr ""
+
+msgid "Force users to change their password when they first log in"
+msgstr ""
+
+msgid "Please note that your username to access is %s"
+msgstr ""
+
+msgid "Note: If you do not remember your password, click on <a href=\"%s\">\"Forgot your password?\"</a>, enter your username and follow the instructions."
+msgstr ""
+
+msgid "Bi-weekly"
+msgstr ""
+
+msgid "Every x days"
+msgstr ""
+
+msgid "Number of days"
+msgstr ""
+
+msgid "Leave a comment"
+msgstr ""
+
+msgid "Please leave a comment first"
+msgstr ""
+
+msgid "Last quiz finalization date"
+msgstr ""
+
+msgid "Last lp's finalization date"
+msgstr ""
+
+msgid "Must be in ALL the selected categories"
+msgstr ""
+
+msgid "Report by attempts"
+msgstr ""
+
+msgid "Questions topic"
+msgstr ""
+
+msgid "The questions topic will be used as the name of the test and will be sent to the AI generator to generate questions in the language configured for this course, asking for them to be generated in the Aiken format so they can easily be imported into this course."
+msgstr ""
+
+msgid "AI Questions Generator"
+msgstr ""
+
+msgid "Most AI generators are limited in the number of characters they can return, and often your organization will be charged based on the number of characters returned, so please use with moderation, asking for smaller numbers first, then extending as you gain confidence."
+msgstr ""
+
+msgid "Use one (or more) of the following proposed tags to automatically generate a certificate or a skill and show them here when the student gets to this step, which requires all other steps to be finished first."
+msgstr ""
+
+msgid "Hi ((user_complete_name))."
+msgstr ""
+
+msgid "Invitation to session ((session_name))"
+msgstr ""
+
+msgid "Fill blanks or form with exact selection"
+msgstr ""
+
+msgid "Matching with exact selection"
+msgstr ""
+
+msgid "Image zones with exact selection"
+msgstr ""
+
+msgid "Match by dragging with exact selection"
+msgstr ""
+
+msgid "Multiple answer dropdown with exact selection"
+msgstr ""
+
+msgid "AI learning path generator"
+msgstr ""
+
+msgid "Topic"
+msgstr ""
+
+msgid "Type the topic on which you want the AI Helper to develop a learning path. The more detailed the topic, the more precise the result will be."
+msgstr ""
+
+msgid "Number of learning path items"
+msgstr ""
+
+msgid "This is the number of pages you want the AI Helper to generate in your learning path. Splitting the learning path in several pages, chapters, sections (however you want to call them) will help structure the course and also let you redistribute the content for better presentation."
+msgstr ""
+
+msgid "Rough maximum number of words (actually number of tokens) you want to get per page. More tokens will probably generate better content, but will also take more time to generate and cost more to your organisation, so use this carefully."
+msgstr ""
+
+msgid "Only selected users will see the content"
+msgstr ""
+
+msgid "Leave empty to enable the content for everyone"
+msgstr ""
+
+msgid "Export courses reports complete"
+msgstr ""
+
+msgid "The number of questions is limited to between %d and %d."
+msgstr ""
+
+msgid "Add a test after each page"
+msgstr ""
+
+msgid "Hidden but visible for me"
+msgstr ""
+
+msgid "Conclusion"
+msgstr ""
+
+msgid "Unable to access temp file"
+msgstr ""
+
+msgid "Duplicated users"
+msgstr ""
+
+msgid "This report only lists users that have the same firstname and lastname."
+msgstr ""
+
+msgid "By checking this box, you will remove all relationships of the HR manager with other sessions and courses. If what you want is to maintain those relationships, do NOT check this box."
+msgstr ""
+
+msgid "There is no class with the name \"%s\""
+msgstr ""
+
+msgid "Maximum number of subscriptions allowed. Leave at 0 to not limit it."
+msgstr ""
+
+msgid "Subscriptions"
+msgstr ""
+
+msgid "Allow subscriptions"
+msgstr ""
+
+msgid "Maximum number of subscriptions"
+msgstr ""
+
+msgid "No longer available"
+msgstr ""
+
+msgid "Export all results from an exercise"
+msgstr ""
+
+msgid "No result found for export in this test."
+msgstr ""
+
+msgid "User %s has been changed to %s. To cancel, click <a href='%s'>here</a>."
+msgstr ""
+
+msgid "Ex-learner"
+msgstr ""
+
+msgid "File size is too big"
+msgstr ""
+
+msgid "An error occured"
+msgstr ""
+
+msgid "Image for headers"
+msgstr ""
+
+msgid "Add picture for headers"
+msgstr ""
+
+msgid "This picture will be used in the course header and in the e-mails sent and PDFs generated from this course. The picture will have a ratio of 25:7. You can crop the picture you upload."
+msgstr ""
+
+msgid "Delete picture for headers"
+msgstr ""
+
+msgid "The final picture must be in a 16:9 ratio, but you can crop the picture you upload."
+msgstr ""
+
+msgid "Export all results of all tests"
+msgstr ""
+
+msgid "Click to view details"
+msgstr ""
+
+msgid "This report applies to all plateform activities of the user."
+msgstr ""
+
+msgid "dd/mm/yyyy"
+msgstr ""
+
+msgid "Export certificates issue report"
+msgstr ""
+
+msgid "Hide hierarchies"
+msgstr ""
+
+msgid "Show hierarchies"
+msgstr ""
+
+msgid "Parent career"
+msgstr ""
+
+msgid "This career cannot be deleted until all of its children have been deleted or moved to another career."
+msgstr ""
+
+msgid "This email is already in use by another user in the same file."
+msgstr ""
+
+msgid "You have new posts in the following forums of your courses."
+msgstr ""
+
+msgid "This identifier is internal to the system and should not contain spaces nor special characters. It can be used from plugins as well, to filter the elements it is attached to."
+msgstr ""
+
+msgid "Include last login"
+msgstr ""
+
+msgid "Duplicated users by e-mail"
+msgstr ""
+
+msgid "This report only lists users that have the same email."
+msgstr ""
+
+msgid "Stop notifying me"
+msgstr ""
+
+msgid "Expiration date cannot be empty."
+msgstr ""
+
+msgid "E-mail not sent. You might have introduced an incorrect address, the address might belong to an inactive user, or the mail server is not correctly configured (check the mail.conf.php file)."
+msgstr ""
+
+msgid "Your password has expired. Please set a new password before you continue."
+msgstr ""
+
+msgid "Copy iframe code below to include the exercise :"
+msgstr ""
+
+msgid "My missing signatures"
+msgstr ""
+
+msgid "Only show active users"
+msgstr ""
+
+msgid "Update courses list"
+msgstr ""
+
+msgid "A code is required"
+msgstr ""
+
+msgid "This course code does not exist"
+msgstr ""
+
+msgid "Duplicate code"
+msgstr ""
+
+msgid "The update failed for the following courses"
+msgstr ""
+
+msgid "%02d h %02d m %02d s"
 msgstr ""
 

@@ -5,7 +5,7 @@
         {{ t("Menu") }}
       </h3>
       <div class="app-sidebar__panel">
-        <PanelMenu :model="menuItems" />
+        <PanelMenu :model="menuItems"  @click.native="handlePanelHeaderClick"  />
       </div>
       <div class="app-sidebar__bottom">
         <PageList category-title="footer_private" />
@@ -55,6 +55,7 @@ const securityStore = useSecurityStore()
 const { menuItems } = useSidebarMenu()
 
 const sidebarIsOpen = ref(window.localStorage.getItem("sidebarIsOpen") === "true")
+const expandingDueToPanelClick = ref(false)
 
 const currentYear = new Date().getFullYear();
 
@@ -62,13 +63,35 @@ watch(
   sidebarIsOpen,
   (newValue) => {
     const appEl = document.querySelector("#app")
-
     window.localStorage.setItem("sidebarIsOpen", newValue.toString())
-
     appEl.classList.toggle("app--sidebar-inactive", !newValue)
-  },
-  {
-    immediate: true,
-  },
-)
+
+    if (!newValue) {
+      if (!expandingDueToPanelClick.value) {
+        const expandedHeaders = document.querySelectorAll('.p-panelmenu-header.p-highlight')
+        expandedHeaders.forEach(header => {
+          header.click()
+        })
+        sidebarIsOpen.value = false
+        window.localStorage.setItem("sidebarIsOpen", 'false')
+      }
+    }
+    expandingDueToPanelClick.value = false
+}, { immediate: true })
+
+const handlePanelHeaderClick = (event) => {
+  const header = event.target.closest('.p-panelmenu-header')
+  if (!header) return
+
+  const contentId = header.getAttribute('aria-controls')
+  const contentPanel = document.getElementById(contentId)
+
+  if (contentPanel && contentPanel.querySelector('.p-toggleable-content')) {
+    if (!sidebarIsOpen.value) {
+      expandingDueToPanelClick.value = true
+      sidebarIsOpen.value = true
+      window.localStorage.setItem("sidebarIsOpen", 'true')
+    }
+  }
+}
 </script>

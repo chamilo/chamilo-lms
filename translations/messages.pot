@@ -24187,9 +24187,6 @@ msgstr ""
 msgid "Sign out"
 msgstr ""
 
-msgid "Social network"
-msgstr ""
-
 msgid "Sessions catalogue"
 msgstr ""
 

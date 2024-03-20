@@ -24192,9 +24192,6 @@ msgstr "Mes compétences"
 msgid "Sign out"
 msgstr "Déconnexion"
 
-msgid "Social network"
-msgstr "Réseau social"
-
 msgid "Sessions catalogue"
 msgstr "Catalogue de sessions"
 

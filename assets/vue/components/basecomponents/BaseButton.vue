@@ -1,5 +1,6 @@
 <template>
   <Button
+    class="cursor-pointer"
     :aria-label="onlyIcon ? label : undefined"
     :class="buttonClass"
     :disabled="disabled"
@@ -95,10 +96,11 @@ const buttonClass = computed(() => {
   }
 
   let commonDisabled =
-    "disabled:bg-primary-bgdisabled disabled:border disabled:border-primary-borderdisabled disabled:text-fontdisabled";
+    "disabled:bg-primary-bgdisabled disabled:border disabled:border-primary-borderdisabled disabled:text-fontdisabled disabled:pointer-events-auto disabled:cursor-not-allowed";
+  let textWhite = "hover:text-white active:text-white focus:text-white "
   switch (props.type) {
     case "primary":
-      result += `border-primary hover:bg-primary text-primary hover:text-white ${commonDisabled} `;
+      result += `border-primary hover:bg-primary text-primary ${textWhite} ${commonDisabled} `;
       break;
     case "secondary":
       result +=

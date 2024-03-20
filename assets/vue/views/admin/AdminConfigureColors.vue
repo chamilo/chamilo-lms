@@ -178,9 +178,11 @@ import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseColorPicker from "../../components/basecomponents/BaseColorPicker.vue"
 import { useTheme } from "../../composables/theme"
 import axios from "axios"
+import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
 const { getColorTheme, getColors } = useTheme()
+const { showSuccessNotification, showErrorNotification } = useNotification()
 
 let primaryColor = getColorTheme("--color-primary-base")
 let primaryColorGradient = getColorTheme("--color-primary-gradient")
@@ -194,10 +196,15 @@ let dangerColor = getColorTheme("--color-danger-base")
 
 const saveColors = async () => {
   let colors = getColors()
-  // TODO send colors to backend, then notify if was correct or incorrect
-  await axios.post("/api/color_themes", {
-    variables: colors,
-  })
+  try {
+    await axios.post("/api/color_themes", {
+      variables: colors,
+    })
+    showSuccessNotification(t("Colors updated"))
+  } catch (error) {
+    showErrorNotification(error)
+    console.error(error)
+  }
 }
 
 const menu = ref("menu")

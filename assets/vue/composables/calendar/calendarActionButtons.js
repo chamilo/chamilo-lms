@@ -3,7 +3,7 @@ import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../../store/cidReq"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useSecurityStore } from "../../store/securityStore"
-import { checkIsAllowedToEdit } from "../userPermissions"
+import { checkIsAllowedToEdit, checkIsAllowedToEditCourse } from "../userPermissions"
 
 /**
  * Extracted from Agenda::displayActions

@@ -214,7 +214,7 @@ import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
 import BaseToggleButton from "../../components/basecomponents/BaseToggleButton.vue"
 import StudentViewButton from "../../components/StudentViewButton.vue"
 import Sortable from "sortablejs"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { checkIsAllowedToEdit, checkIsAllowedToEditCourse } from "../../composables/userPermissions"
 import { useCidReqStore } from "../../store/cidReq"
 import { storeToRefs } from "pinia"
 import courseService from "../../services/courseService"
@@ -381,14 +381,14 @@ async function updateDisplayOrder(htmlItem, newIndex) {
 const isAllowedToEdit = ref(false)
 
 onMounted(async () => {
-  isAllowedToEdit.value = await checkIsAllowedToEdit()
+  isAllowedToEdit.value = await checkIsAllowedToEditCourse(course.value.id)
   setTimeout(() => {
     translateHtml()
   }, 1000)
 })
 
 const onStudentViewChanged = async () => {
-  isAllowedToEdit.value = await checkIsAllowedToEdit()
+  isAllowedToEdit.value = await checkIsAllowedToEditCourse(course.value.id)
 }
 
 const allowEditToolVisibilityInSession = computed(() => {

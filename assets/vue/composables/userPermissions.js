@@ -18,3 +18,17 @@ export async function checkIsAllowedToEdit(tutor = false, coach = false, session
 
   return false
 }
+
+export async function checkIsAllowedToEditCourse(courseId) {
+  try {
+    const { data } = await axios.get(`${window.location.origin}/permissions/is_allowed_to_edit_course/${courseId}`, {
+      withCredentials: true
+    })
+
+    return data.isAllowedToEditCourse
+  } catch (e) {
+    console.log(e)
+  }
+
+  return false
+}

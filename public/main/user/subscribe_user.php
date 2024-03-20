@@ -141,6 +141,9 @@ $table = new SortableTable(
 );
 $parameters['keyword'] = $keyword;
 $parameters['type'] = $type;
+$parameters['cid'] = api_get_course_int_id();
+$parameters['sid'] = api_get_session_id();
+
 $table->set_additional_parameters($parameters);
 $col = 0;
 $table->set_header($col++, '', false);
@@ -205,7 +208,8 @@ $form = new FormValidator(
 );
 $form->addText('keyword', '', false);
 $form->addElement('hidden', 'type', $type);
-$form->addElement('hidden', 'cidReq', api_get_course_id());
+$form->addElement('hidden', 'cid', api_get_course_int_id());
+$form->addElement('hidden', 'sid', api_get_session_id());
 $form->addButtonSearch(get_lang('Search'));
 echo Display::toolbarAction('toolbar-subscriber', [$actionsLeft, $extraForm, $form->returnForm()]);
 

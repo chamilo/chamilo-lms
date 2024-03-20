@@ -1,18 +1,6 @@
-{% extends "@ChamiloCore/Layout/base-layout.html.twig" %}
-{% block chamilo_wrap %}
-    {%- autoescape %}
-        {% if not from_vue %}
-            <div id="app" data-flashes="{{ app.flashes()|json_encode }}"></div>
-        {% endif %}
-    {% endautoescape -%}
-    {% autoescape false %}
-        <section id="sectionMainContent" class="section-content">
-            {%- block content %}
-                {% include '@ChamiloCore/Layout/vue_setup.html.twig' %}
-            {% endblock -%}
-        </section>
-    {% endautoescape %}
-{% endblock %}
+{% extends "@ChamiloCore/Layout/no_layout.html.twig" %}
 
-{% block chamilo_footer %}
+{%- block content %}
+    {% include '@ChamiloCore/Layout/vue_setup.html.twig' %}
+    {#    {{ encore_entry_script_tags('vue') }}#}
 {% endblock %}

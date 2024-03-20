@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\ColorTheme;
+use Chamilo\CoreBundle\Repository\ColorThemeRepository;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -19,12 +20,18 @@ class ColorThemeProcessor implements ProcessorInterface
     public function __construct(
         private readonly ProcessorInterface $persistProcessor,
         private readonly ParameterBagInterface $parameterBag,
+        private readonly ColorThemeRepository $colorThemeRepository,
     ) {}
 
     public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
     {
         \assert($data instanceof ColorTheme);
 
+        $this->colorThemeRepository->deactivateAll();
+
+        $data->setActive(true);
+
+        /** @var ColorTheme $colorTheme */
         $colorTheme = $this->persistProcessor->process($data, $operation, $uriVariables, $context);
 
         if ($colorTheme) {
@@ -33,16 +40,18 @@ class ColorThemeProcessor implements ProcessorInterface
             $contentParts = [];
             $contentParts[] = ':root {';
 
-            foreach ($data->getVariables() as $variable => $value) {
+            foreach ($colorTheme->getVariables() as $variable => $value) {
                 $contentParts[] = "  $variable: $value;";
             }
 
             $contentParts[] = '}';
 
+            $dirName = $projectDir."/var/theme/{$colorTheme->getSlug()}";
+
             $fs = new Filesystem();
-            $fs->mkdir($projectDir.'/var/theme');
+            $fs->mkdir($dirName);
             $fs->dumpFile(
-                $projectDir.'/var/theme/colors.css',
+                $dirName.'/colors.css',
                 implode(PHP_EOL, $contentParts)
             );
         }

@@ -75,12 +75,6 @@ final class Version20240112131200 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE resource_tag CHANGE id id INT AUTO_INCREMENT NOT NULL;');
         }
 
-        if ($schema->hasTable('agenda_event_invitation')) {
-            error_log('Perform the changes in the agenda_event_invitation table');
-            $this->addSql('ALTER TABLE personal_agenda DROP FOREIGN KEY FK_D8612460AF68C6B');
-            $this->addSql('ALTER TABLE agenda_event_invitation CHANGE id id INT AUTO_INCREMENT NOT NULL;');
-        }
-
         if ($schema->hasTable('gradebook_comment')) {
             error_log('Perform the changes in the gradebook_comment table');
             $this->addSql('ALTER TABLE gradebook_comment CHANGE id id INT AUTO_INCREMENT NOT NULL;');

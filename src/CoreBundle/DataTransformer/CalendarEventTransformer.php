@@ -10,6 +10,7 @@ use ApiPlatform\Core\DataTransformer\DataTransformerInterface;
 use Chamilo\CoreBundle\ApiResource\CalendarEvent;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
+use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -18,6 +19,7 @@ class CalendarEventTransformer implements DataTransformerInterface
 {
     public function __construct(
         private readonly RouterInterface $router,
+        private readonly UsergroupRepository $usergroupRepository,
     ) {}
 
     public function transform($object, string $to, array $context = []): object
@@ -40,6 +42,12 @@ class CalendarEventTransformer implements DataTransformerInterface
 
         $object->setResourceLinkListFromEntity();
 
+        $subscriptionItemTitle = null;
+
+        if (CCalendarEvent::SUBSCRIPTION_VISIBILITY_CLASS == $object->getSubscriptionVisibility()) {
+            $subscriptionItemTitle = $this->usergroupRepository->find($object->getSubscriptionItemId())?->getTitle();
+        }
+
         return new CalendarEvent(
             'calendar_event_'.$object->getIid(),
             $object->getTitle(),
@@ -52,6 +60,7 @@ class CalendarEventTransformer implements DataTransformerInterface
             $object->isCollective(),
             $object->getSubscriptionVisibility(),
             $object->getSubscriptionItemId(),
+            $subscriptionItemTitle,
             $object->getMaxAttendees(),
             $object->getResourceNode(),
             $object->getResourceLinkListFromEntity(),

@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\EventListener;
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -44,7 +44,9 @@ class ExceptionListener
                 $redirectUrl = $baseUrl.$path.($query ? '?'.$query : '');
 
                 $loginUrl = $this->router->generate('login', ['redirect' => $redirectUrl], UrlGeneratorInterface::ABSOLUTE_URL);
-                ChamiloApi::redirectTo($loginUrl);
+                $event->setResponse(new RedirectResponse($loginUrl));
+
+                return;
             }
         }
 

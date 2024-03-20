@@ -47,11 +47,11 @@ class Version20211005153900 extends AbstractMigrationChamilo
         }
 
         if (!$table->hasColumn('exercise_id')) {
-            $this->addSql("ALTER TABLE ticket_ticket ADD exercise_id INT DEFAULT NULL");
+            $this->addSql('ALTER TABLE ticket_ticket ADD exercise_id INT DEFAULT NULL');
         }
 
         if (!$table->hasColumn('lp_id')) {
-            $this->addSql("ALTER TABLE ticket_ticket ADD lp_id INT DEFAULT NULL");
+            $this->addSql('ALTER TABLE ticket_ticket ADD lp_id INT DEFAULT NULL');
         }
 
         $table = $schema->getTable('ticket_assigned_log');

@@ -266,7 +266,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
             $groupId = $item['to_group_id'] ?? 0;
             if (empty($item['lastedit_date'])) {
                 $lastUpdatedAt = new DateTime('now', new DateTimeZone('UTC'));
-           } else {
+            } else {
                 $lastUpdatedAt = new DateTime($item['lastedit_date'], new DateTimeZone('UTC'));
             }
             $newVisibility = ResourceLink::VISIBILITY_DRAFT;

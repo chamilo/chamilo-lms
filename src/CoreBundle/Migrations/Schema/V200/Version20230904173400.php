@@ -78,7 +78,7 @@ class Version20230904173400 extends AbstractMigrationChamilo
                     $subscriptionsInfo = $this->getSubscriptions((int) $personalAgenda['id']);
 
                     if (\count($subscriptionsInfo) > 0
-                        && $personalAgenda['subscription_visibility'] !== 0
+                        && 0 !== $personalAgenda['subscription_visibility']
                     ) {
                         $invitationsOrSubscriptionsInfo = $subscriptionsInfo;
                     }

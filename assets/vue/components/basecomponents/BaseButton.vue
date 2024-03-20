@@ -20,7 +20,7 @@
 <script setup>
 import Button from "primevue/button"
 import { computed } from "vue"
-import { chamiloIconToClass } from "./ChamiloIcons";
+import { chamiloIconToClass } from "./ChamiloIcons"
 import { buttonTypeValidator, iconValidator, sizeValidator } from "./validators"
 
 const props = defineProps({
@@ -96,28 +96,28 @@ const buttonClass = computed(() => {
   }
 
   let commonDisabled =
-    "disabled:bg-primary-bgdisabled disabled:border disabled:border-primary-borderdisabled disabled:text-fontdisabled disabled:pointer-events-auto disabled:cursor-not-allowed";
+    "disabled:bg-primary-bgdisabled disabled:border disabled:border-primary-borderdisabled disabled:text-fontdisabled disabled:pointer-events-auto disabled:cursor-not-allowed"
   let textWhite = "hover:text-white active:text-white focus:text-white "
   switch (props.type) {
     case "primary":
-      result += `border-primary hover:bg-primary text-primary ${textWhite} ${commonDisabled} `;
-      break;
+      result += `border-primary hover:bg-primary text-primary ${textWhite} ${commonDisabled} `
+      break
     case "secondary":
       result +=
-        "bg-secondary text-white hover:bg-secondary-gradient disabled:bg-secondary-bgdisabled disabled:text-fontdisabled";
-      break;
+        "bg-secondary text-white hover:bg-secondary-gradient disabled:bg-secondary-bgdisabled disabled:text-fontdisabled"
+      break
     case "success":
-      result += `bg-success hover:bg-success-gradient ${commonDisabled} `;
-      break;
+      result += `bg-success hover:bg-success-gradient ${commonDisabled} `
+      break
     case "danger":
-      result += `border-error hover:bg-error text-error hover:text-white ${commonDisabled} `;
-      break;
+      result += `border-error hover:bg-error text-error hover:text-white ${commonDisabled} `
+      break
     case "black":
-      result += "bg-white text-tertiary border-tertiary hover:bg-tertiary-gradient hover:text-white";
-      break;
+      result += "bg-white text-tertiary border-tertiary hover:bg-tertiary-gradient hover:text-white"
+      break
   }
-  return result;
-});
+  return result
+})
 
 // https://primevue.org/button/#outlined
 const primeOutlinedProperty = computed(() => {

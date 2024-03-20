@@ -6,9 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\EventListener;
 
+use Chamilo\CoreBundle\Repository\ColorThemeRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -31,7 +33,9 @@ class TwigListener
         SerializerInterface $serializer,
         TokenStorageInterface $tokenStorage,
         SettingsManager $settingsManager,
-        LanguageRepository $languageRepository
+        LanguageRepository $languageRepository,
+        private readonly ColorThemeRepository $colorThemeRepository,
+        private readonly RouterInterface $router,
     ) {
         $this->twig = $twig;
         $this->tokenStorage = $tokenStorage;
@@ -99,5 +103,22 @@ class TwigListener
         $this->twig->addGlobal('access_url_id', $request->getSession()->get('access_url_id'));
         $this->twig->addGlobal('config_json', json_encode($config));
         $this->twig->addGlobal('languages_json', json_encode($languages));
+
+        $this->loadColorTheme();
+    }
+
+    private function loadColorTheme(): void
+    {
+        $link = null;
+
+        $colorTheme = $this->colorThemeRepository->getActiveOne();
+
+        if ($colorTheme) {
+            $path = $this->router->generate('chamilo_color_theme');
+
+            $link = '<link rel="stylesheet" href="'.$path.'">';
+        }
+
+        $this->twig->addGlobal('color_theme_link', $link);
     }
 }

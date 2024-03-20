@@ -46,6 +46,14 @@ class Version20211005153900 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_EDE2C7686219A7B7 ON ticket_ticket (assigned_last_user)');
         }
 
+        if (!$table->hasColumn('exercise_id')) {
+            $this->addSql('ALTER TABLE ticket_ticket ADD exercise_id INT DEFAULT NULL');
+        }
+
+        if (!$table->hasColumn('lp_id')) {
+            $this->addSql('ALTER TABLE ticket_ticket ADD lp_id INT DEFAULT NULL');
+        }
+
         $table = $schema->getTable('ticket_assigned_log');
         if (!$table->hasForeignKey('FK_54B65868700047D2')) {
             $this->addSql('ALTER TABLE ticket_assigned_log ADD CONSTRAINT FK_54B65868700047D2 FOREIGN KEY (ticket_id) REFERENCES ticket_ticket (id) ON DELETE CASCADE;');

@@ -40,7 +40,12 @@
     />
   </div>
 
-  <div class="flex flex-wrap mb-4">
+  <div class="flex flex-wrap mb-4 gap-4">
+    <BaseInputText
+      v-model="themeTitle"
+      :label="t('Title')"
+    />
+
     <BaseButton
       type="primary"
       icon="send"
@@ -182,6 +187,8 @@ import axios from "axios"
 const { t } = useI18n()
 const { getColorTheme, getColors } = useTheme()
 
+const themeTitle = ref()
+
 let primaryColor = getColorTheme("--color-primary-base")
 let primaryColorGradient = getColorTheme("--color-primary-gradient")
 let secondaryColor = getColorTheme("--color-secondary-base")
@@ -196,6 +203,7 @@ const saveColors = async () => {
   let colors = getColors()
   // TODO send colors to backend, then notify if was correct or incorrect
   await axios.post("/api/color_themes", {
+    title: themeTitle.value,
     variables: colors,
   })
 }

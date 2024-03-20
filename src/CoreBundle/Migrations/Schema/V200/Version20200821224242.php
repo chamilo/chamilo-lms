@@ -19,6 +19,12 @@ final class Version20200821224242 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         $connection = $this->getEntityManager()->getConnection();
+        if ($schema->hasTable('message_feedback')) {
+            $table = $schema->getTable('message_feedback');
+            if ($table->hasForeignKey('FK_DB0F8049537A1329')) {
+                $this->addSql('ALTER TABLE message_feedback DROP FOREIGN KEY FK_DB0F8049537A1329');
+            }
+        }
 
         $table = $schema->getTable('message');
         $this->addSql('ALTER TABLE message CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE parent_id parent_id INT DEFAULT NULL;');
@@ -207,9 +213,6 @@ final class Version20200821224242 extends AbstractMigrationChamilo
 
             $table = $schema->getTable('message_feedback');
 
-            if ($table->hasForeignKey('FK_DB0F8049537A1329')) {
-                $this->addSql('ALTER TABLE message_feedback DROP FOREIGN KEY FK_DB0F8049537A1329');
-            }
             if ($table->hasIndex('IDX_DB0F8049537A1329')) {
                 $this->addSql('DROP INDEX IDX_DB0F8049537A1329 ON message_feedback');
             }

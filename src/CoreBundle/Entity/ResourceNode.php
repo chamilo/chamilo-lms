@@ -469,10 +469,8 @@ class ResourceNode implements Stringable
 
     public function addResourceLink(ResourceLink $link): self
     {
-        $link
-            ->setResourceNode($this)
-            ->setResourceTypeGroup($this->resourceType->getId())
-        ;
+        $link->setResourceNode($this);
+
         $this->resourceLinks->add($link);
 
         return $this;

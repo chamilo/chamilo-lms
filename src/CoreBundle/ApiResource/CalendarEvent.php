@@ -37,6 +37,8 @@ class CalendarEvent extends AbstractResource
         #[Groups(['calendar_event:read'])]
         public ?int $subscriptionItemId = null,
         #[Groups(['calendar_event:read'])]
+        public ?string $subscriptionItemTitle = null,
+        #[Groups(['calendar_event:read'])]
         public int $maxAttendees = 0,
         #[Groups(['calendar_event:read'])]
         public ?ResourceNode $resourceNode = null,

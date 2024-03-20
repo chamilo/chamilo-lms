@@ -30,7 +30,11 @@
         {{ encore_entry_link_tags('legacy_document') }}
         {{ encore_entry_link_tags('vue') }}
         {{ encore_entry_link_tags('app') }}
-        <link rel="stylesheet" href="{{ path('chamilo_color_theme') }}">
+
+        {% if color_theme_link %}
+            {{ color_theme_link|raw }}
+        {% endif %}
+
         {# Files app.css is generated from "assets/css/app.scss" file using the file webpack.config.js #}
         {#    {{ encore_entry_link_tags('app') }} #}
         {% if theme is defined %}

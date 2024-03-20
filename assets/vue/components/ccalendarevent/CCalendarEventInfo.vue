@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col space-y-4">
+  <div class="calendar-event-info">
     <h5 v-text="event.title" />
 
     <p v-text="abbreviatedDatetime(event.startDate)" />
@@ -13,14 +13,19 @@
 
     <div v-html="event.content" />
 
-    <div v-if="allowCollectiveInvitations && type.invitation === event.invitationType">
-      <h6 v-t="'Invitees'" />
-
-      <ShowLinks
-        :item="event"
-        :show-status="false"
-      />
-    </div>
+    <CalendarEventSubscriptionsInfo
+      v-if="type.subscription === event.invitationType"
+      :event="event"
+    />
+    <CalendarEventInvitationsInfo
+      v-else-if="type.invitation === event.invitationType"
+      :event="event"
+    />
+    <ShowLinks
+      v-else
+      :item="event"
+      :show-status="false"
+    />
   </div>
 </template>
 
@@ -29,6 +34,8 @@ import { useFormatDate } from "../../composables/formatDate"
 import ShowLinks from "../resource_links/ShowLinks"
 import { useCalendarInvitations } from "../../composables/calendar/calendarInvitations"
 import { type } from "../../constants/entity/ccalendarevent"
+import CalendarEventSubscriptionsInfo from "./CalendarEventSubscriptionsInfo.vue"
+import CalendarEventInvitationsInfo from "./CalendarEventInvitationsInfo.vue"
 
 const { abbreviatedDatetime } = useFormatDate()
 const { allowCollectiveInvitations } = useCalendarInvitations()

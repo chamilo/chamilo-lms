@@ -97,10 +97,12 @@ const buttonClass = computed(() => {
 
   let commonDisabled =
     "disabled:bg-primary-bgdisabled disabled:border disabled:border-primary-borderdisabled disabled:text-fontdisabled disabled:pointer-events-auto disabled:cursor-not-allowed"
-  let textWhite = "hover:text-white active:text-white focus:text-white "
   switch (props.type) {
     case "primary":
-      result += `border-primary hover:bg-primary text-primary ${textWhite} ${commonDisabled} `
+      result += `bg-white border-primary text-primary hover:bg-primary hover:text-white ${commonDisabled} `
+      break
+    case "primary-alternative":
+      result += `bg-primary text-white hover:bg-primary-gradient ${commonDisabled} `
       break
     case "secondary":
       result +=

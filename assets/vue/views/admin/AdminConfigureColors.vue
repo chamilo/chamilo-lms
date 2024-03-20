@@ -57,8 +57,14 @@
     <div class="flex flex-row flex-wrap">
       <BaseButton
         class="mr-2 mb-2"
-        :label="t('Button')"
+        :label="t('Primary')"
         type="primary"
+        icon="eye-on"
+      />
+      <BaseButton
+        class="mr-2 mb-2"
+        :label="t('Primary alternative')"
+        type="primary-alternative"
         icon="eye-on"
       />
       <BaseButton

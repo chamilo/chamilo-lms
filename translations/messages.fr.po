@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-01-13 02:40+0000\n"
-"Last-Translator: Weblate admin <ywarnier@beeznest.org>\n"
-"Language-Team: French <https://translation.chamilo.org/projects/chamilo-lms/"
-"translations/fr/>\n"
+"PO-Revision-Date: 2024-03-21 08:46+0000\n"
+"Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
+"Language-Team: French <https://translation.chamilo.org/projects/chamilo/"
+"messages/fr/>\n"
 "Language: fr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.4.2\n"
 
 msgid "You can generate badges for the skills learnt by your users, to give them recognition for their effort, through which they will be able to show off their acquired skills and competencies with icons that will be shown on their user profile. For more information on OpenBadges, check <a href='http://openbadges.org'>http://openbadges.org/</a>."
 msgstr "Vous pouvez maintenant créer des insignes qui reconnaissent les compétences apprisent par vos utilisateurs, les récompenses pour leurs efforts et au travers desquels ils pourront démontrer leurs compétences acquises sur leur page de profil. Pour plus d'informations au sujet d'OpenBadges: <a href='http://openbadges.org'>http://openbadges.org</a>."
@@ -25181,3 +25181,102 @@ msgstr "La mise à jour a échoué pour les cours suivants"
 
 msgid "%02d h %02d m %02d s"
 msgstr "%02d h %02d m %02d s"
+
+msgid "By checking this box, I confirm that I accept the data processing by the platform"
+msgstr ""
+"En cochant cette case, je confirme que j'accepte le traitement des données "
+"par la plateforme"
+
+msgid "The platform owner, responsible for the processing, implements processing of personal data to respond to your contact request. The data is mandatory. In their absence, it will not be possible to process your request."
+msgstr ""
+"Le propriétaire de la plateforme, responsable du traitement, met en œuvre le "
+"traitement des données personnelles pour répondre à votre demande de "
+"contact. La fourniture de ces données est obligatoire. En leur absence, il "
+"ne sera pas possible de traiter votre demande."
+
+#, fuzzy
+msgid "All attempts blocked because you did not reach the minimum score of %s % at one of your attempts."
+msgstr ""
+"Toutes les tentatives ont été bloquées car vous n'avez pas atteint le score "
+"minimum de %s % lors de l'une de vos tentatives."
+
+msgid "Deleted users"
+msgstr "Utilisateurs supprimés"
+
+msgid "The name provided will be used as the identifier of the user extra field containing an ID that the remote SCORM API will recognize as a user ID. This is only useful if your remote SCORM provider asked you for something similar."
+msgstr ""
+"Le nom fourni sera utilisé comme identifiant du champ extra de l'utilisateur "
+"contenant un ID que l'API SCORM distante reconnaîtra comme un ID "
+"utilisateur. Ceci est uniquement utile si votre fournisseur SCORM distant "
+"vous a demandé quelque chose de similaire."
+
+msgid "Send diagnostic finalization message"
+msgstr "Envoyer le message de finalisation du diagnostic"
+
+msgid "Hide question numbering"
+msgstr "Masquer la numérotation des questions"
+
+msgid "Welcome, please go to diagnostic at %s."
+msgstr "Bienvenue. Veuillez vous rendre au diagnostic à %s."
+
+msgid "View all friends"
+msgstr "Voir tous les amis"
+
+msgid "DiagnosticfinalizationmessageContent"
+msgstr ""
+"Bonjour %s, je suis %s et je suis en train de revoir votre diagnostic pour "
+"définir le cours que vous allez suivre."
+
+msgid "Prevent moving backwards between questions"
+msgstr "Empêcher de revenir en arrière entre les questions"
+
+msgid "This question is used in another exercises. If you continue its edition, the changes will affect all exercises that contain this question."
+msgstr ""
+"Cette question est utilisée dans d'autres exercices. Si vous continuez sa "
+"modification, les changements affecteront tous les exercices qui contiennent "
+"cette question."
+
+msgid "Mark as promoted message"
+msgstr "Marquer comme message promu"
+
+msgid "Extra field to use as student ID for SCORM API"
+msgstr ""
+"Champ supplémentaire à utiliser comme identifiant d'apprenant pour l'API "
+"SCORM"
+
+msgid "Unauthorised view access to resource"
+msgstr "Vue non autorisée - accès à la ressource interdit"
+
+msgid "Text appearing at the end of the test when the user has succeeded or if no pass percentage was set."
+msgstr ""
+"Texte apparaissant à la fin du test lorsque l'utilisateur a réussi ou si "
+"aucun pourcentage de réussite n'a été défini."
+
+msgid "Multiple choice with *other* option"
+msgstr "Choix multiples avec l'option *autre*"
+
+msgid "Direct pop-up mode"
+msgstr "Mode pop-up direct"
+
+msgid "Number of times the question was answered"
+msgstr "Nombre de fois que la question a été répondue"
+
+msgid "DiagnosticfinalizationmessageTitle"
+msgstr "Finalisation du diagnostic"
+
+msgid "Show score by category on a radar/spiderweb chart"
+msgstr ""
+"Afficher le score par catégorie sur un graphique en radar/toile d'araignée"
+
+msgid "My profile"
+msgstr "Mon profil"
+
+msgid "Number of times this answer was selected"
+msgstr "Nombre de fois que cette réponse a été sélectionnée"
+
+#, fuzzy
+msgid "Back to tests list"
+msgstr "Retour à la liste des tests"
+
+msgid "Text appearing at the end of the test when the user has failed."
+msgstr "Texte apparaissant à la fin du test lorsque l'utilisateur a échoué."

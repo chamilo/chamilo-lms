@@ -88,9 +88,9 @@ final class Version20240122221400 extends AbstractMigrationChamilo
         $kernel = $container->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
-        $langPath = $rootPath.'/public/main/lang/'.$englishName.'/trad4all.inc.php';
+        $langPath = $rootPath.'/var/translations/import/'.$englishName.'/trad4all.inc.php';
         $destinationFilePath = $rootPath.'/var/translations/messages.'.$isocode.'.po';
-        $originalFile = $rootPath.'/public/main/lang/english/trad4all.inc.php';
+        $originalFile = $rootPath.'/var/translations/import/english/trad4all.inc.php';
 
         if (!file_exists($langPath)) {
             error_log("Original file not found: $langPath");
@@ -118,6 +118,8 @@ final class Version20240122221400 extends AbstractMigrationChamilo
             $langPath,
             true
         );
+
+        $termsInLanguage = [];
         foreach ($originalTermsInLanguage as $id => $content) {
             if (!isset($termsInLanguage[$id])) {
                 $termsInLanguage[$id] = trim(rtrim($content, ';'), '"');
@@ -131,10 +133,8 @@ final class Version20240122221400 extends AbstractMigrationChamilo
                 continue;
             }
             $doneTranslations[$englishTranslation] = true;
-            $translatedTerm = '';
-            if (!empty($termsInLanguage[$term])) {
-                $translatedTerm = $termsInLanguage[$term];
-            }
+            $translatedTerm = $termsInLanguage[$term] ?? '';
+
             // Here we apply a little correction to avoid unterminated strings
             // when a string ends with a \"
             if (preg_match('/\\\$/', $englishTranslation)) {

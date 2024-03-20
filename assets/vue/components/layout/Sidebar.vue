@@ -4,8 +4,8 @@
       <h3 class="app-sidebar__top">
         {{ t("Menu") }}
       </h3>
-      <div class="app-sidebar__panel">
-        <PanelMenu :model="menuItems"  @click.native="handlePanelHeaderClick"  />
+      <div class="app-sidebar__panel" @click="handlePanelHeaderClick">
+        <PanelMenu :model="menuItems" />
       </div>
       <div class="app-sidebar__bottom">
         <PageList category-title="footer_private" />

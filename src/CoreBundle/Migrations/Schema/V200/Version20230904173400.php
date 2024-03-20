@@ -72,31 +72,36 @@ class Version20230904173400 extends AbstractMigrationChamilo
             $em->persist($calendarEvent);
 
             if ($collectiveInvitationsEnabled) {
-                $calendarEvent->setCollective((bool) $personalAgenda['collective']);
-
-                $hasSubscriptions = false;
                 $invitationsOrSubscriptionsInfo = [];
 
                 if ($subscriptionsEnabled) {
                     $subscriptionsInfo = $this->getSubscriptions((int) $personalAgenda['id']);
 
-                    if (\count($subscriptionsInfo) > 0) {
-                        $hasSubscriptions = true;
-
+                    if (\count($subscriptionsInfo) > 0
+                        && $personalAgenda['subscription_visibility'] !== 0
+                    ) {
                         $invitationsOrSubscriptionsInfo = $subscriptionsInfo;
                     }
                 }
 
-                if ($hasSubscriptions) {
+                if ($invitationsOrSubscriptionsInfo) {
                     $calendarEvent
                         ->setInvitationType(CCalendarEvent::TYPE_SUBSCRIPTION)
                         ->setSubscriptionVisibility($personalAgenda['subscription_visibility'])
                         ->setSubscriptionItemId($personalAgenda['subscription_item_id'])
+                        ->setMaxAttendees($invitationsOrSubscriptionsInfo[0]['max_attendees'])
                     ;
                 } else {
-                    $calendarEvent->setInvitationType(CCalendarEvent::TYPE_INVITATION);
+                    $invitationsInfo = $this->getInvitations($subscriptionsEnabled, (int) $personalAgenda['id']);
 
-                    $invitationsOrSubscriptionsInfo = $this->getInvitations($subscriptionsEnabled, (int) $personalAgenda['id']);
+                    if (\count($invitationsInfo) > 0) {
+                        $calendarEvent
+                            ->setCollective((bool) $personalAgenda['collective'])
+                            ->setInvitationType(CCalendarEvent::TYPE_INVITATION)
+                        ;
+
+                        $invitationsOrSubscriptionsInfo = $invitationsInfo;
+                    }
                 }
 
                 foreach ($invitationsOrSubscriptionsInfo as $invitationOrSubscriptionInfo) {
@@ -197,7 +202,7 @@ class Version20230904173400 extends AbstractMigrationChamilo
 
     private function getSubscriptions(int $personalAgendaId): array
     {
-        $sql = "SELECT i.id, i.creator_id, i.created_at, i.updated_at
+        $sql = "SELECT i.id, i.creator_id, i.created_at, i.updated_at, i.max_attendees
             FROM agenda_event_invitation i
             INNER JOIN personal_agenda pa ON i.id = pa.agenda_event_invitation_id
             WHERE pa.id = $personalAgendaId

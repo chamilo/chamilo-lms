@@ -1,8 +1,13 @@
 import axios from "axios"
 
-export async function checkIsAllowedToEdit(tutor = false, coach = false, sessionCoach = false, checkStudentView = true) {
+export async function checkIsAllowedToEdit(
+  tutor = false,
+  coach = false,
+  sessionCoach = false,
+  checkStudentView = true,
+) {
   try {
-    const { data } = await axios.get(window.location.origin + '/permissions/is_allowed_to_edit', {
+    const { data } = await axios.get(window.location.origin + "/permissions/is_allowed_to_edit", {
       params: {
         tutor,
         coach,

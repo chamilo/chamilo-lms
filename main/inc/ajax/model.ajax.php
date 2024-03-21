@@ -649,6 +649,7 @@ switch ($action) {
         $courseId = $_REQUEST['course_id'] ?? 0;
         $exerciseId = $_REQUEST['exercise_id'] ?? 0;
         $status = $_REQUEST['status'] ?? 0;
+        $showAttemptsInSessions = $_REQUEST['showAttemptsInSessions'] ? true : false;
         if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
             $filter_user = (int) $_GET['filter_by_user'];
             if (empty($whereCondition)) {
@@ -683,7 +684,8 @@ switch ($action) {
             '',
             false,
             true,
-            $status
+            $status,
+            $showAttemptsInSessions
         );
 
         break;
@@ -1619,7 +1621,8 @@ switch ($action) {
             false,
             false,
             true,
-            $status
+            $status,
+            $showAttemptsInSessions
         );
 
         break;

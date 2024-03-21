@@ -63,6 +63,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             'CourseCategoryName',
             'Teacher',
             'Language',
+            'Visibility',
         ];
         if ($includeUsers) {
             $listToExport[0][] = 'Users';
@@ -88,6 +89,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             }
             $dataToExport['tutor_name'] = str_replace(';', ',', $course['tutor_name']);
             $dataToExport['course_language'] = str_replace(';', ',', $course['course_language']);
+            $dataToExport['visibility'] = str_replace(';', ',', $course['visibility']);
+
             if ($includeUsers) {
                 $dataToExport['students'] = '';
                 $dataToExport['teachers'] = '';

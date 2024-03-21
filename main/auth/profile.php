@@ -449,6 +449,7 @@ if ($form->validate()) {
 
     $wrong_current_password = false;
     $user_data = $form->getSubmitValues(1);
+    $user_data['item_id'] = api_get_user_id();
     /** @var User $user */
     $user = UserManager::getRepository()->find(api_get_user_id());
 

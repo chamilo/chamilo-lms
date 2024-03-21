@@ -11,9 +11,9 @@ api_protect_admin_script();
  */
 function generateCsvModel(array $fields): string
 {
-    $headerCsv = "<strong>Code</strong>;Title;CourseCategory;Language;";
+    $headerCsv = "<strong>Code</strong>;Title;CourseCategory;Language;Visibility;";
 
-    $exampleCsv = "<b>COURSE001</b>;Introduction to Biology;BIO;english;";
+    $exampleCsv = "<b>COURSE001</b>;Introduction to Biology;BIO;english;1;";
 
     foreach ($fields as $field) {
         $fieldType = (int) $field['field_type'];
@@ -50,6 +50,7 @@ function generateXmlModel(array $fields): string
     $modelXml .= "        &lt;Title&gt;Introduction to Biology&lt;/Title&gt;\n";
     $modelXml .= "        &lt;CourseCategory&gt;BIO&lt;/CourseCategory&gt;\n";
     $modelXml .= "        &lt;Language&gt;english&lt;/Language&gt;\n";
+    $modelXml .= "        &lt;Visibility&gt;1&lt;/Visibility&gt;\n";
     foreach ($fields as $field) {
         switch ($field['field_type']) {
             case ExtraField::FIELD_TYPE_CHECKBOX:
@@ -106,8 +107,9 @@ function updateCourse(array $courseData, int $courseId): void
         'Title' => 'title',
         'Language' => 'course_language',
         'CourseCategory' => 'category_code',
+        'Visibilit' => 'visibility',
     ];
-
+    $params = [];
     foreach ($fieldsMapping as $inputField => $dbField) {
         if (isset($courseData[$inputField])) {
             $params[$dbField] = $courseData[$inputField];

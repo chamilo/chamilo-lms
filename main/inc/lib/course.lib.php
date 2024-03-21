@@ -3196,6 +3196,7 @@ class CourseManager
             $sql = "SELECT DISTINCT (c.code),
                         c.id as real_id,
                         c.category_code AS category,
+                        c.title as title,
                         s.id as session_id,
                         s.name as session_name
                     FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." scu
@@ -3203,7 +3204,7 @@ class CourseManager
                     ON (scu.c_id = c.id)
                     INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION)." s
                     ON (s.id = scu.session_id)
-                    WHERE user_id = $user_id ";
+                    WHERE user_id = $user_id OR id_coach = $user_id ";
             $r = Database::query($sql);
             while ($row = Database::fetch_array($r, 'ASSOC')) {
                 if (!empty($skipCourseList)) {

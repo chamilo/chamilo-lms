@@ -305,7 +305,7 @@ if (empty($statusId)) {
 
 $url = api_get_path(WEB_AJAX_PATH).
     'model.ajax.php?a=get_exercise_pending_results&filter_by_user='.$filter_user.
-    '&course_id='.$courseId.'&exercise_id='.$exerciseId.'&status='.$statusId;
+    '&course_id='.$courseId.'&exercise_id='.$exerciseId.'&status='.$statusId.'&showAttemptsInSessions='.$showAttemptsInSessions;
 $action_links = '';
 
 $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');

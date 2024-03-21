@@ -3,7 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\PersonalAgenda;
+//use Chamilo\CoreBundle\Entity\PersonalAgenda;
 use Chamilo\CoreBundle\Entity\SysCalendar;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
@@ -58,7 +58,7 @@ class Agenda
     ) {
         // Table definitions
         $this->tbl_global_agenda = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
-        $this->tbl_personal_agenda = Database::get_main_table(TABLE_PERSONAL_AGENDA);
+        //$this->tbl_personal_agenda = Database::get_main_table(TABLE_PERSONAL_AGENDA);
         $this->tbl_course_agenda = Database::get_course_table(TABLE_AGENDA);
         $this->table_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT);
 
@@ -271,7 +271,7 @@ class Agenda
         $em = Database::getManager();
         switch ($this->type) {
             case 'personal':
-                $event = new PersonalAgenda();
+                /*$event = new PersonalAgenda();
                 $event
                     ->setTitle($title)
                     ->setText($content)
@@ -283,7 +283,7 @@ class Agenda
                 ;
                 $em->persist($event);
                 $em->flush();
-                $id = $event->getId();
+                $id = $event->getId();*/
                 break;
             case 'course':
                 $sessionId = $this->getSessionId();
@@ -636,7 +636,7 @@ class Agenda
 
         switch ($this->type) {
             case 'personal':
-                $eventInfo = $this->get_event($id);
+                /*$eventInfo = $this->get_event($id);
                 if ($eventInfo['user'] != api_get_user_id()) {
                     break;
                 }
@@ -659,7 +659,7 @@ class Agenda
                     $this->tbl_personal_agenda,
                     $attributes,
                     ['id = ?' => $id]
-                );
+                );*/
                 break;
             case 'course':
                 $repo = Container::getCalendarEventRepository();
@@ -842,13 +842,13 @@ class Agenda
     {
         switch ($this->type) {
             case 'personal':
-                $eventInfo = $this->get_event($id);
+                /*$eventInfo = $this->get_event($id);
                 if ($eventInfo['user'] == api_get_user_id()) {
                     Database::delete(
                         $this->tbl_personal_agenda,
                         ['id = ?' => $id]
                     );
-                }
+                }*/
                 break;
             case 'course':
                 $courseId = api_get_course_int_id();
@@ -1003,7 +1003,7 @@ class Agenda
 
                 if (false == $sessionFilterActive) {
                     // Getting personal events
-                    $this->getPersonalEvents($start, $end);
+                    //$this->getPersonalEvents($start, $end);
 
                     // Getting platform/admin events
                     $this->getPlatformEvents($start, $end);
@@ -1158,10 +1158,10 @@ class Agenda
         if (!empty($event)) {
             switch ($this->type) {
                 case 'personal':
-                    $sql = "UPDATE $this->tbl_personal_agenda SET
+                    /*$sql = "UPDATE $this->tbl_personal_agenda SET
                             enddate = DATE_ADD(enddate, INTERVAL $delta MINUTE)
 							WHERE id = ".$id;
-                    Database::query($sql);
+                    Database::query($sql);*/
                     break;
                 case 'course':
                     $sql = "UPDATE $this->tbl_course_agenda SET
@@ -1206,11 +1206,11 @@ class Agenda
         if (!empty($event)) {
             switch ($this->type) {
                 case 'personal':
-                    $sql = "UPDATE $this->tbl_personal_agenda SET
+                    /*$sql = "UPDATE $this->tbl_personal_agenda SET
                             all_day = $allDay, date = DATE_ADD(date, INTERVAL $delta MINUTE),
                             enddate = DATE_ADD(enddate, INTERVAL $delta MINUTE)
 							WHERE id=".$id;
-                    Database::query($sql);
+                    Database::query($sql);*/
                     break;
                 case 'course':
                     $sql = "UPDATE $this->tbl_course_agenda SET
@@ -1250,7 +1250,7 @@ class Agenda
         $event = null;
         switch ($this->type) {
             case 'personal':
-                $sql = "SELECT * FROM ".$this->tbl_personal_agenda."
+                /*$sql = "SELECT * FROM ".$this->tbl_personal_agenda."
                         WHERE id = $id AND user = ".api_get_user_id();
                 $result = Database::query($sql);
                 if (Database::num_rows($result)) {
@@ -1259,7 +1259,7 @@ class Agenda
                     $event['content'] = $event['text'];
                     $event['start_date'] = $event['date'];
                     $event['end_date'] = $event['enddate'];
-                }
+                }*/
                 break;
             case 'course':
                 $repo = Container::getCalendarEventRepository();

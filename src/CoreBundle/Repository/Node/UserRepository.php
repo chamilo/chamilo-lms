@@ -246,7 +246,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ['bundle' => 'CoreBundle', 'entity' => 'MessageTag', 'field' => 'user', 'type' => 'object', 'action' => 'delete'],
             ['bundle' => 'CoreBundle', 'entity' => 'Notification', 'field' => 'destUserId', 'type' => 'int', 'action' => 'delete'],
             ['bundle' => 'CoreBundle', 'entity' => 'PageCategory', 'field' => 'creator', 'type' => 'object', 'action' => 'convert'],
-            ['bundle' => 'CoreBundle', 'entity' => 'PersonalAgenda', 'field' => 'user', 'type' => 'object', 'action' => 'delete'],
+            //['bundle' => 'CoreBundle', 'entity' => 'PersonalAgenda', 'field' => 'user', 'type' => 'object', 'action' => 'delete'],
             ['bundle' => 'CoreBundle', 'entity' => 'Portfolio', 'field' => 'user', 'type' => 'object', 'action' => 'convert'],
             ['bundle' => 'CoreBundle', 'entity' => 'PortfolioCategory', 'field' => 'user', 'type' => 'object', 'action' => 'convert'],
             ['bundle' => 'CoreBundle', 'entity' => 'PortfolioComment', 'field' => 'author', 'type' => 'object', 'action' => 'convert'],

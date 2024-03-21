@@ -86,7 +86,15 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public const USERNAME_MAX_LENGTH = 100;
     public const ROLE_DEFAULT = 'ROLE_USER';
     public const ANONYMOUS = 6;
+
+    /**
+     * Global status for the fallback user.
+     * This special status is used for a system user that acts as a placeholder
+     * or fallback for content ownership when regular users are deleted.
+     * This ensures data integrity and prevents orphaned content within the system.
+     */
     public const ROLE_FALLBACK = 99;
+
     /*public const COURSE_MANAGER = 1;
       public const TEACHER = 1;
       public const SESSION_ADMIN = 3;

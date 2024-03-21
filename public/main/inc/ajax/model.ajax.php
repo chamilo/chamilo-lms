@@ -2552,8 +2552,8 @@ switch ($action) {
         ]);
         break;
     case 'get_usergroups_teacher':
-        $columns = ['name', 'users', 'status', 'group_type', 'actions'];
-        $options['order'] = "name $sord";
+        $columns = ['title', 'users', 'status', 'group_type', 'actions'];
+        $options['order'] = "title $sord";
         $options['limit'] = "$start , $limit";
         $options['session_id'] = $sessionId;
         switch ($type) {
@@ -2564,7 +2564,7 @@ switch ($action) {
                     $options['where'] = [' (session_id IS NULL OR session_id != ?) ' => $sessionId];
                 }
                 if (!empty($keyword)) {
-                    $options['where']['AND name like %?% '] = $keyword;
+                    $options['where']['AND title like %?% '] = $keyword;
                 }
                 $result = $obj->getUserGroupNotInCourse(
                     $options,

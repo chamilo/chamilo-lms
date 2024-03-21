@@ -587,17 +587,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected Collection $userRelTags;
 
     /**
-     * @var Collection<int, PersonalAgenda>
-     */
-    #[ORM\OneToMany(
-        mappedBy: 'user',
-        targetEntity: PersonalAgenda::class,
-        cascade: ['persist', 'remove'],
-        orphanRemoval: true
-    )]
-    protected Collection $personalAgendas;
-
-    /**
      * @var Collection<int, CGroupRelUser>
      */
     #[ORM\OneToMany(
@@ -780,7 +769,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->userCourseCategories = new ArrayCollection();
         $this->userRelCourseVotes = new ArrayCollection();
         $this->userRelTags = new ArrayCollection();
-        $this->personalAgendas = new ArrayCollection();
         $this->sessionsRelUser = new ArrayCollection();
         $this->sentMessages = new ArrayCollection();
         $this->receivedMessages = new ArrayCollection();
@@ -2052,14 +2040,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function getUserRelTags(): Collection
     {
         return $this->userRelTags;
-    }
-
-    /**
-     * @return Collection<int, PersonalAgenda>
-     */
-    public function getPersonalAgendas(): Collection
-    {
-        return $this->personalAgendas;
     }
 
     public function getCurriculumItems(): Collection

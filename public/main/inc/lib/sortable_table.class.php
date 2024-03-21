@@ -407,7 +407,7 @@ class SortableTable extends HTML_Table
         }
 
         //$html .= '<div class="table-responsive">'.$content.'</div>';
-        $html .= '<div class="">';
+        $html .= '<div class="sortable-container">';
         $html .= $content.'</div>';
 
         if (!empty($this->additional_parameters)) {

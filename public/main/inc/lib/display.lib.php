@@ -2180,7 +2180,7 @@ class Display
         }
 
 
-        return '<div id="'.$id.'" class="p-toolbar p-component flex items-center justify-between flex-wrap" role="toolbar">
+        return '<div id="'.$id.'" class="toolbar-action p-toolbar p-component flex items-center justify-between flex-wrap" role="toolbar">
                 <div class="p-toolbar-group-start p-toolbar-group-left">'.$start.'</div>
                 <div class="p-toolbar-group-center">'.$center.'</div>
                 <div class="p-toolbar-group-end p-toolbar-group-right">'.$end.'</div>

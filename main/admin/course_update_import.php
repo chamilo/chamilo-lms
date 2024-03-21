@@ -234,6 +234,7 @@ function processExtraFieldValue(string $fieldName, $value, array $extraFields)
             if ($value == '1') {
                 $newValue = ['extra_'.$fieldName => '1'];
             }
+
             return $newValue;
         case ExtraField::FIELD_TYPE_TAG:
             return explode(',', $value);
@@ -360,9 +361,9 @@ foreach ($allExtraFields as $field) {
 
 $csvContent = generateCsvModel($extraFields);
 $xmlContent = generateXmlModel($extraFields);
-echo '<div id="csv-model"><p>' . get_lang('CSVMustLookLike') . ' (' . get_lang('MandatoryFields') . '):</p>';
-echo '<blockquote><pre>' . $csvContent . '</pre></blockquote></div>';
-echo '<div id="xml-model" style="display: none;"><p>' . get_lang('XMLMustLookLike') . ' (' . get_lang('MandatoryFields') . '):</p>';
-echo '<blockquote><pre>' . $xmlContent . '</pre></blockquote></div>';
+echo '<div id="csv-model"><p>'.get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').'):</p>';
+echo '<blockquote><pre>'.$csvContent.'</pre></blockquote></div>';
+echo '<div id="xml-model" style="display: none;"><p>'.get_lang('XMLMustLookLike').' ('.get_lang('MandatoryFields').'):</p>';
+echo '<blockquote><pre>'.$xmlContent.'</pre></blockquote></div>';
 
 Display::display_footer();

@@ -103,24 +103,39 @@ function validateCourseData(array $courses): array
 function updateCourse(array $courseData, int $courseId): void
 {
     $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+    $fieldsMapping = [
+        'Title' => 'title',
+        'Language' => 'course_language',
+        'CourseCategory' => 'category_code',
+        'Visibilit' => 'visibility',
+    ];
     $params = [];
-    if (isset($courseData['Title'])) {
-        $params['title'] = $courseData['Title'];
+    foreach ($fieldsMapping as $inputField => $dbField) {
+        if (isset($courseData[$inputField])) {
+            $params[$dbField] = $courseData[$inputField];
+        }
     }
-    if (isset($courseData['Language'])) {
-        $params['course_language'] = $courseData['Language'];
-    }
-    if (isset($courseData['CourseCategory'])) {
-        $params['category_code'] = $courseData['CourseCategory'];
-    }
-    if (isset($courseData['Visibility'])) {
-        $params['visibility'] = $courseData['Visibility'];
-    }
+
     Database::update($courseTable, $params, ['id = ?' => $courseId]);
-    $courseData['code'] = $courseData['Code'];
-    $courseData['item_id'] = $courseId;
-    $courseFieldValue = new ExtraFieldValue('course');
-    $courseFieldValue->saveFieldValues($courseData);
+
+    if (isset($courseData['extra'])) {
+        $courseData['extra']['code'] = $courseData['Code'];
+        $courseData['extra']['item_id'] = $courseId;
+        $saveOnlyThisFields = [];
+        foreach ($courseData['extra'] as $key => $value) {
+            $newKey = preg_replace('/^extra_/', '', $key);
+            $saveOnlyThisFields[] = $newKey;
+        }
+        $courseFieldValue = new ExtraFieldValue('course');
+        $courseFieldValue->saveFieldValues(
+            $courseData['extra'],
+            false,
+            false,
+            $saveOnlyThisFields,
+            [],
+            true
+        );
+    }
 }
 
 /**
@@ -150,7 +165,7 @@ function parseCsvCourseData(string $file, array $extraFields): array
             }
             if (in_array($key, array_column($extraFields, 'variable'))) {
                 $processedValue = processExtraFieldValue($key, $value, $extraFields);
-                $courseData['extra_'.$key] = $processedValue;
+                $courseData['extra']['extra_'.$key] = $processedValue;
             } else {
                 $courseData[$key] = $value;
             }
@@ -181,7 +196,7 @@ function parseXmlCourseData(string $file, array $extraFields): array
                 $value = $node->nodeValue;
                 if (in_array($key, array_column($extraFields, 'variable'))) {
                     $processedValue = processExtraFieldValue($key, $value, $extraFields);
-                    $courseData['extra_'.$key] = $processedValue;
+                    $courseData['extra']['extra_'.$key] = $processedValue;
                 } else {
                     $courseData[$key] = $value;
                 }
@@ -219,6 +234,7 @@ function processExtraFieldValue(string $fieldName, $value, array $extraFields)
             if ($value == '1') {
                 $newValue = ['extra_'.$fieldName => '1'];
             }
+
             return $newValue;
         case ExtraField::FIELD_TYPE_TAG:
             return explode(',', $value);
@@ -345,9 +361,9 @@ foreach ($allExtraFields as $field) {
 
 $csvContent = generateCsvModel($extraFields);
 $xmlContent = generateXmlModel($extraFields);
-echo '<div id="csv-model"><p>' . get_lang('CSVMustLookLike') . ' (' . get_lang('MandatoryFields') . '):</p>';
-echo '<blockquote><pre>' . $csvContent . '</pre></blockquote></div>';
-echo '<div id="xml-model" style="display: none;"><p>' . get_lang('XMLMustLookLike') . ' (' . get_lang('MandatoryFields') . '):</p>';
-echo '<blockquote><pre>' . $xmlContent . '</pre></blockquote></div>';
+echo '<div id="csv-model"><p>'.get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').'):</p>';
+echo '<blockquote><pre>'.$csvContent.'</pre></blockquote></div>';
+echo '<div id="xml-model" style="display: none;"><p>'.get_lang('XMLMustLookLike').' ('.get_lang('MandatoryFields').'):</p>';
+echo '<blockquote><pre>'.$xmlContent.'</pre></blockquote></div>';
 
 Display::display_footer();

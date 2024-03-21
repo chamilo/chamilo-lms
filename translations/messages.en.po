@@ -24194,9 +24194,6 @@ msgstr "My Skills"
 msgid "Sign out"
 msgstr "Sign out"
 
-msgid "Social network"
-msgstr "Social network"
-
 msgid "Sessions catalogue"
 msgstr "Sessions catalogue"
 

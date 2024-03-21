@@ -56,7 +56,6 @@ const props = defineProps({
   },
   isInvalid: {
     type: Boolean,
-    required: false,
     default: false,
   },
   required: {

@@ -5,7 +5,7 @@
       <input
         type="color"
         :value="hexColor"
-        class="grow h-10 rounded-lg mb-0"
+        class="grow h-10 rounded-lg mb-0 cursor-pointer"
         @input="colorPicked($event.target.value)"
       />
       <BaseInputText

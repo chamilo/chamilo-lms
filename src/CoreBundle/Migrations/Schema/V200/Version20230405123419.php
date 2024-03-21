@@ -26,9 +26,6 @@ final class Version20230405123419 extends AbstractMigrationChamilo
             $this->addSql(
                 'ALTER TABLE gradebook_category ADD CONSTRAINT FK_96A4C705C33F7837 FOREIGN KEY (document_id) REFERENCES c_document (iid) ON DELETE SET NULL;'
             );
-            $this->addSql(
-                'CREATE UNIQUE INDEX UNIQ_96A4C705C33F7837 ON gradebook_category (document_id);'
-            );
         }
     }
 
@@ -37,9 +34,6 @@ final class Version20230405123419 extends AbstractMigrationChamilo
         if ($schema->hasTable('gradebook_category')) {
             $this->addSql(
                 'ALTER TABLE gradebook_category DROP CONSTRAINT FK_96A4C705C33F7837;'
-            );
-            $this->addSql(
-                'ALTER TABLE gradebook_category DROP INDEX UNIQ_96A4C705C33F7837;'
             );
         }
         if ($schema->hasTable('c_document')) {

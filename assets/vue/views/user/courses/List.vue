@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import { useQuery } from "@vue/apollo-composable";
 import { useI18n } from "vue-i18n";
@@ -40,11 +40,15 @@ const { t } = useI18n();
 
 let user = computed(() => store.getters["security/getUser"]);
 
-const { result, loading } = useQuery(GET_COURSE_REL_USER, {
+const { result, loading, refetch } = useQuery(GET_COURSE_REL_USER, () => ({
   user: user.value["@id"],
-});
+}));
 
 const isLoading = computed(() => loading.value);
 
 const courses = computed(() => result.value?.courseRelUsers.edges.map(({ node }) => node.course) ?? []);
+
+onMounted(() => {
+  refetch();
+});
 </script>

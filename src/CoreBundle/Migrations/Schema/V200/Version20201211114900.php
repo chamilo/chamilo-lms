@@ -108,6 +108,12 @@ final class Version20201211114900 extends AbstractMigrationChamilo
 
             if (!$table->hasColumn('item_root')) {
                 $this->addSql('ALTER TABLE c_lp_item ADD item_root INT DEFAULT NULL');
+                $this->addSql(
+                    'ALTER TABLE c_lp_item ADD CONSTRAINT FK_CCC9C1EDDEC4BDA0 FOREIGN KEY (item_root) REFERENCES c_lp_item (iid) ON DELETE CASCADE'
+                );
+                $this->addSql(
+                    'CREATE INDEX IDX_CCC9C1EDDEC4BDA0 ON c_lp_item (item_root)'
+                );
             }
         }
 

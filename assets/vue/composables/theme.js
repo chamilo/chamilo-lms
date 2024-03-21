@@ -1,4 +1,5 @@
 import { onMounted, ref, watch } from "vue"
+import Color from "colorjs.io"
 
 export const useTheme = () => {
   let colors = {}
@@ -24,24 +25,34 @@ export const useTheme = () => {
   }
 
   const getCssVariableValue = (variableName) => {
-    const colorVariable = getComputedStyle(document.body).getPropertyValue(variableName).split(", ")
-    return {
-      r: parseInt(colorVariable[0]),
-      g: parseInt(colorVariable[1]),
-      b: parseInt(colorVariable[2]),
-    }
+    const colorVariable = getComputedStyle(document.body).getPropertyValue(variableName)
+    return colorFromCSSVariable(colorVariable)
   }
 
   const setCssVariableValue = (variableName, color) => {
-    document.documentElement.style.setProperty(variableName, `${color.r}, ${color.g}, ${color.b}`)
+    document.documentElement.style.setProperty(variableName, colorToCSSVariable(color))
   }
 
   const getColors = () => {
     let colorsPlainObject = {}
     for (const [key, value] of Object.entries(colors)) {
-      colorsPlainObject[key] = `${value.value.r}, ${value.value.g}, ${value.value.b}`
+      colorsPlainObject[key] = colorToCSSVariable(value.value)
     }
     return colorsPlainObject
+  }
+
+  const colorToCSSVariable = (color) => {
+    // according to documentation https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/rgb#syntax
+    // the format "r g b" should work but because how rules in css are defined does not
+    // so, we need the format "r, g, b" for variables,
+    const r = Math.round(color.r * 255)
+    const g = Math.round(color.g * 255)
+    const b = Math.round(color.b * 255)
+    return `${r}, ${g}, ${b}`
+  }
+
+  const colorFromCSSVariable = (variable) => {
+    return new Color(`rgb(${variable})`)
   }
 
   return {

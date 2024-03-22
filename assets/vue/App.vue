@@ -79,7 +79,10 @@ const layout = computed(() => {
 
   const queryParams = new URLSearchParams(window.location.search)
 
-  if (queryParams.has("lp_id") || (queryParams.has("origin") && "learnpath" === queryParams.get("origin"))) {
+  if (
+    (queryParams.has("lp_id") && "view" === queryParams.get("action")) ||
+    (queryParams.has("origin") && "learnpath" === queryParams.get("origin"))
+  ) {
     return "EmptyLayout"
   }
 

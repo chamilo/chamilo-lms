@@ -24,16 +24,20 @@ module.exports = {
         gradient: colorWithOpacity("--color-primary-gradient"),
         bgdisabled: "#fafafa",
         borderdisabled: "#e4e9ed",
+        "button-text": colorWithOpacity("--color-primary-button-text"),
+        "button-alternative-text": colorWithOpacity("--color-primary-button-alternative-text"),
       },
       secondary: {
         DEFAULT: colorWithOpacity("--color-secondary-base"),
         gradient: colorWithOpacity("--color-secondary-gradient"),
         bgdisabled: '#e4e9ed',
         hover: "#d35e0f",
+        "button-text": colorWithOpacity("--color-secondary-button-text"),
       },
       tertiary: {
         DEFAULT: colorWithOpacity("--color-tertiary-base"),
         gradient: colorWithOpacity("--color-tertiary-gradient"),
+        "button-text": colorWithOpacity("--color-tertiary-button-text"),
       },
       gray: {
         5: "#fcfcfc",
@@ -53,13 +57,30 @@ module.exports = {
         5: "#e06410",
         6: "#faf7f5",
       },
-      warning: "#f5ce01",
       success: {
         DEFAULT: colorWithOpacity("--color-success-base"),
         gradient: colorWithOpacity("--color-success-gradient"),
+        "button-text": colorWithOpacity("--color-success-button-text"),
       },
+      info: {
+        DEFAULT: colorWithOpacity("--color-info-base"),
+        gradient: colorWithOpacity("--color-info-gradient"),
+        "button-text": colorWithOpacity("--color-info-button-text"),
+      },
+      warning: {
+        DEFAULT: colorWithOpacity("--color-warning-base"),
+        gradient: colorWithOpacity("--color-warning-gradient"),
+        "button-text": colorWithOpacity("--color-warning-button-text"),
+      },
+      danger: {
+        DEFAULT: colorWithOpacity("--color-danger-base"),
+        gradient: colorWithOpacity("--color-danger-gradient"),
+        "button-text": colorWithOpacity("--color-danger-button-text"),
+      },
+      // error is used in some places in css to this is the same color as danger DEFAULT
       error: colorWithOpacity("--color-danger-base"),
-      info: "#0d7bfd",
+
+      form: colorWithOpacity("--color-form-base"),
 
       white: colors.white,
       black: colors.black,

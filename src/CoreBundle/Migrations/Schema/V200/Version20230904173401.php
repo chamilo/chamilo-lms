@@ -44,14 +44,14 @@ class Version20230904173401 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE personal_agenda DROP subscription_item_id');
         }
 
-        if ($schema->hasTable('agenda_event_invitation')) {
-            $this->addSql('ALTER TABLE agenda_event_invitation DROP FOREIGN KEY FK_52A2D5E161220EA6');
-            $this->addSql('DROP TABLE agenda_event_invitation');
-        }
-
         if ($schema->hasTable('agenda_event_invitee')) {
             $this->addSql('ALTER TABLE agenda_event_invitee DROP FOREIGN KEY FK_4F5757FEA76ED395');
             $this->addSql('DROP TABLE agenda_event_invitee');
+        }
+
+        if ($schema->hasTable('agenda_event_invitation')) {
+            $this->addSql('ALTER TABLE agenda_event_invitation DROP FOREIGN KEY FK_52A2D5E161220EA6');
+            $this->addSql('DROP TABLE agenda_event_invitation');
         }
     }
 }

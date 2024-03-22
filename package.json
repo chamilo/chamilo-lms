@@ -5,7 +5,7 @@
   "scripts": {
     "dev-server": "encore dev-server",
     "dev": "encore dev",
-    "watch": "encore dev --watch",
+    "watch": "encore dev-server",
     "build": "encore production --progress"
   },
   "dependencies": {

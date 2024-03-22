@@ -48,7 +48,7 @@ export const useTheme = () => {
     const r = Math.round(color.r * 255)
     const g = Math.round(color.g * 255)
     const b = Math.round(color.b * 255)
-    return `${r}, ${g}, ${b}`
+    return `${r} ${g} ${b}`
   }
 
   const colorFromCSSVariable = (variable) => {

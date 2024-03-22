@@ -105,8 +105,7 @@ const buttonClass = computed(() => {
       result += `bg-primary text-primary-button-alternative-text hover:bg-primary-gradient ${commonDisabled} `
       break
     case "secondary":
-      result +=
-        `bg-secondary text-secondary-button-text hover:bg-secondary-gradient disabled:bg-secondary-bgdisabled disabled:text-fontdisabled ${commonDisabled}`
+      result += `bg-secondary text-secondary-button-text hover:bg-secondary-gradient disabled:bg-secondary-bgdisabled disabled:text-fontdisabled ${commonDisabled}`
       break
     case "success":
       result += `bg-success text-success-button-text hover:bg-success-gradient ${commonDisabled} `
@@ -118,10 +117,10 @@ const buttonClass = computed(() => {
       result += `bg-warning text-warning-button-text hover:bg-warning-gradient ${commonDisabled} `
       break
     case "danger":
-      result += `border-error text-danger-button-text hover:bg-error text-error hover:text-white ${commonDisabled}`
+      result += `bg-white border-error text-danger-button-text hover:bg-error text-error hover:text-white ${commonDisabled}`
       break
     case "black":
-      result += `border-tertiary text-tertiary-button-text hover:bg-tertiary hover:text-white ${commonDisabled}`
+      result += `bg-white border-tertiary text-tertiary-button-text hover:bg-tertiary hover:text-white ${commonDisabled}`
       break
   }
   return result

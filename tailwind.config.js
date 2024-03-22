@@ -1,10 +1,12 @@
-const colors = require("tailwindcss/colors");
+const colors = require("tailwindcss/colors")
 
 // from tailwind youtube channel https://youtu.be/MAtaT8BZEAo?t=1023
 const colorWithOpacity = (variableName) => {
-  return ({opacityValue}) => {
+  return ({ opacityValue }) => {
     if (opacityValue !== undefined) {
-      return `rgba(var(${variableName}), ${opacityValue})`
+      // use standard syntax rgb (color / alpha) rgba is legacy
+      // check https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/rgb
+      return `rgb(var(${variableName}) / ${opacityValue})`
     }
     return `rgb(var(${variableName}))`
   }
@@ -30,7 +32,7 @@ module.exports = {
       secondary: {
         DEFAULT: colorWithOpacity("--color-secondary-base"),
         gradient: colorWithOpacity("--color-secondary-gradient"),
-        bgdisabled: '#e4e9ed',
+        bgdisabled: "#e4e9ed",
         hover: "#d35e0f",
         "button-text": colorWithOpacity("--color-secondary-button-text"),
       },
@@ -87,7 +89,7 @@ module.exports = {
       transparent: colors.transparent,
       current: colors.current,
 
-      fontdisabled: '#a2a6b0',
+      fontdisabled: "#a2a6b0",
     },
     extend: {
       fontFamily: {
@@ -104,8 +106,5 @@ module.exports = {
   corePlugins: {
     aspectRatio: true,
   },
-  plugins: [
-    require("@tailwindcss/forms"),
-    require("@tailwindcss/typography"),
-  ],
-};
+  plugins: [require("@tailwindcss/forms"), require("@tailwindcss/typography")],
+}

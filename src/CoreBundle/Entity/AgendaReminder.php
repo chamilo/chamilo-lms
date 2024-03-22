@@ -7,8 +7,10 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
+use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use DateInterval;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'agenda_reminder')]
@@ -19,19 +21,27 @@ class AgendaReminder
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[Groups(['calendar_event:read'])]
     protected ?int $id = null;
 
     #[ORM\Column(name: 'type', type: 'string')]
     protected string $type;
-
-    #[ORM\Column(name: 'event_id', type: 'integer')]
-    protected int $eventId;
 
     #[ORM\Column(name: 'date_interval', type: 'dateinterval')]
     protected DateInterval $dateInterval;
 
     #[ORM\Column(name: 'sent', type: 'boolean')]
     protected bool $sent;
+
+    #[Groups(['calendar_event:write', 'calendar_event:read'])]
+    public int $count;
+
+    #[Groups(['calendar_event:write', 'calendar_event:read'])]
+    public string $period;
+
+    #[ORM\ManyToOne(inversedBy: 'reminders')]
+    #[ORM\JoinColumn(referencedColumnName: 'iid', nullable: false)]
+    private ?CCalendarEvent $event = null;
 
     public function __construct()
     {
@@ -51,18 +61,6 @@ class AgendaReminder
     public function setType(string $type): self
     {
         $this->type = $type;
-
-        return $this;
-    }
-
-    public function getEventId(): int
-    {
-        return $this->eventId;
-    }
-
-    public function setEventId(int $eventId): self
-    {
-        $this->eventId = $eventId;
 
         return $this;
     }
@@ -87,6 +85,49 @@ class AgendaReminder
     public function setSent(bool $sent): self
     {
         $this->sent = $sent;
+
+        return $this;
+    }
+
+    public function getEvent(): ?CCalendarEvent
+    {
+        return $this->event;
+    }
+
+    public function setEvent(?CCalendarEvent $event): static
+    {
+        $this->event = $event;
+
+        return $this;
+    }
+
+    public function decodeDateInterval(): static
+    {
+        $this->dateInterval = match ($this->period) {
+            'i' => DateInterval::createFromDateString("{$this->count} minutes"),
+            'h' => DateInterval::createFromDateString("{$this->count} hours"),
+            'd' => DateInterval::createFromDateString("{$this->count} days"),
+            default => null,
+        };
+
+        return $this;
+    }
+
+    public function encodeDateInterval(): static
+    {
+        if ($this->dateInterval->i) {
+            $this->count = $this->dateInterval->i;
+            $this->period = 'i';
+        } elseif ($this->dateInterval->h) {
+            $this->count = $this->dateInterval->h;
+            $this->period = 'h';
+        } elseif ($this->dateInterval->d) {
+            $this->count = $this->dateInterval->d;
+            $this->period = 'd';
+        } else {
+            $this->count = (int) $this->dateInterval->format('%a');
+            $this->period = 'd';
+        }
 
         return $this;
     }

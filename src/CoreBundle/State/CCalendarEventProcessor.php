@@ -8,7 +8,9 @@ namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
+use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Exception;
 use Symfony\Component\Security\Core\Security;
@@ -21,6 +23,7 @@ class CCalendarEventProcessor implements ProcessorInterface
     public function __construct(
         private readonly ProcessorInterface $persistProcessor,
         private readonly Security $security,
+        private readonly SettingsManager $settingsManager,
     ) {}
 
     /**
@@ -41,6 +44,16 @@ class CCalendarEventProcessor implements ProcessorInterface
             if ($currentUser->getResourceNode()->getId() !== $data->getParentResourceNode()) {
                 throw new Exception('Not allowed');
             }
+        }
+
+        if ('true' === $this->settingsManager->getSetting('agenda.agenda_reminders')) {
+            $data->getReminders()->forAll(function (int $i, AgendaReminder $reminder) {
+                $reminder->setType('');
+
+                return $reminder->decodeDateInterval();
+            });
+        } else {
+            $data->getReminders()->clear();
         }
 
         /** @var CCalendarEvent $result */

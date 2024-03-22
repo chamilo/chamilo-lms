@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\DataTransformer;
 
 use ApiPlatform\Core\DataTransformer\DataTransformerInterface;
 use Chamilo\CoreBundle\ApiResource\CalendarEvent;
+use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
@@ -23,7 +24,7 @@ class CalendarEventTransformer implements DataTransformerInterface
         private readonly RouterInterface $router,
         private readonly UsergroupRepository $usergroupRepository,
         private readonly CCalendarEventRepository $calendarEventRepository,
-        private readonly SettingsManager $settingsManager
+        private readonly SettingsManager $settingsManager,
     ) {}
 
     public function transform($object, string $to, array $context = []): object
@@ -69,11 +70,19 @@ class CalendarEventTransformer implements DataTransformerInterface
             $object->getSubscriptionItemId(),
             $subscriptionItemTitle,
             $object->getMaxAttendees(),
+            null,
             $object->getResourceNode(),
             $object->getResourceLinkListFromEntity(),
             $color
         );
+
         $calendarEvent->setType($eventType);
+
+        if ('true' === $this->settingsManager->getSetting('agenda.agenda_reminders')) {
+            $object->getReminders()->forAll(fn(int $i, AgendaReminder $reminder) => $reminder->encodeDateInterval());
+
+            $calendarEvent->reminders = $object->getReminders();
+        }
 
         return $calendarEvent;
     }

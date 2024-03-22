@@ -18,6 +18,7 @@ use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\ApiResource\CalendarEvent;
 use Chamilo\CoreBundle\Controller\Api\UpdateCCalendarEventAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Filter\CidFilter;
@@ -167,6 +168,13 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     #[ORM\Column(name: 'max_attendees', type: 'integer')]
     protected int $maxAttendees = 0;
 
+    /**
+     * @var Collection<int, AgendaReminder>
+     */
+    #[Groups(['calendar_event:write'])]
+    #[ORM\OneToMany(mappedBy: 'event', targetEntity: AgendaReminder::class, cascade: ['persist'], orphanRemoval: true)]
+    private Collection $reminders;
+
     public function __construct()
     {
         $this->children = new ArrayCollection();
@@ -174,6 +182,7 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
         $this->repeatEvents = new ArrayCollection();
         $this->allDay = false;
         $this->collective = false;
+        $this->reminders = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -432,6 +441,36 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     public function setMaxAttendees(int $maxAttendees): self
     {
         $this->maxAttendees = $maxAttendees;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AgendaReminder>
+     */
+    public function getReminders(): Collection
+    {
+        return $this->reminders;
+    }
+
+    public function addReminder(AgendaReminder $reminder): static
+    {
+        if (!$this->reminders->contains($reminder)) {
+            $this->reminders->add($reminder);
+            $reminder->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReminder(AgendaReminder $reminder): static
+    {
+        if ($this->reminders->removeElement($reminder)) {
+            // set the owning side to null (unless already changed)
+            if ($reminder->getEvent() === $this) {
+                $reminder->setEvent(null);
+            }
+        }
 
         return $this;
     }

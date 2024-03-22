@@ -16,4 +16,20 @@
       }
     }
   }
+
+  .reminders-info {
+    @apply space-y-2;
+
+    &__title {
+      @apply text-gray-50 mb-3;
+    }
+
+    &__list {
+      @apply space-y-2;
+    }
+
+    &__item {
+      @apply flex text-body-2 flex-row gap-2;
+    }
+  }
 }

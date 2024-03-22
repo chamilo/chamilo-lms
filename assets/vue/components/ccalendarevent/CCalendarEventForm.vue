@@ -41,6 +41,8 @@
     </div>
     <CalendarInvitations v-model="item" />
 
+    <CalendarRemindersEditor v-model="item" />
+
     <slot />
   </form>
 </template>
@@ -53,6 +55,7 @@ import BaseInputText from "../basecomponents/BaseInputText.vue"
 import { useI18n } from "vue-i18n"
 import BaseCalendar from "../basecomponents/BaseCalendar.vue"
 import CalendarInvitations from "./CalendarInvitations.vue"
+import CalendarRemindersEditor from "./CalendarRemindersEditor.vue"
 
 const { t } = useI18n()
 

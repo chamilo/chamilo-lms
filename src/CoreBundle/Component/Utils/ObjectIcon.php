@@ -154,4 +154,6 @@ enum ObjectIcon: string
     case MAP_MARKER = 'map-marker';
     // Sessions catalogue
     case CATALOGUE = 'bookmark-multiple-outline';
+
+    case EVENT_REMINDER = 'alarm';
 }

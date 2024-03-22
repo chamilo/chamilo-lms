@@ -6,9 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\ApiResource;
 
+use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use DateTime;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 class CalendarEvent extends AbstractResource
@@ -40,15 +42,19 @@ class CalendarEvent extends AbstractResource
         public ?string $subscriptionItemTitle = null,
         #[Groups(['calendar_event:read'])]
         public int $maxAttendees = 0,
+        /**
+         * @var Collection<int, AgendaReminder>
+         */
+        #[Groups(['calendar_event:read'])]
+        public ?Collection $reminders = null,
         #[Groups(['calendar_event:read'])]
         public ?ResourceNode $resourceNode = null,
-        ?array $resourceLinkListFromEntity = null,
+        public ?array $resourceLinkListFromEntity = null,
         #[Groups(['calendar_event:read'])]
         public ?string $color = null,
         #[Groups(['calendar_event:read'])]
         public ?string $type = null,
     ) {
-        $this->resourceLinkListFromEntity = $resourceLinkListFromEntity;
     }
 
     public function getType(): ?string

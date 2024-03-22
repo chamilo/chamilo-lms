@@ -158,4 +158,6 @@ enum ActionIcon: string
     case EXIT = 'exit-run';
     // Edit badges/skills
     case EDIT_BADGE = 'shield-edit-outline';
+
+    case ADD_EVENT_REMINDER = 'alarm-plus';
 }

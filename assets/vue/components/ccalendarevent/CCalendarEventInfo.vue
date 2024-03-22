@@ -26,6 +26,8 @@
       :item="event"
       :show-status="false"
     />
+
+    <CalendarRemindersInfo :event="event" />
   </div>
 </template>
 
@@ -36,6 +38,7 @@ import { useCalendarInvitations } from "../../composables/calendar/calendarInvit
 import { type } from "../../constants/entity/ccalendarevent"
 import CalendarEventSubscriptionsInfo from "./CalendarEventSubscriptionsInfo.vue"
 import CalendarEventInvitationsInfo from "./CalendarEventInvitationsInfo.vue"
+import CalendarRemindersInfo from "./CalendarRemindersInfo.vue"
 
 const { abbreviatedDatetime } = useFormatDate()
 const { allowCollectiveInvitations } = useCalendarInvitations()

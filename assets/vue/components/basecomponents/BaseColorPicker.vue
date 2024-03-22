@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col justify-center gap-0">
     <p v-if="label">{{ label }}</p>
-    <div class="flex flex-row gap-3 mb-3 h-10">
+    <div class="flex flex-row gap-3 h-10">
       <ColorPicker
         format="hex"
         :model-value="hexColor"
@@ -9,7 +9,8 @@
       />
       <BaseInputText
         label=""
-        class="max-w-32 mb-0"
+        class="max-w-32"
+        input-class="mb-0"
         :model-value="hexColor"
         :error-text="inputHexError"
         :is-invalid="inputHexError !== ''"
@@ -17,11 +18,18 @@
         @update:model-value="colorPicked"
       />
     </div>
+    <small
+      v-if="error"
+      class="text-danger h-4"
+    >
+      {{ error }}
+    </small>
+    <div v-else class="h-4"></div>
   </div>
 </template>
 
 <script setup>
-import ColorPicker from 'primevue/colorpicker'
+import ColorPicker from "primevue/colorpicker"
 import Color from "colorjs.io"
 import { computed, ref } from "vue"
 import { useI18n } from "vue-i18n"
@@ -36,6 +44,10 @@ const props = defineProps({
     required: true,
   },
   label: {
+    type: String,
+    default: "",
+  },
+  error: {
     type: String,
     default: "",
   },

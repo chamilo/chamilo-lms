@@ -3,7 +3,7 @@
 
   <!-- Advanced mode -->
   <div v-show="isAdvancedMode">
-    <div class="flex flex-col gap-2 mb-8 md:grid md:grid-cols-2 xl:grid-cols-4">
+    <div class="flex flex-col gap-2 mb-3 md:grid md:grid-cols-2 xl:grid-cols-4">
       <BaseColorPicker
         v-model="colorPrimary"
         :label="t('Primary color')"
@@ -15,14 +15,16 @@
       <BaseColorPicker
         v-model="colorPrimaryButtonText"
         :label="t('Primary color button text')"
+        :error="colorPrimaryButtonTextError"
       />
       <BaseColorPicker
         v-model="colorPrimaryButtonAlternativeText"
         :label="t('Primary color button alternative text')"
+        :error="colorPrimaryButtonAlternativeTextError"
       />
     </div>
 
-    <div class="flex flex-col gap-2 mb-8 md:grid md:grid-cols-2 xl:grid-cols-4">
+    <div class="flex flex-col gap-2 mb-3 md:grid md:grid-cols-2 xl:grid-cols-4">
       <BaseColorPicker
         v-model="colorSecondary"
         :label="t('Secondary color')"
@@ -34,10 +36,11 @@
       <BaseColorPicker
         v-model="colorSecondaryButtonText"
         :label="t('Secondary color button text')"
+        :error="colorSecondaryButtonTextError"
       />
     </div>
 
-    <div class="flex flex-col gap-2 mb-8 md:grid md:grid-cols-2 xl:grid-cols-4">
+    <div class="flex flex-col gap-2 mb-3 md:grid md:grid-cols-2 xl:grid-cols-4">
       <BaseColorPicker
         v-model="colorTertiary"
         :label="t('Tertiary color')"
@@ -46,13 +49,9 @@
         v-model="colorTertiaryGradient"
         :label="t('Tertiary color hover/background')"
       />
-      <BaseColorPicker
-        v-model="colorTertiaryButtonText"
-        :label="t('Tertiary color button text')"
-      />
     </div>
 
-    <div class="flex flex-col gap-2 mb-8 md:grid md:grid-cols-2 xl:grid-cols-4">
+    <div class="flex flex-col gap-2 mb-3 md:grid md:grid-cols-2 xl:grid-cols-4">
       <BaseColorPicker
         v-model="colorSuccess"
         :label="t('Success color')"
@@ -64,10 +63,11 @@
       <BaseColorPicker
         v-model="colorSuccessButtonText"
         :label="t('Success color button text')"
+        :error="colorSuccessButtonTextError"
       />
     </div>
 
-    <div class="flex flex-col gap-2 mb-8 md:grid md:grid-cols-2 xl:grid-cols-4">
+    <div class="flex flex-col gap-2 mb-3 md:grid md:grid-cols-2 xl:grid-cols-4">
       <BaseColorPicker
         v-model="colorInfo"
         :label="t('Info color')"
@@ -79,10 +79,11 @@
       <BaseColorPicker
         v-model="colorInfoButtonText"
         :label="t('Info color button text')"
+        :error="colorInfoButtonTextError"
       />
     </div>
 
-    <div class="flex flex-col gap-2 mb-8 md:grid md:grid-cols-2 xl:grid-cols-4">
+    <div class="flex flex-col gap-2 mb-3 md:grid md:grid-cols-2 xl:grid-cols-4">
       <BaseColorPicker
         v-model="colorWarning"
         :label="t('Warning color')"
@@ -94,10 +95,11 @@
       <BaseColorPicker
         v-model="colorWarningButtonText"
         :label="t('Warning color button text')"
+        :error="colorWarningButtonTextError"
       />
     </div>
 
-    <div class="flex flex-col gap-2 mb-8 md:grid md:grid-cols-2 xl:grid-cols-4">
+    <div class="flex flex-col gap-2 mb-3 md:grid md:grid-cols-2 xl:grid-cols-4">
       <BaseColorPicker
         v-model="colorDanger"
         :label="t('Danger color')"
@@ -106,13 +108,9 @@
         v-model="colorDangerGradient"
         :label="t('Danger color hover/background')"
       />
-      <BaseColorPicker
-        v-model="colorDangerButtonText"
-        :label="t('Danger color button text')"
-      />
     </div>
 
-    <div class="flex flex-col gap-2 mb-8 md:grid md:grid-cols-2 xl:grid-cols-4">
+    <div class="flex flex-col gap-2 mb-3 md:grid md:grid-cols-2 xl:grid-cols-4">
       <BaseColorPicker
         v-model="formColor"
         :label="t('Form outline color')"
@@ -122,7 +120,7 @@
 
   <!-- Simple mode -->
   <div v-show="!isAdvancedMode">
-    <div class="flex flex-col gap-2 mb-8 md:grid md:grid-cols-2 xl:grid-cols-4">
+    <div class="flex flex-col gap-2 mb-3 md:grid md:grid-cols-2 xl:grid-cols-4">
       <BaseColorPicker
         v-model="colorPrimary"
         :label="t('Primary color')"
@@ -137,7 +135,7 @@
       />
     </div>
 
-    <div class="flex flex-col gap-2 mb-8 md:grid md:grid-cols-2 xl:grid-cols-4">
+    <div class="flex flex-col gap-2 mb-3 md:grid md:grid-cols-2 xl:grid-cols-4">
       <BaseColorPicker
         v-model="colorSuccess"
         :label="t('Success color')"
@@ -156,7 +154,7 @@
       />
     </div>
 
-    <div class="flex flex-col gap-2 mb-8 md:grid md:grid-cols-2 xl:grid-cols-4">
+    <div class="flex flex-col gap-2 mb-3 md:grid md:grid-cols-2 xl:grid-cols-4">
       <BaseColorPicker
         v-model="formColor"
         :label="t('Form outline color')"
@@ -434,7 +432,6 @@ let formColor = getColorTheme("--color-form-base")
 
 const saveColors = async () => {
   let colors = getColors()
-  console.log(colors)
   try {
     await axios.post("/api/color_themes", {
       variables: colors,
@@ -446,7 +443,7 @@ const saveColors = async () => {
   }
 }
 
-const isAdvancedMode = ref(false)
+const isAdvancedMode = ref(true)
 
 watch(colorPrimary, (newValue) => {
   if (!isAdvancedMode.value) {
@@ -454,6 +451,7 @@ watch(colorPrimary, (newValue) => {
     colorPrimaryButtonText.value = newValue
     colorPrimaryButtonAlternativeText.value = makeTextWithContrast(newValue)
   }
+  checkColorContrast(newValue, colorPrimaryButtonText.value, colorPrimaryButtonAlternativeTextError)
 })
 
 watch(colorSecondary, (newValue) => {
@@ -461,6 +459,7 @@ watch(colorSecondary, (newValue) => {
     colorSecondaryGradient.value = makeGradient(newValue)
     colorSecondaryButtonText.value = makeTextWithContrast(newValue)
   }
+  checkColorContrast(newValue, colorSecondaryButtonText.value, colorSecondaryButtonTextError)
 })
 
 watch(colorTertiary, (newValue) => {
@@ -475,6 +474,7 @@ watch(colorSuccess, (newValue) => {
     colorSuccessGradient.value = makeGradient(newValue)
     colorSuccessButtonText.value = makeTextWithContrast(newValue)
   }
+  checkColorContrast(newValue, colorSuccessButtonText.value, colorSuccessButtonTextError)
 })
 
 watch(colorInfo, (newValue) => {
@@ -482,6 +482,7 @@ watch(colorInfo, (newValue) => {
     colorInfoGradient.value = makeGradient(newValue)
     colorInfoButtonText.value = makeTextWithContrast(newValue)
   }
+  checkColorContrast(newValue, colorInfoButtonText.value, colorInfoButtonTextError)
 })
 
 watch(colorWarning, (newValue) => {
@@ -489,6 +490,7 @@ watch(colorWarning, (newValue) => {
     colorWarningGradient.value = makeGradient(newValue)
     colorWarningButtonText.value = makeTextWithContrast(newValue)
   }
+  checkColorContrast(newValue, colorWarningButtonText.value, colorWarningButtonTextError)
 })
 
 watch(colorDanger, (newValue) => {
@@ -497,15 +499,6 @@ watch(colorDanger, (newValue) => {
     colorDangerButtonText.value = makeTextWithContrast(newValue)
   }
 })
-
-function makeTextWithContrast(color) {
-  // according to colorjs library https://colorjs.io/docs/contrast#accessible-perceptual-contrast-algorithm-apca
-  // this algorithm is better than WCAGG 2.1 to check for contrast
-  // "APCA is being evaluated for use in version 3 of the W3C Web Content Accessibility Guidelines (WCAG)"
-  let onWhite = Math.abs(color.contrast("white", "APCA"))
-  let onBlack = Math.abs(color.contrast("black", "APCA"))
-  return onWhite > onBlack ? new Color("white") : new Color("black")
-}
 
 function makeGradient(color) {
   const light = color.clone().to("oklab").l
@@ -525,6 +518,73 @@ function makeGradient(color) {
   }
 }
 
+function makeTextWithContrast(color) {
+  // according to colorjs library https://colorjs.io/docs/contrast#accessible-perceptual-contrast-algorithm-apca
+  // this algorithm is better than WCAGG 2.1 to check for contrast
+  // "APCA is being evaluated for use in version 3 of the W3C Web Content Accessibility Guidelines (WCAG)"
+  let onWhite = Math.abs(color.contrast("white", "APCA"))
+  let onBlack = Math.abs(color.contrast("black", "APCA"))
+  return onWhite > onBlack ? new Color("white") : new Color("black")
+}
+
+// check for contrast of text
+const colorPrimaryButtonTextError = ref("")
+watch(colorPrimaryButtonText, (newValue) => {
+  checkColorContrast(new Color("white"), newValue, colorPrimaryButtonTextError)
+})
+
+const colorPrimaryButtonAlternativeTextError = ref("")
+watch(colorPrimaryButtonAlternativeText, (newValue) => {
+  checkColorContrast(colorPrimary.value, newValue, colorPrimaryButtonAlternativeTextError)
+})
+
+const colorSecondaryButtonTextError = ref("")
+watch(colorSecondaryButtonText, (newValue) => {
+  checkColorContrast(colorSecondary.value, newValue, colorSecondaryButtonTextError)
+})
+
+const colorTertiaryButtonTextError = ref("")
+watch(colorTertiaryButtonText, (newValue) => {
+  checkColorContrast(colorTertiary.value, newValue, colorTertiaryButtonTextError)
+})
+
+const colorSuccessButtonTextError = ref("")
+watch(colorSuccessButtonText, (newValue) => {
+  checkColorContrast(colorSuccess.value, newValue, colorSuccessButtonTextError)
+})
+
+const colorInfoButtonTextError = ref("")
+watch(colorInfoButtonText, (newValue) => {
+  checkColorContrast(colorInfo.value, newValue, colorInfoButtonTextError)
+})
+
+const colorWarningButtonTextError = ref("")
+watch(colorWarningButtonText, (newValue) => {
+  checkColorContrast(colorWarning.value, newValue, colorWarningButtonTextError)
+})
+
+const colorDangerButtonTextError = ref("")
+watch(colorDangerButtonText, (newValue) => {
+  checkColorContrast(new Color("white"), newValue, colorDangerButtonTextError)
+})
+
+function checkColorContrast(background, foreground, textErrorRef) {
+  if (isAdvancedMode.value) {
+    // using APCA for text contrast in buttons. In chamilo buttons the text
+    // has a font size of 16px and weight of 600
+    // Lc 60 The minimum level recommended for content text that is not body, column, or block text
+    // https://git.apcacontrast.com/documentation/APCA_in_a_Nutshell#use-case--size-ranges
+    let contrast = Math.abs(background.contrast(foreground, "APCA"))
+    console.log(`Contrast ${contrast}`)
+    if (contrast < 60) {
+      textErrorRef.value = t("Does not have enough contrast against background")
+    } else {
+      textErrorRef.value = ""
+    }
+  }
+}
+
+// properties for example components
 const menu = ref("menu")
 const menuItems = [{ label: t("Item 1") }, { label: t("Item 2") }, { label: t("Item 3") }]
 const toggle = (event) => {

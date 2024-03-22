@@ -1,0 +1,19 @@
+.calendar-event-info {
+  @apply flex flex-col space-y-4;
+
+  .invitations-info {
+    @apply space-y-2;
+
+    &__title {
+      @apply text-gray-50 mb-3;
+    }
+
+    &__item {
+      @apply flex text-body-2 flex-row justify-between;
+
+      p {
+        @apply first:font-semibold;
+      }
+    }
+  }
+}

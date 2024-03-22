@@ -412,6 +412,8 @@ let colorTertiary = getColorTheme("--color-tertiary-base")
 let colorTertiaryGradient = getColorTheme("--color-tertiary-gradient")
 let colorTertiaryButtonText = getColorTheme("--color-tertiary-button-text")
 
+const themeTitle = ref()
+
 let colorSuccess = getColorTheme("--color-success-base")
 let colorSuccessGradient = getColorTheme("--color-success-gradient")
 let colorSuccessButtonText = getColorTheme("--color-success-button-text")
@@ -434,7 +436,7 @@ const saveColors = async () => {
   let colors = getColors()
   try {
     await axios.post("/api/color_themes", {
-      variables: colors,
+      title: themeTitle.value,variables: colors,
     })
     showSuccessNotification(t("Colors updated"))
   } catch (error) {

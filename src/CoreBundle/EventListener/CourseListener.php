@@ -73,7 +73,7 @@ class CourseListener
         }
 
         if (true === $cidReset) {
-            $this->removeCourseFromSession($request);
+            $this->cleanSessionHandler($request);
 
             return;
         }
@@ -190,6 +190,8 @@ class CourseListener
             $courseParams = $this->generateCourseUrl($course, $sessionId, $groupId, $origin);
             $sessionHandler->set('course_url_params', $courseParams);
             $twig->addGlobal('course_url_params', $courseParams);
+        } else {
+            $this->cleanSessionHandler($request);
         }
     }
 
@@ -268,7 +270,7 @@ class CourseListener
         }
     }
 
-    public function removeCourseFromSession(Request $request): void
+    public function cleanSessionHandler(Request $request): void
     {
         $sessionHandler = $request->getSession();
         $alreadyVisited = $sessionHandler->get('course_already_visited');

@@ -8,6 +8,8 @@ async function find(iri) {
   return await api.get(iri)
 }
 
-export {
-  find
+async function post(params) {
+  return await api.post("/api/resource_links", params)
 }
+
+export { find, post }

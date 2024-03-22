@@ -376,7 +376,7 @@ msgstr ""
 msgid "Check unique e-mail"
 msgstr ""
 
-msgid "This email is not available"
+msgid "This email is already in use on the platform."
 msgstr ""
 
 msgid "Total posts in all forums."
@@ -19732,7 +19732,7 @@ msgstr ""
 msgid "Command line interpreter (CLI)"
 msgstr ""
 
-msgid "Please visit our website: http://www.chamilo.org"
+msgid "Please visit our website: https://chamilo.org/download"
 msgstr ""
 
 msgid "The space used on disk cannot be measured properly on Windows-based systems."
@@ -24028,7 +24028,7 @@ msgstr ""
 msgid "Only show a radar of scores by category, instead of a table of categories. Do not show individual scores or feedback."
 msgstr ""
 
-msgid "All attemps blocked because you did not reach the minimum score of %s % at one of your attemps."
+msgid "All attempts blocked because you did not reach the minimum score of %s % at one of your attempts."
 msgstr ""
 
 msgid "Authors that have been registered :"
@@ -24185,9 +24185,6 @@ msgid "My Skills"
 msgstr ""
 
 msgid "Sign out"
-msgstr ""
-
-msgid "Social network"
 msgstr ""
 
 msgid "Sessions catalogue"

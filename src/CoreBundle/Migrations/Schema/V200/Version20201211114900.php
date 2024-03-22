@@ -101,10 +101,13 @@ final class Version20201211114900 extends AbstractMigrationChamilo
 
         if ($schema->hasTable('c_lp_item')) {
             $table = $schema->getTable('c_lp_item');
+
+            if ($table->hasColumn('c_id')) {
+                $this->addSql('ALTER TABLE c_lp_item DROP COLUMN c_id');
+            }
+
             if (!$table->hasColumn('item_root')) {
-                $this->addSql(
-                    'ALTER TABLE c_lp_item CHANGE c_id item_root INT DEFAULT NULL'
-                );
+                $this->addSql('ALTER TABLE c_lp_item ADD item_root INT DEFAULT NULL');
                 $this->addSql(
                     'ALTER TABLE c_lp_item ADD CONSTRAINT FK_CCC9C1EDDEC4BDA0 FOREIGN KEY (item_root) REFERENCES c_lp_item (iid) ON DELETE CASCADE'
                 );
@@ -161,10 +164,13 @@ final class Version20201211114900 extends AbstractMigrationChamilo
 
         if ($schema->hasTable('c_lp_item')) {
             $table = $schema->getTable('c_lp_item');
+
             if ($table->hasColumn('item_root')) {
-                $this->addSql(
-                    'ALTER TABLE c_lp_item CHANGE item_root c_id  INT DEFAULT NULL'
-                );
+                $this->addSql('ALTER TABLE c_lp_item ADD c_id INT DEFAULT NULL');
+            }
+
+            if ($table->hasColumn('item_root')) {
+                $this->addSql('ALTER TABLE c_lp_item DROP COLUMN item_root');
             }
         }
 

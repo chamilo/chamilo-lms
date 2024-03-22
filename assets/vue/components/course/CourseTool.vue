@@ -47,7 +47,7 @@
 
     <div class="course-tool__options">
       <button
-        v-if="(securityStore.isCourseAdmin) && !isSorting && !isCustomizing && (session?.id ? 'true' === getSetting('course.allow_edit_tool_visibility_in_session') : true)"
+        v-if="(isAllowedToEdit) && !isSorting && !isCustomizing && (session?.id ? 'true' === getSetting('course.allow_edit_tool_visibility_in_session') : true)"
         @click="changeVisibility(tool)"
       >
         <BaseIcon
@@ -85,12 +85,13 @@
 </template>
 
 <script setup>
-import { computed, inject } from "vue"
+import { computed, inject, onMounted, ref } from "vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import {useSecurityStore} from "../../store/securityStore";
 import { usePlatformConfig } from "../../store/platformConfig"
 import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../../store/cidReq"
+import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 
 const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()
@@ -101,6 +102,7 @@ const { getSetting } = storeToRefs(platformConfigStore)
 
 const isSorting = inject("isSorting")
 const isCustomizing = inject("isCustomizing")
+const isAllowedToEdit = ref(false)
 
 // eslint-disable-next-line no-undef
 const props = defineProps({
@@ -140,4 +142,8 @@ const titleCustomClass = computed(() => {
   return ""
 })
 const isVisible = computed(() => props.tool.resourceNode.resourceLinks[0].visibility === 2)
+
+onMounted(async () => {
+  isAllowedToEdit.value = await checkIsAllowedToEdit()
+})
 </script>

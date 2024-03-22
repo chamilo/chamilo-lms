@@ -86,7 +86,15 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public const USERNAME_MAX_LENGTH = 100;
     public const ROLE_DEFAULT = 'ROLE_USER';
     public const ANONYMOUS = 6;
+
+    /**
+     * Global status for the fallback user.
+     * This special status is used for a system user that acts as a placeholder
+     * or fallback for content ownership when regular users are deleted.
+     * This ensures data integrity and prevents orphaned content within the system.
+     */
     public const ROLE_FALLBACK = 99;
+
     /*public const COURSE_MANAGER = 1;
       public const TEACHER = 1;
       public const SESSION_ADMIN = 3;
@@ -579,17 +587,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected Collection $userRelTags;
 
     /**
-     * @var Collection<int, PersonalAgenda>
-     */
-    #[ORM\OneToMany(
-        mappedBy: 'user',
-        targetEntity: PersonalAgenda::class,
-        cascade: ['persist', 'remove'],
-        orphanRemoval: true
-    )]
-    protected Collection $personalAgendas;
-
-    /**
      * @var Collection<int, CGroupRelUser>
      */
     #[ORM\OneToMany(
@@ -772,7 +769,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->userCourseCategories = new ArrayCollection();
         $this->userRelCourseVotes = new ArrayCollection();
         $this->userRelTags = new ArrayCollection();
-        $this->personalAgendas = new ArrayCollection();
         $this->sessionsRelUser = new ArrayCollection();
         $this->sentMessages = new ArrayCollection();
         $this->receivedMessages = new ArrayCollection();
@@ -2044,14 +2040,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function getUserRelTags(): Collection
     {
         return $this->userRelTags;
-    }
-
-    /**
-     * @return Collection<int, PersonalAgenda>
-     */
-    public function getPersonalAgendas(): Collection
-    {
-        return $this->personalAgendas;
     }
 
     public function getCurriculumItems(): Collection

@@ -44,6 +44,7 @@
       v-model:visible="dialogShow"
       :header="t('Event')"
       :modal="true"
+      :style="{ width: '30rem' }"
     >
       <CCalendarEventInfo :event="item" />
 
@@ -54,6 +55,22 @@
           type="black"
           @click="dialogShow = false"
         />
+
+        <BaseButton
+          v-if="allowToUnsubscribe"
+          :label="t('Unsubscribe')"
+          type="black"
+          icon="join-group"
+          @click="unsubscribeToEvent"
+        />
+        <BaseButton
+          v-else-if="allowToSubscribe"
+          :label="t('Subscribe')"
+          type="black"
+          icon="join-group"
+          @click="subscribeToEvent"
+        />
+
         <BaseButton
           :label="t('Delete')"
           icon="delete"
@@ -130,6 +147,7 @@ import { storeToRefs } from "pinia"
 import CalendarSectionHeader from "../../components/ccalendarevent/CalendarSectionHeader.vue"
 import { useCalendarActionButtons } from "../../composables/calendar/calendarActionButtons"
 import { useCalendarEvent } from "../../composables/calendar/calendarEvent"
+import resourceLinkService from "../../services/resourceLinkService"
 
 const store = useStore()
 const confirm = useConfirm()
@@ -141,12 +159,14 @@ const { abbreviatedDatetime } = useFormatDate()
 
 const { showAddButton } = useCalendarActionButtons()
 
-const { isEditableByUser } = useCalendarEvent()
+const { isEditableByUser, allowSubscribeToEvent, allowUnsubscribeToEvent } = useCalendarEvent()
 
 const item = ref({})
 const dialog = ref(false)
 const dialogShow = ref(false)
 const allowToEdit = ref(false)
+const allowToSubscribe = ref(false)
+const allowToUnsubscribe = ref(false)
 
 const currentUser = computed(() => store.getters["security/getUser"])
 const { t } = useI18n()
@@ -248,6 +268,8 @@ const calendarOptions = ref({
     item.value["parentResourceNodeId"] = event.extendedProps.resourceNode.creator.id
 
     allowToEdit.value = isEditableByUser(item.value, currentUser.value.id)
+    allowToSubscribe.value = !allowToEdit.value && allowSubscribeToEvent(item.value)
+    allowToUnsubscribe.value = !allowToEdit.value && allowUnsubscribeToEvent(item.value, currentUser.value.id)
 
     dialogShow.value = true
   },
@@ -308,6 +330,23 @@ function confirmDelete() {
     },
   })
 }
+
+async function subscribeToEvent() {
+  try {
+    await resourceLinkService.post({
+      resourceNode: item.value.resourceNode["@id"],
+      user: currentUser.value["@id"],
+      visibility: RESOURCE_LINK_PUBLISHED,
+    })
+
+    allowToSubscribe.value = false
+    allowToUnsubscribe.value = true
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+async function unsubscribeToEvent() {}
 
 const isLoading = computed(() => store.getters["ccalendarevent/isLoading"])
 

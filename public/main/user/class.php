@@ -115,7 +115,7 @@ if (api_is_allowed_to_edit()) {
 }
 
 // jqgrid will use this URL to do the selects
-$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups_teacher&type='.$type.'&group_filter='.$groupFilter.'&keyword='.$keyword;
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups_teacher&type='.$type.'&group_filter='.$groupFilter.'&keyword='.$keyword.'&'.api_get_cidreq();
 
 // The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = [

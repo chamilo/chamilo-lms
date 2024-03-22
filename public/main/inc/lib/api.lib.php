@@ -52,13 +52,6 @@ define('ANONYMOUS', 6);
 /** global status of a user: low security, necessary for inserting data from
  * the teacher through HTMLPurifier */
 define('COURSEMANAGERLOWSECURITY', 10);
-/**
- * Global status for the fallback user.
- * This special status is used for a system user that acts as a placeholder
- * or fallback for content ownership when regular users are deleted.
- * This ensures data integrity and prevents orphaned content within the system.
- */
-define('ROLE_FALLBACK', 99);
 // Soft user status
 define('PLATFORM_ADMIN', 11);
 define('SESSION_COURSE_COACH', 12);
@@ -3517,7 +3510,7 @@ function api_not_allowed(
     $message = null,
     $responseCode = 0
 ): never {
-    throw new NotAllowedException($message ?: 'You are not allowed', $responseCode);
+    throw new NotAllowedException($message ?: 'You are not allowed', null, $responseCode);
 }
 
 /**

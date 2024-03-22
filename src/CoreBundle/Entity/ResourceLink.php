@@ -259,6 +259,7 @@ class ResourceLink implements Stringable
     public function setResourceNode(ResourceNode $resourceNode): self
     {
         $this->resourceNode = $resourceNode;
+        $this->resourceTypeGroup = $resourceNode->getResourceType()->getId();
 
         return $this;
     }

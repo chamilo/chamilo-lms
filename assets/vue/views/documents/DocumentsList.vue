@@ -19,44 +19,44 @@
         v-if="showBackButtonIfNotRootFolder"
         :label="t('Back')"
         icon="back"
-        type="black"
+        type="gray"
         @click="back"
       />
       <BaseButton
         :label="t('New document')"
         icon="file-add"
-        type="black"
+        type="success"
         @click="goToNewDocument"
-      />
-      <BaseButton
-        :disabled="true"
-        :label="t('New drawing')"
-        icon="drawing"
-        type="black"
-      />
-      <BaseButton
-        :label="t('Record audio')"
-        icon="record-add"
-        type="black"
-        @click="showRecordAudioDialog"
       />
       <BaseButton
         :label="t('Upload')"
         icon="file-upload"
-        type="black"
+        type="success"
         @click="goToUploadFile"
       />
       <BaseButton
         :label="t('New folder')"
         icon="folder-plus"
-        type="black"
+        type="success"
         @click="openNew"
+      />
+      <BaseButton
+      :disabled="true"
+      :label="t('New drawing')"
+      icon="drawing"
+      type="success"
+      />
+      <BaseButton
+      :label="t('Record audio')"
+      icon="record-add"
+      type="success"
+      @click="showRecordAudioDialog"
       />
       <BaseButton
         :disabled="true"
         :label="t('New cloud file')"
         icon="file-cloud-add"
-        type="black"
+        type="success"
       />
       <BaseButton
         :disabled="!hasImageInDocumentEntries"
@@ -75,7 +75,7 @@
         :disabled="true"
         :label="t('Download all')"
         icon="download"
-        type="black"
+        type="primary"
       />
     </template>
   </BaseToolbar>
@@ -146,7 +146,7 @@
           <BaseButton
             icon="information"
             size="small"
-            type="black"
+            type="primary"
             @click="btnShowInformationOnClick(slotProps.data)"
           />
 
@@ -160,7 +160,7 @@
                   : ''
             "
             size="small"
-            type="black"
+            type="secondary"
             @click="btnChangeVisibilityOnClick(slotProps.data)"
           />
 
@@ -168,7 +168,7 @@
             v-if="securityStore.isAuthenticated && isCurrentTeacher"
             icon="edit"
             size="small"
-            type="black"
+            type="secondary"
             @click="btnEditOnClick(slotProps.data)"
           />
 
@@ -184,14 +184,14 @@
             :icon="slotProps.data.iid === defaultCertificateId ? 'certificate-selected' : 'certificate-not-selected'"
             :class="{ 'selected': slotProps.data.iid === defaultCertificateId }"
             size="small"
-            type="black"
+            type="slotProps.data.iid === defaultCertificateId ? 'success' : 'black'"
             @click="selectAsDefaultCertificate(slotProps.data)"
           />
           <BaseButton
             v-if="securityStore.isAuthenticated && isCurrentTeacher && isHtmlFile(slotProps.data)"
             :icon="getTemplateIcon(slotProps.data.iid)"
             size="small"
-            type="black"
+            type="secondary"
             @click="openTemplateForm(slotProps.data.iid)"
           />
         </div>
@@ -206,13 +206,13 @@
     <BaseButton
       :label="t('Select all')"
       icon="select-all"
-      type="black"
+      type="primary"
       @click="selectAll"
     />
     <BaseButton
       :label="t('Unselect all')"
       icon="unselect-all"
-      type="black"
+      type="primary"
       @click="unselectAll"
     />
     <BaseButton

@@ -197,7 +197,7 @@ if (!isset($src)) {
     switch ($lpType) {
         case CLp::LP_TYPE:
             $oLP->stop_previous_item();
-            $htmlHeadXtra[] = '<script src="scorm_api.php"></script>';
+            $htmlHeadXtra[] = '<script src="scorm_api.php?'.api_get_cidreq().'"></script>';
             $preReqCheck = $oLP->prerequisites_match($lp_item_id);
 
             if (true === $preReqCheck) {
@@ -239,7 +239,7 @@ if (!isset($src)) {
         case CLp::SCORM_TYPE:
             // save old if asset
             $oLP->stop_previous_item(); // save status manually if asset
-            $htmlHeadXtra[] = '<script src="scorm_api.php"></script>';
+            $htmlHeadXtra[] = '<script src="scorm_api.php?'.api_get_cidreq().'"></script>';
             $preReqCheck = $oLP->prerequisites_match($lp_item_id);
 
             if (true === $preReqCheck) {

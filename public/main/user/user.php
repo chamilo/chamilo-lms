@@ -498,6 +498,8 @@ $table = new SortableTable(
 $parameters['keyword'] = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $parameters['sec_token'] = Security::get_token();
 $parameters['id_session'] = api_get_session_id();
+$parameters['cid'] = api_get_course_int_id();
+$parameters['sid'] = api_get_session_id();
 $parameters['type'] = $type;
 
 $table->set_additional_parameters($parameters);
@@ -673,11 +675,13 @@ function get_number_of_users()
     $counter = 0;
     $sessionId = api_get_session_id();
     $courseCode = api_get_course_id();
-    $active = isset($_GET['active']) ? $_GET['active'] : null;
-    if ($active) {
-        $active = true;
-    } else {
-        $active = false;
+    $active = $_GET['active'] ?? null;
+    if (isset($active)) {
+        if ($active) {
+            $active = true;
+        } else {
+            $active = false;
+        }
     }
     $type = isset($_REQUEST['type']) ? (int) $_REQUEST['type'] : STUDENT;
 

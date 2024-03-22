@@ -1,51 +1,181 @@
 <template class="personal-theme">
   <h4 class="mb-4">{{ t("Configure chamilo colors") }}</h4>
 
-  <div class="flex flex-col md:grid md:grid-cols-2 gap-2 mb-8">
-    <BaseColorPicker
-      v-model="primaryColor"
-      :label="t('Primary color')"
-    />
-    <BaseColorPicker
-      v-model="primaryColorGradient"
-      :label="t('Primary color hover')"
-    />
-    <BaseColorPicker
-      v-model="secondaryColor"
-      :label="t('Secondary color')"
-    />
-    <BaseColorPicker
-      v-model="secondaryColorGradient"
-      :label="t('Secondary color hover')"
-    />
-    <BaseColorPicker
-      v-model="tertiaryColor"
-      :label="t('Tertiary color')"
-    />
-    <BaseColorPicker
-      v-model="tertiaryColorGradient"
-      :label="t('Tertiary color gradient')"
-    />
-    <BaseColorPicker
-      v-model="successColor"
-      :label="t('Success color')"
-    />
-    <BaseColorPicker
-      v-model="successColorGradient"
-      :label="t('Success color gradient')"
-    />
-    <BaseColorPicker
-      v-model="dangerColor"
-      :label="t('Danger color')"
-    />
+  <!-- Advanced mode -->
+  <div v-show="isAdvancedMode">
+    <div class="flex flex-col gap-2 mb-8 md:grid md:grid-cols-2 xl:grid-cols-4">
+      <BaseColorPicker
+        v-model="colorPrimary"
+        :label="t('Primary color')"
+      />
+      <BaseColorPicker
+        v-model="colorPrimaryGradient"
+        :label="t('Primary color hover/background')"
+      />
+      <BaseColorPicker
+        v-model="colorPrimaryButtonText"
+        :label="t('Primary color button text')"
+      />
+      <BaseColorPicker
+        v-model="colorPrimaryButtonAlternativeText"
+        :label="t('Primary color button alternative text')"
+      />
+    </div>
+
+    <div class="flex flex-col gap-2 mb-8 md:grid md:grid-cols-2 xl:grid-cols-4">
+      <BaseColorPicker
+        v-model="colorSecondary"
+        :label="t('Secondary color')"
+      />
+      <BaseColorPicker
+        v-model="colorSecondaryGradient"
+        :label="t('Secondary color hover/background')"
+      />
+      <BaseColorPicker
+        v-model="colorSecondaryButtonText"
+        :label="t('Secondary color button text')"
+      />
+    </div>
+
+    <div class="flex flex-col gap-2 mb-8 md:grid md:grid-cols-2 xl:grid-cols-4">
+      <BaseColorPicker
+        v-model="colorTertiary"
+        :label="t('Tertiary color')"
+      />
+      <BaseColorPicker
+        v-model="colorTertiaryGradient"
+        :label="t('Tertiary color hover/background')"
+      />
+      <BaseColorPicker
+        v-model="colorTertiaryButtonText"
+        :label="t('Tertiary color button text')"
+      />
+    </div>
+
+    <div class="flex flex-col gap-2 mb-8 md:grid md:grid-cols-2 xl:grid-cols-4">
+      <BaseColorPicker
+        v-model="colorSuccess"
+        :label="t('Success color')"
+      />
+      <BaseColorPicker
+        v-model="colorSuccessGradient"
+        :label="t('Success color hover/background')"
+      />
+      <BaseColorPicker
+        v-model="colorSuccessButtonText"
+        :label="t('Success color button text')"
+      />
+    </div>
+
+    <div class="flex flex-col gap-2 mb-8 md:grid md:grid-cols-2 xl:grid-cols-4">
+      <BaseColorPicker
+        v-model="colorInfo"
+        :label="t('Info color')"
+      />
+      <BaseColorPicker
+        v-model="colorInfoGradient"
+        :label="t('Info color hover/background')"
+      />
+      <BaseColorPicker
+        v-model="colorInfoButtonText"
+        :label="t('Info color button text')"
+      />
+    </div>
+
+    <div class="flex flex-col gap-2 mb-8 md:grid md:grid-cols-2 xl:grid-cols-4">
+      <BaseColorPicker
+        v-model="colorWarning"
+        :label="t('Warning color')"
+      />
+      <BaseColorPicker
+        v-model="colorWarningGradient"
+        :label="t('Warning color hover/background')"
+      />
+      <BaseColorPicker
+        v-model="colorWarningButtonText"
+        :label="t('Warning color button text')"
+      />
+    </div>
+
+    <div class="flex flex-col gap-2 mb-8 md:grid md:grid-cols-2 xl:grid-cols-4">
+      <BaseColorPicker
+        v-model="colorDanger"
+        :label="t('Danger color')"
+      />
+      <BaseColorPicker
+        v-model="colorDangerGradient"
+        :label="t('Danger color hover/background')"
+      />
+      <BaseColorPicker
+        v-model="colorDangerButtonText"
+        :label="t('Danger color button text')"
+      />
+    </div>
+
+    <div class="flex flex-col gap-2 mb-8 md:grid md:grid-cols-2 xl:grid-cols-4">
+      <BaseColorPicker
+        v-model="formColor"
+        :label="t('Form outline color')"
+      />
+    </div>
   </div>
 
-  <div class="flex flex-wrap mb-4">
+  <!-- Simple mode -->
+  <div v-show="!isAdvancedMode">
+    <div class="flex flex-col gap-2 mb-8 md:grid md:grid-cols-2 xl:grid-cols-4">
+      <BaseColorPicker
+        v-model="colorPrimary"
+        :label="t('Primary color')"
+      />
+      <BaseColorPicker
+        v-model="colorSecondary"
+        :label="t('Secondary color')"
+      />
+      <BaseColorPicker
+        v-model="colorTertiary"
+        :label="t('Tertiary color')"
+      />
+    </div>
+
+    <div class="flex flex-col gap-2 mb-8 md:grid md:grid-cols-2 xl:grid-cols-4">
+      <BaseColorPicker
+        v-model="colorSuccess"
+        :label="t('Success color')"
+      />
+      <BaseColorPicker
+        v-model="colorInfo"
+        :label="t('Info color')"
+      />
+      <BaseColorPicker
+        v-model="colorWarning"
+        :label="t('Warning color')"
+      />
+      <BaseColorPicker
+        v-model="colorDanger"
+        :label="t('Danger color')"
+      />
+    </div>
+
+    <div class="flex flex-col gap-2 mb-8 md:grid md:grid-cols-2 xl:grid-cols-4">
+      <BaseColorPicker
+        v-model="formColor"
+        :label="t('Form outline color')"
+      />
+    </div>
+  </div>
+
+  <div class="flex flex-wrap mb-4 gap-3">
     <BaseButton
       type="primary"
       icon="send"
       :label="t('Save')"
       @click="saveColors"
+    />
+    <BaseButton
+      type="black"
+      icon="cog"
+      :label="isAdvancedMode ? t('Hide advanced mode') : t('Show advanced mode')"
+      @click="isAdvancedMode = !isAdvancedMode"
     />
   </div>
 
@@ -54,7 +184,7 @@
 
   <div class="mb-4">
     <p class="mb-3 text-lg">{{ t("Buttons") }}</p>
-    <div class="flex flex-row flex-wrap">
+    <div class="flex flex-row flex-wrap mb-3">
       <BaseButton
         class="mr-2 mb-2"
         :label="t('Primary')"
@@ -69,13 +199,6 @@
       />
       <BaseButton
         class="mr-2 mb-2"
-        :label="t('Disabled')"
-        type="primary"
-        icon="eye-on"
-        disabled
-      />
-      <BaseButton
-        class="mr-2 mb-2"
         :label="t('Secondary')"
         type="secondary"
         icon="eye-on"
@@ -86,12 +209,8 @@
         type="black"
         icon="eye-on"
       />
-      <BaseButton
-        class="mr-2 mb-2"
-        type="primary"
-        icon="cog"
-        only-icon
-      />
+    </div>
+    <div class="flex flex-row flex-wrap mb-3">
       <BaseButton
         class="mr-2 mb-2"
         :label="t('Success')"
@@ -100,9 +219,36 @@
       />
       <BaseButton
         class="mr-2 mb-2"
+        :label="t('Info')"
+        type="info"
+        icon="send"
+      />
+      <BaseButton
+        class="mr-2 mb-2"
+        :label="t('Warning')"
+        type="warning"
+        icon="send"
+      />
+      <BaseButton
+        class="mr-2 mb-2"
         :label="t('Danger')"
         type="danger"
         icon="delete"
+      />
+    </div>
+    <div class="flex flex-row flex-wrap mb-3">
+      <BaseButton
+        class="mr-2 mb-2"
+        :label="t('Disabled')"
+        type="primary"
+        icon="eye-on"
+        disabled
+      />
+      <BaseButton
+        class="mr-2 mb-2"
+        type="primary"
+        icon="cog"
+        only-icon
       />
     </div>
   </div>
@@ -200,7 +346,6 @@
     <BaseInputDate
       id="date"
       :label="t('Date')"
-      :model-value="date"
       class="w-32"
     />
   </div>
@@ -238,7 +383,7 @@
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
 import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
-import { provide, ref } from "vue"
+import { provide, ref, watch } from "vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseRadioButtons from "../../components/basecomponents/BaseRadioButtons.vue"
 import BaseDialogConfirmCancel from "../../components/basecomponents/BaseDialogConfirmCancel.vue"
@@ -250,20 +395,42 @@ import { useNotification } from "../../composables/notification"
 import BaseDropdown from "../../components/basecomponents/BaseDropdown.vue"
 import BaseInputDate from "../../components/basecomponents/BaseInputDate.vue"
 import BaseToggleButton from "../../components/basecomponents/BaseToggleButton.vue"
+import Color from "colorjs.io"
 
 const { t } = useI18n()
 const { getColorTheme, getColors } = useTheme()
 const { showSuccessNotification, showErrorNotification } = useNotification()
 
-let primaryColor = getColorTheme("--color-primary-base")
-let primaryColorGradient = getColorTheme("--color-primary-gradient")
-let secondaryColor = getColorTheme("--color-secondary-base")
-let secondaryColorGradient = getColorTheme("--color-secondary-gradient")
-let tertiaryColor = getColorTheme("--color-tertiary-base")
-let tertiaryColorGradient = getColorTheme("--color-tertiary-gradient")
-let successColor = getColorTheme("--color-success-base")
-let successColorGradient = getColorTheme("--color-success-gradient")
-let dangerColor = getColorTheme("--color-danger-base")
+let colorPrimary = getColorTheme("--color-primary-base")
+let colorPrimaryGradient = getColorTheme("--color-primary-gradient")
+let colorPrimaryButtonText = getColorTheme("--color-primary-button-text")
+let colorPrimaryButtonAlternativeText = getColorTheme("--color-primary-button-alternative-text")
+
+let colorSecondary = getColorTheme("--color-secondary-base")
+let colorSecondaryGradient = getColorTheme("--color-secondary-gradient")
+let colorSecondaryButtonText = getColorTheme("--color-secondary-button-text")
+
+let colorTertiary = getColorTheme("--color-tertiary-base")
+let colorTertiaryGradient = getColorTheme("--color-tertiary-gradient")
+let colorTertiaryButtonText = getColorTheme("--color-tertiary-button-text")
+
+let colorSuccess = getColorTheme("--color-success-base")
+let colorSuccessGradient = getColorTheme("--color-success-gradient")
+let colorSuccessButtonText = getColorTheme("--color-success-button-text")
+
+let colorInfo = getColorTheme("--color-info-base")
+let colorInfoGradient = getColorTheme("--color-info-gradient")
+let colorInfoButtonText = getColorTheme("--color-info-button-text")
+
+let colorWarning = getColorTheme("--color-warning-base")
+let colorWarningGradient = getColorTheme("--color-warning-gradient")
+let colorWarningButtonText = getColorTheme("--color-warning-button-text")
+
+let colorDanger = getColorTheme("--color-danger-base")
+let colorDangerGradient = getColorTheme("--color-danger-gradient")
+let colorDangerButtonText = getColorTheme("--color-danger-button-text")
+
+let formColor = getColorTheme("--color-form-base")
 
 const saveColors = async () => {
   let colors = getColors()
@@ -276,6 +443,85 @@ const saveColors = async () => {
   } catch (error) {
     showErrorNotification(error)
     console.error(error)
+  }
+}
+
+const isAdvancedMode = ref(false)
+
+watch(colorPrimary, (newValue) => {
+  if (!isAdvancedMode.value) {
+    colorPrimaryGradient.value = makeGradient(newValue)
+    colorPrimaryButtonText.value = newValue
+    colorPrimaryButtonAlternativeText.value = makeTextWithContrast(newValue)
+  }
+})
+
+watch(colorSecondary, (newValue) => {
+  if (!isAdvancedMode.value) {
+    colorSecondaryGradient.value = makeGradient(newValue)
+    colorSecondaryButtonText.value = makeTextWithContrast(newValue)
+  }
+})
+
+watch(colorTertiary, (newValue) => {
+  if (!isAdvancedMode.value) {
+    colorTertiaryButtonText.value = newValue
+    colorTertiaryGradient.value = makeGradient(newValue)
+  }
+})
+
+watch(colorSuccess, (newValue) => {
+  if (!isAdvancedMode.value) {
+    colorSuccessGradient.value = makeGradient(newValue)
+    colorSuccessButtonText.value = makeTextWithContrast(newValue)
+  }
+})
+
+watch(colorInfo, (newValue) => {
+  if (!isAdvancedMode.value) {
+    colorInfoGradient.value = makeGradient(newValue)
+    colorInfoButtonText.value = makeTextWithContrast(newValue)
+  }
+})
+
+watch(colorWarning, (newValue) => {
+  if (!isAdvancedMode.value) {
+    colorWarningGradient.value = makeGradient(newValue)
+    colorWarningButtonText.value = makeTextWithContrast(newValue)
+  }
+})
+
+watch(colorDanger, (newValue) => {
+  if (!isAdvancedMode.value) {
+    colorDangerGradient.value = makeGradient(newValue)
+    colorDangerButtonText.value = makeTextWithContrast(newValue)
+  }
+})
+
+function makeTextWithContrast(color) {
+  // according to colorjs library https://colorjs.io/docs/contrast#accessible-perceptual-contrast-algorithm-apca
+  // this algorithm is better than WCAGG 2.1 to check for contrast
+  // "APCA is being evaluated for use in version 3 of the W3C Web Content Accessibility Guidelines (WCAG)"
+  let onWhite = Math.abs(color.contrast("white", "APCA"))
+  let onBlack = Math.abs(color.contrast("black", "APCA"))
+  return onWhite > onBlack ? new Color("white") : new Color("black")
+}
+
+function makeGradient(color) {
+  const light = color.clone().to("oklab").l
+  // when color is light (lightness > 0.5), darken gradient color
+  // when color is dark, lighten gradient color
+  // The values 0.5 and 1.6 were chosen through experimentation, there could be a better way to do this
+  if (light > 0.5) {
+    return color
+      .clone()
+      .set({ "oklab.l": (l) => l * 0.8 })
+      .to("srgb")
+  } else {
+    return color
+      .clone()
+      .set({ "oklab.l": (l) => l * 1.6 })
+      .to("srgb")
   }
 }
 
@@ -298,7 +544,6 @@ const radioValue = ref("value1")
 
 const isDialogVisible = ref(false)
 
-const date = ref(null)
 const toggleState = ref(true)
 
 // needed for course tool

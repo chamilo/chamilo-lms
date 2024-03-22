@@ -99,23 +99,29 @@ const buttonClass = computed(() => {
     "disabled:bg-primary-bgdisabled disabled:border disabled:border-primary-borderdisabled disabled:text-fontdisabled disabled:pointer-events-auto disabled:cursor-not-allowed"
   switch (props.type) {
     case "primary":
-      result += `bg-white border-primary text-primary hover:bg-primary hover:text-white ${commonDisabled} `
+      result += `bg-white border-primary text-primary-button-text hover:bg-primary hover:text-white ${commonDisabled} `
       break
     case "primary-alternative":
-      result += `bg-primary text-white hover:bg-primary-gradient ${commonDisabled} `
+      result += `bg-primary text-primary-button-alternative-text hover:bg-primary-gradient ${commonDisabled} `
       break
     case "secondary":
       result +=
-        "bg-secondary text-white hover:bg-secondary-gradient disabled:bg-secondary-bgdisabled disabled:text-fontdisabled"
+        `bg-secondary text-secondary-button-text hover:bg-secondary-gradient disabled:bg-secondary-bgdisabled disabled:text-fontdisabled ${commonDisabled}`
       break
     case "success":
-      result += `bg-success hover:bg-success-gradient ${commonDisabled} `
+      result += `bg-success text-success-button-text hover:bg-success-gradient ${commonDisabled} `
+      break
+    case "info":
+      result += `bg-info text-info-button-text hover:bg-info-gradient ${commonDisabled} `
+      break
+    case "warning":
+      result += `bg-warning text-warning-button-text hover:bg-warning-gradient ${commonDisabled} `
       break
     case "danger":
-      result += `border-error hover:bg-error text-error hover:text-white ${commonDisabled} `
+      result += `border-error text-danger-button-text hover:bg-error text-error hover:text-white ${commonDisabled}`
       break
     case "black":
-      result += "bg-white text-tertiary border-tertiary hover:bg-tertiary-gradient hover:text-white"
+      result += `border-tertiary text-tertiary-button-text hover:bg-tertiary hover:text-white ${commonDisabled}`
       break
   }
   return result

@@ -445,7 +445,7 @@ const saveColors = async () => {
   }
 }
 
-const isAdvancedMode = ref(true)
+const isAdvancedMode = ref(false)
 
 watch(colorPrimary, (newValue) => {
   if (!isAdvancedMode.value) {

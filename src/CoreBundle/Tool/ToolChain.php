@@ -162,8 +162,6 @@ class ToolChain
             'tracking',
             'course_setting',
             'course_maintenance',
-            'bbb',
-            'mobidico',
         ];
         $toolList = array_flip($toolList);
 

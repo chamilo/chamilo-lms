@@ -91,7 +91,6 @@ import {useSecurityStore} from "../../store/securityStore";
 import { usePlatformConfig } from "../../store/platformConfig"
 import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../../store/cidReq"
-import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 
 const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()
@@ -102,10 +101,13 @@ const { getSetting } = storeToRefs(platformConfigStore)
 
 const isSorting = inject("isSorting")
 const isCustomizing = inject("isCustomizing")
-const isAllowedToEdit = ref(false)
 
 // eslint-disable-next-line no-undef
 const props = defineProps({
+  isAllowedToEdit: {
+    type: Boolean,
+    required: true
+  },
   tool: {
     type: Object,
     required: true,
@@ -142,8 +144,4 @@ const titleCustomClass = computed(() => {
   return ""
 })
 const isVisible = computed(() => props.tool.resourceNode.resourceLinks[0].visibility === 2)
-
-onMounted(async () => {
-  isAllowedToEdit.value = await checkIsAllowedToEdit()
-})
 </script>

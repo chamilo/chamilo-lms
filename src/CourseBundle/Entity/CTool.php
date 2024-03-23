@@ -77,7 +77,6 @@ class CTool extends AbstractResource implements ResourceInterface, ResourceShowC
     public function __construct()
     {
         $this->visibility = true;
-        $this->position = 0;
     }
 
     public function __toString(): string

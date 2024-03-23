@@ -188,12 +188,9 @@ class ToolChain
             /** @var Tool $toolEntity */
             $toolEntity = $toolRepo->findOneBy($criteria);
             if ($toolEntity) {
-                $position = $toolList[$tool->getTitle()] + 1;
-
                 $courseTool = (new CTool())
                     ->setTool($toolEntity)
                     ->setTitle($tool->getTitle())
-                    ->setPosition($position)
                     ->setVisibility($visibility)
                     ->setParent($course)
                     ->setCreator($course->getCreator())

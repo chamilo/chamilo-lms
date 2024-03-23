@@ -1078,7 +1078,6 @@ class Plugin
                 ->setTitle($name.$visibilityPerStatus)
                 ->setVisibility($visibility)
                 ->setTool($toolEntity)
-                ->setPosition(0);
 
             $em->persist($tool);
             $em->flush();

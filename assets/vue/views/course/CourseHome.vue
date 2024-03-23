@@ -180,6 +180,7 @@
         <CourseTool
           v-for="(tool, index) in tools"
           :key="'tool-' + index.toString()"
+          :is-allowed-to-edit="isAllowedToEdit"
           :change-visibility="changeVisibility"
           :data-index="index"
           :data-tool="tool.title"

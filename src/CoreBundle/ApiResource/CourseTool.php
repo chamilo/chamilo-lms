@@ -29,13 +29,4 @@ class CourseTool extends AbstractResource
 
     #[Groups(['ctool:read'])]
     public string $url;
-
-    #[Groups(['ctool:read'])]
-    public string $category = '';
-
-    #[Groups(['ctool:read'])]
-    public function getNameToTranslate(): string
-    {
-        return ucfirst(str_replace('_', ' ', $this->title));
-    }
 }

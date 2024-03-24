@@ -339,7 +339,7 @@ class IndexBlocksController extends BaseController
         ];
         $items[] = [
             'class' => 'item-global-agenda',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'calendar/agenda_js.php', 'type' => 'admin']),
+            'url' => '/resources/ccalendarevent?type=global',
             'label' => $this->translator->trans('Global agenda'),
         ];
 

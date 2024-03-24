@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\EntityAccessUrlInterface;
 use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceFormat;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
 use Chamilo\CoreBundle\Entity\ResourceType;
@@ -20,6 +21,7 @@ use Chamilo\CoreBundle\Entity\ResourceWithAccessUrlInterface;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\AccessUrlListenerTrait;
+use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\Event\PrePersistEventArgs;
@@ -257,6 +259,10 @@ class ResourceListener
 
             throw new InvalidArgumentException($message);
         }
+
+        if ($resource instanceof CCalendarEvent) {
+            $this->addCCalendarEventGlobalLink($resource, $eventArgs);
+        }
     }
 
     /**
@@ -298,5 +304,48 @@ class ResourceListener
         $originalBasename = \basename($resourceName, $originalExtension);
         $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);*/
         $resource->getResourceNode()->setTitle($resourceName);
+    }
+
+    private function addCCalendarEventGlobalLink(CCalendarEvent $event, PrePersistEventArgs $eventArgs): void
+    {
+        $currentRequest = $this->request->getCurrentRequest();
+
+        if (null === $currentRequest) {
+            return;
+        }
+
+        $type = $currentRequest->query->get('type');
+        if (null === $type) {
+            $content = $currentRequest->getContent();
+            $params = json_decode($content, true);
+            if (isset($params['isGlobal']) && 1 === (int) $params['isGlobal']) {
+                $type = 'global';
+            }
+        }
+
+        if ('global' === $type) {
+            $em = $eventArgs->getObjectManager();
+            $resourceNode = $event->getResourceNode();
+
+            $globalLink = new ResourceLink();
+            $globalLink->setCourse(null)
+                ->setSession(null)
+                ->setGroup(null)
+                ->setUser(null);
+
+            $alreadyHasGlobalLink = false;
+            foreach ($resourceNode->getResourceLinks() as $existingLink) {
+                if (null === $existingLink->getCourse() && null === $existingLink->getSession() &&
+                    null === $existingLink->getGroup() && null === $existingLink->getUser()) {
+                    $alreadyHasGlobalLink = true;
+                    break;
+                }
+            }
+
+            if (!$alreadyHasGlobalLink) {
+                $resourceNode->addResourceLink($globalLink);
+                $em->persist($globalLink);
+            }
+        }
     }
 }

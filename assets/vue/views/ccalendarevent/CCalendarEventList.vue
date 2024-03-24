@@ -23,6 +23,7 @@
         v-if="dialog"
         ref="createForm"
         :values="item"
+        :is-global="isGlobal"
       />
       <template #footer>
         <BaseButton
@@ -128,6 +129,7 @@ import { useStore } from "vuex"
 import { useI18n } from "vue-i18n"
 import { useConfirm } from "primevue/useconfirm"
 import { useFormatDate } from "../../composables/formatDate"
+import { useRoute } from "vue-router"
 
 import Loading from "../../components/Loading.vue"
 import FullCalendar from "@fullcalendar/vue3"
@@ -171,6 +173,8 @@ const allowToUnsubscribe = ref(false)
 const currentUser = computed(() => store.getters["security/getUser"])
 const { t } = useI18n()
 const { appLocale } = useLocale()
+const route = useRoute()
+const isGlobal = ref(route.query.type === 'global')
 
 let currentEvent = null
 
@@ -201,6 +205,10 @@ async function getCalendarEvents({ startStr, endStr }) {
 
   if (group.value) {
     params.gid = group.value.id
+  }
+
+  if (route.query?.type === 'global') {
+    params.type = 'global'
   }
 
   const calendarEvents = await cCalendarEventService.findAll({ params }).then((response) => response.json())
@@ -359,6 +367,10 @@ function onCreateEventForm() {
 
   let itemModel = createForm.value.v$.item.$model
 
+  if (isGlobal.value) {
+    itemModel.isGlobal = true
+  }
+
   if (itemModel["@id"]) {
     store.dispatch("ccalendarevent/update", itemModel)
   } else {
@@ -379,6 +391,11 @@ function onCreateEventForm() {
 }
 
 const toast = useToast()
+
+watch(() => route.query.type, (newType) => {
+  isGlobal.value = newType === 'global'
+  reFetch()
+})
 
 watch(
   () => store.state.ccalendarevent.created,

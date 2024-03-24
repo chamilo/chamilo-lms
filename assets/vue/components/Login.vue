@@ -79,6 +79,7 @@ import Password from "primevue/password"
 import InputSwitch from "primevue/inputswitch"
 import { useI18n } from "vue-i18n"
 import { useSecurityStore } from "../store/securityStore"
+import { usePlatformConfig } from "../store/platformConfig"
 
 const route = useRoute()
 const router = useRouter()
@@ -113,13 +114,16 @@ async function performLogin() {
   const responseData = await store.dispatch("security/login", payload)
 
   if (!store.getters["security/hasError"]) {
-    securityStore.user = store.state["security/user"]
-
     // Check if 'redirect' is an absolute URL
     if (typeof redirect !== "undefined" && isValidHttpUrl(redirect.toString())) {
       // If it's an absolute URL, redirect directly
       window.location.href = redirect.toString()
     } else if (typeof redirect !== "undefined") {
+      securityStore.user = responseData
+
+      const platformConfigurationStore = usePlatformConfig()
+      await platformConfigurationStore.initialize()
+
       // If 'redirect' is a relative path, use 'router.push' to navigate
       await router.push({ path: redirect.toString() })
     } else {

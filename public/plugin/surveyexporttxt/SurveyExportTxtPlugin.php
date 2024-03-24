@@ -82,7 +82,7 @@ class SurveyExportTxtPlugin extends Plugin
             ->getResult();
 
         foreach ($result as $item) {
-            $this->createLinkToCourseTool($this->get_name().':teacher', $item['id'], 'survey.png');
+            $this->createLinkToCourseTool($this->get_name().':teacher', $item['id']);
         }
     }
 

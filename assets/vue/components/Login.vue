@@ -7,7 +7,7 @@
 
     <form
       class="login-section__form p-input-filled"
-      @submit.prevent="performLogin"
+      @submit.prevent="onSubmitLoginForm"
     >
       <div class="field">
         <InputText
@@ -72,20 +72,17 @@
 <script setup>
 import { useStore } from "vuex"
 import { computed, ref } from "vue"
-import { useRoute, useRouter } from "vue-router"
 import Button from "primevue/button"
 import InputText from "primevue/inputtext"
 import Password from "primevue/password"
 import InputSwitch from "primevue/inputswitch"
 import { useI18n } from "vue-i18n"
-import { useSecurityStore } from "../store/securityStore"
-import { usePlatformConfig } from "../store/platformConfig"
+import { useLogin } from "../composables/auth/login"
 
-const route = useRoute()
-const router = useRouter()
 const store = useStore()
 const { t } = useI18n()
-const securityStore = useSecurityStore()
+
+const { redirectNotAuthenticated, performLogin } = useLogin()
 
 const login = ref("")
 const password = ref("")
@@ -93,58 +90,13 @@ const remember = ref(false)
 
 const isLoading = computed(() => store.getters["security/isLoading"])
 
-let redirect = route.query.redirect
+redirectNotAuthenticated()
 
-if (securityStore.isAuthenticated) {
-  if (typeof redirect !== "undefined") {
-    router.push({ path: redirect.toString() })
-  } else {
-    router.replace({ name: "Home" })
-  }
-}
-
-async function performLogin() {
-  let payload = {
+function onSubmitLoginForm() {
+  performLogin({
     login: login.value,
     password: password.value,
     _remember_me: remember.value,
-  }
-  let redirect = route.query.redirect
-
-  const responseData = await store.dispatch("security/login", payload)
-
-  if (!store.getters["security/hasError"]) {
-    // Check if 'redirect' is an absolute URL
-    if (typeof redirect !== "undefined" && isValidHttpUrl(redirect.toString())) {
-      // If it's an absolute URL, redirect directly
-      window.location.href = redirect.toString()
-    } else if (typeof redirect !== "undefined") {
-      securityStore.user = responseData
-
-      const platformConfigurationStore = usePlatformConfig()
-      await platformConfigurationStore.initialize()
-
-      // If 'redirect' is a relative path, use 'router.push' to navigate
-      await router.push({ path: redirect.toString() })
-    } else {
-      if (responseData.load_terms) {
-        window.location.href = responseData.redirect
-      } else {
-        window.location.href = "/home"
-      }
-    }
-  }
-}
-
-function isValidHttpUrl(string) {
-  let url
-
-  try {
-    url = new URL(string)
-  } catch (_) {
-    return false
-  }
-
-  return url.protocol === "http:" || url.protocol === "https:"
+  })
 }
 </script>

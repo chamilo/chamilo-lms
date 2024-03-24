@@ -35,37 +35,20 @@ class GlobalEventFilter extends AbstractFilter
         array $context = []
     ): void {
         $isGlobalType = isset($context['filters']['type']) && $context['filters']['type'] === 'global';
+        if (!$isGlobalType) {
+            return;
+        }
 
         $rootAlias = $queryBuilder->getRootAliases()[0];
         $resourceNodeAlias = $queryNameGenerator->generateJoinAlias('resourceNode');
         $resourceLinkAlias = $queryNameGenerator->generateJoinAlias('resourceLink');
-        if ($isGlobalType) {
-            $queryBuilder
-                ->innerJoin("$rootAlias.resourceNode", $resourceNodeAlias)
-                ->innerJoin("$resourceNodeAlias.resourceLinks", $resourceLinkAlias)
-                ->andWhere("$resourceLinkAlias.course IS NULL")
-                ->andWhere("$resourceLinkAlias.session IS NULL")
-                ->andWhere("$resourceLinkAlias.group IS NULL")
-                ->andWhere("$resourceLinkAlias.user IS NULL");
-
-            return;
-        }
-
-        if (!$isGlobalType) {
-            $subQueryBuilder = $queryBuilder->getEntityManager()->createQueryBuilder();
-            $subRN = $queryNameGenerator->generateJoinAlias('subResourceNode');
-            $subRL = $queryNameGenerator->generateJoinAlias('subResourceLink');
-            $subQueryBuilder->select('1')
-                ->from(ResourceNode::class, $subRN)
-                ->innerJoin("$subRN.resourceLinks", $subRL)
-                ->where("$subRL.course IS NULL")
-                ->andWhere("$subRL.session IS NULL")
-                ->andWhere("$subRL.group IS NULL")
-                ->andWhere("$subRL.user IS NULL")
-                ->andWhere("$subRN.id = $rootAlias.resourceNode");
-
-            $queryBuilder->andWhere($queryBuilder->expr()->not($queryBuilder->expr()->exists($subQueryBuilder->getDQL())));
-        }
+        $queryBuilder
+            ->innerJoin("$rootAlias.resourceNode", $resourceNodeAlias)
+            ->innerJoin("$resourceNodeAlias.resourceLinks", $resourceLinkAlias)
+            ->andWhere("$resourceLinkAlias.course IS NULL")
+            ->andWhere("$resourceLinkAlias.session IS NULL")
+            ->andWhere("$resourceLinkAlias.group IS NULL")
+            ->andWhere("$resourceLinkAlias.user IS NULL");
     }
 
     public function getDescription(string $resourceClass): array

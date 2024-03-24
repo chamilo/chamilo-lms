@@ -1,10 +1,10 @@
 <template>
   <div class="flex flex-col gap-4">
-    <CalendarSectionHeader
+    <!--CalendarSectionHeader
       @add-click="showAddEventDialog"
       @my-students-schedule-click="goToMyStudentsSchedule"
       @session-planning-click="goToSessionPanning"
-    />
+    /-->
 
     <FullCalendar
       ref="cal"
@@ -73,17 +73,18 @@
         />
 
         <BaseButton
+          v-if="showDeleteButton"
           :label="t('Delete')"
           icon="delete"
           type="danger"
           @click="confirmDelete"
         />
         <BaseButton
-          v-if="allowToEdit"
+          v-if="allowToEdit && showEditButton"
           :label="t('Edit')"
           type="secondary"
           @click="dialog = true"
-        />
+          icon="delete"/>
       </template>
     </Dialog>
 
@@ -213,11 +214,23 @@ async function getCalendarEvents({ startStr, endStr }) {
 
   const calendarEvents = await cCalendarEventService.findAll({ params }).then((response) => response.json())
 
-  return calendarEvents["hydra:member"].map((event) => ({
-    ...event,
-    start: event.startDate,
-    end: event.endDate,
-  }))
+  return calendarEvents["hydra:member"].map((event) => {
+    let color = '#007BFF'
+    if (event.type === 'global') {
+      color = '#FF0000'
+    } else if (event.type === 'course') {
+      color = '#28a745'
+    } else if (event.type === 'session') {
+      color = '#800080'
+    }
+
+    return {
+      ...event,
+      start: event.startDate,
+      end: event.endDate,
+      color,
+    }
+  })
 }
 
 const calendarLocale = allLocales.find(
@@ -298,6 +311,32 @@ const calendarOptions = ref({
     getCalendarEvents(info).then((events) => successCallback(events))
   },
 })
+
+const currentContext = computed(() => {
+  if (route.query.type === 'global') {
+    return 'global'
+  } else if (course.value) {
+    return 'course'
+  } else if (session.value) {
+    return 'session'
+  } else {
+    return 'personal'
+  }
+});
+
+const allowAction = (eventType) => {
+  const contextRules = {
+    global: ['global'],
+    course: ['course'],
+    session: ['session'],
+    personal: ['personal']
+  };
+
+  return contextRules[currentContext.value].includes(eventType);
+};
+
+const showEditButton = computed(() => allowAction(item.value.type));
+const showDeleteButton = computed(() => allowAction(item.value.type));
 
 const cal = ref(null)
 

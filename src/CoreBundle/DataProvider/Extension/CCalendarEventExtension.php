@@ -35,12 +35,17 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
         ?Operation $operation = null,
         array $context = []
     ): void {
-        $this->addWhere($queryBuilder, $resourceClass);
+        $this->addWhere($queryBuilder, $resourceClass, $context);
     }
 
-    private function addWhere(QueryBuilder $qb, string $resourceClass): void
+    private function addWhere(QueryBuilder $qb, string $resourceClass, array $context): void
     {
         if (CCalendarEvent::class !== $resourceClass) {
+            return;
+        }
+
+        $isGlobalType = isset($context['filters']['type']) && $context['filters']['type'] === 'global';
+        if ($isGlobalType) {
             return;
         }
 

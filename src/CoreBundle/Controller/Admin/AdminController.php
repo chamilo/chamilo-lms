@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Controller\BaseController;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +17,10 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/admin')]
 class AdminController extends BaseController
 {
+    public function __construct(
+        private readonly AccessUrlHelper $accessUrlHelper,
+    ) {}
+
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/register-campus', name: 'admin_register_campus', methods: ['POST'])]
     public function registerCampus(Request $request, SettingsManager $settingsManager): Response
@@ -23,6 +28,7 @@ class AdminController extends BaseController
         $requestData = $request->toArray();
         $doNotListCampus = (bool) $requestData['donotlistcampus'];
 
+        $settingsManager->setUrl($this->accessUrlHelper->getCurrent());
         $settingsManager->updateSetting('platform.registered', 'true');
 
         $settingsManager->updateSetting(

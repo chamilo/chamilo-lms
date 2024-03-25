@@ -245,7 +245,7 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null, $course_i
 
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
     $linkInfo = GradebookUtils::isResourceInCourseGradebook(
-        api_get_course_id(),
+        api_get_course_int_id(),
         3,
         $id,
         api_get_session_id()
@@ -879,7 +879,7 @@ function deleteDirWork($id)
         );
 
         $linkInfo = GradebookUtils::isResourceInCourseGradebook(
-            api_get_course_id(),
+            api_get_course_int_id(),
             3,
             $id,
             $sessionId
@@ -5146,7 +5146,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
 
     if (!empty($params['category_id'])) {
         $link_info = GradebookUtils::isResourceInCourseGradebook(
-            $courseInfo['code'],
+            $course_id,
             LINK_STUDENTPUBLICATION,
             $workId,
             api_get_session_id()
@@ -5163,7 +5163,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
             if (empty($linkId)) {
                 GradebookUtils::add_resource_to_course_gradebook(
                     $params['category_id'],
-                    $courseInfo['code'],
+                    $courseInfo['real_id'],
                     LINK_STUDENTPUBLICATION,
                     $workId,
                     $params['new_dir'],
@@ -5176,7 +5176,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
             } else {
                 GradebookUtils::updateResourceFromCourseGradebook(
                     $linkId,
-                    $courseInfo['code'],
+                    $course_id,
                     $params['weight']
                 );
             }

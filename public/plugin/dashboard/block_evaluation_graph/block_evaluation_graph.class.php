@@ -127,11 +127,11 @@ class BlockEvaluationGraph extends Block
                 $cats = Category::load(
                     null,
                     null,
-                    $course_code,
+                    api_get_course_int_id($course_code),
                     null,
                     null,
                     null,
-                    false
+                    null
                 );
 
                 if (isset($cats) && isset($cats[0])) {
@@ -310,10 +310,18 @@ class BlockEvaluationGraph extends Block
         if (!empty($this->sessions)) {
             $session_ids = array_keys($this->sessions);
             foreach ($session_ids as $session_id) {
-                $courses_code = array_keys(Tracking::get_courses_list_from_session($session_id));
+                $courses = Tracking::get_courses_list_from_session($session_id);
+                $courses_code = array_keys($courses);
                 $courses_graph = [];
                 foreach ($courses_code as $course_code) {
-                    $cats = Category::load(null, null, $course_code, null, null, $session_id);
+                    $cats = Category::load(
+                        null,
+                        null,
+                        $courses[$course_code]['c_id'],
+                        null,
+                        null,
+                        $session_id
+                    );
                     if (isset($cats) && isset($cats[0])) {
                         $alleval = $cats[0]->get_evaluations(null, true, $course_code);
                         $alllinks = $cats[0]->get_links(null, true);

@@ -16,7 +16,7 @@ class LinkFactory
      * @param int    $type        link type
      * @param int    $ref_id      reference id
      * @param int    $user_id     user id (link owner)
-     * @param string $course_code course code
+     * @param int    $courseId    course ID
      * @param int    $category_id parent category
      * @param int    $visible     visible
      *
@@ -27,7 +27,7 @@ class LinkFactory
         $type = null,
         $ref_id = null,
         $user_id = null,
-        $course_code = null,
+        $courseId = null,
         $category_id = null,
         $visible = null
     ) {
@@ -36,7 +36,7 @@ class LinkFactory
             $type,
             $ref_id,
             $user_id,
-            $course_code,
+            $courseId,
             $category_id,
             $visible
         );

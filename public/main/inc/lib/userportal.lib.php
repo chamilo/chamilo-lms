@@ -960,7 +960,7 @@ class IndexManager
                             $category = Category::load(
                                 null,
                                 null,
-                                $specialCourseInfo['course_code'],
+                                $specialCourseInfo['c_id'],
                                 null,
                                 null,
                                 null
@@ -987,6 +987,7 @@ class IndexManager
                         if (isset($courses['in_category'][$key1]['courses'])) {
                             foreach ($courses['in_category'][$key1]['courses'] as $key2 => $courseInCatInfo) {
                                 $courseCode = $courseInCatInfo['course_code'];
+                                $loopCourseId = api_get_course_int_id($courseCode);
                                 if ($studentInfoProgress) {
                                     $progress = Tracking::get_avg_student_progress(
                                         $user_id,
@@ -1008,7 +1009,7 @@ class IndexManager
                                     $category = Category::load(
                                         null,
                                         null,
-                                        $courseCode,
+                                        $loopCourseId,
                                         null,
                                         null,
                                         null
@@ -1047,6 +1048,7 @@ class IndexManager
 
                     foreach ($courses['not_category'] as $key => $courseNotInCatInfo) {
                         $courseCode = $courseNotInCatInfo['course_code'];
+                        $loopCourseId = api_get_course_int_id($courseCode);
                         if ($studentInfoProgress) {
                             $progress = Tracking::get_avg_student_progress(
                                 $user_id,
@@ -1068,7 +1070,7 @@ class IndexManager
                             $category = Category::load(
                                 null,
                                 null,
-                                $courseCode,
+                                $loopCourseId,
                                 null,
                                 null,
                                 null
@@ -1289,7 +1291,7 @@ class IndexManager
                                                     $category = Category::load(
                                                         null,
                                                         null,
-                                                        $course['course_code'],
+                                                        api_get_course_int_id($course['course_code']),
                                                         null,
                                                         null,
                                                         $session_id
@@ -1732,7 +1734,8 @@ class IndexManager
             $mainCategoryList = [];
             foreach ($subscribedCourses as $courseInfo) {
                 $courseCode = $courseInfo['code'];
-                $categories = Category::load(null, null, $courseCode);
+                $loopCourseId = api_get_course_int_id($courseCode);
+                $categories = Category::load(null, null, $loopCourseId);
                 /** @var Category $category */
                 $category = !empty($categories[0]) ? $categories[0] : [];
                 if (!empty($category)) {
@@ -1784,8 +1787,7 @@ class IndexManager
                     $countDependenciesPassed = 0;
                     foreach ($dependencies as $courseId) {
                         $courseInfo = api_get_course_info_by_id($courseId);
-                        $courseCode = $courseInfo['code'];
-                        $categories = Category::load(null, null, $courseCode);
+                        $categories = Category::load(null, null, $courseId);
                         $subCategory = !empty($categories[0]) ? $categories[0] : null;
                         if (!empty($subCategory)) {
                             $score = Category::userFinishedCourse(

@@ -41,10 +41,11 @@ class UserDataGenerator
     {
         $this->userid = $userid;
         $result = [];
+        /** @var Evaluation $eval */
         foreach ($evals as $eval) {
             $toadd = true;
-            $coursecode = $eval->get_course_code();
-            if (isset($coursecode)) {
+            $courseId = $eval->getCourseId();
+            if (!empty($courseId)) {
                 $result = Result::load(null, $userid, $eval->get_id());
                 if (0 == count($result)) {
                     $toadd = false;
@@ -305,7 +306,7 @@ class UserDataGenerator
     /**
      * @param $item
      *
-     * @return mixed
+     * @return string
      */
     private function build_course_name($item)
     {
@@ -388,19 +389,19 @@ class UserDataGenerator
     }
 
     /**
-     * @param string $coursecode
+     * @param string $courseCode
      *
-     * @return mixed
+     * @return string
      */
-    private function get_course_name_from_code_cached($coursecode)
+    private function get_course_name_from_code_cached(string $courseCode): string
     {
         if (isset($this->coursecodecache) &&
-            isset($this->coursecodecache[$coursecode])
+            isset($this->coursecodecache[$courseCode])
         ) {
-            return $this->coursecodecache[$coursecode];
+            return $this->coursecodecache[$courseCode];
         } else {
-            $name = CourseManager::getCourseNameFromCode($coursecode);
-            $this->coursecodecache[$coursecode] = $name;
+            $name = CourseManager::getCourseNameFromCode($courseCode);
+            $this->coursecodecache[$courseCode] = $name;
 
             return $name;
         }
@@ -409,7 +410,7 @@ class UserDataGenerator
     /**
      * @param int $category_id
      */
-    private function get_category_cached($category_id)
+    private function get_category_cached(int $category_id)
     {
         if (isset($this->categorycache) &&
             isset($this->categorycache[$category_id])

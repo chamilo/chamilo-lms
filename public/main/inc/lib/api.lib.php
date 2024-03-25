@@ -1829,11 +1829,11 @@ function api_get_course_id()
 /**
  * Returns the current course id (integer).
  *
- * @param string $code Optional course code
+ * @param ?string $code Optional course code
  *
  * @return int
  */
-function api_get_course_int_id($code = null)
+function api_get_course_int_id(?string $code = null): int
 {
     if (!empty($code)) {
         $code = Database::escape_string($code);
@@ -1847,7 +1847,7 @@ function api_get_course_int_id($code = null)
         if (is_array($row) && isset($row['id'])) {
             return $row['id'];
         } else {
-            return false;
+            return 0;
         }
     }
 
@@ -2176,9 +2176,8 @@ function api_get_url_entity($id = 0): ?AccessUrl
  *
  * @return array The course info as an array formatted by api_format_course_array, including category.title
  */
-function api_get_course_info_by_id($id = 0)
+function api_get_course_info_by_id(?int $id = 0)
 {
-    $id = (int) $id;
     if (empty($id)) {
         $course = Session::read('_course', []);
 
@@ -7327,7 +7326,7 @@ function api_protect_session_admin_list_users()
 /**
  * @return bool
  */
-function api_is_student_view_active()
+function api_is_student_view_active(): bool
 {
     $studentView = Session::read('studentview');
 

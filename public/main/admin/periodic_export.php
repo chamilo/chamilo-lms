@@ -74,7 +74,7 @@ if ($form->validate()) {
         $categories = Category::load(
             null,
             null,
-            $courseInfo['code'],
+            $courseId,
             null,
             false,
             0

@@ -33,7 +33,8 @@ class LinkAddEditForm extends FormValidator
             $link = $link_object;
         } elseif (isset($link_type) && isset($category_object)) {
             $link = LinkFactory:: create($link_type);
-            $link->set_course_code(api_get_course_id());
+            // Set course code *and* course id
+            $link->setCourseId(api_get_course_int_id());
             $link->set_session_id(api_get_session_id());
             $link->set_category_id($category_object[0]->get_id());
         } else {
@@ -84,7 +85,7 @@ class LinkAddEditForm extends FormValidator
             $default_weight = 0;
             if (!empty($category_object)) {
                 foreach ($category_object as $my_cat) {
-                    if ($my_cat->get_course_code() == api_get_course_id()) {
+                    if ($my_cat->getCourseId() == api_get_course_int_id()) {
                         $grade_model_id = $my_cat->get_grade_model_id();
                         if (empty($grade_model_id)) {
                             if (0 == $my_cat->get_parent_id()) {

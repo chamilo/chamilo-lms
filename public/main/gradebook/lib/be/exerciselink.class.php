@@ -42,7 +42,7 @@ class ExerciseLink extends AbstractLink
     {
         $exerciseTable = $this->get_exercise_table();
         $lpItemTable = Database::get_course_table(TABLE_LP_ITEM);
-        if (empty($this->course_code)) {
+        if (empty($this->getCourseId())) {
             return [];
         }
         $sessionId = $this->get_session_id();
@@ -93,12 +93,13 @@ class ExerciseLink extends AbstractLink
 
     /**
      * Has anyone done this exercise yet ?
+     * @throws Exception
      */
     public function has_results()
     {
         $tbl_stats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $sessionId = $this->get_session_id();
-        $course_id = api_get_course_int_id($this->get_course_code());
+        $course_id = ($this->getCourseId());
         $sessionCondition = api_get_session_condition($sessionId);
 
         $sql = "SELECT count(exe_id) AS number

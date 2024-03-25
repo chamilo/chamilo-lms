@@ -204,15 +204,20 @@ abstract class AbstractLink implements GradebookItem
     }
 
     /**
-     * @param string $course_code
+     * Set course ID and course code. If ID is empty, set both to null
+     * @param ?int $courseId
      */
-    public function set_course_code($course_code)
-    {
-        $courseInfo = api_get_course_info($course_code);
-        if ($courseInfo) {
-            $this->course_code = $course_code;
-            $this->course_id = $courseInfo['real_id'];
+    public function setCourseId(?int $courseId = null): AbstractLink {
+        $courseInfo = api_get_course_info_by_id($courseId);
+        if (!empty($courseInfo)) {
+            $this->course_code = $courseInfo['code'];
+            $this->course_id = $courseId;
+        } else {
+            $this->course_code = null;
+            $this->course_id = null;
         }
+
+        return $this;
     }
 
     /**
@@ -282,7 +287,7 @@ abstract class AbstractLink implements GradebookItem
      * @param int    $type
      * @param int    $ref_id
      * @param int    $user_id
-     * @param string $course_code
+     * @param ?int    $courseId
      * @param int    $category_id
      * @param int    $visible
      *
@@ -293,7 +298,7 @@ abstract class AbstractLink implements GradebookItem
         $type = null,
         $ref_id = null,
         $user_id = null,
-        $course_code = null,
+        ?int $courseId = null,
         $category_id = null,
         $visible = null
     ) {
@@ -331,17 +336,14 @@ abstract class AbstractLink implements GradebookItem
             $sql .= ' user_id = '.intval($user_id);
             $paramcount++;
         }
-        if (isset($course_code)) {
+        if (!empty($courseId)) {
             if (0 != $paramcount) {
                 $sql .= ' AND';
             } else {
                 $sql .= ' WHERE';
             }
-            $courseInfo = api_get_course_info($course_code);
-            if ($courseInfo) {
-                $sql .= " c_id = '".$courseInfo['real_id']."'";
-                $paramcount++;
-            }
+            $sql .= " c_id = $courseId";
+            $paramcount++;
         }
         if (isset($category_id)) {
             if (0 != $paramcount) {
@@ -369,14 +371,16 @@ abstract class AbstractLink implements GradebookItem
 
     /**
      * Insert this link into the database.
+     * @return int 0 on error, or the link's database id
+     * @throws Exception
      */
-    public function add()
+    public function add(): int
     {
         $this->add_linked_data();
         if (!empty($this->type) &&
             !empty($this->ref_id) &&
             !empty($this->user_id) &&
-            !empty($this->course_code) &&
+            !empty($this->course_id) &&
             !empty($this->category)
         ) {
             $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
@@ -388,7 +392,7 @@ abstract class AbstractLink implements GradebookItem
                         type =  ".$this->type." ";
 
             $result = Database::query($sql);
-            $row = Database::fetch_array($result, 'ASSOC');
+            $row = Database::fetch_assoc($result);
 
             if (0 == $row['count']) {
                 $em = Database::getManager();
@@ -405,7 +409,7 @@ abstract class AbstractLink implements GradebookItem
                     ->setUser(api_get_user_entity($this->get_user_id()))
                     ->setRefId($this->get_ref_id())
                     ->setCategory($category)
-                    ->setCourse(api_get_course_entity())
+                    ->setCourse(api_get_course_entity($this->course_id))
                 ;
                 $em->persist($link);
                 $em->flush();
@@ -416,7 +420,7 @@ abstract class AbstractLink implements GradebookItem
             }
         }
 
-        return false;
+        return 0;
     }
 
     /**
@@ -466,11 +470,11 @@ abstract class AbstractLink implements GradebookItem
         $description_log = isset($arreval['description']) ? $arreval['description'] : '';
         if (empty($nameLog)) {
             if (isset($_POST['name_link'])) {
-                $name_log = isset($_POST['name_link']) ? $_POST['name_link'] : $arreval['course_code'];
+                $name_log = isset($_POST['name_link']) ? $_POST['name_link'] : $arreval['course_id'];
             } elseif (isset($_POST['link_'.$evaluationId]) && $_POST['link_'.$evaluationId]) {
                 $name_log = $_POST['link_'.$evaluationId];
             } else {
-                $name_log = $arreval['course_code'];
+                $name_log = $arreval['course_id'];
             }
         } else {
             $name_log = $nameLog;
@@ -513,7 +517,7 @@ abstract class AbstractLink implements GradebookItem
         // links can only be moved to categories inside this course
         $targets = [];
         $level = 0;
-        $categories = Category::load(null, null, $this->get_course_code(), 0);
+        $categories = Category::load(null, null, $this->course_id, 0);
         foreach ($categories as $cat) {
             $targets[] = [$cat->get_id(), $cat->get_name(), $level + 1];
             $targets = $this->addTargetSubcategories(
@@ -530,12 +534,12 @@ abstract class AbstractLink implements GradebookItem
      * Move this link to the given category.
      * If this link moves to outside a course, delete it.
      */
-    public function move_to_cat($cat)
+    public function move_to_cat(GradebookCategory $cat)
     {
-        if ($this->get_course_code() != $cat->get_course_code()) {
+        if ($this->getCourseId() != $cat->getCourse()->getId()) {
             $this->delete();
         } else {
-            $this->set_category_id($cat->get_id());
+            $this->set_category_id($cat->getId());
             $this->save();
         }
     }
@@ -709,44 +713,45 @@ abstract class AbstractLink implements GradebookItem
     }
 
     /**
-     * @param int    $itemId
-     * @param int    $linkType
-     * @param string $courseCode
-     * @param int    $sessionId
+     * @param int $itemId
+     * @param int $linkType
+     * @param int $courseId
+     * @param int $sessionId
      *
-     * @return array|bool|\Doctrine\DBAL\Driver\Statement
+     * @return array
+     * @throws Exception
      */
-    public static function getGradebookLinksFromItem($itemId, $linkType, $courseCode, $sessionId = 0)
+    public static function getGradebookLinksFromItem(
+        int $itemId,
+        int $linkType,
+        int $courseId,
+        ?int $sessionId = 0
+    ): array
     {
-        if (empty($courseCode) || empty($itemId) || empty($linkType)) {
+        if (empty($courseId) || empty($itemId) || empty($linkType)) {
             return false;
         }
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $tableCategory = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $itemId = (int) $itemId;
-        $linkType = (int) $linkType;
         $sessionId = (int) $sessionId;
 
         $sessionCondition = api_get_session_condition($sessionId, true, false, 'c.session_id');
-        $courseCode = Database::escape_string($courseCode);
 
         $sql = "SELECT DISTINCT l.*
                 FROM $table l INNER JOIN $tableCategory c
-                ON (c.course_code = l.course_code AND c.id = l.category_id)
+                ON (c.c_id = l.c_id AND c.id = l.category_id)
                 WHERE
                     ref_id = $itemId AND
                     type = $linkType AND
-                    l.course_code = '$courseCode'
+                    l.c_id = $courseId
                     $sessionCondition ";
 
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
-            $result = Database::store_result($result);
-
-            return $result;
+            return Database::store_result($result);
         }
 
-        return false;
+        return [];
     }
 
     /**
@@ -769,14 +774,14 @@ abstract class AbstractLink implements GradebookItem
             $link->set_type($data['type']);
             $link->set_ref_id($data['ref_id']);
             $link->set_user_id($data['user_id']);
-            $link->set_course_code(api_get_course_id());
+            $link->setCourseId(api_get_course_int_id());
             $link->set_category_id($data['category_id']);
             $link->set_date($data['created_at']);
             $link->set_weight($data['weight']);
             $link->set_visible($data['visible']);
             $link->set_locked($data['locked']);
 
-            //session id should depend of the category --> $data['category_id']
+            //session id should depend on the category --> $data['category_id']
             $session_id = api_get_session_id();
             $link->set_session_id($session_id);
 
@@ -800,7 +805,7 @@ abstract class AbstractLink implements GradebookItem
      */
     private function addTargetSubcategories($targets, $level, $catid)
     {
-        $subcats = Category::load(null, null, null, $catid);
+        $subcats = Category::load(null, null, 0, $catid);
         foreach ($subcats as $cat) {
             $targets[] = [$cat->get_id(), $cat->get_name(), $level + 1];
             $targets = $this->addTargetSubcategories(

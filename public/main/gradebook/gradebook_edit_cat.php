@@ -33,9 +33,9 @@ if ($form->validate()) {
     $cat->set_name($values['name']);
 
     if (empty($values['course_code'])) {
-        $cat->set_course_code(null);
+        $cat->setCourseId(null);
     } else {
-        $cat->set_course_code($values['course_code']);
+        $cat->setCourseId(api_get_course_int_id($values['course_code']));
     }
 
     if (isset($values['grade_model_id'])) {

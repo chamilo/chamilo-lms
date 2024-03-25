@@ -25,7 +25,7 @@ class DisplayGradebook
                     Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Assessment home'))
                     .'</a>';
                 if ('view_result' === $page) {
-                    if ((null != $evalobj->get_course_code()) && !$evalobj->has_results()) {
+                    if (!empty($evalobj->getCourseId()) && !$evalobj->has_results()) {
                         $links[] = '<a href="gradebook_add_result.php?'.api_get_cidreq().'&selectcat='.$selectcat.'&selecteval='.$evalobj->get_id().'">
     				'.Display::getMdiIcon(ActionIcon::GRADE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Grade learners')).'</a>';
                     }
@@ -90,10 +90,10 @@ class DisplayGradebook
             $description = get_lang('Description').' :<b> '.$evalobj->get_description().'</b><br>';
         }
 
-        if (null == $evalobj->get_course_code()) {
+        if (!empty($evalobj->getCourseId())) {
             $course = get_lang('Independent from course');
         } else {
-            $course = CourseManager::getCourseNameFromCode($evalobj->get_course_code());
+            $course = api_get_course_info_by_id($evalobj->getCourseId())['title'];
         }
 
         $evalinfo = '<h2>'.$evalobj->get_name().'</h2><hr>';
@@ -264,7 +264,7 @@ class DisplayGradebook
             $categories = Category::load(
                 null,
                 null,
-                null,
+                0,
                 $catobj->get_id(),
                 null,
                 $sessionId
@@ -371,20 +371,19 @@ class DisplayGradebook
         $isCoach = api_is_coach(api_get_session_id(), api_get_course_int_id());
         $accessToRead = api_is_allowed_to_edit(null, true) || $isCoach;
         $accessToEdit = api_is_allowed_to_edit(null, true);
-        $courseCode = api_get_course_id();
 
         if ($accessToRead) {
             $my_category = $catobj->showAllCategoryInfo($catobj->get_id());
             if ('0' != $selectcat && $accessToEdit) {
                 if ('' == $my_api_cidreq) {
-                    $my_api_cidreq = 'cidReq='.$my_category['course_code'];
+                    $my_api_cidreq = 'cid='.$my_category['c_id'];
                 }
                 if ($show_add_link && empty($messageResource)) {
                     $actionsLeft .= '<a href="gradebook_add_eval.php?'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'" >'.
                         Display::getMdiIcon('table-plus', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add classroom activity')).'</a>';
                     $cats = Category::load($selectcat);
 
-                    if (null != $cats[0]->get_course_code() && empty($messageResource)) {
+                    if (!empty($cats[0]->getCourseId()) && empty($messageResource)) {
                         $actionsLeft .= '<a href="gradebook_add_link.php?'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'">'.
                             Display::getMdiIcon('link-plus', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add online activity')).'</a>';
                     } else {
@@ -427,7 +426,7 @@ class DisplayGradebook
                     // Right icons
                     if ($accessToEdit) {
                         $actionsRight = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id(
-                            ).'&cidReq='.$catobj->get_course_code().'&id_session='.$catobj->get_session_id().'">'.
+                            ).'&cid='.$catobj->getCourseId().'&id_session='.$catobj->get_session_id().'">'.
                             Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit')).'</a>';
 
                         if ('true' == api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') &&
@@ -505,7 +504,7 @@ class DisplayGradebook
             }
 
             $min_certification = get_lang('Minimum certification score').' : '.$min_certification;
-            $edit_icon = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id().'&cidReq='.$catobj->get_course_code().'&id_session='.$catobj->get_session_id().'">'.
+            $edit_icon = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id().'&cid='.$catobj->getCourseId().'&id_session='.$catobj->get_session_id().'">'.
                 Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit')).'</a>';
 
             $msg = $weight.' - '.$min_certification.$edit_icon;

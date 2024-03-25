@@ -117,6 +117,11 @@ class CatForm extends FormValidator
                 'course_code',
                 $this->category_object->get_course_code()
             );
+            $this->addElement(
+                'hidden',
+                'course_id',
+                $this->category_object->getCourseId()
+            );
         }
         $this->build_basic_form();
     }
@@ -134,11 +139,11 @@ class CatForm extends FormValidator
         $test_cats = Category::load(
             null,
             null,
-            $course_code,
+            api_get_course_int_id(),
             null,
             null,
             $session_id,
-            false
+            null
         );
 
         $links = null;
@@ -181,6 +186,11 @@ class CatForm extends FormValidator
             'hidden',
             'course_code',
             $this->category_object->get_course_code()
+        );
+        $this->addElement(
+            'hidden',
+            'course_id',
+            $this->category_object->getCourseId()
         );
         $this->build_basic_form();
     }
@@ -352,16 +362,15 @@ class CatForm extends FormValidator
             );
 
             // Freeze or not
-            $course_code = api_get_course_id();
             $session_id = api_get_session_id();
             $test_cats = Category::load(
                 null,
                 null,
-                $course_code,
+                api_get_course_int_id(),
                 null,
                 null,
                 $session_id,
-                false
+                null
             );
             $links = null;
             if (!empty($test_cats[0])) {

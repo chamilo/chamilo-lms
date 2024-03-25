@@ -21,18 +21,18 @@ class ResultTable extends SortableTable
     /**
      * ResultTable constructor.
      *
-     * @param string      $evaluation
-     * @param array       $results
-     * @param string|null $iscourse
-     * @param array       $addparams
-     * @param bool        $forprint
+     * @param Evaluation   $evaluation
+     * @param ?array       $results
+     * @param ?string      $iscourse
+     * @param ?array       $addparams
+     * @param ?bool        $forprint
      */
     public function __construct(
-        $evaluation,
-        $results = [],
-        $iscourse,
-        $addparams = [],
-        $forprint = false
+        Evaluation $evaluation,
+        ?array $results = [],
+        ?string $iscourse = '0',
+        ?array $addparams = [],
+        ?bool $forprint = false
     ) {
         parent:: __construct(
             'resultlist',
@@ -253,7 +253,7 @@ class ResultTable extends SortableTable
                 Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
         }
 
-        if (null == $this->evaluation->get_course_code()) {
+        if (null == $this->evaluation->getCourseId()) {
             $editColumn .= '&nbsp;<a href="'.api_get_self().'?resultdelete='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'" onclick="return confirmationuser();">';
             $editColumn .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'));
             $editColumn .= '</a>';

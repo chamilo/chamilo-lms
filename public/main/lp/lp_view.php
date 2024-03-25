@@ -417,7 +417,7 @@ if ($oLP->current == $oLP->get_last()) {
     $categories = Category::load(
         null,
         null,
-        $course_code,
+        $course_id,
         null,
         null,
         $sessionId

@@ -74,7 +74,15 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (isset($_GET['category_id'])) {
-            $cats = Category::load($_GET['category_id'], null, null, null, null, null, false);
+            $cats = Category::load(
+                $_GET['category_id'],
+                null,
+                0,
+                null,
+                null,
+                null,
+                null
+            );
             GradebookUtils::generateTable($courseInfo, api_get_user_id(), $cats);
             exit;
         }
@@ -189,11 +197,11 @@ $courseInfo = api_get_course_info();
 $cats = Category::load(
     null,
     null,
-    $course_code,
+    $courseInfo['id'],
     null,
     null,
     $session_id,
-    'ORDER By id'
+    'ORDER BY id'
 );
 $first_time = null;
 
@@ -202,11 +210,11 @@ if (empty($cats)) {
     $cats = Category::load(
         0,
         null,
-        $course_code,
+        $courseInfo['id'],
         null,
         null,
         $session_id,
-        'ORDER By id'
+        'ORDER BY id'
     );
     $first_time = 1;
 }
@@ -231,7 +239,7 @@ if (isset($_GET['createallcategories'])) {
         foreach ($coursecat as $row) {
             $cat = new Category();
             $cat->set_name($row[1]);
-            $cat->set_course_code($row[0]);
+            $cat->setCourseId(api_get_course_int_id($row[0]));
             $cat->set_description(null);
             $cat->set_user_id($stud_id);
             $cat->set_parent_id(0);
@@ -271,7 +279,7 @@ if (isset($_GET['movecat'])) {
         }
     } else {
         $targetcat = Category::load($_GET['targetcat']);
-        $course_to_crsind = (null != $cats[0]->get_course_code() && null == $targetcat[0]->get_course_code());
+        $course_to_crsind = (null != $cats[0]->getCourseId() && null == $targetcat[0]->getCourseId());
 
         if (!($course_to_crsind && !isset($_GET['confirm']))) {
             $cats[0]->move_to_cat($targetcat[0]);
@@ -305,7 +313,7 @@ if (isset($_GET['moveeval'])) {
         }
     } else {
         $targetcat = Category::load($_GET['targetcat']);
-        $course_to_crsind = null != $evals[0]->get_course_code() && null == $targetcat[0]->get_course_code();
+        $course_to_crsind = null != $evals[0]->getCourseId() && null == $targetcat[0]->getCourseId();
 
         if (!($course_to_crsind && !isset($_GET['confirm']))) {
             $evals[0]->move_to_cat($targetcat[0]);
@@ -672,9 +680,10 @@ $simple_search_form = '';
 
 if (isset($_GET['studentoverview'])) {
     //@todo this code also seems to be deprecated ...
+    /** @var Category[] $cats */
     $cats = Category::load($selectCat);
     $stud_id = api_is_allowed_to_edit() ? null : $stud_id;
-    $allcat = $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
+    $allcat = $cats[0]->get_subcategories($stud_id, $course_id, $session_id);
     $alleval = $cats[0]->get_evaluations($stud_id, true);
     $alllink = $cats[0]->get_links($stud_id, true);
     if (isset($_GET['exportpdf'])) {
@@ -745,11 +754,11 @@ if (isset($_GET['studentoverview'])) {
     $cats = Category:: load(
         null,
         null,
-        $course_code,
+        $course_id,
         null,
         null,
         $session_id,
-        false
+        null
     );
 
     if (empty($cats)) {
@@ -763,7 +772,7 @@ if (isset($_GET['studentoverview'])) {
             $cat->set_name($course_code);
             $cat->setIsRequirement(true);
         }
-        $cat->set_course_code($course_code);
+        $cat->setCourseId($course_id);
         $cat->set_description(null);
         $cat->set_user_id($stud_id);
         $cat->set_parent_id(0);
@@ -777,15 +786,28 @@ if (isset($_GET['studentoverview'])) {
         unset($cat);
     }
 
-    $cats = Category::load($selectCat, null, null, null, null, null, false);
+    /** @var Category[] $cats */
+    $cats = Category::load(
+        $selectCat,
+        null,
+        0,
+        null,
+        null,
+        null,
+        null
+    );
     // With this fix the teacher only can view 1 gradebook
     if (api_is_platform_admin()) {
         $stud_id = api_is_allowed_to_edit() ? null : api_get_user_id();
     }
 
-    $allcat = $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
-    $alleval = $cats[0]->get_evaluations($stud_id);
-    $alllink = $cats[0]->get_links($stud_id);
+    if (!empty($cats)) {
+        $allcat = $cats[0]->get_subcategories($stud_id, $course_id, $session_id);
+        $alleval = $cats[0]->get_evaluations($stud_id);
+        $alllink = $cats[0]->get_links($stud_id);
+    } else {
+        $allcat = $alleval = $alling = [];
+    }
 }
 
 // add params to the future links (in the table shown)
@@ -859,11 +881,11 @@ if (isset($first_time) && 1 == $first_time && api_is_allowed_to_edit(null, true)
     $cats = Category::load(
         null,
         null,
-        $course_code,
+        $course_id,
         null,
         null,
         $session_id,
-        false
+        null
     );
 
     if (!empty($cats)) {
@@ -917,11 +939,11 @@ if (isset($first_time) && 1 == $first_time && api_is_allowed_to_edit(null, true)
                         $cats = Category:: load(
                             null,
                             null,
-                            $course_code,
+                            $course_id,
                             null,
                             null,
                             $session_id,
-                            false
+                            null
                         );
                     } else {
                         $form_grade->display();
@@ -943,9 +965,9 @@ if (isset($first_time) && 1 == $first_time && api_is_allowed_to_edit(null, true)
         }
         /** @var Category $cat */
         foreach ($cats as $cat) {
-            $allcat = $cat->get_subcategories($stud_id, $course_code, $session_id);
-            $alleval = $cat->get_evaluations($stud_id, false, $course_code, $session_id);
-            $alllink = $cat->get_links($stud_id, true, $course_code, $session_id);
+            $allcat = $cat->get_subcategories($stud_id, $course_id, $session_id);
+            $alleval = $cat->get_evaluations($stud_id, false, $course_id, $session_id);
+            $alllink = $cat->get_links($stud_id, true, $course_id, $session_id);
 
             if (0 != $cat->get_parent_id()) {
                 $i++;

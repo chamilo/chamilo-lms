@@ -363,7 +363,7 @@ class Attendance
         if ($link_to_gradebook && !empty($this->category_id)) {
             $description = '';
             $linkInfo = GradebookUtils::isResourceInCourseGradebook(
-                $courseCode,
+                $course->getId(),
                 7,
                 $lastId,
                 $sessionId
@@ -372,7 +372,7 @@ class Attendance
             if (!$linkInfo) {
                 GradebookUtils::add_resource_to_course_gradebook(
                     $this->category_id,
-                    $courseCode,
+                    $courseInfo['real_id'],
                     7,
                     $lastId,
                     $titleGradebook,
@@ -443,7 +443,7 @@ class Attendance
             if ($link_to_gradebook && !empty($this->category_id)) {
                 $description = '';
                 $link_info = GradebookUtils::isResourceInCourseGradebook(
-                    $course_code,
+                    $_course['real_id'],
                     7,
                     $attendanceId,
                     $session_id
@@ -451,7 +451,7 @@ class Attendance
                 if (!$link_info) {
                     GradebookUtils::add_resource_to_course_gradebook(
                         $this->category_id,
-                        $course_code,
+                        $_course['real_id'],
                         7,
                         $attendanceId,
                         $title_gradebook,
@@ -2413,7 +2413,7 @@ class Attendance
             $default['skills'] = array_keys($skillList);
 
             $link_info = GradebookUtils::isResourceInCourseGradebook(
-                api_get_course_id(),
+                api_get_course_int_id(),
                 7,
                 $attendance->getIid(),
                 $sessionId

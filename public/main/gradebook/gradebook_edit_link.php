@@ -30,11 +30,11 @@ if (0 == $session_id) {
     $cats = Category:: load(
         null,
         null,
-        $course_code,
+        $course_id,
         null,
         null,
         $session_id,
-        false
+        null
     ); //already init
 } else {
     $cats = Category::loadSessionCategories(null, $session_id);
@@ -50,7 +50,7 @@ $form = new LinkAddEditForm(
 );
 if ($form->validate()) {
     $values = $form->exportValues();
-    $parent_cat = Category :: load($values['select_gradebook']);
+    $parent_cat = Category::load($values['select_gradebook']);
     $final_weight = $values['weight_mask'];
     $link->set_weight($final_weight);
 

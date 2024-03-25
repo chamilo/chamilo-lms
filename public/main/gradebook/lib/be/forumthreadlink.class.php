@@ -46,7 +46,7 @@ class ForumThreadLink extends AbstractLink
      */
     public function get_all_links()
     {
-        if (empty($this->course_code)) {
+        if (empty($this->getCourseId())) {
             return [];
         }
 

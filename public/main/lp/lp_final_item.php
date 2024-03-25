@@ -106,11 +106,11 @@ if (false == $accessGranted) {
     $catLoad = Category::load(
         null,
         null,
-        $courseCode,
+        $courseId,
         null,
         null,
         $sessionId,
-        'ORDER By id'
+        'ORDER BY id'
     );
     // If not gradebook has been defined
     if (empty($catLoad)) {
@@ -131,7 +131,7 @@ if (false == $accessGranted) {
             null,
             $lpId,
             null,
-            $courseCode,
+            $courseId,
             $categoryId
         );
 

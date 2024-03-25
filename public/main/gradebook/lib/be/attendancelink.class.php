@@ -41,9 +41,9 @@ class AttendanceLink extends AbstractLink
      *
      * @return array 2-dimensional array - every element contains 2 subelements (id, name)
      */
-    public function get_all_links()
+    public function get_all_links(): array
     {
-        if (empty($this->course_code)) {
+        if (empty($this->getCourseId())) {
             return [];
         }
         $sessionId = $this->get_session_id();

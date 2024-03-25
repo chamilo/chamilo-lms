@@ -86,7 +86,7 @@ foreach ($result as $value) {
     $cats = Category::load(
         null,
         null,
-        $courseCode,
+        $courseId,
         null,
         null,
         $sessionId,
@@ -98,7 +98,7 @@ foreach ($result as $value) {
         $cats = Category::load(
             0,
             null,
-            $courseCode,
+            $courseId,
             null,
             null,
             $sessionId,

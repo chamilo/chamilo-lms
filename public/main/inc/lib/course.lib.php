@@ -1214,28 +1214,28 @@ class CourseManager
     }
 
     /**
-     * Return user info array of all users registered in a course
-     * This only returns the users that are registered in this actual course, not linked courses.
-     *
-     * @param string|null    $courseCode  Cours code is allowed to be null if we want all users
-     * @param int       $sessionId
-     * @param string    $limit
-     * @param string    $order_by         the field to order the users by.
+     * Get user info array of all users registered in a course, by course code.
+     * Wrapper: This method calls getUserListFromCourseId() in the background.
+     * @param string|null $courseCode Cours code is allowed to be null if we want all users
+     * @param int         $sessionId
+     * @param string      $limit
+     * @param string      $order_by the field to order the users by.
      *                                    Valid values are 'lastname', 'firstname', 'username', 'email',
      *                                    'official_code' OR a part of a SQL statement that starts with ORDER BY ...
-     * @param int|null  $filter_by_status if using the session_id: 0 or 2 (student, coach),
+     * @param int|null    $filter_by_status if using the session_id: 0 or 2 (student, coach),
      *                                    if using session_id = 0 STUDENT or COURSEMANAGER
-     * @param bool|null $return_count
-     * @param bool      $add_reports
-     * @param bool      $resumed_report
-     * @param array     $extra_field
-     * @param array     $courseCodeList
-     * @param array     $userIdList
-     * @param bool      $filterByActive
-     * @param array     $sessionIdList
-     * @param string    $searchByKeyword
+     * @param bool|null   $return_count
+     * @param bool        $add_reports
+     * @param bool        $resumed_report
+     * @param array       $extra_field
+     * @param array       $courseCodeList
+     * @param array       $userIdList
+     * @param bool        $filterByActive
+     * @param array       $sessionIdList
+     * @param string      $searchByKeyword
      *
      * @return array|int
+     * @throws Exception
      */
     public static function get_user_list_from_course_code(
         $courseCode,
@@ -1253,22 +1253,79 @@ class CourseManager
         $sessionIdList = [],
         $searchByKeyword = '',
         $options = []
+    )
+    {
+        $courseId = api_get_course_int_id($courseCode);
+        return self::getUserListFromCourseId(
+            $courseId,
+            $sessionId,
+            $limit,
+            $order_by,
+            $filter_by_status,
+            $return_count,
+            $add_reports,
+            $resumed_report,
+            $extra_field,
+            $courseCodeList,
+            $userIdList,
+            $filterByActive,
+            $sessionIdList,
+            $searchByKeyword,
+            $options
+        );
+    }
+
+    /**
+     * Return user info array of all users registered in a course (by course ID and session ID).
+     * This only returns the users that are registered in this actual course, not linked courses.
+     *
+     * @param ?int    $courseCode Course ID is allowed to be null if we want all users
+     * @param ?int    $sessionId
+     * @param ?string $limit
+     * @param ?string $order_by the field to order the users by.
+     *                                    Valid values are 'lastname', 'firstname', 'username', 'email',
+     *                                    'official_code' OR a part of a SQL statement that starts with ORDER BY ...
+     * @param ?int    $filter_by_status if using the session_id: 0 or 2 (student, coach),
+     *                                    if using session_id = 0 STUDENT or COURSEMANAGER
+     * @param ?bool   $return_count
+     * @param ?bool   $add_reports
+     * @param ?bool   $resumed_report
+     * @param ?array  $extra_field
+     * @param ?array  $courseCodeList
+     * @param ?array  $userIdList
+     * @param ?bool   $filterByActive
+     * @param ?array  $sessionIdList
+     * @param ?string $searchByKeyword
+     * @param ?array
+     *
+     * @return array|int
+     * @throws Exception
+     */
+    public static function getUserListFromCourseId(
+        ?int $courseId = null,
+        ?int $sessionId = 0,
+        ?string $limit = null,
+        ?string $order_by = null,
+        ?int $filter_by_status = null,
+        ?bool $return_count = null,
+        ?bool $add_reports = false,
+        ?bool $resumed_report = false,
+        ?array $extra_field = [],
+        ?array $courseIdsList = [],
+        ?array $userIdList = [],
+        ?bool $filterByActive = null,
+        ?array $sessionIdList = [],
+        ?string $searchByKeyword = '',
+        ?array $options = []
     ) {
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
 
         $sessionId = (int) $sessionId;
-        $courseCode = Database::escape_string($courseCode);
-        $courseInfo = api_get_course_info($courseCode);
-        $courseId = 0;
-        if (!empty($courseInfo)) {
-            $courseId = $courseInfo['real_id'];
-        }
         $session = null;
         if (!empty($sessionId)) {
             $session = api_get_session_entity($sessionId);
         }
-        $course = api_get_course_entity($courseId);
         $where = [];
         if (empty($order_by)) {
             $order_by = 'user.lastname, user.firstname';
@@ -1288,7 +1345,6 @@ class CourseManager
         }
 
         $filter_by_status_condition = null;
-        $sqlInjectWhere = '';
         $whereExtraField = '';
         $injectExtraFields = ' , ';
         $sqlInjectJoins = '';
@@ -1358,7 +1414,7 @@ class CourseManager
             // 2 = coach
             // 0 = student
             if (isset($filter_by_status)) {
-                $filter_by_status = (int) $filter_by_status;
+                $filter_by_status = $filter_by_status;
                 $filter_by_status_condition = " session_course_user.status = $filter_by_status AND ";
             }
         } else {
@@ -1402,8 +1458,8 @@ class CourseManager
             }
             $where[] = ' course_rel_user.c_id IS NOT NULL ';
 
-            if (isset($filter_by_status) && is_numeric($filter_by_status)) {
-                $filter_by_status = (int) $filter_by_status;
+            if (isset($filter_by_status)) {
+                $filter_by_status = $filter_by_status;
                 $filter_by_status_condition = " course_rel_user.status = $filter_by_status AND ";
             }
         }
@@ -1443,11 +1499,11 @@ class CourseManager
             $sql .= ' AND field_id IS NOT NULL GROUP BY value ';
         }
 
-        if (!empty($courseCodeList)) {
-            $courseCodeList = array_map(['Database', 'escape_string'], $courseCodeList);
-            $courseCodeList = implode('","', $courseCodeList);
+        if (!empty($courseIdsList)) {
+            $courseIdsList = array_map('intval', $courseIdsList);
+            $courseIdsList = implode('","', $courseIdsList);
             if (empty($sessionIdList)) {
-                $sql .= ' AND course.code IN ("'.$courseCodeList.'")';
+                $sql .= ' AND course.id IN ("'.$courseIdsList.'")';
             }
         }
 
@@ -1510,7 +1566,7 @@ class CourseManager
                     $user_info['status_session'] = $user['status_session'];
                 }
 
-                $sessionId = isset($user['session_id']) ? $user['session_id'] : 0;
+                $sessionId = $user['session_id'] ?? 0;
                 $sessionName = isset($user['session_name']) ? ' ('.$user['session_name'].') ' : '';
 
                 if ($add_reports) {
@@ -1567,10 +1623,10 @@ class CourseManager
                         $users[$row_key]['count_users_registered'] = $registered_users_with_extra_field;
                         $users[$row_key]['average_hours_per_user'] = $users[$row_key]['training_hours'] / $users[$row_key]['count_users'];
 
-                        $category = Category:: load(
+                        $category = Category::load(
                             null,
                             null,
-                            $user['code'],
+                            $user['c_id'],
                             null,
                             null,
                             $sessionId
@@ -1611,7 +1667,7 @@ class CourseManager
                         $category = Category:: load(
                             null,
                             null,
-                            $user['code'],
+                            $user['c_id'],
                             null,
                             null,
                             $sessionId
@@ -3486,12 +3542,13 @@ class CourseManager
         if ($number_of_courses > 0) {
             while ($course = Database::fetch_array($rs_special_course)) {
                 $course_info = api_get_course_info($course['code']);
-                $courseId = $course_info['real_id'];
+                $courseId = $course['id'];
                 if (Course::HIDDEN == $course_info['visibility']) {
                     continue;
                 }
 
                 $params = [];
+                $params['c_id'] = $courseId;
                 //Param (course_code) needed to get the student info in page "My courses"
                 $params['course_code'] = $course['code'];
                 $params['code'] = $course['code'];
@@ -6210,20 +6267,19 @@ class CourseManager
     /**
      * Helper function to create a default gradebook (if necessary) upon course creation.
      *
-     * @param int    $modelId    The gradebook model ID
-     * @param string $courseCode Course code
+     * @param int $modelId  The gradebook model ID
+     * @param int $courseId Course ID
+     * @return void
+     * @throws Exception
      */
-    public static function createDefaultGradebook($modelId, $courseCode)
+    public static function createDefaultGradebook(int $modelId, int $courseId): void
     {
         if ('true' === api_get_setting('gradebook_enable_grade_model')) {
             //Create gradebook_category for the new course and add
             // a gradebook model for the course
-            if (isset($modelId) &&
-                !empty($modelId) &&
-                '-1' != $modelId
-            ) {
+            if ('-1' != $modelId) {
                 GradebookUtils::create_default_course_gradebook(
-                    $courseCode,
+                    $courseId,
                     $modelId
                 );
             }
@@ -6627,13 +6683,14 @@ class CourseManager
 
     /**
      * Fill course with all necessary items.
-     *
-     * @param array $params   Parameters from the course creation form
-     * @param int   $authorId
+     * @param Course $course
+     * @param array $params Parameters from the course creation form
+     * @param ?int   $authorId
+     * @throws Exception
      */
-    private static function fillCourse(Course $course, $params, $authorId = 0)
+    private static function fillCourse(Course $course, array $params, ?int $authorId = 0)
     {
-        $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
+        $authorId = empty($authorId) ? api_get_user_id() : $authorId;
 
         AddCourse::fillCourse(
             $course,
@@ -6644,7 +6701,7 @@ class CourseManager
         if (isset($params['gradebook_model_id'])) {
             self::createDefaultGradebook(
                 $params['gradebook_model_id'],
-                $course->getCode()
+                $course->getId()
             );
         }
 

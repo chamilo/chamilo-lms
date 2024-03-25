@@ -1842,7 +1842,7 @@ class Exercise
         }
 
         $linkInfo = GradebookUtils::isResourceInCourseGradebook(
-            $this->course['code'],
+            $this->course_id,
             LINK_EXERCISE,
             $exerciseId,
             $this->sessionId
@@ -8700,7 +8700,7 @@ class Exercise
         $links = AbstractLink::getGradebookLinksFromItem(
             $this->getId(),
             LINK_EXERCISE,
-            $courseInfo['code'],
+            $courseInfo['real_id'],
             $sessionId
         );
 
@@ -8708,7 +8708,7 @@ class Exercise
             $links = AbstractLink::getGradebookLinksFromItem(
                 $this->iId,
                 LINK_EXERCISE,
-                $courseInfo['code'],
+                $courseInfo['real_id'],
                 $sessionId
             );
         }

@@ -30,7 +30,7 @@ if ($form->validate()) {
         $cats = Category:: load(
             null,
             null,
-            $courseCode,
+            $courseId,
             null,
             null,
             0,

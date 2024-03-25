@@ -26,18 +26,18 @@ class FlatViewDataGenerator
     private $mainCourseCategory;
 
     /**
-     * @param array         $users
-     * @param array         $evals
-     * @param array         $links
-     * @param array         $params
-     * @param Category|null $mainCourseCategory
+     * @param ?array         $users
+     * @param ?array         $evals
+     * @param ?array         $links
+     * @param ?array         $params
+     * @param ?Category $mainCourseCategory
      */
     public function __construct(
-        $users = [],
-        $evals = [],
-        $links = [],
-        $params = [],
-        $mainCourseCategory = null
+        ?array $users = [],
+        ?array $evals = [],
+        ?array $links = [],
+        ?array $params = [],
+        ?Category $mainCourseCategory = null
     ) {
         $this->users = isset($users) ? $users : [];
         $this->evals = isset($evals) ? $evals : [];
@@ -122,7 +122,7 @@ class FlatViewDataGenerator
         ) {
             $main_weight = $this->category->get_weight();
         } else {
-            $main_cat = Category::load($parent_id, null, null);
+            $main_cat = Category::load($parent_id, null, 0);
             $main_weight = $main_cat[0]->get_weight();
         }
 
@@ -136,12 +136,11 @@ class FlatViewDataGenerator
         }
 
         // No category was added
-        $course_code = api_get_course_id();
         $session_id = api_get_session_id();
         $model = ExerciseLib::getCourseScoreModel();
         $allcat = $this->category->get_subcategories(
             null,
-            $course_code,
+            api_get_course_int_id(),
             $session_id,
             'ORDER BY id'
         );
@@ -348,7 +347,7 @@ class FlatViewDataGenerator
             $categories = Category::load(
                 null,
                 null,
-                null,
+                0,
                 $this->category->get_id()
             );
             if (!empty($categories)) {
@@ -367,7 +366,7 @@ class FlatViewDataGenerator
         ) {
             $main_weight = $this->category->get_weight();
         } else {
-            $main_cat = Category::load($parent_id, null, null);
+            $main_cat = Category::load($parent_id, null, 0);
             $main_weight = $main_cat[0]->get_weight();
         }
 
@@ -376,7 +375,6 @@ class FlatViewDataGenerator
             $export_to_pdf = true;
         }
 
-        $course_code = api_get_course_id();
         $session_id = api_get_session_id();
         $model = ExerciseLib::getCourseScoreModel();
 
@@ -438,7 +436,7 @@ class FlatViewDataGenerator
 
             $allcat = $this->category->get_subcategories(
                 null,
-                $course_code,
+                api_get_course_int_id(),
                 $session_id,
                 'ORDER BY id'
             );
@@ -897,7 +895,6 @@ class FlatViewDataGenerator
      */
     public function get_data_to_graph2($displayWarning = true)
     {
-        $course_code = api_get_course_id();
         $session_id = api_get_session_id();
         // do some checks on users/items counts, redefine if invalid values
         $usertable = [];
@@ -920,7 +917,7 @@ class FlatViewDataGenerator
             $item_value_total = 0;
             $allcat = $this->category->get_subcategories(
                 null,
-                $course_code,
+                api_get_course_int_id(),
                 $session_id,
                 'ORDER BY id'
             );

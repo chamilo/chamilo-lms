@@ -82,7 +82,6 @@ if ('true' === $filter) {
 }
 
 $content = '';
-$courseCode = api_get_course_id();
 $allowCustomCertificate = 'true' === api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') &&
     1 == api_get_course_setting('customcertificate_course_enable', $courseInfo);
 
@@ -171,7 +170,7 @@ switch ($action) {
         }
         exit;
     case 'generate_all_certificates':
-        $userList = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id());
+        $userList = CourseManager::getUserListFromCourseId(api_get_course_int_id(), api_get_session_id());
         if (!empty($userList)) {
             foreach ($userList as $userInfo) {
                 if (INVITEE == $userInfo['status']) {
@@ -222,7 +221,15 @@ if (!empty($content)) {
 }
 
 //@todo replace all this code with something like get_total_weight()
-$cats = Category::load($categoryId, null, null, null, null, null, false);
+$cats = Category::load(
+    $categoryId,
+    null,
+    0,
+    null,
+    null,
+    null,
+    null
+);
 
 if (!empty($cats)) {
     //with this fix the teacher only can view 1 gradebook

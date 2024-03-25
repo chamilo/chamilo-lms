@@ -118,7 +118,7 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
     $gradebookCategories = Category::load(
         null,
         null,
-        $selectedCourseInfo['code'],
+        $selectedCourse,
         null,
         false,
         $selectedSession
@@ -220,7 +220,7 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
             $gradebookCategories = Category::load(
                 null,
                 null,
-                $sessionCourse['code'],
+                $sessionCourse['real_id'],
                 null,
                 false,
                 $session['id']

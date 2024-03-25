@@ -13,9 +13,9 @@ $selectCat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 $catadd = new Category();
 $catadd->set_user_id(api_get_user_id());
 $catadd->set_parent_id($selectCat);
-$catcourse = Category :: load($selectCat);
+$catcourse = Category::load($selectCat);
 $form = new CatForm(
-    CatForm :: TYPE_SELECT_COURSE,
+    CatForm::TYPE_SELECT_COURSE,
     $catadd,
     'add_cat_form',
     null,
@@ -25,7 +25,7 @@ $form = new CatForm(
 if ($form->validate()) {
     $values = $form->exportValues();
     $cat = new Category();
-    $cat->set_course_code($values['select_course']);
+    $cat->setCourseId(api_get_course_int_id($values['select_course']));
     $cat->set_name($values['name']);
     header('Location: gradebook_add_link.php?selectcat='.$selectCat.'&course_code='.Security::remove_XSS($values['select_course']).'&'.api_get_cidreq());
     exit;

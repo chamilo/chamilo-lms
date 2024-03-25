@@ -1344,7 +1344,7 @@ if (empty($details)) {
                     $cats = Category::load(
                         null,
                         null,
-                        $courseCodeItem,
+                        $courseId,
                         null,
                         null,
                         $sId

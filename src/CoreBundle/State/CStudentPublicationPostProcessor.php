@@ -147,7 +147,7 @@ class CStudentPublicationPostProcessor implements ProcessorInterface
         }
 
         $gradebookLinkInfo = GradebookUtils::isResourceInCourseGradebook(
-            $course->getCode(),
+            $course->getId(),
             LINK_STUDENTPUBLICATION,
             $publication->getIid(),
             $session?->getId()
@@ -159,7 +159,7 @@ class CStudentPublicationPostProcessor implements ProcessorInterface
             if (empty($linkId)) {
                 GradebookUtils::add_resource_to_course_gradebook(
                     $publication->gradebookCategoryId,
-                    $course->getCode(),
+                    $course->getId(),
                     LINK_STUDENTPUBLICATION,
                     $publication->getIid(),
                     $publication->getTitle(),
@@ -172,7 +172,7 @@ class CStudentPublicationPostProcessor implements ProcessorInterface
             } else {
                 GradebookUtils::updateResourceFromCourseGradebook(
                     $linkId,
-                    $course->getCode(),
+                    $course->getId(),
                     $publication->getWeight()
                 );
             }

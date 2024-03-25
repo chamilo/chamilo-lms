@@ -397,7 +397,7 @@ if ($nbStudents > 0) {
     $category = Category::load(
         null,
         null,
-        $courseCode,
+        $courseId,
         null,
         null,
         $sessionId

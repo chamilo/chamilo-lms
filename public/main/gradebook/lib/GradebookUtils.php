@@ -17,37 +17,39 @@ class GradebookUtils
     /**
      * Adds a resource to the unique gradebook of a given course.
      *
-     * @param   int
-     * @param   string  Course code
-     * @param   int     Resource type (use constants defined in linkfactory.class.php)
-     * @param   int     Resource ID in the corresponding tool
-     * @param   string  Resource name to show in the gradebook
-     * @param   int     Resource weight to set in the gradebook
-     * @param   int     Resource max
-     * @param   string  Resource description
-     * @param   int     Visibility (0 hidden, 1 shown)
-     * @param   int     Session ID (optional or 0 if not defined)
-     * @param   int
+     * @param int
+     * @param int $courseId Course ID
+     * @param int     Resource type (use constants defined in linkfactory.class.php)
+     * @param int     Resource ID in the corresponding tool
+     * @param string  Resource name to show in the gradebook
+     * @param int     Resource weight to set in the gradebook
+     * @param int     Resource max
+     * @param string  Resource description
+     * @param int     Visibility (0 hidden, 1 shown)
+     * @param int     Session ID (optional or 0 if not defined)
+     * @param int
      * @param int $resource_type
      *
      * @return bool True on success, false on failure
+     * @throws Exception
      */
     public static function add_resource_to_course_gradebook(
-        $category_id,
-        $course_code,
-        $resource_type,
-        $resource_id,
-        $resource_name = '',
-        $weight = 0,
-        $max = 0,
-        $resource_description = '',
-        $visible = 0,
-        $session_id = 0,
-        $link_id = null
-    ) {
+        int $category_id,
+        int $courseId,
+        string $resource_type,
+        int $resource_id,
+        ?string $resource_name = '',
+        ?int $weight = 0,
+        ?int $max = 0,
+        ?string $resource_description = '',
+        ?int $visible = 0,
+        ?int $session_id = 0,
+        ?int $link_id = null
+    ): bool
+    {
         $link = LinkFactory::create($resource_type);
         $link->set_user_id(api_get_user_id());
-        $link->set_course_code($course_code);
+        $link->setCourseId($courseId);
 
         if (empty($category_id)) {
             return false;
@@ -80,25 +82,23 @@ class GradebookUtils
     /**
      * Update a resource weight.
      *
-     * @param    int     Link/Resource ID
-     * @param   string
-     * @param float
+     * @param int   $link_id Link/Resource ID
+     * @param int   $courseId
+     * @param float $weight
      *
      * @return bool false on error, true on success
+     * @throws Exception
      */
     public static function updateResourceFromCourseGradebook(
-        $link_id,
-        $course_code,
-        $weight
-    ) {
-        $link_id = (int) $link_id;
-        $courseInfo = api_get_course_info($course_code);
-        if (!empty($link_id) && !empty($courseInfo)) {
-            $link_id = intval($link_id);
-            $courseId = $courseInfo['real_id'];
+        int $link_id,
+        int $courseId,
+        float $weight
+    ): bool
+    {
+        if (!empty($link_id) && !empty($courseId)) {
             $sql = 'UPDATE '.Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK).'
-                    SET weight = '."'".api_float_val($weight)."'".'
-                    WHERE c_id = "'.$courseId.'" AND id = '.$link_id;
+                    SET weight = '.$weight.'
+                    WHERE c_id = '.$courseId.' AND id = '.$link_id;
             Database::query($sql);
         }
 
@@ -467,37 +467,38 @@ class GradebookUtils
     /**
      * Checks if a resource is in the unique gradebook of a given course.
      *
-     * @param string $course_code   Course code
+     * @param int    $courseId Course ID
      * @param int    $resource_type Resource type (use constants defined in linkfactory.class.php)
-     * @param int    $resource_id   Resource ID in the corresponding tool
-     * @param int    $session_id    Session ID (optional -  0 if not defined)
+     * @param int    $resource_id Resource ID in the corresponding tool
+     * @param ?int    $session_id Session ID (optional -  0 if not defined) (WARNING: not yet implemented)
      *
      * @return array false on error or array of resource
+     * @throws Exception
      */
     public static function isResourceInCourseGradebook(
-        $course_code,
-        $resource_type,
-        $resource_id,
-        $session_id = 0
-    ) {
+        int $courseId,
+        int $resource_type,
+        int $resource_id,
+        ?int $session_id
+    ): array
+    {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-        $courseInfo = api_get_course_info($course_code);
-        if (empty($courseInfo)) {
+        if (empty($courseId) or empty($resource_type) or empty($resource_id)) {
             return [];
         }
 
         $sql = "SELECT * FROM $table l
                 WHERE
-                    c_id = ".$courseInfo['real_id']." AND
-                    type = ".(int) $resource_type." AND
-                    ref_id = ".(int) $resource_id;
+                    c_id = $courseId AND
+                    type = $resource_type AND
+                    ref_id = $resource_id";
         $res = Database::query($sql);
 
         if (Database::num_rows($res) < 1) {
-            return false;
+            return [];
         }
 
-        return Database::fetch_array($res, 'ASSOC');
+        return Database::fetch_assoc($res);
     }
 
     /**
@@ -733,8 +734,9 @@ class GradebookUtils
     }
 
     /**
+     * Gets the content of an HTML document with placeholders replaced
      * @param int    $user_id
-     * @param string $course_code
+     * @param int    $courseId
      * @param int    $sessionId
      * @param bool   $is_preview
      * @param bool   $hide_print_button
@@ -742,16 +744,17 @@ class GradebookUtils
      * @return array
      */
     public static function get_user_certificate_content(
-        $user_id,
-        $course_code,
-        $sessionId,
-        $is_preview = false,
-        $hide_print_button = false
-    ) {
+        int $user_id,
+        int $courseId,
+        int $sessionId,
+        ?bool $is_preview = false,
+        ?bool $hide_print_button = false
+    ): array
+    {
         // Generate document HTML
         $content_html = DocumentManager::replace_user_info_into_html(
             $user_id,
-            api_get_course_info_by_id($course_code),
+            api_get_course_info_by_id($courseId),
             $sessionId,
             $is_preview
         );
@@ -796,25 +799,27 @@ class GradebookUtils
     }
 
     /**
-     * @param null $course_code
-     * @param int  $gradebook_model_id
+     * Create a gradebook in the given course if no gradebook exists yet
+     * @param ?int $courseId
+     * @param ?int $gradebook_model_id
      *
-     * @return mixed
+     * @return int 0 on failure, gradebook ID otherwise
+     * @throws Exception
      */
     public static function create_default_course_gradebook(
-        $course_code = null,
-        $gradebook_model_id = 0
-    ) {
+        ?int $courseId = null,
+        ?int $gradebook_model_id = 0
+    ): int
+    {
         if (api_is_allowed_to_edit(true, true)) {
-            if (!isset($course_code) || empty($course_code)) {
-                $course_code = api_get_course_id();
+            if (empty($courseId)) {
+                $courseId = api_get_course_int_id();
             }
             $session_id = api_get_session_id();
-            $courseInfo = api_get_course_info($course_code);
 
             $t = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
             $sql = "SELECT * FROM $t
-                    WHERE c_id = '".$courseInfo['real_id']."' ";
+                    WHERE c_id = $courseId ";
             if (!empty($session_id)) {
                 $sql .= " AND session_id = ".$session_id;
             } else {
@@ -828,17 +833,17 @@ class GradebookUtils
                 if (!empty($session_id)) {
                     $my_session_id = api_get_session_id();
                     $s_name = api_get_session_name($my_session_id);
-                    $cat->set_name($course_code.' - '.get_lang('Session').' '.$s_name);
+                    $cat->set_name($courseId.' - '.get_lang('Session').' '.$s_name);
                     $cat->set_session_id($session_id);
                 } else {
-                    $cat->set_name($course_code);
+                    $cat->set_name(strval($courseId));
                 }
-                $cat->set_course_code($course_code);
-                $cat->set_description(null);
+                $cat->setCourseId($courseId);
+                $cat->set_description('');
                 $cat->set_user_id(api_get_user_id());
                 $cat->set_parent_id(0);
                 $default_weight_setting = api_get_setting('gradebook_default_weight');
-                $default_weight = isset($default_weight_setting) && !empty($default_weight_setting) ? $default_weight_setting : 100;
+                $default_weight = !empty($default_weight_setting) ? $default_weight_setting : 100;
                 $cat->set_weight($default_weight);
                 $cat->set_grade_model_id($gradebook_model_id);
                 $cat->set_certificate_min_score(75);
@@ -854,7 +859,7 @@ class GradebookUtils
             return $category_id;
         }
 
-        return false;
+        return 0;
     }
 
     /**
@@ -862,7 +867,6 @@ class GradebookUtils
      */
     public static function load_gradebook_select_in_tool($form)
     {
-        $course_code = api_get_course_id();
         $session_id = api_get_session_id();
 
         self::create_default_course_gradebook();
@@ -871,11 +875,11 @@ class GradebookUtils
         $all_categories = Category::load(
             null,
             null,
-            $course_code,
+            api_get_course_int_id(),
             null,
             null,
             $session_id,
-            false
+            null
         );
         $select_gradebook = $form->addSelect(
             'category_id',
@@ -884,7 +888,7 @@ class GradebookUtils
 
         if (!empty($all_categories)) {
             foreach ($all_categories as $my_cat) {
-                if ($my_cat->get_course_code() == api_get_course_id()) {
+                if ($my_cat->getCourseId() == api_get_course_int_id()) {
                     $grade_model_id = $my_cat->get_grade_model_id();
                     if (empty($grade_model_id)) {
                         if (0 == $my_cat->get_parent_id()) {
@@ -932,7 +936,6 @@ class GradebookUtils
         );
 
         // HTML report creation first
-        $course_code = trim($cat->get_course_code());
 
         $displayscore = ScoreDisplay::instance();
         $customDisplays = $displayscore->get_custom_score_display_settings();
@@ -1029,6 +1032,7 @@ class GradebookUtils
             $table->updateCellAttributes($row, $column, 'colspan="'.$columns.'" align="center" class="row_odd"');
         }
 
+        $course_code = trim($cat->get_course_code());
         $pdfParams = [
             'filename' => get_lang('List View').'_'.api_get_local_time(),
             'pdf_title' => $title,
@@ -1070,23 +1074,20 @@ class GradebookUtils
     /**
      * returns users within a course given by param.
      *
-     * @param string $courseCode
-     *
-     * @todo use CourseManager
+     * @param ?int $courseId
      *
      * @return array
+     * @throws Exception
+     * @todo use CourseManager
+     *
      */
-    public static function get_users_in_course($courseCode)
+    public static function get_users_in_course(?int $courseId = 0)
     {
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname ASC' : ' ORDER BY lastname, firstname ASC';
-
         $current_session = api_get_session_id();
-        $courseCode = Database::escape_string($courseCode);
-        $courseInfo = api_get_course_info($courseCode);
-        $courseId = $courseInfo['real_id'];
 
         if (!empty($current_session)) {
             $sql = "SELECT user.id as user_id, user.username, lastname, firstname, official_code
@@ -1095,8 +1096,8 @@ class GradebookUtils
                     ON (scru.user_id = user.id)
                     WHERE
                         scru.status = ".Session::STUDENT." AND
-                        scru.c_id='$courseId' AND
-                        session_id ='$current_session'
+                        scru.c_id = $courseId AND
+                        session_id = '$current_session'
                     $order_clause
                     ";
         } else {
@@ -1106,7 +1107,7 @@ class GradebookUtils
                     ON (course_rel_user.user_id = user.id)
                     WHERE
                         course_rel_user.status = '.STUDENT.' AND
-                        course_rel_user.c_id = "'.$courseId.'" '.
+                        course_rel_user.c_id = '.$courseId.' '.
                     $order_clause;
         }
 
@@ -1143,21 +1144,23 @@ class GradebookUtils
      * @param array $links
      *
      * @return array
+     * @throws Exception
      */
-    public static function get_all_users($evals = [], $links = [])
+    public static function get_all_users($evals = [], $links = []): array
     {
-        $coursecodes = [];
-        // By default add all user in course
-        $coursecodes[api_get_course_id()] = '1';
-        $users = self::get_users_in_course(api_get_course_id());
+        $courseId = api_get_course_int_id();
+        // By default, add all user in course
+        $courseIds[$courseId] = '1';
+        $users = self::get_users_in_course($courseId);
 
         foreach ($evals as $eval) {
-            $coursecode = $eval->get_course_code();
+            /* @var Evaluation $eval */
+            $loopCourseId = $eval->getCourseId();
             // evaluation in course
-            if (isset($coursecode) && !empty($coursecode)) {
-                if (!array_key_exists($coursecode, $coursecodes)) {
-                    $coursecodes[$coursecode] = '1';
-                    $users = array_merge($users, self::get_users_in_course($coursecode));
+            if (!empty($loopCourseId)) {
+                if (!array_key_exists($loopCourseId, $courseIds)) {
+                    $courseIds[$loopCourseId] = '1';
+                    $users = array_merge($users, self::get_users_in_course($loopCourseId));
                 }
             } else {
                 // course independent evaluation
@@ -1167,7 +1170,7 @@ class GradebookUtils
                 $sql = 'SELECT user.id as user_id, lastname, firstname, user.official_code
                         FROM '.$tbl_res.' as res, '.$tbl_user.' as user
                         WHERE
-                            res.evaluation_id = '.intval($eval->get_id()).' AND
+                            res.evaluation_id = '.$eval->get_id().' AND
                             res.user_id = user.id
                         ';
                 $sql .= ' ORDER BY lastname, firstname';
@@ -1185,12 +1188,13 @@ class GradebookUtils
 
         foreach ($links as $link) {
             // links are always in a course
-            $coursecode = $link->get_course_code();
-            if (!array_key_exists($coursecode, $coursecodes)) {
-                $coursecodes[$coursecode] = '1';
+            /** @var EvalLink $link */
+            $loopCourseId = $link->getCourseId();
+            if (!array_key_exists($loopCourseId, $courseIds)) {
+                $courseIds[$loopCourseId] = '1';
                 $users = array_merge(
                     $users,
-                    self::get_users_in_course($coursecode)
+                    self::get_users_in_course($loopCourseId)
                 );
             }
         }
@@ -1350,7 +1354,7 @@ class GradebookUtils
                 }
             }
 
-            $category = Category::load(null, null, $course['code']);
+            $category = Category::load(null, null, $course['real_id']);
 
             if (empty($category)) {
                 continue;
@@ -1426,7 +1430,7 @@ class GradebookUtils
                 $category = Category::load(
                     null,
                     null,
-                    $course['code'],
+                    $course['real_id'],
                     null,
                     null,
                     $session['session_id']

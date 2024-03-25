@@ -177,7 +177,7 @@ abstract class EvalLink extends AbstractLink
                 $eval->set_visible(0); //     is called
                 $eval->set_id(-1); // a 'real' id will be set when eval is added to db
                 $eval->set_user_id($this->get_user_id());
-                $eval->set_course_code($this->get_course_code());
+                $eval->setCourseId($this->getCourseId());
                 $this->evaluation = $eval;
                 $this->set_ref_id($eval->get_id());
             }

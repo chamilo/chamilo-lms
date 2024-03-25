@@ -75,7 +75,7 @@ if ('edit' === $action && isset($survey_id) && is_numeric($survey_id)) {
     $defaults['end_date'] = $defaults['avail_till'];
 
     $link_info = GradebookUtils::isResourceInCourseGradebook(
-        $course_id,
+        api_get_course_int_id(),
         $gradebook_link_type,
         $survey_id,
         $session_id

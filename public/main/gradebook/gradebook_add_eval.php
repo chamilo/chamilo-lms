@@ -18,7 +18,7 @@ $evaladd->set_user_id($userId);
 if (!empty($select_cat)) {
     $evaladd->set_category_id($_GET['selectcat']);
     $cat = Category::load($_GET['selectcat']);
-    $evaladd->set_course_code($cat[0]->get_course_code());
+    $evaladd->setCourseId($cat[0]->getCourseId());
 } else {
     $evaladd->set_category_id(0);
 }
@@ -40,11 +40,12 @@ if ($form->validate()) {
     $eval->set_user_id($values['hid_user_id']);
 
     if (!empty($values['hid_course_code'])) {
-        $eval->set_course_code($values['hid_course_code']);
+        $eval->setCourseId(api_get_course_int_id($values['hid_course_code']));
     }
 
+    // Todo: Fix this assignment that ignores the block above
     //Always add the gradebook to the course
-    $eval->set_course_code(api_get_course_id());
+    $eval->setCourseId(api_get_course_int_id());
     $eval->set_category_id($values['hid_category_id']);
 
     $parent_cat = Category::load($values['hid_category_id']);
@@ -70,7 +71,7 @@ if ($form->validate()) {
     ];
     Event::registerLog($logInfo);
 
-    if (null == $eval->get_course_code()) {
+    if (null == $eval->getCourseId()) {
         if (1 == $values['adduser']) {
             //Disabling code when course code is null see issue #2705
             //header('Location: gradebook_add_user.php?selecteval=' . $eval->get_id());
@@ -125,7 +126,7 @@ $(function() {
 });
 </script>';
 
-if (null == $evaladd->get_course_code()) {
+if (null == $evaladd->getCourseId()) {
     Display::addFlash(Display::return_message(get_lang('Course independent evaluation'), 'normal', false));
 }
 

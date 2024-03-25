@@ -50,7 +50,7 @@ if (isset($_GET['createallcategories'])) {
         foreach ($coursecat as $row) {
             $cat = new Category();
             $cat->set_name($row[1]);
-            $cat->set_course_code($row[0]);
+            $cat->setCourseId(api_get_course_int_id($row[0]));
             $cat->set_description(null);
             $cat->set_user_id(api_get_user_id());
             $cat->set_parent_id(0);
@@ -86,7 +86,7 @@ if (isset($_GET['movecat'])) {
     } else {
         $get_target_cat = Security::remove_XSS($_GET['targetcat']);
         $targetcat = Category :: load($get_target_cat);
-        $course_to_crsind = (null != $cats[0]->get_course_code() && null == $targetcat[0]->get_course_code());
+        $course_to_crsind = (null != $cats[0]->getCourseId() && null == $targetcat[0]->getCourseId());
 
         if (!($course_to_crsind && !isset($_GET['confirm']))) {
             $cats[0]->move_to_cat($targetcat[0]);
@@ -122,7 +122,7 @@ if (isset($_GET['moveeval'])) {
     } else {
         $get_target_cat = Security::remove_XSS($_GET['targetcat']);
         $targetcat = Category :: load($get_target_cat);
-        $course_to_crsind = (null != $evals[0]->get_course_code() && null == $targetcat[0]->get_course_code());
+        $course_to_crsind = (null != $evals[0]->getCourseId() && null == $targetcat[0]->getCourseId());
 
         if (!($course_to_crsind && !isset($_GET['confirm']))) {
             $evals[0]->move_to_cat($targetcat[0]);

@@ -21,7 +21,6 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
                     'hide_global_announcements_when_not_connected' => 'false',
                     'hide_send_to_hrm_users' => 'true',
                     'disable_announcement_attachment' => 'false',
-                    'admin_chamilo_announcements_disable' => 'false',
                     'allow_scheduled_announcements' => 'false',
                     'disable_delete_all_announcements' => 'false',
                     'hide_announcement_sent_to_users_info' => 'false',
@@ -46,7 +45,6 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
             ->add('hide_global_announcements_when_not_connected', YesNoType::class)
             ->add('hide_send_to_hrm_users', YesNoType::class)
             ->add('disable_announcement_attachment', YesNoType::class)
-            ->add('admin_chamilo_announcements_disable', YesNoType::class)
             ->add('allow_scheduled_announcements', YesNoType::class)
             ->add('disable_delete_all_announcements', YesNoType::class)
             ->add('hide_announcement_sent_to_users_info', YesNoType::class)

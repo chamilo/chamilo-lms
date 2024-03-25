@@ -40,44 +40,9 @@
     />
 
     <div class="field">
-      <TinyEditor
-        id="item_content"
+      <BaseTinyEditor
         v-model="v$.item.content.$model"
-        :init="{
-          skin_url: '/build/libs/tinymce/skins/ui/oxide',
-          content_css: '/build/libs/tinymce/skins/content/default/content.css',
-          branding: false,
-          relative_urls: false,
-          height: 500,
-          toolbar_mode: 'sliding',
-          file_picker_callback: function(callback, value, meta) {
-            if (meta.filetype === 'image') {
-              var input = document.createElement('input');
-              input.setAttribute('type', 'file');
-              input.setAttribute('accept', 'image/*');
-              input.onchange = function() {
-                var file = this.files[0];
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                  // Esta es la URL de la imagen que se pasará al editor
-                  callback(e.target.result, {
-                    alt: file.name
-                  });
-                };
-                reader.readAsDataURL(file);
-              };
-              input.click();
-            }
-          },
-          autosave_ask_before_unload: true,
-          plugins: [
-            'fullpage advlist autolink lists link image charmap print preview anchor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table paste wordcount '
-          ],
-          toolbar: 'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl | ' + extraPlugins,
-        }
-        "
+        editor-id="item_content"
         required
       />
     </div>
@@ -95,35 +60,33 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue';
-import BaseInputText from "../basecomponents/BaseInputText.vue";
-import BaseCheckbox from "../basecomponents/BaseCheckbox.vue";
-import BaseDropdown from "../basecomponents/BaseDropdown.vue";
-import useVuelidate from '@vuelidate/core';
-import { required } from '@vuelidate/validators';
-import isEmpty from 'lodash/isEmpty';
-import { useI18n } from 'vue-i18n';
+import { computed, ref, watch } from "vue"
+import BaseInputText from "../basecomponents/BaseInputText.vue"
+import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
+import BaseDropdown from "../basecomponents/BaseDropdown.vue"
+import useVuelidate from "@vuelidate/core"
+import { required } from "@vuelidate/validators"
+import isEmpty from "lodash/isEmpty"
+import { useI18n } from "vue-i18n"
 import pageCategoryService from "../../services/pageCategoryService"
+import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 
 const props = defineProps({
   modelValue: {
     type: Object,
     default: () => {},
-  }
-});
+  },
+})
 
-const emit = defineEmits([
-  'update:modelValue',
-  'submit',
-]);
+const emit = defineEmits(["update:modelValue", "submit"])
 
-const { t } = useI18n();
+const { t } = useI18n()
 
-let locales = ref(window.languages);
+let locales = ref(window.languages)
 
-let categories = ref([]);
+let categories = ref([])
 
-const findAllPageCategories = async () => categories.value = await pageCategoryService.findAll()
+const findAllPageCategories = async () => (categories.value = await pageCategoryService.findAll())
 
 findAllPageCategories()
 
@@ -131,17 +94,17 @@ watch(
   () => props.modelValue,
   (newValue) => {
     if (!newValue) {
-      return;
+      return
     }
 
-    if (!isEmpty(newValue.category) && !isEmpty(newValue.category['@id'])) {
-      emit('update:modelValue', {
+    if (!isEmpty(newValue.category) && !isEmpty(newValue.category["@id"])) {
+      emit("update:modelValue", {
         ...newValue,
-        category: newValue.category['@id']
-      });
+        category: newValue.category["@id"],
+      })
     }
-  }
-);
+  },
+)
 
 const validations = {
   item: {
@@ -160,19 +123,16 @@ const validations = {
     category: {
       required,
     },
-  }
-};
+  },
+}
 
-const v$ = useVuelidate(
-  validations,
-  { item: computed(() => props.modelValue) }
-);
+const v$ = useVuelidate(validations, { item: computed(() => props.modelValue) })
 
-function btnSaveOnClick () {
-  const item = { ...props.modelValue, ...v$.value.item.$model };
+function btnSaveOnClick() {
+  const item = { ...props.modelValue, ...v$.value.item.$model }
 
-  emit('update:modelValue', item)
+  emit("update:modelValue", item)
 
-  emit('submit', item)
+  emit("submit", item)
 }
 </script>

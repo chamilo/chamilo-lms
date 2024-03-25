@@ -13,12 +13,13 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from "vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
+import { TINYEDITOR_MODE_PERSONAL_FILES } from "../../components/basecomponents/TinyEditorOptions"
 
-const editorContent = ref('')
+const editorContent = ref("")
 // Here you decide the mode, 'personal_files' or 'documents'
-const editorMode = ref('personal_files')
+const editorMode = ref(TINYEDITOR_MODE_PERSONAL_FILES)
 // Decide if you want to use the file manager or not
 const useFileManager = ref(true)
 </script>

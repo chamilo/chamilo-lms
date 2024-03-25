@@ -108,8 +108,9 @@ class ToolChain
                     $resourceType->setTool($toolEntity);
                     $manager->persist($resourceType);
                 }
-                $manager->flush();
             }
+
+            $manager->flush();
         }
     }
 

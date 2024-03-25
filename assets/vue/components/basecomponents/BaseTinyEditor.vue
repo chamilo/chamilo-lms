@@ -218,7 +218,7 @@ async function filePickerCallback(callback, value, meta) {
 }
 
 function inputFileHandler(callback, input) {
-  return () => {
+  return async () => {
     const file = input.files[0]
     const title = file.name
     const comment = ""
@@ -234,13 +234,13 @@ function inputFileHandler(callback, input) {
     formData.append("resourceLinkList", resourceLinkList)
 
     try {
-      let response = fetch("/file-manager/upload-image", {
+      let response = await fetch("/file-manager/upload-image", {
         method: "POST",
         body: formData,
       })
-      let data = response.json()
-      if (data.location) {
-        callback(data.location)
+      const { data, location } = await response.json()
+      if (location) {
+        callback(location, { alt: data.title })
       } else {
         console.error("Failed to upload file")
       }

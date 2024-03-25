@@ -67,7 +67,7 @@ switch ($action) {
 
         break;
     case 'get_latest_news':
-        if ('true' === api_get_setting('announcement.admin_chamilo_announcements_disable')) {
+        if ('true' === api_get_setting('admin.admin_chamilo_announcements_disable')) {
             break;
         }
 

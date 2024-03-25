@@ -4280,7 +4280,7 @@ function convert_sql_date($last_post_datetime)
     list($year, $month, $day) = explode('-', $last_post_date);
     list($hour, $min, $sec) = explode(':', $last_post_time);
 
-    return mktime((int) $hour, (int) $min, (int) $sec, (int) $month, (int) $day, (int) $year);
+    return gmmktime((int) $hour, (int) $min, (int) $sec, (int) $month, (int) $day, (int) $year);
 }
 
 /**

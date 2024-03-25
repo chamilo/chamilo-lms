@@ -176,6 +176,11 @@ async function filePickerCallback(callback, value, meta) {
   if (!props.useFileManager) {
     const input = document.createElement("input")
     input.setAttribute("type", "file")
+    if ("image" === meta.filetype) {
+      input.accept = "image/*"
+    } else if ("media" === meta.filetype) {
+      input.accept = "audio/*, video/*"
+    }
     input.style.display = "none"
     input.onchange = inputFileHandler(callback, input)
     document.body.appendChild(input)

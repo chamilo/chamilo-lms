@@ -249,6 +249,7 @@ class AddCourse
 
         self::insertCourseSettings($course);
         self::createGroupCategory($course);
+        $gradebook = self::createRootGradebook($course);
 
         if ($fillWithExemplaryContent ?? api_get_setting('example_material_course_creation') !== 'false') {
             self::insertExampleContent($course, $authorId, $entityManager);
@@ -361,11 +362,12 @@ class AddCourse
      *
      * @param Course $course The course object into which the example content will be inserted.
      * @param int $authorId The ID of the user who will be listed as the author of the inserted content.
+     * @param GradebookCategory $gradebook
      *
      * @return void
      * @throws Exception
      */
-    private static function insertExampleContent(Course $course, int $authorId): void
+    private static function insertExampleContent(Course $course, int $authorId, GradebookCategory $gradebook): void
     {
         $now = api_get_utc_datetime();
         $files = [
@@ -560,7 +562,7 @@ class AddCourse
 
         saveThread($forumEntity, $params, $courseInfo, false);
 
-        self::createGradebookStructure($course, $exercise->id);
+        self::createExampleGradebookContent($course, $gradebook, $exercise->id);
     }
 
     /**
@@ -576,7 +578,56 @@ class AddCourse
      *
      * @return void
      */
-    private static function createGradebookStructure(Course $course, int $refId): void
+    private static function createExampleGradebookContent(Course $course, GradebookCategory $parentCategory, int $refId): void
+    {
+        $manager = Database::getManager();
+
+        /* Gradebook tool */
+        $courseCode = $course->getCode();
+
+        $childGradebookCategory = new GradebookCategory();
+        $childGradebookCategory->setTitle($courseCode);
+        $childGradebookCategory->setLocked(0);
+        $childGradebookCategory->setGenerateCertificates(false);
+        $childGradebookCategory->setDescription('');
+        $childGradebookCategory->setCourse($course);
+        $childGradebookCategory->setWeight(100);
+        $childGradebookCategory->setVisible(true);
+        $childGradebookCategory->setCertifMinScore(75);
+        $childGradebookCategory->setParent($parentCategory);
+        $childGradebookCategory->setUser(api_get_user_entity());
+
+        $manager->persist($childGradebookCategory);
+        $manager->flush();
+
+        $gradebookLink = new GradebookLink();
+
+        $gradebookLink->setType(1);
+        $gradebookLink->setRefId($refId);
+        $gradebookLink->setUser(api_get_user_entity());
+        $gradebookLink->setCourse($course);
+        $gradebookLink->setCategory($childGradebookCategory);
+        $gradebookLink->setCreatedAt(new \DateTime());
+        $gradebookLink->setWeight(100);
+        $gradebookLink->setVisible(1);
+        $gradebookLink->setLocked(0);
+
+        $manager->persist($gradebookLink);
+        $manager->flush();
+    }
+
+    /**
+     * Creates the basic gradebook structure for a course.
+     *
+     * This method sets up the initial gradebook categories and links for a new course.
+     * It creates a parent gradebook category representing the course itself.
+     *
+     * @param Course $course The course entity for which the gradebook structure will be created.
+     *
+     * @return GradebookCategory The created gradebook's ID
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    private static function createRootGradebook(Course $course): GradebookCategory
     {
         $manager = Database::getManager();
 
@@ -597,35 +648,7 @@ class AddCourse
         $manager->persist($parentGradebookCategory);
         $manager->flush();
 
-        $childGradebookCategory = new GradebookCategory();
-        $childGradebookCategory->setTitle($courseCode);
-        $childGradebookCategory->setLocked(0);
-        $childGradebookCategory->setGenerateCertificates(false);
-        $childGradebookCategory->setDescription('');
-        $childGradebookCategory->setCourse($course);
-        $childGradebookCategory->setWeight(100);
-        $childGradebookCategory->setVisible(true);
-        $childGradebookCategory->setCertifMinScore(75);
-        $childGradebookCategory->setParent($parentGradebookCategory);
-        $childGradebookCategory->setUser(api_get_user_entity());
-
-        $manager->persist($childGradebookCategory);
-        $manager->flush();
-
-        $gradebookLink = new GradebookLink();
-
-        $gradebookLink->setType(1);
-        $gradebookLink->setRefId($refId);
-        $gradebookLink->setUser(api_get_user_entity());
-        $gradebookLink->setCourse($course);
-        $gradebookLink->setCategory($childGradebookCategory);
-        $gradebookLink->setCreatedAt(new \DateTime());
-        $gradebookLink->setWeight(100);
-        $gradebookLink->setVisible(1);
-        $gradebookLink->setLocked(0);
-
-        $manager->persist($gradebookLink);
-        $manager->flush();
+        return $parentGradebookCategory;
     }
 
     /**

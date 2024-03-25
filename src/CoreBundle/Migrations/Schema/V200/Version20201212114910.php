@@ -33,6 +33,7 @@ final class Version20201212114910 extends AbstractMigrationChamilo
         $userList = [];
         // Adding first admin as main creator also adding to the resource node tree.
         $admin = $this->getAdmin();
+        $admin->addRole('ROLE_ADMIN');
 
         $adminId = $admin->getId();
         $userList[$adminId] = $admin;

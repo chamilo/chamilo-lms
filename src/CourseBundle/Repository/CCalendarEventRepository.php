@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
@@ -75,5 +76,36 @@ final class CCalendarEventRepository extends ResourceRepository
         $em->flush();
 
         return $event;
+    }
+
+    public function determineEventType(CCalendarEvent $event): string
+    {
+        $em = $this->getEntityManager();
+        $queryBuilder = $em->createQueryBuilder();
+
+        $queryBuilder
+            ->select('rl')
+            ->from(ResourceLink::class, 'rl')
+            ->innerJoin('rl.resourceNode', 'rn')
+            ->where('rn.id = :resourceNodeId')
+            ->setParameter('resourceNodeId', $event->getResourceNode()->getId());
+
+        $resourceLinks = $queryBuilder->getQuery()->getResult();
+
+        foreach ($resourceLinks as $link) {
+            if (null === $link->getCourse() && null === $link->getSession() && null === $link->getGroup() && null === $link->getUser()) {
+                return 'global';
+            }
+
+            if (null !== $link->getCourse()) {
+                return 'course';
+            }
+
+            if (null !== $link->getSession()) {
+                return 'session';
+            }
+        }
+
+        return 'personal';
     }
 }

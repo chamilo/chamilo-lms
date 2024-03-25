@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
+use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -20,6 +21,7 @@ class CalendarEventTransformer implements DataTransformerInterface
     public function __construct(
         private readonly RouterInterface $router,
         private readonly UsergroupRepository $usergroupRepository,
+        private readonly CCalendarEventRepository $calendarEventRepository
     ) {}
 
     public function transform($object, string $to, array $context = []): object
@@ -48,7 +50,8 @@ class CalendarEventTransformer implements DataTransformerInterface
             $subscriptionItemTitle = $this->usergroupRepository->find($object->getSubscriptionItemId())?->getTitle();
         }
 
-        return new CalendarEvent(
+        $eventType = $this->calendarEventRepository->determineEventType($object);
+        $calendarEvent = new CalendarEvent(
             'calendar_event_'.$object->getIid(),
             $object->getTitle(),
             $object->getContent(),
@@ -65,6 +68,9 @@ class CalendarEventTransformer implements DataTransformerInterface
             $object->getResourceNode(),
             $object->getResourceLinkListFromEntity(),
         );
+        $calendarEvent->setType($eventType);
+
+        return $calendarEvent;
     }
 
     private function mapSessionToDto(object $object): CalendarEvent

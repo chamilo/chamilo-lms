@@ -1,10 +1,8 @@
 <template>
   <div class="flex flex-col gap-4">
-    <!--CalendarSectionHeader
+    <CalendarSectionHeader
       @add-click="showAddEventDialog"
-      @my-students-schedule-click="goToMyStudentsSchedule"
-      @session-planning-click="goToSessionPanning"
-    /-->
+    />
 
     <FullCalendar
       ref="cal"

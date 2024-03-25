@@ -10,34 +10,16 @@
     <div class="field">
       <div class="p-float-label">
         <div class="html-editor-container">
-          <TinyEditor
+          <BaseTinyEditor
             v-if="
-          (item.resourceNode &&
-            item.resourceNode.resourceFile &&
-            item.resourceNode.resourceFile.text) ||
-          item.newDocument
-        "
-            id="item_content"
+            (
+              item.resourceNode
+              && item.resourceNode.resourceFile
+              && item.resourceNode.resourceFile.text
+            )
+            || item.newDocument"
             v-model="item.contentFile"
-            :init="{
-          skin_url: '/build/libs/tinymce/skins/ui/oxide',
-          content_css: '/build/libs/tinymce/skins/content/default/content.css',
-          branding: false,
-          relative_urls: false,
-          height: 500,
-          toolbar_mode: 'sliding',
-          file_picker_callback: browser,
-          autosave_ask_before_unload: true,
-          plugins: [
-            'fullpage advlist autolink lists link image charmap print preview anchor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table paste wordcount emoticons ' +
-              extraPlugins,
-          ],
-          toolbar:
-            'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl | ' +
-            extraPlugins,
-        }"
+            editor-id="item_content"
             required
           />
         </div>
@@ -56,10 +38,11 @@ import { required } from "@vuelidate/validators";
 import { ref } from "vue";
 import { usePlatformConfig } from "../../store/platformConfig";
 import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue"
+import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 
 export default {
   name: "DocumentsForm",
-  components: { BaseInputTextWithVuelidate },
+  components: { BaseTinyEditor, BaseInputTextWithVuelidate },
   props: {
     values: {
       type: Object,

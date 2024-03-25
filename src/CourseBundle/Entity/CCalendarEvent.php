@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Filter\CidFilter;
+use Chamilo\CoreBundle\Filter\GlobalEventFilter;
 use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CoreBundle\State\CalendarEventProvider;
 use Chamilo\CoreBundle\State\CCalendarEventProcessor;
@@ -67,6 +68,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(filterClass: DateFilter::class, strategy: 'exclude_null')]
 #[ApiFilter(filterClass: CidFilter::class)]
 #[ApiFilter(filterClass: SidFilter::class)]
+#[ApiFilter(GlobalEventFilter::class, properties: ["type"])]
 class CCalendarEvent extends AbstractResource implements ResourceInterface, Stringable
 {
     public const COLOR_STUDENT_PUBLICATION = '#FF8C00';

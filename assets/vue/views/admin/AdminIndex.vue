@@ -83,7 +83,7 @@
       class="admin-index__block-container block-admin-version"
     >
       <div class="admin-index__block">
-        <h4 v-t="'Version Check'" />
+        <h4 v-t="'Version check'" />
 
         <div
           v-if="'false' === platformConfigurationStore.getSetting('platform.registered')"

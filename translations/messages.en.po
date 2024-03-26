@@ -25201,3 +25201,36 @@ msgstr "The update failed for the following courses"
 
 msgid "%02d h %02d m %02d s"
 msgstr "%02d h %02d m %02d s"
+
+msgid "User management"
+msgstr "User management"
+
+msgid "Here you can manage registered users within your platform"
+msgstr "Here you can manage registered users within your platform"
+
+msgid "Course management"
+msgstr "Course management"
+
+msgid "Create and manage your courses in a simple way"
+msgstr "Create and manage your courses in a simple way"
+
+msgid "Sessions management"
+msgstr "Sessions management"
+
+msgid "Create course packages for a certain time with training sessions"
+msgstr "Create course packages for a certain time with training sessions"
+
+msgid "Manage the skills of your users, through courses and badges"
+msgstr "Manage the skills of your users, through courses and badges"
+
+msgid "View the status of your server, perform performance tests"
+msgstr "View the status of your server, perform performance tests"
+
+msgid "Platform management"
+msgstr "Platform management"
+
+msgid "Configure your platform, view reports, publish and send announcements globally"
+msgstr "Configure your platform, view reports, publish and send announcements globally"
+
+msgid "Learn more about Chamilo and its use, official references links"
+msgstr "Learn more about Chamilo and its use, official references links"

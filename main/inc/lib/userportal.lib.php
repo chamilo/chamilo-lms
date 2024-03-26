@@ -948,6 +948,14 @@ class IndexManager
             ];
         }
 
+        if (api_get_configuration_value('show_all_my_gradebooks_page')) {
+            $items[] = [
+                'icon' => Display::return_icon('gradebook.png', get_lang('GlobalGradebook')),
+                'link' => api_get_path(WEB_CODE_PATH).'gradebook/all_my_gradebooks.php',
+                'title' => get_lang('GlobalGradebook'),
+            ];
+        }
+
         if (api_get_configuration_value('show_missing_signatures_page') && api_get_configuration_value('enable_sign_attendance_sheet')) {
             $items[] = [
                 'icon' => Display::return_icon('attendance.png', get_lang('MyMissingSignatures')),

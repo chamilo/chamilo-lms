@@ -1179,6 +1179,10 @@ VALUES (2, 13, 'session_courses_read_only_mode', 'Lock Course In Session', 1, 1,
 // Hide gradebook "download report in PDF" button
 // $_configuration['gradebook_hide_pdf_report_button'] = false;
 
+// Shows a link to the "Global gradebooks" page in the /index.php and /user_portal.php page.
+// It also enables the main/gradebook/all_my_gradebooks.php page.
+//$_configuration['show_all_my_gradebooks_page'] = false;
+
 // Show pending survey link in user menu
 // $_configuration['show_pending_survey_in_menu'] = false;
 

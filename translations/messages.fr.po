@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-03-21 11:43+0000\n"
+"PO-Revision-Date: 2024-03-26 17:17+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: French <https://translation.chamilo.org/projects/chamilo/"
 "messages/fr/>\n"
@@ -1312,6 +1312,7 @@ msgstr "Hotpotatoes"
 msgid "-1 = All questions will be selected."
 msgstr "-1 = Toutes les questions seront sélectionnées. 0 = Aucune question ne sera sélectionnée."
 
+#, fuzzy
 msgid "You can customize the email sent to users when they finished the exercise. You can use tags like these:"
 msgstr ""
 "Vous pouvez adapter le courriel envoyé aux utilisateurs quand ils terminent "

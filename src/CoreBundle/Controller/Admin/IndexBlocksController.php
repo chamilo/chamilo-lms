@@ -339,7 +339,7 @@ class IndexBlocksController extends BaseController
         ];
         $items[] = [
             'class' => 'item-global-agenda',
-            'url' => '/resources/ccalendarevent?type=global',
+            'route' => ['name' => 'CCalendarEventList', 'query' => ['type' => 'global']],
             'label' => $this->translator->trans('Global agenda'),
         ];
 
@@ -353,7 +353,7 @@ class IndexBlocksController extends BaseController
 
         $items[] = [
             'class' => 'item-pages-list',
-            'url' => '/resources/pages',
+            'route' => ['name' => 'PageList'],
             'label' => $this->translator->trans('Pages'),
         ];
         $items[] = [
@@ -414,7 +414,7 @@ class IndexBlocksController extends BaseController
         if ('true' === $this->settingsManager->getSetting('registration.allow_terms_conditions')) {
             $items[] = [
                 'class' => 'item-terms-and-conditions',
-                'url' => '/resources/terms-conditions',
+                'route' => ['name' => 'TermsConditions'],
                 'label' => $this->translator->trans('Terms and Conditions'),
             ];
         }
@@ -607,6 +607,12 @@ class IndexBlocksController extends BaseController
                 'label' => $this->translator->trans('Update session status'),
             ];
         }
+
+        $items[] = [
+            'class' => 'item-colors',
+            'route' => ['name' => 'AdminConfigurationColors'],
+            'label' => $this->translator->trans('Colors'),
+        ];
 
         return $items;
     }

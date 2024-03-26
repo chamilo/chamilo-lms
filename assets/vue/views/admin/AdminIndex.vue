@@ -151,19 +151,7 @@
       :title="t('Platform management')"
       class="block-admin-platform"
       icon="admin-settings"
-    >
-      <li
-        :aria-label="t('Colors')"
-        class="p-menuitem"
-        role="menuitem"
-      >
-        <div class="p-menuitem-content">
-          <router-link class="p-menuitem-link" :to="{name: 'AdminConfigurationColors'}">
-            <span class="p-menuitem-text" v-text="t('Colors')" />
-          </router-link>
-        </div>
-      </li>
-    </AdminBlock>
+    />
 
     <AdminBlock
       v-if="blockChamilo"

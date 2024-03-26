@@ -32,12 +32,37 @@
             role="menuitem"
           >
             <div class="p-menuitem-content">
-              <a :href="item.url" class="p-menuitem-link">
-                <span class="p-menuitem-text" v-text="item.label" />
+              <router-link
+                v-if="item.route"
+                v-slot="{ href, navigate }"
+                :to="item.route"
+                custom
+              >
+                <a
+                  :href="href"
+                  class="p-menuitem-link"
+                  v-bind="props.action"
+                  @click="navigate"
+                >
+                  <span
+                    class="p-menuitem-text"
+                    v-text="item.label"
+                  />
+                </a>
+              </router-link>
+              <a
+                v-else-if="item.url"
+                :href="item.url"
+                class="p-menuitem-link"
+                v-bind="props.action"
+              >
+                <span
+                  class="p-menuitem-text"
+                  v-text="item.label"
+                />
               </a>
             </div>
           </li>
-          <slot></slot>
         </ul>
       </div>
     </div>

@@ -79,15 +79,20 @@
     />
 
     <div
-      v-if="isAdmin"
+      v-if="securityStore.isAdmin"
       class="admin-index__block-container block-admin-version"
     >
       <div class="admin-index__block">
         <h4 v-t="'Version check'" />
 
         <div
-          v-if="'false' === platformConfigurationStore.getSetting('platform.registered')"
-          class="admin-block-version"
+          v-if="blockVersionStatusEl"
+          class="block-admin-version__status"
+          v-html="blockVersionStatusEl"
+        />
+        <div
+          v-else
+          class="block-admin-version__form"
         >
           <i18n-t
             class="mb-3"
@@ -135,10 +140,6 @@
             />
           </form>
         </div>
-        <div
-          ref="blockAdminVersionCheck"
-          class="block-admin-version_check"
-        />
       </div>
     </div>
 
@@ -176,83 +177,43 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue"
+import { ref } from "vue"
 import { useI18n } from "vue-i18n"
-import { useStore } from "vuex"
-import { useToast } from "primevue/usetoast"
 import Button from "primevue/button"
 import Checkbox from "primevue/checkbox"
 import Skeleton from "primevue/skeleton"
 import AdminBlock from "../../components/admin/AdminBlock"
-import axios from "axios"
 
-import { usePlatformConfig } from "../../store/platformConfig";
-import AdminConfigureColors from "./AdminConfigureColors.vue";
+import { useSecurityStore } from "../../store/securityStore"
+
+import { useIndexBlocks } from "../../composables/admin/indexBlocks"
 
 const { t } = useI18n()
 
-const store = useStore()
-const platformConfigurationStore = usePlatformConfig()
-
-const toast = useToast()
-
-const isAdmin = computed(() => store.getters["security/isAdmin"])
+const securityStore = useSecurityStore()
 
 const doNotListCampus = ref(false)
 
+const {
+  blockVersionStatusEl,
+  checkVersion,
+  blockUsers,
+  blockCourses,
+  blockSessions,
+  blockGradebook,
+  blockSkills,
+  blockPrivacy,
+  blockSettings,
+  blockPlatform,
+  blockChamilo,
+  loadBlocks,
+} = useIndexBlocks()
+
 function checkVersionOnSubmit() {
-  axios
-    .post("/admin/register-campus", {
-      donotlistcampus: doNotListCampus.value,
-    })
-    .then(() =>
-      toast.add({
-        severity: "success",
-        detail: t("Version check enabled"),
-      }),
-    )
+  checkVersion(doNotListCampus.value)
 }
 
-const blockAdminVersionCheck = ref()
-
-onMounted(() => {
-  if (isAdmin.value) {
-    if ("false" === platformConfigurationStore.getSetting("admin.admin_chamilo_announcements_disable")) {
-      axios
-        .get("/main/inc/ajax/admin.ajax.php?a=get_latest_news")
-        .then(({ data }) => toast.add({ severity: "info", detail: data }))
-    }
-
-    axios.get("/main/inc/ajax/admin.ajax.php?a=version").then(({ data }) => {
-      if (blockAdminVersionCheck.value) {
-        blockAdminVersionCheck.value.innerHTML += data
-      }
-    })
-  }
-})
-
 const isLoadingBlocks = ref(true)
-const blockUsers = ref(null)
-const blockCourses = ref(null)
-const blockSessions = ref(null)
-const blockGradebook = ref(null)
-const blockSkills = ref(null)
-const blockPrivacy = ref(null)
-const blockSettings = ref(null)
-const blockPlatform = ref(null)
-const blockChamilo = ref(null)
 
-axios.get("/admin/index").then(({ data }) => {
-  isLoadingBlocks.value = false
-
-  blockUsers.value = data.users || null
-  blockCourses.value = data.courses || null
-  blockSessions.value = data.sessions || null
-  blockGradebook.value = data.gradebook || null
-  blockSkills.value = data.skills || null
-  blockPrivacy.value = data.data_privacy || null
-  blockSettings.value = data.settings || null
-  blockPlatform.value = data.platform || null
-  blockChamilo.value = data.chamilo || null
-})
+loadBlocks().then(() => (isLoadingBlocks.value = false))
 </script>

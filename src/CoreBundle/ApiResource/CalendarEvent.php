@@ -44,6 +44,8 @@ class CalendarEvent extends AbstractResource
         public ?ResourceNode $resourceNode = null,
         ?array $resourceLinkListFromEntity = null,
         #[Groups(['calendar_event:read'])]
+        public ?string $color = null,
+        #[Groups(['calendar_event:read'])]
         public ?string $type = null,
     ) {
         $this->resourceLinkListFromEntity = $resourceLinkListFromEntity;

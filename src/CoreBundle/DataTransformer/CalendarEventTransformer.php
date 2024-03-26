@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\ApiResource\CalendarEvent;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -21,7 +22,8 @@ class CalendarEventTransformer implements DataTransformerInterface
     public function __construct(
         private readonly RouterInterface $router,
         private readonly UsergroupRepository $usergroupRepository,
-        private readonly CCalendarEventRepository $calendarEventRepository
+        private readonly CCalendarEventRepository $calendarEventRepository,
+        private readonly SettingsManager $settingsManager
     ) {}
 
     public function transform($object, string $to, array $context = []): object
@@ -51,6 +53,8 @@ class CalendarEventTransformer implements DataTransformerInterface
         }
 
         $eventType = $this->calendarEventRepository->determineEventType($object);
+        $color = $this->determineEventColor($eventType);
+
         $calendarEvent = new CalendarEvent(
             'calendar_event_'.$object->getIid(),
             $object->getTitle(),
@@ -67,6 +71,7 @@ class CalendarEventTransformer implements DataTransformerInterface
             $object->getMaxAttendees(),
             $object->getResourceNode(),
             $object->getResourceLinkListFromEntity(),
+            $color
         );
         $calendarEvent->setType($eventType);
 
@@ -98,5 +103,28 @@ class CalendarEventTransformer implements DataTransformerInterface
             false,
             $sessionUrl,
         );
+    }
+
+    private function determineEventColor(string $eventType): string
+    {
+        $agendaColors = [
+            'platform' => 'red',
+            'course' => '#458B00',
+            'session' => '#00496D',
+            'personal' => 'steel blue',
+        ];
+
+        $settingAgendaColors = $this->settingsManager->getSetting('agenda.agenda_colors');
+        if (is_array($settingAgendaColors)) {
+            $agendaColors = array_merge($agendaColors, $settingAgendaColors);
+        }
+
+        $colorKeyMap = [
+            'global' => 'platform',
+        ];
+
+        $colorKey = $colorKeyMap[$eventType] ?? $eventType;
+
+        return $agendaColors[$colorKey] ?? $agendaColors['personal'];
     }
 }

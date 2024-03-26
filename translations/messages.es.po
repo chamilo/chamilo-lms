@@ -1,9 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
+"PO-Revision-Date: 2024-03-26 20:44+0000\n"
+"Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
+"Language-Team: Spanish <https://translation.chamilo.org/projects/chamilo/"
+"messages/es/>\n"
 "Language: es\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.4.2\n"
 
 msgid "You can generate badges for the skills learnt by your users, to give them recognition for their effort, through which they will be able to show off their acquired skills and competencies with icons that will be shown on their user profile. For more information on OpenBadges, check <a href='http://openbadges.org'>http://openbadges.org/</a>."
 msgstr "Puede generar insignias para reconocer las habilidades aprendidas de sus usuarios, dar un reconocimiento por su logro, con lo cual ellos podrán mostrar sus capacidades y competencias adquiridas a través de emblemas, que serán visualizadas en su perfil de usuario. Para más información sobre los Open Badges en <a href=\"http://openbadges.org\">http://openbadges.org/</a>."
@@ -17024,8 +17030,23 @@ msgstr "Herramienta on-line para convertir texto en voz. Utiliza tecnología y s
 msgid "Show users folders in the documents tool"
 msgstr "Mostrar las carpetas de los usuarios en la herramienta documentos"
 
+#, fuzzy
 msgid "This option allows you to show or hide to teachers the folders that the system generates for each user who visits the tool documents or send a file through the web editor. If you display these folders to the teachers, they may make visible or not the learners and allow each learner to have a specific place on the course where not only store documents, but where they can also create and edit web pages and to export to pdf, make drawings, make personal web templates, send files, as well as create, move and delete directories and files and make security copies from their folders. Each user of course have a complete document manager. Also, remember that any user can copy a file that is visible from any folder in the documents tool (whether or not the owner) to his/her portfolios or personal documents area of social network, which will be available for his/her can use it in other courses."
 msgstr ""
+"Esta opción le permite mostrar u ocultar a los profesores las carpetas que "
+"el sistema genera para cada usuario que visita la herramienta de documentos "
+"o de enviar un archivo a través del editor web. Si muestra estas carpetas a "
+"los profesores, podrán hacer visibles o no a los alumnos y permitir que cada "
+"alumno tenga un espacio específico en el curso donde no solo almacenar "
+"documentos, sino también crear y editar páginas web, exportar al formato "
+"PDF, realizar dibujos, crear plantillas personales de documentos, enviar "
+"archivos, así como crear, mover y eliminar directorios y archivos y hacer "
+"copias de seguridad de sus carpetas. Cada usuario del curso tiene un gestor "
+"de documentos completo. Además, recuerde que cualquier usuario puede copiar "
+"un archivo que sea visible desde cualquier carpeta en la herramienta de "
+"documentos (sea o no el propietario) a su portafolio o área de documentos "
+"personales de la red social, la cual estará disponible para su uso en otros "
+"cursos."
 
 msgid "Show in documents tool all folders containing multimedia resources supplied by default"
 msgstr "Mostrar en la herramienta documentos las carpetas que contienen los recursos multimedia suministrados por defecto."
@@ -25092,20 +25113,178 @@ msgid "Only show active users"
 msgstr "Mostrar solo usuarios activos"
 
 msgid "Update courses list"
-msgstr ""
+msgstr "Actualizar lista de cursos"
 
 msgid "A code is required"
-msgstr ""
+msgstr "Un código es necesario"
 
 msgid "This course code does not exist"
-msgstr ""
+msgstr "Este código de curso no existe"
 
 msgid "Duplicate code"
-msgstr ""
+msgstr "Código duplicado"
 
 msgid "The update failed for the following courses"
-msgstr ""
+msgstr "La actualización falló para los siguientes cursos"
 
 msgid "%02d h %02d m %02d s"
 msgstr "%02d h %02d m %02d s"
 
+msgid "Register oneself"
+msgstr "Crear una cuenta"
+
+msgid "You don't have any course yet."
+msgstr "No tiene ningún curso todavía."
+
+msgid "You don't have any session yet."
+msgstr "No tiene ninguna sesión todavía."
+
+msgid "Course management"
+msgstr "Gestión de cursos"
+
+msgid "This message was deleted when the user was removed from the platform on %s"
+msgstr ""
+"Este mensaje fue eliminado cuando el usuario fue retirado de la plataforma "
+"el %s"
+
+#, fuzzy
+msgid "All attempts blocked because you did not reach the minimum score of %s % at one of your attempts."
+msgstr ""
+"Todos los intentos fueron bloqueados porque no ha alcanzado el score mínimo "
+"de %s %% en por lo menos uno de sus intentos."
+
+msgid "Sign out"
+msgstr "Cerrar sesión"
+
+#, fuzzy
+msgid "Deleted users"
+msgstr "Usuarios eliminados"
+
+msgid "Platform management"
+msgstr "Gestión de la plataforma"
+
+msgid "The name provided will be used as the identifier of the user extra field containing an ID that the remote SCORM API will recognize as a user ID. This is only useful if your remote SCORM provider asked you for something similar."
+msgstr ""
+"El nombre proporcionado se utilizará como identificador del campo adicional "
+"del usuario que contiene un ID que la API remota de SCORM reconocerá como un "
+"ID de usuario. Esto solo es útil si su proveedor remoto de SCORM le ha "
+"solicitado algo similar."
+
+msgid "Send diagnostic finalization message"
+msgstr "Enviar el mensaje de finalización del diagnóstico"
+
+msgid "Hide question numbering"
+msgstr "Ocultar numeración de preguntas"
+
+msgid "Welcome, please go to diagnostic at %s."
+msgstr "Bienvenid@. Por favor vaya al diagnóstico a las %s."
+
+msgid "Here you can manage registered users within your platform"
+msgstr "Aquí puede gestionar a los usuarios registrados dentro de su plataforma"
+
+msgid "Sessions management"
+msgstr "Gestión de sesions"
+
+msgid "Add a course introduction to display to your students."
+msgstr "Agregue una introducción al curso para mostrar a sus alumnos."
+
+#, fuzzy
+msgid "DiagnosticfinalizationmessageContent"
+msgstr ""
+"Hola %s, soy %s y estoy revisando tu diagnóstico para definir el curso que "
+"seguirás."
+
+msgid "Prevent moving backwards between questions"
+msgstr "Prohibir regresar en las preguntas anteriores"
+
+msgid "My General Certificate"
+msgstr "Mi Certificado General"
+
+msgid "You don't have any course content yet."
+msgstr "No tiene ningún contenido de curso todavía."
+
+msgid "User management"
+msgstr "Gestión de usuarios"
+
+msgid "This question is used in another exercises. If you continue its edition, the changes will affect all exercises that contain this question."
+msgstr ""
+"Esta pregunta es usada en otros ejercicios. Si desea seguir con su "
+"modificación, los cambios afectarán todos los ejercicios que contengan esta "
+"pregunta."
+
+msgid "View the status of your server, perform performance tests"
+msgstr "Vea el estado de su servidor, realice pruebas de rendimiento"
+
+msgid "Extra field to use as student ID for SCORM API"
+msgstr "Campo adicional para usar como ID del aprendiz en la API de SCORM"
+
+msgid "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you."
+msgstr ""
+"De clic en \"Explorar\" para encontrar un tema de interés, o espere a que "
+"alguien lo/la registre."
+
+msgid "Unauthorised view access to resource"
+msgstr "Vista no autorizada - acceso al recurso prohibido"
+
+msgid "See as student"
+msgstr "Ver como estudiante"
+
+msgid "Text appearing at the end of the test when the user has succeeded or if no pass percentage was set."
+msgstr ""
+"Texto que aparece al final del examen cuando el usuario ha tenido éxito o si "
+"no se estableció un porcentaje de aprobación."
+
+#, fuzzy
+msgid "Multiple choice with *other* option"
+msgstr "Elección múltiple con opción *Otro*"
+
+msgid "Direct pop-up mode"
+msgstr "Modo de ventana emergente directa"
+
+msgid "DiagnosticfinalizationmessageTitle"
+msgstr "Finalización del diagnóstico"
+
+#, fuzzy
+msgid "Show score by category on a radar/spiderweb chart"
+msgstr "Muestra la puntuación por categoría en un gráfico de radar/telaraña"
+
+msgid "Official code"
+msgstr "Código oficial"
+
+msgid "Create course packages for a certain time with training sessions"
+msgstr ""
+"Cree paquetes de cursos para un tiempo determinado con sesiones de formación"
+
+msgid "Course introduction"
+msgstr "Introducción del curso"
+
+msgid "Configure your platform, view reports, publish and send announcements globally"
+msgstr ""
+"Configure su plataforma, visualice informes, publique y envíe anuncios "
+"globalmente"
+
+msgid "Create and manage your courses in a simple way"
+msgstr "Cree y gestione sus cursos de manera sencilla"
+
+msgid "Remember me"
+msgstr "Recordarme"
+
+msgid "My Skills"
+msgstr "Mis competencias"
+
+#, fuzzy
+msgid "Text appearing at the end of the test when the user has failed."
+msgstr "Texto que aparece al final del examen cuando el usuario no ha aprobado."
+
+msgid "Your session search diagnosis is saved"
+msgstr "Su diagnóstico de búsqueda de sesión ha sido guardado"
+
+msgid "Learn more about Chamilo and its use, official references links"
+msgstr "Aprenda más sobre Chamilo y su uso, enlaces a referencias oficiales"
+
+msgid "Manage the skills of your users, through courses and badges"
+msgstr ""
+"Gestione las habilidades de sus usuarios, a través de cursos y distintivos"
+
+msgid "Signed in as"
+msgstr "Conectado como"

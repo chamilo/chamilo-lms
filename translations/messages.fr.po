@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-03-21 11:43+0000\n"
+"PO-Revision-Date: 2024-03-26 20:44+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: French <https://translation.chamilo.org/projects/chamilo/"
 "messages/fr/>\n"
@@ -1312,6 +1312,7 @@ msgstr "Hotpotatoes"
 msgid "-1 = All questions will be selected."
 msgstr "-1 = Toutes les questions seront sélectionnées. 0 = Aucune question ne sera sélectionnée."
 
+#, fuzzy
 msgid "You can customize the email sent to users when they finished the exercise. You can use tags like these:"
 msgstr ""
 "Vous pouvez adapter le courriel envoyé aux utilisateurs quand ils terminent "
@@ -26002,3 +26003,43 @@ msgstr "Retour à la liste des tests"
 
 msgid "Text appearing at the end of the test when the user has failed."
 msgstr "Texte apparaissant à la fin du test lorsque l'utilisateur a échoué."
+
+msgid "Course management"
+msgstr "Gestion des courss"
+
+msgid "Platform management"
+msgstr "Gestion de la plateforme"
+
+msgid "Here you can manage registered users within your platform"
+msgstr "Gérez les utilisateurs inscrits sur votre plateforme"
+
+msgid "Sessions management"
+msgstr "Gestion des sessions"
+
+msgid "User management"
+msgstr "Gestion des utilisateurs"
+
+msgid "View the status of your server, perform performance tests"
+msgstr "Visualisez l'état de votre serveur, et lancez des tests de performance"
+
+msgid "Create course packages for a certain time with training sessions"
+msgstr "Créez des groupements de cours sur des périodes de temps déterminées"
+
+msgid "Configure your platform, view reports, publish and send announcements globally"
+msgstr ""
+"Configurez votre plateforme, visualisez des rapports, publiez et envoyez des "
+"annonces globales"
+
+msgid "Create and manage your courses in a simple way"
+msgstr "Créez et gérez vos cours en toute simplicité"
+
+msgid "Your session search diagnosis is saved"
+msgstr "Votre diagnostic de recherche de session a été sauvegardé"
+
+msgid "Learn more about Chamilo and its use, official references links"
+msgstr ""
+"Apprenez-en plus sur Chamilo, son utilisation et ses diverses références"
+
+msgid "Manage the skills of your users, through courses and badges"
+msgstr ""
+"Gérez les compétences de vos utilisateurs au travers de cours et de badges"

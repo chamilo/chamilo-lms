@@ -213,14 +213,7 @@ async function getCalendarEvents({ startStr, endStr }) {
   const calendarEvents = await cCalendarEventService.findAll({ params }).then((response) => response.json())
 
   return calendarEvents["hydra:member"].map((event) => {
-    let color = '#007BFF'
-    if (event.type === 'global') {
-      color = '#FF0000'
-    } else if (event.type === 'course') {
-      color = '#28a745'
-    } else if (event.type === 'session') {
-      color = '#800080'
-    }
+    let color = event.color || '#007BFF'
 
     return {
       ...event,
@@ -267,6 +260,7 @@ const calendarOptions = ref({
   selectable: true,
   eventClick(eventClickInfo) {
     eventClickInfo.jsEvent.preventDefault()
+    currentEvent = eventClickInfo.event
 
     let event = eventClickInfo.event.toPlainObject()
 
@@ -276,8 +270,6 @@ const calendarOptions = ref({
 
       return
     }
-
-    currentEvent = event
 
     item.value = { ...event.extendedProps }
 
@@ -320,7 +312,7 @@ const currentContext = computed(() => {
   } else {
     return 'personal'
   }
-});
+})
 
 const allowAction = (eventType) => {
   const contextRules = {
@@ -328,13 +320,13 @@ const allowAction = (eventType) => {
     course: ['course'],
     session: ['session'],
     personal: ['personal']
-  };
+  }
 
-  return contextRules[currentContext.value].includes(eventType);
-};
+  return contextRules[currentContext.value].includes(eventType)
+}
 
-const showEditButton = computed(() => allowAction(item.value.type));
-const showDeleteButton = computed(() => allowAction(item.value.type));
+const showEditButton = computed(() => allowAction(item.value.type))
+const showDeleteButton = computed(() => allowAction(item.value.type))
 
 const cal = ref(null)
 

@@ -70,6 +70,11 @@ const props = defineProps({
     default: TINYEDITOR_MODE_PERSONAL_FILES,
     validator: (value) => TINYEDITOR_MODES.includes(value),
   },
+  fullPage: {
+    type: Boolean,
+    required: false,
+    default: true,
+  },
 })
 const emit = defineEmits(["update:modelValue"])
 const router = useRouter()
@@ -119,7 +124,6 @@ const defaultEditorConfig = {
     "code",
     "codesample",
     "directionality",
-    "fullpage",
     "fullscreen",
     "emoticons",
     "image",
@@ -165,6 +169,10 @@ const defaultEditorConfig = {
     " | " +
     toolbarTextDirection,
   file_picker_callback: filePickerCallback,
+}
+
+if (props.fullPage) {
+  defaultEditorConfig.plugins.push("fullpage")
 }
 
 const editorConfig = computed(() => ({

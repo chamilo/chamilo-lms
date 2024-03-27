@@ -35,6 +35,7 @@ switch ($apiName) {
 
         $messageGetItems = 'Generate the table of contents of a course in "%s" in %d or less chapters on the topic of "%s" and return it as a list of items separated by CRLF. Do not provide chapter numbering. Do not include a conclusion chapter.';
         $prompt = sprintf($messageGetItems, $courseLanguage, $chaptersCount, $topic);
+
         $resultText = $plugin->openAiGetCompletionText($prompt, 'learnpath');
 
         if (isset($resultText['error']) && true === $resultText['error']) {
@@ -68,6 +69,7 @@ switch ($apiName) {
                     $promptItem = sprintf($messageGetItemContent, $topic, $courseLanguage, $wordsCount, $title, $topic);
                     $resultContentText = $plugin->openAiGetCompletionText($promptItem, 'learnpath');
                     $lpItemContent = (!empty($resultContentText) ? trim($resultContentText) : '');
+
                     if (false !== stripos($lpItemContent, '</head>')) {
                         $lpItemContent = preg_replace("|</head>|i", "\r\n$style\r\n\\0", $lpItemContent);
                     } else {

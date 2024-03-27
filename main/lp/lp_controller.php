@@ -745,6 +745,25 @@ switch ($action) {
                     exit;
                 }
 
+                if (Text2SpeechPlugin::create()->isEnabled(true)
+                    && isset($_GET['tts']) && 1 === (int) $_GET['tts']
+                ) {
+                    $audioPath = api_get_path(SYS_UPLOAD_PATH).'plugins/text2speech/'.basename($_POST['file']);
+
+                    $fileInfo = new SplFileInfo($audioPath);
+
+                    if ($fileInfo->isReadable()) {
+                        $_FILES['file'] = [
+                            'name' => $fileInfo->getFilename(),
+                            'type' => 'audio/'.$fileInfo->getExtension(),
+                            'tmp_name' => $fileInfo->getRealPath(),
+                            'error' => UPLOAD_ERR_OK,
+                            'size' => $fileInfo->getSize(),
+                            'copy_file' => true,
+                        ];
+                    }
+                }
+
                 // Upload audio
                 if (isset($_FILES['file']) && !empty($_FILES['file'])) {
                     // Updating the lp.modified_on

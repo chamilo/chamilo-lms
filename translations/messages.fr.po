@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-03-26 20:44+0000\n"
+"PO-Revision-Date: 2024-03-27 08:56+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: French <https://translation.chamilo.org/projects/chamilo/"
 "messages/fr/>\n"
@@ -19590,7 +19590,7 @@ msgid "Updates"
 msgstr "Mises à jour"
 
 msgid "Teaching"
-msgstr "Enseignant"
+msgstr "Enseignement"
 
 msgid "Courses reporting"
 msgstr "Rapports de cours"

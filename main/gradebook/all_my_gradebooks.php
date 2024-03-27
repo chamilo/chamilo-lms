@@ -51,7 +51,11 @@ $userCoursesList = CourseManager::get_courses_list_by_user_id ($user_id, true, f
 foreach ($userCoursesList as $course) {
     $course_code = $course['code'];
     $stud_id = $user_id;
-    $session_id = $course['session_id'];
+    if (isset($course['session_id']) && $course['session_id'] > 0) {
+        $session_id = $course['session_id'];
+    } else {
+        $session_id = 0;
+    }
     $course_id = $course['real_id'];
     $courseInfo = api_get_course_info($course_code);
 

@@ -56,6 +56,14 @@ $htmlHeadXtra[] = '<script>
                 modal: true
          });
 
+         $("#dialog-copy-confirm").dialog({
+            autoOpen: false,
+            show: "blind",
+            resizable: false,
+            height:300,
+            modal: true
+        });
+
         $(".multiplicate_popup").click(function() {
             var targetUrl = $(this).attr("href");
             $( "#dialog-confirm" ).dialog({
@@ -70,6 +78,30 @@ $htmlHeadXtra[] = '<script>
                 }
             });
             $("#dialog-confirm").dialog("open");
+            return false;
+        });
+
+        $(".copy_survey_popup").click(function() {
+            var targetUrl = $(this).attr("href");
+            $( "#dialog-copy-confirm" ).dialog({
+                width:800,
+                height:200,
+                buttons: {
+                    "'.addslashes(get_lang('CopySurvey')).'": function() {
+                        var surveyCode = $("input[name=survey_code]").val();
+                        location.href = targetUrl+"&survey_code="+surveyCode;
+                        $( this ).dialog( "close" );
+                    }
+                }
+            });
+            $("#dialog-copy-confirm").dialog({
+                open: function( event, ui ) {
+                    var timestampMiliseconds= new Date().getTime();
+                    var timestampSeconds = Math.floor(timestampMiliseconds / 1000);
+                    $("input[name=survey_code]").val(timestampSeconds);
+                }
+              });
+            $("#dialog-copy-confirm").dialog("open");
             return false;
         });
     });
@@ -108,6 +140,8 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
 
 $listUrl = api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq();
 $surveyId = isset($_GET['survey_id']) ? $_GET['survey_id'] : 0;
+$surveyCode = isset($_GET['survey_code']) ? $_GET['survey_code'] : '';
+$surveyCode = Security::remove_XSS($surveyCode);
 
 // Action handling: performing the same action on multiple surveys
 if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_array($_POST['id'])) {
@@ -810,7 +844,17 @@ switch ($action) {
         break;
     case 'copy_survey':
         if (!empty($surveyId) && api_is_allowed_to_edit()) {
-            SurveyManager::copy_survey($surveyId);
+            if (!empty($surveyCode)) {
+                if (SurveyManager::checkUniqueCode($surveyCode)) {
+                    SurveyManager::copy_survey($surveyId, null, null, $surveyCode);
+                } else {
+                    Display::addFlash(Display::return_message(get_lang('CodeAlreadyExists'), 'warning', false));
+                    header('Location: '.$listUrl);
+                    exit;
+                }
+            } else {
+                SurveyManager::copy_survey($surveyId);
+            }
             Display::addFlash(Display::return_message(get_lang('SurveyCopied'), 'confirmation', false));
             header('Location: '.$listUrl);
             exit;

@@ -532,7 +532,7 @@ if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
 
 $showTerms = false;
 // Terms and conditions
-if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_registered_show_terms) {
+if (api_get_setting('allow_terms_conditions') === 'true') {
     if (!api_is_platform_admin()) {
         if (api_get_setting('show_terms_if_profile_completed') === 'true') {
             $userInfo = api_get_user_info();

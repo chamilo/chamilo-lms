@@ -177,26 +177,6 @@ switch ($action) {
                 $month,
                 $year
             );
-            $agendaitems = Agenda::get_global_agenda_items(
-                $agendaitems,
-                $day,
-                $month,
-                $year,
-                $week,
-                "month_view"
-            );
-
-            if ('true' === api_get_setting('allow_personal_agenda')) {
-                /*$agendaitems = Agenda::get_personal_agenda_items(
-                    $user_id,
-                    $agendaitems,
-                    $day,
-                    $month,
-                    $year,
-                    $week,
-                    "month_view"
-                );*/
-            }
             Agenda::display_mymonthcalendar(
                 $user_id,
                 $agendaitems,

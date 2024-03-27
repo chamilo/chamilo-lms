@@ -165,7 +165,15 @@ class FlatViewTable extends SortableTable
         $resource_list = $new_list;
         $i = 1;
         // Cache definition
-        $cachePath = api_get_path(SYS_ARCHIVE_PATH);
+        $cachePath = api_get_path(SYS_ARCHIVE_PATH) . 'chart/';
+        if (!file_exists($cachePath)) {
+            mkdir($cachePath, 0755, true);
+        }
+
+        if (!is_writable($cachePath)) {
+            chmod($cachePath, 0755);
+        }
+
         foreach ($resource_list as $key => $resource) {
             // Reverse array, otherwise we get highest values first
             $resource = array_reverse($resource, true);
@@ -196,9 +204,8 @@ class FlatViewTable extends SortableTable
             $myCache = new pCache(['CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)]);
             $chartHash = $myCache->getHash($dataSet);
             if ($myCache->isInCache($chartHash)) {
-                $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
+                $imgPath = $cachePath.$chartHash;
                 $myCache->saveFromCache($chartHash, $imgPath);
-                $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
             } else {
                 /* Create the pChart object */
                 $widthSize = 480;
@@ -294,11 +301,10 @@ class FlatViewTable extends SortableTable
                 /* Render the picture (choose the best way) */
 
                 $myCache->writeToCache($chartHash, $myPicture);
-                $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
+                $imgPath = $cachePath.$chartHash;
                 $myCache->saveFromCache($chartHash, $imgPath);
-                $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
             }
-            echo '<img src="'.$imgPath.'" >';
+            echo '<img src="data:image/png;base64,' . base64_encode(file_get_contents($imgPath)) . '" >';
             if (0 == $i % 2 && 0 != $i) {
                 echo '<br /><br />';
             } else {

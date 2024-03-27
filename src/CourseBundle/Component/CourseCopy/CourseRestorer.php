@@ -3501,7 +3501,7 @@ class CourseRestorer
             $cats = Category::load(
                 null,
                 null,
-                $destinationCourseCode,
+                api_get_course_int_id($destinationCourseCode),
                 null,
                 null,
                 $sessionId

@@ -79,8 +79,8 @@ class SurveyLink extends AbstractLink
      */
     public function get_all_links()
     {
-        if (empty($this->course_code)) {
-            exit('Error in get_all_links() : course code not set');
+        if (empty($this->course_id)) {
+            exit('Error in get_all_links() : course ID not set');
         }
         $sessionId = $this->get_session_id();
         $course_id = $this->getCourseId();

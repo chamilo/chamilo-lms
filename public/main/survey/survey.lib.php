@@ -481,7 +481,7 @@ class SurveyManager
 
         $gradebook_link_type = 8;
         $link_info = GradebookUtils::isResourceInCourseGradebook(
-            $courseCode,
+            api_get_course_int_id(),
             $gradebook_link_type,
             $survey_id,
             $session_id
@@ -499,7 +499,7 @@ class SurveyManager
                 if (!$gradebook_link_id && isset($values['category_id'])) {
                     GradebookUtils::add_resource_to_course_gradebook(
                         $values['category_id'],
-                        $courseCode,
+                        api_get_course_int_id(),
                         $gradebook_link_type,
                         $survey_id,
                         $title_gradebook,
@@ -512,7 +512,7 @@ class SurveyManager
                 } else {
                     GradebookUtils::updateResourceFromCourseGradebook(
                         $gradebook_link_id,
-                        $courseCode,
+                        api_get_course_int_id(),
                         $survey_weight
                     );
                 }

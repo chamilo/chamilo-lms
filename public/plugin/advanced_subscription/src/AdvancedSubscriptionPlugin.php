@@ -1535,11 +1535,11 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 $courseCategories = Category::load(
                     null,
                     null,
-                    $course['code'],
+                    $course['real_id'],
                     null,
                     null,
                     $session['id'],
-                    false
+                    null
                 );
 
                 if (count($courseCategories) > 0 &&

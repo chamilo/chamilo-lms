@@ -18,7 +18,8 @@ export default {
     {
       name: 'CCalendarEventList',
       path: '',
-      component: () => import('../views/ccalendarevent/CCalendarEventList.vue')
+      component: () => import('../views/ccalendarevent/CCalendarEventList.vue'),
+      props: (route) => ({ type: route.query.type })
     }
   ]
 };

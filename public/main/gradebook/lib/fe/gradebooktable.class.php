@@ -328,6 +328,7 @@ class GradebookTable extends SortableTable
         // Status of user in course.
         $user_id = $this->userId;
         $course_code = api_get_course_id();
+        $courseId = api_get_course_int_id();
         $session_id = api_get_session_id();
 
         $statusToFilter = 0;
@@ -336,8 +337,8 @@ class GradebookTable extends SortableTable
         }
 
         if (empty($this->studentList) && $this->loadStats) {
-            $studentList = CourseManager::get_user_list_from_course_code(
-                $course_code,
+            $studentList = CourseManager::getUserListFromCourseId(
+                $courseId,
                 $session_id,
                 null,
                 null,
@@ -362,7 +363,7 @@ class GradebookTable extends SortableTable
         $main_cat = Category::load(
             null,
             null,
-            $course_code,
+            api_get_course_int_id(),
             null,
             null,
             $session_id,
@@ -565,7 +566,7 @@ class GradebookTable extends SortableTable
                     $cats = Category::load(
                         $parent_id,
                         null,
-                        null,
+                        0,
                         null,
                         null,
                         null
@@ -574,7 +575,7 @@ class GradebookTable extends SortableTable
                     if (isset($cats[0])) {
                         /** @var Category $subCategory */
                         $subCategory = $cats[0];
-                        $allcat = $subCategory->get_subcategories($this->userId, $course_code, $session_id);
+                        $allcat = $subCategory->get_subcategories($this->userId, $courseId, $session_id);
                         $alleval = $subCategory->get_evaluations($this->userId);
                         $alllink = $subCategory->get_links($this->userId);
 
@@ -825,7 +826,7 @@ class GradebookTable extends SortableTable
                                 $score = $main_cat[0]->calc_score(
                                     $student['user_id'],
                                     null,
-                                    $course_code,
+                                    $courseId,
                                     $session_id
                                 );
                                 if (!empty($score[0])) {
@@ -948,6 +949,8 @@ class GradebookTable extends SortableTable
                 $category = Category::load($id_cat);
                 $weight_category = (int) $this->build_weight($category[0]);
                 $course_code = $this->build_course_code($category[0]);
+                $localCourseInfo = api_get_course_info($course_code);
+                $localCourseId = $localCourseInfo['real_id'];
                 $weight_total_links = round($weight_total_links);
 
                 if ($weight_total_links > $weight_category ||
@@ -956,7 +959,7 @@ class GradebookTable extends SortableTable
                 ) {
                     $warning_message = sprintf(get_lang('The sum of all weights of activities must be %s'), $weight_category);
                     $modify_icons =
-                        '<a href="gradebook_edit_cat.php?editcat='.$id_cat.'&cidReq='.$course_code.'&id_session='.api_get_session_id().'">'.
+                        '<a href="gradebook_edit_cat.php?editcat='.$id_cat.'&cid='.$localCourseId.'&sid='.api_get_session_id().'">'.
                         Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'), ['alt' => $warning_message]);
                     $warning_message .= $modify_icons;
                     echo Display::return_message($warning_message, 'warning', false);
@@ -964,7 +967,7 @@ class GradebookTable extends SortableTable
 
                 $content_html = DocumentManager::replace_user_info_into_html(
                     api_get_user_id(),
-                    api_get_course_info($course_code),
+                    $localCourseInfo,
                     api_get_session_id()
                 );
 
@@ -974,8 +977,7 @@ class GradebookTable extends SortableTable
 
                 if (empty($new_content[0])) {
                     // Set default certificate
-                    $courseData = api_get_course_info($course_code);
-                    DocumentManager::generateDefaultCertificate($courseData);
+                    DocumentManager::generateDefaultCertificate($localCourseInfo);
                 }
             }
 

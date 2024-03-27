@@ -72,10 +72,29 @@ class AccessUserFixtures extends Fixture implements ContainerAwareInterface
             ->setTimezone($timezone)
         ;
         $manager->persist($anon);
+
+        $fallbackUser = new User();
+        $fallbackUser
+            ->setUsername('fallback_user')
+            ->setEmail('fallback@example.com')
+            ->setPlainPassword('fallback_user')
+            ->setStatus(User::ROLE_FALLBACK)
+            ->setLastname('Fallback')
+            ->setFirstname('User')
+            ->setCreatorId(1)
+            ->setOfficialCode('FALLBACK')
+            ->setAuthSource(PLATFORM_AUTH_SOURCE)
+            ->setPhone('0000000000')
+            ->setTimezone($timezone)
+            ->setActive(USER_SOFT_DELETED)
+        ;
+        $manager->persist($fallbackUser);
+
         $manager->flush();
 
         $userRepo->addUserToResourceNode($admin->getId(), $admin->getId());
         $userRepo->addUserToResourceNode($anon->getId(), $admin->getId());
+        $userRepo->addUserToResourceNode($fallbackUser->getId(), $admin->getId());
 
         $manager->flush();
 

@@ -822,7 +822,7 @@ class learnpath
             ->removeByResourceInContext($lp, $course, $session);
 
         $link_info = GradebookUtils::isResourceInCourseGradebook(
-            api_get_course_id(),
+            api_get_course_int_id(),
             4,
             $id,
             api_get_session_id()

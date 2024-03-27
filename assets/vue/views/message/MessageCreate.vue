@@ -33,27 +33,7 @@
     />
 
     <div class="field">
-      <TinyEditor
-        v-model="item.content"
-        :init="{
-          skin_url: '/build/libs/tinymce/skins/ui/oxide',
-          content_css: '/build/libs/tinymce/skins/content/default/content.css',
-          branding: false,
-          relative_urls: false,
-          height: 500,
-          toolbar_mode: 'sliding',
-          file_picker_callback: browser,
-          autosave_ask_before_unload: true,
-          plugins: [
-            'advlist autolink lists link image charmap print preview anchor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table paste wordcount emoticons',
-          ],
-          toolbar:
-            'undo redo | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl',
-        }"
-        required
-      />
+      <BaseTinyEditor v-model="item.content" editor-id="message" required />
     </div>
 
     <BaseButton
@@ -82,6 +62,7 @@ import userService from "../../services/user"
 import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import { useNotification } from "../../composables/notification"
 import { capitalize } from "lodash"
+import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 
 const store = useStore()
 const router = useRouter()

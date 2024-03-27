@@ -40,7 +40,7 @@ class StudentPublicationLink extends AbstractLink
      */
     public function get_all_links()
     {
-        if (empty($this->course_code)) {
+        if (empty($this->course_id)) {
             return [];
         }
 

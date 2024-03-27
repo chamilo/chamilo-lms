@@ -83,7 +83,7 @@
       class="admin-index__block-container block-admin-version"
     >
       <div class="admin-index__block">
-        <h4 v-t="'Version Check'" />
+        <h4 v-t="'Version check'" />
 
         <div
           v-if="'false' === platformConfigurationStore.getSetting('platform.registered')"
@@ -95,14 +95,14 @@
             tag="p"
           >
             <a
-              href="https://www.chamilo.org/stats/"
+              href="https://stats.chamilo.org/"
               target="_blank"
-              v-text="'https://www.chamilo.org/stats/'"
+              v-text="'https://stats.chamilo.org/'"
             />
             <a
-              href="https://www.chamilo.org/community.php"
+              href="https://version.chamilo.org/community.php"
               target="_blank"
-              v-text="'https://www.chamilo.org/community.php'"
+              v-text="'https://version.chamilo.org/community.php'"
             />
           </i18n-t>
 

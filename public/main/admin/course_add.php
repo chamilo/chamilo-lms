@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -189,11 +190,9 @@ if ($form->validate()) {
     $course['wanted_code'] = $course['visual_code'];
     $course['gradebook_model_id'] = isset($course['gradebook_model_id']) ? $course['gradebook_model_id'] : null;
 
-    include_once api_get_path(SYS_CODE_PATH).'lang/english/trad4all.inc.php';
-    $file_to_include = api_get_path(SYS_CODE_PATH).'lang/'.$course['course_language'].'/trad4all.inc.php';
-
-    if (file_exists($file_to_include)) {
-        include $file_to_include;
+    if (!empty($course['course_language'])) {
+        $translator = Container::$container->get('translator');
+        $translator->setLocale($course['course_language']);
     }
 
     $course = CourseManager::create_course($course);

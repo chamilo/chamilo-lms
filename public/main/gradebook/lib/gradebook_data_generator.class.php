@@ -565,7 +565,7 @@ class GradebookDataGenerator
         $score = $item->calc_score(
             null,
             'best',
-            api_get_course_id(),
+            api_get_course_int_id(),
             api_get_session_id()
         );
 

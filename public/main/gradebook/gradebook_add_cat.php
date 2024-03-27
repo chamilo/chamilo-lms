@@ -4,7 +4,8 @@
 require_once __DIR__.'/../inc/global.inc.php';
 $_in_course = true;
 $course_code = api_get_course_id();
-if (empty($course_code)) {
+$courseId = api_get_course_int_id();
+if (empty($courseId)) {
     $_in_course = false;
 }
 
@@ -21,12 +22,14 @@ $catadd->set_parent_id($get_select_cat);
 $catcourse = Category :: load($get_select_cat);
 
 if ($_in_course) {
-    $catadd->set_course_code($course_code);
+    $catadd->setCourseId($courseId);
 } else {
-    $catadd->set_course_code($catcourse[0]->get_course_code());
+    $catadd->setCourseId($catcourse[0]->getCourseId());
 }
 
-$catadd->set_course_code(api_get_course_id());
+// Todo: Fix this overwriting of code. Doesn't make sense given the previous block
+$catadd->setCourseId(api_get_course_int_id());
+
 $form = new CatForm(
     CatForm::TYPE_ADD,
     $catadd,
@@ -42,20 +45,21 @@ if ($form->validate()) {
     if ('0' == $values['hid_parent_id']) {
         if ('COURSEINDEPENDENT' == $select_course) {
             $cat->set_name($values['name']);
-            $cat->set_course_code(null);
+            $cat->setCourseId(null);
         } else {
-            $cat->set_course_code($select_course);
+            $cat->setCourseId(api_get_course_int_id($select_course));
             $cat->set_name($values['name']);
         }
     } else {
         $cat->set_name($values['name']);
-        $cat->set_course_code($values['course_code']);
+        $cat->setCourseId(api_get_course_int_id($values['course_code']));
     }
 
     $cat->set_session_id(api_get_session_id());
 
+    // Todo: Fix this reassignment that ignores the block above
     // Always add the gradebook to the course
-    $cat->set_course_code(api_get_course_id());
+    $cat->setCourseId(api_get_course_int_id());
     if (isset($values['skills'])) {
         $cat->set_skills($values['skills']);
     }

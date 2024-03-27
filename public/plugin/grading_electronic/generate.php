@@ -90,11 +90,11 @@ try {
     $cats = Category::load(
         null,
         null,
-        $course->getCode(),
+        $course->getId(),
         null,
         null,
         $session ? $session->getId() : 0,
-        'ORDER By id'
+        'ORDER BY id'
     );
 
     /** @var \Category $gradebook */

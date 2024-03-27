@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Tool;
 
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 abstract class AbstractTool
@@ -15,17 +14,16 @@ abstract class AbstractTool
     protected string $title;
 
     #[Groups(['ctool:read'])]
-    protected string $titleToShow = '';
+    protected string $titleToShow;
 
     #[Groups(['ctool:read'])]
     protected string $icon = '';
 
     #[Groups(['ctool:read'])]
     protected string $category = '';
-    protected string $link;
+
     protected string $image;
-    protected string $admin;
-    protected ?SchemaInterface $settings = null;
+
     protected array $resourceTypes = [];
 
     /**
@@ -40,40 +38,12 @@ abstract class AbstractTool
      */
     protected string $scope;
 
-    abstract public function getCategory(): string;
-    abstract public function getLink(): string;
-
-    /*public function __construct(
-        string $title,
-        string $category,
-        string $link,
-        ?SchemaInterface $settings = null,
-        ?array $resourceTypes = []
-    ) {
-        $this->title = $title;
-        $this->titleToShow = $title;
-        $this->category = $category;
-        $this->link = $link;
-        $this->image = $title.'.png';
-        $this->settings = $settings;
-        $this->resourceTypes = $resourceTypes;
-        $this->icon = 'mdi-crop-square';
-    }*/
-
     public function isCourseTool(): bool
     {
         return false;
     }
 
-    public function isGlobal(): bool
-    {
-        return true;
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
+    abstract public function getTitle(): string;
 
     public function getTarget(): string
     {
@@ -110,23 +80,9 @@ abstract class AbstractTool
         return $this->resourceTypes;
     }
 
-    public function setResourceTypes(?array $resourceTypes): self
-    {
-        $this->resourceTypes = $resourceTypes;
-
-        return $this;
-    }
-
     public function getTitleToShow(): string
     {
         // return $this->getTitle();
         return ucfirst(str_replace('_', ' ', $this->getTitle()));
-    }
-
-    public function setTitleToShow(string $titleToShow): self
-    {
-        $this->titleToShow = $titleToShow;
-
-        return $this;
     }
 }

@@ -102,7 +102,7 @@ if (isset($_GET['search'])) {
 $mainCourseCategory = Category::load(
     null,
     null,
-    api_get_course_id(),
+    api_get_course_int_id(),
     null,
     null,
     api_get_session_id()
@@ -272,7 +272,6 @@ if (isset($_GET['exportpdf'])) {
 }
 
 $studentView = api_is_student_view_active();
-
 if (isset($_GET['isStudentView']) && 'false' === $_GET['isStudentView']) {
     DisplayGradebook::display_header_reduce_flatview(
     $cat[0],
@@ -281,7 +280,7 @@ if (isset($_GET['isStudentView']) && 'false' === $_GET['isStudentView']) {
     $simple_search_form
 );
     $flatViewTable->display();
-} elseif (isset($_GET['selectcat']) && ('teacherview' === $studentView)) {
+} elseif (isset($_GET['selectcat']) && (false === $studentView)) {
     DisplayGradebook::display_header_reduce_flatview(
         $cat[0],
         $showeval,

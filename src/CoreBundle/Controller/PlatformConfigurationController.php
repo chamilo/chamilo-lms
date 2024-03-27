@@ -45,7 +45,7 @@ class PlatformConfigurationController extends AbstractController
                 'platform.show_tabs',
                 'platform.catalog_show_courses_sessions',
 
-                // 'admin.admin_chamilo_announcements_disable',
+                'admin.admin_chamilo_announcements_disable',
                 'admin.administrator_name',
                 'admin.administrator_surname',
 

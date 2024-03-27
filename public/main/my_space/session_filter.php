@@ -133,7 +133,7 @@ if ($form->validate()) {
         $cats = Category::load(
             null,
             null,
-            $courseCode,
+            $courseId,
             null,
             null,
             $sessionId,
@@ -145,7 +145,7 @@ if ($form->validate()) {
             $cats = Category::load(
                 0,
                 null,
-                $courseCode,
+                $courseId,
                 null,
                 null,
                 $sessionId,

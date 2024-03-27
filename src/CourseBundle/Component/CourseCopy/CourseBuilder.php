@@ -36,6 +36,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\Resources\Work;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use CourseManager;
 use Database;
+use Doctrine\DBAL\Exception;
 use DocumentManager;
 use learnpath;
 use Link as LinkManager;
@@ -1789,10 +1790,12 @@ class CourseBuilder
     /**
      * Build the attendances.
      *
-     * @param int   $session_id      Internal session ID
-     * @param int   $courseId        Internal course ID
+     * @param int   $session_id Internal session ID
+     * @param int   $courseId Internal course ID
      * @param bool  $withBaseContent Whether to include content from the course without session or not
-     * @param array $id_list         If you want to restrict the structure to only the given IDs
+     * @param array $id_list If you want to restrict the structure to only the given IDs
+     * @throws \Exception
+     * @throws Exception
      */
     public function build_attendance(
         $session_id = 0,
@@ -1808,13 +1811,13 @@ class CourseBuilder
         $sql = 'SELECT * FROM '.$table_attendance.'
                 WHERE c_id = '.$courseId.' '.$sessionCondition;
         $db_result = Database::query($sql);
-        while ($row = Database::fetch_array($db_result, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($db_result)) {
             $obj = new Attendance($row);
             $sql = 'SELECT * FROM '.$table_attendance_calendar.'
                     WHERE c_id = '.$courseId.' AND attendance_id = '.$row['id'];
 
             $result = Database::query($sql);
-            while ($sub_row = Database::fetch_array($result, 'ASSOC')) {
+            while ($sub_row = Database::fetch_assoc($result)) {
                 $obj->add_attendance_calendar($sub_row);
             }
             $this->course->add_resource($obj);
@@ -1824,14 +1827,15 @@ class CourseBuilder
     /**
      * Build the works (or "student publications", or "assignments").
      *
-     * @param int   $session_id      Internal session ID
-     * @param int   $courseId        Internal course ID
+     * @param int   $session_id Internal session ID
+     * @param int   $courseId Internal course ID
      * @param bool  $withBaseContent Whether to include content from the course without session or not
-     * @param array $idList          If you want to restrict the structure to only the given IDs
+     * @param array $idList If you want to restrict the structure to only the given IDs
+     * @throws Exception
      */
     public function build_works(
-        $session_id = 0,
-        $courseId = 0,
+        int $session_id = 0,
+        int $courseId = 0,
         $withBaseContent = false,
         $idList = []
     ) {
@@ -1859,7 +1863,7 @@ class CourseBuilder
                     $idCondition
                 ";
         $result = Database::query($sql);
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($result)) {
             $obj = new Work($row);
             $this->course->add_resource($obj);
         }

@@ -94,18 +94,17 @@ class LinkForm extends FormValidator
         );
 
         $select->addOption('['.get_lang('Choose type of activity to assess').']', 0);
-        $courseCode = $this->category_object->get_course_code();
+        $courseId = $this->category_object->getCourseId();
 
         $linkTypes = LinkFactory::get_all_types();
         foreach ($linkTypes as $linkType) {
-            // The hot potatoe link will be added "inside" the exercise option.
+            // The hotpotatoes link will be added "inside" the exercise option.
             if (LINK_HOTPOTATOES == $linkType) {
                 continue;
             }
-            $link = $this->createLink($linkType, $courseCode);
-            // disable this element if the link works with a dropdownlist
+            $link = $this->createLink($linkType, $courseId);
+            // disable this element if the link works with a drop-down list
             $link->set_session_id(api_get_session_id());
-            // and if there are no links left
             // and if there are no links left
             if (!$link->needs_name_and_description() && '0' == count($link->get_all_links())) {
                 $select->addOption($link->get_type_name(), $linkType, 'disabled');
@@ -115,7 +114,7 @@ class LinkForm extends FormValidator
 
             if (LINK_EXERCISE == $link->get_type()) {
                 // Adding hot potatoes
-                /*$linkHot = $this->createLink(LINK_HOTPOTATOES, $courseCode);
+                /*$linkHot = $this->createLink(LINK_HOTPOTATOES, $courseId);
                 $linkHot->setHp(true);
                 if ($linkHot->get_all_links(true)) {
                     $select->addOption(
@@ -138,18 +137,19 @@ class LinkForm extends FormValidator
     }
 
     /**
-     * @param int         $link
-     * @param string|null $courseCode
+     * @param int  $link
+     * @param ?int $courseId
      *
      * @return AttendanceLink|DropboxLink|ExerciseLink|ForumThreadLink|LearnpathLink|StudentPublicationLink|SurveyLink|null
      */
-    private function createLink($link, $courseCode)
+    private function createLink(int $link, ?int $courseId = null)
     {
         $link = LinkFactory::create($link);
-        if (!empty($courseCode)) {
-            $link->set_course_code($courseCode);
+        if (!empty($courseId)) {
+            $link->setCourseId($courseId);
         } elseif (!empty($_GET['course_code'])) {
-            $link->set_course_code(Database::escape_string($_GET['course_code'], null, false));
+            $courseInfo = api_get_course_info($_GET['course_code']);
+            $link->setCourseId($courseInfo['real_id']);
         }
 
         return $link;

@@ -205,6 +205,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'usergroup_do_not_unsubscribe_users_from_course_on_course_unsubscribe',
                 'usergroup_do_not_unsubscribe_users_from_session_on_session_unsubscribe',
                 'drh_allow_access_to_all_students',
+                'admin_chamilo_announcements_disable',
             ],
             'Agenda' => [
                 'personal_agenda_show_all_session_events',
@@ -420,7 +421,6 @@ class Version20230216122900 extends AbstractMigrationChamilo
             ],
             'Announcement' => [
                 'disable_delete_all_announcements',
-                'admin_chamilo_announcements_disable',
                 'disable_announcement_attachment',
                 'allow_scheduled_announcements',
                 'hide_announcement_sent_to_users_info',
@@ -745,7 +745,6 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'hide_announcement_sent_to_users_info',
                 'allow_scheduled_announcements',
                 'disable_announcement_attachment',
-                'admin_chamilo_announcements_disable',
                 'disable_delete_all_announcements',
             ],
             'Document' => [
@@ -970,6 +969,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'max_anonymous_users',
                 'show_link_request_hrm_user',
                 'user_status_option_only_for_admin_enabled',
+                'admin_chamilo_announcements_disable',
             ],
             'Profile' => [
                 'hide_username_in_course_chat',

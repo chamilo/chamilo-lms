@@ -56,7 +56,7 @@ $there_is_a_end_date = false;
 
 if (Gradebook::is_active()) {
     $link_info = GradebookUtils::isResourceInCourseGradebook(
-        api_get_course_id(),
+        api_get_course_int_id(),
         LINK_STUDENTPUBLICATION,
         $workId
     );

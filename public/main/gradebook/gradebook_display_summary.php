@@ -18,8 +18,8 @@ $sessionId = api_get_session_id();
 $courseInfo = api_get_course_info();
 $statusToFilter = empty($sessionId) ? STUDENT : 0;
 
-$userList = CourseManager::get_user_list_from_course_code(
-    api_get_course_id(),
+$userList = CourseManager::getUserListFromCourseId(
+    api_get_course_int_id(),
     $sessionId,
     null,
     null,
@@ -48,7 +48,15 @@ if ($cacheAvailable) {
 switch ($action) {
     case 'export_all':
         //Session::write('use_gradebook_cache', true);
-        $cats = Category::load($cat_id, null, null, null, null, null, false);
+        $cats = Category::load(
+            $cat_id,
+            null,
+            0,
+            null,
+            null,
+            null,
+            null
+        );
         /** @var Category $cat */
         $cat = $cats[0];
         $allcat = $cat->get_subcategories(
@@ -65,7 +73,7 @@ switch ($action) {
         $alllink = $cat->get_links(
             null,
             true,
-            api_get_course_id(),
+            api_get_course_int_id(),
             api_get_session_id()
         );
 
@@ -141,7 +149,15 @@ switch ($action) {
         break;
     case 'download':
         $userId = isset($_GET['user_id']) && $_GET['user_id'] ? $_GET['user_id'] : null;
-        $cats = Category::load($cat_id, null, null, null, null, null, false);
+        $cats = Category::load(
+            $cat_id,
+            null,
+            0,
+            null,
+            null,
+            null,
+            null
+        );
         GradebookUtils::generateTable($courseInfo, $userId, $cats, false, false, $userList);
         break;
     case 'add_comment':

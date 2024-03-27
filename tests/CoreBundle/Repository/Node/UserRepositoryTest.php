@@ -22,8 +22,8 @@ class UserRepositoryTest extends AbstractApiTest
     public function testCount(): void
     {
         $count = self::getContainer()->get(UserRepository::class)->count([]);
-        // Admin + anon (registered in the DataFixture\AccessUrlAdminFixtures.php)
-        $this->assertSame(2, $count);
+        // Admin + anon + fallback (registered in the DataFixture\AccessUrlAdminFixtures.php)
+        $this->assertSame(3, $count);
     }
 
     public function testLoadUserByIdentifier(): void
@@ -117,8 +117,8 @@ class UserRepositoryTest extends AbstractApiTest
         $userRepo = self::getContainer()->get(UserRepository::class);
 
         $count = $userRepo->count([]);
-        // By default, there are 2 users: admin + anon.
-        $this->assertSame(3, $count);
+        // By default, there are 3 users: admin + anon + fallback.
+        $this->assertSame(4, $count);
         $this->assertHasNoEntityViolations($student);
 
         $this->assertCount(1, $student->getRoles());
@@ -251,7 +251,7 @@ class UserRepositoryTest extends AbstractApiTest
         $userRepo->addUserToResourceNode($user->getId(), $user->getId());
         $em->flush();
 
-        $this->assertSame(3, $userRepo->count([]));
+        $this->assertSame(4, $userRepo->count([]));
         $this->assertCount(4, $user->getRoles());
 
         $this->assertSame('Joe Doe', $user->getCompleteNameWithClasses());

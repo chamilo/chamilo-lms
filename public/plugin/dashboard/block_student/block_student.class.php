@@ -182,11 +182,11 @@ class BlockStudent extends Block
                     $cats = Category::load(
                         null,
                         null,
-                        $course_code,
+                        $course['real_id'],
                         null,
                         null,
                         null,
-                        false
+                        null
                     );
                     $scoretotal = [];
                     if (isset($cats) && isset($cats[0])) {

@@ -2,8 +2,6 @@
   <div class="flex flex-col gap-4">
     <CalendarSectionHeader
       @add-click="showAddEventDialog"
-      @my-students-schedule-click="goToMyStudentsSchedule"
-      @session-planning-click="goToSessionPanning"
     />
 
     <FullCalendar
@@ -23,6 +21,7 @@
         v-if="dialog"
         ref="createForm"
         :values="item"
+        :is-global="isGlobal"
       />
       <template #footer>
         <BaseButton
@@ -72,17 +71,18 @@
         />
 
         <BaseButton
+          v-if="showDeleteButton"
           :label="t('Delete')"
           icon="delete"
           type="danger"
           @click="confirmDelete"
         />
         <BaseButton
-          v-if="allowToEdit"
+          v-if="allowToEdit && showEditButton"
           :label="t('Edit')"
           type="secondary"
           @click="dialog = true"
-        />
+          icon="delete"/>
       </template>
     </Dialog>
 
@@ -128,6 +128,7 @@ import { useStore } from "vuex"
 import { useI18n } from "vue-i18n"
 import { useConfirm } from "primevue/useconfirm"
 import { useFormatDate } from "../../composables/formatDate"
+import { useRoute } from "vue-router"
 
 import Loading from "../../components/Loading.vue"
 import FullCalendar from "@fullcalendar/vue3"
@@ -171,6 +172,8 @@ const allowToUnsubscribe = ref(false)
 const currentUser = computed(() => store.getters["security/getUser"])
 const { t } = useI18n()
 const { appLocale } = useLocale()
+const route = useRoute()
+const isGlobal = ref(route.query.type === 'global')
 
 let currentEvent = null
 
@@ -203,13 +206,22 @@ async function getCalendarEvents({ startStr, endStr }) {
     params.gid = group.value.id
   }
 
+  if (route.query?.type === 'global') {
+    params.type = 'global'
+  }
+
   const calendarEvents = await cCalendarEventService.findAll({ params }).then((response) => response.json())
 
-  return calendarEvents["hydra:member"].map((event) => ({
-    ...event,
-    start: event.startDate,
-    end: event.endDate,
-  }))
+  return calendarEvents["hydra:member"].map((event) => {
+    let color = event.color || '#007BFF'
+
+    return {
+      ...event,
+      start: event.startDate,
+      end: event.endDate,
+      color,
+    }
+  })
 }
 
 const calendarLocale = allLocales.find(
@@ -248,6 +260,7 @@ const calendarOptions = ref({
   selectable: true,
   eventClick(eventClickInfo) {
     eventClickInfo.jsEvent.preventDefault()
+    currentEvent = eventClickInfo.event
 
     let event = eventClickInfo.event.toPlainObject()
 
@@ -257,8 +270,6 @@ const calendarOptions = ref({
 
       return
     }
-
-    currentEvent = event
 
     item.value = { ...event.extendedProps }
 
@@ -290,6 +301,32 @@ const calendarOptions = ref({
     getCalendarEvents(info).then((events) => successCallback(events))
   },
 })
+
+const currentContext = computed(() => {
+  if (route.query.type === 'global') {
+    return 'global'
+  } else if (course.value) {
+    return 'course'
+  } else if (session.value) {
+    return 'session'
+  } else {
+    return 'personal'
+  }
+})
+
+const allowAction = (eventType) => {
+  const contextRules = {
+    global: ['global'],
+    course: ['course'],
+    session: ['session'],
+    personal: ['personal']
+  }
+
+  return contextRules[currentContext.value].includes(eventType)
+}
+
+const showEditButton = computed(() => allowAction(item.value.type))
+const showDeleteButton = computed(() => allowAction(item.value.type))
 
 const cal = ref(null)
 
@@ -359,6 +396,10 @@ function onCreateEventForm() {
 
   let itemModel = createForm.value.v$.item.$model
 
+  if (isGlobal.value) {
+    itemModel.isGlobal = true
+  }
+
   if (itemModel["@id"]) {
     store.dispatch("ccalendarevent/update", itemModel)
   } else {
@@ -379,6 +420,11 @@ function onCreateEventForm() {
 }
 
 const toast = useToast()
+
+watch(() => route.query.type, (newType) => {
+  isGlobal.value = newType === 'global'
+  reFetch()
+})
 
 watch(
   () => store.state.ccalendarevent.created,

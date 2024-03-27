@@ -3,8 +3,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
-//use Chamilo\CoreBundle\Entity\PersonalAgenda;
-use Chamilo\CoreBundle\Entity\SysCalendar;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CCalendarEventAttachment;
@@ -57,8 +55,6 @@ class Agenda
         $sessionId = 0
     ) {
         // Table definitions
-        $this->tbl_global_agenda = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
-        //$this->tbl_personal_agenda = Database::get_main_table(TABLE_PERSONAL_AGENDA);
         $this->tbl_course_agenda = Database::get_course_table(TABLE_AGENDA);
         $this->table_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT);
 
@@ -363,24 +359,6 @@ class Agenda
                             $counter++;
                         }
                     }
-                }
-                break;
-            case 'admin':
-                if (api_is_platform_admin()) {
-                    $event = new SysCalendar();
-                    $color = SysCalendar::COLOR_SYSTEM_EVENT;
-                    $event
-                        ->setTitle($title)
-                        ->setContent($content)
-                        ->setStartDate($start)
-                        ->setEndDate($end)
-                        ->setAllDay($allDay)
-                        ->setUrl(api_get_url_entity())
-                        ->setColor($color)
-                    ;
-                    $em->persist($event);
-                    $em->flush();
-                    $id = $event->getId();
                 }
                 break;
         }
@@ -811,26 +789,6 @@ class Agenda
 
                 return false;
                 break;
-            case 'admin':
-            case 'platform':
-                if (api_is_platform_admin()) {
-                    $attributes = [
-                        'title' => $title,
-                        'start_date' => $start,
-                        'end_date' => $end,
-                        'all_day' => $allDay,
-                    ];
-
-                    if ($updateContent) {
-                        $attributes['content'] = $content;
-                    }
-                    Database::update(
-                        $this->tbl_global_agenda,
-                        $attributes,
-                        ['id = ?' => $id]
-                    );
-                }
-                break;
         }
     }
 
@@ -925,14 +883,6 @@ class Agenda
                     }
                 }
                 break;
-            case 'admin':
-                if (api_is_platform_admin()) {
-                    Database::delete(
-                        $this->tbl_global_agenda,
-                        ['id = ?' => $id]
-                    );
-                }
-                break;
         }
     }
 
@@ -957,9 +907,6 @@ class Agenda
         $format = 'json'
     ) {
         switch ($this->type) {
-            case 'admin':
-                $this->getPlatformEvents($start, $end);
-                break;
             case 'course':
                 $course = api_get_course_entity($courseId);
 
@@ -999,14 +946,6 @@ class Agenda
                 $sessionFilterActive = false;
                 if (!empty($this->sessionId)) {
                     $sessionFilterActive = true;
-                }
-
-                if (false == $sessionFilterActive) {
-                    // Getting personal events
-                    //$this->getPersonalEvents($start, $end);
-
-                    // Getting platform/admin events
-                    $this->getPlatformEvents($start, $end);
                 }
 
                 $ignoreVisibility = ('true' === api_get_setting('agenda.personal_agenda_show_all_session_events'));
@@ -1171,12 +1110,6 @@ class Agenda
 							    id = ".$id;
                     Database::query($sql);
                     break;
-                case 'admin':
-                    $sql = "UPDATE $this->tbl_global_agenda SET
-                            end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
-							WHERE id = ".$id;
-                    Database::query($sql);
-                    break;
             }
         }
 
@@ -1220,14 +1153,6 @@ class Agenda
 							WHERE
 							    c_id = ".$this->course['real_id']." AND
 							    id=".$id;
-                    Database::query($sql);
-                    break;
-                case 'admin':
-                    $sql = "UPDATE $this->tbl_global_agenda SET
-                            all_day = $allDay,
-                            start_date = DATE_ADD(start_date,INTERVAL $delta MINUTE),
-                            end_date = DATE_ADD(end_date, INTERVAL $delta MINUTE)
-							WHERE id=".$id;
                     Database::query($sql);
                     break;
             }
@@ -1289,16 +1214,6 @@ class Agenda
 
                         $event['attachment'] = $eventEntity->getAttachments();
                     }
-                }
-                break;
-            case 'admin':
-            case 'platform':
-                $sql = "SELECT * FROM ".$this->tbl_global_agenda."
-                        WHERE id = $id";
-                $result = Database::query($sql);
-                if (Database::num_rows($result)) {
-                    $event = Database::fetch_array($result, 'ASSOC');
-                    $event['description'] = $event['content'];
                 }
                 break;
         }

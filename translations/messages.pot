@@ -25194,3 +25194,36 @@ msgstr ""
 
 msgid "%02d h %02d m %02d s"
 msgstr ""
+
+msgid "User management"
+msgstr ""
+
+msgid "Here you can manage registered users within your platform"
+msgstr ""
+
+msgid "Course management"
+msgstr ""
+
+msgid "Create and manage your courses in a simple way"
+msgstr ""
+
+msgid "Sessions management"
+msgstr ""
+
+msgid "Create course packages for a certain time with training sessions"
+msgstr ""
+
+msgid "Manage the skills of your users, through courses and badges"
+msgstr ""
+
+msgid "View the status of your server, perform performance tests"
+msgstr ""
+
+msgid "Platform management"
+msgstr ""
+
+msgid "Configure your platform, view reports, publish and send announcements globally"
+msgstr ""
+
+msgid "Learn more about Chamilo and its use, official references links"
+msgstr ""

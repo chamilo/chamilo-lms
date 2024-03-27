@@ -302,8 +302,9 @@ class EvalForm extends FormValidator
 
     /**
      * Builds a result form containing inputs for all students with a given course_code.
+     * @throws Exception
      */
-    protected function build_result_add_form()
+    protected function build_result_add_form(): void
     {
         $renderer = &$this->defaultRenderer();
         $renderer->setFormTemplate(
@@ -316,7 +317,7 @@ class EvalForm extends FormValidator
 		   </form>'
         );
 
-        $users = GradebookUtils::get_users_in_course($this->evaluation_object->get_course_code());
+        $users = GradebookUtils::get_users_in_course($this->evaluation_object->getCourseId());
         $nr_users = 0;
         //extra field for check on maxvalue
         $this->addElement('hidden', 'maxvalue', $this->evaluation_object->get_max());
@@ -466,11 +467,12 @@ class EvalForm extends FormValidator
                 'hid_user_id' => $this->evaluation_object->get_user_id(),
                 'hid_category_id' => $this->evaluation_object->get_category_id(),
                 'hid_course_code' => $this->evaluation_object->get_course_code(),
+                'hid_course_id' => $this->evaluation_object->getCourseId(),
                 'created_at' => api_get_utc_datetime(),
             ]
         );
         $this->build_basic_form();
-        if (null == $this->evaluation_object->get_course_code()) {
+        if (null == $this->evaluation_object->getCourseId()) {
             $this->addElement('checkbox', 'adduser', null, get_lang('Add users to evaluation'));
         } else {
             $this->addElement('checkbox', 'addresult', null, get_lang('Grade learners'));
@@ -500,6 +502,7 @@ class EvalForm extends FormValidator
             'description' => $this->evaluation_object->get_description(),
             'hid_user_id' => $this->evaluation_object->get_user_id(),
             'hid_course_code' => $this->evaluation_object->get_course_code(),
+            'hid_course_id' => $this->evaluation_object->getCourseId(),
             'hid_category_id' => $this->evaluation_object->get_category_id(),
             'created_at' => api_get_utc_datetime($this->evaluation_object->get_date()),
             'weight' => $weight,
@@ -542,15 +545,14 @@ class EvalForm extends FormValidator
         $cat_id = $this->evaluation_object->get_category_id();
 
         $session_id = api_get_session_id();
-        $course_code = api_get_course_id();
         $all_categories = Category:: load(
             null,
             null,
-            $course_code,
+            api_get_course_int_id(),
             null,
             null,
             $session_id,
-            false
+            null
         );
 
         if (1 == count($all_categories)) {
@@ -566,7 +568,7 @@ class EvalForm extends FormValidator
             $default_weight = 0;
             if (!empty($all_categories)) {
                 foreach ($all_categories as $my_cat) {
-                    if ($my_cat->get_course_code() == api_get_course_id()) {
+                    if ($my_cat->getCourseId() == api_get_course_int_id()) {
                         $grade_model_id = $my_cat->get_grade_model_id();
                         if (empty($grade_model_id)) {
                             if (0 == $my_cat->get_parent_id()) {

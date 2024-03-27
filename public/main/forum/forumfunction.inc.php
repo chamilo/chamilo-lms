@@ -176,7 +176,7 @@ function handleForum($url)
 
                     SkillModel::deleteSkillsFromItem($id, ITEM_TYPE_FORUM_THREAD);
                     $link_info = GradebookUtils::isResourceInCourseGradebook(
-                        api_get_course_id(),
+                        api_get_course_int_id(),
                         5,
                         $id,
                         api_get_session_id()
@@ -1617,7 +1617,7 @@ function updateThread($values)
 
     $id = $values['thread_id'];
     $linkInfo = GradebookUtils::isResourceInCourseGradebook(
-        $courseCode,
+        $courseId,
         LINK_FORUM_THREAD,
         $id,
         $sessionId
@@ -1649,7 +1649,7 @@ function updateThread($values)
         if (!$linkInfo) {
             GradebookUtils::add_resource_to_course_gradebook(
                 $values['category_id'],
-                $courseCode,
+                $courseId,
                 LINK_FORUM_THREAD,
                 $id,
                 $title,
@@ -1751,7 +1751,7 @@ function saveThread(
         $resourcename = stripslashes($values['calification_notebook_title']);
         GradebookUtils::add_resource_to_course_gradebook(
             $values['category_id'],
-            $courseCode,
+            $course_id,
             5,
             $thread->getIid(),
             $resourcename,

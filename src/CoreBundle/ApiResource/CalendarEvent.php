@@ -43,7 +43,22 @@ class CalendarEvent extends AbstractResource
         #[Groups(['calendar_event:read'])]
         public ?ResourceNode $resourceNode = null,
         ?array $resourceLinkListFromEntity = null,
+        #[Groups(['calendar_event:read'])]
+        public ?string $color = null,
+        #[Groups(['calendar_event:read'])]
+        public ?string $type = null,
     ) {
         $this->resourceLinkListFromEntity = $resourceLinkListFromEntity;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): self
+    {
+        $this->type = $type;
+        return $this;
     }
 }

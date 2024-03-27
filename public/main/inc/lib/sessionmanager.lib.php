@@ -2743,7 +2743,7 @@ class SessionManager
         foreach ($courseList as $courseId) {
             $courseInfo = api_get_course_info_by_id($courseId);
 
-            // If course doesn't exists continue!
+            // If course doesn't exist continue!
             if (empty($courseInfo)) {
                 continue;
             }
@@ -2760,16 +2760,16 @@ class SessionManager
                 // Copy gradebook categories and links (from base course)
                 // to the new course session
                 if ($copyEvaluation) {
-                    $cats = Category::load(null, null, $courseInfo['code']);
+                    $cats = Category::load(null, null, $courseId);
                     if (!empty($cats)) {
                         $sessionCategory = Category:: load(
                             null,
                             null,
-                            $courseInfo['code'],
+                            $courseId,
                             null,
                             null,
                             $sessionId,
-                            false
+                            null
                         );
 
                         // @todo remove commented code
@@ -2805,7 +2805,7 @@ class SessionManager
                             $links = $cat->get_links(
                                 null,
                                 false,
-                                $courseInfo['code'],
+                                $courseId,
                                 0
                             );
 

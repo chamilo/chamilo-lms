@@ -424,7 +424,7 @@ class CourseController extends ToolBaseController
         $form->handleRequest($request);
 
         if (!$form->isSubmitted() || !$form->isValid()) {
-            $categories = Category::load(null, null, $course->getCode());
+            $categories = Category::load(null, null, $course->getId());
             $actions = '';
 
             if (!empty($categories)) {
@@ -511,7 +511,7 @@ class CourseController extends ToolBaseController
         /** @var User $user */
         $user = $this->getUser();
 
-        $categories = Category::load(null, null, $course->getCode());
+        $categories = Category::load(null, null, $course->getId());
 
         if (empty($categories)) {
             throw $this->createNotFoundException();

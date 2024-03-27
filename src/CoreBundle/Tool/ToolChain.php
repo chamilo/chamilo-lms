@@ -108,8 +108,9 @@ class ToolChain
                     $resourceType->setTool($toolEntity);
                     $manager->persist($resourceType);
                 }
-                $manager->flush();
             }
+
+            $manager->flush();
         }
     }
 
@@ -162,8 +163,6 @@ class ToolChain
             'tracking',
             'course_setting',
             'course_maintenance',
-            'bbb',
-            'mobidico',
         ];
         $toolList = array_flip($toolList);
 
@@ -188,12 +187,9 @@ class ToolChain
             /** @var Tool $toolEntity */
             $toolEntity = $toolRepo->findOneBy($criteria);
             if ($toolEntity) {
-                $position = $toolList[$tool->getTitle()] + 1;
-
                 $courseTool = (new CTool())
                     ->setTool($toolEntity)
                     ->setTitle($tool->getTitle())
-                    ->setPosition($position)
                     ->setVisibility($visibility)
                     ->setParent($course)
                     ->setCreator($course->getCreator())

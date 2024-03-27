@@ -198,7 +198,6 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         $relations = [
             ['bundle' => 'CoreBundle', 'entity' => 'AccessUrlRelUser', 'field' => 'user', 'type' => 'object', 'action' => 'delete'],
             ['bundle' => 'CoreBundle', 'entity' => 'Admin', 'field' => 'user', 'type' => 'object', 'action' => 'delete'],
-            ['bundle' => 'CoreBundle', 'entity' => 'AgendaEventInvitee', 'field' => 'user', 'type' => 'object', 'action' => 'delete'],
             ['bundle' => 'CoreBundle', 'entity' => 'AttemptFeedback', 'field' => 'user', 'type' => 'object', 'action' => 'convert'],
             ['bundle' => 'CoreBundle', 'entity' => 'Chat', 'field' => 'toUser', 'type' => 'int', 'action' => 'convert'],
             ['bundle' => 'CoreBundle', 'entity' => 'ChatVideo', 'field' => 'toUser', 'type' => 'int', 'action' => 'convert'],

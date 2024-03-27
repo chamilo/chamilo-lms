@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-01-13 02:40+0000\n"
-"Last-Translator: Weblate admin <ywarnier@beeznest.org>\n"
-"Language-Team: Dutch <https://translation.chamilo.org/projects/chamilo-lms/"
-"translations/nl/>\n"
+"PO-Revision-Date: 2024-03-27 08:56+0000\n"
+"Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
+"Language-Team: Dutch <https://translation.chamilo.org/projects/chamilo/"
+"messages/nl/>\n"
 "Language: nl\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.4.2\n"
 
 msgid "You can generate badges for the skills learnt by your users, to give them recognition for their effort, through which they will be able to show off their acquired skills and competencies with icons that will be shown on their user profile. For more information on OpenBadges, check <a href='http://openbadges.org'>http://openbadges.org/</a>."
 msgstr "Je kunt badges genereren voor de vaardigheden door je gebruikers aangeleerd, om hen erkenning te geven voor hun inspanningen. Hierdoor zullen ze ook hun vaardigheden en competenties kunnen etaleren met pictogrammen die bij hun gebruikersprofiel zullen verschijnen. Voor meer informatie over OpenBadges, surf naar http://openbadges.org"
@@ -356,7 +356,7 @@ msgid "Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )"
 msgstr "Voorbeeld van een formule: sqrt([x] / [y]) * (e^(ln(pi)))"
 
 msgid "Variable ranges"
-msgstr ""
+msgstr "Variabele bereiken"
 
 msgid "Range value"
 msgstr "Bereikwaarde"
@@ -5792,12 +5792,14 @@ msgstr "OpenGraph metatitel"
 
 msgid "This will show an OpenGraph Description meta (og:description) in your site's headers"
 msgstr ""
+"Dit toont een OpenGraph-beschrijving meta (og:description) in de headers van "
+"uw site"
 
 msgid "Meta description"
-msgstr ""
+msgstr "Metabeschrijving"
 
 msgid "This will show an OpenGraph Title meta (og:title) in your site's headers"
-msgstr ""
+msgstr "Dit toont een OpenGraph-titelmeta (og:title) in de headers van uw site"
 
 msgid "The field has been deleted"
 msgstr "Het veld is verwijderd."
@@ -7607,6 +7609,13 @@ msgstr "Oefening en leerpad"
 
 msgid "Warning: It is possible to use, in the gradebook, tests that are part of learning paths. If the learning path itself is already included, this test might be part of the gradebook already. The learning paths evaluation is made on the basis of a progress percentage, while the evaluation on tests is made on the basis of a score. Survey evaluation is based on whether the user has answered (1) or not (0). Make sure you test your combinations of gradebook evaluations to avoid mind-boggling situations."
 msgstr ""
+"Waarschuwing: Het is mogelijk om in het cijferboek tests te gebruiken die "
+"onderdeel zijn van leerpaden. Als het leerpad zelf al is opgenomen, kan deze "
+"test al onderdeel zijn van het cijferboek. De evaluatie van leerpaden wordt "
+"gebaseerd op een voortgangspercentage, terwijl de evaluatie van tests "
+"gebaseerd is op een score. De evaluatie van enquêtes is gebaseerd op of de "
+"gebruiker heeft geantwoord (1) of niet (0). Zorg ervoor dat u uw combinaties "
+"van cijferboekevaluaties test om verwarrende situaties te voorkomen."
 
 msgid "Choose either duration or time limit"
 msgstr "Selecteer of tijdsduur of tijdslimiet"
@@ -8530,7 +8539,7 @@ msgid "Forums"
 msgstr "Forums"
 
 msgid "Students list report"
-msgstr ""
+msgstr "Leerlingenlijst rapport"
 
 msgid "Create folder"
 msgstr "Nieuwe map"
@@ -11155,7 +11164,7 @@ msgid "Your password is encrypted for security reasons. Thus, after pressing the
 msgstr "Uw paswoord is geëncrypteerd omwile van beveiligingsredenen. Na het klikken op de link wordt opnieuw een e-mail verstuurd met uw paswoord."
 
 msgid "Extra fields"
-msgstr ""
+msgstr "Extra velden"
 
 msgid "This OpenID could not be found in our database. Please register for a new account. If you have already an account with us, please edit your profile inside your account to add this OpenID"
 msgstr "Deze OpenID bestaat niet in onze database. Gelieve u te registreren voor een nieuwe account. Bent u bij ons reeds geregistreerd, gelieve dan uw profiel aan te passen, en deze OpenID toe te voegen"
@@ -13145,6 +13154,8 @@ msgstr "Hulp bij conferentiemodule"
 
 msgid "The GoogleMaps plugin needs to be enabled by the platform administrator in order to show the map."
 msgstr ""
+"De GoogleMaps-plugin moet door de platformbeheerder ingeschakeld worden om "
+"de kaart te tonen."
 
 msgid "Chamilo Help"
 msgstr "Hulp bij het starten met Chamilo"
@@ -13186,7 +13197,7 @@ msgid "Reporting Help"
 msgstr "Hulp bij statistieken"
 
 msgid "Induction-type session"
-msgstr ""
+msgstr "Inductie-type sessie"
 
 msgid "Publish survey"
 msgstr "Publiceer enquete"
@@ -13960,7 +13971,7 @@ msgid "The user has rights of its group"
 msgstr "De gebruiker heeft de rechten van zijn groep."
 
 msgid "Promotion updated successfully"
-msgstr ""
+msgstr "Promotie succesvol bijgewerkt"
 
 msgid "Create a new project"
 msgstr "Maak een nieuw project"
@@ -14474,6 +14485,8 @@ msgstr "Selecteer de taal die u wil gebruiken tijdens de installaties"
 
 msgid "Enable the AsciiSVG plugin in the WYSIWYG editor to draw charts from mathematical functions."
 msgstr ""
+"Schakel de AsciiSVG-plugin in de WYSIWYG-editor in om grafieken te tekenen "
+"vanuit wiskundige functies."
 
 msgid "Here are the values you entered"
 msgstr "Dit zijn de waarden die u heeft ingevoerd"
@@ -15229,7 +15242,7 @@ msgid "View missing assignments"
 msgstr "Toon ontbrekende opgaven"
 
 msgid "Enable AsciiSVG"
-msgstr ""
+msgstr "AsciiSVG inschakelen"
 
 msgid "Only required by the sub-languages feature or version upgrade process"
 msgstr "Suggestie enkel wanneer je de sub-language feature wil inschakelen"
@@ -15527,24 +15540,38 @@ msgstr "Er staan lege regels in de hoofding van het geselecteerde bestand"
 
 msgid "This feature is useful for the multi-URL scenario, where there is a difference between the global admin and the normal admins. In this case, selecting \"No\" will prevent normal admins to set other users' passwords, and will only allow them to ask for a password regeneration (thus sent by e-mail to the user). The global admin can still do it."
 msgstr ""
+"Deze functie is nuttig voor het scenario met multi-URL's, waarbij er een "
+"verschil is tussen de globale beheerder en de normale beheerders. In dit "
+"geval zal het selecteren van \"Nee\" voorkomen dat normale beheerders de "
+"wachtwoorden van andere gebruikers kunnen instellen, en zal hen alleen "
+"toestaan om een wachtwoordhergeneratie te vragen (die vervolgens per e-mail "
+"naar de gebruiker wordt verzonden). De globale beheerder kan dit nog steeds "
+"doen."
 
 msgid "Admins can change users' passwords"
-msgstr ""
+msgstr "Beheerders kunnen de wachtwoorden van gebruikers wijzigen"
 
 msgid "Allow users with the corresponding privileges to use the \"login as\" feature to connect using other users' account? This setting is most useful for multi-url configuration, where you don't think an administrator from a secondary URL should be able to connect as any user. Note that another setting is available in the configuration file to block all possibility for anyone to use this feature."
 msgstr ""
+"Sta gebruikers met de overeenkomstige rechten toe om de functie \"inloggen "
+"als\" te gebruiken om verbinding te maken met de account van andere "
+"gebruikers? Deze instelling is vooral nuttig voor multi-url configuratie, "
+"waar u niet wilt dat een beheerder van een secundaire URL als elke gebruiker "
+"kan inloggen. Let op dat er nog een andere instelling beschikbaar is in het "
+"configuratiebestand om de mogelijkheid voor iedereen om deze functie te "
+"gebruiken volledig te blokkeren."
 
 msgid "\"Login as\" feature"
-msgstr ""
+msgstr "\"Inloggen als\" functie"
 
 msgid "Filter by user"
-msgstr ""
+msgstr "Filter op gebruiker"
 
 msgid "Filter by group"
-msgstr ""
+msgstr "Filter op groep"
 
 msgid "Filter: Everyone"
-msgstr ""
+msgstr "Filter: Iedereen"
 
 msgid "All questions must have a category to use the random-by-category mode."
 msgstr "Alle vragen moeten een categorie hebben om de random per categorie modus te kunnen  gebruiken."
@@ -15881,15 +15908,30 @@ msgstr "Zorg dat je voldoende vragen hebt in je categorieën."
 
 msgid "Sorry, this installation has a courses limit, which has now been reached. To increase the number of courses allowed on this Chamilo installation, please contact your hosting provider or, if available, upgrade to a superior hosting plan."
 msgstr ""
+"Het spijt ons, maar de limiet voor het aantal cursussen op deze Chamilo-"
+"installatie is bereikt. Om het toegestane aantal cursussen te verhogen, neem "
+"contact op met uw hostingprovider of, indien beschikbaar, upgrade naar een "
+"beter hostingpakket."
 
 msgid "Sorry, this installation has a teachers limit, which has now been reached. To increase the number of teachers allowed on this Chamilo installation, please contact your hosting provider or, if available, upgrade to a superior hosting plan."
 msgstr ""
+"Het spijt ons, maar de limiet voor trainers op deze Chamilo-installatie is "
+"bereikt. Om het aantal toegestane trainers op deze Chamilo-installatie te "
+"verhogen, neem contact op met uw hostingprovider of, indien beschikbaar, "
+"upgrade naar een beter hostingpakket."
 
 msgid "Sorry, this installation has a users limit, which has now been reached. To increase the number of users allowed on this Chamilo installation, please contact your hosting provider or, if available, upgrade to a superior hosting plan."
 msgstr ""
+"Het spijt ons, maar deze installatie heeft een gebruikerslimiet die nu "
+"bereikt is. Om het aantal toegestane gebruikers op deze Chamilo-installatie "
+"te verhogen, neem contact op met uw hostingprovider of, indien beschikbaar, "
+"upgrade naar een beter hostingpakket."
 
 msgid "By copying the link below and pasting it in an e-mail or on a website, you will allow any anonymous person to enter and answer this survey."
 msgstr ""
+"Door de onderstaande link te kopiëren en te plakken in een e-mail of op een "
+"website, geeft u elke anonieme persoon toestemming om deze enquête in te "
+"vullen."
 
 msgid "Open self"
 msgstr "Open _self"
@@ -16055,21 +16097,30 @@ msgstr "Copy"
 
 msgid "Date on which the session is closed to coaches. The additional delay will allow them to export all relevant tracking information"
 msgstr ""
+"Datum waarop de sessie voor coaches wordt gesloten. De extra vertraging "
+"maakt het mogelijk om alle relevante volginformatie te exporteren"
 
+#, fuzzy
 msgid "Date on which the session is made available to coaches, so they can prepare it before the students get connected"
 msgstr ""
+"Datum waarop de sessie beschikbaar wordt gesteld voor coaches, zodat zij "
+"deze kunnen voorbereiden voordat de deelnemers verbinding maken"
 
 msgid "Date on which the session is closed"
-msgstr ""
+msgstr "Datum waarop de sessie wordt gesloten"
 
 msgid "Date on which the session is made available to all"
-msgstr ""
+msgstr "Datum waarop de sessie voor iedereen beschikbaar wordt gemaakt"
 
 msgid "Date that will be shown in the session information as the date on which the session ends"
 msgstr ""
+"Datum die wordt weergegeven in de sessie-informatie als de datum waarop de "
+"sessie eindigt"
 
 msgid "Date that will be shown in the session information as the date on which the session starts"
 msgstr ""
+"Datum dat wordt weergegeven in de sessie-informatie als de startdatum van de "
+"sessie"
 
 msgid "Access end date for coaches"
 msgstr "Toegangs- en einddatum voor coaches"
@@ -16154,6 +16205,10 @@ msgstr "De startdatum moet voor de einddatum liggen"
 
 msgid "When this option is enabled, the session title is a link to a special session page. When disabled, it is only a text title, without link. The session page linked to might be confusing for some users, which is why you might want to disable it."
 msgstr ""
+"Wanneer deze optie is ingeschakeld, is de sessietitel een link naar een "
+"speciale sessiepagina. Wanneer uitgeschakeld, is het slechts een teksttitel, "
+"zonder link. De gelinkte sessiepagina kan verwarrend zijn voor sommige "
+"gebruikers, daarom wilt u deze misschien uitschakelen."
 
 msgid "Enable session link in courses list"
 msgstr "Activeer de sessie link in de cursussenlijst"
@@ -16229,12 +16284,19 @@ msgstr "Gebruikers importeren"
 
 msgid "INFORMATION VISIBLE TO THE TEACHER ONLY:\nThis folder contains documents which are created by the Learning Path tool. Inside this folder you can edit the HTML file which are generated by importing content from the Learning Path, as the ones imported by Chamilo Rapid, for example. We recommend hiding this folder to your students."
 msgstr ""
+"INFORMATIE ALLEEN ZICHTBAAR VOOR DE TRAINER:\n"
+"Deze map bevat documenten die zijn gemaakt door de Leerpad tool. In deze map "
+"kunt u de HTML-bestanden bewerken die zijn gegenereerd door het importeren "
+"van inhoud uit het Leerpad, zoals die geïmporteerd door Chamilo Rapid, "
+"bijvoorbeeld. We raden aan om deze map voor uw cursisten te verbergen."
 
 msgid "Just a moment, please. You will be redirected in %s seconds..."
 msgstr "Een ogenblik a.u.b. U wordt omgeleid in %s seconden ..."
 
 msgid "To protect your site, make the whole %s directory read-only (chmod -R 0555 on Linux) and delete the %s directory."
 msgstr ""
+"Om uw site te beschermen, maak de gehele %s map alleen-lezen (chmod -R 0555 "
+"op Linux) en verwijder de %s map."
 
 msgid "Number of public courses"
 msgstr "Aantal openbare cursussen"
@@ -16321,7 +16383,7 @@ msgid "Return to the course list"
 msgstr "Ga terug naar de cursuslijst"
 
 msgid "%d/%m"
-msgstr ""
+msgstr "%d/%m"
 
 msgid "Course tutor"
 msgstr "Cursus tutor"
@@ -16345,7 +16407,7 @@ msgid "Session tutors reports visibility"
 msgstr "Sessie tutors rapporten zichtbaarheid"
 
 msgid "NP"
-msgstr ""
+msgstr "NA"
 
 msgid "P"
 msgstr "P"
@@ -16517,6 +16579,8 @@ msgstr "Uw account op %s werd goedgekeurd door één van onze beheerders."
 
 msgid "A student has obtained the number of sub-skills needed to validate the mother skill."
 msgstr ""
+"Een leerling heeft het aantal deelvaardigheden behaald dat nodig is om de "
+"hoofdvaardigheid te valideren."
 
 msgid "Off"
 msgstr "uit"
@@ -16532,6 +16596,9 @@ msgstr "Superieur (n+1)"
 
 msgid "Enable the MathJax library to visualize mathematical formulas. This is only useful if either ASCIIMathML or ASCIISVG settings are enabled."
 msgstr ""
+"Schakel de MathJax-bibliotheek in om wiskundige formules te visualiseren. "
+"Dit is alleen nuttig als de instellingen voor ASCIIMathML of ASCIISVG "
+"ingeschakeld zijn."
 
 msgid "You can now login at %s using the login and the password you have provided."
 msgstr "U kan zich nu aanmelden bij %s door gebruik te maken van de login en het wachtwoord dat u hebt ingegeven."
@@ -17038,7 +17105,7 @@ msgid "Images"
 msgstr "Afbeeldingen"
 
 msgid "Upload corrections"
-msgstr ""
+msgstr "Upload correcties"
 
 msgid "Enable online services for text to speech conversion"
 msgstr "Online diensten inschakelen voor tekst naar spraak conversie"
@@ -17224,7 +17291,7 @@ msgid "Username or e-mail address"
 msgstr "Gebruikersnaam of email adres"
 
 msgid "Enable MathJax"
-msgstr ""
+msgstr "Schakel MathJax in"
 
 msgid "Activate"
 msgstr "Activeer"
@@ -17425,7 +17492,7 @@ msgid "Never connected"
 msgstr "Nooit verbonden"
 
 msgid "Font resize accessibility feature"
-msgstr ""
+msgstr "Lettergrootte aanpassen toegankelijkheidsfunctie"
 
 msgid "Enable this option to show a set of font resize options on the top-right side of your campus. This will allow visually impaired to read their course contents more easily."
 msgstr "Schakel deze optie in om een reeks opties voor het wijzigen van het lettertype rechtsboven op uw campus weer te geven. Hierdoor kunnen slechtzienden hun cursusinhoud gemakkelijker lezen."
@@ -17695,7 +17762,7 @@ msgid "You have to  choose a relation type"
 msgstr "U moet een relatietype kiezen"
 
 msgid "Relation type selection"
-msgstr ""
+msgstr "Selectie van relatie type"
 
 msgid "Add user to this URL"
 msgstr "Voeg gebruiker toe aan deze URL"
@@ -17878,7 +17945,7 @@ msgid "A course category with the same name already exists."
 msgstr "Er bestaat al een cursuscategorie met dezelfde naam"
 
 msgid "OpenID redirect"
-msgstr ""
+msgstr "OpenID-omleiding"
 
 msgid "Blogs"
 msgstr "Blogs"
@@ -18076,7 +18143,7 @@ msgid "Information about the last finished step and the next unfinished one."
 msgstr "Informatie over de laatste voltooide stap en de volgende onvoltooide stap."
 
 msgid "LaTeX code"
-msgstr ""
+msgstr "LaTeX-code"
 
 msgid "LaTeX formula"
 msgstr "LaTeX-formule"
@@ -18396,8 +18463,16 @@ msgstr "Forum categorieën"
 msgid "Cleanup of cache and temporary files"
 msgstr "Archive directory cleanup"
 
+#, fuzzy
 msgid "Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its app/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory."
 msgstr ""
+"Chamilo bewaart een kopie van de meeste tijdelijke bestanden die het "
+"genereert (voor back-ups, exports, kopieën, enz.) in de app/cache/-map. Na "
+"verloop van tijd kan dit leiden tot een zeer grote hoeveelheid gebruikte "
+"schijfruimte voor niets. Klik op de onderstaande knop om uw archiefmap op te "
+"schonen. Deze bewerking zou geautomatiseerd moeten worden door een cron-"
+"proces, maar als dit niet mogelijk is, kunt u regelmatig naar deze pagina "
+"komen om alle tijdelijke bestanden uit de map te verwijderen."
 
 msgid "Proceed with cleanup"
 msgstr "Proceed with cleanup"
@@ -18405,8 +18480,15 @@ msgstr "Proceed with cleanup"
 msgid "The app/cache/ directory cleanup has been executed successfully."
 msgstr "Het archief is succesvol opgeschoond"
 
+#, fuzzy
 msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
 msgstr ""
+"Om een of andere reden kon de map app/cache/ niet worden opgeschoond. "
+"Gelieve deze handmatig op te schonen door verbinding te maken met de server "
+"en alle bestanden en symbolische links in de map chamilo/app/cache/ te "
+"verwijderen, met uitzondering van het .htaccess-bestand. Op Linux: # find "
+"app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v "
+"\\{} \\;"
 
 msgid "Enable start time"
 msgstr "Instellen tijdstip begin"
@@ -18455,9 +18537,21 @@ msgstr "U hebt vroeger al geprobeerd om deze oefening op te doen"
 
 msgid "You do not have cookies support enabled in your browser. Chamilo relies on the feature called \"cookies\" to store your connection details. This means you will not be able to login if cookies are not enabled. Please change your browser configuration (generally in the Edit -> Preferences menu) and reload this page."
 msgstr ""
+"Cookies-ondersteuning is niet ingeschakeld in uw browser. Chamilo maakt "
+"gebruik van de functie \"cookies\" om uw verbindingsgegevens op te slaan. "
+"Dit betekent dat u niet kunt inloggen als cookies niet zijn ingeschakeld. "
+"Wijzig uw browserconfiguratie (meestal in het menu Bewerken -> Voorkeuren) "
+"en herlaad deze pagina."
 
 msgid "Your do not have JavaScript support enabled in your browser. Chamilo relies heavily on JavaScript to provide you with a more dynamic interface. It is likely that most feature will work, but you might not benefit from the latest improvements in usability. We recommend you change your browser configuration (generally under the Edit -> Preferences menu) and reload this page."
 msgstr ""
+"U heeft JavaScript-ondersteuning niet ingeschakeld in uw browser. Chamilo "
+"maakt veel gebruik van JavaScript om u een dynamischere interface te bieden. "
+"Het is waarschijnlijk dat de meeste functies werken, maar u profiteert "
+"mogelijk niet van de nieuwste verbeteringen op het gebied van "
+"gebruiksvriendelijkheid. We raden u aan uw browserconfiguratie te wijzigen ("
+"meestal onder het menu Bewerken -> Voorkeuren) en deze pagina opnieuw te "
+"laden."
 
 msgid "You do not seem to have Flash support enabled in your browser. Chamilo only relies on Flash for a few features and will not lock you out in any way if you don't have it, but if you want to benefit from the complete set of tools from Chamilo, we recommend you install the Flash Plugin and restart your browser."
 msgstr ""
@@ -18758,6 +18852,10 @@ msgstr "Sta docenten toe de toetsmatrijs van assessments aan te passen"
 
 msgid "Enabling this option, you will allow each teacher to choose the grading model which will be used in his/her course. This change will have to be made by the teacher from inside the assessments tool of the course."
 msgstr ""
+"Door deze optie in te schakelen, staat u elke trainer toe om het "
+"beoordelingsmodel te kiezen dat gebruikt zal worden in zijn/haar cursus. "
+"Deze wijziging zal door de trainer moeten worden gemaakt vanuit het "
+"beoordelingshulpmiddel van de cursus."
 
 msgid "Number of sub evaluations"
 msgstr "Aanta sub evaluaties"
@@ -18793,16 +18891,16 @@ msgid "My skills"
 msgstr "Mijn vaardigheden"
 
 msgid "Group parentship"
-msgstr ""
+msgstr "Groepsouderschap"
 
 msgid "No parentship"
-msgstr ""
+msgstr "Geen ouderschap"
 
 msgid "No certificate"
 msgstr "Geen certificaat"
 
 msgid "Allow assignments handing through online editor"
-msgstr ""
+msgstr "Sta opdrachten toe via de online editor in te leveren"
 
 msgid "See file"
 msgstr "Bestand bekijken"
@@ -18812,6 +18910,10 @@ msgstr "Documentvoorbeeld tonen"
 
 msgid "Showing previews of the documents in the documents tool will avoid loading a new page just to show a document, but can result unstable with some older browsers or smaller width screens."
 msgstr ""
+"Het tonen van voorbeelden van documenten in de documententool zal het laden "
+"van een nieuwe pagina om een document te tonen overbodig maken, maar kan "
+"instabiel zijn met sommige oudere browsers of schermen met een kleinere "
+"breedte."
 
 msgid "You already sent an assignment, you can't upload a new one"
 msgstr "Je hebt al een opdracht verzonden, je kunt geen nieuwe uploaden"
@@ -18820,67 +18922,82 @@ msgid "Enable CAS authentication"
 msgstr "CAS-authenticatie inschakelen"
 
 msgid "Main CAS server"
-msgstr ""
+msgstr "Hoofd-CAS-server"
 
 msgid "This is the main CAS server which will be used for the authentication (IP address or hostname)"
 msgstr ""
+"Dit is de hoofd-CAS-server die gebruikt zal worden voor de authenticatie (IP-"
+"adres of hostnaam)"
 
 msgid "Main CAS server URI"
-msgstr ""
+msgstr "Hoofd-CAS-server-URI"
 
 msgid "The path to the CAS service"
-msgstr ""
+msgstr "Het pad naar de CAS-service"
 
 msgid "Main CAS server port"
-msgstr ""
+msgstr "Hoofd-CAS-server poort"
 
 msgid "The port on which to connect to the main CAS server"
-msgstr ""
+msgstr "De poort waarop verbinding moet worden gemaakt met de hoofd-CAS-server"
 
 msgid "Main CAS server protocol"
-msgstr ""
+msgstr "Hoofd-CAS-server protocol"
 
 msgid "CAS 1"
-msgstr ""
+msgstr "CAS 1"
 
 msgid "CAS 2"
-msgstr ""
+msgstr "CAS 2"
 
 msgid "SAML"
-msgstr ""
+msgstr "SAML"
 
 msgid "The protocol with which we connect to the CAS server"
-msgstr ""
+msgstr "Het protocol waarmee we verbinding maken met de CAS-server"
 
 msgid "Enable CAS user addition"
-msgstr ""
+msgstr "CAS-gebruikerstoegang inschakelen"
 
+#, fuzzy
 msgid "Enable CAS user addition. To create the user account from the LDAP directory, the extldap_config and extldap_user_correspondance tables must be filled in in app/config/auth.conf.php"
 msgstr ""
+"CAS-gebruikerstoegang inschakelen. Om het gebruikersaccount uit de LDAP-"
+"directory te creëren, moeten de extldap_config en "
+"extldap_user_correspondance tabellen ingevuld worden in app/config/auth.conf."
+"php"
 
 msgid "Add CAS user login"
-msgstr ""
+msgstr "CAS-gebruikerslogin toevoegen"
 
 msgid "Add CAS user login details when registering a new user"
 msgstr ""
+"Voeg CAS-gebruikerslogin details toe bij het registreren van een nieuwe "
+"gebruiker"
 
 msgid "Add CAS user e-mail"
-msgstr ""
+msgstr "Voeg CAS-gebruikerse-mail toe"
 
 msgid "Add CAS user e-mail details when registering a new user"
 msgstr ""
+"Voeg CAS-gebruiker e-mailgegevens toe bij het registreren van een nieuwe "
+"gebruiker"
 
 msgid "Add CAS user first name"
 msgstr "Voeg CAS-gebruiker voornaam toe"
 
 msgid "Add CAS user first name when registering a new user"
 msgstr ""
+"Voeg de voornaam van de CAS-gebruiker toe bij het registreren van een nieuwe "
+"gebruiker"
 
 msgid "Add CAS user last name"
-msgstr ""
+msgstr "Voeg CAS-gebruikersachternaam toe"
 
 msgid "Add CAS user last name details when registering a new user"
 msgstr ""
+"Voeg de achternaamgegevens van de CAS-gebruiker toe bij het registreren van "
+"een nieuwe gebruiker"
 
 msgid "User list"
 msgstr "Gebruikerslijst"
@@ -18889,10 +19006,10 @@ msgid "Add as an announcement"
 msgstr "Toevoegen als aankondiging"
 
 msgid "Skills and assessments"
-msgstr ""
+msgstr "Vaardigheden en beoordelingen"
 
 msgid "Add skill"
-msgstr ""
+msgstr "Vaardigheid toevoegen"
 
 msgid "Show admin toolbar"
 msgstr "Toon admin toolbar"
@@ -18901,7 +19018,7 @@ msgid "Accept legal agreement"
 msgstr "Gebruiksovereenkomst aanvaarden."
 
 msgid "Legal agreement for this course"
-msgstr ""
+msgstr "Juridische overeenkomst voor deze cursus"
 
 msgid "Random questions by category"
 msgstr "Willekeurige vraag per categorie"
@@ -18937,7 +19054,7 @@ msgid "Questions already answered"
 msgstr "Reeds beantwoorde vragen"
 
 msgid "There is no such skill"
-msgstr ""
+msgstr "Er bestaat geen dergelijke vaardigheid"
 
 msgid "Please check your grading model values"
 msgstr "Gelieve uw grading model waarden na te zien"
@@ -18955,16 +19072,16 @@ msgid "I am a human resources manager"
 msgstr "Ik ben een human resources manager"
 
 msgid "Absolute skill"
-msgstr ""
+msgstr "Absolute vaardigheid"
 
 msgid "Option"
-msgstr ""
+msgstr "Optie"
 
 msgid "There are no SVG images in your images gallery directory"
-msgstr ""
+msgstr "In uw afbeeldingengalerij map bevinden zich geen SVG-afbeeldingen"
 
 msgid "No SVG image"
-msgstr ""
+msgstr "Geen SVG-afbeelding"
 
 msgid "Number of learners"
 msgstr "Aantal cursisten"
@@ -19015,10 +19132,10 @@ msgid "Hide table of contents frame"
 msgstr "Verberg inhoudsopgaveframe"
 
 msgid "Updates"
-msgstr ""
+msgstr "Updates"
 
 msgid "Teaching"
-msgstr ""
+msgstr "Onderwijzen"
 
 msgid "Courses reporting"
 msgstr "Cursus statistieken"
@@ -19033,34 +19150,39 @@ msgid "My reporting"
 msgstr "Mijn voortgang"
 
 msgid "Search skills"
-msgstr ""
+msgstr "Vaardigheden zoeken"
 
 msgid "Save this search"
-msgstr ""
+msgstr "Sla deze zoekopdracht op"
 
 msgid "Stored skills profiles"
-msgstr ""
+msgstr "Opgeslagen vaardigheidsprofielen"
 
 msgid "Matches"
-msgstr ""
+msgstr "Wedstrijden"
 
 msgid "%s, welcome to %s"
-msgstr ""
+msgstr "%s, welkom bij %s"
 
 msgid "Use user's IDs from the file to subscribe them"
-msgstr ""
+msgstr "Gebruik de gebruikers-ID uit het bestand om ze te abonneren"
 
 msgid "Who and where"
-msgstr ""
+msgstr "Wie en waar"
 
 msgid "You cannot upload this assignment. Please delete the previous one first."
-msgstr ""
+msgstr "U kunt deze opdracht niet uploaden. Verwijder eerst de vorige."
 
 msgid "MB"
-msgstr ""
+msgstr "MB"
 
 msgid "Shows a global toolbar on top of the page to the designated user roles. This toolbar, very similar to Wordpress and Google's black toolbars, can really speed up complicated actions and improve the space you have available for the learning content, but it might be confusing for some users"
 msgstr ""
+"Toont een globale werkbalk bovenaan de pagina voor de aangewezen "
+"gebruikersrollen. Deze werkbalk, die sterk lijkt op de zwarte werkbalken van "
+"Wordpress en Google, kan gecompliceerde acties aanzienlijk versnellen en de "
+"beschikbare ruimte voor de leerinhoud verbeteren, maar het kan verwarrend "
+"zijn voor sommige gebruikers"
 
 msgid "Session list"
 msgstr "Sessielijst"
@@ -19078,7 +19200,7 @@ msgid "Live results"
 msgstr "Live resultaten"
 
 msgid "Skill not found"
-msgstr ""
+msgstr "Vaardigheid niet gevonden"
 
 msgid "I have this skill"
 msgstr "Ik heb deze compententies"
@@ -19129,37 +19251,37 @@ msgid "Enable help link"
 msgstr "Activeer Help link"
 
 msgid "The Help link is located in the top right part of the screen"
-msgstr ""
+msgstr "De Help-link bevindt zich in de rechterbovenhoek van het scherm"
 
 msgid "Back to administration"
-msgstr ""
+msgstr "Terug naar beheer"
 
 msgid "Allow global chat"
 msgstr ""
 
 msgid "Extra content in header"
-msgstr ""
+msgstr "Extra inhoud in headers"
 
 msgid "You can add HTML code like meta tags"
-msgstr ""
+msgstr "U kunt HTML-code toevoegen, zoals meta-tags"
 
 msgid "Extra content in footer"
-msgstr ""
+msgstr "Extra inhoud in footer"
 
 msgid "Users can chat with each other"
 msgstr "Gebruikers kunnen met elkaar chatten"
 
 msgid "Do not show"
-msgstr ""
+msgstr "Niet tonen"
 
 msgid "Show to admins only"
-msgstr ""
+msgstr "Alleen tonen aan beheerders"
 
 msgid "Show to admins and teachers"
-msgstr ""
+msgstr "Toon aan beheerders en trainers"
 
 msgid "Show to all  users"
-msgstr ""
+msgstr "Toon aan alle gebruikers"
 
 msgid "Import glossary"
 msgstr "Importeer woordenlijst"
@@ -19180,34 +19302,37 @@ msgid "Export glossary as a CSV file"
 msgstr "Exporteer woordenlijst als een CSV-bestand"
 
 msgid "Select an action"
-msgstr ""
+msgstr "Selecteer een actie"
 
 msgid "Login: %s"
-msgstr ""
+msgstr "Inloggen: %s"
 
 msgid "Database <b>%s</b> will be created"
-msgstr ""
+msgstr "Database <b>%s</b> zal worden aangemaakt"
 
 msgid "A database with the same name <b>already exists</b>."
-msgstr ""
+msgstr "Er <b>bestaat al</b> een database met de naam."
 
+#, fuzzy
 msgid "User <b>%s</b> doesn't have access in the database <b>%s</b>"
-msgstr ""
+msgstr "Gebruiker <b>%s</b> heeft geen toegang tot de database <b>%s</b>"
 
 msgid "Database <b>%s</b> can't be created, user <b>%s</b> doesn't have enough permissions"
 msgstr ""
+"Database <b>%s</b> kan niet worden aangemaakt, gebruiker <b>%s</b> heeft "
+"onvoldoende rechten"
 
 msgid "Copy only session items"
-msgstr ""
+msgstr "Kopieer alleen sessie-items"
 
 msgid "First letter of course title"
-msgstr ""
+msgstr "Eerste letter van cursustitel"
 
 msgid "# of published exercises"
-msgstr ""
+msgstr "# gepubliceerde oefeningen"
 
 msgid "# of published Learning Paths"
-msgstr ""
+msgstr "# gepubliceerde Leerpaden"
 
 msgid "Chat (Connected)"
 msgstr "Chat (Verbonden)"
@@ -19219,7 +19344,7 @@ msgid "Add course description"
 msgstr "Voeg cursus beschrijving toe"
 
 msgid "Suggested steps to take next"
-msgstr ""
+msgstr "Voorgestelde stappen om te volgen"
 
 msgid "Record answer"
 msgstr "Antwoord opnemen"
@@ -19237,28 +19362,29 @@ msgid "Oral expression"
 msgstr "Mondelinge expressie"
 
 msgid "Users found in other portals"
-msgstr ""
+msgstr "Gebruikers gevonden in andere portalen"
 
 msgid "Add user to my portal"
-msgstr ""
+msgstr "Gebruiker toevoegen aan mijn portaal"
 
 msgid "Users deleted"
-msgstr ""
+msgstr "Gebruikers verwijderd"
 
 msgid "Users added"
-msgstr ""
+msgstr "Gebruikers toegevoegd"
 
 msgid "Plugin area"
 msgstr ""
 
 msgid "No configuration settings found for this plugin"
-msgstr ""
+msgstr "Geen configuratie-instellingen gevonden voor deze plug-in"
 
 msgid "Default course visibility"
-msgstr ""
+msgstr "Standaard zichtbaarheid van de cursus"
 
 msgid "Default course visibility while creating a new course"
 msgstr ""
+"Standaard zichtbaarheid van de cursus bij het aanmaken van een nieuwe cursus"
 
 msgid "You have entered the course <b>%s</b> in <b>%s</b>"
 msgstr "Je bent ingeschreven voor de cursus <b>%s</b>(%s)"
@@ -25079,4 +25205,3 @@ msgstr ""
 
 msgid "%02d h %02d m %02d s"
 msgstr ""
-

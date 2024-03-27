@@ -35,6 +35,7 @@ class AdminSettingsSchema extends AbstractSettingsSchema
                     'drh_allow_access_to_all_students' => 'false',
                     'user_status_option_only_for_admin_enabled' => 'false',
                     'user_status_option_show_only_for_admin' => '',
+                    'admin_chamilo_announcements_disable' => 'false',
                 ]
             )
         ;
@@ -80,6 +81,7 @@ class AdminSettingsSchema extends AbstractSettingsSchema
                         $this->settingArrayHelpValue('user_status_option_show_only_for_admin'),
                 ]
             )
+            ->add('admin_chamilo_announcements_disable', YesNoType::class)
         ;
     }
 

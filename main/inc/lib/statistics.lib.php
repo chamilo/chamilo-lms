@@ -449,7 +449,7 @@ class Statistics
                 FROM $categoryTable
                 ORDER BY tree_pos";
         $res = Database::query($sql);
-        $categories = [];
+        $categories = [null => get_lang('NoCategory')];
         while ($category = Database::fetch_object($res)) {
             $categories[$category->code] = $category->name;
         }

@@ -1233,7 +1233,6 @@ function store_add_dropbox($file = [], $work = null)
             $work->title = $dropbox_title;
             $work->filename = $dropbox_filename;
             $work->filesize = $dropbox_filesize;
-            $work->upload_date = api_get_utc_datetime();
             $work->last_upload_date = api_get_utc_datetime();
             $work->description = isset($_POST['description']) ? $_POST['description'] : '';
             $work->uploader_id = api_get_user_id();

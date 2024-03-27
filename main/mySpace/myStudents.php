@@ -2402,11 +2402,11 @@ if (!empty($sessionId)) {
 $allow = api_get_configuration_value('allow_user_message_tracking');
 if ($allow && (api_is_drh() || api_is_platform_admin())) {
     if ($filterMessages) {
-        $users = MessageManager::getUsersThatHadConversationWithUser($student_id, $coachAccessStartDate, $coachAccessEndDate);
+        $users = MessageManager::getMessageExchangeWithUser($student_id, $coachAccessStartDate, $coachAccessEndDate);
     } else {
-        $users = MessageManager::getUsersThatHadConversationWithUser($student_id);
+        $users = MessageManager::getMessageExchangeWithUser($student_id);
     }
-    $users = MessageManager::getUsersThatHadConversationWithUser($student_id);
+
     echo Display::page_subheader2(get_lang('MessageTracking'));
 
     $table = new HTML_Table(['class' => 'table']);

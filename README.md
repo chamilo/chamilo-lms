@@ -211,6 +211,12 @@ or, for Chamilo 1.11
 ```
 If your default php-cli uses PHP7.4 (see `ln -s /etc/alternatives/php`), you might have issues running with a so-called `platform_check.php` script when running `composer update` anyway. This is because this script doesn't user the proper launch context, and you might need to change your default settings on Ubuntu (i.e. change the link /etc/alternatives/php to point to the other php version) before launching `composer update`. You can always revert that operation later on if you need to go back to work on Chamilo 1.11 and Composer complains again.
 
+### git hooks
+
+To use the git hook sample scripts under `tests/scripts/git-hooks/`, the
+following commands can be used.
+
+    git config core.hooksPath tests/scripts/git-hooks/
 
 ## Changes from 1.x
 

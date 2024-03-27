@@ -6216,7 +6216,7 @@ $MySocialGroups = "Mijn sociale groepen";
 $SocialGroups = "Sociale groepen";
 $CreateASocialGroup = "Sociale groep maken";
 $StatsUsersDidNotLoginInLastPeriods = "Al enige tijd niet ingelogd";
-$LastXMonths = "Laatste %i maanden";
+$LastXMonths = "Laatste %d maanden";
 $NeverConnected = "Nooit verbonden";
 $EnableAccessibilityFontResizeTitle = "
 Font resize accessibility feature";

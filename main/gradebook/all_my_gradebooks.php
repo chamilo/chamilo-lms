@@ -125,3 +125,5 @@ $showTitle = true;
     }
 }
 
+Display::display_footer();
+

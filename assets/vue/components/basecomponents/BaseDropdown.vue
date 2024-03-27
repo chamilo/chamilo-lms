@@ -27,8 +27,9 @@ defineProps({
     type: String,
     required: true,
   },
+  // type null allow all kind of values, like prime vue does
   modelValue: {
-    type: Object,
+    type: null,
     required: true,
     default: () => {},
   },

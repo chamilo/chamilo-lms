@@ -20,7 +20,6 @@ import Calendar from "primevue/calendar";
 defineProps({
   modelValue: {
     type: String,
-    required: true,
     default: () => "",
   },
   id: {

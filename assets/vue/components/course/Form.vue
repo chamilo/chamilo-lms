@@ -45,12 +45,12 @@
         v-model="fillDemoContent"
        name=""
       />
-      <BaseAutocomplete
+      <!--BaseAutocomplete
         id="template"
         v-model="courseTemplate"
         :label="t('Select Template')"
         :search="searchTemplates"
-      />
+      /-->
     </div>
     <!-- Form Footer -->
     <div class="form-footer">

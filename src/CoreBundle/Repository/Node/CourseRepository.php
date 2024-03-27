@@ -10,10 +10,10 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
-use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -206,5 +206,28 @@ class CourseRepository extends ResourceRepository
         ;
 
         return $queryBuilder;
+    }
+
+    public function courseCodeExists(string $code): bool
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->select('count(c.id)')
+            ->where('c.code = :code OR c.visualCode = :code')
+            ->setParameter('code', $code)
+            ->getQuery();
+
+        return (int) $qb->getSingleScalarResult() > 0;
+    }
+
+    public function findCourseAsArray($id)
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->select('c.id, c.code, c.title, c.visualCode, c.courseLanguage, c.departmentUrl, c.departmentName')
+            ->where('c.id = :id')
+            ->setParameter('id', $id);
+
+        $query = $qb->getQuery();
+
+        return $query->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
     }
 }

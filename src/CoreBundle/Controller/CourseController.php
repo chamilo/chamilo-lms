@@ -23,6 +23,7 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Service\CourseService;
 use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
@@ -721,7 +722,7 @@ class CourseController extends ToolBaseController
         foreach ($courseList as $course) {
             $title = $course['title'];
             $results['items'][] = [
-                'id' => $course['code'],
+                'id' => $course['id'],
                 'name' => $title.' ('.$course['code'].') ',
             ];
         }
@@ -730,36 +731,34 @@ class CourseController extends ToolBaseController
     }
 
     #[Route('/create', name: 'chamilo_core_course_create')]
-    public function createCourse(Request $request, TranslatorInterface $translator): JsonResponse
-    {
+    public function createCourse(
+        Request $request,
+        TranslatorInterface $translator,
+        CourseService $courseService
+    ): JsonResponse {
         $courseData = json_decode($request->getContent(), true);
 
+        $title = $courseData['name'] ?? null;
         $wantedCode = $courseData['code'] ?? null;
+        $courseLanguage = $courseData['language']['id'] ?? null;
         $categoryCode = $courseData['category'] ?? null;
-        $title = $courseData['name'];
-        $courseLanguage = isset($courseData['language']) ? $courseData['language']['id'] : '';
         $exemplaryContent = $courseData['fillDemoContent'] ?? false;
         $template = $courseData['template'] ?? '';
 
-        if (empty($wantedCode)) {
-            $wantedCode = CourseManager::generate_course_code(substr($title, 0, CourseManager::MAX_COURSE_LENGTH_CODE));
+        $params = [
+            'title' => $title,
+            'wanted_code' => $wantedCode,
+            'course_language' => $courseLanguage,
+            'exemplary_content' => $exemplaryContent,
+            'course_template' => $template,
+        ];
+
+        if ($categoryCode) {
+            $params['course_categories'] = $categoryCode;
         }
 
-        $courseCodeOk = !CourseManager::course_code_exists($wantedCode);
-        if ($courseCodeOk) {
-            $params = [
-                'title' => $title,
-                'exemplary_content' => $exemplaryContent,
-                'wanted_code' => $wantedCode,
-                'course_language' => $courseLanguage,
-                'course_template' => $template,
-            ];
-
-            if ($categoryCode) {
-                $params['course_categories'] = $categoryCode;
-            }
-
-            $course = CourseManager::create_course($params);
+        try {
+            $course = $courseService->createCourse($params);
             if ($course) {
                 return new JsonResponse([
                     'success' => true,
@@ -767,6 +766,12 @@ class CourseController extends ToolBaseController
                     'courseId' => $course->getId(),
                 ]);
             }
+        } catch (\Exception $e) {
+
+            return new JsonResponse([
+                'success' => false,
+                'message' => $translator->trans($e->getMessage())
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         return new JsonResponse(['success' => false, 'message' => $translator->trans('An error occurred while creating the course.')]);

@@ -1,5 +1,8 @@
 <template>
-  <div class="admin-index__block-container">
+  <div
+    class="admin-index__block-container"
+    :class="id"
+  >
     <div class="admin-index__block">
       <div class="flex gap-2 justify-between">
         <h4>
@@ -76,6 +79,12 @@
           </li>
         </ul>
       </div>
+
+      <AdminBlockExtraContent
+        :id="id"
+        v-model="modelExtraContent"
+        :editable="editable"
+      />
     </div>
   </div>
 </template>
@@ -85,10 +94,24 @@ import { computed } from "vue"
 import { useI18n } from "vue-i18n"
 import BaseInputGroup from "../basecomponents/BaseInputGroup.vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
+import AdminBlockExtraContent from "./AdminBlockExtraContent.vue"
 
 const { t } = useI18n()
 
+const modelExtraContent = defineModel("extraContent", {
+  type: Object,
+})
+
 const props = defineProps({
+  id: {
+    type: String,
+    required: true,
+  },
+  editable: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
   icon: { type: String, required: false, default: () => "admin-settings" },
   title: { type: String, require: true, default: () => "" },
   description: { type: String, required: false, default: () => null },

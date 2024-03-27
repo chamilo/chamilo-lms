@@ -7,10 +7,15 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Controller\BaseController;
+use Chamilo\CoreBundle\Entity\Page;
+use Chamilo\CoreBundle\Entity\PageCategory;
+use Chamilo\CoreBundle\Repository\PageCategoryRepository;
+use Chamilo\CoreBundle\Repository\PageRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER')")]
@@ -23,7 +28,10 @@ class IndexBlocksController extends BaseController
 
     public function __construct(
         private readonly TranslatorInterface $translator,
-        private readonly SettingsManager $settingsManager
+        private readonly SettingsManager $settingsManager,
+        private readonly PageRepository $pageRepository,
+        private readonly PageCategoryRepository $pageCategoryRepository,
+        private readonly SerializerInterface $serializer
     ) {
         $this->extAuthSource = [
             'extldap' => [],
@@ -38,68 +46,108 @@ class IndexBlocksController extends BaseController
 
         $json = [];
         $json['users'] = [
+            'id' => 'block-admin-users',
             'searchUrl' => $this->generateUrl('legacy_main', ['name' => 'admin/user_list.php']),
             'editable' => $this->isAdmin,
             'items' => $this->getItemsUsers(),
+            'extraContent' => $this->getExtraContent('block-admin-users'),
         ];
 
         if ($this->isAdmin) {
             $json['courses'] = [
+                'id' => 'block-admin-courses',
                 'searchUrl' => $this->generateUrl('legacy_main', ['name' => 'admin/course_list.php']),
                 'editable' => true,
                 'items' => $this->getItemsCourses(),
+                'extraContent' => $this->getExtraContent('block-admin-courses'),
             ];
 
             $json['platform'] = [
+                'id' => 'block-admin-platform',
                 'searchUrl' => $this->generateUrl('chamilo_platform_settings_search'),
                 'editable' => true,
                 'items' => $this->getItemsPlatform(),
+                'extraContent' => $this->getExtraContent('block-admin-platform'),
             ];
 
             /* Settings */
             $json['settings'] = [
+                'id' => 'block-admin-settings',
                 'editable' => false,
                 'items' => $this->getItemsSettings(),
+                'extraContent' => $this->getExtraContent('block-admin-settings'),
             ];
 
             // Skills
             if ('true' === $this->settingsManager->getSetting('skill.allow_skills_tool')) {
                 $json['skills'] = [
+                    'id' => 'block-admin-skills',
                     'editable' => false,
                     'items' => $this->getItemsSkills(),
+                    'extraContent' => $this->getExtraContent('block-admin-skills'),
                 ];
             }
 
             if ('true' === $this->settingsManager->getSetting('gradebook.gradebook_dependency')) {
                 $json['gradebook'] = [
+                    'id' => 'block-admin-gradebook',
                     'editable' => false,
                     'items' => $this->getItemsGradebook(),
+                    'extraContent' => $this->getExtraContent('block-admin-gradebook'),
                 ];
             }
 
             // Data protection
             if ('true' !== $this->settingsManager->getSetting('profile.disable_gdpr')) {
                 $json['data_privacy'] = [
+                    'id' => 'block-admin-privacy',
                     'editable' => false,
                     'items' => $this->getItemsPrivacy(),
+                    'extraContent' => $this->getExtraContent('block-admin-privacy'),
                 ];
             }
 
             /* Chamilo.org */
             $json['chamilo'] = [
+                'id' => 'block-admin-chamilo',
                 'editable' => false,
                 'items' => $this->getItemsChamilo(),
+                'extraContent' => $this->getExtraContent('block-admin-chamilo'),
             ];
         }
 
         /* Sessions */
         $json['sessions'] = [
+            'id' => 'block-admin-sessions',
             'searchUrl' => $this->generateUrl('legacy_main', ['name' => 'session/session_list.php']),
             'editable' => $this->isAdmin,
             'items' => $this->getItemsSessions(),
+            'extraContent' => $this->getExtraContent('block-admin-sessions'),
         ];
 
         return $this->json($json);
+    }
+
+    private function getExtraContent(string $title): ?array
+    {
+        /** @var Page|null $page */
+        $page = $this->pageRepository->findOneBy(['title' => $title]);
+
+        $pageJsonld = $this->serializer->serialize($page, 'jsonld', ['groups' => ['adminblock:read']]);
+        $pageArray = json_decode($pageJsonld, true);
+
+        if ($page) {
+            return $pageArray;
+        }
+
+        /** @var PageCategory $category */
+        $category = $this->pageCategoryRepository->findOneBy(['title' => $title]);
+        $categoryJsonld = $this->serializer->serialize($category, 'jsonld', ['groups' => ['page:read']]);
+        $categoryArray = json_decode($categoryJsonld, true);
+
+        return [
+            'category' => $categoryArray['@id'],
+        ];
     }
 
     private function getItemsUsers(): array

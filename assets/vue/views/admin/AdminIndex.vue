@@ -16,65 +16,79 @@
   >
     <AdminBlock
       v-if="blockUsers"
+      :id="blockUsers.id"
+      v-model:extra-content="blockUsers.extraContent"
       :description="t('Here you can manage registered users within your platform')"
+      :editable="blockUsers.editable"
       :items="blockUsers.items"
       :search-url="blockUsers.searchUrl"
       :title="t('User management')"
-      class="block-admin-users"
       icon="account"
     />
 
     <AdminBlock
       v-if="blockCourses"
+      :id="blockCourses.id"
+      v-model:extra-content="blockCourses.extraContent"
       :description="t('Create and manage your courses in a simple way')"
+      :editable="blockCourses.editable"
       :items="blockCourses.items"
       :search-url="blockCourses.searchUrl"
       :title="t('Course management')"
-      class="block-admin-courses"
       icon="courses"
     />
 
     <AdminBlock
       v-if="blockSessions"
+      :id="blockSessions.id"
+      v-model:extra-content="blockSessions.extraContent"
+      :editable="blockSessions.editable"
       :description="t('Create course packages for a certain time with training sessions')"
       :items="blockSessions.items"
       :search-url="blockSessions.searchUrl"
       :title="t('Sessions management')"
-      class="block-admin-sessions"
       icon="sessions"
     />
 
     <AdminBlock
       v-if="blockGradebook"
+      :id="blockGradebook.id"
+      v-model:extra-content="blockGradebook.extraContent"
+      :editable="blockGradebook.editable"
       :items="blockGradebook.items"
       :title="t('Assessments')"
-      class="block-admin-gradebook"
       icon="gradebook"
     />
 
     <AdminBlock
       v-if="blockSkills"
+      :id="blockSkills.id"
+      v-model:extra-content="blockSkills.extraContent"
+      :editable="blockSkills.editable"
       :description="t('Manage the skills of your users, through courses and badges')"
       :items="blockSkills.items"
       :title="t('Skills')"
-      class="block-admin-skills"
       icon="gradebook"
     />
 
     <AdminBlock
       v-if="blockPrivacy"
+      :id="blockPrivacy.id"
+      v-model:extra-content="blockPrivacy.extraContent"
+      :editable="blockPrivacy.editable"
       :items="blockPrivacy.items"
       :title="t('Personal data protection')"
-      class="block-admin-privacy"
       icon="anonymous"
     />
 
     <AdminBlock
       v-if="blockSettings"
+      :id="blockSettings.id"
+      v-model:extra-content="blockSettings.extraContent"
       :description="t('View the status of your server, perform performance tests')"
+      :editable="blockSettings.editable"
       :items="blockSettings.items"
       :title="t('System')"
-      class="block-admin-settings"
       icon="settings"
     />
 
@@ -145,19 +159,23 @@
 
     <AdminBlock
       v-if="blockPlatform"
+      :id="blockPlatform.id"
+      v-model:extra-content="blockPlatform.extraContent"
+      :editable="blockPlatform.editable"
       :description="t('Configure your platform, view reports, publish and send announcements globally')"
       :items="blockPlatform.items"
       :search-url="blockPlatform.searchUrl"
       :title="t('Platform management')"
-      class="block-admin-platform"
       icon="admin-settings"
     />
 
     <AdminBlock
       v-if="blockChamilo"
+      :id="blockChamilo.id"
+      v-model:extra-content="blockChamilo.extraContent"
+      :editable="blockChamilo.editable"
       :description="t('Learn more about Chamilo and its use, official references links')"
       :items="blockChamilo.items"
-      class="block-admin-chamilo"
       icon="admin-settings"
       title="Chamilo.org"
     />

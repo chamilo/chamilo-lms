@@ -29,6 +29,7 @@ import { useRouter } from "vue-router"
 import Message from 'primevue/message'
 import courseService from "../../services/courseService"
 import { useI18n } from "vue-i18n"
+import { useNotification } from "../../composables/notification"
 
 const store = useStore()
 const item = ref({})
@@ -38,24 +39,26 @@ const { t } = useI18n()
 const isLoading = computed(() => store.getters['course/getField']('isLoading'))
 const violations = computed(() => store.getters['course/getField']('violations'))
 const courseData = ref({})
+const { showSuccessNotification, showErrorNotification } = useNotification()
 
 const submitCourse = async (formData) => {
   isLoading.value = true
   try {
-    let tempResponse = await courseService.createCourse(formData)
-    if (tempResponse.success) {
-      const courseId = tempResponse.courseId
-      const sessionId = 0
-      await router.push(`/course/${courseId}/home?sid=${sessionId}`)
-    } else {
-      console.error(tempResponse.message)
-    }
+    const response = await courseService.createCourse(formData)
+    const courseId = response.courseId
+    const sessionId = 0
+    showSuccessNotification(t('Course created successfully.'))
+    await router.push(`/course/${courseId}/home?sid=${sessionId}`)
   } catch (error) {
     console.error(error)
-    if (error.response && error.response.data) {
-      violations.value = error.response.data
-    } else {
-      console.error('An unexpected error occurred.')
+
+    const errorMessage = error.response && error.response.data && error.response.data.message
+      ? error.response.data.message
+      : t('An unexpected error occurred.')
+    showErrorNotification(errorMessage)
+
+    if (error.response && error.response.data && error.response.data.violations) {
+      violations.value = error.response.data.violations
     }
   } finally {
     isLoading.value = false

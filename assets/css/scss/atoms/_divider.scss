@@ -1,0 +1,25 @@
+.divider {
+  @apply bg-white;
+
+  &[aria-orientation="vertical"] {
+    @apply before:absolute before:block before:left-1/2 before:top-0 before:h-full before:content-[""] before:border-l before:border-solid before:border-gray-25
+      flex min-h-full mx-2 py-2 relative justify-center;
+
+    div {
+      @apply first:py-2;
+    }
+  }
+
+  &[aria-orientation="horizontal"] {
+    @apply before:absolute before:block before:left-0 before:w-full before:top-1/2 before:content-[""] before:border-t before:border-solid before:border-gray-25
+      flex w-full relative items-center my-2 px-2;
+
+    div {
+      @apply first:px-2;
+    }
+  }
+
+  div {
+    @apply first:z-[1] first:bg-white first:text-gray-50 first:font-semibold first:text-caption;
+  }
+}

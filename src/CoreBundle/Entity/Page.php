@@ -31,7 +31,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(security: 'is_granted(\'ROLE_ADMIN\')'),
     ],
     normalizationContext: [
-        'groups' => ['page:read', 'timestampable_created:read', 'timestampable_updated:read'],
+        'groups' => ['page:read', 'timestampable_created:read', 'timestampable_updated:read', 'adminblock:read'],
     ],
     denormalizationContext: [
         'groups' => ['page:write'],
@@ -61,7 +61,7 @@ class Page
     #[Groups(['page:read', 'page:write'])]
     #[ORM\Column(name: 'title', type: 'string', length: 255)]
     protected string $title;
-    #[Groups(['page:read', 'page:write'])]
+    #[Groups(['page:read', 'page:write', 'adminblock:read'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'content', type: 'text')]
     protected string $content;
@@ -88,7 +88,7 @@ class Page
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected User $creator;
-    #[Groups(['page:read', 'page:write'])]
+    #[Groups(['page:read', 'page:write', 'adminblock:read'])]
     #[Gedmo\SortableGroup]
     #[ORM\ManyToOne(targetEntity: PageCategory::class, inversedBy: 'pages')]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', onDelete: 'SET NULL')]

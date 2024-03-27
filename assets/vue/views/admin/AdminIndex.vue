@@ -16,78 +16,97 @@
   >
     <AdminBlock
       v-if="blockUsers"
+      :id="blockUsers.id"
+      v-model:extra-content="blockUsers.extraContent"
       :description="t('Here you can manage registered users within your platform')"
+      :editable="blockUsers.editable"
       :items="blockUsers.items"
       :search-url="blockUsers.searchUrl"
       :title="t('User management')"
-      class="block-admin-users"
       icon="account"
     />
 
     <AdminBlock
       v-if="blockCourses"
+      :id="blockCourses.id"
+      v-model:extra-content="blockCourses.extraContent"
       :description="t('Create and manage your courses in a simple way')"
+      :editable="blockCourses.editable"
       :items="blockCourses.items"
       :search-url="blockCourses.searchUrl"
       :title="t('Course management')"
-      class="block-admin-courses"
       icon="courses"
     />
 
     <AdminBlock
       v-if="blockSessions"
+      :id="blockSessions.id"
+      v-model:extra-content="blockSessions.extraContent"
+      :editable="blockSessions.editable"
       :description="t('Create course packages for a certain time with training sessions')"
       :items="blockSessions.items"
       :search-url="blockSessions.searchUrl"
       :title="t('Sessions management')"
-      class="block-admin-sessions"
       icon="sessions"
     />
 
     <AdminBlock
       v-if="blockGradebook"
+      :id="blockGradebook.id"
+      v-model:extra-content="blockGradebook.extraContent"
+      :editable="blockGradebook.editable"
       :items="blockGradebook.items"
       :title="t('Assessments')"
-      class="block-admin-gradebook"
       icon="gradebook"
     />
 
     <AdminBlock
       v-if="blockSkills"
+      :id="blockSkills.id"
+      v-model:extra-content="blockSkills.extraContent"
+      :editable="blockSkills.editable"
       :description="t('Manage the skills of your users, through courses and badges')"
       :items="blockSkills.items"
       :title="t('Skills')"
-      class="block-admin-skills"
       icon="gradebook"
     />
 
     <AdminBlock
       v-if="blockPrivacy"
+      :id="blockPrivacy.id"
+      v-model:extra-content="blockPrivacy.extraContent"
+      :editable="blockPrivacy.editable"
       :items="blockPrivacy.items"
       :title="t('Personal data protection')"
-      class="block-admin-privacy"
       icon="anonymous"
     />
 
     <AdminBlock
       v-if="blockSettings"
+      :id="blockSettings.id"
+      v-model:extra-content="blockSettings.extraContent"
       :description="t('View the status of your server, perform performance tests')"
+      :editable="blockSettings.editable"
       :items="blockSettings.items"
       :title="t('System')"
-      class="block-admin-settings"
       icon="settings"
     />
 
     <div
-      v-if="isAdmin"
+      v-if="securityStore.isAdmin"
       class="admin-index__block-container block-admin-version"
     >
       <div class="admin-index__block">
         <h4 v-t="'Version check'" />
 
         <div
-          v-if="'false' === platformConfigurationStore.getSetting('platform.registered')"
-          class="admin-block-version"
+          v-if="blockVersionStatusEl"
+          class="block-admin-version__status"
+          v-html="blockVersionStatusEl"
+        />
+        <div
+          v-else
+          class="block-admin-version__form"
         >
           <i18n-t
             class="mb-3"
@@ -135,40 +154,28 @@
             />
           </form>
         </div>
-        <div
-          ref="blockAdminVersionCheck"
-          class="block-admin-version_check"
-        />
       </div>
     </div>
 
     <AdminBlock
       v-if="blockPlatform"
+      :id="blockPlatform.id"
+      v-model:extra-content="blockPlatform.extraContent"
+      :editable="blockPlatform.editable"
       :description="t('Configure your platform, view reports, publish and send announcements globally')"
       :items="blockPlatform.items"
       :search-url="blockPlatform.searchUrl"
       :title="t('Platform management')"
-      class="block-admin-platform"
       icon="admin-settings"
-    >
-      <li
-        :aria-label="t('Colors')"
-        class="p-menuitem"
-        role="menuitem"
-      >
-        <div class="p-menuitem-content">
-          <router-link class="p-menuitem-link" :to="{name: 'AdminConfigurationColors'}">
-            <span class="p-menuitem-text" v-text="t('Colors')" />
-          </router-link>
-        </div>
-      </li>
-    </AdminBlock>
+    />
 
     <AdminBlock
       v-if="blockChamilo"
+      :id="blockChamilo.id"
+      v-model:extra-content="blockChamilo.extraContent"
+      :editable="blockChamilo.editable"
       :description="t('Learn more about Chamilo and its use, official references links')"
       :items="blockChamilo.items"
-      class="block-admin-chamilo"
       icon="admin-settings"
       title="Chamilo.org"
     />
@@ -176,83 +183,43 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue"
+import { ref } from "vue"
 import { useI18n } from "vue-i18n"
-import { useStore } from "vuex"
-import { useToast } from "primevue/usetoast"
 import Button from "primevue/button"
 import Checkbox from "primevue/checkbox"
 import Skeleton from "primevue/skeleton"
 import AdminBlock from "../../components/admin/AdminBlock"
-import axios from "axios"
 
-import { usePlatformConfig } from "../../store/platformConfig";
-import AdminConfigureColors from "./AdminConfigureColors.vue";
+import { useSecurityStore } from "../../store/securityStore"
+
+import { useIndexBlocks } from "../../composables/admin/indexBlocks"
 
 const { t } = useI18n()
 
-const store = useStore()
-const platformConfigurationStore = usePlatformConfig()
-
-const toast = useToast()
-
-const isAdmin = computed(() => store.getters["security/isAdmin"])
+const securityStore = useSecurityStore()
 
 const doNotListCampus = ref(false)
 
+const {
+  blockVersionStatusEl,
+  checkVersion,
+  blockUsers,
+  blockCourses,
+  blockSessions,
+  blockGradebook,
+  blockSkills,
+  blockPrivacy,
+  blockSettings,
+  blockPlatform,
+  blockChamilo,
+  loadBlocks,
+} = useIndexBlocks()
+
 function checkVersionOnSubmit() {
-  axios
-    .post("/admin/register-campus", {
-      donotlistcampus: doNotListCampus.value,
-    })
-    .then(() =>
-      toast.add({
-        severity: "success",
-        detail: t("Version check enabled"),
-      }),
-    )
+  checkVersion(doNotListCampus.value)
 }
 
-const blockAdminVersionCheck = ref()
-
-onMounted(() => {
-  if (isAdmin.value) {
-    if ("false" === platformConfigurationStore.getSetting("admin.admin_chamilo_announcements_disable")) {
-      axios
-        .get("/main/inc/ajax/admin.ajax.php?a=get_latest_news")
-        .then(({ data }) => toast.add({ severity: "info", detail: data }))
-    }
-
-    axios.get("/main/inc/ajax/admin.ajax.php?a=version").then(({ data }) => {
-      if (blockAdminVersionCheck.value) {
-        blockAdminVersionCheck.value.innerHTML += data
-      }
-    })
-  }
-})
-
 const isLoadingBlocks = ref(true)
-const blockUsers = ref(null)
-const blockCourses = ref(null)
-const blockSessions = ref(null)
-const blockGradebook = ref(null)
-const blockSkills = ref(null)
-const blockPrivacy = ref(null)
-const blockSettings = ref(null)
-const blockPlatform = ref(null)
-const blockChamilo = ref(null)
 
-axios.get("/admin/index").then(({ data }) => {
-  isLoadingBlocks.value = false
-
-  blockUsers.value = data.users || null
-  blockCourses.value = data.courses || null
-  blockSessions.value = data.sessions || null
-  blockGradebook.value = data.gradebook || null
-  blockSkills.value = data.skills || null
-  blockPrivacy.value = data.data_privacy || null
-  blockSettings.value = data.settings || null
-  blockPlatform.value = data.platform || null
-  blockChamilo.value = data.chamilo || null
-})
+loadBlocks().then(() => (isLoadingBlocks.value = false))
 </script>

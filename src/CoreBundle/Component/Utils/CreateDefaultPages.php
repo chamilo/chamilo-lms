@@ -99,6 +99,29 @@ class CreateDefaultPages
 
         $this->pageCategoryRepository->update($footerPrivateCategory);
 
+        // Categories for extra content in admin blocks
+
+        $adminBlocks = [
+            'block-admin-users',
+            'block-admin-courses',
+            'block-admin-sessions',
+            'block-admin-gradebook',
+            'block-admin-skills',
+            'block-admin-privacy',
+            'block-admin-settings',
+            'block-admin-platform',
+            'block-admin-chamilo',
+        ];
+
+        foreach ($adminBlocks as $nameBlock) {
+            $usersAdminBlock = (new PageCategory())
+                ->setTitle($nameBlock)
+                ->setType('grid')
+                ->setCreator($user)
+            ;
+            $this->pageCategoryRepository->update($usersAdminBlock);
+        }
+
         return true;
     }
 }

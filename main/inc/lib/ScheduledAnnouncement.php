@@ -412,6 +412,7 @@ class ScheduledAnnouncement extends Model
                                 '((user_lastname))' => $userInfo['lastname'],
                                 '((user_first_name))' => $userInfo['firstname'],
                                 '((user_last_name))' => $userInfo['lastname'],
+                                '((user_official_code))' => $userInfo['official_code'],
                                 '((user_picture))' => $userPicture,
                                 '((lp_progress))' => $progress,
                             ];
@@ -477,6 +478,7 @@ class ScheduledAnnouncement extends Model
             '((user_last_name))',
             '((user_picture))',
             '((lp_progress))',
+            '((user_official_code))',
         ];
         // get user extra fields list (only visible to self and filter-able)
         $extraField = new ExtraField('user');

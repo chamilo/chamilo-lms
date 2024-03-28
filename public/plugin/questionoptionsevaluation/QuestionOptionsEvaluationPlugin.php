@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
@@ -9,10 +8,9 @@ use Chamilo\CoreBundle\Entity\TrackEAttempt;
  */
 class QuestionOptionsEvaluationPlugin extends Plugin
 {
-    const SETTING_ENABLE = 'enable';
-    const SETTING_MAX_SCORE = 'exercise_max_score';
-
-    const EXTRAFIELD_FORMULA = 'quiz_evaluation_formula';
+    public const SETTING_ENABLE = 'enable';
+    public const SETTING_MAX_SCORE = 'exercise_max_score';
+    public const EXTRAFIELD_FORMULA = 'quiz_evaluation_formula';
 
     /**
      * QuestionValuationPlugin constructor.
@@ -39,7 +37,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
     {
         static $result = null;
 
-        return $result ?: $result = new self();
+        return $result ? $result : $result = new self();
     }
 
     /**
@@ -97,7 +95,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
         $extraFieldValue = new ExtraFieldValue('quiz');
         $extraFieldValue->save(
             [
-                'item_id' => $exercise->iId,
+                'item_id' => $exercise->iid,
                 'variable' => self::EXTRAFIELD_FORMULA,
                 'value' => $formula,
             ]
@@ -152,7 +150,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
     {
         $em = Database::getManager();
 
-        $eTrack = $em->find('ChamiloCoreBundle:TrackEExercise', $trackId);
+        $eTrack = $em->find('ChamiloCoreBundle:TrackEExercises', $trackId);
 
         $qTracks = $em
             ->createQuery(
@@ -164,7 +162,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
                     'id' => $eTrack->getExeId(),
                     'course' => $eTrack->getCId(),
                     'session' => $eTrack->getSessionId(),
-                    'user' => $eTrack->getUser()->getId(),
+                    'user' => $eTrack->getExeUserId(),
                 ]
             )
             ->getResult();
@@ -183,19 +181,16 @@ class QuestionOptionsEvaluationPlugin extends Plugin
         switch ($formula) {
             case 1:
                 $result = $counts['correct'] - $counts['incorrect'];
-
                 break;
             case 2:
                 $result = $counts['correct'] - $counts['incorrect'] / 2;
-
                 break;
             case 3:
                 $result = $counts['correct'] - $counts['incorrect'] / 3;
-
                 break;
         }
 
-        $score = $result / count($qTracks) * $this->getMaxScore();
+        $score = ($result / count($qTracks)) * $this->getMaxScore();
 
         return $score >= 0 ? $score : 0;
     }
@@ -226,7 +221,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
 
                 $iid = $questionAnswers->iid[$i];
 
-                if (MULTIPLE_ANSWER == $question->selectType() || 0 === $formula) {
+                if ($question->selectType() == MULTIPLE_ANSWER || 0 === $formula) {
                     $ponderation = 1 == $isCorrect ? 1 / $counts[1] : -1 / $counts[0];
                 } else {
                     $ponderation = 1 == $isCorrect ? 1 : -1 / $formula;
@@ -236,7 +231,6 @@ class QuestionOptionsEvaluationPlugin extends Plugin
                     $questionPonderation += $ponderation;
                 }
 
-                //error_log("question: $questionId -- i: $i -- w: $ponderation");
                 Database::query("UPDATE $tblAnswer SET ponderation = $ponderation WHERE iid = $iid");
             }
 
@@ -256,7 +250,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
                 ->save(
                     [
                         'variable' => self::EXTRAFIELD_FORMULA,
-                        'value_type' => ExtraField::FIELD_TYPE_TEXT,
+                        'field_type' => ExtraField::FIELD_TYPE_TEXT,
                         'display_text' => $this->get_lang('EvaluationFormula'),
                         'visible_to_self' => false,
                         'changeable' => false,

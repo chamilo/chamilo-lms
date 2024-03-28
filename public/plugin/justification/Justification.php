@@ -6,10 +6,12 @@ class Justification extends Plugin
     protected function __construct()
     {
         parent::__construct(
-            '1.1',
-            'Julio Montoya',
+            '1.2',
+            'Julio Montoya, Nicolas Ducoulombier',
             [
                 'tool_enable' => 'boolean',
+                'notification_to_creator_only' => 'boolean',
+                'access_for_session_admin' => 'boolean',
                 'default_course_id' => 'text',
             ]
         );
@@ -57,7 +59,7 @@ class Justification extends Plugin
 
     public function getList()
     {
-        $sql = 'SELECT * FROM justification_document ORDER BY title ';
+        $sql = 'SELECT * FROM justification_document ORDER BY name ';
         $query = Database::query($sql);
 
         return Database::store_result($query, 'ASSOC');
@@ -71,7 +73,7 @@ class Justification extends Plugin
         $sql = "CREATE TABLE IF NOT EXISTS justification_document (
             id INT unsigned NOT NULL auto_increment PRIMARY KEY,
             code TEXT NULL,
-            title TEXT NULL,
+            name TEXT NULL,
             validity_duration INT,
             comment TEXT NULL,
             date_manual_on INT

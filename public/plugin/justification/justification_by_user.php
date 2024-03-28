@@ -1,11 +1,10 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\CoreBundle\Framework\Container;
-
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-api_protect_admin_script();
+$allowSessionAdmins = api_get_plugin_setting('justification', 'access_for_session_admin') === 'true';
+api_protect_admin_script($allowSessionAdmins);
 
 $tool = 'justification';
 $plugin = Justification::create();
@@ -32,9 +31,7 @@ if ($form->validate()) {
     $userId = $form->getSubmitValue('user_id');
 }
 
-$personalRepo = Container::getPersonalFileRepository();
 if ($userId) {
-    $user = api_get_user_entity($userId);
     $tpl->assign('user_info', api_get_user_info($userId));
     $list = $plugin->getUserJustificationList($userId);
     if ($list) {
@@ -43,18 +40,9 @@ if ($userId) {
                 $item['date_validity'] = Display::label($item['date_validity'], 'warning');
             }
             $item['justification'] = $plugin->getJustification($item['justification_document_id']);
-
-            $personalFile = $personalRepo->getResourceByCreatorFromTitle(
-                $item['file_path'],
-                $user,
-                $user->getResourceNode()
-            );
-
-            $url = $personalRepo->getResourceFileUrl($personalFile);
-
             $item['file_path'] = Display::url(
                 $item['file_path'],
-                $url,
+                api_get_uploaded_web_url('justification', $item['id'], $item['file_path']),
                 ['target' => '_blank']
             );
         }

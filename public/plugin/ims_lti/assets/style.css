@@ -1,0 +1,37 @@
+/* For license terms, see /license.txt */
+
+table.admin-tools > tbody > tr.child > td {
+    vertical-align: middle;
+}
+table.admin-tools .child td:first-of-type {
+    padding-left: 50px;
+    position: relative;
+}
+table.admin-tools .child td:first-of-type:before {
+    content: "";
+    width: 12px;
+    left: 24px;
+    top: 0%;
+    height: 50%;
+    border-left: 2px solid #ddd;
+    border-bottom: 2px solid #ddd;
+    position: absolute;
+    display: block;
+}
+table.admin-tools .child td:first-of-type:after {
+    content: "";
+    width: 12px;
+    left: 24px;
+    top: 50%;
+    height: 50%;
+    border-left: 2px solid #ddd;
+    position: absolute;
+    display: block;
+}
+table.admin-tools .child:last-child td:first-of-type:after {
+    display: none;
+}
+
+.plugin-ims-lti-iframe {
+    width: 100%;
+}

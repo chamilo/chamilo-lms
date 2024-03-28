@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 $strings['plugin_title'] = 'Evaluación para opciones de pregunta';

@@ -79,8 +79,8 @@ function subscribeUser($userId, $courseInfo)
 {
     $courseId = $courseInfo['real_id'];
     $isUserSubscribed = CourseManager::is_user_subscribed_in_course($userId, $courseInfo['code']);
-    if (false === $isUserSubscribed) {
-        CourseManager::subscribeUser($userId, $courseId, STUDENT);
+    if ($isUserSubscribed === false) {
+        CourseManager::subscribeUser($userId, $courseInfo['code'], STUDENT);
         echo "Subscribe user id #$userId to course #$courseId".PHP_EOL;
     } else {
         echo "Nothing to do user id #$userId is already subscribed to #$courseId".PHP_EOL;

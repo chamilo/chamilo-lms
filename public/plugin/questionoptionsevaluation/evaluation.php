@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -10,7 +9,7 @@ api_protect_course_script();
 $exerciseId = isset($_REQUEST['exercise']) ? (int) $_REQUEST['exercise'] : 0;
 
 if (empty($exerciseId)) {
-    echo Display::return_message(get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'), 'error');
+    echo Display::return_message(get_lang('NotAllowed'), 'error');
 
     exit;
 }
@@ -18,15 +17,15 @@ if (empty($exerciseId)) {
 $exercise = new Exercise();
 
 if (!$exercise->read($exerciseId, false)) {
-    echo Display::return_message(get_lang('Test not found or not visible'), 'error');
+    echo Display::return_message(get_lang('ExerciseNotFound'), 'error');
 
     exit;
 }
 
 $plugin = QuestionOptionsEvaluationPlugin::create();
 
-if ('true' !== $plugin->get('enable')) {
-    echo Display::return_message(get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'), 'error');
+if ($plugin->get('enable') !== 'true') {
+    echo Display::return_message(get_lang('NotAllowed'), 'error');
 
     exit;
 }
@@ -66,7 +65,7 @@ if ($formEvaluation->validate()) {
     exit;
 }
 
-$formEvaluation->setDefaults(['formula' => $plugin->getFormulaForExercise($exercise->iId)]);
+$formEvaluation->setDefaults(['formula' => $plugin->getFormulaForExercise($exercise->iid)]);
 
 echo Display::return_message(
     $plugin->get_lang('QuizQuestionsScoreRulesTitleConfirm'),

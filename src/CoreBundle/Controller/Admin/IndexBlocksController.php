@@ -145,6 +145,10 @@ class IndexBlocksController extends BaseController
         $categoryJsonld = $this->serializer->serialize($category, 'jsonld', ['groups' => ['page:read']]);
         $categoryArray = json_decode($categoryJsonld, true);
 
+        if (empty($categoryArray)) {
+            return [];
+        }
+
         return [
             'category' => $categoryArray['@id'],
         ];

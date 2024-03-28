@@ -30,7 +30,7 @@ final class Version20240122221400 extends AbstractMigrationChamilo
         $connection = $em->getConnection();
 
         // Default sublanguages to be excluded from the update.
-        $defaultSubLanguages = ['ast', 'ast_ES', 'ca', 'ca_ES', 'eo', 'gl', 'qu', 'quz_PE', 'zh-TW', 'zh_TW', 'pt-BR', 'pt_PT', 'fur', 'fur_IT', 'oc', 'oc_FR'];
+        $defaultSubLanguages = ['ast', 'ast_ES', 'ca', 'ca_ES', 'eo', 'gl', 'qu', 'quz_PE', 'qu_PE', 'zh-TW', 'zh_TW', 'pt-BR', 'pt_PT', 'fur', 'fur_IT', 'oc', 'oc_FR'];
 
         // Fetching sublanguages from the database.
         $sql = "SELECT * FROM language WHERE parent_id IS NOT NULL AND isocode NOT IN('".implode("', '", $defaultSubLanguages)."')";
@@ -43,6 +43,9 @@ final class Version20240122221400 extends AbstractMigrationChamilo
 
         // Update Vue translations after processing all sublanguages.
         $this->executeVueTranslationsUpdate();
+
+        // Delete the 'import' folder at the end of the process.
+        $this->deleteImportFolder();
     }
 
     private function updateAndGenerateSubLanguage(array $sublanguage, Connection $connection): string
@@ -181,6 +184,29 @@ final class Version20240122221400 extends AbstractMigrationChamilo
 
         // Build the complete code
         return substr($parentCode.'_'.$variantCode, 0, $maxLength);
+    }
+
+    private function deleteImportFolder(): void
+    {
+        $container = $this->getContainer();
+        $kernel = $container->get('kernel');
+        $rootPath = $kernel->getProjectDir();
+        $importPath = $rootPath . '/var/translations/import/';
+
+        $this->recursiveRemoveDirectory($importPath);
+    }
+
+    private function recursiveRemoveDirectory($directory): void
+    {
+        foreach(glob("{$directory}/*") as $file)
+        {
+            if(is_dir($file)) {
+                $this->recursiveRemoveDirectory($file);
+            } else {
+                unlink($file);
+            }
+        }
+        rmdir($directory);
     }
 
     public function down(Schema $schema): void {}

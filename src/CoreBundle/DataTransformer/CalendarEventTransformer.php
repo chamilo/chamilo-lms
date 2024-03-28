@@ -107,16 +107,17 @@ class CalendarEventTransformer implements DataTransformerInterface
 
     private function determineEventColor(string $eventType): string
     {
-        $agendaColors = [
+        $defaultColors = [
             'platform' => 'red',
             'course' => '#458B00',
             'session' => '#00496D',
             'personal' => 'steel blue',
         ];
 
+        $agendaColors = [];
         $settingAgendaColors = $this->settingsManager->getSetting('agenda.agenda_colors');
         if (is_array($settingAgendaColors)) {
-            $agendaColors = array_merge($agendaColors, $settingAgendaColors);
+            $agendaColors = array_merge($defaultColors, $settingAgendaColors);
         }
 
         $colorKeyMap = [
@@ -125,6 +126,6 @@ class CalendarEventTransformer implements DataTransformerInterface
 
         $colorKey = $colorKeyMap[$eventType] ?? $eventType;
 
-        return $agendaColors[$colorKey] ?? $agendaColors['personal'];
+        return $agendaColors[$colorKey] ?? $defaultColors[$colorKey];
     }
 }

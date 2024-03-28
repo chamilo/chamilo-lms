@@ -435,10 +435,9 @@ if ($form->validate()) {
             $expiration_date = $user['expiration_date'];
         }
 
-        if (isset($user['active'])) {
-            $active = $user_data['platform_admin'] ? USER_ACTIVE : intval($user['active']);
-        } else {
-            $active = USER_SOFT_DELETED;
+        $active = isset($user['active']) ? (int) $user['active'] : USER_SOFT_DELETED;
+        if ($user_data['platform_admin']) {
+            $active = USER_ACTIVE;
         }
 
         //If the user is set to admin the status will be overwrite by COURSEMANAGER = 1

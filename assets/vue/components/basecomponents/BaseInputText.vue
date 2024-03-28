@@ -4,15 +4,30 @@
       <InputText
         :id="id"
         :model-value="modelValue"
-        :class="{ 'p-invalid': isInvalid }"
+        :class="{ 'p-invalid': isInvalid, [inputClass]: true }"
         :aria-label="label"
         type="text"
         @update:model-value="updateValue"
       />
-      <label :for="id" :class="{ 'p-error': isInvalid }">{{ label }}</label>
+      <label
+        :for="id"
+        :class="{ 'p-error': isInvalid }"
+      >
+        {{ label }}
+      </label>
     </div>
-    <small v-if="formSubmitted && isInvalid" class="p-error">{{ errorText }}</small>
-    <small v-if="helpText" class="form-text text-muted">{{ helpText }}</small>
+    <small
+      v-if="formSubmitted && isInvalid"
+      class="p-error"
+    >
+      {{ errorText }}
+    </small>
+    <small
+      v-if="helpText"
+      class="form-text text-muted"
+    >
+      {{ helpText }}
+    </small>
   </div>
 </template>
 
@@ -31,7 +46,7 @@ const props = defineProps({
     default: "",
   },
   modelValue: {
-    type: String,
+    type: [String, null],
     required: true,
   },
   errorText: {
@@ -41,17 +56,23 @@ const props = defineProps({
   },
   isInvalid: {
     type: Boolean,
-    required: false,
     default: false,
   },
   required: {
     type: Boolean,
     default: false,
   },
-  helpText: String,
+  helpText: {
+    type: String,
+    default: "",
+  },
   formSubmitted: {
     type: Boolean,
-    default: false
+    default: false,
+  },
+  inputClass: {
+    type: String,
+    default: "",
   },
 })
 

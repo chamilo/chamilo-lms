@@ -1,5 +1,6 @@
 <template>
   <Button
+    class="cursor-pointer"
     :aria-label="onlyIcon ? label : undefined"
     :class="buttonClass"
     :disabled="disabled"
@@ -19,7 +20,7 @@
 <script setup>
 import Button from "primevue/button"
 import { computed } from "vue"
-import { chamiloIconToClass } from "./ChamiloIcons";
+import { chamiloIconToClass } from "./ChamiloIcons"
 import { buttonTypeValidator, iconValidator, sizeValidator } from "./validators"
 
 const props = defineProps({
@@ -95,27 +96,35 @@ const buttonClass = computed(() => {
   }
 
   let commonDisabled =
-    "disabled:bg-primary-bgdisabled disabled:border disabled:border-primary-borderdisabled disabled:text-fontdisabled";
+    "disabled:bg-primary-bgdisabled disabled:border disabled:border-primary-borderdisabled disabled:text-fontdisabled disabled:pointer-events-auto disabled:cursor-not-allowed"
   switch (props.type) {
     case "primary":
-      result += `border-primary hover:bg-primary text-primary hover:text-white ${commonDisabled} `;
-      break;
+      result += `bg-white border-primary text-primary-button-text hover:bg-primary hover:text-white ${commonDisabled} `
+      break
+    case "primary-alternative":
+      result += `bg-primary text-primary-button-alternative-text hover:bg-primary-gradient ${commonDisabled} `
+      break
     case "secondary":
-      result +=
-        "bg-secondary text-white hover:bg-secondary-gradient disabled:bg-secondary-bgdisabled disabled:text-fontdisabled";
-      break;
+      result += `bg-secondary text-secondary-button-text hover:bg-secondary-gradient disabled:bg-secondary-bgdisabled disabled:text-fontdisabled ${commonDisabled}`
+      break
     case "success":
-      result += `bg-success hover:bg-success-gradient ${commonDisabled} `;
-      break;
+      result += `bg-success text-success-button-text hover:bg-success-gradient ${commonDisabled} `
+      break
+    case "info":
+      result += `bg-info text-info-button-text hover:bg-info-gradient ${commonDisabled} `
+      break
+    case "warning":
+      result += `bg-warning text-warning-button-text hover:bg-warning-gradient ${commonDisabled} `
+      break
     case "danger":
-      result += `border-error hover:bg-error text-error hover:text-white ${commonDisabled} `;
-      break;
+      result += `bg-white border-danger text-danger hover:bg-danger-gradient hover:text-white ${commonDisabled}`
+      break
     case "black":
-      result += "bg-white text-tertiary border-tertiary hover:bg-tertiary-gradient hover:text-white";
-      break;
+      result += `bg-white border-tertiary text-tertiary hover:bg-tertiary hover:text-white ${commonDisabled}`
+      break
   }
-  return result;
-});
+  return result
+})
 
 // https://primevue.org/button/#outlined
 const primeOutlinedProperty = computed(() => {

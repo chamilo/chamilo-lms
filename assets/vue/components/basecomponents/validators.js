@@ -21,5 +21,5 @@ export const buttonTypeValidator = (value) => {
   if (typeof value !== "string") {
     return false
   }
-  return ["primary", "secondary", "black", "success", "danger"].includes(value)
+  return ["primary", "primary-alternative", "secondary", "black", "success", "info", "warning", "danger"].includes(value)
 }

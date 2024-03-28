@@ -39,6 +39,7 @@
     "bootstrap-daterangepicker": "^3.1.0",
     "bootstrap-select": "^1.13.18",
     "chart.js": "^3.9.1",
+    "colorjs.io": "^0.5.0",
     "cropper": "^4.1.0",
     "datepair.js": "^0.4.17",
     "dotenv": "^16.3.1",

@@ -288,7 +288,9 @@ if (!empty($creatorInfo)) {
     $form->addElement('label', get_lang('Registration date'), $date);
 }
 
-if (!$user_data['platform_admin']) {
+$isUserEditingOwnAccount = ($user_data['id'] === api_get_user_id());
+$hideFields = $isUserEditingOwnAccount || USER_SOFT_DELETED == $user_data['active'];
+if (!$hideFields) {
     // Expiration Date
     $form->addElement('radio', 'radio_expiration_date', get_lang('Expiration date'), get_lang('Never expires'), 0);
     $group = [];
@@ -304,6 +306,9 @@ if (!$user_data['platform_admin']) {
     // active account or inactive account
     $form->addElement('radio', 'active', get_lang('Account'), get_lang('active'), 1);
     $form->addElement('radio', 'active', '', get_lang('inactive'), 0);
+} else {
+    $form->addElement('hidden', 'active', $user_data['active']);
+    $form->addElement('hidden', 'expiration_date', $user_data['expiration_date']);
 }
 $studentBossList = UserManager::getStudentBossList($user_id);
 
@@ -372,14 +377,15 @@ $form->addButtonSave(get_lang('Save'));
 
 // Set default values
 $user_data['reset_password'] = 0;
-$expiration_date = $user_data['expiration_date'];
-
-if (empty($expiration_date)) {
-    $user_data['radio_expiration_date'] = 0;
-    $user_data['expiration_date'] = api_get_local_time();
-} else {
-    $user_data['radio_expiration_date'] = 1;
-    $user_data['expiration_date'] = api_get_local_time($expiration_date);
+if (!$hideFields) {
+    $expiration_date = $user_data['expiration_date'];
+    if (empty($expiration_date)) {
+        $user_data['radio_expiration_date'] = 0;
+        $user_data['expiration_date'] = api_get_local_time();
+    } else {
+        $user_data['radio_expiration_date'] = 1;
+        $user_data['expiration_date'] = api_get_local_time($expiration_date);
+    }
 }
 $form->setDefaults($user_data);
 
@@ -429,16 +435,8 @@ if ($form->validate()) {
         $hr_dept_id = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : null;
         $language = $user['locale'];
         $address = isset($user['address']) ? $user['address'] : null;
-
-        $expiration_date = null;
-        if (!$user_data['platform_admin'] && '1' == $user['radio_expiration_date']) {
-            $expiration_date = $user['expiration_date'];
-        }
-
+        $expiration_date = $user['expiration_date'];
         $active = isset($user['active']) ? (int) $user['active'] : USER_SOFT_DELETED;
-        if ($user_data['platform_admin']) {
-            $active = USER_ACTIVE;
-        }
 
         //If the user is set to admin the status will be overwrite by COURSEMANAGER = 1
         if (1 == $platform_admin) {

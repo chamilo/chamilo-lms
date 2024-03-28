@@ -23,6 +23,9 @@ class Version20230216122900 extends AbstractMigrationChamilo
     {
         $connection = $this->getEntityManager()->getConnection();
         $configurationValues = [
+            'Ticket' => [
+                'ticket_project_user_roles',
+            ],
             'Session' => [
                 'allow_redirect_to_session_after_inscription_about',
                 'remove_session_url',
@@ -163,7 +166,6 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'webservice_enable_adminonly_api',
                 'plugin_settings',
                 'allow_working_time_edition',
-                'ticket_project_user_roles',
                 'disable_user_conditions_sender_id',
                 'portfolio_advanced_sharing',
                 'redirect_index_to_url_for_logged_users',
@@ -1002,7 +1004,6 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'redirect_index_to_url_for_logged_users',
                 'portfolio_advanced_sharing',
                 'disable_user_conditions_sender_id',
-                'ticket_project_user_roles',
                 'allow_working_time_edition',
                 'plugin_settings',
                 'webservice_enable_adminonly_api',
@@ -1143,6 +1144,9 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'remove_session_url',
                 'allow_redirect_to_session_after_inscription_about',
             ],
+            'Ticket' => [
+                'ticket_project_user_roles',
+            ]
         ];
         foreach ($configurationValues as $category => $variables) {
             foreach ($variables as $variable) {

@@ -1,35 +1,38 @@
-import axios from 'axios';
+import axios from "axios"
 
-const API_URL = '/social-network';
+const API_URL = "/social-network"
 
 export default {
   async fetchPersonalData(userId) {
     try {
-      const response = await axios.get(`${API_URL}/personal-data/${userId}`);
-      return response.data.personalData;
+      const response = await axios.get(`${API_URL}/personal-data/${userId}`)
+
+      return response.data.personalData
     } catch (error) {
-      console.error('Error fetching personal data:', error);
-      throw error;
+      console.error("Error fetching personal data:", error)
+      throw error
     }
   },
 
   async fetchTermsAndConditions(userId) {
     try {
-      const response = await axios.get(`${API_URL}/terms-and-conditions/${userId}`);
-      return response.data.terms;
+      const response = await axios.get(`${API_URL}/terms-and-conditions/${userId}`)
+
+      return response.data.terms
     } catch (error) {
-      console.error('Error fetching terms and conditions:', error);
-      throw error;
+      console.error("Error fetching terms and conditions:", error)
+      throw error
     }
   },
 
   async fetchLegalStatus(userId) {
     try {
-      const response = await axios.get(`${API_URL}/legal-status/${userId}`);
-      return response.data;
+      const response = await axios.get(`${API_URL}/legal-status/${userId}`)
+
+      return response.data
     } catch (error) {
-      console.error('Error fetching legal status:', error);
-      throw error;
+      console.error("Error fetching legal status:", error)
+      throw error
     }
   },
 
@@ -39,11 +42,12 @@ export default {
         explanation,
         userId,
         requestType,
-      });
-      return response.data;
+      })
+
+      return response.data
     } catch (error) {
-      console.error('Error submitting privacy request:', error);
-      throw error;
+      console.error("Error submitting privacy request:", error)
+      throw error
     }
   },
 
@@ -51,21 +55,23 @@ export default {
     try {
       const response = await axios.post(`${API_URL}/send-legal-term`, {
         userId,
-      });
-      return response.data;
+      })
+
+      return response.data
     } catch (error) {
-      console.error('Error accepting the term:', error);
-      throw error;
+      console.error("Error accepting the term:", error)
+      throw error
     }
   },
 
   async fetchInvitations(userId) {
     try {
-      const response = await axios.get(`${API_URL}/invitations/${userId}`);
-      return response.data;
+      const response = await axios.get(`${API_URL}/invitations/${userId}`)
+
+      return response.data
     } catch (error) {
-      console.error('Error fetching invitations:', error);
-      throw error;
+      console.error("Error fetching invitations:", error)
+      throw error
     }
   },
 
@@ -74,13 +80,14 @@ export default {
       const response = await axios.post(`${API_URL}/user-action`, {
         userId,
         targetUserId,
-        action: 'add_friend',
+        action: "add_friend",
         is_my_friend: true,
-      });
-      return response.data;
+      })
+
+      return response.data
     } catch (error) {
-      console.error('Error accepting invitation:', error);
-      throw error;
+      console.error("Error accepting invitation:", error)
+      throw error
     }
   },
 
@@ -89,12 +96,13 @@ export default {
       const response = await axios.post(`${API_URL}/user-action`, {
         userId,
         targetUserId,
-        action: 'deny_friend',
-      });
-      return response.data;
+        action: "deny_friend",
+      })
+
+      return response.data
     } catch (error) {
-      console.error('Error denying invitation:', error);
-      throw error;
+      console.error("Error denying invitation:", error)
+      throw error
     }
   },
 
@@ -103,12 +111,13 @@ export default {
       const response = await axios.post(`${API_URL}/group-action`, {
         userId,
         groupId,
-        action: 'accept',
-      });
-      return response.data;
+        action: "accept",
+      })
+
+      return response.data
     } catch (error) {
-      console.error('Error accepting group invitation:', error);
-      throw error;
+      console.error("Error accepting group invitation:", error)
+      throw error
     }
   },
 
@@ -117,12 +126,13 @@ export default {
       const response = await axios.post(`${API_URL}/group-action`, {
         userId,
         groupId,
-        action: 'deny',
-      });
-      return response.data;
+        action: "deny",
+      })
+
+      return response.data
     } catch (error) {
-      console.error('Error denying group invitation:', error);
-      throw error;
+      console.error("Error denying group invitation:", error)
+      throw error
     }
   },
 
@@ -131,12 +141,13 @@ export default {
       const response = await axios.post(`${API_URL}/group-action`, {
         userId,
         groupId,
-        action: 'join',
-      });
-      return response.data;
+        action: "join",
+      })
+
+      return response.data
     } catch (error) {
-      console.error('Error joining the group:', error);
-      throw error;
+      console.error("Error joining the group:", error)
+      throw error
     }
   },
-};
+}

@@ -1,15 +1,15 @@
-import { defineStore } from "pinia";
-import axios from "axios";
+import { defineStore } from "pinia"
+import axios from "axios"
 import { computed, ref } from "vue"
 
 export const usePlatformConfig = defineStore("platformConfig", () => {
-  const isLoading = ref(false);
-  const settings = ref([]);
-  const studentView = ref('teacherview');
+  const isLoading = ref(false)
+  const settings = ref([])
+  const studentView = ref("teacherview")
   const plugins = ref([])
 
   async function findSettingsRequest() {
-    isLoading.value = true;
+    isLoading.value = true
 
     try {
       const { data } = await axios.get("/platform-config/list")
@@ -27,7 +27,7 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
   }
 
   async function initialize() {
-    await findSettingsRequest();
+    await findSettingsRequest()
   }
 
   const getSetting = computed(
@@ -44,5 +44,5 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
     initialize,
     getSetting,
     isStudentViewActive,
-  };
-});
+  }
+})

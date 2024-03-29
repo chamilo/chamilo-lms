@@ -7,6 +7,7 @@ export default {
    */
   getGlossaryTerms: async (params) => {
     const response = await axios.get(ENTRYPOINT + "glossaries", { params })
+
     return response.data
   },
 
@@ -15,6 +16,7 @@ export default {
    */
   getGlossaryTerm: async (termId) => {
     const response = await axios.get(ENTRYPOINT + `glossaries/${termId}`)
+
     return response.data
   },
 
@@ -23,6 +25,7 @@ export default {
    */
   createGlossaryTerm: async (data) => {
     const response = await axios.post(ENTRYPOINT + `glossaries`, data)
+
     return response.data
   },
 
@@ -32,6 +35,7 @@ export default {
    */
   updateGlossaryTerm: async (termId, data) => {
     const response = await axios.put(ENTRYPOINT + `glossaries/${termId}`, data)
+
     return response.data
   },
 
@@ -41,6 +45,7 @@ export default {
   export: async (formData) => {
     const endpoint = `${ENTRYPOINT}glossaries/export`
     const response = await axios.post(endpoint, formData, { responsetype: "blob " })
+
     return response.data
   },
 
@@ -54,6 +59,7 @@ export default {
         "Content-Type": "multipart/form-data",
       },
     })
+
     return response.data
   },
 
@@ -63,6 +69,7 @@ export default {
   exportToDocuments: async (data) => {
     const endpoint = `${ENTRYPOINT}glossaries/export_to_documents`
     const response = await axios.post(endpoint, data)
+
     return response.data
   },
 
@@ -72,6 +79,7 @@ export default {
   deleteTerm: async (termId) => {
     const endpoint = `${ENTRYPOINT}glossaries/${termId}`
     const response = await axios.delete(endpoint)
+
     return response.data
   },
 }

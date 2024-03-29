@@ -33,7 +33,11 @@
     />
 
     <div class="field">
-      <BaseTinyEditor v-model="item.content" editor-id="message" required />
+      <BaseTinyEditor
+        v-model="item.content"
+        editor-id="message"
+        required
+      />
     </div>
 
     <BaseButton
@@ -214,7 +218,11 @@ if (route.query.send_to_user) {
         const prefill = capitalize(route.query.prefill)
 
         item.value.title = t(prefill + "Title")
-        item.value.content = t(prefill + "Content", [user.firstname, currentUser.value.firstname, currentUser.value.firstname])
+        item.value.content = t(prefill + "Content", [
+          user.firstname,
+          currentUser.value.firstname,
+          currentUser.value.firstname,
+        ])
       }
     })
     .catch((e) => notification.showErrorNotification(e))

@@ -52,9 +52,11 @@ const { course, userIsCoach } = storeToRefs(cidReqStore)
 const user = computed(() => store.getters["security/getUser"])
 
 const showButton = computed(() => {
-  return securityStore.isAuthenticated &&
+  return (
+    securityStore.isAuthenticated &&
     course.value &&
     (isCourseAdmin.value || isAdmin.value || userIsCoach.value(user.value.id, 0, false)) &&
-    "true" === platformConfigStore.getSetting("course.student_view_enabled");
+    "true" === platformConfigStore.getSetting("course.student_view_enabled")
+  )
 })
 </script>

@@ -2,82 +2,140 @@
   <BaseCard class="social-side-menu mt-4">
     <template #header>
       <div class="px-4 py-2 -mb-2 bg-gray-15">
-        <h2 class="text-h5">{{ t('Social network') }}</h2>
+        <h2 class="text-h5">{{ t("Social network") }}</h2>
       </div>
     </template>
-    <hr class="-mt-2 mb-4 -mx-4">
-    <ul v-if="isCurrentUser" class="menu-list">
-      <li :class="['menu-item', { 'active': isActive('/social') }]">
+    <hr class="-mt-2 mb-4 -mx-4" />
+    <ul
+      v-if="isCurrentUser"
+      class="menu-list"
+    >
+      <li :class="['menu-item', { active: isActive('/social') }]">
         <router-link to="/social">
-          <i class="mdi mdi-home" aria-hidden="true"></i>
+          <i
+            aria-hidden="true"
+            class="mdi mdi-home"
+          ></i>
           {{ t("Home") }}
         </router-link>
       </li>
-      <li :class="['menu-item', { 'active': isActive('/resources/messages') }]">
+      <li :class="['menu-item', { active: isActive('/resources/messages') }]">
         <router-link to="/resources/messages">
-          <i class="mdi mdi-email" aria-hidden="true"></i>
+          <i
+            aria-hidden="true"
+            class="mdi mdi-email"
+          ></i>
           {{ t("Messages") }}
-          <span class="badge badge-warning" v-if="unreadMessagesCount > 0">{{ unreadMessagesCount }}</span>
+          <span
+            v-if="unreadMessagesCount > 0"
+            class="badge badge-warning"
+            >{{ unreadMessagesCount }}</span
+          >
         </router-link>
       </li>
-      <li :class="['menu-item', { 'active': isActive('/resources/friends/invitations') }]">
+      <li :class="['menu-item', { active: isActive('/resources/friends/invitations') }]">
         <router-link :to="{ name: 'Invitations' }">
-          <i class="mdi mdi-mailbox" aria-hidden="true"></i>
+          <i
+            aria-hidden="true"
+            class="mdi mdi-mailbox"
+          ></i>
           {{ t("Invitations") }}
-          <span class="badge badge-warning" v-if="invitationsCount > 0">{{ invitationsCount }}</span>
+          <span
+            v-if="invitationsCount > 0"
+            class="badge badge-warning"
+            >{{ invitationsCount }}</span
+          >
         </router-link>
       </li>
-      <li :class="['menu-item', { 'active': isActive('/resources/friends') }]">
+      <li :class="['menu-item', { active: isActive('/resources/friends') }]">
         <router-link :to="{ name: 'UserRelUserList' }">
-          <i class="mdi mdi-handshake" aria-hidden="true"></i>
+          <i
+            aria-hidden="true"
+            class="mdi mdi-handshake"
+          ></i>
           {{ t("My friends") }}
         </router-link>
       </li>
-      <li :class="['menu-item', { 'active': isActive(groupLink) }]">
-        <a v-if="isValidGlobalForumsCourse" :href="groupLink" rel="noopener noreferrer">
-          <i class="mdi mdi-group" aria-hidden="true"></i>
+      <li :class="['menu-item', { active: isActive(groupLink) }]">
+        <a
+          v-if="isValidGlobalForumsCourse"
+          :href="groupLink"
+          rel="noopener noreferrer"
+        >
+          <i
+            aria-hidden="true"
+            class="mdi mdi-group"
+          ></i>
           {{ t("Social groups") }}
         </a>
-        <router-link v-else :to="groupLink">
-          <i class="mdi mdi-group" aria-hidden="true"></i>
+        <router-link
+          v-else
+          :to="groupLink"
+        >
+          <i
+            aria-hidden="true"
+            class="mdi mdi-group"
+          ></i>
           {{ t("Social groups") }}
         </router-link>
       </li>
-      <li :class="['menu-item', { 'active': isActive('/social/search') }]">
+      <li :class="['menu-item', { active: isActive('/social/search') }]">
         <router-link to="/social/search">
-          <i class="mdi mdi-magnify" aria-hidden="true"></i>
+          <i
+            aria-hidden="true"
+            class="mdi mdi-magnify"
+          ></i>
           {{ t("Search") }}
         </router-link>
       </li>
-      <li :class="['menu-item', { 'active': isActive('/resources/personal_files') }]">
+      <li :class="['menu-item', { active: isActive('/resources/personal_files') }]">
         <router-link :to="{ name: 'PersonalFileList', params: { node: currentNodeId } }">
           <i class="mdi mdi-briefcase"></i>
           {{ t("My files") }}
         </router-link>
       </li>
-      <li :class="['menu-item', { 'active': isActive('/resources/users/personal_data') }]">
+      <li :class="['menu-item', { active: isActive('/resources/users/personal_data') }]">
         <router-link to="/resources/users/personal_data">
-          <i class="mdi mdi-account" aria-hidden="true"></i>
+          <i
+            aria-hidden="true"
+            class="mdi mdi-account"
+          ></i>
           {{ t("Personal data") }}
         </router-link>
       </li>
-      <li :class="['menu-item', { 'active': isActive('/social', 'promoted') }]">
+      <li :class="['menu-item', { active: isActive('/social', 'promoted') }]">
         <router-link :to="{ path: '/social', query: { filterType: 'promoted' } }">
-          <i class="mdi mdi-star" aria-hidden="true"></i>
+          <i
+            aria-hidden="true"
+            class="mdi mdi-star"
+          ></i>
           {{ t("Promoted messages") }}
         </router-link>
       </li>
     </ul>
-    <ul v-else class="menu-list">
+    <ul
+      v-else
+      class="menu-list"
+    >
       <li class="menu-item">
         <router-link to="/social">
-          <i class="mdi mdi-home" aria-hidden="true"></i>
+          <i
+            aria-hidden="true"
+            class="mdi mdi-home"
+          ></i>
           {{ t("Home") }}
         </router-link>
       </li>
       <li class="menu-item">
-        <a href="/main/inc/ajax/user_manager.ajax.php?a=get_user_popup&user_id={{user.id}}" class="ajax" rel="noopener noreferrer">
-          <i class="mdi mdi-email" aria-hidden="true"></i>
+        <a
+          class="ajax"
+          href="/main/inc/ajax/user_manager.ajax.php?a=get_user_popup&user_id={{user.id}}"
+          rel="noopener noreferrer"
+        >
+          <i
+            aria-hidden="true"
+            class="mdi mdi-email"
+          ></i>
           {{ t("Send message") }}
         </a>
       </li>
@@ -87,10 +145,10 @@
 
 <script setup>
 import BaseCard from "../basecomponents/BaseCard.vue"
-import { useRoute } from 'vue-router'
+import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
-import { onMounted, computed, ref, inject, watchEffect } from "vue"
+import { computed, inject, onMounted, ref, watchEffect } from "vue"
 import { useStore } from "vuex"
 import { useSecurityStore } from "../../store/securityStore"
 import axios from "axios"
@@ -105,9 +163,9 @@ const messageRelUserStore = useMessageRelUserStore()
 const unreadMessagesCount = computed(() => messageRelUserStore.countUnread)
 const invitationsCount = ref(0)
 
-const user = inject('social-user')
-const isCurrentUser = inject('is-current-user')
-const groupLink = ref({ name: 'UserGroupShow' })
+const user = inject("social-user")
+const isCurrentUser = inject("is-current-user")
+const groupLink = ref({ name: "UserGroupShow" })
 const platformConfigStore = usePlatformConfig()
 const globalForumsCourse = computed(() => platformConfigStore.getSetting("forum.global_forums_course_id"))
 const isValidGlobalForumsCourse = computed(() => {
@@ -116,15 +174,15 @@ const isValidGlobalForumsCourse = computed(() => {
 })
 const getGroupLink = async () => {
   try {
-    const response = await axios.get('/social-network/get-forum-link')
+    const response = await axios.get("/social-network/get-forum-link")
     if (isValidGlobalForumsCourse.value) {
       groupLink.value = response.data.go_to
     } else {
-      groupLink.value = { name: 'UserGroupList' }
+      groupLink.value = { name: "UserGroupList" }
     }
   } catch (error) {
-    console.error('Error fetching forum link:', error)
-    groupLink.value = { name: 'UserGroupList' }
+    console.error("Error fetching forum link:", error)
+    groupLink.value = { name: "UserGroupList" }
   }
 }
 
@@ -134,7 +192,7 @@ const fetchInvitationsCount = async (userId) => {
     const { data } = await axios.get(`/social-network/invitations/count/${userId}`)
     invitationsCount.value = data.totalInvitationsCount
   } catch (error) {
-    console.error('Error fetching invitations count:', error)
+    console.error("Error fetching invitations count:", error)
   }
 }
 watchEffect(() => {
@@ -152,19 +210,24 @@ watchEffect(() => {
       fetchInvitationsCount(user.value.id)
     }
   } catch (e) {
-    console.error('Error loading user:', e)
+    console.error("Error loading user:", e)
   }
 })
 
 const isActive = (path, filterType = null) => {
-  if (path === '/resources/friends/invitations' || path === '/social/search') {
+  if (path === "/resources/friends/invitations" || path === "/social/search") {
     return route.path === path
   }
 
   const pathMatch = route.path.startsWith(path)
   const hasQueryParams = Object.keys(route.query).length > 0
-  const filterMatch = filterType ? (route.query.filterType === filterType && hasQueryParams) : !hasQueryParams
-  return pathMatch && filterMatch && !route.path.startsWith('/resources/friends/invitations') && !route.path.startsWith('/social/search')
+  const filterMatch = filterType ? route.query.filterType === filterType && hasQueryParams : !hasQueryParams
+  return (
+    pathMatch &&
+    filterMatch &&
+    !route.path.startsWith("/resources/friends/invitations") &&
+    !route.path.startsWith("/social/search")
+  )
 }
 
 onMounted(async () => {

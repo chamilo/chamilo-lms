@@ -1,8 +1,6 @@
 <template>
   <div class="flex flex-col gap-4">
-    <CalendarSectionHeader
-      @add-click="showAddEventDialog"
-    />
+    <CalendarSectionHeader @add-click="showAddEventDialog" />
 
     <FullCalendar
       ref="cal"
@@ -81,8 +79,9 @@
           v-if="allowToEdit && showEditButton"
           :label="t('Edit')"
           type="secondary"
+          icon="delete"
           @click="dialog = true"
-          icon="delete"/>
+        />
       </template>
     </Dialog>
 
@@ -173,7 +172,7 @@ const currentUser = computed(() => store.getters["security/getUser"])
 const { t } = useI18n()
 const { appLocale } = useLocale()
 const route = useRoute()
-const isGlobal = ref(route.query.type === 'global')
+const isGlobal = ref(route.query.type === "global")
 
 let currentEvent = null
 
@@ -206,14 +205,14 @@ async function getCalendarEvents({ startStr, endStr }) {
     params.gid = group.value.id
   }
 
-  if (route.query?.type === 'global') {
-    params.type = 'global'
+  if (route.query?.type === "global") {
+    params.type = "global"
   }
 
   const calendarEvents = await cCalendarEventService.findAll({ params }).then((response) => response.json())
 
   return calendarEvents["hydra:member"].map((event) => {
-    let color = event.color || '#007BFF'
+    let color = event.color || "#007BFF"
 
     return {
       ...event,
@@ -303,23 +302,23 @@ const calendarOptions = ref({
 })
 
 const currentContext = computed(() => {
-  if (route.query.type === 'global') {
-    return 'global'
+  if (route.query.type === "global") {
+    return "global"
   } else if (course.value) {
-    return 'course'
+    return "course"
   } else if (session.value) {
-    return 'session'
+    return "session"
   } else {
-    return 'personal'
+    return "personal"
   }
 })
 
 const allowAction = (eventType) => {
   const contextRules = {
-    global: ['global'],
-    course: ['course'],
-    session: ['session'],
-    personal: ['personal']
+    global: ["global"],
+    course: ["course"],
+    session: ["session"],
+    personal: ["personal"],
   }
 
   return contextRules[currentContext.value].includes(eventType)
@@ -421,10 +420,13 @@ function onCreateEventForm() {
 
 const toast = useToast()
 
-watch(() => route.query.type, (newType) => {
-  isGlobal.value = newType === 'global'
-  reFetch()
-})
+watch(
+  () => route.query.type,
+  (newType) => {
+    isGlobal.value = newType === "global"
+    reFetch()
+  },
+)
 
 watch(
   () => store.state.ccalendarevent.created,

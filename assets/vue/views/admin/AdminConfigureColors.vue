@@ -14,13 +14,13 @@
       />
       <BaseColorPicker
         v-model="colorPrimaryButtonText"
-        :label="t('Primary color button text')"
         :error="colorPrimaryButtonTextError"
+        :label="t('Primary color button text')"
       />
       <BaseColorPicker
         v-model="colorPrimaryButtonAlternativeText"
-        :label="t('Primary color button alternative text')"
         :error="colorPrimaryButtonAlternativeTextError"
+        :label="t('Primary color button alternative text')"
       />
     </div>
 
@@ -35,8 +35,8 @@
       />
       <BaseColorPicker
         v-model="colorSecondaryButtonText"
-        :label="t('Secondary color button text')"
         :error="colorSecondaryButtonTextError"
+        :label="t('Secondary color button text')"
       />
     </div>
 
@@ -62,8 +62,8 @@
       />
       <BaseColorPicker
         v-model="colorSuccessButtonText"
-        :label="t('Success color button text')"
         :error="colorSuccessButtonTextError"
+        :label="t('Success color button text')"
       />
     </div>
 
@@ -78,8 +78,8 @@
       />
       <BaseColorPicker
         v-model="colorInfoButtonText"
-        :label="t('Info color button text')"
         :error="colorInfoButtonTextError"
+        :label="t('Info color button text')"
       />
     </div>
 
@@ -94,8 +94,8 @@
       />
       <BaseColorPicker
         v-model="colorWarningButtonText"
-        :label="t('Warning color button text')"
         :error="colorWarningButtonTextError"
+        :label="t('Warning color button text')"
       />
     </div>
 
@@ -164,15 +164,15 @@
 
   <div class="flex flex-wrap mb-4 gap-3">
     <BaseButton
-      type="primary"
-      icon="send"
       :label="t('Save')"
+      icon="send"
+      type="primary"
       @click="saveColors"
     />
     <BaseButton
-      type="black"
-      icon="cog"
       :label="isAdvancedMode ? t('Hide advanced mode') : t('Show advanced mode')"
+      icon="cog"
+      type="black"
       @click="isAdvancedMode = !isAdvancedMode"
     />
   </div>
@@ -184,69 +184,69 @@
     <p class="mb-3 text-lg">{{ t("Buttons") }}</p>
     <div class="flex flex-row flex-wrap mb-3">
       <BaseButton
-        class="mr-2 mb-2"
         :label="t('Primary')"
-        type="primary"
+        class="mr-2 mb-2"
         icon="eye-on"
+        type="primary"
       />
       <BaseButton
-        class="mr-2 mb-2"
         :label="t('Primary alternative')"
+        class="mr-2 mb-2"
+        icon="eye-on"
         type="primary-alternative"
-        icon="eye-on"
       />
       <BaseButton
-        class="mr-2 mb-2"
         :label="t('Secondary')"
+        class="mr-2 mb-2"
+        icon="eye-on"
         type="secondary"
-        icon="eye-on"
       />
       <BaseButton
-        class="mr-2 mb-2"
         :label="t('Tertiary')"
+        class="mr-2 mb-2"
+        icon="eye-on"
         type="black"
-        icon="eye-on"
       />
     </div>
     <div class="flex flex-row flex-wrap mb-3">
       <BaseButton
-        class="mr-2 mb-2"
         :label="t('Success')"
+        class="mr-2 mb-2"
+        icon="send"
         type="success"
-        icon="send"
       />
       <BaseButton
-        class="mr-2 mb-2"
         :label="t('Info')"
+        class="mr-2 mb-2"
+        icon="send"
         type="info"
-        icon="send"
       />
       <BaseButton
-        class="mr-2 mb-2"
         :label="t('Warning')"
-        type="warning"
+        class="mr-2 mb-2"
         icon="send"
+        type="warning"
       />
       <BaseButton
-        class="mr-2 mb-2"
         :label="t('Danger')"
-        type="danger"
+        class="mr-2 mb-2"
         icon="delete"
+        type="danger"
       />
     </div>
     <div class="flex flex-row flex-wrap mb-3">
       <BaseButton
-        class="mr-2 mb-2"
         :label="t('Disabled')"
-        type="primary"
-        icon="eye-on"
+        class="mr-2 mb-2"
         disabled
+        icon="eye-on"
+        type="primary"
       />
       <BaseButton
         class="mr-2 mb-2"
-        type="primary"
         icon="cog"
         only-icon
+        type="primary"
       />
     </div>
   </div>
@@ -256,10 +256,10 @@
     <div class="flex flex-row gap-3">
       <BaseButton
         class="mr-3 mb-2"
-        type="primary"
         icon="cog"
-        popup-identifier="menu"
         only-icon
+        popup-identifier="menu"
+        type="primary"
         @click="toggle"
       />
       <BaseMenu
@@ -269,10 +269,6 @@
       />
       <BaseDropdown
         v-model="dropdown"
-        class="w-36"
-        input-id="dropdown"
-        option-label="label"
-        option-value="value"
         :label="t('Dropdown')"
         :options="[
           {
@@ -288,7 +284,11 @@
             value: 'option_3',
           },
         ]"
+        class="w-36"
+        input-id="dropdown"
         name="dropdown"
+        option-label="label"
+        option-value="value"
       />
     </div>
   </div>
@@ -310,8 +310,8 @@
     <div class="mb-2"></div>
     <BaseRadioButtons
       v-model="radioValue"
-      :options="radioButtons"
       :initial-value="radioValue"
+      :options="radioButtons"
       name="radio"
     />
   </div>
@@ -337,8 +337,8 @@
       :model-value="null"
     />
     <BaseInputText
-      :label="t('This is a form with an error')"
       :is-invalid="true"
+      :label="t('This is a form with an error')"
       :model-value="null"
     />
     <BaseInputDate
@@ -352,13 +352,13 @@
     <p class="mb-3 text-lg">{{ t("Dialogs") }}</p>
     <BaseButton
       :label="t('Show dialog')"
-      type="black"
       icon="eye-on"
+      type="black"
       @click="isDialogVisible = true"
     />
     <BaseDialogConfirmCancel
-      :title="t('Dialog example')"
       :is-visible="isDialogVisible"
+      :title="t('Dialog example')"
       @confirm-clicked="isDialogVisible = false"
       @cancel-clicked="isDialogVisible = false"
     />
@@ -368,8 +368,8 @@
     <div class="course-tool cursor-pointer">
       <div class="course-tool__link hover:primary-gradient hover:bg-primary-gradient/10">
         <span
-          class="course-tool__icon mdi mdi-bookshelf"
           aria-hidden="true"
+          class="course-tool__icon mdi mdi-bookshelf"
         />
       </div>
       <p class="course-tool__title">{{ t("Documents") }}</p>
@@ -436,7 +436,8 @@ const saveColors = async () => {
   let colors = getColors()
   try {
     await axios.post("/api/color_themes", {
-      title: themeTitle.value,variables: colors,
+      title: themeTitle.value,
+      variables: colors,
     })
     showSuccessNotification(t("Colors updated"))
   } catch (error) {

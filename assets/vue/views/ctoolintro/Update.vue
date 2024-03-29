@@ -46,15 +46,16 @@ export default {
     let ctoolintroId = route.query.ctoolintroIid
 
     // Get the current intro text.
-    axios.get(ENTRYPOINT + "c_tool_intros/" + ctoolintroId)
+    axios
+      .get(ENTRYPOINT + "c_tool_intros/" + ctoolintroId)
       .then((response) => {
-        let data = response.data;
-        item.value["introText"] = data.introText;
-        item.value["parentResourceNodeId"] = Number(route.query.parentResourceNodeId);
+        let data = response.data
+        item.value["introText"] = data.introText
+        item.value["parentResourceNodeId"] = Number(route.query.parentResourceNodeId)
       })
       .catch(function (error) {
-        console.error(error);
-      });
+        console.error(error)
+      })
 
     item.value["courseTool"] = "/api/c_tools/" + toolId
     item.value["resourceLinkList"] = [

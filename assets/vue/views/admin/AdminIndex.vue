@@ -179,6 +179,60 @@
       icon="admin-settings"
       title="Chamilo.org"
     />
+
+    <div
+      v-if="securityStore.isAdmin"
+      class="admin-index__block-container block-admin-support"
+    >
+      <div class="admin-index__block">
+        <h4 v-t="'Professional support'" />
+
+        <div
+          v-if="blockSupportStatusEl"
+          class="block-admin-support__status"
+          v-html="blockSupportStatusEl"
+        />
+        <div
+          v-else
+          class="block-admin-news__status"
+        >
+          <i18n-t
+            class="mb-3"
+            keypath="Disabled"
+            tag="p"
+          >
+          </i18n-t>
+        </div>
+
+      </div>
+    </div>
+
+    <div
+      v-if="securityStore.isAdmin"
+      class="admin-index__block-container block-admin-news"
+    >
+      <div class="admin-index__block">
+        <h4 v-t="'News from Chamilo'" />
+
+        <div
+          v-if="blockNewsStatusEl"
+          class="block-admin-news__status"
+          v-html="blockNewsStatusEl"
+        />
+        <div
+          v-else
+          class="block-admin-news__status"
+        >
+          <i18n-t
+            class="mb-3"
+            keypath="Disabled"
+            tag="p"
+          >
+          </i18n-t>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -213,6 +267,8 @@ const {
   blockPlatform,
   blockChamilo,
   loadBlocks,
+  blockNewsStatusEl,
+  blockSupportStatusEl,
 } = useIndexBlocks()
 
 function checkVersionOnSubmit() {

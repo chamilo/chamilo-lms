@@ -14,20 +14,22 @@ export function useIndexBlocks() {
   const securityStore = useSecurityStore()
 
   const blockVersionStatusEl = ref()
+  const blockNewsStatusEl = ref()
+  const blockSupportStatusEl = ref()
 
   onMounted(() => {
     if (!securityStore.isAdmin) {
       return
     }
 
-    if ("false" === platformConfigStore.getSetting("admin.admin_chamilo_announcements_disable")) {
-      adminService.findAnnouncements().then((announcement) => toast.add({ severity: "info", detail: announcement }))
-    }
-
     if ("false" === platformConfigStore.getSetting("platform.registered")) {
       blockVersionStatusEl.value = null
     } else {
       loadVersion()
+    }
+    if ("false" === platformConfigStore.getSetting("admin.admin_chamilo_announcements_disable")) {
+      loadSupport()
+      loadNews()
     }
   })
 
@@ -49,6 +51,18 @@ export function useIndexBlocks() {
     blockVersionStatusEl.value = t("Loading")
 
     blockVersionStatusEl.value = await adminService.findVersion()
+  }
+
+  async function loadNews() {
+    blockVersionStatusEl.value = t("Loading")
+
+    blockNewsStatusEl.value = await adminService.findAnnouncements()
+  }
+
+  async function loadSupport() {
+    blockSupportStatusEl.value = t("Loading")
+
+    blockSupportStatusEl.value = await adminService.findSupport()
   }
 
   const blockUsers = ref(null)
@@ -88,5 +102,9 @@ export function useIndexBlocks() {
     blockPlatform,
     blockChamilo,
     loadBlocks,
+    blockNewsStatusEl,
+    loadNews,
+    blockSupportStatusEl,
+    loadSupport,
   }
 }

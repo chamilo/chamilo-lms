@@ -25,6 +25,7 @@ use DateTimeZone;
 use Doctrine\Migrations\AbstractMigration;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 abstract class AbstractMigrationChamilo extends AbstractMigration
@@ -370,5 +371,35 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         }
 
         return $selectedValue;
+    }
+
+    private function generateFilePath(string $filename): string
+    {
+        $cacheDir = $this->container->get('kernel')->getCacheDir();
+
+        return $cacheDir.'/migration_'.$filename;
+    }
+
+    protected function writeFile(string $filename, string $content): void
+    {
+        $fullFilename = $this->generateFilePath($filename);
+
+        $fs = new Filesystem();
+        $fs->dumpFile($fullFilename, $content);
+    }
+
+    protected function readFile(string $filename): string
+    {
+        $fullFilename = $this->generateFilePath($filename);
+
+        return file_get_contents($fullFilename);
+    }
+
+    protected function removeFile(string $filename): void
+    {
+        $fullFilename = $this->generateFilePath($filename);
+
+        $fs = new Filesystem();
+        $fs->remove($fullFilename);
     }
 }

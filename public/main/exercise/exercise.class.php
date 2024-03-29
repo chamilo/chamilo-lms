@@ -692,7 +692,7 @@ class Exercise
                 if (!empty($extraFields)) {
                     $extraFieldValue = new ExtraFieldValue('question');
                 }
-                while ($question = Database::fetch_array($result, 'ASSOC')) {
+                while ($question = Database::fetch_assoc($result)) {
                     /** @var Question $objQuestionTmp */
                     $objQuestionTmp = Question::read($question['iid']);
                     $category_labels = '';
@@ -3090,7 +3090,7 @@ class Exercise
         $result = Database::query($sql_track);
         $new_array = [];
         if (Database::num_rows($result) > 0) {
-            $new_array = Database::fetch_array($result, 'ASSOC');
+            $new_array = Database::fetch_assoc($result);
             $new_array['num_exe'] = Database::num_rows($result);
         }
 
@@ -4349,7 +4349,7 @@ class Exercise
                                         exe_id = $exeId AND
                                         question_id = $questionId ";
                             $result = Database::query($sql);
-                            $resultData = Database::fetch_array($result, 'ASSOC');
+                            $resultData = Database::fetch_assoc($result);
                             $answer = $resultData['answer'];
                             $questionScore = $resultData['marks'];
                         }
@@ -4462,7 +4462,7 @@ class Exercise
                         $result = Database::query($sql);
                         $options = [];
                         $correctAnswers = [];
-                        while ($row = Database::fetch_array($result, 'ASSOC')) {
+                        while ($row = Database::fetch_assoc($result)) {
                             $options[] = $row;
                             $correctAnswers[$row['correct']] = $row['answer'];
                         }
@@ -4844,7 +4844,7 @@ class Exercise
                                         hotspot_answer_id = '1'";
                         // By default we take 1 because it's a delineation
                         $resq = Database::query($query);
-                        $row = Database::fetch_array($resq, 'ASSOC');
+                        $row = Database::fetch_assoc($resq);
 
                         $choice = $row['hotspot_correct'];
                         $user_answer = $row['hotspot_coordinate'];
@@ -7115,7 +7115,7 @@ class Exercise
         $result = Database::query($sql_track);
         $new_array = [];
         if (Database::num_rows($result) > 0) {
-            $new_array = Database::fetch_array($result, 'ASSOC');
+            $new_array = Database::fetch_assoc($result);
             $start_date = api_get_utc_datetime($new_array['start_date'], true);
             $end_date = api_get_utc_datetime($new_array['exe_date'], true);
             $new_array['duration_formatted'] = '';
@@ -7314,7 +7314,7 @@ class Exercise
             $result = Database::query($sql);
             $list = [];
             if (Database::num_rows($result)) {
-                while ($row = Database::fetch_array($result, 'ASSOC')) {
+                while ($row = Database::fetch_assoc($result)) {
                     $list[$row['category_id']] = $row;
                 }
 
@@ -8035,7 +8035,7 @@ class Exercise
         $result = Database::query($sql);
 
         $rows = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($result)) {
             $rows[] = $row;
         }
 
@@ -8084,7 +8084,7 @@ class Exercise
         }
         $result = Database::query($sql);
         $rows = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($result)) {
             $rows[] = $row;
         }
 
@@ -8674,7 +8674,7 @@ class Exercise
         $bestResult = 0;
         $sumResult = 0;
         $result = Database::query($sql);
-        while ($data = Database::fetch_array($result, 'ASSOC')) {
+        while ($data = Database::fetch_assoc($result)) {
             // Only take into account users in the current student list.
             if (!empty($studentIdList)) {
                 if (!in_array($data['exe_user_id'], $studentIdList)) {

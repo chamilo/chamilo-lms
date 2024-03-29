@@ -164,7 +164,7 @@ class LegalManager
                 ORDER BY version DESC
                 LIMIT 1 ";
         $result = Database::query($sql);
-        $result = Database::fetch_array($result, 'ASSOC');
+        $result = Database::fetch_assoc($result);
 
         if (isset($result['content'])) {
             $result['content'] = self::replaceTags($result['content']);
@@ -351,7 +351,7 @@ class LegalManager
                 FROM $table
                 ORDER BY id DESC ";
         $result = Database::query($sql);
-        $url = Database::fetch_array($result, 'ASSOC');
+        $url = Database::fetch_assoc($result);
         $result = $url['count_result'];
 
         return $result;

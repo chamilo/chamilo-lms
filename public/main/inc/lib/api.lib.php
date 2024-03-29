@@ -1983,7 +1983,7 @@ function api_get_anonymous_id()
                 $login
             );
         } else {
-            $row = Database::fetch_array($result, 'ASSOC');
+            $row = Database::fetch_assoc($result);
 
             return $row['id'];
         }
@@ -1995,7 +1995,7 @@ function api_get_anonymous_id()
             WHERE status = ".ANONYMOUS." ";
     $res = Database::query($sql);
     if (Database::num_rows($res) > 0) {
-        $row = Database::fetch_array($res, 'ASSOC');
+        $row = Database::fetch_assoc($res);
 
         return $row['id'];
     }
@@ -2490,7 +2490,7 @@ function api_get_session_visibility(
         return SESSION_INVISIBLE;
     }
 
-    $row = Database::fetch_array($result, 'ASSOC');
+    $row = Database::fetch_assoc($result);
     $visibility = $row['visibility'];
 
     // I don't care the session visibility.
@@ -3616,7 +3616,7 @@ function api_get_languages()
             ORDER BY original_name ASC";
     $result = Database::query($sql);
     $languages = [];
-    while ($row = Database::fetch_array($result, 'ASSOC')) {
+    while ($row = Database::fetch_assoc($result)) {
         $languages[$row['isocode']] = $row['original_name'];
     }
 
@@ -4420,7 +4420,7 @@ function api_get_settings_options($var)
             ORDER BY id";
     $result = Database::query($sql);
     $settings_options_array = [];
-    while ($row = Database::fetch_array($result, 'ASSOC')) {
+    while ($row = Database::fetch_assoc($result)) {
         $settings_options_array[] = $row;
     }
 
@@ -5184,7 +5184,7 @@ function api_get_access_url_from_user($user_id)
             WHERE user_id = ".$user_id;
     $result = Database::query($sql);
     $list = [];
-    while ($row = Database::fetch_array($result, 'ASSOC')) {
+    while ($row = Database::fetch_assoc($result)) {
         $list[] = $row['access_url_id'];
     }
 
@@ -5395,7 +5395,7 @@ function api_get_tool_information_by_name($name)
                 WHERE c_id = $course_id  AND tool_id = '".$tool."' ";
         $rs = Database::query($sql);
 
-        return Database::fetch_array($rs, 'ASSOC');
+        return Database::fetch_assoc($rs);
     }
 
     return [];

@@ -36,7 +36,7 @@ if (!empty($invitationcode) || !api_is_allowed_to_edit()) {
         api_not_allowed(true, get_lang('Wrong invitation code'));
     }
 
-    $survey_invitation = Database::fetch_array($result, 'ASSOC');
+    $survey_invitation = Database::fetch_assoc($result);
     if ($survey_invitation) {
         $surveyId = (int) $survey_invitation['survey_id'];
     }

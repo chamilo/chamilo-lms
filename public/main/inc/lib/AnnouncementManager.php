@@ -1000,7 +1000,7 @@ class AnnouncementManager
         $num_rows = Database::num_rows($rs);
         $result = [];
         if ($num_rows > 0) {
-            while ($row = Database::fetch_array($rs, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($rs)) {
                 if (empty($row['c_id'])) {
                     continue;
                 }
@@ -1155,7 +1155,7 @@ class AnnouncementManager
         $result = Database::query($sql);
         $repo = Container::getAnnouncementAttachmentRepository();
         if (0 != Database::num_rows($result)) {
-            $row = Database::fetch_array($result, 'ASSOC');
+            $row = Database::fetch_assoc($result);
         }
 
         return $row;

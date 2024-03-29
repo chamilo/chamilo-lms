@@ -357,7 +357,7 @@ class Evaluation implements GradebookItem
                 $sql = 'SELECT weight from '.$tbl_grade_evaluations.'
                         WHERE id='.$arreval['id'];
                 $rs = Database::query($sql);
-                $row_old_weight = Database::fetch_array($rs, 'ASSOC');
+                $row_old_weight = Database::fetch_assoc($rs);
                 $current_date = api_get_utc_datetime();
                 $params = [
                     'id_linkeval_log' => $arreval['id'],

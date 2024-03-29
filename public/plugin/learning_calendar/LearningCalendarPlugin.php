@@ -295,13 +295,13 @@ class LearningCalendarPlugin extends Plugin
         $result = Database::query($sql);
 
         if ($getCount) {
-            $row = Database::fetch_array($result, 'ASSOC');
+            $row = Database::fetch_assoc($result);
 
             return $row['count'];
         }
 
         $list = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($result)) {
             $list[] = $row;
         }
 
@@ -329,7 +329,7 @@ class LearningCalendarPlugin extends Plugin
         $sql = "SELECT start_date FROM learning_calendar_events
                 WHERE calendar_id = $calendarId ORDER BY start_date LIMIT 1";
         $result = Database::query($sql);
-        $row = Database::fetch_array($result, 'ASSOC');
+        $row = Database::fetch_assoc($result);
 
         return $row['start_date'];
     }
@@ -363,7 +363,7 @@ class LearningCalendarPlugin extends Plugin
                 WHERE calendar_id = $calendarId";
         $result = Database::query($sql);
         $list = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($result)) {
             $userInfo = api_get_user_info($row['user_id']);
             $userInfo['exam'] = 'exam';
             $list[] = $userInfo;
@@ -383,7 +383,7 @@ class LearningCalendarPlugin extends Plugin
         $sql = "SELECT count(id) as count FROM learning_calendar_user
                 WHERE calendar_id = $calendarId";
         $result = Database::query($sql);
-        $row = Database::fetch_array($result, 'ASSOC');
+        $row = Database::fetch_assoc($result);
 
         return (int) $row['count'];
     }
@@ -446,7 +446,7 @@ class LearningCalendarPlugin extends Plugin
         $sql = "SELECT * FROM learning_calendar WHERE id = $calendarId";
         $result = Database::query($sql);
 
-        return Database::fetch_array($result, 'ASSOC');
+        return Database::fetch_assoc($result);
     }
 
     /**
@@ -460,7 +460,7 @@ class LearningCalendarPlugin extends Plugin
         $sql = "SELECT * FROM learning_calendar_user WHERE user_id = $userId";
         $result = Database::query($sql);
 
-        return Database::fetch_array($result, 'ASSOC');
+        return Database::fetch_assoc($result);
     }
 
     /**
@@ -714,7 +714,7 @@ class LearningCalendarPlugin extends Plugin
         $result = Database::query($sql);
         $list = [];
         if (Database::num_rows($result)) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 $list[$row['id']] = $row;
             }
         }
@@ -792,7 +792,7 @@ class LearningCalendarPlugin extends Plugin
         $result = Database::query($sql);
 
         if (Database::num_rows($result)) {
-            $row = Database::fetch_array($result, 'ASSOC');
+            $row = Database::fetch_assoc($result);
 
             return $row['count'];
         }
@@ -935,7 +935,7 @@ class LearningCalendarPlugin extends Plugin
         if (!empty($newCalendarId)) {
             $sql = "SELECT * FROM learning_calendar_events WHERE calendar_id = $calendarId";
             $result = Database::query($sql);
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 unset($row['id']);
                 $row['calendar_id'] = $newCalendarId;
                 Database::insert('learning_calendar_events', $row);
@@ -991,7 +991,7 @@ class LearningCalendarPlugin extends Plugin
         $result = Database::query($sql);
 
         if (Database::num_rows($result)) {
-            $row = Database::fetch_array($result, 'ASSOC');
+            $row = Database::fetch_assoc($result);
             $currentType = $row['type'];
             $currentType++;
             if ($currentType > count($eventTypeList)) {
@@ -1036,7 +1036,7 @@ class LearningCalendarPlugin extends Plugin
         $result = Database::query($sql);
 
         $list = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($result)) {
             $list[] = [
                 'start_date' => $row['start_date'],
                 'end_date' => $row['start_date'],

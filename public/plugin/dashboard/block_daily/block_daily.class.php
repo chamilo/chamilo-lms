@@ -170,7 +170,7 @@ class BlockDaily extends Block
             $attendance = [];
             $attendances = [];
 
-            while ($row = Database::fetch_array($rs, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($rs)) {
                 $attendance['done'] = $row['attendance_qualify_max'];
                 $attendance['id'] = $row['id'];
                 //$attendance['name'] = $row['name'];

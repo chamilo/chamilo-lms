@@ -399,7 +399,7 @@ switch ($report) {
 
             $sessionCount = 0;
             $numberUsers = 0;
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 $sessions[] = $row;
                 $numberUsers += $row['nbr_users'];
                 $sessionCount++;

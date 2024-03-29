@@ -236,16 +236,16 @@ class Chat extends Model
         }
 
         $sql = "SELECT * FROM ".$this->table."
-                WHERE 
+                WHERE
                     (
-                        to_user = $toUserId AND 
+                        to_user = $toUserId AND
                         from_user = $fromUserId
                     )
                     OR
                     (
-                        from_user = $toUserId AND 
+                        from_user = $toUserId AND
                         to_user =  $fromUserId
-                    )  
+                    )
                 $orderBy
                 LIMIT $start, $end
                 ";
@@ -305,7 +305,7 @@ class Chat extends Model
         $result = Database::query($sql);
 
         $chatList = [];
-        while ($chat = Database::fetch_array($result, 'ASSOC')) {
+        while ($chat = Database::fetch_assoc($result)) {
             $chatList[$chat['from_user']][] = $chat;
         }
 

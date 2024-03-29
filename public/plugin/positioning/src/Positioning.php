@@ -81,7 +81,7 @@ class Positioning extends Plugin
         $result = Database::query($sql);
 
         if (Database::num_rows($result) > 0) {
-            return Database::fetch_array($result, 'ASSOC');
+            return Database::fetch_assoc($result);
         }
 
         return false;
@@ -227,7 +227,7 @@ class Positioning extends Plugin
         $result = Database::query($sql);
 
         if (Database::num_rows($result) > 0) {
-            return Database::fetch_array($result, 'ASSOC');
+            return Database::fetch_assoc($result);
         }
 
         return false;

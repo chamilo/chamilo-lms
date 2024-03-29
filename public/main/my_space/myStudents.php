@@ -672,7 +672,7 @@ $sql = 'SELECT session_id, c_id
         WHERE user_id='.$studentId;
 $rs = Database::query($sql);
 $tmp_sessions = [];
-while ($row = Database::fetch_array($rs, 'ASSOC')) {
+while ($row = Database::fetch_assoc($rs)) {
     $tmp_sessions[] = $row['session_id'];
     if ($drh_can_access_all_courses) {
         if (in_array($row['session_id'], $tmp_sessions)) {

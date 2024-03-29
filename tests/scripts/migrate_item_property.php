@@ -54,7 +54,7 @@ $documentManager = $em->getRepository('ChamiloCourseBundle:CDocument');
 $contextManager = Container::$container->get('sonata.classification.manager.context');
 $defaultContext = $contextManager->findOneBy(['id' => 'default']);
 
-while ($row = Database::fetch_array($result, 'ASSOC')) {
+while ($row = Database::fetch_assoc($result)) {
     $itemIid = $row['iid'];
     $courseId = $row['c_id'];
     $sessionId = $row['session_id'];

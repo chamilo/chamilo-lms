@@ -62,7 +62,7 @@ foreach ($urlList as $url) {
     $message = 'Checking requests from '.strip_tags(Display::dateToStringAgoAndLongDate($dateToString))."\n";
 
     $result = Database::query($sql);
-    while ($user = Database::fetch_array($result, 'ASSOC')) {
+    while ($user = Database::fetch_assoc($result)) {
         $userId = $user['id'];
         $userInfo = api_get_user_info($userId);
         if ($userInfo) {

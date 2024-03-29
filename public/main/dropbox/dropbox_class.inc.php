@@ -188,7 +188,7 @@ class Dropbox_Work
                 FROM '.Database::get_course_table(TABLE_DROPBOX_FILE)."
                 WHERE c_id = $course_id AND id = ".$id.'';
         $result = Database::query($sql);
-        $res = Database::fetch_array($result, 'ASSOC');
+        $res = Database::fetch_assoc($result);
 
         // Check if uploader is still in Chamilo system
         $uploader_id = stripslashes($res['uploader_id']);
@@ -404,7 +404,7 @@ class Dropbox_SentWork extends Dropbox_Work
                 FROM '.Database::get_course_table(TABLE_DROPBOX_POST)."
                 WHERE c_id = $course_id AND file_id = ".intval($id);
         $result = Database::query($sql);
-        while ($res = Database::fetch_array($result, 'ASSOC')) {
+        while ($res = Database::fetch_assoc($result)) {
             // Check for deleted users
             $dest_user_id = $res['dest_user_id'];
             $user_info = api_get_user_info($dest_user_id);

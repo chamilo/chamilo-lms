@@ -58,7 +58,7 @@ class Attendance
         $result = Database::query($sql);
         $data = [];
         if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 $data[$row['iid']] = $row;
             }
         }
@@ -1450,7 +1450,7 @@ class Attendance
         $rs = Database::query($sql);
         $data = [];
         if (Database::num_rows($rs) > 0) {
-            while ($row = Database::fetch_array($rs, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($rs)) {
                 $row['db_date_time'] = $row['date_time'];
                 $row['date_time'] = api_get_local_time($row['date_time']);
                 $row['date'] = api_format_date($row['date_time'], DATE_FORMAT_SHORT);
@@ -2263,7 +2263,7 @@ class Attendance
 
         $rs = Database::query($sql);
         // get info from sessions
-        while ($row = Database::fetch_array($rs, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($rs)) {
             $courseId = $row['c_id'];
             $sessionId = $row['session_id'];
             $courseItem = api_get_course_info_by_id($courseId);

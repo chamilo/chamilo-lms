@@ -26,7 +26,7 @@ class CourseCategory
             $result = Database::query($sql);
 
             if (Database::num_rows($result)) {
-                $category = Database::fetch_array($result, 'ASSOC');
+                $category = Database::fetch_assoc($result);
                 if ($category) {
                     // Get access url id
                     $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
@@ -59,7 +59,7 @@ class CourseCategory
         $sql = "SELECT * FROM $table WHERE id = $categoryId";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
-            $category = Database::fetch_array($result, 'ASSOC');
+            $category = Database::fetch_assoc($result);
             if ($category) {
                 // Get access url id
                 $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
@@ -301,7 +301,7 @@ class CourseCategory
                 WHERE parent_id = '$categoryCode'";
         $result = Database::query($sql);
         $children = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($result)) {
             $children[] = $row;
             $subChildren = self::getChildren($row['code']);
             $children = array_merge($children, $subChildren);
@@ -351,7 +351,7 @@ class CourseCategory
 
         $result = Database::query($sql);
         $children = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($result)) {
             $parent = self::getCategory($row['parent_id']);
             $children[] = $row;
             $subChildren = self::getParents($parent ? $parent['code'] : null);

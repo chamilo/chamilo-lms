@@ -519,7 +519,7 @@ class GradebookUtils
                 ON c.id = l.c_id
                 WHERE l.id='.intval($id_link).' OR l.category_id='.intval($id_link);
         $res = Database::query($sql);
-        $array = Database::fetch_array($res, 'ASSOC');
+        $array = Database::fetch_assoc($res);
 
         return $array['id'];
     }

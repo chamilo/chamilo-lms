@@ -188,7 +188,7 @@ switch ($action) {
                         gradebooks_to_validate_in_dependence
                     FROM $table WHERE id = ".$categoryId;
             $result = Database::query($sql);
-            $categoryData = Database::fetch_array($result, 'ASSOC');
+            $categoryData = Database::fetch_assoc($result);
 
             $options = [];
             if (!empty($categoryData['depends'])) {

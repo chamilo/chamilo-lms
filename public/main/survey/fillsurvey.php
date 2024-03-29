@@ -95,7 +95,7 @@ if ('' != $surveyCode) {
     $sql = "SELECT anonymous FROM $table_survey
             WHERE c_id = $courseId AND code ='".$surveyCode."'";
     $resultAnonymous = Database::query($sql);
-    $rowAnonymous = Database::fetch_array($resultAnonymous, 'ASSOC');
+    $rowAnonymous = Database::fetch_assoc($resultAnonymous);
     // If is anonymous and is not allowed to take the survey to anonymous users, forbid access:
     if (!isset($rowAnonymous['anonymous']) ||
         (0 == $rowAnonymous['anonymous'] && api_is_anonymous()) ||
@@ -171,7 +171,7 @@ if (Database::num_rows($result) < 1) {
     api_not_allowed(true, get_lang('Wrong invitation code'));
 }
 
-$survey_invitation = Database::fetch_array($result, 'ASSOC');
+$survey_invitation = Database::fetch_assoc($result);
 $surveyUserFromSession = Session::read('surveyuser');
 // Now we check if the user already filled the survey
 if (!isset($_POST['finish_survey']) &&
@@ -213,7 +213,7 @@ if (Database::num_rows($result) > 1) {
 
         echo '<form id="language" name="language" method="POST" action="'.$frmLangUrl.'">';
         echo '<select name="language">';
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($result)) {
             echo '<option value="'.$row['iid'].'">'.$row['lang'].'</option>';
         }
         echo '</select>';
@@ -311,7 +311,7 @@ if (count($_POST) > 0) {
                                 WHERE
                                     iid='".intval($value)."'";
                         $result = Database::query($sql);
-                        $row = Database::fetch_array($result, 'ASSOC');
+                        $row = Database::fetch_assoc($result);
                         if ($row) {
                             $option_value = $row['option_text'];
                         }
@@ -354,7 +354,7 @@ if (count($_POST) > 0) {
         $result = Database::query($sql);*/
         // There is only one question type for conditional surveys
         $types = [];
-        //while ($row = Database::fetch_array($result, 'ASSOC')) {
+        //while ($row = Database::fetch_assoc($result)) {
         $questions = $survey->getQuestions();
         $questionList = [];
         foreach ($questions as $question) {
@@ -377,7 +377,7 @@ if (count($_POST) > 0) {
                 $sql = "SELECT value FROM $table_survey_question_option
                         WHERE iid='".intval($value)."'";
                 $result = Database::query($sql);
-                $row = Database::fetch_array($result, 'ASSOC');
+                $row = Database::fetch_assoc($result);
                 $option_value = $row['value'];
                 $survey_question_answer = $value;
 
@@ -687,7 +687,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                         survey_id = '".$surveyId."'
                     ORDER BY sort ASC";
             $result = Database::query($sql);
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 if (1 == $survey->getOneQuestionPerPage()) {
                     if ('pagebreak' !== $row['type']) {
                         $paged_questions[$counter][] = $row['iid'];
@@ -777,7 +777,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
             $counter = 0;
             $limit = 0;
             $questions = [];
-            while ($row = Database :: fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 // If the type is not a pagebreak we store it in the $questions array
                 if ('pagebreak' !== $row['type']) {
                     $sort = $row['sort'];
@@ -985,7 +985,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                                  ORDER BY sort ASC";
                         $result = Database::query($sql);
                         $counter = 0;
-                        while ($row = Database::fetch_array($result, 'ASSOC')) {
+                        while ($row = Database::fetch_assoc($result)) {
                             if (1 == $survey->getOneQuestionPerPage()) {
                                 $paged_questions_sec[$counter][] = $row['question_id'];
                                 $counter++;
@@ -1035,7 +1035,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                         $counter = 0;
                         $limit = 0;
                         $questions = [];
-                        while ($row = Database::fetch_array($result, 'ASSOC')) {
+                        while ($row = Database::fetch_assoc($result)) {
                             // If the type is not a pagebreak we store it in the $questions array
                             if ('pagebreak' !== $row['type']) {
                                 $questions[$row['sort']]['question_id'] = $row['question_id'];
@@ -1086,7 +1086,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                         ORDER ".$order_sql." ";
                 $result = Database::query($sql);
                 $counter = 0;
-                while ($row = Database::fetch_array($result, 'ASSOC')) {
+                while ($row = Database::fetch_assoc($result)) {
                     if (1 == $survey->getOneQuestionPerPage()) {
                         $paged_questions[$counter][] = $row['question_id'];
                         $counter++;
@@ -1149,7 +1149,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
                 $counter = 0;
                 $limit = 0;
                 $questions = [];
-                while ($row = Database :: fetch_array($result, 'ASSOC')) {
+                while ($row = Database::fetch_assoc($result)) {
                     // If the type is not a pagebreak we store it in the $questions array
                     if ('pagebreak' !== $row['type']) {
                         $questions[$row['sort']]['question_id'] = $row['question_id'];

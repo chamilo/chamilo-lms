@@ -1179,7 +1179,7 @@ class Agenda
                         WHERE id = $id AND user = ".api_get_user_id();
                 $result = Database::query($sql);
                 if (Database::num_rows($result)) {
-                    $event = Database::fetch_array($result, 'ASSOC');
+                    $event = Database::fetch_assoc($result);
                     $event['description'] = $event['text'];
                     $event['content'] = $event['text'];
                     $event['start_date'] = $event['date'];
@@ -1250,7 +1250,7 @@ class Agenda
         $result = Database::query($sql);
         $my_events = [];
         if (Database::num_rows($result)) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 $event = [];
                 $event['id'] = 'personal_'.$row['id'];
                 $event['title'] = $row['title'];
@@ -1757,7 +1757,7 @@ class Agenda
         $result = Database::query($sql);
         $my_events = [];
         if (Database::num_rows($result)) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 $event = [];
                 $event['id'] = 'platform_'.$row['id'];
                 $event['title'] = $row['title'];
@@ -2315,7 +2315,7 @@ class Agenda
                 ";
         $result = Database::query($sql);
         if (0 != Database::num_rows($result)) {
-            $row = Database::fetch_array($result, 'ASSOC');
+            $row = Database::fetch_assoc($result);
         }
 
         return $row;
@@ -2441,7 +2441,7 @@ class Agenda
                                 parent_event_id = ".$eventId;
                     $result = Database::query($sql);
                     if (Database::num_rows($result)) {
-                        while ($row = Database::fetch_array($result, 'ASSOC')) {
+                        while ($row = Database::fetch_assoc($result)) {
                             $events[] = $row;
                         }
                     }
@@ -2833,7 +2833,7 @@ class Agenda
             }
             $result = Database::query($sqlquery);
 
-            while ($item = Database::fetch_array($result, 'ASSOC')) {
+            while ($item = Database::fetch_assoc($result)) {
                 $agendaday = -1;
                 if (!empty($item['start_date'])) {
                     $item['start_date'] = api_get_local_time(
@@ -3072,7 +3072,7 @@ class Agenda
         }
 
         $result = Database::query($sql);
-        while ($item = Database::fetch_array($result, 'ASSOC')) {
+        while ($item = Database::fetch_assoc($result)) {
             $time_minute = api_convert_and_format_date(
                 $item['date'],
                 TIME_NO_SEC_FORMAT

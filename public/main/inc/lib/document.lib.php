@@ -592,7 +592,7 @@ class DocumentManager
 
             $result = Database::query($sql);
             if ($result && 0 != Database::num_rows($result)) {
-                while ($row = Database::fetch_array($result, 'ASSOC')) {
+                while ($row = Database::fetch_assoc($result)) {
                     if (self::is_folder_to_avoid($row['path'])) {
                         continue;
                     }
@@ -647,7 +647,7 @@ class DocumentManager
                         l.c_id = $courseId ";
             $result = Database::query($sql);
             $visibleFolders = [];
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 $visibleFolders[$row['id']] = $row['path'];
             }
 
@@ -670,7 +670,7 @@ class DocumentManager
                         l.c_id = $courseId ";
             $result = Database::query($sql);
             $invisibleFolders = [];
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 //get visible folders in the invisible ones -> they are invisible too
                 $sql = "SELECT DISTINCT docs.iid, n.path
                         FROM resource_node AS n
@@ -685,7 +685,7 @@ class DocumentManager
                             $condition_session AND
                             l.c_id = $courseId ";
                 $folder_in_invisible_result = Database::query($sql);
-                while ($folders_in_invisible_folder = Database::fetch_array($folder_in_invisible_result, 'ASSOC')) {
+                while ($folders_in_invisible_folder = Database::fetch_assoc($folder_in_invisible_result)) {
                     $invisibleFolders[$folders_in_invisible_folder['id']] = $folders_in_invisible_folder['path'];
                 }
             }
@@ -899,7 +899,7 @@ class DocumentManager
         $result = Database::query($sql);
         $courseParam = '&cid='.$course_id.'&id='.$id.'&sid='.$session_id.'&gid='.$groupId;
         if ($result && 1 == Database::num_rows($result)) {
-            $row = Database::fetch_array($result, 'ASSOC');
+            $row = Database::fetch_assoc($result);
 
             //@todo need to clarify the name of the URLs not nice right now
             $url_path = urlencode($row['path']);
@@ -1069,7 +1069,7 @@ class DocumentManager
         $result = Database::query($sql);
         $is_visible = false;
         if (Database::num_rows($result) > 0) {
-            $row = Database::fetch_array($result, 'ASSOC');
+            $row = Database::fetch_assoc($result);
 
             $em = Database::getManager();
 

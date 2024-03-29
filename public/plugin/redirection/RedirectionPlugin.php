@@ -83,7 +83,7 @@ class RedirectionPlugin extends Plugin
         $sql = "SELECT * FROM plugin_redirection WHERE user_id = $userId LIMIT 1";
         $result = Database::query($sql);
 
-        return Database::fetch_array($result, 'ASSOC');
+        return Database::fetch_assoc($result);
     }
 
     /**

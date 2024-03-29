@@ -91,7 +91,7 @@ function get_work_data_by_path($path, $courseId = 0)
     $result = Database::query($sql);
     $return = [];
     if (Database::num_rows($result)) {
-        $return = Database::fetch_array($result, 'ASSOC');
+        $return = Database::fetch_assoc($result);
     }
 
     return $return;
@@ -211,7 +211,7 @@ function get_work_assignment_by_id($id, $courseId = 0)
     $result = Database::query($sql);
     $return = [];
     if (Database::num_rows($result)) {
-        $return = Database::fetch_array($result, 'ASSOC');
+        $return = Database::fetch_assoc($result);
     }
 
     return $return;
@@ -656,7 +656,7 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
     $sql = "SELECT title, url FROM $tbl_work
             WHERE iid ='".$move_file."'";
     $result = Database::query($sql);
-    $row = Database::fetch_array($result, 'ASSOC');
+    $row = Database::fetch_assoc($result);
     $title = empty($row['title']) ? basename($row['url']) : $row['title'];
 
     $form = new FormValidator(
@@ -1262,7 +1262,7 @@ function getWorkListStudent(
 
     $studentPublications = $qb->getQuery()->getResult();
     $urlOthers = api_get_path(WEB_CODE_PATH).'work/work_list_others.php?'.api_get_cidreq().'&id=';
-    //while ($work = Database::fetch_array($result, 'ASSOC')) {
+    //while ($work = Database::fetch_assoc($result)) {
     $icon = Display::getMdiIcon(ObjectIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL);
 
     /** @var CStudentPublication $studentPublication */
@@ -1460,7 +1460,7 @@ function getAllWorkListStudent(
     }
 
     $works = [];
-    while ($work = Database::fetch_array($result, 'ASSOC')) {
+    while ($work = Database::fetch_assoc($result)) {
         $courseId = $work['c_id'];
         $courseInfo = $courseList[$work['c_id']];
         $sessionId = $work['session_id'];
@@ -1621,7 +1621,7 @@ function getWorkListTeacher(
         $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq();
         $blockEdition = ('true' === api_get_setting('work.block_student_publication_edition'));
 
-        //while ($work = Database::fetch_array($result, 'ASSOC')) {
+        //while ($work = Database::fetch_assoc($result)) {
         $icon = Display::getMdiIcon(ObjectIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL);
         /** @var CStudentPublication $studentPublication */
         foreach ($studentPublications as $studentPublication) {
@@ -1861,7 +1861,7 @@ function get_work_user_list_from_documents(
     $allowEdition = 1 == api_get_course_setting('student_delete_own_publication');
 
     $workList = [];
-    while ($row = Database::fetch_array($result, 'ASSOC')) {
+    while ($row = Database::fetch_assoc($result)) {
         $userId = $row['user_id'];
         $documentId = $row['document_id'];
         $itemId = $row['iid'];
@@ -2102,7 +2102,7 @@ function get_work_user_list(
         $result = Database::query($sql);*/
         $works = [];
         /*if ($getCount) {
-            $work = Database::fetch_array($result, 'ASSOC');
+            $work = Database::fetch_assoc($result);
             if ($work) {
                 return (int) $work['count'];
             }
@@ -2603,7 +2603,7 @@ function getAllWork(
     $result = Database::query($sql);
     $works = [];
     if ($getCount) {
-        $work = Database::fetch_array($result, 'ASSOC');
+        $work = Database::fetch_assoc($result);
         if ($work) {
             return (int) $work['count'];
         }
@@ -2635,7 +2635,7 @@ function getAllWork(
     $loading = Display::getMdiIcon('loading', 'animate-spin');
     $qualification_exists = true;
     $repo = Container::getStudentPublicationRepository();
-    while ($work = Database::fetch_array($result, 'ASSOC')) {
+    while ($work = Database::fetch_assoc($result)) {
         $courseId = $work['c_id'];
         $courseInfo = $courseList[$work['c_id']];
         $sessionId = $work['session_id'];
@@ -3389,7 +3389,7 @@ function getDocumentToWorkPerUser($documentId, $workId, $courseId, $sessionId, $
     $result = Database::query($sql);
     $workInfo = [];
     if (Database::num_rows($result)) {
-        $workInfo = Database::fetch_array($result, 'ASSOC');
+        $workInfo = Database::fetch_assoc($result);
     }
 
     return $workInfo;
@@ -3866,7 +3866,7 @@ function getLastWorkStudentFromParent(
 
     $result = Database::query($sql);
     if (Database::num_rows($result)) {
-        return Database::fetch_array($result, 'ASSOC');
+        return Database::fetch_assoc($result);
     }
 
     return [];
@@ -3919,7 +3919,7 @@ function getLastWorkStudentFromParentByUser(
             ';
     $result = Database::query($sql);
     if (Database::num_rows($result)) {
-        $work = Database::fetch_array($result, 'ASSOC');
+        $work = Database::fetch_assoc($result);
         $work['qualification_rounded'] = formatWorkScore($work['qualification'], $parentInfo['qualification']);
 
         return $work;
@@ -4945,7 +4945,7 @@ function agendaExistsForWork($workId, $courseInfo)
             WHERE c_id = $courseId AND publication_id = ".$workId;
     $res = Database::query($sql);
     if (Database::num_rows($res)) {
-        $row = Database::fetch_array($res, 'ASSOC');
+        $row = Database::fetch_assoc($res);
         if (!empty($row['add_to_calendar'])) {
             return $row['add_to_calendar'];
         }

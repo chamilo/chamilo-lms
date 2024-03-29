@@ -2463,7 +2463,7 @@ class CourseRestorer
                                         c_id = ".$this->destination_course_id." AND
                                         survey_id='".self::DBUTF8escapestring(Database::result($result_check, 0, 0))."'";
                             $result = Database::query($sql);
-                            $survey_data = Database::fetch_array($result, 'ASSOC');
+                            $survey_data = Database::fetch_assoc($result);
 
                             // if the survey is shared => also delete the shared content
                             if (isset($survey_data['survey_share']) && is_numeric($survey_data['survey_share'])) {

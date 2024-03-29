@@ -76,7 +76,7 @@ class CourseLegalPlugin extends Plugin
         $result = Database::query($sql);
         $data = [];
         if (Database::num_rows($result) > 0) {
-            $data = Database::fetch_array($result, 'ASSOC');
+            $data = Database::fetch_assoc($result);
         }
 
         return $data;

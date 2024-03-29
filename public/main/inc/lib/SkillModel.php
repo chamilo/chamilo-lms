@@ -330,7 +330,7 @@ class SkillModel extends Model
         $result = Database::query($sql);
         $skills = [];
         if (Database::num_rows($result)) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 $skillId = $row['id'];
                 $skill = $skillRepo->find($skillId);
 

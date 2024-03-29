@@ -158,7 +158,7 @@ class UrlManager
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
         $sql = "SELECT count(id) as count_result FROM $table";
         $res = Database::query($sql);
-        $url = Database::fetch_array($res, 'ASSOC');
+        $url = Database::fetch_assoc($res);
         $result = $url['count_result'];
 
         return $result;
@@ -1258,7 +1258,7 @@ class UrlManager
 
         $result = Database::query($sql);
         if ($result) {
-            $row = Database::fetch_array($result, 'ASSOC');
+            $row = Database::fetch_assoc($result);
 
             return (int) $row['count'];
         }

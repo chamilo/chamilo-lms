@@ -32,11 +32,11 @@ $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION)
 
 if (!empty($courseInfo['real_id'])) {
     $courseId = $courseInfo['real_id'];
-    $sql = "SELECT * FROM $tbl_student_publication 
+    $sql = "SELECT * FROM $tbl_student_publication
 	        WHERE c_id = $courseId AND id = $id";
     $result = Database::query($sql);
     if ($result && Database::num_rows($result)) {
-        $row = Database::fetch_array($result, 'ASSOC');
+        $row = Database::fetch_assoc($result);
         $full_file_name = $courseInfo['course_sys_path'].$row['url'];
 
         $item_info = api_get_item_property_info($courseId, 'work', $row['id']);

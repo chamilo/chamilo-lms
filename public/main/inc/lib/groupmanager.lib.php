@@ -588,7 +588,7 @@ class GroupManager
         $res = Database::query($sql);
         $group = [];
         if (Database::num_rows($res)) {
-            $group = Database::fetch_array($res, 'ASSOC');
+            $group = Database::fetch_assoc($res);
         }
 
         return $group;
@@ -783,7 +783,7 @@ class GroupManager
         $res = Database::query($sql);
         $category = [];
         if (Database::num_rows($res)) {
-            $category = Database::fetch_array($res, 'ASSOC');
+            $category = Database::fetch_assoc($res);
         }
 
         return $category;
@@ -2079,7 +2079,7 @@ class GroupManager
 
         $res = Database::query($sql);
         $groups = [];
-        while ($group = Database::fetch_array($res, 'ASSOC')) {
+        while ($group = Database::fetch_assoc($res)) {
             $groups[] = $group;
         }
 

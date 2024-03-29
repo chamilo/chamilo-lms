@@ -791,7 +791,7 @@ class Link extends Model
 
         $categoryInItemProperty = [];
         if (Database::num_rows($result)) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 $categoryInItemProperty[$row['id']] = $row;
             }
         }
@@ -1673,7 +1673,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
                 WHERE iid = $id";
         $result = Database::query($sql);
 
-        return Database::fetch_array($result, 'ASSOC');
+        return Database::fetch_assoc($result);
     }
 
     /**

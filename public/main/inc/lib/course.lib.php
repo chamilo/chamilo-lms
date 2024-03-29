@@ -238,7 +238,7 @@ class CourseManager
         $data = [];
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
-            while ($row = Database::fetch_array($res, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($res)) {
                 $data[] = $row;
             }
         }
@@ -2909,7 +2909,7 @@ class CourseManager
                     ";
                     $result = Database::query($sql);
                     if (Database::num_rows($result) > 0) {
-                        while ($result_row = Database::fetch_array($result, 'ASSOC')) {
+                        while ($result_row = Database::fetch_assoc($result)) {
                             $result_row['special_course'] = 1;
                             $course_list[] = $result_row;
                             $codes[] = $result_row['real_id'];
@@ -2940,7 +2940,7 @@ class CourseManager
         $result = Database::query($sql);
 
         if (Database::num_rows($result)) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 if (!empty($skipCourseList)) {
                     if (in_array($row['real_id'], $skipCourseList)) {
                         continue;
@@ -2963,7 +2963,7 @@ class CourseManager
                     ON (s.id = scu.session_id)
                     WHERE user_id = $user_id ";
             $r = Database::query($sql);
-            while ($row = Database::fetch_array($r, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($r)) {
                 if (!empty($skipCourseList)) {
                     if (in_array($row['real_id'], $skipCourseList)) {
                         continue;
@@ -5516,7 +5516,7 @@ class CourseManager
         $result = Database::query($sql);
         $courseAccess = [];
         if (Database::num_rows($result)) {
-            $courseAccess = Database::fetch_array($result, 'ASSOC');
+            $courseAccess = Database::fetch_assoc($result);
         }
 
         return $courseAccess;

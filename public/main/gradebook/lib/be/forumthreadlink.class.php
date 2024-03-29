@@ -167,7 +167,7 @@ class ForumThreadLink extends AbstractLink
                 $score = 0;
                 $counter = 0;
                 if (Database::num_rows($scores)) {
-                    while ($data = Database::fetch_array($scores, 'ASSOC')) {
+                    while ($data = Database::fetch_assoc($scores)) {
                         $score += $data['qualify'];
                         $counter++;
                     }
@@ -289,7 +289,7 @@ class ForumThreadLink extends AbstractLink
                     iid = '".$this->get_ref_id()."' AND
                     session_id = $sessionId ";
         $result = Database::query($sql);
-        $row = Database::fetch_array($result, 'ASSOC');
+        $row = Database::fetch_assoc($result);
 
         if ($row) {
             $forum_id = $row['forum_id'];

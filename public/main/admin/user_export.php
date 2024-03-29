@@ -170,7 +170,7 @@ if ($form->validate()) {
     }
 
     $res = Database::query($sql);
-    while ($user = Database::fetch_array($res, 'ASSOC')) {
+    while ($user = Database::fetch_assoc($res)) {
         $student_data = UserManager:: get_extra_user_data(
             $user['UserId'],
             true,

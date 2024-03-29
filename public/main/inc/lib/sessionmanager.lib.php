@@ -3497,7 +3497,7 @@ class SessionManager
             $plugin = BuyCoursesPlugin::create();
             $checker = $plugin->isEnabled();
             $sessions = [];
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 if (!isset($row['image'])) {
                     $row['image'] = '';
                 }
@@ -3806,7 +3806,7 @@ class SessionManager
 
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
-            $row = Database::fetch_array($result, 'ASSOC');
+            $row = Database::fetch_assoc($result);
             $row['course_list'] = self::get_course_list_by_session_id($sessionId);
 
             return $row;
@@ -4118,7 +4118,7 @@ class SessionManager
                 return (int) $count['count'];
             }
 
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 $courses[$row['real_id']] = $row;
             }
         }
@@ -4189,7 +4189,7 @@ class SessionManager
 		        ";
         if ($getCount) {
             $result = Database::query($sql);
-            $row = Database::fetch_array($result, 'ASSOC');
+            $row = Database::fetch_assoc($result);
 
             return $row['count'];
         }
@@ -4205,7 +4205,7 @@ class SessionManager
         $courses = [];
 
         if ($num_rows > 0) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 $courses[$row['id']] = $row;
             }
         }
@@ -4248,7 +4248,7 @@ class SessionManager
         $num_rows = Database::num_rows($result);
         $courses = [];
         if ($num_rows > 0) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 $courses[$row['id']] = $row;
             }
         }
@@ -4287,7 +4287,7 @@ class SessionManager
         $result = Database::query($sql);
         $num_rows = Database::num_rows($result);
         if ($num_rows > 0) {
-            $row = Database::fetch_array($result, 'ASSOC');
+            $row = Database::fetch_assoc($result);
 
             return $row['count'];
         }
@@ -4384,7 +4384,7 @@ class SessionManager
         }
 
         $return = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($result)) {
             $return[] = $row;
         }
 
@@ -5676,7 +5676,7 @@ class SessionManager
                                             $result = Database::query($sql);
                                             $rows = Database::num_rows($result);
                                             if ($rows > 0) {
-                                                $userCourseData = Database::fetch_array($result, 'ASSOC');
+                                                $userCourseData = Database::fetch_assoc($result);
                                                 if (!empty($userCourseData)) {
                                                     $teacherBackupList[$teacher['user_id']][$course_code] = $userCourseData;
                                                 }
@@ -5689,7 +5689,7 @@ class SessionManager
                                                     ";
 
                                             $result = Database::query($sql);
-                                            while ($groupData = Database::fetch_array($result, 'ASSOC')) {
+                                            while ($groupData = Database::fetch_assoc($result)) {
                                                 $groupBackup['user'][$teacher['user_id']][$course_code][$groupData['group_id']] = $groupData;
                                             }
 
@@ -5700,7 +5700,7 @@ class SessionManager
                                                     ";
 
                                             $result = Database::query($sql);
-                                            while ($groupData = Database::fetch_array($result, 'ASSOC')) {
+                                            while ($groupData = Database::fetch_assoc($result)) {
                                                 $groupBackup['tutor'][$teacher['user_id']][$course_code][$groupData['group_id']] = $groupData;
                                             }
 
@@ -5808,7 +5808,7 @@ class SessionManager
                                                 $result = Database::query($sql);
                                                 $rows = Database::num_rows($result);
                                                 if ($rows > 0) {
-                                                    $userCourseData = Database::fetch_array($result, 'ASSOC');
+                                                    $userCourseData = Database::fetch_assoc($result);
                                                     if (!empty($userCourseData)) {
                                                         $teacherBackupList[$teacher['user_id']][$course_code] = $userCourseData;
                                                     }
@@ -5821,7 +5821,7 @@ class SessionManager
                                                         ";
 
                                                 $result = Database::query($sql);
-                                                while ($groupData = Database::fetch_array($result, 'ASSOC')) {
+                                                while ($groupData = Database::fetch_assoc($result)) {
                                                     $groupBackup['user'][$teacher['user_id']][$course_code][$groupData['group_id']] = $groupData;
                                                 }
 
@@ -5832,7 +5832,7 @@ class SessionManager
                                                         ";
 
                                                 $result = Database::query($sql);
-                                                while ($groupData = Database::fetch_array($result, 'ASSOC')) {
+                                                while ($groupData = Database::fetch_assoc($result)) {
                                                     $groupBackup['tutor'][$teacher['user_id']][$course_code][$groupData['group_id']] = $groupData;
                                                 }
 
@@ -6634,7 +6634,7 @@ class SessionManager
                         ON (cu.c_id = c.id)
 		                WHERE src.session_id IN ('$sessionToString') AND cu.status = 1";
                 $result = Database::query($sql);
-                while ($row = Database::fetch_array($result, 'ASSOC')) {
+                while ($row = Database::fetch_assoc($result)) {
                     $teacherListId[$row['user_id']] = $row['user_id'];
                 }
             } else {
@@ -7074,7 +7074,7 @@ class SessionManager
         $result = Database::query($sql);
         $values = [];
         if (Database::num_rows($result)) {
-            $values = Database::fetch_array($result, 'ASSOC');
+            $values = Database::fetch_assoc($result);
         }
 
         return $values;

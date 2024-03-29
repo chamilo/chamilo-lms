@@ -48,7 +48,7 @@ class SocialManager extends UserManager
                 ORDER BY id ASC';
         $result = Database::query($sql);
         $friend_relation_list = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($result)) {
             $friend_relation_list[] = $row;
         }
         $count_list = count($friend_relation_list);
@@ -100,7 +100,7 @@ class SocialManager extends UserManager
         }
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
-            $row = Database::fetch_array($res, 'ASSOC');
+            $row = Database::fetch_assoc($res);
 
             return (int) $row['id'];
         } else {
@@ -176,7 +176,7 @@ class SocialManager extends UserManager
 
         $res = Database::query($sql);
         $list = [];
-        while ($row = Database::fetch_array($res, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($res)) {
             if ($load_extra_info) {
                 $userInfo = api_get_user_info($row['friend_user_id']);
                 $list[] = [
@@ -295,7 +295,7 @@ class SocialManager extends UserManager
         }
         $res = Database::query($sql);
         $list = [];
-        while ($row = Database::fetch_array($res, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($res)) {
             $list[] = $row;
         }
 
@@ -327,7 +327,7 @@ class SocialManager extends UserManager
                     msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         $list = [];
-        while ($row = Database::fetch_array($res, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($res)) {
             $list[$row['user_receiver_id']] = $row;
         }
 
@@ -359,7 +359,7 @@ class SocialManager extends UserManager
                     msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         if (Database::num_rows($res)) {
-            $row = Database::fetch_array($res, 'ASSOC');
+            $row = Database::fetch_assoc($res);
 
             return (int) $row['count'];
         }
@@ -853,7 +853,7 @@ class SocialManager extends UserManager
                 $groups = [];
                 $userGroup = new UserGroupModel();
                 $urlGroup = api_get_path(WEB_CODE_PATH).'social/group_view.php?id=';
-                while ($row = Database::fetch_array($res, 'ASSOC')) {
+                while ($row = Database::fetch_assoc($res)) {
                     $row['group_info'] = [];
                     if (!empty($row['group_id'])) {
                         if (!in_array($row['group_id'], $groups)) {

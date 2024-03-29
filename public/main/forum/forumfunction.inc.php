@@ -2588,7 +2588,7 @@ function getThreadScoreHistory($user_id, $thread_id, $opt)
     }
     $rs = Database::query($sql);
     $log = [];
-    while ($row = Database::fetch_array($rs, 'ASSOC')) {
+    while ($row = Database::fetch_assoc($rs)) {
         $log[] = $row;
     }
 
@@ -2678,7 +2678,7 @@ function current_qualify_of_thread($threadId, $sessionId, $userId)
                 user_id = $userId
             ";
     $res = Database::query($sql);
-    $row = Database::fetch_array($res, 'ASSOC');
+    $row = Database::fetch_assoc($res);
 
     if ($row) {
         return $row['qualify'];
@@ -3852,7 +3852,7 @@ function display_forum_search_results($search_term)
 
     $result = Database::query($sql);
     $search_results = [];
-    while ($row = Database::fetch_array($result, 'ASSOC')) {
+    while ($row = Database::fetch_assoc($result)) {
         $forumId = $row['forum_id'];
         $forumData = get_forums($forumId);
         $category = isset($forum_categories_list[$forumData['forum_category']]) ? $forum_categories_list[$forumData['forum_category']] : null;
@@ -4959,7 +4959,7 @@ function getAttachedFiles(
     $json = [];
     if (Database::num_rows($result) > 0) {
         $repo = Container::getForumAttachmentRepository();
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($result)) {
             /** @var CForumAttachment $attachment */
             $attachment = $repo->find($row['iid']);
             $downloadUrl = $repo->getResourceFileDownloadUrl($attachment);
@@ -5071,7 +5071,7 @@ function getAttachmentIdsByPostId($postId, $courseId = 0)
                 WHERE c_id = $courseId AND post_id = $postId";
         $result = Database::query($sql);
         if (false !== $result && Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 $array[] = $row['iid'];
             }
         }

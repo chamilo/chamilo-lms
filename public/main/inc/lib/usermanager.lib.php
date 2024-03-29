@@ -2730,7 +2730,7 @@ class UserManager
         $course_list_sql_result = Database::query($sql);
         $personal_course_list = [];
         if (Database::num_rows($course_list_sql_result) > 0) {
-            while ($result_row = Database::fetch_array($course_list_sql_result, 'ASSOC')) {
+            while ($result_row = Database::fetch_assoc($course_list_sql_result)) {
                 $course_info = api_get_course_info($result_row['code']);
                 $result_row['course_info'] = $course_info;
                 $personal_course_list[] = $result_row;
@@ -2888,7 +2888,7 @@ class UserManager
             ORDER BY i";
 
             $course_list_sql_result = Database::query($sql);
-            while ($result_row = Database::fetch_array($course_list_sql_result, 'ASSOC')) {
+            while ($result_row = Database::fetch_assoc($course_list_sql_result)) {
                 $result_row['course_info'] = api_get_course_info($result_row['code']);
                 $key = $result_row['session_id'].' - '.$result_row['code'];
                 if (!isset($personal_course_list[$key])) {
@@ -2962,7 +2962,7 @@ class UserManager
         $courses = [];
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
-            while ($result_row = Database::fetch_array($result, 'ASSOC')) {
+            while ($result_row = Database::fetch_assoc($result)) {
                 $result_row['status'] = 5;
                 if (!in_array($result_row['real_id'], $courses)) {
                     $position = $result_row['position'];
@@ -3296,7 +3296,7 @@ class UserManager
         $res = Database::query($sql);
         $num = Database::num_rows($res);
         if (1 == $num) {
-            $id_key = Database::fetch_array($res, 'ASSOC');
+            $id_key = Database::fetch_assoc($res);
             self::delete_api_key($id_key['id']);
             $num = self::add_api_key($user_id, $api_service);
         } elseif (0 == $num) {
@@ -3331,7 +3331,7 @@ class UserManager
         if (Database::num_rows($res) < 1) {
             return false;
         }
-        $row = Database::fetch_array($res, 'ASSOC');
+        $row = Database::fetch_assoc($res);
 
         return $row['id'];
     }
@@ -3437,7 +3437,7 @@ class UserManager
         $result = Database::query($sql);
         $return = [];
         if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 $return[] = ['id' => $row['tag'], 'text' => $row['tag']];
             }
         }
@@ -3472,7 +3472,7 @@ class UserManager
         $result = Database::query($sql);
         $return = [];
         if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 $return[] = $row;
             }
         }
@@ -3506,7 +3506,7 @@ class UserManager
         $result = Database::query($sql);
         $return = [];
         if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 $return[$row['id']] = ['tag' => $row['tag'], 'count' => $row['count']];
             }
         }
@@ -3541,7 +3541,7 @@ class UserManager
         $result = Database::query($sql);
         $return = [];
         if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 $return[$row['id']] = ['tag' => $row['tag'], 'count' => $row['count']];
             }
         }
@@ -3582,7 +3582,7 @@ class UserManager
                 WHERE tag LIKE '$tag' AND field_id = $field_id";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
-            $row = Database::fetch_array($result, 'ASSOC');
+            $row = Database::fetch_assoc($result);
 
             return $row['id'];
         } else {
@@ -3607,7 +3607,7 @@ class UserManager
                 WHERE id = '$tag_id' AND field_id = $field_id";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
-            $row = Database::fetch_array($result, 'ASSOC');
+            $row = Database::fetch_assoc($result);
 
             return $row['id'];
         } else {
@@ -3751,7 +3751,7 @@ class UserManager
         $result = Database::query($sql);
         $return = [];
         if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 $return[$row['user_id']] = $row;
             }
         }
@@ -3833,11 +3833,11 @@ class UserManager
 
         if (Database::num_rows($result) > 0) {
             if ($getCount) {
-                $row = Database::fetch_array($result, 'ASSOC');
+                $row = Database::fetch_assoc($result);
 
                 return $row['count'];
             }
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 $return[$row['id']] = $row;
             }
         }
@@ -4645,7 +4645,7 @@ class UserManager
 
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {
-            $row = Database::fetch_array($rs, 'ASSOC');
+            $row = Database::fetch_assoc($rs);
             $score = $row['score_certificate'];
             $category_id = $row['cat_id'];
             $cat = Category::load($category_id);
@@ -5968,7 +5968,7 @@ SQL;
         $sql = "SELECT * FROM $table WHERE user_id = $userId AND career_id = $careerId";
         $result = Database::query($sql);
 
-        return Database::fetch_array($result, 'ASSOC');
+        return Database::fetch_assoc($result);
     }
 
     /**

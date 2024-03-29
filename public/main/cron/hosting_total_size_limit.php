@@ -94,7 +94,7 @@ function calculateTotalPortalSize($debug)
     $sql = "SELECT SUM(size) total FROM $table
             WHERE filetype = 'file' AND c_id <> ''";
     $result = Database::query($sql);
-    $row = Database::fetch_array($result, 'ASSOC');
+    $row = Database::fetch_assoc($result);
     $totalSize = $row['total'];
 
     if ($debug) {
@@ -104,7 +104,7 @@ function calculateTotalPortalSize($debug)
     $table = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
     $sql = "SELECT SUM(size) total FROM $table WHERE c_id <> ''";
     $result = Database::query($sql);
-    $row = Database::fetch_array($result, 'ASSOC');
+    $row = Database::fetch_assoc($result);
     $subTotal = $row['total'];
     $totalSize += $subTotal;
     if ($debug) {

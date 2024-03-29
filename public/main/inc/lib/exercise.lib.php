@@ -1651,7 +1651,7 @@ HOTSPOT;
         $sqlResult = Database::query($sql);
 
         if (0 != Database::num_rows($sqlResult)) {
-            while ($row = Database::fetch_array($sqlResult, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($sqlResult)) {
                 $tmp = [];
                 $tmp[0] = $row['course_title'];
                 $tmp[1] = $row['session_name'];
@@ -1709,7 +1709,7 @@ HOTSPOT;
 
             $sqlResult = Database::query($sql);
             if (Database::num_rows($sqlResult)) {
-                $result = Database::fetch_array($sqlResult, 'ASSOC');
+                $result = Database::fetch_assoc($sqlResult);
                 $result['duration_formatted'] = '';
                 if (!empty($result['exe_duration'])) {
                     $time = api_format_time($result['exe_duration'], 'js');
@@ -2141,7 +2141,7 @@ HOTSPOT;
 
         $results = [];
         $resx = Database::query($sql);
-        while ($rowx = Database::fetch_array($resx, 'ASSOC')) {
+        while ($rowx = Database::fetch_assoc($resx)) {
             $results[] = $rowx;
         }
 
@@ -3580,7 +3580,7 @@ EOT;
         $result = Database::query($sql);
         $return = [];
         if ($result) {
-            $return = Database::fetch_array($result, 'ASSOC');
+            $return = Database::fetch_assoc($result);
         }
 
         return $return;
@@ -3869,7 +3869,7 @@ EOT;
             $good_answers = 0;
             switch ($question_type) {
                 case FILL_IN_BLANKS:
-                    while ($row = Database::fetch_array($result, 'ASSOC')) {
+                    while ($row = Database::fetch_assoc($result)) {
                         $fill_blank = self::check_fill_in_blanks(
                             $correct_answer,
                             $row['answer'],
@@ -5523,7 +5523,7 @@ EOT;
                 $studentsWhere
         ";
         $queryTotal = Database::query($sql);
-        $totalRow = Database::fetch_array($queryTotal, 'ASSOC');
+        $totalRow = Database::fetch_assoc($queryTotal);
         $total = 0;
         if ($totalRow) {
             $total = (int) $totalRow['total'];
@@ -5610,7 +5610,7 @@ EOT;
                     $sessionCondition
         ";
         $result = Database::query($sql);
-        $totalRow = Database::fetch_array($result, 'ASSOC');
+        $totalRow = Database::fetch_assoc($result);
         $total = 0;
         if ($totalRow) {
             $total = (int) $totalRow['count'];

@@ -739,7 +739,7 @@ class Statistics
                 GROUP BY date(login_date)";
 
         $res = Database::query($sql);
-        while ($row = Database::fetch_array($res, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($res)) {
             $monthAndDay = substr($row['login_date'], 5, 5);
             $totalLogin[$monthAndDay] = $row['number'];
         }

@@ -955,7 +955,7 @@ class MySpace
 ";
         $queryResult = Database::query($query);
         $data = [];
-        while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($queryResult)) {
             $lp_id = (int) $row['lp_id'];
             $registeredUsers = self::getCompanyLearnpathSubscription($startDate, $endDate, $lp_id);
             if (!empty($registeredUsers)) {
@@ -1164,7 +1164,7 @@ class MySpace
             " group by lp_item_id";
         $queryResult = Database::query($cLpItemsQuery);
         $cLpItems = [];
-        while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($queryResult)) {
             $cLpItems[] = (int) $row['lp_item_id'];
         }
         if (0 == count($cLpItems)) {
@@ -1188,7 +1188,7 @@ class MySpace
                 " where field_id IN ( $queryExtraFieldPrice ) and item_id in ($cLpItems)";
             $queryResult = Database::query($cLpItemsPriceQuery);
             $lpItemPrice = [];
-            while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($queryResult)) {
                 $lpItemPrice[$row['lp_item_id']] = $row['price'];
             }
             // search authors of lp
@@ -1198,7 +1198,7 @@ class MySpace
                 " where field_id IN ( $queryExtraFieldValue ) ".
                 " group by users_id ";
             $queryResult = Database::query($autorsQuery);
-            while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($queryResult)) {
                 $autorsStr .= " ".str_replace(';', ' ', $row['users_id']);
                 $autorsStr = trim($autorsStr);
             }
@@ -1221,7 +1221,7 @@ class MySpace
                     " from c_lp_item ".
                     " where iid in ($cLpItems)";
                 $queryResult = Database::query($query);
-                while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
+                while ($row = Database::fetch_assoc($queryResult)) {
                     $row['price'] = isset($lpItemPrice[$row['iid']]) ? $lpItemPrice[$row['iid']] : 0;
                     $cLpItemsData[$row['iid']] = $row;
                 }
@@ -1232,7 +1232,7 @@ class MySpace
                 " where field_id IN ( $queryExtraFieldValue )";
             $queryResult = Database::query($query);
             $printData = [];
-            while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($queryResult)) {
                 $cLpItem = (int) $row['lp_item_id'];
                 // get full lp data
                 $cLpItemData = isset($cLpItemsData[$cLpItem]) ? $cLpItemsData[$cLpItem] : [];
@@ -3812,7 +3812,7 @@ class MySpace
                 $query .= $whereCondition;
             }
             $queryResult = Database::query($query);
-            while ($row = Database::fetch_array($queryResult, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($queryResult)) {
                 // $courseId = (int)$row['c_id'];
                 $studentId = (int) $row['to_user_id'];
                 $company = isset($row['company']) ? $row['company'] : '';

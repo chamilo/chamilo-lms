@@ -629,7 +629,7 @@ class ExtraField extends Model
         $result = Database::query($sql);
         $extraFieldRepo = Container::getExtraFieldRepository();
         if (Database::num_rows($result)) {
-            $row = Database::fetch_array($result, 'ASSOC');
+            $row = Database::fetch_assoc($result);
             $extraFieldId = $row['id'];
             /** @var \Chamilo\CoreBundle\Entity\ExtraField $extraField */
             $extraField = $extraFieldRepo->find($extraFieldId);
@@ -640,7 +640,7 @@ class ExtraField extends Model
                     WHERE field_id='".$extraFieldId."'
                     ORDER BY id ASC";
             $result = Database::query($sql);
-            while ($option = Database::fetch_array($result, 'ASSOC')) {
+            while ($option = Database::fetch_assoc($result)) {
                 $row['options'][$option['id']] = $option;
             }
 
@@ -664,7 +664,7 @@ class ExtraField extends Model
                     item_type = $this->itemType";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
-            $row = Database::fetch_array($result, 'ASSOC');
+            $row = Database::fetch_assoc($result);
 
             // All the options of the field
             $sql = "SELECT * FROM $this->table_field_options
@@ -2055,7 +2055,7 @@ class ExtraField extends Model
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $extraFieldRepo = Container::getExtraFieldRepository();
-            $row = Database::fetch_array($result, 'ASSOC');
+            $row = Database::fetch_assoc($result);
             if ($row) {
                 $extraFieldId = $row['id'];
                 /** @var \Chamilo\CoreBundle\Entity\ExtraField $extraField */

@@ -576,7 +576,7 @@ class MessageManager
         $rs = Database::query($sql);
         $data = [];
         if (Database::num_rows($rs) > 0) {
-            while ($row = Database::fetch_array($rs, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($rs)) {
                 $data[] = $row;
             }
         }
@@ -611,7 +611,7 @@ class MessageManager
         $data = [];
         $parents = [];
         if (Database::num_rows($rs) > 0) {
-            while ($row = Database::fetch_array($rs, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($rs)) {
                 if ($message_id == $row['parent_id'] || in_array($row['parent_id'], $parents)) {
                     $parents[] = $row['id'];
                     $data[] = $row;
@@ -822,7 +822,7 @@ class MessageManager
         $res = Database::query($sql);
         $item = [];
         if (Database::num_rows($res) > 0) {
-            $item = Database::fetch_array($res, 'ASSOC');
+            $item = Database::fetch_assoc($res);
         }
 
         return $item;

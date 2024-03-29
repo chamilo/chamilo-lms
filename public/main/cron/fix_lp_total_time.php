@@ -18,15 +18,15 @@ $sendMessage = true;
 $userId = 1; // User id that will receive a report
 $update = false;
 
-$sql = "SELECT iid, total_time FROM c_lp_item_view 
-        WHERE total_time > $maxSeconds 
-        order by total_time desc 
+$sql = "SELECT iid, total_time FROM c_lp_item_view
+        WHERE total_time > $maxSeconds
+        order by total_time desc
         LIMIT $limit
 ";
 
 $result = Database::query($sql);
 $log = '';
-while ($row = Database::fetch_array($result, 'ASSOC')) {
+while ($row = Database::fetch_assoc($result)) {
     $id = $row['iid'];
     $oldTotalTime = $row['total_time'];
     $sql = "UPDATE c_lp_item_view SET total_time = '$valueToUpdate' WHERE iid = $id;";

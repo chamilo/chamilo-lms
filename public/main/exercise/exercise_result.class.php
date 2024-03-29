@@ -138,7 +138,7 @@ class ExerciseResult
         $results = [];
         $resx = Database::query($sql);
         $bestAttemptPerUser = [];
-        while ($rowx = Database::fetch_array($resx, 'ASSOC')) {
+        while ($rowx = Database::fetch_assoc($resx)) {
             if ($this->onlyBestAttempts) {
                 if (!isset($bestAttemptPerUser[$rowx['excruid']])) {
                     $bestAttemptPerUser[$rowx['excruid']] = $rowx;

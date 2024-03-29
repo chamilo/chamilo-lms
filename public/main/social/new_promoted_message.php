@@ -69,7 +69,7 @@ function show_compose_reply_to_message($message_id, $receiver_id, $tpl)
               FROM $table
               WHERE user_receiver_id = ".$receiver_id." AND id = ".$message_id;
     $result = Database::query($query);
-    $row = Database::fetch_array($result, 'ASSOC');
+    $row = Database::fetch_assoc($result);
     $userInfo = api_get_user_info($row['user_sender_id']);
     if (empty($row['user_sender_id']) || empty($userInfo)) {
         $html = get_lang('The id of the message to reply to is not valid.');

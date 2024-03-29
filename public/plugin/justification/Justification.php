@@ -34,7 +34,7 @@ class Justification extends Plugin
         $sql = 'SELECT * FROM justification_document WHERE id = '.$id;
         $query = Database::query($sql);
 
-        return Database::fetch_array($query, 'ASSOC');
+        return Database::fetch_assoc($query);
     }
 
     public function getUserJustificationList($userId)
@@ -54,7 +54,7 @@ class Justification extends Plugin
         $sql = "SELECT * FROM justification_document_rel_users WHERE id = $id ";
         $query = Database::query($sql);
 
-        return Database::fetch_array($query, 'ASSOC');
+        return Database::fetch_assoc($query);
     }
 
     public function getList()

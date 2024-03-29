@@ -48,7 +48,7 @@ class SurveyUtil
         $total = Database::num_rows($result);
         $counter = 1;
         $error = false;
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($result)) {
             if (1 == $counter && 'pagebreak' === $row['type']) {
                 echo Display::return_message(get_lang('The page break cannot be the first'), 'error', false);
                 $error = true;
@@ -367,7 +367,7 @@ class SurveyUtil
 					    survey_question.survey_id = '".$surveyId."'
 					ORDER BY survey_question.sort, survey_question_option.sort ASC";
             $result = Database::query($sql);
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 if ('pagebreak' !== $row['type']) {
                     $questions[$row['sort']]['question_id'] = $row['question_id'];
                     $questions[$row['sort']]['survey_id'] = $row['survey_id'];
@@ -385,7 +385,7 @@ class SurveyUtil
                         survey_id = '".$surveyId."' AND
                         user = '".$userId."'";
             $result = Database::query($sql);
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 $answers[$row['question_id']][] = $row['option_id'];
                 $all_answers[$row['question_id']][] = $row;
             }
@@ -630,7 +630,7 @@ class SurveyUtil
                             survey_id= $surveyId AND
                             question_id = $questionId ";
                 $result = Database::query($sql);
-                while ($row = Database::fetch_array($result, 'ASSOC')) {
+                while ($row = Database::fetch_assoc($result)) {
                     echo $row['option_id'].'<hr noshade="noshade" size="1" />';
                 }
                 echo '</div>';
@@ -642,7 +642,7 @@ class SurveyUtil
                             question_id = $questionId
                         ORDER BY sort ASC";
                 $result = Database::query($sql);
-                while ($row = Database::fetch_array($result, 'ASSOC')) {
+                while ($row = Database::fetch_assoc($result)) {
                     $options[$row['iid']] = $row;
                 }
                 // Getting the answers
@@ -655,7 +655,7 @@ class SurveyUtil
                 $result = Database::query($sql);
                 $number_of_answers = [];
                 $data = [];
-                while ($row = Database::fetch_array($result, 'ASSOC')) {
+                while ($row = Database::fetch_assoc($result)) {
                     if (!isset($number_of_answers[$row['question_id']])) {
                         $number_of_answers[$row['question_id']] = 0;
                     }
@@ -784,7 +784,7 @@ class SurveyUtil
                         $sql_restriction";
             $result = Database::query($sql);
             echo '<ul>';
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 $user_info = api_get_user_info($row['user']);
                 echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&survey_id='
                     .$surveyId.'&user='.$row['user'].'">'
@@ -1515,7 +1515,7 @@ class SurveyUtil
         $questionIdList = array_keys($possible_answers_type);
         $open_question_iterator = 1;
         $result = Database::query($sql);
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($result)) {
             if (!in_array($row['question_id'], $questionIdList)) {
                 continue;
             }
@@ -3582,7 +3582,7 @@ class SurveyUtil
         $efv = new ExtraFieldValue('survey');
         $surveyIds = [];
         $repo = Container::getSurveyRepository();
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($result)) {
             $surveyId = $row['iid'];
             if (in_array($surveyId, $surveyIds)) {
                 continue;

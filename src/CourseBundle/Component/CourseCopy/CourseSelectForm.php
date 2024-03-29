@@ -572,7 +572,7 @@ class CourseSelectForm
                                         ref = $resource_item ";
                             $res = Database::query($sql);
                             $all_properties = [];
-                            while ($item_property = Database::fetch_array($res, 'ASSOC')) {
+                            while ($item_property = Database::fetch_assoc($res)) {
                                 $all_properties[] = $item_property;
                             }
                             $course->resources[RESOURCE_DOCUMENT][$resource_item]->item_properties = $all_properties;

@@ -73,7 +73,7 @@ class H5pImportPlugin extends Plugin
                 c_lp_item_view_id = '.$lpItemView['iid'].
             ' ORDER BY total_time DESC';
         $sumScoreResult = Database::query($sql);
-        $durationRow = Database::fetch_array($sumScoreResult, 'ASSOC');
+        $durationRow = Database::fetch_assoc($sumScoreResult);
 
         if (!empty($durationRow['exe_duration'])) {
             // Update the total duration in the learning path item view

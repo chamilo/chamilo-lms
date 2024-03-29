@@ -122,7 +122,7 @@ class Result
                 }
 
                 $res_course_rel_user = Database::query($sql);
-                while ($row_course_rel_user = Database::fetch_array($res_course_rel_user, 'ASSOC')) {
+                while ($row_course_rel_user = Database::fetch_assoc($res_course_rel_user)) {
                     $list_user_course_list[] = $row_course_rel_user;
                 }
                 $current_date = api_get_utc_datetime();

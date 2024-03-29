@@ -587,7 +587,7 @@ class survey_question
         $sql = "SELECT parent_id FROM $table
                 WHERE c_id = $courseId AND question_id = $questionId ";
         $result = Database::query($sql);
-        $row = Database::fetch_array($result, 'ASSOC');
+        $row = Database::fetch_assoc($result);
         if ($row && !empty($row['parent_id'])) {
             $list[] = $row['parent_id'];
             $list = self::getParents($row['parent_id'], $list);

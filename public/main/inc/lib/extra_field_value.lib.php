@@ -571,7 +571,7 @@ class ExtraFieldValue extends Model
                 ORDER BY id";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
-            $result = Database::fetch_array($result, 'ASSOC');
+            $result = Database::fetch_assoc($result);
             if ($transform) {
                 if (!empty($result['field_value'])) {
                     switch ($result['value_type']) {
@@ -724,7 +724,7 @@ class ExtraFieldValue extends Model
 
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
-            $result = Database::fetch_array($result, 'ASSOC');
+            $result = Database::fetch_assoc($result);
             $result['value'] = $result['field_value'];
             if ($transform) {
                 $fieldType = $result['value_type'];
@@ -836,7 +836,7 @@ class ExtraFieldValue extends Model
             if ($all) {
                 $result = Database::store_result($result, 'ASSOC');
             } else {
-                $result = Database::fetch_array($result, 'ASSOC');
+                $result = Database::fetch_assoc($result);
             }
 
             return $result;

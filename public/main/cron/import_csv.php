@@ -3017,7 +3017,7 @@ class ImportCsv
                 $result = Database::query($sql);
                 $rows = Database::num_rows($result);
                 if ($rows > 0) {
-                    $userCourseData = Database::fetch_array($result, 'ASSOC');
+                    $userCourseData = Database::fetch_assoc($result);
                     if (!empty($userCourseData)) {
                         $teacherBackup[$userId][$courseInfo['code']] = $userCourseData;
                     }
@@ -3030,7 +3030,7 @@ class ImportCsv
                         ";
 
                 $result = Database::query($sql);
-                while ($groupData = Database::fetch_array($result, 'ASSOC')) {
+                while ($groupData = Database::fetch_assoc($result)) {
                     $groupBackup['user'][$userId][$courseInfo['code']][$groupData['group_id']] = $groupData;
                 }
 
@@ -3041,7 +3041,7 @@ class ImportCsv
                         ";
 
                 $result = Database::query($sql);
-                while ($groupData = Database::fetch_array($result, 'ASSOC')) {
+                while ($groupData = Database::fetch_assoc($result)) {
                     $groupBackup['tutor'][$userId][$courseInfo['code']][$groupData['group_id']] = $groupData;
                 }
 

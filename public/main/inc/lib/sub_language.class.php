@@ -32,7 +32,7 @@ class SubLanguageManager
         }
         $rs = Database::query($sql);
         $all_languages = [];
-        while ($row = Database::fetch_array($rs, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($rs)) {
             $all_languages[$row['english_name']] = $row;
         }
 
@@ -83,7 +83,7 @@ class SubLanguageManager
         $sql = 'SELECT * FROM '.$table.' WHERE id = "'.intval($parent_id).'"';
         $rs = Database::query($sql);
         $all_information = [];
-        while ($row = Database::fetch_array($rs, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($rs)) {
             $all_information = $row;
         }
 

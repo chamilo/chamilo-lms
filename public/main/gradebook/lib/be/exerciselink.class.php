@@ -280,7 +280,7 @@ class ExerciseLink extends AbstractLink
 
         if (isset($studentId) && empty($type)) {
             // for 1 student
-            if ($data = Database::fetch_array($scores, 'ASSOC')) {
+            if ($data = Database::fetch_assoc($scores)) {
                 $attempts = Database::query($sql);
                 $counter = 0;
                 while ($attempt = Database::fetch_array($attempts)) {
@@ -319,7 +319,7 @@ class ExerciseLink extends AbstractLink
                 $studentIdList = array_column($studentList, 'user_id');
             }
 
-            while ($data = Database::fetch_array($scores, 'ASSOC')) {
+            while ($data = Database::fetch_assoc($scores)) {
                 // Only take into account users in the current student list.
                 if (!empty($studentIdList)) {
                     if (!in_array($data['exe_user_id'], $studentIdList)) {

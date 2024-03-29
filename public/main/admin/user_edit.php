@@ -86,7 +86,7 @@ if (1 != Database::num_rows($res)) {
     exit;
 }
 
-$user_data = Database::fetch_array($res, 'ASSOC');
+$user_data = Database::fetch_assoc($res);
 
 $user_data['platform_admin'] = is_null($user_data['is_admin']) ? 0 : 1;
 $user_data['send_mail'] = 0;

@@ -66,10 +66,10 @@ foreach ($courses as $course) {
 
     $myOnlyLpList = [];
     if (Database::num_rows($result)) {
-        while ($lpInfo = Database::fetch_array($result, 'ASSOC')) {
+        while ($lpInfo = Database::fetch_assoc($result)) {
             $lpIid = $lpInfo['iid'];
             $oldId = $lpInfo['id'];
-            $sql = "SELECT * FROM $tblCLpItem 
+            $sql = "SELECT * FROM $tblCLpItem
                     WHERE c_id = $courseId AND lp_id = $oldId ORDER by iid";
             //echo "<h3>$sql</h3>";
             //echo "New lp.iid $lpIid / old lp.id $oldId";
@@ -113,10 +113,10 @@ foreach ($courses as $course) {
                 $link = "newscorm/lp_controller.php?action=view&lp_id=$oldId&id_session=$sessionId";
                 $secondLink = "lp/lp_controller.php?action=view&lp_id=$oldId&id_session=$sessionId";
 
-                $sql = "UPDATE $toolTable 
+                $sql = "UPDATE $toolTable
                         SET link = '$correctLink'
-                        WHERE 
-                              c_id = $courseId AND 
+                        WHERE
+                              c_id = $courseId AND
                               (link = '$link' OR link ='$secondLink' )";
                 Database::query($sql);
             }
@@ -128,7 +128,7 @@ foreach ($courses as $course) {
                 foreach ($variablesToFix as $variable) {
                     if (!empty($item[$variable]) && isset($itemList[$item[$variable]])) {
                         $newId = $itemList[$item[$variable]];
-                        $sql = "UPDATE $tblCLpItem SET $variable = $newId 
+                        $sql = "UPDATE $tblCLpItem SET $variable = $newId
                                 WHERE iid = $itemIid AND c_id = $courseId AND lp_id = $oldId";
                         Database::query($sql);
                         var_dump($sql);
@@ -136,25 +136,25 @@ foreach ($courses as $course) {
                 }
 
                 // c_lp_view
-                $sql = "UPDATE c_lp_view SET last_item = $itemIid 
+                $sql = "UPDATE c_lp_view SET last_item = $itemIid
                         WHERE c_id = $courseId AND last_item = $itemId AND lp_id = $oldId";
                 Database::query($sql);
                 var_dump($sql);
 
                 // c_lp_item_view
-                $sql = "UPDATE c_lp_item_view SET lp_item_id = $itemIid 
+                $sql = "UPDATE c_lp_item_view SET lp_item_id = $itemIid
                         WHERE c_id = $courseId AND lp_item_id = $itemId ";
                 Database::query($sql);
                 var_dump($sql);
 
                 // Update track_exercises
-                $sql = "UPDATE track_e_exercises SET orig_lp_item_id = $itemIid 
+                $sql = "UPDATE track_e_exercises SET orig_lp_item_id = $itemIid
                         WHERE c_id = $courseId AND orig_lp_id = $oldId AND orig_lp_item_id = $itemId";
                 Database::query($sql);
                 var_dump($sql);
 
                 // c_forum_thread
-                $sql = "UPDATE c_forum_thread SET lp_item_id = $itemIid 
+                $sql = "UPDATE c_forum_thread SET lp_item_id = $itemIid
                         WHERE c_id = $courseId AND lp_item_id = $itemId";
                 Database::query($sql);
                 var_dump($sql);
@@ -191,14 +191,14 @@ foreach ($courses as $course) {
                         $sql = "DELETE FROM c_lp_view WHERE id = $oldViewId AND iid = $prefixViewId ";
                         Database::query($sql);
 
-                        $sql = "UPDATE track_e_exercises 
-                                SET orig_lp_item_view_id = $newViewId 
-                                WHERE 
-                                  c_id = $courseId AND 
-                                  orig_lp_id = $oldId AND 
-                                  orig_lp_item_id = $itemIid AND 
-                                  orig_lp_item_view_id = $oldViewId AND 
-                                  exe_user_id = $userId                                       
+                        $sql = "UPDATE track_e_exercises
+                                SET orig_lp_item_view_id = $newViewId
+                                WHERE
+                                  c_id = $courseId AND
+                                  orig_lp_id = $oldId AND
+                                  orig_lp_item_id = $itemIid AND
+                                  orig_lp_item_view_id = $oldViewId AND
+                                  exe_user_id = $userId
                                   ";
                         Database::query($sql);
                         var_dump($sql);
@@ -240,12 +240,12 @@ foreach ($courses as $course) {
                     }
                 }
 
-                $sql = "UPDATE $tblCLpItem SET lp_id = $lpIid 
+                $sql = "UPDATE $tblCLpItem SET lp_id = $lpIid
                         WHERE c_id = $courseId AND lp_id = $oldId AND id = $itemId";
                 Database::query($sql);
                 var_dump($sql);
 
-                $sql = "UPDATE $tblCLpItem SET id = iid 
+                $sql = "UPDATE $tblCLpItem SET id = iid
                     WHERE c_id = $courseId AND lp_id = $oldId AND id = $itemId";
                 Database::query($sql);
                 var_dump($sql);
@@ -260,7 +260,7 @@ foreach ($courses as $course) {
             var_dump($sql);
 
             // Update track_exercises
-            $sql = "UPDATE track_e_exercises SET orig_lp_id = $lpIid 
+            $sql = "UPDATE track_e_exercises SET orig_lp_id = $lpIid
                     WHERE c_id = $courseId AND orig_lp_id = $oldId";
             Database::query($sql);
             var_dump($sql);

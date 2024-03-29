@@ -242,7 +242,7 @@ switch ($action) {
 
         $result = Database::query($sql);
         $results = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($result)) {
             $results[] = $row;
         }
 

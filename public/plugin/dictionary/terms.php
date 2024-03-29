@@ -20,7 +20,7 @@ $term = null;
 if (!empty($id)) {
     $sql = "SELECT * FROM $table WHERE id = $id";
     $result = Database::query($sql);
-    $term = Database::fetch_array($result, 'ASSOC');
+    $term = Database::fetch_assoc($result);
     if (empty($term)) {
         api_not_allowed(true);
     }

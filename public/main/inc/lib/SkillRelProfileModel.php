@@ -49,7 +49,7 @@ class SkillRelProfileModel extends Model
                 ON (pr.id = p.profile_id)
                 WHERE p.profile_id = ".$profileId;
         $result = Database::query($sql);
-        $profileData = Database::fetch_array($result, 'ASSOC');
+        $profileData = Database::fetch_assoc($result);
 
         return $profileData;
     }

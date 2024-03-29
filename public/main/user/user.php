@@ -253,7 +253,7 @@ if (isset($_GET['action'])) {
                 $rs = Database::query($sql);
                 $counter = 1;
 
-                while ($user = Database:: fetch_array($rs, 'ASSOC')) {
+                while ($user = Database::fetch_assoc($rs)) {
                     if (isset($user['legal_agreement'])) {
                         if (1 == $user['legal_agreement']) {
                             $user['legal_agreement'] = get_lang('Yes');
@@ -341,7 +341,7 @@ if (isset($_GET['action'])) {
 
                 $rs = Database::query($sql);
                 $counter = 1;
-                while ($user = Database::fetch_array($rs, 'ASSOC')) {
+                while ($user = Database::fetch_assoc($rs)) {
                     if (isset($user['legal_agreement'])) {
                         if (1 == $user['legal_agreement']) {
                             $user['legal_agreement'] = get_lang('Yes');
@@ -451,7 +451,7 @@ if (api_is_allowed_to_edit(null, true)) {
 					    rel_course.c_id = $courseId ";
 
             $result = Database::query($sql);
-            $row = Database::fetch_array($result, 'ASSOC');
+            $row = Database::fetch_assoc($result);
             if (($row && $row['user_id'] == $user_id) || empty($row)) {
                 CourseManager::unsubscribe_user($user_id, $courseCode);
                 Display::addFlash(

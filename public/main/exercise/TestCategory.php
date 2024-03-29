@@ -215,7 +215,7 @@ class TestCategory
                 WHERE question_id = $questionId";
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
-            return Database::fetch_array($res, 'ASSOC');
+            return Database::fetch_assoc($res);
         }
 
         return [];
@@ -842,7 +842,7 @@ class TestCategory
         $categories = [];
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 if ($excludeCategoryWithNoQuestions && 0 == $row['count_questions']) {
                     continue;
                 }

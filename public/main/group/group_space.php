@@ -412,7 +412,7 @@ function get_number_of_group_users()
                 c_id = $course_id AND
                 group_id = '".(int) ($groupInfo['iid'])."'";
     $result = Database::query($sql);
-    $return = Database::fetch_array($result, 'ASSOC');
+    $return = Database::fetch_assoc($result);
 
     return $return['number_of_users'];
 }

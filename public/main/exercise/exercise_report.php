@@ -272,7 +272,7 @@ if (isset($_REQUEST['comments']) &&
                 GROUP BY question_id';
         $res = Database::query($qry);
         $tot = 0;
-        while ($row = Database :: fetch_array($res, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($res)) {
             $marks = $row['marks'];
             if (!$objExerciseTmp->propagate_neg && $marks < 0) {
                 continue;

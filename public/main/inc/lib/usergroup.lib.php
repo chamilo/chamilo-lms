@@ -607,14 +607,14 @@ class UserGroupModel extends Model
         }
         if (!empty($result)) {
             if (Database::num_rows($result) > 0) {
-                while ($row = Database::fetch_array($result, 'ASSOC')) {
+                while ($row = Database::fetch_assoc($result)) {
                     $data[] = $row;
                 }
             }
         }
         if (!empty($sqlClasses)) {
             if (Database::num_rows($resultClasess) > 0) {
-                while ($row = Database::fetch_array($resultClasess, 'ASSOC')) {
+                while ($row = Database::fetch_assoc($resultClasess)) {
                     $data[] = $row;
                 }
             }
@@ -735,7 +735,7 @@ class UserGroupModel extends Model
         if ($getCount) {
             if (!empty($result)) {
                 $result = Database::query($sql);
-                $array = Database::fetch_array($result, 'ASSOC');
+                $array = Database::fetch_assoc($result);
 
                 return $array['count'];
             }
@@ -749,14 +749,14 @@ class UserGroupModel extends Model
         }
         if (!empty($result)) {
             if (Database::num_rows($result) > 0) {
-                while ($row = Database::fetch_array($result, 'ASSOC')) {
+                while ($row = Database::fetch_assoc($result)) {
                     $data[] = $row;
                 }
             }
         }
         if (!empty($sqlClasses)) {
             if (Database::num_rows($resultClasess) > 0) {
-                while ($row = Database::fetch_array($resultClasess, 'ASSOC')) {
+                while ($row = Database::fetch_assoc($resultClasess)) {
                     $data[] = $row;
                 }
             }
@@ -2042,7 +2042,7 @@ class UserGroupModel extends Model
                         user_id = $user_id ";
             $result = Database::query($sql);
             if (Database::num_rows($result) > 0) {
-                $row = Database::fetch_array($result, 'ASSOC');
+                $row = Database::fetch_assoc($result);
                 $return_value = $row['relation_type'];
             }
         }
@@ -2268,7 +2268,7 @@ class UserGroupModel extends Model
         $result = Database::query($sql);
         $array = [];
         if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($result)) {
                 if ($with_image) {
                     $picture = $this->get_picture_group($row['id'], $row['picture'], 80);
                     $img = '<img src="'.$picture['file'].'" />';
@@ -2330,7 +2330,7 @@ class UserGroupModel extends Model
 
         $result = Database::query($sql);
         $array = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($result)) {
             if ($with_image) {
                 $picture = $this->get_picture_group($row['id'], $row['picture'], 80);
                 $img = '<img src="'.$picture['file'].'" />';
@@ -2402,7 +2402,7 @@ class UserGroupModel extends Model
 
         $result = Database::query($sql);
         $array = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($result)) {
             if ($withImage) {
                 $picture = $this->get_picture_group($row['id'], $row['picture'], 80);
                 $img = '<img src="'.$picture['file'].'" />';
@@ -2483,7 +2483,7 @@ class UserGroupModel extends Model
 
         $result = Database::query($sql);
         $array = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($result)) {
             if ($withImage) {
                 $userInfo = api_get_user_info($row['id']);
                 $userPicture = UserManager::getUserPicture($row['id']);
@@ -2525,7 +2525,7 @@ class UserGroupModel extends Model
 
         $result = Database::query($sql);
         $array = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($result)) {
             $array[$row['id']] = $row;
         }
 
@@ -2683,7 +2683,7 @@ class UserGroupModel extends Model
 
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
-            $row = Database::fetch_array($result, 'ASSOC');
+            $row = Database::fetch_assoc($result);
 
             return $row['count'];
         }
@@ -2738,7 +2738,7 @@ class UserGroupModel extends Model
 
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
-            while ($row = Database::fetch_array($res, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($res)) {
                 if (!in_array($row['id'], $return)) {
                     $return[$row['id']] = $row;
                 }

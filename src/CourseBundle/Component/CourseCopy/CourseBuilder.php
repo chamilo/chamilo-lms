@@ -1746,13 +1746,13 @@ class CourseBuilder
         $sql = "SELECT * FROM $table_thematic
                 WHERE c_id = $courseId $sessionCondition ";
         $db_result = Database::query($sql);
-        while ($row = Database::fetch_array($db_result, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($db_result)) {
             $thematic = new Thematic($row);
             $sql = 'SELECT * FROM '.$table_thematic_advance.'
                     WHERE c_id = '.$courseId.' AND thematic_id = '.$row['id'];
 
             $result = Database::query($sql);
-            while ($sub_row = Database::fetch_array($result, 'ASSOC')) {
+            while ($sub_row = Database::fetch_assoc($result)) {
                 $thematic->addThematicAdvance($sub_row);
             }
 
@@ -1779,7 +1779,7 @@ class CourseBuilder
                             tp.id IN (".implode(', ', $thematic_plan_id_list).') ';
 
                 $result = Database::query($sql);
-                while ($sub_row = Database::fetch_array($result, 'ASSOC')) {
+                while ($sub_row = Database::fetch_assoc($result)) {
                     $thematic->addThematicPlan($sub_row);
                 }
             }

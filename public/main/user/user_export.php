@@ -160,7 +160,7 @@ if ('1' == $export['addcsvheader'] && 'csv' === $export['file_type']) {
 }
 
 $res = Database::query($sql);
-while ($user = Database::fetch_array($res, 'ASSOC')) {
+while ($user = Database::fetch_assoc($res)) {
     $studentData = UserManager:: get_extra_user_data(
         $user['UserId'],
         true,

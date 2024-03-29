@@ -730,7 +730,7 @@ class Tracking
                     } while ($row = Database::fetch_array($result));
                 } elseif ($num > 0) {
                     // Not extended.
-                    $row = Database::fetch_array($result, 'ASSOC');
+                    $row = Database::fetch_assoc($result);
                     $my_id = $row['myid'];
                     $my_lp_id = $row['mylpid'];
                     $my_lp_view_id = $row['mylpviewid'];
@@ -903,7 +903,7 @@ class Tracking
                                         session_id = '.$sessionId.'
                                      ORDER BY exe_date DESC ';
                             $sumScoreResult = Database::query($sql);
-                            $durationRow = Database::fetch_array($sumScoreResult, 'ASSOC');
+                            $durationRow = Database::fetch_assoc($sumScoreResult);
                             if (!empty($durationRow['exe_duration'])) {
                                 $exeDuration = $durationRow['exe_duration'];
                                 if ($exeDuration != $subtotal_time &&
@@ -1802,7 +1802,7 @@ class Tracking
     	        FROM $tbl_track_login u $url_table
                 WHERE $userCondition $condition_time $url_condition";
         $rs = Database::query($sql);
-        $row = Database::fetch_array($rs, 'ASSOC');
+        $row = Database::fetch_assoc($rs);
         $diff = $row['diff'];
 
         if ($diff >= 0) {
@@ -1842,7 +1842,7 @@ class Tracking
     	        FROM $tbl_track_login u $url_table
                 WHERE $condition_time $url_condition";
         $rs = Database::query($sql);
-        $row = Database::fetch_array($rs, 'ASSOC');
+        $row = Database::fetch_assoc($rs);
         $diff = $row['diff'];
 
         if ($diff >= 0) {
@@ -2794,7 +2794,7 @@ class Tracking
 
         $progress = [];
         $viewCount = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($result)) {
             if (!isset($viewCount[$row['lp_id']])) {
                 $progress[$row['lp_id']] = $row['progress'];
             }
@@ -2981,7 +2981,7 @@ class Tracking
                             ORDER BY lp_item_id";
                     $res_lp_item = Database::query($sql);
 
-                    while ($row_lp_item = Database::fetch_array($res_lp_item, 'ASSOC')) {
+                    while ($row_lp_item = Database::fetch_assoc($res_lp_item)) {
                         $my_lp_item_id = $row_lp_item['lp_item_id'];
                         $order = ' view_count DESC';
                         if ($getOnlyBestAttempt) {
@@ -3010,7 +3010,7 @@ class Tracking
                                 LIMIT 1";
 
                         $res_lp_item_result = Database::query($sql);
-                        while ($row_max_score = Database::fetch_array($res_lp_item_result, 'ASSOC')) {
+                        while ($row_max_score = Database::fetch_assoc($res_lp_item_result)) {
                             $list[] = $row_max_score;
                         }
                     }
@@ -3033,7 +3033,7 @@ class Tracking
                                 (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."')
                             ";
                     $res_max_score = Database::query($sql);
-                    while ($row_max_score = Database::fetch_array($res_max_score, 'ASSOC')) {
+                    while ($row_max_score = Database::fetch_assoc($res_max_score)) {
                         $list[] = $row_max_score;
                     }
                 }
@@ -3107,7 +3107,7 @@ class Tracking
                         $result_last_attempt = Database::query($sql);
                         $num = Database::num_rows($result_last_attempt);
                         if ($num > 0) {
-                            $attemptResult = Database::fetch_array($result_last_attempt, 'ASSOC');
+                            $attemptResult = Database::fetch_assoc($result_last_attempt);
                             $id_last_attempt = $attemptResult['exe_id'];
                             // We overwrite the score with the best one not the one saved in the LP (latest)
                             if ($getOnlyBestAttempt && false == $get_only_latest_attempt_results) {
@@ -3190,7 +3190,7 @@ class Tracking
                         lp_id = ".$lp_id;
             $result_have_quiz = Database::query($sql);
             if (Database::num_rows($result_have_quiz) > 0) {
-                $row = Database::fetch_array($result_have_quiz, 'ASSOC');
+                $row = Database::fetch_assoc($result_have_quiz);
                 if (is_numeric($row['count']) && 0 != $row['count']) {
                     $lp_with_quiz++;
                 }
@@ -3301,7 +3301,7 @@ class Tracking
                 $conditionsToString
         ";
         $result = Database::query($sql);
-        $row = Database::fetch_array($result, 'ASSOC');
+        $row = Database::fetch_assoc($result);
 
         if (empty($row['sum_max_score'])) {
             return 0;
@@ -3419,7 +3419,7 @@ class Tracking
                                      ORDER BY exe_date DESC ';
 
                             $sumScoreResult = Database::query($sql);
-                            $durationRow = Database::fetch_array($sumScoreResult, 'ASSOC');
+                            $durationRow = Database::fetch_assoc($sumScoreResult);
                             if (!empty($durationRow['exe_duration'])) {
                                 $exeDuration = $durationRow['exe_duration'];
                                 if ($exeDuration != $totalTimeInLpItemView &&
@@ -4636,7 +4636,7 @@ class Tracking
         $rs = Database::query($sql);
         $courses = $course_in_session = $temp_course_in_session = [];
         $courseIdList = [];
-        while ($row = Database::fetch_array($rs, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($rs)) {
             $courses[$row['id']] = $row['title'];
             $courseIdList[] = $row['id'];
         }
@@ -4688,7 +4688,7 @@ class Tracking
 
         $rs = Database::query($sql);
         $simple_session_array = [];
-        while ($row = Database::fetch_array($rs, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($rs)) {
             $course_info = api_get_course_info($row['code']);
             $temp_course_in_session[$row['session_id']]['course_list'][$course_info['real_id']] = $course_info;
             $temp_course_in_session[$row['session_id']]['title'] = $row['title'];
@@ -7039,7 +7039,7 @@ class Tracking
                 WHERE c_id = $course_id AND exe_user_id = $user_id  $sessionCondition";
         $res = Database::query($sql);
         $list = [];
-        while ($row = Database::fetch_array($res, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($res)) {
             $list[$row['exe_id']] = $row;
         }
 
@@ -7088,7 +7088,7 @@ class Tracking
                         exe_user_id = $user_id ";
             $res = Database::query($sql);
             $list = [];
-            while ($row = Database::fetch_array($res, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($res)) {
                 $list[$row['exe_id']] = $row;
             }
 
@@ -7118,7 +7118,7 @@ class Tracking
                 WHERE c_id = $course_id AND session_id = $origin_session_id  AND user_id = $user_id ";
         $res = Database::query($sql);
         $list = [];
-        while ($row = Database::fetch_array($res, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($res)) {
             $list[$row['course_access_id']] = $row;
         }
 
@@ -7148,7 +7148,7 @@ class Tracking
                     access_user_id = $user_id ";
         $res = Database::query($sql);
         $list = [];
-        while ($row = Database::fetch_array($res, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($res)) {
             $list[] = $row['access_id'];
         }
 
@@ -7180,7 +7180,7 @@ class Tracking
         $lp_list = new LearnpathList($user_id, $course_info, $new_session_id);
         $flat_list = $lp_list->get_flat_list();
         $list = [];
-        while ($row = Database::fetch_array($res, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($res)) {
             // Checking if the LP exist in the new session
             //if (in_array($row['lp_id'], array_keys($flat_list))) {
             $list[$row['id']] = $row;
@@ -7237,7 +7237,7 @@ class Tracking
             $flat_list = $lp_list->get_flat_list();
 
             $list = [];
-            while ($row = Database::fetch_array($res, 'ASSOC')) {
+            while ($row = Database::fetch_assoc($res)) {
                 //Checking if the LP exist in the new session
                 //if (in_array($row['lp_id'], array_keys($flat_list))) {
                 $list[$row['id']] = $row;
@@ -7272,7 +7272,7 @@ class Tracking
         $sql = "SELECT ref FROM $TBL_ITEM_PROPERTY
                 WHERE tool = 'calendar_event' AND insert_user_id = $user_id AND c_id = $course_id ";
         $res = Database::query($sql);
-        while ($row = Database::fetch_array($res, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($res)) {
             $id = $row['ref'];
             if ($update_database) {
                 $sql = "UPDATE $TBL_AGENDA SET session_id = $new_session_id WHERE c_id = $course_id AND iid = $id ";
@@ -7298,13 +7298,13 @@ class Tracking
             echo $sql;
         }
         $res = Database::query($sql);
-        while ($row = Database::fetch_array($res, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($res)) {
             $id = $row['ref'];
             $sql = "SELECT * FROM $TBL_STUDENT_PUBLICATION
                     WHERE iid = $id AND session_id = $origin_session_id AND c_id = $course_id";
             $sub_res = Database::query($sql);
             if (Database::num_rows($sub_res) > 0) {
-                $data = Database::fetch_array($sub_res, 'ASSOC');
+                $data = Database::fetch_assoc($sub_res);
                 if ($debug) {
                     var_dump($data);
                 }
@@ -7313,7 +7313,7 @@ class Tracking
                     $sql = "SELECT * FROM $TBL_STUDENT_PUBLICATION
                             WHERE iid = $parent_id AND c_id = $course_id";
                     $select_res = Database::query($sql);
-                    $parent_data = Database::fetch_array($select_res, 'ASSOC');
+                    $parent_data = Database::fetch_assoc($select_res);
                     if ($debug) {
                         var_dump($parent_data);
                     }
@@ -7340,7 +7340,7 @@ class Tracking
 
                     $new_parent_id = 0;
                     if ($num_rows > 0) {
-                        $new_result = Database::fetch_array($sub_res, 'ASSOC');
+                        $new_result = Database::fetch_assoc($sub_res);
                         $created_dir = $new_result['url'];
                         $new_parent_id = $new_result['id'];
                     } else {
@@ -7394,7 +7394,7 @@ class Tracking
                     $rest_select = Database::query($sql);
                     if (Database::num_rows($rest_select) > 0) {
                         if ($update_database && $new_parent_id) {
-                            $assignment_data = Database::fetch_array($rest_select, 'ASSOC');
+                            $assignment_data = Database::fetch_assoc($rest_select);
                             $sql_add_publication = "INSERT INTO ".$TBL_STUDENT_PUBLICATION_ASSIGNMENT." SET
                                     	c_id = '$course_id',
                                        expires_on          = '".$assignment_data['expires_on']."',
@@ -7507,7 +7507,7 @@ class Tracking
             var_dump($sql);
         }
         $res = Database::query($sql);
-        while ($row = Database::fetch_array($res, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($res)) {
             $id = (int) $row['id'];
             if ($update_database) {
                 $sql = "UPDATE $TBL_DROPBOX_FILE SET session_id = $new_session_id WHERE c_id = $course_id AND iid = $id";
@@ -7545,7 +7545,7 @@ class Tracking
             var_dump($sql);
         }
         $res = Database::query($sql);
-        while ($row = Database::fetch_array($res, 'ASSOC')) {
+        while ($row = Database::fetch_assoc($res)) {
             $id = $row['notebook_id'];
             if ($update_database) {
                 $sql = "UPDATE $TBL_NOTEBOOK
@@ -8779,7 +8779,7 @@ class TrackingCourseLog
                 }
             }
         }
-        while ($user = Database::fetch_array($res, 'ASSOC')) {
+        while ($user = Database::fetch_assoc($res)) {
             $userId = $user['user_id'];
             $userIdList[] = $userId;
             $userEntity = api_get_user_entity($userId);
@@ -9092,7 +9092,7 @@ class TrackingCourseLog
         $sortByFirstName = api_sort_by_first_name();
         $course = api_get_course_entity($courseId);
 
-        while ($user = Database::fetch_array($res, 'ASSOC')) {
+        while ($user = Database::fetch_assoc($res)) {
             $user['official_code'] = $user['col0'];
             $user['lastname'] = $user['col1'];
             $user['firstname'] = $user['col2'];

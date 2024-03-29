@@ -71,7 +71,7 @@ foreach ($students as $studentInfo) {
                     status = ''
                 LIMIT 1";
         $result = Database::query($sql);
-        $attempt = Database::fetch_array($result, 'ASSOC');
+        $attempt = Database::fetch_assoc($result);
         if (empty($attempt)) {
             $userExerciseData[$exerciseId] = null;
             continue;

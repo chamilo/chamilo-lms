@@ -275,7 +275,7 @@ $sql = "SELECT survey_question.*, count(survey_question_option.iid) as number_of
 $result = Database::query($sql);
 $question_counter_max = Database::num_rows($result);
 $questionsGroupClass = '';
-while ($row = Database::fetch_array($result, 'ASSOC')) {
+while ($row = Database::fetch_assoc($result)) {
     $questionId = $row['iid'];
 
     $breakClass = '';
@@ -397,7 +397,7 @@ if ($is_survey_type_1) {
                 WHERE id = '.intval($_GET['gid']).' AND survey_id = '.$survey_id.'
                 LIMIT 1';
         $rs = Database::query($sql);
-        $editedrow = Database::fetch_array($rs, 'ASSOC');
+        $editedrow = Database::fetch_assoc($rs);
         echo '<input type="text" maxlength="20" name="name" value="'.$editedrow['title'].'" size="10" disabled>';
         echo '<input type="text" maxlength="150" name="description" value="'.$editedrow['description'].'" size="40">';
         echo '<input type="hidden" name="group_id" value="'.Security::remove_XSS($_GET['gid']).'">';
@@ -428,7 +428,7 @@ if ($is_survey_type_1) {
 
     $rs = Database::query($sql);
     $grouplist = '';
-    while ($row = Database::fetch_array($rs, 'ASSOC')) {
+    while ($row = Database::fetch_assoc($rs)) {
         $grouplist .= '<tr><td>'.$row['title'].'</td><td>'.$row['description'].'</td><td>'.
         '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&gid='.$row['id'].'&action=editgroup">'.
         Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a> '.

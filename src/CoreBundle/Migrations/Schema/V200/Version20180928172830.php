@@ -48,6 +48,13 @@ class Version20180928172830 extends AbstractMigrationChamilo
         }
 
         if ($table->hasColumn('link')) {
+            $lpTools = $this->connection
+                ->prepare("SELECT c_id, session_id, link FROM c_tool WHERE link LIKE '%lp_controller.php%'")
+                ->executeQuery()
+                ->fetchAllAssociative();
+
+            $this->writeFile('tool_links', serialize($lpTools));
+
             $this->addSql('ALTER TABLE c_tool DROP link');
         }
 

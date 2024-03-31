@@ -267,7 +267,7 @@ function check_system_version()
  */
 function getLatestNews()
 {
-    $url = 'https://version.chamilo.org/news/latest.php';
+    $url = 'https://version.chamilo.org/news-c2/latest.php';
 
     $client = new Client();
     $response = $client->request(

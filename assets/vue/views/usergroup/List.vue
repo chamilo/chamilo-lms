@@ -198,8 +198,7 @@ import BaseInputTextWithVuelidate from "../../components/basecomponents/BaseInpu
 import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import { useI18n } from "vue-i18n"
-import axios from "axios"
-import { ENTRYPOINT } from "../../config/entrypoint"
+import usergroupService from "../../services/usergroupService"
 
 const { t } = useI18n()
 const newestGroups = ref([])
@@ -241,49 +240,27 @@ const createGroup = async () => {
       groupType: 1,
     }
     try {
-      const response = await axios.post(ENTRYPOINT + "usergroups", groupData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+      const newGroup = await usergroupService.createGroup(groupData)
 
-      if (selectedFile.value && response.data && response.data.id) {
-        const formData = new FormData()
-        formData.append("picture", selectedFile.value)
-        await axios.post(`/social-network/upload-group-picture/${response.data.id}`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+      if (selectedFile.value && newGroup && newGroup.id) {
+        await usergroupService.uploadPicture(newGroup.id, {
+          picture: selectedFile.value,
         })
       }
 
       showCreateGroupDialog.value = false
       resetForm()
-      await updateGroupsList()
+      updateGroupsList()
     } catch (error) {
       console.error("Failed to create group or upload picture:", error.response.data)
     }
   }
 }
-const fetchGroups = async (endpoint) => {
-  try {
-    const response = await fetch(ENTRYPOINT + `${endpoint}`)
-    if (!response.ok) {
-      throw new Error("Failed to fetch groups")
-    }
-    const data = await response.json()
-    console.log("hidra menber ::: ", data["hydra:member"])
 
-    return data["hydra:member"]
-  } catch (error) {
-    console.error(error)
-    return []
-  }
-}
-const updateGroupsList = async () => {
-  newestGroups.value = await fetchGroups("usergroup/list/newest")
-  popularGroups.value = await fetchGroups("usergroup/list/popular")
-  myGroups.value = await fetchGroups("usergroup/list/my")
+const updateGroupsList = () => {
+  usergroupService.listNewest().then((newest) => (newestGroups.value = newest))
+  usergroupService.listPopular().then((popular) => (popularGroups.value = popular))
+  usergroupService.listMine().then((mine) => (myGroups.value = mine))
 }
 
 const extractGroupId = (group) => {
@@ -294,7 +271,7 @@ const redirectToGroupDetails = (groupId) => {
   router.push({ name: "UserGroupShow", params: { group_id: groupId } })
 }
 onMounted(async () => {
-  await updateGroupsList()
+  updateGroupsList()
 })
 
 const closeDialog = () => {

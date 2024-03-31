@@ -1,8 +1,9 @@
-import { ENTRYPOINT } from "../config/entrypoint"
-import axios from "axios"
+import baseService from "./baseService"
 
-const sessionRelUserService = {
-  findAll: (params) => axios.get(ENTRYPOINT + "session_rel_users", { params }).then((response) => response.data),
+async function findAll(params) {
+  return await baseService.getCollection("/api/session_rel_users", params)
 }
 
-export default sessionRelUserService
+export default {
+  findAll,
+}

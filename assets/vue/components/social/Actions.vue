@@ -40,8 +40,8 @@
 
 <script>
 import { reactive } from "vue"
-import axios from "axios"
 import { usePlatformConfig } from "../../store/platformConfig"
+import socialService from "../../services/socialService"
 
 export default {
   name: "WallActions",
@@ -68,11 +68,11 @@ export default {
     function onLikeComment() {
       isLoading.like = true
 
-      axios
-        .post(props.socialPost["@id"] + "/like", {})
-        .then(({ data }) => {
-          props.socialPost.countFeedbackLikes = data.countFeedbackLikes
-          props.socialPost.countFeedbackDislikes = data.countFeedbackDislikes
+      socialService
+        .sendPostLike(props.socialPost["@id"])
+        .then((like) => {
+          props.socialPost.countFeedbackLikes = like.countFeedbackLikes
+          props.socialPost.countFeedbackDislikes = like.countFeedbackDislikes
         })
         .finally(() => (isLoading.like = false))
     }
@@ -80,11 +80,11 @@ export default {
     function onDisikeComment() {
       isLoading.dislike = true
 
-      axios
-        .post(props.socialPost["@id"] + "/dislike", {})
-        .then(({ data }) => {
-          props.socialPost.countFeedbackLikes = data.countFeedbackLikes
-          props.socialPost.countFeedbackDislikes = data.countFeedbackDislikes
+      socialService
+        .sendPostDislike(props.socialPost["@id"])
+        .then((like) => {
+          props.socialPost.countFeedbackLikes = like.countFeedbackLikes
+          props.socialPost.countFeedbackDislikes = like.countFeedbackDislikes
         })
         .finally(() => (isLoading.dislike = false))
     }
@@ -92,7 +92,7 @@ export default {
     function onDeleteComment() {
       isLoading.delete = true
 
-      axios
+      socialService
         .delete(props.socialPost["@id"])
         .then(() => emit("post-deleted", props.socialPost))
         .finally(() => (isLoading.delete = false))

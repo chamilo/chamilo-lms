@@ -144,8 +144,6 @@ import { useStore } from "vuex"
 import Loading from "../../components/Loading.vue"
 import { computed, ref } from "vue"
 import isEmpty from "lodash/isEmpty"
-import axios from "axios"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useConfirm } from "primevue/useconfirm"
@@ -154,6 +152,7 @@ import BaseChip from "../../components/basecomponents/BaseChip.vue"
 import BaseAutocomplete from "../../components/basecomponents/BaseAutocomplete.vue"
 import { useFormatDate } from "../../composables/formatDate"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
+import messageTagService from "../../services/messageTagService"
 
 const confirm = useConfirm()
 const { t } = useI18n()
@@ -250,25 +249,14 @@ function createEvent() {
 
 const foundTag = ref("")
 
-function onSearchTags(query) {
+async function onSearchTags(query) {
   isLoadingSelect.value = true
 
-  return axios
-    .get(ENTRYPOINT + "message_tags", {
-      params: {
-        user: user["@id"],
-        tag: query,
-      },
-    })
-    .then((response) => {
-      isLoadingSelect.value = false
+  const { items } = await messageTagService.searchUserTags(user["@id"], query)
 
-      return response.data["hydra:member"]
-    })
-    .catch(function (error) {
-      isLoadingSelect.value = false
-      console.log(error)
-    })
+  isLoadingSelect.value = false
+
+  return items
 }
 
 async function onItemSelect({ value }) {

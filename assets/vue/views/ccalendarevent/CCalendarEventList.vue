@@ -369,7 +369,7 @@ function confirmDelete() {
 
 async function subscribeToEvent() {
   try {
-    await resourceLinkService.post({
+    await resourceLinkService.create({
       resourceNode: item.value.resourceNode["@id"],
       user: currentUser.value["@id"],
       visibility: RESOURCE_LINK_PUBLISHED,

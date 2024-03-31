@@ -27,12 +27,17 @@
 <script setup>
 import ShowLinks from "../../components/resource_links/ShowLinks.vue"
 import { ref } from "vue"
-import axios from "axios"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import VueMultiselect from "vue-multiselect"
 import isEmpty from "lodash/isEmpty"
 import { RESOURCE_LINK_PUBLISHED } from "./visibility.js"
 import { useSecurityStore } from "../../store/securityStore"
+import userService from "../../services/userService"
+import userRelUserService from "../../services/userRelUserService"
+import { useCidReqStore } from "../../store/cidReq"
+import { storeToRefs } from "pinia"
+import sessionRelCourseRelUserService from "../../services/sessionRelCourseRelUserService"
+import sessionRelUserService from "../../services/sessionRelUserService"
+import courseRelUserService from "../../services/courseRelUserService"
 
 // eslint-disable-next-line vue/require-prop-types
 const model = defineModel()
@@ -70,6 +75,9 @@ const selectedUsers = ref([])
 const isLoading = ref(false)
 
 const securityStore = useSecurityStore()
+const cidReqStore = useCidReqStore()
+
+const { course, session } = storeToRefs(cidReqStore)
 
 function addUser(userResult) {
   if (isEmpty(model.value[props.linkListName])) {
@@ -90,39 +98,17 @@ function addUser(userResult) {
 }
 
 function findUsers(query) {
-  axios
-    .get(ENTRYPOINT + "users", {
-      params: {
-        username: query,
-      },
-    })
-    .then((response) => {
-      isLoading.value = false
-      let data = response.data
-      users.value = data["hydra:member"]
-    })
-    .catch(function (error) {
-      isLoading.value = false
-      console.log(error)
-    })
+  userService
+    .findByUsername(query)
+    .then(({ items }) => (users.value = items))
+    .finally(() => (isLoading.value = false))
 }
 
 function findUserRelUsers(query) {
-  axios
-    .get(ENTRYPOINT + "user_rel_users", {
-      params: {
-        user: securityStore.user["id"],
-        "friend.username": query,
-      },
-    })
-    .then((response) => {
-      isLoading.value = false
-
-      users.value = response.data["hydra:member"].map((member) => member.friend)
-    })
-    .catch(function () {
-      isLoading.value = false
-    })
+  userRelUserService
+    .searchRelationshipByUsername(securityStore.user["@id"], query)
+    .then(({ items }) => (users.value = items.map((relationship) => relationship.friend)))
+    .finally(() => (isLoading.value = false))
 }
 
 function findStudentsInCourse(query) {
@@ -130,42 +116,35 @@ function findStudentsInCourse(query) {
   const cId = parseInt(searchParams.get("cid"))
   const sId = parseInt(searchParams.get("sid"))
 
-  if (!cId && !sId) {
+  if (!course.value && !session.value) {
     return
   }
 
-  let endpoint = ENTRYPOINT
   let params = {
     "user.username": query,
   }
 
-  if (sId) {
-    params.session = endpoint + `sessions/${sId}`
+  if (session.value) {
+    params.session = session.value["@id"]
   }
+
+  let service
 
   if (cId) {
+    params.course = course.value["@id"]
+
     if (sId) {
-      endpoint += `session_rel_course_rel_users`
-      params.course = endpoint + `courses/${cId}`
+      service = sessionRelCourseRelUserService.findAll
     } else {
-      endpoint += `courses/${cId}/users`
+      service = courseRelUserService.findAll
     }
   } else {
-    endpoint += `session_rel_users`
+    service = sessionRelUserService.findAll
   }
 
-  axios
-    .get(endpoint, {
-      params,
-    })
-    .then((response) => {
-      isLoading.value = false
-
-      users.value = response.data["hydra:member"].map((member) => member.user)
-    })
-    .catch(function () {
-      isLoading.value = false
-    })
+  service(params)
+    .then(({ items }) => (users.value = items.map((membership) => membership.user)))
+    .finally(() => (isLoading.value = false))
 }
 
 function asyncFind(query) {

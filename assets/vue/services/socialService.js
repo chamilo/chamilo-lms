@@ -1,6 +1,23 @@
 import axios from "axios"
+import baseService from "./baseService"
 
 const API_URL = "/social-network"
+
+/**
+ * @param {string} postIri
+ * @returns {Promise<Object>}
+ */
+async function sendPostLike(postIri) {
+  return baseService.post(`${postIri}/like`)
+}
+
+/**
+ * @param {string} postIri
+ * @returns {Promise<Object>}
+ */
+async function sendPostDislike(postIri) {
+  return baseService.post(`${postIri}/dislike`)
+}
 
 export default {
   async fetchPersonalData(userId) {
@@ -150,4 +167,10 @@ export default {
       throw error
     }
   },
+
+  sendPostLike,
+
+  sendPostDislike,
+
+  delete: baseService.delete,
 }

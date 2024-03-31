@@ -1,15 +1,62 @@
 import api from "../config/api"
 
-/**
- * @param {string} iri
- * @returns {Promise<axios.AxiosResponse<any>>}
- */
-async function find(iri) {
-  return await api.get(iri)
-}
+export default {
+  /**
+   * @param {string} iri
+   * @param {Object} [params]
+   * @returns {Promise<Object>}
+   */
+  async get(iri, params = {}) {
+    const { data } = await api.get(iri, {
+      params,
+    })
 
-async function post(params) {
-  return await api.post("/api/resource_links", params)
-}
+    return data
+  },
 
-export { find, post }
+  /**
+   * @param {string} endpoint
+   * @param {Object} searchParams
+   * @returns {Promise<{totalItems, items}>}
+   */
+  async getCollection(endpoint, searchParams = {}) {
+    const { data } = await api.get(endpoint, {
+      params: searchParams,
+    })
+
+    return {
+      totalItems: data.totalItems,
+      items: data["hydra:member"],
+    }
+  },
+
+  /**
+   * @param {string} endpoint
+   * @param {Object} [params]
+   * @returns {Promise<Object>}
+   */
+  async post(endpoint, params) {
+    const { data } = await api.post(endpoint, params)
+
+    return data
+  },
+
+  /**
+   * @param {string} endpoint
+   * @param {Object} params
+   * @returns {Promise<Object>}
+   */
+  async postForm(endpoint, params) {
+    const { data } = await api.postForm(endpoint, params)
+
+    return data
+  },
+
+  /**
+   * @param {string} iri
+   * @returns {Promise<void>}
+   */
+  async delete(iri) {
+    await api.delete(iri)
+  },
+}

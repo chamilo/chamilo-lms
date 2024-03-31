@@ -45,8 +45,8 @@ import { useNotification } from "../../composables/notification"
 import VueMultiselect from "vue-multiselect"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import { ENTRYPOINT } from "../../config/entrypoint"
-import axios from "axios"
+import userService from "../../services/userService"
+import userRelUserService from "../../services/userRelUserService"
 
 const store = useStore()
 const router = useRouter()
@@ -61,11 +61,10 @@ const searchQuery = ref("")
 const asyncFind = (query) => {
   if (query.toString().length < 3) return
   isLoadingSelect.value = true
-  axios
-    .get(`${ENTRYPOINT}users`, { params: { username: query } })
-    .then((response) => {
-      users.value = response.data["hydra:member"]
-    })
+
+  userService
+    .findByUsername(query)
+    .then(({ items }) => (users.value = items))
     .catch((error) => {
       console.error("Error fetching users:", error)
     })
@@ -76,12 +75,9 @@ const asyncFind = (query) => {
 
 const addFriend = (friend) => {
   isLoadingSelect.value = true
-  axios
-    .post(`${ENTRYPOINT}user_rel_users`, {
-      user: user["@id"],
-      friend: friend["@id"],
-      relationType: 10,
-    })
+
+  userRelUserService
+    .sendFriendRequest(user["@id"], friend["@id"])
     .then(() => {
       showSuccessNotification(t("Friend request sent successfully"))
     })

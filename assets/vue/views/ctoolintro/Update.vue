@@ -19,10 +19,9 @@ import UpdateMixin from "../../mixins/UpdateMixin"
 import { ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import useVuelidate from "@vuelidate/core"
-import axios from "axios"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
 import { useCidReq } from "../../composables/cidReq"
+import cToolIntroService from "../../services/cToolIntroService"
 
 const servicePrefix = "ctoolintro"
 
@@ -46,11 +45,10 @@ export default {
     let ctoolintroId = route.query.ctoolintroIid
 
     // Get the current intro text.
-    axios
-      .get(ENTRYPOINT + "c_tool_intros/" + ctoolintroId)
-      .then((response) => {
-        let data = response.data
-        item.value["introText"] = data.introText
+    cToolIntroService
+      .findById(ctoolintroId)
+      .then((toolIntroInfo) => {
+        item.value["introText"] = toolIntroInfo.introText
         item.value["parentResourceNodeId"] = Number(route.query.parentResourceNodeId)
       })
       .catch(function (error) {

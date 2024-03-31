@@ -79,8 +79,8 @@ import { useI18n } from "vue-i18n"
 import { useNotification } from "../../composables/notification"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import { ENTRYPOINT } from "../../config/entrypoint"
-import axios from "axios"
+import userRelUserService from "../../services/userRelUserService"
+import userService from "../../services/userService"
 
 const store = useStore()
 const router = useRouter()
@@ -107,10 +107,9 @@ const isFriend = (user) => {
 
 async function fetchFriendsList() {
   try {
-    const response = await axios.get(`${ENTRYPOINT}user_rel_users`, {
-      params: { user: user.id, relationType: [3, 10] },
-    })
-    friendsList.value = response.data["hydra:member"].map((friendship) => friendship.friend.id).concat(user.id)
+    const friendshipList = await userRelUserService.getFriendList(user["@id"])
+
+    friendsList.value = friendshipList.map((friendship) => friendship.friend.id).concat(user.id)
   } catch (error) {
     showErrorNotification(t("Error fetching friends list"))
     console.error("Error fetching friends list:", error)
@@ -121,8 +120,9 @@ const asyncFind = async (query) => {
   if (query.length < 3) return
   isLoadingSelect.value = true
   try {
-    const { data } = await axios.get(`${ENTRYPOINT}users`, { params: { username: query } })
-    foundUsers.value = data["hydra:member"].filter((foundUser) => !friendsList.value.includes(foundUser.id))
+    const { items } = await userService.findByUsername(query)
+
+    foundUsers.value = items.filter((foundUser) => !friendsList.value.includes(foundUser.id))
   } catch (error) {
     showErrorNotification(t("Error fetching users"))
   } finally {
@@ -131,11 +131,7 @@ const asyncFind = async (query) => {
 }
 const addFriend = async (friend) => {
   try {
-    await axios.post(`${ENTRYPOINT}user_rel_users`, {
-      user: user["@id"],
-      friend: friend["@id"],
-      relationType: 10,
-    })
+    await userRelUserService.sendFriendRequest(user["@id"], friend["@id"])
     showSuccessNotification(t("Friend request sent successfully"))
     await fetchFriendsList()
     const searchQuery = router.currentRoute.value.query.search

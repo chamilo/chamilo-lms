@@ -88,7 +88,8 @@ final class CCalendarEventRepository extends ResourceRepository
             ->from(ResourceLink::class, 'rl')
             ->innerJoin('rl.resourceNode', 'rn')
             ->where('rn.id = :resourceNodeId')
-            ->setParameter('resourceNodeId', $event->getResourceNode()->getId());
+            ->setParameter('resourceNodeId', $event->getResourceNode()->getId())
+        ;
 
         $resourceLinks = $queryBuilder->getQuery()->getResult();
 

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -7,6 +8,8 @@ namespace Chamilo\CoreBundle\Service;
 
 use Chamilo\CoreBundle\Entity\TrackEDefault;
 use Chamilo\CoreBundle\ServiceHelper\CidReqHelper;
+use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 
@@ -21,8 +24,8 @@ class EventLoggerService
     public function addEvent(
         string $eventType,
         string $valueType,
-               $value,
-        ?\DateTime $dateTime = null,
+        $value,
+        ?DateTime $dateTime = null,
         ?int $userId = null,
         ?int $courseId = null,
         ?int $sessionId = null
@@ -41,18 +44,18 @@ class EventLoggerService
         $trackEvent
             ->setDefaultUserId($userId)
             ->setCId($courseId)
-            ->setDefaultDate($dateTime ?? new \DateTime('now', new \DateTimeZone('UTC')))
+            ->setDefaultDate($dateTime ?? new DateTime('now', new DateTimeZone('UTC')))
             ->setDefaultEventType($eventType)
             ->setDefaultValueType($valueType)
             ->setDefaultValue($value)
-            ->setSessionId((int) $sessionId);
+            ->setSessionId((int) $sessionId)
+        ;
 
         $this->entityManager->persist($trackEvent);
         $this->entityManager->flush();
 
         return true;
     }
-
 
     private function serializeEventValue($value): string
     {

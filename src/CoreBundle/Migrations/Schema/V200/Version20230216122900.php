@@ -1146,7 +1146,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
             ],
             'Ticket' => [
                 'ticket_project_user_roles',
-            ]
+            ],
         ];
         foreach ($configurationValues as $category => $variables) {
             foreach ($variables as $variable) {

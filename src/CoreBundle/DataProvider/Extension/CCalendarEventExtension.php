@@ -44,7 +44,7 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
             return;
         }
 
-        $isGlobalType = isset($context['filters']['type']) && $context['filters']['type'] === 'global';
+        $isGlobalType = isset($context['filters']['type']) && 'global' === $context['filters']['type'];
         if ($isGlobalType) {
             return;
         }

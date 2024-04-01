@@ -214,7 +214,8 @@ class CourseRepository extends ResourceRepository
             ->select('count(c.id)')
             ->where('c.code = :code OR c.visualCode = :code')
             ->setParameter('code', $code)
-            ->getQuery();
+            ->getQuery()
+        ;
 
         return (int) $qb->getSingleScalarResult() > 0;
     }
@@ -224,7 +225,8 @@ class CourseRepository extends ResourceRepository
         $qb = $this->createQueryBuilder('c')
             ->select('c.id, c.code, c.title, c.visualCode, c.courseLanguage, c.departmentUrl, c.departmentName')
             ->where('c.id = :id')
-            ->setParameter('id', $id);
+            ->setParameter('id', $id)
+        ;
 
         $query = $qb->getQuery();
 

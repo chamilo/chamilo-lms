@@ -331,13 +331,15 @@ class ResourceListener
             $globalLink->setCourse(null)
                 ->setSession(null)
                 ->setGroup(null)
-                ->setUser(null);
+                ->setUser(null)
+            ;
 
             $alreadyHasGlobalLink = false;
             foreach ($resourceNode->getResourceLinks() as $existingLink) {
-                if (null === $existingLink->getCourse() && null === $existingLink->getSession() &&
-                    null === $existingLink->getGroup() && null === $existingLink->getUser()) {
+                if (null === $existingLink->getCourse() && null === $existingLink->getSession()
+                    && null === $existingLink->getGroup() && null === $existingLink->getUser()) {
                     $alreadyHasGlobalLink = true;
+
                     break;
                 }
             }

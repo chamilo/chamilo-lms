@@ -191,16 +191,15 @@ final class Version20240122221400 extends AbstractMigrationChamilo
         $container = $this->getContainer();
         $kernel = $container->get('kernel');
         $rootPath = $kernel->getProjectDir();
-        $importPath = $rootPath . '/var/translations/import/';
+        $importPath = $rootPath.'/var/translations/import/';
 
         $this->recursiveRemoveDirectory($importPath);
     }
 
     private function recursiveRemoveDirectory($directory): void
     {
-        foreach(glob("{$directory}/*") as $file)
-        {
-            if(is_dir($file)) {
+        foreach (glob("{$directory}/*") as $file) {
+            if (is_dir($file)) {
                 $this->recursiveRemoveDirectory($file);
             } else {
                 unlink($file);

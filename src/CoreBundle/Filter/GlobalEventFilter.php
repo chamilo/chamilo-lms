@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -8,7 +9,6 @@ namespace Chamilo\CoreBundle\Filter;
 use ApiPlatform\Doctrine\Orm\Filter\AbstractFilter;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
-use Chamilo\CoreBundle\Entity\ResourceNode;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
@@ -27,14 +27,14 @@ class GlobalEventFilter extends AbstractFilter
 
     protected function filterProperty(
         string $property,
-               $value,
+        $value,
         QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
         ?Operation $operation = null,
         array $context = []
     ): void {
-        $isGlobalType = isset($context['filters']['type']) && $context['filters']['type'] === 'global';
+        $isGlobalType = isset($context['filters']['type']) && 'global' === $context['filters']['type'];
         if (!$isGlobalType) {
             return;
         }
@@ -48,7 +48,8 @@ class GlobalEventFilter extends AbstractFilter
             ->andWhere("$resourceLinkAlias.course IS NULL")
             ->andWhere("$resourceLinkAlias.session IS NULL")
             ->andWhere("$resourceLinkAlias.group IS NULL")
-            ->andWhere("$resourceLinkAlias.user IS NULL");
+            ->andWhere("$resourceLinkAlias.user IS NULL")
+        ;
     }
 
     public function getDescription(string $resourceClass): array

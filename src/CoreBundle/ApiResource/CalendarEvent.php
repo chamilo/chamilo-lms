@@ -54,8 +54,7 @@ class CalendarEvent extends AbstractResource
         public ?string $color = null,
         #[Groups(['calendar_event:read'])]
         public ?string $type = null,
-    ) {
-    }
+    ) {}
 
     public function getType(): ?string
     {
@@ -65,6 +64,7 @@ class CalendarEvent extends AbstractResource
     public function setType(?string $type): self
     {
         $this->type = $type;
+
         return $this;
     }
 }

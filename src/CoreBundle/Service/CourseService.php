@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -23,10 +24,15 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CGroupCategory;
+use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\EntityManager;
 use DocumentManager;
+use Exception;
 use Exercise;
+use InvalidArgumentException;
 use Link;
+use LogicException;
 use MultipleAnswer;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Finder\Finder;
@@ -39,7 +45,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CourseService
 {
-    const MAX_COURSE_LENGTH_CODE = 40;
+    public const MAX_COURSE_LENGTH_CODE = 40;
 
     public function __construct(
         private readonly EntityManager $entityManager,
@@ -58,7 +64,7 @@ class CourseService
     public function createCourse(array $params): ?Course
     {
         if (empty($params['title'])) {
-            throw new \InvalidArgumentException('The course title cannot be empty.');
+            throw new InvalidArgumentException('The course title cannot be empty.');
         }
 
         if (empty($params['wanted_code'])) {
@@ -66,7 +72,7 @@ class CourseService
         }
 
         if ($this->courseRepository->courseCodeExists($params['wanted_code'])) {
-            throw new \Exception('The course code already exists: ' . $params['wanted_code']);
+            throw new Exception('The course code already exists: '.$params['wanted_code']);
         }
 
         $keys = $this->defineCourseKeys($params['wanted_code']);
@@ -83,7 +89,7 @@ class CourseService
     public function registerCourse(array $rawParams): ?Course
     {
         try {
-            /* @var User $currentUser */
+            /** @var User $currentUser */
             $currentUser = $this->security->getUser();
 
             $params = $this->prepareAndValidateCourseData($rawParams);
@@ -105,7 +111,8 @@ class CourseService
                 ->setSticky($params['sticky'] ?? false)
                 ->setVideoUrl($params['videoUrl'] ?? '')
                 ->setUnsubscribe($params['unsubscribe'])
-                ->setCreator($currentUser);
+                ->setCreator($currentUser)
+            ;
 
             if (!empty($params['categories'])) {
                 foreach ($params['categories'] as $categoryId) {
@@ -164,8 +171,7 @@ class CourseService
             }
 
             return $course;
-
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return null;
         }
     }
@@ -174,11 +180,11 @@ class CourseService
     {
         $siteName = $this->getDefaultSetting('platform.site_name');
         $recipientEmail = $this->getDefaultSetting('admin.administrator_email');
-        $recipientName = $this->getDefaultSetting('admin.administrator_name') . ' ' . $this->getDefaultSetting('admin.administrator_surname');
+        $recipientName = $this->getDefaultSetting('admin.administrator_name').' '.$this->getDefaultSetting('admin.administrator_surname');
         $institutionName = $this->getDefaultSetting('platform.institution');
         $courseName = $course->getTitle();
 
-        $subject = $this->translator->trans('New Course Created in'). "$siteName - $institutionName";
+        $subject = $this->translator->trans('New Course Created in')."$siteName - $institutionName";
 
         $greeting = $this->translator->trans('email.greeting');
         $intro = $this->translator->trans('email.course_created_intro');
@@ -187,20 +193,21 @@ class CourseService
         $message = "$greeting $recipientName,\n\n";
         $message .= "$intro $siteName - $institutionName.\n";
         $message .= "$courseNameLabel $courseName\n";
-        $message .= $this->translator->trans('Course name: ').$course->getTitle() . "\n";
+        $message .= $this->translator->trans('Course name: ').$course->getTitle()."\n";
 
         foreach ($course->getCategories() as $category) {
-            $message .= $this->translator->trans('Category: ').$category->getCode() . "\n";
+            $message .= $this->translator->trans('Category: ').$category->getCode()."\n";
         }
 
-        $message .= $this->translator->trans('Coach: ').$course->getTutorName() . "\n";
+        $message .= $this->translator->trans('Coach: ').$course->getTutorName()."\n";
         $message .= $this->translator->trans('Language: ').$course->getCourseLanguage();
 
         $email = (new Email())
             ->from($recipientEmail)
             ->to($recipientEmail)
             ->subject($subject)
-            ->text($message);
+            ->text($message)
+        ;
 
         $this->mailer->send($email);
     }
@@ -225,8 +232,8 @@ class CourseService
         $keysAreUnique = false;
 
         while (!$keysAreUnique && $tryCount < $limitNumTry) {
-            $keysCourseId = $prefixForAll . $uniquePrefix . $keysCourseCode . $finalSuffix['CourseId'];
-            $keysCourseRepository = $prefixForPath . $uniquePrefix . $wantedCode . $finalSuffix['CourseDir'];
+            $keysCourseId = $prefixForAll.$uniquePrefix.$keysCourseCode.$finalSuffix['CourseId'];
+            $keysCourseRepository = $prefixForPath.$uniquePrefix.$wantedCode.$finalSuffix['CourseDir'];
 
             if ($this->courseRepository->courseCodeExists($keysCourseId)) {
                 $finalSuffix['CourseId'] = substr(md5(uniqid((string) rand(), true)), 0, 4);
@@ -305,7 +312,7 @@ class CourseService
             $courseSetting->setCId($course->getId());
             $courseSetting->setVariable($variable);
             $courseSetting->setTitle($setting['title'] ?? '');
-            $courseSetting->setValue((string)$setting['default']);
+            $courseSetting->setValue((string) $setting['default']);
             $courseSetting->setCategory($setting['category'] ?? '');
 
             $this->entityManager->persist($courseSetting);
@@ -329,10 +336,10 @@ class CourseService
 
     private function createRootGradebook(Course $course): GradebookCategory
     {
-        /* @var User $currentUser */
+        /** @var User $currentUser */
         $currentUser = $this->security->getUser();
         if (!$currentUser) {
-            throw new \LogicException('There is no user currently authenticated..');
+            throw new LogicException('There is no user currently authenticated..');
         }
 
         $gradebookCategory = new GradebookCategory();
@@ -345,7 +352,8 @@ class CourseService
             ->setWeight(100)
             ->setVisible(false)
             ->setCertifMinScore(75)
-            ->setUser($currentUser);
+            ->setUser($currentUser)
+        ;
 
         $this->entityManager->persist($gradebookCategory);
         $this->entityManager->flush();
@@ -355,7 +363,7 @@ class CourseService
 
     private function insertExampleContent(Course $course, GradebookCategory $gradebook): void
     {
-        /* @var User $currentUser */
+        /** @var User $currentUser */
         $currentUser = $this->security->getUser();
 
         $files = [
@@ -385,17 +393,17 @@ class CourseService
         }
 
         $projectDir = $this->parameterBag->get('kernel.project_dir');
-        $defaultPath = $projectDir . '/public/img/document';
+        $defaultPath = $projectDir.'/public/img/document';
 
         $request = $this->requestStack->getCurrentRequest();
-        $baseUrl = $request->getSchemeAndHttpHost() . $request->getBasePath();
+        $baseUrl = $request->getSchemeAndHttpHost().$request->getBasePath();
 
         $finder = new Finder();
         $finder->in($defaultPath);
 
         /** @var SplFileInfo $file */
         foreach ($finder as $file) {
-            $parentName = dirname(str_replace($defaultPath, '', $file->getRealPath()));
+            $parentName = \dirname(str_replace($defaultPath, '', $file->getRealPath()));
             if ('/' === $parentName || '/certificates' === $parentName) {
                 continue;
             }
@@ -445,7 +453,7 @@ class CourseService
             }
         }
 
-        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $now = new DateTime('now', new DateTimeZone('UTC'));
         $formattedNow = $now->format('Y-m-d H:i:s');
 
         $agenda = new Agenda('course');
@@ -599,7 +607,7 @@ class CourseService
         $gradebookLink->setUser(api_get_user_entity());
         $gradebookLink->setCourse($course);
         $gradebookLink->setCategory($childGradebookCategory);
-        $gradebookLink->setCreatedAt(new \DateTime());
+        $gradebookLink->setCreatedAt(new DateTime());
         $gradebookLink->setWeight(100);
         $gradebookLink->setVisible(1);
         $gradebookLink->setLocked(0);
@@ -616,9 +624,9 @@ class CourseService
 
     public function useTemplateAsBasisIfRequired($courseCode, $courseTemplate): void
     {
-        $templateSetting =  $this->settingsManager->getSetting('course.course_creation_use_template');
+        $templateSetting = $this->settingsManager->getSetting('course.course_creation_use_template');
         $teacherCanSelectCourseTemplate = 'true' === $this->settingsManager->getSetting('course.teacher_can_select_course_template');
-        $courseTemplate = isset($courseTemplate) ? intval($courseTemplate) : 0;
+        $courseTemplate = isset($courseTemplate) ? (int) $courseTemplate : 0;
 
         $useTemplate = false;
 
@@ -652,7 +660,7 @@ class CourseService
         $departmentUrl = $this->fixDepartmentUrl($params['department_url'] ?? '');
         $diskQuota = $params['disk_quota'] ?? $this->getDefaultSetting('document.default_document_quotum');
         $visibility = $params['visibility'] ?? $this->getDefaultSetting('course.courses_default_creation_visibility', Course::OPEN_PLATFORM);
-        $subscribe = $params['subscribe'] ?? ($visibility == Course::OPEN_PLATFORM);
+        $subscribe = $params['subscribe'] ?? (Course::OPEN_PLATFORM == $visibility);
         $unsubscribe = $params['unsubscribe'] ?? false;
         $expirationDate = $params['expiration_date'] ?? $this->getFutureExpirationDate();
         $teachers = $params['teachers'] ?? [];
@@ -660,14 +668,24 @@ class CourseService
         $notifyAdmins = $this->getDefaultSetting('course.send_email_to_admin_when_create_course');
 
         $errors = [];
-        if (empty($code)) $errors[] = 'courseSysCode is missing';
-        if (empty($visualCode)) $errors[] = 'courseScreenCode is missing';
-        if (empty($directory)) $errors[] = 'courseRepository is missing';
-        if (empty($title)) $errors[] = 'title is missing';
-        if ($visibility < 0 || $visibility > 4) $errors[] = 'visibility is invalid';
+        if (empty($code)) {
+            $errors[] = 'courseSysCode is missing';
+        }
+        if (empty($visualCode)) {
+            $errors[] = 'courseScreenCode is missing';
+        }
+        if (empty($directory)) {
+            $errors[] = 'courseRepository is missing';
+        }
+        if (empty($title)) {
+            $errors[] = 'title is missing';
+        }
+        if ($visibility < 0 || $visibility > 4) {
+            $errors[] = 'visibility is invalid';
+        }
 
         if (!empty($errors)) {
-            throw new \Exception(implode(', ', $errors));
+            throw new Exception(implode(', ', $errors));
         }
 
         return [
@@ -683,7 +701,7 @@ class CourseService
             'visibility' => $visibility,
             'subscribe' => $subscribe,
             'unsubscribe' => $unsubscribe,
-            'expirationDate' => new \DateTime($expirationDate),
+            'expirationDate' => new DateTime($expirationDate),
             'teachers' => $teachers,
             'categories' => $categories,
             'notifyAdmins' => $notifyAdmins,
@@ -694,20 +712,21 @@ class CourseService
     {
         $settingValue = $this->settingsManager->getSetting($name);
 
-        return $settingValue !== null ? $settingValue : $default;
+        return null !== $settingValue ? $settingValue : $default;
     }
 
     private function fixDepartmentUrl(string $url): string
     {
         if (!empty($url) && !str_starts_with($url, 'http://') && !str_starts_with($url, 'https://')) {
-            return 'http://' . $url;
+            return 'http://'.$url;
         }
-        return $url === 'http://' ? '' : $url;
+
+        return 'http://' === $url ? '' : $url;
     }
 
     private function getFutureExpirationDate(): string
     {
-        return (new \DateTime())->modify('+1 year')->format('Y-m-d H:i:s');
+        return (new DateTime())->modify('+1 year')->format('Y-m-d H:i:s');
     }
 
     private function generateCourseCode(string $title): string
@@ -720,15 +739,14 @@ class CourseService
     private function replaceDangerousChar(string $text): string
     {
         $encoding = mb_detect_encoding($text, mb_detect_order(), true);
-        if ($encoding !== 'UTF-8') {
+        if ('UTF-8' !== $encoding) {
             $text = mb_convert_encoding($text, 'UTF-8', $encoding);
         }
 
         $text = str_replace(' ', '-', $text);
         $text = preg_replace('/[^-\w]+/', '', $text);
-        $text = preg_replace('/\.+$/', '', $text);
 
-        return $text;
+        return preg_replace('/\.+$/', '', $text);
     }
 
     private function handlePostCourseCreation(Course $course, array $params): void

@@ -41,6 +41,7 @@ use Database;
 use Display;
 use Doctrine\ORM\EntityManagerInterface;
 use Event;
+use Exception;
 use Exercise;
 use ExtraFieldValue;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -766,11 +767,10 @@ class CourseController extends ToolBaseController
                     'courseId' => $course->getId(),
                 ]);
             }
-        } catch (\Exception $e) {
-
+        } catch (Exception $e) {
             return new JsonResponse([
                 'success' => false,
-                'message' => $translator->trans($e->getMessage())
+                'message' => $translator->trans($e->getMessage()),
             ], Response::HTTP_BAD_REQUEST);
         }
 

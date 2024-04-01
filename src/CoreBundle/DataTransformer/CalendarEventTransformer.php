@@ -79,7 +79,7 @@ class CalendarEventTransformer implements DataTransformerInterface
         $calendarEvent->setType($eventType);
 
         if ('true' === $this->settingsManager->getSetting('agenda.agenda_reminders')) {
-            $object->getReminders()->forAll(fn(int $i, AgendaReminder $reminder) => $reminder->encodeDateInterval());
+            $object->getReminders()->forAll(fn (int $i, AgendaReminder $reminder) => $reminder->encodeDateInterval());
 
             $calendarEvent->reminders = $object->getReminders();
         }
@@ -125,7 +125,7 @@ class CalendarEventTransformer implements DataTransformerInterface
 
         $agendaColors = [];
         $settingAgendaColors = $this->settingsManager->getSetting('agenda.agenda_colors');
-        if (is_array($settingAgendaColors)) {
+        if (\is_array($settingAgendaColors)) {
             $agendaColors = array_merge($defaultColors, $settingAgendaColors);
         }
 

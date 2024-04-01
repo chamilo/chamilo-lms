@@ -69,7 +69,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(filterClass: DateFilter::class, strategy: 'exclude_null')]
 #[ApiFilter(filterClass: CidFilter::class)]
 #[ApiFilter(filterClass: SidFilter::class)]
-#[ApiFilter(GlobalEventFilter::class, properties: ["type"])]
+#[ApiFilter(GlobalEventFilter::class, properties: ['type'])]
 class CCalendarEvent extends AbstractResource implements ResourceInterface, Stringable
 {
     public const COLOR_STUDENT_PUBLICATION = '#FF8C00';

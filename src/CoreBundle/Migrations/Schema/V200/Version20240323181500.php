@@ -29,7 +29,6 @@ class Version20240323181500 extends AbstractMigrationChamilo
         $utc = new DateTimeZone('UTC');
         $admin = $this->getAdmin();
         foreach ($sysCalendars as $sysCalendar) {
-
             $calendarEvent = $this->createCCalendarEvent(
                 $sysCalendar['title'] ?: '-',
                 $sysCalendar['content'],
@@ -78,13 +77,15 @@ class Version20240323181500 extends AbstractMigrationChamilo
         $globalLink->setCourse(null)
             ->setSession(null)
             ->setGroup(null)
-            ->setUser(null);
+            ->setUser(null)
+        ;
 
         $alreadyHasGlobalLink = false;
         foreach ($resourceNode->getResourceLinks() as $existingLink) {
-            if (null === $existingLink->getCourse() && null === $existingLink->getSession() &&
-                null === $existingLink->getGroup() && null === $existingLink->getUser()) {
+            if (null === $existingLink->getCourse() && null === $existingLink->getSession()
+                && null === $existingLink->getGroup() && null === $existingLink->getUser()) {
                 $alreadyHasGlobalLink = true;
+
                 break;
             }
         }

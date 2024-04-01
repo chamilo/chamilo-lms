@@ -152,7 +152,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
         $reminders = $em->getRepository(AgendaReminder::class)->findBy(['type' => 'course']);
         foreach ($reminders as $reminder) {
             $oldEventId = $reminder->getEventId();
-            if (array_key_exists($oldEventId, $oldNewEventIdMap)) {
+            if (\array_key_exists($oldEventId, $oldNewEventIdMap)) {
                 $newEventId = $oldNewEventIdMap[$oldEventId];
                 $reminder->setEventId($newEventId);
                 $em->persist($reminder);

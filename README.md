@@ -155,10 +155,14 @@ Load the (your-domain)/main/install/index.php URL to start the installer (which 
 If the installer is pure-HTML and doesn't appear with a clean layout, that's because you didn't follow these instructions carefully.
 Go back to the beginning of this section and try again.
 
-If you want hot reloading for assets use the command `yarn run encore dev-server`. This will refresh automatically
-your assets when you modify them under `assets/vue`. Access your chamilo instance as usual. In the background, this will serve
+If you want hot reloading for assets, use the command `yarn dev-server`\*. This will refresh automatically
+your assets when you modify them under `assets/vue`. Access your Chamilo instance as usual. In the background, this will serve
 assets from a custom server on http://localhost:8080. Do not access this url directly since
 [Encore](https://symfony.com/doc/current/frontend.html#webpack-encore) is in charge of changing url assets as needed.
+
+\* This will not show tinymce WYSIWYG editors because this third party plugin is not configured to take assets from localhost:8080 and thus,
+they will not work. If you plan to work with the editor, the only option is to use `yarn watch`. This command will compile all assets when you
+modify something, but you will need to refresh the browser window to see the changes.
 
 ### Supporting PHP 7.4 and 8.1 in parallel
 

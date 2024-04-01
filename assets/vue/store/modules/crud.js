@@ -111,7 +111,6 @@ export default function makeCrudModule({ normalizeRelations = (x) => x, resolveR
             commit(ACTIONS.TOGGLE_LOADING);
             commit(ACTIONS.ADD, data);
             commit(ACTIONS.SET_CREATED, data);
-              return data;
           })
           .catch((e) => handleError(commit, e));
       },
@@ -344,7 +343,6 @@ export default function makeCrudModule({ normalizeRelations = (x) => x, resolveR
           .then((data) => {
             commit(ACTIONS.TOGGLE_LOADING);
             commit(ACTIONS.SET_UPDATED, data);
-            return data;
           })
           .catch((e) => handleError(commit, e));
       },

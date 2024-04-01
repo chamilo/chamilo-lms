@@ -54,7 +54,7 @@ export function useIndexBlocks() {
   }
 
   async function loadNews() {
-    blockVersionStatusEl.value = t("Loading")
+    blockNewsStatusEl.value = t("Loading")
 
     blockNewsStatusEl.value = await adminService.findAnnouncements()
   }

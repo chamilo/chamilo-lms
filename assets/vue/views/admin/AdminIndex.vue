@@ -222,14 +222,8 @@
         <div
           v-else
           class="block-admin-news__status"
-        >
-          <i18n-t
-            class="mb-3"
-            keypath="Disabled"
-            tag="p"
-          >
-          </i18n-t>
-        </div>
+          v-t="'Disabled'"
+        />
       </div>
     </div>
 

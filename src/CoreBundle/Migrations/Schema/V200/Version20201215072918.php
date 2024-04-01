@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
@@ -21,7 +22,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Migrate c_calendar_event, calendar_event_attachment';
+        return 'Migrate c_calendar_event, calendar_event_attachment and update agenda_reminder';
     }
 
     public function up(Schema $schema): void
@@ -41,6 +42,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
         $kernel = $container->get('kernel');
         $rootPath = $kernel->getProjectDir();
         $admin = $this->getAdmin();
+        $oldNewEventIdMap = [];
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
@@ -55,6 +57,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
             $events = $result->fetchAllAssociative();
             foreach ($events as $eventData) {
                 $id = $eventData['iid'];
+                $oldEventId = $id;
 
                 /** @var CCalendarEvent $event */
                 $event = $eventRepo->find($id);
@@ -100,6 +103,9 @@ final class Version20201215072918 extends AbstractMigrationChamilo
 
                 $em->persist($event);
                 $em->flush();
+
+                $newEventId = $event->getId();
+                $oldNewEventIdMap[$oldEventId] = $newEventId;
             }
 
             $sql = "SELECT * FROM c_calendar_event_attachment WHERE c_id = {$courseId}
@@ -137,6 +143,22 @@ final class Version20201215072918 extends AbstractMigrationChamilo
                 $em->flush();
             }
         }
+
+        $this->updateAgendaReminders($oldNewEventIdMap, $em);
+    }
+
+    private function updateAgendaReminders($oldNewEventIdMap, $em): void
+    {
+        $reminders = $em->getRepository(AgendaReminder::class)->findBy(['type' => 'course']);
+        foreach ($reminders as $reminder) {
+            $oldEventId = $reminder->getEventId();
+            if (array_key_exists($oldEventId, $oldNewEventIdMap)) {
+                $newEventId = $oldNewEventIdMap[$oldEventId];
+                $reminder->setEventId($newEventId);
+                $em->persist($reminder);
+            }
+        }
+        $em->flush();
     }
 
     public function down(Schema $schema): void {}

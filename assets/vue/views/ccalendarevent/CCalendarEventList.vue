@@ -20,6 +20,7 @@
         ref="createForm"
         :values="item"
         :is-global="isGlobal"
+        :notifications-data="selectedEventNotifications"
       />
       <template #footer>
         <BaseButton
@@ -148,6 +149,8 @@ import CalendarSectionHeader from "../../components/ccalendarevent/CalendarSecti
 import { useCalendarActionButtons } from "../../composables/calendar/calendarActionButtons"
 import { useCalendarEvent } from "../../composables/calendar/calendarEvent"
 import resourceLinkService from "../../services/resourceLinkService"
+import axios from "axios"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const store = useStore()
 const confirm = useConfirm()
@@ -172,7 +175,9 @@ const currentUser = computed(() => store.getters["security/getUser"])
 const { t } = useI18n()
 const { appLocale } = useLocale()
 const route = useRoute()
+
 const isGlobal = ref(route.query.type === "global")
+const selectedEventNotifications = ref([])
 
 let currentEvent = null
 
@@ -186,6 +191,40 @@ const sessionState = reactive({
   },
   showSessionDialog: false,
 })
+
+const platformConfigStore = usePlatformConfig()
+const agendaRemindersEnabled = computed(() => {
+  return "true" === platformConfigStore.getSetting("agenda.agenda_reminders")
+})
+
+function parseDateInterval(dateInterval) {
+  const regex = /P(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)D)?T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/
+  const matches = dateInterval.match(regex)
+  if (matches) {
+    const [, , , , hours, minutes] = matches.map(Number)
+    if (hours) return { count: hours, period: 'h' }
+    if (minutes) return { count: minutes, period: 'i' }
+  }
+  return { count: 0, period: 'i' } // Default value
+}
+
+async function loadEventNotifications(compositeEventId) {
+  const matches = compositeEventId.match(/\d+/)
+  const eventId = matches ? matches[0] : null
+
+  if (!eventId) {
+    console.error("Invalid event ID format:", compositeEventId)
+    return
+  }
+
+  try {
+    const response = await axios.get(`/api/agenda_reminders?eventId=${eventId}`)
+    selectedEventNotifications.value = response.data['hydra:member'].map(notification => parseDateInterval(notification.dateInterval))
+  } catch (error) {
+    console.error("Error loading event notifications:", error)
+    selectedEventNotifications.value = []
+  }
+}
 
 async function getCalendarEvents({ startStr, endStr }) {
   const params = {
@@ -257,7 +296,7 @@ const calendarOptions = ref({
   startParam: "startDate[after]",
   endParam: "endDate[before]",
   selectable: true,
-  eventClick(eventClickInfo) {
+  eventClick: async (eventClickInfo) => {
     eventClickInfo.jsEvent.preventDefault()
     currentEvent = eventClickInfo.event
 
@@ -270,6 +309,7 @@ const calendarOptions = ref({
       return
     }
 
+    await loadEventNotifications(event.id);
     item.value = { ...event.extendedProps }
 
     item.value["title"] = event.title
@@ -340,28 +380,30 @@ function confirmDelete() {
     icon: "pi pi-exclamation-triangle",
     acceptClass: "p-button-danger",
     rejectClass: "p-button-plain p-button-outlined",
-    accept() {
-      if (item.value["parentResourceNodeId"] === currentUser.value["id"]) {
-        store.dispatch("ccalendarevent/del", item.value)
+    accept: async () => {
+      try {
+        const eventId = item.value['@id'].split('/').pop()
+        await axios.post(`/api/agenda_reminders/delete_by_event`, { eventId })
 
+        if (item.value["parentResourceNodeId"] === currentUser.value["id"]) {
+          await store.dispatch("ccalendarevent/del", item.value)
+        } else {
+          let filteredLinks = item.value["resourceLinkListFromEntity"].filter(
+            (resourceLinkFromEntity) => resourceLinkFromEntity["user"]["id"] === currentUser.value["id"]
+          )
+          if (filteredLinks.length > 0) {
+            await store.dispatch("resourcelink/del", {
+              "@id": `/api/resource_links/${filteredLinks[0]["id"]}`,
+            })
+          }
+        }
         dialogShow.value = false
         dialog.value = false
         reFetch()
-      } else {
-        let filteredLinks = item.value["resourceLinkListFromEntity"].filter(
-          (resourceLinkFromEntity) => resourceLinkFromEntity["user"]["id"] === currentUser.value["id"],
-        )
-
-        if (filteredLinks.length > 0) {
-          store.dispatch("resourcelink/del", {
-            "@id": `/api/resource_links/${filteredLinks[0]["id"]}`,
-          })
-
-          currentEvent.remove()
-          dialogShow.value = false
-          dialog.value = false
-          reFetch()
-        }
+        toast.add({ severity: "success", detail: t("Event and its notifications deleted successfully."), life: 3500 })
+      } catch (error) {
+        console.error("Error deleting event or notifications: ", error)
+        toast.add({ severity: "error", detail: t("Error deleting event or notifications"), life: 3500 })
       }
     },
   })
@@ -388,7 +430,7 @@ const isLoading = computed(() => store.getters["ccalendarevent/isLoading"])
 
 const createForm = ref(null)
 
-function onCreateEventForm() {
+async function onCreateEventForm() {
   if (createForm.value.v$.$invalid) {
     return
   }
@@ -399,26 +441,82 @@ function onCreateEventForm() {
     itemModel.isGlobal = true
   }
 
-  if (itemModel["@id"]) {
-    store.dispatch("ccalendarevent/update", itemModel)
-  } else {
-    if (course.value) {
-      itemModel.resourceLinkList = [
-        {
+  try {
+    let response;
+    if (itemModel["@id"]) {
+      // Update the existing event
+      response = await store.dispatch("ccalendarevent/update", itemModel)
+    } else {
+      // Create a new event
+      if (course.value) {
+        itemModel.resourceLinkList = [{
           cid: course.value.id,
           sid: session.value?.id ?? null,
           visibility: RESOURCE_LINK_PUBLISHED,
-        },
-      ]
+        }]
+      }
+      response = await store.dispatch("ccalendarevent/create", itemModel)
     }
 
-    store.dispatch("ccalendarevent/create", itemModel)
+    if (response && response.iid) {
+      let successDetail = t("Event saved successfully")
+      if (agendaRemindersEnabled.value) {
+        if (createForm.value.notifications && createForm.value.notifications.length > 0 && !createForm.value.v$.notifications.$error) {
+          await sendNotifications(response.iid, createForm.value.notifications)
+          successDetail += t(" with notifications sent")
+        }
+      }
+      dialog.value = false
+      dialogShow.value = false
+      toast.add({ severity: "success", detail: successDetail, life: 3500 })
+      reFetch()
+    } else {
+      throw new Error("Failed to obtain event ID from the response.")
+    }
+  } catch (error) {
+    console.error("Error saving event or notifications: ", error)
+    toast.add({ severity: "error", detail: "Error saving event or notifications", life: 3500 })
   }
-
-  dialog.value = false
 }
 
 const toast = useToast()
+
+// Function to send notifications to the server
+async function sendNotifications(eventId, notifications) {
+  try {
+    const response = await axios.post(`/api/agenda_reminders/delete_by_event`, { eventId })
+    console.log(response.data.message)
+  } catch (error) {
+    console.error(`Error deleting existing notifications for event ${eventId}:`, error)
+  }
+  const promises = notifications.map(notification => {
+    const notificationData = {
+      eventId: eventId,
+      count: notification.count,
+      period: notification.period,
+    }
+    return fetch('/api/agenda_reminders', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/ld+json',
+        'Content-Type': 'application/ld+json',
+      },
+      body: JSON.stringify(notificationData),
+    })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(errorBody => {
+            throw new Error(`Error: ${response.status} ${errorBody['hydra:description'] || 'Unknown error'}`)
+          })
+        }
+        return response.json()
+      })
+      .catch(error => {
+        console.error('Failed to send a notification:', error.message)
+      })
+  })
+  await Promise.allSettled(promises)
+}
 
 watch(
   () => route.query.type,

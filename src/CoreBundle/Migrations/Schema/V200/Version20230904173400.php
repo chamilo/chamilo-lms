@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
@@ -19,7 +20,7 @@ class Version20230904173400 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Migrate personal_agenda to c_calendar_event';
+        return 'Migrate personal_agenda to c_calendar_event and update agenda_reminder';
     }
 
     /**
@@ -44,6 +45,7 @@ class Version20230904173400 extends AbstractMigrationChamilo
         $personalAgendas = $this->getPersonalEvents();
 
         $utc = new DateTimeZone('UTC');
+        $oldNewEventIdMap = [];
 
         /** @var array $personalAgenda */
         foreach ($personalAgendas as $personalAgenda) {
@@ -70,6 +72,7 @@ class Version20230904173400 extends AbstractMigrationChamilo
             $map[$personalAgenda['id']] = $calendarEvent;
 
             $em->persist($calendarEvent);
+            $em->flush();
 
             if ($collectiveInvitationsEnabled) {
                 $invitationsOrSubscriptionsInfo = [];
@@ -116,9 +119,11 @@ class Version20230904173400 extends AbstractMigrationChamilo
                     }
                 }
             }
+            $oldNewEventIdMap[$personalAgenda['id']] = $calendarEvent->getIid();
         }
 
         $em->flush();
+        $this->updateAgendaReminders($oldNewEventIdMap, $em);
     }
 
     private function getPersonalEvents(): array
@@ -215,5 +220,19 @@ class Version20230904173400 extends AbstractMigrationChamilo
         } catch (\Doctrine\DBAL\Exception) {
             return [];
         }
+    }
+
+    private function updateAgendaReminders(array $oldNewEventIdMap, $em): void
+    {
+        $reminders = $em->getRepository(AgendaReminder::class)->findBy(['type' => 'personal']);
+        foreach ($reminders as $reminder) {
+            $oldEventId = $reminder->getEventId();
+            if (array_key_exists($oldEventId, $oldNewEventIdMap)) {
+                $newEventId = $oldNewEventIdMap[$oldEventId];
+                $reminder->setEventId($newEventId);
+                $em->persist($reminder);
+            }
+        }
+        $em->flush();
     }
 }

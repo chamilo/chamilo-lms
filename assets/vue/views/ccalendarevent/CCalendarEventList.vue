@@ -148,8 +148,10 @@ import CalendarSectionHeader from "../../components/ccalendarevent/CalendarSecti
 import { useCalendarActionButtons } from "../../composables/calendar/calendarActionButtons"
 import { useCalendarEvent } from "../../composables/calendar/calendarEvent"
 import resourceLinkService from "../../services/resourceLinkService"
+import { useSecurityStore } from "../../store/securityStore"
 
 const store = useStore()
+const securityStore = useSecurityStore()
 const confirm = useConfirm()
 const cidReqStore = useCidReqStore()
 
@@ -168,7 +170,6 @@ const allowToEdit = ref(false)
 const allowToSubscribe = ref(false)
 const allowToUnsubscribe = ref(false)
 
-const currentUser = computed(() => store.getters["security/getUser"])
 const { t } = useI18n()
 const { appLocale } = useLocale()
 const route = useRoute()
@@ -230,7 +231,7 @@ const calendarLocale = allLocales.find(
 
 const showAddEventDialog = () => {
   item.value = {}
-  item.value["parentResourceNode"] = currentUser.value.resourceNode["id"]
+  item.value["parentResourceNode"] = securityStore.user.resourceNode["id"]
 
   dialog.value = true
 }
@@ -277,9 +278,9 @@ const calendarOptions = ref({
     item.value["endDate"] = event.end
     item.value["parentResourceNodeId"] = event.extendedProps.resourceNode.creator.id
 
-    allowToEdit.value = isEditableByUser(item.value, currentUser.value.id)
+    allowToEdit.value = isEditableByUser(item.value, securityStore.user.id)
     allowToSubscribe.value = !allowToEdit.value && allowSubscribeToEvent(item.value)
-    allowToUnsubscribe.value = !allowToEdit.value && allowUnsubscribeToEvent(item.value, currentUser.value.id)
+    allowToUnsubscribe.value = !allowToEdit.value && allowUnsubscribeToEvent(item.value, securityStore.user.id)
 
     dialogShow.value = true
   },
@@ -289,7 +290,7 @@ const calendarOptions = ref({
     }
 
     item.value = {}
-    item.value["parentResourceNode"] = currentUser.value.resourceNode["id"]
+    item.value["parentResourceNode"] = securityStore.user.resourceNode["id"]
     item.value["allDay"] = info.allDay
     item.value["startDate"] = info.start
     item.value["endDate"] = info.end
@@ -341,7 +342,7 @@ function confirmDelete() {
     acceptClass: "p-button-danger",
     rejectClass: "p-button-plain p-button-outlined",
     accept() {
-      if (item.value["parentResourceNodeId"] === currentUser.value["id"]) {
+      if (item.value["parentResourceNodeId"] === securityStore.user["id"]) {
         store.dispatch("ccalendarevent/del", item.value)
 
         dialogShow.value = false
@@ -349,7 +350,7 @@ function confirmDelete() {
         reFetch()
       } else {
         let filteredLinks = item.value["resourceLinkListFromEntity"].filter(
-          (resourceLinkFromEntity) => resourceLinkFromEntity["user"]["id"] === currentUser.value["id"],
+          (resourceLinkFromEntity) => resourceLinkFromEntity["user"]["id"] === securityStore.user["id"],
         )
 
         if (filteredLinks.length > 0) {
@@ -371,7 +372,7 @@ async function subscribeToEvent() {
   try {
     await resourceLinkService.create({
       resourceNode: item.value.resourceNode["@id"],
-      user: currentUser.value["@id"],
+      user: securityStore.user["@id"],
       visibility: RESOURCE_LINK_PUBLISHED,
     })
 

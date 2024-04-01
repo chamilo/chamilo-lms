@@ -2,9 +2,11 @@ import { onMounted, readonly, ref } from "vue"
 import { useStore } from "vuex"
 import { useRoute } from "vue-router"
 import axios from "axios"
+import { useSecurityStore } from "../store/securityStore"
 
 export function useSocialInfo() {
   const store = useStore()
+  const securityStore = useSecurityStore()
   const route = useRoute()
   const user = ref({})
   const isCurrentUser = ref(true)
@@ -44,7 +46,7 @@ export function useSocialInfo() {
         user.value = await store.dispatch("user/load", "/api/users/" + route.query.id)
         isCurrentUser.value = false
       } else {
-        user.value = store.getters["security/getUser"]
+        user.value = securityStore.user
         isCurrentUser.value = true
       }
     } catch (e) {

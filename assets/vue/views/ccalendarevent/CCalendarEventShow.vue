@@ -24,6 +24,8 @@ import { mapFields } from "vuex-map-fields"
 import Loading from "../../components/Loading.vue"
 import ShowMixin from "../../mixins/ShowMixin"
 import Toolbar from "../../components/Toolbar.vue"
+import { useSecurityStore } from "../../store/securityStore"
+import { storeToRefs } from "pinia"
 
 const servicePrefix = "CCalendarEvent"
 
@@ -34,16 +36,22 @@ export default {
     Toolbar,
   },
   mixins: [ShowMixin],
+  setup() {
+    const securityStore = useSecurityStore()
+
+    const { isAuthenticated, isAdmin, isCurrentTeacher } = storeToRefs(securityStore)
+
+    return {
+      isAuthenticated,
+      isAdmin,
+      isCurrentTeacher,
+    }
+  },
   computed: {
     ...mapFields("ccalendarevent", {
       isLoading: "isLoading",
     }),
     ...mapGetters("ccalendarevent", ["find"]),
-    ...mapGetters({
-      isAuthenticated: "security/isAuthenticated",
-      isAdmin: "security/isAdmin",
-      isCurrentTeacher: "security/isCurrentTeacher",
-    }),
   },
   methods: {
     ...mapActions("ccalendarevent", {

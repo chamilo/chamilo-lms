@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex"
+import { mapActions } from "vuex"
 import { createHelpers } from "vuex-map-fields"
 import ToolIntroForm from "../../components/ctoolintro/Form.vue"
 import Loading from "../../components/Loading.vue"
@@ -23,6 +23,8 @@ import isEmpty from "lodash/isEmpty"
 import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility.js"
 import { useCidReq } from "../../composables/cidReq"
 import cToolIntroService from "../../services/cToolIntroService"
+import { useSecurityStore } from "../../store/securityStore"
+import { storeToRefs } from "pinia"
 
 const servicePrefix = "ctoolintro"
 
@@ -46,6 +48,9 @@ export default {
     const item = ref({})
     const route = useRoute()
     const router = useRouter()
+    const securityStore = useSecurityStore()
+
+    const { isAuthenticated, user } = storeToRefs(securityStore)
 
     let id = route.params.id
     if (isEmpty(id)) {
@@ -100,14 +105,10 @@ export default {
         })
     }
 
-    return { v$: useVuelidate(), users, isLoadingSelect, item, onCreated }
+    return { v$: useVuelidate(), users, isLoadingSelect, item, onCreated, currentUser: user, isAuthenticated }
   },
   computed: {
     ...mapFields(["error", "isLoading", "created", "violations"]),
-    ...mapGetters({
-      isAuthenticated: "security/isAuthenticated",
-      currentUser: "security/getUser",
-    }),
   },
   methods: {
     ...mapActions("ctoolintro", ["create", "createWithFormData"]),

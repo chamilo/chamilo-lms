@@ -70,8 +70,7 @@
 </template>
 
 <script setup>
-import { useStore } from "vuex"
-import { computed, ref } from "vue"
+import { ref } from "vue"
 import Button from "primevue/button"
 import InputText from "primevue/inputtext"
 import Password from "primevue/password"
@@ -79,16 +78,13 @@ import InputSwitch from "primevue/inputswitch"
 import { useI18n } from "vue-i18n"
 import { useLogin } from "../composables/auth/login"
 
-const store = useStore()
 const { t } = useI18n()
 
-const { redirectNotAuthenticated, performLogin } = useLogin()
+const { redirectNotAuthenticated, performLogin, isLoading } = useLogin()
 
 const login = ref("")
 const password = ref("")
 const remember = ref(false)
-
-const isLoading = computed(() => store.getters["security/isLoading"])
 
 redirectNotAuthenticated()
 

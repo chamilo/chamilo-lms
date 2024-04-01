@@ -60,17 +60,17 @@ import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue"
 import axios from "axios"
 import { useRoute } from "vue-router"
+import { useSecurityStore } from "../../store/securityStore"
 
 const emit = defineEmits(["post-created"])
 const store = useStore()
+const securityStore = useSecurityStore()
 const { t } = useI18n()
 const route = useRoute()
 const isPromotedPage = computed(() => {
   return route.query.filterType === "promoted"
 })
 const user = inject("social-user")
-const currentUser = store.getters["security/getUser"]
-const userIsAdmin = store.getters["security/isAdmin"]
 const selectedFile = ref(null)
 const postState = reactive({
   content: "",
@@ -112,7 +112,7 @@ onMounted(() => {
 
 function showTextPlaceholder() {
   postState.textPlaceholder =
-    currentUser["@id"] === user.value["@id"]
+    securityStore.user["@id"] === user.value["@id"]
       ? t("What are you thinking about?")
       : t("Write something to {0}", [user.value.fullName])
 }
@@ -120,7 +120,7 @@ function showTextPlaceholder() {
 const allowCreatePromoted = ref(false)
 
 function showCheckboxPromoted() {
-  allowCreatePromoted.value = userIsAdmin && currentUser["@id"] === user.value["@id"]
+  allowCreatePromoted.value = securityStore.isAdmin && securityStore.user["@id"] === user.value["@id"]
 }
 
 async function sendPost() {
@@ -141,8 +141,8 @@ async function sendPost() {
     await store.dispatch("socialpost/create", {
       content: postState.content,
       type: postState.isPromoted ? SOCIAL_TYPE_PROMOTED_MESSAGE : SOCIAL_TYPE_WALL_POST,
-      sender: currentUser["@id"],
-      userReceiver: currentUser["@id"] === user.value["@id"] ? null : user.value["@id"],
+      sender: securityStore.user["@id"],
+      userReceiver: securityStore.user["@id"] === user.value["@id"] ? null : user.value["@id"],
     })
     if (selectedFile.value) {
       const formData = new FormData()

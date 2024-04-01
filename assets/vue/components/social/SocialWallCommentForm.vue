@@ -21,15 +21,15 @@
 
 <script setup>
 import { ref } from "vue"
-import { useStore } from "vuex"
 import axios from "axios"
 import { ENTRYPOINT } from "../../config/entrypoint"
 import { SOCIAL_TYPE_WALL_COMMENT } from "./constants"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import { useI18n } from "vue-i18n"
 import BaseButton from "../basecomponents/BaseButton.vue"
+import { useSecurityStore } from "../../store/securityStore"
 
-const store = useStore()
+const securityStore = useSecurityStore()
 const { t } = useI18n()
 
 const props = defineProps({
@@ -41,7 +41,6 @@ const props = defineProps({
 
 const emit = defineEmits(["comment-posted"])
 
-const currentUser = store.getters["security/getUser"]
 const comment = ref("")
 const error = ref("")
 const isLoading = ref(false)
@@ -57,7 +56,7 @@ function sendComment() {
     .post(ENTRYPOINT + "social_posts", {
       content: comment.value,
       type: SOCIAL_TYPE_WALL_COMMENT,
-      sender: currentUser["@id"],
+      sender: securityStore.user["@id"],
       parent: props.post["@id"],
     })
     .then((response) => {

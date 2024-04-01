@@ -100,6 +100,8 @@ import ShowLinks from "../../components/resource_links/ShowLinks.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 
 import { useFormatDate } from "../../composables/formatDate"
+import { useSecurityStore } from "../../store/securityStore"
+import { storeToRefs } from "pinia"
 
 const servicePrefix = "Documents"
 
@@ -115,8 +117,15 @@ export default {
   data() {
     const { relativeDatetime } = useFormatDate()
 
+    const securityStore = useSecurityStore()
+
+    const { isAuthenticated, isAdmin, isCurrentTeacher } = storeToRefs(securityStore)
+
     return {
       relativeDatetime,
+      isAuthenticated,
+      isAdmin,
+      isCurrentTeacher,
     }
   },
   computed: {
@@ -124,11 +133,6 @@ export default {
       isLoading: "isLoading",
     }),
     ...mapGetters("documents", ["find"]),
-    ...mapGetters({
-      isAuthenticated: "security/isAuthenticated",
-      isAdmin: "security/isAdmin",
-      isCurrentTeacher: "security/isCurrentTeacher",
-    }),
   },
   methods: {
     ...mapActions("documents", {

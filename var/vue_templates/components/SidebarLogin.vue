@@ -1,6 +1,5 @@
 <script setup>
-import { computed, ref } from "vue"
-import { useStore } from "vuex"
+import { ref } from "vue"
 import { useI18n } from "vue-i18n"
 import InputText from "primevue/inputtext"
 import Password from "primevue/password"
@@ -8,16 +7,13 @@ import Button from "primevue/button"
 import InputSwitch from "primevue/inputswitch"
 import { useLogin } from "../../../assets/vue/composables/auth/login"
 
-const store = useStore()
 const { t } = useI18n()
 
-const { performLogin } = useLogin()
+const { performLogin, isLoading } = useLogin()
 
 const login = ref("")
 const password = ref("")
 const remember = ref(false)
-
-const isLoading = computed(() => store.getters["security/isLoading"])
 </script>
 
 <template>

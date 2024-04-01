@@ -21,7 +21,6 @@
 </template>
 
 <script setup>
-import { useStore } from "vuex"
 import { onMounted, provide, computed, readonly, ref, watch, watchEffect } from "vue"
 import { useRoute } from "vue-router"
 import SocialWall from "./SocialWall.vue"
@@ -34,10 +33,11 @@ import MySkillsCard from "../../components/social/MySkillsCard.vue"
 import { useSocialInfo } from "../../composables/useSocialInfo"
 import { useSocialStore } from "../../store/socialStore"
 import { useI18n } from "vue-i18n"
+import { useSecurityStore } from "../../store/securityStore"
 
-const store = useStore()
 const route = useRoute()
 const { t } = useI18n()
+const securityStore = useSecurityStore()
 const socialStore = useSocialStore()
 const hasPermission = ref(false)
 const isLoadingPage = ref(true)
@@ -48,12 +48,11 @@ provide("is-current-user", isCurrentUser)
 provide("group-info", groupInfo)
 provide("is-group", isGroup)
 
-const currentUser = store.getters["security/getUser"]
 const profileUserId = computed(() => route.query.id)
 
 onMounted(async () => {
   if (profileUserId.value) {
-    await socialStore.checkUserRelation(currentUser.id, profileUserId.value)
+    await socialStore.checkUserRelation(securityStore.user.id, profileUserId.value)
     hasPermission.value = socialStore.isProfileVisible
   } else {
     hasPermission.value = true

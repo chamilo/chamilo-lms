@@ -74,7 +74,6 @@ let id = isEmpty(route.params.id) ? route.query.id : route.params.id
 let replyAll = "1" === route.query.all
 
 onMounted(async () => {
-  const currentUser = computed(() => store.getters["security/getUser"])
   const response = await store.dispatch("message/load", id)
 
   item.value = await response
@@ -91,7 +90,7 @@ onMounted(async () => {
 
   item.value["originalSender"] = item.value["sender"]
   // New sender.
-  item.value["sender"] = currentUser.value["@id"]
+  item.value["sender"] = securityStore.user["@id"]
 
   // Set new receivers, will be loaded by onSendMessageForm()
   if (replyAll) {
@@ -101,7 +100,7 @@ onMounted(async () => {
         return
       }
       // Dont' add the current user.
-      if (currentUser.value["@id"] === user.receiver["@id"]) {
+      if (securityStore.user["@id"] === user.receiver["@id"]) {
         return
       }
       item.value.receiversCc.push(user)
@@ -115,7 +114,7 @@ onMounted(async () => {
     })
 
     /*item.value.receiversTo.forEach(function (user, index, obj) {
-      if (currentUser.value['@id'] === user.receiver['@id']) {
+      if (securityStore.user['@id'] === user.receiver['@id']) {
         obj.splice(index, 1);
       }
     });*/
@@ -143,8 +142,6 @@ onMounted(async () => {
 const isLoading = computed(() => store.state.message.isLoading)
 const violations = computed(() => store.state.message.violations)
 
-const currentUser = computed(() => securityStore.user)
-
 const createForm = ref()
 
 const onReplyMessageForm = async () => {
@@ -159,7 +156,7 @@ const onReplyMessageForm = async () => {
       users.push({ receiver: user.receiver["@id"], receiverType: 2 })
     })
   }
-  createForm.value.v$.item.$model.sender = "/api/users/" + currentUser.value.id
+  createForm.value.v$.item.$model.sender = "/api/users/" + securityStore.user.id
   createForm.value.v$.item.$model.receiversTo = null
   createForm.value.v$.item.$model.receiversCc = null
   createForm.value.v$.item.$model.receivers = users

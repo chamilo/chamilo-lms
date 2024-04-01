@@ -12,10 +12,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, useStore } from "vuex"
+import { mapActions } from "vuex"
 import { createHelpers } from "vuex-map-fields"
 import UploadMixin from "../../mixins/UploadMixin"
-import { computed, ref } from "vue"
+import { ref } from "vue"
 import isEmpty from "lodash/isEmpty"
 
 import "@uppy/core/dist/style.css"
@@ -27,6 +27,8 @@ import Webcam from "@uppy/webcam"
 import { Dashboard } from "@uppy/vue"
 import { useRoute, useRouter } from "vue-router"
 import { ENTRYPOINT } from "../../config/entrypoint"
+import { useSecurityStore } from "../../store/securityStore"
+import { storeToRefs } from "pinia"
 
 const XHRUpload = require("@uppy/xhr-upload")
 
@@ -49,9 +51,9 @@ export default {
     const parentResourceNodeId = ref(null)
     const route = useRoute()
     const router = useRouter();
+    const securityStore = useSecurityStore()
 
-    const store = useStore()
-    const user = computed(() => store.getters["security/getUser"])
+    const { user, isAuthenticated, isAdmin } = storeToRefs(securityStore)
 
     parentResourceNodeId.value = user.value.resourceNode["id"]
 
@@ -98,6 +100,9 @@ export default {
 
     return {
       uppy,
+      currentUser: user,
+      isAdmin,
+      isAuthenticated,
     }
   },
   mixins: [UploadMixin],
@@ -109,11 +114,6 @@ export default {
   },
   computed: {
     ...mapFields(["error", "isLoading", "created", "violations"]),
-    ...mapGetters({
-      isAuthenticated: "security/isAuthenticated",
-      isAdmin: "security/isAdmin",
-      currentUser: "security/getUser",
-    }),
   },
   created() {
     let nodeId = this.$route.params.node

@@ -29,7 +29,8 @@ import TinyEditor from "@tinymce/tinymce-vue"
 import { useRoute, useRouter } from "vue-router"
 import { useCidReqStore } from "../../store/cidReq"
 import { storeToRefs } from "pinia"
-import { useStore } from "vuex"
+import { useSecurityStore } from "../../store/securityStore"
+
 import { TINYEDITOR_MODE_DOCUMENTS, TINYEDITOR_MODE_PERSONAL_FILES, TINYEDITOR_MODES } from "./TinyEditorOptions"
 
 const props = defineProps({
@@ -81,11 +82,10 @@ const router = useRouter()
 const route = useRoute()
 const parentResourceNodeId = ref(0)
 
-const store = useStore()
-const user = computed(() => store.getters["security/getUser"])
+const securityStore = useSecurityStore()
 
 // Set the parent node ID based on the user's resource node ID or route parameter
-parentResourceNodeId.value = user.value.resourceNode["id"]
+parentResourceNodeId.value = securityStore.user.resourceNode["id"]
 if (route.params.node) {
   parentResourceNodeId.value = Number(route.params.node)
 }

@@ -74,21 +74,20 @@
 <script setup>
 import { onMounted, ref } from "vue"
 import { useRouter } from "vue-router"
-import { useStore } from "vuex"
 import { useI18n } from "vue-i18n"
 import { useNotification } from "../../composables/notification"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import userRelUserService from "../../services/userRelUserService"
 import userService from "../../services/userService"
+import { useSecurityStore } from "../../store/securityStore"
 
-const store = useStore()
+const securityStore = useSecurityStore()
 const router = useRouter()
 const { t } = useI18n()
 const { showSuccessNotification, showErrorNotification } = useNotification()
 const isLoadingSelect = ref(false)
 const loadingResults = ref(false)
-const user = store.getters["security/getUser"]
 const foundUsers = ref([])
 const friendsList = ref([])
 const searchQuery = ref("")
@@ -107,9 +106,9 @@ const isFriend = (user) => {
 
 async function fetchFriendsList() {
   try {
-    const friendshipList = await userRelUserService.getFriendList(user["@id"])
+    const friendshipList = await userRelUserService.getFriendList(securityStore.user["@id"])
 
-    friendsList.value = friendshipList.map((friendship) => friendship.friend.id).concat(user.id)
+    friendsList.value = friendshipList.map((friendship) => friendship.friend.id).concat(securityStore.user.id)
   } catch (error) {
     showErrorNotification(t("Error fetching friends list"))
     console.error("Error fetching friends list:", error)
@@ -131,7 +130,7 @@ const asyncFind = async (query) => {
 }
 const addFriend = async (friend) => {
   try {
-    await userRelUserService.sendFriendRequest(user["@id"], friend["@id"])
+    await userRelUserService.sendFriendRequest(securityStore.user["@id"], friend["@id"])
     showSuccessNotification(t("Friend request sent successfully"))
     await fetchFriendsList()
     const searchQuery = router.currentRoute.value.query.search

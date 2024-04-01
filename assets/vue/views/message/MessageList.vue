@@ -169,10 +169,12 @@ import { GET_USER_MESSAGE_TAGS } from "../../graphql/queries/MessageTag"
 import { useNotification } from "../../composables/notification"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 import SocialSideMenu from "../../components/social/SocialSideMenu.vue";
+import { useSecurityStore } from "../../store/securityStore"
 
 const route = useRoute()
 const router = useRouter()
 const store = useStore()
+const securityStore = useSecurityStore()
 const { t } = useI18n()
 
 const confirm = useConfirm()
@@ -181,8 +183,6 @@ const notification = useNotification()
 const messageRelUserStore = useMessageRelUserStore()
 
 const { relativeDatetime } = useFormatDate()
-
-const user = computed(() => store.getters["security/getUser"])
 
 const mItemsMarkAs = ref([
   {
@@ -245,7 +245,7 @@ const goToCompose = () => {
 
 const { result: messageTagsResult } = useQuery(
   GET_USER_MESSAGE_TAGS,
-  { user: user.value["@id"] },
+  { user: securityStore.user["@id"] },
   { fetchPolicy: "cache-and-network" },
 )
 
@@ -285,7 +285,7 @@ function showInbox() {
 
   fetchPayload = {
     msgType: MESSAGE_TYPE_INBOX,
-    "receivers.receiver": user.value["@id"],
+    "receivers.receiver": securityStore.user["@id"],
     "order[sendDate]": "desc",
     itemsPerPage: initialRowsPerPage,
     page: 1,
@@ -299,7 +299,7 @@ function showInboxByTag(tag) {
 
   fetchPayload = {
     msgType: MESSAGE_TYPE_INBOX,
-    "receivers.receiver": user.value["@id"],
+    "receivers.receiver": securityStore.user["@id"],
     "receivers.tags.tag": tag.tag,
     "order[sendDate]": "desc",
     itemsPerPage: initialRowsPerPage,
@@ -314,7 +314,7 @@ function showUnread() {
 
   fetchPayload = {
     msgType: MESSAGE_TYPE_INBOX,
-    "receivers.receiver": user.value["@id"],
+    "receivers.receiver": securityStore.user["@id"],
     "order[sendDate]": "desc",
     "receivers.read": false,
     itemsPerPage: initialRowsPerPage,
@@ -329,7 +329,7 @@ function showSent() {
 
   fetchPayload = {
     msgType: MESSAGE_TYPE_INBOX,
-    sender: user.value["@id"],
+    sender: securityStore.user["@id"],
     "order[sendDate]": "desc",
     itemsPerPage: initialRowsPerPage,
     page: 1,
@@ -377,11 +377,11 @@ function sortingChanged(event) {
 function findMyReceiver(message) {
   const receivers = [...message.receiversTo, ...message.receiversCc]
 
-  return receivers.find(({ receiver }) => receiver["@id"] === user.value["@id"])
+  return receivers.find(({ receiver }) => receiver["@id"] === securityStore.user["@id"])
 }
 
 async function deleteMessage(message) {
-  if (message.sender["@id"] === user.value["@id"]) {
+  if (message.sender["@id"] === securityStore.user["@id"]) {
     message.status = MESSAGE_STATUS_DELETED
 
     await store.dispatch("message/update", message)

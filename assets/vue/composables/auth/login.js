@@ -1,7 +1,8 @@
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useRoute, useRouter } from "vue-router"
-import { useStore } from "vuex"
 import { useSecurityStore } from "../../store/securityStore"
+import { ref } from "vue"
+import securityService from "../../services/securityService"
 
 function isValidHttpUrl(string) {
   let url
@@ -18,40 +19,43 @@ function isValidHttpUrl(string) {
 export function useLogin() {
   const route = useRoute()
   const router = useRouter()
-  const store = useStore()
   const securityStore = useSecurityStore()
+  const platformConfigurationStore = usePlatformConfig()
+
+  const isLoading = ref(false)
 
   async function performLogin(payload) {
-    const responseData = await store.dispatch("security/login", payload)
+    isLoading.value = true
 
-    if (store.getters["security/hasError"]) {
-      return
-    }
+    try {
+      const responseData = await securityService.login(payload)
 
-    if (route.query.redirect) {
-      // Check if 'redirect' is an absolute URL
-      if (isValidHttpUrl(route.query.redirect.toString())) {
-        // If it's an absolute URL, redirect directly
-        window.location.href = route.query.redirect.toString()
+      if (route.query.redirect) {
+        // Check if 'redirect' is an absolute URL
+        if (isValidHttpUrl(route.query.redirect.toString())) {
+          // If it's an absolute URL, redirect directly
+          window.location.href = route.query.redirect.toString()
+
+          return
+        }
+      } else if (responseData.load_terms) {
+        window.location.href = responseData.redirect
 
         return
       }
 
       securityStore.user = responseData
 
-      const platformConfigurationStore = usePlatformConfig()
       await platformConfigurationStore.initialize()
 
-      // If 'redirect' is a relative path, use 'router.push' to navigate
-      await router.push({ path: route.query.redirect.toString() })
-
-      return
-    }
-
-    if (responseData.load_terms) {
-      window.location.href = responseData.redirect
-    } else {
-      window.location.href = "/home"
+      if (route.query.redirect) {
+        // If 'redirect' is a relative path, use 'router.push' to navigate
+        await router.replace({ path: route.query.redirect.toString() })
+      } else {
+        await router.replace({ name: "Home" })
+      }
+    } finally {
+      isLoading.value = false
     }
   }
 
@@ -68,6 +72,7 @@ export function useLogin() {
   }
 
   return {
+    isLoading,
     performLogin,
     redirectNotAuthenticated,
   }

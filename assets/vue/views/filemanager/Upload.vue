@@ -27,6 +27,8 @@ import Webcam from "@uppy/webcam"
 import { Dashboard } from "@uppy/vue"
 import { useRoute, useRouter } from "vue-router"
 import { ENTRYPOINT } from "../../config/entrypoint"
+import { useSecurityStore } from "../../store/securityStore"
+import { storeToRefs } from "pinia"
 
 const XHRUpload = require("@uppy/xhr-upload")
 
@@ -51,7 +53,9 @@ export default {
     const router = useRouter();
 
     const store = useStore()
-    const user = computed(() => store.getters["security/getUser"])
+    const securityStore = useSecurityStore()
+
+    const { isAuthenticated, isAdmin, user } = storeToRefs(securityStore)
 
     parentResourceNodeId.value = user.value.resourceNode["id"]
 
@@ -98,6 +102,9 @@ export default {
 
     return {
       uppy,
+      currentUser: user,
+      isAdmin,
+      isAuthenticated,
     }
   },
   mixins: [UploadMixin],
@@ -109,11 +116,6 @@ export default {
   },
   computed: {
     ...mapFields(["error", "isLoading", "created", "violations"]),
-    ...mapGetters({
-      isAuthenticated: "security/isAuthenticated",
-      isAdmin: "security/isAdmin",
-      currentUser: "security/getUser",
-    }),
   },
   created() {
     let nodeId = this.$route.params.node

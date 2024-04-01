@@ -1,8 +1,11 @@
 <template>
   <q-item>
-    <q-item-section avatar top>
+    <q-item-section
+      avatar
+      top
+    >
       <q-avatar>
-        <img :src="comment.sender.illustrationUrl">
+        <img :src="comment.sender.illustrationUrl" />
       </q-avatar>
     </q-item-section>
 
@@ -19,7 +22,10 @@
       </q-item-label>
     </q-item-section>
 
-    <q-item-section side top>
+    <q-item-section
+      side
+      top
+    >
       <WallActions
         :is-owner="isOwner"
         :social-post="comment"
@@ -30,27 +36,26 @@
 </template>
 
 <script setup>
-import {useStore} from "vuex"
-import {computed} from "vue"
+import { computed } from "vue"
 import WallActions from "./Actions"
 import { useFormatDate } from "../../composables/formatDate"
+import { useSecurityStore } from "../../store/securityStore"
 
 const { abbreviatedDatetime, relativeDatetime } = useFormatDate()
 
 const props = defineProps({
   comment: {
     type: Object,
-    required: true
-  }
+    required: true,
+  },
 })
 
-const emit = defineEmits(['comment-deleted'])
+const emit = defineEmits(["comment-deleted"])
 
-const store = useStore()
-const currentUser = store.getters['security/getUser']
-const isOwner = computed(() =>  currentUser['@id'] === props.comment.sender['@id'])
+const securityStore = useSecurityStore()
+const isOwner = computed(() => securityStore.user["@id"] === props.comment.sender["@id"])
 
 function onCommentDeleted(event) {
-  emit('comment-deleted', event)
+  emit("comment-deleted", event)
 }
 </script>

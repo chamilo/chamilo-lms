@@ -32,8 +32,6 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                     'agenda_legend' => '',
                     'agenda_colors' => '',
                     'agenda_on_hover_info' => '',
-                    'agenda_collective_invitations' => 'false',
-                    'agenda_event_subscriptions' => 'false',
                     'agenda_reminders_sender_id' => '0',
                     'fullcalendar_settings' => '',
                 ]
@@ -97,8 +95,6 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                         $this->settingArrayHelpValue('agenda_on_hover_info'),
                 ]
             )
-            ->add('agenda_collective_invitations', YesNoType::class)
-            ->add('agenda_event_subscriptions', YesNoType::class)
             ->add('agenda_reminders_sender_id', TextType::class)
             ->add(
                 'fullcalendar_settings',

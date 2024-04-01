@@ -216,8 +216,6 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'agenda_colors',
                 'agenda_on_hover_info',
                 'personal_calendar_show_sessions_occupation',
-                'agenda_collective_invitations',
-                'agenda_event_subscriptions',
                 'agenda_reminders_sender_id',
                 'fullcalendar_settings',
             ],
@@ -950,8 +948,6 @@ class Version20230216122900 extends AbstractMigrationChamilo
             'Agenda' => [
                 'fullcalendar_settings',
                 'agenda_reminders_sender_id',
-                'agenda_event_subscriptions',
-                'agenda_collective_invitations',
                 'personal_calendar_show_sessions_occupation',
                 'agenda_on_hover_info',
                 'agenda_colors',

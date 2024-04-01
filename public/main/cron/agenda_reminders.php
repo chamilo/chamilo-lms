@@ -12,8 +12,6 @@ exit;
 $batchCounter = 0;
 $batchSize = 100;
 
-$agendaCollectiveInvitations = 'true' === api_get_setting('agenda.agenda_collective_invitations');
-
 $now = new DateTime('now', new DateTimeZone('UTC'));
 
 $em = Database::getManager();
@@ -99,17 +97,15 @@ foreach ($reminders as $reminder) {
             return $inviteeList;
         };
 
-        if ($agendaCollectiveInvitations) {
-            $invitees = $getInviteesForEvent($reminder->getEventId());
-            $inviteesIdList = array_column($invitees, 'id');
-            foreach ($inviteesIdList as $userId) {
-                MessageManager::send_message_simple(
-                    $userId,
-                    $messageSubject,
-                    $messageContent,
-                    $event->getResourceNode()->getCreator()->getId()
-                );
-            }
+        $invitees = $getInviteesForEvent($reminder->getEventId());
+        $inviteesIdList = array_column($invitees, 'id');
+        foreach ($inviteesIdList as $userId) {
+            MessageManager::send_message_simple(
+                $userId,
+                $messageSubject,
+                $messageContent,
+                $event->getResourceNode()->getCreator()->getId()
+            );
         }
     }
 

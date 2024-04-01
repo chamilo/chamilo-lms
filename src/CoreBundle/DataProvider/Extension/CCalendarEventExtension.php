@@ -86,9 +86,7 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
             ->setParameter('user', $user->getId())
         ;
 
-        if ('true' === $this->settingsManager->getSetting('agenda.agenda_event_subscriptions')) {
-            $this->addSubscriptionsConditions($qb, $user);
-        }
+        $this->addSubscriptionsConditions($qb, $user);
     }
 
     private function addSubscriptionsConditions(QueryBuilder $qb, User $user): void

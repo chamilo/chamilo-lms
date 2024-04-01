@@ -6,46 +6,18 @@ import InputText from "primevue/inputtext"
 import Password from "primevue/password"
 import Button from "primevue/button"
 import InputSwitch from "primevue/inputswitch"
-import { useRoute, useRouter } from "vue-router"
-import { useSecurityStore } from "../../../assets/vue/store/securityStore"
+import { useLogin } from "../../../assets/vue/composables/auth/login"
 
-const route = useRoute()
-const router = useRouter()
 const store = useStore()
 const { t } = useI18n()
-const securityStore = useSecurityStore()
+
+const { performLogin } = useLogin()
 
 const login = ref("")
 const password = ref("")
 const remember = ref(false)
 
 const isLoading = computed(() => store.getters["security/isLoading"])
-
-async function performLogin() {
-  let payload = {
-    login: login.value,
-    password: password.value,
-    _remember_me: remember.value,
-  }
-  let redirect = route.query.redirect
-
-  await store.dispatch("security/login", payload)
-
-  if (!store.getters["security/hasError"]) {
-    securityStore.user = store.state["security/user"]
-    const responseData = await store.dispatch("security/login", payload)
-
-    if (typeof redirect !== "undefined") {
-      await router.push({ path: redirect.toString() })
-    } else {
-      if (responseData.load_terms) {
-        window.location.href = responseData.redirect
-      } else {
-        window.location.href = "/home"
-      }
-    }
-  }
-}
 </script>
 
 <template>

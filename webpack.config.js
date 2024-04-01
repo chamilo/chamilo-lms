@@ -122,10 +122,6 @@ Encore.copyFiles({
   to: "libs/mathjax/config/[path][name].[ext]",
 })
 Encore.copyFiles({
-  from: "./node_modules/tinymce/skins",
-  to: "libs/tinymce/skins/[path][name].[ext]",
-})
-Encore.copyFiles({
   from: "node_modules/moment/locale",
   to: "libs/locale/[path][name].[ext]",
 })

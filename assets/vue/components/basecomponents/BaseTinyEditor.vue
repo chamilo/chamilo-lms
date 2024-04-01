@@ -25,12 +25,15 @@
 
 <script setup>
 import { computed, ref } from "vue"
-import TinyEditor from "@tinymce/tinymce-vue"
+import TinyEditor from "../../components/Editor"
 import { useRoute, useRouter } from "vue-router"
 import { useCidReqStore } from "../../store/cidReq"
 import { storeToRefs } from "pinia"
 import { useStore } from "vuex"
 import { TINYEDITOR_MODE_DOCUMENTS, TINYEDITOR_MODE_PERSONAL_FILES, TINYEDITOR_MODES } from "./TinyEditorOptions"
+
+//import contentUiCss from "css-loader!tinymce/skins/ui/oxide/content.css"
+//import contentCss from "css-loader!tinymce/skins/content/default/content.css"
 
 const props = defineProps({
   editorId: {
@@ -109,8 +112,9 @@ const toolbarCode = "code codesample"
 const toolbarTextDirection = "ltr rtl"
 
 const defaultEditorConfig = {
-  skin_url: "/build/libs/tinymce/skins/ui/oxide",
-  content_css: "/build/libs/tinymce/skins/content/default/content.css",
+  skin: false,
+  content_css: false,
+  //content_style: contentUiCss.toString() + "\n" + contentCss.toString(),
   branding: false,
   relative_urls: false,
   height: 500,

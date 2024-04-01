@@ -34,8 +34,6 @@ import "@mdi/font/css/materialdesignicons.css"
 
 import DashboardLayout from "./components/layout/DashboardLayout.vue"
 import EmptyLayout from "./components/layout/EmptyLayout.vue"
-// Tinymce
-import Editor from "./components/Editor"
 
 // Prime
 import PrimeVue from "primevue/config"
@@ -202,7 +200,6 @@ app.component("ColumnGroup", ColumnGroup)
 app.component("Toolbar", Toolbar)
 app.component("DashboardLayout", DashboardLayout)
 app.component("EmptyLayout", EmptyLayout)
-app.component("TinyEditor", Editor)
 
 app.config.globalProperties.axios = axios
 app.config.globalProperties.window = window

@@ -1,5 +1,6 @@
 
 import Editor from '@tinymce/tinymce-vue'
+import "tinymce/skins/ui/oxide/skin.css"
 
 import 'tinymce/tinymce'
 import 'tinymce/icons/default'

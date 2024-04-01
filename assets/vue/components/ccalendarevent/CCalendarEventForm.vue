@@ -41,18 +41,46 @@
     </div>
     <CalendarInvitations v-model="item" />
 
+    <div v-if="agendaRemindersEnabled" class="field mt-2">
+      <BaseButton
+        label="Add Notification"
+        @click="addNotification"
+        icon="time"
+        type="button"
+        class="mb-2"
+      />
+      <div v-for="(notification, index) in notifications" :key="index" class="flex items-center gap-2">
+        <input
+          v-model="notification.count"
+          type="number"
+          min="0"
+          placeholder="Count"
+        />
+        <select v-model="notification.period">
+          <option value="i">Minutes</option>
+          <option value="h">Hours</option>
+          <option value="d">Days</option>
+        </select>
+        <BaseButton
+          icon="delete"
+          @click="removeNotification(index)"
+          type="button"/>
+      </div>
+    </div>
     <slot />
   </form>
 </template>
 
 <script setup>
-import { computed, ref, watch } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useVuelidate } from "@vuelidate/core"
-import { required } from "@vuelidate/validators"
+import { required, minValue } from "@vuelidate/validators"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import { useI18n } from "vue-i18n"
 import BaseCalendar from "../basecomponents/BaseCalendar.vue"
 import CalendarInvitations from "./CalendarInvitations.vue"
+import BaseButton from "../basecomponents/BaseButton.vue"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const { t } = useI18n()
 
@@ -70,9 +98,11 @@ const props = defineProps({
     type: Object,
     default: () => {},
   },
+  notificationsData: Array,
 })
 
 const item = computed(() => props.initialValues || props.values)
+const notifications = ref(props.notificationsData || [])
 
 const rules = computed(() => ({
   item: {
@@ -89,13 +119,25 @@ const rules = computed(() => ({
       required,
     },
   },
+  notifications: {
+    $each: {
+      count: { required, minVal: minValue(1) },
+      period: { required },
+    },
+  },
 }))
 
-const v$ = useVuelidate(rules, { item })
+const v$ = useVuelidate(rules, { item, notifications })
 
 // eslint-disable-next-line no-undef
 defineExpose({
   v$,
+  notifications
+})
+
+const platformConfigStore = usePlatformConfig()
+const agendaRemindersEnabled = computed(() => {
+  return platformConfigStore.getSetting("agenda.agenda_reminders") === "true"
 })
 
 const dateRange = ref()
@@ -108,4 +150,23 @@ watch(dateRange, (newValue) => {
   item.value.startDate = newValue[0]
   item.value.endDate = newValue[1]
 })
+
+onMounted(() => {
+  notifications.value = props.notificationsData.map(notification => ({
+    count: notification.count,
+    period: notification.period,
+  }))
+})
+
+watch(() => props.notificationsData, (newVal) => {
+  notifications.value = newVal || []
+})
+
+function addNotification() {
+  notifications.value.push({ count: 1, period: 'i' })
+}
+
+function removeNotification(index) {
+  notifications.value.splice(index, 1)
+}
 </script>

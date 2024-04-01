@@ -25,7 +25,10 @@
     </div>
     <CalendarInvitations v-model="item" />
 
-    <CalendarRemindersEditor v-model="item" />
+    <CalendarRemindersEditor
+      v-if="!isGlobal"
+      v-model="item"
+    />
 
     <slot />
   </form>
@@ -58,6 +61,7 @@ const props = defineProps({
     type: Object,
     default: () => {},
   },
+  isGlobal: Boolean,
 })
 
 const item = computed(() => props.initialValues || props.values)

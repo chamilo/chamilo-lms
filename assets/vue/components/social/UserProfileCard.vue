@@ -1,8 +1,17 @@
 <template>
   <BaseCard plain>
     <div class="p-4 text-center user-profile-card">
-      <img :src="user.illustrationUrl" class="mb-4 w-24 h-24 mx-auto rounded-full" alt="Profile picture" />
-      <div v-if="visibility.firstname && visibility.lastname" class="text-xl font-bold">{{ user.fullName }}</div>
+      <img
+        :src="user.illustrationUrl"
+        alt="Profile picture"
+        class="mb-4 w-24 h-24 mx-auto rounded-full"
+      />
+      <div
+        v-if="visibility.firstname && visibility.lastname"
+        class="text-xl font-bold"
+      >
+        {{ user.fullName }}
+      </div>
 
       <div v-if="visibility.language && languageInfo">
         <template v-if="flagIconExists(languageInfo.code)">
@@ -14,34 +23,66 @@
       </div>
 
       <div class="mt-4">
-        <p v-if="showFullProfile" class="flex items-center justify-center mb-2">
-          <a v-if="visibility.email && user.email" :href="'/resources/messages/new'" class="flex items-center justify-center mb-2">
+        <p
+          v-if="showFullProfile"
+          class="flex items-center justify-center mb-2"
+        >
+          <a
+            v-if="visibility.email && user.email"
+            :href="'/resources/messages/new'"
+            class="flex items-center justify-center mb-2"
+          >
             <i class="mdi mdi-email-outline mr-2"></i> {{ user.email }}
           </a>
         </p>
-        <p v-if="vCardUserLink" class="flex items-center justify-center mb-2">
-          <a :href="vCardUserLink" target="_blank" class="flex items-center justify-center">
-            <i class="mdi mdi-card-account-details-outline mr-2"></i> {{ t('Business card') }}
+        <p
+          v-if="vCardUserLink"
+          class="flex items-center justify-center mb-2"
+        >
+          <a
+            :href="vCardUserLink"
+            class="flex items-center justify-center"
+            target="_blank"
+          >
+            <i class="mdi mdi-card-account-details-outline mr-2"></i> {{ t("Business card") }}
           </a>
         </p>
-        <p v-if="user.skype" class="flex items-center justify-center mb-2">
+        <p
+          v-if="user.skype"
+          class="flex items-center justify-center mb-2"
+        >
           <i class="mdi mdi-skype mr-2"></i> Skype: {{ user.skype }}
         </p>
-        <p v-if="user.linkedin" class="flex items-center justify-center">
+        <p
+          v-if="user.linkedin"
+          class="flex items-center justify-center"
+        >
           <i class="mdi mdi-linkedin mr-2"></i> LinkedIn: {{ user.linkedin }}
         </p>
       </div>
 
       <hr />
-      <div v-if="extraInfo && extraInfo.length > 0" class="extra-info-container">
+      <div
+        v-if="extraInfo && extraInfo.length > 0"
+        class="extra-info-container"
+      >
         <dl class="extra-info-list">
-          <template v-for="item in extraInfo" :key="item.variable">
+          <template
+            v-for="item in extraInfo"
+            :key="item.variable"
+          >
             <div v-if="item.value">
               <dt v-if="item.variable !== 'langue_cible'">{{ item.label }}:</dt>
               <dd v-if="item.variable !== 'langue_cible'">{{ item.value }}</dd>
 
-              <div v-if="item.variable === 'langue_cible'" class="language-target">
-                <i v-if="flagIconExists(item.value)" :class="`flag-icon flag-icon-${item.value.toLowerCase()}`"></i>
+              <div
+                v-if="item.variable === 'langue_cible'"
+                class="language-target"
+              >
+                <i
+                  v-if="flagIconExists(item.value)"
+                  :class="`flag-icon flag-icon-${item.value.toLowerCase()}`"
+                ></i>
               </div>
             </div>
           </template>
@@ -50,30 +91,36 @@
 
       <div v-if="chatEnabled && isUserOnline && !userOnlyInChat">
         <button @click="chatWith(user.id, user.fullName, user.isOnline, user.illustrationUrl)">
-          {{ t('Chat') }} ({{ t('Online') }})
+          {{ t("Chat") }} ({{ t("Online") }})
         </button>
       </div>
 
       <Divider />
-      <BaseButton v-if="isCurrentUser || isAdmin" :label="t('Edit profile')" type="primary" class="mt-4" @click="editProfile" icon="edit" />
+      <BaseButton
+        v-if="isCurrentUser || isAdmin"
+        :label="t('Edit profile')"
+        class="mt-4"
+        icon="edit"
+        type="primary"
+        @click="editProfile"
+      />
     </div>
   </BaseCard>
 </template>
 
 <script setup>
-import { computed, inject, onMounted, ref, watchEffect } from "vue"
-import { useStore } from 'vuex'
+import { computed, inject, ref, watchEffect } from "vue"
+import { useStore } from "vuex"
 import BaseCard from "../basecomponents/BaseCard.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
-import Divider from 'primevue/divider'
+import Divider from "primevue/divider"
 import axios from "axios"
-
 
 const { t } = useI18n()
 const store = useStore()
-const user = inject('social-user')
-const isCurrentUser = inject('is-current-user')
+const user = inject("social-user")
+const isCurrentUser = inject("is-current-user")
 const isAdmin = ref(false)
 const extraInfo = ref([])
 const chatEnabled = ref(true)
@@ -81,7 +128,7 @@ const isUserOnline = ref(false)
 const userOnlyInChat = ref(false)
 const showFullProfile = computed(() => isCurrentUser.value || isAdmin.value)
 const languageInfo = ref(null)
-const vCardUserLink = ref('')
+const vCardUserLink = ref("")
 const visibility = ref({})
 watchEffect(() => {
   if (user.value && user.value.id) {
@@ -92,6 +139,7 @@ watchEffect(() => {
 const editProfile = () => {
   window.location = "/account/edit"
 }
+
 async function fetchUserProfile(userId) {
   try {
     const response = await axios.get(`/social-network/user-profile/${userId}`)
@@ -104,17 +152,16 @@ async function fetchUserProfile(userId) {
     userOnlyInChat.value = data.userOnlyInChat
     chatEnabled.value = data.chatEnabled
   } catch (error) {
-    console.error('Error fetching user profile data:', error)
+    console.error("Error fetching user profile data:", error)
   }
 }
 
 function flagIconExists(code) {
-  const mdiFlagIcons = ['us', 'fr', 'de', 'es', 'it', 'pl']
+  const mdiFlagIcons = ["us", "fr", "de", "es", "it", "pl"]
   return mdiFlagIcons.includes(code.toLowerCase())
 }
 
-function chatWith(userId, completeName, isOnline, avatarSmall) {
-}
+function chatWith(userId, completeName, isOnline, avatarSmall) {}
 
-isAdmin.value = user.value.role === 'admin'
+isAdmin.value = user.value.role === "admin"
 </script>

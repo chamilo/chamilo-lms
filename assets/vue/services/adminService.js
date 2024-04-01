@@ -1,4 +1,4 @@
-import axios from "axios"
+import api from "../config/api"
 
 export default {
   /**
@@ -6,7 +6,7 @@ export default {
    * @returns {Promise<void>}
    */
   registerCampus: async (doNotListCampus) => {
-    await axios.post("/admin/register-campus", {
+    await api.post("/admin/register-campus", {
       donotlistcampus: doNotListCampus,
     })
   },
@@ -15,7 +15,7 @@ export default {
    * @returns {Promise<string>}
    */
   findAnnouncements: async () => {
-    const { data } = await axios.get("/main/inc/ajax/admin.ajax.php?a=get_latest_news")
+    const { data } = await api.get("/main/inc/ajax/admin.ajax.php?a=get_latest_news")
 
     return data
   },
@@ -24,7 +24,7 @@ export default {
    * @returns {Promise<string>}
    */
   findVersion: async () => {
-    const { data } = await axios.get("/main/inc/ajax/admin.ajax.php?a=version")
+    const { data } = await api.get("/main/inc/ajax/admin.ajax.php?a=version")
 
     return data
   },
@@ -42,7 +42,7 @@ export default {
    * @returns {Promise<Object>}
    */
   findBlocks: async () => {
-    const { data } = await axios.get("/admin/index")
+    const { data } = await api.get("/admin/index")
 
     return data
   },

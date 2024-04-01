@@ -1,8 +1,8 @@
 <template>
   <Toolbar
+    :handle-back="handleBack"
     :handle-reset="resetForm"
     :handle-submit="onSendFormData"
-    :handle-back="handleBack"
   />
 
   <div class="documents-layout">
@@ -19,8 +19,12 @@
         :values="item"
       />
       <Panel
-        v-if="$route.query.filetype === 'certificate' "
-        :header="$t('Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:')"
+        v-if="$route.query.filetype === 'certificate'"
+        :header="
+          $t(
+            'Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:',
+          )
+        "
       >
         <div v-html="finalTags" />
       </Panel>
@@ -56,12 +60,12 @@ export default {
     Loading,
     Toolbar,
     DocumentsForm,
-    Panel
+    Panel,
   },
   mixins: [CreateMixin],
   data() {
-    const filetype = this.$route.query.filetype === 'certificate' ? 'certificate' : 'file';
-    const finalTags = this.getCertificateTags();
+    const filetype = this.$route.query.filetype === "certificate" ? "certificate" : "file"
+    const finalTags = this.getCertificateTags()
     return {
       item: {
         newDocument: true, // Used in FormNewDocument.vue to show the editor
@@ -72,7 +76,7 @@ export default {
       },
       templates: [],
       finalTags,
-    };
+    }
   },
   computed: {
     ...mapFields(["error", "isLoading", "created", "violations"]),
@@ -90,59 +94,60 @@ export default {
   },
 
   methods: {
-      handleBack() {
-        this.$router.back();
-      },
-      addTemplateToEditor(templateContent) {
-        this.item.contentFile = templateContent;
-      },
-      fetchTemplates() {
-        const courseId = this.$route.query.cid;
-        axios.get(`/template/all-templates/${courseId}`)
-          .then(response => {
-            this.templates = response.data;
-            console.log('Templates fetched successfully:', this.templates);
-          })
-          .catch(error => {
-            console.error('Error fetching templates:', error);
-          });
-      },
-      getCertificateTags(){
-          let finalTags = "";
-          let tags = [
-            '((user_firstname))',
-            '((user_lastname))',
-            '((user_username))',
-            '((gradebook_institution))',
-            '((gradebook_sitename))',
-            '((teacher_firstname))',
-            '((teacher_lastname))',
-            '((official_code))',
-            '((date_certificate))',
-            '((date_certificate_no_time))',
-            '((course_code))',
-            '((course_title))',
-            '((gradebook_grade))',
-            '((certificate_link))',
-            '((certificate_link_html))',
-            '((certificate_barcode))',
-            '((external_style))',
-            '((time_in_course))',
-            '((time_in_course_in_all_sessions))',
-            '((start_date_and_end_date))',
-            '((course_objectives))',
-          ];
+    handleBack() {
+      this.$router.back()
+    },
+    addTemplateToEditor(templateContent) {
+      this.item.contentFile = templateContent
+    },
+    fetchTemplates() {
+      const courseId = this.$route.query.cid
+      axios
+        .get(`/template/all-templates/${courseId}`)
+        .then((response) => {
+          this.templates = response.data
+          console.log("Templates fetched successfully:", this.templates)
+        })
+        .catch((error) => {
+          console.error("Error fetching templates:", error)
+        })
+    },
+    getCertificateTags() {
+      let finalTags = ""
+      let tags = [
+        "((user_firstname))",
+        "((user_lastname))",
+        "((user_username))",
+        "((gradebook_institution))",
+        "((gradebook_sitename))",
+        "((teacher_firstname))",
+        "((teacher_lastname))",
+        "((official_code))",
+        "((date_certificate))",
+        "((date_certificate_no_time))",
+        "((course_code))",
+        "((course_title))",
+        "((gradebook_grade))",
+        "((certificate_link))",
+        "((certificate_link_html))",
+        "((certificate_barcode))",
+        "((external_style))",
+        "((time_in_course))",
+        "((time_in_course_in_all_sessions))",
+        "((start_date_and_end_date))",
+        "((course_objectives))",
+      ]
 
-          for (const tag of tags){
-              finalTags += "<p class=\"m-0\">"+tag+"</p>"
-          }
+      for (const tag of tags) {
+        finalTags += '<p class="m-0">' + tag + "</p>"
+      }
 
-          return finalTags;
-      },
-    ...mapActions('documents', ['createWithFormData', 'reset'])
+      return finalTags
+    },
+    ...mapActions("documents", ["createWithFormData", "reset"]),
   },
   mounted() {
-    this.fetchTemplates();
+    this.fetchTemplates()
   },
-};
+}
 </script>

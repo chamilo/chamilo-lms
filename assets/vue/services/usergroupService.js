@@ -1,25 +1,57 @@
-import axios from "axios"
+import baseService from "./baseService"
 
 export default {
   /**
    * @param {string} searchTerm
-   * @returns {Promise<Object>} { totalItems, items }
+   * @returns {Promise<{totalItems, items}>}
    */
   search: async (searchTerm) => {
-    const response = {}
+    return await baseService.getCollection("/api/usergroups/search", {
+      search: searchTerm,
+    })
+  },
 
-    try {
-      const { data } = await axios.get("/api/usergroups/search", {
-        params: { search: searchTerm },
-      })
+  /**
+   * @param {Object} params
+   * @returns {Promise<Object>}
+   */
+  async createGroup(params) {
+    return await baseService.post("/api/usergroups", params)
+  },
 
-      response.totalItems = data["hydra:totalItems"]
-      response.items = data["hydra:member"]
-    } catch {
-      response.totalItems = 0
-      response.items = []
-    }
+  /**
+   * @param {number} groupId
+   * @param {Object} params
+   * @returns {Promise<Object>}
+   */
+  async uploadPicture(groupId, params) {
+    return await baseService.postForm(`/social-network/upload-group-picture/${groupId}`, params)
+  },
 
-    return response
+  /**
+   * @returns {Promise<Array>}
+   */
+  async listNewest() {
+    const { items } = await baseService.getCollection("/api/usergroup/list/newest")
+
+    return items
+  },
+
+  /**
+   * @returns {Promise<Array>}
+   */
+  async listPopular() {
+    const { items } = await baseService.getCollection("/api/usergroup/list/popular")
+
+    return items
+  },
+
+  /**
+   * @returns {Promise<Array>}
+   */
+  async listMine() {
+    const { items } = await baseService.getCollection("/api/usergroup/list/my")
+
+    return items
   },
 }

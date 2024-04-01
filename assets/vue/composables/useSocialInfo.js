@@ -1,7 +1,8 @@
-import { ref, readonly, onMounted } from "vue"
+import { onMounted, readonly, ref } from "vue"
 import { useStore } from "vuex"
 import { useRoute } from "vue-router"
 import axios from "axios"
+
 export function useSocialInfo() {
   const store = useStore()
   const route = useRoute()
@@ -9,9 +10,9 @@ export function useSocialInfo() {
   const isCurrentUser = ref(true)
   const groupInfo = ref({
     isMember: false,
-    title: '',
-    description: '',
-    role: ''
+    title: "",
+    description: "",
+    role: "",
   })
   const isGroup = ref(false)
   const isLoading = ref(true)
@@ -40,7 +41,7 @@ export function useSocialInfo() {
   const loadUser = async () => {
     try {
       if (route.query.id) {
-        user.value = await store.dispatch("user/load", '/api/users/' + route.query.id)
+        user.value = await store.dispatch("user/load", "/api/users/" + route.query.id)
         isCurrentUser.value = false
       } else {
         user.value = store.getters["security/getUser"]
@@ -54,7 +55,7 @@ export function useSocialInfo() {
   onMounted(async () => {
     try {
       //if (!route.params.group_id) {
-        await loadUser()
+      await loadUser()
       //}
       if (route.params.group_id) {
         await loadGroup(route.params.group_id)

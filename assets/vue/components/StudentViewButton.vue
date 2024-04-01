@@ -15,10 +15,10 @@ import { computed } from "vue"
 import { useI18n } from "vue-i18n"
 import { useStore } from "vuex"
 import { usePlatformConfig } from "../store/platformConfig"
-import axios from "axios"
 import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../store/cidReq"
 import { useSecurityStore } from "../store/securityStore"
+import permissionService from "../services/permissionService"
 
 const emit = defineEmits(["change"])
 
@@ -30,15 +30,11 @@ const securityStore = useSecurityStore()
 
 const isStudentView = computed({
   async set() {
-    try {
-      const { data } = await axios.get(`${window.location.origin}/toggle_student_view`)
+    const studentView = await permissionService.toogleStudentView()
 
-      platformConfigStore.studentView = data
+    platformConfigStore.studentView = studentView
 
-      emit("change", data)
-    } catch (e) {
-      console.log(e)
-    }
+    emit("change", studentView)
   },
   get() {
     return platformConfigStore.isStudentViewActive
@@ -52,9 +48,11 @@ const { course, userIsCoach } = storeToRefs(cidReqStore)
 const user = computed(() => store.getters["security/getUser"])
 
 const showButton = computed(() => {
-  return securityStore.isAuthenticated &&
+  return (
+    securityStore.isAuthenticated &&
     course.value &&
     (isCourseAdmin.value || isAdmin.value || userIsCoach.value(user.value.id, 0, false)) &&
-    "true" === platformConfigStore.getSetting("course.student_view_enabled");
+    "true" === platformConfigStore.getSetting("course.student_view_enabled")
+  )
 })
 </script>

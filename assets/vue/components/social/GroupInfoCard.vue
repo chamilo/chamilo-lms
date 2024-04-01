@@ -3,42 +3,47 @@
     <div class="p-4 text-center">
       <img
         :src="groupInfo.image"
-        class="mb-4 w-24 h-24 mx-auto rounded-full"
         alt="Group picture"
+        class="mb-4 w-24 h-24 mx-auto rounded-full"
       />
       <hr />
       <BaseButton
         v-if="groupInfo.isModerator"
         :label="t('Edit this group')"
-        type="primary"
         class="mt-4"
-        @click="showEditGroupDialog = true"
         icon="edit"
+        type="primary"
+        @click="showEditGroupDialog = true"
       />
     </div>
   </BaseCard>
 
-  <Dialog header="Edit Group" v-model:visible="showEditGroupDialog" :modal="true" :closable="true">
+  <Dialog
+    v-model:visible="showEditGroupDialog"
+    :closable="true"
+    :modal="true"
+    header="Edit Group"
+  >
     <form @submit.prevent="submitGroupEdit">
       <div class="p-fluid">
         <BaseInputTextWithVuelidate
           v-model="editGroupForm.name"
-          label="Name*"
           :vuelidate-property="v$.editGroupForm.name"
+          label="Name*"
         />
 
         <BaseInputTextWithVuelidate
           v-model="editGroupForm.description"
-          label="Description"
           :vuelidate-property="v$.editGroupForm.description"
           as="textarea"
+          label="Description"
           rows="3"
         />
 
         <BaseInputTextWithVuelidate
           v-model="editGroupForm.url"
-          label="URL"
           :vuelidate-property="v$.editGroupForm.url"
+          label="URL"
         />
 
         <BaseFileUpload
@@ -50,7 +55,13 @@
 
         <div class="p-field mt-2">
           <label for="groupPermissions">Group Permissions</label>
-          <Dropdown id="groupPermissions" v-model="editGroupForm.permissions" :options="permissionsOptions" optionLabel="label" placeholder="Select Permission" />
+          <Dropdown
+            id="groupPermissions"
+            v-model="editGroupForm.permissions"
+            :options="permissionsOptions"
+            option-label="label"
+            placeholder="Select Permission"
+          />
         </div>
 
         <div class="p-field-checkbox mt-2">
@@ -62,15 +73,24 @@
           />
         </div>
       </div>
-      <Button label="Save" icon="pi pi-check" class="p-button-rounded p-button-text" @click="submitGroupEdit" />
-      <Button label="Close" class="p-button-text" @click="closeEditDialog" />
+      <Button
+        class="p-button-rounded p-button-text"
+        icon="pi pi-check"
+        label="Save"
+        @click="submitGroupEdit"
+      />
+      <Button
+        class="p-button-text"
+        label="Close"
+        @click="closeEditDialog"
+      />
     </form>
   </Dialog>
 </template>
 
 <script setup>
-import { computed, inject, onMounted, ref, watch } from "vue"
-import { useStore } from 'vuex'
+import { inject, ref } from "vue"
+import { useStore } from "vuex"
 import BaseCard from "../basecomponents/BaseCard.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
@@ -79,7 +99,7 @@ import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVueli
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import BaseFileUpload from "../basecomponents/BaseFileUpload.vue"
 import useVuelidate from "@vuelidate/core"
-import { required } from '@vuelidate/validators'
+import { required } from "@vuelidate/validators"
 import axios from "axios"
 import { ENTRYPOINT } from "../../config/entrypoint"
 
@@ -87,33 +107,36 @@ const { t } = useI18n()
 const store = useStore()
 const route = useRoute()
 const router = useRouter()
-const groupInfo = inject('group-info')
-const isGroup = inject('is-group')
+const groupInfo = inject("group-info")
+const isGroup = inject("is-group")
 
 const showEditGroupDialog = ref(false)
 const selectedFile = ref(null)
 
 const permissionsOptions = [
-  { label: 'Open', value: 1 },
-  { label: 'Closed', value: 2 },
+  { label: "Open", value: 1 },
+  { label: "Closed", value: 2 },
 ]
 
 const editGroupForm = ref({
   name: groupInfo.value.title,
   description: groupInfo.value.description,
   url: groupInfo.value.url,
-  permissions: permissionsOptions.find(option => option.value === groupInfo.value.visibility),
+  permissions: permissionsOptions.find((option) => option.value === groupInfo.value.visibility),
   allowLeave: Boolean(groupInfo.value.allowMembersToLeaveGroup),
 })
 
-const v$ = useVuelidate({
-  editGroupForm: {
-    name: { required },
-    description: {},
-    url: {},
-    permissions: { required },
-  }
-}, { editGroupForm })
+const v$ = useVuelidate(
+  {
+    editGroupForm: {
+      name: { required },
+      description: {},
+      url: {},
+      permissions: { required },
+    },
+  },
+  { editGroupForm },
+)
 
 const submitGroupEdit = () => {
   v$.value.$touch()
@@ -126,31 +149,32 @@ const submitGroupEdit = () => {
       allowMembersToLeaveGroup: editGroupForm.value.allowLeave ? 1 : 0,
     }
 
-    axios.put(`${ENTRYPOINT}usergroups/${groupInfo.value.id}`, updatedGroupData, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    .then((response) => {
-      if (selectedFile.value && response.data && response.data.id) {
-        const formData = new FormData()
-        formData.append('picture', selectedFile.value)
-        return axios.post(`/social-network/upload-group-picture/${response.data.id}`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-      }
-    })
-    .then(() => {
-      showEditGroupDialog.value = false
-      router.push('/dummy').then(() => {
-        router.go(-1)
+    axios
+      .put(`${ENTRYPOINT}usergroups/${groupInfo.value.id}`, updatedGroupData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
-    })
-    .catch((error) => {
-      console.error('Error updating group:', error)
-    })
+      .then((response) => {
+        if (selectedFile.value && response.data && response.data.id) {
+          const formData = new FormData()
+          formData.append("picture", selectedFile.value)
+          return axios.post(`/social-network/upload-group-picture/${response.data.id}`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+        }
+      })
+      .then(() => {
+        showEditGroupDialog.value = false
+        router.push("/dummy").then(() => {
+          router.go(-1)
+        })
+      })
+      .catch((error) => {
+        console.error("Error updating group:", error)
+      })
   }
 }
 

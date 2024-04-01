@@ -33,7 +33,11 @@
     />
 
     <div class="field">
-      <BaseTinyEditor v-model="item.content" editor-id="message" required />
+      <BaseTinyEditor
+        v-model="item.content"
+        editor-id="message"
+        required
+      />
     </div>
 
     <BaseButton
@@ -51,14 +55,12 @@ import { useStore } from "vuex"
 import MessageForm from "../../components/message/Form.vue"
 import Loading from "../../components/Loading.vue"
 import { computed, ref } from "vue"
-import axios from "axios"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import BaseAutocomplete from "../../components/basecomponents/BaseAutocomplete.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import { MESSAGE_TYPE_INBOX } from "../../components/message/constants"
-import userService from "../../services/user"
+import userService from "../../services/userService"
 import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import { useNotification } from "../../composables/notification"
 import { capitalize } from "lodash"
@@ -71,26 +73,13 @@ const { t } = useI18n()
 
 const notification = useNotification()
 
-const asyncFind = (query) => {
-  return axios
-    .get(ENTRYPOINT + "users", {
-      params: {
-        username: query,
-      },
-    })
-    .then((response) => {
-      let data = response.data
+const asyncFind = async (query) => {
+  const { items } = await userService.findByUsername(query)
 
-      return (
-        data["hydra:member"]?.map((member) => ({
-          name: member.fullName,
-          value: member["@id"],
-        })) ?? []
-      )
-    })
-    .catch(function (error) {
-      console.log(error)
-    })
+  return items.map((member) => ({
+    name: member.fullName,
+    value: member["@id"],
+  }))
 }
 
 const currentUser = computed(() => store.getters["security/getUser"])
@@ -201,7 +190,6 @@ if (route.query.send_to_user) {
 
   userService
     .find("/api/users/" + parseInt(route.query.send_to_user))
-    .then((response) => response.json())
     .then((user) => {
       sendToUser.value = user
 
@@ -214,7 +202,11 @@ if (route.query.send_to_user) {
         const prefill = capitalize(route.query.prefill)
 
         item.value.title = t(prefill + "Title")
-        item.value.content = t(prefill + "Content", [user.firstname, currentUser.value.firstname, currentUser.value.firstname])
+        item.value.content = t(prefill + "Content", [
+          user.firstname,
+          currentUser.value.firstname,
+          currentUser.value.firstname,
+        ])
       }
     })
     .catch((e) => notification.showErrorNotification(e))

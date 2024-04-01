@@ -1,5 +1,9 @@
-import { post } from "./baseService"
+import api from "../config/api"
 
 export default {
-  post,
+  async create(params) {
+    const { data } = await api.post("/api/resource_links", params)
+
+    return data
+  },
 }

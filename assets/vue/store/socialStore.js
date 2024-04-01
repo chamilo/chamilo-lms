@@ -1,8 +1,7 @@
-
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia"
 import axios from "axios"
 
-export const useSocialStore = defineStore('social', {
+export const useSocialStore = defineStore("social", {
   state: () => ({
     showFullProfile: false,
   }),
@@ -16,7 +15,7 @@ export const useSocialStore = defineStore('social', {
         console.error("Error checking user relation:", error)
         this.showFullProfile = false
       }
-    }
+    },
   },
 
   getters: {

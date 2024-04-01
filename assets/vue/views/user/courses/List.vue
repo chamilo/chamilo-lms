@@ -1,13 +1,25 @@
 <template>
   <StickyCourses />
 
-  <hr>
+  <hr />
 
-  <div v-if="isLoading" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+  <div
+    v-if="isLoading"
+    class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+  >
     <Skeleton height="16rem" />
-    <Skeleton class="hidden md:block" height="16rem" />
-    <Skeleton class="hidden lg:block" height="16rem" />
-    <Skeleton class="hidden xl:block" height="16rem" />
+    <Skeleton
+      class="hidden md:block"
+      height="16rem"
+    />
+    <Skeleton
+      class="hidden lg:block"
+      height="16rem"
+    />
+    <Skeleton
+      class="hidden xl:block"
+      height="16rem"
+    />
   </div>
 
   <div
@@ -25,30 +37,30 @@
 </template>
 
 <script setup>
-import { onMounted, computed } from "vue";
-import { useStore } from "vuex";
-import { useQuery } from "@vue/apollo-composable";
-import { useI18n } from "vue-i18n";
-import { GET_COURSE_REL_USER } from "../../../graphql/queries/CourseRelUser.js";
-import Skeleton from "primevue/skeleton";
-import StickyCourses from "../../../views/user/courses/StickyCourses.vue";
-import CourseCardList from "../../../components/course/CourseCardList.vue";
-import EmptyState from "../../../components/EmptyState";
+import { onMounted, computed } from "vue"
+import { useStore } from "vuex"
+import { useQuery } from "@vue/apollo-composable"
+import { useI18n } from "vue-i18n"
+import { GET_COURSE_REL_USER } from "../../../graphql/queries/CourseRelUser.js"
+import Skeleton from "primevue/skeleton"
+import StickyCourses from "../../../views/user/courses/StickyCourses.vue"
+import CourseCardList from "../../../components/course/CourseCardList.vue"
+import EmptyState from "../../../components/EmptyState"
 
-const store = useStore();
-const { t } = useI18n();
+const store = useStore()
+const { t } = useI18n()
 
-let user = computed(() => store.getters["security/getUser"]);
+let user = computed(() => store.getters["security/getUser"])
 
 const { result, loading, refetch } = useQuery(GET_COURSE_REL_USER, () => ({
   user: user.value["@id"],
-}));
+}))
 
-const isLoading = computed(() => loading.value);
+const isLoading = computed(() => loading.value)
 
-const courses = computed(() => result.value?.courseRelUsers.edges.map(({ node }) => node.course) ?? []);
+const courses = computed(() => result.value?.courseRelUsers.edges.map(({ node }) => node.course) ?? [])
 
 onMounted(() => {
-  refetch();
-});
+  refetch()
+})
 </script>

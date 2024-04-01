@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 import { usePlatformConfig } from "./platformConfig"
-import courseService from "../services/course"
+import courseService from "../services/courseService"
 import sessionService from "../services/sessionService"
 import { computed, ref } from "vue"
 
@@ -56,7 +56,7 @@ export const useCidReqStore = defineStore("cidReq", () => {
       return
     }
 
-    course.value = await courseService.find(iri, { sid }).then((response) => response.json())
+    course.value = await courseService.find(iri, { sid })
   }
 
   const setSessionByIri = async (iri) => {
@@ -64,9 +64,7 @@ export const useCidReqStore = defineStore("cidReq", () => {
       return
     }
 
-    const { data } = await sessionService.find(iri);
-
-    session.value = data
+    session.value = await sessionService.find(iri)
   }
 
   const setCourseAndSessionByIri = async (courseIri, sId = 0) => {

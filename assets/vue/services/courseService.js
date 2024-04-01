@@ -1,27 +1,28 @@
-import { ENTRYPOINT } from "../config/entrypoint"
-import axios from "axios"
+import api from "../config/api"
+import baseService from "./baseService"
 
-const API_URL = '/course';
-const courseService = {
+export default {
+  find: baseService.get,
+
   /**
    * @param {number} courseId
    * @param {number=} sessionId
    * @returns {Promise<Object>}
    */
   loadTools: async (courseId, sessionId = 0) => {
-    const { data } = await axios.get(ENTRYPOINT + `../course/${courseId}/home.json?sid=${sessionId}`)
+    const { data } = await api.get(`/course/${courseId}/home.json?sid=${sessionId}`)
 
     return data
   },
 
   loadCTools: async (courseId, sessionId = 0) => {
-    const { data } = await axios.get(ENTRYPOINT + 'c_tools', {
+    const { data } = await api.get("/api/c_tools", {
       params: {
         cid: courseId,
         sid: sessionId,
         order: {
-          position: 'asc'
-        }
+          position: "asc",
+        },
       },
     })
 
@@ -36,13 +37,10 @@ const courseService = {
    * @returns {Promise<Object>}
    */
   updateToolOrder: async (tool, newIndex, courseId, sessionId = 0) => {
-    const { data } = await axios.post(
-      ENTRYPOINT + `../course/${courseId}/home.json?sid=${sessionId}`,
-      {
-        index: newIndex,
-        toolItem: tool,
-      }
-    )
+    const { data } = await api.post(`/course/${courseId}/home.json?sid=${sessionId}`, {
+      index: newIndex,
+      toolItem: tool,
+    })
 
     return data
   },
@@ -53,14 +51,11 @@ const courseService = {
    * @returns {Promise<{Object}>}
    */
   loadHomeIntro: async (courseId, sessionId = 0) => {
-    const { data } = await axios.get(
-      ENTRYPOINT + `../course/${courseId}/getToolIntro`,
-      {
-        params: {
-          sid: sessionId,
-        },
-      }
-    )
+    const { data } = await api.get(`/course/${courseId}/getToolIntro`, {
+      params: {
+        sid: sessionId,
+      },
+    })
 
     return data
   },
@@ -71,14 +66,11 @@ const courseService = {
    * @returns {Promise<Object>}
    */
   checkLegal: async (courseId, sessionId = 0) => {
-    const { data } = await axios.get(
-      `${API_URL}/${courseId}/checkLegal.json`,
-      {
-        params: {
-          sid: sessionId,
-        },
-      }
-    )
+    const { data } = await api.get(`/course/${courseId}/checkLegal.json`, {
+      params: {
+        sid: sessionId,
+      },
+    })
 
     return data
   },
@@ -89,9 +81,10 @@ const courseService = {
    * @returns {Promise<Object>} The server response after creating the course.
    */
   createCourse: async (courseData) => {
-    const response = await axios.post(`${API_URL}/create`, courseData);
-    console.log('response create ::', response);
-    return response.data;
+    const response = await api.post(`/course/create`, courseData)
+    console.log("response create ::", response)
+
+    return response.data
   },
 
   /**
@@ -99,8 +92,9 @@ const courseService = {
    * @returns {Promise<Array>} A list of available categories.
    */
   getCategories: async () => {
-    const response = await axios.get(`${API_URL}/categories`);
-    return response.data;
+    const response = await api.get(`/course/categories`)
+
+    return response.data
   },
 
   /**
@@ -109,14 +103,13 @@ const courseService = {
    * @returns {Promise<Array>} A list of templates matching the search term.
    */
   searchTemplates: async (searchTerm) => {
-    const response = await axios.get(`${API_URL}/search_templates`, {
-      params: { search: searchTerm }
-    });
-    return response.data.items.map(item => ({
+    const response = await api.get(`/course/search_templates`, {
+      params: { search: searchTerm },
+    })
+
+    return response.data.items.map((item) => ({
       name: item.name,
-      value: item.id
-    }));
+      value: item.id,
+    }))
   },
 }
-
-export default courseService

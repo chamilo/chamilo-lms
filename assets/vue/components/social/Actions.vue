@@ -39,9 +39,9 @@
 </template>
 
 <script>
-import { reactive, ref } from "vue";
-import axios from "axios";
-import { usePlatformConfig } from "../../store/platformConfig";
+import { reactive } from "vue"
+import { usePlatformConfig } from "../../store/platformConfig"
+import socialService from "../../services/socialService"
 
 export default {
   name: "WallActions",
@@ -57,53 +57,49 @@ export default {
   },
   emits: ["post-deleted"],
   setup(props, { emit }) {
-    const platformConfigStore = usePlatformConfig();
+    const platformConfigStore = usePlatformConfig()
 
     const isLoading = reactive({
       like: false,
       dislike: false,
       delete: false,
-    });
+    })
 
     function onLikeComment() {
-      isLoading.like = true;
+      isLoading.like = true
 
-      axios
-        .post(props.socialPost["@id"] + "/like", {})
-        .then(({ data }) => {
-          props.socialPost.countFeedbackLikes = data.countFeedbackLikes;
-          props.socialPost.countFeedbackDislikes = data.countFeedbackDislikes;
+      socialService
+        .sendPostLike(props.socialPost["@id"])
+        .then((like) => {
+          props.socialPost.countFeedbackLikes = like.countFeedbackLikes
+          props.socialPost.countFeedbackDislikes = like.countFeedbackDislikes
         })
-        .finally(() => (isLoading.like = false));
+        .finally(() => (isLoading.like = false))
     }
 
     function onDisikeComment() {
-      isLoading.dislike = true;
+      isLoading.dislike = true
 
-      axios
-        .post(props.socialPost["@id"] + "/dislike", {})
-        .then(({ data }) => {
-          props.socialPost.countFeedbackLikes = data.countFeedbackLikes;
-          props.socialPost.countFeedbackDislikes = data.countFeedbackDislikes;
+      socialService
+        .sendPostDislike(props.socialPost["@id"])
+        .then((like) => {
+          props.socialPost.countFeedbackLikes = like.countFeedbackLikes
+          props.socialPost.countFeedbackDislikes = like.countFeedbackDislikes
         })
-        .finally(() => (isLoading.dislike = false));
+        .finally(() => (isLoading.dislike = false))
     }
 
     function onDeleteComment() {
-      isLoading.delete = true;
+      isLoading.delete = true
 
-      axios
+      socialService
         .delete(props.socialPost["@id"])
         .then(() => emit("post-deleted", props.socialPost))
-        .finally(() => (isLoading.delete = false));
+        .finally(() => (isLoading.delete = false))
     }
 
-    const enableFeedback =
-      "true" ===
-      platformConfigStore.getSetting("social.social_enable_messages_feedback");
-    const disableDislike =
-      "true" ===
-      platformConfigStore.getSetting("social.disable_dislike_option");
+    const enableFeedback = "true" === platformConfigStore.getSetting("social.social_enable_messages_feedback")
+    const disableDislike = "true" === platformConfigStore.getSetting("social.disable_dislike_option")
 
     return {
       enableFeedback,
@@ -112,7 +108,7 @@ export default {
       onLikeComment,
       onDisikeComment,
       onDeleteComment,
-    };
+    }
   },
-};
+}
 </script>

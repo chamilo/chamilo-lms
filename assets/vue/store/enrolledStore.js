@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 import axios from "axios"
-import { computed, ref } from "vue"
+import { ref } from "vue"
 
 export const useEnrolledStore = defineStore("enrolledStore", () => {
   // Reactive state to track if the user is enrolled in courses or sessions
@@ -11,7 +11,7 @@ export const useEnrolledStore = defineStore("enrolledStore", () => {
   async function checkEnrollments() {
     try {
       const { data } = await axios.get("/course/check-enrollments")
-      console.log('Check enrollments data:', data)
+      console.log("Check enrollments data:", data)
       isEnrolledInCourses.value = data.isEnrolledInCourses
       isEnrolledInSessions.value = data.isEnrolledInSessions
     } catch (error) {
@@ -28,6 +28,6 @@ export const useEnrolledStore = defineStore("enrolledStore", () => {
     // Computed properties for reactivity
     isEnrolledInCourses,
     isEnrolledInSessions,
-    initialize
-  };
-});
+    initialize,
+  }
+})

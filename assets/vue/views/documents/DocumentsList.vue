@@ -41,16 +41,16 @@
         @click="openNew"
       />
       <BaseButton
-      :disabled="true"
-      :label="t('New drawing')"
-      icon="drawing"
-      type="success"
+        :disabled="true"
+        :label="t('New drawing')"
+        icon="drawing"
+        type="success"
       />
       <BaseButton
-      :label="t('Record audio')"
-      icon="record-add"
-      type="success"
-      @click="showRecordAudioDialog"
+        :label="t('Record audio')"
+        icon="record-add"
+        type="success"
+        @click="showRecordAudioDialog"
       />
       <BaseButton
         :disabled="true"
@@ -181,8 +181,8 @@
           />
           <BaseButton
             v-if="isCertificateMode"
+            :class="{ selected: slotProps.data.iid === defaultCertificateId }"
             :icon="slotProps.data.iid === defaultCertificateId ? 'certificate-selected' : 'certificate-not-selected'"
-            :class="{ 'selected': slotProps.data.iid === defaultCertificateId }"
             size="small"
             type="slotProps.data.iid === defaultCertificateId ? 'success' : 'black'"
             @click="selectAsDefaultCertificate(slotProps.data)"
@@ -340,9 +340,9 @@
         id="post-file"
         :label="t('File upload')"
         accept="image"
+        model-value=""
         size="small"
         @file-selected="selectedFile = $event"
-        model-value=""
       />
     </form>
   </BaseDialogConfirmCancel>
@@ -371,7 +371,6 @@ import DocumentAudioRecorder from "../../components/documents/DocumentAudioRecor
 import { useNotification } from "../../composables/notification"
 import { useSecurityStore } from "../../store/securityStore"
 import prettyBytes from "pretty-bytes"
-import { ENTRYPOINT } from "../../config/entrypoint"
 import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
 
 const store = useStore()
@@ -383,7 +382,7 @@ const { t } = useI18n()
 const { filters, options, onUpdateOptions, deleteItem } = useDatatableList("Documents")
 const notification = useNotification()
 const { cid, sid, gid } = useCidReq()
-const { isImage, isHtml } = useFileUtils();
+const { isImage, isHtml } = useFileUtils()
 
 const { relativeDatetime } = useFormatDate()
 
@@ -416,13 +415,13 @@ const hasImageInDocumentEntries = computed(() => {
 })
 
 const isCertificateMode = computed(() => {
-  return route.query.filetype === 'certificate';
+  return route.query.filetype === "certificate"
 })
 
-const defaultCertificateId = ref(null);
+const defaultCertificateId = ref(null)
 
 const isHtmlFile = (fileData) => {
-  return isHtml(fileData);
+  return isHtml(fileData)
 }
 
 onMounted(() => {
@@ -685,111 +684,111 @@ function recordedAudioNotSaved(error) {
 
 async function selectAsDefaultCertificate(certificate) {
   try {
-    const response = await axios.patch(`/gradebook/set_default_certificate/${cid}/${certificate.iid}`);
+    const response = await axios.patch(`/gradebook/set_default_certificate/${cid}/${certificate.iid}`)
     if (response.status === 200) {
       loadDefaultCertificate()
       onUpdateOptions(options.value)
-      notification.showSuccessNotification(t('Certificate set as default successfully'));
+      notification.showSuccessNotification(t("Certificate set as default successfully"))
     }
   } catch (error) {
-    notification.showErrorNotification(t('Error setting certificate as default'));
+    notification.showErrorNotification(t("Error setting certificate as default"))
   }
 }
 
 async function loadDefaultCertificate() {
   try {
-    const response = await axios.get(`/gradebook/default_certificate/${cid}`);
-    defaultCertificateId.value = response.data.certificateId;
+    const response = await axios.get(`/gradebook/default_certificate/${cid}`)
+    defaultCertificateId.value = response.data.certificateId
   } catch (error) {
     if (error.response && error.response.status === 404) {
-      console.error('Default certificate not found.');
-      defaultCertificateId.value = null;
+      console.error("Default certificate not found.")
+      defaultCertificateId.value = null
     } else {
-      console.error('Error loading the certificate', error);
+      console.error("Error loading the certificate", error)
     }
   }
 }
 
-const showTemplateFormModal = ref(false);
-const selectedFile = ref(null);
+const showTemplateFormModal = ref(false)
+const selectedFile = ref(null)
 const templateFormData = ref({
-  title: '',
+  title: "",
   thumbnail: null,
 })
 
-const currentDocumentId = ref(null);
+const currentDocumentId = ref(null)
 
 const isDocumentTemplate = async (documentId) => {
   try {
-    const response = await axios.get(`/template/document-templates/${documentId}/is-template`);
-    return response.data.isTemplate;
+    const response = await axios.get(`/template/document-templates/${documentId}/is-template`)
+    return response.data.isTemplate
   } catch (error) {
-    console.error('Error verifying the template status:', error);
+    console.error("Error verifying the template status:", error)
     return false
   }
 }
 
 const deleteDocumentTemplate = async (documentId) => {
   try {
-    await axios.post(`/template/document-templates/${documentId}/delete`);
-    onUpdateOptions(options.value);
-    notification.showSuccessNotification(t('Template successfully deteled.'));
+    await axios.post(`/template/document-templates/${documentId}/delete`)
+    onUpdateOptions(options.value)
+    notification.showSuccessNotification(t("Template successfully deteled."))
   } catch (error) {
-    console.error('Error deleting the template:', error);
-    notification.showErrorNotification(t('Error deleting the template.'));
+    console.error("Error deleting the template:", error)
+    notification.showErrorNotification(t("Error deleting the template."))
   }
 }
 
 const getTemplateIcon = (documentId) => {
-  const document = items.value.find((doc) => doc.iid === documentId);
-  return document && document.template ? 'template-selected' : 'template-not-selected';
+  const document = items.value.find((doc) => doc.iid === documentId)
+  return document && document.template ? "template-selected" : "template-not-selected"
 }
 
 const openTemplateForm = async (documentId) => {
-  const isTemplate = await isDocumentTemplate(documentId);
+  const isTemplate = await isDocumentTemplate(documentId)
 
   if (isTemplate) {
     await deleteDocumentTemplate(documentId)
-    onUpdateOptions(listaoptions.value);
+    onUpdateOptions(options.value)
   } else {
-    currentDocumentId.value = documentId;
-    showTemplateFormModal.value = true;
+    currentDocumentId.value = documentId
+    showTemplateFormModal.value = true
   }
 }
 
 const submitTemplateForm = async () => {
-  submitted.value = true;
+  submitted.value = true
 
   if (!templateFormData.value.title || !selectedFile.value) {
-    notification.showErrorNotification(t('The title and thumbnail are required.'));
-    return;
+    notification.showErrorNotification(t("The title and thumbnail are required."))
+    return
   }
 
   try {
     const formData = new FormData()
-    formData.append('title', templateFormData.value.title);
-    formData.append('thumbnail', selectedFile.value);
-    formData.append('refDoc', currentDocumentId.value);
-    formData.append('cid', cid);
+    formData.append("title", templateFormData.value.title)
+    formData.append("thumbnail", selectedFile.value)
+    formData.append("refDoc", currentDocumentId.value)
+    formData.append("cid", cid)
 
-    const response = await axios.post('/template/document-templates/create', formData, {
+    const response = await axios.post("/template/document-templates/create", formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
       },
-    });
+    })
 
     if (response.status === 200 || response.status === 201) {
-      notification.showSuccessNotification(t('Template created successfully.'));
-      templateFormData.value.title = '';
-      selectedFile.value = null;
-      showTemplateFormModal.value = false;
-      onUpdateOptions(options.value);
+      notification.showSuccessNotification(t("Template created successfully."))
+      templateFormData.value.title = ""
+      selectedFile.value = null
+      showTemplateFormModal.value = false
+      onUpdateOptions(options.value)
     } else {
-      notification.showErrorNotification(t('Error creating the template.'));
+      notification.showErrorNotification(t("Error creating the template."))
     }
   } catch (error) {
-    console.error('Error submitting the form:', error)
-    notification.showErrorNotification(t('Error submitting the form.'));
+    console.error("Error submitting the form:", error)
+    notification.showErrorNotification(t("Error submitting the form."))
   }
-};
+}
 </script>

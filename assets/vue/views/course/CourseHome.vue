@@ -180,11 +180,11 @@
         <CourseTool
           v-for="(tool, index) in tools"
           :key="'tool-' + index.toString()"
-          :is-allowed-to-edit="isAllowedToEdit"
           :change-visibility="changeVisibility"
           :data-index="index"
           :data-tool="tool.title"
           :go-to-setting-course-tool="goToSettingCourseTool"
+          :is-allowed-to-edit="isAllowedToEdit"
           :tool="tool"
         />
 
@@ -249,19 +249,18 @@ const courseItems = ref([])
 
 const routerTools = ["document", "link", "glossary", "agenda", "student_publication", "course_homepage"]
 
-courseService.loadCTools(course.value.id, session.value?.id)
-  .then((cTools) => {
-    tools.value = cTools.map(element => {
-      if (routerTools.includes(element.title)) {
-        element.to = element.url
-      }
+courseService.loadCTools(course.value.id, session.value?.id).then((cTools) => {
+  tools.value = cTools.map((element) => {
+    if (routerTools.includes(element.title)) {
+      element.to = element.url
+    }
 
-      return element
-    })
+    return element
+  })
 
-    const noAdminToolsIndex = []
+  const noAdminToolsIndex = []
 
-    courseItems.value = tools.value
+  courseItems.value = tools.value
     .filter((element, index) => {
       if ("admin" === element.tool.category) {
         noAdminToolsIndex.push(index)
@@ -271,15 +270,15 @@ courseService.loadCTools(course.value.id, session.value?.id)
 
       return false
     })
-    .map(adminTool => ({
+    .map((adminTool) => ({
       label: adminTool.tool.titleToShow,
       url: adminTool.url,
     }))
 
-    noAdminToolsIndex.reverse().forEach((element) => tools.value.splice(element, 1))
+  noAdminToolsIndex.reverse().forEach((element) => tools.value.splice(element, 1))
 
-    isCourseLoading.value = false
-  })
+  isCourseLoading.value = false
+})
 
 courseService
   .loadTools(course.value.id, session.value?.id)
@@ -313,7 +312,15 @@ const setToolVisibility = (tool, visibility) => {
 
 function changeVisibility(tool) {
   axios
-    .post(ENTRYPOINT + "../r/course_tool/links/" + tool.resourceNode.id + "/change_visibility?cid=" + course.value.id + "&sid=" + session.value?.id)
+    .post(
+      ENTRYPOINT +
+        "../r/course_tool/links/" +
+        tool.resourceNode.id +
+        "/change_visibility?cid=" +
+        course.value.id +
+        "&sid=" +
+        session.value?.id,
+    )
     .then((response) => setToolVisibility(tool, response.data.visibility))
     .catch((error) => console.log(error))
 }
@@ -360,7 +367,7 @@ async function updateDisplayOrder(htmlItem, newIndex) {
   const tool = htmlItem.dataset.tool
   let toolItem = null
 
-  if (typeof tools !== "undefined" && Array.isArray(tools.value)) {
+  if (typeof tools.value !== "undefined" && Array.isArray(tools.value)) {
     const toolList = tools.value
     toolItem = toolList.find((element) => element.title === tool)
   } else {
@@ -371,12 +378,7 @@ async function updateDisplayOrder(htmlItem, newIndex) {
   console.log(toolItem, newIndex)
 
   // Send the updated values to the server
-  await courseService.updateToolOrder(
-    toolItem,
-    newIndex,
-    course.value.id,
-    session.value?.id
-  )
+  await courseService.updateToolOrder(toolItem, newIndex, course.value.id, session.value?.id)
 }
 
 const isAllowedToEdit = ref(false)
@@ -395,8 +397,6 @@ const onStudentViewChanged = async () => {
 const allowEditToolVisibilityInSession = computed(() => {
   const isInASession = session.value?.id
 
-  return isInASession
-    ? "true" === getSetting.value("course.allow_edit_tool_visibility_in_session")
-    : true
+  return isInASession ? "true" === getSetting.value("course.allow_edit_tool_visibility_in_session") : true
 })
 </script>

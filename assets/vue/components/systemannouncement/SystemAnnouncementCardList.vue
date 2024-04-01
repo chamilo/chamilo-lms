@@ -1,7 +1,5 @@
 <template>
-  <div
-    v-if="announcements.length > 0"
-  >
+  <div v-if="announcements.length > 0">
     <SystemAnnouncementCard
       v-for="announcement in announcements"
       :key="announcement.id"
@@ -14,18 +12,18 @@
 import { ref } from "vue"
 import axios from "axios"
 
-import SystemAnnouncementCard from './SystemAnnouncementCard.vue';
+import SystemAnnouncementCard from "./SystemAnnouncementCard.vue"
 
-const announcements = ref([]);
+const announcements = ref([])
 
 axios
   .get("/news/list")
   .then((response) => {
     if (Array.isArray(response.data)) {
-      announcements.value = response.data;
+      announcements.value = response.data
     }
   })
   .catch(function (error) {
-    console.log(error);
-  });
+    console.log(error)
+  })
 </script>

@@ -1,10 +1,10 @@
-import {ENTRYPOINT} from "../config/entrypoint"
+import { ENTRYPOINT } from "../config/entrypoint"
 import axios from "axios"
 
 export default {
-    findAll: async () => {
-        const response = await axios.get(ENTRYPOINT + 'page_categories')
+  findAll: async () => {
+    const response = await axios.get(ENTRYPOINT + "page_categories")
 
-        return response.data['hydra:member']
-    },
+    return response.data["hydra:member"]
+  },
 }

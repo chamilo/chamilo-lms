@@ -1,4 +1,4 @@
-import api from "../config/api"
+import baseService from "./baseService"
 
 export default {
   /**
@@ -6,7 +6,7 @@ export default {
    * @returns {Promise<void>}
    */
   registerCampus: async (doNotListCampus) => {
-    await api.post("/admin/register-campus", {
+    await baseService.post("/admin/register-campus", {
       donotlistcampus: doNotListCampus,
     })
   },
@@ -15,35 +15,27 @@ export default {
    * @returns {Promise<string>}
    */
   findAnnouncements: async () => {
-    const { data } = await api.get("/main/inc/ajax/admin.ajax.php?a=get_latest_news")
-
-    return data
+    return await baseService.get("/main/inc/ajax/admin.ajax.php?a=get_latest_news")
   },
 
   /**
    * @returns {Promise<string>}
    */
   findVersion: async () => {
-    const { data } = await api.get("/main/inc/ajax/admin.ajax.php?a=version")
-
-    return data
+    return await baseService.get("/main/inc/ajax/admin.ajax.php?a=version")
   },
 
   /**
    * @returns {Promise<string>}
    */
   findSupport: async () => {
-    const { data } = await axios.get("/main/inc/ajax/admin.ajax.php?a=get_support")
-
-    return data
+    return await baseService.get("/main/inc/ajax/admin.ajax.php?a=get_support")
   },
 
   /**
    * @returns {Promise<Object>}
    */
   findBlocks: async () => {
-    const { data } = await api.get("/admin/index")
-
-    return data
+    return await baseService.get("/admin/index")
   },
 }

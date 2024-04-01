@@ -4,7 +4,7 @@ export default {
   /**
    * @param {string} iri
    * @param {Object} [params]
-   * @returns {Promise<Object>}
+   * @returns {Promise<any>}
    */
   async get(iri, params = {}) {
     const { data } = await api.get(iri, {

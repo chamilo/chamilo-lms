@@ -41,7 +41,7 @@
     </div>
     <CalendarInvitations v-model="item" />
 
-    <div v-if="agendaRemindersEnabled" class="field mt-2">
+    <div v-if="!isGlobal && agendaRemindersEnabled" class="field mt-2">
       <BaseButton
         label="Add Notification"
         @click="addNotification"
@@ -99,6 +99,7 @@ const props = defineProps({
     default: () => {},
   },
   notificationsData: Array,
+  isGlobal: Boolean,
 })
 
 const item = computed(() => props.initialValues || props.values)

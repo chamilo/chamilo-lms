@@ -67,12 +67,18 @@ switch ($action) {
 
         break;
     case 'get_latest_news':
-        if ('true' === api_get_setting('admin.admin_chamilo_announcements_disable')) {
-            break;
-        }
-
         try {
             $latestNews = getLatestNews();
+            $latestNews = json_decode($latestNews, true);
+
+            echo Security::remove_XSS($latestNews['text'], COURSEMANAGER);
+            break;
+        } catch (Exception $e) {
+            break;
+        }
+    case 'get_support':
+        try {
+            $latestNews = getProSupport();
             $latestNews = json_decode($latestNews, true);
 
             echo Security::remove_XSS($latestNews['text'], COURSEMANAGER);
@@ -261,7 +267,37 @@ function check_system_version()
  */
 function getLatestNews()
 {
-    $url = 'https://version.chamilo.org/news/latest.php';
+    $url = 'https://version.chamilo.org/news-c2/latest.php';
+
+    $client = new Client();
+    $response = $client->request(
+        'GET',
+        $url,
+        [
+            'query' => [
+                'language' => api_get_language_isocode(),
+            ],
+        ]
+    );
+
+    if (200 !== $response->getStatusCode()) {
+        throw new Exception(get_lang('Deny access'));
+    }
+
+    return $response->getBody()->getContents();
+}
+
+/**
+ * Display the latest support services block.
+ *
+ * @throws \GuzzleHttp\Exception\GuzzleException
+ * @throws Exception
+ *
+ * @return string|void
+ */
+function getProSupport()
+{
+    $url = 'https://version.chamilo.org/support/latest.php';
 
     $client = new Client();
     $response = $client->request(

@@ -30,6 +30,15 @@ export default {
   },
 
   /**
+   * @returns {Promise<string>}
+   */
+  findSupport: async () => {
+    const { data } = await axios.get("/main/inc/ajax/admin.ajax.php?a=get_support")
+
+    return data
+  },
+
+  /**
    * @returns {Promise<Object>}
    */
   findBlocks: async () => {

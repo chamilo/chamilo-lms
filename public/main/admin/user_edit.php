@@ -423,19 +423,22 @@ if ($form->validate()) {
         $lastname = $user['lastname'];
         $firstname = $user['firstname'];
         $password = $user['password'];
-        $auth_source = isset($user['auth_source']) ? $user['auth_source'] : $userInfo['auth_source'];
+        $auth_source = $user['auth_source'] ?? $userInfo['auth_source'];
         $official_code = $user['official_code'];
         $email = $user['email'];
         $phone = $user['phone'];
-        $username = isset($user['username']) ? $user['username'] : $userInfo['username'];
+        $username = $user['username'] ?? $userInfo['username'];
         $status = (int) $user['status'];
         $platform_admin = (int) $user['platform_admin'];
         $send_mail = (int) $user['send_mail'];
         $reset_password = (int) $user['reset_password'];
         $hr_dept_id = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : null;
         $language = $user['locale'];
-        $address = isset($user['address']) ? $user['address'] : null;
-        $expiration_date = $user['expiration_date'];
+        $address = $user['address'] ?? null;
+        $expiration_date = !empty($user['expiration_date']) ? $user['expiration_date'] : null;
+        if (isset($user['radio_expiration_date']) && 0 === (int) $user['radio_expiration_date']) {
+            $expiration_date = null;
+        }
         $active = isset($user['active']) ? (int) $user['active'] : USER_SOFT_DELETED;
 
         //If the user is set to admin the status will be overwrite by COURSEMANAGER = 1

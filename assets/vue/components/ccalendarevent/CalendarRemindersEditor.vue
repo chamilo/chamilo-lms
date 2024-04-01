@@ -8,7 +8,7 @@ import { useCalendarReminders } from "../../composables/calendar/calendarReminde
 
 const { t } = useI18n()
 
-const { agendaRemindersEnabled, periodList } = useCalendarReminders()
+const { periodList } = useCalendarReminders()
 
 const model = defineModel({
   type: Object,
@@ -25,10 +25,7 @@ function addEmptyReminder() {
 </script>
 
 <template>
-  <Fieldset
-    v-if="agendaRemindersEnabled"
-    :legend="t('Reminders')"
-  >
+  <Fieldset :legend="t('Reminders')">
     <div class="reminder-list space-y-4">
       <BaseButton
         :label="t('Add reminder')"

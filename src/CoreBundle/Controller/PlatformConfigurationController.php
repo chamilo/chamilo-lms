@@ -58,7 +58,6 @@ class PlatformConfigurationController extends AbstractController
 
                 'agenda.allow_personal_agenda',
                 'agenda.personal_calendar_show_sessions_occupation',
-                'agenda.agenda_reminders',
                 'agenda.agenda_collective_invitations',
                 'agenda.agenda_event_subscriptions',
 

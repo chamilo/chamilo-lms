@@ -7,12 +7,7 @@
  */
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-
 exit;
-
-if ('true' !== api_get_setting('agenda.agenda_reminders')) {
-    exit;
-}
 
 $batchCounter = 0;
 $batchSize = 100;

@@ -78,11 +78,9 @@ class CalendarEventTransformer implements DataTransformerInterface
 
         $calendarEvent->setType($eventType);
 
-        if ('true' === $this->settingsManager->getSetting('agenda.agenda_reminders')) {
-            $object->getReminders()->forAll(fn (int $i, AgendaReminder $reminder) => $reminder->encodeDateInterval());
+        $object->getReminders()->forAll(fn (int $i, AgendaReminder $reminder) => $reminder->encodeDateInterval());
 
-            $calendarEvent->reminders = $object->getReminders();
-        }
+        $calendarEvent->reminders = $object->getReminders();
 
         return $calendarEvent;
     }

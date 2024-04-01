@@ -46,15 +46,11 @@ class CCalendarEventProcessor implements ProcessorInterface
             }
         }
 
-        if ('true' === $this->settingsManager->getSetting('agenda.agenda_reminders')) {
-            $data->getReminders()->forAll(function (int $i, AgendaReminder $reminder) {
-                $reminder->setType('');
+        $data->getReminders()->forAll(function (int $i, AgendaReminder $reminder) {
+            $reminder->setType('');
 
-                return $reminder->decodeDateInterval();
-            });
-        } else {
-            $data->getReminders()->clear();
-        }
+            return $reminder->decodeDateInterval();
+        });
 
         /** @var CCalendarEvent $result */
         return $this->persistProcessor->process($data, $operation, $uriVariables, $context);

@@ -37,21 +37,19 @@ class UpdateCCalendarEventAction extends BaseResourceFileAction
             ->setCollective($result['collective'] ?? false)
         ;
 
-        if ('true' === $settingsManager->getSetting('agenda.agenda_reminders')) {
-            $calendarEvent->getReminders()->clear();
+        $calendarEvent->getReminders()->clear();
 
-            foreach ($result['reminders'] as $reminderInfo) {
-                $reminder = new AgendaReminder();
-                $reminder->count = $reminderInfo['count'];
-                $reminder->period = $reminderInfo['period'];
+        foreach ($result['reminders'] as $reminderInfo) {
+            $reminder = new AgendaReminder();
+            $reminder->count = $reminderInfo['count'];
+            $reminder->period = $reminderInfo['period'];
 
-                $reminder
-                    ->setType('')
-                    ->decodeDateInterval()
-                ;
+            $reminder
+                ->setType('')
+                ->decodeDateInterval()
+            ;
 
-                $calendarEvent->addReminder($reminder);
-            }
+            $calendarEvent->addReminder($reminder);
         }
 
         return $calendarEvent;

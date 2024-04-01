@@ -43,7 +43,7 @@ export function useCalendarActionButtons() {
       showImportICalButton.value = true
 
       if (course.value) {
-        if ("true" === platformConfigStore.getSetting("agenda.agenda_reminders") && isAllowedToEdit) {
+        if (isAllowedToEdit.value) {
           showImportCourseEventsButton.value = true
         }
       }

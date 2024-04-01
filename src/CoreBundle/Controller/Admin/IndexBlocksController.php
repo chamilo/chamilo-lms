@@ -394,15 +394,11 @@ class IndexBlocksController extends BaseController
             'route' => ['name' => 'CCalendarEventList', 'query' => ['type' => 'global']],
             'label' => $this->translator->trans('Global agenda'),
         ];
-
-        if ('true' === $this->settingsManager->getSetting('agenda.agenda_reminders')) {
-            $items[] = [
-                'class' => 'item-agenda-reminders',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/import_course_agenda_reminders.php']),
-                'label' => $this->translator->trans('Import course events'),
-            ];
-        }
-
+        $items[] = [
+            'class' => 'item-agenda-reminders',
+            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/import_course_agenda_reminders.php']),
+            'label' => $this->translator->trans('Import course events'),
+        ];
         $items[] = [
             'class' => 'item-pages-list',
             'route' => ['name' => 'PageList'],

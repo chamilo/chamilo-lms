@@ -1,12 +1,7 @@
-import { usePlatformConfig } from "../../store/platformConfig"
 import { useI18n } from "vue-i18n"
 
 export function useCalendarReminders() {
-  const platformConfigStore = usePlatformConfig()
-
   const { t } = useI18n()
-
-  const agendaRemindersEnabled = "true" === platformConfigStore.getSetting("agenda.agenda_reminders")
 
   const periodList = [
     { label: t("Minutes"), value: "i" },
@@ -31,7 +26,6 @@ export function useCalendarReminders() {
   }
 
   return {
-    agendaRemindersEnabled,
     periodList,
     decodeDateInterval,
   }

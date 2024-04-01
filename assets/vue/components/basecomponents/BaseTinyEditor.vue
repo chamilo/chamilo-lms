@@ -177,6 +177,7 @@ const defaultEditorConfig = {
 
 if (props.fullPage) {
   defaultEditorConfig.plugins.push("fullpage")
+  defaultEditorConfig.toolbar += " | fullpage"
 }
 
 const editorConfig = computed(() => ({

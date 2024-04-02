@@ -1,0 +1,74 @@
+<?php
+
+declare(strict_types=1);
+
+/* For licensing terms, see /license.txt */
+
+namespace Chamilo\CoreBundle\Migrations\Schema\V200;
+
+use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Doctrine\DBAL\Schema\Schema;
+
+class Version20240401213600 extends AbstractMigrationChamilo
+{
+    public function getDescription(): string
+    {
+        return 'Adds allow_careers_in_global_agenda setting and updates c_calendar_event table';
+    }
+
+    public function up(Schema $schema): void
+    {
+        $settingExists = $this->connection->fetchOne("SELECT COUNT(*) FROM settings_current WHERE variable = 'allow_careers_in_global_agenda'");
+
+        $selectedValue = $this->getConfigurationSelectedValue();
+
+        if ($settingExists == 0) {
+            $this->addSql(
+                "INSERT INTO settings_current (access_url, variable, category, selected_value, title, access_url_changeable, access_url_locked) VALUES (1, 'allow_careers_in_global_agenda', 'agenda', '$selectedValue', 'Allow careers and promotions in global agenda', 1, 0)"
+            );
+        } else {
+            $this->addSql(
+                "UPDATE settings_current SET selected_value = '$selectedValue' WHERE variable = 'allow_careers_in_global_agenda'"
+            );
+        }
+
+        // Update c_calendar_event table
+        if (!$schema->getTable('c_calendar_event')->hasColumn('career_id')) {
+            $this->addSql('ALTER TABLE c_calendar_event ADD career_id INT DEFAULT NULL');
+        }
+
+        if (!$schema->getTable('c_calendar_event')->hasColumn('promotion_id')) {
+            $this->addSql('ALTER TABLE c_calendar_event ADD promotion_id INT DEFAULT NULL');
+        }
+    }
+
+    private function getConfigurationSelectedValue(): string
+    {
+        global $_configuration;
+        $rootPath = $this->getContainer()->getParameter('kernel.project_dir');
+        $oldConfigPath = $rootPath . '/app/config/configuration.php';
+        if (!in_array($oldConfigPath, get_included_files(), true)) {
+            include_once $oldConfigPath;
+        }
+
+        $value = $_configuration['allow_careers_in_global_agenda'] ?? false;
+        if (is_bool($value)) {
+            return $value ? 'true' : 'false';
+        }
+
+        return (string)$value;
+    }
+
+    public function down(Schema $schema): void
+    {
+        $this->addSql("DELETE FROM settings_current WHERE variable = 'allow_careers_in_global_agenda'");
+
+        if ($schema->getTable('c_calendar_event')->hasColumn('career_id')) {
+            $this->addSql('ALTER TABLE c_calendar_event DROP COLUMN career_id');
+        }
+
+        if ($schema->getTable('c_calendar_event')->hasColumn('promotion_id')) {
+            $this->addSql('ALTER TABLE c_calendar_event DROP COLUMN promotion_id');
+        }
+    }
+}

@@ -175,6 +175,22 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: AgendaReminder::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $reminders;
 
+    /**
+     * Optional career identifier.
+     *
+     * @var int|null
+     */
+    #[ORM\Column(name: 'career_id', type: 'integer', nullable: true)]
+    protected ?int $careerId = null;
+
+    /**
+     * Optional promotion identifier.
+     *
+     * @var int|null
+     */
+    #[ORM\Column(name: 'promotion_id', type: 'integer', nullable: true)]
+    protected ?int $promotionId = null;
+
     public function __construct()
     {
         $this->children = new ArrayCollection();
@@ -471,6 +487,30 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
                 $reminder->setEvent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCareerId(): ?int
+    {
+        return $this->careerId;
+    }
+
+    public function setCareerId(?int $careerId): self
+    {
+        $this->careerId = $careerId;
+
+        return $this;
+    }
+
+    public function getPromotionId(): ?int
+    {
+        return $this->promotionId;
+    }
+
+    public function setPromotionId(?int $promotionId): self
+    {
+        $this->promotionId = $promotionId;
 
         return $this;
     }

@@ -514,18 +514,6 @@ switch ($action) {
             exit;
         }
 
-        if (WhispeakAuthPlugin::questionRequireAuthentify($question_id)) {
-            if (ONE_PER_PAGE == $objExercise->type) {
-                echo json_encode(['type' => 'one_per_page']);
-                break;
-            }
-
-            echo json_encode(['ok' => true]);
-            break;
-        } else {
-            ChamiloSession::erase(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION);
-        }
-
         // Getting information of the current exercise.
         $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
         $exercise_id = $exercise_stat_info['exe_exo_id'];

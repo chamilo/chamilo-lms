@@ -221,16 +221,6 @@ if (!isset($src)) {
 
                 $src = $oLP->fixBlockedLinks($src);
 
-                if (WhispeakAuthPlugin::isLpItemMarked($lp_item_id)) {
-                    ChamiloSession::write(
-                        WhispeakAuthPlugin::SESSION_LP_ITEM,
-                        ['lp' => $lp->getIid(), 'lp_item' => $lp_item_id, 'src' => $src]
-                    );
-
-                    $src = api_get_path(WEB_PLUGIN_PATH).'whispeakauth/authentify.php';
-                    break;
-                }
-
                 $oLP->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php?error=prerequisites';

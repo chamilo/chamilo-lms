@@ -645,13 +645,6 @@ class ScormApi
                 break;
         }
 
-        if (WhispeakAuthPlugin::isLpItemMarked($new_item_id)) {
-            ChamiloSession::write(
-                WhispeakAuthPlugin::SESSION_LP_ITEM,
-                ['lp' => $lpId, 'lp_item' => $new_item_id, 'src' => '']
-            );
-        }
-
         $mylp->start_current_item(true);
         if ($mylp->force_commit) {
             $mylp->save_current();

@@ -57,15 +57,6 @@ if ($dir) {
             $learnPath->stop_previous_item();
             $prerequisiteCheck = $learnPath->prerequisites_match($lpItemId);
             if (true === $prerequisiteCheck) {
-                if (WhispeakAuthPlugin::isLpItemMarked($lpItemId)) {
-                    ChamiloSession::write(
-                        WhispeakAuthPlugin::SESSION_LP_ITEM,
-                        ['lp' => $learnPath->lp_id, 'lp_item' => $lpItemId, 'src' => $src]
-                    );
-
-                    $src = api_get_path(WEB_PLUGIN_PATH).'whispeakauth/authentify.php';
-                    break;
-                }
                 $src = $learnPath->get_link('http', $lpItemId);
                 if (empty($src)) {
                     $src = 'blank.php?'.api_get_cidreq().'&error=document_protected';

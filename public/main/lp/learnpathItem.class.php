@@ -2799,10 +2799,6 @@ class learnpathItem
                 error_log("type: $type");
             }
 
-            if (!WhispeakAuthPlugin::isAllowedToSaveLpItem($this->iId)) {
-                return false;
-            }
-
             switch ($type) {
                 case 'asset':
                     if ($prereqs_complete) {

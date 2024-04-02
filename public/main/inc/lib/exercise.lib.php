@@ -69,8 +69,6 @@ class ExerciseLib
             return false;
         }
 
-        $questionRequireAuth = WhispeakAuthPlugin::questionRequireAuthentify($questionId);
-
         if (EXERCISE_FEEDBACK_TYPE_END != $exercise->getFeedbackType()) {
             $show_comment = false;
         }
@@ -99,12 +97,6 @@ class ExerciseLib
                         );
                     }
                     echo $titleToDisplay;
-                }
-
-                if ($questionRequireAuth) {
-                    WhispeakAuthPlugin::quizQuestionAuthentify($questionId, $exercise);
-
-                    return false;
                 }
 
                 if (!empty($questionDescription) && READING_COMPREHENSION != $answerType) {
@@ -1488,11 +1480,6 @@ HTML;
                     }
                     echo $objQuestionTmp->getTitleToDisplay($exercise, $current_item);
                 }
-                if ($questionRequireAuth) {
-                    WhispeakAuthPlugin::quizQuestionAuthentify($questionId, $exercise);
-
-                    return false;
-                }
 
                 //@todo I need to the get the feedback type
                 echo <<<HOTSPOT
@@ -1552,12 +1539,6 @@ HOTSPOT;
                         TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
                     }
                     echo $objQuestionTmp->getTitleToDisplay($exercise, $current_item);
-                }
-
-                if ($questionRequireAuth) {
-                    WhispeakAuthPlugin::quizQuestionAuthentify($questionId, $exercise);
-
-                    return false;
                 }
 
                 echo '

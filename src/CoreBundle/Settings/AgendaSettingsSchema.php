@@ -34,6 +34,7 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                     'agenda_on_hover_info' => '',
                     'agenda_reminders_sender_id' => '0',
                     'fullcalendar_settings' => '',
+                    'allow_careers_in_global_agenda' => 'false',
                 ]
             )
         ;
@@ -105,6 +106,7 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                         $this->settingArrayHelpValue('fullcalendar_settings'),
                 ]
             )
+            ->add('allow_careers_in_global_agenda', YesNoType::class)
         ;
     }
 

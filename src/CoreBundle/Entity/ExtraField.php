@@ -48,6 +48,10 @@ class ExtraField
     public const TRACK_EXERCISE_FIELD_TYPE = 18;
     public const PORTFOLIO_TYPE = 19;
     public const LP_VIEW_TYPE = 20;
+    public const COURSE_ANNOUNCEMENT = 21;
+    public const MESSAGE_TYPE = 22;
+    public const DOCUMENT_TYPE = 23;
+    public const ATTENDANCE_CALENDAR_TYPE = 24;
 
     public const USER_FIELD_TYPE_RADIO = 3;
     public const USER_FIELD_TYPE_SELECT_MULTIPLE = 5;

@@ -38,7 +38,6 @@
 
 <script setup>
 import { onMounted, computed } from "vue"
-import { useStore } from "vuex"
 import { useQuery } from "@vue/apollo-composable"
 import { useI18n } from "vue-i18n"
 import { GET_COURSE_REL_USER } from "../../../graphql/queries/CourseRelUser.js"
@@ -46,14 +45,13 @@ import Skeleton from "primevue/skeleton"
 import StickyCourses from "../../../views/user/courses/StickyCourses.vue"
 import CourseCardList from "../../../components/course/CourseCardList.vue"
 import EmptyState from "../../../components/EmptyState"
+import { useSecurityStore } from "../../../store/securityStore"
 
-const store = useStore()
+const securityStore = useSecurityStore()
 const { t } = useI18n()
 
-let user = computed(() => store.getters["security/getUser"])
-
 const { result, loading, refetch } = useQuery(GET_COURSE_REL_USER, () => ({
-  user: user.value["@id"],
+  user: securityStore.user["@id"],
 }))
 
 const isLoading = computed(() => loading.value)

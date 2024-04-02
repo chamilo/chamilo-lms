@@ -90,6 +90,8 @@ import ResourceIcon from "../../components/documents/ResourceIcon.vue"
 import { useRoute } from "vue-router"
 import moment from "moment"
 import prettyBytes from "pretty-bytes"
+import { useSecurityStore } from "../../store/securityStore"
+import { storeToRefs } from "pinia"
 
 /*const servicePrefix = 'documents';
 const { getters, actions } = list(servicePrefix);*/
@@ -102,6 +104,15 @@ export default {
     ResourceIcon,
   },
   setup() {
+    const securityStore = useSecurityStore()
+
+    const { isAuthenticated, isAdmin, isCurrentTeacher } = storeToRefs(securityStore)
+
+    return {
+      isAuthenticated,
+      isAdmin,
+      isCurrentTeacher,
+    }
     //this.moment = moment;
   },
   mixins: [ListMixin],
@@ -164,11 +175,6 @@ export default {
     }),
     ...mapGetters("resourcenode", {
       resourceNode: "getResourceNode",
-    }),
-    ...mapGetters({
-      isAuthenticated: "security/isAuthenticated",
-      isAdmin: "security/isAdmin",
-      isCurrentTeacher: "security/isCurrentTeacher",
     }),
 
     //...getters

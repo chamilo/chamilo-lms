@@ -42,7 +42,6 @@ import { computed, onMounted, onUpdated, provide, ref, watch, watchEffect } from
 import { useRoute, useRouter } from "vue-router"
 import { DefaultApolloClient } from "@vue/apollo-composable"
 import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client/core"
-import { useStore } from "vuex"
 import axios from "axios"
 import { capitalize, isEmpty } from "lodash"
 import ConfirmDialog from "primevue/confirmdialog"
@@ -130,23 +129,12 @@ watchEffect(async () => {
   }
 })
 
-const user = ref({})
-
-let isAuthenticated = false
-
-if (!isEmpty(window.user)) {
-  user.value = window.user
-  isAuthenticated = true
-}
-
-const store = useStore()
 const securityStore = useSecurityStore()
 const notification = useNotification()
 
-const payload = { isAuthenticated, user }
-
-store.dispatch("security/onRefresh", payload)
-securityStore.user = window.user
+if (!isEmpty(window.user)) {
+  securityStore.user = window.user
+}
 
 onUpdated(() => {
   const app = document.getElementById("app")

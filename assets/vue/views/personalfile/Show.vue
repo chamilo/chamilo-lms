@@ -131,6 +131,8 @@ import Toolbar from "../../components/Toolbar.vue"
 
 import ShowLinks from "../../components/resource_links/ShowLinks.vue"
 import { useFormatDate } from "../../composables/formatDate"
+import { useSecurityStore } from "../../store/securityStore"
+import { storeToRefs } from "pinia"
 
 const servicePrefix = "PersonalFile"
 
@@ -143,9 +145,15 @@ export default {
   },
   data() {
     const { relativeDatetime } = useFormatDate()
+    const securityStore = useSecurityStore()
+
+    const { isAuthenticated, isAdmin, isCurrentTeacher } = storeToRefs(securityStore)
 
     return {
       relativeDatetime,
+      isAuthenticated,
+      isAdmin,
+      isCurrentTeacher,
     }
   },
   mixins: [ShowMixin],
@@ -154,11 +162,6 @@ export default {
       isLoading: "isLoading",
     }),
     ...mapGetters("personalfile", ["find"]),
-    ...mapGetters({
-      isAuthenticated: "security/isAuthenticated",
-      isAdmin: "security/isAdmin",
-      isCurrentTeacher: "security/isCurrentTeacher",
-    }),
   },
   methods: {
     goBack() {

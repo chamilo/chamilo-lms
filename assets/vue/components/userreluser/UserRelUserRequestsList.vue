@@ -70,7 +70,7 @@ import BaseButton from "../basecomponents/BaseButton.vue"
 import Skeleton from "primevue/skeleton"
 import BaseUserAvatar from "../basecomponents/BaseUserAvatar.vue"
 import { ref } from "vue"
-import { useStore } from "vuex"
+import { useSecurityStore } from "../../store/securityStore"
 import userRelUserService from "../../services/userreluser"
 import { useNotification } from "../../composables/notification"
 import axios from "axios"
@@ -80,20 +80,18 @@ const emit = defineEmits(["accept-friend"])
 
 const { t } = useI18n()
 
-const store = useStore()
+const securityStore = useSecurityStore()
 const notification = useNotification()
-
-const user = store.getters["security/getUser"]
 
 const friendRequests = ref([])
 const waitingRequests = ref([])
 
 const friendRequestFilter = {
-  friend: user.id,
+  friend: securityStore.user.id,
   relationType: 10, // friend request
 }
 const waitingFilter = {
-  user: user.id,
+  user: securityStore.user.id,
   relationType: 10,
 }
 

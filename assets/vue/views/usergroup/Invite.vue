@@ -90,16 +90,15 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue"
+import { onMounted, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
-import { useStore } from "vuex"
 import axios from "axios"
+import { useSecurityStore } from "../../store/securityStore"
 
 const { t } = useI18n()
 const route = useRoute()
-const store = useStore()
-const currentUser = computed(() => store.getters["security/getUser"])
+const securityStore = useSecurityStore()
 const availableFriends = ref([])
 const selectedFriends = ref([])
 const invitedFriends = ref([])
@@ -113,7 +112,7 @@ const removeFriend = (friend) => {
 }
 const loadAvailableFriends = async () => {
   const groupId = route.params.group_id
-  const userId = currentUser.value.id
+  const userId = securityStore.user.id
   try {
     const response = await axios.get(`/social-network/invite-friends/${userId}/${groupId}`)
     availableFriends.value = response.data.friends

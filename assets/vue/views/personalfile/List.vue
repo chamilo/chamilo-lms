@@ -248,6 +248,8 @@ import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibil
 import { useI18n } from "vue-i18n"
 import { useFormatDate } from "../../composables/formatDate"
 import prettyBytes from "pretty-bytes"
+import { useSecurityStore } from "../../store/securityStore"
+import { storeToRefs } from "pinia"
 
 export default {
   name: "PersonalFileList",
@@ -261,7 +263,9 @@ export default {
   mixins: [ListMixin],
   setup() {
     const { t } = useI18n()
+    const securityStore = useSecurityStore()
     const { relativeDatetime } = useFormatDate()
+    const { user, isAuthenticated, isAdmin } = storeToRefs(securityStore)
 
     const data = {
       sortBy: "title",
@@ -302,6 +306,9 @@ export default {
       prettyBytes,
       relativeDatetime,
       t,
+      currentUser: user,
+      isAuthenticated,
+      isAdmin,
     }
 
     return data
@@ -315,11 +322,6 @@ export default {
     // From crud.js list function
     ...mapGetters("resourcenode", {
       resourceNode: "getResourceNode",
-    }),
-    ...mapGetters({
-      isAuthenticated: "security/isAuthenticated",
-      isAdmin: "security/isAdmin",
-      currentUser: "security/getUser",
     }),
 
     ...mapGetters("personalfile", {

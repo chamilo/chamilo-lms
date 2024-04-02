@@ -91,6 +91,8 @@ import isEmpty from "lodash/isEmpty"
 import { useFormatDate } from "../../composables/formatDate"
 import prettyBytes from "pretty-bytes"
 import { useI18n } from "vue-i18n"
+import { useSecurityStore } from "../../store/securityStore"
+import { storeToRefs } from "pinia"
 
 export default {
   name: "PersonalFileShared",
@@ -103,8 +105,11 @@ export default {
     DataFilter,
   },
   data() {
+    const securityStore = useSecurityStore()
     const { t } = useI18n()
     const { relativeDatetime } = useFormatDate()
+
+    const { isAdmin, user, isAuthenticated } = storeToRefs(securityStore)
 
     return {
       sortBy: "title",
@@ -130,6 +135,9 @@ export default {
       relativeDatetime,
       prettyBytes,
       t,
+      isAuthenticated,
+      isAdmin,
+      currentUser: user,
     }
   },
   created() {
@@ -144,11 +152,6 @@ export default {
     // From crud.js list function
     ...mapGetters("resourcenode", {
       resourceNode: "getResourceNode",
-    }),
-    ...mapGetters({
-      isAuthenticated: "security/isAuthenticated",
-      isAdmin: "security/isAdmin",
-      currentUser: "security/getUser",
     }),
 
     ...mapGetters("personalfile", {

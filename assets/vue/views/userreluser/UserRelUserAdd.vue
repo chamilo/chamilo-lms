@@ -39,7 +39,6 @@
 <script setup>
 import { onMounted, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { useStore } from "vuex"
 import { useI18n } from "vue-i18n"
 import { useNotification } from "../../composables/notification"
 import VueMultiselect from "vue-multiselect"
@@ -47,13 +46,13 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import userService from "../../services/userService"
 import userRelUserService from "../../services/userRelUserService"
+import { useSecurityStore } from "../../store/securityStore"
 
-const store = useStore()
+const securityStore = useSecurityStore()
 const router = useRouter()
 const route = useRoute()
 const { t } = useI18n()
 const { showSuccessNotification, showErrorNotification } = useNotification()
-const user = store.getters["security/getUser"]
 const users = ref([])
 const isLoadingSelect = ref(false)
 const searchQuery = ref("")
@@ -77,7 +76,7 @@ const addFriend = (friend) => {
   isLoadingSelect.value = true
 
   userRelUserService
-    .sendFriendRequest(user["@id"], friend["@id"])
+    .sendFriendRequest(securityStore.user["@id"], friend["@id"])
     .then(() => {
       showSuccessNotification(t("Friend request sent successfully"))
     })

@@ -52,7 +52,7 @@
       </div>
 
       <BaseAutocomplete
-        v-if="item.sender && item.sender['@id'] !== user['@id']"
+        v-if="item.sender && item.sender['@id'] !== securityStore.user['@id']"
         id="search-tags"
         v-model="foundTag"
         :label="t('Tags')"
@@ -153,13 +153,14 @@ import BaseAutocomplete from "../../components/basecomponents/BaseAutocomplete.v
 import { useFormatDate } from "../../composables/formatDate"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 import messageTagService from "../../services/messageTagService"
+import { useSecurityStore } from "../../store/securityStore"
 
 const confirm = useConfirm()
 const { t } = useI18n()
 
 const isLoadingSelect = ref(false)
 const store = useStore()
-const user = store.getters["security/getUser"]
+const securityStore = useSecurityStore()
 //const find = store.getters["message/find"];
 const route = useRoute()
 const router = useRouter()
@@ -181,7 +182,7 @@ store.dispatch("message/load", id).then((responseItem) => {
   item.value = responseItem
 
   myReceiver.value = [...responseItem.receiversTo, ...responseItem.receiversCc].find(
-    ({ receiver }) => receiver["@id"] === user["@id"],
+    ({ receiver }) => receiver["@id"] === securityStore.user["@id"],
   )
 
   // Change to read.
@@ -252,7 +253,7 @@ const foundTag = ref("")
 async function onSearchTags(query) {
   isLoadingSelect.value = true
 
-  const { items } = await messageTagService.searchUserTags(user["@id"], query)
+  const { items } = await messageTagService.searchUserTags(securityStore.user["@id"], query)
 
   isLoadingSelect.value = false
 
@@ -265,7 +266,7 @@ async function onItemSelect({ value }) {
   if (!value["@id"]) {
     try {
       await store.dispatch("messagetag/create", {
-        user: user["@id"],
+        user: securityStore.user["@id"],
         tag: value.tag,
       })
     } catch (e) {

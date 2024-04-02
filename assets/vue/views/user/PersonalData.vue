@@ -132,10 +132,9 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref, computed } from "vue"
+import { onMounted, reactive, ref } from "vue"
 import { useI18n } from 'vue-i18n'
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
-import { useStore } from "vuex"
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
@@ -143,13 +142,12 @@ import LayoutFormButtons from "../../components/layout/LayoutFormButtons.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useNotification } from "../../composables/notification"
 import socialService from "../../services/socialService"
+import { useSecurityStore } from "../../store/securityStore"
 
 const { t } = useI18n()
-const store = useStore()
+const securityStore = useSecurityStore()
 
 const { showSuccessNotification, showErrorNotification } = useNotification()
-
-const user = computed(() => store.getters["security/getUser"])
 
 const personalData = reactive({
   data: {},
@@ -188,26 +186,24 @@ function toggleCategory(categoryName) {
 }
 
 async function fetchPersonalData() {
-  if (!user.value) {
+  if (!securityStore.user) {
     console.error("User ID is not available.")
     return
   }
   try {
-    const userId = user.value["@id"].split('/').pop()
-    personalData.data = await socialService.fetchPersonalData(userId)
+    personalData.data = await socialService.fetchPersonalData(securityStore.user.id)
   } catch (error) {
     showErrorNotification('Error fetching personal data:', error)
   }
 }
 
 async function fetchTermsAndConditions() {
-  if (!user.value) {
+  if (!securityStore.user) {
     console.error("User ID is not available.")
     return
   }
   try {
-    const userId = user.value["@id"].split('/').pop()
-    termsAndConditions.value = await socialService.fetchTermsAndConditions(userId)
+    termsAndConditions.value = await socialService.fetchTermsAndConditions(securityStore.user.id)
   } catch (error) {
     showErrorNotification('Error fetching terms and conditions:', error)
   }
@@ -220,8 +216,7 @@ async function submitPrivacyRequest(requestType) {
     return
   }
   try {
-    const userId = user.value["@id"].split('/').pop()
-    const response = await socialService.submitPrivacyRequest({ userId, explanation, requestType })
+    const response = await socialService.submitPrivacyRequest({ userId: securityStore.user.id, explanation, requestType })
     if (response.success) {
       showSuccessNotification(response.message)
       deleteTermExplanation.value = ''
@@ -237,8 +232,7 @@ async function submitPrivacyRequest(requestType) {
 
 async function submitAcceptTerm() {
   try {
-    const userId = user.value["@id"].split('/').pop()
-    const response = await socialService.submitAcceptTerm(userId)
+    const response = await socialService.submitAcceptTerm(securityStore.user.id)
 
     if (response.success) {
       showSuccessNotification(response.message)
@@ -252,13 +246,12 @@ async function submitAcceptTerm() {
 }
 
 async function fetchLegalStatus() {
-  if (!user.value) {
+  if (!securityStore.user) {
     console.error("User ID is not available.")
     return
   }
   try {
-    const userId = user.value["@id"].split('/').pop()
-    const legalStatusData = await socialService.fetchLegalStatus(userId)
+    const legalStatusData = await socialService.fetchLegalStatus(securityStore.user.id)
     Object.assign(legalStatus, legalStatusData)
   } catch (error) {
     showErrorNotification('Error fetching legal status:', error)

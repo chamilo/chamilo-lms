@@ -18,6 +18,6 @@ const platformConfigStore = usePlatformConfig();
 
 const redirectValue = platformConfigStore.getSetting("platform.redirect_index_to_url_for_logged_users");
 if (typeof redirectValue === 'string' && redirectValue.trim() !== '') {
-  router.push(`/${redirectValue}`);
+  router.replace(`/${redirectValue}`);
 }
 </script>

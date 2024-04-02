@@ -65,8 +65,10 @@ import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import { useNotification } from "../../composables/notification"
 import { capitalize } from "lodash"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
+import { useSecurityStore } from "../../store/securityStore"
 
 const store = useStore()
+const securityStore = useSecurityStore()
 const router = useRouter()
 const route = useRoute()
 const { t } = useI18n()
@@ -82,10 +84,8 @@ const asyncFind = async (query) => {
   }))
 }
 
-const currentUser = computed(() => store.getters["security/getUser"])
-
 const item = ref({
-  sender: currentUser.value["@id"],
+  sender: securityStore.user["@id"],
   receivers: [],
   msgType: MESSAGE_TYPE_INBOX,
   title: "",
@@ -204,8 +204,8 @@ if (route.query.send_to_user) {
         item.value.title = t(prefill + "Title")
         item.value.content = t(prefill + "Content", [
           user.firstname,
-          currentUser.value.firstname,
-          currentUser.value.firstname,
+          securityStore.user.firstname,
+          securityStore.user.firstname,
         ])
       }
     })

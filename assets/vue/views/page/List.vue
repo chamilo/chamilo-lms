@@ -1,6 +1,6 @@
 <template>
   <DataTable
-    v-if="isAdmin"
+    v-if="securityStore.isAdmin"
     v-model:filters="filters"
     v-model:selection="selectedItems"
     :lazy="true"
@@ -227,7 +227,7 @@ onMounted(() => {
 
   onUpdateOptions(options.value)
 
-  if (isAdmin.value) {
+  if (securityStore.isAdmin) {
     layoutMenuItems.value = [
       {
         label: t("New page"),
@@ -238,8 +238,6 @@ onMounted(() => {
     ]
   }
 })
-
-const isAdmin = computed(() => store.getters["security/isAdmin"])
 
 const items = computed(() => store.state["page"].recents)
 

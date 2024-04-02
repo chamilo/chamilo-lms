@@ -15,12 +15,12 @@
           width="12rem"
         />
         <Skeleton
-          v-if="isCurrentTeacher"
+          v-if="securityStore.isCurrentTeacher"
           height="2.5rem"
           width="8rem"
         />
         <Skeleton
-          v-if="isCurrentTeacher"
+          v-if="securityStore.isCurrentTeacher"
           height="2.5rem"
           width="3rem"
         />
@@ -34,25 +34,25 @@
           width="6rem"
         />
         <Skeleton
-          v-if="isCurrentTeacher"
+          v-if="securityStore.isCurrentTeacher"
           class="ml-auto"
           height="1.5rem"
           width="6rem"
         />
         <Skeleton
-          v-if="isCurrentTeacher"
+          v-if="securityStore.isCurrentTeacher"
           class="aspect-square"
           height="1.5rem"
           width="6rem"
         />
         <Skeleton
-          v-if="isCurrentTeacher"
+          v-if="securityStore.isCurrentTeacher"
           class="aspect-square"
           height="1.5rem"
           width="6rem"
         />
         <Skeleton
-          v-if="isCurrentTeacher"
+          v-if="securityStore.isCurrentTeacher"
           class="aspect-square"
           height="1.5rem"
           width="6rem"
@@ -89,7 +89,7 @@
         </div>
 
         <BaseButton
-          v-if="isCurrentTeacher && courseIntroEl?.introduction?.iid"
+          v-if="securityStore.isCurrentTeacher && courseIntroEl?.introduction?.iid"
           :label="t('Edit introduction')"
           class="grow-0"
           icon="edit"
@@ -202,7 +202,6 @@
 
 <script setup>
 import { computed, onMounted, provide, ref, watch } from "vue"
-import { useStore } from "vuex"
 import { useI18n } from "vue-i18n"
 import axios from "axios"
 import { ENTRYPOINT } from "../../config/entrypoint"
@@ -221,12 +220,12 @@ import { storeToRefs } from "pinia"
 import courseService from "../../services/courseService"
 import CourseIntroduction from "../../components/course/CourseIntroduction.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { useSecurityStore } from "../../store/securityStore"
 
-const store = useStore()
 const { t } = useI18n()
 const cidReqStore = useCidReqStore()
 const platformConfigStore = usePlatformConfig()
-
+const securityStore = useSecurityStore()
 const { course, session } = storeToRefs(cidReqStore)
 const { getSetting } = storeToRefs(platformConfigStore)
 
@@ -236,8 +235,6 @@ const shortcuts = ref([])
 const courseIntroEl = ref(null)
 
 const isCourseLoading = ref(true)
-
-const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
 
 const isSorting = ref(false)
 const isCustomizing = ref(false)

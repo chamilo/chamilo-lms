@@ -13,6 +13,7 @@ use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use DateTime;
 use DateTimeZone;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Exception;
 
@@ -119,7 +120,7 @@ class Version20230904173400 extends AbstractMigrationChamilo
                     }
                 }
             }
-            $oldNewEventIdMap[$personalAgenda['id']] = $calendarEvent->getIid();
+            $oldNewEventIdMap[$personalAgenda['id']] = $calendarEvent;
         }
 
         $em->flush();
@@ -222,14 +223,20 @@ class Version20230904173400 extends AbstractMigrationChamilo
         }
     }
 
-    private function updateAgendaReminders(array $oldNewEventIdMap, $em): void
+    /**
+     * @param array<int, CCalendarEvent> $oldNewEventIdMap
+     * @param EntityManagerInterface $em
+     * @return void
+     */
+    private function updateAgendaReminders(array $oldNewEventIdMap, EntityManagerInterface $em): void
     {
         $reminders = $em->getRepository(AgendaReminder::class)->findBy(['type' => 'personal']);
+        /** @var AgendaReminder $reminder */
         foreach ($reminders as $reminder) {
-            $oldEventId = $reminder->getEventId();
+            $oldEventId = $reminder->getEvent()->getIid();
             if (\array_key_exists($oldEventId, $oldNewEventIdMap)) {
-                $newEventId = $oldNewEventIdMap[$oldEventId];
-                $reminder->setEventId($newEventId);
+                $newEvent = $oldNewEventIdMap[$oldEventId];
+                $reminder->setEvent($newEvent);
                 $em->persist($reminder);
             }
         }

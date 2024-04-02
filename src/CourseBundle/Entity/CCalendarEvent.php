@@ -19,6 +19,8 @@ use Chamilo\CoreBundle\ApiResource\CalendarEvent;
 use Chamilo\CoreBundle\Controller\Api\UpdateCCalendarEventAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\AgendaReminder;
+use Chamilo\CoreBundle\Entity\Career;
+use Chamilo\CoreBundle\Entity\Promotion;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Filter\CidFilter;
@@ -176,20 +178,18 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     private Collection $reminders;
 
     /**
-     * Optional career identifier.
-     *
-     * @var int|null
+     * @var Career|null
      */
-    #[ORM\Column(name: 'career_id', type: 'integer', nullable: true)]
-    protected ?int $careerId = null;
+    #[ORM\ManyToOne(targetEntity: Career::class)]
+    #[ORM\JoinColumn(name: 'career_id', referencedColumnName: 'id', nullable: true)]
+    protected ?Career $career = null;
 
     /**
-     * Optional promotion identifier.
-     *
-     * @var int|null
+     * @var Promotion|null
      */
-    #[ORM\Column(name: 'promotion_id', type: 'integer', nullable: true)]
-    protected ?int $promotionId = null;
+    #[ORM\ManyToOne(targetEntity: Promotion::class)]
+    #[ORM\JoinColumn(name: 'promotion_id', referencedColumnName: 'id', nullable: true)]
+    protected ?Promotion $promotion = null;
 
     public function __construct()
     {
@@ -491,26 +491,26 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
         return $this;
     }
 
-    public function getCareerId(): ?int
+    public function getCareer(): ?Career
     {
-        return $this->careerId;
+        return $this->career;
     }
 
-    public function setCareerId(?int $careerId): self
+    public function setCareer(?Career $career): self
     {
-        $this->careerId = $careerId;
+        $this->career = $career;
 
         return $this;
     }
 
-    public function getPromotionId(): ?int
+    public function getPromotion(): ?Promotion
     {
-        return $this->promotionId;
+        return $this->promotion;
     }
 
-    public function setPromotionId(?int $promotionId): self
+    public function setPromotion(?Promotion $promotion): self
     {
-        $this->promotionId = $promotionId;
+        $this->promotion = $promotion;
 
         return $this;
     }

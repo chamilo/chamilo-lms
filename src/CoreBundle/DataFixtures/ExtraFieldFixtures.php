@@ -248,6 +248,22 @@ class ExtraFieldFixtures extends Fixture
                 'visible_to_self' => true,
                 'changeable' => true,
             ],
+            [
+                'variable' => 'attachment',
+                'display_text' => 'Attachment',
+                'item_type' => ExtraField::SCHEDULED_ANNOUNCEMENT,
+                'value_type' => ExtraField::FIELD_TYPE_FILE,
+                'visible_to_self' => true,
+                'changeable' => true,
+            ],
+            [
+                'variable' => 'send_to_coaches',
+                'display_text' => 'Send to Coaches',
+                'item_type' => ExtraField::SCHEDULED_ANNOUNCEMENT,
+                'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
+                'visible_to_self' => true,
+                'changeable' => true,
+            ],
         ];
 
         $options = [

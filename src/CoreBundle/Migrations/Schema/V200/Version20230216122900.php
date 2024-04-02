@@ -674,6 +674,20 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 "INSERT INTO extra_field (item_type, value_type, variable, display_text, visible_to_self, changeable, filter, created_at) VALUES (7, 7, 'end_date', 'EndDate', 1, 1, 1, NOW())"
             );
         }
+
+        $attachmentExists = $this->connection->fetchOne("SELECT COUNT(*) FROM extra_field WHERE variable = 'attachment' AND item_type = 13");
+        if ($attachmentExists == 0) {
+            $this->addSql(
+                "INSERT INTO extra_field (item_type, value_type, variable, display_text, visible_to_self, changeable, filter, created_at) VALUES (13, 18, 'attachment', 'Attachment', 1, 1, 1, NOW())"
+            );
+        }
+
+        $sendToCoachesExists = $this->connection->fetchOne("SELECT COUNT(*) FROM extra_field WHERE variable = 'send_to_coaches' AND item_type = 13");
+        if ($sendToCoachesExists == 0) {
+            $this->addSql(
+                "INSERT INTO extra_field (item_type, value_type, variable, display_text, visible_to_self, changeable, filter, created_at) VALUES (13, 13, 'send_to_coaches', 'Send to Coaches', 1, 1, 1, NOW())"
+            );
+        }
     }
 
     public function down(Schema $schema): void

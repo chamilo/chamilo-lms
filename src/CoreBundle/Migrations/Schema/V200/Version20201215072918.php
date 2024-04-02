@@ -104,7 +104,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
                 $em->persist($event);
                 $em->flush();
 
-                $newEventId = $event->getId();
+                $newEventId = $event->getIid();
                 $oldNewEventIdMap[$oldEventId] = $newEventId;
             }
 

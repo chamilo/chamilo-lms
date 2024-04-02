@@ -35,10 +35,14 @@ class Version20201215072917 extends AbstractMigrationChamilo
         // Update c_calendar_event table
         if (!$schema->getTable('c_calendar_event')->hasColumn('career_id')) {
             $this->addSql('ALTER TABLE c_calendar_event ADD career_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_calendar_event ADD CONSTRAINT FK_C_CALENDAR_EVENT_CAREER FOREIGN KEY (career_id) REFERENCES career (id)');
+            $this->addSql('CREATE INDEX IDX_C_CALENDAR_EVENT_CAREER ON c_calendar_event (career_id)');
         }
 
         if (!$schema->getTable('c_calendar_event')->hasColumn('promotion_id')) {
             $this->addSql('ALTER TABLE c_calendar_event ADD promotion_id INT DEFAULT NULL');
+            $this->addSql('ALTER TABLE c_calendar_event ADD CONSTRAINT FK_C_CALENDAR_EVENT_PROMOTION FOREIGN KEY (promotion_id) REFERENCES promotion (id)');
+            $this->addSql('CREATE INDEX IDX_C_CALENDAR_EVENT_PROMOTION ON c_calendar_event (promotion_id)');
         }
     }
 
@@ -64,10 +68,14 @@ class Version20201215072917 extends AbstractMigrationChamilo
         $this->addSql("DELETE FROM settings_current WHERE variable = 'allow_careers_in_global_agenda'");
 
         if ($schema->getTable('c_calendar_event')->hasColumn('career_id')) {
+            $this->addSql('ALTER TABLE c_calendar_event DROP FOREIGN KEY FK_C_CALENDAR_EVENT_CAREER');
+            $this->addSql('DROP INDEX IDX_C_CALENDAR_EVENT_CAREER ON c_calendar_event');
             $this->addSql('ALTER TABLE c_calendar_event DROP COLUMN career_id');
         }
 
         if ($schema->getTable('c_calendar_event')->hasColumn('promotion_id')) {
+            $this->addSql('ALTER TABLE c_calendar_event DROP FOREIGN KEY FK_C_CALENDAR_EVENT_PROMOTION');
+            $this->addSql('DROP INDEX IDX_C_CALENDAR_EVENT_PROMOTION ON c_calendar_event');
             $this->addSql('ALTER TABLE c_calendar_event DROP COLUMN promotion_id');
         }
     }

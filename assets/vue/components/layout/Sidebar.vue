@@ -5,7 +5,9 @@
         {{ t("Menu") }}
       </h3>
       <div class="app-sidebar__panel" @click="handlePanelHeaderClick">
-        <PanelMenu :model="menuItems" />
+        <PanelMenu :model="menuItemsBeforeMyCourse" />
+        <PanelMenu :model="menuItemMyCourse" />
+        <PanelMenu :model="menuItemsAfterMyCourse" />
       </div>
       <div class="app-sidebar__bottom">
         <PageList category-title="footer_private" />
@@ -52,7 +54,7 @@ import PageList from "../page/PageList.vue"
 const { t } = useI18n()
 const securityStore = useSecurityStore()
 
-const { menuItems } = useSidebarMenu()
+const { menuItemsBeforeMyCourse, menuItemMyCourse, menuItemsAfterMyCourse } = useSidebarMenu()
 
 const sidebarIsOpen = ref(window.localStorage.getItem("sidebarIsOpen") === "true")
 const expandingDueToPanelClick = ref(false)

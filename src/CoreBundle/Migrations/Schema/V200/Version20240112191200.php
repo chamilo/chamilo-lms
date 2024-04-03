@@ -8,6 +8,11 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Chamilo\CourseBundle\Entity\CAnnouncement;
+use Chamilo\CourseBundle\Entity\CGlossary;
+use Chamilo\CourseBundle\Entity\CGroupCategory;
+use Chamilo\CourseBundle\Entity\CLink;
+use Chamilo\CourseBundle\Entity\CLinkCategory;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Chamilo\CourseBundle\Repository\CGroupCategoryRepository;
@@ -25,18 +30,14 @@ final class Version20240112191200 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-        $em = $doctrine->getManager();
+        $em = $this->getEntityManager();
 
-        /** @var Connection $connection */
-        $connection = $em->getConnection();
+        $linkCategoryRepo = $this->container->get(CLinkCategoryRepository::class);
+        $linkRepo = $this->container->get(CLinkRepository::class);
+        $groupCategoryRepo = $this->container->get(CGroupCategoryRepository::class);
+        $glossaryRepo = $this->container->get(CGlossaryRepository::class);
+        $announcementRepo = $this->container->get(CAnnouncementRepository::class);
 
-        $linkCategoryRepo = $container->get(CLinkCategoryRepository::class);
-        $linkRepo = $container->get(CLinkRepository::class);
-        $groupCategoryRepo = $container->get(CGroupCategoryRepository::class);
-        $glossaryRepo = $container->get(CGlossaryRepository::class);
-        $announcementRepo = $container->get(CAnnouncementRepository::class);
 
         $this->updateResourceNodeDisplayOrder($linkCategoryRepo, 'c_link_category', $em, $schema);
         $this->updateResourceNodeDisplayOrder($linkRepo, 'c_link', $em, $schema);

@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\DBAL\Schema\Schema;
 
 class Version20230321164019 extends AbstractMigrationChamilo
@@ -20,9 +21,7 @@ class Version20230321164019 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-        $em = $doctrine->getManager();
+        $em = $this->getEntityManager();
 
         $sql = 'SELECT * FROM track_e_attempt_recording';
         $connection = $this->getEntityManager()->getConnection();

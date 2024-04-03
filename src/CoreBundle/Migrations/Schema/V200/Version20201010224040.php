@@ -21,9 +21,8 @@ final class Version20201010224040 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-        $em = $doctrine->getManager();
+        $doctrine = $this->getContainer()->get('doctrine');
+        $em = $this->getEntityManager();
 
         /** @var Connection $connection */
         $connection = $em->getConnection();
@@ -32,7 +31,7 @@ final class Version20201010224040 extends AbstractMigrationChamilo
         $result = $connection->executeQuery($sql);
         $items = $result->fetchAllAssociative();
 
-        $repo = $container->get(SysAnnouncementRepository::class);
+        $repo = $this->getContainer()->get(SysAnnouncementRepository::class);
 
         foreach ($items as $itemData) {
             $id = $itemData['id'];

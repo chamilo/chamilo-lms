@@ -7,9 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\SettingsCurrentRepository;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
 final class Version20240112103400 extends AbstractMigrationChamilo
@@ -21,15 +21,9 @@ final class Version20240112103400 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
         $em = $this->getEntityManager();
 
-        /** @var Connection $connection */
-        $connection = $em->getConnection();
-        $kernel = $container->get('kernel');
-        $rootPath = $kernel->getProjectDir();
-
-        $settingRepo = $container->get(SettingsCurrentRepository::class);
+        $settingRepo = $this->container->get(SettingsCurrentRepository::class);
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 

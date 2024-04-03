@@ -13,6 +13,7 @@ use Sonata\Exporter\Writer\CsvWriter;
 use Sonata\Exporter\Writer\JsonWriter;
 use Sonata\Exporter\Writer\XlsWriter;
 use Sonata\Exporter\Writer\XmlWriter;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class Exporter
@@ -58,7 +59,7 @@ class Exporter
             $handler->export();
         };
 
-        return new StreamedResponse($callback, 200, [
+        return new StreamedResponse($callback, Response::HTTP_OK, [
             'Content-Type' => $contentType,
             'Content-Disposition' => sprintf('attachment; filename=%s', $filename),
         ]);

@@ -7,12 +7,12 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 use Exception;
 
@@ -25,16 +25,13 @@ final class Version20231012185600 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-        $em = $doctrine->getManager();
+        $em = $this->getEntityManager();
 
-        /** @var Connection $connection */
         $connection = $em->getConnection();
 
-        $quizRepo = $container->get(CQuizRepository::class);
-        $courseRepo = $container->get(CourseRepository::class);
-        $userRepo = $container->get(UserRepository::class);
+        $quizRepo = $this->container->get(CQuizRepository::class);
+        $courseRepo = $this->container->get(CourseRepository::class);
+        $userRepo = $this->container->get(UserRepository::class);
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 

@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\DataFixtures\SettingsCurrentFixtures;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Chamilo\Kernel;
 use Doctrine\DBAL\Schema\Schema;
 
 use const JSON_UNESCAPED_SLASHES;
@@ -376,7 +377,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
     {
         global $_configuration;
         $container = $this->getContainer();
-        $kernel = $container->get('kernel');
+        $kernel = $this->getContainer()->get('kernel');
         $rootPath = $kernel->getProjectDir();
         $oldConfigPath = $rootPath.'/app/config/configuration.php';
         $configFileLoaded = \in_array($oldConfigPath, get_included_files(), true);

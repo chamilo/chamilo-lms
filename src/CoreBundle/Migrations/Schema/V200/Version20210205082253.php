@@ -6,13 +6,13 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUserGroup;
+use Chamilo\CoreBundle\Entity\Illustration;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -25,16 +25,14 @@ final class Version20210205082253 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
         $em = $this->getEntityManager();
 
-        /** @var Connection $connection */
         $connection = $em->getConnection();
 
-        $kernel = $container->get('kernel');
+        $kernel = $this->getContainer()->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
-        $illustrationRepo = $container->get(IllustrationRepository::class);
+        $illustrationRepo = $this->container->get(IllustrationRepository::class);
 
         // Adding users to the resource node tree.
         $batchSize = self::BATCH_SIZE;
@@ -82,8 +80,9 @@ final class Version20210205082253 extends AbstractMigrationChamilo
         $q = $em->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\Usergroup u');
         $admin = $this->getAdmin();
 
-        $userGroupRepo = $container->get(UsergroupRepository::class);
-        $urlRepo = $container->get(AccessUrlRepository::class);
+        $userGroupRepo = $this->container->get(UsergroupRepository::class);
+        $urlRepo = $this->container->get(AccessUrlRepository::class);
+
         $urlList = $urlRepo->findAll();
 
         /** @var AccessUrl $url */

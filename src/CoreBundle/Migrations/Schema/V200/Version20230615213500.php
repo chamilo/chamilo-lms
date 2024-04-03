@@ -10,7 +10,6 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Repository\CLpRepository;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
 final class Version20230615213500 extends AbstractMigrationChamilo
@@ -22,14 +21,11 @@ final class Version20230615213500 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-        $em = $doctrine->getManager();
+        $em = $this->getEntityManager();
 
-        /** @var Connection $connection */
         $connection = $em->getConnection();
 
-        $lpRepo = $container->get(CLpRepository::class);
+        $lpRepo = $this->container->get(CLpRepository::class);
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 

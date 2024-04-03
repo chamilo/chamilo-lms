@@ -13,20 +13,25 @@ use Chamilo\LtiBundle\Component\OutcomeReplaceRequest;
 use Chamilo\LtiBundle\Component\OutcomeResponse;
 use Chamilo\LtiBundle\Component\OutcomeUnsupportedRequest;
 use Chamilo\LtiBundle\Entity\ExternalTool;
+use Doctrine\Persistence\ManagerRegistry;
 use OAuthUtil;
 use SimpleXMLElement;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ServiceController extends BaseController
 {
-    /**
-     * @Route("/lti/os", name="chamilo_lti_os")
-     */
-    public function outcomeServiceAction(Request $request): Response
+    public function __construct(
+        private ManagerRegistry $managerRegistry,
+        private TranslatorInterface $translator,
+    ) {}
+
+    #[Route(path: '/lti/os', name: 'chamilo_lti_os')]
+    public function outcomeService(Request $request): Response
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->managerRegistry->getManager();
         $toolRepo = $em->getRepository(ExternalTool::class);
 
         $headers = $request->headers;
@@ -132,8 +137,8 @@ class ServiceController extends BaseController
                 break;
         }
 
-        $serviceRequest->setEntityManager($this->getDoctrine()->getManager());
-        $serviceRequest->setTranslator($this->get('translator'));
+        $serviceRequest->setEntityManager($this->managerRegistry->getManager());
+        $serviceRequest->setTranslator($this->translator);
 
         return $serviceRequest->process();
     }

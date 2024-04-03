@@ -22,11 +22,8 @@ final class Version20240122221400 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-        $em = $doctrine->getManager();
+        $em = $this->getEntityManager();
 
-        /** @var Connection $connection */
         $connection = $em->getConnection();
 
         // Default sublanguages to be excluded from the update.
@@ -87,8 +84,7 @@ final class Version20240122221400 extends AbstractMigrationChamilo
 
     private function generatePoFileFromTrad4All(string $englishName, string $isocode): void
     {
-        $container = $this->getContainer();
-        $kernel = $container->get('kernel');
+        $kernel = $this->getContainer()->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
         $langPath = $rootPath.'/var/translations/import/'.$englishName.'/trad4all.inc.php';
@@ -188,8 +184,7 @@ final class Version20240122221400 extends AbstractMigrationChamilo
 
     private function deleteImportFolder(): void
     {
-        $container = $this->getContainer();
-        $kernel = $container->get('kernel');
+        $kernel = $this->getContainer()->get('kernel');
         $rootPath = $kernel->getProjectDir();
         $importPath = $rootPath.'/var/translations/import/';
 

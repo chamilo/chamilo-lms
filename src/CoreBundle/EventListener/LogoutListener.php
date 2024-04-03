@@ -12,13 +12,15 @@ use Chamilo\CoreBundle\Entity\User;
 use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Event\LogoutEvent;
 
-class LogoutListener
+class LogoutListener implements EventSubscriberInterface
 {
     protected UrlGeneratorInterface $router;
     protected AuthorizationCheckerInterface $checker;
@@ -38,9 +40,9 @@ class LogoutListener
     }
 
     /**
-     * @return null|RedirectResponse
+     * @throws Exception
      */
-    public function onSymfonyComponentSecurityHttpEventLogoutEvent(LogoutEvent $event)
+    public function onSymfonyComponentSecurityHttpEventLogoutEvent(LogoutEvent $event): ?RedirectResponse
     {
         $request = $event->getRequest();
 
@@ -75,5 +77,13 @@ class LogoutListener
         $login = $this->router->generate('index');
 
         return new RedirectResponse($login);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public static function getSubscribedEvents(): array
+    {
+        return [LogoutEvent::class => ['onSymfonyComponentSecurityHttpEventLogoutEvent', 20]];
     }
 }

@@ -33,7 +33,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
     public const BATCH_SIZE = 20;
 
     private ?EntityManager $manager = null;
-    private ?ContainerInterface $container = null;
+    protected ?ContainerInterface $container = null;
 
     public function setEntityManager(EntityManager $manager): void
     {
@@ -45,10 +45,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         $this->container = $container;
     }
 
-    /**
-     * @return ContainerInterface
-     */
-    public function getContainer()
+    public function getContainer(): ?ContainerInterface
     {
         return $this->container;
     }
@@ -79,12 +76,9 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         return $admin->getUser();
     }
 
-    /**
-     * @return EntityManager
-     */
-    public function getEntityManager()
+    public function getEntityManager(): EntityManager
     {
-        return $this->getContainer()->get('doctrine')->getManager();
+        return $this->container->get('doctrine')->getManager();
     }
 
     /**

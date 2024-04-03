@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use DateTime;
 use DateTimeZone;
@@ -41,7 +42,7 @@ class Version20230904173400 extends AbstractMigrationChamilo
         $map = [];
 
         $em = $this->getEntityManager();
-        $userRepo = $em->getRepository(User::class);
+        $userRepo = $this->container->get(UserRepository::class);
 
         $personalAgendas = $this->getPersonalEvents();
 

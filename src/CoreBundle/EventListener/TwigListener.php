@@ -9,7 +9,8 @@ namespace Chamilo\CoreBundle\EventListener;
 use Chamilo\CoreBundle\Repository\ColorThemeRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -20,7 +21,7 @@ use Twig\Environment;
 /**
  * Twig-related event listener. For filters, look into ChamiloExtension.php.
  */
-class TwigListener
+class TwigListener implements EventSubscriberInterface
 {
     private SerializerInterface $serializer;
     private Environment $twig;
@@ -44,7 +45,7 @@ class TwigListener
         $this->languageRepository = $languageRepository;
     }
 
-    public function __invoke(RequestEvent $event): void
+    public function onControllerEvent(ControllerEvent $event): void
     {
         $request = $event->getRequest();
         $token = $this->tokenStorage->getToken();
@@ -120,5 +121,10 @@ class TwigListener
         }
 
         $this->twig->addGlobal('color_theme_link', $link);
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return [ControllerEvent::class => 'onControllerEvent'];
     }
 }

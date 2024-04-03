@@ -23,10 +23,9 @@ final class Version20230720143000 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
         $em = $this->getEntityManager();
 
-        $kernel = $container->get('kernel');
+        $kernel = $this->getContainer()->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
         $q = $em->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\User u');

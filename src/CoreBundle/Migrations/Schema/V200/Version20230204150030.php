@@ -25,13 +25,10 @@ class Version20230204150030 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-
         /** @var EntityManager $em */
-        $em = $doctrine->getManager();
+        $em = $this->getEntityManager();
 
-        $kernel = $container->get('kernel');
+        $kernel = $this->getContainer()->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
         $batchSize = self::BATCH_SIZE;
@@ -45,7 +42,7 @@ class Version20230204150030 extends AbstractMigrationChamilo
             'itemType' => ExtraField::SESSION_FIELD_TYPE,
         ]);
 
-        $sessionRepo = $container->get(SessionRepository::class);
+        $sessionRepo = $this->container->get(SessionRepository::class);
 
         /** @var ExtraFieldValues $item */
         foreach ($q->toIterable() as $item) {

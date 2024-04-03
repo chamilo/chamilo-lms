@@ -22,7 +22,7 @@ class NewsController extends BaseController
     use ControllerTrait;
 
     #[Route('/list', name: 'news_index', methods: ['GET'])]
-    public function indexAction(SysAnnouncementRepository $sysAnnouncementRepository): Response
+    public function index(SysAnnouncementRepository $sysAnnouncementRepository): Response
     {
         /** @var User $user */
         $user = $this->getUser();

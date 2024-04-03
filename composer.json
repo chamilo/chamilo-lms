@@ -58,6 +58,7 @@
         "ext-libxml": "*",
         "ext-mbstring": "*",
         "ext-pdo": "*",
+        "ext-simplexml": "*",
         "ext-soap": "*",
         "ext-xml": "*",
         "ext-xmlreader": "*",

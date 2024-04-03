@@ -21,7 +21,7 @@ class ThemeController extends AbstractController
     ) {}
 
     #[Route('/theme/colors.css', name: 'chamilo_color_theme', methods: ['GET'])]
-    public function colorThemeAction(): Response
+    public function colorTheme(): Response
     {
         $response = new Response('');
 

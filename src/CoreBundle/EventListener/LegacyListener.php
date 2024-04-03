@@ -11,11 +11,14 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Exception;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -26,7 +29,7 @@ use Twig\Environment;
  * Works as old global.inc.php
  * Setting old php requirements so pages inside main/* could work correctly.
  */
-class LegacyListener
+class LegacyListener implements EventSubscriberInterface
 {
     use ContainerAwareTrait;
 
@@ -36,7 +39,7 @@ class LegacyListener
         private readonly AccessUrlRepository $accessUrlRepository,
         private readonly RouterInterface $router,
         private readonly ParameterBagInterface $parameterBag,
-        private readonly SettingsManager $settingsManager
+        private readonly SettingsManager $settingsManager,
     ) {}
 
     public function onKernelRequest(RequestEvent $event): void
@@ -54,11 +57,9 @@ class LegacyListener
         // Fixes the router when loading in legacy mode (public/main)
         if (!empty($baseUrl)) {
             // We are inside main/
-            /** @var RouterInterface $router */
-            $router = $container->get('router');
-            $context = $router->getContext();
+            $context = $this->router->getContext();
             $context->setBaseUrl('');
-            $router->setContext($context);
+            $this->router->setContext($context);
         }
 
         // Setting container
@@ -165,4 +166,16 @@ class LegacyListener
     public function onKernelResponse(ResponseEvent $event): void {}
 
     public function onKernelController(ControllerEvent $event): void {}
+
+    /**
+     * @return array<string, mixed>
+     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            KernelEvents::REQUEST => ['onKernelRequest', 7],
+            KernelEvents::RESPONSE => 'onKernelResponse',
+            KernelEvents::CONTROLLER => 'onKernelController',
+        ];
+    }
 }

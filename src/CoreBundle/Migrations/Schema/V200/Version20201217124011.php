@@ -8,10 +8,12 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;
@@ -20,7 +22,6 @@ use Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use Chamilo\Kernel;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
 final class Version20201217124011 extends AbstractMigrationChamilo
@@ -32,24 +33,20 @@ final class Version20201217124011 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-        $em = $doctrine->getManager();
+        $em = $this->getEntityManager();
 
-        /** @var Connection $connection */
         $connection = $em->getConnection();
 
-        $studentPublicationRepo = $container->get(CStudentPublicationRepository::class);
-        $studentPublicationCommentRepo = $container->get(CStudentPublicationCommentRepository::class);
-        $studentPublicationCorrectionRepo = $container->get(CStudentPublicationCorrectionRepository::class);
-
-        $courseRepo = $container->get(CourseRepository::class);
-        $sessionRepo = $container->get(SessionRepository::class);
-        $groupRepo = $container->get(CGroupRepository::class);
+        $studentPublicationRepo = $this->container->get(CStudentPublicationRepository::class);
+        $studentPublicationCommentRepo = $this->container->get(CStudentPublicationCommentRepository::class);
+        $studentPublicationCorrectionRepo = $this->container->get(CStudentPublicationCorrectionRepository::class);
+        $courseRepo = $this->container->get(CourseRepository::class);
+        $sessionRepo = $this->container->get(SessionRepository::class);
+        $groupRepo = $this->container->get(CGroupRepository::class);
 
         // $userRepo = $container->get(UserRepository::class);
         /** @var Kernel $kernel */
-        $kernel = $container->get('kernel');
+        $kernel = $this->getContainer()->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
         $admin = $this->getAdmin();

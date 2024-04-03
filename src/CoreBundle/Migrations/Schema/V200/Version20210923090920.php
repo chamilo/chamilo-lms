@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Illustration;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\Kernel;
@@ -23,12 +24,11 @@ final class Version20210923090920 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         $em = $this->getEntityManager();
-        $container = $this->getContainer();
 
         /** @var Kernel $kernel */
-        $kernel = $container->get('kernel');
+        $kernel = $this->getContainer()->get('kernel');
         $rootPath = $kernel->getProjectDir();
-        $illustrationRepo = $container->get(IllustrationRepository::class);
+        $illustrationRepo = $this->container->get(IllustrationRepository::class);
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
         /** @var Course $course */

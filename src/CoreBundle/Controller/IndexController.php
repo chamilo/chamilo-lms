@@ -14,24 +14,23 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class IndexController extends BaseController
 {
-    /**
-     * @Route("/", name="index", methods={"GET", "POST"}, options={"expose"=true})
-     * @Route("/home", name="home", methods={"GET", "POST"}, options={"expose"=true})
-     * @Route("/login", name="login", methods={"GET", "POST"}, options={"expose"=true})
-     * @Route("/faq", name="faq", methods={"GET", "POST"}, options={"expose"=true})
-     * @Route("/demo", name="demo", methods={"GET", "POST"}, options={"expose"=true})
-     * @Route("/course/{cid}/home", name="chamilo_core_course_home")
-     * @Route("/courses", name="courses", methods={"GET", "POST"}, options={"expose"=true})
-     * @Route("/catalogue/{slug}", name="catalogue", methods={"GET", "POST"}, options={"expose"=true})
-     * @Route("/resources/document/{nodeId}/manager", methods={"GET"}, name="resources_filemanager")
-     * @Route("/account/home", name="account", options={"expose"=true}, name="chamilo_core_account_home")
-     * @Route("/social", name="social", options={"expose"=true}, name="chamilo_core_socialnetwork")
-     * @Route("/admin", name="admin", options={"expose"=true})
-     */
+    #[Route('/', name: 'index', options: ['expose' => true], methods: ['GET', 'POST'])]
     #[Route('/sessions', name: 'sessions')]
     #[Route('/sessions/{extra}', name: 'sessions_options')]
     #[Route('/admin/configuration/colors', name: 'configuration_colors')]
-    public function indexAction(): Response
+    #[Route('/home', name: 'home', options: ['expose' => true], methods: ['GET', 'POST'])]
+    #[Route('/login', name: 'login', options: ['expose' => true], methods: ['GET', 'POST'])]
+    #[Route('/faq', name: 'faq', options: ['expose' => true], methods: ['GET', 'POST'])]
+    #[Route('/demo', name: 'demo', options: ['expose' => true], methods: ['GET', 'POST'])]
+    #[Route('/course/{cid}/home', name: 'chamilo_core_course_home')]
+    #[Route('/courses', name: 'courses', options: ['expose' => true], methods: ['GET', 'POST'])]
+    #[Route('/catalogue/{slug}', name: 'catalogue', options: ['expose' => true], methods: ['GET', 'POST'])]
+    #[Route('/resources/ccalendarevent', name: 'resources_ccalendarevent', methods: ['GET'])]
+    #[Route('/resources/document/{nodeId}/manager', name: 'resources_filemanager', methods: ['GET'])]
+    #[Route('/account/home', name: 'chamilo_core_account_home', options: ['expose' => true])]
+    #[Route('/social', name: 'chamilo_core_socialnetwork', options: ['expose' => true])]
+    #[Route('/admin', name: 'admin', options: ['expose' => true])]
+    public function index(): Response
     {
         return $this->render('@ChamiloCore/Index/vue.html.twig');
     }
@@ -69,7 +68,7 @@ class IndexController extends BaseController
      */
     #[Route('/toggle_student_view', methods: ['GET'])]
     #[Security("is_granted('ROLE_TEACHER')")]
-    public function toggleStudentViewAction(Request $request, SettingsManager $settingsManager): Response
+    public function toggleStudentView(Request $request, SettingsManager $settingsManager): Response
     {
         if (!api_is_allowed_to_edit(false, false, false, false)) {
             throw $this->createAccessDeniedException();

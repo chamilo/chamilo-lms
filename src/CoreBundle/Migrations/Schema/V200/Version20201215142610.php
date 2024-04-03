@@ -7,20 +7,18 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
-use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
 final class Version20201215142610 extends AbstractMigrationChamilo
@@ -32,24 +30,16 @@ final class Version20201215142610 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-        $em = $doctrine->getManager();
+        $em = $this->getEntityManager();
 
-        /** @var Connection $connection */
         $connection = $em->getConnection();
 
-        $quizRepo = $container->get(CQuizRepository::class);
-        $quizQuestionRepo = $container->get(CQuizQuestionRepository::class);
-        $quizQuestionCategoryRepo = $container->get(CQuizQuestionCategoryRepository::class);
-
-        $documentRepo = $container->get(CDocumentRepository::class);
-        $courseRepo = $container->get(CourseRepository::class);
-        $sessionRepo = $container->get(SessionRepository::class);
-        $groupRepo = $container->get(CGroupRepository::class);
-        $userRepo = $container->get(UserRepository::class);
-
-        $admin = $this->getAdmin();
+        $quizRepo = $this->container->get(CQuizRepository::class);
+        $quizQuestionRepo = $this->container->get(CQuizQuestionRepository::class);
+        $quizQuestionCategoryRepo = $this->container->get(CQuizQuestionCategoryRepository::class);
+        $documentRepo = $this->container->get(CDocumentRepository::class);
+        $courseRepo = $this->container->get(CourseRepository::class);
+        $userRepo = $this->container->get(UserRepository::class);
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 

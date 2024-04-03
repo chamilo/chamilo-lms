@@ -23,12 +23,10 @@ final class Version20201212114910 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-        $em = $doctrine->getManager();
+        $em = $this->getEntityManager();
 
-        $urlRepo = $container->get(AccessUrlRepository::class);
-        $userRepo = $container->get(UserRepository::class);
+        $urlRepo = $this->container->get(AccessUrlRepository::class);
+        $userRepo = $this->container->get(UserRepository::class);
 
         $userList = [];
         // Adding first admin as main creator also adding to the resource node tree.

@@ -8,8 +8,8 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Repository\CLpItemRepository;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 use learnpath;
 use stdClass;
@@ -23,14 +23,11 @@ final class Version20201216132000 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-        $em = $doctrine->getManager();
+        $em = $this->getEntityManager();
 
-        /** @var Connection $connection */
         $connection = $em->getConnection();
 
-        $lpItemRepo = $container->get(CLpItemRepository::class);
+        $lpItemRepo = $this->container->get(CLpItemRepository::class);
 
         $batchSize = self::BATCH_SIZE;
         // $q = $em->createQuery('SELECT lp FROM Chamilo\CourseBundle\Entity\CLp lp WHERE lp.iid = 263 ORDER BY lp.iid');

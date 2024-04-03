@@ -24,10 +24,9 @@ class EditorController extends BaseController
 
     /**
      * Get templates (left column when creating a document).
-     *
-     * @Route("/templates", methods={"GET"}, name="editor_templates")
      */
-    public function editorTemplatesAction(TranslatorInterface $translator, RouterInterface $router): Response
+    #[Route(path: '/templates', methods: ['GET'], name: 'editor_templates')]
+    public function editorTemplates(TranslatorInterface $translator, RouterInterface $router): Response
     {
         $editor = new CkEditor(
             $translator,

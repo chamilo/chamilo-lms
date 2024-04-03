@@ -6,11 +6,12 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\SocialPost;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\PersonalFileRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
 final class Version20230720222140 extends AbstractMigrationChamilo
@@ -22,19 +23,13 @@ final class Version20230720222140 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
         $em = $this->getEntityManager();
 
-        /** @var Connection $connection */
-        $connection = $em->getConnection();
-
-        $kernel = $container->get('kernel');
+        $kernel = $this->getContainer()->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
-        $userRepo = $container->get(UserRepository::class);
-
-        /** @var PersonalFileRepository $personalRepo */
-        $personalRepo = $container->get(PersonalFileRepository::class);
+        $userRepo = $this->container->get(UserRepository::class);
+        $personalRepo = $this->container->get(PersonalFileRepository::class);
 
         $q = $em->createQuery('SELECT s FROM Chamilo\CoreBundle\Entity\SocialPost s');
 

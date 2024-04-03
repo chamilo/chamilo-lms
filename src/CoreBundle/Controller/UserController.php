@@ -21,10 +21,9 @@ class UserController extends AbstractController
 {
     /**
      * Public profile.
-     *
-     * @Route("/{username}", methods={"GET"}, name="chamilo_core_user_profile")
      */
-    public function profileAction(string $username, UserRepository $userRepository, IllustrationRepository $illustrationRepository): Response
+    #[Route(path: '/{username}', methods: ['GET'], name: 'chamilo_core_user_profile')]
+    public function profile(string $username, UserRepository $userRepository, IllustrationRepository $illustrationRepository): Response
     {
         $user = $userRepository->findByUsername($username);
 

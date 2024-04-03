@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
@@ -24,16 +26,14 @@ final class Version20210930130343 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
         $em = $this->getEntityManager();
         $connection = $em->getConnection();
 
-        $introRepo = $container->get(CToolIntroRepository::class);
-        $cToolRepo = $container->get(CToolRepository::class);
-        $toolRepo = $container->get(ToolRepository::class);
-
-        $sessionRepo = $container->get(SessionRepository::class);
-        $courseRepo = $container->get(CourseRepository::class);
+        $introRepo = $this->container->get(CToolIntroRepository::class);
+        $cToolRepo = $this->container->get(CToolRepository::class);
+        $toolRepo = $this->container->get(ToolRepository::class);
+        $sessionRepo = $this->container->get(SessionRepository::class);
+        $courseRepo = $this->container->get(CourseRepository::class);
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 

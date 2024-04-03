@@ -23,7 +23,7 @@ class SettingsController extends BaseController
     use ControllerTrait;
 
     #[Route('/settings', name: 'admin_settings')]
-    public function indexAction(): Response
+    public function index(): Response
     {
         return $this->redirectToRoute('chamilo_platform_settings', ['namespace' => 'platform']);
     }
@@ -33,7 +33,7 @@ class SettingsController extends BaseController
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/settings/search_settings', name: 'chamilo_platform_settings_search')]
-    public function searchSettingAction(Request $request): Response
+    public function searchSetting(Request $request): Response
     {
         $manager = $this->getSettingsManager();
         $formList = [];
@@ -93,7 +93,7 @@ class SettingsController extends BaseController
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/settings/{namespace}', name: 'chamilo_platform_settings')]
-    public function updateSettingAction(Request $request, string $namespace): Response
+    public function updateSetting(Request $request, string $namespace): Response
     {
         $manager = $this->getSettingsManager();
         $url = $this->getAccessUrl();

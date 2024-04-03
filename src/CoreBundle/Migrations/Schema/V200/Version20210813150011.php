@@ -23,14 +23,11 @@ class Version20210813150011 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-
         /** @var Kernel $kernel */
-        $kernel = $container->get('kernel');
+        $kernel = $this->getContainer()->get('kernel');
         $rootPath = $kernel->getProjectDir();
-        $doctrine = $container->get('doctrine');
 
-        $em = $doctrine->getManager();
+        $em = $this->getEntityManager();
         // $connection = $em->getConnection();
         // $skillRepo = $container->get(SkillRepository::class);
 

@@ -13,7 +13,6 @@ use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CLinkCategory;
 use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
 final class Version20201215141131 extends AbstractMigrationChamilo
@@ -25,16 +24,13 @@ final class Version20201215141131 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-        $em = $doctrine->getManager();
+        $em = $this->getEntityManager();
 
-        /** @var Connection $connection */
         $connection = $em->getConnection();
 
-        $linkRepo = $container->get(CLinkRepository::class);
-        $linkCategoryRepo = $container->get(CLinkCategoryRepository::class);
-        $courseRepo = $container->get(CourseRepository::class);
+        $linkRepo = $this->container->get(CLinkRepository::class);
+        $linkCategoryRepo = $this->container->get(CLinkCategoryRepository::class);
+        $courseRepo = $this->container->get(CourseRepository::class);
 
         $admin = $this->getAdmin();
 

@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ExceptionController extends AbstractController
 {
-    public function showAction(Exception $exception): Response
+    public function show(Exception $exception): Response
     {
         if ('dev' === (string) $this->getParameter('app_env')) {
             throw new HttpException($exception->getCode(), $exception->getMessage());
@@ -52,10 +52,8 @@ class ExceptionController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/error")
-     */
-    public function errorAction(Request $request): Response
+    #[Route(path: '/error')]
+    public function error(Request $request): Response
     {
         $message = $request->getSession()->get('error_message', '');
         $exception = new FlattenException();

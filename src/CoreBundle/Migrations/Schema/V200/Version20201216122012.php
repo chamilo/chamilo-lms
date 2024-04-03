@@ -15,7 +15,6 @@ use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Repository\CLpCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLpItemRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
 final class Version20201216122012 extends AbstractMigrationChamilo
@@ -27,17 +26,14 @@ final class Version20201216122012 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-        $em = $doctrine->getManager();
+        $em = $this->getEntityManager();
 
-        /** @var Connection $connection */
         $connection = $em->getConnection();
 
-        $lpCategoryRepo = $container->get(CLpCategoryRepository::class);
-        $lpRepo = $container->get(CLpRepository::class);
-        $courseRepo = $container->get(CourseRepository::class);
-        $lpItemRepo = $container->get(CLpItemRepository::class);
+        $lpCategoryRepo = $this->container->get(CLpCategoryRepository::class);
+        $lpRepo = $this->container->get(CLpRepository::class);
+        $courseRepo = $this->container->get(CourseRepository::class);
+        $lpItemRepo = $this->container->get(CLpItemRepository::class);
 
         $batchSize = self::BATCH_SIZE;
         $admin = $this->getAdmin();

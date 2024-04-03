@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\TicketMessageAttachment;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\TicketMessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\Kernel;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
 class Version20211005154000 extends AbstractMigrationChamilo
@@ -21,19 +21,16 @@ class Version20211005154000 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-        $em = $doctrine->getManager();
+        $em = $this->getEntityManager();
 
-        /** @var Connection $connection */
         $connection = $em->getConnection();
 
         /** @var Kernel $kernel */
-        $kernel = $container->get('kernel');
+        $kernel = $this->getContainer()->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
-        $attachmentRepo = $container->get(TicketMessageAttachmentRepository::class);
-        $userRepo = $container->get(UserRepository::class);
+        $attachmentRepo = $this->container->get(TicketMessageAttachmentRepository::class);
+        $userRepo = $this->container->get(UserRepository::class);
 
         $sql = 'SELECT * FROM ticket_message_attachments ORDER BY id';
 

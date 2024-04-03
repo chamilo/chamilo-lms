@@ -14,17 +14,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class AccessGroupFixtures extends Fixture implements ContainerAwareInterface
 {
-    private ContainerInterface $container;
+    public function __construct(
+        private GroupRepository $groupRepository
+    ) {}
 
     public function setContainer(?ContainerInterface $container = null): void
     {
-        $this->container = $container;
+        $this->groupRepository = $container->get(GroupRepository::class);
     }
 
     public function load(ObjectManager $manager): void
     {
-        /** @var GroupRepository $repo */
-        $repo = $this->container->get(GroupRepository::class);
-        $repo->createDefaultGroups($this);
+        $this->groupRepository->createDefaultGroups($this);
     }
 }

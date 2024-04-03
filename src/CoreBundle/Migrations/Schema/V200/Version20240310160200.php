@@ -22,13 +22,9 @@ class Version20240310160200 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
+        $em = $this->getEntityManager();
 
-        $em = $doctrine->getManager();
-
-        /** @var UserRepository $repo */
-        $repo = $container->get(UserRepository::class);
+        $repo = $this->container->get(UserRepository::class);
 
         $plainPassword = 'fallback_user';
         $encodedPassword = password_hash($plainPassword, PASSWORD_DEFAULT);

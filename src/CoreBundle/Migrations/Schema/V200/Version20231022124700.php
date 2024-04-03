@@ -8,8 +8,6 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
-use Chamilo\CourseBundle\Repository\CDocumentRepository;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
 use const PREG_NO_ERROR;
@@ -23,23 +21,15 @@ final class Version20231022124700 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
         $em = $this->getEntityManager();
 
-        /** @var Connection $connection */
         $connection = $em->getConnection();
-        $kernel = $container->get('kernel');
-        $rootPath = $kernel->getProjectDir();
-
-        /** @var CDocumentRepository $documentRepo */
-        $documentRepo = $container->get(CDocumentRepository::class);
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();
-            $courseDirectory = $course->getDirectory();
 
             // Tool intro
             $sql = "SELECT * FROM c_tool_intro WHERE c_id = {$courseId} ORDER BY iid";

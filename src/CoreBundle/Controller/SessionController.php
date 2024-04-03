@@ -36,11 +36,10 @@ use UserManager;
 class SessionController extends AbstractController
 {
     /**
-     * @Route("/{sid}/about", name="chamilo_core_session_about")
-     *
      * @Entity("session", expr="repository.find(sid)")
      */
-    public function aboutAction(
+    #[Route(path: '/{sid}/about', name: 'chamilo_core_session_about')]
+    public function about(
         Request $request,
         Session $session,
         IllustrationRepository $illustrationRepo,

@@ -9,7 +9,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Templates;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
-use Chamilo\Kernel;
+use Chamilo\CoreBundle\Repository\TemplatesRepository;
 use Doctrine\DBAL\Schema\Schema;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -22,15 +22,13 @@ class Version20240130161800 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-
-        /** @var Kernel $kernel */
-        $kernel = $container->get('kernel');
+        $kernel = $this->getContainer()->get('kernel');
         $rootPath = $kernel->getProjectDir();
-        $doctrine = $container->get('doctrine');
 
-        $em = $doctrine->getManager();
+        $em = $this->getEntityManager();
         $connection = $em->getConnection();
+
+        $templatesRepo = $this->container->get(TemplatesRepository::class);
 
         $sql = 'SELECT id, image, c_id FROM templates WHERE image IS NOT NULL';
         $stmt = $connection->prepare($sql);
@@ -64,7 +62,7 @@ class Version20240130161800 extends AbstractMigrationChamilo
                     $em->persist($asset);
                     $em->flush();
 
-                    $template = $em->getRepository(Templates::class)->find($templateId);
+                    $template = $templatesRepo->find($templateId);
                     if ($template) {
                         $template->setImage($asset);
                         $em->persist($template);

@@ -728,7 +728,7 @@ class SocialController extends AbstractController
     }
 
     #[Route('/group-action', name: 'chamilo_core_social_group_action')]
-    public function groupAction(
+    public function group(
         Request $request,
         UsergroupRepository $usergroupRepository,
         EntityManagerInterface $em,
@@ -849,7 +849,7 @@ class SocialController extends AbstractController
     }
 
     #[Route('/user-action', name: 'chamilo_core_social_user_action')]
-    public function userAction(
+    public function user(
         Request $request,
         UserRepository $userRepository,
         MessageRepository $messageRepository,

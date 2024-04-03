@@ -21,7 +21,7 @@ class Version20170625122900 extends AbstractMigrationChamilo
     {
         // Install tools.
         $container = $this->getContainer();
-        $toolChain = $container->get(ToolChain::class);
+        $toolChain = $this->getContainer()->get(ToolChain::class);
         $toolChain->createTools();
 
         $table = $schema->getTable('c_document');

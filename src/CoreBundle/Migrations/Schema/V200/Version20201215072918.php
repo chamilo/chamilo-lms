@@ -14,8 +14,6 @@ use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CCalendarEventAttachment;
 use Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
-use Chamilo\Kernel;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -28,19 +26,15 @@ final class Version20201215072918 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-        $em = $doctrine->getManager();
+        $em = $this->getEntityManager();
 
-        /** @var Connection $connection */
         $connection = $em->getConnection();
 
-        $eventRepo = $container->get(CCalendarEventRepository::class);
-        $eventAttachmentRepo = $container->get(CCalendarEventAttachmentRepository::class);
-        $courseRepo = $container->get(CourseRepository::class);
+        $eventRepo = $this->container->get(CCalendarEventRepository::class);
+        $eventAttachmentRepo = $this->container->get(CCalendarEventAttachmentRepository::class);
+        $courseRepo = $this->container->get(CourseRepository::class);
 
-        /** @var Kernel $kernel */
-        $kernel = $container->get('kernel');
+        $kernel = $this->getContainer()->get('kernel');
         $rootPath = $kernel->getProjectDir();
         $admin = $this->getAdmin();
         $oldNewEventMap = [];

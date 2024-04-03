@@ -54,10 +54,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
     use GradebookControllerTrait;
     use ResourceControllerTrait;
 
-    /**
-     * @Route("/{tool}/{type}/{id}/disk_space", methods={"GET", "POST"}, name="chamilo_core_resource_disk_space")
-     */
-    public function diskSpaceAction(Request $request): Response
+    #[Route(path: '/{tool}/{type}/{id}/disk_space', methods: ['GET', 'POST'], name: 'chamilo_core_resource_disk_space')]
+    public function diskSpace(Request $request): Response
     {
         $nodeId = $request->get('id');
         $repository = $this->getRepositoryFromRequest($request);
@@ -131,7 +129,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      * View file of a resource node.
      */
     #[Route('/{tool}/{type}/{id}/view', name: 'chamilo_core_resource_view', methods: ['GET'])]
-    public function viewAction(Request $request, EntityManagerInterface $entityManager): Response
+    public function view(Request $request, EntityManagerInterface $entityManager): Response
     {
         $id = $request->get('id');
         $filter = (string) $request->get('filter'); // See filters definitions in /config/services.yml.
@@ -172,7 +170,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      * @return RedirectResponse|void
      */
     #[Route('/{tool}/{type}/{id}/link', name: 'chamilo_core_resource_link', methods: ['GET'])]
-    public function linkAction(Request $request, RouterInterface $router, CLinkRepository $cLinkRepository)
+    public function link(Request $request, RouterInterface $router, CLinkRepository $cLinkRepository): RedirectResponse
     {
         $tool = $request->get('tool');
         $type = $request->get('type');
@@ -211,7 +209,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      * @return RedirectResponse|StreamedResponse
      */
     #[Route('/{tool}/{type}/{id}/download', name: 'chamilo_core_resource_download', methods: ['GET'])]
-    public function downloadAction(Request $request, EntityManagerInterface $entityManager)
+    public function download(Request $request, EntityManagerInterface $entityManager)
     {
         $id = $request->get('id');
         $resourceNode = $this->getResourceNodeRepository()->findOneBy(['uuid' => $id]);

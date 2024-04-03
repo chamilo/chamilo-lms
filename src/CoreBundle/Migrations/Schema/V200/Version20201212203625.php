@@ -15,10 +15,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
-use Chamilo\Kernel;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class Version20201212203625 extends AbstractMigrationChamilo
@@ -30,22 +27,15 @@ final class Version20201212203625 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
+        $em = $this->getEntityManager();
 
-        /** @var EntityManager $em */
-        $em = $doctrine->getManager();
-
-        /** @var Connection $connection */
         $connection = $em->getConnection();
 
-        /** @var CDocumentRepository $documentRepo */
-        $documentRepo = $container->get(CDocumentRepository::class);
-        $courseRepo = $container->get(CourseRepository::class);
+        $documentRepo = $this->container->get(CDocumentRepository::class);
+        $courseRepo = $this->container->get(CourseRepository::class);
         $attemptRepo = $em->getRepository(TrackEAttempt::class);
 
-        /** @var Kernel $kernel */
-        $kernel = $container->get('kernel');
+        $kernel = $this->getContainer()->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
         $batchSize = self::BATCH_SIZE;

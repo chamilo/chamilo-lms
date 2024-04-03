@@ -32,7 +32,7 @@ class PluginsController extends BaseController
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/add', name: 'chamilo_core_plugins', methods: ['GET', 'POST'])]
-    public function pluginsAddAction(): Response
+    public function pluginsAdd(): Response
     {
         $appPlugin = new AppPlugin();
         $allPlugins = $appPlugin->read_plugins_from_path();

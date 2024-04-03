@@ -11,7 +11,10 @@ use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
@@ -28,15 +31,14 @@ final class Version20201212195011 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
         $em = $this->getEntityManager();
         $connection = $em->getConnection();
 
-        $courseRepo = $container->get(CourseRepository::class);
-        $sessionRepo = $container->get(SessionRepository::class);
-        $toolRepo = $container->get(CToolRepository::class);
-        $urlRepo = $em->getRepository(AccessUrl::class);
-        $userRepo = $container->get(UserRepository::class);
+        $courseRepo = $this->container->get(CourseRepository::class);
+        $sessionRepo = $this->container->get(SessionRepository::class);
+        $toolRepo = $this->container->get(CToolRepository::class);
+        $urlRepo = $this->container->get(AccessUrlRepository::class);
+        $userRepo = $this->container->get(UserRepository::class);
 
         $batchSize = self::BATCH_SIZE;
         $admin = $this->getAdmin();

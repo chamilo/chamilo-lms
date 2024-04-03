@@ -13,13 +13,6 @@
         type="black"
         @click="redirectToCreateLinkCategory"
       />
-      <!--BaseButton
-        :label="t('Export to PDF')"
-        icon="file-pdf"
-        type="black"
-        @click="exportToPDF"
-      />
-      <StudentViewButton /-->
     </BaseToolbar>
 
     <LinkCategoryCard v-if="isLoading">
@@ -181,7 +174,6 @@ import LinkCategoryCard from "../../components/links/LinkCategoryCard.vue"
 import linkService from "../../services/linkService"
 import BaseDialogDelete from "../../components/basecomponents/BaseDialogDelete.vue"
 import Skeleton from "primevue/skeleton"
-import StudentViewButton from "../../components/StudentViewButton.vue"
 import { isVisible, toggleVisibilityProperty, visibilityFromBoolean } from "../../components/links/linkVisibility"
 import { useSecurityStore } from "../../store/securityStore"
 
@@ -194,7 +186,7 @@ const { t } = useI18n()
 
 const notifications = useNotification()
 
-const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
+const isCurrentTeacher = securityStore.isCurrentTeacher
 
 const linksWithoutCategory = ref([])
 const categories = ref({})

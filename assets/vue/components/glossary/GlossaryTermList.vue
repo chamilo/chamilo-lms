@@ -51,13 +51,10 @@ import BaseButton from "../basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
 import BaseCard from "../basecomponents/BaseCard.vue"
 import { useSecurityStore } from "../../store/securityStore"
-import { useStore } from "vuex"
-import { computed } from "vue"
 
 const { t } = useI18n()
 const securityStore = useSecurityStore()
-const store = useStore()
-const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
+const isCurrentTeacher = securityStore.isCurrentTeacher
 
 defineProps({
   glossaries: {

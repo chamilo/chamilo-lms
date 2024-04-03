@@ -401,7 +401,7 @@ filters.value.loadNode = 1
 
 const selectedItems = ref([])
 
-const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
+const isCurrentTeacher = securityStore.isCurrentTeacher
 
 const items = computed(() => store.getters["documents/getRecents"])
 const isLoading = computed(() => store.getters["documents/isLoading"])

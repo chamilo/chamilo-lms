@@ -146,7 +146,7 @@ const resourceLinkList = ref(
   ]),
 )
 
-const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
+const isCurrentTeacher = securityStore.isCurrentTeacher
 
 const glossaries = ref([])
 const view = ref("list")

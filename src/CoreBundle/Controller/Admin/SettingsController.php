@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Controller\BaseController;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -93,10 +94,10 @@ class SettingsController extends BaseController
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/settings/{namespace}', name: 'chamilo_platform_settings')]
-    public function updateSetting(Request $request, string $namespace): Response
+    public function updateSetting(Request $request, AccessUrlHelper $accessUrlHelper, string $namespace): Response
     {
         $manager = $this->getSettingsManager();
-        $url = $this->getAccessUrl();
+        $url = $accessUrlHelper->getCurrent();
         $manager->setUrl($url);
         $schemaAlias = $manager->convertNameSpaceToService($namespace);
         $searchForm = $this->getSearchForm();
@@ -176,10 +177,10 @@ class SettingsController extends BaseController
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/settings_sync', name: 'sync_settings')]
-    public function syncSettings(): Response
+    public function syncSettings(AccessUrlHelper $accessUrlHelper): Response
     {
         $manager = $this->getSettingsManager();
-        $url = $this->getAccessUrl();
+        $url = $accessUrlHelper->getCurrent();
         $manager->setUrl($url);
         $manager->installSchemas($url);
 

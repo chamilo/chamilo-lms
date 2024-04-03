@@ -1,47 +1,55 @@
 <template>
-  <div
-    v-show="itemList.length > 0"
-    class="app-breadcrumb"
-  >
-    <Breadcrumb
-      :model="itemList"
-      unstyled
-    >
-      <template #item="{ item, props }">
-        <router-link
-          v-if="item.route"
-          v-slot="{ href, navigate }"
-          :to="item.route"
-          custom
-        >
-          <a
-            :href="href"
-            v-bind="props.action"
-            @click="navigate"
-          >
-            <span :class="[item.icon]" />
-            <span
-              v-if="item.label"
-              v-text="item.label"
-            />
-          </a>
-        </router-link>
-        <a
-          v-else
-          :href="item.url !== '#' ? item.url : undefined"
-          v-bind="props.action"
-        >
-          <span>{{ item.label }}</span>
-        </a>
-      </template>
-
-      <template #separator> / </template>
-    </Breadcrumb>
+  <div>
+    <div v-if="!isCourseLoaded">
+      <Skeleton
+        height="1rem"
+        width="20rem"
+      />
+    </div>
     <div
-      v-if="session"
-      class="app-breadcrumb__session-title"
-      v-text="session.title"
-    />
+      v-show="itemList.length > 0"
+      class="app-breadcrumb"
+    >
+      <Breadcrumb
+        :model="itemList"
+        unstyled
+        >0
+        <template #item="{ item, props }">
+          <router-link
+            v-if="item.route"
+            v-slot="{ href, navigate }"
+            :to="item.route"
+            custom
+          >
+            <a
+              :href="href"
+              v-bind="props.action"
+              @click="navigate"
+            >
+              <span :class="[item.icon]" />
+              <span
+                v-if="item.label"
+                v-text="item.label"
+              />
+            </a>
+          </router-link>
+          <a
+            v-else
+            :href="item.url !== '#' ? item.url : undefined"
+            v-bind="props.action"
+          >
+            <span>{{ item.label }}</span>
+          </a>
+        </template>
+
+        <template #separator> /</template>
+      </Breadcrumb>
+      <div
+        v-if="session"
+        class="app-breadcrumb__session-title"
+        v-text="session.title"
+      />
+    </div>
   </div>
 </template>
 
@@ -52,6 +60,7 @@ import { useI18n } from "vue-i18n"
 import Breadcrumb from "primevue/breadcrumb"
 import { useCidReqStore } from "../store/cidReq"
 import { storeToRefs } from "pinia"
+import Skeleton from "primevue/skeleton"
 
 const legacyItems = ref(window.breadcrumb)
 
@@ -59,7 +68,7 @@ const cidReqStore = useCidReqStore()
 const route = useRoute()
 const { t } = useI18n()
 
-const { course, session } = storeToRefs(cidReqStore)
+const { course, session, isCourseLoaded } = storeToRefs(cidReqStore)
 
 const specialRouteNames = [
   "MyCourses",
@@ -102,7 +111,6 @@ watch(
     if (specialRouteNames.includes(route.name)) {
       return
     }
-
     if (course.value) {
       if (session.value) {
         itemList.value.push({

@@ -365,5 +365,6 @@ echo '<div id="csv-model"><p>'.get_lang('CSVMustLookLike').' ('.get_lang('Mandat
 echo '<blockquote><pre>'.$csvContent.'</pre></blockquote></div>';
 echo '<div id="xml-model" style="display: none;"><p>'.get_lang('XMLMustLookLike').' ('.get_lang('MandatoryFields').'):</p>';
 echo '<blockquote><pre>'.$xmlContent.'</pre></blockquote></div>';
+echo '<div id="import-details"><p class="text-muted">Visibility: 0=CLOSED, 1=PRIVATE, 2=OPEN, 3=PUBLIC, 4=HIDDEN.</p></div>';
 
 Display::display_footer();

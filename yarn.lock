@@ -3635,6 +3635,7 @@ __metadata:
     bootstrap-daterangepicker: "npm:^3.1.0"
     bootstrap-select: "npm:^1.13.18"
     chart.js: "npm:^3.9.1"
+    colorjs.io: "npm:^0.5.0"
     core-js: "npm:3.35.0"
     cropper: "npm:^4.1.0"
     datepair.js: "npm:^0.4.17"
@@ -3863,6 +3864,13 @@ __metadata:
   version: 2.0.20
   resolution: "colorette@npm:2.0.20"
   checksum: 10c0/e94116ff33b0ff56f3b83b9ace895e5bf87c2a7a47b3401b8c3f3226e050d5ef76cf4072fb3325f9dc24d1698f9b730baf4e05eeaf861d74a1883073f4c98a40
+  languageName: node
+  linkType: hard
+
+"colorjs.io@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "colorjs.io@npm:0.5.0"
+  checksum: 10c0/3fa5ed32f2bc62ea133d8df9b267a2bd2e33d3acb8f86bf057b125967f4b7ac607179df15fe4371e4f883760ea939a93a234d6b655fac605166d68e98a55a24d
   languageName: node
   linkType: hard
 

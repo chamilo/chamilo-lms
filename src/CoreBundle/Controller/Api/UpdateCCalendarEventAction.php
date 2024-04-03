@@ -39,17 +39,19 @@ class UpdateCCalendarEventAction extends BaseResourceFileAction
 
         $calendarEvent->getReminders()->clear();
 
-        foreach ($result['reminders'] as $reminderInfo) {
-            $reminder = new AgendaReminder();
-            $reminder->count = $reminderInfo['count'];
-            $reminder->period = $reminderInfo['period'];
+        if (isset($result['reminders'])) {
+            foreach ($result['reminders'] as $reminderInfo) {
+                $reminder = new AgendaReminder();
+                $reminder->count = $reminderInfo['count'];
+                $reminder->period = $reminderInfo['period'];
 
-            $reminder
-                ->setType('')
-                ->decodeDateInterval()
-            ;
+                $reminder
+                    ->setType('')
+                    ->decodeDateInterval()
+                ;
 
-            $calendarEvent->addReminder($reminder);
+                $calendarEvent->addReminder($reminder);
+            }
         }
 
         return $calendarEvent;

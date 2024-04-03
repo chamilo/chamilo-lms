@@ -101,7 +101,21 @@ class CreateDefaultPages
 
         // Categories for extra content in admin blocks
 
-        $adminBlocks = [
+        foreach ($this->getCategoriesForAdminBlocks() as $nameBlock) {
+            $usersAdminBlock = (new PageCategory())
+                ->setTitle($nameBlock)
+                ->setType('grid')
+                ->setCreator($user)
+            ;
+            $this->pageCategoryRepository->update($usersAdminBlock);
+        }
+
+        return true;
+    }
+
+    public function getCategoriesForAdminBlocks()
+    {
+        return [
             'block-admin-users',
             'block-admin-courses',
             'block-admin-sessions',
@@ -112,16 +126,5 @@ class CreateDefaultPages
             'block-admin-platform',
             'block-admin-chamilo',
         ];
-
-        foreach ($adminBlocks as $nameBlock) {
-            $usersAdminBlock = (new PageCategory())
-                ->setTitle($nameBlock)
-                ->setType('grid')
-                ->setCreator($user)
-            ;
-            $this->pageCategoryRepository->update($usersAdminBlock);
-        }
-
-        return true;
     }
 }

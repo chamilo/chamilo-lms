@@ -317,7 +317,10 @@ class PageRepositoryTest extends AbstractApiTest
         $result = $createDefaultPages->createDefaultPages($admin, $this->getAccessUrl(), 'en_US');
         $this->assertTrue($result);
         $this->assertSame(2, $pageRepo->count([]));
-        $this->assertSame(6, $pageCategoryRepo->count([]));
+        $this->assertSame(
+            6 + count($createDefaultPages->getCategoriesForAdminBlocks()),
+            $pageCategoryRepo->count([])
+        );
 
         $result = $createDefaultPages->createDefaultPages($admin, $this->getAccessUrl(), 'en_US');
         $this->assertFalse($result);

@@ -107,7 +107,7 @@ function updateCourse(array $courseData, int $courseId): void
         'Title' => 'title',
         'Language' => 'course_language',
         'CourseCategory' => 'category_code',
-        'Visibilit' => 'visibility',
+        'Visibility' => 'visibility',
     ];
     $params = [];
     foreach ($fieldsMapping as $inputField => $dbField) {

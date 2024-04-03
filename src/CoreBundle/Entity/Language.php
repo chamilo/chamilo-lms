@@ -6,10 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Platform languages.
  */
-#[ApiResource(attributes: ['pagination_enabled' => false])]
+#[ApiResource(paginationEnabled: false)]
 #[ApiFilter(BooleanFilter::class, properties: ['available'])]
 #[ApiFilter(OrderFilter::class, properties: ['english_name' => 'DESC'])]
 #[ORM\Table(name: 'language', options: ['row_format' => 'DYNAMIC'])]

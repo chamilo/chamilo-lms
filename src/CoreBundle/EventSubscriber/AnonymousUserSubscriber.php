@@ -20,18 +20,12 @@ use Symfony\Component\Security\Core\Security;
 class AnonymousUserSubscriber implements EventSubscriberInterface
 {
     private const MAX_ANONYMOUS_USERS = 5;
-    private Security $security;
-    private EntityManagerInterface $entityManager;
-    private SessionInterface $session;
-    private SettingsManager $settingsManager;
 
-    public function __construct(Security $security, EntityManagerInterface $entityManager, SessionInterface $session, SettingsManager $settingsManager)
-    {
-        $this->security = $security;
-        $this->entityManager = $entityManager;
-        $this->session = $session;
-        $this->settingsManager = $settingsManager;
-    }
+    public function __construct(
+        private readonly Security $security,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly SettingsManager $settingsManager
+    ) { }
 
     public function onKernelRequest(RequestEvent $event): void
     {
@@ -86,7 +80,7 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
                     'is_anonymous' => true,
                 ];
 
-                $this->session->set('_user', $userInfo);
+                $request->getSession()->set('_user', $userInfo);
             }
         }
     }

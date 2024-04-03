@@ -2427,6 +2427,9 @@ class TicketManager
         }
     }
 
+    /**
+     * @deprecated Use TicketProjectHelper::userIsAllowInProject instead
+     */
     public static function userIsAllowInProject(int $projectId): bool
     {
         $authorizationChecked = Container::getAuthorizationChecker();
@@ -2454,6 +2457,9 @@ class TicketManager
         return false;
     }
 
+    /**
+     * @deprecated Use TicketProjectHelper::getAllowedRolesFromProject instead
+     */
     public static function getAllowedRolesFromProject(int $projectId): array
     {
         // Define a mapping from role IDs to role names

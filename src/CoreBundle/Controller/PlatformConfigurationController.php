@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Controller;
 
 use bbb;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\ServiceHelper\TicketProjectHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,6 +21,10 @@ use TicketManager;
 class PlatformConfigurationController extends AbstractController
 {
     use ControllerTrait;
+
+    public function __construct(
+        private readonly TicketProjectHelper $ticketProjectHelper,
+    ) { }
 
     #[Route('/list', name: 'platform_config_list', methods: ['GET'])]
     public function list(SettingsManager $settingsManager): Response
@@ -79,7 +84,7 @@ class PlatformConfigurationController extends AbstractController
             $configuration['settings']['display.show_link_ticket_notification'] = 'false';
 
             if (!empty($user)) {
-                $userIsAllowedInProject = TicketManager::userIsAllowInProject(1);
+                $userIsAllowedInProject = $this->ticketProjectHelper->userIsAllowInProject(1);
 
                 if ($userIsAllowedInProject
                     && 'true' === $settingsManager->getSetting('display.show_link_ticket_notification')

@@ -20,6 +20,7 @@ doctrine:
             datetimetz: SimPod\DoctrineUtcDateTime\UTCDateTimeType
             datetime_immutable: SimPod\DoctrineUtcDateTime\UTCDateTimeImmutableType
             datetimetz_immutable: SimPod\DoctrineUtcDateTime\UTCDateTimeImmutableType
+        use_savepoints: true
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
@@ -63,3 +64,4 @@ doctrine:
             softdeleteable:
                 class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
                 enabled: true
+        enable_lazy_ghost_objects: true

@@ -68,7 +68,6 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-            anonymous: true
 
         # Use to connect via a JWT token
         api:

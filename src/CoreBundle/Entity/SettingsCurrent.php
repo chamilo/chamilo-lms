@@ -44,10 +44,10 @@ class SettingsCurrent
     protected ?string $selectedValue = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
-    #[ORM\Column(name: 'comment', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected ?string $comment = null;
 
     #[ORM\Column(name: 'scope', type: 'string', length: 50, nullable: true)]

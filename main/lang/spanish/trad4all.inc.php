@@ -9071,5 +9071,8 @@ $PasswordExpiredPleaseSetNewPassword = "Su contraseña se ha vencido. Por favor,
 $CopyIframeCodeToIncludeExercise = "Copie el código del iframe a continuación para incluir el ejercicio:";
 $MyMissingSignatures = "Mis firmas faltantes";
 $OnlyShowActiveUsers = "Mostrar solo usuarios activos";
+$UpdateCourseListXMLCSV = "Actualizar la lista de cursos";
+$CourseCodeDoesNotExist = "Este codigo de curso no existe";
 $HoursMinutesSeconds = "%02d h %02d m %02d s";
+$IfYourLPsAreScormsYouShouldSelectThemFromTheScorms = "Si sus lecciones de aprendizaje son paquetes scorm, debe seleccionar la carpeta correspondiente en la parte SCORM";
 ?>

@@ -8987,4 +8987,5 @@ $DuplicateCode = "Code dupliqué";
 $CoursesUpdatedSuccessfully = "Mise à jour des cours réussie";
 $UpdateFailedForCourses = "La mise à jour a échoué pour les cours suivants";
 $HoursMinutesSeconds = "%02d h %02d m %02d s";
+$IfYourLPsAreScormsYouShouldSelectThemFromTheScorms = "Si vos parcours d'apprentissage sont des packages scorm, vous devez sélectionner le dossier correspondant dans la partie SCORM";
 ?>

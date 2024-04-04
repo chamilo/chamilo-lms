@@ -173,7 +173,7 @@ class LegacyListener implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::REQUEST => ['onKernelRequest', 7],
+            KernelEvents::REQUEST => 'onKernelRequest',
             KernelEvents::RESPONSE => 'onKernelResponse',
             KernelEvents::CONTROLLER => 'onKernelController',
         ];

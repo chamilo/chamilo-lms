@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\ServiceHelper\ContainerHelper;
 use ChamiloSession as Session;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
@@ -1140,7 +1141,7 @@ if ($form->validate()) {
     $roles = $userEntity->getRoles();
     $token = new UsernamePasswordToken($userEntity, null, $providerKey, $roles);
 
-    $container->get('security.token_storage')->setToken($token);
+    $container->get(ContainerHelper::class)->getTokenStorage()->setToken($token);
     $container->get('session')->set('_security_' . $providerKey, serialize($token));
     $session = $container->get('session');
     $userData = [

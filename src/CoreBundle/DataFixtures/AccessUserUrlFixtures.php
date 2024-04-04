@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\DataFixtures;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\ServiceHelper\ContainerHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -25,7 +26,7 @@ class AccessUserUrlFixtures extends Fixture implements ContainerAwareInterface
 
     public function setContainer(?ContainerInterface $container = null): void
     {
-        $this->tokenStorage = $container->get('security.token_storage');
+        $this->tokenStorage = $container->get(ContainerHelper::class)->getTokenStorage();
         $this->settingsManager = $container->get(SettingsManager::class);
     }
 

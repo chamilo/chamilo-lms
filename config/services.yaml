@@ -94,6 +94,14 @@ services:
       tags:
         - name: security.voter
 
+    Chamilo\CoreBundle\ServiceHelper\ContainerHelper:
+        calls:
+            - setAuthorizationChecker: [ '@security.authorization_checker' ]
+            - setTokenStorage: [ '@security.token_storage' ]
+            - setKernel: [ '@kernel' ]
+            - setMessengerBus: [ '@messenger.bus.default' ]
+            - setValidator: [ '@validator' ]
+
 cocur_slugify:
     lowercase: true
 

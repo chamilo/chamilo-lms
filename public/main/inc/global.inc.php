@@ -42,20 +42,18 @@ $request = Request::createFromGlobals();
 // and not called from a symfony controller from public/
 $request->request->set('load_legacy', true);
 $currentBaseUrl = $request->getBaseUrl();
-$kernel->boot();
-$currentUri = $request->getRequestUri();
+
 if (empty($currentBaseUrl)) {
     $currentBaseUrl = $request->getSchemeAndHttpHost() . $request->getBasePath();
 }
+
+$response = $kernel->handle($request, HttpKernelInterface::MAIN_REQUEST, false);
+
 $container = $kernel->getContainer();
 $router = $container->get('router');
 $context = $router->getContext();
 $router->setContext($context);
-/** @var FlashBag $flashBag */
-$flashBag = $container->get('session')->getFlashBag();
-$saveFlashBag = !empty($flashBag->keys()) ? $flashBag->all() : null;
 
-$response = $kernel->handle($request, HttpKernelInterface::MAIN_REQUEST, false);
 $context = Container::getRouter()->getContext();
 
 $isCli =  'cli' === php_sapi_name();
@@ -70,6 +68,8 @@ if ($isCli) {
 if ($isCli && $baseUrl) {
     $context->setBaseUrl($baseUrl);
 } else {
+    $currentUri = $request->getRequestUri();
+
     $fullUrl = $currentBaseUrl . $currentUri;
     $posMain = strpos($fullUrl, '/main');
     $posPlugin = strpos($fullUrl, '/plugin');
@@ -109,6 +109,10 @@ try {
     // Symfony uses request_stack now
     $container->get('request_stack')->push($request);
     $container->get('translator')->setLocale($request->getLocale());
+
+    /** @var FlashBag $flashBag */
+    $flashBag = $request->getSession()->getFlashBag();
+    $saveFlashBag = !empty($flashBag->keys()) ? $flashBag->all() : null;
 
     if (!empty($saveFlashBag)) {
         foreach ($saveFlashBag as $typeMessage => $messageList) {

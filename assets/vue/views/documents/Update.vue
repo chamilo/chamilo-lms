@@ -16,16 +16,14 @@
 </template>
 
 <script setup>
-import { useStore } from "vuex"
 import DocumentsForm from "../../components/documents/Form.vue"
 import Loading from "../../components/Loading.vue"
 import EditLinks from "../../components/resource_links/EditLinks.vue"
 import { useDatatableUpdate } from "../../composables/datatableUpdate"
-import { computed } from "vue"
+import { useSecurityStore } from "../../store/securityStore"
 
-const store = useStore()
-
-const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
+const securityStore = useSecurityStore()
+const isCurrentTeacher = securityStore.isCurrentTeacher
 
 const { item, retrieve, updateItemWithFormData, isLoading } = useDatatableUpdate("Documents")
 

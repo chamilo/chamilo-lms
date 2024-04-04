@@ -79,11 +79,10 @@ import BaseIcon from "../basecomponents/BaseIcon.vue"
 import { isVisible, VISIBLE } from "./linkVisibility"
 import { useSecurityStore } from "../../store/securityStore"
 import { useStore } from "vuex"
-import { computed, watch } from "vue"
 
 const store = useStore()
 const securityStore = useSecurityStore()
-const isCurrentTeacher = computed(() => store.getters["security/isCurrentTeacher"])
+const isCurrentTeacher = securityStore.isCurrentTeacher
 
 const { t } = useI18n()
 

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\State\ColorThemeProcessor;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
@@ -20,6 +21,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Post(
             processor: ColorThemeProcessor::class,
         ),
+        new GetCollection(),
     ],
     denormalizationContext: [
         'groups' => ['color_theme:write'],

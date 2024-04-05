@@ -434,4 +434,12 @@ class Message
 
         return $this;
     }
+
+    /**
+     * @return Collection
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
 }

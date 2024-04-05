@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Form\ProfileType;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -26,10 +27,14 @@ class AccountController extends BaseController
 {
     use ControllerTrait;
 
+    public function __construct(
+        private readonly UserHelper $userHelper,
+    ) { }
+
     #[Route('/edit', name: 'chamilo_core_account_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, UserRepository $userRepository, IllustrationRepository $illustrationRepo, SettingsManager $settingsManager): Response
     {
-        $user = $this->getUser();
+        $user = $this->userHelper->getCurrent();
 
         if (!\is_object($user) || !$user instanceof UserInterface) {
             throw $this->createAccessDeniedException('This user does not have access to this section');

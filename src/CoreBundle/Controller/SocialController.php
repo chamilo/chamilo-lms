@@ -24,6 +24,7 @@ use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
+use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
 use DateTime;
@@ -47,6 +48,10 @@ use UserManager;
 #[Route('/social-network')]
 class SocialController extends AbstractController
 {
+    public function __construct(
+        private readonly UserHelper $userHelper,
+    ) { }
+
     #[Route('/personal-data/{userId}', name: 'chamilo_core_social_personal_data')]
     public function getPersonalData(
         int $userId,
@@ -552,7 +557,7 @@ class SocialController extends AbstractController
         UserRepository $userRepository,
         TranslatorInterface $translator
     ): JsonResponse {
-        $user = $this->getUser();
+        $user = $this->userHelper->getCurrent();
         if ($userId !== $user->getId()) {
             return $this->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
         }
@@ -623,7 +628,7 @@ class SocialController extends AbstractController
         MessageRepository $messageRepository,
         UsergroupRepository $usergroupRepository
     ): JsonResponse {
-        $user = $this->getUser();
+        $user = $this->userHelper->getCurrent();
         if ($userId !== $user->getId()) {
             return $this->json(['error' => 'Unauthorized']);
         }
@@ -650,8 +655,7 @@ class SocialController extends AbstractController
 
         $formattedResults = [];
         if ('user' === $type) {
-            /** @var User $user */
-            $user = $this->getUser();
+            $user = $this->userHelper->getCurrent();
             $results = $userRepository->searchUsersByTags($query, $user->getId(), 0, $from, $numberOfItems);
             foreach ($results as $item) {
                 $isUserOnline = $trackOnlineRepository->isUserOnline($item['id']);
@@ -692,8 +696,7 @@ class SocialController extends AbstractController
         UsergroupRepository $usergroupRepository,
         TrackEOnlineRepository $trackOnlineRepository
     ): JsonResponse {
-        /** @var User $user */
-        $user = $this->getUser();
+        $user = $this->userHelper->getCurrent();
         if (!$user) {
             return $this->json(['error' => 'User not authenticated'], Response::HTTP_UNAUTHORIZED);
         }
@@ -951,7 +954,7 @@ class SocialController extends AbstractController
         $file = $request->files->get('picture');
         if ($file instanceof UploadedFile) {
             $userGroup = $usergroupRepository->find($groupId);
-            $illustrationRepository->addIllustration($userGroup, $this->getUser(), $file);
+            $illustrationRepository->addIllustration($userGroup, $this->userHelper->getCurrent(), $file);
         }
 
         return new JsonResponse(['success' => 'Group and image saved successfully'], Response::HTTP_OK);

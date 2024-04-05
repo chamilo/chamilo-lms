@@ -12,8 +12,10 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEDownloads;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Repository\ResourceFactory;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CoreBundle\Traits\CourseControllerTrait;
@@ -53,6 +55,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
     use CourseControllerTrait;
     use GradebookControllerTrait;
     use ResourceControllerTrait;
+
+    public function __construct(
+        private readonly UserHelper $userHelper,
+    ) { }
 
     #[Route(path: '/{tool}/{type}/{id}/disk_space', methods: ['GET', 'POST'], name: 'chamilo_core_resource_disk_space')]
     public function diskSpace(Request $request): Response
@@ -139,8 +145,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             throw new FileNotFoundException($this->trans('Resource not found'));
         }
 
-        /** @var ?User $user */
-        $user = $this->getUser();
+        $user = $this->userHelper->getCurrent();
         $firstResourceLink = $resourceNode->getResourceLinks()->first();
         if ($firstResourceLink) {
             $resourceLinkId = $firstResourceLink->getId();
@@ -228,8 +233,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         // If resource node has a file just download it. Don't download the children.
         if ($resourceNode->hasResourceFile()) {
-            /** @var ?User $user */
-            $user = $this->getUser();
+            $user = $this->userHelper->getCurrent();
             $firstResourceLink = $resourceNode->getResourceLinks()->first();
             if ($firstResourceLink) {
                 $resourceLinkId = $firstResourceLink->getId();
@@ -531,7 +535,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
                     // @todo move into a function/class
                     if ('true' === $this->getSettingsManager()->getSetting('editor.translate_html')) {
-                        $user = $this->getUser();
+                        $user = $this->userHelper->getCurrent();
                         if (null !== $user) {
                             // Overwrite user_json, otherwise it will be loaded by the TwigListener.php
                             $userJson = json_encode(['locale' => $user->getLocale()]);

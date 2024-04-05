@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller;
 use bbb;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\ServiceHelper\TicketProjectHelper;
+use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,6 +25,7 @@ class PlatformConfigurationController extends AbstractController
 
     public function __construct(
         private readonly TicketProjectHelper $ticketProjectHelper,
+        private readonly UserHelper $userHelper,
     ) { }
 
     #[Route('/list', name: 'platform_config_list', methods: ['GET'])]
@@ -78,8 +80,7 @@ class PlatformConfigurationController extends AbstractController
                 'forum.global_forums_course_id',
             ];
 
-            /** @var User|null $user */
-            $user = $this->getUser();
+            $user = $this->userHelper->getCurrent();
 
             $configuration['settings']['display.show_link_ticket_notification'] = 'false';
 

@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
@@ -38,7 +39,8 @@ class CourseController extends ToolBaseController
 {
     public function __construct(
         private readonly CShortcutRepository $shortcutRepository,
-        private readonly ManagerRegistry $managerRegistry
+        private readonly ManagerRegistry $managerRegistry,
+        private readonly UserHelper $userHelper,
     ) {}
 
     #[Route(path: '/edit/{id}', name: 'chamilo_lti_edit', requirements: ['id' => '\d+'])]
@@ -131,8 +133,7 @@ class CourseController extends ToolBaseController
 
         $settingsManager = $this->get('chamilo.settings.manager');
 
-        /** @var User $user */
-        $user = $this->getUser();
+        $user = $this->userHelper->getCurrent();
         $course = $this->getCourse();
         $session = $this->getCourseSession();
 
@@ -453,8 +454,7 @@ class CourseController extends ToolBaseController
 
         $this->addFlash('success', $this->trans('External tool added'));
 
-        /** @var User $user */
-        $user = $this->getUser();
+        $user = $this->userHelper->getCurrent();
 
         if (!$externalTool->isActiveDeepLinking()) {
             $this->shortcutRepository->addShortCut($externalTool, $user, $course);
@@ -489,8 +489,7 @@ class CourseController extends ToolBaseController
         $toolRepo = $em->getRepository(ExternalTool::class);
         $course = $this->getCourse();
 
-        /** @var User $user */
-        $user = $this->getUser();
+        $user = $this->userHelper->getCurrent();
 
         $categories = Category::load(null, null, $course->getId());
 
@@ -774,8 +773,7 @@ class CourseController extends ToolBaseController
         $em->persist($newTool);
         $em->flush();
 
-        /** @var User $user */
-        $user = $this->getUser();
+        $user = $this->userHelper->getCurrent();
         $this->shortcutRepository->addShortCut($newTool, $user, $course);
 
         return $newTool;

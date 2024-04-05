@@ -26,10 +26,6 @@ services:
 
     Chamilo\CoreBundle\Hook\HookFactory: ~
 
-    Chamilo\CoreBundle\Controller\ResourceController:
-        arguments:
-            - '@Chamilo\CoreBundle\Repository\ResourceFactory'
-
     Chamilo\CoreBundle\DataPersister\MessageDataPersister:
         arguments: ['@api_platform.doctrine.orm.data_persister']
 

@@ -8,6 +8,8 @@
 @import "~bootstrap-daterangepicker/daterangepicker.css";
 //@import '~jquery-ui/themes/base/all.css';
 
+@import "tinymce/skins/ui/oxide/skin.css";
+
 // TAILWIND COLOR DEFINITION https://tailwindcss.com/docs/customizing-colors#using-css-variables
 @layer base {
   :root {

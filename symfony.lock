@@ -104,9 +104,6 @@
             "fixtures/.gitignore"
         ]
     },
-    "knplabs/doctrine-behaviors": {
-        "version": "2.6.2"
-    },
     "knpuniversity/oauth2-client-bundle": {
         "version": "2.18",
         "recipe": {

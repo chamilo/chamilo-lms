@@ -86,7 +86,6 @@
         "jeroendesloovere/vcard": "~1.7",
         "jimmiw/php-time-ago": "~3.2",
         "kigkonsult/icalcreator": "~2.29",
-        "knplabs/doctrine-behaviors": "~2.0",
         "knplabs/knp-components": "~3.0",
         "knpuniversity/oauth2-client-bundle": "~2.0",
         "laminas/laminas-config": "~3.5",

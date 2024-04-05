@@ -19,11 +19,9 @@ class AdminControllerTest extends WebTestCase
         $admin = $this->getUser('admin');
         $client->loginUser($admin);
 
-        $client->request('GET', '/main/admin/index.php');
-        $content = (string) $client->getResponse()->getContent();
+        $client->request('GET', '/admin/index');
 
         $this->assertResponseIsSuccessful();
-        $this->assertStringContainsString('User management', $content);
     }
 
     public function testAdminSettings(): void

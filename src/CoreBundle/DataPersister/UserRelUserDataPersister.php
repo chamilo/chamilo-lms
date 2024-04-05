@@ -26,7 +26,7 @@ class UserRelUserDataPersister implements ContextAwareDataPersisterInterface
         return $this->decorated->supports($data, $context);
     }
 
-    public function persist($data, array $context = [])
+    public function persist($data, array $context = []): ?object
     {
         $result = $this->decorated->persist($data, $context);
         if ($data instanceof UserRelUser && (

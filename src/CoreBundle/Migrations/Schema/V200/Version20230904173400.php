@@ -225,12 +225,11 @@ class Version20230904173400 extends AbstractMigrationChamilo
 
     /**
      * @param array<int, CCalendarEvent> $oldNewEventIdMap
-     * @param EntityManagerInterface $em
-     * @return void
      */
     private function updateAgendaReminders(array $oldNewEventIdMap, EntityManagerInterface $em): void
     {
         $reminders = $em->getRepository(AgendaReminder::class)->findBy(['type' => 'personal']);
+
         /** @var AgendaReminder $reminder */
         foreach ($reminders as $reminder) {
             $oldEventId = $reminder->getEvent()->getIid();

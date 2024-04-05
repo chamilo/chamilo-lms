@@ -22,7 +22,7 @@ class Version20201215072917 extends AbstractMigrationChamilo
 
         $selectedValue = $this->getConfigurationSelectedValue();
 
-        if ($settingExists == 0) {
+        if (0 == $settingExists) {
             $this->addSql(
                 "INSERT INTO settings_current (access_url, variable, category, selected_value, title, access_url_changeable, access_url_locked) VALUES (1, 'allow_careers_in_global_agenda', 'agenda', '$selectedValue', 'Allow careers and promotions in global agenda', 1, 0)"
             );
@@ -50,17 +50,17 @@ class Version20201215072917 extends AbstractMigrationChamilo
     {
         global $_configuration;
         $rootPath = $this->getContainer()->getParameter('kernel.project_dir');
-        $oldConfigPath = $rootPath . '/app/config/configuration.php';
-        if (!in_array($oldConfigPath, get_included_files(), true)) {
+        $oldConfigPath = $rootPath.'/app/config/configuration.php';
+        if (!\in_array($oldConfigPath, get_included_files(), true)) {
             include_once $oldConfigPath;
         }
 
         $value = $_configuration['allow_careers_in_global_agenda'] ?? false;
-        if (is_bool($value)) {
+        if (\is_bool($value)) {
             return $value ? 'true' : 'false';
         }
 
-        return (string)$value;
+        return (string) $value;
     }
 
     public function down(Schema $schema): void

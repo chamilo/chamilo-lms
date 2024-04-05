@@ -177,16 +177,10 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: AgendaReminder::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $reminders;
 
-    /**
-     * @var Career|null
-     */
     #[ORM\ManyToOne(targetEntity: Career::class)]
     #[ORM\JoinColumn(name: 'career_id', referencedColumnName: 'id', nullable: true)]
     protected ?Career $career = null;
 
-    /**
-     * @var Promotion|null
-     */
     #[ORM\ManyToOne(targetEntity: Promotion::class)]
     #[ORM\JoinColumn(name: 'promotion_id', referencedColumnName: 'id', nullable: true)]
     protected ?Promotion $promotion = null;

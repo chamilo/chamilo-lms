@@ -173,8 +173,8 @@ class Basic extends Toolbar
             $config['external_plugins'] = $customPluginsPath;
         }
 
-        $config['skin_url'] = '/build/libs/tinymce/skins/ui/oxide';
-        $config['content_css'] = '/build/libs/tinymce/skins/content/default/content.css';
+        $config['skin'] = false;
+        $config['content_css'] = false;
         $config['branding'] = false;
         $config['relative_urls'] = false;
         $config['toolbar_mode'] = 'sliding';

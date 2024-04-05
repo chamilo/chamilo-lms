@@ -115,7 +115,6 @@ class GradebookCategory
 
     #[ORM\OneToOne(inversedBy: 'gradebookCategory', targetEntity: CDocument::class)]
     #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'iid', onDelete: 'set null')]
-    #[ApiSubresource]
     #[Groups(['gradebookCategory:read', 'gradebookCategory:write'])]
     protected ?CDocument $document = null;
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bc7e5e23d9f1d2c1b64f43cde4eb816b",
+    "content-hash": "84a791f1aa11f1fdd58ba22887d15558",
     "packages": [
         {
             "name": "a2lix/auto-form-bundle",
@@ -679,16 +679,16 @@
         },
         {
             "name": "chamilo/settings-bundle",
-            "version": "v1.1.1",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/chamilo/SyliusSettingsBundle.git",
-                "reference": "d6ff2bc8192f2597601b52f39099f2927491b0ca"
+                "reference": "f2a24951a0fe4b3598360fee6b24fc1ba280e215"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chamilo/SyliusSettingsBundle/zipball/d6ff2bc8192f2597601b52f39099f2927491b0ca",
-                "reference": "d6ff2bc8192f2597601b52f39099f2927491b0ca",
+                "url": "https://api.github.com/repos/chamilo/SyliusSettingsBundle/zipball/f2a24951a0fe4b3598360fee6b24fc1ba280e215",
+                "reference": "f2a24951a0fe4b3598360fee6b24fc1ba280e215",
                 "shasum": ""
             },
             "require": {
@@ -751,9 +751,9 @@
                 "webshop"
             ],
             "support": {
-                "source": "https://github.com/chamilo/SyliusSettingsBundle/tree/v1.1.1"
+                "source": "https://github.com/chamilo/SyliusSettingsBundle/tree/v1.2.0"
             },
-            "time": "2024-02-08T00:02:54+00:00"
+            "time": "2024-04-05T20:17:34+00:00"
         },
         {
             "name": "clue/graph",

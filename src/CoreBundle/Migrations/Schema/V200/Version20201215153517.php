@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
-use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CAnnouncementAttachment;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;

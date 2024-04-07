@@ -9,12 +9,14 @@ namespace Chamilo\CoreBundle\ServiceHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Symfony\Component\Security\Core\Security;
 
+use const JSON_ERROR_NONE;
+
 class TicketProjectHelper
 {
     public function __construct(
         private readonly Security $security,
         private readonly SettingsManager $settingsManager,
-    ) { }
+    ) {}
 
     public function userIsAllowInProject(int $projectId): bool
     {
@@ -32,6 +34,7 @@ class TicketProjectHelper
             foreach ($allowRoleList as $role) {
                 if ($this->security->isGranted($role)) {
                     $result = true;
+
                     break;
                 }
             }
@@ -74,6 +77,6 @@ class TicketProjectHelper
         $roleIds = $data['permissions'][$projectId];
 
         // Transform role IDs into role names using the defined mapping
-        return array_map(fn($roleId) => $roleMap[$roleId] ?? "$roleId", $roleIds);
+        return array_map(fn ($roleId) => $roleMap[$roleId] ?? "$roleId", $roleIds);
     }
 }

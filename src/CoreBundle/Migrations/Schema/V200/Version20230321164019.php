@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
-use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\DBAL\Schema\Schema;
 
 class Version20230321164019 extends AbstractMigrationChamilo

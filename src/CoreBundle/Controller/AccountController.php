@@ -29,7 +29,7 @@ class AccountController extends BaseController
 
     public function __construct(
         private readonly UserHelper $userHelper,
-    ) { }
+    ) {}
 
     #[Route('/edit', name: 'chamilo_core_account_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, UserRepository $userRepository, IllustrationRepository $illustrationRepo, SettingsManager $settingsManager): Response

@@ -14,7 +14,7 @@ class UserHelper
 {
     public function __construct(
         private readonly TokenStorageInterface $tokenStorage,
-    ) { }
+    ) {}
 
     public function getCurrent(): ?User
     {

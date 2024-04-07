@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
 use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\ServiceHelper\UserHelper;
@@ -26,7 +25,7 @@ class NewsController extends BaseController
     public function __construct(
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly UserHelper $userHelper,
-    ) { }
+    ) {}
 
     #[Route('/list', name: 'news_index', methods: ['GET'])]
     public function index(SysAnnouncementRepository $sysAnnouncementRepository): Response

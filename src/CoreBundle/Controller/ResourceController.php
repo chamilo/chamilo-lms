@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEDownloads;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Repository\ResourceFactory;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\ServiceHelper\UserHelper;
@@ -58,7 +57,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
     public function __construct(
         private readonly UserHelper $userHelper,
-    ) { }
+    ) {}
 
     #[Route(path: '/{tool}/{type}/{id}/disk_space', methods: ['GET', 'POST'], name: 'chamilo_core_resource_disk_space')]
     public function diskSpace(Request $request): Response

@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\DataFixtures\SettingsCurrentFixtures;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
-use Chamilo\Kernel;
 use Doctrine\DBAL\Schema\Schema;
 
 use const JSON_UNESCAPED_SLASHES;

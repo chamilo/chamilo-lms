@@ -8,11 +8,6 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
-use Chamilo\CourseBundle\Entity\CAnnouncement;
-use Chamilo\CourseBundle\Entity\CGlossary;
-use Chamilo\CourseBundle\Entity\CGroupCategory;
-use Chamilo\CourseBundle\Entity\CLink;
-use Chamilo\CourseBundle\Entity\CLinkCategory;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Chamilo\CourseBundle\Repository\CGroupCategoryRepository;
@@ -37,7 +32,6 @@ final class Version20240112191200 extends AbstractMigrationChamilo
         $groupCategoryRepo = $this->container->get(CGroupCategoryRepository::class);
         $glossaryRepo = $this->container->get(CGlossaryRepository::class);
         $announcementRepo = $this->container->get(CAnnouncementRepository::class);
-
 
         $this->updateResourceNodeDisplayOrder($linkCategoryRepo, 'c_link_category', $em, $schema);
         $this->updateResourceNodeDisplayOrder($linkRepo, 'c_link', $em, $schema);

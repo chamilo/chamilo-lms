@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Security;
@@ -25,7 +24,7 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         private readonly Security $security,
         private readonly EntityManagerInterface $entityManager,
         private readonly SettingsManager $settingsManager
-    ) { }
+    ) {}
 
     public function onKernelRequest(RequestEvent $event): void
     {

@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CourseBundle\Entity\CLink;
-use Chamilo\CourseBundle\Entity\CShortcut;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
 use Doctrine\DBAL\Schema\Schema;

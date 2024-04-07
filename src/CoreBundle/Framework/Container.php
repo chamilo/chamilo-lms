@@ -223,9 +223,6 @@ class Container
         return self::getLegacyHelper()->getAuthorizationChecker();
     }
 
-    /**
-     * @return TokenStorage|TokenStorageInterface
-     */
     public static function getTokenStorage(): TokenStorageInterface|TokenStorage
     {
         return self::getLegacyHelper()->getTokenStorage();

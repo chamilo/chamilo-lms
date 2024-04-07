@@ -50,7 +50,7 @@ class SocialController extends AbstractController
 {
     public function __construct(
         private readonly UserHelper $userHelper,
-    ) { }
+    ) {}
 
     #[Route('/personal-data/{userId}', name: 'chamilo_core_social_personal_data')]
     public function getPersonalData(

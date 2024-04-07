@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use bbb;
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\ServiceHelper\TicketProjectHelper;
 use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -16,7 +15,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use TicketManager;
 
 #[Route('/platform-config')]
 class PlatformConfigurationController extends AbstractController
@@ -26,7 +24,7 @@ class PlatformConfigurationController extends AbstractController
     public function __construct(
         private readonly TicketProjectHelper $ticketProjectHelper,
         private readonly UserHelper $userHelper,
-    ) { }
+    ) {}
 
     #[Route('/list', name: 'platform_config_list', methods: ['GET'])]
     public function list(SettingsManager $settingsManager): Response

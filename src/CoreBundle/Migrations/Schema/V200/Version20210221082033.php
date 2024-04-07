@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
-use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\Kernel;
 use Doctrine\DBAL\Schema\Schema;

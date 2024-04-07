@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Templates;
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SystemTemplateRepository;

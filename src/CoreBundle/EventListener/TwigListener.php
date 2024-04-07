@@ -15,7 +15,6 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\SerializerInterface;
-use TicketManager;
 use Twig\Environment;
 
 /**
@@ -61,7 +60,6 @@ class TwigListener implements EventSubscriberInterface
                 $isAuth = true;
             }
         }
-
 
         $languages = $this->languageRepository->getAllAvailable()->getQuery()->getArrayResult();
 

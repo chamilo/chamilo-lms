@@ -60,9 +60,6 @@ class Version20181025064351 extends AbstractMigrationChamilo
         $table = $schema->getTable('gradebook_category');
 
         $this->addSql('ALTER TABLE gradebook_category CHANGE user_id user_id INT DEFAULT NULL');
-        $this->addSql(
-            'DELETE FROM gradebook_category WHERE user_id IS NOT NULL AND user_id NOT IN (SELECT id FROM user)'
-        );
 
         if ($table->hasIndex('idx_gb_cat_parent')) {
             $this->addSql(' DROP INDEX idx_gb_cat_parent ON gradebook_category;');
@@ -70,9 +67,7 @@ class Version20181025064351 extends AbstractMigrationChamilo
 
         $this->addSql('UPDATE gradebook_category SET session_id = NULL WHERE session_id = 0');
         $this->addSql('UPDATE gradebook_category SET parent_id = NULL WHERE parent_id = 0');
-
-        $this->addSql('DELETE FROM gradebook_category WHERE session_id IS NOT NULL AND session_id NOT IN (SELECT id FROM session)');
-        $this->addSql('DELETE FROM gradebook_category WHERE parent_id IS NOT NULL AND parent_id NOT IN (SELECT id FROM gradebook_category)');
+        $this->addSql('DELETE FROM gradebook_category WHERE parent_id > 0 AND parent_id NOT IN (SELECT id FROM gradebook_category)');
 
         if (false === $table->hasForeignKey('FK_96A4C705727ACA70')) {
             $this->addSql('ALTER TABLE gradebook_category ADD CONSTRAINT FK_96A4C705727ACA70 FOREIGN KEY (parent_id) REFERENCES gradebook_category (id) ON DELETE CASCADE');

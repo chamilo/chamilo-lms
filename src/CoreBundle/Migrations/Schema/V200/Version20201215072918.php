@@ -17,7 +17,6 @@ use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use Chamilo\Kernel;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\ORM\EntityManagerInterface;
 
 final class Version20201215072918 extends AbstractMigrationChamilo
 {
@@ -28,18 +27,22 @@ final class Version20201215072918 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $em = $this->getEntityManager();
+        $container = $this->getContainer();
+        $doctrine = $container->get('doctrine');
+        $em = $doctrine->getManager();
 
+        /** @var Connection $connection */
         $connection = $em->getConnection();
 
-        $eventRepo = $this->container->get(CCalendarEventRepository::class);
-        $eventAttachmentRepo = $this->container->get(CCalendarEventAttachmentRepository::class);
-        $courseRepo = $this->container->get(CourseRepository::class);
+        $eventRepo = $container->get(CCalendarEventRepository::class);
+        $eventAttachmentRepo = $container->get(CCalendarEventAttachmentRepository::class);
+        $courseRepo = $container->get(CourseRepository::class);
 
-        $kernel = $this->getContainer()->get('kernel');
+        /** @var Kernel $kernel */
+        $kernel = $container->get('kernel');
         $rootPath = $kernel->getProjectDir();
         $admin = $this->getAdmin();
-        $oldNewEventMap = [];
+        $oldNewEventIdMap = [];
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
@@ -101,7 +104,8 @@ final class Version20201215072918 extends AbstractMigrationChamilo
                 $em->persist($event);
                 $em->flush();
 
-                $oldNewEventMap[$oldEventId] = $event;
+                $newEventId = $event->getIid();
+                $oldNewEventIdMap[$oldEventId] = $newEventId;
             }
 
             $sql = "SELECT * FROM c_calendar_event_attachment WHERE c_id = {$courseId}
@@ -140,22 +144,17 @@ final class Version20201215072918 extends AbstractMigrationChamilo
             }
         }
 
-        $this->updateAgendaReminders($oldNewEventMap, $em);
+        $this->updateAgendaReminders($oldNewEventIdMap, $em);
     }
 
-    /**
-     * @param array<int, CCalendarEvent> $oldNewEventMap
-     */
-    private function updateAgendaReminders(array $oldNewEventMap, EntityManagerInterface $em): void
+    private function updateAgendaReminders($oldNewEventIdMap, $em): void
     {
         $reminders = $em->getRepository(AgendaReminder::class)->findBy(['type' => 'course']);
-
-        /** @var AgendaReminder $reminder */
         foreach ($reminders as $reminder) {
-            $oldEventId = $reminder->getEvent()->getIid();
-            if (\array_key_exists($oldEventId, $oldNewEventMap)) {
-                $newEvent = $oldNewEventMap[$oldEventId];
-                $reminder->setEvent($newEvent);
+            $oldEventId = $reminder->getEventId();
+            if (\array_key_exists($oldEventId, $oldNewEventIdMap)) {
+                $newEventId = $oldNewEventIdMap[$oldEventId];
+                $reminder->setEventId($newEventId);
                 $em->persist($reminder);
             }
         }

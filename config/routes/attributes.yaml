@@ -1,0 +1,15 @@
+controllers:
+    resource:
+        path: ../../src/CoreBundle/Controller/
+        namespace: Chamilo\CoreBundle\Controller
+    type: attribute
+
+lti_controllers:
+    resource:
+        path: ../../src/LtiBundle/Controller/
+        namespace: Chamilo\LtiBundle\Controller
+    type: attribute
+
+kernel:
+    resource: Chamilo\Kernel
+    type: attribute

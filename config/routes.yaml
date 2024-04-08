@@ -31,7 +31,7 @@ legacy_plugin:
 
 resources_vue:
     path: /resources/{wildcard}
-    controller: Chamilo\CoreBundle\Controller\IndexController::indexAction
+    controller: Chamilo\CoreBundle\Controller\IndexController::index
     requirements:
         wildcard: .*
 

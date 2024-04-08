@@ -46,6 +46,8 @@ class StylesheetsSettingsSchema extends AbstractSettingsSchema
                 'label' => 'Select Stylesheet Theme',
             ])
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 
     private function getThemeChoices(): array

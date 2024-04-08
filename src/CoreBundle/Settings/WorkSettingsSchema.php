@@ -48,5 +48,7 @@ class WorkSettingsSchema extends AbstractSettingsSchema
             ->add('allow_redirect_to_main_page_after_work_upload', YesNoType::class)
             ->add('my_courses_show_pending_work', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 }

@@ -167,6 +167,8 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             ->add('security_session_cookie_samesite_none', YesNoType::class)
             ->add('anonymous_autoprovisioning', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 
     private function settingArrayHelpValue(string $variable): string

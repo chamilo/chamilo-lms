@@ -45,5 +45,7 @@ class SocialSettingsSchema extends AbstractSettingsSchema
             ->add('social_show_language_flag_in_profile', YesNoType::class)
             ->add('social_make_teachers_friend_all', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 }

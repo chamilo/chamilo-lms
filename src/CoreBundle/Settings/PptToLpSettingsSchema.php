@@ -45,5 +45,7 @@ class PptToLpSettingsSchema extends AbstractSettingsSchema
             ->add('ftp_password')
             ->add('path_to_lzx')
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 }

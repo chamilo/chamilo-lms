@@ -47,5 +47,7 @@ class DropboxSettingsSchema extends AbstractSettingsSchema
             ->add('dropbox_hide_course_coach', YesNoType::class)
             ->add('dropbox_hide_general_coach', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 }

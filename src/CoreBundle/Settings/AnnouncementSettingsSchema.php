@@ -64,6 +64,8 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
             ->add('allow_coach_to_edit_announcements', YesNoType::class)
             ->add('course_announcement_scheduled_by_date', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 
     private function settingArrayHelpValue(string $variable): string

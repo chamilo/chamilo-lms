@@ -90,6 +90,8 @@ class SurveySettingsSchema extends AbstractSettingsSchema
             ->add('allow_survey_tool_in_lp', YesNoType::class)
             ->add('show_surveys_base_in_sessions', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 
     private function settingArrayHelpValue(string $variable): string

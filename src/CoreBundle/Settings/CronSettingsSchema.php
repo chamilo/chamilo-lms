@@ -38,5 +38,7 @@ class CronSettingsSchema extends AbstractSettingsSchema
             ->add('cron_remind_course_expiration_frequency')
             ->add('cron_remind_course_expiration_activate', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 }

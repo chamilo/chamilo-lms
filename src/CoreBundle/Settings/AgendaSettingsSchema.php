@@ -108,6 +108,8 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
             )
             ->add('allow_careers_in_global_agenda', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 
     private function settingArrayHelpValue(string $variable): string

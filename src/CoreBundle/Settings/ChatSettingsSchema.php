@@ -38,5 +38,7 @@ class ChatSettingsSchema extends AbstractSettingsSchema
             ->add('hide_chat_video', YesNoType::class)
             ->add('course_chat_restrict_to_coach', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 }

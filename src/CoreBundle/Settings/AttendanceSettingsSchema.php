@@ -44,5 +44,7 @@ class AttendanceSettingsSchema extends AbstractSettingsSchema
             ->add('attendance_calendar_set_duration', YesNoType::class)
             ->add('attendance_allow_comments', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 }

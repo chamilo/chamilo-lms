@@ -392,6 +392,8 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             )
             ->add('allow_edit_tool_visibility_in_session', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 
     private function settingArrayHelpValue(string $variable): string

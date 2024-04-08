@@ -45,5 +45,7 @@ class CasSettingsSchema extends AbstractSettingsSchema
             ->add('cas_add_user_activate')
             ->add('update_user_info_cas_with_ldap', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 }

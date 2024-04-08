@@ -346,6 +346,8 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 ]
             )
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 
     private function settingArrayHelpValue(string $variable): string

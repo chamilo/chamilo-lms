@@ -164,6 +164,8 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
             )
             ->add('send_inscription_msg_to_inbox', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 
     private function settingArrayHelpValue(string $variable): string

@@ -48,5 +48,7 @@ class SearchSettingsSchema extends AbstractSettingsSchema
             )
             ->add('number_of_upcoming_events')
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 }

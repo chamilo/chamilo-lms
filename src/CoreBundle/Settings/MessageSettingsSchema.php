@@ -51,5 +51,7 @@ class MessageSettingsSchema extends AbstractSettingsSchema
             ->add('allow_user_message_tracking', YesNoType::class)
             ->add('filter_interactivity_messages', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 }

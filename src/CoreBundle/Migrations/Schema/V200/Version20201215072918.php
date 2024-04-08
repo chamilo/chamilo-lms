@@ -17,6 +17,7 @@ use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use Chamilo\Kernel;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\ORM\EntityManagerInterface;
 
 final class Version20201215072918 extends AbstractMigrationChamilo
 {
@@ -42,7 +43,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
         $kernel = $container->get('kernel');
         $rootPath = $kernel->getProjectDir();
         $admin = $this->getAdmin();
-        $oldNewEventIdMap = [];
+        $oldNewEventMap = [];
 
         $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
@@ -104,8 +105,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
                 $em->persist($event);
                 $em->flush();
 
-                $newEventId = $event->getIid();
-                $oldNewEventIdMap[$oldEventId] = $newEventId;
+                $oldNewEventMap[$oldEventId] = $event;
             }
 
             $sql = "SELECT * FROM c_calendar_event_attachment WHERE c_id = {$courseId}
@@ -144,17 +144,22 @@ final class Version20201215072918 extends AbstractMigrationChamilo
             }
         }
 
-        $this->updateAgendaReminders($oldNewEventIdMap, $em);
+        $this->updateAgendaReminders($oldNewEventMap, $em);
     }
 
-    private function updateAgendaReminders($oldNewEventIdMap, $em): void
+    /**
+     * @param array<int, CCalendarEvent> $oldNewEventMap
+     */
+    private function updateAgendaReminders(array $oldNewEventMap, EntityManagerInterface $em): void
     {
         $reminders = $em->getRepository(AgendaReminder::class)->findBy(['type' => 'course']);
+
+        /** @var AgendaReminder $reminder */
         foreach ($reminders as $reminder) {
-            $oldEventId = $reminder->getEventId();
-            if (\array_key_exists($oldEventId, $oldNewEventIdMap)) {
-                $newEventId = $oldNewEventIdMap[$oldEventId];
-                $reminder->setEventId($newEventId);
+            $oldEventId = $reminder->getEvent()->getIid();
+            if (\array_key_exists($oldEventId, $oldNewEventMap)) {
+                $newEvent = $oldNewEventMap[$oldEventId];
+                $reminder->setEvent($newEvent);
                 $em->persist($reminder);
             }
         }

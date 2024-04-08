@@ -47,5 +47,7 @@ class TrackingSettingsSchema extends AbstractSettingsSchema
             ->add('meta_twitter_site')
             ->add('meta_twitter_creator')
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 }

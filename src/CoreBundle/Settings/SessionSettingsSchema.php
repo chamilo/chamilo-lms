@@ -230,6 +230,8 @@ class SessionSettingsSchema extends AbstractSettingsSchema
             )
             ->add('session_model_list_field_ordered_by_id', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 
     private function settingArrayHelpValue(string $variable): string

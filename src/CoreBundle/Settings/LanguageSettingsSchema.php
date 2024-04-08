@@ -120,5 +120,7 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
                 'choices' => $choices,
             ]
         );
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 }

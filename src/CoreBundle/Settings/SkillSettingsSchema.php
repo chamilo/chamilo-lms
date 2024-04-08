@@ -61,6 +61,8 @@ class SkillSettingsSchema extends AbstractSettingsSchema
             )
             ->add('allow_skill_rel_items', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 
     private function settingArrayHelpValue(string $variable): string

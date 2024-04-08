@@ -37,5 +37,7 @@ class CertificateSettingsSchema extends AbstractSettingsSchema
             ->add('hide_header_footer', YesNoType::class)
             ->add('add_certificate_pdf_footer', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 }

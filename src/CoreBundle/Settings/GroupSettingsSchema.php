@@ -34,5 +34,7 @@ class GroupSettingsSchema extends AbstractSettingsSchema
             ->add('allow_group_categories', YesNoType::class)
             ->add('hide_course_group_if_no_tools_available', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 }

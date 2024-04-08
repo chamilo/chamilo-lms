@@ -178,6 +178,8 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
             ->add('lp_enable_flow', YesNoType::class)
             ->add('lp_item_prerequisite_dates', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 
     private function settingArrayHelpValue(string $variable): string

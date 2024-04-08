@@ -58,5 +58,7 @@ class GlossarySettingsSchema extends AbstractSettingsSchema
             )
             ->add('allow_remove_tags_in_glossary_export', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 }

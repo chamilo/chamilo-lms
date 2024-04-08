@@ -204,6 +204,8 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                 ]
             )
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 
     private function settingArrayHelpValue(string $variable): string

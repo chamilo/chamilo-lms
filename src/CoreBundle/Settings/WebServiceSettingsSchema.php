@@ -45,5 +45,7 @@ class WebServiceSettingsSchema extends AbstractSettingsSchema
             ->add('decode_utf8', YesNoType::class)
             ->add('allow_download_documents_by_api_key', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 }

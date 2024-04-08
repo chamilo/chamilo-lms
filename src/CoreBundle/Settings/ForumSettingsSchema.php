@@ -59,5 +59,7 @@ class ForumSettingsSchema extends AbstractSettingsSchema
             ->add('allow_forum_category_language_filter', YesNoType::class)
             ->add('subscribe_users_to_forum_notifications_also_in_base_course', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 }

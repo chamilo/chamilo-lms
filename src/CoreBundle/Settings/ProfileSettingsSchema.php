@@ -216,6 +216,8 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
             ->add('career_diagram_disclaimer', YesNoType::class)
             ->add('linkedin_organization_id', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 
     private function settingArrayHelpValue(string $variable): string

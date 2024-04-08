@@ -117,5 +117,7 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
             ->add('default_template')
             ->add('hide_social_media_links', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 }

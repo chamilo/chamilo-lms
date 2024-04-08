@@ -9,10 +9,13 @@ namespace Chamilo\CoreBundle\Settings;
 use Doctrine\ORM\EntityRepository;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class AbstractSettingsSchema implements SchemaInterface
 {
     protected EntityRepository $repository;
+    protected TranslatorInterface $translator;
 
     /**
      * @param array                   $allowedTypes
@@ -25,7 +28,7 @@ abstract class AbstractSettingsSchema implements SchemaInterface
         }
     }
 
-    public function getRepository()
+    public function getRepository(): EntityRepository
     {
         return $this->repository;
     }
@@ -34,4 +37,40 @@ abstract class AbstractSettingsSchema implements SchemaInterface
     {
         $this->repository = $repo;
     }
+
+    public function setTranslator(TranslatorInterface $translator): void
+    {
+        $this->translator = $translator;
+    }
+
+    protected function getSettingsInfoFromDatabase(): array
+    {
+        $settings = $this->getRepository()->findAll();
+        $settingsInfo = [];
+
+        foreach ($settings as $setting) {
+            $settingsInfo[$setting->getVariable()] = [
+                'label' => $this->translator->trans($setting->getTitle()),
+                'help' => $this->translator->trans($setting->getComment()),
+            ];
+        }
+
+        return $settingsInfo;
+    }
+
+    protected function updateFormFieldsFromSettingsInfo(FormBuilderInterface $builder): void
+    {
+        $settingsInfo = $this->getSettingsInfoFromDatabase();
+        foreach ($builder->all() as $fieldName => $field) {
+            if (isset($settingsInfo[$fieldName])) {
+                $fieldConfig = $settingsInfo[$fieldName];
+                $options = $field->getOptions();
+                $options['label'] = $this->translator->trans($fieldConfig['label']);
+                $options['help'] = $this->translator->trans($fieldConfig['help']);
+                $builder->remove($fieldName);
+                $builder->add($fieldName, get_class($field->getType()->getInnerType()), $options);
+            }
+        }
+    }
+
 }

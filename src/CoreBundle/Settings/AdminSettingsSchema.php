@@ -51,14 +51,7 @@ class AdminSettingsSchema extends AbstractSettingsSchema
     public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
-            ->add(
-                'administrator_name',
-                TextType::class,
-                [
-                    'label' => 'emailAdministratorTitle',
-                    'help' => 'emailAdministratorComment',
-                ]
-            )
+            ->add('administrator_name', TextType::class)
             ->add('administrator_surname')
             ->add('administrator_email', EmailType::class)
             ->add('administrator_phone')
@@ -83,6 +76,8 @@ class AdminSettingsSchema extends AbstractSettingsSchema
             )
             ->add('admin_chamilo_announcements_disable', YesNoType::class)
         ;
+
+        $this->updateFormFieldsFromSettingsInfo($builder);
     }
 
     private function settingArrayHelpValue(string $variable): string

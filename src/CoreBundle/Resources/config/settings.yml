@@ -3,6 +3,14 @@ services:
         autowire: true
         public: true
 
+    _instanceof:
+      Chamilo\CoreBundle\Settings\AbstractSettingsSchema:
+        calls:
+          - method: 'setRepository'
+            arguments: [ '@Chamilo\CoreBundle\Repository\SettingsCurrentRepository' ]
+          - method: 'setTranslator'
+            arguments: [ '@translator' ]
+
     chamilo_core.settings.admin:
         class: Chamilo\CoreBundle\Settings\AdminSettingsSchema
         tags:

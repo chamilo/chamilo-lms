@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Repository\TagRepository;
 use DateTime;
 use GoogleMapsPlugin;
 use Oh\GoogleMapFormTypeBundle\Form\Type\GoogleMapType;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -28,7 +29,6 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Security\Core\Security;
 
 /**
  * @template-extends AbstractType<array>

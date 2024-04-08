@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/contact/category')]
 class ContactCategoryController extends AbstractController
@@ -46,7 +46,7 @@ class ContactCategoryController extends AbstractController
             return $this->redirectToRoute('chamilo_contact_category_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('@ChamiloCore/ContactCategory/new.html.twig', [
+        return $this->render('@ChamiloCore/ContactCategory/new.html.twig', [
             'contact_category' => $contactCategory,
             'form' => $form,
         ]);
@@ -72,7 +72,7 @@ class ContactCategoryController extends AbstractController
             return $this->redirectToRoute('chamilo_contact_category_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('@ChamiloCore/ContactCategory/edit.html.twig', [
+        return $this->render('@ChamiloCore/ContactCategory/edit.html.twig', [
             'contact_category' => $contactCategory,
             'form' => $form,
         ]);

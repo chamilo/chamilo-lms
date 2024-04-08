@@ -11,8 +11,8 @@ use Chamilo\CoreBundle\Traits\AccessUrlListenerTrait;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Exception;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Security;
 
 /**
  * Session entity listener, when a session is created/updated.

@@ -45,13 +45,13 @@ use Event;
 use Exception;
 use Exercise;
 use ExtraFieldValue;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -132,7 +132,6 @@ class CourseController extends ToolBaseController
     }
 
     #[Route('/{cid}/home.json', name: 'chamilo_core_course_home_json')]
-    #[Entity('course', expr: 'repository.find(cid)')]
     public function indexJson(
         Request $request,
         CShortcutRepository $shortcutRepository,
@@ -307,9 +306,9 @@ class CourseController extends ToolBaseController
      * Edit configuration with given namespace.
      */
     #[Route('/{cid}/settings/{namespace}', name: 'chamilo_core_course_settings')]
-    #[Entity('course', expr: 'repository.find(cid)')]
     public function updateSettings(
         Request $request,
+        #[MapEntity(expr: 'repository.find(cid)')]
         Course $course,
         string $namespace,
         SettingsCourseManager $manager,
@@ -351,7 +350,7 @@ class CourseController extends ToolBaseController
                 'course' => $course,
                 'schemas' => $schemas,
                 'settings' => $settings,
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }

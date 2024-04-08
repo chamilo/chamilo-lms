@@ -14,7 +14,7 @@ use Chamilo\CoreBundle\Repository\PageRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -128,32 +128,6 @@ class IndexBlocksController extends BaseController
         return $this->json($json);
     }
 
-    private function getExtraContent(string $title): ?array
-    {
-        /** @var Page|null $page */
-        $page = $this->pageRepository->findOneBy(['title' => $title]);
-
-        $pageJsonld = $this->serializer->serialize($page, 'jsonld', ['groups' => ['adminblock:read']]);
-        $pageArray = json_decode($pageJsonld, true);
-
-        if ($page) {
-            return $pageArray;
-        }
-
-        /** @var PageCategory $category */
-        $category = $this->pageCategoryRepository->findOneBy(['title' => $title]);
-        $categoryJsonld = $this->serializer->serialize($category, 'jsonld', ['groups' => ['page:read']]);
-        $categoryArray = json_decode($categoryJsonld, true);
-
-        if (empty($categoryArray)) {
-            return [];
-        }
-
-        return [
-            'category' => $categoryArray['@id'],
-        ];
-    }
-
     private function getItemsUsers(): array
     {
         $items = [];
@@ -264,6 +238,32 @@ class IndexBlocksController extends BaseController
         }
 
         return array_values($items);
+    }
+
+    private function getExtraContent(string $title): ?array
+    {
+        /** @var Page|null $page */
+        $page = $this->pageRepository->findOneBy(['title' => $title]);
+
+        $pageJsonld = $this->serializer->serialize($page, 'jsonld', ['groups' => ['adminblock:read']]);
+        $pageArray = json_decode($pageJsonld, true);
+
+        if ($page) {
+            return $pageArray;
+        }
+
+        /** @var PageCategory $category */
+        $category = $this->pageCategoryRepository->findOneBy(['title' => $title]);
+        $categoryJsonld = $this->serializer->serialize($category, 'jsonld', ['groups' => ['page:read']]);
+        $categoryArray = json_decode($categoryJsonld, true);
+
+        if (empty($categoryArray)) {
+            return [];
+        }
+
+        return [
+            'category' => $categoryArray['@id'],
+        ];
     }
 
     private function getItemsCourses(): array
@@ -512,96 +512,6 @@ class IndexBlocksController extends BaseController
         return $items;
     }
 
-    private function getItemsSessions(): array
-    {
-        $items = [];
-        $items[] = [
-            'class' => 'item-session-list',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'session/session_list.php']),
-            'label' => $this->translator->trans('Training sessions list'),
-        ];
-        $items[] = [
-            'class' => 'item-session-add',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'session/session_add.php']),
-            'label' => $this->translator->trans('Add a training session'),
-        ];
-        $items[] = [
-            'class' => 'item-session-category',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'session/session_category_list.php']),
-            'label' => $this->translator->trans('Sessions categories list'),
-        ];
-        $items[] = [
-            'class' => 'item-session-import',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'session/session_import.php']),
-            'label' => $this->translator->trans('Import sessions list'),
-        ];
-        $items[] = [
-            'class' => 'item-session-import-hr',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'session/session_import_drh.php']),
-            'label' => $this->translator->trans('Import list of HR directors into sessions'),
-        ];
-        if (\count($this->extAuthSource['ldap']) > 0) {
-            $items[] = [
-                'class' => 'item-session-subscription-ldap-import',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/ldap_import_students_to_session.php']),
-                'label' => $this->translator->trans('Import LDAP users into a session'),
-            ];
-        }
-        $items[] = [
-            'class' => 'item-session-export',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'session/session_export.php']),
-            'label' => $this->translator->trans('Export sessions list'),
-        ];
-
-        $items[] = [
-            'class' => 'item-session-course-copy',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'coursecopy/copy_course_session.php']),
-            'label' => $this->translator->trans('Copy from course in session to another session'),
-        ];
-
-        $allowCareer = $this->settingsManager->getSetting('session.allow_session_admin_read_careers');
-
-        if ($this->isAdmin || ('true' === $allowCareer && $this->isSessionAdmin)) {
-            // option only visible in development mode. Enable through code if required
-            if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
-                $items[] = [
-                    'class' => 'item-session-user-move-stats',
-                    'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_move_stats.php']),
-                    'label' => $this->translator->trans('Move users results from/to a session'),
-                ];
-            }
-
-            $items[] = [
-                'class' => 'item-session-user-move',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'coursecopy/move_users_from_course_to_session.php']),
-                'label' => $this->translator->trans('Move users results from base course to a session'),
-            ];
-
-            $items[] = [
-                'class' => 'item-career-dashboard',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/career_dashboard.php']),
-                'label' => $this->translator->trans('Careers and promotions'),
-            ];
-            $items[] = [
-                'class' => 'item-session-field',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/extra_fields.php', 'type' => 'session']),
-                'label' => $this->translator->trans('Manage session fields'),
-            ];
-            $items[] = [
-                'class' => 'item-resource-sequence',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/resource_sequence.php']),
-                'label' => $this->translator->trans('Resources sequencing'),
-            ];
-            $items[] = [
-                'class' => 'item-export-exercise-results',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/export_exercise_results.php']),
-                'label' => $this->translator->trans('Export all results from an exercise'),
-            ];
-        }
-
-        return $items;
-    }
-
     private function getItemsSettings(): array
     {
         $items = [];
@@ -695,6 +605,7 @@ class IndexBlocksController extends BaseController
             'url' => $this->generateUrl('legacy_main', ['name' => 'skills/skills_gradebook.php']),
             'label' => $this->translator->trans('Skills and assessments'),
         ];
+
         /*$items[] = [
             'url' => $this->$this->generateUrl('legacy_main', ['name' => 'admin/skill_badge.php'),
             'label' => $this->translator->trans('Badges'),
@@ -797,6 +708,99 @@ class IndexBlocksController extends BaseController
             'url' => 'https://chamilo.org/providers',
             'label' => $this->translator->trans('Chamilo official services providers'),
         ];
+
+        return $items;
+    }
+
+    private function getItemsSessions(): array
+    {
+        $items = [];
+        $items[] = [
+            'class' => 'item-session-list',
+            'url' => $this->generateUrl('legacy_main', ['name' => 'session/session_list.php']),
+            'label' => $this->translator->trans('Training sessions list'),
+        ];
+        $items[] = [
+            'class' => 'item-session-add',
+            'url' => $this->generateUrl('legacy_main', ['name' => 'session/session_add.php']),
+            'label' => $this->translator->trans('Add a training session'),
+        ];
+        $items[] = [
+            'class' => 'item-session-category',
+            'url' => $this->generateUrl('legacy_main', ['name' => 'session/session_category_list.php']),
+            'label' => $this->translator->trans('Sessions categories list'),
+        ];
+        $items[] = [
+            'class' => 'item-session-import',
+            'url' => $this->generateUrl('legacy_main', ['name' => 'session/session_import.php']),
+            'label' => $this->translator->trans('Import sessions list'),
+        ];
+        $items[] = [
+            'class' => 'item-session-import-hr',
+            'url' => $this->generateUrl('legacy_main', ['name' => 'session/session_import_drh.php']),
+            'label' => $this->translator->trans('Import list of HR directors into sessions'),
+        ];
+        if (\count($this->extAuthSource['ldap']) > 0) {
+            $items[] = [
+                'class' => 'item-session-subscription-ldap-import',
+                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/ldap_import_students_to_session.php']),
+                'label' => $this->translator->trans('Import LDAP users into a session'),
+            ];
+        }
+        $items[] = [
+            'class' => 'item-session-export',
+            'url' => $this->generateUrl('legacy_main', ['name' => 'session/session_export.php']),
+            'label' => $this->translator->trans('Export sessions list'),
+        ];
+
+        $items[] = [
+            'class' => 'item-session-course-copy',
+            'url' => $this->generateUrl('legacy_main', ['name' => 'coursecopy/copy_course_session.php']),
+            'label' => $this->translator->trans('Copy from course in session to another session'),
+        ];
+
+        $allowCareer = $this->settingsManager->getSetting('session.allow_session_admin_read_careers');
+
+        if ($this->isAdmin || ('true' === $allowCareer && $this->isSessionAdmin)) {
+            // option only visible in development mode. Enable through code if required
+            if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
+                $items[] = [
+                    'class' => 'item-session-user-move-stats',
+                    'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_move_stats.php']),
+                    'label' => $this->translator->trans('Move users results from/to a session'),
+                ];
+            }
+
+            $items[] = [
+                'class' => 'item-session-user-move',
+                'url' => $this->generateUrl(
+                    'legacy_main',
+                    ['name' => 'coursecopy/move_users_from_course_to_session.php']
+                ),
+                'label' => $this->translator->trans('Move users results from base course to a session'),
+            ];
+
+            $items[] = [
+                'class' => 'item-career-dashboard',
+                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/career_dashboard.php']),
+                'label' => $this->translator->trans('Careers and promotions'),
+            ];
+            $items[] = [
+                'class' => 'item-session-field',
+                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/extra_fields.php', 'type' => 'session']),
+                'label' => $this->translator->trans('Manage session fields'),
+            ];
+            $items[] = [
+                'class' => 'item-resource-sequence',
+                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/resource_sequence.php']),
+                'label' => $this->translator->trans('Resources sequencing'),
+            ];
+            $items[] = [
+                'class' => 'item-export-exercise-results',
+                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/export_exercise_results.php']),
+                'label' => $this->translator->trans('Export all results from an exercise'),
+            ];
+        }
 
         return $items;
     }

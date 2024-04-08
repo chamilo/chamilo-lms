@@ -9,13 +9,13 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Exception\ValidatorException;
 
 #[Route('/admin')]
@@ -84,7 +84,7 @@ class SettingsController extends BaseController
                 'schemas' => $schemas,
                 'settings' => $settings,
                 'form_list' => $formList,
-                'search_form' => $searchForm->createView(),
+                'search_form' => $searchForm,
             ]
         );
     }
@@ -167,7 +167,7 @@ class SettingsController extends BaseController
                 'settings' => $settings,
                 'form' => $form->createView(),
                 'keyword' => $keyword,
-                'search_form' => $searchForm->createView(),
+                'search_form' => $searchForm,
             ]
         );
     }

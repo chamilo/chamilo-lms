@@ -8,7 +8,7 @@ namespace Chamilo\CoreBundle\Controller;
 
 use SocialManager;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com>.

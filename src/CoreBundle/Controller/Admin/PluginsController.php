@@ -8,9 +8,9 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 
 use AppPlugin;
 use Chamilo\CoreBundle\Controller\BaseController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/plugins')]
 class PluginsController extends BaseController

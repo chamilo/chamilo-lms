@@ -14,9 +14,9 @@ use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\EntityManager;
 use Exception;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
 
 class CreateSocialPostAttachmentAction extends BaseResourceFileAction
 {

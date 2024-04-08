@@ -30,7 +30,7 @@ use OAuthSignatureMethod_HMAC_SHA1;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use UserManager;
 
@@ -70,7 +70,7 @@ class CourseController extends ToolBaseController
                     'title' => $this->trans('Edit external tool'),
                     'added_tools' => [],
                     'global_tools' => [],
-                    'form' => $form->createView(),
+                    'form' => $form,
                     'course' => $course,
                 ]
             );
@@ -434,7 +434,7 @@ class CourseController extends ToolBaseController
                         'parent' => null,
                         'course' => null,
                     ]),
-                    'form' => $form->createView(),
+                    'form' => $form,
                     'course' => $course,
                     'actions' => $actions,
                 ]

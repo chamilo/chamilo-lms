@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\DataProvider\Extension;
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 trait CourseLinkExtensionTrait
 {

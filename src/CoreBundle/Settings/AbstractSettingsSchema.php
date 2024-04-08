@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Settings;
 
@@ -68,9 +68,8 @@ abstract class AbstractSettingsSchema implements SchemaInterface
                 $options['label'] = $this->translator->trans($fieldConfig['label']);
                 $options['help'] = $this->translator->trans($fieldConfig['help']);
                 $builder->remove($fieldName);
-                $builder->add($fieldName, get_class($field->getType()->getInnerType()), $options);
+                $builder->add($fieldName, \get_class($field->getType()->getInnerType()), $options);
             }
         }
     }
-
 }

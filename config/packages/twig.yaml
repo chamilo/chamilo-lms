@@ -1,6 +1,4 @@
 twig:
-    cache:
-        '%kernel.cache_dir%/twig'
     paths:
         - '%kernel.project_dir%/var/templates'
         - '%kernel.project_dir%/public/main/template'
@@ -9,6 +7,8 @@ twig:
     form_themes:
         - '@OhGoogleMapFormType/Form/fields.html.twig'
         - 'form-theme.html.twig'
+
+    file_name_pattern: '*.twig'
 
     globals:
         software_name: Chamilo

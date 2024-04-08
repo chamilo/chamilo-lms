@@ -5,6 +5,10 @@
 /**
  * This script send notification messages to users that have reminders from an event in their agenda.
  */
+
+use Chamilo\CoreBundle\Entity\AgendaReminder;
+use Chamilo\CourseBundle\Entity\CCalendarEvent;
+
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 exit;
@@ -15,7 +19,7 @@ $batchSize = 100;
 $now = new DateTime('now', new DateTimeZone('UTC'));
 
 $em = Database::getManager();
-$remindersRepo = $em->getRepository(\Chamilo\CoreBundle\Entity\AgendaReminder::class);
+$remindersRepo = $em->getRepository(AgendaReminder::class);
 
 $reminders = $remindersRepo->findBy(['sent' => false]);
 
@@ -27,10 +31,9 @@ if (empty($senderId)) {
 }
 
 foreach ($reminders as $reminder) {
+    $event = $reminder->getEvent();
 
     if ('personal' === $reminder->getType()) {
-        $event = $em->getRepository(\Chamilo\CourseBundle\Entity\CCalendarEvent::class)->find($reminder->getEventId());
-
         if (null === $event) {
             continue;
         }
@@ -76,8 +79,7 @@ foreach ($reminders as $reminder) {
         );
 
 
-        $getInviteesForEvent = function ($eventId) use ($em) {
-            $event = $em->find(\Chamilo\CourseBundle\Entity\CCalendarEvent::class, $eventId);
+        $getInviteesForEvent = function (?CCalendarEvent $event) use ($em) {
             if (!$event) {
                 return [];
             }
@@ -97,7 +99,7 @@ foreach ($reminders as $reminder) {
             return $inviteeList;
         };
 
-        $invitees = $getInviteesForEvent($reminder->getEventId());
+        $invitees = $getInviteesForEvent($reminder->getEvent());
         $inviteesIdList = array_column($invitees, 'id');
         foreach ($inviteesIdList as $userId) {
             MessageManager::send_message_simple(
@@ -110,8 +112,6 @@ foreach ($reminders as $reminder) {
     }
 
     if ('course' === $reminder->getType()) {
-
-        $event = $em->getRepository(\Chamilo\CourseBundle\Entity\CCalendarEvent::class)->find($reminder->getEventId());
         if (null === $event) {
             continue;
         }

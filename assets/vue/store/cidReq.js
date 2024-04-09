@@ -8,7 +8,7 @@ export const useCidReqStore = defineStore("cidReq", () => {
   const course = ref(null)
   const session = ref(null)
   const group = ref(null)
-  const isCourseLoaded = ref(false)
+  const isCourseLoaded = ref(true)
 
   const userIsCoach = computed(() => {
     const platformConfigStore = usePlatformConfig()
@@ -56,6 +56,8 @@ export const useCidReqStore = defineStore("cidReq", () => {
     if (course.value && iri === course.value["@id"]) {
       return
     }
+
+    isCourseLoaded.value = false
 
     try {
       course.value = await courseService.find(iri, { sid })
@@ -111,6 +113,6 @@ export const useCidReqStore = defineStore("cidReq", () => {
     setCourseAndSessionByIri,
     setCourseAndSessionById,
 
-    isCourseLoaded
+    isCourseLoaded,
   }
 })

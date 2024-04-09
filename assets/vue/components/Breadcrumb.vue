@@ -4,6 +4,7 @@
       <Skeleton
         height="1rem"
         width="20rem"
+        class="mb-2"
       />
     </div>
     <div

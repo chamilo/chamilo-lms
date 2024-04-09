@@ -427,7 +427,7 @@ class DocumentManager
 
             switch ($contentType) {
                 case 'text/html':
-                    $enableMathJaxScript = api_get_setting('enabled_mathjax');
+                    $enableMathJaxScript = api_get_setting('enabled_mathjax') && api_get_configuration_value('mathjax_enable_script_header_in_all_HTML_document');
                     if (isset($lpFixedEncoding) && $lpFixedEncoding === 'true') {
                         $contentType .= '; charset=UTF-8';
                     } else {
@@ -481,12 +481,12 @@ class DocumentManager
                     ['https%3A%2F%2F', 'https://'],
                     $content
                 );
-                if ($enableMathJaxScript) {
+                if ($enableMathJaxScript === true) {
                     $content = self::includeMathJaxScript($content);
                 }
                 echo $content;
             } else {
-                if ($enableMathJaxScript) {
+                if ($enableMathJaxScript === true) {
                     $content = file_get_contents($full_file_name);
                     $content = self::includeMathJaxScript($content);
                     echo $content;

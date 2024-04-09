@@ -36,32 +36,14 @@ class TrackELoginRepository extends ServiceEntityRepository
 
     public function updateLastLoginLogoutDate(int $userId, DateTime $logoutDate): void
     {
-        $query = $this->createQueryBuilder('t')
-            ->select('t.loginId')
-            ->where('t.user = :userId')
-            ->andWhere('t.logoutDate IS NULL')
-            ->setParameter('userId', $userId)
-            ->orderBy('t.loginDate', 'DESC')
-            ->setMaxResults(1)
-            ->getQuery()
-        ;
+        $lastLoginRecord = $this->findOneBy(
+            ['user' => $userId, 'logoutDate' => null],
+            ['loginDate' => 'DESC']
+        );
 
-        try {
-            $lastLoginId = $query->getSingleScalarResult();
-        } catch (NoResultException|NonUniqueResultException) {
-            $lastLoginId = 0;
-        }
-
-        if ($lastLoginId) {
-            $qb = $this->createQueryBuilder('t')
-                ->update()
-                ->set('t.logoutDate', ':logoutDate')
-                ->where('t.loginId = :loginId')
-                ->setParameter('loginId', $lastLoginId)
-                ->setParameter('logoutDate', $logoutDate)
-            ;
-
-            $qb->getQuery()->execute();
+        if ($lastLoginRecord !== null) {
+            $lastLoginRecord->setLogoutDate($logoutDate);
+            $this->_em->flush();
         }
     }
 }

@@ -15,16 +15,23 @@
         />
         <div
           v-else
-          class="flex mx-7 mb-2 -my-1 py-2 gap-2 mr-3"
+          class="flex mx-7 my-1.5 py-2 ml-8 gap-4"
         >
-          <Skeleton
-            height="1.5rem"
-            width="1.5rem"
+          <BaseIcon
+            size="small"
+            class="text-sm"
+            icon="courses"
           />
-          <Skeleton
+          <div
             v-if="sidebarIsOpen"
-            height="1.5rem"
-            width="7rem"
+            class="font-bold text-sm self-center"
+          >
+            {{ t("Course") }}
+          </div>
+          <BaseIcon
+            size="small"
+            class="text-sm animate-spin"
+            icon="sync"
           />
         </div>
         <PanelMenu :model="menuItemsAfterMyCourse" />
@@ -71,7 +78,7 @@ import { useSecurityStore } from "../../store/securityStore"
 import { useSidebarMenu } from "../../composables/sidebarMenu"
 import PageList from "../page/PageList.vue"
 import { useEnrolledStore } from "../../store/enrolledStore"
-import Skeleton from "primevue/skeleton"
+import BaseIcon from "../basecomponents/BaseIcon.vue"
 
 const { t } = useI18n()
 const securityStore = useSecurityStore()

@@ -5,11 +5,12 @@
       <ColorPicker
         format="hex"
         :model-value="hexColor"
+        class="w-11"
         @update:model-value="colorPicked"
       />
       <BaseInputText
         label=""
-        class="max-w-32"
+        class="w-32"
         input-class="mb-0"
         :model-value="hexColor"
         :error-text="inputHexError"
@@ -24,7 +25,10 @@
     >
       {{ error }}
     </small>
-    <div v-else class="h-4"></div>
+    <div
+      v-else
+      class="h-4"
+    ></div>
   </div>
 </template>
 

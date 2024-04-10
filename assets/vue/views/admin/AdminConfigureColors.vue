@@ -445,7 +445,7 @@ import themeService from "../../services/colorThemeService"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 
 const { t } = useI18n()
-const { getColorTheme, getColors } = useTheme()
+const { getColorTheme, getColors, setColors } = useTheme()
 const { showSuccessNotification, showErrorNotification } = useNotification()
 
 let colorPrimary = getColorTheme("--color-primary-base")
@@ -484,6 +484,34 @@ const isServerThemesLoading = ref(true)
 const selectedTheme = ref(null)
 
 onMounted(async () => {
+  await refreshThemes()
+})
+
+const selectTheme = (slug) => {
+  const found = serverThemes.value.find((e) => e.slug === slug) ?? null
+  if (found) {
+    selectedTheme.value = found
+    setColors(selectedTheme.value.variables)
+  }
+}
+
+const saveColors = async () => {
+  if (selectedTheme.value === null) {
+    showErrorNotification(t("You must select a theme in order to save it"))
+    return
+  }
+  try {
+    await themeService.updateTheme(selectedTheme.value.title, getColors())
+    showSuccessNotification(t("Colors updated"))
+  } catch (error) {
+    showErrorNotification(error)
+    console.error(error)
+  }
+
+  await refreshThemes()
+}
+
+const refreshThemes = async () => {
   try {
     serverThemes.value = await themeService.getThemes()
     const found = serverThemes.value.find((e) => e.active) ?? null
@@ -493,25 +521,6 @@ onMounted(async () => {
     isServerThemesLoading.value = false
   } catch (error) {
     showErrorNotification(t("We could not retrieve the themes"))
-    console.error(error)
-  }
-})
-
-const selectTheme = (slug) => {
-  selectedTheme.value = serverThemes.value.find((e) => e.slug === slug) ?? null
-}
-
-const saveColors = async () => {
-  if (selectedTheme.value === null) {
-    showErrorNotification(t("You must select a theme in order to save it"))
-    return
-  }
-  let colors = getColors()
-  try {
-    await themeService.updateTheme(selectedTheme.value.title, selectedTheme.value.colors)
-    showSuccessNotification(t("Colors updated"))
-  } catch (error) {
-    showErrorNotification(error)
     console.error(error)
   }
 }

@@ -41,6 +41,16 @@ export const useTheme = () => {
     return colorsPlainObject
   }
 
+  const setColors = (colorsObj) => {
+    for (const key in colorsObj) {
+      if (colors[key] === undefined || colors[key] === null) {
+        console.error(`Color with key ${key} is on color set`)
+        continue
+      }
+      colors[key].value = colorFromCSSVariable(colorsObj[key])
+    }
+  }
+
   const colorToCSSVariable = (color) => {
     // according to documentation https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/rgb#syntax
     // the format "r g b" should work but because how rules in css are defined does not
@@ -58,5 +68,6 @@ export const useTheme = () => {
   return {
     getColorTheme,
     getColors,
+    setColors,
   }
 }

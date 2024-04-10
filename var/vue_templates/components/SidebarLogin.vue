@@ -14,6 +14,14 @@ const { performLogin, isLoading } = useLogin()
 const login = ref("")
 const password = ref("")
 const remember = ref(false)
+
+function onSubmitLoginForm() {
+  performLogin({
+    login: login.value,
+    password: password.value,
+    _remember_me: remember.value,
+  })
+}
 </script>
 
 <template>
@@ -24,7 +32,7 @@ const remember = ref(false)
   >
     <form
       class="login-section__form p-input-filled"
-      @submit.prevent="performLogin"
+      @submit.prevent="onSubmitLoginForm"
     >
       <div class="mb-2">
         <InputText

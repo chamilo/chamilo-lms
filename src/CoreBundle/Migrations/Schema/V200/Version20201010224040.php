@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Entity\SysAnnouncement;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
 final class Version20201010224040 extends AbstractMigrationChamilo
@@ -21,17 +20,11 @@ final class Version20201010224040 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $doctrine = $this->getContainer()->get('doctrine');
-        $em = $this->getEntityManager();
-
-        /** @var Connection $connection */
-        $connection = $em->getConnection();
-
         $sql = 'SELECT * FROM sys_announcement';
-        $result = $connection->executeQuery($sql);
+        $result = $this->connection->executeQuery($sql);
         $items = $result->fetchAllAssociative();
 
-        $repo = $this->getContainer()->get(SysAnnouncementRepository::class);
+        $repo = $this->container->get(SysAnnouncementRepository::class);
 
         foreach ($items as $itemData) {
             $id = $itemData['id'];

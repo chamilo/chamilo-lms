@@ -25,20 +25,18 @@ final class Version20231026231100 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $em = $this->getEntityManager();
-
-        $kernel = $this->getContainer()->get('kernel');
+        $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
         $repo = $this->container->get(SocialPostAttachmentRepository::class);
         $socialPostRepo = $this->container->get(SocialPostRepository::class);
 
-        $sub = $em->createQueryBuilder();
+        $sub = $this->entityManager->createQueryBuilder();
         $sub->select('sp.id')
             ->from('Chamilo\CoreBundle\Entity\SocialPost', 'sp')
         ;
 
-        $qb = $em->createQueryBuilder();
+        $qb = $this->entityManager->createQueryBuilder();
         $qb->select('ma')
             ->from('Chamilo\CoreBundle\Entity\MessageAttachment', 'ma')
             ->where($qb->expr()->in('ma.message', $sub->getDQL()))
@@ -76,8 +74,8 @@ final class Version20231026231100 extends AbstractMigrationChamilo
                     $attachment->addUserLink($sender);
                     $attachment->setCreator($sender);
 
-                    $em->persist($attachment);
-                    $em->flush();
+                    $this->entityManager->persist($attachment);
+                    $this->entityManager->flush();
 
                     $repo->addFile($attachment, $uploadFile);
                 }

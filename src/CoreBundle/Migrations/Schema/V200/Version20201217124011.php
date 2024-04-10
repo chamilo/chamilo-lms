@@ -31,10 +31,6 @@ final class Version20201217124011 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $em = $this->getEntityManager();
-
-        $connection = $em->getConnection();
-
         $studentPublicationRepo = $this->container->get(CStudentPublicationRepository::class);
         $studentPublicationCommentRepo = $this->container->get(CStudentPublicationCommentRepository::class);
         $studentPublicationCorrectionRepo = $this->container->get(CStudentPublicationCorrectionRepository::class);
@@ -44,12 +40,12 @@ final class Version20201217124011 extends AbstractMigrationChamilo
 
         // $userRepo = $container->get(UserRepository::class);
         /** @var Kernel $kernel */
-        $kernel = $this->getContainer()->get('kernel');
+        $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
         $admin = $this->getAdmin();
 
-        $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
@@ -59,7 +55,7 @@ final class Version20201217124011 extends AbstractMigrationChamilo
             // Assignments folders.
             $sql = "SELECT * FROM c_student_publication WHERE contains_file = 0 AND c_id = {$courseId}
                     ORDER BY iid";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
@@ -83,12 +79,12 @@ final class Version20201217124011 extends AbstractMigrationChamilo
                     continue;
                 }
 
-                $em->persist($resource);
-                $em->flush();
+                $this->entityManager->persist($resource);
+                $this->entityManager->flush();
             }
 
-            $em->flush();
-            $em->clear();
+            $this->entityManager->flush();
+            $this->entityManager->clear();
 
             // Assignments files.
             $sql = "SELECT * FROM c_student_publication
@@ -96,7 +92,7 @@ final class Version20201217124011 extends AbstractMigrationChamilo
                           contains_file = 1 AND
                           c_id = {$courseId}
                     ORDER BY iid";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $course = $courseRepo->find($courseId);
@@ -129,12 +125,12 @@ final class Version20201217124011 extends AbstractMigrationChamilo
                 $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/'.$path;
                 error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                 $this->addLegacyFileToResource($filePath, $studentPublicationRepo, $resource, $id, $title);
-                $em->persist($resource);
-                $em->flush();
+                $this->entityManager->persist($resource);
+                $this->entityManager->flush();
             }
 
-            $em->flush();
-            $em->clear();
+            $this->entityManager->flush();
+            $this->entityManager->clear();
 
             $admin = $this->getAdmin();
 
@@ -144,7 +140,7 @@ final class Version20201217124011 extends AbstractMigrationChamilo
                           (title_correction <> '' OR title_correction IS NOT NULL) AND
                           c_id = {$courseId}
                     ORDER BY iid";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
@@ -164,22 +160,22 @@ final class Version20201217124011 extends AbstractMigrationChamilo
                 $correction->setTitle($title);
                 $correction->setParent($studentPublication);
                 $studentPublicationCorrectionRepo->addResourceNode($correction, $admin, $studentPublication);
-                $em->persist($correction);
+                $this->entityManager->persist($correction);
 
                 $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/'.$path;
                 error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                 $this->addLegacyFileToResource($filePath, $studentPublicationCorrectionRepo, $correction, null, $title);
-                $em->persist($correction);
-                $em->flush();
+                $this->entityManager->persist($correction);
+                $this->entityManager->flush();
             }
 
-            $em->flush();
-            $em->clear();
+            $this->entityManager->flush();
+            $this->entityManager->clear();
 
             // Comments.
             $sql = "SELECT * FROM c_student_publication_comment WHERE c_id = {$courseId}
                     ORDER BY iid";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
@@ -195,7 +191,7 @@ final class Version20201217124011 extends AbstractMigrationChamilo
                 /** @var CStudentPublication $parent */
                 $parent = $studentPublicationRepo->find($workId);
                 $sql = "SELECT * FROM c_student_publication WHERE c_id = {$courseId} AND id = {$workId}";
-                $result = $connection->executeQuery($sql);
+                $result = $this->connection->executeQuery($sql);
                 $work = $result->fetchAssociative();
                 if (empty($work)) {
                     continue;
@@ -209,8 +205,8 @@ final class Version20201217124011 extends AbstractMigrationChamilo
                 $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/'.$file;
                 error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                 $this->addLegacyFileToResource($filePath, $studentPublicationRepo, $resource, $id, $title);
-                $em->persist($resource);
-                $em->flush();
+                $this->entityManager->persist($resource);
+                $this->entityManager->flush();
             }
         }
     }

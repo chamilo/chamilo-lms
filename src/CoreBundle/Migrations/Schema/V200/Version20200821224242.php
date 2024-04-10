@@ -18,7 +18,6 @@ final class Version20200821224242 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $connection = $this->getEntityManager()->getConnection();
         if ($schema->hasTable('message_feedback')) {
             $table = $schema->getTable('message_feedback');
             if ($table->hasForeignKey('FK_DB0F8049537A1329')) {
@@ -44,14 +43,14 @@ final class Version20200821224242 extends AbstractMigrationChamilo
         $this->addSql('UPDATE message SET parent_id = NULL WHERE parent_id = 0');
 
         $sql = 'SELECT id, parent_id FROM message WHERE parent_id IS NOT NULL AND parent_id <> 0';
-        $result = $connection->executeQuery($sql);
+        $result = $this->connection->executeQuery($sql);
         $items = $result->fetchAllAssociative();
 
         foreach ($items as $item) {
             $id = $item['id'];
             $parentId = (int) $item['parent_id'];
             $sql = "SELECT id FROM message WHERE id = $parentId";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $subItem = $result->fetchAllAssociative();
 
             if (empty($subItem)) {
@@ -112,8 +111,8 @@ final class Version20200821224242 extends AbstractMigrationChamilo
         // $this->addSql('ALTER TABLE message CHANGE user_receiver_id user_receiver_id INT DEFAULT NULL');
         $this->addSql('UPDATE message SET user_receiver_id = NULL WHERE user_receiver_id = 0');
 
-        /*$connection = $this->getEntityManager()->getConnection();
-        $result = $connection->executeQuery('SELECT * FROM message WHERE user_receiver_id IS NOT NULL');
+        /*
+        $result = $this->connection->executeQuery('SELECT * FROM message WHERE user_receiver_id IS NOT NULL');
         $messages = $result->fetchAllAssociative();
 
         if ($messages) {
@@ -121,7 +120,7 @@ final class Version20200821224242 extends AbstractMigrationChamilo
                 $messageId = $message['id'];
                 $receiverId = $message['user_receiver_id'];
 
-                $result = $connection->executeQuery(" SELECT * FROM message_rel_user WHERE message_id = $messageId AND user_id = $receiverId");
+                $result = $this->connection->executeQuery(" SELECT * FROM message_rel_user WHERE message_id = $messageId AND user_id = $receiverId");
                 $exists = $result->fetchAllAssociative();
 
                 if (empty($exists)) {

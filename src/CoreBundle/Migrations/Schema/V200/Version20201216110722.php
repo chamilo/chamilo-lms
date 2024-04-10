@@ -23,17 +23,13 @@ final class Version20201216110722 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $em = $this->getEntityManager();
-
-        $connection = $em->getConnection();
-
         $attendanceRepo = $this->container->get(CAttendanceRepository::class);
         // $attendanceRepo = $container->get(CAttendanceCalendar::class);
         $courseRepo = $this->container->get(CourseRepository::class);
 
         $admin = $this->getAdmin();
 
-        $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
@@ -43,7 +39,7 @@ final class Version20201216110722 extends AbstractMigrationChamilo
             // c_thematic.
             $sql = "SELECT * FROM c_attendance WHERE c_id = {$courseId}
                     ORDER BY iid";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
@@ -67,8 +63,8 @@ final class Version20201216110722 extends AbstractMigrationChamilo
                     continue;
                 }
 
-                $em->persist($resource);
-                $em->flush();
+                $this->entityManager->persist($resource);
+                $this->entityManager->flush();
             }
         }
     }

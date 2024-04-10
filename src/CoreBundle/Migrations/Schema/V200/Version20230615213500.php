@@ -21,20 +21,16 @@ final class Version20230615213500 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $em = $this->getEntityManager();
-
-        $connection = $em->getConnection();
-
         $lpRepo = $this->container->get(CLpRepository::class);
 
-        $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();
 
             $sql = "SELECT * FROM c_lp WHERE c_id = {$courseId} ORDER BY display_order";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $lps = $result->fetchAllAssociative();
 
             foreach ($lps as $lp) {
@@ -58,6 +54,6 @@ final class Version20230615213500 extends AbstractMigrationChamilo
             }
         }
 
-        $em->flush();
+        $this->entityManager->flush();
     }
 }

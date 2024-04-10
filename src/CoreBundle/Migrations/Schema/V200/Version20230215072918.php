@@ -24,16 +24,12 @@ final class Version20230215072918 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $em = $this->getEntityManager();
-
-        $connection = $em->getConnection();
-
         $lpRepo = $this->container->get(CLpRepository::class);
         $courseRepo = $this->container->get(CourseRepository::class);
         $sessionRepo = $this->container->get(SessionRepository::class);
         $userRepo = $this->container->get(UserRepository::class);
 
-        $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
@@ -42,14 +38,14 @@ final class Version20230215072918 extends AbstractMigrationChamilo
 
             $sql = "SELECT * FROM c_lp WHERE c_id = {$courseId}
                     ORDER BY iid";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $lps = $result->fetchAllAssociative();
             foreach ($lps as $lpData) {
                 $id = $lpData['iid'];
                 $lp = $lpRepo->find($id);
                 $sql = "SELECT * FROM c_item_property
                         WHERE tool = 'learnpath' AND c_id = {$courseId} AND ref = {$id} AND lastedit_type = 'LearnpathSubscription'";
-                $result = $connection->executeQuery($sql);
+                $result = $this->connection->executeQuery($sql);
                 $items = $result->fetchAllAssociative();
 
                 if (!empty($items)) {
@@ -67,8 +63,8 @@ final class Version20230215072918 extends AbstractMigrationChamilo
                         if (!empty($session)) {
                             $item->setSession($session);
                         }
-                        $em->persist($item);
-                        $em->flush();
+                        $this->entityManager->persist($item);
+                        $this->entityManager->flush();
                     }
                 }
             }

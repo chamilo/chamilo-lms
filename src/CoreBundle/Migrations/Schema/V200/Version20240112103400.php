@@ -20,11 +20,9 @@ final class Version20240112103400 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $em = $this->getEntityManager();
-
         $settingRepo = $this->container->get(SettingsCurrentRepository::class);
 
-        $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
@@ -32,10 +30,10 @@ final class Version20240112103400 extends AbstractMigrationChamilo
             if (null !== $diskQuotaInBytes) {
                 $diskQuotaInMegabytes = $diskQuotaInBytes / (1024 * 1024);
                 $course->setDiskQuota((int) $diskQuotaInMegabytes);
-                $em->persist($course);
+                $this->entityManager->persist($course);
             }
         }
-        $em->flush();
+        $this->entityManager->flush();
 
         $setting = $settingRepo->findOneBy(['variable' => 'default_document_quotum']);
         if ($setting) {
@@ -48,6 +46,6 @@ final class Version20240112103400 extends AbstractMigrationChamilo
             $selectedValueInBytes = (int) $setting->getSelectedValue() / (1024 * 1024);
             $setting->setSelectedValue((string) $selectedValueInBytes);
         }
-        $em->flush();
+        $this->entityManager->flush();
     }
 }

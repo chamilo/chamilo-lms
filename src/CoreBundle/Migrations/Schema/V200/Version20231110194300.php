@@ -19,7 +19,7 @@ final class Version20231110194300 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $kernel = $this->getContainer()->get('kernel');
+        $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
         $customThemesFolders = [

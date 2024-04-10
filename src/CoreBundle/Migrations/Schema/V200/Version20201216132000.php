@@ -22,15 +22,11 @@ final class Version20201216132000 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $em = $this->getEntityManager();
-
-        $connection = $em->getConnection();
-
         $lpItemRepo = $this->container->get(CLpItemRepository::class);
 
         $batchSize = self::BATCH_SIZE;
-        // $q = $em->createQuery('SELECT lp FROM Chamilo\CourseBundle\Entity\CLp lp WHERE lp.iid = 263 ORDER BY lp.iid');
-        $q = $em->createQuery('SELECT lp FROM Chamilo\CourseBundle\Entity\CLp lp');
+        // $q = $this->entityManager->createQuery('SELECT lp FROM Chamilo\CourseBundle\Entity\CLp lp WHERE lp.iid = 263 ORDER BY lp.iid');
+        $q = $this->entityManager->createQuery('SELECT lp FROM Chamilo\CourseBundle\Entity\CLp lp');
         $counter = 1;
 
         /** @var CLp $lp */
@@ -54,7 +50,7 @@ final class Version20201216132000 extends AbstractMigrationChamilo
             }
 
             // Execute the update query for item_root
-            $connection->executeUpdate('UPDATE c_lp_item SET item_root = :rootId WHERE lp_id = :lpId', [
+            $this->connection->executeUpdate('UPDATE c_lp_item SET item_root = :rootId WHERE lp_id = :lpId', [
                 'rootId' => $rootItem->getIid(),
                 'lpId' => $lpId,
             ]);
@@ -62,7 +58,7 @@ final class Version20201216132000 extends AbstractMigrationChamilo
             // Migrate c_lp_item
             $sql = "SELECT * FROM c_lp_item WHERE lp_id = $lpId AND path <> 'root'
                     ORDER BY display_order";
-            $resultItems = $connection->executeQuery($sql);
+            $resultItems = $this->connection->executeQuery($sql);
             $lpItems = $resultItems->fetchAllAssociative();
 
             if (empty($lpItems)) {
@@ -77,16 +73,16 @@ final class Version20201216132000 extends AbstractMigrationChamilo
                 $orderList[] = $object;
             }
 
-            learnpath::sortItemByOrderList($rootItem, $orderList, true, $lpItemRepo, $em);
+            learnpath::sortItemByOrderList($rootItem, $orderList, true, $lpItemRepo, $this->entityManager);
             if (($counter % $batchSize) === 0) {
-                $em->flush();
-                $em->clear(); // Detaches all objects from Doctrine!
+                $this->entityManager->flush();
+                $this->entityManager->clear(); // Detaches all objects from Doctrine!
             }
             $counter++;
-            $em->flush();
+            $this->entityManager->flush();
         }
 
-        $em->flush();
-        $em->clear();
+        $this->entityManager->flush();
+        $this->entityManager->clear();
     }
 }

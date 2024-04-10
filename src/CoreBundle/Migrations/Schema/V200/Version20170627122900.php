@@ -38,9 +38,7 @@ class Version20170627122900 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE settings_options CHANGE value value VARCHAR(190) DEFAULT NULL');
 
-        $connection = $this->getEntityManager()->getConnection();
-
-        $result = $connection
+        $result = $this->connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM settings_current WHERE variable = 'exercise_invisible_in_session' AND category = 'Session'"
             )
@@ -58,7 +56,7 @@ class Version20170627122900 extends AbstractMigrationChamilo
             );
         }
 
-        $result = $connection->executeQuery(
+        $result = $this->connection->executeQuery(
             "SELECT COUNT(1) FROM settings_current WHERE variable = 'configure_exercise_visibility_in_course' AND category = 'Session'"
         );
         $count = $result->fetchNumeric()[0];

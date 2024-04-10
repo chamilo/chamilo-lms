@@ -23,21 +23,20 @@ use Chamilo\CourseBundle\Repository\CGroupRepository;
 use DateTime;
 use DateTimeZone;
 use Doctrine\Migrations\AbstractMigration;
-use Doctrine\ORM\EntityManager;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-abstract class AbstractMigrationChamilo extends AbstractMigration implements ContainerAwareInterface
+abstract class AbstractMigrationChamilo extends AbstractMigration
 {
     public const BATCH_SIZE = 20;
 
-    private ?EntityManager $manager = null;
+    protected ?EntityManagerInterface $entityManager = null;
     protected ?ContainerInterface $container = null;
 
-    public function setEntityManager(EntityManager $manager): void
+    public function setEntityManager(EntityManagerInterface $entityManager): void
     {
-        $this->manager = $manager;
+        $this->entityManager = $entityManager;
     }
 
     public function setContainer(?ContainerInterface $container = null): void
@@ -45,18 +44,10 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         $this->container = $container;
     }
 
-    public function getContainer(): ?ContainerInterface
-    {
-        return $this->container;
-    }
-
     public function adminExist(): bool
     {
-        $em = $this->getEntityManager();
-        $connection = $em->getConnection();
-
         $sql = 'SELECT user_id FROM admin WHERE user_id IN (SELECT id FROM user) ORDER BY id LIMIT 1';
-        $result = $connection->executeQuery($sql);
+        $result = $this->connection->executeQuery($sql);
         $adminRow = $result->fetchAssociative();
 
         if (empty($adminRow)) {
@@ -68,17 +59,12 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
 
     public function getAdmin(): User
     {
-        $admin = $this->getEntityManager()
+        $admin = $this->entityManager
             ->getRepository(Admin::class)
             ->findOneBy([], ['id' => 'ASC'])
         ;
 
         return $admin->getUser();
-    }
-
-    public function getEntityManager(): EntityManager
-    {
-        return $this->container->get('doctrine')->getManager();
     }
 
     /**
@@ -115,9 +101,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         $accessUrlLocked = true,
         $options = []
     ): void {
-        $em = $this->getEntityManager();
-
-        $accessUrl = $em->find(AccessUrl::class, $accessUrl);
+        $accessUrl = $this->entityManager->find(AccessUrl::class, $accessUrl);
 
         $setting = new SettingsCurrent();
         $setting
@@ -135,7 +119,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
             ->setAccessUrlLocked((int) $accessUrlLocked)
         ;
 
-        $em->persist($setting);
+        $this->entityManager->persist($setting);
 
         if (\count($options) > 0) {
             foreach ($options as $option) {
@@ -154,10 +138,10 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
                     ->setDisplayText($option['text'])
                 ;
 
-                $em->persist($settingOption);
+                $this->entityManager->persist($settingOption);
             }
         }
-        $em->flush();
+        $this->entityManager->flush();
     }
 
     /**
@@ -225,17 +209,13 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
         $parentResource,
         array $items = []
     ) {
-        $container = $this->getContainer();
-        $em = $this->getEntityManager();
-        $connection = $em->getConnection();
-
         $courseId = $course->getId();
         $id = $resource->getResourceIdentifier();
 
         if (empty($items)) {
             $sql = "SELECT * FROM c_item_property
                     WHERE tool = '{$tool}' AND c_id = {$courseId} AND ref = {$id}";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
         }
 
@@ -244,9 +224,9 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
             return false;
         }
 
-        $sessionRepo = $container->get(SessionRepository::class);
-        $groupRepo = $container->get(CGroupRepository::class);
-        $userRepo = $container->get(UserRepository::class);
+        $sessionRepo = $this->container->get(SessionRepository::class);
+        $groupRepo = $this->container->get(CGroupRepository::class);
+        $userRepo = $this->container->get(UserRepository::class);
 
         $resource->setParent($parentResource);
         $resourceNode = null;
@@ -315,7 +295,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
 
             if (null === $resourceNode) {
                 $resourceNode = $repo->addResourceNode($resource, $user, $parentResource);
-                $em->persist($resourceNode);
+                $this->entityManager->persist($resourceNode);
             }
             $resource->addCourseLink($course, $session, $group, $newVisibility);
 
@@ -324,7 +304,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
                 $link->setDeletedAt($lastUpdatedAt);
             }
 
-            $em->persist($resource);
+            $this->entityManager->persist($resource);
         }
 
         return true;
@@ -341,7 +321,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
             return null;
         }
 
-        return $this->getEntityManager()->find(Course::class, $id);
+        return $this->entityManager->find(Course::class, $id);
     }
 
     public function findSession(int $id): ?Session
@@ -350,6 +330,6 @@ abstract class AbstractMigrationChamilo extends AbstractMigration implements Con
             return null;
         }
 
-        return $this->getEntityManager()->find(Session::class, $id);
+        return $this->entityManager->find(Session::class, $id);
     }
 }

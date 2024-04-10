@@ -21,16 +21,13 @@ class Version20240130161800 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $kernel = $this->getContainer()->get('kernel');
+        $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
-
-        $em = $this->getEntityManager();
-        $connection = $em->getConnection();
 
         $templatesRepo = $this->container->get(TemplatesRepository::class);
 
         $sql = 'SELECT id, image, c_id FROM templates WHERE image IS NOT NULL';
-        $stmt = $connection->prepare($sql);
+        $stmt = $this->connection->prepare($sql);
         $result = $stmt->executeQuery();
 
         while ($row = $result->fetchAssociative()) {
@@ -39,7 +36,7 @@ class Version20240130161800 extends AbstractMigrationChamilo
             $courseId = $row['c_id'];
 
             $courseDirectorySql = 'SELECT directory FROM course WHERE id = :courseId';
-            $courseStmt = $connection->prepare($courseDirectorySql);
+            $courseStmt = $this->connection->prepare($courseDirectorySql);
             $courseResult = $courseStmt->executeQuery(['courseId' => $courseId]);
 
             $courseRow = $courseResult->fetchAssociative();
@@ -58,14 +55,14 @@ class Version20240130161800 extends AbstractMigrationChamilo
                     $asset->setTitle($fileName);
                     $asset->setFile($file);
 
-                    $em->persist($asset);
-                    $em->flush();
+                    $this->entityManager->persist($asset);
+                    $this->entityManager->flush();
 
                     $template = $templatesRepo->find($templateId);
                     if ($template) {
                         $template->setImage($asset);
-                        $em->persist($template);
-                        $em->flush();
+                        $this->entityManager->persist($template);
+                        $this->entityManager->flush();
                     }
                 }
             }

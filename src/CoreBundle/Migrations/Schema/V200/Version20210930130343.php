@@ -24,23 +24,20 @@ final class Version20210930130343 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $em = $this->getEntityManager();
-        $connection = $em->getConnection();
-
         $introRepo = $this->container->get(CToolIntroRepository::class);
         $cToolRepo = $this->container->get(CToolRepository::class);
         $toolRepo = $this->container->get(ToolRepository::class);
         $sessionRepo = $this->container->get(SessionRepository::class);
         $courseRepo = $this->container->get(CourseRepository::class);
 
-        $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();
             $sql = "SELECT * FROM c_tool_intro WHERE c_id = {$courseId}
                     ORDER BY iid";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
 
             if (empty($items)) {
@@ -54,8 +51,8 @@ final class Version20210930130343 extends AbstractMigrationChamilo
                     ->setParent($course)
                     ->addCourseLink($course)
                 ;
-                $em->persist($cTool);
-                $em->flush();
+                $this->entityManager->persist($cTool);
+                $this->entityManager->flush();
 
                 continue;
             }
@@ -98,7 +95,7 @@ final class Version20210930130343 extends AbstractMigrationChamilo
                         ->setParent($course)
                         ->addCourseLink($course, $session)
                     ;
-                    $em->persist($cTool);
+                    $this->entityManager->persist($cTool);
                 } else {
                     $cTool = $cToolRepo->findCourseResourceByTitle($toolName, $course->getResourceNode(), $course, $session);
                 }
@@ -114,12 +111,12 @@ final class Version20210930130343 extends AbstractMigrationChamilo
                 $introRepo->addResourceNode($intro, $admin, $course);
                 $intro->addCourseLink($course, $session);
 
-                $em->persist($intro);
-                $em->flush();
+                $this->entityManager->persist($intro);
+                $this->entityManager->flush();
             }
 
-            $em->flush();
-            $em->clear();
+            $this->entityManager->flush();
+            $this->entityManager->clear();
         }
     }
 

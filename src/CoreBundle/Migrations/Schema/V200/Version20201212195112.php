@@ -27,9 +27,6 @@ final class Version20201212195112 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $em = $this->getEntityManager();
-
-        $connection = $em->getConnection();
         $courseRepo = $this->container->get(CourseRepository::class);
         $sessionRepo = $this->container->get(SessionRepository::class);
         $groupRepo = $this->container->get(CGroupRepository::class);
@@ -38,7 +35,7 @@ final class Version20201212195112 extends AbstractMigrationChamilo
         $batchSize = self::BATCH_SIZE;
 
         // Migrating c_tool.
-        $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
@@ -47,7 +44,7 @@ final class Version20201212195112 extends AbstractMigrationChamilo
             $courseId = $course->getId();
             $sql = "SELECT * FROM c_group_category
                     WHERE c_id = {$courseId} ";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $categories = $result->fetchAllAssociative();
 
             foreach ($categories as $categoryData) {
@@ -68,23 +65,23 @@ final class Version20201212195112 extends AbstractMigrationChamilo
                 $groupRepo->addResourceNode($category, $admin, $course);
                 $newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
                 $category->addCourseLink($course, $session, null, $newVisibility);
-                $em->persist($category);
+                $this->entityManager->persist($category);
                 if (($counter % $batchSize) === 0) {
-                    $em->flush();
-                    $em->clear();
+                    $this->entityManager->flush();
+                    $this->entityManager->clear();
                 }
                 $counter++;
             }
 
-            $em->flush();
-            $em->clear();
+            $this->entityManager->flush();
+            $this->entityManager->clear();
 
             // Groups
             $counter = 1;
             $courseId = $course->getId();
             $sql = "SELECT * FROM c_group_info
                     WHERE c_id = {$courseId} ";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $groups = $result->fetchAllAssociative();
 
             foreach ($groups as $groupData) {
@@ -108,15 +105,15 @@ final class Version20201212195112 extends AbstractMigrationChamilo
                     $newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
                 }
                 $group->addCourseLink($course, $session, null, $newVisibility);
-                $em->persist($group);
+                $this->entityManager->persist($group);
                 if (($counter % $batchSize) === 0) {
-                    $em->flush();
-                    $em->clear();
+                    $this->entityManager->flush();
+                    $this->entityManager->clear();
                 }
                 $counter++;
             }
         }
-        $em->flush();
-        $em->clear();
+        $this->entityManager->flush();
+        $this->entityManager->clear();
     }
 }

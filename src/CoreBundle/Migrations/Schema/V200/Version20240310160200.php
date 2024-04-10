@@ -22,8 +22,6 @@ class Version20240310160200 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $em = $this->getEntityManager();
-
         $repo = $this->container->get(UserRepository::class);
 
         $plainPassword = 'fallback_user';
@@ -45,7 +43,7 @@ class Version20240310160200 extends AbstractMigrationChamilo
             ->setActive(User::SOFT_DELETED)
             ->setTimezone('UTC')
         ;
-        $em->flush();
+        $this->entityManager->flush();
 
         error_log($fallbackUser->getFullname());
 

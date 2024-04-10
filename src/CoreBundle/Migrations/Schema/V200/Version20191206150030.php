@@ -22,10 +22,9 @@ class Version20191206150030 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $doctrine = $this->getContainer()->get('doctrine');
-        $em = $this->getEntityManager();
+        $em = $this->entityManager;
 
-        $kernel = $this->getContainer()->get('kernel');
+        $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
         $batchSize = self::BATCH_SIZE;

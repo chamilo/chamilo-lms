@@ -22,15 +22,13 @@ final class Version20230720222140 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $em = $this->getEntityManager();
-
-        $kernel = $this->getContainer()->get('kernel');
+        $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
         $userRepo = $this->container->get(UserRepository::class);
         $personalRepo = $this->container->get(PersonalFileRepository::class);
 
-        $q = $em->createQuery('SELECT s FROM Chamilo\CoreBundle\Entity\SocialPost s');
+        $q = $this->entityManager->createQuery('SELECT s FROM Chamilo\CoreBundle\Entity\SocialPost s');
 
         /** @var SocialPost $socialPost */
         foreach ($q->toIterable() as $socialPost) {
@@ -81,8 +79,8 @@ final class Version20230720222140 extends AbstractMigrationChamilo
                 $socialPost->setContent($content);
 
                 // Persist the updated social post entity
-                $em->persist($socialPost);
-                $em->flush();
+                $this->entityManager->persist($socialPost);
+                $this->entityManager->flush();
             }
         }
     }

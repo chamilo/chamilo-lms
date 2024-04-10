@@ -23,12 +23,10 @@ final class Version20230720143000 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $em = $this->getEntityManager();
-
-        $kernel = $this->getContainer()->get('kernel');
+        $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
-        $q = $em->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\User u');
+        $q = $this->entityManager->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\User u');
 
         /** @var User $userEntity */
         foreach ($q->toIterable() as $userEntity) {
@@ -37,7 +35,7 @@ final class Version20230720143000 extends AbstractMigrationChamilo
 
             $variable = 'split_users_upload_directory';
             // Query the 'selected_value' from the 'settings_current' table where the 'variable' is 'split_users_upload_directory'
-            $query = $em->createQuery('SELECT s.selectedValue FROM Chamilo\CoreBundle\Entity\SettingsCurrent s WHERE s.variable = :variable')
+            $query = $this->entityManager->createQuery('SELECT s.selectedValue FROM Chamilo\CoreBundle\Entity\SettingsCurrent s WHERE s.variable = :variable')
                 ->setParameter('variable', $variable)
             ;
 
@@ -73,7 +71,7 @@ final class Version20230720143000 extends AbstractMigrationChamilo
                 }
 
                 $title = basename($file);
-                $queryBuilder = $em->createQueryBuilder();
+                $queryBuilder = $this->entityManager->createQueryBuilder();
 
                 // Build the query to join the ResourceNode and PersonalFile tables
                 $queryBuilder
@@ -108,8 +106,8 @@ final class Version20230720143000 extends AbstractMigrationChamilo
                 $personalFile->addUserLink($userEntity);
 
                 // Save the object to the database
-                $em->persist($personalFile);
-                $em->flush();
+                $this->entityManager->persist($personalFile);
+                $this->entityManager->flush();
             }
         }
     }

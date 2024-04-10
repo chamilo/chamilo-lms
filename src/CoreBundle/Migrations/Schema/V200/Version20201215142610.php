@@ -29,10 +29,6 @@ final class Version20201215142610 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $em = $this->getEntityManager();
-
-        $connection = $em->getConnection();
-
         $quizRepo = $this->container->get(CQuizRepository::class);
         $quizQuestionRepo = $this->container->get(CQuizQuestionRepository::class);
         $quizQuestionCategoryRepo = $this->container->get(CQuizQuestionCategoryRepository::class);
@@ -40,7 +36,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
         $courseRepo = $this->container->get(CourseRepository::class);
         $userRepo = $this->container->get(UserRepository::class);
 
-        $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
@@ -63,7 +59,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
             // Quiz
             $sql = "SELECT * FROM c_quiz WHERE c_id = {$courseId}
                     ORDER BY iid";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
@@ -86,34 +82,34 @@ final class Version20201215142610 extends AbstractMigrationChamilo
                     continue;
                 }
 
-                $em->persist($resource);
-                $em->flush();
+                $this->entityManager->persist($resource);
+                $this->entityManager->flush();
 
                 /*$sql = "SELECT q.* FROM c_quiz_question q
                         INNER JOIN c_quiz_rel_question cq
                         ON (q.iid = cq.exercice_id and q.c_id = cq.c_id)
                         WHERE q.c_id = $courseId AND exercice_id = $id
                         ORDER BY iid";
-                $result = $connection->executeQuery($sql);
+                $result = $this->connection->executeQuery($sql);
                 $questions = $result->fetchAllAssociative();
                 foreach ($questions as $questionData) {
                     $questionData[''];
                 }
                 $sql = "SELECT * FROM c_quiz_question WHERE c_id = $courseId
                         ORDER BY iid";
-                $result = $connection->executeQuery($sql);
+                $result = $this->connection->executeQuery($sql);
                 $items = $result->fetchAllAssociative();
                 foreach ($items as $itemData) {
                 }*/
             }
 
-            $em->flush();
-            $em->clear();
+            $this->entityManager->flush();
+            $this->entityManager->clear();
 
             // Question categories.
             $sql = "SELECT * FROM c_quiz_question_category WHERE c_id = {$courseId}
                     ORDER BY iid";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
 
             $course = $courseRepo->find($courseId);
@@ -137,16 +133,16 @@ final class Version20201215142610 extends AbstractMigrationChamilo
                     continue;
                 }
 
-                $em->persist($resource);
-                $em->flush();
+                $this->entityManager->persist($resource);
+                $this->entityManager->flush();
             }
 
-            $em->flush();
-            $em->clear();
+            $this->entityManager->flush();
+            $this->entityManager->clear();
 
             $sql = "SELECT * FROM c_quiz_question WHERE c_id = {$courseId}
                     ORDER BY iid";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
@@ -162,9 +158,9 @@ final class Version20201215142610 extends AbstractMigrationChamilo
                 $question->setParent($course);
                 $resourceNode = $quizQuestionRepo->addResourceNode($question, $courseAdmin, $course);
                 $question->addCourseLink($course);
-                $em->persist($resourceNode);
-                $em->persist($question);
-                $em->flush();
+                $this->entityManager->persist($resourceNode);
+                $this->entityManager->persist($question);
+                $this->entityManager->flush();
 
                 /** @var CQuizQuestion $question */
                 $question = $quizQuestionRepo->find($id);
@@ -179,11 +175,11 @@ final class Version20201215142610 extends AbstractMigrationChamilo
                     }
                 }
 
-                $em->persist($question);
-                $em->flush();
+                $this->entityManager->persist($question);
+                $this->entityManager->flush();
             }
-            $em->flush();
-            $em->clear();
+            $this->entityManager->flush();
+            $this->entityManager->clear();
         }
     }
 }

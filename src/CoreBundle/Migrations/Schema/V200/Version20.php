@@ -162,7 +162,7 @@ class Version20 extends AbstractMigrationChamilo
 
         // Selecting languages that are not sublanguages or are explicitly allowed.
         $sql = "SELECT * FROM language WHERE parent_id IS NULL OR isocode IN ('".implode("', '", $allowedSubLanguages)."')";
-        $result = $this->getEntityManager()->getConnection()->executeQuery($sql);
+        $result = $this->connection->executeQuery($sql);
         $items = $result->fetchAllAssociative();
 
         foreach ($items as $item) {
@@ -192,7 +192,7 @@ class Version20 extends AbstractMigrationChamilo
             ), course_language)
         ");
 
-                $this->addSql("
+        $this->addSql("
             UPDATE sys_announcement
             SET lang = COALESCE((
                 SELECT isocode
@@ -202,7 +202,7 @@ class Version20 extends AbstractMigrationChamilo
             ), lang)
         ");
 
-                $this->addSql("
+        $this->addSql("
             UPDATE settings_current
             SET selected_value = COALESCE((
                 SELECT isocode

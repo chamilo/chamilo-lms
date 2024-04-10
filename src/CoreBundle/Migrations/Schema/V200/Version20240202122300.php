@@ -22,16 +22,13 @@ class Version20240202122300 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $em = $this->getEntityManager();
-        $connection = $em->getConnection();
-
         $admin = $this->getAdmin();
 
         $linkRepo = $this->container->get(CLinkRepository::class);
         $shortcutRepo = $this->container->get(CShortcutRepository::class);
 
         $sql = 'SELECT * FROM c_link WHERE on_homepage = 1';
-        $stmt = $connection->prepare($sql);
+        $stmt = $this->connection->prepare($sql);
         $result = $stmt->executeQuery();
 
         while ($row = $result->fetchAssociative()) {
@@ -62,7 +59,7 @@ class Version20240202122300 extends AbstractMigrationChamilo
             }
         }
 
-        $em->flush();
+        $this->entityManager->flush();
     }
 
     public function down(Schema $schema): void {}

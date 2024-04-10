@@ -22,22 +22,19 @@ class Version20210221082033 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         /** @var Kernel $kernel */
-        $kernel = $this->getContainer()->get('kernel');
+        $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
-        $em = $this->getEntityManager();
-
-        $connection = $em->getConnection();
         $lpRepo = $this->container->get(CLpRepository::class);
 
-        $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();
             $sql = "SELECT * FROM c_lp WHERE c_id = {$courseId}
                     ORDER BY iid";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
@@ -48,14 +45,14 @@ class Version20210221082033 extends AbstractMigrationChamilo
                     error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                     if ($this->fileExists($filePath)) {
                         $this->addLegacyFileToResource($filePath, $lpRepo, $lp, $lp->getIid(), $path);
-                        $em->persist($lp);
-                        $em->flush();
+                        $this->entityManager->persist($lp);
+                        $this->entityManager->flush();
                     }
                 }
             }
 
-            $em->flush();
-            $em->clear();
+            $this->entityManager->flush();
+            $this->entityManager->clear();
         }
     }
 }

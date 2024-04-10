@@ -20,11 +20,8 @@ class Version20230321164019 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $em = $this->getEntityManager();
-
         $sql = 'SELECT * FROM track_e_attempt_recording';
-        $connection = $this->getEntityManager()->getConnection();
-        $result = $connection->executeQuery($sql);
+        $result = $this->connection->executeQuery($sql);
         $items = $result->fetchAllAssociative();
 
         foreach ($items as $item) {
@@ -38,14 +35,14 @@ class Version20230321164019 extends AbstractMigrationChamilo
                 ->setSessionId($item['session_id'])
             ;
 
-            $trackEExercise = $em->getRepository(TrackEExercise::class)->find($item['exe_id']);
+            $trackEExercise = $this->entityManager->getRepository(TrackEExercise::class)->find($item['exe_id']);
             if ($trackEExercise) {
                 $attemptQualify->setTrackExercise($trackEExercise);
-                $em->persist($attemptQualify);
+                $this->entityManager->persist($attemptQualify);
             }
         }
 
-        $em->flush();
+        $this->entityManager->flush();
     }
 
     public function down(Schema $schema): void {}

@@ -23,8 +23,6 @@ final class Version20201212114910 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $em = $this->getEntityManager();
-
         $urlRepo = $this->container->get(AccessUrlRepository::class);
         $userRepo = $this->container->get(UserRepository::class);
 
@@ -39,7 +37,7 @@ final class Version20201212114910 extends AbstractMigrationChamilo
         $this->write('Adding admin user');
         if (false === $admin->hasResourceNode()) {
             $resourceNode = $userRepo->addUserToResourceNode($adminId, $adminId);
-            $em->persist($resourceNode);
+            $this->entityManager->persist($resourceNode);
         }
 
         // Adding portals (AccessUrl) to the resource node tree.
@@ -49,13 +47,13 @@ final class Version20201212114910 extends AbstractMigrationChamilo
         foreach ($urls as $url) {
             if (false === $url->hasResourceNode()) {
                 $urlRepo->createNodeForResourceWithNoParent($url, $admin);
-                $em->persist($url);
+                $this->entityManager->persist($url);
             }
         }
-        $em->flush();
+        $this->entityManager->flush();
 
         $sql = 'SELECT DISTINCT(user_id) FROM admin';
-        $result = $em->getConnection()->executeQuery($sql);
+        $result = $this->entityManager->getConnection()->executeQuery($sql);
         $results = $result->fetchAllAssociative();
         $adminList = [];
         if (!empty($results)) {
@@ -65,7 +63,7 @@ final class Version20201212114910 extends AbstractMigrationChamilo
         // Adding users to the resource node tree.
         $batchSize = self::BATCH_SIZE;
         $counter = 1;
-        $q = $em->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\User u');
+        $q = $this->entityManager->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\User u');
 
         $this->write('Migrating users');
 
@@ -105,16 +103,16 @@ final class Version20201212114910 extends AbstractMigrationChamilo
             }
 
             $resourceNode = $userRepo->addUserToResourceNode($userId, $creator->getId());
-            $em->persist($resourceNode);
+            $this->entityManager->persist($resourceNode);
 
             if (($counter % $batchSize) === 0) {
-                $em->flush();
-                $em->clear(); // Detaches all objects from Doctrine!
+                $this->entityManager->flush();
+                $this->entityManager->clear(); // Detaches all objects from Doctrine!
             }
             $counter++;
         }
-        $em->flush();
-        $em->clear();
+        $this->entityManager->flush();
+        $this->entityManager->clear();
 
         $table = $schema->getTable('user');
         if (false === $table->hasIndex('UNIQ_8D93D649D17F50A6')) {

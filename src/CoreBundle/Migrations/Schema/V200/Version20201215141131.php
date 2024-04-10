@@ -24,17 +24,13 @@ final class Version20201215141131 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $em = $this->getEntityManager();
-
-        $connection = $em->getConnection();
-
         $linkRepo = $this->container->get(CLinkRepository::class);
         $linkCategoryRepo = $this->container->get(CLinkCategoryRepository::class);
         $courseRepo = $this->container->get(CourseRepository::class);
 
         $admin = $this->getAdmin();
 
-        $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
@@ -44,7 +40,7 @@ final class Version20201215141131 extends AbstractMigrationChamilo
 
             $sql = "SELECT * FROM c_link_category WHERE c_id = {$courseId}
                     ORDER BY iid";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
@@ -66,13 +62,13 @@ final class Version20201215141131 extends AbstractMigrationChamilo
                 if (false === $result) {
                     continue;
                 }
-                $em->persist($resource);
-                $em->flush();
+                $this->entityManager->persist($resource);
+                $this->entityManager->flush();
             }
 
             $sql = "SELECT * FROM c_link WHERE c_id = {$courseId}
                     ORDER BY iid";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
@@ -104,8 +100,8 @@ final class Version20201215141131 extends AbstractMigrationChamilo
                 if (false === $result) {
                     continue;
                 }
-                $em->persist($resource);
-                $em->flush();
+                $this->entityManager->persist($resource);
+                $this->entityManager->flush();
             }
         }
     }

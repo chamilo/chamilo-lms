@@ -20,12 +20,10 @@ final class Version20240128205500 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $em = $this->getEntityManager();
-
-        $kernel = $this->getContainer()->get('kernel');
+        $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
-        $q = $em->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\User u');
+        $q = $this->entityManager->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\User u');
 
         $gradebookCertificateRepo = $this->container->get(GradebookCertificateRepository::class);
         $personalRepo = $this->container->get(PersonalFileRepository::class);
@@ -78,12 +76,12 @@ final class Version20240128205500 extends AbstractMigrationChamilo
                 $personalFile->setUploadFile($uploadedFile);
                 $personalFile->addUserLink($userEntity);
 
-                $em->persist($personalFile);
-                $em->flush();
+                $this->entityManager->persist($personalFile);
+                $this->entityManager->flush();
 
                 // Update the record in gradebook_certificate with the new title
                 $certificate->setPathCertificate('/'.$newTitle);
-                $em->flush();
+                $this->entityManager->flush();
             }
         }
     }

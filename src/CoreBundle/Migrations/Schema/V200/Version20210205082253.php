@@ -24,11 +24,7 @@ final class Version20210205082253 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $em = $this->getEntityManager();
-
-        $connection = $em->getConnection();
-
-        $kernel = $this->getContainer()->get('kernel');
+        $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
         $illustrationRepo = $this->container->get(IllustrationRepository::class);
@@ -36,10 +32,10 @@ final class Version20210205082253 extends AbstractMigrationChamilo
         // Adding users to the resource node tree.
         $batchSize = self::BATCH_SIZE;
         $counter = 1;
-        $q = $em->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\User u');
+        $q = $this->entityManager->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\User u');
 
         $sql = "SELECT * FROM settings_current WHERE variable = 'split_users_upload_directory' AND access_url = 1";
-        $result = $connection->executeQuery($sql);
+        $result = $this->connection->executeQuery($sql);
         $setting = $result->fetchAssociative();
 
         /** @var User $userEntity */
@@ -65,18 +61,18 @@ final class Version20210205082253 extends AbstractMigrationChamilo
             }
 
             if (($counter % $batchSize) === 0) {
-                $em->flush();
-                $em->clear(); // Detaches all objects from Doctrine!
+                $this->entityManager->flush();
+                $this->entityManager->clear(); // Detaches all objects from Doctrine!
             }
             $counter++;
         }
 
-        $em->flush();
-        $em->clear();
+        $this->entityManager->flush();
+        $this->entityManager->clear();
 
         // Migrate Usergroup.
         $counter = 1;
-        $q = $em->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\Usergroup u');
+        $q = $this->entityManager->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\Usergroup u');
         $admin = $this->getAdmin();
 
         $userGroupRepo = $this->container->get(UsergroupRepository::class);
@@ -103,13 +99,13 @@ final class Version20210205082253 extends AbstractMigrationChamilo
                 $userGroup->getUrls()->add($accessUrlRelUserGroup);
             }
             $userGroupRepo->addResourceNode($userGroup, $admin, $url);
-            $em->persist($userGroup);
-            $em->flush();
+            $this->entityManager->persist($userGroup);
+            $this->entityManager->flush();
         }
-        $em->clear();
+        $this->entityManager->clear();
 
         // Migrate Usergroup images.
-        $q = $em->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\Usergroup u');
+        $q = $this->entityManager->createQuery('SELECT u FROM Chamilo\CoreBundle\Entity\Usergroup u');
 
         /** @var Usergroup $userGroup */
         foreach ($q->toIterable() as $userGroup) {
@@ -135,13 +131,13 @@ final class Version20210205082253 extends AbstractMigrationChamilo
             }
 
             if (($counter % $batchSize) === 0) {
-                $em->flush();
-                $em->clear(); // Detaches all objects from Doctrine!
+                $this->entityManager->flush();
+                $this->entityManager->clear(); // Detaches all objects from Doctrine!
             }
             $counter++;
         }
 
-        $em->flush();
-        $em->clear();
+        $this->entityManager->flush();
+        $this->entityManager->clear();
     }
 }

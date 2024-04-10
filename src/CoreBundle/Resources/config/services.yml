@@ -18,7 +18,7 @@ services:
     Doctrine\Migrations\Version\DbalMigrationFactory: ~
     Chamilo\CoreBundle\Migrations\MigrationFactory:
         decorates: Doctrine\Migrations\Version\DbalMigrationFactory
-        arguments: ['@Chamilo\CoreBundle\Migrations\MigrationFactory.inner', '@service_container']
+        arguments: ['@Chamilo\CoreBundle\Migrations\MigrationFactory.inner', '@service_container', '@doctrine.orm.entity_manager']
 
     Chamilo\CoreBundle\Controller\:
         resource: '../../Controller'

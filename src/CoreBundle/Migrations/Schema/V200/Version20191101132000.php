@@ -98,10 +98,9 @@ class Version20191101132000 extends AbstractMigrationChamilo
         $table = $schema->getTable('course_category');
 
         // $this->addSql('ALTER TABLE course DROP category_code');
-        $em = $this->getEntityManager();
-        $connection = $em->getConnection();
+        $em = $this->entityManager;
         $sql = 'SELECT * FROM course_category';
-        $result = $connection->executeQuery($sql);
+        $result = $this->connection->executeQuery($sql);
         $all = $result->fetchAllAssociative();
 
         $categories = array_column($all, 'parent_id', 'id');
@@ -131,10 +130,10 @@ class Version20191101132000 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_AFF874975DA1941 ON course_category (asset_id);');
         }
 
-        $kernel = $this->getContainer()->get('kernel');
+        $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
-        $repo = $this->getEntityManager()->getRepository(CourseCategory::class);
+        $repo = $this->entityManager->getRepository(CourseCategory::class);
 
         if ($table->hasColumn('image')) {
             foreach ($all as $category) {

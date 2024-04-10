@@ -791,22 +791,13 @@ class Category implements GradebookItem
 
     /**
      * Calculate the score of this category.
-     *
-     * @param ?int    $studentId (default: all students - then the average is returned)
-     * @param ?string $type
-     * @param ?int    $courseId
-     * @param ?int    $session_id
-     *
-     * @return array|null (score sum, weight sum) or null if no scores available
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \Doctrine\DBAL\Exception
      */
     public function calc_score(
         ?int $studentId = null,
         ?string $type = null,
         ?int $courseId = 0,
         ?int $session_id = null
-    ) {
+    ): ?array {
         $key = 'category:'.$this->id.'student:'.(int) $studentId.'type:'.$type.'course:'.$courseId.'session:'.(int) $session_id;
         $useCache = ('true' === api_get_setting('gradebook.gradebook_use_apcu_cache'));
         $cacheAvailable = api_get_configuration_value('apc') && $useCache;

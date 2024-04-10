@@ -45,13 +45,13 @@ $column_model = [
     [
         'name' => 'name',
         'index' => 'name',
-        'width' => '140',
+        'width' => '340px',
         'align' => 'left',
     ],
     [
         'name' => 'actions',
         'index' => 'actions',
-        'width' => '40',
+        'width' => '250px',
         'align' => 'left',
         'formatter' => 'action_formatter',
         'sortable' => 'false',

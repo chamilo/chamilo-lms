@@ -115,9 +115,9 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     #[ORM\Column(name: 'hide_question_title', type: 'boolean', nullable: false)]
     protected bool $hideQuestionTitle;
 
-    #[ORM\ManyToOne(targetEntity: CExerciseCategory::class, cascade: ['persist'])]
-    #[ORM\JoinColumn(name: 'exercise_category_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    protected ?CExerciseCategory $exerciseCategory = null;
+    #[ORM\ManyToOne(targetEntity: CQuizCategory::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'quiz_category_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    protected ?CQuizCategory $quizCategory = null;
 
     #[ORM\Column(name: 'show_previous_button', type: 'boolean', nullable: false, options: ['default' => 1])]
     protected bool $showPreviousButton;
@@ -503,14 +503,14 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
         return $this->passPercentage;
     }
 
-    public function getExerciseCategory(): ?CExerciseCategory
+    public function getQuizCategory(): ?CQuizCategory
     {
-        return $this->exerciseCategory;
+        return $this->quizCategory;
     }
 
-    public function setExerciseCategory(CExerciseCategory $exerciseCategory): self
+    public function setQuizCategory(CQuizCategory $quizCategory): self
     {
-        $this->exerciseCategory = $exerciseCategory;
+        $this->quizCategory = $quizCategory;
 
         return $this;
     }

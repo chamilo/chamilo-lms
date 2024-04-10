@@ -14,7 +14,7 @@ use Chamilo\CoreBundle\Component\Utils\ActionIcon;
  * @author hubert.borderiou
  * @author Julio Montoya - several fixes
  *
- * @todo   rename to ExerciseCategory
+ * @todo   rename to QuizCategory
  */
 class TestCategory
 {

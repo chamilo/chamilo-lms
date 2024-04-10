@@ -16,9 +16,9 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Table(name: 'c_exercise_category')]
+#[ORM\Table(name: 'c_quiz_category')]
 #[ORM\Entity(repositoryClass: SortableRepository::class)]
-class CExerciseCategory extends AbstractResource implements ResourceInterface, Stringable
+class CQuizCategory extends AbstractResource implements ResourceInterface, Stringable
 {
     use TimestampableEntity;
 

@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Tool;
 
-use Chamilo\CourseBundle\Entity\CExerciseCategory;
+use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
@@ -44,7 +44,7 @@ class Exercise extends AbstractTool implements ToolInterface
             'exercises' => CQuiz::class,
             'questions' => CQuizQuestion::class,
             'question_categories' => CQuizQuestionCategory::class,
-            'exercise_categories' => CExerciseCategory::class,
+            'exercise_categories' => CQuizCategory::class,
         ];
     }
 }

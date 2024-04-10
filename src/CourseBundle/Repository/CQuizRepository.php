@@ -95,7 +95,7 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
 
         if (null !== $categoryId) {
             $qb
-                ->andWhere('resource.exerciseCategory = :category_id')
+                ->andWhere('resource.quizCategory = :category_id')
                 ->setParameter('category_id', $categoryId)
             ;
         }

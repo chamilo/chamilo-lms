@@ -4,7 +4,7 @@
 
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CExerciseCategory;
+use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
 
 /**
@@ -262,7 +262,7 @@ if ($is_allowedToEdit && !empty($action)) {
         case 'down_category':
             $categoryIdFromGet = isset($_REQUEST['category_id_edit']) ? $_REQUEST['category_id_edit'] : 0;
             $em = Database::getManager();
-            $repo = Container::getExerciseCategoryRepository();
+            $repo = Container::getQuizCategoryRepository();
             $category = $repo->find($categoryIdFromGet);
             $currentPosition = $category->getPosition();
 
@@ -416,7 +416,7 @@ if ('true' !== api_get_setting('exercise.allow_exercise_categories')) {
         $total = count($categories);
         $upIcon = Display::getMdiIcon('arrow-up-bold', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Move up'));
         $downIcon = Display::getMdiIcon('arrow-down-bold', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Move down'));
-        /** @var CExerciseCategory $category */
+        /** @var CQuizCategory $category */
         foreach ($categories as $category) {
             $categoryIdItem = $category->getId();
             $up = '';

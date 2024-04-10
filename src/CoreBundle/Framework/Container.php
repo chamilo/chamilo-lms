@@ -49,7 +49,7 @@ use Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
-use Chamilo\CourseBundle\Repository\CExerciseCategoryRepository;
+use Chamilo\CourseBundle\Repository\CQuizCategoryRepository;
 use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CForumCategoryRepository;
 use Chamilo\CourseBundle\Repository\CForumPostRepository;
@@ -331,9 +331,9 @@ class Container
         return self::$container->get(CDocumentRepository::class);
     }
 
-    public static function getExerciseCategoryRepository(): CExerciseCategoryRepository
+    public static function getQuizCategoryRepository(): CQuizCategoryRepository
     {
-        return self::$container->get(CExerciseCategoryRepository::class);
+        return self::$container->get(CQuizCategoryRepository::class);
     }
 
     public static function getExternalToolRepository(): ExternalToolRepository

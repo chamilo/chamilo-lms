@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CQuizCategory;
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Component\Utils\ToolIcon;
@@ -297,7 +298,7 @@ $options = [];
 switch ($action) {
     case 'get_exercise_categories':
         $courseId = isset($_REQUEST['c_id']) ? $_REQUEST['c_id'] : 0;
-        $repo = Container::getExerciseCategoryRepository();
+        $repo = Container::getQuizCategoryRepository();
         $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId));
         $count = $qb->select('COUNT(resource)')->getQuery()->getSingleScalarResult();
 
@@ -1036,15 +1037,10 @@ $columns = [];
 
 switch ($action) {
     case 'get_exercise_categories':
-        api_protect_course_script();
-        if (!api_is_allowed_to_edit()) {
-            api_not_allowed(true);
-        }
-
         $columns = ['name', 'actions'];
         $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId));
         $items = $qb->getQuery()->getResult();
-        /** @var \Chamilo\CourseBundle\Entity\CExerciseCategory $item */
+        /** @var CQuizCategory $item */
         $result = [];
         foreach ($items as $item) {
             $result[] = [
@@ -1052,11 +1048,6 @@ switch ($action) {
                 'name' => $item->getTitle(),
             ];
         }
-        /*$result = $manager->get_all([
-            'where' => ['c_id = ? ' => $courseId],
-            'order' => "$sidx $sord",
-            'LIMIT' => "$start , $limit",
-        ]);*/
         break;
     case 'get_calendar_users':
         $columns = ['firstname', 'lastname', 'exam'];

@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
-use Chamilo\CourseBundle\Entity\CExerciseCategory;
+use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestionCategory;
 use ChamiloSession as Session;
@@ -91,7 +91,7 @@ class Exercise
     public $notifications;
     public $export = false;
     public $autolaunch;
-    public $exerciseCategoryId;
+    public $quizCategoryId;
     public $pageResultConfiguration;
     public $hideQuestionNumber;
     public $preventBackwards;
@@ -136,7 +136,7 @@ class Exercise
         $this->scoreTypeModel = 0;
         $this->globalCategoryId = null;
         $this->notifications = [];
-        $this->exerciseCategoryId = 0;
+        $this->quizCategoryId = 0;
         $this->pageResultConfiguration = null;
         $this->hideQuestionNumber = 0;
         $this->preventBackwards = 0;
@@ -212,7 +212,7 @@ class Exercise
             $this->questionSelectionType = isset($object->question_selection_type) ? (int) $object->question_selection_type : null;
             $this->hideQuestionTitle = isset($object->hide_question_title) ? (int) $object->hide_question_title : 0;
             $this->autolaunch = isset($object->autolaunch) ? (int) $object->autolaunch : 0;
-            $this->exerciseCategoryId = isset($object->exercise_category_id) ? (int) $object->exercise_category_id : null;
+            $this->quizCategoryId = isset($object->quiz_category_id) ? (int) $object->quiz_category_id : null;
             $this->preventBackwards = isset($object->prevent_backwards) ? (int) $object->prevent_backwards : 0;
             $this->exercise_was_added_in_lp = false;
             $this->lpList = [];
@@ -1592,7 +1592,7 @@ class Exercise
         $expired_time = (int) $this->expired_time;
 
         $repo = Container::getQuizRepository();
-        $repoCategory = Container::getExerciseCategoryRepository();
+        $repoCategory = Container::getQuizCategoryRepository();
 
         // we prepare date in the database using the api_get_utc_datetime() function
         $start_time = null;
@@ -1641,8 +1641,8 @@ class Exercise
         ;
 
         $allow = ('true' === api_get_setting('exercise.allow_exercise_categories'));
-        if (true === $allow && !empty($this->getExerciseCategoryId())) {
-            $exercise->setExerciseCategory($repoCategory->find($this->getExerciseCategoryId()));
+        if (true === $allow && !empty($this->getQuizCategoryId())) {
+            $exercise->setQuizCategory($repoCategory->find($this->getQuizCategoryId()));
         }
 
         $exercise->setPreventBackwards($this->getPreventBackwards());
@@ -1900,14 +1900,14 @@ class Exercise
             $categories = $categoryManager->getCategories(api_get_course_int_id());
             $options = [];
             if (!empty($categories)) {
-                /** @var CExerciseCategory $category */
+                /** @var CQuizCategory $category */
                 foreach ($categories as $category) {
                     $options[$category->getId()] = $category->getTitle();
                 }
             }
 
             $form->addSelect(
-                'exercise_category_id',
+                'quiz_category_id',
                 get_lang('Category'),
                 $options,
                 ['placeholder' => get_lang('Please select an option')]
@@ -2435,7 +2435,7 @@ class Exercise
                 $defaults['question_selection_type'] = $this->getQuestionSelectionType();
                 $defaults['hide_question_title'] = $this->getHideQuestionTitle();
                 $defaults['show_previous_button'] = $this->showPreviousButton();
-                $defaults['exercise_category_id'] = $this->getExerciseCategoryId();
+                $defaults['quiz_category_id'] = $this->getQuizCategoryId();
                 $defaults['prevent_backwards'] = $this->getPreventBackwards();
                 $defaults['hide_question_number'] = $this->getHideQuestionNumber();
 
@@ -2662,7 +2662,7 @@ class Exercise
         $this->setGlobalCategoryId($form->getSubmitValue('global_category_id'));
         $this->setShowPreviousButton($form->getSubmitValue('show_previous_button'));
         $this->setNotifications($form->getSubmitValue('notifications'));
-        $this->setExerciseCategoryId($form->getSubmitValue('exercise_category_id'));
+        $this->setQuizCategoryId($form->getSubmitValue('quiz_category_id'));
         $this->setPageResultConfiguration($form->getSubmitValues());
         $this->setHideQuestionNumber($form->getSubmitValue('hide_question_number'));
         $this->preventBackwards = (int) $form->getSubmitValue('prevent_backwards');
@@ -8305,22 +8305,22 @@ class Exercise
     /**
      * @return int
      */
-    public function getExerciseCategoryId()
+    public function getQuizCategoryId(): ?int
     {
-        if (empty($this->exerciseCategoryId)) {
+        if (empty($this->quizCategoryId)) {
             return null;
         }
 
-        return (int) $this->exerciseCategoryId;
+        return (int) $this->quizCategoryId;
     }
 
     /**
      * @param int $value
      */
-    public function setExerciseCategoryId($value)
+    public function setQuizCategoryId($value): void
     {
         if (!empty($value)) {
-            $this->exerciseCategoryId = (int) $value;
+            $this->quizCategoryId = (int) $value;
         }
     }
 
@@ -8779,9 +8779,9 @@ class Exercise
         $qb = $repo->getResourcesByCourse($course, $session);
 
         if (!empty($categoryId)) {
-            $qb->andWhere($qb->expr()->eq('resource.exerciseCategory', $categoryId));
+            $qb->andWhere($qb->expr()->eq('resource.quizCategory', $categoryId));
         } else {
-            $qb->andWhere($qb->expr()->isNull('resource.exerciseCategory'));
+            $qb->andWhere($qb->expr()->isNull('resource.quizCategory'));
         }
 
         $allowDelete = self::allowAction('delete');
@@ -8827,9 +8827,9 @@ class Exercise
         $categoryCondition = '';
         if ('true' === api_get_setting('exercise.allow_exercise_categories')) {
             if (!empty($categoryId)) {
-                $categoryCondition = " AND exercise_category_id = $categoryId ";
+                $categoryCondition = " AND quiz_category_id = $categoryId ";
             } else {
-                $categoryCondition = ' AND exercise_category_id IS NULL ';
+                $categoryCondition = ' AND quiz_category_id IS NULL ';
             }
         }
 

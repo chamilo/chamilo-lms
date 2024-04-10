@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CExerciseCategory;
+use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 
 /**
@@ -15,7 +15,7 @@ class ExerciseCategoryManager extends Model
     public $type = '';
     public $columns = [
         'id',
-        'name',
+        'title',
         'c_id',
         'description',
         'created_at',
@@ -31,7 +31,7 @@ class ExerciseCategoryManager extends Model
     {
         parent::__construct();
         $this->is_course_model = true;
-        $this->table = Database::get_course_table('exercise_category');
+        $this->table = Database::get_course_table('quiz_category');
     }
 
     /**
@@ -41,7 +41,7 @@ class ExerciseCategoryManager extends Model
      */
     public function getCategories($courseId)
     {
-        return Container::getExerciseCategoryRepository()->getCategories($courseId);
+        return Container::getQuizCategoryRepository()->getCategories($courseId);
     }
 
     /**
@@ -55,7 +55,7 @@ class ExerciseCategoryManager extends Model
         $options = [];
 
         if (!empty($categories)) {
-            /** @var CExerciseCategory $category */
+            /** @var CQuizCategory $category */
             foreach ($categories as $category) {
                 $options[$category->getId()] = $category->getTitle();
             }
@@ -69,7 +69,7 @@ class ExerciseCategoryManager extends Model
      */
     public function delete($id)
     {
-        $repo = Container::getExerciseCategoryRepository();
+        $repo = Container::getQuizCategoryRepository();
         $category = $repo->find($id);
         $repo->hardDelete($category);
 
@@ -88,7 +88,7 @@ class ExerciseCategoryManager extends Model
         Symfony\Component\HttpFoundation\Session\Session $session,
         $parameters
     ) {
-        $repo = Container::getExerciseCategoryRepository();
+        $repo = Container::getQuizCategoryRepository();
         $translator = Container::$container->get('translator');
         foreach ($primaryKeys as $id) {
             $category = $repo->find($id);
@@ -110,13 +110,13 @@ class ExerciseCategoryManager extends Model
     {
         $id = $params['id'];
 
-        $repo = Container::getExerciseCategoryRepository();
-        /** @var CExerciseCategory $category */
+        $repo = Container::getQuizCategoryRepository();
+        /** @var CQuizCategory $category */
         $category = $repo->find($id);
 
         if ($category) {
             $category
-                ->setTitle($params['name'])
+                ->setTitle($params['title'])
                 ->setDescription($params['description'])
             ;
 
@@ -139,10 +139,10 @@ class ExerciseCategoryManager extends Model
         $courseId = api_get_course_int_id();
         $course = api_get_course_entity($courseId);
 
-        $repo = Container::getExerciseCategoryRepository();
-        $category = new CExerciseCategory();
+        $repo = Container::getQuizCategoryRepository();
+        $category = new CQuizCategory();
         $category
-            ->setTitle($params['name'])
+            ->setTitle($params['title'])
             ->setCourse($course)
             ->setDescription($params['description'])
             ->setParent($course)
@@ -229,7 +229,7 @@ JAVASCRIPT;
         $form->addElement('header', $header);
 
         $form->addText(
-            'name',
+            'title',
             get_lang('Name')
         );
 
@@ -243,7 +243,7 @@ JAVASCRIPT;
         $form->setDefaults($defaults);
 
         // Setting the rules
-        $form->addRule('name', get_lang('Required field'), 'required');
+        $form->addRule('title', get_lang('Required field'), 'required');
 
         return $form;
     }

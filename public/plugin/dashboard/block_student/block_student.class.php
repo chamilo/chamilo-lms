@@ -190,7 +190,7 @@ class BlockStudent extends Block
                     );
                     $scoretotal = [];
                     if (isset($cats) && isset($cats[0])) {
-                        $scoretotal = $cats[0]->calc_score($student_id, null, $course_code);
+                        $scoretotal = $cats[0]->calc_score($student_id, null, $course['real_id']);
                     }
 
                     if (!empty($scoretotal)) {

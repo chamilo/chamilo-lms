@@ -7,6 +7,7 @@
         :options="realOptions"
         :option-label="optionLabel"
         :option-value="optionValue"
+        :loading="isLoading"
         placeholder="--"
         @update:model-value="emit('update:modelValue', $event)"
       >
@@ -61,6 +62,10 @@ const props = defineProps({
   hastEmptyValue: {
     type: Boolean,
     default: false
+  },
+  isLoading: {
+    type: Boolean,
+    default: false,
   }
 })
 

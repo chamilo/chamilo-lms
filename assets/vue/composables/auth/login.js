@@ -3,6 +3,7 @@ import { useRoute, useRouter } from "vue-router"
 import { useSecurityStore } from "../../store/securityStore"
 import { ref } from "vue"
 import securityService from "../../services/securityService"
+import { useNotification } from "../notification"
 
 function isValidHttpUrl(string) {
   let url
@@ -21,6 +22,7 @@ export function useLogin() {
   const router = useRouter()
   const securityStore = useSecurityStore()
   const platformConfigurationStore = usePlatformConfig()
+  const { showSuccessNotification, showErrorNotification } = useNotification()
 
   const isLoading = ref(false)
 
@@ -54,6 +56,9 @@ export function useLogin() {
       } else {
         await router.replace({ name: "Home" })
       }
+    } catch (error) {
+      const errorMessage = error.response?.data?.error || "An error occurred during login."
+      showErrorNotification(errorMessage)
     } finally {
       isLoading.value = false
     }

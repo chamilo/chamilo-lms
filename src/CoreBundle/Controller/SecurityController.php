@@ -62,6 +62,15 @@ class SecurityController extends AbstractController
             return $this->json(['error' => $message], 401);
         }
 
+        if (null !== $user->getExpirationDate() && $user->getExpirationDate() <= new \DateTime()) {
+            $message = $translator->trans('Your account has expired.');
+
+            $tokenStorage->setToken(null);
+            $request->getSession()->invalidate();
+
+            return $this->json(['error' => $message], 401);
+        }
+
         $extraFieldValuesRepository = $this->entityManager->getRepository(ExtraFieldValues::class);
         $legalTermsRepo = $this->entityManager->getRepository(Legal::class);
         if ($user->hasRole('ROLE_STUDENT')

@@ -14,6 +14,7 @@ use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
+use Exception;
 
 final class Version20231012185600 extends AbstractMigrationChamilo
 {
@@ -63,20 +64,25 @@ final class Version20231012185600 extends AbstractMigrationChamilo
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
 
-                /** @var CQuiz $quiz */
-                $quiz = $quizRepo->find($id);
-                if ($quiz->hasResourceNode()) {
+                try {
+                    /** @var CQuiz $quiz */
+                    $quiz = $quizRepo->find($id);
+                    if ($quiz === null || $quiz->hasResourceNode()) {
+                        continue;
+                    }
+
+                    error_log('Version20231012185600 checking quiz ' . $id . ' as resource node ');
+                    $admin = $userRepo->find($courseAdmin->getId());
+                    $quiz->setParent($course);
+                    $resourceNode = $quizRepo->addResourceNode($quiz, $admin, $course);
+                    $quiz->addCourseLink($course);
+                    $em->persist($resourceNode);
+                    $em->persist($quiz);
+                    $em->flush();
+                } catch (Exception $e) {
+                    error_log("Error processing quiz with ID {$id} in course {$courseId}: " . $e->getMessage());
                     continue;
                 }
-
-                error_log('Version20231012185600 checking quiz '.$id.' as resource node ');
-                $courseAdmin = $userRepo->find($courseAdmin->getId());
-                $quiz->setParent($course);
-                $resourceNode = $quizRepo->addResourceNode($quiz, $courseAdmin, $course);
-                $quiz->addCourseLink($course);
-                $em->persist($resourceNode);
-                $em->persist($quiz);
-                $em->flush();
             }
         }
     }

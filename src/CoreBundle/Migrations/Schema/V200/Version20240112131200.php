@@ -287,7 +287,7 @@ final class Version20240112131200 extends AbstractMigrationChamilo
 
         if ($schema->hasTable('c_quiz')) {
             error_log('Perform the changes in the c_quiz table');
-            $this->addSql('ALTER TABLE c_quiz CHANGE exercise_category_id exercise_category_id INT DEFAULT NULL, CHANGE resource_node_id resource_node_id INT DEFAULT NULL;');
+            $this->addSql('ALTER TABLE c_quiz CHANGE resource_node_id resource_node_id INT DEFAULT NULL;');
         }
 
         if ($schema->hasTable('c_forum_post')) {

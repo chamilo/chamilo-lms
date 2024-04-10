@@ -12,21 +12,14 @@ use Chamilo\CoreBundle\Entity\TicketProject;
 use Chamilo\CoreBundle\Entity\TicketStatus;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use TicketManager;
 
-class TicketFixtures extends Fixture implements ContainerAwareInterface
+class TicketFixtures extends Fixture
 {
     public function __construct(
         private TranslatorInterface $translator,
     ) {}
-
-    public function setContainer(?ContainerInterface $container = null): void
-    {
-        $this->translator = $container->get('translator');
-    }
 
     public function load(ObjectManager $manager): void
     {

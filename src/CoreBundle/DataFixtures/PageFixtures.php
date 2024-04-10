@@ -10,22 +10,14 @@ use Chamilo\CoreBundle\Component\Utils\CreateDefaultPages;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class PageFixtures extends Fixture implements ContainerAwareInterface
+class PageFixtures extends Fixture
 {
     public function __construct(
-        private CreateDefaultPages $createDefaultPages,
-        private TranslatorInterface $translator,
+        private readonly CreateDefaultPages $createDefaultPages,
+        private readonly TranslatorInterface $translator,
     ) {}
-
-    public function setContainer(?ContainerInterface $container = null): void
-    {
-        $this->createDefaultPages = $container->get(CreateDefaultPages::class);
-        $this->translator = $container->get('translator');
-    }
 
     public function load(ObjectManager $manager): void
     {

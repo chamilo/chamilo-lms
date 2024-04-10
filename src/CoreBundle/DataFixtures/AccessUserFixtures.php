@@ -11,25 +11,17 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class AccessUserFixtures extends Fixture implements ContainerAwareInterface
+class AccessUserFixtures extends Fixture
 {
     public const ADMIN_USER_REFERENCE = 'admin';
     public const ANON_USER_REFERENCE = 'anon';
     public const ACCESS_URL_REFERENCE = 'accessUrl';
 
     public function __construct(
-        private ToolChain $toolChain,
-        private UserRepository $userRepository
+        private readonly ToolChain $toolChain,
+        private readonly UserRepository $userRepository
     ) {}
-
-    public function setContainer(?ContainerInterface $container = null): void
-    {
-        $this->toolChain = $container->get(ToolChain::class);
-        $this->userRepository = $container->get(UserRepository::class);
-    }
 
     public function load(ObjectManager $manager): void
     {

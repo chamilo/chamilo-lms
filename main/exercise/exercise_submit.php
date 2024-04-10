@@ -1728,6 +1728,8 @@ foreach ($questionList as $questionId) {
         $remind_highlight = ' remind_highlight ';
     }
 
+    $openDescription = api_get_configuration_value('quiz_question_description_open_by_default') ? true : false;
+
     // Showing the exercise description
     if (!empty($objExercise->description)) {
         if ($objExercise->type == ONE_PER_PAGE || ($objExercise->type != ONE_PER_PAGE && $i == 1)) {
@@ -1738,7 +1740,7 @@ foreach ($questionList as $questionId) {
                 [],
                 'description',
                 'exercise-collapse',
-                false,
+                $openDescription,
                 true
             );
         }

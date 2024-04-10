@@ -4,7 +4,10 @@
       <h4 class="mb-4">{{ t("Configure chamilo colors") }}</h4>
 
       <!-- Advanced mode -->
-      <div v-show="isAdvancedMode">
+      <div
+        v-show="isAdvancedMode"
+        class="mb-5"
+      >
         <div
           class="flex flex-col gap-2 mb-3 items-start md:items-end md:grid md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3"
         >
@@ -137,7 +140,10 @@
       </div>
 
       <!-- Simple mode -->
-      <div v-show="!isAdvancedMode">
+      <div
+        v-show="!isAdvancedMode"
+        class="mb-5"
+      >
         <div
           class="flex flex-col gap-2 mb-3 items-start md:items-end md:grid md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3"
         >
@@ -186,7 +192,17 @@
         </div>
       </div>
 
-      <div class="flex flex-wrap mb-4 gap-3">
+      <div class="flex flex-wrap items-start mb-4 gap-3">
+        <BaseSelect
+          option-value="slug"
+          option-label="title"
+          :options="serverThemes"
+          :label="t('Theme selector')"
+          :model-value="selectedTheme?.slug"
+          :is-loading="isServerThemesLoading"
+          class="w-52"
+          @update:model-value="selectTheme"
+        />
         <BaseButton
           :label="t('Save')"
           icon="send"
@@ -413,19 +429,20 @@
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
 import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
-import { provide, ref, watch } from "vue"
+import { onMounted, provide, ref, watch } from "vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseRadioButtons from "../../components/basecomponents/BaseRadioButtons.vue"
 import BaseDialogConfirmCancel from "../../components/basecomponents/BaseDialogConfirmCancel.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseColorPicker from "../../components/basecomponents/BaseColorPicker.vue"
 import { useTheme } from "../../composables/theme"
-import axios from "axios"
 import { useNotification } from "../../composables/notification"
 import BaseDropdown from "../../components/basecomponents/BaseDropdown.vue"
 import BaseInputDate from "../../components/basecomponents/BaseInputDate.vue"
 import BaseToggleButton from "../../components/basecomponents/BaseToggleButton.vue"
 import Color from "colorjs.io"
+import themeService from "../../services/colorThemeService"
+import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 
 const { t } = useI18n()
 const { getColorTheme, getColors } = useTheme()
@@ -443,8 +460,6 @@ let colorSecondaryButtonText = getColorTheme("--color-secondary-button-text")
 let colorTertiary = getColorTheme("--color-tertiary-base")
 let colorTertiaryGradient = getColorTheme("--color-tertiary-gradient")
 let colorTertiaryButtonText = getColorTheme("--color-tertiary-button-text")
-
-const themeTitle = ref()
 
 let colorSuccess = getColorTheme("--color-success-base")
 let colorSuccessGradient = getColorTheme("--color-success-gradient")
@@ -464,13 +479,36 @@ let colorDangerButtonText = getColorTheme("--color-danger-button-text")
 
 let formColor = getColorTheme("--color-form-base")
 
+const serverThemes = ref([])
+const isServerThemesLoading = ref(true)
+const selectedTheme = ref(null)
+
+onMounted(async () => {
+  try {
+    serverThemes.value = await themeService.getThemes()
+    const found = serverThemes.value.find((e) => e.active) ?? null
+    if (found) {
+      selectedTheme.value = found
+    }
+    isServerThemesLoading.value = false
+  } catch (error) {
+    showErrorNotification(t("We could not retrieve the themes"))
+    console.error(error)
+  }
+})
+
+const selectTheme = (slug) => {
+  selectedTheme.value = serverThemes.value.find((e) => e.slug === slug) ?? null
+}
+
 const saveColors = async () => {
+  if (selectedTheme.value === null) {
+    showErrorNotification(t("You must select a theme in order to save it"))
+    return
+  }
   let colors = getColors()
   try {
-    await axios.post("/api/color_themes", {
-      title: themeTitle.value,
-      variables: colors,
-    })
+    await themeService.updateTheme(selectedTheme.value.title, selectedTheme.value.colors)
     showSuccessNotification(t("Colors updated"))
   } catch (error) {
     showErrorNotification(error)

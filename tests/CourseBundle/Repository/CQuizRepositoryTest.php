@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
-use Chamilo\CourseBundle\Entity\CExerciseCategory;
+use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Chamilo\Tests\AbstractApiTest;
@@ -108,7 +108,7 @@ class CQuizRepositoryTest extends AbstractApiTest
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
 
-        $category = (new CExerciseCategory())
+        $category = (new CQuizCategory())
             ->setTitle('cat')
             ->setDescription('desc')
             ->setCourse($course)
@@ -123,7 +123,7 @@ class CQuizRepositoryTest extends AbstractApiTest
         $exercise = (new CQuiz())
             ->setTitle('exercise 1')
             ->setParent($course)
-            ->setExerciseCategory($category)
+            ->setQuizCategory($category)
             ->setCreator($teacher)
             ->addCourseLink($course)
         ;

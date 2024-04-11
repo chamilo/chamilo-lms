@@ -151,7 +151,7 @@ class ExerciseCategoryManager extends Model
 
         /*
             // Update position
-            $query = $em->getRepository('ChamiloCourseBundle:CExerciseCategory')->createQueryBuilder('e');
+            $query = $em->getRepository('ChamiloCourseBundle:CQuizCategory')->createQueryBuilder('e');
             $query
                 ->where('e.cId = :cId')
                 ->setParameter('cId', $courseId)

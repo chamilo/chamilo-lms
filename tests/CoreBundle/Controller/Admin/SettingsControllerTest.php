@@ -32,7 +32,7 @@ class SettingsControllerTest extends WebTestCase
 
         $client->request('GET', '/admin/settings/admin');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('#sectionMainContent', 'Administrator email');
+        $this->assertSelectorTextContains('#sectionMainContent', 'administrator_email');
     }
 
     public function testSearchSettingAction(): void
@@ -50,7 +50,7 @@ class SettingsControllerTest extends WebTestCase
             'search[keyword]' => 'allow_message_tool',
         ]);
 
-        $this->assertStringContainsString('Allow message tool', $client->getResponse()->getContent());
+        $this->assertStringContainsString('Internal messaging tool', $client->getResponse()->getContent());
     }
 
     public function testUpdateSettingAction(): void

@@ -6,24 +6,24 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CourseBundle\Repository;
 
-use Chamilo\CourseBundle\Entity\CExerciseCategory;
-use Chamilo\CourseBundle\Repository\CExerciseCategoryRepository;
+use Chamilo\CourseBundle\Entity\CQuizCategory;
+use Chamilo\CourseBundle\Repository\CQuizCategoryRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 
-class CExerciseCategoryRepositoryTest extends AbstractApiTest
+class CQuizCategoryRepositoryTest extends AbstractApiTest
 {
     use ChamiloTestTrait;
 
     public function testCreate(): void
     {
         $em = $this->getEntityManager();
-        $repo = self::getContainer()->get(CExerciseCategoryRepository::class);
+        $repo = self::getContainer()->get(CQuizCategoryRepository::class);
 
         $course = $this->createCourse('new');
         $teacher = $this->createUser('teacher');
 
-        $item = (new CExerciseCategory())
+        $item = (new CQuizCategory())
             ->setTitle('cat')
             ->setDescription('desc')
             ->setCourse($course)

@@ -17,19 +17,25 @@ $interbreadcrumb[] = ["url" => "../lp/lp_controller.php?action=list", "name" => 
 Display::display_header($nameTools, "Doc");
 // Show the title
 api_display_tool_title($nameTools.$add_group_to_title);
-?>
 
+$frmUpload = new FormValidator('form_div', 'post', 'upload.php');
+$frmUpload->addElement('hidden', 'curdirpath', $path);
+$frmUpload->addElement('hidden', 'tool', $my_tool);
+$frmUpload->addElement('file', 'user_file', get_lang('FileToUpload'));
+$frmUpload->addRule('user_file', get_lang('ThisFieldIsRequired'), 'required');
+$frmUpload->addButtonUpload(get_lang('Upload'));
+
+echo '
 <div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px;height:50px;">
 </div>
 <div id="upload_form_div" name="form_div" style="display:block;">
-    <form method="POST" action="upload.php" id="upload_form" enctype="multipart/form-data">
-        <input type="hidden" name="curdirpath" value="<?php echo $path; ?>">
-        <input type="hidden" name="tool" value="<?php echo $my_tool; ?>">
-        <input type="file" name="user_file">
-        <input type="submit" name="submit" value="Upload">
-    </form>
+';
+
+$frmUpload->display();
+
+echo '
 </div>
 <br/>
-<?php
+';
 
 Display::display_footer();

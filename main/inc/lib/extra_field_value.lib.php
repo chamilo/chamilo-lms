@@ -334,14 +334,13 @@ class ExtraFieldValue extends Model
                             break;
                     }
 
-                    $cleanedName = api_replace_dangerous_char($value['name']);
-                    $fileName = ExtraField::FIELD_TYPE_FILE."_{$params['item_id']}_$cleanedName";
                     if (!file_exists($fileDir)) {
                         mkdir($fileDir, $dirPermissions, true);
                     }
 
                     if (!empty($value['tmp_name']) && isset($value['error']) && $value['error'] == 0) {
                         $cleanedName = api_replace_dangerous_char($value['name']);
+                        $cleanedName = disable_dangerous_file($cleanedName);
                         $fileName = ExtraField::FIELD_TYPE_FILE."_{$params['item_id']}_$cleanedName";
                         moveUploadedFile($value, $fileDir.$fileName);
 

@@ -219,13 +219,12 @@ switch ($action) {
 
         $data = [];
         $fileUpload = $_FILES['upload'];
-        $currentDirectory = Security::remove_XSS($_REQUEST['curdirpath']);
         $isAllowedToEdit = api_is_allowed_to_edit(null, true);
         if ($isAllowedToEdit) {
             $globalFile = ['files' => $fileUpload];
             $result = DocumentManager::upload_document(
                 $globalFile,
-                $currentDirectory,
+                '/',
                 '',
                 '',
                 0,
@@ -244,11 +243,11 @@ switch ($action) {
             }
         } else {
             $userId = api_get_user_id();
-            $syspath = UserManager::getUserPathById($userId, 'system').'my_files'.$currentDirectory;
+            $syspath = UserManager::getUserPathById($userId, 'system').'my_files';
             if (!is_dir($syspath)) {
                 mkdir($syspath, api_get_permissions_for_new_directories(), true);
             }
-            $webpath = UserManager::getUserPathById($userId, 'web').'my_files'.$currentDirectory;
+            $webpath = UserManager::getUserPathById($userId, 'web').'my_files';
             $fileUploadName = $fileUpload['name'];
             if (file_exists($syspath.$fileUploadName)) {
                 $extension = pathinfo($fileUploadName, PATHINFO_EXTENSION);

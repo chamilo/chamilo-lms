@@ -138,6 +138,10 @@ class ExtraField extends Model
             'track_exercise' => EntityExtraField::TRACK_EXERCISE_FIELD_TYPE,
             'portfolio' => EntityExtraField::PORTFOLIO_TYPE,
             'lp_view' => EntityExtraField::LP_VIEW_TYPE,
+            'course_announcement' => EntityExtraField::COURSE_ANNOUNCEMENT,
+            'message' =>  EntityExtraField::MESSAGE_TYPE,
+            'document' => EntityExtraField::DOCUMENT_TYPE,
+            'attendance_calendar' => EntityExtraField::ATTENDANCE_CALENDAR_TYPE,
         ];
     }
 
@@ -177,6 +181,10 @@ class ExtraField extends Model
             'exercise',
             'track_exercise',
             'lp_view',
+            'course_announcement',
+            'message',
+            'document',
+            'attendance_calendar',
         ];
 
         if ('true' === api_get_setting('announcement.allow_scheduled_announcements')) {

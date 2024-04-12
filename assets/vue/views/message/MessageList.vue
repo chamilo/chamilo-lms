@@ -117,11 +117,15 @@
           />
         </template>
       </Column>
-      <Column :header="t('Title')" :sortable="true" field="title">
+      <Column
+        :header="t('Title')"
+        :sortable="true"
+        field="title"
+      >
         <template #body="slotProps">
           <router-link
             class="text-primary"
-            :to="{ name: 'MessageShow', query: { id: slotProps.data['@id'], }, }"
+            :to="{ name: 'MessageShow', query: { id: slotProps.data['@id'] } }"
           >
             {{ slotProps.data.title }}
           </router-link>
@@ -134,7 +138,11 @@
           />
         </template>
       </Column>
-      <Column :header="t('Send date')" :sortable="true" field="sendDate">
+      <Column
+        :header="t('Send date')"
+        :sortable="true"
+        field="sendDate"
+      >
         <template #body="slotProps">
           {{ relativeDatetime(slotProps.data.sendDate) }}
         </template>
@@ -171,7 +179,7 @@ import { MESSAGE_STATUS_DELETED, MESSAGE_TYPE_INBOX } from "../../components/mes
 import { GET_USER_MESSAGE_TAGS } from "../../graphql/queries/MessageTag"
 import { useNotification } from "../../composables/notification"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
-import SocialSideMenu from "../../components/social/SocialSideMenu.vue";
+import SocialSideMenu from "../../components/social/SocialSideMenu.vue"
 import { useSecurityStore } from "../../store/securityStore"
 
 const route = useRoute()

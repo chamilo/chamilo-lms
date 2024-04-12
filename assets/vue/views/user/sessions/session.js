@@ -7,10 +7,9 @@ export function useSession(user, start, end, query) {
   let sessions = ref(null)
   let isLoading = ref(false)
 
-  if (user.value) {
-    let userId = user.value.id
+  if (user) {
     let variables = {
-      user: "/api/users/" + userId,
+      user: user["@id"],
     }
 
     variables = includeStartDateIfExist(variables, start)

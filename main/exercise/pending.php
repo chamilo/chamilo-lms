@@ -13,6 +13,7 @@ $filter_user = isset($_REQUEST['filter_by_user']) ? (int) $_REQUEST['filter_by_u
 $courseId = isset($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : 0;
 $exerciseId = isset($_REQUEST['exercise_id']) ? (int) $_REQUEST['exercise_id'] : 0;
 $statusId = isset($_REQUEST['status']) ? (int) $_REQUEST['status'] : 0;
+$questionTypeId = isset($_REQUEST['questionTypeId']) ? (int) $_REQUEST['questionTypeId'] : 0;
 $exportXls = isset($_REQUEST['export_xls']) && !empty($_REQUEST['export_xls']) ? (int) $_REQUEST['export_xls'] : 0;
 $action = $_REQUEST['a'] ?? null;
 
@@ -293,6 +294,14 @@ $status = [
 ];
 
 $form->addSelect('status', get_lang('Status'), $status);
+
+$questionType = [
+    0 => get_lang('All'),
+    1 => get_lang('QuestionsWithNoAutomaticCorrection'),
+];
+
+$form->addSelect('questionTypeId', get_lang('QuestionType'), $questionType);
+
 $form->addButtonSearch(get_lang('Search'), 'pendingSubmit');
 $content = $form->returnForm();
 
@@ -305,7 +314,7 @@ if (empty($statusId)) {
 
 $url = api_get_path(WEB_AJAX_PATH).
     'model.ajax.php?a=get_exercise_pending_results&filter_by_user='.$filter_user.
-    '&course_id='.$courseId.'&exercise_id='.$exerciseId.'&status='.$statusId.'&showAttemptsInSessions='.$showAttemptsInSessions;
+    '&course_id='.$courseId.'&exercise_id='.$exerciseId.'&status='.$statusId.'&questionType='.$questionTypeId.'&showAttemptsInSessions='.$showAttemptsInSessions;
 $action_links = '';
 
 $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');

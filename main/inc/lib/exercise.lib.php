@@ -2227,7 +2227,8 @@ HOTSPOT;
         $showSession = false,
         $searchAllTeacherCourses = false,
         $status = 0,
-        $showAttemptsInSessions = false
+        $showAttemptsInSessions = false,
+        $questionType = 0
     ) {
         return self::get_exam_results_data(
             null,
@@ -2246,7 +2247,8 @@ HOTSPOT;
             false,
             $searchAllTeacherCourses,
             $status,
-            $showAttemptsInSessions
+            $showAttemptsInSessions,
+            $questionType
         );
     }
 
@@ -2534,7 +2536,8 @@ HOTSPOT;
         $getOnlyIds = false,
         $searchAllTeacherCourses = false,
         $status = 0,
-        $showAttemptsInSessions = false
+        $showAttemptsInSessions = false,
+        $questionType = 0
     ) {
         //@todo replace all this globals
         global $filter;
@@ -2557,6 +2560,27 @@ HOTSPOT;
 
         $courseCondition = "c_id = $courseId";
         $statusCondition = '';
+
+        if ($questionType == 1) {
+            $TBL_EXERCISES_REL_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+            $TBL_EXERCISES_QUESTION = Database::get_course_table(TABLE_QUIZ_QUESTION);
+
+            $sqlExercise = "SELECT exercice_id
+                            FROM $TBL_EXERCISES_REL_QUESTION terq
+                            LEFT JOIN $TBL_EXERCISES_QUESTION teq
+                            ON terq.question_id = teq.iid
+                            WHERE teq.type in (".FREE_ANSWER.", ".ORAL_EXPRESSION.", ".ANNOTATION.", ".UPLOAD_ANSWER.")
+            ";
+
+            $resultExerciseIds = Database::query($sqlExercise);
+            $exercises = Database::store_result($resultExerciseIds, 'ASSOC');
+            $exerciseIds = [];
+            foreach ($exercises as $exercise) {
+                $exerciseIds[] = $exercise['exercice_id'];
+            }
+            $exercises_where = " AND te.exe_exo_id IN(".implode(',', $exerciseIds).")";
+            $exercisesFilter = " AND exe_exo_id IN(".implode(',', $exerciseIds).")";
+        }
 
         if (!empty($status)) {
             switch ($status) {
@@ -2653,6 +2677,7 @@ HOTSPOT;
             WHERE
                 $courseCondition
                 $exerciseFilter
+                $exercisesFilter
                 $sessionCondition
             GROUP BY ttte.exe_id
         )";
@@ -2809,6 +2834,7 @@ HOTSPOT;
                     ce.active <> -1 AND
                     ce.$courseCondition
                     $exercise_where
+                    $exercises_where
                     $extra_where_conditions
                     $statusCondition
                 ";

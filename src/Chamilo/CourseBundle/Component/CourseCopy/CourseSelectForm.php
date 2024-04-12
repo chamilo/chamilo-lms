@@ -366,9 +366,12 @@ class CourseSelectForm
                     case RESOURCE_QUIZQUESTION:
                     case RESOURCE_SURVEYQUESTION:
                     case RESOURCE_SURVEYINVITATION:
-                    case RESOURCE_SCORM:
                         break;
                     default:
+                        $enableScormSelection = api_get_configuration_value('course_backup_allow_scorm_selection_in_select_form');
+                        if (($type == RESOURCE_SCORM) && !$enableScormSelection) {
+                            break;
+                        }
                         if ($showHeader) {
                             echo '<div class="item-backup" onclick="javascript:exp('."'$type'".');">';
                             echo '<em id="img_'.$type.'" class="fa fa-plus-square-o fa-lg"></em>';
@@ -390,6 +393,14 @@ class CourseSelectForm
                                 ),
                                 'warning'
                             );
+                            if ($enableScormSelection) {
+                                 echo Display::return_message(
+                                     get_lang(
+                                         'IfYourLPsAreScormsYouShouldSelectThemFromTheScorms'
+                                     ),
+                                     'warning'
+                                 );
+                             }
                         }
 
                         if ($type == RESOURCE_DOCUMENT) {
@@ -482,18 +493,20 @@ class CourseSelectForm
      */
     public static function display_hidden_scorm_directories($course)
     {
-        if (is_array($course->resources)) {
-            foreach ($course->resources as $type => $resources) {
-                if (!empty($resources) && count($resources) > 0) {
-                    switch ($type) {
-                        case RESOURCE_SCORM:
-                            foreach ($resources as $id => $resource) {
-                                echo '<input
-                                    type="hidden"
-                                    name="resource['.RESOURCE_SCORM.']['.$id.']"
-                                    id="resource['.RESOURCE_SCORM.']['.$id.']" value="On" />';
-                            }
-                            break;
+        if (!api_get_configuration_value('course_backup_allow_scorm_selection_in_select_form')) {
+            if (is_array($course->resources)) {
+                foreach ($course->resources as $type => $resources) {
+                    if (!empty($resources) && count($resources) > 0) {
+                        switch ($type) {
+                            case RESOURCE_SCORM:
+                                foreach ($resources as $id => $resource) {
+                                    echo '<input
+                                        type="hidden"
+                                        name="resource['.RESOURCE_SCORM.']['.$id.']"
+                                        id="resource['.RESOURCE_SCORM.']['.$id.']" value="On" />';
+                                }
+                                break;
+                        }
                     }
                 }
             }

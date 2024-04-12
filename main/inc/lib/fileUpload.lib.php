@@ -343,7 +343,7 @@ function handle_uploaded_document(
             }
 
             // Full path to where we want to store the file with trailing slash
-            $whereToSave = $documentDir.$uploadPath;
+            $whereToSave = Security::cleanPath($documentDir.$uploadPath).'/';
 
             // At least if the directory doesn't exist, tell so
             if (!is_dir($whereToSave)) {

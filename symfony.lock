@@ -486,15 +486,6 @@
             "config/packages/reset_password.yaml"
         ]
     },
-    "tgalopin/html-sanitizer-bundle": {
-        "version": "1.4",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "main",
-            "version": "1.0",
-            "ref": "95b935177db9abb65356fe19e57fe5abd908b5b8"
-        }
-    },
     "theofidry/alice-data-fixtures": {
         "version": "1.6",
         "recipe": {

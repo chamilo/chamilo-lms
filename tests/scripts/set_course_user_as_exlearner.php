@@ -12,7 +12,7 @@ if (PHP_SAPI != 'cli') {
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 if (false === api_get_configuration_value('user_edition_extra_field_to_check')) {
-    die('You should to set the extra variable to check from setting user_edition_extra_field_to_check in configuration.php');
+    die('You should set an extra field variable to check, by setting "user_edition_extra_field_to_check" in configuration.php');
 }
 
 $extraToCheck = api_get_configuration_value('user_edition_extra_field_to_check');
@@ -25,8 +25,8 @@ if (Database::num_rows($rs) > 0) {
         $userId = $row['id'];
         $userExtra = UserManager::get_extra_user_data_by_field($userId, $extraToCheck);
         if (isset($userExtra[$extraToCheck])) {
-            echo "<br>Checking user_id : $userId the extrafield $extraToCheck with value {$userExtra[$extraToCheck]}:<br>" . PHP_EOL;
-            // It gets the courses with the same extra value
+            echo "<br>Checking user_id : $userId and its extrafield $extraToCheck with value {$userExtra[$extraToCheck]}:<br>" . PHP_EOL;
+            // Get the courses with the same extra value
             $extraFieldValues = new ExtraFieldValue('course');
             $extraItems = $extraFieldValues->get_item_id_from_field_variable_and_field_value($extraToCheck, $userExtra[$extraToCheck], false, false, true);
             $coursesTocheck = [];

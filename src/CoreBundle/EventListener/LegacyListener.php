@@ -12,7 +12,7 @@ use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
@@ -31,8 +31,6 @@ use Twig\Environment;
  */
 class LegacyListener implements EventSubscriberInterface
 {
-    use ContainerAwareTrait;
-
     public function __construct(
         private readonly Environment $twig,
         private readonly TokenStorageInterface $tokenStorage,
@@ -40,6 +38,7 @@ class LegacyListener implements EventSubscriberInterface
         private readonly RouterInterface $router,
         private readonly ParameterBagInterface $parameterBag,
         private readonly SettingsManager $settingsManager,
+        private readonly ContainerInterface $container,
     ) {}
 
     public function onKernelRequest(RequestEvent $event): void

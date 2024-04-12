@@ -17,7 +17,6 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
@@ -38,8 +37,6 @@ use Twig\Environment;
  */
 class CourseListener implements EventSubscriberInterface
 {
-    use ContainerAwareTrait;
-
     public function __construct(
         private readonly Environment $twig,
         private readonly AuthorizationCheckerInterface $authorizationChecker,
@@ -214,17 +211,6 @@ class CourseListener implements EventSubscriberInterface
 
         $request = $event->getRequest();
         $sessionHandler = $request->getSession();
-        // $container = $this->container;
-
-        /*if ($course) {
-            $courseLanguage = $course->getCourseLanguage();
-            //error_log('onkernelcontroller request: '.$courseLanguage);
-            if (!empty($courseLanguage)) {
-                $request->setLocale($courseLanguage);
-                $sessionHandler->set('_locale', $courseLanguage);
-                $this->container->get('session')->set('_locale', $courseLanguage);
-            }
-        }*/
 
         $courseId = (int) $request->get('cid');
         // $groupId = (int) $request->get('gid');
@@ -255,7 +241,6 @@ class CourseListener implements EventSubscriberInterface
                     // Legacy code
                     // $courseCode = $course->getCode();
                     // $courseInfo = api_get_course_info($courseCode);
-                    // $container->get('twig')->addGlobal('course', $course);
                     // $sessionHandler->set('_real_cid', $course->getId());
                     // $sessionHandler->set('_cid', $course->getCode());
                     // $sessionHandler->set('_course', $courseInfo);

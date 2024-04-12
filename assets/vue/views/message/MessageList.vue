@@ -96,8 +96,8 @@
       responsive-layout="scroll"
       sort-field="sendDate"
       :sort-order="-1"
+      striped-rows
       @page="onPage($event)"
-      @row-click="onRowClick"
       @sort="sortingChanged($event)"
     >
       <Column selection-mode="multiple" />
@@ -119,9 +119,12 @@
       </Column>
       <Column :header="t('Title')" :sortable="true" field="title">
         <template #body="slotProps">
-          <div class="flex gap-2 pb-2">
+          <router-link
+            class="text-primary"
+            :to="{ name: 'MessageShow', query: { id: slotProps.data['@id'], }, }"
+          >
             {{ slotProps.data.title }}
-          </div>
+          </router-link>
 
           <BaseTag
             v-for="tag in findMyReceiver(slotProps.data)?.tags"
@@ -354,15 +357,6 @@ function onPage(event) {
   fetchPayload[`order[${event.sortField}]`] = event.sortOrder === -1 ? "desc" : "asc"
 
   loadMessages(false)
-}
-
-function onRowClick({ data }) {
-  router.push({
-    name: "MessageShow",
-    query: {
-      id: data["@id"],
-    },
-  })
 }
 
 function sortingChanged(event) {

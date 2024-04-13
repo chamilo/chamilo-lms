@@ -802,14 +802,19 @@ class SkillModel extends Model
             } else {
                 $courseInfo = [];
             }
-            $asset = $assetRepo->find($resultData['asset_id']);
-            $image = $assetRepo->getAssetUrl($asset);
+
+            $asset = null;
+            if (!empty($resultData['asset_id'])) {
+                $asset = $assetRepo->find($resultData['asset_id']);
+            }
+
+            $image = $asset ? $assetRepo->getAssetUrl($asset) : '/img/icons/32/badges-default.png';
             $badgeImage = Display::img(
                 $image,
                 '',
                 ['width' => '40'],
                 false
-            );;
+            );
             $tableRow = [
                 'skill_id' => $resultData['id'],
                 'asset_id' => $resultData['asset_id'],

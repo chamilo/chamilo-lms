@@ -157,9 +157,12 @@ class Version20 extends AbstractMigrationChamilo
         $languages = LanguageFixtures::getLanguages();
         $languages = array_column($languages, 'isocode', 'english_name');
 
-        $sql = 'SELECT * FROM language';
-        $connection = $this->getEntityManager()->getConnection();
-        $result = $connection->executeQuery($sql);
+        // List of sublanguages to be excluded from updates, except those explicitly allowed.
+        $allowedSubLanguages = ['ast', 'ast_ES', 'ca', 'ca_ES', 'eo', 'gl', 'qu', 'quz_PE', 'qu_PE', 'zh-TW', 'zh_TW', 'pt-BR', 'pt_PT', 'fur', 'fur_IT', 'oc', 'oc_FR'];
+
+        // Selecting languages that are not sublanguages or are explicitly allowed.
+        $sql = "SELECT * FROM language WHERE parent_id IS NULL OR isocode IN ('".implode("', '", $allowedSubLanguages)."')";
+        $result = $this->getEntityManager()->getConnection()->executeQuery($sql);
         $items = $result->fetchAllAssociative();
 
         foreach ($items as $item) {
@@ -171,16 +174,44 @@ class Version20 extends AbstractMigrationChamilo
             }
         }
 
-        $this->addSql("UPDATE language SET isocode = 'fr_FR' WHERE isocode = 'fr' ");
-        $this->addSql("UPDATE language SET isocode = 'pl_PL' WHERE isocode = 'pl' ");
+        // Specific updates for ISO codes.
+        $this->addSql("UPDATE language SET isocode = 'fr_FR' WHERE isocode = 'fr' AND parent_id IS NULL");
+        $this->addSql("UPDATE language SET isocode = 'pl_PL' WHERE isocode = 'pl' AND parent_id IS NULL");
         $this->addSql("UPDATE language SET isocode = 'qu_PE' WHERE isocode = 'qu'");
-
         $this->addSql("UPDATE sys_announcement SET lang = 'english' WHERE lang IS NULL OR lang = '' ");
         $this->addSql("UPDATE course SET course_language = 'english' WHERE course_language IS NULL OR course_language = '' ");
 
-        $this->addSql('UPDATE course SET course_language = (SELECT isocode FROM language WHERE english_name = course_language)');
-        $this->addSql('UPDATE sys_announcement SET lang = (SELECT isocode FROM language WHERE english_name = lang);');
-        $this->addSql("UPDATE settings_current SET selected_value = (SELECT isocode FROM language WHERE english_name = selected_value) WHERE variable = 'platformLanguage'");
+        // Update ISO codes based on the English name, excluding non-allowed sublanguages.
+        $this->addSql("
+            UPDATE course
+            SET course_language = COALESCE((
+                SELECT isocode
+                FROM language
+                WHERE english_name = course_language
+                AND (parent_id IS NULL OR isocode IN ('".implode("', '", $allowedSubLanguages)."'))
+            ), course_language)
+        ");
+
+                $this->addSql("
+            UPDATE sys_announcement
+            SET lang = COALESCE((
+                SELECT isocode
+                FROM language
+                WHERE english_name = lang
+                AND (parent_id IS NULL OR isocode IN ('".implode("', '", $allowedSubLanguages)."'))
+            ), lang)
+        ");
+
+                $this->addSql("
+            UPDATE settings_current
+            SET selected_value = COALESCE((
+                SELECT isocode
+                FROM language
+                WHERE english_name = selected_value
+                AND (parent_id IS NULL OR isocode IN ('".implode("', '", $allowedSubLanguages)."'))
+            ), selected_value)
+            WHERE variable = 'platformLanguage'
+        ");
 
         $table = $schema->getTable('fos_group');
         if (false === $table->hasColumn('name')) {

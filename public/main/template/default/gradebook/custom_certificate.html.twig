@@ -3,6 +3,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
+	<title>{{ 'Certificate' | trans }}</title>
 </head>
 <body>
 {% set stylesheet_name = chamilo_settings_get('stylesheets.stylesheets') %}
@@ -20,7 +21,7 @@
                         <img src="{{ url('index') ~ 'build/css/themes/' ~ stylesheet_name ~ '/images/lado-b.png' }}" style="display:block;">
                     </td>
                     <td bgcolor="#92c647" width=700 height=91 style="font-family:CourierSans-Light; font-weight: bold; line-height: 47px; color:#FFF; padding-bottom: 10px; font-size: 45px;">
-                        {{ 'CertificateHeader' | get_lang }}
+                        {{ 'Certificate of participation' | trans }}
                     </td>
                     <td bgcolor="#92c647" width=58 height=91>
                         <img src="{{ url('index') ~ 'build/css/themes/' ~ stylesheet_name ~ '/images/lado-header.png' }}" style="display:block;">
@@ -41,11 +42,11 @@
                             {{ complete_name }}
                         </h3>
                         <p style="font-size: 16px;">
-                            {{ 'User has participate dans de platforme %s the contrat date %s certificate date %s time %s' | get_lang | format(_s.site_name, certificate_generated_date_no_time, terms_validation_date_no_time, time_in_platform_in_hours)}}
+                            {{ 'User has participate dans de platforme %s the contrat date %s certificate date %s time %s' | trans | format(_s.site_name, certificate_generated_date_no_time, terms_validation_date_no_time, time_in_platform_in_hours)}}
                         </p>
                         <br />
-                        <p style="font-size: 16px;">{{ 'ThisTrainingHasXHours' | get_lang | format(time_in_platform_in_hours)}}</p><br />
-                        <p style="font-size: 16px;">{{ 'TheContentsAreValidated' | get_lang }}:</p>
+                        <p style="font-size: 16px;">{{ 'This preparation corresponds to a volume of approximately %s training hours.' | trans | format(time_in_platform_in_hours)}}</p><br />
+                        <p style="font-size: 16px;">{{ 'The following contents have been validated' | trans }}:</p>
                             {% if sessions %}
                                 <ul style="color: #672290; font-size: 16px;">
                                     {% for session in sessions %}
@@ -54,7 +55,7 @@
                                 </ul>
                             {% endif %}<br />
                         <h4 style="color: #672290; font-size: 16px;">{{ complete_name }}</h4>
-                        <p style="color:#40ad49; font-size: 16px;">{{ 'SkillsValidated' | get_lang }}:</p>
+                        <p style="color:#40ad49; font-size: 16px;">{{ 'Obtained the following skills' | trans }}:</p>
                             {% if skills %}
                                 <ul style="color: #672290; font-size: 16px;">
                                 {% for skill in skills %}
@@ -63,8 +64,8 @@
                                 </ul>
                             {% endif %}
                             <br />
-                        <p style="color:#40ad49; font-size: 16px;">Berlin/Paris, {{ 'The' | get_lang }} <span style="font-weight: bold; color: #672290;">{{ certificate_generated_date_no_time }}</span><br />
-                            {{ 'ThePlatformTeam' | get_lang }}</p>
+                        <p style="color:#40ad49; font-size: 16px;">Berlin/Paris, {{ 'The' | trans }} <span style="font-weight: bold; color: #672290;">{{ certificate_generated_date_no_time }}</span><br />
+                            {{ 'The platform team' | trans }}</p>
                         <br />
                     </td>
                     <td height=755 bgcolor="#92c647">
@@ -82,7 +83,7 @@
                         <img src="{{ url('index') ~ 'build/css/themes/' ~ stylesheet_name ~ '/images/lado-b.png' }}"  style="display:block;">
                     </td>
                     <td bgcolor="#92c647" width=500 height=91 style="font-family:CourierSans-Light; line-height: 18px; color:#FFF;">
-                        {{ 'CertificateFooter' | get_lang }}
+                        {{ 'Certificate Footer' | trans }}
                     </td>
                     <td bgcolor="#92c647" width=245 height=91>
                         <img src="{{ url('index') ~ 'build/css/themes/' ~ stylesheet_name ~ '/images/lado-footer.png' }}" style="display:block;">

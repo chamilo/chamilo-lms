@@ -888,7 +888,7 @@ class SettingsManager implements SettingsManagerInterface
             'exercise_invisible_in_session' => 'exercise',
             'configure_exercise_visibility_in_course' => 'exercise',
             'allow_download_documents_by_api_key' => 'Webservices',
-            'ProfilingFilterAddingUsers' => 'profile',
+            'profiling_filter_adding_users' => 'profile',
             'donotlistcampus' => 'platform',
             'gradebook_show_percentage_in_reports' => 'gradebook',
             'course_creation_splash_screen' => 'Course',

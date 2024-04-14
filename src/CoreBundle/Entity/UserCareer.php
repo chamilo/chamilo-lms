@@ -15,17 +15,19 @@ class UserCareer
 {
     use TimestampableEntity;
 
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'user_id', type: 'integer', nullable: false)]
-    protected int $user;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
+    protected User $user;
 
-    #[ORM\Column(name: 'career_id', type: 'integer', nullable: false)]
-    protected int $career;
+    #[ORM\ManyToOne(targetEntity: Career::class)]
+    #[ORM\JoinColumn(name: 'career_id', referencedColumnName: 'id', nullable: false)]
+    protected Career $career;
 
-    #[ORM\Column(name: 'extra_data', type: 'text', nullable: true)]
-    protected string $extraData;
+    #[ORM\Column(type: 'text', nullable: true)]
+    protected ?string $extraData = null;
 }

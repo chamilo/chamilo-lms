@@ -475,7 +475,7 @@ class IndexBlocksController extends BaseController
             ];
         }
 
-        if (api_get_configuration_value('notification_event')) {
+        if ('true' === api_get_setting('platform.notification_event')) {
             $items[] = [
                 'class' => 'item-notification-list',
                 'url' => $this->generateUrl('legacy_main', ['name' => 'notification_event/list.php']),

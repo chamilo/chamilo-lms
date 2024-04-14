@@ -169,6 +169,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'disable_user_conditions_sender_id',
                 'portfolio_advanced_sharing',
                 'redirect_index_to_url_for_logged_users',
+                'notification_event',
             ],
             'Profile' => [
                 'linkedin_organization_id',
@@ -1009,6 +1010,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 'linkedin_organization_id',
             ],
             'Platform' => [
+                'notification_event',
                 'redirect_index_to_url_for_logged_users',
                 'portfolio_advanced_sharing',
                 'disable_user_conditions_sender_id',

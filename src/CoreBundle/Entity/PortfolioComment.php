@@ -20,11 +20,8 @@ class PortfolioComment
     public const VISIBILITY_VISIBLE = 1;
     public const VISIBILITY_PER_USER = 2;
 
-    /**
-     * Add @ to the next line if portfolio_advanced_sharing config setting is true
-     * ORM\Column(name="visibility", type="smallint", options={"default": 1}).
-     */
-    protected int $visibility = 1;
+    #[ORM\Column(type: 'smallint', options: ["default" => self::VISIBILITY_VISIBLE])]
+    protected int $visibility;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -84,7 +81,7 @@ class PortfolioComment
     {
         $this->isImportant = false;
         $this->children = new ArrayCollection();
-        $this->visibility = 1;
+        $this->visibility = self::VISIBILITY_VISIBLE;
     }
 
     public function getId(): int
@@ -172,11 +169,6 @@ class PortfolioComment
     public function setIsImportant(bool $isImportant): void
     {
         $this->isImportant = $isImportant;
-    }
-
-    public function getExcerpt(int $count = 190): string
-    {
-        return api_get_short_text_from_html($this->content, $count);
     }
 
     public function getScore(): ?float

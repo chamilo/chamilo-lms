@@ -310,11 +310,6 @@ class Portfolio
         return $this;
     }
 
-    public function getExcerpt(int $count = 380): string
-    {
-        return api_get_short_text_from_html($this->content, $count);
-    }
-
     public function getScore(): ?float
     {
         return $this->score;

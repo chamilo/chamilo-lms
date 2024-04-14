@@ -105,6 +105,9 @@ class SessionRelUser
     #[Groups(['session_rel_user:read'])]
     protected Collection $courses;
 
+    #[ORM\Column(name: 'collapsed', type: 'boolean', nullable: true, options: ['default' => null])]
+    protected ?bool $collapsed = null;
+
     /**
      * @throws Exception
      */

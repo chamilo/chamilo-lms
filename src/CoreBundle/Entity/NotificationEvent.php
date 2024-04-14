@@ -21,22 +21,22 @@ class NotificationEvent
     protected string $title;
 
     #[ORM\Column(name: 'content', type: 'text', nullable: true)]
-    protected string $content;
+    protected ?string $content = null;
 
     #[ORM\Column(name: 'link', type: 'text', nullable: true)]
-    protected string $link;
+    protected ?string $link = null;
 
     #[ORM\Column(name: 'persistent', type: 'integer', nullable: true)]
-    protected int $persistent;
+    protected ?int $persistent = null;
 
     #[ORM\Column(name: 'day_diff', type: 'integer', nullable: true)]
-    protected int $dayDiff;
+    protected ?int $dayDiff = null;
 
     #[ORM\Column(name: 'event_type', type: 'string', length: 255, nullable: false)]
     protected string $eventType;
 
     #[ORM\Column(name: 'event_id', type: 'integer', nullable: true)]
-    protected int $eventId;
+    protected ?int $eventId = null;
 
     public function getId(): ?int
     {
@@ -62,48 +62,48 @@ class NotificationEvent
         return $this;
     }
 
-    public function getContent(): string
+    public function getContent(): ?string
     {
         return $this->content;
     }
 
-    public function setContent(string $content): self
+    public function setContent(?string $content): self
     {
         $this->content = $content;
 
         return $this;
     }
 
-    public function getLink(): string
+    public function getLink(): ?string
     {
         return $this->link;
     }
 
-    public function setLink(string $link): self
+    public function setLink(?string $link): self
     {
         $this->link = $link;
 
         return $this;
     }
 
-    public function getPersistent(): int
+    public function getPersistent(): ?int
     {
         return $this->persistent;
     }
 
-    public function setPersistent(int $persistent): self
+    public function setPersistent(?int $persistent): self
     {
         $this->persistent = $persistent;
 
         return $this;
     }
 
-    public function getDayDiff(): int
+    public function getDayDiff(): ?int
     {
         return $this->dayDiff;
     }
 
-    public function setDayDiff(int $dayDiff): self
+    public function setDayDiff(?int $dayDiff): self
     {
         $this->dayDiff = $dayDiff;
 
@@ -122,12 +122,12 @@ class NotificationEvent
         return $this;
     }
 
-    public function getEventId(): int
+    public function getEventId(): ?int
     {
         return $this->eventId;
     }
 
-    public function setEventId(int $eventId): self
+    public function setEventId(?int $eventId): self
     {
         $this->eventId = $eventId;
 

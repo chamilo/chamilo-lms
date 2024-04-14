@@ -104,6 +104,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'portfolio_advanced_sharing' => 'false',
                     'redirect_index_to_url_for_logged_users' => '',
                     'default_menu_entry_for_course_or_session' => 'my_courses',
+                    'notification_event' => 'false',
                 ]
             )
             ->setTransformer(
@@ -345,6 +346,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     ],
                 ]
             )
+            ->add('notification_event', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

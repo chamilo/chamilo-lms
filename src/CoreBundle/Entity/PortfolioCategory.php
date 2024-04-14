@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
@@ -40,22 +41,25 @@ class PortfolioCategory implements Stringable
     #[ORM\OneToMany(targetEntity: Portfolio::class, mappedBy: 'category')]
     protected ArrayCollection $items;
 
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    private ?PortfolioCategory $parent = null;
+
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
+    private Collection $children;
+
     public function __construct()
     {
+        $this->children = new ArrayCollection();
         $this->items = new ArrayCollection();
-    }
-
-    public function __toString(): string
-    {
-        return $this->title;
     }
 
     /**
      * Get id.
      *
-     * @return int
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -65,7 +69,7 @@ class PortfolioCategory implements Stringable
      *
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -73,9 +77,10 @@ class PortfolioCategory implements Stringable
     /**
      * Set title.
      *
+     * @param string $title
      * @return PortfolioCategory
      */
-    public function setTitle(string $title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -90,9 +95,10 @@ class PortfolioCategory implements Stringable
     /**
      * Set description.
      *
+     * @param string|null $description
      * @return PortfolioCategory
      */
-    public function setDescription(?string $description)
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
@@ -107,9 +113,10 @@ class PortfolioCategory implements Stringable
     /**
      * Set isVisible.
      *
+     * @param bool $isVisible
      * @return PortfolioCategory
      */
-    public function setIsVisible(bool $isVisible)
+    public function setIsVisible(bool $isVisible): self
     {
         $this->isVisible = $isVisible;
 
@@ -119,9 +126,12 @@ class PortfolioCategory implements Stringable
     /**
      * Get items.
      *
+     * @param Course|null $course
+     * @param Session|null $session
+     * @param bool $onlyVisibles
      * @return ArrayCollection
      */
-    public function getItems(?Course $course = null, ?Session $session = null, bool $onlyVisibles = false)
+    public function getItems(?Course $course = null, ?Session $session = null, bool $onlyVisibles = false): ArrayCollection
     {
         $criteria = Criteria::create();
 
@@ -150,5 +160,48 @@ class PortfolioCategory implements Stringable
         $this->items = $items;
 
         return $this;
+    }
+
+    public function getParent(): ?self
+    {
+        return $this->parent;
+    }
+
+    public function setParent(?self $parent): self
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    public function getChildren(): Collection
+    {
+        return $this->children;
+    }
+
+    public function addChild(PortfolioCategory $child): self
+    {
+        if (!$this->children->contains($child)) {
+            $this->children[] = $child;
+            $child->setParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChild(PortfolioCategory $child): self
+    {
+        if ($this->children->removeElement($child)) {
+            if ($child->getParent() === $this) {
+                $child->setParent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->title;
     }
 }

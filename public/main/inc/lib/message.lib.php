@@ -1674,7 +1674,7 @@ class MessageManager
      */
     public static function countLikesAndDislikes($messageId, $userId): array
     {
-        if (!api_get_configuration_value('social_enable_messages_feedback')) {
+        if ('true' !== api_get_setting('social.social_enable_messages_feedback')) {
             return [];
         }
 
@@ -1700,7 +1700,7 @@ class MessageManager
      */
     public static function getLikesButton($messageId, $userId, $groupId = 0)
     {
-        if (!api_get_configuration_value('social_enable_messages_feedback')) {
+        if ('true' !== api_get_setting('social.social_enable_messages_feedback')) {
             return '';
         }
 
@@ -1722,7 +1722,7 @@ class MessageManager
         );
 
         $btnDislike = '';
-        if (false === api_get_configuration_value('disable_dislike_option')) {
+        if ('true' !== api_get_setting('social.disable_dislike_option')) {
             $disabled = $countLikes['user_disliked'] ? 'btn--danger' : 'btn--plain';
 
             $btnDislike = Display::button(

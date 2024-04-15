@@ -52,12 +52,6 @@ class ExtraFieldFixtures extends Fixture
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => \ExtraField::FIELD_TYPE_TEXT,
             ],
-            /*[
-                'variable' => 'timezone',
-                'display_text' => 'Timezone',
-                'item_type' => ExtraField::USER_FIELD_TYPE,
-                'value_type' => \ExtraField::FIELD_TYPE_TEXT,
-            ],*/
             [
                 'variable' => 'user_chat_status',
                 'display_text' => 'User chat status',
@@ -261,6 +255,14 @@ class ExtraFieldFixtures extends Fixture
                 'display_text' => 'Send to Coaches',
                 'item_type' => ExtraField::SCHEDULED_ANNOUNCEMENT,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
+                'visible_to_self' => true,
+                'changeable' => true,
+            ],
+            [
+                'variable' => 'work_time',
+                'display_text' => 'Considered working time',
+                'item_type' => ExtraField::WORK_FIELD_TYPE,
+                'value_type' => ExtraField::FIELD_TYPE_INTEGER,
                 'visible_to_self' => true,
                 'changeable' => true,
             ],

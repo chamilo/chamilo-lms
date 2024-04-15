@@ -54,8 +54,7 @@ class MailSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Help desk emails that will recieve email notifications in import_csv.php').
-                        $this->settingArrayHelpValue('cron_notification_help_desk'),
+                    'help' => $this->settingArrayHelpValue('cron_notification_help_desk'),
                 ]
             )
             ->add(
@@ -63,8 +62,7 @@ class MailSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Add a custom extra footer for notificacions emails for a specific language, for example for privacy policy notices. Multiple languages and paragraphs can be added').
-                        $this->settingArrayHelpValue('notifications_extended_footer_message'),
+                    'help' => $this->settingArrayHelpValue('notifications_extended_footer_message'),
                 ]
             )
         ;

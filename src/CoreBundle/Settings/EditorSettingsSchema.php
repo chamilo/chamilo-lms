@@ -84,8 +84,7 @@ class EditorSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('List of driver to plugin in ckeditor').
-                        $this->settingArrayHelpValue('editor_driver_list'),
+                    'help' => $this->settingArrayHelpValue('editor_driver_list'),
                 ]
             )
             ->add('enable_uploadimage_editor', YesNoType::class)
@@ -94,8 +93,7 @@ class EditorSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Ckeditor settings').
-                        $this->settingArrayHelpValue('editor_settings'),
+                    'help' => $this->settingArrayHelpValue('editor_settings'),
                 ]
             )
             ->add('video_context_menu_hidden', YesNoType::class)
@@ -104,8 +102,7 @@ class EditorSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Enable player renderers for YouTube, Vimeo, Facebook, DailyMotion, Twitch medias').
-                        $this->settingArrayHelpValue('video_player_renderers'),
+                    'help' => $this->settingArrayHelpValue('video_player_renderers'),
                 ]
             )
         ;

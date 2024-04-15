@@ -151,8 +151,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Allow add additional actions (as links) in exercises list for teachers').
-                        $this->settingArrayHelpValue('exercise_additional_teacher_modify_actions'),
+                    'help' => $this->settingArrayHelpValue('exercise_additional_teacher_modify_actions'),
                 ]
             )
             ->add('quiz_confirm_saved_answers', YesNoType::class)
@@ -163,8 +162,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Zoom in description images quiz').
-                        $this->settingArrayHelpValue('quiz_image_zoom'),
+                    'help' => $this->settingArrayHelpValue('quiz_image_zoom'),
                 ]
             )
             ->add('quiz_answer_extra_recording', YesNoType::class)
@@ -174,8 +172,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Shows the best exercise score attempt for a student in the reports').
-                        $this->settingArrayHelpValue('add_exercise_best_attempt_in_report'),
+                    'help' => $this->settingArrayHelpValue('add_exercise_best_attempt_in_report'),
                 ]
             )
             ->add(
@@ -183,8 +180,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Add user extra fields in report: main/mySpace/exercise_category_report.php').
-                        $this->settingArrayHelpValue('exercise_category_report_user_extra_fields'),
+                    'help' => $this->settingArrayHelpValue('exercise_category_report_user_extra_fields'),
                 ]
             )
             ->add(
@@ -192,8 +188,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Allow to convert a score into a text/color label using a model if score is inside those values. See BT#12898').
-                        $this->settingArrayHelpValue('score_grade_model'),
+                    'help' => $this->settingArrayHelpValue('score_grade_model'),
                 ]
             )
             ->add('allow_time_per_question', YesNoType::class)
@@ -216,8 +211,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Allow extends allowed question types for embeddable exercises. By default, only the following question types are allowed: 1, 2, 17').
-                        $this->settingArrayHelpValue('exercise_embeddable_extra_types'),
+                    'help' => $this->settingArrayHelpValue('exercise_embeddable_extra_types'),
                 ]
             )
         ;

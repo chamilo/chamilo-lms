@@ -206,8 +206,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Proxy settings for access external services').
-                        $this->settingArrayHelpValue('proxy_settings'),
+                    'help' => $this->settingArrayHelpValue('proxy_settings'),
                 ]
             )
             ->add(
@@ -215,8 +214,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Enable speed controller in video player').
-                        $this->settingArrayHelpValue('video_features'),
+                    'help' => $this->settingArrayHelpValue('video_features'),
                 ]
             )
             ->add(
@@ -224,8 +222,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Changes the row list when using jqgrid/sortable tables').
-                        $this->settingArrayHelpValue('table_row_list'),
+                    'help' => $this->settingArrayHelpValue('table_row_list'),
                 ]
             )
             ->add('webservice_return_user_field', TextType::class)
@@ -238,8 +235,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Overwrites the app/config/auth.conf.php settings').
-                        $this->settingArrayHelpValue('extldap_config'),
+                    'help' => $this->settingArrayHelpValue('extldap_config'),
                 ]
             )
             ->add(
@@ -247,8 +243,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Update user expiration in x days or months when login the first time').
-                        $this->settingArrayHelpValue('update_student_expiration_x_date'),
+                    'help' => $this->settingArrayHelpValue('update_student_expiration_x_date'),
                 ]
             )
             ->add('user_status_show_options_enabled', YesNoType::class)
@@ -257,8 +252,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('The user status is hidden when is false, it requires user_status_show_options_enabled = true').
-                        $this->settingArrayHelpValue('user_status_show_option'),
+                    'help' => $this->settingArrayHelpValue('user_status_show_option'),
                 ]
             )
             ->add(
@@ -266,8 +260,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Set the default expiration date when a user is created by role and days').
-                        $this->settingArrayHelpValue('user_number_of_days_for_default_expiration_date_per_role'),
+                    'help' => $this->settingArrayHelpValue('user_number_of_days_for_default_expiration_date_per_role'),
                 ]
             )
             ->add('user_edition_extra_field_to_check', TextType::class)

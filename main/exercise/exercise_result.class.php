@@ -77,6 +77,7 @@ class ExerciseResult
                     lastname,
                     official_code,
                     ce.title as extitle,
+                    ce.pass_percentage as expasspercentage,
                     te.exe_result as exresult ,
                     te.exe_weighting as exweight,
                     te.exe_date as exdate,
@@ -113,6 +114,7 @@ class ExerciseResult
                         lastname,
                         official_code,
                         ce.title as extitle,
+                        ce.pass_percentage as expasspercentage,
                         te.exe_result as exresult,
                         te.exe_weighting as exweight,
                         te.exe_date as exdate,
@@ -229,6 +231,9 @@ class ExerciseResult
                     $return[$i]['username'] = $results[$i]['username'];
                 }
                 $return[$i]['title'] = $result['extitle'];
+                $return[$i]['minimun'] = $result['expasspercentage']
+                    ? float_format($result['expasspercentage'] / 100 * $result['exweight'])
+                    : 0;
                 $return[$i]['start_date'] = api_get_local_time($result['exstart']);
                 $return[$i]['end_date'] = api_get_local_time($result['exdate']);
                 $return[$i]['duration'] = $result['duration'];
@@ -269,6 +274,7 @@ class ExerciseResult
                             $return[$i]['username'] = $student['username'];
                         }
                         $return[$i]['title'] = null;
+                        $return[$i]['minimun'] = null;
                         $return[$i]['start_date'] = null;
                         $return[$i]['end_date'] = null;
                         $return[$i]['duration'] = null;
@@ -368,6 +374,7 @@ class ExerciseResult
         $data .= get_lang('StartDate').';';
         $data .= get_lang('EndDate').';';
         $data .= get_lang('Duration').' ('.get_lang('MinMinutes').') ;';
+        $data .= get_lang('WeightNecessary').';';
         $data .= get_lang('Score').';';
         $data .= get_lang('Total').';';
         $data .= get_lang('Status').';';
@@ -417,6 +424,7 @@ class ExerciseResult
             $data .= str_replace("\r\n", '  ', $row['start_date']).';';
             $data .= str_replace("\r\n", '  ', $row['end_date']).';';
             $data .= str_replace("\r\n", '  ', $duration).';';
+            $data .= str_replace("\r\n", '  ', $row['minimun']).';';
             $data .= str_replace("\r\n", '  ', $row['result']).';';
             $data .= str_replace("\r\n", '  ', $row['max']).';';
             $data .= str_replace("\r\n", '  ', $row['status']).';';
@@ -559,6 +567,8 @@ class ExerciseResult
         $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('EndDate'));
         $column++;
         $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Duration').' ('.get_lang('MinMinutes').')');
+        $column++;
+        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('WeightNecessary'));
         $column++;
         $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Score'));
         $column++;
@@ -710,6 +720,8 @@ class ExerciseResult
             $column++;
             $duration = !empty($row['duration']) ? round($row['duration'] / 60) : 0;
             $worksheet->setCellValueByColumnAndRow($column, $line, $duration);
+            $column++;
+            $worksheet->setCellValueByColumnAndRow($column, $line, $row['minimun']);
             $column++;
             $worksheet->setCellValueByColumnAndRow($column, $line, $row['result']);
             $column++;

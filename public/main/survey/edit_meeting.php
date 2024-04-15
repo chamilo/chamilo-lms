@@ -56,19 +56,10 @@ $form->addHidden('visible_results', '0');
 $form->addHidden('survey_type', 3);
 $text = $form->addText('survey_title', get_lang('Title'));
 
-$allowSurveyAvailabilityDatetime = ('true' === api_get_setting('survey.allow_survey_availability_datetime'));
-
-if ($allowSurveyAvailabilityDatetime) {
-    $form->addDateTimePicker('start_date', get_lang('Start Date'));
-    $form->addDateTimePicker('end_date', get_lang('End Date'));
-    $form->addRule('start_date', get_lang('Invalid date'), 'datetime');
-    $form->addRule('end_date', get_lang('Invalid date'), 'datetime');
-} else {
-    $form->addDatePicker('start_date', get_lang('Start Date'));
-    $form->addDatePicker('end_date', get_lang('End Date'));
-    $form->addRule('start_date', get_lang('Invalid date'), 'date');
-    $form->addRule('end_date', get_lang('Invalid date'), 'date');
-}
+$form->addDateTimePicker('start_date', get_lang('Start Date'));
+$form->addDateTimePicker('end_date', get_lang('End Date'));
+$form->addRule('start_date', get_lang('Invalid date'), 'datetime');
+$form->addRule('end_date', get_lang('Invalid date'), 'datetime');
 
 $form->addRule(
     ['start_date', 'end_date'],

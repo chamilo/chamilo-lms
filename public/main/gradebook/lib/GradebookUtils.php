@@ -1510,10 +1510,6 @@ class GradebookUtils
         $loadStats = [];
         if ('true' === api_get_setting('gradebook_detailed_admin_view')) {
             $loadStats = [1, 2, 3];
-        } else {
-            if ('true' === api_get_setting('gradebook.gradebook_enable_best_score')) {
-                $loadStats = [2];
-            }
         }
 
         $gradebooktable = new GradebookTable(

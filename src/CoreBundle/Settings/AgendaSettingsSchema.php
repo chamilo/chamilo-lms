@@ -21,10 +21,6 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
             ->setDefaults(
                 [
                     'allow_personal_agenda' => 'true',
-                    // 'display_mini_month_calendar' => '', ??
-                    'display_upcoming_events' => '',
-                    // ??
-                    // 'number_of_upcoming_events' => '0',
                     'default_calendar_view' => 'month',
                     'personal_calendar_show_sessions_occupation' => 'false',
                     'personal_agenda_show_all_session_events' => 'false',
@@ -41,9 +37,6 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
 
         $allowedTypes = [
             'allow_personal_agenda' => ['string'],
-            // 'display_mini_month_calendar' => array('string'),
-            'display_upcoming_events' => ['string'],
-            // 'number_of_upcoming_events' => array('string'),
             'default_calendar_view' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
@@ -53,9 +46,6 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->add('allow_personal_agenda', YesNoType::class)
-            // ->add('display_mini_month_calendar', YesNoType::class)
-            ->add('display_upcoming_events', YesNoType::class)
-            // ->add('number_of_upcoming_events')
             ->add(
                 'default_calendar_view',
                 ChoiceType::class,

@@ -606,7 +606,7 @@ switch ($action) {
             );
         }
 
-        $config = api_get_configuration_value('announcement.hide_send_to_hrm_users');
+        $config = api_get_setting('announcement.announcements_hide_send_to_hrm_users');
 
         if (false === $config) {
             $form->addCheckBox(

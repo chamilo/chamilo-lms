@@ -31,7 +31,6 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
                     'gradebook_default_weight' => '100',
                     'gradebook_locking_enabled' => 'false',
                     'gradebook_default_grade_model_id' => '',
-                    'gradebook_show_percentage_in_reports' => '',
                     'my_display_coloring' => 'false',
                     'student_publication_to_take_in_gradebook' => 'first',
                     'gradebook_detailed_admin_view' => 'false',
@@ -40,7 +39,6 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
                     'add_gradebook_certificates_cron_task_enabled' => 'false',
                     'certificate_filter_by_official_code' => 'false',
                     'hide_certificate_export_link_students' => 'false',
-                    'gradebook_enable_best_score' => 'false',
                     'gradebook_hide_graph' => 'false',
                     'gradebook_hide_pdf_report_button' => 'false',
                     'hide_gradebook_percentage_user_result' => 'true',
@@ -89,7 +87,6 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
             ->add('gradebook_default_weight')
             ->add('gradebook_locking_enabled', YesNoType::class)
             ->add('gradebook_default_grade_model_id')
-            ->add('gradebook_show_percentage_in_reports')
             ->add('my_display_coloring', YesNoType::class)
             ->add(
                 'student_publication_to_take_in_gradebook',
@@ -107,8 +104,6 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
             ->add('add_gradebook_certificates_cron_task_enabled', YesNoType::class)
             ->add('certificate_filter_by_official_code', YesNoType::class)
             ->add('hide_certificate_export_link_students', YesNoType::class)
-            ->add('gradebook_enable_best_score', YesNoType::class)
-            ->add('gradebook_hide_graph', YesNoType::class)
             ->add('gradebook_hide_pdf_report_button', YesNoType::class)
             ->add('hide_gradebook_percentage_user_result', YesNoType::class)
             ->add('gradebook_use_exercise_score_settings_in_categories', YesNoType::class)

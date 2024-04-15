@@ -688,10 +688,8 @@ class SurveyManager
                 'survey_group_sec2' => $row['survey_group_sec2'],
             ];
 
-            if ('true' === api_get_setting('survey.allow_required_survey_questions')) {
-                if (isset($row['is_required'])) {
-                    $params['is_required'] = $row['is_required'];
-                }
+            if (isset($row['is_required'])) {
+                $params['is_required'] = $row['is_required'];
             }
 
             $insertId = Database::insert($table_survey_question, $params);
@@ -896,9 +894,7 @@ class SurveyManager
         $return['horizontalvertical'] = $row['display'];
         $return['shared_question_id'] = $row['shared_question_id'];
         $return['maximum_score'] = $row['max_value'];
-        $return['is_required'] = ('true' === api_get_setting('survey.allow_required_survey_questions'))
-            ? $row['is_required']
-            : false;
+        $return['is_required'] = $row['is_required'];
 
         if (0 != $row['survey_group_pri']) {
             $return['assigned'] = $row['survey_group_pri'];
@@ -1057,21 +1053,17 @@ class SurveyManager
                         ->setSharedQuestionId((int) $form_content['shared_question_id'])
                     ;
 
-                    if ('true' === api_get_setting('survey.allow_required_survey_questions')) {
-                        $question->setIsMandatory(isset($form_content['is_required']));
-                    }
+                    $question->setIsMandatory(isset($form_content['is_required']));
 
-                    if ('true' === api_get_setting('survey.survey_question_dependency')) {
-                        $params['parent_id'] = 0;
-                        $params['parent_option_id'] = 0;
-                        if (isset($form_content['parent_id']) &&
-                            isset($form_content['parent_option_id']) &&
-                            !empty($form_content['parent_id']) &&
-                            !empty($form_content['parent_option_id'])
-                        ) {
-                            $params['parent_id'] = $form_content['parent_id'];
-                            $params['parent_option_id'] = $form_content['parent_option_id'];
-                        }
+                    $params['parent_id'] = 0;
+                    $params['parent_option_id'] = 0;
+                    if (isset($form_content['parent_id']) &&
+                        isset($form_content['parent_option_id']) &&
+                        !empty($form_content['parent_id']) &&
+                        !empty($form_content['parent_option_id'])
+                    ) {
+                        $params['parent_id'] = $form_content['parent_id'];
+                        $params['parent_option_id'] = $form_content['parent_option_id'];
                     }
 
                     $em->persist($question);
@@ -1113,21 +1105,16 @@ class SurveyManager
                         ->setMaxValue($maxScore)
                     ;
 
-                    if ('true' === api_get_setting('survey.allow_required_survey_questions')) {
-                        $question->isMandatory(isset($form_content['is_required']));
-                    }
-
-                    if ('true' === api_get_setting('survey.survey_question_dependency')) {
-                        $params['parent_id'] = 0;
-                        $params['parent_option_id'] = 0;
-                        if (isset($form_content['parent_id']) &&
-                            isset($form_content['parent_option_id']) &&
-                            !empty($form_content['parent_id']) &&
-                            !empty($form_content['parent_option_id'])
-                        ) {
-                            $question->setParent($repo->find($form_content['parent_id']));
-                            $question->setParentOption($repoOption->find($form_content['parent_option_id']));
-                        }
+                    $question->isMandatory(isset($form_content['is_required']));
+                    $params['parent_id'] = 0;
+                    $params['parent_option_id'] = 0;
+                    if (isset($form_content['parent_id']) &&
+                        isset($form_content['parent_option_id']) &&
+                        !empty($form_content['parent_id']) &&
+                        !empty($form_content['parent_option_id'])
+                    ) {
+                        $question->setParent($repo->find($form_content['parent_id']));
+                        $question->setParentOption($repoOption->find($form_content['parent_option_id']));
                     }
 
                     $em->persist($question);
@@ -1763,10 +1750,8 @@ class SurveyManager
                     'survey_group_sec2' => $row['survey_group_sec2'],
                 ];
 
-                if ('true' === api_get_setting('survey.allow_required_survey_questions')) {
-                    if (isset($row['is_required'])) {
-                        $params['is_required'] = $row['is_required'];
-                    }
+                if (isset($row['is_required'])) {
+                    $params['is_required'] = $row['is_required'];
                 }
 
                 $insertId = Database::insert($surveyQuestionTable, $params);
@@ -1845,10 +1830,8 @@ class SurveyManager
             'survey_group_sec1' => $row['survey_group_sec1'],
             'survey_group_sec2' => $row['survey_group_sec2'],
         ];
-        if ('true' === api_get_setting('survey.allow_required_survey_questions')) {
-            if (isset($row['is_required'])) {
-                $params['is_required'] = $row['is_required'];
-            }
+        if (isset($row['is_required'])) {
+            $params['is_required'] = $row['is_required'];
         }
         // Get question position
         $sqlSort = "SELECT max(sort) as sort FROM $questionTable
@@ -2074,10 +2057,6 @@ class SurveyManager
 
     public static function hasDependency(CSurvey $survey)
     {
-        if ('false' === api_get_setting('survey.survey_question_dependency')) {
-            return false;
-        }
-
         $surveyId = $survey->getIid();
 
         $table = Database::get_course_table(TABLE_SURVEY_QUESTION);

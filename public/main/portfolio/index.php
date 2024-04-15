@@ -15,10 +15,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-if ('true' !== api_get_setting('platform.allow_portfolio_tool')) {
-    api_not_allowed(true);
-}
-
 $em = Database::getManager();
 
 $currentUserId = api_get_user_id();

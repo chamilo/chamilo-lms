@@ -296,17 +296,14 @@ $returnParams = $extraField->addElements(
     true
 );
 
-$allowEmailTemplate = ('true' === api_get_setting('mail.mail_template_system'));
-if ($allowEmailTemplate) {
-    $form->addEmailTemplate(
-        [
-            'subject_registration_platform.tpl',
-            'content_registration_platform.tpl',
-            'new_user_first_email_confirmation.tpl',
-            'new_user_second_email_confirmation.tpl',
-        ]
-    );
-}
+$form->addEmailTemplate(
+    [
+        'subject_registration_platform.tpl',
+        'content_registration_platform.tpl',
+        'new_user_first_email_confirmation.tpl',
+        'new_user_second_email_confirmation.tpl',
+    ]
+);
 
 $jquery_ready_content = $returnParams['jquery_ready_content'];
 

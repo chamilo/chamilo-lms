@@ -3282,7 +3282,6 @@ class SurveyUtil
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $mandatoryAllowed = ('true' === api_get_setting('survey.allow_mandatory_survey'));
-        $allowSurveyAvailabilityDatetime = ('true' === api_get_setting('survey.allow_survey_availability_datetime'));
 
         // Searching
         $search_restriction = self::survey_search_restriction();
@@ -3371,7 +3370,7 @@ class SurveyUtil
             if (null !== $from) {
                 $array[5] = api_convert_and_format_date(
                     $from,
-                    $allowSurveyAvailabilityDatetime ? DATE_TIME_FORMAT_LONG : DATE_FORMAT_LONG
+                    DATE_TIME_FORMAT_LONG
                 );
             }
             $till = $survey->getAvailTill() ? $survey->getAvailTill()->format('Y-m-d H:i:s') : null;
@@ -3379,7 +3378,7 @@ class SurveyUtil
             if (null !== $till) {
                 $array[6] = api_convert_and_format_date(
                     $till,
-                    $allowSurveyAvailabilityDatetime ? DATE_TIME_FORMAT_LONG : DATE_FORMAT_LONG
+                    DATE_TIME_FORMAT_LONG
                 );
             }
 
@@ -3432,7 +3431,6 @@ class SurveyUtil
     public static function get_survey_data_for_coach($from, $number_of_items, $column, $direction)
     {
         $mandatoryAllowed = ('true' === api_get_setting('survey.allow_mandatory_survey'));
-        $allowSurveyAvailabilityDatetime = ('true' === api_get_setting('survey.allow_survey_availability_datetime'));
         $repo = Container::getSurveyRepository();
         $qb = $repo->findAllByCourse(
             api_get_course_entity(),
@@ -3496,11 +3494,11 @@ class SurveyUtil
         while ($survey = Database::fetch_array($res)) {
             $survey['col5'] = api_convert_and_format_date(
                 $survey['col5'],
-                $allowSurveyAvailabilityDatetime ? DATE_TIME_FORMAT_LONG : DATE_FORMAT_LONG
+                DATE_TIME_FORMAT_LONG
             );
             $survey['col6'] = api_convert_and_format_date(
                 $survey['col6'],
-                $allowSurveyAvailabilityDatetime ? DATE_TIME_FORMAT_LONG : DATE_FORMAT_LONG
+                DATE_TIME_FORMAT_LONG
             );
 
             if ($mandatoryAllowed) {
@@ -3534,7 +3532,6 @@ class SurveyUtil
         $user_id = (int) $user_id;
         $sessionId = api_get_session_id();
         $mandatoryAllowed = ('true' === api_get_setting('survey.allow_mandatory_survey'));
-        $allowSurveyAvailabilityDatetime = ('true' === api_get_setting('survey.allow_survey_availability_datetime'));
 
         // Database table definitions
         $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
@@ -3554,7 +3551,7 @@ class SurveyUtil
 
         /** @var \DateTime $now */
         $now = api_get_utc_datetime(null, false, true);
-        $filterDate = $allowSurveyAvailabilityDatetime ? $now->format('Y-m-d H:i') : $now->format('Y-m-d');
+        $filterDate = $now->format('Y-m-d H:i');
         $sessionCondition = api_get_session_condition($sessionId, true, false, 'survey_invitation.session_id');
 
         $sql = "SELECT

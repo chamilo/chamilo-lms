@@ -81,7 +81,7 @@ if ('true' === api_get_setting('allow_message_tool')) {
 EOF;
 }
 
-$tool_name = 'true' === api_get_setting('profile.is_editable') ? get_lang('Edit Profile') : get_lang('View my e-portfolio');
+$tool_name = get_lang('View my e-portfolio');
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
 /*
@@ -190,7 +190,7 @@ $form->applyFilter('phone', 'trim');
 $form->applyFilter('phone', 'html_filter');
 
 //  PICTURE
-if ('true' === api_get_setting('profile.is_editable') && in_array('picture', $profileList)) {
+if (in_array('picture', $profileList)) {
     $form->addFile(
         'picture',
         [
@@ -226,7 +226,7 @@ if (!in_array('language', $profileList)) {
 }
 
 // THEME
-if ('true' === api_get_setting('profile.is_editable') && 'true' === api_get_setting('user_selected_theme')) {
+if ('true' === api_get_setting('user_selected_theme')) {
     $form->addSelectTheme('theme', get_lang('Graphical theme'));
     if (!in_array('theme', $profileList)) {
         $form->freeze('theme');
@@ -300,7 +300,6 @@ if ('true' === api_get_setting('extended_profile')) {
 
 //    PASSWORD, if auth_source is platform
 if (PLATFORM_AUTH_SOURCE == $user_data['auth_source'] &&
-    'true' === api_get_setting('profile.is_editable') &&
     in_array('password', $profileList)
 ) {
     $form->addElement('password', 'password0', [get_lang('Pass'), get_lang('Enter2passToChange')], ['size' => 40]);
@@ -348,11 +347,7 @@ if (in_array('apikeys', $profileList)) {
     );
 }
 //    SUBMIT
-if ('true' === api_get_setting('profile.is_editable')) {
-    $form->addButtonUpdate(get_lang('Save settings'), 'apply_change');
-} else {
-    $form->freeze();
-}
+$form->addButtonUpdate(get_lang('Save settings'), 'apply_change');
 
 // Student cannot modified their user conditions
 $extraConditions = api_get_setting('profile.show_conditions_to_user', true);

@@ -53,15 +53,11 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'pdf_logo_header' => '',
                     'allow_my_files' => 'true',
                     'registered' => 'false',
-                    'keep_old_images_after_delete' => 'true',
                     'load_term_conditions_section' => 'login',
                     'server_type' => 'prod',
                     'show_tabs' => array_values(self::$tabs),
                     'chamilo_database_version' => '2.0.0',
-                    'theme_fallback' => 'chamilo',
                     'unoconv_binaries' => '/usr/bin/unoconv',
-                    'packager' => 'chamilo',
-                    'sync_db_with_schema' => 'false',
                     'hide_main_navigation_menu' => 'false',
                     'pdf_img_dpi' => '96',
                     'tracking_skip_generic_data' => 'false',
@@ -74,14 +70,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'proxy_settings' => '',
                     'video_features' => '',
                     'table_row_list' => '',
-                    'allow_portfolio_tool' => 'false',
-                    'session_stored_in_db_as_backup' => 'false',
-                    'memcache_server' => '',
-                    'session_stored_after_n_times' => '10',
-                    'default_template' => 'default',
-                    'aspell_bin' => '/usr/bin/hunspell',
-                    'aspell_opts' => '-a -d en_GB -H -i utf-8',
-                    'aspell_temp_dir' => './',
                     'webservice_return_user_field' => 'oauth2_id',
                     'multiple_url_hide_disabled_settings' => 'false',
                     'login_max_attempt_before_blocking_account' => '0',
@@ -98,7 +86,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'use_career_external_id_as_identifier_in_diagrams' => 'false',
                     'disable_webservices' => 'false',
                     'webservice_enable_adminonly_api' => 'false',
-                    'plugin_settings' => '',
                     'allow_working_time_edition' => 'false',
                     'disable_user_conditions_sender_id' => '0',
                     'portfolio_advanced_sharing' => 'false',
@@ -170,7 +157,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             // old settings with no category
             ->add('chamilo_database_version')
             ->add('registered', YesNoType::class)
-            ->add('keep_old_images_after_delete', YesNoType::class)
             ->add(
                 'load_term_conditions_section',
                 ChoiceType::class,
@@ -192,14 +178,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 ],
             )
             ->add(
-                'theme_fallback',
-                TextType::class,
-                [
-                    'label' => 'ThemeFallbackTitle',
-                    'help' => 'ThemeFallbackComment',
-                ]
-            )
-            ->add(
                 'unoconv_binaries',
                 TextType::class,
                 [
@@ -207,15 +185,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'help' => 'UnoconvBinariesComment',
                 ]
             )
-            ->add(
-                'packager',
-                TextType::class,
-                [
-                    'label' => 'PackagerTitle',
-                    'help' => 'PackagerComment',
-                ]
-            )
-            ->add('sync_db_with_schema', YesNoType::class)
             ->add('hide_main_navigation_menu', YesNoType::class)
             ->add('pdf_img_dpi', TextType::class)
             ->add('tracking_skip_generic_data', YesNoType::class)
@@ -259,22 +228,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                         $this->settingArrayHelpValue('table_row_list'),
                 ]
             )
-            ->add('allow_portfolio_tool', YesNoType::class)
-            ->add('session_stored_in_db_as_backup', YesNoType::class)
-            ->add(
-                'memcache_server',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => get_lang('Define the different memcache servers available').
-                        $this->settingArrayHelpValue('memcache_server'),
-                ]
-            )
-            ->add('session_stored_after_n_times', TextType::class)
-            ->add('default_template', TextType::class)
-            ->add('aspell_bin', TextType::class)
-            ->add('aspell_opts', TextType::class)
-            ->add('aspell_temp_dir', TextType::class)
             ->add('webservice_return_user_field', TextType::class)
             ->add('multiple_url_hide_disabled_settings', YesNoType::class)
             ->add('login_max_attempt_before_blocking_account', TextType::class)
@@ -323,15 +276,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->add('use_career_external_id_as_identifier_in_diagrams', YesNoType::class)
             ->add('disable_webservices', YesNoType::class)
             ->add('webservice_enable_adminonly_api', YesNoType::class)
-            ->add(
-                'plugin_settings',
-                TextareaType::class,
-                [
-                    'help_html' => true,
-                    'help' => get_lang('Disables the following BBB plugin settings in the plugin form and use them in priority').
-                        $this->settingArrayHelpValue('plugin_settings'),
-                ]
-            )
             ->add('allow_working_time_edition', YesNoType::class)
             ->add('disable_user_conditions_sender_id', TextType::class)
             ->add('portfolio_advanced_sharing', TextType::class)
@@ -375,18 +319,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             'table_row_list' => "<pre>
                 ['options' => [50, 100, 200, 500]]
                 </pre>",
-            'memcache_server' => "<pre>
-                [
-                    0 => [
-                        'host' => 'chamilo8',
-                        'port' => '11211',
-                    ],
-                    1 => [
-                        'host' => 'chamilo9',
-                        'port' => '11211',
-                    ],
-                ]
-                </pre>",
             'extldap_config' => "<pre>
                 ['host' => '', 'port' => '']
                 </pre>",
@@ -414,15 +346,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'SESSIONADMIN' => 60,
                     'STUDENT_BOSS' => 60,
                     'INVITEE' => 31
-                ]
-                </pre>",
-            'plugin_settings' => "<pre>
-                [
-                    'bbb' => [
-                        'tool_enable' => 'true', // string value
-                        'host' => 'https://www.example.com',
-                        'salt' => 'abc123'
-                    ]
                 ]
                 </pre>",
         ];

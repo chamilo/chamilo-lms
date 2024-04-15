@@ -3201,7 +3201,7 @@ class ImportCsv
 }
 
 $logger = new Logger('cron');
-$emails = api_get_setting('mail.cron_notification_mails', true);
+$emails = api_get_setting('mail.cron_notification_help_desk', true);
 
 $minLevel = Logger::DEBUG;
 

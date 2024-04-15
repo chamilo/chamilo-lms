@@ -6383,7 +6383,7 @@ class learnpath
         ];
         $form->addGroup($group, null, get_lang('If file exists:'));
 
-        $fileExistsOption = api_get_setting('document_if_file_exists_option');
+        $fileExistsOption = api_get_setting('document.document_if_file_exists_option');
         $defaultFileExistsOption = 'rename';
         if (!empty($fileExistsOption)) {
             $defaultFileExistsOption = $fileExistsOption;

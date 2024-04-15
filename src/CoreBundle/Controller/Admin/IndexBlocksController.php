@@ -467,13 +467,11 @@ class IndexBlocksController extends BaseController
             ];
         }
 
-        if ('true' === $this->settingsManager->getSetting('mail.mail_template_system')) {
-            $items[] = [
-                'class' => 'item-mail-template',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'mail_template/list.php']),
-                'label' => $this->translator->trans('Mail templates'),
-            ];
-        }
+        $items[] = [
+            'class' => 'item-mail-template',
+            'url' => $this->generateUrl('legacy_main', ['name' => 'mail_template/list.php']),
+            'label' => $this->translator->trans('Mail templates'),
+        ];
 
         if ('true' === api_get_setting('platform.notification_event')) {
             $items[] = [
@@ -649,12 +647,10 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('Tickets'),
         ];
 
-        if ('true' === $this->settingsManager->getSetting('session.allow_session_status')) {
-            $items[] = [
-                'url' => $this->generateUrl('legacy_main', ['name' => 'session/cron_status.php']),
-                'label' => $this->translator->trans('Update session status'),
-            ];
-        }
+        $items[] = [
+            'url' => $this->generateUrl('legacy_main', ['name' => 'session/cron_status.php']),
+            'label' => $this->translator->trans('Update session status'),
+        ];
 
         $items[] = [
             'class' => 'item-colors',

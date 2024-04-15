@@ -19,14 +19,13 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
             ->setDefaults(
                 [
                     'hide_global_announcements_when_not_connected' => 'false',
-                    'hide_send_to_hrm_users' => 'true',
+                    'announcements_hide_send_to_hrm_users' => 'true',
                     'disable_announcement_attachment' => 'false',
                     'allow_scheduled_announcements' => 'false',
                     'disable_delete_all_announcements' => 'false',
                     'hide_announcement_sent_to_users_info' => 'false',
                     'send_all_emails_to' => '',
                     'allow_careers_in_global_announcements' => 'false',
-                    'announcements_hide_send_to_hrm_users' => 'false',
                     'allow_coach_to_edit_announcements' => 'false',
                     'course_announcement_scheduled_by_date' => 'false',
                 ]
@@ -43,7 +42,7 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->add('hide_global_announcements_when_not_connected', YesNoType::class)
-            ->add('hide_send_to_hrm_users', YesNoType::class)
+            ->add('announcements_hide_send_to_hrm_users', YesNoType::class)
             ->add('disable_announcement_attachment', YesNoType::class)
             ->add('allow_scheduled_announcements', YesNoType::class)
             ->add('disable_delete_all_announcements', YesNoType::class)
@@ -60,7 +59,6 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('allow_careers_in_global_announcements', YesNoType::class)
-            ->add('announcements_hide_send_to_hrm_users', YesNoType::class)
             ->add('allow_coach_to_edit_announcements', YesNoType::class)
             ->add('course_announcement_scheduled_by_date', YesNoType::class)
         ;

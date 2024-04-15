@@ -42,7 +42,6 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                     'enabled_text2audio' => 'false',
                     // 'enable_nanogong' => 'false',
                     'show_documents_preview' => 'false',
-                    'enable_wami_record' => 'false',
                     'enable_webcam_clip' => 'false',
                     'tool_visible_by_default_at_creation' => [
                         'documents',
@@ -54,10 +53,6 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                         'gradebook',
                     ],
                     'documents_default_visibility_defined_in_course' => 'false',
-                    // ?
-                    'allow_personal_user_files' => '',
-                    // ?
-                    'if_file_exists_option' => 'rename',
                     'send_notification_when_document_added' => 'false',
                     'thematic_pdf_orientation' => 'landscape',
                     'certificate_pdf_orientation' => 'landscape',
@@ -88,7 +83,6 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
     public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
-            ->add('allow_personal_user_files', YesNoType::class)
             ->add('default_document_quotum')
             ->add('default_group_quotum')
             ->add('permanently_remove_deleted_files', YesNoType::class)
@@ -130,7 +124,6 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
             ->add('enabled_text2audio', YesNoType::class)
             // ->add('enable_nanogong', YesNoType::class)
             ->add('show_documents_preview', YesNoType::class)
-            ->add('enable_wami_record', YesNoType::class)
             ->add('enable_webcam_clip', YesNoType::class)
             ->add(
                 'tool_visible_by_default_at_creation',
@@ -145,16 +138,6 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                         'Forums' => 'forums',
                         'Quiz' => 'quiz',
                         'Gradebook' => 'gradebook',
-                    ],
-                ]
-            )
-            ->add(
-                'if_file_exists_option',
-                ChoiceType::class,
-                [
-                    'choices' => [
-                        'Rename' => 'rename',
-                        'Overwrite' => 'overwrite',
                     ],
                 ]
             )

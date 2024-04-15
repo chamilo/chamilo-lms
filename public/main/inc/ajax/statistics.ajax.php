@@ -624,11 +624,6 @@ switch ($action) {
                 $table = $table['table'];
                 break;
             case 'status':
-                $sessionStatusAllowed = ('true' === api_get_setting('session.allow_session_status'));
-                if (!$sessionStatusAllowed) {
-                    exit;
-                }
-
                 $sql = "SELECT count(id) count, status FROM $table
                         WHERE
                             (

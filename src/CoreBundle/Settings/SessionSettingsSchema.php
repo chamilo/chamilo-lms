@@ -28,8 +28,6 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'show_groups_to_users' => 'false',
                     'hide_courses_in_sessions' => 'false',
                     'allow_session_admins_to_manage_all_sessions' => 'false',
-                    'session_tutor_reports_visibility' => 'false',
-                    'session_page_enabled' => 'true',
                     'allow_teachers_to_create_sessions' => 'false',
                     'prevent_session_admins_to_manage_all_users' => 'false',
                     'session_course_ordering' => 'false',
@@ -67,7 +65,6 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'session_courses_read_only_mode' => 'false',
                     'session_import_settings' => '',
                     'catalog_settings' => '',
-                    'allow_session_status' => 'false',
                     'tracking_columns' => '',
                     'my_progress_session_show_all_courses' => 'false',
                     'assignment_base_course_teacher_access_to_all_session' => 'false',
@@ -110,8 +107,6 @@ class SessionSettingsSchema extends AbstractSettingsSchema
             ->add('show_groups_to_users', YesNoType::class)
             ->add('hide_courses_in_sessions', YesNoType::class)
             ->add('allow_session_admins_to_manage_all_sessions', YesNoType::class)
-            ->add('session_tutor_reports_visibility', YesNoType::class)
-            ->add('session_page_enabled', YesNoType::class)
             ->add('allow_teachers_to_create_sessions', YesNoType::class)
             ->add('prevent_session_admins_to_manage_all_users', YesNoType::class)
             ->add(
@@ -191,7 +186,6 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                         $this->settingArrayHelpValue('catalog_settings'),
                 ]
             )
-            ->add('allow_session_status', YesNoType::class)
             ->add(
                 'tracking_columns',
                 TextareaType::class,

@@ -822,14 +822,12 @@ switch ($action) {
             }
         }
 
-        if ('true' === api_get_setting('session.allow_session_status')) {
-            if (isset($filters->filter_status)) {
-                $sStatus = (int) $filters->filter_status;
-                $whereCondition .= ' AND s.status = '.$sStatus;
-            } else {
-                if ($listType === 'custom') {
-                    $whereCondition .= ' AND (s.status IN ("'.SessionManager::STATUS_PLANNED.'", "'.SessionManager::STATUS_PROGRESS.'") ) ';
-                }
+        if (isset($filters->filter_status)) {
+            $sStatus = (int) $filters->filter_status;
+            $whereCondition .= ' AND s.status = '.$sStatus;
+        } else {
+            if ($listType === 'custom') {
+                $whereCondition .= ' AND (s.status IN ("'.SessionManager::STATUS_PLANNED.'", "'.SessionManager::STATUS_PROGRESS.'") ) ';
             }
         }
 

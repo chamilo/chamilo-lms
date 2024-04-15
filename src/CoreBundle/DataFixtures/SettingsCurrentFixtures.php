@@ -93,11 +93,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 'comment' => 'Show the teacher reference (name and e-mail if available) in the footer?',
             ],
             [
-                'name' => 'homepage_view',
-                'title' => 'Course homepage layout',
-                'comment' => 'How would you like the homepage of a course to look (icons layout)?',
-            ],
-            [
                 'name' => 'show_toolshortcuts',
                 'title' => 'Tools shortcuts',
                 'comment' => 'Show the tool shortcuts in the banner?',
@@ -1554,7 +1549,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 "comment" => "The roles set to 'true' will only appear to administrators. Other users will not be able to see them."
             ],
             [
-                "name" => "hide_send_to_hrm_users",
+                "name" => "announcements_hide_send_to_hrm_users",
                 "title" => "Hide the option to send an announcement copy to HRM",
                 "comment" => "In the announcements form, an option normally appears to allow teachers to send a copy of the announcement to the user's HRM. Set this to \"Yes\" to remote the option (and *not* send the copy)."
             ],

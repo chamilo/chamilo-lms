@@ -200,10 +200,6 @@ class survey_question
                 break;
         }
 
-        if ('false' === api_get_setting('survey.survey_question_dependency')) {
-            $allowParent = false;
-        }
-
         $icon = Display::getMdiIcon(
                 SurveyManager::icon_question($type),
                 'ch-tool-icon',
@@ -240,8 +236,7 @@ class survey_question
             $config
         );
 
-        if (('true' === api_get_setting('survey.allow_required_survey_questions')) &&
-            in_array($_GET['type'], ['yesno', 'multiplechoice'])) {
+        if (in_array($_GET['type'], ['yesno', 'multiplechoice'])) {
             $form->addCheckBox('is_required', get_lang('Mandatory?'), get_lang('Yes'));
         }
 
@@ -577,9 +572,6 @@ class survey_question
      */
     public static function getParents($questionId, $list = [])
     {
-        if ('false' === api_get_setting('survey.survey_question_dependency')) {
-            return $list;
-        }
         $courseId = api_get_course_int_id();
         $questionId = (int) $questionId;
 
@@ -692,9 +684,6 @@ class survey_question
      */
     public static function getDependency(array $question): ?array
     {
-        if ('false' === api_get_setting('survey.survey_question_dependency')) {
-            return [];
-        }
         $questionId = $question['question_id'];
 
         $em = Database::getManager();

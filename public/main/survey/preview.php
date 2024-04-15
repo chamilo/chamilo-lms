@@ -36,7 +36,7 @@ $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION
 
 $course_id = api_get_course_int_id();
 $courseInfo = api_get_course_info();
-$allowRequiredSurveyQuestions = ('true' === api_get_setting('survey.allow_required_survey_questions'));
+$allowRequiredSurveyQuestions = true;
 
 // Breadcrumbs
 $interbreadcrumb[] = [
@@ -116,9 +116,7 @@ if (isset($_GET['show'])) {
 
     if (array_key_exists($_GET['show'], $paged_questions)) {
         $select = '';
-        if ('true' === api_get_setting('survey.survey_question_dependency')) {
-            $select = ' survey_question.parent_id, survey_question.parent_option_id, ';
-        }
+        $select = ' survey_question.parent_id, survey_question.parent_option_id, ';
         $sql = "SELECT
                     survey_question.iid question_id,
                     survey_question.survey_id,

@@ -1434,15 +1434,13 @@ class MessageManager
         );
         $layoutContent = '';
         $emailbody = '';
-        if ('true' === api_get_setting('mail.mail_template_system')) {
-            $mailTemplateManager = new MailTemplateManager();
-            $templateText = $mailTemplateManager->getTemplateByType('new_user_mail_to_admin_approval.tpl');
-            if (empty($templateText)) {
-            } else {
-                // custom procedure to load a template as a string (doesn't use cache so may slow down)
-                $template = $tplMailBody->twig->createTemplate($templateText);
-                $emailbody = $template->render($tplMailBody->params);
-            }
+        $mailTemplateManager = new MailTemplateManager();
+        $templateText = $mailTemplateManager->getTemplateByType('new_user_mail_to_admin_approval.tpl');
+        if (empty($templateText)) {
+        } else {
+            // custom procedure to load a template as a string (doesn't use cache so may slow down)
+            $template = $tplMailBody->twig->createTemplate($templateText);
+            $emailbody = $template->render($tplMailBody->params);
         }
         if (empty($emailbody)) {
             $layoutContent = $tplMailBody->get_template('mail/new_user_mail_to_admin_approval.tpl');

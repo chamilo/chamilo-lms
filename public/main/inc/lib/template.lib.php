@@ -823,14 +823,9 @@ class Template
      *
      * @return string
      */
-    public static function getThemeFallback()
+    public static function getThemeFallback(): string
     {
-        $theme = api_get_setting('platform.theme_fallback');
-        if (empty($theme)) {
-            $theme = 'chamilo';
-        }
-
-        return $theme;
+        return 'chamilo';
     }
 
     /**

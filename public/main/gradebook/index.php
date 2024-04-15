@@ -1004,10 +1004,6 @@ if (isset($first_time) && 1 == $first_time && api_is_allowed_to_edit(null, true)
                 if (!$isAllow) {
                     if ('true' === api_get_setting('gradebook_detailed_admin_view')) {
                         $loadStats = [1, 2, 3];
-                    } else {
-                        if ('true' === api_get_setting('gradebook.gradebook_enable_best_score')) {
-                            $loadStats = [2];
-                        }
                     }
                 }
 

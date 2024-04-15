@@ -20,7 +20,6 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
         $builder
             ->setDefaults(
                 [
-                    'fixed_encoding' => 'false',
                     'show_invisible_exercise_in_lp_toc' => 'false',
                     'add_all_files_in_lp_export' => 'false',
                     'show_prerequisite_as_blocked' => 'false',
@@ -60,10 +59,10 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
                     'lp_start_and_end_date_visible_in_student_view' => 'false',
                     'scorm_lms_update_sco_status_all_time' => 'false',
                     'scorm_upload_from_cache' => 'false',
-                    'lp_prerequisit_on_quiz_unblock_if_max_attempt_reached' => 'false',
+                    'lp_prerequisite_on_quiz_unblock_if_max_attempt_reached' => 'false',
                     'student_follow_page_hide_lp_tests_average' => 'false',
-                    'student_follow_page_add_LP_acquisition_info' => 'false',
-                    'student_follow_page_add_LP_invisible_checkbox' => 'false',
+                    'student_follow_page_add_lp_acquisition_info' => 'false',
+                    'student_follow_page_add_lp_invisible_checkbox' => 'false',
                     'student_follow_page_include_not_subscribed_lp_students' => 'false',
                     'my_progress_course_tools_order' => '',
                     'lp_enable_flow' => 'false',
@@ -72,16 +71,13 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
             )
         ;
 
-        $allowedTypes = [
-            'fixed_encoding' => ['string'],
-        ];
+        $allowedTypes = [];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
     public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
-            ->add('fixed_encoding', YesNoType::class)
             ->add('show_invisible_exercise_in_lp_toc', YesNoType::class)
             ->add('add_all_files_in_lp_export', YesNoType::class)
             ->add('show_prerequisite_as_blocked', YesNoType::class)
@@ -161,10 +157,10 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
             ->add('lp_start_and_end_date_visible_in_student_view', YesNoType::class)
             ->add('scorm_lms_update_sco_status_all_time', YesNoType::class)
             ->add('scorm_upload_from_cache', YesNoType::class)
-            ->add('lp_prerequisit_on_quiz_unblock_if_max_attempt_reached', YesNoType::class)
+            ->add('lp_prerequisite_on_quiz_unblock_if_max_attempt_reached', YesNoType::class)
             ->add('student_follow_page_hide_lp_tests_average', YesNoType::class)
-            ->add('student_follow_page_add_LP_acquisition_info', YesNoType::class)
-            ->add('student_follow_page_add_LP_invisible_checkbox', YesNoType::class)
+            ->add('student_follow_page_add_lp_acquisition_info', YesNoType::class)
+            ->add('student_follow_page_add_lp_invisible_checkbox', YesNoType::class)
             ->add('student_follow_page_include_not_subscribed_lp_students', YesNoType::class)
             ->add(
                 'my_progress_course_tools_order',

@@ -218,7 +218,7 @@
       </div>
     </div>
 
-    <div class="bg-gray-20 h-0.5 md:h-auto md:w-0.5" />
+    <BaseDivider layout="vertical" />
 
     <div>
       <h6 class="mb-4">{{ t("You can see examples of how chamilo will look here") }}</h6>
@@ -443,6 +443,7 @@ import BaseToggleButton from "../../components/basecomponents/BaseToggleButton.v
 import Color from "colorjs.io"
 import themeService from "../../services/colorThemeService"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
+import BaseDivider from "../../components/basecomponents/BaseDivider.vue"
 
 const { t } = useI18n()
 const { getColorTheme, getColors, setColors } = useTheme()

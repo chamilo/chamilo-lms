@@ -65,8 +65,20 @@ abstract class AbstractSettingsSchema implements SchemaInterface
             if (isset($settingsInfo[$fieldName])) {
                 $fieldConfig = $settingsInfo[$fieldName];
                 $options = $field->getOptions();
-                $options['label'] = $this->translator->trans($fieldConfig['label']);
-                $options['help'] = $this->translator->trans($fieldConfig['help']);
+
+                $labelFromDb = $this->translator->trans($fieldConfig['label']);
+                $helpFromDb = $this->translator->trans($fieldConfig['help']);
+
+                $existingHelp = $options['help'] ?? '';
+                if (!empty($existingHelp)) {
+                    $combinedHelp = $helpFromDb . "<br>" . $existingHelp;
+                } else {
+                    $combinedHelp = $helpFromDb;
+                }
+
+                $options['label'] = $labelFromDb;
+                $options['help'] = $combinedHelp;
+
                 $builder->remove($fieldName);
                 $builder->add($fieldName, \get_class($field->getType()->getInnerType()), $options);
             }

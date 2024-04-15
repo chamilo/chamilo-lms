@@ -64,8 +64,7 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Agenda legend options').
-                        $this->settingArrayHelpValue('agenda_legend'),
+                    'help' => $this->settingArrayHelpValue('agenda_legend'),
                 ]
             )
             ->add(
@@ -73,8 +72,7 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Set customs colors to agenda events').
-                        $this->settingArrayHelpValue('agenda_colors'),
+                    'help' => $this->settingArrayHelpValue('agenda_colors'),
                 ]
             )
             ->add(
@@ -82,8 +80,7 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Customize on hover agenda view. Show agenda comment and/or description').
-                        $this->settingArrayHelpValue('agenda_on_hover_info'),
+                    'help' => $this->settingArrayHelpValue('agenda_on_hover_info'),
                 ]
             )
             ->add('agenda_reminders_sender_id', TextType::class)
@@ -92,8 +89,7 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Extra settings for the agenda (FullCalendar v3)').
-                        $this->settingArrayHelpValue('fullcalendar_settings'),
+                    'help' => $this->settingArrayHelpValue('fullcalendar_settings'),
                 ]
             )
             ->add('allow_careers_in_global_agenda', YesNoType::class)

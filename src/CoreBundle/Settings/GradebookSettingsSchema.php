@@ -124,8 +124,7 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Courses id list to check in the gradebook sidebar see BT#13099').
-                        $this->settingArrayHelpValue('gradebook_dependency_mandatory_courses'),
+                    'help' => $this->settingArrayHelpValue('gradebook_dependency_mandatory_courses'),
                 ]
             )
             ->add(
@@ -133,8 +132,7 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Gradebook id list needed to build the gradebook sidebar see BT#13099').
-                        $this->settingArrayHelpValue('gradebook_badge_sidebar'),
+                    'help' => $this->settingArrayHelpValue('gradebook_badge_sidebar'),
                 ]
             )
             ->add('gradebook_multiple_evaluation_attempts', YesNoType::class)
@@ -144,8 +142,7 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Allow add one column by each user extra field indicated to the Gradebook Flatview for each user').
-                        $this->settingArrayHelpValue('gradebook_flatview_extrafields_columns'),
+                    'help' => $this->settingArrayHelpValue('gradebook_flatview_extrafields_columns'),
                 ]
             )
             ->add(
@@ -153,8 +150,7 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Gradebook student pdf export settings').
-                        $this->settingArrayHelpValue('gradebook_pdf_export_settings'),
+                    'help' => $this->settingArrayHelpValue('gradebook_pdf_export_settings'),
                 ]
             )
             ->add('allow_gradebook_comments', YesNoType::class)
@@ -163,8 +159,7 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Enable specific columns in gradebook table').
-                        $this->settingArrayHelpValue('gradebook_display_extra_stats'),
+                    'help' => $this->settingArrayHelpValue('gradebook_display_extra_stats'),
                 ]
             )
             ->add('gradebook_hide_table', YesNoType::class)

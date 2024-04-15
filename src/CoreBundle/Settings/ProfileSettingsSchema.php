@@ -141,8 +141,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Hide fields from this list array').
-                        $this->settingArrayHelpValue('hide_user_field_from_list'),
+                    'help' => $this->settingArrayHelpValue('hide_user_field_from_list'),
                 ]
             )
             ->add(
@@ -150,8 +149,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Send email notification to admin when a user is created').
-                        $this->settingArrayHelpValue('send_notification_when_user_added'),
+                    'help' => $this->settingArrayHelpValue('send_notification_when_user_added'),
                 ]
             )
             ->add(
@@ -159,8 +157,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Show multiple conditions to user during sign up process. Example with a GDPR condition').
-                        $this->settingArrayHelpValue('show_conditions_to_user'),
+                    'help' => $this->settingArrayHelpValue('show_conditions_to_user'),
                 ]
             )
             ->add('allow_teachers_to_classes', YesNoType::class)
@@ -169,8 +166,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Validate user login via a webservice, Chamilo will send a "login" and "password" parameters to the "myWebServiceFunctionToLogin" function, the result should be "1" if the user have access').
-                        $this->settingArrayHelpValue('profile_fields_visibility'),
+                    'help' => $this->settingArrayHelpValue('profile_fields_visibility'),
                 ]
             )
             ->add(
@@ -178,8 +174,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('This option sets default parameters in the main/admin/user_import.php').
-                        $this->settingArrayHelpValue('user_import_settings'),
+                    'help' => $this->settingArrayHelpValue('user_import_settings'),
                 ]
             )
             ->add(
@@ -187,8 +182,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Search user by extra field in the user list').
-                        $this->settingArrayHelpValue('user_search_on_extra_fields'),
+                    'help' => $this->settingArrayHelpValue('user_search_on_extra_fields'),
                 ]
             )
             ->add('allow_career_users', YesNoType::class)
@@ -197,8 +191,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Community manager users').
-                        $this->settingArrayHelpValue('community_managers_user_list'),
+                    'help' => $this->settingArrayHelpValue('community_managers_user_list'),
                 ]
             )
             ->add(
@@ -206,8 +199,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Allow to show users in a map, users need to have a coordinates extra field BT#15176').
-                        $this->settingArrayHelpValue('allow_social_map_fields'),
+                    'help' => $this->settingArrayHelpValue('allow_social_map_fields'),
                 ]
             )
             ->add('career_diagram_legend', YesNoType::class)

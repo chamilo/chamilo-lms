@@ -122,8 +122,7 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Allow or block user subscriptions to a lp/lp category').
-                        $this->settingArrayHelpValue('lp_subscription_settings'),
+                    'help' => $this->settingArrayHelpValue('lp_subscription_settings'),
                 ]
             )
             ->add(
@@ -131,8 +130,7 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('LP view custom settings').
-                        $this->settingArrayHelpValue('lp_view_settings'),
+                    'help' => $this->settingArrayHelpValue('lp_view_settings'),
                 ]
             )
             ->add(
@@ -140,8 +138,7 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Show download files button after finishing all LP. Example: ABC is the course code, and 1 and 100 are the doc id').
-                        $this->settingArrayHelpValue('download_files_after_all_lp_finished'),
+                    'help' => $this->settingArrayHelpValue('download_files_after_all_lp_finished'),
                 ]
             )
             ->add('allow_lp_subscription_to_usergroups', YesNoType::class)
@@ -167,8 +164,7 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Allow change the order to show the tools in "My progress" page').
-                        $this->settingArrayHelpValue('my_progress_course_tools_order'),
+                    'help' => $this->settingArrayHelpValue('my_progress_course_tools_order'),
                 ]
             )
             ->add('lp_enable_flow', YesNoType::class)

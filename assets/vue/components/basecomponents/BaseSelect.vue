@@ -7,24 +7,29 @@
         :options="realOptions"
         :option-label="optionLabel"
         :option-value="optionValue"
+        :loading="isLoading"
         placeholder="--"
         @update:model-value="emit('update:modelValue', $event)"
       >
         <template #emptyfilter>--</template>
         <template #empty>
-          <p class="pt-2 px-2">{{ t('No available options') }}</p>
+          <p class="pt-2 px-2">{{ t("No available options") }}</p>
         </template>
       </Dropdown>
-      <label v-t="label" :class="{ 'p-error': isInvalid }" :for="id" />
+      <label
+        v-t="label"
+        :class="{ 'p-error': isInvalid }"
+        :for="id"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import {useI18n} from "vue-i18n";
-import {computed} from "vue";
+import { useI18n } from "vue-i18n"
+import { computed } from "vue"
 
-const {t} = useI18n()
+const { t } = useI18n()
 
 const props = defineProps({
   id: {
@@ -60,8 +65,12 @@ const props = defineProps({
   },
   hastEmptyValue: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
+  isLoading: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const emit = defineEmits(["update:modelValue"])
@@ -72,12 +81,8 @@ const realOptions = computed(() => {
       [props.optionLabel]: "--",
       [props.optionValue]: "",
     }
-    return [
-      emptyValue,
-      ...props.options,
-    ]
+    return [emptyValue, ...props.options]
   }
   return props.options
 })
-
 </script>

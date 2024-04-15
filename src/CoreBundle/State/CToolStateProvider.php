@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 /**
  * @template-implements ProviderInterface<CTool>
  */
-class CToolProvider implements ProviderInterface
+final class CToolStateProvider implements ProviderInterface
 {
     use CourseFromRequestTrait;
 

@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class UsergroupPostProcessor implements ProcessorInterface
+final class UsergroupPostStateProcessor implements ProcessorInterface
 {
     private ProcessorInterface $processor;
     private EntityManagerInterface $entityManager;

@@ -8,10 +8,9 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use Chamilo\CoreBundle\State\ColorThemeProcessor;
+use Chamilo\CoreBundle\State\ColorThemeStateProcessor;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -29,7 +28,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ],
     paginationEnabled: false,
     security: "is_granted('ROLE_ADMIN')",
-    processor: ColorThemeProcessor::class,
+    processor: ColorThemeStateProcessor::class,
 )]
 class ColorTheme
 {

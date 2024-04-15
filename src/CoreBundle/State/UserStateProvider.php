@@ -16,7 +16,7 @@ use Chamilo\CoreBundle\Entity\User;
 /**
  * @template-implements ProviderInterface<User>
  */
-class UserProvider implements ProviderInterface
+final class UserStateProvider implements ProviderInterface
 {
     public function __construct(
         private readonly ItemProvider $itemProvider,

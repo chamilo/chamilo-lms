@@ -18,7 +18,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 /**
  * @implements ProcessorInterface<CCalendarEvent>
  */
-class CCalendarEventProcessor implements ProcessorInterface
+final class CCalendarEventStateProcessor implements ProcessorInterface
 {
     public function __construct(
         private readonly ProcessorInterface $persistProcessor,

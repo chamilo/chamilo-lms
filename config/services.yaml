@@ -63,17 +63,17 @@ services:
             - name: kernel.event_subscriber
               dispatcher: security.event_dispatcher.main
 
-    Chamilo\CoreBundle\State\CStudentPublicationPostProcessor:
+    Chamilo\CoreBundle\State\CStudentPublicationPostStateProcessor:
         bind:
             $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
 
-    Chamilo\CoreBundle\State\CCalendarEventProcessor:
+    Chamilo\CoreBundle\State\CCalendarEventStateProcessor:
         arguments:
             $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
         tags:
             - { name: 'api_platform.state_processor' }
 
-    Chamilo\CoreBundle\State\UsergroupPostProcessor:
+    Chamilo\CoreBundle\State\UsergroupPostStateProcessor:
       arguments:
         $processor: '@api_platform.doctrine.orm.state.persist_processor'
         $entityManager: '@doctrine.orm.entity_manager'
@@ -82,7 +82,7 @@ services:
       tags:
         - { name: 'api_platform.state_processor' }
 
-    Chamilo\CoreBundle\State\ColorThemeProcessor:
+    Chamilo\CoreBundle\State\ColorThemeStateProcessor:
       bind:
         $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
 

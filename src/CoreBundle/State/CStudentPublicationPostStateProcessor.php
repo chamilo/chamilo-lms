@@ -23,7 +23,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class CStudentPublicationPostProcessor implements ProcessorInterface
+final class CStudentPublicationPostStateProcessor implements ProcessorInterface
 {
     public function __construct(
         private readonly ProcessorInterface $persistProcessor,

@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 /**
  * @template-implements ProviderInterface<CalendarEvent[]>
  */
-class CalendarEventProvider implements ProviderInterface
+final class CalendarEventStateProvider implements ProviderInterface
 {
     public function __construct(
         private readonly CollectionProvider $collectionProvider,

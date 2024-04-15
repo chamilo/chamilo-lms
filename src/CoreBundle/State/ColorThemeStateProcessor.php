@@ -15,7 +15,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 use const PHP_EOL;
 
-class ColorThemeProcessor implements ProcessorInterface
+final class ColorThemeStateProcessor implements ProcessorInterface
 {
     public function __construct(
         private readonly ProcessorInterface $persistProcessor,

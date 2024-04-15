@@ -16,9 +16,9 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use Chamilo\CoreBundle\DataProvider\MessageByGroupDataProvider;
 use Chamilo\CoreBundle\Entity\Listener\MessageListener;
 use Chamilo\CoreBundle\Repository\MessageRepository;
+use Chamilo\CoreBundle\State\MessageByGroupStateProvider;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -48,7 +48,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriTemplate: '/messages/by-group/list',
             security: "is_granted('ROLE_USER')",
             name: 'get_messages_by_social_group',
-            provider: MessageByGroupDataProvider::class
+            provider: MessageByGroupStateProvider::class
         ),
         new Post(securityPostDenormalize: "is_granted('CREATE', object)"),
     ],

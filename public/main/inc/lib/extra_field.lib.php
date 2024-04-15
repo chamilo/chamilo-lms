@@ -3377,7 +3377,7 @@ JAVASCRIPT;
             $valueParts = explode('#', $text);
             $dataValue = count($valueParts) > 1 ? array_shift($valueParts) : '';
 
-            $select->addOption(implode('', $valueParts), $value, ['data-value' => $dataValue]);
+            $select->addOption(get_lang(implode('', $valueParts)), $value, ['data-value' => $dataValue]);
         }
 
         if ($freezeElement) {

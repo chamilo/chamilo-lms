@@ -1184,7 +1184,7 @@ class ExtraField extends Model
                                     'radio',
                                     'extra_'.$variable,
                                     $option_details['option_value'],
-                                    $option_details['display_text'].'<br />',
+                                    get_lang($option_details['display_text']).'<br />',
                                     $option_details['option_value']
                                 );
                             }
@@ -1209,7 +1209,7 @@ class ExtraField extends Model
                                     'checkbox',
                                     'extra_'.$variable,
                                     $option_details['option_value'],
-                                    $option_details['display_text'].'<br />',
+                                    get_lang($option_details['display_text']).'<br />',
                                     $option_details['option_value']
                                 );
                             }
@@ -1260,7 +1260,7 @@ class ExtraField extends Model
                         }
                         if (isset($field_details['options']) && !empty($field_details['options'])) {
                             foreach ($field_details['options'] as $optionDetails) {
-                                $options[$optionDetails['option_value']] = $optionDetails['display_text'];
+                                $options[$optionDetails['option_value']] = get_lang($optionDetails['display_text']);
                             }
                         }
 

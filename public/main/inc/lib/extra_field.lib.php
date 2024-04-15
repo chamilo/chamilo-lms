@@ -3440,13 +3440,13 @@ JAVASCRIPT;
             foreach ($options as $option) {
                 foreach ($option as $sub_option) {
                     if ('0' == $sub_option['option_value']) {
-                        $values[$sub_option['id']] = $sub_option['display_text'];
+                        $values[$sub_option['id']] = get_lang($sub_option['display_text']);
 
                         continue;
                     }
 
                     if ($firstId === $sub_option['option_value']) {
-                        $second_values[$sub_option['id']] = $sub_option['display_text'];
+                        $second_values[$sub_option['id']] = get_lang($sub_option['display_text']);
                     }
                 }
             }
@@ -3517,7 +3517,7 @@ JAVASCRIPT;
                         continue;
                     }
 
-                    $values[$sub_option['id']] = $sub_option['display_text'];
+                    $values[$sub_option['id']] = get_lang($sub_option['display_text']);
                 }
             }
         }
@@ -3675,19 +3675,19 @@ JAVASCRIPT;
         foreach ($level1 as $item1) {
             $valueParts = explode('#', $item1['display_text']);
             $dataValue = count($valueParts) > 1 ? array_shift($valueParts) : '';
-            $slctFirst->addOption(implode('', $valueParts), $item1['id'], ['data-value' => $dataValue]);
+            $slctFirst->addOption(get_lang(implode('', $valueParts)), $item1['id'], ['data-value' => $dataValue]);
         }
 
         foreach ($level2 as $item2) {
             $valueParts = explode('#', $item2['display_text']);
             $dataValue = count($valueParts) > 1 ? array_shift($valueParts) : '';
-            $slctSecond->addOption(implode('', $valueParts), $item2['id'], ['data-value' => $dataValue]);
+            $slctSecond->addOption(get_lang(implode('', $valueParts)), $item2['id'], ['data-value' => $dataValue]);
         }
 
         foreach ($level3 as $item3) {
             $valueParts = explode('#', $item3['display_text']);
             $dataValue = count($valueParts) > 1 ? array_shift($valueParts) : '';
-            $slctThird->addOption(implode('', $valueParts), $item3['id'], ['data-value' => $dataValue]);
+            $slctThird->addOption(get_lang(implode('', $valueParts)), $item3['id'], ['data-value' => $dataValue]);
         }
 
         $form

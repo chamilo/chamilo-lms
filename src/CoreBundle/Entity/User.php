@@ -19,6 +19,7 @@ use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Controller\Api\UserSkillsController;
 use Chamilo\CoreBundle\Entity\Listener\UserListener;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\State\UserProvider;
 use Chamilo\CoreBundle\Traits\UserCreatorTrait;
 use Chamilo\CourseBundle\Entity\CGroupRelTutor;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
@@ -62,6 +63,7 @@ use UserManager;
     ],
     normalizationContext: ['groups' => ['user:read']],
     denormalizationContext: ['groups' => ['user:write']],
+    provider: UserProvider::class,
     security: 'is_granted("ROLE_USER")'
 )]
 #[ORM\Table(name: 'user')]

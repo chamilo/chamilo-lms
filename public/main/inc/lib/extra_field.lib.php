@@ -3359,7 +3359,7 @@ JAVASCRIPT;
 
         $select = $form->addSelect(
             'extra_'.$fieldDetails['variable'],
-            $fieldDetails['display_text'],
+            get_lang($fieldDetails['display_text']),
             [],
             ['id' => 'extra_'.$fieldDetails['variable']]
         );

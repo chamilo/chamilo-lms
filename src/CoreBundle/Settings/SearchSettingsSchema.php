@@ -21,13 +21,10 @@ class SearchSettingsSchema extends AbstractSettingsSchema
                     'search_enabled' => 'false',
                     'search_prefilter_prefix' => '',
                     'search_show_unlinked_results' => 'true',
-                    'number_of_upcoming_events' => '0',
                 ]
             )
         ;
-        $allowedTypes = [
-            'number_of_upcoming_events' => ['string'],
-        ];
+        $allowedTypes = [];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
@@ -46,7 +43,6 @@ class SearchSettingsSchema extends AbstractSettingsSchema
                     ],
                 ]
             )
-            ->add('number_of_upcoming_events')
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

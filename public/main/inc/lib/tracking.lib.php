@@ -7855,11 +7855,11 @@ class Tracking
             $columnHeaders['student_follow_page_add_LP_subscription_info'] = get_lang('Unlock');
         }
 
-        if ('true' === api_get_setting('lp.student_follow_page_add_LP_acquisition_info')) {
-            $columnHeaders['student_follow_page_add_LP_acquisition_info'] = get_lang('Acquisition');
+        if ('true' === api_get_setting('lp.student_follow_page_add_lp_acquisition_info')) {
+            $columnHeaders['student_follow_page_add_lp_acquisition_info'] = get_lang('Acquisition');
         }
 
-        $addLpInvisibleCheckbox = api_get_configuration_value('student_follow_page_add_LP_invisible_checkbox');
+        $addLpInvisibleCheckbox = api_get_setting('lp.student_follow_page_add_lp_invisible_checkbox');
 
         $columnHeadersKeys = array_keys($columnHeaders);
 
@@ -8004,7 +8004,7 @@ class Tracking
                 );
             }
 
-            if (in_array('student_follow_page_add_LP_acquisition_info', $columnHeadersKeys)) {
+            if (in_array('student_follow_page_add_lp_acquisition_info', $columnHeadersKeys)) {
                 $learningpathData[] = StudentFollowPage::getLpAcquisition(
                     $learnpath,
                     $userId,

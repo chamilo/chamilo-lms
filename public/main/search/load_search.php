@@ -511,19 +511,17 @@ $userForm->addEndPanel();
 $form->addButtonSave(get_lang('Save Diagnostic Changes'), 'save');
 
 // Get list of session status
-if (api_get_configuration_value('allow_session_status')) {
-    $statusList = SessionManager::getStatusList();
-    $statusSelectList[0] = ' -- '.get_lang('All').' --';
-    foreach ($statusList as $nro => $name) {
-        $statusSelectList[$nro] = $name;
-    }
-    $form->addSelect(
-        'filter_status',
-        get_lang('SessionStatus'),
-        $statusSelectList,
-        ['id' => 'filter_status']
-    );
+$statusList = SessionManager::getStatusList();
+$statusSelectList[0] = ' -- '.get_lang('All').' --';
+foreach ($statusList as $nro => $name) {
+    $statusSelectList[$nro] = $name;
 }
+$form->addSelect(
+    'filter_status',
+    get_lang('SessionStatus'),
+    $statusSelectList,
+    ['id' => 'filter_status']
+);
 
 $form->addButtonSearch(get_lang('Search Sessions'), 'search');
 

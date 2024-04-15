@@ -19,7 +19,6 @@ class EditorSettingsSchema extends AbstractSettingsSchema
             ->setDefaults(
                 [
                     'allow_email_editor' => '',
-                    'math_mimetex' => '',
                     'math_asciimathML' => '',
                     'enabled_asciisvg' => '',
                     'include_asciimathml_script' => '',
@@ -59,7 +58,6 @@ class EditorSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->add('allow_email_editor', YesNoType::class)
-            ->add('math_mimetex', YesNoType::class)
             ->add('math_asciimathML', YesNoType::class)
             ->add('enabled_asciisvg', YesNoType::class)
             ->add('include_asciimathml_script', YesNoType::class)

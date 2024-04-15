@@ -190,9 +190,7 @@ class ExtraField extends Model
         if ('true' === api_get_setting('announcement.allow_scheduled_announcements')) {
             $result[] = 'scheduled_announcement';
         }
-        if ('true' === api_get_setting('platform.allow_portfolio_tool')) {
-            $result[] = 'portfolio';
-        }
+        $result[] = 'portfolio';
         sort($result);
 
         return $result;

@@ -346,10 +346,7 @@ $returnParams = $extraField->addElements(
 );
 $jqueryReadyContent = $returnParams['jquery_ready_content'];
 
-$allowEmailTemplate = ('true' === api_get_setting('mail.mail_template_system'));
-if ($allowEmailTemplate) {
-    $form->addEmailTemplate(['user_edit_content.tpl']);
-}
+$form->addEmailTemplate(['user_edit_content.tpl']);
 
 // the $jqueryReadyContent variable collects all functions that will be load in the
 $htmlHeadXtra[] = '<script>

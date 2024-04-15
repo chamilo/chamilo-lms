@@ -6,12 +6,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $test = true;
 
-$sessionStatusAllowed = api_get_setting('session.allow_session_status');
-if (!$sessionStatusAllowed) {
-    echo '"allow_session_status" setting is not activated.';
-    exit;
-}
-
 $em = Database::getManager();
 $table = Database::get_main_table(TABLE_MAIN_SESSION);
 $sql = "SELECT * FROM $table ";

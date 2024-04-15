@@ -38,7 +38,7 @@ $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION
 $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
-$allowRequiredSurveyQuestions = ('true' === api_get_setting('survey.allow_required_survey_questions'));
+$allowRequiredSurveyQuestions = true;
 
 // Check if user is anonymous or not
 $isAnonymous = false;
@@ -674,9 +674,7 @@ if ((isset($_GET['show']) && '' != $_GET['show']) ||
     $paged_questions = [];
     // If non-conditional survey
     $select = '';
-    if ('true' === api_get_setting('survey.survey_question_dependency')) {
-        $select = ' survey_question.parent_id, survey_question.parent_option_id, ';
-    }
+    $select = ' survey_question.parent_id, survey_question.parent_option_id, ';
 
     // If non-conditional survey
     if (0 === $survey->getSurveyType()) {

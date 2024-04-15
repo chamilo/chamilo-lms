@@ -19,7 +19,6 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
         $builder->setDefaults(
             [
                 'filter_terms' => '',
-                'allow_browser_sniffer' => 'false',
                 'admins_can_set_users_pass' => '',
                 'allow_strength_pass_checker' => 'true',
                 'allow_captcha' => 'false',
@@ -46,7 +45,6 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             ]
         );
         $allowedTypes = [
-            'allow_browser_sniffer' => ['string'],
             'allow_strength_pass_checker' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
@@ -56,7 +54,6 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->add('filter_terms', TextareaType::class)
-            ->add('allow_browser_sniffer', YesNoType::class)
             ->add('admins_can_set_users_pass', YesNoType::class)
             ->add('allow_strength_pass_checker', YesNoType::class)
             ->add('allow_captcha', YesNoType::class)

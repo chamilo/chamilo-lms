@@ -258,15 +258,8 @@ class SessionManager
                 $session->setDisplayEndDate($displayEndDate);
                 $session->setCoachAccessStartDate($coachStartDate);
                 $session->setCoachAccessEndDate($coachEndDate);
+                $session->setStatus($status);
 
-                if (!empty($sessionCategoryId)) {
-                    //$session->setCategory($category);
-                    //$values['session_category_id'] = $sessionCategoryId;
-                }
-
-                if ('true' === api_get_setting('session.allow_session_status')) {
-                    $session->setStatus($status);
-                }
 
                 $em = Database::getManager();
                 $em->persist($session);
@@ -528,10 +521,7 @@ class SessionManager
             if (!empty($extraFieldsToLoad)) {
                 $select = "SELECT DISTINCT s.* ";
             }
-
-            if ('true' === api_get_setting('session.allow_session_status')) {
-                $select .= ', status';
-            }
+            $select .= ', status';
 
             if (isset($options['order'])) {
                 $isMakingOrder = 0 === strpos($options['order'], 'category_name');
@@ -1931,10 +1921,7 @@ class SessionManager
                 } else {
                     $sessionEntity->setCategory(null);
                 }
-
-                if ('true' === api_get_setting('session.allow_session_status')) {
-                    $sessionEntity->setStatus($status);
-                }
+                $sessionEntity->setStatus($status);
 
                 $em->flush();
 
@@ -8048,17 +8035,15 @@ class SessionManager
             ]
         );
 
-        if ('true' === api_get_setting('session.allow_session_status')) {
-            $statusList = self::getStatusList();
-            $form->addSelect(
-                'status',
-                get_lang('SessionStatus'),
-                $statusList,
-                [
-                    'id' => 'status',
-                ]
-            );
-        }
+        $statusList = self::getStatusList();
+        $form->addSelect(
+            'status',
+            get_lang('SessionStatus'),
+            $statusList,
+            [
+                'id' => 'status',
+            ]
+        );
 
         $form->addHtmlEditor(
             'description',
@@ -8542,27 +8527,26 @@ class SessionManager
                     ];
                 }
 
-                if ('true' === api_get_setting('session.allow_session_status')) {
-                    $columns[] = get_lang('SessionStatus');
-                    $list = self::getStatusList();
-                    $listToString = '';
-                    foreach ($list as $statusId => $status) {
-                        $listToString .= $statusId.':'.$status.';';
-                    }
-
-                    $columnModel[] = [
-                        'name' => 'status',
-                        'index' => 'status',
-                        'align' => 'left',
-                        'search' => 'true',
-                        'stype' => 'select',
-                        // for the bottom bar
-                        'searchoptions' => [
-                            'defaultValue' => '1',
-                            'value' => $listToString,
-                        ],
-                    ];
+                $columns[] = get_lang('SessionStatus');
+                $list = self::getStatusList();
+                $listToString = '';
+                foreach ($list as $statusId => $status) {
+                    $listToString .= $statusId.':'.$status.';';
                 }
+
+                $columnModel[] = [
+                    'name' => 'status',
+                    'index' => 'status',
+                    'align' => 'left',
+                    'search' => 'true',
+                    'stype' => 'select',
+                    // for the bottom bar
+                    'searchoptions' => [
+                        'defaultValue' => '1',
+                        'value' => $listToString,
+                    ],
+                ];
+
                 break;
 
             case 'simple':
@@ -8643,22 +8627,21 @@ class SessionManager
                     ];
                 }
 
-                if ('true' === api_get_setting('session.allow_session_status')) {
-                    $columns[] = get_lang('SessionStatus');
-                    $list = self::getStatusList();
-                    $listToString = '';
-                    foreach ($list as $statusId => $status) {
-                        $listToString .= $statusId.':'.$status.';';
-                    }
-
-                    $columnModel[] = ['name' => 'status', 'index' => 'status', 'align' => 'left', 'search' => 'true', 'stype' => 'select',
-                        // for the bottom bar
-                        'searchoptions' => [
-                            'defaultValue' => '1',
-                            'value' => $listToString,
-                        ],
-                    ];
+                $columns[] = get_lang('SessionStatus');
+                $list = self::getStatusList();
+                $listToString = '';
+                foreach ($list as $statusId => $status) {
+                    $listToString .= $statusId.':'.$status.';';
                 }
+
+                $columnModel[] = ['name' => 'status', 'index' => 'status', 'align' => 'left', 'search' => 'true', 'stype' => 'select',
+                    // for the bottom bar
+                    'searchoptions' => [
+                        'defaultValue' => '1',
+                        'value' => $listToString,
+                    ],
+                ];
+
                 break;
             case 'complete':
                 $columns = [
@@ -8812,27 +8795,25 @@ class SessionManager
                     ];
                 }
 
-                if ('true' === api_get_setting('session.allow_session_status')) {
-                    $columns[] = get_lang('SessionStatus');
-                    $list = self::getStatusList();
-                    $listToString = '';
-                    foreach ($list as $statusId => $status) {
-                        $listToString .= $statusId.':'.$status.';';
-                    }
-
-                    $columnModel[] = [
-                        'name' => 'status',
-                        'index' => 'status',
-                        'align' => 'left',
-                        'search' => 'true',
-                        'stype' => 'select',
-                        // for the bottom bar
-                        'searchoptions' => [
-                            'defaultValue' => '1',
-                            'value' => $listToString,
-                        ],
-                    ];
+                $columns[] = get_lang('SessionStatus');
+                $list = self::getStatusList();
+                $listToString = '';
+                foreach ($list as $statusId => $status) {
+                    $listToString .= $statusId.':'.$status.';';
                 }
+
+                $columnModel[] = [
+                    'name' => 'status',
+                    'index' => 'status',
+                    'align' => 'left',
+                    'search' => 'true',
+                    'stype' => 'select',
+                    // for the bottom bar
+                    'searchoptions' => [
+                        'defaultValue' => '1',
+                        'value' => $listToString,
+                    ],
+                ];
 
                 break;
         }

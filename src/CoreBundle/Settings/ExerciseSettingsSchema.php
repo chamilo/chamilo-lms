@@ -80,7 +80,6 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                     'exercise_result_end_text_html_strict_filtering' => 'false',
                     'question_exercise_html_strict_filtering' => 'false',
                     'quiz_question_delete_automatically_when_deleting_exercise' => 'false',
-                    'quiz_question_allow_inter_course_linking' => 'false',
                     'quiz_hide_attempts_table_on_start_page' => 'false',
                     'quiz_hide_question_number' => 'false',
                     'quiz_keep_alive_ping_interval' => '0',
@@ -209,7 +208,6 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
             ->add('exercise_result_end_text_html_strict_filtering', YesNoType::class)
             ->add('question_exercise_html_strict_filtering', YesNoType::class)
             ->add('quiz_question_delete_automatically_when_deleting_exercise', YesNoType::class)
-            ->add('quiz_question_allow_inter_course_linking', YesNoType::class)
             ->add('quiz_hide_attempts_table_on_start_page', YesNoType::class)
             ->add('quiz_hide_question_number', YesNoType::class)
             ->add('quiz_keep_alive_ping_interval', TextType::class)

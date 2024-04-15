@@ -18,7 +18,6 @@ class CertificateSettingsSchema extends AbstractSettingsSchema
             ->setDefaults(
                 [
                     'hide_my_certificate_link' => 'false',
-                    'hide_header_footer' => 'false',
                     'add_certificate_pdf_footer' => 'false',
                 ]
             )
@@ -34,7 +33,6 @@ class CertificateSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->add('hide_my_certificate_link', YesNoType::class)
-            ->add('hide_header_footer', YesNoType::class)
             ->add('add_certificate_pdf_footer', YesNoType::class)
         ;
 

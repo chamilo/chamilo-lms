@@ -49,8 +49,6 @@ class CourseSettingsSchema extends AbstractSettingsSchema
         $builder
             ->setDefaults(
                 [
-                    'homepage_view' => 'activity_big',
-                    'show_tool_shortcuts' => 'false',
                     // @todo check default value?
                     'active_tools_on_create' => $tools,
                     'display_coursecode_in_courselist' => 'false',
@@ -138,7 +136,6 @@ class CourseSettingsSchema extends AbstractSettingsSchema
         ;
 
         $allowedTypes = [
-            'homepage_view' => ['string'],
             'active_tools_on_create' => ['array'],
             'course_hide_tools' => ['array'],
             'display_coursecode_in_courselist' => ['string'],
@@ -154,20 +151,6 @@ class CourseSettingsSchema extends AbstractSettingsSchema
         $tools = $this->getProcessedToolChain();
 
         $builder
-            ->add(
-                'homepage_view',
-                ChoiceType::class,
-                [
-                    'choices' => [
-                        // 'HomepageView2column' => '2column',
-                        // 'HomepageView3column' => '3column',
-                        // 'HomepageViewVerticalActivity' => 'vertical_activity',
-                        // 'HomepageViewActivity' => 'activity',
-                        'HomepageViewActivityBig' => 'activity_big',
-                    ],
-                ]
-            )
-            ->add('show_tool_shortcuts', YesNoType::class)
             ->add(
                 'active_tools_on_create',
                 ChoiceType::class,

@@ -488,7 +488,7 @@ class FlatViewDataGenerator
                     $item_value = $percentage * $item_value;
                     $item_total += $sub_cat->get_weight();
 
-                    if ('false' === api_get_setting('gradebook_show_percentage_in_reports')) {
+                    //if ('false' === api_get_setting('gradebook_show_percentage_in_reports')) {
                         $defaultShowPercentageValue = SCORE_SIMPLE;
                         if (!empty($style)) {
                             $defaultShowPercentageValue = $style;
@@ -504,7 +504,7 @@ class FlatViewDataGenerator
                             null
                         );
                         $temp_score = Display::tip($real_score, $temp_score);
-                    } else {
+                    /*} else {
                         $real_score = $scoreDisplay->display_score(
                             $real_score,
                             SCORE_DIV_PERCENT,
@@ -516,7 +516,7 @@ class FlatViewDataGenerator
                             null
                         );
                         $temp_score = Display::tip($temp_score, $real_score);
-                    }
+                    }*/
 
                     if (!isset($this->params['only_total_category']) ||
                         (isset($this->params['only_total_category']) &&
@@ -650,7 +650,7 @@ class FlatViewDataGenerator
         if (!empty($style)) {
             $defaultStyle = (int) $style;
         }
-        $showPercentage = api_get_setting('gradebook_show_percentage_in_reports');
+        //$showPercentage = api_get_setting('gradebook_show_percentage_in_reports');
         for ($count = 0; $count < $items_count && ($items_start + $count < count($this->evals_links)); $count++) {
             /** @var AbstractLink $item */
             $item = $this->evals_links[$count + $items_start];
@@ -703,7 +703,7 @@ class FlatViewDataGenerator
                 SCORE_ONLY_SCORE
             );
 
-            if ('false' === $showPercentage) {
+            //if ('false' === $showPercentage) {
                 $defaultShowPercentageValue = SCORE_SIMPLE;
                 if (!empty($style)) {
                     $defaultShowPercentageValue = $style;
@@ -717,13 +717,13 @@ class FlatViewDataGenerator
                     SCORE_DIV_SIMPLE_WITH_CUSTOM
                 );
                 $temp_score = Display::tip($real_score, $temp_score);
-            } else {
+            /*} else {
                 $temp_score = $scoreDisplay->display_score(
                     $real_score,
                     $defaultStyle
                 );
                 $temp_score = Display::tip($temp_score, $complete_score);
-            }
+            }*/
 
             if (!empty($model)) {
                 $scoreToShow = '';

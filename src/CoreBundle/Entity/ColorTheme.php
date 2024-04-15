@@ -26,6 +26,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     denormalizationContext: [
         'groups' => ['color_theme:write'],
     ],
+    paginationEnabled: false,
     security: "is_granted('ROLE_ADMIN')",
 )]
 class ColorTheme

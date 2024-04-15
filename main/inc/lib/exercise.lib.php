@@ -2561,6 +2561,9 @@ HOTSPOT;
         $courseCondition = "c_id = $courseId";
         $statusCondition = '';
 
+        $exercisesFilter = '';
+        $exercises_where = '';
+
         if ($questionType == 1) {
             $TBL_EXERCISES_REL_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $TBL_EXERCISES_QUESTION = Database::get_course_table(TABLE_QUIZ_QUESTION);

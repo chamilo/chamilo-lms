@@ -8,8 +8,9 @@ const url = "/api/color_themes"
  * @returns {Promise<Array>}
  */
 async function getThemes() {
-  let results = await baseService.get(url)
-  return results["hydra:member"]
+  const { items } = await baseService.getCollection(url)
+
+  return items
 }
 
 /**

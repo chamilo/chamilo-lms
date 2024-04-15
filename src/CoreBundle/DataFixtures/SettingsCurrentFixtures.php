@@ -1549,7 +1549,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 "comment" => "The roles set to 'true' will only appear to administrators. Other users will not be able to see them."
             ],
             [
-                "name" => "announcements_hide_send_to_hrm_users",
+                "name" => "hide_send_to_hrm_users",
                 "title" => "Hide the option to send an announcement copy to HRM",
                 "comment" => "In the announcements form, an option normally appears to allow teachers to send a copy of the announcement to the user's HRM. Set this to \"Yes\" to remote the option (and *not* send the copy)."
             ],
@@ -2212,6 +2212,1281 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 "name" => "allow_quick_question_description_popup",
                 "title" => "Quick image addition to question",
                 "comment" => "Enable an additional icon in the test questions list to add an image as question description. This vastly accelerates question edition when the questions are in the title and the description only includes an image."
+            ],
+            [
+                "name" => "exercise_hide_ip",
+                "title" => "Hide user IP from test reports",
+                "comment" => "By default, we show user information and its IP address, but this might be considered personal data, so this option allows you to remove this info from all test reports."
+            ],
+            [
+                "name" => "tracking_my_progress_show_deleted_exercises",
+                "title" => "Show deleted tests in 'My progress'",
+                "comment" => "Enable this option to display, on the 'My progress' page, the results of all tests you have taken, even the ones that have been deleted."
+            ],
+            [
+                "name" => "show_exercise_attempts_in_all_user_sessions",
+                "title" => "Show test attempts from all sessions in pending tests report",
+                "comment" => "Show test attempts from users in all sessions where the general coach has access in pending tests report."
+            ],
+            [
+                "name" => "show_exercise_session_attempts_in_base_course",
+                "title" => "Show test attempts from all sessions in base course",
+                "comment" => "Show test attempts from users in all sessions to the teacher in the base course."
+            ],
+            [
+                "name" => "quiz_check_all_answers_before_end_test",
+                "title" => "Check all answers before submitting test",
+                "comment" => "Display a popup with the list of answered/unanswered questions before submitting the test."
+            ],
+            [
+                "name" => "quiz_discard_orphan_in_course_export",
+                "title" => "Discard orphan questions in course export",
+                "comment" => "When exporting a course, do not export the questions that are not part of any test."
+            ],
+            [
+                "name" => "exercise_result_end_text_html_strict_filtering",
+                "title" => "Bypass HTML filtering in test end messages",
+                "comment" => "Consider messages at the end of tests are always safe. Removing the filter makes it possible to use JavaScript there."
+            ],
+            [
+                "name" => "question_exercise_html_strict_filtering",
+                "title" => "Bypass HTML filtering in test questions",
+                "comment" => "Consider questions text in tests are always safe. Removing the filter makes it possible to use JavaScript there."
+            ],
+            [
+                "name" => "quiz_question_delete_automatically_when_deleting_exercise",
+                "title" => "Automatically delete questions when deleting test",
+                "comment" => "The default behaviour is to make questions orphan when the only test using them is deleted. When enabled, this option ensure that all questions that would otherwise end up orphan are deleted as well."
+            ],
+            [
+                "name" => "quiz_hide_attempts_table_on_start_page",
+                "title" => "Hide test attempts table on test start page",
+                "comment" => "Hide the table showing all previous attempts on the test start page."
+            ],
+            [
+                "name" => "quiz_hide_question_number",
+                "title" => "Hide question number",
+                "comment" => "Hide the question incremental numbering when taking a test."
+            ],
+            [
+                "name" => "quiz_keep_alive_ping_interval",
+                "title" => "Keep session active in tests",
+                "comment" => "Keep session active by maintaining a regular ping signal to the server every x seconds, define here. We recommend once every 300 seconds."
+            ],
+            [
+                "name" => "exercise_embeddable_extra_types",
+                "title" => "Embeddable question types",
+                "comment" => "By default, only single answer and multiple answer questions are considered when deciding whether a test can be embedded in a video or not. With this option, you can decide that more question types are available. Be aware that not all question types fit nicely in the space assigned to videos. Questions types are availalble in the code in question.class.php."
+            ],
+            [
+                "name" => "global_forums_course_id",
+                "title" => "Use course as global forum",
+                "comment" => "Set the course ID (numerical) of a course reserverd to use as a global forum. This replaces the 'Social groups' link in the social network by a link to the forum of that course."
+            ],
+            [
+                "name" => "hide_forum_post_revision_language",
+                "title" => "Hide forum post review language",
+                "comment" => "Hide the possibility to assign a language to a forum post review."
+            ],
+            [
+                "name" => "allow_forum_post_revisions",
+                "title" => "Forum post review",
+                "comment" => "Enable this option to allow asking for a review or a translation to one's post in a forum. When extensively configured, can be used to collaborate with other users in a language-learning forum."
+            ],
+            [
+                "name" => "forum_fold_categories",
+                "title" => "Fold forum categories",
+                "comment" => "Visual effect to enable forum categories folding/unfolding."
+            ],
+            [
+                "name" => "allow_forum_category_language_filter",
+                "title" => "Forum categories language filter",
+                "comment" => "Add a language filter to the forum view to only see categries configured in a specific language. Requires using the 'language' extra field on the 'forum_category' entity."
+            ],
+            [
+                "name" => "subscribe_users_to_forum_notifications_also_in_base_course",
+                "title" => "Forum notifications from base course as well",
+                "comment" => "Enable this option to enable notifications coming from the base course forum, even if following the course through a session."
+            ],
+            [
+                "name" => "default_glossary_view",
+                "title" => "Default glossary view",
+                "comment" => "Choose which view ('table' or 'list') will be used by default in the glossary tool."
+            ],
+            [
+                "name" => "allow_remove_tags_in_glossary_export",
+                "title" => "Remove HTML tags in glossary export",
+                "comment" => ""
+            ],
+            [
+                "name" => "gradebook_hide_graph",
+                "title" => "Hide gradebook charts",
+                "comment" => "If your portal is resources-limited, reducing the generation of the dynamic gradebok charts with potentially thousands of results is a good option."
+            ],
+            [
+                "name" => "gradebook_hide_pdf_report_button",
+                "title" => "Hide gradebook button 'download PDF report'",
+                "comment" => ""
+            ],
+            [
+                "name" => "hide_gradebook_percentage_user_result",
+                "title" => "Hide percentage in best/average gradebook results",
+                "comment" => ""
+            ],
+            [
+                "name" => "gradebook_use_exercise_score_settings_in_categories",
+                "title" => "Use test settings for grades display",
+                "comment" => ""
+            ],
+            [
+                "name" => "gradebook_use_apcu_cache",
+                "title" => "Use APCu caching to speed up gradebok",
+                "comment" => "Improve speed when rendering gradebook student reports using Doctrine APCU cache. APCu is an optional but recommended PHP extension."
+            ],
+            [
+                "name" => "gradebook_report_score_style",
+                "title" => "Gradebook reports score style",
+                "comment" => "Add gradebook score style configuration in the flat view. See api.lib.php in order to find the options: examples SCORE_DIV = 1, SCORE_PERCENT = 2, etc"
+            ],
+            [
+                "name" => "gradebook_score_display_custom_standalone",
+                "title" => "Custom score display in gradebook's standalone column",
+                "comment" => ""
+            ],
+            [
+                "name" => "gradebook_use_exercise_score_settings_in_total",
+                "title" => "Use global score display setting in gradebook",
+                "comment" => ""
+            ],
+            [
+                "name" => "gradebook_dependency",
+                "title" => "Inter-gradebook dependencies",
+                "comment" => "Enables a mechanism of gradebook dependencies that lets people know "
+            ],
+            [
+                "name" => "gradebook_dependency_mandatory_courses",
+                "title" => "Mandatory courses for gradebook dependencies",
+                "comment" => "When using inter-gradebook dependencies, you can choose a list of mandatory courses that will be required before approving any gradebook that has dependencies."
+            ],
+            [
+                "name" => "gradebook_badge_sidebar",
+                "title" => "Gradebook badges sidebar",
+                "comment" => "Generate a sidebar into the side menu where a few badges can be shown as pending approval. Requires badges and gradebooks pour être "
+            ],
+            [
+                "name" => "gradebook_multiple_evaluation_attempts",
+                "title" => "Allow multiple evaluation attempts in gradebook",
+                "comment" => ""
+            ],
+            [
+                "name" => "allow_gradebook_stats",
+                "title" => "Cache results in the gradebook",
+                "comment" => "Put some of the large calculations of averages in cached fields for the links and evaluations to increase speed (considerably). The potential negative impact is that it can take some time to refresh the gradebook results tables."
+            ],
+            [
+                "name" => "gradebook_flatview_extrafields_columns",
+                "title" => "User extra fields in gradebook flat view",
+                "comment" => "Add the given columns ('variables' array) to the main results table in the gradebook."
+            ],
+            [
+                "name" => "gradebook_pdf_export_settings",
+                "title" => "Gradebook PDF export options",
+                "comment" => "Change the PDF export for learners based on the provided settings ('hide_score_weight', 'hide_feedback_textarea', ...)"
+            ],
+            [
+                "name" => "allow_gradebook_comments",
+                "title" => "Gradebook comments",
+                "comment" => "Enable gradebook comments so teachers can add a comment to the overall performance of the learner in this course. The comment will appear in the PDF export for the learner."
+            ],
+            [
+                "name" => "gradebook_display_extra_stats",
+                "title" => "Gradebook extra statistics",
+                "comment" => "Add additional columns to the gradebook's main report (1 = ranking, 2 = best score, 3 = average)."
+            ],
+            [
+                "name" => "gradebook_hide_table",
+                "title" => "Hide gradebook table for learners",
+                "comment" => "Reduce gradebook load time by hiding the results table (but still giving access to certificates, skills, etc)."
+            ],
+            [
+                "name" => "gradebook_hide_link_to_item_for_student",
+                "title" => "Hide item links for learners in gradebook",
+                "comment" => "Avoid learners clicking on items from the gradebook by removing the links on the items."
+            ],
+            [
+                "name" => "gradebook_enable_subcategory_skills_independant_assignement",
+                "title" => "Enable skills by gradebook's subcategory",
+                "comment" => "Skills are normally attributed for completing a whole gradebook. By enabling this option, you allow "
+            ],
+            [
+                "name" => "show_language_selector_in_menu",
+                "title" => "Language switcher in main menu",
+                "comment" => "Display a language selector in the main menu that immediately updates the language preference of the user. This can be useful in multilingual portals where learners have to switch from one language to another for their learning."
+            ],
+            [
+                "name" => "language_flags_by_country",
+                "title" => "Language flags",
+                "comment" => "Use country flags for languages. This is not enabled by default because some languages are not strictly attached to a country, which can lead to frustration for some users."
+            ],
+            [
+                "name" => "allow_course_multiple_languages",
+                "title" => "Multiple-language courses",
+                "comment" => "Enable courses managed in more than one language. This option adds a language selector withing the course page to let users switch easily, and adds a 'multiple_language' extra field to courses which allows for remote management procedures."
+            ],
+            [
+                "name" => "template_activate_language_filter",
+                "title" => "Multiple-language document templates",
+                "comment" => "Enable document templates (at the platform or course level) to be configured for specific languages."
+            ],
+            [
+                "name" => "show_invisible_exercise_in_lp_toc",
+                "title" => "Invisible tests visible in learning paths",
+                "comment" => "Make tests marked as 'invisible' in the tests tool appear when they are included in a learning path."
+            ],
+            [
+                "name" => "add_all_files_in_lp_export",
+                "title" => "Export all files when exporting a learning path",
+                "comment" => "When exporting a LP, all files and folders in the same path of an html will be exported too."
+            ],
+            [
+                "name" => "show_prerequisite_as_blocked",
+                "title" => "Learning path's prerequisites",
+                "comment" => "On th learning paths lists, display a visual element to show that other learning paths are currently blocked by some prerequisites rule."
+            ],
+            [
+                "name" => "hide_lp_time",
+                "title" => "Hide time from learning paths records",
+                "comment" => "Hide learning paths time spent in reports in general."
+            ],
+            [
+                "name" => "lp_category_accordion",
+                "title" => "Foldable learning paths' categories",
+                "comment" => "Enable to allow users to fold the categories in the learning paths list."
+            ],
+            [
+                "name" => "lp_view_accordion",
+                "title" => "Foldable learning paths' items",
+                "comment" => ""
+            ],
+            [
+                "name" => "disable_js_in_lp_view",
+                "title" => "Disable JS in learning paths view",
+                "comment" => "Disable JS files that Chamilo usually adds to HTML files in the learning path (while displaying them)."
+            ],
+            [
+                "name" => "allow_teachers_to_access_blocked_lp_by_prerequisite",
+                "title" => "Teachers can access blocked learning paths",
+                "comment" => "Teachers do not need to pass complete learning paths to have access to a prerequisites-blocked learning path."
+            ],
+            [
+                "name" => "allow_lp_chamilo_export",
+                "title" => "Export learning paths in the Chamilo backup format",
+                "comment" => "Add the possibility to export any of your broken class"
+            ],
+            [
+                "name" => "hide_accessibility_label_on_lp_item",
+                "title" => "Hide requirements label in learning paths",
+                "comment" => "Hide the pre-requisites tooltip on learning path items. This is mostly an estaethic choice."
+            ],
+            [
+                "name" => "lp_minimum_time",
+                "title" => "Minimum time to complete learning path",
+                "comment" => "Add a minimum time field to learning paths. If the user has not spent that much time on the learning path, the last item of the learning path cannot be completed."
+            ],
+            [
+                "name" => "validate_lp_prerequisite_from_other_session",
+                "title" => "Use learning path item status from other sessions",
+                "comment" => "Allow users to complete prerequisites in a learning path if the corresponding item was already completed in another session."
+            ],
+            [
+                "name" => "show_hidden_exercise_added_to_lp",
+                "title" => "Display tests from learning paths even if invisible",
+                "comment" => "Show hidden exercises that were added to a LP in the exercise list. If we are in a session, the test is invisible in the base course, it is included in a LP and the setting to show it is not specifically set to true, then hide it."
+            ],
+            [
+                "name" => "lp_menu_location",
+                "title" => "Learning path menu location",
+                "comment" => "Set this to 'left' or 'right' to change the side of the learning path menu."
+            ],
+            [
+                "name" => "lp_score_as_progress_enable",
+                "title" => "Use learning path score as progress",
+                "comment" => "This is useful when using SCORM content with only one large SCO. SCORM does not communicate progress, so this is a trick to use the score as progress. Enabling this option will let you configure this on a per-learning path basis."
+            ],
+            [
+                "name" => "lp_prevents_beforeunload",
+                "title" => "Prevent beforeunload JS event in learning path",
+                "comment" => "This helps with browser compatibility by preventing tricky JS events to execute."
+            ],
+            [
+                "name" => "disable_my_lps_page",
+                "title" => "Hide 'My learning paths' page",
+                "comment" => "The page 'My learning path' was added in 1.11. Use this option to hide it."
+            ],
+            [
+                "name" => "scorm_api_username_as_student_id",
+                "title" => "Use username as student_id in SCORM communication",
+                "comment" => ""
+            ],
+            [
+                "name" => "scorm_api_extrafield_to_use_as_student_id",
+                "title" => "Use extra field as student_id in SCORM communication",
+                "comment" => "Give the name of the extra field to be used as student_id for all SCORM communication."
+            ],
+            [
+                "name" => "allow_import_scorm_package_in_course_builder",
+                "title" => "SCORM import within course import",
+                "comment" => "Enable to copy the directory structure of SCORM packages when restoring a course (from the course maintenance tool)."
+            ],
+            [
+                "name" => "allow_htaccess_import_from_scorm",
+                "title" => "Allow .htaccess from SCORM packages",
+                "comment" => "Normally, all .htaccess files are filtered and removed when importing content in Chamilo. This feature allows .htaccess to be imported if it is present in a SCORM package."
+            ],
+            [
+                "name" => "allow_session_lp_category",
+                "title" => "Learning paths categories can be managed in sessions",
+                "comment" => ""
+            ],
+            [
+                "name" => "ticket_lp_quiz_info_add",
+                "title" => "Add learning paths and tests info to ticket reporting",
+                "comment" => ""
+            ],
+            [
+                "name" => "lp_subscription_settings",
+                "title" => "Learning paths subscription settings",
+                "comment" => "Configure additional options for the learning paths subscription feature. Options include 'allow_add_users_to_lp' and 'allow_add_users_to_lp_category'."
+            ],
+            [
+                "name" => "lp_view_settings",
+                "title" => "Learning path display settings",
+                "comment" => "Configure additional options for the learning paths display. Options include 'show_reporting_icon', 'hide_lp_arrow_navigation', 'show_toolbar_by_default', 'navigation_in_the_middle' and 'add_extra_quit_to_home_icon'."
+            ],
+            [
+                "name" => "download_files_after_all_lp_finished",
+                "title" => "Download button after finishing learning paths",
+                "comment" => "Show download files button after finishing all LP. Example: if ABC is the course code, and 1 and 100 are the doc id, choose: ['courses' => ['ABC' => [1, 100]]]."
+            ],
+            [
+                "name" => "allow_lp_subscription_to_usergroups",
+                "title" => "Learning paths subscription for classes",
+                "comment" => "Enable subscription to learning paths and learning path categories to groups/classes."
+            ],
+            [
+                "name" => "lp_fixed_encoding",
+                "title" => "Fixed encoding in learning path",
+                "comment" => "Reduce resource usage by ignoring a check on the text encoding in imported learning paths."
+            ],
+            [
+                "name" => "lp_prerequisite_use_last_attempt_only",
+                "title" => "Use last score in learning path test prerequisites",
+                "comment" => "When a test is used as prerequisite for an item in the learning path, use the last attempt of the test only as validation for the prerequisite (default is to use best attempt)."
+            ],
+            [
+                "name" => "show_invisible_exercise_in_lp_list",
+                "title" => "Display tests in list of learning path tests even if invisible",
+                "comment" => ""
+            ],
+            [
+                "name" => "force_edit_exercise_in_lp",
+                "title" => "Edition of tests included in learning paths",
+                "comment" => "Enable editing tests even if they have been included in a learning path. The default is to prevent edition if the test is in a learning path, because that can affect consistency of tracking among many learners if test modifications are significant."
+            ],
+            [
+                "name" => "student_follow_page_add_LP_subscription_info",
+                "title" => "Unlocked information in learning paths list",
+                "comment" => "This adds an 'unlocked' column in the learning paths list if the learner is subscribed to the given learning path and has access to it."
+            ],
+            [
+                "name" => "lp_show_max_progress_instead_of_average",
+                "title" => "Show max progress instead of average for learning paths reporting",
+                "comment" => ""
+            ],
+            [
+                "name" => "lp_show_max_progress_or_average_enable_course_level_redefinition",
+                "title" => "Select max progress vs average for learning paths at course level",
+                "comment" => "Enable redefinition of the setting to show the best progress instead of averages in reporting of learnpaths at a course level."
+            ],
+            [
+                "name" => "lp_allow_export_to_students",
+                "title" => "Learners can export learning paths",
+                "comment" => "Enable this to allow learners to download the learning paths as SCORM packages."
+            ],
+            [
+                "name" => "show_invisible_lp_in_course_home",
+                "title" => "Display link to learning path on course home when invisible",
+                "comment" => "If a learning path is set to invisible but the teacher/coach decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+            ],
+            [
+                "name" => "lp_start_and_end_date_visible_in_student_view",
+                "title" => "Display learning path availability to learners",
+                "comment" => "Show learning paths to learners with their availability dates, rather than hiding them until the date comes."
+            ],
+            [
+                "name" => "scorm_lms_update_sco_status_all_time",
+                "title" => "Update SCOR status autonomously",
+                "comment" => "If the SCO is not sending a status, take over and update the status based on what can be observed in Chamilo."
+            ],
+            [
+                "name" => "scorm_upload_from_cache",
+                "title" => "Upload SCORM from cache dir",
+                "comment" => "Allow admins to upload a SCORM package (in zip form) into the cache directory and to use it as import source on the SCORM upload page."
+            ],
+            [
+                "name" => "lp_prerequisit_on_quiz_unblock_if_max_attempt_reached",
+                "title" => "Unlock learning path item if max attempt is reached for test prerequisite",
+                "comment" => ""
+            ],
+            [
+                "name" => "student_follow_page_hide_lp_tests_average",
+                "title" => "Hide percentage sign in average of tests in learning paths in learner follow-up",
+                "comment" => "Hides the icon of percentage in 'Average of tests in Learning Paths' indication on a student tracking"
+            ],
+            [
+                "name" => "student_follow_page_add_LP_acquisition_info",
+                "title" => "Add acquisition column in learner follow-up",
+                "comment" => "Add column to learner follow-up page to show acquisition status by a learner on a learning path."
+            ],
+            [
+                "name" => "student_follow_page_add_LP_invisible_checkbox",
+                "title" => "Add visibility information for learning paths on learner follow-up page",
+                "comment" => ""
+            ],
+            [
+                "name" => "student_follow_page_include_not_subscribed_lp_students",
+                "title" => "Include learning paths not subscribed to on learner follow-up page",
+                "comment" => ""
+            ],
+            [
+                "name" => "my_progress_course_tools_order",
+                "title" => "Order of tools on 'My progress' page",
+                "comment" => "Change the order of tools shown on the 'My progress' page for learners. Options include 'quizzes', 'learning_paths' and 'skills'."
+            ],
+            [
+                "name" => "lp_enable_flow",
+                "title" => "Navigate between learning paths",
+                "comment" => "Add the possibility to select a 'next' learning path and show buttons inside the learning path to move from one to the next."
+            ],
+            [
+                "name" => "lp_item_prerequisite_dates",
+                "title" => "Date-based learning path items prerequisites",
+                "comment" => "Adds the option to define prerequisites with start and end dates for learnpath items."
+            ],
+            [
+                "name" => "update_users_email_to_dummy_except_admins",
+                "title" => "Update users e-mail to dummy value during imports",
+                "comment" => "During special CSV cron imports of users, automatically replace e-mails with dummy e-mail username@example.com."
+            ],
+            [
+                "name" => "mail_header_style",
+                "title" => "Extra e-mail HTML header attributes",
+                "comment" => ""
+            ],
+            [
+                "name" => "mail_content_style",
+                "title" => "Extra e-mail HTML body attributes",
+                "comment" => ""
+            ],
+            [
+                "name" => "allow_email_editor_for_anonymous",
+                "title" => "E-mail editor for anonymous",
+                "comment" => "Allow anonymous users to send e-mails from the platform. In this day and age of information security this is not a recommended option."
+            ],
+            [
+                "name" => "messages_hide_mail_content",
+                "title" => "Hide e-mail content to bring users to platform",
+                "comment" => "Prefer short e-mail versions with a link to the messaging space on the platform to increase platform-based engagement."
+            ],
+            [
+                "name" => "send_two_inscription_confirmation_mail",
+                "title" => "Send 2 registration e-mails",
+                "comment" => "Send two separate e-mails on registration. One for the username, another one for the password."
+            ],
+            [
+                "name" => "show_user_email_in_notification",
+                "title" => "Show sender's e-mail address in notifications",
+                "comment" => ""
+            ],
+            [
+                "name" => "send_notification_score_in_percentage",
+                "title" => "Send score in percentage in test results notification",
+                "comment" => ""
+            ],
+            [
+                "name" => "cron_notification_help_desk",
+                "title" => "E-mail addresses to send cronjobs execution reports",
+                "comment" => "Given as array of e-mail addresses. Does not work for all cronjobs yet."
+            ],
+            [
+                "name" => "notifications_extended_footer_message",
+                "title" => "Extended notifications footer",
+                "comment" => "Add a custom extra footer for notifications emails for a specific language, for example for privacy policy notices. Multiple languages and paragraphs can be added."
+            ],
+            [
+                "name" => "private_messages_about_user",
+                "title" => "Allow private messages between teachers about a learner",
+                "comment" => "Allow exchange of messages from teachers/bosses about a user from the tracking page of that user."
+            ],
+            [
+                "name" => "private_messages_about_user_visible_to_user",
+                "title" => "Allow learners to see messages about them between teachers",
+                "comment" => "If exchange of messages about a user are enabled, this option will allow the corresponding user to see the messages. This is to comply with rules of transparency the organization may need to comply to."
+            ],
+            [
+                "name" => "social_enable_messages_feedback",
+                "title" => "Like/Dislike for social posts",
+                "comment" => "Allows users to add feedback (likes or dislikes) to posts in social wall."
+            ],
+            [
+                "name" => "disable_dislike_option",
+                "title" => "Disable 'dislike' for social posts",
+                "comment" => "Remove the thumb down option for social posts feedback. Only keep thumb up (like)."
+            ],
+            [
+                "name" => "allow_user_message_tracking",
+                "title" => "Admins can see personal messages",
+                "comment" => "Allow administrators to see personal messages between a teacher and a learner. Please make sure you include a note in your terms and conditions as this might affect privacy protection."
+            ],
+            [
+                "name" => "filter_interactivity_messages",
+                "title" => "Teachers can access learners messages only within session timeframe",
+                "comment" => "Filter messages between a teacher and a learner between the session start end dates"
+            ],
+            [
+                "name" => "unoconv_binaries",
+                "title" => "UNO converter binaries",
+                "comment" => "Give the system path to the UNO converter library to enable some extra exporting features."
+            ],
+            [
+                "name" => "hide_main_navigation_menu",
+                "title" => "Hide main navigation menu",
+                "comment" => "When using Chamilo for a specific purpose (like one massive online exam), you might want to reduce distraction even more by removin the side menu."
+            ],
+            [
+                "name" => "pdf_img_dpi",
+                "title" => "PDF export resolution",
+                "comment" => "This represents the resolution of generated PDF files (in dot per inch, or dpi). The default is 96. Increasing it will give you better resolution PDF files but will also increase the weight and generation time of the files."
+            ],
+            [
+                "name" => "tracking_skip_generic_data",
+                "title" => "Skip generic data in learner self-tracking page",
+                "comment" => "If the 'My progress' page takes too long to load, you might want to remove the processing of generic statistics for the user. In this case enable this setting."
+            ],
+            [
+                "name" => "hide_complete_name_in_whoisonline",
+                "title" => "Hide the complete username in 'who is online'",
+                "comment" => "The 'who is online' page (if enabled) will show a picture and a name for each user currently online. Enable this option to hide the names."
+            ],
+            [
+                "name" => "table_default_row",
+                "title" => "Default number of table rows",
+                "comment" => "How many rows should be shown in all tables by default."
+            ],
+            [
+                "name" => "allow_double_validation_in_registration",
+                "title" => "Double validation for registration process",
+                "comment" => "Simply display a confirmation request on the registration page before going forward with the user creation."
+            ],
+            [
+                "name" => "block_my_progress_page",
+                "title" => "Prevent access to 'My progress'",
+                "comment" => "In specific implementations like online exams, you might want to prevent user access to the 'My progress' page."
+            ],
+            [
+                "name" => "generate_random_login",
+                "title" => "Generate random username",
+                "comment" => "When importing users (batch processes), automatically generate a random string for username. Otherwise "
+            ],
+            [
+                "name" => "timepicker_increment",
+                "title" => "Timepicker increment",
+                "comment" => "Minimal time increment (in minutes) when selecting a date and time with the timepicker widget. For example, it might not be useful to have less than 5 or 15 minutes increments when talking about assignment submission, availability of a test, start time of a session, etc."
+            ],
+            [
+                "name" => "proxy_settings",
+                "title" => "Proxy settings",
+                "comment" => "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+            ],
+            [
+                "name" => "video_features",
+                "title" => "Video features",
+                "comment" => "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+            ],
+            [
+                "name" => "table_row_list",
+                "title" => "Default offered pagination numbers in tables",
+                "comment" => "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+            ],
+            [
+                "name" => "webservice_return_user_field",
+                "title" => "Webservices return user field",
+                "comment" => "Ask REST webservices (v2.php) to return another identifier for fields related to user ID. This is useful if the external system doesn't really deal with user IDs as they are in Chamilo, as it helps the external system match the user data return with some external data that is know to Chamilo. For example, if you use an external authentication system, you can return the extra field used to match the user with the external authentication system rather than user.id."
+            ],
+            [
+                "name" => "multiple_url_hide_disabled_settings",
+                "title" => "Hide disabled settings in sub-URLs",
+                "comment" => "Set to yes to hide settings completely in a sub-URL if the setting is disabled in the main URL (where the access_url_changeable field = 0)"
+            ],
+            [
+                "name" => "login_max_attempt_before_blocking_account",
+                "title" => "Max login attempts before lockdown",
+                "comment" => "Number of failed login attempts to tolerate before the user account is locked and has to be unlocked by an admin."
+            ],
+            [
+                "name" => "force_renew_password_at_first_login",
+                "title" => "Force password renewal at first login",
+                "comment" => "This is one of the simple measure to increase the security of your portal by asking users to immediately change their password, so the one that was transfered by e-mail is no longer valid and they use one that they come up with."
+            ],
+            [
+                "name" => "hide_breadcrumb_if_not_allowed",
+                "title" => "Hide breadcrumb if 'not allowed'",
+                "comment" => "If the user is not allowed to access a specific page, also hide the breadcrumb. This increases security by avoiding the display of unnecessary information."
+            ],
+            [
+                "name" => "extldap_config",
+                "title" => "LDAP connection configuration",
+                "comment" => "Array defining host and port for the LDAP server."
+            ],
+            [
+                "name" => "update_student_expiration_x_date",
+                "title" => "Set expiration date on first login",
+                "comment" => "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in."
+            ],
+            [
+                "name" => "user_status_show_options_enabled",
+                "title" => "Selective display of roles",
+                "comment" => "Enable to use an array to define which roles should be clearly displayed and which should be hidden."
+            ],
+            [
+                "name" => "user_status_show_option",
+                "title" => "Roles display options",
+                "comment" => "An array of role => true/false that defines whether that role should be shown or hidden."
+            ],
+            [
+                "name" => "user_number_of_days_for_default_expiration_date_per_role",
+                "title" => "Default expiration days by role",
+                "comment" => "An array of role = > number which represents the number of days an account has before expiration, depending on the role."
+            ],
+            [
+                "name" => "user_edition_extra_field_to_check",
+                "title" => "Set an extra field as trigger for registration as ex-learner",
+                "comment" => "Give an extra field label here. If this extra field is updated for any user, a process is triggered to check the access to this user to courses with the same given extra field."
+            ],
+            [
+                "name" => "user_hide_never_expire_option",
+                "title" => "Hide 'never expires' option for users",
+                "comment" => "Remove the option 'never expires' when creating/editing a user account."
+            ],
+            [
+                "name" => "platform_logo_url",
+                "title" => "URL for alternative platform logo",
+                "comment" => "Replaces the Chamilo logo by loading a (possibly remote) URL. Make sure this is allowed by your security policies."
+            ],
+            [
+                "name" => "use_career_external_id_as_identifier_in_diagrams",
+                "title" => "Use external career ID in diagrams",
+                "comment" => "If using career diagrams, show an extra field instead of the internal career ID."
+            ],
+            [
+                "name" => "disable_webservices",
+                "title" => "Disable web services",
+                "comment" => "If you do not use web services, enable this to avoid any unnecessary security risk."
+            ],
+            [
+                "name" => "webservice_enable_adminonly_api",
+                "title" => "Enable admin-only web services",
+                "comment" => "Some REST web services are marked for admins only and are disabled by default. Enable this feature to give access to these web services (to users with admin credentials, obviously)."
+            ],
+            [
+                "name" => "allow_working_time_edition",
+                "title" => "Enable edition of course work time",
+                "comment" => "Enable this feature to let teachers manually update the time spent in the course by learners."
+            ],
+            [
+                "name" => "disable_user_conditions_sender_id",
+                "title" => "Internal ID of the user used to send disabled account notifications",
+                "comment" => "Avoid being too personal with users by using a 'bot' account to send e-mails to users when their account is disabled for some reason."
+            ],
+            [
+                "name" => "portfolio_advanced_sharing",
+                "title" => "Enable portfolio advanced sharing",
+                "comment" => "Decide who can view the posts and comments of the portfolio."
+            ],
+            [
+                "name" => "redirect_index_to_url_for_logged_users",
+                "title" => "Redirect index.php to given URL for authenticated users",
+                "comment" => "If you do not want to use the index page (announcements, popular courses, etc), you can define here the script (from the document root) where users will be redirected when trying to load the index."
+            ],
+            [
+                "name" => "default_menu_entry_for_course_or_session",
+                "title" => "Default menu entry for courses",
+                "comment" => "Define the default sub-elements of the 'Courses' entry to if user is not registered to any course nor session."
+            ],
+            [
+                "name" => "changeable_options",
+                "title" => "Fields users are allowed to change in their profile",
+                "comment" => "Select the fields users will be able to change on their profile page."
+            ],
+            [
+                "name" => "profiling_filter_adding_users",
+                "title" => "Filter users on profile fields on subscription to course",
+                "comment" => "Allow teachers to filter the users based on extra fields on the page to subscribe users to their course."
+            ],
+            [
+                "name" => "hide_username_with_complete_name",
+                "title" => "Hide username when already showing complete name",
+                "comment" => "Some internal functions will return the username when returning the user's complete name. With this option enabled, you ensure the username will not appear."
+            ],
+            [
+                "name" => "hide_username_in_course_chat",
+                "title" => "Hide username in course chat",
+                "comment" => "In the course chat, hide the username. Only display people's names."
+            ],
+            [
+                "name" => "allow_career_diagram",
+                "title" => "Enable career diagrams",
+                "comment" => "Career diagrams allow you to display diagrams of careers, skills and courses."
+            ],
+            [
+                "name" => "disable_change_user_visibility_for_public_courses",
+                "title" => "Disable making tool users visible in public courses",
+                "comment" => "Avoid anyone making the 'users' tool visible in a public course."
+            ],
+            [
+                "name" => "my_space_users_items_per_page",
+                "title" => "Default number of items per page in mySpace",
+                "comment" => ""
+            ],
+            [
+                "name" => "add_user_course_information_in_mailto",
+                "title" => "Pre-fill the mail with user and course info in footer contact",
+                "comment" => "Add subject and body in the mailto: footer."
+            ],
+            [
+                "name" => "pass_reminder_custom_link",
+                "title" => "Custom page for password reminder",
+                "comment" => "Set your own URL to a password reset page. Useful when using a federated account management system."
+            ],
+            [
+                "name" => "registration_add_helptext_for_2_names",
+                "title" => "Add helper to add two names in registration",
+                "comment" => "Add help text for users to enter two names in the registration form when double lastnames are common."
+            ],
+            [
+                "name" => "disable_gdpr",
+                "title" => "Disable GDPR features",
+                "comment" => "If you already manage your personal data protection declaration to users elsewhere, you can safely disable this feature."
+            ],
+            [
+                "name" => "data_protection_officer_name",
+                "title" => "Data protection officer name",
+                "comment" => ""
+            ],
+            [
+                "name" => "data_protection_officer_role",
+                "title" => "Data protection officer role",
+                "comment" => ""
+            ],
+            [
+                "name" => "data_protection_officer_email",
+                "title" => "Data protection officer e-mail address",
+                "comment" => ""
+            ],
+            [
+                "name" => "hide_user_field_from_list",
+                "title" => "Hide fields from users list in course",
+                "comment" => "By default, we show all data from users in the users tool in the course. This array allows you to specify which fields you do not want to display. Only affects main fields (not extra fields)."
+            ],
+            [
+                "name" => "send_notification_when_user_added",
+                "title" => "Send mail to admin when user created",
+                "comment" => "Send email notification to admin when a user is created."
+            ],
+            [
+                "name" => "show_conditions_to_user",
+                "title" => "Show specific registration conditions",
+                "comment" => "Show multiple conditions to user during sign up process. Provide an array with each element containing 'variable' (internal extra field name), 'display_text' (simple text for a checkbox), 'text_area' (long text of conditions)."
+            ],
+            [
+                "name" => "allow_teachers_to_classes",
+                "title" => "Allow teachers to manage classes",
+                "comment" => ""
+            ],
+            [
+                "name" => "profile_fields_visibility",
+                "title" => "Fields visible on profile page",
+                "comment" => "Array of fields and whether (boolean) they are visible or not on the user's profile page (also works with extra fields labels)."
+            ],
+            [
+                "name" => "user_import_settings",
+                "title" => "Options for user import",
+                "comment" => "Array of options to apply as default parameters in the CSV/XML user import."
+            ],
+            [
+                "name" => "user_search_on_extra_fields",
+                "title" => "Search users by extra fields in users list for admins",
+                "comment" => "Naturally include the given extra fields (array of extra fields labels) in the user searches."
+            ],
+            [
+                "name" => "allow_career_users",
+                "title" => "Enable career diagrams for users",
+                "comment" => "If career diagrams are enabled, users can only see them (and only the diagrams that correspond to their studies) if you enable this option."
+            ],
+            [
+                "name" => "community_managers_user_list",
+                "title" => "Community managers list",
+                "comment" => "Provide an array of user IDs that will be considered community managers in the special course designated as global forum. Community managers have additional privileges on the global forum."
+            ],
+            [
+                "name" => "allow_social_map_fields",
+                "title" => "Users geolocation on a map",
+                "comment" => "Enable the display of a map in the social network allowing you to locate other users. This includes several positions (current and destination) which have to be defined as addresses or coordinates in separate extra fields. The extra fields must be set as an array here."
+            ],
+            [
+                "name" => "career_diagram_legend",
+                "title" => "Display a legend below the career diagram",
+                "comment" => "Add a career legend below the career diagram. A language variable called 'Career diagram legend' must exist in your sub-language."
+            ],
+            [
+                "name" => "career_diagram_disclaimer",
+                "title" => "Display a disclaimer below the career diagram",
+                "comment" => "Add a disclaimer below the career diagram. A language variable called 'Career diagram disclaimer' must exist in your sub-language."
+            ],
+            [
+                "name" => "linkedin_organization_id",
+                "title" => "LinkedIn Orgnization ID",
+                "comment" => "When sharing a badge on LinkedIn, LinkedIn allows you to set an organization ID that will link to the LinkedIn's page of your organization (to link the organization attributing the badge)."
+            ],
+            [
+                "name" => "required_profile_fields",
+                "title" => "Required fields during registration",
+                "comment" => ""
+            ],
+            [
+                "name" => "required_extra_fields_in_inscription",
+                "title" => "Required extra fields during registration",
+                "comment" => ""
+            ],
+            [
+                "name" => "allow_fields_inscription",
+                "title" => "Restrict fields shown during registration",
+                "comment" => "If you only want to show some of the available profile field, your can complete the array here with sub-elements 'fields' and 'extra_fields' containing arrays with a list of the fields to show."
+            ],
+            [
+                "name" => "send_inscription_msg_to_inbox",
+                "title" => "Send the welcome message to e-mail and inbox",
+                "comment" => "By default, the welcome message (with credentials) is sent only by e-mail. Enable this option to send it to the user's Chamilo inbox as well."
+            ],
+            [
+                "name" => "admins_can_set_users_pass",
+                "title" => "Admins can set users passwords manually",
+                "comment" => ""
+            ],
+            [
+                "name" => "check_password",
+                "title" => "Check password strength",
+                "comment" => ""
+            ],
+            [
+                "name" => "security_strict_transport",
+                "title" => "HTTP Strict Transport Security",
+                "comment" => "HTTP Strict Transport Security is an excellent feature to support on your site and strengthens your implementation of TLS by getting the User Agent to enforce the use of HTTPS. Recommended value: \"strict-transport-security: max-age=63072000; includeSubDomains\". See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security. You can include the \"preload\" suffix, but this has consequences on the top level domain (TLD), so probably not to be done lightly. See https://hstspreload.org/. Leave blank to disable."
+            ],
+            [
+                "name" => "security_content_policy",
+                "title" => "Content Security Policy",
+                "comment" => "Content Security Policy is an effective measure to protect your site from XSS attacks. By whitelisting sources of approved content, you can prevent the browser from loading malicious assets. This setting is particularly complicated to set with WYSIWYG editors, but if you add all domains that you want to authorize for iframes inclusion in the child-src statement, this example should work for you. You can prevent JavaScript from executing from external sources (including inside SVG images) by using a strict list in the \"script-src\" argument. Leave blank to disable. Example setting: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;"
+            ],
+            [
+                "name" => "security_content_policy_report_only",
+                "title" => "Content Security Policy report only",
+                "comment" => "This setting allows you to experiment by reporting but not enforcing some Content Security Policy."
+            ],
+            [
+                "name" => "security_public_key_pins",
+                "title" => "HTTP Public Key Pinning",
+                "comment" => "HTTP Public Key Pinning protects your site from MiTM attacks using rogue X.509 certificates. By whitelisting only the identities that the browser should trust, your users are protected in the event a certificate authority is compromised."
+            ],
+            [
+                "name" => "security_public_key_pins_report_only",
+                "title" => "HTTP Public Key Pinning report only",
+                "comment" => "This setting allows you to experiment by reporting but not enforcing some HTTP Public Key Pinning."
+            ],
+            [
+                "name" => "security_x_frame_options",
+                "title" => "X-Frame-Options",
+                "comment" => "X-Frame-Options tells the browser whether you want to allow your site to be framed or not. By preventing a browser from framing your site you can defend against attacks like clickjacking. If defining a URL here, it should define the URL(s) from which your content should be visible, not the URLs from which your site accepts content. For example, if your main URL (root_web above) is https://11.chamilo.org/, then this setting should be: 'ALLOW-FROM https://11.chamilo.org'. These headers only apply to pages where Chamilo is responsible of the HTTP headers generation (i.e. \".php\" files). It does not apply to static files. If playing with this feature, make sure you also update your web server configuration to add the right headers for static files. See CDN configuration documentation above (search for \"add_header\") for more information. Recommended (strict) value for this setting, if enabled: \"SAMEORIGIN\"."
+            ],
+            [
+                "name" => "security_xss_protection",
+                "title" => "X-XSS-Protection",
+                "comment" => "X-XSS-Protection sets the configuration for the cross-site scripting filter built into most browsers. Recommended value \"1; mode=block\"."
+            ],
+            [
+                "name" => "security_x_content_type_options",
+                "title" => "X-Content-Type-Options",
+                "comment" => "X-Content-Type-Options stops a browser from trying to MIME-sniff the content type and forces it to stick with the declared content-type. The only valid value for this header is \"nosniff\"."
+            ],
+            [
+                "name" => "security_referrer_policy",
+                "title" => "Security Referrer Policy",
+                "comment" => "Referrer Policy is a new header that allows a site to control how much information the browser includes with navigation away from a document and should be set by all sites."
+            ],
+            [
+                "name" => "security_block_inactive_users_immediately",
+                "title" => "Block disabled users immediately",
+                "comment" => "Immediately block users who have been disabled by the admin through users management. Otherwise, users who have been disabled will keep their previous privileges until they logout."
+            ],
+            [
+                "name" => "security_session_cookie_samesite_none",
+                "title" => "Session cookie samesite",
+                "comment" => "Enable samesite:None parameter for session cookie. More info: https://www.chromium.org/updates/same-site and https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
+            ],
+            [
+                "name" => "remove_session_url",
+                "title" => "Hide link to session page",
+                "comment" => "Hide link to the session page from the sessions list."
+            ],
+            [
+                "name" => "hide_tab_list",
+                "title" => "Hide tabs on the session page",
+                "comment" => ""
+            ],
+            [
+                "name" => "session_admins_edit_courses_content",
+                "title" => "Session admins can edit course content",
+                "comment" => ""
+            ],
+            [
+                "name" => "allow_session_admin_login_as_teacher",
+                "title" => "Session admins can 'login as' teachers",
+                "comment" => ""
+            ],
+            [
+                "name" => "allow_search_diagnostic",
+                "title" => "Enable sessions search diagnosis",
+                "comment" => "Allow tutors to get a diagnosis that will allow them to search for the best sessions for learners."
+            ],
+            [
+                "name" => "allow_redirect_to_session_after_inscription_about",
+                "title" => "Redirect to session after registration in session's 'About' page",
+                "comment" => ""
+            ],
+            [
+                "name" => "session_list_show_count_users",
+                "title" => "Show number of users in sessions list",
+                "comment" => "The admin can see the number of users in each session. This adds additional weight to the sessions list, so if you use it often, consider carefully whether you want the extra waiting time."
+            ],
+            [
+                "name" => "session_admins_access_all_content",
+                "title" => "Session admins can access all course content",
+                "comment" => ""
+            ],
+            [
+                "name" => "limit_session_admin_list_users",
+                "title" => "Session admins are forbidden access to the users list",
+                "comment" => ""
+            ],
+            [
+                "name" => "hide_search_form_in_session_list",
+                "title" => "Hide search form in sessions list",
+                "comment" => ""
+            ],
+            [
+                "name" => "allow_delete_user_for_session_admin",
+                "title" => "Session admins can delete users",
+                "comment" => ""
+            ],
+            [
+                "name" => "allow_disable_user_for_session_admin",
+                "title" => "Session admins can disable users",
+                "comment" => ""
+            ],
+            [
+                "name" => "session_multiple_subscription_students_list_avoid_emptying",
+                "title" => "Prevent emptying the subscribed users in session subscription",
+                "comment" => "When using the multiple learners subscription to a session, prevent the normal behaviour which is to unsubscribe users who are not in the right panel when clicking submit. Keep all users there."
+            ],
+            [
+                "name" => "hide_reporting_session_list",
+                "title" => "Hide sessions list in reporting tool",
+                "comment" => "Sessions that include the course are listed in the reporting tool inside the course itself, which can add considerable weight if the same course is used in hundreds of sessions. This option removes that list."
+            ],
+            [
+                "name" => "allow_session_admin_read_careers",
+                "title" => "Session admins can view careers",
+                "comment" => ""
+            ],
+            [
+                "name" => "session_list_order",
+                "title" => "Sessions support manual sorting",
+                "comment" => ""
+            ],
+            [
+                "name" => "allow_user_session_collapsable",
+                "title" => "Allow user to collapse sessions in My sessions",
+                "comment" => ""
+            ],
+            [
+                "name" => "catalog_course_subscription_in_user_s_session",
+                "title" => "Auto-create single-user session on course auto-subscription",
+                "comment" => "When a user subscribes to an open course through the courses catalogue, create a single-user session instead of subscribing him/her to the base course."
+            ],
+            [
+                "name" => "default_session_list_view",
+                "title" => "Default sessions list view",
+                "comment" => "Select the default tab you want to see when opening the sessions list as admin."
+            ],
+            [
+                "name" => "session_automatic_creation_user_id",
+                "title" => "Auto-created session's creator ID",
+                "comment" => "Set the user to use as creator of the automatically-created sessions (to avoid assigning every session to user \"1\" which is often the portal administrator)."
+            ],
+            [
+                "name" => "user_s_session_duration",
+                "title" => "Auto-created sessions duration",
+                "comment" => "Duration (in days) of the single-user, auto-created sessions. After expiry, the user cannot register to the same course (no other session is created)."
+            ],
+            [
+                "name" => "my_courses_session_order",
+                "title" => "Change the default sorting of session in My sessions",
+                "comment" => "By default, sessions are ordered by start date. Change this by providing an array of type ['field' => 'end_date', 'order' => 'desc']."
+            ],
+            [
+                "name" => "session_courses_read_only_mode",
+                "title" => "Set course read-only in session",
+                "comment" => "Let teachers set some courses in read-only mode when opened through sessions. In the course properties, check the 'Lock course in session' option."
+            ],
+            [
+                "name" => "session_import_settings",
+                "title" => "Options for session import",
+                "comment" => "Array of options to apply as default parameters in the CSV/XML session import."
+            ],
+            [
+                "name" => "catalog_settings",
+                "title" => "Fields to search by in catalogue",
+                "comment" => "Set preferences for the courses and sessions catalogues search options. If defined, this array will be used as a strict list of fields to let users search by."
+            ],
+            [
+                "name" => "tracking_columns",
+                "title" => "Customize course-session tracking columns",
+                "comment" => "Define an array of columns for the following reports: 'course_session', 'my_students_lp', 'my_progress_lp', 'my_progress_courses'."
+            ],
+            [
+                "name" => "my_progress_session_show_all_courses",
+                "title" => "My progress: show course details in session",
+                "comment" => "Display all details of each course in session when clicking on session details."
+            ],
+            [
+                "name" => "assignment_base_course_teacher_access_to_all_session",
+                "title" => "Base course teacher can see assignments from all sessions",
+                "comment" => "Show all learner publications (from base course and from all sessions) in the work/pending.php page of the base course."
+            ],
+            [
+                "name" => "allow_session_admin_extra_access",
+                "title" => "Session admin can access batch user import, update and export",
+                "comment" => ""
+            ],
+            [
+                "name" => "hide_session_graph_in_my_progress",
+                "title" => "Hide session chart in My progress",
+                "comment" => ""
+            ],
+            [
+                "name" => "show_users_in_active_sessions_in_tracking",
+                "title" => "Only display users from active sessions in tracking",
+                "comment" => ""
+            ],
+            [
+                "name" => "session_coach_access_after_duration_end",
+                "title" => "Sessions by duration always available to coaches",
+                "comment" => "Otherwise, session coaches only have access to sessions by duration during the active duration."
+            ],
+            [
+                "name" => "session_course_users_subscription_limited_to_session_users",
+                "title" => "Limit subscriptions to course to only users of the session",
+                "comment" => "Restrict the list of students to subscribe in the course session. And disable registration for users in all courses from Resume Session page."
+            ],
+            [
+                "name" => "session_classes_tab_disable",
+                "title" => "Disable add class in session course for non-admin",
+                "comment" => "Disable tab to add classes in session course for non-admins."
+            ],
+            [
+                "name" => "email_template_subscription_to_session_confirmation_username",
+                "title" => "Add username to e-mail notification of subscription to session",
+                "comment" => ""
+            ],
+            [
+                "name" => "email_template_subscription_to_session_confirmation_lost_password",
+                "title" => "Add reset password link to e-mail notification of subscription to session",
+                "comment" => ""
+            ],
+            [
+                "name" => "session_creation_user_course_extra_field_relation_to_prefill",
+                "title" => "Pre-fill session fields with user fields",
+                "comment" => "Array of relationships between user extra fields and session extra fields, so the session can be pre-filled with data matching the user's data."
+            ],
+            [
+                "name" => "session_creation_form_set_extra_fields_mandatory",
+                "title" => "Set mandatory extra fields in session creation form",
+                "comment" => "Require the listed fields during session creation."
+            ],
+            [
+                "name" => "session_model_list_field_ordered_by_id",
+                "title" => "Sort session templates by id in session creation form",
+                "comment" => ""
+            ],
+            [
+                "name" => "badge_assignation_notification",
+                "title" => "Send notification to learner when a skill/badge has been acquired",
+                "comment" => ""
+            ],
+            [
+                "name" => "allow_private_skills",
+                "title" => "Hide skills from learners",
+                "comment" => "If enabled, skills can only be visible for admins, teachers (related to a user via a course), and HRM users (if related to a user)."
+            ],
+            [
+                "name" => "allow_teacher_access_student_skills",
+                "title" => "Allow teachers to access learners' skills",
+                "comment" => ""
+            ],
+            [
+                "name" => "skills_teachers_can_assign_skills",
+                "title" => "Allow teachers to set which skills are acquired through their courses",
+                "comment" => "By default, only admins can decide which skills can be acquired through which course."
+            ],
+            [
+                "name" => "hide_skill_levels",
+                "title" => "Hide skill levels feature",
+                "comment" => ""
+            ],
+            [
+                "name" => "skills_hierarchical_view_in_user_tracking",
+                "title" => "Show skills as a hierarchical table",
+                "comment" => ""
+            ],
+            [
+                "name" => "skill_levels_names",
+                "title" => "Skill levels names",
+                "comment" => "Define names for levels of skills as an array of id => name."
+            ],
+            [
+                "name" => "allow_skill_rel_items",
+                "title" => "Enable linking skills to items",
+                "comment" => "This enables a major feature that enables any item to be linked to (and as such to allow acquisition of) a skill. The feature still requires the teacher to confirm the acquisition of the skill, so the acquisition is not automatic."
+            ],
+            [
+                "name" => "social_show_language_flag_in_profile",
+                "title" => "Show language flag next to avatar in social network",
+                "comment" => ""
+            ],
+            [
+                "name" => "social_make_teachers_friend_all",
+                "title" => "Teachers and admins see students as friends on social network",
+                "comment" => ""
+            ],
+            [
+                "name" => "hide_survey_reporting_button",
+                "title" => "Hide survey reporting button",
+                "comment" => "Allows admins to hide survey reporting button if surveys are used to survey teachers."
+            ],
+            [
+                "name" => "survey_mark_question_as_required",
+                "title" => "Mark all survey questions as 'required' by default",
+                "comment" => ""
+            ],
+            [
+                "name" => "survey_anonymous_show_answered",
+                "title" => "Allow teachers to see who answered in anonymous surveys",
+                "comment" => "Allow teachers to see which learners have already answered an anonymous survey. This only appears once more than one user has answered, so it remains difficult to identify who answered what."
+            ],
+            [
+                "name" => "survey_allow_answered_question_edit",
+                "title" => "Allow teachers to edit survey questions after students answered",
+                "comment" => ""
+            ],
+            [
+                "name" => "survey_duplicate_order_by_name",
+                "title" => "Order by student name when using survey duplication feature",
+                "comment" => "The survey duplication feature is oriented towards teachers and is meant to ask teachers to give their appreciation about each student in order. This option will order the questions by learner's lastname."
+            ],
+            [
+                "name" => "survey_backwards_enable",
+                "title" => "Enable 'previous question' button in surveys",
+                "comment" => ""
+            ],
+            [
+                "name" => "hide_survey_edition",
+                "title" => "Prevent survey edition",
+                "comment" => "Prevent editing surveys for all surveys listed here (by code). Use * to prevent edition of all surveys."
+            ],
+            [
+                "name" => "survey_additional_teacher_modify_actions",
+                "title" => "Add additional actions (as links) to survey lists for teachers",
+                "comment" => "Add actions (usually connected to plugins) in the list of surveys. Use array syntax ['myplugin' => ['MyPlugin', 'urlGeneratorCallback']]."
+            ],
+            [
+                "name" => "show_surveys_base_in_sessions",
+                "title" => "Display surveys from base course in all session courses",
+                "comment" => ""
+            ],
+            [
+                "name" => "block_student_publication_edition",
+                "title" => "Prevent assignments edition",
+                "comment" => ""
+            ],
+            [
+                "name" => "block_student_publication_add_documents",
+                "title" => "Prevent adding documents to assignments",
+                "comment" => ""
+            ],
+            [
+                "name" => "block_student_publication_score_edition",
+                "title" => "Prevent teacher from modifying assignment scores",
+                "comment" => ""
+            ],
+            [
+                "name" => "allow_only_one_student_publication_per_user",
+                "title" => "Students can only upload one assignment",
+                "comment" => ""
+            ],
+            [
+                "name" => "allow_my_student_publication_page",
+                "title" => "Enable My assignments page",
+                "comment" => ""
+            ],
+            [
+                "name" => "assignment_prevent_duplicate_upload",
+                "title" => "Prevent duplicate uploads in assignments",
+                "comment" => ""
+            ],
+            [
+                "name" => "considered_working_time",
+                "title" => "Enable time effort for assignments",
+                "comment" => "This will allow teachers to give an estimated time effort (in hh:mm:ss format) to complete the assignment. Upon submission of the assignment and approval by the teacher (the assignment is given a score), the learner will automatically be assigned the corresponding time."
+            ],
+            [
+                "name" => "force_download_doc_before_upload_work",
+                "title" => "Force download of document before assignment upload",
+                "comment" => "Force users to download the provided document in the assignment definition before they can upload their assignment."
+            ],
+            [
+                "name" => "allow_redirect_to_main_page_after_work_upload",
+                "title" => "Redirect to assigment tool homepage after upload or comment",
+                "comment" => "Redirect to assignments list after uploading an assignment or a adding a comment"
+            ],
+            [
+                "name" => "my_courses_show_pending_work",
+                "title" => "Display link to 'pending' assignments from My courses page",
+                "comment" => ""
+            ],
+            [
+                "name" => "ticket_project_user_roles",
+                "title" => "Access by role to ticket projects",
+                "comment" => "Allow ticket projects to be accesses by specific user roles. Example: ['permissions' => [1 => [17]] where project_id = 1, STUDENT_BOSS = 17."
             ],
         ];
     }

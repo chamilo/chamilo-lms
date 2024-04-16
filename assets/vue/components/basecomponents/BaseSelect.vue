@@ -8,7 +8,7 @@
         :option-label="optionLabel"
         :option-value="optionValue"
         :loading="isLoading"
-        placeholder="--"
+        :show-clear="allowClear"
         @update:model-value="emit('update:modelValue', $event)"
       >
         <template #emptyfilter>--</template>
@@ -68,6 +68,10 @@ const props = defineProps({
     default: false,
   },
   isLoading: {
+    type: Boolean,
+    default: false,
+  },
+  allowClear: {
     type: Boolean,
     default: false,
   },

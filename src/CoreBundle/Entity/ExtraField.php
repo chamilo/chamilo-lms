@@ -97,8 +97,6 @@ class ExtraField
     #[Gedmo\Translatable]
     #[ORM\Column(name: 'display_text', type: 'string', length: 255, nullable: true, unique: false)]
     protected ?string $displayText = null;
-    #[Gedmo\Locale]
-    protected ?string $locale = null;
     #[ORM\Column(name: 'helper_text', type: 'text', nullable: true, unique: false)]
     protected ?string $helperText = null;
     #[ORM\Column(name: 'default_value', type: 'text', nullable: true, unique: false)]
@@ -317,16 +315,6 @@ class ExtraField
         $this->helperText = $helperText;
 
         return $this;
-    }
-    public function setTranslatableLocale($locale): static
-    {
-        $this->locale = $locale;
-
-        return $this;
-    }
-    public function getTranslatableLocale(): ?string
-    {
-        return $this->locale;
     }
 
     public function getAutoRemove(): bool

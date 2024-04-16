@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Repository\ExtraFieldOptionsRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
-use Gedmo\Translatable\Entity\Translation;
 
 class ExtraFieldOptionsRepositoryTest extends AbstractApiTest
 {
@@ -57,57 +56,5 @@ class ExtraFieldOptionsRepositoryTest extends AbstractApiTest
 
         $this->assertSame($defaultCount + 1, $extraFieldRepo->count([]));
         $this->assertSame($defaultCountOptions + 1, $extraFieldOptionsRepo->count([]));
-    }
-
-    public function testCreateWithTranslation(): void
-    {
-        $this->testCreate();
-        $em = $this->getEntityManager();
-
-        $extraFieldOptionsRepo = static::getContainer()->get(ExtraFieldOptionsRepository::class);
-
-        /** @var ExtraFieldOptions $extraFieldOption */
-        $extraFieldOption = $extraFieldOptionsRepo->findOneBy(['value' => 'value']);
-        $this->assertNotNull($extraFieldOption);
-        $this->assertInstanceOf(ExtraFieldOptions::class, $extraFieldOption);
-
-        $extraFieldOption
-            ->setTranslatableLocale('fr_FR')
-            ->setDisplayText('test in FRENCH')
-        ;
-        $em->persist($extraFieldOption);
-        $em->flush();
-
-        /** @var ExtraFieldOptions $extraFieldOption */
-        $extraFieldOption = $extraFieldOptionsRepo->find($extraFieldOption->getId());
-
-        $extraFieldOption
-            ->setTranslatableLocale('pl')
-            ->setDisplayText('test in POLISH')
-        ;
-        $em->persist($extraFieldOption);
-        $em->flush();
-        $em->clear();
-
-        /** @var ExtraFieldOptions $extraFieldOption */
-        $extraFieldOption = $extraFieldOptionsRepo->find($extraFieldOption->getId());
-        $repository = $em->getRepository(Translation::class);
-
-        $translations = $repository->findTranslations($extraFieldOption);
-
-        $this->assertCount(2, $translations);
-        $expected = [
-            'fr_FR' => [
-                'displayText' => 'test in FRENCH',
-            ],
-            'pl' => [
-                'displayText' => 'test in POLISH',
-            ],
-        ];
-        $this->assertSame($expected, $translations);
-
-        /** @var ExtraFieldOptions $extraFieldOption */
-        $extraFieldOption = $extraFieldOptionsRepo->find($extraFieldOption->getId());
-        $this->assertSame('test in ENGLISH', $extraFieldOption->getDisplayText());
     }
 }

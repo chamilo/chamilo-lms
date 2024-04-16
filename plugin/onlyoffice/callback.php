@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * (c) Copyright Ascensio System SIA 2021
+ * (c) Copyright Ascensio System SIA 2023
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 use ChamiloSession as Session;
+use \Firebase\JWT\JWT;
+use \Firebase\JWT\Key;
 
 /**
  * Status of the document
@@ -117,20 +119,20 @@ function track(): array
         return $result;
     }
 
-    if (!empty($plugin->get("jwt_secret"))) {
+    if (!empty($plugin->getDocumentServerSecret())) {
 
         if (!empty($data["token"])) {
             try {
-                $payload = \Firebase\JWT\JWT::decode($data["token"], $plugin->get("jwt_secret"), array("HS256"));
+                $payload = JWT::decode($data["token"], new Key($plugin->getDocumentServerSecret(), "HS256"));
             } catch (\UnexpectedValueException $e) {
                 $result["status"] = "error";
                 $result["error"] = "403 Access denied";
                 return $result;
             }
         } else {
-            $token = substr(getallheaders()[AppConfig::JwtHeader()], strlen("Bearer "));
+            $token = substr(getallheaders()[$plugin->getJwtHeader()], strlen("Bearer "));
             try {
-                $decodeToken = \Firebase\JWT\JWT::decode($token, $plugin->get("jwt_secret"), array("HS256"));
+                $decodeToken = JWT::decode($token, new Key($plugin->getDocumentServerSecret(), "HS256"));
                 $payload = $decodeToken->payload;
             } catch (\UnexpectedValueException $e) {
                 $result["status"] = "error";
@@ -151,6 +153,7 @@ function track(): array
         case TrackerStatus_Corrupted:
 
             $downloadUri = $data["url"];
+            $downloadUri = $plugin->replaceDocumentServerUrlToInternal($downloadUri);
 
             if (!empty($docId) && !empty($courseCode)) {
                 $docInfo = DocumentManager::get_document_data_by_id($docId, $courseCode, false, $sessionId);
@@ -225,10 +228,10 @@ function download()
     global $sessionId;
     global $courseInfo;
 
-    if (!empty($plugin->get("jwt_secret"))) {
-        $token = substr(getallheaders()[AppConfig::JwtHeader()], strlen("Bearer "));
+    if (!empty($plugin->getDocumentServerSecret())) {
+        $token = substr(getallheaders()[$plugin->getJwtHeader()], strlen("Bearer "));
         try {
-            $payload = \Firebase\JWT\JWT::decode($token, $plugin->get("jwt_secret"), array("HS256"));
+            $payload = JWT::decode($token, new Key($plugin->getDocumentServerSecret(), "HS256"));
 
         } catch (\UnexpectedValueException $e) {
             $result["status"] = "error";
@@ -255,6 +258,7 @@ function download()
     @header("Content-Disposition: attachment; filename=" . $docInfo["title"]);
 
     readfile($filePath);
+    exit();
 }
 
 /**

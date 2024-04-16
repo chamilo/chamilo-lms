@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * (c) Copyright Ascensio System SIA 2021
+ * (c) Copyright Ascensio System SIA 2023
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,21 +33,26 @@ class TemplateManager {
         "el" => "el-GR",
         "en" => "en-US",
         "es" => "es-ES",
+        "eu" => "eu-ES",
         "fr" => "fr-FR",
+        "gl" => "gl-ES",
         "it" => "it-IT",
         "ja" => "ja-JP",
         "ko" => "ko-KR",
         "lv" => "lv-LV",
         "nl" => "nl-NL",
+        "ms" => "ms-MY",
         "pl" => "pl-PL",
         "pt" => "pt-PT",
         "pt-BR" => "pt-BR",
         "ru" => "ru-RU",
         "sk" => "sk-SK",
         "sv" => "sv-SE",
+        "tr" => "tr-TR",
         "uk" => "uk-UA",
         "vi" => "vi-VN",
-        "zh" => "zh-CN"
+        "zh" => "zh-CN",
+        "zh-TW" => "zh-TW"
     ];
 
     /**

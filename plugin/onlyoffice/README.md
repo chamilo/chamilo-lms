@@ -51,6 +51,7 @@ To use ONLYOFFICE behind a proxy, please refer to [this article](https://helpcen
     cp -r ./ /tmp/onlyoffice-deploy/onlyoffice
     cd /tmp/onlyoffice-deploy/onlyoffice
     rm -rf ./.git*
+    rm -rf */.git*
     ```
 
 4. Archive
@@ -82,6 +83,10 @@ Return to the plugin list, select the ONLYOFFICE plugin, and click Enable the se
 ## Configuring Chamilo ONLYOFFICE integration plugin
 
 On the Plugins page, find ONLYOFFICE and click _Configure_. You'll see the _Settings_ page. Enable the plugin and specify the _Document Server address_. 
+
+Starting from version 7.2, JWT is enabled by default and the secret key is generated automatically to restrict the access to ONLYOFFICE Docs and for security reasons and data integrity. 
+Specify your own **Secret key** on the Chamilo **Settings** page. 
+In the ONLYOFFICE Docs [config file](https://api.onlyoffice.com/editors/signature/), specify the same secret key and enable the validation.
 
 ## How it works
 

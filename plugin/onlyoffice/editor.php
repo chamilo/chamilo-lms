@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * (c) Copyright Ascensio System SIA 2021
+ * (c) Copyright Ascensio System SIA 2023
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
+use \Firebase\JWT\JWT;
+
 const USER_AGENT_MOBILE = "/android|avantgo|playbook|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od|ad)|iris|kindle|lge |maemo|midp|mmp|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\\/|plucker|pocket|psp|symbian|treo|up\\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i";
 
 $plugin = OnlyofficePlugin::create();
@@ -29,7 +31,7 @@ if (!$isEnable) {
     return;
 }
 
-$documentServerUrl = $plugin->get("document_server_url");
+$documentServerUrl = $plugin->getDocumentServerUrl();
 if (empty($documentServerUrl)) {
     die ("Document server isn't configured");
     return;
@@ -49,6 +51,9 @@ $userInfo = api_get_user_info($userId);
 $sessionId = api_get_session_id();
 $courseId = api_get_course_int_id();
 $courseInfo = api_get_course_info();
+if (empty($courseInfo)) {
+    api_not_allowed(true);
+}
 $courseCode = $courseInfo["code"];
 
 $docInfo = DocumentManager::get_document_data_by_id($docId, $courseCode, false, $sessionId);
@@ -60,6 +65,10 @@ $langInfo = LangManager::getLangUser();
 $docType = FileUtility::getDocType($extension);
 $key = FileUtility::getKey($courseCode, $docId);
 $fileUrl = FileUtility::getFileUrl($courseId, $userId, $docId, $sessionId, $groupId);
+
+if (!empty($plugin->getStorageUrl())) {
+    $fileUrl = str_replace(api_get_path(WEB_PATH), $plugin->getStorageUrl(), $fileUrl);
+}
 
 $config = [
     "type" => "desktop",
@@ -144,13 +153,19 @@ if (!$isVisible) {
 
 if ($canEdit && $accessRights && !$isReadonly) {
     $config["editorConfig"]["mode"] = "edit";
-    $config["editorConfig"]["callbackUrl"] = getCallbackUrl(
+
+    $callback = getCallbackUrl(
         $docId,
         $userId,
         $courseId,
         $sessionId,
         $groupId
     );
+
+    if (!empty($plugin->getStorageUrl())) {
+        $callback = str_replace(api_get_path(WEB_PATH), $plugin->getStorageUrl(), $callback);
+    }
+    $config["editorConfig"]["callbackUrl"] = $callback;
 } else {
     $canView = in_array($extension, FileUtility::$can_view_types);
     if ($canView) {
@@ -161,8 +176,8 @@ if ($canEdit && $accessRights && !$isReadonly) {
 }
 $config["document"]["permissions"]["edit"] = $accessRights && !$isReadonly;
 
-if (!empty($plugin->get("jwt_secret"))) {
-    $token = \Firebase\JWT\JWT::encode($config, $plugin->get("jwt_secret"));
+if (!empty($plugin->getDocumentServerSecret())) {
+    $token = JWT::encode($config, $plugin->getDocumentServerSecret(), "HS256");
     $config["token"] = $token;
 }
 
@@ -242,17 +257,17 @@ function getCallbackUrl(int $docId, int $userId, int $courseId, int $sessionId, 
 
     var connectEditor = function () {
         var config = <?php echo json_encode($config)?>;
+        var errorPage = <?php echo json_encode(api_get_path(WEB_PLUGIN_PATH) . "onlyoffice/error.php")?>;
 
+        var docsVersion = DocsAPI.DocEditor.version().split(".");
         if ((config.document.fileType === "docxf" || config.document.fileType === "oform")
-            && DocsAPI.DocEditor.version().split(".")[0] < 7) {
-            <?php
-                echo Display::addFlash(
-                        Display::return_message(
-                            $plugin->get_lang("UpdateOnlyoffice"),
-                            "error"
-                        )
-                    ); 
-            ?>;
+            && docsVersion[0] < 7) {
+            window.location.href = errorPage + "?status=" + 1;
+            return;
+        }
+        if (docsVersion[0] < 6
+            || docsVersion[0] == 6 && docsVersion[1] == 0) {
+            window.location.href = errorPage + "?status=" + 2;
             return;
         }
 

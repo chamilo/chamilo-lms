@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * (c) Copyright Ascensio System SIA 2021
+ * (c) Copyright Ascensio System SIA 2023
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,27 @@ class AppConfig {
     private const jwtHeader = "onlyoffice_jwt_header";
 
     /**
+     * The config key for the internal url
+     *
+     * @var string
+     */
+    private const internalUrl = "onlyoffice_internal_url";
+
+    /**
+    * Link to Docs Cloud
+    *
+    * @var string
+    */
+    private const linkToDocs = "https://www.onlyoffice.com/docs-registration.aspx?referer=chamilo";
+
+    /**
+     * The config key for the storage url
+     *
+     * @var string
+     */
+    private const storageUrl = "onlyoffice_storage_url";
+
+    /**
      * Get the jwt header setting
      *
      * @return string
@@ -36,10 +57,57 @@ class AppConfig {
     public static function JwtHeader()
     {
         $header = api_get_configuration_value(self::jwtHeader);
-        if (empty($header)) {
-            $header = "Authorization";
-        }
-
         return $header;
+    }
+
+    /**
+     * Get the internal url setting
+     *
+     * @return string
+     */
+    public static function InternalUrl()
+    {
+        $internalUrl = api_get_configuration_value(self::internalUrl);
+        return $internalUrl;
+    }
+
+    /**
+     * Get the storage url setting
+     *
+     * @return string
+     */
+    public static function StorageUrl()
+    {
+        $storageUrl = api_get_configuration_value(self::storageUrl);
+        return $storageUrl;
+    }
+
+    /**
+     * DEMO DATA
+     */
+    private const DEMO_PARAM = [
+        "ADDR" => "https://onlinedocs.onlyoffice.com/",
+        "HEADER" => "AuthorizationJWT",
+        "SECRET" => "sn2puSUF7muF5Jas",
+        "TRIAL" => 30
+    ];
+
+    /**
+     * Get demo params
+     *
+     * @return array
+     */
+    public static function GetDemoParams()
+    {
+        return self::DEMO_PARAM;
+    }
+
+    /**
+    * Get link to Docs Cloud
+    *
+    * @return string
+    */
+    public function GetLinkToDocs() {
+        return self::linkToDocs;
     }
 }

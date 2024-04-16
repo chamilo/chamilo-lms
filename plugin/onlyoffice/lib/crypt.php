@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * (c) Copyright Ascensio System SIA 2021
+ * (c) Copyright Ascensio System SIA 2023
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,9 @@
 
 require_once __DIR__ . "/../../../main/inc/global.inc.php";
 
+use \Firebase\JWT\JWT;
+use \Firebase\JWT\Key;
+
 class Crypt {
 
     /**
@@ -30,7 +33,7 @@ class Crypt {
      */
     public static function GetHash($object)
     {
-        return \Firebase\JWT\JWT::encode($object, api_get_security_key());
+        return JWT::encode($object, api_get_security_key(), "HS256");
     }
 
     /**
@@ -48,7 +51,7 @@ class Crypt {
             return [$result, "token is empty"];
         }
         try {
-            $result = \Firebase\JWT\JWT::decode($token, api_get_security_key(), array("HS256"));
+            $result = JWT::decode($token, new Key(api_get_security_key(), "HS256"));
         } catch (\UnexpectedValueException $e) {
             $error = $e->getMessage();
         }

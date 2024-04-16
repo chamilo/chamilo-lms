@@ -209,7 +209,7 @@ switch ($action) {
 
         if (
             api_is_anonymous() ||
-            !api_get_configuration_value('social_enable_messages_feedback')
+            !api_get_setting('social.social_enable_messages_feedback')
         ) {
             echo json_encode(false);
             exit;

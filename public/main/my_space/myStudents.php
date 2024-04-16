@@ -976,7 +976,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
             $timeLegalAccept = api_get_local_time($legalTime);
         } else {
             $btn = Display::url(
-                get_lang('Send message legal agreement'),
+                get_lang('Send legal agreement'),
                 api_get_self().'?action=send_legal&student='.$studentId.'&course='.$courseCode,
                 ['class' => 'btn btn--primary']
             );

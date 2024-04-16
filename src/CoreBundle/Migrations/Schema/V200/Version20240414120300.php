@@ -19,10 +19,13 @@ class Version20240414120300 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $settingsToUpdate = array_merge(
-            SettingsCurrentFixtures::getExistingSettings(),
-            SettingsCurrentFixtures::getNewConfigurationSettings()
-        );
+        $existingSettings = SettingsCurrentFixtures::getExistingSettings();
+        $newConfigurationSettings = SettingsCurrentFixtures::getNewConfigurationSettings();
+
+        $flattenedExistingSettings = $this->flattenConfigurationSettings($existingSettings);
+        $flattenedNewSettings = $this->flattenConfigurationSettings($newConfigurationSettings);
+
+        $settingsToUpdate = array_merge($flattenedExistingSettings, $flattenedNewSettings);
 
         foreach ($settingsToUpdate as $settingData) {
             $variableExists = $this->connection->fetchOne(
@@ -44,4 +47,15 @@ class Version20240414120300 extends AbstractMigrationChamilo
     }
 
     public function down(Schema $schema): void {}
+
+    private function flattenConfigurationSettings(array $categorizedSettings): array
+    {
+        $flattenedSettings = [];
+        foreach ($categorizedSettings as $category => $settings) {
+            foreach ($settings as $setting) {
+                $flattenedSettings[] = $setting;
+            }
+        }
+        return $flattenedSettings;
+    }
 }

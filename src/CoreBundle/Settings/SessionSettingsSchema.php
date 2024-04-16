@@ -163,8 +163,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('My courses session order. Possible field values: "start_date", "end_date", "name" Order values: "asc" or "desc"').
-                        $this->settingArrayHelpValue('my_courses_session_order'),
+                    'help' => $this->settingArrayHelpValue('my_courses_session_order'),
                 ]
             )
             ->add('session_courses_read_only_mode', YesNoType::class)
@@ -173,8 +172,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('This option sets default parameters in the main/session/session_import.php').
-                        $this->settingArrayHelpValue('session_import_settings'),
+                    'help' => $this->settingArrayHelpValue('session_import_settings'),
                 ]
             )
             ->add(
@@ -182,8 +180,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Catalog search settings visibility').
-                        $this->settingArrayHelpValue('catalog_settings'),
+                    'help' => $this->settingArrayHelpValue('catalog_settings'),
                 ]
             )
             ->add(
@@ -191,8 +188,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Customize course session tracking columns').
-                        $this->settingArrayHelpValue('tracking_columns'),
+                    'help' => $this->settingArrayHelpValue('tracking_columns'),
                 ]
             )
             ->add('my_progress_session_show_all_courses', YesNoType::class)
@@ -209,8 +205,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Relation to prefill session extra field with user extra field on session creation on main/session/session_add.php').
-                        $this->settingArrayHelpValue('session_creation_user_course_extra_field_relation_to_prefill'),
+                    'help' => $this->settingArrayHelpValue('session_creation_user_course_extra_field_relation_to_prefill'),
                 ]
             )
             ->add(
@@ -218,8 +213,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Configuration setting to make some extra field required in session creation form on main/session/session_add.php').
-                        $this->settingArrayHelpValue('session_creation_form_set_extra_fields_mandatory'),
+                    'help' => $this->settingArrayHelpValue('session_creation_form_set_extra_fields_mandatory'),
                 ]
             )
             ->add('session_model_list_field_ordered_by_id', YesNoType::class)

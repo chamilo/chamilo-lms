@@ -95,16 +95,16 @@ const userSubmenuItems = computed(() => [
     label: props.currentUser.fullName,
     items: [
       {
+        label: t("My profile"),
+        command: async () => await router.push({ name: "AccountHome" }),
+      },
+      {
         label: t("My General Certificate"),
         url: "/main/social/my_skills_report.php?a=generate_custom_skill",
       },
       {
         label: t("My skills"),
         url: "/main/social/my_skills_report.php",
-      },
-      {
-        label: t("Settings"),
-        command: async () => await router.push({ name: "AccountHome" }),
       },
       {
         separator: true,

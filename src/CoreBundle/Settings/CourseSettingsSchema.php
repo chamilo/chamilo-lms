@@ -289,8 +289,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Course log - Default columns to hide').
-                        $this->settingArrayHelpValue('course_log_hide_columns'),
+                    'help' => $this->settingArrayHelpValue('course_log_hide_columns'),
                 ]
             )
             ->add(
@@ -298,8 +297,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Show student progress in My courses page').
-                        $this->settingArrayHelpValue('course_student_info'),
+                    'help' => $this->settingArrayHelpValue('course_student_info'),
                 ]
             )
             ->add(
@@ -307,8 +305,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Course catalog links behaviour').
-                        $this->settingArrayHelpValue('course_catalog_settings'),
+                    'help' => $this->settingArrayHelpValue('course_catalog_settings'),
                 ]
             )
             ->add('resource_sequence_show_dependency_in_course_intro', YesNoType::class)
@@ -323,8 +320,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Course log - User extra fields to show as columns for default').
-                        $this->settingArrayHelpValue('course_log_default_extra_fields'),
+                    'help' => $this->settingArrayHelpValue('course_log_default_extra_fields'),
                 ]
             )
             ->add('show_courses_in_catalogue', YesNoType::class)
@@ -333,8 +329,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Allows defining one or several categories of courses that will be visible in the course catalog').
-                        $this->settingArrayHelpValue('courses_catalogue_show_only_category'),
+                    'help' => $this->settingArrayHelpValue('courses_catalogue_show_only_category'),
                 ]
             )
             ->add(
@@ -342,8 +337,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Course extra fields to be presented on main/create_course/add_course.php').
-                        $this->settingArrayHelpValue('course_creation_by_teacher_extra_fields_to_show'),
+                    'help' => $this->settingArrayHelpValue('course_creation_by_teacher_extra_fields_to_show'),
                 ]
             )
             ->add(
@@ -351,8 +345,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Configuration setting to make some extra field required in course creation form').
-                        $this->settingArrayHelpValue('course_creation_form_set_extra_fields_mandatory'),
+                    'help' => $this->settingArrayHelpValue('course_creation_form_set_extra_fields_mandatory'),
                 ]
             )
             ->add(
@@ -360,8 +353,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Course extra fields to be presented on course settings').
-                        $this->settingArrayHelpValue('course_configuration_tool_extra_fields_to_show_and_edit'),
+                    'help' => $this->settingArrayHelpValue('course_configuration_tool_extra_fields_to_show_and_edit'),
                 ]
             )
             ->add(
@@ -369,8 +361,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Relation to prefill course extra field with user extra field on course creacion on main/create_course/add_course.php and main/admin/course_add.php').
-                        $this->settingArrayHelpValue('course_creation_user_course_extra_field_relation_to_prefill'),
+                    'help' => $this->settingArrayHelpValue('course_creation_user_course_extra_field_relation_to_prefill'),
                 ]
             )
             ->add('allow_edit_tool_visibility_in_session', YesNoType::class)

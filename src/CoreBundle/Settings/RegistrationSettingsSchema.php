@@ -149,8 +149,7 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Set extra fields as required in the inscription.php page').
-                        $this->settingArrayHelpValue('required_extra_fields_in_inscription'),
+                    'help' => $this->settingArrayHelpValue('required_extra_fields_in_inscription'),
                 ]
             )
             ->add(
@@ -158,8 +157,7 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Only shows the fields in this list').
-                        $this->settingArrayHelpValue('allow_fields_inscription'),
+                    'help' => $this->settingArrayHelpValue('allow_fields_inscription'),
                 ]
             )
             ->add('send_inscription_msg_to_inbox', YesNoType::class)

@@ -172,6 +172,8 @@ class SettingsManager implements SettingsManagerInterface
 
     public function loadAll(): void
     {
+        $session = null;
+
         if ($this->request->getCurrentRequest()) {
             $session = $this->request->getCurrentRequest()->getSession();
             $schemaList = $session->get('schemas');

@@ -666,7 +666,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
                     if (1 !== (int) $userInfo['profile_completed']) {
                         $blockButton = true;
                         $infoMessage .= Display::return_message(
-                                get_lang('You must first fill your profile to enable the terms and conditions validation'),
+                                get_lang('You must first fill your profile to enable the terms and conditions validation.'),
                                 'warning',
                                 true
                             );
@@ -716,8 +716,8 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
                     'checkbox',
                     'legal_accept',
                     null,
-                    get_lang('I have read and agree') . '&nbsp;<a href="inscription.php?legal" target="_blank">' .
-                    get_lang('Terms and conditions') . '</a>'
+                    get_lang('I have read and agree to the') . '&nbsp;<a href="inscription.php?legal" target="_blank">' .
+                    get_lang('Terms and Conditions') . '</a>'
                 );
                 $form->addRule(
                     'legal_accept',
@@ -739,7 +739,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
                     'checkbox',
                     'legal_accept',
                     null,
-                    get_lang('I have read and agree')
+                    get_lang('I have read and agree to the') . ' ' . get_lang('Terms and Conditions')
                 );
                 $form->addRule(
                     'legal_accept',

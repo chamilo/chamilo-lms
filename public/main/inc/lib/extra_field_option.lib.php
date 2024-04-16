@@ -549,7 +549,7 @@ class ExtraFieldOption extends Model
                 'id' => $row->getId(),
                 'field_id' => $row->getField()->getId(),
                 'option_value' => $row->getValue(),
-                'display_text' => $row->getDisplayText(),
+                'display_text' => \ExtraField::translateDisplayName($row->getValue(), $row->getDisplayText()),
                 'priority' => $row->getPriority(),
                 'priority_message' => $row->getPriorityMessage(),
                 'option_order' => $row->getOptionOrder(),
@@ -591,7 +591,7 @@ class ExtraFieldOption extends Model
                 'id' => $subOption->getId(),
                 'field_id' => $subOption->getField()->getId(),
                 'option_value' => $subOption->getValue(),
-                'display_text' => $subOption->getDisplayText(),
+                'display_text' => \ExtraField::translateDisplayName($subOption->getValue(), $subOption->getDisplayText()),
                 'priority' => $subOption->getPriority(),
                 'priority_message' => $subOption->getPriorityMessage(),
                 'option_order' => $subOption->getOptionOrder(),
@@ -862,7 +862,7 @@ class ExtraFieldOption extends Model
         if ($info && $translateDisplayText) {
             $extraFieldOptionsRepo = Container::getExtraFieldOptionsRepository();
             $option = $extraFieldOptionsRepo->find($id);
-            $info['display_text'] = $option->getDisplayText();
+            $info['display_text'] = \ExtraField::translateDisplayName($option->getValue(), $option->getDisplayText());
         }
 
         return $info;
@@ -875,7 +875,7 @@ class ExtraFieldOption extends Model
         foreach ($result as &$row) {
             $extraFieldOptionsRepo = Container::getExtraFieldOptionsRepository();
             $option = $extraFieldOptionsRepo->find($row['id']);
-            $row['display_text'] = $option->getDisplayText();
+            $row['display_text'] = \ExtraField::translateDisplayName($option->getValue(), $option->getDisplayText());
         }
 
         return $result;

@@ -1,7 +1,11 @@
 <template>
   <div class="flex flex-col justify-center gap-0">
-    <p v-if="label">{{ label }}</p>
-    <div class="flex flex-row gap-3 h-10">
+    <p
+      v-if="label"
+      class="text-body-2 mb-1.5"
+      v-text="label"
+    />
+    <div class="flex flex-row gap-2 h-10">
       <ColorPicker
         format="hex"
         :model-value="hexColor"

@@ -4,6 +4,22 @@
 
     <div class="admin-colors__container">
       <div class="admin-colors__settings">
+        <BaseSelect
+          v-model="selectedTheme"
+          :is-loading="isServerThemesLoading"
+          :label="t('Theme selector')"
+          :options="serverThemes"
+          allow-clear
+          option-label="title"
+          option-value="@id"
+        />
+
+        <BaseInputText
+          v-model="themeTitle"
+          :disabled="selectedTheme"
+          :label="t('Title')"
+        />
+
         <!-- Advanced mode -->
         <div v-show="isAdvancedMode">
           <div class="row-group">
@@ -174,17 +190,7 @@
           />
         </div>
 
-        <div class="flex flex-wrap items-start mb-4 gap-3">
-          <BaseSelect
-            option-value="slug"
-            option-label="title"
-            :options="serverThemes"
-            :label="t('Theme selector')"
-            :model-value="selectedTheme?.slug"
-            :is-loading="isServerThemesLoading"
-            class="w-52"
-            @update:model-value="selectTheme"
-          />
+        <div class="field">
           <BaseButton
             :label="t('Save')"
             icon="send"
@@ -460,34 +466,43 @@ let formColor = getColorTheme("--color-form-base")
 
 const serverThemes = ref([])
 const isServerThemesLoading = ref(true)
-const selectedTheme = ref(null)
+const themeTitle = ref()
+const selectedTheme = ref()
 
 onMounted(async () => {
   await refreshThemes()
 })
 
-const selectTheme = (slug) => {
-  const found = serverThemes.value.find((e) => e.slug === slug) ?? null
-  if (found) {
-    selectedTheme.value = found
-    setColors(selectedTheme.value.variables)
+watch(selectedTheme, (newValue) => {
+  if (!newValue) {
+    themeTitle.value = ""
   }
-}
+
+  const found = serverThemes.value.find((e) => e["@id"] === newValue) ?? null
+
+  if (found) {
+    themeTitle.value = found.title
+    setColors(found.variables)
+  }
+})
 
 const saveColors = async () => {
-  if (selectedTheme.value === null) {
-    showErrorNotification(t("You must select a theme in order to save it"))
-    return
-  }
   try {
-    await themeService.updateTheme(selectedTheme.value.title, getColors())
-    showSuccessNotification(t("Colors updated"))
+    const updatedTheme = await themeService.updateTheme({
+      iri: selectedTheme.value || undefined,
+      title: themeTitle.value,
+      colors: getColors(),
+    })
+
+    showSuccessNotification(t("Color updated"))
+
+    await refreshThemes()
+
+    selectedTheme.value = updatedTheme["@id"]
   } catch (error) {
     showErrorNotification(error)
     console.error(error)
   }
-
-  await refreshThemes()
 }
 
 const refreshThemes = async () => {
@@ -495,7 +510,7 @@ const refreshThemes = async () => {
     serverThemes.value = await themeService.getThemes()
     const found = serverThemes.value.find((e) => e.active) ?? null
     if (found) {
-      selectedTheme.value = found
+      selectedTheme.value = found["@id"]
     }
     isServerThemesLoading.value = false
   } catch (error) {

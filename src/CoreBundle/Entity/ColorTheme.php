@@ -8,7 +8,9 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\State\ColorThemeProcessor;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,9 +20,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity]
 #[ApiResource(
     operations: [
-        new Post(
-            processor: ColorThemeProcessor::class,
-        ),
+        new Post(),
+        new Put(),
         new GetCollection(),
     ],
     denormalizationContext: [
@@ -28,6 +29,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ],
     paginationEnabled: false,
     security: "is_granted('ROLE_ADMIN')",
+    processor: ColorThemeProcessor::class,
 )]
 class ColorTheme
 {
@@ -40,7 +42,7 @@ class ColorTheme
 
     #[Groups(['color_theme:write'])]
     #[ORM\Column(length: 255)]
-    private ?string $title = null;
+    private string $title;
 
     /**
      * @var array<string, mixed>
@@ -53,9 +55,8 @@ class ColorTheme
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
-    #[Groups(['color_theme:write'])]
     #[ORM\Column]
-    private ?bool $active = null;
+    private bool $active = false;
 
     public function getId(): ?int
     {

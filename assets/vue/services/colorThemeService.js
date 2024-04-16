@@ -16,15 +16,22 @@ async function getThemes() {
 /**
  * Update or create a theme with the title
  *
+ * @param {string|null} iri
  * @param {string} title
  * @param {Object} colors
  * @returns {Promise<Object>}
  */
-async function updateTheme(title, colors) {
-  await baseService.post(url, {
-    title: title,
+async function updateTheme({ iri = null, title, colors }) {
+  if (iri) {
+    return await baseService.put(iri, {
+      title,
+      variables: colors,
+    })
+  }
+
+  return await baseService.post(url, {
+    title,
     variables: colors,
-    active: true,
   })
 }
 

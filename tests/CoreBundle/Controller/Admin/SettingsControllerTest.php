@@ -32,7 +32,7 @@ class SettingsControllerTest extends WebTestCase
 
         $client->request('GET', '/admin/settings/admin');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('#sectionMainContent', 'administrator_email');
+        $this->assertSelectorTextContains('#sectionMainContent', 'Portal Administrator: e-mail');
     }
 
     public function testSearchSettingAction(): void

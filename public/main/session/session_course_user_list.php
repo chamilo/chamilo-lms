@@ -50,7 +50,7 @@ if (is_array($idChecked)) {
     $idChecked = $my_temp;
 }
 
-$sql = "SELECT s.name, c.title
+$sql = "SELECT s.title, c.title
         FROM $tbl_session_rel_course src
 		INNER JOIN $tbl_session s ON s.id = src.session_id
 		INNER JOIN $tbl_course c ON c.id = src.c_id

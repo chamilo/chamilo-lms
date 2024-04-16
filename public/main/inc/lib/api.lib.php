@@ -2676,7 +2676,7 @@ function api_get_setting($variable, $isArray = false, $key = null)
             break;
         default:
             $settingValue = $settingsManager->getSetting($variable, true);
-            if ($isArray && !empty($settingValue)) {
+            if (is_string($settingValue) && $isArray && !empty($settingValue)) {
                 // Check if the value is a valid JSON string
                 $decodedValue = json_decode($settingValue, true);
 

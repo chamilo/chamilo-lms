@@ -149,14 +149,12 @@ import { useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 import { computed, inject, onMounted, ref, watchEffect } from "vue"
-import { useStore } from "vuex"
 import { useSecurityStore } from "../../store/securityStore"
 import axios from "axios"
 import { usePlatformConfig } from "../../store/platformConfig"
 
 const { t } = useI18n()
 const route = useRoute()
-const store = useStore()
 const securityStore = useSecurityStore()
 const currentNodeId = ref(0)
 const messageRelUserStore = useMessageRelUserStore()

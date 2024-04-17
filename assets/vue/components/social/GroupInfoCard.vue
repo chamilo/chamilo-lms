@@ -90,11 +90,10 @@
 
 <script setup>
 import { inject, ref } from "vue"
-import { useStore } from "vuex"
 import BaseCard from "../basecomponents/BaseCard.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
-import { useRoute, useRouter } from "vue-router"
+import { useRouter } from "vue-router"
 import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import BaseFileUpload from "../basecomponents/BaseFileUpload.vue"
@@ -104,11 +103,8 @@ import axios from "axios"
 import { ENTRYPOINT } from "../../config/entrypoint"
 
 const { t } = useI18n()
-const store = useStore()
-const route = useRoute()
 const router = useRouter()
 const groupInfo = inject("group-info")
-const isGroup = inject("is-group")
 
 const showEditGroupDialog = ref(false)
 const selectedFile = ref(null)

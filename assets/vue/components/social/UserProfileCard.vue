@@ -110,7 +110,6 @@
 
 <script setup>
 import { computed, inject, ref, watchEffect } from "vue"
-import { useStore } from "vuex"
 import BaseCard from "../basecomponents/BaseCard.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
@@ -118,7 +117,6 @@ import Divider from "primevue/divider"
 import axios from "axios"
 
 const { t } = useI18n()
-const store = useStore()
 const user = inject("social-user")
 const isCurrentUser = inject("is-current-user")
 const isAdmin = ref(false)

@@ -47,8 +47,6 @@
 import BaseCard from "../basecomponents/BaseCard.vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
-import { onMounted, computed, ref, inject, watchEffect } from "vue"
-import { useStore } from "vuex"
 import { useSecurityStore } from "../../store/securityStore"
 import axios from 'axios'
 import { useNotification } from "../../composables/notification"
@@ -58,7 +56,6 @@ import { useSocialInfo } from "../../composables/useSocialInfo"
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
-const store = useStore()
 const securityStore = useSecurityStore()
 const notification = useNotification()
 

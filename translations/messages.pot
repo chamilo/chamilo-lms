@@ -26184,7 +26184,7 @@ msgstr ""
 msgid "Inter-gradebook dependencies"
 msgstr ""
 
-msgid "Enables a mechanism of gradebook dependencies that lets people know "
+msgid "Enables a mechanism of gradebook dependencies that lets people know which other items they need to go through first in order to complete the gradbeook."
 msgstr ""
 
 msgid "Mandatory courses for gradebook dependencies"
@@ -26196,7 +26196,7 @@ msgstr ""
 msgid "Gradebook badges sidebar"
 msgstr ""
 
-msgid "Generate a sidebar into the side menu where a few badges can be shown as pending approval. Requires badges and gradebooks pour être "
+msgid "Generate a sidebar into the side menu where a few badges can be shown as pending approval. Requires gradebooks to be listed here, by (numerical) ID."
 msgstr ""
 
 msgid "Allow multiple evaluation attempts in gradebook"

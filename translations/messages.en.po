@@ -26191,8 +26191,8 @@ msgstr "Use global score display setting in gradebook"
 msgid "Inter-gradebook dependencies"
 msgstr "Inter-gradebook dependencies"
 
-msgid "Enables a mechanism of gradebook dependencies that lets people know "
-msgstr "Enables a mechanism of gradebook dependencies that lets people know "
+msgid "Enables a mechanism of gradebook dependencies that lets people know which other items they need to go through first in order to complete the gradbeook."
+msgstr "Enables a mechanism of gradebook dependencies that lets people know which other items they need to go through first in order to complete the gradbeook."
 
 msgid "Mandatory courses for gradebook dependencies"
 msgstr "Mandatory courses for gradebook dependencies"
@@ -26203,8 +26203,8 @@ msgstr "When using inter-gradebook dependencies, you can choose a list of mandat
 msgid "Gradebook badges sidebar"
 msgstr "Gradebook badges sidebar"
 
-msgid "Generate a sidebar into the side menu where a few badges can be shown as pending approval. Requires badges and gradebooks pour être "
-msgstr "Generate a sidebar into the side menu where a few badges can be shown as pending approval. Requires badges and gradebooks pour être "
+msgid "Generate a sidebar into the side menu where a few badges can be shown as pending approval. Requires gradebooks to be listed here, by (numerical) ID."
+msgstr "Generate a sidebar into the side menu where a few badges can be shown as pending approval. Requires gradebooks to be listed here, by (numerical) ID."
 
 msgid "Allow multiple evaluation attempts in gradebook"
 msgstr "Allow multiple evaluation attempts in gradebook"

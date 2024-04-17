@@ -794,7 +794,7 @@ class ExtraField extends Model
 
         return $extra;
     }
- 
+
     /**
      * Translate the display text for a extra field.
      *
@@ -2361,23 +2361,7 @@ class ExtraField extends Model
         }
 
         $form->addElement('header', $header);
-
-        if ('edit' === $action) {
-            $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'.http_build_query(['id' => $id]);
-            $translateButton = Display::toolbarButton(
-                get_lang('Translate this term'),
-                $translateUrl,
-                'language',
-                'link'
-            );
-
-            $form->addText(
-                'display_text',
-                [get_lang('Name'), $translateButton]
-            );
-        } else {
-            $form->addElement('text', 'display_text', get_lang('Name'));
-        }
+        $form->addElement('text', 'display_text', get_lang('Name'));
 
         $form->addHtmlEditor('description', get_lang('Description'), false);
 

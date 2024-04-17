@@ -2714,12 +2714,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     "name" => "gradebook_badge_sidebar",
                     "title" => "Gradebook badges sidebar",
-                    "comment" => "Generate a sidebar into the side menu where a few badges can be shown as pending approval. Requires badges and gradebooks pour être ",
+                    "comment" => "Generate a sidebar into the side menu where a few badges can be shown as pending approval. Requires gradebooks to be listed here, by (numerical) ID.",
                 ],
                 [
                     "name" => "gradebook_dependency",
                     "title" => "Inter-gradebook dependencies",
-                    "comment" => "Enables a mechanism of gradebook dependencies that lets people know ",
+                    "comment" => "Enables a mechanism of gradebook dependencies that lets people know which other items they need to go through first in order to complete the gradbeook.",
                 ],
                 [
                     "name" => "gradebook_dependency_mandatory_courses",

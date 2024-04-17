@@ -14,15 +14,11 @@
 <script setup>
 import UserProfileCard from "../social/UserProfileCard.vue"
 import SocialSideMenu from "../social/SocialSideMenu.vue"
-import { useStore } from "vuex"
-import { useRoute } from "vue-router"
-import { onMounted, provide, readonly, ref, watch } from "vue"
+import { provide } from "vue"
 import { useSocialInfo } from "../../composables/useSocialInfo"
 import SocialGroupMenu from "../social/SocialGroupMenu.vue"
 import GroupInfoCard from "../social/GroupInfoCard.vue"
 
-const store = useStore()
-const route = useRoute()
 
 const { user, isCurrentUser, groupInfo, isGroup, loadGroup, loadUser, isLoading } = useSocialInfo()
 

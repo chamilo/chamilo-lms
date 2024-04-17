@@ -1,6 +1,5 @@
 import { mapFields } from 'vuex-map-fields';
 import { useQuasar } from 'quasar';
-import Snackbar from "../components/Snackbar.vue";
 
 export default {
   setup() {

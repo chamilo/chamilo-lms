@@ -5,6 +5,7 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Mpdf\Mpdf;
 use Mpdf\MpdfException;
 use Mpdf\Utils\UtfString;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Class PDF.
@@ -334,8 +335,23 @@ class PDF
                     $filename = basename($filename, '.htm');
                 }
 
+                $webPath = api_get_path(WEB_PATH);
+
                 $document_html = @file_get_contents($file);
                 $document_html = preg_replace($clean_search, '', $document_html);
+
+                $crawler = new Crawler($document_html);
+                $crawler
+                    ->filter('link[rel="stylesheet"]')
+                    ->each(function (Crawler $node) use ($webPath) {
+                        $linkUrl = $node->link()->getUri();
+
+                        if (!str_starts_with($linkUrl, $webPath)) {
+                            $node->getNode(0)->parentNode->removeChild($node->getNode(0));
+                        }
+                    })
+                ;
+                $document_html = $crawler->outerHtml();
 
                 //absolute path for frames.css //TODO: necessary?
                 $absolute_css_path = api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css';

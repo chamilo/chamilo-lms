@@ -1859,8 +1859,8 @@ if (empty($details)) {
                 get_lang('Average score')
             ).'</th>';
         echo '<th>'.get_lang('Attempts').'</th>';
-        echo '<th>'.get_lang('LatestAttempt').'</th>';
-        echo '<th>'.get_lang('AllAttempts').'</th>';
+        echo '<th>'.get_lang('Latest attempt').'</th>';
+        echo '<th>'.get_lang('All attempts').'</th>';
 
         /*$hookQuizTracking = HookMyStudentsQuizTracking::create();
         if ($hookQuizTracking) {

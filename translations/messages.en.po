@@ -26191,8 +26191,8 @@ msgstr "Use global score display setting in gradebook"
 msgid "Inter-gradebook dependencies"
 msgstr "Inter-gradebook dependencies"
 
-msgid "Enables a mechanism of gradebook dependencies that lets people know "
-msgstr "Enables a mechanism of gradebook dependencies that lets people know "
+msgid "Enables a mechanism of gradebook dependencies that lets people know which other items they need to go through first in order to complete the gradbeook."
+msgid "Enables a mechanism of gradebook dependencies that lets people know which other items they need to go through first in order to complete the gradbeook."
 
 msgid "Mandatory courses for gradebook dependencies"
 msgstr "Mandatory courses for gradebook dependencies"

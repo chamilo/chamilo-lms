@@ -26184,7 +26184,7 @@ msgstr ""
 msgid "Inter-gradebook dependencies"
 msgstr ""
 
-msgid "Enables a mechanism of gradebook dependencies that lets people know "
+msgid "Enables a mechanism of gradebook dependencies that lets people know which other items they need to go through first in order to complete the gradbeook."
 msgstr ""
 
 msgid "Mandatory courses for gradebook dependencies"

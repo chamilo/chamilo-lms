@@ -41,6 +41,19 @@
   @apply flex-shrink-0 bg-gray-15 flex gap-4 justify-end rounded-b-lg p-4;
 }
 
+.p-dialog-enter-active {
+  @apply transition-all duration-150 ease-in;
+}
+
+.p-dialog-leave-active {
+  @apply transition-all duration-150 ease-out;
+}
+
+.p-dialog-enter-from,
+.p-dialog-leave-to {
+  @apply opacity-0 scale-75;
+}
+
 .p-dialog.p-confirm-dialog {
   .p-dialog-content {
     @apply flex gap-2;

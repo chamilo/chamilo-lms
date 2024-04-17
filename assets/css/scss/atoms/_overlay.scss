@@ -1,5 +1,5 @@
 .p-component-overlay {
-  @apply bg-gray-30 duration-200;
+  @apply fixed top-0 left-0 w-full h-full bg-gray-30 duration-200;
 }
 
 .p-component-overlay-enter {
@@ -8,4 +8,21 @@
 
 .p-component-overlay-leave {
   animation: p-component-overlay-leave-animation 150ms forwards;
+}
+
+@keyframes p-component-overlay-enter-animation {
+  from {
+    @apply bg-transparent;
+  }
+  to {
+    @apply bg-gray-30;
+  }
+}
+@keyframes p-component-overlay-leave-animation {
+  from {
+    @apply bg-gray-30;
+  }
+  to {
+    @apply bg-transparent;
+  }
 }

@@ -16,12 +16,10 @@
 <script setup>
 import CourseCardList from "../../../components/course/CourseCardList.vue"
 import { computed, ref, watchEffect } from "vue"
-import { useStore } from "vuex"
 import { GET_STICKY_COURSES } from "../../../graphql/queries/Course"
 import { useQuery } from "@vue/apollo-composable"
 import { useSecurityStore } from "../../../store/securityStore"
 
-const store = useStore()
 const securityStore = useSecurityStore()
 
 const queryResponse = ref({})

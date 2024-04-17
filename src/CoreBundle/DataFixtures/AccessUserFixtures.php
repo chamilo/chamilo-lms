@@ -75,6 +75,7 @@ class AccessUserFixtures extends Fixture implements ContainerAwareInterface
 
         $fallbackUser = new User();
         $fallbackUser
+            ->setSkipResourceNode(true)
             ->setUsername('fallback_user')
             ->setEmail('fallback@example.com')
             ->setPlainPassword('fallback_user')

@@ -639,7 +639,7 @@ class ExtraField extends Model
             $extraFieldId = $row['id'];
             /** @var \Chamilo\CoreBundle\Entity\ExtraField $extraField */
             $extraField = $extraFieldRepo->find($extraFieldId);
-            $row['display_text'] = $extraField->getDisplayText();
+            $row['display_text'] = ExtraField::translateDisplayName($row['variable'],$row['display_text']);
 
             // All the tags of the field
             $sql = "SELECT * FROM $this->table_field_tag
@@ -796,6 +796,30 @@ class ExtraField extends Model
     }
 
     /**
+     * Translate the display text for a extra field.
+     *
+     * @param string $variable
+     * @param string $defaultDisplayText
+     *
+     * @return string
+     */
+    public static function translateDisplayName($variable, $defaultDisplayText): string
+    {
+        // 1st priority variable.
+        $translatedVariable = get_lang(api_underscore_to_camel_case($variable));
+        if (api_underscore_to_camel_case($variable) !== $translatedVariable) {
+            return $translatedVariable;
+        }
+
+        // 2nd priority display text.
+        $translatedDisplayText = get_lang($defaultDisplayText);
+        if ($defaultDisplayText !== $translatedDisplayText) {
+            return $translatedDisplayText;
+        }
+        return $defaultDisplayText;
+    }
+
+    /**
      * Return an array of all the extra fields available for this item.
      *
      * @param int $itemId (session_id, question_id, course id)
@@ -924,7 +948,7 @@ class ExtraField extends Model
                 $extraFieldId = $extraField['id'];
                 /** @var \Chamilo\CoreBundle\Entity\ExtraField $field */
                 $field = $extraFieldRepo->find($extraFieldId);
-                $extraField['display_text'] = $field->getDisplayText();
+                $extraField['display_text'] = self::translateDisplayName($extraField['variable'], $extraField['display_text']);
                 $extraField['options'] = $option->get_field_options_by_field(
                     $extraField['id'],
                     false,
@@ -1114,7 +1138,7 @@ class ExtraField extends Model
                 //$translatedDisplayText = $field_details['display_text'];
                 /** @var \Chamilo\CoreBundle\Entity\ExtraField $extraField */
                 $extraField = $extraFieldRepo->find($field_details['id']);
-                $translatedDisplayText = get_lang($extraField->getDisplayText());
+                $translatedDisplayText = ExtraField::translateDisplayName($field_details['variable'],$field_details['display_text']);
 
                 $translatedDisplayHelpText = '';
                 if ($help) {
@@ -2066,7 +2090,7 @@ class ExtraField extends Model
                 $extraFieldId = $row['id'];
                 /** @var \Chamilo\CoreBundle\Entity\ExtraField $extraField */
                 $field = $extraFieldRepo->find($extraFieldId);
-                $row['display_text'] = $field->getDisplayText();
+                $row['display_text'] = $this->translateDisplayName($row['variable'], $row['display_text']);
 
                 // All the options of the field
                 $sql = "SELECT * FROM $this->table_field_options
@@ -2337,23 +2361,7 @@ class ExtraField extends Model
         }
 
         $form->addElement('header', $header);
-
-        if ('edit' === $action) {
-            $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'.http_build_query(['id' => $id]);
-            $translateButton = Display::toolbarButton(
-                get_lang('Translate this term'),
-                $translateUrl,
-                'language',
-                'link'
-            );
-
-            $form->addText(
-                'display_text',
-                [get_lang('Name'), $translateButton]
-            );
-        } else {
-            $form->addElement('text', 'display_text', get_lang('Name'));
-        }
+        $form->addElement('text', 'display_text', get_lang('Name'));
 
         $form->addHtmlEditor('description', get_lang('Description'), false);
 
@@ -2495,7 +2503,7 @@ class ExtraField extends Model
             $extraFieldRepo = Container::getExtraFieldRepository();
             /** @var \Chamilo\CoreBundle\Entity\ExtraField $extraField */
             $field = $extraFieldRepo->find($id);
-            $info['display_text'] = $field->getDisplayText();
+            $info['display_text'] = ExtraField::translateDisplayName($info['variable'],$info['display_text']);
         }
 
         return $info;

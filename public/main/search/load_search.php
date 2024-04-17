@@ -523,7 +523,7 @@ $form->addSelect(
     ['id' => 'filter_status']
 );
 
-$form->addButtonSearch(get_lang('Search Sessions'), 'search');
+$form->addButtonSearch(get_lang('Search sessions'), 'search');
 
 $extraFieldsToFilter = $extraField->get_all(['variable = ?' => 'temps_de_travail']);
 $extraFieldToSearch = [];

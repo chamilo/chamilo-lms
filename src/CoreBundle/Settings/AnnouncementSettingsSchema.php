@@ -52,10 +52,7 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Add "attachment" file upload extra field label in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
-                        Add "send_to_coaches" checkbox options field label in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
-                        Add the list of emails as a bcc when sending an email. Configure a cron task pointing at main/cron/scheduled_announcement.php').
-                        $this->settingArrayHelpValue('send_all_emails_to'),
+                    'help' => $this->settingArrayHelpValue('send_all_emails_to'),
                 ]
             )
             ->add('allow_careers_in_global_announcements', YesNoType::class)

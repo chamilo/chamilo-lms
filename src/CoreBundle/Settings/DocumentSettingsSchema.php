@@ -171,8 +171,7 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Allow compilatio plagiarism prevention tool, requires extension "php-soap"  sudo apt-get install php-soap').
-                        $this->settingArrayHelpValue('compilatio_tool'),
+                    'help' => $this->settingArrayHelpValue('compilatio_tool'),
                 ]
             )
             ->add('documents_hide_download_icon', YesNoType::class)
@@ -182,8 +181,7 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Custom cloud link URLS, this requires enable_add_file_link = true').
-                        $this->settingArrayHelpValue('documents_custom_cloud_link_list'),
+                    'help' => $this->settingArrayHelpValue('documents_custom_cloud_link_list'),
                 ]
             )
         ;

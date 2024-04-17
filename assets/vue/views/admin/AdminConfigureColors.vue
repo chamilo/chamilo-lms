@@ -1,378 +1,409 @@
-<template class="personal-theme">
-  <h4 class="mb-4">{{ t("Configure chamilo colors") }}</h4>
+<template>
+  <div class="admin-colors">
+    <SectionHeader :title="t('Configure Chamilo colors')" />
 
-  <!-- Advanced mode -->
-  <div v-show="isAdvancedMode">
-    <div class="flex flex-col gap-2 mb-3 md:grid md:grid-cols-2 xl:grid-cols-4">
-      <BaseColorPicker
-        v-model="colorPrimary"
-        :label="t('Primary color')"
-      />
-      <BaseColorPicker
-        v-model="colorPrimaryGradient"
-        :label="t('Primary color hover/background')"
-      />
-      <BaseColorPicker
-        v-model="colorPrimaryButtonText"
-        :error="colorPrimaryButtonTextError"
-        :label="t('Primary color button text')"
-      />
-      <BaseColorPicker
-        v-model="colorPrimaryButtonAlternativeText"
-        :error="colorPrimaryButtonAlternativeTextError"
-        :label="t('Primary color button alternative text')"
-      />
-    </div>
-
-    <div class="flex flex-col gap-2 mb-3 md:grid md:grid-cols-2 xl:grid-cols-4">
-      <BaseColorPicker
-        v-model="colorSecondary"
-        :label="t('Secondary color')"
-      />
-      <BaseColorPicker
-        v-model="colorSecondaryGradient"
-        :label="t('Secondary color hover/background')"
-      />
-      <BaseColorPicker
-        v-model="colorSecondaryButtonText"
-        :error="colorSecondaryButtonTextError"
-        :label="t('Secondary color button text')"
-      />
-    </div>
-
-    <div class="flex flex-col gap-2 mb-3 md:grid md:grid-cols-2 xl:grid-cols-4">
-      <BaseColorPicker
-        v-model="colorTertiary"
-        :label="t('Tertiary color')"
-      />
-      <BaseColorPicker
-        v-model="colorTertiaryGradient"
-        :label="t('Tertiary color hover/background')"
-      />
-    </div>
-
-    <div class="flex flex-col gap-2 mb-3 md:grid md:grid-cols-2 xl:grid-cols-4">
-      <BaseColorPicker
-        v-model="colorSuccess"
-        :label="t('Success color')"
-      />
-      <BaseColorPicker
-        v-model="colorSuccessGradient"
-        :label="t('Success color hover/background')"
-      />
-      <BaseColorPicker
-        v-model="colorSuccessButtonText"
-        :error="colorSuccessButtonTextError"
-        :label="t('Success color button text')"
-      />
-    </div>
-
-    <div class="flex flex-col gap-2 mb-3 md:grid md:grid-cols-2 xl:grid-cols-4">
-      <BaseColorPicker
-        v-model="colorInfo"
-        :label="t('Info color')"
-      />
-      <BaseColorPicker
-        v-model="colorInfoGradient"
-        :label="t('Info color hover/background')"
-      />
-      <BaseColorPicker
-        v-model="colorInfoButtonText"
-        :error="colorInfoButtonTextError"
-        :label="t('Info color button text')"
-      />
-    </div>
-
-    <div class="flex flex-col gap-2 mb-3 md:grid md:grid-cols-2 xl:grid-cols-4">
-      <BaseColorPicker
-        v-model="colorWarning"
-        :label="t('Warning color')"
-      />
-      <BaseColorPicker
-        v-model="colorWarningGradient"
-        :label="t('Warning color hover/background')"
-      />
-      <BaseColorPicker
-        v-model="colorWarningButtonText"
-        :error="colorWarningButtonTextError"
-        :label="t('Warning color button text')"
-      />
-    </div>
-
-    <div class="flex flex-col gap-2 mb-3 md:grid md:grid-cols-2 xl:grid-cols-4">
-      <BaseColorPicker
-        v-model="colorDanger"
-        :label="t('Danger color')"
-      />
-      <BaseColorPicker
-        v-model="colorDangerGradient"
-        :label="t('Danger color hover/background')"
-      />
-    </div>
-
-    <div class="flex flex-col gap-2 mb-3 md:grid md:grid-cols-2 xl:grid-cols-4">
-      <BaseColorPicker
-        v-model="formColor"
-        :label="t('Form outline color')"
-      />
-    </div>
-  </div>
-
-  <!-- Simple mode -->
-  <div v-show="!isAdvancedMode">
-    <div class="flex flex-col gap-2 mb-3 md:grid md:grid-cols-2 xl:grid-cols-4">
-      <BaseColorPicker
-        v-model="colorPrimary"
-        :label="t('Primary color')"
-      />
-      <BaseColorPicker
-        v-model="colorSecondary"
-        :label="t('Secondary color')"
-      />
-      <BaseColorPicker
-        v-model="colorTertiary"
-        :label="t('Tertiary color')"
-      />
-    </div>
-
-    <div class="flex flex-col gap-2 mb-3 md:grid md:grid-cols-2 xl:grid-cols-4">
-      <BaseColorPicker
-        v-model="colorSuccess"
-        :label="t('Success color')"
-      />
-      <BaseColorPicker
-        v-model="colorInfo"
-        :label="t('Info color')"
-      />
-      <BaseColorPicker
-        v-model="colorWarning"
-        :label="t('Warning color')"
-      />
-      <BaseColorPicker
-        v-model="colorDanger"
-        :label="t('Danger color')"
-      />
-    </div>
-
-    <div class="flex flex-col gap-2 mb-3 md:grid md:grid-cols-2 xl:grid-cols-4">
-      <BaseColorPicker
-        v-model="formColor"
-        :label="t('Form outline color')"
-      />
-    </div>
-  </div>
-
-  <div class="flex flex-wrap mb-4 gap-3">
-    <BaseButton
-      :label="t('Save')"
-      icon="send"
-      type="primary"
-      @click="saveColors"
-    />
-    <BaseButton
-      :label="isAdvancedMode ? t('Hide advanced mode') : t('Show advanced mode')"
-      icon="cog"
-      type="black"
-      @click="isAdvancedMode = !isAdvancedMode"
-    />
-  </div>
-
-  <hr />
-  <h5 class="mb-4">{{ t("You can see examples of how chamilo will look here") }}</h5>
-
-  <div class="mb-4">
-    <p class="mb-3 text-lg">{{ t("Buttons") }}</p>
-    <div class="flex flex-row flex-wrap mb-3">
-      <BaseButton
-        :label="t('Primary')"
-        class="mr-2 mb-2"
-        icon="eye-on"
-        type="primary"
-      />
-      <BaseButton
-        :label="t('Primary alternative')"
-        class="mr-2 mb-2"
-        icon="eye-on"
-        type="primary-alternative"
-      />
-      <BaseButton
-        :label="t('Secondary')"
-        class="mr-2 mb-2"
-        icon="eye-on"
-        type="secondary"
-      />
-      <BaseButton
-        :label="t('Tertiary')"
-        class="mr-2 mb-2"
-        icon="eye-on"
-        type="black"
-      />
-    </div>
-    <div class="flex flex-row flex-wrap mb-3">
-      <BaseButton
-        :label="t('Success')"
-        class="mr-2 mb-2"
-        icon="send"
-        type="success"
-      />
-      <BaseButton
-        :label="t('Info')"
-        class="mr-2 mb-2"
-        icon="send"
-        type="info"
-      />
-      <BaseButton
-        :label="t('Warning')"
-        class="mr-2 mb-2"
-        icon="send"
-        type="warning"
-      />
-      <BaseButton
-        :label="t('Danger')"
-        class="mr-2 mb-2"
-        icon="delete"
-        type="danger"
-      />
-    </div>
-    <div class="flex flex-row flex-wrap mb-3">
-      <BaseButton
-        :label="t('Disabled')"
-        class="mr-2 mb-2"
-        disabled
-        icon="eye-on"
-        type="primary"
-      />
-      <BaseButton
-        class="mr-2 mb-2"
-        icon="cog"
-        only-icon
-        type="primary"
-      />
-    </div>
-  </div>
-
-  <div class="mb-4">
-    <p class="mb-3 text-lg">{{ t("Dropdowns") }}</p>
-    <div class="flex flex-row gap-3">
-      <BaseButton
-        class="mr-3 mb-2"
-        icon="cog"
-        only-icon
-        popup-identifier="menu"
-        type="primary"
-        @click="toggle"
-      />
-      <BaseMenu
-        id="menu"
-        ref="menu"
-        :model="menuItems"
-      />
-      <BaseDropdown
-        v-model="dropdown"
-        :label="t('Dropdown')"
-        :options="[
-          {
-            label: t('Option 1'),
-            value: 'option_1',
-          },
-          {
-            label: t('Option 2'),
-            value: 'option_2',
-          },
-          {
-            label: t('Option 3'),
-            value: 'option_3',
-          },
-        ]"
-        class="w-36"
-        input-id="dropdown"
-        name="dropdown"
-        option-label="label"
-        option-value="value"
-      />
-    </div>
-  </div>
-
-  <div class="mb-4">
-    <p class="mb-3 text-lg">{{ t("Checkbox and radio buttons") }}</p>
-    <BaseCheckbox
-      id="check1"
-      v-model="checkbox1"
-      :label="t('Checkbox 1')"
-      name="checkbox1"
-    />
-    <BaseCheckbox
-      id="check2"
-      v-model="checkbox2"
-      :label="t('Checkbox 2')"
-      name="checkbox2"
-    />
-    <div class="mb-2"></div>
-    <BaseRadioButtons
-      v-model="radioValue"
-      :initial-value="radioValue"
-      :options="radioButtons"
-      name="radio"
-    />
-  </div>
-
-  <div class="mb-4">
-    <p class="mb-3 text-lg">{{ t("Toggle") }}</p>
-    <BaseToggleButton
-      :model-value="toggleState"
-      :off-label="t('Show all')"
-      :on-label="t('Hide all')"
-      off-icon="eye-on"
-      on-icon="eye-off"
-      size="normal"
-      without-borders
-      @update:model-value="toggleState = !toggleState"
-    />
-  </div>
-
-  <div class="mb-4">
-    <p class="mb-3 text-lg">{{ t("Forms") }}</p>
-    <BaseInputText
-      :label="t('This is the default form')"
-      :model-value="null"
-    />
-    <BaseInputText
-      :is-invalid="true"
-      :label="t('This is a form with an error')"
-      :model-value="null"
-    />
-    <BaseInputDate
-      id="date"
-      :label="t('Date')"
-      class="w-32"
-    />
-  </div>
-
-  <div class="mb-4">
-    <p class="mb-3 text-lg">{{ t("Dialogs") }}</p>
-    <BaseButton
-      :label="t('Show dialog')"
-      icon="eye-on"
-      type="black"
-      @click="isDialogVisible = true"
-    />
-    <BaseDialogConfirmCancel
-      :is-visible="isDialogVisible"
-      :title="t('Dialog example')"
-      @confirm-clicked="isDialogVisible = false"
-      @cancel-clicked="isDialogVisible = false"
-    />
-  </div>
-  <div class="mb-4">
-    <p class="mb-3 text-lg">{{ t("Some more elements") }}</p>
-    <div class="course-tool cursor-pointer">
-      <div class="course-tool__link hover:primary-gradient hover:bg-primary-gradient/10">
-        <span
-          aria-hidden="true"
-          class="course-tool__icon mdi mdi-bookshelf"
+    <div class="admin-colors__container">
+      <div class="admin-colors__settings">
+        <BaseSelect
+          v-model="selectedTheme"
+          :is-loading="isServerThemesLoading"
+          :label="t('Theme selector')"
+          :options="serverThemes"
+          allow-clear
+          option-label="title"
+          option-value="@id"
         />
+
+        <BaseInputText
+          v-model="themeTitle"
+          :disabled="selectedTheme"
+          :label="t('Title')"
+        />
+
+        <!-- Advanced mode -->
+        <div v-show="isAdvancedMode">
+          <div class="row-group">
+            <BaseColorPicker
+              v-model="colorPrimary"
+              :label="t('Primary color')"
+            />
+            <BaseColorPicker
+              v-model="colorPrimaryGradient"
+              :label="t('Primary color hover/background')"
+            />
+            <BaseColorPicker
+              v-model="colorPrimaryButtonText"
+              :error="colorPrimaryButtonTextError"
+              :label="t('Primary color button text')"
+            />
+            <BaseColorPicker
+              v-model="colorPrimaryButtonAlternativeText"
+              :error="colorPrimaryButtonAlternativeTextError"
+              :label="t('Primary color button alternative text')"
+            />
+          </div>
+
+          <div class="row-group">
+            <BaseColorPicker
+              v-model="colorSecondary"
+              :label="t('Secondary color')"
+            />
+            <BaseColorPicker
+              v-model="colorSecondaryGradient"
+              :label="t('Secondary color hover/background')"
+            />
+            <BaseColorPicker
+              v-model="colorSecondaryButtonText"
+              :error="colorSecondaryButtonTextError"
+              :label="t('Secondary color button text')"
+            />
+          </div>
+
+          <div class="row-group">
+            <BaseColorPicker
+              v-model="colorTertiary"
+              :label="t('Tertiary color')"
+            />
+            <BaseColorPicker
+              v-model="colorTertiaryGradient"
+              :label="t('Tertiary color hover/background')"
+            />
+          </div>
+
+          <div class="row-group">
+            <BaseColorPicker
+              v-model="colorSuccess"
+              :label="t('Success color')"
+            />
+            <BaseColorPicker
+              v-model="colorSuccessGradient"
+              :label="t('Success color hover/background')"
+            />
+            <BaseColorPicker
+              v-model="colorSuccessButtonText"
+              :error="colorSuccessButtonTextError"
+              :label="t('Success color button text')"
+            />
+          </div>
+
+          <div class="row-group">
+            <BaseColorPicker
+              v-model="colorInfo"
+              :label="t('Info color')"
+            />
+            <BaseColorPicker
+              v-model="colorInfoGradient"
+              :label="t('Info color hover/background')"
+            />
+            <BaseColorPicker
+              v-model="colorInfoButtonText"
+              :error="colorInfoButtonTextError"
+              :label="t('Info color button text')"
+            />
+          </div>
+
+          <div class="row-group">
+            <BaseColorPicker
+              v-model="colorWarning"
+              :label="t('Warning color')"
+            />
+            <BaseColorPicker
+              v-model="colorWarningGradient"
+              :label="t('Warning color hover/background')"
+            />
+            <BaseColorPicker
+              v-model="colorWarningButtonText"
+              :error="colorWarningButtonTextError"
+              :label="t('Warning color button text')"
+            />
+          </div>
+
+          <div class="row-group">
+            <BaseColorPicker
+              v-model="colorDanger"
+              :label="t('Danger color')"
+            />
+            <BaseColorPicker
+              v-model="colorDangerGradient"
+              :label="t('Danger color hover/background')"
+            />
+          </div>
+
+          <div class="row-group">
+            <BaseColorPicker
+              v-model="formColor"
+              :label="t('Form outline color')"
+            />
+          </div>
+        </div>
+
+        <!-- Simple mode -->
+        <div v-show="!isAdvancedMode">
+          <div class="row-group">
+            <BaseColorPicker
+              v-model="colorPrimary"
+              :label="t('Primary color')"
+            />
+            <BaseColorPicker
+              v-model="colorSecondary"
+              :label="t('Secondary color')"
+            />
+            <BaseColorPicker
+              v-model="colorTertiary"
+              :label="t('Tertiary color')"
+            />
+          </div>
+
+          <div class="row-group">
+            <BaseColorPicker
+              v-model="colorSuccess"
+              :label="t('Success color')"
+            />
+            <BaseColorPicker
+              v-model="colorInfo"
+              :label="t('Info color')"
+            />
+            <BaseColorPicker
+              v-model="colorWarning"
+              :label="t('Warning color')"
+            />
+            <BaseColorPicker
+              v-model="colorDanger"
+              :label="t('Danger color')"
+            />
+          </div>
+
+          <div class="row-group">
+            <BaseColorPicker
+              v-model="formColor"
+              :label="t('Form outline color')"
+            />
+          </div>
+        </div>
+
+        <div class="field">
+          <BaseButton
+            :label="isAdvancedMode ? t('Hide advanced mode') : t('Show advanced mode')"
+            icon="cog"
+            type="black"
+            @click="isAdvancedMode = !isAdvancedMode"
+          />
+        </div>
+
+        <div class="field">
+          <BaseButton
+            :label="t('Save')"
+            icon="send"
+            type="primary"
+            @click="saveColors"
+          />
+        </div>
       </div>
-      <p class="course-tool__title">{{ t("Documents") }}</p>
+
+      <BaseDivider layout="vertical" />
+
+      <div class="admin-colors__preview">
+        <h6>{{ t("You can see examples of how chamilo will look here") }}</h6>
+
+        <div>
+          <p class="mb-3 text-lg">{{ t("Buttons") }}</p>
+          <div class="flex flex-row flex-wrap mb-3">
+            <BaseButton
+              :label="t('Primary')"
+              class="mr-2 mb-2"
+              icon="eye-on"
+              type="primary"
+            />
+            <BaseButton
+              :label="t('Primary alternative')"
+              class="mr-2 mb-2"
+              icon="eye-on"
+              type="primary-alternative"
+            />
+            <BaseButton
+              :label="t('Secondary')"
+              class="mr-2 mb-2"
+              icon="eye-on"
+              type="secondary"
+            />
+            <BaseButton
+              :label="t('Tertiary')"
+              class="mr-2 mb-2"
+              icon="eye-on"
+              type="black"
+            />
+          </div>
+          <div class="flex flex-row flex-wrap mb-3">
+            <BaseButton
+              :label="t('Success')"
+              class="mr-2 mb-2"
+              icon="send"
+              type="success"
+            />
+            <BaseButton
+              :label="t('Info')"
+              class="mr-2 mb-2"
+              icon="send"
+              type="info"
+            />
+            <BaseButton
+              :label="t('Warning')"
+              class="mr-2 mb-2"
+              icon="send"
+              type="warning"
+            />
+            <BaseButton
+              :label="t('Danger')"
+              class="mr-2 mb-2"
+              icon="delete"
+              type="danger"
+            />
+          </div>
+          <div class="flex flex-row flex-wrap mb-3">
+            <BaseButton
+              :label="t('Disabled')"
+              class="mr-2 mb-2"
+              disabled
+              icon="eye-on"
+              type="primary"
+            />
+            <BaseButton
+              class="mr-2 mb-2"
+              icon="cog"
+              only-icon
+              type="primary"
+            />
+          </div>
+        </div>
+
+        <div>
+          <p class="mb-3 text-lg">{{ t("Dropdowns") }}</p>
+          <div class="flex flex-row gap-3">
+            <BaseButton
+              class="mr-3 mb-2"
+              icon="cog"
+              only-icon
+              popup-identifier="menu"
+              type="primary"
+              @click="toggle"
+            />
+            <BaseMenu
+              id="menu"
+              ref="menu"
+              :model="menuItems"
+            />
+            <BaseDropdown
+              v-model="dropdown"
+              :label="t('Dropdown')"
+              :options="[
+                {
+                  label: t('Option 1'),
+                  value: 'option_1',
+                },
+                {
+                  label: t('Option 2'),
+                  value: 'option_2',
+                },
+                {
+                  label: t('Option 3'),
+                  value: 'option_3',
+                },
+              ]"
+              class="w-36"
+              input-id="dropdown"
+              name="dropdown"
+              option-label="label"
+              option-value="value"
+            />
+          </div>
+        </div>
+
+        <div>
+          <p class="mb-3 text-lg">{{ t("Checkbox and radio buttons") }}</p>
+          <div class="flex flex-col md:flex-row gap-3 md:gap-5">
+            <BaseRadioButtons
+              v-model="radioValue"
+              :initial-value="radioValue"
+              :options="radioButtons"
+              name="radio"
+            />
+            <div>
+              <BaseCheckbox
+                id="check1"
+                v-model="checkbox1"
+                :label="t('Checkbox 1')"
+                name="checkbox1"
+              />
+              <BaseCheckbox
+                id="check2"
+                v-model="checkbox2"
+                :label="t('Checkbox 2')"
+                name="checkbox2"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="mb-3 text-lg">{{ t("Toggle") }}</p>
+          <BaseToggleButton
+            :model-value="toggleState"
+            :off-label="t('Show all')"
+            :on-label="t('Hide all')"
+            off-icon="eye-on"
+            on-icon="eye-off"
+            size="normal"
+            without-borders
+            @update:model-value="toggleState = !toggleState"
+          />
+        </div>
+
+        <div>
+          <p class="mb-3 text-lg">{{ t("Forms") }}</p>
+          <BaseInputText
+            :label="t('This is the default form')"
+            :model-value="null"
+          />
+          <BaseInputText
+            :is-invalid="true"
+            :label="t('This is a form with an error')"
+            :model-value="null"
+          />
+          <BaseInputDate
+            id="date"
+            :label="t('Date')"
+            class="w-32"
+          />
+        </div>
+
+        <div>
+          <p class="mb-3 text-lg">{{ t("Dialogs") }}</p>
+          <BaseButton
+            :label="t('Show dialog')"
+            icon="eye-on"
+            type="black"
+            @click="isDialogVisible = true"
+          />
+          <BaseDialogConfirmCancel
+            :is-visible="isDialogVisible"
+            :title="t('Dialog example')"
+            @confirm-clicked="isDialogVisible = false"
+            @cancel-clicked="isDialogVisible = false"
+          />
+        </div>
+        <div>
+          <p class="mb-3 text-lg">{{ t("Some more elements") }}</p>
+          <div class="course-tool cursor-pointer">
+            <div class="course-tool__link hover:primary-gradient hover:bg-primary-gradient/10">
+              <span
+                aria-hidden="true"
+                class="course-tool__icon mdi mdi-bookshelf"
+              />
+            </div>
+            <p class="course-tool__title">{{ t("Documents") }}</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -381,22 +412,25 @@
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
 import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
-import { provide, ref, watch } from "vue"
+import { onMounted, provide, ref, watch } from "vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseRadioButtons from "../../components/basecomponents/BaseRadioButtons.vue"
 import BaseDialogConfirmCancel from "../../components/basecomponents/BaseDialogConfirmCancel.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseColorPicker from "../../components/basecomponents/BaseColorPicker.vue"
 import { useTheme } from "../../composables/theme"
-import axios from "axios"
 import { useNotification } from "../../composables/notification"
 import BaseDropdown from "../../components/basecomponents/BaseDropdown.vue"
 import BaseInputDate from "../../components/basecomponents/BaseInputDate.vue"
 import BaseToggleButton from "../../components/basecomponents/BaseToggleButton.vue"
 import Color from "colorjs.io"
+import themeService from "../../services/colorThemeService"
+import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
+import BaseDivider from "../../components/basecomponents/BaseDivider.vue"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const { t } = useI18n()
-const { getColorTheme, getColors } = useTheme()
+const { getColorTheme, getColors, setColors } = useTheme()
 const { showSuccessNotification, showErrorNotification } = useNotification()
 
 let colorPrimary = getColorTheme("--color-primary-base")
@@ -411,8 +445,6 @@ let colorSecondaryButtonText = getColorTheme("--color-secondary-button-text")
 let colorTertiary = getColorTheme("--color-tertiary-base")
 let colorTertiaryGradient = getColorTheme("--color-tertiary-gradient")
 let colorTertiaryButtonText = getColorTheme("--color-tertiary-button-text")
-
-const themeTitle = ref()
 
 let colorSuccess = getColorTheme("--color-success-base")
 let colorSuccessGradient = getColorTheme("--color-success-gradient")
@@ -432,16 +464,57 @@ let colorDangerButtonText = getColorTheme("--color-danger-button-text")
 
 let formColor = getColorTheme("--color-form-base")
 
+const serverThemes = ref([])
+const isServerThemesLoading = ref(true)
+const themeTitle = ref()
+const selectedTheme = ref()
+
+onMounted(async () => {
+  await refreshThemes()
+})
+
+watch(selectedTheme, (newValue) => {
+  if (!newValue) {
+    themeTitle.value = ""
+  }
+
+  const found = serverThemes.value.find((e) => e["@id"] === newValue) ?? null
+
+  if (found) {
+    themeTitle.value = found.title
+    setColors(found.variables)
+  }
+})
+
 const saveColors = async () => {
-  let colors = getColors()
   try {
-    await axios.post("/api/color_themes", {
+    const updatedTheme = await themeService.updateTheme({
+      iri: selectedTheme.value || undefined,
       title: themeTitle.value,
-      variables: colors,
+      colors: getColors(),
     })
-    showSuccessNotification(t("Colors updated"))
+
+    showSuccessNotification(t("Color updated"))
+
+    await refreshThemes()
+
+    selectedTheme.value = updatedTheme["@id"]
   } catch (error) {
     showErrorNotification(error)
+    console.error(error)
+  }
+}
+
+const refreshThemes = async () => {
+  try {
+    serverThemes.value = await themeService.getThemes()
+    const found = serverThemes.value.find((e) => e.active) ?? null
+    if (found) {
+      selectedTheme.value = found["@id"]
+    }
+    isServerThemesLoading.value = false
+  } catch (error) {
+    showErrorNotification(t("We could not retrieve the themes"))
     console.error(error)
   }
 }

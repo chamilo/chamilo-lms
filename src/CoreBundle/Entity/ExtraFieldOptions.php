@@ -33,9 +33,6 @@ class ExtraFieldOptions
     #[ORM\Column(name: 'display_text', type: 'string', length: 255, nullable: true)]
     protected ?string $displayText = null;
 
-    #[Gedmo\Locale]
-    protected ?string $locale = null;
-
     #[ORM\Column(name: 'priority', type: 'string', length: 255, nullable: true)]
     protected ?string $priority = null;
 
@@ -132,17 +129,5 @@ class ExtraFieldOptions
         $this->priorityMessage = $priorityMessage;
 
         return $this;
-    }
-
-    public function setTranslatableLocale($locale)
-    {
-        $this->locale = $locale;
-
-        return $this;
-    }
-
-    public function getTranslatableLocale()
-    {
-        return $this->locale;
     }
 }

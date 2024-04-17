@@ -65,8 +65,7 @@ class SurveySettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Hide survey edition tools for all or some surveys. Set an asterisk to hide for all, otherwise set an array with the survey codes in which the options will be blocked').
-                        $this->settingArrayHelpValue('hide_survey_edition'),
+                    'help' => $this->settingArrayHelpValue('hide_survey_edition'),
                 ]
             )
             ->add(
@@ -74,8 +73,7 @@ class SurveySettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Allow add additional actions (as links) in survey list for teachers').
-                        $this->settingArrayHelpValue('survey_additional_teacher_modify_actions'),
+                    'help' => $this->settingArrayHelpValue('survey_additional_teacher_modify_actions'),
                 ]
             )
             ->add('show_surveys_base_in_sessions', YesNoType::class)

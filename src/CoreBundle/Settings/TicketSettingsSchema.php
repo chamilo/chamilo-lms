@@ -47,8 +47,7 @@ class TicketSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Ticket project user roles').
-                        $this->settingArrayHelpValue('ticket_project_user_roles'),
+                    'help' => $this->settingArrayHelpValue('ticket_project_user_roles'),
                 ]
             )
         ;

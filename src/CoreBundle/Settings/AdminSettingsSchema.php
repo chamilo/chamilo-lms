@@ -69,8 +69,7 @@ class AdminSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('The user status is hidden when is false, it requires user_status_option_only_for_admin_enabled = true').
-                        $this->settingArrayHelpValue('user_status_option_show_only_for_admin'),
+                    'help' => $this->settingArrayHelpValue('user_status_option_show_only_for_admin'),
                 ]
             )
         ;

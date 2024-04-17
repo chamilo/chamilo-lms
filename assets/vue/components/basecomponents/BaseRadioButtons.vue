@@ -8,7 +8,7 @@
         :name="name"
         :value="option.value"
       />
-      <label :for="name + index" class="ml-2 cursor-pointer">{{ option.label }}</label>
+      <label :for="`${name}-${index}`" class="ml-2 cursor-pointer">{{ option.label }}</label>
     </div>
   </div>
 </template>

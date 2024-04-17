@@ -42,6 +42,17 @@ export default {
   },
 
   /**
+   * @param {string} iri
+   * @param {Object} params
+   * @returns {Promise<Object>}
+   */
+  async put(iri, params) {
+    const { data } = await api.put(iri, params)
+
+    return data
+  },
+
+  /**
    * @param {string} endpoint
    * @param {Object} params
    * @returns {Promise<Object>}

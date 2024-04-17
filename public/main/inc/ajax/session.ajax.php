@@ -449,7 +449,7 @@ switch ($action) {
             function ($session) {
                 return [
                     'id' => $session['id'],
-                    'text' => strip_tags($session['name']),
+                    'text' => strip_tags($session['title']),
                 ];
             },
             SessionManager::formatSessionsAdminForGrid($options)

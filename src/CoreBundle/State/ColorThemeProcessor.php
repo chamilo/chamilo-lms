@@ -27,14 +27,14 @@ class ColorThemeProcessor implements ProcessorInterface
     {
         \assert($data instanceof ColorTheme);
 
-        $this->colorThemeRepository->deactivateAll();
-
         $data->setActive(true);
 
         /** @var ColorTheme $colorTheme */
         $colorTheme = $this->persistProcessor->process($data, $operation, $uriVariables, $context);
 
         if ($colorTheme) {
+            $this->colorThemeRepository->deactivateAllExcept($colorTheme);
+
             $projectDir = $this->parameterBag->get('kernel.project_dir');
 
             $contentParts = [];

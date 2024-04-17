@@ -2331,13 +2331,13 @@ switch ($action) {
         $result = $new_result;
         break;
     case 'get_mail_template':
-        $columns = ['name', 'type', 'default_template', 'actions'];
+        $columns = ['title', 'type', 'default_template', 'actions'];
         if (!in_array($sidx, $columns)) {
-            $sidx = 'name';
+            $sidx = 'title';
         }
 
         if (!in_array($sidx, $columns)) {
-            $sidx = 'name';
+            $sidx = 'title';
         }
 
         $result = Database::select(
@@ -2413,7 +2413,7 @@ switch ($action) {
                 get_lang('No')
             );
             foreach ($result as $item) {
-                $item['display_text'] = $item['displayText'];
+                $item['display_text'] = ExtraField::translateDisplayName($item['variable'], $item['displayText']);
                 $item['value_type'] = $obj->get_field_type_by_id($item['valueType']);
                 $item['changeable'] = $item['changeable'] ? $checkIcon : $timesIcon;
                 $item['visible_to_self'] = $item['visibleToSelf'] ? $checkIcon : $timesIcon;

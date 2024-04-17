@@ -55,8 +55,7 @@ class SkillSettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Set skill levels name, then later it will be parsed using get_lang BT#13586').
-                        $this->settingArrayHelpValue('skill_levels_names'),
+                    'help' => $this->settingArrayHelpValue('skill_levels_names'),
                 ]
             )
             ->add('allow_skill_rel_items', YesNoType::class)

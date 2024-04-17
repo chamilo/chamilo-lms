@@ -148,8 +148,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Customize password generation and verification').
-                        $this->settingArrayHelpValue('password_requirements'),
+                    'help' => $this->settingArrayHelpValue('password_requirements'),
                 ]
             )
             ->add(
@@ -157,8 +156,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
                 TextareaType::class,
                 [
                     'help_html' => true,
-                    'help' => get_lang('Allow online users by user profile 1 = COURSEMANAGER (teacher) 5 = STUDENT 11 = PLATFORM_ADMIN Example: The online users will be available only for teachers and students').
-                        $this->settingArrayHelpValue('allow_online_users_by_status'),
+                    'help' => $this->settingArrayHelpValue('allow_online_users_by_status'),
                 ]
             )
             ->add('security_session_cookie_samesite_none', YesNoType::class)

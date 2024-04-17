@@ -148,73 +148,77 @@ class SettingsManager implements SettingsManagerInterface
 
         if ($loadFromDb) {
             $settings = $this->load($category, $name);
-
-            return $settings->get($name);
+            if ($settings->has($name)) {
+                return $settings->get($name);
+            } else {
+                return null;
+            }
         }
 
         $this->loadAll();
 
-        if (!empty($this->schemaList)) {
+        if (!empty($this->schemaList) && isset($this->schemaList[$category])) {
             $settings = $this->schemaList[$category];
-
-            return $settings->get($name);
+            if ($settings->has($name)) {
+                return $settings->get($name);
+            } else {
+                error_log("Attempted to access undefined setting '$name' in category '$category'.");
+                return null;
+            }
         }
 
         throw new InvalidArgumentException(sprintf('Category %s not found', $category));
-        /*exit;
-
-        $settings = $this->load($category, $name);
-
-        if (!$settings) {
-            throw new \InvalidArgumentException(sprintf("Parameter '$name' not found in category '$category'"));
-        }
-
-        $this->settings = $settings;
-
-        return $settings->get($name);*/
     }
 
     public function loadAll(): void
     {
         $session = null;
+
         if ($this->request->getCurrentRequest()) {
             $session = $this->request->getCurrentRequest()->getSession();
             $schemaList = $session->get('schemas');
-            $this->schemaList = $schemaList;
+            if (!empty($schemaList)) {
+                $this->schemaList = $schemaList;
+                return;
+            }
         }
 
-        if (empty($this->schemaList)) {
-            $schemas = array_keys($this->getSchemas());
-            $schemaList = [];
-            $settingsBuilder = new SettingsBuilder();
-            $all = $this->getAllParametersByCategory();
+        $schemas = array_keys($this->getSchemas());
+        $schemaList = [];
+        $settingsBuilder = new SettingsBuilder();
+        $all = $this->getAllParametersByCategory();
 
-            foreach ($schemas as $schema) {
-                $schemaRegister = $this->schemaRegistry->get($schema);
-                $schemaRegister->buildSettings($settingsBuilder);
-                $name = $this->convertServiceToNameSpace($schema);
-                $settings = new Settings();
-                $parameters = $all[$name] ?? [];
-                $transformers = $settingsBuilder->getTransformers();
-                foreach ($transformers as $parameter => $transformer) {
-                    if (\array_key_exists($parameter, $parameters)) {
-                        if ('course_creation_use_template' === $parameter) {
-                            if (empty($parameters[$parameter])) {
-                                $parameters[$parameter] = null;
-                            }
-                        } else {
-                            $parameters[$parameter] = $transformer->reverseTransform($parameters[$parameter]);
+        foreach ($schemas as $schema) {
+            $schemaRegister = $this->schemaRegistry->get($schema);
+            $schemaRegister->buildSettings($settingsBuilder);
+            $name = $this->convertServiceToNameSpace($schema);
+            $settings = new Settings();
+            $parameters = $all[$name] ?? [];
+
+            $knownParameters = array_filter($parameters, function ($key) use ($settingsBuilder) {
+                return $settingsBuilder->isDefined($key);
+            }, ARRAY_FILTER_USE_KEY);
+
+            $transformers = $settingsBuilder->getTransformers();
+            foreach ($transformers as $parameter => $transformer) {
+                if (\array_key_exists($parameter, $knownParameters)) {
+                    if ('course_creation_use_template' === $parameter) {
+                        if (empty($knownParameters[$parameter])) {
+                            $knownParameters[$parameter] = null;
                         }
+                    } else {
+                        $knownParameters[$parameter] = $transformer->reverseTransform($knownParameters[$parameter]);
                     }
                 }
-                $parameters = $settingsBuilder->resolve($parameters);
-                $settings->setParameters($parameters);
-                $schemaList[$name] = $settings;
             }
-            $this->schemaList = $schemaList;
-            if ($session && $this->request->getCurrentRequest()) {
-                $session->set('schemas', $schemaList);
-            }
+
+            $parameters = $settingsBuilder->resolve($knownParameters);
+            $settings->setParameters($parameters);
+            $schemaList[$name] = $settings;
+        }
+        $this->schemaList = $schemaList;
+        if ($session && $this->request->getCurrentRequest()) {
+            $session->set('schemas', $schemaList);
         }
     }
 

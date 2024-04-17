@@ -69,22 +69,20 @@
 }
 
 .p-float-label {
+  @apply block relative;
+
   label {
-    @apply left-4 text-support-3 bg-transparent transition-all duration-200;
+    @apply absolute top-1/2 -mt-2 pointer-events-none leading-none left-4 text-support-3 bg-transparent transition-all duration-200;
   }
 
-  input:focus,
-  input.p-filled,
-  .html-editor-container,
-  textarea:focus,
-  textarea.p-filled,
-  textarea,
-  .p-inputwrapper-focus,
-  .p-inputwrapper-filled {
-    ~ label {
-      @apply bg-white px-1 text-primary top-0 left-2 text-caption;
-      top: 0 !important;
-    }
+  &:has(input:focus) label,
+  &:has(input.p-filled) label,
+  &:has(input:-webkit-autofill) label,
+  &:has(textarea:focus) label,
+  &:has(textarea.p-filled) label,
+  &:has(.p-inputwrapper-focus) label,
+  &:has(.p-inputwrapper-filled) label {
+    @apply top-0 left-2 text-caption px-1 bg-white text-primary;
   }
 
   .html-editor-container > div {

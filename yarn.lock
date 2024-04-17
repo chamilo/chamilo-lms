@@ -3688,7 +3688,7 @@ __metadata:
     pretty-bytes: "npm:^5.6.0"
     primeflex: "npm:^3.3.1"
     primeicons: "npm:^6.0.1"
-    primevue: "npm:^3.46.0"
+    primevue: "npm:^3.51.0"
     purgecss-webpack-plugin: "npm:^5.0.0"
     pwstrength-bootstrap: "npm:3.1.1"
     qtip2: "npm:3.0.3"
@@ -8584,12 +8584,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"primevue@npm:^3.46.0":
-  version: 3.47.2
-  resolution: "primevue@npm:3.47.2"
+"primevue@npm:^3.51.0":
+  version: 3.51.0
+  resolution: "primevue@npm:3.51.0"
   peerDependencies:
     vue: ^3.0.0
-  checksum: 10c0/26645126acb003e98779523023b147a3fa5b3553f58e11288f226d8ce9f272c325b9e24f8a959e7b8078b3dcd4566dda28c9642d5519fa95f9afa43db6cab260
+  checksum: 10c0/91425cb4b69b839b1db828c1658f698e878ce0d7acc14a2071782a52808d120ce10599b4cd572ee456413849ab647e09cf217a8fa7447db013473fd2ff702b44
   languageName: node
   linkType: hard
 

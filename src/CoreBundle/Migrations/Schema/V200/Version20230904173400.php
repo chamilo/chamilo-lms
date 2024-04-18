@@ -9,11 +9,11 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use DateTime;
 use DateTimeZone;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Exception;
 
@@ -40,8 +40,7 @@ class Version20230904173400 extends AbstractMigrationChamilo
         /** @var array<int, CCalendarEvent> $map */
         $map = [];
 
-        $em = $this->getEntityManager();
-        $userRepo = $em->getRepository(User::class);
+        $userRepo = $this->container->get(UserRepository::class);
 
         $personalAgendas = $this->getPersonalEvents();
 
@@ -72,8 +71,8 @@ class Version20230904173400 extends AbstractMigrationChamilo
 
             $map[$personalAgenda['id']] = $calendarEvent;
 
-            $em->persist($calendarEvent);
-            $em->flush();
+            $this->entityManager->persist($calendarEvent);
+            $this->entityManager->flush();
 
             if ($collectiveInvitationsEnabled) {
                 $invitationsOrSubscriptionsInfo = [];
@@ -112,7 +111,7 @@ class Version20230904173400 extends AbstractMigrationChamilo
                     $inviteesOrSubscribersInfo = $this->getInviteesOrSubscribers($invitationOrSubscriptionInfo['id']);
 
                     foreach ($inviteesOrSubscribersInfo as $oldInviteeOrSubscriberInfo) {
-                        $user = $em->find(User::class, $oldInviteeOrSubscriberInfo['user_id']);
+                        $user = $this->entityManager->find(User::class, $oldInviteeOrSubscriberInfo['user_id']);
 
                         if ($user) {
                             $calendarEvent->addUserLink($user);
@@ -123,8 +122,8 @@ class Version20230904173400 extends AbstractMigrationChamilo
             $oldNewEventIdMap[$personalAgenda['id']] = $calendarEvent;
         }
 
-        $em->flush();
-        $this->updateAgendaReminders($oldNewEventIdMap, $em);
+        $this->entityManager->flush();
+        $this->updateAgendaReminders($oldNewEventIdMap);
     }
 
     private function getPersonalEvents(): array
@@ -226,9 +225,9 @@ class Version20230904173400 extends AbstractMigrationChamilo
     /**
      * @param array<int, CCalendarEvent> $oldNewEventIdMap
      */
-    private function updateAgendaReminders(array $oldNewEventIdMap, EntityManagerInterface $em): void
+    private function updateAgendaReminders(array $oldNewEventIdMap): void
     {
-        $reminders = $em->getRepository(AgendaReminder::class)->findBy(['type' => 'personal']);
+        $reminders = $this->entityManager->getRepository(AgendaReminder::class)->findBy(['type' => 'personal']);
 
         /** @var AgendaReminder $reminder */
         foreach ($reminders as $reminder) {
@@ -236,9 +235,9 @@ class Version20230904173400 extends AbstractMigrationChamilo
             if (\array_key_exists($oldEventId, $oldNewEventIdMap)) {
                 $newEvent = $oldNewEventIdMap[$oldEventId];
                 $reminder->setEvent($newEvent);
-                $em->persist($reminder);
+                $this->entityManager->persist($reminder);
             }
         }
-        $em->flush();
+        $this->entityManager->flush();
     }
 }

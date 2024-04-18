@@ -22,14 +22,13 @@ class Version20230216122900 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $connection = $this->getEntityManager()->getConnection();
         $configurationValues = SettingsCurrentFixtures::getNewConfigurationSettings();
 
         foreach ($configurationValues as $category => $settings) {
             foreach ($settings as $setting) {
                 $variable = $setting['name'];
                 $category = strtolower($category);
-                $result = $connection
+                $result = $this->connection
                     ->executeQuery(
                         "SELECT COUNT(1) FROM settings_current WHERE variable = '$variable' AND category = '{$category}'"
                     )
@@ -60,7 +59,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
         );
 
         // Insert extra fields required.
-        $result = $connection
+        $result = $this->connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM extra_field WHERE variable = 'session_courses_read_only_mode' AND item_type = 2 AND value_type = 13"
             )
@@ -73,7 +72,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
         }
 
         // Insert extra fields required.
-        $result = $connection
+        $result = $this->connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM extra_field WHERE variable = 'is_mandatory' AND item_type = 12 AND value_type = 13"
             )
@@ -85,7 +84,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
             );
         }
 
-        $result = $connection
+        $result = $this->connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM extra_field WHERE variable = 'show_in_catalogue' AND item_type = 2 AND value_type = 3"
             )
@@ -103,7 +102,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
             );
         }
 
-        $result = $connection
+        $result = $this->connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM extra_field WHERE variable = 'multiple_language' AND item_type = 2 AND value_type = 5"
             )
@@ -115,7 +114,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
             );
         }
 
-        $result = $connection
+        $result = $this->connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM extra_field WHERE variable = 'send_notification_at_a_specific_date' AND item_type = 21 AND value_type = 13"
             )
@@ -127,7 +126,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
             );
         }
 
-        $result = $connection
+        $result = $this->connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM extra_field WHERE variable = 'date_to_send_notification' AND item_type = 21 AND value_type = 6"
             )
@@ -139,7 +138,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
             );
         }
 
-        $result = $connection
+        $result = $this->connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM extra_field WHERE variable = 'send_to_users_in_session' AND item_type = 21 AND value_type = 13"
             )
@@ -151,7 +150,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
             );
         }
 
-        $result = $connection
+        $result = $this->connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM extra_field WHERE variable = 'tags' AND item_type = 22 AND value_type = 10"
             )
@@ -163,7 +162,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
             );
         }
 
-        $result = $connection
+        $result = $this->connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM extra_field WHERE variable = 'acquisition' AND item_type = 20 AND value_type = 3"
             )
@@ -181,7 +180,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
             );
         }
 
-        $result = $connection
+        $result = $this->connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM extra_field WHERE variable = 'invisible' AND item_type = 20 AND value_type = 13"
             )
@@ -193,7 +192,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
             );
         }
 
-        $result = $connection
+        $result = $this->connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM extra_field WHERE variable = 'start_date' AND item_type = 7 AND value_type = 7"
             )
@@ -205,7 +204,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
             );
         }
 
-        $result = $connection
+        $result = $this->connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM extra_field WHERE variable = 'end_date' AND item_type = 7 AND value_type = 7"
             )
@@ -241,14 +240,13 @@ class Version20230216122900 extends AbstractMigrationChamilo
 
     public function down(Schema $schema): void
     {
-        $connection = $this->getEntityManager()->getConnection();
         $configurationValues = SettingsCurrentFixtures::getNewConfigurationSettings();
 
         foreach ($configurationValues as $category => $settings) {
             foreach ($settings as $setting) {
                 $variable = $setting['name'];
                 $category = strtolower($category);
-                $result = $connection
+                $result = $this->connection
                     ->executeQuery(
                         "SELECT COUNT(1) FROM settings_current WHERE variable = '$variable' AND category = '$category'"
                     )
@@ -263,7 +261,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
         }
 
         // Delete extra fields required.
-        $result = $connection
+        $result = $this->connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM extra_field WHERE variable = 'end_date' AND item_type = 7 AND value_type = 7"
             )
@@ -275,7 +273,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
             );
         }
 
-        $result = $connection
+        $result = $this->connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM extra_field WHERE variable = 'start_date' AND item_type = 7 AND value_type = 7"
             )
@@ -287,7 +285,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
             );
         }
 
-        $result = $connection
+        $result = $this->connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM extra_field WHERE variable = 'invisible' AND item_type = 20 AND value_type = 13"
             )
@@ -299,7 +297,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
             );
         }
 
-        $result = $connection
+        $result = $this->connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM extra_field WHERE variable = 'acquisition' AND item_type = 20 AND value_type = 3"
             )
@@ -311,7 +309,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
             );
         }
 
-        $result = $connection
+        $result = $this->connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM extra_field WHERE variable = 'tags' AND item_type = 22 AND value_type = 10"
             )
@@ -323,7 +321,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
             );
         }
 
-        $result = $connection
+        $result = $this->connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM extra_field WHERE variable = 'multiple_language' AND item_type = 2 AND value_type = 5"
             )
@@ -335,7 +333,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
             );
         }
 
-        $result = $connection
+        $result = $this->connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM extra_field WHERE variable = 'show_in_catalogue' AND item_type = 2 AND value_type = 3"
             )
@@ -347,7 +345,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
             );
         }
 
-        $result = $connection
+        $result = $this->connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM extra_field WHERE variable = 'session_courses_read_only_mode' AND item_type = 2 AND value_type = 13"
             )
@@ -359,7 +357,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
             );
         }
 
-        $result = $connection
+        $result = $this->connection
             ->executeQuery(
                 "SELECT COUNT(1) FROM extra_field WHERE variable = 'is_mandatory' AND item_type = 12 AND value_type = 13"
             )
@@ -375,8 +373,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
     public function getConfigurationSelectedValue(string $variable): string
     {
         global $_configuration;
-        $container = $this->getContainer();
-        $kernel = $container->get('kernel');
+        $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
         $oldConfigPath = $rootPath.'/app/config/configuration.php';
         $configFileLoaded = \in_array($oldConfigPath, get_included_files(), true);

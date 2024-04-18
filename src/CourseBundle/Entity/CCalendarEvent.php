@@ -26,8 +26,8 @@ use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Filter\CidFilter;
 use Chamilo\CoreBundle\Filter\GlobalEventFilter;
 use Chamilo\CoreBundle\Filter\SidFilter;
-use Chamilo\CoreBundle\State\CalendarEventProvider;
-use Chamilo\CoreBundle\State\CCalendarEventProcessor;
+use Chamilo\CoreBundle\State\CalendarEventStateProvider;
+use Chamilo\CoreBundle\State\CCalendarEventStateProcessor;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -54,11 +54,11 @@ use Symfony\Component\Validator\Constraints as Assert;
             paginationEnabled: false,
             security: "is_granted('ROLE_USER')",
             output: CalendarEvent::class,
-            provider: CalendarEventProvider::class,
+            provider: CalendarEventStateProvider::class,
         ),
         new Post(
             securityPostDenormalize: "is_granted('CREATE', object)",
-            processor: CCalendarEventProcessor::class
+            processor: CCalendarEventStateProcessor::class
         ),
     ],
     normalizationContext: ['groups' => ['calendar_event:read', 'resource_node:read']],

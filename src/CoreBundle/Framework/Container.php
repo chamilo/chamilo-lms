@@ -40,6 +40,7 @@ use Chamilo\CoreBundle\Repository\TrackEDownloadsRepository;
 use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
+use Chamilo\CoreBundle\ServiceHelper\ContainerHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
@@ -90,10 +91,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface as HttpSessionInterface;
 use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Translation\Translator;
 use Twig\Environment;
 use UnitEnum;
@@ -125,47 +127,46 @@ class Container
         return false;
     }
 
+    public static function getLegacyHelper(): ContainerHelper
+    {
+        return self::$container->get(ContainerHelper::class);
+    }
+
     public static function getEnvironment(): string
     {
-        return self::$container->get('kernel')->getEnvironment();
+        return self::getLegacyHelper()->getKernel()->getEnvironment();
     }
 
     public static function getLogDir(): string
     {
-        return self::$container->get('kernel')->getLogDir();
+        return self::getLegacyHelper()->getKernel()->getLogDir();
     }
 
     public static function getCacheDir(): string
     {
-        return self::$container->get('kernel')->getCacheDir().'/';
+        return self::getLegacyHelper()->getKernel()->getCacheDir().'/';
     }
 
-    /**
-     * @return string
-     */
-    public static function getProjectDir()
+    public static function getProjectDir(): string
     {
         if (null !== self::$container) {
-            return self::$container->get('kernel')->getProjectDir().'/';
+            return self::getLegacyHelper()->getKernel()->getProjectDir().'/';
         }
 
         return str_replace('\\', '/', realpath(__DIR__.'/../../../')).'/';
     }
 
-    /**
-     * @return bool
-     */
-    public static function isInstalled()
+    public static function isInstalled(): bool
     {
-        return self::$container->get('kernel')->isInstalled();
+        return self::getLegacyHelper()->getKernel()->isInstalled();
     }
 
-    public static function getMessengerBus()
+    public static function getMessengerBus(): MessageBusInterface
     {
-        return self::$container->get('messenger.bus.default');
+        return self::getLegacyHelper()->getMessengerBus();
     }
 
-    public static function getTwig()
+    public static function getTwig(): Environment
     {
         return self::$twig;
     }
@@ -217,20 +218,14 @@ class Container
         self::$session = $session;
     }
 
-    /**
-     * @return AuthorizationChecker
-     */
-    public static function getAuthorizationChecker()
+    public static function getAuthorizationChecker(): AuthorizationCheckerInterface
     {
-        return self::$container->get('security.authorization_checker');
+        return self::getLegacyHelper()->getAuthorizationChecker();
     }
 
-    /**
-     * @return TokenStorage|TokenStorageInterface
-     */
-    public static function getTokenStorage()
+    public static function getTokenStorage(): TokenStorageInterface|TokenStorage
     {
-        return self::$container->get('security.token_storage');
+        return self::getLegacyHelper()->getTokenStorage();
     }
 
     public static function getMailer(): Mailer
@@ -606,9 +601,6 @@ class Container
         return self::$container->get('form.factory');
     }
 
-    /**
-     * @param string $type error|success|warning|danger
-     */
     public static function addFlash(string $message, string $type = 'success'): void
     {
         $type = match ($type) {

@@ -9,18 +9,18 @@ namespace Chamilo\CoreBundle\EventListener;
 use Chamilo\CoreBundle\Repository\ColorThemeRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\SerializerInterface;
-use TicketManager;
 use Twig\Environment;
 
 /**
  * Twig-related event listener. For filters, look into ChamiloExtension.php.
  */
-class TwigListener
+class TwigListener implements EventSubscriberInterface
 {
     private SerializerInterface $serializer;
     private Environment $twig;
@@ -44,11 +44,10 @@ class TwigListener
         $this->languageRepository = $languageRepository;
     }
 
-    public function __invoke(RequestEvent $event): void
+    public function onControllerEvent(ControllerEvent $event): void
     {
         $request = $event->getRequest();
         $token = $this->tokenStorage->getToken();
-        $userIsAllowedInProject = false;
 
         $data = null;
         $isAuth = false;
@@ -59,39 +58,7 @@ class TwigListener
                     'groups' => ['user_json:read'],
                 ]);
                 $isAuth = true;
-                $userIsAllowedInProject = TicketManager::userIsAllowInProject(1);
             }
-        }
-
-        $settings = [
-            'platform.site_name',
-            'platform.timezone',
-            'platform.theme',
-            'platform.administrator_name',
-            'platform.administrator_surname',
-
-            'editor.enabled_mathjax',
-            'editor.translate_html',
-            'platform.load_term_conditions_section',
-            'registration.allow_terms_conditions',
-            'agenda.personal_calendar_show_sessions_occupation',
-
-            'social.social_enable_messages_feedback',
-            'social.disable_dislike_option',
-            'platform.redirect_index_to_url_for_logged_users',
-        ];
-
-        // @todo get variables in 1 query.
-        $config = [];
-        foreach ($settings as $variable) {
-            $value = $this->settingsManager->getSetting($variable);
-            $config[$variable] = $value;
-        }
-
-        if ($userIsAllowedInProject && 'true' === $this->settingsManager->getSetting('display.show_link_ticket_notification')) {
-            $config['display.show_link_ticket_notification'] = 'true';
-        } else {
-            $config['display.show_link_ticket_notification'] = 'false';
         }
 
         $languages = $this->languageRepository->getAllAvailable()->getQuery()->getArrayResult();
@@ -101,7 +68,6 @@ class TwigListener
         $this->twig->addGlobal('is_authenticated', json_encode($isAuth));
         $this->twig->addGlobal('user_json', $data ?? json_encode([]));
         $this->twig->addGlobal('access_url_id', $request->getSession()->get('access_url_id'));
-        $this->twig->addGlobal('config_json', json_encode($config));
         $this->twig->addGlobal('languages_json', json_encode($languages));
 
         $this->loadColorTheme();
@@ -120,5 +86,10 @@ class TwigListener
         }
 
         $this->twig->addGlobal('color_theme_link', $link);
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return [ControllerEvent::class => 'onControllerEvent'];
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 use RuntimeException;
 use SubLanguageManager;
@@ -22,22 +21,15 @@ final class Version20240122221400 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-        $em = $doctrine->getManager();
-
-        /** @var Connection $connection */
-        $connection = $em->getConnection();
-
         // Default sublanguages to be excluded from the update.
         $defaultSubLanguages = ['ast', 'ast_ES', 'ca', 'ca_ES', 'eo', 'gl', 'qu', 'quz_PE', 'qu_PE', 'zh-TW', 'zh_TW', 'pt-BR', 'pt_PT', 'fur', 'fur_IT', 'oc', 'oc_FR'];
 
         // Fetching sublanguages from the database.
         $sql = "SELECT * FROM language WHERE parent_id IS NOT NULL AND isocode NOT IN('".implode("', '", $defaultSubLanguages)."')";
-        $sublanguages = $connection->executeQuery($sql)->fetchAllAssociative();
+        $sublanguages = $this->connection->executeQuery($sql)->fetchAllAssociative();
 
         foreach ($sublanguages as $sublanguage) {
-            $newIsoCode = $this->updateAndGenerateSubLanguage($sublanguage, $connection);
+            $newIsoCode = $this->updateAndGenerateSubLanguage($sublanguage);
             $this->generatePoFileFromTrad4All($sublanguage['english_name'], $newIsoCode);
         }
 
@@ -48,14 +40,14 @@ final class Version20240122221400 extends AbstractMigrationChamilo
         $this->deleteImportFolder();
     }
 
-    private function updateAndGenerateSubLanguage(array $sublanguage, Connection $connection): string
+    private function updateAndGenerateSubLanguage(array $sublanguage): string
     {
         // Get the parent language ID
         $parentId = $sublanguage['parent_id'];
 
         // Query to obtain the isocode of the parent language
         $parentIsoQuery = 'SELECT isocode FROM language WHERE id = ?';
-        $parentIsoCode = $connection->executeQuery($parentIsoQuery, [$parentId])->fetchOne();
+        $parentIsoCode = $this->connection->executeQuery($parentIsoQuery, [$parentId])->fetchOne();
 
         // Get the prefix of the parent language's isocode
         $firstIso = substr($parentIsoCode, 0, 2);
@@ -63,22 +55,22 @@ final class Version20240122221400 extends AbstractMigrationChamilo
 
         // Update the isocode in the language table
         $updateLanguageQuery = 'UPDATE language SET isocode = ? WHERE id = ?';
-        $connection->executeStatement($updateLanguageQuery, [$newIsoCode, $sublanguage['id']]);
+        $this->connection->executeStatement($updateLanguageQuery, [$newIsoCode, $sublanguage['id']]);
         error_log('Updated language table for id '.$sublanguage['id']);
 
         // Check and update in settings_current
         $updateSettingsQuery = "UPDATE settings_current SET selected_value = ? WHERE variable = 'platform_language' AND selected_value = ?";
-        $connection->executeStatement($updateSettingsQuery, [$newIsoCode, $sublanguage['english_name']]);
+        $this->connection->executeStatement($updateSettingsQuery, [$newIsoCode, $sublanguage['english_name']]);
         error_log('Updated settings_current for language '.$sublanguage['english_name']);
 
         // Check and update in user table
         $updateUserQuery = 'UPDATE user SET locale = ? WHERE locale = ?';
-        $connection->executeStatement($updateUserQuery, [$newIsoCode, $sublanguage['english_name']]);
+        $this->connection->executeStatement($updateUserQuery, [$newIsoCode, $sublanguage['english_name']]);
         error_log('Updated user table for language '.$sublanguage['english_name']);
 
         // Check and update in course table
         $updateCourseQuery = 'UPDATE course SET course_language = ? WHERE course_language = ?';
-        $connection->executeStatement($updateCourseQuery, [$newIsoCode, $sublanguage['english_name']]);
+        $this->connection->executeStatement($updateCourseQuery, [$newIsoCode, $sublanguage['english_name']]);
         error_log('Updated course table for language '.$sublanguage['english_name']);
 
         // Return the new ISO code.
@@ -87,8 +79,7 @@ final class Version20240122221400 extends AbstractMigrationChamilo
 
     private function generatePoFileFromTrad4All(string $englishName, string $isocode): void
     {
-        $container = $this->getContainer();
-        $kernel = $container->get('kernel');
+        $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
         $langPath = $rootPath.'/var/translations/import/'.$englishName.'/trad4all.inc.php';
@@ -188,8 +179,7 @@ final class Version20240122221400 extends AbstractMigrationChamilo
 
     private function deleteImportFolder(): void
     {
-        $container = $this->getContainer();
-        $kernel = $container->get('kernel');
+        $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
         $importPath = $rootPath.'/var/translations/import/';
 

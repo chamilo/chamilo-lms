@@ -7,10 +7,10 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\SocialPost;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\PersonalFileRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
 final class Version20230720222140 extends AbstractMigrationChamilo
@@ -22,21 +22,13 @@ final class Version20230720222140 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $em = $this->getEntityManager();
-
-        /** @var Connection $connection */
-        $connection = $em->getConnection();
-
-        $kernel = $container->get('kernel');
+        $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
-        $userRepo = $container->get(UserRepository::class);
+        $userRepo = $this->container->get(UserRepository::class);
+        $personalRepo = $this->container->get(PersonalFileRepository::class);
 
-        /** @var PersonalFileRepository $personalRepo */
-        $personalRepo = $container->get(PersonalFileRepository::class);
-
-        $q = $em->createQuery('SELECT s FROM Chamilo\CoreBundle\Entity\SocialPost s');
+        $q = $this->entityManager->createQuery('SELECT s FROM Chamilo\CoreBundle\Entity\SocialPost s');
 
         /** @var SocialPost $socialPost */
         foreach ($q->toIterable() as $socialPost) {
@@ -87,8 +79,8 @@ final class Version20230720222140 extends AbstractMigrationChamilo
                 $socialPost->setContent($content);
 
                 // Persist the updated social post entity
-                $em->persist($socialPost);
-                $em->flush();
+                $this->entityManager->persist($socialPost);
+                $this->entityManager->flush();
             }
         }
     }

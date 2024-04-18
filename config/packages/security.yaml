@@ -1,8 +1,7 @@
 # To get started with security, check out the documentation:
 # http://symfony.com/doc/current/book/security.html
 security:
-    enable_authenticator_manager: true
-
+    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         legacy_md5:
             algorithm: md5
@@ -68,7 +67,6 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-            anonymous: true
 
         # Use to connect via a JWT token
         api:

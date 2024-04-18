@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,13 +18,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_SLASHES;
 
+#[AsCommand(
+    name: 'chamilo:update_vue_translations',
+    description: 'This command updates the json vue locale files based in the Symfony /translation folder',
+)]
 class UpdateVueTranslations extends Command
 {
-    /**
-     * @var string|null
-     */
-    protected static $defaultName = 'chamilo:update_vue_translations';
-
     private LanguageRepository $languageRepository;
     private ParameterBagInterface $parameterBag;
     private TranslatorInterface $translator;
@@ -35,15 +35,6 @@ class UpdateVueTranslations extends Command
         $this->translator = $translator;
 
         parent::__construct();
-    }
-
-    protected function configure(): void
-    {
-        $description = 'This command updates the json vue locale files based in the Symfony /translation folder';
-        $this
-            ->setDescription($description)
-            ->setHelp($description)
-        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

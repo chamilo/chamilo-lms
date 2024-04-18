@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ThemeController extends AbstractController
 {
@@ -21,7 +21,7 @@ class ThemeController extends AbstractController
     ) {}
 
     #[Route('/theme/colors.css', name: 'chamilo_color_theme', methods: ['GET'])]
-    public function colorThemeAction(): Response
+    public function colorTheme(): Response
     {
         $response = new Response('');
 

@@ -14,13 +14,13 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Security;
 
 /**
  * @template-implements ProviderInterface<CalendarEvent[]>
  */
-class CalendarEventProvider implements ProviderInterface
+final class CalendarEventStateProvider implements ProviderInterface
 {
     public function __construct(
         private readonly CollectionProvider $collectionProvider,

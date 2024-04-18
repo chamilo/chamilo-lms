@@ -63,17 +63,17 @@ services:
             - name: kernel.event_subscriber
               dispatcher: security.event_dispatcher.main
 
-    Chamilo\CoreBundle\State\CStudentPublicationPostProcessor:
+    Chamilo\CoreBundle\State\CStudentPublicationPostStateProcessor:
         bind:
             $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
 
-    Chamilo\CoreBundle\State\CCalendarEventProcessor:
+    Chamilo\CoreBundle\State\CCalendarEventStateProcessor:
         arguments:
             $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
         tags:
             - { name: 'api_platform.state_processor' }
 
-    Chamilo\CoreBundle\State\UsergroupPostProcessor:
+    Chamilo\CoreBundle\State\UsergroupPostStateProcessor:
       arguments:
         $processor: '@api_platform.doctrine.orm.state.persist_processor'
         $entityManager: '@doctrine.orm.entity_manager'
@@ -82,9 +82,14 @@ services:
       tags:
         - { name: 'api_platform.state_processor' }
 
-    Chamilo\CoreBundle\State\ColorThemeProcessor:
+    Chamilo\CoreBundle\State\ColorThemeStateProcessor:
       bind:
         $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
+
+    Chamilo\CoreBundle\State\UserRelUserStateProcessor:
+      bind:
+        $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
+        $removeProcessor: '@api_platform.doctrine.orm.state.remove_processor'
 
     Chamilo\CoreBundle\EventSubscriber\AnonymousUserSubscriber:
       tags:
@@ -93,6 +98,14 @@ services:
     Chamilo\CoreBundle\Security\Authorization\Voter\AnonymousVoter:
       tags:
         - name: security.voter
+
+    Chamilo\CoreBundle\ServiceHelper\ContainerHelper:
+        calls:
+            - setAuthorizationChecker: [ '@security.authorization_checker' ]
+            - setTokenStorage: [ '@security.token_storage' ]
+            - setKernel: [ '@kernel' ]
+            - setMessengerBus: [ '@messenger.bus.default' ]
+            - setValidator: [ '@validator' ]
 
 cocur_slugify:
     lowercase: true

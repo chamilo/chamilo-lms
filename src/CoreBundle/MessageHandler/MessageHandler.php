@@ -10,15 +10,15 @@ use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Mailer;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Mime\Address;
 
-class MessageHandler implements MessageHandlerInterface
+#[AsMessageHandler]
+class MessageHandler
 {
     public function __construct(
         private readonly Mailer $mailer
     ) {}
-
     public function __invoke(Message $message): void
     {
         if (Message::MESSAGE_TYPE_INBOX !== $message->getMsgType()) {

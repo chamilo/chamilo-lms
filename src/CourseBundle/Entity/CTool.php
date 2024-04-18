@@ -19,7 +19,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Filter\CidFilter;
 use Chamilo\CoreBundle\Filter\SidFilter;
-use Chamilo\CoreBundle\State\CToolProvider;
+use Chamilo\CoreBundle\State\CToolStateProvider;
 use Chamilo\CourseBundle\Repository\CToolRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -32,7 +32,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     normalizationContext: ['groups' => ['ctool:read']],
     output: CourseTool::class,
-    provider: CToolProvider::class,
+    provider: CToolStateProvider::class,
 )]
 #[ORM\Table(name: 'c_tool')]
 #[ORM\Index(columns: ['c_id'], name: 'course')]

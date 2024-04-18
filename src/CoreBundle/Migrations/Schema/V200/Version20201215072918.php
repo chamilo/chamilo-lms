@@ -14,10 +14,7 @@ use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CCalendarEventAttachment;
 use Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
-use Chamilo\Kernel;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\ORM\EntityManagerInterface;
 
 final class Version20201215072918 extends AbstractMigrationChamilo
 {
@@ -28,24 +25,16 @@ final class Version20201215072918 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-        $em = $doctrine->getManager();
+        $eventRepo = $this->container->get(CCalendarEventRepository::class);
+        $eventAttachmentRepo = $this->container->get(CCalendarEventAttachmentRepository::class);
+        $courseRepo = $this->container->get(CourseRepository::class);
 
-        /** @var Connection $connection */
-        $connection = $em->getConnection();
-
-        $eventRepo = $container->get(CCalendarEventRepository::class);
-        $eventAttachmentRepo = $container->get(CCalendarEventAttachmentRepository::class);
-        $courseRepo = $container->get(CourseRepository::class);
-
-        /** @var Kernel $kernel */
-        $kernel = $container->get('kernel');
+        $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
         $admin = $this->getAdmin();
         $oldNewEventMap = [];
 
-        $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
@@ -54,7 +43,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
 
             $sql = "SELECT * FROM c_calendar_event WHERE c_id = {$courseId}
                     ORDER BY iid";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $events = $result->fetchAllAssociative();
             foreach ($events as $eventData) {
                 $id = $eventData['iid'];
@@ -68,7 +57,7 @@ final class Version20201215072918 extends AbstractMigrationChamilo
 
                 $sql = "SELECT * FROM c_item_property
                         WHERE tool = 'calendar_event' AND c_id = {$courseId} AND ref = {$id}";
-                $result = $connection->executeQuery($sql);
+                $result = $this->connection->executeQuery($sql);
                 $items = $result->fetchAllAssociative();
 
                 // For some reason this event doesnt have a c_item_property value,
@@ -81,8 +70,8 @@ final class Version20201215072918 extends AbstractMigrationChamilo
                         'session_id' => $eventData['session_id'],
                     ];
                     $this->fixItemProperty('calendar_event', $eventRepo, $course, $admin, $event, $course, $items);
-                    $em->persist($event);
-                    $em->flush();
+                    $this->entityManager->persist($event);
+                    $this->entityManager->flush();
 
                     continue;
                 }
@@ -102,15 +91,15 @@ final class Version20201215072918 extends AbstractMigrationChamilo
 
                 $this->fixItemProperty('calendar_event', $eventRepo, $course, $admin, $event, $parent);
 
-                $em->persist($event);
-                $em->flush();
+                $this->entityManager->persist($event);
+                $this->entityManager->flush();
 
                 $oldNewEventMap[$oldEventId] = $event;
             }
 
             $sql = "SELECT * FROM c_calendar_event_attachment WHERE c_id = {$courseId}
                     ORDER BY iid";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $attachments = $result->fetchAllAssociative();
             foreach ($attachments as $attachmentData) {
                 $id = $attachmentData['iid'];
@@ -139,20 +128,20 @@ final class Version20201215072918 extends AbstractMigrationChamilo
                 $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/upload/calendar/'.$attachmentPath;
                 error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                 $this->addLegacyFileToResource($filePath, $eventAttachmentRepo, $attachment, $id, $fileName);
-                $em->persist($attachment);
-                $em->flush();
+                $this->entityManager->persist($attachment);
+                $this->entityManager->flush();
             }
         }
 
-        $this->updateAgendaReminders($oldNewEventMap, $em);
+        $this->updateAgendaReminders($oldNewEventMap);
     }
 
     /**
      * @param array<int, CCalendarEvent> $oldNewEventMap
      */
-    private function updateAgendaReminders(array $oldNewEventMap, EntityManagerInterface $em): void
+    private function updateAgendaReminders(array $oldNewEventMap): void
     {
-        $reminders = $em->getRepository(AgendaReminder::class)->findBy(['type' => 'course']);
+        $reminders = $this->entityManager->getRepository(AgendaReminder::class)->findBy(['type' => 'course']);
 
         /** @var AgendaReminder $reminder */
         foreach ($reminders as $reminder) {
@@ -160,10 +149,10 @@ final class Version20201215072918 extends AbstractMigrationChamilo
             if (\array_key_exists($oldEventId, $oldNewEventMap)) {
                 $newEvent = $oldNewEventMap[$oldEventId];
                 $reminder->setEvent($newEvent);
-                $em->persist($reminder);
+                $this->entityManager->persist($reminder);
             }
         }
-        $em->flush();
+        $this->entityManager->flush();
     }
 
     public function down(Schema $schema): void {}

@@ -7,19 +7,24 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use bbb;
-use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\ServiceHelper\TicketProjectHelper;
+use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use TicketManager;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/platform-config')]
 class PlatformConfigurationController extends AbstractController
 {
     use ControllerTrait;
+
+    public function __construct(
+        private readonly TicketProjectHelper $ticketProjectHelper,
+        private readonly UserHelper $userHelper,
+    ) {}
 
     #[Route('/list', name: 'platform_config_list', methods: ['GET'])]
     public function list(SettingsManager $settingsManager): Response
@@ -73,13 +78,12 @@ class PlatformConfigurationController extends AbstractController
                 'forum.global_forums_course_id',
             ];
 
-            /** @var User|null $user */
-            $user = $this->getUser();
+            $user = $this->userHelper->getCurrent();
 
             $configuration['settings']['display.show_link_ticket_notification'] = 'false';
 
             if (!empty($user)) {
-                $userIsAllowedInProject = TicketManager::userIsAllowInProject(1);
+                $userIsAllowedInProject = $this->ticketProjectHelper->userIsAllowInProject(1);
 
                 if ($userIsAllowedInProject
                     && 'true' === $settingsManager->getSetting('display.show_link_ticket_notification')

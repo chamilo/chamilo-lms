@@ -248,9 +248,8 @@ class Version20180319145700 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX IDX_C4B6F5FB3FE509D ON c_survey_question_option (survey_id);');
         }
 
-        $em = $this->getEntityManager();
         $sql = 'SELECT * FROM c_survey ';
-        $result = $em->getConnection()->executeQuery($sql);
+        $result = $this->connection->executeQuery($sql);
         $data = $result->fetchAllAssociative();
         $surveyList = [];
         if ($data) {
@@ -261,7 +260,7 @@ class Version20180319145700 extends AbstractMigrationChamilo
 
         // Replace survey_code with new survey_id.
         $sql = 'SELECT * FROM c_survey_invitation ';
-        $result = $em->getConnection()->executeQuery($sql);
+        $result = $this->connection->executeQuery($sql);
         $data = $result->fetchAllAssociative();
         if ($data) {
             foreach ($data as $item) {
@@ -289,7 +288,7 @@ class Version20180319145700 extends AbstractMigrationChamilo
                     efv.field_value = 1
         ';
 
-        $result = $em->getConnection()->executeQuery($sql);
+        $result = $this->connection->executeQuery($sql);
         $data = $result->fetchAllAssociative();
         if ($data) {
             foreach ($data as $item) {

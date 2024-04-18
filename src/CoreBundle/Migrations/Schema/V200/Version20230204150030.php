@@ -13,7 +13,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Version20230204150030 extends AbstractMigrationChamilo
@@ -25,13 +24,7 @@ class Version20230204150030 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-
-        /** @var EntityManager $em */
-        $em = $doctrine->getManager();
-
-        $kernel = $container->get('kernel');
+        $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
         $batchSize = self::BATCH_SIZE;
@@ -39,13 +32,13 @@ class Version20230204150030 extends AbstractMigrationChamilo
         $dql = 'SELECT v FROM Chamilo\\CoreBundle\\Entity\\ExtraFieldValues v';
         $dql .= ' JOIN v.field f';
         $dql .= ' WHERE f.variable = :variable AND f.itemType = :itemType';
-        $q = $em->createQuery($dql);
+        $q = $this->entityManager->createQuery($dql);
         $q->setParameters([
             'variable' => 'image',
             'itemType' => ExtraField::SESSION_FIELD_TYPE,
         ]);
 
-        $sessionRepo = $container->get(SessionRepository::class);
+        $sessionRepo = $this->container->get(SessionRepository::class);
 
         /** @var ExtraFieldValues $item */
         foreach ($q->toIterable() as $item) {
@@ -64,10 +57,10 @@ class Version20230204150030 extends AbstractMigrationChamilo
                     ->setTitle($fileName)
                     ->setFile($file)
                 ;
-                $em->persist($asset);
-                $em->flush();
+                $this->entityManager->persist($asset);
+                $this->entityManager->flush();
                 $item->setAsset($asset);
-                $em->persist($item);
+                $this->entityManager->persist($item);
 
                 $sessionId = $item->getItemId();
 
@@ -78,13 +71,13 @@ class Version20230204150030 extends AbstractMigrationChamilo
             }
 
             if (($counter % $batchSize) === 0) {
-                $em->flush();
-                $em->clear(); // Detaches all objects from Doctrine!
+                $this->entityManager->flush();
+                $this->entityManager->clear(); // Detaches all objects from Doctrine!
             }
             $counter++;
         }
-        $em->flush();
-        $em->clear();
+        $this->entityManager->flush();
+        $this->entityManager->clear();
     }
 
     public function down(Schema $schema): void {}

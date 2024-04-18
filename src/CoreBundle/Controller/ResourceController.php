@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\TrackEDownloads;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CoreBundle\Traits\CourseControllerTrait;
@@ -27,6 +28,7 @@ use Chamilo\CourseBundle\Repository\CToolRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -36,9 +38,8 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Serializer\SerializerInterface;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
@@ -54,10 +55,12 @@ class ResourceController extends AbstractResourceController implements CourseCon
     use GradebookControllerTrait;
     use ResourceControllerTrait;
 
-    /**
-     * @Route("/{tool}/{type}/{id}/disk_space", methods={"GET", "POST"}, name="chamilo_core_resource_disk_space")
-     */
-    public function diskSpaceAction(Request $request): Response
+    public function __construct(
+        private readonly UserHelper $userHelper,
+    ) {}
+
+    #[Route(path: '/{tool}/{type}/{id}/disk_space', methods: ['GET', 'POST'], name: 'chamilo_core_resource_disk_space')]
+    public function diskSpace(Request $request): Response
     {
         $nodeId = $request->get('id');
         $repository = $this->getRepositoryFromRequest($request);
@@ -131,7 +134,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      * View file of a resource node.
      */
     #[Route('/{tool}/{type}/{id}/view', name: 'chamilo_core_resource_view', methods: ['GET'])]
-    public function viewAction(Request $request, EntityManagerInterface $entityManager): Response
+    public function view(Request $request, EntityManagerInterface $entityManager): Response
     {
         $id = $request->get('id');
         $filter = (string) $request->get('filter'); // See filters definitions in /config/services.yml.
@@ -141,8 +144,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             throw new FileNotFoundException($this->trans('Resource not found'));
         }
 
-        /** @var ?User $user */
-        $user = $this->getUser();
+        $user = $this->userHelper->getCurrent();
         $firstResourceLink = $resourceNode->getResourceLinks()->first();
         if ($firstResourceLink) {
             $resourceLinkId = $firstResourceLink->getId();
@@ -172,7 +174,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      * @return RedirectResponse|void
      */
     #[Route('/{tool}/{type}/{id}/link', name: 'chamilo_core_resource_link', methods: ['GET'])]
-    public function linkAction(Request $request, RouterInterface $router, CLinkRepository $cLinkRepository)
+    public function link(Request $request, RouterInterface $router, CLinkRepository $cLinkRepository): RedirectResponse
     {
         $tool = $request->get('tool');
         $type = $request->get('type');
@@ -211,7 +213,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
      * @return RedirectResponse|StreamedResponse
      */
     #[Route('/{tool}/{type}/{id}/download', name: 'chamilo_core_resource_download', methods: ['GET'])]
-    public function downloadAction(Request $request, EntityManagerInterface $entityManager)
+    public function download(Request $request, EntityManagerInterface $entityManager)
     {
         $id = $request->get('id');
         $resourceNode = $this->getResourceNodeRepository()->findOneBy(['uuid' => $id]);
@@ -230,8 +232,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         // If resource node has a file just download it. Don't download the children.
         if ($resourceNode->hasResourceFile()) {
-            /** @var ?User $user */
-            $user = $this->getUser();
+            $user = $this->userHelper->getCurrent();
             $firstResourceLink = $resourceNode->getResourceLinks()->first();
             if ($firstResourceLink) {
                 $resourceLinkId = $firstResourceLink->getId();
@@ -533,7 +534,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
                     // @todo move into a function/class
                     if ('true' === $this->getSettingsManager()->getSetting('editor.translate_html')) {
-                        $user = $this->getUser();
+                        $user = $this->userHelper->getCurrent();
                         if (null !== $user) {
                             // Overwrite user_json, otherwise it will be loaded by the TwigListener.php
                             $userJson = json_encode(['locale' => $user->getLocale()]);

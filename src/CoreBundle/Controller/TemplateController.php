@@ -9,11 +9,11 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Templates;
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SystemTemplateRepository;
 use Chamilo\CoreBundle\Repository\TemplatesRepository;
+use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,13 +22,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/template')]
 class TemplateController extends AbstractController
 {
     #[Route('/document-templates/create', methods: ['POST'])]
-    public function createDocumentTemplate(Request $request, EntityManagerInterface $entityManager, AssetRepository $assetRepo): Response
+    public function createDocumentTemplate(Request $request, EntityManagerInterface $entityManager, UserHelper $userHelper): Response
     {
         $documentId = (int) $request->request->get('refDoc');
         $title = $request->request->get('title');
@@ -39,8 +39,7 @@ class TemplateController extends AbstractController
             return $this->json(['error' => 'No image provided.'], Response::HTTP_BAD_REQUEST);
         }
 
-        /** @var User $user */
-        $user = $this->getUser();
+        $user = $userHelper->getCurrent();
         $course = null;
         if ($cid) {
             $course = $entityManager->getRepository(Course::class)->find($cid);

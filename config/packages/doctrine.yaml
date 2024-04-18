@@ -20,8 +20,12 @@ doctrine:
             datetimetz: SimPod\DoctrineUtcDateTime\UTCDateTimeType
             datetime_immutable: SimPod\DoctrineUtcDateTime\UTCDateTimeImmutableType
             datetimetz_immutable: SimPod\DoctrineUtcDateTime\UTCDateTimeImmutableType
+        use_savepoints: false
     orm:
         auto_generate_proxy_classes: true
+        enable_lazy_ghost_objects: true
+        report_fields_where_declared: true
+        validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
         query_cache_driver:
@@ -31,6 +35,24 @@ doctrine:
             type: pool
             pool: doctrine.result_cache_pool
         mappings:
+            chamilo_core:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/CoreBundle/Entity'
+                prefix: 'Chamilo\CoreBundle\Entity'
+                alias: ChamiloCoreBundle
+            chamilo_course:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/CourseBundle/Entity'
+                prefix: 'Chamilo\CourseBundle\Entity'
+                alias: ChamiloCourseBundle
+            chamilo_lti:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/LtiBundle/Entity'
+                prefix: 'Chamilo\LtiBundle\Entity'
+                alias: ChamiloLtiBundle
             gedmo_translatable:
                 type: annotation
                 prefix: Gedmo\Translatable\Entity
@@ -55,6 +77,7 @@ doctrine:
                 dir: "%kernel.project_dir%/vendor/gedmo/doctrine-extensions/src/Tree/Entity"
                 alias: GedmoTree # (optional) it will default to the name set for the mapping
                 is_bundle: false
+
         dql:
             string_functions:
                 MONTH: DoctrineExtensions\Query\Mysql\Month
@@ -63,3 +86,32 @@ doctrine:
             softdeleteable:
                 class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
                 enabled: true
+
+when@test:
+    doctrine:
+        dbal:
+            # "TEST_TOKEN" is typically set by ParaTest
+            dbname_suffix: '_test%env(default::TEST_TOKEN)%'
+
+when@prod:
+    doctrine:
+        orm:
+            auto_generate_proxy_classes: false
+            proxy_dir: '%kernel.build_dir%/doctrine/orm/Proxies'
+            metadata_cache_driver:
+                type: pool
+                pool: doctrine.system_cache_pool
+            query_cache_driver:
+                type: pool
+                pool: doctrine.system_cache_pool
+            result_cache_driver:
+                type: pool
+                pool: doctrine.result_cache_pool
+
+    framework:
+        cache:
+            pools:
+                doctrine.result_cache_pool:
+                    adapter: cache.app
+                doctrine.system_cache_pool:
+                    adapter: cache.system

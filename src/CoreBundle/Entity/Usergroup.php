@@ -12,10 +12,10 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use Chamilo\CoreBundle\DataProvider\GroupMembersDataProvider;
-use Chamilo\CoreBundle\DataProvider\UsergroupDataProvider;
+use Chamilo\CoreBundle\DataProvider\UsergroupStateProvider;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
-use Chamilo\CoreBundle\State\UsergroupPostProcessor;
+use Chamilo\CoreBundle\State\GroupMembersStateProvider;
+use Chamilo\CoreBundle\State\UsergroupPostStateProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -42,39 +42,39 @@ use Symfony\Component\Validator\Constraints as Assert;
             normalizationContext: ['groups' => ['usergroup:read']],
             security: "is_granted('ROLE_USER')",
             name: 'get_my_usergroups',
-            provider: UsergroupDataProvider::class
+            provider: UsergroupStateProvider::class
         ),
         new GetCollection(
             uriTemplate: '/usergroup/list/newest',
             normalizationContext: ['groups' => ['usergroup:read']],
             security: "is_granted('ROLE_USER')",
             name: 'get_newest_usergroups',
-            provider: UsergroupDataProvider::class
+            provider: UsergroupStateProvider::class
         ),
         new GetCollection(
             uriTemplate: '/usergroup/list/popular',
             normalizationContext: ['groups' => ['usergroup:read']],
             security: "is_granted('ROLE_USER')",
             name: 'get_popular_usergroups',
-            provider: UsergroupDataProvider::class
+            provider: UsergroupStateProvider::class
         ),
         new GetCollection(
             uriTemplate: '/usergroups/search',
             normalizationContext: ['groups' => ['usergroup:read']],
             security: "is_granted('ROLE_USER')",
             name: 'search_usergroups',
-            provider: UsergroupDataProvider::class
+            provider: UsergroupStateProvider::class
         ),
         new GetCollection(
             uriTemplate: '/usergroups/{id}/members',
             normalizationContext: ['groups' => ['usergroup:read']],
             security: "is_granted('ROLE_USER')",
             name: 'get_group_members',
-            provider: GroupMembersDataProvider::class
+            provider: GroupMembersStateProvider::class
         ),
         new Post(
             securityPostDenormalize: "is_granted('CREATE', object)",
-            processor: UsergroupPostProcessor::class
+            processor: UsergroupPostStateProcessor::class
         ),
     ],
     normalizationContext: [

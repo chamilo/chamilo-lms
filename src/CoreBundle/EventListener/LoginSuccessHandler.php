@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\ServiceHelper\LoginAttemptLogger;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -24,7 +25,7 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use UserManager;
 
 // class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
-class LoginSuccessHandler
+class LoginSuccessHandler implements EventSubscriberInterface
 {
     protected UrlGeneratorInterface $router;
     protected AuthorizationCheckerInterface $checker;
@@ -177,5 +178,13 @@ class LoginSuccessHandler
         }
 
         return $response;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public static function getSubscribedEvents(): array
+    {
+        return ['security.interactive_login' => 'onSecurityInteractiveLogin'];
     }
 }

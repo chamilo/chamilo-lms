@@ -8,9 +8,10 @@ namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Repository\AssetRepository;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Vich\UploaderBundle\Event\Event;
 
-class AssetListener
+class AssetListener implements EventSubscriberInterface
 {
     protected AssetRepository $assetRepository;
 
@@ -34,5 +35,13 @@ class AssetListener
                 $this->assetRepository->getFileSystem()->deleteDirectory($folder);
             }*/
         }
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public static function getSubscribedEvents(): array
+    {
+        return ['vich_uploader.post_remove' => 'onVichUploaderPostRemove'];
     }
 }

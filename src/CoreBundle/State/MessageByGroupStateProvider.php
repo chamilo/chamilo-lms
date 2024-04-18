@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\DataProvider;
+namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
@@ -12,7 +12,7 @@ use Chamilo\CoreBundle\Repository\MessageRepository;
 /**
  * @template-implements ProviderInterface<array<int, Message>>
  */
-final class MessageByGroupDataProvider implements ProviderInterface
+final class MessageByGroupStateProvider implements ProviderInterface
 {
     private MessageRepository $messageRepository;
 

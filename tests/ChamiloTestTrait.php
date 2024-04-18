@@ -11,8 +11,10 @@ use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
+use Chamilo\CoreBundle\ServiceHelper\ContainerHelper;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -208,8 +210,10 @@ trait ChamiloTestTrait
 
     public function getViolations($entity)
     {
-        /** @var ValidatorInterface $validator */
-        $validator = static::$kernel->getContainer()->get('validator');
+        /** @var ContainerHelper $containerHelper */
+        $containerHelper = static::$kernel->getContainer()->get(ContainerHelper::class);
+
+        $validator = $containerHelper->getValidator();
 
         /** @var ConstraintViolationList $errors */
         return $validator->validate($entity);

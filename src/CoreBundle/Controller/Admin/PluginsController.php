@@ -8,9 +8,9 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 
 use AppPlugin;
 use Chamilo\CoreBundle\Controller\BaseController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/plugins')]
 class PluginsController extends BaseController
@@ -32,7 +32,7 @@ class PluginsController extends BaseController
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/add', name: 'chamilo_core_plugins', methods: ['GET', 'POST'])]
-    public function pluginsAddAction(): Response
+    public function pluginsAdd(): Response
     {
         $appPlugin = new AppPlugin();
         $allPlugins = $appPlugin->read_plugins_from_path();

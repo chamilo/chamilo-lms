@@ -6,15 +6,13 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
-use Chamilo\CoreBundle\Entity\SocialPost;
 use Chamilo\CoreBundle\Entity\SocialPostAttachment;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\SocialPostAttachmentRepository;
-use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Repository\SocialPostRepository;
 use DateTime;
 use DateTimeZone;
 use DirectoryIterator;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -27,25 +25,18 @@ final class Version20231026231100 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $em = $this->getEntityManager();
-
-        /** @var Connection $connection */
-        $connection = $em->getConnection();
-
-        $kernel = $container->get('kernel');
+        $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
-        $repo = $container->get(SocialPostAttachmentRepository::class);
-        $userRepo = $container->get(UserRepository::class);
-        $admin = $this->getAdmin();
+        $repo = $this->container->get(SocialPostAttachmentRepository::class);
+        $socialPostRepo = $this->container->get(SocialPostRepository::class);
 
-        $sub = $em->createQueryBuilder();
+        $sub = $this->entityManager->createQueryBuilder();
         $sub->select('sp.id')
             ->from('Chamilo\CoreBundle\Entity\SocialPost', 'sp')
         ;
 
-        $qb = $em->createQueryBuilder();
+        $qb = $this->entityManager->createQueryBuilder();
         $qb->select('ma')
             ->from('Chamilo\CoreBundle\Entity\MessageAttachment', 'ma')
             ->where($qb->expr()->in('ma.message', $sub->getDQL()))
@@ -70,7 +61,7 @@ final class Version20231026231100 extends AbstractMigrationChamilo
                     $mimeType = mime_content_type($foundFilePath);
                     $uploadFile = new UploadedFile($foundFilePath, $filename, $mimeType, null, true);
 
-                    $socialPost = $em->getRepository(SocialPost::class)->find($messageId);
+                    $socialPost = $socialPostRepo->find($messageId);
 
                     $attachment = new SocialPostAttachment();
                     $attachment->setSocialPost($socialPost);
@@ -83,8 +74,8 @@ final class Version20231026231100 extends AbstractMigrationChamilo
                     $attachment->addUserLink($sender);
                     $attachment->setCreator($sender);
 
-                    $em->persist($attachment);
-                    $em->flush();
+                    $this->entityManager->persist($attachment);
+                    $this->entityManager->flush();
 
                     $repo->addFile($attachment, $uploadFile);
                 }

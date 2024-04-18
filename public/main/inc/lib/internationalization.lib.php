@@ -1295,9 +1295,9 @@ function api_strtolower($string, $encoding = null)
  * @see http://php.net/manual/en/function.strtoupper
  * @see http://php.net/manual/en/function.mb-strtoupper
  */
-function api_strtoupper($string, $encoding = null)
+function api_strtoupper(?string $string, $encoding = null)
 {
-    return strtoupper($string);
+    return strtoupper((string) $string);
 }
 
 /**

@@ -1991,6 +1991,7 @@ class CoursesAndSessionsCatalog
         $searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : '';
         $keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : '';
         $searchTag = $_REQUEST['search_tag'] ? Security::remove_XSS($_REQUEST['search_tag']) : '';
+        $languageSelect = isset($_REQUEST['course_language']) ? Security::remove_XSS($_REQUEST['course_language']) : '';
 
         if ($action === 'subscribe_user_with_password') {
             $action = 'subscribe';
@@ -2006,7 +2007,8 @@ class CoursesAndSessionsCatalog
             '&search_tag='.$searchTag.
             '&category_code='.$categoryCode.
             '&pageCurrent='.$pageCurrent.
-            '&pageLength='.$pageLength;
+            '&pageLength='.$pageLength.
+            '&course_language='.$languageSelect;
 
         if (!empty($extraFields)) {
             $params = [];

@@ -86,6 +86,11 @@ services:
       bind:
         $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
 
+    Chamilo\CoreBundle\State\UserRelUserStateProcessor:
+      bind:
+        $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
+        $removeProcessor: '@api_platform.doctrine.orm.state.remove_processor'
+
     Chamilo\CoreBundle\EventSubscriber\AnonymousUserSubscriber:
       tags:
         - name: kernel.event_subscriber

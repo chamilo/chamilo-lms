@@ -29,9 +29,6 @@ services:
     Chamilo\CoreBundle\DataPersister\MessageDataPersister:
         arguments: ['@api_platform.doctrine.orm.data_persister']
 
-    Chamilo\CoreBundle\DataPersister\UserRelUserDataPersister:
-        arguments: ['@api_platform.doctrine.orm.data_persister']
-
     # Form types
     # Custom yes/no form type, use in the platform settings
     Chamilo\CoreBundle\Form\Type\YesNoType:

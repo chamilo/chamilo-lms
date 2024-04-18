@@ -13,6 +13,9 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * @template-implements<UserRelUser|null>
+ */
 final class UserRelUserStateProcessor implements ProcessorInterface
 {
     public function __construct(
@@ -21,7 +24,7 @@ final class UserRelUserStateProcessor implements ProcessorInterface
         private readonly EntityManagerInterface $entityManager,
     ) {}
 
-    public function process($data, Operation $operation, array $uriVariables = [], array $context = []): UserRelUser
+    public function process($data, Operation $operation, array $uriVariables = [], array $context = []): ?UserRelUser
     {
         if ($operation instanceof DeleteOperationInterface) {
             return $this->removeProcessor->process($data, $operation, $uriVariables, $context);

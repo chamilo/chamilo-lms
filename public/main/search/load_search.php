@@ -533,7 +533,7 @@ if (!empty($extraFieldsToFilter)) {
     }
 }
 $extraFieldListToString = implode(',', $extraFieldToSearch);
-$result = SessionManager::getGridColumns('simple', $extraFieldsToFilter);
+$result = SessionManager::getGridColumns('custom', $extraFieldsToFilter);
 $columns = $result['columns'];
 $columnModel = $result['column_model'];
 

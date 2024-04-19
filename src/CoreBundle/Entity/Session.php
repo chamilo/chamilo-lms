@@ -170,6 +170,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'session_rel_user:read',
         'course:read',
         'track_e_exercise:read',
+        'calendar_event:read',
     ])]
     #[ORM\Column(name: 'title', type: 'string', length: 150)]
     protected string $title;

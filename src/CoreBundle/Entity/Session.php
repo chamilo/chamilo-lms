@@ -430,6 +430,9 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return false;
     }
 
+    /**
+     * @return Collection<int, SessionRelCourse>
+     */
     public function getCourses(): Collection
     {
         return $this->courses;
@@ -578,6 +581,9 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return false;
     }
 
+    /**
+     * @return Collection<int, SessionRelCourseRelUser>
+     */
     public function getSessionRelCourseByUser(User $user, ?int $status = null): Collection
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq('user', $user));

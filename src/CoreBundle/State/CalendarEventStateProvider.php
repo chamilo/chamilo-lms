@@ -10,15 +10,17 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\CalendarEvent;
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * @template-implements ProviderInterface<CalendarEvent[]>
+ * @template-implements ProviderInterface<CCalendarEvent|Session>
  */
 final class CalendarEventStateProvider implements ProviderInterface
 {
@@ -31,39 +33,39 @@ final class CalendarEventStateProvider implements ProviderInterface
         private readonly SettingsManager $settingsManager,
     ) {}
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): iterable
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
     {
         /** @var User|null $user */
         $user = $this->security->getUser();
 
         $accessUrl = $this->accessUrlService->getCurrent();
 
-        if ($operation instanceof CollectionOperationInterface) {
-            $cCalendarEvents = $this->collectionProvider->provide($operation, $uriVariables, $context);
-            $userSessions = [];
+        /** @var array<CCalendarEvent> $cCalendarEvents */
+        $cCalendarEvents = $this->collectionProvider->provide($operation, $uriVariables, $context);
+        $userSessions = [];
 
-            $request = $this->requestStack->getMainRequest();
-            $courseId = $request->query->getInt('cid');
-            $sessionId = $request->query->getInt('sid');
+        $request = $this->requestStack->getMainRequest();
+        $courseId = $request->query->getInt('cid');
+        $sessionId = $request->query->getInt('sid');
 
-            $inCourseBase = !empty($courseId);
-            $inSession = !empty($sessionId);
-            $inCourseSession = $inCourseBase && $inSession;
+        $inCourseBase = !empty($courseId);
+        $inSession = !empty($sessionId);
+        $inCourseSession = $inCourseBase && $inSession;
 
-            $inPersonalAgenda = !$inCourseBase && !$inCourseSession;
+        $inPersonalAgenda = !$inCourseBase && !$inCourseSession;
 
-            if ($inPersonalAgenda
-                && 'true' === $this->settingsManager->getSetting('agenda.personal_calendar_show_sessions_occupation')
-            ) {
-                $userSessions = $this->getSessionList($user, $accessUrl, $context);
-            }
-
-            return array_merge($cCalendarEvents, $userSessions);
+        if ($inPersonalAgenda
+            && 'true' === $this->settingsManager->getSetting('agenda.personal_calendar_show_sessions_occupation')
+        ) {
+            $userSessions = $this->getSessionList($user, $accessUrl, $context);
         }
 
-        return null;
+        return array_merge($cCalendarEvents, $userSessions);
     }
 
+    /**
+     * @return array<Session>
+     */
     private function getSessionList(User $user, AccessUrl $accessUrl, array $context = []): array
     {
         $qb = $this->sessionRepository->getUserFollowedSessionsInAccessUrl($user, $accessUrl);

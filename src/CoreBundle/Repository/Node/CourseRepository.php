@@ -59,9 +59,9 @@ class CourseRepository extends ResourceRepository
     /**
      * Get course user relationship based in the course_rel_user table.
      *
-     * @return CourseRelUser[]
+     * @return array<int, CourseRelUser>
      */
-    public function getCoursesByUser(User $user, AccessUrl $url)
+    public function getCoursesByUser(User $user, AccessUrl $url): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 

@@ -96,8 +96,8 @@
       responsive-layout="scroll"
       sort-field="sendDate"
       :sort-order="-1"
+      striped-rows
       @page="onPage($event)"
-      @row-click="onRowClick"
       @sort="sortingChanged($event)"
     >
       <Column selection-mode="multiple" />
@@ -117,11 +117,18 @@
           />
         </template>
       </Column>
-      <Column :header="t('Title')" :sortable="true" field="title">
+      <Column
+        :header="t('Title')"
+        :sortable="true"
+        field="title"
+      >
         <template #body="slotProps">
-          <div class="flex gap-2 pb-2">
+          <router-link
+            class="text-primary"
+            :to="{ name: 'MessageShow', query: { id: slotProps.data['@id'] } }"
+          >
             {{ slotProps.data.title }}
-          </div>
+          </router-link>
 
           <BaseTag
             v-for="tag in findMyReceiver(slotProps.data)?.tags"
@@ -131,7 +138,11 @@
           />
         </template>
       </Column>
-      <Column :header="t('Send date')" :sortable="true" field="sendDate">
+      <Column
+        :header="t('Send date')"
+        :sortable="true"
+        field="sendDate"
+      >
         <template #body="slotProps">
           {{ relativeDatetime(slotProps.data.sendDate) }}
         </template>
@@ -168,7 +179,7 @@ import { MESSAGE_STATUS_DELETED, MESSAGE_TYPE_INBOX } from "../../components/mes
 import { GET_USER_MESSAGE_TAGS } from "../../graphql/queries/MessageTag"
 import { useNotification } from "../../composables/notification"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
-import SocialSideMenu from "../../components/social/SocialSideMenu.vue";
+import SocialSideMenu from "../../components/social/SocialSideMenu.vue"
 import { useSecurityStore } from "../../store/securityStore"
 
 const route = useRoute()
@@ -354,15 +365,6 @@ function onPage(event) {
   fetchPayload[`order[${event.sortField}]`] = event.sortOrder === -1 ? "desc" : "asc"
 
   loadMessages(false)
-}
-
-function onRowClick({ data }) {
-  router.push({
-    name: "MessageShow",
-    query: {
-      id: data["@id"],
-    },
-  })
 }
 
 function sortingChanged(event) {

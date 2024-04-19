@@ -51,7 +51,6 @@
 </template>
 
 <script setup>
-import { useStore } from "vuex"
 import MessageForm from "../../components/message/Form.vue"
 import Loading from "../../components/Loading.vue"
 import { computed, ref } from "vue"
@@ -66,8 +65,9 @@ import { useNotification } from "../../composables/notification"
 import { capitalize } from "lodash"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import { useSecurityStore } from "../../store/securityStore"
+import messageService from "../../services/message"
+import messageAttachmentService from "../../services/messageattachment"
 
-const store = useStore()
 const securityStore = useSecurityStore()
 const router = useRouter()
 const route = useRoute()
@@ -112,26 +112,34 @@ const receiversCc = computed(() =>
   })),
 )
 
-const isLoading = computed(() => store.getters["message/isLoading"])
-const messageCreated = computed(() => store.state.message.created)
+const isLoading = ref(false)
 
-const onSubmit = () => {
+const onSubmit = async () => {
   item.value.receivers = [...receiversTo.value, ...receiversCc.value]
+  isLoading.value = true
 
-  store.dispatch("message/create", item.value).then(() => {
+  try {
+    const message = await messageService.create(item.value)
+    console.log(message)
+    const json_message = await message.json()
+    console.log(json_message)
     if (attachments.value.length > 0) {
-      attachments.value.forEach((attachment) =>
-        store.dispatch("messageattachment/createWithFormData", {
-          messageId: messageCreated.value.id,
+      for (const attachment of attachments.value) {
+        await messageAttachmentService.createWithFormData({
+          messageId: json_message.id,
           file: attachment,
-        }),
-      )
+        })
+      }
     }
+  } catch (error) {
+    notification.showErrorNotification(error)
+  } finally {
+    isLoading.value = false
+  }
 
-    router.push({
-      name: "MessageList",
-      query: route.query,
-    })
+  await router.push({
+    name: "MessageList",
+    query: route.query,
   })
 }
 

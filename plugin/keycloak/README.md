@@ -34,7 +34,7 @@ Change the client scope roles to "Single role attribute".
 
 - Client Scopes-> role_list -> Mappers -> role list -> "Single Role Attribute" = true
 
-Add user mappers for "Firstname" "LastName" and "Email" so Chamilo can get those values.
+Add user mappers for "FirstName", "LastName" and "Email" so Chamilo can get those values.
 
 Clients -> (select the client previously created) -> mappers -> create
 
@@ -49,4 +49,6 @@ Repeat the process for the 3 attributes.
 
 Create a demo user in keycloak
 
-Try to login using the keycloak new button in Chamilo. 
+Try to login using the new keycloak button in Chamilo.
+
+When everything works, restrict `Valid redirect URIs` setting from `*` to `http://www.example.org/plugin/keycloak/start.php?acs`

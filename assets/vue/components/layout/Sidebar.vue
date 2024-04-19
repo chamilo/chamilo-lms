@@ -4,13 +4,42 @@
       <h3 class="app-sidebar__top">
         {{ t("Menu") }}
       </h3>
-      <div class="app-sidebar__panel" @click="handlePanelHeaderClick">
-        <PanelMenu :model="menuItems" />
+      <div
+        class="app-sidebar__panel"
+        @click="handlePanelHeaderClick"
+      >
+        <PanelMenu :model="menuItemsBeforeMyCourse" />
+        <PanelMenu
+          v-if="enrolledStore.isInitialized"
+          :model="menuItemMyCourse"
+        />
+        <div
+          v-else
+          class="flex mx-7 my-1.5 py-2 ml-8 gap-4"
+        >
+          <BaseIcon
+            size="small"
+            class="text-sm"
+            icon="courses"
+          />
+          <div
+            v-if="sidebarIsOpen"
+            class="font-bold text-sm self-center"
+          >
+            {{ t("Course") }}
+          </div>
+          <BaseIcon
+            size="small"
+            class="text-sm animate-spin"
+            icon="sync"
+          />
+        </div>
+        <PanelMenu :model="menuItemsAfterMyCourse" />
       </div>
       <div class="app-sidebar__bottom">
         <PageList category-title="footer_private" />
 
-        <p v-html="t('Created with Chamilo copyright year', [ currentYear ])" />
+        <p v-html="t('Created with Chamilo copyright year', [currentYear])" />
       </div>
       <a
         v-if="securityStore.isAuthenticated"
@@ -41,23 +70,26 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue"
+import { onMounted, ref, watch } from "vue"
 import PanelMenu from "primevue/panelmenu"
 import ToggleButton from "primevue/togglebutton"
 import { useI18n } from "vue-i18n"
 import { useSecurityStore } from "../../store/securityStore"
 import { useSidebarMenu } from "../../composables/sidebarMenu"
 import PageList from "../page/PageList.vue"
+import { useEnrolledStore } from "../../store/enrolledStore"
+import BaseIcon from "../basecomponents/BaseIcon.vue"
 
 const { t } = useI18n()
 const securityStore = useSecurityStore()
+const enrolledStore = useEnrolledStore()
 
-const { menuItems } = useSidebarMenu()
+const { menuItemsBeforeMyCourse, menuItemMyCourse, menuItemsAfterMyCourse, initialize } = useSidebarMenu()
 
 const sidebarIsOpen = ref(window.localStorage.getItem("sidebarIsOpen") === "true")
 const expandingDueToPanelClick = ref(false)
 
-const currentYear = new Date().getFullYear();
+const currentYear = new Date().getFullYear()
 
 watch(
   sidebarIsOpen,
@@ -68,30 +100,36 @@ watch(
 
     if (!newValue) {
       if (!expandingDueToPanelClick.value) {
-        const expandedHeaders = document.querySelectorAll('.p-panelmenu-header.p-highlight')
-        expandedHeaders.forEach(header => {
+        const expandedHeaders = document.querySelectorAll(".p-panelmenu-header.p-highlight")
+        expandedHeaders.forEach((header) => {
           header.click()
         })
         sidebarIsOpen.value = false
-        window.localStorage.setItem("sidebarIsOpen", 'false')
+        window.localStorage.setItem("sidebarIsOpen", "false")
       }
     }
     expandingDueToPanelClick.value = false
-}, { immediate: true })
+  },
+  { immediate: true },
+)
 
 const handlePanelHeaderClick = (event) => {
-  const header = event.target.closest('.p-panelmenu-header')
+  const header = event.target.closest(".p-panelmenu-header")
   if (!header) return
 
-  const contentId = header.getAttribute('aria-controls')
+  const contentId = header.getAttribute("aria-controls")
   const contentPanel = document.getElementById(contentId)
 
-  if (contentPanel && contentPanel.querySelector('.p-toggleable-content')) {
+  if (contentPanel && contentPanel.querySelector(".p-toggleable-content")) {
     if (!sidebarIsOpen.value) {
       expandingDueToPanelClick.value = true
       sidebarIsOpen.value = true
-      window.localStorage.setItem("sidebarIsOpen", 'true')
+      window.localStorage.setItem("sidebarIsOpen", "true")
     }
   }
 }
+
+onMounted(async () => {
+  await initialize()
+})
 </script>

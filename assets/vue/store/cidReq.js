@@ -1,13 +1,14 @@
 import { defineStore } from "pinia"
 import { usePlatformConfig } from "./platformConfig"
 import courseService from "../services/courseService"
-import sessionService from "../services/sessionService"
 import { computed, ref } from "vue"
+import sessionService from "../services/sessionService"
 
 export const useCidReqStore = defineStore("cidReq", () => {
   const course = ref(null)
   const session = ref(null)
   const group = ref(null)
+  const isCourseLoaded = ref(true)
 
   const userIsCoach = computed(() => {
     const platformConfigStore = usePlatformConfig()
@@ -56,7 +57,15 @@ export const useCidReqStore = defineStore("cidReq", () => {
       return
     }
 
-    course.value = await courseService.find(iri, { sid })
+    isCourseLoaded.value = false
+
+    try {
+      course.value = await courseService.find(iri, { sid })
+    } catch (error) {
+      console.error(error)
+    } finally {
+      isCourseLoaded.value = true
+    }
   }
 
   const setSessionByIri = async (iri) => {
@@ -64,7 +73,11 @@ export const useCidReqStore = defineStore("cidReq", () => {
       return
     }
 
-    session.value = await sessionService.find(iri)
+    try {
+      session.value = await sessionService.find(iri)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const setCourseAndSessionByIri = async (courseIri, sId = 0) => {
@@ -99,5 +112,7 @@ export const useCidReqStore = defineStore("cidReq", () => {
     resetCid,
     setCourseAndSessionByIri,
     setCourseAndSessionById,
+
+    isCourseLoaded,
   }
 })

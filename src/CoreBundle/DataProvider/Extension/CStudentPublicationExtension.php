@@ -39,12 +39,6 @@ class CStudentPublicationExtension implements QueryCollectionExtensionInterface
             throw new AccessDeniedException();
         }
 
-        $request = $this->requestStack->getCurrentRequest();
-
-        $courseId = $request->query->getInt('cid');
-        $sessionId = $request->query->getInt('sid');
-        $groupId = $request->query->getInt('gid');
-
-        $this->addCourseLinkWithVisibilityConditions($queryBuilder, true, $courseId, $sessionId, $groupId);
+        $this->addCourseLinkWithVisibilityConditions($queryBuilder, true);
     }
 }

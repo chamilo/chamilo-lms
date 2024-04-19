@@ -63,8 +63,6 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface // ,
         // At least the cid so the CourseListener can be called.
         $resourceParentId = $request->query->get('resourceNode_parent');
         $courseId = $request->query->getInt('cid');
-        $sessionId = $request->query->getInt('sid');
-        $groupId = $request->query->getInt('gid');
 
         if (empty($resourceParentId)) {
             throw new AccessDeniedException('resourceNode.parent is required');
@@ -74,7 +72,7 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface // ,
             throw new AccessDeniedException('cid is required');
         }
 
-        $this->addCourseLinkWithVisibilityConditions($queryBuilder, true, $courseId, $sessionId, $groupId);
+        $this->addCourseLinkWithVisibilityConditions($queryBuilder, true);
 
         /*$queryBuilder->
             andWhere('node.creator = :current_user')

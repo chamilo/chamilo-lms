@@ -25,6 +25,8 @@ use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
+use Chamilo\CoreBundle\Filter\CidFilter;
+use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
@@ -109,24 +111,6 @@ use Symfony\Component\Validator\Constraints as Assert;
                         'description' => 'Resource node Parent',
                         'schema' => ['type' => 'integer'],
                     ],
-                    [
-                        'name' => 'cid',
-                        'in' => 'query',
-                        'required' => true,
-                        'description' => 'Course id',
-                        'schema' => [
-                            'type' => 'integer',
-                        ],
-                    ],
-                    [
-                        'name' => 'sid',
-                        'in' => 'query',
-                        'required' => false,
-                        'description' => 'Session id',
-                        'schema' => [
-                            'type' => 'integer',
-                        ],
-                    ],
                 ],
             ]
         ),
@@ -155,6 +139,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         'resourceNode.updatedAt',
     ]
 )]
+#[ApiFilter(filterClass: CidFilter::class)]
+#[ApiFilter(filterClass: SidFilter::class)]
 class CDocument extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
     #[ApiProperty(identifier: true)]

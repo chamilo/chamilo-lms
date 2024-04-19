@@ -20,15 +20,11 @@ use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Bundle\SecurityBundle\Security;
 use UserGroupModel;
 
 final class CCalendarEventExtension implements QueryCollectionExtensionInterface
 {
-    use CourseLinkExtensionTrait;
-
     public function __construct(
-        private readonly Security $security,
         private readonly CidReqHelper $cidReqHelper,
         private readonly UserHelper $userHelper,
         private readonly AccessUrlHelper $accessUrlHelper,

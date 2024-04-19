@@ -20,6 +20,8 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Filter\CidFilter;
+use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CoreBundle\State\CStudentPublicationPostStateProcessor;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use DateTime;
@@ -65,6 +67,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         'assingment.endsOn' => ['nulls_comparison' => OrderFilterInterface::NULLS_SMALLEST],
     ]
 )]
+#[ApiFilter(filterClass: CidFilter::class)]
+#[ApiFilter(filterClass: SidFilter::class)]
 class CStudentPublication extends AbstractResource implements ResourceInterface, Stringable
 {
     #[Groups(['c_student_publication:write'])]

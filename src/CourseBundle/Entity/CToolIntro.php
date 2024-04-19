@@ -17,6 +17,8 @@ use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
+use Chamilo\CoreBundle\Filter\CidFilter;
+use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CourseBundle\Repository\CToolIntroRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
@@ -28,6 +30,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'c_tool_intro')]
 #[ORM\Entity(repositoryClass: CToolIntroRepository::class)]
 #[ApiFilter(filterClass: SearchFilter::class, properties: ['courseTool' => 'exact'])]
+#[ApiFilter(filterClass: CidFilter::class)]
+#[ApiFilter(filterClass: SidFilter::class)]
 class CToolIntro extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
     #[Groups(['c_tool_intro:read'])]

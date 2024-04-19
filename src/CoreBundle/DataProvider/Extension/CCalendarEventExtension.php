@@ -9,9 +9,14 @@ namespace Chamilo\CoreBundle\DataProvider\Extension;
 use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Repository\SessionRepository;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Chamilo\CoreBundle\ServiceHelper\CidReqHelper;
+use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Doctrine\ORM\QueryBuilder;
@@ -25,7 +30,11 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
     public function __construct(
         private readonly Security $security,
         private readonly CidReqHelper $cidReqHelper,
+        private readonly UserHelper $userHelper,
+        private readonly AccessUrlHelper $accessUrlHelper,
         private readonly SettingsManager $settingsManager,
+        private readonly CourseRepository $courseRepository,
+        private readonly SessionRepository $sessionRepository,
     ) {}
 
     public function applyToCollection(
@@ -52,9 +61,8 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
         $courseId = $this->cidReqHelper->getCourseId();
         $sessionId = $this->cidReqHelper->getSessionId();
         $groupId = $this->cidReqHelper->getGroupId();
-
-        /** @var ?User $user */
-        $user = $this->security->getUser();
+        $user = $this->userHelper->getCurrent();
+        $accessUrl = $this->accessUrlHelper->getCurrent();
 
         $inCourseBase = !empty($courseId);
         $inSession = !empty($sessionId);
@@ -71,6 +79,8 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
 
         if ($inPersonalList && $user) {
             $this->addPersonalCalendarConditions($qb, $user);
+            $this->addCourseConditions($qb, $user, $accessUrl);
+            $this->addSessionConditions($qb, $user, $accessUrl);
         }
     }
 
@@ -116,5 +126,75 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
             ->orWhere($expr)
             ->setParameter(':visibility_all', CCalendarEvent::SUBSCRIPTION_VISIBILITY_ALL)
         ;
+    }
+
+    private function addCourseConditions(QueryBuilder $qb, User $user, AccessUrl $accessUrl): void
+    {
+        $courseSubscriptions = $this->courseRepository->getCoursesByUser($user, $accessUrl);
+
+        $courseIdList = [];
+
+        foreach ($courseSubscriptions as $courseSubscription) {
+            $courseIdList[] = $courseSubscription->getCourse()->getId();
+        }
+
+        if ($courseIdList) {
+            $qb
+                ->orWhere(
+                    $qb->expr()->andX(
+                        $qb->expr()->in('resource_links.course', ':course_id_list'),
+                        $qb->expr()->isNull('resource_links.session')
+                    )
+                )
+                ->setParameter('course_id_list', $courseIdList)
+            ;
+        }
+    }
+
+    private function addSessionConditions(QueryBuilder $qb, User $user, AccessUrl $accessUrl): void
+    {
+        $sessionIdList = [];
+        $courseIdList = [];
+
+        if ($user->isHRM()
+            && 'true' === $this->settingsManager->getSetting('session.drh_can_access_all_session_content')
+        ) {
+            $sessions = $this->sessionRepository
+                ->getUserFollowedSessionsInAccessUrl($user, $accessUrl)
+                ->getQuery()
+                ->getResult()
+            ;
+
+            foreach ($sessions as $session) {
+                foreach ($session->getCourses() as $sessionRelCourse) {
+                    $courseIdList[] = $sessionRelCourse->getCourse()->getId();
+                }
+
+                $sessionIdList[] = $session->getId();
+            }
+        } else {
+            $sessions = $this->sessionRepository->getSessionsByUser($user, $accessUrl);
+
+            foreach ($sessions as $session) {
+                foreach ($session->getSessionRelCourseByUser($user) as $sessionRelCourse) {
+                    $courseIdList[] = $sessionRelCourse->getCourse()->getId();
+                }
+
+                $sessionIdList[] = $session->getId();
+            }
+        }
+
+        if ($sessionIdList && $courseIdList) {
+            $qb
+                ->orWhere(
+                    $qb->expr()->andX(
+                        $qb->expr()->in('resource_links.session', ':session_id_list'),
+                        $qb->expr()->in('resource_links.course', ':course_id_list')
+                    )
+                )
+                ->setParameter('session_id_list', array_unique($sessionIdList))
+                ->setParameter('course_id_list', $courseIdList)
+            ;
+        }
     }
 }

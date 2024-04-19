@@ -213,6 +213,8 @@ $(function() {
         sessionStorage.removeItem('system_templateValues');
         sessionStorage.removeItem('formValues');
     });
+    
+    ".$result['js']."
 });
 </script>";
 

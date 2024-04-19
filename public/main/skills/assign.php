@@ -153,7 +153,7 @@ $currentUrl = api_get_self().'?user='.$userId.'&current='.$currentLevel;
 
 $form = new FormValidator('assign_skill', 'POST', $currentUrl);
 $form->addHeader(get_lang('Assign skill'));
-$form->addText('user_name', get_lang('Username'), false);
+$form->addText('user_name', '', false);
 
 $levelName = get_lang('Skill');
 if (!empty($skillLevels)) {
@@ -359,7 +359,7 @@ if ($form->validate()) {
     exit;
 }
 
-$form->setDefaults(['user_name' => UserManager::formatUserFullName($user, true)]);
+$form->setDefaults(['user_name' => get_lang('Username').': '.UserManager::formatUserFullName($user, true)]);
 $form->freeze(['user_name']);
 
 if (api_is_drh()) {

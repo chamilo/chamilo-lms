@@ -49,6 +49,6 @@ Repeat the process for the 3 attributes.
 
 Create a demo user in keycloak
 
-Try to login using the keycloak new button in Chamilo.
+Try to login using the new keycloak button in Chamilo.
 
 When everything works, restrict `Valid redirect URIs` setting from `*` to `http://www.example.org/plugin/keycloak/start.php?acs`

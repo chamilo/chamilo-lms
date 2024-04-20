@@ -115,7 +115,7 @@ class DateTimePicker extends HTML_QuickForm_text
      *
      * @return string Locale code (e.g., 'es', 'en', 'fr').
      */
-    private function getLocaleCode()
+    private function getLocaleCode(): string
     {
         $locale = api_get_language_isocode();
         $userInfo = api_get_user_info();

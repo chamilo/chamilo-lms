@@ -263,9 +263,9 @@ if ($objExercise->selectAttempts() > 0) {
     $attempt_count = Event::get_attempt_count(
         $user_id,
         $exerciseId,
-        $learnpath_id,
-        $learnpath_item_id,
-        $learnpath_item_view_id
+        (int) $learnpath_id,
+        (int) $learnpath_item_id,
+        (int) $learnpath_item_view_id
     );
 
     if ($attempt_count >= $objExercise->selectAttempts()) {
@@ -848,9 +848,9 @@ if ($formSent && isset($_POST)) {
                     $attempt_count = Event::get_attempt_count(
                         api_get_user_id(),
                         $exerciseId,
-                        $learnpath_id,
-                        $learnpath_item_id,
-                        $learnpath_item_view_id
+                        (int) $learnpath_id,
+                        (int) $learnpath_item_id,
+                        (int) $learnpath_item_view_id
                     );
                     if ($attempt_count >= $objExercise->selectAttempts()) {
                         echo Display::return_message(
@@ -917,9 +917,9 @@ if (0 != $question_count) {
                     $attempt_count = Event::get_attempt_count(
                         api_get_user_id(),
                         $exerciseId,
-                        $learnpath_id,
-                        $learnpath_item_id,
-                        $learnpath_item_view_id
+                        (int) $learnpath_id,
+                        (int) $learnpath_item_id,
+                        (int) $learnpath_item_view_id
                     );
                     if ($attempt_count >= $objExercise->selectAttempts()) {
                         Display::return_message(

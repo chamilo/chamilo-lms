@@ -116,8 +116,8 @@
       </div>
 
       <CourseIntroduction
-        v-if="isAllowedToEdit"
         ref="courseIntroEl"
+        :is-allowed-to-edit="isAllowedToEdit"
       />
 
       <div

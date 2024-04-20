@@ -30,6 +30,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
+use ChamiloSession;
 
 /**
  * Class CourseListener.
@@ -114,6 +115,9 @@ class CourseListener implements EventSubscriberInterface
             $sessionHandler->set('cid', $course->getId());
             $sessionHandler->set('_cid', $course->getCode());
             $sessionHandler->set('_course', $courseInfo);
+            ChamiloSession::write('cid', $course->getId());
+            ChamiloSession::write('_real_cid', $course->getId());
+            ChamiloSession::write('_course', $courseInfo);
 
             // Setting variables for the twig templates.
             $twig->addGlobal('course', $course);

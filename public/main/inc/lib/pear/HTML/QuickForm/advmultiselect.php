@@ -473,7 +473,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
         } else {
             $this->_elementTemplate = '
             {javascript}
-            <div class="grid grid-cols-3">
+            <div class="grid grid-cols-3 advmultiselect">
               <div><!-- BEGIN label_2 -->{label_2}<!-- END label_2 --> {unselected}</div>
               <div><div class="text-center">{add}{remove}</div></div>
               <div><!-- BEGIN label_3 -->{label_3}<!-- END label_3 -->{selected}</div>

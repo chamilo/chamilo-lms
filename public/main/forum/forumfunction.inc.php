@@ -4282,7 +4282,7 @@ function set_notification($content, $id, $addOnly = false, $userInfo = [], $cour
  * about a new post in a certain forum or thread.
  *
  * @param string $content does the user want to be notified about a forum or about a thread
- * @param int    $id      the id of the forum or thread
+ * @param int $id      the id of the forum or thread
  *
  * @return array returns
  *
@@ -4293,7 +4293,7 @@ function set_notification($content, $id, $addOnly = false, $userInfo = [], $cour
  *
  * @since May 2008, dokeos 1.8.5
  */
-function get_notifications($content, $id)
+function get_notifications(string $content, int $id): array
 {
     // Database table definition
     $table_users = Database::get_main_table(TABLE_MAIN_USER);
@@ -4306,14 +4306,21 @@ function get_notifications($content, $id)
         $field = 'forum_id';
     }
 
-    $id = (int) $id;
+    $sessionId = api_get_session_id();
+    $conditionSession = "";
+    if (!empty($sessionId)) {
+        $users = SessionManager::getUsersByCourseSession($sessionId, api_get_course_info());
+        if (!empty($users)) {
+            $conditionSession = " AND user.id IN(".implode(',', $users).")";
+        }
+    }
 
     $sql = "SELECT user.id as user_id, user.firstname, user.lastname, user.email, user.id user
             FROM $table_users user, $table_notification notification
             WHERE
                 notification.c_id = $course_id AND user.active = 1 AND
                 user.id = notification.user_id AND
-                notification.$field = $id ";
+                notification.$field = $id $conditionSession";
 
     $result = Database::query($sql);
     $return = [];

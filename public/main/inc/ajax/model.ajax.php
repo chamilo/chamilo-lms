@@ -16,6 +16,8 @@ require_once __DIR__.'/../global.inc.php';
 $action = $_GET['a'];
 $page = (int) $_REQUEST['page']; //page
 $limit = (int) $_REQUEST['rows']; //quantity of rows
+$cid = isset($_REQUEST['cid']) ? (int) $_REQUEST['cid'] : null;
+$sid = isset($_REQUEST['sid']) ? (int) $_REQUEST['sid'] : null;
 
 // Makes max row persistence after refreshing the grid
 $savedRows = Session::read('max_rows_'.$action);
@@ -551,7 +553,7 @@ switch ($action) {
         $count = $skill->getUserListSkillRankingCount();
         break;
     case 'get_course_announcements':
-        $count = AnnouncementManager::getNumberAnnouncements();
+        $count = AnnouncementManager::getNumberAnnouncements($cid, $sid);
         break;
     case 'get_work_teacher':
         $count = getWorkListTeacher(0, $limit, null, null, $whereCondition, true);
@@ -1371,13 +1373,8 @@ switch ($action) {
         $result = AnnouncementManager::getAnnouncements(
             null,
             null,
-            false,
-            $start,
-            $limit,
-            $sidx,
-            $sord,
-            $titleToSearch,
-            $userIdToSearch
+            $cid,
+            $sid
         );
 
         break;

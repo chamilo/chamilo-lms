@@ -2,6 +2,10 @@
 
 import { usePlatformConfig } from "../vue/store/platformConfig";
 
+function normalizeLocale(locale) {
+  return locale.split('_')[0];
+}
+
 export default function translateHtml() {
   const platformConfigStore = usePlatformConfig();
 
@@ -10,15 +14,13 @@ export default function translateHtml() {
     window.user.locale &&
     "true" === platformConfigStore.getSetting("editor.translate_html")
   ) {
-    var isoCode = window.user.locale;
+    var isoCode = normalizeLocale(window.user.locale);
     const translateElement = document.querySelector(".mce-translatehtml");
     if (translateElement) {
       document.querySelectorAll(".mce-translatehtml").forEach(function (el) {
         el.style.display = "none";
       });
-      const selectedLang = document.querySelectorAll(
-        '[lang="' + isoCode + '"]'
-      );
+      const selectedLang = document.querySelectorAll(`[lang="${isoCode}"]`);
       if (selectedLang.length > 0) {
         selectedLang.forEach(function (userLang) {
           userLang.classList.remove("hidden");
@@ -37,19 +39,7 @@ export default function translateHtml() {
         el.style.display = "none";
       });
 
-      // To show only the content by user language.
-      if (isoCode == "pl_PL") {
-        isoCode = "pl";
-      }
-      if (isoCode == "fr_FR") {
-        isoCode = "fr";
-      }
-      if (isoCode == "en_US") {
-        isoCode = "en";
-      }
-      const selectedLang = document.querySelectorAll(
-        'span[lang="' + isoCode + '"]'
-      );
+      const selectedLang = document.querySelectorAll(`span[lang="${isoCode}"]`);
       if (selectedLang.length > 0) {
         selectedLang.forEach(function (userLang) {
           userLang.classList.remove("hidden");

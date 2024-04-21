@@ -463,6 +463,10 @@ class Category implements GradebookItem
             $bond = ' AND';
         }
 
+        if (!isset($session_id)) {
+            $session_id = api_get_session_id();
+        }
+
         if (empty($session_id)) {
             $sql .= $bond.' (session_id IS NULL OR session_id = 0) ';
         } else {
@@ -1466,7 +1470,7 @@ class Category implements GradebookItem
     {
         $tbl_main_courses = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_main_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $sql = 'SELECT DISTINCT(code), title, id
+        $sql = 'SELECT DISTINCT(code), title, cc.id
                 FROM '.$tbl_main_courses.' cc, '.$tbl_main_course_user.' cu
                 WHERE cc.id = cu.c_id AND cu.status = '.COURSEMANAGER;
         if (!api_is_platform_admin()) {

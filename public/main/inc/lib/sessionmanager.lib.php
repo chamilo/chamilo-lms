@@ -2766,7 +2766,7 @@ class SessionManager
                             $sessionName = $session->getTitle();
                             $cat->set_name($courseInfo['code'].' - '.get_lang('Session').' '.$sessionName);
                             $cat->set_session_id($sessionId);
-                            $cat->set_course_code($courseInfo['code']);
+                            $cat->setCourseId($courseId);
                             $cat->set_description(null);
                             //$cat->set_user_id($stud_id);
                             $cat->set_parent_id(0);
@@ -2820,7 +2820,7 @@ class SessionManager
                             $evaluationList = $cat->get_evaluations(
                                 null,
                                 false,
-                                $courseInfo['code'],
+                                $courseId,
                                 0
                             );
 

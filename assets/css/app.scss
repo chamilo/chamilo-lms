@@ -599,6 +599,32 @@ form .field {
   textarea {
     width: 100%;
   }
+
+  .freeze {
+    display: block;
+    padding-top: 10px;
+  }
+
+  .freeze + label,
+  .html-editor-container + label,
+  .advmultiselect + label {
+    font-size: 13px;
+    @apply absolute top-0 left-0 text-support-3 text-caption px-1 bg-white text-primary;
+  }
+}
+
+.flatpickr-calendar .flatpickr-validate-btn {
+  margin-top: 10px;
+  width: 100%;
+  padding: 5px;
+  background-color: #569ff7;
+  border: none;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+.mce-translatehtml, span[lang] {
+  display: none;
 }
 
 //@import 'primevue-md-light-indigo/theme.css';

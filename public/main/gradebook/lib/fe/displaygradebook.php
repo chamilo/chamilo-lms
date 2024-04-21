@@ -383,7 +383,7 @@ class DisplayGradebook
                         Display::getMdiIcon('table-plus', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add classroom activity')).'</a>';
                     $cats = Category::load($selectcat);
 
-                    if (!empty($cats[0]->getCourseId()) && empty($messageResource)) {
+                    if (isset($cats[0]) && !empty($cats[0]->getCourseId()) && empty($messageResource)) {
                         $actionsLeft .= '<a href="gradebook_add_link.php?'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'">'.
                             Display::getMdiIcon('link-plus', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add online activity')).'</a>';
                     } else {
@@ -426,7 +426,7 @@ class DisplayGradebook
                     // Right icons
                     if ($accessToEdit) {
                         $actionsRight = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id(
-                            ).'&cid='.$catobj->getCourseId().'&id_session='.$catobj->get_session_id().'">'.
+                            ).'&cid='.$catobj->getCourseId().'&sid='.$catobj->get_session_id().'">'.
                             Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit')).'</a>';
 
                         if ('true' == api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') &&
@@ -504,7 +504,7 @@ class DisplayGradebook
             }
 
             $min_certification = get_lang('Minimum certification score').' : '.$min_certification;
-            $edit_icon = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id().'&cid='.$catobj->getCourseId().'&id_session='.$catobj->get_session_id().'">'.
+            $edit_icon = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id().'&cid='.$catobj->getCourseId().'&sid='.$catobj->get_session_id().'">'.
                 Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit')).'</a>';
 
             $msg = $weight.' - '.$min_certification.$edit_icon;
@@ -587,7 +587,7 @@ class DisplayGradebook
         $allevals = $catcourse[0]->get_evaluations(
             $userId,
             true,
-            api_get_course_id()
+            api_get_course_int_id()
         );
         $alllinks = $catcourse[0]->get_links(
             $userId,

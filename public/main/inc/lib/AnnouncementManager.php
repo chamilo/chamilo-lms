@@ -1336,51 +1336,35 @@ class AnnouncementManager
     /**
      * @param $stok
      * @param $announcement_number
-     * @param bool   $getCount
-     * @param null   $start
-     * @param null   $limit
-     * @param string $sidx
-     * @param string $sord
-     * @param string $titleToSearch
-     * @param int    $userIdToSearch
-     * @param int    $userId
-     * @param int    $courseId
-     * @param int    $sessionId
+     * @param int $courseId
+     * @param int $sessionId
      *
      * @return array
      */
     public static function getAnnouncements(
         $stok,
         $announcement_number,
-        $getCount = false,
-        $start = null,
-        $limit = null,
-        $sidx = '',
-        $sord = '',
-        $titleToSearch = '',
-        $userIdToSearch = 0,
-        $userId = 0,
-        $courseId = 0,
-        $sessionId = 0
-    ) {
-        $group_id = api_get_group_id();
-        $session_id = $sessionId ?: api_get_session_id();
-        if (empty($courseId)) {
-            $courseInfo = api_get_course_info();
-            $courseId = $courseInfo['real_id'];
-        } else {
-            $courseId = (int) $courseId;
-            $courseInfo = api_get_course_info_by_id($courseId);
-        }
+        ?int $courseId = null,
+        ?int $sessionId = null
+    ): array {
+        $groupId = api_get_group_id();
 
-        if (empty($courseInfo)) {
-            return [];
+        if (null === $courseId) {
+            $courseId = api_get_course_int_id();
+        }
+        if (null === $sessionId) {
+            $sessionId = api_get_session_id();
         }
 
         $repo = Container::getAnnouncementRepository();
         $course = api_get_course_entity($courseId);
-        $session = api_get_session_entity($session_id);
-        $group = api_get_group_entity(api_get_group_id());
+
+        if (null === $course) {
+            return [];
+        }
+
+        $session = api_get_session_entity($sessionId);
+        $group = api_get_group_entity($groupId);
 
         if (api_is_allowed_to_edit(false, true)) {
             $qb = $repo->getResourcesByCourse($course, $session, $group, null, true, true);
@@ -1398,7 +1382,8 @@ class AnnouncementManager
         $bottomAnnouncement = $announcement_number;
         $displayed = [];
 
-        $actionUrl = api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq();
+        $cidReq = 'cid='.$courseId.'&sid='.$sessionId.'&gid='.$groupId;
+        $actionUrl = api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.$cidReq;
         $emailIcon = Display::getMdiIcon(StateIcon::MAIL_NOTIFICATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Announcement sent by e-mail'));
         $attachmentIcon = Display::getMdiIcon(ObjectIcon::ATTACHMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Attachment'));
 
@@ -1478,16 +1463,6 @@ class AnnouncementManager
             get_lang('Down')
         );
 
-        /*$isTutor = false;
-        if (!empty($group_id)) {
-            $groupInfo = GroupManager::get_group_properties(api_get_group_id());
-            //User has access in the group?
-            $isTutor = GroupManager::is_tutor_of_group(
-                api_get_user_id(),
-                $groupInfo
-            );
-        }*/
-
         $results = [];
         /** @var CAnnouncement $announcement */
         foreach ($announcements as $announcement) {
@@ -1503,7 +1478,7 @@ class AnnouncementManager
                 $disableEdit = false;
                 $to = [];
                 $separated = AbstractResource::separateUsersGroups($to);
-                if (!empty($group_id)) {
+                if (!empty($groupId)) {
                     // If the announcement was sent to many groups, disable edition inside a group
                     if (isset($separated['groups']) && count($separated['groups']) > 1) {
                         $disableEdit = true;
@@ -1515,7 +1490,7 @@ class AnnouncementManager
                     }
 
                     // Announcement sent to only a user
-                    if ($separated['groups'] > 1 && !in_array($group_id, $separated['groups'])) {
+                    if ($separated['groups'] > 1 && !in_array($groupId, $separated['groups'])) {
                         $disableEdit = true;
                     }
                 } else {
@@ -1525,12 +1500,6 @@ class AnnouncementManager
                 }
 
                 $title = $announcement->getTitle().$groupReference.$sent_to_icon;
-                /*$item_visibility = api_get_item_visibility(
-                    $courseInfo,
-                    TOOL_ANNOUNCEMENT,
-                    $row['id'],
-                    $session_id
-                );*/
                 $visibility = $announcement->isVisible($course, $session);
 
                 // show attachment list
@@ -1554,14 +1523,6 @@ class AnnouncementManager
                     $actionUrl.'&action=view&id='.$announcementId
                 );
 
-                // we can edit if : we are the teacher OR the element belongs to
-                // the session we are coaching OR the option to allow users to edit is on
-                /*if api_is_allowed_to_edit(false, true) ||
-                     (api_is_session_general_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $announcementId)) ||
-                     (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()) ||
-                     ($isTutor)
-                     //$row['to_group_id'] == $group_id &&
-                 ) {*/
                 if ($repo->isGranted(ResourceNodeVoter::EDIT, $announcement)) {
                     if (true === $disableEdit) {
                         $modify_icons = $editIconDisable;
@@ -1644,45 +1605,23 @@ class AnnouncementManager
     /**
      * @return int
      */
-    public static function getNumberAnnouncements()
+    public static function getNumberAnnouncements(?int $courseId = null, ?int $sessionId = null): int
     {
-        $session_id = api_get_session_id();
-        $courseInfo = api_get_course_info();
-        $courseId = $courseInfo['real_id'];
-        $userId = api_get_user_id();
+        if (null === $courseId) {
+            $courseId = api_get_course_int_id();
+        }
+        if (null === $sessionId) {
+            $sessionId = api_get_session_id();
+        }
 
+        $userId = api_get_user_id();
         $repo = Container::getAnnouncementRepository();
         $course = api_get_course_entity($courseId);
-        $session = api_get_session_entity($session_id);
+        $session = api_get_session_entity($sessionId);
         $group = api_get_group_entity(api_get_group_id());
         if (api_is_allowed_to_edit(false, true)) {
             // check teacher status
             if (empty($_GET['origin']) || 'learnpath' !== $_GET['origin']) {
-                /*if (0 == api_get_group_id()) {
-                    $group_condition = '';
-                } else {
-                    $group_condition = " AND (ip.to_group_id='".api_get_group_id()."' OR ip.to_group_id = 0 OR ip.to_group_id IS NULL)";
-                }
-
-                $sql = "SELECT
-                            announcement.*,
-                            ip.visibility,
-                            ip.to_group_id,
-                            ip.insert_user_id
-                        FROM $tbl_announcement announcement
-                        INNER JOIN $tbl_item_property ip
-                        ON (announcement.c_id = ip.c_id AND announcement.id = ip.ref)
-                        WHERE
-                            announcement.c_id = $courseId AND
-                            ip.c_id = $courseId AND
-                            ip.tool = 'announcement' AND
-                            ip.visibility <> '2'
-                            $group_condition
-                            $condition_session
-                        GROUP BY ip.ref
-                        ORDER BY display_order DESC
-                        LIMIT 0, $maximum";*/
-
                 $qb = $repo->getResourcesByCourse($course, $session, $group);
                 $qb->select('count(resource)');
 
@@ -1700,5 +1639,7 @@ class AnnouncementManager
 
             return $qb->getQuery()->getSingleScalarResult();
         }
+
+        return 0;
     }
 }

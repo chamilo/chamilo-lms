@@ -79,14 +79,25 @@ class DateTimePicker extends HTML_QuickForm_text
 
         $js = $localeScript . "<script>
         document.addEventListener('DOMContentLoaded', function () {
-            flatpickr('#{$id}', {
+            const fp = flatpickr('#{$id}', {
                 locale: '{$localeCode}',
                 altInput: true,
                 altFormat: '".get_lang('F d, Y')." ".get_lang('at')." H:i',
                 enableTime: true,
                 dateFormat: 'Y-m-d H:i',
                 time_24hr: true,
-                wrap: false
+                wrap: false,
+                onReady: function(selectedDates, dateStr, instance) {
+                    const validateButton = document.createElement('button');
+                    validateButton.textContent = '".get_lang('Validate')."';
+                    validateButton.className = 'flatpickr-validate-btn';
+                    validateButton.type = 'button';
+                    validateButton.onclick = function() {
+                        instance.close();
+                    };
+
+                    instance.calendarContainer.appendChild(validateButton);
+                }
             });
 
             document.querySelector('label[for=\"' + '{$id}' + '\"]').classList.add('datepicker-label');
@@ -104,7 +115,7 @@ class DateTimePicker extends HTML_QuickForm_text
      *
      * @return string Locale code (e.g., 'es', 'en', 'fr').
      */
-    private function getLocaleCode()
+    private function getLocaleCode(): string
     {
         $locale = api_get_language_isocode();
         $userInfo = api_get_user_info();

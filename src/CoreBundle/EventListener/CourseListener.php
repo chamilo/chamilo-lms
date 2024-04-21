@@ -59,10 +59,6 @@ class CourseListener implements EventSubscriberInterface
 
         $request = $event->getRequest();
 
-        if (!$request->hasPreviousSession()) {
-            return;
-        }
-
         // Ignore debug
         if ('_wdt' === $request->attributes->get('_route')) {
             return;

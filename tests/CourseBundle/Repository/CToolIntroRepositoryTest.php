@@ -141,6 +141,7 @@ class CToolIntroRepositoryTest extends AbstractApiTest
             [
                 'query' => [
                     'cid' => $course->getId(),
+                    'sid' => '',
                 ],
             ]
         );
@@ -170,8 +171,12 @@ class CToolIntroRepositoryTest extends AbstractApiTest
             '@context' => '/api/contexts/CToolIntro',
             '@id' => '/api/c_tool_intros',
             '@type' => 'hydra:Collection',
-            'hydra:totalItems' => 1,
+            'hydra:totalItems' => 2, // course intro + session course intro
             'hydra:member' => [
+                [
+                    '@type' => 'CToolIntro',
+                    'introText' => 'test',
+                ],
                 [
                     '@type' => 'CToolIntro',
                     'introText' => 'test in session',

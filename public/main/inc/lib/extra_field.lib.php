@@ -3176,7 +3176,7 @@ JAVASCRIPT;
                     }
                     break;
                 case self::FIELD_TYPE_SELECT_MULTIPLE:
-                    $displayedValue = $valueData['field_value'];
+                    $displayedValue = $valueData['value'];
                     break;
                 default:
                     $displayedValue = $valueData['field_value'];

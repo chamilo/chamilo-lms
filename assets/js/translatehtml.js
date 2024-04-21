@@ -1,20 +1,13 @@
 /* For licensing terms, see /license.txt */
 
-import { usePlatformConfig } from "../vue/store/platformConfig"
-
 function normalizeLocale(locale) {
   return locale.split('_')[0]
 }
 
-export default async function translateHtml() {
-  try {
-    const platformConfigStore = usePlatformConfig()
-    await platformConfigStore.initialize()
-
+export default function translateHtml() {
     if (
       window.user &&
-      window.user.locale &&
-      "true" === platformConfigStore.getSetting("editor.translate_html")
+      window.user.locale
     ) {
       var isoCode = normalizeLocale(window.user.locale)
       const translateElement = document.querySelector(".mce-translatehtml")
@@ -50,7 +43,4 @@ export default async function translateHtml() {
         }
       }
     }
-  } catch (error) {
-    console.error("Error in translateHtml:", error)
-  }
 }

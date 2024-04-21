@@ -1,84 +1,104 @@
 <template>
-  <BaseToolbar v-if="securityStore.isAuthenticated && isCurrentTeacher">
-    <template v-if="isCertificateMode">
-      <BaseButton
-        :label="t('Create certificate')"
-        icon="file-add"
-        type="black"
-        @click="goToNewDocument"
-      />
-      <BaseButton
-        :label="t('Upload')"
-        icon="file-upload"
-        type="black"
-        @click="goToUploadFile"
-      />
-    </template>
-    <template v-else>
-      <BaseButton
-        v-if="showBackButtonIfNotRootFolder"
-        :label="t('Back')"
-        icon="back"
-        type="gray"
-        @click="back"
-      />
-      <BaseButton
-        :label="t('New document')"
-        icon="file-add"
-        type="success"
-        @click="goToNewDocument"
-      />
-      <BaseButton
-        :label="t('Upload')"
-        icon="file-upload"
-        type="success"
-        @click="goToUploadFile"
-      />
-      <BaseButton
-        :label="t('New folder')"
-        icon="folder-plus"
-        type="success"
-        @click="openNew"
-      />
-      <BaseButton
-        :disabled="true"
-        :label="t('New drawing')"
-        icon="drawing"
-        type="success"
-      />
-      <BaseButton
-        :label="t('Record audio')"
-        icon="record-add"
-        type="success"
-        @click="showRecordAudioDialog"
-      />
-      <BaseButton
-        :disabled="true"
-        :label="t('New cloud file')"
-        icon="file-cloud-add"
-        type="success"
-      />
-      <BaseButton
-        :disabled="!hasImageInDocumentEntries"
-        :label="t('Slideshow')"
-        icon="view-gallery"
-        type="black"
-        @click="showSlideShowWithFirstImage"
-      />
-      <BaseButton
-        :label="t('Usage')"
-        icon="usage"
-        type="black"
-        @click="showUsageDialog"
-      />
-      <BaseButton
-        :disabled="true"
-        :label="t('Download all')"
-        icon="download"
-        type="primary"
-      />
-    </template>
-  </BaseToolbar>
+  <SectionHeader
+    v-if="securityStore.isAuthenticated"
+    :title="t('Documents')"
+  >
+    <BaseButton
+      v-if="showNewCertificateButton"
+      :label="t('Create certificate')"
+      icon="file-add"
+      only-icon
+      type="black"
+      @click="goToNewDocument"
+    />
+    <BaseButton
+      v-if="showUploadCertificateButton"
+      :label="t('Upload')"
+      icon="file-upload"
+      only-icon
+      type="black"
+      @click="goToUploadFile"
+    />
+
+    <BaseButton
+      v-if="showBackButtonIfNotRootFolder"
+      :label="t('Back')"
+      icon="back"
+      only-icon
+      type="gray"
+      @click="back"
+    />
+    <BaseButton
+      v-if="showNewDocumentButton"
+      :label="t('New document')"
+      icon="file-add"
+      only-icon
+      type="success"
+      @click="goToNewDocument"
+    />
+    <BaseButton
+      v-if="showUploadButton"
+      :label="t('Upload')"
+      icon="file-upload"
+      only-icon
+      type="success"
+      @click="goToUploadFile"
+    />
+    <BaseButton
+      v-if="showNewFolderButton"
+      :label="t('New folder')"
+      icon="folder-plus"
+      only-icon
+      type="success"
+      @click="openNew"
+    />
+    <BaseButton
+      v-if="showNewDrawingButton"
+      :label="t('New drawing')"
+      icon="drawing"
+      only-icon
+      type="success"
+    />
+    <BaseButton
+      v-if="showRecordAudioButton"
+      :label="t('Record audio')"
+      icon="record-add"
+      only-icon
+      type="success"
+      @click="showRecordAudioDialog"
+    />
+    <BaseButton
+      v-if="showNewCloudFileButton"
+      :label="t('New cloud file')"
+      icon="file-cloud-add"
+      only-icon
+      type="success"
+    />
+    <BaseButton
+      v-if="showSlideshowButton"
+      :disabled="!hasImageInDocumentEntries"
+      :label="t('Slideshow')"
+      icon="view-gallery"
+      only-icon
+      type="black"
+      @click="showSlideShowWithFirstImage"
+    />
+    <BaseButton
+      v-if="showUsageButton"
+      :label="t('Usage')"
+      icon="usage"
+      only-icon
+      type="black"
+      @click="showUsageDialog"
+    />
+    <BaseButton
+      v-if="showDownloadAllButton"
+      :label="t('Download all')"
+      icon="download"
+      only-icon
+      type="primary"
+    />
+  </SectionHeader>
 
   <DataTable
     v-model:filters="filters"
@@ -372,6 +392,8 @@ import { useNotification } from "../../composables/notification"
 import { useSecurityStore } from "../../store/securityStore"
 import prettyBytes from "pretty-bytes"
 import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
+import { useDocumentActionButtons } from "../../composables/document/documentActionButtons"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const store = useStore()
 const route = useRoute()
@@ -385,6 +407,20 @@ const { cid, sid, gid } = useCidReq()
 const { isImage, isHtml } = useFileUtils()
 
 const { relativeDatetime } = useFormatDate()
+
+const {
+  showNewDocumentButton,
+  showUploadButton,
+  showNewFolderButton,
+  showNewDrawingButton,
+  showRecordAudioButton,
+  showNewCloudFileButton,
+  showSlideshowButton,
+  showUsageButton,
+  showDownloadAllButton,
+  showNewCertificateButton,
+  showUploadCertificateButton,
+} = useDocumentActionButtons()
 
 const item = ref({})
 const usageData = ref({})

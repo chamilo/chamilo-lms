@@ -224,6 +224,7 @@ class CourseRepositoryTest extends AbstractApiTest
         $this->assertSame(1, $course->getStudentSubscriptions()->count());
         $this->assertSame(0, $course->getTeachersSubscriptions()->count());
 
+        $this->getClientWithGuiCredentials('student', 'student');
         $client->request('GET', sprintf('/course/%s/home', $course->getId()));
         $this->assertResponseIsSuccessful();
     }
@@ -264,10 +265,10 @@ class CourseRepositoryTest extends AbstractApiTest
         $courseRepo->update($course);
         $this->assertSame(2, $course->getTeachersSubscriptions()->count());
 
-        $teacher = $this->getUser('teacher');
-
-        $token = $this->getUserTokenFromUser($teacher);
-        $this->createClientWithCredentials($token)->request('GET', sprintf('/course/%s/home', $course->getId()));
+        $this
+            ->getClientWithGuiCredentials('teacher', 'teacher')
+            ->request('GET', sprintf('/course/%s/home', $course->getId()))
+        ;
         $this->assertResponseIsSuccessful();
     }
 
@@ -290,10 +291,10 @@ class CourseRepositoryTest extends AbstractApiTest
 
         $this->assertSame(1, $course->getUsers()->count());
 
-        // retrieve the admin
-        $student = $this->getUser('student');
-        $token = $this->getUserTokenFromUser($student);
-        $this->createClientWithCredentials($token)->request('GET', sprintf('/course/%s/home', $course->getId()));
+        $this
+            ->getClientWithGuiCredentials('student', 'student')
+            ->request('GET', sprintf('/course/%s/home', $course->getId()))
+        ;
         $this->assertResponseIsSuccessful();
     }
 

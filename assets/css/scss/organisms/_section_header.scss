@@ -1,5 +1,6 @@
 .section-header {
-  @apply flex gap-4 items-center border-b border-b-gray-30;
+  @apply flex flex-col gap-2 border-b border-b-gray-30
+    md:flex-row sm:items-center;
 
   &--h2 {
     @apply pb-6 ;
@@ -10,10 +11,14 @@
   }
 
   &__title {
-    @apply mr-auto;
+    @apply sm:mr-auto;
+  }
+
+  &__actions {
+    @apply flex gap-2 flex-wrap;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply mr-auto;
+    @apply sm:mr-auto;
   }
 }

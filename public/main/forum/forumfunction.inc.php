@@ -1972,7 +1972,7 @@ function show_add_post_form(CForum $forum, CForumThread $thread, CForumPost $pos
     if ($showPreview) {
         if ('newthread' !== $action && !empty($threadId)) {
             $iframe = '<iframe style="border: 1px solid black"
-            src="iframe_thread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId.'#'.$postId.'" width="100%"></iframe>';
+            src="'.api_get_path(WEB_CODE_PATH).'forum/iframe_thread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId.'#'.$postId.'" width="100%"></iframe>';
         }
         if (!empty($iframe)) {
             $form->addElement('label', get_lang('Thread'), $iframe);

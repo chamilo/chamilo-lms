@@ -149,9 +149,9 @@ if ('embeddable' !== $origin) {
 $attempt_count = Event::get_attempt_count(
     $currentUserId,
     $objExercise->id,
-    $learnpath_id,
-    $learnpath_item_id,
-    $learnpath_item_view_id
+    (int) $learnpath_id,
+    (int) $learnpath_item_id,
+    (int) $learnpath_item_view_id
 );
 
 if ($objExercise->selectAttempts() > 0) {

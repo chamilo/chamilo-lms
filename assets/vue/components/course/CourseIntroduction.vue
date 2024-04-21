@@ -18,6 +18,13 @@ const { course, session } = storeToRefs(cidReqStore)
 
 const intro = ref(null)
 
+const props = defineProps({
+  isAllowedToEdit: {
+    type: Boolean,
+    required: true
+  }
+})
+
 courseService.loadHomeIntro(course.value.id, session.value?.id).then((data) => (intro.value = data))
 
 const goToIntroCreate = () => {
@@ -77,20 +84,21 @@ defineExpose({
       v-if="intro.introText"
       v-html="intro.introText"
     />
-    <EmptyState
-      v-else
-      :detail="t('Add a course introduction to display to your students.')"
-      :summary="t('You don\'t have any course content yet.')"
-      icon="courses"
-    >
-      <BaseButton
-        :label="t('Course introduction')"
-        class="mt-4"
-        icon="plus"
-        type="primary"
-        @click="goToIntroCreate"
-      />
-    </EmptyState>
+    <div v-else-if="isAllowedToEdit">
+      <EmptyState
+        :detail="t('Add a course introduction to display to your students.')"
+        :summary="t('You don\'t have any course content yet.')"
+        icon="courses"
+      >
+        <BaseButton
+          :label="t('Course introduction')"
+          class="mt-4"
+          icon="plus"
+          type="primary"
+          @click="goToIntroCreate"
+        />
+      </EmptyState>
+    </div>
   </div>
   <Skeleton
     v-else

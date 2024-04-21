@@ -116,8 +116,8 @@
       </div>
 
       <CourseIntroduction
-        v-if="isAllowedToEdit"
         ref="courseIntroEl"
+        :is-allowed-to-edit="isAllowedToEdit"
       />
 
       <div
@@ -382,9 +382,11 @@ const isAllowedToEdit = ref(false)
 
 onMounted(async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit()
-  setTimeout(() => {
-    translateHtml()
-  }, 1000)
+  if ("true" === platformConfigStore.getSetting("editor.translate_html")) {
+    setTimeout(() => {
+      translateHtml()
+    }, 1000)
+  }
 })
 
 const onStudentViewChanged = async () => {

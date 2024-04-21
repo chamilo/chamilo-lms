@@ -1,6 +1,9 @@
-/** This JS  will be included when loading an HTML in the Document tool */
+import { createPinia, setActivePinia } from 'pinia'
 
-import translateHtml from './../translatehtml.js';
+const pinia = createPinia()
+setActivePinia(pinia)
+
+import translateHtml from './../translatehtml.js'
 document.addEventListener('DOMContentLoaded', function () {
-  translateHtml();
+  translateHtml()
 });

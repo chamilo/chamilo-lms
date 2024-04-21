@@ -25,8 +25,11 @@ use Chamilo\CourseBundle\Entity\CForumThread;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+$cid = isset($_REQUEST['cid']) ? (int) $_REQUEST['cid'] : null;
+$sid = isset($_REQUEST['sid']) ? (int) $_REQUEST['sid'] : null;
+
 // A notice for unauthorized people.
-api_protect_course_script(true);
+api_protect_course_script(true, false, '', $cid);
 
 $nameTools = get_lang('Forums');
 
@@ -47,8 +50,8 @@ if (!empty($threadId)) {
     $threadEntity = $repoThread->find($threadId);
 }
 
-$courseEntity = api_get_course_entity(api_get_course_int_id());
-$sessionEntity = api_get_session_entity(api_get_session_id());
+$courseEntity = api_get_course_entity($cid);
+$sessionEntity = api_get_session_entity($sid);
 
 /* Is the user allowed here? */
 // if the user is not a course administrator and the forum is hidden
@@ -60,8 +63,6 @@ if (!api_is_allowed_to_create_course() &&
 ) {
     api_not_allowed(false);
 }
-
-$course_id = api_get_course_int_id();
 
 $table_posts = Database::get_course_table(TABLE_FORUM_POST);
 $table_users = Database::get_main_table(TABLE_MAIN_USER);

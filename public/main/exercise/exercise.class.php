@@ -6732,9 +6732,9 @@ class Exercise
                 $attemptCount = Event::get_attempt_count(
                     api_get_user_id(),
                     $this->getId(),
-                    $lpId,
-                    $lpItemId,
-                    $lpItemViewId
+                    (int) $lpId,
+                    (int) $lpItemId,
+                    (int) $lpItemViewId
                 );
 
                 if ($attemptCount >= $exerciseAttempts) {

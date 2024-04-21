@@ -885,9 +885,14 @@ function api_valid_email($address)
  *
  * @author Roan Embrechts
  */
-function api_protect_course_script($print_headers = false, $allow_session_admins = false, $checkTool = '')
+function api_protect_course_script($print_headers = false, $allow_session_admins = false, string $checkTool = '', $cid = null): bool
 {
     $course_info = api_get_course_info();
+
+    if (isset($cid)) {
+        $course_info = api_get_course_info_by_id($cid);
+    }
+
     if (empty($course_info)) {
         api_not_allowed($print_headers);
 

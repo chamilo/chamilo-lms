@@ -2,3 +2,7 @@
 .hidden {
     display: none;
 }
+
+.mce-translatehtml, span[lang] {
+    display: none;
+}

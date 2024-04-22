@@ -56,8 +56,6 @@ class PortfolioCategory implements Stringable
 
     /**
      * Get id.
-     *
-     * @return int|null
      */
     public function getId(): ?int
     {
@@ -66,8 +64,6 @@ class PortfolioCategory implements Stringable
 
     /**
      * Get title.
-     *
-     * @return string
      */
     public function getTitle(): string
     {
@@ -76,9 +72,6 @@ class PortfolioCategory implements Stringable
 
     /**
      * Set title.
-     *
-     * @param string $title
-     * @return PortfolioCategory
      */
     public function setTitle(string $title): self
     {
@@ -94,9 +87,6 @@ class PortfolioCategory implements Stringable
 
     /**
      * Set description.
-     *
-     * @param string|null $description
-     * @return PortfolioCategory
      */
     public function setDescription(?string $description): self
     {
@@ -112,9 +102,6 @@ class PortfolioCategory implements Stringable
 
     /**
      * Set isVisible.
-     *
-     * @param bool $isVisible
-     * @return PortfolioCategory
      */
     public function setIsVisible(bool $isVisible): self
     {
@@ -125,11 +112,6 @@ class PortfolioCategory implements Stringable
 
     /**
      * Get items.
-     *
-     * @param Course|null $course
-     * @param Session|null $session
-     * @param bool $onlyVisibles
-     * @return ArrayCollection
      */
     public function getItems(?Course $course = null, ?Session $session = null, bool $onlyVisibles = false): ArrayCollection
     {
@@ -179,7 +161,7 @@ class PortfolioCategory implements Stringable
         return $this->children;
     }
 
-    public function addChild(PortfolioCategory $child): self
+    public function addChild(self $child): self
     {
         if (!$this->children->contains($child)) {
             $this->children[] = $child;
@@ -189,7 +171,7 @@ class PortfolioCategory implements Stringable
         return $this;
     }
 
-    public function removeChild(PortfolioCategory $child): self
+    public function removeChild(self $child): self
     {
         if ($this->children->removeElement($child)) {
             if ($child->getParent() === $this) {

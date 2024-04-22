@@ -10,8 +10,6 @@ use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\User;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 class TrackELoginRepository extends ServiceEntityRepository
@@ -41,7 +39,7 @@ class TrackELoginRepository extends ServiceEntityRepository
             ['loginDate' => 'DESC']
         );
 
-        if ($lastLoginRecord !== null) {
+        if (null !== $lastLoginRecord) {
             $lastLoginRecord->setLogoutDate($logoutDate);
             $this->_em->flush();
         }

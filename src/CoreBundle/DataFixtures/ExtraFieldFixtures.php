@@ -845,7 +845,8 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                     ->setItemType($data['item_type'])
                     ->setValueType($data['value_type'])
                     ->setChangeable($data['changeable'] ?? false)
-                    ->setVisibleToSelf($data['visible_to_self'] ?? false);
+                    ->setVisibleToSelf($data['visible_to_self'] ?? false)
+                ;
 
                 if (isset($data['default_value'])) {
                     $extraField->setDefaultValue((string) $data['default_value']);
@@ -857,7 +858,8 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                         $extraFieldOption = new ExtraFieldOptions();
                         $extraFieldOption->setField($extraField)
                             ->setDisplayText($option)
-                            ->setOptionOrder(array_search($option, $options) + 1);
+                            ->setOptionOrder(array_search($option, $options) + 1)
+                        ;
 
                         $manager->persist($extraFieldOption);
                     }

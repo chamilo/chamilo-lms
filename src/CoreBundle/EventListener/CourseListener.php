@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Entity\CGroup;
+use ChamiloSession;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +31,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
-use ChamiloSession;
 
 /**
  * Class CourseListener.

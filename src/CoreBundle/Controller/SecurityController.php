@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Legal;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -62,7 +63,7 @@ class SecurityController extends AbstractController
             return $this->json(['error' => $message], 401);
         }
 
-        if (null !== $user->getExpirationDate() && $user->getExpirationDate() <= new \DateTime()) {
+        if (null !== $user->getExpirationDate() && $user->getExpirationDate() <= new DateTime()) {
             $message = $translator->trans('Your account has expired.');
 
             $tokenStorage->setToken(null);

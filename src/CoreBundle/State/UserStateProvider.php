@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\State;
@@ -29,7 +31,7 @@ final class UserStateProvider implements ProviderInterface
         if ($operation instanceof CollectionOperationInterface) {
             $providedUsers = $this->collectionProvider->provide($operation, $uriVariables, $context);
 
-            assert($providedUsers instanceof Paginator);
+            \assert($providedUsers instanceof Paginator);
 
             /** @var User $user */
             foreach ($providedUsers as $user) {

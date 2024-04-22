@@ -29,11 +29,11 @@ class MailTemplate
     #[ORM\Column(name: 'type', type: 'string', nullable: false)]
     protected string $type;
 
-    #[ORM\ManyToOne(targetEntity: "User")]
+    #[ORM\ManyToOne(targetEntity: 'User')]
     #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     protected ?User $author = null;
 
-    #[ORM\ManyToOne(targetEntity: "AccessUrl")]
+    #[ORM\ManyToOne(targetEntity: 'AccessUrl')]
     #[ORM\JoinColumn(name: 'url_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected ?AccessUrl $url = null;
 

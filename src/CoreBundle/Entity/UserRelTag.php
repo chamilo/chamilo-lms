@@ -31,7 +31,7 @@ class UserRelTag
 
     #[ORM\ManyToOne(targetEntity: Tag::class, cascade: ['persist'], inversedBy: 'userRelTags')]
     #[ORM\JoinColumn(name: 'tag_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    protected Tag $tag;
+    private ?Tag $tag = null;
 
     /**
      * Get id.
@@ -55,12 +55,12 @@ class UserRelTag
         return $this;
     }
 
-    public function getTag(): Tag
+    public function getTag(): ?Tag
     {
         return $this->tag;
     }
 
-    public function setTag(Tag $tag): self
+    public function setTag(?Tag $tag): static
     {
         $this->tag = $tag;
 

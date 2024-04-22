@@ -30,15 +30,15 @@ class Tag
     protected ExtraField $field;
 
     /**
-     * @var Collection<int, UserRelTag>|UserRelTag[]
+     * @var Collection<int, UserRelTag>
      */
-    #[ORM\OneToMany(targetEntity: UserRelTag::class, mappedBy: 'tag', cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'tag', targetEntity: UserRelTag::class, cascade: ['persist'])]
     protected Collection $userRelTags;
 
     /**
-     * @var Collection<int, ExtraFieldRelTag>|ExtraFieldRelTag[]
+     * @var Collection<int, ExtraFieldRelTag>
      */
-    #[ORM\OneToMany(targetEntity: ExtraFieldRelTag::class, mappedBy: 'tag', cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'tag', targetEntity: ExtraFieldRelTag::class, cascade: ['persist'])]
     protected Collection $extraFieldRelTags;
 
     #[ORM\Column(name: 'count', type: 'integer', nullable: false)]
@@ -48,6 +48,7 @@ class Tag
     {
         $this->userRelTags = new ArrayCollection();
         $this->count = 0;
+        $this->extraFieldRelTags = new ArrayCollection();
     }
 
     public function setTag(string $tag): self
@@ -96,14 +97,62 @@ class Tag
         return $this;
     }
 
-    public function getUserRelTags()
+    /**
+     * @return Collection<int, UserRelTag>
+     */
+    public function getUserRelTags(): Collection
     {
         return $this->userRelTags;
     }
 
-    public function setUserRelTags($userRelTags): self
+    public function addUserRelTag(UserRelTag $userRelTag): static
     {
-        $this->userRelTags = $userRelTags;
+        if (!$this->userRelTags->contains($userRelTag)) {
+            $this->userRelTags->add($userRelTag);
+            $userRelTag->setTag($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserRelTag(UserRelTag $userRelTag): static
+    {
+        if ($this->userRelTags->removeElement($userRelTag)) {
+            // set the owning side to null (unless already changed)
+            if ($userRelTag->getTag() === $this) {
+                $userRelTag->setTag(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ExtraFieldRelTag>
+     */
+    public function getExtraFieldRelTags(): Collection
+    {
+        return $this->extraFieldRelTags;
+    }
+
+    public function addExtraFieldRelTag(ExtraFieldRelTag $extraFieldRelTag): static
+    {
+        if (!$this->extraFieldRelTags->contains($extraFieldRelTag)) {
+            $this->extraFieldRelTags->add($extraFieldRelTag);
+            $extraFieldRelTag->setTag($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExtraFieldRelTag(ExtraFieldRelTag $extraFieldRelTag): static
+    {
+        if ($this->extraFieldRelTags->removeElement($extraFieldRelTag)) {
+            // set the owning side to null (unless already changed)
+            if ($extraFieldRelTag->getTag() === $this) {
+                $extraFieldRelTag->setTag(null);
+            }
+        }
 
         return $this;
     }

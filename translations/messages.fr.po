@@ -26043,3 +26043,6 @@ msgstr ""
 msgid "Manage the skills of your users, through courses and badges"
 msgstr ""
 "Gérez les compétences de vos utilisateurs au travers de cours et de badges"
+
+msgid "Contact Us"
+msgstr "Nous contacter"

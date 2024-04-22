@@ -5,6 +5,7 @@
     :size="size"
     class="rounded-full"
     :class="avatarClass"
+    :aria-label="alt"
   />
 </template>
 
@@ -17,6 +18,11 @@ const props = defineProps({
     type: String,
     require: true,
     default: "",
+  },
+  // this sets the aria-label which sets alt property of image inside Avatar component
+  alt: {
+    type: String,
+    required: true,
   },
   size: {
     type: String,

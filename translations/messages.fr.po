@@ -26046,3 +26046,7 @@ msgstr ""
 
 msgid "Contact Us"
 msgstr "Nous contacter"
+
+msgid "Send"
+msgstr "Envoyer"
+

@@ -25106,3 +25106,9 @@ msgstr ""
 
 msgid "%02d h %02d m %02d s"
 msgstr ""
+
+msgid "Contact Us"
+msgstr "Kontakt"
+
+msgid "Send"
+msgstr "Senden"

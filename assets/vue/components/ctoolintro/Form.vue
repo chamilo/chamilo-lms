@@ -1,5 +1,5 @@
 <template>
-  <q-form>
+  <form>
     <BaseTinyEditor
       v-model="item.introText"
       editor-id="introText"
@@ -7,7 +7,7 @@
     />
     <!-- For extra content-->
     <slot></slot>
-  </q-form>
+  </form>
 </template>
 
 <script setup>

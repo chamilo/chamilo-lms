@@ -31,17 +31,16 @@
 
 <script setup>
 import { ref } from "vue";
-import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import BaseInputText from "../basecomponents/BaseInputText.vue";
 import AudioRecorder from "../AudioRecorder.vue";
 import BaseButton from "../basecomponents/BaseButton.vue";
 import { RESOURCE_LINK_PUBLISHED } from "../resource_links/visibility";
 import { useCidReq } from "../../composables/cidReq";
+import documentsService from "../../services/documents"
 
 const { t } = useI18n();
 const queryParams = useCidReq();
-const store = useStore();
 
 const props = defineProps({
   parentResourceNodeId: {
@@ -70,7 +69,7 @@ const recordAudio = () => {
   audioRecorder.value.record();
 };
 
-const saveAudio = () => {
+const saveAudio = async () => {
   if (recordName.value === "") {
     recordError.value = t("It is necessary a file name before save recorded audio");
     return;
@@ -90,9 +89,12 @@ const saveAudio = () => {
       },
     ]),
   };
-  store
-    .dispatch("documents/createWithFormData", data)
-    .then(() => emit("document-saved"))
-    .catch((error) => emit("document-not-saved", error));
+
+  try {
+    await documentsService.createWithFormData(data)
+    emit("document-saved")
+  } catch (error) {
+    emit("document-not-saved", error)
+  }
 };
 </script>

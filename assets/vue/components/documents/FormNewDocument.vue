@@ -7,25 +7,19 @@
       :label="$t('Title')"
     />
 
-    <div class="field">
-      <div class="p-float-label">
-        <div class="html-editor-container">
-          <BaseTinyEditor
-            v-if="
-            (
-              item.resourceNode
-              && item.resourceNode.resourceFile
-              && item.resourceNode.resourceFile.text
-            )
-            || item.newDocument"
-            v-model="item.contentFile"
-            editor-id="item_content"
-            required
-          />
-        </div>
-        <label v-t="'Content'"/>
-      </div>
-    </div>
+    <BaseTinyEditor
+      v-if="
+      (
+        item.resourceNode
+        && item.resourceNode.resourceFile
+        && item.resourceNode.resourceFile.text
+      )
+      || item.newDocument"
+      v-model="item.contentFile"
+      :title="t('Content')"
+      editor-id="item_content"
+      required
+    />
 
     <!-- For extra content-->
     <slot></slot>
@@ -39,6 +33,7 @@ import { ref } from "vue";
 import { usePlatformConfig } from "../../store/platformConfig";
 import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue"
 import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
+import { useI18n } from "vue-i18n"
 
 export default {
   name: "DocumentsForm",
@@ -60,12 +55,13 @@ export default {
   setup() {
     const platformConfigStore = usePlatformConfig();
     const extraPlugins = ref("");
+    const { t } = useI18n()
 
     if ("true" === platformConfigStore.getSetting("editor.translate_html")) {
       extraPlugins.value = "translatehtml";
     }
 
-    return { v$: useVuelidate(), extraPlugins };
+    return { v$: useVuelidate(), extraPlugins, t };
   },
   data() {
     return {
@@ -74,11 +70,6 @@ export default {
       parentResourceNodeId: null,
       resourceNode: null,
     };
-  },
-  watch: {
-    contentFile(newContent) {
-      tinymce.get('item_content').setContent(newContent);
-    }
   },
   computed: {
     item() {
@@ -100,6 +91,11 @@ export default {
     violations() {
       return this.errors || {};
     },
+  },
+  watch: {
+    contentFile(newContent) {
+      tinymce.get('item_content').setContent(newContent);
+    }
   },
   methods: {
     browser(callback, value, meta) {

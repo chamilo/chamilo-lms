@@ -30,9 +30,7 @@
       />
     </div>
 
-    <div class="field">
-      <BaseTinyEditor v-model="item.content" editor-id="message" required />
-    </div>
+    <BaseTinyEditor v-model="item.content" editor-id="message" required />
 
     <BaseButton
       :label="t('Send')"

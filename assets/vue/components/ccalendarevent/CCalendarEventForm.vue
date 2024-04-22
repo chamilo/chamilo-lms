@@ -16,13 +16,11 @@
       type="range"
     />
 
-    <div class="field">
-      <BaseTinyEditor
-        v-model="item.content"
-        editor-id="calendar-event-content"
-        required
-      />
-    </div>
+    <BaseTinyEditor
+      v-model="item.content"
+      editor-id="calendar-event-content"
+      required
+    />
     <CalendarInvitations v-model="item" />
 
     <CalendarRemindersEditor

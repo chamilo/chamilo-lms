@@ -1,25 +1,24 @@
 <template>
-  <div class="base-tiny-editor">
-    <label
-      v-if="title"
-      :for="editorId"
-    >
-      {{ title }}
-    </label>
-    <TinyEditor
-      :id="editorId"
-      :model-value="modelValue"
-      :init="editorConfig"
-      :required="required"
-      @update:model-value="updateValue"
-      @input="updateValue"
-    />
-    <p
+  <div class="field">
+    <FloatLabel>
+      <TinyEditor
+        :id="editorId"
+        :model-value="modelValue"
+        :init="editorConfig"
+        :required="required"
+        @update:model-value="updateValue"
+        @input="updateValue"
+      />
+      <label
+        v-if="title"
+        :for="editorId"
+        v-text="title"
+      />
+    </FloatLabel>
+    <small
       v-if="helpText"
-      class="help-text"
-    >
-      {{ helpText }}
-    </p>
+      v-text="helpText"
+    />
   </div>
 </template>
 
@@ -30,6 +29,7 @@ import { useRoute, useRouter } from "vue-router"
 import { useCidReqStore } from "../../store/cidReq"
 import { storeToRefs } from "pinia"
 import { useSecurityStore } from "../../store/securityStore"
+import FloatLabel from "primevue/floatlabel"
 
 import { TINYEDITOR_MODE_DOCUMENTS, TINYEDITOR_MODE_PERSONAL_FILES, TINYEDITOR_MODES } from "./TinyEditorOptions"
 

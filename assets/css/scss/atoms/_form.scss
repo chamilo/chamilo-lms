@@ -81,11 +81,13 @@
   &:has(textarea:focus) label,
   &:has(textarea.p-filled) label,
   &:has(.p-inputwrapper-focus) label,
-  &:has(.p-inputwrapper-filled) label {
-    @apply top-0 left-2 text-caption px-1 bg-white text-primary;
+  &:has(.p-inputwrapper-filled) label,
+  &:has(.tox.tox-tinymce) label {
+    @apply top-0 left-2 text-caption px-1 bg-white text-primary z-[1];
   }
 
-  .html-editor-container > div {
+  .html-editor-container > div,
+  .tox.tox-tinymce {
     @apply pt-2 border-support-3 rounded-lg;
   }
 

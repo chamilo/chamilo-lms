@@ -1975,7 +1975,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'default_menu_entry_for_course_or_session',
                     'title' => 'Default menu entry for courses',
-                    'comment' => "Define the default sub-elements of the 'Courses' entry to if user is not registered to any course nor session.",
+                    'comment' => "Define the default sub-elements of the 'Courses' entry to display if user is not registered to any course nor session.",
                 ],
                 [
                     'name' => 'disable_user_conditions_sender_id',
@@ -1995,12 +1995,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'force_renew_password_at_first_login',
                     'title' => 'Force password renewal at first login',
-                    'comment' => 'This is one of the simple measure to increase the security of your portal by asking users to immediately change their password, so the one that was transfered by e-mail is no longer valid and they use one that they come up with.',
+                    'comment' => 'This is one simple measure to increase the security of your portal by asking users to immediately change their password, so the one that was transfered by e-mail is no longer valid and they then will use one that they came up with and that they are the only person to know.',
                 ],
                 [
                     'name' => 'generate_random_login',
                     'title' => 'Generate random username',
-                    'comment' => 'When importing users (batch processes), automatically generate a random string for username. Otherwise ',
+                    'comment' => 'When importing users (batch processes), automatically generate a random string for username. Otherwise, the username will be generated on the basis of the firstname and lastname, or the prefix of the e-mail.',
                 ],
                 [
                     'name' => 'hide_breadcrumb_if_not_allowed',
@@ -2015,7 +2015,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'hide_main_navigation_menu',
                     'title' => 'Hide main navigation menu',
-                    'comment' => 'When using Chamilo for a specific purpose (like one massive online exam), you might want to reduce distraction even more by removin the side menu.',
+                    'comment' => 'When using Chamilo for a specific purpose (like one massive online exam), you might want to reduce distraction even more by removing the side menu.',
                 ],
                 [
                     'name' => 'login_max_attempt_before_blocking_account',
@@ -2137,7 +2137,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'allow_course_multiple_languages',
                     'title' => 'Multiple-language courses',
-                    'comment' => "Enable courses managed in more than one language. This option adds a language selector withing the course page to let users switch easily, and adds a 'multiple_language' extra field to courses which allows for remote management procedures.",
+                    'comment' => "Enable courses managed in more than one language. This option adds a language selector within the course page to let users switch easily, and adds a 'multiple_language' extra field to courses which allows for remote management procedures.",
                 ],
                 [
                     'name' => 'language_flags_by_country',
@@ -2164,7 +2164,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'allow_lp_chamilo_export',
                     'title' => 'Export learning paths in the Chamilo backup format',
-                    'comment' => 'Add the possibility to export any of your broken class',
+                    'comment' => 'Enable the possibility to export any of your learning paths in a Chamilo course backup format.',
                 ],
                 [
                     'name' => 'allow_teachers_to_access_blocked_lp_by_prerequisite',
@@ -2209,7 +2209,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'show_prerequisite_as_blocked',
                     'title' => "Learning path's prerequisites",
-                    'comment' => 'On th learning paths lists, display a visual element to show that other learning paths are currently blocked by some prerequisites rule.',
+                    'comment' => 'On the learning paths lists, display a visual element to show that other learning paths are currently blocked by some prerequisites rule.',
                 ],
                 [
                     'name' => 'validate_lp_prerequisite_from_other_session',
@@ -2338,7 +2338,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
                 [
                     'name' => 'scorm_lms_update_sco_status_all_time',
-                    'title' => 'Update SCOR status autonomously',
+                    'title' => 'Update SCO status autonomously',
                     'comment' => 'If the SCO is not sending a status, take over and update the status based on what can be observed in Chamilo.',
                 ],
                 [
@@ -2715,12 +2715,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'gradebook_badge_sidebar',
                     'title' => 'Gradebook badges sidebar',
-                    'comment' => 'Generate a sidebar into the side menu where a few badges can be shown as pending approval. Requires gradebooks to be listed here, by (numerical) ID.',
+                    'comment' => 'Generate a block inside the side menu where a few badges can be shown as pending approval. Requires gradebooks to be listed here, by (numerical) ID.',
                 ],
                 [
                     'name' => 'gradebook_dependency',
                     'title' => 'Inter-gradebook dependencies',
-                    'comment' => 'Enables a mechanism of gradebook dependencies that lets people know which other items they need to go through first in order to complete the gradbeook.',
+                    'comment' => 'Enables a mechanism of gradebook dependencies that lets people know which other items they need to go through first in order to complete the gradebook.',
                 ],
                 [
                     'name' => 'gradebook_dependency_mandatory_courses',
@@ -2735,7 +2735,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'gradebook_enable_subcategory_skills_independant_assignement',
                     'title' => "Enable skills by gradebook's subcategory",
-                    'comment' => 'Skills are normally attributed for completing a whole gradebook. By enabling this option, you allow ',
+                    'comment' => 'Skills are normally attributed for completing a whole gradebook. By enabling this option, you allow skills to be attached to sub-sections of gradebooks.',
                 ],
                 [
                     'name' => 'gradebook_flatview_extrafields_columns',

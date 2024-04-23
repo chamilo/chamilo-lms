@@ -120,7 +120,8 @@ if ($isNotAllowedHere) {
     api_not_allowed(true, get_lang('Sorry, you are trying to access the registration page for this portal, but registration is currently disabled. Please contact the administrator (see contact information in the footer). If you already have an account on this site.'));
 }
 
-$extraConditions = api_get_setting('profile.show_conditions_to_user', true);
+$settingConditions = api_get_setting('profile.show_conditions_to_user', true);
+$extraConditions = 'false' !== $settingConditions ? $settingConditions : [];
 if ($extraConditions && isset($extraConditions['conditions'])) {
     // Create user extra fields for the conditions
     $userExtraField = new ExtraField('user');
@@ -461,7 +462,9 @@ if (false === $userAlreadyRegisteredShowTerms &&
         if (isset($allowedFields['extra_fields']) && is_array($allowedFields['extra_fields'])) {
             $extraFieldList = $allowedFields['extra_fields'];
         }
-        $requiredFields = api_get_setting('registration.required_extra_fields_in_inscription', true);
+        $settingRequiredFields = api_get_setting('registration.required_extra_fields_in_inscription', true);
+        $requiredFields = 'false' !== $settingRequiredFields ? $settingRequiredFields : [];
+
         if (!empty($requiredFields) && $requiredFields['options']) {
             $requiredFields = $requiredFields['options'];
         }
@@ -1132,6 +1135,7 @@ if ($form->validate()) {
     if ('AppCache' == get_class($kernel)) {
         $kernel = $kernel->getKernel();
     }
+    /** @var \Symfony\Component\DependencyInjection\ContainerInterface $container */
     $container = $kernel->getContainer();
     $entityManager = $container->get('doctrine.orm.default_entity_manager');
     $userRepository = $entityManager->getRepository(User::class);
@@ -1139,11 +1143,11 @@ if ($form->validate()) {
 
     $providerKey = 'main';
     $roles = $userEntity->getRoles();
-    $token = new UsernamePasswordToken($userEntity, null, $providerKey, $roles);
+    $token = new UsernamePasswordToken($userEntity, $providerKey, $roles);
 
     $container->get(ContainerHelper::class)->getTokenStorage()->setToken($token);
-    $container->get('session')->set('_security_' . $providerKey, serialize($token));
-    $session = $container->get('session');
+    $sessionHandler = $container->get('request_stack')->getSession();
+    $sessionHandler->set('_security_' . $providerKey, serialize($token));
     $userData = [
         'firstName' => stripslashes($values['firstname']),
         'lastName' => stripslashes($values['lastname']),
@@ -1152,10 +1156,10 @@ if ($form->validate()) {
         'user_id' => $userId
     ];
 
-    $session->set('_user', $userData);
+    $sessionHandler->set('_user', $userData);
 
     $is_allowedCreateCourse = isset($values['status']) && 1 == $values['status'];
-    $session->set('is_allowedCreateCourse', $is_allowedCreateCourse);
+    $sessionHandler->set('is_allowedCreateCourse', $is_allowedCreateCourse);
 
 
     // Stats

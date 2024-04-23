@@ -13,7 +13,6 @@ use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Chamilo\CourseBundle\Repository\CGroupCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLinkCategoryRepository;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
 final class Version20240112191200 extends AbstractMigrationChamilo
@@ -25,31 +24,21 @@ final class Version20240112191200 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-        $em = $doctrine->getManager();
+        $linkCategoryRepo = $this->container->get(CLinkCategoryRepository::class);
+        $linkRepo = $this->container->get(CLinkRepository::class);
+        $groupCategoryRepo = $this->container->get(CGroupCategoryRepository::class);
+        $glossaryRepo = $this->container->get(CGlossaryRepository::class);
+        $announcementRepo = $this->container->get(CAnnouncementRepository::class);
 
-        /** @var Connection $connection */
-        $connection = $em->getConnection();
-
-        $linkCategoryRepo = $container->get(CLinkCategoryRepository::class);
-        $linkRepo = $container->get(CLinkRepository::class);
-        $groupCategoryRepo = $container->get(CGroupCategoryRepository::class);
-        $glossaryRepo = $container->get(CGlossaryRepository::class);
-        $announcementRepo = $container->get(CAnnouncementRepository::class);
-
-        $this->updateResourceNodeDisplayOrder($linkCategoryRepo, 'c_link_category', $em, $schema);
-        $this->updateResourceNodeDisplayOrder($linkRepo, 'c_link', $em, $schema);
-        $this->updateResourceNodeDisplayOrder($groupCategoryRepo, 'c_group_category', $em, $schema);
-        $this->updateResourceNodeDisplayOrder($glossaryRepo, 'c_glossary', $em, $schema);
-        $this->updateResourceNodeDisplayOrder($announcementRepo, 'c_announcement', $em, $schema);
+        $this->updateResourceNodeDisplayOrder($linkCategoryRepo, 'c_link_category', $schema);
+        $this->updateResourceNodeDisplayOrder($linkRepo, 'c_link', $schema);
+        $this->updateResourceNodeDisplayOrder($groupCategoryRepo, 'c_group_category', $schema);
+        $this->updateResourceNodeDisplayOrder($glossaryRepo, 'c_glossary', $schema);
+        $this->updateResourceNodeDisplayOrder($announcementRepo, 'c_announcement', $schema);
     }
 
-    private function updateResourceNodeDisplayOrder($resourceRepo, $tableName, $em, Schema $schema): void
+    private function updateResourceNodeDisplayOrder($resourceRepo, $tableName, Schema $schema): void
     {
-        /** @var Connection $connection */
-        $connection = $em->getConnection();
-
         $table = $schema->getTable($tableName);
 
         if (!$table->hasColumn('display_order')) {
@@ -57,7 +46,7 @@ final class Version20240112191200 extends AbstractMigrationChamilo
         }
 
         $sql = "SELECT * FROM $tableName ORDER BY display_order";
-        $result = $connection->executeQuery($sql);
+        $result = $this->connection->executeQuery($sql);
         $resources = $result->fetchAllAssociative();
 
         foreach ($resources as $resourceData) {
@@ -85,6 +74,6 @@ final class Version20240112191200 extends AbstractMigrationChamilo
             }
         }
 
-        $em->flush();
+        $this->entityManager->flush();
     }
 }

@@ -1,5 +1,12 @@
 <template>
-  <Avatar :image="`${imageUrl}?w=${imageSize}&h=${imageSize}&fit=crop`" :shape="shape" />
+  <Avatar
+    :image="`${imageUrl}?w=${imageSize}&h=${imageSize}&fit=crop`"
+    :shape="shape"
+    :size="size"
+    class="rounded-full"
+    :class="avatarClass"
+    :aria-label="alt"
+  />
 </template>
 
 <script setup>
@@ -11,6 +18,11 @@ const props = defineProps({
     type: String,
     require: true,
     default: "",
+  },
+  // this sets the aria-label which sets the alt property of the image inside Avatar component
+  alt: {
+    type: String,
+    required: true,
   },
   size: {
     type: String,
@@ -27,14 +39,25 @@ const props = defineProps({
 });
 
 const imageSize = computed(() => {
-  if ('large' === props.size) {
-    return 56;
+  // these numbers are approximate, they were calculated with a size
+  // allowing to see the image clearly
+  if (props.size === "xlarge") {
+    return 250;
+  } else if (props.size === "large") {
+    return 125;
   }
-
-  if ('xlarge' === props.size) {
-    return 42;
-  }
-
-  return 28;
+  return 75;
 });
+
+const avatarClass = computed(() => {
+  let clazz = ""
+  if (props.size === "xlarge") {
+    clazz += "h-28 w-28 "
+  } else if (props.size === "large") {
+    clazz += "h-16 w-16 "
+  } else if (props.size === "normal") {
+    clazz += "h-10 w-10 "
+  }
+  return clazz
+})
 </script>

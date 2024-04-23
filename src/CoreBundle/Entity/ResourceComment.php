@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Chamilo\CoreBundle\Traits\TimestampableAgoTrait;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use DateTime;

@@ -8,8 +8,8 @@ namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CourseBundle\Entity\CLinkCategory;
 use Chamilo\CourseBundle\Repository\CLinkRepository;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
 
 class UpdateCLinkCategoryAction extends BaseResourceFileAction
 {

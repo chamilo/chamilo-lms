@@ -23,7 +23,6 @@ class Version20240323181500 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $em = $this->getEntityManager();
         $sysCalendars = $this->connection->fetchAllAssociative('SELECT * FROM sys_calendar');
 
         $utc = new DateTimeZone('UTC');
@@ -39,11 +38,11 @@ class Version20240323181500 extends AbstractMigrationChamilo
                 $admin
             );
 
-            $em->persist($calendarEvent);
-            $this->addGlobalResourceLinkToNode($em, $calendarEvent->getResourceNode());
+            $this->entityManager->persist($calendarEvent);
+            $this->addGlobalResourceLinkToNode($calendarEvent->getResourceNode());
         }
 
-        $em->flush();
+        $this->entityManager->flush();
     }
 
     private function createCCalendarEvent(
@@ -71,7 +70,7 @@ class Version20240323181500 extends AbstractMigrationChamilo
         return $calendarEvent;
     }
 
-    private function addGlobalResourceLinkToNode($em, $resourceNode): void
+    private function addGlobalResourceLinkToNode($resourceNode): void
     {
         $globalLink = new ResourceLink();
         $globalLink->setCourse(null)
@@ -92,7 +91,7 @@ class Version20240323181500 extends AbstractMigrationChamilo
 
         if (!$alreadyHasGlobalLink) {
             $resourceNode->addResourceLink($globalLink);
-            $em->persist($globalLink);
+            $this->entityManager->persist($globalLink);
         }
     }
 

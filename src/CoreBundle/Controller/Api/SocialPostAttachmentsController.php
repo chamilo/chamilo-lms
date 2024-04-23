@@ -8,8 +8,8 @@ use Chamilo\CoreBundle\Entity\SocialPost;
 use Chamilo\CoreBundle\Entity\SocialPostAttachment;
 use Chamilo\CoreBundle\Repository\Node\SocialPostAttachmentRepository;
 use Doctrine\ORM\EntityManager;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Security\Core\Security;
 
 class SocialPostAttachmentsController extends BaseResourceFileAction
 {

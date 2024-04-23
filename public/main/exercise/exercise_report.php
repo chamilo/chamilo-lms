@@ -59,7 +59,7 @@ $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 $allowCoachFeedbackExercises = 'true' === api_get_setting('allow_coach_feedback_exercises');
 $course_id = api_get_course_int_id();
-$exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
+$exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : (isset($_GET['id']) ? (int) $_GET['id'] : 0);
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 $sessionId = api_get_session_id();
 
@@ -408,7 +408,7 @@ if (isset($_REQUEST['comments']) &&
         $sql = "UPDATE $TBL_LP_ITEM_VIEW
                 SET score = '".(float) $tot."'
                 $statusCondition
-                WHERE c_id = $course_id AND iid = $lp_item_view_id";
+                WHERE iid = $lp_item_view_id";
         Database::query($sql);
 
         header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise_show.php?id='.$id.'&student='.$student_id.'&'.api_get_cidreq());

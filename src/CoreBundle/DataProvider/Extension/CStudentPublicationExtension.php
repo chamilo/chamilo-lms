@@ -11,9 +11,9 @@ use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\Security;
 
 class CStudentPublicationExtension implements QueryCollectionExtensionInterface
 {
@@ -39,12 +39,6 @@ class CStudentPublicationExtension implements QueryCollectionExtensionInterface
             throw new AccessDeniedException();
         }
 
-        $request = $this->requestStack->getCurrentRequest();
-
-        $courseId = $request->query->getInt('cid');
-        $sessionId = $request->query->getInt('sid');
-        $groupId = $request->query->getInt('gid');
-
-        $this->addCourseLinkWithVisibilityConditions($queryBuilder, true, $courseId, $sessionId, $groupId);
+        $this->addCourseLinkWithVisibilityConditions($queryBuilder, true);
     }
 }

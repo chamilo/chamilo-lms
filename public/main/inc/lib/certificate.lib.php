@@ -576,7 +576,7 @@ class Certificate extends Model
     /**
      * @return string
      */
-    public function generateCustomCertificate(string $fileName = '')
+    public function generateCustomCertificate(string $fileName = ''): string
     {
         $certificateRepo = Container::getGradeBookCertificateRepository();
         $certificateRepo->registerUserInfoAboutCertificate(0, $this->user_id, 100, $fileName);
@@ -602,20 +602,30 @@ class Certificate extends Model
                 foreach ($session['courses'] as $course) {
                     $course = api_get_course_entity($course['real_id']);
                     $courseId = $course->getId();
+                    /* @var GradebookCategory $category */
                     $category = $gradeBookRepo->findOneBy(['course' => $course, 'session' => $session['session_id']]);
 
                     if (null !== $category) {
                         $result = Category::userFinishedCourse(
                             $this->user_id,
                             $category,
-                            true
+                            true,
+                            $courseId,
+                            $session['session_id']
                         );
+
+                        $lpList = new LearnpathList(
+                            $this->user_id,
+                            api_get_course_info_by_id($courseId),
+                            $session['session_id']
+                        );
+                        $lpFlatList = $lpList->get_flat_list();
 
                         // Find time spent in LP
                         $timeSpent = Tracking::get_time_spent_in_lp(
                             $this->user_id,
                             $course,
-                            [],
+                            !empty($lpFlatList) ? array_keys($lpFlatList) : [],
                             $session['session_id']
                         );
 
@@ -666,8 +676,12 @@ class Certificate extends Model
         }
         $tplContent->assign('terms_validation_date', $termsValidationDate);
 
+        if (empty($totalTimeInLearningPaths)) {
+            $totalTimeInLearningPaths = $timeInSeconds;
+        }
+
         // Ofaj
-        $tplContent->assign('time_in_platform_in_hours', round($timeInSeconds / 3600, 1));
+        $tplContent->assign('time_in_platform_in_hours', round($timeInSeconds/3600, 1));
         $tplContent->assign(
             'certificate_generated_date_no_time',
             api_get_local_time(
@@ -696,9 +710,9 @@ class Certificate extends Model
         $tplContent->assign('sessions', $sessionsApproved);
         $tplContent->assign('courses', $coursesApproved);
         $tplContent->assign('time_spent_in_lps', api_time_to_hms($totalTimeInLearningPaths));
-        $tplContent->assign('time_spent_in_lps_in_hours', round($totalTimeInLearningPaths / 3600, 1));
+        $tplContent->assign('time_spent_in_lps_in_hours', round($totalTimeInLearningPaths/3600, 1));
 
-        $layoutContent = $tplContent->get_template('gradebook/custom_certificate.tpl');
+        $layoutContent = $tplContent->get_template('gradebook/custom_certificate.html.twig');
         $content = $tplContent->fetch($layoutContent);
 
         return $content;
@@ -707,7 +721,7 @@ class Certificate extends Model
     /**
      * Ofaj.
      */
-    public function generatePdfFromCustomCertificate()
+    public function generatePdfFromCustomCertificate(): void
     {
         $orientation = api_get_setting('document.certificate_pdf_orientation');
 

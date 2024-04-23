@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\DataProvider;
+namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 /**
  * @template-implements ProviderInterface<array<int, Usergroup>>
  */
-final class GroupMembersDataProvider implements ProviderInterface
+final class GroupMembersStateProvider implements ProviderInterface
 {
     private EntityManagerInterface $entityManager;
 

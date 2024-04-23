@@ -49,16 +49,16 @@ const menuItems = computed(() => [
     ],
   },
   {
-    label: t("FAQ"),
-    command: async () => await router.push({ name: "Faq" }),
-  },
-  {
     label: t("Registration"),
     url: "/main/auth/inscription.php",
   },
   {
     label: t("Demo"),
     command: async () => await router.push({ name: "Demo" }),
+  },
+  {
+    label: t("FAQ"),
+    command: async () => await router.push({ name: "Faq" }),
   },
   {
     label: t("Contact"),

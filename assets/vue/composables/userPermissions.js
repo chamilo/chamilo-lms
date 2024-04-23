@@ -1,7 +1,14 @@
 import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../store/cidReq"
-import axios from "axios"
+import api from "../config/api"
 
+/**
+ * @param {boolean} tutor
+ * @param {boolean} coach
+ * @param {boolean} sessionCoach
+ * @param {boolean} checkStudentView
+ * @returns {Promise<boolean>}
+ */
 export async function checkIsAllowedToEdit(
   tutor = false,
   coach = false,
@@ -12,7 +19,7 @@ export async function checkIsAllowedToEdit(
   const { course, session } = storeToRefs(cidReqStore)
 
   try {
-    const { data } = await axios.get(window.location.origin + "/permissions/is_allowed_to_edit", {
+    const { data } = await api.get("/permissions/is_allowed_to_edit", {
       params: {
         tutor,
         coach,

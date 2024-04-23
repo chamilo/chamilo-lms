@@ -12,10 +12,7 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Entity\CLpRelUser;
-use Chamilo\CourseBundle\Repository\CLpRelUserRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
-use Chamilo\Kernel;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
 final class Version20230215072918 extends AbstractMigrationChamilo
@@ -27,28 +24,12 @@ final class Version20230215072918 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-        $em = $doctrine->getManager();
+        $lpRepo = $this->container->get(CLpRepository::class);
+        $courseRepo = $this->container->get(CourseRepository::class);
+        $sessionRepo = $this->container->get(SessionRepository::class);
+        $userRepo = $this->container->get(UserRepository::class);
 
-        /** @var Connection $connection */
-        $connection = $em->getConnection();
-
-        $lpRepo = $container->get(CLpRepository::class);
-
-        /** @var CLpRelUserRepository $cLpRelUserRepo */
-        $cLpRelUserRepo = $container->get(CLpRelUserRepository::class);
-
-        $courseRepo = $container->get(CourseRepository::class);
-        $sessionRepo = $container->get(SessionRepository::class);
-        $userRepo = $container->get(UserRepository::class);
-
-        /** @var Kernel $kernel */
-        $kernel = $container->get('kernel');
-        $rootPath = $kernel->getProjectDir();
-        $admin = $this->getAdmin();
-
-        $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
@@ -57,14 +38,14 @@ final class Version20230215072918 extends AbstractMigrationChamilo
 
             $sql = "SELECT * FROM c_lp WHERE c_id = {$courseId}
                     ORDER BY iid";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $lps = $result->fetchAllAssociative();
             foreach ($lps as $lpData) {
                 $id = $lpData['iid'];
                 $lp = $lpRepo->find($id);
                 $sql = "SELECT * FROM c_item_property
                         WHERE tool = 'learnpath' AND c_id = {$courseId} AND ref = {$id} AND lastedit_type = 'LearnpathSubscription'";
-                $result = $connection->executeQuery($sql);
+                $result = $this->connection->executeQuery($sql);
                 $items = $result->fetchAllAssociative();
 
                 if (!empty($items)) {
@@ -82,8 +63,8 @@ final class Version20230215072918 extends AbstractMigrationChamilo
                         if (!empty($session)) {
                             $item->setSession($session);
                         }
-                        $em->persist($item);
-                        $em->flush();
+                        $this->entityManager->persist($item);
+                        $this->entityManager->flush();
                     }
                 }
             }

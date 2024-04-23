@@ -14,9 +14,12 @@ import UserProfileCard from "../social/UserProfileCard.vue"
 import SocialSideMenu from "../social/SocialSideMenu.vue"
 import { onMounted, provide } from "vue"
 import { useSocialInfo } from "../../composables/useSocialInfo"
+import { useSecurityStore } from "../../store/securityStore"
 
 
-const { user, isCurrentUser, groupInfo, isGroup, loadUser } = useSocialInfo()
+const { isCurrentUser, groupInfo, isGroup, loadUser } = useSocialInfo()
+
+const { user } = useSecurityStore()
 
 provide("social-user", user)
 provide("is-current-user", isCurrentUser)

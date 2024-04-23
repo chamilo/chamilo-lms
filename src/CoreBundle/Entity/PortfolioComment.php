@@ -20,7 +20,7 @@ class PortfolioComment
     public const VISIBILITY_VISIBLE = 1;
     public const VISIBILITY_PER_USER = 2;
 
-    #[ORM\Column(type: 'smallint', options: ["default" => self::VISIBILITY_VISIBLE])]
+    #[ORM\Column(type: 'smallint', options: ['default' => self::VISIBILITY_VISIBLE])]
     protected int $visibility;
 
     #[ORM\Id]

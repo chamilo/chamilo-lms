@@ -49,7 +49,7 @@ class Version20201215072917 extends AbstractMigrationChamilo
     private function getConfigurationSelectedValue(): string
     {
         global $_configuration;
-        $rootPath = $this->getContainer()->getParameter('kernel.project_dir');
+        $rootPath = $this->container->getParameter('kernel.project_dir');
         $oldConfigPath = $rootPath.'/app/config/configuration.php';
         if (!\in_array($oldConfigPath, get_included_files(), true)) {
             include_once $oldConfigPath;

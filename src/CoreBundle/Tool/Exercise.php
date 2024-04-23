@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Tool;
 
-use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 

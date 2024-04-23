@@ -199,28 +199,28 @@ switch ($action) {
             [
                 'name' => 'title',
                 'index' => 'title',
-                'width' => '300',
+                'width' => '400px',
                 'align' => 'left',
                 'sortable' => 'false',
             ],
             [
                 'name' => 'username',
                 'index' => 'username',
-                'width' => '100',
+                'width' => '350px',
                 'align' => 'left',
                 'sortable' => 'false',
             ],
             [
                 'name' => 'lastedit_date',
                 'index' => 'lastedit_date',
-                'width' => '200',
+                'width' => '350px',
                 'align' => 'left',
                 'sortable' => 'false',
             ],
             [
                 'name' => 'actions',
                 'index' => 'actions',
-                'width' => '150',
+                'width' => '150px',
                 'align' => 'left',
                 'sortable' => 'false',
             ],
@@ -262,11 +262,7 @@ switch ($action) {
         });
         </script>';
 
-        $count = AnnouncementManager::getAnnouncements(
-            $token,
-            $announcement_number,
-            true
-        );
+        $count = AnnouncementManager::getNumberAnnouncements();
 
         if (empty($count)) {
             $html = '';

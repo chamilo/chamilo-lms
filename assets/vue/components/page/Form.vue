@@ -1,18 +1,18 @@
 <template>
   <div>
     <BaseInputText
+      id="item_title"
       v-model="v$.item.title.$model"
       :error-text="v$.item.title.$errors.map((error) => error.$message).join('<br>')"
       :is-invalid="v$.item.title.$error"
       :label="t('Title')"
-      id="item_title"
     />
 
     <BaseCheckbox
       id="enabled"
+      v-model="v$.item.enabled.$model"
       :label="t('Enabled')"
       name="enabled"
-      v-model="v$.item.enabled.$model"
     />
 
     <BaseDropdown
@@ -39,13 +39,11 @@
       option-value="isocode"
     />
 
-    <div class="field">
-      <BaseTinyEditor
-        v-model="v$.item.content.$model"
-        editor-id="item_content"
-        required
-      />
-    </div>
+    <BaseTinyEditor
+      v-model="v$.item.content.$model"
+      editor-id="item_content"
+      required
+    />
 
     <div class="text-right">
       <Button

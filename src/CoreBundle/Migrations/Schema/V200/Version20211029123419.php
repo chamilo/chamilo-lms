@@ -20,10 +20,9 @@ final class Version20211029123419 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         if ($schema->hasTable('page')) {
-            $container = $this->getContainer();
-            $createDefaultPages = $container->get(CreateDefaultPages::class);
+            $createDefaultPages = $this->container->get(CreateDefaultPages::class);
 
-            $urlRepo = $container->get(AccessUrlRepository::class);
+            $urlRepo = $this->container->get(AccessUrlRepository::class);
             $urlList = $urlRepo->findAll();
 
             /** @var AccessUrl $url */

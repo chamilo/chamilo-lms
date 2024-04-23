@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\DataProvider\Extension;
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 trait CourseLinkExtensionTrait
 {
@@ -14,25 +14,18 @@ trait CourseLinkExtensionTrait
         private readonly Security $security
     ) {}
 
-    protected function addCourseLinkWithVisibilityConditions(
-        QueryBuilder $queryBuilder,
-        bool $checkVisibility,
-        int $courseId,
-        ?int $sessionId,
-        ?int $groupId
-    ): void {
+    protected function addCourseLinkWithVisibilityConditions(QueryBuilder $queryBuilder, bool $checkVisibility): void
+    {
         $rootAlias = $queryBuilder->getRootAliases()[0];
 
         $queryBuilder
             ->innerJoin("$rootAlias.resourceNode", 'node')
-            ->innerJoin('node.resourceLinks', 'links')
+            ->innerJoin('node.resourceLinks', 'resource_links')
         ;
 
         if ($checkVisibility) {
             $this->addVisibilityCondition($queryBuilder);
         }
-
-        $this->addCourseLinkCondition($queryBuilder, $courseId, $sessionId, $groupId);
     }
 
     protected function addVisibilityCondition(QueryBuilder $queryBuilder): void
@@ -43,38 +36,8 @@ trait CourseLinkExtensionTrait
 
         if (!$allowDraft) {
             $queryBuilder
-                ->andWhere('links.visibility != :visibilityDraft')
+                ->andWhere('resource_links.visibility != :visibilityDraft')
                 ->setParameter('visibilityDraft', ResourceLink::VISIBILITY_DRAFT)
-            ;
-        }
-    }
-
-    protected function addCourseLinkCondition(
-        QueryBuilder $queryBuilder,
-        int $courseId,
-        ?int $sessionId,
-        ?int $groupId
-    ): void {
-        $queryBuilder
-            ->andWhere('links.course = :course')
-            ->setParameter('course', $courseId)
-        ;
-
-        if (empty($sessionId)) {
-            $queryBuilder->andWhere('links.session IS NULL');
-        } else {
-            $queryBuilder
-                ->andWhere('links.session = :session')
-                ->setParameter('session', $sessionId)
-            ;
-        }
-
-        if (empty($groupId)) {
-            $queryBuilder->andWhere('links.group IS NULL');
-        } else {
-            $queryBuilder
-                ->andWhere('links.group = :group')
-                ->setParameter('group', $groupId)
             ;
         }
     }

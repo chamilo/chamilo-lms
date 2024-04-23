@@ -12,8 +12,8 @@ use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\Security;
 
 final class TrackEExerciseExtension implements QueryCollectionExtensionInterface
 {

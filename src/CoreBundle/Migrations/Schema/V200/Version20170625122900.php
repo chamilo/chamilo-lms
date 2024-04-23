@@ -20,8 +20,7 @@ class Version20170625122900 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         // Install tools.
-        $container = $this->getContainer();
-        $toolChain = $container->get(ToolChain::class);
+        $toolChain = $this->container->get(ToolChain::class);
         $toolChain->createTools();
 
         $table = $schema->getTable('c_document');

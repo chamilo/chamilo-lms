@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/file-manager')]
 class FileManagerController extends AbstractController
@@ -43,7 +43,7 @@ class FileManagerController extends AbstractController
     }
 
     #[Route('/upload', name: 'file_manager_upload', methods: ['POST'])]
-    public function upload(Request $request): JsonResponse
+    public function upload(): JsonResponse
     {
         // Implement logic to upload files
         // This part will handle receiving and storing uploaded files
@@ -81,21 +81,21 @@ class FileManagerController extends AbstractController
     }
 
     #[Route('/create-folder', name: 'file_manager_create_folder', methods: ['POST'])]
-    public function createFolder(Request $request): JsonResponse
+    public function createFolder(): JsonResponse
     {
         // Implement logic to create new folders
         return $this->json(['message' => 'Folder created successfully']);
     }
 
     #[Route('/rename', name: 'file_manager_rename', methods: ['POST'])]
-    public function rename(Request $request): JsonResponse
+    public function rename(): JsonResponse
     {
         // Implement logic to rename files/folders
         return $this->json(['message' => 'File/folder renamed successfully']);
     }
 
     #[Route('/delete', name: 'file_manager_delete', methods: ['DELETE'])]
-    public function delete(Request $request): JsonResponse
+    public function delete(): JsonResponse
     {
         // Implement logic to delete files/folders
         return $this->json(['message' => 'File/folder deleted successfully']);

@@ -20,7 +20,9 @@ use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\State\CStudentPublicationPostProcessor;
+use Chamilo\CoreBundle\Filter\CidFilter;
+use Chamilo\CoreBundle\Filter\SidFilter;
+use Chamilo\CoreBundle\State\CStudentPublicationPostStateProcessor;
 use Chamilo\CourseBundle\Repository\CStudentPublicationRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -45,7 +47,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Delete(security: "is_granted('DELETE', object.resourceNode)"),
         new Post(
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
-            processor: CStudentPublicationPostProcessor::class
+            processor: CStudentPublicationPostStateProcessor::class
         ),
     ],
     normalizationContext: [
@@ -65,6 +67,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         'assingment.endsOn' => ['nulls_comparison' => OrderFilterInterface::NULLS_SMALLEST],
     ]
 )]
+#[ApiFilter(filterClass: CidFilter::class)]
+#[ApiFilter(filterClass: SidFilter::class)]
 class CStudentPublication extends AbstractResource implements ResourceInterface, Stringable
 {
     #[Groups(['c_student_publication:write'])]

@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -21,10 +21,9 @@ class UserController extends AbstractController
 {
     /**
      * Public profile.
-     *
-     * @Route("/{username}", methods={"GET"}, name="chamilo_core_user_profile")
      */
-    public function profileAction(string $username, UserRepository $userRepository, IllustrationRepository $illustrationRepository): Response
+    #[Route(path: '/{username}', methods: ['GET'], name: 'chamilo_core_user_profile')]
+    public function profile(string $username, UserRepository $userRepository, IllustrationRepository $illustrationRepository): Response
     {
         $user = $userRepository->findByUsername($username);
 

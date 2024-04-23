@@ -12,24 +12,17 @@ use Chamilo\CoreBundle\Entity\TicketProject;
 use Chamilo\CoreBundle\Entity\TicketStatus;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use TicketManager;
 
-class TicketFixtures extends Fixture implements ContainerAwareInterface
+class TicketFixtures extends Fixture
 {
-    private ContainerInterface $container;
-
-    public function setContainer(?ContainerInterface $container = null): void
-    {
-        $this->container = $container;
-    }
+    public function __construct(
+        private TranslatorInterface $translator,
+    ) {}
 
     public function load(ObjectManager $manager): void
     {
-        $container = $this->container;
-        $trans = $container->get('translator');
-
         $adminId = 1;
 
         $ticketProject = new TicketProject();
@@ -42,12 +35,12 @@ class TicketFixtures extends Fixture implements ContainerAwareInterface
         $manager->flush();
 
         $categories = [
-            $trans->trans('Enrollment') => $trans->trans('Tickets about enrollment'),
-            $trans->trans('General information') => $trans->trans('Tickets about general information'),
-            $trans->trans('Requests and paperwork') => $trans->trans('Tickets about requests and paperwork'),
-            $trans->trans('Academic Incidents') => $trans->trans('Tickets about academic incidents, like exams, practices, tasks, etc.'),
-            $trans->trans('Virtual campus') => $trans->trans('Tickets about virtual campus'),
-            $trans->trans('Online evaluation') => $trans->trans('Tickets about online evaluation'),
+            $this->translator->trans('Enrollment') => $this->translator->trans('Tickets about enrollment'),
+            $this->translator->trans('General information') => $this->translator->trans('Tickets about general information'),
+            $this->translator->trans('Requests and paperwork') => $this->translator->trans('Tickets about requests and paperwork'),
+            $this->translator->trans('Academic Incidents') => $this->translator->trans('Tickets about academic incidents, like exams, practices, tasks, etc.'),
+            $this->translator->trans('Virtual campus') => $this->translator->trans('Tickets about virtual campus'),
+            $this->translator->trans('Online evaluation') => $this->translator->trans('Tickets about online evaluation'),
         ];
 
         $i = 1;
@@ -70,9 +63,9 @@ class TicketFixtures extends Fixture implements ContainerAwareInterface
 
         // Default Priorities
         $defaultPriorities = [
-            TicketManager::PRIORITY_NORMAL => $trans->trans('Normal'),
-            TicketManager::PRIORITY_HIGH => $trans->trans('High'),
-            TicketManager::PRIORITY_LOW => $trans->trans('Low'),
+            TicketManager::PRIORITY_NORMAL => $this->translator->trans('Normal'),
+            TicketManager::PRIORITY_HIGH => $this->translator->trans('High'),
+            TicketManager::PRIORITY_LOW => $this->translator->trans('Low'),
         ];
 
         foreach ($defaultPriorities as $code => $priority) {
@@ -90,11 +83,11 @@ class TicketFixtures extends Fixture implements ContainerAwareInterface
 
         // Default status
         $defaultStatus = [
-            TicketManager::STATUS_NEW => $trans->trans('New'),
-            TicketManager::STATUS_PENDING => $trans->trans('Pending'),
-            TicketManager::STATUS_UNCONFIRMED => $trans->trans('Unconfirmed'),
-            TicketManager::STATUS_CLOSE => $trans->trans('Close'),
-            TicketManager::STATUS_FORWARDED => $trans->trans('Forwarded'),
+            TicketManager::STATUS_NEW => $this->translator->trans('New'),
+            TicketManager::STATUS_PENDING => $this->translator->trans('Pending'),
+            TicketManager::STATUS_UNCONFIRMED => $this->translator->trans('Unconfirmed'),
+            TicketManager::STATUS_CLOSE => $this->translator->trans('Close'),
+            TicketManager::STATUS_FORWARDED => $this->translator->trans('Forwarded'),
         ];
 
         foreach ($defaultStatus as $code => $status) {

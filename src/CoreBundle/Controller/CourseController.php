@@ -25,6 +25,7 @@ use Chamilo\CoreBundle\Repository\TagRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Service\CourseService;
 use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
+use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
@@ -44,13 +45,13 @@ use Event;
 use Exception;
 use Exercise;
 use ExtraFieldValue;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -64,7 +65,8 @@ class CourseController extends ToolBaseController
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly SerializerInterface $serializer
+        private readonly SerializerInterface $serializer,
+        private readonly UserHelper $userHelper,
     ) {}
 
     #[Route('/{cid}/checkLegal.json', name: 'chamilo_core_course_check_legal_json')]
@@ -75,8 +77,7 @@ class CourseController extends ToolBaseController
         ExtraFieldValuesRepository $extraFieldValuesRepository,
         SettingsManager $settingsManager
     ): Response {
-        /** @var User $user */
-        $user = $this->getUser();
+        $user = $this->userHelper->getCurrent();
         $course = $this->getCourse();
         $responseData = [
             'redirect' => false,
@@ -131,7 +132,6 @@ class CourseController extends ToolBaseController
     }
 
     #[Route('/{cid}/home.json', name: 'chamilo_core_course_home_json')]
-    #[Entity('course', expr: 'repository.find(cid)')]
     public function indexJson(
         Request $request,
         CShortcutRepository $shortcutRepository,
@@ -170,8 +170,7 @@ class CourseController extends ToolBaseController
 
         $userId = 0;
 
-        /** @var ?User $user */
-        $user = $this->getUser();
+        $user = $this->userHelper->getCurrent();
         if (null !== $user) {
             $userId = $user->getId();
         }
@@ -306,10 +305,10 @@ class CourseController extends ToolBaseController
     /**
      * Edit configuration with given namespace.
      */
-    #[Route('/{cid}/settings/{namespace}', name: 'chamilo_core_course_settings')]
-    #[Entity('course', expr: 'repository.find(cid)')]
+    #[Route('/{course}/settings/{namespace}', name: 'chamilo_core_course_settings')]
     public function updateSettings(
         Request $request,
+        #[MapEntity(expr: 'repository.find(cid)')]
         Course $course,
         string $namespace,
         SettingsCourseManager $manager,
@@ -351,7 +350,7 @@ class CourseController extends ToolBaseController
                 'course' => $course,
                 'schemas' => $schemas,
                 'settings' => $settings,
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }
@@ -365,8 +364,7 @@ class CourseController extends ToolBaseController
     ): Response {
         $courseId = $course->getId();
 
-        /** @var ?User $user */
-        $user = $this->getUser();
+        $user = $this->userHelper->getCurrent();
 
         $fieldsRepo = $em->getRepository(ExtraField::class);
 
@@ -653,8 +651,7 @@ class CourseController extends ToolBaseController
     #[Route('/check-enrollments', name: 'chamilo_core_check_enrollments', methods: ['GET'])]
     public function checkEnrollments(EntityManagerInterface $em, SettingsManager $settingsManager): JsonResponse
     {
-        /** @var User|null $user */
-        $user = $this->getUser();
+        $user = $this->userHelper->getCurrent();
 
         if (!$user) {
             return new JsonResponse(['error' => 'User not found'], Response::HTTP_UNAUTHORIZED);
@@ -715,8 +712,7 @@ class CourseController extends ToolBaseController
         $searchTerm = $request->query->get('search', '');
         $accessUrl = $accessUrlHelper->getCurrent();
 
-        /** @var User|null $user */
-        $user = $this->getUser();
+        $user = $this->userHelper->getCurrent();
 
         $courseList = $courseRepository->getCoursesInfoByUser($user, $accessUrl, 1, $searchTerm);
         $results = ['items' => []];

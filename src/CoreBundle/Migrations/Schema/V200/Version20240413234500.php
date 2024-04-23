@@ -26,13 +26,21 @@ final class Version20240413234500 extends AbstractMigrationChamilo
         }
 
         if ($schema->hasTable('portfolio_comment')) {
-            $this->addSql('ALTER TABLE portfolio_comment ADD visibility SMALLINT DEFAULT 1 NOT NULL');
+            $table = $schema->getTable('portfolio_comment');
+            if (!$table->hasColumn('visibility')) {
+                $this->addSql('ALTER TABLE portfolio_comment ADD visibility SMALLINT DEFAULT 1 NOT NULL');
+            }
         }
 
         if ($schema->hasTable('portfolio_category')) {
-            $this->addSql('ALTER TABLE portfolio_category ADD parent_id INT DEFAULT NULL');
-            $this->addSql('ALTER TABLE portfolio_category ADD CONSTRAINT FK_7AC64359727ACA70 FOREIGN KEY (parent_id) REFERENCES portfolio_category (id) ON DELETE SET NULL');
-            $this->addSql('CREATE INDEX IDX_7AC64359727ACA70 ON portfolio_category (parent_id)');
+            $table = $schema->getTable('portfolio_category');
+            if (!$table->hasColumn('parent_id')) {
+                $this->addSql('ALTER TABLE portfolio_category ADD parent_id INT DEFAULT NULL');
+                $this->addSql('ALTER TABLE portfolio_category ADD CONSTRAINT FK_7AC64359727ACA70 FOREIGN KEY (parent_id) REFERENCES portfolio_category (id) ON DELETE SET NULL');
+            }
+            if (!$table->hasIndex('IDX_7AC64359727ACA70')) {
+                $this->addSql('CREATE INDEX IDX_7AC64359727ACA70 ON portfolio_category (parent_id)');
+            }
         }
     }
 
@@ -43,13 +51,23 @@ final class Version20240413234500 extends AbstractMigrationChamilo
         }
 
         if ($schema->hasTable('portfolio_comment')) {
-            $this->addSql('ALTER TABLE portfolio_comment DROP COLUMN visibility');
+            $table = $schema->getTable('portfolio_comment');
+            if ($table->hasColumn('visibility')) {
+                $this->addSql('ALTER TABLE portfolio_comment DROP COLUMN visibility');
+            }
         }
 
         if ($schema->hasTable('portfolio_category')) {
-            $this->addSql('ALTER TABLE portfolio_category DROP FOREIGN KEY FK_7AC64359727ACA70');
-            $this->addSql('ALTER TABLE portfolio_category DROP COLUMN parent_id');
-            $this->addSql('DROP INDEX IDX_7AC64359727ACA70 ON portfolio_category');
+            $table = $schema->getTable('portfolio_category');
+            if ($table->hasForeignKey('FK_7AC64359727ACA70')) {
+                $this->addSql('ALTER TABLE portfolio_category DROP FOREIGN KEY FK_7AC64359727ACA70');
+            }
+            if ($table->hasColumn('parent_id')) {
+                $this->addSql('ALTER TABLE portfolio_category DROP COLUMN parent_id');
+            }
+            if ($table->hasIndex('IDX_7AC64359727ACA70')) {
+                $this->addSql('DROP INDEX IDX_7AC64359727ACA70 ON portfolio_category');
+            }
         }
     }
 }

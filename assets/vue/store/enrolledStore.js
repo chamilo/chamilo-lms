@@ -6,6 +6,7 @@ export const useEnrolledStore = defineStore("enrolledStore", () => {
   // Reactive state to track if the user is enrolled in courses or sessions
   const isEnrolledInCourses = ref(false)
   const isEnrolledInSessions = ref(false)
+  const isInitialized = ref(false)
 
   // Function to check enrollment status
   async function checkEnrollments() {
@@ -16,6 +17,8 @@ export const useEnrolledStore = defineStore("enrolledStore", () => {
       isEnrolledInSessions.value = data.isEnrolledInSessions
     } catch (error) {
       console.error("Error verifying enrollments:", error)
+    } finally {
+      isInitialized.value = true
     }
   }
 
@@ -29,5 +32,6 @@ export const useEnrolledStore = defineStore("enrolledStore", () => {
     isEnrolledInCourses,
     isEnrolledInSessions,
     initialize,
+    isInitialized,
   }
 })

@@ -29,11 +29,13 @@ class MailTemplate
     #[ORM\Column(name: 'type', type: 'string', nullable: false)]
     protected string $type;
 
-    #[ORM\Column(name: 'score', type: 'float', nullable: true)]
-    protected float $authorId;
+    #[ORM\ManyToOne(targetEntity: 'User')]
+    #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    protected ?User $author = null;
 
-    #[ORM\Column(name: 'result_id', type: 'integer', nullable: false)]
-    protected int $urlId;
+    #[ORM\ManyToOne(targetEntity: 'AccessUrl')]
+    #[ORM\JoinColumn(name: 'url_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    protected ?AccessUrl $url = null;
 
     #[ORM\Column(name: 'default_template', type: 'boolean', nullable: false)]
     protected bool $defaultTemplate;

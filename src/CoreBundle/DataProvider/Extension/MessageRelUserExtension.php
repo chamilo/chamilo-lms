@@ -12,7 +12,7 @@ use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class MessageRelUserExtension implements QueryCollectionExtensionInterface
 {

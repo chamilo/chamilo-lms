@@ -18,8 +18,6 @@ class Version20170626122900 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $connection = $this->getEntityManager()->getConnection();
-
         $table = $schema->getTable('user');
 
         if ($table->hasIndex('idx_user_uid')) {
@@ -218,7 +216,7 @@ class Version20170626122900 extends AbstractMigrationChamilo
                 FROM user_rel_user
                 GROUP BY user_id, friend_user_id, relation_type
                 HAVING count > 1';
-        $result = $connection->executeQuery($sql);
+        $result = $this->connection->executeQuery($sql);
         $items = $result->fetchAllAssociative();
 
         foreach ($items as $item) {
@@ -229,7 +227,7 @@ class Version20170626122900 extends AbstractMigrationChamilo
             $sql = "SELECT id
                     FROM user_rel_user
                     WHERE user_id = $userId AND friend_user_id = $friendId AND relation_type = $relationType ";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $subItems = $result->fetchAllAssociative();
             $counter = 0;
             foreach ($subItems as $subItem) {

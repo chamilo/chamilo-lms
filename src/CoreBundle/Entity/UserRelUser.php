@@ -15,6 +15,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Entity\Listener\UserRelUserListener;
+use Chamilo\CoreBundle\State\UserRelUserStateProcessor;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -42,7 +43,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: [
         'groups' => ['user_rel_user:write'],
     ],
-    security: 'is_granted("ROLE_USER")'
+    security: 'is_granted("ROLE_USER")',
+    processor: UserRelUserStateProcessor::class,
 )]
 #[UniqueEntity(
     fields: ['user', 'friend', 'relationType'],

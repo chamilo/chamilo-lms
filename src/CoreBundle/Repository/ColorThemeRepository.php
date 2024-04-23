@@ -15,18 +15,11 @@ class ColorThemeRepository extends ServiceEntityRepository
         parent::__construct($registry, ColorTheme::class);
     }
 
-    public function deactivateAll(): void
+    public function deactivateAllExcept(ColorTheme $colorTheme): void
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb
-            ->update(ColorTheme::class, 'ct')
-            ->set('ct.active', ':inactive')
-            ->where(
-                $qb->expr()->eq('ct.active', ':active')
-            )
-            ->setParameters(['active' => true, 'inactive' => false])
-            ->getQuery()
-            ->execute()
+        $this->getEntityManager()
+            ->createQuery('UPDATE Chamilo\CoreBundle\Entity\ColorTheme t SET t.active = FALSE WHERE t.id <> :id')
+            ->execute(['id' => $colorTheme->getId()])
         ;
     }
 

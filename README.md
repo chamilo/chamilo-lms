@@ -104,7 +104,7 @@ chown -R root .env config/
 If you have already installed it and just want to update it from Git, do:
 ~~~~
 git pull
-composer update
+composer install
 
 # Database update
 php bin/console doctrine:schema:update --force --complete

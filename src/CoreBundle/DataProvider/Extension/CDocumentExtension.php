@@ -12,9 +12,9 @@ use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\Security;
 
 /**
  * Extension is called when loading api/documents.json.
@@ -63,8 +63,6 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface // ,
         // At least the cid so the CourseListener can be called.
         $resourceParentId = $request->query->get('resourceNode_parent');
         $courseId = $request->query->getInt('cid');
-        $sessionId = $request->query->getInt('sid');
-        $groupId = $request->query->getInt('gid');
 
         if (empty($resourceParentId)) {
             throw new AccessDeniedException('resourceNode.parent is required');
@@ -74,7 +72,7 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface // ,
             throw new AccessDeniedException('cid is required');
         }
 
-        $this->addCourseLinkWithVisibilityConditions($queryBuilder, true, $courseId, $sessionId, $groupId);
+        $this->addCourseLinkWithVisibilityConditions($queryBuilder, true);
 
         /*$queryBuilder->
             andWhere('node.creator = :current_user')

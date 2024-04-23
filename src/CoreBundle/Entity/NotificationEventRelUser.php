@@ -38,6 +38,7 @@ class NotificationEventRelUser
     public function setEvent(NotificationEvent $event): self
     {
         $this->event = $event;
+
         return $this;
     }
 
@@ -49,6 +50,7 @@ class NotificationEventRelUser
     public function setUser(User $user): self
     {
         $this->user = $user;
+
         return $this;
     }
 }

@@ -1130,10 +1130,10 @@ if (null !== $course) {
         $session
     );
     $messages = Container::getForumPostRepository()->countUserForumPosts($user, $course, $session);
-    $links = Tracking::count_student_visited_links($studentId, $courseId, $sessionId);
-    $chat_last_connection = Tracking::chat_last_connection($studentId, $courseId, $sessionId);
-    $documents = Tracking::countStudentDownloadedDocuments($studentId, $courseId, $sessionId);
-    $uploaded_documents = Tracking::count_student_uploaded_documents($studentId, $courseCode, $sessionId);
+    $links = Tracking::count_student_visited_links($studentId, $course->getId(), $sessionId);
+    $chat_last_connection = Tracking::chat_last_connection($studentId, $course->getId(), $sessionId);
+    $documents = Tracking::countStudentDownloadedDocuments($studentId, $course->getId(), $sessionId);
+    $uploaded_documents = Tracking::count_student_uploaded_documents($studentId, $course->getCode(), $sessionId);
 
     $tpl->assign('title', $course->getTitle());
 
@@ -1146,15 +1146,15 @@ if (null !== $course) {
         'upload_documents' => $uploaded_documents,
         'course_first_access' => Tracking::get_first_connection_date_on_the_course(
             $studentId,
-            $courseId,
+            $course->getId(),
             $sessionId
         ),
         'course_last_access' => Tracking::get_last_connection_date_on_the_course(
             $studentId,
-            ['real_id' => $courseId],
+            ['real_id' => $course->getId()],
             $sessionId
         ),
-        'count_access_dates' => Tracking::getNumberOfCourseAccessDates($studentId, $courseId, $sessionId),
+        'count_access_dates' => Tracking::getNumberOfCourseAccessDates($studentId, $course->getId(), $sessionId),
     ];
 } else {
     $details = false;
@@ -1559,6 +1559,10 @@ if (empty($details)) {
             ),
     ];
 
+    if (empty($courseId) && null !== $course) {
+        $courseId = $course->getId();
+    }
+
     $timeCourse = null;
     if (Tracking::minimumTimeAvailable($sessionId, $courseId)) {
         $timeCourse = Tracking::getCalculateTime($studentId, $courseId, $sessionId);
@@ -1790,18 +1794,6 @@ if (empty($details)) {
                     echo Display::tag('td', $start_time);
                 }
 
-                /*                if ($hookLpTracking) {
-                                    $hookContents = $hookLpTracking->notifyTrackingContent($lp_id, $studentId);
-
-                                    foreach ($hookContents as $hookContent) {
-                                        if (isset($hookContent['value'])) {
-                                            $contentToExport[] = strip_tags($hookContent['value']);
-
-                                            echo Display::tag('td', $hookContent['value'], $hookContent['attrs']);
-                                        }
-                                    }
-                                }*/
-
                 $csv_content[] = $contentToExport;
 
                 if (true === $any_result) {
@@ -1859,23 +1851,8 @@ if (empty($details)) {
                 get_lang('Average score')
             ).'</th>';
         echo '<th>'.get_lang('Attempts').'</th>';
-        echo '<th>'.get_lang('LatestAttempt').'</th>';
-        echo '<th>'.get_lang('AllAttempts').'</th>';
-
-        /*$hookQuizTracking = HookMyStudentsQuizTracking::create();
-        if ($hookQuizTracking) {
-            $hookHeaders = array_map(
-                function ($hookHeader) {
-                    if (isset($hookHeader['value'])) {
-                     return Display::tag('th', $hookHeader['value'], $hookHeader['attrs']);
-                    }
-                },
-                $hookQuizTracking->notifyTrackingHeader()
-            );
-
-            echo implode(PHP_EOL, $hookHeaders);
-        }*/
-
+        echo '<th>'.get_lang('Latest attempt').'</th>';
+        echo '<th>'.get_lang('All attempts').'</th>';
         echo '</tr></thead><tbody>';
 
         $csv_content[] = [];
@@ -1885,40 +1862,6 @@ if (empty($details)) {
             get_lang('Average score in learning paths'),
             get_lang('Attempts'),
         ];
-
-        /*if ($hookQuizTracking) {
-            $hookHeaders = array_map(
-                function ($hookHeader) {
-                    if (isset($hookHeader['value'])) {
-                    return strip_tags($hookHeader['value']);
-                    }
-                },
-                $hookQuizTracking->notifyTrackingHeader()
-            );
-
-            $csvContentIndex = count($csv_content) - 1;
-            $csv_content[$csvContentIndex] = array_merge($csv_content[$csvContentIndex], $hookHeaders);
-        }*/
-
-        /*$t_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sessionCondition = api_get_session_condition(
-            $sessionId,
-            true,
-            true,
-            'quiz.session_id'
-        );
-
-        $sql = "SELECT quiz.title, id
-                FROM $t_quiz AS quiz
-                WHERE
-                    quiz.c_id = ".$courseInfo['real_id']." AND
-                    active IN (0, 1)
-                    $sessionCondition
-                ORDER BY quiz.title ASC ";
-
-        $result_exercices = Database::query($sql);
-        $i = 0;*/
-
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
         $repo = Container::getQuizRepository();

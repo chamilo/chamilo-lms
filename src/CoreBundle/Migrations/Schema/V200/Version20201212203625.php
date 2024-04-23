@@ -15,10 +15,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
-use Chamilo\Kernel;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class Version20201212203625 extends AbstractMigrationChamilo
@@ -30,28 +27,17 @@ final class Version20201212203625 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
+        $documentRepo = $this->container->get(CDocumentRepository::class);
+        $courseRepo = $this->container->get(CourseRepository::class);
+        $attemptRepo = $this->entityManager->getRepository(TrackEAttempt::class);
 
-        /** @var EntityManager $em */
-        $em = $doctrine->getManager();
-
-        /** @var Connection $connection */
-        $connection = $em->getConnection();
-
-        /** @var CDocumentRepository $documentRepo */
-        $documentRepo = $container->get(CDocumentRepository::class);
-        $courseRepo = $container->get(CourseRepository::class);
-        $attemptRepo = $em->getRepository(TrackEAttempt::class);
-
-        /** @var Kernel $kernel */
-        $kernel = $container->get('kernel');
+        $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
         $batchSize = self::BATCH_SIZE;
 
         // Migrate teacher exercise audio.
-        $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
@@ -62,7 +48,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                           c_id = $courseId AND
                           path LIKE '/../exercises/teacher_audio%'
                     ";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $documents = $result->fetchAllAssociative();
 
             foreach ($documents as $documentData) {
@@ -94,34 +80,34 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                                 ->setTitle($fileName)
                                 ->setFile($file)
                             ;
-                            $em->persist($asset);
-                            $em->flush();
+                            $this->entityManager->persist($asset);
+                            $this->entityManager->flush();
 
                             $attempFeedback = (new AttemptFeedback())
                                 ->setAsset($asset)
                             ;
                             $attempt->addAttemptFeedback($attempFeedback);
-                            $em->persist($attempFeedback);
-                            $em->flush();
+                            $this->entityManager->persist($attempFeedback);
+                            $this->entityManager->flush();
 
                             /*$sql = "UPDATE c_document
                                     SET comment = 'skip_migrate'
                                     WHERE iid = $documentId
                             ";
-                            $connection->executeQuery($sql);*/
+                            $this->connection->executeQuery($sql);*/
                         }
                     }
                 }
             }
-            $em->flush();
-            $em->clear();
+            $this->entityManager->flush();
+            $this->entityManager->clear();
         }
 
-        $em->flush();
-        $em->clear();
+        $this->entityManager->flush();
+        $this->entityManager->clear();
 
         // Migrate student exercise audio
-        $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
@@ -134,7 +120,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                           path NOT LIKE '/../exercises/teacher_audio%' AND
                           path LIKE '/../exercises/%'
                     ";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $documents = $result->fetchAllAssociative();
 
             foreach ($documents as $documentData) {
@@ -172,33 +158,33 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                             ->setTitle($fileName)
                             ->setFile($file)
                         ;
-                        $em->persist($asset);
-                        $em->flush();
+                        $this->entityManager->persist($asset);
+                        $this->entityManager->flush();
 
                         $attemptFile = (new AttemptFile())
                             ->setAsset($asset)
                         ;
                         $attempt->addAttemptFile($attemptFile);
-                        $em->persist($attemptFile);
-                        $em->flush();
+                        $this->entityManager->persist($attemptFile);
+                        $this->entityManager->flush();
 
                         /*$sql = "UPDATE c_document
                                 SET comment = 'skip_migrate'
                                 WHERE iid = $documentId
                         ";
-                        $connection->executeQuery($sql);*/
+                        $this->connection->executeQuery($sql);*/
                     }
                 }
             }
-            $em->flush();
-            $em->clear();
+            $this->entityManager->flush();
+            $this->entityManager->clear();
         }
 
-        $em->flush();
-        $em->clear();
+        $this->entityManager->flush();
+        $this->entityManager->clear();
 
         // Migrate normal documents.
-        $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
@@ -211,7 +197,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                           path NOT LIKE '/../exercises/%' AND
                           path NOT LIKE '/chat_files/%'
                     ORDER BY filetype DESC, path";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $documents = $result->fetchAllAssociative();
             foreach ($documents as $documentData) {
                 $documentId = $documentData['iid'];
@@ -231,7 +217,7 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                     WHERE
                           c_id = {$courseId} AND
                           path LIKE '$currentPath'";
-                    $result = $connection->executeQuery($sql);
+                    $result = $this->connection->executeQuery($sql);
                     $parentId = $result->fetchOne();
 
                     if (!empty($parentId)) {
@@ -255,20 +241,20 @@ final class Version20201212203625 extends AbstractMigrationChamilo
                 $filePath = $rootPath.'/app/courses/'.$course->getDirectory().'/document/'.$documentPath;
                 error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                 $this->addLegacyFileToResource($filePath, $documentRepo, $document, $documentId);
-                $em->persist($document);
+                $this->entityManager->persist($document);
 
                 if (($counter % $batchSize) === 0) {
-                    $em->flush();
-                    $em->clear();
+                    $this->entityManager->flush();
+                    $this->entityManager->clear();
                 }
                 $counter++;
             }
-            $em->flush();
-            $em->clear();
+            $this->entityManager->flush();
+            $this->entityManager->clear();
         }
 
-        $em->flush();
-        $em->clear();
+        $this->entityManager->flush();
+        $this->entityManager->clear();
     }
 
     public function down(Schema $schema): void {}

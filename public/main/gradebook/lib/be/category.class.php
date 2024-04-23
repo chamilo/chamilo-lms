@@ -463,6 +463,10 @@ class Category implements GradebookItem
             $bond = ' AND';
         }
 
+        if (!isset($session_id)) {
+            $session_id = api_get_session_id();
+        }
+
         if (empty($session_id)) {
             $sql .= $bond.' (session_id IS NULL OR session_id = 0) ';
         } else {
@@ -1466,7 +1470,7 @@ class Category implements GradebookItem
     {
         $tbl_main_courses = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_main_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $sql = 'SELECT DISTINCT(code), title, id
+        $sql = 'SELECT DISTINCT(code), title, cc.id
                 FROM '.$tbl_main_courses.' cc, '.$tbl_main_course_user.' cu
                 WHERE cc.id = cu.c_id AND cu.status = '.COURSEMANAGER;
         if (!api_is_platform_admin()) {
@@ -2211,12 +2215,16 @@ class Category implements GradebookItem
     public static function userFinishedCourse(
         int $userId,
         GradebookCategory $category,
-        bool $recalculateScore = false
+        bool $recalculateScore = false,
+        ?int $courseId = null,
+        ?int $sessionId = null
     ): bool {
         $currentScore = self::getCurrentScore(
             $userId,
             $category,
-            $recalculateScore
+            $recalculateScore,
+            $courseId,
+            $sessionId
         );
 
         $minCertificateScore = $category->getCertifMinScore();
@@ -2226,21 +2234,21 @@ class Category implements GradebookItem
 
     /**
      * Get the current score (as percentage) on a gradebook category for a user.
-     *
-     * @param int  $userId      The user id
-     * @param bool $recalculate
-     *
-     * @return float The score
      */
     public static function getCurrentScore(
-        $userId,
+        int               $userId,
         GradebookCategory $category,
-        $recalculate = false
-    ) {
+        bool              $recalculate = false,
+        ?int              $courseId = null,
+        ?int              $sessionId = null
+    ): float|int {
+
         if ($recalculate) {
             return self::calculateCurrentScore(
                 $userId,
-                $category
+                $category,
+                $courseId,
+                $sessionId
             );
         }
 
@@ -2656,13 +2664,27 @@ class Category implements GradebookItem
      *
      * @return float The score
      */
-    private static function calculateCurrentScore(int $userId, GradebookCategory $category)
-    {
+    private static function calculateCurrentScore(
+        int $userId,
+        ?GradebookCategory $category = null,
+        ?int $courseId = null,
+        ?int $sessionId = null,
+    ): float|int {
+
         if (null === $category) {
             return 0;
         }
 
-        $categoryList = self::load($category->getId());
+        $categoryList = self::load(
+            null,
+            null,
+            $courseId,
+            null,
+            null,
+            $sessionId
+        );
+
+        /* @var Category $category */
         $category = $categoryList[0] ?? null;
 
         if (null === $category) {

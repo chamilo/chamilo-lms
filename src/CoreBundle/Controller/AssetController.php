@@ -15,16 +15,14 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/assets')]
 class AssetController
 {
     use ControllerTrait;
 
-    /**
-     * @Route("/{category}/{path}", methods={"GET"}, requirements={"path"=".+"}, name="chamilo_core_asset_showfile")
-     */
+    #[Route(path: '/{category}/{path}', methods: ['GET'], requirements: ['path' => '.+'], name: 'chamilo_core_asset_showfile')]
     public function showFile(
         string $category,
         string $path,

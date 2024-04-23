@@ -8,22 +8,30 @@ const url = "/api/color_themes"
  * @returns {Promise<Array>}
  */
 async function getThemes() {
-  let results = await baseService.get(url)
-  return results["hydra:member"]
+  const { items } = await baseService.getCollection(url)
+
+  return items
 }
 
 /**
  * Update or create a theme with the title
  *
+ * @param {string|null} iri
  * @param {string} title
  * @param {Object} colors
  * @returns {Promise<Object>}
  */
-async function updateTheme(title, colors) {
-  await baseService.post(url, {
-    title: title,
+async function updateTheme({ iri = null, title, colors }) {
+  if (iri) {
+    return await baseService.put(iri, {
+      title,
+      variables: colors,
+    })
+  }
+
+  return await baseService.post(url, {
+    title,
     variables: colors,
-    active: true,
   })
 }
 

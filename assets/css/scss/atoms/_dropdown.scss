@@ -1,27 +1,10 @@
 .p-dropdown, .p-multiselect {
-  @apply border border-support-3 bg-white rounded-lg transition w-full duration-200
+  @apply inline-flex cursor-pointer relative select-none
+      border border-support-3 bg-white rounded-lg transition w-full duration-200
     hover:border-primary hover:text-gray-90 hover:outline-0 hover:outline-none;
 
-  &.p-dropdown-clearable {
-    .p-dropdown-label {
-      //padding-right: nth($inputPadding, 2) + $primeIconFontSize;
-    }
-  }
-
-  .p-dropdown-label, .p-multiselect-label {
-    @apply bg-transparent border-none
-      focus:outline-0 focus:outline-none;
-
-    &.p-placeholder {
-      //color: $inputPlaceholderTextColor;
-    }
-  }
-
-  .p-dropdown-trigger {
-    @apply bg-transparent rounded-r-lg w-12;
-  }
-
-  .p-dropdown-clear-icon {
+  .p-dropdown-panel, .p-autocomplete-panel, .p-multiselect-panel {
+    @apply min-w-full;
   }
 
   &.p-invalid.p-component {
@@ -29,65 +12,60 @@
   }
 }
 
+.p-dropdown-clear-icon {
+  @apply absolute top-1/2 -mt-2;
+}
+
+.p-dropdown-trigger {
+  @apply flex items-center justify-center flex-shrink-0
+      bg-transparent rounded-r-lg w-9;
+}
+
+.p-dropdown-label, .p-multiselect-label {
+  @apply block whitespace-nowrap overflow-hidden flex-1 w-[1%] overflow-ellipsis cursor-pointer
+      bg-transparent border-none
+    focus:outline-0 focus:outline-none;
+}
+
+.p-dropdown-label-empty {
+  @apply overflow-hidden opacity-0;
+}
+
 .p-dropdown-panel, .p-autocomplete-panel, .p-multiselect-panel {
-  @apply bg-white rounded-lg text-gray-90 shadow-lg;
-
-  .p-dropdown-header {
-    //padding: $inputListHeaderPadding;
-    //border-bottom: $inputListHeaderBorder;
-    //color: $inputListHeaderTextColor;
-    //background: $inputOverlayHeaderBg;
-    //margin: $inputListHeaderMargin;
-    //border-top-right-radius: $borderRadius;
-    //border-top-left-radius: $borderRadius;
-
-    .p-dropdown-filter {
-      //padding-right: nth($inputPadding, 2) + $primeIconFontSize;
-      //margin-right: -1 * (nth($inputPadding, 2) + $primeIconFontSize);
-    }
-
-    .p-dropdown-filter-icon {
-      //right: nth($inputPadding, 2);
-      //color: $inputIconColor;
-    }
-  }
+  @apply absolute min-w-full top-2 left-0
+    bg-white rounded-lg text-gray-90 drop-shadow-lg;
 
   .p-dropdown-items {
-    @apply py-1.5;
+    @apply rounded-lg
+      after:content-[""] after:w-full after:block after:h-3 after:sticky after:bg-white after:z-[2] after:bottom-0 after:rounded-b-lg
+      before:content-[""] before:w-full before:block before:h-3 before:sticky before:bg-white before:z-[2] before:top-0 before:rounded-b-lg;
 
     .p-dropdown-item {
       @apply px-4 py-2 transition text-body-2 outline-0 outline-none text-gray-90;
 
       &.p-highlight {
-        @apply bg-support-3 text-support-4;
-
-        &.p-focus {
-        }
+        @apply bg-support-3 text-primary;
       }
 
-      &:not(.p-highlight):not(.p-disabled) {
-        &.p-focus,
-        &:hover {
-          @apply bg-support-1;
-        }
+      &.p-focus {
+        @apply text-primary;
       }
-    }
-
-    .p-dropdown-item-group {
-      //margin: $submenuHeaderMargin;
-      //padding: $submenuHeaderPadding;
-      //color: $submenuHeaderTextColor;
-      //background: $submenuHeaderBg;
-      //font-weight: $submenuHeaderFontWeight;
-    }
-
-    .p-dropdown-empty-message {
-      //padding: $inputListItemPadding;
-      //color: $inputListItemTextColor;
-      //background: $inputListItemBg;
     }
   }
 }
+
+.p-dropdown-items-wrapper {
+  @apply overflow-auto rounded-lg;
+}
+
+.p-dropdown-item {
+  @apply cursor-pointer whitespace-nowrap relative overflow-hidden flex items-center;
+}
+
+.p-dropdown-items {
+  @apply m-0 p-0 list-none;
+}
+
 .p-multiselect-label-container {
   @apply p-2;
 }

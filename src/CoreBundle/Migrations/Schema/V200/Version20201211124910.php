@@ -16,14 +16,13 @@ final class Version20201211124910 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $connection = $this->getEntityManager()->getConnection();
         if ($schema->hasTable('resource_format')) {
-            $result = $connection->executeQuery(" SELECT * FROM resource_format WHERE title = 'html'");
+            $result = $this->connection->executeQuery(" SELECT * FROM resource_format WHERE title = 'html'");
             $exists = $result->fetchAllAssociative();
             if (empty($exists)) {
                 $this->addSql("INSERT INTO resource_format SET title = 'html', created_at = NOW(), updated_at = NOW();");
             }
-            $result = $connection->executeQuery(" SELECT * FROM resource_format WHERE title = 'txt'");
+            $result = $this->connection->executeQuery(" SELECT * FROM resource_format WHERE title = 'txt'");
             $exists = $result->fetchAllAssociative();
             if (empty($exists)) {
                 $this->addSql("INSERT INTO resource_format SET title = 'txt', created_at = NOW(), updated_at = NOW();");
@@ -33,14 +32,13 @@ final class Version20201211124910 extends AbstractMigrationChamilo
 
     public function down(Schema $schema): void
     {
-        $connection = $this->getEntityManager()->getConnection();
         if ($schema->hasTable('resource_format')) {
-            $result = $connection->executeQuery(" SELECT * FROM resource_format WHERE title = 'txt'");
+            $result = $this->connection->executeQuery(" SELECT * FROM resource_format WHERE title = 'txt'");
             $exists = $result->fetchAllAssociative();
             if (!empty($exists)) {
                 $this->addSql("DELETE FROM resource_format WHERE title = 'txt';");
             }
-            $result = $connection->executeQuery(" SELECT * FROM resource_format WHERE title = 'html'");
+            $result = $this->connection->executeQuery(" SELECT * FROM resource_format WHERE title = 'html'");
             $exists = $result->fetchAllAssociative();
             if (!empty($exists)) {
                 $this->addSql("DELETE FROM resource_format WHERE title = 'html';");

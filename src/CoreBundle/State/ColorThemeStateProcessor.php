@@ -15,7 +15,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 use const PHP_EOL;
 
-class ColorThemeProcessor implements ProcessorInterface
+final class ColorThemeStateProcessor implements ProcessorInterface
 {
     public function __construct(
         private readonly ProcessorInterface $persistProcessor,
@@ -27,14 +27,14 @@ class ColorThemeProcessor implements ProcessorInterface
     {
         \assert($data instanceof ColorTheme);
 
-        $this->colorThemeRepository->deactivateAll();
-
         $data->setActive(true);
 
         /** @var ColorTheme $colorTheme */
         $colorTheme = $this->persistProcessor->process($data, $operation, $uriVariables, $context);
 
         if ($colorTheme) {
+            $this->colorThemeRepository->deactivateAllExcept($colorTheme);
+
             $projectDir = $this->parameterBag->get('kernel.project_dir');
 
             $contentParts = [];

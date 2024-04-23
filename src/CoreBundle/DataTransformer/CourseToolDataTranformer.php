@@ -26,7 +26,7 @@ class CourseToolDataTranformer implements DataTransformerInterface
         protected readonly ToolChain $toolChain,
     ) {}
 
-    public function transform($object, string $to, array $context = [])
+    public function transform($object, string $to, array $context = []): object
     {
         \assert($object instanceof CTool);
 

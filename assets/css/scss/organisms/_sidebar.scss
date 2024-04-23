@@ -69,50 +69,86 @@
   }
 
   .p-panelmenu {
-    @apply min-w-[15rem];
+
+    .p-panelmenu-header-action {
+      @apply flex items-center gap-2 select-none cursor-pointer relative pl-9 py-3 pr-6 mb-1 overflow-hidden;
+    }
+
+    .p-menuitem-link {
+      @apply flex items-center select-none cursor-pointer relative overflow-hidden;
+    }
 
     .p-panelmenu-header {
-      > .p-panelmenu-header-content a {
-        @apply gap-4 pl-8 py-3 pr-6 mb-1 flex-nowrap;
+      @apply outline-none;
 
+      &.p-highlight,
+      &:hover {
+        @apply bg-support-1 border-l-4 border-primary border-solid text-primary;
+
+        .p-panelmenu-header-action {
+          @apply pl-8;
+        }
+      }
+
+      .p-panelmenu-header-content {
+
+        .p-panelmenu-header-action {
+
+          .p-submenu-icon {
+            @apply order-3 text-body-2 font-semibold;
+          }
+
+          .p-menuitem-icon {
+            @apply order-1 text-body-2 font-semibold;
+          }
+        }
+      }
+
+      &[aria-expanded="false"] {
         .p-submenu-icon {
-          @apply order-3 rotate-90 text-body-2 font-semibold;
+          @apply rotate-90;
         }
+      }
 
-        .p-menuitem-icon {
-          @apply order-1 text-body-2 font-semibold;
+      &[aria-expanded="true"] {
+        .p-submenu-icon {
+          @apply rotate-180;
         }
+      }
 
+      > .p-panelmenu-header-content a {
         .p-menuitem-text {
           @apply order-2 grow text-body-2 font-semibold whitespace-nowrap;
-        }
-
-        &.router-link-active,
-        &[aria-expanded="true"],
-        &:hover{
-          @apply bg-support-1 border-l-4 border-primary border-solid pl-7 text-primary;
-        }
-
-        &[aria-expanded="true"] {
-          .p-submenu-icon {
-            @apply rotate-180;
-          }
         }
       }
     }
 
     .p-panelmenu-content {
+
       .p-menuitem {
-        .p-menuitem-link {
-          @apply pl-8 py-3 pr-6;
 
-          .p-menuitem-text {
-            @apply text-body-2;
+        > .p-menuitem-content {
+
+          .p-menuitem-link {
+            @apply pl-8 py-3 pr-6;
+
+            .p-menuitem-text {
+              @apply text-body-2
+                hover:text-primary;
+            }
           }
+        }
 
-          &.router-link-active-exact,
-          &:hover {
-            @apply text-primary;
+        &.p-highlight {
+
+          > .p-menuitem-content {
+
+            .p-menuitem-link {
+
+              .p-menuitem-text {
+                @apply text-primary;
+              }
+            }
           }
         }
       }

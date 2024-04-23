@@ -6,10 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -22,15 +21,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'gradebook_category')]
 #[ORM\Entity]
 #[ApiResource(
-    attributes: [
-        'security' => "is_granted('ROLE_USER')",
+    normalizationContext: [
+        'groups' => ['gradebookCategory:read'],
     ],
     denormalizationContext: [
         'groups' => ['gradebookCategory:write'],
     ],
-    normalizationContext: [
-        'groups' => ['gradebookCategory:read'],
-    ],
+    security: "is_granted('ROLE_USER')",
 )]
 #[ApiFilter(SearchFilter::class, properties: [
     'course' => 'exact',
@@ -117,7 +114,6 @@ class GradebookCategory
 
     #[ORM\OneToOne(inversedBy: 'gradebookCategory', targetEntity: CDocument::class)]
     #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'iid', onDelete: 'set null')]
-    #[ApiSubresource]
     #[Groups(['gradebookCategory:read', 'gradebookCategory:write'])]
     protected ?CDocument $document = null;
 

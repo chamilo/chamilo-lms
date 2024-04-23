@@ -1,18 +1,23 @@
-.p-inputgroup-addon {
-  //background: $inputGroupBg;
-  //color: $inputGroupTextColor;
-  //border-top: $inputBorder;
-  //border-left: $inputBorder;
-  //border-bottom: $inputBorder;
-  //padding: $inputPadding;
-  //min-width: $inputGroupAddOnMinWidth;
-
-  &:last-child {
-    //border-right: $inputBorder;
-  }
-}
-
 .p-inputgroup {
+  @apply flex items-stretch w-full;
+
+  .p-float-label {
+    @apply flex items-stretch w-full;
+
+    &:first-child input {
+      @apply rounded-l-lg;
+    }
+
+    &:last-child input {
+       @apply rounded-r-lg;
+    }
+  }
+
+  .p-inputtext,
+  .p-inputwrapper {
+    @apply flex-1 w-[1%];
+  }
+
   > .p-component,
   > .p-inputwrapper > .p-inputtext,
   > .p-float-label > .p-component {
@@ -23,47 +28,38 @@
     }
 
     &:focus {
-      @apply z-10;
+      @apply z-[1];
 
       ~ label {
-        @apply z-10;
+        @apply z-[1];
       }
+    }
+  }
+
+  button,
+  input {
+    @apply first:rounded-l-lg last:rounded-r-lg;
+  }
+
+  > .p-inputwrapper:first-child {
+    @apply rounded-l-lg;
+
+    > .p-inputtext {
+      @apply rounded-l-lg;
+    }
+  }
+
+  > .p-inputwrapper:last-child {
+    @apply rounded-r-lg;
+
+    > .p-inputtext {
+      @apply rounded-r-lg;
     }
   }
 }
 
-.p-inputgroup-addon:first-child,
-.p-inputgroup button:first-child,
-.p-inputgroup input:first-child,
-.p-inputgroup > .p-inputwrapper:first-child,
-.p-inputgroup > .p-inputwrapper:first-child > .p-inputtext {
-  @apply rounded-l-lg;
-}
-
-.p-inputgroup .p-float-label:first-child input {
-  @apply rounded-l-lg;
-}
-
-.p-inputgroup-addon:last-child,
-.p-inputgroup button:last-child,
-.p-inputgroup input:last-child,
-.p-inputgroup > .p-inputwrapper:last-child,
-.p-inputgroup > .p-inputwrapper:last-child > .p-inputtext {
-  @apply rounded-r-lg;
-}
-
-.p-inputgroup .p-float-label:last-child input {
-  @apply rounded-r-lg;
-}
-
-.p-fluid {
-  .p-inputgroup {
-    .p-button {
-      @apply w-auto;
-
-      &.p-button-icon-only {
-        @apply w-2.5;
-      }
-    }
-  }
+.p-inputgroup-addon {
+  @apply flex items-center justify-center bg-white border-t border-l border-b border-support-3 px-4 py-3
+    last:border-r last:rounded-r-lg
+    first:rounded-l-lg;
 }

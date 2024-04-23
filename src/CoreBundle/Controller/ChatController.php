@@ -17,7 +17,7 @@ use Event;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ChatController extends AbstractResourceController implements CourseControllerInterface
 {
@@ -25,13 +25,10 @@ class ChatController extends AbstractResourceController implements CourseControl
     use CourseControllerTrait;
     use ResourceControllerTrait;
 
-    /**
-     * @Route("/resources/chat/", name="chat_home", options={"expose"=true})
-     */
-    public function indexAction(Request $request): Response
+    #[Route(path: '/resources/chat/', name: 'chat_home', options: ['expose' => true])]
+    public function index(): Response
     {
         Event::event_access_tool(TOOL_CHAT);
-
         $logInfo = [
             'tool' => TOOL_CHAT,
             'action' => 'start',
@@ -48,10 +45,8 @@ class ChatController extends AbstractResourceController implements CourseControl
         );
     }
 
-    /**
-     * @Route("/resources/chat/conversations/", name="chat_ajax", options={"expose"=true})
-     */
-    public function ajaxAction(Request $request, ResourceNodeRepository $repo): Response
+    #[Route(path: '/resources/chat/conversations/', name: 'chat_ajax', options: ['expose' => true])]
+    public function ajax(Request $request, ResourceNodeRepository $repo): Response
     {
         if (!api_protect_course_script(false)) {
             exit;

@@ -12,11 +12,11 @@ use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ExceptionController extends AbstractController
 {
-    public function showAction(Exception $exception): Response
+    public function show(Exception $exception): Response
     {
         if ('dev' === (string) $this->getParameter('app_env')) {
             throw new HttpException($exception->getCode(), $exception->getMessage());
@@ -52,10 +52,8 @@ class ExceptionController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/error")
-     */
-    public function errorAction(Request $request): Response
+    #[Route(path: '/error')]
+    public function error(Request $request): Response
     {
         $message = $request->getSession()->get('error_message', '');
         $exception = new FlattenException();

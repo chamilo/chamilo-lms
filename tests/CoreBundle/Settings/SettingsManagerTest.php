@@ -73,7 +73,7 @@ class SettingsManagerTest extends AbstractApiTest
         $settingsManager->updateSetting('skill.badge_assignation_notification', 'true');
 
         $badgeSetting = $settingsManager->getSetting('skill.badge_assignation_notification');
-        $this->assertSame('false', $badgeSetting);
+        $this->assertSame('true', $badgeSetting);
 
         $settingEntity = $repo->findOneBy(['variable' => 'badge_assignation_notification']);
         $this->assertSame('true', $settingEntity->getSelectedValue());

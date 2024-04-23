@@ -9,7 +9,6 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\TicketMessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\Kernel;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
 class Version20211005154000 extends AbstractMigrationChamilo
@@ -21,23 +20,16 @@ class Version20211005154000 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-        $doctrine = $container->get('doctrine');
-        $em = $doctrine->getManager();
-
-        /** @var Connection $connection */
-        $connection = $em->getConnection();
-
         /** @var Kernel $kernel */
-        $kernel = $container->get('kernel');
+        $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
-        $attachmentRepo = $container->get(TicketMessageAttachmentRepository::class);
-        $userRepo = $container->get(UserRepository::class);
+        $attachmentRepo = $this->container->get(TicketMessageAttachmentRepository::class);
+        $userRepo = $this->container->get(UserRepository::class);
 
         $sql = 'SELECT * FROM ticket_message_attachments ORDER BY id';
 
-        $result = $connection->executeQuery($sql);
+        $result = $this->connection->executeQuery($sql);
         $items = $result->fetchAllAssociative();
 
         foreach ($items as $item) {
@@ -67,8 +59,8 @@ class Version20211005154000 extends AbstractMigrationChamilo
             error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
             $this->addLegacyFileToResource($filePath, $attachmentRepo, $messageAttachment, $item['id']);
 
-            $em->persist($messageAttachment);
-            $em->flush();
+            $this->entityManager->persist($messageAttachment);
+            $this->entityManager->flush();
         }
     }
 }

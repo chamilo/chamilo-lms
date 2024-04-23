@@ -8,7 +8,7 @@ namespace Chamilo\CoreBundle\Controller;
 
 use SocialManager;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com>.
@@ -16,10 +16,8 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/online')]
 class OnlineController extends BaseController
 {
-    /**
-     * @Route("/", name="users_online", methods={"GET"}, options={"expose"=true})
-     */
-    public function indexAction(): Response
+    #[Route(path: '/', name: 'users_online', methods: ['GET'], options: ['expose' => true])]
+    public function index(): Response
     {
         // @todo don't use legacy code
         $users = who_is_online(0, MAX_ONLINE_USERS);
@@ -33,10 +31,8 @@ class OnlineController extends BaseController
         );
     }
 
-    /**
-     * @Route("/in_course/{cidReq}", name="online_users_in_course", methods={"GET", "POST"}, options={"expose"=true})
-     */
-    public function onlineUsersInCoursesAction(string $cidReq): Response
+    #[Route(path: '/in_course/{cidReq}', name: 'online_users_in_course', methods: ['GET', 'POST'], options: ['expose' => true])]
+    public function onlineUsersInCourses(string $cidReq): Response
     {
         // @todo don't use legacy code
         $users = who_is_online_in_this_course(
@@ -57,10 +53,8 @@ class OnlineController extends BaseController
         );
     }
 
-    /**
-     * @Route("/in_sessions", name="online_users_in_session", methods={"GET", "POST"}, options={"expose"=true})
-     */
-    public function onlineUsersInCoursesSessionAction(int $id = 0): Response
+    #[Route(path: '/in_sessions', name: 'online_users_in_session', methods: ['GET', 'POST'], options: ['expose' => true])]
+    public function onlineUsersInCoursesSession(int $id = 0): Response
     {
         $users = who_is_online_in_this_course(
             0,

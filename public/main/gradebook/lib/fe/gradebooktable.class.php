@@ -947,37 +947,39 @@ class GradebookTable extends SortableTable
             ) {
                 $id_cat = (int) $_GET['selectcat'];
                 $category = Category::load($id_cat);
-                $weight_category = (int) $this->build_weight($category[0]);
-                $course_code = $this->build_course_code($category[0]);
-                $localCourseInfo = api_get_course_info($course_code);
-                $localCourseId = $localCourseInfo['real_id'];
-                $weight_total_links = round($weight_total_links);
+                if (isset($category[0])) {
+                    $weight_category = (int) $this->build_weight($category[0]);
+                    $course_code = $this->build_course_code($category[0]);
+                    $localCourseInfo = api_get_course_info($course_code);
+                    $localCourseId = $localCourseInfo['real_id'];
+                    $weight_total_links = round($weight_total_links);
 
-                if ($weight_total_links > $weight_category ||
-                    $weight_total_links < $weight_category ||
-                    $weight_total_links > $weight_category
-                ) {
-                    $warning_message = sprintf(get_lang('The sum of all weights of activities must be %s'), $weight_category);
-                    $modify_icons =
-                        '<a href="gradebook_edit_cat.php?editcat='.$id_cat.'&cid='.$localCourseId.'&sid='.api_get_session_id().'">'.
-                        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'), ['alt' => $warning_message]);
-                    $warning_message .= $modify_icons;
-                    echo Display::return_message($warning_message, 'warning', false);
-                }
+                    if ($weight_total_links > $weight_category ||
+                        $weight_total_links < $weight_category ||
+                        $weight_total_links > $weight_category
+                    ) {
+                        $warning_message = sprintf(get_lang('The sum of all weights of activities must be %s'), $weight_category);
+                        $modify_icons =
+                            '<a href="gradebook_edit_cat.php?editcat='.$id_cat.'&cid='.$localCourseId.'&sid='.api_get_session_id().'">'.
+                            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'), ['alt' => $warning_message]);
+                        $warning_message .= $modify_icons;
+                        echo Display::return_message($warning_message, 'warning', false);
+                    }
 
-                $content_html = DocumentManager::replace_user_info_into_html(
-                    api_get_user_id(),
-                    $localCourseInfo,
-                    api_get_session_id()
-                );
+                    $content_html = DocumentManager::replace_user_info_into_html(
+                        api_get_user_id(),
+                        $localCourseInfo,
+                        api_get_session_id()
+                    );
 
-                if (!empty($content_html)) {
-                    $new_content = explode('</head>', $content_html['content']);
-                }
+                    if (!empty($content_html)) {
+                        $new_content = explode('</head>', $content_html['content']);
+                    }
 
-                if (empty($new_content[0])) {
-                    // Set default certificate
-                    DocumentManager::generateDefaultCertificate($localCourseInfo);
+                    if (empty($new_content[0])) {
+                        // Set default certificate
+                        DocumentManager::generateDefaultCertificate($localCourseInfo);
+                    }
                 }
             }
 

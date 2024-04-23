@@ -10,11 +10,11 @@ use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CourseBundle\Repository\CLpCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Sortable\Entity\Repository\SortableRepository;
 use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Learning paths categories.
  */
 #[ORM\Table(name: 'c_lp_category')]
-#[ORM\Entity(repositoryClass: SortableRepository::class)]
+#[ORM\Entity(repositoryClass: CLpCategoryRepository::class)]
 class CLpCategory extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]

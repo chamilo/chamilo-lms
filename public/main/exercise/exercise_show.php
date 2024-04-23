@@ -865,7 +865,7 @@ foreach ($questionList as $questionId) {
 } // end of large foreach on questions
 
 // Display the text when finished message if we are on a LP #4227
-$end_of_message = $objExercise->getFinishText();
+$end_of_message = $objExercise->getFinishText($totalScore, $totalWeighting);
 if (!empty($end_of_message) && ('learnpath' === $origin)) {
     echo Display::return_message($end_of_message, 'normal', false);
     echo "<div class='clear'>&nbsp;</div>";

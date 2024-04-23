@@ -6,8 +6,8 @@ import StudentViewButton from "../StudentViewButton.vue"
 defineProps({
   title: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 })
 
 const cidReqStore = useCidReqStore()
@@ -22,10 +22,10 @@ const { course } = storeToRefs(cidReqStore)
       v-text="title"
     />
 
-    <StudentViewButton
-      v-if="course"
-    />
+    <div class="section-header__actions">
+      <StudentViewButton v-if="course" />
 
-    <slot />
+      <slot />
+    </div>
   </div>
 </template>

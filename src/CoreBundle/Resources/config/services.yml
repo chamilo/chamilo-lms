@@ -18,23 +18,13 @@ services:
     Doctrine\Migrations\Version\DbalMigrationFactory: ~
     Chamilo\CoreBundle\Migrations\MigrationFactory:
         decorates: Doctrine\Migrations\Version\DbalMigrationFactory
-        arguments: ['@Chamilo\CoreBundle\Migrations\MigrationFactory.inner', '@service_container']
+        arguments: ['@Chamilo\CoreBundle\Migrations\MigrationFactory.inner', '@service_container', '@doctrine.orm.entity_manager']
 
     Chamilo\CoreBundle\Controller\:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
 
     Chamilo\CoreBundle\Hook\HookFactory: ~
-
-    Chamilo\CoreBundle\Controller\ResourceController:
-        arguments:
-            - '@Chamilo\CoreBundle\Repository\ResourceFactory'
-
-    Chamilo\CoreBundle\DataPersister\MessageDataPersister:
-        arguments: ['@api_platform.doctrine.orm.data_persister']
-
-    Chamilo\CoreBundle\DataPersister\UserRelUserDataPersister:
-        arguments: ['@api_platform.doctrine.orm.data_persister']
 
     # Form types
     # Custom yes/no form type, use in the platform settings

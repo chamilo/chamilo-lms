@@ -11,7 +11,7 @@ use Chamilo\CoreBundle\ServiceHelper\CidReqHelper;
 use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class EventLoggerService
 {

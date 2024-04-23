@@ -33,8 +33,7 @@ final class Version20200821224243 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $connection = $this->getEntityManager()->getConnection();
-        $result = $connection->executeQuery('SELECT * FROM message WHERE user_receiver_id IS NOT NULL');
+        $result = $this->connection->executeQuery('SELECT * FROM message WHERE user_receiver_id IS NOT NULL');
         $messages = $result->fetchAllAssociative();
 
         if ($messages) {
@@ -42,7 +41,7 @@ final class Version20200821224243 extends AbstractMigrationChamilo
                 $messageId = (int) $message['id'];
                 $receiverId = (int) $message['user_receiver_id'];
 
-                $result = $connection->executeQuery(" SELECT * FROM message_rel_user WHERE message_id = $messageId AND user_id = $receiverId");
+                $result = $this->connection->executeQuery(" SELECT * FROM message_rel_user WHERE message_id = $messageId AND user_id = $receiverId");
                 $exists = $result->fetchAllAssociative();
 
                 if (empty($exists)) {

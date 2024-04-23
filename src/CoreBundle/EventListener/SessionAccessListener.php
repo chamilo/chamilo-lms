@@ -9,10 +9,11 @@ namespace Chamilo\CoreBundle\EventListener;
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CourseBundle\Event\SessionAccess;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class SessionAccessListener
+class SessionAccessListener implements EventSubscriberInterface
 {
     protected EntityManager $em;
 
@@ -45,5 +46,13 @@ class SessionAccessListener
 
         $this->em->persist($access);
         $this->em->flush();
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public static function getSubscribedEvents(): array
+    {
+        return ['chamilo_course.course.session' => 'onSessionAccessEvent'];
     }
 }

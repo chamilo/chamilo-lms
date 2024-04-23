@@ -17,6 +17,9 @@ use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
+use Chamilo\CoreBundle\Filter\CidFilter;
+use Chamilo\CoreBundle\Filter\SidFilter;
+use Chamilo\CourseBundle\Repository\CToolIntroRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -25,8 +28,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(operations: [new Get(security: 'is_granted(\'VIEW\', object)'), new Put(security: 'is_granted(\'EDIT\', object)'), new Delete(security: 'is_granted(\'DELETE\', object)'), new GetCollection(security: 'is_granted(\'ROLE_USER\')'), new Post(securityPostDenormalize: 'is_granted(\'CREATE\', object)')], security: 'is_granted(\'ROLE_ADMIN\') or is_granted(\'ROLE_CURRENT_COURSE_TEACHER\')', denormalizationContext: ['groups' => ['c_tool_intro:write']], normalizationContext: ['groups' => ['c_tool_intro:read']])]
 #[ORM\Table(name: 'c_tool_intro')]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: CToolIntroRepository::class)]
 #[ApiFilter(filterClass: SearchFilter::class, properties: ['courseTool' => 'exact'])]
+#[ApiFilter(filterClass: CidFilter::class)]
+#[ApiFilter(filterClass: SidFilter::class)]
 class CToolIntro extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
     #[Groups(['c_tool_intro:read'])]

@@ -20,16 +20,12 @@ final class Version20230315115019 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-
         /** @var Kernel $kernel */
-        $kernel = $container->get('kernel');
+        $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
 
-        $em = $this->getEntityManager();
-        $connection = $em->getConnection();
         $sql = 'SELECT * FROM system_template';
-        $result = $connection->executeQuery($sql);
+        $result = $this->connection->executeQuery($sql);
         $all = $result->fetchAllAssociative();
 
         $table = $schema->getTable('system_template');
@@ -38,7 +34,7 @@ final class Version20230315115019 extends AbstractMigrationChamilo
             foreach ($all as $systemTemplate) {
                 if (!empty($systemTemplate['image'])) {
                     /** @var SystemTemplate|null $template */
-                    $template = $em->find(SystemTemplate::class, $systemTemplate['id']);
+                    $template = $this->entityManager->find(SystemTemplate::class, $systemTemplate['id']);
                     if ($template->hasImage()) {
                         continue;
                     }
@@ -53,12 +49,12 @@ final class Version20230315115019 extends AbstractMigrationChamilo
                             ->setTitle($fileName)
                             ->setFile($file)
                         ;
-                        $em->persist($asset);
-                        $em->flush();
+                        $this->entityManager->persist($asset);
+                        $this->entityManager->flush();
                         $template->setImage($asset);
 
-                        $em->persist($template);
-                        $em->flush();
+                        $this->entityManager->persist($template);
+                        $this->entityManager->flush();
                     }
                 }
             }

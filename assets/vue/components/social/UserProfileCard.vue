@@ -1,10 +1,10 @@
 <template>
   <BaseCard plain>
     <div class="p-4 text-center user-profile-card">
-      <img
-        :src="user.illustrationUrl"
-        alt="Profile picture"
-        class="mb-4 w-24 h-24 mx-auto rounded-full"
+      <BaseUserAvatar
+        :image-url="user.illustrationUrl"
+        :alt="t('Picture')"
+        size="xlarge"
       />
       <div
         v-if="visibility.firstname && visibility.lastname"
@@ -115,11 +115,14 @@ import BaseButton from "../basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
 import Divider from "primevue/divider"
 import axios from "axios"
+import { useSecurityStore } from "../../store/securityStore"
+import BaseUserAvatar from "../basecomponents/BaseUserAvatar.vue"
 
 const { t } = useI18n()
+const store = useStore()
+const { isAdmin } = useSecurityStore()
 const user = inject("social-user")
 const isCurrentUser = inject("is-current-user")
-const isAdmin = ref(false)
 const extraInfo = ref([])
 const chatEnabled = ref(true)
 const isUserOnline = ref(false)
@@ -160,6 +163,4 @@ function flagIconExists(code) {
 }
 
 function chatWith(userId, completeName, isOnline, avatarSmall) {}
-
-isAdmin.value = user.value.role === "admin"
 </script>

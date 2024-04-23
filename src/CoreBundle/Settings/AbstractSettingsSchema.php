@@ -71,7 +71,7 @@ abstract class AbstractSettingsSchema implements SchemaInterface
 
                 $existingHelp = $options['help'] ?? '';
                 if (!empty($existingHelp)) {
-                    $combinedHelp = $helpFromDb . "<br>" . $existingHelp;
+                    $combinedHelp = $helpFromDb.'<br>'.$existingHelp;
                 } else {
                     $combinedHelp = $helpFromDb;
                 }

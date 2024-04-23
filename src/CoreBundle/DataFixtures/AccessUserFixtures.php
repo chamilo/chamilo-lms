@@ -11,28 +11,22 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class AccessUserFixtures extends Fixture implements ContainerAwareInterface
+class AccessUserFixtures extends Fixture
 {
     public const ADMIN_USER_REFERENCE = 'admin';
     public const ANON_USER_REFERENCE = 'anon';
     public const ACCESS_URL_REFERENCE = 'accessUrl';
 
-    private ContainerInterface $container;
-
-    public function setContainer(?ContainerInterface $container = null): void
-    {
-        $this->container = $container;
-    }
+    public function __construct(
+        private readonly ToolChain $toolChain,
+        private readonly UserRepository $userRepository
+    ) {}
 
     public function load(ObjectManager $manager): void
     {
         $timezone = 'Europe\Paris';
-        $container = $this->container;
-        $toolChain = $container->get(ToolChain::class);
-        $toolChain->createTools();
+        $this->toolChain->createTools();
 
         // Defined in AccessGroupFixtures.php.
         // $group = $this->getReference('GROUP_ADMIN');
@@ -55,9 +49,7 @@ class AccessUserFixtures extends Fixture implements ContainerAwareInterface
 
         $manager->persist($admin);
 
-        /** @var UserRepository $userRepo */
-        $userRepo = $container->get(UserRepository::class);
-        $userRepo->updateUser($admin);
+        $this->userRepository->updateUser($admin);
 
         $anon = (new User())
             ->setSkipResourceNode(true)
@@ -75,6 +67,7 @@ class AccessUserFixtures extends Fixture implements ContainerAwareInterface
 
         $fallbackUser = new User();
         $fallbackUser
+            ->setSkipResourceNode(true)
             ->setUsername('fallback_user')
             ->setEmail('fallback@example.com')
             ->setPlainPassword('fallback_user')
@@ -92,9 +85,9 @@ class AccessUserFixtures extends Fixture implements ContainerAwareInterface
 
         $manager->flush();
 
-        $userRepo->addUserToResourceNode($admin->getId(), $admin->getId());
-        $userRepo->addUserToResourceNode($anon->getId(), $admin->getId());
-        $userRepo->addUserToResourceNode($fallbackUser->getId(), $admin->getId());
+        $this->userRepository->addUserToResourceNode($admin->getId(), $admin->getId());
+        $this->userRepository->addUserToResourceNode($anon->getId(), $admin->getId());
+        $this->userRepository->addUserToResourceNode($fallbackUser->getId(), $admin->getId());
 
         $manager->flush();
 

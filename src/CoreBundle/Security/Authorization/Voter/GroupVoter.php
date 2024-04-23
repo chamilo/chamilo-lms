@@ -13,10 +13,10 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Doctrine\ORM\EntityManager;
 use GroupManager;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class GroupVoter extends Voter

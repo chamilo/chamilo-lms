@@ -10,7 +10,6 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\Kernel;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 
 class Version20210221082033 extends AbstractMigrationChamilo
@@ -22,27 +21,20 @@ class Version20210221082033 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-
         /** @var Kernel $kernel */
-        $kernel = $container->get('kernel');
+        $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
-        $doctrine = $container->get('doctrine');
 
-        $em = $doctrine->getManager();
+        $lpRepo = $this->container->get(CLpRepository::class);
 
-        /** @var Connection $connection */
-        $connection = $em->getConnection();
-        $lpRepo = $container->get(CLpRepository::class);
-
-        $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();
             $sql = "SELECT * FROM c_lp WHERE c_id = {$courseId}
                     ORDER BY iid";
-            $result = $connection->executeQuery($sql);
+            $result = $this->connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
             foreach ($items as $itemData) {
                 $id = $itemData['iid'];
@@ -53,14 +45,14 @@ class Version20210221082033 extends AbstractMigrationChamilo
                     error_log('MIGRATIONS :: $filePath -- '.$filePath.' ...');
                     if ($this->fileExists($filePath)) {
                         $this->addLegacyFileToResource($filePath, $lpRepo, $lp, $lp->getIid(), $path);
-                        $em->persist($lp);
-                        $em->flush();
+                        $this->entityManager->persist($lp);
+                        $this->entityManager->flush();
                     }
                 }
             }
 
-            $em->flush();
-            $em->clear();
+            $this->entityManager->flush();
+            $this->entityManager->clear();
         }
     }
 }

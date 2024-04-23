@@ -10,3 +10,21 @@
     @apply border-none border-0 m-0 p-0 w-full;
   }
 }
+
+.admin-colors {
+  &__container {
+    @apply flex flex-col md:flex-row gap-4 mt-6;
+  }
+
+  &__settings {
+    @apply space-y-4 flex-1;
+
+    .row-group {
+      @apply flex flex-col gap-4 items-start md:items-end md:grid md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3;
+    }
+  }
+
+  &__preview {
+    @apply space-y-4 flex-1;
+  }
+}

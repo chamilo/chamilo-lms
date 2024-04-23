@@ -2,7 +2,7 @@
   @apply bg-white px-0 py-2 border border-gray-25 rounded-sm w-52;
 
   .p-menuitem-link {
-    @apply p-3 duration-150 select-none;
+    @apply p-3 duration-150 select-none flex cursor-pointer;
 
     .p-menuitem-text {
       @apply text-body-2;

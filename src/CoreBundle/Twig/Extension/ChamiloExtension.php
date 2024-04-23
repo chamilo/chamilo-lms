@@ -52,17 +52,17 @@ class ChamiloExtension extends AbstractExtension
             new TwigFilter('api_get_configuration_value', 'api_get_configuration_value'),
             new TwigFilter('remove_xss', 'Security::remove_XSS'),
             new TwigFilter('user_complete_name', 'UserManager::formatUserFullName'),
-            new TwigFilter('user_complete_name_with_link', [$this, 'completeUserNameWithLink']),
-            new TwigFilter('illustration', [$this, 'getIllustration']),
-            new TwigFilter('api_get_setting', [$this, 'getSettingsParameter']),
+            new TwigFilter('user_complete_name_with_link', $this->completeUserNameWithLink(...)),
+            new TwigFilter('illustration', $this->getIllustration(...)),
+            new TwigFilter('api_get_setting', $this->getSettingsParameter(...)),
         ];
     }
 
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('chamilo_settings_all', [$this, 'getSettings']),
-            new TwigFunction('chamilo_settings_get', [$this, 'getSettingsParameter']),
+            new TwigFunction('chamilo_settings_all', $this->getSettings(...)),
+            new TwigFunction('chamilo_settings_get', $this->getSettingsParameter(...)),
             new TwigFunction('chamilo_settings_has', [$this, 'hasSettingsParameter']),
         ];
     }

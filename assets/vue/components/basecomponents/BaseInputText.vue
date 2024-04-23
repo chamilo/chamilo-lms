@@ -6,6 +6,7 @@
         :model-value="modelValue"
         :class="{ 'p-invalid': isInvalid, [inputClass]: true }"
         :aria-label="label"
+        :disabled="disabled"
         type="text"
         @update:model-value="updateValue"
       />
@@ -34,7 +35,7 @@
 <script setup>
 import InputText from "primevue/inputtext"
 
-const props = defineProps({
+defineProps({
   id: {
     type: String,
     require: true,
@@ -73,6 +74,10 @@ const props = defineProps({
   inputClass: {
     type: String,
     default: "",
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
   },
 })
 

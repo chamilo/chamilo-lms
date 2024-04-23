@@ -23,18 +23,13 @@ class Version20210813150011 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $container = $this->getContainer();
-
         /** @var Kernel $kernel */
-        $kernel = $container->get('kernel');
+        $kernel = $this->container->get('kernel');
         $rootPath = $kernel->getProjectDir();
-        $doctrine = $container->get('doctrine');
 
-        $em = $doctrine->getManager();
-        // $connection = $em->getConnection();
         // $skillRepo = $container->get(SkillRepository::class);
 
-        $q = $em->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Skill c');
+        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Skill c');
 
         /** @var Skill $skill */
         foreach ($q->toIterable() as $skill) {
@@ -62,8 +57,8 @@ class Version20210813150011 extends AbstractMigrationChamilo
                 ;
 
                 $skill->setAsset($asset);
-                $em->persist($skill);
-                $em->flush();
+                $this->entityManager->persist($skill);
+                $this->entityManager->flush();
             }
         }
     }

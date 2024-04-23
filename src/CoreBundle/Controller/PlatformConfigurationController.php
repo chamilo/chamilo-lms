@@ -7,19 +7,24 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use bbb;
-use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\ServiceHelper\TicketProjectHelper;
+use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use TicketManager;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/platform-config')]
 class PlatformConfigurationController extends AbstractController
 {
     use ControllerTrait;
+
+    public function __construct(
+        private readonly TicketProjectHelper $ticketProjectHelper,
+        private readonly UserHelper $userHelper,
+    ) {}
 
     #[Route('/list', name: 'platform_config_list', methods: ['GET'])]
     public function list(SettingsManager $settingsManager): Response
@@ -60,6 +65,7 @@ class PlatformConfigurationController extends AbstractController
                 'course.course_validation',
                 'course.student_view_enabled',
                 'course.allow_edit_tool_visibility_in_session',
+                'course.enable_record_audio',
                 'session.limit_session_admin_role',
                 'session.allow_session_admin_read_careers',
                 'session.limit_session_admin_list_users',
@@ -71,15 +77,15 @@ class PlatformConfigurationController extends AbstractController
                 'language.language_priority_4',
                 'profile.allow_social_map_fields',
                 'forum.global_forums_course_id',
+                'document.students_download_folders',
             ];
 
-            /** @var User|null $user */
-            $user = $this->getUser();
+            $user = $this->userHelper->getCurrent();
 
             $configuration['settings']['display.show_link_ticket_notification'] = 'false';
 
             if (!empty($user)) {
-                $userIsAllowedInProject = TicketManager::userIsAllowInProject(1);
+                $userIsAllowedInProject = $this->ticketProjectHelper->userIsAllowInProject(1);
 
                 if ($userIsAllowedInProject
                     && 'true' === $settingsManager->getSetting('display.show_link_ticket_notification')

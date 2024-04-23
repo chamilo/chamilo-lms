@@ -28,7 +28,7 @@ class ExtraFieldRelTag
 
     #[ORM\ManyToOne(targetEntity: Tag::class, inversedBy: 'extraFieldRelTags')]
     #[ORM\JoinColumn(name: 'tag_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    protected Tag $tag;
+    private ?Tag $tag = null;
 
     #[ORM\Column(name: 'item_id', type: 'integer', nullable: false)]
     protected int $itemId;
@@ -72,12 +72,12 @@ class ExtraFieldRelTag
         return $this;
     }
 
-    public function getTag(): Tag
+    public function getTag(): ?Tag
     {
         return $this->tag;
     }
 
-    public function setTag(Tag $tag): self
+    public function setTag(?Tag $tag): static
     {
         $this->tag = $tag;
 

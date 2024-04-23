@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CourseBundle\Repository\CLpItemRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'c_lp_item')]
 #[ORM\Index(name: 'lp_id', columns: ['lp_id'])]
 #[Gedmo\Tree(type: 'nested')]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: CLpItemRepository::class)]
 class CLpItem implements Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]

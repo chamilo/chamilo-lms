@@ -63,9 +63,9 @@ class SessionRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Session[]
+     * @return array<int, Session>
      */
-    public function getSessionsByUser(User $user, AccessUrl $url)
+    public function getSessionsByUser(User $user, AccessUrl $url): array
     {
         $qb = $this->createQueryBuilder('s');
         $qb

@@ -885,9 +885,14 @@ function api_valid_email($address)
  *
  * @author Roan Embrechts
  */
-function api_protect_course_script($print_headers = false, $allow_session_admins = false, $checkTool = '')
+function api_protect_course_script($print_headers = false, $allow_session_admins = false, string $checkTool = '', $cid = null): bool
 {
     $course_info = api_get_course_info();
+
+    if (isset($cid)) {
+        $course_info = api_get_course_info_by_id($cid);
+    }
+
     if (empty($course_info)) {
         api_not_allowed($print_headers);
 
@@ -2676,7 +2681,7 @@ function api_get_setting($variable, $isArray = false, $key = null)
             break;
         default:
             $settingValue = $settingsManager->getSetting($variable, true);
-            if ($isArray && !empty($settingValue)) {
+            if (is_string($settingValue) && $isArray && !empty($settingValue)) {
                 // Check if the value is a valid JSON string
                 $decodedValue = json_decode($settingValue, true);
 

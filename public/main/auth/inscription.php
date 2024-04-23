@@ -1142,7 +1142,7 @@ if ($form->validate()) {
 
     $providerKey = 'main';
     $roles = $userEntity->getRoles();
-    $token = new UsernamePasswordToken($userEntity, null, $providerKey, $roles);
+    $token = new UsernamePasswordToken($userEntity, $providerKey, $roles);
 
     $container->get(ContainerHelper::class)->getTokenStorage()->setToken($token);
     $container->get('session')->set('_security_' . $providerKey, serialize($token));

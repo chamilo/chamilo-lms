@@ -11,7 +11,9 @@ use Chamilo\CourseBundle\Entity\CCalendarEvent;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-exit;
+if ('cli' != php_sapi_name()) {
+    exit; //do not run from browser
+}
 
 $batchCounter = 0;
 $batchSize = 100;

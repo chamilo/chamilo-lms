@@ -63,13 +63,12 @@
     </div>
 
     <div>
-      {{ t("From") }}
-
-      <BaseChip
+      <span class="mr-2">{{ t("From") }}</span>
+      <BaseUserAvatar
         v-if="item.sender"
-        :value="item.sender"
-        image-field="illustrationUrl"
-        label-field="username"
+        :image-url="item.sender.illustrationUrl"
+        :alt="t('Sender profile picture')"
+        class="mr-2 mb-2"
       />
       <span
         v-else
@@ -78,26 +77,24 @@
     </div>
 
     <div>
-      {{ t("To") }}
-
-      <BaseChip
+      <span class="mr-2">{{ t("To") }}</span>
+      <BaseUserAvatar
         v-for="receiver in item.receiversTo"
         :key="receiver.receiver.id"
-        :value="receiver.receiver"
-        image-field="illustrationUrl"
-        label-field="username"
+        :image-url="receiver.receiver.illustrationUrl"
+        :alt="t('Receiver profile picture')"
+        class="mr-2 mb-2"
       />
     </div>
 
     <div>
-      {{ t("Cc") }}
-
-      <BaseChip
+      <span class="mr-2">{{ t("Cc") }}</span>
+      <BaseUserAvatar
         v-for="receiver in item.receiversCc"
         :key="receiver.receiver.id"
-        :value="receiver.receiver"
-        image-field="illustrationUrl"
-        label-field="username"
+        :image-url="receiver.receiver.illustrationUrl"
+        :alt="t('Carbon copy receiver profile picture')"
+        class="mr-2 mb-2"
       />
     </div>
 
@@ -154,6 +151,7 @@ import { useFormatDate } from "../../composables/formatDate"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 import messageTagService from "../../services/messageTagService"
 import { useSecurityStore } from "../../store/securityStore"
+import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 
 const confirm = useConfirm()
 const { t } = useI18n()

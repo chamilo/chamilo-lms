@@ -23,6 +23,7 @@ $now = new DateTime('now', new DateTimeZone('UTC'));
 $em = Database::getManager();
 $remindersRepo = $em->getRepository(AgendaReminder::class);
 
+/** @var array<AgendaReminder> $reminders */
 $reminders = $remindersRepo->findBy(['sent' => false]);
 
 $senderId = (int) api_get_setting('agenda.agenda_reminders_sender_id');
@@ -159,7 +160,14 @@ foreach ($reminders as $reminder) {
             if ($resourceLink->getUser()) {
                 $userIdList[] = $resourceLink->getUser()->getId();
             } elseif ($resourceLink->getGroup()) {
-                $groupUsers = GroupManager::get_users($resourceLink->getGroup()->getId(), false, null, null, false, $event->getSessionId());
+                $groupUsers = GroupManager::get_users(
+                    $resourceLink->getGroup()->getIid(),
+                    false,
+                    null,
+                    null,
+                    false,
+                    $resourceLink->getCourse()?->getId()
+                );
                 foreach ($groupUsers as $groupUserId) {
                     $groupUserIdList[] = $groupUserId;
                 }

@@ -76,11 +76,9 @@
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
-import { isVisible, VISIBLE } from "./linkVisibility"
+import { isVisible } from "./linkVisibility"
 import { useSecurityStore } from "../../store/securityStore"
-import { useStore } from "vuex"
 
-const store = useStore()
 const securityStore = useSecurityStore()
 const isCurrentTeacher = securityStore.isCurrentTeacher
 

@@ -22,32 +22,19 @@
             </p>
           </div>
         </div>
-
-        <!--Button
-          class="p-button-sm mb-4"
-          label="Edit profile"
-          @click="btnEditProfileOnClick"
-        /-->
-
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, provide, readonly, ref, watch } from "vue"
-import { useStore } from "vuex"
+import { onMounted, provide } from "vue"
 
 import Avatar from "primevue/avatar"
-import { useI18n } from "vue-i18n"
 import SocialSideMenu from "../../components/social/SocialSideMenu.vue";
 import UserProfileCard from "../../components/social/UserProfileCard.vue"
-import { useRoute } from "vue-router"
 import { useSocialInfo } from "../../composables/useSocialInfo"
 
-const store = useStore()
-const route = useRoute()
-const { t } = useI18n()
 
 const { user, isCurrentUser, groupInfo, isGroup, loadUser } = useSocialInfo();
 
@@ -57,8 +44,4 @@ provide("group-info", groupInfo);
 provide("is-group", isGroup);
 
 onMounted(loadUser);
-
-function btnEditProfileOnClick() {
-  window.location = "/account/edit"
-}
 </script>

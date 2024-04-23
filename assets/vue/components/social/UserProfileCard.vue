@@ -110,7 +110,6 @@
 
 <script setup>
 import { computed, inject, ref, watchEffect } from "vue"
-import { useStore } from "vuex"
 import BaseCard from "../basecomponents/BaseCard.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"

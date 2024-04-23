@@ -164,7 +164,6 @@ import EmptyState from "../../components/EmptyState.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { computed, onMounted, ref } from "vue"
-import { useStore } from "vuex"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
@@ -177,7 +176,6 @@ import Skeleton from "primevue/skeleton"
 import { isVisible, toggleVisibilityProperty, visibilityFromBoolean } from "../../components/links/linkVisibility"
 import { useSecurityStore } from "../../store/securityStore"
 
-const store = useStore()
 const route = useRoute()
 const router = useRouter()
 const securityStore = useSecurityStore()

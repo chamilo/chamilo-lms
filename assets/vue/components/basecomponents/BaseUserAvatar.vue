@@ -19,7 +19,7 @@ const props = defineProps({
     require: true,
     default: "",
   },
-  // this sets the aria-label which sets alt property of image inside Avatar component
+  // this sets the aria-label which sets the alt property of the image inside Avatar component
   alt: {
     type: String,
     required: true,
@@ -39,8 +39,8 @@ const props = defineProps({
 });
 
 const imageSize = computed(() => {
-  // these numbers are aproximate, they were calculated with a size
-  // that allow to see the image clear
+  // these numbers are approximate, they were calculated with a size
+  // allowing to see the image clearly
   if (props.size === "xlarge") {
     return 250;
   } else if (props.size === "large") {

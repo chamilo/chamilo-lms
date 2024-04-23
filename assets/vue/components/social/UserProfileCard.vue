@@ -119,7 +119,6 @@ import { useSecurityStore } from "../../store/securityStore"
 import BaseUserAvatar from "../basecomponents/BaseUserAvatar.vue"
 
 const { t } = useI18n()
-const store = useStore()
 const { isAdmin } = useSecurityStore()
 const user = inject("social-user")
 const isCurrentUser = inject("is-current-user")

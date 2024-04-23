@@ -1135,6 +1135,7 @@ if ($form->validate()) {
     if ('AppCache' == get_class($kernel)) {
         $kernel = $kernel->getKernel();
     }
+    /** @var \Symfony\Component\DependencyInjection\ContainerInterface $container */
     $container = $kernel->getContainer();
     $entityManager = $container->get('doctrine.orm.default_entity_manager');
     $userRepository = $entityManager->getRepository(User::class);
@@ -1145,8 +1146,8 @@ if ($form->validate()) {
     $token = new UsernamePasswordToken($userEntity, $providerKey, $roles);
 
     $container->get(ContainerHelper::class)->getTokenStorage()->setToken($token);
-    $container->get('session')->set('_security_' . $providerKey, serialize($token));
-    $session = $container->get('session');
+    $sessionHandler = $container->get('request_stack')->getSession();
+    $sessionHandler->set('_security_' . $providerKey, serialize($token));
     $userData = [
         'firstName' => stripslashes($values['firstname']),
         'lastName' => stripslashes($values['lastname']),
@@ -1155,10 +1156,10 @@ if ($form->validate()) {
         'user_id' => $userId
     ];
 
-    $session->set('_user', $userData);
+    $sessionHandler->set('_user', $userData);
 
     $is_allowedCreateCourse = isset($values['status']) && 1 == $values['status'];
-    $session->set('is_allowedCreateCourse', $is_allowedCreateCourse);
+    $sessionHandler->set('is_allowedCreateCourse', $is_allowedCreateCourse);
 
 
     // Stats

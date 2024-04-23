@@ -27372,3 +27372,12 @@ msgstr "Allow ticket projects to be accesses by specific user roles. Example: ['
 
 msgid "Contact Us"
 msgstr "Contact Us"
+
+msgid "Sender profile picture"
+msgstr "Sender profile picture"
+
+msgid "Receiver profile picture"
+msgstr "Receiver profile picture"
+
+msgid "Carbon copy receiver profile picture"
+msgstr "Carbon copy receiver profile picture"

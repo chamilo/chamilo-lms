@@ -10,6 +10,9 @@ use Chamilo\CoreBundle\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
+/**
+ * @extends Voter<'ROLE_ANONYMOUS', User>
+ */
 class AnonymousVoter extends Voter
 {
     protected function supports(string $attribute, $subject): bool

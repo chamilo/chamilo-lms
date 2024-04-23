@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 
 /**
- * @template-implements ProviderInterface<array<int, Message>>
+ * @template-implements ProviderInterface<Message>
  */
 final class MessageByGroupStateProvider implements ProviderInterface
 {

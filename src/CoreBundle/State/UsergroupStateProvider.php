@@ -16,7 +16,7 @@ use Exception;
 use Symfony\Bundle\SecurityBundle\Security;
 
 /**
- * @template-implements ProviderInterface<array<int, Usergroup>>
+ * @template-implements ProviderInterface<Usergroup>
  */
 final class UsergroupStateProvider implements ProviderInterface
 {

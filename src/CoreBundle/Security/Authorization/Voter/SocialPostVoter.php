@@ -13,6 +13,9 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
+/**
+ * @extends Voter<'CREATE'|'VIEW'|'EDIT'|'DELETE', SocialPost>
+ */
 class SocialPostVoter extends Voter
 {
     public const CREATE = 'CREATE';

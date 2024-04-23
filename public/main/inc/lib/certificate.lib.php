@@ -676,6 +676,10 @@ class Certificate extends Model
         }
         $tplContent->assign('terms_validation_date', $termsValidationDate);
 
+        if (empty($totalTimeInLearningPaths)) {
+            $totalTimeInLearningPaths = $timeInSeconds;
+        }
+
         // Ofaj
         $tplContent->assign('time_in_platform_in_hours', round($timeInSeconds/3600, 1));
         $tplContent->assign(

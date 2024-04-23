@@ -9443,7 +9443,7 @@ class Exercise
                     if ($returnData) {
                         $currentRow['id'] = $exercise->id;
                         $currentRow['url'] = $webPath.'exercise/overview.php?'
-                            .api_get_cidreq_params($courseId, $sessionId).'&'
+                            .api_get_cidreq().'&'
                             ."$mylpid$mylpitemid&exerciseId={$exercise->id}";
                         $currentRow['name'] = $currentRow[0];
                     }

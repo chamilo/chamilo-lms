@@ -98,7 +98,6 @@ import WallComment from "./SocialWallComment.vue"
 import WallActions from "./Actions"
 import axios from "axios"
 import { ENTRYPOINT } from "../../config/entrypoint"
-import { useStore } from "vuex"
 import BaseCard from "../basecomponents/BaseCard.vue"
 import { SOCIAL_TYPE_PROMOTED_MESSAGE } from "./constants"
 import { useFormatDate } from "../../composables/formatDate"
@@ -111,7 +110,6 @@ const props = defineProps({
   },
 })
 const emit = defineEmits(["post-deleted"])
-const store = useStore()
 
 const { relativeDatetime } = useFormatDate()
 

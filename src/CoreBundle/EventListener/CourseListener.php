@@ -143,6 +143,7 @@ class CourseListener implements EventSubscriberInterface
                     $sessionHandler->set('session_name', $session->getTitle());
                     $sessionHandler->set('sid', $session->getId());
                     $sessionHandler->set('session', $session);
+                    ChamiloSession::write('sid', $session->getId());
 
                     $twig->addGlobal('session', $session);
                 } else {

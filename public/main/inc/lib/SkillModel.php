@@ -1706,7 +1706,8 @@ class SkillModel extends Model
                 ON s.id = sru.skill_id
                 WHERE sru.user_id = $userId";
 
-        $result = Database::query($sql);
+        $query = Database::query($sql);
+        $result = Database::store_result($query, 'ASSOC');
 
         $skills = [];
         foreach ($result as $item) {

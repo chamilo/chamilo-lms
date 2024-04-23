@@ -120,7 +120,8 @@ if ($isNotAllowedHere) {
     api_not_allowed(true, get_lang('Sorry, you are trying to access the registration page for this portal, but registration is currently disabled. Please contact the administrator (see contact information in the footer). If you already have an account on this site.'));
 }
 
-$extraConditions = api_get_setting('profile.show_conditions_to_user', true);
+$settingConditions = api_get_setting('profile.show_conditions_to_user', true);
+$extraConditions = 'false' !== $settingConditions ? $settingConditions : [];
 if ($extraConditions && isset($extraConditions['conditions'])) {
     // Create user extra fields for the conditions
     $userExtraField = new ExtraField('user');
@@ -461,7 +462,9 @@ if (false === $userAlreadyRegisteredShowTerms &&
         if (isset($allowedFields['extra_fields']) && is_array($allowedFields['extra_fields'])) {
             $extraFieldList = $allowedFields['extra_fields'];
         }
-        $requiredFields = api_get_setting('registration.required_extra_fields_in_inscription', true);
+        $settingRequiredFields = api_get_setting('registration.required_extra_fields_in_inscription', true);
+        $requiredFields = 'false' !== $settingRequiredFields ? $settingRequiredFields : [];
+
         if (!empty($requiredFields) && $requiredFields['options']) {
             $requiredFields = $requiredFields['options'];
         }

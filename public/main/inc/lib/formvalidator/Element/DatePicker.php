@@ -44,7 +44,9 @@ class DatePicker extends HTML_QuickForm_text
         }
 
         $label = $this->getLabel();
-        $requiredFields = api_get_setting('registration.required_extra_fields_in_inscription', true);
+        $settingRequiredFields = api_get_setting('registration.required_extra_fields_in_inscription', true);
+        $requiredFields = 'false' !== $settingRequiredFields ? $settingRequiredFields : [];
+
         if (!empty($requiredFields) && $requiredFields['options']) {
             $requiredFields = $requiredFields['options'];
         }

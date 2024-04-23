@@ -3,7 +3,7 @@
     <div class="p-4 text-center user-profile-card">
       <BaseUserAvatar
         :image-url="user.illustrationUrl"
-        :alt="t('Profile picture')"
+        :alt="t('Picture')"
         size="xlarge"
       />
       <div

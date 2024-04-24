@@ -44,7 +44,7 @@ defineExpose({
   refreshPosts,
 })
 
-function listPosts() {
+async function listPosts() {
   postList.splice(0, postList.length)
   if (!user.value["@id"]) {
     return
@@ -61,14 +61,10 @@ function listPosts() {
     params.type = SOCIAL_TYPE_PROMOTED_MESSAGE
   }
 
-  axios
-    .get(ENTRYPOINT + "social_posts", { params })
-    .then((response) => {
-      postList.push(...response.data["hydra:member"])
-    })
-    .finally(() => {
-      isLoading.value = false
-    })
+  const { data } = await axios.get(ENTRYPOINT + "social_posts", { params })
+  postList.push(...data["hydra:member"])
+
+  isLoading.value = false
 }
 
 function onPostDeleted(event) {

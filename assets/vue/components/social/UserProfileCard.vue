@@ -142,8 +142,8 @@ const editProfile = () => {
 
 async function fetchUserProfile(userId) {
   try {
-    const response = await axios.get(`/social-network/user-profile/${userId}`)
-    const data = response.data
+    const { data } = await axios.get(`/social-network/user-profile/${userId}`)
+
     languageInfo.value = data.language
     vCardUserLink.value = data.vCardUserLink
     visibility.value = data.visibility

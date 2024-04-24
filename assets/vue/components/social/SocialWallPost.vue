@@ -121,9 +121,9 @@ const currentUser = inject("social-user")
 const isCurrentUser = inject("is-current-user")
 const isOwner = computed(() => currentUser["@id"] === props.post.sender["@id"])
 
-onMounted(async () => {
+onMounted(() => {
   loadComments()
-  await loadAttachments()
+  loadAttachments()
 })
 const computedAttachments = computed(() => {
   return attachments.value
@@ -140,16 +140,16 @@ async function loadAttachments() {
   }
 }
 
-function loadComments() {
-  axios
-    .get(ENTRYPOINT + "social_posts", {
-      params: {
-        parent: props.post["@id"],
-        "order[sendDate]": "desc",
-        itemsPerPage: 3,
-      },
-    })
-    .then((response) => comments.push(...response.data["hydra:member"]))
+async function loadComments() {
+  const { data } = await axios.get(ENTRYPOINT + "social_posts", {
+    params: {
+      parent: props.post["@id"],
+      "order[sendDate]": "desc",
+      itemsPerPage: 3,
+    },
+  })
+
+  comments.push(...data["hydra:member"])
 }
 
 function onCommentDeleted(event) {

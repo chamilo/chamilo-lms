@@ -8,8 +8,6 @@ namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Repository\ColorThemeRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
-use Chamilo\CoreBundle\Settings\SettingsManager;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -20,31 +18,18 @@ use Twig\Environment;
 /**
  * Twig-related event listener. For filters, look into ChamiloExtension.php.
  */
-class TwigListener implements EventSubscriberInterface
+class TwigListener
 {
-    private SerializerInterface $serializer;
-    private Environment $twig;
-    private TokenStorageInterface $tokenStorage;
-    private SettingsManager $settingsManager;
-    private LanguageRepository $languageRepository;
-
     public function __construct(
-        Environment $twig,
-        SerializerInterface $serializer,
-        TokenStorageInterface $tokenStorage,
-        SettingsManager $settingsManager,
-        LanguageRepository $languageRepository,
+        private readonly Environment $twig,
+        private readonly SerializerInterface $serializer,
+        private readonly TokenStorageInterface $tokenStorage,
+        private readonly LanguageRepository $languageRepository,
         private readonly ColorThemeRepository $colorThemeRepository,
         private readonly RouterInterface $router,
-    ) {
-        $this->twig = $twig;
-        $this->tokenStorage = $tokenStorage;
-        $this->serializer = $serializer;
-        $this->settingsManager = $settingsManager;
-        $this->languageRepository = $languageRepository;
-    }
+    ) {}
 
-    public function onControllerEvent(ControllerEvent $event): void
+    public function __invoke(ControllerEvent $event): void
     {
         $request = $event->getRequest();
         $token = $this->tokenStorage->getToken();
@@ -86,10 +71,5 @@ class TwigListener implements EventSubscriberInterface
         }
 
         $this->twig->addGlobal('color_theme_link', $link);
-    }
-
-    public static function getSubscribedEvents(): array
-    {
-        return [ControllerEvent::class => 'onControllerEvent'];
     }
 }

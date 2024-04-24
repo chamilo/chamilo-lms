@@ -17,7 +17,6 @@ use Chamilo\CoreBundle\ServiceHelper\LoginAttemptLogger;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -25,32 +24,17 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use UserManager;
 
 // class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
-class LoginSuccessHandler implements EventSubscriberInterface
+class LoginSuccessHandler
 {
-    protected UrlGeneratorInterface $router;
-    protected AuthorizationCheckerInterface $checker;
-    protected SettingsManager $settingsManager;
-    protected EntityManagerInterface $entityManager;
-    private LoginAttemptLogger $loginAttemptLogger;
-
     public function __construct(
-        UrlGeneratorInterface $urlGenerator,
-        AuthorizationCheckerInterface $checker,
-        SettingsManager $settingsManager,
-        EntityManagerInterface $entityManager,
-        LoginAttemptLogger $loginAttemptLogger
-    ) {
-        $this->router = $urlGenerator;
-        $this->checker = $checker;
-        $this->settingsManager = $settingsManager;
-        $this->entityManager = $entityManager;
-        $this->loginAttemptLogger = $loginAttemptLogger;
-    }
+        private readonly UrlGeneratorInterface $router,
+        private readonly AuthorizationCheckerInterface $checker,
+        private readonly SettingsManager $settingsManager,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly LoginAttemptLogger $loginAttemptLogger
+    ) {}
 
-    /**
-     * @return null|RedirectResponse
-     */
-    public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
+    public function __invoke(InteractiveLoginEvent $event): ?RedirectResponse
     {
         $request = $event->getRequest();
         $session = $request->getSession();
@@ -178,13 +162,5 @@ class LoginSuccessHandler implements EventSubscriberInterface
         }
 
         return $response;
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public static function getSubscribedEvents(): array
-    {
-        return ['security.interactive_login' => 'onSecurityInteractiveLogin'];
     }
 }

@@ -7,17 +7,15 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Exception\NotAllowedException;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Twig\Environment;
 
-class ExceptionListener implements EventSubscriberInterface
+class ExceptionListener
 {
     protected Environment $twig;
     protected TokenStorageInterface $tokenStorage;
@@ -30,7 +28,7 @@ class ExceptionListener implements EventSubscriberInterface
         $this->router = $router;
     }
 
-    public function onKernelException(ExceptionEvent $event): void
+    public function __invoke(ExceptionEvent $event): void
     {
         // You get the exception object from the received event
         $exception = $event->getThrowable();
@@ -79,13 +77,5 @@ class ExceptionListener implements EventSubscriberInterface
 
         // sends the modified response object to the event
         $event->setResponse($response);
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public static function getSubscribedEvents(): array
-    {
-        return [KernelEvents::EXCEPTION => 'onKernelException'];
     }
 }

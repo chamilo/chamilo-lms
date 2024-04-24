@@ -18,13 +18,10 @@ use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Entity\CGroup;
 use ChamiloSession;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -33,17 +30,16 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 /**
- * Class CourseListener.
  * Sets the course and session objects in the controller that implements the CourseControllerInterface.
  */
-class CourseListener implements EventSubscriberInterface
+class CidReqListener
 {
     public function __construct(
         private readonly Environment $twig,
         private readonly AuthorizationCheckerInterface $authorizationChecker,
         private readonly TranslatorInterface $translator,
         private readonly EntityManagerInterface $entityManager,
-        private TokenStorageInterface $tokenStorage,
+        private readonly TokenStorageInterface $tokenStorage,
     ) {}
 
     /**
@@ -197,8 +193,6 @@ class CourseListener implements EventSubscriberInterface
         }
     }
 
-    public function onKernelResponse(ResponseEvent $event): void {}
-
     /**
      * Once the onKernelRequest was fired, we check if the course/session object were set and we inject them in the controller.
      */
@@ -313,17 +307,5 @@ class CourseListener implements EventSubscriberInterface
         }
 
         return '';
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public static function getSubscribedEvents(): array
-    {
-        return [
-            KernelEvents::REQUEST => ['onKernelRequest', 6],
-            KernelEvents::RESPONSE => 'onKernelResponse',
-            KernelEvents::CONTROLLER => 'onKernelController',
-        ];
     }
 }

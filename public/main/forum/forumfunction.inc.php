@@ -4362,7 +4362,12 @@ function send_notifications(CForum $forum, CForumThread $thread, $post_id = 0)
 
     $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications');
     if (1 === $subscribe) {
-        $users_to_be_notified = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id());
+        $sessionId = api_get_session_id();
+        if (!empty($sessionId)) {
+            $users_to_be_notified = SessionManager::getAllUserIdsInSession($sessionId);
+        } else {
+            $users_to_be_notified = CourseManager::get_user_list_from_course_code(api_get_course_id());
+        }
     }
 
     if (is_array($users_to_be_notified)) {

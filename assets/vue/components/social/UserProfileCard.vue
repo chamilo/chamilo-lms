@@ -97,7 +97,7 @@
 
       <Divider />
       <BaseButton
-        v-if="isCurrentUser || isAdmin"
+        v-if="isCurrentUser || securityStore.isAdmin"
         :label="t('Edit profile')"
         class="mt-4"
         icon="edit"
@@ -119,14 +119,14 @@ import { useSecurityStore } from "../../store/securityStore"
 import BaseUserAvatar from "../basecomponents/BaseUserAvatar.vue"
 
 const { t } = useI18n()
-const { isAdmin } = useSecurityStore()
+const securityStore = useSecurityStore()
 const user = inject("social-user")
 const isCurrentUser = inject("is-current-user")
 const extraInfo = ref([])
 const chatEnabled = ref(true)
 const isUserOnline = ref(false)
 const userOnlyInChat = ref(false)
-const showFullProfile = computed(() => isCurrentUser.value || isAdmin.value)
+const showFullProfile = computed(() => isCurrentUser.value || securityStore.isAdmin)
 const languageInfo = ref(null)
 const vCardUserLink = ref("")
 const visibility = ref({})

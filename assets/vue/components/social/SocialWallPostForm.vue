@@ -59,7 +59,7 @@ import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue"
 import { useRoute } from "vue-router"
 import { useSecurityStore } from "../../store/securityStore"
-import socialPostService from "../../services/socialpost"
+import socialService from "../../services/socialService"
 import { useNotification } from "../../composables/notification"
 
 const emit = defineEmits(["post-created"])
@@ -138,13 +138,13 @@ async function sendPost() {
   }
 
   try {
-    const response = await socialPostService.create({
+    const post = await socialService.createPost({
       content: postState.content,
       type: postState.isPromoted ? SOCIAL_TYPE_PROMOTED_MESSAGE : SOCIAL_TYPE_WALL_POST,
       sender: securityStore.user["@id"],
       userReceiver: securityStore.user["@id"] === user.value["@id"] ? null : user.value["@id"],
     })
-    const post = await response.json()
+
     if (selectedFile.value) {
       const formData = new FormData()
       let idUrl = post["@id"]
@@ -152,7 +152,8 @@ async function sendPost() {
       let socialPostId = parts[parts.length - 1]
       formData.append("file", selectedFile.value)
       formData.append("messageId", socialPostId)
-      await socialPostService.addPostAttachment(formData)
+
+      await socialService.addAttachment(formData)
     }
 
     postState.content = ""

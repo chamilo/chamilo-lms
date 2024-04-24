@@ -27374,3 +27374,105 @@ msgstr ""
 
 msgid "Carbon copy receiver profile picture"
 msgstr ""
+
+msgid "Ppt_to_lp"
+msgstr ""
+
+msgid "Left"
+msgstr ""
+
+msgid "Right"
+msgstr ""
+
+msgid "Month"
+msgstr ""
+
+msgid "Week"
+msgstr ""
+
+msgid "Icons text"
+msgstr ""
+
+msgid "Session name and course title"
+msgstr ""
+
+msgid "Public"
+msgstr ""
+
+msgid "Private"
+msgstr ""
+
+msgid "No link"
+msgstr ""
+
+msgid "Session link"
+msgstr ""
+
+msgid "World"
+msgstr ""
+
+msgid "Show to all users"
+msgstr ""
+
+msgid "Black list"
+msgstr ""
+
+msgid "White list"
+msgstr ""
+
+msgid "Show glossary in documents is none"
+msgstr ""
+
+msgid "Show glossary in documents is manual"
+msgstr ""
+
+msgid "Show glossary in documents is automatic"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "Score average"
+msgstr ""
+
+msgid "Score percent"
+msgstr ""
+
+msgid "Score div percent"
+msgstr ""
+
+msgid "Exercise and learning path"
+msgstr ""
+
+msgid "Hide catalogue"
+msgstr ""
+
+msgid "Show only courses"
+msgstr ""
+
+msgid "Show only sessions"
+msgstr ""
+
+msgid "Show courses and sessions"
+msgstr ""
+
+msgid "Mail confirmation"
+msgstr ""
+
+msgid "Campus homepage"
+msgstr ""
+
+msgid "Course catalogue"
+msgstr ""
+
+msgid "Search shows unlinked results"
+msgstr ""
+
+msgid "Search hides unlinked results"
+msgstr ""
+
+msgid "Course coach email sender"
+msgstr ""
+
+msgid "No reply email sender"
+msgstr ""

@@ -27381,3 +27381,105 @@ msgstr "Receiver profile picture"
 
 msgid "Carbon copy receiver profile picture"
 msgstr "Carbon copy receiver profile picture"
+
+msgid "Ppt_to_lp"
+msgstr "Document converter"
+
+msgid "Left"
+msgstr "Left"
+
+msgid "Right"
+msgstr "Right"
+
+msgid "Month"
+msgstr "Month"
+
+msgid "Week"
+msgstr "Week"
+
+msgid "Icons text"
+msgstr "Icons text"
+
+msgid "Session name and course title"
+msgstr "Session name and course title"
+
+msgid "Public"
+msgstr "Public"
+
+msgid "Private"
+msgstr "Private"
+
+msgid "No link"
+msgstr "No link"
+
+msgid "Session link"
+msgstr "Session link"
+
+msgid "World"
+msgstr "World"
+
+msgid "Show to all users"
+msgstr "Show to all users"
+
+msgid "Black list"
+msgstr "Black list"
+
+msgid "White list"
+msgstr "White list"
+
+msgid "Show glossary in documents is none"
+msgstr "Show glossary in documents is none"
+
+msgid "Show glossary in documents is manual"
+msgstr "Show glossary in documents is manual"
+
+msgid "Show glossary in documents is automatic"
+msgstr "Show glossary in documents is automatic"
+
+msgid "None"
+msgstr "None"
+
+msgid "Score average"
+msgstr "Score average"
+
+msgid "Score percent"
+msgstr "Score percent"
+
+msgid "Score div percent"
+msgstr "Score div percent"
+
+msgid "Exercise and learning path"
+msgstr "Exercise and learning path"
+
+msgid "Hide catalogue"
+msgstr "Hide catalogue"
+
+msgid "Show only courses"
+msgstr "Show only courses"
+
+msgid "Show only sessions"
+msgstr "Show only sessions"
+
+msgid "Show courses and sessions"
+msgstr "Show courses and sessions"
+
+msgid "Mail confirmation"
+msgstr "Mail confirmation"
+
+msgid "Campus homepage"
+msgstr "Campus homepage"
+
+msgid "Course catalogue"
+msgstr "Course catalogue"
+
+msgid "Search shows unlinked results"
+msgstr "Search shows unlinked results"
+
+msgid "Search hides unlinked results"
+msgstr "Search hides unlinked results"
+
+msgid "Course coach email sender"
+msgstr "Course coach email sender"
+
+msgid "No reply email sender"
+msgstr "No reply email sender"

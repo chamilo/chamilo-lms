@@ -21,8 +21,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { useStore } from 'vuex'
+import { ref } from 'vue'
 import CourseForm from '../../components/course/Form.vue'
 import Loading from '../../components/Loading.vue'
 import { useRouter } from "vue-router"
@@ -31,18 +30,17 @@ import courseService from "../../services/courseService"
 import { useI18n } from "vue-i18n"
 import { useNotification } from "../../composables/notification"
 
-const store = useStore()
 const item = ref({})
 const router = useRouter()
 const { t } = useI18n()
 
-const isLoading = computed(() => store.getters['course/getField']('isLoading'))
-const violations = computed(() => store.getters['course/getField']('violations'))
-const courseData = ref({})
+const isLoading = ref(false)
+const violations = ref(null)
 const { showSuccessNotification, showErrorNotification } = useNotification()
 
 const submitCourse = async (formData) => {
   isLoading.value = true
+  violations.value = null
   try {
     const response = await courseService.createCourse(formData)
     const courseId = response.courseId

@@ -119,7 +119,7 @@ class DateTimePicker extends HTML_QuickForm_text
     {
         $locale = api_get_language_isocode();
         $userInfo = api_get_user_info();
-        if (is_array($userInfo) && !empty($userInfo['language'])) {
+        if (is_array($userInfo) && !empty($userInfo['language']) && ANONYMOUS != $userInfo['status']) {
             $locale = $userInfo['language'];
         }
 

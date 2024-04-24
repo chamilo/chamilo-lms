@@ -110,7 +110,7 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                     'choices' => [
                         'Campus homepage' => 'index.php',
                         'My courses' => 'user_portal.php',
-                        'Course catalog' => 'main/auth/courses.php',
+                        'Course catalogue' => 'main/auth/courses.php',
                     ],
                 ]
             )

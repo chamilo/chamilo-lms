@@ -579,12 +579,9 @@ class CourseController extends ToolBaseController
             /** @var CToolIntro $ctoolintro */
             $ctoolintro = $ctoolintroRepo->findOneBy(['courseTool' => $ctool]);
             if ($ctoolintro) {
-                $introText = $ctoolintro->getIntroText();
-                $cleanedHtml = $this->processHtmlContent($introText);
-
                 $responseData = [
                     'iid' => $ctoolintro->getIid(),
-                    'introText' => $cleanedHtml,
+                    'introText' => $ctoolintro->getIntroText(),
                     'createInSession' => $createInSession,
                     'cToolId' => $ctool->getIid(),
                 ];
@@ -975,29 +972,4 @@ class CourseController extends ToolBaseController
 
         return $enrollmentCount > 0;
     }
-
-    private function processHtmlContent($htmlText): array|string|null
-    {
-        $doc = new \DOMDocument();
-        libxml_use_internal_errors(true);
-        $doc->loadHTML(mb_convert_encoding($htmlText, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        libxml_clear_errors();
-
-        // Extract everything inside the <html> element, if present, or fallback to the document itself
-        $htmlContent = '';
-        $html = $doc->getElementsByTagName('html')->item(0);
-        if ($html) {
-            foreach ($html->childNodes as $child) {
-                $htmlContent .= $doc->saveHTML($child);
-            }
-        } else {
-            $htmlContent = $doc->saveHTML($doc->documentElement);
-        }
-
-        // Remove <html>, <head>, and <body> tags manually
-        $htmlContent = preg_replace('/<\/?(html|head|body)[^>]*>/i', '', $htmlContent);
-
-        return $htmlContent;
-    }
-
 }

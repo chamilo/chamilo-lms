@@ -1100,7 +1100,7 @@ if ($form->validate()) {
                             $currentUserInfo['complete_name']
                         );
                         $contentEmail = sprintf(
-                            get_lang('User %s signed the agreement.TheY'),
+                            get_lang('User %s signed the agreement the %s.'),
                             $currentUserInfo['complete_name'],
                             api_get_local_time($time)
                         );

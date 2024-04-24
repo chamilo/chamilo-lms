@@ -88,7 +88,7 @@ switch ($action) {
                     $currentUserInfo['complete_name']
                 );
                 $contentEmail = sprintf(
-                    get_lang('User %s signed the agreement.TheDateY'),
+                    get_lang('User %s signed the agreement the %s.'),
                     $currentUserInfo['complete_name'],
                     api_get_local_time()
                 );

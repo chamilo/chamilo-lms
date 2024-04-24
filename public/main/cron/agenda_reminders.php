@@ -36,7 +36,7 @@ if (empty($senderId)) {
 foreach ($reminders as $reminder) {
     $event = $reminder->getEvent();
 
-    if ('personal' === $reminder->getType()) {
+    if ('personal' === $event->determineType()) {
         if (null === $event) {
             continue;
         }
@@ -114,11 +114,7 @@ foreach ($reminders as $reminder) {
         }
     }
 
-    if ('course' === $reminder->getType()) {
-        if (null === $event) {
-            continue;
-        }
-
+    if ('course' === $event->determineType()) {
         $notificationDate = clone $event->getStartDate();
         $notificationDate->sub($reminder->getDateInterval());
 

@@ -420,7 +420,7 @@ class Category implements GradebookItem
      * @param ?bool $order_by Whether to show all "session"
      *                            categories (true) or hide them (false) in case there is no session id
      *
-     * @return array
+     * @return array<static>
      * @throws \Doctrine\DBAL\Exception
      * @throws Exception
      */

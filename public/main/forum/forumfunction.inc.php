@@ -4306,21 +4306,12 @@ function get_notifications(string $content, int $id): array
         $field = 'forum_id';
     }
 
-    $sessionId = api_get_session_id();
-    $conditionSession = "";
-    if (!empty($sessionId)) {
-        $users = SessionManager::getUsersByCourseSession($sessionId, api_get_course_info());
-        if (!empty($users)) {
-            $conditionSession = " AND user.id IN(".implode(',', $users).")";
-        }
-    }
-
     $sql = "SELECT user.id as user_id, user.firstname, user.lastname, user.email, user.id user
             FROM $table_users user, $table_notification notification
             WHERE
                 notification.c_id = $course_id AND user.active = 1 AND
                 user.id = notification.user_id AND
-                notification.$field = $id $conditionSession";
+                notification.$field = $id ";
 
     $result = Database::query($sql);
     $return = [];
@@ -4368,6 +4359,11 @@ function send_notifications(CForum $forum, CForumThread $thread, $post_id = 0)
 
     // Merging the two
     $users_to_be_notified = array_merge($users_to_be_notified_by_forum, $users_to_be_notified_by_thread);
+
+    $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications');
+    if (1 === $subscribe) {
+        $users_to_be_notified = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id());
+    }
 
     if (is_array($users_to_be_notified)) {
         foreach ($users_to_be_notified as $value) {

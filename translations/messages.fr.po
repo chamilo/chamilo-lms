@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-04-22 22:44+0000\n"
+"PO-Revision-Date: 2024-04-24 09:40+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: French <https://translation.chamilo.org/projects/chamilo/"
 "messages/fr/>\n"
@@ -26044,7 +26044,6 @@ msgid "Manage the skills of your users, through courses and badges"
 msgstr ""
 "Gérez les compétences de vos utilisateurs au travers de cours et de badges"
 
-#, fuzzy
 msgid "Disable editor announcements"
 msgstr "Désactiver les annonces de l'éditeur"
 
@@ -29110,3 +29109,84 @@ msgstr ""
 
 msgid "Enable extra test answers recording"
 msgstr "Activer l'enregistrement étendu des réponses du test"
+
+msgid "Contact Us"
+msgstr "Nous contacter"
+
+msgid "Send"
+msgstr "Envoyer"
+
+msgid "Sender profile picture"
+msgstr "Photo de profil de l'expéditeur"
+
+msgid "This is one simple measure to increase the security of your portal by asking users to immediately change their password, so the one that was transfered by e-mail is no longer valid and they then will use one that they came up with and that they are the only person to know."
+msgstr ""
+"Il s'agit d'une mesure simple pour renforcer la sécurité de votre portail en "
+"demandant aux utilisateurs de changer immédiatement leur mot de passe, afin "
+"que celui qui a été transmis par e-mail ne soit plus valide et qu'ils "
+"utilisent ensuite un mot de passe qu'ils ont créé et qu'ils sont les seuls à "
+"connaître."
+
+msgid "Enables a mechanism of gradebook dependencies that lets people know which other items they need to go through first in order to complete the gradebook."
+msgstr ""
+"Active un mécanisme de dépendances du cahier de notes qui informe les "
+"utilisateurs des éléments qu'ils doivent achever avant de compléter le "
+"cahier de notes actuel."
+
+msgid "Generate a block inside the side menu where a few badges can be shown as pending approval. Requires gradebooks to be listed here, by (numerical) ID."
+msgstr ""
+"Générer un bloc dans le menu latéral, où quelques badges en attente "
+"d'approbation peuvent être affichés. Nécessite que les cahiers de notes "
+"soient répertoriés ici, par ID (numérique)."
+
+msgid "Skills are normally attributed for completing a whole gradebook. By enabling this option, you allow skills to be attached to sub-sections of gradebooks."
+msgstr ""
+"Les compétences sont normalement attribuées pour la complétion d'un cahier "
+"de notes entier. En activant cette option, vous permettez l'association de "
+"compétences à des sous-sections de cahiers de notes."
+
+msgid "Define the default sub-elements of the 'Courses' entry to display if user is not registered to any course nor session."
+msgstr ""
+"Définissez les sous-éléments par défaut de l'entrée 'Cours' à afficher si "
+"l'utilisateur n'est inscrit à aucun cours ni session."
+
+msgid "Update SCO status autonomously"
+msgstr "Mettre à jour le statut SCO de manière autonome"
+
+msgid "When using Chamilo for a specific purpose (like one massive online exam), you might want to reduce distraction even more by removing the side menu."
+msgstr ""
+"Lorsque vous utilisez Chamilo pour un objectif spécifique (comme un examen "
+"en ligne massif), vous pourriez vouloir réduire encore plus les distractions "
+"en supprimant le menu latéral."
+
+msgid "On the learning paths lists, display a visual element to show that other learning paths are currently blocked by some prerequisites rule."
+msgstr ""
+"Sur les listes de parcours d'apprentissage, affichez un élément visuel pour "
+"indiquer que d'autres parcours d'apprentissage sont actuellement bloqués par "
+"une règle de prérequis."
+
+msgid "Enable the possibility to export any of your learning paths in a Chamilo course backup format."
+msgstr ""
+"Activez la possibilité d'exporter n'importe quel parcours d'apprentissage au "
+"format de sauvegarde de cours Chamilo."
+
+msgid "Carbon copy receiver profile picture"
+msgstr "Photo de profil du destinataire en copie carbone"
+
+msgid "Enable courses managed in more than one language. This option adds a language selector within the course page to let users switch easily, and adds a 'multiple_language' extra field to courses which allows for remote management procedures."
+msgstr ""
+"Activez les cours gérés en plusieurs langues. Cette option ajoute un "
+"sélecteur de langue à la page du cours pour permettre aux utilisateurs d'en "
+"changer facilement, et ajoute un champ de profil 'multiple_language' aux "
+"cours, ce qui permet des procédures de gestion plus complexes via des "
+"services web ou des plugins."
+
+msgid "When importing users (batch processes), automatically generate a random string for username. Otherwise, the username will be generated on the basis of the firstname and lastname, or the prefix of the e-mail."
+msgstr ""
+"Lors de l'importation des utilisateurs (processus par lots), générer "
+"automatiquement une chaîne aléatoire pour le nom d'utilisateur. Sinon, le "
+"nom d'utilisateur sera généré sur la base du prénom et du nom, ou du préfixe "
+"de l'e-mail."
+
+msgid "Receiver profile picture"
+msgstr "Photo de profil du destinataire"

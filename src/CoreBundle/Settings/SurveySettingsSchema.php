@@ -48,8 +48,8 @@ class SurveySettingsSchema extends AbstractSettingsSchema
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'CourseCoachEmailSender' => 'coach',
-                        'NoReplyEmailSender' => 'noreply',
+                        'Course coach email sender' => 'coach',
+                        'No reply email sender' => 'noreply',
                     ],
                 ]
             )

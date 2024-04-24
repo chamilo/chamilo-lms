@@ -79,7 +79,7 @@
           v-if="allowToEdit && showEditButton"
           :label="t('Edit')"
           type="secondary"
-          icon="delete"
+          icon="edit"
           @click="dialog = true"
         />
       </template>

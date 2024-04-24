@@ -144,10 +144,10 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'CatalogueHide' => '-1',
-                        'CatalogueShowOnlyCourses' => '0',
-                        'CatalogueShowOnlySessions' => '1',
-                        'CatalogueShowCoursesAndSessions' => '2',
+                        'Catalogue hide' => '-1',
+                        'Catalogue show only courses' => '0',
+                        'Catalogue show only sessions' => '1',
+                        'Catalogue show courses and sessions' => '2',
                     ],
                 ]
             )

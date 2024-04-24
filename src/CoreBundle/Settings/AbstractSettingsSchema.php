@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Settings;
 use Doctrine\ORM\EntityRepository;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -62,26 +63,37 @@ abstract class AbstractSettingsSchema implements SchemaInterface
     {
         $settingsInfo = $this->getSettingsInfoFromDatabase();
         foreach ($builder->all() as $fieldName => $field) {
+            $options = $field->getOptions();
+            $labelAttributes = $options['label_attr'] ?? [];
+            $labelAttributes['class'] = (isset($labelAttributes['class']) ? $labelAttributes['class'] . ' ' : '') . 'settings-label';
+            $options['label_attr'] = $labelAttributes;
+
             if (isset($settingsInfo[$fieldName])) {
                 $fieldConfig = $settingsInfo[$fieldName];
-                $options = $field->getOptions();
 
                 $labelFromDb = $this->translator->trans($fieldConfig['label']);
                 $helpFromDb = $this->translator->trans($fieldConfig['help']);
 
                 $existingHelp = $options['help'] ?? '';
-                if (!empty($existingHelp)) {
-                    $combinedHelp = $helpFromDb.'<br>'.$existingHelp;
-                } else {
-                    $combinedHelp = $helpFromDb;
-                }
+                $combinedHelp = !empty($existingHelp) ? $helpFromDb . '<br>' . $existingHelp : $helpFromDb;
 
                 $options['label'] = $labelFromDb;
                 $options['help'] = $combinedHelp;
+                $options['label_html'] = true;
+                $options['help_html'] = true;
 
-                $builder->remove($fieldName);
-                $builder->add($fieldName, \get_class($field->getType()->getInnerType()), $options);
+                if ($field->getType()->getInnerType() instanceof ChoiceType && isset($options['choices'])) {
+                    $translatedChoices = [];
+                    foreach ($options['choices'] as $key => $value) {
+                        $readableKey = ucfirst(strtolower(str_replace('_', ' ', $key)));
+                        $translatedChoices[$this->translator->trans($readableKey)] = $value;
+                    }
+                    $options['choices'] = $translatedChoices;
+                }
             }
+
+            $builder->remove($fieldName);
+            $builder->add($fieldName, \get_class($field->getType()->getInnerType()), $options);
         }
     }
 }

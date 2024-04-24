@@ -276,6 +276,8 @@ class CidReqListener
         $sessionHandler->remove('session');
         $sessionHandler->remove('course_url_params');
         $sessionHandler->remove('origin');
+        ChamiloSession::erase('_real_cid');
+        ChamiloSession::erase('_course');
 
         // Remove user temp roles
         $token = $this->tokenStorage->getToken();

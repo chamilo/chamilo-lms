@@ -769,7 +769,7 @@ abstract class AbstractLink implements GradebookItem
             $link->set_type($data['type']);
             $link->set_ref_id($data['ref_id']);
             $link->set_user_id($data['user_id']);
-            $link->setCourseId(api_get_course_int_id());
+            $link->setCourseId($data['c_id']);
             $link->set_category_id($data['category_id']);
             $link->set_date($data['created_at']);
             $link->set_weight($data['weight']);

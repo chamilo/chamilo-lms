@@ -3,6 +3,7 @@
     <BaseTinyEditor
       v-model="item.introText"
       editor-id="introText"
+      :full-page="false"
       required
     />
     <!-- For extra content-->

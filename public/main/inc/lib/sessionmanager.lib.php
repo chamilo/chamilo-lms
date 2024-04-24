@@ -10104,4 +10104,43 @@ class SessionManager
 
         return in_array($userId, $adminIds);
     }
+
+    /**
+     * Retrieves all user IDs associated with a session including coaches and students.
+     *
+     * @param int $sessionId The session ID.
+     * @return array An array of user IDs.
+     */
+    public static function getAllUserIdsInSession(int $sessionId): array
+    {
+        $users = [];
+        $session = api_get_session_entity($sessionId);
+        if ($session) {
+            $courses = $session->getCourses();
+            if (!empty($courses)) {
+                foreach ($courses as $sessionRelCourse) {
+                    $course = $sessionRelCourse->getCourse();
+                    $coachSubscriptions = $session->getSessionRelCourseRelUsersByStatus($course, Session::COURSE_COACH);
+                    foreach ($coachSubscriptions as $coachSubscription) {
+                        $users[]['user_id'] = $coachSubscription->getUser()->getId();
+                    }
+
+                    $userCourseSubscriptions = $session->getSessionRelCourseRelUsersByStatus($course, Session::STUDENT);
+                    foreach ($userCourseSubscriptions as $courseSubscription) {
+                        $users[]['user_id'] = $courseSubscription->getUser()->getId();
+                    }
+
+                }
+            }
+
+            $generalCoachesId = self::getGeneralCoachesIdForSession($sessionId);
+            if (!empty($generalCoachesId)) {
+                foreach ($generalCoachesId as $generalCoachId) {
+                    $users[]['user_id'] = $generalCoachId;
+                }
+            }
+        }
+
+        return $users;
+    }
 }

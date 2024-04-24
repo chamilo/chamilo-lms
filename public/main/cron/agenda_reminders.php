@@ -36,11 +36,11 @@ if (empty($senderId)) {
 foreach ($reminders as $reminder) {
     $event = $reminder->getEvent();
 
-    if ('personal' === $event->determineType()) {
-        if (null === $event) {
-            continue;
-        }
+    if (null === $event) {
+        continue;
+    }
 
+    if ('personal' === $event->determineType()) {
         $notificationDate = clone $event->getStartDate();
         $notificationDate->sub($reminder->getDateInterval());
 
@@ -87,7 +87,7 @@ foreach ($reminders as $reminder) {
                 return [];
             }
 
-            $resourceLinks = $event->getResourceLinkEntityList();
+            $resourceLinks = $event->getResourceNode()->getResourceLinks();
             $inviteeList = [];
             foreach ($resourceLinks as $resourceLink) {
                 $user = $resourceLink->getUser();

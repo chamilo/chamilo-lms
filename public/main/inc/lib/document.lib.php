@@ -896,7 +896,6 @@ class DocumentManager
             $row['url'] = api_get_path(WEB_CODE_PATH).'document/showinframes.php?id='.$id;
             $row['document_url'] = api_get_path(WEB_CODE_PATH).'document/document.php?id='.$id;
             // Consider storing a relative path or identifier in the database to construct paths
-            $row['absolute_path_from_document'] = api_get_path(SYS_COURSE_PATH) . $course_info['directory'] . '/document/' . $id;
             $row['basename'] = $id;  // You may store and use titles or another unique identifier
 
             // Handling the parent ID should be adjusted if the path isn't available

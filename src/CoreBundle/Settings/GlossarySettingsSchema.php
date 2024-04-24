@@ -42,7 +42,7 @@ class GlossarySettingsSchema extends AbstractSettingsSchema
                         'None' => 'none',
                         'Exercise' => 'exercise',
                         'LearningPath' => 'lp',
-                        'ExerciseAndLearningPath' => 'exercise_and_lp',
+                        'Exercise and LearningPath' => 'exercise_and_lp',
                     ],
                 ]
             )

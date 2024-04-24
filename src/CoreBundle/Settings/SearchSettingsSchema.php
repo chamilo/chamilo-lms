@@ -38,8 +38,8 @@ class SearchSettingsSchema extends AbstractSettingsSchema
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'SearchShowUnlinkedResults' => 'true',
-                        'SearchHideUnlinkedResults' => 'false',
+                        'Search show unlinked results' => 'true',
+                        'Search hide unlinked results' => 'false',
                     ],
                 ]
             )

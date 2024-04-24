@@ -2182,7 +2182,7 @@ if ($allowMessages) {
         'javascript: void(0);',
         [
             'onClick' => "$('#compose_message').show();",
-            'class' => 'btn btn--plain',
+            'class' => 'btn btn--plain mb-6',
         ]
     );
 

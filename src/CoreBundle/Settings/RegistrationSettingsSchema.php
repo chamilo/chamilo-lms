@@ -96,7 +96,7 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                     'choices' => [
                         'Yes' => 'true',
                         'No' => 'false',
-                        'MailConfirmation' => 'confirmation',
+                        'Mail confirmation' => 'confirmation',
                         'Approval' => 'approval',
                     ],
                 ]
@@ -108,9 +108,9 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'CampusHomepage' => 'index.php',
-                        'MyCourses' => 'user_portal.php',
-                        'CourseCatalog' => 'main/auth/courses.php',
+                        'Campus homepage' => 'index.php',
+                        'My courses' => 'user_portal.php',
+                        'Course catalog' => 'main/auth/courses.php',
                     ],
                 ]
             )

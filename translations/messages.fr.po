@@ -26044,6 +26044,7 @@ msgid "Manage the skills of your users, through courses and badges"
 msgstr ""
 "Gérez les compétences de vos utilisateurs au travers de cours et de badges"
 
+#, fuzzy
 msgid "Disable editor announcements"
 msgstr "Désactiver les annonces de l'éditeur"
 
@@ -29109,9 +29110,3 @@ msgstr ""
 
 msgid "Enable extra test answers recording"
 msgstr "Activer l'enregistrement étendu des réponses du test"
-
-msgid "Contact Us"
-msgstr "Nous contacter"
-
-msgid "Send"
-msgstr "Envoyer"

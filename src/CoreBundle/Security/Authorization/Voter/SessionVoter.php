@@ -64,7 +64,7 @@ class SessionVoter extends Voter
         }
 
         // Checks if the current course was set up
-        // $session->getCurrentCourse() is set in the class CourseListener.
+        // $session->getCurrentCourse() is set in the class CidReqListener.
         /** @var Session $session */
         $session = $subject;
         $currentCourse = $session->getCurrentCourse();

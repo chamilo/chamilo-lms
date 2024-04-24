@@ -7,43 +7,32 @@ services:
 
     # Event listeners
     Chamilo\CoreBundle\EventListener\AssetListener:
-        arguments:
-            - '@Chamilo\CoreBundle\Repository\AssetRepository'
         tags:
             - {name: kernel.event_listener, event: vich_uploader.post_remove}
 
-    Chamilo\CoreBundle\EventListener\CourseListener:
+    Chamilo\CoreBundle\EventListener\CidReqListener:
         tags:
             - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 6}
-            - {name: kernel.event_listener, event: kernel.response, method: onKernelResponse}
             - {name: kernel.event_listener, event: kernel.controller, method: onKernelController}
 
     # Sets the user access in a course listener
     Chamilo\CoreBundle\EventListener\CourseAccessListener:
         arguments:
             - '@doctrine.orm.entity_manager'
-        calls:
-            - [setRequest, ['@request_stack']]
         tags:
-            - {name: kernel.event_listener, event: chamilo_course.course.access, method: onCourseAccessEvent}
+            - {name: kernel.event_listener, event: chamilo_course.course.access}
 
     # Sets the user access in a course session listener
     Chamilo\CoreBundle\EventListener\SessionAccessListener:
-        arguments:
-            - '@doctrine.orm.entity_manager'
-        calls:
-            - [setRequest, ['@request_stack']]
         tags:
-            - {name: kernel.event_listener, event: chamilo_course.course.session, method: onSessionAccessEvent}
+            - {name: kernel.event_listener, event: chamilo_course.course.session}
 
     # Setting user
     Chamilo\CoreBundle\EventListener\LegacyListener:
         bind:
             $container: '@service_container'
         tags:
-            - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 7}
-            - {name: kernel.event_listener, event: kernel.response, method: onKernelResponse}
-            - {name: kernel.event_listener, event: kernel.controller, method: onKernelController}
+            - {name: kernel.event_listener, event: kernel.request, priority: 7}
 
     # User locale listener
 #    Chamilo\CoreBundle\EventListener\UserLocaleListener:
@@ -52,9 +41,8 @@ services:
 
     # Settings listener
     Chamilo\CoreBundle\EventListener\SettingListener:
-        arguments: ['@service_container']
         tags:
-            - {name: kernel.event_listener, event: sylius.settings.pre_save, method: onSettingPreSave}
+            - {name: kernel.event_listener, event: sylius.settings.pre_save}
 
     Chamilo\CoreBundle\EventListener\TwigListener:
         tags:
@@ -62,16 +50,13 @@ services:
 
     # Auth listeners
     Chamilo\CoreBundle\EventListener\LoginSuccessHandler:
-        arguments: ['@router', '@security.authorization_checker', '@Chamilo\CoreBundle\Settings\SettingsManager', '@doctrine.orm.entity_manager', '@Chamilo\CoreBundle\ServiceHelper\LoginAttemptLogger']
         tags:
-            - {name: kernel.event_listener, event: security.interactive_login, method: onSecurityInteractiveLogin}
+            - {name: kernel.event_listener, event: security.interactive_login}
 
     Chamilo\CoreBundle\EventListener\LogoutListener:
-        arguments: ['@router', '@security.authorization_checker', '@security.token_storage', '@doctrine.orm.entity_manager']
         tags:
             - name: kernel.event_listener
               event: Symfony\Component\Security\Http\Event\LogoutEvent
-              dispatcher: security.event_dispatcher.main
               priority: 20
 
     Chamilo\CoreBundle\EventListener\HTTPExceptionListener:
@@ -79,7 +64,6 @@ services:
             - {name: kernel.event_listener, event: kernel.exception}
 
     Chamilo\CoreBundle\EventListener\ExceptionListener:
-        arguments: ['@twig']
         tags:
             - {name: kernel.event_listener, event: kernel.exception}
 

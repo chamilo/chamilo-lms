@@ -9,31 +9,25 @@ namespace Chamilo\CoreBundle\EventListener;
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CourseBundle\Event\CourseAccess;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * In and outs of a course
- * This listeners is always called when user enters the course home.
+ * This listener is always called when user enters the course home.
  */
-class CourseAccessListener implements EventSubscriberInterface
+class CourseAccessListener
 {
-    protected EntityManager $em;
-
     protected ?Request $request = null;
 
-    public function __construct(EntityManager $em)
-    {
-        $this->em = $em;
-    }
-
-    public function setRequest(RequestStack $requestStack): void
-    {
+    public function __construct(
+        private readonly EntityManager $em,
+        RequestStack $requestStack
+    ) {
         $this->request = $requestStack->getCurrentRequest();
     }
 
-    public function onCourseAccessEvent(CourseAccess $event): void
+    public function __invoke(CourseAccess $event): void
     {
         // CourseAccess
         $user = $event->getUser();
@@ -50,13 +44,5 @@ class CourseAccessListener implements EventSubscriberInterface
 
         $this->em->persist($access);
         $this->em->flush();
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public static function getSubscribedEvents(): array
-    {
-        return ['chamilo_course.course.access' => 'onCourseAccessEvent'];
     }
 }

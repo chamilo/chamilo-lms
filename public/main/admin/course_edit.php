@@ -296,7 +296,7 @@ if ($form->validate()) {
     $course = $form->getSubmitValues();
     $visibility = $course['visibility'];
 
-    // @todo should be check in the CourseListener
+    // @todo should be check in the CidReqListener
     /*global $_configuration;
 
     if (isset($_configuration[$urlId]) &&

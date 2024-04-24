@@ -65,7 +65,7 @@ services:
 #        class: Chamilo\CoreBundle\EventListener\OnlineListener
 #        arguments: [@security.context, @doctrine.orm.entity_manager ]
 #        tags:
-#            - {name: kernel.event_listener, event: kernel.controller, method: onCoreController}
+#            - {name: kernel.event_listener, event: kernel.controller}
 
     Chamilo\CoreBundle\Repository\AssetRepository: ~
 

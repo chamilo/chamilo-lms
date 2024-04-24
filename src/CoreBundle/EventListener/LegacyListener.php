@@ -11,14 +11,9 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Exception;
-use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\HttpKernel\Event\ResponseEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -29,7 +24,7 @@ use Twig\Environment;
  * Works as old global.inc.php
  * Setting old php requirements so pages inside main/* could work correctly.
  */
-class LegacyListener implements EventSubscriberInterface
+class LegacyListener
 {
     public function __construct(
         private readonly Environment $twig,
@@ -41,7 +36,7 @@ class LegacyListener implements EventSubscriberInterface
         private readonly ContainerInterface $container,
     ) {}
 
-    public function onKernelRequest(RequestEvent $event): void
+    public function __invoke(RequestEvent $event): void
     {
         if (!$event->isMainRequest()) {
             return;
@@ -142,7 +137,7 @@ class LegacyListener implements EventSubscriberInterface
         $twig->addGlobal('header_extra_content', $extraHeader);
 
         // We set cid_reset = true if we enter inside a main/admin url
-        // CourseListener check this variable and deletes the course session
+        // CidReqListener check this variable and deletes the course session
         if (str_contains((string) $request->get('name'), 'admin/')) {
             $session->set('cid_reset', true);
         } else {
@@ -160,21 +155,5 @@ class LegacyListener implements EventSubscriberInterface
         }
 
         $session->set('access_url_id', $urlId);
-    }
-
-    public function onKernelResponse(ResponseEvent $event): void {}
-
-    public function onKernelController(ControllerEvent $event): void {}
-
-    /**
-     * @return array<string, mixed>
-     */
-    public static function getSubscribedEvents(): array
-    {
-        return [
-            KernelEvents::REQUEST => 'onKernelRequest',
-            KernelEvents::RESPONSE => 'onKernelResponse',
-            KernelEvents::CONTROLLER => 'onKernelController',
-        ];
     }
 }

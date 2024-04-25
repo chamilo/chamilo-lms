@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Form element to select a date.
@@ -99,28 +100,38 @@ class DatePicker extends HTML_QuickForm_text
         $localeCode = $this->getLocaleCode();
         $id = $this->getAttribute('id');
 
-        $localeScript = '';
-        if ($localeCode !== 'en') {
-            $localeScript = '<script async="false" src="/build/flatpickr/l10n/' . $localeCode . '.js"></script>';
-        }
-
-        return $localeScript . "<script>
+        return "<script>
             document.addEventListener('DOMContentLoaded', function () {
-                const fp = flatpickr('#{$id}', {
-                    locale: '{$localeCode}',
-                    altInput: true,
-                    altFormat: '".get_lang('F d, Y')."',
-                    enableTime: false,
-                    dateFormat: 'Y-m-d',
-                    time_24hr: true,
-                    wrap: false
-                });
+                function initializeFlatpickr() {
+                    const fp = flatpickr('#{$id}', {
+                        locale: '{$localeCode}',
+                        altInput: true,
+                        altFormat: '".get_lang('F d, Y')."',
+                        enableTime: false,
+                        dateFormat: 'Y-m-d',
+                        time_24hr: true,
+                        wrap: false
+                    });
 
-                if ($('label[for=\"".$id."\"]').length > 0) {
-                    $('label[for=\"".$id."\"]').hide();
+                    if ($('label[for=\"".$id."\"]').length > 0) {
+                        $('label[for=\"".$id."\"]').hide();
+                    }
+
+                    document.querySelector('label[for=\"' + '{$id}' + '\"]').classList.add('datepicker-label');
                 }
 
-                document.querySelector('label[for=\"' + '{$id}' + '\"]').classList.add('datepicker-label');
+                function loadLocale() {
+                    if ('{$localeCode}' !== 'en') {
+                        var script = document.createElement('script');
+                        script.src = '/build/flatpickr/l10n/{$localeCode}.js';
+                        script.onload = initializeFlatpickr;
+                        document.head.appendChild(script);
+                    } else {
+                        initializeFlatpickr();
+                    }
+                }
+
+                loadLocale();
             });
         </script>";
     }
@@ -135,7 +146,12 @@ class DatePicker extends HTML_QuickForm_text
      */
     private function getLocaleCode(): string
     {
-        $locale = api_get_language_isocode();
+        $locale = api_get_setting('language.platform_language');
+        $request = Container::getRequest();
+        if ($request) {
+            $locale = $request->getLocale();
+        }
+
         $userInfo = api_get_user_info();
         if (is_array($userInfo) && !empty($userInfo['language']) && ANONYMOUS != $userInfo['status']) {
             $locale = $userInfo['language'];

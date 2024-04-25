@@ -87,7 +87,7 @@ class TicketManager
     public static function getCategories($from, $numberItems, $column, $direction)
     {
         $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
-        $sql = "SELECT id, name, description, total_tickets
+        $sql = "SELECT id, title, description, total_tickets
                 FROM $table";
 
         if (!in_array($direction, ['ASC', 'DESC'])) {
@@ -118,7 +118,7 @@ class TicketManager
     {
         $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
         $id = (int) $id;
-        $sql = "SELECT id, name, description, total_tickets
+        $sql = "SELECT id, title, description, total_tickets
                 FROM $table WHERE id = $id";
 
         $result = Database::query($sql);
@@ -518,7 +518,7 @@ class TicketManager
                 if (empty($usersInCategory)) {
                     $subject = sprintf(
                         get_lang('Warning: No one has been assigned to category %s'),
-                        $categoryInfo['name']
+                        $categoryInfo['title']
                     );
 
                     if ('true' === api_get_setting('ticket_send_warning_to_all_admins')) {
@@ -527,7 +527,7 @@ class TicketManager
                                 get_lang(
                                     'A notification was sent to the administrators to report this category has no user assigned'
                                 ),
-                                $categoryInfo['name']
+                                $categoryInfo['title']
                             ),
                             null,
                             false
@@ -815,7 +815,7 @@ class TicketManager
                 $column = 'ticket_id';
                 break;
             case 1:
-                $column = 'status_name';
+                $column = 'status_title';
                 break;
             case 2:
                 $column = 'start_date';
@@ -824,7 +824,7 @@ class TicketManager
                 $column = 'sys_lastedit_datetime';
                 break;
             case 4:
-                $column = 'category_name';
+                $column = 'category_title';
                 break;
             case 5:
                 $column = 'sys_insert_user_id';
@@ -845,11 +845,11 @@ class TicketManager
         $sql = "SELECT DISTINCT
                 ticket.*,
                 ticket.id ticket_id,
-                status.name AS status_name,
+                status.title AS status_title,
                 ticket.start_date,
                 ticket.sys_lastedit_datetime,
-                cat.name AS category_name,
-                priority.name AS priority_name,
+                cat.title AS category_title,
+                priority.title AS priority_title,
                 ticket.total_messages AS total_messages,
                 ticket.message AS message,
                 ticket.subject AS subject,
@@ -882,9 +882,9 @@ class TicketManager
                       ticket.message LIKE '%$keyword%' OR
                       ticket.keyword LIKE '%$keyword%' OR
                       ticket.source LIKE '%$keyword%' OR
-                      cat.name LIKE '%$keyword%' OR
-                      status.name LIKE '%$keyword%' OR
-                      priority.name LIKE '%$keyword%' OR
+                      cat.title LIKE '%$keyword%' OR
+                      status.title LIKE '%$keyword%' OR
+                      priority.title LIKE '%$keyword%' OR
                       ticket.personal_email LIKE '%$keyword%'
             )";
         }
@@ -989,10 +989,10 @@ class TicketManager
             if ($isAdmin) {
                 $ticket = [
                     $icon.' '.Security::remove_XSS($row['subject']),
-                    $row['status_name'],
+                    $row['status_title'],
                     $row['start_date'],
                     $row['sys_lastedit_datetime'],
-                    $row['category_name'],
+                    $row['category_title'],
                     $name,
                     $row['assigned_last_user'],
                     $row['total_messages'],
@@ -1000,10 +1000,10 @@ class TicketManager
             } else {
                 $ticket = [
                     $icon.' '.Security::remove_XSS($row['subject']),
-                    $row['status_name'],
+                    $row['status_title'],
                     $row['start_date'],
                     $row['sys_lastedit_datetime'],
-                    $row['category_name'],
+                    $row['category_title'],
                 ];
             }
             if ($isAdmin) {
@@ -1189,9 +1189,9 @@ class TicketManager
 
         $sql = "SELECT
                     ticket.*,
-                    cat.name,
-                    status.name as status,
-                    priority.name priority
+                    cat.title,
+                    status.title as status,
+                    priority.title priority
                 FROM $table_support_tickets ticket
                 INNER JOIN $table_support_category cat
                 ON (cat.id = ticket.category_id)
@@ -1680,9 +1680,9 @@ class TicketManager
                     ticket.code,
                     ticket.sys_insert_datetime,
                     ticket.sys_lastedit_datetime,
-                    cat.name as category,
+                    cat.title as category,
                     CONCAT(user.lastname,' ', user.firstname) AS fullname,
-                    status.name as status,
+                    status.title as status,
                     ticket.total_messages as messages,
                     ticket.assigned_last_user as responsable
                 FROM $table_support_tickets ticket,
@@ -1997,7 +1997,7 @@ class TicketManager
     public static function addProject($params)
     {
         $project = new TicketProject();
-        $project->setTitle($params['name']);
+        $project->setTitle($params['title']);
         $project->setDescription($params['description']);
         $project->setInsertUserId(api_get_user_id());
 
@@ -2022,7 +2022,7 @@ class TicketManager
     public static function updateProject($id, $params)
     {
         $project = self::getProject($id);
-        $project->setTitle($params['name']);
+        $project->setTitle($params['title']);
         $project->setDescription($params['description']);
         $project->setLastEditDateTime(new DateTime($params['sys_lastedit_datetime']));
         $project->setLastEditUserId($params['sys_lastedit_user_id']);
@@ -2117,8 +2117,8 @@ class TicketManager
     public static function addStatus($params)
     {
         $item = new TicketStatus();
-        $item->setCode(URLify::filter($params['name']));
-        $item->setTitle($params['name']);
+        $item->setCode(URLify::filter($params['title']));
+        $item->setTitle($params['title']);
         $item->setDescription($params['description']);
 
         Database::getManager()->persist($item);
@@ -2142,7 +2142,7 @@ class TicketManager
     public static function updateStatus($id, $params)
     {
         $item = self::getStatus($id);
-        $item->setTitle($params['name']);
+        $item->setTitle($params['title']);
         $item->setDescription($params['description']);
 
         Database::getManager()->persist($item);
@@ -2217,8 +2217,8 @@ class TicketManager
     {
         $item = new TicketPriority();
         $item
-            ->setCode(URLify::filter($params['name']))
-            ->setTitle($params['name'])
+            ->setCode(URLify::filter($params['title']))
+            ->setTitle($params['title'])
             ->setDescription($params['description'])
             ->setColor('')
             ->setInsertUserId(api_get_user_id())
@@ -2246,7 +2246,7 @@ class TicketManager
     public static function updatePriority($id, $params)
     {
         $item = self::getPriority($id);
-        $item->setTitle($params['name']);
+        $item->setTitle($params['title']);
         $item->setDescription($params['description']);
 
         Database::getManager()->persist($item);

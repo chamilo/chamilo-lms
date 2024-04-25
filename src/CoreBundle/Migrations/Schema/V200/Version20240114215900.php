@@ -33,8 +33,8 @@ final class Version20240114215900 extends AbstractMigrationChamilo
         $this->addSql('DROP INDEX IDX_EEDF4DA6F004E599 ON track_e_downloads;');
         $this->addSql('ALTER TABLE track_e_downloads DROP resource_link_id;');
         $this->addSql('ALTER TABLE track_e_downloads ADD c_id INT NOT NULL;');
-        $this->addSql('ALTER TABLE track_e_downloads ADD down_session_id INT DEFAULT NULL;');
         $this->addSql('CREATE INDEX idx_ted_c_id ON track_e_downloads (c_id);');
-        $this->addSql('CREATE INDEX down_session_id ON track_e_downloads (down_session_id);');
+        $this->addSql('ALTER TABLE track_e_downloads ADD session_id INT DEFAULT NULL;');
+        $this->addSql('CREATE INDEX session_id ON track_e_downloads (session_id);');
     }
 }

@@ -182,7 +182,7 @@ if (!empty($projectId)) {
     $selectTypes = [];
     $types = TicketManager::get_all_tickets_categories($projectId);
     foreach ($types as $type) {
-        $selectTypes[$type['category_id']] = $type['name'];
+        $selectTypes[$type['category_id']] = $type['title'];
     }
 
     $admins = UserManager::getUserListLike(
@@ -199,7 +199,7 @@ if (!empty($projectId)) {
     $status = TicketManager::get_all_tickets_status();
     $selectStatus = [];
     foreach ($status as $stat) {
-        $selectStatus[$stat['id']] = $stat['name'];
+        $selectStatus[$stat['id']] = $stat['title'];
     }
 
     $selectPriority = TicketManager::getPriorityList();

@@ -105,7 +105,7 @@ function add_image_form() {
 
 $projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
 
-$types = TicketManager::get_all_tickets_categories($projectId, 'category.name ASC');
+$types = TicketManager::get_all_tickets_categories($projectId, 'category.title ASC');
 $htmlHeadXtra[] = '<script>
     var projects = '.js_array($types, 'projects', 'project_id').'
     var course_required = '.js_array($types, 'course_required', 'course_required').'
@@ -182,7 +182,7 @@ $userId = api_get_user_id();
 // Category List
 $categoryList = [];
 foreach ($types as $type) {
-    $categoryList[$type['category_id']] = $type['name'].': '.$type['description'];
+    $categoryList[$type['category_id']] = $type['title'].': '.$type['description'];
 }
 
 // Status List

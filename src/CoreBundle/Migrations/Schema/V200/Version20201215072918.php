@@ -133,7 +133,9 @@ final class Version20201215072918 extends AbstractMigrationChamilo
             }
         }
 
-        $this->updateAgendaReminders($oldNewEventMap);
+        if ($schema->hasTable('agenda_reminder')) {
+            $this->updateAgendaReminders($oldNewEventMap);
+        }
     }
 
     /**

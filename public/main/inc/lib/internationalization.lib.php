@@ -67,11 +67,19 @@ function get_lang(string $variable, ?string $locale = null): string
 
     // Check for locale fallbacks (in case no translation is available).
     static $fallbacks = null;
+    $englishInQueue = (!empty($locale) && $locale === 'en_US');
     if ($fallbacks === null) {
         if (!empty($locale)) {
             while (!empty($parent = SubLanguageManager::getParentLocale($locale))) {
                 $fallbacks[] = $parent;
+                if ($parent === 'en_US') {
+                    $englishInQueue = true;
+                }
             }
+        }
+        // If there were no parent language, still consider en_US as global fallback
+        if (!$englishInQueue) {
+            $fallbacks[] = 'en_US';
         }
     }
     // Test a basic translation to the current language.

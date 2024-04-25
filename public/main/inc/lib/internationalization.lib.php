@@ -65,12 +65,37 @@ function get_lang(string $variable, ?string $locale = null): string
     // Using symfony
     $defaultDomain = 'messages';
 
-    return $translator->trans(
+    // Check for locale fallbacks (in case no translation is available).
+    static $fallbacks = null;
+    if ($fallbacks === null) {
+        if (!empty($locale)) {
+            while (!empty($parent = SubLanguageManager::getParentLocale($locale))) {
+                $fallbacks[] = $parent;
+            }
+        }
+    }
+    // Test a basic translation to the current language.
+    $translation = $translator->trans(
         $variable,
         [],
         $defaultDomain,
         $locale
     );
+    // If no translation was found, $translation is empty.
+    // Check fallbacks for a valid translation.
+    $i = 0;
+    while (empty($translation) && !empty($fallbacks[$i])) {
+        $fallback = $fallbacks[$i];
+        $translation = $translator->trans(
+            $variable,
+            [],
+            $defaultDomain,
+            $fallback
+        );
+        $i++;
+    }
+
+    return $translation;
 }
 
 /**

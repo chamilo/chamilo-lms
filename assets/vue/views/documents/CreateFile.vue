@@ -15,7 +15,7 @@
     <div class="documents-form-container">
       <DocumentsForm
         ref="createForm"
-        :errors="violations"
+        :errors="errors"
         :values="item"
       />
       <Panel
@@ -34,8 +34,6 @@
 </template>
 
 <script>
-import { mapActions } from "vuex"
-import { createHelpers } from "vuex-map-fields"
 import DocumentsForm from "../../components/documents/FormNewDocument.vue"
 import Loading from "../../components/Loading.vue"
 import Toolbar from "../../components/Toolbar.vue"
@@ -43,14 +41,9 @@ import CreateMixin from "../../mixins/CreateMixin"
 import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
 import Panel from "primevue/panel"
 import TemplateList from "../../components/documents/TemplateList.vue"
-import axios from "axios"
+import documentsService from "../../services/documents"
 
 const servicePrefix = "Documents"
-
-const { mapFields } = createHelpers({
-  getterType: "documents/getField",
-  mutationType: "documents/updateField",
-})
 
 export default {
   name: "DocumentsCreateFile",
@@ -68,18 +61,18 @@ export default {
     const finalTags = this.getCertificateTags()
     return {
       item: {
+        title: "",
+        contentFile: "",
         newDocument: true, // Used in FormNewDocument.vue to show the editor
         filetype: filetype,
         parentResourceNodeId: null,
         resourceLinkList: null,
-        contentFile: null,
       },
       templates: [],
+      isLoading: false,
+      errors: {},
       finalTags,
     }
-  },
-  computed: {
-    ...mapFields(["error", "isLoading", "created", "violations"]),
   },
   created() {
     this.item.parentResourceNodeId = this.$route.params.node
@@ -92,7 +85,6 @@ export default {
       },
     ])
   },
-
   methods: {
     handleBack() {
       this.$router.back()
@@ -100,17 +92,16 @@ export default {
     addTemplateToEditor(templateContent) {
       this.item.contentFile = templateContent
     },
-    fetchTemplates() {
+    async fetchTemplates() {
+      this.errors = {}
       const courseId = this.$route.query.cid
-      axios
-        .get(`/template/all-templates/${courseId}`)
-        .then((response) => {
-          this.templates = response.data
-          console.log("Templates fetched successfully:", this.templates)
-        })
-        .catch((error) => {
-          console.error("Error fetching templates:", error)
-        })
+      try {
+        let data = await documentsService.getTemplates(courseId)
+        this.templates = data
+      } catch (error) {
+        console.error(error)
+        this.errors = error.errors
+      }
     },
     getCertificateTags() {
       let finalTags = ""
@@ -144,7 +135,20 @@ export default {
 
       return finalTags
     },
-    ...mapActions("documents", ["createWithFormData", "reset"]),
+    async createWithFormData(payload) {
+      this.isLoading = true
+      this.errors = {}
+      try {
+        let response = await documentsService.createWithFormData(payload)
+        let data = await response.json()
+        console.log(data)
+      } catch (error) {
+        console.error(error)
+        this.errors = error.errors
+      } finally {
+        this.isLoading = false
+      }
+    },
   },
   mounted() {
     this.fetchTemplates()

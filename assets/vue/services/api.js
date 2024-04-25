@@ -1,5 +1,8 @@
 import fetch from '../utils/fetch';
 
+// As stated here https://github.com/chamilo/chamilo-lms/pull/5386#discussion_r1578471409
+// this service should not be used and instead the assets/bue/config/api.js should be used instead
+// take a look at assets/bue/services/socialService.js to have an example
 export default function makeService(endpoint, extensions = {}) {
   const baseService = {
     find(id, params) {
@@ -63,6 +66,14 @@ export default function makeService(endpoint, extensions = {}) {
         method: 'PUT',
         body: JSON.stringify(payload)
       });
+    },
+    handleError(error, errorsRef, violationsRef) {
+      if (error instanceof SubmissionError) {
+        violationsRef.value = error.errors
+        errorsRef.value = error.errors._error
+        return
+      }
+      errorsRef.value = error.message
     }
   };
 

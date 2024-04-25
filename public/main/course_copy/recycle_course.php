@@ -71,17 +71,17 @@ if (Security::check_token('post') && (
         /* to delete, course code confirmation must be equal that current course code */
         if ($current_course_code == $courseCodeConfirmation) {
             $cr->recycle($recycle_type);
-            echo Display::return_message(get_lang('RecycleFinished'), 'confirm');
+            echo Display::return_message(get_lang('Recycle is finished'), 'confirm');
         } else {
             $messageFailCourseCode = '<p>'.get_lang('CourseRegistrationCodeIncorrect').'</p>';
             $messageFailCourseCode .= '<p><a class="btn btn--primary" href="'.api_get_self().'?'.api_get_cidreq().'">'.
-                get_lang('BackToPreviousPage').
+                get_lang('Back to previous page').
                 '</a></p>';
             echo Display::return_message($messageFailCourseCode, 'error', false);
         }
     } elseif ('select_items' == $recycle_type) {
         $cr->recycle($recycle_type);
-        echo Display::return_message(get_lang('RecycleFinished'), 'confirm');
+        echo Display::return_message(get_lang('Recycle is finished'), 'confirm');
     }
 } elseif (Security::check_token('post') && (
         isset($_POST['recycle_option']) &&
@@ -104,15 +104,15 @@ if (Security::check_token('post') && (
     } else {
         echo Display::return_message(get_lang('Warning: using this tool, you will delete learning objects in your course. There is no UNDO possible. We advise you to create a <a href="create_backup.php">backup</a> before.'), 'warning', false);
         $form = new FormValidator('recycle_course', 'post', api_get_self().'?'.api_get_cidreq());
-        $form->addElement('header', get_lang('SelectOptionForBackup'));
-        $form->addElement('radio', 'recycle_option', null, get_lang('FullRecycle'), 'full_backup');
-        $form->addElement('radio', 'recycle_option', null, get_lang('LetMeSelectItems'), 'select_items');
+        $form->addElement('header', get_lang('Please select a backup option'));
+        $form->addElement('radio', 'recycle_option', null, get_lang('Delete everything'), 'full_backup');
+        $form->addElement('radio', 'recycle_option', null, get_lang('Let me select learning objects'), 'select_items');
 
         //Confirmation input code
         $form->addElement(
             'label',
             '',
-            '<span class="hidden course-full-delete">'.get_lang('CourseCodeConfirmation').'</span>',
+            '<span class="hidden course-full-delete">'.get_lang('Course code confirmation').'</span>',
             null,
             null
         );

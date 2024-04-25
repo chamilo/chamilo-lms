@@ -23,7 +23,7 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
 
-$tool_name = get_lang('DelCourse');
+$tool_name = get_lang('Completely delete this course');
 $type_info_message = 'warning';
 if (isset($_GET['delete']) && 'yes' === $_GET['delete'] && $_GET['course_code'] && !empty($_GET['course_code'])) {
     if ($current_course_code == $_GET['course_code']) {
@@ -31,33 +31,33 @@ if (isset($_GET['delete']) && 'yes' === $_GET['delete'] && $_GET['course_code'] 
         // DELETE CONFIRMATION MESSAGE
         Session::erase('_cid');
         Session::erase('_real_cid');
-        $message = '<h3>'.get_lang('CourseTitle').' : '.$current_course_name.'</h3>';
-        $message .= '<h3>'.get_lang('CourseCode').' : '.$current_course_code.'</h3>';
-        $message .= get_lang('HasDel');
-        $message .= '<br /><br /><a href="../../index.php">'.get_lang('BackHome').'</a>';
+        $message = '<h3>'.get_lang('Course title').' : '.$current_course_name.'</h3>';
+        $message .= '<h3>'.get_lang('Course code').' : '.$current_course_code.'</h3>';
+        $message .= get_lang('has been deleted');
+        $message .= '<br /><br /><a href="../../index.php">'.get_lang('Back to Home Page.').'</a>';
     } else {
         /* message if code course is incorrect */
-        $message = '<h3>'.get_lang('CourseTitle').' : '.$current_course_name.'</h3>';
-        $message .= '<h3>'.get_lang('CourseCode').' : '.$current_course_code.'</h3>';
-        $message .= '<p>'.get_lang('CourseRegistrationCodeIncorrect').'</p>';
+        $message = '<h3>'.get_lang('Course title').' : '.$current_course_name.'</h3>';
+        $message .= '<h3>'.get_lang('Course code').' : '.$current_course_code.'</h3>';
+        $message .= '<p>'.get_lang('Course registration code incorrect').'</p>';
         $message .= '<p><a class="btn btn--primary" href="'
             .api_get_path(WEB_CODE_PATH)
             .'course_info/delete_course.php?'
             .api_get_cidreq()
-            .'">'.get_lang('BackToPreviousPage').'</a>';
-        $message .= '<br /><br /><a href="../../index.php">'.get_lang('BackHome').'</a>';
+            .'">'.get_lang('Back to previous page').'</a>';
+        $message .= '<br /><br /><a href="../../index.php">'.get_lang('Back to Home Page.').'</a>';
         $type_info_message = 'error';
     }
 } else {
-    $message = '<h3>'.get_lang('CourseTitle').' : '.$current_course_name.'</h3>';
-    $message .= '<h3>'.get_lang('CourseCode').' : '.$current_course_code.'</h3>';
-    $message .= '<p>'.get_lang('ByDel').'</p>';
+    $message = '<h3>'.get_lang('Course title').' : '.$current_course_name.'</h3>';
+    $message .= '<h3>'.get_lang('Course code').' : '.$current_course_code.'</h3>';
+    $message .= '<p>'.get_lang('Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?</p>').'<p>';
     $message .= '<p><span class="form_required">*</span>'
-        .get_lang('CourseCodeConfirmation')
+        .get_lang('Course code confirmation')
         .'&nbsp;<input type="text" name="course_code" id="course_code"></p>';
 
     $message .= '<p>';
-    $message .= '<button class="btn btn--danger delete-course">'.get_lang('ValidateChanges').'</button>';
+    $message .= '<button class="btn btn--danger delete-course">'.get_lang('Validate changes').'</button>';
     $message .= '&nbsp;';
     $message .= '<a class="btn btn--primary"href="'
         .api_get_path(WEB_CODE_PATH)

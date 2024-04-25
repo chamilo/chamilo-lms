@@ -747,7 +747,7 @@ class SessionManager
 
                 switch ($session['visibility']) {
                     case SESSION_VISIBLE_READ_ONLY: //1
-                        $session['visibility'] = get_lang('ReadOnly');
+                        $session['visibility'] = get_lang('Read only');
                         break;
                     case SESSION_VISIBLE:           //2
                     case SESSION_AVAILABLE:         //4
@@ -882,8 +882,8 @@ class SessionManager
             }
         }
 
-        $activeIcon = Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('active'));
-        $inactiveIcon = Display::getMdiIcon(StateIcon::INACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('inactive'));
+        $activeIcon = Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Active'));
+        $inactiveIcon = Display::getMdiIcon(StateIcon::INACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Inactive'));
 
         foreach ($sessions as $session) {
             if ($showCountUsers) {
@@ -932,7 +932,7 @@ class SessionManager
                     $session['visibility'] = get_lang('Visible');
                     break;
                 case SESSION_INVISIBLE:         //3
-                    $session['visibility'] = api_ucfirst(get_lang('invisible'));
+                    $session['visibility'] = api_ucfirst(get_lang('Invisible'));
                     break;
             }
 
@@ -8038,7 +8038,7 @@ class SessionManager
         $statusList = self::getStatusList();
         $form->addSelect(
             'status',
-            get_lang('SessionStatus'),
+            get_lang('Session status'),
             $statusList,
             [
                 'id' => 'status',
@@ -8527,7 +8527,7 @@ class SessionManager
                     ];
                 }
 
-                $columns[] = get_lang('SessionStatus');
+                $columns[] = get_lang('Session status');
                 $list = self::getStatusList();
                 $listToString = '';
                 foreach ($list as $statusId => $status) {
@@ -8627,7 +8627,7 @@ class SessionManager
                     ];
                 }
 
-                $columns[] = get_lang('SessionStatus');
+                $columns[] = get_lang('Session status');
                 $list = self::getStatusList();
                 $listToString = '';
                 foreach ($list as $statusId => $status) {
@@ -8795,7 +8795,7 @@ class SessionManager
                     ];
                 }
 
-                $columns[] = get_lang('SessionStatus');
+                $columns[] = get_lang('Session status');
                 $list = self::getStatusList();
                 $listToString = '';
                 foreach ($list as $statusId => $status) {
@@ -9708,7 +9708,7 @@ class SessionManager
         $list = self::getStatusList();
 
         if (!isset($list[$status])) {
-            return get_lang('NoStatus');
+            return get_lang('No status');
         }
 
         return $list[$status];
@@ -9909,7 +9909,7 @@ class SessionManager
         }
 
         $userId = (int) $userId;
-        $content = Display::page_subheader(get_lang('OngoingTraining'));
+        $content = Display::page_subheader(get_lang('Ongoing training'));
         $content .= '
            <script>
             resizeIframe = function(iFrame) {

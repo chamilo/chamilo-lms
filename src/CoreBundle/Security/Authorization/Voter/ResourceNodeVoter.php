@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CGroup;
+use ChamiloSession;
 use Laminas\Permissions\Acl\Acl;
 use Laminas\Permissions\Acl\Resource\GenericResource;
 use Laminas\Permissions\Acl\Role\GenericRole;
@@ -149,6 +150,12 @@ class ResourceNodeVoter extends Voter
             $courseId = (int) $request->getSession()->get('cid');
             $sessionId = (int) $request->getSession()->get('sid');
             $groupId = (int) $request->getSession()->get('gid');
+
+            if (0 === $courseId) {
+                $courseId = (int) ChamiloSession::read('cid');
+                $sessionId = (int) ChamiloSession::read('sid');
+                $groupId = (int) ChamiloSession::read('gid');
+            }
         }
 
         $links = $resourceNode->getResourceLinks();

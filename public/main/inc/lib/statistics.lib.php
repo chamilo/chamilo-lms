@@ -1001,8 +1001,8 @@ class Statistics
             }
             $parameters['date_diff'] = $date_diff;
             $parameters['report'] = 'courselastvisit';
-            $table_header[] = [get_lang("CourseCode"), true];
-            $table_header[] = [get_lang("LastAccess"), true];
+            $table_header[] = [get_lang("Course code"), true];
+            $table_header[] = [get_lang("Latest access"), true];
 
             ob_start();
             Display:: display_sortable_table(
@@ -1015,7 +1015,7 @@ class Statistics
             $content .= ob_get_contents();
             ob_end_clean();
         } else {
-            $content = get_lang('NoSearchResults');
+            $content = get_lang('No search results');
         }
 
         return $content;

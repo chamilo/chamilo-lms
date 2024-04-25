@@ -1,11 +1,11 @@
 <template>
   <PrimeToolbar>
     <template #start>
-      <PrimeButton
+      <BaseButton
         v-if="handleBack"
         :label="$t('Back')"
-        icon="mdi mdi-arrow-left"
-        class="p-button-outlined"
+        type="primary"
+        icon="back"
         @click="backAction"
       />
 
@@ -26,12 +26,12 @@
         @click="editItem"
       />
 
-      <PrimeButton
+      <BaseButton
         v-if="handleSubmit"
-        :loading="isLoading"
-        :title="$t('Submit')"
-        class="p-button-outlined"
-        icon="mdi mdi-content-save"
+        :is-loading="isLoading"
+        :label="$t('Submit')"
+        type="success"
+        icon="save"
         @click="submitItem"
       />
 
@@ -81,12 +81,14 @@
 </template>
 
 <script>
-import PrimeToolbar from 'primevue/toolbar';
-import PrimeButton from 'primevue/button';
+import PrimeToolbar from "primevue/toolbar"
+import PrimeButton from "primevue/button"
+import BaseButton from "./basecomponents/BaseButton.vue"
 
 export default {
-  name: 'Toolbar',
+  name: "Toolbar",
   components: {
+    BaseButton,
     PrimeToolbar,
     PrimeButton,
   },
@@ -96,105 +98,105 @@ export default {
     },
     handleFilter: {
       type: Function,
-      required: false
+      required: false,
     },
     handleList: {
       type: Function,
-      required: false
+      required: false,
     },
     handleEdit: {
       type: Function,
-      required: false
+      required: false,
     },
     handleBack: {
       type: Function,
-      required: false
+      required: false,
     },
     handleSubmit: {
       type: Function,
-      required: false
+      required: false,
     },
     handleReset: {
       type: Function,
-      required: false
+      required: false,
     },
     handleDelete: {
       type: Function,
-      required: false
+      required: false,
     },
     handleAdd: {
       type: Function,
-      required: false
+      required: false,
     },
     handleSend: {
       type: Function,
-      required: false
+      required: false,
     },
     handleAddDocument: {
       type: Function,
-      required: false
+      required: false,
     },
     onSendFilter: {
       type: Function,
-      required: false
+      required: false,
     },
     resetFilter: {
       type: Function,
-      required: false
+      required: false,
     },
     handleUploadDocument: {
       type: Function,
-      required: false
+      required: false,
     },
     title: {
       type: String,
-      required: false
+      required: false,
     },
     isLoading: {
       type: Boolean,
       required: false,
-      default: () => false
-    }
+      default: () => false,
+    },
   },
   methods: {
     backAction() {
       if (this.handleBack) {
-        this.handleBack();
+        this.handleBack()
       }
     },
     listItem() {
       if (this.handleList) {
-        this.handleList();
+        this.handleList()
       }
     },
     addItem() {
       if (this.handleAdd) {
-        this.handleAdd();
+        this.handleAdd()
       }
     },
     addDocument() {
       if (this.addDocument) {
-        this.handleAddDocument();
+        this.handleAddDocument()
       }
     },
     uploadDocument() {
       if (this.uploadDocument) {
-        this.handleUploadDocument();
+        this.handleUploadDocument()
       }
     },
     editItem() {
       if (this.handleEdit) {
-        this.handleEdit();
+        this.handleEdit()
       }
     },
     sendItem() {
       if (this.handleSend) {
-        this.handleSend();
+        this.handleSend()
       }
     },
     submitItem() {
       if (this.handleSubmit) {
-        this.handleSubmit();
+        this.handleSubmit()
       }
     },
     onHandleDelete() {
@@ -208,9 +210,9 @@ export default {
     },
     resetItem() {
       if (this.handleReset) {
-        this.handleReset();
+        this.handleReset()
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>

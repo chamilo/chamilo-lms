@@ -13,6 +13,7 @@
     :text="onlyIcon"
     :title="onlyIcon ? label : undefined"
     :type="isSubmit ? 'submit' : 'button'"
+    :loading="isLoading"
     @click="$emit('click', $event)"
   />
 </template>
@@ -62,6 +63,10 @@ const props = defineProps({
     required: false,
     default: false,
   },
+  isLoading: {
+    type: Boolean,
+    default: false,
+  }
 })
 
 defineEmits(["click"])

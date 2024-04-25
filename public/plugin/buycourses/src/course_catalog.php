@@ -33,7 +33,7 @@ if ($form->validate()) {
 }
 
 $form->addHeader($plugin->get_lang('SearchFilter'));
-$form->addText('name', get_lang('CourseName'), false);
+$form->addText('name', get_lang('Course name'), false);
 $form->addElement(
     'number',
     'min',

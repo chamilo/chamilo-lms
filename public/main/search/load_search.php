@@ -41,7 +41,7 @@ switch ($action) {
             SESSION_VISIBLE_READ_ONLY,
             false
         );
-        Display::addFlash(Display::return_message(get_lang('UserAdded')));
+        Display::addFlash(Display::return_message(get_lang('The user has been added')));
         header("Location: ".api_get_self().'?user_id='.$userToLoad.'#session-table');
         break;
     case 'unsubscribe_user':
@@ -55,7 +55,7 @@ switch ($action) {
 $em = Database::getManager();
 
 $formSearch = new FormValidator('load', 'get', api_get_self());
-$formSearch->addHeader(get_lang('Load Diagnosis'));
+$formSearch->addHeader(get_lang('Load diagnosis'));
 if (!empty($userInfo)) {
     $users = [];
     switch ($userInfo['status']) {
@@ -115,7 +115,7 @@ if ($userToLoad) {
     }
 }
 
-$formSearch->addButtonSearch(get_lang('Show Diagnostic'), 'save');
+$formSearch->addButtonSearch(get_lang('Show diagnosis'), 'save');
 
 $form = new FormValidator('search', 'post', api_get_self().'?user_id='.$userToLoad.'#session-table');
 $form->addHeader(get_lang('Diagnosis'));
@@ -508,7 +508,7 @@ $userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseEight]');
 
 $userForm->addEndPanel();
 
-$form->addButtonSave(get_lang('Save Diagnostic Changes'), 'save');
+$form->addButtonSave(get_lang('Save diagnostic changes'), 'save');
 
 // Get list of session status
 $statusList = SessionManager::getStatusList();
@@ -518,7 +518,7 @@ foreach ($statusList as $nro => $name) {
 }
 $form->addSelect(
     'filter_status',
-    get_lang('SessionStatus'),
+    get_lang('Session status'),
     $statusSelectList,
     ['id' => 'filter_status']
 );

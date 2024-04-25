@@ -1088,16 +1088,16 @@ function api_block_inactive_user()
         $tpl = new Template(null, true, true, false, true, false, true, 0);
         $tpl->assign('hide_login_link', 1);
 
-        //api_not_allowed(true, get_lang('AccountInactive'));
+        //api_not_allowed(true, get_lang('Account inactive'));
         // we were not in a course, return to home page
         $msg = Display::return_message(
-            get_lang('AccountInactive'),
+            get_lang('Account inactive'),
             'error',
             false
         );
 
         $msg .= '<p class="text-center">
-                 <a class="btn btn--plain" href="'.$homeUrl.'">'.get_lang('BackHome').'</a></p>';
+                 <a class="btn btn--plain" href="'.$homeUrl.'">'.get_lang('Back to Home Page.').'</a></p>';
 
         $tpl->assign('content', $msg);
         $tpl->display_one_col_template();

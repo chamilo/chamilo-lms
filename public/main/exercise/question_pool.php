@@ -395,7 +395,7 @@ if (1 == $exercise_id_changed) {
 
 // Exercise List
 $my_exercise_list = [];
-$my_exercise_list['0'] = get_lang('AllTests');
+$my_exercise_list['0'] = get_lang('All tests');
 $my_exercise_list['-1'] = get_lang('Orphan questions');
 $titleSavedAsHtml = ('true' === api_get_setting('editor.save_titles_as_html'));
 if (is_array($exercise_list)) {
@@ -470,7 +470,7 @@ $form
 $form
     ->addSelect(
         'courseCategoryId',
-        get_lang('QuestionCategory'),
+        get_lang('Questions category'),
         $categoryList,
         ['onchange' => 'submit_form(this);', 'id' => 'courseCategoryId']
     )
@@ -884,7 +884,7 @@ $headers = [
     '',
     get_lang('Question'),
     get_lang('Type'),
-    get_lang('QuestionCategory'),
+    get_lang('Questions category'),
     get_lang('Difficulty'),
     $actionLabel,
 ];

@@ -1746,7 +1746,7 @@ msgid "has been deleted"
 msgstr "has been deleted"
 
 msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
-msgstr "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgstr "Deleting this course will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?</p>"
 
 msgid "YES"
 msgstr "YES"
@@ -27483,3 +27483,15 @@ msgstr "Course coach email sender"
 
 msgid "No reply email sender"
 msgstr "No reply email sender"
+
+msgid "Course registration code incorrect"
+msgstr "Course registration code incorrect"
+
+msgid "Load diagnosis"
+msgstr "Load diagnosis"
+
+msgid "Show diagnosis"
+msgstr "Show diagnosis"
+
+msgid "Save diagnosis changes"
+msgstr "Save diagnosis changes"

@@ -27476,3 +27476,15 @@ msgstr ""
 
 msgid "No reply email sender"
 msgstr ""
+
+msgid "Course registration code incorrect"
+msgstr ""
+
+msgid "Load diagnosis"
+msgstr ""
+
+msgid "Show diagnosis"
+msgstr ""
+
+msgid "Save diagnosis changes"
+msgstr ""

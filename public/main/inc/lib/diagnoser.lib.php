@@ -116,12 +116,12 @@ class Diagnoser
             $table = new SortableTableFromArray($data, 1, 1000);
             $table->set_additional_parameters(['section' => 'courses_space']);
             $table->set_header(0, '', false);
-            $table->set_header(1, get_lang('CourseCode'), true);
+            $table->set_header(1, get_lang('Course code'), true);
             $table->set_header(2, 'Space used on disk (MB)', true);
             $table->set_header(3, 'Set max course space (MB)', false);
             $table->set_header(4, get_lang('Edit'), false);
-            $table->set_header(5, get_lang('LastVisit'), true);
-            $table->set_header(6, get_lang('CurrentDirectory'), false);
+            $table->set_header(5, get_lang('Latest visit'), true);
+            $table->set_header(6, get_lang('Current folder'), false);
 
             $table->display();
         } else {

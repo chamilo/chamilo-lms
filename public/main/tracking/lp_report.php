@@ -406,8 +406,8 @@ $headers[] = get_lang('Username');
 foreach ($lps as $lp) {
     $lpName = $lp->getTitle();
     $headers[] = get_lang('Progress').': '.$lpName;
-    $headers[] = get_lang('FirstAccess').': '.$lpName;
-    $headers[] = get_lang('LastAccess').': '.$lpName;
+    $headers[] = get_lang('First access').': '.$lpName;
+    $headers[] = get_lang('Latest access').': '.$lpName;
     $headers[] = get_lang('Time').': '.$lpName;
     $headers[] = get_lang('Score').': '.$lpName;
 }

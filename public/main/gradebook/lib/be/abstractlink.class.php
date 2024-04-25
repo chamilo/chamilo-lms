@@ -754,12 +754,7 @@ abstract class AbstractLink implements GradebookItem
         return [];
     }
 
-    /**
-     * @param Doctrine\DBAL\Driver\Statement|null $result
-     *
-     * @return array
-     */
-    private static function create_objects_from_sql_result($result)
+    private static function create_objects_from_sql_result(\Doctrine\DBAL\Result $result): array
     {
         $links = [];
         $allow = ('true' === api_get_setting('gradebook.allow_gradebook_stats'));
@@ -774,7 +769,7 @@ abstract class AbstractLink implements GradebookItem
             $link->set_type($data['type']);
             $link->set_ref_id($data['ref_id']);
             $link->set_user_id($data['user_id']);
-            $link->setCourseId(api_get_course_int_id());
+            $link->setCourseId($data['c_id']);
             $link->set_category_id($data['category_id']);
             $link->set_date($data['created_at']);
             $link->set_weight($data['weight']);

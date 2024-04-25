@@ -24,6 +24,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 
+use const ARRAY_FILTER_USE_KEY;
+
 /**
  * Handles the platform settings.
  */
@@ -150,9 +152,9 @@ class SettingsManager implements SettingsManagerInterface
             $settings = $this->load($category, $name);
             if ($settings->has($name)) {
                 return $settings->get($name);
-            } else {
-                return null;
             }
+
+            return null;
         }
 
         $this->loadAll();
@@ -161,10 +163,10 @@ class SettingsManager implements SettingsManagerInterface
             $settings = $this->schemaList[$category];
             if ($settings->has($name)) {
                 return $settings->get($name);
-            } else {
-                error_log("Attempted to access undefined setting '$name' in category '$category'.");
-                return null;
             }
+            error_log("Attempted to access undefined setting '$name' in category '$category'.");
+
+            return null;
         }
 
         throw new InvalidArgumentException(sprintf('Category %s not found', $category));
@@ -179,6 +181,7 @@ class SettingsManager implements SettingsManagerInterface
             $schemaList = $session->get('schemas');
             if (!empty($schemaList)) {
                 $this->schemaList = $schemaList;
+
                 return;
             }
         }

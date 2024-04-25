@@ -15,9 +15,6 @@ use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Exception;
 use Symfony\Bundle\SecurityBundle\Security;
 
-/**
- * @implements ProcessorInterface<CCalendarEvent>
- */
 final class CCalendarEventStateProcessor implements ProcessorInterface
 {
     public function __construct(

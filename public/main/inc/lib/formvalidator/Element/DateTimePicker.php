@@ -67,40 +67,50 @@ class DateTimePicker extends HTML_QuickForm_text
      *
      * @return string
      */
-    private function getElementJS()
+    private function getElementJS(): string
     {
         $localeCode = $this->getLocaleCode();
         $id = $this->getAttribute('id');
 
-        $localeScript = '';
-        if ($localeCode !== 'en') {
-            $localeScript = '<script async="false" src="/build/flatpickr/l10n/' . $localeCode . '.js"></script>';
-        }
-
-        $js = $localeScript . "<script>
+        $js = "<script>
         document.addEventListener('DOMContentLoaded', function () {
-            const fp = flatpickr('#{$id}', {
-                locale: '{$localeCode}',
-                altInput: true,
-                altFormat: '".get_lang('F d, Y')." ".get_lang('at')." H:i',
-                enableTime: true,
-                dateFormat: 'Y-m-d H:i',
-                time_24hr: true,
-                wrap: false,
-                onReady: function(selectedDates, dateStr, instance) {
-                    const validateButton = document.createElement('button');
-                    validateButton.textContent = '".get_lang('Validate')."';
-                    validateButton.className = 'flatpickr-validate-btn';
-                    validateButton.type = 'button';
-                    validateButton.onclick = function() {
-                        instance.close();
-                    };
+            function initializeFlatpickr() {
+                const fp = flatpickr('#{$id}', {
+                    locale: '{$localeCode}',
+                    altInput: true,
+                    altFormat: '".get_lang('F d, Y')." ".get_lang('at')." H:i',
+                    enableTime: true,
+                    dateFormat: 'Y-m-d H:i',
+                    time_24hr: true,
+                    wrap: false,
+                    onReady: function(selectedDates, dateStr, instance) {
+                        const validateButton = document.createElement('button');
+                        validateButton.textContent = '".get_lang('Validate')."';
+                        validateButton.className = 'flatpickr-validate-btn';
+                        validateButton.type = 'button';
+                        validateButton.onclick = function() {
+                            instance.close();
+                        };
 
-                    instance.calendarContainer.appendChild(validateButton);
+                        instance.calendarContainer.appendChild(validateButton);
+                    }
+                });
+
+                document.querySelector('label[for=\"' + '{$id}' + '\"]').classList.add('datepicker-label');
+            }
+
+            function loadLocaleAndInitialize() {
+                if ('{$localeCode}' !== 'en') {
+                    var script = document.createElement('script');
+                    script.src = '/build/flatpickr/l10n/' + '{$localeCode}.js';
+                    script.onload = initializeFlatpickr;
+                    document.head.appendChild(script);
+                } else {
+                    initializeFlatpickr();
                 }
-            });
+            }
 
-            document.querySelector('label[for=\"' + '{$id}' + '\"]').classList.add('datepicker-label');
+            loadLocaleAndInitialize();
         });
         </script>";
 
@@ -119,7 +129,7 @@ class DateTimePicker extends HTML_QuickForm_text
     {
         $locale = api_get_language_isocode();
         $userInfo = api_get_user_info();
-        if (is_array($userInfo) && !empty($userInfo['language'])) {
+        if (is_array($userInfo) && !empty($userInfo['language']) && ANONYMOUS != $userInfo['status']) {
             $locale = $userInfo['language'];
         }
 

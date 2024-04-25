@@ -1,47 +1,41 @@
 <template>
-  <Toolbar class="p-mb-4">
-    <template #left>
-      <div
-        v-if="isAuthenticated && isCurrentTeacher"
-        class="flex flex-row gap-2"
-      >
-        <!--         <Button label="New" icon="pi pi-plus" class="p-button-primary p-button-sm p-mr-2" @click="openNew" />-->
-        <Button
-          class="btn btn--primary"
-          icon="pi pi-plus"
-          label="New folder"
-          @click="openNew"
-        />
+  <BaseToolbar>
+    <BaseButton
+      v-if="showNewFolderButton"
+      :label="t('New folder')"
+      icon="folder-plus"
+      only-icon
+      type="black"
+      @click="openNew"
+    />
 
-        <!--         <Button label="New folder" icon="pi pi-plus" class="p-button-success p-mr-2" @click="addHandler()" />-->
-        <!--         <Button label="New document" icon="pi pi-plus" class="p-button-sm p-button-primary p-mr-2" @click="addDocumentHandler()" />-->
-        <Button
-          class="btn btn--primary"
-          icon="pi pi-plus"
-          label="Upload"
-          @click="uploadDocumentHandler()"
-        />
-      </div>
-    </template>
-  </Toolbar>
+    <BaseButton
+      v-if="showUploadButton"
+      :label="t('Upload')"
+      icon="file-upload"
+      only-icon
+      type="black"
+      @click="uploadDocumentHandler"
+    />
+  </BaseToolbar>
 
   <DataTable
     v-model:filters="filters"
     v-model:selection="selectedItems"
-    :globalFilterFields="['resourceNode.title', 'resourceNode.updatedAt']"
+    :global-filter-fields="['resourceNode.title', 'resourceNode.updatedAt']"
     :lazy="true"
     :loading="isLoading"
     :paginator="true"
     :rows="10"
-    :rowsPerPageOptions="[5, 10, 20, 50]"
-    :totalRecords="totalItems"
+    :rows-per-page-options="[5, 10, 20, 50]"
+    :total-records="totalItems"
     :value="items"
     class="p-datatable-sm"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-    dataKey="iid"
-    filterDisplay="menu"
-    paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-    responsiveLayout="scroll"
+    current-page-report-template="Showing {first} to {last} of {totalRecords}"
+    data-key="iid"
+    filter-display="menu"
+    paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+    responsive-layout="scroll"
     @page="onPage($event)"
     @sort="sortingChanged($event)"
   >
@@ -82,11 +76,7 @@
       field="resourceNode.resourceFile.size"
     >
       <template #body="slotProps">
-        {{
-          slotProps.data.resourceNode.resourceFile
-            ? prettyBytes(slotProps.data.resourceNode.resourceFile.size)
-            : ""
-        }}
+        {{ slotProps.data.resourceNode.resourceFile ? prettyBytes(slotProps.data.resourceNode.resourceFile.size) : "" }}
       </template>
     </Column>
 
@@ -103,12 +93,13 @@
     </Column>
   </DataTable>
 
-  <Dialog
-    v-model:visible="itemDialog"
-    :header="$t('New folder')"
-    :modal="true"
-    :style="{ width: '450px' }"
-    class="p-fluid"
+  <BaseDialogConfirmCancel
+    v-model:is-visible="itemDialog"
+    :cancel-label="t('Cancel')"
+    :confirm-label="t('Save')"
+    :title="t('New folder')"
+    @confirm-clicked="saveItem"
+    @cancel-clicked="hideDialog"
   >
     <div class="p-field">
       <label for="title">{{ $t("Name") }}</label>
@@ -126,22 +117,7 @@
         >$t('Title is required')</small
       >
     </div>
-
-    <template #footer>
-      <Button
-        class="p-button-text"
-        icon="pi pi-times"
-        label="Cancel"
-        @click="hideDialog"
-      />
-      <Button
-        class="p-button-text"
-        icon="pi pi-check"
-        label="Save"
-        @click="saveItem"
-      />
-    </template>
-  </Dialog>
+  </BaseDialogConfirmCancel>
 </template>
 
 <script>
@@ -149,7 +125,7 @@ import { mapActions, mapGetters } from "vuex"
 import { mapFields } from "vuex-map-fields"
 import ListMixin from "../../mixins/ListMixin"
 import ActionCell from "../../components/ActionCell.vue"
-//import Toolbar from '../../components/Toolbar.vue';
+import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import ResourceIcon from "../../components/documents/ResourceIcon.vue"
 import ResourceFileLink from "../../components/documents/ResourceFileLink.vue"
 import DataFilter from "../../components/DataFilter"
@@ -160,12 +136,18 @@ import { useFormatDate } from "../../composables/formatDate"
 import prettyBytes from "pretty-bytes"
 import { useSecurityStore } from "../../store/securityStore"
 import { storeToRefs } from "pinia"
+import { ref } from "vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import { useDocumentActionButtons } from "../../composables/document/documentActionButtons"
+import BaseDialogConfirmCancel from "../../components/basecomponents/BaseDialogConfirmCancel.vue"
 
 export default {
   name: "DocumentForHtmlEditor",
   servicePrefix: "Documents",
   components: {
-    //8Toolbar,
+    BaseDialogConfirmCancel,
+    BaseButton,
+    BaseToolbar,
     ActionCell,
     ResourceIcon,
     ResourceFileLink,
@@ -180,7 +162,10 @@ export default {
 
     const { isAuthenticated, isAdmin, isCurrentTeacher } = storeToRefs(securityStore)
 
+    const { showUploadButton, showNewFolderButton } = useDocumentActionButtons()
+
     const data = {
+      t,
       sortBy: "title",
       sortDesc: false,
       columns: [
@@ -195,9 +180,7 @@ export default {
       options: [],
       selectedItems: [],
       // prime vue
-      itemDialog: false,
-      deleteItemDialog: false,
-      deleteMultipleDialog: false,
+      itemDialog: ref(false),
       item: {},
       filters: {},
       submitted: false,
@@ -206,16 +189,16 @@ export default {
       isAuthenticated,
       isAdmin,
       isCurrentTeacher,
+      showNewFolderButton,
+      showUploadButton,
     }
 
     return data
   },
   created() {
-    console.log("created - vue/views/documents/DocumentsList.vue")
     this.filters["loadNode"] = 1
   },
   mounted() {
-    console.log("mounted - vue/views/documents/DocumentsList.vue")
     this.filters["loadNode"] = 1
     this.onUpdateOptions(this.options)
   },
@@ -265,9 +248,8 @@ export default {
       this.submitted = true
 
       if (this.item.title.trim()) {
-        if (this.item.id) {
-        } else {
-          //this.products.push(this.product);
+        if (!this.item.id) {
+          this.item.filetype = "folder"
           this.item.parentResourceNodeId = this.$route.params.node
           this.item.resourceLinkList = JSON.stringify([
             {
@@ -362,7 +344,7 @@ export default {
     // From ListMixin
     ...mapActions("documents", {
       getPage: "fetchAll",
-      create: "create",
+      create: "createWithFormData",
       deleteItem: "del",
       deleteMultipleAction: "delMultiple",
     }),

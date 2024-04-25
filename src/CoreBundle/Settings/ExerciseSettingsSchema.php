@@ -139,10 +139,10 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'none' => '0',
-                        'SCORE_AVERAGE' => '1',
-                        'SCORE_PERCENT' => '2',
-                        'SCORE_DIV_PERCENT' => '3',
+                        'None' => '0',
+                        'Score average' => '1',
+                        'Score percent' => '2',
+                        'Score div percent' => '3',
                     ],
                 ],
             )

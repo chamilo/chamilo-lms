@@ -606,8 +606,9 @@ form .field {
   }
 
   .freeze + label,
-  .html-editor-container + label,
-  .advmultiselect + label {
+  .advmultiselect + label,
+  textarea + label.settings-label
+  {
     font-size: 13px;
     @apply absolute top-0 left-0 text-support-3 text-caption px-1 bg-white text-primary;
   }

@@ -3,6 +3,10 @@ import baseService from "./baseService"
 
 const API_URL = "/social-network"
 
+async function createPost(params) {
+  return baseService.post("/api/social_posts", params)
+}
+
 /**
  * @param {string} postIri
  * @returns {Promise<Object>}
@@ -17,6 +21,14 @@ async function sendPostLike(postIri) {
  */
 async function sendPostDislike(postIri) {
   return baseService.post(`${postIri}/dislike`)
+}
+
+/**
+ * @param {FormData} formData
+ * @returns {Promise<Object>}
+ */
+async function addAttachment(formData) {
+  return await baseService.postForm("/api/social_post_attachments", formData)
 }
 
 export default {
@@ -168,9 +180,13 @@ export default {
     }
   },
 
+  createPost,
+
   sendPostLike,
 
   sendPostDislike,
+
+  addAttachment,
 
   delete: baseService.delete,
 }

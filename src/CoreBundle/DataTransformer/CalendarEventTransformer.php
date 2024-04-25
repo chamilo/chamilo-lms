@@ -53,7 +53,7 @@ class CalendarEventTransformer implements DataTransformerInterface
             $subscriptionItemTitle = $this->usergroupRepository->find($object->getSubscriptionItemId())?->getTitle();
         }
 
-        $eventType = $this->calendarEventRepository->determineEventType($object);
+        $eventType = $object->determineType();
         $color = $this->determineEventColor($eventType);
 
         $calendarEvent = new CalendarEvent(

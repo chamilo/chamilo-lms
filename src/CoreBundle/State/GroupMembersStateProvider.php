@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Entity\Usergroup;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * @template-implements ProviderInterface<array<int, Usergroup>>
+ * @template-implements ProviderInterface<Usergroup>
  */
 final class GroupMembersStateProvider implements ProviderInterface
 {

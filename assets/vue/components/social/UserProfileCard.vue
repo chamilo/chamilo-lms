@@ -1,10 +1,10 @@
 <template>
   <BaseCard plain>
     <div class="p-4 text-center user-profile-card">
-      <img
-        :src="user.illustrationUrl"
-        alt="Profile picture"
-        class="mb-4 w-24 h-24 mx-auto rounded-full"
+      <BaseUserAvatar
+        :image-url="user.illustrationUrl"
+        :alt="t('Picture')"
+        size="xlarge"
       />
       <div
         v-if="visibility.firstname && visibility.lastname"
@@ -97,7 +97,7 @@
 
       <Divider />
       <BaseButton
-        v-if="isCurrentUser || isAdmin"
+        v-if="isCurrentUser || securityStore.isAdmin"
         :label="t('Edit profile')"
         class="mt-4"
         icon="edit"
@@ -110,23 +110,23 @@
 
 <script setup>
 import { computed, inject, ref, watchEffect } from "vue"
-import { useStore } from "vuex"
 import BaseCard from "../basecomponents/BaseCard.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
 import Divider from "primevue/divider"
 import axios from "axios"
+import { useSecurityStore } from "../../store/securityStore"
+import BaseUserAvatar from "../basecomponents/BaseUserAvatar.vue"
 
 const { t } = useI18n()
-const store = useStore()
+const securityStore = useSecurityStore()
 const user = inject("social-user")
 const isCurrentUser = inject("is-current-user")
-const isAdmin = ref(false)
 const extraInfo = ref([])
 const chatEnabled = ref(true)
 const isUserOnline = ref(false)
 const userOnlyInChat = ref(false)
-const showFullProfile = computed(() => isCurrentUser.value || isAdmin.value)
+const showFullProfile = computed(() => isCurrentUser.value || securityStore.isAdmin)
 const languageInfo = ref(null)
 const vCardUserLink = ref("")
 const visibility = ref({})
@@ -142,8 +142,8 @@ const editProfile = () => {
 
 async function fetchUserProfile(userId) {
   try {
-    const response = await axios.get(`/social-network/user-profile/${userId}`)
-    const data = response.data
+    const { data } = await axios.get(`/social-network/user-profile/${userId}`)
+
     languageInfo.value = data.language
     vCardUserLink.value = data.vCardUserLink
     visibility.value = data.visibility
@@ -162,6 +162,4 @@ function flagIconExists(code) {
 }
 
 function chatWith(userId, completeName, isOnline, avatarSmall) {}
-
-isAdmin.value = user.value.role === "admin"
 </script>

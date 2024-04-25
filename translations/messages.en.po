@@ -26191,8 +26191,8 @@ msgstr "Use global score display setting in gradebook"
 msgid "Inter-gradebook dependencies"
 msgstr "Inter-gradebook dependencies"
 
-msgid "Enables a mechanism of gradebook dependencies that lets people know which other items they need to go through first in order to complete the gradbeook."
-msgstr "Enables a mechanism of gradebook dependencies that lets people know which other items they need to go through first in order to complete the gradbeook."
+msgid "Enables a mechanism of gradebook dependencies that lets people know which other items they need to go through first in order to complete the gradebook."
+msgstr "Enables a mechanism of gradebook dependencies that lets people know which other items they need to go through first in order to complete the gradebook."
 
 msgid "Mandatory courses for gradebook dependencies"
 msgstr "Mandatory courses for gradebook dependencies"
@@ -26203,8 +26203,8 @@ msgstr "When using inter-gradebook dependencies, you can choose a list of mandat
 msgid "Gradebook badges sidebar"
 msgstr "Gradebook badges sidebar"
 
-msgid "Generate a sidebar into the side menu where a few badges can be shown as pending approval. Requires gradebooks to be listed here, by (numerical) ID."
-msgstr "Generate a sidebar into the side menu where a few badges can be shown as pending approval. Requires gradebooks to be listed here, by (numerical) ID."
+msgid "Generate a block inside the side menu where a few badges can be shown as pending approval. Requires gradebooks to be listed here, by (numerical) ID."
+msgstr "Generate a block inside the side menu where a few badges can be shown as pending approval. Requires gradebooks to be listed here, by (numerical) ID."
 
 msgid "Allow multiple evaluation attempts in gradebook"
 msgstr "Allow multiple evaluation attempts in gradebook"
@@ -26254,8 +26254,8 @@ msgstr "Avoid learners clicking on items from the gradebook by removing the link
 msgid "Enable skills by gradebook's subcategory"
 msgstr "Enable skills by gradebook's subcategory"
 
-msgid "Skills are normally attributed for completing a whole gradebook. By enabling this option, you allow "
-msgstr "Skills are normally attributed for completing a whole gradebook. By enabling this option, you allow "
+msgid "Skills are normally attributed for completing a whole gradebook. By enabling this option, you allow skills to be attached to sub-sections of gradebooks."
+msgstr "Skills are normally attributed for completing a whole gradebook. By enabling this option, you allow skills to be attached to sub-sections of gradebooks."
 
 msgid "Language switcher in main menu"
 msgstr "Language switcher in main menu"
@@ -26272,8 +26272,8 @@ msgstr "Use country flags for languages. This is not enabled by default because 
 msgid "Multiple-language courses"
 msgstr "Multiple-language courses"
 
-msgid "Enable courses managed in more than one language. This option adds a language selector withing the course page to let users switch easily, and adds a 'multiple_language' extra field to courses which allows for remote management procedures."
-msgstr "Enable courses managed in more than one language. This option adds a language selector withing the course page to let users switch easily, and adds a 'multiple_language' extra field to courses which allows for remote management procedures."
+msgid "Enable courses managed in more than one language. This option adds a language selector within the course page to let users switch easily, and adds a 'multiple_language' extra field to courses which allows for remote management procedures."
+msgstr "Enable courses managed in more than one language. This option adds a language selector within the course page to let users switch easily, and adds a 'multiple_language' extra field to courses which allows for remote management procedures."
 
 msgid "Multiple-language document templates"
 msgstr "Multiple-language document templates"
@@ -26296,8 +26296,8 @@ msgstr "When exporting a LP, all files and folders in the same path of an html w
 msgid "Learning path's prerequisites"
 msgstr "Learning path's prerequisites"
 
-msgid "On th learning paths lists, display a visual element to show that other learning paths are currently blocked by some prerequisites rule."
-msgstr "On th learning paths lists, display a visual element to show that other learning paths are currently blocked by some prerequisites rule."
+msgid "On the learning paths lists, display a visual element to show that other learning paths are currently blocked by some prerequisites rule."
+msgstr "On the learning paths lists, display a visual element to show that other learning paths are currently blocked by some prerequisites rule."
 
 msgid "Hide time from learning paths records"
 msgstr "Hide time from learning paths records"
@@ -26329,8 +26329,8 @@ msgstr "Teachers do not need to pass complete learning paths to have access to a
 msgid "Export learning paths in the Chamilo backup format"
 msgstr "Export learning paths in the Chamilo backup format"
 
-msgid "Add the possibility to export any of your broken class"
-msgstr "Add the possibility to export any of your broken class"
+msgid "Enable the possibility to export any of your learning paths in a Chamilo course backup format."
+msgstr "Enable the possibility to export any of your learning paths in a Chamilo course backup format."
 
 msgid "Hide requirements label in learning paths"
 msgstr "Hide requirements label in learning paths"
@@ -26485,8 +26485,8 @@ msgstr "Display learning path availability to learners"
 msgid "Show learning paths to learners with their availability dates, rather than hiding them until the date comes."
 msgstr "Show learning paths to learners with their availability dates, rather than hiding them until the date comes."
 
-msgid "Update SCOR status autonomously"
-msgstr "Update SCOR status autonomously"
+msgid "Update SCO status autonomously"
+msgstr "Update SCO status autonomously"
 
 msgid "If the SCO is not sending a status, take over and update the status based on what can be observed in Chamilo."
 msgstr "If the SCO is not sending a status, take over and update the status based on what can be observed in Chamilo."
@@ -26629,8 +26629,8 @@ msgstr "Give the system path to the UNO converter library to enable some extra e
 msgid "Hide main navigation menu"
 msgstr "Hide main navigation menu"
 
-msgid "When using Chamilo for a specific purpose (like one massive online exam), you might want to reduce distraction even more by removin the side menu."
-msgstr "When using Chamilo for a specific purpose (like one massive online exam), you might want to reduce distraction even more by removin the side menu."
+msgid "When using Chamilo for a specific purpose (like one massive online exam), you might want to reduce distraction even more by removing the side menu."
+msgstr "When using Chamilo for a specific purpose (like one massive online exam), you might want to reduce distraction even more by removing the side menu."
 
 msgid "PDF export resolution"
 msgstr "PDF export resolution"
@@ -26671,8 +26671,8 @@ msgstr "In specific implementations like online exams, you might want to prevent
 msgid "Generate random username"
 msgstr "Generate random username"
 
-msgid "When importing users (batch processes), automatically generate a random string for username. Otherwise "
-msgstr "When importing users (batch processes), automatically generate a random string for username. Otherwise "
+msgid "When importing users (batch processes), automatically generate a random string for username. Otherwise, the username will be generated on the basis of the firstname and lastname, or the prefix of the e-mail."
+msgstr "When importing users (batch processes), automatically generate a random string for username. Otherwise, the username will be generated on the basis of the firstname and lastname, or the prefix of the e-mail."
 
 msgid "Timepicker increment"
 msgstr "Timepicker increment"
@@ -26719,8 +26719,8 @@ msgstr "Number of failed login attempts to tolerate before the user account is l
 msgid "Force password renewal at first login"
 msgstr "Force password renewal at first login"
 
-msgid "This is one of the simple measure to increase the security of your portal by asking users to immediately change their password, so the one that was transfered by e-mail is no longer valid and they use one that they come up with."
-msgstr "This is one of the simple measure to increase the security of your portal by asking users to immediately change their password, so the one that was transfered by e-mail is no longer valid and they use one that they come up with."
+msgid "This is one simple measure to increase the security of your portal by asking users to immediately change their password, so the one that was transfered by e-mail is no longer valid and they then will use one that they came up with and that they are the only person to know."
+msgstr "This is one simple measure to increase the security of your portal by asking users to immediately change their password, so the one that was transfered by e-mail is no longer valid and they then will use one that they came up with and that they are the only person to know."
 
 msgid "Hide breadcrumb if 'not allowed'"
 msgstr "Hide breadcrumb if 'not allowed'"
@@ -26821,8 +26821,8 @@ msgstr "If you do not want to use the index page (announcements, popular courses
 msgid "Default menu entry for courses"
 msgstr "Default menu entry for courses"
 
-msgid "Define the default sub-elements of the 'Courses' entry to if user is not registered to any course nor session."
-msgstr "Define the default sub-elements of the 'Courses' entry to if user is not registered to any course nor session."
+msgid "Define the default sub-elements of the 'Courses' entry to display if user is not registered to any course nor session."
+msgstr "Define the default sub-elements of the 'Courses' entry to display if user is not registered to any course nor session."
 
 msgid "Fields users are allowed to change in their profile"
 msgstr "Fields users are allowed to change in their profile"
@@ -27369,3 +27369,117 @@ msgstr "Access by role to ticket projects"
 
 msgid "Allow ticket projects to be accesses by specific user roles. Example: ['permissions' => [1 => [17]] where project_id = 1, STUDENT_BOSS = 17."
 msgstr "Allow ticket projects to be accesses by specific user roles. Example: ['permissions' => [1 => [17]] where project_id = 1, STUDENT_BOSS = 17."
+
+msgid "Contact Us"
+msgstr "Contact Us"
+
+msgid "Sender profile picture"
+msgstr "Sender profile picture"
+
+msgid "Receiver profile picture"
+msgstr "Receiver profile picture"
+
+msgid "Carbon copy receiver profile picture"
+msgstr "Carbon copy receiver profile picture"
+
+msgid "Ppt_to_lp"
+msgstr "Document converter"
+
+msgid "Left"
+msgstr "Left"
+
+msgid "Right"
+msgstr "Right"
+
+msgid "Month"
+msgstr "Month"
+
+msgid "Week"
+msgstr "Week"
+
+msgid "Icons text"
+msgstr "Icons text"
+
+msgid "Session name and course title"
+msgstr "Session name and course title"
+
+msgid "Public"
+msgstr "Public"
+
+msgid "Private"
+msgstr "Private"
+
+msgid "No link"
+msgstr "No link"
+
+msgid "Session link"
+msgstr "Session link"
+
+msgid "World"
+msgstr "World"
+
+msgid "Show to all users"
+msgstr "Show to all users"
+
+msgid "Black list"
+msgstr "Black list"
+
+msgid "White list"
+msgstr "White list"
+
+msgid "Show glossary in documents is none"
+msgstr "Show glossary in documents is none"
+
+msgid "Show glossary in documents is manual"
+msgstr "Show glossary in documents is manual"
+
+msgid "Show glossary in documents is automatic"
+msgstr "Show glossary in documents is automatic"
+
+msgid "None"
+msgstr "None"
+
+msgid "Score average"
+msgstr "Score average"
+
+msgid "Score percent"
+msgstr "Score percent"
+
+msgid "Score div percent"
+msgstr "Score div percent"
+
+msgid "Exercise and learning path"
+msgstr "Exercise and learning path"
+
+msgid "Hide catalogue"
+msgstr "Hide catalogue"
+
+msgid "Show only courses"
+msgstr "Show only courses"
+
+msgid "Show only sessions"
+msgstr "Show only sessions"
+
+msgid "Show courses and sessions"
+msgstr "Show courses and sessions"
+
+msgid "Mail confirmation"
+msgstr "Mail confirmation"
+
+msgid "Campus homepage"
+msgstr "Campus homepage"
+
+msgid "Course catalogue"
+msgstr "Course catalogue"
+
+msgid "Search shows unlinked results"
+msgstr "Search shows unlinked results"
+
+msgid "Search hides unlinked results"
+msgstr "Search hides unlinked results"
+
+msgid "Course coach email sender"
+msgstr "Course coach email sender"
+
+msgid "No reply email sender"
+msgstr "No reply email sender"

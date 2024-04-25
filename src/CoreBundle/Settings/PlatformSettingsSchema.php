@@ -144,10 +144,10 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'CatalogueHide' => '-1',
-                        'CatalogueShowOnlyCourses' => '0',
-                        'CatalogueShowOnlySessions' => '1',
-                        'CatalogueShowCoursesAndSessions' => '2',
+                        'Hide catalogue' => '-1',
+                        'Show only courses' => '0',
+                        'Show only sessions' => '1',
+                        'Show courses and sessions' => '2',
                     ],
                 ]
             )
@@ -278,8 +278,8 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'My Courses' => 'my_courses',
-                        'My Sessions' => 'my_sessions',
+                        'My courses' => 'my_courses',
+                        'My sessions' => 'my_sessions',
                     ],
                 ]
             )

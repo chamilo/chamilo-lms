@@ -19,6 +19,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @todo remove legacy code.
+ * @extends Voter<'VIEW'|'EDIT'|'DELETE', Session>
  */
 class SessionVoter extends Voter
 {
@@ -63,7 +64,7 @@ class SessionVoter extends Voter
         }
 
         // Checks if the current course was set up
-        // $session->getCurrentCourse() is set in the class CourseListener.
+        // $session->getCurrentCourse() is set in the class CidReqListener.
         /** @var Session $session */
         $session = $subject;
         $currentCourse = $session->getCurrentCourse();

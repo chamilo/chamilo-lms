@@ -8,13 +8,13 @@ namespace Chamilo\CoreBundle\ServiceHelper;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\EventListener\CourseListener;
+use Chamilo\CoreBundle\EventListener\CidReqListener;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
- * @see CourseListener::onKernelRequest()
+ * @see CidReqListener::onKernelRequest()
  */
 class CidReqHelper
 {

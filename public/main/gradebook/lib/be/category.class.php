@@ -420,7 +420,7 @@ class Category implements GradebookItem
      * @param ?bool $order_by Whether to show all "session"
      *                            categories (true) or hide them (false) in case there is no session id
      *
-     * @return array
+     * @return array<static>
      * @throws \Doctrine\DBAL\Exception
      * @throws Exception
      */
@@ -2215,12 +2215,16 @@ class Category implements GradebookItem
     public static function userFinishedCourse(
         int $userId,
         GradebookCategory $category,
-        bool $recalculateScore = false
+        bool $recalculateScore = false,
+        ?int $courseId = null,
+        ?int $sessionId = null
     ): bool {
         $currentScore = self::getCurrentScore(
             $userId,
             $category,
-            $recalculateScore
+            $recalculateScore,
+            $courseId,
+            $sessionId
         );
 
         $minCertificateScore = $category->getCertifMinScore();
@@ -2230,21 +2234,21 @@ class Category implements GradebookItem
 
     /**
      * Get the current score (as percentage) on a gradebook category for a user.
-     *
-     * @param int  $userId      The user id
-     * @param bool $recalculate
-     *
-     * @return float The score
      */
     public static function getCurrentScore(
-        $userId,
+        int               $userId,
         GradebookCategory $category,
-        $recalculate = false
-    ) {
+        bool              $recalculate = false,
+        ?int              $courseId = null,
+        ?int              $sessionId = null
+    ): float|int {
+
         if ($recalculate) {
             return self::calculateCurrentScore(
                 $userId,
-                $category
+                $category,
+                $courseId,
+                $sessionId
             );
         }
 
@@ -2660,13 +2664,27 @@ class Category implements GradebookItem
      *
      * @return float The score
      */
-    private static function calculateCurrentScore(int $userId, GradebookCategory $category)
-    {
+    private static function calculateCurrentScore(
+        int $userId,
+        ?GradebookCategory $category = null,
+        ?int $courseId = null,
+        ?int $sessionId = null,
+    ): float|int {
+
         if (null === $category) {
             return 0;
         }
 
-        $categoryList = self::load($category->getId());
+        $categoryList = self::load(
+            null,
+            null,
+            $courseId,
+            null,
+            null,
+            $sessionId
+        );
+
+        /* @var Category $category */
         $category = $categoryList[0] ?? null;
 
         if (null === $category) {

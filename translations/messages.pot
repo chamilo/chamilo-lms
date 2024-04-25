@@ -26184,7 +26184,7 @@ msgstr ""
 msgid "Inter-gradebook dependencies"
 msgstr ""
 
-msgid "Enables a mechanism of gradebook dependencies that lets people know which other items they need to go through first in order to complete the gradbeook."
+msgid "Enables a mechanism of gradebook dependencies that lets people know which other items they need to go through first in order to complete the gradebook."
 msgstr ""
 
 msgid "Mandatory courses for gradebook dependencies"
@@ -26196,7 +26196,7 @@ msgstr ""
 msgid "Gradebook badges sidebar"
 msgstr ""
 
-msgid "Generate a sidebar into the side menu where a few badges can be shown as pending approval. Requires gradebooks to be listed here, by (numerical) ID."
+msgid "Generate a block inside the side menu where a few badges can be shown as pending approval. Requires gradebooks to be listed here, by (numerical) ID."
 msgstr ""
 
 msgid "Allow multiple evaluation attempts in gradebook"
@@ -26247,7 +26247,7 @@ msgstr ""
 msgid "Enable skills by gradebook's subcategory"
 msgstr ""
 
-msgid "Skills are normally attributed for completing a whole gradebook. By enabling this option, you allow "
+msgid "Skills are normally attributed for completing a whole gradebook. By enabling this option, you allow skills to be attached to sub-sections of gradebooks."
 msgstr ""
 
 msgid "Language switcher in main menu"
@@ -26265,7 +26265,7 @@ msgstr ""
 msgid "Multiple-language courses"
 msgstr ""
 
-msgid "Enable courses managed in more than one language. This option adds a language selector withing the course page to let users switch easily, and adds a 'multiple_language' extra field to courses which allows for remote management procedures."
+msgid "Enable courses managed in more than one language. This option adds a language selector within the course page to let users switch easily, and adds a 'multiple_language' extra field to courses which allows for remote management procedures."
 msgstr ""
 
 msgid "Multiple-language document templates"
@@ -26289,7 +26289,7 @@ msgstr ""
 msgid "Learning path's prerequisites"
 msgstr ""
 
-msgid "On th learning paths lists, display a visual element to show that other learning paths are currently blocked by some prerequisites rule."
+msgid "On the learning paths lists, display a visual element to show that other learning paths are currently blocked by some prerequisites rule."
 msgstr ""
 
 msgid "Hide time from learning paths records"
@@ -26322,7 +26322,7 @@ msgstr ""
 msgid "Export learning paths in the Chamilo backup format"
 msgstr ""
 
-msgid "Add the possibility to export any of your broken class"
+msgid "Enable the possibility to export any of your learning paths in a Chamilo course backup format."
 msgstr ""
 
 msgid "Hide requirements label in learning paths"
@@ -26478,7 +26478,7 @@ msgstr ""
 msgid "Show learning paths to learners with their availability dates, rather than hiding them until the date comes."
 msgstr ""
 
-msgid "Update SCOR status autonomously"
+msgid "Update SCO status autonomously"
 msgstr ""
 
 msgid "If the SCO is not sending a status, take over and update the status based on what can be observed in Chamilo."
@@ -26622,7 +26622,7 @@ msgstr ""
 msgid "Hide main navigation menu"
 msgstr ""
 
-msgid "When using Chamilo for a specific purpose (like one massive online exam), you might want to reduce distraction even more by removin the side menu."
+msgid "When using Chamilo for a specific purpose (like one massive online exam), you might want to reduce distraction even more by removing the side menu."
 msgstr ""
 
 msgid "PDF export resolution"
@@ -26664,7 +26664,7 @@ msgstr ""
 msgid "Generate random username"
 msgstr ""
 
-msgid "When importing users (batch processes), automatically generate a random string for username. Otherwise "
+msgid "When importing users (batch processes), automatically generate a random string for username. Otherwise, the username will be generated on the basis of the firstname and lastname, or the prefix of the e-mail."
 msgstr ""
 
 msgid "Timepicker increment"
@@ -26712,7 +26712,7 @@ msgstr ""
 msgid "Force password renewal at first login"
 msgstr ""
 
-msgid "This is one of the simple measure to increase the security of your portal by asking users to immediately change their password, so the one that was transfered by e-mail is no longer valid and they use one that they come up with."
+msgid "This is one simple measure to increase the security of your portal by asking users to immediately change their password, so the one that was transfered by e-mail is no longer valid and they then will use one that they came up with and that they are the only person to know."
 msgstr ""
 
 msgid "Hide breadcrumb if 'not allowed'"
@@ -26814,7 +26814,7 @@ msgstr ""
 msgid "Default menu entry for courses"
 msgstr ""
 
-msgid "Define the default sub-elements of the 'Courses' entry to if user is not registered to any course nor session."
+msgid "Define the default sub-elements of the 'Courses' entry to display if user is not registered to any course nor session."
 msgstr ""
 
 msgid "Fields users are allowed to change in their profile"
@@ -27363,3 +27363,116 @@ msgstr ""
 msgid "Allow ticket projects to be accesses by specific user roles. Example: ['permissions' => [1 => [17]] where project_id = 1, STUDENT_BOSS = 17."
 msgstr ""
 
+msgid "Contact Us"
+msgstr ""
+
+msgid "Sender profile picture"
+msgstr ""
+
+msgid "Receiver profile picture"
+msgstr ""
+
+msgid "Carbon copy receiver profile picture"
+msgstr ""
+
+msgid "Ppt_to_lp"
+msgstr ""
+
+msgid "Left"
+msgstr ""
+
+msgid "Right"
+msgstr ""
+
+msgid "Month"
+msgstr ""
+
+msgid "Week"
+msgstr ""
+
+msgid "Icons text"
+msgstr ""
+
+msgid "Session name and course title"
+msgstr ""
+
+msgid "Public"
+msgstr ""
+
+msgid "Private"
+msgstr ""
+
+msgid "No link"
+msgstr ""
+
+msgid "Session link"
+msgstr ""
+
+msgid "World"
+msgstr ""
+
+msgid "Show to all users"
+msgstr ""
+
+msgid "Black list"
+msgstr ""
+
+msgid "White list"
+msgstr ""
+
+msgid "Show glossary in documents is none"
+msgstr ""
+
+msgid "Show glossary in documents is manual"
+msgstr ""
+
+msgid "Show glossary in documents is automatic"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "Score average"
+msgstr ""
+
+msgid "Score percent"
+msgstr ""
+
+msgid "Score div percent"
+msgstr ""
+
+msgid "Exercise and learning path"
+msgstr ""
+
+msgid "Hide catalogue"
+msgstr ""
+
+msgid "Show only courses"
+msgstr ""
+
+msgid "Show only sessions"
+msgstr ""
+
+msgid "Show courses and sessions"
+msgstr ""
+
+msgid "Mail confirmation"
+msgstr ""
+
+msgid "Campus homepage"
+msgstr ""
+
+msgid "Course catalogue"
+msgstr ""
+
+msgid "Search shows unlinked results"
+msgstr ""
+
+msgid "Search hides unlinked results"
+msgstr ""
+
+msgid "Course coach email sender"
+msgstr ""
+
+msgid "No reply email sender"
+msgstr ""

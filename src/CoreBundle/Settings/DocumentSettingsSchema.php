@@ -91,8 +91,8 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'Blacklist' => 'blacklist',
-                        'Whitelist' => 'whitelist',
+                        'Black list' => 'blacklist',
+                        'White list' => 'whitelist',
                     ],
                 ]
             )
@@ -107,9 +107,9 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'ShowGlossaryInDocumentsIsNone' => 'none',
-                        'ShowGlossaryInDocumentsIsManual' => 'ismanual',
-                        'ShowGlossaryInDocumentsIsAutomatic' => 'isautomatic',
+                        'Show glossary in documents is none' => 'none',
+                        'Show glossary in documents is manual' => 'ismanual',
+                        'Show glossary in documents is automatic' => 'isautomatic',
                     ],
                 ]
             )

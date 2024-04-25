@@ -48,7 +48,6 @@
 
 <script setup>
 import { computed, inject, onMounted, reactive, ref, toRefs, watch } from "vue"
-import { useStore } from "vuex"
 import { SOCIAL_TYPE_PROMOTED_MESSAGE, SOCIAL_TYPE_WALL_POST } from "./constants"
 import useVuelidate from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
@@ -58,15 +57,16 @@ import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseFileUpload from "../basecomponents/BaseFileUpload.vue"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue"
-import axios from "axios"
 import { useRoute } from "vue-router"
 import { useSecurityStore } from "../../store/securityStore"
+import socialService from "../../services/socialService"
+import { useNotification } from "../../composables/notification"
 
 const emit = defineEmits(["post-created"])
-const store = useStore()
 const securityStore = useSecurityStore()
 const { t } = useI18n()
 const route = useRoute()
+const { showErrorNotification } = useNotification()
 const isPromotedPage = computed(() => {
   return route.query.filterType === "promoted"
 })
@@ -138,26 +138,22 @@ async function sendPost() {
   }
 
   try {
-    await store.dispatch("socialpost/create", {
+    const post = await socialService.createPost({
       content: postState.content,
       type: postState.isPromoted ? SOCIAL_TYPE_PROMOTED_MESSAGE : SOCIAL_TYPE_WALL_POST,
       sender: securityStore.user["@id"],
       userReceiver: securityStore.user["@id"] === user.value["@id"] ? null : user.value["@id"],
     })
+
     if (selectedFile.value) {
       const formData = new FormData()
-      const post = store.state.socialpost.created
       let idUrl = post["@id"]
       let parts = idUrl.split("/")
       let socialPostId = parts[parts.length - 1]
       formData.append("file", selectedFile.value)
       formData.append("messageId", socialPostId)
-      const endpoint = "/api/social_post_attachments"
-      const fileUploadResponse = await axios.post(endpoint, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+
+      await socialService.addAttachment(formData)
     }
 
     postState.content = ""
@@ -168,6 +164,7 @@ async function sendPost() {
     emit("post-created")
   } catch (error) {
     console.error("There was an error creating the post:", error)
+    showErrorNotification("There was an error creating the post")
   }
 }
 </script>

@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Doctrine\Orm\State\CollectionProvider;
-use ApiPlatform\Metadata\CollectionOperationInterface;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use Chamilo\CoreBundle\ApiResource\CalendarEvent;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;

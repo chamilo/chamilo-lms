@@ -1,25 +1,22 @@
 <template>
-  <div class="base-tiny-editor">
-    <label
-      v-if="title"
-      :for="editorId"
-    >
-      {{ title }}
-    </label>
-    <TinyEditor
-      :id="editorId"
-      :model-value="modelValue"
-      :init="editorConfig"
-      :required="required"
-      @update:model-value="updateValue"
-      @input="updateValue"
-    />
-    <p
+  <div class="field">
+    <FloatLabel>
+      <TinyEditor
+        :id="editorId"
+        v-model="modelValue"
+        :init="editorConfig"
+        :required="required"
+      />
+      <label
+        v-if="title"
+        :for="editorId"
+        v-text="title"
+      />
+    </FloatLabel>
+    <small
       v-if="helpText"
-      class="help-text"
-    >
-      {{ helpText }}
-    </p>
+      v-text="helpText"
+    />
   </div>
 </template>
 
@@ -30,18 +27,18 @@ import { useRoute, useRouter } from "vue-router"
 import { useCidReqStore } from "../../store/cidReq"
 import { storeToRefs } from "pinia"
 import { useSecurityStore } from "../../store/securityStore"
-
-import { TINYEDITOR_MODE_DOCUMENTS, TINYEDITOR_MODE_PERSONAL_FILES, TINYEDITOR_MODES } from "./TinyEditorOptions"
+import FloatLabel from "primevue/floatlabel"
 
 //import contentUiCss from "css-loader!tinymce/skins/ui/oxide/content.css"
 //import contentCss from "css-loader!tinymce/skins/content/default/content.css"
 
+const modelValue = defineModel({
+  type: String,
+  required: true,
+})
+
 const props = defineProps({
   editorId: {
-    type: String,
-    required: true,
-  },
-  modelValue: {
     type: String,
     required: true,
   },
@@ -68,33 +65,26 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  // change mode when useFileManager=True
-  mode: {
-    type: String,
-    default: TINYEDITOR_MODE_PERSONAL_FILES,
-    validator: (value) => TINYEDITOR_MODES.includes(value),
-  },
   fullPage: {
     type: Boolean,
     required: false,
     default: true,
   },
 })
-const emit = defineEmits(["update:modelValue"])
+
 const router = useRouter()
 const route = useRoute()
 const parentResourceNodeId = ref(0)
 
 const securityStore = useSecurityStore()
+const cidReqStore = useCidReqStore()
+
+const { course } = storeToRefs(cidReqStore)
 
 // Set the parent node ID based on the user's resource node ID or route parameter
-parentResourceNodeId.value = securityStore.user.resourceNode["id"]
+parentResourceNodeId.value = securityStore.user.resourceNode.id
 if (route.params.node) {
   parentResourceNodeId.value = Number(route.params.node)
-}
-
-const updateValue = (value) => {
-  emit("update:modelValue", value)
 }
 
 const toolbarUndo = "undo redo"
@@ -186,23 +176,8 @@ const editorConfig = computed(() => ({
 }))
 
 async function filePickerCallback(callback, value, meta) {
-  if (!props.useFileManager) {
-    const input = document.createElement("input")
-    input.setAttribute("type", "file")
-    if ("image" === meta.filetype) {
-      input.accept = "image/*"
-    } else if ("media" === meta.filetype) {
-      input.accept = "audio/*, video/*"
-    }
-    input.style.display = "none"
-    input.onchange = inputFileHandler(callback, input)
-    document.body.appendChild(input)
-    input.click()
-    return
-  }
-
-  let url = getUrlForTinyEditor(props.mode)
-  if (meta.filetype === "image") {
+  let url = getUrlForTinyEditor()
+  if ("image" === meta.filetype) {
     url += "&type=images"
   } else {
     url += "&type=files"
@@ -217,7 +192,7 @@ async function filePickerCallback(callback, value, meta) {
   })
 
   // tinymce is already in the global scope, set by backend and php
-  tinymce.activeEditor.windowManager.openUrl({
+  window.tinymce.activeEditor.windowManager.openUrl({
     url: url,
     title: "File manager",
     onMessage: (api, message) => {
@@ -230,57 +205,29 @@ async function filePickerCallback(callback, value, meta) {
   })
 }
 
-function inputFileHandler(callback, input) {
-  return async () => {
-    const file = input.files[0]
-    const title = file.name
-    const comment = ""
-    const fileType = "file"
-    const resourceLinkList = []
-
-    const formData = new FormData()
-    formData.append("uploadFile", file)
-    formData.append("title", title)
-    formData.append("comment", comment)
-    formData.append("parentResourceNodeId", parentResourceNodeId.value)
-    formData.append("filetype", fileType)
-    formData.append("resourceLinkList", resourceLinkList)
-
-    try {
-      let response = await fetch("/file-manager/upload-image", {
-        method: "POST",
-        body: formData,
-      })
-      const { data, location } = await response.json()
-      if (location) {
-        callback(location, { alt: data.title })
-      } else {
-        console.error("Failed to upload file")
-      }
-    } catch (error) {
-      console.error("Error uploading file:", error)
-    } finally {
-      document.body.removeChild(input)
-    }
+function getUrlForTinyEditor() {
+  if (!course.value) {
+    return router.resolve({
+      name: "FileManagerList",
+      params: {
+        node: parentResourceNodeId.value,
+      },
+    }).href
   }
-}
 
-function getUrlForTinyEditor(mode) {
-  if (props.mode === TINYEDITOR_MODE_PERSONAL_FILES) {
-    return "/resources/filemanager/personal_list/" + parentResourceNodeId.value
-  } else if (props.mode === TINYEDITOR_MODE_DOCUMENTS) {
-    const cidReqStore = useCidReqStore()
-    const { course } = storeToRefs(cidReqStore)
+  let nodeId = course.value.resourceNode ? course.value.resourceNode.id : null
 
-    let nodeId = course.value && course.value.resourceNode ? course.value.resourceNode.id : null
-    if (!nodeId) {
-      console.error("Resource node ID is not available.")
-      return
-    }
-
-    return router.resolve({ name: "DocumentForHtmlEditor", params: { id: nodeId }, query: route.query }).href
-  } else {
-    console.error(`Mode "${mode}" is not valid. Check valid modes on TinyEditorOptions.js`)
+  if (!nodeId) {
+    console.error("Resource node ID is not available.")
+    return
   }
+
+  return router.resolve({
+    name: "DocumentForHtmlEditor",
+    params: {
+      node: nodeId,
+    },
+    query: route.query,
+  }).href
 }
 </script>

@@ -910,7 +910,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     }
 
     /**
-     * currentCourse is set in CourseListener.
+     * currentCourse is set in CidReqListener.
      */
     public function getCurrentCourse(): ?Course
     {
@@ -918,7 +918,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     }
 
     /**
-     * currentCourse is set in CourseListener.
+     * currentCourse is set in CidReqListener.
      */
     public function setCurrentCourse(Course $course): self
     {

@@ -6,15 +6,13 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\EventListener;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\KernelEvents;
 
-final class HTTPExceptionListener implements EventSubscriberInterface
+final class HTTPExceptionListener
 {
-    public function onKernelException(ExceptionEvent $event): void
+    public function __invoke(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();
         if (!($exception instanceof HttpException)
@@ -29,13 +27,5 @@ final class HTTPExceptionListener implements EventSubscriberInterface
         $response->setStatusCode($exception->getStatusCode());
 
         $event->setResponse($response);
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public static function getSubscribedEvents(): array
-    {
-        return [KernelEvents::EXCEPTION => 'onKernelException'];
     }
 }

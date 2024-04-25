@@ -105,7 +105,6 @@ import EmptyState from "../../components/EmptyState.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { computed, onMounted, ref } from "vue"
-import { useStore } from "vuex"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
@@ -122,7 +121,6 @@ import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import Skeleton from "primevue/skeleton"
 import { useSecurityStore } from "../../store/securityStore"
 
-const store = useStore()
 const route = useRoute()
 const router = useRouter()
 const securityStore = useSecurityStore()

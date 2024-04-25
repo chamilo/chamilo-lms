@@ -869,97 +869,53 @@ class DocumentManager
      * @return array document content
      */
     public static function get_document_data_by_id(
-        $id,
-        $course_code,
-        $load_parents = false,
-        $session_id = null,
-        $ignoreDeleted = false
-    ) {
+        int    $id,
+        string $course_code,
+        bool   $load_parents = false,
+        int    $session_id = null,
+        bool $ignoreDeleted = false
+    ): bool|array {
         $course_info = api_get_course_info($course_code);
-        $course_id = $course_info['real_id'];
-
         if (empty($course_info)) {
             return false;
         }
 
+        $course_id = $course_info['real_id'];
         $session_id = empty($session_id) ? api_get_session_id() : (int) $session_id;
         $groupId = api_get_group_id();
 
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $id = (int) $id;
-        $sessionCondition = api_get_session_condition($session_id, true, true);
 
-        $sql = "SELECT * FROM $TABLE_DOCUMENT
-                WHERE iid = $id";
-
-        if ($ignoreDeleted) {
-            $sql .= " AND path NOT LIKE '%_DELETED_%' ";
-        }
-
+        $sql = "SELECT * FROM $TABLE_DOCUMENT WHERE iid = $id";
         $result = Database::query($sql);
-        $courseParam = '&cid='.$course_id.'&id='.$id.'&sid='.$session_id.'&gid='.$groupId;
         if ($result && 1 == Database::num_rows($result)) {
             $row = Database::fetch_assoc($result);
 
-            //@todo need to clarify the name of the URLs not nice right now
-            $url_path = urlencode($row['path']);
-            $path = str_replace('%2F', '/', $url_path);
-            $pathinfo = pathinfo($row['path']);
+            // Adjust paths for URLs based on new system
+            $row['url'] = api_get_path(WEB_CODE_PATH).'document/showinframes.php?id='.$id;
+            $row['document_url'] = api_get_path(WEB_CODE_PATH).'document/document.php?id='.$id;
+            // Consider storing a relative path or identifier in the database to construct paths
+            $row['basename'] = $id;  // You may store and use titles or another unique identifier
 
-            $row['url'] = api_get_path(WEB_CODE_PATH).'document/showinframes.php?id='.$id.$courseParam;
-            $row['document_url'] = api_get_path(WEB_CODE_PATH).'document/document.php?id='.$id.$courseParam;
-            //$row['absolute_path'] = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$row['path'];
-            $row['absolute_path_from_document'] = '/document'.$row['path'];
-            //$row['absolute_parent_path'] = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$pathinfo['dirname'].'/';
-            //$row['direct_url'] = $www.$path;
-            $row['basename'] = basename($row['path']);
+            // Handling the parent ID should be adjusted if the path isn't available
+            $row['parent_id'] = $row['parent_resource_node_id'] ?? '0';  // Adjust according to your schema
 
-            if ('.' == dirname($row['path'])) {
-                $row['parent_id'] = '0';
-            } else {
-                $row['parent_id'] = self::get_document_id($course_info, dirname($row['path']), $session_id);
-                if (empty($row['parent_id'])) {
-                    // Try one more with session id = 0
-                    $row['parent_id'] = self::get_document_id($course_info, dirname($row['path']), 0);
-                }
-            }
             $parents = [];
-
-            //Use to generate parents (needed for the breadcrumb)
-            //@todo sorry but this for is here because there's not a parent_id in the document table so we parsed the path!!
             if ($load_parents) {
-                $dir_array = explode('/', $row['path']);
-                $dir_array = array_filter($dir_array);
-                $array_len = count($dir_array) + 1;
-                $real_dir = '';
-
-                for ($i = 1; $i < $array_len; $i++) {
-                    $real_dir .= '/'.(isset($dir_array[$i]) ? $dir_array[$i] : '');
-                    $parent_id = self::get_document_id($course_info, $real_dir);
-                    if (0 != $session_id && empty($parent_id)) {
-                        $parent_id = self::get_document_id($course_info, $real_dir, 0);
-                    }
-                    if (!empty($parent_id)) {
-                        $sub_document_data = self::get_document_data_by_id(
-                            $parent_id,
-                            $course_code,
-                            false,
-                            $session_id
-                        );
-                        if (0 != $session_id and !$sub_document_data) {
-                            $sub_document_data = self::get_document_data_by_id(
-                                $parent_id,
-                                $course_code,
-                                false,
-                                0
-                            );
-                        }
-                        //@todo add visibility here
-                        $parents[] = $sub_document_data;
+                // Modify this logic to work with parent IDs stored directly in the database
+                $current_id = $row['parent_id'];
+                while ($current_id != '0') {
+                    $parent_data = self::get_document_data_by_id($current_id, $course_code, false, $session_id);
+                    if ($parent_data) {
+                        $parents[] = $parent_data;
+                        $current_id = $parent_data['parent_id'] ?? '0';
+                    } else {
+                        break;
                     }
                 }
             }
-            $row['parents'] = $parents;
+            $row['parents'] = array_reverse($parents);
 
             return $row;
         }

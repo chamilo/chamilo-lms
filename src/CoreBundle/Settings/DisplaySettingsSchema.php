@@ -97,10 +97,10 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'DoNotShow' => 'do_not_show',
-                        'ShowToAdminsOnly' => 'show_to_admin',
-                        'ShowToAdminsAndTeachers' => 'show_to_admin_and_teachers',
-                        'ShowToAllUsers' => 'show_to_all',
+                        'Do not show' => 'do_not_show',
+                        'Show to admins only' => 'show_to_admin',
+                        'Show to admins and teachers' => 'show_to_admin_and_teachers',
+                        'Show to all users' => 'show_to_all',
                     ],
                 ]
             )

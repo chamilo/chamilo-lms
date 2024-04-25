@@ -5,7 +5,7 @@
         <h6 v-text="announcement.title" />
 
         <BaseButton
-          v-if="isAdmin"
+          v-if="securityStore.isAdmin"
           icon="edit"
           label="Edit"
           type="black"
@@ -18,37 +18,23 @@
   </BaseCard>
 </template>
 
-<script>
-
-import {mapGetters, useStore} from "vuex";
-import {useRouter} from "vue-router";
-import {reactive, toRefs} from "vue";
-import BaseButton from "../basecomponents/BaseButton.vue";
+<script setup>
+import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseCard from "../basecomponents/BaseCard.vue"
+import { useSecurityStore } from "../../store/securityStore"
 
-export default {
-  name: 'SystemAnnouncementCard',
-  components: { BaseCard, BaseButton },
-  props: {
-    announcement: Object,
-  },
-  setup() {
-    const router = useRouter();
-    const state = reactive({
-      handleAnnouncementClick: function(announcement) {
-        router
-            .push({path: `/main/admin/system_announcements.php?`, query: {id: announcement['id'], action: 'edit'}})
-            .catch(() => {
-            });
-      }
-    });
+const securityStore = useSecurityStore()
 
-    return toRefs(state);
+defineProps({
+  announcement: {
+    type: Object,
+    required: true,
   },
-  computed: {
-    ...mapGetters({
-      'isAdmin': 'security/isAdmin',
-    }),
-  }
-};
+})
+
+function handleAnnouncementClick(announcement) {
+  // until announcement is migrated to vue we need to use a browser action
+  // when announcement is migrated we should use router.push here
+  location.assign(`/main/admin/system_announcements.php?id=${announcement["id"]}&action=edit`)
+}
 </script>

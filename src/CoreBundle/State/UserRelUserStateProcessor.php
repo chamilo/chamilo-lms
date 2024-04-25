@@ -13,9 +13,6 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Doctrine\ORM\EntityManagerInterface;
 
-/**
- * @template-implements<UserRelUser|null>
- */
 final class UserRelUserStateProcessor implements ProcessorInterface
 {
     public function __construct(
@@ -32,7 +29,7 @@ final class UserRelUserStateProcessor implements ProcessorInterface
 
         $result = $this->persistProcessor->process($data, $operation, $uriVariables, $context);
 
-        assert($result instanceof UserRelUser);
+        \assert($result instanceof UserRelUser);
 
         if ($operation instanceof Put) {
             if (UserRelUser::USER_RELATION_TYPE_FRIEND === $data->getRelationType()) {

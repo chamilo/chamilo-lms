@@ -98,7 +98,6 @@ import WallComment from "./SocialWallComment.vue"
 import WallActions from "./Actions"
 import axios from "axios"
 import { ENTRYPOINT } from "../../config/entrypoint"
-import { useStore } from "vuex"
 import BaseCard from "../basecomponents/BaseCard.vue"
 import { SOCIAL_TYPE_PROMOTED_MESSAGE } from "./constants"
 import { useFormatDate } from "../../composables/formatDate"
@@ -111,7 +110,6 @@ const props = defineProps({
   },
 })
 const emit = defineEmits(["post-deleted"])
-const store = useStore()
 
 const { relativeDatetime } = useFormatDate()
 
@@ -123,9 +121,9 @@ const currentUser = inject("social-user")
 const isCurrentUser = inject("is-current-user")
 const isOwner = computed(() => currentUser["@id"] === props.post.sender["@id"])
 
-onMounted(async () => {
+onMounted(() => {
   loadComments()
-  await loadAttachments()
+  loadAttachments()
 })
 const computedAttachments = computed(() => {
   return attachments.value
@@ -142,16 +140,16 @@ async function loadAttachments() {
   }
 }
 
-function loadComments() {
-  axios
-    .get(ENTRYPOINT + "social_posts", {
-      params: {
-        parent: props.post["@id"],
-        "order[sendDate]": "desc",
-        itemsPerPage: 3,
-      },
-    })
-    .then((response) => comments.push(...response.data["hydra:member"]))
+async function loadComments() {
+  const { data } = await axios.get(ENTRYPOINT + "social_posts", {
+    params: {
+      parent: props.post["@id"],
+      "order[sendDate]": "desc",
+      itemsPerPage: 3,
+    },
+  })
+
+  comments.push(...data["hydra:member"])
 }
 
 function onCommentDeleted(event) {

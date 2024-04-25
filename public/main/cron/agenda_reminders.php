@@ -11,7 +11,9 @@ use Chamilo\CourseBundle\Entity\CCalendarEvent;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-exit;
+if ('cli' != php_sapi_name()) {
+    exit; //do not run from browser
+}
 
 $batchCounter = 0;
 $batchSize = 100;
@@ -21,6 +23,7 @@ $now = new DateTime('now', new DateTimeZone('UTC'));
 $em = Database::getManager();
 $remindersRepo = $em->getRepository(AgendaReminder::class);
 
+/** @var array<AgendaReminder> $reminders */
 $reminders = $remindersRepo->findBy(['sent' => false]);
 
 $senderId = (int) api_get_setting('agenda.agenda_reminders_sender_id');
@@ -33,11 +36,11 @@ if (empty($senderId)) {
 foreach ($reminders as $reminder) {
     $event = $reminder->getEvent();
 
-    if ('personal' === $reminder->getType()) {
-        if (null === $event) {
-            continue;
-        }
+    if (null === $event) {
+        continue;
+    }
 
+    if ('personal' === $event->determineType()) {
         $notificationDate = clone $event->getStartDate();
         $notificationDate->sub($reminder->getDateInterval());
 
@@ -84,7 +87,7 @@ foreach ($reminders as $reminder) {
                 return [];
             }
 
-            $resourceLinks = $event->getResourceLinkEntityList();
+            $resourceLinks = $event->getResourceNode()->getResourceLinks();
             $inviteeList = [];
             foreach ($resourceLinks as $resourceLink) {
                 $user = $resourceLink->getUser();
@@ -111,11 +114,7 @@ foreach ($reminders as $reminder) {
         }
     }
 
-    if ('course' === $reminder->getType()) {
-        if (null === $event) {
-            continue;
-        }
-
+    if ('course' === $event->determineType()) {
         $notificationDate = clone $event->getStartDate();
         $notificationDate->sub($reminder->getDateInterval());
 
@@ -157,7 +156,14 @@ foreach ($reminders as $reminder) {
             if ($resourceLink->getUser()) {
                 $userIdList[] = $resourceLink->getUser()->getId();
             } elseif ($resourceLink->getGroup()) {
-                $groupUsers = GroupManager::get_users($resourceLink->getGroup()->getId(), false, null, null, false, $event->getSessionId());
+                $groupUsers = GroupManager::get_users(
+                    $resourceLink->getGroup()->getIid(),
+                    false,
+                    null,
+                    null,
+                    false,
+                    $resourceLink->getCourse()?->getId()
+                );
                 foreach ($groupUsers as $groupUserId) {
                     $groupUserIdList[] = $groupUserId;
                 }

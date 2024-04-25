@@ -73,7 +73,7 @@ class SidFilter extends AbstractFilter
             true
         );
 
-        // Session was set with a kernel request from CoreBundle\EventListener\CourseListener class
+        // Session was set with a kernel request from CoreBundle\EventListener\CidReqListener class
         $session = $this->getSession();
 
         if (null === $session) {

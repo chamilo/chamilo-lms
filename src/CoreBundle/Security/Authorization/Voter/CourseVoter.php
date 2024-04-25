@@ -16,6 +16,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * @extends Voter<'VIEW'|'EDIT'|'DELETE', Course>
+ */
 class CourseVoter extends Voter
 {
     public const VIEW = 'VIEW';

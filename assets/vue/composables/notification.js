@@ -27,6 +27,8 @@ export function useNotification() {
       }
     } else if (error.message) {
       message = error.message;
+    } else if (typeof(error) === 'string') {
+      message = error;
     }
 
     showMessage(message, 'error');

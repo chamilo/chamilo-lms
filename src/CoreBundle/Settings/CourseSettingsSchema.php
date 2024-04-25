@@ -170,9 +170,9 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                 [
                     'choices' => [
                         'No' => 'false',
-                        'IconsOnly' => 'icons',
-                        'TextOnly' => 'text',
-                        'IconsText' => 'iconstext',
+                        'Icons only' => 'icons',
+                        'Text only' => 'text',
+                        'Icons text' => 'iconstext',
                     ],
                 ]
             )
@@ -182,10 +182,10 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'CourseHomepage' => 'course_home',
-                        'CourseCode' => 'course_code',
-                        'CourseTitle' => 'course_title',
-                        'SessionNameAndCourseTitle' => 'session_name_and_course_title',
+                        'Course homepage' => 'course_home',
+                        'Course code' => 'course_code',
+                        'Course title' => 'course_title',
+                        'Session name and course title' => 'session_name_and_course_title',
                     ],
                 ]
             )

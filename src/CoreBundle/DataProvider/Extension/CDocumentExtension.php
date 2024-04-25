@@ -60,7 +60,7 @@ final class CDocumentExtension implements QueryCollectionExtensionInterface // ,
         $request = $this->requestStack->getCurrentRequest();
 
         // Listing documents must contain the resource node parent (resourceNode.parent) and the course (cid)
-        // At least the cid so the CourseListener can be called.
+        // At least the cid so the CidReqListener can be called.
         $resourceParentId = $request->query->get('resourceNode_parent');
         $courseId = $request->query->getInt('cid');
 

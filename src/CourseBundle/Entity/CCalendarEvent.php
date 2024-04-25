@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\CoreBundle\Entity\Career;
 use Chamilo\CoreBundle\Entity\Promotion;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Room;
 use Chamilo\CoreBundle\Filter\CidFilter;
 use Chamilo\CoreBundle\Filter\GlobalEventFilter;
@@ -507,5 +508,30 @@ class CCalendarEvent extends AbstractResource implements ResourceInterface, Stri
         $this->promotion = $promotion;
 
         return $this;
+    }
+
+    public function determineType(): string
+    {
+        $resourceLinks = $this->resourceNode->getResourceLinks();
+
+        foreach ($resourceLinks as $link) {
+            if (null === $link->getCourse()
+                && null === $link->getSession()
+                && null === $link->getGroup()
+                && null === $link->getUser()
+            ) {
+                return 'global';
+            }
+
+            if (null !== $link->getCourse()) {
+                return 'course';
+            }
+
+            if (null !== $link->getSession()) {
+                return 'session';
+            }
+        }
+
+        return 'personal';
     }
 }

@@ -234,6 +234,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
         }
 
         $table = $schema->getTable('c_quiz_rel_question');
+        $this->addSql('DELETE FROM c_quiz_rel_question WHERE iid in (select cqrq.iid from c_quiz_rel_question cqrq inner join c_quiz cq on cq.id = cqrq.exercice_id inner join c_quiz_question cqq on cqq.iid = cqrq.question_id and cqrq.c_id != cq.c_id)');
         if ($table->hasColumn('exercice_id')) {
             $this->addSql('DELETE FROM c_quiz_rel_question WHERE exercice_id = -1 ');
         }

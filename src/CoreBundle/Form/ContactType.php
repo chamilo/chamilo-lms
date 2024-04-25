@@ -18,6 +18,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Gregwar\CaptchaBundle\Type\CaptchaType;
 
 /**
  * @template-extends AbstractType<array>
@@ -75,6 +76,22 @@ class ContactType extends AbstractType
                 'constraints' => [
                     new NotBlank(),
                 ],
+            ])
+            ->add('captcha', CaptchaType::class, [
+                'label' => $this->translator->trans('Verification'),
+                'width' => 200,
+                'height' => 50,
+                'length' => 6,
+                'quality' => 90,
+                'distortion' => true,
+                'background_color' => [255, 255, 255],
+                'reload' => true,
+                'as_url' => true,
+                'attr' => [
+                    'class' => 'captcha_image',
+                    'placeholder' => $this->translator->trans('Type the letters'),
+                ],
+                'invalid_message' => $this->translator->trans('The security code entered was incorrect.'),
             ])
             ->add('submit', SubmitType::class, [
                 'label' => $this->translator->trans('Send'),

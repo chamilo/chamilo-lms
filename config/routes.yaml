@@ -53,3 +53,6 @@ web_ajax:
 
 web_main:
     path: main/
+
+gregwar_captcha_routing:
+  resource: "@GregwarCaptchaBundle/Resources/config/routing/routing.yml"

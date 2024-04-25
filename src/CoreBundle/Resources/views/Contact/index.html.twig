@@ -4,13 +4,13 @@
 
 {% block content %}
     <section id="contact-us" class="py-8">
-        <div class="max-w-md mx-auto">
+        <div class="mx-auto w-full">
             <h2 class="text-2xl font-semibold text-center mb-6">{{ "Contact Us"|get_lang }}</h2>
 
             {{ form_start(form, {'attr': {'class': 'bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'}}) }}
 
             {% for message in app.flashes('success') %}
-                <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                <div class="alert alert-success">
                     {{ message }}
                 </div>
             {% endfor %}
@@ -52,6 +52,12 @@
 
             <div class="terms-container">
                 {{ termsContent | raw }}
+            </div>
+
+            <div class="mb-4">
+                {{ form_label(form.captcha) }}
+                {{ form_widget(form.captcha) }}
+                {{ form_errors(form.captcha) }}
             </div>
 
             {{ form_end(form) }}

@@ -44,8 +44,6 @@ final class CCalendarEventStateProcessor implements ProcessorInterface
         }
 
         $data->getReminders()->forAll(function (int $i, AgendaReminder $reminder) {
-            $reminder->setType('');
-
             return $reminder->decodeDateInterval();
         });
 

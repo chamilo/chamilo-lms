@@ -141,18 +141,21 @@ final class Version20201215072918 extends AbstractMigrationChamilo
      */
     private function updateAgendaReminders(array $oldNewEventMap): void
     {
-        $reminders = $this->entityManager->getRepository(AgendaReminder::class)->findBy(['type' => 'course']);
+        $result = $this->connection->executeQuery("SELECT * FROM agenda_reminder WHERE type = 'course'");
 
-        /** @var AgendaReminder $reminder */
-        foreach ($reminders as $reminder) {
-            $oldEventId = $reminder->getEvent()->getIid();
+        while (($reminder = $result->fetchAssociative()) !== false) {
+            $oldEventId = $reminder['event_id'];
             if (\array_key_exists($oldEventId, $oldNewEventMap)) {
                 $newEvent = $oldNewEventMap[$oldEventId];
-                $reminder->setEvent($newEvent);
-                $this->entityManager->persist($reminder);
+                $this->addSql(
+                    sprintf(
+                        "UPDATE agenda_reminder SET event_id = %d WHERE id = %d",
+                        $newEvent->getIid(),
+                        $reminder['id']
+                    )
+                );
             }
         }
-        $this->entityManager->flush();
     }
 
     public function down(Schema $schema): void {}

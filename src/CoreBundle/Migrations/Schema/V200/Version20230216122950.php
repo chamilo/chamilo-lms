@@ -62,8 +62,10 @@ final class Version20230216122950 extends AbstractMigrationChamilo
 
         if (!$schema->hasTable('agenda_reminder')) {
             $this->addSql(
-                'CREATE TABLE agenda_reminder (id INT AUTO_INCREMENT NOT NULL, type VARCHAR(255) NOT NULL, event_id INT NOT NULL, date_interval VARCHAR(255) NOT NULL COMMENT "(DC2Type:dateinterval)", sent TINYINT(1) NOT NULL, created_at DATETIME NOT NULL COMMENT "(DC2Type:datetime)", updated_at DATETIME NOT NULL COMMENT "(DC2Type:datetime)", PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
+                'CREATE TABLE agenda_reminder (id INT AUTO_INCREMENT NOT NULL, event_id INT NOT NULL, date_interval VARCHAR(255) NOT NULL COMMENT "(DC2Type:dateinterval)", sent TINYINT(1) NOT NULL, created_at DATETIME NOT NULL COMMENT "(DC2Type:datetime)", updated_at DATETIME NOT NULL COMMENT "(DC2Type:datetime)", PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
             );
+        } else {
+            $this->addSql('ALTER TABLE agenda_reminder DROP type');
         }
 
         if (!$schema->hasTable('notification_event_rel_user')) {

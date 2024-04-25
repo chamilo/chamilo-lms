@@ -367,7 +367,7 @@ echo '<table width="100%">
           </td>
         </tr>
         <tr>
-           <td><p><b>'.get_lang('Category').': </b>'.$ticket['ticket']['name'].'</p></td>
+           <td><p><b>'.get_lang('Category').': </b>'.$ticket['ticket']['title'].'</p></td>
         </tr>
         <tr>
            <td><p '.$bold.'><b>'.get_lang('Status').':</b> '.$ticket['ticket']['status'].'</p></td>

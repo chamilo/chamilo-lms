@@ -66,7 +66,7 @@ const props = defineProps({
   isLoading: {
     type: Boolean,
     default: false,
-  }
+  },
 })
 
 defineEmits(["click"])

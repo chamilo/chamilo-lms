@@ -1739,8 +1739,11 @@ class SkillModel extends Model
     public static function translateName($name)
     {
         $variable = ChamiloApi::getLanguageVar($name, 'Skill');
-
-        return isset($GLOBALS[$variable]) ? $GLOBALS[$variable] : $name;
+        $translation = get_lang($variable);
+        if ($variable != $translation) {
+            return $translation;
+       }
+       return $name;
     }
 
     /**
@@ -1755,8 +1758,11 @@ class SkillModel extends Model
         }
 
         $variable = ChamiloApi::getLanguageVar($code, 'SkillCode');
-
-        return isset($GLOBALS[$variable]) ? $GLOBALS[$variable] : $code;
+        $translation = get_lang($variable);
+        if ($variable != $translation) {
+            return $translation;
+       }
+       return $code;
     }
 
     /**

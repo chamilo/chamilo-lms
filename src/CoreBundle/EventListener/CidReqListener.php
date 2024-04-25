@@ -125,6 +125,9 @@ class CidReqListener
                 $sessionHandler->remove('session_name');
                 $sessionHandler->remove('sid');
                 $sessionHandler->remove('session');
+                ChamiloSession::erase('session_name');
+                ChamiloSession::erase('sid');
+                ChamiloSession::erase('session');
             } else {
                 // dump("Load chamilo session from DB");
                 $session = $this->entityManager->find(Session::class, $sessionId);
@@ -152,6 +155,7 @@ class CidReqListener
 
             if (empty($groupId)) {
                 $sessionHandler->remove('gid');
+                ChamiloSession::erase('gid');
             } else {
                 // dump('Load chamilo group from DB');
                 $group = $this->entityManager->getRepository(CGroup::class)->find($groupId);
@@ -261,6 +265,7 @@ class CidReqListener
         if ($alreadyVisited) {
             // "Logout" course
             $sessionHandler->remove('course_already_visited');
+            ChamiloSession::erase('course_already_visited');
         }
 
         $sessionHandler->remove('toolgroup');
@@ -276,8 +281,19 @@ class CidReqListener
         $sessionHandler->remove('session');
         $sessionHandler->remove('course_url_params');
         $sessionHandler->remove('origin');
+        ChamiloSession::erase('toolgroup');
+        ChamiloSession::erase('_cid');
+        ChamiloSession::erase('cid');
+        ChamiloSession::erase('sid');
+        ChamiloSession::erase('gid');
+        ChamiloSession::erase('is_allowed_in_course');
         ChamiloSession::erase('_real_cid');
         ChamiloSession::erase('_course');
+        ChamiloSession::erase('_locale_course');
+        ChamiloSession::erase('course');
+        ChamiloSession::erase('session');
+        ChamiloSession::erase('course_url_params');
+        ChamiloSession::erase('origin');
 
         // Remove user temp roles
         $token = $this->tokenStorage->getToken();

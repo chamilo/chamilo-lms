@@ -965,6 +965,17 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this->sessionRelCourseRelUsers->matching($criteria);
     }
 
+    public function getSessionRelCourseRelUserInCourse(Course $course): Collection
+    {
+        $criteria = Criteria::create()
+            ->where(
+                Criteria::expr()->eq('course', $course)
+            )
+        ;
+
+        return $this->sessionRelCourseRelUsers->matching($criteria);
+    }
+
     public function getIssuedSkills(): Collection
     {
         return $this->issuedSkills;

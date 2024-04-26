@@ -483,7 +483,7 @@ class TicketManager
             if (0 != $assignedUserId) {
                 $href = api_get_path(WEB_CODE_PATH).'/ticket/ticket_details.php?ticket_id='.$ticketId;
                 $helpDeskMessage .= sprintf(
-                    get_lang('TicketAssignedToXCheckZAtLinkY'),
+                    get_lang("Ticket assigned to %s. Follow-up at <a href='%s'>#%s</a>."),
                     $assignedUserInfo['complete_name'],
                     $href,
                     $ticketId

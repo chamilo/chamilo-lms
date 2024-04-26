@@ -146,7 +146,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $user = $this->userHelper->getCurrent();
         $firstResourceLink = $resourceNode->getResourceLinks()->first();
-        if ($firstResourceLink) {
+        if ($firstResourceLink && $user) {
             $resourceLinkId = $firstResourceLink->getId();
             $url = $resourceNode->getResourceFile()->getOriginalName();
             $downloadRepository = $entityManager->getRepository(TrackEDownloads::class);
@@ -156,7 +156,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $cid = (int) $request->query->get('cid');
         $sid = (int) $request->query->get('sid');
         $allUserInfo = null;
-        if ($cid) {
+        if ($cid && $user) {
             $allUserInfo = $this->getAllInfoToCertificate(
                 $user->getId(),
                 $cid,

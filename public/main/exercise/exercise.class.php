@@ -6172,7 +6172,7 @@ class Exercise
     ) {
         $setting = api_get_course_setting('email_alert_manager_on_new_quiz');
 
-        if (empty($setting) && empty($this->getNotifications())) {
+        if ((empty($setting) || !is_array($setting)) && empty($this->getNotifications())) {
             return false;
         }
 

@@ -409,7 +409,7 @@ class TicketManager
 
                 Display::addFlash(Display::return_message(
                     sprintf(
-                        get_lang('TicketXAssignedToUserX'),
+                        get_lang('Ticket <b>#%s</b> assigned to user <b>%s</b>'),
                         $ticket_code,
                         $assignedUserInfo['complete_name']
                     ),
@@ -492,7 +492,7 @@ class TicketManager
 
             if ('true' === api_get_setting('ticket_send_warning_to_all_admins')) {
                 $warningSubject = sprintf(
-                    get_lang('Ticket %s createdWithNoCategory'),
+                    get_lang('Ticket %s was created without a category'),
                     $ticket_code
                 );
                 Display::addFlash(Display::return_message($warningSubject));
@@ -568,7 +568,7 @@ class TicketManager
                 api_mail_html(
                     get_lang('Virtual support'),
                     $personalEmail,
-                    get_lang('IncidentResentToVirtual support'),
+                    get_lang('The incident has been sent to the virtual support team again'),
                     $helpDeskMessage
                 );
             }
@@ -1380,7 +1380,7 @@ class TicketManager
         // Content
         $href = api_get_path(WEB_CODE_PATH).'/ticket/ticket_details.php?ticket_id='.$ticketId;
         $ticketUrl = Display::url($ticketCode, $href);
-        $messageEmail = get_lang('TicketNum').": $ticketUrl <br />";
+        $messageEmail = get_lang('Ticket number').": $ticketUrl <br />";
         $messageEmail .= get_lang('Status').": $status <br />";
         $messageEmail .= get_lang('Priority').": $priority <br />";
         $messageEmail .= '<hr /><br />';

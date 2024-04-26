@@ -33,7 +33,7 @@
       :key="i"
       class="flex flex-row gap-2 items-center"
     >
-      <BaseUserAvatar :image-url="request.user.illustrationUrl" />
+      <BaseUserAvatar :image-url="request.user.illustrationUrl" :alt="t('Picture')" />
 
       {{ request.user.username }}
 

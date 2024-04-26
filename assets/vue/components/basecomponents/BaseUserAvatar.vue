@@ -6,6 +6,11 @@
     class="rounded-full"
     :class="avatarClass"
     :aria-label="alt"
+    :pt="{
+      image: {
+        style: 'width: 100%;'
+      }
+    }"
   />
 </template>
 
@@ -28,7 +33,7 @@ const props = defineProps({
     type: String,
     require: false,
     default: "normal",
-    validator: (value) => ["normal", "large", "xlarge"].includes(value),
+    validator: (value) => ["small", "normal", "large", "xlarge"].includes(value),
   },
   shape: {
     type: String,
@@ -56,7 +61,9 @@ const avatarClass = computed(() => {
   } else if (props.size === "large") {
     clazz += "h-16 w-16 "
   } else if (props.size === "normal") {
-    clazz += "h-10 w-10 "
+    clazz += "h-10 w-10 " // base size 40px
+  } else if (props.size === "small") {
+    clazz += "h-8 w-8 "
   }
   return clazz
 })

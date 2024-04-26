@@ -11,7 +11,7 @@
       class="field"
     >
       <span v-t="'To'" />
-      <BaseUserAvatar :image-url="sendToUser.illustrationUrl" />
+      <BaseUserAvatar :image-url="sendToUser.illustrationUrl" :alt="t('Picture')" />
       <span v-text="sendToUser.fullName" />
     </div>
     <BaseAutocomplete

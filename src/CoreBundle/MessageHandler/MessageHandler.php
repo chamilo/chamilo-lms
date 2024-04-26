@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\MessageHandler;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Mime\Address;
@@ -51,6 +52,11 @@ class MessageHandler
             'theme' => '',
         ];
         $email->context($params);
-        $this->mailer->send($email);
+
+        try {
+            $this->mailer->send($email);
+        } catch (TransportExceptionInterface $e) {
+            error_log('MessageHandler exception: '.$e->getMessage());
+        }
     }
 }

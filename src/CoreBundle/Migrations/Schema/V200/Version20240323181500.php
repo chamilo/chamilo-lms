@@ -26,6 +26,8 @@ class Version20240323181500 extends AbstractMigrationChamilo
         $sysCalendars = $this->connection->fetchAllAssociative('SELECT * FROM sys_calendar');
 
         $utc = new DateTimeZone('UTC');
+        $oldNewEventIdMap = [];
+
         $admin = $this->getAdmin();
         foreach ($sysCalendars as $sysCalendar) {
             $calendarEvent = $this->createCCalendarEvent(
@@ -39,10 +41,18 @@ class Version20240323181500 extends AbstractMigrationChamilo
             );
 
             $this->entityManager->persist($calendarEvent);
+            $this->entityManager->flush();
+
             $this->addGlobalResourceLinkToNode($calendarEvent->getResourceNode());
+
+            $oldNewEventIdMap[$sysCalendar['id']] = $calendarEvent;
         }
 
         $this->entityManager->flush();
+
+        if ($schema->hasTable('agenda_reminder')) {
+            $this->updateAgendaReminders($oldNewEventIdMap);
+        }
     }
 
     private function createCCalendarEvent(
@@ -92,6 +102,28 @@ class Version20240323181500 extends AbstractMigrationChamilo
         if (!$alreadyHasGlobalLink) {
             $resourceNode->addResourceLink($globalLink);
             $this->entityManager->persist($globalLink);
+        }
+    }
+
+    /**
+     * @param array<int, CCalendarEvent> $oldNewEventIdMap
+     */
+    private function updateAgendaReminders(array $oldNewEventIdMap): void
+    {
+        $result = $this->connection->executeQuery("SELECT * FROM agenda_reminder WHERE type = 'admin'");
+
+        while (($reminder = $result->fetchAssociative()) !== false) {
+            $oldEventId = $reminder['event_id'];
+            if (\array_key_exists($oldEventId, $oldNewEventIdMap)) {
+                $newEvent = $oldNewEventIdMap[$oldEventId];
+                $this->addSql(
+                    sprintf(
+                        "UPDATE agenda_reminder SET event_id = %d WHERE id = %d",
+                        $newEvent->getIid(),
+                        $reminder['id']
+                    )
+                );
+            }
         }
     }
 

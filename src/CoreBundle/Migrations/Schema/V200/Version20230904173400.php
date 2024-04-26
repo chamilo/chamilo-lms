@@ -123,7 +123,10 @@ class Version20230904173400 extends AbstractMigrationChamilo
         }
 
         $this->entityManager->flush();
-        $this->updateAgendaReminders($oldNewEventIdMap);
+
+        if ($schema->hasTable('agenda_reminder')) {
+            $this->updateAgendaReminders($oldNewEventIdMap);
+        }
     }
 
     private function getPersonalEvents(): array
@@ -227,17 +230,20 @@ class Version20230904173400 extends AbstractMigrationChamilo
      */
     private function updateAgendaReminders(array $oldNewEventIdMap): void
     {
-        $reminders = $this->entityManager->getRepository(AgendaReminder::class)->findBy(['type' => 'personal']);
+        $result = $this->connection->executeQuery("SELECT * FROM agenda_reminder WHERE type = 'personal'");
 
-        /** @var AgendaReminder $reminder */
-        foreach ($reminders as $reminder) {
-            $oldEventId = $reminder->getEvent()->getIid();
+        while (($reminder = $result->fetchAssociative()) !== false) {
+            $oldEventId = $reminder['event_id'];
             if (\array_key_exists($oldEventId, $oldNewEventIdMap)) {
                 $newEvent = $oldNewEventIdMap[$oldEventId];
-                $reminder->setEvent($newEvent);
-                $this->entityManager->persist($reminder);
+                $this->addSql(
+                    sprintf(
+                        "UPDATE agenda_reminder SET event_id = %d WHERE id = %d",
+                        $newEvent->getIid(),
+                        $reminder['id']
+                    )
+                );
             }
         }
-        $this->entityManager->flush();
     }
 }

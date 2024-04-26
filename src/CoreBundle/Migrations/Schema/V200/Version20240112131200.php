@@ -115,11 +115,6 @@ final class Version20240112131200 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE message_feedback CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE message_id message_id INT NOT NULL;');
         }
 
-        if ($schema->hasTable('agenda_reminder')) {
-            error_log('Perform the changes in the agenda_reminder table');
-            $this->addSql('ALTER TABLE agenda_reminder CHANGE id id INT AUTO_INCREMENT NOT NULL;');
-        }
-
         if ($schema->hasTable('c_quiz_rel_category')) {
             error_log('Perform the changes in the c_quiz_rel_category table');
             $this->addSql('ALTER TABLE c_quiz_rel_category CHANGE iid iid INT AUTO_INCREMENT NOT NULL;');

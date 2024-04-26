@@ -89,6 +89,9 @@
             "ref": "a9f2e49180f75cdc71ae279a929c4b2e0638de84"
         }
     },
+    "gregwar/captcha-bundle": {
+        "version": "v2.2.0"
+    },
     "hautelook/alice-bundle": {
         "version": "2.12",
         "recipe": {

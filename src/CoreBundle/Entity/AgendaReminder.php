@@ -24,9 +24,6 @@ class AgendaReminder
     #[Groups(['calendar_event:read'])]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'type', type: 'string')]
-    protected string $type;
-
     #[ORM\Column(name: 'date_interval', type: 'dateinterval')]
     protected DateInterval $dateInterval;
 
@@ -51,18 +48,6 @@ class AgendaReminder
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): self
-    {
-        $this->type = $type;
-
-        return $this;
     }
 
     public function getDateInterval(): DateInterval

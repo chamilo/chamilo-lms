@@ -7,6 +7,8 @@
  */
 
 use Chamilo\CoreBundle\Entity\AgendaReminder;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -40,28 +42,28 @@ foreach ($reminders as $reminder) {
         continue;
     }
 
-    if ('personal' === $event->determineType()) {
-        $notificationDate = clone $event->getStartDate();
-        $notificationDate->sub($reminder->getDateInterval());
+    $notificationDate = clone $event->getStartDate();
+    $notificationDate->sub($reminder->getDateInterval());
 
-        if ($notificationDate > $now) {
-            continue;
-        }
+    if ($notificationDate > $now) {
+        continue;
+    }
 
+    if ('course' !== $event->determineType()) {
         $eventDetails = [];
         $eventDetails[] = '<p><strong>'.$event->getTitle().'</strong></p>';
 
         if ($event->isAllDay()) {
-            $eventDetails[] = '<p class="small">'.get_lang('AllDay').'</p>';
+            $eventDetails[] = '<p class="small">'.get_lang('All day').'</p>';
         } else {
             $eventDetails[] = sprintf(
-                '<p class="small">'.get_lang('FromDateX').'</p>',
+                '<p class="small">'.get_lang('From %s').'</p>',
                 api_get_local_time($event->getStartDate(), null, null, false, true, true)
             );
 
             if (!empty($event->getEnddate())) {
                 $eventDetails[] = sprintf(
-                    '<p class="small">'.get_lang('UntilDateX').'</p>',
+                    '<p class="small">'.get_lang('Until %s').'</p>',
                     api_get_local_time($event->getEnddate(), null, null, false, true, true)
                 );
             }
@@ -71,7 +73,7 @@ foreach ($reminders as $reminder) {
             $eventDetails[] = $event->getContent();
         }
 
-        $messageSubject = sprintf(get_lang('ReminderXEvent'), $event->getTitle());
+        $messageSubject = sprintf(get_lang('Reminder for event : %s'), $event->getTitle());
         $messageContent = implode(PHP_EOL, $eventDetails);
 
         MessageManager::send_message_simple(
@@ -80,7 +82,6 @@ foreach ($reminders as $reminder) {
             $messageContent,
             $event->getResourceNode()->getCreator()->getId()
         );
-
 
         $getInviteesForEvent = function (?CCalendarEvent $event) use ($em) {
             if (!$event) {
@@ -112,16 +113,7 @@ foreach ($reminders as $reminder) {
                 $event->getResourceNode()->getCreator()->getId()
             );
         }
-    }
-
-    if ('course' === $event->determineType()) {
-        $notificationDate = clone $event->getStartDate();
-        $notificationDate->sub($reminder->getDateInterval());
-
-        if ($notificationDate > $now) {
-            continue;
-        }
-
+    } else {
         $eventDetails = [
             sprintf('<p><strong>%s</strong></p>', $event->getTitle()),
             $event->isAllDay() ? '<p class="small">All Day</p>' : sprintf(
@@ -167,6 +159,24 @@ foreach ($reminders as $reminder) {
                 foreach ($groupUsers as $groupUserId) {
                     $groupUserIdList[] = $groupUserId;
                 }
+            } else {
+                $course = $resourceLink->getCourse();
+
+                if ($session = $resourceLink->getSession()) {
+                    $userSubscriptions = $session->getSessionRelCourseRelUserInCourse($course)->getValues();
+
+                    $userIdList = array_map(
+                        fn(SessionRelCourseRelUser $sessionCourseUserSubscription) => $sessionCourseUserSubscription->getUser()->getId(),
+                        $userSubscriptions
+                    );
+                } else {
+                    $userSubscriptions = $course->getUsers()->getValues();
+
+                    $userIdList = array_map(
+                        fn(CourseRelUser $courseUserSubscription) => $courseUserSubscription->getUser()->getId(),
+                        $userSubscriptions
+                    );
+                }
             }
         }
 
@@ -193,8 +203,6 @@ foreach ($reminders as $reminder) {
     }
 
     $reminder->setSent(true);
-
-    $em->persist($reminder);
 
     $batchCounter++;
 

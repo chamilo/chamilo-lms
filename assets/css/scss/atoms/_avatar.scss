@@ -1,5 +1,21 @@
 .p-avatar {
-  @apply rounded-md bg-gray-25;
+  @apply inline-flex items-center justify-center rounded-md bg-gray-25;
+
+  &-image {
+    @apply bg-transparent;
+  }
+
+  &-circle {
+    @apply rounded-full;
+
+    img {
+      @apply rounded-full
+    }
+  }
+
+  img {
+    @apply h-full w-full;
+  }
 
   &.p-avatar-lg {
     @apply h-12 w-12;

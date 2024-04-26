@@ -107,7 +107,7 @@
             v-if="slotProps.data.sender"
             class="flex items-center gap-2"
           >
-            <BaseUserAvatar :image-url="slotProps.data.sender.illustrationUrl" />
+            <BaseUserAvatar :image-url="slotProps.data.sender.illustrationUrl" :alt="t('Picture')" />
 
             {{ slotProps.data.sender.username }}
           </div>

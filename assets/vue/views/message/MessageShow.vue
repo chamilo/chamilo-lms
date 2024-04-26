@@ -64,11 +64,11 @@
 
     <div>
       <span class="mr-2">{{ t("From") }}</span>
-      <BaseUserAvatar
+      <MessageCommunicationParty
         v-if="item.sender"
-        :image-url="item.sender.illustrationUrl"
-        :alt="t('Sender profile picture')"
-        class="mr-2 mb-2"
+        :username="item.sender.username"
+        :full-name="item.sender.fullName"
+        :profile-image-url="item.sender.illustrationUrl"
       />
       <span
         v-else
@@ -78,23 +78,23 @@
 
     <div>
       <span class="mr-2">{{ t("To") }}</span>
-      <BaseUserAvatar
+      <MessageCommunicationParty
         v-for="receiver in item.receiversTo"
         :key="receiver.receiver.id"
-        :image-url="receiver.receiver.illustrationUrl"
-        :alt="t('Receiver profile picture')"
-        class="mr-2 mb-2"
+        :username="receiver.receiver.username"
+        :full-name="receiver.receiver.fullName"
+        :profile-image-url="receiver.receiver.illustrationUrl"
       />
     </div>
 
     <div>
       <span class="mr-2">{{ t("Cc") }}</span>
-      <BaseUserAvatar
+      <MessageCommunicationParty
         v-for="receiver in item.receiversCc"
         :key="receiver.receiver.id"
-        :image-url="receiver.receiver.illustrationUrl"
-        :alt="t('Carbon copy receiver profile picture')"
-        class="mr-2 mb-2"
+        :username="receiver.receiver.username"
+        :full-name="receiver.receiver.fullName"
+        :profile-image-url="receiver.receiver.illustrationUrl"
       />
     </div>
 
@@ -104,34 +104,36 @@
 
     <div v-html="item.content" />
 
-    <q-card>
-      <q-card-section v-if="item.attachments && item.attachments.length > 0">
-        <p class="my-3">{{ item.attachments.length }} {{ $t("Attachments") }}</p>
+    <BaseCard>
+      <template #header>
+        <p class="m-3">{{ item.attachments.length }} {{ $t("Attachments") }}</p>
+      </template>
 
-        <div class="q-gutter-y-sm q-gutter-x-sm row">
-          <div
-            v-for="(attachment, index) in item.attachments"
-            :key="index"
-          >
-            <div v-if="attachment.resourceNode.resourceFile.audio">
-              <audio controls>
-                <source :src="attachment.downloadUrl" />
-              </audio>
-            </div>
-
-            <q-btn
-              v-else
-              :href="attachment.downloadUrl"
-              flat
-              icon="attachment"
-              type="a"
-            >
-              {{ attachment.resourceNode.resourceFile.originalName }}
-            </q-btn>
+      <div
+        v-if="item.attachments && item.attachments.length > 0"
+        class="q-gutter-y-sm q-gutter-x-sm row"
+      >
+        <div
+          v-for="(attachment, index) in item.attachments"
+          :key="index"
+        >
+          <div v-if="attachment.resourceNode.resourceFile.audio">
+            <audio controls>
+              <source :src="attachment.downloadUrl" />
+            </audio>
           </div>
+
+          <BaseButton
+            v-else
+            :href="attachment.downloadUrl"
+            icon="attachment"
+            type="primary"
+          >
+            {{ attachment.resourceNode.resourceFile.originalName }}
+          </BaseButton>
         </div>
-      </q-card-section>
-    </q-card>
+      </div>
+    </BaseCard>
     <Loading :visible="isLoading" />
   </div>
 </template>
@@ -151,7 +153,8 @@ import { useFormatDate } from "../../composables/formatDate"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 import messageTagService from "../../services/messageTagService"
 import { useSecurityStore } from "../../store/securityStore"
-import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
+import BaseCard from "../../components/basecomponents/BaseCard.vue"
+import MessageCommunicationParty from "./MessageCommunicationParty.vue"
 
 const confirm = useConfirm()
 const { t } = useI18n()

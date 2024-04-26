@@ -159,6 +159,18 @@ class ResourceNodeVoter extends Voter
         }
 
         $links = $resourceNode->getResourceLinks();
+        $firstLink = $resourceNode->getResourceLinks()->first();
+        if ($resourceNode->hasResourceFile() && $firstLink) {
+            if (0 === $courseId && $firstLink->getCourse() instanceof Course) {
+                $courseId = (int) $firstLink->getCourse()->getId();
+            }
+            if (0 === $sessionId && $firstLink->getSession() instanceof Session) {
+                $sessionId = (int) $firstLink->getSession()->getId();
+            }
+            if (0 === $groupId && $firstLink->getGroup() instanceof CGroup) {
+                $groupId = (int) $firstLink->getGroup()->getIid();
+            }
+        }
 
         $linkFound = 0;
         $link = null;

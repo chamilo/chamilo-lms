@@ -49,7 +49,7 @@ class TicketProjectHelper
     {
         // Define a mapping from role IDs to role names
         $roleMap = [
-            1 => 'ROLE_ADMIN',
+            1 => 'ROLE_TEACHER',
             17 => 'ROLE_STUDENT_BOSS',
             4 => 'ROLE_RRHH',
             3 => 'ROLE_SESSION_MANAGER',

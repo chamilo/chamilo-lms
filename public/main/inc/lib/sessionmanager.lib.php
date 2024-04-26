@@ -8184,7 +8184,7 @@ class SessionManager
         $form->addFile(
             'picture',
             get_lang('Add image'),
-            ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '1 / 1']
+            ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true]
         );
         $allowedPictureTypes = api_get_supported_image_extensions(false);
         $form->addRule('picture', get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(',', $allowedPictureTypes).')', 'filetype', $allowedPictureTypes);

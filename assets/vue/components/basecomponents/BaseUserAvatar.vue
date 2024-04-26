@@ -6,6 +6,11 @@
     class="rounded-full"
     :class="avatarClass"
     :aria-label="alt"
+    :pt="{
+      image: {
+        style: 'width: 100%;'
+      }
+    }"
   />
 </template>
 

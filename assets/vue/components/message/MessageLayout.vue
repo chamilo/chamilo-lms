@@ -15,11 +15,13 @@ import SocialSideMenu from "../social/SocialSideMenu.vue"
 import { onMounted, provide } from "vue"
 import { useSocialInfo } from "../../composables/useSocialInfo"
 import { useSecurityStore } from "../../store/securityStore"
-
+import { storeToRefs } from "pinia"
 
 const { isCurrentUser, groupInfo, isGroup, loadUser } = useSocialInfo()
 
-const { user } = useSecurityStore()
+const securityStore = useSecurityStore()
+
+const { user } = storeToRefs(securityStore)
 
 provide("social-user", user)
 provide("is-current-user", isCurrentUser)

@@ -1,6 +1,6 @@
 <template>
   <BaseCard plain>
-    <div class="p-4 text-center user-profile-card">
+    <div class="flex flex-col items-center p-4 user-profile-card">
       <BaseUserAvatar
         :image-url="user.illustrationUrl"
         :alt="t('Picture')"

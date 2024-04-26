@@ -25997,7 +25997,6 @@ msgstr "Mon profil"
 msgid "Number of times this answer was selected"
 msgstr "Nombre de fois que cette réponse a été sélectionnée"
 
-#, fuzzy
 msgid "Back to tests list"
 msgstr "Retour à la liste des tests"
 

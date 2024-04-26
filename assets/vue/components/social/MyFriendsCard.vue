@@ -26,7 +26,7 @@
       <ul class="list-group">
         <li v-for="friend in limitedFriends" :key="friend.id" class="list-group-item friend-item d-flex align-items-center">
           <a :href="`/social?id=${friend.friend.id}`" class="d-flex align-items-center text-decoration-none">
-            <BaseUserAvatar :image-url="friend.friend.illustrationUrl" class="mr-2" />
+            <BaseUserAvatar :image-url="friend.friend.illustrationUrl" class="mr-2" :alt="t('Picture')" />
             <span>{{ friend.friend.firstname }} {{ friend.friend.lastname }} <small class="text-muted">({{ friend.friend.username }})</small></span>
             <span v-if="friend.friend.isOnline" class="mdi mdi-circle circle-green mx-2" title="Online"></span>
             <span v-else class="mdi mdi-circle circle-gray mx-2" title="Offline"></span>

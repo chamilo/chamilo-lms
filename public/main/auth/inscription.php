@@ -1173,7 +1173,7 @@ if ($form->validate()) {
         '<p>'.
         get_lang('Dear').' '.
         stripslashes(Security::remove_XSS($recipient_name)).',<br /><br />'.
-        get_lang('Your personal settings have been registered').".</p>";
+        get_lang('Your personal settings have been registered')."</p>";
 
     $formData = [
         'button' => Display::button(
@@ -1205,7 +1205,7 @@ if ($form->validate()) {
     } else {
         if (!empty($values['email'])) {
             $linkDiagnostic = api_get_path(WEB_PATH).'main/search/search.php';
-            $textAfterRegistration .= '<p>'.get_lang('An e-mail has been sent to remind you of your login and password').'.</p>';
+            $textAfterRegistration .= '<p>'.get_lang('An e-mail has been sent to remind you of your login and password').'</p>';
             $diagnosticPath = '<a href="'.$linkDiagnostic.'" class="custom-link">'.$linkDiagnostic.'</a>';
             $textAfterRegistration .= '<p>';
             $textAfterRegistration .= sprintf(

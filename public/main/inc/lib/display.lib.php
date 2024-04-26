@@ -1554,7 +1554,7 @@ class Display
             $title .= "<small> $second_title</small>";
         }
 
-        return '<'.$size.' class="page-header">'.$title.'</'.$size.'>';
+        return '<div class="page-header section-header"><'.$size.' class="section-header__title">'.$title.'</'.$size.'></div>';
     }
 
     public static function page_header_and_translate($title, $second_title = null)
@@ -2445,6 +2445,9 @@ class Display
                     button.addEventListener("click", function() {
                         menus.forEach((menu, menuIndex) => {
                             if (index === menuIndex) {
+                                button.setAttribute("aria-expanded", "true" === button.getAttribute("aria-expanded") ? "true" : "false")
+                                button.parentNode.querySelector(".mdi").classList.toggle("mdi-chevron-down")
+                                button.parentNode.querySelector(".mdi").classList.toggle("mdi-chevron-up")
                                 menu.classList.toggle("active");
                             } else {
                                 menu.classList.remove("active");
@@ -2458,6 +2461,7 @@ class Display
         <div class="mt-4 rounded-lg bg-gray-15 display-panel-collapse mr-4">
             <div class="px-4 bg-gray-25 border border-gray-30" id="card_'.$idAccordion.'">
                 <h5 class="p-2">
+                    <span aria-hidden="true" class="mdi mdi-chevron-down"></span>
                     <a role="button"
                         class="cursor-pointer"
                         data-toggle="collapse"

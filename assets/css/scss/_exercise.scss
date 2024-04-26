@@ -1,7 +1,15 @@
 // Exercise CSS
 
+.exercise-overview {
+  @apply space-y-4;
+}
+
+[name="frm_exercise"] {
+  @apply space-y-4;
+}
+
 .main-question {
-  @apply mb-4;
+  @apply mb-4 space-y-4;
 }
 
 .question_menu {

@@ -165,7 +165,7 @@ $(function() {
     function repopulateFormValues() {
         var formValues = JSON.parse(sessionStorage.getItem('formValues'));
         $.each(formValues, function(i, field) {
-            if (field.name === 'coach_username' || field.name === 'name' || field.name === 'system_template') {
+            if (field.name === 'coach_username' || field.name === 'title' || field.name === 'system_template') {
                 $('[name=\"' + field.name + '\"]').val(field.value);
             }
         });
@@ -213,7 +213,7 @@ $(function() {
         sessionStorage.removeItem('system_templateValues');
         sessionStorage.removeItem('formValues');
     });
-    
+
     ".$result['js']."
 });
 </script>";

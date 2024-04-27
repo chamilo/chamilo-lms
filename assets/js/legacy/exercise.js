@@ -1,7 +1,6 @@
 // Script to be added in the exercises tool.
 import 'jsplumb';
 import 'jquery-ui-touch-punch';
-// import 'xcolor/jquery.xcolor.js';
 import 'signature_pad';
 import '../../../public/main/inc/lib/javascript/epiclock/javascript/jquery.dateformat.min.js';
 import '../../../public/main/inc/lib/javascript/epiclock/javascript/jquery.epiclock.js';
@@ -16,16 +15,24 @@ document.addEventListener("DOMContentLoaded", function() {
     "enregistrement-audio": "audio-recording-help"
   };
 
+  var currentUrlParams = new URLSearchParams(window.location.search);
+  var cid = currentUrlParams.get('cid') || '0';
+  var sid = currentUrlParams.get('sid') || '0';
+  var gid = currentUrlParams.get('gid') || '0';
+
   var links = document.querySelectorAll('a[href*="web"]');
   links.forEach(function(link) {
-    link.classList.add("ajax");
     var href = link.getAttribute("href");
     var pathSegments = href.split("/");
-    if (pathSegments.length >= 3) {
-      var frenchPath = pathSegments[2];
-      var englishEquivalent = routeMapping[frenchPath] || frenchPath;
-      link.setAttribute("href", "/main/inc/ajax/exercise.ajax.php?a=" + englishEquivalent);
+    var lastSegmentIndex = pathSegments.length - (pathSegments[pathSegments.length - 1] === '' ? 2 : 1);
+    var lastPathSegment = pathSegments[lastSegmentIndex];
+
+    if (lastPathSegment && routeMapping[lastPathSegment]) {
+      var englishEquivalent = routeMapping[lastPathSegment];
+      var newHref = `/main/inc/ajax/exercise.ajax.php?a=${englishEquivalent}&cid=${cid}&sid=${sid}&gid=${gid}`;
+      link.setAttribute("href", newHref);
       link.setAttribute("data-title", link.textContent.trim());
+      link.classList.add("ajax");
     }
   });
 });

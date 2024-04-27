@@ -421,11 +421,13 @@ final class Version20230913162700 extends AbstractMigrationChamilo
                         if ($documentFile) {
                             $newUrl = $documentRepo->getResourceFileUrl($documentFile);
                             if (!empty($newUrl)) {
+                                $queryChar = strpos($newUrl, '?') === false ? '?' : '&';
+                                $newUrlWithCid = $newUrl . $queryChar . 'cid=' . $courseId;
                                 $patternForReplacement = '/'.$matches[1][$index].'=(["\'])'.preg_quote($videoPath, '/').'\1/i';
-                                $replacement = $matches[1][$index].'=$1'.$newUrl.'$1';
+                                $replacement = $matches[1][$index].'=$1'.$newUrlWithCid.'$1';
                                 $contentText = preg_replace($patternForReplacement, $replacement, $contentText);
                                 error_log('$documentPath ->'.$documentPath);
-                                error_log('newUrl ->'.$newUrl);
+                                error_log('newUrl ->'.$newUrlWithCid);
                             }
                         }
                     }
@@ -433,6 +435,6 @@ final class Version20230913162700 extends AbstractMigrationChamilo
             }
         }
 
-        return $contentText; // Return the updated content text.
+        return $contentText;
     }
 }

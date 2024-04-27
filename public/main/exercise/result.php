@@ -23,7 +23,11 @@ if (in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     $show_headers = false;
 }
 
-api_protect_course_script($show_headers);
+$cid = isset($_REQUEST['cid']) ? (int) $_REQUEST['cid'] : null;
+$sid = isset($_REQUEST['sid']) ? (int) $_REQUEST['sid'] : null;
+
+// A notice for unauthorized people.
+api_protect_course_script($show_headers, false, '', $cid);
 
 if (empty($id)) {
     api_not_allowed($show_headers);

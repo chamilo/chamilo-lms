@@ -57,7 +57,7 @@ final class Version20231110194300 extends AbstractMigrationChamilo
         $destinationDir = $rootPath.'/assets/css/themes/';
         $chamiloDefaultCssPath = $destinationDir.'chamilo/default.css';
 
-        if (!file_exists($sourceDir)) {
+        if (!is_dir($sourceDir)) {
             return;
         }
 
@@ -111,15 +111,13 @@ final class Version20231110194300 extends AbstractMigrationChamilo
         }
 
         $content = file_get_contents($webpackConfigPath);
-
-        $pattern = "/(const themes = \\[\n\\s*)([^\\]]*?)(\\s*\\];)/s";
+        $pattern = "/(const themes = \[\s*\")([^\"\]]+)(\"\s*\])/";
         $replacement = function ($matches) use ($newThemes) {
-            $existingThemesString = rtrim($matches[2], ", \n");
-            $newThemesString = implode("',\n    '", $newThemes);
-            $formattedNewThemesString = $existingThemesString.
-                (empty($existingThemesString) ? '' : ",\n    '").$newThemesString."'";
+            $existingThemes = explode('", "', trim($matches[2], '"'));
+            $allThemes = array_unique(array_merge($existingThemes, $newThemes));
+            $newThemesString = implode('", "', $allThemes);
 
-            return $matches[1].$formattedNewThemesString.$matches[3];
+            return $matches[1] . $newThemesString . $matches[3];
         };
 
         $newContent = preg_replace_callback($pattern, $replacement, $content);

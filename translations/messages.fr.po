@@ -29195,3 +29195,21 @@ msgstr "Aide enregistrement"
 
 msgid "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on “Stop recording” then select “End exercise”. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page."
 msgstr "Pendant l'enregistrement, vous pouvez faire une pause quand vous le souhaitez. Si vous n'êtes pas satisfait, enregistrez-vous à nouveau. Cela écrasera la version précédente. Satisfait ? Pour envoyer l'enregistrement à votre professeur, cliquez sur « Arrêter l'enregistrement » puis sélectionnez « Fin de l'exercice ». Le professeur pourra écouter votre enregistrement et vous donner son feedback ! Tous vos enregistrements transmis peuvent être consultés sur la page d'accueil de l'exercice."
+
+msgid "Certificate of participation"
+msgstr "Attestation <br>de participation"
+
+msgid "User has participate at a training session on the platforme %s from %s until %s"
+msgstr "a participé à une formation en ligne sur la plateforme %s. <br>Du %s au %s."
+
+msgid "This preparation corresponds to a volume of approximately %s training hours."
+msgstr "Cette préparation correspond à un volume d'environ %s heures de formation."
+
+msgid "The following contents have been validated"
+msgstr "Les contenus suivants ont été validés "
+
+msgid "Obtained the following skills"
+msgstr "a obtenu les compétences suivantes "
+
+msgid "Certificate Footer"
+msgstr ""

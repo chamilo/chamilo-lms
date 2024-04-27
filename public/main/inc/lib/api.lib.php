@@ -888,6 +888,9 @@ function api_valid_email($address)
 function api_protect_course_script($print_headers = false, $allow_session_admins = false, string $checkTool = '', $cid = null): bool
 {
     $course_info = api_get_course_info();
+    if (empty($course_info) && isset($_REQUEST['cid'])) {
+        $course_info = api_get_course_info_by_id((int) $_REQUEST['cid']);
+    }
 
     if (isset($cid)) {
         $course_info = api_get_course_info_by_id($cid);

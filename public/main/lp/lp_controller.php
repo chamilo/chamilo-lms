@@ -27,12 +27,12 @@ $debug = false;
 $current_course_tool = TOOL_LEARNPATH;
 $lpItemId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 $lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
-$course_id = api_get_course_int_id();
-$session_id = api_get_session_id();
+$courseId = isset($_REQUEST['cid']) ? (int) $_REQUEST['cid'] : api_get_course_int_id();
+$sessionId = isset($_REQUEST['sid']) ? (int) $_REQUEST['sid'] : api_get_session_id();
 $lpRepo = Container::getLpRepository();
 $lpItemRepo = Container::getLpItemRepository();
-$courseInfo = api_get_course_info();
-$course = api_get_course_entity();
+$courseInfo = api_get_course_info_by_id($courseId);
+$course = api_get_course_entity($courseId);
 $userId = api_get_user_id();
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
 $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
@@ -71,15 +71,15 @@ if (!empty($lpObject)) {
     if (isset($oLP) && is_object($oLP)) {
         if (1 == $myrefresh ||
             empty($oLP->cc) ||
-            $oLP->cc != api_get_course_id() ||
-            $oLP->lp_view_session_id != $session_id
+            $oLP->cc != $course->getCode() ||
+            $oLP->lp_view_session_id != $sessionId
         ) {
             if ($debug) {
                 error_log('Course has changed, discard lp object');
                 error_log('$oLP->lp_view_session_id: '.$oLP->lp_view_session_id);
-                error_log('api_get_session_id(): '.$session_id);
+                error_log('api_get_session_id(): '.$sessionId);
                 error_log('$oLP->cc: '.$oLP->cc);
-                error_log('api_get_course_id(): '.api_get_course_id());
+                error_log('api_get_course_id(): '.$course->getCode());
             }
 
             if (1 === $myrefresh) {
@@ -237,11 +237,8 @@ switch ($action) {
     case 'send_notify_teacher':
         // Send notification to the teacher
         $studentInfo = api_get_user_info();
-        $course_info = api_get_course_info();
-        $sessionId = api_get_session_id();
-
-        $courseName = $course_info['title'];
-        $courseUrl = $course_info['course_public_url'];
+        $courseName = $courseInfo['title'];
+        $courseUrl = $courseInfo['course_public_url'];
         if (!empty($sessionId)) {
             $sessionInfo = api_get_session_info($sessionId);
             $courseName = $sessionInfo['name'];
@@ -249,7 +246,7 @@ switch ($action) {
         }
 
         $url = Display::url($courseName, $courseUrl, ['title' => get_lang('Go to the course')]);
-        $coachList = CourseManager::get_coachs_from_course($sessionId, api_get_course_int_id());
+        $coachList = CourseManager::get_coachs_from_course($sessionId, $courseId);
         foreach ($coachList as $coach_course) {
             $recipientName = $coach_course['full_name'];
             $coachInfo = api_get_user_info($coach_course['user_id']);
@@ -693,7 +690,7 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            $result = ScormExport::exportToPdf($lpId, api_get_course_info());
+            $result = ScormExport::exportToPdf($lpId, $courseInfo);
             if (!$result) {
                 require 'lp_list.php';
             }
@@ -1005,7 +1002,7 @@ switch ($action) {
             $redirectTo = isset($_GET['redirectTo']) ? $_GET['redirectTo'] : '';
             switch ($redirectTo) {
                 case 'course_home':
-                    $url = api_get_path(WEB_PATH).'course/'.api_get_course_int_id().'/home?'.api_get_cidreq();
+                    $url = api_get_path(WEB_PATH).'course/'.$courseId.'/home?'.api_get_cidreq();
                     break;
                 case 'lp_list':
                     $url = 'lp_controller.php?'.api_get_cidreq();

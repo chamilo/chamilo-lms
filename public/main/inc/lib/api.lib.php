@@ -2052,7 +2052,11 @@ function api_get_cidreq($addSessionId = true, $addGroupId = true, $origin = '')
 
     if ($addSessionId) {
         if (!empty($url)) {
-            $url .= 0 == api_get_session_id() ? '&sid=0' : '&sid='.api_get_session_id();
+            $sessionId = api_get_session_id();
+            if (0 === $sessionId && isset($_REQUEST['sid'])) {
+                $sessionId = (int) $_REQUEST['sid'];
+            }
+            $url .= 0 === $sessionId ? '&sid=0' : '&sid='.$sessionId;
         }
     }
 

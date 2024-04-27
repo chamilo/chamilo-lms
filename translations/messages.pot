@@ -27512,3 +27512,6 @@ msgstr ""
 
 msgid "Certificate Footer"
 msgstr ""
+
+msgid "Select date .."
+msgstr ""

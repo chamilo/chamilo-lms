@@ -48,7 +48,7 @@
                                         {{ complete_name }}
                                     </h3>
                                     <p style="font-size: 16px;">
-                                        {{ 'User has participate dans de platforme %s the contrat date %s certificate date %s' | trans | format(_s.site_name, certificate_generated_date_no_time, terms_validation_date_no_time, time_in_platform_in_hours)}}
+                                        {{ 'User has participate at a training session on the platforme %s from %s until %s' | trans | format(_s.site_name, terms_validation_date_no_time, certificate_generated_date_no_time, time_in_platform_in_hours)}}
                                     </p>
                                     <br />
                                     <p style="font-size: 16px;">{{ 'This preparation corresponds to a volume of approximately %s training hours.' | trans | format(time_spent_in_lps_in_hours)}}</p><br />

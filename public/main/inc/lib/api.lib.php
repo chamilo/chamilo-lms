@@ -2041,6 +2041,9 @@ function api_get_cidreq_params($courseId, $sessionId = 0, $groupId = 0)
 function api_get_cidreq($addSessionId = true, $addGroupId = true, $origin = '')
 {
     $courseId = api_get_course_int_id();
+    if (0 === $courseId && isset($_REQUEST['cid'])) {
+        $courseId = (int) $_REQUEST['cid'];
+    }
     $url = empty($courseId) ? '' : 'cid='.$courseId;
     $origin = empty($origin) ? api_get_origin() : Security::remove_XSS($origin);
 

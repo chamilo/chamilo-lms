@@ -3696,7 +3696,7 @@ class learnpathItem
                                     WHERE exe_id = $exeId";
                             $res = Database::query($sql);
                             $exeRow = Database::fetch_array($res);
-                            $duration = $exeRow['exe_duration'];
+                            $duration = isset($exeRow['exe_duration']) ? (int) $exeRow['exe_duration'] : 0;
                             $total_time = " total_time = ".$duration.", ";
                             if ($debug) {
                                 error_log("quiz: $total_time");

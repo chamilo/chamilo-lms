@@ -25,12 +25,16 @@ class ExtraFieldRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('f');
         $qb
-            ->where(
-                $qb->expr()->andX(
-                    $qb->expr()->eq('f.visibleToSelf', true),
-                    $qb->expr()->eq('f.itemType', $type)
-                )
+            ->addSelect(
+                'CASE WHEN f.fieldOrder IS NULL THEN -1 ELSE f.fieldOrder END AS HIDDEN list_order_is_null'
             )
+            ->where(
+                $qb->expr()->eq('f.visibleToSelf', true),
+            )
+            ->andWhere(
+                $qb->expr()->eq('f.itemType', $type)
+            )
+            ->orderBy('list_order_is_null', 'ASC')
         ;
 
         return $qb->getQuery()->getResult();

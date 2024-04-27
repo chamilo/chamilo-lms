@@ -2445,9 +2445,9 @@ class Display
                     button.addEventListener("click", function() {
                         menus.forEach((menu, menuIndex) => {
                             if (index === menuIndex) {
-                                button.setAttribute("aria-expanded", "true" === button.getAttribute("aria-expanded") ? "true" : "false")
-                                button.parentNode.querySelector(".mdi").classList.toggle("mdi-chevron-down")
-                                button.parentNode.querySelector(".mdi").classList.toggle("mdi-chevron-up")
+                                button.setAttribute("aria-expanded", "true" === button.getAttribute("aria-expanded") ? "false" : "true")
+                                button.classList.toggle("mdi-chevron-down")
+                                button.classList.toggle("mdi-chevron-up")
                                 menu.classList.toggle("active");
                             } else {
                                 menu.classList.remove("active");
@@ -2459,11 +2459,10 @@ class Display
         </script>';
             $html = '
         <div class="mt-4 rounded-lg bg-gray-15 display-panel-collapse mr-4">
-            <div class="px-4 bg-gray-25 border border-gray-30" id="card_'.$idAccordion.'">
-                <h5 class="p-2">
-                    <span aria-hidden="true" class="mdi mdi-chevron-down"></span>
+            <div class="bg-gray-25 border border-gray-30" id="card_'.$idAccordion.'">
+                <h5>
                     <a role="button"
-                        class="cursor-pointer"
+                        class="cursor-pointer p-2 block mdi mdi-chevron-down"
                         data-toggle="collapse"
                         data-target="#collapse_'.$idAccordion.'"
                         aria-expanded="'.(($open) ? 'true' : 'false').'"

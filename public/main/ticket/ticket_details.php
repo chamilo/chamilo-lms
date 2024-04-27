@@ -189,7 +189,7 @@ foreach ($messages as $message) {
 
     $messageToShow .= '<a id="note-'.$counter.'"> </a><h4>'
         .sprintf(
-            get_lang('Update successfulByX'),
+            get_lang('Updated by %s'),
             $message['user_info']['complete_name_with_message_link']
         );
 

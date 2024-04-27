@@ -31,7 +31,7 @@
         {{ encore_entry_link_tags('vue') }}
         {{ encore_entry_link_tags('app') }}
 
-        {% if color_theme_link %}
+        {% if color_theme_link is defined %}
             {{ color_theme_link|raw }}
         {% endif %}
 

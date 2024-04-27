@@ -164,7 +164,7 @@ if ($form->validate()) {
                 }
 
                 // Course base
-                $row = getCourseSessionRow($courseId, $exerciseObj, 0, get_lang('BaseCourse'));
+                $row = getCourseSessionRow($courseId, $exerciseObj, 0, get_lang('Base course'));
                 $orderedData[] = [
                     $row['title'],
                     $row['correct_count'],

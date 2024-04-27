@@ -31,7 +31,7 @@ $currentUrl = api_get_self().'?course_id='.$courseId.
     '&source_session_id='.$sourceSessionId.'&destination_session_id='.$destinationSessionId;
 
 $form = new FormValidator('course', 'GET', api_get_self().'?course_id='.$courseId);
-$form->addHeader(get_lang('MoveUsersFromCourseToSession'));
+$form->addHeader(get_lang('Move users results from base course to a session'));
 $form->addSelectAjax(
     'course_id',
     get_lang('Course'),
@@ -45,7 +45,7 @@ $form->addButtonSearch(get_lang('Search'));
 $content = '';
 if (!empty($courseId)) {
     if (!empty($sourceSessionId) && $sourceSessionId === $destinationSessionId) {
-        Display::addFlash(Display::return_message(get_lang('CantMoveToTheSameSession')));
+        Display::addFlash(Display::return_message(get_lang('Cannot move this to the same session.')));
         api_location(api_get_self());
     }
 
@@ -53,7 +53,7 @@ if (!empty($courseId)) {
     if (!empty($sessions)) {
         $sessions = array_column($sessions, 'name', 'id');
         $form->addHtml(Display::page_subheader2(get_lang('Sessions')));
-        $sessionsWithBase = [0 => get_lang('BaseCourse')] + $sessions;
+        $sessionsWithBase = [0 => get_lang('Base course')] + $sessions;
         $form->addSelect(
             'source_session_id',
             get_lang('Source'),

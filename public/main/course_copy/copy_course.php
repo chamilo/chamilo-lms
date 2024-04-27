@@ -101,7 +101,7 @@ if (Security::check_token('post') && (
     }
 
     if (empty($courses)) {
-        echo Display::return_message(get_lang('NoDestinationCoursesAvailable'), 'normal');
+        echo Display::return_message(get_lang('No destination course available'), 'normal');
     } else {
         $form = new FormValidator(
             'copy_course',

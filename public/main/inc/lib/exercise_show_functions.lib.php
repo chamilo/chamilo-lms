@@ -553,7 +553,7 @@ class ExerciseShowFunctions
 
             // Your choice
             if (isset($new_options[$studentChoice])) {
-                $content .= get_lang($new_options[$studentChoice]['name']);
+                $content .= get_lang($new_options[$studentChoice]['title']);
             } else {
                 $content .= '-';
             }
@@ -565,7 +565,7 @@ class ExerciseShowFunctions
             if (!$hide_expected_answer) {
                 $content .= '<td width="5%">';
                 if (isset($new_options[$answerCorrect])) {
-                    $content .= get_lang($new_options[$answerCorrect]['name']);
+                    $content .= get_lang($new_options[$answerCorrect]['title']);
                 } else {
                     $content .= '-';
                 }

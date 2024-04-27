@@ -19,11 +19,13 @@ $this_section = SECTION_COURSES;
 
 // Notice for unauthorized people.
 api_protect_course_script(true);
-$sessionId = api_get_session_id();
-$courseCode = api_get_course_id();
+$courseId = isset($_REQUEST['cid']) ? (int) $_REQUEST['cid'] : api_get_course_int_id();
+$sessionId = isset($_REQUEST['sid']) ? (int) $_REQUEST['sid'] : api_get_session_id();
+$courseInfo = api_get_course_info_by_id($courseId);
+$courseCode = $courseInfo['code'];
 $exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 
-$objExercise = new Exercise();
+$objExercise = new Exercise($courseId);
 $result = $objExercise->read($exercise_id, true);
 
 if (!$result) {
@@ -32,7 +34,7 @@ if (!$result) {
 
 if ('true' === api_get_plugin_setting('positioning', 'tool_enable')) {
     $plugin = Positioning::create();
-    if ($plugin->blockFinalExercise(api_get_user_id(), $exercise_id, api_get_course_int_id(), $sessionId)) {
+    if ($plugin->blockFinalExercise(api_get_user_id(), $exercise_id, $courseId, $sessionId)) {
         api_not_allowed(true);
     }
 }
@@ -203,8 +205,8 @@ if (!api_is_allowed_to_session_edit()) {
 $attempts = Event::getExerciseResultsByUser(
     api_get_user_id(),
     $objExercise->id,
-    api_get_course_int_id(),
-    api_get_session_id(),
+    $courseId,
+    $sessionId,
     $learnpath_id,
     $learnpath_item_id,
     'desc'
@@ -243,7 +245,7 @@ if (!empty($attempts)) {
                 $attempt_result['max_score'],
                 $objExercise,
                 $attempt_result['exe_user_id'],
-                api_get_course_int_id(),
+                $courseId,
                 $sessionId
             );
         }
@@ -444,8 +446,8 @@ if ($disable && empty($exercise_stat_info)) {
 $isLimitReached = ExerciseLib::isQuestionsLimitPerDayReached(
     api_get_user_id(),
     count($objExercise->get_validated_question_list()),
-    api_get_course_int_id(),
-    api_get_session_id()
+    $courseId,
+    $sessionId
 );
 
 if (!empty($exercise_url_button) && !$isLimitReached) {

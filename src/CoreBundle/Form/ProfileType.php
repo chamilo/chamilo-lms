@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Form;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Form\Type\IllustrationType;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -27,7 +28,7 @@ class ProfileType extends AbstractType
 {
     private LanguageRepository $languageRepository;
 
-    public function __construct(LanguageRepository $languageRepository)
+    public function __construct(LanguageRepository $languageRepository, private readonly SettingsManager $settingsManager)
     {
         $this->languageRepository = $languageRepository;
     }
@@ -67,7 +68,14 @@ class ProfileType extends AbstractType
                 'label'    => 'form.label_locale',
                 'required' => false,
             ))*/
-            ->add('timezone', TimezoneType::class, ['label' => 'Timezone', 'required' => true])
+        ;
+
+        if ('true' === $this->settingsManager->getSetting('use_users_timezone')) {
+            $builder
+                ->add('timezone', TimezoneType::class, ['label' => 'Timezone', 'required' => true]);
+        }
+
+        $builder
             ->add('phone', TextType::class, ['label' => 'Phone number', 'required' => false])
             ->add(
                 'illustration',

@@ -29189,3 +29189,9 @@ msgstr ""
 
 msgid "Receiver profile picture"
 msgstr "Photo de profil du destinataire"
+
+msgid "Recording help"
+msgstr "Aide enregistrement"
+
+msgid "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on “Stop recording” then select “End exercise”. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page."
+msgstr "Pendant l'enregistrement, vous pouvez faire une pause quand vous le souhaitez. Si vous n'êtes pas satisfait, enregistrez-vous à nouveau. Cela écrasera la version précédente. Satisfait ? Pour envoyer l'enregistrement à votre professeur, cliquez sur « Arrêter l'enregistrement » puis sélectionnez « Fin de l'exercice ». Le professeur pourra écouter votre enregistrement et vous donner son feedback ! Tous vos enregistrements transmis peuvent être consultés sur la page d'accueil de l'exercice."

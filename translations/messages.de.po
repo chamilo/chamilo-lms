@@ -25112,3 +25112,9 @@ msgstr "Kontakt"
 
 msgid "Send"
 msgstr "Senden"
+
+msgid "Recording help"
+msgstr "Hilfe Aufnahme"
+
+msgid "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on “Stop recording” then select “End exercise”. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page."
+msgstr "Während der Aufnahme können Sie jederzeit pausieren. Wenn Sie nicht zufrieden sind, nehmen Sie erneut auf. Dadurch wird die vorherige Version überschrieben. Befriedigt ? Um die Aufzeichnung an Ihren Lehrer zu senden, klicken Sie auf „Aufzeichnung beenden“ und wählen Sie dann „Übung beenden“. Der Lehrer kann sich Ihre Aufnahme anhören und Ihnen Feedback geben! Alle von Ihnen übermittelten Aufzeichnungen können Sie auf der Übungshomepage einsehen."

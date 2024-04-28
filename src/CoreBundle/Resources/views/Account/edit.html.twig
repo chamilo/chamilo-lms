@@ -41,22 +41,30 @@
     });
     </script>
 
-    <h3>{{ user.userIdentifier }}</h3>
+    <div class="section-header section-header--h2">
+        <h2 class="section-header__title">{{ user.fullName }}</h2>
+    </div>
 {#        <a href="{{ url('app_forgot_password_request') }}" class="btn btn--primary">#}
 {#            Reset password#}
 {#        </a>#}
 
-    <img class="inline-block h-16 w-16 rounded-full ring-2 ring-white"
-         src="{{ user | illustration }}?w=120&h=120&fit=crop"
-         alt=""
-    />
+    <div class="flex md:flex-row gap-4 mt-6">
+        <div class="w-16">
+            <img class="h-16 w-16 rounded-full mb-4"
+                 src="{{ user | illustration }}?w=120&h=120&fit=crop"
+                 alt=""
+            />
+        </div>
+        <div class="flex-grow">
+            {{ form_start(form, { 'action': path('chamilo_core_account_edit'), 'attr': { 'class': 'edit' } }) }}
+            {{ form_widget(form, {'attr': {'class': 'flex flex-col gap-4'}}) }}
 
-    {{ form_start(form, { 'action': path('chamilo_core_account_edit'), 'attr': { 'class': 'edit' } }) }}
-    {{ form_widget(form, {'attr': {'class': 'flex flex-col gap-4'}}) }}
-
-    <div>
-        <button class="btn btn--primary" name="update_profile" type="submit">{{ 'Update profile'|trans }}</button>
+            <div>
+                <button class="btn btn--primary" name="update_profile" type="submit">{{ 'Update profile'|trans }}</button>
+            </div>
+            {{ form_end(form) }}
+        </div>
     </div>
-    {{ form_end(form) }}
+
 {% endautoescape %}
 {% endblock %}

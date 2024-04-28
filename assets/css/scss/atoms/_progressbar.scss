@@ -1,11 +1,31 @@
 .p-progressbar {
-  @apply bg-gray-30 rounded-full border-none h-1.5;
+  @apply relative overflow-hidden;
+
+  &-determinate {
+    .p-progressbar-value {
+      @apply h-full w-0 absolute border-none flex items-center justify-center overflow-hidden;
+
+      &-animate {
+        @apply duration-1000 ease-in-out;
+
+        transition-property: width;
+      }
+    }
+
+    .p-progressbar-label {
+      @apply inline-flex;
+    }
+  }
+}
+
+.p-progressbar {
+  @apply bg-gray-30 rounded-lg border-none h-6;
 
   &-value {
-    @apply bg-primary;
+    @apply border-none m-0 bg-primary;
   }
 
   &-label {
-    @apply text-white;
+    @apply text-white leading-normal;
   }
 }

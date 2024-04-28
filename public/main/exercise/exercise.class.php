@@ -9784,7 +9784,7 @@ class Exercise
         ];
     }
 
-    public static function saveExerciseInLp($safe_item_id, $safe_exe_id)
+    public static function saveExerciseInLp($safe_item_id, $safe_exe_id, $course_id = null)
     {
         $lp = Session::read('oLP');
 
@@ -9796,7 +9796,9 @@ class Exercise
         }
 
         $viewId = $lp->get_view_id();
-        $course_id = api_get_course_int_id();
+        if (!isset($course_id)) {
+            $course_id = api_get_course_int_id();
+        }
         $userId = (int) api_get_user_id();
         $viewId = (int) $viewId;
 

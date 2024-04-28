@@ -405,7 +405,7 @@ if (count($sessions) > 0) {
         $sessionInformation .= $courseToolInformationTotal;
     }
 } else {
-    $sessionInformation = '<p>'.get_lang('NoCourse sessionsForThisUser').'</p>';
+    $sessionInformation = '<p>'.get_lang('No course sessions for this user').'</p>';
 }
 $courseToolInformationTotal = '';
 

@@ -47,15 +47,6 @@
 }
 
 @layer utilities {
-  .custom-collapse {
-    display: none;
-  }
-  .custom-collapse.active {
-    display: block;
-  }
-  .collapse {
-    visibility: inherit !important;
-  }
   .border-gray-300 {
     --tw-border-opacity: 1;
     border-color: rgba(156, 163, 175, var(--tw-border-opacity));

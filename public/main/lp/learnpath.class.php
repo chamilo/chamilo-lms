@@ -2017,11 +2017,10 @@ class learnpath
     {
         $text = $percentage.$text_add;
 
-        return '<div class="progress">
-            <div id="progress_bar_value"
-                class="progress-bar progress-bar-success" role="progressbar"
-                aria-valuenow="'.$percentage.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$text.';">
-            '.$text.'
+        return '<div class="p-progressbar p-progressbar-determinate"
+            role="progressbar" aria-valuenow="'.$percentage.'" aria-valuemin="0" aria-valuemax="100">
+            <div id="progress_bar_value" class="p-progressbar-value" style="width: '.$text.';">
+                 <div class="p-progressbar-label">'.$text.'</div>
             </div>
         </div>';
     }

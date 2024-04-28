@@ -28,9 +28,12 @@ $lp_id = !empty($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
 if (empty($lp_id)) {
     api_not_allowed();
 }
-$sessionId = api_get_session_id();
-$course_code = api_get_course_id();
-$course_id = api_get_course_int_id();
+
+$course_id = isset($_REQUEST['cid']) ? (int) $_REQUEST['cid'] : api_get_course_int_id();
+$sessionId = isset($_REQUEST['sid']) ? (int) $_REQUEST['sid'] : api_get_session_id();
+
+$courseInfo = api_get_course_info_by_id($course_id);
+$course_code = $courseInfo['code'];
 $user_id = api_get_user_id();
 $course = api_get_course_entity($course_id);
 $session = api_get_session_entity($sessionId);
@@ -282,7 +285,7 @@ if (!empty($_REQUEST['exeId']) &&
     $safe_exe_id = (int) $_REQUEST['exeId'];
 
     if (!empty($safe_id) && !empty($safe_item_id)) {
-        Exercise::saveExerciseInLp($safe_item_id, $safe_exe_id);
+        Exercise::saveExerciseInLp($safe_item_id, $safe_exe_id, $course_id);
     }
     if (EXERCISE_FEEDBACK_TYPE_END != intval($_GET['fb_type'])) {
         $src = 'blank.php?msg=exerciseFinished&'.api_get_cidreq(true, true, 'learnpath');

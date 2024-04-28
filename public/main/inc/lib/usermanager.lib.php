@@ -4559,11 +4559,11 @@ class UserManager
             if (1 == $num_rows) {
                 $row = Database::fetch_array($rs);
 
-                return $row['uid'];
+                return (int) $row['uid'];
             } else {
                 $my_num_rows = $num_rows;
 
-                return Database::result($rs, $my_num_rows - 1, 'uid');
+                return (int) Database::result($rs, $my_num_rows - 1, 'uid');
             }
         } elseif ($session > 0) {
             $sql = 'SELECT u.id as uid FROM '.$table_user.' u
@@ -4576,7 +4576,7 @@ class UserManager
             if (Database::num_rows($rs) > 0) {
                 $row = Database::fetch_assoc($rs);
 
-                return $row['uid'];
+                return (int) $row['uid'];
             }
         }
 

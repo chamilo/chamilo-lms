@@ -25136,3 +25136,6 @@ msgstr "hat folgende Kompetenzen erworben"
 
 msgid "Certificate Footer"
 msgstr ""
+
+msgid "No course session for this user"
+msgstr "Keine Sessions für diesen Benutzer"

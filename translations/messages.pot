@@ -27515,3 +27515,6 @@ msgstr ""
 
 msgid "Select date .."
 msgstr ""
+
+msgid "No course sessions for this user"
+msgstr ""

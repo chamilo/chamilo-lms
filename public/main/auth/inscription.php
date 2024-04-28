@@ -1157,7 +1157,7 @@ if ($form->validate()) {
     ];
 
     $sessionHandler->set('_user', $userData);
-
+    $sessionHandler->set('_locale_user', $userEntity->getLocale());
     $is_allowedCreateCourse = isset($values['status']) && 1 == $values['status'];
     $sessionHandler->set('is_allowedCreateCourse', $is_allowedCreateCourse);
 

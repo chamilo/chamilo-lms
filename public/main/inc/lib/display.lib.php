@@ -2458,25 +2458,23 @@ class Display
             });
         </script>';
             $html = '
-        <div class="mt-4 rounded-lg bg-gray-15 display-panel-collapse mr-4">
-            <div class="bg-gray-25 border border-gray-30" id="card_'.$idAccordion.'">
-                <h5>
-                    <a role="button"
-                        class="cursor-pointer p-2 block mdi mdi-chevron-down"
-                        data-toggle="collapse"
-                        data-target="#collapse_'.$idAccordion.'"
-                        aria-expanded="'.(($open) ? 'true' : 'false').'"
-                        aria-controls="collapse_'.$idAccordion.'"
-                    >
-                        '.$title.'
-                    </a>
-                </h5>
+        <div class="display-panel-collapse">
+            <div class="display-panel-collapse__header" id="card_'.$idAccordion.'">
+                <a role="button"
+                    class="mdi mdi-chevron-down"
+                    data-toggle="collapse"
+                    data-target="#collapse_'.$idAccordion.'"
+                    aria-expanded="'.(($open) ? 'true' : 'false').'"
+                    aria-controls="collapse_'.$idAccordion.'"
+                >
+                    '.$title.'
+                </a>
             </div>
             <div
                 id="collapse_'.$idAccordion.'"
-                class="px-4 border border-gray-30 bg-white collapse custom-collapse '.(($open) ? 'active' : '').'"
+                class="display-panel-collapse__collapsible '.(($open) ? 'active' : '').'"
             >
-                <div id="collapse_contant_'.$idAccordion.'"  class="card-body ">';
+                <div id="collapse_contant_'.$idAccordion.'">';
 
             $html .= $content;
             $html .= '</div></div></div>';

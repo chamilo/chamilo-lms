@@ -1,0 +1,28 @@
+.display-panel-collapse {
+  @apply rounded-lg border-gray-25;
+
+  &__header {
+    @apply relative
+      before:content-[""] before:absolute before:rounded-l-lg before:bg-secondary before:w-1 before:h-full before:-left-1;
+
+    a {
+      @apply cursor-pointer p-2 block bg-support-6 rounded-r-lg;
+
+      &[aria-expanded=true] {
+        @apply rounded-b-none;
+      }
+    }
+
+    ::before {
+      float: right;
+    }
+  }
+
+  &__collapsible {
+    @apply hidden p-3 rounded-b;
+
+    &.active {
+      @apply block shadow-lg;
+    }
+  }
+}

@@ -31,9 +31,9 @@ $allowedFields = [
 ];
 
 $allowedFieldsConfiguration = api_get_setting('registration.allow_fields_inscription', true);
-if (false !== $allowedFieldsConfiguration) {
-    $allowedFields = isset($allowedFieldsConfiguration['fields']) ? $allowedFieldsConfiguration['fields'] : [];
-    $allowedFields['extra_fields'] = isset($allowedFieldsConfiguration['extra_fields']) ? $allowedFieldsConfiguration['extra_fields'] : [];
+if ('false' !== $allowedFieldsConfiguration) {
+    $allowedFields = $allowedFieldsConfiguration['fields'] ?? [];
+    $allowedFields['extra_fields'] = $allowedFieldsConfiguration['extra_fields'] ?? [];
 }
 
 $pluginTccDirectoryPath = api_get_path(SYS_PLUGIN_PATH) . 'logintcc';

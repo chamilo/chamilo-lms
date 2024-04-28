@@ -18,7 +18,7 @@
           <i :class="`mdi mdi-flag-${languageInfo.code.toLowerCase()}`"></i>
         </template>
         <template v-else>
-          {{ languageInfo.code }}
+          {{ t(languageInfo.code) }}
         </template>
       </div>
 
@@ -72,8 +72,8 @@
             :key="item.variable"
           >
             <div v-if="item.value">
-              <dt v-if="item.variable !== 'langue_cible'">{{ item.label }}:</dt>
-              <dd v-if="item.variable !== 'langue_cible'">{{ item.value }}</dd>
+              <dt v-if="item.variable !== 'langue_cible'">{{ t(item.label) }}:</dt>
+              <dd v-if="item.variable !== 'langue_cible'">{{ t(item.value) }}</dd>
 
               <div
                 v-if="item.variable === 'langue_cible'"

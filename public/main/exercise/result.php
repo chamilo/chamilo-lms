@@ -25,6 +25,10 @@ if (in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
 
 $cid = isset($_REQUEST['cid']) ? (int) $_REQUEST['cid'] : null;
 $sid = isset($_REQUEST['sid']) ? (int) $_REQUEST['sid'] : null;
+// Hack for sid not being picked up by CidReqListener (cid isn't either)
+if (!empty($sid)) {
+    Session::write('sid', $sid);
+}
 
 // A notice for unauthorized people.
 api_protect_course_script($show_headers, false, '', $cid);
@@ -47,7 +51,8 @@ $exercise_id = $track_exercise_info['exe_exo_id'];
 $student_id = (int) $track_exercise_info['exe_user_id'];
 $current_user_id = api_get_user_id();
 
-$objExercise = new Exercise();
+// Pass cid manually to avoid context issues with cid not being picked up by CidReqListener
+$objExercise = new Exercise($cid);
 if (!empty($exercise_id)) {
     $objExercise->read($exercise_id);
 }

@@ -670,4 +670,12 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     {
         return $this->setTitle($name);
     }
+
+    /**
+     * @return Collection<int, TrackEExercise>
+     */
+    public function getAttempts(): Collection
+    {
+        return $this->attempts;
+    }
 }

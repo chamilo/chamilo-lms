@@ -10,18 +10,15 @@ use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\Page;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\RequestStack;
-
-// use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
-// use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 
 final class PageExtension implements QueryCollectionExtensionInterface // , QueryItemExtensionInterface
 {
     public function __construct(
         private readonly Security $security,
-        private readonly RequestStack $requestStack
+        private readonly AccessUrlHelper $accessUrlHelper,
     ) {}
 
     public function applyToCollection(
@@ -34,17 +31,6 @@ final class PageExtension implements QueryCollectionExtensionInterface // , Quer
         $this->addWhere($queryBuilder, $resourceClass);
     }
 
-    public function applyToItem(
-        QueryBuilder $queryBuilder,
-        QueryNameGeneratorInterface $queryNameGenerator,
-        string $resourceClass,
-        array $identifiers,
-        ?string $operationName = null,
-        array $context = []
-    ): void {
-        // $this->addWhere($queryBuilder, $resourceClass);
-    }
-
     private function addWhere(QueryBuilder $qb, string $resourceClass): void
     {
         if (Page::class !== $resourceClass) {
@@ -53,13 +39,12 @@ final class PageExtension implements QueryCollectionExtensionInterface // , Quer
 
         $alias = $qb->getRootAliases()[0];
 
-        $request = $this->requestStack->getCurrentRequest();
-        $urlId = $request->getSession()->get('access_url_id');
+        $url = $this->accessUrlHelper->getCurrent();
 
         // Url filter by default.
         $qb
             ->andWhere("$alias.url = :url")
-            ->setParameter('url', $urlId)
+            ->setParameter('url', $url->getId())
         ;
 
         if (!$this->security->isGranted('ROLE_ADMIN')) {

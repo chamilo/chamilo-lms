@@ -32,7 +32,10 @@ pageService
   <div v-if="page">
     <SectionHeader :title="page.title" />
 
-    <div v-html="page.content"></div>
+    <div
+      class="wysiwyg"
+      v-html="page.content"
+    ></div>
   </div>
   <Loading :visible="isLoading" />
 </template>

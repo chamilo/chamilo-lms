@@ -110,6 +110,14 @@ class CreateDefaultPages
             $this->pageCategoryRepository->update($usersAdminBlock);
         }
 
+        $publicCategory = (new PageCategory())
+            ->setTitle('public')
+            ->setType('grid')
+            ->setCreator($user)
+        ;
+
+        $this->pageCategoryRepository->update($publicCategory);
+
         return true;
     }
 

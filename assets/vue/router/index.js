@@ -10,6 +10,7 @@ import userRelUserRoutes from "./userreluser"
 import calendarEventRoutes from "./ccalendarevent"
 import toolIntroRoutes from "./ctoolintro"
 import pageRoutes from "./page"
+import publicPageRoutes from "./publicPage"
 import socialNetworkRoutes from "./social"
 import termsRoutes from "./terms"
 import fileManagerRoutes from "./filemanager"
@@ -162,6 +163,7 @@ const router = createRouter({
     calendarEventRoutes,
     toolIntroRoutes,
     pageRoutes,
+    publicPageRoutes,
   ],
 })
 

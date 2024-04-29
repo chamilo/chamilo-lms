@@ -30,6 +30,7 @@ class IndexController extends BaseController
     #[Route('/account/home', name: 'chamilo_core_account_home', options: ['expose' => true])]
     #[Route('/social', name: 'chamilo_core_socialnetwork', options: ['expose' => true])]
     #[Route('/admin', name: 'admin', options: ['expose' => true])]
+    #[Route('/p/{slug}', name: 'public_page')]
     public function index(): Response
     {
         return $this->render('@ChamiloCore/Index/vue.html.twig');

@@ -46,6 +46,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         'url' => 'exact',
         'category' => 'exact',
         'category.title' => 'partial',
+        'slug' => 'exact',
     ]
 )]
 #[ApiFilter(filterClass: OrderFilter::class, properties: ['title'])]

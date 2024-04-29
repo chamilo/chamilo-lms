@@ -1,10 +1,5 @@
 <template>
-  <div class="flex gap-2">
-    <h2
-      v-t="'Pages'"
-      class="mr-auto"
-    />
-
+  <SectionHeader :title="t('Pages')">
     <BaseButton
       v-if="menuItems.length"
       icon="dots-vertical"
@@ -20,9 +15,7 @@
       ref="menu"
       :model="menuItems"
     />
-  </div>
-
-  <hr />
+  </SectionHeader>
 
   <router-view />
 </template>
@@ -32,8 +25,11 @@ import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseMenu from "../basecomponents/BaseMenu.vue"
 import { provide, ref, watch } from "vue"
 import { useRoute } from "vue-router"
+import { useI18n } from "vue-i18n"
+import SectionHeader from "../layout/SectionHeader.vue"
 
 const route = useRoute()
+const { t } = useI18n()
 
 const menu = ref(null)
 

@@ -1,5 +1,5 @@
 .display-panel-collapse {
-  @apply rounded-lg border-gray-25;
+  @apply rounded-lg border-gray-25 drop-shadow-lg bg-white;
 
   &__header {
     @apply relative
@@ -12,17 +12,13 @@
         @apply rounded-b-none;
       }
     }
-
-    ::before {
-      float: right;
-    }
   }
 
   &__collapsible {
     @apply hidden p-3 rounded-b;
 
     &.active {
-      @apply block shadow-lg;
+      @apply block;
     }
   }
 }

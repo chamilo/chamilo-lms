@@ -43,6 +43,7 @@
       v-model="v$.item.content.$model"
       editor-id="item_content"
       required
+      :title="t('Content')"
     />
 
     <div class="text-right">

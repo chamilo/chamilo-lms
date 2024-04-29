@@ -149,4 +149,9 @@ class ResourceComment
 
         return $this;
     }
+
+    public function getRoot(): int
+    {
+        return $this->root;
+    }
 }

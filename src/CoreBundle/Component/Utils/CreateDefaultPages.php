@@ -101,7 +101,7 @@ class CreateDefaultPages
 
         // Categories for extra content in admin blocks
 
-        foreach ($this->getCategoriesForAdminBlocks() as $nameBlock) {
+        foreach (self::getCategoriesForAdminBlocks() as $nameBlock) {
             $usersAdminBlock = (new PageCategory())
                 ->setTitle($nameBlock)
                 ->setType('grid')
@@ -121,7 +121,7 @@ class CreateDefaultPages
         return true;
     }
 
-    public function getCategoriesForAdminBlocks()
+    public static function getCategoriesForAdminBlocks(): array
     {
         return [
             'block-admin-users',

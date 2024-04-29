@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\DataProvider\Extension;
 use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
+use Chamilo\CoreBundle\Component\Utils\CreateDefaultPages;
 use Chamilo\CoreBundle\Entity\Page;
 use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Doctrine\ORM\QueryBuilder;
@@ -28,27 +29,51 @@ final class PageExtension implements QueryCollectionExtensionInterface // , Quer
         ?Operation $operation = null,
         array $context = []
     ): void {
-        $this->addWhere($queryBuilder, $resourceClass);
-    }
-
-    private function addWhere(QueryBuilder $qb, string $resourceClass): void
-    {
         if (Page::class !== $resourceClass) {
             return;
         }
 
-        $alias = $qb->getRootAliases()[0];
+        $alias = $queryBuilder->getRootAliases()[0];
 
         $url = $this->accessUrlHelper->getCurrent();
 
         // Url filter by default.
-        $qb
+        $queryBuilder
             ->andWhere("$alias.url = :url")
             ->setParameter('url', $url->getId())
+            ->innerJoin(
+                "$alias.category",
+                'category',
+            )
         ;
 
         if (!$this->security->isGranted('ROLE_ADMIN')) {
-            $qb->andWhere("$alias.enabled = 1");
+            $queryBuilder->andWhere("$alias.enabled = 1")
+                ->andWhere(
+                    $queryBuilder->expr()->notIn(
+                        'category.title',
+                        CreateDefaultPages::getCategoriesForAdminBlocks()
+                    )
+                )
+            ;
+        }
+
+        if (!$this->security->isGranted('IS_AUTHENTICATED')) {
+            $queryBuilder
+                ->andWhere(
+                    $queryBuilder->expr()->in('category.title', ':anon_categories')
+                )
+                ->setParameter(
+                    'anon_categories',
+                    [
+                        'faq',
+                        'demo',
+                        'home',
+                        'public',
+                        'footer_public',
+                    ]
+                )
+            ;
         }
     }
 }

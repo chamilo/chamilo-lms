@@ -50,7 +50,7 @@ final class Version20201216132000 extends AbstractMigrationChamilo
             }
 
             // Execute the update query for item_root
-            $this->connection->executeUpdate('UPDATE c_lp_item SET item_root = :rootId WHERE lp_id = :lpId', [
+            $this->connection->executeStatement('UPDATE c_lp_item SET item_root = :rootId WHERE lp_id = :lpId', [
                 'rootId' => $rootItem->getIid(),
                 'lpId' => $lpId,
             ]);

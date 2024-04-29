@@ -5,8 +5,8 @@ import baseService from "./baseService"
  * @param {string} slug
  * @returns {Promise<Object|null>}
  */
-async function getBySlug(slug) {
-  const { items } = await baseService.getCollection("/api/pages", { slug })
+async function getPublicPageBySlug(slug) {
+  const { items } = await baseService.getCollection("/api/pages", { slug, "category.title": "public" })
 
   if (items.length) {
     return items[0]
@@ -16,7 +16,7 @@ async function getBySlug(slug) {
 }
 
 export default {
-  getBySlug,
+  getPublicPageBySlug,
 
   /**
    * @param {Object} params

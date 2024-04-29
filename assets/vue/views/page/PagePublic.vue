@@ -15,7 +15,7 @@ const isLoading = ref(true)
 const page = ref()
 
 pageService
-  .getBySlug(route.params.slug)
+  .getPublicPageBySlug(route.params.slug)
   .then((result) => {
     if (result) {
       page.value = result

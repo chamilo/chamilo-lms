@@ -1009,8 +1009,9 @@ EOT;
         return true;
     }
 
-    public function addStartPanel(string $id, string $title, bool $open = false, $icon = null)
+    public function addStartPanel(string $id, string $title, bool $open = false, $icon = null): void
     {
+        // Same code as in Display::panelCollapse
         $parent = null;
         $javascript = '
         <script>
@@ -1022,6 +1023,9 @@ EOT;
                     button.addEventListener("click", function() {
                         menus.forEach((menu, menuIndex) => {
                             if (index === menuIndex) {
+                                button.setAttribute("aria-expanded", "true" === button.getAttribute("aria-expanded") ? "false" : "true")
+                                button.classList.toggle("mdi-chevron-down")
+                                button.classList.toggle("mdi-chevron-up")
                                 menu.classList.toggle("active");
                             } else {
                                 menu.classList.remove("active");
@@ -1039,30 +1043,28 @@ EOT;
             $htmlIcon = Display::getMdiIcon($icon, 'ch-tool-icon', 'float:left;', ICON_SIZE_SMALL);
         }
         $html = '
-        <div class="mt-4 rounded-lg">
-            <div class="px-4 bg-gray-100 border border-gray-50" id="card_'.$id.'">
-                <h5>
-                    <a role="button"
-                        class="block cursor-pointer"
-                        data-toggle="collapse"
-                        data-target="#collapse_'.$id.'"
-                        aria-expanded="'.(($open) ? 'true' : 'false').'"
-                        aria-controls="collapse_'.$id.'"
-                    >
-                        '.$htmlIcon.'&nbsp;'.$title.'
-                    </a>
-                </h5>
+        <div class="display-panel-collapse field">
+            <div class="display-panel-collapse__header" id="card_'.$id.'">
+                <a role="button"
+                    class="mdi mdi-chevron-down"
+                    data-toggle="collapse"
+                    data-target="#collapse_'.$id.'"
+                    aria-expanded="'.(($open) ? 'true' : 'false').'"
+                    aria-controls="collapse_'.$id.'"
+                >
+                    '.$htmlIcon.'&nbsp;'.$title.'
+                </a>
             </div>
             <div
                 id="collapse_'.$id.'"
-                class="px-4 border border-gray-50 bg-white collapse custom-collapse '.(($open) ? 'show' : '').'"
+                class="display-panel-collapse__collapsible '.(($open) ? 'active' : '').'"
             >
                 <div id="collapse_contant_'.$id.'"  class="card-body ">';
 
         $this->addHtml($html);
     }
 
-    public function addEndPanel()
+    public function addEndPanel(): void
     {
         $this->addHtml('</div></div></div>');
     }

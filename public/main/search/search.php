@@ -220,11 +220,11 @@ if (!empty($items)) {
     }
 }
 
-if (isset($defaults['extra_access_start_date']) && isset($defaults['extra_access_start_date'][0])) {
+if (isset($defaults['extra_access_start_date'][0])) {
     $defaults['extra_access_start_date'] = $defaults['extra_access_start_date'][0];
 }
 
-if (isset($defaults['extra_access_end_date']) && isset($defaults['extra_access_end_date'][0])) {
+if (isset($defaults['extra_access_end_date'][0])) {
     $defaults['extra_access_end_date'] = $defaults['extra_access_end_date'][0];
 }
 
@@ -304,12 +304,14 @@ $extra = $extraFieldSession->addElements(
     $adminPermissions
 );
 
-$userForm->addRule(
-    ['extra_access_start_date', 'extra_access_end_date'],
-    get_lang('StartDateMustBeBeforeTheEndDate'),
-    'compare_datetime_text',
-    '< allow_empty'
-);
+if ($userForm->hasElement('extra_access_start_date')) {
+    $userForm->addRule(
+        ['extra_access_start_date', 'extra_access_end_date'],
+        get_lang('StartDateMustBeBeforeTheEndDate'),
+        'compare_datetime_text',
+        '< allow_empty'
+    );
+}
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
@@ -366,12 +368,14 @@ $extra = $extraField->addElements(
     $adminPermissions
 );
 
-$userForm->addRule(
-    ['extra_datedebutstage', 'extra_datefinstage'],
-    get_lang('StartDateMustBeBeforeTheEndDate'),
-    'compare_datetime_text',
-    '< allow_empty'
-);
+if ($userForm->hasElement('extra_datedebutstage')) {
+    $userForm->addRule(
+        ['extra_datedebutstage', 'extra_datefinstage'],
+        get_lang('StartDateMustBeBeforeTheEndDate'),
+        'compare_datetime_text',
+        '< allow_empty'
+    );
+}
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
@@ -568,6 +572,7 @@ $(function () {
 </script>';
 
 $userForm->addButtonSave(get_lang('Send'));
+$userForm->addHtml('</div>');
 
 $userForm->setDefaults($defaults);
 

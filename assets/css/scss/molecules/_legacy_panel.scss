@@ -6,10 +6,20 @@
       before:content-[""] before:absolute before:rounded-l-lg before:bg-secondary before:w-1 before:h-full before:-left-1;
 
     a {
-      @apply cursor-pointer p-2 block bg-support-6 rounded-r-lg;
+      @apply cursor-pointer p-2 block bg-support-6 rounded-r-lg border-y border-y-gray-25 border-r border-r-gray-25;
 
       &[aria-expanded=true] {
         @apply rounded-b-none;
+      }
+
+      &::before {
+        @apply mr-1;
+
+        float: left;
+      }
+
+      .ch-tool-icon.mdi {
+        @apply mr-1;
       }
     }
   }

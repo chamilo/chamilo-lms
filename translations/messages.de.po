@@ -24091,7 +24091,7 @@ msgid "If your quiz have hotspot questions included, you should select the image
 msgstr ""
 
 msgid "Back to the attempt list"
-msgstr ""
+msgstr "Zurück zur Versuchsliste"
 
 msgid "Show the result to the learner: Show the score, the learner's choice and his feedback on each attempt, add the correct answer and his feedback when the chosen limit of attempts is reached."
 msgstr ""

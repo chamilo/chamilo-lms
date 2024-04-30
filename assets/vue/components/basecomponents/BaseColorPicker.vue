@@ -38,7 +38,7 @@
 
 <script setup>
 import Color from "colorjs.io"
-import { computed, onMounted, ref } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import BaseInputText from "./BaseInputText.vue"
 
@@ -94,6 +94,13 @@ function inputColorPicked(newHexColor) {
     inputHexError.value = t("Invalid format")
   }
 }
+
+watch(
+  () => props.modelValue,
+  () => {
+    inputText.value = hexColor.value
+  },
+)
 
 onMounted(() => {
   inputText.value = hexColor.value

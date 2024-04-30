@@ -11,6 +11,7 @@
  * - Check the results in one index.php file
  * - Delete this file
  */
+exit;
 if (PHP_SAPI != 'cli') {
     die('This script can only be launched from the command line');
 }

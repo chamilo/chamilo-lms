@@ -3,11 +3,11 @@
 
 exit;
 
-require_once __DIR__ . '/../../main/inc/global.inc.php';
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
-$sql = 'SELECT iid, c_id, question 
-        FROM c_quiz_question 
-        WHERE iid not in (SELECT question_id from c_quiz_rel_question) 
+$sql = 'SELECT iid, c_id, question
+        FROM c_quiz_question
+        WHERE iid not in (SELECT question_id from c_quiz_rel_question)
         ORDER BY iid';
 
 $result = Database::query($sql);

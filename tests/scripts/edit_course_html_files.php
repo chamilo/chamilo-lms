@@ -11,7 +11,8 @@
  * need to move it to an executable folder and change the first require.
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-require __DIR__.'/../../main/inc/global.inc.php';
+exit;
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 api_protect_admin_script();
 
 // Search string

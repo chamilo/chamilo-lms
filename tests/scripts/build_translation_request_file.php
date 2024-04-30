@@ -7,8 +7,8 @@
 /**
  * Includes and declarations
  */
-die();
-require_once '../../main/inc/global.inc.php';
+exit;
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 $path = api_get_path(SYS_LANG_PATH);
 $referenceLanguage = 'english';
 $language = 'german';

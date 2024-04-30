@@ -9,7 +9,7 @@
 
 exit;
 
-require_once '../../main/inc/global.inc.php';
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 /** @var The course id $courseId */
 $courseId = 0;

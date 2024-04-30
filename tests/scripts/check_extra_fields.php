@@ -9,7 +9,7 @@
 
 exit;
 
-require_once __DIR__.'/../../main/inc/global.inc.php';
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 $em = Database::getManager();
 $repo = $em->getRepository('ChamiloCoreBundle:ExtraField');

@@ -3,9 +3,9 @@
  * This script insert session extra fields
  */
 
-//exit;
+exit;
 
-require_once '../../main/inc/global.inc.php';
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 api_protect_admin_script();
 

@@ -11,12 +11,12 @@
  * @author Percy Santiago <psantiago@icpna.edu.pe>
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-exit(); //remove this line to execute from the command line
+exit; //remove this line to execute from the command line
 if (PHP_SAPI !== 'cli') {
     die('This script can only be executed from the command line');
 }
 
-require __DIR__.'/../../main/inc/conf/configuration.php';
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 // Dates
 $expiryDate = '2015-06-01'; //session start date must be < to be considered
@@ -51,8 +51,8 @@ echo "[".time()."] Found $countSessions sessions between $fromDate and $expiryDa
 
 while ($session = mysql_fetch_assoc($res)) {
     $sql2 = "SELECT c.id AS cid, c.code as ccode, c.directory as cdir
-            FROM course c, session_rel_course s 
-            WHERE s.id_session = ".$session['id']." 
+            FROM course c, session_rel_course s
+            WHERE s.id_session = ".$session['id']."
             AND s.course_code = c.code";
     $res2 = mysql_query($sql2, $conexion); //Database::query($sql2);
 

@@ -7,7 +7,7 @@
 
 exit;
 
-require_once '../../main/inc/global.inc.php';
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 if (PHP_SAPI !== 'cli') {
     die('This script can only be executed from the command line');
@@ -45,7 +45,7 @@ if (!empty($items)) {
             echo('rm -rf '.__DIR__.'/../../archive/'.$item['directory'].'_*').PHP_EOL;
             exec('rm -rf '.__DIR__.'/../../archive/'.$item['directory'].'_*');
             // The normal procedure also created a database dump, but it is
-            // stored in the course folder, so no issue there...       
+            // stored in the course folder, so no issue there...
             if (substr($size, 3, 1) == 'K') {
                 $total += substr($size, 0, 3);
             }

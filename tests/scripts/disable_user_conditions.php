@@ -16,6 +16,7 @@
  *   than 6 months then deactivate his account and send an email to the learner.
  * */
 
+exit;
 require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 $senderId = api_get_setting('platform.disable_user_conditions_sender_id');

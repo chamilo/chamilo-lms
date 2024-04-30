@@ -19,7 +19,7 @@
 
 exit;
 
-require_once __DIR__.'/../../main/inc/global.inc.php';
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 /*$test = '
 https://example.fr/../../../../../../../LOLOS/CHAMILO/document/Chamilo/Fonctionalite_de_groupe.html

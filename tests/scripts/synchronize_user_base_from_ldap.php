@@ -7,7 +7,7 @@ User account synchronisation from LDAP
 
 This script
 creates new user accounts found in the LDAP directory (if multiURL is enable, it creates the user on the URL for which the LDAP has been configured)
-disables user accounts not found in the LDAP directory (it disbales the user for all URLs) 
+disables user accounts not found in the LDAP directory (it disbales the user for all URLs)
 or delete the user depending on the variable deleteUsersNotFoundInLDAP (only if the user has auth_source === extldap)
 updates existing user accounts found in the LDAP directory, re-enabling them if disabled (it applies for all URLs) only if option reenableUsersFoundInLDAP is set to true.
 anonymizes user accounts disabled for more than 3 years (applies for all URLs) only if the variable is set to true (by default).
@@ -25,7 +25,7 @@ username field is used to identify and match LDAP and Chamilo accounts together.
 */
 exit;
 // Change this to the absolute path to chamilo root folder if you move the script out of tests/scripts
-$chamiloRoot = __DIR__.'/../..';
+$chamiloRoot = __DIR__.'/../../public';
 
 // Set to true in order to get a trace of changes made by this script
 $debug = false;
@@ -43,7 +43,7 @@ $reenableUsersFoundInLDAP = false;
 // Anonymize user accounts disabled for more than 3 years
 $anonymizeUserAccountsDisbaledFor3Years = false;
 
-// List of username of accounts that should not be disabled or deleted if not present in LDAP 
+// List of username of accounts that should not be disabled or deleted if not present in LDAP
 // For exemple the first admin and the anonymous user that has no username ('')
 //$usernameListNotToTouchEvenIfNotInLDAP = ['admin','','test'];
 
@@ -101,7 +101,7 @@ if (api_is_multiple_url_enabled()) {
     $multipleUrlLDAPConfig = true;
     if (!empty($extldap_config) && array_key_exists('host', $extldap_config) && !empty($extldap_config['host'])) {
         $multipleUrlLDAPConfig = false;
-    }    
+    }
 }
 
 if (!$multipleUrlLDAPConfig) {
@@ -201,7 +201,7 @@ foreach ($accessUrls as $accessUrl) {
             LDAP_OPT_PROTOCOL_VERSION,
             array_key_exists('protocol_version', $extldap_config[$accessUrlId]) ? $extldap_config[$accessUrlId]['protocol_version'] : 2
         );
-    
+
         ldap_set_option(
             $ldap,
             LDAP_OPT_REFERRALS,
@@ -284,7 +284,7 @@ foreach ($accessUrls as $accessUrl) {
             }
             $entry = ldap_next_entry($ldap, $entry);
         }
-    
+
         ldap_close($ldap);
         if ($debug) {
             echo "ldapUsers = " . print_r($ldapUsers,1) . "\n";
@@ -413,7 +413,7 @@ foreach (array_diff(array_keys($dbUsers), array_keys($allLdapUsers)) as $usernam
             }
             if ($debug) {
                 echo 'Deleted user ' . $usernameToDisable . "\n";
-            } 
+            }
         } else {
             if (!$test) {
                 if ($user->isActive()) {
@@ -435,7 +435,7 @@ foreach (array_diff(array_keys($dbUsers), array_keys($allLdapUsers)) as $usernam
             if ($debug) {
                 echo 'Disabled ' . $user->getUsername() . "\n";
             }
-        }    
+        }
     }
 }
 if (!$test) {

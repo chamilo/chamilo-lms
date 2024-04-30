@@ -19,11 +19,11 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 echo 'First check if table "classification__category" has a default category; if not then run: <br />';
 echo 'bin/console sonata:media:fix-media-context';
 echo 'change course id in the query';
-//exit;
+exit;
 // For tests to clean all resource stuff:
 //
 
-require_once __DIR__.'/../../main/inc/global.inc.php';
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 $sql = "SELECT
           d.id,

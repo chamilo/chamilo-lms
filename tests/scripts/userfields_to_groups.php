@@ -3,10 +3,11 @@
  * Move user fields "ruc" and "razon_social" to (social) groups (create groups)
  * and assign the related users to those groups.
  */
+exit;
 if (PHP_SAPI != 'cli') {
     die('This script can only be launched from the command line');
 }
-require __DIR__ . '/../../main/inc/global.inc.php';
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 // We assume all these fields represent the same value, so they are on a 1-1
 // relationship.

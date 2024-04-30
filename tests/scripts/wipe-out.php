@@ -14,7 +14,7 @@
 /**
  * Security checks
  */
-
+exit;
 if (PHP_SAPI != 'cli') {
     echo "For security reasons, this script can only be launched from the command line, sorry.";
     exit;
@@ -43,7 +43,7 @@ ini_set('track_errors',1);
 $_SERVER['SERVER_NAME'] = '';
 $_SERVER['HTTP_HOST'] = 'localhost';
 $root = __DIR__.'/../';
-require $root.'main/inc/global.inc.php';
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 $global_db = Database::get_main_database();
 $webpath = api_get_path(WEB_PATH);

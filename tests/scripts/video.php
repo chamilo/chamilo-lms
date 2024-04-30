@@ -7,7 +7,7 @@
  * @todo Add security filtering for filenames
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-exit();
+exit;
 ini_set('memory_limit',0);
 ini_set('max_execution_time',0);
 ini_set('upload_max_filesize',0);

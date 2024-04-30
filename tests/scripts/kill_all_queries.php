@@ -10,7 +10,7 @@
  * should be able to quickly restart your database.
  */
 exit;
-require_once '../../main/inc/global.inc.php';
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 $result = Database::query("SHOW FULL PROCESSLIST");
 while ($row=Database::fetch_array($result)) {
     $process_id=$row["Id"];

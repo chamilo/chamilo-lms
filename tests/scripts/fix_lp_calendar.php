@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
-
-require __DIR__ . '/../../main/inc/global.inc.php';
+exit;
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 $extraField = new ExtraField('lp_item');
 $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable('calendar');

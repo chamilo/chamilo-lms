@@ -28,7 +28,7 @@ if (!empty($argv[1])) {
     $language = $argv[1];
 }
 $_GET['language'] = $language;
-@require __DIR__ . '/../../main/inc/global.inc.php';
+@require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 // Categories, in order of appearance in the Chamilo settings page
 // Check the end of main/admin/settings.php for the initial list

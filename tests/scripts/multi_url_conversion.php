@@ -7,7 +7,7 @@
  * referencing ID 1 to ID 2.
  */
 die();
-require __DIR__.'/../../main/inc/global.inc.php';
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 $tableAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
 $tableUserRelCourseVote = Database::get_main_table(TABLE_MAIN_USER_REL_COURSE_VOTE);

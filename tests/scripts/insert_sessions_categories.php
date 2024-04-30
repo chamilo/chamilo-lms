@@ -3,7 +3,8 @@
 /**
  * This script generates four session categories.
  */
-require_once '../../main/inc/global.inc.php';
+exit;
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 api_protect_admin_script();
 
 $accessUrlId = api_get_current_access_url_id();

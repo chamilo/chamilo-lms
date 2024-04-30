@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * Notification class
  * This class provides methods for the Notification management.
@@ -58,20 +60,29 @@ class Notification extends Model
     public function __construct()
     {
         $this->table = Database::get_main_table(TABLE_NOTIFICATION);
-        // Default no-reply email
-        $this->adminEmail = api_get_setting('noreply_email_address');
-        $this->adminName = api_get_setting('siteName');
-        $this->titlePrefix = '['.api_get_setting('siteName').'] ';
 
-        // If no-reply email doesn't exist or is something '@example.com', use the admin name/email
-        if (empty($this->adminEmail) || substr($this->adminEmail, -12) === '@example.com') {
-            $this->adminEmail = api_get_setting('emailAdministrator');
-            $this->adminName = api_get_person_name(
-                api_get_setting('administratorName'),
-                api_get_setting('administratorSurname'),
-                null,
-                PERSON_NAME_EMAIL_ADDRESS
-            );
+        if ($smtpFromEmail = Container::getParameter('smtp_from_email')) {
+            $this->adminEmail = $smtpFromEmail;
+
+            if ($smtpFromName = Container::getParameter('smtp_from_name')) {
+                $this->adminName = $smtpFromName;
+            }
+        } else {
+            // Default no-reply email
+            $this->adminEmail = api_get_setting('noreply_email_address');
+            $this->adminName = api_get_setting('siteName');
+            $this->titlePrefix = '['.api_get_setting('siteName').'] ';
+
+            // If no-reply email doesn't exist use the admin name/email
+            if (empty($this->adminEmail)) {
+                $this->adminEmail = api_get_setting('emailAdministrator');
+                $this->adminName = api_get_person_name(
+                    api_get_setting('administratorName'),
+                    api_get_setting('administratorSurname'),
+                    null,
+                    PERSON_NAME_EMAIL_ADDRESS
+                );
+            }
         }
     }
 

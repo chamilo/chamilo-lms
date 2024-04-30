@@ -30,7 +30,11 @@
       />
     </div>
 
-    <BaseTinyEditor v-model="item.content" editor-id="message" required />
+    <BaseTinyEditor
+      v-model="item.content"
+      editor-id="message"
+      required
+    />
 
     <BaseButton
       :label="t('Send')"
@@ -76,11 +80,15 @@ onMounted(async () => {
   const response = await store.dispatch("message/load", id)
 
   item.value = await response
-  const originalUserInfo = await store.dispatch("user/load", '/api/users/' + item.value.sender.id)
+  const originalUserInfo = await store.dispatch("user/load", "/api/users/" + item.value.sender.id)
   const originalSenderName = originalUserInfo.fullName
   const originalSenderEmail = originalUserInfo.email
   const formattedDate = formatDateTimeFromISO(item.value.sendDate)
-  const translatedHeader = t('Email reply header', [formattedDate, originalSenderName, `<a href="mailto:${originalSenderEmail}">${originalSenderEmail}</a>` ])
+  const translatedHeader = t("Email reply header", [
+    formattedDate,
+    originalSenderName,
+    `<a href="mailto:${originalSenderEmail}">${originalSenderEmail}</a>`,
+  ])
   delete item.value["@id"]
   delete item.value["id"]
   delete item.value["firstReceiver"]
@@ -164,10 +172,10 @@ const onReplyMessageForm = async () => {
   try {
     await store.dispatch("message/create", createForm.value.v$.item.$model)
 
-    notification.showSuccessNotification("Message sent");
+    notification.showSuccessNotification("Message sent")
 
     await router.push({
-      name: "MessageList"
+      name: "MessageList",
     })
   } catch (e) {
     notification.showErrorNotification(e)

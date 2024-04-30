@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
-
-require __DIR__ . '/../../main/inc/global.inc.php';
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 $extraField = new ExtraField('lp_item');
 $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable('calendar');

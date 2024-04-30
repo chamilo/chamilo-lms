@@ -11,13 +11,11 @@
  * Launch from the command line.
  * Usage: php delete_old_courses.php
  */
-
-exit;
-
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
 $creation = '2014-01-01';
 $access = '2014-07-01';
 
-require_once '../../main/inc/global.inc.php';
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 if (PHP_SAPI !== 'cli') {
     die('This script can only be executed from the command line');
@@ -51,7 +49,7 @@ if (!empty($items)) {
             echo('rm -rf '.__DIR__.'/../../archive/'.$item['directory'].'_*').PHP_EOL;
             exec('rm -rf '.__DIR__.'/../../archive/'.$item['directory'].'_*');
             // The normal procedure also created a database dump, but it is
-            // stored in the course folder, so no issue there...       
+            // stored in the course folder, so no issue there...
             if (substr($size, 0, 4) == '160K') {
                 $total += 160;
             }

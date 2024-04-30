@@ -12,9 +12,7 @@
 /**
  * Init
  */
-// comment exit statement before executing
-exit;
-
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
 /* Usage doc */
 if ($argc <= 1) {
     echo 'Usage: php settings2csv.php [language]'.PHP_EOL;
@@ -28,7 +26,7 @@ if (!empty($argv[1])) {
     $language = $argv[1];
 }
 $_GET['language'] = $language;
-@require __DIR__ . '/../../main/inc/global.inc.php';
+@require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 // Categories, in order of appearance in the Chamilo settings page
 // Check the end of main/admin/settings.php for the initial list

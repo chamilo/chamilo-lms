@@ -3,10 +3,8 @@
 /**
  * Remove the current_settings duplicates from migration 1.9.x to 1.10.x
  */
-
-//exit;
-
-require_once __DIR__.'/../../main/inc/global.inc.php';
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 //api_protect_admin_script();
 

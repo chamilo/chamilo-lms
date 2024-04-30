@@ -4,9 +4,8 @@
  * Fix failed migration 1.9.x to 1.10.0
  * Note: You need execute the ./fix_duplicate_settings.php to remove duplicated settings from failed migration
  */
-exit;
-
-require_once __DIR__.'/../../main/inc/global.inc.php';
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 api_protect_admin_script();
 

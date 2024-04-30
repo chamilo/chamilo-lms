@@ -16,10 +16,8 @@
  * exercises (question, answer) and course description in the database.
  *
  */
-
-exit;
-
-require_once __DIR__.'/../../main/inc/global.inc.php';
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 /*$test = '
 https://example.fr/../../../../../../../LOLOS/CHAMILO/document/Chamilo/Fonctionalite_de_groupe.html

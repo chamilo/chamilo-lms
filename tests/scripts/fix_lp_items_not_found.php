@@ -6,10 +6,8 @@
  * It's useful when the path field in c_lp_item table has a value like 'document/item_file.html'
  * Then this values is updated to 'document/learning_path/LP_DIRECTORY/item_file.html
  */
-
-exit;
-
-require_once '../../main/inc/global.inc.php';
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 /** @var The course id $courseId */
 $courseId = 0;

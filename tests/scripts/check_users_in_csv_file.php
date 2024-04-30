@@ -1,9 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
-
-exit;
-
-require_once __DIR__.'/../inc/global.inc.php';
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 api_protect_admin_script();
 
 $file = '';

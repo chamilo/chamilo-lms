@@ -3,10 +3,11 @@
 /**
  * Temporary fix to set user.user_id to the same as user.id
  */
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
 if (PHP_SAPI != 'cli') {
     die('This script can only be executed from the command line');
 }
-require __DIR__.'/../../main/inc/conf/configuration.php';
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 $dbh = mysql_connect(
     $_configuration['db_host'],

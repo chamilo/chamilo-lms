@@ -21,10 +21,11 @@
 /**
  * Context initialization
  */
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
 if (PHP_SAPI != 'cli') {
     die('This script can only be executed from the command line');
 }
-require __DIR__.'/../../main/inc/global.inc.php';
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 /**
  * Old database configuration
@@ -83,7 +84,7 @@ foreach ($oldDBH->query($sqlOld) as $oldRow) {
     $sqlNew = "SELECT iid, to_group_id FROM c_item_property
         WHERE c_id = ".$oldRow['c_id'].
         $sessionSubSelect.
-        " AND tool = '".$oldRow['tool']."' 
+        " AND tool = '".$oldRow['tool']."'
         AND ref = ".$oldRow['ref'];
 
     //echo trim(str_replace("\n", '', $sqlNew)).PHP_EOL;

@@ -9,8 +9,8 @@
  * In this case, disable the exit(); line below, run this script and then you
  * should be able to quickly restart your database.
  */
-exit;
-require_once '../../main/inc/global.inc.php';
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 $result = Database::query("SHOW FULL PROCESSLIST");
 while ($row=Database::fetch_array($result)) {
     $process_id=$row["Id"];

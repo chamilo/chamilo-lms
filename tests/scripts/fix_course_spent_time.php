@@ -6,9 +6,8 @@
  * the records in track_e_course_access that is used to calculate the
  * total course time.
  */
-exit;
-
-require_once __DIR__.'/../../main/inc/global.inc.php';
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 $maxSeconds = 10 * 60 * 60; // Check records higher than X hours
 $addSecondsToLogin = 2 * 60 * 60; // Update this abusive records with X hours
@@ -17,14 +16,14 @@ $sendMessage = true;
 $userId = 1; // User id that will receive a report
 $update = false; // Update and fix the record
 
-$sql = "SELECT 
-    course_access_id, 
-    counter, 
-    UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date) diff, 
-    login_course_date, 
-    logout_course_date 
-    FROM track_e_course_access 
-    WHERE UNIX_TIMESTAMP(logout_course_date) > UNIX_TIMESTAMP(login_course_date) 
+$sql = "SELECT
+    course_access_id,
+    counter,
+    UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date) diff,
+    login_course_date,
+    logout_course_date
+    FROM track_e_course_access
+    WHERE UNIX_TIMESTAMP(logout_course_date) > UNIX_TIMESTAMP(login_course_date)
     ORDER by diff DESC
     LIMIT $limit
 ";

@@ -4,10 +4,8 @@
 /**
  * This script fixes use of id instead of iid for the learning path
  */
-
-exit;
-
-require_once '../../main/inc/global.inc.php';
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 /** @var int $courseId */
 $onlyCourseId = 0;

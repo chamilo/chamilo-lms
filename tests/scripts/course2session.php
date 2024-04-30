@@ -7,9 +7,8 @@
 /**
  * Init
  */
-// comment exit statement before executing
-exit;
-require __DIR__ . '/../../main/inc/global.inc.php';
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
+require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 $debug = 1;
 // Who will be the general coach assigned to all sessions created?

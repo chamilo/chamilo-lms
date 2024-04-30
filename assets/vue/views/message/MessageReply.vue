@@ -9,10 +9,10 @@
       class="field"
     >
       <span v-t="'To'" />
-      <BaseChip
-        :value="item.originalSender"
-        image-field="illustrationUrl"
-        label-field="username"
+      <MessageCommunicationParty
+        :username="item.originalSender.username"
+        :full-name="item.originalSender.fullName"
+        :profile-image-url="item.originalSender.illustrationUrl"
       />
     </div>
 
@@ -21,12 +21,12 @@
       class="field"
     >
       <span v-t="'Cc'" />
-      <BaseChip
-        v-for="messageRelUser in item.receiversCc"
-        :key="messageRelUser['@id']"
-        :value="messageRelUser.receiver"
-        image-field="illustrationUrl"
-        label-field="username"
+      <MessageCommunicationParty
+        v-for="receiver in item.receiversCc"
+        :key="receiver.receiver.id"
+        :username="receiver.receiver.username"
+        :full-name="receiver.receiver.fullName"
+        :profile-image-url="receiver.receiver.illustrationUrl"
       />
     </div>
 
@@ -57,6 +57,7 @@ import { useSecurityStore } from "../../store/securityStore"
 import { useNotification } from "../../composables/notification"
 import { formatDateTimeFromISO } from "../../utils/dates"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
+import MessageCommunicationParty from "./MessageCommunicationParty.vue"
 
 const item = ref({})
 const store = useStore()

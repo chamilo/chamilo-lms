@@ -16,7 +16,7 @@
 
         <BaseInputText
           v-model="themeTitle"
-          :disabled="selectedTheme"
+          :disabled="true"
           :label="t('Title')"
         />
 

@@ -275,7 +275,11 @@ abstract class ResourceRepository extends ServiceEntityRepository
 
         // TODO Avoid global assumption for a request, and inject
         // the request stack instead.
-        $sessionStudentView = $this->getRequest()->getSession()->get('studentview');
+        $request = $this->getRequest();
+        $sessionStudentView = null;
+        if (null !== $request) {
+            $sessionStudentView = $request->getSession()->get('studentview');
+        }
 
         $checker = $this->getAuthorizationChecker();
         $isAdminOrTeacher =

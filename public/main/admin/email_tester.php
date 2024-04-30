@@ -4,6 +4,8 @@
  * Index page of the admin tools.
  */
 // Resetting the course id.
+use Chamilo\CoreBundle\Framework\Container;
+
 $cidReset = true;
 
 // Including some necessary chamilo files.
@@ -42,7 +44,9 @@ if ($form->validate()) {
         $values['subject'],
         $values['content'],
         UserManager::formatUserFullName($user),
-        $user->getEmail()
+        true === (bool) Container::getParameter('smtp_unique_sender')
+            ? Container::getParameter('smtp_from_email')
+            : $user->getEmail()
     );
 
     Display::addFlash(

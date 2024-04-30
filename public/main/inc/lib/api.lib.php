@@ -7106,6 +7106,49 @@ function api_format_time($time, $originFormat = 'php')
     return $formattedTime;
 }
 
+function api_set_noreply_and_from_address_to_mailer(
+    TemplatedEmail $email,
+    array $sender,
+    array $replyToAddress = []
+): void {
+    $noReplyAddress = api_get_setting('noreply_email_address');
+    $avoidReplyToAddress = false;
+
+    if (!empty($noReplyAddress)) {
+        // $avoidReplyToAddress = api_get_configuration_value('mail_no_reply_avoid_reply_to');
+    }
+
+    // Default values
+    $notification = new Notification();
+    $defaultSenderName = $notification->getDefaultPlatformSenderName();
+    $defaultSenderEmail = $notification->getDefaultPlatformSenderEmail();
+
+    // If the parameter is set don't use the admin.
+    $senderName = !empty($sender['name']) ? $sender['name'] : $defaultSenderName;
+    $senderEmail = !empty($sender['email']) ? $sender['email'] : $defaultSenderEmail;
+
+    // Send errors to the platform admin
+    $email
+        ->getHeaders()
+        ->addIdHeader('Errors-To', api_get_setting('admin.administrator_email'))
+    ;
+
+    if (!$avoidReplyToAddress && !empty($replyToAddress)) {
+        $email->addReplyTo(new Address($replyToAddress['mail'], $replyToAddress['name']));
+    }
+
+    if (true === (bool) Container::getParameter('smtp_unique_sender')) {
+        $senderName = $defaultSenderName;
+        $senderEmail = $defaultSenderEmail;
+
+        $email->sender(new Address($senderEmail, $senderName));
+    }
+
+    if ($senderEmail) {
+        $email->from(new Address($senderEmail, $senderName));
+    }
+}
+
 /**
  * Sends an email
  * Sender name and email can be specified, if not specified
@@ -7140,14 +7183,13 @@ function api_mail_html(
         return false;
     }
 
-    // Default values
-    $notification = new Notification();
-    $defaultEmail = $notification->getDefaultPlatformSenderEmail();
-    $defaultName = $notification->getDefaultPlatformSenderName();
+    $message = new TemplatedEmail();
 
-    // If the parameter is set don't use the admin.
-    $senderName = !empty($senderName) ? $senderName : $defaultName;
-    $senderEmail = !empty($senderEmail) ? $senderEmail : $defaultEmail;
+    api_set_noreply_and_from_address_to_mailer(
+        $message,
+        ['name' => $senderName, 'email' => $senderEmail],
+        !empty($extra_headers['reply_to']) ? $extra_headers['reply_to'] : []
+    );
 
     // Reply to first
     $replyToName = '';
@@ -7162,7 +7204,6 @@ function api_mail_html(
         //$sendMessage = new \Chamilo\CoreBundle\Message\SendMessage();
         //$bus->dispatch($sendMessage);
 
-        $message = new TemplatedEmail();
         $message->subject($subject);
 
         $list = api_get_setting('announcement.send_all_emails_to', true);
@@ -7195,10 +7236,6 @@ function api_mail_html(
             'content' => $body,
             'theme' => api_get_visual_theme(),
         ];
-
-        if (!empty($senderEmail)) {
-            $message->from(new Address($senderEmail, $senderName));
-        }
 
         if (!empty($recipientEmail)) {
             $message->to(new Address($recipientEmail, $recipientName));

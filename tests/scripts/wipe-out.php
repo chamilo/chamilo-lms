@@ -14,7 +14,7 @@
 /**
  * Security checks
  */
-exit;
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
 if (PHP_SAPI != 'cli') {
     echo "For security reasons, this script can only be launched from the command line, sorry.";
     exit;

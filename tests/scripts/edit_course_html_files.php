@@ -11,7 +11,7 @@
  * need to move it to an executable folder and change the first require.
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-exit;
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
 require_once __DIR__.'/../../public/main/inc/global.inc.php';
 api_protect_admin_script();
 

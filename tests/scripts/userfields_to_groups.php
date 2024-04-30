@@ -3,7 +3,7 @@
  * Move user fields "ruc" and "razon_social" to (social) groups (create groups)
  * and assign the related users to those groups.
  */
-exit;
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
 if (PHP_SAPI != 'cli') {
     die('This script can only be launched from the command line');
 }

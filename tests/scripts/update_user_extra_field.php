@@ -14,9 +14,7 @@
  * "julio" is the username of the user to be updated
  *
  */
-
-exit;
-
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
 require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 // Define origin and destination courses' code

@@ -6,7 +6,7 @@
  * This means creating a new URL of ID 1 and moving all previous records
  * referencing ID 1 to ID 2.
  */
-die();
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
 require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 $tableAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL);

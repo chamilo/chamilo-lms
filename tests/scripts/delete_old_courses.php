@@ -11,9 +11,7 @@
  * Launch from the command line.
  * Usage: php delete_old_courses.php
  */
-
-exit;
-
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
 $creation = '2014-01-01';
 $access = '2014-07-01';
 

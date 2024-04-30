@@ -23,7 +23,7 @@ defined in app/config/auth.conf.php or overriden in app/config/configuration.php
 username field is used to identify and match LDAP and Chamilo accounts together.
 ($extldap_user_correspondance['username'])
 */
-exit;
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
 // Change this to the absolute path to chamilo root folder if you move the script out of tests/scripts
 $chamiloRoot = __DIR__.'/../../public';
 

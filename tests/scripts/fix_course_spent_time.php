@@ -6,8 +6,7 @@
  * the records in track_e_course_access that is used to calculate the
  * total course time.
  */
-exit;
-
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
 require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 $maxSeconds = 10 * 60 * 60; // Check records higher than X hours

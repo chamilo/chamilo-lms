@@ -3,12 +3,10 @@
 
 /**
  * This script checks if the default extra fields are present in the platform.
- * If a default extra field doesn't exists then it will created.
+ * If a default extra field doesn't exist, it will be created.
  * Extra field list as in 1.11.8
  */
-
-exit;
-
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
 require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 $em = Database::getManager();

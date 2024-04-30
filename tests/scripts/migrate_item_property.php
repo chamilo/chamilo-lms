@@ -15,11 +15,11 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
  * Migrate content from c_item_property and c_document tables to the new "Resource" system.
  *
  */
-
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
 echo 'First check if table "classification__category" has a default category; if not then run: <br />';
 echo 'bin/console sonata:media:fix-media-context';
 echo 'change course id in the query';
-exit;
+
 // For tests to clean all resource stuff:
 //
 

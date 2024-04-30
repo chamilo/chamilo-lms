@@ -7,7 +7,7 @@
 /**
  * Includes and declarations
  */
-exit;
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
 require_once __DIR__.'/../../public/main/inc/global.inc.php';
 $path = api_get_path(SYS_LANG_PATH);
 $referenceLanguage = 'english';

@@ -6,9 +6,7 @@
  * with the LP score result (lp_item_view.score).
  * This script works only if 1 there's one attempt
  */
-
-exit;
-
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
 require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 api_protect_admin_script();

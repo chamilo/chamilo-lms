@@ -15,8 +15,7 @@
  *   if he has a generated the general certificate) and has not connected to the platfrom for more
  *   than 6 months then deactivate his account and send an email to the learner.
  * */
-
-exit;
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
 require_once __DIR__.'/../../public/main/inc/global.inc.php';
 
 $senderId = api_get_setting('platform.disable_user_conditions_sender_id');

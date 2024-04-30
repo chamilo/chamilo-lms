@@ -12,9 +12,7 @@
 /**
  * Init
  */
-// comment exit statement before executing
-exit;
-
+die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
 /* Usage doc */
 if ($argc <= 1) {
     echo 'Usage: php settings2csv.php [language]'.PHP_EOL;

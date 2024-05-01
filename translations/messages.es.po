@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-03-26 20:44+0000\n"
+"PO-Revision-Date: 2024-05-01 13:22+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Spanish <https://translation.chamilo.org/projects/chamilo/"
 "messages/es/>\n"
@@ -1751,8 +1751,12 @@ msgstr "Añadir un enlace web en la página principal"
 msgid "has been deleted"
 msgstr "ha sido suprimido"
 
+#, fuzzy
 msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
-msgstr "Si suprime el sitio web de este curso, suprimirá todos los documentos que contiene y todos sus miembros dejarán de estar inscritos en el mismo. <p>¿ Está seguro de querer suprimir este curso ?"
+msgstr ""
+"Si suprime el sitio web de este curso, suprimirá todos los documentos que "
+"contiene y todos sus miembros dejarán de estar inscritos en el mismo. <p>¿ "
+"Está seguro de querer suprimir este curso ?"
 
 msgid "YES"
 msgstr "SI"
@@ -25291,3 +25295,212 @@ msgstr "Conectado como"
 
 msgid "Contact Us"
 msgstr "Contactanos"
+
+msgid "Disable editor announcements"
+msgstr "Desactivar anuncios del editor"
+
+msgid "Disable attachment to announcements"
+msgstr "Deshabilitar adjuntos en anuncios"
+
+msgid "The roles set to 'true' will only appear to administrators. Other users will not be able to see them."
+msgstr ""
+"Los roles establecidos en 'true' solo aparecerán a los administradores. "
+"Otros usuarios no podrán verlos."
+
+msgid "Select 'Yes' to remove the button to delete all announcements, as this can be used by mistake by teachers."
+msgstr ""
+"Seleccione 'Sí' para eliminar el botón de borrar todos los anuncios, ya que "
+"los formadores pueden usarlo por error."
+
+msgid "This gives the HRM a little more power by allowing them to edit/delete agenda events in the course-session."
+msgstr ""
+"Esto otorga al responable RRHH un poco más de poder al permitirle editar/"
+"eliminar eventos de la agenda en la sesión del curso."
+
+msgid "Default calendar display mode"
+msgstr "Modo de visualización predeterminado del calendario"
+
+msgid "Enable scheduled announcements in sessions"
+msgstr "Habilitar anuncios programados en sesiones"
+
+msgid "Allow coaches to always edit announcements"
+msgstr "Permitir a los tutores editar siempre los anuncios"
+
+msgid "Disable user unsubscription from session on session removal from group/class"
+msgstr ""
+"Desactivar la cancelación de suscripción del usuario de la sesión al "
+"eliminar la sesión del grupo/clase"
+
+msgid "Allows the sessions managers to set announcements that will be triggered on specific dates or after/before a number of days of start/end of the session. Enabling this feature requires you to setup a cron task."
+msgstr ""
+"Permite a los administradores de sesiones establecer anuncios que se "
+"activarán en fechas específicas o después/antes de un número de días del "
+"inicio/fin de la sesión. Habilitar esta función requiere configurar una "
+"tarea cron."
+
+msgid "Hide the option to send an announcement copy to HRM"
+msgstr "Ocultar la opción de enviar una copia del anuncio al responsable RRHH"
+
+msgid "Choose 'Yes' to stop announcements from the software editor to appear on the administrative homepage (only admins see it). This will also remove security update announcements."
+msgstr ""
+"Elija 'Sí' para evitar que los anuncios del editor de software aparezcan en "
+"la página de inicio administrativa (solo los administradores lo ven). Esto "
+"también eliminará los anuncios de actualizaciones de seguridad."
+
+msgid "Attendance signing"
+msgstr "Firma de asistencia"
+
+msgid "Allow HRM role to edit or delete agenda events"
+msgstr "Permitir al responable RRHH editar o eliminar eventos de la agenda"
+
+msgid "Date-based announcements"
+msgstr "Anuncios basados en fechas"
+
+msgid "Send all e-mails to"
+msgstr "Envíe todos los correos electrónicos a"
+
+msgid "In the announcements form, an option normally appears to allow teachers to send a copy of the announcement to the user's HRM. Set this to 'Yes' to remote the option (and *not* send the copy)."
+msgstr ""
+"En el formulario de anuncios, normalmente aparece una opción que permite a "
+"los formadores enviar una copia del anuncio al responable RRHH del usuario. "
+"Ponga la opción  presente sobre 'Sí' para eliminar la opción del formulario ("
+"y *no* enviar la copia)."
+
+msgid "Extra settings for the agenda, allowing you to configure the specific calendar library we use."
+msgstr ""
+"Configuración adicional para la agenda, que le permite configurar la "
+"biblioteca de calendario específica que utilizamos."
+
+msgid "Customize the agenda on cursor hovering. Show agenda comment and/or description."
+msgstr ""
+"Personaliza la agenda al pasar el cursor. Muestra el comentario y/o la "
+"descripción de la agenda."
+
+msgid "Set this to dayGridMonth, basicWeek, agendaWeek or agendaDay to change the default view of the calendar."
+msgstr ""
+"Establezca esto en dayGridMonth, basicWeek, agendaWeek o agendaDay para "
+"cambiar la vista predeterminada del calendario."
+
+msgid "Hide role from normal users"
+msgstr "Ocultar rol a usuarios normales"
+
+msgid "Allow coaches to always edit announcements inside active or past sessions."
+msgstr ""
+"Permitir a los tutores editar siempre anuncios dentro de sesiones activas o "
+"pasadas."
+
+msgid "Agenda colours"
+msgstr "Colores en la agenda"
+
+msgid "Enable taking signatures to confirm one's attendance."
+msgstr "Habilitar la toma de firmas para confirmar la asistencia de uno."
+
+msgid "Duration of attendance events"
+msgstr "Duración de los eventos de asistencia"
+
+msgid "Do not hide events from expired sessions."
+msgstr "No ocultar eventos de sesiones caducadas."
+
+msgid "Calendar customization"
+msgstr "Personalización de la agenda"
+
+msgid "Disable user unsubscription from course/session on user unsubscription from group/class"
+msgstr ""
+"Desactivar la cancelación de suscripción del usuario al curso/sesión al "
+"cancelar la suscripción del grupo/clase"
+
+msgid "Disable user unsubscription from course on course removal from group/class"
+msgstr ""
+"Desactivar la cancelación de suscripción del usuario al curso cuando se "
+"elimina el curso del grupo/clase"
+
+msgid "Even though attachments in this version are dealt in an elegant way and do not multiply on disk, you might want to disable attachments altogether if you want to avoid excesses."
+msgstr ""
+"Aunque los adjuntos en esta versión se manejan de manera elegante y no se "
+"multiplican en el disco, es posible que desee desactivar los adjuntos por "
+"completo si desea evitar excesos."
+
+msgid "HRM can access all students from reporting pages"
+msgstr ""
+"El responable RRHH puede acceder a todos los estudiantes desde las páginas "
+"de informes"
+
+msgid "Give a list of e-mail addresses to whom *all* e-mails sent from the platform will be sent. The e-mails are sent to these addresses as a visible destination."
+msgstr ""
+"Proporcione una lista de direcciones de correo electrónico a las cuales se "
+"enviarán *todos* los correos electrónicos desde la plataforma. Los correos "
+"electrónicos se envían a estas direcciones como un destino visible."
+
+msgid "Hide 'sent to' in announcements"
+msgstr "Ocultar 'enviado a' en anuncios"
+
+msgid "Add a small text as legend describing the colours used for the events."
+msgstr ""
+"Añadoe un pequeño texto como leyenda describiendo los colores utilizados "
+"para los eventos."
+
+msgid "Enable only if you are using the Redirection plugin"
+msgstr "Habilite solo si está utilizando el plugin de Redirección"
+
+msgid "Define which roles are hidden to normal users"
+msgstr "Defina qué roles están ocultos para los usuarios normales"
+
+msgid "Show link to request bond between user and HRM"
+msgstr ""
+"Mostrar enlace para solicitar vínculo entre el usuario y el responsable RRHH"
+
+msgid "Select 'Yes' to avoid showing to whom an announcement has been sent."
+msgstr "Seleccione 'Sí' para evitar mostrar a quién se ha enviado un anuncio."
+
+msgid "Multiple anonymous users"
+msgstr "Usuarios anónimos múltiples"
+
+msgid "Link global calendar events with careers and promotions"
+msgstr "Vincular eventos del calendario global con carreras y promociones"
+
+msgid "Enable this option to allow multiple system users for anonymous users. This is useful when using this platform as a public showroom for some courses. Having multiple anonymous users will let tracking work for the duration of the experience for several users without mixing their data (which could otherwise confuse them)."
+msgstr ""
+"Habilite esta opción para permitir múltiples usuarios creados por Chamilo "
+"como cuentas de usuarios anónimos. Esto es útil cuando se utiliza esta "
+"plataforma como espacio de muestra público para algunos cursos. Tener "
+"múltiples usuarios anónimos permitirá que el seguimiento funcione durante la "
+"experiencia de varios usuarios simultáneos sin mezclar sus datos (lo que "
+"podría confundirlos)."
+
+msgid "Notify global admin only of new users"
+msgstr ""
+"Notificar solo al administrador global de la creación de nuevos usuarios"
+
+msgid "Agenda hover info"
+msgstr "Información al pasar el cursor sobre la agenda"
+
+msgid "Set HTML-code colours for each type of event to change the colour when displaying the event."
+msgstr ""
+"Establezca colores de código HTML para cada tipo de evento para cambiar el "
+"color al mostrar el evento."
+
+msgid "Display sessions occupations in personal agenda"
+msgstr "Mostrar ocupaciones de sesiones en la agenda personal"
+
+msgid "Allows hiding users' role when this option is set to true and the following array sets the corresponding role to 'true'."
+msgstr ""
+"Permite ocultar el rol de los usuarios cuando esta opción está activada y el "
+"siguiente array establece el rol correspondiente en 'true'."
+
+msgid "Allow teachers to configure announcements that will be sent at specific dates. This requires you to setup a cron task on cron/course_announcement.php running at least once daily."
+msgstr ""
+"Permitir que los responsables configuren anuncios que se enviarán en fechas "
+"específicas. Esto requiere que configure una tarea cron en cron/"
+"course_announcement.php que se ejecute al menos una vez al día."
+
+msgid "Disable button to delete all announcements"
+msgstr "Desactivar botón para eliminar todos los anuncios"
+
+msgid "Agenda colour legends"
+msgstr "Leyendas de colores de la agenda"
+
+msgid "Link global announcements with careers and promotions"
+msgstr "Vincular anuncios globales con carreras y promociones"
+
+msgid "Display all agenda events in personal agenda"
+msgstr "Mostrar todos los eventos de la agenda en la agenda personal"

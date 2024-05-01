@@ -94,7 +94,7 @@ trait NonResourceRepository
         return $this;
     }
 
-    public function getRequest(): Request
+    public function getRequest(): ?Request
     {
         return $this->requestStack->getCurrentRequest();
     }

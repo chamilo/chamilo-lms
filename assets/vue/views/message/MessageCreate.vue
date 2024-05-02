@@ -1,18 +1,15 @@
 <template>
-  <!--        :handle-submit="onSendMessageForm"-->
   <MessageForm
     v-model:attachments="attachments"
     :values="item"
   >
-    <!--          @input="v$.item.receiversTo.$touch()"-->
-
     <div
       v-if="sendToUser"
       class="field"
     >
       <span
-        class="mr-2"
         v-t="'To'"
+        class="mr-2"
       />
       <MessageCommunicationParty
         :username="sendToUser.username"
@@ -46,10 +43,18 @@
 
     <BaseButton
       :label="t('Send')"
+      :disabled="!canSubmitMessage"
       icon="plus"
       type="primary"
+      class="mb-2"
       @click="onSubmit"
     />
+    <small
+      v-if="!canSubmitMessage"
+      class="block text-gray-90"
+    >
+      {{ t('Send is disabled because title of message or "to" recipent are not filled in') }}
+    </small>
   </MessageForm>
   <Loading :visible="isLoading || isLoadingUser" />
 </template>
@@ -116,9 +121,16 @@ const receiversCc = computed(() =>
   })),
 )
 
+const canSubmitMessage = computed(() => {
+  return usersTo.value.length > 0 && item.value.title !== ""
+})
+
 const isLoading = ref(false)
 
 const onSubmit = async () => {
+  if (!canSubmitMessage.value) {
+    return
+  }
   item.value.receivers = [...receiversTo.value, ...receiversCc.value]
   isLoading.value = true
 

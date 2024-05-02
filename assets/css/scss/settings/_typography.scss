@@ -1,41 +1,55 @@
 @layer utilities {
   .text-header {
+    @apply text-gray-90;
+
     font-size: 52px;
     line-height: 64px;
     font-weight: 700;
   }
 
   .text-h1 {
+    @apply text-gray-90;
+
     font-size: 32px;
     line-height: 40px;
     font-weight: 700;
   }
 
   .text-h2 {
+    @apply text-gray-90;
+
     font-size: 29px;
     line-height: 32px;
     font-weight: 700;
   }
 
   .text-h3 {
+    @apply text-gray-90;
+
     font-size: 26px;
     line-height: 32px;
     font-weight: 700;
   }
 
   .text-h4 {
+    @apply text-gray-90;
+
     font-size: 23px;
     line-height: 32px;
     font-weight: 700;
   }
 
   .text-h5 {
+    @apply text-gray-90;
+
     font-size: 20px;
     line-height: 24px;
     font-weight: 700;
   }
 
   .text-h6 {
+    @apply text-gray-90;
+
     font-size: 18px;
     line-height: 24px;
     font-weight: 700;

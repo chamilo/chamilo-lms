@@ -102,7 +102,7 @@ class ExerciseLib
                 if (!empty($questionDescription) && READING_COMPREHENSION != $answerType) {
                     echo Display::div(
                         $questionDescription,
-                        ['class' => 'question_description']
+                        ['class' => 'question_description wysiwyg']
                     );
                 }
             }

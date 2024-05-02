@@ -60,18 +60,28 @@ final class Version20230913162700 extends AbstractMigrationChamilo
 
     private function updateContent($config, $courseDirectory, $courseId, $documentRepo): void
     {
-        $sql = "SELECT iid, {$config['field']} FROM {$config['table']} WHERE c_id = {$courseId}";
-        $result = $this->connection->executeQuery($sql);
-        $items = $result->fetchAllAssociative();
+        if (isset($config['field'])) {
+            $fields = [$config['field']];
+        } elseif (isset($config['fields'])) {
+            $fields = $config['fields'];
+        } else {
+            throw new \Exception('No field or fields specified for updating.');
+        }
 
-        foreach ($items as $item) {
-            $originalText = $item[$config['field']];
-            if (!empty($originalText)) {
-                $updatedText = $this->replaceOldURLsWithNew($originalText, $courseDirectory, $courseId, $documentRepo);
-                if ($originalText !== $updatedText) {
-                    $sql = "UPDATE {$config['table']} SET {$config['field']} = :newText WHERE iid = :id";
-                    $params = ['newText' => $updatedText, 'id' => $item['iid']];
-                    $this->connection->executeQuery($sql, $params);
+        foreach ($fields as $field) {
+            $sql = "SELECT iid, {$field} FROM {$config['table']} WHERE c_id = {$courseId}";
+            $result = $this->connection->executeQuery($sql);
+            $items = $result->fetchAllAssociative();
+
+            foreach ($items as $item) {
+                $originalText = $item[$field];
+                if (!empty($originalText)) {
+                    $updatedText = $this->replaceOldURLsWithNew($originalText, $courseDirectory, $courseId, $documentRepo);
+                    if ($originalText !== $updatedText) {
+                        $sql = "UPDATE {$config['table']} SET {$field} = :newText WHERE iid = :id";
+                        $params = ['newText' => $updatedText, 'id' => $item['iid']];
+                        $this->connection->executeQuery($sql, $params);
+                    }
                 }
             }
         }

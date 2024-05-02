@@ -7177,7 +7177,8 @@ function api_mail_html(
     $extra_headers = [],
     $data_file = [],
     $embeddedImage = false,
-    $additionalParameters = []
+    $additionalParameters = [],
+    string $sendErrorTo = null
 ) {
     if (!api_valid_email($recipientEmail)) {
         return false;
@@ -7190,6 +7191,13 @@ function api_mail_html(
         ['name' => $senderName, 'email' => $senderEmail],
         !empty($extra_headers['reply_to']) ? $extra_headers['reply_to'] : []
     );
+
+    if ($sendErrorTo) {
+        $message
+            ->getHeaders()
+            ->addIdHeader('Errors-To', $sendErrorTo)
+        ;
+    }
 
     // Reply to first
     $replyToName = '';

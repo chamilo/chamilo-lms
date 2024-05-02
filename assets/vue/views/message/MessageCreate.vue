@@ -57,7 +57,7 @@
 <script setup>
 import MessageForm from "../../components/message/Form.vue"
 import Loading from "../../components/Loading.vue"
-import { computed, ref } from "vue"
+import { computed, onMounted, ref } from "vue"
 import BaseAutocomplete from "../../components/basecomponents/BaseAutocomplete.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
@@ -197,12 +197,12 @@ const browser = (callback, value, meta) => {
 const isLoadingUser = ref(false)
 const sendToUser = ref()
 
-if (route.query.send_to_user) {
-  isLoadingUser.value = true
+onMounted(async () => {
+  if (route.query.send_to_user) {
+    isLoadingUser.value = true
 
-  userService
-    .find("/api/users/" + parseInt(route.query.send_to_user))
-    .then((user) => {
+    try {
+      let user = await userService.find(route.query.send_to_user)
       sendToUser.value = user
 
       usersTo.value.push({
@@ -220,8 +220,11 @@ if (route.query.send_to_user) {
           securityStore.user.firstname,
         ])
       }
-    })
-    .catch((e) => notification.showErrorNotification(e))
-    .finally(() => (isLoadingUser.value = false))
-}
+    } catch (error) {
+      notification.showErrorNotification(error)
+    } finally {
+      isLoadingUser.value = false
+    }
+  }
+})
 </script>

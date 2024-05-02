@@ -15,7 +15,10 @@
 export default {
   name: 'TemplateList',
   props: {
-    templates: []
+    templates: {
+      type: Array,
+      required: true
+    },
   },
   methods: {
     selectTemplate(content) {

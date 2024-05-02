@@ -3,7 +3,7 @@
     <BaseInputTextWithVuelidate
       id="item_title"
       v-model.trim="item.title"
-      vuelidate-property="v$.item.title"
+      :vuelidate-property="v$.item.title"
       :label="$t('Title')"
     />
 

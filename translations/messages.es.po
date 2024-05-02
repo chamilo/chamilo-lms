@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-05-01 13:22+0000\n"
+"PO-Revision-Date: 2024-05-02 12:16+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Spanish <https://translation.chamilo.org/projects/chamilo/"
 "messages/es/>\n"
@@ -25504,3 +25504,153 @@ msgstr "Vincular anuncios globales con carreras y promociones"
 
 msgid "Display all agenda events in personal agenda"
 msgstr "Mostrar todos los eventos de la agenda en la agenda personal"
+
+msgid "View courses in a grid layout"
+msgstr "Ver cursos en un estructura 'grid'"
+
+msgid "Adds a link icon to courses that are shared between URLs, so users (in particular teachers) know they have to take special care when editing the course content."
+msgstr ""
+"Agrega un icono de enlace a los cursos que se comparten entre URLs, para que "
+"los usuarios (en particular los tutores) sepan que deben tener especial "
+"cuidado al editar el contenido del curso."
+
+msgid "Restrict course chat to coaches"
+msgstr "Restringir el chat del curso a los tutores"
+
+msgid "Hide courses block in the sidebar"
+msgstr "Ocultar el bloque de cursos en la barra lateral"
+
+msgid "When this setting is set to 'Yes', the HTML documents viewer adds the HTML headers for the inclusion of Bootstrap and Font Awesome, which were used in Chamilo 1. This might help compatibility between old content and a newer version of the platform."
+msgstr ""
+"Cuando esta configuración está establecida en 'Sí', el visor de documentos "
+"HTML añade los encabezados HTML para la inclusión de Bootstrap y Font "
+"Awesome, que se utilizaron en Chamilo 1. Esto podría ayudar a la "
+"compatibilidad entre contenido antiguo y una versión más nueva de la "
+"plataforma."
+
+msgid "Select the tools that will be *active* after the creation of a course."
+msgstr ""
+"Seleccione las herramientas que estarán *activas* después de la creación de "
+"un curso."
+
+msgid "Hide 'my certificate' link"
+msgstr "Ocultar enlace 'Mis certificados'"
+
+msgid "Use course categories from top URL"
+msgstr "Utilice las categorías de cursos de la URL superior"
+
+msgid "Active tools on course creation"
+msgstr "Herramientas activas en la creación de cursos"
+
+msgid "In multi-URL settings, allow admins and teachers to assign categories from the top URL to courses in the children URLs."
+msgstr ""
+"En configuraciones multi-URL, permitir a los administradores y tutores "
+"asignar categorías de la URL principal a los cursos en las URLs secundarias."
+
+msgid "View courses in a layout with several courses per line. Otherwise, the layout will show one course per line."
+msgstr ""
+"Ver cursos en un diseño con varios cursos por línea. De lo contrario, el "
+"diseño mostrará un curso por línea."
+
+msgid "Splash screen for courses"
+msgstr "Pantalla de inicio para cursos"
+
+msgid "Disable the ability to edit course coaches"
+msgstr "Desactivar la capacidad de editar tutores del curso"
+
+msgid "Only allow students to talk to the tutors in the course (not other students)."
+msgstr ""
+"Permitir únicamente que los alumnos hablen con los tutores del curso (no con "
+"otros alumnos)."
+
+msgid "If enabled, this option will hide all courses not set in the user's language."
+msgstr ""
+"Si está activada, esta opción ocultará todos los cursos que no estén "
+"configurados en el idioma del usuario."
+
+msgid "Add Bootstrap lib headers to HTML documents viewer"
+msgstr "Añadir encabezados de la librería Bootstrap al visor de documentos HTML"
+
+msgid "Show a splash screen when creating a new course."
+msgstr "Mostrar una pantalla de bienvenida al crear un nuevo curso."
+
+msgid "Hide the certificates page for non-admin users."
+msgstr ""
+"Ocultar la página de certificados para usuarios que no sean administradores."
+
+msgid "Hide videochat option in global chat"
+msgstr "Ocultar la opción de videochat en el chat global"
+
+msgid "Block public courses access to authenticated users"
+msgstr "Bloquear el acceso a cursos públicos para usuarios autenticados"
+
+msgid "If enabled, this option show all sessions of the user in calendar-based view."
+msgstr ""
+"Si está activada, esta opción muestra todas las sesiones del usuario en una "
+"vista basada en calendario."
+
+msgid "Allow comments in attendance sheets"
+msgstr "Permitir comentarios en las hojas de asistencia"
+
+msgid "When disabled, admins do not have a link to quickly assign coaches to session-courses on the course edition page."
+msgstr ""
+"Cuando está desactivado, los administradores no tienen un enlace para "
+"asignar rápidamente tutores a cursos de sesión en la página de edición del "
+"curso."
+
+msgid "Show all sessions on 'My courses' page"
+msgstr "Mostrar todas las sesiones en la página 'Mis cursos'"
+
+msgid "Option to define the duration for an event in attendance sheet."
+msgstr "Opción para definir la duración de un evento en la hoja de asistencia."
+
+msgid "Restrict course templates to one course category"
+msgstr "Restringir plantillas de curso a una sola categoría de curso"
+
+msgid "Only show courses in the user's language"
+msgstr "Mostrar solo cursos en el idioma del usuario"
+
+msgid "Allow using extra fields in course catalogue"
+msgstr "Permitir el uso de campos de perfil en el catálogo de cursos"
+
+msgid "Show multi-URL shared course marker"
+msgstr "Mostrar marcador de curso compartido con múltiples URL"
+
+msgid "Only show public courses. Do not allow registered users to access courses with 'open' visibility unless they are subscribed to each of these courses."
+msgstr ""
+"Mostrar solo cursos públicos. No permitir a los usuarios registrados acceder "
+"a cursos con visibilidad 'abierta' a menos que estén suscritos a cada uno de "
+"estos cursos."
+
+msgid "With this option enabled, if a course has public visibility and terms and conditions, those terms are disabled while the course is public."
+msgstr ""
+"Con esta opción activada, si un curso tiene visibilidad pública y términos y "
+"condiciones, dichos términos se desactivan mientras el curso sea público."
+
+msgid "Add coach and dates to the session's subtitle in the sessions' list."
+msgstr ""
+"Añadir tutor y fechas al subtítulo de la sesión en la lista de sesiones."
+
+msgid "Access public courses with terms and conditions"
+msgstr "Acceso a cursos públicos con términos y condiciones"
+
+msgid "Teachers and students can comment on each individual attendance (to justify)."
+msgstr ""
+"Los formadores y los alumnos pueden comentar en cada asistencia individual ("
+"para justificar ausencias)."
+
+msgid "Show simple session info"
+msgstr "Mostrar información básica de sesión"
+
+msgid "Add footer to PDF certificate exports"
+msgstr "Agregar pie de página a las exportaciones de certificados en PDF"
+
+msgid "Add new search fields dynamically to the course catalogue based on searchable course extra fields."
+msgstr ""
+"Añadir dinámicamente nuevos campos de búsqueda al catálogo de cursos basados "
+"en campos de perfil buscables de curso."
+
+msgid "When on screens where the left menu is visible, do not display the « Courses » section."
+msgstr ""
+"Cuando esté en pantallas donde el menú izquierdo es visible, no mostrar la "
+"sección «Cursos»."

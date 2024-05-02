@@ -2,12 +2,19 @@ import gql from 'graphql-tag';
 
 // The extension SessionRelUserExtension.php will be loaded.
 export const GET_SESSION_REL_USER_CURRENT = gql`
-    query getCurrentSessions($user: String!, $afterStartDate: String, $afterEndDate: String, $beforeStartDate: String, $beforeEndDate: String) {
+    # Query to fetch current sessions with pagination set to 1000 items per page to avoid implementing pagination on the session page.
+    query getCurrentSessions($user: String!, $after: String, $afterStartDate: String, $afterEndDate: String, $beforeStartDate: String, $beforeEndDate: String) {
         sessionRelUsers(
-            user: $user
-            session_accessStartDate: {after: $afterStartDate, before: $beforeStartDate}
+            user: $user,
+            first: 1000,  # Pagination hard-coded to 1000 items per page.
+            after: $after,
+            session_accessStartDate: {after: $afterStartDate, before: $beforeStartDate},
             session_accessEndDate: {after: $afterEndDate, before: $beforeEndDate}
         ) {
+            pageInfo {
+                endCursor
+                hasNextPage
+            }
             edges {
                 node {
                     session {
@@ -60,12 +67,19 @@ export const GET_SESSION_REL_USER_CURRENT = gql`
 `;
 
 export const GET_SESSION_REL_USER = gql`
-    query getSessions($user: String!, $afterStartDate: String, $afterEndDate: String, $beforeStartDate: String, $beforeEndDate: String) {
+    # Query to fetch sessions with date filters applied, pagination set to 1000 items per page.
+    query getSessions($user: String!, $after: String, $afterStartDate: String, $afterEndDate: String, $beforeStartDate: String, $beforeEndDate: String) {
         sessionRelUsers(
-            user: $user
-            session_accessStartDate: {after: $afterStartDate, before: $beforeStartDate}
+            user: $user,
+            first: 1000,  # Pagination hard-coded to 1000 items per page.
+            after: $after,
+            session_accessStartDate: {after: $afterStartDate, before: $beforeStartDate},
             session_accessEndDate: {after: $afterEndDate, before: $beforeEndDate}
         ) {
+            pageInfo {
+                endCursor
+                hasNextPage
+            }
             edges {
                 node {
                     session {

@@ -7,12 +7,15 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use bbb;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\ServiceHelper\TicketProjectHelper;
 use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
+use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -110,5 +113,29 @@ class PlatformConfigurationController extends AbstractController
         }
 
         return new JsonResponse($configuration);
+    }
+
+    #[Route('/list/course_settings', name: 'course_settings_list', methods: ['GET'])]
+    public function courseSettingsList(
+        SettingsCourseManager $courseSettingsManager,
+        CourseRepository $courseRepository,
+        Request $request
+    ): JsonResponse {
+        $courseId = $request->query->get('cid');
+        if (!$courseId) {
+            return new JsonResponse(['error' => 'Course ID is required'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $course = $courseRepository->find($courseId);
+        if (!$course) {
+            return new JsonResponse(['error' => 'Course not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $courseSettingsManager->setCourse($course);
+        $settings = [
+            'show_course_in_user_language' => $courseSettingsManager->getCourseSettingValue('show_course_in_user_language'),
+        ];
+
+        return new JsonResponse(['settings' => $settings]);
     }
 }

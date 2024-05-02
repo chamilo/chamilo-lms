@@ -73,7 +73,7 @@ import { useNotification } from "../../composables/notification"
 import { capitalize } from "lodash"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import { useSecurityStore } from "../../store/securityStore"
-import messageService from "../../services/message"
+import { messageService } from "../../services/message"
 import messageAttachmentService from "../../services/messageattachment"
 import MessageCommunicationParty from "./MessageCommunicationParty.vue"
 

@@ -10,9 +10,15 @@
       v-if="sendToUser"
       class="field"
     >
-      <span v-t="'To'" />
-      <BaseUserAvatar :image-url="sendToUser.illustrationUrl" :alt="t('Picture')" />
-      <span v-text="sendToUser.fullName" />
+      <span
+        class="mr-2"
+        v-t="'To'"
+      />
+      <MessageCommunicationParty
+        :username="sendToUser.username"
+        :full-name="sendToUser.fullName"
+        :profile-image-url="sendToUser.illustrationUrl"
+      />
     </div>
     <BaseAutocomplete
       v-else
@@ -58,13 +64,13 @@ import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import { MESSAGE_TYPE_INBOX } from "../../components/message/constants"
 import userService from "../../services/userService"
-import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import { useNotification } from "../../composables/notification"
 import { capitalize } from "lodash"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import { useSecurityStore } from "../../store/securityStore"
 import messageService from "../../services/message"
 import messageAttachmentService from "../../services/messageattachment"
+import MessageCommunicationParty from "./MessageCommunicationParty.vue"
 
 const securityStore = useSecurityStore()
 const router = useRouter()

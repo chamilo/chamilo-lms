@@ -1,11 +1,11 @@
 <template>
-    <div v-if="sessions.length > 0">
-      <SessionListCategoryWrapper :sessions="sessions"/>
-    </div>
+  <div v-if="sessions.length > 0">
+    <SessionListCategoryWrapper :sessions="sessions" />
+  </div>
 </template>
 
 <script setup>
-import SessionListCategoryWrapper from '../../components/session/SessionListCategoryWrapper'
+import SessionListCategoryWrapper from "../../components/session/SessionListCategoryWrapper"
 
 defineProps({
   sessions: {

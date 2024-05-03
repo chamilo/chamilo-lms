@@ -24,8 +24,17 @@ async function findByUsername(username) {
   return await baseService.getCollection("/api/users", { username })
 }
 
+/**
+ * @param {string} term
+ * @returns {Promise<{totalItems, items}>}
+ */
+async function findBySearchTerm(term) {
+  return await baseService.getCollection("/api/users", { search: term })
+}
+
 export default {
   find,
   findAll,
   findByUsername,
+  findBySearchTerm,
 }

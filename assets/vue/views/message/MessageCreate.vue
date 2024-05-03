@@ -75,7 +75,7 @@ const { t } = useI18n()
 const notification = useNotification()
 
 const asyncFind = async (query) => {
-  const { items } = await userService.findByUsername(query)
+  const { items } = await userService.findBySearchTerm(query)
 
   return items.map((member) => ({
     name: member.fullName,

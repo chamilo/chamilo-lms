@@ -18,6 +18,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Controller\Api\UserSkillsController;
 use Chamilo\CoreBundle\Entity\Listener\UserListener;
+use Chamilo\CoreBundle\Filter\SearchOr;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\State\UserStateProvider;
 use Chamilo\CoreBundle\Traits\UserCreatorTrait;
@@ -79,6 +80,7 @@ use UserManager;
         'lastname' => 'partial',
     ]
 )]
+#[ApiFilter(SearchOr::class, properties: ['username', 'firstname', 'lastname'])]
 #[ApiFilter(filterClass: BooleanFilter::class, properties: ['isActive'])]
 class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface, LegacyPasswordAuthenticatedUserInterface, ExtraFieldItemInterface, Stringable
 {

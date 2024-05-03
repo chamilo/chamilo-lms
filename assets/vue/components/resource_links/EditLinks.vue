@@ -99,7 +99,7 @@ function addUser(userResult) {
 
 function findUsers(query) {
   userService
-    .findByUsername(query)
+    .findBySearchTerm(query)
     .then(({ items }) => (users.value = items))
     .finally(() => (isLoading.value = false))
 }

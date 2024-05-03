@@ -119,7 +119,7 @@ const asyncFind = async (query) => {
   if (query.length < 3) return
   isLoadingSelect.value = true
   try {
-    const { items } = await userService.findByUsername(query)
+    const { items } = await userService.findBySearchTerm(query)
 
     foundUsers.value = items.filter((foundUser) => !friendsList.value.includes(foundUser.id))
   } catch (error) {

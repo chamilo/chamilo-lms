@@ -152,6 +152,8 @@ if ('auto' === $invitationCode) {
             'user_id' => $userid,
             'invitation_code' => $autoInvitationCode,
             'invitation_date' => $now,
+            'answered' => 0,
+            'c_lp_item_id' => 0,
         ];
         Database::insert($table_survey_invitation, $params);
     }

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-05-02 12:16+0000\n"
+"PO-Revision-Date: 2024-05-03 06:23+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Spanish <https://translation.chamilo.org/projects/chamilo/"
 "messages/es/>\n"
@@ -25654,3 +25654,117 @@ msgid "When on screens where the left menu is visible, do not display the « Co
 msgstr ""
 "Cuando esté en pantallas donde el menú izquierdo es visible, no mostrar la "
 "sección «Cursos»."
+
+msgid "When using resources sequencing with courses or sessions, show the dependencies of the course on the course’s homepage."
+msgstr ""
+"Al utilizar la secuenciación de recursos con cursos o sesiones, mostrar las "
+"dependencias del curso en la página de inicio del curso."
+
+msgid "Add a message box in the course creation page for teachers, asking them to donate to the project."
+msgstr ""
+"Añade un cuadro de mensaje en la página de creación de cursos para los "
+"profesores, pidiéndoles que donen al proyecto."
+
+msgid "On the courses/sessions page, the session title can be either of the following : 0 = no link (hide session title) ; 1 = link title to a special session page ; 2 = link to the course if there is only one course ; 3 = session title makes the courses list foldable ; 4 = no link (show session title)."
+msgstr ""
+"En la página de cursos/sesiones, el título de la sesión puede ser uno de los "
+"siguientes: 0 = sin enlace (ocultar título de la sesión); 1 = enlazar el "
+"título a una página especial de la sesión; 2 = enlazar al curso si solo hay "
+"un curso; 3 = el título de la sesión hace que la lista de cursos sea "
+"plegable; 4 = sin enlace (mostrar título de la sesión)."
+
+msgid "When creating a course, make the course category a required setting."
+msgstr ""
+"Al crear un curso, haga que la categoría del curso sea una configuración "
+"obligatoria."
+
+msgid "Hide course catalogue’s public link"
+msgstr "Ocultar enlace público del catálogo de cursos"
+
+msgid "Course catalogue settings"
+msgstr "Configuración del catálogo de cursos"
+
+msgid "Donation link on course creation page"
+msgstr "Enlace de donación en la página de creación de curso"
+
+msgid "Course student info display"
+msgstr "Presentación de información del alumno del curso"
+
+msgid "Remove course code field from course creation form"
+msgstr ""
+"Eliminar el campo de código del curso del formulario de creación de cursos"
+
+msgid "Hide course teacher info on course details page"
+msgstr ""
+"Ocultar información del profesor del curso en la página de detalles del curso"
+
+msgid "This array gives you the possibility to configure which columns to hide in the main course stats page and in the total time report."
+msgstr ""
+"Esta matriz le permite configurar qué columnas ocultar en la página "
+"principal de estadísticas del curso y en el informe de tiempo total."
+
+msgid "On the course details page, hide the teacher information."
+msgstr "En la página de detalles del curso, oculta la información del profesor."
+
+msgid "Display course catalogue on homepage"
+msgstr "Mostrar catálogo de cursos en la página de inicio"
+
+msgid "Remove the possibility for non-admins to change the course visibility. Visibility can be an issue when there are too many teachers to control directly. Forcing visibilities allows the organization to better manage courses catalogues."
+msgstr ""
+"Elimine la posibilidad de que los no administradores cambien la visibilidad "
+"del curso. La visibilidad puede ser un problema cuando hay demasiados "
+"profesores que requieran mayor supervisión. Forzar las visibilidades permite "
+"a la organización gestionar mejor los catálogos de cursos."
+
+msgid "The page the donation message should link to (full URL)."
+msgstr "La página a la que debe enlazar el mensaje de donación (URL completa)."
+
+msgid "User extra fields by default in course stats page"
+msgstr ""
+"Campos de perfil de usuario por defecto en la página de estadísticas del "
+"curso"
+
+msgid "Set course category mandatory"
+msgstr "Establecer la categoría del curso como obligatoria"
+
+msgid "Hides the link to the course catalogue in the menu when the catalogue is public."
+msgstr ""
+"Ocultar el enlace al catálogo de cursos en el menú cuando el catálogo es "
+"público."
+
+msgid "Type of link for the session title"
+msgstr "Tipo de enlace para el título de la sesión"
+
+msgid "On the ‘My courses’/’My sessions’ pages, show additional information regarding the score, progress and/or certificate acquisition by the student."
+msgstr ""
+"En las páginas de 'Mis cursos'/'Mis sesiones' del alumno, mostrar "
+"información adicional sobre la puntuación, el progreso y/o la adquisición de "
+"certificados por parte suya."
+
+msgid "Course visibility changes for admins only"
+msgstr "Cambios de visibilidad del curso solo disponibles para administradores"
+
+msgid "Hide columns from course logs"
+msgstr "Ocultar columnas del seguimiento del curso"
+
+msgid "The course rating feature comes by default in different places. If you don’t want it, enable this option."
+msgstr ""
+"La función de calificación del curso viene por defecto en diferentes "
+"lugares. Si no la desea, active esta opción."
+
+msgid "Hide course rating"
+msgstr "Ocultar calificación de cursos"
+
+msgid "Show dependencies in course intro"
+msgstr "Mostrar dependencias en la introducción del curso"
+
+msgid "This array gives you the possibility to configure many aspects of the course catalogue."
+msgstr ""
+"Este arreglo le ofrece la posibilidad de configurar muchos aspectos del "
+"catálogo de cursos."
+
+msgid "If not provided, the course code is generated by default based on the course title, so enable this option to remove the code field from the course creation form altogether."
+msgstr ""
+"Si no se proporciona, el código del curso se genera automáticamente en base "
+"al título del curso, así que active esta opción para eliminar por completo "
+"el campo de código del formulario de creación de cursos."

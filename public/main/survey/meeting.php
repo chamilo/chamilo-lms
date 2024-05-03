@@ -50,8 +50,6 @@ if (null === $survey) {
 }
 
 $surveyId = $survey->getIid();
-
-SurveyManager::checkTimeAvailability($survey);
 $invitations = SurveyUtil::get_invited_users($survey);
 $students = $invitations['course_users'] ?? [];
 
@@ -64,6 +62,10 @@ $interbreadcrumb[] = [
 
 $url = api_get_self().'?survey_id='.$surveyId.'&invitationcode='.$invitationcode.'&'.api_get_cidreq();
 $urlEdit = $url.'&action=edit';
+
+if (!api_is_allowed_to_edit()) {
+    SurveyManager::checkTimeAvailability($survey);
+}
 
 $questions = $survey->getQuestions();
 
@@ -110,10 +112,13 @@ if (isset($_POST) && !empty($_POST)) {
 
 $template = new Template();
 
-$table = new HTML_Table(['class' => 'table']);
+$table = new HTML_Table(['class' => 'table table-hover table-striped data_table mt-5']);
 $row = 0;
-$column = 1;
+$column = 0;
 $answerList = [];
+
+$table->setHeaderContents($row, $column, "");
+$column++;
 foreach ($questions as $item) {
     $questionId = $item->getIid();
     $answers = SurveyUtil::get_answers_of_question_by_user($surveyId, $questionId);
@@ -142,18 +147,18 @@ foreach ($questions as $item) {
     }
 
     $mainDate = api_format_date($mainDate, DATE_FORMAT_SHORT);
-    $table->setHeaderContents($row, $column, "<h4>$mainDate</h4> $startTime <br >$endTime");
+    $table->setHeaderContents($row, $column, "<h4>$mainDate</h4> <span class='text-lg'>$startTime <br >$endTime</span>");
     $column++;
 }
 
-$row = 1;
+$row = 0;
 $column = 0;
 
 // Total counter
-$table->setHeaderContents(
+$table->setCellContents(
     $row,
     0,
-    get_lang('Number of users').': '.count($students)
+    '<span class="text-bold font-extrabold text-xl">'.get_lang('Number of users').': '.count($students).'</span>'
 );
 
 foreach ($questions as $item) {
@@ -166,8 +171,8 @@ foreach ($questions as $item) {
                 $questionsWithAnswer++;
             }
         }
-        $count = '<p style="color:cornflowerblue" >
-                  <span class="fa fa-check fa-2x"></span>'.$questionsWithAnswer.'</p>';
+        $count = '<p class="text-info text-center p-2 text-bold font-extrabold text-2xl">
+                  <span class="mdi mdi-check text-3xl"></span>'.$questionsWithAnswer.'</p>';
     }
     $table->setCellContents(
         $row,
@@ -176,7 +181,7 @@ foreach ($questions as $item) {
     );
 }
 
-$row = 2;
+$row = 1;
 $column = 0;
 $availableIcon = Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Available'));
 $notAvailableIcon = Display::getMdiIcon(StateIcon::INACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Not available'));
@@ -210,7 +215,7 @@ foreach ($students as $studentId) {
             }
 
             if ('edit' === $action) {
-                $html = '<div class="alert alert-info"><input
+                $html = '<div class="alert alert-info text-center"><input
                     id="'.$questionId.'"
                     name="options['.$questionId.']"
                     class="question" '.$checked.'
@@ -220,7 +225,7 @@ foreach ($students as $studentId) {
                 $html = $checked;
             }
 
-            $table->setHeaderContents(
+            $table->setCellContents(
                 $row,
                 $rowColumn,
                 $html
@@ -238,7 +243,7 @@ foreach ($students as $studentId) {
                     $checked = $notAvailableIcon;
                 }
             }
-            $table->setHeaderContents(
+            $table->setCellContents(
                 $row,
                 $rowColumn,
                 $checked
@@ -247,7 +252,7 @@ foreach ($students as $studentId) {
         }
     }
     $column = 0;
-    $table->setCellContents($row, $column, $name);
+    $table->setCellContents($row, $column, '<span class="text-bold font-extrabold text-lg">'.$name.'</span>');
     $row++;
 }
 if ('edit' === $action) {

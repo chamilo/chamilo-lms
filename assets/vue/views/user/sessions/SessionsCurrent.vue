@@ -18,9 +18,6 @@ import StickyCourses from "../../../views/user/courses/StickyCourses.vue"
 import SessionCategoryView from "../../../components/session/SessionCategoryView"
 import { useSession } from "./session"
 import SessionsLoading from "./SessionsLoading.vue"
-import { useSecurityStore } from "../../../store/securityStore"
 
-const securityStore = useSecurityStore()
-
-const { sessions, isLoading } = useSession(securityStore.user)
+const { sessions, isLoading } = useSession()
 </script>

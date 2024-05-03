@@ -61,7 +61,11 @@ final class SessionRelUserExtension implements QueryCollectionExtensionInterface
         if (str_contains($content, 'getCurrentSessions')) {
             $qb->andWhere(
                 $qb->expr()->orX(
-                    $qb->expr()->isNull('s.accessEndDate'),
+                    $qb->expr()->andX(
+                        $qb->expr()->isNotNull('s.accessStartDate'),
+                        $qb->expr()->isNull('s.accessEndDate'),
+                        $qb->expr()->lte('s.accessStartDate', "'$date'")
+                    ),
                     $qb->expr()->andX(
                         $qb->expr()->isNotNull('s.accessStartDate'),
                         $qb->expr()->isNotNull('s.accessEndDate'),
@@ -73,6 +77,20 @@ final class SessionRelUserExtension implements QueryCollectionExtensionInterface
                         $qb->expr()->isNotNull('s.accessEndDate'),
                         $qb->expr()->gte('s.accessEndDate', "'$date'")
                     )
+                )
+            );
+        } elseif (str_contains($content, 'getUpcommingSessions')) {
+            $qb->andWhere(
+                $qb->expr()->andX(
+                    $qb->expr()->isNotNull('s.accessStartDate'),
+                    $qb->expr()->gt('s.accessStartDate', "'$date'")
+                )
+            );
+        } elseif (str_contains($content, 'getPastSessions')) {
+            $qb->andWhere(
+                $qb->expr()->andX(
+                    $qb->expr()->isNotNull('s.accessEndDate'),
+                    $qb->expr()->lt('s.accessEndDate', "'$date'")
                 )
             );
         }

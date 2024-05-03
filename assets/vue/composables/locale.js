@@ -12,14 +12,6 @@ export function useLocale() {
 
   const appLocale = ref(document.querySelector('html').lang)
 
-  watch(() => {
-    return cidReqStore.course ? cidReqStore.course.id : null
-  }, (newId, oldId) => {
-    if (newId) {
-      courseSettingsStore.loadCourseSettings(newId)
-    }
-  }, { immediate: true })
-
   const localeList = computed(() => {
     const list = {}
     list['platform_lang'] = platformConfigStore.getSetting('language.platform_language')

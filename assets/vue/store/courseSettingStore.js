@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 import axios from "axios"
-import { computed, ref } from "vue"
+import { ref } from "vue"
 
 export const useCourseSettings = defineStore("courseSettings", () => {
   const isLoading = ref(false)
@@ -18,14 +18,17 @@ export const useCourseSettings = defineStore("courseSettings", () => {
     }
   }
 
-  const getSetting = computed(() => {
-    return (variable) => settings.value[variable] || null
-  });
+  function resetCourseSettings() {
+    settings.value = {}
+  }
+
+  const getSetting = (variable) => settings.value[variable] || null
 
   return {
     isLoading,
     settings,
     loadCourseSettings,
+    resetCourseSettings,
     getSetting
-  }
-})
+  };
+});

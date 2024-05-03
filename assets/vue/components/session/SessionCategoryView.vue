@@ -1,8 +1,5 @@
 <template>
-  <SessionListNoCategoryWrapper
-    :sessions="sessionList"
-    class="mb-4"
-  />
+  <SessionListCategoryWrapper :sessions="sessionList" />
   <SessionCategoryListWrapper
     :categories="categories"
     :category-with-sessions="categoryWithSessions"
@@ -11,16 +8,23 @@
 
 <script setup>
 import SessionCategoryListWrapper from "../../components/session/SessionCategoryListWrapper"
-import SessionListNoCategoryWrapper from "../../components/session/SessionListNoCategoryWrapper"
 import isEmpty from "lodash/isEmpty"
-import { computed, toRefs } from "vue"
+import { computed, toRefs, provide } from "vue"
+import SessionListCategoryWrapper from "./SessionListCategoryWrapper.vue"
 
 const props = defineProps({
   resultSessions: {
     type: Object,
     required: true,
   },
+  disabled: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
 })
+
+provide("disabledSessions", props.disabled)
 
 const { resultSessions } = toRefs(props)
 

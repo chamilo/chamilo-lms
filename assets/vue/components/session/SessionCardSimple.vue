@@ -1,20 +1,21 @@
 <template>
   <div
-    v-for="course in courses"
-    no-body
+    v-for="(course, index) in courses"
+    :key="index"
     style="max-width: 540px"
   >
     <CourseCard
       :session="session"
       :course="course"
       :session-id="session._id"
+      :disabled="disabledSessions"
     />
   </div>
 </template>
 
 <script setup>
 import CourseCard from "../course/CourseCard.vue"
-import { ref } from "vue"
+import { inject, ref } from "vue"
 import isEmpty from "lodash/isEmpty"
 
 const props = defineProps({
@@ -25,6 +26,8 @@ const props = defineProps({
 })
 
 const courses = ref([])
+
+const disabledSessions = inject("disabledSessions") || false
 
 let showAllCourses = false
 

@@ -1,7 +1,13 @@
 <template>
   <Card class="course-card">
     <template #header>
+      <img
+        v-if="disabled"
+        :src="course.illustrationUrl"
+        :alt="course.title"
+      />
       <router-link
+        v-else
         :to="{ name: 'CourseHome', params: { id: course._id }, query: { sid: sessionId } }"
         class="course-card__home-link"
       >
@@ -12,7 +18,12 @@
       </router-link>
     </template>
     <template #title>
+      <div v-if="disabled">
+        <span v-if="session"> {{ session.title }} - </span>
+        {{ course.title }}
+      </div>
       <router-link
+        v-else
         :to="{ name: 'CourseHome', params: { id: course._id }, query: { sid: sessionId } }"
         class="course-card__home-link"
       >
@@ -46,6 +57,11 @@ const props = defineProps({
     type: Number,
     required: false,
     default: 0,
+  },
+  disabled: {
+    type: Boolean,
+    required: false,
+    default: false,
   },
 })
 

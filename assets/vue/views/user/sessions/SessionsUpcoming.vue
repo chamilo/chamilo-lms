@@ -5,6 +5,7 @@
   <SessionCategoryView
     v-if="!isLoading"
     :result-sessions="sessions"
+    disabled
   />
 </template>
 

@@ -1138,7 +1138,7 @@ function api_protect_teacher_script()
  */
 function api_block_anonymous_users($printHeaders = true)
 {
-    $isAuth = Container::getAuthorizationChecker()->isGranted('IS_AUTHENTICATED_FULLY');
+    $isAuth = Container::getAuthorizationChecker()->isGranted('IS_AUTHENTICATED');
 
     if (false === $isAuth) {
         api_not_allowed($printHeaders);
@@ -3516,7 +3516,7 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false)
  */
 function api_is_anonymous()
 {
-    return !Container::getAuthorizationChecker()->isGranted('IS_AUTHENTICATED_FULLY');
+    return !Container::getAuthorizationChecker()->isGranted('IS_AUTHENTICATED');
 }
 
 /**

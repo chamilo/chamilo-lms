@@ -1,3 +1,130 @@
 .p-autocomplete {
   @apply flex;
+
+  &-loader {
+    @apply absolute top-1/2 -mt-2 right-3;
+  }
+
+  &-dd &-input {
+    @apply flex-auto w-[1%];
+  }
+
+  &-dd &-input,
+  &-dd &-multiple-container {
+    @apply rounded-r-lg;
+  }
+
+  &-dd &-dropdown {
+    @apply rounded-l-lg;
+  }
+
+  & &-panel {
+    @apply min-w-full;
+  }
+
+  &-panel {
+    @apply absolute overflow-auto top-0 left-0 bg-white drop-shadow-lg rounded-lg border-none text-gray-90
+      before:content-[""] before:w-full before:block before:h-3 before:sticky before:bg-white before:z-[2] before:top-0 before:rounded-t-lg before:rounded-b-none
+      after:content-[""] after:w-full after:block after:h-3 after:sticky after:bg-white after:z-[2] after:bottom-0 after:rounded-b-lg after:rounded-t-none;
+
+    .p-autocomplete-items {
+      @apply p-0;
+
+      .p-autocomplete-item {
+        @apply m-0 px-4 py-2 transition text-body-2 outline-0 outline-none text-gray-90 border-none bg-transparent rounded-none;
+
+        &:first-child {
+          @apply mt-0;
+        }
+
+        &:last-child {
+          @apply mb-0;
+        }
+
+        &.p-highlight {
+          @apply bg-support-3 text-primary;
+        }
+
+        &:not(.p-highlight):not(.p-disabled).p-focus {
+          @apply text-primary;
+        }
+
+        &-group {
+          @apply m-0 px-3 py-4 bg-white text-gray-90;
+        }
+      }
+    }
+  }
+
+  &-items {
+    @apply m-0 p-0 list-none;
+  }
+
+  &-item {
+    @apply cursor-pointer whitespace-nowrap relative overflow-hidden;
+  }
+
+  &-multiple-container {
+    @apply m-0 p-3 list-none cursor-text overflow-hidden flex items-center flex-wrap gap-2 outline-transparent;
+
+    .p-autocomplete-input-token {
+      @apply p-0;
+
+      input {
+        @apply p-0 m-0 text-gray-90;
+      }
+    }
+
+    .p-autocomplete-token {
+      @apply px-1.5 py-0 rounded-lg text-gray-90 bg-gray-20;
+
+      .p-autocomplete-token-icon {
+        @apply ml-2;
+      }
+
+      &.p-focus {
+        @apply text-primary;
+      }
+    }
+  }
+
+  &-token {
+    @apply cursor-default inline-flex items-center flex-initial;
+
+    &-icon {
+      @apply cursor-pointer;
+    }
+  }
+
+  &-input-token {
+    @apply flex-1 inline-flex;
+
+    input {
+      @apply border-none outline-none bg-transparent m-0 p-0 shadow-none rounded-none w-full;
+    }
+  }
+
+  &.p-autocomplete-dd {
+    &.p-autocomplete-loader {
+      @apply right-[3.75rem];
+    }
+  }
+
+  &:not(.p-disabled) {
+    &:hover {
+      .p-autocomplete-multiple-container {
+        @apply border-primary;
+      }
+    }
+
+    &.p-focus {
+      .p-autocomplete-multiple-container {
+        @apply outline-none outline-offset-0 border-primary;
+      }
+    }
+  }
+
+  &.p-invalid.p-component > .p-inputtext {
+    @apply border-danger;
+  }
 }

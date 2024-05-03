@@ -2121,7 +2121,7 @@ class SurveyManager
     /**
      * Check whether this survey has ended. If so, display message and exit this script.
      */
-    public static function checkTimeAvailability(?CSurvey $survey)
+    public static function checkTimeAvailability(?CSurvey $survey): void
     {
         if (null === $survey) {
             api_not_allowed(true);
@@ -2133,26 +2133,31 @@ class SurveyManager
         $currentDate = new DateTime('now', $utcZone);
         $currentDate->modify('today');
 
+        $returnMessage = false;
         if ($currentDate < $startDate) {
-            api_not_allowed(
-                true,
-                Display:: return_message(
-                    get_lang('This survey is not yet available. Please try again later. Thank you.'),
-                    'warning',
-                    false
-                )
+            $returnMessage =  Display:: return_message(
+                get_lang('This survey is not yet available. Please try again later. Thank you.'),
+                'warning',
+                false
             );
         }
 
         if ($currentDate > $endDate) {
-            api_not_allowed(
-                true,
-                Display:: return_message(
-                    get_lang('Sorry, this survey is not available anymore. Thank you for trying.'),
-                    'warning',
-                    false
-                )
+            $returnMessage = Display:: return_message(
+                get_lang('Sorry, this survey is not available anymore. Thank you for trying.'),
+                'warning',
+                false
             );
+        }
+
+        if (false !== $returnMessage) {
+            $content = Display::page_header($survey->getTitle());
+            $content .= $returnMessage;
+            $template = new Template();
+            $template->assign('actions', Display::toolbarAction('toolbar', []));
+            $template->assign('content', $content);
+            $template->display_one_col_template();
+            exit;
         }
     }
 

@@ -30,7 +30,7 @@
       />
     </div>
 
-    <BaseTinyEditor v-model="item.content" editor-id="message" required />
+    <BaseTinyEditor v-model="item.content" editor-id="message" :full-page="false" required />
 
     <BaseButton
       :label="t('Send')"
@@ -134,6 +134,7 @@ onMounted(async () => {
   }*/
 
   // Set reply content.
+  item.value.title = t('Re:') + ' ' + item.value.title
   item.value.content = `<br /><br /><hr /><blockquote>${translatedHeader}<hr />${item.value.content}</blockquote>`
 })
 

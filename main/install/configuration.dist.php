@@ -2537,6 +2537,9 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 // Block session about page access for all users
 // $_configuration['session_about_block_all_access'] = false;
 
+// Enables copying the list of sessions a user is registered for to the clipboard when the 'show Sessions' button is clicked
+// $_configuration['admin_user_list_allow_copy_to_clipboard_sessions_list'] = false;
+
 // Block course about page access for all users
 // $_configuration['course_about_block_all_access'] = false;
 

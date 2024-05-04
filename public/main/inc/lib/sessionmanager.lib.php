@@ -2793,7 +2793,7 @@ class SessionManager
                                 null,
                                 false,
                                 $courseId,
-                                0
+                                $sessionId
                             );
 
                             //$cat->set_session_id($sessionId);
@@ -2821,7 +2821,7 @@ class SessionManager
                                 null,
                                 false,
                                 $courseId,
-                                0
+                                $sessionId
                             );
 
                             if (!empty($evaluationList)) {

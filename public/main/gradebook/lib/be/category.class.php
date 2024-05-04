@@ -467,10 +467,12 @@ class Category implements GradebookItem
             $session_id = api_get_session_id();
         }
 
-        if (empty($session_id)) {
-            $sql .= $bond.' (session_id IS NULL OR session_id = 0) ';
-        } else {
+        if (!empty($session_id)) {
             $sql .= $bond.' session_id = '.$session_id;
+        } else {
+            if (empty($id)) {
+                $sql .= $bond.' (session_id IS NULL OR session_id = 0) ';
+            }
         }
         $bond = ' AND';
 

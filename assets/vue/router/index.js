@@ -198,11 +198,7 @@ router.beforeResolve(async (to) => {
     cid = parseInt(to.params?.id ?? 0)
   }
 
-  if (cid) {
-    await cidReqStore.setCourseAndSessionById(cid, sid)
-  } else {
-    cidReqStore.resetCid()
-  }
+  await cidReqStore.setCourseAndSessionById(cid, sid)
 })
 
 export default router

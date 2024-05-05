@@ -23,6 +23,7 @@ use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -67,7 +68,10 @@ class CidReqListener
         }
 
         if (true === $cidReset) {
-            $this->cleanSessionHandler($request);
+            self::cleanSessionHandler(
+                $request,
+                $this->tokenStorage->getToken()
+            );
 
             return;
         }
@@ -192,8 +196,6 @@ class CidReqListener
             $courseParams = $this->generateCourseUrl($course, $sessionId, $groupId, $origin);
             $sessionHandler->set('course_url_params', $courseParams);
             $twig->addGlobal('course_url_params', $courseParams);
-        } else {
-            $this->cleanSessionHandler($request);
         }
     }
 
@@ -258,7 +260,7 @@ class CidReqListener
         }
     }
 
-    public function cleanSessionHandler(Request $request): void
+    public static function cleanSessionHandler(Request $request, ?TokenInterface $token): void
     {
         $sessionHandler = $request->getSession();
         $alreadyVisited = $sessionHandler->get('course_already_visited');
@@ -296,7 +298,6 @@ class CidReqListener
         ChamiloSession::erase('origin');
 
         // Remove user temp roles
-        $token = $this->tokenStorage->getToken();
         if (null !== $token) {
             /** @var User $user */
             $user = $token->getUser();
@@ -309,8 +310,6 @@ class CidReqListener
                 $user->removeRole('ROLE_CURRENT_COURSE_SESSION_TEACHER');
             }
         }
-
-        // $request->setLocale($request->getPreferredLanguage());
     }
 
     private function generateCourseUrl(?Course $course, int $sessionId, int $groupId, ?string $origin): string

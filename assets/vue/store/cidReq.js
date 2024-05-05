@@ -49,7 +49,11 @@ export const useCidReqStore = defineStore("cidReq", () => {
     }
   })
 
-  const resetCid = () => {
+  const resetCid = async () => {
+    if (course.value) {
+      await courseService.cidReset()
+    }
+
     course.value = null
     session.value = null
     group.value = null
@@ -92,9 +96,14 @@ export const useCidReqStore = defineStore("cidReq", () => {
     }
   }
 
+  /**
+   * @param {number|null} cId
+   * @param {number|null} sId
+   * @returns {Promise<Awaited<void>[]>|Promise<void>}
+   */
   const setCourseAndSessionById = (cId, sId = undefined) => {
     if (!cId) {
-      return Promise.resolve()
+      return resetCid()
     }
 
     const coursePromise = setCourseByIri(cId, sId)

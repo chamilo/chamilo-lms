@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\EventListener\CidReqListener;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
@@ -52,6 +53,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -68,6 +70,19 @@ class CourseController extends ToolBaseController
         private readonly SerializerInterface $serializer,
         private readonly UserHelper $userHelper,
     ) {}
+
+    #[Route('/cid_reset', methods: ['GET'])]
+    public function cidReset(
+        Request $request,
+        TokenStorageInterface $tokenStorage,
+    ): Response {
+        CidReqListener::cleanSessionHandler(
+            $request,
+            $tokenStorage->getToken()
+        );
+
+        return new Response('', Response::HTTP_NO_CONTENT);
+    }
 
     #[Route('/{cid}/checkLegal.json', name: 'chamilo_core_course_check_legal_json')]
     public function checkTermsAndConditionJson(

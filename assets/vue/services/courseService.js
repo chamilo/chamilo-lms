@@ -1,8 +1,17 @@
 import api from "../config/api"
 import baseService from "./baseService"
 
+/**
+ * @returns {Promise<void>}
+ */
+async function cidReset() {
+  await api.get("/course/cid_reset")
+}
+
 export default {
   find: baseService.get,
+
+  cidReset,
 
   /**
    * @param {number} courseId

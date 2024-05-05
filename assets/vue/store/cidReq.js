@@ -80,26 +80,23 @@ export const useCidReqStore = defineStore("cidReq", () => {
     }
   }
 
-  const setCourseAndSessionByIri = async (courseIri, sId = 0) => {
-    if (!courseIri) {
-      return
+  const setCourseAndSessionById = (cId, sId = undefined) => {
+    if (!cId) {
+      return Promise.resolve()
     }
 
-    await setCourseByIri(courseIri, sId)
+    const courseIri = `/api/courses/${cId}`
 
-    let sessionIri = sId ? `/api/sessions/${sId}` : undefined
+    const coursePromise = setCourseByIri(courseIri, sId)
 
-    if (!sessionIri) {
-      return
+    if (!sId) {
+      return coursePromise
     }
 
-    await setSessionByIri(sessionIri)
-  }
+    const sessionIri = `/api/sessions/${sId}`
+    const sessionPromise = setSessionByIri(sessionIri)
 
-  const setCourseAndSessionById = async (cid, sid = undefined) => {
-    let courseIri = cid ? `/api/courses/${cid}` : undefined
-
-    await setCourseAndSessionByIri(courseIri, sid)
+    return Promise.all([coursePromise, sessionPromise])
   }
 
   return {
@@ -110,7 +107,6 @@ export const useCidReqStore = defineStore("cidReq", () => {
     userIsCoach,
 
     resetCid,
-    setCourseAndSessionByIri,
     setCourseAndSessionById,
 
     isCourseLoaded,

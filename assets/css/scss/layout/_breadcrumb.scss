@@ -1,15 +1,39 @@
 .app-breadcrumb {
-  @apply bg-white pb-3 text-tiny font-semibold leading-4 space-y-1;
+  @apply bg-white mb-3 text-tiny font-semibold leading-4 space-y-1;
 
-  ol {
-    @apply mb-1 flex gap-1 text-gray-90;
+  .p-breadcrumb {
+    @apply overflow-x-auto bg-white;
 
-    li {
-      &:last-child {
-        .p-menuitem-text {
+    &-list {
+      @apply p-0 flex gap-1 text-gray-90 list-none items-center flex-nowrap;
+
+      li {
+        .p-menuitem-link {
+          @apply outline-transparent
+            focus-visible:outline-none;
+        }
+
+        &:last-child .p-menuitem-text,
+        &:last-child .p-menuitem-icon {
           @apply text-gray-50;
         }
       }
+    }
+
+    .p-menuitem {
+      &-text,
+      &-icon {
+        @apply text-black leading-none;
+      }
+
+      &-link,
+      &-separator {
+        @apply flex items-center text-black;
+      }
+    }
+
+    &::-webkit-scrollbar {
+      @apply hidden;
     }
   }
 

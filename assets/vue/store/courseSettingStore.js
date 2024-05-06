@@ -8,6 +8,7 @@ export const useCourseSettings = defineStore("courseSettings", () => {
 
   async function loadCourseSettings(courseId) {
     isLoading.value = true
+
     try {
       const { data } = await axios.get(`/platform-config/list/course_settings?cid=${courseId}`)
       settings.value = data.settings
@@ -29,6 +30,6 @@ export const useCourseSettings = defineStore("courseSettings", () => {
     settings,
     loadCourseSettings,
     resetCourseSettings,
-    getSetting
-  };
-});
+    getSetting,
+  }
+})

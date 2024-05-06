@@ -13,6 +13,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script();
 
+$settingsManager = Container::getSettingsManager();
+
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
 $toolName = get_lang('E-mail tester');
@@ -44,8 +46,8 @@ if ($form->validate()) {
         $values['subject'],
         $values['content'],
         UserManager::formatUserFullName($user),
-        true === (bool) Container::getParameter('smtp_unique_sender')
-            ? Container::getParameter('smtp_from_email')
+        'true' === $settingsManager->getSetting('mail.smtp_unique_sender')
+            ? $settingsManager->getSetting('mail.smtp_from_email')
             : $user->getEmail()
     );
 

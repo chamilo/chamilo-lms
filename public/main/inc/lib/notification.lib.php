@@ -61,10 +61,10 @@ class Notification extends Model
     {
         $this->table = Database::get_main_table(TABLE_NOTIFICATION);
 
-        if ($smtpFromEmail = Container::getParameter('smtp_from_email')) {
+        if ($smtpFromEmail = api_get_setting('mail.smtp_from_email')) {
             $this->adminEmail = $smtpFromEmail;
 
-            if ($smtpFromName = Container::getParameter('smtp_from_name')) {
+            if ($smtpFromName = api_get_setting('mail.smtp_from_name')) {
                 $this->adminName = $smtpFromName;
             }
         } else {

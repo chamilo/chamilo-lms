@@ -7137,7 +7137,7 @@ function api_set_noreply_and_from_address_to_mailer(
         $email->addReplyTo(new Address($replyToAddress['mail'], $replyToAddress['name']));
     }
 
-    if (true === (bool) Container::getParameter('smtp_unique_sender')) {
+    if ('true' === api_get_setting('mail.smtp_unique_sender')) {
         $senderName = $defaultSenderName;
         $senderEmail = $defaultSenderEmail;
 

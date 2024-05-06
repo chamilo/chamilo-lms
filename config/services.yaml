@@ -7,9 +7,6 @@ parameters:
     locale: '%env(APP_LOCALE)%'
     installed: '%env(APP_INSTALLED)%'
     multiple_access_url: '%env(APP_MULTIPLE_ACCESS_URL)%'
-    smtp_unique_sender: '%env(APP_SMTP_UNIQUE_SENDER)%'
-    smtp_from_email: '%env(APP_SMTP_FROM_EMAIL)%'
-    smtp_from_name: '%env(APP_SMTP_FROM_NAME)%'
     container.dumper.inline_factories: true
     twig:
         form:

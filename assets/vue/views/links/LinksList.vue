@@ -28,7 +28,7 @@
       </div>
     </LinkCategoryCard>
 
-    <div v-if="!linksWithoutCategory && !categories">
+    <div v-if="!linksWithoutCategory.length && !categories.length">
       <!-- Render the image and create button -->
       <EmptyState
         :summary="t('Add your first link to this course')"
@@ -48,10 +48,10 @@
       v-if="!isLoading"
       class="flex flex-col gap-4"
     >
-      <!-- Render the list of links -->
-      <LinkCategoryCard v-if="linksWithoutCategory && linksWithoutCategory.length > 0">
+      <!-- Render the list of links without a category -->
+      <LinkCategoryCard v-if="linksWithoutCategory.length > 0" :showHeader="false">
         <template #header>
-          <h5>{{ t("General") }}</h5>
+          <h5>{{ t('General') }}</h5>
         </template>
 
         <ul>
@@ -74,9 +74,11 @@
         </ul>
       </LinkCategoryCard>
 
+      <!-- Render the list of categorized links -->
       <LinkCategoryCard
         v-for="category in categories"
         :key="category.info.id"
+        :showHeader="true"
       >
         <template #header>
           <div class="flex justify-between">
@@ -132,8 +134,8 @@
             />
           </li>
         </ul>
-        <p v-if="!category.links || category.links === 0">
-          {{ t("There are no links in this category") }}
+        <p v-if="!category.links || category.links.length === 0">
+          {{ t('There are no links in this category') }}
         </p>
       </LinkCategoryCard>
     </div>
@@ -152,7 +154,7 @@
       <div v-if="categoryToDelete">
         <p class="mb-2 font-semibold">{{ categoryToDelete.info.title }}</p>
         <p>
-          {{ t("With links") }}: {{ (categoryToDelete.links || []).map((l) => l.title).join(", ") }}
+          {{ t('With links') }}: {{ (categoryToDelete.links || []).map((l) => l.title).join(', ') }}
         </p>
       </div>
     </BaseDialogDelete>
@@ -187,7 +189,7 @@ const notifications = useNotification()
 const isCurrentTeacher = securityStore.isCurrentTeacher
 
 const linksWithoutCategory = ref([])
-const categories = ref({})
+const categories = ref([])
 
 const selectedLink = ref(null)
 const selectedCategory = ref(null)
@@ -206,11 +208,11 @@ const categoryToDelete = ref(null)
 
 const isLoading = ref(true)
 
-const linkValidationResults = ref({});
+const linkValidationResults = ref({})
 
 onMounted(() => {
   linksWithoutCategory.value = []
-  categories.value = {}
+  categories.value = []
   fetchLinks()
 })
 
@@ -243,11 +245,14 @@ async function deleteLink() {
 
 async function checkLink(id, url) {
   try {
-    const result = await linkService.checkLink(url, id);
-    linkValidationResults.value = { ...linkValidationResults.value, [id]: { isValid: result.isValid } };
+    const result = await linkService.checkLink(url, id)
+    linkValidationResults.value = { ...linkValidationResults.value, [id]: { isValid: result.isValid } }
   } catch (error) {
-    console.error("Error checking link:", error);
-    linkValidationResults.value = { ...linkValidationResults.value, [id]: { isValid: false, message: error.message || 'Link validation failed' } };
+    console.error("Error checking link:", error)
+    linkValidationResults.value = {
+      ...linkValidationResults.value,
+      [id]: { isValid: false, message: error.message || "Link validation failed" }
+    }
   }
 }
 
@@ -276,8 +281,7 @@ async function moveUp(id, position) {
     notifications.showSuccessNotification(t("Link moved up"))
     await fetchLinks()
   } catch (error) {
-    console.error("Error moving link up:", error)
-    notifications.showErrorNotification(t("Could not moved link up"))
+    notifications.showErrorNotification(t("Could not move link up"))
   }
 }
 
@@ -288,8 +292,7 @@ async function moveDown(id, position) {
     notifications.showSuccessNotification(t("Link moved down"))
     await fetchLinks()
   } catch (error) {
-    console.error("Error moving link down:", error)
-    notifications.showErrorNotification(t("Could not moved link down"))
+    notifications.showErrorNotification(t("Could not move link down"))
   }
 }
 

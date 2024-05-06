@@ -31,7 +31,7 @@ class DatePicker extends HTML_QuickForm_text
      *
      * @return string
      */
-    public function toHtml()
+    public function toHtml(): string
     {
         if ($this->_flagFrozen) {
             return $this->getFrozenHtml();
@@ -56,21 +56,22 @@ class DatePicker extends HTML_QuickForm_text
         if (!empty($requiredFields) && in_array($variable, $requiredFields)) {
             $requiredSymbol = '<span class="form_required">*</span>';
         }
+
         return '
-            <div>'.$requiredSymbol.$label.'</div>
-            <div id="'.$id.'" class="flex flex-row mt-1">
-                <input '.$this->_getAttrString($this->_attributes).'
-                    class="form-control border" type="text" value="'.$value.'" placeholder="'.get_lang('Select date ..').'" data-input>
-                <div class="ml-1" id="button-addon3">
-                    <button class="btn btn--secondary-outline"  type="button" data-toggle>
-                        <i class="pi pi-calendar pi-lg"></i>
-                    </button>
-                    <button class="btn btn--secondary-outline" type="button" data-clear>
-                        <i class="pi pi-times pi-lg"></i>
-                    </button>
-              </div>
+        <div>'.$requiredSymbol.$label.'</div>
+        <div id="'.$id.'" class="flex items-center mt-1 flatpickr-wrapper" data-wrap="true">
+            <input '.$this->_getAttrString($this->_attributes).'
+                class="form-control border flex-grow" type="text" value="'.$value.'" placeholder="'.get_lang('Select date ..').'" data-input>
+            <div class="flex space-x-1 ml-2" id="button-addon3">
+                <button class="btn btn--secondary-outline mr-2" type="button" data-toggle>
+                    <i class="pi pi-calendar pi-lg"></i>
+                </button>
+                <button class="btn btn--secondary-outline" type="button" data-clear>
+                    <i class="pi pi-times pi-lg"></i>
+                </button>
             </div>
-        '.$this->getElementJS();
+        </div>
+    '.$this->getElementJS();
     }
 
     /**
@@ -101,39 +102,39 @@ class DatePicker extends HTML_QuickForm_text
         $id = $this->getAttribute('id');
 
         return "<script>
-            document.addEventListener('DOMContentLoaded', function () {
-                function initializeFlatpickr() {
-                    const fp = flatpickr('#{$id}', {
-                        locale: '{$localeCode}',
-                        altInput: true,
-                        altFormat: '".get_lang('F d, Y')."',
-                        enableTime: false,
-                        dateFormat: 'Y-m-d',
-                        time_24hr: true,
-                        wrap: false
-                    });
+        document.addEventListener('DOMContentLoaded', function () {
+            function initializeFlatpickr() {
+                const fp = flatpickr('#{$id}', {
+                    locale: '{$localeCode}',
+                    altInput: true,
+                    altFormat: '".get_lang('F d, Y')."',
+                    enableTime: false,
+                    dateFormat: 'Y-m-d',
+                    time_24hr: true,
+                    wrap: true
+                });
 
-                    if ($('label[for=\"".$id."\"]').length > 0) {
-                        $('label[for=\"".$id."\"]').hide();
-                    }
-
-                    document.querySelector('label[for=\"' + '{$id}' + '\"]').classList.add('datepicker-label');
+                if ($('label[for=\"".$id."\"]').length > 0) {
+                    $('label[for=\"".$id."\"]').hide();
                 }
 
-                function loadLocale() {
-                    if ('{$localeCode}' !== 'en') {
-                        var script = document.createElement('script');
-                        script.src = '/build/flatpickr/l10n/{$localeCode}.js';
-                        script.onload = initializeFlatpickr;
-                        document.head.appendChild(script);
-                    } else {
-                        initializeFlatpickr();
-                    }
-                }
+                document.querySelector('label[for=\"' + '{$id}' + '\"]').classList.add('datepicker-label');
+            }
 
-                loadLocale();
-            });
-        </script>";
+            function loadLocale() {
+                if ('{$localeCode}' !== 'en') {
+                    var script = document.createElement('script');
+                    script.src = '/build/flatpickr/l10n/{$localeCode}.js';
+                    script.onload = initializeFlatpickr;
+                    document.head.appendChild(script);
+                } else {
+                    initializeFlatpickr();
+                }
+            }
+
+            loadLocale();
+        });
+    </script>";
     }
 
     /**

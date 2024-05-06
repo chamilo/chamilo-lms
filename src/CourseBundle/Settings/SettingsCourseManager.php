@@ -151,4 +151,21 @@ class SettingsCourseManager extends SettingsManager
 
         return $list;
     }
+
+    /**
+     * Fetches the value of a specific setting for the given course and variable.
+     *
+     * @param string $variableName The name of the variable to fetch.
+     * @return string|null The value of the setting if found, or null if not.
+     */
+    public function getCourseSettingValue(string $variableName): ?string
+    {
+        $repo = $this->manager->getRepository(CCourseSetting::class);
+        $courseSetting = $repo->findOneBy([
+            'cId' => $this->course->getId(),
+            'variable' => $variableName
+        ]);
+
+        return $courseSetting ? $courseSetting->getValue() : null;
+    }
 }

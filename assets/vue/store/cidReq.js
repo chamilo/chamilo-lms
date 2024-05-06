@@ -3,12 +3,15 @@ import { usePlatformConfig } from "./platformConfig"
 import courseService from "../services/courseService"
 import { computed, ref } from "vue"
 import sessionService from "../services/sessionService"
+import { useCourseSettings } from "./courseSettingStore"
 
 export const useCidReqStore = defineStore("cidReq", () => {
   const course = ref(null)
   const session = ref(null)
   const group = ref(null)
   const isCourseLoaded = ref(true)
+
+  const courseSettingsStore = useCourseSettings()
 
   const userIsCoach = computed(() => {
     const platformConfigStore = usePlatformConfig()
@@ -50,17 +53,24 @@ export const useCidReqStore = defineStore("cidReq", () => {
     course.value = null
     session.value = null
     group.value = null
+
+    courseSettingsStore.resetCourseSettings()
   }
 
-  const setCourseByIri = async (iri, sid = 0) => {
-    if (course.value && iri === course.value["@id"]) {
+  const setCourseByIri = async (cId, sid = 0) => {
+    const courseIri = `/api/courses/${cId}`
+
+    if (course.value && courseIri === course.value["@id"]) {
       return
     }
 
     isCourseLoaded.value = false
 
+    const coursePromise = courseService.find(courseIri, { sid })
+    const courseSettingsPromise = courseSettingsStore.loadCourseSettings(cId)
+
     try {
-      course.value = await courseService.find(iri, { sid })
+      await Promise.all([coursePromise, courseSettingsPromise]).then((responses) => (course.value = responses[0]))
     } catch (error) {
       console.error(error)
     } finally {
@@ -68,13 +78,15 @@ export const useCidReqStore = defineStore("cidReq", () => {
     }
   }
 
-  const setSessionByIri = async (iri) => {
-    if (session.value && iri === session.value["@id"]) {
+  const setSessionByIri = async (sId) => {
+    const sessionIri = `/api/sessions/${sId}`
+
+    if (session.value && sessionIri === session.value["@id"]) {
       return
     }
 
     try {
-      session.value = await sessionService.find(iri)
+      session.value = await sessionService.find(sessionIri)
     } catch (error) {
       console.error(error)
     }
@@ -85,16 +97,13 @@ export const useCidReqStore = defineStore("cidReq", () => {
       return Promise.resolve()
     }
 
-    const courseIri = `/api/courses/${cId}`
-
-    const coursePromise = setCourseByIri(courseIri, sId)
+    const coursePromise = setCourseByIri(cId, sId)
 
     if (!sId) {
       return coursePromise
     }
 
-    const sessionIri = `/api/sessions/${sId}`
-    const sessionPromise = setSessionByIri(sessionIri)
+    const sessionPromise = setSessionByIri(sId)
 
     return Promise.all([coursePromise, sessionPromise])
   }

@@ -21,7 +21,6 @@ import assignments from "./assignments"
 import links from "./links"
 import glossary from "./glossary"
 import { useSecurityStore } from "../store/securityStore"
-import { useCourseSettings } from "../store/courseSettingStore"
 import MyCourseList from "../views/user/courses/List.vue"
 import MySessionList from "../views/user/sessions/SessionsCurrent.vue"
 import MySessionListPast from "../views/user/sessions/SessionsPast.vue"
@@ -191,7 +190,6 @@ router.beforeEach((to, from, next) => {
 
 router.beforeResolve(async (to) => {
   const cidReqStore = useCidReqStore()
-  const courseSettingsStore = useCourseSettings()
 
   let cid = parseInt(to.query?.cid ?? 0)
   const sid = parseInt(to.query?.sid ?? 0)
@@ -202,10 +200,8 @@ router.beforeResolve(async (to) => {
 
   if (cid) {
     await cidReqStore.setCourseAndSessionById(cid, sid)
-    await courseSettingsStore.loadCourseSettings(cid)
   } else {
     cidReqStore.resetCid()
-    courseSettingsStore.resetCourseSettings()
   }
 })
 

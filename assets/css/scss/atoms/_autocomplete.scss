@@ -125,6 +125,6 @@
   }
 
   &.p-invalid.p-component > .p-inputtext {
-    @apply border-danger;
+    @apply border-error;
   }
 }

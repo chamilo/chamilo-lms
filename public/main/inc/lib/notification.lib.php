@@ -363,7 +363,7 @@ class Notification extends Model
                 $newMessageText = '';
                 $linkToNewMessage = Display::url(
                     get_lang('See message'),
-                    api_get_path(WEB_CODE_PATH).'messages/view_message.php?id='.$messageId
+                    api_get_path(WEB_PATH).'resources/messages/show?id=/api/messages/'.$messageId
                 );
                 break;
             case self::NOTIFICATION_TYPE_MESSAGE:
@@ -379,7 +379,7 @@ class Notification extends Model
                 }
                 $linkToNewMessage = Display::url(
                     get_lang('See message'),
-                    api_get_path(WEB_CODE_PATH).'messages/view_message.php?id='.$messageId
+                    api_get_path(WEB_PATH).'resources/messages/show?id=/api/messages/'.$messageId
                 );
                 break;
             case self::NOTIFICATION_TYPE_INVITATION:

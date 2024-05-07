@@ -65,7 +65,7 @@ abstract class AbstractSettingsSchema implements SchemaInterface
         foreach ($builder->all() as $fieldName => $field) {
             $options = $field->getOptions();
             $labelAttributes = $options['label_attr'] ?? [];
-            $labelAttributes['class'] = (isset($labelAttributes['class']) ? $labelAttributes['class'] . ' ' : '') . 'settings-label';
+            $labelAttributes['class'] = (isset($labelAttributes['class']) ? $labelAttributes['class'].' ' : '').'settings-label';
             $options['label_attr'] = $labelAttributes;
 
             if (isset($settingsInfo[$fieldName])) {
@@ -75,7 +75,7 @@ abstract class AbstractSettingsSchema implements SchemaInterface
                 $helpFromDb = $this->translator->trans($fieldConfig['help']);
 
                 $existingHelp = $options['help'] ?? '';
-                $combinedHelp = !empty($existingHelp) ? $helpFromDb . '<br>' . $existingHelp : $helpFromDb;
+                $combinedHelp = !empty($existingHelp) ? $helpFromDb.'<br>'.$existingHelp : $helpFromDb;
 
                 $options['label'] = $labelFromDb;
                 $options['help'] = $combinedHelp;

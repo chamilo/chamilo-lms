@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Filter;
@@ -8,19 +10,17 @@ use ApiPlatform\Doctrine\Orm\Filter\AbstractFilter;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Doctrine\ORM\QueryBuilder;
+use InvalidArgumentException;
 
 class SearchOr extends AbstractFilter
 {
-    /**
-     * @inheritDoc
-     */
     protected function filterProperty(
         string $property,
         $value,
         QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
-        Operation $operation = null,
+        ?Operation $operation = null,
         array $context = []
     ): void {
         if ('search' !== $property) {
@@ -28,7 +28,7 @@ class SearchOr extends AbstractFilter
         }
 
         if (empty($value)) {
-            throw new \InvalidArgumentException('The property must not be empty.');
+            throw new InvalidArgumentException('The property must not be empty.');
         }
 
         $alias = $queryBuilder->getRootAliases()[0];
@@ -48,12 +48,10 @@ class SearchOr extends AbstractFilter
         $queryBuilder
             ->andWhere(
                 $queryBuilder->expr()->orX(...$ors)
-            );
+            )
+        ;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getDescription(string $resourceClass): array
     {
         return [

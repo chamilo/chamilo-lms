@@ -11,6 +11,8 @@ use Chamilo\CoreBundle\Repository\Node\PersonalFileRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Doctrine\DBAL\Schema\Schema;
 
+use const PREG_SET_ORDER;
+
 final class Version20240506165900 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
@@ -75,13 +77,13 @@ final class Version20240506165900 extends AbstractMigrationChamilo
 
         foreach ($matches as $match) {
             $attribute = $match[1];
-            $baseUrlWithApp = $match[2] ? $match[2] . $match[3] : $match[3];
+            $baseUrlWithApp = $match[2] ? $match[2].$match[3] : $match[3];
             $folderId = (int) $match[4];
             $userId = (int) $match[5];
             $filename = $match[6];
 
             $user = $userRepo->find($userId);
-            if ($user !== null) {
+            if (null !== $user) {
                 $personalFile = $personalRepo->getResourceByCreatorFromTitle($filename, $user, $user->getResourceNode());
                 if ($personalFile) {
                     $newUrl = $personalRepo->getResourceFileUrl($personalFile);

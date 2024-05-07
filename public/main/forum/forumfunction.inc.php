@@ -3834,12 +3834,12 @@ function displayForumSearchResults(string $searchTerm): void
     }
     foreach ($threads as $thread) {
         if ($thread->isVisible($course)) {
-            $search_results[] = '<li class="mb-2"><a href="viewthread.php?'.api_get_cidreq().'&thread='.$thread->getIid().'" class="text-blue-500 hover:text-blue-600">'.htmlspecialchars($thread->getTitle()).'</a></li>';
+            $search_results[] = '<li class="mb-2"><a href="viewthread.php?'.api_get_cidreq().'&thread='.$thread->getIid().'&forum='.$thread->getForum()->getIid().'" class="text-blue-500 hover:text-blue-600">'.htmlspecialchars($thread->getTitle()).'</a></li>';
         }
     }
     foreach ($posts as $post) {
         if ($post->isVisible($course)) {
-            $search_results[] = '<li class="mb-2"><a href="viewpost.php?'.api_get_cidreq().'&post='.$post->getIid().'" class="text-blue-500 hover:text-blue-600">'.htmlspecialchars($post->getTitle()).'</a></li>';
+            $search_results[] = '<li class="mb-2"><a href="viewthread.php?'.api_get_cidreq().'&thread='.$post->getThread()->getIid().'&forum='.$post->getForum()->getIid().'" class="text-blue-500 hover:text-blue-600">'.htmlspecialchars($post->getTitle()).'</a></li>';
         }
     }
 

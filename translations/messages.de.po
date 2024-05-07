@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-05-03 08:19+0000\n"
+"PO-Revision-Date: 2024-05-07 15:44+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: German <https://translation.chamilo.org/projects/chamilo/"
 "messages/de/>\n"
@@ -22333,115 +22333,140 @@ msgid "Require e-mail confirmation"
 msgstr "E-Mail-Bestätigung erforderlich"
 
 msgid "Registration confirmation"
-msgstr ""
+msgstr "Bestätigung der Registrierung"
 
 msgid "Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email"
 msgstr ""
+"Ihr Konto ist inaktiv, da Sie es noch nicht bestätigt haben. Überprüfen Sie "
+"Ihre E-Mails und folgen Sie den Anweisungen oder klicken Sie auf den "
+"folgenden Link, um die E-Mail erneut zu senden"
 
 msgid "To complete your platform registration you need confirm your account by clicking the following link"
 msgstr ""
+"Um Ihre Plattformregistrierung abzuschließen, müssen Sie Ihr Konto "
+"bestätigen, indem Sie auf den folgenden Link klicken"
 
 msgid "Confirmation for new account"
-msgstr ""
+msgstr "Bestätigung für neues Konto"
 
 msgid "You need confirm your account via email to access the platform"
 msgstr ""
+"Sie müssen Ihr Konto per E-Mail bestätigen, um Zugang zur Plattform zu "
+"erhalten"
 
 msgid "Enable Cloud files link addition"
-msgstr ""
+msgstr "Aktivieren Sie das Hinzufügen von Cloud-Dateilinks"
 
 msgid "Allow users to link to a file hosted on a public cloud service as if they were documents in the Chamilo documents tool."
 msgstr ""
+"Erlauben Sie Benutzern, eine Verknüpfung zu einer Datei herzustellen, die "
+"auf einem öffentlichen Cloud-Dienst gehostet wird, als wären es Dokumente im "
+"Chamilo-Dokumentenwerkzeug."
 
 msgid "This URL already exists"
-msgstr ""
+msgstr "Diese URL existiert bereits"
 
 msgid "An error occurred while adding the link to a cloud file."
 msgstr ""
+"Beim Hinzufügen des Links zu einer Cloud-Datei ist ein Fehler aufgetreten."
 
 msgid "Add link to Cloud file"
-msgstr ""
+msgstr "Fügen Sie einen Link zur Cloud-Datei hinzu"
 
 msgid "Cloud link deleted"
-msgstr ""
+msgstr "Link zur Cloud gelöscht"
 
 msgid "Cloud link moved"
-msgstr ""
+msgstr "Der Cloud-Link wurde verschoben"
 
 msgid "Error deleting the cloud link."
-msgstr ""
+msgstr "Fehler beim Löschen des Cloud-Links."
 
 msgid "Cloud link added"
-msgstr ""
+msgstr "Cloud-Link hinzugefügt"
 
 msgid "Please enter a name for this Cloud link"
-msgstr ""
+msgstr "Bitte geben Sie einen Namen für diesen Cloud-Link ein"
 
 msgid "Cloud file link updated."
-msgstr ""
+msgstr "Der Link zur Cloud-Datei wurde aktualisiert."
 
 msgid "The domain is not valid. It must be one of the following:"
 msgstr ""
+"Der Domainname ist nicht gültig. Er muss einem der folgenden entsprechen:"
 
 msgid "List of valid domains"
-msgstr ""
+msgstr "Liste gültiger Domänen"
 
 msgid "URL field format invalid. Example of expected format: http://dropbox.com/sh/loremipsum/loremipsum?dl=0"
 msgstr ""
+"Das Format des URL-Feldes ist ungültig. Beispiel für das erwartete Format: "
+"https://dropbox.com/sh/loremipsum/loremipsum?dl=0"
 
 msgid "File extension"
-msgstr ""
+msgstr "Dateierweiterung"
 
 msgid "Audit report"
-msgstr ""
+msgstr "Prüfbericht"
 
 msgid "The Google Translate API used by this feature returned and empty answer. Please check or ask your translate_app_google_key setting is set correctly, or kindly ask an administrator to do so."
 msgstr ""
+"Die Google Translate API, die von dieser Funktion verwendet wird, gab eine "
+"leere Antwort zurück. Bitte überprüfen Sie, ob Ihre Einstellung "
+"translate_app_google_key korrekt gesetzt ist, oder bitten Sie einen "
+"Administrator dies zu tun."
 
 msgid "Link me to student"
-msgstr ""
+msgstr "Verknüpfen Sie mich mit dem Lernenden"
 
 msgid "Please select the student you want to request a link to, so the administrators can review and approve your request. Please note that proper administrative procedures should have been followed first to ensure the admin can legally accept your request."
 msgstr ""
+"Bitte wählen Sie den Lernenden aus, für den Sie einen Link anfordern "
+"möchten, damit die Administratoren Ihre Anfrage überprüfen und genehmigen "
+"können. Bitte beachten Sie, dass zuerst die entsprechenden administrativen "
+"Verfahren befolgt werden sollten, um sicherzustellen, dass der Administrator "
+"Ihre Anfrage rechtmäßig akzeptieren kann."
 
 msgid "Request linking with student"
-msgstr ""
+msgstr "Anfrage zur Verknüpfung mit Lernenden"
 
 msgid "Send pending announcements manually"
-msgstr ""
+msgstr "Senden Sie ausstehende Ankündigungen manuell"
 
 msgid "Student linking request rejected"
-msgstr ""
+msgstr "Anfrage zur Verknüpfung von Lernenden abgelehnt"
 
 msgid "Student link removed"
-msgstr ""
+msgstr "Link des Lernenden entfernt"
 
 msgid "Session template"
-msgstr ""
+msgstr "Vorlagen Session"
 
 msgid "Cloud file link"
-msgstr ""
+msgstr "Link zur Cloud-Datei"
 
 msgid "Reset %s"
-msgstr ""
+msgstr "Zurücksetzen %s"
 
 msgid "My global certificate"
 msgstr "Mein Zertifikat"
 
 msgid "Message tracking"
-msgstr ""
+msgstr "Nachrichtenverfolgung"
 
 msgid "Messages exchange between %s and %s"
-msgstr ""
+msgstr "Austausch von Nachrichten zwischen %s und %s"
 
 msgid "You will receive another email with your password"
-msgstr ""
+msgstr "Sie erhalten eine weitere E-Mail mit Ihrem Passwort."
 
 msgid "You must have received another email with your username."
-msgstr ""
+msgstr "Du musst eine weitere E-Mail mit deinem Benutzernamen erhalten haben."
 
 msgid "You must upload a zip file with the same name as the original SCORM file."
 msgstr ""
+"Sie müssen eine Zip-Datei hochladen, die denselben Namen wie die "
+"ursprüngliche SCORM-Datei hat."
 
 msgid "You need to create a skill profile"
 msgstr ""

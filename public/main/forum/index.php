@@ -257,20 +257,29 @@ if ($translate) {
     $htmlHeadXtra[] = api_get_css_asset('select2/css/select2.min.css');
     $htmlHeadXtra[] = api_get_asset('select2/js/select2.min.js');
     $htmlHeadXtra[] = '<script>
-        $(document).ready(function() {
-            $("#extra_language").select2({
-                placeholder: "'.get_lang('Select a language').'",
-                allowClear: true
-            });
-
-            $("#extra_language").on("change", function() {
-                var selectedLanguages = $(this).val();
-                if (selectedLanguages.length === 0) {
-                    window.location.reload();
-                }
-            });
+    $(document).ready(function() {
+        $("#extra_language").select2({
+            placeholder: "'.get_lang('Select a language').'",
+            allowClear: true
         });
-        </script>';
+
+        var urlParams = new URLSearchParams(window.location.search);
+        var reloaded = urlParams.get("reloaded");
+
+        $("#extra_language").on("change", function() {
+            var selectedLanguages = $(this).val();
+            if (selectedLanguages.length === 0 && !reloaded) {
+                urlParams.set("reloaded", "true");
+                window.location.href = window.location.pathname + "?" + urlParams.toString();
+            }
+        });
+
+        if (reloaded) {
+            urlParams.delete("reloaded");
+            window.history.replaceState(null, null, window.location.pathname + "?" + urlParams.toString());
+        }
+    });
+    </script>';
     $form = new FormValidator('search_simple', 'get', api_get_self().'?'.api_get_cidreq(), null, null);
     $form->addHidden('cid', api_get_course_int_id());
     $form->addHidden('sid', api_get_session_id());

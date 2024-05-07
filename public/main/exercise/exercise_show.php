@@ -623,7 +623,7 @@ foreach ($questionList as $questionId) {
             if (!empty($comnt)) {
                 echo ExerciseLib::getFeedbackText($comnt);
             }
-            echo ExerciseLib::getOralFeedbackAudio($id, $questionId, $student_id);
+            echo ExerciseLib::getOralFeedbackAudio($id, $questionId);
             echo '</div>';
 
             echo '<div id="'.$name.'" class="row hidden">';
@@ -672,7 +672,7 @@ foreach ($questionList as $questionId) {
             if (!empty($comnt)) {
                 echo '<b>'.get_lang('Feedback').'</b>';
                 echo ExerciseLib::getFeedbackText($comnt);
-                echo ExerciseLib::getOralFeedbackAudio($id, $questionId, $student_id);
+                echo ExerciseLib::getOralFeedbackAudio($id, $questionId);
             }
         }
 

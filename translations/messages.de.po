@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-05-07 17:02+0000\n"
+"PO-Revision-Date: 2024-05-07 17:32+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: German <https://translation.chamilo.org/projects/chamilo/"
 "messages/de/>\n"
@@ -22482,40 +22482,42 @@ msgstr ""
 "ursprüngliche SCORM-Datei hat."
 
 msgid "You need to create a skill profile"
-msgstr ""
+msgstr "Sie müssen ein Kompetenzprofil erstellen"
 
 msgid "Skill level"
-msgstr ""
+msgstr "Kompetenzniveau"
 
 msgid "Add item to portfolio"
-msgstr ""
+msgstr "Element zum Portfolio hinzufügen"
 
 msgid "New document added to course %s"
-msgstr ""
+msgstr "Neues Dokument zum Kurs %s hinzugefügt"
 
 msgid "A new document %s has been added to the document tool in your course %s by %s."
 msgstr ""
+"Ein neues Dokument %s wurde von %s im Dokumenten-Tool Ihres Kurses %s "
+"hinzugefügt."
 
 msgid "Pending surveys"
-msgstr ""
+msgstr "Ausstehende Umfragen"
 
 msgid "No pending surveys"
-msgstr ""
+msgstr "Keine ausstehenden Umfragen"
 
 msgid "Most popular sessions"
-msgstr ""
+msgstr "Beliebteste Sessions"
 
 msgid "Item can be viewed - Prerequisites completed"
-msgstr ""
+msgstr "Element kann angesehen werden - Voraussetzungen abgeschlossen"
 
 msgid "Item %s blocks this step"
-msgstr ""
+msgstr "Element %s blockiert diesen Schritt"
 
 msgid "Your result at %s blocks this step"
-msgstr ""
+msgstr "Ihr Ergebnis bei %s blockiert diesen Schritt"
 
 msgid "What do you want to do?"
-msgstr ""
+msgstr "Was möchten Sie tun?"
 
 msgid "Follow courses"
 msgstr "Belegen Sie Kurse"
@@ -23094,6 +23096,8 @@ msgstr "Die Ankündigung wird gesendet an"
 
 msgid "You need attach a audio file according to the text, clicking on the %s icon."
 msgstr ""
+"Sie müssen eine Audiodatei entsprechend dem Text anhängen, indem Sie auf das "
+"%s-Symbol klicken."
 
 msgid "Create read-out text"
 msgstr "Erstellen Sie Vorlesetext"
@@ -24470,373 +24474,410 @@ msgid "Email reply header"
 msgstr "Am %s schrieb %s (%s):"
 
 msgid "Latest login in a course"
-msgstr ""
+msgstr "Letzter Login in einem Kurs"
 
 msgid "The"
 msgstr ""
 
 msgid "Multiplicate questions by class"
-msgstr ""
+msgstr "Fragen nach Klasse vervielfachen"
 
 msgid "Multiplicate questions by user"
-msgstr ""
+msgstr "Fragen vervielfachen pro Benutzer"
 
 msgid "Questions about next user"
-msgstr ""
+msgstr "Fragen zum nächsten Benutzer"
 
 msgid "Course code to be entered in capital letters to confirm the deletion: %s"
 msgstr ""
+"Geben Sie den Kurscode in Großbuchstaben ein, um die Löschung zu bestätigen: "
+"%s"
 
 msgid "Badge: %s"
-msgstr ""
+msgstr "Abzeichen: %s"
 
 msgid "Comment by %s"
-msgstr ""
+msgstr "Kommentar von %s"
 
 msgid "Portfolio item by %s"
-msgstr ""
+msgstr "Portfolio-Element von %s"
 
 msgid "Copy to my portfolio"
-msgstr ""
+msgstr "In mein Portfolio kopieren"
 
 msgid "Copy to student portfolio"
-msgstr ""
+msgstr "In das Portfolio des Lernenden kopieren"
 
 msgid "Originally published as \"%s\" by %s"
-msgstr ""
+msgstr "Ursprünglich veröffentlicht als '%s' von %s"
 
 msgid "Originally commented by %s in \"%s\""
-msgstr ""
+msgstr "Ursprünglich kommentiert von %s in '%s'"
 
 msgid "Item added to students own portfolio"
-msgstr ""
+msgstr "Element zum Portfolio des Lernenden hinzugefügt"
 
 msgid "Mark comment as important"
-msgstr ""
+msgstr "Kommentar als wichtig markieren"
 
 msgid "Unmark comment as important"
-msgstr ""
+msgstr "Kommentar als nicht wichtig markieren"
 
 msgid "Portfolio item marked as important"
-msgstr ""
+msgstr "Portfolioelement als wichtig markiert"
 
 msgid "Select a learner portfolio"
-msgstr ""
+msgstr "Wählen Sie ein Lernendenportfolio"
 
 msgid "See my portfolio in this course"
-msgstr ""
+msgstr "Mein Portfolio in diesem Kurs sehen"
 
 msgid "Portfolio details"
-msgstr ""
+msgstr "Portfolio-Details"
 
 msgid "Item title"
-msgstr ""
+msgstr "Elementbezeichnung"
 
 msgid "Creation date: %s"
-msgstr ""
+msgstr "Erstellungsdatum: %s"
 
 msgid "Update date: %s"
-msgstr ""
+msgstr "Aktualisierungsdatum: %s"
 
 msgid "Category: %s"
-msgstr ""
+msgstr "Kategorie: %s"
 
 msgid "Date: %s"
-msgstr ""
+msgstr "Datum: %s"
 
 msgid "Item title: %s"
-msgstr ""
+msgstr "Elementbezeichnung: %s"
 
 msgid "No items in your portfolio"
-msgstr ""
+msgstr "Keine Elemente in Ihrem Portfolio"
 
 msgid "You have not commented"
-msgstr ""
+msgstr "Sie haben keinen Kommentar hinterlassen"
 
 msgid "Portfolio items"
-msgstr ""
+msgstr "Portfolio-Elemente"
 
 msgid "Portfolio comments"
-msgstr ""
+msgstr "Portfolio-Kommentare"
 
 msgid "Comments made"
-msgstr ""
+msgstr "Kommentare abgegeben"
 
 msgid "Grade this item"
-msgstr ""
+msgstr "Bewerten Sie diesen Element"
 
 msgid "Portfolio item was graded"
-msgstr ""
+msgstr "Portfolio-Element wurde bewertet"
 
+#, fuzzy
 msgid "Context for the comment to be grade"
-msgstr ""
+msgstr "Kontext für den zu bewertenden Kommentar"
 
 msgid "Grade this comment"
-msgstr ""
+msgstr "Bewerten Sie diesen Kommentar"
 
 msgid "Portfolio comment was graded"
-msgstr ""
+msgstr "Der Portfolio-Kommentar wurde bewertet"
 
 msgid "Grade items"
-msgstr ""
+msgstr "Elemente bewerten"
 
 msgid "Grade comments"
-msgstr ""
+msgstr "Kommentare bewerten"
 
 msgid "Hide correct answered questions"
-msgstr ""
+msgstr "Ausgeblendete richtig beantwortete Fragen"
 
 msgid "The setting \"%s\" will change to \"%s\""
-msgstr ""
+msgstr "Die Einstellung '%s' wird auf '%s' geändert"
 
 msgid "Verification of answered questions"
-msgstr ""
+msgstr "Überprüfung beantworteter Fragen"
 
 msgid "Student's assignments to be corrected"
-msgstr ""
+msgstr "Lernenden-Aufgaben zur Korrektur"
 
 msgid "You will find below all the work that have been submitted by students in one of your course (it could be in the base course or in a course in a session). You can filter the list selecting a specific course or a work status."
 msgstr ""
+"Sie finden unten alle Arbeiten, die von Lernenden in einem Ihrer Kurse "
+"eingereicht wurden (es kann sich um den Basiskurs oder um einen Kurs in "
+"einer Session handeln). Sie können die Liste filtern, indem Sie einen "
+"bestimmten Kurs oder einen Arbeitsstatus auswählen."
 
 msgid "Back to the main course portfolio"
-msgstr ""
+msgstr "Zurück zum Hauptkursportfolio"
 
 msgid "Export my portfolio data in a PDF file"
-msgstr ""
+msgstr "Exportieren Sie meine Portfoliodaten in eine PDF-Datei"
 
 msgid "Export my portfolio data in a ZIP file"
-msgstr ""
+msgstr "Exportieren Sie meine Portfoliodaten in einer ZIP-Datei"
 
 msgid "Categories are for organization only in personal portfolio."
-msgstr ""
+msgstr "Kategorien sein nur vor im persönlichen Portfolio organizieren."
 
 msgid "Export my portfolio data to a PDF file"
-msgstr ""
+msgstr "Exportieren Sie meine Portfolio-Daten in eine PDF-Datei"
 
 msgid "Export my portfolio data to a ZIP file"
-msgstr ""
+msgstr "Exportieren Sie meine Portfoliodaten in eine ZIP-Datei"
 
 msgid "New learning path available"
-msgstr ""
+msgstr "Neuer Lernpfad verfügbar"
 
 msgid "There is a new learning path called %s that has been added to your %s course. Go to this learning path here : %s"
 msgstr ""
+"Es wurde ein neuer Lernpfad namens %s zu Ihrem %s Kurs hinzugefügt. Gehen "
+"Sie hier zu diesem Lernpfad: %s"
 
 msgid "%s %% Completed"
-msgstr ""
+msgstr "%s %% abgeschlossen"
 
 msgid "E-mail to teachers on new user's post in the portfolio tool"
-msgstr ""
+msgstr "E-Mail an Trainer über einen neuen Beitrag im Portfolio-Tool"
 
 msgid "There is a new post by %s in the portfolio of course %s. To view it <a href='%s'>go here</a>."
 msgstr ""
+"Es gibt einen neuen Beitrag von %s im Portfolio des Kurses %s. Um ihn "
+"anzusehen <a href='%s'>klicken Sie hier</a>."
 
 msgid "[Portfolio] New post in course %s"
-msgstr ""
+msgstr "[Portfolio] Neuer Beitrag im Kurs %s"
 
 msgid "Ongoing training"
-msgstr ""
+msgstr "Laufende Schulung"
 
 msgid "Dear %s,<br /><br /> A new test/quiz %s has been added to course %s.<br /><br />Course: %s <br />Test/Quiz name: %s <br />"
 msgstr ""
+"Sehr geehrte(r) %s,<br /><br /> ein neuer Test/Quiz %s wurde zum Kurs %s "
+"hinzugefügt.<br /><br />Kurs: %s <br />Test/Quiz-Name: %s <br />"
 
 msgid "Visit the test/quiz page <a href=\"%s\">%s</a><br />"
-msgstr ""
+msgstr "Besuchen Sie die Test-/Quizseite <a href='%s'>%s</a><br />"
 
 msgid "Dear %s,<br /><br />As his/her parent, you are receiving this e-mail to let you know that %s just got a new test/quiz %s in course %s.<br /><br />Learner: %s<br /> Course: %s<br />Test/Quiz name: %s<br />"
 msgstr ""
+"Sehr geehrte(r) %s,<br /><br />als sein/ihr Erziehungsberechtigter erhalten "
+"Sie diese E-Mail, um Sie darüber zu informieren, dass %s gerade eine neue "
+"Klassenarbeit/Kurztest %s im Kurs %s erhalten hat.<br /><br />Lernender: "
+"%s<br /> Kurs: %s<br />Name der Klassenarbeit/des Kurztests: %s<br />"
 
 msgid "Test duration: %s <br />"
-msgstr ""
+msgstr "Testdauer: %s <br />"
 
 msgid "Test start date: %s <br />"
-msgstr ""
+msgstr "Prüfungsbeginn: %s <br />"
 
 msgid "Test end date: %s <br />"
-msgstr ""
+msgstr "Prüfungsbeginn: %s <br />"
 
 msgid "Career Diagram Legend"
-msgstr ""
+msgstr "Legende zum Karrierediagramm"
 
 msgid "Career Diagram Disclaimer"
-msgstr ""
+msgstr "Karriere-Diagramm Haftungsausschluss"
 
 msgid "Successful Attempt"
-msgstr ""
+msgstr "Erfolgreicher Versuch"
 
 msgid "Failed attempt"
-msgstr ""
+msgstr "Fehlgeschlagener Versuch"
 
 msgid "Students with successful attempt"
-msgstr ""
+msgstr "Lernende mit erfolgreichem Versuch"
 
 msgid "Students with failed attempt"
-msgstr ""
+msgstr "Lernende mit nicht bestandenem Versuch"
 
 msgid "Exercise attempt stats report"
-msgstr ""
+msgstr "Statistikbericht zu Übungsversuchen"
 
 msgid "Comparative group report"
-msgstr ""
+msgstr "Vergleichsgruppenbericht"
 
 msgid "Courses usage"
-msgstr ""
+msgstr "Kursnutzung"
 
 msgid "Hide connection time"
-msgstr ""
+msgstr "Verbindungsdauer ausblenden"
 
 msgid "Course in which the question was initially created."
-msgstr ""
+msgstr "Kurs, in dem die Frage ursprünglich erstellt wurde."
 
 msgid "Apprenticeship contract"
-msgstr ""
+msgstr "Ausbildungsvertrag"
 
 msgid "Export Common Cartridge v1.3"
-msgstr ""
+msgstr "Exportieren zum Common Cartridge v1.3"
 
 msgid "Import Common Cartridge v1.3"
-msgstr ""
+msgstr "Importieren von Common Cartridge v1.3"
 
 msgid "Export your course content in the IMS Common Cartridge 1.3 format, to share it on other platforms."
 msgstr ""
+"Exportieren Sie Ihre Kursinhalte im IMS Common Cartridge 1.3-Format, um sie "
+"auf anderen Plattformen zu teilen."
 
 msgid "Import a course in IMS Common Cartridge 1.3 format, from another platform compatible with this format. The version is important."
 msgstr ""
+"Einen Kurs im IMS Common Cartridge 1.3-Format von einer anderen Plattform, "
+"die mit diesem Format kompatibel ist, importieren. Die Version ist wichtig."
 
 msgid "IMS CC file created."
-msgstr ""
+msgstr "IMS CC-Datei erstellt."
 
 msgid "IMS CC file"
-msgstr ""
+msgstr "IMS CC-Datei"
 
 msgid "IMS CC file imported."
-msgstr ""
+msgstr "IMS CC-Datei importiert."
 
 msgid "Upload any IMS CC (.imscc or .zip) file in the right version and it will be extracted directly into your course."
 msgstr ""
+"Laden Sie eine IMS CC-Datei (.imscc oder .zip) in der richtigen Version "
+"hoch, und sie wird direkt in Ihren Kurs extrahiert."
 
 msgid "IMS Common Cartridge v1.3"
-msgstr ""
+msgstr "IMS Common Cartridge v1.3"
 
 msgid "Hide question number"
-msgstr ""
+msgstr "Frage Nummer ausblenden"
 
 msgid "Pending attempts"
-msgstr ""
+msgstr "Ausstehende Versuche"
 
 msgid "Edit in profile"
-msgstr ""
+msgstr "Profil bearbeiten"
 
 msgid "Guidance"
-msgstr ""
+msgstr "Anleitung"
 
 msgid "Remove time"
-msgstr ""
+msgstr "Zeit entfernen"
 
 msgid "Copy with session content"
-msgstr ""
+msgstr "Kopieren mit Session-Inhalten"
 
 msgid "Export by class"
-msgstr ""
+msgstr "Exportieren nach Klasse"
 
 msgid "Upload answer"
-msgstr ""
+msgstr "Antwort hochladen"
 
 msgid "Token expired, action already realized"
-msgstr ""
+msgstr "Token abgelaufen, Aktion bereits durchgeführt"
 
 msgid "Corrector"
-msgstr ""
+msgstr "Korrektor"
 
 msgid "Correction date"
-msgstr ""
+msgstr "Korrekturdatum"
 
 msgid "Hide attempts table on start page"
-msgstr ""
+msgstr "Versuche-Tabelle auf der Startseite ausblenden"
 
 msgid "Maximum progress in learning paths"
-msgstr ""
+msgstr "Maximaler Fortschritt in Lernpfaden"
 
 msgid "Hide skills"
-msgstr ""
+msgstr "Fähigkeiten ausblenden"
 
 msgid "Options for hiding in export"
-msgstr ""
+msgstr "Optionen zum Ausblenden beim Export"
 
 msgid "Hide assignments"
-msgstr ""
+msgstr "Aufgaben ausblenden"
 
 msgid "Add survey to course"
-msgstr ""
+msgstr "Umfrage zum Kurs hinzufügen"
 
 msgid "Move the current survey"
-msgstr ""
+msgstr "Verschieben Sie die aktuelle Umfrage"
 
 msgid "Share events in course sessions"
-msgstr ""
+msgstr "Teilen Sie Ereignisse in Kurs-Sessionen"
 
 msgid "Agenda events in the course will be visible in sessions"
-msgstr ""
+msgstr "Termine im Kurs werden in Sessions sichtbar sein"
 
 msgid "Agenda events only visible in current course"
-msgstr ""
+msgstr "Agendaereignisse nur im aktuellen Kurs sichtbar"
 
 msgid "Test result"
-msgstr ""
+msgstr "Testergebnis"
 
 msgid "Filter by Learning Path"
-msgstr ""
+msgstr "Filtern nach Lernpfad"
 
 msgid "Share forums in all sessions"
-msgstr ""
+msgstr "Foren in allen Sessions teilen"
 
 msgid "You have achieved a new skill."
-msgstr ""
+msgstr "Sie haben eine neue Fähigkeit erlangt."
 
 msgid "Hi, %s. You have achieved the skill \"%s\". To see the details go here: %s."
 msgstr ""
+"Hallo, %s. Sie haben die Fähigkeit '%s' erworben. Um die Details zu sehen, "
+"gehen Sie hier: %s."
 
 msgid "To assign a new skill to this user, click <a href=\"%s\">here</a>"
 msgstr ""
+"Um dieser Person eine neue Fähigkeit zuzuweisen, klicken Sie <a "
+"href='%s'>hier</a>"
 
 msgid "Add event in course calendar"
-msgstr ""
+msgstr "Ereignis im Kurskalender hinzufügen"
 
 msgid "Hours"
-msgstr ""
+msgstr "Stunden"
 
 msgid "Reminder for event : %s"
-msgstr ""
+msgstr "Erinnerung für Veranstaltung: %s"
 
 msgid "Add notification"
-msgstr ""
+msgstr "Benachrichtigung hinzufügen"
 
 msgid "Notification to remind the event"
-msgstr ""
+msgstr "Benachrichtigung zur Erinnerung an das Ereignis"
 
 msgid "Add tags"
-msgstr ""
+msgstr "Tags hinzufügen"
 
 msgid "Event editable by the invitees"
-msgstr ""
+msgstr "Ereignis kann von den Eingeladenen bearbeitet werden"
 
 msgid "Invitees"
-msgstr ""
+msgstr "Eingeladene"
 
 msgid "Reminder number %s for the course %s"
-msgstr ""
+msgstr "Erinnerung Nummer %s für den Kurs %s"
 
 msgid "Hello %s"
-msgstr ""
+msgstr "Hallo %s"
 
 msgid "You are registered in the training %s since the %s"
-msgstr ""
+msgstr "Sie sind seit dem %s für das Training %s angemeldet"
 
 msgid "You are receiving this message because you have completed a learning path with a %s% progress of your training.<br/>Your progress must be 100 to consider that your training was carried out.<br/>If you have the slightest problem, you should contact with your trainer."
 msgstr ""
+"Sie erhalten diese Nachricht, weil Sie einen Lernpfad mit einem Fortschritt "
+"von %s% Ihrer Schulung abgeschlossen haben.<br/>Ihr Fortschritt muss 100 "
+"betragen, um zu bestätigen, dass Ihre Schulung durchgeführt wurde.<br/>Bei "
+"dem geringsten Problem sollten Sie sich an Ihren Trainer wenden."
 
 msgid "As a reminder, to access the training platform:<br/>1. Connect to the platform at the address: %s <br/>2. Then enter: <br/>Your username: %s <br/>Your password: This was emailed to you.<br/>if you forgot it and can't find it, you can retrieve it by going to %s <br/><br/>Thank you for doing what is necessary."
 msgstr ""
+"Als Erinnerung, um auf die Trainingsplattform zuzugreifen:<br/>1. Verbinden "
+"Sie sich mit der Plattform unter der Adresse: %s <br/>2. Geben Sie dann ein: "
+"<br/>Ihr Benutzername: %s <br/>Ihr Passwort: Dies wurde Ihnen per E-Mail "
+"zugeschickt.<br/>Wenn Sie es vergessen haben und nicht finden können, können "
+"Sie es abrufen, indem Sie zu %s gehen <br/><br/>Vielen Dank, dass Sie das "
+"Notwendige veranlassen."
 
 msgid "The training center<p>%s</p>Trainers:<br/>%s"
 msgstr ""
@@ -25590,3 +25631,49 @@ msgstr "Ihre Session-Suchdiagnose ist gespeichert"
 
 msgid "Create surveyDoodle"
 msgstr "Erstellen Sie eine Doodle-Umfrage"
+
+msgid "FAQ"
+msgstr "FAQ"
+
+msgid "Sign out"
+msgstr "Abmelden"
+
+msgid "Deleted users"
+msgstr "Gelöschte Benutzer"
+
+msgid "Sessions catalogue"
+msgstr "Sessionskatalog"
+
+msgid "The name provided will be used as the identifier of the user extra field containing an ID that the remote SCORM API will recognize as a user ID. This is only useful if your remote SCORM provider asked you for something similar."
+msgstr ""
+"Der angegebene Name wird als Bezeichner für das zusätzliche Benutzerfeld "
+"verwendet, das eine ID enthält, welche die entfernte SCORM-API als Benutzer-"
+"ID erkennen wird. Dies ist nur nützlich, wenn Ihr entfernter SCORM-Anbieter "
+"nach etwas Ähnlichem gefragt hat."
+
+msgid "View all friends"
+msgstr "Alle Freunde anzeigen"
+
+msgid "My General Certificate"
+msgstr "Mein allgemeines Zertifikat"
+
+msgid "Mark as promoted message"
+msgstr "Als Werbenachricht markieren"
+
+msgid "Extra field to use as student ID for SCORM API"
+msgstr "Zusatzfeld als Studenten-ID für SCORM API verwenden"
+
+msgid "Unauthorised view access to resource"
+msgstr "Unbefugte Ansicht - Zugriff auf Ressource verboten"
+
+msgid "Multiple choice with *other* option"
+msgstr "Mehrfachauswahl mit *andere* Option"
+
+msgid "My profile"
+msgstr "Mein Profil"
+
+msgid "My Skills"
+msgstr "Meine Fähigkeiten"
+
+msgid "Created with Chamilo copyright year"
+msgstr "Erstellt mit Chamilo © %s"

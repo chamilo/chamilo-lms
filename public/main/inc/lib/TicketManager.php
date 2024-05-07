@@ -481,7 +481,7 @@ class TicketManager
                     </table>';
 
             if (0 != $assignedUserId) {
-                $href = api_get_path(WEB_CODE_PATH).'/ticket/ticket_details.php?ticket_id='.$ticketId;
+                $href = api_get_path(WEB_CODE_PATH).'ticket/ticket_details.php?ticket_id='.$ticketId;
                 $helpDeskMessage .= sprintf(
                     get_lang("Ticket assigned to %s. Follow-up at <a href='%s'>#%s</a>."),
                     $assignedUserInfo['complete_name'],
@@ -1378,7 +1378,7 @@ class TicketManager
         $titleEmail = "[$ticketCode] $title";
 
         // Content
-        $href = api_get_path(WEB_CODE_PATH).'/ticket/ticket_details.php?ticket_id='.$ticketId;
+        $href = api_get_path(WEB_CODE_PATH).'ticket/ticket_details.php?ticket_id='.$ticketId;
         $ticketUrl = Display::url($ticketCode, $href);
         $messageEmail = get_lang('Ticket number').": $ticketUrl <br />";
         $messageEmail .= get_lang('Status').": $status <br />";

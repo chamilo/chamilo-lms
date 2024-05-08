@@ -29,9 +29,6 @@ class MessageListener
                 ;
                 $args->getEntityManager()->persist($messageSent);
                 $args->getEntityManager()->flush();*/
-
-                // Dispatch to the Messenger bus. Function MessageHandler.php will send the message.
-                $this->bus->dispatch($message);
             }
         }
     }

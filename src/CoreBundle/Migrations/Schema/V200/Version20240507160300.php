@@ -30,7 +30,7 @@ final class Version20240507160300 extends AbstractMigrationChamilo
         $users = $this->entityManager->getRepository(User::class)->findAll();
 
         foreach ($users as $userEntity) {
-            if (!$illustrationRepo->hasIllustration($userEntity)) {
+            if ($userEntity->getResourceNode() && !$illustrationRepo->hasIllustration($userEntity)) {
                 $picture = $userEntity->getPictureUri();
                 if (empty($picture)) {
                     continue;
@@ -42,9 +42,12 @@ final class Version20240507160300 extends AbstractMigrationChamilo
                 if (file_exists($picturePath)) {
                     $mimeType = mime_content_type($picturePath);
                     $file = new UploadedFile($picturePath, $picture, $mimeType, null, true);
-                    $illustrationRepo->addIllustration($userEntity, $userEntity, $file);
-                    error_log('Illustration added for User ID: ' . $userEntity->getId());
-                    chmod($picturePath, 0644);
+                    if ($userEntity->getResourceNode()) {
+                        $illustrationRepo->addIllustration($userEntity, $userEntity, $file);
+                        error_log('Illustration added for User ID: ' . $userEntity->getId());
+                    } else {
+                        error_log('No resource node found for User ID: ' . $userEntity->getId());
+                    }
                 }
             }
         }

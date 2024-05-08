@@ -903,6 +903,16 @@ $userInfoExtra = [];
 $userInfoExtra['groups'] = $userGroupManager;
 $userInfoExtra['online'] = $online;
 
+$bossList = [];
+$studentBossList = Usermanager::getStudentBossList($studentId);
+foreach ($studentBossList as $boss) {
+    $bossInfo = api_get_user_info($boss['boss_id']);
+    if ($bossInfo) {
+        $bossList[] = $bossInfo['complete_name_with_username'];
+    }
+}
+$userInfoExtra['boss_list'] = $bossList;
+
 if (!empty($courseCode)) {
     $userInfoExtra['url_access'] = Display::url(
         get_lang('See accesses'),

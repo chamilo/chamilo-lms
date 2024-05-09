@@ -14,6 +14,8 @@ function newVideosCallback(newVideo) {
     return
   }
 
+  newVideo.classList.add("not-prose")
+
   // eslint-disable-next-line no-undef
   new MediaElementPlayer(newVideo, mejsOptions)
 }

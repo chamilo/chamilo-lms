@@ -37,16 +37,16 @@ final class Version20240507160300 extends AbstractMigrationChamilo
                 }
 
                 $path = $this->determinePath($userEntity->getId(), $picture);
-                $picturePath = $rootPath . '/app/upload/' . $path . $picture;
+                $picturePath = $rootPath.'/app/upload/'.$path.$picture;
 
                 if (file_exists($picturePath)) {
                     $mimeType = mime_content_type($picturePath);
                     $file = new UploadedFile($picturePath, $picture, $mimeType, null, true);
                     if ($userEntity->getResourceNode()) {
                         $illustrationRepo->addIllustration($userEntity, $userEntity, $file);
-                        error_log('Illustration added for User ID: ' . $userEntity->getId());
+                        error_log('Illustration added for User ID: '.$userEntity->getId());
                     } else {
-                        error_log('No resource node found for User ID: ' . $userEntity->getId());
+                        error_log('No resource node found for User ID: '.$userEntity->getId());
                     }
                 }
             }
@@ -61,8 +61,9 @@ final class Version20240507160300 extends AbstractMigrationChamilo
         $path = "users/{$userId}/";
         $splitSetting = $this->fetchSplitSetting();
         if (!empty($splitSetting) && 'true' === $splitSetting['selected_value']) {
-            $path = 'users/' . substr((string) $userId, 0, 1) . '/' . $userId . '/';
+            $path = 'users/'.substr((string) $userId, 0, 1).'/'.$userId.'/';
         }
+
         return $path;
     }
 
@@ -70,6 +71,7 @@ final class Version20240507160300 extends AbstractMigrationChamilo
     {
         $sql = "SELECT * FROM settings_current WHERE variable = 'split_users_upload_directory' AND access_url = 1";
         $result = $this->connection->executeQuery($sql);
+
         return $result->fetchAssociative() ?? [];
     }
 }

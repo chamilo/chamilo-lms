@@ -1,10 +1,12 @@
 import "mediaelement/build/mediaelementplayer.min.css"
 import "mediaelement/full"
 
+import iconSprite from "../../css/scss/libs/mediaelementjs/icons.svg"
+
 const videoSelector = "video:not(.skip), audio:not(.skip)"
 
 const mejsOptions = {
-  iconSprite: "/build/libs/mediaelement/mejs-controls.svg",
+  iconSprite,
 }
 
 function newVideosCallback(newVideo) {

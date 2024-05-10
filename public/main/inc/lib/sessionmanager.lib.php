@@ -2893,7 +2893,7 @@ class SessionManager
 
                 // Subscribe all the users from the session to this course inside the session
                 self::insertUsersInCourse(
-                    array_column($user_list, 'id'),
+                    array_column($user_list, 'user_id'),
                     $courseId,
                     $sessionId,
                     ['visibility' => $sessionVisibility],
@@ -9840,6 +9840,9 @@ class SessionManager
         }
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public static function insertUsersInCourse(
         array $studentIds,
         int $courseId,
@@ -9856,25 +9859,17 @@ class SessionManager
 
         foreach ($studentIds as $studentId) {
             $user = api_get_user_entity($studentId);
+            $session->addUserInCourse($relationInfo['status'], $user, $course)
+                ->setVisibility($relationInfo['visibility']);
 
-            if (!$session->hasUserInCourse($user, $course)) {
-                $session->addUserInCourse($relationInfo['status'], $user, $course)
-                    ->setVisibility($relationInfo['visibility']);
+            Event::logUserSubscribedInCourseSession($user, $course, $session);
 
-                Event::logUserSubscribedInCourseSession($user, $course, $session);
-            }
-
-            $subscription = new SessionRelUser();
-            $subscription->setUser($user);
-            $subscription->setSession($session);
-            $subscription->setRelationType(Session::STUDENT);
-
-            if ($updateSession && !$session->hasUser($subscription)) {
+            if ($updateSession) {
                 $session->addUserInSession(Session::STUDENT, $user);
             }
         }
 
-        try {
+       try {
             $em->persist($session);
             $em->flush();
         } catch (\Exception $e) {

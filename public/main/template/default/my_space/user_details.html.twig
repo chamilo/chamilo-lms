@@ -19,7 +19,7 @@
             <div class="flex-auto lg:flex-1/3 px-4">
                 {{ display.reporting_user_details(user) }}
                 {% if user_extra.boss_list %}
-                    <h3 class="font-semibold mt-4">Student Boss:</h3>
+                    <h3 class="font-semibold mt-4">{{ 'Student\'s superior'|trans }}</h3>
                     {% for boss in user_extra.boss_list %}
                         <p>{{ boss }}</p>
                     {% endfor %}

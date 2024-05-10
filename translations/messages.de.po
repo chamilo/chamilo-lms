@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-05-07 17:32+0000\n"
+"PO-Revision-Date: 2024-05-10 14:58+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: German <https://translation.chamilo.org/projects/chamilo/"
 "messages/de/>\n"
@@ -24883,46 +24883,46 @@ msgid "The training center<p>%s</p>Trainers:<br/>%s"
 msgstr ""
 
 msgid "Get embedable link"
-msgstr ""
+msgstr "Einbettbaren Link erhalten"
 
 msgid "Link to embed the exercise"
-msgstr ""
+msgstr "Link zum Einbetten der Übung"
 
 msgid "Copy this url to include this exercise in an iframe:"
-msgstr ""
+msgstr "Kopieren Sie diese URL, um diese Übung in einem iframe einzubinden:"
 
 msgid "Export extra fields"
-msgstr ""
+msgstr "Exportieren Sie zusätzliche Felder"
 
 msgid "Hide ex-learners"
-msgstr ""
+msgstr "Ehemalige Lernende ausblenden"
 
 msgid "Certificate of achievement per learning path"
-msgstr ""
+msgstr "Zertifikat über den Lernerfolg pro Lernpfad"
 
 msgid "You have obtained the following results in the training course:"
-msgstr ""
+msgstr "Sie haben die folgenden Ergebnisse im Trainingskurs erzielt:"
 
 msgid "You have obtained the following results in the tests:"
-msgstr ""
+msgstr "Sie haben folgende Ergebnisse in den Tests erzielt:"
 
 msgid "Export LP Quiz results"
-msgstr ""
+msgstr "Exportieren Sie die LP-Quizergebnisse"
 
 msgid "Learning path results"
-msgstr ""
+msgstr "Lernpfadergebnisse"
 
 msgid "Active users in sessions per URL"
-msgstr ""
+msgstr "Aktive Nutzer in Sessions pro URL"
 
 msgid "Next LP"
-msgstr ""
+msgstr "Nächster LP"
 
 msgid "No notification"
-msgstr ""
+msgstr "Keine Benachrichtigung"
 
 msgid "Allow skills assignation by sub category"
-msgstr ""
+msgstr "Erlauben Sie die Zuweisung von Fähigkeiten nach Unterkategorie"
 
 msgid "It allows the acquisition of skills by sub categories independently."
 msgstr ""
@@ -24961,46 +24961,48 @@ msgid "Disable signature"
 msgstr ""
 
 msgid "Enable signature"
-msgstr ""
+msgstr "Aktivieren Sie die Signatur"
 
 msgid "Sign"
-msgstr ""
+msgstr "Zeichen"
 
 msgid "View signature"
-msgstr ""
+msgstr "Betrachten Sie die Signatur"
 
 msgid "Download QR for attendance signature"
-msgstr ""
+msgstr "QR-Code für Anwesenheitsunterschrift herunterladen"
 
 msgid "Password requirement passed"
-msgstr ""
+msgstr "Passwortanforderung erfüllt"
 
 msgid "Pending password requirement"
-msgstr ""
+msgstr "Ausstehende Passwortanforderung"
 
 msgid "Minimum %s special characters"
-msgstr ""
+msgstr "Mindestens %s Sonderzeichen"
 
 msgid "The new password cannot be same as the current password"
-msgstr ""
+msgstr "Das neue Passwort darf nicht mit dem aktuellen Passwort übereinstimmen"
 
 msgid "Filter by class"
-msgstr ""
+msgstr "Nach Klasse filtern"
 
 msgid "Not in any class"
-msgstr ""
+msgstr "In keiner Klasse"
 
 msgid "The account for username <i>%s</i> was disabled after %d failed login attempts."
 msgstr ""
+"Das Konto für den Benutzernamen <i>%s</i> wurde nach %d fehlgeschlagenen "
+"Anmeldeversuchen deaktiviert."
 
 msgid "Answer list"
-msgstr ""
+msgstr "Antwortliste"
 
 msgid "Enter a list of answers (one answer by line)"
-msgstr ""
+msgstr "Geben Sie eine Liste von Antworten ein (eine Antwort pro Zeile)"
 
 msgid "Or select a CSV file with a list of answers"
-msgstr ""
+msgstr "Oder wählen Sie eine CSV-Datei mit einer Liste von Antworten"
 
 msgid "Convert to multiple answer dropdown"
 msgstr ""

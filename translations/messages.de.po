@@ -22603,8 +22603,8 @@ msgstr "Frist für die Einreichung der Arbeit (Für den Lernenden sichtbar)"
 msgid "Follow up message about student %s"
 msgstr "Follow-up Nachricht über Lernende %s"
 
-msgid "Hi,<br/><br/>"
-msgstr "Hallo,<br/><br/>"
+msgid "Hi,<br/><br/>User %s sent a follow up message about student %s.<br/><br/>The message can be seen here %s"
+msgstr "Hallo,<br/><br/>Benutzer %s hat eine Follow-up-Nachricht zum Lernenden %s gesendet.<br/><br/>Die Nachricht ist an %s sichtbar"
 
 msgid "Include services"
 msgstr "Einschließlich Dienstleistungen"

@@ -9847,29 +9847,39 @@ class SessionManager
         array $relationInfo = [],
         bool $updateSession = true
     ) {
+        $em = Database::getManager();
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
 
-        $em = Database::getManager();
 
         $relationInfo = array_merge(['visibility' => 0, 'status' => Session::STUDENT], $relationInfo);
 
         foreach ($studentIds as $studentId) {
             $user = api_get_user_entity($studentId);
 
-            $session
-                ->addUserInCourse($relationInfo['status'], $user, $course)
-                ->setVisibility($relationInfo['visibility']);
+            if (!$session->hasUserInCourse($user, $course)) {
+                $session->addUserInCourse($relationInfo['status'], $user, $course)
+                    ->setVisibility($relationInfo['visibility']);
 
-            Event::logUserSubscribedInCourseSession($user, $course, $session);
+                Event::logUserSubscribedInCourseSession($user, $course, $session);
+            }
 
-            if ($updateSession) {
+            $subscription = new SessionRelUser();
+            $subscription->setUser($user);
+            $subscription->setSession($session);
+            $subscription->setRelationType(Session::STUDENT);
+
+            if ($updateSession && !$session->hasUser($subscription)) {
                 $session->addUserInSession(Session::STUDENT, $user);
             }
         }
 
-        $em->persist($session);
-        $em->flush();
+        try {
+            $em->persist($session);
+            $em->flush();
+        } catch (\Exception $e) {
+            error_log("Error executing flush: " . $e->getMessage());
+        }
     }
 
     public static function getCareersFromSession(int $sessionId): array

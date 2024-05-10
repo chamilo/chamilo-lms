@@ -22487,8 +22487,8 @@ msgstr "Posted deadline for sending the work (Visible to the learner)"
 msgid "Follow up message about student %s"
 msgstr "Follow up message about student %s"
 
-msgid "Hi,<br/><br/>"
-msgstr "Hi,<br/><br/>"
+msgid "Hi,<br/><br/>User %s sent a follow up message about student %s.<br/><br/>The message can be seen here %s"
+msgstr "Hi,<br/><br/>User %s sent a follow up message about student %s.<br/><br/>The message can be seen here %s"
 
 msgid "Include services"
 msgstr "Include services"

@@ -1,10 +1,12 @@
 import "mediaelement/build/mediaelementplayer.min.css"
 import "mediaelement/full"
 
+import iconSprite from "../../css/scss/libs/mediaelementjs/icons.svg"
+
 const videoSelector = "video:not(.skip), audio:not(.skip)"
 
 const mejsOptions = {
-  iconSprite: "/build/libs/mediaelement/mejs-controls.svg",
+  iconSprite,
 }
 
 function newVideosCallback(newVideo) {
@@ -13,6 +15,8 @@ function newVideosCallback(newVideo) {
   if (attrId && attrId.startsWith("mejs")) {
     return
   }
+
+  newVideo.classList.add("not-prose")
 
   // eslint-disable-next-line no-undef
   new MediaElementPlayer(newVideo, mejsOptions)

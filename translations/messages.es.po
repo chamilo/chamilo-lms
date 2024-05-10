@@ -22515,8 +22515,8 @@ msgstr "Fecha límite publicada para enviar el trabajo (visible para el alumno)"
 msgid "Follow up message about student %s"
 msgstr "Mensaje de seguimiento sobre alumno %s"
 
-msgid "Hi,<br/><br/>"
-msgstr "Hola,<br/><br/>"
+msgid "Hi,<br/><br/>User %s sent a follow up message about student %s.<br/><br/>The message can be seen here %s"
+msgstr "Hola,<br/><br/>El usuario %s ha enviado un mensaje de seguimiento sobre el alumno %s.<br/><br/>El mensaje se puede ver en %s"
 
 msgid "Include services"
 msgstr "Incluir los servicios"
@@ -25276,7 +25276,6 @@ msgstr "Recordarme"
 msgid "My Skills"
 msgstr "Mis competencias"
 
-#, fuzzy
 msgid "Text appearing at the end of the test when the user has failed."
 msgstr "Texto que aparece al final del examen cuando el usuario no ha aprobado."
 
@@ -25287,8 +25286,7 @@ msgid "Learn more about Chamilo and its use, official references links"
 msgstr "Aprenda más sobre Chamilo y su uso, enlaces a referencias oficiales"
 
 msgid "Manage the skills of your users, through courses and badges"
-msgstr ""
-"Gestione las habilidades de sus usuarios, a través de cursos y distintivos"
+msgstr "Gestione las habilidades de sus usuarios, a través de cursos y distintivos"
 
 msgid "Signed in as"
 msgstr "Conectado como"
@@ -25308,13 +25306,11 @@ msgstr ""
 "Otros usuarios no podrán verlos."
 
 msgid "Select 'Yes' to remove the button to delete all announcements, as this can be used by mistake by teachers."
-msgstr ""
-"Seleccione 'Sí' para eliminar el botón de borrar todos los anuncios, ya que "
+msgstr "Seleccione 'Sí' para eliminar el botón de borrar todos los anuncios, ya que "
 "los formadores pueden usarlo por error."
 
 msgid "This gives the HRM a little more power by allowing them to edit/delete agenda events in the course-session."
-msgstr ""
-"Esto otorga al responable RRHH un poco más de poder al permitirle editar/"
+msgstr "Esto otorga al responable RRHH un poco más de poder al permitirle editar/"
 "eliminar eventos de la agenda en la sesión del curso."
 
 msgid "Default calendar display mode"

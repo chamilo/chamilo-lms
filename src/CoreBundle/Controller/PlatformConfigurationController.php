@@ -81,6 +81,7 @@ class PlatformConfigurationController extends AbstractController
                 'profile.allow_social_map_fields',
                 'forum.global_forums_course_id',
                 'document.students_download_folders',
+                'social.hide_social_groups_block',
             ];
 
             $user = $this->userHelper->getCurrent();

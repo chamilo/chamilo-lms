@@ -56,9 +56,7 @@ function loader() {
 }
 
 function domLoader() {
-  document.addEventListener("DOMContentLoaded", function () {
-    loader()
-  })
+  addedNodesCallback(document)
 }
 
 export function useMediaElementLoader() {

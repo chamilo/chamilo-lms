@@ -19,6 +19,7 @@ Encore.setOutputPath("public/build/")
   .addEntry("legacy_free-jqgrid", "./assets/js/legacy/free-jqgrid.js")
   .addEntry("legacy_lp", "./assets/js/legacy/lp.js")
   .addEntry("legacy_document", "./assets/js/legacy/document.js")
+  .addEntry("legacy_framereadyloader", "./assets/js/legacy/frameReadyLoader.js")
 
   .addEntry("vue", "./assets/vue/main.js")
   .addEntry("vue_installer", "./assets/vue/main_installer.js")

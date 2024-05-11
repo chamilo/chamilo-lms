@@ -2667,9 +2667,23 @@ class Display
         string $itemType = '',
         string $jsConditionalFunction = 'function () { return false; }'
     ): string {
+        $colorThemeRepo = Container::$container->get(ColorThemeRepository::class);
+        $router = Container::getRouter();
+
+        $colorTheme = $colorThemeRepo->getActiveOne();
+        $colorThemeItem = '';
+
+        if ($colorTheme) {
+            $colorThemeItem = '{ type: "stylesheet", src: "'.$router->generate('chamilo_color_theme').'" },';
+        }
+
         return '$.frameReady(function() {},
             "'.$frameName.'",
             [
+                { type: "script", src: "/build/runtime.js" },
+                { type: "script", src: "/build/legacy_framereadyloader.js" },
+                { type: "stylesheet", src: "/build/legacy_framereadyloader.css" },
+                '.$colorThemeItem.'
             ],
             '.$jsConditionalFunction
             .');';

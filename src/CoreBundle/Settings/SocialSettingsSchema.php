@@ -23,6 +23,7 @@ class SocialSettingsSchema extends AbstractSettingsSchema
                     'disable_dislike_option' => 'false',
                     'social_show_language_flag_in_profile' => 'false',
                     'social_make_teachers_friend_all' => 'false',
+                    'hide_social_groups_block' => 'false',
                 ]
             )
         ;
@@ -44,6 +45,7 @@ class SocialSettingsSchema extends AbstractSettingsSchema
             ->add('disable_dislike_option', YesNoType::class)
             ->add('social_show_language_flag_in_profile', YesNoType::class)
             ->add('social_make_teachers_friend_all', YesNoType::class)
+            ->add('hide_social_groups_block', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

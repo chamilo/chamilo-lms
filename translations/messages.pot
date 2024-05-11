@@ -22480,7 +22480,7 @@ msgstr ""
 msgid "Follow up message about student %s"
 msgstr ""
 
-msgid "Hi,<br/><br/>"
+msgid "Hi,<br/><br/>User %s sent a follow up message about student %s.<br/><br/>The message can be seen here %s"
 msgstr ""
 
 msgid "Include services"

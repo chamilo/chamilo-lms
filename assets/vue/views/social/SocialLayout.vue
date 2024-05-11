@@ -8,7 +8,7 @@
           <component :is="currentComponent" />
         </div>
         <div class="flex flex-col w-full md:w-1/4 lg:w-1/6" v-if="!isSearchPage">
-          <MyGroupsCard />
+          <MyGroupsCard v-if="!hideSocialGroupBlock" />
           <MyFriendsCard />
           <MySkillsCard />
         </div>
@@ -34,7 +34,10 @@ import { useSocialInfo } from "../../composables/useSocialInfo"
 import { useSocialStore } from "../../store/socialStore"
 import { useI18n } from "vue-i18n"
 import { useSecurityStore } from "../../store/securityStore"
+import { usePlatformConfig } from "../../store/platformConfig"
 
+const platformConfigStore = usePlatformConfig()
+const hideSocialGroupBlock =  "true" === platformConfigStore.getSetting("social.hide_social_groups_block")
 const route = useRoute()
 const { t } = useI18n()
 const securityStore = useSecurityStore()

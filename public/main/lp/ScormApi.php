@@ -561,7 +561,7 @@ class ScormApi
             $return .= "updateGamification('$stars', '$score'); \n";
 
             $position = $myLP->isFirstOrLastItem($item_id);
-            $return .= "checkCurrentItemPosition('$position'); \n";
+            $return .= "checkCurrentItemPosition('$item_id'); \n";
 
             if ($mediaplayer) {
                 $return .= $mediaplayer;

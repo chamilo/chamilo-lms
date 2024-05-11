@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\ColorThemeRepository;
 use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -2659,5 +2660,18 @@ class Display
                 </div>
             </div>
             ";
+    }
+
+    public static function getFrameReadyBlock(
+        string $frameName,
+        string $itemType = '',
+        string $jsConditionalFunction = 'function () { return false; }'
+    ): string {
+        return '$.frameReady(function() {},
+            "'.$frameName.'",
+            [
+            ],
+            '.$jsConditionalFunction
+            .');';
     }
 }

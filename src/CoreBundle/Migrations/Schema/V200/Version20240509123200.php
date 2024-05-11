@@ -57,13 +57,13 @@ final class Version20240509123200 extends AbstractMigrationChamilo
         foreach ($courses as $course) {
             foreach ($requiredTools as $toolName) {
                 $ctool = $course->getTools()->filter(
-                    fn(CTool $ct) => $ct->getTool()->getTitle() === $toolName
+                    fn (CTool $ct) => $ct->getTool()->getTitle() === $toolName
                 )->first() ?? null;
 
                 if (!$ctool) {
                     $tool = $toolRepo->findOneBy(['title' => $toolName]);
                     if ($tool) {
-                        $linkVisibility = ($toolName == 'course_setting' || $toolName == 'course_maintenance')
+                        $linkVisibility = ('course_setting' == $toolName || 'course_maintenance' == $toolName)
                             ? ResourceLink::VISIBILITY_DRAFT : ResourceLink::VISIBILITY_PUBLISHED;
 
                         $ctool = new CTool();

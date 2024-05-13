@@ -13,11 +13,13 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Entity\Listener\SessionListener;
 use Chamilo\CoreBundle\Repository\SessionRepository;
+use Chamilo\CoreBundle\State\UserSessionSubscriptionsStateProvider;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -39,6 +41,54 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Put(security: "is_granted('ROLE_ADMIN')"),
         new GetCollection(security: "is_granted('ROLE_ADMIN')"),
+        new GetCollection(
+            uriTemplate: '/user/{id}/session_subscriptions/past.{_format}',
+            uriVariables: [
+                'id' => new Link(
+                    fromClass: User::class,
+                ),
+            ],
+            normalizationContext: [
+                'groups' => [
+                    'user_subscriptions:sessions',
+                ],
+            ],
+            security: "is_granted('ROLE_USER')",
+            name: 'user_session_subscriptions_past',
+            provider: UserSessionSubscriptionsStateProvider::class,
+        ),
+        new GetCollection(
+            uriTemplate: '/user/{id}/session_subscriptions/current.{_format}',
+            uriVariables: [
+                'id' => new Link(
+                    fromClass: User::class,
+                ),
+            ],
+            normalizationContext: [
+                'groups' => [
+                    'user_subscriptions:sessions',
+                ],
+            ],
+            security: "is_granted('ROLE_USER')",
+            name: 'user_session_subscriptions_current',
+            provider: UserSessionSubscriptionsStateProvider::class,
+        ),
+        new GetCollection(
+            uriTemplate: '/user/{id}/session_subscriptions/upcoming.{_format}',
+            uriVariables: [
+                'id' => new Link(
+                    fromClass: User::class,
+                ),
+            ],
+            normalizationContext: [
+                'groups' => [
+                    'user_subscriptions:sessions',
+                ],
+            ],
+            security: "is_granted('ROLE_USER')",
+            name: 'user_session_subscriptions_upcoming',
+            provider: UserSessionSubscriptionsStateProvider::class,
+        ),
         new Post(security: "is_granted('ROLE_ADMIN')"),
         new Delete(security: "is_granted('DELETE', object)"),
     ],
@@ -72,6 +122,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'session_rel_course_rel_user:read',
         'course:read',
         'track_e_exercise:read',
+        'user_subscriptions:sessions',
     ])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -85,6 +136,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'session:read',
         'session_rel_user:read',
         'session_rel_course_rel_user:read',
+        'user_subscriptions:sessions',
     ])]
     #[ORM\OrderBy(['position' => 'ASC'])]
     #[ORM\OneToMany(
@@ -171,6 +223,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'course:read',
         'track_e_exercise:read',
         'calendar_event:read',
+        'user_subscriptions:sessions',
     ])]
     #[ORM\Column(name: 'title', type: 'string', length: 150)]
     protected string $title;
@@ -189,7 +242,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     #[ORM\Column(name: 'show_description', type: 'boolean', nullable: true)]
     protected ?bool $showDescription;
 
-    #[Groups(['session:read', 'session:write'])]
+    #[Groups(['session:read', 'session:write', 'user_subscriptions:sessions'])]
     #[ORM\Column(name: 'duration', type: 'integer', nullable: true)]
     protected ?int $duration = null;
 
@@ -221,6 +274,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'session:write',
         'session_rel_user:read',
         'session_rel_course_rel_user:read',
+        'user_subscriptions:sessions',
     ])]
     #[ORM\Column(name: 'display_start_date', type: 'datetime', unique: false, nullable: true)]
     protected ?DateTime $displayStartDate;
@@ -230,6 +284,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'session:write',
         'session_rel_user:read',
         'session_rel_course_rel_user:read',
+        'user_subscriptions:sessions',
     ])]
     #[ORM\Column(name: 'display_end_date', type: 'datetime', unique: false, nullable: true)]
     protected ?DateTime $displayEndDate;
@@ -277,7 +332,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     #[ORM\Column(name: 'status', type: 'integer', nullable: false)]
     protected int $status;
 
-    #[Groups(['session:read', 'session:write', 'session_rel_user:read'])]
+    #[Groups(['session:read', 'session:write', 'session_rel_user:read', 'user_subscriptions:sessions'])]
     #[ORM\ManyToOne(targetEntity: SessionCategory::class, inversedBy: 'sessions')]
     #[ORM\JoinColumn(name: 'session_category_id', referencedColumnName: 'id')]
     protected ?SessionCategory $category = null;
@@ -293,6 +348,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     /**
      * Image illustrating the session (was extra field 'image' in 1.11).
      */
+    #[Groups(['user_subscriptions:sessions'])]
     #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['remove'])]
     #[ORM\JoinColumn(name: 'image_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?Asset $image = null;
@@ -530,6 +586,9 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this;
     }
 
+    /**
+     * @return Collection<SessionRelCourseRelUser>
+     */
     public function getAllUsersFromCourse(int $status): Collection
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq('status', $status));
@@ -686,6 +745,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         ;
     }
 
+    #[Groups(['user_subscriptions:sessions'])]
     public function getGeneralCoachesSubscriptions(): Collection
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq('relationType', self::GENERAL_COACH));
@@ -1192,5 +1252,14 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         }
 
         return !empty($end) && $now <= $end;
+    }
+
+    /**
+     * @return Collection<SessionRelCourseRelUser>
+     */
+    #[Groups(['user_subscriptions:sessions'])]
+    public function getCourseCoachesSubscriptions(): Collection
+    {
+        return $this->getAllUsersFromCourse(self::COURSE_COACH);
     }
 }

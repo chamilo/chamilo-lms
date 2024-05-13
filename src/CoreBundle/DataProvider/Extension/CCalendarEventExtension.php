@@ -169,7 +169,7 @@ final class CCalendarEventExtension implements QueryCollectionExtensionInterface
                 $sessionIdList[] = $session->getId();
             }
         } else {
-            $sessions = $this->sessionRepository->getSessionsByUser($user, $accessUrl);
+            $sessions = $this->sessionRepository->getSessionsByUser($user, $accessUrl)->getQuery()->getResult();
 
             foreach ($sessions as $session) {
                 foreach ($session->getSessionRelCourseByUser($user) as $sessionRelCourse) {

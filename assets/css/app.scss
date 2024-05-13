@@ -619,6 +619,16 @@ form .field {
   display: none;
 }
 
+.sub-item-indent {
+  padding-left: 20px;
+}
+
+.sub-item-indent.active {
+  background-color: #e0e0e0;
+  color: #333;
+  font-weight: bold;
+}
+
 //@import 'primevue-md-light-indigo/theme.css';
 //@import '~primevue/resources/primevue.min.css';
 //@import '~primeflex/primeflex.css';

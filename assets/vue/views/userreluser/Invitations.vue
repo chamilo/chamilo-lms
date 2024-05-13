@@ -27,8 +27,7 @@
 </template>
 
 <script setup>
-import axios from 'axios'
-import { inject, onMounted, ref, watchEffect } from "vue"
+import { inject, onMounted, ref } from "vue"
 import InvitationList from "../../components/userreluser/InvitationList.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useRouter } from "vue-router"
@@ -38,12 +37,9 @@ const receivedInvitations = ref([])
 const sentInvitations = ref([])
 const pendingInvitations = ref([])
 const router = useRouter()
-
 const user = inject('social-user')
-const isCurrentUser = inject('is-current-user')
 
-
-watchEffect(() => {
+onMounted(() => {
   if (user.value && user.value.id) {
     fetchInvitations(user.value.id)
   }

@@ -50,5 +50,10 @@ body {
     prose-h5:text-h5
     prose-h6:text-h6
     prose-img:inline-block prose-img:my-2
-    ;
+    prose-a:text-info
+  ;
+
+  > * {
+    @apply my-0;
+  }
 }

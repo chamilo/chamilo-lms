@@ -7,6 +7,14 @@ const videoSelector = "video:not(.skip), audio:not(.skip)"
 
 const mejsOptions = {
   iconSprite,
+
+  /**
+   * @param {HTMLDivElement} media
+   * @param {HTMLVideoElement|HTMLAudioElement|HTMLIFrameElement} node
+   */
+  success(media, node) {
+    node.classList.add("not-prose")
+  },
 }
 
 function newVideosCallback(newVideo) {
@@ -15,8 +23,6 @@ function newVideosCallback(newVideo) {
   if (attrId && attrId.startsWith("mejs")) {
     return
   }
-
-  newVideo.classList.add("not-prose")
 
   // eslint-disable-next-line no-undef
   new MediaElementPlayer(newVideo, mejsOptions)

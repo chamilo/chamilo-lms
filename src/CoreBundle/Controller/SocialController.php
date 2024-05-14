@@ -342,7 +342,7 @@ class SocialController extends AbstractController
 
         return $this->json([
             'items' => $items,
-            'go_to' => $goToUrl
+            'go_to' => $goToUrl,
         ]);
     }
 

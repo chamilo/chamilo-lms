@@ -92,8 +92,8 @@ class UserVoter extends Voter
         return false;
     }
 
-    private function haveSharedMessages(User $currentUser, User $targetUser): bool {
-
+    private function haveSharedMessages(User $currentUser, User $targetUser): bool
+    {
         $messageRepository = $this->entityManager->getRepository(Message::class);
 
         return $messageRepository->usersHaveSharedMessages($currentUser, $targetUser);

@@ -367,7 +367,7 @@ class MessageRepository extends ServiceEntityRepository
 
     public function usersHaveSharedMessages(?User $currentUser, ?User $targetUser): bool
     {
-        if ($currentUser === null || $targetUser === null) {
+        if (null === $currentUser || null === $targetUser) {
             return false;
         }
 
@@ -380,8 +380,9 @@ class MessageRepository extends ServiceEntityRepository
                 'userOne' => $targetUser,
                 'userTwo' => $currentUser,
             ])
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
-        return count($qb->getQuery()->getResult()) > 0;
+        return \count($qb->getQuery()->getResult()) > 0;
     }
 }

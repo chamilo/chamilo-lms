@@ -2011,7 +2011,7 @@ class Tracking
                         //If the last connection is > than 7 days, the text is red
                         //345600 = 7 days in seconds
                         if ($currentTimestamp - $timestamp > 604800) {
-                            return '<span style="color: #F00;">'.api_format_date($last_login_date, DATE_FORMAT_SHORT).'</span>';
+                            return '<em style="color: #F00;">'.api_format_date($last_login_date, DATE_FORMAT_SHORT).'</em>';
                         } else {
                             return api_format_date($last_login_date, DATE_FORMAT_SHORT);
                         }

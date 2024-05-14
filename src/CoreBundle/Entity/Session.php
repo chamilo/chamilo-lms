@@ -42,7 +42,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Put(security: "is_granted('ROLE_ADMIN')"),
         new GetCollection(security: "is_granted('ROLE_ADMIN')"),
         new GetCollection(
-            uriTemplate: '/user/{id}/session_subscriptions/past.{_format}',
+            uriTemplate: '/users/{id}/session_subscriptions/past.{_format}',
             uriVariables: [
                 'id' => new Link(
                     fromClass: User::class,
@@ -58,7 +58,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             provider: UserSessionSubscriptionsStateProvider::class,
         ),
         new GetCollection(
-            uriTemplate: '/user/{id}/session_subscriptions/current.{_format}',
+            uriTemplate: '/users/{id}/session_subscriptions/current.{_format}',
             uriVariables: [
                 'id' => new Link(
                     fromClass: User::class,
@@ -74,7 +74,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             provider: UserSessionSubscriptionsStateProvider::class,
         ),
         new GetCollection(
-            uriTemplate: '/user/{id}/session_subscriptions/upcoming.{_format}',
+            uriTemplate: '/users/{id}/session_subscriptions/upcoming.{_format}',
             uriVariables: [
                 'id' => new Link(
                     fromClass: User::class,

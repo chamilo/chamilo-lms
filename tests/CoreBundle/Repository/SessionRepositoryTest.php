@@ -543,6 +543,7 @@ class SessionRepositoryTest extends AbstractApiTest
     public function testSessionRelUser(): void
     {
         $em = $this->getEntityManager();
+        /** @var SessionRepository $sessionRepo */
         $sessionRepo = self::getContainer()->get(SessionRepository::class);
 
         $url = $this->getAccessUrl();
@@ -582,7 +583,7 @@ class SessionRepositoryTest extends AbstractApiTest
         $this->assertSame(2, $session->getAllUsersFromCourse(Session::STUDENT)->count());
 
         $student1 = $this->getUser('student1');
-        $sessions = $sessionRepo->getSessionsByUser($student1, $url);
+        $sessions = $sessionRepo->getSessionsByUser($student1, $url)->getQuery()->getResult();
         $this->assertCount(1, $sessions);
 
         $sessions = $sessionRepo->getSessionCoursesByStatusInUserSubscription($student1, $session, Session::STUDENT);

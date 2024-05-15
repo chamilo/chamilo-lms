@@ -133,6 +133,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'message:read',
         'user_rel_user:read',
         'social_post:read',
+        'user_subscriptions:sessions',
     ])]
     public ?string $illustrationUrl = null;
 

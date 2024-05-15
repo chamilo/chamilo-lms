@@ -11,11 +11,8 @@ use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\User;
-use DateTime;
-use DateTimeZone;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 // use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
@@ -24,7 +21,6 @@ final class SessionRelUserExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(
         private readonly Security $security,
-        private readonly RequestStack $requestStack
     ) {}
 
     public function applyToCollection(
@@ -49,51 +45,9 @@ final class SessionRelUserExtension implements QueryCollectionExtensionInterface
             return;
         }
 
-        $request = $this->requestStack->getCurrentRequest();
         $alias = $qb->getRootAliases()[0];
-        $content = $request->getContent();
-
-        $now = new DateTime('now', new DateTimeZone('UTC'));
-        $date = $now->format('Y-m-d H:i:s');
 
         $qb->innerJoin("$alias.session", 's');
-
-        if (str_contains($content, 'getCurrentSessions')) {
-            $qb->andWhere(
-                $qb->expr()->orX(
-                    $qb->expr()->andX(
-                        $qb->expr()->isNotNull('s.accessStartDate'),
-                        $qb->expr()->isNull('s.accessEndDate'),
-                        $qb->expr()->lte('s.accessStartDate', "'$date'")
-                    ),
-                    $qb->expr()->andX(
-                        $qb->expr()->isNotNull('s.accessStartDate'),
-                        $qb->expr()->isNotNull('s.accessEndDate'),
-                        $qb->expr()->lte('s.accessStartDate', "'$date'"),
-                        $qb->expr()->gte('s.accessEndDate', "'$date'")
-                    ),
-                    $qb->expr()->andX(
-                        $qb->expr()->isNull('s.accessStartDate'),
-                        $qb->expr()->isNotNull('s.accessEndDate'),
-                        $qb->expr()->gte('s.accessEndDate', "'$date'")
-                    )
-                )
-            );
-        } elseif (str_contains($content, 'getUpcommingSessions')) {
-            $qb->andWhere(
-                $qb->expr()->andX(
-                    $qb->expr()->isNotNull('s.accessStartDate'),
-                    $qb->expr()->gt('s.accessStartDate', "'$date'")
-                )
-            );
-        } elseif (str_contains($content, 'getPastSessions')) {
-            $qb->andWhere(
-                $qb->expr()->andX(
-                    $qb->expr()->isNotNull('s.accessEndDate'),
-                    $qb->expr()->lt('s.accessEndDate', "'$date'")
-                )
-            );
-        }
 
         if ($this->security->isGranted('ROLE_ADMIN')) {
             return;

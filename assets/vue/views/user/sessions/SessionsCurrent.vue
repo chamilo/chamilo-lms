@@ -19,5 +19,5 @@ import SessionCategoryView from "../../../components/session/SessionCategoryView
 import { useSession } from "./session"
 import SessionsLoading from "./SessionsLoading.vue"
 
-const { sessions, isLoading } = useSession()
+const { sessions, isLoading } = useSession("current")
 </script>

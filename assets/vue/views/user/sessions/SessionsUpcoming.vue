@@ -5,7 +5,6 @@
   <SessionCategoryView
     v-if="!isLoading"
     :result-sessions="sessions"
-    disabled
   />
 </template>
 
@@ -15,5 +14,5 @@ import SessionTabs from "../../../components/session/SessionTabs.vue"
 import { useSession } from "./session"
 import SessionsLoading from "./SessionsLoading.vue"
 
-const { sessions, isLoading } = useSession("upcomming")
+const { sessions, isLoading } = useSession("upcoming")
 </script>

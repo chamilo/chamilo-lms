@@ -1,4 +1,14 @@
 import api from "../config/api"
+import baseService from "./baseService"
+
+/**
+ * @param {string} userIri
+ * @param {string} listType
+ * @returns {Promise<{totalItems, items}>}
+ */
+async function findUserSubscriptions(userIri, listType) {
+  return baseService.getCollection(`${userIri}/session_subscriptions/${listType}`)
+}
 
 export default {
   /**
@@ -10,4 +20,6 @@ export default {
 
     return data
   },
+
+  findUserSubscriptions,
 }

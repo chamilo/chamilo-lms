@@ -851,6 +851,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this;
     }
 
+    #[Groups(['user_subscriptions:sessions'])]
     public function isActiveForStudent(): bool
     {
         $start = $this->getAccessStartDate();
@@ -871,6 +872,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this;
     }
 
+    #[Groups(['user_subscriptions:sessions'])]
     public function isActiveForCoach(): bool
     {
         $start = $this->getCoachAccessStartDate();

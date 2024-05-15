@@ -7,16 +7,15 @@
     <CourseCard
       :session="session"
       :course="course"
-      :session-id="session._id"
-      :disabled="disabledSessions"
+      :session-id="session.id"
+      :disabled="!enableAccess"
     />
   </div>
 </template>
 
 <script setup>
 import CourseCard from "../course/CourseCard.vue"
-import { inject, ref } from "vue"
-import isEmpty from "lodash/isEmpty"
+import { useSecurityStore } from "../../store/securityStore"
 
 const props = defineProps({
   session: {
@@ -25,35 +24,20 @@ const props = defineProps({
   },
 })
 
-const courses = ref([])
+const securityStore = useSecurityStore()
 
-const disabledSessions = inject("disabledSessions") || false
+const courses = props.session.courses
+  ? props.session.courses.map((sesionRelCourse) => ({ ...sesionRelCourse.course, _id: sesionRelCourse.course.id }))
+  : []
 
-let showAllCourses = false
+const isGeneralCoach = props.session.courseCoachesSubscriptions
+  ? props.session.generalCoachesSubscriptions.findIndex((sRcRU) => sRcRU.user["@id"] === securityStore.user["@id"]) >= 0
+  : false
 
-if (!isEmpty(props.session.users) && !isEmpty(props.session.users.edges)) {
-  props.session.users.edges.forEach(({ node }) => {
-    // User is Session::SESSION_ADMIN
-    if (4 === node.relationType) {
-      showAllCourses = true
-    }
-  })
-}
+const isCourseCoach = props.session.courseCoachesSubscriptions
+  ? props.session.courseCoachesSubscriptions.findIndex((sRcRU) => sRcRU.user["@id"] === securityStore.user["@id"]) >= 0
+  : false
 
-if (showAllCourses) {
-  courses.value = props.session.courses.edges.map(({ node }) => {
-    return node.course
-  })
-} else {
-  if (!isEmpty(props.session.courses) && !isEmpty(props.session.courses.edges)) {
-    props.session.courses.edges.map(({ node }) => {
-      const courseExists =
-        props.session.courses.edges.findIndex((courseItem) => courseItem.node.course._id === node.course._id) >= 0
-
-      if (courseExists) {
-        courses.value.push(node.course)
-      }
-    })
-  }
-}
+const enableAccess =
+  (isGeneralCoach || isCourseCoach) && props.session.activeForCoach ? true : props.session.activeForStudent
 </script>

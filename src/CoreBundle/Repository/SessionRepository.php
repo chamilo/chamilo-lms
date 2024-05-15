@@ -7,13 +7,14 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
-use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use DateTime;
+use DateTimeZone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
@@ -62,23 +63,98 @@ class SessionRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    /**
-     * @return array<int, Session>
-     */
-    public function getSessionsByUser(User $user, AccessUrl $url): array
+    public function getSessionsByUser(User $user, AccessUrl $url): QueryBuilder
     {
         $qb = $this->createQueryBuilder('s');
         $qb
             ->innerJoin('s.users', 'sru')
-            ->leftJoin(AccessUrlRelUser::class, 'uru', Join::WITH, 'uru.user = sru.user')
-            ->andWhere('sru.user = :user AND uru.url = :url')
+            ->leftJoin('s.urls', 'urls')
+            ->where($qb->expr()->eq('sru.user', ':user'))
+            ->andWhere($qb->expr()->eq('urls.url', ':url'))
             ->setParameters([
                 'user' => $user,
                 'url' => $url,
             ])
         ;
 
-        return $qb->getQuery()->getResult();
+        return $qb;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getPastSessionsByUser(User $user, AccessUrl $url): QueryBuilder
+    {
+        $now = new DateTime('now', new DateTimeZone('UTC'));
+
+        $qb = $this->getSessionsByUser($user, $url);
+        $qb
+            ->andWhere(
+                $qb->expr()->andX(
+                    $qb->expr()->isNotNull('s.accessEndDate'),
+                    $qb->expr()->lt('s.accessEndDate', ':now')
+                )
+            )
+            ->setParameter('now', $now)
+        ;
+
+        return $qb;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getCurrentSessionsByUser(User $user, AccessUrl $url): QueryBuilder
+    {
+        $now = new DateTime('now', new DateTimeZone('UTC'));
+
+        $qb = $this->getSessionsByUser($user, $url);
+        $qb
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->andX(
+                        $qb->expr()->isNotNull('s.accessStartDate'),
+                        $qb->expr()->isNull('s.accessEndDate'),
+                        $qb->expr()->lte('s.accessStartDate', ':now')
+                    ),
+                    $qb->expr()->andX(
+                        $qb->expr()->isNotNull('s.accessStartDate'),
+                        $qb->expr()->isNotNull('s.accessEndDate'),
+                        $qb->expr()->lte('s.accessStartDate', ':now'),
+                        $qb->expr()->gte('s.accessEndDate', ':now')
+                    ),
+                    $qb->expr()->andX(
+                        $qb->expr()->isNull('s.accessStartDate'),
+                        $qb->expr()->isNotNull('s.accessEndDate'),
+                        $qb->expr()->gte('s.accessEndDate', ':now')
+                    )
+                )
+            )
+            ->setParameter('now', $now)
+        ;
+
+        return $qb;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getUpcomingSessionsByUser(User $user, AccessUrl $url): QueryBuilder
+    {
+        $now = new DateTime('now', new DateTimeZone('UTC'));
+
+        $qb = $this->getSessionsByUser($user, $url);
+        $qb
+            ->andWhere(
+                $qb->expr()->andX(
+                    $qb->expr()->isNotNull('s.accessStartDate'),
+                    $qb->expr()->gt('s.accessStartDate', ':now')
+                )
+            )
+            ->setParameter('now', $now)
+        ;
+
+        return $qb;
     }
 
     public function addUserInCourse(int $relationType, User $user, Course $course, Session $session): void

@@ -64,14 +64,22 @@ final class ResourceNormalizer implements NormalizerInterface, NormalizerAwareIn
         if ($object->hasResourceNode()) {
             $resourceNode = $object->getResourceNode();
 
-            $params = [
-                'id' => $resourceNode->getUuid(),
-                'cid' => $courseId,
-                'sid' => $sessionId,
-                'gid' => $groupId,
-                'tool' => $resourceNode->getResourceType()->getTool()->getTitle(),
-                'type' => $resourceNode->getResourceType()->getTitle(),
-            ];
+            if ($resourceNode->hasResourceFile()) {
+                $params = [
+                    'id' => $resourceNode->getUuid(),
+                    'tool' => $resourceNode->getResourceType()->getTool()->getTitle(),
+                    'type' => $resourceNode->getResourceType()->getTitle(),
+                ];
+            } else {
+                $params = [
+                    'id' => $resourceNode->getUuid(),
+                    'cid' => $courseId,
+                    'sid' => $sessionId,
+                    'gid' => $groupId,
+                    'tool' => $resourceNode->getResourceType()->getTool()->getTitle(),
+                    'type' => $resourceNode->getResourceType()->getTitle(),
+                ];
+            }
 
             // if ($getFile) {
             // Get all links from resource.

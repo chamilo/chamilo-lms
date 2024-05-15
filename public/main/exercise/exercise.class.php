@@ -3629,6 +3629,11 @@ class Exercise
             $nbrAnswers = 1;
         }
 
+        $generatedFile = '';
+        if ($answerType == ORAL_EXPRESSION) {
+            $generatedFile = ExerciseLib::getOralFeedbackAudio($exeId, $questionId);
+        }
+
         $user_answer = '';
         // Get answer list for matching
         $sql = "SELECT iid, answer
@@ -6143,7 +6148,7 @@ class Exercise
             'open_question' => $arrques,
             'open_answer' => $arrans,
             'answer_type' => $answerType,
-            'generated_oral_file' => '',
+            'generated_oral_file' => $generatedFile,
             'user_answered' => $userAnsweredQuestion,
             'correct_answer_id' => $correctAnswerId,
             'answer_destination' => $answerDestination,

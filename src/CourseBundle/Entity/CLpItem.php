@@ -520,12 +520,12 @@ class CLpItem implements Stringable
         return $this;
     }
 
-    public function getRoot(): ?CLpItem
+    public function getRoot(): ?self
     {
         return $this->root;
     }
 
-    public function setRoot(?CLpItem $root): CLpItem
+    public function setRoot(?self $root): self
     {
         $this->root = $root;
 

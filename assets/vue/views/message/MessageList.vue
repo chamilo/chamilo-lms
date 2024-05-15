@@ -179,7 +179,6 @@ import { MESSAGE_STATUS_DELETED, MESSAGE_TYPE_INBOX } from "../../components/mes
 import { GET_USER_MESSAGE_TAGS } from "../../graphql/queries/MessageTag"
 import { useNotification } from "../../composables/notification"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
-import SocialSideMenu from "../../components/social/SocialSideMenu.vue"
 import { useSecurityStore } from "../../store/securityStore"
 
 const route = useRoute()

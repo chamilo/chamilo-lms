@@ -228,6 +228,10 @@
     color: #666;
   }
 
+  .card .stat-content {
+    padding: 10px;
+  }
+
   // Alerts
 
   .alert {
@@ -437,10 +441,6 @@
   font-size: 12px;
 }
 
-.question_description img, .question_options img {
-  display: inherit !important;
-}
-
 .question_options .droppable {
   padding: 5px;
   text-align: center;
@@ -617,6 +617,16 @@ form .field {
 
 .mce-translatehtml, span[lang] {
   display: none;
+}
+
+.sub-item-indent {
+  padding-left: 20px;
+}
+
+.sub-item-indent.active {
+  background-color: #e0e0e0;
+  color: #333;
+  font-weight: bold;
 }
 
 //@import 'primevue-md-light-indigo/theme.css';

@@ -9,8 +9,8 @@ namespace Chamilo\CoreBundle\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
-use Chamilo\CoreBundle\Repository\SkillRepository;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Repository\SkillRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -126,6 +126,7 @@ class Skill implements Stringable
                 return $translation;
             }
         }
+
         return $this->title;
     }
     public function getShortCode($translated = true): string
@@ -137,6 +138,7 @@ class Skill implements Stringable
                 return $translation;
             }
         }
+
         return $this->shortCode;
     }
     public function setShortCode(string $shortCode): self

@@ -129,7 +129,7 @@ if ('true' === api_get_setting('editor.save_titles_as_html')) {
 
 // Exercise description.
 if (!empty($objExercise->description)) {
-    $html .= Display::div($objExercise->description, ['class' => 'exercise_description']);
+    $html .= Display::div($objExercise->description, ['class' => 'exercise_description wysiwyg']);
 }
 
 $extra_params = '';

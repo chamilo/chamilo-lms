@@ -62,7 +62,7 @@ const asyncFind = (query) => {
   isLoadingSelect.value = true
 
   userService
-    .findByUsername(query)
+    .findBySearchTerm(query)
     .then(({ items }) => (users.value = items))
     .catch((error) => {
       console.error("Error fetching users:", error)

@@ -52,8 +52,12 @@ import UpdateMixin from "../../mixins/UpdateMixin"
 import EditLinks from "../../components/resource_links/EditLinks.vue"
 import TemplateList from "../../components/documents/TemplateList.vue"
 import axios from "axios"
+import Panel from "primevue/panel"
+import { storeToRefs } from "pinia"
+import { useSecurityStore } from "../../store/securityStore"
 
 const servicePrefix = "Documents"
+const { isCurrentTeacher } = storeToRefs(useSecurityStore())
 
 export default {
   name: "DocumentsUpdate",
@@ -64,6 +68,7 @@ export default {
     Loading,
     Toolbar,
     DocumentsForm,
+    Panel,
   },
   mixins: [UpdateMixin],
   data() {
@@ -82,9 +87,9 @@ export default {
       violations: "violations",
     }),
     ...mapGetters("documents", ["find"]),
-    ...mapGetters({
-      isCurrentTeacher: "security/isCurrentTeacher",
-    }),
+    isCurrentTeacher: () => {
+      return isCurrentTeacher.value
+    },
   },
   methods: {
     handleBack() {

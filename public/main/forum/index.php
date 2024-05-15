@@ -257,20 +257,29 @@ if ($translate) {
     $htmlHeadXtra[] = api_get_css_asset('select2/css/select2.min.css');
     $htmlHeadXtra[] = api_get_asset('select2/js/select2.min.js');
     $htmlHeadXtra[] = '<script>
-        $(document).ready(function() {
-            $("#extra_language").select2({
-                placeholder: "'.get_lang('Select a language').'",
-                allowClear: true
-            });
-
-            $("#extra_language").on("change", function() {
-                var selectedLanguages = $(this).val();
-                if (selectedLanguages.length === 0) {
-                    window.location.reload();
-                }
-            });
+    $(document).ready(function() {
+        $("#extra_language").select2({
+            placeholder: "'.get_lang('Select a language').'",
+            allowClear: true
         });
-        </script>';
+
+        var urlParams = new URLSearchParams(window.location.search);
+        var reloaded = urlParams.get("reloaded");
+
+        $("#extra_language").on("change", function() {
+            var selectedLanguages = $(this).val();
+            if (selectedLanguages.length === 0 && !reloaded) {
+                urlParams.set("reloaded", "true");
+                window.location.href = window.location.pathname + "?" + urlParams.toString();
+            }
+        });
+
+        if (reloaded) {
+            urlParams.delete("reloaded");
+            window.history.replaceState(null, null, window.location.pathname + "?" + urlParams.toString());
+        }
+    });
+    </script>';
     $form = new FormValidator('search_simple', 'get', api_get_self().'?'.api_get_cidreq(), null, null);
     $form->addHidden('cid', api_get_course_int_id());
     $form->addHidden('sid', api_get_session_id());
@@ -556,6 +565,14 @@ if (is_array($forumCategories)) {
                                 $forumVisibility
                             );
 
+                            $notifyDisabled = true;
+                            $sessionForumNotification = $_SESSION['forum_notification']['forum'] ?? [];
+                            if (in_array($forumId, $sessionForumNotification)) {
+                                $notifyDisabled = false;
+                            }
+                            $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=notify&content=forum&id='.$forumId.'">'.
+                                Display::getMdiIcon('email-alert', ($notifyDisabled ? 'ch-tool-icon-disabled' : 'ch-tool-icon'), '', ICON_SIZE_SMALL, get_lang('Notify me')).'</a>';
+
                             $toolActions .= returnLockUnlockIcon(
                                 'forum',
                                 $forumId,
@@ -569,23 +586,6 @@ if (is_array($forumCategories)) {
                             );
                         }
 
-                        /*$iconnotify = 'notification_mail_na.png';
-                        $session_forum_notification = isset($_SESSION['forum_notification']['forum'])
-                            ? $_SESSION['forum_notification']['forum']
-                            : false;
-
-                        if (is_array($session_forum_notification)) {
-                            if (in_array($forum['forum_id'], $session_forum_notification)) {
-                                $iconnotify = 'notification_mail.png';
-                            }
-                        }
-
-                        if ($hideNotifications == false && !api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
-                            $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
-                                .'&action=notify&content=forum&id='.$forum['forum_id'].'">'
-                                .Display::return_icon($iconnotify, get_lang('Notify me'), null, ICON_SIZE_SMALL)
-                                .'</a>';
-                        };*/
                         $forumInfo['tools'] = $toolActions;
                         $forumsDetailsList[] = $forumInfo;
                     }

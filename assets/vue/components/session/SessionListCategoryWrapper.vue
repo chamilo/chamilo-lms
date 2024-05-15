@@ -7,29 +7,18 @@
       v-for="session in sessions"
       :key="session.id"
     >
-      <SessionCardSimple
-        :session="session"
-      />
+      <SessionCardSimple :session="session" />
     </div>
   </div>
 </template>
 
-<script>
-import SessionCardSimple from './SessionCardSimple.vue';
+<script setup>
+import SessionCardSimple from "./SessionCardSimple.vue"
 
-export default {
-  name: 'SessionListCategoryWrapper',
-  components: {
-    SessionCardSimple
+defineProps({
+  sessions: {
+    type: Array,
+    required: true,
   },
-  props: {
-    sessions: {
-      type: Array,
-      required: true,
-    },
-  },
-  setup() {
-  }
-}
-
+})
 </script>

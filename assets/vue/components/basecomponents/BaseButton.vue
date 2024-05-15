@@ -117,7 +117,7 @@ const buttonClass = computed(() => {
       result += `bg-warning text-warning-button-text hover:bg-warning-gradient ${commonDisabled} `
       break
     case "danger":
-      result += `bg-white border-danger text-danger hover:bg-danger-gradient hover:text-white ${commonDisabled}`
+      result += `bg-white border-error text-danger hover:bg-danger-gradient hover:text-white ${commonDisabled}`
       break
     case "black":
       result += `bg-white border-tertiary text-tertiary hover:bg-tertiary hover:text-white ${commonDisabled}`

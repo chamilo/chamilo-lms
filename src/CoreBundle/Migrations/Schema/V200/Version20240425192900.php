@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
@@ -14,9 +16,6 @@ class Version20240425192900 extends AbstractMigration
         return 'Changes on the agenda_reminder structure';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function up(Schema $schema): void
     {
         if (!$schema->hasTable('agenda_reminder')) {

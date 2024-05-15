@@ -4,7 +4,8 @@
       v-for="template in templates"
       :key="template.id"
       class="template-item"
-      @click="selectTemplate(template.content)">
+      @click="selectTemplate(template.content)"
+    >
       <img :src="template.image" />
       <div>{{ template.title }}</div>
     </div>
@@ -13,14 +14,17 @@
 
 <script>
 export default {
-  name: 'TemplateList',
+  name: "TemplateList",
   props: {
-    templates: []
+    templates: {
+      type: Array,
+      required: true,
+    },
   },
   methods: {
     selectTemplate(content) {
-      this.$emit('template-selected', content);
+      this.$emit("template-selected", content)
     },
-  }
+  },
 }
 </script>

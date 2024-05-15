@@ -146,6 +146,18 @@ $extraField = new ExtraField('session');
 $extraFieldValue = new ExtraFieldValue('session');
 $extraFieldValueUser = new ExtraFieldValue('user');
 
+$wantStage = $extraFieldValueUser->get_values_by_handler_and_field_variable(api_get_user_id(), 'filiere_want_stage');
+$defaultValueStatus = '';
+$hide = true;
+if ($wantStage) {
+    $hide = ('yes' === $wantStage['field_value'] || '' === $wantStage['field_value']);
+}
+
+$defaultValueStatus = 'extraFiliere.hide()';
+if (false === $hide) {
+    $defaultValueStatus = '';
+}
+
 $theme = 'theme_fr';
 
 $lang = $defaultLangCible = api_get_language_isocode();
@@ -800,6 +812,126 @@ $htmlHeadXtra[] = '<script>
 $(function() {
     '.$jqueryExtra.'
     '.$jsTag.'
+});
+</script>';
+
+$url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?a=order&user_id='.$userId;
+$htmlHeadXtra[] = '
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var targetBlock = window.location.hash;
+      var targetBlockWithoutHash = targetBlock.substring(1);
+      const diapoButton = document.querySelector("#card_"+targetBlockWithoutHash+" a");
+
+      setTimeout(function() {
+        diapoButton.click();
+      }, 500);
+    });
+</script>
+<script>
+$(function() {
+    var themeDefault = "extra_'.$theme.'";
+    var extraFiliere = $("input[name=\'extra_filiere[extra_filiere]\']").parent().parent();
+    '.$defaultValueStatus.'
+
+    $("input[name=\'extra_filiere_want_stage[extra_filiere_want_stage]\']").change(function() {
+        if ($(this).val() == "no") {
+            extraFiliere.show();
+        } else {
+            extraFiliere.hide();
+        }
+    });
+
+    $("#extra_theme").parent().append(
+        $("<a>", {
+            "class": "btn ajax btn--plain",
+            "href": "'.$url.'&field_variable=extra_theme",
+            "text": "'.get_lang('Order').'"
+        })
+    );
+
+    $("#extra_theme_fr").parent().append(
+        $("<a>", {
+            "class": "btn ajax btn--plain",
+            "href": "'.$url.'&field_variable=extra_theme_fr",
+            "text": "'.get_lang('Order').'"
+        })
+    );
+
+    $("#extra_theme_de").parent().append(
+        $("<a>", {
+            "class": "btn ajax btn--plain",
+            "href": "'.$url.'&field_variable=extra_theme_de",
+            "text": "'.get_lang('Order').'"
+        })
+    );
+
+    $("#extra_theme_it").parent().append(
+        $("<a>", {
+            "class": "btn ajax btn--plain",
+            "href": "'.$url.'&field_variable=extra_theme_it",
+            "text": "'.get_lang('Order').'"
+        })
+    );
+
+    $("#extra_theme_es").parent().append(
+        $("<a>", {
+            "class": "btn ajax btn--plain",
+            "href": "'.$url.'&field_variable=extra_theme_es",
+            "text": "'.get_lang('Order').'"
+        })
+    );
+
+     $("#extra_theme_pl").parent().append(
+        $("<a>", {
+            "class": "btn ajax btn--plain",
+            "href": "'.$url.'&field_variable=extra_theme_pl",
+            "text": "'.get_lang('Order').'"
+        })
+    );
+
+    $("#extra_domaine_0, #extra_domaine_1, #extra_domaine_2").on("change", function() {
+        var domainList = [];
+        $("#extra_domaine_0 option:selected").each(function() {
+            domainList.push($(this).val());
+        });
+        $("#extra_domaine_1 option:selected").each(function() {
+            domainList.push($(this).val());
+        });
+        $("#extra_domaine_2 option:selected").each(function() {
+            domainList.push($(this).val());
+        });
+
+        var domainListToString = JSON.stringify(domainList);
+
+        $.ajax({
+            contentType: "application/x-www-form-urlencoded",
+            type: "GET",
+            url: "'.api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?a=search_options_from_tags&type=session&from=extra_domaine&search="+themeDefault+"&options="+domainListToString,
+            success: function(data) {
+                var selectToString = "";
+                selectToString += "<option></option>";
+                jQuery.each(JSON.parse(data), function(i, item) {
+                    selectToString += "<optgroup label=\'"+item.text+"\'>";
+                    jQuery.each(item.children, function(j, data) {
+                        if (data.text != "") {
+                            selectToString += "<option value=\'"+data.text+"\'> " +data.text+"</option>"
+                        }
+                    });
+                    selectToString += "</optgroup>";
+                });
+
+                for (i = 0; i <= 5; i++) {
+                    var themeId = "#"+themeDefault+"_"+i;
+                    var beforeValue = $(themeId).find(":selected").val();
+                    $(themeId).find("option").remove().end();
+                    $(themeId).empty();
+                    $(themeId).html(selectToString);
+                    $(themeId).val(beforeValue);
+                }
+            }
+         });
+    });
 });
 </script>';
 

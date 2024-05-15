@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\EventListener;
 use Chamilo\CoreBundle\Controller\EditorController;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
@@ -17,6 +18,7 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Entity\CGroup;
 use ChamiloSession;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
@@ -268,6 +270,13 @@ class CidReqListener
             ChamiloSession::erase('course_already_visited');
         }
 
+        $user = $this->tokenStorage->getToken()->getUser();
+        $courseId = $sessionHandler->get('cid', 0);
+        $sessionId = $sessionHandler->get('sid', 0);
+        $ip = $request->getClientIp();
+        if ($courseId !== 0) {
+            $this->logoutAccess($user, $courseId, $sessionId, $ip);
+        }
         $sessionHandler->remove('toolgroup');
         $sessionHandler->remove('_cid');
         $sessionHandler->remove('cid');
@@ -325,5 +334,46 @@ class CidReqListener
         }
 
         return '';
+    }
+
+    private function logoutAccess(User $user, int $courseId, int $sessionId, string $ip): void
+    {
+        $now = new DateTime("now", new \DateTimeZone("UTC"));
+        $sessionLifetime = 3600;
+        $limitTime = (new DateTime())->setTimestamp(time() - $sessionLifetime);
+
+        $access = $this->entityManager->getRepository(TrackECourseAccess::class)
+            ->createQueryBuilder('a')
+            ->where('a.user = :user AND a.cId = :courseId AND a.sessionId = :sessionId')
+            ->andWhere('a.loginCourseDate > :limitTime')
+            ->setParameters([
+                'user' => $user,
+                'courseId' => $courseId,
+                'sessionId' => $sessionId,
+                'limitTime' => $limitTime,
+            ])
+            ->orderBy('a.loginCourseDate', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if ($access) {
+            $access->setLogoutCourseDate($now);
+            $access->setCounter($access->getCounter() + 1);
+            $this->entityManager->flush();
+        } else {
+            // No access found or existing access is outside the session lifetime
+            // Insert new access record
+            $newAccess = new TrackECourseAccess();
+            $newAccess->setUser($user);
+            $newAccess->setCId($courseId);
+            $newAccess->setSessionId($sessionId);
+            $newAccess->setUserIp($ip);
+            $newAccess->setLoginCourseDate($now);
+            $newAccess->setLogoutCourseDate($now);
+            $newAccess->setCounter(1);
+            $this->entityManager->persist($newAccess);
+            $this->entityManager->flush();
+        }
     }
 }

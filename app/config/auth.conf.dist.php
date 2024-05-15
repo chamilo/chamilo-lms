@@ -61,17 +61,17 @@ $extldap_config = array(
   //ldap host
   'host' => array('1.2.3.4', '2.3.4.5', '3.4.5.6'),
   // filter
-  'filter' => '', // no () arround the string
-  //'port' => , default on 389
+  'filter' => '', // no () around the string
+  //'port' => , default on 389 for LDAP, 636 for LDAPS
   'port' => 389,
-  //protocl version (2 or 3)
+  //protocol version (2 or 3)
   'protocol_version' => 3,
   // set this to 0 to connect to AD server
   'referrals' => 0,
   //String used to search the user in ldap. %username will ber replaced by the username.
   //See extldap_get_user_search_string() function below
-  // For Active Directory: 'user_search' => 'sAMAccountName=%username%',  // no () arround the string
-  // For OpenLDAP: 'user_search' => 'uid=%username%',  // no () arround the string
+  // For Active Directory: 'user_search' => 'sAMAccountName=%username%',  // no () around the string
+  // For OpenLDAP: 'user_search' => 'uid=%username%',  // no () around the string
   'user_search' => 'uid=%username%',
   //encoding used in ldap (most common are UTF-8 and ISO-8859-1
   'encoding' => 'UTF-8',

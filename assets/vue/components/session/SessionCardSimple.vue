@@ -30,7 +30,7 @@ const courses = props.session.courses
   ? props.session.courses.map((sesionRelCourse) => ({ ...sesionRelCourse.course, _id: sesionRelCourse.course.id }))
   : []
 
-const isGeneralCoach = props.session.courseCoachesSubscriptions
+const isGeneralCoach = props.session.generalCoachesSubscriptions
   ? props.session.generalCoachesSubscriptions.findIndex((sRcRU) => sRcRU.user["@id"] === securityStore.user["@id"]) >= 0
   : false
 

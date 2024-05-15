@@ -587,7 +587,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     }
 
     /**
-     * @return Collection<SessionRelCourseRelUser>
+     * @return Collection<int, SessionRelCourseRelUser>
      */
     public function getAllUsersFromCourse(int $status): Collection
     {
@@ -1257,7 +1257,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     }
 
     /**
-     * @return Collection<SessionRelCourseRelUser>
+     * @return Collection<int, SessionRelCourseRelUser>
      */
     #[Groups(['user_subscriptions:sessions'])]
     public function getCourseCoachesSubscriptions(): Collection

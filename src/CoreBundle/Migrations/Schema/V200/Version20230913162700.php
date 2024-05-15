@@ -8,8 +8,15 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\DBAL\Schema\Schema;
+use Exception;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+
+use const PHP_URL_PATH;
 
 final class Version20230913162700 extends AbstractMigrationChamilo
 {
@@ -23,6 +30,23 @@ final class Version20230913162700 extends AbstractMigrationChamilo
         $documentRepo = $this->container->get(CDocumentRepository::class);
 
         $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        $updateConfigurations = [
+            ['table' => 'c_tool_intro', 'field' => 'intro_text'],
+            ['table' => 'c_course_description', 'field' => 'content'],
+            ['table' => 'c_quiz', 'fields' => ['description', 'text_when_finished']],
+            ['table' => 'c_quiz_question', 'fields' => ['description', 'question']],
+            ['table' => 'c_quiz_answer', 'fields' => ['answer', 'comment']],
+            ['table' => 'c_course_description', 'field' => 'content'],
+            ['table' => 'c_student_publication', 'field' => 'description'],
+            ['table' => 'c_student_publication_comment', 'field' => 'comment'],
+            ['table' => 'c_forum_category', 'field' => 'cat_comment'],
+            ['table' => 'c_forum_forum', 'field' => 'forum_comment'],
+            ['table' => 'c_forum_post', 'field' => 'post_text'],
+            ['table' => 'c_glossary', 'field' => 'description'],
+            ['table' => 'c_survey', 'fields' => ['title', 'subtitle']],
+            ['table' => 'c_survey_question', 'fields' => ['survey_question', 'survey_question_comment']],
+            ['table' => 'c_survey_question_option', 'field' => 'option_text'],
+        ];
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
@@ -33,361 +57,35 @@ final class Version20230913162700 extends AbstractMigrationChamilo
                 continue;
             }
 
-            // Tool intro
-            $sql = "SELECT * FROM c_tool_intro WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalIntroText = $itemData['intro_text'];
-                    if (!empty($originalIntroText)) {
-                        $updatedIntroText = $this->replaceOldURLsWithNew($originalIntroText, $courseDirectory, $courseId, $documentRepo);
-                        if ($originalIntroText !== $updatedIntroText) {
-                            $sql = 'UPDATE c_tool_intro SET intro_text = :newIntroText WHERE iid = :introId';
-                            $params = [
-                                'newIntroText' => $updatedIntroText,
-                                'introId' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                        }
-                    }
-                }
+            foreach ($updateConfigurations as $config) {
+                $this->updateContent($config, $courseDirectory, $courseId, $documentRepo);
             }
+        }
+    }
 
-            // Course description
-            $sql = "SELECT * FROM c_course_description WHERE c_id = {$courseId} ORDER BY iid";
+    private function updateContent($config, $courseDirectory, $courseId, $documentRepo): void
+    {
+        if (isset($config['field'])) {
+            $fields = [$config['field']];
+        } elseif (isset($config['fields'])) {
+            $fields = $config['fields'];
+        } else {
+            throw new Exception('No field or fields specified for updating.');
+        }
+
+        foreach ($fields as $field) {
+            $sql = "SELECT iid, {$field} FROM {$config['table']} WHERE c_id = {$courseId}";
             $result = $this->connection->executeQuery($sql);
             $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalContent = $itemData['content'];
-                    if (!empty($originalContent)) {
-                        $updatedContent = $this->replaceOldURLsWithNew($originalContent, $courseDirectory, $courseId, $documentRepo);
-                        if ($originalContent !== $updatedContent) {
-                            $sql = 'UPDATE c_course_description SET content = :newContent WHERE iid = :id';
-                            $params = [
-                                'newContent' => $updatedContent,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                        }
-                    }
-                }
-            }
 
-            // Quiz
-            $sql = "SELECT * FROM c_quiz WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalDescription = $itemData['description'];
-                    if (!empty($originalDescription)) {
-                        $updatedDescription = $this->replaceOldURLsWithNew($originalDescription, $courseDirectory, $courseId, $documentRepo);
-                        if ($originalDescription !== $updatedDescription) {
-                            $sql = 'UPDATE c_quiz SET description = :newDescription WHERE iid = :id';
-                            $params = [
-                                'newDescription' => $updatedDescription,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                        }
-                    }
-
-                    $originalText = $itemData['text_when_finished'];
-                    if (!empty($originalText)) {
-                        $updatedText = $this->replaceOldURLsWithNew($originalText, $courseDirectory, $courseId, $documentRepo);
-                        if ($originalText !== $updatedText) {
-                            $sql = 'UPDATE c_quiz SET text_when_finished = :newText WHERE iid = :id';
-                            $params = [
-                                'newText' => $updatedText,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                        }
-                    }
-                }
-            }
-
-            // Quiz question
-            $sql = "SELECT * FROM c_quiz_question WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalDescription = $itemData['description'];
-                    if (!empty($originalDescription)) {
-                        $updatedDescription = $this->replaceOldURLsWithNew($originalDescription, $courseDirectory, $courseId, $documentRepo);
-                        if ($originalDescription !== $updatedDescription) {
-                            $sql = 'UPDATE c_quiz_question SET description = :newDescription WHERE iid = :id';
-                            $params = [
-                                'newDescription' => $updatedDescription,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                        }
-                    }
-
-                    $originalQuestion = $itemData['question'];
-                    if (!empty($originalQuestion)) {
-                        $updatedQuestion = $this->replaceOldURLsWithNew($originalQuestion, $courseDirectory, $courseId, $documentRepo);
-                        if ($originalQuestion !== $updatedQuestion) {
-                            $sql = 'UPDATE c_quiz_question SET question = :newQuestion WHERE iid = :id';
-                            $params = [
-                                'newQuestion' => $updatedQuestion,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                        }
-                    }
-                }
-            }
-
-            // Quiz answer
-            $sql = "SELECT * FROM c_quiz_answer WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalAnswer = $itemData['answer'];
-                    if (!empty($originalAnswer)) {
-                        $updatedAnswer = $this->replaceOldURLsWithNew($originalAnswer, $courseDirectory, $courseId, $documentRepo);
-                        if ($originalAnswer !== $updatedAnswer) {
-                            $sql = 'UPDATE c_quiz_answer SET answer = :newAnswer WHERE iid = :id';
-                            $params = [
-                                'newAnswer' => $updatedAnswer,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                        }
-                    }
-
-                    $originalComment = $itemData['comment'];
-                    if (!empty($originalComment)) {
-                        $updatedComment = $this->replaceOldURLsWithNew($originalComment, $courseDirectory, $courseId, $documentRepo);
-                        if ($originalComment !== $updatedComment) {
-                            $sql = 'UPDATE c_quiz_answer SET comment = :newComment WHERE iid = :id';
-                            $params = [
-                                'newComment' => $updatedComment,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                        }
-                    }
-                }
-            }
-
-            // Student publication
-            $sql = "SELECT * FROM c_student_publication WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalWorkDescription = $itemData['description'];
-                    if (!empty($originalWorkDescription)) {
-                        $updatedWorkDescription = $this->replaceOldURLsWithNew($originalWorkDescription, $courseDirectory, $courseId, $documentRepo);
-                        if ($originalWorkDescription !== $updatedWorkDescription) {
-                            $sql = 'UPDATE c_student_publication SET description = :newDescription WHERE iid = :id';
-                            $params = [
-                                'newDescription' => $updatedWorkDescription,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                        }
-                    }
-                }
-            }
-
-            // Student publication comment
-            $sql = "SELECT * FROM c_student_publication_comment WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalWorkComment = $itemData['comment'];
-                    if (!empty($originalWorkComment)) {
-                        $updatedWorkComment = $this->replaceOldURLsWithNew($originalWorkComment, $courseDirectory, $courseId, $documentRepo);
-                        if ($originalWorkComment !== $updatedWorkComment) {
-                            $sql = 'UPDATE c_student_publication_comment SET comment = :newComment WHERE iid = :id';
-                            $params = [
-                                'newComment' => $updatedWorkComment,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                        }
-                    }
-                }
-            }
-
-            // Forum category
-            $sql = "SELECT * FROM c_forum_category WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalCatComment = $itemData['cat_comment'];
-                    if (!empty($originalCatComment)) {
-                        $updatedCatComment = $this->replaceOldURLsWithNew($originalCatComment, $courseDirectory, $courseId, $documentRepo);
-                        if ($originalCatComment !== $updatedCatComment) {
-                            $sql = 'UPDATE c_forum_category SET cat_comment = :newComment WHERE iid = :id';
-                            $params = [
-                                'newComment' => $updatedCatComment,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                        }
-                    }
-                }
-            }
-
-            // Forum
-            $sql = "SELECT * FROM c_forum_forum WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalForumComment = $itemData['forum_comment'];
-                    if (!empty($originalForumComment)) {
-                        $updatedForumComment = $this->replaceOldURLsWithNew($originalForumComment, $courseDirectory, $courseId, $documentRepo);
-                        if ($originalForumComment !== $updatedForumComment) {
-                            $sql = 'UPDATE c_forum_forum SET forum_comment = :newComment WHERE iid = :id';
-                            $params = [
-                                'newComment' => $updatedForumComment,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                        }
-                    }
-                }
-            }
-
-            // Forum post
-            $sql = "SELECT * FROM c_forum_post WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalPostText = $itemData['post_text'];
-                    if (!empty($originalPostText)) {
-                        $updatedPostText = $this->replaceOldURLsWithNew($originalPostText, $courseDirectory, $courseId, $documentRepo);
-                        if ($originalPostText !== $updatedPostText) {
-                            $sql = 'UPDATE c_forum_post SET post_text = :newText WHERE iid = :id';
-                            $params = [
-                                'newText' => $updatedPostText,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                        }
-                    }
-                }
-            }
-
-            // Glossary
-            $sql = "SELECT * FROM c_glossary WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalGlossaryDescription = $itemData['description'];
-                    if (!empty($originalGlossaryDescription)) {
-                        $updatedGlossaryDescription = $this->replaceOldURLsWithNew($originalGlossaryDescription, $courseDirectory, $courseId, $documentRepo);
-                        if ($originalGlossaryDescription !== $updatedGlossaryDescription) {
-                            $sql = 'UPDATE c_glossary SET description = :newDescription WHERE iid = :id';
-                            $params = [
-                                'newDescription' => $updatedGlossaryDescription,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                        }
-                    }
-                }
-            }
-
-            // Survey
-            $sql = "SELECT * FROM c_survey WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalSurveyTitle = $itemData['title'];
-                    if (!empty($originalSurveyTitle)) {
-                        $updatedSurveyTitle = $this->replaceOldURLsWithNew($originalSurveyTitle, $courseDirectory, $courseId, $documentRepo);
-                        if ($originalSurveyTitle !== $updatedSurveyTitle) {
-                            $sql = 'UPDATE c_survey SET title = :newTitle WHERE iid = :id';
-                            $params = [
-                                'newTitle' => $updatedSurveyTitle,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                        }
-                    }
-
-                    $originalSurveySubTitle = $itemData['subtitle'];
-                    if (!empty($originalSurveySubTitle)) {
-                        $updatedSurveySubTitle = $this->replaceOldURLsWithNew($originalSurveySubTitle, $courseDirectory, $courseId, $documentRepo);
-                        if ($originalSurveySubTitle !== $updatedSurveySubTitle) {
-                            $sql = 'UPDATE c_survey SET subtitle = :newSubtitle WHERE iid = :id';
-                            $params = [
-                                'newSubtitle' => $updatedSurveySubTitle,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                        }
-                    }
-                }
-            }
-
-            // Survey question
-            $sql = "SELECT * FROM c_survey_question WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalSurveyQuestion = $itemData['survey_question'];
-                    if (!empty($originalSurveyQuestion)) {
-                        $updatedSurveyQuestion = $this->replaceOldURLsWithNew($originalSurveyQuestion, $courseDirectory, $courseId, $documentRepo);
-                        if ($originalSurveyQuestion !== $updatedSurveyQuestion) {
-                            $sql = 'UPDATE c_survey_question SET survey_question = :newQuestion WHERE iid = :id';
-                            $params = [
-                                'newQuestion' => $updatedSurveyQuestion,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                        }
-                    }
-
-                    $originalSurveyQuestionComment = $itemData['survey_question_comment'];
-                    if (!empty($originalSurveyQuestionComment)) {
-                        $updatedSurveyQuestionComment = $this->replaceOldURLsWithNew($originalSurveyQuestionComment, $courseDirectory, $courseId, $documentRepo);
-                        if ($originalSurveyQuestionComment !== $updatedSurveyQuestionComment) {
-                            $sql = 'UPDATE c_survey_question SET survey_question_comment = :newComment WHERE iid = :id';
-                            $params = [
-                                'newComment' => $updatedSurveyQuestionComment,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                        }
-                    }
-                }
-            }
-
-            // Survey question option
-            $sql = "SELECT * FROM c_survey_question_option WHERE c_id = {$courseId} ORDER BY iid";
-            $result = $this->connection->executeQuery($sql);
-            $items = $result->fetchAllAssociative();
-            if (!empty($items)) {
-                foreach ($items as $itemData) {
-                    $originalOptionText = $itemData['option_text'];
-                    if (!empty($originalOptionText)) {
-                        $updatedOptionText = $this->replaceOldURLsWithNew($originalOptionText, $courseDirectory, $courseId, $documentRepo);
-                        if ($originalOptionText !== $updatedOptionText) {
-                            $sql = 'UPDATE c_survey_question_option SET option_text = :newText WHERE iid = :id';
-                            $params = [
-                                'newText' => $updatedOptionText,
-                                'id' => $itemData['iid'],
-                            ];
-                            $this->connection->executeQuery($sql, $params);
-                        }
+            foreach ($items as $item) {
+                $originalText = $item[$field];
+                if (!empty($originalText)) {
+                    $updatedText = $this->replaceOldURLsWithNew($originalText, $courseDirectory, $courseId, $documentRepo);
+                    if ($originalText !== $updatedText) {
+                        $sql = "UPDATE {$config['table']} SET {$field} = :newText WHERE iid = :id";
+                        $params = ['newText' => $updatedText, 'id' => $item['iid']];
+                        $this->connection->executeQuery($sql, $params);
                     }
                 }
             }
@@ -397,42 +95,132 @@ final class Version20230913162700 extends AbstractMigrationChamilo
     private function replaceOldURLsWithNew($itemDataText, $courseDirectory, $courseId, $documentRepo): array|string|null
     {
         $contentText = $itemDataText;
+        $specificCoursePattern = '/(src|href)=["\']((https?:\/\/[^\/]+)?(\/courses\/([^\/]+)\/document\/[^"\']+\.\w+))["\']/i';
+        preg_match_all($specificCoursePattern, $contentText, $matches);
 
-        $pattern = '/(src|href)=(["\'])(\/courses\/'.preg_quote($courseDirectory, '/').'\/[^"\']+\.\w+)\2/i';
-        preg_match_all($pattern, $contentText, $matches);
-        $videosSrcPath = $matches[3];
+        foreach ($matches[2] as $index => $fullUrl) {
+            $videoPath = parse_url($fullUrl, PHP_URL_PATH) ?: $fullUrl;
+            $actualCourseDirectory = $matches[5][$index];
+            if ($actualCourseDirectory !== $courseDirectory) {
+                $videoPath = preg_replace("/^\\/courses\\/$actualCourseDirectory\\//i", "/courses/$courseDirectory/", $videoPath);
+            }
 
-        if (!empty($videosSrcPath)) {
-            foreach ($videosSrcPath as $index => $videoPath) {
-                $documentPath = str_replace('/courses/'.$courseDirectory.'/document/', '/', $videoPath);
-                $sql = "SELECT iid, path, resource_node_id
-                        FROM c_document
-                        WHERE
-                              c_id = $courseId AND
-                              path LIKE '$documentPath'
-                ";
-                $result = $this->connection->executeQuery($sql);
-                $documents = $result->fetchAllAssociative();
+            $documentPath = str_replace('/courses/'.$courseDirectory.'/document/', '/', $videoPath);
 
-                if (!empty($documents)) {
-                    foreach ($documents as $documentData) {
-                        $resourceNodeId = (int) $documentData['resource_node_id'];
-                        $documentFile = $documentRepo->getResourceFromResourceNode($resourceNodeId);
-                        if ($documentFile) {
-                            $newUrl = $documentRepo->getResourceFileUrl($documentFile);
-                            if (!empty($newUrl)) {
-                                $patternForReplacement = '/'.$matches[1][$index].'=(["\'])'.preg_quote($videoPath, '/').'\1/i';
-                                $replacement = $matches[1][$index].'=$1'.$newUrl.'$1';
-                                $contentText = preg_replace($patternForReplacement, $replacement, $contentText);
-                                error_log('$documentPath ->'.$documentPath);
-                                error_log('newUrl ->'.$newUrl);
-                            }
-                        }
+            $sql = "SELECT iid, path, resource_node_id FROM c_document WHERE c_id = $courseId AND path LIKE '$documentPath'";
+            $result = $this->connection->executeQuery($sql);
+            $documents = $result->fetchAllAssociative();
+
+            if (!empty($documents)) {
+                $this->replaceDocumentLinks($documents, $documentRepo, $matches, $index, $videoPath, $courseId, $contentText);
+            } else {
+                $document = $this->createNewDocument($videoPath, $courseId);
+                if ($document) {
+                    $newUrl = $documentRepo->getResourceFileUrl($document);
+                    if ($newUrl) {
+                        $replacement = $matches[1][$index].'="'.$newUrl.'"';
+                        $contentText = str_replace($matches[0][$index], $replacement, $contentText);
                     }
                 }
             }
         }
 
         return $contentText;
+    }
+
+    private function replaceDocumentLinks($documents, $documentRepo, $matches, $index, $videoPath, $courseId, &$contentText): void
+    {
+        foreach ($documents as $documentData) {
+            $resourceNodeId = (int) $documentData['resource_node_id'];
+            $documentFile = $documentRepo->getResourceFromResourceNode($resourceNodeId);
+            if ($documentFile) {
+                $newUrl = $documentRepo->getResourceFileUrl($documentFile);
+                if (!empty($newUrl)) {
+                    $patternForReplacement = '/'.preg_quote($matches[0][$index], '/').'/';
+                    $replacement = $matches[1][$index].'="'.$newUrl.'"';
+                    $contentText = preg_replace($patternForReplacement, $replacement, $contentText, 1);
+                }
+            }
+        }
+    }
+
+    private function createNewDocument($videoPath, $courseId)
+    {
+        try {
+            $documentRepo = $this->container->get(CDocumentRepository::class);
+            $kernel = $this->container->get('kernel');
+            $rootPath = $kernel->getProjectDir();
+            $appCourseOldPath = $rootPath.'/app'.$videoPath;
+            $title = basename($appCourseOldPath);
+
+            $courseRepo = $this->container->get(CourseRepository::class);
+            $course = $courseRepo->find($courseId);
+            if (!$course) {
+                throw new Exception("Course with ID $courseId not found.");
+            }
+
+            $document = $documentRepo->findCourseResourceByTitle($title, $course->getResourceNode(), $course);
+            if (null !== $document) {
+                return $document;
+            }
+
+            if (file_exists($appCourseOldPath) && !is_dir($appCourseOldPath)) {
+                $document = new CDocument();
+                $document->setFiletype('file')
+                    ->setTitle($title)
+                    ->setComment(null)
+                    ->setReadonly(false)
+                    ->setCreator($this->getAdmin())
+                    ->setParent($course)
+                    ->addCourseLink($course)
+                ;
+
+                $this->entityManager->persist($document);
+                $this->entityManager->flush();
+
+                $documentRepo->addFileFromPath($document, $title, $appCourseOldPath);
+
+                return $document;
+            }
+            $generalCoursesPath = $rootPath.'/app/courses/';
+            $foundPath = $this->recursiveFileSearch($generalCoursesPath, $title);
+            if ($foundPath) {
+                $document = new CDocument();
+                $document->setFiletype('file')
+                    ->setTitle($title)
+                    ->setComment(null)
+                    ->setReadonly(false)
+                    ->setCreator($this->getAdmin())
+                    ->setParent($course)
+                    ->addCourseLink($course)
+                ;
+
+                $this->entityManager->persist($document);
+                $this->entityManager->flush();
+
+                $documentRepo->addFileFromPath($document, $title, $foundPath);
+                error_log('File found in new location: '.$foundPath);
+
+                return $document;
+            }
+
+            throw new Exception('File not found in any location.');
+        } catch (Exception $e) {
+            error_log('Migration error: '.$e->getMessage());
+
+            return null;
+        }
+    }
+
+    private function recursiveFileSearch($directory, $title)
+    {
+        $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory));
+        foreach ($iterator as $file) {
+            if ($file->isFile() && $file->getFilename() === $title) {
+                return $file->getRealPath();
+            }
+        }
+
+        return null;
     }
 }

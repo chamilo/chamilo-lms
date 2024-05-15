@@ -1859,7 +1859,12 @@ function api_get_course_int_id(?string $code = null): int
         }
     }
 
-    return Session::read('_real_cid', 0);
+    $cid = Session::read('_real_cid', 0);
+    if (empty($cid) && isset($_REQUEST['cid'])) {
+        $cid = (int) $_REQUEST['cid'];
+    }
+
+    return $cid;
 }
 
 /**
@@ -2120,6 +2125,10 @@ function api_get_course_info($courseCode = null)
     $course = Session::read('_course');
     if ('-1' == $course) {
         $course = [];
+    }
+
+    if (empty($course) && isset($_REQUEST['cid'])) {
+        $course = api_get_course_info_by_id((int) $_REQUEST['cid']);
     }
 
     return $course;

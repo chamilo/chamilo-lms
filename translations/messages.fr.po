@@ -23138,8 +23138,8 @@ msgstr "Date limite affichée d'envoi du travail (visible par l'apprenant)"
 msgid "Follow up message about student %s"
 msgstr "Message de suivi concernant l'apprenant %s"
 
-msgid "Hi,<br/><br/>"
-msgstr "Bonjour,<br/><br/>"
+msgid "Hi,<br/><br/>User %s sent a follow up message about student %s.<br/><br/>The message can be seen here %s"
+msgstr "Bonjour,<br/><br/>L'utilisateur %s a envoyé un message de suivi concernant l'apprenant %s.<br/><br/>Le message est visible sur %s"
 
 msgid "Include services"
 msgstr "Inclure les services"

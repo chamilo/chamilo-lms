@@ -312,25 +312,26 @@ class SocialController extends AbstractController
     ): JsonResponse {
         $baseUrl = $requestStack->getCurrentRequest()->getBaseUrl();
         $cid = (int) $settingsManager->getSetting('forum.global_forums_course_id');
-        $groupsArray = [];
-        $threadsArray = [];
+        $items = [];
+        $goToUrl = '';
+
         if (!empty($cid)) {
             $threads = $forumThreadRepository->getThreadsBySubscriptions($userId, $cid);
             foreach ($threads as $thread) {
                 $threadId = $thread->getIid();
                 $forumId = (int) $thread->getForum()->getIid();
-                $threadsArray[] = [
+                $items[] = [
                     'id' => $threadId,
                     'name' => $thread->getTitle(),
                     'description' => '',
                     'url' => $baseUrl.'/main/forum/viewthread.php?cid='.$cid.'&sid=0&gid=0&forum='.$forumId.'&thread='.$threadId,
-                    'go_to' => $baseUrl.'/main/forum/index.php?cid='.$cid.'&sid=0&gid=0',
                 ];
             }
+            $goToUrl = $baseUrl.'/main/forum/index.php?cid='.$cid.'&sid=0&gid=0';
         } else {
             $groups = $usergroupRepository->getGroupsByUser($userId);
             foreach ($groups as $group) {
-                $groupsArray[] = [
+                $items[] = [
                     'id' => $group->getId(),
                     'name' => $group->getTitle(),
                     'description' => $group->getDescription(),
@@ -339,11 +340,10 @@ class SocialController extends AbstractController
             }
         }
 
-        if (!empty($threadsArray)) {
-            return $this->json(['groups' => $threadsArray]);
-        }
-
-        return $this->json(['groups' => $groupsArray]);
+        return $this->json([
+            'items' => $items,
+            'go_to' => $goToUrl,
+        ]);
     }
 
     #[Route('/group/{groupId}/discussion/{discussionId}/messages', name: 'chamilo_core_social_group_discussion_messages')]

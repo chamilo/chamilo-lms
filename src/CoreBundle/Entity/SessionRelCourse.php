@@ -51,7 +51,7 @@ class SessionRelCourse
     #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id', nullable: false)]
     protected ?Session $session = null;
 
-    #[Groups(['session_rel_course:read', 'session_rel_course:write', 'session:read'])]
+    #[Groups(['session_rel_course:read', 'session_rel_course:write', 'session:read', 'user_subscriptions:sessions'])]
     #[ORM\ManyToOne(targetEntity: Course::class, cascade: ['persist'], inversedBy: 'sessions')]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false)]
     protected ?Course $course = null;

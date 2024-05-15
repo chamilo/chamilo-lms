@@ -1,65 +1,70 @@
 import { ref } from "vue"
-import { useQuery } from "@vue/apollo-composable"
-import { GET_SESSION_REL_USER, GET_SESSION_REL_USER_CURRENT } from "../../../graphql/queries/SessionRelUser"
-import { DateTime } from "luxon"
+import { useSecurityStore } from "../../../store/securityStore"
+import sessionService from "../../../services/sessionService"
+import isEmpty from "lodash/isEmpty"
 
-export function useSession(user, start, end, query) {
-  let sessions = ref(null)
-  let isLoading = ref(false)
+export function useSession(type) {
+  const securityStore = useSecurityStore()
 
-  if (user) {
-    let variables = {
-      user: user["@id"],
-    }
+  const isLoading = ref(false)
 
-    variables = includeStartDateIfExist(variables, start)
-    variables = includeEndDateIfExist(variables, end)
-    let finalQuery = getGraphqlQuery(variables)
-    if (query !== undefined) {
-      finalQuery = query
-    }
+  const uncategorizedSessions = ref([])
+  const categories = ref([])
+  const categoriesWithSessions = ref([])
 
+  function getUncategorizedSessions(sessions) {
+    return sessions.filter((session) => isEmpty(session.category))
+  }
+
+  function getCategories(sessions) {
+    let categoryList = []
+
+    sessions.forEach((session) => {
+      if (session.category) {
+        const alreadyAdded = categoryList.findIndex((cat) => cat["@id"] === session.category["@id"]) >= 0
+
+        if (!alreadyAdded) {
+          categoryList.push(session.category)
+        }
+      }
+    })
+
+    return categoryList
+  }
+
+  function getCategoriesWithSessions(sessions) {
+    let categoriesIn = []
+
+    sessions.forEach(function (session) {
+      if (!isEmpty(session.category)) {
+        if (categoriesIn[session.category["@id"]] === undefined) {
+          categoriesIn[session.category["@id"]] = []
+          categoriesIn[session.category["@id"]]["sessions"] = []
+        }
+        categoriesIn[session.category["@id"]]["sessions"].push(session)
+      }
+    })
+
+    return categoriesIn
+  }
+
+  if (securityStore.isAuthenticated) {
     isLoading.value = true
-    const { result, loading } = useQuery(finalQuery, variables)
-    sessions.value = result
-    return {
-      sessions,
-      isLoading: loading,
-    }
+
+    sessionService
+      .findUserSubscriptions(securityStore.user["@id"], type)
+      .then(({ items }) => {
+        uncategorizedSessions.value = getUncategorizedSessions(items)
+        categories.value = getCategories(items)
+        categoriesWithSessions.value = getCategoriesWithSessions(items)
+      })
+      .finally(() => (isLoading.value = false))
   }
 
   return {
-    sessions,
     isLoading,
-  }
-}
-
-const includeStartDateIfExist = (variables, start) => {
-  if (start !== undefined && start !== null) {
-    if (!DateTime.isDateTime(start)) {
-      console.error("You should pass a DateTime instance to useSession start parameter")
-    }
-    variables.afterStartDate = start.toISO()
-  }
-
-  return variables
-}
-
-const includeEndDateIfExist = (variables, end) => {
-  if (end !== undefined && end !== null) {
-    if (!DateTime.isDateTime(end)) {
-      console.error("You should pass a DateTime instance to useSession end parameter")
-    }
-    variables.beforeEndDate = end.toISO()
-  }
-
-  return variables
-}
-
-const getGraphqlQuery = (variables) => {
-  if (Object.hasOwn(variables, "afterStartDate") || Object.hasOwn(variables, "beforeEndDate")) {
-    return GET_SESSION_REL_USER
-  } else {
-    return GET_SESSION_REL_USER_CURRENT
+    uncategorizedSessions,
+    categories,
+    categoriesWithSessions,
   }
 }

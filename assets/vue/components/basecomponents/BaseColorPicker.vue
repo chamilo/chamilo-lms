@@ -6,21 +6,21 @@
       v-text="label"
     />
     <div class="flex flex-row gap-2 h-10">
-      <ColorPicker
-        format="hex"
-        :model-value="hexColor"
-        class="w-11"
-        @update:model-value="colorPicked"
+      <input
+        :value="hexColor"
+        class="h-12 w-12 cursor-pointer rounded-lg"
+        type="color"
+        @input="inputColorPicked($event.target.value)"
       />
       <BaseInputText
         label=""
         class="w-32"
         input-class="mb-0"
-        :model-value="hexColor"
+        :model-value="inputText"
         :error-text="inputHexError"
         :is-invalid="inputHexError !== ''"
         :form-submitted="inputHexError !== ''"
-        @update:model-value="colorPicked"
+        @update:model-value="inputColorPickedFromInputText"
       />
     </div>
     <small
@@ -37,9 +37,8 @@
 </template>
 
 <script setup>
-import ColorPicker from "primevue/colorpicker"
 import Color from "colorjs.io"
-import { computed, ref } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import BaseInputText from "./BaseInputText.vue"
 
@@ -67,23 +66,27 @@ const hexColor = computed(() => {
   let hex = props.modelValue.toString({ format: "hex" })
   // convert #fff color format to full #ffffff, because otherwise input does not set the color right
   if (hex.length === 4) {
-    hex = hex + hex.slice(1)
+    hex = "#" + hex[1] + hex[1] + hex[2] + hex[2] + hex[3] + hex[3]
   }
   return hex
 })
 
 const inputHexError = ref("")
+const inputText = ref("")
 
-function colorPicked(newHexColor) {
+function inputColorPickedFromInputText(newHexColor) {
+  // preserve text input when user is editing the field by hand
+  inputText.value = newHexColor
+  inputColorPicked(newHexColor)
+}
+
+function inputColorPicked(newHexColor) {
   inputHexError.value = ""
-  if (!newHexColor.startsWith("#")) {
-    newHexColor = `#${newHexColor}`
-  }
-  if (newHexColor.length < 7) {
+  if (newHexColor.length !== 7) {
     inputHexError.value = t("Invalid format")
     return
   }
-
+  inputText.value = newHexColor
   try {
     let color = new Color(newHexColor)
     emit("update:modelValue", color)
@@ -91,4 +94,15 @@ function colorPicked(newHexColor) {
     inputHexError.value = t("Invalid format")
   }
 }
+
+watch(
+  () => props.modelValue,
+  () => {
+    inputText.value = hexColor.value
+  },
+)
+
+onMounted(() => {
+  inputText.value = hexColor.value
+})
 </script>

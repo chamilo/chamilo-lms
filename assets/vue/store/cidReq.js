@@ -3,12 +3,15 @@ import { usePlatformConfig } from "./platformConfig"
 import courseService from "../services/courseService"
 import { computed, ref } from "vue"
 import sessionService from "../services/sessionService"
+import { useCourseSettings } from "./courseSettingStore"
 
 export const useCidReqStore = defineStore("cidReq", () => {
   const course = ref(null)
   const session = ref(null)
   const group = ref(null)
   const isCourseLoaded = ref(true)
+
+  const courseSettingsStore = useCourseSettings()
 
   const userIsCoach = computed(() => {
     const platformConfigStore = usePlatformConfig()
@@ -50,17 +53,24 @@ export const useCidReqStore = defineStore("cidReq", () => {
     course.value = null
     session.value = null
     group.value = null
+
+    courseSettingsStore.resetCourseSettings()
   }
 
-  const setCourseByIri = async (iri, sid = 0) => {
-    if (course.value && iri === course.value["@id"]) {
+  const setCourseByIri = async (cId, sid = 0) => {
+    const courseIri = `/api/courses/${cId}`
+
+    if (course.value && courseIri === course.value["@id"]) {
       return
     }
 
     isCourseLoaded.value = false
 
+    const coursePromise = courseService.find(courseIri, { sid })
+    const courseSettingsPromise = courseSettingsStore.loadCourseSettings(cId)
+
     try {
-      course.value = await courseService.find(iri, { sid })
+      await Promise.all([coursePromise, courseSettingsPromise]).then((responses) => (course.value = responses[0]))
     } catch (error) {
       console.error(error)
     } finally {
@@ -68,38 +78,34 @@ export const useCidReqStore = defineStore("cidReq", () => {
     }
   }
 
-  const setSessionByIri = async (iri) => {
-    if (session.value && iri === session.value["@id"]) {
+  const setSessionByIri = async (sId) => {
+    const sessionIri = `/api/sessions/${sId}`
+
+    if (session.value && sessionIri === session.value["@id"]) {
       return
     }
 
     try {
-      session.value = await sessionService.find(iri)
+      session.value = await sessionService.find(sessionIri)
     } catch (error) {
       console.error(error)
     }
   }
 
-  const setCourseAndSessionByIri = async (courseIri, sId = 0) => {
-    if (!courseIri) {
-      return
+  const setCourseAndSessionById = (cId, sId = undefined) => {
+    if (!cId) {
+      return Promise.resolve()
     }
 
-    await setCourseByIri(courseIri, sId)
+    const coursePromise = setCourseByIri(cId, sId)
 
-    let sessionIri = sId ? `/api/sessions/${sId}` : undefined
-
-    if (!sessionIri) {
-      return
+    if (!sId) {
+      return coursePromise
     }
 
-    await setSessionByIri(sessionIri)
-  }
+    const sessionPromise = setSessionByIri(sId)
 
-  const setCourseAndSessionById = async (cid, sid = undefined) => {
-    let courseIri = cid ? `/api/courses/${cid}` : undefined
-
-    await setCourseAndSessionByIri(courseIri, sid)
+    return Promise.all([coursePromise, sessionPromise])
   }
 
   return {
@@ -110,7 +116,6 @@ export const useCidReqStore = defineStore("cidReq", () => {
     userIsCoach,
 
     resetCid,
-    setCourseAndSessionByIri,
     setCourseAndSessionById,
 
     isCourseLoaded,

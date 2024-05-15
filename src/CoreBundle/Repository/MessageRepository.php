@@ -364,4 +364,25 @@ class MessageRepository extends ServiceEntityRepository
 
         return false;
     }
+
+    public function usersHaveSharedMessages(?User $currentUser, ?User $targetUser): bool
+    {
+        if (null === $currentUser || null === $targetUser) {
+            return false;
+        }
+
+        $qb = $this->createQueryBuilder('m');
+        $qb->select('m')
+            ->innerJoin('m.receivers', 'mr')
+            ->where('mr.receiver = :userTwo')
+            ->andWhere('m.sender = :userOne')
+            ->setParameters([
+                'userOne' => $targetUser,
+                'userTwo' => $currentUser,
+            ])
+            ->setMaxResults(1)
+        ;
+
+        return \count($qb->getQuery()->getResult()) > 0;
+    }
 }

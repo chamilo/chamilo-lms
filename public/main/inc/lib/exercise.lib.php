@@ -102,7 +102,7 @@ class ExerciseLib
                 if (!empty($questionDescription) && READING_COMPREHENSION != $answerType) {
                     echo Display::div(
                         $questionDescription,
-                        ['class' => 'question_description']
+                        ['class' => 'question_description wysiwyg']
                     );
                 }
             }
@@ -4489,8 +4489,7 @@ EOT;
                     $comnt = Event::get_comments($exeId, $questionId);
                     $teacherAudio = self::getOralFeedbackAudio(
                         $exeId,
-                        $questionId,
-                        api_get_user_id()
+                        $questionId
                     );
 
                     if (!empty($comnt) || $teacherAudio) {
@@ -5112,15 +5111,9 @@ EOT;
     }
 
     /**
-     * Get the audio componen for a teacher audio feedback.
-     *
-     * @param int $attemptId
-     * @param int $questionId
-     * @param int $userId
-     *
-     * @return string
+     * Get the audio component for a teacher audio feedback.
      */
-    public static function getOralFeedbackAudio($attemptId, $questionId, $userId)
+    public static function getOralFeedbackAudio(int $attemptId, int $questionId): string
     {
         /** @var TrackEExercise $tExercise */
         $tExercise = Container::getTrackEExerciseRepository()->find($attemptId);

@@ -1,18 +1,30 @@
 import { useI18n } from "vue-i18n"
-import { computed } from "vue"
+import { computed, ref } from "vue"
 import { useSecurityStore } from "../store/securityStore"
 import { usePlatformConfig } from "../store/platformConfig"
 import { useEnrolledStore } from "../store/enrolledStore"
-import { useRouter } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
+import { useSocialMenuItems } from "./useSocialMenuItems"
 
 export function useSidebarMenu() {
   const { t } = useI18n()
   const router = useRouter()
+  const route = useRoute()
   const securityStore = useSecurityStore()
   const platformConfigStore = usePlatformConfig()
   const enrolledStore = useEnrolledStore()
+  const { items: socialItems } = useSocialMenuItems();
   const showTabsSetting = platformConfigStore.getSetting("platform.show_tabs")
   const showCatalogue = platformConfigStore.getSetting("platform.catalog_show_courses_sessions")
+
+  const isActive = (item) => {
+    if (item.route) {
+      return route.path === item.route || (item.route.name && route.name === item.route.name)
+    } else if (item.items) {
+      return item.items.some(subItem => isActive(subItem))
+    }
+    return false
+  };
 
   const menuItemsBeforeMyCourse = computed(() => {
     const items = []
@@ -118,11 +130,29 @@ export function useSidebarMenu() {
     }
 
     if (showTabsSetting.indexOf("social") > -1) {
+      const styledSocialItems = socialItems.value.map(item => {
+        const newItem = {
+          ...item,
+          class: `sub-item-indent${isActive(item) ? ' active' : ''}`
+        };
+
+        if (newItem.isLink && newItem.route) {
+          newItem.command = () => window.location.href = newItem.route
+        } else if (newItem.route) {
+          newItem.command = () => router.push(newItem.route)
+        } else if (newItem.link) {
+          newItem.command = () => window.location.href = newItem.link
+        }
+
+        return newItem
+      });
+
       items.push({
         icon: "mdi mdi-sitemap-outline",
         label: t("Social network"),
-        command: () => router.push({ name: "SocialWall" }),
-      })
+        items: styledSocialItems,
+        expanded: isActive({ items: styledSocialItems })
+      });
     }
 
     if (platformConfigStore.plugins?.bbb?.show_global_conference_link) {

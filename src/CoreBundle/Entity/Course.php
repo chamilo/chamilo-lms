@@ -74,6 +74,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         'session_rel_user:read',
         'session_rel_course:read',
         'track_e_exercise:read',
+        'user_subscriptions:sessions',
     ])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -92,6 +93,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         'session_rel_user:read',
         'session_rel_course:read',
         'track_e_exercise:read',
+        'user_subscriptions:sessions',
     ])]
     #[Assert\NotBlank(message: 'A Course requires a title')]
     #[ORM\Column(name: 'title', type: 'string', length: 250, unique: false, nullable: true)]

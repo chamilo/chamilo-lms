@@ -3769,7 +3769,7 @@ function forum_search()
     $form->addElement('header', '', get_lang('Search in the Forum'));
     $form->addElement('text', 'search_term', get_lang('Search term'), ['autofocus']);
     $form->applyFilter('search_term', 'html_filter');
-    $form->addElement('static', 'search_information', '', get_lang('Search in the ForumInformation'));
+    $form->addElement('static', 'search_information', '', get_lang('Search in the Forum information'));
     $form->addButtonSearch(get_lang('Search'));
 
     // Setting the rules.
@@ -3782,126 +3782,69 @@ function forum_search()
         $form->setDefaults($values);
         $form->display();
         // Display the search results.
-        display_forum_search_results($values['search_term']);
+        displayForumSearchResults($values['search_term']);
     } else {
         $form->display();
     }
 }
 
 /**
- * Display the search results.
- *
- * @param string $search_term
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
- *
- * @version march 2008, dokeos 1.8.5
+ * Displays the search results for forums, threads, and posts within a course.
  */
-function display_forum_search_results($search_term)
+function displayForumSearchResults(string $searchTerm): void
 {
-    /*$table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
-    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
-    $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-    $session_id = api_get_session_id();
-    $course_id = api_get_course_int_id();
+    $forumRepo = Container::getForumRepository();
+    $threadRepo = Container::getForumThreadRepository();
+    $postRepo = Container::getForumPostRepository();
 
-    // Defining the search strings as an array.
-    if (strstr($search_term, '+')) {
-        $search_terms = explode('+', $search_term);
-    } else {
-        $search_terms[] = $search_term;
+    $courseId = api_get_course_int_id();
+    $sessionId = api_get_session_id();
+    $course = api_get_course_entity($courseId);
+    $session = api_get_session_entity($sessionId);
+
+    $searchTerms = explode(' ', $searchTerm);
+    $searchTerms = array_filter($searchTerms);
+
+    $forumQb = $forumRepo->getResourcesByCourse($course, $session);
+    foreach ($searchTerms as $term) {
+        $forumQb->andWhere('resource.title LIKE :term OR resource.forumComment LIKE :term')
+            ->setParameter('term', '%' . $term . '%');
     }
+    $forums = $forumQb->getQuery()->getResult();
 
-    // Search restriction.
-    foreach ($search_terms as $value) {
-        $search_restriction[] = "
-        (
-            posts.post_title LIKE '%".Database::escape_string(trim($value))."%' OR
-            posts.post_text LIKE '%".Database::escape_string(trim($value))."%'
-        )";
+    $threadQb = $threadRepo->getResourcesByCourse($course, $session);
+    foreach ($searchTerms as $term) {
+        $threadQb->andWhere('resource.title LIKE :term')
+            ->setParameter('term', '%' . $term . '%');
     }
+    $threads = $threadQb->getQuery()->getResult();
 
-    $sessionCondition = api_get_session_condition(
-        $session_id,
-        true,
-        false,
-        'item_property.session_id'
-    );
+    $postQb = $postRepo->getResourcesByCourse($course, $session);
+    foreach ($searchTerms as $term) {
+        $postQb->andWhere('resource.title LIKE :term OR resource.postText LIKE :term')
+            ->setParameter('term', '%' . $term . '%');
+    }
+    $posts = $postQb->getQuery()->getResult();
 
-    $sql = "SELECT posts.*
-            FROM $table_posts posts
-            INNER JOIN $table_threads threads
-            ON (posts.threadId = threads.threadId AND posts.c_id = threads.c_id)
-            INNER JOIN $table_item_property item_property
-            ON (item_property.ref = threads.threadId AND item_property.c_id = threads.c_id)
-            WHERE
-                posts.c_id = $course_id AND
-                item_property.c_id = $course_id AND
-                item_property.visibility = 1
-                $sessionCondition AND
-                posts.visible = 1 AND
-                item_property.tool = '".TOOL_FORUM_THREAD."' AND
-                ".implode(' AND ', $search_restriction).'
-            GROUP BY posts.post_id';
-
-    // Getting all the information of the forum categories.
-    $forum_categories_list = get_forum_categories();
-
-    // Getting all the information of the forums.
-    $forum_list = get_forums();
-
-    $result = Database::query($sql);
     $search_results = [];
-    while ($row = Database::fetch_assoc($result)) {
-        $forumId = $row['forum_id'];
-        $forumData = get_forums($forumId);
-        $category = isset($forum_categories_list[$forumData['forum_category']]) ? $forum_categories_list[$forumData['forum_category']] : null;
-        $display_result = false;
-
-//          We only show it when
-//          1. forum category is visible
-//          2. forum is visible
-//          3. thread is visible (to do)
-//          4. post is visible
-
-        if (!api_is_allowed_to_edit(null, true)) {
-            if (!empty($category)) {
-                if ('1' == $category['visibility'] && '1' == $forumData['visibility']) {
-                    $display_result = true;
-                }
-            } else {
-                if ('1' == $forumData['visible']) {
-                    $display_result = true;
-                }
-            }
-        } else {
-            $display_result = true;
-        }
-
-        if ($display_result) {
-            $categoryName = !empty($category) ? $category['cat_title'] : '';
-            $search_results_item = '<li><a href="viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.$forumData['forum_category'].'&search='.urlencode($search_term).'">'.
-                prepare4display($categoryName).'</a> &gt; ';
-            $search_results_item .= '<a href="viewforum.php?'.api_get_cidreq().'&forum='.$forumId.'&search='.urlencode($search_term).'">'.
-                prepare4display($forum_list[$row['forum_id']]['forum_title']).'</a> &gt; ';
-            $search_results_item .= '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$row['threadId'].'&search='.urlencode($search_term).'">'.
-                prepare4display($row['post_title']).'</a>';
-            $search_results_item .= '<br />';
-            if (api_strlen($row['post_title']) > 200) {
-                $search_results_item .= prepare4display(api_substr(strip_tags($row['post_title']), 0, 200)).'...';
-            } else {
-                $search_results_item .= prepare4display($row['post_title']);
-            }
-            $search_results_item .= '</li>';
-            $search_results[] = $search_results_item;
+    foreach ($forums as $forum) {
+        if ($forum->isVisible($course) && $forum->getForumCategory()->isVisible($course)) {
+            $search_results[] = '<li class="mb-2"><a href="viewforum.php?'.api_get_cidreq().'&forum='.$forum->getIid().'" class="text-blue-500 hover:text-blue-600">'.htmlspecialchars($forum->getTitle()).'</a></li>';
         }
     }
-    echo '<legend>'.count($search_results).' '.get_lang('Search in the ForumResults').'</legend>';
-    echo '<ol>';
-    if ($search_results) {
-        echo implode($search_results);
+    foreach ($threads as $thread) {
+        if ($thread->isVisible($course)) {
+            $search_results[] = '<li class="mb-2"><a href="viewthread.php?'.api_get_cidreq().'&thread='.$thread->getIid().'&forum='.$thread->getForum()->getIid().'" class="text-blue-500 hover:text-blue-600">'.htmlspecialchars($thread->getTitle()).'</a></li>';
+        }
     }
-    echo '</ol>';*/
+    foreach ($posts as $post) {
+        if ($post->isVisible($course)) {
+            $search_results[] = '<li class="mb-2"><a href="viewthread.php?'.api_get_cidreq().'&thread='.$post->getThread()->getIid().'&forum='.$post->getForum()->getIid().'" class="text-blue-500 hover:text-blue-600">'.htmlspecialchars($post->getTitle()).'</a></li>';
+        }
+    }
+
+    echo '<div class="text-lg font-semibold mb-4">'.count($search_results).' '.get_lang('Search results').'</div>';
+    echo '<ol class="list-decimal pl-5">'.implode($search_results).'</ol>';
 }
 
 /**
@@ -3913,15 +3856,11 @@ function display_forum_search_results($search_term)
  */
 function search_link()
 {
-    // @todo implement search
-
-    return '';
-
     $return = '';
     $origin = api_get_origin();
     if ('learnpath' != $origin) {
         $return = '<a href="forumsearch.php?'.api_get_cidreq().'&action=search"> ';
-        $return .= Display::getMdiIcon('magnify-plus-outline	', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Search')).'</a>';
+        $return .= Display::getMdiIcon('magnify-plus-outline	', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Search')).'</a>';
 
         if (!empty($_GET['search'])) {
             $return .= ': '.Security::remove_XSS($_GET['search']).' ';
@@ -3933,7 +3872,7 @@ function search_link()
                 }
             }
             $url .= implode('&', $url_parameter);
-            $return .= '<a href="'.$url.'">'.Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', '', ICON_SIZE_SMALL,  get_lang('Clean search results')).'</a>';
+            $return .= '<a href="'.$url.'">'.Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', '', ICON_SIZE_MEDIUM,  get_lang('Clean search results')).'</a>';
         }
     }
 

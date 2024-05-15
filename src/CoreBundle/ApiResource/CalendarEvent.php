@@ -43,7 +43,7 @@ class CalendarEvent extends AbstractResource
         #[Groups(['calendar_event:read'])]
         public int $maxAttendees = 0,
         /**
-         * @var Collection<int, AgendaReminder>
+         * @var Collection<int, AgendaReminder>|null
          */
         #[Groups(['calendar_event:read'])]
         public ?Collection $reminders = null,

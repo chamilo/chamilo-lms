@@ -4,21 +4,17 @@
   <!--  <SessionListWrapper :sessions="sessions"/>-->
   <SessionCategoryView
     v-if="!isLoading"
-    :result-sessions="sessions"
+    :uncategorized-sessions="uncategorizedSessions"
+    :categories="categories"
+    :categories-with-sessions="categoriesWithSessions"
   />
 </template>
 
 <script setup>
-import { DateTime } from "luxon"
 import SessionCategoryView from "../../../components/session/SessionCategoryView"
 import SessionTabs from "../../../components/session/SessionTabs.vue"
 import { useSession } from "./session"
 import SessionsLoading from "./SessionsLoading.vue"
-import { useSecurityStore } from "../../../store/securityStore"
 
-const securityStore = useSecurityStore()
-
-let start = DateTime.local()
-
-const { sessions, isLoading } = useSession(securityStore.user, start)
+const { isLoading, uncategorizedSessions, categories, categoriesWithSessions } = useSession("upcoming")
 </script>

@@ -3,7 +3,7 @@
       border border-support-3 bg-white rounded-lg transition w-full duration-200
     hover:border-primary hover:text-gray-90 hover:outline-0 hover:outline-none;
 
-  .p-dropdown-panel, .p-autocomplete-panel, .p-multiselect-panel {
+  .p-dropdown-panel, .p-multiselect-panel {
     @apply min-w-full;
   }
 
@@ -31,14 +31,14 @@
   @apply overflow-hidden opacity-0;
 }
 
-.p-dropdown-panel, .p-autocomplete-panel, .p-multiselect-panel {
+.p-dropdown-panel, .p-multiselect-panel {
   @apply absolute min-w-full top-2 left-0
     bg-white rounded-lg text-gray-90 drop-shadow-lg;
 
   .p-dropdown-items {
     @apply rounded-lg
-      after:content-[""] after:w-full after:block after:h-3 after:sticky after:bg-white after:z-[2] after:bottom-0 after:rounded-b-lg
-      before:content-[""] before:w-full before:block before:h-3 before:sticky before:bg-white before:z-[2] before:top-0 before:rounded-b-lg;
+      before:content-[""] before:w-full before:block before:h-3 before:sticky before:bg-white before:z-[2] before:top-0 before:rounded-t-lg before:rounded-b-none
+      after:content-[""] after:w-full after:block after:h-3 after:sticky after:bg-white after:z-[2] after:bottom-0 after:rounded-b-lg after:rounded-t-none;
 
     .p-dropdown-item {
       @apply px-4 py-2 transition text-body-2 outline-0 outline-none text-gray-90;

@@ -1,8 +1,8 @@
 <template>
   <div class="field">
-    <div class="p-float-label">
+    <FloatLabel>
       <AutoComplete
-        v-model="baseModel"
+        v-model="modelValue"
         :input-id="id"
         :multiple="isMultiple"
         :suggestions="suggestions"
@@ -12,13 +12,12 @@
         :min-length="3"
         @complete="onComplete"
         @item-select="$emit('item-select', $event)"
-        @update:model-value="$emit('update:modelValue', $event)"
       />
       <label
         v-t="label"
         :for="id"
       />
-    </div>
+    </FloatLabel>
     <small
       v-if="isInvalid"
       v-t="helpText"
@@ -28,8 +27,14 @@
 </template>
 
 <script setup>
-import AutoComplete from "primevue/autocomplete"
 import { ref } from "vue"
+import FloatLabel from "primevue/floatlabel"
+import AutoComplete from "primevue/autocomplete"
+
+const modelValue = defineModel({
+  type: [Array, String],
+  require: true,
+})
 
 const props = defineProps({
   id: {
@@ -41,11 +46,6 @@ const props = defineProps({
     type: String,
     required: true,
     default: null,
-  },
-  modelValue: {
-    type: Array,
-    require: true,
-    default: () => [],
   },
   helpText: {
     type: String,
@@ -79,9 +79,7 @@ const props = defineProps({
   },
 })
 
-defineEmits(["update:modelValue", "item-select"])
-
-const baseModel = ref([])
+defineEmits(["item-select"])
 
 const suggestions = ref([])
 
@@ -90,7 +88,7 @@ const onComplete = async (event) => {
     const members = await props.search(event.query)
     suggestions.value = members && members.length ? members : []
   } catch (error) {
-    console.error('Error during onComplete:', error)
+    console.error("Error during onComplete:", error)
     suggestions.value = []
   }
 }

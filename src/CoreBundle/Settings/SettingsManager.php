@@ -196,11 +196,15 @@ class SettingsManager implements SettingsManagerInterface
             $schemaRegister->buildSettings($settingsBuilder);
             $name = $this->convertServiceToNameSpace($schema);
             $settings = new Settings();
+
+            /** @var array<string, mixed> $parameters */
             $parameters = $all[$name] ?? [];
 
-            $knownParameters = array_filter($parameters, function ($key) use ($settingsBuilder) {
-                return $settingsBuilder->isDefined($key);
-            }, ARRAY_FILTER_USE_KEY);
+            $knownParameters = array_filter(
+                $parameters,
+                fn ($key): bool => $settingsBuilder->isDefined($key),
+                ARRAY_FILTER_USE_KEY
+            );
 
             $transformers = $settingsBuilder->getTransformers();
             foreach ($transformers as $parameter => $transformer) {

@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
-use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
@@ -238,7 +237,7 @@ class Version20230904173400 extends AbstractMigrationChamilo
                 $newEvent = $oldNewEventIdMap[$oldEventId];
                 $this->addSql(
                     sprintf(
-                        "UPDATE agenda_reminder SET event_id = %d WHERE id = %d",
+                        'UPDATE agenda_reminder SET event_id = %d WHERE id = %d',
                         $newEvent->getIid(),
                         $reminder['id']
                     )

@@ -6,8 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
+use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -24,7 +26,8 @@ class UserVoter extends Voter
     public const DELETE = 'DELETE';
 
     public function __construct(
-        private Security $security
+        private Security $security,
+        private EntityManagerInterface $entityManager
     ) {}
 
     protected function supports(string $attribute, $subject): bool
@@ -46,10 +49,10 @@ class UserVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
-        /** @var User $currentUSer */
-        $currentUSer = $token->getUser();
+        /** @var User $currentUser */
+        $currentUser = $token->getUser();
 
-        if (!$currentUSer instanceof UserInterface) {
+        if (!$currentUser instanceof UserInterface) {
             return false;
         }
 
@@ -61,27 +64,38 @@ class UserVoter extends Voter
         $user = $subject;
 
         if (self::VIEW === $attribute) {
-            if ($currentUSer === $user) {
+            if ($currentUser === $user) {
                 return true;
             }
 
-            if ($user->hasFriendWithRelationType($currentUSer, UserRelUser::USER_RELATION_TYPE_FRIEND)) {
+            if ($user->hasFriendWithRelationType($currentUser, UserRelUser::USER_RELATION_TYPE_FRIEND)) {
                 return true;
             }
 
-            $friendsOfFriends = $currentUSer->getFriendsOfFriends();
+            $friendsOfFriends = $currentUser->getFriendsOfFriends();
             if (\in_array($user, $friendsOfFriends, true)) {
                 return true;
             }
 
             if (
-                $user->hasFriendWithRelationType($currentUSer, UserRelUser::USER_RELATION_TYPE_BOSS)
-                || $user->isFriendWithMeByRelationType($currentUSer, UserRelUser::USER_RELATION_TYPE_BOSS)
+                $user->hasFriendWithRelationType($currentUser, UserRelUser::USER_RELATION_TYPE_BOSS)
+                || $user->isFriendWithMeByRelationType($currentUser, UserRelUser::USER_RELATION_TYPE_BOSS)
             ) {
+                return true;
+            }
+
+            if ($this->haveSharedMessages($currentUser, $user)) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    private function haveSharedMessages(User $currentUser, User $targetUser): bool
+    {
+        $messageRepository = $this->entityManager->getRepository(Message::class);
+
+        return $messageRepository->usersHaveSharedMessages($currentUser, $targetUser);
     }
 }

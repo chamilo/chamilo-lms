@@ -1713,7 +1713,7 @@ function switch_item(current_item, next_item)
 
     // @todo add loadForumThread inside lp_nav.php to do only one request instead of 3!
     //loadForumThread(olms.lms_lp_id, next_item);
-    //checkCurrentItemPosition(olms.lms_item_id);
+    checkCurrentItemPosition(olms.lms_item_id);
 
     return true;
 }
@@ -1721,20 +1721,29 @@ function switch_item(current_item, next_item)
 /**
  * Hide or show the navigation buttons if the current item is the First or Last
  */
-var checkCurrentItemPosition = function(position) {
-    if (position == 'first') {
-        $("#scorm-previous").hide();
-        $("#scorm-next").show();
-    } else if (position == 'none') {
-        $("#scorm-previous").show();
-        $("#scorm-next").show();
-    } else if (position == 'last') {
-        $("#scorm-previous").show();
-        $("#scorm-next").hide();
-    } else if (position == 'both') {
-        $("#scorm-previous").hide();
-        $("#scorm-next").hide();
-    }
+var checkCurrentItemPosition = function(lpItemId) {
+    var currentItem = $.getJSON(
+        '<?php echo api_get_path(WEB_AJAX_PATH); ?>lp.ajax.php' + courseUrl,
+        {
+            a: 'check_item_position',
+            lp_item: lpItemId
+        }
+    ).done(function(parsedResponse,statusText,jqXhr) {
+        var position = jqXhr.responseJSON;
+        if (position == 'first') {
+            $("#scorm-previous").hide();
+            $("#scorm-next").show();
+        } else if (position == 'none') {
+            $("#scorm-previous").show();
+            $("#scorm-next").show();
+        } else if (position == 'last') {
+            $("#scorm-previous").show();
+            $("#scorm-next").hide();
+        } else if (position == 'both') {
+          $("#scorm-previous").hide();
+          $("#scorm-next").hide();
+        }
+    });
 }
 
 /**

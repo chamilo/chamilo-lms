@@ -1747,8 +1747,8 @@ if ($allowBlockCategory &&
         if (!empty($objExercise->description)) {
             if (ONE_PER_PAGE == $objExercise->type || (ONE_PER_PAGE != $objExercise->type && 1 == $i)) {
                 echo Display::panelCollapse(
-                    '<span>'.get_lang('Description').'</span>',
-                    $objExercise->description,
+                    get_lang('Description'),
+                    Display::div($objExercise->description, ['class' => 'exercise_description wysiwyg']),
                     'exercise-description',
                     [],
                     'description',

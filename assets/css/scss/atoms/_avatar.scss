@@ -1,5 +1,6 @@
 .p-avatar {
-  @apply inline-flex items-center justify-center rounded-md bg-gray-25;
+  @apply inline-flex items-center justify-center rounded-lg bg-gray-25 w-8 h-8;
+  font-size: 1rem;
 
   &-image {
     @apply bg-transparent;
@@ -18,26 +19,45 @@
   }
 
   &.p-avatar-lg {
-    @apply h-12 w-12;
-    font-size: 1.5rem;
+    @apply h-16 w-16;
+    font-size: 2rem;
+  }
 
-    .p-avatar-icon {
-      font-size: 1.5rem;
-    }
+  &.p-avatar-lg &-icon {
+    font-size: 2rem;
   }
 
   &.p-avatar-xl {
-    @apply h-16 w-16;
-    font-size: 2rem;
+    @apply h-28 w-28;
+    font-size: 3.5rem;
+  }
 
-    .p-avatar-icon {
-      font-size: 2rem;
+  &.p-avatar-lg &-icon {
+    font-size: 3.5rem;
+  }
+
+  &-group {
+    @apply flex items-center;
+  }
+
+  &-group & + & {
+    @apply -ml-4;
+  }
+
+  &-group & {
+    @apply border border-solid border-white;
+  }
+}
+
+.basic-user-info {
+  @apply inline-flex items-center gap-2;
+
+  &__caption {
+    div {
+      @apply text-caption
+        first:font-semibold
+      ;
     }
   }
 }
 
-.p-avatar-group {
-  .p-avatar {
-    @apply border border-solid border-white;
-  }
-}

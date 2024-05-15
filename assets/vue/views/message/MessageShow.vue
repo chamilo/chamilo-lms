@@ -62,8 +62,8 @@
       />
     </div>
 
-    <div>
-      <span class="mr-2">{{ t("From") }}</span>
+    <div class="field space-x-4">
+      <span>{{ t("From") }}</span>
       <MessageCommunicationParty
         v-if="item.sender"
         :username="item.sender.username"
@@ -76,8 +76,8 @@
       />
     </div>
 
-    <div>
-      <span class="mr-2">{{ t("To") }}</span>
+    <div class="field space-x-4">
+      <span>{{ t("To") }}</span>
       <MessageCommunicationParty
         v-for="receiver in item.receiversTo"
         :key="receiver.receiver.id"
@@ -87,8 +87,8 @@
       />
     </div>
 
-    <div>
-      <span class="mr-2">{{ t("Cc") }}</span>
+    <div class="field space-x-4">
+      <span>{{ t("Cc") }}</span>
       <MessageCommunicationParty
         v-for="receiver in item.receiversCc"
         :key="receiver.receiver.id"

@@ -6,7 +6,7 @@
   >
     <div
       v-if="item.originalSender"
-      class="field"
+      class="field space-x-4"
     >
       <span v-t="'To'" />
       <MessageCommunicationParty
@@ -18,7 +18,7 @@
 
     <div
       v-if="item.receiversCc"
-      class="field"
+      class="field space-x-4"
     >
       <span v-t="'Cc'" />
       <MessageCommunicationParty
@@ -143,7 +143,7 @@ onMounted(async () => {
   }*/
 
   // Set reply content.
-  item.value.title = t('Re:') + ' ' + item.value.title
+  item.value.title = t("Re:") + " " + item.value.title
   item.value.content = `<br /><br /><hr /><blockquote>${translatedHeader}<hr />${item.value.content}</blockquote>`
 })
 

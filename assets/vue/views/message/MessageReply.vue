@@ -9,10 +9,10 @@
       class="field"
     >
       <span v-t="'To'" />
-      <BaseChip
-        :value="item.originalSender"
-        image-field="illustrationUrl"
-        label-field="username"
+      <MessageCommunicationParty
+        :username="item.originalSender.username"
+        :full-name="item.originalSender.fullName"
+        :profile-image-url="item.originalSender.illustrationUrl"
       />
     </div>
 
@@ -21,16 +21,21 @@
       class="field"
     >
       <span v-t="'Cc'" />
-      <BaseChip
-        v-for="messageRelUser in item.receiversCc"
-        :key="messageRelUser['@id']"
-        :value="messageRelUser.receiver"
-        image-field="illustrationUrl"
-        label-field="username"
+      <MessageCommunicationParty
+        v-for="receiver in item.receiversCc"
+        :key="receiver.receiver.id"
+        :username="receiver.receiver.username"
+        :full-name="receiver.receiver.fullName"
+        :profile-image-url="receiver.receiver.illustrationUrl"
       />
     </div>
 
-    <BaseTinyEditor v-model="item.content" editor-id="message" :full-page="false" required />
+    <BaseTinyEditor
+      v-model="item.content"
+      :full-page="false"
+      editor-id="message"
+      required
+    />
 
     <BaseButton
       :label="t('Send')"
@@ -49,7 +54,6 @@ import MessageForm from "../../components/message/Form.vue"
 import Loading from "../../components/Loading.vue"
 import isEmpty from "lodash/isEmpty"
 import { useRoute, useRouter } from "vue-router"
-import BaseChip from "../../components/basecomponents/BaseChip.vue"
 import { MESSAGE_TYPE_INBOX } from "../../components/message/constants"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
@@ -57,6 +61,7 @@ import { useSecurityStore } from "../../store/securityStore"
 import { useNotification } from "../../composables/notification"
 import { formatDateTimeFromISO } from "../../utils/dates"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
+import MessageCommunicationParty from "./MessageCommunicationParty.vue"
 
 const item = ref({})
 const store = useStore()
@@ -75,11 +80,15 @@ onMounted(async () => {
   const response = await store.dispatch("message/load", id)
 
   item.value = await response
-  const originalUserInfo = await store.dispatch("user/load", '/api/users/' + item.value.sender.id)
+  const originalUserInfo = await store.dispatch("user/load", "/api/users/" + item.value.sender.id)
   const originalSenderName = originalUserInfo.fullName
   const originalSenderEmail = originalUserInfo.email
   const formattedDate = formatDateTimeFromISO(item.value.sendDate)
-  const translatedHeader = t('Email reply header', [formattedDate, originalSenderName, `<a href="mailto:${originalSenderEmail}">${originalSenderEmail}</a>` ])
+  const translatedHeader = t("Email reply header", [
+    formattedDate,
+    originalSenderName,
+    `<a href="mailto:${originalSenderEmail}">${originalSenderEmail}</a>`,
+  ])
   delete item.value["@id"]
   delete item.value["id"]
   delete item.value["firstReceiver"]
@@ -164,10 +173,10 @@ const onReplyMessageForm = async () => {
   try {
     await store.dispatch("message/create", createForm.value.v$.item.$model)
 
-    notification.showSuccessNotification("Message sent");
+    notification.showSuccessNotification("Message sent")
 
     await router.push({
-      name: "MessageList"
+      name: "MessageList",
     })
   } catch (e) {
     notification.showErrorNotification(e)

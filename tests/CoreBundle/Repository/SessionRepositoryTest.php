@@ -543,6 +543,7 @@ class SessionRepositoryTest extends AbstractApiTest
     public function testSessionRelUser(): void
     {
         $em = $this->getEntityManager();
+
         /** @var SessionRepository $sessionRepo */
         $sessionRepo = self::getContainer()->get(SessionRepository::class);
 

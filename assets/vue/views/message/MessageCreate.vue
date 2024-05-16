@@ -165,7 +165,7 @@ onMounted(async () => {
     isLoadingUser.value = true
 
     try {
-      let user = await userService.find(route.query.send_to_user)
+      let user = await userService.findById(route.query.send_to_user)
       sendToUser.value = user
 
       usersTo.value.push({

@@ -104,8 +104,7 @@
               :image-url="slotProps.data.sender.illustrationUrl"
               :alt="t('Picture')"
             />
-
-            {{ slotProps.data.sender.username }}
+            {{ slotProps.data.sender.fullName }}
           </div>
           <div
             v-else

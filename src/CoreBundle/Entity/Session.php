@@ -1245,12 +1245,12 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     {
         $now = new DateTime('now');
 
-        if (!empty($start) && !empty($end) && ($now >= $start && $now <= $end)) {
-            return true;
+        if (!empty($start) && !empty($end)) {
+            return $now >= $start && $now <= $end;
         }
 
-        if (!empty($start) && $now >= $start) {
-            return true;
+        if (!empty($start)) {
+            return $now >= $start;
         }
 
         return !empty($end) && $now <= $end;

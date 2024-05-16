@@ -114,7 +114,11 @@ const receiversCc = computed(() =>
 )
 
 const canSubmitMessage = computed(() => {
-  return usersTo.value.length > 0 && item.value.title !== ""
+  return (
+    (usersTo.value.length > 0 || usersCc.value.length > 0) &&
+    item.value.title.trim() !== "" &&
+    item.value.content.trim() !== ""
+  )
 })
 
 const isLoading = ref(false)

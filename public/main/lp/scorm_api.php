@@ -203,6 +203,7 @@ olms.asset_timer = 0;
 olms.userfname = '<?php echo addslashes(trim($user['firstname'])); ?>';
 olms.userlname = '<?php echo addslashes(trim($user['lastname'])); ?>';
 olms.execute_stats = false;
+olms.lms_lp_item_parents = '';
 
 var courseUrl = '?cid='+olms.lms_course_id+'&sid='+olms.lms_session_id;
 var statsUrl = 'lp_controller.php' + courseUrl + '&action=stats';
@@ -1661,6 +1662,8 @@ function switch_item(current_item, next_item)
             });
         }
     }
+
+    updateItemParentNames();
     var mysrc = '<?php echo api_get_path(WEB_CODE_PATH); ?>lp/lp_controller.php?action=content&lp_id=' + olms.lms_lp_id +
                 '&item_id=' + next_item + '&cid=' + olms.lms_course_id + '&sid=' + olms.lms_session_id;
     var cont_f = $("#content_id");
@@ -1716,6 +1719,22 @@ function switch_item(current_item, next_item)
     checkCurrentItemPosition(olms.lms_item_id);
 
     return true;
+}
+
+/**
+* Updates the 'item-parent-names' div with the titles of the current item's parents.
+*/
+function updateItemParentNames() {
+    var parentNamesContainer = document.getElementById('item-parent-names');
+    if (parentNamesContainer) {
+        parentNamesContainer.innerHTML = '';
+        olms.lms_lp_item_parents.forEach(function(parentTitle) {
+            var h3 = document.createElement('h3');
+            h3.className = 'text-h5';
+            h3.textContent = parentTitle;
+            parentNamesContainer.appendChild(h3);
+        });
+    }
 }
 
 /**

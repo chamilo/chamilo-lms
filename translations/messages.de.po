@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-05-16 12:57+0000\n"
+"PO-Revision-Date: 2024-05-16 16:21+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: German <https://translation.chamilo.org/projects/chamilo/"
 "messages/de/>\n"
@@ -9038,7 +9038,7 @@ msgid "Portal Admin"
 msgstr "Administrator"
 
 msgid "none"
-msgstr "nichts"
+msgstr "Keine"
 
 msgid "First select a course"
 msgstr "Zuerst einen Kurs auswählen"
@@ -28421,3 +28421,552 @@ msgstr ""
 
 msgid "Enable extra test answers recording"
 msgstr "Aktivieren Sie die Aufzeichnung zusätzlicher Testantworten"
+
+msgid "Session admins can view careers"
+msgstr "Session-Administratoren können Karrieren einsehen"
+
+msgid "Prevent emptying the subscribed users in session subscription"
+msgstr ""
+"Verhindern Sie das Leeren der eingeschriebenen Benutzer in der Session-"
+"Anmeldung"
+
+msgid "Show language flag next to avatar in social network"
+msgstr "Sprachflagge neben dem Avatar im sozialen Netzwerk anzeigen"
+
+msgid "Hide survey reporting button"
+msgstr "Umfragebericht-Button ausblenden"
+
+msgid "Enable 'previous question' button in surveys"
+msgstr "Aktivieren Sie den Button \"Vorherige Frage\" in Umfragen"
+
+msgid "Hide skills from learners"
+msgstr "Fähigkeiten vor Lernenden verbergen"
+
+msgid "Force download of document before assignment upload"
+msgstr "Dokument-Download erzwingen, bevor eine Aufgabe hochgeladen wird"
+
+msgid "Access by role to ticket projects"
+msgstr "Zugriff nach Rolle auf Ticketprojekte"
+
+msgid "Display surveys from base course in all session courses"
+msgstr "Anzeigen von Umfragen aus dem Basiskurs in allen Sessionkursen"
+
+msgid "Session link"
+msgstr "Session-Link"
+
+msgid "Auto-create single-user session on course auto-subscription"
+msgstr ""
+"Automatische Erstellung einer Einzelbenutzer-Session bei automatischer "
+"Kurseinschreibung"
+
+msgid "Students can only upload one assignment"
+msgstr "Lernende können nur eine Aufgabe hochladen"
+
+msgid "Allow ticket projects to be accesses by specific user roles. Example: ['permissions' => [1 => [17]] where project_id = 1, STUDENT_BOSS = 17."
+msgstr ""
+"Erlauben Sie den Zugriff auf Ticketprojekte für bestimmte Benutzerrollen. "
+"Beispiel: ['permissions' => [1 => [17]] where project_id = 1, STUDENT_BOSS = "
+"17."
+
+msgid "No link"
+msgstr "Kein Link"
+
+msgid "Base course teacher can see assignments from all sessions"
+msgstr "Der Basis-Kursleiter kann alle Aufgaben aus den Sessions einsehen"
+
+msgid "Show number of users in sessions list"
+msgstr "Anzahl der Benutzer in der Sessionsliste anzeigen"
+
+msgid "Show only courses"
+msgstr "Nur Kurse anzeigen"
+
+msgid "Prevent survey edition"
+msgstr "Verhinderung der Bearbeitung von Umfragen"
+
+msgid "Allow teachers to see which learners have already answered an anonymous survey. This only appears once more than one user has answered, so it remains difficult to identify who answered what."
+msgstr ""
+"Erlauben Sie Trainern zu sehen, welche Lernenden bereits an einer anonymen "
+"Umfrage teilgenommen haben. Dies wird erst angezeigt, wenn mehr als ein "
+"Nutzer geantwortet hat, sodass es weiterhin schwierig bleibt zu "
+"identifizieren, wer was geantwortet hat."
+
+msgid "Restrict the list of students to subscribe in the course session. And disable registration for users in all courses from Resume Session page."
+msgstr ""
+"Beschränken Sie die Liste der Lernenden, die sich für die Kurs-Session "
+"anmelden dürfen. Und deaktivieren Sie die Registrierung für Benutzer in "
+"allen Kursen auf der Seite 'Session fortsetzen'."
+
+msgid "Enable samesite:None parameter for session cookie. More info: https://www.chromium.org/updates/same-site and https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure"
+msgstr ""
+"Aktivieren Sie den Parameter samesite:None für das Session-Cookie. Weitere "
+"Informationen: https://www.chromium.org/updates/same-site und "
+"https://developers.google.com/search/blog/2020/01/get-ready-for-new-"
+"samesitenone-secure"
+
+msgid "Allow teachers to edit survey questions after students answered"
+msgstr ""
+"Erlauben Sie Trainern, Umfragefragen zu bearbeiten, nachdem Lernende "
+"geantwortet haben"
+
+msgid "Order by student name when using survey duplication feature"
+msgstr ""
+"Sortieren nach Namen des Lernenden bei Verwendung der Funktion zur "
+"Duplizierung von Umfragen"
+
+msgid "Sender profile picture"
+msgstr "Absenderprofilbild"
+
+msgid "Set course read-only in session"
+msgstr "Kurs in der Session schreibgeschützt setzen"
+
+msgid "Prevent editing surveys for all surveys listed here (by code). Use * to prevent edition of all surveys."
+msgstr ""
+"Bearbeitung von Umfragen für alle hier aufgelisteten Umfragen (nach Code) "
+"verhindern. Verwenden Sie *, um die Bearbeitung aller Umfragen zu verhindern."
+
+msgid "By default, only admins can decide which skills can be acquired through which course."
+msgstr ""
+"Standardmäßig können nur Administratoren entscheiden, welche Fähigkeiten "
+"durch welchen Kurs erworben werden können."
+
+msgid "Show to all users"
+msgstr "Allen Benutzern anzeigen"
+
+msgid "Mail confirmation"
+msgstr "E-Mail-Bestätigung"
+
+msgid "This enables a major feature that enables any item to be linked to (and as such to allow acquisition of) a skill. The feature still requires the teacher to confirm the acquisition of the skill, so the acquisition is not automatic."
+msgstr ""
+"Dies aktiviert eine wichtige Funktion, die es jedem Element ermöglicht, mit "
+"einer Fähigkeit verknüpft zu werden (und somit den Erwerb einer Fähigkeit zu "
+"ermöglichen). Die Funktion erfordert jedoch, dass der Trainer den Erwerb der "
+"Fähigkeit bestätigt, sodass der Erwerb nicht automatisch erfolgt."
+
+msgid "Add username to e-mail notification of subscription to session"
+msgstr ""
+"Benutzername in E-Mail-Benachrichtigung über die Anmeldung zur Session "
+"hinzufügen"
+
+msgid "When using the multiple learners subscription to a session, prevent the normal behaviour which is to unsubscribe users who are not in the right panel when clicking submit. Keep all users there."
+msgstr ""
+"Beim Verwenden des Abonnements für mehrere Lernende zu einer Session, "
+"verhindern Sie das normale Verhalten, welches darin besteht, Benutzer "
+"abzumelden, die sich nicht im richtigen Panel befinden, wenn Sie auf Senden "
+"klicken. Behalten Sie alle Benutzer bei."
+
+msgid "Only display users from active sessions in tracking"
+msgstr "Nur Nutzer aus aktiven Sessions im Tracking anzeigen"
+
+msgid "Limit subscriptions to course to only users of the session"
+msgstr "Beschränken Sie die Kursanmeldungen nur auf Benutzer der Session"
+
+msgid "Define names for levels of skills as an array of id => name."
+msgstr "Festlegen von Namen für Kompetenzniveaus als Array von id => Name."
+
+msgid "Redirect to session after registration in session's 'About' page"
+msgstr ""
+"Weiterleitung zur Session nach der Registrierung auf der Seite 'Über die "
+"Session'"
+
+msgid "Session cookie samesite"
+msgstr "Session-Cookie SameSite"
+
+msgid "Redirect to assignments list after uploading an assignment or a adding a comment"
+msgstr ""
+"Nach dem Hochladen einer Aufgabe oder dem Hinzufügen eines Kommentars zur "
+"Liste der Aufgaben weiterleiten"
+
+msgid "Public"
+msgstr "Öffentlich"
+
+msgid "Search shows unlinked results"
+msgstr "Die Suche zeigt nicht verknüpfte Ergebnisse"
+
+msgid "Set the user to use as creator of the automatically-created sessions (to avoid assigning every session to user '1' which is often the portal administrator)."
+msgstr ""
+"Legen Sie den Benutzer fest, der als Ersteller der automatisch erstellten "
+"Sessions verwendet werden soll (um zu vermeiden, dass jede Session dem "
+"Benutzer '1' zugewiesen wird, der oft der Portaladministrator ist)."
+
+msgid "Icons text"
+msgstr "Symboltext"
+
+msgid "Score div percent"
+msgstr "Punkteverteilung in Prozent"
+
+msgid "Hide link to session page"
+msgstr "Link zur Session-Seite ausblenden"
+
+msgid "Course registration code incorrect"
+msgstr "Kursanmeldecode falsch"
+
+msgid "Auto-created sessions duration"
+msgstr "Automatisch erstellte Session-Dauer"
+
+msgid "Teachers and admins see students as friends on social network"
+msgstr ""
+"Lehrkräfte und Administratoren sehen Lernende als Freunde im sozialen "
+"Netzwerk"
+
+msgid "The admin can see the number of users in each session. This adds additional weight to the sessions list, so if you use it often, consider carefully whether you want the extra waiting time."
+msgstr ""
+"Der Administrator kann die Anzahl der Benutzer in jeder Session sehen. Dies "
+"erhöht die Belastung der Sessionsliste, also überlegen Sie sorgfältig, ob "
+"Sie die zusätzliche Wartezeit in Kauf nehmen möchten."
+
+msgid "Sessions that include the course are listed in the reporting tool inside the course itself, which can add considerable weight if the same course is used in hundreds of sessions. This option removes that list."
+msgstr ""
+"Sitzungen, die den Kurs beinhalten, werden im Berichtswerkzeug innerhalb des "
+"Kurses aufgelistet, was erheblich ins Gewicht fallen kann, wenn derselbe "
+"Kurs in hunderten von Sitzungen verwendet wird. Diese Option entfernt diese "
+"Liste."
+
+msgid "Session admins can access all course content"
+msgstr "Session-Administratoren können auf alle Kursinhalte zugreifen"
+
+msgid "Ppt_to_lp"
+msgstr "Dokumentenkonverter"
+
+msgid "Show only sessions"
+msgstr "Nur Sessions anzeigen"
+
+msgid "No reply email sender"
+msgstr "No-reply E-Mail-Absender"
+
+msgid "Sessions by duration always available to coaches"
+msgstr "Sessionen nach Dauer sind immer für Trainer verfügbar"
+
+msgid "Private"
+msgstr "Privat"
+
+msgid "Sort session templates by id in session creation form"
+msgstr "Sessionvorlagen nach ID im Erstellungsformular für Sessions sortieren"
+
+msgid "Display link to 'pending' assignments from My courses page"
+msgstr "Anzeige des Links zu 'anstehenden' Aufgaben auf der Seite 'Meine Kurse'"
+
+msgid "Show diagnosis"
+msgstr "Diagnose anzeigen"
+
+msgid "When a user subscribes to an open course through the courses catalogue, create a single-user session instead of subscribing him/her to the base course."
+msgstr ""
+"Wenn ein Benutzer sich über den Kurskatalog für einen offenen Kurs anmeldet, "
+"erstellen Sie eine Einzelbenutzer-Session, anstatt ihn/sie für den Basis-"
+"Kurs einzuschreiben."
+
+msgid "Customize course-session tracking columns"
+msgstr "Anpassen der Spalten für die Kurs-Session-Verfolgung"
+
+msgid "Campus homepage"
+msgstr "Campus-Startseite"
+
+msgid "By default, sessions are ordered by start date. Change this by providing an array of type ['field' => 'end_date', 'order' => 'desc']."
+msgstr ""
+"Standardmäßig werden Sessions nach Startdatum sortiert. Ändern Sie dies, "
+"indem Sie ein Array vom Typ ['field' => 'end_date', 'order' => 'desc'] "
+"bereitstellen."
+
+msgid "Score percent"
+msgstr "Prozentpunkte"
+
+msgid "Show glossary in documents is automatic"
+msgstr "Das Anzeigen des Glossars in Dokumenten erfolgt automatisch"
+
+msgid "Prevent teacher from modifying assignment scores"
+msgstr "Verhindern Sie, dass Trainer die Punktzahlen für Aufgaben ändern"
+
+msgid "Let teachers set some courses in read-only mode when opened through sessions. In the course properties, check the 'Lock course in session' option."
+msgstr ""
+"Lehrkräfte können einige Kurse im Nur-Lese-Modus einstellen, wenn sie über "
+"Sessions geöffnet werden. In den Kurseigenschaften wählen Sie die Option "
+"'Kurs in der Session sperren'."
+
+msgid "Course catalogue"
+msgstr "Kurskatalog"
+
+msgid "Session name and course title"
+msgstr "Sessionname und Kurstitel"
+
+msgid "Array of options to apply as default parameters in the CSV/XML session import."
+msgstr ""
+"Array von Optionen, die als Standardparameter beim CSV/XML-Sessionimport "
+"angewendet werden sollen."
+
+msgid "Show skills as a hierarchical table"
+msgstr "Fähigkeiten in einer hierarchischen Tabelle anzeigen"
+
+msgid "Select the default tab you want to see when opening the sessions list as admin."
+msgstr ""
+"Wählen Sie den Standard-Tab, den Sie beim Öffnen der Sessionsliste als "
+"Administrator sehen möchten."
+
+msgid "Session admins can disable users"
+msgstr "Session-Administratoren können Benutzer deaktivieren"
+
+msgid "Black list"
+msgstr "Schwarze Liste"
+
+msgid "Allow user to collapse sessions in My sessions"
+msgstr "Erlauben Sie dem Benutzer, Sessions in Meine Sessions zu minimieren"
+
+msgid "Auto-created session's creator ID"
+msgstr "Automatisch erstellte Session-Ersteller-ID"
+
+msgid "Add actions (usually connected to plugins) in the list of surveys. Use array syntax ['myplugin' => ['MyPlugin', 'urlGeneratorCallback']]."
+msgstr ""
+"Fügen Sie Aktionen (normalerweise mit Plugins verbunden) in die Liste der "
+"Umfragen ein. Verwenden Sie die Array-Syntax ['myplugin' => ['MyPlugin', "
+"'urlGeneratorCallback']]."
+
+msgid "World"
+msgstr "Welt"
+
+msgid "Hide tabs on the session page"
+msgstr "Tabs auf der Session-Seite ausblenden"
+
+msgid "Default sessions list view"
+msgstr "Standardansicht der Sessionsliste"
+
+msgid "Define an array of columns for the following reports: 'course_session', 'my_students_lp', 'my_progress_lp', 'my_progress_courses'."
+msgstr ""
+"Definieren Sie ein Array von Spalten für die folgenden Berichte: "
+"'course_session', 'my_students_lp', 'my_progress_lp', 'my_progress_courses'."
+
+msgid "Duration (in days) of the single-user, auto-created sessions. After expiry, the user cannot register to the same course (no other session is created)."
+msgstr ""
+"Dauer (in Tagen) der automatisch erstellten Einzelbenutzer-Sessions. Nach "
+"Ablauf kann sich der Benutzer nicht für denselben Kurs anmelden (es wird "
+"keine weitere Session erstellt)."
+
+msgid "Course coach email sender"
+msgstr "Kurstutor E-Mail-Versender"
+
+msgid "Show all learner publications (from base course and from all sessions) in the work/pending.php page of the base course."
+msgstr ""
+"Alle Lernendenpublikationen (aus dem Basiskurs und aus allen Sessions) auf "
+"der Seite work/pending.php des Basiskurses anzeigen."
+
+msgid "Enable sessions search diagnosis"
+msgstr "Aktivieren Sie die Diagnose der Sessionsuche"
+
+msgid "Allow teachers to set which skills are acquired through their courses"
+msgstr ""
+"Erlauben Sie Trainern festzulegen, welche Fähigkeiten durch ihre Kurse "
+"erworben werden"
+
+msgid "Enable My assignments page"
+msgstr "Aktivieren Sie die Seite 'Meine Aufgaben'"
+
+msgid "Sessions support manual sorting"
+msgstr "Sessionen unterstützen manuelle Sortierung"
+
+msgid "Fields to search by in catalogue"
+msgstr "Suchfelder im Katalog"
+
+msgid "Add additional actions (as links) to survey lists for teachers"
+msgstr ""
+"Fügen Sie zusätzliche Aktionen (als Links) zu den Umfragelisten für Trainer "
+"hinzu"
+
+msgid "Change the default sorting of session in My sessions"
+msgstr "Ändern Sie die Standardsortierung der Session in Meine Sessions"
+
+msgid "Prevent assignments edition"
+msgstr "Verhinderung der Bearbeitung von Aufgaben"
+
+msgid "Prevent adding documents to assignments"
+msgstr "Verhindern Sie das Hinzufügen von Dokumenten zu Aufgaben"
+
+msgid "Left"
+msgstr "Links"
+
+msgid "Show glossary in documents is none"
+msgstr "Im Dokument angezeigtes Glossar ist keines"
+
+msgid "Allow tutors to get a diagnosis that will allow them to search for the best sessions for learners."
+msgstr ""
+"Ermöglichen Sie Tutoren, eine Diagnose zu erhalten, die es ihnen erlaubt, "
+"die besten Sessions für Lernende zu suchen."
+
+msgid "Save diagnosis changes"
+msgstr "Diagnoseänderungen speichern"
+
+msgid "Hide sessions list in reporting tool"
+msgstr "Sitzungsliste im Berichtstool ausblenden"
+
+msgid "Set mandatory extra fields in session creation form"
+msgstr "Pflichtfelder im Formular zur Erstellung einer Session festlegen"
+
+msgid "Score average"
+msgstr "Durchschnittliche Punktzahl"
+
+msgid "Session admins can delete users"
+msgstr "Session-Administratoren können Benutzer löschen"
+
+msgid "Hide catalogue"
+msgstr "Katalog ausblenden"
+
+msgid "Right"
+msgstr "Rechts"
+
+msgid "Search hides unlinked results"
+msgstr "Die Suche blendet nicht verknüpfte Ergebnisse aus"
+
+msgid "Force users to download the provided document in the assignment definition before they can upload their assignment."
+msgstr ""
+"Benutzer müssen das im Arbeitsauftrag bereitgestellte Dokument "
+"herunterladen, bevor sie ihren Arbeit hochladen können."
+
+msgid "Enable linking skills to items"
+msgstr "Fähigkeiten mit Elementen verknüpfen aktivieren"
+
+msgid "Allow teachers to see who answered in anonymous surveys"
+msgstr ""
+"Erlauben Sie Trainern einzusehen, wer bei anonymen Umfragen geantwortet hat"
+
+msgid "Session admins can 'login as' teachers"
+msgstr "Session-Administratoren können sich als Trainer 'anmelden als'"
+
+msgid "Hide search form in sessions list"
+msgstr "Suchformular in der Sessionsliste ausblenden"
+
+msgid "Session admin can access batch user import, update and export"
+msgstr ""
+"Der Session-Administrator kann auf den Massenbenutzerimport, -aktualisierung "
+"und -export zugreifen"
+
+msgid "Allows admins to hide survey reporting button if surveys are used to survey teachers."
+msgstr ""
+"Ermöglicht Administratoren, die Schaltfläche für die Berichterstattung von "
+"Umfragen auszublenden, wenn Umfragen dazu verwendet werden, Lehrkräfte zu "
+"befragen."
+
+msgid "Set preferences for the courses and sessions catalogues search options. If defined, this array will be used as a strict list of fields to let users search by."
+msgstr ""
+"Legen Sie die Einstellungen für die Suchoptionen im Kurs- und Session-"
+"Katalog fest. Wenn definiert, wird dieses Array als strikte Liste von "
+"Feldern verwendet, nach denen Benutzer suchen können."
+
+msgid "None"
+msgstr "Keine"
+
+msgid "Carbon copy receiver profile picture"
+msgstr "Empfängerprofilbild in Kopie"
+
+msgid "This will allow teachers to give an estimated time effort (in hh:mm:ss format) to complete the assignment. Upon submission of the assignment and approval by the teacher (the assignment is given a score), the learner will automatically be assigned the corresponding time."
+msgstr ""
+"Dies ermöglicht es den Trainern, eine geschätzte Zeitaufwand (im hh:mm:ss-"
+"Format) für die Fertigstellung des Arbeitsauftrags anzugeben. Nach "
+"Einreichung des Arbeitsauftrags und Genehmigung durch den Trainer (der "
+"Arbeitsauftrag erhält eine Bewertung), wird dem Lernenden automatisch die "
+"entsprechende Zeit zugewiesen."
+
+msgid "Disable add class in session course for non-admin"
+msgstr ""
+"Deaktivieren Sie das Hinzufügen von Klassen im Session-Kurs für Nicht-"
+"Administratoren"
+
+msgid "My progress: show course details in session"
+msgstr "Mein Fortschritt: Kursdetails in der Session anzeigen"
+
+msgid "Array of relationships between user extra fields and session extra fields, so the session can be pre-filled with data matching the user's data."
+msgstr ""
+"Array von Beziehungen zwischen zusätzlichen Benutzerfeldern und zusätzlichen "
+"Sessionfeldern, damit die Session mit Daten vorausgefüllt werden kann, die "
+"den Daten des Benutzers entsprechen."
+
+msgid "Load diagnosis"
+msgstr "Diagnose laden"
+
+msgid "Skill levels names"
+msgstr "Namen der Fähigkeitsstufen"
+
+msgid "Send notification to learner when a skill/badge has been acquired"
+msgstr ""
+"Benachrichtigung an Lernenden senden, wenn eine Fähigkeit/Abzeichen erworben "
+"wurde"
+
+msgid "Pre-fill session fields with user fields"
+msgstr "Sessionfelder mit Benutzerfeldern vorbelegen"
+
+msgid "Prevent duplicate uploads in assignments"
+msgstr "Verhindern Sie doppelte Uploads bei Aufgaben"
+
+msgid "Session admins can edit course content"
+msgstr "Session-Administratoren können Kursinhalte bearbeiten"
+
+msgid "Enable time effort for assignments"
+msgstr "Aktivieren Sie den Zeitaufwand für Aufgaben"
+
+msgid "Hide link to the session page from the sessions list."
+msgstr "Link zur Session-Seite in der Sessionsliste ausblenden."
+
+msgid "If enabled, skills can only be visible for admins, teachers (related to a user via a course), and HRM users (if related to a user)."
+msgstr ""
+"Wenn aktiviert, sind Kompetenzen nur für Administratoren, Lehrkräfte (die "
+"über einen Kurs mit einem Benutzer verbunden sind) und HR-Benutzer (wenn sie "
+"mit einem Benutzer verbunden sind) sichtbar."
+
+msgid "Session admins are forbidden access to the users list"
+msgstr "Session-Administratoren ist der Zugriff auf die Benutzerliste untersagt"
+
+msgid "Hide session chart in My progress"
+msgstr "Sessiondiagramm in Mein Fortschritt ausblenden"
+
+msgid "Require the listed fields during session creation."
+msgstr "Erforderliche Felder bei der Erstellung einer Session angeben."
+
+msgid "Add reset password link to e-mail notification of subscription to session"
+msgstr ""
+"Den Link zum Zurücksetzen des Passworts zur E-Mail-Benachrichtigung über die "
+"Anmeldung zur Session hinzufügen"
+
+msgid "Options for session import"
+msgstr "Optionen für den Session-Import"
+
+msgid "Show courses and sessions"
+msgstr "Kurse und Sessions anzeigen"
+
+msgid "Allow teachers to access learners' skills"
+msgstr "Erlauben Sie Trainern den Zugriff auf die Fähigkeiten der Lernenden"
+
+msgid "Display all details of each course in session when clicking on session details."
+msgstr ""
+"Zeigen Sie alle Details jedes Kurses in der Session an, wenn Sie auf "
+"Sessiondetails klicken."
+
+msgid "Mark all survey questions as 'required' by default"
+msgstr "Alle Umfragefragen standardmäßig als 'erforderlich' markieren"
+
+msgid "White list"
+msgstr "Weiße Liste"
+
+msgid "Redirect to assigment tool homepage after upload or comment"
+msgstr ""
+"Nach dem Hochladen oder Kommentieren zur Startseite des Arbeitstools umleiten"
+
+msgid "Otherwise, session coaches only have access to sessions by duration during the active duration."
+msgstr ""
+"Andernfalls haben Session-Trainer nur während der aktiven Dauer Zugriff auf "
+"Sessions nach Dauer."
+
+msgid "Hide skill levels feature"
+msgstr "Funktion zur Verbergung von Kompetenzstufen"
+
+msgid "Show glossary in documents is manual"
+msgstr "Das Glossar in Dokumenten anzeigen ist manuell"
+
+msgid "Receiver profile picture"
+msgstr "Empfängerprofilbild"
+
+msgid "Disable tab to add classes in session course for non-admins."
+msgstr ""
+"Deaktivieren Sie die Tab zum Hinzufügen von Klassen im Session-Kurs für "
+"Nicht-Administratoren."
+
+msgid "The survey duplication feature is oriented towards teachers and is meant to ask teachers to give their appreciation about each student in order. This option will order the questions by learner's lastname."
+msgstr ""
+"Die Duplikationsfunktion der Umfrage richtet sich an Trainer und soll "
+"Trainer dazu anregen, ihre Wertschätzung für jeden Lernenden in der "
+"Reihenfolge zu geben. Diese Option wird die Fragen nach dem Nachnamen des "
+"Lernenden sortieren."

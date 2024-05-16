@@ -818,6 +818,17 @@ class ScormApi
             $updateMinTime"
         ;
 
+        $lpItemParents = $mylp->getCurrentItemParentNames($mylp->get_current_item_id());
+        $titleItemParents = '';
+        if (!empty($lpItemParents)) {
+            $escapedParents = array_map(function($parentTitle) {
+                return htmlspecialchars($parentTitle, ENT_QUOTES, 'UTF-8');
+            }, $lpItemParents);
+
+            $titleItemParents = json_encode($escapedParents);
+        }
+        $return .= "olms.lms_lp_item_parents={$titleItemParents};";
+
         //$return .= 'updateGamificationValues(); ';
         $mylp->set_error_msg('');
         $mylp->prerequisites_match(); // Check the prerequisites are all complete.

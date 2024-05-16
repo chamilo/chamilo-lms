@@ -1,11 +1,11 @@
 import baseService from "./baseService"
 
 /**
- * @param {string} userIri
+ * @param {string} userId
  * @returns {Promise<Object>}
  */
-async function find(userIri) {
-  return await baseService.get(userIri)
+async function find(userId) {
+  return await baseService.get(`/api/users/${userId}`)
 }
 
 /**

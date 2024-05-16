@@ -5,14 +5,14 @@
   >
     <div
       v-if="sendToUser"
-      class="field"
+      class="field space-x-4"
     >
       <span v-t="'To'" />
-      <BaseUserAvatar
-        :image-url="sendToUser.illustrationUrl"
-        :alt="t('Picture')"
+      <MessageCommunicationParty
+        :username="sendToUser.username"
+        :full-name="sendToUser.fullName"
+        :profile-image-url="sendToUser.illustrationUrl"
       />
-      <span v-text="sendToUser.fullName" />
     </div>
 
     <BaseAutocomplete
@@ -41,10 +41,18 @@
 
     <BaseButton
       :label="t('Send')"
+      :disabled="!canSubmitMessage"
       icon="plus"
       type="primary"
+      class="mb-2"
       @click="onSubmit"
     />
+    <small
+      v-if="!canSubmitMessage"
+      class="block text-gray-90"
+    >
+      {{ t('Send is disabled because title of message or "to" recipent are not filled in') }}
+    </small>
   </MessageForm>
   <Loading :visible="isLoading || isLoadingUser" />
 </template>
@@ -52,20 +60,20 @@
 <script setup>
 import MessageForm from "../../components/message/Form.vue"
 import Loading from "../../components/Loading.vue"
-import { computed, ref } from "vue"
+import { computed, onMounted, ref } from "vue"
 import BaseAutocomplete from "../../components/basecomponents/BaseAutocomplete.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import { MESSAGE_TYPE_INBOX } from "../../components/message/constants"
 import userService from "../../services/userService"
-import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import { useNotification } from "../../composables/notification"
 import { capitalize } from "lodash"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import { useSecurityStore } from "../../store/securityStore"
-import messageService from "../../services/message"
+import { messageService } from "../../services/message"
 import messageAttachmentService from "../../services/messageattachment"
+import MessageCommunicationParty from "./MessageCommunicationParty.vue"
 
 const securityStore = useSecurityStore()
 const router = useRouter()
@@ -111,9 +119,16 @@ const receiversCc = computed(() =>
   })),
 )
 
+const canSubmitMessage = computed(() => {
+  return usersTo.value.length > 0 && item.value.title !== ""
+})
+
 const isLoading = ref(false)
 
 const onSubmit = async () => {
+  if (!canSubmitMessage.value) {
+    return
+  }
   item.value.receivers = [...receiversTo.value, ...receiversCc.value]
   isLoading.value = true
 
@@ -145,12 +160,12 @@ const onSubmit = async () => {
 const isLoadingUser = ref(false)
 const sendToUser = ref()
 
-if (route.query.send_to_user) {
-  isLoadingUser.value = true
+onMounted(async () => {
+  if (route.query.send_to_user) {
+    isLoadingUser.value = true
 
-  userService
-    .find("/api/users/" + parseInt(route.query.send_to_user))
-    .then((user) => {
+    try {
+      let user = await userService.find(route.query.send_to_user)
       sendToUser.value = user
 
       usersTo.value.push({
@@ -168,8 +183,11 @@ if (route.query.send_to_user) {
           securityStore.user.firstname,
         ])
       }
-    })
-    .catch((e) => notification.showErrorNotification(e))
-    .finally(() => (isLoadingUser.value = false))
-}
+    } catch (error) {
+      notification.showErrorNotification(error)
+    } finally {
+      isLoadingUser.value = false
+    }
+  }
+})
 </script>

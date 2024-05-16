@@ -1,10 +1,5 @@
 <template>
-  <div class="section-header section-header--h2">
-    <h2
-      class="mr-auto"
-      v-text="title"
-    />
-
+  <SectionHeader :title="title">
     <BaseButton
       icon="email-plus"
       only-icon
@@ -42,9 +37,7 @@
       ref="mMessageList"
       :model="mItemsMarkAs"
     />
-  </div>
-
-  <hr />
+  </SectionHeader>
 
   <div class="message-container">
     <div class="message-actions">
@@ -107,7 +100,10 @@
             v-if="slotProps.data.sender"
             class="flex items-center gap-2"
           >
-            <BaseUserAvatar :image-url="slotProps.data.sender.illustrationUrl" :alt="t('Picture')" />
+            <BaseUserAvatar
+              :image-url="slotProps.data.sender.illustrationUrl"
+              :alt="t('Picture')"
+            />
 
             {{ slotProps.data.sender.username }}
           </div>
@@ -180,6 +176,7 @@ import { GET_USER_MESSAGE_TAGS } from "../../graphql/queries/MessageTag"
 import { useNotification } from "../../composables/notification"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 import { useSecurityStore } from "../../store/securityStore"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const route = useRoute()
 const router = useRouter()

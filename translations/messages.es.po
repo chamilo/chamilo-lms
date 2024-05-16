@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-05-03 06:23+0000\n"
+"PO-Revision-Date: 2024-05-16 12:58+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Spanish <https://translation.chamilo.org/projects/chamilo/"
 "messages/es/>\n"
@@ -25764,3 +25764,48 @@ msgstr ""
 "Si no se proporciona, el código del curso se genera automáticamente en base "
 "al título del curso, así que active esta opción para eliminar por completo "
 "el campo de código del formulario de creación de cursos."
+
+msgid "When not empty, only the courses from the given categories will appear in the courses catalogue."
+msgstr ""
+"Cuando no esté vacío, solo los cursos de las categorías dadas aparecerán en "
+"el catálogo de cursos."
+
+msgid "When enabled, only the courses with the extra field ‘show_in_catalogue’ set to 1 will appear in the catalogue."
+msgstr ""
+"Cuando esté activado, solo los cursos con el campo adicional "
+"'show_in_catalogue' establecido en 1 aparecerán en el catálogo."
+
+msgid "Show donate message on course creation page"
+msgstr "Mostrar mensaje de donación en la página de creación de curso"
+
+msgid "Give a category code to use as course templates. Only those courses will show in the drop-down at course creation time, and users won’t see the courses in this category from the courses catalogue."
+msgstr ""
+"Asigne un código de categoría para usar como plantillas de curso. Solo esos "
+"cursos se mostrarán en el menú desplegable al momento de crear un curso, y "
+"los usuarios no verán los cursos de esta categoría en el catálogo de cursos."
+
+msgid "Add a button to unsubscribe from a course on the ‘My courses’ page."
+msgstr ""
+"Agregue un botón para darse de baja de un curso en la página 'Mis cursos'."
+
+msgid "Show unsubscribe button in ‘My courses’"
+msgstr "Mostrar botón de cancelar suscripción en 'Mis cursos'"
+
+msgid "Configure this array with the internal IDs of the extra fields you want to show by default in the main course stats page."
+msgstr ""
+"Configure este arreglo con los ID internos de los campos de perfil que desea "
+"mostrar por defecto en la página principal de estadísticas del curso."
+
+msgid "Only show matching courses in catalogue"
+msgstr "Mostrar solo los cursos correspondientes en el catálogo"
+
+msgid "The fields defined in this array will appear as additional fields in the course creation form."
+msgstr ""
+"Los campos definidos en este arreglo aparecerán como campos adicionales en "
+"el formulario de creación de cursos."
+
+msgid "Only show matching categories in courses catalogue"
+msgstr "Muestra solo las categorías coincidentes en el catálogo de cursos"
+
+msgid "Extra fields to show on course creation form"
+msgstr "Campos de perfil para mostrar en el formulario de creación de cursos"

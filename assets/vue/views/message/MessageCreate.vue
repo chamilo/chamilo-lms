@@ -133,13 +133,11 @@ const onSubmit = async () => {
 
   try {
     const message = await messageService.create(item.value)
-    console.log(message)
-    const json_message = await message.json()
-    console.log(json_message)
+
     if (attachments.value.length > 0) {
       for (const attachment of attachments.value) {
         await messageAttachmentService.createWithFormData({
-          messageId: json_message.id,
+          messageId: message.id,
           file: attachment,
         })
       }

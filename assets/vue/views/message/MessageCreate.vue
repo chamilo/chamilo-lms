@@ -47,12 +47,6 @@
       class="mb-2"
       @click="onSubmit"
     />
-    <small
-      v-if="!canSubmitMessage"
-      class="block text-gray-90"
-    >
-      {{ t('Send is disabled because title of message or "to" recipent are not filled in') }}
-    </small>
   </MessageForm>
   <Loading :visible="isLoading || isLoadingUser" />
 </template>

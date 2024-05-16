@@ -68,6 +68,7 @@ import { useSecurityStore } from "../../store/securityStore"
 import { messageService } from "../../services/message"
 import messageAttachmentService from "../../services/messageattachment"
 import MessageCommunicationParty from "./MessageCommunicationParty.vue"
+import { MESSAGE_REL_USER_TYPE_CC, MESSAGE_REL_USER_TYPE_TO } from "../../constants/entity/messagereluser"
 
 const securityStore = useSecurityStore()
 const router = useRouter()
@@ -102,14 +103,14 @@ const usersCc = ref([])
 const receiversTo = computed(() =>
   usersTo.value.map((userTo) => ({
     receiver: userTo.value,
-    receiverType: 1,
+    receiverType: MESSAGE_REL_USER_TYPE_TO,
   })),
 )
 
 const receiversCc = computed(() =>
   usersCc.value.map((userCc) => ({
     receiver: userCc.value,
-    receiverType: 2,
+    receiverType: MESSAGE_REL_USER_TYPE_CC,
   })),
 )
 

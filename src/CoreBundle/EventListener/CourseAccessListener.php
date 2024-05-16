@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\EventListener;
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\ServiceHelper\CidReqHelper;
+use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use DateTime;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,9 +24,8 @@ class CourseAccessListener
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly RequestStack $requestStack,
         private readonly CidReqHelper $cidReqHelper,
-        private readonly TokenStorageInterface $tokenStorage,
+        private readonly UserHelper $userHelper
     ) {}
 
     public function onKernelRequest(RequestEvent $event): void
@@ -39,49 +39,21 @@ class CourseAccessListener
         $sessionId = (int) $this->cidReqHelper->getSessionId();
 
         if ($courseId > 0) {
-            $user = $this->tokenStorage->getToken()?->getUser();
-            if ($user instanceof User) {
-                $ip = $this->requestStack->getCurrentRequest()->getClientIp();
-                $access = $this->findExistingAccess($user, $courseId, $sessionId);
+            $user = $this->userHelper->getCurrent();
+            if ($user) {
+                $ip = $event->getRequest()->getClientIp();
+                $accessRepository = $this->em->getRepository(TrackECourseAccess::class);
+                $access = $accessRepository->findExistingAccess($user, $courseId, $sessionId);
 
                 if ($access) {
-                    $this->updateAccess($access);
+                    $accessRepository->updateAccess($access);
                 } else {
-                    $this->recordAccess($user, $courseId, $sessionId, $ip);
+                    $accessRepository->recordAccess($user, $courseId, $sessionId, $ip);
                 }
 
                 // Set a flag on the request to indicate that access has been checked
                 $event->getRequest()->attributes->set('access_checked', true);
             }
         }
-    }
-
-    private function findExistingAccess(User $user, int $courseId, int $sessionId)
-    {
-        return $this->em->getRepository(TrackECourseAccess::class)
-            ->findOneBy(['user' => $user, 'cId' => $courseId, 'sessionId' => $sessionId]);
-    }
-
-    private function updateAccess(TrackECourseAccess $access): void
-    {
-        $now = new DateTime();
-        if (!$access->getLogoutCourseDate() || $now->getTimestamp() - $access->getLogoutCourseDate()->getTimestamp() > 300) {
-            $access->setLogoutCourseDate($now);
-            $access->setCounter($access->getCounter() + 1);
-            $this->em->flush();
-        }
-    }
-
-    private function recordAccess(User $user, int $courseId, int $sessionId, string $ip): void
-    {
-        $access = new TrackECourseAccess();
-        $access->setUser($user);
-        $access->setCId($courseId);
-        $access->setSessionId($sessionId);
-        $access->setUserIp($ip);
-        $access->setLoginCourseDate(new \DateTime());
-        $access->setCounter(1);
-        $this->em->persist($access);
-        $this->em->flush();
     }
 }

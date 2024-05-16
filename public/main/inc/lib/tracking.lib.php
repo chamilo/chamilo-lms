@@ -5712,7 +5712,7 @@ class Tracking
                 );
                 $last_connection_in_lp = self::get_last_connection_time_in_lp(
                     $userId,
-                    $course,
+                    $course->getCode(),
                     $lp_id,
                     $sessionId
                 );

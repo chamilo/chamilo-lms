@@ -1705,7 +1705,7 @@ if (empty($details)) {
                 // Get last connection time in lp
                 $start_time = Tracking::get_last_connection_time_in_lp(
                     $studentId,
-                    $course,
+                    $course->getCode(),
                     $lp_id,
                     $sessionId
                 );

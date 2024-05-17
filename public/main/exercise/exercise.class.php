@@ -3631,7 +3631,7 @@ class Exercise
 
         $generatedFile = '';
         if ($answerType == ORAL_EXPRESSION) {
-            $generatedFile = ExerciseLib::getOralFeedbackAudio($exeId, $questionId);
+            $generatedFile = ExerciseLib::getOralFileAudio($exeId, $questionId);
         }
 
         $user_answer = '';

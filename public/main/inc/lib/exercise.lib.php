@@ -5111,6 +5111,41 @@ EOT;
     }
 
     /**
+     * Get the HTML audio element for the oral file of a specific track exercise question attempt.
+     */
+    public static function getOralFileAudio(int $trackExerciseId, int $questionId): string
+    {
+        /** @var TrackEExercise $trackExercise */
+        $trackExercise = Container::getTrackEExerciseRepository()->find($trackExerciseId);
+
+        if (null === $trackExercise) {
+            return '';
+        }
+
+        $questionAttempt = $trackExercise->getAttemptByQuestionId($questionId);
+
+        if (null === $questionAttempt) {
+            return '';
+        }
+
+        $assetRepo = Container::getAssetRepository();
+
+        $html = '';
+        foreach ($questionAttempt->getAttemptFiles() as $attemptFile) {
+            $html .= Display::tag(
+                'audio',
+                '',
+                [
+                    'src' => $assetRepo->getAssetUrl($attemptFile->getAsset()),
+                    'controls' => '',
+                ]
+            );
+        }
+
+        return $html;
+    }
+
+    /**
      * Get the audio component for a teacher audio feedback.
      */
     public static function getOralFeedbackAudio(int $attemptId, int $questionId): string

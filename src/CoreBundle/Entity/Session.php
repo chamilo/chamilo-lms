@@ -915,8 +915,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     {
         $now = new DateTime();
 
-        return (null === $this->accessStartDate || $this->accessStartDate < $now)
-            && (null === $this->accessEndDate || $now < $this->accessEndDate);
+        return (!$this->accessStartDate || $now >= $this->accessStartDate) && (!$this->accessEndDate || $now <= $this->accessEndDate);
     }
 
     public function addCourse(Course $course): self

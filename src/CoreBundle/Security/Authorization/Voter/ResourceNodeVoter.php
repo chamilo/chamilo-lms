@@ -370,6 +370,7 @@ class ResourceNodeVoter extends Voter
         $userRole = new GenericRole('ROLE_USER');
         $student = new GenericRole('ROLE_STUDENT');
         $teacher = new GenericRole('ROLE_TEACHER');
+        $studentBoss = new GenericRole('ROLE_STUDENT_BOSS');
 
         $currentStudent = new GenericRole(self::ROLE_CURRENT_COURSE_STUDENT);
         $currentTeacher = new GenericRole(self::ROLE_CURRENT_COURSE_TEACHER);
@@ -386,6 +387,7 @@ class ResourceNodeVoter extends Voter
             ->addRole($userRole)
             ->addRole($student)
             ->addRole($teacher)
+            ->addRole($studentBoss)
 
             ->addRole($currentStudent)
             ->addRole($currentTeacher, self::ROLE_CURRENT_COURSE_STUDENT)

@@ -10,11 +10,8 @@ use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\ServiceHelper\CidReqHelper;
 use Chamilo\CoreBundle\ServiceHelper\UserHelper;
-use DateTime;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 /**
  * In and outs of a course

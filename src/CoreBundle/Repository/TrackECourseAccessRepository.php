@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Repository;
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CoreBundle\Entity\User;
 use DateTime;
+use DateTimeZone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -79,7 +80,7 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
         $access->setCId($courseId);
         $access->setSessionId($sessionId);
         $access->setUserIp($ip);
-        $access->setLoginCourseDate(new \DateTime());
+        $access->setLoginCourseDate(new DateTime());
         $access->setCounter(1);
         $this->_em->persist($access);
         $this->_em->flush();
@@ -90,7 +91,7 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
      */
     public function logoutAccess(User $user, int $courseId, int $sessionId, string $ip): void
     {
-        $now = new DateTime("now", new \DateTimeZone("UTC"));
+        $now = new DateTime('now', new DateTimeZone('UTC'));
         $sessionLifetime = 3600;
         $limitTime = (new DateTime())->setTimestamp(time() - $sessionLifetime);
 
@@ -106,7 +107,8 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
             ->orderBy('a.loginCourseDate', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getOneOrNullResult()
+        ;
 
         if ($access) {
             $access->setLogoutCourseDate($now);

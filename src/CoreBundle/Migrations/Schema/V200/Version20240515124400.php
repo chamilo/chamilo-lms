@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\TrackEDownloads;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
-use Chamilo\CoreBundle\Entity\TrackEDownloads;
-use Chamilo\CoreBundle\Entity\ResourceFile;
-use Chamilo\CoreBundle\Entity\ResourceNode;
+use Exception;
 
 final class Version20240515124400 extends AbstractMigrationChamilo
 {
@@ -35,7 +36,8 @@ final class Version20240515124400 extends AbstractMigrationChamilo
                 ->setFirstResult($offset)
                 ->setMaxResults($batchSize)
                 ->getQuery()
-                ->getResult();
+                ->getResult()
+            ;
 
             if (empty($downloads)) {
                 break;
@@ -65,19 +67,20 @@ final class Version20240515124400 extends AbstractMigrationChamilo
                             if ($firstResourceLink && $user) {
                                 $resourceLinkId = $firstResourceLink->getId();
                                 $url = $resourceNode->getResourceFile()->getOriginalName();
-                                echo "Resource link $resourceLinkId Down id {$download->getDownId()} for $url: user " . $user->getFullname() . "\n";
+                                echo "Resource link $resourceLinkId Down id {$download->getDownId()} for $url: user ".$user->getFullname()."\n";
 
-                                $this->connection->executeUpdate("UPDATE track_e_downloads SET resource_link_id = ? WHERE down_id = ?", [$resourceLinkId, $download->getDownId()]);
+                                $this->connection->executeUpdate('UPDATE track_e_downloads SET resource_link_id = ? WHERE down_id = ?', [$resourceLinkId, $download->getDownId()]);
                             }
                         }
                     }
                 }
 
                 $this->entityManager->commit();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->entityManager->rollback();
                 $success = false;
-                echo "Failed for download ID {$download->getDownId()}: " . $e->getMessage() . "\n";
+                echo "Failed for download ID {$download->getDownId()}: ".$e->getMessage()."\n";
+
                 break;
             } finally {
                 $this->entityManager->clear();
@@ -88,13 +91,11 @@ final class Version20240515124400 extends AbstractMigrationChamilo
 
         // Only delete if all updates were successful
         if ($success) {
-            $this->connection->executeUpdate("DELETE FROM track_e_downloads WHERE resource_link_id IS NULL");
+            $this->connection->executeUpdate('DELETE FROM track_e_downloads WHERE resource_link_id IS NULL');
         } else {
             echo "Process failed. No records were deleted.\n";
         }
     }
 
-    public function down(Schema $schema): void
-    {
-    }
+    public function down(Schema $schema): void {}
 }

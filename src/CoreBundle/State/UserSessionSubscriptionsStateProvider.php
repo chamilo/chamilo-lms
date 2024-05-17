@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
@@ -16,6 +17,9 @@ use Exception;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
+/**
+ * @template-implements ProviderInterface<Session>
+ */
 class UserSessionSubscriptionsStateProvider implements ProviderInterface
 {
     public function __construct(

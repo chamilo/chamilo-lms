@@ -18,7 +18,6 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Entity\CGroup;
 use ChamiloSession;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
@@ -273,14 +272,15 @@ class CidReqListener
         $courseId = $sessionHandler->get('cid', 0);
         $sessionId = $sessionHandler->get('sid', 0);
         $ip = $request->getClientIp();
-        if ($courseId !== 0) {
+        if (0 !== $courseId) {
             $token = $this->tokenStorage->getToken();
             if (null !== $token) {
                 /** @var User $user */
                 $user = $token->getUser();
                 if ($user instanceof UserInterface) {
                     $this->entityManager->getRepository(TrackECourseAccess::class)
-                        ->logoutAccess($user, $courseId, $sessionId, $ip);
+                        ->logoutAccess($user, $courseId, $sessionId, $ip)
+                    ;
                 }
             }
         }

@@ -94,22 +94,44 @@
       @sort="sortingChanged($event)"
     >
       <Column selection-mode="multiple" />
-      <Column :header="t('From')">
+      <Column :header="showingInbox ? t('From') : t('To')">
         <template #body="slotProps">
           <div
-            v-if="slotProps.data.sender"
+            v-if="showingInbox && slotProps.data.sender"
             class="flex items-center gap-2"
           >
-            <BaseUserAvatar
-              :image-url="slotProps.data.sender.illustrationUrl"
-              :alt="t('Picture')"
+            <MessageCommunicationParty
+              :username="slotProps.data.sender.username"
+              :full-name="slotProps.data.sender.fullName"
+              :profile-image-url="slotProps.data.sender.illustrationUrl"
             />
-            {{ slotProps.data.sender.fullName }}
           </div>
           <div
-            v-else
+            v-else-if="showingInbox && !slotProps.data.sender"
             v-t="'No sender'"
           />
+          <div v-else-if="!showingInbox">
+            <div
+              v-for="receiverTo in slotProps.data.receiversTo"
+              :key="receiverTo['@id']"
+            >
+              <MessageCommunicationParty
+                :username="receiverTo.receiver.username"
+                :full-name="receiverTo.receiver.fullName"
+                :profile-image-url="receiverTo.receiver.illustrationUrl"
+              />
+            </div>
+            <div
+              v-for="receiverCc in slotProps.data.receiversCc"
+              :key="receiverCc['@id']"
+            >
+              <MessageCommunicationParty
+                :username="receiverCc.receiver.username"
+                :full-name="receiverCc.receiver.fullName"
+                :profile-image-url="receiverCc.receiver.illustrationUrl"
+              />
+            </div>
+          </div>
         </template>
       </Column>
       <Column
@@ -164,7 +186,7 @@ import { useRoute, useRouter } from "vue-router"
 import { useFormatDate } from "../../composables/formatDate"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
-import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
+import MessageCommunicationParty from "./MessageCommunicationParty.vue"
 import BaseTag from "../../components/basecomponents/BaseTag.vue"
 import DataTable from "primevue/datatable"
 import Column from "primevue/column"
@@ -286,7 +308,10 @@ function loadMessages(reset = true) {
   store.dispatch("message/fetchAll", fetchPayload)
 }
 
+const showingInbox = ref(false)
+
 function showInbox() {
+  showingInbox.value = true
   title.value = t("Inbox")
 
   fetchPayload = {
@@ -301,6 +326,7 @@ function showInbox() {
 }
 
 function showInboxByTag(tag) {
+  showingInbox.value = true
   title.value = tag.tag
 
   fetchPayload = {
@@ -316,6 +342,7 @@ function showInboxByTag(tag) {
 }
 
 function showUnread() {
+  showingInbox.value = true
   title.value = t("Unread")
 
   fetchPayload = {
@@ -331,6 +358,7 @@ function showUnread() {
 }
 
 function showSent() {
+  showingInbox.value = false
   title.value = t("Sent")
 
   fetchPayload = {

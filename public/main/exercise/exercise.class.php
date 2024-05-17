@@ -10735,22 +10735,22 @@ class Exercise
                         </tr>
                     </table>';
             $msg .= '<br />'.sprintf(
-                    get_lang('A learner has attempted one or more oral questionAreX'),
+                    get_lang('The attempted oral questions are %s'),
                     $oral_question_list
                 ).'<br />';
             $msg1 = str_replace('#exercise#', $this->exercise, $msg);
             $msg = str_replace('#firstName#', $user_info['firstname'], $msg1);
             $msg1 = str_replace('#lastName#', $user_info['lastname'], $msg);
             $msg = str_replace('#mail#', $user_info['email'], $msg1);
-            $msg = str_replace('#course#', $courseInfo['name'], $msg1);
+            $msg1 = str_replace('#course#', $courseInfo['name'], $msg);
 
             if (!in_array($origin, ['learnpath', 'embeddable'])) {
-                $msg .= '<br /><a href="#url#">'.get_lang(
+                $msg1 .= '<br /><a href="#url#">'.get_lang(
                         'Click this link to check the answer and/or give feedback'
                     ).'</a>';
             }
-            $msg1 = str_replace('#url#', $url_email, $msg);
-            $mail_content = $msg1;
+            $msg = str_replace('#url#', $url_email, $msg1);
+            $mail_content = $msg;
             $subject = get_lang('A learner has attempted one or more oral question');
 
             if (!empty($teachers)) {

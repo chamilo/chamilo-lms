@@ -29216,3 +29216,6 @@ msgstr ""
 
 msgid "No course session for this user"
 msgstr "Pas de cours de session pour cet utilisateur"
+
+msgid "The attempted oral questions are %s"
+msgstr "Les questions orales auxquelles il a répondu sont: %s"

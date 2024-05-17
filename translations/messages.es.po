@@ -25976,3 +25976,6 @@ msgid "Enable sharing options for document inside group category"
 msgstr ""
 "Habilitar opciones de compartición para el documento dentro de la categoría "
 "de grupo"
+
+msgid "The attempted oral questions are %s"
+msgstr "Las preguntas orales respondidas son: %s"

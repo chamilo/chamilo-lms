@@ -27518,3 +27518,6 @@ msgstr ""
 
 msgid "No course sessions for this user"
 msgstr ""
+
+msgid "The attempted oral questions are %s"
+msgstr ""

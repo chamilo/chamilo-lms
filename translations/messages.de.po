@@ -28970,3 +28970,6 @@ msgstr ""
 "Trainer dazu anregen, ihre Wertschätzung für jeden Lernenden in der "
 "Reihenfolge zu geben. Diese Option wird die Fragen nach dem Nachnamen des "
 "Lernenden sortieren."
+
+msgid "The attempted oral questions are %s"
+msgstr "Die beantworteten mündlichen Fragen sind %s"

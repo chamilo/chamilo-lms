@@ -25052,3 +25052,5 @@ msgstr ""
 msgid "%02d h %02d m %02d s"
 msgstr ""
 
+msgid "The attempted oral questions are %s"
+msgstr "Intrebarile orale raspunse sunt: %s"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-05-16 12:58+0000\n"
+"PO-Revision-Date: 2024-05-17 08:00+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Spanish <https://translation.chamilo.org/projects/chamilo/"
 "messages/es/>\n"
@@ -25809,3 +25809,170 @@ msgstr "Muestra solo las categorías coincidentes en el catálogo de cursos"
 
 msgid "Extra fields to show on course creation form"
 msgstr "Campos de perfil para mostrar en el formulario de creación de cursos"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow coaches in session courses to adapt tool visibilities to their needs."
+msgstr ""
+"Al utilizar las sesiones, el comportamiento predeterminado es usar la "
+"visibilidad de la herramienta definida en el curso base. Esta configuración "
+"cambia eso para permitir que los tutores en los cursos de sesión adapten la "
+"visibilidad de las herramientas a sus necesidades."
+
+msgid "Sort users by specific info by default"
+msgstr "Ordenar usuarios por información específica de forma predeterminada"
+
+msgid "Hide documents download icon"
+msgstr "Ocultar icono de descarga de documentos"
+
+msgid "Compilatio is an anti-cheating service that compares text between two submissions and reports if there is a high probability the content (usually assignments) is not genuine."
+msgstr ""
+"Compilatio es un servicio antiplagio que compara el texto entre dos entregas "
+"e informa si hay una alta probabilidad de que el contenido (generalmente "
+"trabajos) no sea auténtico."
+
+msgid "Provide link to a bug reporting platform if not using the internal ticket manager."
+msgstr ""
+"Proporcionar un enlace a una plataforma de reporte de errores si no se "
+"utiliza el gestor de tickets interno."
+
+msgid "Set strict hosts list for cloud links"
+msgstr "Establecer lista estricta de hosts para enlaces en la nube"
+
+msgid "In the documents tool, hide the download icon from users."
+msgstr ""
+"En la herramienta de documentos, oculta el icono de descarga a los usuarios."
+
+msgid "In the course progress tool, you can print a PDF of the different elements. Set ‘portrait’ or ‘landscape’ (technical terms) to change it."
+msgstr ""
+"En la herramienta de progreso del curso, puedes imprimir un PDF de los "
+"diferentes elementos. Establece 'portrait' o 'landscape' (términos técnicos) "
+"para cambiarlo."
+
+msgid "When enabled, this option disables as well as possible the copy-pasting mechanisms. Useful in restrictive exams setups."
+msgstr ""
+"Cuando está activada, esta opción deshabilita lo mejor posible los "
+"mecanismos de copiar y pegar. Útil en configuraciones de exámenes "
+"restrictivos."
+
+msgid "PDF orientation for course progress"
+msgstr "Orientación del PDF para el avance temático"
+
+msgid "Some pages allow you to promote the portal or a course on social networks. Enable this setting to remove the links."
+msgstr ""
+"Algunas páginas le permiten promocionar el portal o un curso en redes "
+"sociales. Active esta configuración para eliminar los enlaces."
+
+msgid "The fields defined in this array will be mandatory in the course creation form."
+msgstr ""
+"Los campos definidos en este arreglo serán obligatorios en el formulario de "
+"creación de cursos."
+
+msgid "Hide social media links"
+msgstr "Ocultar enlaces de redes sociales"
+
+msgid "Make a virtual keyboard appear. This is useful when setting up restrictive exams in a physical room where students have no keyboard to limit their ability to cheat."
+msgstr ""
+"Haga aparecer un teclado virtual. Esto es útil al configurar exámenes "
+"restrictivos en una sala física donde los alumnos no tienen teclado para "
+"limitar su capacidad de hacer trampa."
+
+msgid "Disable copy-pasting"
+msgstr "Desactivar copiar y pegar"
+
+msgid "Compilatio settings"
+msgstr "Configuración de Compilatio"
+
+msgid "Whenever someone creates a new item in the documents tool, send a notification to users."
+msgstr ""
+"Cada vez que alguien crea un nuevo elemento en la herramienta de documentos, "
+"envía una notificación a los usuarios."
+
+msgid "Provide the name of the template folder from main/template/ to change the appearance and structure of this portal."
+msgstr ""
+"Proporcione el nombre de la carpeta de plantillas de main/template/ para "
+"cambiar la apariencia y estructura de este portal."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr ""
+"Si no está vacío, el proceso de creación del curso buscará algunos campos en "
+"el perfil del usuario y los completará automáticamente para el curso. Por "
+"ejemplo, un tutor especializado en marketing digital podría establecer "
+"automáticamente una etiqueta de «marketing digital» en cada curso que crea."
+
+msgid "A general certificate is a certificate grouping all the accomplishments by the user in the courses (s)he followed."
+msgstr ""
+"Un certificado general es un certificado que agrupa todos los logros del "
+"usuario en los cursos que ha seguido."
+
+msgid "Extra fields to require on course creation form"
+msgstr ""
+"Campos de perfil adicionales para requerir en el formulario de creación de "
+"cursos"
+
+msgid "Send notification to students when document added"
+msgstr "Enviar notificación a los alumnos cuando se añada un documento"
+
+msgid "Set ‘portrait’ or ‘landscape’ (technical terms) for PDF certificates."
+msgstr ""
+"Establezca 'portrait' o 'landscape' (términos técnicos) para los "
+"certificados en PDF."
+
+msgid "Enable sharing options for group document"
+msgstr "Habilitar opciones de compartición para el documento de grupo"
+
+msgid "PDF orientation for certificates"
+msgstr "Orientación de PDF para certificados"
+
+msgid "The fields defined in this array will appear on the course settings page."
+msgstr ""
+"Los campos definidos en este arreglo aparecerán en la página de "
+"configuración del curso."
+
+msgid "Configure the Compilatio connection details here."
+msgstr "Configure los detalles de conexión de Compilatio aquí."
+
+msgid "The documents tool can integrate links to files in the cloud. The list of cloud services is limited to a hardcoded list, but you can define the ‘links’ array that will contain a list of your own list of services/URLs. The list defined here will replace the default list."
+msgstr ""
+"La herramienta de documentos puede integrar enlaces a archivos en la nube. "
+"La lista de servicios en la nube está limitada a una lista predefinida, pero "
+"puedes definir el arreglo 'enlaces' que contendrá una lista de tus propios "
+"servicios/URLs. La lista definida aquí reemplazará la lista predeterminada."
+
+msgid "Extra fields to show in course settings"
+msgstr "Campos de perfil para mostrar en la configuración del curso"
+
+msgid "Enable this if you have X-sendfile enabled at the web server level and you want to add the required headers for browsers to pick it up."
+msgstr ""
+"Actívelo si tiene X-sendfile habilitado a nivel del servidor web y desea "
+"agregar las cabeceras necesarias para que los navegadores puedan detectarlo."
+
+msgid "Use virtual keyboard"
+msgstr "Utilizar el teclado virtual"
+
+msgid "Enable Compilatio"
+msgstr "Activar Compilatio"
+
+msgid "Prefill course fields with fields from user"
+msgstr "Rellene previamente los campos del curso con campos del usuario"
+
+msgid "Enable general certificate"
+msgstr "Activar certificado general"
+
+msgid "Bug report link"
+msgstr "Enlace de informe de errores"
+
+msgid "Layout template"
+msgstr "Plantilla de diseño"
+
+msgid "Enable X-sendfile headers"
+msgstr "Activar encabezados X-sendfile"
+
+msgid "Order of user lastname and firstname"
+msgstr "Orden de apellido y nombre del usuario"
+
+msgid "Allow tool visibility edition in sessions"
+msgstr "Permitir la edición de la visibilidad de herramientas en sesiones"
+
+msgid "Enable sharing options for document inside group category"
+msgstr ""
+"Habilitar opciones de compartición para el documento dentro de la categoría "
+"de grupo"

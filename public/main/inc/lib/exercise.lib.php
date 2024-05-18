@@ -202,6 +202,10 @@ class ExerciseLib
                         global $exercise_stat_info;
                         if (!empty($exercise_stat_info)) {
                             echo $objQuestionTmp->returnRecorder((int) $exercise_stat_info['exe_id']);
+                            $generatedFile = self::getOralFileAudio($exercise_stat_info['exe_id'], $questionId);
+                            if (!empty($generatedFile)) {
+                                echo $generatedFile;
+                            }
                         }
                     }
 

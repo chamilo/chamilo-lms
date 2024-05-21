@@ -31,6 +31,10 @@
         {{ encore_entry_link_tags('vue') }}
         {{ encore_entry_link_tags('app') }}
 
+        {% if lp_view is defined %}
+            {{ encore_entry_link_tags('css/scorm') }}
+        {% endif %}
+
         {% if color_theme_link is defined %}
             {{ color_theme_link|raw }}
         {% endif %}

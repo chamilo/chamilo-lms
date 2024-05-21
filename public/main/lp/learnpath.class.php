@@ -1357,17 +1357,17 @@ class learnpath
         if (false === $hideArrows) {
             $icon = Display::getMdiIcon('chevron-left');
             $previousIcon = '
-                <a class="icon-toolbar" id="scorm-previous" href="#"
+                <button class="icon-toolbar" id="scorm-previous" type="button"
                     onclick="switch_item('.$mycurrentitemid.',\'previous\');return false;" title="'.$previousText.'">
                     '.$icon.'<span class="sr-only">'.$previousText.'</span>
-                </a>';
+                </button>';
 
             $icon = Display::getMdiIcon('chevron-right');
             $nextIcon = '
-                <a class="icon-toolbar" id="scorm-next" href="#"
+                <button class="icon-toolbar" id="scorm-next" type="button"
                     onclick="switch_item('.$mycurrentitemid.',\'next\');return false;" title="'.$nextText.'">
                     '.$icon.'<span class="sr-only">'.$nextText.'</span>
-                </a>';
+                </button>';
         }
 
         if ('fullscreen' === $this->mode) {
@@ -2660,14 +2660,14 @@ class learnpath
         if ($isAllow && false == $hideIcons) {
             if ($this->get_lp_session_id() == api_get_session_id()) {
                 $html .= '<div id="actions_lp" class="actions_lp"><hr>';
-                $html .= '<div class="flex flex-row justify-center mb-2">';
+                $html .= '<div class="flex flex-wrap gap-1 justify-center">';
                 $html .= "<a
-                    class='btn btn-sm btn--plain mx-1'
+                    class='btn btn-sm btn--plain'
                     href='lp_controller.php?".api_get_cidreq()."&action=add_item&type=step&lp_id=".$this->lp_id."&isStudentView=false'
                     target='_parent'>".
                     Display::getMdiIcon('pencil').get_lang('Edit')."</a>";
                 $html .= '<a
-                    class="btn btn-sm btn--plain mx-1"
+                    class="btn btn-sm btn--plain"
                     href="lp_controller.php?'.api_get_cidreq()."&action=edit&lp_id=".$this->lp_id.'&isStudentView=false">'.
                     Display::getMdiIcon('hammer-wrench').get_lang('Settings').'</a>';
                 $html .= '</div>';

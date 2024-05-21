@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-05-17 08:00+0000\n"
+"PO-Revision-Date: 2024-05-21 09:47+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Spanish <https://translation.chamilo.org/projects/chamilo/"
 "messages/es/>\n"
@@ -25977,5 +25977,403 @@ msgstr ""
 "Habilitar opciones de compartición para el documento dentro de la categoría "
 "de grupo"
 
-msgid "The attempted oral questions are %s"
-msgstr "Las preguntas orales respondidas son: %s"
+msgid "Allow users to include HTML in title fields in several places. This allows for some styling of titles, notably in test questions."
+msgstr ""
+"Permitir a los usuarios incluir HTML en los campos de título en varios "
+"lugares. Esto permite aplicar estilos a los títulos, especialmente en las "
+"preguntas de exámenes."
+
+msgid "Show link to download test results"
+msgstr "Mostrar enlace para descargar resultados del ejercicio"
+
+msgid "Block sending test notifications to general coach"
+msgstr "Bloquear el envío de notificaciones de prueba al tutor general"
+
+msgid "Allow the teacher to rate the open, oral expression and annotation question types with a decimal score."
+msgstr ""
+"Permita al tutor calificar los tipos de preguntas de expresión oral abierta "
+"y anotación con una puntuación decimal."
+
+msgid "Select between the following forms for the display of users' score in various reports: 1 = SCORE_AVERAGE (5 / 10); 2 = SCORE_PERCENT (50%); 3 = SCORE_DIV_PERCENT (5 / 10 (50%)). Use the numerical ID of the form you want to use."
+msgstr ""
+"Seleccione entre las siguientes formas para mostrar la puntuación de los "
+"usuarios en varios informes: 1 = PROMEDIO_PUNTUACIÓN (5 / 10); 2 = "
+"PORCENTAJE_PUNTUACIÓN (50%); 3 = PUNTUACIÓN_DIV_PORCENTAJE (5 / 10 (50%)). "
+"Utilice el ID numérico de la forma que desea usar."
+
+msgid "Hide the fact that open questions (including audio and annotations) have a score by hiding the score display in all learner-facing reports."
+msgstr ""
+"Oculte el hecho de que las preguntas abiertas (incluyendo audio y "
+"anotaciones) tienen una puntuación ocultando la visualización de la "
+"puntuación en todos los informes orientados a los alumnos."
+
+msgid "Prevent the use of images copy-paste as base64 in the editor to avoid filling the database with images."
+msgstr ""
+"Evita el uso de copiar y pegar imágenes como base64 en el editor para no "
+"llenar la base de datos con imágenes."
+
+msgid "Enable test images zooming"
+msgstr "Activar el zoom en imágenes de ejercicios"
+
+msgid "Set this to false to disable the 'previous' button when answering questions in a test, thus forcing users to always move ahead."
+msgstr ""
+"Establezca esto en falso para desactivar el botón 'anterior' al responder "
+"preguntas en un examen, obligando así a los usuarios a avanzar siempre."
+
+msgid "Disable new test attempts"
+msgstr "Desactivar nuevos intentos de ejercicio"
+
+msgid "Generate certificate when ending a quiz. The quiz needs to be linked in the gradebook tool and have a pass percentage configured."
+msgstr ""
+"Generar certificado al finalizar un cuestionario. El cuestionario debe estar "
+"vinculado en la herramienta de evaluaciones y tener configurado un "
+"porcentaje de aprobación."
+
+msgid "When using this option, an additional option will appear in the test's configuration. When using a test with multiple question categories and asking for a distribution by category, this will allow the user to navigate questions per category. Once a category is finished, (s)he moves to the next category and cannot return to the previous category."
+msgstr ""
+"Al utilizar esta opción, aparecerá una opción adicional en la configuración "
+"del ejercicio. Al usar un ejercicio con múltiples categorías de preguntas y "
+"solicitar una distribución por categoría, esto permitirá al usuario navegar "
+"las preguntas por categoría. Una vez que se termina una categoría, el alumno "
+"pasa a la siguiente categoría y no puede regresar a la categoría anterior."
+
+msgid "The auto-launch feature allows the teacher to set an exercise to open immediately upon accessing the course homepage. Enable this option and click on the rocket icon in the list of tests to enable."
+msgstr ""
+"La función de auto-lanzamiento permite al tutor configurar un ejercicio para "
+"que se abra inmediatamente al acceder a la página principal del curso. "
+"Active esta opción y haga clic en el icono del cohete en la lista de "
+"ejercicios para habilitar."
+
+msgid "Learners completing a test usually sends notifications to coaches, including the general session coach. Enable this option to omit the general coach from these notifications."
+msgstr ""
+"Los alumnos que completan una prueba suelen enviar notificaciones a los "
+"tutores, incluyendo al tutor general de la lección. Active esta opción para "
+"omitir al tutor general de estas notificaciones."
+
+msgid "Enable this feature to allow users to zoom on images used in the tests."
+msgstr ""
+"Active esta función para permitir a los usuarios ampliar las imágenes "
+"utilizadas en los ejercicios."
+
+msgid "The default test results page shows a user datasheet (photo, name, etc) which might, in some contexts, be considered as pushing the limits of personal data treatment. Enable this option to remove user details from the test results."
+msgstr ""
+"La página de resultados del ejercicio por defecto muestra una hoja de datos "
+"del usuario (foto, nombre, etc.) que, en algunos contextos, podría "
+"considerarse como un exceso en el tratamiento de datos personales. Active "
+"esta opción para eliminar los detalles del usuario de los resultados del "
+"ejercicio."
+
+msgid "Hide question ribbon (right/wrong) in test results"
+msgstr ""
+"Ocultar la cinta de pregunta (correcto/incorrecto) en los resultados del "
+"ejercicio"
+
+msgid "Add checkbox for answers count confirmation"
+msgstr ""
+"Añadir casilla de verificación para confirmación del número de respuestas"
+
+msgid "Prevent copy-pasting images in WYSIWYG editor"
+msgstr "Evitar copiar y pegar imágenes en el editor WYSIWYG"
+
+msgid "Disable 'clean results' for teachers"
+msgstr "Desactivar 'limpiar resultados' para profesores"
+
+msgid "List of WYSIWYG files drivers"
+msgstr "Lista de controladores de archivos WYSIWYG"
+
+msgid "Full WYSIWYG editor toolbar"
+msgstr "Barra de herramientas completa del editor WYSIWYG"
+
+msgid "Allow teachers to provide feedback to users through audio (alternatively to text) on each question in a test."
+msgstr ""
+"Permita que los tutores proporcionen retroalimentación a los usuarios "
+"mediante audio (alternativamente a texto) en cada pregunta de una prueba."
+
+msgid "Enable selecting mandatory questions"
+msgstr "Habilitar la selección de preguntas obligatorias"
+
+msgid "Save titles as HTML"
+msgstr "Guardar títulos como HTML"
+
+msgid "Test notification settings at test-level"
+msgstr "Configurar notificaciones de ejercicios a nivel de ejercicio"
+
+msgid "Show question pagination for teachers"
+msgstr "Mostrar paginación de preguntas para tutores"
+
+msgid "Always show test description on results page"
+msgstr "Muestra siempre la descripción del ejercicio en la página de resultados"
+
+msgid "Audio feedback to submitted answers"
+msgstr "Retroalimentación de audio para las respuestas enviadas"
+
+msgid "Decimal score in open question types"
+msgstr "Puntuación decimal en tipos de preguntas abiertas"
+
+msgid "Generic configuration array to reconfigure the WYSIWYG editor globally."
+msgstr ""
+"Configuración genérica en formato array para reconfigurar el editor WYSIWYG "
+"globalmente."
+
+msgid "Add question feedback if incorrect answer"
+msgstr "Añadir retroalimentación a la pregunta si la respuesta es incorrecta"
+
+msgid "Disable the option to delete test results from the tests list. This is often used when less-careful teachers manage courses, to avoid critical mistakes."
+msgstr ""
+"Desactive la opción de eliminar resultados de ejercicios de la lista de "
+"ejercicios. Esto se utiliza a menudo cuando tutores menos cuidadosos "
+"gestionan cursos, para evitar errores críticos."
+
+msgid "Show the expected choice and a status (right/wrong) for each answer on the test results page (if the test has been configured to show results)."
+msgstr ""
+"Mostrar la opción esperada y un estado (correcto/incorrecto) para cada "
+"respuesta en la página de resultados del ejercicio (si el ejercicio ha sido "
+"configurado para mostrar resultados)."
+
+msgid "Show the username (instead or, or as well as, the user info) on the test results page."
+msgstr ""
+"Muestre el nombre de usuario (en lugar de, o además de, la información del "
+"usuario) en la página de resultados del ejercicio."
+
+msgid "Show question IDs in tests"
+msgstr "Mostrar los ID de las preguntas en los ejercicios"
+
+msgid "Show 'previous' button in test to navigate questions"
+msgstr "Mostrar botón 'anterior' en el test para navegar entre las preguntas"
+
+msgid "This option adds a checkbox at the end of each test asking the user to confirm the number of answers saved. This provides better auditing data for critical tests."
+msgstr ""
+"Esta opción añade una casilla de verificación al final de cada ejercicio "
+"solicitando al usuario que confirme el número de respuestas guardadas. Esto "
+"proporciona mejores datos de auditoría para ejercicios críticos."
+
+msgid "Show score for certainty degree questions"
+msgstr "Muestra la puntuación para las preguntas de grado de certeza"
+
+msgid "Question pagination length for teachers"
+msgstr "Longitud de paginación de preguntas para tutores"
+
+msgid "Enable player renderers for YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
+msgstr ""
+"Habilitar reproductores para medios de YouTube, Vimeo, Facebook, "
+"DailyMotion, Twitch"
+
+msgid "Make sure users are all set to start the test by providing a simulation of the question-saving process before entering the test. This allows for early detection of some connection issues and reduces user experience frictions."
+msgstr ""
+"Asegúrese de que todos los alumnos estén listos para comenzar el ejercicio "
+"proporcionando una simulación del proceso de guardado de preguntas antes de "
+"entrar al ejercicio. Esto permite la detección temprana de algunos problemas "
+"de conexión y reduce las fricciones en la experiencia del usuario."
+
+msgid "In test results, a ribbon appears by default to indicate if the answer was right or wrong. Enable this option to remove the ribbon globally."
+msgstr ""
+"En los resultados de los exámenes, una cinta aparece por defecto para "
+"indicar si la respuesta fue correcta o incorrecta. Active esta opción para "
+"eliminar la cinta globalmente."
+
+msgid "Show username in test results page"
+msgstr "Muestre el nombre de usuario en la página de resultados del ejercicio"
+
+msgid "Enable test categories"
+msgstr "Habilitar categorías de ejercicios"
+
+msgid "If enabled, this option allows users to use a ‘lang’ attribute in HTML elements to define the langage the content of that element is written in. Enable multiple elements with different ‘lang’ attributes and Chamilo will display the content in the langage of the user only."
+msgstr ""
+"Si está habilitada, esta opción permite a los usuarios utilizar un atributo "
+"'lang' en elementos HTML para definir el idioma en el que está escrito el "
+"contenido de ese elemento. Habilite múltiples elementos con diferentes "
+"atributos 'lang' y Chamilo mostrará el contenido solo en el idioma del "
+"usuario."
+
+msgid "When enabled, teachers cannot delete tests nor questions, change tests visibility, download to QTI, clean results, etc."
+msgstr ""
+"Cuando está activado, los tutores no pueden eliminar ejercicios ni "
+"preguntas, cambiar la visibilidad de los ejercicios, descargar a QTI, "
+"limpiar resultados, etc."
+
+msgid "Number of questions to show on every page when using the question pagination for teachers option."
+msgstr ""
+"Número de preguntas a mostrar en cada página al utilizar la opción de "
+"paginación de preguntas para tutores."
+
+msgid "Hide user info on test results page"
+msgstr ""
+"Ocultar información del usuario en la página de resultados del ejercicio"
+
+msgid "Video player renderers"
+msgstr "Reproductores de video"
+
+msgid "Block copy-pasting in tests"
+msgstr "Bloquear el copiar y pegar en exámenes"
+
+msgid "Add score in mail notification of test submission"
+msgstr ""
+"Añada la puntuación en la notificación por correo de la entrega del ejercicio"
+
+msgid "Enable display of best score attempt"
+msgstr "Activar visualización del mejor intento de puntuación"
+
+msgid "Enable test results page configuration"
+msgstr "Habilitar la configuración de la página de resultados del ejercicio"
+
+msgid "For tests with many questions, use pagination if the number of questions is higher than this setting. Set to 0 to prevent using pagination."
+msgstr ""
+"Para ejercicios con muchas preguntas, utilice la paginación si el número de "
+"preguntas es superior a esta configuración. Establezca en 0 para evitar el "
+"uso de la paginación."
+
+msgid "Provide a list of courses and tests' IDs that will show the best score attempt for any learner in the reports. "
+msgstr ""
+"Proporcione una lista de identificadores de cursos y ejercicios que "
+"mostrarán el mejor intento de puntuación para cualquier alumno en los "
+"informes. "
+
+msgid "Enable the selection of mandatory questions in a test when using random categories."
+msgstr ""
+"Active la selección de preguntas obligatorias en un ejercicio cuando utilice "
+"categorías aleatorias."
+
+msgid "On the test results page, display a link to download the results as a file."
+msgstr ""
+"En la página de resultados del ejercicio, muestre un enlace para descargar "
+"los resultados como archivo."
+
+msgid "Allow teachers to edit tests in learning paths"
+msgstr "Permitir a los tutores editar pruebas en lecciones"
+
+msgid "Test categories are not enabled by default because they add a level of complexity. Enable this feature to show all test categories related management icons appear."
+msgstr ""
+"Las categorías de ejercicios no están habilitadas por defecto porque añaden "
+"un nivel de complejidad. Active esta función para que aparezcan todos los "
+"iconos de gestión relacionados con las categorías de ejercicios."
+
+msgid "Enable the configuration of test submission notifications at the test level rather than the course level. Falls back to course-level settings if not defined at test-level."
+msgstr ""
+"Habilite la configuración de notificaciones de entrega de ejercicios a nivel "
+"de ejercicio en lugar de a nivel de curso. Revierte a la configuración a "
+"nivel de curso si no está definida a nivel de ejercicio."
+
+msgid "Allow images drag&drop in WYSIWYG editor"
+msgstr "Permitir arrastrar y soltar imágenes en el editor WYSIWYG"
+
+msgid "Disable new test attempts globally. Usually used when there is a problem with tests in general and you want some time to analyse without blocking the whole platform."
+msgstr ""
+"Desactivar globalmente nuevos intentos de ejercicio. Se utiliza "
+"habitualmente cuando hay un problema con los ejercicios en general y se "
+"desea tener tiempo para analizar sin bloquear toda la plataforma."
+
+msgid "Add the learner's score to the e-mail notification sent to the teacher after a test was submitted."
+msgstr ""
+"Agregue la puntuación del alumno al correo electrónico de notificación "
+"enviado al tutor después de que se entregue un ejercicio."
+
+msgid "Limit teachers' permissions over tests"
+msgstr "Limitar los permisos de los tutores en los ejercicios"
+
+msgid "Define an array of settings you want to apply to all tests results pages. Settings can be 'hide_question_score', 'hide_expected_answer', 'hide_category_table', 'hide_correct_answered_questions', 'hide_total_score' and possibly more in the future. Look for ‘getPageConfigurationAttribute’ in the code to see what’s in use."
+msgstr ""
+"Defina un arreglo de configuraciones que desee aplicar a todas las páginas "
+"de resultados de ejercicios. Las configuraciones pueden ser "
+"'hide_question_score', 'hide_expected_answer', 'hide_category_table', "
+"'hide_correct_answered_questions', 'hide_total_score' y posiblemente más en "
+"el futuro. Busque ‘getPageConfigurationAttribute’ en el código para ver qué "
+"está en uso."
+
+msgid "Allow tests auto-launch"
+msgstr "Permitir el auto-lanzamiento de ejercicios"
+
+msgid "Additional links for teachers in tests list"
+msgstr "Enlaces adicionales para tutores en la lista de ejercicios"
+
+msgid "Enable recording of all answers (even temporary) in the track_e_attempt_recording table. This feautre is experimentaland can create issues in the reporting pages when attempting to grade a test."
+msgstr ""
+"Active la grabación de todas las respuestas (incluso temporales) en la tabla "
+"track_e_attempt_recording. Esta característica es experimental y puede "
+"causar problemas en las páginas de informes al intentar calificar un "
+"ejercicio."
+
+msgid "Configure callback elements to generate new action icons for teachers to the right side of the tests list, in the form of an array, e.g. ['myplugin' => ['MyPlugin', 'urlGeneratorCallback']]"
+msgstr ""
+"Configure los elementos de callback para generar nuevos iconos de acción "
+"para los tutores en el lado derecho de la lista de ejercicios, en forma de "
+"un arreglo, por ejemplo, ['myplugin' => ['MyPlugin', 'urlGeneratorCallback']]"
+
+msgid "Array containing the names of the drivers for files access from the WYSIWYG editor."
+msgstr ""
+"Array que contiene los nombres de los controladores para el acceso a "
+"archivos desde el editor WYSIWYG."
+
+msgid "Tests score format"
+msgstr "Formato de puntuación de ejercicios"
+
+msgid "Enable image upload as file when doing a copy in the content or a drag and drop."
+msgstr ""
+"Habilite la carga de imágenes como archivo al realizar una copia en el "
+"contenido o un arrastrar y soltar."
+
+msgid "Lock questions of previous categories in a test"
+msgstr "Bloquear las preguntas de las categorías anteriores en un ejercicio"
+
+msgid "Add answer-saving process check before test"
+msgstr ""
+"Añada un proceso de verificación para guardar respuestas antes del ejercicio"
+
+msgid "Show expected choice in test results"
+msgstr "Muestre la opción esperada en los resultados del ejercicio"
+
+msgid "Round score in test exports"
+msgstr "Puntuación redondeada en las exportaciones de ejercicios"
+
+msgid "Hide open questions' score"
+msgstr "Ocultar la puntuación de las preguntas abiertas"
+
+msgid "Hide the context menu on video player"
+msgstr "Ocultar el menú contextual en el reproductor de video"
+
+msgid "Support multi-language HTML content"
+msgstr "Soporte para contenido HTML multilenguaje"
+
+msgid "Block copy/paste/save/print keys and right-clicks in exercises."
+msgstr ""
+"Bloquear las teclas de copiar/pegar/guardar/imprimir y clics derechos en "
+"ejercicios."
+
+msgid "By default, Chamilo prevents you from editing tests that are included inside a learning path. This is to avoid changes that would affect learners (past and future) differently regarding the results and/or progress in the learning path. This option allows teachers to bypass this restriction."
+msgstr ""
+"De forma predeterminada, Chamilo impide editar pruebas que están incluidas "
+"dentro de una lección. Esto es para evitar cambios que afectarían a los "
+"alumnos (pasados y futuros) de manera diferente en cuanto a los resultados y/"
+"o el progreso en la lección. Esta opción permite a los tutores eludir esta "
+"restricción."
+
+msgid "Generate certificate on test end"
+msgstr "Generar certificado al finalizar el ejercicio"
+
+msgid "WYSIWYG editor settings"
+msgstr "Configuración del editor WYSIWYG"
+
+msgid "Show questions' internal IDs to let users take note of issues on specific questions and report them more efficiently."
+msgstr ""
+"Mostrar los IDs internos de las preguntas para que los usuarios puedan tomar "
+"nota de los problemas en preguntas específicas e informarlos de manera más "
+"eficiente."
+
+msgid "Show the full toolbar in all WYSIWYG editor boxes around the platform."
+msgstr ""
+"Muestra la barra de herramientas completa en todos los cuadros de editor "
+"WYSIWYG de la plataforma."
+
+msgid "By default, Chamilo does not show a score for the certainty degree question types."
+msgstr ""
+"Por defecto, Chamilo no muestra una puntuación para los tipos de preguntas "
+"de grado de certeza."
+
+msgid "By default, Chamilo allows you to show feedback on each answer in a question. With this option, an additional field is created to provide pre-defined feedback to the whole question. This feedback will only appear if the user answered incorrectly."
+msgstr ""
+"De forma predeterminada, Chamilo le permite mostrar retroalimentación en "
+"cada respuesta de una pregunta. Con esta opción, se crea un campo adicional "
+"para proporcionar retroalimentación predefinida a toda la pregunta. Esta "
+"retroalimentación solo aparecerá si el usuario respondió incorrectamente."
+
+msgid "Enable extra test answers recording"
+msgstr "Activar el registro de respuestas adicionales del ejercicio"

@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserCourseCategory;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\ServiceHelper\MailHelper;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
@@ -7180,91 +7181,21 @@ function api_mail_html(
     $additionalParameters = [],
     string $sendErrorTo = null
 ) {
-    if (!api_valid_email($recipientEmail)) {
-        return false;
-    }
+    $mailHelper = Container::$container->get(MailHelper::class);
 
-    $message = new TemplatedEmail();
-
-    api_set_noreply_and_from_address_to_mailer(
-        $message,
-        ['name' => $senderName, 'email' => $senderEmail],
-        !empty($extra_headers['reply_to']) ? $extra_headers['reply_to'] : []
+    return $mailHelper->send(
+        $recipientName,
+        $recipientEmail,
+        $subject,
+        $body,
+        $senderName,
+        $senderEmail,
+        $extra_headers,
+        $data_file,
+        $embeddedImage,
+        $additionalParameters,
+        $sendErrorTo
     );
-
-    if ($sendErrorTo) {
-        $message
-            ->getHeaders()
-            ->addIdHeader('Errors-To', $sendErrorTo)
-        ;
-    }
-
-    // Reply to first
-    $replyToName = '';
-    $replyToEmail = '';
-    if (isset($extra_headers['reply_to'])) {
-        $replyToEmail = $extra_headers['reply_to']['mail'];
-        $replyToName = $extra_headers['reply_to']['name'];
-    }
-
-    try {
-        $bus = Container::getMessengerBus();
-        //$sendMessage = new \Chamilo\CoreBundle\Message\SendMessage();
-        //$bus->dispatch($sendMessage);
-
-        $message->subject($subject);
-
-        $list = api_get_setting('announcement.send_all_emails_to', true);
-        if (!empty($list) && isset($list['emails'])) {
-            foreach ($list['emails'] as $email) {
-                $message->cc($email);
-            }
-        }
-
-        // Attachment
-        if (!empty($data_file)) {
-            foreach ($data_file as $file_attach) {
-                if (!empty($file_attach['path']) && !empty($file_attach['filename'])) {
-                    $message->attachFromPath($file_attach['path'], $file_attach['filename']);
-                }
-            }
-        }
-
-        $noReply = api_get_setting('noreply_email_address');
-        $automaticEmailText = '';
-        if (!empty($noReply)) {
-            $automaticEmailText = '<br />'.get_lang('This is an automatic email message. Please do not reply to it.');
-        }
-
-        $params = [
-            'mail_header_style' => api_get_setting('mail.mail_header_style'),
-            'mail_content_style' => api_get_setting('mail.mail_content_style'),
-            'link' => $additionalParameters['link'] ?? '',
-            'automatic_email_text' => $automaticEmailText,
-            'content' => $body,
-            'theme' => api_get_visual_theme(),
-        ];
-
-        if (!empty($recipientEmail)) {
-            $message->to(new Address($recipientEmail, $recipientName));
-        }
-
-        if (!empty($replyToEmail)) {
-            $message->replyTo(new Address($replyToEmail, $replyToName));
-        }
-
-        $message
-            ->htmlTemplate('@ChamiloCore/Mailer/Default/default.html.twig')
-            ->context($params)
-        ;
-        Container::getMailer()->send($message);
-
-        return true;
-    } catch (Exception $e) {
-        error_log($e->getMessage());
-    }
-
-    return 1;
 }
 
 /**

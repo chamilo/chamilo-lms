@@ -1409,12 +1409,10 @@ class CourseManager
                     $sqlInjectJoins
                    ";
             $where[] = ' session_course_user.c_id IS NOT NULL ';
-            $where[] = ' user.active <> '.USER_SOFT_DELETED.' ';
 
             // 2 = coach
             // 0 = student
             if (isset($filter_by_status)) {
-                $filter_by_status = $filter_by_status;
                 $filter_by_status_condition = " session_course_user.status = $filter_by_status AND ";
             }
         } else {
@@ -1459,7 +1457,6 @@ class CourseManager
             $where[] = ' course_rel_user.c_id IS NOT NULL ';
 
             if (isset($filter_by_status)) {
-                $filter_by_status = $filter_by_status;
                 $filter_by_status_condition = " course_rel_user.status = $filter_by_status AND ";
             }
         }

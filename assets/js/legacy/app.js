@@ -544,15 +544,13 @@ function addMainEvent(elm, evType, fn, useCapture) {
   }
 }
 
-function copyTextToClipBoard(elementId) {
-  /* Get the text field */
+window.copyTextToClipBoard = function(elementId) {
   var copyText = document.getElementById(elementId)
 
-  /* Select the text field */
-  copyText.select()
-
-  /* Copy the text inside the text field */
-  document.execCommand("copy")
+  if (copyText) {
+    copyText.select()
+    document.execCommand("copy")
+  }
 }
 
 function toggleModal(modalID) {

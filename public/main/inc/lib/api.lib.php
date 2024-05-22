@@ -7255,9 +7255,8 @@ function api_mail_html(
 
         $message
             ->htmlTemplate('@ChamiloCore/Mailer/Default/default.html.twig')
-            ->textTemplate('@ChamiloCore/Mailer/Default/default.text.twig')
+            ->context($params)
         ;
-        $message->context($params);
         Container::getMailer()->send($message);
 
         return true;

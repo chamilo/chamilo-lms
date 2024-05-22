@@ -22357,6 +22357,9 @@ msgstr "Très faible"
 msgid "You have been assigned the learner %s"
 msgstr "L'apprenant %s vous a été assigné"
 
+msgid "You have been assigned the learner %s with url %s"
+msgstr "Vous avez été assigné comme tuteur pour l'apprenant %s. Vous pouvez accéder à sa fiche ici: %s"
+
 msgid "You have been assigned as tutor for the learner %s.<br/>"
 msgstr "Vous avez été assigné comme tuteur pour l'apprenant %s.<br/>"
 

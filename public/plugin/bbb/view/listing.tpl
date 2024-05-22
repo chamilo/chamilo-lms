@@ -116,4 +116,3 @@
 </div>
 
 {% endautoescape %}
-<script src="{{ url('index') ~ 'build/legacy_app.js' }}"></script>

@@ -10,12 +10,17 @@ framework:
             # failed: 'doctrine://default?queue_name=failed'
             # sync: 'sync://'
 
-        routing:
-            # Route your messages to the transports
-            'Chamilo\CoreBundle\Entity\Message': sync_priority_high
-
 when@test:
     framework:
         messenger:
             transports:
                 sync_priority_high: 'in-memory://'
+
+#when@prod:
+#    framework:
+#        messenger:
+#            transports:
+#                mail_async: "%env(MESSENGER_TRANSPORT_DSN)%"
+#
+#            routing:
+#                'Symfony\Component\Mailer\Messenger\SendEmailMessage': mail_async

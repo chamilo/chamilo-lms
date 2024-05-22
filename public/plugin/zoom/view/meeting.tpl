@@ -39,7 +39,7 @@
                            value="{{ _p.web }}plugin/zoom/join_meeting.php?meetingId={{ meeting.meetingId }}&{{ url_extra }}"
                     >
                     <button onclick="copyTextToClipBoard('share_button_flash');" class="btn btn--plain">
-                        <span class="fa fa-copy"></span> {{ 'CopyTextToClipboard' | get_lang }}
+                        <span class="fa fa-copy"></span> {{ 'Copy text' | get_lang }}
                     </button>
                 </div>
             </div>

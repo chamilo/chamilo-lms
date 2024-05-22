@@ -39,12 +39,12 @@ class MessageManager
 
                 $deleteLink = '';
                 if (!empty($url) && $sender && $currentUserId === $sender->getId()) {
-                    $deleteLink = '<a title="'.addslashes(
-                            get_lang('DeleteMessage')
-                        ).'" href="'.$url.'&action=delete_message&message_id='.$messageId.'"  onclick="javascript:if(!confirm('."'".addslashes(
-                            api_htmlentities(get_lang('ConfirmDeleteMessage'))
-                        )."'".')) return false;" >&nbsp;&nbsp;&nbsp;&nbsp;'.
-                        Display::returnPrimeIcon('trash', 'lg').'</a>';
+                    $deleteLink = '<button title="'.addslashes(get_lang('DeleteMessage')).'"
+                       onclick="event.stopPropagation(); if(confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage'))).'\')) {
+                       window.location.href=\''.$url.'&action=delete_message&message_id='.$messageId.'\';
+                       } return false;"
+                       class="ml-2 inline-flex items-center">'.
+                        Display::returnPrimeIcon('trash', 'lg').'</button>';
                 }
 
                 $content = '<div class="custom-message">' . $message->getContent().'<br />'.$date.'<br />'.

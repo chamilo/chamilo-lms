@@ -2459,7 +2459,7 @@ class Display
             });
         </script>';
             $html = '
-        <div class="display-panel-collapse">
+        <div class="display-panel-collapse mb-2">
             <div class="display-panel-collapse__header" id="card_'.$idAccordion.'">
                 <a role="button"
                     class="mdi mdi-chevron-down"

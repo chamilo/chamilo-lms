@@ -14,10 +14,8 @@ framework:
             # Route your messages to the transports
             'Chamilo\CoreBundle\Entity\Message': sync_priority_high
 
-# when@test:
-#    framework:
-#        messenger:
-#            transports:
-#                # replace with your transport name here (e.g., my_transport: 'in-memory://')
-#                # For more Messenger testing tools, see https://github.com/zenstruck/messenger-test
-#                async: 'in-memory://'
+when@test:
+    framework:
+        messenger:
+            transports:
+                sync_priority_high: 'in-memory://'

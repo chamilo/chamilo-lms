@@ -11,11 +11,13 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\BodyRendererInterface;
 
 final class MailHelper
 {
     public function __construct(
         private readonly MailerInterface $mailer,
+        private readonly BodyRendererInterface $bodyRenderer,
     ) {}
 
     public function send(
@@ -107,6 +109,7 @@ final class MailHelper
                 ->context($params)
             ;
 
+            $this->bodyRenderer->render($templatedEmail);
             $this->mailer->send($templatedEmail);
 
             return true;

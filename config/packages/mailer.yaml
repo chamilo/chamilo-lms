@@ -6,3 +6,8 @@ when@dev:
     framework:
         mailer:
             dsn: 'null://null'
+
+when@test:
+    framework:
+        mailer:
+            dsn: 'null://null'

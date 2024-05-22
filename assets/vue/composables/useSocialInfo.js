@@ -43,7 +43,12 @@ export function useSocialInfo() {
   const loadUser = async () => {
     try {
       if (route.query.id) {
-        user.value = await store.dispatch("user/load", "/api/users/" + route.query.id)
+        const params = { ...route.query }
+        if (route.path.includes("/social")) {
+          params.page_origin = "social"
+        }
+        const response = await axios.get(`/api/users/${route.query.id}`, { params })
+        user.value = response.data
         isCurrentUser.value = false
       } else {
         user.value = securityStore.user

@@ -40,7 +40,7 @@
                {{ message.content }}
             </div>
 
-            {% if message.attachments %}
+            {% if message.attachments.quantity > 0 %}
                 <div class="email-attachments">
                     <div class="title">{{ 'Attachments'|trans }} <span>({{ message.attachments.quantity }} {{ 'Files'|trans }}, {{ message.attachments.total_size }})</span></div>
                     <ul>

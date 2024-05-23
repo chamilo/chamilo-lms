@@ -5,6 +5,9 @@ var offline_button = '<img src="' + _p.web_img + 'statusoffline.png">';
 var connect_lang = '{{ "ChatConnected"|get_lang | escape('js')}}';
 var disconnect_lang = '{{ "ChatDisconnected"|get_lang | escape('js')}}';
 var chatLang = '{{ "GlobalChat"|get_lang | escape('js')}}';
+var sessionRemainingSeconds = 0;
+var sessionCounterInterval;
+var sessionClosing = false;
 
 {% if 'hide_chat_video'|api_get_configuration_value %}
     var hide_chat_video = true;
@@ -443,6 +446,10 @@ $(function() {
             });
         });
     {% endif %}
+
+    if (window.self === window.top) {
+        checkSessionTime();
+    }
 });
 
 $(window).resize(function() {

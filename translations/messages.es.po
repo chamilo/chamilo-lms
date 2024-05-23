@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-05-21 09:47+0000\n"
+"PO-Revision-Date: 2024-05-23 13:20+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Spanish <https://translation.chamilo.org/projects/chamilo/"
 "messages/es/>\n"
@@ -21750,6 +21750,9 @@ msgstr "Muy débil"
 msgid "You have been assigned the learner %s"
 msgstr "Se le ha asignado el estudiante %s"
 
+msgid "You have been assigned the learner %s with url %s"
+msgstr "Usted ha sido asignado(a) como tutor del estudiante %s. Puede acceder a su perfil aquí: %s"
+
 msgid "You have been assigned as tutor for the learner %s.<br/>"
 msgstr "Usted ha sido asignado(a) como tutor del estudiante %s. Puede acceder a su perfil aquí: %s"
 
@@ -26377,3 +26380,226 @@ msgstr ""
 
 msgid "Enable extra test answers recording"
 msgstr "Activar el registro de respuestas adicionales del ejercicio"
+
+msgid "Visual effect to enable forum categories folding/unfolding."
+msgstr ""
+"Efecto visual para habilitar el plegado/desplegado de categorías de foros."
+
+msgid "Keep session active in tests"
+msgstr "Mantener la sesión activa en los ejercicios"
+
+msgid "The default behaviour is to make questions orphan when the only test using them is deleted. When enabled, this option ensure that all questions that would otherwise end up orphan are deleted as well."
+msgstr ""
+"El comportamiento predeterminado es dejar las preguntas huérfanas cuando se "
+"elimina el único ejercicio que las utiliza. Cuando se activa, esta opción "
+"garantiza que todas las preguntas que de otro modo quedarían huérfanas "
+"también se eliminen."
+
+msgid "Hide user IP from test reports"
+msgstr "Ocultar la IP del usuario de los informes de ejercicios"
+
+msgid "When exporting a course, do not export the questions that are not part of any test."
+msgstr ""
+"Al exportar un curso, no exportar las preguntas que no forman parte de "
+"ningún ejercicio."
+
+msgid "Add user extra fields in exercise category report"
+msgstr ""
+"Añadir campos de perfil de usuario en el informe de categoría de ejercicio"
+
+msgid "Quick image addition to question"
+msgstr "Adición rápida de imagen a la pregunta"
+
+msgid "Enable to display to the final user a page with the list of pending tests across all courses."
+msgstr ""
+"Habilitar para mostrar al usuario final una página con la lista de "
+"ejercicios pendientes en todos los cursos."
+
+msgid "Forum categories language filter"
+msgstr "Filtro de idioma para categorías de foros"
+
+msgid "Add a language filter to the forum view to only see categries configured in a specific language. Requires using the 'language' extra field on the 'forum_category' entity."
+msgstr ""
+"Agregar un filtro de idioma a la vista del foro para ver solo las categorías "
+"configuradas en un idioma específico. Requiere el uso del campo adicional "
+"'language' en la entidad 'forum_category'."
+
+msgid "Bypass HTML filtering in test end messages"
+msgstr "Evitar el filtrado HTML en los mensajes de finalización del ejercicio"
+
+msgid "Set the course ID (numerical) of a course reserverd to use as a global forum. This replaces the 'Social groups' link in the social network by a link to the forum of that course."
+msgstr ""
+"Establezca el ID del curso (numérico) de un curso reservado para usar como "
+"foro global. Esto reemplaza el enlace de 'Grupos sociales' en la red social "
+"por un enlace al foro de ese curso."
+
+msgid "Display a popup with the list of answered/unanswered questions before submitting the test."
+msgstr ""
+"Mostrar un popup con la lista de preguntas respondidas/no respondidas antes "
+"de enviar el ejercicio."
+
+msgid "Consider messages at the end of tests are always safe. Removing the filter makes it possible to use JavaScript there."
+msgstr ""
+"Los mensajes al final de los ejercicios siempre son seguros. Eliminar el "
+"filtro permite usar JavaScript allí."
+
+msgid "Bypass HTML filtering in test questions"
+msgstr "Omitir el filtrado HTML en las preguntas del ejercicio"
+
+msgid "Fold forum categories"
+msgstr "Contraer categorías de foros"
+
+msgid "Forum post review"
+msgstr "Revisión de publicación en el foro"
+
+msgid "Hide the possibility to assign a language to a forum post review."
+msgstr ""
+"Oculte la posibilidad de asignar un idioma a la revisión de una publicación "
+"en el foro."
+
+msgid "Hide forum post review language"
+msgstr "Ocultar idioma de revisión de publicación en foro"
+
+msgid "Enable this option to display, on the 'My progress' page, the results of all tests you have taken, even the ones that have been deleted."
+msgstr ""
+"Active esta opción para mostrar, en la página 'Mi progreso', los resultados "
+"de todos los ejercicios que ha realizado, incluso los que han sido "
+"eliminados."
+
+msgid "Discard orphan questions in course export"
+msgstr "Descartar preguntas huérfanas en la exportación del curso"
+
+msgid "Default glossary view"
+msgstr "Vista predeterminada del glosario"
+
+msgid "Hide test attempts table on test start page"
+msgstr ""
+"Ocultar la tabla de intentos de ejercicio en la página de inicio del "
+"ejercicio"
+
+msgid "Check all answers before submitting test"
+msgstr "Revisar todas las respuestas antes de enviar el ejercicio"
+
+msgid "Score grades model"
+msgstr "Modelo de calificación de puntuaciones"
+
+msgid "Enable this option to enable notifications coming from the base course forum, even if following the course through a session."
+msgstr ""
+"Active esta opción para recibir notificaciones del foro del curso base, "
+"incluso si sigue el curso a través de una sesión."
+
+msgid "Hide gradebook charts"
+msgstr "Ocultar gráficos en la herramienta de Evaluaciones"
+
+msgid "Hide the question incremental numbering when taking a test."
+msgstr ""
+"Oculte la numeración incremental de las preguntas al realizar un ejercicio."
+
+msgid "By default, it is only possible to limit the time per test. Limiting it per question adds an extra layer of possibilities, and you can (carefully) combine both."
+msgstr ""
+"Por defecto, solo es posible limitar el tiempo por ejercicio. Limitarlo por "
+"pregunta añade una capa extra de posibilidades, y puede combinar ambos (con "
+"cuidado)."
+
+#, fuzzy
+msgid "Define an array with the list of user extra fields to add to the report."
+msgstr ""
+"Defina un arreglo con la lista de campos de perfil adicionales para agregar "
+"al informe."
+
+msgid "By default, we show user information and its IP address, but this might be considered personal data, so this option allows you to remove this info from all test reports."
+msgstr ""
+"Por defecto, mostramos la información del usuario y su dirección IP, pero "
+"esto podría considerarse datos personales, por lo que esta opción le permite "
+"eliminar esta información de todos los informes de ejercicios."
+
+msgid "Show deleted tests in 'My progress'"
+msgstr "Mostrar ejercicios eliminados en 'Mi progreso'"
+
+msgid "Keep session active by maintaining a regular ping signal to the server every x seconds, define here. We recommend once every 300 seconds."
+msgstr ""
+"Mantener la sesión activa manteniendo una señal de ping regular al servidor "
+"cada x segundos, definido aquí. Recomendamos una vez cada 300 segundos."
+
+msgid "Choose which view ('table' or 'list') will be used by default in the glossary tool."
+msgstr ""
+"Elija qué vista ('table' o 'list') se utilizará por defecto en la "
+"herramienta de glosario."
+
+msgid "Forum notifications from base course as well"
+msgstr "Notificaciones del foro también del curso base"
+
+msgid "Show test attempts from users in all sessions where the general coach has access in pending tests report."
+msgstr ""
+"Mostrar los intentos de ejercicio de los usuarios en todas las lecciones "
+"donde el tutor general tenga acceso en el informe de ejercicios pendientes."
+
+msgid "Global pending tests list"
+msgstr "Lista global de ejercicios pendientes"
+
+msgid "Embeddable question types"
+msgstr "Tipos de preguntas integrables"
+
+msgid "By default, only single answer and multiple answer questions are considered when deciding whether a test can be embedded in a video or not. With this option, you can decide that more question types are available. Be aware that not all question types fit nicely in the space assigned to videos. Questions types are availalble in the code in question.class.php."
+msgstr ""
+"Por defecto, solo se consideran las preguntas de respuesta única y múltiple "
+"al decidir si un ejercicio puede incrustarse en un video o no. Con esta "
+"opción, puede decidir que más tipos de preguntas estén disponibles. Tenga en "
+"cuenta que no todos los tipos de preguntas se ajustan bien en el espacio "
+"asignado a los videos. Los tipos de preguntas están disponibles en el código "
+"en question.class.php."
+
+msgid "Remove HTML tags in glossary export"
+msgstr "Eliminar etiquetas HTML en la exportación del glosario"
+
+msgid "Show test attempts from all sessions in pending tests report"
+msgstr ""
+"Mostrar los intentos de ejercicio de todas las sesiones en el informe de "
+"ejercicios pendientes"
+
+msgid "Hide the table showing all previous attempts on the test start page."
+msgstr ""
+"Oculte la tabla que muestra todos los intentos anteriores en la página de "
+"inicio del ejercicio."
+
+msgid "Use course as global forum"
+msgstr "Utilizar un curso como foro global"
+
+msgid "Show test attempts from users in all sessions to the teacher in the base course."
+msgstr ""
+"Mostrar los intentos de ejercicio de los usuarios en todas las sesiones al "
+"tutor en el curso base."
+
+msgid "Consider questions text in tests are always safe. Removing the filter makes it possible to use JavaScript there."
+msgstr ""
+"Considere que el texto de las preguntas en los ejercicios siempre es seguro. "
+"Eliminar el filtro permite el uso de JavaScript en ellos."
+
+msgid "Automatically delete questions when deleting test"
+msgstr "Eliminar automáticamente las preguntas al borrar el ejercicio"
+
+msgid "Enable time per question in tests"
+msgstr "Activar tiempo por pregunta en ejercicios"
+
+msgid "Enable an additional icon in the test questions list to add an image as question description. This vastly accelerates question edition when the questions are in the title and the description only includes an image."
+msgstr ""
+"Habilitar un icono adicional en la lista de preguntas del ejercicio para "
+"agregar una imagen como descripción de la pregunta. Esto acelera "
+"considerablemente la edición de preguntas cuando las preguntas están en el "
+"título y la descripción solo incluye una imagen."
+
+msgid "Enable this option to allow asking for a review or a translation to one's post in a forum. When extensively configured, can be used to collaborate with other users in a language-learning forum."
+msgstr ""
+"Habilite esta opción para permitir solicitar una revisión o una traducción "
+"de la publicación de uno en un foro. Cuando está configurado extensivamente, "
+"se puede utilizar para colaborar con otros usuarios en un foro de "
+"aprendizaje de idiomas."
+
+msgid "Show test attempts from all sessions in base course"
+msgstr "Mostrar ejercicios de todas las lecciones en el curso base"
+
+msgid "Define an array of score ranges and colors to display reports using this model. This allows you to show colors rather than numerical grades."
+msgstr ""
+"Defina un arreglo de rangos de puntuación y colores para mostrar informes "
+"utilizando este modelo. Esto le permite mostrar colores en lugar de "
+"calificaciones numéricas."

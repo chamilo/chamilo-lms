@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -27,7 +28,8 @@ class UserVoter extends Voter
 
     public function __construct(
         private Security $security,
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
+        private RequestStack $requestStack
     ) {}
 
     protected function supports(string $attribute, $subject): bool
@@ -64,6 +66,11 @@ class UserVoter extends Voter
         $user = $subject;
 
         if (self::VIEW === $attribute) {
+            // If the user is on the social page and is logged in, allow access
+            if ($this->isFromSocialPage() && $currentUser->getId() !== null) {
+                return true;
+            }
+
             if ($currentUser === $user) {
                 return true;
             }
@@ -87,6 +94,17 @@ class UserVoter extends Voter
             if ($this->haveSharedMessages($currentUser, $user)) {
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    private function isFromSocialPage(): bool
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if ($request) {
+            $pageOrigin = $request->query->get('page_origin');
+            return $pageOrigin === 'social';
         }
 
         return false;

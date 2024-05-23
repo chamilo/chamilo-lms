@@ -21715,6 +21715,9 @@ msgstr ""
 msgid "You have been assigned the learner %s"
 msgstr ""
 
+msgid "You have been assigned the learner %s with url %s"
+msgstr ""
+
 msgid "You have been assigned as tutor for the learner %s.<br/>"
 msgstr ""
 

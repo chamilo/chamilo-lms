@@ -173,6 +173,8 @@ $form->addRule(
 $hasPicture = $illustrationRepo->hasIllustration($userObj);
 
 if ($hasPicture) {
+    $picture = $illustrationRepo->getIllustrationUrl($userObj);
+    $form->addElement('html', '<img src="'.$picture.'" class="w-32 h-32" />');
     $form->addElement('checkbox', 'delete_picture', '', get_lang('Remove picture'));
 }
 
@@ -407,7 +409,9 @@ if ($form->validate()) {
         $picture_uri = $user_data['picture_uri'];
         if (isset($user['delete_picture']) && $user['delete_picture']) {
             $picture_uri = UserManager::deleteUserPicture($user_id);
-        } elseif (!empty($picture['name'])) {
+        }
+        if (!empty($picture['name'])) {
+            $picture_uri = UserManager::deleteUserPicture($user_id);
             $request = Container::getRequest();
             $file = $request->files->get('picture');
             $picture_uri = UserManager::update_user_picture(

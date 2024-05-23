@@ -21778,6 +21778,9 @@ msgstr "Sehr schwach"
 msgid "You have been assigned the learner %s"
 msgstr "Der Schüler %s, die Ihnen zugeordnet"
 
+msgid "You have been assigned the learner %s with url %s"
+msgstr "Sie wurden dem Teilnehmer %s als Tutor zugewiesen. Zum Profil: %s"
+
 msgid "You have been assigned as tutor for the learner %s.<br/>"
 msgstr "Sie wurden dem Teilnehmer %s als Tutor zugewiesen. Zum Profil: %s"
 

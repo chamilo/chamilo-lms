@@ -2548,3 +2548,6 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 
 // Set the followinf parameter to true to activate the integration of the mathjax script in all HTML documents
 //$_configuration['mathjax_enable_script_header_in_all_HTML_document'] = false;
+
+// Set the following parameter to true to enable a session lifetime controller that notifies users that their session is about to expire
+//$_configuration['session_lifetime_controller'] = false;

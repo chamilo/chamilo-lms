@@ -18,6 +18,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\State\MessageByGroupStateProvider;
+use Chamilo\CoreBundle\State\MessageProcessor;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -56,7 +57,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: [
         'groups' => ['message:write'],
     ],
-    security: "is_granted('ROLE_USER')"
+    security: "is_granted('ROLE_USER')",
+    processor: MessageProcessor::class,
 )]
 #[ApiFilter(filterClass: OrderFilter::class, properties: ['title', 'sendDate'])]
 #[ApiFilter(

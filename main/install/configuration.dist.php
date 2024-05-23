@@ -1675,6 +1675,13 @@ ALTER TABLE notification_event_rel_user ADD CONSTRAINT FK_USER FOREIGN KEY (user
 // Add help text to put 2 names in registration form
 //$_configuration['registration_add_helptext_for_2_names'] = false;
 
+// Add extra fields to validate on user registration
+/*$_configuration['extra_fields_to_validate_on_user_registration'] = [
+    'extra_fields' => [
+        'passport', 'employee_id'
+    ]
+];*/
+
 // Allow career/promotions in global announcements
 // ALTER TABLE sys_announcement ADD COLUMN career_id INT DEFAULT 0;
 // ALTER TABLE sys_announcement ADD COLUMN promotion_id INT DEFAULT 0;

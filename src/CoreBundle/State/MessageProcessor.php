@@ -28,7 +28,7 @@ final class MessageProcessor implements ProcessorInterface
 
         $message = $this->persistProcessor->process($data, $operation, $uriVariables, $context);
 
-        assert($message instanceof Message);
+        \assert($message instanceof Message);
 
         if ($operation instanceof Post) {
             if (Message::MESSAGE_TYPE_INBOX === $message->getMsgType()) {

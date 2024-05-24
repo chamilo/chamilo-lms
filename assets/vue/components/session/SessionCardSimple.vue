@@ -1,18 +1,3 @@
-<template>
-  <div
-    v-for="(course, index) in courses"
-    :key="index"
-    style="max-width: 540px"
-  >
-    <CourseCard
-      :session="session"
-      :course="course"
-      :session-id="session.id"
-      :disabled="!enableAccess"
-    />
-  </div>
-</template>
-
 <script setup>
 import CourseCard from "../course/CourseCard.vue"
 import { useSecurityStore } from "../../store/securityStore"
@@ -41,3 +26,18 @@ const isCourseCoach = props.session.courseCoachesSubscriptions
 const enableAccess =
   (isGeneralCoach || isCourseCoach) && props.session.activeForCoach ? true : props.session.activeForStudent
 </script>
+
+<template>
+  <div
+    v-for="(course, index) in courses"
+    :key="index"
+    style="max-width: 540px"
+  >
+    <CourseCard
+      :session="session"
+      :course="course"
+      :session-id="session.id"
+      :disabled="!enableAccess"
+    />
+  </div>
+</template>

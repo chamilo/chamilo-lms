@@ -67,7 +67,7 @@ class UserVoter extends Voter
 
         if (self::VIEW === $attribute) {
             // If the user is on the social page and is logged in, allow access
-            if ($this->isFromSocialPage() && $currentUser->getId() !== null) {
+            if ($this->isFromSocialPage() && null !== $currentUser->getId()) {
                 return true;
             }
 
@@ -104,7 +104,8 @@ class UserVoter extends Voter
         $request = $this->requestStack->getCurrentRequest();
         if ($request) {
             $pageOrigin = $request->query->get('page_origin');
-            return $pageOrigin === 'social';
+
+            return 'social' === $pageOrigin;
         }
 
         return false;

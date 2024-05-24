@@ -456,9 +456,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         return new Response(null, Response::HTTP_NO_CONTENT);
     }
 
-    /**
-     * @return mixed|StreamedResponse
-     */
     private function processFile(Request $request, ResourceNode $resourceNode, string $mode = 'show', string $filter = '', ?array $allUserInfo = null): mixed
     {
         $this->denyAccessUnlessGranted(

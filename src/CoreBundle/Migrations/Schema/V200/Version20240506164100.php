@@ -11,9 +11,6 @@ use Doctrine\DBAL\Schema\Schema;
 
 class Version20240506164100 extends AbstractMigrationChamilo
 {
-    /**
-     * @inheritDoc
-     */
     public function up(Schema $schema): void
     {
         $selectedMailValue = $this->getMailConfigurationValueFromFile('SMTP_UNIQUE_SENDER') ? 'true' : 'false';

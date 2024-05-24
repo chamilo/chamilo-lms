@@ -18,7 +18,6 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Messenger\Transport\InMemoryTransport;
 
 class MessageRepositoryTest extends AbstractApiTest
 {

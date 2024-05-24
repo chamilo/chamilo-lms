@@ -20,6 +20,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
@@ -7112,6 +7113,9 @@ function api_set_noreply_and_from_address_to_mailer(
     array $sender,
     array $replyToAddress = []
 ): void {
+    $validator = Container::getLegacyHelper()->getValidator();
+    $emailConstraint = new Assert\Email();
+
     $noReplyAddress = api_get_setting('noreply_email_address');
     $avoidReplyToAddress = false;
 
@@ -7129,13 +7133,23 @@ function api_set_noreply_and_from_address_to_mailer(
     $senderEmail = !empty($sender['email']) ? $sender['email'] : $defaultSenderEmail;
 
     // Send errors to the platform admin
-    $email
-        ->getHeaders()
-        ->addIdHeader('Errors-To', api_get_setting('admin.administrator_email'))
-    ;
+    $adminEmail = api_get_setting('admin.administrator_email');
 
-    if (!$avoidReplyToAddress && !empty($replyToAddress)) {
-        $email->addReplyTo(new Address($replyToAddress['mail'], $replyToAddress['name']));
+    $adminEmailValidation = $validator->validate($adminEmail, $emailConstraint);
+
+    if (!empty($adminEmail) && 0 === $adminEmailValidation->count()) {
+        $email
+            ->getHeaders()
+            ->addIdHeader('Errors-To', $adminEmail)
+        ;
+    }
+
+    if (!$avoidReplyToAddress) {
+        $replyToEmailValidation = $validator->validate($replyToAddress['mail'], $emailConstraint);
+
+        if (!empty($replyToAddress) && 0 === $replyToEmailValidation->count()) {
+            $email->addReplyTo(new Address($replyToAddress['mail'], $replyToAddress['name']));
+        }
     }
 
     if ('true' === api_get_setting('mail.smtp_unique_sender')) {

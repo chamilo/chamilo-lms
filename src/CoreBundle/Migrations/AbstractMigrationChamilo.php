@@ -163,6 +163,21 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         return false;
     }
 
+    public function getMailConfigurationValue(string $variable, array $configuration = []): mixed
+    {
+        global $platform_email;
+
+        if ($configuration) {
+            $platform_email = $configuration;
+        }
+
+        if (isset($platform_email[$variable])) {
+            return $platform_email[$variable];
+        }
+
+        return false;
+    }
+
     /**
      * Remove a setting completely.
      *
@@ -331,5 +346,29 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         }
 
         return $this->entityManager->find(Session::class, $id);
+    }
+
+    public function getMailConfigurationValueFromFile(string $variable): ?string
+    {
+        global $platform_email;
+
+        $rootPath = $this->container->get('kernel')->getProjectDir();
+        $oldConfigPath = $rootPath.'/app/config/mail.conf.php';
+
+        $configFileLoaded = \in_array($oldConfigPath, get_included_files(), true);
+
+        if (!$configFileLoaded) {
+            include_once $oldConfigPath;
+        }
+
+        $settingValue = $this->getConfigurationValue($variable, $platform_email);
+
+        if (\is_bool($settingValue)) {
+            $selectedValue = var_export($settingValue, true);
+        } else {
+            $selectedValue = (string) $settingValue;
+        }
+
+        return $selectedValue;
     }
 }

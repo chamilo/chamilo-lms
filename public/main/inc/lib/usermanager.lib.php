@@ -457,7 +457,12 @@ class UserManager
                         $emailSubject,
                         $emailBody,
                         $sender_name,
-                        $email_admin
+                        $email_admin,
+                        [],
+                        [],
+                        false,
+                        [],
+                        $creatorEmail
                     );
 
                     $emailBody = $tpl->render('@ChamiloCore/Mailer/Legacy/new_user_second_email_confirmation.html.twig');
@@ -482,6 +487,7 @@ class UserManager
                         null,
                         null,
                         null,
+                        [],
                         $creatorEmail
                     );
                 } else {
@@ -514,6 +520,7 @@ class UserManager
                             null,
                             null,
                             null,
+                            [],
                             $creatorEmail
                         );
                     }

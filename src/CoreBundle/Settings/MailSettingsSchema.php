@@ -31,6 +31,10 @@ class MailSettingsSchema extends AbstractSettingsSchema
                     'send_notification_score_in_percentage' => 'false',
                     'cron_notification_help_desk' => '',
                     'notifications_extended_footer_message' => '',
+
+                    'smtp_unique_sender' => 'false',
+                    'smtp_from_email' => '',
+                    'smtp_from_name' => '',
                 ]
             )
         ;
@@ -65,6 +69,9 @@ class MailSettingsSchema extends AbstractSettingsSchema
                     'help' => $this->settingArrayHelpValue('notifications_extended_footer_message'),
                 ]
             )
+            ->add('smtp_unique_sender', YesNoType::class)
+            ->add('smtp_from_email', EmailType::class)
+            ->add('smtp_from_name', TextType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

@@ -122,40 +122,52 @@
 
 {% macro reporting_user_details(user) %}
     {% autoescape false %}
-    <div class="parameters">
-        <dl class="dl-horizontal">
+    <div class="parameters mt-4 mb-4">
+        <dl class="dl-horizontal mb-4">
             {% if user.status %}
-                <dt>{{ 'Status'|trans }}</dt>
-
-                {% if user.status == 1 %}
-                    <dd>{{ 'Trainer' | trans }}</dd>
-                {% else %}
-                    <dd>{{ 'Learner' | trans }}</dd>
-                {% endif %}
+                <div class="flex mb-2">
+                    <dt class="w-1/3 font-semibold">{{ 'Status'|trans }}</dt>
+                    <dd class="w-2/3">
+                        {% if user.status == 1 %}
+                            {{ 'Trainer' | trans }}
+                        {% else %}
+                            {{ 'Learner' | trans }}
+                        {% endif %}
+                    </dd>
+                </div>
             {% endif %}
-
-            <dt>{{ 'Official code'|trans }}</dt>
-            {% if user.officialCode is defined %}
-                <dd>{{ user.officialCode }}</dd>
-            {% else %}
-                <dd>{{ 'No official code'|trans }}</dd>
-            {% endif %}
-            <dt>{{ 'OnLine'|trans }}</dt>
-            <dd>
-{#                {{ user.user_is_online }}#}
-{#                {{ user.online }}#}
-            </dd>
-            <dt>{{ 'Tel'|trans }}</dt>
-            <dd>{{ user.phone == '' ? 'NoTel'|trans : user.phone }}</dd>
-
+            <div class="flex mb-2">
+                <dt class="w-1/3 font-semibold">{{ 'Official code'|trans }}</dt>
+                <dd class="w-2/3">
+                    {% if user.officialCode is defined %}
+                        {{ user.officialCode }}
+                    {% else %}
+                        {{ 'No official code'|trans }}
+                    {% endif %}
+                </dd>
+            </div>
+            <div class="flex mb-2">
+                <dt class="w-1/3 font-semibold">{{ 'OnLine'|trans }}</dt>
+                <dd class="w-2/3">
+                    {#                {{ user.user_is_online }}#}
+                    {#                {{ user.online }}#}
+                </dd>
+            </div>
+            <div class="flex mb-2">
+                <dt class="w-1/3 font-semibold">{{ 'Tel'|trans }}</dt>
+                <dd class="w-2/3">{{ user.phone == '' ? 'NoTel'|trans : user.phone }}</dd>
+            </div>
             {% if user.timezone is defined %}
-                <dt>{{ 'Timezone'|trans }}</dt>
-                <dd>{{ user.timezone }}</dd>
+                <div class="flex mb-2">
+                    <dt class="w-1/3 font-semibold">{{ 'Timezone'|trans }}</dt>
+                    <dd class="w-2/3">{{ user.timezone }}</dd>
+                </div>
             {% endif %}
-
             {% if user.legal is defined %}
-                <dt>{{ 'Legal'|trans }}</dt>
-                <dd>{{ user.legal.url_send }}</dd>
+                <div class="flex mb-2">
+                    <dt class="w-1/3 font-semibold">{{ 'Legal'|trans }}</dt>
+                    <dd class="w-2/3">{{ user.legal.url_send }}</dd>
+                </div>
             {% endif %}
         </dl>
     </div>
@@ -165,20 +177,22 @@
 {% macro reporting_user_box(user) %}
     {% autoescape false %}
     {% import _self as display %}
-<div class="flex flex-wrap">
-    <div class="flex flex-auto lg:flex-1/3 items-start justify-left px-4 lg:text-left">
-        <div class="w-full lg:w-1/2 px-4 justify-left lg:text-left">
-            <div class="text-center">
-                <img class="w-36 h-36 rounded-full mb-4 mx-auto lg:mx-0" src="{{ user | illustration }}" alt="Avatar">
-                <h3 class="text-lg font-semibold">{{ user.getFullName }} ({{ user.username }})</h3>
-                <p class="text-gray-600">{{ user.email }}</p>
-            </div>
+    <div class="user">
+        <div class="avatar">
+            <img width="128px" src="{{ user | illustration }}" class="img-responsive">
         </div>
-        <div class="w-full lg:w-1/2 px-4">
-            {{ display.reporting_user_details(user) }}
+        <div class="name">
+            <h3>
+                {% if user.complete_name_link is defined %}
+                    {{ user.complete_name_link }}
+                {% else %}
+                    {{ user | user_complete_name }}
+                {% endif %}
+            </h3>
+            <p class="email">{{ user.email }}</p>
         </div>
+        {{ display.reporting_user_details(user) }}
     </div>
-</div>
     {% endautoescape %}
 {% endmacro %}
 

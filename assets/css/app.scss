@@ -629,6 +629,23 @@ form .field {
   font-weight: bold;
 }
 
+.easy-donut {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.easy-donut .percent {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+.stat-widget-five {
+  display: flex;
+  align-items: center;
+}
+.stat-widget-five .fa, .stat-widget-five .mdi-icon {
+  margin-right: 1rem;
+}
+
 //@import 'primevue-md-light-indigo/theme.css';
 //@import '~primevue/resources/primevue.min.css';
 //@import '~primeflex/primeflex.css';

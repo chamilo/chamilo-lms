@@ -142,6 +142,10 @@ function _updateUsers(
             $phone = $user['PhoneNumber'] ?? $userInfo['phone'];
             $pictureUrl = $user['PictureUri'] ?? $userInfo['picture_uri'];
             $expirationDate = $user['ExpiryDate'] ?? $userInfo['expiration_date'];
+            // Fix wrong date in DB for old users (sometimes would be expiration_date = '9999-12-31 ********') where it should be null
+            if (substr($expirationDate, 0, 4) === '9999') {
+                $expirationDate = null;
+            }
             $active = $userInfo['active'];
             if (isset($user['Active'])) {
                 $user['Active'] = (int) $user['Active'];

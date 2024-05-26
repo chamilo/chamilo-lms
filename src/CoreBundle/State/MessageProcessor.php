@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\Message;
+use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Notification;
 
 final class MessageProcessor implements ProcessorInterface
@@ -45,19 +46,21 @@ final class MessageProcessor implements ProcessorInterface
             $message->getSender()->getId()
         );
 
-        foreach ($message->getReceivers() as $receiver) {
-            $user = $receiver->getReceiver();
+        $userIdList = $message
+            ->getReceivers()
+            ->map(fn (MessageRelUser $messageRelUser): int => $messageRelUser->getReceiver()->getId())
+            ->getValues()
+        ;
 
-            (new Notification())
-                ->saveNotification(
-                    $message->getId(),
-                    Notification::NOTIFICATION_TYPE_MESSAGE,
-                    [$user->getId()],
-                    $message->getTitle(),
-                    $message->getContent(),
-                    $sender_info,
-                )
-            ;
-        }
+        (new Notification())
+            ->saveNotification(
+                $message->getId(),
+                Notification::NOTIFICATION_TYPE_MESSAGE,
+                $userIdList,
+                $message->getTitle(),
+                $message->getContent(),
+                $sender_info,
+            )
+        ;
     }
 }

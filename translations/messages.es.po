@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-05-23 13:20+0000\n"
+"PO-Revision-Date: 2024-05-27 08:08+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Spanish <https://translation.chamilo.org/projects/chamilo/"
 "messages/es/>\n"
@@ -26603,3 +26603,195 @@ msgstr ""
 "Defina un arreglo de rangos de puntuación y colores para mostrar informes "
 "utilizando este modelo. Esto le permite mostrar colores en lugar de "
 "calificaciones numéricas."
+
+msgid "Gradebook comments"
+msgstr "Comentarios en la herramienta de evaluaciones"
+
+msgid "Add additional columns to the gradebook's main report (1 = ranking, 2 = best score, 3 = average)."
+msgstr ""
+"Añadir columnas adicionales al informe principal de la herramienta de "
+"evaluaciones (1 = clasificación, 2 = mejor puntuación, 3 = promedio)."
+
+msgid "Hide gradebook table for learners"
+msgstr "Ocultar la tabla de la herramienta de evaluaciones para alumnos"
+
+msgid "Improve speed when rendering gradebook student reports using Doctrine APCU cache. APCu is an optional but recommended PHP extension."
+msgstr ""
+"Mejorar la velocidad al generar informes de alumnos en la herramienta de "
+"evaluaciones utilizando la caché APCU de Doctrine. APCu es una extensión PHP "
+"opcional pero recomendada."
+
+msgid "Allow multiple evaluation attempts in gradebook"
+msgstr ""
+"Permitir varios intentos de evaluación en la herramienta de evaluaciones"
+
+msgid "Gradebook reports score style"
+msgstr "Estilo de puntuación de informes de la herramienta de evaluaciones"
+
+msgid "User extra fields in gradebook flat view"
+msgstr ""
+"Campos de perfil de usuario en la vista plana de la herramienta de "
+"evaluaciones"
+
+msgid "If your portal is resources-limited, reducing the generation of the dynamic gradebok charts with potentially thousands of results is a good option."
+msgstr ""
+"Si su portal tiene recursos limitados, reducir la generación de los gráficos "
+"dinámicos de la herramienta de evaluaciones (con potencialmente miles de "
+"resultados) es una buena opción."
+
+msgid "Hide percentage in best/average gradebook results"
+msgstr ""
+"Ocultar porcentaje en los resultados promedio/mejores de la herramienta de "
+"evaluaciones"
+
+msgid "Language switcher in main menu"
+msgstr "Selector de idioma en el menú principal"
+
+msgid "Use country flags for languages. This is not enabled by default because some languages are not strictly attached to a country, which can lead to frustration for some users."
+msgstr ""
+"Utilizar banderas de países para los idiomas. Esto no está habilitado de "
+"forma predeterminada porque algunos idiomas no están estrictamente "
+"vinculados a un país, lo que puede causar frustración para algunos usuarios."
+
+msgid "Gradebook extra statistics"
+msgstr "Estadísticas adicionales en la herramienta de evaluaciones"
+
+msgid "Multiple-language document templates"
+msgstr "Plantillas de documentos multilingües"
+
+msgid "When using inter-gradebook dependencies, you can choose a list of mandatory courses that will be required before approving any gradebook that has dependencies."
+msgstr ""
+"Al utilizar dependencias entre herramientas de evaluaciones, puede elegir "
+"una lista de cursos obligatorios que serán necesarios antes de aprobar "
+"cualquier herramienta de evaluaciones que tenga dependencias."
+
+msgid "Invisible tests visible in learning paths"
+msgstr "Hacer visibles en lecciones los ejercicios invisibles"
+
+msgid "Multiple-language courses"
+msgstr "Cursos multilingües"
+
+msgid "Use APCu caching to speed up gradebok"
+msgstr "Utilice el caché APCu para acelerar la herramienta de evaluaciones"
+
+msgid "Enables a mechanism of gradebook dependencies that lets people know which other items they need to go through first in order to complete the gradebook."
+msgstr ""
+"Activa un mecanismo de dependencias en la herramienta de evaluaciones que "
+"permite a los alumnos saber qué otros elementos necesitan completar primero "
+"para finalizar los elementos de la evaluación."
+
+msgid "Language flags"
+msgstr "Banderas de idiomas"
+
+msgid "Enable document templates (at the platform or course level) to be configured for specific languages."
+msgstr ""
+"Habilitar la posibilidad de usar plantillas de documentos (a nivel de "
+"plataforma o curso) para idiomas específicos."
+
+msgid "Add the given columns ('variables' array) to the main results table in the gradebook."
+msgstr ""
+"Agregar las columnas dadas (array 'variables') a la tabla de resultados "
+"principales en la herramienta de evaluaciones."
+
+msgid "Cache results in the gradebook"
+msgstr "Poner resultados en caché en la herramienta de evaluaciones"
+
+msgid "Avoid learners clicking on items from the gradebook by removing the links on the items."
+msgstr ""
+"Evitar que los alumnos hagan clic en elementos de la herramienta de "
+"evaluaciones eliminando los enlaces de los ítems."
+
+msgid "Enable skills by gradebook's subcategory"
+msgstr "Habilite competencias por subcategoría de evaluaciones"
+
+msgid "Add gradebook score style configuration in the flat view. See api.lib.php in order to find the options: examples SCORE_DIV = 1, SCORE_PERCENT = 2, etc"
+msgstr ""
+"Añada configuración de estilo de puntuación en la herramienta de "
+"evaluaciones en la vista plana. Consulte api.lib.php para encontrar las "
+"opciones: ejemplos SCORE_DIV = 1, SCORE_PERCENT = 2, etc"
+
+msgid "Enable gradebook comments so teachers can add a comment to the overall performance of the learner in this course. The comment will appear in the PDF export for the learner."
+msgstr ""
+"Activar comentarios en la herramienta de evaluaciones para que los tutores "
+"puedan agregar un comentario sobre el rendimiento general del alumno en este "
+"curso. El comentario aparecerá en la exportación en PDF para el alumno."
+
+msgid "Generate a block inside the side menu where a few badges can be shown as pending approval. Requires gradebooks to be listed here, by (numerical) ID."
+msgstr ""
+"Generar un bloque dentro del menú lateral donde se puedan mostrar algunas "
+"insignias como pendientes de aprobación. Requiere que las evaluaciones se "
+"listen aquí, por ID (numérico)."
+
+msgid "Display a language selector in the main menu that immediately updates the language preference of the user. This can be useful in multilingual portals where learners have to switch from one language to another for their learning."
+msgstr ""
+"Mostrar un selector de idioma en el menú principal que actualice "
+"inmediatamente la preferencia de idioma del usuario. Esto puede ser útil en "
+"portales multilingües donde los alumnos tienen que cambiar de un idioma a "
+"otro para su aprendizaje."
+
+msgid "Skills are normally attributed for completing a whole gradebook. By enabling this option, you allow skills to be attached to sub-sections of gradebooks."
+msgstr ""
+"Las competencias suelen otorgarse por completar toda la herramienta de "
+"evaluaciones. Al activar esta opción, permite que las competencias se "
+"asignen a subsecciones de la herramienta de evaluaciones."
+
+msgid "Mandatory courses for gradebook dependencies"
+msgstr "Cursos obligatorios para dependencias de la herramienta de evaluaciones"
+
+msgid "Hide gradebook button 'download PDF report'"
+msgstr "Ocultar botón 'descargar informe PDF' de la herramienta de evaluaciones"
+
+msgid "Use global score display setting in gradebook"
+msgstr ""
+"Utilice la configuración de visualización de puntuación global en la "
+"herramienta de evaluaciones"
+
+msgid "Hide item links for learners in gradebook"
+msgstr "Ocultar enlaces de ítems para alumnos en la herramienta de evaluaciones"
+
+msgid "Gradebook PDF export options"
+msgstr "Opciones de exportación de PDF de la herramienta de evaluaciones"
+
+msgid "Change the PDF export for learners based on the provided settings ('hide_score_weight', 'hide_feedback_textarea', ...)"
+msgstr ""
+"Modificar la exportación en PDF para alumnos basada con la configuración "
+"proporcionada ('hide_score_weight', 'hide_feedback_textarea', ...)"
+
+msgid "Reduce gradebook load time by hiding the results table (but still giving access to certificates, skills, etc)."
+msgstr ""
+"Reducir el tiempo de carga del libro de calificaciones ocultando la tabla de "
+"resultados (pero manteniendo el acceso a certificados, habilidades, etc.)."
+
+msgid "Inter-gradebook dependencies"
+msgstr "Dependencias entre herramientas de evaluaciones"
+
+msgid "Enable courses managed in more than one language. This option adds a language selector within the course page to let users switch easily, and adds a 'multiple_language' extra field to courses which allows for remote management procedures."
+msgstr ""
+"Habilite cursos gestionados en más de un idioma. Esta opción añade un "
+"selector de idioma dentro de la página del curso para permitir a los "
+"usuarios cambiar fácilmente, y añade un campo de perfil 'multiple_language' "
+"a los cursos que permite procedimientos de gestión remota."
+
+msgid "Put some of the large calculations of averages in cached fields for the links and evaluations to increase speed (considerably). The potential negative impact is that it can take some time to refresh the gradebook results tables."
+msgstr ""
+"Colocar algunos de los grandes cálculos de promedios en campos almacenados "
+"en caché para los enlaces y evaluaciones para aumentar la velocidad "
+"(considerablemente). El posible impacto negativo es que puede tomar unos "
+"minutos con datos pasados en la tablas de resultados (en la misma "
+"herramienta de evaluaciones)."
+
+msgid "Custom score display in gradebook's standalone column"
+msgstr ""
+"Visualización personalizada de puntuaciones en una columna independiente de "
+"la herramienta de evaluaciones"
+
+msgid "Gradebook badges sidebar"
+msgstr "Barra lateral de insignias de la herramienta de evaluaciones"
+
+msgid "Make tests marked as 'invisible' in the tests tool appear when they are included in a learning path."
+msgstr ""
+"Hacer que los ejercicios marcados como 'invisible' en la herramienta de "
+"ejercicios aparezcan cuando se incluyan en una lección."
+
+msgid "Use test settings for grades display"
+msgstr "Utilice la configuración de ejercicios para mostrar las calificaciones"

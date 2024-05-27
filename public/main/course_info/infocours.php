@@ -920,6 +920,10 @@ if ($form->validate()) {
     $uploadFile = $request->files->get('picture');
 
     if (null !== $uploadFile) {
+        $hasIllustration = $illustrationRepo->hasIllustration($courseEntity);
+        if ($hasIllustration) {
+            $illustrationRepo->deleteIllustration($courseEntity);
+        }
         $file = $illustrationRepo->addIllustration(
             $courseEntity,
             api_get_user_entity(api_get_user_id()),

@@ -8,9 +8,6 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Post;
-use Chamilo\CoreBundle\Controller\Api\CreateMessageAttachmentAction;
 use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
@@ -20,38 +17,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
     types: ['http://schema.org/MediaObject'],
     operations: [
         new Get(),
-        new GetCollection(),
-        new Post(
-            controller: CreateMessageAttachmentAction::class,
-            openapiContext: [
-                'requestBody' => [
-                    'content' => [
-                        'multipart/form-data' => [
-                            'schema' => [
-                                'type' => 'object',
-                                'properties' => [
-                                    'file' => [
-                                        'type' => 'string',
-                                        'format' => 'binary',
-                                    ],
-                                    'messageId' => [
-                                        'type' => 'integer',
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            security: 'is_granted(\'ROLE_USER\')',
-            validationContext: [
-                'groups' => [
-                    'Default',
-                    'message_attachment:create',
-                ],
-            ],
-            deserialize: false
-        ),
     ],
     normalizationContext: [
         'groups' => ['message:read'],
@@ -68,19 +33,23 @@ class MessageAttachment extends AbstractResource implements ResourceInterface, S
 
     #[ORM\Column(name: 'path', type: 'string', length: 255, nullable: false)]
     protected string $path;
-    #[Groups(['message:read'])]
+
+    #[Groups(['message:read', 'message:write'])]
     #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected ?string $comment = null;
 
     #[ORM\Column(name: 'size', type: 'integer', nullable: false)]
     protected int $size;
 
-    #[ORM\ManyToOne(targetEntity: Message::class, cascade: ['persist'], inversedBy: 'attachments')]
+    #[ORM\ManyToOne(targetEntity: Message::class, inversedBy: 'attachments')]
     #[ORM\JoinColumn(name: 'message_id', referencedColumnName: 'id', nullable: false)]
     protected Message $message;
 
     #[ORM\Column(name: 'filename', type: 'string', length: 255, nullable: false)]
     protected string $filename;
+
+    #[Groups(['message:write'])]
+    protected ResourceFile $resourceFileToAttach;
 
     public function __construct()
     {
@@ -152,12 +121,12 @@ class MessageAttachment extends AbstractResource implements ResourceInterface, S
         return $this;
     }
 
-    public function getMessage(): Message
+    public function getMessage(): ?Message
     {
         return $this->message;
     }
 
-    public function setMessage(Message $message): self
+    public function setMessage(?Message $message): static
     {
         $this->message = $message;
 
@@ -187,5 +156,23 @@ class MessageAttachment extends AbstractResource implements ResourceInterface, S
     public function setResourceName(string $name): self
     {
         return $this->setFilename($name);
+    }
+
+    public function getResourceFileToAttach(): ResourceFile
+    {
+        return $this->resourceFileToAttach;
+    }
+
+    public function setResourceFileToAttach(ResourceFile $resourceFileToAttach): self
+    {
+        $this
+            ->setFilename($resourceFileToAttach->getOriginalName())
+            ->setSize($resourceFileToAttach->getSize())
+            ->setPath($resourceFileToAttach->getTitle())
+        ;
+
+        $this->resourceFileToAttach = $resourceFileToAttach;
+
+        return $this;
     }
 }

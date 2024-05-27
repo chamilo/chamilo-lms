@@ -1,47 +1,44 @@
-<template>
-  <div
-      v-for="session in sessions"
-      :key="session.id"
-  >
-    <SessionCard
-        :session="session"
-    />
-  </div>
-</template>
-
 <script>
-
-import SessionCard from './SessionCard.vue';
+import SessionCard from "./SessionCard.vue"
 
 export default {
-  name: 'SessionCardList',
+  name: "SessionCardList",
   components: {
-    SessionCard
+    SessionCard,
   },
   props: {
     sessions: Array,
   },
   data() {
     return {
-      deck: false
-    };
+      deck: false,
+    }
   },
   methods: {
     isList: function () {
       if (!this.deck) {
-        return 'primary';
+        return "primary"
       }
-      return 'secondary';
+      return "secondary"
     },
     isDeck: function () {
       if (this.deck) {
-        return 'primary';
+        return "primary"
       }
-      return 'secondary';
+      return "secondary"
     },
     changeLayout: function () {
-      this.deck = !this.deck;
+      this.deck = !this.deck
     },
-  }
-};
+  },
+}
 </script>
+
+<template>
+  <div
+    v-for="session in sessions"
+    :key="session.id"
+  >
+    <SessionCard :session="session" />
+  </div>
+</template>

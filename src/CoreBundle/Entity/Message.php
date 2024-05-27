@@ -16,9 +16,9 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use Chamilo\CoreBundle\Entity\Listener\MessageListener;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\State\MessageByGroupStateProvider;
+use Chamilo\CoreBundle\State\MessageProcessor;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -33,7 +33,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(columns: ['group_id'], name: 'idx_message_group')]
 #[ORM\Index(columns: ['msg_type'], name: 'idx_message_type')]
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
-#[ORM\EntityListeners([MessageListener::class])]
 #[ApiResource(
     operations: [
         new Get(security: "is_granted('VIEW', object)"),
@@ -58,7 +57,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: [
         'groups' => ['message:write'],
     ],
-    security: "is_granted('ROLE_USER')"
+    security: "is_granted('ROLE_USER')",
+    processor: MessageProcessor::class,
 )]
 #[ApiFilter(filterClass: OrderFilter::class, properties: ['title', 'sendDate'])]
 #[ApiFilter(

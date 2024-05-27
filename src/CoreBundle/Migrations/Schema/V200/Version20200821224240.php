@@ -19,7 +19,7 @@ final class Version20200821224240 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         // Select the IDs of duplicated messages with msg_status = 4
-        $sqlSelectMessages = "
+        $sqlSelectMessages = '
             SELECT DISTINCT(m1.id) AS message_id
             FROM message m1
             JOIN message m2
@@ -30,7 +30,7 @@ final class Version20200821224240 extends AbstractMigrationChamilo
                 AND m1.content = m2.content
                 AND m1.msg_status = 4
                 AND m1.id != m2.id
-        ";
+        ';
 
         // Delete attachments related to the duplicated messages
         $sqlDeleteAttachments = "

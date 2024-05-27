@@ -4,12 +4,16 @@
  * Index page of the admin tools.
  */
 // Resetting the course id.
+use Chamilo\CoreBundle\Framework\Container;
+
 $cidReset = true;
 
 // Including some necessary chamilo files.
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script();
+
+$settingsManager = Container::getSettingsManager();
 
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -42,7 +46,9 @@ if ($form->validate()) {
         $values['subject'],
         $values['content'],
         UserManager::formatUserFullName($user),
-        $user->getEmail()
+        'true' === $settingsManager->getSetting('mail.smtp_unique_sender')
+            ? $settingsManager->getSetting('mail.smtp_from_email')
+            : $user->getEmail()
     );
 
     Display::addFlash(

@@ -11,6 +11,8 @@ use Chamilo\CoreBundle\Entity\AttemptFile;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class Version20240519210000 extends AbstractMigrationChamilo
@@ -46,7 +48,7 @@ final class Version20240519210000 extends AbstractMigrationChamilo
                 $filePath = "app/courses/{$courseDir}/exercises/{$pathPattern}";
                 $this->processFile($filePath, $attemptRepo, $attemptData);
             } else {
-                error_log('MIGRATIONS :: File not found for pattern: ' . $pathPattern);
+                error_log('MIGRATIONS :: File not found for pattern: '.$pathPattern);
             }
         }
 
@@ -56,8 +58,8 @@ final class Version20240519210000 extends AbstractMigrationChamilo
     private function findCourseDirectory(string $pathPattern): ?string
     {
         $kernel = $this->container->get('kernel');
-        $rootPath = $kernel->getProjectDir() . '/app/courses/';
-        $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($rootPath));
+        $rootPath = $kernel->getProjectDir().'/app/courses/';
+        $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($rootPath));
 
         foreach ($iterator as $file) {
             if (str_contains($file->getPathname(), $pathPattern)) {
@@ -93,17 +95,19 @@ final class Version20240519210000 extends AbstractMigrationChamilo
                 $asset = (new Asset())
                     ->setCategory(Asset::EXERCISE_ATTEMPT)
                     ->setTitle($fileName)
-                    ->setFile($file);
+                    ->setFile($file)
+                ;
                 $this->entityManager->persist($asset);
                 $this->entityManager->flush();
 
                 $attemptFile = (new AttemptFile())
-                    ->setAsset($asset);
+                    ->setAsset($asset)
+                ;
                 $attempt->addAttemptFile($attemptFile);
                 $this->entityManager->persist($attemptFile);
                 $this->entityManager->flush();
 
-                error_log('MIGRATIONS :: File processed and inserted as asset and attempt file: ' . $filePath);
+                error_log('MIGRATIONS :: File processed and inserted as asset and attempt file: '.$filePath);
             }
         }
     }

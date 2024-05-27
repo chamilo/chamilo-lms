@@ -104,36 +104,37 @@
 
     <div v-html="item.content" />
 
-    <BaseCard>
-      <template #header>
-        <p class="m-3">{{ item.attachments.length }} {{ $t("Attachments") }}</p>
-      </template>
+    <template v-if="item.attachments && item.attachments.length > 0">
+      <BaseCard>
+        <template #header>
+          <p class="m-3">{{ item.attachments.length }} {{ $t("Attachments") }}</p>
+        </template>
 
-      <div
-        v-if="item.attachments && item.attachments.length > 0"
-        class="q-gutter-y-sm q-gutter-x-sm row"
-      >
         <div
-          v-for="(attachment, index) in item.attachments"
-          :key="index"
+          class="q-gutter-y-sm q-gutter-x-sm row"
         >
-          <div v-if="attachment.resourceNode.resourceFile.audio">
-            <audio controls>
-              <source :src="attachment.downloadUrl" />
-            </audio>
-          </div>
-
-          <BaseButton
-            v-else
-            :href="attachment.downloadUrl"
-            icon="attachment"
-            type="primary"
+          <div
+            v-for="(attachment, index) in item.attachments"
+            :key="index"
           >
-            {{ attachment.resourceNode.resourceFile.originalName }}
-          </BaseButton>
+            <div v-if="attachment.resourceNode.resourceFile.audio">
+              <audio controls>
+                <source :src="attachment.downloadUrl" />
+              </audio>
+            </div>
+
+            <BaseButton
+              v-else
+              :href="attachment.downloadUrl"
+              icon="attachment"
+              type="primary"
+            >
+              {{ attachment.resourceNode.resourceFile.originalName }}
+            </BaseButton>
+          </div>
         </div>
-      </div>
-    </BaseCard>
+      </BaseCard>
+    </template>
     <Loading :visible="isLoading" />
   </div>
 </template>

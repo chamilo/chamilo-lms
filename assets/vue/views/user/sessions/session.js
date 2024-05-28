@@ -32,17 +32,27 @@ export function useSession(type) {
     return categoryList
   }
 
+  /**
+   * @param {Array<object>} sessions
+   * @returns {Map<string, { sessions }>}
+   */
   function getCategoriesWithSessions(sessions) {
-    let categoriesIn = []
+    let categoriesIn = new Map()
 
     sessions.forEach(function (session) {
-      if (!isEmpty(session.category)) {
-        if (categoriesIn[session.category["@id"]] === undefined) {
-          categoriesIn[session.category["@id"]] = []
-          categoriesIn[session.category["@id"]]["sessions"] = []
-        }
-        categoriesIn[session.category["@id"]]["sessions"].push(session)
+      if (isEmpty(session.category)) {
+        return
       }
+
+      let sessionsInCategory = []
+
+      if (categoriesIn.has(session.category["@id"])) {
+        sessionsInCategory = categoriesIn.get(session.category["@id"]).sessions
+      }
+
+      sessionsInCategory.push(session)
+
+      categoriesIn.set(session.category["@id"], { sessions: sessionsInCategory })
     })
 
     return categoriesIn

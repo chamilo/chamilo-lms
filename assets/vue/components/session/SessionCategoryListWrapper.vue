@@ -1,6 +1,5 @@
 <script setup>
 import SessionListCategoryWrapper from "../../components/session/SessionListCategoryWrapper"
-import { toRefs } from "vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 
 const props = defineProps({
@@ -9,16 +8,12 @@ const props = defineProps({
     required: true,
   },
   categoryWithSessions: {
-    type: Array,
+    type: Map,
     required: true,
   },
 })
 
-const { categoryWithSessions } = toRefs(props)
-
-function getSessionsFromCategory(category) {
-  return categoryWithSessions.value[category._id]["sessions"]
-}
+const getSessionsFromCategory = (category) => props.categoryWithSessions.get(category["@id"]).sessions
 </script>
 
 <template>

@@ -20,7 +20,7 @@ defineProps({
     required: true,
   },
   categoriesWithSessions: {
-    type: Array,
+    type: Map,
     required: true,
   },
 })

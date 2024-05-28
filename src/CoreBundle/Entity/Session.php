@@ -48,6 +48,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                     fromClass: User::class,
                 ),
             ],
+            paginationEnabled: false,
             normalizationContext: [
                 'groups' => [
                     'user_subscriptions:sessions',
@@ -64,6 +65,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                     fromClass: User::class,
                 ),
             ],
+            paginationEnabled: false,
             normalizationContext: [
                 'groups' => [
                     'user_subscriptions:sessions',
@@ -80,6 +82,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                     fromClass: User::class,
                 ),
             ],
+            paginationEnabled: false,
             normalizationContext: [
                 'groups' => [
                     'user_subscriptions:sessions',

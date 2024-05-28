@@ -3629,9 +3629,17 @@ class Exercise
             $nbrAnswers = 1;
         }
 
-        $generatedFile = '';
+        $generatedFiles = [];
         if ($answerType == ORAL_EXPRESSION) {
-            $generatedFile = ExerciseLib::getOralFileAudio($exeId, $questionId);
+            $generatedFiles = ExerciseLib::getOralFileAudio($exeId, $questionId, true);
+        }
+
+
+        $generatedFilesHtml = '';
+        if (!empty($generatedFiles)) {
+            foreach ($generatedFiles as $fileUrl) {
+                $generatedFilesHtml .= '<a href="'.$fileUrl.'">'.$fileUrl.'</a><br />';
+            }
         }
 
         $user_answer = '';
@@ -6148,7 +6156,7 @@ class Exercise
             'open_question' => $arrques,
             'open_answer' => $arrans,
             'answer_type' => $answerType,
-            'generated_oral_file' => $generatedFile,
+            'generated_oral_file' => $generatedFilesHtml,
             'user_answered' => $userAnsweredQuestion,
             'correct_answer_id' => $correctAnswerId,
             'answer_destination' => $answerDestination,
@@ -10683,7 +10691,8 @@ class Exercise
         $user_info,
         $url_email,
         $teachers
-    ) {
+    ): void {
+
         // Email configuration settings
         $courseCode = api_get_course_id();
         $courseInfo = api_get_course_info($courseCode);
@@ -10697,9 +10706,6 @@ class Exercise
             }
             $answer_type = $item['answer_type'];
             if (!empty($question) && (!empty($answer) || !empty($file)) && ORAL_EXPRESSION == $answer_type) {
-                if (!empty($file)) {
-                    $file = Display::url($file, $file);
-                }
                 $oral_question_list .= '<br />
                     <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
                     <tr>
@@ -10708,7 +10714,7 @@ class Exercise
                     </tr>
                     <tr>
                         <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>
-                        <td valign="top" bgcolor="#F3F3F3">'.$answer.$file.'</td>
+                        <td valign="top" bgcolor="#F3F3F3"><p>'.$answer.'</p><p>'.$file.'</p></td>
                     </tr></table>';
             }
         }

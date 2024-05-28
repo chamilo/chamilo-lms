@@ -5115,38 +5115,54 @@ EOT;
     }
 
     /**
-     * Get the HTML audio element for the oral file of a specific track exercise question attempt.
+     * Retrieves the generated audio files for an oral question in an exercise attempt.
+     *
+     * @param int  $trackExerciseId The ID of the tracked exercise.
+     * @param int  $questionId      The ID of the question.
+     * @param bool $returnUrls      (Optional) If set to true, only the URLs of the audio files are returned. Default is false.
+     *
+     * @return array|string If $returnUrls is true, returns an array of URLs of the audio files. Otherwise, returns an HTML string with audio tags.
      */
-    public static function getOralFileAudio(int $trackExerciseId, int $questionId): string
+    public static function getOralFileAudio(int $trackExerciseId, int $questionId, bool $returnUrls = false): array|string
     {
         /** @var TrackEExercise $trackExercise */
         $trackExercise = Container::getTrackEExerciseRepository()->find($trackExerciseId);
 
         if (null === $trackExercise) {
-            return '';
+            return $returnUrls ? [] : '';
         }
 
         $questionAttempt = $trackExercise->getAttemptByQuestionId($questionId);
 
         if (null === $questionAttempt) {
-            return '';
+            return $returnUrls ? [] : '';
         }
 
         $assetRepo = Container::getAssetRepository();
 
-        $html = '';
-        foreach ($questionAttempt->getAttemptFiles() as $attemptFile) {
-            $html .= Display::tag(
-                'audio',
-                '',
-                [
-                    'src' => $assetRepo->getAssetUrl($attemptFile->getAsset()),
-                    'controls' => '',
-                ]
-            );
-        }
+        if ($returnUrls) {
+            $basePath = rtrim(api_get_path(WEB_PATH), '/');
+            $urls = [];
+            foreach ($questionAttempt->getAttemptFiles() as $attemptFile) {
+                $urls[] = $basePath.$assetRepo->getAssetUrl($attemptFile->getAsset());
+            }
 
-        return $html;
+            return $urls;
+        } else {
+            $html = '';
+            foreach ($questionAttempt->getAttemptFiles() as $attemptFile) {
+                $html .= Display::tag(
+                    'audio',
+                    '',
+                    [
+                        'src' => $assetRepo->getAssetUrl($attemptFile->getAsset()),
+                        'controls' => '',
+                    ]
+                );
+            }
+
+            return $html;
+        }
     }
 
     /**

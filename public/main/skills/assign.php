@@ -57,8 +57,33 @@ $skillIdFromGet = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 $currentValue = isset($_REQUEST['current_value']) ? (int) $_REQUEST['current_value'] : 0;
 $currentLevel = isset($_REQUEST['current']) ? (int) str_replace('sub_skill_id_', '', $_REQUEST['current']) : 0;
 
+// Handle skill and subskill selection
+$skillId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : key($skillsOptions);
 $subSkillList = isset($_REQUEST['sub_skill_list']) ? explode(',', $_REQUEST['sub_skill_list']) : [];
 $subSkillList = array_unique($subSkillList);
+
+if (empty($subSkillList) && $skillId) {
+    $skillRelSkill = new SkillRelSkillModel();
+    $parents = $skillRelSkill->getSkillParents($skillId);
+    ksort($parents);
+
+    $subSkillList = [];
+    foreach ($parents as $parent) {
+        if ($parent['skill_id'] != 1) {
+            $subSkillList[] = $parent['skill_id'];
+        }
+    }
+    $subSkillList[] = $skillId;
+    $subSkillList = array_unique($subSkillList);
+
+    $firstParentId = $subSkillList[0];
+    $subSkillListToString = implode(',', array_slice($subSkillList, 0, -1)) . ',' . $skillId;
+    $currentLevel = 'sub_skill_id_' . count($subSkillList) - 1;
+
+    $currentUrl = api_get_path(WEB_CODE_PATH).'skills/assign.php?user='.$userId.'&id='.$firstParentId.'&current_value='.$skillId.'&current='.$currentLevel.'&sub_skill_list='.$subSkillListToString;
+    header('Location: '.$currentUrl);
+    exit;
+}
 
 if (!empty($subSkillList)) {
     // Compare asked skill with current level

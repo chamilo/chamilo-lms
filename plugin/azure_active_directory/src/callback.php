@@ -64,8 +64,11 @@ try {
 
     // We use the e-mail to authenticate the user, so check that at least one
     // e-mail source exists
-    if (empty($me['mail']) || empty($me['mailNickname'])) {
-        throw new Exception('Mail empty');
+    if (empty($me['mail'])) {
+        throw new Exception('The mail field is empty in Azure AD and is needed to set the organisation email for this user.');
+    }
+    if (empty($me['mailNickname'])) {
+        throw new Exception('The mailNickname field is empty in Azure AD and is needed to set the unique Azure ID for this user.');
     }
 
     $extraFieldValue = new ExtraFieldValue('user');

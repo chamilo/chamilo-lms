@@ -3,9 +3,7 @@
     <div class="col-span-2">
       <BaseInputText
         id="item_title"
-        v-model="v$.item.title.$model"
-        v-model:error-text="v$.item.title.required.$message"
-        v-model:is-invalid="v$.item.title.$invalid"
+        v-model="item.title"
         :label="t('Title')"
       />
 
@@ -30,7 +28,7 @@
               class="max-w-full"
               controls
             >
-              <source :src="URL.createObjectURL(attachment)" />
+              <source :src="window.URL.createObjectURL(attachment)" />
             </audio>
           </li>
         </ul>
@@ -43,101 +41,34 @@
   </div>
 </template>
 
-<script>
-import has from "lodash/has"
-import useVuelidate from "@vuelidate/core"
-import { required } from "@vuelidate/validators"
+<script setup>
 import AudioRecorder from "../AudioRecorder"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import { useI18n } from "vue-i18n"
+import { computed } from "vue"
 
-export default {
-  name: "MessageForm",
-  components: { AudioRecorder, BaseInputText },
-  emits: ["update:attachments"],
-  setup() {
-    const { t } = useI18n()
+const attachments = defineModel("attachments", {
+  type: Array,
+})
 
-    return { v$: useVuelidate(), URL, t }
+const props = defineProps({
+  values: {
+    type: Object,
+    required: true,
   },
-  props: {
-    values: {
-      type: Object,
-      required: true,
-    },
-    errors: {
-      type: Object,
-      default: () => {},
-    },
-    initialValues: {
-      type: Object,
-      default: () => {},
-    },
-    attachments: {
-      type: Array,
-      required: false,
-      default: () => [],
-    },
+  errors: {
+    type: Object,
+    default: () => {},
   },
-  data() {
-    return {
-      title: null,
-      parentResourceNodeId: null,
-      receiversTo: [],
-      receiversCc: [],
-    }
+  initialValues: {
+    type: Object,
+    default: () => {},
   },
-  computed: {
-    item() {
-      return this.initialValues || this.values
-    },
-    receiversErrors() {
-      const errors = []
-      if (!this.v$.item.receiversTo.$dirty) return errors
-      has(this.violations, "receiversTo") && errors.push(this.violations.receiversTo)
+})
 
-      if (this.v$.item.receiversTo.required) {
-        return this.$t("Field is required")
-      }
+const { t } = useI18n()
 
-      return errors
-    },
-    titleErrors() {
-      const errors = []
-      if (!this.v$.item.title.$dirty) return errors
-      has(this.violations, "title") && errors.push(this.violations.title)
+const item = computed(() => props.initialValues || props.values)
 
-      if (this.v$.item.title.required) {
-        return this.$t("Field is required")
-      }
-
-      return errors
-    },
-
-    violations() {
-      return this.errors || {}
-    },
-  },
-  methods: {
-    attachAudios(audio) {
-      this.$emit("update:attachments", [...this.attachments, audio])
-    },
-  },
-  validations: {
-    item: {
-      title: {
-        required,
-      },
-      receiversTo: {
-        required,
-      },
-      /*receiversCc: {
-        required,
-      },*/
-      content: {
-        required,
-      },
-    },
-  },
-}
+const attachAudios = (audio) => attachments.value.push(audio)
 </script>

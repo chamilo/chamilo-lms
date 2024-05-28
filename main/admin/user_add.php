@@ -368,137 +368,176 @@ $html_results_enabled[] = $form->createElement('button', 'submit_plus', get_lang
 $form->addGroup($html_results_enabled);
 
 // Validate form
-if ($form->validate()) {
+$formValid = $form->validate();
+if ($formValid) {
     $check = Security::check_token('post');
     if ($check) {
         $user = $form->exportValues();
 
-        $lastname = $user['lastname'];
-        $firstname = $user['firstname'];
-        $official_code = $user['official_code'];
-        $email = $user['email'];
-        $phone = $user['phone'];
-        $username = $user['username'];
-        $status = (int) $user['status'];
-        $language = $user['language'];
-        $picture = $_FILES['picture'];
-        $platform_admin = (int) $user['admin']['platform_admin'];
-        $send_mail = (int) $user['mail']['send_mail'];
-        $hr_dept_id = isset($user['hr_dept_id']) ? (int) $user['hr_dept_id'] : 0;
+        $extraFields = api_get_configuration_value('extra_fields_to_validate_on_user_registration');
+        if (!empty($extraFields) && isset($extraFields['extra_fields'])) {
+            $extraFieldList = $extraFields['extra_fields'];
+            foreach ($user as $key => $value) {
+                if (substr($key, 0, 6) == 'extra_') {
+                    $extra_value = Security::remove_XSS($value);
+                    $extra_field = substr($key,6);
 
-        if (isset($extAuthSource) && count($extAuthSource) > 0 &&
-            $user['password']['password_auto'] == '2'
-        ) {
-            $auth_source = $user['password']['auth_source'];
-            $password = 'PLACEHOLDER';
-        } else {
-            $auth_source = PLATFORM_AUTH_SOURCE;
-            $password = $user['password']['password_auto'] == '1' ? api_generate_password() : $user['password']['password'];
-        }
+                    if(!empty($extra_value)) {
+                        if (in_array($extra_field, $extraFieldList)) {
+                            $extraValueExists = api_user_extra_field_validation($extra_field, $extra_value);
+                            if ($extraValueExists) {
+                                $formValid = false;
 
-        if ($user['radio_expiration_date'] == '1') {
-            $expiration_date = $user['expiration_date'];
-        } else {
-            $expiration_date = null;
-        }
+                                $element = $form->getElement($key);
+                                if ($element) {
+                                    $attrs = ['style' => 'border-color: #a94442;'];
+                                    $form->updateElementAttr([$element], $attrs);
+                                }
 
-        $active = (int) $user['active'];
-        if (api_get_setting('login_is_email') == 'true') {
-            $username = $email;
-        }
-
-        $extra = [];
-        foreach ($user as $key => $value) {
-            if (substr($key, 0, 6) == 'extra_') {
-                // An extra field
-                $extra[substr($key, 6)] = $value;
+                                Display::addFlash(
+                                    Display::return_message(
+                                        get_lang('TheValueEntered ').$extra_field.get_lang('AlreadyExists'),
+                                        'error',
+                                        false
+                                    )
+                                );
+                            }
+                        }
+                    }
+                }
             }
         }
 
-        $template = isset($user['email_template_option']) ? $user['email_template_option'] : [];
+        if ($formValid) {
+            $lastname = $user['lastname'];
+            $firstname = $user['firstname'];
+            $official_code = $user['official_code'];
+            $email = $user['email'];
+            $phone = $user['phone'];
+            $username = $user['username'];
+            $status = (int) $user['status'];
+            $language = $user['language'];
+            $picture = $_FILES['picture'];
+            $platform_admin = (int) $user['admin']['platform_admin'];
+            $send_mail = (int) $user['mail']['send_mail'];
+            $hr_dept_id = isset($user['hr_dept_id']) ? (int) $user['hr_dept_id'] : 0;
 
-        $user_id = UserManager::create_user(
-            $firstname,
-            $lastname,
-            $status,
-            $email,
-            $username,
-            $password,
-            $official_code,
-            $language,
-            $phone,
-            null,
-            $auth_source,
-            $expiration_date,
-            $active,
-            $hr_dept_id,
-            $extra,
-            null,
-            $send_mail,
-            $platform_admin,
-            '',
-            false,
-            null,
-            0,
-            $template
-        );
-
-        Security::clear_token();
-        $tok = Security::get_token();
-        if (!empty($user_id)) {
-            if (!empty($picture['name'])) {
-                $picture_uri = UserManager::update_user_picture(
-                    $user_id,
-                    $_FILES['picture']['name'],
-                    $_FILES['picture']['tmp_name'],
-                    $user['picture_crop_result']
-                );
-                UserManager::update_user(
-                    $user_id,
-                    $firstname,
-                    $lastname,
-                    $username,
-                    $password,
-                    $auth_source,
-                    $email,
-                    $status,
-                    $official_code,
-                    $phone,
-                    $picture_uri,
-                    $expiration_date,
-                    $active,
-                    null,
-                    $hr_dept_id,
-                    null,
-                    $language
-                );
+            if (isset($extAuthSource) && count($extAuthSource) > 0 &&
+                $user['password']['password_auto'] == '2'
+            ) {
+                $auth_source = $user['password']['auth_source'];
+                $password = 'PLACEHOLDER';
+            } else {
+                $auth_source = PLATFORM_AUTH_SOURCE;
+                $password = $user['password']['password_auto'] == '1' ? api_generate_password() : $user['password']['password'];
             }
 
-            $extraFieldValues = new ExtraFieldValue('user');
-            $user['item_id'] = $user_id;
-            $extraFieldValues->saveFieldValues($user);
-            $message = get_lang('UserAdded').': '.
-                Display::url(
-                    api_get_person_name($firstname, $lastname),
-                    api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id
-                );
-        }
+            if ($user['radio_expiration_date'] == '1') {
+                $expiration_date = $user['expiration_date'];
+            } else {
+                $expiration_date = null;
+            }
 
-        Display::addFlash(Display::return_message($message, 'normal', false));
+            $active = (int) $user['active'];
+            if (api_get_setting('login_is_email') == 'true') {
+                $username = $email;
+            }
 
-        if (isset($_POST['submit_plus'])
-            || (api_is_session_admin() && api_get_configuration_value('limit_session_admin_list_users'))
-        ) {
-            //we want to add more. Prepare report message and redirect to the same page (to clean the form)
-            header('Location: user_add.php?sec_token='.$tok);
-            exit;
-        } else {
+            $extra = [];
+            foreach ($user as $key => $value) {
+                if (substr($key, 0, 6) == 'extra_') {
+                    // An extra field
+                    $extra[substr($key, 6)] = $value;
+                }
+            }
+
+            $template = isset($user['email_template_option']) ? $user['email_template_option'] : [];
+
+            $user_id = UserManager::create_user(
+                $firstname,
+                $lastname,
+                $status,
+                $email,
+                $username,
+                $password,
+                $official_code,
+                $language,
+                $phone,
+                null,
+                $auth_source,
+                $expiration_date,
+                $active,
+                $hr_dept_id,
+                $extra,
+                null,
+                $send_mail,
+                $platform_admin,
+                '',
+                false,
+                null,
+                0,
+                $template
+            );
+
+            Security::clear_token();
             $tok = Security::get_token();
-            header('Location: user_list.php?sec_token='.$tok);
-            exit;
+            if (!empty($user_id)) {
+                if (!empty($picture['name'])) {
+                    $picture_uri = UserManager::update_user_picture(
+                        $user_id,
+                        $_FILES['picture']['name'],
+                        $_FILES['picture']['tmp_name'],
+                        $user['picture_crop_result']
+                    );
+                    UserManager::update_user(
+                        $user_id,
+                        $firstname,
+                        $lastname,
+                        $username,
+                        $password,
+                        $auth_source,
+                        $email,
+                        $status,
+                        $official_code,
+                        $phone,
+                        $picture_uri,
+                        $expiration_date,
+                        $active,
+                        null,
+                        $hr_dept_id,
+                        null,
+                        $language
+                    );
+                }
+
+                $extraFieldValues = new ExtraFieldValue('user');
+                $user['item_id'] = $user_id;
+                $extraFieldValues->saveFieldValues($user);
+                $message = get_lang('UserAdded').': '.
+                    Display::url(
+                        api_get_person_name($firstname, $lastname),
+                        api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id
+                    );
+            }
+
+            Display::addFlash(Display::return_message($message, 'normal', false));
+
+            if (isset($_POST['submit_plus'])
+                || (api_is_session_admin() && api_get_configuration_value('limit_session_admin_list_users'))
+            ) {
+                //we want to add more. Prepare report message and redirect to the same page (to clean the form)
+                header('Location: user_add.php?sec_token='.$tok);
+                exit;
+            } else {
+                $tok = Security::get_token();
+                header('Location: user_list.php?sec_token='.$tok);
+                exit;
+            }
         }
     }
-} else {
+}
+
+if (!$formValid) {
     if (isset($_POST['submit'])) {
         Security::clear_token();
     }

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-05-27 08:08+0000\n"
+"PO-Revision-Date: 2024-05-28 21:11+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Spanish <https://translation.chamilo.org/projects/chamilo/"
 "messages/es/>\n"
@@ -26795,3 +26795,270 @@ msgstr ""
 
 msgid "Use test settings for grades display"
 msgstr "Utilice la configuración de ejercicios para mostrar las calificaciones"
+
+msgid "Learning paths subscription settings"
+msgstr "Configuración de suscripción a lecciones"
+
+msgid "Disable JS files that Chamilo usually adds to HTML files in the learning path (while displaying them)."
+msgstr ""
+"Desactivar los archivos JS que Chamilo suele añadir a los archivos HTML en "
+"la lección (mientras se muestran)."
+
+msgid "Hide 'My learning paths' page"
+msgstr "Ocultar la página 'Mis lecciones'"
+
+msgid "Add a minimum time field to learning paths. If the user has not spent that much time on the learning path, the last item of the learning path cannot be completed."
+msgstr ""
+"Agregar un campo de tiempo mínimo a las lecciones. Si el usuario no ha "
+"pasado ese tiempo en la lección, no se puede completar el último elemento de "
+"la lección."
+
+msgid "Set this to 'left' or 'right' to change the side of the learning path menu."
+msgstr ""
+"Establezca esto en 'left' (izquierda) o 'right' (derecha) para cambiar el "
+"lado del menú de la lección."
+
+msgid "Minimum time to complete learning path"
+msgstr "Tiempo mínimo para completar la lección"
+
+msgid "Export learning paths in the Chamilo backup format"
+msgstr "Exportar lecciones en el formato de exportación de cursos de Chamilo"
+
+msgid "Display tests from learning paths even if invisible"
+msgstr "Mostrar ejercicios de lecciones incluso si están ocultos"
+
+msgid "Use username as student_id in SCORM communication"
+msgstr "Usar el nombre de usuario como student_id en la comunicación SCORM"
+
+msgid "Foldable learning paths' categories"
+msgstr "Categorías de lecciones plegables"
+
+msgid "Normally, all .htaccess files are filtered and removed when importing content in Chamilo. This feature allows .htaccess to be imported if it is present in a SCORM package."
+msgstr ""
+"Normalmente, todos los archivos .htaccess se filtran y eliminan al importar "
+"contenido en la plataforma. Esta función permite que se importe .htaccess si "
+"está presente en un paquete SCORM."
+
+msgid "Hide requirements label in learning paths"
+msgstr "Ocultar etiqueta de requisitos en lecciones"
+
+msgid "Show hidden exercises that were added to a LP in the exercise list. If we are in a session, the test is invisible in the base course, it is included in a LP and the setting to show it is not specifically set to true, then hide it."
+msgstr ""
+"Mostrar ejercicios ocultos que se agregaron a una lección en la lista de "
+"ejercicios. Si estamos en una sesión, el ejercicio es invisible en el curso "
+"base, está incluido en una lección y la configuración para mostrarlo no está "
+"específicamente establecida, entonces ocultarlo."
+
+msgid "SCORM import within course import"
+msgstr "Importación de SCORM dentro de la importación del curso"
+
+msgid "Hide time from learning paths records"
+msgstr "Ocultar el tiempo de los registros de lecciones"
+
+msgid "Use learning path score as progress"
+msgstr "Utilizar la puntuación de la lección como progreso"
+
+msgid "Hide learning paths time spent in reports in general."
+msgstr "Ocultar el tiempo dedicado en lecciones de los informes en general."
+
+msgid "Use extra field as student_id in SCORM communication"
+msgstr "Usar el campo de perfil como student_id en la comunicación SCORM"
+
+msgid "Learning path menu location"
+msgstr "Ubicación del menú de lección"
+
+msgid "Teachers can access blocked learning paths"
+msgstr "Los profesores pueden acceder a lecciones bloqueadas"
+
+msgid "Export all files when exporting a learning path"
+msgstr "Exportar todos los archivos al exportar una lección"
+
+msgid "Learning path's prerequisites"
+msgstr "Pre-requisitos de la lección"
+
+msgid "Learning paths categories can be managed in sessions"
+msgstr "Las categorías de lecciones pueden gestionarse en sesiones"
+
+msgid "Disable JS in learning paths view"
+msgstr "Desactivar JS en la vista de lecciones"
+
+msgid "Configure additional options for the learning paths subscription feature. Options include 'allow_add_users_to_lp' and 'allow_add_users_to_lp_category'."
+msgstr ""
+"Configure opciones adicionales para la función de suscripción a lecciones. "
+"Las opciones incluyen 'allow_add_users_to_lp' y "
+"'allow_add_users_to_lp_category'."
+
+msgid "Add learning paths and tests info to ticket reporting"
+msgstr "Añadir información de lecciones y ejercicios al reporte de tickets"
+
+msgid "When exporting a LP, all files and folders in the same path of an html will be exported too."
+msgstr ""
+"Al exportar una lección, todos los archivos y carpetas en la misma ruta de "
+"un html también serán exportados."
+
+msgid "Use learning path item status from other sessions"
+msgstr "Utilizar estado del ítem de lección de otras sesiones"
+
+msgid "Allow users to complete prerequisites in a learning path if the corresponding item was already completed in another session."
+msgstr ""
+"Permitir a los usuarios completar los requisitos previos en una lección si "
+"el elemento correspondiente ya se completó en otra sesión."
+
+#, fuzzy
+msgid "The page 'My learning path' was added in 1.11. Use this option to hide it."
+msgstr ""
+"La página 'Mis lecciones' se añadió en la 1.11. Active esta opción para "
+"ocultarla."
+
+msgid "On the learning paths lists, display a visual element to show that other learning paths are currently blocked by some prerequisites rule."
+msgstr ""
+"En las listas de lecciones, mostrar un elemento visual para indicar que "
+"otras lecciones están actualmente bloqueadas por alguna regla de requisitos "
+"previos."
+
+msgid "This helps with browser compatibility by preventing tricky JS events to execute."
+msgstr ""
+"Esto ayuda con la compatibilidad del navegador al evitar la ejecución de "
+"eventos JS complicados."
+
+msgid "Enable the possibility to export any of your learning paths in a Chamilo course backup format."
+msgstr ""
+"Habilitar la posibilidad de exportar cualquiera de sus lecciones en un "
+"formato de copia de seguridad de curso de Chamilo."
+
+msgid "Enable to allow users to fold the categories in the learning paths list."
+msgstr ""
+"Habilitar para permitir a los usuarios contraer las categorías en la lista "
+"de lecciones."
+
+msgid "Prevent beforeunload JS event in learning path"
+msgstr "Evitar el evento JS beforeunload en la lección"
+
+msgid "Teachers do not need to pass complete learning paths to have access to a prerequisites-blocked learning path."
+msgstr ""
+"Los profesores no necesitan completar lecciones completas para tener acceso "
+"a una lección con bloqueo por requisitos previos."
+
+msgid "Allow .htaccess from SCORM packages"
+msgstr "Permitir .htaccess de paquetes SCORM"
+
+msgid "Hide the pre-requisites tooltip on learning path items. This is mostly an estaethic choice."
+msgstr ""
+"Ocultar el tooltip de requisitos previos en los elementos de la lección. "
+"Esto es principalmente una elección estética."
+
+msgid "Enable to copy the directory structure of SCORM packages when restoring a course (from the course maintenance tool)."
+msgstr ""
+"Habilitar para copiar la estructura de directorios de paquetes SCORM al "
+"restaurar un curso (desde la herramienta de mantenimiento del curso)."
+
+msgid "This is useful when using SCORM content with only one large SCO. SCORM does not communicate progress, so this is a trick to use the score as progress. Enabling this option will let you configure this on a per-learning path basis."
+msgstr ""
+"Esto es útil al usar contenido SCORM con un único SCO grande. SCORM no "
+"comunica el progreso, por lo que este truco se puede usar para poner la "
+"puntuación como progreso. Habilitar esta opción le permitirá configurar esto "
+"para cada lección individualmente."
+
+msgid "Give the name of the extra field to be used as student_id for all SCORM communication."
+msgstr ""
+"Indique el nombre del campo adicional que se utilizará como student_id para "
+"toda la comunicación SCORM."
+
+msgid "Foldable learning paths' items"
+msgstr "Elementos de lección plegables"
+
+msgid "Display link to learning path on course home when invisible"
+msgstr ""
+"Mostrar enlace a la lección en la página principal del curso cuando esté "
+"oculto"
+
+msgid "Show max progress instead of average for learning paths reporting"
+msgstr ""
+"Mostrar el progreso máximo en lugar del promedio en los informes de lecciones"
+
+msgid "Enable editing tests even if they have been included in a learning path. The default is to prevent edition if the test is in a learning path, because that can affect consistency of tracking among many learners if test modifications are significant."
+msgstr ""
+"Permitir la edición de ejercicios incluso si han sido incluidos en una "
+"lección. La configuración predeterminada es evitar la edición si el "
+"ejercicio está en una lección, porque eso puede afectar la consistencia del "
+"seguimiento entre muchos alumnos si las modificaciones del ejercicio son "
+"significativas."
+
+msgid "Download button after finishing learning paths"
+msgstr "Botón de descarga después de completar lecciones"
+
+msgid "Show download files button after finishing all LP. Example: if ABC is the course code, and 1 and 100 are the doc id, choose: ['courses' => ['ABC' => [1, 100]]]."
+msgstr ""
+"Mostrar botón de descarga de archivos después de finalizar todas las "
+"lecciones. Ejemplo: si ABC es el código del curso, y 1 y 100 son los ids de "
+"documento, elija: ['courses' => ['ABC' => [1, 100]]]."
+
+msgid "Select max progress vs average for learning paths at course level"
+msgstr ""
+"Seleccione el progreso máximo vs el promedio para lecciones a nivel de curso"
+
+msgid "This adds an 'unlocked' column in the learning paths list if the learner is subscribed to the given learning path and has access to it."
+msgstr ""
+"Esto añade una columna 'desbloqueado' en la lista de lecciones si el alumno "
+"está suscrito a la lección correspondiente y tiene acceso a ella."
+
+msgid "Edition of tests included in learning paths"
+msgstr "Edición de ejercicios incluidos en lecciones"
+
+msgid "Fixed encoding in learning path"
+msgstr "Codificación fija en las lecciones"
+
+msgid "Display tests in list of learning path tests even if invisible"
+msgstr ""
+"Muestre ejercicios en la lista de ejercicios de la lección incluso si están "
+"invisibles"
+
+msgid "When a test is used as prerequisite for an item in the learning path, use the last attempt of the test only as validation for the prerequisite (default is to use best attempt)."
+msgstr ""
+"Cuando un ejercicio se utiliza como requisito previo para un elemento de una "
+"lección, utilizar únicamente el último intento del ejercicio como validación "
+"para el requisito previo (por defecto se utiliza el mejor intento)."
+
+msgid "Enable subscription to learning paths and learning path categories to groups/classes."
+msgstr ""
+"Habilite la suscripción a lecciones y categorías de lecciones para grupos/"
+"clases."
+
+msgid "Learning path display settings"
+msgstr "Configuración de visualización de la lección"
+
+msgid "Use last score in learning path test prerequisites"
+msgstr ""
+"Utilice la última puntuación en los requisitos previos del ejercicio en "
+"lecciones"
+
+msgid "Learners can export learning paths"
+msgstr "Los alumnos pueden exportar lecciones"
+
+msgid "Reduce resource usage by ignoring a check on the text encoding in imported learning paths."
+msgstr ""
+"Reducir el uso de recursos ignorando la verificación de la codificación de "
+"texto en lecciones importadas."
+
+msgid "Enable this to allow learners to download the learning paths as SCORM packages."
+msgstr ""
+"Activar para permitir que los alumnos descarguen las lecciones como paquetes "
+"SCORM."
+
+msgid "Learning paths subscription for classes"
+msgstr "Suscripción a lecciones para clases"
+
+msgid "Unlocked information in learning paths list"
+msgstr "Información desbloqueada en la lista de lecciones"
+
+msgid "Enable redefinition of the setting to show the best progress instead of averages in reporting of learnpaths at a course level."
+msgstr ""
+"Habilitar la redefinición de la configuración para mostrar el mejor progreso "
+"en lugar de promedios en los informes de lecciones a nivel de curso."
+
+msgid "Configure additional options for the learning paths display. Options include 'show_reporting_icon', 'hide_lp_arrow_navigation', 'show_toolbar_by_default', 'navigation_in_the_middle' and 'add_extra_quit_to_home_icon'."
+msgstr ""
+"Configure opciones adicionales para la visualización de lecciones. Las "
+"opciones incluyen 'show_reporting_icon', 'hide_lp_arrow_navigation', "
+"'show_toolbar_by_default', 'navigation_in_the_middle' y "
+"'add_extra_quit_to_home_icon'."

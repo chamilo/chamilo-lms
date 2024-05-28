@@ -48,10 +48,21 @@ if (empty($_GET['state']) || ($_GET['state'] !== ChamiloSession::read('oauth2sta
 }
 
 // Try to get an access token (using the authorization code grant)
-$token = $provider->getAccessToken('authorization_code', [
-    'code' => $_GET['code'],
-    'resource' => 'https://graph.windows.net',
-]);
+try {
+    $token = $provider->getAccessToken('authorization_code', [
+        'code' => $_GET['code'],
+        'resource' => 'https://graph.windows.net',
+    ]);
+} catch (Exception $exception) {
+    if ($exception->getMessage() == 'interaction_required') {
+        $message = Display::return_message($plugin->get_lang('additional_interaction_required'), 'error', false);
+    } else {
+        $message = Display::return_message($exception->getMessage(), 'error');
+    }
+    Display::addFlash($message);
+    header('Location: '.api_get_path(WEB_PATH));
+    exit;
+}
 
 $me = null;
 

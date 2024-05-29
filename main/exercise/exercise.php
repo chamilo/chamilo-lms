@@ -266,6 +266,18 @@ if (!empty($action) && $is_allowedToEdit) {
                         break;
                     }
 
+                    $visibleOnBaseCourse = api_get_item_visibility(
+                        $courseInfo,
+                        TOOL_QUIZ,
+                        $objExerciseTmp->iid,
+                        0
+                    );
+
+                    if (!$visibleOnBaseCourse) {
+                        Display::addFlash(Display::return_message(get_lang('CanNotHide') . ' ' . $objExerciseTmp->name, 'error'));
+                        break;
+                    }
+
                     // enables an exercise
                     if (empty($sessionId)) {
                         $objExerciseTmp->enable();

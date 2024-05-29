@@ -3629,17 +3629,9 @@ class Exercise
             $nbrAnswers = 1;
         }
 
-        $generatedFiles = [];
-        if ($answerType == ORAL_EXPRESSION) {
-            $generatedFiles = ExerciseLib::getOralFileAudio($exeId, $questionId, true);
-        }
-
-
         $generatedFilesHtml = '';
-        if (!empty($generatedFiles)) {
-            foreach ($generatedFiles as $fileUrl) {
-                $generatedFilesHtml .= '<a href="'.$fileUrl.'">'.$fileUrl.'</a><br />';
-            }
+        if ($answerType == ORAL_EXPRESSION) {
+            $generatedFilesHtml = ExerciseLib::getOralFileAudio($exeId, $questionId);
         }
 
         $user_answer = '';

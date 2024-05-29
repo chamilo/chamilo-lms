@@ -68,5 +68,5 @@ const { t } = useI18n()
 
 const item = computed(() => props.initialValues || props.values)
 
-const onUploadSuccess = (resource) => attachments.value.push(resource)
+const onUploadSuccess = ({ response }) => attachments.value.push(response)
 </script>

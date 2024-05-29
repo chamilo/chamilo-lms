@@ -61,8 +61,8 @@ const uppy = new Uppy({
   .use(Webcam)
   .use(Audio)
   .on("upload", ({ id, fileIDs }) => emit("upload", { id, fileIDs }))
-  .on("upload-success", (item, response) => emit("upload-success", response.body))
-  .on("complete", () => emit("complete"))
+  .on("upload-success", (file, { body }) => emit("upload-success", { file, response: body }))
+  .on("complete", ({ successful, failed }) => emit("complete", { successful, failed }))
 </script>
 
 <template>

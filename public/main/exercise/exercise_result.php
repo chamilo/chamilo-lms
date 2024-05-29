@@ -266,7 +266,7 @@ ExerciseLib::exercise_time_control_delete(
 ExerciseLib::delete_chat_exercise_session($exeId);
 
 if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
-    $pageBottom .= '<div class="question-return">';
+    $pageBottom .= '<div class="question-return mb-4">';
     $pageBottom .= Display::url(
         get_lang('Return to Course Homepage'),
         api_get_course_url(),

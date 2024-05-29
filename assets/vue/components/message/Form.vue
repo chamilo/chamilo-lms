@@ -10,42 +10,40 @@
       <slot></slot>
     </div>
 
-    <div>
-      <div v-if="attachments && attachments.length > 0">
-        <div
-          v-t="'Attachments'"
-          class="text-h6"
+    <div class="space-y-4">
+      <p class="text-h6">
+        <BaseIcon icon="attachment" />
+        {{ t("Attachments") }}
+      </p>
+
+      <ul
+        v-if="attachments && attachments.length > 0"
+        class="space-y-2"
+      >
+        <li
+          v-for="(attachment, index) in attachments"
+          :key="index"
+          class="text-body-2"
+          v-text="attachment.originalName"
         />
+      </ul>
 
-        <ul>
-          <li
-            v-for="(attachment, index) in attachments"
-            :key="index"
-            class="my-2"
-          >
-            <audio
-              v-if="attachment.type.indexOf('audio') === 0"
-              class="max-w-full"
-              controls
-            >
-              <source :src="window.URL.createObjectURL(attachment)" />
-            </audio>
-          </li>
-        </ul>
-
-        <hr />
-      </div>
-
-      <AudioRecorder @attach-audio="attachAudios" />
+      <BaseUploader
+        field-name="file"
+        :endpoint="resourceFileService.endpoint"
+        @upload-success="onUploadSuccess"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import AudioRecorder from "../AudioRecorder"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import { useI18n } from "vue-i18n"
 import { computed } from "vue"
+import BaseIcon from "../basecomponents/BaseIcon.vue"
+import BaseUploader from "../basecomponents/BaseUploader.vue"
+import resourceFileService from "../../services/resourceFileService"
 
 const attachments = defineModel("attachments", {
   type: Array,
@@ -70,5 +68,5 @@ const { t } = useI18n()
 
 const item = computed(() => props.initialValues || props.values)
 
-const attachAudios = (audio) => attachments.value.push(audio)
+const onUploadSuccess = (resource) => attachments.value.push(resource)
 </script>

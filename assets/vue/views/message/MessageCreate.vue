@@ -91,6 +91,7 @@ const item = ref({
   msgType: MESSAGE_TYPE_INBOX,
   title: "",
   content: "",
+  attachments: [],
 })
 
 const attachments = ref([])
@@ -127,6 +128,10 @@ const onSubmit = async () => {
   if (!canSubmitMessage.value) {
     return
   }
+
+  item.value.attachments = attachments.value.map((attachment) => ({
+    resourceFileToAttach: attachment["@id"],
+  }))
   item.value.receivers = [...receiversTo.value, ...receiversCc.value]
   isLoading.value = true
 

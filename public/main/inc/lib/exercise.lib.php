@@ -5138,10 +5138,10 @@ EOT;
             return $returnUrls ? [] : '';
         }
 
+        $basePath = rtrim(api_get_path(WEB_PATH), '/');
         $assetRepo = Container::getAssetRepository();
 
         if ($returnUrls) {
-            $basePath = rtrim(api_get_path(WEB_PATH), '/');
             $urls = [];
             foreach ($questionAttempt->getAttemptFiles() as $attemptFile) {
                 $urls[] = $basePath.$assetRepo->getAssetUrl($attemptFile->getAsset());
@@ -5155,7 +5155,7 @@ EOT;
                     'audio',
                     '',
                     [
-                        'src' => $assetRepo->getAssetUrl($attemptFile->getAsset()),
+                        'src' => $basePath.$assetRepo->getAssetUrl($attemptFile->getAsset()),
                         'controls' => '',
                     ]
                 );

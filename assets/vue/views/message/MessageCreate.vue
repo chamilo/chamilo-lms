@@ -66,7 +66,6 @@ import { capitalize } from "lodash"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import { useSecurityStore } from "../../store/securityStore"
 import { messageService } from "../../services/message"
-import messageAttachmentService from "../../services/messageattachment"
 import MessageCommunicationParty from "./MessageCommunicationParty.vue"
 import { MESSAGE_REL_USER_TYPE_CC, MESSAGE_REL_USER_TYPE_TO } from "../../constants/entity/messagereluser"
 
@@ -132,16 +131,7 @@ const onSubmit = async () => {
   isLoading.value = true
 
   try {
-    const message = await messageService.create(item.value)
-
-    if (attachments.value.length > 0) {
-      for (const attachment of attachments.value) {
-        await messageAttachmentService.createWithFormData({
-          messageId: message.id,
-          file: attachment,
-        })
-      }
-    }
+    await messageService.create(item.value)
   } catch (error) {
     notification.showErrorNotification(error)
   } finally {

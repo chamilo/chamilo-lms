@@ -1801,7 +1801,7 @@ function get_forums(
                         forum.c_id = $course_id AND
                         item_properties.c_id = $course_id
                         $includeGroupsForumSelect
-                    ORDER BY forum_order ASC";
+                    ORDER BY forum.forum_order ASC";
 
             // Select the number of threads of the forums (only the threads that are not deleted).
             $sql2 = "SELECT count(*) AS number_of_threads, threads.forum_id

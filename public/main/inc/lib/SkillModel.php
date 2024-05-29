@@ -1798,7 +1798,7 @@ class SkillModel extends Model
         // This procedure is for check if there is already a Skill with no Parent (Root by default)
         $gradeBookList = [];
         foreach ($allGradeBooks as $gradebook) {
-            $gradeBookList[$gradebook['id']] = $gradebook['name'];
+            $gradeBookList[$gradebook['id']] = $gradebook['title'];
         }
 
         $translateUrl = api_get_path(WEB_CODE_PATH).'skills/skill_translate.php?';
@@ -1823,7 +1823,7 @@ class SkillModel extends Model
             );
         }
 
-        $form->addText('name', [get_lang('Name'), $translateNameButton], true, ['id' => 'name']);
+        $form->addText('title', [get_lang('Name'), $translateNameButton], true, ['id' => 'title']);
         $form->addText('short_code', [get_lang('Short code'), $translateCodeButton], false, ['id' => 'short_code']);
 
         // Cannot change parent of root

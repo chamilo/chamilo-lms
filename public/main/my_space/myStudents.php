@@ -365,7 +365,7 @@ switch ($action) {
 
                     $courseTable .= '<tr>
                         <td>
-                            <a href="'.api_get_course_url($courseId).'?sid='.$sId.'">'.
+                            <a href="'.api_get_course_url($courseId, $sId).'">'.
                         $course->getTitle().'</a>
                         </td>
                         <td >'.$time_spent_on_course.'</td>
@@ -1418,7 +1418,7 @@ if (empty($details)) {
 
                     echo '<tr>
                     <td>
-                        <a href="'.api_get_course_url($courseId).'?sid='.$sId.'">'.
+                        <a href="'.api_get_course_url($courseId, $sId).'">'.
                         $course->getTitle().'
                         </a>
                     </td>

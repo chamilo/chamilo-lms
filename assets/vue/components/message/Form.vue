@@ -64,6 +64,8 @@
         field-name="file"
         :endpoint="resourceFileService.endpoint"
         @upload-success="onUploadSuccess"
+        @upload="onUpload"
+        @complete="onUploadComplete"
       />
     </div>
   </div>
@@ -188,11 +190,22 @@ function onUploadSuccess({ response }) {
   resourceFileList.value.push(response)
 }
 
+const isUploading = ref(false)
+
+function onUpload() {
+  isUploading.value = true
+}
+
+function onUploadComplete() {
+  isUploading.value = false
+}
+
 const canSubmitMessage = computed(() => {
   return (
     (usersTo.value.length > 0 || usersCc.value.length > 0) &&
     messagePayload.value.title.trim() !== "" &&
-    messagePayload.value.content.trim() !== ""
+    messagePayload.value.content.trim() !== "" &&
+    !isUploading.value
   )
 })
 

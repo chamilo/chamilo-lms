@@ -12,6 +12,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\BodyRendererInterface;
+use Symfony\Component\Mime\Part\DataPart;
 
 final class MailHelper
 {
@@ -76,6 +77,10 @@ final class MailHelper
                 foreach ($data_file as $file_attach) {
                     if (!empty($file_attach['path']) && !empty($file_attach['filename'])) {
                         $templatedEmail->attachFromPath($file_attach['path'], $file_attach['filename']);
+                    }
+
+                    if (!empty($file_attach['stream']) && !empty($file_attach['filename'])) {
+                        $templatedEmail->addPart(new DataPart($file_attach['stream'], $file_attach['filename']));
                     }
                 }
             }

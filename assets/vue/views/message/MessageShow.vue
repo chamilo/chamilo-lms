@@ -110,29 +110,28 @@
           <p class="m-3">{{ item.attachments.length }} {{ $t("Attachments") }}</p>
         </template>
 
-        <div
-          class="q-gutter-y-sm q-gutter-x-sm row"
-        >
-          <div
+        <ul class="space-y-2">
+          <li
             v-for="(attachment, index) in item.attachments"
             :key="index"
           >
-            <div v-if="attachment.resourceNode.resourceFile.audio">
-              <audio controls>
-                <source :src="attachment.downloadUrl" />
-              </audio>
-            </div>
+            <audio
+              v-if="attachment.resourceNode.resourceFile.audio"
+              controls
+            >
+              <source :src="attachment.downloadUrl" />
+            </audio>
 
-            <BaseButton
+            <a
               v-else
               :href="attachment.downloadUrl"
-              icon="attachment"
-              type="primary"
+              class="btn btn--plain"
             >
+              <BaseIcon icon="attachment" />
               {{ attachment.resourceNode.resourceFile.originalName }}
-            </BaseButton>
-          </div>
-        </div>
+            </a>
+          </li>
+        </ul>
       </BaseCard>
     </template>
     <Loading :visible="isLoading" />
@@ -156,6 +155,7 @@ import messageTagService from "../../services/messageTagService"
 import { useSecurityStore } from "../../store/securityStore"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import MessageCommunicationParty from "./MessageCommunicationParty.vue"
+import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 
 const confirm = useConfirm()
 const { t } = useI18n()

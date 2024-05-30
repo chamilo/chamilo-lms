@@ -59,6 +59,7 @@ if (false === $visibility &&
 }
 
 $lp_item_id = $oLP->get_current_item_id();
+$lpCurrentItemId = isset($_GET['lp_item_id']) ? (int) $_GET['lp_item_id'] : $oLP->get_current_item_id();
 $lpType = $lp->getLpType();
 
 if (!api_is_allowed_to_edit(null, true)) {
@@ -191,7 +192,7 @@ $get_teacher_buttons = $oLP->get_teacher_toc_buttons();
 $itemType = '';
 $type_quiz = false;
 foreach ($get_toc_list as $toc) {
-    if ($toc['id'] == $lp_item_id) {
+    if ($toc['id'] == $lpCurrentItemId) {
         $itemType = $toc['type'];
         $type_quiz = 'quiz' === $toc['type'];
     }
@@ -536,7 +537,7 @@ if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id()
 $template->assign('lp_accumulate_work_time', $lpMinTime);
 $template->assign('lp_mode', $lp->getDefaultViewMod());
 $template->assign('lp_title_scorm', stripslashes($lp->getTitle()));
-$template->assign('lp_item_parents', $oLP->getCurrentItemParentNames($oLP->get_current_item_id()));
+$template->assign('lp_item_parents', $oLP->getCurrentItemParentNames($lpCurrentItemId));
 
 // @todo Fix lp_view_accordion
 /*if ('true' === api_get_setting('lp.lp_view_accordion') && 1 == $lpType) {

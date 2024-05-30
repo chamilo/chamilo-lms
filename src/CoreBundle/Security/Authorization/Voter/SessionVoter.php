@@ -158,7 +158,7 @@ class SessionVoter extends Voter
         }
 
         $criteria = Criteria::create()->where(
-            Criteria::expr()->eq('session', $session)
+            Criteria::expr()->eq('sessionId', $session->getId())
         );
 
         /** @var TrackECourseAccess|null $trackECourseAccess */

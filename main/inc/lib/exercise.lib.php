@@ -2228,7 +2228,8 @@ HOTSPOT;
         $searchAllTeacherCourses = false,
         $status = 0,
         $showAttemptsInSessions = false,
-        $questionType = 0
+        $questionType = 0,
+        $originPending = false
     ) {
         return self::get_exam_results_data(
             null,
@@ -2248,7 +2249,8 @@ HOTSPOT;
             $searchAllTeacherCourses,
             $status,
             $showAttemptsInSessions,
-            $questionType
+            $questionType,
+            $originPending
         );
     }
 
@@ -2537,7 +2539,8 @@ HOTSPOT;
         $searchAllTeacherCourses = false,
         $status = 0,
         $showAttemptsInSessions = false,
-        $questionType = 0
+        $questionType = 0,
+        $originPending = false
     ) {
         //@todo replace all this globals
         global $filter;
@@ -2636,13 +2639,6 @@ HOTSPOT;
             $sessionCondition = " AND ttte.session_id = 0";
         }
 
-        if (empty($sessionId) &&
-            api_get_configuration_value('show_exercise_session_attempts_in_base_course')
-        ) {
-            $session_id_and = '';
-            $sessionCondition = '';
-        }
-
         if ($showAttemptsInSessions) {
             $sessions = SessionManager::get_sessions_by_general_coach(api_get_user_id());
             if (!empty($sessions)) {
@@ -2652,9 +2648,24 @@ HOTSPOT;
                 }
                 $session_id_and = " AND te.session_id IN(".implode(',', $sessionIds).")";
                 $sessionCondition = " AND ttte.session_id IN(".implode(',', $sessionIds).")";
+            } elseif (empty($sessionId) &&
+                api_get_configuration_value('show_exercise_session_attempts_in_base_course')
+            ) {
+                $session_id_and = '';
+                $sessionCondition = '';
             } else {
                 return false;
             }
+        } elseif (empty($sessionId) &&
+            api_get_configuration_value('show_exercise_session_attempts_in_base_course')
+        ) {
+            $session_id_and = '';
+            $sessionCondition = '';
+        }
+
+        if (api_is_platform_admin() && $originPending) {
+            $session_id_and = '';
+            $sessionCondition = '';
         }
 
         $exercise_where = '';

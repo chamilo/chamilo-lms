@@ -32,7 +32,7 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
     /**
      * @throws Exception
      */
-    public function provide(Operation $operation, array $uriVariables = [], array $context = [])
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
     {
         $user = $this->userRepository->find($uriVariables['id']);
 
@@ -49,12 +49,10 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
             throw new AccessDeniedException();
         }
 
-        $qb = match ($operation->getName()) {
-            'user_session_subscriptions_past' => $this->sessionRepository->getPastSessionsByUser($user, $url),
-            'user_session_subscriptions_current' => $this->sessionRepository->getCurrentSessionsByUser($user, $url),
-            'user_session_subscriptions_upcoming' => $this->sessionRepository->getUpcomingSessionsByUser($user, $url),
+        return match ($operation->getName()) {
+            'user_session_subscriptions_past' => $this->sessionRepository->getPastSessionsWithDatesForUser($user, $url),
+            'user_session_subscriptions_current' => $this->sessionRepository->getCurrentSessionsWithDatesForUser($user, $url),
+            'user_session_subscriptions_upcoming' => $this->sessionRepository->getUpcomingSessionsWithDatesForUser($user, $url),
         };
-
-        return $qb->getQuery()->getResult();
     }
 }

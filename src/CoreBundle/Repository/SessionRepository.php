@@ -81,9 +81,11 @@ class SessionRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return array<int, Session>
+     *
      * @throws Exception
      */
-    public function getPastSessionsByUser(User $user, AccessUrl $url): QueryBuilder
+    public function getPastSessionsWithDatesForUser(User $user, AccessUrl $url): array
     {
         $now = new DateTime('now', new DateTimeZone('UTC'));
 
@@ -98,13 +100,15 @@ class SessionRepository extends ServiceEntityRepository
             ->setParameter('now', $now)
         ;
 
-        return $qb;
+        return $qb->getQuery()->getResult();
     }
 
     /**
+     * @return array<int, Session>
+     *
      * @throws Exception
      */
-    public function getCurrentSessionsByUser(User $user, AccessUrl $url): QueryBuilder
+    public function getCurrentSessionsWithDatesForUser(User $user, AccessUrl $url): array
     {
         $now = new DateTime('now', new DateTimeZone('UTC'));
 
@@ -112,6 +116,14 @@ class SessionRepository extends ServiceEntityRepository
         $qb
             ->andWhere(
                 $qb->expr()->orX(
+                    $qb->expr()->andX(
+                        $qb->expr()->isNull('s.accessStartDate'),
+                        $qb->expr()->isNull('s.accessEndDate'),
+                        $qb->expr()->orX(
+                            $qb->expr()->eq('s.duration', 0),
+                            $qb->expr()->isNull('s.duration')
+                        )
+                    ),
                     $qb->expr()->andX(
                         $qb->expr()->isNotNull('s.accessStartDate'),
                         $qb->expr()->isNull('s.accessEndDate'),
@@ -133,13 +145,15 @@ class SessionRepository extends ServiceEntityRepository
             ->setParameter('now', $now)
         ;
 
-        return $qb;
+        return $qb->getQuery()->getResult();
     }
 
     /**
+     * @return array<int, Session>
+     *
      * @throws Exception
      */
-    public function getUpcomingSessionsByUser(User $user, AccessUrl $url): QueryBuilder
+    public function getUpcomingSessionsWithDatesForUser(User $user, AccessUrl $url): array
     {
         $now = new DateTime('now', new DateTimeZone('UTC'));
 
@@ -154,7 +168,7 @@ class SessionRepository extends ServiceEntityRepository
             ->setParameter('now', $now)
         ;
 
-        return $qb;
+        return $qb->getQuery()->getResult();
     }
 
     public function addUserInCourse(int $relationType, User $user, Course $course, Session $session): void

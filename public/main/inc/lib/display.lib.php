@@ -2667,6 +2667,11 @@ class Display
         string $itemType = '',
         string $jsConditionalFunction = 'function () { return false; }'
     ): string {
+
+        if (in_array($itemType, ['link', 'sco', 'xapi', 'quiz', 'h5p', 'forum'])) {
+            return false;
+        }
+
         $colorThemeRepo = Container::$container->get(ColorThemeRepository::class);
         $router = Container::getRouter();
 

@@ -156,7 +156,7 @@ switch ($action) {
 $lpId = (int) $track_exercise_info['orig_lp_id'];
 $lpItemId = (int) $track_exercise_info['orig_lp_item_id'];
 $lpViewId = (int) $track_exercise_info['orig_lp_item_view_id'];
-$pageBottom = '<div class="question-return">';
+$pageBottom = '<div class="question-return mb-4">';
 $pageBottom .= Display::url(
     get_lang('Back to the attempt list'),
     api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$exercise_id.'&'.api_get_cidreq().

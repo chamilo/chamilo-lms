@@ -687,7 +687,8 @@ switch ($action) {
             true,
             $status,
             $showAttemptsInSessions,
-            $questionType
+            $questionType,
+            true
         );
 
         break;
@@ -1625,7 +1626,8 @@ switch ($action) {
             true,
             $status,
             $showAttemptsInSessions,
-            $questionType
+            $questionType,
+            true
         );
 
         break;

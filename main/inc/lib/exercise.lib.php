@@ -2228,7 +2228,8 @@ HOTSPOT;
         $searchAllTeacherCourses = false,
         $status = 0,
         $showAttemptsInSessions = false,
-        $questionType = 0
+        $questionType = 0,
+        $originPending = false
     ) {
         return self::get_exam_results_data(
             null,
@@ -2248,7 +2249,8 @@ HOTSPOT;
             $searchAllTeacherCourses,
             $status,
             $showAttemptsInSessions,
-            $questionType
+            $questionType,
+            $originPending
         );
     }
 
@@ -2537,7 +2539,8 @@ HOTSPOT;
         $searchAllTeacherCourses = false,
         $status = 0,
         $showAttemptsInSessions = false,
-        $questionType = 0
+        $questionType = 0,
+        $originPending = false
     ) {
         //@todo replace all this globals
         global $filter;
@@ -2623,6 +2626,12 @@ HOTSPOT;
         $TBL_TRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $TBL_TRACK_HOTPOTATOES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
         $TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+        $TBL_ACCESS_URL_REL_SESSION = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $TBL_ACCESS_URL_REL_USER = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+
+        $currentUrl = api_get_current_access_url_id();
+        $te_access_url_session_filter = " te.session_id in (select session_id from $TBL_ACCESS_URL_REL_SESSION where access_url_id = $currentUrl)";
+        $te_access_url_user_filter = " te.exe_user_id in (select user_id from $TBL_ACCESS_URL_REL_USER where access_url_id = $currentUrl)";
 
         $session_id_and = '';
         $sessionCondition = '';
@@ -2636,13 +2645,6 @@ HOTSPOT;
             $sessionCondition = " AND ttte.session_id = 0";
         }
 
-        if (empty($sessionId) &&
-            api_get_configuration_value('show_exercise_session_attempts_in_base_course')
-        ) {
-            $session_id_and = '';
-            $sessionCondition = '';
-        }
-
         if ($showAttemptsInSessions) {
             $sessions = SessionManager::get_sessions_by_general_coach(api_get_user_id());
             if (!empty($sessions)) {
@@ -2650,11 +2652,26 @@ HOTSPOT;
                 foreach ($sessions as $session) {
                     $sessionIds[] = $session['id'];
                 }
-                $session_id_and = " AND te.session_id IN(".implode(',', $sessionIds).")";
+                $session_id_and = " AND te.session_id IN(".implode(',', $sessionIds).") AND $te_access_url_session_filter";
                 $sessionCondition = " AND ttte.session_id IN(".implode(',', $sessionIds).")";
+            } elseif (empty($sessionId) &&
+                api_get_configuration_value('show_exercise_session_attempts_in_base_course')
+            ) {
+                $session_id_and = " AND (te.session_id = 0 OR $te_access_url_session_filter)";
+                $sessionCondition = "";
             } else {
                 return false;
             }
+        } elseif (empty($sessionId) &&
+            api_get_configuration_value('show_exercise_session_attempts_in_base_course')
+        ) {
+            $session_id_and = " AND (te.session_id = 0 OR $te_access_url_session_filter)";
+            $sessionCondition = "";
+        }
+
+        if (api_is_platform_admin() && $originPending) {
+            $session_id_and = " AND (te.session_id = 0 OR $te_access_url_session_filter)";
+            $sessionCondition = "";
         }
 
         $exercise_where = '';
@@ -2834,6 +2851,7 @@ HOTSPOT;
                 WHERE
                     te.$courseCondition
                     $session_id_and AND
+                    $te_access_url_user_filter AND
                     ce.active <> -1 AND
                     ce.$courseCondition
                     $exercise_where

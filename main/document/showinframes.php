@@ -383,10 +383,11 @@ if (($execute_iframe || $show_web_odf) && !$isChatFolder) {
         );
 
         if (false === $show_web_odf) {
+            $secToken = Security::get_token();
             $actionsLeft .= Display::url(
                 Display::return_icon('pdf.png', get_lang('Export2PDF'), [], ICON_SIZE_MEDIUM),
                 api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(
-                ).'&action=export_to_pdf&id='.$document_id
+                ).'&action=export_to_pdf&id='.$document_id.'&sec_token='.$secToken
             );
         }
     }

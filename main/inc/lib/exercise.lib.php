@@ -2626,6 +2626,7 @@ HOTSPOT;
         $TBL_TRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $TBL_TRACK_HOTPOTATOES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
         $TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+        $TBL_ACCESS_URL_REL_SESSION = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
         $session_id_and = '';
         $sessionCondition = '';
@@ -2641,31 +2642,33 @@ HOTSPOT;
 
         if ($showAttemptsInSessions) {
             $sessions = SessionManager::get_sessions_by_general_coach(api_get_user_id());
+            $currentUrl = api_get_current_access_url_id();
+            $te_access_url_session_filter = " te.session_id in (select session_id from $TBL_ACCESS_URL_REL_SESSION where access_url_id = $currentUrl)";
             if (!empty($sessions)) {
                 $sessionIds = [];
                 foreach ($sessions as $session) {
                     $sessionIds[] = $session['id'];
                 }
-                $session_id_and = " AND te.session_id IN(".implode(',', $sessionIds).")";
+                $session_id_and = " AND te.session_id IN(".implode(',', $sessionIds).") AND $te_access_url_session_filter";
                 $sessionCondition = " AND ttte.session_id IN(".implode(',', $sessionIds).")";
             } elseif (empty($sessionId) &&
                 api_get_configuration_value('show_exercise_session_attempts_in_base_course')
             ) {
-                $session_id_and = '';
-                $sessionCondition = '';
+                $session_id_and = " AND (te.session_id = 0 OR $te_access_url_session_filter)";
+                $sessionCondition = "";
             } else {
                 return false;
             }
         } elseif (empty($sessionId) &&
             api_get_configuration_value('show_exercise_session_attempts_in_base_course')
         ) {
-            $session_id_and = '';
-            $sessionCondition = '';
+            $session_id_and = " AND (te.session_id = 0 OR $te_access_url_session_filter)";
+            $sessionCondition = "";
         }
 
         if (api_is_platform_admin() && $originPending) {
-            $session_id_and = '';
-            $sessionCondition = '';
+            $session_id_and = " AND (te.session_id = 0 OR $te_access_url_session_filter)";
+            $sessionCondition = "";
         }
 
         $exercise_where = '';

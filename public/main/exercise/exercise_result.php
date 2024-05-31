@@ -300,7 +300,11 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
 
     // Record the results in the learning path, using the SCORM interface (API)
     $pageBottom .= "<script>window.parent.API.void_save_asset('$total_score', '$maxScore', 0, 'completed');</script>";
-    $pageBottom .= '<script type="text/javascript">'.$href.'</script>';
+
+    $courseId = isset($_REQUEST['cid']) ? (int) $_REQUEST['cid'] : api_get_course_int_id();
+    Exercise::saveExerciseInLp($learnpath_item_id, $exeId, $courseId);
+
+    //$pageBottom .= '<script type="text/javascript">'.$href.'</script>';
 
     $showFooter = false;
 }

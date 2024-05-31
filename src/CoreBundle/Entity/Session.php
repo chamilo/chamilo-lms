@@ -109,10 +109,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(filterClass: OrderFilter::class, properties: ['id', 'title'])]
 class Session implements ResourceWithAccessUrlInterface, Stringable
 {
-    public const VISIBLE = 1;
-    public const READ_ONLY = 2;
+    public const READ_ONLY = 1;
+    public const VISIBLE = 2;
     public const INVISIBLE = 3;
     public const AVAILABLE = 4;
+
     public const STUDENT = 0;
     public const DRH = 1;
     public const COURSE_COACH = 2;
@@ -398,8 +399,8 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     public static function getStatusList(): array
     {
         return [
-            self::VISIBLE => 'status_visible',
             self::READ_ONLY => 'status_read_only',
+            self::VISIBLE => 'status_visible',
             self::INVISIBLE => 'status_invisible',
             self::AVAILABLE => 'status_available',
         ];

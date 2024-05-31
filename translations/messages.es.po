@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-05-28 21:11+0000\n"
+"PO-Revision-Date: 2024-05-31 08:49+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Spanish <https://translation.chamilo.org/projects/chamilo/"
 "messages/es/>\n"
@@ -27062,3 +27062,381 @@ msgstr ""
 "opciones incluyen 'show_reporting_icon', 'hide_lp_arrow_navigation', "
 "'show_toolbar_by_default', 'navigation_in_the_middle' y "
 "'add_extra_quit_to_home_icon'."
+
+msgid "Video features"
+msgstr "Funciones de vídeo"
+
+msgid "Add a custom extra footer for notifications emails for a specific language, for example for privacy policy notices. Multiple languages and paragraphs can be added."
+msgstr ""
+"Añadir un pie de página personalizado adicional para los correos "
+"electrónicos de notificaciones para un idioma específico, por ejemplo, para "
+"avisos de políticas de privacidad. Se pueden añadir varios idiomas y "
+"párrafos."
+
+msgid "Hide e-mail content to bring users to platform"
+msgstr ""
+"Ocultar el contenido del correo electrónico para dirigir a los usuarios a la "
+"plataforma"
+
+msgid "Upload SCORM from cache dir"
+msgstr "Subir SCORM desde el directorio de temporales"
+
+msgid "Allows users to add feedback (likes or dislikes) to posts in social wall."
+msgstr ""
+"Permite a los usuarios añadir retroalimentación (me gusta o no me gusta) a "
+"las publicaciones en el muro social."
+
+msgid "If the SCO is not sending a status, take over and update the status based on what can be observed in Chamilo."
+msgstr ""
+"Si el SCO no envía un estado, tomar el control y actualizar el estado en "
+"función de lo que se pueda observar en Chamilo."
+
+msgid "The 'who is online' page (if enabled) will show a picture and a name for each user currently online. Enable this option to hide the names."
+msgstr ""
+"La página 'quién está en línea' (si está habilitada) mostrará una foto y un "
+"nombre para cada usuario que esté en línea. Active esta opción para ocultar "
+"los nombres."
+
+msgid "Max login attempts before lockdown"
+msgstr "Intentos máximos de inicio de sesión antes del bloqueo"
+
+msgid "Add acquisition column in learner follow-up"
+msgstr "Añadir columna de adquisición en el seguimiento del alumno"
+
+msgid "During special CSV cron imports of users, automatically replace e-mails with dummy e-mail username@example.com."
+msgstr ""
+"Durante las importaciones automáticas de usuarios en CSV mediante cron, "
+"reemplazar automáticamente los correos electrónicos por el correo ficticio "
+"username@example.com."
+
+msgid "Allow private messages between teachers about a learner"
+msgstr "Permitir mensajes privados entre tutores sobre un alumno"
+
+msgid "Extended notifications footer"
+msgstr "Pie de página extendido para notificaciones"
+
+msgid "PDF export resolution"
+msgstr "Resolución de exportación a PDF"
+
+msgid "Double validation for registration process"
+msgstr "Doble validación para el proceso de registro"
+
+msgid "If the 'My progress' page takes too long to load, you might want to remove the processing of generic statistics for the user. In this case enable this setting."
+msgstr ""
+"Si la página 'Mi progreso' tarda demasiado en cargar, es posible que desee "
+"desactivar el procesamiento de estadísticas generales para el usuario. En "
+"este caso, active esta configuración."
+
+msgid "Order of tools on 'My progress' page"
+msgstr "Orden de herramientas en la página 'Mi progreso'"
+
+msgid "This represents the resolution of generated PDF files (in dot per inch, or dpi). The default is 96. Increasing it will give you better resolution PDF files but will also increase the weight and generation time of the files."
+msgstr ""
+"Esto representa la resolución de los archivos PDF generados (en puntos por "
+"pulgada, o dpi). El valor predeterminado es 96. Aumentarlo le proporcionará "
+"archivos PDF de mejor resolución, pero también aumentará el peso y el tiempo "
+"de generación de los archivos."
+
+msgid "This is one simple measure to increase the security of your portal by asking users to immediately change their password, so the one that was transfered by e-mail is no longer valid and they then will use one that they came up with and that they are the only person to know."
+msgstr ""
+"Esta es una medida simple para aumentar la seguridad de su portal "
+"solicitando a los usuarios que cambien su contraseña de inmediato, de modo "
+"que la que se transfirió por correo electrónico ya no sea válida y luego "
+"utilicen una que hayan creado y de la que solo ellos tienen conocimiento."
+
+msgid "Generate random username"
+msgstr "Generar nombre de usuario aleatorio"
+
+msgid "Extra e-mail HTML body attributes"
+msgstr "Atributos HTML adicionales para el cuerpo del correo electrónico"
+
+msgid "Adds the option to define prerequisites with start and end dates for learnpath items."
+msgstr ""
+"Agregar la opción de definir requisitos previos con fechas de inicio y fin "
+"para los elementos de la lección."
+
+msgid "Filter messages between a teacher and a learner between the session start end dates"
+msgstr ""
+"Filtrar mensajes entre un tutor y un alumno entre las fechas de inicio y fin "
+"de la sesión"
+
+msgid "Extra e-mail HTML header attributes"
+msgstr "Atributos adicionales del encabezado HTML del correo electrónico"
+
+msgid "If a learning path is set to invisible but the teacher/coach decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr ""
+"Si una lección está configurada como invisible pero el tutor decide hacerla "
+"disponible desde la página principal del curso, esta opción impide que "
+"Chamilo oculte el enlace en la página principal del curso."
+
+msgid "In specific implementations like online exams, you might want to prevent user access to the 'My progress' page."
+msgstr ""
+"En implementaciones específicas como exámenes en línea, es posible que desee "
+"evitar el acceso del usuario a la página 'Mi progreso'."
+
+msgid "Navigate between learning paths"
+msgstr "Navegar entre lecciones"
+
+msgid "Send 2 registration e-mails"
+msgstr "Enviar dos correos electrónicos de registro"
+
+msgid "UNO converter binaries"
+msgstr "Binarios del convertidor UNO"
+
+msgid "Hide main navigation menu"
+msgstr "Ocultar el menú de navegación principal"
+
+msgid "Allow anonymous users to send e-mails from the platform. In this day and age of information security this is not a recommended option."
+msgstr ""
+"Permitir que usuarios anónimos envíen correos electrónicos desde la "
+"plataforma. En esta era de la seguridad de la información, esta no es una "
+"opción recomendada."
+
+msgid "Admins can see personal messages"
+msgstr "Los administradores pueden ver mensajes personales"
+
+msgid "Simply display a confirmation request on the registration page before going forward with the user creation."
+msgstr ""
+"Simplemente muestre una solicitud de confirmación en la página de registro "
+"antes de proceder con la creación del usuario."
+
+msgid "Send two separate e-mails on registration. One for the username, another one for the password."
+msgstr ""
+"Enviar dos correos electrónicos separados al registrarse. Uno para el nombre "
+"de usuario, otro para la contraseña."
+
+msgid "Hide percentage sign in average of tests in learning paths in learner follow-up"
+msgstr ""
+"Ocultar el signo de porcentaje en el promedio de ejercicios en lecciones en "
+"los reportes del alumno"
+
+msgid "Show sender's e-mail address in notifications"
+msgstr ""
+"Mostrar la dirección de correo electrónico del remitente en las "
+"notificaciones"
+
+msgid "Given as array of e-mail addresses. Does not work for all cronjobs yet."
+msgstr ""
+"Dado como un arreglo de direcciones de correo electrónico. Todavía no "
+"funciona para todas las tareas programadas."
+
+msgid "Show learning paths to learners with their availability dates, rather than hiding them until the date comes."
+msgstr ""
+"Mostrar lecciones a los alumnos con sus fechas de disponibilidad, en lugar "
+"de ocultarlas hasta que llegue la fecha."
+
+msgid "Default offered pagination numbers in tables"
+msgstr "Opciones de paginación predeterminadas ofrecidas en tablas"
+
+msgid "Force password renewal at first login"
+msgstr "Obligar a la renovación de la contraseña en el primer inicio de sesión"
+
+msgid "Proxy settings"
+msgstr "Configuración de proxy"
+
+msgid "Allow admins to upload a SCORM package (in zip form) into the cache directory and to use it as import source on the SCORM upload page."
+msgstr ""
+"Permita a los administradores subir un paquete SCORM (en formato zip) al "
+"directorio de temporales en el servidor, y utilizarlo como fuente de "
+"importación en la página de carga de SCORM."
+
+msgid "Number of failed login attempts to tolerate before the user account is locked and has to be unlocked by an admin."
+msgstr ""
+"Número de intentos fallidos de inicio de sesión que se tolerarán antes de "
+"que la cuenta de usuario se bloquee y deba ser desbloqueada por un "
+"administrador."
+
+msgid "Allow administrators to see personal messages between a teacher and a learner. Please make sure you include a note in your terms and conditions as this might affect privacy protection."
+msgstr ""
+"Permitir que los administradores vean mensajes personales entre un tutor y "
+"un alumno. Por favor, asegúrese de incluir una nota en sus términos y "
+"condiciones, ya que esto podría afectar la protección de la privacidad."
+
+msgid "Allow learners to see messages about them between teachers"
+msgstr "Permitir a los alumnos ver mensajes sobre ellos entre tutores"
+
+msgid "Update SCO status autonomously"
+msgstr "Actualizar el estado del SCO de forma autónoma"
+
+#, fuzzy
+msgid "Give the system path to the UNO converter library to enable some extra exporting features."
+msgstr ""
+"Indique la ruta del sistema a la biblioteca del convertidor UNO para "
+"habilitar algunas características adicionales de exportación."
+
+msgid "Webservices return user field"
+msgstr "Los servicios web devuelven el campo de usuario"
+
+msgid "Prefer short e-mail versions with a link to the messaging space on the platform to increase platform-based engagement."
+msgstr ""
+"Preferir versiones cortas de correo electrónico con un enlace al espacio de "
+"mensajería en la plataforma para aumentar la participación/actividad "
+"centrada en la plataforma."
+
+msgid "Default number of table rows"
+msgstr "Número predeterminado de filas de tabla"
+
+msgid "When using Chamilo for a specific purpose (like one massive online exam), you might want to reduce distraction even more by removing the side menu."
+msgstr ""
+"Al utilizar Chamilo para un propósito específico (como un examen masivo en "
+"línea), podría querer reducir aún más las distracciones eliminando el menú "
+"lateral."
+
+msgid "Hides the icon of percentage in 'Average of tests in Learning Paths' indication on a student tracking"
+msgstr ""
+"Ocultar el icono de porcentaje en la indicación de 'Promedio de ejercicios "
+"en lecciones' en el seguimiento de alumnos"
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr ""
+"Algunas características de Chamilo se conectarán al exterior desde el "
+"servidor. Por ejemplo, para asegurarse de que un contenido externo existe al "
+"crear un enlace o mostrar una página incrustada en la lección. Si su "
+"servidor Chamilo utiliza un proxy para salir de su red, este sería el lugar "
+"para configurarlo."
+
+msgid "Disable 'dislike' for social posts"
+msgstr "Desactivar 'no me gusta' para publicaciones sociales"
+
+msgid "Include learning paths not subscribed to on learner follow-up page"
+msgstr ""
+"Incluir lecciones a las que no se ha suscrito en la página de seguimiento "
+"del alumno"
+
+msgid "E-mail addresses to send cronjobs execution reports"
+msgstr ""
+"Direcciones de correo electrónico para enviar informes de ejecución de "
+"cronjobs"
+
+msgid "Ask REST webservices (v2.php) to return another identifier for fields related to user ID. This is useful if the external system doesn't really deal with user IDs as they are in Chamilo, as it helps the external system match the user data return with some external data that is know to Chamilo. For example, if you use an external authentication system, you can return the extra field used to match the user with the external authentication system rather than user.id."
+msgstr ""
+"Solicite a los servicios web REST (v2.php) que devuelvan otro identificador "
+"para los campos relacionados con el ID de usuario. Esto es útil si el "
+"sistema externo no maneja los ID de usuario como lo hace Chamilo, ya que "
+"ayuda al sistema externo a coincidir los datos del usuario devueltos con "
+"algunos datos externos que son conocidos por Chamilo. Por ejemplo, si "
+"utiliza un sistema de autenticación externo, puede devolver el campo "
+"adicional utilizado para coincidir al usuario con el sistema de "
+"autenticación externo en lugar de user.id."
+
+msgid "Hide the complete username in 'who is online'"
+msgstr "Ocultar el nombre de usuario completo en 'quién está en línea'"
+
+msgid "Date-based learning path items prerequisites"
+msgstr "Elementos de la lección basados en fechas como prerrequisitos"
+
+msgid "Minimal time increment (in minutes) when selecting a date and time with the timepicker widget. For example, it might not be useful to have less than 5 or 15 minutes increments when talking about assignment submission, availability of a test, start time of a session, etc."
+msgstr ""
+"Incremento mínimo de tiempo (en minutos) al seleccionar una fecha y hora con "
+"el widget de selección de tiempo. Por ejemplo, puede que no sea útil tener "
+"incrementos de menos de 5 o 15 minutos cuando se habla de la entrega de un "
+"trabajo, la disponibilidad de un ejercicio, la hora de inicio de una "
+"lección, etc."
+
+msgid "Update users e-mail to dummy value during imports"
+msgstr ""
+"Actualice el correo electrónico de los usuarios a un valor ficticio durante "
+"las importaciones"
+
+msgid "Add column to learner follow-up page to show acquisition status by a learner on a learning path."
+msgstr ""
+"Añadir columna a la página de seguimiento del alumno para mostrar el estado "
+"de adquisición de una lección por parte del alumno."
+
+msgid "Allow exchange of messages from teachers/bosses about a user from the tracking page of that user."
+msgstr ""
+"Permitir el intercambio de mensajes de tutores/jefes sobre un alumno desde "
+"la página de seguimiento de ese usuario."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr ""
+"Establezca las opciones que desea que aparezcan en la navegación alrededor "
+"de una tabla para mostrar menos o más filas en una página. Ej. [50, 100, "
+"200, 500]."
+
+msgid "Display learning path availability to learners"
+msgstr "Mostrar la disponibilidad de la lección a los alumnos"
+
+msgid "Timepicker increment"
+msgstr "Incremento del selector de hora"
+
+msgid "When importing users (batch processes), automatically generate a random string for username. Otherwise, the username will be generated on the basis of the firstname and lastname, or the prefix of the e-mail."
+msgstr ""
+"Al importar usuarios (procesos por lotes), se generará automáticamente una "
+"cadena aleatoria para el nombre de usuario. De lo contrario, el nombre de "
+"usuario se generará en base al nombre y apellido, o al prefijo del correo "
+"electrónico."
+
+msgid "Hide disabled settings in sub-URLs"
+msgstr "Ocultar configuraciones deshabilitadas en sub-URLs"
+
+msgid "If exchange of messages about a user are enabled, this option will allow the corresponding user to see the messages. This is to comply with rules of transparency the organization may need to comply to."
+msgstr ""
+"Si el intercambio de mensajes sobre un usuario está habilitado, esta opción "
+"permitirá que el usuario correspondiente vea los mensajes. Esto es para "
+"cumplir con las reglas de transparencia que la organización pueda desear "
+"acatar."
+
+msgid "E-mail editor for anonymous"
+msgstr "Editor de correo electrónico para anónimos"
+
+msgid "Prevent access to 'My progress'"
+msgstr "Impedir acceso a 'Mi progreso'"
+
+msgid "How many rows should be shown in all tables by default."
+msgstr "Cuántas filas deben mostrarse por defecto en todas las tablas."
+
+msgid "Remove the thumb down option for social posts feedback. Only keep thumb up (like)."
+msgstr ""
+"Eliminar la opción de pulgar hacia abajo (únicamente esta) para la "
+"retroalimentación de publicaciones sociales. Mantener únicamente el pulgar "
+"hacia arriba (me gusta), si la opción de me gusta/no me gusta está activada."
+
+msgid "Like/Dislike for social posts"
+msgstr "Me gusta/No me gusta para publicaciones sociales"
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr ""
+"Array de características adicionales que puede habilitar para el reproductor "
+"de video en Chamilo. Las opciones incluyen 'speed', que le permite cambiar "
+"la velocidad de reproducción de un video."
+
+msgid "Unlock learning path item if max attempt is reached for test prerequisite"
+msgstr ""
+"Desbloquear ítem de lección si se alcanza el número máximo de intentos en el "
+"ejercicio configurado como requisito previo"
+
+msgid "Set to yes to hide settings completely in a sub-URL if the setting is disabled in the main URL (where the access_url_changeable field = 0)"
+msgstr ""
+"Activar para ocultar completamente los ajustes en una sub-URL si el ajuste "
+"está desactivado en la URL principal (donde el campo access_url_changeable = "
+"0)"
+
+msgid "Send score in percentage in test results notification"
+msgstr ""
+"Envíe la puntuación en porcentaje en la notificación de resultados del "
+"ejercicio"
+
+msgid "Add visibility information for learning paths on learner follow-up page"
+msgstr ""
+"Añadir información de visibilidad para lecciones en la página de seguimiento "
+"de alumnos"
+
+msgid "Teachers can access learners messages only within session timeframe"
+msgstr ""
+"Los tutores pueden acceder a los mensajes de los alumnos solo dentro del "
+"período de la lección."
+
+msgid "Add the possibility to select a 'next' learning path and show buttons inside the learning path to move from one to the next."
+msgstr ""
+"Añadir la posibilidad de seleccionar una lección 'siguiente' y mostrar "
+"botones dentro de la lección para avanzar de una a la siguiente."
+
+msgid "Change the order of tools shown on the 'My progress' page for learners. Options include 'quizzes', 'learning_paths' and 'skills'."
+msgstr ""
+"Cambiar el orden de las herramientas mostradas en la página 'Mi progreso' "
+"para alumnos. Las opciones incluyen 'quizzes' (ejercicios), 'learning_paths' "
+"(lecciones) y 'skills' (competencias)."
+
+msgid "Skip generic data in learner self-tracking page"
+msgstr "Omita datos genéricos en la página de auto-seguimiento del alumno"

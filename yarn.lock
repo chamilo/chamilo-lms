@@ -2221,6 +2221,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@uppy/audio@npm:^1.1.9":
+  version: 1.1.9
+  resolution: "@uppy/audio@npm:1.1.9"
+  dependencies:
+    "@uppy/utils": "npm:^5.9.0"
+    preact: "npm:^10.5.13"
+  peerDependencies:
+    "@uppy/core": ^3.11.0
+  checksum: 10c0/09930e26fae69b666d7db16cf282128d1cbfc98da2dedbaeb1a01e8830857dd06fb3755fc57b9df92c7ddd4884d97f1739de6de1c535fa7b626c05f86bb03983
+  languageName: node
+  linkType: hard
+
 "@uppy/companion-client@npm:^2.2.2":
   version: 2.2.2
   resolution: "@uppy/companion-client@npm:2.2.2"
@@ -2390,6 +2402,16 @@ __metadata:
   dependencies:
     lodash.throttle: "npm:^4.1.1"
   checksum: 10c0/d7e2c4c3d8f41d489c5c89baed4b64b69c3fe3acef2dded566dd33b9155ac21666db218c4337875513ec932b898d39fcc4fd07240aa0ac1d1b426779b0506b93
+  languageName: node
+  linkType: hard
+
+"@uppy/utils@npm:^5.9.0":
+  version: 5.9.0
+  resolution: "@uppy/utils@npm:5.9.0"
+  dependencies:
+    lodash: "npm:^4.17.21"
+    preact: "npm:^10.5.13"
+  checksum: 10c0/857c8fa11814816f0a1d97ce78f86cac8c9f4e46267d2d64631f7cce8d3b8caf3796cccdd4cecdfe110862ebbed5a76896522a965f09b0940f0979b91f04c793
   languageName: node
   linkType: hard
 
@@ -3621,6 +3643,7 @@ __metadata:
     "@tailwindcss/typography": "npm:^0.5.10"
     "@tinymce/tinymce-vue": "npm:^5.1.1"
     "@types/lodash": "npm:^4.14.202"
+    "@uppy/audio": "npm:^1.1.9"
     "@uppy/core": "npm:^2.1.10"
     "@uppy/dashboard": "npm:^2.1.4"
     "@uppy/drag-drop": "npm:^2.0.7"

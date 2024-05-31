@@ -1818,7 +1818,7 @@ if ($allowBlockCategory &&
                     ];
                     $exerciseActions .= Display::div(
                         implode(PHP_EOL, $button),
-                        ['class' => 'exercise_save_now_button']
+                        ['class' => 'exercise_save_now_button mb-4']
                     );
                 }
 
@@ -1842,7 +1842,7 @@ if ($allowBlockCategory &&
             );
             $exerciseActions .= Display::div(
                 $remind_question_div,
-                ['class' => 'exercise_save_now_button']
+                ['class' => 'exercise_save_now_button mb-4']
             );
         }
         echo Display::div($exerciseActions, ['class' => 'form-actions']);

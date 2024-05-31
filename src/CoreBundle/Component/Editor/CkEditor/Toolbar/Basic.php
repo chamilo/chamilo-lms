@@ -186,7 +186,7 @@ class Basic extends Toolbar
         // enable automatic uploads of images represented by blob or data URIs
         $config['automatic_uploads'] = true;
         // custom filepicker only to Image dialog
-        $config['file_picker_types'] = 'image';
+        $config['file_picker_types'] = 'file image media';
 
         $config['file_picker_callback'] = '[browser]';
 

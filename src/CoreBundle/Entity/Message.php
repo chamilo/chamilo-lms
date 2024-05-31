@@ -157,8 +157,14 @@ class Message
     /**
      * @var Collection<int, MessageAttachment>
      */
-    #[Groups(['message:read'])]
-    #[ORM\OneToMany(mappedBy: 'message', targetEntity: MessageAttachment::class, cascade: ['remove', 'persist'])]
+    #[Assert\Valid]
+    #[Groups(['message:read', 'message:write'])]
+    #[ORM\OneToMany(
+        mappedBy: 'message',
+        targetEntity: MessageAttachment::class,
+        cascade: ['persist'],
+        orphanRemoval: true,
+    )]
     protected Collection $attachments;
 
     #[ORM\OneToMany(mappedBy: 'message', targetEntity: MessageFeedback::class, orphanRemoval: true)]
@@ -374,10 +380,27 @@ class Message
         return $this->attachments;
     }
 
-    public function addAttachment(MessageAttachment $attachment): self
+    public function addAttachment(MessageAttachment $attachment): static
     {
-        $this->attachments->add($attachment);
-        $attachment->setMessage($this);
+        if (!$this->attachments->contains($attachment)) {
+            $this->attachments->add($attachment);
+            $attachment
+                ->setMessage($this)
+                ->setParent($this->sender)
+                ->setCreator($this->sender)
+            ;
+        }
+
+        return $this;
+    }
+
+    public function removeAttachment(MessageAttachment $attachment): static
+    {
+        if ($this->attachments->removeElement($attachment)) {
+            if ($attachment->getMessage() === $this) {
+                $attachment->setMessage(null);
+            }
+        }
 
         return $this;
     }

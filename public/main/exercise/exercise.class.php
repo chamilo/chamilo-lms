@@ -7823,7 +7823,7 @@ class Exercise
                         ];
                         $exercise_actions .= Display::div(
                             implode(PHP_EOL, $button),
-                            ['class' => 'exercise_save_now_button']
+                            ['class' => 'exercise_save_now_button mb-4']
                         );
                     }
 
@@ -7843,7 +7843,7 @@ class Exercise
                     ];
                     $exercise_actions = Display::div(
                         implode(PHP_EOL, $button),
-                        ['class' => 'exercise_save_now_button']
+                        ['class' => 'exercise_save_now_button mb-4']
                     );
                 }
 

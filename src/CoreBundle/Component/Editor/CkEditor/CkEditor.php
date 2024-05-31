@@ -67,9 +67,17 @@ class CkEditor extends Editor
         $javascript = $this->toJavascript($config);
 
         // it replaces [browser] by image picker callback
-        $javascript = str_replace('"[browser]"', $this->getImagePicker(), $javascript);
+        $javascript = str_replace('"[browser]"', $this->getFileManagerPicker(), $javascript);
 
         return "<script>
+            window.addEventListener('message', function(event) {
+                if (event.data.url) {
+                    if (window.parent.tinyMCECallback) {
+                        window.parent.tinyMCECallback(event.data.url);
+                        delete window.parent.tinyMCECallback;
+                    }
+                }
+            });
             document.addEventListener('DOMContentLoaded', function() {
                 window.chEditors = window.chEditors || [];
                 window.chEditors.push($javascript)
@@ -145,7 +153,7 @@ class CkEditor extends Editor
      *
      * @return string
      */
-    private function getImagePicker()
+    private function getImagePicker(): string
     {
         return 'function (cb, value, meta) {
             var input = document.createElement("input");
@@ -166,6 +174,56 @@ class CkEditor extends Editor
             };
             input.click();
         }';
+    }
+
+    /**
+     * Generates the JavaScript function for opening the file manager picker in TinyMCE.
+     *
+     * Determines the URL based on whether the context is a course or a user.
+     * Falls back to the image picker if neither is found.
+     *
+     * @return string The JavaScript function for TinyMCE's file manager picker.
+     */
+    private function getFileManagerPicker(): string
+    {
+        $course = api_get_course_entity();
+        $user = api_get_user_entity();
+
+        $url = null;
+        if (null !== $course) {
+            $resourceNodeId = $course->getResourceNode()->getId();
+            $url = api_get_path(WEB_PATH).'resources/document/'.$resourceNodeId.'/manager?'.api_get_cidreq().'&type=images';
+        } else {
+            if (null !== $user) {
+                $resourceNodeId = $user->getResourceNode()->getId();
+                $url = api_get_path(WEB_PATH).'resources/filemanager/personal_list/'.$resourceNodeId;
+            }
+        }
+
+        if (null === $url) {
+            return $this->getImagePicker();
+        }
+
+        return '
+            function(cb, value, meta) {
+                window.tinyMCECallback = cb;
+                let fileType = meta.filetype;
+                let fileManagerUrl = "'.$url.'";
+
+                if (fileType === "image") {
+                    fileManagerUrl += "?type=images";
+                } else if (fileType === "file") {
+                    fileManagerUrl += "?type=files";
+                }
+
+                tinymce.activeEditor.windowManager.openUrl({
+                    title: "File Manager",
+                    url: fileManagerUrl,
+                    width: 950,
+                    height: 450
+                });
+            }
+        ';
     }
 
     /**

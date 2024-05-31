@@ -19,6 +19,7 @@
     "@quasar/extras": "^1.11.4",
     "@tinymce/tinymce-vue": "^5.1.1",
     "@types/lodash": "^4.14.202",
+    "@uppy/audio": "^1.1.9",
     "@uppy/core": "^2.1.10",
     "@uppy/dashboard": "^2.1.4",
     "@uppy/drag-drop": "^2.0.7",

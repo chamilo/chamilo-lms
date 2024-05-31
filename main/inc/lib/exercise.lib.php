@@ -2627,6 +2627,11 @@ HOTSPOT;
         $TBL_TRACK_HOTPOTATOES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
         $TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
         $TBL_ACCESS_URL_REL_SESSION = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $TBL_ACCESS_URL_REL_USER = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+
+        $currentUrl = api_get_current_access_url_id();
+        $te_access_url_session_filter = " te.session_id in (select session_id from $TBL_ACCESS_URL_REL_SESSION where access_url_id = $currentUrl)";
+        $te_access_url_user_filter = " te.exe_user_id in (select user_id from $TBL_ACCESS_URL_REL_USER where access_url_id = $currentUrl)";
 
         $session_id_and = '';
         $sessionCondition = '';
@@ -2642,8 +2647,6 @@ HOTSPOT;
 
         if ($showAttemptsInSessions) {
             $sessions = SessionManager::get_sessions_by_general_coach(api_get_user_id());
-            $currentUrl = api_get_current_access_url_id();
-            $te_access_url_session_filter = " te.session_id in (select session_id from $TBL_ACCESS_URL_REL_SESSION where access_url_id = $currentUrl)";
             if (!empty($sessions)) {
                 $sessionIds = [];
                 foreach ($sessions as $session) {
@@ -2848,6 +2851,7 @@ HOTSPOT;
                 WHERE
                     te.$courseCondition
                     $session_id_and AND
+                    $te_access_url_user_filter AND
                     ce.active <> -1 AND
                     ce.$courseCondition
                     $exercise_where

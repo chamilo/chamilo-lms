@@ -71,13 +71,26 @@ class CkEditor extends Editor
 
         return "<script>
             window.addEventListener('message', function(event) {
+                // Check if the received message contains the URL data
                 if (event.data.url) {
-                    if (window.parent.tinyMCECallback) {
-                        window.parent.tinyMCECallback(event.data.url);
-                        delete window.parent.tinyMCECallback;
+                    // Check if we are in an iframe
+                    if (window.parent !== window) {
+                        // Send the message to the parent window
+                        window.parent.postMessage(event.data, '*');
+                        // Access the callback function in the parent window
+                        const parentWindow = window.parent.window[0].window;
+                        if (parentWindow && parentWindow.tinyMCECallback) {
+                            parentWindow.tinyMCECallback(event.data.url);
+                            delete parentWindow.tinyMCECallback;
+                        }
+                    } else if (window.tinyMCECallback) {
+                        // Handle the message in the main context
+                        window.tinyMCECallback(event.data.url);
+                        delete window.tinyMCECallback;
                     }
                 }
             });
+
             document.addEventListener('DOMContentLoaded', function() {
                 window.chEditors = window.chEditors || [];
                 window.chEditors.push($javascript)
@@ -177,30 +190,32 @@ class CkEditor extends Editor
     }
 
     /**
-     * Generates the JavaScript function for opening the file manager picker in TinyMCE.
+     * Generates a JavaScript function for TinyMCE file manager picker.
      *
-     * Determines the URL based on whether the context is a course or a user.
-     * Falls back to the image picker if neither is found.
-     *
-     * @return string The JavaScript function for TinyMCE's file manager picker.
+     * @param bool $onlyPersonalfiles If true, only shows personal files.
+     * @return string JavaScript function as string.
      */
-    private function getFileManagerPicker(): string
+    private function getFileManagerPicker($onlyPersonalfiles = true): string
     {
-        $course = api_get_course_entity();
         $user = api_get_user_entity();
+        $course = api_get_course_entity();
 
-        $url = null;
-        if (null !== $course) {
-            $resourceNodeId = $course->getResourceNode()->getId();
-            $url = api_get_path(WEB_PATH).'resources/document/'.$resourceNodeId.'/manager?'.api_get_cidreq().'&type=images';
-        } else {
+        if ($onlyPersonalfiles) {
             if (null !== $user) {
                 $resourceNodeId = $user->getResourceNode()->getId();
-                $url = api_get_path(WEB_PATH).'resources/filemanager/personal_list/'.$resourceNodeId;
+                $url = api_get_path(WEB_PATH) . 'resources/filemanager/personal_list/' . $resourceNodeId;
+            }
+        } else {
+            if (null !== $course) {
+                $resourceNodeId = $course->getResourceNode()->getId();
+                $url = api_get_path(WEB_PATH) . 'resources/document/' . $resourceNodeId . '/manager?' . api_get_cidreq() . '&type=images';
+            } elseif (null !== $user) {
+                $resourceNodeId = $user->getResourceNode()->getId();
+                $url = api_get_path(WEB_PATH) . 'resources/filemanager/personal_list/' . $resourceNodeId;
             }
         }
 
-        if (null === $url) {
+        if (!isset($url)) {
             return $this->getImagePicker();
         }
 
@@ -208,7 +223,7 @@ class CkEditor extends Editor
             function(cb, value, meta) {
                 window.tinyMCECallback = cb;
                 let fileType = meta.filetype;
-                let fileManagerUrl = "'.$url.'";
+                let fileManagerUrl = "' . $url . '";
 
                 if (fileType === "image") {
                     fileManagerUrl += "?type=images";
@@ -225,6 +240,7 @@ class CkEditor extends Editor
             }
         ';
     }
+
 
     /**
      * Get the empty template.

@@ -7,11 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Doctrine\Common\Collections\Criteria;
-use SessionManager;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -110,7 +107,7 @@ class SessionVoter extends Voter
                     }
                 }
 
-                if ($this->sessionIsAvailableByDuration($session, $user)) {
+                if ($session->isAvailableByDurationForUser($user)) {
                     if ($userIsGeneralCoach) {
                         $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
 
@@ -147,43 +144,6 @@ class SessionVoter extends Voter
 
         // User don't have access to the session
         return false;
-    }
-
-    private function sessionIsAvailableByDuration(Session $session, User $user): bool
-    {
-        $duration = $session->getDuration() * 24 * 60 * 60;
-
-        if (0 === $user->getTrackECourseAccess()->count()) {
-            return true;
-        }
-
-        $criteria = Criteria::create()->where(
-            Criteria::expr()->eq('sessionId', $session->getId())
-        );
-
-        /** @var TrackECourseAccess|null $trackECourseAccess */
-        $trackECourseAccess = $user->getTrackECourseAccess()->matching($criteria)->first();
-
-        $currentTime = time();
-        $firstAccess = 0;
-
-        if (null !== $trackECourseAccess) {
-            $firstAccess = $trackECourseAccess->getLoginCourseDate()->getTimestamp();
-        }
-
-        $userDurationData = SessionManager::getUserSession(
-            $user->getId(),
-            $session->getId()
-        );
-        $userDuration = 0;
-
-        if (isset($userDurationData['duration'])) {
-            $userDuration = (int) $userDurationData['duration'] * 24 * 60 * 60;
-        }
-
-        $totalDuration = $firstAccess + $duration + $userDuration;
-
-        return $totalDuration > $currentTime;
     }
 
     private function canEditSession(User $user, Session $session, bool $checkSession = true): bool

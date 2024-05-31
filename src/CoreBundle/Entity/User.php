@@ -2484,4 +2484,33 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
         return $this;
     }
+
+    public function getSubscriptionToSession(Session $session): ?SessionRelUser
+    {
+        $criteria = Criteria::create();
+        $criteria->where(
+            Criteria::expr()->eq('session', $session)
+        );
+
+        $match = $this->sessionsRelUser->matching($criteria);
+
+        if ($match->count() > 0) {
+            return $match->first();
+        }
+
+        return null;
+    }
+
+    public function getFirstAccessToSession(Session $session): ?TrackECourseAccess
+    {
+        $criteria = Criteria::create()
+            ->where(
+                Criteria::expr()->eq('sessionId', $session->getId())
+            )
+        ;
+
+        $match = $this->trackECourseAccess->matching($criteria);
+
+        return $match->count() > 0 ? $match->first() : null;
+    }
 }

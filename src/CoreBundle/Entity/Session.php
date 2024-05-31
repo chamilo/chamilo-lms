@@ -1266,4 +1266,30 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     {
         return $this->getAllUsersFromCourse(self::COURSE_COACH);
     }
+
+    public function isAvailableByDurationForUser(User $user): bool
+    {
+        $duration = $this->duration * 24 * 60 * 60;
+
+        if (0 === $user->getTrackECourseAccess()->count()) {
+            return true;
+        }
+
+        $trackECourseAccess = $user->getFirstAccessToSession($this);
+
+        $firstAccess = $trackECourseAccess
+            ? $trackECourseAccess->getLoginCourseDate()->getTimestamp()
+            : 0;
+
+        $userDurationData = $user->getSubscriptionToSession($this);
+
+        $userDuration = $userDurationData
+            ? ($userDurationData->getDuration() * 24 * 60 * 60)
+            : 0;
+
+        $totalDuration = $firstAccess + $duration + $userDuration;
+        $currentTime = time();
+
+        return $totalDuration > $currentTime;
+    }
 }

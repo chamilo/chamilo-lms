@@ -2546,5 +2546,12 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 // Set the following parameter to true to enable student to be assign as teacher of a course
 //$_configuration['course_allow_student_role_to_be_teacher'] = false;
 
-// Set the followinf parameter to true to activate the integration of the mathjax script in all HTML documents
+// Set the following parameter to true to activate the integration of the mathjax script in all HTML documents
 //$_configuration['mathjax_enable_script_header_in_all_HTML_document'] = false;
+
+// E-mail-specific logo
+// Set to true to use web/css/[current-theme]/images/email-logo.png as an
+// e-mail logo instead of the platform logo. Only works if setting
+// 'use_course_logo_in_course_page' is not set or there is no logo for that
+// course. Recommended e-mail logo width is 540px.
+//$_configuration['email_logo'] = false;

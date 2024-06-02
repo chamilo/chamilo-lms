@@ -9442,11 +9442,11 @@ function api_site_use_cookie_warning_cookie_exist()
  * Given a number of seconds, format the time to show hours, minutes and seconds.
  *
  * @param int    $time         The time in seconds
- * @param string $originFormat Optional. 
+ * @param string $originFormat Optional.
  * PHP (used for scorm)
  * JS (used in most cases and understood by excel)
  * LANG (used to present unit in the user language)
- * 
+ *
  * @return string (00h00'00")
  */
 function api_format_time($time, $originFormat = 'php')
@@ -9675,6 +9675,22 @@ function api_mail_html(
     }
     if (isset($additionalParameters['logo'])) {
         $mailView->assign('logo', $additionalParameters['logo']);
+    } elseif (api_get_configuration_value('email_logo') == true) {
+        $logoSubPath = 'themes/'.api_get_visual_theme().'/images/email-logo.png';
+        $logoSysPath = api_get_path(SYS_PATH).'web/css/'.$logoSubPath;
+        if (file_exists($logoSysPath)) {
+            $logoWebPath = api_get_path(WEB_CSS_PATH).$logoSubPath;
+            $imgTag = \Display::img(
+                $logoWebPath,
+                api_get_setting('siteName'),
+                [
+                    'id' => 'header-logo',
+                    'class' => 'img-responsive'
+                ]
+            );
+            $logoTag = \Display::url($imgTag, api_get_path(WEB_PATH));
+            $mailView->assign('logo', $logoTag);
+        }
     }
     $mailView->assign('mail_header_style', api_get_configuration_value('mail_header_style'));
     $mailView->assign('mail_content_style', api_get_configuration_value('mail_content_style'));

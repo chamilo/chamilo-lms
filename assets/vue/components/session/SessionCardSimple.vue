@@ -1,6 +1,6 @@
 <script setup>
 import CourseCard from "../course/CourseCard.vue"
-import { useSecurityStore } from "../../store/securityStore"
+import { SESSION_VISIBILITY_INVISIBLE } from "../../constants/entity/session"
 
 const props = defineProps({
   session: {
@@ -9,22 +9,11 @@ const props = defineProps({
   },
 })
 
-const securityStore = useSecurityStore()
-
 const courses = props.session.courses
   ? props.session.courses.map((sesionRelCourse) => ({ ...sesionRelCourse.course, _id: sesionRelCourse.course.id }))
   : []
 
-const isGeneralCoach = props.session.generalCoachesSubscriptions
-  ? props.session.generalCoachesSubscriptions.findIndex((sRcRU) => sRcRU.user["@id"] === securityStore.user["@id"]) >= 0
-  : false
-
-const isCourseCoach = props.session.courseCoachesSubscriptions
-  ? props.session.courseCoachesSubscriptions.findIndex((sRcRU) => sRcRU.user["@id"] === securityStore.user["@id"]) >= 0
-  : false
-
-const enableAccess =
-  (isGeneralCoach || isCourseCoach) && props.session.activeForCoach ? true : props.session.activeForStudent
+const enableAccess = props.session.accessVisibility !== SESSION_VISIBILITY_INVISIBLE
 </script>
 
 <template>

@@ -358,6 +358,10 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     #[ORM\JoinColumn(name: 'image_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?Asset $image = null;
 
+    #[ApiProperty(writable: false)]
+    #[Groups(['user_subscriptions:sessions'])]
+    private int $accessVisibility;
+
     public function __construct()
     {
         $this->skills = new ArrayCollection();
@@ -856,7 +860,6 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this;
     }
 
-    #[Groups(['user_subscriptions:sessions'])]
     public function isActiveForStudent(): bool
     {
         $start = $this->getAccessStartDate();
@@ -877,7 +880,6 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this;
     }
 
-    #[Groups(['user_subscriptions:sessions'])]
     public function isActiveForCoach(): bool
     {
         $start = $this->getCoachAccessStartDate();
@@ -1371,17 +1373,20 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $visibility;
     }
 
-    public function checkAccessVisibility(User $user): int
+    public function checkAccessVisibility(User $user): void
     {
         if ($user->isAdmin() || $user->isSuperAdmin()) {
-            return self::AVAILABLE;
-        }
-
-        if (null === $this->getAccessStartDate() && null === $this->getAccessEndDate()) {
+            $this->accessVisibility = self::AVAILABLE;
+        } elseif (null === $this->getAccessStartDate() && null === $this->getAccessEndDate()) {
             // I don't care the session visibility.
-            return $this->getAccessVisibilityByDuration($user);
+            $this->accessVisibility = $this->getAccessVisibilityByDuration($user);
+        } else {
+            $this->accessVisibility = $this->getAcessVisibilityByDates($user);
         }
+    }
 
-        return $this->getAcessVisibilityByDates($user);
+    public function getAccessVisibility(): int
+    {
+        return $this->accessVisibility;
     }
 }

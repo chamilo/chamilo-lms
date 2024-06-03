@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -1292,5 +1293,95 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         $currentTime = time();
 
         return $totalDuration > $currentTime;
+    }
+
+    private function getAccessVisibilityByDuration(User $user): int
+    {
+        // Session duration per student.
+        if ($this->getDuration() > 0) {
+            $duration = $this->getDuration() * 24 * 60 * 60;
+            $courseAccess = $user->getFirstAccessToSession($this);
+
+            // If there is a session duration but there is no previous
+            // access by the user, then the session is still available
+            if (!$courseAccess) {
+                return self::AVAILABLE;
+            }
+
+            $currentTime = time();
+            $firstAccess = $courseAccess->getLoginCourseDate()->getTimestamp();
+            $userSessionSubscription = $user->getSubscriptionToSession($this);
+            $userDuration = $userSessionSubscription
+                ? $userSessionSubscription->getDuration() * 24 * 60 * 60
+                : 0;
+
+            $totalDuration = $firstAccess + $duration + $userDuration;
+
+            return $totalDuration > $currentTime ? self::AVAILABLE : self::READ_ONLY;
+        }
+
+        return self::AVAILABLE;
+    }
+
+    /**
+     * Checks whether the user is a course or session coach.
+     */
+    public function hasCoach(User $user): bool
+    {
+        return $this->hasUserAsGeneralCoach($user) || $this->hasCoachInCourseList($user);
+    }
+
+    private function getAcessVisibilityByDates(User $user): int
+    {
+        $now = new DateTime();
+        $visibility = $this->getVisibility();
+
+        // If start date was set.
+        if ($this->getAccessStartDate()) {
+            $visibility = $now > $this->getAccessStartDate() ? self::AVAILABLE : self::INVISIBLE;
+        }
+
+        // If the end date was set.
+        if ($this->getAccessEndDate()) {
+            // Only if date_start said that it was ok
+            if (self::AVAILABLE === $visibility) {
+                $visibility = $now < $this->getAccessEndDate()
+                    ? self::AVAILABLE // Date still available
+                    : $this->getVisibility(); // Session ends
+            }
+        }
+
+        // If I'm a coach the visibility can change in my favor depending in the coach dates.
+        $isCoach = $this->hasCoach($user);
+
+        if ($isCoach) {
+            // Test start date.
+            if ($this->getCoachAccessStartDate()) {
+                $visibility = $this->getCoachAccessStartDate() < $now ? self::AVAILABLE : self::INVISIBLE;
+            }
+
+            // Test end date.
+            if ($this->getCoachAccessEndDate()) {
+                if (self::AVAILABLE === $visibility) {
+                    $visibility = $this->getCoachAccessEndDate() >= $now ? self::AVAILABLE : $this->getVisibility();
+                }
+            }
+        }
+
+        return $visibility;
+    }
+
+    public function checkAccessVisibility(User $user): int
+    {
+        if ($user->isAdmin() || $user->isSuperAdmin()) {
+            return self::AVAILABLE;
+        }
+
+        if (null === $this->getAccessStartDate() && null === $this->getAccessEndDate()) {
+            // I don't care the session visibility.
+            return $this->getAccessVisibilityByDuration($user);
+        }
+
+        return $this->getAcessVisibilityByDates($user);
     }
 }

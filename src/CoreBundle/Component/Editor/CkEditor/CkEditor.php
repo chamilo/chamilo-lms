@@ -163,8 +163,6 @@ class CkEditor extends Editor
 
     /**
      * Get a custom image picker.
-     *
-     * @return string
      */
     private function getImagePicker(): string
     {
@@ -192,8 +190,9 @@ class CkEditor extends Editor
     /**
      * Generates a JavaScript function for TinyMCE file manager picker.
      *
-     * @param bool $onlyPersonalfiles If true, only shows personal files.
-     * @return string JavaScript function as string.
+     * @param bool $onlyPersonalfiles if true, only shows personal files
+     *
+     * @return string javaScript function as string
      */
     private function getFileManagerPicker($onlyPersonalfiles = true): string
     {
@@ -203,15 +202,15 @@ class CkEditor extends Editor
         if ($onlyPersonalfiles) {
             if (null !== $user) {
                 $resourceNodeId = $user->getResourceNode()->getId();
-                $url = api_get_path(WEB_PATH) . 'resources/filemanager/personal_list/' . $resourceNodeId;
+                $url = api_get_path(WEB_PATH).'resources/filemanager/personal_list/'.$resourceNodeId;
             }
         } else {
             if (null !== $course) {
                 $resourceNodeId = $course->getResourceNode()->getId();
-                $url = api_get_path(WEB_PATH) . 'resources/document/' . $resourceNodeId . '/manager?' . api_get_cidreq() . '&type=images';
+                $url = api_get_path(WEB_PATH).'resources/document/'.$resourceNodeId.'/manager?'.api_get_cidreq().'&type=images';
             } elseif (null !== $user) {
                 $resourceNodeId = $user->getResourceNode()->getId();
-                $url = api_get_path(WEB_PATH) . 'resources/filemanager/personal_list/' . $resourceNodeId;
+                $url = api_get_path(WEB_PATH).'resources/filemanager/personal_list/'.$resourceNodeId;
             }
         }
 
@@ -223,7 +222,7 @@ class CkEditor extends Editor
             function(cb, value, meta) {
                 window.tinyMCECallback = cb;
                 let fileType = meta.filetype;
-                let fileManagerUrl = "' . $url . '";
+                let fileManagerUrl = "'.$url.'";
 
                 if (fileType === "image") {
                     fileManagerUrl += "?type=images";
@@ -240,7 +239,6 @@ class CkEditor extends Editor
             }
         ';
     }
-
 
     /**
      * Get the empty template.

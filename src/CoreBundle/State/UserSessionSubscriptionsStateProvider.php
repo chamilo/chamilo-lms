@@ -49,16 +49,10 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
             throw new AccessDeniedException();
         }
 
-        $sessionList = match ($operation->getName()) {
+        return match ($operation->getName()) {
             'user_session_subscriptions_past' => $this->sessionRepository->getPastSessionsWithDatesForUser($user, $url),
             'user_session_subscriptions_current' => $this->sessionRepository->getCurrentSessionsWithDatesForUser($user, $url),
             'user_session_subscriptions_upcoming' => $this->sessionRepository->getUpcomingSessionsWithDatesForUser($user, $url),
         };
-
-        foreach ($sessionList as $session) {
-            $session->checkAccessVisibilityByUser($user);
-        }
-
-        return $sessionList;
     }
 }

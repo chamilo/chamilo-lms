@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
-use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -357,10 +356,6 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['remove'])]
     #[ORM\JoinColumn(name: 'image_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?Asset $image = null;
-
-    #[ApiProperty(writable: false)]
-    #[Groups(['user_subscriptions:sessions'])]
-    private int $accessVisibility;
 
     public function __construct()
     {
@@ -1376,19 +1371,20 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     public function checkAccessVisibilityByUser(User $user): int
     {
         if ($user->isAdmin() || $user->isSuperAdmin()) {
-            $this->accessVisibility = self::AVAILABLE;
-        } elseif (null === $this->getAccessStartDate() && null === $this->getAccessEndDate()) {
-            // I don't care the session visibility.
-            $this->accessVisibility = $this->getAccessVisibilityByDuration($user);
-        } else {
-            $this->accessVisibility = $this->getAcessVisibilityByDates($user);
+            return self::AVAILABLE;
         }
 
-        return $this->accessVisibility;
+        if (null === $this->getAccessStartDate() && null === $this->getAccessEndDate()) {
+            // I don't care the session visibility.
+            return $this->getAccessVisibilityByDuration($user);
+        }
+
+        return $this->getAcessVisibilityByDates($user);
     }
 
+    #[Groups(['user_subscriptions:sessions', 'session:read', 'session:item:read'])]
     public function getAccessVisibility(): int
     {
-        return $this->accessVisibility;
+        return 0;
     }
 }

@@ -1373,7 +1373,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $visibility;
     }
 
-    public function checkAccessVisibility(User $user): void
+    public function checkAccessVisibilityByUser(User $user): int
     {
         if ($user->isAdmin() || $user->isSuperAdmin()) {
             $this->accessVisibility = self::AVAILABLE;
@@ -1383,6 +1383,8 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         } else {
             $this->accessVisibility = $this->getAcessVisibilityByDates($user);
         }
+
+        return $this->accessVisibility;
     }
 
     public function getAccessVisibility(): int

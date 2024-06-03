@@ -56,7 +56,7 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
         };
 
         foreach ($sessionList as $session) {
-            $session->checkAccessVisibility($user);
+            $session->checkAccessVisibilityByUser($user);
         }
 
         return $sessionList;

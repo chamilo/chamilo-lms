@@ -92,7 +92,7 @@ class SessionVoter extends Voter
                     $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_STUDENT);
                 }
 
-                if (Session::INVISIBLE !== $session->checkAccessVisibility($user)) {
+                if (Session::INVISIBLE !== $session->checkAccessVisibilityByUser($user)) {
                     return true;
                 }
 

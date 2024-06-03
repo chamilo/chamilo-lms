@@ -83,48 +83,17 @@ class SessionVoter extends Voter
                     $userIsCourseCoach = $session->hasCourseCoachInCourse($user, $currentCourse);
                     $userIsStudent = $session->hasUserInCourse($user, $currentCourse, Session::STUDENT);
                 }
-                $duration = (int) $session->getDuration();
-                if (0 === $duration) {
-                    // General coach.
-                    if ($userIsGeneralCoach && $session->isActiveForCoach()) {
-                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
 
-                        return true;
-                    }
-
-                    // Course-Coach access.
-                    if ($userIsCourseCoach && $session->isActiveForCoach()) {
-                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
-
-                        return true;
-                    }
-
-                    // Student access.
-                    if ($userIsStudent && $session->isActiveForStudent()) {
-                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_STUDENT);
-
-                        return true;
-                    }
+                if ($userIsGeneralCoach) {
+                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
+                } elseif ($userIsCourseCoach) { // Course-Coach access.
+                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
+                } elseif ($userIsStudent) { // Student access.
+                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_STUDENT);
                 }
 
-                if ($session->isAvailableByDurationForUser($user)) {
-                    if ($userIsGeneralCoach) {
-                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
-
-                        return true;
-                    }
-
-                    if ($userIsCourseCoach) {
-                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
-
-                        return true;
-                    }
-
-                    if ($userIsStudent) {
-                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_STUDENT);
-
-                        return true;
-                    }
+                if (Session::INVISIBLE !== $session->checkAccessVisibility($user)) {
+                    return true;
                 }
 
                 return false;

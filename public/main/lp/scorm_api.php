@@ -1722,16 +1722,31 @@ function switch_item(current_item, next_item)
 }
 
 /**
+* Decodes HTML entities in a string
+* @param {string} str - The string with HTML entities
+* @returns {string} - The decoded string
+*/
+function decodeHtmlEntities(str) {
+    var txt = document.createElement("textarea");
+    txt.innerHTML = str;
+    return txt.value;
+}
+
+/**
 * Updates the 'item-parent-names' div with the titles of the current item's parents.
 */
 function updateItemParentNames() {
     var parentNamesContainer = document.getElementById('item-parent-names');
     if (parentNamesContainer) {
         parentNamesContainer.innerHTML = '';
-        olms.lms_lp_item_parents.forEach(function(parentTitle) {
+
+        // Ensure olms.lms_lp_item_parents is an array
+        var parentNames = Array.isArray(olms.lms_lp_item_parents) ? olms.lms_lp_item_parents : [];
+
+        parentNames.forEach(function(parentTitle) {
             var h3 = document.createElement('h3');
             h3.className = 'text-h5';
-            h3.textContent = parentTitle;
+            h3.textContent = decodeHtmlEntities(parentTitle);
             parentNamesContainer.appendChild(h3);
         });
     }

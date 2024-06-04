@@ -821,11 +821,13 @@ class ScormApi
         $lpItemParents = $mylp->getCurrentItemParentNames($mylp->get_current_item_id());
         $titleItemParents = '';
         if (!empty($lpItemParents)) {
+            // Escape HTML entities
             $escapedParents = array_map(function($parentTitle) {
                 return htmlspecialchars($parentTitle, ENT_QUOTES, 'UTF-8');
             }, $lpItemParents);
 
-            $titleItemParents = json_encode($escapedParents);
+            // Encode JSON without escaping Unicode characters
+            $titleItemParents = json_encode($escapedParents, JSON_UNESCAPED_UNICODE | JSON_HEX_APOS | JSON_HEX_QUOT);
         }
         $return .= "olms.lms_lp_item_parents={$titleItemParents};";
 

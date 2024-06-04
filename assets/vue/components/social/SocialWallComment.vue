@@ -5,20 +5,20 @@
       top
     >
       <q-avatar>
-        <img :src="comment.sender.illustrationUrl" />
+        <img :src="comment.sender.illustrationUrl" class="h-12 w-12 border border-gray-25" />
       </q-avatar>
     </q-item-section>
 
     <q-item-section top>
       <q-item-label lines="1">
-        <span class="text-weight-medium">{{ comment.sender.fullName }}</span>
+        <p class="text-weight-medium">{{ comment.sender.fullName }}</p>
       </q-item-label>
       <q-item-label v-html="comment.content" />
       <q-item-label
         :title="abbreviatedDatetime(comment.sendDate)"
         caption
       >
-        {{ relativeDatetime(comment.sendDate) }}
+        <p class="small">{{ relativeDatetime(comment.sendDate) }}</p>
       </q-item-label>
     </q-item-section>
 
@@ -29,7 +29,7 @@
       <WallActions
         :is-owner="isOwner"
         :social-post="comment"
-        @post-deleted="onCommentDeleted($event)"
+        @post-deleted="onCommentDeleted(comment)"
       />
     </q-item-section>
   </q-item>
@@ -55,7 +55,7 @@ const emit = defineEmits(["comment-deleted"])
 const securityStore = useSecurityStore()
 const isOwner = computed(() => securityStore.user["@id"] === props.comment.sender["@id"])
 
-function onCommentDeleted(event) {
-  emit("comment-deleted", event)
+function onCommentDeleted(eventComment) {
+  emit("comment-deleted", eventComment)
 }
 </script>

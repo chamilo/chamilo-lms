@@ -106,6 +106,16 @@ export default {
     }
   },
 
+  async checkTermsRestrictions(userId) {
+    try {
+
+      return await baseService.get(`${API_URL}/terms-restrictions/${userId}`);
+    } catch (error) {
+      console.error("Error checking terms restrictions:", error)
+      throw error
+    }
+  },
+
   async fetchInvitations(userId) {
     try {
       const response = await axios.get(`${API_URL}/invitations/${userId}`)

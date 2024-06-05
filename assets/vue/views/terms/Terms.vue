@@ -1,26 +1,29 @@
 <template>
   <div class="terms">
-    <div v-for="(item, index) in term" :key="index">
-      <h3>{{ item.title }}</h3>
-      <div v-html="item.content"></div>
-    </div>
-    <p class="small mt-4 mb-4">{{ term.date_text }}</p>
-    <div v-if="!accepted">
-      <BaseButton
-        :label="$t('Accept Terms and Conditions')"
-        type="primary"
-        icon="pi pi-check"
-        @click="acceptTerms"
-      />
-    </div>
-    <div v-else>
-      <p>{{ t('You accepted these terms on') }} {{ acceptanceDate }}</p>
-      <BaseButton
-        :label="$t('Revoke Acceptance')"
-        type="danger"
-        icon="pi pi-times"
-        @click="revokeAcceptance"
-      />
+    <div v-if="!isLoading">
+      <div v-for="(item, index) in term" :key="index">
+        <h3>{{ item.title }}</h3>
+        <div v-html="item.content"></div>
+      </div>
+      <p class="small mt-4 mb-4">{{ term.date_text }}</p>
+      <div v-if="!accepted && !blockButton">
+        <BaseButton
+          :label="$t('Accept Terms and Conditions')"
+          type="primary"
+          icon="pi pi-check"
+          @click="acceptTerms"
+        />
+      </div>
+      <div v-else-if="accepted">
+        <p>{{ t('You accepted these terms on') }} {{ acceptanceDate }}</p>
+        <BaseButton
+          :label="$t('Revoke Acceptance')"
+          type="danger"
+          icon="pi pi-times"
+          @click="revokeAcceptance"
+        />
+      </div>
+      <div v-if="blockButton" class="alert alert-warning" v-html="infoMessage"></div>
     </div>
   </div>
 </template>
@@ -37,6 +40,9 @@ const { t } = useI18n()
 const term = ref({})
 const accepted = ref(false)
 const acceptanceDate = ref(null)
+const blockButton = ref(false)
+const infoMessage = ref('')
+const isLoading = ref(true)
 const securityStore = useSecurityStore()
 
 const fetchTerms = async () => {
@@ -56,6 +62,17 @@ const checkAcceptance = async () => {
     acceptanceDate.value = response.acceptDate
   } catch (error) {
     console.error('Error checking acceptance:', error)
+  }
+}
+
+const checkRestrictions = async () => {
+  try {
+    const userId = securityStore.user.id
+    const response = await socialService.checkTermsRestrictions(userId)
+    blockButton.value = response.blockButton
+    infoMessage.value = response.infoMessage
+  } catch (error) {
+    console.error('Error checking restrictions:', error)
   }
 }
 
@@ -81,8 +98,10 @@ const revokeAcceptance = async () => {
   }
 }
 
-onMounted(() => {
-  fetchTerms()
-  checkAcceptance()
+onMounted(async () => {
+  await fetchTerms()
+  await checkAcceptance()
+  await checkRestrictions()
+  isLoading.value = false
 })
 </script>

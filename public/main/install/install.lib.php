@@ -1185,7 +1185,7 @@ function get_countries_list_from_array($combo = false)
 function lockSettings()
 {
     $settings = api_get_locked_settings();
-    $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $table = Database::get_main_table(TABLE_MAIN_SETTINGS);
     foreach ($settings as $setting) {
         $sql = "UPDATE $table SET access_url_locked = 1 WHERE variable  = '$setting'";
         Database::query($sql);
@@ -1197,7 +1197,7 @@ function lockSettings()
  */
 function updateDirAndFilesPermissions()
 {
-    $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $table = Database::get_main_table(TABLE_MAIN_SETTINGS);
     $permissions_for_new_directories = isset($_SESSION['permissions_for_new_directories']) ? $_SESSION['permissions_for_new_directories'] : 0770;
     $permissions_for_new_files = isset($_SESSION['permissions_for_new_files']) ? $_SESSION['permissions_for_new_files'] : 0660;
     // use decoct() to store as string
@@ -1589,7 +1589,7 @@ function installProfileSettings($installationProfile = '')
         installProfileSettings($params->parent);
     }
 
-    $tblSettings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $tblSettings = Database::get_main_table(TABLE_MAIN_SETTINGS);
 
     foreach ($settings as $id => $param) {
         $conditions = ['variable = ? ' => $param->variable];

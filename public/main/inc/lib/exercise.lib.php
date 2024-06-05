@@ -132,10 +132,14 @@ class ExerciseLib
                 case MATCHING_DRAGGABLE:
                     if (DRAGGABLE == $answerType) {
                         $isVertical = 'v' === $objQuestionTmp->extra;
-                        $s .= '<div><p class="small">'
+                        $s .= '<p class="small">'
                             .get_lang('Sort the following options from the list as you see fit by dragging them to the lower areas. You can put them back in this area to modify your answer.')
-                            .'</p><ul class="exercise-draggable-answer '.($isVertical ? '' : 'list-inline')
-                            .'" id="question-'.$questionId.'" data-question="'.$questionId.'">';
+                            .'</p>
+                            <div class="w-full ui-widget ui-helper-clearfix">
+                                <div class="clearfix">
+                                    <ul class="exercise-draggable-answer '.($isVertical ? 'vertical' : 'list-inline w-full').'"
+                                        id="question-'.$questionId.'" data-question="'.$questionId.'">
+                            ';
                     } else {
                         $s .= '<div id="drag'.$questionId.'_question" class="drag_question">
                                <table class="table table-hover table-striped data_table">';
@@ -1379,10 +1383,10 @@ HTML;
                     $answerCorrect = $objAnswerTmp->isCorrect($answerId);
                     $windowId = $questionId.'_'.$counterAnswer;
                     if ($answerCorrect) {
-                        $s .= '<div class="droppable-item">
-                            <span class="number">'.$counterAnswer.'</span>
-                            <div id="drop_'.$windowId.'" class="droppable"></div>
-                            </div>';
+                        $s .= '<div class="droppable-item '.($isVertical ? 'w-full' : '').' flex items-center justify-between p-4 mb-4 bg-gray-200 rounded-md">';
+                        $s .= '<span class="number text-lg font-bold">'.$counterAnswer.'</span>';
+                        $s .= '<div id="drop_'.$windowId.'" class="droppable border-2 border-dashed border-gray-400 p-4 bg-white rounded-md"></div>';
+                        $s .= '</div>';
                         $counterAnswer++;
                     }
                 }

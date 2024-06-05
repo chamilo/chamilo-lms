@@ -653,6 +653,56 @@ form .field {
   .question-result {
     padding-top: 30px;
   }
+
+  .exercise-draggable-answer.full-width {
+    width: 100%;
+  }
+
+  .exercise-draggable-answer.list-inline {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .exercise-draggable-answer.vertical {
+    @apply flex flex-col w-full;
+  }
+
+  .exercise-draggable-answer.horizontal {
+    @apply flex flex-wrap;
+  }
+
+  .droppable-item {
+    @apply flex items-center justify-between p-4 mb-4 rounded-md;
+  }
+
+  .number {
+    @apply text-lg font-bold;
+  }
+
+  .droppable, .ui-droppable {
+    @apply border-2 border-dashed p-4 bg-white rounded-md min-h-[50px];
+  }
+
+  .question_options .question-answer__items--vertical .droppable {
+    width: 98%;
+  }
+
+  .ui-dragging {
+    @apply w-full flex items-center justify-center p-4 border-2 border-dashed;
+  }
+
+  .vertical .ui-draggable-dragging {
+    width: 80%;
+  }
+
+  .question-answer__items--vertical {
+    @apply flex flex-col w-full;
+  }
+
+  .question-answer__items--horizontal {
+    @apply flex flex-row flex-wrap;
+  }
 }
 //@import 'primevue-md-light-indigo/theme.css';
 //@import '~primevue/resources/primevue.min.css';

@@ -237,6 +237,30 @@ class SocialController extends AbstractController
         ]);
     }
 
+    #[Route('/delete-legal', name: 'chamilo_core_social_delete_legal')]
+    public function deleteLegal(Request $request, TranslatorInterface $translator,): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $userId = $data['userId'] ?? null;
+
+        if (!$userId) {
+            return $this->json(['error' => $translator->trans('User ID not provided')], Response::HTTP_BAD_REQUEST);
+        }
+
+        $extraFieldValue = new ExtraFieldValue('user');
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
+        if ($value && isset($value['id'])) {
+            $extraFieldValue->delete($value['id']);
+        }
+
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'termactivated');
+        if ($value && isset($value['id'])) {
+            $extraFieldValue->delete($value['id']);
+        }
+
+        return $this->json(['success' => true, 'message' => $translator->trans('Legal acceptance revoked successfully.')]);
+    }
+
     #[Route('/handle-privacy-request', name: 'chamilo_core_social_handle_privacy_request')]
     public function handlePrivacyRequest(
         Request $request,

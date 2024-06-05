@@ -93,6 +93,19 @@ export default {
     }
   },
 
+  async revokeAcceptTerm(userId) {
+    try {
+      const response = await axios.post(`${API_URL}/delete-legal`, {
+        userId,
+      })
+
+      return response.data
+    } catch (error) {
+      console.error("Error revoking acceptance:", error)
+      throw error
+    }
+  },
+
   async fetchInvitations(userId) {
     try {
       const response = await axios.get(`${API_URL}/invitations/${userId}`)

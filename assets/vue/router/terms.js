@@ -13,6 +13,11 @@ export default {
       name: 'TermsConditionsEdit',
       path: 'edit',
       component: () => import('../views/terms/TermsEdit.vue')
+    },
+    {
+      name: 'TermsConditionsView',
+      path: 'view',
+      component: () => import('../views/terms/Terms.vue')
     }
   ]
 }

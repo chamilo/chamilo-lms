@@ -984,6 +984,54 @@ class SocialController extends AbstractController
         return new JsonResponse(['success' => 'Group and image saved successfully'], Response::HTTP_OK);
     }
 
+    #[Route('/terms-restrictions/{userId}', name: 'chamilo_core_social_terms_restrictions')]
+    public function checkTermsRestrictions(
+        int $userId,
+        UserRepository $userRepo,
+        ExtraFieldRepository $extraFieldRepository,
+        TranslatorInterface $translator,
+        SettingsManager $settingsManager
+    ): JsonResponse {
+
+        /** @var User $user */
+        $user = $userRepo->find($userId);
+
+        if (!$user) {
+            return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $isAdmin = $user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_SUPER_ADMIN');
+
+        $termActivated = false;
+        $blockButton = false;
+        $infoMessage = '';
+
+        if (!$isAdmin) {
+            if ('true' === $settingsManager->getSetting('ticket.show_terms_if_profile_completed')) {
+                $extraFieldValue = new ExtraFieldValue('user');
+                $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'termactivated');
+                if (isset($value['value'])) {
+                    $termActivated = !empty($value['value']) && 1 === (int) $value['value'];
+                }
+
+                if (false === $termActivated) {
+                    $blockButton = true;
+                    $infoMessage .= $translator->trans('The terms and conditions have not yet been validated by your tutor.').'&nbsp;';
+                }
+
+                if (!$user->isProfileCompleted()) {
+                    $blockButton = true;
+                    $infoMessage .= $translator->trans('You must first fill your profile to enable the terms and conditions validation.');
+                }
+            }
+        }
+
+        return $this->json([
+            'blockButton' => $blockButton,
+            'infoMessage' => $infoMessage,
+        ]);
+    }
+
     /**
      * Formats a hierarchical structure of messages for display.
      *

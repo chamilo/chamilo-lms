@@ -26,6 +26,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ReadableCollection;
 use Doctrine\ORM\Mapping as ORM;
+use LogicException;
 use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -113,6 +114,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     public const VISIBLE = 2;
     public const INVISIBLE = 3;
     public const AVAILABLE = 4;
+    public const LIST_ONLY = 5;
 
     public const STUDENT = 0;
     public const DRH = 1;
@@ -356,6 +358,9 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['remove'])]
     #[ORM\JoinColumn(name: 'image_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?Asset $image = null;
+
+    #[Groups(['user_subscriptions:sessions', 'session:read', 'session:item:read'])]
+    private int $accessVisibility = 0;
 
     public function __construct()
     {
@@ -1292,6 +1297,28 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $totalDuration > $currentTime;
     }
 
+    public function getDaysLeftByUser(User $user): int
+    {
+        $userSessionSubscription = $user->getSubscriptionToSession($this);
+
+        $duration = $this->duration;
+
+        if ($userSessionSubscription) {
+            $duration += $userSessionSubscription->getDuration();
+        }
+
+        $courseAccess = $user->getFirstAccessToSession($this);
+
+        if (!$courseAccess) {
+            return $duration;
+        }
+
+        $endDateInSeconds = $courseAccess->getLoginCourseDate()->getTimestamp() + $duration * 24 * 60 * 60;
+        $currentTime = time();
+
+        return (int) round(($endDateInSeconds - $currentTime) / 60 / 60 / 24);
+    }
+
     private function getAccessVisibilityByDuration(User $user): int
     {
         // Session duration per student.
@@ -1331,60 +1358,57 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     private function getAcessVisibilityByDates(User $user): int
     {
         $now = new DateTime();
-        $visibility = $this->getVisibility();
 
-        // If start date was set.
-        if ($this->getAccessStartDate()) {
-            $visibility = $now > $this->getAccessStartDate() ? self::AVAILABLE : self::INVISIBLE;
+        $userIsCoach = $this->hasCoach($user);
+
+        $sessionEndDate = $userIsCoach && $this->coachAccessEndDate
+            ? $this->coachAccessEndDate
+            : $this->accessEndDate;
+
+        if (!$userIsCoach && $this->accessStartDate && $now < $this->accessStartDate) {
+            return self::LIST_ONLY;
         }
 
-        // If the end date was set.
-        if ($this->getAccessEndDate()) {
-            // Only if date_start said that it was ok
-            if (self::AVAILABLE === $visibility) {
-                $visibility = $now < $this->getAccessEndDate()
-                    ? self::AVAILABLE // Date still available
-                    : $this->getVisibility(); // Session ends
-            }
+        if ($sessionEndDate) {
+            return $now <= $sessionEndDate ? self::AVAILABLE : $this->visibility;
         }
 
-        // If I'm a coach the visibility can change in my favor depending in the coach dates.
-        $isCoach = $this->hasCoach($user);
-
-        if ($isCoach) {
-            // Test start date.
-            if ($this->getCoachAccessStartDate()) {
-                $visibility = $this->getCoachAccessStartDate() < $now ? self::AVAILABLE : self::INVISIBLE;
-            }
-
-            // Test end date.
-            if ($this->getCoachAccessEndDate()) {
-                if (self::AVAILABLE === $visibility) {
-                    $visibility = $this->getCoachAccessEndDate() >= $now ? self::AVAILABLE : $this->getVisibility();
-                }
-            }
-        }
-
-        return $visibility;
+        return self::AVAILABLE;
     }
 
-    public function checkAccessVisibilityByUser(User $user): int
+    public function setAccessVisibilityByUser(User $user): int
     {
         if ($user->isAdmin() || $user->isSuperAdmin()) {
-            return self::AVAILABLE;
-        }
-
-        if (null === $this->getAccessStartDate() && null === $this->getAccessEndDate()) {
+            $this->accessVisibility = self::AVAILABLE;
+        } elseif (!$this->getAccessStartDate() && !$this->getAccessEndDate()) {
             // I don't care the session visibility.
-            return $this->getAccessVisibilityByDuration($user);
+            $this->accessVisibility = $this->getAccessVisibilityByDuration($user);
+        } else {
+            $this->accessVisibility = $this->getAcessVisibilityByDates($user);
         }
 
-        return $this->getAcessVisibilityByDates($user);
+        return $this->accessVisibility;
     }
 
-    #[Groups(['user_subscriptions:sessions', 'session:read', 'session:item:read'])]
     public function getAccessVisibility(): int
     {
-        return 0;
+        if (0 === $this->accessVisibility) {
+            throw new LogicException('Access visibility by user is not set');
+        }
+
+        return $this->accessVisibility;
+    }
+
+    public function getClosedOrHiddenCourses(): Collection
+    {
+        $closedVisibilities = [
+            Course::CLOSED,
+            Course::HIDDEN,
+        ];
+
+        return $this->courses->filter(fn (SessionRelCourse $sessionRelCourse) => \in_array(
+            $sessionRelCourse->getCourse()->getVisibility(),
+            $closedVisibilities
+        ));
     }
 }

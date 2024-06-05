@@ -13,8 +13,8 @@ use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
-use DateTimeZone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
@@ -26,8 +26,10 @@ use Exception;
  */
 class SessionRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        private readonly SettingsManager $settingsManager,
+    ) {
         parent::__construct($registry, Session::class);
     }
 
@@ -85,22 +87,35 @@ class SessionRepository extends ServiceEntityRepository
      *
      * @throws Exception
      */
-    public function getPastSessionsWithDatesForUser(User $user, AccessUrl $url): array
+    public function getPastSessionsOfUserInUrl(User $user, AccessUrl $url): array
     {
-        $now = new DateTime('now', new DateTimeZone('UTC'));
+        $sessions = $this->getSubscribedSessionsOfUserInUrl($user, $url);
 
-        $qb = $this->getSessionsByUser($user, $url);
-        $qb
-            ->andWhere(
-                $qb->expr()->andX(
-                    $qb->expr()->isNotNull('s.accessEndDate'),
-                    $qb->expr()->lt('s.accessEndDate', ':now')
-                )
-            )
-            ->setParameter('now', $now)
-        ;
+        $filterPastSessions = function (Session $session) use ($user) {
+            $now = new DateTime();
 
-        return $qb->getQuery()->getResult();
+            // Check if the session has a duration
+            if ($session->getDuration() > 0) {
+                $daysLeft = $session->getDaysLeftByUser($user);
+
+                return $daysLeft < 0;
+            }
+
+            // Get the appropriate end date based on whether the user is a coach
+            $sessionEndDate = $session->hasCoach($user) && $session->getCoachAccessEndDate()
+                ? $session->getCoachAccessEndDate()
+                : $session->getAccessEndDate();
+
+            // If there's no end date, the session is not considered past
+            if (!$sessionEndDate) {
+                return false;
+            }
+
+            // Check if the current date is after the end date
+            return $now > $sessionEndDate;
+        };
+
+        return array_filter($sessions, $filterPastSessions);
     }
 
     /**
@@ -108,44 +123,45 @@ class SessionRepository extends ServiceEntityRepository
      *
      * @throws Exception
      */
-    public function getCurrentSessionsWithDatesForUser(User $user, AccessUrl $url): array
+    public function getCurrentSessionsOfUserInUrl(User $user, AccessUrl $url): array
     {
-        $now = new DateTime('now', new DateTimeZone('UTC'));
+        $sessions = $this->getSubscribedSessionsOfUserInUrl($user, $url);
 
-        $qb = $this->getSessionsByUser($user, $url);
-        $qb
-            ->andWhere(
-                $qb->expr()->orX(
-                    $qb->expr()->andX(
-                        $qb->expr()->isNull('s.accessStartDate'),
-                        $qb->expr()->isNull('s.accessEndDate'),
-                        $qb->expr()->orX(
-                            $qb->expr()->eq('s.duration', 0),
-                            $qb->expr()->isNull('s.duration')
-                        )
-                    ),
-                    $qb->expr()->andX(
-                        $qb->expr()->isNotNull('s.accessStartDate'),
-                        $qb->expr()->isNull('s.accessEndDate'),
-                        $qb->expr()->lte('s.accessStartDate', ':now')
-                    ),
-                    $qb->expr()->andX(
-                        $qb->expr()->isNotNull('s.accessStartDate'),
-                        $qb->expr()->isNotNull('s.accessEndDate'),
-                        $qb->expr()->lte('s.accessStartDate', ':now'),
-                        $qb->expr()->gte('s.accessEndDate', ':now')
-                    ),
-                    $qb->expr()->andX(
-                        $qb->expr()->isNull('s.accessStartDate'),
-                        $qb->expr()->isNotNull('s.accessEndDate'),
-                        $qb->expr()->gte('s.accessEndDate', ':now')
-                    )
-                )
-            )
-            ->setParameter('now', $now)
-        ;
+        $filterCurrentSessions = function (Session $session) use ($user) {
+            // Check if session has a duration
+            if ($session->getDuration() > 0) {
+                $daysLeft = $session->getDaysLeftByUser($user);
+                $firstAccess = $user->getFirstAccessToSession($session);
 
-        return $qb->getQuery()->getResult();
+                return $daysLeft >= 0 && $daysLeft <= $session->getDuration() && $firstAccess;
+            }
+
+            // Determine if the user is a coach
+            $userIsCoach = $session->hasCoach($user);
+
+            // Determine the start date based on whether the user is a coach
+            $sessionStartDate = $userIsCoach && $session->getCoachAccessStartDate()
+                ? $session->getCoachAccessStartDate()
+                : $session->getAccessStartDate();
+
+            // If there is no start date, consider the session current
+            if (!$sessionStartDate) {
+                return true;
+            }
+
+            // Get the current date and time
+            $now = new DateTime();
+
+            // Determine the end date based on whether the user is a coach
+            $sessionEndDate = $userIsCoach && $session->getCoachAccessEndDate()
+                ? $session->getCoachAccessEndDate()
+                : $session->getAccessEndDate();
+
+            // Check if the current date is within the start and end dates
+            return $now >= $sessionStartDate && (!$sessionEndDate || $now <= $sessionEndDate);
+        };
+
+        return array_filter($sessions, $filterCurrentSessions);
     }
 
     /**
@@ -153,22 +169,39 @@ class SessionRepository extends ServiceEntityRepository
      *
      * @throws Exception
      */
-    public function getUpcomingSessionsWithDatesForUser(User $user, AccessUrl $url): array
+    public function getUpcomingSessionsOfUserInUrl(User $user, AccessUrl $url): array
     {
-        $now = new DateTime('now', new DateTimeZone('UTC'));
+        $sessions = $this->getSubscribedSessionsOfUserInUrl($user, $url);
 
-        $qb = $this->getSessionsByUser($user, $url);
-        $qb
-            ->andWhere(
-                $qb->expr()->andX(
-                    $qb->expr()->isNotNull('s.accessStartDate'),
-                    $qb->expr()->gt('s.accessStartDate', ':now')
-                )
-            )
-            ->setParameter('now', $now)
-        ;
+        $filterUpcomingSessions = function (Session $session) use ($user) {
+            $now = new DateTime();
 
-        return $qb->getQuery()->getResult();
+            // Check if the session has a duration
+            if ($session->getDuration() > 0) {
+                $daysLeft = $session->getDaysLeftByUser($user);
+                $firstAccess = $user->getFirstAccessToSession($session);
+
+                return $daysLeft >= $session->getDuration() && !$firstAccess;
+            }
+
+            // Determine if the user is a coach
+            $userIsCoach = $session->hasCoach($user);
+
+            // Get the appropriate start date based on whether the user is a coach
+            $sessionStartDate = $userIsCoach && $session->getCoachAccessStartDate()
+                ? $session->getCoachAccessStartDate()
+                : $session->getAccessStartDate();
+
+            // If there's no start date, the session is not considered future
+            if (!$sessionStartDate) {
+                return false;
+            }
+
+            // Check if the current date is before the start date
+            return $now < $sessionStartDate;
+        };
+
+        return array_filter($sessions, $filterUpcomingSessions);
     }
 
     public function addUserInCourse(int $relationType, User $user, Course $course, Session $session): void
@@ -362,5 +395,46 @@ class SessionRepository extends ServiceEntityRepository
         ;
 
         return $qb;
+    }
+
+    /**
+     * @return array<int, Session>
+     *
+     * @throws Exception
+     */
+    public function getSubscribedSessionsOfUserInUrl(
+        User $user,
+        AccessUrl $url,
+        bool $ignoreVisibilityForAdmin = false,
+    ): array {
+        $sessions = $this->getSessionsByUser($user, $url)->getQuery()->getResult();
+
+        $filterSessions = function (Session $session) use ($user, $ignoreVisibilityForAdmin) {
+            $visibility = $session->setAccessVisibilityByUser($user);
+
+            if (Session::VISIBLE !== $visibility) {
+                $closedOrHiddenCourses = $session->getClosedOrHiddenCourses();
+
+                if ($closedOrHiddenCourses->count() === $session->getCourses()->count()) {
+                    $visibility = Session::INVISIBLE;
+                }
+            }
+
+            switch ($visibility) {
+                case Session::READ_ONLY:
+                case Session::VISIBLE:
+                case Session::AVAILABLE:
+                    break;
+
+                case Session::INVISIBLE:
+                    if (!$ignoreVisibilityForAdmin) {
+                        return false;
+                    }
+            }
+
+            return true;
+        };
+
+        return array_filter($sessions, $filterSessions);
     }
 }

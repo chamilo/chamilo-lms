@@ -238,7 +238,7 @@ class SocialController extends AbstractController
     }
 
     #[Route('/delete-legal', name: 'chamilo_core_social_delete_legal')]
-    public function deleteLegal(Request $request, TranslatorInterface $translator,): JsonResponse
+    public function deleteLegal(Request $request, TranslatorInterface $translator): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
         $userId = $data['userId'] ?? null;
@@ -992,7 +992,6 @@ class SocialController extends AbstractController
         TranslatorInterface $translator,
         SettingsManager $settingsManager
     ): JsonResponse {
-
         /** @var User $user */
         $user = $userRepo->find($userId);
 

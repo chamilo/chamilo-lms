@@ -82,7 +82,7 @@ if ($form->validate()) {
     $second = DateTime::createFromFormat('Y-m-d', $endDate);
     $numberOfWeeks = floor($first->diff($second)->days / 7);
 
-    $sql = "SELECT sru.user_id, s.name, s.id as session_id, s.display_start_date, s.display_end_date
+    $sql = "SELECT sru.user_id, s.title, s.id as session_id, s.display_start_date, s.display_end_date
             FROM $tblSession s
             LEFT JOIN $tblSessionRelUser sru
             ON (sru.session_id = s.id AND sru.relation_type = ".Session::GENERAL_COACH.")

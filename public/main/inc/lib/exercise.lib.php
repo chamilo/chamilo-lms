@@ -1617,7 +1617,7 @@ HOTSPOT;
 
         $sql = "SELECT qz.title quiz_title,
                         c.title course_title,
-                        s.name session_name,
+                        s.title session_name,
                         qz.iid as quiz_id,
                         qz.c_id,
                         qz.session_id

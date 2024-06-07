@@ -2367,8 +2367,8 @@ class Event
                         user_id = $userId AND
                         c_id = $courseId  AND
                         session_id = $sessionId AND
-                        login_course_date > '$time'
-                    ORDER BY login_course_date DESC
+                        logout_course_date > '$time'
+                    ORDER BY logout_course_date DESC
                     LIMIT 1";
             $result = Database::query($sql);
             $insert = false;

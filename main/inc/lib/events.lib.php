@@ -2385,9 +2385,15 @@ class Event
             }
 
             if ($insert) {
+                $defaultExtraTime = api_get_configuration_value('tracking_default_course_extra_time_on_logout');
+                $loginCourseDate = $currentDate = api_get_utc_datetime();
+                if (!empty($defaultExtraTime)) {
+                    $loginDiff = time() - $defaultExtraTime;
+                    $loginCourseDate = api_get_utc_datetime($loginDiff);
+               }
                 $ip = Database::escape_string(api_get_real_ip());
                 $sql = "INSERT INTO $tableCourseAccess (c_id, user_ip, user_id, login_course_date, logout_course_date, counter, session_id)
-                        VALUES ($courseId, '$ip', $userId, '$currentDate', '$currentDate', 1, $sessionId)";
+                        VALUES ($courseId, '$ip', $userId, '$loginCourseDate', '$currentDate', 1, $sessionId)";
                 Database::query($sql);
             }
 

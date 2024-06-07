@@ -2559,3 +2559,5 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 // Define the maximum time in seconds to be registered if no action by user in the LP for more than the php session lifetime.
 //$_configuration['time_to_be_registered_for_abusiveTime'] = 600;
 
+// Define the default time in seconds to be registered if the user does logout from a course and there is no recent entry in track_e_course_access.
+//$_configuration['tracking_default_course_extra_time_on_logout'] = 600;

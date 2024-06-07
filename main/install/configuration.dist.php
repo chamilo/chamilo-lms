@@ -2555,3 +2555,7 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 // 'use_course_logo_in_course_page' is not set or there is no logo for that
 // course. Recommended e-mail logo width is 540px.
 //$_configuration['email_logo'] = false;
+
+// Define the maximum time in seconds to be registered if no action by user in the LP for more than the php session lifetime.
+//$_configuration['time_to_be_registered_for_abusiveTime'] = 600;
+

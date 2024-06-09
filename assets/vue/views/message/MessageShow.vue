@@ -1,11 +1,6 @@
 <template>
   <div v-if="item">
-    <div class="flex gap-4 items-center">
-      <h2
-        class="mr-auto"
-        v-text="item.title"
-      />
-
+    <SectionHeader :title="item.title">
       <BaseButton
         :disabled="isLoading"
         icon="reply"
@@ -35,9 +30,7 @@
         type="black"
         @click="confirmDelete"
       />
-    </div>
-
-    <hr />
+    </SectionHeader>
 
     <div class="flex justify-end gap-2">
       <div v-if="myReceiver">
@@ -156,6 +149,7 @@ import { useSecurityStore } from "../../store/securityStore"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import MessageCommunicationParty from "./MessageCommunicationParty.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const confirm = useConfirm()
 const { t } = useI18n()

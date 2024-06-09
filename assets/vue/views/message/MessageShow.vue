@@ -251,6 +251,10 @@ async function onSearchTags(query) {
 
   const { items } = await messageTagService.searchUserTags(securityStore.user["@id"], query)
 
+  if (!items.length) {
+    items.push({ tag: query })
+  }
+
   isLoadingSelect.value = false
 
   return items
@@ -269,7 +273,7 @@ async function onItemSelect({ value }) {
       return
     }
   } else {
-    const existingIndex = getTagIndex(value["@id"]) >= 0
+    const existingIndex = getTagIndex(value) >= 0
 
     if (existingIndex) {
       return

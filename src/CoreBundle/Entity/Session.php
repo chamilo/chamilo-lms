@@ -1341,7 +1341,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
             $totalDuration = $firstAccess + $duration + $userDuration;
 
-            return $totalDuration > $currentTime ? self::AVAILABLE : self::READ_ONLY;
+            return $totalDuration > $currentTime ? self::AVAILABLE : $this->visibility;
         }
 
         return self::AVAILABLE;

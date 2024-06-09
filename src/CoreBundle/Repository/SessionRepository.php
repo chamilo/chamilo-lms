@@ -131,9 +131,8 @@ class SessionRepository extends ServiceEntityRepository
             // Check if session has a duration
             if ($session->getDuration() > 0) {
                 $daysLeft = $session->getDaysLeftByUser($user);
-                $firstAccess = $user->getFirstAccessToSession($session);
 
-                return $daysLeft >= 0 && $daysLeft <= $session->getDuration() && $firstAccess;
+                return $daysLeft >= 0;
             }
 
             // Determine if the user is a coach
@@ -176,12 +175,9 @@ class SessionRepository extends ServiceEntityRepository
         $filterUpcomingSessions = function (Session $session) use ($user) {
             $now = new DateTime();
 
-            // Check if the session has a duration
+            // All session with access by duration call be either current or past
             if ($session->getDuration() > 0) {
-                $daysLeft = $session->getDaysLeftByUser($user);
-                $firstAccess = $user->getFirstAccessToSession($session);
-
-                return $daysLeft >= $session->getDuration() && !$firstAccess;
+                return false;
             }
 
             // Determine if the user is a coach

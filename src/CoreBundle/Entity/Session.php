@@ -1323,6 +1323,10 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     {
         // Session duration per student.
         if ($this->getDuration() > 0) {
+            if ($this->hasCoach($user)) {
+                return self::AVAILABLE;
+            }
+
             $duration = $this->getDuration() * 24 * 60 * 60;
             $courseAccess = $user->getFirstAccessToSession($this);
 
@@ -1376,9 +1380,9 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return self::AVAILABLE;
     }
 
-    public function setAccessVisibilityByUser(User $user): int
+    public function setAccessVisibilityByUser(User $user, bool $ignoreVisibilityForAdmins = true): int
     {
-        if ($user->isAdmin() || $user->isSuperAdmin()) {
+        if (($user->isAdmin() || $user->isSuperAdmin()) && $ignoreVisibilityForAdmins) {
             $this->accessVisibility = self::AVAILABLE;
         } elseif (!$this->getAccessStartDate() && !$this->getAccessEndDate()) {
             // I don't care the session visibility.

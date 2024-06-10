@@ -93,16 +93,19 @@ class SessionRepository extends ServiceEntityRepository
 
         $filterPastSessions = function (Session $session) use ($user) {
             $now = new DateTime();
+            // Determine if the user is a coach
+            $userIsCoach = $session->hasCoach($user);
 
             // Check if the session has a duration
             if ($session->getDuration() > 0) {
                 $daysLeft = $session->getDaysLeftByUser($user);
+                $session->setTitle($session->getTitle().'<-'.$daysLeft);
 
-                return $daysLeft < 0;
+                return $daysLeft < 0 && !$userIsCoach;
             }
 
             // Get the appropriate end date based on whether the user is a coach
-            $sessionEndDate = $session->hasCoach($user) && $session->getCoachAccessEndDate()
+            $sessionEndDate = $userIsCoach && $session->getCoachAccessEndDate()
                 ? $session->getCoachAccessEndDate()
                 : $session->getAccessEndDate();
 
@@ -128,15 +131,15 @@ class SessionRepository extends ServiceEntityRepository
         $sessions = $this->getSubscribedSessionsOfUserInUrl($user, $url);
 
         $filterCurrentSessions = function (Session $session) use ($user) {
+            // Determine if the user is a coach
+            $userIsCoach = $session->hasCoach($user);
+
             // Check if session has a duration
             if ($session->getDuration() > 0) {
                 $daysLeft = $session->getDaysLeftByUser($user);
 
-                return $daysLeft >= 0;
+                return $daysLeft >= 0 || $userIsCoach;
             }
-
-            // Determine if the user is a coach
-            $userIsCoach = $session->hasCoach($user);
 
             // Determine the start date based on whether the user is a coach
             $sessionStartDate = $userIsCoach && $session->getCoachAccessStartDate()
@@ -401,12 +404,12 @@ class SessionRepository extends ServiceEntityRepository
     public function getSubscribedSessionsOfUserInUrl(
         User $user,
         AccessUrl $url,
-        bool $ignoreVisibilityForAdmin = false,
+        bool $ignoreVisibilityForAdmins = false,
     ): array {
         $sessions = $this->getSessionsByUser($user, $url)->getQuery()->getResult();
 
-        $filterSessions = function (Session $session) use ($user, $ignoreVisibilityForAdmin) {
-            $visibility = $session->setAccessVisibilityByUser($user);
+        $filterSessions = function (Session $session) use ($user, $ignoreVisibilityForAdmins) {
+            $visibility = $session->setAccessVisibilityByUser($user, $ignoreVisibilityForAdmins);
 
             if (Session::VISIBLE !== $visibility) {
                 $closedOrHiddenCourses = $session->getClosedOrHiddenCourses();
@@ -423,7 +426,7 @@ class SessionRepository extends ServiceEntityRepository
                     break;
 
                 case Session::INVISIBLE:
-                    if (!$ignoreVisibilityForAdmin) {
+                    if (!$ignoreVisibilityForAdmins) {
                         return false;
                     }
             }

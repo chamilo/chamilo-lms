@@ -829,7 +829,9 @@ class ScormApi
             // Encode JSON without escaping Unicode characters
             $titleItemParents = json_encode($escapedParents, JSON_UNESCAPED_UNICODE | JSON_HEX_APOS | JSON_HEX_QUOT);
         }
-        $return .= "olms.lms_lp_item_parents={$titleItemParents};";
+        if (!empty($titleItemParents)) {
+            $return .= "olms.lms_lp_item_parents={$titleItemParents};";
+        }
 
         //$return .= 'updateGamificationValues(); ';
         $mylp->set_error_msg('');

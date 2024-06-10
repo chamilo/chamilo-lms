@@ -2672,6 +2672,9 @@ HOTSPOT;
         if (api_is_platform_admin() && $originPending) {
             $session_id_and = " AND (te.session_id = 0 OR $te_access_url_session_filter)";
             $sessionCondition = "";
+            if (false !== $searchAllTeacherCourses) {
+                $courseCondition = "c_id is not null ";
+            }
         }
 
         $exercise_where = '';

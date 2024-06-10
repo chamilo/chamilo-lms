@@ -22,7 +22,7 @@ final class Version20240602231700 extends AbstractMigrationChamilo
     {
         $documentRepo = $this->container->get(CDocumentRepository::class);
 
-        // Query to get the resourceNodeIds
+        // Query to get the documentIids
         $sql = "SELECT cd1.iid, cd1.path, cd1.c_id
                 FROM c_document cd1
                 LEFT JOIN c_document cd2 ON cd2.c_id = cd1.c_id AND cd2.path = SUBSTRING_INDEX(cd1.path, '/', 2)
@@ -36,20 +36,7 @@ final class Version20240602231700 extends AbstractMigrationChamilo
             return;
         }
 
-        // Extract resourceNodeIds from the result
-        $resourceNodeIds = array_column($orphans, 'iid');
-
-        // If there are resourceNodeIds, continue with the script
-        $sql = 'SELECT iid FROM c_document WHERE resource_node_id IN (?)';
-        $result = $this->connection->executeQuery($sql, [$resourceNodeIds], [Connection::PARAM_INT_ARRAY]);
-        $iids = $result->fetchAllAssociative();
-
-        if (empty($iids)) {
-            echo 'No documents found to delete.' . PHP_EOL;
-            return;
-        }
-
-        foreach ($iids as $itemData) {
+        foreach ($orphans as $itemData) {
             echo 'Deleting document with iid: ' . $itemData['iid'] . PHP_EOL;
             $document = $documentRepo->find($itemData['iid']);
             if ($document) {

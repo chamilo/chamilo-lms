@@ -1,0 +1,15 @@
+.message-list {
+  &__actions {
+    @apply flex gap-2 justify-end items-center flex-wrap mb-4;
+  }
+}
+
+.message-show {
+  &__tags-container {
+    @apply flex justify-end gap-2 items-center;
+  }
+
+  &__tag-searcher.field {
+    @apply mb-0;
+  }
+}

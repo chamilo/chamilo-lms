@@ -1,46 +1,46 @@
 <template>
-  <SectionHeader :title="title">
-    <BaseButton
-      icon="email-plus"
-      only-icon
-      type="black"
-      @click="goToCompose"
-    />
+  <div class="message-list">
+    <SectionHeader :title="title">
+      <BaseButton
+        icon="email-plus"
+        only-icon
+        type="black"
+        @click="goToCompose"
+      />
 
-    <BaseButton
-      :disabled="isLoading"
-      icon="refresh"
-      only-icon
-      type="black"
-      @click="refreshMessages"
-    />
+      <BaseButton
+        :disabled="isLoading"
+        icon="refresh"
+        only-icon
+        type="black"
+        @click="refreshMessages"
+      />
 
-    <BaseButton
-      :disabled="0 === selectedItems.length || isLoading"
-      icon="delete"
-      only-icon
-      type="black"
-      @click="showDlgConfirmDeleteMultiple"
-    />
+      <BaseButton
+        :disabled="0 === selectedItems.length || isLoading"
+        icon="delete"
+        only-icon
+        type="black"
+        @click="showDlgConfirmDeleteMultiple"
+      />
 
-    <BaseButton
-      :disabled="0 === selectedItems.length || isLoading"
-      icon="multiple-marked"
-      only-icon
-      popup-identifier="course-messages-list-tmenu"
-      type="black"
-      @click="mToggleMessagesList"
-    />
+      <BaseButton
+        :disabled="0 === selectedItems.length || isLoading"
+        icon="multiple-marked"
+        only-icon
+        popup-identifier="course-messages-list-tmenu"
+        type="black"
+        @click="mToggleMessagesList"
+      />
 
-    <BaseMenu
-      id="course-messages-list-tmenu"
-      ref="mMessageList"
-      :model="mItemsMarkAs"
-    />
-  </SectionHeader>
+      <BaseMenu
+        id="course-messages-list-tmenu"
+        ref="mMessageList"
+        :model="mItemsMarkAs"
+      />
+    </SectionHeader>
 
-  <div class="message-container">
-    <div class="message-actions">
+    <div class="message-list__actions">
       <BaseButton
         :label="t('Inbox')"
         icon="inbox"

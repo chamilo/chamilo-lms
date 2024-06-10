@@ -32,17 +32,15 @@
       />
     </SectionHeader>
 
-    <div class="flex justify-end gap-2">
-      <div v-if="myReceiver">
-        <BaseChip
-          v-for="tag in myReceiver.tags"
-          :key="tag['@id']"
-          :value="tag"
-          is-removable
-          label-field="tag"
-          @remove="onRemoveTagFromMessage(tag)"
-        />
-      </div>
+    <div class="message-show__tags-container">
+      <BaseChip
+        v-for="tag in myReceiver.tags"
+        :key="tag['@id']"
+        :value="tag"
+        is-removable
+        label-field="tag"
+        @remove="onRemoveTagFromMessage(tag)"
+      />
 
       <BaseAutocomplete
         v-if="item.sender && item.sender['@id'] !== securityStore.user['@id']"
@@ -51,6 +49,7 @@
         :label="t('Tags')"
         :search="onSearchTags"
         option-label="tag"
+        class="message-show__tag-searcher"
         @item-select="onItemSelect"
       />
     </div>

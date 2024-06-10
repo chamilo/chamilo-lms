@@ -4,11 +4,21 @@
     :label="value[labelField]"
     :removable="isRemovable"
     @remove="$emit('remove', value)"
-  />
+  >
+    <template #removeicon="{ removeCallback, keydownCallback }">
+      <BaseIcon
+        icon="close"
+        class="p-icon p-chip-remove-icon"
+        @click="removeCallback"
+        @keydownk="keydownCallback"
+      />
+    </template>
+  </Chip>
 </template>
 
 <script setup>
 import Chip from "primevue/chip";
+import BaseIcon from "./BaseIcon.vue"
 
 defineProps({
   value: {

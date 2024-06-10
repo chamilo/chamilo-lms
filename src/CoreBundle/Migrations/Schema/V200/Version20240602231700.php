@@ -15,7 +15,7 @@ final class Version20240602231700 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Delete documents based on resource_node_id';
+        return 'Delete documents that do not have parents based on the path.';
     }
 
     public function up(Schema $schema): void

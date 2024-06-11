@@ -16,7 +16,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use Chamilo\CoreBundle\Filter\SearchOr;
+use Chamilo\CoreBundle\Filter\SearchOrFilter;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\State\MessageByGroupStateProvider;
 use Chamilo\CoreBundle\State\MessageProcessor;
@@ -77,7 +77,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     BooleanFilter::class,
     properties: ['receivers.read']
 )]
-#[ApiFilter(SearchOr::class, properties: ['title', 'content'])]
+#[ApiFilter(SearchOrFilter::class, properties: ['title', 'content'])]
 class Message
 {
     public const MESSAGE_TYPE_INBOX = 1;

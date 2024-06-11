@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Filter;
 
@@ -12,7 +12,7 @@ use ApiPlatform\Metadata\Operation;
 use Doctrine\ORM\QueryBuilder;
 use InvalidArgumentException;
 
-class SearchOr extends AbstractFilter
+class SearchOrFilter extends AbstractFilter
 {
     protected function filterProperty(
         string $property,
@@ -59,7 +59,7 @@ class SearchOr extends AbstractFilter
                 'property' => null,
                 'type' => 'string',
                 'required' => false,
-                'description' => 'Do a "Search OR" across multiple fields',
+                'description' => 'It does a "Search OR" using `LIKE %text%` to search for fields that contain `text`',
             ],
         ];
     }

@@ -93,6 +93,26 @@
       @page="onPage($event)"
       @sort="sortingChanged($event)"
     >
+      <template #header>
+        <form
+          class="message-list__searcher-container"
+          @submit.prevent="onSearch"
+        >
+          <InputGroup>
+            <InputText
+              v-model="searchText"
+              :placeholder="t('Search')"
+              type="text"
+            />
+            <BaseButton
+              icon="search"
+              type="primary"
+              is-submit
+            />
+          </InputGroup>
+        </form>
+      </template>
+
       <Column selection-mode="multiple" />
       <Column :header="showingInbox ? t('From') : t('To')">
         <template #body="slotProps">
@@ -198,6 +218,8 @@ import { useNotification } from "../../composables/notification"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 import { useSecurityStore } from "../../store/securityStore"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
+import InputGroup from "primevue/inputgroup"
+import InputText from "primevue/inputtext"
 
 const route = useRoute()
 const router = useRouter()
@@ -285,6 +307,9 @@ const totalItems = computed(() => store.getters["message/getTotalItems"])
 
 const title = ref(null)
 
+const selectedTag = ref(null)
+const searchText = ref("")
+
 const selectedItems = ref([])
 
 const rowClass = (data) => {
@@ -305,6 +330,22 @@ function loadMessages(reset = true) {
     dtMessages.value.resetPage()
   }
 
+  fetchPayload.msgType = MESSAGE_TYPE_INBOX
+
+  if (selectedTag.value) {
+    fetchPayload["receivers.tags.tag"] = selectedTag.value.tag
+  }
+
+  if (showingInbox.value) {
+    fetchPayload["receivers.receiver"] = securityStore.user["@id"]
+  } else {
+    fetchPayload.sender = securityStore.user["@id"]
+  }
+
+  if (searchText.value) {
+    fetchPayload.search = searchText.value
+  }
+
   store.dispatch("message/fetchAll", fetchPayload)
 }
 
@@ -313,10 +354,9 @@ const showingInbox = ref(false)
 function showInbox() {
   showingInbox.value = true
   title.value = t("Inbox")
+  selectedTag.value = null
 
   fetchPayload = {
-    msgType: MESSAGE_TYPE_INBOX,
-    "receivers.receiver": securityStore.user["@id"],
     "order[sendDate]": "desc",
     itemsPerPage: initialRowsPerPage,
     page: 1,
@@ -328,11 +368,9 @@ function showInbox() {
 function showInboxByTag(tag) {
   showingInbox.value = true
   title.value = tag.tag
+  selectedTag.value = tag
 
   fetchPayload = {
-    msgType: MESSAGE_TYPE_INBOX,
-    "receivers.receiver": securityStore.user["@id"],
-    "receivers.tags.tag": tag.tag,
     "order[sendDate]": "desc",
     itemsPerPage: initialRowsPerPage,
     page: 1,
@@ -344,10 +382,9 @@ function showInboxByTag(tag) {
 function showUnread() {
   showingInbox.value = true
   title.value = t("Unread")
+  selectedTag.value = null
 
   fetchPayload = {
-    msgType: MESSAGE_TYPE_INBOX,
-    "receivers.receiver": securityStore.user["@id"],
     "order[sendDate]": "desc",
     "receivers.read": false,
     itemsPerPage: initialRowsPerPage,
@@ -360,9 +397,9 @@ function showUnread() {
 function showSent() {
   showingInbox.value = false
   title.value = t("Sent")
+  selectedTag.value = null
 
   fetchPayload = {
-    msgType: MESSAGE_TYPE_INBOX,
     sender: securityStore.user["@id"],
     "order[sendDate]": "desc",
     itemsPerPage: initialRowsPerPage,
@@ -454,4 +491,14 @@ function showDlgConfirmDeleteMultiple() {
 onMounted(() => {
   showInbox()
 })
+
+function onSearch() {
+  fetchPayload = {
+    "order[sendDate]": "desc",
+    itemsPerPage: initialRowsPerPage,
+    page: 1,
+  }
+
+  loadMessages()
+}
 </script>

@@ -2,6 +2,14 @@
   &__actions {
     @apply flex gap-2 justify-end items-center flex-wrap mb-4;
   }
+
+  &__searcher-container {
+    @apply flex justify-end;
+
+    .p-inputgroup {
+      @apply md:w-1/3;
+    }
+  }
 }
 
 .message-show {

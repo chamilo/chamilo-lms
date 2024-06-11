@@ -9,6 +9,10 @@
     @apply flex justify-end gap-2 items-center;
   }
 
+  &__tags {
+    @apply flex gap-2;
+  }
+
   &__tag-searcher.field {
     @apply mb-0;
   }

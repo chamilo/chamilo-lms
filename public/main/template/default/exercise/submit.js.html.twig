@@ -224,32 +224,38 @@ jsPlumb.ready(function () {
 });
 
 $(function () {
-    DraggableAnswer.init(
-        $(".exercise-draggable-answer"),
-        $(".droppable")
-    );
+  DraggableAnswer.init(
+    $(".exercise-draggable-answer"),
+    $(".droppable")
+  );
 
-    // if shuffle answers
-    if ('{{ shuffle_answers }}' == '1') {
-        $('.exercise-draggable-answer').each(function(){
-            // get current ul
-            var $ul = $(this);
-            // get array of list items in current ul
-            var $liArr = $ul.children('li');
-            // sort array of list items in current ul randomly
-            $liArr.sort(function(a,b){
-                // Get a random number between 0 and 10
-                var temp = parseInt( Math.random()*100 );
-                // Get 1 or 0, whether temp is odd or even
-                var isOddOrEven = temp%2;
-                // Get +1 or -1, whether temp greater or smaller than 5
-                var isPosOrNeg = temp>5 ? 1 : -1;
-                // Return -1, 0, or +1
-                return( isOddOrEven*isPosOrNeg );
-            })
-            // append list items to ul
-            .appendTo($ul);
-        });
-    }
+  // if shuffle answers
+  if ('{{ shuffle_answers }}' == '1') {
+    $('.exercise-draggable-answer').each(function() {
+      var $ul = $(this);
+      var $liArr = $ul.children('li').toArray();
+
+      function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+      }
+
+      var previousOrder = $liArr.map(item => item.id).join();
+      var newOrder;
+
+      do {
+        shuffle($liArr);
+        newOrder = $liArr.map(item => item.id).join();
+      } while (newOrder === previousOrder);
+
+      // Detach and append list items to preserve event handlers
+      $.each($liArr, function(index, item) {
+        $ul.append($(item).detach());
+      });
+    });
+  }
 });
 </script>

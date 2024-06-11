@@ -268,7 +268,35 @@ class MessageRepositoryTest extends AbstractApiTest
 
         $client = $this->createClientWithCredentials($user1Token);
 
-        $responseMessage = $client->request(
+        $file = $this->getUploadedFile();
+
+        $resourceFile = $client->request(
+            'POST',
+            '/api/resource_files',
+            [
+                'headers' => [
+                    'Content-Type' => 'multipart/form-data',
+                ],
+                'extra' => [
+                    'files' => [
+                        'file' => $file,
+                    ],
+                ],
+            ]
+        );
+
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertJsonContains(
+            [
+                '@context' => '/api/contexts/ResourceFile',
+                '@type' => 'http://schema.org/MediaObject',
+            ]
+        );
+
+        $resourceFileId = $resourceFile->toArray()['@id'];
+
+        $client->request(
             'POST',
             '/api/messages',
             [
@@ -283,6 +311,11 @@ class MessageRepositoryTest extends AbstractApiTest
                         ],
                     ],
                     'sender' => "/api/users/{$user1->getId()}",
+                    'attachments' => [
+                        [
+                            'resourceFileToAttach' => $resourceFileId,
+                        ]
+                    ]
                 ],
             ]
         );
@@ -308,37 +341,18 @@ class MessageRepositoryTest extends AbstractApiTest
                 'msgType' => Message::MESSAGE_TYPE_INBOX,
                 'title' => 'Message title',
                 'content' => 'Message content',
-            ]
-        );
-
-        $messageId = $responseMessage->toArray()['id'];
-
-        $file = $this->getUploadedFile();
-
-        $responseAttachment = $client->request(
-            'POST',
-            '/api/message_attachments',
-            [
-                'headers' => [
-                    'Content-Type' => 'multipart/form-data',
-                ],
-                'extra' => [
-                    'files' => [
-                        'file' => $file,
-                    ],
-                    'parameters' => [
-                        'messageId' => $messageId,
+                'attachments' => [
+                    [
+                        '@type' => 'http://schema.org/MediaObject',
+                        'resourceNode' => [
+                            '@type' => 'ResourceNode',
+                            'resourceFile' => [
+                                '@type' => 'http://schema.org/MediaObject',
+                                '@id' => $resourceFileId,
+                            ],
+                        ],
                     ],
                 ],
-            ]
-        );
-
-        $this->assertResponseIsSuccessful();
-        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
-        $this->assertJsonContains(
-            [
-                '@context' => '/api/contexts/MessageAttachment',
-                '@type' => 'http://schema.org/MediaObject',
             ]
         );
     }

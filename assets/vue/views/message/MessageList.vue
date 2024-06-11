@@ -109,6 +109,11 @@
               type="primary"
               is-submit
             />
+            <BaseButton
+              icon="close"
+              type="primary"
+              @click="onResetSearch"
+            />
           </InputGroup>
         </form>
       </template>
@@ -493,6 +498,18 @@ onMounted(() => {
 })
 
 function onSearch() {
+  fetchPayload = {
+    "order[sendDate]": "desc",
+    itemsPerPage: initialRowsPerPage,
+    page: 1,
+  }
+
+  loadMessages()
+}
+
+function onResetSearch() {
+  searchText.value = ""
+
   fetchPayload = {
     "order[sendDate]": "desc",
     itemsPerPage: initialRowsPerPage,

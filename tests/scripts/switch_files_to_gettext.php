@@ -32,7 +32,8 @@ echo count($defined_terms)." terms were found in language files".PHP_EOL;
 // time and memory)
 $usedTerms = [];
 $l = strlen(api_get_path(SYS_PATH));
-$files = getAllPhpFiles(api_get_path(SYS_PATH));
+$pathfile = api_get_path(SYS_PATH)."main/template/default/gamification/";
+$files = getAllPhpFiles($pathfile);
 $rootLength = strlen(api_get_path(SYS_PATH));
 $countFiles = 0;
 $countReplaces = 0;
@@ -59,13 +60,12 @@ foreach ($files as $file) {
                     $translation = $terms[$term];
                     $quotedTerm = $myTerms[1][0];
                     //echo "Would do sed -i \"s#$quotedTerm#'$translation'#g\" $file here\n";
-                    system("sed -i \"s#$term#'$translation'#g\" $file");
+                    system("sed -i \"s#$quotedTerm#'$translation'#g\" $file");
                     $countReplaces++;
                 }
             }
         } else {
-            $res = 0;
-            $res = preg_match_all('/\{\s*([\'"](\\w*)[\'"])\s*\|get_lang\}/m', $line, $myTerms);
+            $res = preg_match_all('/\{\{\s*([\'"](\\w*)[\'"])\s*\|get_lang\}\}/m', $line, $myTerms);
             if ($res > 0) {
                 foreach ($myTerms[2] as $term) {
                     echo "Found term $term".PHP_EOL;
@@ -76,7 +76,7 @@ foreach ($files as $file) {
                         $translation = $terms[$term];
                         $quotedTerm = $myTerms[1][0];
                         //echo "Would do sed -i \"s#$quotedTerm#'$translation'#g\" $file here\n";
-                        system("sed -i \"s#$term#'$translation'#g\" $file");
+                        system("sed -i \"s#$quotedTerm#'$translation'#g\" $file");
                         $countReplaces++;
                     }
                 }

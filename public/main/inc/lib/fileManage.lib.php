@@ -74,17 +74,12 @@ function copyDirTo($source, $destination, $move = true)
 
 /**
  * Get a list of all PHP (.php) files in a given directory. Includes .tpl files.
- *
- * @param string $base_path     The base path in which to find the corresponding files
- * @param bool   $includeStatic Include static .html, .htm and .css files
- *
- * @return array
  */
-function getAllPhpFiles($base_path, $includeStatic = false)
+function getAllPhpFiles(string $base_path, bool $includeStatic = false): array
 {
     $list = scandir($base_path);
     $files = [];
-    $extensionsArray = ['.php', '.tpl'];
+    $extensionsArray = ['.php', '.tpl', '.html.twig'];
     if ($includeStatic) {
         $extensionsArray[] = 'html';
         $extensionsArray[] = '.htm';
@@ -101,10 +96,11 @@ function getAllPhpFiles($base_path, $includeStatic = false)
         if (is_dir($base_path.$item)) {
             $files = array_merge($files, getAllPhpFiles($base_path.$item.'/', $includeStatic));
         } else {
-            //only analyse php files
-            $sub = substr($item, -4);
-            if (in_array($sub, $extensionsArray)) {
-                $files[] = $base_path.$item;
+            foreach ($extensionsArray as $extension) {
+                if (substr($item, -strlen($extension)) == $extension) {
+                    $files[] = $base_path.$item;
+                    break;
+                }
             }
         }
     }

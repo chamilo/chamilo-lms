@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
@@ -624,6 +625,24 @@ switch ($action) {
             $form->addHtml('<div id="add_event_options" style="display:none;">');
             $form->addDateTimePicker('event_date_start', get_lang('Date start'));
             $form->addDateTimePicker('event_date_end', get_lang('Date end'));
+
+            $form->addHtml('<hr><div id="notification_list"></div>');
+            $form
+                ->addButton(
+                    'add_notification',
+                    get_lang('Add reminder'),
+                    ActionIcon::ADD_EVENT_REMINDER->value,
+                    'plain'
+                )
+                ->setType('button')
+            ;
+            $form->addHtml('<hr>');
+
+            $htmlHeadXtra[] = '<script>$(function () {'
+                .Agenda::getJsForReminders('#announcement_add_notification')
+                .'});</script>'
+            ;
+
             $form->addHtml('</div>');
         }
 
@@ -646,6 +665,12 @@ switch ($action) {
             $data['users'] = $data['users'] ?? [];
             $sendToUsersInSession = isset($data['send_to_users_in_session']);
             $sendMeCopy = isset($data['send_me_a_copy_by_email']);
+
+            $notificationCount = $data['notification_count'] ?? [];
+            $notificationPeriod = $data['notification_period'] ?? [];
+
+            $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
+
             if (isset($id) && $id) {
                 // there is an Id => the announcement already exists => update mode
                 $file_comment = $announcementAttachmentIsDisabled ? null : $_POST['file_comment'];
@@ -725,7 +750,8 @@ switch ($action) {
                                 $data['users'],
                                 api_get_course_entity(),
                                 api_get_session_entity(),
-                                api_get_group_entity()
+                                api_get_group_entity(),
+                                $reminders
                             );
                     }
 

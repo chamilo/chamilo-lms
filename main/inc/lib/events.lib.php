@@ -2257,7 +2257,7 @@ class Event
         $courseId,
         $userId,
         $sessionId,
-        $minutes = 5
+        $minutes = 0.5
     ) {
         if (Session::read('login_as')) {
             return false;
@@ -2288,7 +2288,7 @@ class Event
 
         $result = Database::query($sql);
 
-        // Save every 5 minutes by default
+        // Save every 30 seconds by default
         $seconds = $minutes * 60;
         $maxSeconds = 3600; // Only update if max diff is one hour
         if (Database::num_rows($result)) {

@@ -25,9 +25,10 @@ if (empty($extension) || !file_exists($archive_path.$archive_file)) {
 
 $extension = strtolower($extension);
 $content_type = '';
+$_cid = api_get_course_int_id();
 
 if (in_array($extension, ['xml', 'csv', 'imscc']) &&
-    (api_is_platform_admin(true) || api_is_drh())
+    (api_is_platform_admin(true) || api_is_drh() || (CourseManager::is_course_teacher(api_get_user_id(), api_get_course_id())))
 ) {
     $content_type = 'application/force-download';
 } elseif ('zip' === $extension && $_cid && (api_is_platform_admin(true) || api_is_course_admin())) {

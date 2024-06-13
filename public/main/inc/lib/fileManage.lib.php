@@ -89,22 +89,21 @@ function getAllPhpFiles(string $base_path, bool $includeStatic = false): array
         if ('.' == substr($item, 0, 1)) {
             continue;
         }
-        $special_dirs = [api_get_path(SYS_TEST_PATH), api_get_path(SYS_COURSE_PATH), api_get_path(SYS_LANG_PATH), api_get_path(SYS_ARCHIVE_PATH)];
-        if (in_array($base_path.$item.'/', $special_dirs)) {
+        $special_dirs = []; // Modify this array as needed
+        if (in_array($base_path . $item . '/', $special_dirs)) {
             continue;
         }
-        if (is_dir($base_path.$item)) {
-            $files = array_merge($files, getAllPhpFiles($base_path.$item.'/', $includeStatic));
+        if (is_dir($base_path . $item)) {
+            $files = array_merge($files, getAllPhpFiles($base_path . $item . '/', $includeStatic));
         } else {
             foreach ($extensionsArray as $extension) {
                 if (substr($item, -strlen($extension)) == $extension) {
-                    $files[] = $base_path.$item;
+                    $files[] = $base_path . $item;
                     break;
                 }
             }
         }
     }
-    $list = null;
 
     return $files;
 }

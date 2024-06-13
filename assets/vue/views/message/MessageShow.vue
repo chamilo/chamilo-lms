@@ -32,11 +32,11 @@
       />
     </SectionHeader>
 
-    <div class="message-show__tags-container">
-      <div
-        v-if="myReceiver"
-        class="message-show__tags"
-      >
+    <div
+      v-if="myReceiver"
+      class="message-show__tags-container"
+    >
+      <div class="message-show__tags">
         <BaseChip
           v-for="tag in myReceiver.tags"
           :key="tag['@id']"
@@ -48,7 +48,6 @@
       </div>
 
       <BaseAutocomplete
-        v-if="item.sender && item.sender['@id'] !== securityStore.user['@id']"
         id="search-tags"
         v-model="foundTag"
         :label="t('Tags')"

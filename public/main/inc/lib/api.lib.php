@@ -2075,7 +2075,9 @@ function api_get_cidreq($addSessionId = true, $addGroupId = true, $origin = '')
 
     if (!empty($url)) {
         $url .= '&gradebook='.(int) api_is_in_gradebook();
-        $url .= '&origin='.$origin;
+        if (false !== $origin) {
+            $url .= '&origin=' . $origin;
+        }
     }
 
     return $url;

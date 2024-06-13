@@ -1844,14 +1844,14 @@ function saveThread(
     ) {
         $message .= get_lang('Your message has to be approved before people can view it.').'<br />';
         $message .= get_lang('You can now return to the').
-            ' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'">'.
+            ' <a href="viewforum.php?'.api_get_cidreq(true, true, false).'&forum='.$values['forum_id'].'">'.
             get_lang('Forum').'</a><br />';
     } else {
         $message .= get_lang('You can now return to the').
-            ' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'">'.
+            ' <a href="viewforum.php?'.api_get_cidreq(true, true, false).'&forum='.$values['forum_id'].'">'.
             get_lang('Forum').'</a><br />';
         $message .= get_lang('You can now return to the').
-            ' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&thread='.$thread->getIid().'">'.
+            ' <a href="viewthread.php?'.api_get_cidreq(true, true, false).'&forum='.$values['forum_id'].'&thread='.$thread->getIid().'">'.
             get_lang('Message').'</a>';
     }
     $reply_info['new_post_id'] = $postId;

@@ -5,7 +5,7 @@ require_once 'OpenAiUrl.php';
 
 class OpenAi
 {
-    private $model = "gpt-3.5-turbo-instruct"; // See https://platform.openai.com/docs/models for possible models
+    private $model = "gpt-4o"; // See https://platform.openai.com/docs/models for possible models
     private $headers;
     private $contentTypes;
     private $timeout = 0;

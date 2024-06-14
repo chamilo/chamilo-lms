@@ -27,19 +27,17 @@ class SessionNormalizer implements NormalizerInterface, NormalizerAwareInterface
     {
         $context[self::ALREADY_CALLED] = true;
 
-        $data = $this->normalizer->normalize($object, $format, $context);
-
         \assert($object instanceof Session);
 
         try {
             $object->getAccessVisibility();
         } catch (LogicException) {
-            $data['accessVisibility'] = $object->setAccessVisibilityByUser(
+            $object->setAccessVisibilityByUser(
                 $this->userHelper->getCurrent()
             );
         }
 
-        return $data;
+        return $this->normalizer->normalize($object, $format, $context);
     }
 
     public function supportsNormalization($data, ?string $format = null, array $context = []): bool

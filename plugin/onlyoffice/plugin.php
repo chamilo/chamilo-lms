@@ -26,7 +26,8 @@ require_once __DIR__.'/lib/onlyofficeSettingsFormBuilder.php';
 
 $plugin = OnlyofficePlugin::create();
 $plugin_info = $plugin->get_info();
-$plugin_info['settings_form'] = OnlyofficeSettingsFormBuilder::buildSettingsForm($plugin);
+$form = new OnlyofficeSettingsFormBuilder();
+$plugin_info['settings_form'] = $form->buildSettingsForm($plugin);
 if ($plugin_info['settings_form']->validate()) {
-    $plugin = OnlyofficeSettingsFormBuilder::validateSettingsForm($plugin);
+    $plugin = $form->validateSettingsForm($plugin);
 }

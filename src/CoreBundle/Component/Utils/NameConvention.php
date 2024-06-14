@@ -7,15 +7,18 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Component\Utils;
 
 use Chamilo\CoreBundle\Entity\User;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class NameConvention
 {
     protected RequestStack $requestStack;
+    private ParameterBagInterface $parameterBag;
 
-    public function __construct(RequestStack $requestStack)
+    public function __construct(RequestStack $requestStack, ParameterBagInterface $parameterBag)
     {
         $this->requestStack = $requestStack;
+        $this->parameterBag = $parameterBag;
     }
 
     public function getPersonName(User $user): string
@@ -35,7 +38,7 @@ class NameConvention
 
     public function getFormat(): array
     {
-        $locale = $this->requestStack->getCurrentRequest()->getLocale();
+        $locale = $this->requestStack->getCurrentRequest()?->getLocale() ?? $this->parameterBag->get('locale');
 
         $format = $this->getDefaultList()[$locale] ?? null;
         if (null === $format) {

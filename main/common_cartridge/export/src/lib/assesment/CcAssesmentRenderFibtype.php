@@ -19,6 +19,7 @@ class CcAssesmentRenderFibtype extends CcQuestionMetadataBase
         $this->setSetting(CcQtiTags::MAXNUMBER);
         $this->setSetting(CcQtiTags::PROMPT, CcQtiValues::BOX);
         $this->setSetting(CcQtiTags::FIBTYPE, CcQtiValues::STRING);
+        $this->qtype = CcQtiProfiletype::FIELD_ENTRY;
     }
 
     public function setEncoding($value)

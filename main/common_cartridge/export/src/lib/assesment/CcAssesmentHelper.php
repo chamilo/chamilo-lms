@@ -102,7 +102,7 @@ abstract class CcAssesmentHelper
      * @param cc_assesment_section $section
      * @param unknown_type         $rootpath
      * @param unknown_type         $contextid
-     * @param unknown_type         $outdir
+     * @param string         $outdir
      */
     public static function processQuestions(&$objQuizz, &$manifest, CcAssesmentSection &$section, $rootpath, $contextid, $outdir)
     {
@@ -110,23 +110,47 @@ abstract class CcAssesmentHelper
         $questioncount = 0;
         foreach ($objQuizz['questions'] as $question) {
             $qtype = $question->quiz_type;
-            /* Question type :
+            /* Question type comes from the c_quiz_question.type column.
+             * You can find the different types defined in api.lib.php.
+             * Look for UNIQUE_ANSWER as the first constant defined
              * 1 : Unique Answer (Multiple choice, single response)
              * 2 : Multiple Answers (Multiple choice, multiple response)
              *
              */
             $questionProcessor = null;
             switch ($qtype) {
-                case 1:
-                    $questionProcessor = new CcAssesmentQuestionMultichoice($objQuizz, $objQuizz['questions'], $manifest, $section, $question, $rootpath, $contextid, $outdir);
-                    $questionProcessor->generate();
-                    $questioncount++;
+                case UNIQUE_ANSWER:
+                    try {
+                        $questionProcessor = new CcAssesmentQuestionMultichoice($objQuizz, $objQuizz['questions'], $manifest, $section, $question, $rootpath, $contextid, $outdir);
+                        $questionProcessor->generate();
+                        $questioncount++;
+                    } catch (RuntimeException $e) {
+                        error_log($e->getMessage().' in question of test '.$objQuizz['title']);
+                        continue 2;
+                    }
                     break;
-                case 2:
-                    $questionProcessor = new CcAssesmentQuestionMultichoiceMultiresponse($objQuizz, $objQuizz['questions'], $manifest, $section, $question, $rootpath, $contextid, $outdir);
-                    $questionProcessor->generate();
-                    $questioncount++;
+                case MULTIPLE_ANSWER:
+                    try {
+                        $questionProcessor = new CcAssesmentQuestionMultichoiceMultiresponse($objQuizz, $objQuizz['questions'], $manifest, $section, $question, $rootpath, $contextid, $outdir);
+                        $questionProcessor->generate();
+                        $questioncount++;
+                    } catch (RuntimeException $e) {
+                        error_log($e->getMessage().' in question of test '.$objQuizz['title']);
+                        continue 2;
+                    }
                     break;
+                    /*
+                case FILL_IN_BLANKS:
+                    try {
+                        $questionProcessor = new CcAssesmentRenderFibtype($objQuizz, $objQuizz['questions'], $manifest, $section, $question, $rootpath, $contextid, $outdir);
+                        $questionProcessor->generate();
+                        $questioncount++;
+                    } catch (RuntimeException $e) {
+                        error_log($e->getMessage().' in question of test '.$objQuizz['title']);
+                        continue;
+                    }
+                    break;
+                    */
             }
         }
         //return dependencies

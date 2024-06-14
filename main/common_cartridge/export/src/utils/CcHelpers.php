@@ -68,12 +68,13 @@ abstract class CcHelpers
         return $result;
     }
 
-    public static function processEmbeddedFiles(&$doc, $attributes, $search, $customslash = null)
+    public static function processEmbeddedFiles(XMLGenericDocument &$doc, $attributes, $search, $customslash = null)
     {
         $result = [];
         $query = self::buildQuery($attributes, $search);
         $list = $doc->nodeList($query);
         foreach ($list as $filelink) {
+            // Prepare the return value of just the filepath from within the course's document folder
             $rvalue = str_replace($search, '', $filelink->nodeValue);
             if (!empty($customslash)) {
                 $rvalue = str_replace($customslash, '/', $rvalue);
@@ -91,7 +92,7 @@ abstract class CcHelpers
      *
      * @return multitype:mixed
      */
-    public static function embeddedFiles($html)
+    public static function embeddedFiles(string $html, string $courseDir = null)
     {
         $result = [];
         $doc = new XMLGenericDocument();
@@ -99,14 +100,27 @@ abstract class CcHelpers
         $doc->doc->strictErrorChecking = false;
         if (!empty($html) && $doc->loadHTML($html)) {
             $attributes = ['src', 'href'];
-            $result1 = self::processEmbeddedFiles($doc, $attributes, '@@PLUGINFILE@@');
-            $result2 = self::processEmbeddedFiles($doc, $attributes, '$@FILEPHP@$', '$@SLASH@$');
+            $result1 = [];
+            if (!empty($courseDir) && is_dir(api_get_path(SYS_COURSE_PATH).$courseDir)) {
+                // get a list of files within the course's "document" directory (only those... for now)
+                $result1 = self::processEmbeddedFiles($doc, $attributes, '/courses/'.$courseDir.'/document/');
+            }
+            $result2 = [];
+            //$result2 = self::processEmbeddedFiles($doc, $attributes, '/app/upload/users/');
             $result = array_merge($result1, $result2);
         }
 
         return $result;
     }
 
+    /**
+     * Return an array of static media dependencies found in a given document file or a document and its neighbours in the same folder
+     * @param $packageroot
+     * @param $contextid
+     * @param $folder
+     * @param $docfilepath
+     * @return array
+     */
     public static function embeddedMapping($packageroot, $contextid = null, $folder = null, $docfilepath = null)
     {
         if (isset($folder)) {
@@ -115,6 +129,7 @@ abstract class CcHelpers
             $folder = dirname($docfilepath);
             $files[] = basename($docfilepath);
         }
+        $basePath = api_get_path(SYS_APP_PATH);
 
         $depfiles = [];
         foreach ($files as $file) {
@@ -128,7 +143,7 @@ abstract class CcHelpers
             $hashpart = '';
 
             $location = $folder.DIRECTORY_SEPARATOR.$file;
-            $type = mime_content_type($file);
+            $type = mime_content_type($basePath.$location);
 
             $depfiles[$filepath.$filename] = [$location,
                                                     ($mainfile == 1),
@@ -148,6 +163,7 @@ abstract class CcHelpers
         $permDirs = api_get_permissions_for_new_directories();
 
         $files = CcHelpers::embeddedMapping($packageroot, null, $folder, $docfilepath);
+        $basePath = api_get_path(SYS_APP_PATH);
 
         $rdir = $allinone ? new CcResourceLocation($outdir) : null;
         foreach ($files as $virtual => $values) {
@@ -166,12 +182,12 @@ abstract class CcHelpers
             }
 
             $source = $values[0];
-            if (is_dir($source)) {
+            if (is_dir($basePath.$source)) {
                 continue;
             }
 
-            if (!copy($source, $rtp)) {
-                throw new RuntimeException('Unable to copy files!');
+            if (!copy($basePath.$source, $rtp)) {
+                throw new RuntimeException('Unable to copy files from '.$basePath.$source.' to '.$rtp.'!');
             }
             $resource = new CcResources($rdir->rootdir(),
                                         $values[7].$clean_filename,
@@ -243,33 +259,56 @@ abstract class CcHelpers
         return $result;
     }
 
-    public static function processLinkedFiles($content, CcIManifest &$manifest, $packageroot,
-                                                $contextid, $outdir, $webcontent = false)
+    /**
+     * Detect embedded files in the given HTML string
+     * @param string      $content The HTML string content
+     * @param CcIManifest $manifest Manifest object (usually empty at this point) that will be filled
+     * @param             $packageroot
+     * @param             $contextid
+     * @param             $outdir
+     * @param             $webcontent
+     * @return array
+     */
+    public static function processLinkedFiles(
+        string $content,
+        CcIManifest &$manifest,
+        $packageroot,
+        $contextid,
+        $outdir,
+        $webcontent = false
+    )
     {
         // Detect all embedded files
         // copy all files in the cc package stripping any spaces and using only lowercase letters
         // add those files as resources of the type webcontent to the manifest
-        // replace the links to the resource using $IMS-CC-FILEBASE$ and their new locations
+        // replace the links to the resource using $1Edtech-CC-FILEBASE$ and their new locations
         // cc_resource has array of files and array of dependencies
         // most likely we would need to add all files as independent resources and than
         // attach them all as dependencies to the forum tag.
-        $lfiles = self::embeddedFiles($content);
+        $courseDir = $internalCourseDocumentsPath = null;
+        $courseInfo = api_get_course_info();
+        $replaceprefix = '$1EdTech-CC-FILEBASE$';
+        if (!empty($courseInfo)) {
+            $courseDir = $courseInfo['directory'];
+            $internalCourseDocumentsPath = '/courses/'.$courseDir.'/document';
+        }
+        $lfiles = self::embeddedFiles($content, $courseDir);
         $text = $content;
         $deps = [];
         if (!empty($lfiles)) {
-            $files = self::handleStaticContent($manifest,
-                                                 $packageroot,
-                                                 $contextid,
-                                                 $outdir);
-            $replaceprefix = $webcontent ? '' : '$IMS-CC-FILEBASE$';
             foreach ($lfiles as $lfile) {
+                $lfile = DIRECTORY_SEPARATOR.$lfile; // results of handleResourceContent() come prefixed by DIRECTORY_SEPARATOR
+                $files = self::handleResourceContent(
+                    $manifest,
+                    $packageroot,
+                    $contextid,
+                    $outdir,
+                    true,
+                    $internalCourseDocumentsPath.$lfile
+                );
                 if (isset($files[$lfile])) {
                     $filename = str_replace('%2F', '/', rawurlencode($lfile));
-                    $content = str_replace('@@PLUGINFILE@@'.$filename,
-                                           $replaceprefix.'../'.$files[$lfile][1],
-                                           $content);
-                    // For the legacy stuff.
-                    $content = str_replace('$@FILEPHP@$'.str_replace('/', '$@SLASH@$', $filename),
+                    $content = str_replace($internalCourseDocumentsPath.$filename,
                                            $replaceprefix.'../'.$files[$lfile][1],
                                            $content);
                     $deps[] = $files[$lfile][0];

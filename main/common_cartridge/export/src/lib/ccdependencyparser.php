@@ -85,7 +85,7 @@ function stripUrl($path, $rootDir = '')
  */
 function fullPath($path, $dirsep = DIRECTORY_SEPARATOR)
 {
-    $token = '$IMS-CC-FILEBASE$';
+    $token = '$1EdTech-CC-FILEBASE$';
     $path = str_replace($token, '', $path);
     if (is_string($path) && ($path != '')) {
         $sep = $dirsep;

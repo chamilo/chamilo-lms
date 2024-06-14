@@ -62,10 +62,8 @@ class CcAssesmentQuestionProcBase
             }
 
             //Get category
-            $questionCategory = $this->questionNode->questionCategory;
-
-            if (!empty($questionCategory)) {
-                $this->qmetadata->setCategory($questionCategory);
+            if (!empty($this->questionNode->questionCategory)) {
+                $this->qmetadata->setCategory($this->questionNode->questionCategory);
             }
             $rts = new CcAssesmentItemmetadata();
             $rts->addMetadata($this->qmetadata);
@@ -82,7 +80,7 @@ class CcAssesmentQuestionProcBase
             $qmaterial = new CcAssesmentMaterial();
             $qmattext = new CcAssesmentMattext();
 
-            $questionText = $this->questionNode->question;
+            $questionText = $this->questionNode->question.'<br>'.$this->questionNode->description;
             $result = CcHelpers::processLinkedFiles($questionText,
                 $this->manifest,
                 $this->rootpath,

@@ -43,6 +43,8 @@ if (Security::check_token('post') && ($action === 'course_select_form')) {
     $resources = Security::remove_XSS($_POST['resource']);
     if (!empty($resources)) {
         $cb = new CourseBuilder('partial');
+        // Build the course object with all selected resources
+        /* @var Course $course */
         $course = $cb->build(0, null, false, array_keys($resources), $resources);
         $course = CourseSelectForm::get_posted_course(null, 0, '', $course);
         $imsccFile = Cc13ExportConvert::export($course);

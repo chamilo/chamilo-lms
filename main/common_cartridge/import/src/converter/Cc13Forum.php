@@ -7,7 +7,7 @@ class Cc13Forum extends Cc13Entities
 {
     public function fullPath($path, $dir_sep = DIRECTORY_SEPARATOR)
     {
-        $token = '$IMS-CC-FILEBASE$';
+        $token = '$1EdTech-CC-FILEBASE$';
         $path = str_replace($token, '', $path);
 
         if (is_string($path) && ($path != '')) {

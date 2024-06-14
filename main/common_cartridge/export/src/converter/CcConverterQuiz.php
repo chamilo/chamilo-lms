@@ -3,7 +3,7 @@
 
 class CcConverterQuiz extends CcConverters
 {
-    public function __construct(CcIItem &$item, CcIManifest &$manifest, $rootpath, $path)
+    public function __construct(CcIItem &$item, CcIManifest &$manifest, string $rootpath, string $path)
     {
         $this->ccType = CcVersion13::ASSESSMENT;
         $this->defaultfile = 'quiz.xml';
@@ -11,7 +11,13 @@ class CcConverterQuiz extends CcConverters
         parent::__construct($item, $manifest, $rootpath, $path);
     }
 
-    public function convert($outdir, $objQuizz)
+    /**
+     * Convert a quiz to a CC XML file (.xml) in a subfolder of the whole CC archive
+     * @param $outdir
+     * @param $objQuizz
+     * @return bool true
+     */
+    public function convert($outdir, $objQuizz): bool
     {
         $rt = new Assesment13ResourceFile();
         $title = $objQuizz['title'];
@@ -29,7 +35,7 @@ class CcConverterQuiz extends CcConverters
         if ($maxAttempts > 0) {
             // Qti does not support number of specific attempts bigger than 5 (??)
             if ($maxAttempts > 5) {
-                $maxAttempts = CcQtiValues::unlimited;
+                $maxAttempts = CcQtiValues::UNLIMITED;
             }
             $metadata->setMaxattempts($maxAttempts);
         }
@@ -49,7 +55,7 @@ class CcConverterQuiz extends CcConverters
                                                     $this->rootpath,
                                                     $contextid,
                                                     $outdir);
-
+        // Use exercise description, get it from $result[0] generated above.
         CcAssesmentHelper::addAssesmentDescription($rt, $result[0], CcQtiValues::HTMLTYPE);
 
         // Section.

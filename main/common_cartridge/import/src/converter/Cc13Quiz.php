@@ -40,7 +40,11 @@ class Cc13Quiz extends Cc13Entities
             foreach ($quiz['questions'] as $question) {
                 $qtype = $question['type'];
 
-                $types = ['unique_answer' => 1, 'multiple_answer' => 2];
+                $types = [
+                    'unique_answer' => UNIQUE_ANSWER,
+                    'multiple_answer' => MULTIPLE_ANSWER,
+                    'fib' => FILL_IN_BLANKS,
+                ];
                 $questionType = $types[$qtype];
 
                 $questionInstance = Question::getInstance($questionType);

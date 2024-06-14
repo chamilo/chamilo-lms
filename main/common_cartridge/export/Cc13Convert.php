@@ -143,6 +143,16 @@ class Cc13Convert
         return $sections;
     }
 
+    /**
+     * Return array of items by category and item ID ("test" level, not "question" level) with details like title,
+     * comment (description), type, questions, max_attempt, etc.
+     * @param $objItems
+     * @param $categoryId
+     * @param $itemType
+     * @param $coursecode
+     * @param $itemQuestions
+     * @return array|mixed
+     */
     protected static function getSequence($objItems, $categoryId = null, $itemType = null, $coursecode = null, $itemQuestions = null)
     {
         $sequences = [];
@@ -245,7 +255,18 @@ class Cc13Convert
         return $sequences;
     }
 
-    protected static function processSequence(CcIItem &$item, CcIManifest &$manifest, array $sequence, $packageroot, $outdir)
+    /**
+     * Process the different types of activities exported from the course.
+     * When dealing with tests, the "sequence" provided here is a test, not a question.
+     * For each sequence, call the corresponding CcConverter[Type] object instantiation method in export/src/converter/.
+     * @param CcIItem     $item
+     * @param CcIManifest $manifest
+     * @param array       $sequence
+     * @param string      $packageroot
+     * @param string      $outdir
+     * @return void
+     */
+    protected static function processSequence(CcIItem &$item, CcIManifest &$manifest, array $sequence, string $packageroot, string $outdir)
     {
         if (!empty($sequence)) {
             foreach ($sequence as $seq) {
@@ -254,7 +275,7 @@ class Cc13Convert
                 $aitem = self::itemIndenter($item, $activity_indentation);
                 $caller = "CcConverter{$activity_type}";
                 if (class_exists($caller)) {
-                    $obj = new $caller($aitem, $manifest, $packageroot, $path);
+                    $obj = new $caller($aitem, $manifest, $packageroot, $outdir);
                     if (!$obj->convert($outdir, $seq)) {
                         throw new RuntimeException("failed to convert {$activity_type}");
                     }

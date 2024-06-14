@@ -5,6 +5,11 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 
 class Cc13ExportConvert
 {
+    /**
+     * Export the CommonCartridge object to the app/cache/course_backups/CourseCC13Archiver_[hash] directory
+     * @param $objCourse
+     * @return false|string
+     */
     public static function export($objCourse)
     {
         $permDirs = api_get_permissions_for_new_directories();
@@ -25,6 +30,12 @@ class Cc13ExportConvert
         return false;
     }
 
+    /**
+     * @param $backupDir
+     * @param $objCourse
+     * @return string Filename of the created .imscc (zip) file
+     * @throws Exception
+     */
     public static function createImscc($backupDir, $objCourse)
     {
         $backupDirectory = CourseArchiver::getBackupDir();

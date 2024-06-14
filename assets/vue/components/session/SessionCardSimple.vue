@@ -1,6 +1,6 @@
 <script setup>
 import CourseCard from "../course/CourseCard.vue"
-import { SESSION_VISIBILITY_LIST_ONLY } from "../../constants/entity/session"
+import { useSessionCard } from "../../composables/my_course_list/myCourseListSessions"
 
 const props = defineProps({
   session: {
@@ -9,11 +9,7 @@ const props = defineProps({
   },
 })
 
-const courses = props.session.courses
-  ? props.session.courses.map((sesionRelCourse) => ({ ...sesionRelCourse.course, _id: sesionRelCourse.course.id }))
-  : []
-
-const enableAccess = props.session.accessVisibility !== SESSION_VISIBILITY_LIST_ONLY
+const { courses, isEnabled } = useSessionCard(props.session)
 </script>
 
 <template>
@@ -26,7 +22,7 @@ const enableAccess = props.session.accessVisibility !== SESSION_VISIBILITY_LIST_
       :session="session"
       :course="course"
       :session-id="session.id"
-      :disabled="!enableAccess"
+      :disabled="!isEnabled"
     />
   </div>
 </template>

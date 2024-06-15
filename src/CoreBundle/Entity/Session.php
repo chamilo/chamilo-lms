@@ -34,6 +34,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Get(
+            uriTemplate: '/sessions/{id}/basic',
+            normalizationContext: [
+                'groups' => ['session:basic'],
+            ],
+            security: "is_granted('ROLE_ADMIN') or is_granted('VIEW', object)"
+        ),
+        new Get(
+            uriTemplate: '/sessions/{id}',
             normalizationContext: [
                 'groups' => ['session:read', 'session:item:read'],
             ],
@@ -95,7 +103,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(security: "is_granted('ROLE_ADMIN')"),
         new Delete(security: "is_granted('DELETE', object)"),
     ],
-    normalizationContext: ['groups' => ['session:read']],
+    normalizationContext: ['groups' => ['session:basic']],
     denormalizationContext: ['groups' => ['session:write']],
     security: "is_granted('ROLE_ADMIN')"
 )]
@@ -121,6 +129,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     public const SESSION_ADMIN = 4;
 
     #[Groups([
+        'session:basic',
         'session:read',
         'session_rel_user:read',
         'session_rel_course_rel_user:read',
@@ -147,6 +156,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         mappedBy: 'session',
         targetEntity: SessionRelCourse::class,
         cascade: ['persist'],
+        fetch: 'EXTRA_LAZY',
         orphanRemoval: true
     )]
     protected Collection $courses;
@@ -161,6 +171,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         mappedBy: 'session',
         targetEntity: SessionRelUser::class,
         cascade: ['persist', 'remove'],
+        fetch: 'EXTRA_LAZY',
         orphanRemoval: true
     )]
     protected Collection $users;
@@ -219,6 +230,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
     #[Assert\NotBlank]
     #[Groups([
+        'session:basic',
         'session:read',
         'session:write',
         'session_rel_course_rel_user:read',
@@ -233,6 +245,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     protected string $title;
 
     #[Groups([
+        'session:basic',
         'session:read',
         'session:write',
     ])]
@@ -250,11 +263,11 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     #[ORM\Column(name: 'duration', type: 'integer', nullable: true)]
     protected ?int $duration = null;
 
-    #[Groups(['session:read'])]
+    #[Groups(['session:basic', 'session:read'])]
     #[ORM\Column(name: 'nbr_courses', type: 'integer', unique: false, nullable: false)]
     protected int $nbrCourses;
 
-    #[Groups(['session:read'])]
+    #[Groups(['session:basic', 'session:read'])]
     #[ORM\Column(name: 'nbr_users', type: 'integer', unique: false, nullable: false)]
     protected int $nbrUsers;
 
@@ -263,6 +276,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     protected int $nbrClasses;
 
     #[Groups([
+        'session:basic',
         'session:read',
         'session:write',
     ])]

@@ -1,9 +1,9 @@
-import { createPinia, setActivePinia } from 'pinia'
+import { createPinia, setActivePinia } from "pinia"
+import translateHtml from "./../translatehtml.js"
 
 const pinia = createPinia()
 setActivePinia(pinia)
 
-import translateHtml from './../translatehtml.js'
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener("DOMContentLoaded", function () {
   translateHtml()
-});
+})

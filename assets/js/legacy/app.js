@@ -24,6 +24,7 @@ import "./main"
 import moment from "moment"
 import Sortable from "sortablejs"
 import Swal from "sweetalert2"
+import "./vendor"
 
 // Gets HTML content from tinymce
 window.getContentFromEditor = function (id) {
@@ -52,8 +53,6 @@ window.setContentFromEditor = function (id, content) {
 //
 // global.frameReady = frameReady;
 // window.frameReady = frameReady;
-
-import "./vendor"
 
 global.moment = moment
 moment.locale(locale)
@@ -544,7 +543,7 @@ function addMainEvent(elm, evType, fn, useCapture) {
   }
 }
 
-window.copyTextToClipBoard = function(elementId) {
+window.copyTextToClipBoard = function (elementId) {
   var copyText = document.getElementById(elementId)
 
   if (copyText) {

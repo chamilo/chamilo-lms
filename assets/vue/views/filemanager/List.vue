@@ -1,32 +1,14 @@
 <template>
-  <div
-    v-if="isAuthenticated"
-    class="q-card"
-  >
+  <div v-if="isAuthenticated" class="q-card">
     <div class="p-4 flex flex-row gap-1 mb-2">
       <div class="flex flex-row gap-2">
-        <Button
-          class="btn btn--primary"
-          icon="fa fa-folder-plus"
-          label="New folder"
-          @click="openNew"
-        />
-        <Button
-          class="btn btn--primary"
-          icon="fa fa-file-upload"
-          label="Upload"
-          @click="uploadDocumentHandler()"
-        />
-        <Button
-          v-if="selectedItems.length"
-          class="btn btn--danger"
-          icon="pi pi-trash"
-          label="Delete"
-          @click="confirmDeleteMultiple"
-        />
+        <Button class="btn btn--primary" icon="fa fa-folder-plus" label="New folder" @click="openNew" />
+        <Button class="btn btn--primary" icon="fa fa-file-upload" label="Upload" @click="uploadDocumentHandler" />
+        <Button v-if="selectedItems.length" class="btn btn--danger" icon="pi pi-trash" label="Delete" @click="confirmDeleteMultiple" />
       </div>
     </div>
   </div>
+
   <DataTable
     v-model:filters="filters"
     v-model:selection="selectedItems"
@@ -44,28 +26,17 @@
     filterDisplay="menu"
     paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
     responsiveLayout="scroll"
-    @page="onPage($event)"
-    @sort="sortingChanged($event)"
+    @page="onPage"
+    @sort="sortingChanged"
   >
-    <Column
-      :header="$t('Title')"
-      :sortable="true"
-      field="resourceNode.title"
-    >
+    <Column :header="$t('Title')" :sortable="true" field="resourceNode.title">
       <template #body="slotProps">
-        <div v-if="slotProps.data && slotProps.data.resourceNode && slotProps.data.resourceNode.resourceFile">
+        <div v-if="slotProps.data?.resourceNode?.resourceFile">
           <ResourceFileLink :resource="slotProps.data" />
-          <v-icon
-            v-if="slotProps.data.resourceLinkListFromEntity && slotProps.data.resourceLinkListFromEntity.length > 0"
-            icon="mdi-link"
-          />
+          <v-icon v-if="slotProps.data.resourceLinkListFromEntity?.length" icon="mdi-link" />
         </div>
         <div v-else>
-          <a
-            v-if="slotProps.data"
-            class="cursor-pointer"
-            @click="handleClick(slotProps.data)"
-          >
+          <a v-if="slotProps.data" class="cursor-pointer" @click="handleClick(slotProps.data)">
             <v-icon icon="mdi-folder" />
             {{ slotProps.data.resourceNode.title }}
           </a>
@@ -73,25 +44,13 @@
       </template>
     </Column>
 
-    <Column
-      :header="$t('Size')"
-      :sortable="true"
-      field="resourceNode.resourceFile.size"
-    >
+    <Column :header="$t('Size')" :sortable="true" field="resourceNode.resourceFile.size">
       <template #body="slotProps">
-        {{
-          slotProps.data.resourceNode.resourceFile
-            ? prettyBytes(slotProps.data.resourceNode.resourceFile.size)
-            : ""
-        }}
+        {{ slotProps.data.resourceNode.resourceFile ? prettyBytes(slotProps.data.resourceNode.resourceFile.size) : "" }}
       </template>
     </Column>
 
-    <Column
-      :header="$t('Modified')"
-      :sortable="true"
-      field="resourceNode.updatedAt"
-    >
+    <Column :header="$t('Modified')" :sortable="true" field="resourceNode.updatedAt">
       <template #body="slotProps">
         {{ relativeDatetime(slotProps.data.resourceNode.updatedAt) }}
       </template>
@@ -100,66 +59,29 @@
     <Column :exportable="false">
       <template #body="slotProps">
         <div class="flex flex-row gap-2">
-          <Button
-            v-if="isAuthenticated"
-            class="btn btn--danger"
-            icon="pi pi-trash"
-            @click="confirmDeleteItem(slotProps.data)"
-          />
+          <Button v-if="isAuthenticated" class="btn btn--danger" icon="pi pi-trash" @click="confirmDeleteItem(slotProps.data)" />
         </div>
       </template>
     </Column>
 
     <Column :exportable="false">
       <template #body="slotProps">
-        <div class="flex flex-row gap-2">
-          <Button
-            class="p-button-sm p-button p-mr-2"
-            label="Select"
-            @click="returnToEditor(slotProps.data)"
-          />
+        <div v-if="slotProps.data.resourceNode.resourceFile" class="flex flex-row gap-2">
+          <Button class="p-button-sm p-button p-mr-2" label="Select" @click="returnToEditor(slotProps.data)" />
         </div>
       </template>
     </Column>
   </DataTable>
 
-  <Dialog
-    v-model:visible="itemDialog"
-    :header="$t('New folder')"
-    :modal="true"
-    :style="{ width: '450px' }"
-    class="p-fluid"
-  >
+  <Dialog v-model:visible="itemDialog" :header="$t('New folder')" :modal="true" :style="{ width: '450px' }" class="p-fluid">
     <div class="p-field">
       <label for="title">{{ $t("Name") }}</label>
-      <InputText
-        id="title"
-        v-model.trim="item.title"
-        :class="{ 'p-invalid': submitted && !item.title }"
-        autocomplete="off"
-        autofocus
-        required="true"
-      />
-      <small
-        v-if="submitted && !item.title"
-        class="p-error"
-      >$t('Title is required')</small
-      >
+      <InputText id="title" v-model.trim="item.title" :class="{ 'p-invalid': submitted && !item.title }" autocomplete="off" autofocus required />
+      <small v-if="submitted && !item.title" class="p-error">{{ $t('Title is required') }}</small>
     </div>
-
     <template #footer>
-      <Button
-        class="p-button-text"
-        icon="pi pi-times"
-        label="Cancel"
-        @click="hideDialog"
-      />
-      <Button
-        class="p-button-text"
-        icon="pi pi-check"
-        label="Save"
-        @click="saveItem"
-      />
+      <Button class="p-button-text" icon="pi pi-times" label="Cancel" @click="hideDialog" />
+      <Button class="p-button-text" icon="pi pi-check" label="Save" @click="saveItem" />
     </template>
   </Dialog>
 
@@ -174,32 +96,14 @@
     </template>
   </Dialog>
 
-  <Dialog
-    v-model:visible="deleteMultipleDialog"
-    :modal="true"
-    :style="{ width: '450px' }"
-    header="Confirm"
-  >
+  <Dialog v-model:visible="deleteMultipleDialog" :modal="true" :style="{ width: '450px' }" header="Confirm">
     <div class="confirmation-content">
-      <i
-        class="pi pi-exclamation-triangle p-mr-3"
-        style="font-size: 2rem"
-      />
-      <span v-if="item">{{ $t('Are you sure you want to delete the selected items?') }}</span>
+      <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem"></i>
+      <span>{{ $t('Are you sure you want to delete the selected items?') }}</span>
     </div>
     <template #footer>
-      <Button
-        class="p-button-text"
-        icon="pi pi-times"
-        label="No"
-        @click="deleteMultipleDialog = false"
-      />
-      <Button
-        class="p-button-text"
-        icon="pi pi-check"
-        label="Yes"
-        @click="deleteMultipleItems"
-      />
+      <Button class="p-button-text" icon="pi pi-times" label="No" @click="deleteMultipleDialog = false" />
+      <Button class="p-button-text" icon="pi pi-check" label="Yes" @click="deleteMultipleItems" />
     </template>
   </Dialog>
 
@@ -214,286 +118,268 @@
       <Button class="p-button-text" label="Close" @click="closeDetailsDialog" />
     </template>
   </Dialog>
-
 </template>
 
-<script>
-import { mapActions, mapGetters } from "vuex"
-import { mapFields } from "vuex-map-fields"
-import ListMixin from "../../mixins/ListMixin"
-import ActionCell from "../../components/ActionCell.vue"
-import ResourceIcon from "../../components/documents/ResourceIcon.vue"
-import ResourceFileLink from "../../components/documents/ResourceFileLink.vue"
-import DataFilter from "../../components/DataFilter"
+<script setup>
+import { ref, computed, onMounted, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useFormatDate } from '../../composables/formatDate'
+import prettyBytes from 'pretty-bytes'
+import { useStore } from 'vuex'
+import { useRoute, useRouter } from 'vue-router'
+import ResourceFileLink from '../../components/documents/ResourceFileLink.vue'
+import { useSecurityStore } from '../../store/securityStore'
+import { storeToRefs } from 'pinia'
 import isEmpty from "lodash/isEmpty"
-import { RESOURCE_LINK_PUBLISHED } from "../../components/resource_links/visibility"
-import { useI18n } from "vue-i18n"
-import { useFormatDate } from "../../composables/formatDate"
-import prettyBytes from "pretty-bytes"
-import { useSecurityStore } from "../../store/securityStore"
-import { storeToRefs } from "pinia"
+import isString from "lodash/isString"
+import isBoolean from "lodash/isBoolean"
+import toInteger from "lodash/toInteger"
+import axios from 'axios'
 
-export default {
-  name: "FileManagerList",
-  servicePrefix: "FileManager",
-  components: {
-    ActionCell,
-    ResourceIcon,
-    ResourceFileLink,
-    DataFilter,
+const { t } = useI18n()
+const { relativeDatetime } = useFormatDate()
+const store = useStore()
+const route = useRoute()
+const router = useRouter()
+const securityStore = useSecurityStore()
+const { isAuthenticated, user } = storeToRefs(securityStore)
+
+const items = computed(() => store.getters['personalfile/list'])
+const totalItems = computed(() => store.getters['personalfile/totalItems'])
+const isLoading = computed(() => store.getters['personalfile/isLoading'])
+
+const itemDialog = ref(false)
+const deleteItemDialog = ref(false)
+const deleteMultipleDialog = ref(false)
+const detailsDialogVisible = ref(false)
+const selectedItem = ref({})
+const itemToDelete = ref(null)
+const selectedItems = ref([])
+const filters = ref({ shared: 0, loadNode: 1 })
+const submitted = ref(false)
+const item = ref({})
+const options = ref({ itemsPerPage: 10, page: 1, sortBy: '', sortDesc: false })
+const pagination = ref({
+  sortBy: "resourceNode.title",
+  descending: false,
+  page: 1,
+  rowsPerPage: 10,
+  rowsNumber: 10,
+})
+const nextPage = ref(null)
+const expandedFilter = ref(false)
+
+const columnsQua = ref([
+  { align: "left", name: "resourceNode.title", label: t("Title"), field: "resourceNode.title", sortable: true },
+  {
+    align: "left",
+    name: "resourceNode.updatedAt",
+    label: t("Modified"),
+    field: "resourceNode.updatedAt",
+    sortable: true
   },
-  mixins: [ListMixin],
-  setup() {
-    const { t } = useI18n()
-    const { relativeDatetime } = useFormatDate()
-    const securityStore = useSecurityStore()
+  { name: "resourceNode.resourceFile.size", label: t("Size"), field: "resourceNode.resourceFile.size", sortable: true },
+  { name: "action", label: t("Actions"), field: "action", sortable: false },
+])
 
-    const { isAuthenticated, isAdmin, user } = storeToRefs(securityStore)
+const columns = ref([
+  { label: t("Title"), field: "title", name: "title", sortable: true },
+  { label: t("Modified"), field: "resourceNode.updatedAt", name: "updatedAt", sortable: true },
+  { label: t("Size"), field: "resourceNode.resourceFile.size", name: "size", sortable: true },
+  { label: t("Actions"), name: "action", sortable: false },
+])
 
-    const data = {
-      sortBy: "title",
-      sortDesc: false,
-      columnsQua: [
-        { align: "left", name: "resourceNode.title", label: t("Title"), field: "resourceNode.title", sortable: true },
-        {
-          align: "left",
-          name: "resourceNode.updatedAt",
-          label: t("Modified"),
-          field: "resourceNode.updatedAt",
-          sortable: true,
-        },
-        {
-          name: "resourceNode.resourceFile.size",
-          label: t("Size"),
-          field: "resourceNode.resourceFile.size",
-          sortable: true,
-        },
-        { name: "action", label: t("Actions"), field: "action", sortable: false },
-      ],
-      columns: [
-        { label: t("Title"), field: "title", name: "title", sortable: true },
-        { label: t("Modified"), field: "resourceNode.updatedAt", name: "updatedAt", sortable: true },
-        { label: t("Size"), field: "resourceNode.resourceFile.size", name: "size", sortable: true },
-        { label: t("Actions"), name: "action", sortable: false },
-      ],
-      pageOptions: [10, 20, 50, t("All")],
-      selected: [],
-      isBusy: false,
-      options: [],
-      selectedItems: [],
-      // prime vue
-      deleteMultipleDialog: false,
-      item: {},
-      filters: { shared: 0, loadNode: 1 },
-      submitted: false,
-      prettyBytes,
-      relativeDatetime,
-      t,
-      currentUser: user,
-      isAdmin,
-      isAuthenticated,
-    }
+const pageOptions = ref([10, 20, 50, t("All")])
+const isBusy = ref(false)
 
-    return data
-  },
-  created() {
-    this.resetList = true
-    this.onUpdateOptions(this.options)
-    this.isFromEditor = window.location.search.includes('editor=tinymce');
-  },
-  computed: {
-    // From crud.js list function
-    ...mapGetters("resourcenode", {
-      resourceNode: "getResourceNode",
-    }),
-
-    ...mapGetters("personalfile", {
-      items: "list",
-    }),
-
-    //...getters
-
-    // From ListMixin
-    ...mapFields("personalfile", {
-      deletedResource: "deleted",
-      error: "error",
-      isLoading: "isLoading",
-      resetList: "resetList",
-      totalItems: "totalItems",
-      view: "view",
-    }),
-  },
-  data() {
-    return {
-      itemDialog: false,
-      detailsDialogVisible: false,
-      deleteItemDialog: false,
-      selectedItem: {},
-      itemToDelete: null,
-      isFromEditor: false,
-    };
-  },
-  methods: {
-    showHandler(item) {
-      this.selectedItem = item;
-      this.detailsDialogVisible = true;
-    },
-    closeDetailsDialog() {
-      this.detailsDialogVisible = false;
-    },
-    // prime
-    onPage(event) {
-      this.options.itemsPerPage = event.rows
-      this.options.page = event.page + 1
-      this.options.sortBy = event.sortField
-      this.options.sortDesc = event.sortOrder === -1
-
-      this.onUpdateOptions(this.options)
-    },
-    sortingChanged(event) {
-      console.log("sortingChanged")
-      console.log(event)
-      this.options.sortBy = event.sortField
-      this.options.sortDesc = event.sortOrder === -1
-
-      this.onUpdateOptions(this.options)
-      // ctx.sortBy   ==> Field key for sorting by (or null for no sorting)
-      // ctx.sortDesc ==> true if sorting descending, false otherwise
-    },
-
-    openNew() {
-      this.item = {}
-      this.submitted = false
-      this.itemDialog = true
-    },
-    hideDialog() {
-      this.itemDialog = false
-      this.submitted = false
-    },
-    saveItem() {
-      this.submitted = true
-
-      if (this.item.title.trim()) {
-        if (this.item.id) {
-        } else {
-          let resourceNodeId = this.currentUser.resourceNode["id"]
-          if (!isEmpty(this.$route.params.node)) {
-            resourceNodeId = this.$route.params.node
-          }
-          this.item.filetype = "folder"
-          this.item.parentResourceNodeId = resourceNodeId
-          this.item.resourceLinkList = JSON.stringify([
-            {
-              gid: 0,
-              sid: 0,
-              cid: 0,
-              visibility: RESOURCE_LINK_PUBLISHED,
-            },
-          ])
-
-          this.createWithFormData(this.item)
-          this.showMessage("Saved")
-        }
-
-        this.itemDialog = false
-        this.item = {}
-      }
-    },
-    editItem(item) {
-      this.item = { ...item }
-      this.itemDialog = true
-    },
-    confirmDeleteItem(item) {
-      console.log('confirmDeleteItem :::', item)
-      this.item = { ...item }
-      this.itemToDelete = { ...item }
-      this.deleteItemDialog = true
-    },
-    confirmDeleteMultiple() {
-      this.deleteMultipleDialog = true
-    },
-    deleteMultipleItems() {
-      console.log("deleteMultipleItems")
-      console.log(this.selectedItems)
-      this.deleteMultipleAction(this.selectedItems)
-      this.onRequest({
-        pagination: this.pagination,
-      })
-      this.deleteMultipleDialog = false
-      this.selectedItems = null
-    },
-    deleteItemButton() {
-      console.log("deleteItem", this.itemToDelete);
-      if (this.itemToDelete && this.itemToDelete.id) {
-        this.deleteItem(this.itemToDelete)
-          .then(() => {
-            this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Item deleted successfully', life: 3000 });
-            this.deleteItemDialog = false;
-            this.itemToDelete = null;
-            this.onUpdateOptions(this.options);
-          })
-          .catch(error => {
-            console.error("Error deleting the item:", error);
-            this.$toast.add({ severity: 'error', summary: 'Error', detail: 'An error occurred while deleting the item', life: 3000 });
-          });
-      } else {
-        console.error("No item to delete or item ID is missing");
-      }
-    },
-    onRowSelected(items) {
-      this.selected = items
-    },
-    selectAllRows() {
-      this.$refs.selectableTable.selectAllRows()
-    },
-    clearSelected() {
-      this.$refs.selectableTable.clearSelected()
-    },
-    returnToEditor(item) {
-      const url = item.contentUrl
-
-      // Tiny mce.
-      window.parent.postMessage(
-        {
-          url: url,
-        },
-        "*",
-      )
-
-      if (parent.tinymce) {
-        parent.tinymce.activeEditor.windowManager.close()
-      }
-
-      // Ckeditor
-      function getUrlParam(paramName) {
-        var reParam = new RegExp("(?:[\?&]|&amp;)" + paramName + "=([^&]+)", "i")
-        var match = window.location.search.match(reParam)
-        return match && match.length > 1 ? match[1] : ""
-      }
-
-      var funcNum = getUrlParam("CKEditorFuncNum")
-      if (window.opener.CKEDITOR) {
-        window.opener.CKEDITOR.tools.callFunction(funcNum, url)
-        window.close()
-      }
-    },
-    async deleteSelected() {
-      console.log("deleteSelected")
-      this.deleteMultipleAction(this.selected)
-      this.onRequest({
-        pagination: this.pagination,
-      })
-      console.log("end -- deleteSelected")
-    },
-    ...mapActions("personalfile", {
-      getPage: "fetchAll",
-      createWithFormData: "createWithFormData",
-      deleteItem: "del",
-      deleteMultipleAction: "delMultiple",
-    }),
-    ...mapActions("resourcenode", {
-      findResourceNode: "findResourceNode",
-    }),
-  },
+const openNew = () => {
+  item.value = {}
+  submitted.value = false
+  itemDialog.value = true
 }
+
+const hideDialog = () => {
+  itemDialog.value = false
+  submitted.value = false
+}
+
+const saveItem = async () => {
+  submitted.value = true
+  if (item.value.title.trim()) {
+    if (item.value.id) {
+      // Update logic here
+    } else {
+      let resourceNodeId = user.value.resourceNode.id
+      if (route.params.node) {
+        resourceNodeId = route.params.node
+      }
+      item.value.filetype = "folder"
+      item.value.parentResourceNodeId = resourceNodeId
+      item.value.resourceLinkList = JSON.stringify([{ gid: 0, sid: 0, cid: 0, visibility: 'RESOURCE_LINK_PUBLISHED' }])
+      await store.dispatch('personalfile/createWithFormData', item.value)
+      showMessage("Saved")
+    }
+    itemDialog.value = false
+    item.value = {}
+    onUpdateOptions()
+  }
+}
+
+const confirmDeleteItem = (item) => {
+  itemToDelete.value = { ...item }
+  deleteItemDialog.value = true
+}
+
+const confirmDeleteMultiple = () => {
+  deleteMultipleDialog.value = true
+}
+
+const deleteMultipleItems = async () => {
+  await store.dispatch('personalfile/delMultiple', selectedItems.value)
+  deleteMultipleDialog.value = false
+  selectedItems.value = []
+  onUpdateOptions()
+}
+
+const deleteItemButton = async () => {
+  if (itemToDelete.value && itemToDelete.value.id) {
+    try {
+      await store.dispatch('personalfile/del', itemToDelete.value)
+      showMessage("Item deleted successfully", "success")
+      deleteItemDialog.value = false
+      itemToDelete.value = null
+      onUpdateOptions()
+    } catch (error) {
+      showMessage("An error occurred while deleting the item", "error")
+    }
+  }
+}
+
+const showMessage = (message, type = "info") => {
+  // Show toast message
+}
+
+const onPage = (event) => {
+  options.value.itemsPerPage = event.rows
+  options.value.page = event.page + 1
+  options.value.sortBy = event.sortField
+  options.value.sortDesc = event.sortOrder === -1
+
+  onUpdateOptions()
+}
+
+const sortingChanged = (event) => {
+  options.value.sortBy = event.sortField
+  options.value.sortDesc = event.sortOrder === -1
+
+  onUpdateOptions()
+}
+
+const onUpdateOptions = async () => {
+  await store.dispatch('personalfile/fetchAll', {
+    page: options.value.page,
+    rows: options.value.itemsPerPage,
+    sortBy: options.value.sortBy,
+    sortDesc: options.value.sortDesc
+  })
+}
+
+const handleClick = (data) => {
+  if (data.resourceNode.resourceFile) {
+    returnToEditor(data)
+  } else {
+    const resourceId = data.resourceNode.id
+    filters.value["resourceNode.parent"] = resourceId
+
+    router.push({
+      name: "FileManagerList",
+      params: { node: resourceId },
+      query: route.query,
+    })
+    //onUpdateOptions()
+  }
+}
+
+const closeDetailsDialog = () => {
+  detailsDialogVisible.value = false
+}
+
+const uploadDocumentHandler = () => {
+  router.push({ name: "FileManagerUploadFile", query: route.query })
+}
+
+const returnToEditor = (data) => {
+  const url = data.contentUrl
+
+  // Tiny mce.
+  window.parent.postMessage(
+    {
+      url: url,
+    },
+    "*"
+  )
+
+  if (parent.tinymce) {
+    parent.tinymce.activeEditor.windowManager.close()
+  }
+
+  // Ckeditor
+  function getUrlParam(paramName) {
+    const reParam = new RegExp("(?:[\\?&]|&amp;)" + paramName + "=([^&]+)", "i")
+    const match = window.location.search.match(reParam)
+    return match && match.length > 1 ? match[1] : ""
+  }
+
+  const funcNum = getUrlParam("CKEditorFuncNum")
+  if (window.opener.CKEDITOR) {
+    window.opener.CKEDITOR.tools.callFunction(funcNum, url)
+    window.close()
+  }
+}
+
+const resetList = ref(true)
+
+watch(route, () => {
+  resetList.value = true
+  const nodeId = route.params.node
+  if (!isEmpty(nodeId)) {
+    const cid = toInteger(route.query.cid)
+    const sid = toInteger(route.query.sid)
+    const gid = toInteger(route.query.gid)
+    const id = "/api/resource_nodes/" + nodeId
+    const params = { id, cid, sid, gid }
+    findResourceNode(params)
+  }
+  onUpdateOptions()
+})
+
+const findResourceNode = async (params) => {
+  await store.dispatch('resourcenode/findResourceNode', params)
+}
+
+const deletedItem = ref(null)
+const deletedResource = ref(null)
+const error = ref(null)
+
+watch([deletedItem, deletedResource, error, items], () => {
+  if (deletedItem.value) {
+    showMessage(`${deletedItem.value["@id"]} deleted.`)
+  }
+
+  if (deletedResource.value) {
+    const message = t("{resource} created", { resource: deletedResource.value.resourceNode.title })
+    showMessage(message)
+    onUpdateOptions()
+  }
+
+  if (error.value) {
+    showMessage(error.value)
+  }
+
+  options.value.totalItems = totalItems.value
+})
+
+onMounted(() => {
+  onUpdateOptions()
+})
 </script>

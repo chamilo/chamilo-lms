@@ -1105,12 +1105,13 @@ function get_forum_categories(int $courseId = 0, int $sessionId = 0): Array
  *
  * @version february 2006, dokeos 1.8
  */
-function get_forums_in_category(int $categoryId, int $courseId = 0)
+function get_forums_in_category(int $categoryId, int $courseId = 0, int $sessionId = 0)
 {
     $repo = Container::getForumRepository();
     $course = api_get_course_entity($courseId);
+    $session = api_get_session_entity($sessionId);
 
-    $qb = $repo->getResourcesByCourse($course, null, null, null, true, true);
+    $qb = $repo->getResourcesByCourse($course, $session, null, null, true, true);
     $qb
         ->andWhere('resource.forumCategory = :catId')
         ->setParameter('catId', $categoryId)
@@ -3357,7 +3358,7 @@ function send_mail($userInfo, CForum $forum, CForumThread $thread, CForumPost $p
     $threadId = $thread->getIid();
 
     $thread_link = api_get_path(WEB_CODE_PATH).
-        'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId;
+        'forum/viewthread.php?'.api_get_cidreq(true, true, false).'&forum='.$forumId.'&thread='.$threadId;
 
     $email_body = get_lang('Dear').' '.
         api_get_person_name($userInfo['firstname'], $userInfo['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).", <br />\n\r";
@@ -5357,7 +5358,7 @@ function reportPost(CForumPost $post, CForum $forumInfo, CForumThread $threadInf
     $users = getReportRecipients();
     if (!empty($users)) {
         $url = api_get_path(WEB_CODE_PATH).
-            'forum/viewthread.php?forum='.$forumInfo->getIid().'&thread='.$threadInfo->getIid().'&'.api_get_cidreq().'&post_id='.$postId.'#post_id_'.$postId;
+            'forum/viewthread.php?forum='.$forumInfo->getIid().'&thread='.$threadInfo->getIid().'&'.api_get_cidreq(true, true, false).'&post_id='.$postId.'#post_id_'.$postId;
         $postLink = Display::url(
             $post->getTitle(),
             $url
@@ -5375,4 +5376,52 @@ function reportPost(CForumPost $post, CForum $forumInfo, CForumThread $threadInf
     }
 
     return true;
+}
+
+function getVisibleForums($courseId, $sessionId): array
+{
+    $forums = get_forums($courseId, $sessionId);
+    $visibleForums = [];
+
+    foreach ($forums as $forum) {
+        $forumSession = $forum->getFirstResourceLink()->getSession();
+        if ($sessionId > 0) {
+            if (null === $forumSession) {
+                $threads = get_threads($forum->getIid(), $courseId, $sessionId, true);
+                if (!empty($threads)) {
+                    $visibleForums[] = $forum;
+                }
+            } else {
+                $visibleForums[] = $forum;
+            }
+        } else {
+            $visibleForums[] = $forum;
+        }
+    }
+
+    return $visibleForums;
+}
+
+function getVisibleForumsInCategory($categoryId, $courseId, $sessionId): array
+{
+    $forumsInCategory = get_forums_in_category($categoryId, $courseId, $sessionId);
+    $visibleForums = [];
+
+    foreach ($forumsInCategory as $forum) {
+        $forumSession = $forum->getFirstResourceLink()->getSession();
+        if ($sessionId > 0) {
+            if (null === $forumSession) {
+                $threads = get_threads($forum->getIid(), $courseId, $sessionId, true);
+                if (!empty($threads)) {
+                    $visibleForums[] = $forum;
+                }
+            } else {
+                $visibleForums[] = $forum;
+            }
+        } else {
+            $visibleForums[] = $forum;
+        }
+    }
+
+    return $visibleForums;
 }

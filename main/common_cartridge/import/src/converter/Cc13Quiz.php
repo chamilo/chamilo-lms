@@ -44,6 +44,7 @@ class Cc13Quiz extends Cc13Entities
                     'unique_answer' => UNIQUE_ANSWER,
                     'multiple_answer' => MULTIPLE_ANSWER,
                     'fib' => FILL_IN_BLANKS,
+                    'essay' => FREE_ANSWER,
                 ];
                 $questionType = $types[$qtype];
 
@@ -715,11 +716,19 @@ class Cc13Quiz extends Cc13Entities
         $returnType['qtype'] = '';
         $returnType['cc'] = $type;
 
-        if ($type == CC_QUIZ_MULTIPLE_CHOICE) {
-            $returnType['qtype'] = 'unique_answer';
-        }
-        if ($type == CC_QUIZ_MULTIPLE_RESPONSE) {
-            $returnType['qtype'] = 'multiple_answer';
+        switch ($type) {
+            case CC_QUIZ_MULTIPLE_CHOICE:
+                $returnType['qtype'] = 'unique_answer';
+                break;
+            case CC_QUIZ_MULTIPLE_RESPONSE:
+                $returnType['qtype'] = 'multiple_answer';
+                break;
+            case CC_QUIZ_FIB:
+                $returnType['qtype'] = 'fib';
+                break;
+            case CC_QUIZ_ESSAY:
+                $returnType['qtype'] = 'essay';
+                break;
         }
 
         return $returnType;

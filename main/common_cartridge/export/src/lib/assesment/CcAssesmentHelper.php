@@ -115,7 +115,7 @@ abstract class CcAssesmentHelper
              * Look for UNIQUE_ANSWER as the first constant defined
              * 1 : Unique Answer (Multiple choice, single response)
              * 2 : Multiple Answers (Multiple choice, multiple response)
-             *
+             * 5 : Free Answer ("essay" in CC13)
              */
             $questionProcessor = null;
             switch ($qtype) {
@@ -147,10 +147,20 @@ abstract class CcAssesmentHelper
                         $questioncount++;
                     } catch (RuntimeException $e) {
                         error_log($e->getMessage().' in question of test '.$objQuizz['title']);
-                        continue;
+                        continue 2;
                     }
                     break;
                     */
+                case FREE_ANSWER:
+                    try {
+                        $questionProcessor = new CcAssesmentQuestionEssay($objQuizz, $objQuizz['questions'], $manifest, $section, $question, $rootpath, $contextid, $outdir);
+                        $questionProcessor->generate();
+                        $questioncount++;
+                    } catch (RuntimeException $e) {
+                        error_log($e->getMessage().' in question of test '.$objQuizz['title']);
+                        continue 2;
+                    }
+                    break;
             }
         }
         //return dependencies

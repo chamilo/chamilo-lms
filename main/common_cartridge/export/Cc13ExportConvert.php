@@ -7,7 +7,7 @@ class Cc13ExportConvert
 {
     /**
      * Export the CommonCartridge object to the app/cache/course_backups/CourseCC13Archiver_[hash] directory
-     * @param $objCourse
+     * @param \Chamilo\CourseBundle\Component\CourseCopy\Course $objCourse
      * @return false|string
      */
     public static function export($objCourse)

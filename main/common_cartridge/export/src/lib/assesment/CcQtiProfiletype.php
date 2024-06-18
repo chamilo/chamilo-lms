@@ -19,7 +19,8 @@ abstract class CcQtiProfiletype
      */
     public static function valid($value)
     {
-        static $verificationValues = [self::ESSAY,
+        static $verificationValues = [
+            self::ESSAY,
             self::FIELD_ENTRY,
             self::MULTIPLE_CHOICE,
             self::MULTIPLE_RESPONSE,

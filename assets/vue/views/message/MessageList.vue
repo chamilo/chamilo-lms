@@ -186,7 +186,7 @@
         field="sendDate"
       >
         <template #body="slotProps">
-          {{ relativeDatetime(slotProps.data.sendDate) }}
+          {{ abbreviatedDatetime(slotProps.data.sendDate) }}
         </template>
       </Column>
       <Column :header="t('Actions')">
@@ -237,7 +237,7 @@ const notification = useNotification()
 
 const messageRelUserStore = useMessageRelUserStore()
 
-const { relativeDatetime } = useFormatDate()
+const { abbreviatedDatetime } = useFormatDate()
 
 const mItemsMarkAs = ref([
   {

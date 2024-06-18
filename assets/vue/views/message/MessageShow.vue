@@ -96,7 +96,7 @@
 
     <hr />
 
-    <p v-text="relativeDatetime(item.sendDate)" />
+    <p v-text="abbreviatedDatetime(item.sendDate)" />
 
     <div v-html="item.content" />
 
@@ -165,7 +165,7 @@ const route = useRoute()
 const router = useRouter()
 const messageRelUserStore = useMessageRelUserStore()
 
-const { relativeDatetime } = useFormatDate()
+const { abbreviatedDatetime } = useFormatDate()
 
 let id = route.params.id
 if (isEmpty(id)) {

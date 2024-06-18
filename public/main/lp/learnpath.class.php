@@ -6794,7 +6794,10 @@ class learnpath
             }
         </script>';
         $moveIcon = Display::getMdiIcon('cursor-move', 'ch-tool-icon', '', 16, get_lang('Move'));
+        $userRights = api_is_allowed_to_edit(false, true);
         foreach ($a_forums as $forum) {
+            $forumSession = $forum->getFirstResourceLink()->getSession();
+            $isForumSession = (null !== $forumSession);
             $forumId = $forum->getIid();
             $title = Security::remove_XSS($forum->getTitle());
             $link = Display::url(
@@ -6813,8 +6816,14 @@ class learnpath
             $return .= ' </a>';
             $return .= Display::getMdiIcon('comment-quote', 'ch-tool-icon', null, 16, get_lang('Forum'));
 
+            $alertIcon = '';
+            if (!$isForumSession && $userRights) {
+                $tooltip = get_lang('This Learningpath includes a forum in the base course, so once users in a session will participate in this forum, it will start to appear in the forum tool in the session, whereas by default forums from the base course do not appear in the session.');
+                $alertIcon = Display::return_icon('warning.png', $tooltip, null, ICON_SIZE_SMALL);
+            }
+
             $moveLink = Display::url(
-                $title.' '.$link,
+                $title,
                 api_get_self().'?'.
                 api_get_cidreq().'&action=add_item&type='.TOOL_FORUM.'&forum_id='.$forumId.'&lp_id='.$this->lp_id,
                 [
@@ -6826,12 +6835,12 @@ class learnpath
                 ]
             );
             $return .= '<a onclick="javascript:toggle_forum('.$forumId.');" style="cursor:hand; vertical-align:middle">
-                            <img
-                                src="'.Display::returnIconPath('add.png').'"
-                                id="forum_'.$forumId.'_opener" align="absbottom"
-                             />
-                        </a>
-                        '.$moveLink;
+                    <img
+                        src="'.Display::returnIconPath('add.png').'"
+                        id="forum_'.$forumId.'_opener" align="absbottom"
+                     />
+                </a>
+                '.$moveLink. ' '.$alertIcon;
             $return .= '</li>';
 
             $return .= '<div style="display:none" id="forum_'.$forumId.'_content">';

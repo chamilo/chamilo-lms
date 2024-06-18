@@ -494,7 +494,7 @@ if (is_array($threads)) {
                 }
             }
             if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
-                $iconsEdit .= '<a href="'.$url.'&forum='.$forumId."&action=notify&content=thread&id={$threadId}".'">'.
+                $iconsEdit .= '<a href="'.$viewForumUrl.'&forum='.$forumId."&action=notify&content=thread&id={$threadId}".'">'.
                     Display::getMdiIcon('email-alert', ($disable ? 'ch-tool-icon-disabled' : 'ch-tool-icon'), '', ICON_SIZE_SMALL, get_lang('Notify me')).'</a>';
             }
 

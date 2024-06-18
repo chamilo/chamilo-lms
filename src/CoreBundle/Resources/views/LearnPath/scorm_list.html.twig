@@ -1,21 +1,18 @@
 {% autoescape false %}
     {% macro processItem(item, lp_current_item_id, status_list) %}
         {% import _self as self %}
-        {% set itemClass = '' %}
+        {% set itemClass = ' ' %}
         {% if 'dir' == item.itemType %}
-            {% set itemClass = 'scorm_item_section' %}
+            {% set itemClass = itemClass ~ 'scorm_item_section ' %}
         {% endif %}
 
         {% if lp_current_item_id == item.iid %}
-            {% set itemClass = 'scorm_highlight' %}
+            {% set itemClass = itemClass ~ 'scorm_highlight ' %}
         {% endif %}
 
         {% set itemLevel = 'level_' ~ (item.lvl - 1) %}
         {% set itemStatusClass = status_list[item.iid] %}
-        {% set accordionClass = '' %}
-        {% if item.itemType == 'dir' %}
-            {% set accordionClass = 'accordion' %}
-        {% endif %}
+        {% set accordionClass = item.itemType == 'dir' and 'true' == chamilo_settings_get('lp.lp_view_accordion') ? 'accordion' : '' %}
         <div id="toc_{{ item.iid }}"
              class=" scorm_item_normal {{ itemStatusClass }} {{ itemClass }} item-{{ item.itemType }} {{ accordionClass }}">
             {% if item.itemType == 'dir' %}
@@ -119,34 +116,3 @@
         </div>
     {% endif %}
 {% endautoescape %}
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    setTimeout(function() {
-      var lpCurrentItemId = '{{ lp_current_item_id }}'
-      var currentElement = document.getElementById("toc_" + lpCurrentItemId)
-
-      if (currentElement) {
-        var parentContainer = currentElement.closest(".item-children")
-        var previousSibling
-
-        if (parentContainer) {
-          previousSibling = parentContainer.previousElementSibling
-        }
-
-        if (previousSibling) {
-          previousSibling.click()
-          var parentContainer2 = previousSibling.closest(".item-children")
-          var previousSibling2
-
-          if (parentContainer2) {
-            previousSibling2 = parentContainer2.previousElementSibling
-          }
-
-          if (previousSibling2) {
-            previousSibling2.click()
-          }
-        }
-      }
-    }, 1000)
-  })
-</script>

@@ -645,6 +645,12 @@ See https://support.chamilo.org/issues/6976
     }
 
     &.scorm_item_section {
+        &.accordion {
+            .section {
+                @apply cursor-pointer;
+            }
+        }
+
         .section {
             @apply py-3 pr-4 bg-no-repeat bg-left relative bg-gray-10
                 after:block after:absolute after:bottom-0 after:left-0 after:right-0 after:mr-4 after:border-b after:border-gray-25
@@ -820,4 +826,14 @@ See https://support.chamilo.org/issues/6976
 
 .item-children {
     @apply bg-white;
+
+    .accordion + & {
+        @apply hidden;
+    }
+
+    .accordion.active + &,
+    .accordion + &:has(> .scorm_highlight),
+    &:has(& .scorm_highlight) {
+        @apply block;
+    }
 }

@@ -39,4 +39,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
       }
     })
   })
+
+  document
+    .querySelectorAll(".accordion")
+    .forEach((accordion) => accordion.addEventListener("click", () => accordion.classList.toggle("active")))
 })

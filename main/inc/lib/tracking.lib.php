@@ -8419,24 +8419,29 @@ class Tracking
                 }
             }
         } else {
-            echo '<h4>'.get_lang('UserInformationOfThisCourse').'</h4>';
-            echo '<br />';
+            echo '<p class="lead">'.get_lang('UserInformationOfThisCourse').'</p>';
             echo '<table class="table" width="100%">';
             echo '<tr>';
-            echo '<td width="50%" valign="top">';
+            echo '<th width="50%" valign="top">';
             if ($origin_session_id == 0) {
-                echo '<h5>'.get_lang('OriginCourse').'</h5>';
+                echo '<p><strong>'.get_lang('OriginCourse').'</strong></p>';
             } else {
-                echo '<h5>'.get_lang('OriginSession').' #'.$origin_session_id.'</h5>';
+                echo '<p><strong>'.get_lang('OriginSession').' #'.$origin_session_id.'</strong></p>';
             }
+            echo '</th>';
+            echo '<th width="50%" valign="top">';
+            if ($new_session_id == 0) {
+                echo '<p><strong>'.get_lang('DestinyCourse').'</strong></p>';
+            } else {
+                echo '<p><strong>'.get_lang('DestinySession').' #'.$new_session_id.'</strong></p>';
+            }
+            echo '</th>';
+            echo '</tr>';
+            echo '<tr>';
+            echo '<td>';
             self::compareUserData($result_message);
             echo '</td>';
-            echo '<td width="50%" valign="top">';
-            if ($new_session_id == 0) {
-                echo '<h5>'.get_lang('DestinyCourse').'</h5>';
-            } else {
-                echo '<h5>'.get_lang('DestinySession').' #'.$new_session_id.'</h5>';
-            }
+            echo '<td>';
             self::compareUserData($result_message_compare);
             echo '</td>';
             echo '</tr>';
@@ -8455,20 +8460,22 @@ class Tracking
             } elseif ($table === 'LP_VIEW') {
                 $title = get_lang('LearningPaths');
             }
-            echo '<br / ><h3>'.get_lang($title).' </h3><hr />';
+            echo '<h3 class="page-header">'.get_lang($title).' </h3>';
 
             if (is_array($data)) {
+                echo '<ul>';
                 foreach ($data as $id => $item) {
+                    echo '<li>';
                     if ($table === 'TRACK_E_EXERCISES' || $table === 'TRACK_E_EXERCISES_IN_LP') {
-                        echo "<br /><h3>".get_lang('Attempt')." #$id</h3>";
-                        echo '<h3>';
+                        echo '<p class="lead">';
                         echo get_lang('Exercise').' #'.$item['exe_exo_id'];
-                        echo '</h3>';
                         if (!empty($item['orig_lp_id'])) {
-                            echo '<h3>';
+                            echo PHP_EOL.'<small>(';
                             echo get_lang('LearningPath').' #'.$item['orig_lp_id'];
-                            echo '</h3>';
+                            echo ')</small>';
                         }
+                        echo '</p>';
+                        echo "<p><strong>".get_lang('Attempt')." #$id</strong></p>";
                         // Process data.
                         $array = [
                             'exe_date' => get_lang('Date'),
@@ -8478,19 +8485,21 @@ class Tracking
                         foreach ($item as $key => $value) {
                             if (in_array($key, array_keys($array))) {
                                 $key = $array[$key];
-                                echo "$key =  $value <br />";
+                                echo "<p>$key =  $value </p>";
                             }
                         }
                     } else {
-                        echo "<br /><h3>".get_lang('Id')." #$id</h3>";
+                        echo '<p class="lead">'.get_lang('Id')." #$id</p>";
                         // process data
                         foreach ($item as $key => $value) {
-                            echo "$key =  $value <br />";
+                            echo "<p>$key = $value</p>";
                         }
                     }
+                    echo '</li>';
                 }
+                echo '</ul>';
             } else {
-                echo get_lang('NoResults');
+                echo '<p>'.get_lang('NoResults').'</p>';
             }
         }
     }

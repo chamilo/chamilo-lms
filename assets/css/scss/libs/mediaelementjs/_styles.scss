@@ -1,7 +1,7 @@
 .mejs {
   &__container {
-    @apply bg-transparent rounded-lg
-      focus:outline-none drop-shadow-lg;
+    @apply bg-transparent rounded-lg inline-block
+      focus:outline-none focus:drop-shadow-lg;
 
     video {
       @apply rounded-lg;
@@ -12,21 +12,21 @@
     @apply bg-support-3 rounded-lg;
 
     &-loading {
+      svg {
+        @apply fill-current;
+      }
 
       &-bg-img {
-        @apply text-white;
-
-        svg {
-          @apply fill-current;
-        }
+        @apply block text-white;
       }
     }
 
     &-play {
+      @apply cursor-pointer;
     }
 
     &-button {
-      @apply text-white;
+      @apply bg-transparent border-0 text-white;
 
       svg {
         @apply fill-current;

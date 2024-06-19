@@ -17,6 +17,12 @@ async function create(message) {
   return await baseService.post("/api/messages", message)
 }
 
+async function countUnreadMessages(params) {
+  const queryParams = new URLSearchParams(params).toString()
+  return await baseService.get(`/api/messages?${queryParams}`)
+}
+
 export const messageService = {
   create,
+  countUnreadMessages,
 }

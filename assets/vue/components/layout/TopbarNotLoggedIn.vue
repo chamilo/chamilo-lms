@@ -2,10 +2,7 @@
   <div class="app-topbar">
     <Menubar :model="menuItems">
       <template #start>
-        <img
-          :src="headerLogo"
-          alt="Chamilo LMS"
-        />
+        <PlatformLogo />
       </template>
     </Menubar>
   </div>
@@ -14,10 +11,10 @@
 <script setup>
 import { computed } from "vue"
 import Menubar from "primevue/menubar"
-import headerLogoPath from "../../../../assets/css/themes/chamilo/images/header-logo.svg"
 import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 import { useLocale } from "../../composables/locale"
+import PlatformLogo from "./PlatformLogo.vue"
 
 const { t } = useI18n()
 const router = useRouter()
@@ -57,6 +54,4 @@ const menuItems = computed(() => [
     items: languageItems,
   },
 ])
-
-const headerLogo = headerLogoPath
 </script>

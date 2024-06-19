@@ -1,10 +1,7 @@
 <template>
   <div class="app-topbar">
     <div class="app-topbar__start">
-      <img
-        :src="headerLogo"
-        alt="Chamilo LMS"
-      />
+      <PlatformLogo />
     </div>
     <div class="app-topbar__items">
       <PrimeButton
@@ -61,9 +58,9 @@ import { chamiloIconToClass } from "../basecomponents/ChamiloIcons"
 import { useCidReq } from "../../composables/cidReq"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 
-import headerLogoPath from "../../../../assets/css/themes/chamilo/images/header-logo.svg"
 import { useNotification } from "../../composables/notification"
 import { useI18n } from "vue-i18n"
+import PlatformLogo from "./PlatformLogo.vue"
 
 const { t } = useI18n()
 
@@ -121,8 +118,6 @@ const userSubmenuItems = computed(() => [
 function toogleUserMenu(event) {
   elUserSubmenu.value.toggle(event)
 }
-
-const headerLogo = headerLogoPath
 
 const btnInboxBadge = computed(() =>
   messageRelUserStore.countUnread > 9 ? "9+" : messageRelUserStore.countUnread.toString(),

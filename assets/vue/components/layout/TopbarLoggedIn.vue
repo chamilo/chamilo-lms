@@ -16,7 +16,7 @@
 
       <PrimeButton
         :badge="btnInboxBadge"
-        :class="{ 'item-button--unread': btnInboxBadge }"
+        :class="{ 'item-button--unread': !!btnInboxBadge }"
         :icon="chamiloIconToClass['inbox']"
         badge-class="item-button__badge"
         class="item-button"
@@ -32,7 +32,7 @@
         class="user-avatar"
         shape="circle"
         unstyled
-        @click="toogleUserMenu"
+        @click="toggleUserMenu"
       />
     </div>
   </div>
@@ -115,13 +115,14 @@ const userSubmenuItems = computed(() => [
   },
 ])
 
-function toogleUserMenu(event) {
+function toggleUserMenu(event) {
   elUserSubmenu.value.toggle(event)
 }
 
-const btnInboxBadge = computed(() =>
-  messageRelUserStore.countUnread > 9 ? "9+" : messageRelUserStore.countUnread.toString(),
-)
+const btnInboxBadge = computed(() => {
+  const unreadCount = messageRelUserStore.countUnread
+  return unreadCount > 20 ? "9+" : unreadCount > 0 ? unreadCount.toString() : null
+})
 
 messageRelUserStore.findUnreadCount().catch((e) => notification.showErrorNotification(e))
 </script>

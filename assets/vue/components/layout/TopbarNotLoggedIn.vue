@@ -12,11 +12,11 @@
 </template>
 
 <script setup>
-import {computed, ref} from "vue"
+import { computed } from "vue"
 import Menubar from "primevue/menubar"
 import headerLogoPath from "../../../../assets/css/themes/chamilo/images/header-logo.svg"
 import { useI18n } from "vue-i18n"
-import { useRoute, useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -25,14 +25,12 @@ const router = useRouter()
 function setLanguage(event) {
   const { isoCode } = event.item
 
-  const newUrl = router.resolve(
-    {
-      path: route.path,
-      query: {
-        _locale: isoCode
-      }
-    }
-  )
+  const newUrl = router.resolve({
+    path: route.path,
+    query: {
+      _locale: isoCode,
+    },
+  })
 
   window.location.href = newUrl.fullPath
 }

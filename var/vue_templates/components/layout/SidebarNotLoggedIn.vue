@@ -44,8 +44,8 @@ const menuItems = computed(() => [
     label: t("Login"),
     items: [
       {
-        id: 'login-form-item',
-      }
+        id: "login-form-item",
+      },
     ],
   },
   {
@@ -136,9 +136,7 @@ watch(
               />
             </a>
 
-            <SidebarLogin
-              v-else-if="item.id && 'login-form-item' === item.id"
-            />
+            <SidebarLogin v-else-if="item.id && 'login-form-item' === item.id" />
 
             <a
               v-else

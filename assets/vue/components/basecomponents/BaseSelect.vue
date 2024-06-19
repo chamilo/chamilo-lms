@@ -1,8 +1,9 @@
 <template>
   <div class="field">
-    <div class="p-float-label">
+    <FloatLabel>
       <Dropdown
         :id="id"
+        :disabled="disabled"
         :model-value="modelValue"
         :options="realOptions"
         :option-label="optionLabel"
@@ -21,13 +22,14 @@
         :class="{ 'p-error': isInvalid }"
         :for="id"
       />
-    </div>
+    </FloatLabel>
   </div>
 </template>
 
 <script setup>
 import { useI18n } from "vue-i18n"
 import { computed } from "vue"
+import FloatLabel from "primevue/floatlabel"
 
 const { t } = useI18n()
 
@@ -74,6 +76,11 @@ const props = defineProps({
   allowClear: {
     type: Boolean,
     default: false,
+  },
+  disabled: {
+    default: false,
+    required: false,
+    type: Boolean,
   },
 })
 

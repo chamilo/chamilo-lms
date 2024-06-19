@@ -3,8 +3,12 @@ import { useSecurityStore } from "../store/securityStore"
 import { useCidReqStore } from "../store/cidReq"
 import { useCourseSettings } from "../store/courseSettingStore"
 import { computed, ref, watch } from "vue"
+import { useRoute, useRouter } from "vue-router"
 
 export function useLocale() {
+  const router = useRouter()
+  const route = useRoute()
+
   const platformConfigStore = usePlatformConfig()
   const securityStore = useSecurityStore()
   const cidReqStore = useCidReqStore()
@@ -53,8 +57,38 @@ export function useLocale() {
     { immediate: true },
   )
 
+  const defaultLanguage = { originalName: "English", isocode: "en" }
+
+  /**
+   * @type {{originalName: string, isocode: string}[]}
+   */
+  const languageList = window.languages || [defaultLanguage]
+
+  /**
+   * @type {{originalName: string, isocode: string}}
+   */
+  const currentLanguageFromList =
+    languageList.find((language) => document.querySelector("html").lang === language.isocode) || defaultLanguage
+
+  /**
+   * @param {string} isoCode
+   */
+  function reloadWithLocale(isoCode) {
+    const newUrl = router.resolve({
+      path: route.path,
+      query: {
+        _locale: isoCode,
+      },
+    })
+
+    window.location.href = newUrl.fullPath
+  }
+
   return {
     appLocale,
+    languageList,
+    currentLanguageFromList,
+    reloadWithLocale,
   }
 }
 

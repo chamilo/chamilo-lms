@@ -16,33 +16,19 @@ import { computed } from "vue"
 import Menubar from "primevue/menubar"
 import headerLogoPath from "../../../../assets/css/themes/chamilo/images/header-logo.svg"
 import { useI18n } from "vue-i18n"
-import { useRoute, useRouter } from "vue-router"
+import { useRouter } from "vue-router"
+import { useLocale } from "../../composables/locale"
 
 const { t } = useI18n()
-const route = useRoute()
 const router = useRouter()
 
-function setLanguage(event) {
-  const { isoCode } = event.item
+const { languageList, currentLanguageFromList, reloadWithLocale } = useLocale()
 
-  const newUrl = router.resolve({
-    path: route.path,
-    query: {
-      _locale: isoCode,
-    },
-  })
-
-  window.location.href = newUrl.fullPath
-}
-
-const languages = window.languages || [{ originalName: "English", isocode: "en" }]
-const languageItems = languages.map((language) => ({
+const languageItems = languageList.map((language) => ({
   label: language.originalName,
   isoCode: language.isocode,
-  command: setLanguage,
+  command: (event) => reloadWithLocale(event.item.isoCode),
 }))
-
-const currentLanguage = languages.find((language) => document.querySelector("html").lang === language.isocode)
 
 const menuItems = computed(() => [
   {
@@ -67,7 +53,7 @@ const menuItems = computed(() => [
   },
   {
     key: "language_selector",
-    label: currentLanguage ? currentLanguage.originalName : "English",
+    label: currentLanguageFromList.originalName,
     items: languageItems,
   },
 ])

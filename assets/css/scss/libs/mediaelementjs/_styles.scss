@@ -1,15 +1,40 @@
 .mejs {
   &__container {
-    @apply bg-transparent rounded-lg inline-block
+    @apply bg-transparent rounded-lg inline-block max-w-full
+      md:max-w-none
       focus:outline-none focus:drop-shadow-lg;
 
     video {
-      @apply rounded-lg;
+      @apply rounded-lg w-full h-full object-contain;
+    }
+  }
+
+  &__mediaelement {
+    > [id^="mejs_"] {
+      @apply w-full h-full;
+    }
+  }
+
+  &__poster {
+    @apply rounded-lg max-w-full bg-contain
+      md:max-w-none;
+
+    &-img {
+      @apply rounded-lg object-contain;
     }
   }
 
   &__overlay {
-    @apply bg-support-3 rounded-lg;
+    @apply bg-support-3 rounded-lg max-w-full
+      md:max-w-none;
+
+    &-error {
+      @apply w-full h-full;
+
+      img {
+        @apply rounded-lg object-contain w-full h-full;
+      }
+    }
 
     &-loading {
       svg {

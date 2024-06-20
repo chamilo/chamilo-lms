@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
+use Security;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,6 +23,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com>
@@ -33,6 +35,7 @@ class AccountController extends BaseController
 
     public function __construct(
         private readonly UserHelper $userHelper,
+        private readonly TranslatorInterface $translator
     ) {}
 
     #[Route('/edit', name: 'chamilo_core_account_edit', methods: ['GET', 'POST'])]
@@ -90,21 +93,28 @@ class AccountController extends BaseController
             $submittedToken = $request->request->get('_token');
 
             if (!$csrfTokenManager->isTokenValid(new CsrfToken('change_password', $submittedToken))) {
-                $form->addError(new FormError('CSRF token is invalid. Please try again.'));
+                $form->addError(new FormError($this->translator->trans('CSRF token is invalid. Please try again.')));
             } else {
                 $currentPassword = $form->get('currentPassword')->getData();
                 $newPassword = $form->get('newPassword')->getData();
                 $confirmPassword = $form->get('confirmPassword')->getData();
 
                 if (!$userRepository->isPasswordValid($user, $currentPassword)) {
-                    $form->get('currentPassword')->addError(new FormError('Current password is incorrect.'));
+                    $form->get('currentPassword')->addError(new FormError($this->translator->trans('Current password is incorrect.')));
                 } elseif ($newPassword !== $confirmPassword) {
-                    $form->get('confirmPassword')->addError(new FormError('Passwords do not match.'));
+                    $form->get('confirmPassword')->addError(new FormError($this->translator->trans('Passwords do not match.')));
                 } else {
-                    $user->setPlainPassword($newPassword);
-                    $userRepository->updateUser($user);
-                    $this->addFlash('success', 'Password changed successfully.');
-                    return $this->redirectToRoute('chamilo_core_account_home');
+                    $errors = $this->validatePassword($newPassword);
+                    if (count($errors) > 0) {
+                        foreach ($errors as $error) {
+                            $form->get('newPassword')->addError(new FormError($error));
+                        }
+                    } else {
+                        $user->setPlainPassword($newPassword);
+                        $userRepository->updateUser($user);
+                        $this->addFlash('success', $this->translator->trans('Password changed successfully.'));
+                        return $this->redirectToRoute('chamilo_core_account_home');
+                    }
                 }
             }
         }
@@ -112,5 +122,32 @@ class AccountController extends BaseController
         return $this->render('@ChamiloCore/Account/change_password.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * Validate the password against the same requirements as the client-side validation.
+     */
+    private function validatePassword(string $password): array
+    {
+        $errors = [];
+        $minRequirements = Security::getPasswordRequirements()['min'];
+
+        if (strlen($password) < $minRequirements['length']) {
+            $errors[] = $this->translator->trans('Password must be at least %length% characters long.', ['%length%' => $minRequirements['length']]);
+        }
+        if ($minRequirements['lowercase'] > 0 && !preg_match('/[a-z]/', $password)) {
+            $errors[] = $this->translator->trans('Password must contain at least %count% lowercase characters.', ['%count%' => $minRequirements['lowercase']]);
+        }
+        if ($minRequirements['uppercase'] > 0 && !preg_match('/[A-Z]/', $password)) {
+            $errors[] = $this->translator->trans('Password must contain at least %count% uppercase characters.', ['%count%' => $minRequirements['uppercase']]);
+        }
+        if ($minRequirements['numeric'] > 0 && !preg_match('/[0-9]/', $password)) {
+            $errors[] = $this->translator->trans('Password must contain at least %count% numerical (0-9) characters.', ['%count%' => $minRequirements['numeric']]);
+        }
+        if ($minRequirements['specials'] > 0 && !preg_match('/[\W]/', $password)) {
+            $errors[] = $this->translator->trans('Password must contain at least %count% special characters.', ['%count%' => $minRequirements['specials']]);
+        }
+
+        return $errors;
     }
 }

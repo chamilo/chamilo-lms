@@ -646,6 +646,20 @@ form .field {
   margin-right: 1rem;
 }
 
+.toggle-password {
+  position: absolute !important;
+  top: 65% !important;
+  transform: translateY(-50%);
+  right: 0.75rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.toggle-password i {
+  font-size: 24px;
+}
+
 #legacy_content {
   .exercise-overview {
     padding: 30px 10px 60px;

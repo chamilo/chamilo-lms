@@ -105,6 +105,11 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         }
     }
 
+    public function isPasswordValid(User $user, string $plainPassword): bool
+    {
+        return $this->hasher->isPasswordValid($user, $plainPassword);
+    }
+
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
         /** @var User $user */

@@ -104,6 +104,14 @@
         type="primary"
         @click="editProfile"
       />
+      <BaseButton
+        v-if="isCurrentUser || securityStore.isAdmin"
+        :label="t('Change Password')"
+        class="mt-2"
+        icon="lock"
+        type="secondary"
+        @click="changePassword"
+      />
     </div>
   </BaseCard>
 </template>
@@ -138,6 +146,10 @@ watchEffect(() => {
 
 const editProfile = () => {
   window.location = "/account/edit"
+}
+
+const changePassword = () => {
+  window.location = "/account/change-password"
 }
 
 async function fetchUserProfile(userId) {

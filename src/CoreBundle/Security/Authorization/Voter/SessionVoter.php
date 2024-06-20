@@ -84,15 +84,22 @@ class SessionVoter extends Voter
                     $userIsStudent = $session->hasUserInCourse($user, $currentCourse, Session::STUDENT);
                 }
 
-                if ($userIsGeneralCoach) {
-                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
-                } elseif ($userIsCourseCoach) { // Course-Coach access.
+                $visibilityForUser = $session->setAccessVisibilityByUser($user);
+
+                if ($userIsStudent && Session::LIST_ONLY == $visibilityForUser) {
+                    return false;
+                }
+
+                if ($userIsGeneralCoach || $userIsCourseCoach) {
                     $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
                 } elseif ($userIsStudent) { // Student access.
                     $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_STUDENT);
                 }
 
-                if (Session::INVISIBLE !== $session->checkAccessVisibilityByUser($user)) {
+                if (
+                    ($userIsGeneralCoach || $userIsCourseCoach || $userIsStudent)
+                    && $visibilityForUser != Session::INVISIBLE
+                ) {
                     return true;
                 }
 

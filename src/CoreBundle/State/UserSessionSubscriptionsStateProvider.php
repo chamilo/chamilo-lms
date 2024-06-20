@@ -50,9 +50,9 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
         }
 
         return match ($operation->getName()) {
-            'user_session_subscriptions_past' => $this->sessionRepository->getPastSessionsWithDatesForUser($user, $url),
-            'user_session_subscriptions_current' => $this->sessionRepository->getCurrentSessionsWithDatesForUser($user, $url),
-            'user_session_subscriptions_upcoming' => $this->sessionRepository->getUpcomingSessionsWithDatesForUser($user, $url),
+            'user_session_subscriptions_past' => $this->sessionRepository->getPastSessionsOfUserInUrl($user, $url),
+            'user_session_subscriptions_current' => $this->sessionRepository->getCurrentSessionsOfUserInUrl($user, $url),
+            'user_session_subscriptions_upcoming' => $this->sessionRepository->getUpcomingSessionsOfUserInUrl($user, $url),
         };
     }
 }

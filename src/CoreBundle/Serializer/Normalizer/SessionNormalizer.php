@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Serializer\Normalizer;
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\ServiceHelper\UserHelper;
+use LogicException;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -26,11 +27,17 @@ class SessionNormalizer implements NormalizerInterface, NormalizerAwareInterface
     {
         $context[self::ALREADY_CALLED] = true;
 
-        $data = $this->normalizer->normalize($object, $format, $context);
+        \assert($object instanceof Session);
 
-        $data['accessVisibility'] = $this->getSessionAccessVisiblity($object);
+        try {
+            $object->getAccessVisibility();
+        } catch (LogicException) {
+            $object->setAccessVisibilityByUser(
+                $this->userHelper->getCurrent()
+            );
+        }
 
-        return $data;
+        return $this->normalizer->normalize($object, $format, $context);
     }
 
     public function supportsNormalization($data, ?string $format = null, array $context = []): bool
@@ -45,12 +52,5 @@ class SessionNormalizer implements NormalizerInterface, NormalizerAwareInterface
     public function getSupportedTypes(?string $format): array
     {
         return [Session::class => false];
-    }
-
-    private function getSessionAccessVisiblity(Session $session): int
-    {
-        return $session->checkAccessVisibilityByUser(
-            $this->userHelper->getCurrent()
-        );
     }
 }

@@ -64,28 +64,29 @@ class CcAssesmentQuestionMultichoice extends CcAssesmentQuestionProcBase
 
             $answerIdent = $qresponseLabel->getIdent();
             $feedbackIdent = $answerIdent.'_fb';
-            if (empty($this->correctAnswerIdent) && $id) {
+            if (empty($this->correctAnswerIdent) && $id && $this->correctAnswerNodeId == $id) {
                 $this->correctAnswerIdent = $answerIdent;
             }
 
             //add answer specific feedbacks if not empty
             $content = $node['comment'];
 
-            if (!empty($content)) {
-                $result = CcHelpers::processLinkedFiles($content,
-                    $this->manifest,
-                    $this->rootpath,
-                    $this->contextid,
-                    $this->outdir);
-
-                CcAssesmentHelper::addFeedback($this->qitem,
-                    $result[0],
-                    CcQtiValues::HTMLTYPE,
-                    $feedbackIdent);
-
-                PkgResourceDependencies::instance()->add($result[1]);
-                $answerlist[$answerIdent] = $feedbackIdent;
+            if (empty($content)) {
+                $content = '';
             }
+            $result = CcHelpers::processLinkedFiles($content,
+                $this->manifest,
+                $this->rootpath,
+                $this->contextid,
+                $this->outdir);
+
+            CcAssesmentHelper::addFeedback($this->qitem,
+                $result[0],
+                CcQtiValues::HTMLTYPE,
+                $feedbackIdent);
+
+            PkgResourceDependencies::instance()->add($result[1]);
+            $answerlist[$answerIdent] = $feedbackIdent;
         }
         $this->answerlist = $answerlist;
     }

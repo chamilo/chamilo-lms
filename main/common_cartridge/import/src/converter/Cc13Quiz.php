@@ -108,25 +108,29 @@ class Cc13Quiz extends Cc13Entities
                 } else {
                     $objAnswer = new Answer($questionInstance->iid);
                     $questionWeighting = 0;
-                    foreach ($question['answers'] as $slot => $answerValues) {
-                        $answer = $answerValues['title'];
-                        $comment = $answerValues['feedback'];
-                        $weighting = $answerValues['score'];
-                        if ($weighting > 0) {
-                            $questionWeighting += $weighting;
-                        }
-                        $goodAnswer = $weighting > 0;
+                    if (is_array($question['answers'])) {
+                        foreach ($question['answers'] as $slot => $answerValues) {
+                            $answer = $answerValues['title'];
+                            $comment = $answerValues['feedback'];
+                            $weighting = $answerValues['score'];
+                            if ($weighting > 0) {
+                                $questionWeighting += $weighting;
+                            }
+                            $goodAnswer = $weighting > 0;
 
-                        $objAnswer->createAnswer(
-                            $answer,
-                            $goodAnswer,
-                            $comment,
-                            $weighting,
-                            $slot + 1,
-                            null,
-                            null,
-                            ''
-                        );
+                            $objAnswer->createAnswer(
+                                $answer,
+                                $goodAnswer,
+                                $comment,
+                                $weighting,
+                                $slot + 1,
+                                null,
+                                null,
+                                ''
+                            );
+                        }
+                    } elseif ($qtype == 'essay') {
+                        $questionWeighting = $question['ponderation'];
                     }
 
                     // saves the answers into the data base

@@ -314,8 +314,8 @@ class MessageRepositoryTest extends AbstractApiTest
                     'attachments' => [
                         [
                             'resourceFileToAttach' => $resourceFileId,
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
             ]
         );

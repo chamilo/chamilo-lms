@@ -15,9 +15,6 @@ use Doctrine\DBAL\Schema\Schema;
 
 final class Version20200821224245 extends AbstractMigrationChamilo
 {
-    /**
-     * @inheritDoc
-     */
     public function up(Schema $schema): void
     {
         $this->migrateTagsFromInboxMessages();

@@ -32,13 +32,13 @@ final class Version20200821224230 extends AbstractMigrationChamilo
     {
         // Tags from inbox message
         $resMessageTag = $this->connection->executeQuery(
-            "SELECT m.id AS m_id, m.user_receiver_id AS m_receiver_id, t.id AS t_id, t.tag AS t_tag
+            'SELECT m.id AS m_id, m.user_receiver_id AS m_receiver_id, t.id AS t_id, t.tag AS t_tag
             FROM message m
             INNER JOIN extra_field_rel_tag efrt ON m.id = efrt.item_id
             INNER JOIN extra_field ef ON efrt.field_id = ef.id
             INNER JOIN tag t ON (efrt.tag_id = t.id AND ef.id = t.field_id)
             WHERE m.msg_status = 0
-            AND ef.item_type = ".ExtraField::MESSAGE_TYPE." AND ef.variable = 'tags'"
+            AND ef.item_type = '.ExtraField::MESSAGE_TYPE." AND ef.variable = 'tags'"
         );
         $oldMessageTagInfo = $resMessageTag->fetchAllAssociative();
 

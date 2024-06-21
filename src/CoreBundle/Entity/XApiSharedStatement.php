@@ -1,9 +1,12 @@
 <?php
 
+/* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Repository\XApiSharedStatementRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 

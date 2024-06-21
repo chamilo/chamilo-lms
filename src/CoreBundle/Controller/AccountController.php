@@ -15,12 +15,12 @@ use Chamilo\CoreBundle\ServiceHelper\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Security;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -105,7 +105,7 @@ class AccountController extends BaseController
                     $form->get('confirmPassword')->addError(new FormError($this->translator->trans('Passwords do not match.')));
                 } else {
                     $errors = $this->validatePassword($newPassword);
-                    if (count($errors) > 0) {
+                    if (\count($errors) > 0) {
                         foreach ($errors as $error) {
                             $form->get('newPassword')->addError(new FormError($error));
                         }
@@ -113,6 +113,7 @@ class AccountController extends BaseController
                         $user->setPlainPassword($newPassword);
                         $userRepository->updateUser($user);
                         $this->addFlash('success', $this->translator->trans('Password changed successfully.'));
+
                         return $this->redirectToRoute('chamilo_core_account_home');
                     }
                 }
@@ -132,7 +133,7 @@ class AccountController extends BaseController
         $errors = [];
         $minRequirements = Security::getPasswordRequirements()['min'];
 
-        if (strlen($password) < $minRequirements['length']) {
+        if (\strlen($password) < $minRequirements['length']) {
             $errors[] = $this->translator->trans('Password must be at least %length% characters long.', ['%length%' => $minRequirements['length']]);
         }
         if ($minRequirements['lowercase'] > 0 && !preg_match('/[a-z]/', $password)) {

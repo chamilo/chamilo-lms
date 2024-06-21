@@ -1,9 +1,13 @@
 <?php
 
+/* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Repository\XApiInternalLogRepository;
-use Doctrine\DBAL\Types\Types;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
@@ -172,12 +176,12 @@ class XApiInternalLog
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(?\DateTimeInterface $createdAt): static
+    public function setCreatedAt(?DateTimeInterface $createdAt): static
     {
         $this->createdAt = $createdAt;
 

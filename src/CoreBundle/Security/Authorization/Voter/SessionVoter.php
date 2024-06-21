@@ -98,7 +98,7 @@ class SessionVoter extends Voter
 
                 if (
                     ($userIsGeneralCoach || $userIsCourseCoach || $userIsStudent)
-                    && $visibilityForUser != Session::INVISIBLE
+                    && Session::INVISIBLE != $visibilityForUser
                 ) {
                     return true;
                 }

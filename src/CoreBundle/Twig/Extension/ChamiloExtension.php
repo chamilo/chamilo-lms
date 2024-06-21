@@ -171,7 +171,7 @@ class ChamiloExtension extends AbstractExtension
             ];
         }
 
-        $js = "<script>
+        return "<script>
         (function($) {
             $.fn.passwordCheckerChange = function(options) {
                 var settings = $.extend({
@@ -207,11 +207,9 @@ class ChamiloExtension extends AbstractExtension
         }(jQuery));
 
         $(function() {
-            $('".$passwordInputId."').passwordCheckerChange(".json_encode($options).");
+            $('".$passwordInputId."').passwordCheckerChange(".json_encode($options).');
         });
-        </script>";
-
-        return $js;
+        </script>';
     }
 
     /**

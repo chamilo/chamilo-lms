@@ -1,5 +1,9 @@
 <?php
 
+/* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
@@ -56,17 +60,19 @@ class XApiToolLaunchRepository extends ServiceEntityRepository
      */
     public function countByCourseAndSession(
         Course $course,
-        Session $session = null,
+        ?Session $session = null,
         bool $filteredForStudent = false
     ): int {
         $qb = $this->createQueryBuilder('tl');
         $qb->select($qb->expr()->count('tl'))
             ->where($qb->expr()->eq('tl.course', ':course'))
-            ->setParameter('course', $course);
+            ->setParameter('course', $course)
+        ;
 
         if ($session) {
             $qb->andWhere($qb->expr()->eq('tl.session', ':session'))
-                ->setParameter('session', $session);
+                ->setParameter('session', $session)
+            ;
         } else {
             $qb->andWhere($qb->expr()->isNull('tl.session'));
         }
@@ -79,7 +85,8 @@ class XApiToolLaunchRepository extends ServiceEntityRepository
                     Join::WITH,
                     "tl.id = lpi.path AND tl.course = lpi.cId AND lpi.itemType = 'xapi'"
                 )
-                ->andWhere($qb->expr()->isNull('lpi.path'));
+                ->andWhere($qb->expr()->isNull('lpi.path'))
+            ;
         }
 
         $query = $qb->getQuery();

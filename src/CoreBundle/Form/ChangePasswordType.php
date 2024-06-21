@@ -27,7 +27,8 @@ class ChangePasswordType extends AbstractType
             ->add('confirmPassword', PasswordType::class, [
                 'label' => 'Confirm New Password',
                 'required' => true,
-            ]);
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -35,7 +36,7 @@ class ChangePasswordType extends AbstractType
         $resolver->setDefaults([
             'csrf_protection' => true,
             'csrf_field_name' => '_token',
-            'csrf_token_id'   => 'change_password',
+            'csrf_token_id' => 'change_password',
         ]);
     }
 }

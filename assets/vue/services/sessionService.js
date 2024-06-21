@@ -13,10 +13,17 @@ async function findUserSubscriptions(userIri, listType) {
 export default {
   /**
    * @param {string} iri
+   * @param useBasic
    * @returns {Promise<Object>}
    */
-  async find(iri) {
-    const { data } = await api.get(iri)
+  async find(iri, useBasic = false) {
+    const endpoint = iri
+    const groups = useBasic ? ['session:basic'] : ['session:read']
+    const { data } = await api.get(endpoint, {
+      params: {
+        'groups[]': groups
+      }
+    })
 
     return data
   },

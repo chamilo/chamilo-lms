@@ -63,7 +63,7 @@
     "List": "Liste",
     "Edit": "\u00c9diter",
     "Submit": "Valider",
-    "Send": "Send",
+    "Send": "Envoyer",
     "Delete": "Supprimer",
     "{resource} created": "{resource} created",
     "{resource} deleted": "{resource} deleted",
@@ -114,7 +114,7 @@
     "User": "Utilisateur",
     "Sent date": "Date d'envoi",
     "Sent": "Envoy\u00e9",
-    "Attachments": "Ressources ajout\u00e9es",
+    "Attachments": "ressource(s) ajout\u00e9e(s)",
     "You don't have any course content yet.": "Vous n'avez pas encore de contenu de cours.",
     "You don't have any course yet.": "Vous n'avez pas encore de cours.",
     "Go to \"Explore\" to find a topic of interest, or wait for someone to subscribe you.": "Cliquez sur \"Explorer\" pour trouver un cours qui vous int\u00e9resse, ou attendez que quelqu'un vous y inscrive.",
@@ -542,5 +542,11 @@
     "Error fetching friends list": "Error fetching friends list",
     "Error fetching users": "Error fetching users",
     "Search users for friends": "Search users for friends",
-    "Business card": "Carte de visite"
+    "Contact Us": "Nous contacter",
+    "Business card": "Carte de visite",
+    "Teacher profile picture": "Teacher profile picture",
+    "Picture": "Photo",
+    "Sender profile picture": "Photo de profil de l'exp\u00e9diteur",
+    "Receiver profile picture": "Photo de profil du destinataire",
+    "Carbon copy receiver profile picture": "Photo de profil du destinataire en copie carbone"
 }

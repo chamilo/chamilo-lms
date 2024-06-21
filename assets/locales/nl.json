@@ -198,6 +198,7 @@
     "Deadline": "Deadline",
     "Number submitted": "Aantal ingegeven",
     "Visibility": "Zichtbaarheid",
+    "Upload corrections": "Upload correcties",
     "Confirmation": "Confirmation",
     "Are you sure you want to delete the selected items?": "Are you sure you want to delete the selected items?",
     "Assignments deleted": "Assignments deleted",
@@ -512,5 +513,11 @@
     "Error fetching friends list": "Error fetching friends list",
     "Error fetching users": "Error fetching users",
     "Search users for friends": "Search users for friends",
-    "Business card": "Visitekaartje"
+    "Contact Us": "Contact Us",
+    "Business card": "Visitekaartje",
+    "Teacher profile picture": "Teacher profile picture",
+    "Picture": "Afbeelding",
+    "Sender profile picture": "Sender profile picture",
+    "Receiver profile picture": "Receiver profile picture",
+    "Carbon copy receiver profile picture": "Carbon copy receiver profile picture"
 }

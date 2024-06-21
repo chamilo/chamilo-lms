@@ -468,5 +468,11 @@
     "Please enter a search query": "Please enter a search query",
     "Error fetching friends list": "Error fetching friends list",
     "Error fetching users": "Error fetching users",
-    "Search users for friends": "Search users for friends"
+    "Search users for friends": "Search users for friends",
+    "Contact Us": "Contact Us",
+    "Teacher profile picture": "Teacher profile picture",
+    "Picture": "\u0421\u043d\u0438\u043c\u043a\u0430",
+    "Sender profile picture": "Sender profile picture",
+    "Receiver profile picture": "Receiver profile picture",
+    "Carbon copy receiver profile picture": "Carbon copy receiver profile picture"
 }

@@ -401,5 +401,11 @@
     "Please enter a search query": "Please enter a search query",
     "Error fetching friends list": "Error fetching friends list",
     "Error fetching users": "Error fetching users",
-    "Search users for friends": "Search users for friends"
+    "Search users for friends": "Search users for friends",
+    "Contact Us": "Contact Us",
+    "Teacher profile picture": "Teacher profile picture",
+    "Picture": "Paveiksl\u0117liai",
+    "Sender profile picture": "Sender profile picture",
+    "Receiver profile picture": "Receiver profile picture",
+    "Carbon copy receiver profile picture": "Carbon copy receiver profile picture"
 }

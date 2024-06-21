@@ -520,5 +520,11 @@
     "Error fetching friends list": "Error fetching friends list",
     "Error fetching users": "Error fetching users",
     "Search users for friends": "Search users for friends",
-    "Business card": "Vizitka"
+    "Contact Us": "Contact Us",
+    "Business card": "Vizitka",
+    "Teacher profile picture": "Teacher profile picture",
+    "Picture": "Obr\u00e1zok",
+    "Sender profile picture": "Sender profile picture",
+    "Receiver profile picture": "Receiver profile picture",
+    "Carbon copy receiver profile picture": "Carbon copy receiver profile picture"
 }

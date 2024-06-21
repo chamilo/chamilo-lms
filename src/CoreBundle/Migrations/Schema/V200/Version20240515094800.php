@@ -161,5 +161,105 @@ final class Version20240515094800 extends AbstractMigrationChamilo
             $this->addSql("ALTER TABLE xapi_context ADD CONSTRAINT FK_3D777190296CD8AE FOREIGN KEY (team_id) REFERENCES xapi_object (identifier)");
             $this->addSql("ALTER TABLE xapi_context ADD CONSTRAINT FK_3D777190D0A19400 FOREIGN KEY (extensions_id) REFERENCES xapi_extensions (identifier)");
         }
+
+        $hasTblToolLaunch = $schema->hasTable('xapi_tool_launch');
+        $hasTblInternalLog = $schema->hasTable('xapi_internal_log');
+        $hasTblSharedStatement = $schema->hasTable('xapi_shared_statement');
+        $hasTblActivityProfile = $schema->hasTable('xapi_activity_profile');
+        $hasTblActivityState = $schema->hasTable('xapi_activity_state');
+        $hasTblCmi5Item = $schema->hasTable('xapi_cmi5_item');
+        $hasTblLrsAuth = $schema->hasTable('xapi_lrs_auth');
+
+        if ($hasTblToolLaunch) {
+            $tblToolLaunch = $schema->getTable('xapi_tool_launch');
+
+            if ($tblToolLaunch->hasIndex('IDX_E18CB58391D79BD3')) {
+                $this->addSql('DROP INDEX IDX_E18CB58391D79BD3 ON xapi_tool_launch');
+            }
+
+            $this->addSql("ALTER TABLE xapi_tool_launch ADD created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', ADD updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', CHANGE allow_multiple_attempts allow_multiple_attempts TINYINT(1) NOT NULL, CHANGE c_id course_id INT NOT NULL");
+            $this->addSql('ALTER TABLE xapi_tool_launch ADD CONSTRAINT FK_E18CB583591CC992 FOREIGN KEY (course_id) REFERENCES course (id)');
+
+            if (!$tblToolLaunch->hasForeignKey('FK_E18CB583613FECDF')) {
+                $this->addSql('ALTER TABLE xapi_tool_launch ADD CONSTRAINT FK_E18CB583613FECDF FOREIGN KEY (session_id) REFERENCES session (id)');
+            }
+
+            $this->addSql('CREATE INDEX IDX_E18CB583591CC992 ON xapi_tool_launch (course_id)');
+        } else {
+            $this->addSql("CREATE TABLE xapi_tool_launch (id INT AUTO_INCREMENT NOT NULL, course_id INT NOT NULL, session_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, description LONGTEXT DEFAULT NULL, launch_url VARCHAR(255) NOT NULL, activity_id VARCHAR(255) DEFAULT NULL, activity_type VARCHAR(255) DEFAULT NULL, allow_multiple_attempts TINYINT(1) NOT NULL, lrs_url VARCHAR(255) DEFAULT NULL, lrs_auth_username VARCHAR(255) DEFAULT NULL, lrs_auth_password VARCHAR(255) DEFAULT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_E18CB583591CC992 (course_id), INDEX IDX_E18CB583613FECDF (session_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
+        }
+
+        if ($hasTblInternalLog) {
+            $tblInternalLog = $schema->getTable('xapi_internal_log');
+
+            $this->addSql("ALTER TABLE xapi_internal_log ADD updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', CHANGE activity_description activity_description VARCHAR(255) NOT NULL, CHANGE created_at created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)';");
+
+            if (!$tblInternalLog->hasForeignKey('FK_C1C667ACA76ED395')) {
+                $this->addSql("ALTER TABLE xapi_internal_log ADD CONSTRAINT FK_C1C667ACA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)");
+            }
+        } else {
+            $this->addSql("CREATE TABLE xapi_internal_log (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, statement_id VARCHAR(255) NOT NULL, verb VARCHAR(255) NOT NULL, object_id VARCHAR(255) NOT NULL, activity_name VARCHAR(255) DEFAULT NULL, activity_description VARCHAR(255) NOT NULL, score_scaled DOUBLE PRECISION DEFAULT NULL, score_raw DOUBLE PRECISION DEFAULT NULL, score_min DOUBLE PRECISION DEFAULT NULL, score_max DOUBLE PRECISION DEFAULT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', INDEX IDX_C1C667ACA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
+        }
+
+        if ($hasTblSharedStatement) {
+            $this->addSql("ALTER TABLE xapi_shared_statement CHANGE uuid uuid BINARY(16) DEFAULT NULL COMMENT '(DC2Type:uuid)', CHANGE statement statement LONGTEXT NOT NULL COMMENT '(DC2Type:json)', CHANGE sent sent TINYINT(1) NOT NULL");
+        } else {
+            $this->addSql("CREATE TABLE xapi_shared_statement (id INT AUTO_INCREMENT NOT NULL, uuid BINARY(16) DEFAULT NULL COMMENT '(DC2Type:uuid)', statement LONGTEXT NOT NULL COMMENT '(DC2Type:json)', sent TINYINT(1) NOT NULL, INDEX idx_uuid (uuid), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
+        }
+
+        if (!$hasTblActivityProfile) {
+            $this->addSql("CREATE TABLE xapi_activity_profile (id INT AUTO_INCREMENT NOT NULL, profile_id VARCHAR(255) NOT NULL, activity_id VARCHAR(255) NOT NULL, document_data LONGTEXT NOT NULL COMMENT '(DC2Type:json)', PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
+        }
+
+        if (!$hasTblActivityState) {
+            $this->addSql("CREATE TABLE xapi_activity_state (id INT AUTO_INCREMENT NOT NULL, state_id VARCHAR(255) NOT NULL, activity_id VARCHAR(255) NOT NULL, agent LONGTEXT NOT NULL COMMENT '(DC2Type:json)', document_data LONGTEXT NOT NULL COMMENT '(DC2Type:json)', PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
+        }
+
+        if ($hasTblCmi5Item) {
+            $tblCmi5Item = $schema->getTable('xapi_cmi5_item');
+
+            if ($tblCmi5Item->hasForeignKey('FK_7CA116D8A977936C')) {
+                $this->addSql("ALTER TABLE xapi_cmi5_item DROP FOREIGN KEY FK_7CA116D8A977936C");
+            }
+            if ($tblCmi5Item->hasForeignKey('FK_7CA116D8727ACA70')) {
+                $this->addSql("ALTER TABLE xapi_cmi5_item DROP FOREIGN KEY FK_7CA116D8727ACA70");
+            }
+            if ($tblCmi5Item->hasForeignKey('FK_7CA116D88F7B22CC')) {
+                $this->addSql("ALTER TABLE xapi_cmi5_item DROP FOREIGN KEY FK_7CA116D88F7B22CC");
+            }
+
+            if ($tblCmi5Item->hasIndex('IDX_7CA116D8A977936C')) {
+                $this->addSql("DROP INDEX IDX_7CA116D8A977936C ON xapi_cmi5_item");
+            }
+
+            $this->addSql("ALTER TABLE xapi_cmi5_item CHANGE tree_root root_id INT DEFAULT NULL");
+            $this->addSql("ALTER TABLE xapi_cmi5_item ADD CONSTRAINT FK_7CA116D879066886 FOREIGN KEY (root_id) REFERENCES xapi_cmi5_item (id)");
+            $this->addSql("ALTER TABLE xapi_cmi5_item ADD CONSTRAINT FK_7CA116D8727ACA70 FOREIGN KEY (parent_id) REFERENCES xapi_cmi5_item (id)");
+            $this->addSql("ALTER TABLE xapi_cmi5_item ADD CONSTRAINT FK_7CA116D88F7B22CC FOREIGN KEY (tool_id) REFERENCES xapi_tool_launch (id)");
+            $this->addSql("CREATE INDEX IDX_7CA116D879066886 ON xapi_cmi5_item (root_id)");
+        } else {
+            $this->addSql("CREATE TABLE xapi_cmi5_item (id INT AUTO_INCREMENT NOT NULL, root_id INT DEFAULT NULL, parent_id INT DEFAULT NULL, tool_id INT DEFAULT NULL, identifier VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, title LONGTEXT NOT NULL COMMENT '(DC2Type:json)', description LONGTEXT NOT NULL COMMENT '(DC2Type:json)', url VARCHAR(255) DEFAULT NULL, activity_type VARCHAR(255) DEFAULT NULL, launch_method VARCHAR(255) DEFAULT NULL, move_on VARCHAR(255) DEFAULT NULL, mastery_score DOUBLE PRECISION DEFAULT NULL, launch_parameters VARCHAR(255) DEFAULT NULL, entitlement_key VARCHAR(255) DEFAULT NULL, status VARCHAR(255) DEFAULT NULL, lft INT NOT NULL, lvl INT NOT NULL, rgt INT NOT NULL, INDEX IDX_7CA116D879066886 (root_id), INDEX IDX_7CA116D8727ACA70 (parent_id), INDEX IDX_7CA116D88F7B22CC (tool_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
+        }
+
+        if ($hasTblLrsAuth) {
+            $this->addSql("ALTER TABLE xapi_lrs_auth ADD updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)'");
+        } else {
+            $this->addSql("CREATE TABLE xapi_lrs_auth (id INT AUTO_INCREMENT NOT NULL, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, enabled TINYINT(1) NOT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime)', PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
+        }
+
+        if (!$hasTblToolLaunch) {
+            $this->addSql("ALTER TABLE xapi_tool_launch ADD CONSTRAINT FK_E18CB583591CC992 FOREIGN KEY (course_id) REFERENCES course (id)");
+            $this->addSql("ALTER TABLE xapi_tool_launch ADD CONSTRAINT FK_E18CB583613FECDF FOREIGN KEY (session_id) REFERENCES session (id)");
+        }
+
+        if (!$hasTblInternalLog) {
+            $this->addSql("ALTER TABLE xapi_internal_log ADD CONSTRAINT FK_C1C667ACA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)");
+        }
+
+        if (!$hasTblCmi5Item) {
+            $this->addSql("ALTER TABLE xapi_cmi5_item ADD CONSTRAINT FK_7CA116D879066886 FOREIGN KEY (root_id) REFERENCES xapi_cmi5_item (id)");
+            $this->addSql("ALTER TABLE xapi_cmi5_item ADD CONSTRAINT FK_7CA116D8727ACA70 FOREIGN KEY (parent_id) REFERENCES xapi_cmi5_item (id)");
+            $this->addSql("ALTER TABLE xapi_cmi5_item ADD CONSTRAINT FK_7CA116D88F7B22CC FOREIGN KEY (tool_id) REFERENCES xapi_tool_launch (id)");
+        }
     }
 }

@@ -18,14 +18,14 @@
                     {% set label = "Expand" | trans %}
                     {% set icon_expand = "arrow-expand-horizontal" %}
                 {% endif %}
-                <a href="#"
+                <button type="button"
                    id="lp-view-expand-toggle"
                    class="icon-toolbar expand"
                    role="button"
                    title="{{ label }}"
                 >
                     <i class="mdi-{{ icon_expand }} mdi" aria-hidden="true"></i>
-                </a>
+                </button>
             {% endif %}
             <a id="home-course"
                title="{{ 'Home'|trans }}"
@@ -36,8 +36,8 @@
             </a>
             {{ navigation_bar }}
         </div>
-        <a title="{{ 'Options'|trans }}" class="menu-button icons" href="#">
+        <button title="{{ 'Options'|trans }}" class="menu-button icons" type="button">
             <i class="mdi-menu mdi" aria-hidden="true"></i>
-        </a>
+        </button>
     </nav>
 {% endautoescape %}

@@ -1,18 +1,18 @@
 {% extends '@ChamiloCore/Layout/no_layout.html.twig' %}
+
+{% set lp_view = true %}
+
 {% block content %}
     {% autoescape false %}
-        <link rel="stylesheet" href="{{ url('index') ~ 'build/css/scorm.css' }}"/>
         <div id="learning_path_main" class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' : '' }}">
             {% if show_left_column == 1 %}
                 <div id="learning_path_left_zone" class="sidebar-scorm">
                     <div class="lp-view-zone-container">
                         <div id="scorm-info">
-                            <div id="panel-scorm" class="bg-ch-primary panel-body">
+                            <div id="panel-scorm">
                                 <div class="image-avatar">
                                     {% if lp_author == '' %}
-                                        <div class="text-center">
-                                            {{ lp_preview_image }}
-                                        </div>
+                                        {{ lp_preview_image }}
                                     {% else %}
                                         <div class="media-author">
                                             <div class="media-author-avatar">
@@ -173,7 +173,7 @@
             <div id="learning_path_right_zone" class="{{ show_left_column == 1 ? 'content-scorm' : 'no-right-col' }}">
                 <div class="lp-view-zone-container">
                     <div class="lp-view-tabs">
-                        <div id="navTabBar" class="mt-2 mb-16 nav-tabs-bar">
+                        <div id="navTabBar" class="nav-tabs-bar">
                             <div class="text-left">
                                 <h2 class="text-h3">{{ lp_title_scorm }}</h2>
                                 <div id="item-parent-names">
@@ -203,7 +203,7 @@
                         {% include '@ChamiloCore/LearnPath/menubar.html.twig' %}
 
                         <div id="tab-iframe" class="auto tab-content">
-                            <div role="tabpanel" class="tab-pane active" id="lp-view-content">
+                            <div role="tabpanel" id="lp-view-content">
                                 <div id="wrapper-iframe">
                                     {% if lp_mode == 'fullscreen' %}
                                         <iframe id="content_id_blank" name="content_name_blank" src="blank.php"
@@ -230,15 +230,6 @@
         </div>
 
         <script>
-          var LPViewUtils = {
-            setHeightLPToc: function() {
-              var scormInfoHeight = $("#scorm-info").outerHeight(true)
-              $("#learning_path_toc").css({
-                top: scormInfoHeight
-              })
-            }
-          }
-
           $(function() {
             $(".menu-button").on("click", function() {
               $(".circle").toggleClass("open")
@@ -248,15 +239,15 @@
               if (!/Chrome/.test(navigator.userAgent)) {
                 // Fix an issue where you cannot scroll below first screen in
                 // learning paths on Apple devices
-                document.getElementById("wrapper-iframe").setAttribute(
+                /*document.getElementById("wrapper-iframe").setAttribute(
                   "style",
                   "width:100%; overflow:auto; position:auto; -webkit-overflow-scrolling:touch !important;"
-                )
-                $("#wrapper-iframe").before('<a style="position:fixed;right:5px;top:5px;z-index:1001;" target="_blank" href="{{ iframe_src }}" >Open PDF on Safari</a>')
+                )*/
+                $("#wrapper-iframe").before('<a class="btn-open-pdf" target="_blank" href="{{ iframe_src }}" >Open PDF on Safari</a>')
 
                 // Fix another issue whereby buttons do not react to click below
                 // second screen in learning paths on Apple devices
-                document.getElementById("content_id").setAttribute("style", "overflow: auto;")
+                document.getElementById("content_id").style.overflow = 'auto';
               }
             }
               {% if lp_mode == 'embedframe' %}
@@ -307,12 +298,6 @@
                 return
               }
               icon.removeClass("mdi-chevron-down").addClass("mdi-chevron-up")
-            })
-
-            LPViewUtils.setHeightLPToc()
-
-            $(".image-avatar img").on("load", function() {
-              LPViewUtils.setHeightLPToc()
             })
 
             $(".scorm_item_normal a, #scorm-previous, #scorm-next").on("click", function() {
@@ -400,33 +385,7 @@
               }
             })
               {% endif %}
-
-            $(window).on("resize", function() {
-              LPViewUtils.setHeightLPToc()
-            })
           })
         </script>
-        <script>
-          document.addEventListener("DOMContentLoaded", function() {
-            var acc = document.getElementsByClassName("accordion")
-            var i
-            for (i = 0; i < acc.length; i++) {
-              acc[i].addEventListener("click", function() {
-                this.classList.toggle("active")
-                var panel = this.nextElementSibling
-                if (panel.style.display == "block") {
-                  panel.style.display = "none"
-                } else {
-                  panel.style.display = "block"
-                }
-              })
-            }
-          })
-        </script>
-        <style>
-            .item-children {
-                display: none;
-            }
-        </style>
     {% endautoescape %}
 {% endblock %}

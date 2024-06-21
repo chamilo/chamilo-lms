@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Serializer\Filter\GroupFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
@@ -34,16 +35,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Get(
-            uriTemplate: '/sessions/{id}/basic',
-            normalizationContext: [
-                'groups' => ['session:basic'],
-            ],
-            security: "is_granted('ROLE_ADMIN') or is_granted('VIEW', object)"
-        ),
-        new Get(
             uriTemplate: '/sessions/{id}',
             normalizationContext: [
-                'groups' => ['session:read', 'session:item:read'],
+                'groups' => ['session:basic'],
             ],
             security: "is_granted('ROLE_ADMIN') or is_granted('VIEW', object)"
         ),
@@ -112,9 +106,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\EntityListeners([SessionListener::class])]
 #[ORM\Entity(repositoryClass: SessionRepository::class)]
 #[UniqueEntity('title')]
-#[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial'])]
-#[ApiFilter(filterClass: PropertyFilter::class)]
-#[ApiFilter(filterClass: OrderFilter::class, properties: ['id', 'title'])]
+#[ApiFilter(SearchFilter::class, properties: ['title' => 'partial'])]
+#[ApiFilter(PropertyFilter::class)]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'title'])]
+#[ApiFilter(GroupFilter::class, arguments: ['parameterName' => 'groups'])]
 class Session implements ResourceWithAccessUrlInterface, Stringable
 {
     public const READ_ONLY = 1;

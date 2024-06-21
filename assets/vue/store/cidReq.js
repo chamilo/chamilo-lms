@@ -78,7 +78,7 @@ export const useCidReqStore = defineStore("cidReq", () => {
     }
   }
 
-  const setSessionByIri = async (sId, useBasic = false) => {
+  const setSessionByIri = async (sId, useBasic = true) => {
     const sessionIri = `/api/sessions/${sId}`
 
     if (session.value && sessionIri === session.value["@id"]) {
@@ -92,7 +92,7 @@ export const useCidReqStore = defineStore("cidReq", () => {
     }
   }
 
-  const setCourseAndSessionById = (cId, sId = undefined, useBasic = false) => {
+  const setCourseAndSessionById = (cId, sId = undefined, useBasic = true) => {
     if (!cId) {
       return Promise.resolve()
     }

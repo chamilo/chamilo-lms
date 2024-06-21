@@ -17,7 +17,7 @@ export default {
    * @returns {Promise<Object>}
    */
   async find(iri, useBasic = false) {
-    const endpoint = useBasic ? `${iri}/basic` : iri
+    const endpoint = iri
     const groups = useBasic ? ['session:basic'] : ['session:read']
     const { data } = await api.get(endpoint, {
       params: {

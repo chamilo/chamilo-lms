@@ -360,7 +360,8 @@ class CourseController extends ToolBaseController
         Course $course,
         IllustrationRepository $illustrationRepository,
         CCourseDescriptionRepository $courseDescriptionRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        Request $request
     ): Response {
         $courseId = $course->getId();
 
@@ -497,6 +498,7 @@ class CourseController extends ToolBaseController
             'url' => '',
             'is_premium' => '',
             'token' => '',
+            'base_url' => $request->getSchemeAndHttpHost(),
         ];
 
         $metaInfo = '<meta property="og:url" content="'.$urlCourse.'" />';

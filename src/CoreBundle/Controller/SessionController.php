@@ -241,13 +241,6 @@ class SessionController extends AbstractController
                 $session->getId(),
                 api_get_user_id()
             ),
-            /*'subscribe_button' => \CoursesAndSessionsCatalog::getRegisteredInSessionButton(
-                $session->getId(),
-                $session->getName(),
-                $hasRequirements,
-                true,
-                true
-            ),*/
             'user_session_time' => SessionManager::getDayLeftInSession(
                 [
                     'id' => $session->getId(),
@@ -255,6 +248,7 @@ class SessionController extends AbstractController
                 ],
                 api_get_user_id()
             ),
+            'base_url' => $request->getSchemeAndHttpHost(),
         ];
 
         return $this->render('@ChamiloCore/Session/about.html.twig', $params);

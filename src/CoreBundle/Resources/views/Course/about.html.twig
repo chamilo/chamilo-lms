@@ -1,181 +1,165 @@
 {% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
 
 {% block content %}
-{% autoescape false %}
-    <div id="about-course" class="about">
-        <div id="course-info-top">
-            <h2 class="session-title">{{ course.title }}</h2>
-            <div class="course-short">
-                <ul>
-                    <li class="author">{{ "Professors"|trans }}</li>
-                    {%  for teacher in teachers %}
-                        <li>{{ teacher.complete_name }} | </li>
-                    {% endfor %}
-                </ul>
+    {% autoescape false %}
+        <div id="about-course" class="container-about-custom mt-4">
+            <div id="course-info-top" class="mb-4">
+                <h2 class="session-title text-2xl font-bold">{{ course.title }}</h2>
+                {% if not 'course_about_teacher_name_hide'|api_get_configuration_value %}
+                    <div class="course-short mt-2">
+                        <ul>
+                            <li class="author">{{ "Professors"|trans }}:</li>
+                            {% for teacher in teachers %}
+                                <li>{{ teacher.complete_name }}{% if not loop.last %} |{% endif %}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
             </div>
-        </div>
 
-        {% set course_video = '' %}
-        {% for extra_field in extra_fields %}
-            {% if extra_field.value.getField().getVariable() == 'video_url' %}
-                {% set course_video = extra_field.value.getValue() %}
-            {% endif %}
-        {% endfor %}
+            {% set course_video = '' %}
+            {% for extra_field in extra_fields %}
+                {% if extra_field.value.getField().getVariable() == 'video_url' %}
+                    {% set course_video = extra_field.value.getValue() %}
+                {% endif %}
+            {% endfor %}
 
-        <div class="card">
-            <div class="card-body">
+            <div class="bg-white shadow rounded mb-4 p-4">
                 <div class="row">
-                    <div class="col-sm-5">
+                    <div class="col">
                         {% if course_video %}
-                            <div class="course-video">
-                                <div class="embed-responsive embed-responsive-16by9">
+                            <div class="course-video mb-3">
+                                <div class="aspect-w-16 aspect-h-9">
                                     {{ essence.replace(course_video) }}
                                 </div>
                             </div>
                         {% else %}
-                            <div class="course-image">
-                                <img src="{{ image }}" class="img-fluid" />
+                            <div class="course-image mb-3">
+                                <img src="{{ image }}" class="w-full h-auto rounded" />
                             </div>
                         {% endif %}
 
                         {% if "display.hide_social_media_links" | api_get_setting == 'false' %}
-                            <div class="share-social-media">
-                                <ul class="sharing-buttons">
-                                    <li>
-                                        {{ "ShareWithYourFriends"|trans }}
-                                    </li>
-                                    <li>
-                                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ url }}"
-                                           target="_blank" class="btn btn-facebook btn-inverse btn-sm">
-                                            <em class="fab fa-facebook-square"></em> Facebook
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="https://twitter.com/home?{{ {'status': course.title ~ ' ' ~ url }|url_encode }}"
-                                           target="_blank" class="btn btn-twitter btn-inverse btn-sm">
-                                            <em class="fab fa-twitter"></em> Twitter
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': url , 'title': course.title }|url_encode }}"
-                                           target="_blank" class="btn btn-linkedin btn-inverse btn-sm">
-                                            <em class="fab fa-linkedin-in"></em> Linkedin
-                                        </a>
-                                    </li>
-                                </ul>
+                            <div class="share-social-media mt-3">
+                                <div class="social-buttons">
+                                    <span>{{ "Share with your friends"|trans }}</span>
+                                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ url }}" target="_blank" class="facebook">
+                                        <em class="fab fa-facebook-square"></em> Facebook
+                                    </a>
+                                    <a href="https://twitter.com/home?{{ {'status': course.title ~ ' ' ~ url }|url_encode }}" target="_blank" class="twitter">
+                                        <em class="fab fa-twitter"></em> Twitter
+                                    </a>
+                                    <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': url , 'title': course.title }|url_encode }}" target="_blank" class="linkedin">
+                                        <em class="fab fa-linkedin-in"></em> LinkedIn
+                                    </a>
+                                </div>
                             </div>
                         {% endif %}
                     </div>
-                    <div class="col-sm-7">
+                    <div class="col">
                         <div class="course-description">
                             {{ description }}
                         </div>
                     </div>
                 </div>
                 {% if tags %}
-                    <ul class="list-inline course-tags d-flex flex-row bd-highlight mb-3">
-                        <li class="px-2 bd-highlight">{{ 'Tags'|trans }} :</li>
-                        {% for tag in tags %}
-                            <li class="px-2 bd-highlight">
-                                <span>{{ tag.getTag }}</span>
-                            </li>
-                        {% endfor %}
-                    </ul>
+                    <div class="panel-tags mt-4">
+                        <ul class="list-none flex flex-wrap">
+                            <li class="font-bold mr-2">{{ 'Tags'|trans }}:</li>
+                            {% for tag in tags %}
+                                <li class="bg-gray-200 text-gray-700 rounded-full px-2 py-1 mr-2 mb-2">{{ tag.getTag }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 {% endif %}
             </div>
-        </div>
-        <section id="course-info-bottom" class="course">
-            <div class="row">
-                <div class="col-sm-8">
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 class="sub-title">{{ "CourseInformation"|trans }}</h3>
+            <section id="course-info-bottom" class="course">
+                <div class="row">
+                    <div class="col col-2 mb-4">
+                        <div class="bg-white shadow rounded p-4">
+                            <h3 class="sub-title text-xl font-bold mb-3">{{ "Course Information"|trans }}</h3>
                             <div class="course-information">
-
+                                <!-- Añade aquí la información del curso -->
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="col-sm-4">
-                    <div class="card">
-                        <div class="card-body">
-                            {% if is_premium == false %}
-                                <h5>{{ 'CourseSubscription'|trans }}</h5>
-                                <div class="session-subscribe">
+                    <div class="col">
+                        <div class="bg-white shadow rounded p-4 mb-4">
+                            {% if not is_premium %}
+                                <h5 class="text-lg font-semibold">{{ 'Course subscription'|trans }}</h5>
+                                <div class="session-subscribe mt-2">
                                     {% if not is_granted('IS_AUTHENTICATED') %}
                                         {% if 'allow_registration'|api_get_setting != 'false' %}
-                                            <a href="{{ _p.web_main ~ 'auth/inscription.php' ~ redirect_to_session }}" class="btn btn--success btn-block btn-lg">
-                                                <i class="fa fa-pencil" aria-hidden="true"></i> {{ 'SignUp'|trans }}
+                                            <a href="{{ base_url ~ '/main/auth/inscription.php' ~ redirect_to_session }}" class="btn btn--success w-full py-2 mt-2 text-white bg-green-600 rounded hover:bg-green-700">
+                                                <i class="fa fa-pencil" aria-hidden="true"></i> {{ 'Sign Up'|trans }}
                                             </a>
                                         {% endif %}
                                     {% elseif subscription %}
-                                        <a href="{{ url('home') }}courses/{{ course.code }}/index.php?sid=0" class="btn btn-lg btn--success btn-block">{{ 'CourseHomepage'|trans }}</a>
+                                        <a href="{{ url('home') }}courses/{{ course.code }}/index.php?sid=0" class="btn btn--success w-full py-2 mt-2 text-white bg-green-600 rounded hover:bg-green-700">{{ 'Course Homepage'|trans }}</a>
                                     {% else %}
-                                        <a href="{{ url('home') }}courses/{{ course.code }}/index.php?action=subscribe&sec_token={{ token }}" class="btn btn-lg btn--success btn-block">{{ 'Subscribe'|trans }}</a>
+                                        <a href="{{ url('home') }}courses/{{ course.code }}/index.php?action=subscribe&sec_token={{ token }}" class="btn btn--success w-full py-2 mt-2 text-white bg-green-600 rounded hover:bg-green-700">{{ 'Subscribe'|trans }}</a>
                                     {% endif %}
                                 </div>
                             {% else %}
-                                <div class="session-price">
-                                    <div class="sale-price">
-                                        {{ 'SalePrice'|trans }}
+                                <div class="session-price mt-2">
+                                    <div class="sale-price text-lg font-semibold">
+                                        {{ 'Sale price'|trans }}
                                     </div>
-                                    <div class="price-text">
+                                    <div class="price-text text-2xl font-bold text-gray-800">
                                         {{ is_premium.iso_code }} {{ is_premium.price }}
                                     </div>
-                                    <div class="buy-box">
-                                        <a href="{{ _p.web }}plugin/buycourses/src/process.php?i={{ is_premium.product_id }}&t={{ is_premium.product_type }}" class="btn btn-lg btn--primary btn-block">{{ 'BuyNow'|trans }}</a>
+                                    <div class="buy-box mt-2">
+                                        <a href="{{ base_url }}/plugin/buycourses/src/process.php?i={{ is_premium.product_id }}&t={{ is_premium.product_type }}" class="btn btn--primary w-full py-2 mt-2 text-white bg-blue-600 rounded hover:bg-blue-700">{{ 'Buy Now'|trans }}</a>
                                     </div>
                                 </div>
                             {% endif %}
                         </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="panel-teachers">
-                                <h5 class="sub-title">{{ "Coaches"|trans }}</h5>
-                            </div>
-                            {%  for teacher in teachers %}
-                                <div class="coach-information">
-                                    <div class="coach-header">
-                                        <div class="coach-avatar">
-                                            <img class="img-fluid rounded-circle" src="{{ teacher.image }}" alt="{{ teacher.complete_name }}">
-                                        </div>
-                                        <div class="coach-title">
-                                            <h6>{{ teacher.complete_name }}</h6>
-                                            <p> {{ teacher.diploma }}</p>
-                                        </div>
-                                    </div>
-                                    <div class="open-area  {{ teachers | length >= 2 ? 'open-more' : ' ' }}">
-                                        {{ teacher.openarea }}
-                                    </div>
+                        {% if teachers and not 'course_about_teacher_name_hide'|api_get_configuration_value %}
+                            <div class="bg-white shadow rounded p-4">
+                                <div class="panel-teachers">
+                                    <h5 class="sub-title text-lg font-semibold mb-3">{{ "Coaches"|trans }}</h5>
                                 </div>
-                            {% endfor %}
-
-                        </div>
+                                {% for teacher in teachers %}
+                                    <div class="coach-information mb-4">
+                                        <div class="flex items-center mb-2">
+                                            <div class="coach-avatar mr-2">
+                                                <img class="w-12 h-12 rounded-full" src="{{ teacher.image }}" alt="{{ teacher.complete_name }}">
+                                            </div>
+                                            <div>
+                                                <h6 class="text-md font-bold">{{ teacher.complete_name }}</h6>
+                                                <p class="text-sm">{{ teacher.diploma }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="open-area {{ teachers | length >= 2 ? 'open-more' : '' }}">
+                                            {{ teacher.openarea }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
-            </div>
-        </section>
-    </div>
+            </section>
+        </div>
 
-    <script>
-        $(function() {
+        <script>
+          $(function() {
             $('.course-information').readmore({
-                speed: 100,
-                lessLink: '<a class="hide-content" href="#">{{ 'SetInvisible' | trans }}</a>',
-                moreLink: '<a class="read-more" href="#">{{ 'ReadMore' | trans }}</a>',
-                collapsedHeight: 730,
-                heightMargin: 100
+              speed: 100,
+              lessLink: '<a class="hide-content" href="#">{{ 'Set invisible' | trans }}</a>',
+              moreLink: '<a class="read-more" href="#">{{ 'Read more' | trans }}</a>',
+              collapsedHeight: 730,
+              heightMargin: 100
             });
             $('.open-more').readmore({
-                speed: 100,
-                lessLink: '<a class="hide-content" href="#">{{ 'SetInvisible' | trans }}</a>',
-                moreLink: '<a class="read-more" href="#">{{ 'ReadMore' | trans }}</a>',
-                collapsedHeight: 90,
-                heightMargin: 20
+              speed: 100,
+              lessLink: '<a class="hide-content" href="#">{{ 'Set invisible' | trans }}</a>',
+              moreLink: '<a class="read-more" href="#">{{ 'Read more' | trans }}</a>',
+              collapsedHeight: 90,
+              heightMargin: 20
             });
-        });
-    </script>
-{% endautoescape %}
+          });
+        </script>
+    {% endautoescape %}
 {% endblock %}

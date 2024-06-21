@@ -3,3 +3,92 @@
     @apply grid grid-cols-[repeat(auto-fill,_minmax(120px,_1fr))] gap-y-8 gap-x-20 mt-4;
   }
 }
+
+.container-about-custom {
+  margin: 0 auto;
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -16px;
+    margin-right: -16px;
+  }
+  .col {
+    flex: 1;
+    padding-left: 16px;
+    padding-right: 16px;
+    min-width: 300px;
+    box-sizing: border-box;
+  }
+  .col-2 {
+    flex: 2;
+  }
+  .bg-white {
+    background-color: white;
+  }
+  .shadow {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  .rounded {
+    border-radius: 8px;
+  }
+  .p-4 {
+    padding: 16px;
+  }
+  .mb-4 {
+    margin-bottom: 16px;
+  }
+  .mt-4 {
+    margin-top: 16px;
+  }
+  .text-2xl {
+    font-size: 1.5rem;
+  }
+  .font-bold {
+    font-weight: bold;
+  }
+  .course-short ul {
+    padding: 0;
+    list-style-type: none;
+  }
+  .course-short ul li {
+    display: inline;
+    margin-right: 8px;
+  }
+  .text-lg {
+    font-size: 1.25rem;
+  }
+  .text-md {
+    font-size: 1rem;
+  }
+  .text-sm {
+    font-size: 0.875rem;
+  }
+  .font-semibold {
+    font-weight: 600;
+  }
+  .social-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .social-buttons a {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-decoration: none;
+  }
+  .social-buttons a em {
+    margin-right: 8px;
+  }
+  .social-buttons a.facebook {
+    color: #3b5998;
+  }
+  .social-buttons a.twitter {
+    color: #1da1f2;
+  }
+  .social-buttons a.linkedin {
+    color: #0077b5;
+  }
+}

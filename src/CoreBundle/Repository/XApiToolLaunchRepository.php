@@ -110,6 +110,7 @@ class XApiToolLaunchRepository extends ServiceEntityRepository
             ->setParameter('type', TOOL_XAPI)
             ->setParameter('tool_id', $toolLaunch->getId())
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleScalarResult()
+        ;
     }
 }

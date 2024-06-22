@@ -581,8 +581,6 @@ switch ($report) {
                 $sessionCount++;
             }
 
-            $content .= Display::page_subheader2(get_lang('GeneralStats'));
-
             // Coach
             $sql = "SELECT count(DISTINCT(id_coach)) count FROM $tableSession
                     WHERE
@@ -635,6 +633,43 @@ switch ($report) {
                 }
             }
 
+            $content .= Display::page_subheader2(get_lang('UsersReportByCourseInSessions'));
+
+            $tableCourse = new HTML_Table(['class' => 'table table-responsive']);
+            $headers = [
+                get_lang('Course'),
+                get_lang('CountOfSessions'),
+                get_lang('UsersReport'),
+            ];
+
+            $row = 0;
+            $column = 0;
+            foreach ($headers as $header) {
+                $tableCourse->setHeaderContents($row, $column, $header);
+                $column++;
+            }
+            $row++;
+
+            if (!empty($courseSessions)) {
+                arsort($courseSessions);
+                foreach ($courseSessions as $courseId => $count) {
+                    $courseInfo = api_get_course_info_by_id($courseId);
+                    $tableCourse->setCellContents($row, 0, $courseInfo['name']);
+                    $tableCourse->setCellContents($row, 1, $count);
+                    $exportLink = api_get_self().'?report=session_by_date&course_id='.$courseId.'&action=export_users';
+                    $urlExport = Display::url(
+                        Display::return_icon('excel.png', get_lang('UsersReport')),
+                        $exportLink
+                    );
+                    $tableCourse->setCellContents($row, 2, $urlExport);
+                    $row++;
+                }
+            }
+
+            $content .= $tableCourse->toHtml();
+
+            $content .= Display::page_subheader2(get_lang('GeneralStats'));
+
             $table = new HTML_Table(['class' => 'table table-responsive']);
             $row = 0;
             $table->setCellContents($row, 0, get_lang('Weeks'));
@@ -667,32 +702,6 @@ switch ($report) {
                 $content .= '<div class="col-md-4"><h4 class="page-header" id="canvas3_title"></h4><div id="canvas3_table"></div></div>';
             }
             $content .= '</div>';
-
-            $tableCourse = new HTML_Table(['class' => 'table table-responsive']);
-            $headers = [
-                get_lang('Course'),
-                get_lang('CountOfSessions'),
-            ];
-
-            $row = 0;
-            $column = 0;
-            foreach ($headers as $header) {
-                $tableCourse->setHeaderContents($row, $column, $header);
-                $column++;
-            }
-            $row++;
-
-            if (!empty($courseSessions)) {
-                arsort($courseSessions);
-                foreach ($courseSessions as $courseId => $count) {
-                    $courseInfo = api_get_course_info_by_id($courseId);
-                    $tableCourse->setCellContents($row, 0, $courseInfo['name']);
-                    $tableCourse->setCellContents($row, 1, $count);
-                    $row++;
-                }
-            }
-
-            $content .= $tableCourse->toHtml();
 
             $content .= '<div class="row">';
             $content .= '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
@@ -753,6 +762,13 @@ switch ($report) {
         }
 
         $content .= $table->toHtml();
+
+        if (isset($_REQUEST['action']) && 'export_users' === $_REQUEST['action'] && isset($_REQUEST['course_id'])) {
+            $courseId = intval($_REQUEST['course_id']);
+
+            Statistics::exportUserReportByCourseSession($courseId);
+            exit;
+        }
 
         if (isset($_REQUEST['action']) && 'export' === $_REQUEST['action']) {
             $data = $table->toArray();

@@ -2103,4 +2103,55 @@ class Statistics
 
         return $usersInfo;
     }
+
+    /**
+     * Exports a user report by course and session to an Excel file.
+     */
+    public static function exportUserReportByCourseSession(int $courseId): void
+    {
+        $courseInfo = api_get_course_info_by_id($courseId);
+        $sessions = SessionManager::get_session_by_course($courseId);
+
+        $headers = [
+            get_lang('CourseName'),
+            get_lang('SessionName'),
+            get_lang('LastName'),
+            get_lang('FirstName'),
+            get_lang('Email'),
+            get_lang('EndDate'),
+            get_lang('Score'),
+            get_lang('Progress')
+        ];
+
+        $exportData = [$headers];
+        foreach ($sessions as $session) {
+            $sessionId = (int) $session['id'];
+            $students = SessionManager::get_users_by_session($sessionId);
+
+            foreach ($students as $student) {
+                $studentId = $student['user_id'];
+                $studentInfo = api_get_user_info($studentId);
+                $courseCode = $courseInfo['code'];
+
+                $lastConnection = Tracking::getLastConnectionTimeInSessionCourseLp($studentId, $courseCode, $sessionId);
+                $lastConnectionFormatted = $lastConnection ? date('Y-m-d', $lastConnection) : '';
+
+                $averageScore = round(Tracking::getAverageStudentScore($studentId, $courseCode, [], $sessionId));
+                $averageProgress = round(Tracking::get_avg_student_progress($studentId, $courseCode, [], $sessionId));
+
+                $exportData[] = [
+                    $courseInfo['name'],
+                    $session['name'],
+                    $studentInfo['lastname'],
+                    $studentInfo['firstname'],
+                    $studentInfo['mail'],
+                    $lastConnectionFormatted,
+                    $averageScore,
+                    $averageProgress,
+                ];
+            }
+        }
+
+        Export::arrayToXls($exportData, 'session_report');
+    }
 }

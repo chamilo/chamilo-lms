@@ -2295,10 +2295,12 @@ function api_generate_password(int $length = 8, $useRequirements = true): string
 
     $charactersLowerCase = 'abcdefghijkmnopqrstuvwxyz';
     $charactersUpperCase = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+    $charactersSpecials = '!@#$%^&*()_+-=[]{}|;:,.<>?';
     $minNumbers = 2;
     $length = $length - $minNumbers;
     $minLowerCase = round($length / 2);
     $minUpperCase = $length - $minLowerCase;
+    $minSpecials = 1; // Default minimum special characters
 
     $password = '';
     $passwordRequirements = $useRequirements ? Security::getPasswordRequirements() : [];
@@ -2311,8 +2313,9 @@ function api_generate_password(int $length = 8, $useRequirements = true): string
         $minNumbers = $passwordRequirements['min']['numeric'];
         $minLowerCase = $passwordRequirements['min']['lowercase'];
         $minUpperCase = $passwordRequirements['min']['uppercase'];
+        $minSpecials = $passwordRequirements['min']['specials'];
 
-        $rest = $length - $minNumbers - $minLowerCase - $minUpperCase;
+        $rest = $length - $minNumbers - $minLowerCase - $minUpperCase - $minSpecials;
         // Add the rest to fill the length requirement
         if ($rest > 0) {
             $password .= $generator->generateString($rest, $charactersLowerCase.$charactersUpperCase);
@@ -2329,6 +2332,11 @@ function api_generate_password(int $length = 8, $useRequirements = true): string
 
     // Min uppercase
     $password .= $generator->generateString($minUpperCase, $charactersUpperCase);
+
+    // Min special characters
+    $password .= $generator->generateString($minSpecials, $charactersSpecials);
+
+    // Shuffle the password to ensure randomness
     $password = str_shuffle($password);
 
     return $password;

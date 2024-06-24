@@ -1694,13 +1694,13 @@ function search_img_from_html($html_file)
  * @param int    $session_id
  * @param int    $to_group_id             group.id
  * @param int    $to_user_id
- * @param string $base_work_dir           /var/www/chamilo/courses/ABC/document
+ * @param string $base_work_dir           /var/www/chamilo/app/courses/ABC/document or api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/document'
  * @param string $desired_dir_name        complete path of the desired name
  *                                        Example: /folder1/folder2
  * @param string $title                   "folder2"
  * @param int    $visibility              (0 for invisible, 1 for visible, 2 for deleted)
  * @param bool   $generateNewNameIfExists
- * @param bool   $sendNotification        depends in conf setting "send_notification_when_document_added"
+ * @param bool   $sendNotification        depends on conf setting "send_notification_when_document_added"
  *
  * @return string actual directory name if it succeeds,
  *                boolean false otherwise

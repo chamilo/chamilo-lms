@@ -13,7 +13,7 @@
 
 <script setup>
 import useVuelidate from "@vuelidate/core"
-import { computed, ref, defineExpose } from "vue"
+import { computed, ref } from "vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useRoute } from "vue-router"
 import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"

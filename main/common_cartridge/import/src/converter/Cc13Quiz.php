@@ -195,7 +195,8 @@ class Cc13Quiz extends Cc13Entities
                         $is_question_bank = 1;
                     }
 
-                    $assessmentFile = $this->getExternalXml($instance['resource_indentifier']);
+                    // Get the path of the assessment.xml file
+                    $assessmentFile = $this->getExternalXml($instance['resource_identifier']);
 
                     if (!empty($assessmentFile)) {
                         $assessment = $this->loadXmlResource(Cc1p3Convert::$pathToManifestFolder.DIRECTORY_SEPARATOR.$assessmentFile);
@@ -209,13 +210,13 @@ class Cc13Quiz extends Cc13Entities
                             if (!empty($questionCount)) {
                                 $lastInstanceId++;
 
-                                $instances[$instance['resource_indentifier']]['questions'] = $questions;
-                                $instances[$instance['resource_indentifier']]['id'] = $lastInstanceId;
-                                $instances[$instance['resource_indentifier']]['title'] = $instance['title'];
-                                $instances[$instance['resource_indentifier']]['description'] = $this->getQuizDescription($assessment);
-                                $instances[$instance['resource_indentifier']]['is_question_bank'] = $is_question_bank;
-                                $instances[$instance['resource_indentifier']]['options']['timelimit'] = $this->getGlobalConfig($assessment, 'qmd_timelimit', 0);
-                                $instances[$instance['resource_indentifier']]['options']['max_attempts'] = $this->getGlobalConfig($assessment, 'cc_maxattempts', 0, $replaceValues);
+                                $instances[$instance['resource_identifier']]['questions'] = $questions;
+                                $instances[$instance['resource_identifier']]['id'] = $lastInstanceId;
+                                $instances[$instance['resource_identifier']]['title'] = $instance['title'];
+                                $instances[$instance['resource_identifier']]['description'] = $this->getQuizDescription($assessment);
+                                $instances[$instance['resource_identifier']]['is_question_bank'] = $is_question_bank;
+                                $instances[$instance['resource_identifier']]['options']['timelimit'] = $this->getGlobalConfig($assessment, 'qmd_timelimit', 0);
+                                $instances[$instance['resource_identifier']]['options']['max_attempts'] = $this->getGlobalConfig($assessment, 'cc_maxattempts', 0, $replaceValues);
                             }
                         }
                     }

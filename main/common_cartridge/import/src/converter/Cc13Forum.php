@@ -103,7 +103,7 @@ class Cc13Forum extends Cc13Entities
     {
         $topic_data = [];
 
-        $topic_file = $this->getExternalXml($instance['resource_indentifier']);
+        $topic_file = $this->getExternalXml($instance['resource_identifier']);
 
         if (!empty($topic_file)) {
             $topic_file_path = Cc1p3Convert::$pathToManifestFolder.DIRECTORY_SEPARATOR.$topic_file;

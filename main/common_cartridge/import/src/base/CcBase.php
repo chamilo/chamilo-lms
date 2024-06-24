@@ -296,12 +296,12 @@ class CcBase
                 static::$instances['index'][$array_index]['index'] = $array_index;
                 static::$instances['index'][$array_index]['deep'] = $level;
                 static::$instances['index'][$array_index]['instance'] = $this->countInstances($tool_type);
-                static::$instances['index'][$array_index]['resource_indentifier'] = $identifierref;
+                static::$instances['index'][$array_index]['resource_identifier'] = $identifierref;
 
                 static::$instances['instances'][$tool_type][] = ['title' => $title,
                                                                         'instance' => static::$instances['index'][$array_index]['instance'],
                                                                         'common_cartridge_type' => $ccType,
-                                                                        'resource_indentifier' => $identifierref,
+                                                                        'resource_identifier' => $identifierref,
                                                                         'deep' => $level, ];
 
                 $more_items = $xpath->query('imscc:item', $item);

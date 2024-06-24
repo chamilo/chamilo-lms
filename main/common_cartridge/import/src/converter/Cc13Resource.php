@@ -86,7 +86,7 @@ class Cc13Resource extends Cc13Entities
         $link = '';
 
         if ($instance['common_cartridge_type'] == Cc1p3Convert::CC_TYPE_WEBCONTENT || $instance['common_cartridge_type'] == Cc1p3Convert::CC_TYPE_ASSOCIATED_CONTENT) {
-            $resource = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@identifier="'.$instance['resource_indentifier'].'"]/@href');
+            $resource = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@identifier="'.$instance['resource_identifier'].'"]/@href');
             if ($resource->length > 0) {
                 $resource = !empty($resource->item(0)->nodeValue) ? $resource->item(0)->nodeValue : '';
             } else {
@@ -95,7 +95,7 @@ class Cc13Resource extends Cc13Entities
 
             if (empty($resource)) {
                 unset($resource);
-                $resource = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@identifier="'.$instance['resource_indentifier'].'"]/imscc:file/@href');
+                $resource = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@identifier="'.$instance['resource_identifier'].'"]/imscc:file/@href');
                 if ($resource->length > 0) {
                     $resource = !empty($resource->item(0)->nodeValue) ? $resource->item(0)->nodeValue : '';
                 } else {
@@ -108,7 +108,7 @@ class Cc13Resource extends Cc13Entities
         }
 
         if ($instance['common_cartridge_type'] == Cc1p3Convert::CC_TYPE_WEBLINK) {
-            $external_resource = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@identifier="'.$instance['resource_indentifier'].'"]/imscc:file/@href')->item(0)->nodeValue;
+            $external_resource = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@identifier="'.$instance['resource_identifier'].'"]/imscc:file/@href')->item(0)->nodeValue;
 
             if ($external_resource) {
                 $resource = $this->loadXmlResource(Cc1p3Convert::$pathToManifestFolder.DIRECTORY_SEPARATOR.$external_resource);

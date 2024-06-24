@@ -85,7 +85,7 @@ class Cc13Resource extends Cc13Entities
         $xpath = Cc1p3Convert::newxPath(Cc1p3Convert::$manifest, Cc1p3Convert::$namespaces);
         $link = '';
 
-        if ($instance['common_cartriedge_type'] == Cc1p3Convert::CC_TYPE_WEBCONTENT || $instance['common_cartriedge_type'] == Cc1p3Convert::CC_TYPE_ASSOCIATED_CONTENT) {
+        if ($instance['common_cartridge_type'] == Cc1p3Convert::CC_TYPE_WEBCONTENT || $instance['common_cartridge_type'] == Cc1p3Convert::CC_TYPE_ASSOCIATED_CONTENT) {
             $resource = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@identifier="'.$instance['resource_indentifier'].'"]/@href');
             if ($resource->length > 0) {
                 $resource = !empty($resource->item(0)->nodeValue) ? $resource->item(0)->nodeValue : '';
@@ -107,7 +107,7 @@ class Cc13Resource extends Cc13Entities
             }
         }
 
-        if ($instance['common_cartriedge_type'] == Cc1p3Convert::CC_TYPE_WEBLINK) {
+        if ($instance['common_cartridge_type'] == Cc1p3Convert::CC_TYPE_WEBLINK) {
             $external_resource = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@identifier="'.$instance['resource_indentifier'].'"]/imscc:file/@href')->item(0)->nodeValue;
 
             if ($external_resource) {
@@ -137,7 +137,7 @@ class Cc13Resource extends Cc13Entities
         $mod_options = 'objectframe';
         $mod_reference = $link;
         //detected if we are dealing with html file
-        if (!empty($link) && ($instance['common_cartriedge_type'] == Cc1p3Convert::CC_TYPE_WEBCONTENT)) {
+        if (!empty($link) && ($instance['common_cartridge_type'] == Cc1p3Convert::CC_TYPE_WEBCONTENT)) {
             $ext = strtolower(pathinfo($link, PATHINFO_EXTENSION));
             if (in_array($ext, ['html', 'htm', 'xhtml'])) {
                 $mod_type = 'html';

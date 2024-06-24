@@ -289,7 +289,7 @@ class CcBase
                     $index_root = $array_index;
                 }
 
-                static::$instances['index'][$array_index]['common_cartriedge_type'] = $ccType;
+                static::$instances['index'][$array_index]['common_cartridge_type'] = $ccType;
                 static::$instances['index'][$array_index]['tool_type'] = $tool_type;
                 static::$instances['index'][$array_index]['title'] = $title ? $title : '';
                 static::$instances['index'][$array_index]['root_parent'] = $index_root;
@@ -300,7 +300,7 @@ class CcBase
 
                 static::$instances['instances'][$tool_type][] = ['title' => $title,
                                                                         'instance' => static::$instances['index'][$array_index]['instance'],
-                                                                        'common_cartriedge_type' => $ccType,
+                                                                        'common_cartridge_type' => $ccType,
                                                                         'resource_indentifier' => $identifierref,
                                                                         'deep' => $level, ];
 

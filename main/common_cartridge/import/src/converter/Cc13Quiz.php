@@ -20,11 +20,12 @@ class Cc13Quiz extends Cc13Entities
 
     public function storeQuiz($quiz)
     {
+        $token = '/\$(?:IMS|1EdTech)[-_]CC[-_]FILEBASE\$/';
         $courseInfo = api_get_course_info();
         $exercise = new Exercise($courseInfo['real_id']);
         $title = Exercise::format_title_variable($quiz['title']);
         $exercise->updateTitle($title);
-        $exercise->updateDescription('');
+        $exercise->updateDescription($quiz['description']);
         $exercise->updateAttempts($quiz['max_attempts']);
         $exercise->updateFeedbackType(0);
 
@@ -165,6 +166,7 @@ class Cc13Quiz extends Cc13Entities
             $values = [
                 'id' => $instance['id'],
                 'title' => $instance['title'],
+                'description' => $instance['description'],
                 'timelimit' => $instance['options']['timelimit'],
                 'max_attempts' => $instance['options']['max_attempts'],
                 'questions' => $questions,
@@ -210,6 +212,7 @@ class Cc13Quiz extends Cc13Entities
                                 $instances[$instance['resource_indentifier']]['questions'] = $questions;
                                 $instances[$instance['resource_indentifier']]['id'] = $lastInstanceId;
                                 $instances[$instance['resource_indentifier']]['title'] = $instance['title'];
+                                $instances[$instance['resource_indentifier']]['description'] = $this->getQuizDescription($assessment);
                                 $instances[$instance['resource_indentifier']]['is_question_bank'] = $is_question_bank;
                                 $instances[$instance['resource_indentifier']]['options']['timelimit'] = $this->getGlobalConfig($assessment, 'qmd_timelimit', 0);
                                 $instances[$instance['resource_indentifier']]['options']['max_attempts'] = $this->getGlobalConfig($assessment, 'cc_maxattempts', 0, $replaceValues);
@@ -248,6 +251,14 @@ class Cc13Quiz extends Cc13Entities
 
         $response = empty($response) ? $defaultValue : $response;
 
+        return $response;
+    }
+
+    private function getQuizDescription(DOMDocument $assessment): string
+    {
+        $xpath = Cc1p3Convert::newxPath($assessment, Cc1p3Convert::getquizns());
+        $fieldEntry = $xpath->query('/xmlns:questestinterop/xmlns:assessment/xmlns:rubric/xmlns:material/xmlns:mattext');
+        $response = !empty($fieldEntry->item(0)->nodeValue) ? $fieldEntry->item(0)->nodeValue : '';
         return $response;
     }
 

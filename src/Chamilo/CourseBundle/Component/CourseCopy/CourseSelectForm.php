@@ -514,13 +514,13 @@ class CourseSelectForm
     }
 
     /**
-     * Get the posted course.
+     * Get the posted course with all its selected resources.
      *
      * @param string $from         who calls the function?
      *                             It can be copy_course, create_backup, import_backup or recycle_course
      * @param int    $session_id
      * @param string $course_code
-     * @param Course $postedCourse
+     * @param Course $postedCourse Course object as defined in the CourseCopy/Course.php script
      *
      * @return Course The course-object with all resources selected by the user
      *                in the form given by display_form(...)
@@ -530,7 +530,7 @@ class CourseSelectForm
         $course = $postedCourse;
         if (empty($postedCourse)) {
             $cb = new CourseBuilder();
-            $postResource = isset($_POST['resource']) ? $_POST['resource'] : [];
+            $postResource = $_POST['resource'] ?? [];
             $course = $cb->build(0, null, false, array_keys($postResource), $postResource);
         }
 
@@ -539,16 +539,16 @@ class CourseSelectForm
         }
 
         // Create the resource DOCUMENT objects
-        // Loading the results from the checkboxes of ethe javascript
-        $resource = isset($_POST['resource'][RESOURCE_DOCUMENT]) ? $_POST['resource'][RESOURCE_DOCUMENT] : null;
+        // Loading the results from the checkboxes of the javascript
+        $resource = $_POST['resource'][RESOURCE_DOCUMENT] ?? null;
 
         $course_info = api_get_course_info($course_code);
         $table_doc = Database::get_course_table(TABLE_DOCUMENT);
         $table_prop = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $course_id = $course_info['real_id'];
 
-        /* Searching the documents resource that have been set to null because
-        $avoidSerialize is true in the display_form() function*/
+        // Searching the documents resource that have been set to null because
+        // $avoidSerialize is true in the display_form() function
         if ($from === 'copy_course') {
             if (is_array($resource)) {
                 $resource = array_keys($resource);
@@ -645,13 +645,13 @@ class CourseSelectForm
                         }
                         break;
                     case RESOURCE_LEARNPATH:
-                        $lps = isset($_POST['resource'][RESOURCE_LEARNPATH]) ? $_POST['resource'][RESOURCE_LEARNPATH] : null;
+                        $lps = $_POST['resource'][RESOURCE_LEARNPATH] ?? null;
 
                         if (!empty($lps)) {
                             foreach ($lps as $id => $obj) {
                                 $lp_resource = $course->resources[RESOURCE_LEARNPATH][$id];
 
-                                if (isset($lp_resource) && !empty($lp_resource) && isset($lp_resource->items)) {
+                                if (!empty($lp_resource) && isset($lp_resource->items)) {
                                     foreach ($lp_resource->items as $item) {
                                         switch ($item['item_type']) {
                                             //Add links added in a LP see #5760
@@ -670,7 +670,7 @@ class CourseSelectForm
                     case RESOURCE_DOCUMENT:
                         // Mark folders to import which are not selected by the user to import,
                         // but in which a document was selected.
-                        $documents = isset($_POST['resource'][RESOURCE_DOCUMENT]) ? $_POST['resource'][RESOURCE_DOCUMENT] : null;
+                        $documents = $_POST['resource'][RESOURCE_DOCUMENT] ?? null;
                         if (!empty($resources) && is_array($resources)) {
                             foreach ($resources as $id => $obj) {
                                 if (isset($obj->file_type) && $obj->file_type === 'folder' &&

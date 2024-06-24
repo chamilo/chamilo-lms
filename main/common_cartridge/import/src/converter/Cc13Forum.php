@@ -7,8 +7,8 @@ class Cc13Forum extends Cc13Entities
 {
     public function fullPath($path, $dir_sep = DIRECTORY_SEPARATOR)
     {
-        $token = '$1EdTech-CC-FILEBASE$';
-        $path = str_replace($token, '', $path);
+        $token = '/\$(?:IMS|1EdTech)[-_]CC[-_]FILEBASE\$/';
+        $path = preg_replace($token, '', $path);
 
         if (is_string($path) && ($path != '')) {
             $dot_dir = '.';
@@ -151,11 +151,14 @@ class Cc13Forum extends Cc13Entities
         $images_extensions = ['gif', 'jpeg', 'jpg', 'jif', 'jfif', 'png', 'bmp'];
 
         $fileinfo = pathinfo($filename);
+        if (empty($rootPath)) {
+            $rootPath = '';
+        }
 
         if (in_array($fileinfo['extension'], $images_extensions)) {
-            return '<img src="$@FILEPHP@$/'.$filename.'" title="'.$fileinfo['basename'].'" alt="'.$fileinfo['basename'].'" /><br />';
+            return '<img src="'.$rootPath.$filename.'" title="'.$fileinfo['basename'].'" alt="'.$fileinfo['basename'].'" /><br />';
         } else {
-            return '<a href="$@FILEPHP@$/'.$filename.'" title="'.$fileinfo['basename'].'" alt="'.$fileinfo['basename'].'">'.$fileinfo['basename'].'</a><br />';
+            return '<a href="'.$rootPath.$filename.'" title="'.$fileinfo['basename'].'" alt="'.$fileinfo['basename'].'">'.$fileinfo['basename'].'</a><br />';
         }
 
         return '';

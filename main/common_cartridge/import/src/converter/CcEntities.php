@@ -47,9 +47,11 @@ class CcEntities
                 $protocol = parse_url($attribute_value, PHP_URL_SCHEME);
 
                 if (empty($protocol)) {
-                    $attribute_value = str_replace("\$1EdTech-CC-FILEBASE\$", "", $attribute_value);
+                    // The CC standard changed with the renaming of IMS Global to 1stEdTech, so we don't know what we're going to get
+                    $attribute_value = str_replace("\$1EdTech[-_]CC[-_]FILEBASE\$", "", $attribute_value);
+                    $attribute_value = str_replace("\$IMS[-_]CC[-_]FILEBASE\$", "", $attribute_value);
                     $attribute_value = $this->fullPath($rootPath."/".$attribute_value, "/");
-                    $attribute_value = "\$@FILEPHP@\$"."/".$attribute_value;
+                    //$attribute_value = "\$@FILEPHP@\$"."/".$attribute_value;
                 }
 
                 $element->setAttribute($attribute, $attribute_value);
@@ -63,8 +65,8 @@ class CcEntities
 
     public function fullPath($path, $dir_sep = DIRECTORY_SEPARATOR)
     {
-        $token = '$1EdTech-CC-FILEBASE$';
-        $path = str_replace($token, '', $path);
+        $token = '/\$(?:IMS|1EdTech)[-_]CC[-_]FILEBASE\$/';
+        $path = preg_replace($token, '', $path);
 
         if (is_string($path) && ($path != '')) {
             $dot_dir = '.';

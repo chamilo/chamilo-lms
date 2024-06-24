@@ -178,7 +178,8 @@ class Cc13Resource extends Cc13Entities
                             if (($rtp !== false) && is_file($rtp)) {
                                 //file is there - we are in business
                                 $strip = str_replace("\\", "/", str_ireplace($rootpath, '', $rtp));
-                                $encoded_file = '$@FILEPHP@$'.str_replace('/', '$@SLASH@$', $strip);
+                                //$encoded_file = '$@FILEPHP@$'.str_replace('/', '$@SLASH@$', $strip);
+                                $encoded_file = $strip;
                                 $searches[] = $resrc->nodeValue;
                                 $replaces[] = $encoded_file;
                             }

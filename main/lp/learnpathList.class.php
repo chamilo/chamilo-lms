@@ -28,7 +28,7 @@ class LearnpathList
      * (only displays) items if he has enough permissions to view them.
      *
      * @param int    $user_id
-     * @param array  $courseInfo              Optional course code (otherwise we use api_get_course_id())
+     * @param array  $courseInfo              Optional course info array (otherwise we use api_get_course_info())
      * @param int    $session_id              Optional session id (otherwise we use api_get_session_id())
      * @param string $order_by
      * @param bool   $check_publication_dates

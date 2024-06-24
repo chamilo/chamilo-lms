@@ -146,9 +146,9 @@ class Cc13Forum extends Cc13Entities
         return $topic_data;
     }
 
-    private function generateAttachmentHtml($filename)
+    private function generateAttachmentHtml(string $filename, ?string $rootPath)
     {
-        $images_extensions = ['gif', 'jpeg', 'jpg', 'jif', 'jfif', 'png', 'bmp'];
+        $images_extensions = ['gif', 'jpeg', 'jpg', 'jif', 'jfif', 'png', 'bmp', 'webp'];
 
         $fileinfo = pathinfo($filename);
         if (empty($rootPath)) {

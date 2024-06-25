@@ -3,6 +3,10 @@
 
 class Cc13Quiz extends Cc13Entities
 {
+    /**
+     * Get all data from the object instance (coming from the xml file) into a clean array
+     * @return array
+     */
     public function generateData()
     {
         $data = [];
@@ -18,6 +22,11 @@ class Cc13Quiz extends Cc13Entities
         return $data;
     }
 
+    /**
+     * Create a quiz based on the information available in the assessment structure
+     * @param $quiz
+     * @return void
+     */
     public function storeQuiz($quiz)
     {
         $token = '/\$(?:IMS|1EdTech)[-_]CC[-_]FILEBASE\$/';
@@ -96,7 +105,7 @@ class Cc13Quiz extends Cc13Entities
                             ''
                         );
                     }
-                    // saves the answers into the data base
+                    // saves the answers into the database
                     $objAnswer->save();
                     // sets the total weighting of the question
                     $questionInstance->updateWeighting($questionWeighting);
@@ -129,7 +138,7 @@ class Cc13Quiz extends Cc13Entities
                         $questionWeighting = $question['ponderation'];
                     }
 
-                    // saves the answers into the data base
+                    // saves the answers into the database
                     $objAnswer->save();
                     // sets the total weighting of the question
                     $questionInstance->updateWeighting($questionWeighting);

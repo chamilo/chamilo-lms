@@ -80,7 +80,7 @@ class OnlyofficeSettingsFormBuilder {
         $message = '';
         $connectDemoCheckbox = $plugin_info['settings_form']->createElement(
             'checkbox',
-            'connect_demo', 
+            'connect_demo',
             '',
             $plugin->get_lang('connect_demo')
         );
@@ -99,8 +99,9 @@ class OnlyofficeSettingsFormBuilder {
             $message,
             'info'
         );
+        $appConfig = new AppConfig();
         $bannerTemplate = self::buildTemplate('get_docs_cloud_banner', [
-            'docs_cloud_link' => AppConfig::GetLinkToDocs(),
+            'docs_cloud_link' => $appConfig->GetLinkToDocs(),
             'banner_title' => $plugin->get_lang('DocsCloudBannerTitle'),
             'banner_main_text' => $plugin->get_lang('DocsCloudBannerMain'),
             'banner_button_text' => $plugin->get_lang('DocsCloudBannerButton'),
@@ -112,7 +113,7 @@ class OnlyofficeSettingsFormBuilder {
         $plugin_info['settings_form']->insertElementBefore($banner, 'submit_button');
         return $plugin_info['settings_form'];
     }
-    
+
     /**
      * Validate OnlyofficePlugin settings form
      *
@@ -136,7 +137,7 @@ class OnlyofficeSettingsFormBuilder {
 
                 if (!empty($error)) {
                     $errorMsg = $plugin->get_lang('connectionError').'('.$error.')'.(!empty($version) ? '(Version '.$version.')' : '');
-                self::displayError($errorMsg); 
+                self::displayError($errorMsg);
                 }
             }
         }

@@ -66,7 +66,12 @@ class CcBase
         return static::$resourcens;
     }
 
-    public static function getManifest($folder)
+    /**
+     * Find the imsmanifest.xml file inside the given folder and return its path
+     * @param string $folder Full path name of the folder in which we expect to find imsmanifest.xml
+     * @return false|string
+     */
+    public static function getManifest(string $folder)
     {
         if (!is_dir($folder)) {
             return false;
@@ -148,6 +153,19 @@ class CcBase
         $xpath = static::newxPath(static::$manifest, static::$namespaces);
 
         $nodes = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@identifier="'.$identifier.'"]/@type');
+
+        if ($nodes && !empty($nodes->item(0)->nodeValue)) {
+            return $nodes->item(0)->nodeValue;
+        } else {
+            return '';
+        }
+    }
+
+    public function getItemHref($identifier)
+    {
+        $xpath = static::newxPath(static::$manifest, static::$namespaces);
+
+        $nodes = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@identifier="'.$identifier.'"]/imscc:file/@href');
 
         if ($nodes && !empty($nodes->item(0)->nodeValue)) {
             return $nodes->item(0)->nodeValue;
@@ -257,13 +275,12 @@ class CcBase
 
             foreach ($items as $item) {
                 $array_index++;
-                if ($item->nodeName == "item") {
-                    $identifierref = '';
+                $title = $path = $tool_type = $identifierref = '';
+                if ($item->nodeName == 'item') {
                     if ($item->hasAttribute('identifierref')) {
                         $identifierref = $item->getAttribute('identifierref');
                     }
 
-                    $title = '';
                     $titles = $xpath->query('imscc:title', $item);
                     if ($titles->length > 0) {
                         $title = $titles->item(0)->nodeValue;
@@ -275,34 +292,43 @@ class CcBase
                     if (empty($identifierref) && empty($title)) {
                         $tool_type = TYPE_UNKNOWN;
                     }
-                } elseif ($item->nodeName == "resource") {
+                } elseif ($item->nodeName == 'resource') {
                     $identifierref = $xpath->query('@identifier', $item);
                     $identifierref = !empty($identifierref->item(0)->nodeValue) ? $identifierref->item(0)->nodeValue : '';
 
                     $ccType = $this->getItemCcType($identifierref);
                     $tool_type = $this->convertToToolType($ccType);
-
-                    $title = 'Quiz Bank '.($this->countInstances($tool_type) + 1);
+                    if (self::CC_TYPE_WEBCONTENT == $ccType) {
+                        $path = $this->getItemHref($identifierref);
+                        $title = basename($path);
+                    } else { // A resource but not a file... we assume it's a quiz bank and its assigned identifier is irrelevant to its name
+                        $title = 'Quiz Bank '.($this->countInstances($tool_type) + 1);
+                    }
                 }
 
                 if ($level == ROOT_DEEP) {
                     $index_root = $array_index;
                 }
 
-                static::$instances['index'][$array_index]['common_cartridge_type'] = $ccType;
-                static::$instances['index'][$array_index]['tool_type'] = $tool_type;
-                static::$instances['index'][$array_index]['title'] = $title ? $title : '';
-                static::$instances['index'][$array_index]['root_parent'] = $index_root;
-                static::$instances['index'][$array_index]['index'] = $array_index;
-                static::$instances['index'][$array_index]['deep'] = $level;
-                static::$instances['index'][$array_index]['instance'] = $this->countInstances($tool_type);
-                static::$instances['index'][$array_index]['resource_identifier'] = $identifierref;
+                static::$instances['index'][$array_index] = [
+                    'common_cartridge_type' => $ccType,
+                    'tool_type' => $tool_type,
+                    'title' => $title ? $title : '',
+                    'root_parent' => $index_root,
+                    'index' => $array_index,
+                    'deep' => $level,
+                    'instance' => $this->countInstances($tool_type),
+                    'resource_identifier' => $identifierref,
+                ];
 
-                static::$instances['instances'][$tool_type][] = ['title' => $title,
-                                                                        'instance' => static::$instances['index'][$array_index]['instance'],
-                                                                        'common_cartridge_type' => $ccType,
-                                                                        'resource_identifier' => $identifierref,
-                                                                        'deep' => $level, ];
+                static::$instances['instances'][$tool_type][] = [
+                    'title' => $title,
+                    'instance' => static::$instances['index'][$array_index]['instance'],
+                    'common_cartridge_type' => $ccType,
+                    'resource_identifier' => $identifierref,
+                    'deep' => $level,
+                    'src' => $path,
+                ];
 
                 $more_items = $xpath->query('imscc:item', $item);
 

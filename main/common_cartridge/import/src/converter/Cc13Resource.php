@@ -32,6 +32,9 @@ class Cc13Resource extends Cc13Entities
     public function storeDocuments($documents, $path)
     {
         $courseInfo = api_get_course_info();
+        $sessionId = api_get_session_id();
+        $groupId = api_get_group_id();
+        $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/document';
 
         foreach ($documents as $document) {
             if ($document[2] == 'file') {
@@ -47,9 +50,22 @@ class Cc13Resource extends Cc13Entities
                 $_POST['language'] = $courseInfo['language'];
                 $_POST['cc_import'] = true;
 
+                $destDir = dirname($document[4]);
+                // Create the subdirectory if necessary
+                create_unexisting_directory(
+                    $courseInfo,
+                    api_get_user_id(),
+                    $sessionId,
+                    $groupId,
+                    null,
+                    $documentPath,
+                    '/commoncartridge/'.$destDir,
+                    $destDir,
+                    1
+                );
                 DocumentManager::upload_document(
                     $files,
-                    '/cc1p3',
+                    '/commoncartridge/'.$destDir,
                     $document[1],
                     '',
                     null,
@@ -80,12 +96,8 @@ class Cc13Resource extends Cc13Entities
 
             if (empty($resource)) {
                 unset($resource);
-                $resource = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@identifier="'.$instance['resource_identifier'].'"]/imscc:file/@href');
-                if ($resource->length > 0) {
-                    $resource = !empty($resource->item(0)->nodeValue) ? $resource->item(0)->nodeValue : '';
-                } else {
-                    $resource = '';
-                }
+                // src has been set in CcBase::createInstances() based on the contents of <file href="...">
+                $resource = $instance['src'];
             }
             if (!empty($resource)) {
                 $link = $resource;
@@ -93,7 +105,8 @@ class Cc13Resource extends Cc13Entities
         }
 
         if ($instance['common_cartridge_type'] == Cc1p3Convert::CC_TYPE_WEBLINK) {
-            $external_resource = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@identifier="'.$instance['resource_identifier'].'"]/imscc:file/@href')->item(0)->nodeValue;
+            // src has been set in CcBase::createInstances() based on the contents of <file href="...">
+            $external_resource = $instance['src'];
 
             if ($external_resource) {
                 $resource = $this->loadXmlResource(Cc1p3Convert::$pathToManifestFolder.DIRECTORY_SEPARATOR.$external_resource);
@@ -122,12 +135,12 @@ class Cc13Resource extends Cc13Entities
         $mod_options = 'objectframe';
         $mod_reference = $link;
         $mod_alltext = '';
-        //detected if we are dealing with html file
+        // detect if we are dealing with html file
         if (!empty($link) && ($instance['common_cartridge_type'] == Cc1p3Convert::CC_TYPE_WEBCONTENT)) {
             $ext = strtolower(pathinfo($link, PATHINFO_EXTENSION));
             if (in_array($ext, ['html', 'htm', 'xhtml'])) {
                 $mod_type = 'html';
-                //extract the content of the file
+                //extract the content of the file and treat it
                 $rootpath = realpath(Cc1p3Convert::$pathToManifestFolder);
                 $htmlpath = realpath($rootpath.DIRECTORY_SEPARATOR.$link);
                 $dirpath = dirname($htmlpath);
@@ -163,7 +176,7 @@ class Cc13Resource extends Cc13Entities
                             $rtp = realpath($rpath);
                             if (($rtp !== false) && is_file($rtp)) {
                                 //file is there - we are in business
-                                $strip = str_replace("\\", "/", str_ireplace($rootpath, '', $rtp));
+                                $strip = str_replace("\\", "/", str_ireplace($rootpath, '/', $rtp));
                                 //$encoded_file = '$@FILEPHP@$'.str_replace('/', '$@SLASH@$', $strip);
                                 $encoded_file = $strip;
                                 $searches[] = $resrc->nodeValue;
@@ -180,13 +193,14 @@ class Cc13Resource extends Cc13Entities
             }
         }
 
-        $values = [$instance['instance'],
-                                self::safexml($instance['title']),
-                                $mod_type,
-                                $mod_alltext,
-                                $mod_reference,
-                                $mod_options,
-                ];
+        $values = [
+            $instance['instance'],
+            self::safexml($instance['title']),
+            $mod_type,
+            $mod_alltext,
+            $mod_reference, // src or href
+            $mod_options,
+        ];
 
         return $values;
     }

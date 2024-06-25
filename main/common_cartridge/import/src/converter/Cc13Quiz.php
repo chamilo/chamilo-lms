@@ -31,6 +31,8 @@ class Cc13Quiz extends Cc13Entities
     {
         $token = '/\$(?:IMS|1EdTech)[-_]CC[-_]FILEBASE\$/';
         $courseInfo = api_get_course_info();
+        // Replace by the path in documents in which we place all relevant CC files
+        $replacementPath = '/courses/'.$courseInfo['directory'].'/document/commoncartridge/';
         $exercise = new Exercise($courseInfo['real_id']);
         $title = Exercise::format_title_variable($quiz['title']);
         $exercise->updateTitle($title);
@@ -66,9 +68,9 @@ class Cc13Quiz extends Cc13Entities
                 $questionInstance->updateTitle(substr(Security::remove_XSS(strip_tags_blacklist($question['title'], ['br', 'p'])), 0, 20));
                 $questionText = Security::remove_XSS(strip_tags_blacklist($question['title'], ['br', 'p']));
                 // Replace the path from $1EdTech-CC-FILEBASE$ to a correct chamilo path
-                $questionText = preg_replace($token, '/courses/'.$courseInfo['path'].'/document', $questionText);
-
+                $questionText = preg_replace($token, $replacementPath, $questionText);
                 $questionInstance->updateDescription($questionText);
+
                 $questionInstance->updateLevel(1);
                 $questionInstance->updateCategory(0);
 

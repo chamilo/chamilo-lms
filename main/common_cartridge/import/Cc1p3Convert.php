@@ -39,9 +39,15 @@ class Cc1p3Convert extends CcBase
      */
     public function generateImportData(): void
     {
+        $countInstances = 0;
         $xpath = static::newxPath(static::$manifest, static::$namespaces);
+        // Scan for detached resources of type 'webcontent'
+        $resources = $xpath->query('/imscc:manifest/imscc:resources/imscc:resource[@type="'.static::CC_TYPE_WEBCONTENT.'"]');
+        $this->createInstances($resources, 0, $countInstances);
+
+        // Scan for organization items or resources that are tests (question banks)
         $items = $xpath->query('/imscc:manifest/imscc:organizations/imscc:organization/imscc:item | /imscc:manifest/imscc:resources/imscc:resource[@type="'.static::CC_TYPE_QUESTION_BANK.'"]');
-        $this->createInstances($items);
+        $this->createInstances($items, 0,$countInstances);
 
         $resources = new Cc13Resource();
         $forums = new Cc13Forum();
@@ -66,7 +72,7 @@ class Cc1p3Convert extends CcBase
                 $groupId,
                 null,
                 $documentPath,
-                '/cc1p3',
+                '/commoncartridge',
                 'Common Cartridge folder',
                 0
             );

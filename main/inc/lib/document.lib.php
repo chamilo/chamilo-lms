@@ -486,7 +486,7 @@ class DocumentManager
                 }
                 echo $content;
             } else {
-                if ($enableMathJaxScript === true) {
+                if (isset($enableMathJaxScript) && $enableMathJaxScript === true) {
                     $content = file_get_contents($full_file_name);
                     $content = self::includeMathJaxScript($content);
                     echo $content;

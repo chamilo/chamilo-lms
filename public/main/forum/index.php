@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
@@ -404,6 +405,7 @@ if (is_array($forumCategories)) {
         if (!empty($forumsInCategory)) {
             $forumsDetailsList = [];
             // We display all the forums in this category.
+            /* @var CForum $forum*/
             foreach ($forumsInCategory as $forum) {
                 $forumId = $forum->getIid();
 
@@ -545,7 +547,7 @@ if (is_array($forumCategories)) {
                         /*if (api_is_allowed_to_edit(false, true)
                             && !(0 == $forum->getSessionId() && 0 != $sessionId)
                         ) {*/
-                        if (api_is_allowed_to_edit(false, true)) {
+                        if (api_is_allowed_to_edit(false, true)  && !(null === $forum->getFirstResourceLink()->getSession() && 0 != $sessionId)) {
                             $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                                 .'&action=edit_forum&content=forum&id='.$forumId.'">'
                                 .Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))
@@ -565,14 +567,6 @@ if (is_array($forumCategories)) {
                                 $forumVisibility
                             );
 
-                            $notifyDisabled = true;
-                            $sessionForumNotification = $_SESSION['forum_notification']['forum'] ?? [];
-                            if (in_array($forumId, $sessionForumNotification)) {
-                                $notifyDisabled = false;
-                            }
-                            $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=notify&content=forum&id='.$forumId.'">'.
-                                Display::getMdiIcon('email-alert', ($notifyDisabled ? 'ch-tool-icon-disabled' : 'ch-tool-icon'), '', ICON_SIZE_SMALL, get_lang('Notify me')).'</a>';
-
                             $toolActions .= returnLockUnlockIcon(
                                 'forum',
                                 $forumId,
@@ -584,6 +578,16 @@ if (is_array($forumCategories)) {
                                 $forumId,
                                 $forumsInCategory
                             );
+                        }
+
+                        if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
+                            $notifyDisabled = true;
+                            $sessionForumNotification = $_SESSION['forum_notification']['forum'] ?? [];
+                            if (in_array($forumId, $sessionForumNotification)) {
+                                $notifyDisabled = false;
+                            }
+                            $toolActions .= '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&action=notify&content=forum&id=' . $forumId . '">' .
+                                Display::getMdiIcon('email-alert', ($notifyDisabled ? 'ch-tool-icon-disabled' : 'ch-tool-icon'), '', ICON_SIZE_SMALL, get_lang('Notify me')) . '</a>';
                         }
 
                         $forumInfo['tools'] = $toolActions;

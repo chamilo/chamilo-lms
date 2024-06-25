@@ -30,16 +30,18 @@ use Chamilo\CoreBundle\Component\Utils\ActionIcon;
 function handleForum($url)
 {
     $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
+    $lp_id = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : null;
+    $content = $_REQUEST['content'] ?? '';
+    $action = $_REQUEST['action'] ?? null;
+    $isAllowedToEdit = api_is_allowed_to_edit(false, true);
+    if (!$isAllowedToEdit) {
+        $isAllowedToEdit = ('notify' === $action && !api_is_anonymous() && api_is_allowed_to_session_edit(false, true));
+    }
 
-    if (api_is_allowed_to_edit(false, true)) {
+    if ($isAllowedToEdit) {
         $course = api_get_course_entity();
         $session = api_get_session_entity();
         $linksRepo = Database::getManager()->getRepository(ResourceLink::class);
-
-        //if is called from a learning path lp_id
-        $lp_id = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : null;
-        $content = $_REQUEST['content'] ?? '';
-        $action = $_REQUEST['action'] ?? null;
         $repo = null;
         switch ($content) {
             case 'forumcategory':
@@ -85,11 +87,6 @@ function handleForum($url)
                 return $formContent;
                 break;
             case 'notify':
-                if (0 != api_get_session_id() &&
-                    false == api_is_allowed_to_session_edit(false, true)
-                ) {
-                    api_not_allowed();
-                }
                 $message = set_notification($content, $id);
                 Display::addFlash(Display::return_message($message, 'confirm', false));
 

@@ -42,6 +42,7 @@ if ($form->validate()) {
         if (!in_array($extImportFile, $allowedFileMimetype)) {
             echo Display::return_message(get_lang('YouMustImportAFileAccordingToSelectedOption'), 'error');
         } else {
+            // Unzip the whole archive into app/cache/imsccImport/, which is a *temporary* directory
             $baseDir = api_get_path(SYS_ARCHIVE_PATH);
             $uploadPath = 'imsccImport/';
             $errors = [];
@@ -58,7 +59,8 @@ if ($form->validate()) {
             // We detect if it is cc v1.3
             $detected = Imscc13Import::detectFormat($filepath);
             if ($detected) {
-                Imscc13Import::execute($filepath);
+                $importObject = new Imscc13Import();
+                $importObject->execute($filepath);
                 Display::addFlash(Display::return_message(get_lang('IMSCCFileImported'), 'normal', false));
             }
         }

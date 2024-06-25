@@ -2695,8 +2695,6 @@ function api_get_setting($variable, $isArray = false, $key = null)
             }
 
             return 'prod';
-        case 'stylesheets':
-            $variable = 'platform.theme';
         // deprecated settings
         // no break
         case 'openid_authentication':

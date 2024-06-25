@@ -32,21 +32,6 @@ class Cc13Resource extends Cc13Entities
     public function storeDocuments($documents, $path)
     {
         $courseInfo = api_get_course_info();
-        $sessionId = api_get_session_id();
-        $groupId = api_get_group_id();
-        $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
-
-        create_unexisting_directory(
-            $courseInfo,
-            api_get_user_id(),
-            $sessionId,
-            $groupId,
-            null,
-            $documentPath,
-            '/cc1p3',
-            'Common Cartridge folder',
-            0
-        );
 
         foreach ($documents as $document) {
             if ($document[2] == 'file') {
@@ -136,6 +121,7 @@ class Cc13Resource extends Cc13Entities
         $mod_type = 'file';
         $mod_options = 'objectframe';
         $mod_reference = $link;
+        $mod_alltext = '';
         //detected if we are dealing with html file
         if (!empty($link) && ($instance['common_cartridge_type'] == Cc1p3Convert::CC_TYPE_WEBCONTENT)) {
             $ext = strtolower(pathinfo($link, PATHINFO_EXTENSION));

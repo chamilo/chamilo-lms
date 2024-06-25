@@ -8,6 +8,7 @@ class Cc1p3Convert extends CcBase
     public const CC_TYPE_QUESTION_BANK = 'imsqti_xmlv1p3/imscc_xmlv1p3/question-bank';
     public const CC_TYPE_WEBLINK = 'imswl_xmlv1p3';
     public const CC_TYPE_ASSOCIATED_CONTENT = 'associatedcontent/imscc_xmlv1p3/learning-application-resource';
+    public const CC_TYPE_WEBCONTENT = 'webcontent';
     public const CC_TYPE_BASICLTI = 'imsbasiclti_xmlv1p3';
 
     public static $namespaces = ['imscc' => 'http://www.imsglobal.org/xsd/imsccv1p3/imscp_v1p1',
@@ -32,7 +33,11 @@ class Cc1p3Convert extends CcBase
         parent::__construct($path_to_manifest);
     }
 
-    public function generateImportData()
+    /**
+     * Scan the imsmanifest.xml structure to find elements to import to documents, links, forums, quizzes
+     * @return void
+     */
+    public function generateImportData(): void
     {
         $xpath = static::newxPath(static::$manifest, static::$namespaces);
         $items = $xpath->query('/imscc:manifest/imscc:organizations/imscc:organization/imscc:item | /imscc:manifest/imscc:resources/imscc:resource[@type="'.static::CC_TYPE_QUESTION_BANK.'"]');
@@ -42,23 +47,41 @@ class Cc1p3Convert extends CcBase
         $forums = new Cc13Forum();
         $quiz = new Cc13Quiz();
 
+        // Get the embedded XML files describing resources to import
         $documentValues = $resources->generateData('document');
         $linkValues = $resources->generateData('link');
         $forumValues = $forums->generateData();
         $quizValues = $quiz->generateData();
 
+        if (!empty($forums) or !empty($quizValues) or !empty($documentValues)) {
+            $courseInfo = api_get_course_info();
+            $sessionId = api_get_session_id();
+            $groupId = api_get_group_id();
+            $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/document';
+
+            create_unexisting_directory(
+                $courseInfo,
+                api_get_user_id(),
+                $sessionId,
+                $groupId,
+                null,
+                $documentPath,
+                '/cc1p3',
+                'Common Cartridge folder',
+                0
+            );
+        }
+
+        // Import the resources, by type
         if (!empty($forums)) {
             $saved = $forums->storeForums($forumValues);
         }
-
         if (!empty($quizValues)) {
             $saved = $quiz->storeQuizzes($quizValues);
         }
-
         if (!empty($documentValues)) {
             $saved = $resources->storeDocuments($documentValues, static::$pathToManifestFolder);
         }
-
         if (!empty($linkValues)) {
             $saved = $resources->storeLinks($linkValues);
         }

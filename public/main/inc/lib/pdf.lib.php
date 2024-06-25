@@ -383,7 +383,8 @@ class PDF
         $fileToSave = null,
         $returnHtml = false,
         $addDefaultCss = false,
-        $completeHeader = true
+        $completeHeader = true,
+        $disableFooter = false
     ) {
         $urlAppend = '';
 
@@ -486,6 +487,9 @@ class PDF
         }
 
         @$this->pdf->WriteHTML($document_html);
+        if ($disableFooter) {
+            $this->pdf->SetHTMLFooter('');
+        }
 
         if (empty($pdf_name)) {
             $output_file = 'pdf_'.date('Y-m-d-his').'.pdf';

@@ -746,6 +746,8 @@ class Certificate extends Model
             false,
             null,
             false,
+            true,
+            true,
             true
         );
     }

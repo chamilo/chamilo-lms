@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ColorThemeRepository;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -2672,15 +2673,14 @@ class Display
             return false;
         }
 
-        $colorThemeRepo = Container::$container->get(ColorThemeRepository::class);
+        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
         $router = Container::getRouter();
 
-        $colorTheme = $colorThemeRepo->getActiveOne();
-        $colorThemeItem = '';
+        $urlRelColorTheme = $accessUrlHelper->getCurrent()->getActiveColorTheme();
 
-        if ($colorTheme) {
-            $colorThemeItem = '{ type: "stylesheet", src: "'.$router->generate('chamilo_color_theme').'" },';
-        }
+        $colorThemeItem = $urlRelColorTheme
+            ? '{ type: "stylesheet", src: "'.$router->generate('chamilo_color_theme').'" },'
+            : '';
 
         return '$.frameReady(function() {},
             "'.$frameName.'",

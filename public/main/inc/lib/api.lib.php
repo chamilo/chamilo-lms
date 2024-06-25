@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\UserCourseCategory;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\ServiceHelper\MailHelper;
+use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
@@ -3733,83 +3734,13 @@ function api_get_language_from_iso($code)
 }
 
 /**
- * Returns the name of the visual (CSS) theme to be applied on the current page.
- * The returned name depends on the platform, course or user -wide settings.
- *
- * @return string The visual theme's name, it is the name of a folder inside web/css/themes
+ * Shortcut to ThemeHelper::getVisualTheme()
  */
-function api_get_visual_theme()
+function api_get_visual_theme(): string
 {
-    static $visual_theme;
-    if (!isset($visual_theme)) {
-        // Get style directly from DB
-        /*$styleFromDatabase = api_get_settings_params_simple(
-            [
-                'variable = ? AND access_url = ?' => [
-                    'stylesheets',
-                    api_get_current_access_url_id(),
-                ],
-            ]
-        );
+    $themeHelper = Container::$container->get(ThemeHelper::class);
 
-        if ($styleFromDatabase) {
-            $platform_theme = $styleFromDatabase['selected_value'];
-        } else {
-            $platform_theme = api_get_setting('stylesheets');
-        }*/
-        $platform_theme = api_get_setting('stylesheets');
-
-        // Platform's theme.
-        $visual_theme = $platform_theme;
-        if ('true' == api_get_setting('user_selected_theme')) {
-            $user_info = api_get_user_info();
-            if (isset($user_info['theme'])) {
-                $user_theme = $user_info['theme'];
-
-                if (!empty($user_theme)) {
-                    $visual_theme = $user_theme;
-                    // User's theme.
-                }
-            }
-        }
-
-        $course_id = api_get_course_id();
-        if (!empty($course_id)) {
-            if ('true' == api_get_setting('allow_course_theme')) {
-                $course_theme = api_get_course_setting('course_theme', $course_id);
-
-                if (!empty($course_theme) && -1 != $course_theme) {
-                    if (!empty($course_theme)) {
-                        // Course's theme.
-                        $visual_theme = $course_theme;
-                    }
-                }
-
-                $allow_lp_theme = api_get_course_setting('allow_learning_path_theme');
-                if (1 == $allow_lp_theme) {
-                    /*global $lp_theme_css, $lp_theme_config;
-                    // These variables come from the file lp_controller.php.
-                    if (!$lp_theme_config) {
-                        if (!empty($lp_theme_css)) {
-                            // LP's theme.
-                            $visual_theme = $lp_theme_css;
-                        }
-                    }*/
-                }
-            }
-        }
-
-        if (empty($visual_theme)) {
-            $visual_theme = 'chamilo';
-        }
-
-        /*global $lp_theme_log;
-        if ($lp_theme_log) {
-            $visual_theme = $platform_theme;
-        }*/
-    }
-
-    return $visual_theme;
+    return $themeHelper->getVisualTheme();
 }
 
 /**

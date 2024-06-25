@@ -19,6 +19,7 @@ final class MailHelper
     public function __construct(
         private readonly MailerInterface $mailer,
         private readonly BodyRendererInterface $bodyRenderer,
+        private readonly ThemeHelper $themeHelper,
     ) {}
 
     public function send(
@@ -98,7 +99,7 @@ final class MailHelper
                 'link' => $additionalParameters['link'] ?? '',
                 'automatic_email_text' => $automaticEmailText,
                 'content' => $body,
-                'theme' => api_get_visual_theme(),
+                'theme' => $this->themeHelper->getVisualTheme(),
             ];
 
             if (!empty($recipientEmail)) {

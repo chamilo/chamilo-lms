@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\EventListener;
 
-use Chamilo\CoreBundle\Repository\ColorThemeRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -25,7 +25,7 @@ class TwigListener
         private readonly SerializerInterface $serializer,
         private readonly TokenStorageInterface $tokenStorage,
         private readonly LanguageRepository $languageRepository,
-        private readonly ColorThemeRepository $colorThemeRepository,
+        private readonly AccessUrlHelper $accessUrlHelper,
         private readonly RouterInterface $router,
     ) {}
 
@@ -62,9 +62,10 @@ class TwigListener
     {
         $link = null;
 
-        $colorTheme = $this->colorThemeRepository->getActiveOne();
+        $accessUrl = $this->accessUrlHelper->getCurrent();
+        $urlRelColorTheme = $accessUrl->getActiveColorTheme();
 
-        if ($colorTheme) {
+        if ($urlRelColorTheme) {
             $path = $this->router->generate('chamilo_color_theme');
 
             $link = '<link rel="stylesheet" href="'.$path.'">';

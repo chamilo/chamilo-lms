@@ -29,14 +29,15 @@ class Cc13Quiz extends Cc13Entities
      */
     public function storeQuiz($quiz)
     {
-        $token = '/\$(?:IMS|1EdTech)[-_]CC[-_]FILEBASE\$/';
+        $token = '/\$(?:IMS|1EdTech)[-_]CC[-_]FILEBASE\$\.\.\//';
         $courseInfo = api_get_course_info();
         // Replace by the path in documents in which we place all relevant CC files
         $replacementPath = '/courses/'.$courseInfo['directory'].'/document/commoncartridge/';
         $exercise = new Exercise($courseInfo['real_id']);
         $title = Exercise::format_title_variable($quiz['title']);
         $exercise->updateTitle($title);
-        $exercise->updateDescription($quiz['description']);
+        $description = preg_replace($token, $replacementPath, $quiz['description']);
+        $exercise->updateDescription($description);
         $exercise->updateAttempts($quiz['max_attempts']);
         $exercise->updateFeedbackType(0);
 
@@ -87,8 +88,8 @@ class Cc13Quiz extends Cc13Entities
                     $questionWeighting = 0;
                     foreach ($question['answers'] as $slot => $answerValues) {
                         $correct = $answerValues['score'] ? (int) $answerValues['score'] : 0;
-                        $answer = Security::remove_XSS(preg_replace($token, '/courses/'.$courseInfo['path'].'/document', $answerValues['title']));
-                        $comment = Security::remove_XSS(preg_replace($token, '/courses/'.$courseInfo['path'].'/document', $answerValues['feedback']));
+                        $answer = Security::remove_XSS(preg_replace($token, $replacementPath, $answerValues['title']));
+                        $comment = Security::remove_XSS(preg_replace($token, $replacementPath, $answerValues['feedback']));
                         $weighting = $answerValues['score'];
                         $weighting = abs($weighting);
                         if ($weighting > 0) {
@@ -117,8 +118,8 @@ class Cc13Quiz extends Cc13Entities
                     $questionWeighting = 0;
                     if (is_array($question['answers'])) {
                         foreach ($question['answers'] as $slot => $answerValues) {
-                            $answer = Security::remove_XSS(preg_replace($token, '/courses/'.$courseInfo['path'].'/document', $answerValues['title']));
-                            $comment = Security::remove_XSS(preg_replace($token, '/courses/'.$courseInfo['path'].'/document', $answerValues['feedback']));
+                            $answer = Security::remove_XSS(preg_replace($token, $replacementPath, $answerValues['title']));
+                            $comment = Security::remove_XSS(preg_replace($token, $replacementPath, $answerValues['feedback']));
                             $weighting = $answerValues['score'];
                             if ($weighting > 0) {
                                 $questionWeighting += $weighting;

@@ -195,6 +195,14 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
+$survey_invitation['survey_id'] = $surveyId;
+// the following code is commented for the moment because 
+// in Chamilo 2 we can have various survey with the same code
+// for the multi-language functionnality for a survey if needed
+// it will need to be reimplemented in a different way.
+// The code is commented for the moment because it blocks
+// the normal use when many surveys have the same code.
+/*
 // Checking if there is another survey with this code.
 // If this is the case there will be a language choice
 $sql = "SELECT * FROM $table_survey
@@ -225,6 +233,7 @@ if (Database::num_rows($result) > 1) {
         exit();
     }
 }
+ */
 
 // Checking time availability
 SurveyManager::checkTimeAvailability($survey);

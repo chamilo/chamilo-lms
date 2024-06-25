@@ -45,7 +45,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 $session_list = SessionManager::get_sessions_list([], ['name']);
 $sessionList = [];
 foreach ($session_list as $session) {
-    $sessionList[$session['id']] = $session['name'];
+    $sessionList[$session['id']] = $session['title'];
 }
 
 $courseList = CourseManager::get_courses_list(0, 0, 'title');

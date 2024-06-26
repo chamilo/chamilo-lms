@@ -14,20 +14,4 @@ class ColorThemeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, ColorTheme::class);
     }
-
-    public function deactivateAllExcept(ColorTheme $colorTheme): void
-    {
-        $this->getEntityManager()
-            ->createQuery('UPDATE Chamilo\CoreBundle\Entity\ColorTheme t SET t.active = FALSE WHERE t.id <> :id')
-            ->execute(['id' => $colorTheme->getId()])
-        ;
-    }
-
-    public function getActiveOne(): ?ColorTheme
-    {
-        return $this->findOneBy(
-            ['active' => true],
-            ['createdAt' => 'DESC']
-        );
-    }
 }

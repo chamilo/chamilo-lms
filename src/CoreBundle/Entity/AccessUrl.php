@@ -150,7 +150,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
     /**
      * @var Collection<int, AccessUrlRelColorTheme>
      */
-    #[ORM\OneToMany(mappedBy: 'url', targetEntity: AccessUrlRelColorTheme::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'url', targetEntity: AccessUrlRelColorTheme::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $colorThemes;
 
     public function __construct()
@@ -536,5 +536,15 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
         }
 
         return $this;
+    }
+
+    public function getColorThemeByTheme(ColorTheme $theme): ?AccessUrlRelColorTheme
+    {
+        $criteria = Criteria::create();
+        $criteria->where(
+            Criteria::expr()->eq('colorTheme', $theme)
+        );
+
+        return $this->colorThemes->matching($criteria)->first() ?:  null;
     }
 }

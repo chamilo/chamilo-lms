@@ -6,10 +6,24 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\Repository\AccessUrlRelColorThemeRepository;
+use Chamilo\CoreBundle\State\AccessUrlRelColorThemeStateProcessor;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Serializer\Attribute\Groups;
 
+#[ApiResource(
+    operations: [
+        new Post(),
+    ],
+    denormalizationContext: [
+        'groups' => ['access_url_rel_color_theme:write'],
+    ],
+    security: "is_granted('ROLE_ADMIN')",
+    processor: AccessUrlRelColorThemeStateProcessor::class,
+)]
 #[ORM\Entity(repositoryClass: AccessUrlRelColorThemeRepository::class)]
 class AccessUrlRelColorTheme
 {
@@ -24,12 +38,13 @@ class AccessUrlRelColorTheme
     #[ORM\JoinColumn(nullable: false)]
     private ?AccessUrl $url = null;
 
+    #[Groups(['access_url_rel_color_theme:write'])]
     #[ORM\ManyToOne(inversedBy: 'urls')]
     #[ORM\JoinColumn(nullable: false)]
     private ?ColorTheme $colorTheme = null;
 
     #[ORM\Column]
-    private ?bool $active = null;
+    private bool $active = false;
 
     public function getId(): ?int
     {
@@ -60,7 +75,7 @@ class AccessUrlRelColorTheme
         return $this;
     }
 
-    public function isActive(): ?bool
+    public function isActive(): bool
     {
         return $this->active;
     }

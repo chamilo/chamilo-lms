@@ -288,6 +288,10 @@ abstract class CcHelpers
         $courseDir = $internalCourseDocumentsPath = null;
         $courseInfo = api_get_course_info();
         $replaceprefix = '$1EdTech-CC-FILEBASE$';
+        $tokenSyntax = api_get_configuration_value('commoncartridge_path_token');
+        if (!empty($tokenSyntax)) {
+            $replaceprefix = $tokenSyntax;
+        }
         if (!empty($courseInfo)) {
             $courseDir = $courseInfo['directory'];
             $internalCourseDocumentsPath = '/courses/'.$courseDir.'/document';

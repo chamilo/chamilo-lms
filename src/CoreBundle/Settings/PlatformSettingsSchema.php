@@ -40,7 +40,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'institution_address' => '',
                     'site_name' => 'Chamilo site',
                     'timezone' => 'Europe/Paris',
-                    'theme' => 'chamilo',
                     'gravatar_enabled' => 'false',
                     'gravatar_type' => 'mm',
                     'gamification_mode' => ' ',
@@ -120,7 +119,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->add('institution_address')
             ->add('site_name')
             ->add('timezone', TimezoneType::class)
-            ->add('theme')
             ->add('gravatar_enabled', YesNoType::class)
             ->add(
                 'gravatar_type',

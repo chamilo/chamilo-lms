@@ -26,8 +26,8 @@ class SettingsHelperTest extends AbstractApiTest
         $this->assertInstanceOf(SettingsInterface::class, $settings);
         $this->assertSame('chamilo_settings', $helper->getName());
 
-        $defaultTheme = $helper->getSettingsParameter('platform.theme');
+        $defaultTheme = $helper->getSettingsParameter('platform.institution');
 
-        $this->assertSame('chamilo', $defaultTheme);
+        $this->assertSame('Chamilo.org', $defaultTheme);
     }
 }

@@ -45,7 +45,6 @@ class PlatformConfigurationController extends AbstractController
             $variables = [
                 'platform.site_name',
                 'platform.timezone',
-                'platform.theme',
                 'platform.registered',
                 'platform.donotlistcampus',
                 'platform.load_term_conditions_section',

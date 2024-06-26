@@ -275,7 +275,6 @@ class Version20170627122900 extends AbstractMigrationChamilo
             'users_copy_files' => 'document',
             'timezone' => 'platform',
             'enable_profile_user_address_geolocalization' => 'profile',
-            'theme' => 'platform',
             'exercise_hide_label' => 'exercise',
         ];
 

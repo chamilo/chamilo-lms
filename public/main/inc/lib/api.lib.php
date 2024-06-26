@@ -2562,6 +2562,9 @@ function api_get_session_visibility(
     // If start date was set.
     if (!empty($row['access_start_date'])) {
         $visibility = $now > api_strtotime($row['access_start_date'], 'UTC') ? SESSION_AVAILABLE : SESSION_INVISIBLE;
+    } else {
+        // If there's no start date, assume it's available until the end date
+        $visibility = SESSION_AVAILABLE;
     }
 
     // If the end date was set.

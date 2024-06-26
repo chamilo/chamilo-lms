@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\State\ColorThemeStateProcessor;
@@ -23,7 +22,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new Post(),
         new Put(),
-        new GetCollection(),
     ],
     denormalizationContext: [
         'groups' => ['color_theme:write'],
@@ -41,7 +39,7 @@ class ColorTheme
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['color_theme:write'])]
+    #[Groups(['color_theme:write', 'access_url_rel_color_theme:read'])]
     #[ORM\Column(length: 255)]
     private string $title;
 

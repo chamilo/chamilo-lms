@@ -7,9 +7,11 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\Repository\AccessUrlRelColorThemeRepository;
 use Chamilo\CoreBundle\State\AccessUrlRelColorThemeStateProcessor;
+use Chamilo\CoreBundle\State\AccessUrlRelColorThemeStateProvider;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -17,11 +19,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiResource(
     operations: [
         new Post(),
+        new GetCollection(),
+    ],
+    normalizationContext: [
+        'groups' => ['access_url_rel_color_theme:read'],
     ],
     denormalizationContext: [
         'groups' => ['access_url_rel_color_theme:write'],
     ],
+    paginationEnabled: false,
     security: "is_granted('ROLE_ADMIN')",
+    provider: AccessUrlRelColorThemeStateProvider::class,
     processor: AccessUrlRelColorThemeStateProcessor::class,
 )]
 #[ORM\Entity(repositoryClass: AccessUrlRelColorThemeRepository::class)]
@@ -38,11 +46,12 @@ class AccessUrlRelColorTheme
     #[ORM\JoinColumn(nullable: false)]
     private ?AccessUrl $url = null;
 
-    #[Groups(['access_url_rel_color_theme:write'])]
+    #[Groups(['access_url_rel_color_theme:write', 'access_url_rel_color_theme:read'])]
     #[ORM\ManyToOne(inversedBy: 'urls')]
     #[ORM\JoinColumn(nullable: false)]
     private ?ColorTheme $colorTheme = null;
 
+    #[Groups(['access_url_rel_color_theme:read'])]
     #[ORM\Column]
     private bool $active = false;
 

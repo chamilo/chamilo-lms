@@ -18,9 +18,11 @@ const isServerThemesLoading = ref(true)
 
 const loadThemes = async () => {
   try {
-    const { items } = await themeService.findAll()
+    const { items } = await themeService.findAllByCurrentUrl()
 
-    serverThemes.value = items
+    serverThemes.value = items.map((accessUrlRelColorTheme) => accessUrlRelColorTheme.colorTheme)
+
+    modelValue.value = items.find((accessUrlRelColorTheme) => accessUrlRelColorTheme.active)?.colorTheme["@id"]
   } catch (e) {
     showErrorNotification(t("We could not retrieve the themes"))
   } finally {

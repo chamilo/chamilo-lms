@@ -25,6 +25,13 @@ class AccessUrlHelper
         return 1 === (int) $this->parameterBag->get('multiple_access_url');
     }
 
+    public function getFirstAccessUrl(): AccessUrl
+    {
+        $urlId = $this->accessUrlRepository->getFirstId();
+
+        return $this->accessUrlRepository->find($urlId);
+    }
+
     public function getCurrent(): AccessUrl
     {
         static $accessUrl;
@@ -33,8 +40,7 @@ class AccessUrlHelper
             return $accessUrl;
         }
 
-        $urlId = $this->accessUrlRepository->getFirstId();
-        $accessUrl = $this->accessUrlRepository->find($urlId);
+        $accessUrl = $this->getFirstAccessUrl();
 
         if ($this->isMultipleEnabled()) {
             $url = $this->router->generate('index', [], UrlGeneratorInterface::ABSOLUTE_URL);

@@ -7,8 +7,8 @@ const url = "/api/color_themes"
  *
  * @returns {Promise<{totalItems, items}>}
  */
-async function findAll() {
-  return await baseService.getCollection(url)
+async function findAllByCurrentUrl() {
+  return await baseService.getCollection("/api/access_url_rel_color_themes")
 }
 
 /**
@@ -44,7 +44,7 @@ async function changePlatformColorTheme(iri) {
 }
 
 export default {
-  findAll,
   updateTheme,
+  findAllByCurrentUrl,
   changePlatformColorTheme,
 }

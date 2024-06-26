@@ -540,10 +540,11 @@ class CourseController extends ToolBaseController
                 'title' => 'course_homepage',
                 'session_id' => 0,
             ])
-            ->getQuery()
-        ;
+            ->getQuery();
 
-        return $query->getOneOrNullResult();
+        $results = $query->getResult();
+
+        return count($results) > 0 ? $results[0] : null;
     }
 
     #[Route('/{id}/getToolIntro', name: 'chamilo_core_course_gettoolintro')]

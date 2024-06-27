@@ -7157,10 +7157,10 @@ function api_set_noreply_and_from_address_to_mailer(
         ;
     }
 
-    if (!$avoidReplyToAddress) {
+    if (!$avoidReplyToAddress && !empty($replyToAddress)) {
         $replyToEmailValidation = $validator->validate($replyToAddress['mail'], $emailConstraint);
 
-        if (!empty($replyToAddress) && 0 === $replyToEmailValidation->count()) {
+        if (0 === $replyToEmailValidation->count()) {
             $email->addReplyTo(new Address($replyToAddress['mail'], $replyToAddress['name']));
         }
     }

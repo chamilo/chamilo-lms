@@ -44,7 +44,8 @@ final class CLpItemRepository extends ServiceEntityRepository
             ->where('i.lp = :learningPathId')
             ->andWhere('i.itemType = :itemType')
             ->setParameter('learningPathId', $learningPathId)
-            ->setParameter('itemType', $itemType);
+            ->setParameter('itemType', $itemType)
+        ;
 
         $query = $qb->getQuery();
 

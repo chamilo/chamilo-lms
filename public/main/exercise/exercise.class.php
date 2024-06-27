@@ -4214,7 +4214,7 @@ class Exercise
                                         $listMenu = FillBlanks::getFillTheBlankMenuAnswers($correctAnswer, false);
                                         if (!empty($studentAnswer)) {
                                             foreach ($listMenu as $key => $item) {
-                                                if ($key == $correctAnswer) {
+                                                if (sha1($item) === $studentAnswer) {
                                                     $studentAnswerToShow = $item;
                                                     break;
                                                 }

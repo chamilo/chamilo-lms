@@ -6816,12 +6816,6 @@ class learnpath
             $return .= ' </a>';
             $return .= Display::getMdiIcon('comment-quote', 'ch-tool-icon', null, 16, get_lang('Forum'));
 
-            $alertIcon = '';
-            if (!$isForumSession && $userRights) {
-                $tooltip = get_lang('This Learningpath includes a forum in the base course, so once users in a session will participate in this forum, it will start to appear in the forum tool in the session, whereas by default forums from the base course do not appear in the session.');
-                $alertIcon = Display::return_icon('warning.png', $tooltip, null, ICON_SIZE_SMALL);
-            }
-
             $moveLink = Display::url(
                 $title,
                 api_get_self().'?'.
@@ -6840,7 +6834,7 @@ class learnpath
                         id="forum_'.$forumId.'_opener" align="absbottom"
                      />
                 </a>
-                '.$moveLink. ' '.$alertIcon;
+                '.$moveLink;
             $return .= '</li>';
 
             $return .= '<div style="display:none" id="forum_'.$forumId.'_content">';
@@ -7975,6 +7969,31 @@ class learnpath
         }
 
         return $link;
+    }
+
+    /**
+     * Checks if any forum items in a given learning path are from the base course.
+     */
+    public static function isForumFromBaseCourse(int $learningPathId): bool
+    {
+        $itemRepository = Container::getLpItemRepository();
+        $forumRepository = Container::getForumRepository();
+        $forums = $itemRepository->findItemsByLearningPathAndType($learningPathId, 'forum');
+
+        /* @var CLpItem $forumItem */
+        foreach ($forums as $forumItem) {
+            $forumId = (int) $forumItem->getPath();
+            $forum = $forumRepository->find($forumId);
+
+            if ($forum !== null) {
+                $forumSession = $forum->getFirstResourceLink()->getSession();
+                if ($forumSession === null) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

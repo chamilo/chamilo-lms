@@ -37,4 +37,17 @@ final class CLpItemRepository extends ServiceEntityRepository
             'lp' => $lpId,
         ]);
     }
+
+    public function findItemsByLearningPathAndType(int $learningPathId, string $itemType): array
+    {
+        $qb = $this->createQueryBuilder('i')
+            ->where('i.lp = :learningPathId')
+            ->andWhere('i.itemType = :itemType')
+            ->setParameter('learningPathId', $learningPathId)
+            ->setParameter('itemType', $itemType);
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
 }

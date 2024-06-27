@@ -815,10 +815,15 @@ foreach ($categories as $category) {
                 $user
             );
 
+            $forumSessionIcon = '';
+            if (learnpath::isForumFromBaseCourse((int) $id)) {
+                $forumSessionIcon = Display::getMdiIcon('alert-circle', 'ch-tool-icon', '', 22, get_lang('This learning path has forums from the base course'));
+            }
+
             $listData[] = [
                 'learnpath_icon' => $icon_learnpath,
                 'url_start' => $url_start_lp,
-                'title' => $my_title,
+                'title' => $my_title . $forumSessionIcon,
                 'session_image' => $sessionImage,
                 'extra' => $extra,
                 'start_time' => $start_time,

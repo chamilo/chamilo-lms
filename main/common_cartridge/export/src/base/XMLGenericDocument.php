@@ -92,7 +92,7 @@ class XMLGenericDocument
         $this->documentInit();
         $this->doc->validateOnParse = false;
         $this->isloaded = true;
-        $this->doc->loadHTML($content);
+        @$this->doc->loadHTML($content);
         $this->isHtml = true;
 
         return $this->onLoad();

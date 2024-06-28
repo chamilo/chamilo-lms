@@ -82,7 +82,7 @@ abstract class CcHelpers
             $result[] = rawurldecode($rvalue);
         }
 
-        return $result;
+        return array_unique($result);
     }
 
     /**
@@ -310,12 +310,13 @@ abstract class CcHelpers
                     true,
                     $internalCourseDocumentsPath.$lfile
                 );
-                if (isset($files[$lfile])) {
+                $bfile = DIRECTORY_SEPARATOR.basename($lfile);
+                if (isset($files[$bfile])) {
                     $filename = str_replace('%2F', '/', rawurlencode($lfile));
                     $content = str_replace($internalCourseDocumentsPath.$filename,
-                                           $replaceprefix.'../'.$files[$lfile][1],
+                                           $replaceprefix.'../'.$files[$bfile][1],
                                            $content);
-                    $deps[] = $files[$lfile][0];
+                    $deps[] = $files[$bfile][0];
                 }
             }
             $text = $content;

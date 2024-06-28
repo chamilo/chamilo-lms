@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Component\Utils\NameConvention;
 use Chamilo\CoreBundle\Entity\ResourceIllustrationInterface;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
+use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use Chamilo\CoreBundle\Twig\SettingsHelper;
 use Security;
 use Sylius\Bundle\SettingsBundle\Model\SettingsInterface;
@@ -28,8 +29,13 @@ class ChamiloExtension extends AbstractExtension
     private RouterInterface $router;
     private NameConvention $nameConvention;
 
-    public function __construct(IllustrationRepository $illustrationRepository, SettingsHelper $helper, RouterInterface $router, NameConvention $nameConvention)
-    {
+    public function __construct(
+        IllustrationRepository $illustrationRepository,
+        SettingsHelper $helper,
+        RouterInterface $router,
+        NameConvention $nameConvention,
+        private readonly ThemeHelper $themeHelper
+    ) {
         $this->illustrationRepository = $illustrationRepository;
         $this->helper = $helper;
         $this->router = $router;
@@ -66,6 +72,8 @@ class ChamiloExtension extends AbstractExtension
             new TwigFunction('chamilo_settings_get', $this->getSettingsParameter(...)),
             new TwigFunction('chamilo_settings_has', [$this, 'hasSettingsParameter']),
             new TwigFunction('password_checker_js', [$this, 'getPasswordCheckerJs'], ['is_safe' => ['html']]),
+            new TwigFunction('theme_asset', $this->getThemeAssetUrl(...)),
+            new TwigFunction('theme_asset_link_tag', $this->getThemeAssetLinkTag(...), ['is_safe' => ['html']]),
         ];
     }
 
@@ -218,5 +226,15 @@ class ChamiloExtension extends AbstractExtension
     public function getName(): string
     {
         return 'chamilo_extension';
+    }
+
+    public function getThemeAssetUrl(string $path, bool $absolute = false): string
+    {
+        return $this->themeHelper->getThemeAssetUrl($path, $absolute);
+    }
+
+    public function getThemeAssetLinkTag(string $path, bool $absoluteUrl = false): string
+    {
+        return $this->themeHelper->getThemeAssetLinkTag($path, $absoluteUrl);
     }
 }

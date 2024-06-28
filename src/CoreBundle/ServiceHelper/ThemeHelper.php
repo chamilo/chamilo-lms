@@ -8,6 +8,9 @@ namespace Chamilo\CoreBundle\ServiceHelper;
 
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
+use Symfony\Bridge\Twig\Extension\AssetExtension;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\UrlHelper;
 
 final class ThemeHelper
 {
@@ -19,6 +22,9 @@ final class ThemeHelper
         private readonly UserHelper $userHelper,
         private readonly CidReqHelper $cidReqHelper,
         private readonly SettingsCourseManager $settingsCourseManager,
+        private readonly UrlHelper $urlHelper,
+        #[Autowire(service: 'twig.extension.assets')]
+        private readonly AssetExtension $assetExtension,
     ) {}
 
     /**
@@ -62,5 +68,33 @@ final class ThemeHelper
         }
 
         return $visualTheme;
+    }
+
+    public function getThemeAssetUrl(string $path, bool $absolute = false): string
+    {
+        $themeName = $this->getVisualTheme();
+
+        if (empty($themeName)) {
+            return '';
+        }
+
+        $assetPath = $this->assetExtension->getAssetUrl("build/css/themes/$themeName/$path");
+
+        if ($absolute) {
+            return $this->urlHelper->getAbsoluteUrl($assetPath);
+        }
+
+        return $assetPath;
+    }
+
+    public function getThemeAssetLinkTag(string $path, bool $absoluteUrl = false): string
+    {
+        $url = $this->getThemeAssetUrl($path, $absoluteUrl);
+
+        if (empty($url)) {
+            return '';
+        }
+
+        return sprintf('<link rel="stylesheet" href="%s">', $url);
     }
 }

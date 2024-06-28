@@ -9,8 +9,7 @@ use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Repository\ColorThemeRepository;
-use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
+use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -2673,13 +2672,12 @@ class Display
             return false;
         }
 
-        $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
-        $router = Container::getRouter();
+        $themeHelper = Container::$container->get(ThemeHelper::class);
 
-        $urlRelColorTheme = $accessUrlHelper->getCurrent()->getActiveColorTheme();
+        $themeColorsUrl = $themeHelper->getThemeAssetUrl('colors.css');
 
-        $colorThemeItem = $urlRelColorTheme
-            ? '{ type: "stylesheet", src: "'.$router->generate('chamilo_color_theme').'" },'
+        $colorThemeItem = $themeColorsUrl
+            ? '{ type: "stylesheet", src: "'.$themeColorsUrl.'" },'
             : '';
 
         return '$.frameReady(function() {},

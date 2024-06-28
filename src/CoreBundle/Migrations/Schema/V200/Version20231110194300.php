@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
 final class Version20231110194300 extends AbstractMigrationChamilo
@@ -17,12 +18,9 @@ final class Version20231110194300 extends AbstractMigrationChamilo
         return 'Copy custom theme folder to assets and update webpack.config';
     }
 
-    public function up(Schema $schema): void
+    private function getDefaultThemeNames(): array
     {
-        $kernel = $this->container->get('kernel');
-        $rootPath = $kernel->getProjectDir();
-
-        $customThemesFolders = [
+        return [
             'academica',
             'chamilo',
             'chamilo_red',
@@ -52,6 +50,14 @@ final class Version20231110194300 extends AbstractMigrationChamilo
             'simplex',
             'tasty_olive',
         ];
+    }
+
+    public function up(Schema $schema): void
+    {
+        $kernel = $this->container->get('kernel');
+        $rootPath = $kernel->getProjectDir();
+
+        $defaulThemesFolders = $this->getDefaultThemeNames();
 
         $sourceDir = $rootPath.'/app/Resources/public/css/themes';
         $destinationDir = $rootPath.'/assets/css/themes/';
@@ -67,7 +73,7 @@ final class Version20231110194300 extends AbstractMigrationChamilo
         foreach ($finder as $folder) {
             $folderName = $folder->getRelativePathname();
 
-            if (!\in_array($folderName, $customThemesFolders, true)) {
+            if (!\in_array($folderName, $defaulThemesFolders, true)) {
                 $sourcePath = $folder->getRealPath();
                 $destinationPath = $destinationDir.$folderName;
 

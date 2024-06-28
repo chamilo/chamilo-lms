@@ -3,10 +3,10 @@
 
 class CcAssesmentRenderFibtype extends CcQuestionMetadataBase
 {
-    protected $material = null;
-    protected $materialRef = null;
-    protected $responseLabel = null;
-    protected $flowLabel = null;
+    protected $materials = [];
+    protected $material_refs = [];
+    protected $responseLabels = [];
+    protected $flow_labels = [];
 
     public function __construct()
     {
@@ -21,66 +21,29 @@ class CcAssesmentRenderFibtype extends CcQuestionMetadataBase
         $this->setSetting(CcQtiTags::FIBTYPE, CcQtiValues::STRING);
         $this->qtype = CcQtiProfiletype::FIELD_ENTRY;
     }
-
-    public function setEncoding($value)
+    public function add_material(CcAssesmentMaterial $object)
     {
-        $this->setSetting(CcQtiTags::ENCODING, $value);
+        $this->materials[] = $object;
     }
 
-    public function setCharset($value)
+    public function add_material_ref(CcAssesmentResponseMatref $object)
     {
-        $this->setSetting(CcQtiTags::CHARSET, $value);
+        $this->material_refs[] = $object;
     }
 
-    public function setRows($value)
+    public function addResponseLabel(CcAssesmentResponseLabeltype $object)
     {
-        $this->setSetting(CcQtiTags::ROWS, $value);
+        $this->responseLabels[] = $object;
     }
 
-    public function setColumns($value)
+    public function add_flow_label($object)
     {
-        $this->setSetting(CcQtiTags::COLUMNS, $value);
+        $this->flow_labels[] = $object;
     }
 
-    public function setMaxchars($value)
+    public function enableShuffle($value = true)
     {
-        $this->setSetting(CcQtiTags::COLUMNS, $value);
-    }
-
-    public function setLimits($min = null, $max = null)
-    {
-        $this->setSetting(CcQtiTags::MINNUMBER, $min);
-        $this->setSetting(CcQtiTags::MAXNUMBER, $max);
-    }
-
-    public function setPrompt($value)
-    {
-        $this->setSetting(CcQtiTags::PROMPT, $value);
-    }
-
-    public function setFibtype($value)
-    {
-        $this->setSetting(CcQtiTags::FIBTYPE, $value);
-    }
-
-    public function setMaterial(CcAssesmentMaterial $object)
-    {
-        $this->material = $object;
-    }
-
-    public function setMaterialRef(CcAssesmentResponseMatref $object)
-    {
-        $this->materialRef = $object;
-    }
-
-    public function setResponseLabel(CcAssesmentResponseLabeltype $object)
-    {
-        $this->responseLabel = $object;
-    }
-
-    public function setFlowLabel($object)
-    {
-        $this->flowLabel = $object;
+        $this->enableSettingYesno(CcQtiTags::SHUFFLE, $value);
     }
 
     public function generate(XMLGenericDocument &$doc, DOMNode &$item, $namespace)
@@ -88,20 +51,28 @@ class CcAssesmentRenderFibtype extends CcQuestionMetadataBase
         $node = $doc->appendNewElementNs($item, $namespace, CcQtiTags::RENDER_FIB);
         $this->generateAttributes($doc, $node, $namespace);
 
-        if (!empty($this->material) && empty($this->materialRef)) {
-            $this->material->generate($doc, $node, $namespace);
+        if (!empty($this->materials)) {
+            foreach ($this->materials as $mattag) {
+                $mattag->generate($doc, $node, $namespace);
+            }
         }
 
-        if (!empty($this->materialRef) && empty($this->material)) {
-            $this->materialRef->generate($doc, $node, $namespace);
+        if (!empty($this->material_refs)) {
+            foreach ($this->material_refs as $matreftag) {
+                $matreftag->generate($doc, $node, $namespace);
+            }
         }
 
-        if (!empty($this->responseLabel)) {
-            $this->responseLabel->generate($doc, $node, $namespace);
+        if (!empty($this->responseLabels)) {
+            foreach ($this->responseLabels as $resplabtag) {
+                $resplabtag->generate($doc, $node, $namespace);
+            }
         }
 
-        if (!empty($this->flowLabel)) {
-            $this->flowLabel->generate($doc, $node, $namespace);
+        if (!empty($this->flow_labels)) {
+            foreach ($this->flow_labels as $flowlabtag) {
+                $flowlabtag->generate($doc, $node, $namespace);
+            }
         }
     }
 }

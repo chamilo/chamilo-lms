@@ -139,10 +139,9 @@ abstract class CcAssesmentHelper
                         continue 2;
                     }
                     break;
-                    /*
                 case FILL_IN_BLANKS:
                     try {
-                        $questionProcessor = new CcAssesmentRenderFibtype($objQuizz, $objQuizz['questions'], $manifest, $section, $question, $rootpath, $contextid, $outdir);
+                        $questionProcessor = new CcAssesmentQuestionFib($objQuizz, $objQuizz['questions'], $manifest, $section, $question, $rootpath, $contextid, $outdir);
                         $questionProcessor->generate();
                         $questioncount++;
                     } catch (RuntimeException $e) {
@@ -150,7 +149,6 @@ abstract class CcAssesmentHelper
                         continue 2;
                     }
                     break;
-                    */
                 case FREE_ANSWER:
                     try {
                         $questionProcessor = new CcAssesmentQuestionEssay($objQuizz, $objQuizz['questions'], $manifest, $section, $question, $rootpath, $contextid, $outdir);

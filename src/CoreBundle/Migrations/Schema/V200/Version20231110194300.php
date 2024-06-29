@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
 final class Version20231110194300 extends AbstractMigrationChamilo
@@ -60,52 +59,45 @@ final class Version20231110194300 extends AbstractMigrationChamilo
         $defaulThemesFolders = $this->getDefaultThemeNames();
 
         $sourceDir = $rootPath.'/app/Resources/public/css/themes';
-        $destinationDir = $rootPath.'/assets/css/themes/';
-        $chamiloDefaultCssPath = $destinationDir.'chamilo/default.css';
 
         if (!is_dir($sourceDir)) {
             return;
         }
 
+        $filesystem = $this->container->get('oneup_flysystem.themes_filesystem');
+
         $finder = new Finder();
         $finder->directories()->in($sourceDir)->depth('== 0');
         $newThemes = [];
         foreach ($finder as $folder) {
-            $folderName = $folder->getRelativePathname();
+            $themeFolderName = $folder->getRelativePathname();
 
-            if (!\in_array($folderName, $defaulThemesFolders, true)) {
-                $sourcePath = $folder->getRealPath();
-                $destinationPath = $destinationDir.$folderName;
+            if (\in_array($themeFolderName, $defaulThemesFolders, true)) {
+                continue;
+            }
 
-                if (!file_exists($destinationPath)) {
-                    $this->copyDirectory($sourcePath, $destinationPath);
-                    $newThemes[] = $folderName;
+            if ($filesystem->directoryExists($themeFolderName)) {
+                continue;
+            }
 
-                    if (file_exists($chamiloDefaultCssPath)) {
-                        $newThemeDefaultCssPath = $destinationPath.'/default.css';
-                        copy($chamiloDefaultCssPath, $newThemeDefaultCssPath);
-                    }
+            $newThemes[] = $themeFolderName;
+
+            $filesystem->createDirectory($themeFolderName);
+
+            $directory = (new Finder())->in($folder->getRealPath());
+
+            foreach ($directory as $file) {
+                if (!$file->isFile()) {
+                    continue;
                 }
+
+                $newFileRelativePathname = $themeFolderName.DIRECTORY_SEPARATOR.$file->getRelativePathname();
+                $fileContents = $file->getContents();
+                $filesystem->write($newFileRelativePathname, $fileContents);
             }
         }
 
         $this->updateWebpackConfig($rootPath, $newThemes);
-    }
-
-    private function copyDirectory($src, $dst): void
-    {
-        $dir = opendir($src);
-        @mkdir($dst);
-        while (false !== ($file = readdir($dir))) {
-            if (('.' !== $file) && ('..' !== $file)) {
-                if (is_dir($src.'/'.$file)) {
-                    $this->copyDirectory($src.'/'.$file, $dst.'/'.$file);
-                } else {
-                    copy($src.'/'.$file, $dst.'/'.$file);
-                }
-            }
-        }
-        closedir($dir);
     }
 
     private function updateWebpackConfig(string $rootPath, array $newThemes): void

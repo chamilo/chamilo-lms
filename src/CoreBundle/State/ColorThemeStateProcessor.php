@@ -10,11 +10,11 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\AccessUrlRelColorTheme;
 use Chamilo\CoreBundle\Entity\ColorTheme;
-use Chamilo\CoreBundle\Repository\ColorThemeRepository;
 use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Filesystem\Filesystem;
+use League\Flysystem\FilesystemException;
+use League\Flysystem\FilesystemOperator;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 use const PHP_EOL;
 
@@ -22,11 +22,14 @@ final class ColorThemeStateProcessor implements ProcessorInterface
 {
     public function __construct(
         private readonly ProcessorInterface $persistProcessor,
-        private readonly ParameterBagInterface $parameterBag,
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly EntityManagerInterface $entityManager,
+        #[Autowire(service: 'oneup_flysystem.themes_filesystem')] private readonly FilesystemOperator $filesystem,
     ) {}
 
+    /**
+     * @throws FilesystemException
+     */
     public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
     {
         \assert($data instanceof ColorTheme);
@@ -41,8 +44,6 @@ final class ColorThemeStateProcessor implements ProcessorInterface
 
             $this->entityManager->flush();
 
-            $projectDir = $this->parameterBag->get('kernel.project_dir');
-
             $contentParts = [];
             $contentParts[] = ':root {';
 
@@ -52,12 +53,9 @@ final class ColorThemeStateProcessor implements ProcessorInterface
 
             $contentParts[] = '}';
 
-            $dirName = $projectDir."/var/themes/{$colorTheme->getSlug()}";
-
-            $fs = new Filesystem();
-            $fs->mkdir($dirName);
-            $fs->dumpFile(
-                $dirName.'/colors.css',
+            $this->filesystem->createDirectory($colorTheme->getSlug());
+            $this->filesystem->write(
+                $colorTheme->getSlug().DIRECTORY_SEPARATOR.'colors.css',
                 implode(PHP_EOL, $contentParts)
             );
         }

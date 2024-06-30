@@ -115,4 +115,14 @@ class SecurityController extends AbstractController
 
         return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
+
+    #[Route('/check-session', name: 'check_session', methods: ['GET'])]
+    public function checkSession(): JsonResponse
+    {
+        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return new JsonResponse(['isAuthenticated' => true]);
+        }
+
+        return new JsonResponse(['isAuthenticated' => false]);
+    }
 }

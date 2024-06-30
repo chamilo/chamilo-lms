@@ -21,6 +21,7 @@ import assignments from "./assignments"
 import links from "./links"
 import glossary from "./glossary"
 import { useSecurityStore } from "../store/securityStore"
+import securityService from "../services/securityService"
 import MyCourseList from "../views/user/courses/List.vue"
 import MySessionList from "../views/user/sessions/SessionsCurrent.vue"
 import MySessionListPast from "../views/user/sessions/SessionsPast.vue"
@@ -167,23 +168,21 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach((to, from, next) => {
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    const securityStore = useSecurityStore()
-
-    //console.log('requiresAuth');
-    // this route requires auth, check if logged in
-    // if it is not, redirect to login page.
-    if (securityStore.isAuthenticated) {
-      next()
-    } else {
-      next({
-        path: "/login",
-        query: { redirect: to.fullPath },
-      })
+router.beforeEach(async (to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    try {
+      const response = await securityService.checkSession()
+      const isAuthenticated = response.isAuthenticated
+      if (isAuthenticated) {
+        next()
+      } else {
+        next({ name: 'Login', query: { redirect: to.fullPath } })
+      }
+    } catch (error) {
+      console.error('Error checking session:', error)
+      next({ name: 'Login', query: { redirect: to.fullPath } })
     }
   } else {
-    //console.log('next');
     next() // make sure to always call next()!
   }
 })

@@ -4573,6 +4573,43 @@ class Tracking
         return $lastTime;
     }
 
+    /**
+     * Gets the last connection time in the last learning path for a student in a course session.
+     */
+    public static function getLastConnectionTimeInSessionCourseLp(
+        int $studentId,
+        string $courseCode,
+        int $sessionId = 0
+    ): int {
+        $course = api_get_course_info($courseCode);
+
+        if (empty($course)) {
+            return 0;
+        }
+
+        $courseId = $course['real_id'];
+        $lastTime = 0;
+
+        $tLpv = Database::get_course_table(TABLE_LP_VIEW);
+        $tLpiv = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+
+        $sql = 'SELECT MAX(item_view.start_time) as last_time
+            FROM '.$tLpiv.' AS item_view
+            INNER JOIN '.$tLpv.' AS view
+            ON (item_view.lp_view_id = view.id)
+            WHERE
+                view.c_id = '.$courseId.' AND
+                view.user_id = '.$studentId.' AND
+                view.session_id = '.$sessionId;
+
+        $rs = Database::query($sql);
+        if ($rs && Database::num_rows($rs) > 0) {
+            $lastTime = (int) Database::result($rs, 0, 'last_time');
+        }
+
+        return $lastTime;
+    }
+
     public static function getFirstConnectionTimeInLp(
         $student_id,
         $course_code,

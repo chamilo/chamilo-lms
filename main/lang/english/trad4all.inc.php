@@ -9055,4 +9055,6 @@ $UpdateFailedForCourses = "The update failed for the following courses";
 $HoursMinutesSeconds = "%02d h %02d m %02d s";
 $IfYourLPsAreScormsYouShouldSelectThemFromTheScorms = "If your Learning paths are scorm packages, you should select the corresponding folder in the SCORM part";
 $QuestionsWithNoAutomaticCorrection = "Questions with no automatic correction";
+$UsersReportByCourseInSessions = "Report of user progress by course, in all sessions";
+$UsersReport = "Users report";
 ?>

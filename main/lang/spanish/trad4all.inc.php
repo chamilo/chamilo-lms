@@ -9072,8 +9072,14 @@ $CopyIframeCodeToIncludeExercise = "Copie el código del iframe a continuación 
 $MyMissingSignatures = "Mis firmas faltantes";
 $OnlyShowActiveUsers = "Mostrar solo usuarios activos";
 $UpdateCourseListXMLCSV = "Actualizar la lista de cursos";
+$CodeIsRequired = "Se necesita un código";
 $CourseCodeDoesNotExist = "Este codigo de curso no existe";
+$DuplicateCode = "Código duplicado";
+$CoursesUpdatedSuccessfully = "Cursos actualizados exitósamente";
+$UpdateFailedForCourses = "La actualización falló para los cursos siguientes";
 $HoursMinutesSeconds = "%02d h %02d m %02d s";
 $IfYourLPsAreScormsYouShouldSelectThemFromTheScorms = "Si sus lecciones de aprendizaje son paquetes scorm, debe seleccionar la carpeta correspondiente en la parte SCORM";
 $QuestionsWithNoAutomaticCorrection = "Preguntas sin corrección automática";
+$UsersReportByCourseInSessions = "Reporte de progreso de usuarios por curso, en todas las sesiones";
+$UsersReport = "Reporte de usuarios";
 ?>

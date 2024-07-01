@@ -19,7 +19,7 @@ use Chamilo\CoreBundle\Component\Utils\StateIcon;
  *
  * @since Chamilo 1.8.7
  */
-define('CSS_UPLOAD_PATH', api_get_path(SYS_PATH).'Resources/public/css/themes/');
+define('CSS_UPLOAD_PATH', api_get_path(SYMFONY_SYS_PATH).'var/themes/');
 
 /**
  * This function allows easy activating and inactivating of regions.
@@ -389,7 +389,7 @@ function uploadStylesheet($values, $picture)
         $fs = new Filesystem();
         $fs->mirror(
             CSS_UPLOAD_PATH,
-            api_get_path(SYS_PATH).'web/css/themes/',
+            api_get_path(SYMFONY_SYS_PATH).'var/themes/',
             null,
             ['override' => true]
         );

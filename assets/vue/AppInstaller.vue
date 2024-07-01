@@ -6,9 +6,9 @@
         href="index.php"
       >
         <img
+          :src="'/themes/chamilo/images/header-logo.svg'"
           alt="Chamilo"
-          src="/build/css/themes/chamilo/images/header-logo.png"
-        >
+        />
       </a>
       <ol>
         <li

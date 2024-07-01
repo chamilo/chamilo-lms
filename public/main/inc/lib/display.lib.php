@@ -695,7 +695,7 @@ class Display
             if (is_file($alternateCssPath.$theme.$image)) {
                 $icon = $alternateWebCssPath.$theme.$image;
             }
-            // Checking the theme icons folder example: app/Resources/public/css/themes/chamilo/icons/XXX
+            // Checking the theme icons folder example: var/themes/chamilo/icons/XXX
             if (is_file($alternateCssPath.$theme.$size_extra.$image)) {
                 $icon = $alternateWebCssPath.$theme.$size_extra.$image;
             } elseif (is_file($code_path.'img/icons/'.$size_extra.$image)) {

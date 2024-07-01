@@ -8,9 +8,8 @@ namespace Chamilo\CoreBundle\ServiceHelper;
 
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
-use Symfony\Bridge\Twig\Extension\AssetExtension;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\HttpFoundation\UrlHelper;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 final class ThemeHelper
 {
@@ -22,9 +21,7 @@ final class ThemeHelper
         private readonly UserHelper $userHelper,
         private readonly CidReqHelper $cidReqHelper,
         private readonly SettingsCourseManager $settingsCourseManager,
-        private readonly UrlHelper $urlHelper,
-        #[Autowire(service: 'twig.extension.assets')]
-        private readonly AssetExtension $assetExtension,
+        private readonly RouterInterface $router,
     ) {}
 
     /**
@@ -78,13 +75,11 @@ final class ThemeHelper
             return '';
         }
 
-        $assetPath = $this->assetExtension->getAssetUrl("build/css/themes/$themeName/$path");
-
-        if ($absolute) {
-            return $this->urlHelper->getAbsoluteUrl($assetPath);
-        }
-
-        return $assetPath;
+        return $this->router->generate(
+            'theme_asset',
+            ['name' => $themeName, 'path' => $path],
+            $absolute ? UrlGeneratorInterface::ABSOLUTE_URL : UrlGeneratorInterface::ABSOLUTE_PATH
+        );
     }
 
     public function getThemeAssetLinkTag(string $path, bool $absoluteUrl = false): string

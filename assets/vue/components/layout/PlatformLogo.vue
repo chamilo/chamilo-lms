@@ -1,8 +1,9 @@
 <script setup>
-import headerLogoPath from "../../../../assets/css/themes/chamilo/images/header-logo.svg"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { useVisualTheme } from "../../composables/theme"
 
 const platformConfigStore = usePlatformConfig()
+const { getThemeAssetUrl } = useVisualTheme()
 
 const siteName = platformConfigStore.getSetting("platform.site_name")
 </script>
@@ -10,7 +11,7 @@ const siteName = platformConfigStore.getSetting("platform.site_name")
 <template>
   <img
     :alt="siteName"
-    :src="headerLogoPath"
     :title="siteName"
+    :src="getThemeAssetUrl('images/header-logo.png')"
   />
 </template>

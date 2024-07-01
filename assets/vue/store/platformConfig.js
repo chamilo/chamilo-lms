@@ -7,12 +7,15 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
   const settings = ref([])
   const studentView = ref("teacherview")
   const plugins = ref([])
+  const visualTheme = ref("chamilo")
 
   async function findSettingsRequest() {
     isLoading.value = true
 
     try {
       const { data } = await axios.get("/platform-config/list")
+
+      visualTheme.value = data.visual_theme
 
       settings.value = data.settings
 
@@ -44,5 +47,6 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
     initialize,
     getSetting,
     isStudentViewActive,
+    visualTheme,
   }
 })

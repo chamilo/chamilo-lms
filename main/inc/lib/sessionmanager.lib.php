@@ -4906,12 +4906,14 @@ class SessionManager
 
     /**
      * @param int $courseId
+     * @param string|null $startDate
+     * @param string|null $endDate
      *
      * @return array
      *
      * @todo Add param to get only active sessions (not expires ones)
      */
-    public static function get_session_by_course($courseId)
+    public static function get_session_by_course(int $courseId, ?string $startDate = null, ?string $endDate = null): array
     {
         $table_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $table_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -4923,15 +4925,25 @@ class SessionManager
             return [];
         }
 
+        $dateCondition = '';
+        if ($startDate && $endDate) {
+            $dateCondition .= "AND (s.display_start_date BETWEEN '$startDate' AND '$endDate' OR s.display_end_date BETWEEN '$startDate' AND '$endDate') ";
+        } elseif ($startDate) {
+            $dateCondition .= "AND s.display_start_date >= '$startDate' ";
+        } elseif ($endDate) {
+            $dateCondition .= "AND s.display_end_date <= '$endDate' ";
+        }
+
         $sql = "SELECT name, s.id
-                FROM $table_session_course sc
-                INNER JOIN $table_session s
-                ON (sc.session_id = s.id)
-                INNER JOIN $url u
-                ON (u.session_id = s.id)
-                WHERE
-                    u.access_url_id = $urlId AND
-                    sc.c_id = '$courseId' ";
+            FROM $table_session_course sc
+            INNER JOIN $table_session s
+            ON (sc.session_id = s.id)
+            INNER JOIN $url u
+            ON (u.session_id = s.id)
+            WHERE
+                u.access_url_id = $urlId AND
+                sc.c_id = '$courseId'
+                $dateCondition";
         $result = Database::query($sql);
 
         return Database::store_result($result);

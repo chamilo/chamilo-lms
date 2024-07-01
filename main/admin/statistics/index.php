@@ -651,12 +651,21 @@ switch ($report) {
             $row++;
 
             if (!empty($courseSessions)) {
+                $dateStart = null;
+                $dateEnd = null;
+                if (isset($_REQUEST['range_start'])) {
+                    $dateStart = Security::remove_XSS($_REQUEST['range_start']);
+                }
+                if (isset($_REQUEST['range_end'])) {
+                    $dateEnd = Security::remove_XSS($_REQUEST['range_end']);
+                }
+                $conditions = "&date_start=$dateStart&date_end=$dateEnd";
                 arsort($courseSessions);
                 foreach ($courseSessions as $courseId => $count) {
                     $courseInfo = api_get_course_info_by_id($courseId);
                     $tableCourse->setCellContents($row, 0, $courseInfo['name']);
                     $tableCourse->setCellContents($row, 1, $count);
-                    $exportLink = api_get_self().'?report=session_by_date&course_id='.$courseId.'&action=export_users';
+                    $exportLink = api_get_self().'?report=session_by_date&course_id='.$courseId.'&action=export_users'.$conditions;
                     $urlExport = Display::url(
                         Display::return_icon('excel.png', get_lang('UsersReport')),
                         $exportLink
@@ -765,8 +774,10 @@ switch ($report) {
 
         if (isset($_REQUEST['action']) && 'export_users' === $_REQUEST['action'] && isset($_REQUEST['course_id'])) {
             $courseId = intval($_REQUEST['course_id']);
+            $startDate = isset($_REQUEST['date_start']) ? Database::escape_string($_REQUEST['date_start']) : null;
+            $endDate = isset($_REQUEST['date_end']) ? Database::escape_string($_REQUEST['date_end']) : null;
 
-            Statistics::exportUserReportByCourseSession($courseId);
+            Statistics::exportUserReportByCourseSession($courseId, $startDate, $endDate);
             exit;
         }
 

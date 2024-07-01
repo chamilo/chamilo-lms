@@ -2107,10 +2107,10 @@ class Statistics
     /**
      * Exports a user report by course and session to an Excel file.
      */
-    public static function exportUserReportByCourseSession(int $courseId): void
+    public static function exportUserReportByCourseSession(int $courseId, ?string $startDate = null, ?string $endDate = null): void
     {
         $courseInfo = api_get_course_info_by_id($courseId);
-        $sessions = SessionManager::get_session_by_course($courseId);
+        $sessions = SessionManager::get_session_by_course($courseId, $startDate, $endDate);
 
         $headers = [
             get_lang('CourseName'),

@@ -2152,6 +2152,6 @@ class Statistics
             }
         }
 
-        Export::arrayToXls($exportData, 'session_report');
+        Export::arrayToXls($exportData, 'session_report_'.$courseInfo['code'].'_'.date('Y-m-d'));
     }
 }

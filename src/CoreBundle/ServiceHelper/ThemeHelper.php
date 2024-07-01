@@ -52,9 +52,9 @@ final class ThemeHelper
             if ($course) {
                 $this->settingsCourseManager->setCourse($course);
 
-                $visualTheme = $this->settingsCourseManager->getSetting('course_theme');
+                $visualTheme = $this->settingsCourseManager->getCourseSettingValue('course_theme');
 
-                if (1 === (int) $this->settingsCourseManager->getSetting('allow_learning_path_theme')) {
+                if (1 === (int) $this->settingsCourseManager->getCourseSettingValue('allow_learning_path_theme')) {
                     $visualTheme = $lp_theme_css;
                 }
             }

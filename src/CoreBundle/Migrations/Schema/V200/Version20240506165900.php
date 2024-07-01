@@ -82,9 +82,11 @@ final class Version20240506165900 extends AbstractMigrationChamilo
             $userId = (int) $match[5];
             $filename = $match[6];
 
+            // Decode the filename to handle special characters
+            $decodedFilename = urldecode($filename);
             $user = $userRepo->find($userId);
             if (null !== $user) {
-                $personalFile = $personalRepo->getResourceByCreatorFromTitle($filename, $user, $user->getResourceNode());
+                $personalFile = $personalRepo->getResourceByCreatorFromTitle($decodedFilename, $user, $user->getResourceNode());
                 if ($personalFile) {
                     $newUrl = $personalRepo->getResourceFileUrl($personalFile);
                     if ($newUrl) {

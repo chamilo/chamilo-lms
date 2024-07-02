@@ -4035,7 +4035,7 @@ class learnpathItem
         );*/
 
         if ($document) {
-            $name = '/audio/'.$document->getResourceNode()->getResourceFile()->getOriginalName();
+            $name = '/audio/'.$document->getResourceNode()->getResourceFiles()->first()->getOriginalName();
             // Store the mp3 file in the lp_item table.
             $table = Database::get_course_table(TABLE_LP_ITEM);
             $sql = "UPDATE $table SET

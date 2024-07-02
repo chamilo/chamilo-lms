@@ -2272,7 +2272,6 @@ class DocumentManager
             ->from(ResourceNode::class, 'node')
             ->innerJoin('node.resourceType', 'type')
             ->innerJoin('node.resourceLinks', 'links')
-            ->leftJoin('node.resourceFile', 'file')
             ->where('type = :type')
             ->andWhere('links.course = :course')
             ->setParameters(['type' => $type, 'course' => $course])

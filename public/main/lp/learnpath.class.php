@@ -8748,10 +8748,6 @@ class learnpath
         /** @var CDocument $document */
         $document = $repo->find($finalItem->path);
 
-        if ($document && $document->getResourceNode()->hasResourceFile()) {
-            return $repo->getResourceFileContent($document);
-        }
-
-        return '';
+        return $document ? $repo->getResourceFileContent($document) : '';
     }
 }

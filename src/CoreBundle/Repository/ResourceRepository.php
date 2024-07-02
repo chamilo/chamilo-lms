@@ -366,7 +366,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->innerJoin('resource.resourceNode', 'node')
             ->innerJoin('node.resourceLinks', 'links')
             ->innerJoin('node.resourceType', 'type')
-            ->leftJoin('node.resourceFile', 'file')
+            ->leftJoin('node.resourceFiles', 'file')
             ->where('type.title = :type')
             ->setParameter('type', $resourceTypeName, Types::STRING)
             ->addSelect('node')
@@ -695,7 +695,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->select('SUM(file.size) as total')
             ->innerJoin('resource.resourceNode', 'node')
             ->innerJoin('node.resourceLinks', 'l')
-            ->innerJoin('node.resourceFile', 'file')
+            ->innerJoin('node.resourceFiles', 'file')
             ->where('l.course = :course')
             ->andWhere('file IS NOT NULL')
             ->setParameters(

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\MessageTag;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\MessageTagRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\Tests\AbstractApiTest;
@@ -19,6 +20,7 @@ class MessageTagRepositoryTest extends AbstractApiTest
 
     public function testCreateTagAndDeleteUser(): void
     {
+        Container::$container = self::getContainer();
         $tagRepo = self::getContainer()->get(MessageTagRepository::class);
 
         $testUser = $this->createUser('test');

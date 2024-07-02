@@ -2077,7 +2077,7 @@ class Category implements GradebookItem
 
         $html = [];
         if (!empty($my_certificate)) {
-            $pathToCertificate = $category->getDocument()->getResourceNode()->getResourceFile()->getFile()->getPathname();
+            $pathToCertificate = $category->getDocument()->getResourceNode()->getResourceFiles()->first()->getFile()->getPathname();
 
             $certificate_obj = new Certificate(
                 $my_certificate['id'],

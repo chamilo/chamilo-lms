@@ -68,7 +68,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         ],
     ]
 )]
-#[ApiFilter(filterClass: OrderFilter::class, properties: ['id', 'title', 'resourceFile', 'createdAt', 'updatedAt'])]
+#[ApiFilter(filterClass: OrderFilter::class, properties: ['id', 'title', 'createdAt', 'updatedAt'])]
 #[ApiFilter(filterClass: PropertyFilter::class)]
 #[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial'])]
 class ResourceNode implements Stringable
@@ -186,7 +186,13 @@ class ResourceNode implements Stringable
      *
      * @var Collection<int, ResourceFile>
      */
-    #[ORM\OneToMany(mappedBy: 'resourceNode', targetEntity: ResourceFile::class, cascade: ['persist'])]
+    #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write', 'message:read'])]
+    #[ORM\OneToMany(
+        mappedBy: 'resourceNode',
+        targetEntity: ResourceFile::class,
+        cascade: ['persist', 'remove'],
+        fetch: 'EXTRA_LAZY',
+    )]
     private Collection $resourceFiles;
 
     public function __construct()

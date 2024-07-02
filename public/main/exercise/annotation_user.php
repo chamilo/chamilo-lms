@@ -26,7 +26,7 @@ $objQuestion = $questionRepo->find($questionId);
 
 $answer_type = $objQuestion->getType(); //very important
 
-$resourceFile = $objQuestion->getResourceNode()->getResourceFile();
+$resourceFile = $objQuestion->getResourceNode()->getResourceFiles()->first();
 $pictureWidth = $resourceFile->getWidth();
 $pictureHeight = $resourceFile->getHeight();
 $imagePath = $questionRepo->getHotSpotImageUrl($objQuestion);

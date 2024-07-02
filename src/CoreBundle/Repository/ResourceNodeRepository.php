@@ -142,7 +142,7 @@ class ResourceNodeRepository extends MaterializedPathRepository
     {
         $qb = $this->createQueryBuilder('node')
             ->select('SUM(file.size) as total')
-            ->innerJoin('node.resourceFile', 'file')
+            ->innerJoin('node.resourceFiles', 'file')
             ->innerJoin('node.resourceLinks', 'l')
             ->where('node.resourceType = :type')
             ->andWhere('node.parent = :parentNode')

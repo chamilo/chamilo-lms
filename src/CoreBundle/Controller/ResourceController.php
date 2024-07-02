@@ -28,6 +28,7 @@ use Chamilo\CourseBundle\Repository\CToolRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -251,12 +252,17 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $type = $repo->getResourceType();
 
         $criteria = Criteria::create()
-            ->where(Criteria::expr()->neq('resourceFile', null)) // must have a file
+            ->where(Criteria::expr()->neq('resourceFiles', null)) // must have a file
             ->andWhere(Criteria::expr()->eq('resourceType', $type)) // only download same type
         ;
 
         $qb = $resourceNodeRepo->getChildrenQueryBuilder($resourceNode);
-        $qb->addCriteria($criteria);
+        $qbAlias = $qb->getRootAliases()[0];
+
+        $qb
+            ->leftJoin(sprintf('%s.resourceFiles', $qbAlias), 'resourceFiles') // must have a file
+            ->addCriteria($criteria)
+        ;
 
         /** @var ArrayCollection|ResourceNode[] $children */
         $children = $qb->getQuery()->getResult();

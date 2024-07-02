@@ -53,8 +53,7 @@ final class Version20240515124400 extends AbstractMigrationChamilo
                     $resourceFile = $resourceFileRepository->findOneBy(['originalName' => $fileName]);
 
                     if ($resourceFile) {
-                        $resourceFileId = $resourceFile->getId();
-                        $resourceNode = $resourceNodeRepository->findOneBy(['resourceFile' => $resourceFileId]);
+                        $resourceNode = $resourceFile->getResourceNode();
 
                         if ($resourceNode) {
                             $downUserId = $download->getDownUserId();

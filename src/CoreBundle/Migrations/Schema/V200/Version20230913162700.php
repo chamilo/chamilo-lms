@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Doctrine\DBAL\Schema\Schema;
 use Exception;
 use RecursiveDirectoryIterator;
@@ -28,6 +29,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         $documentRepo = $this->container->get(CDocumentRepository::class);
+        $resourceNodeRepo = $this->container->get(ResourceNodeRepository::class);
 
         $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
         $updateConfigurations = [
@@ -60,6 +62,8 @@ final class Version20230913162700 extends AbstractMigrationChamilo
             foreach ($updateConfigurations as $config) {
                 $this->updateContent($config, $courseDirectory, $courseId, $documentRepo);
             }
+
+            $this->updateHtmlContent($courseDirectory, $courseId, $documentRepo, $resourceNodeRepo);
         }
     }
 
@@ -86,6 +90,39 @@ final class Version20230913162700 extends AbstractMigrationChamilo
                         $sql = "UPDATE {$config['table']} SET {$field} = :newText WHERE iid = :id";
                         $params = ['newText' => $updatedText, 'id' => $item['iid']];
                         $this->connection->executeQuery($sql, $params);
+                    }
+                }
+            }
+        }
+    }
+
+    private function updateHtmlContent($courseDirectory, $courseId, $documentRepo, $resourceNodeRepo): void
+    {
+        $sql = "SELECT iid, resource_node_id FROM c_document WHERE filetype = 'file'";
+        $result = $this->connection->executeQuery($sql);
+        $items = $result->fetchAllAssociative();
+
+        foreach ($items as $item) {
+            $document = $documentRepo->find($item['iid']);
+            if ($document) {
+                $resourceNode = $document->getResourceNode();
+                if ($resourceNode && $resourceNode->hasResourceFile()) {
+                    $resourceFile = $resourceNode->getResourceFile();
+                    $filePath = $resourceFile->getTitle();
+                    if ($resourceFile && $resourceFile->getMimeType() === 'text/html') {
+                        error_log("Verifying HTML file: " . $filePath);
+
+                        try {
+                            $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode);
+                            $updatedContent = $this->replaceOldURLsWithNew($content, $courseDirectory, $courseId, $documentRepo);
+
+                            if ($content !== $updatedContent) {
+                                $documentRepo->updateResourceFileContent($document, $updatedContent);
+                                $documentRepo->update($document);
+                            }
+                        } catch (\Exception $e) {
+                            error_log("Error processing file $filePath: " . $e->getMessage());
+                        }
                     }
                 }
             }

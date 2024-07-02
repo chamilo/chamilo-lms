@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -15,9 +16,6 @@ final class Version20240702222600 extends AbstractMigrationChamilo
         return 'Migration resource_node --* resource_file (during development)';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function up(Schema $schema): void
     {
         $tblResourceFile = $schema->getTable('resource_file');

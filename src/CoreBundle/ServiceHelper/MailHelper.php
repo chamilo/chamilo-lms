@@ -99,7 +99,6 @@ final class MailHelper
                 'link' => $additionalParameters['link'] ?? '',
                 'automatic_email_text' => $automaticEmailText,
                 'content' => $body,
-                'theme' => $this->themeHelper->getVisualTheme(),
             ];
 
             if (!empty($recipientEmail)) {

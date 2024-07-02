@@ -8,6 +8,9 @@ namespace Chamilo\CoreBundle\ServiceHelper;
 
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
+use League\Flysystem\FilesystemException;
+use League\Flysystem\FilesystemOperator;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -22,6 +25,7 @@ final class ThemeHelper
         private readonly CidReqHelper $cidReqHelper,
         private readonly SettingsCourseManager $settingsCourseManager,
         private readonly RouterInterface $router,
+        #[Autowire(service: 'oneup_flysystem.themes_filesystem')] private readonly FilesystemOperator $filesystem,
     ) {}
 
     /**
@@ -71,7 +75,11 @@ final class ThemeHelper
     {
         $themeName = $this->getVisualTheme();
 
-        if (empty($themeName)) {
+        try {
+            if (!$this->filesystem->fileExists($themeName.DIRECTORY_SEPARATOR.$path)) {
+                return '';
+            }
+        } catch (FilesystemException) {
             return '';
         }
 

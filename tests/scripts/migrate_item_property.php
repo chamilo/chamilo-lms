@@ -193,9 +193,8 @@ while ($row = Database::fetch_assoc($result)) {
                     $resourceFile = new ResourceFile();
                     $resourceFile->setMedia($media);
                     $resourceFile->setTitle($documentData['title']);
-                    $node->setResourceFile($resourceFile);
+                    $node->addResourceFile($resourceFile);
 
-                    $em->persist($resourceFile);
                     $em->persist($node);
                     break;
             }

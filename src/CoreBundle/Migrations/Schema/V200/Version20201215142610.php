@@ -169,7 +169,7 @@ final class Version20201215142610 extends AbstractMigrationChamilo
                     /** @var CDocument $document */
                     $document = $documentRepo->find($pictureId);
                     if ($document && $document->hasResourceNode() && $document->getResourceNode()->hasResourceFile()) {
-                        $resourceFile = $document->getResourceNode()->getResourceFile();
+                        $resourceFile = $document->getResourceNode()->getResourceFiles()->first();
                         $contents = $documentRepo->getResourceFileContent($document);
                         $quizQuestionRepo->addFileFromString($question, $resourceFile->getOriginalName(), $resourceFile->getMimeType(), $contents);
                     }

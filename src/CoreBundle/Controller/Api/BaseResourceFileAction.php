@@ -409,17 +409,15 @@ class BaseResourceFileAction
 
         $repo->setResourceName($resource, $title);
 
-        $hasFile = $resource->getResourceNode()->hasResourceFile();
-
         $resourceNode = $resource->getResourceNode();
+        $hasFile = $resourceNode->hasResourceFile();
 
         if ($hasFile && !empty($content)) {
-            if ($resourceNode->hasResourceFile()) {
-                // The content is updated by the ResourceNodeListener.php
-                $resourceNode->setContent($content);
-                $resourceNode->getResourceFile()->setSize(\strlen($content));
+            // The content is updated by the ResourceNodeListener.php
+            $resourceNode->setContent($content);
+            foreach ($resourceNode->getResourceFiles() as $resourceFile) {
+                $resourceFile->setSize(\strlen($content));
             }
-            $resourceNode->getResourceFile()->setUpdatedAt(new DateTime());
             $resource->setResourceNode($resourceNode);
         }
 

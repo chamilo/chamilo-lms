@@ -306,10 +306,11 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
                 } elseif (method_exists($record, $setter)) {
                     $valueToSet = 'object' === $relation['type'] ? $fallbackUser : $fallbackUser->getId();
                     $record->{$setter}($valueToSet);
-                    if (method_exists($record, 'getResourceFile') && $record->getResourceFile()) {
-                        $resourceFile = $record->getResourceFile();
-                        if (!$em->contains($resourceFile)) {
-                            $em->persist($resourceFile);
+                    if (method_exists($record, 'getResourceFiles')) {
+                        foreach ($record->getResourceFiles() as $resourceFile) {
+                            if (!$em->contains($resourceFile)) {
+                                $em->persist($resourceFile);
+                            }
                         }
                     }
                     $em->persist($record);

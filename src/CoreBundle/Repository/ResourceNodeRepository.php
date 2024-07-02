@@ -66,8 +66,9 @@ class ResourceNodeRepository extends MaterializedPathRepository
     public function getResourceNodeFileContent(ResourceNode $resourceNode): string
     {
         try {
-            if ($resourceNode->hasResourceFile()) {
-                $resourceFile = $resourceNode->getResourceFile();
+            $resourceFile = $resourceNode->getResourceFiles()->first();
+
+            if ($resourceFile) {
                 $fileName = $this->getFilename($resourceFile);
 
                 return $this->getFileSystem()->read($fileName);
@@ -85,8 +86,9 @@ class ResourceNodeRepository extends MaterializedPathRepository
     public function getResourceNodeFileStream(ResourceNode $resourceNode)
     {
         try {
-            if ($resourceNode->hasResourceFile()) {
-                $resourceFile = $resourceNode->getResourceFile();
+            $resourceFile = $resourceNode->getResourceFiles()->first();
+
+            if ($resourceFile) {
                 $fileName = $this->getFilename($resourceFile);
 
                 return $this->getFileSystem()->readStream($fileName);

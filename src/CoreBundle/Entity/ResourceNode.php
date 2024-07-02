@@ -490,7 +490,7 @@ class ResourceNode implements Stringable
         return false;
     }
 
-    public function getIcon(): string
+    public function getIcon(?string $additionalClass = null): string
     {
         $class = 'fa fa-folder';
         if ($this->hasResourceFile()) {
@@ -503,13 +503,17 @@ class ResourceNode implements Stringable
             }
         }
 
+        if ($additionalClass) {
+            $class .= " $additionalClass";
+        }
+
         return '<i class="'.$class.'"></i>';
     }
 
     public function isResourceFileAnImage(): bool
     {
-        if ($this->hasResourceFile()) {
-            $mimeType = $this->getResourceFile()->getMimeType();
+        if ($resourceFile = $this->resourceFiles->first()) {
+            $mimeType = $resourceFile->getMimeType();
             if (str_contains($mimeType, 'image')) {
                 return true;
             }
@@ -520,8 +524,8 @@ class ResourceNode implements Stringable
 
     public function isResourceFileAVideo(): bool
     {
-        if ($this->hasResourceFile()) {
-            $mimeType = $this->getResourceFile()->getMimeType();
+        if ($resourceFile = $this->resourceFiles->first()) {
+            $mimeType = $resourceFile->getMimeType();
             if (str_contains($mimeType, 'video')) {
                 return true;
             }
@@ -532,28 +536,19 @@ class ResourceNode implements Stringable
 
     public function getThumbnail(RouterInterface $router): string
     {
-        $size = 'fa-3x';
-        $class = sprintf('fa fa-folder %s', $size);
-        if ($this->hasResourceFile()) {
-            $class = sprintf('far fa-file %s', $size);
-            if ($this->isResourceFileAnImage()) {
-                $class = sprintf('far fa-file-image %s', $size);
-                $params = [
-                    'id' => $this->getId(),
-                    'tool' => $this->getResourceType()->getTool(),
-                    'type' => $this->getResourceType()->getTitle(),
-                    'filter' => 'editor_thumbnail',
-                ];
-                $url = $router->generate('chamilo_core_resource_view', $params);
+        if ($this->isResourceFileAnImage()) {
+            $params = [
+                'id' => $this->getId(),
+                'tool' => $this->getResourceType()->getTool(),
+                'type' => $this->getResourceType()->getTitle(),
+                'filter' => 'editor_thumbnail',
+            ];
+            $url = $router->generate('chamilo_core_resource_view', $params);
 
-                return sprintf("<img src='%s'/>", $url);
-            }
-            if ($this->isResourceFileAVideo()) {
-                $class = sprintf('far fa-file-video %s', $size);
-            }
+            return sprintf("<img src='%s'/>", $url);
         }
 
-        return '<i class="'.$class.'"></i>';
+        return $this->getIcon('fa-3x');
     }
 
     /**

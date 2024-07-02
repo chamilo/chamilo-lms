@@ -156,7 +156,7 @@ class TemplateController extends AbstractController
 
             $document = $documentRepository->find($template->getRefDoc());
             $content = '';
-            if (null !== $document && null !== $document->getResourceNode() && null !== $document->getResourceNode()->getResourceFile()) {
+            if (null !== $document && null !== $document->getResourceNode() && $document->getResourceNode()->getResourceFiles()->first()) {
                 $content = $documentRepository->getResourceFileContent($document);
             }
 

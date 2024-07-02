@@ -38,7 +38,7 @@ final class MessageProcessor implements ProcessorInterface
         $message = $this->persistProcessor->process($data, $operation, $uriVariables, $context);
 
         foreach ($message->getAttachments() as $attachment) {
-            $attachment->resourceNode->setResourceFile(
+            $attachment->resourceNode->addResourceFile(
                 $attachment->getResourceFileToAttach()
             );
 

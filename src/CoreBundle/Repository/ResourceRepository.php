@@ -95,8 +95,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $resourceNode = $resource->getResourceNode();
         $resourceName = $resource->getResourceName();
 
-        if ($resourceNode->hasResourceFile()) {
-            $resourceFile = $resourceNode->getResourceFile();
+        foreach ($resourceNode->getResourceFiles() as $resourceFile) {
             if (null !== $resourceFile) {
                 $originalName = $resourceFile->getOriginalName();
                 $originalExtension = pathinfo($originalName, PATHINFO_EXTENSION);
@@ -236,20 +235,16 @@ abstract class ResourceRepository extends ServiceEntityRepository
             throw new LogicException('Resource node is null');
         }
 
-        $resourceFile = $resourceNode->getResourceFile();
-        if (null === $resourceFile) {
-            $resourceFile = new ResourceFile();
-        }
-
         $em = $this->getEntityManager();
+
+        $resourceFile = new ResourceFile();
         $resourceFile
             ->setFile($file)
             ->setDescription($description)
             ->setTitle($resource->getResourceName())
             ->setResourceNode($resourceNode)
         ;
-        $em->persist($resourceFile);
-        $resourceNode->setResourceFile($resourceFile);
+        $resourceNode->addResourceFile($resourceFile);
         $em->persist($resourceNode);
 
         if ($flush) {
@@ -503,8 +498,8 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $em = $this->getEntityManager();
         $children = $resource->getResourceNode()->getChildren();
         foreach ($children as $child) {
-            if ($child->hasResourceFile()) {
-                $em->remove($child->getResourceFile());
+            foreach ($child->getResourceFiles() as $resourceFile) {
+                $em->remove($resourceFile);
             }
             $resourceNode = $this->getResourceFromResourceNode($child->getId());
             if (null !== $resourceNode) {
@@ -572,7 +567,9 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $resourceNode = $resource->getResourceNode();
         if ($resourceNode->hasResourceFile()) {
             $resourceNode->setContent($content);
-            $resourceNode->getResourceFile()->setSize(\strlen($content));
+            foreach ($resourceNode->getResourceFiles() as $resourceFile) {
+                $resourceFile->setSize(\strlen($content));
+            }
 
             return true;
         }
@@ -587,20 +584,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
             $resourceNode = $resource->getResourceNode();
             $resourceNode->setTitle($title);
         }
-
-        // if ($resourceNode->hasResourceFile()) {
-        // $resourceNode->getResourceFile()->getFile()->
-        // $resourceNode->getResourceFile()->setTitle($title);
-        // $resourceFile->setTitle($title);
-
-        /*$fileName = $this->getResourceNodeRepository()->getFilename($resourceFile);
-        error_log('$fileName');
-        error_log($fileName);
-        error_log($title);
-        $this->getResourceNodeRepository()->getFileSystem()->rename($fileName, $title);
-        $resourceFile->setTitle($title);
-        $resourceFile->setOriginalName($title);*/
-        // }
     }
 
     public function toggleVisibilityPublishedDraft(AbstractResource $resource): void

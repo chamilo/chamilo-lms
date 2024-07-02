@@ -143,10 +143,14 @@
     <Column
       :header="t('Size')"
       :sortable="true"
-      field="resourceNode.resourceFile.size"
+      field="resourceNode.firstResourceFile.size"
     >
       <template #body="slotProps">
-        {{ slotProps.data.resourceNode.resourceFile ? prettyBytes(slotProps.data.resourceNode.resourceFile.size) : "" }}
+        {{
+          slotProps.data.resourceNode.firstResourceFile
+            ? prettyBytes(slotProps.data.resourceNode.firstResourceFile.size)
+            : ""
+        }}
       </template>
     </Column>
 
@@ -654,9 +658,9 @@ function btnEditOnClick(item) {
     folderParams.getFile = true
 
     if (
-      item.resourceNode.resourceFile &&
-      item.resourceNode.resourceFile.mimeType &&
-      "text/html" === item.resourceNode.resourceFile.mimeType
+      item.resourceNode.firstResourceFile &&
+      item.resourceNode.firstResourceFile.mimeType &&
+      "text/html" === item.resourceNode.firstResourceFile.mimeType
     ) {
       //folderParams.getFile = true;
     }

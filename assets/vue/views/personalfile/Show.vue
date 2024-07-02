@@ -1,6 +1,10 @@
 <template>
   <div>
-    <Button :label="$t('Back')" icon="pi pi-chevron-left" @click="goBack" />
+    <Button
+      :label="$t('Back')"
+      icon="pi pi-chevron-left"
+      @click="goBack"
+    />
     <Toolbar
       v-if="item && isCurrentTeacher"
       :handle-delete="del"
@@ -21,16 +25,16 @@
     >
       <div class="w-1/2">
         <div
-          v-if="item['resourceNode']['resourceFile']"
+          v-if="item.resourceNode.firstResourceFile"
           class="flex justify-center"
         >
           <div class="w-64">
             <q-img
-              v-if="item['resourceNode']['resourceFile']['image']"
+              v-if="item.resourceNode.firstResourceFile.image"
               :src="item['contentUrl'] + '&w=300'"
               spinner-color="primary"
             />
-            <span v-else-if="item['resourceNode']['resourceFile']['video']">
+            <span v-else-if="item.resourceNode.firstResourceFile.video">
               <video controls>
                 <source :src="item['contentUrl']" />
               </video>
@@ -93,7 +97,7 @@
               </td>
               <td />
             </tr>
-            <tr v-if="item['resourceNode']['resourceFile']">
+            <tr v-if="item.resourceNode.firstResourceFile">
               <td>
                 <strong>{{ $t("File") }}</strong>
               </td>
@@ -143,6 +147,7 @@ export default {
     Toolbar,
     ShowLinks,
   },
+  mixins: [ShowMixin],
   data() {
     const { relativeDatetime } = useFormatDate()
     const securityStore = useSecurityStore()
@@ -156,7 +161,6 @@ export default {
       isCurrentTeacher,
     }
   },
-  mixins: [ShowMixin],
   computed: {
     ...mapFields("personalfile", {
       isLoading: "isLoading",
@@ -165,7 +169,7 @@ export default {
   },
   methods: {
     goBack() {
-      this.$router.go(-1);
+      this.$router.go(-1)
     },
     ...mapActions("personalfile", {
       deleteItem: "del",

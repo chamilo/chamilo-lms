@@ -1,13 +1,13 @@
-import { useStore } from 'vuex'
-import { inject, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { isEmpty } from 'lodash'
+import { useStore } from "vuex"
+import { inject, ref } from "vue"
+import { useRoute, useRouter } from "vue-router"
+import { isEmpty } from "lodash"
 
-import { useCidReq } from './cidReq'
-import { useI18n } from 'vue-i18n';
+import { useCidReq } from "./cidReq"
+import { useI18n } from "vue-i18n"
 import { useNotification } from "./notification"
 
-export function useDatatableList (servicePrefix) {
+export function useDatatableList(servicePrefix) {
   const moduleName = servicePrefix.toLowerCase()
 
   const store = useStore()
@@ -30,19 +30,19 @@ export function useDatatableList (servicePrefix) {
     itemsPerPage: 5,
   })
 
-  function onUpdateOptions ({ page, itemsPerPage, sortBy, sortDesc }) {
+  function onUpdateOptions({ page, itemsPerPage, sortBy, sortDesc }) {
     page = page || options.value.page
 
-    if (!isEmpty(route.query.filetype) && route.query.filetype === 'certificate') {
-      filters.value.filetype = 'certificate';
+    if (!isEmpty(route.query.filetype) && route.query.filetype === "certificate") {
+      filters.value.filetype = "certificate"
     } else {
-      filters.value.filetype = ['file', 'folder'];
+      filters.value.filetype = ["file", "folder"]
     }
 
     let params = { ...filters.value }
 
     if (1 === filters.value.loadNode) {
-      params['resourceNode.parent'] = route.params.node
+      params["resourceNode.parent"] = route.params.node
     }
 
     if (itemsPerPage > 0) {
@@ -50,79 +50,81 @@ export function useDatatableList (servicePrefix) {
     }
 
     if (!isEmpty(sortBy)) {
-      params[`order[${sortBy}]`] = sortDesc ? 'desc' : 'asc'
+      params[`order[${sortBy}]`] = sortDesc ? "desc" : "asc"
     }
 
     let type = route.query.type
 
     params = { ...params, cid, sid, gid, type, page }
 
-    store.dispatch(`${moduleName}/fetchAll`, params)
-      .then(() => options.value = { sortBy, sortDesc, itemsPerPage, page })
+    store
+      .dispatch(`${moduleName}/fetchAll`, params)
+      .then(() => (options.value = { sortBy, sortDesc, itemsPerPage, page }))
   }
 
-  function goToAddItem () {
-    console.log('addHandler');
+  function goToAddItem() {
+    console.log("addHandler")
 
-    let folderParams = route.query;
+    let folderParams = route.query
 
     router.push({
       name: `${servicePrefix}Create`,
       query: folderParams,
-    });
+    })
   }
 
-  function goToEditItem (item) {
-    let folderParams = route.query;
-    folderParams['id'] = item['@id'];
+  function goToEditItem(item) {
+    let folderParams = route.query
+    folderParams["id"] = item["@id"]
 
-    if ('folder' === item.filetype || isEmpty(item.filetype)) {
+    if ("folder" === item.filetype || isEmpty(item.filetype)) {
       router.push({
         name: `${servicePrefix}Update`,
-        params: { id: item['@id'] },
-        query: folderParams
-      });
+        params: { id: item["@id"] },
+        query: folderParams,
+      })
     }
 
-    if ('file' === item.filetype) {
-      folderParams['getFile'] = true;
-      if (item.resourceNode.resourceFile &&
-          item.resourceNode.resourceFile.mimeType &&
-          'text/html' === item.resourceNode.resourceFile.mimeType
+    if ("file" === item.filetype) {
+      folderParams["getFile"] = true
+      if (
+        item.resourceNode.firstResourceFile &&
+        item.resourceNode.firstResourceFile.mimeType &&
+        "text/html" === item.resourceNode.firstResourceFile.mimeType
       ) {
         //folderParams['getFile'] = true;
       }
 
       this.$router.push({
         name: `${servicePrefix}UpdateFile`,
-        params: { id: item['@id'] },
-        query: folderParams
-      });
+        params: { id: item["@id"] },
+        query: folderParams,
+      })
     }
   }
 
-  function onShowItem (item) {
-    console.log('listmixin showHandler', item);
+  function onShowItem(item) {
+    console.log("listmixin showHandler", item)
 
-    let folderParams = route.query;
+    let folderParams = route.query
 
     if (item) {
-      folderParams['id'] = item['@id'];
+      folderParams["id"] = item["@id"]
     }
 
     router.push({
       name: `${servicePrefix}Show`,
       params: folderParams,
       query: folderParams,
-    });
+    })
   }
 
- async function deleteItem (item) {
+  async function deleteItem(item) {
     await store.dispatch(`${moduleName}/del`, item.value)
 
-    onUpdateOptions(options.value);
+    onUpdateOptions(options.value)
 
-    notification.showSuccessNotification(t('Deleted'))
+    notification.showSuccessNotification(t("Deleted"))
   }
 
   return {

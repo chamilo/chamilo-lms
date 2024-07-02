@@ -112,6 +112,10 @@ class ResourceNode implements Stringable
     #[ORM\OneToMany(mappedBy: 'resourceNode', targetEntity: ResourceLink::class, cascade: ['persist', 'remove'])]
     protected Collection $resourceLinks;
 
+    //#[ORM\OneToOne(inversedBy: 'resourceNode', targetEntity: ResourceFile::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    //#[ORM\JoinColumn(name: 'resource_file_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #protected ?ResourceFile $resourceFile = null;
+
     #[Assert\NotNull]
     #[Groups(['resource_node:read', 'resource_node:write', 'document:write'])]
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'resourceNodes')]
@@ -646,5 +650,11 @@ class ResourceNode implements Stringable
         }
 
         return $this;
+    }
+
+    #[Groups(['resource_node:read', 'document:read', 'message:read'])]
+    public function getFirstResourceFile(): ?ResourceFile
+    {
+        return $this->resourceFiles->first() ?: null;
     }
 }

@@ -483,7 +483,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->innerJoin('resource.resourceNode', 'node')
         //    ->innerJoin('node.creator', 'userCreator')
             ->leftJoin('node.resourceLinks', 'links')
-//            ->leftJoin('node.resourceFile', 'file')
             ->where('node.id = :id')
             ->setParameters([
                 'id' => $resourceNodeId,

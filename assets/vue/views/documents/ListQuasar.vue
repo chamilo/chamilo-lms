@@ -40,13 +40,13 @@
       <!--              <q-td key="resourceNode.updatedAt" :props="props">-->
       <!--                {{ props.row.resourceNode.updatedAt }}-->
       <!--              </q-td>-->
-      <!--              <q-td key="resourceNode.resourceFile.size" :props="props">-->
-      <!--                {{ props.row.resourceNode.resourceFile.size }}-->
+      <!--              <q-td key="resourceNode.firstResourceFile.size" :props="props">-->
+      <!--                {{ props.row.resourceNode.firstResourceFile.size }}-->
       <!--              </q-td>-->
       <!--            </q-tr>-->
       <!--          </template>-->
 
-      <template v-slot:body-cell-updatedAt="props">
+      <template #body-cell-updatedAt="props">
         <q-td
           slot="body-cell-updatedAt"
           auto-width
@@ -55,18 +55,18 @@
         </q-td>
       </template>
 
-      <template v-slot:body-cell-size="props">
+      <template #body-cell-size="props">
         <q-td
           slot="body-cell-updatedAt"
           auto-width
         >
-          <span v-if="props.row.resourceNode.resourceFile">
-            {{ prettyBytes(props.row.resourceNode.resourceFile.size) }}
+          <span v-if="props.row.resourceNode.firstResourceFile">
+            {{ prettyBytes(props.row.resourceNode.firstResourceFile.size) }}
           </span>
         </q-td>
       </template>
 
-      <template v-slot:body-cell-action="props">
+      <template #body-cell-action="props">
         <ActionCell
           slot="body-cell-action"
           slot-scope="props"
@@ -103,6 +103,7 @@ export default {
     ActionCell,
     ResourceIcon,
   },
+  mixins: [ListMixin],
   setup() {
     const securityStore = useSecurityStore()
 
@@ -115,7 +116,6 @@ export default {
     }
     //this.moment = moment;
   },
-  mixins: [ListMixin],
   data() {
     return {
       sortBy: "title",
@@ -125,7 +125,7 @@ export default {
         //{ name: 'id', field: '@id', label: this.$t('iid') },
         { label: this.$i18n.t("Title"), field: "title", name: "title", sortable: true },
         { label: this.$i18n.t("Modified"), field: "resourceNode.updatedAt", name: "updatedAt", sortable: true },
-        { label: this.$i18n.t("Size"), field: "resourceNode.resourceFile.size", name: "size", sortable: true },
+        { label: this.$i18n.t("Size"), field: "resourceNode.firstResourceFile.size", name: "size", sortable: true },
         { label: this.$i18n.t("Actions"), name: "action", sortable: false },
       ],
       pageOptions: [5, 10, 15, 20, this.$i18n.t("All")],

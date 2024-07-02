@@ -257,9 +257,9 @@ export default {
       if ("file" === item.filetype) {
         folderParams["getFile"] = true
         if (
-          item.resourceNode.resourceFile &&
-          item.resourceNode.resourceFile.mimeType &&
-          "text/html" === item.resourceNode.resourceFile.mimeType
+          item.resourceNode.firstResourceFile &&
+          item.resourceNode.firstResourceFile.mimeType &&
+          "text/html" === item.resourceNode.firstResourceFile.mimeType
         ) {
           //folderParams['getFile'] = true;
         }

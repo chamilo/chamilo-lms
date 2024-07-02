@@ -122,17 +122,13 @@ class LearnPathItemForm
                 'ToolbarSet' => 'LearningPathDocuments',
                 'Width' => '100%',
                 'Height' => '500',
-                'FullPage' => true,
-                //   'CreateDocumentDir' => $relative_prefix,
-                //'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
-                //'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/'.$relative_path,
             ];
 
             if (($document && $document->getResourceNode()->hasEditableTextContent()) || 'add' === $action) {
                 $renderer = $form->defaultRenderer();
                 $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp');
                 $form->addHtml('<div class="editor-lp">');
-                $form->addHtmlEditor('content_lp', null, null, true, $editorConfig);
+                $form->addHtmlEditor('content_lp', null, null, false, $editorConfig);
                 $form->addHtml('</div>');
                 if ($document) {
                     $form->addHidden('document_id', $document->getIid());

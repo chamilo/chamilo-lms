@@ -2133,11 +2133,12 @@ class Agenda
 
         foreach ($invitees as $invitee) {
             $inviteeUser = $invitee->getUser();
-
-            $inviteeList[] = [
-                'id' => $inviteeUser->getId(),
-                'name' => $inviteeUser->getCompleteNameWithUsername(),
-            ];
+            if (!empty($inviteeUser)) {
+                $inviteeList[] = [
+                    'id' => $inviteeUser->getId(),
+                    'name' => $inviteeUser->getCompleteNameWithUsername(),
+                ];
+            }
         }
 
         return $inviteeList;

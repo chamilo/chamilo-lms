@@ -119,7 +119,7 @@ class LearnPathItemForm
             }
 
             $editorConfig = [
-                'ToolbarSet' => 'LearningPathDocuments',
+                'ToolbarSet' => 'Basic',
                 'Width' => '100%',
                 'Height' => '500',
             ];

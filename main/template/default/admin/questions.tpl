@@ -2,6 +2,7 @@
 {% import 'default/macro/macro.tpl' as display %}
 
 {% block content %}
+    {{ toolbar }}
     {{ form }}
 {#    {% for question in pagination %}#}
     {% for i in start..end %}

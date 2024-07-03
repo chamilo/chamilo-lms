@@ -17,8 +17,6 @@ abstract class LtiAdvantageService
 
     /**
      * LtiAdvantageService constructor.
-     *
-     * @param ImsLtiTool $tool
      */
     public function __construct(ImsLtiTool $tool)
     {
@@ -26,8 +24,6 @@ abstract class LtiAdvantageService
     }
 
     /**
-     * @param ImsLtiTool $tool
-     *
      * @return LtiAdvantageService
      */
     public function setTool(ImsLtiTool $tool)
@@ -43,9 +39,6 @@ abstract class LtiAdvantageService
     abstract public function getAllowedScopes();
 
     /**
-     * @param Request      $request
-     * @param JsonResponse $response
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException

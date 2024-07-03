@@ -1,3 +1,4 @@
+<div {{ html_content_extra_class }}>
 <h3>{{ user.complete_name_with_username }}</h3>
 <br />
 <script>
@@ -65,3 +66,4 @@
     </tr>
     {% endfor %}
 </table>
+</div>

@@ -126,6 +126,24 @@ function save_courses_data($courses)
         $params['user_id'] = $creatorId;
         $addMeAsTeacher = isset($_POST['add_me_as_teacher']) ? $_POST['add_me_as_teacher'] : false;
         $params['add_user_as_teacher'] = $addMeAsTeacher;
+        if (isset($course['Visibility'])) {
+            $params['visibility'] = $course['Visibility'];
+        }
+
+        // Check if there is a course template stated for this course. In that case, we check if that code exists in DB:
+        if (array_key_exists('CourseTemplate', $course) && $course['CourseTemplate'] != '') {
+            $result = Database::fetch_array(
+                Database::query(
+                    "SELECT id as real_id FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
+                WHERE code = '".Database::escape_string($course['CourseTemplate'])."'"
+                ),
+                'ASSOC'
+            );
+            if (count($result) && array_key_exists('real_id', $result)) {
+                $params['course_template'] = $result['real_id'];
+            }
+        }
+
         $courseInfo = CourseManager::create_course($params);
 
         if (!empty($courseInfo)) {
@@ -140,6 +158,25 @@ function save_courses_data($courses)
             }
             $msg .= '<a href="'.api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/">
                     '.$courseInfo['title'].'</a> '.get_lang('Created').'<br />';
+        }
+        // Check if necessary to clone tools' first page from the original course to the imported course:
+        if (array_key_exists('CloneHomepageTools', $course) && $course['CloneHomepageTools'] == 'true' && array_key_exists('course_template', $params)) {
+            $results = Database::store_result(
+                Database::query(
+                    "SELECT * FROM ".Database::get_course_table(TABLE_TOOL_LIST)."
+                    WHERE c_id = ".$params['course_template']
+                ),
+                'ASSOC'
+            );
+            if (count($results)) {
+                foreach ($results as $row) {
+                    Database::update(
+                        Database::get_course_table(TABLE_TOOL_LIST),
+                        ['visibility' => $row['visibility']],
+                        ['c_id = ? and name = ?' => [$courseInfo['real_id'], $row['name']]]
+                    );
+                }
+            }
         }
     }
 
@@ -233,12 +270,12 @@ $form->display();
 
 <blockquote>
 <pre>
-<strong>Code</strong>;<strong>Title</strong>;<strong>CourseCategory</strong>;<strong>CourseCategoryName</strong>;Teacher;Language
-BIO0015;Biology;BIO;Science;teacher1;english
-BIO0016;Maths;MATH;Engineerng;teacher2|teacher3;english
-BIO0017;Language;LANG;;;english
+<strong>Code</strong>;<strong>Title</strong>;<strong>CourseCategory</strong>;<strong>CourseCategoryName</strong>;Teacher;Language;Visibility;CourseTemplate;CloneHomepageTools
+BIO0015;Biology;BIO;Science;teacher1;english;1;TEMPLATE1;true
+BIO0016;Maths;MATH;Engineerng;teacher2|teacher3;english;1;;
+BIO0017;Language;LANG;;;english;1;;
 </pre>
-</blockquote>
+    </blockquote>
 
 <?php
 Display::display_footer();

@@ -43,5 +43,7 @@ $ldap_version = $extldap_config['protocol_version'];
 //non-anonymous LDAP mode
 $ldap_rdn = $extldap_config['admin_dn'];
 $ldap_pass = $extldap_config['admin_password'];
-
+if (api_get_configuration_value('ldap_encrypt_admin_password')) {
+    $ldap_pass = api_decrypt_ldap_password($extldap_config['admin_password']);
+}
 $ldap_pass_placeholder = "PLACEHOLDER";

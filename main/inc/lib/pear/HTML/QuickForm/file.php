@@ -253,6 +253,8 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
     {
         $id = $this->getAttribute('id');
         $ratio = 'aspectRatio: 16 / 9';
+        $cropMove = '';
+
         if (!empty($param['ratio'])) {
             $ratio = 'aspectRatio: '.$param['ratio'].',';
         }
@@ -260,6 +262,28 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
         if (!empty($param['scalable']) && $param['scalable'] != 'false') {
             $ratio = '';
             $scalable = $param['scalable'];
+        }
+
+        if (!empty($param['maxRatio']) && !empty($param['minRatio'])) {
+            $ratio = 'autoCropArea: 1, ';
+            $scalable = 'true';
+            $cropMove = ',cropmove: function (e) {
+                var cropBoxData = $image.cropper(\'getCropBoxData\');
+                var minAspectRatio = ' . $param['minRatio'] . ';
+                var maxAspectRatio = ' . $param['maxRatio'] . ';
+                var cropBoxWidth = cropBoxData.width;
+                var aspectRatio = cropBoxWidth / cropBoxData.height;
+
+                if (aspectRatio < minAspectRatio) {
+                    $image.cropper(\'setCropBoxData\', {
+                        height: cropBoxWidth / minAspectRatio
+                    });
+                } else if (aspectRatio > maxAspectRatio) {
+                    $image.cropper(\'setCropBoxData\', {
+                        height: cropBoxWidth / maxAspectRatio
+                    });
+                }
+            }';
         }
 
         return '<script>
@@ -272,7 +296,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
 
             function isValidType(file) {
                 var fileTypes = [\'image/jpg\', \'image/jpeg\', \'image/gif\', \'image/png\'];
-        
+
                 for(var i = 0; i < fileTypes.length; i++) {
                     if(file.type === fileTypes[i]) {
                         return true;
@@ -281,11 +305,10 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
 
                 return false;
             }
-            
+
             function imageCropper() {
                 $formGroup.show();
                 $cropButton.show();
-
                 $image
                     .cropper(\'destroy\')
                     .cropper({
@@ -301,6 +324,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                             // Output the result data for cropping image.
                             $input.val(e.x + \',\' + e.y + \',\' + e.width + \',\' + e.height);
                         }
+                        ' . $cropMove . '
                     });
             }
 
@@ -361,7 +385,14 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             if (!empty($this->_attributes['crop_scalable'])) {
                 $scalable = $this->_attributes['crop_scalable'];
             }
-            $js = $this->getElementJS(array('ratio' => $ratio, 'scalable' => $scalable));
+
+            $maxRatio = $minRatio = null;
+            if (!empty($this->_attributes['crop_min_ratio']) && !empty($this->_attributes['crop_max_ratio'])) {
+                $minRatio = $this->_attributes['crop_min_ratio'];
+                $maxRatio = $this->_attributes['crop_max_ratio'];
+            }
+
+            $js = $this->getElementJS(array('ratio' => $ratio, 'scalable' => $scalable, 'minRatio' => $minRatio, 'maxRatio' => $maxRatio));
         }
 
         if ($this->isFrozen()) {
@@ -402,41 +433,41 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             case FormValidator::LAYOUT_HORIZONTAL:
                 if (isset($attributes['custom']) && $attributes['custom']) {
                     $template = '
-                        <div class="input-file-container">  
+                        <div class="input-file-container">
                             {element}
                             <label tabindex="0" {label-for} class="input-file-trigger">
                                 <i class="fa fa-picture-o fa-lg" aria-hidden="true"></i> {label}
                             </label>
                         </div>
-                        <p class="file-return"></p>                        
+                        <p class="file-return"></p>
                         <script>
                             document.querySelector("html").classList.add(\'js\');
-                            var fileInput  = document.querySelector( ".input-file" ),  
+                            var fileInput  = document.querySelector( ".input-file" ),
                                 button     = document.querySelector( ".input-file-trigger" ),
                                 the_return = document.querySelector(".file-return");
-                                  
-                            button.addEventListener("keydown", function(event) {  
-                                if ( event.keyCode == 13 || event.keyCode == 32 ) {  
-                                    fileInput.focus();  
-                                }  
+
+                            button.addEventListener("keydown", function(event) {
+                                if ( event.keyCode == 13 || event.keyCode == 32 ) {
+                                    fileInput.focus();
+                                }
                             });
                             button.addEventListener("click", function(event) {
                                fileInput.focus();
                                return false;
-                            });  
+                            });
                             fileInput.addEventListener("change", function(event) {
                                 fileName = this.value;
                                 if (this.files[0]) {
                                     fileName = this.files[0].name;
                                 }
-                                the_return.innerHTML = fileName;  
-                            });                            
+                                the_return.textContent = fileName;
+                            });
                         </script>
                     ';
                 } else {
                     $template = '
                     <div id="file_'.$name.'" class="form-group {error_class}">
-                        
+
                         <label {label-for} class="col-sm-'.$size[0].' control-label" >
                             <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                             {label}
@@ -464,7 +495,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                 return '
                         <label {label-for}>{label}</label>
                         <div class="input-group">
-                            
+
                             {icon}
                             {element}
                         </div>';

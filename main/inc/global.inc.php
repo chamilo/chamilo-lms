@@ -67,17 +67,6 @@ if ($passwordEncryption === 'bcrypt') {
 // Check the PHP version
 api_check_php_version($includePath.'/');
 
-// Specification for usernames:
-// 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
-// 2. Empty username is formally valid, but it is reserved for the anonymous user.
-// 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
-
-$defaultUserNameLength = 50;
-if (api_get_setting('login_is_email') == 'true') {
-    $defaultUserNameLength = 100;
-}
-define('USERNAME_MAX_LENGTH', $defaultUserNameLength);
-
 // Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
 api_request_uri();
 
@@ -111,6 +100,7 @@ $libraryPath = __DIR__.'/lib/';
 
 // @todo convert this libs in classes
 require_once $libraryPath.'database.constants.inc.php';
+require_once $libraryPath.'formvalidator/FormValidator.class.php';
 require_once $libraryPath.'text.lib.php';
 require_once $libraryPath.'array.lib.php';
 require_once $libraryPath.'online.inc.php';
@@ -233,7 +223,7 @@ ChamiloSession::start($alreadyInstalled);
 if ($_configuration['access_url'] != 1) {
     $url_info = api_get_access_url($_configuration['access_url']);
     if ($url_info['active'] == 1) {
-        $settings_by_access = &api_get_settings(null, 'list', $_configuration['access_url'], 1);
+        $settings_by_access = api_get_settings(null, 'list', $_configuration['access_url'], 1);
         foreach ($settings_by_access as &$row) {
             if (empty($row['variable'])) {
                 $row['variable'] = 0;
@@ -249,7 +239,7 @@ if ($_configuration['access_url'] != 1) {
     }
 }
 
-$result = &api_get_settings(null, 'list', 1);
+$result = api_get_settings(null, 'list', 1);
 foreach ($result as &$row) {
     if ($_configuration['access_url'] != 1) {
         if ($url_info['active'] == 1) {
@@ -290,7 +280,7 @@ foreach ($result as &$row) {
     }
 }
 
-$result = &api_get_settings('Plugins', 'list', $_configuration['access_url']);
+$result = api_get_settings('Plugins', 'list', $_configuration['access_url']);
 $_plugins = [];
 foreach ($result as &$row) {
     $key = &$row['variable'];
@@ -320,6 +310,17 @@ if (api_get_setting('server_type') == 'test') {
 }
 
 ini_set('log_errors', '1');
+
+// Specification for usernames:
+// 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
+// 2. Empty username is formally valid, but it is reserved for the anonymous user.
+// 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
+
+$defaultUserNameLength = 50;
+if (api_get_setting('login_is_email') == 'true') {
+    $defaultUserNameLength = 100;
+}
+define('USERNAME_MAX_LENGTH', $defaultUserNameLength);
 
 // Load allowed tag definitions for kses and/or HTMLPurifier.
 require_once $libraryPath.'formvalidator/Rule/allowed_tags.inc.php';
@@ -378,7 +379,7 @@ $langpath = api_get_path(SYS_LANG_PATH);
 /* This will only work if we are in the page to edit a sub_language */
 if (isset($this_script) && $this_script == 'sub_language') {
     // getting the arrays of files i.e notification, trad4all, etc
-    $language_files_to_load = SubLanguageManager:: get_lang_folder_files_list(
+    $language_files_to_load = SubLanguageManager::get_lang_folder_files_list(
         api_get_path(SYS_LANG_PATH).'english',
         true
     );
@@ -579,41 +580,7 @@ if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
 // (needed for the calculation of the total connection time)
 if (!isset($_SESSION['login_as']) && isset($_user) && isset($_user["user_id"])) {
     // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
-    $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-    $sql = "SELECT login_id, login_date
-            FROM $tbl_track_login
-            WHERE
-                login_user_id='".$_user["user_id"]."'
-            ORDER BY login_date DESC
-            LIMIT 0,1";
-
-    $q_last_connection = Database::query($sql);
-    if (Database::num_rows($q_last_connection) > 0) {
-        $now = api_get_utc_datetime();
-        $i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
-
-        // is the latest logout_date still relevant?
-        $sql = "SELECT logout_date FROM $tbl_track_login
-                WHERE login_id = $i_id_last_connection";
-        $q_logout_date = Database::query($sql);
-        $res_logout_date = convert_sql_date(Database::result($q_logout_date, 0, 'logout_date'));
-        $lifeTime = api_get_configuration_value('session_lifetime');
-
-        if ($res_logout_date < time() - $lifeTime) {
-            // it isn't, we should create a fresh entry
-            Event::eventLogin($_user['user_id']);
-        // now that it's created, we can get its ID and carry on
-        } else {
-            $sql = "UPDATE $tbl_track_login SET logout_date = '$now'
-                    WHERE login_id = '$i_id_last_connection'";
-            Database::query($sql);
-        }
-
-        $tableUser = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "UPDATE $tableUser SET last_login = '$now'
-                WHERE user_id = ".$_user["user_id"];
-        Database::query($sql);
-    }
+    Tracking::updateUserLastLogin($_user["user_id"]);
 }
 
 // Add language_measure_frequency to your main/inc/conf/configuration.php in
@@ -660,6 +627,7 @@ if (!empty($language_interface)) {
 if (!file_exists($file) || api_get_setting('server_type') === 'test') {
     $template = new Template();
     $template->assign('quiz_markers_rolls_js', ChamiloApi::getQuizMarkersRollsJS());
+    $template->assign('is_vrview_enabled', Display::isVrViewEnabled());
     // Force use of default to avoid problems
     $tpl = 'default/layout/main.js.tpl';
     $contents = $template->fetch($tpl);

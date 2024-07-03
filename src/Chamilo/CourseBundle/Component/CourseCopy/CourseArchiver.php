@@ -138,6 +138,20 @@ class CourseArchiver
             }
         }
 
+        // Copy all xapi resources to the temp-dir
+        if (isset($course->resources[RESOURCE_XAPI_TOOL]) && is_array($course->resources[RESOURCE_XAPI_TOOL])) {
+            foreach ($course->resources[RESOURCE_XAPI_TOOL] as $xapi) {
+                $launchPath = str_replace(
+                    api_get_path(WEB_COURSE_PATH).$course->info['path'].'/',
+                    '',
+                    dirname($xapi->params['launch_url'])
+                );
+                $xapiDir = dirname($backup_dir.'/'.$launchPath.'/');
+                @mkdir($xapiDir, $perm_dirs, true);
+                copyDirTo($course->path.$launchPath.'/', $backup_dir.$launchPath, false);
+            }
+        }
+
         // Copy all scorm documents to the temp-dir
         if (isset($course->resources[RESOURCE_SCORM]) && is_array($course->resources[RESOURCE_SCORM])) {
             foreach ($course->resources[RESOURCE_SCORM] as $document) {
@@ -341,6 +355,7 @@ class CourseArchiver
         class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\ToolIntro', 'ToolIntro');
         class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Wiki', 'Wiki');
         class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\Work', 'Work');
+        class_alias('Chamilo\CourseBundle\Component\CourseCopy\Resources\XapiTool', 'XapiTool');
 
         /** @var Course $course */
         $course = \UnserializeApi::unserialize('course', base64_decode($contents));

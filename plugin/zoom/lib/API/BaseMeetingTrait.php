@@ -4,6 +4,8 @@
 
 namespace Chamilo\PluginBundle\Zoom\API;
 
+use Exception;
+
 /**
  * Trait BaseMeetingTrait.
  * Common meeting properties definitions.
@@ -29,4 +31,11 @@ trait BaseMeetingTrait
     public $agenda;
     /** @var string description */
     public $host_email;
+
+    /**
+     * @throws Exception
+     */
+    public function update(): void
+    {
+    }
 }

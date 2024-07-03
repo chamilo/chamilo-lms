@@ -21,11 +21,16 @@ $lps = [];
 if (!empty($courses)) {
     $courseIdList = array_column($courses, 'real_id');
     $courseWithSession = [];
+    $courseIteration = 0;
     foreach ($courses as $course) {
         if (isset($course['session_id'])) {
-            if (SESSION_VISIBLE === api_get_session_visibility($course['session_id'])) {
+            $sessionVisibility = api_get_session_visibility($course['session_id']);
+            if (SESSION_VISIBLE === $sessionVisibility || SESSION_AVAILABLE === $sessionVisibility) {
                 $courseWithSession[$course['real_id']] = $course['session_id'];
+            } else {
+                unset($courseIdList[$courseIteration]);
             }
+            $courseIteration++;
         }
     }
 

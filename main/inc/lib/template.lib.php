@@ -200,6 +200,7 @@ class Template
         $functions = [
             ['name' => 'get_tutors_names', 'callable' => 'Template::returnTutorsNames'],
             ['name' => 'get_teachers_names', 'callable' => 'Template::returnTeachersNames'],
+            ['name' => 'api_is_platform_admin', 'callable' => 'api_is_platform_admin'],
         ];
 
         foreach ($functions as $function) {
@@ -222,6 +223,10 @@ class Template
         // Header and footer are showed by default
         $this->set_footer($show_footer);
         $this->set_header($show_header);
+
+        // Extra class for the main cm-content div
+        global $htmlContentExtraClass;
+        $this->setExtraContentClass($htmlContentExtraClass);
 
         $this->set_header_parameters($sendHeaders);
         $this->set_footer_parameters();
@@ -342,10 +347,10 @@ class Template
     /**
      * Shortcut to display a 1 col layout (index.php).
      * */
-    public function display_one_col_template()
+    public function display_one_col_template(bool $clearFlashMessages = true)
     {
         $tpl = $this->get_template('layout/layout_1_col.tpl');
-        $this->display($tpl);
+        $this->display($tpl, $clearFlashMessages);
     }
 
     /**
@@ -450,7 +455,7 @@ class Template
         $origin = api_get_origin();
         $show_course_navigation_menu = '';
         if (!empty($this->course_id) && $this->user_is_logged_in) {
-            if ($origin !== 'embeddable' && api_get_setting('show_toolshortcuts') !== 'false') {
+            if ($origin !== 'iframe' && $origin !== 'embeddable' && api_get_setting('show_toolshortcuts') !== 'false') {
                 // Course toolbar
                 $courseToolBar = CourseHome::show_navigation_tool_shortcuts();
             }
@@ -461,6 +466,28 @@ class Template
         }
         $this->assign('show_course_shortcut', $courseToolBar);
         $this->assign('show_course_navigation_menu', $show_course_navigation_menu);
+    }
+
+    /**
+     * Sets an extra class for the main cm-content div.
+     * To use, give a new row to $htmlContentExtraClass like so: `$htmlContentExtraClass[] = 'feature-item-user-skill-on';`
+     * before any Display::display_header() call.
+     */
+    public function setExtraContentClass($htmlContentExtraClass): void
+    {
+        if (empty($htmlContentExtraClass)) {
+            $extraClass = '';
+        } else {
+            if (is_array($htmlContentExtraClass)) {
+                $extraClass = implode(' ', $htmlContentExtraClass);
+            } else {
+                $extraClass = $htmlContentExtraClass;
+            }
+            $extraClass = Security::remove_XSS($extraClass);
+            $extraClass = trim($extraClass);
+            $extraClass = ' class="'.$extraClass.'"';
+        }
+        $this->assign('html_content_extra_class', $extraClass);
     }
 
     /**
@@ -605,7 +632,11 @@ class Template
             $css[] = api_get_cdn_path($webPublicPath.'assets/'.$file);
         }
 
-        $css[] = $webJsPath.'mediaelement/plugins/vrview/vrview.css';
+        $isVrViewEnabled = Display::isVrViewEnabled();
+
+        if ($isVrViewEnabled) {
+            $css[] = $webJsPath.'mediaelement/plugins/vrview/vrview.css';
+        }
 
         $features = api_get_configuration_value('video_features');
         $defaultFeatures = [
@@ -616,9 +647,12 @@ class Template
             'tracks',
             'volume',
             'fullscreen',
-            'vrview',
             'markersrolls',
         ];
+
+        if ($isVrViewEnabled) {
+            $defaultFeatures[] = 'vrview';
+        }
 
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {
@@ -727,17 +761,21 @@ class Template
     {
         global $disable_js_and_css_files, $htmlHeadXtra;
         $isoCode = api_get_language_isocode();
+        $isVrViewEnabled = Display::isVrViewEnabled();
         $selectLink = 'bootstrap-select/dist/js/i18n/defaults-'.$isoCode.'_'.strtoupper($isoCode).'.min.js';
 
         if ($isoCode == 'en') {
             $selectLink = 'bootstrap-select/dist/js/i18n/defaults-'.$isoCode.'_US.min.js';
         }
         // JS files
-        $js_files = [
-            'chosen/chosen.jquery.min.js',
-            'mediaelement/plugins/vrview/vrview.js',
-            'mediaelement/plugins/markersrolls/markersrolls.min.js',
-        ];
+        $js_files = [];
+        $js_files[] = 'chosen/chosen.jquery.min.js';
+
+        if ($isVrViewEnabled) {
+            $js_files[] = 'mediaelement/plugins/vrview/vrview.js';
+        }
+
+        $js_files[] = 'mediaelement/plugins/markersrolls/markersrolls.min.js';
 
         if (api_get_setting('accessibility_font_resize') === 'true') {
             $js_files[] = 'fontresize.js';
@@ -764,6 +802,16 @@ class Template
             "select2/dist/js/i18n/$isoCode.js",
             'js-cookie/src/js.cookie.js',
         ];
+
+        if ($renderers = api_get_configuration_sub_value('video_player_renderers/renderers')) {
+            foreach ($renderers as $renderName) {
+                if ('youtube' === $renderName) {
+                    continue;
+                }
+
+                $bowerJsFiles[] = "mediaelement/build/renderers/$renderName.min.js";
+            }
+        }
 
         $viewBySession = api_get_setting('my_courses_view_by_session') === 'true';
 
@@ -1178,6 +1226,9 @@ class Template
             'icon' => 'user fa-fw',
             'placeholder' => get_lang('UserName'),
         ];
+        if (api_get_configuration_value('security_login_autocomplete_disable') === true) {
+            $params['autocomplete'] = 'new-password';
+        }
         $browserAutoCapitalize = false;
         // Avoid showing the autocapitalize option if the browser doesn't
         // support it: this attribute is against the HTML5 standard
@@ -1196,6 +1247,9 @@ class Template
             'icon' => 'lock fa-fw',
             'placeholder' => get_lang('Pass'),
         ];
+        if (api_get_configuration_value('security_login_autocomplete_disable') === true) {
+            $params['autocomplete'] = 'new-password';
+        }
         if ($browserAutoCapitalize) {
             $params['autocapitalize'] = 'none';
         }
@@ -1271,13 +1325,49 @@ class Template
         $plugin = null;
         if ($pluginKeycloak) {
             $pluginUrl = api_get_path(WEB_PLUGIN_PATH).'keycloak/start.php?sso';
-            $pluginUrl = Display::url('Keycloak', $pluginUrl, ['class' => 'btn btn-primary']);
-            $html .= '<div>'.$pluginUrl.'</div>';
+            $pluginUrl = Display::url('Keycloak', $pluginUrl, ['class' => 'btn btn-block btn-primary']);
+            $html .= '<div style="margin-top: 10px">'.$pluginUrl.'</div>';
         }
 
         $html .= '<div></div>';
 
         return $html;
+    }
+
+    public function enableCookieUsageWarning()
+    {
+        $form = new FormValidator(
+            'cookiewarning',
+            'post',
+            '',
+            '',
+            [
+                //'onsubmit' => "$(this).toggle('show')",
+            ],
+            FormValidator::LAYOUT_BOX_NO_LABEL
+        );
+        $form->addHidden('acceptCookies', '1');
+        $form->addHtml(
+            '<div class="cookieUsageValidation">
+                '.get_lang('YouAcceptCookies').'
+                <button class="btn btn-link" onclick="$(this).next().toggle(\'slow\'); $(this).toggle(\'slow\')" type="button">
+                    ('.get_lang('More').')
+                </button>
+                <div style="display:none; margin:20px 0;">
+                    '.get_lang('HelpCookieUsageValidation').'
+                </div>
+                <button class="btn btn-link" onclick="$(this).parents(\'form\').submit()" type="button">
+                    ('.get_lang('Accept').')
+                </button>
+            </div>'
+        );
+        $form->protect();
+
+        if ($form->validate()) {
+            api_set_site_use_cookie_warning_cookie();
+        } else {
+            $this->assign('frmDisplayCookieUsageWarning', $form->returnForm());
+        }
     }
 
     /**
@@ -2038,11 +2128,26 @@ class Template
                 $portalImageMeta .= '<meta property="twitter:image:alt" content="'.$imageAlt.'" />'."\n";
             }
         } else {
-            $logo = ChamiloApi::getPlatformLogoPath($this->theme);
-            if (!empty($logo)) {
-                $portalImageMeta = '<meta property="og:image" content="'.$logo.'" />'."\n";
-                $portalImageMeta .= '<meta property="twitter:image" content="'.$logo.'" />'."\n";
-                $portalImageMeta .= '<meta property="twitter:image:alt" content="'.$imageAlt.'" />'."\n";
+            if (api_get_configuration_value('mail_header_from_custom_course_logo') == true) {
+                // check if current page is a course page
+                $courseId = api_get_course_int_id();
+
+                if (!empty($courseId)) {
+                    $course = api_get_course_info_by_id($courseId);
+                    if (!empty($course) && !empty($course['course_email_image_large'])) {
+                        $portalImageMeta = '<meta property="og:image" content="'.$course['course_email_image_large'].'" />'."\n";
+                        $portalImageMeta .= '<meta property="twitter:image" content="'.$course['course_email_image_large'].'" />'."\n";
+                        $portalImageMeta .= '<meta property="twitter:image:alt" content="'.$imageAlt.'" />'."\n";
+                    }
+                }
+            }
+            if (empty($portalImageMeta)) {
+                $logo = ChamiloApi::getPlatformLogoPath($this->theme);
+                if (!empty($logo)) {
+                    $portalImageMeta = '<meta property="og:image" content="'.$logo.'" />'."\n";
+                    $portalImageMeta .= '<meta property="twitter:image" content="'.$logo.'" />'."\n";
+                    $portalImageMeta .= '<meta property="twitter:image:alt" content="'.$imageAlt.'" />'."\n";
+                }
             }
         }
 

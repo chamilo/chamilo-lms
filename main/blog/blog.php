@@ -7,7 +7,7 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-$blog_id = isset($_GET['blog_id']) ? $_GET['blog_id'] : 0;
+$blog_id = isset($_GET['blog_id']) ? (int) $_GET['blog_id'] : 0;
 
 if (empty($blog_id)) {
     api_not_allowed(true);

@@ -20,12 +20,12 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 class User extends BaseUser
 {
-    const COURSE_MANAGER = 1;
-    const TEACHER = 1;
-    const SESSION_ADMIN = 3;
-    const DRH = 4;
-    const STUDENT = 5;
-    const ANONYMOUS = 6;
+    public const COURSE_MANAGER = 1;
+    public const TEACHER = 1;
+    public const SESSION_ADMIN = 3;
+    public const DRH = 4;
+    public const STUDENT = 5;
+    public const ANONYMOUS = 6;
 
     /**
      * @var int

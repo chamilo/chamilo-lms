@@ -11,11 +11,22 @@ In this case, Chamilo is used as provider , and this plugin allows a student ins
 
 # Installation
 
+*Prior to installing/uninstalling this plugin, you will need to make sure the src/Chamilo/PluginBundle/Entity folder is
+temporarily writeable by the web server.*
+
 1. Install the plugin from the Plugins page
 2. Enable the plugin from the Lti Provider Plugin Settings page
 3. Assign to the Administrator region (will appear on the management page)
 4. Add the LTI connection details to try out the little demo app (Configuration page)
 5. Configure the LMS platforms for registration and deployment
+
+To be able to acces LTI content from a different domain in an iframe, the hosting provider will have to enable it by activating this configuration in the app/config/configuration.php file :
+```
+// Enable samesite:None parameter for session cookie.
+// More info: https://www.chromium.org/updates/same-site
+// Also: https://developers.google.com/search/blog/2020/01/get-ready-for-new-samesitenone-secure
+$_configuration['security_session_cookie_samesite_none'] = true;
+```
 
 # DB tables
 
@@ -33,6 +44,7 @@ CREATE TABLE plugin_lti_provider_platform (
  auth_token_url varchar(255) NOT NULL,
  key_set_url varchar(255) NOT NULL,
  deployment_id varchar(255) NOT NULL,
+ tool_provider varchar(255) NULL,
  PRIMARY KEY(id)
 ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
 
@@ -43,4 +55,30 @@ CREATE TABLE plugin_lti_provider_platform_key (
   private_key LONGTEXT NOT NULL,
   PRIMARY KEY(id)
 ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB;
+
+CREATE TABLE plugin_lti_provider_result (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  issuer longtext NOT NULL,
+  user_id int(11) NOT NULL,
+  client_uid int(11) NOT NULL,
+  course_code varchar(40) NOT NULL,
+  tool_id int(11) NOT NULL,
+  tool_name varchar(255) NOT NULL,
+  score double NOT NULL,
+  progress int(11) NOT NULL,
+  duration int(11) NOT NULL,
+  start_date datetime NOT NULL,
+  user_ip varchar(255) NOT NULL,
+  lti_launch_id varchar(255) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ```
+
+## v1.1
+### Database changes
+You need to execute this SQL query in your database after updating your Chamilo after version 1.11.18 if the plugin was already installed before.
+
+```sql
+ALTER TABLE plugin_lti_provider_result MODIFY client_uid varchar(255) NOT NULL;
+```
+

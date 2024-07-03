@@ -64,6 +64,7 @@
                                     </div>
                                 </div>
                             </div>
+                            {% if not hide_lp_test_average %}
                             <div class="col-md-6">
                                 <div class="easy-donut">
                                     <div id="easypiechart-red" title="{{ 'Score'|get_lang }}" class="easypiechart"
@@ -75,6 +76,7 @@
                                     </div>
                                 </div>
                             </div>
+                            {% endif %}
                         </div>
 
                         <div class="row">

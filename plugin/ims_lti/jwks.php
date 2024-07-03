@@ -12,7 +12,7 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 $plugin = ImsLtiPlugin::create();
 
 if ($plugin->get('enabled') !== 'true') {
-    die;
+    exit;
 }
 
 /** @var Platform $platform */

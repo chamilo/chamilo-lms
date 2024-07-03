@@ -3,20 +3,18 @@
 /* For license terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\PluginBundle\Entity\ImsLti\LineItem;
 use Chamilo\PluginBundle\Entity\ImsLti\Platform;
+use Chamilo\PluginBundle\Entity\ImsLti\Token;
 use Chamilo\UserBundle\Entity\User;
-use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
-use Symfony\Component\Filesystem\Filesystem;
+use Doctrine\ORM\Tools\SchemaTool;
+use Firebase\JWT\JWK;
 
 /**
- * Description of MsiLti
+ * Description of MsiLti.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
@@ -29,7 +27,7 @@ class ImsLtiPlugin extends Plugin
 
     protected function __construct()
     {
-        $version = '1.8.0';
+        $version = '1.9.0';
         $author = 'Angel Fernando Quiroz Campos';
 
         $message = Display::return_message($this->get_lang('GenerateKeyPairInfo'));
@@ -44,8 +42,10 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * Get the class instance
+     * Get the class instance.
+     *
      * @staticvar MsiLtiPlugin $result
+     *
      * @return ImsLtiPlugin
      */
     public static function create()
@@ -56,7 +56,7 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * Get the plugin directory name
+     * Get the plugin directory name.
      */
     public function get_name()
     {
@@ -64,26 +64,12 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * Install the plugin. Setup the database
+     * Install the plugin. Setup the database.
+     *
+     * @throws \Doctrine\ORM\Tools\ToolsException
      */
     public function install()
     {
-        $pluginEntityPath = $this->getEntityPath();
-
-        if (!is_dir($pluginEntityPath)) {
-            if (!is_writable(dirname($pluginEntityPath))) {
-                $message = get_lang('ErrorCreatingDir').': '.$pluginEntityPath;
-                Display::addFlash(Display::return_message($message, 'error'));
-
-                return false;
-            }
-
-            mkdir($pluginEntityPath, api_get_permissions_for_new_directories());
-        }
-
-        $fs = new Filesystem();
-        $fs->mirror(__DIR__.'/Entity/', $pluginEntityPath, null, ['override']);
-
         $this->createPluginTables();
     }
 
@@ -129,166 +115,19 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * Unistall plugin. Clear the database
+     * Unistall plugin. Clear the database.
      */
     public function uninstall()
     {
-        $pluginEntityPath = $this->getEntityPath();
-        $fs = new Filesystem();
-
-        if ($fs->exists($pluginEntityPath)) {
-            $fs->remove($pluginEntityPath);
-        }
-
         try {
             $this->dropPluginTables();
             $this->removeTools();
-        } catch (DBALException $e) {
+        } catch (Exception $e) {
             error_log('Error while uninstalling IMS/LTI plugin: '.$e->getMessage());
         }
     }
 
     /**
-     * Creates the plugin tables on database
-     *
-     * @return boolean
-     * @throws DBALException
-     */
-    private function createPluginTables()
-    {
-        $entityManager = Database::getManager();
-        $connection = $entityManager->getConnection();
-
-        if ($connection->getSchemaManager()->tablesExist(self::TABLE_TOOL)) {
-            return true;
-        }
-
-        $queries = [
-            "CREATE TABLE plugin_ims_lti_tool (
-                    id INT AUTO_INCREMENT NOT NULL,
-                    c_id INT DEFAULT NULL,
-                    gradebook_eval_id INT DEFAULT NULL,
-                    parent_id INT DEFAULT NULL,
-                    name VARCHAR(255) NOT NULL,
-                    description LONGTEXT DEFAULT NULL,
-                    launch_url VARCHAR(255) NOT NULL,
-                    consumer_key VARCHAR(255) DEFAULT NULL,
-                    shared_secret VARCHAR(255) DEFAULT NULL,
-                    custom_params LONGTEXT DEFAULT NULL,
-                    active_deep_linking TINYINT(1) DEFAULT '0' NOT NULL,
-                    privacy LONGTEXT DEFAULT NULL,
-                    client_id VARCHAR(255) DEFAULT NULL,
-                    public_key LONGTEXT DEFAULT NULL,
-                    login_url VARCHAR(255) DEFAULT NULL,
-                    redirect_url VARCHAR(255) DEFAULT NULL,
-                    advantage_services LONGTEXT DEFAULT NULL COMMENT '(DC2Type:json)',
-                    version VARCHAR(255) DEFAULT 'lti1p1' NOT NULL,
-                    launch_presentation LONGTEXT NOT NULL COMMENT '(DC2Type:json)',
-                    replacement_params LONGTEXT NOT NULL COMMENT '(DC2Type:json)',
-                    INDEX IDX_C5E47F7C91D79BD3 (c_id),
-                    INDEX IDX_C5E47F7C82F80D8B (gradebook_eval_id),
-                    INDEX IDX_C5E47F7C727ACA70 (parent_id),
-                    PRIMARY KEY(id)
-                ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
-            "CREATE TABLE plugin_ims_lti_platform (
-                    id INT AUTO_INCREMENT NOT NULL,
-                    kid VARCHAR(255) NOT NULL,
-                    public_key LONGTEXT NOT NULL,
-                    private_key LONGTEXT NOT NULL,
-                    PRIMARY KEY(id)
-                ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
-            "CREATE TABLE plugin_ims_lti_token (
-                    id INT AUTO_INCREMENT NOT NULL,
-                    tool_id INT DEFAULT NULL,
-                    scope LONGTEXT NOT NULL COMMENT '(DC2Type:json)',
-                    hash VARCHAR(255) NOT NULL,
-                    created_at INT NOT NULL,
-                    expires_at INT NOT NULL,
-                    INDEX IDX_F7B5692F8F7B22CC (tool_id),
-                    PRIMARY KEY(id)
-                ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
-            "ALTER TABLE plugin_ims_lti_tool
-                ADD CONSTRAINT FK_C5E47F7C91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)",
-            "ALTER TABLE plugin_ims_lti_tool
-                ADD CONSTRAINT FK_C5E47F7C82F80D8B FOREIGN KEY (gradebook_eval_id)
-                REFERENCES gradebook_evaluation (id) ON DELETE SET NULL",
-            "ALTER TABLE plugin_ims_lti_tool
-                ADD CONSTRAINT FK_C5E47F7C727ACA70 FOREIGN KEY (parent_id)
-                REFERENCES plugin_ims_lti_tool (id) ON DELETE CASCADE",
-            "ALTER TABLE plugin_ims_lti_token
-                ADD CONSTRAINT FK_F7B5692F8F7B22CC FOREIGN KEY (tool_id)
-                REFERENCES plugin_ims_lti_tool (id) ON DELETE CASCADE",
-            "CREATE TABLE plugin_ims_lti_lineitem (
-                    id INT AUTO_INCREMENT NOT NULL,
-                    tool_id INT NOT NULL,
-                    evaluation INT NOT NULL,
-                    resource_id VARCHAR(255) DEFAULT NULL,
-                    tag VARCHAR(255) DEFAULT NULL,
-                    start_date DATETIME DEFAULT NULL,
-                    end_date DATETIME DEFAULT NULL,
-                    INDEX IDX_BA81BBF08F7B22CC (tool_id),
-                    UNIQUE INDEX UNIQ_BA81BBF01323A575 (evaluation),
-                    PRIMARY KEY(id)
-                ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
-            "ALTER TABLE plugin_ims_lti_lineitem ADD CONSTRAINT FK_BA81BBF08F7B22CC FOREIGN KEY (tool_id)
-                REFERENCES plugin_ims_lti_tool (id) ON DELETE CASCADE",
-            "ALTER TABLE plugin_ims_lti_lineitem ADD CONSTRAINT FK_BA81BBF01323A575 FOREIGN KEY (evaluation)
-                REFERENCES gradebook_evaluation (id) ON DELETE CASCADE "
-        ];
-
-        foreach ($queries as $query) {
-            Database::query($query);
-        }
-
-        return true;
-    }
-
-    /**
-     * Drops the plugin tables on database
-     *
-     * @return boolean
-     */
-    private function dropPluginTables()
-    {
-        Database::query("DROP TABLE IF EXISTS plugin_ims_lti_lineitem");
-        Database::query("DROP TABLE IF EXISTS plugin_ims_lti_token");
-        Database::query("DROP TABLE IF EXISTS plugin_ims_lti_platform");
-        Database::query("DROP TABLE IF EXISTS plugin_ims_lti_tool");
-
-        return true;
-    }
-
-    private function removeTools()
-    {
-        $sql = "DELETE FROM c_tool WHERE link LIKE 'ims_lti/start.php%' AND category = 'plugin'";
-        Database::query($sql);
-    }
-
-    /**
-     * Set the course settings
-     */
-    private function setCourseSettings()
-    {
-        $button = Display::toolbarButton(
-            $this->get_lang('ConfigureExternalTool'),
-            api_get_path(WEB_PLUGIN_PATH).'ims_lti/configure.php?'.api_get_cidreq(),
-            'cog',
-            'primary'
-        );
-
-        // This setting won't be saved in the database.
-        $this->course_settings = [
-            [
-                'name' => $this->get_lang('ImsLtiDescription').$button.'<hr>',
-                'type' => 'html',
-            ],
-        ];
-    }
-
-    /**
-     * @param Course     $course
-     * @param ImsLtiTool $ltiTool
-     *
      * @return CTool
      */
     public function findCourseToolByLink(Course $course, ImsLtiTool $ltiTool)
@@ -308,9 +147,6 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * @param CTool      $courseTool
-     * @param ImsLtiTool $ltiTool
-     *
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function updateCourseTool(CTool $courseTool, ImsLtiTool $ltiTool)
@@ -330,21 +166,9 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * @param ImsLtiTool $tool
-     *
-     * @return string
-     */
-    private static function generateToolLink(ImsLtiTool $tool)
-    {
-        return 'ims_lti/start.php?id='.$tool->getId();
-    }
-
-    /**
      * Add the course tool.
      *
-     * @param Course     $course
-     * @param ImsLtiTool $ltiTool
-     * @param bool       $isVisible
+     * @param bool $isVisible
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -368,25 +192,30 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * @return string
+     * Add the course session tool.
+     *
+     * @param bool $isVisible
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    protected function getConfigExtraText()
+    public function addCourseSessionTool(Course $course, Session $session, ImsLtiTool $ltiTool, $isVisible = true)
     {
-        $text = $this->get_lang('ImsLtiDescription');
-        $text .= sprintf(
-            $this->get_lang('ManageToolButton'),
-            api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php'
+        $cTool = $this->createLinkToCourseTool(
+            $ltiTool->getName(),
+            $course->getId(),
+            null,
+            self::generateToolLink($ltiTool),
+            $session->getId()
         );
+        $cTool
+            ->setTarget(
+                $ltiTool->getDocumentTarget() === 'iframe' ? '_self' : '_blank'
+            )
+            ->setVisibility($isVisible);
 
-        return $text;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEntityPath()
-    {
-        return api_get_path(SYS_PATH).'src/Chamilo/PluginBundle/Entity/'.$this->getCamelCaseName();
+        $em = Database::getManager();
+        $em->persist($cTool);
+        $em->flush();
     }
 
     public static function isInstructor()
@@ -395,8 +224,6 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * @param User $user
-     *
      * @return array
      */
     public static function getRoles(User $user)
@@ -434,8 +261,6 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * @param User         $user
-     *
      * @return string
      */
     public static function getUserRoles(User $user)
@@ -477,9 +302,6 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * @param ImsLtiTool $tool
-     * @param User       $user
-     *
      * @return string
      */
     public static function getLaunchUserIdClaim(ImsLtiTool $tool, User $user)
@@ -508,9 +330,6 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * @param User $currentUser
-     * @param ImsLtiTool $tool
-     *
      * @return string
      */
     public static function getRoleScopeMentor(User $currentUser, ImsLtiTool $tool)
@@ -523,9 +342,7 @@ class ImsLtiPlugin extends Plugin
     /**
      * Tool User IDs which the user DRH can access as a mentor.
      *
-     * @param User       $user
-     * @param ImsLtiTool $tool
-     * @param bool       $generateIdForTool. Optional. Set TRUE for LTI 1.x.
+     * @param bool $generateIdForTool. Optional. Set TRUE for LTI 1.x.
      *
      * @return array
      */
@@ -552,10 +369,6 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * @param array      $contentItem
-     * @param ImsLtiTool $baseLtiTool
-     * @param Course     $course
-     *
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function saveItemAsLtiLink(array $contentItem, ImsLtiTool $baseLtiTool, Course $course)
@@ -613,20 +426,6 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * @return null|SimpleXMLElement
-     */
-    private function getRequestXmlElement()
-    {
-        $request = file_get_contents("php://input");
-
-        if (empty($request)) {
-            return null;
-        }
-
-        return new SimpleXMLElement($request);
-    }
-
-    /**
      * @return ImsLtiServiceResponse|null
      */
     public function processServiceRequest()
@@ -643,8 +442,7 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * @param int    $toolId
-     * @param Course $course
+     * @param int $toolId
      *
      * @return bool
      */
@@ -662,8 +460,9 @@ class ImsLtiPlugin extends Plugin
     /**
      * @param string $configUrl
      *
-     * @return string
      * @throws Exception
+     *
+     * @return string
      */
     public function getLaunchUrlFromCartridge($configUrl)
     {
@@ -699,9 +498,6 @@ class ImsLtiPlugin extends Plugin
         return (string) $launchUrl;
     }
 
-    /**
-     * @param array $params
-     */
     public function trimParams(array &$params)
     {
         foreach ($params as $key => $value) {
@@ -711,9 +507,6 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * @param ImsLtiTool $tool
-     * @param array      $params
-     *
      * @return array
      */
     public function removeUrlParamsFromLaunchParams(ImsLtiTool $tool, array &$params)
@@ -736,7 +529,7 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * Avoid conflict with foreign key when deleting a course
+     * Avoid conflict with foreign key when deleting a course.
      *
      * @param int $courseId
      */
@@ -752,6 +545,180 @@ class ImsLtiPlugin extends Plugin
 
         $em->createQuery('DELETE FROM ChamiloPluginBundle:ImsLti\ImsLtiTool tool WHERE tool.course = :c_id')
             ->execute(['c_id' => (int) $courseId]);
+    }
+
+    /**
+     * @return string
+     */
+    public static function getIssuerUrl()
+    {
+        $webPath = api_get_path(WEB_PATH);
+
+        return trim($webPath, " /");
+    }
+
+    public static function getCoursesForParentTool(ImsLtiTool $tool, Session $session = null)
+    {
+        if ($tool->getParent()) {
+            return [];
+        }
+
+        $children = $tool->getChildren();
+
+        if ($session) {
+            $children = $children->filter(function (ImsLtiTool $tool) use ($session) {
+                if (null === $tool->getSession()) {
+                    return false;
+                }
+
+                if ($tool->getSession()->getId() !== $session->getId()) {
+                    return false;
+                }
+
+                return true;
+            });
+        }
+
+        return $children->map(function (ImsLtiTool $tool) {
+            return $tool->getCourse();
+        });
+    }
+
+    /**
+     * It gets the public key from jwks or rsa keys.
+     *
+     * @param ImsLtiTool $tool
+     *
+     * @return mixed|string|null
+     */
+    public static function getToolPublicKey(ImsLtiTool $tool)
+    {
+        $publicKey = '';
+        if (!empty($tool->getJwksUrl())) {
+            $publicKeySet = json_decode(file_get_contents($tool->getJwksUrl()), true);
+            $pk = [];
+            foreach ($publicKeySet['keys'] as $key) {
+                $pk = openssl_pkey_get_details(
+                    JWK::parseKeySet(['keys' => [$key]])[$key['kid']]
+                );
+            }
+            if (!empty($pk)) {
+                $publicKey = $pk['key'];
+            }
+        } else {
+            $publicKey = $tool->publicKey;
+        };
+
+        return $publicKey;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getConfigExtraText()
+    {
+        $text = $this->get_lang('ImsLtiDescription');
+        $text .= sprintf(
+            $this->get_lang('ManageToolButton'),
+            api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php'
+        );
+
+        return $text;
+    }
+
+    /**
+     * Creates the plugin tables on database.
+     *
+     * @throws \Doctrine\ORM\Tools\ToolsException
+     */
+    private function createPluginTables()
+    {
+        $em = Database::getManager();
+
+        if ($em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_TOOL])) {
+            return;
+        };
+
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->createSchema(
+            [
+                $em->getClassMetadata(ImsLtiTool::class),
+                $em->getClassMetadata(LineItem::class),
+                $em->getClassMetadata(Platform::class),
+                $em->getClassMetadata(Token::class),
+            ]
+        );
+    }
+
+    /**
+     * Drops the plugin tables on database.
+     */
+    private function dropPluginTables()
+    {
+        $em = Database::getManager();
+
+        if (!$em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_TOOL])) {
+            return;
+        };
+
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->dropSchema(
+            [
+                $em->getClassMetadata(ImsLtiTool::class),
+                $em->getClassMetadata(LineItem::class),
+                $em->getClassMetadata(Platform::class),
+                $em->getClassMetadata(Token::class),
+            ]
+        );
+    }
+
+    private function removeTools()
+    {
+        $sql = "DELETE FROM c_tool WHERE link LIKE 'ims_lti/start.php%' AND category = 'plugin'";
+        Database::query($sql);
+    }
+
+    /**
+     * Set the course settings.
+     */
+    private function setCourseSettings()
+    {
+        $button = Display::toolbarButton(
+            $this->get_lang('ConfigureExternalTool'),
+            api_get_path(WEB_PLUGIN_PATH).'ims_lti/configure.php?'.api_get_cidreq(),
+            'cog',
+            'primary'
+        );
+
+        // This setting won't be saved in the database.
+        $this->course_settings = [
+            [
+                'name' => $this->get_lang('ImsLtiDescription').$button.'<hr>',
+                'type' => 'html',
+            ],
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    private static function generateToolLink(ImsLtiTool $tool)
+    {
+        return 'ims_lti/start.php?id='.$tool->getId();
+    }
+
+    /**
+     * @return SimpleXMLElement|null
+     */
+    private function getRequestXmlElement()
+    {
+        $request = file_get_contents("php://input");
+
+        if (empty($request)) {
+            return null;
+        }
+
+        return new SimpleXMLElement($request);
     }
 
     /**
@@ -784,27 +751,5 @@ class ImsLtiPlugin extends Plugin
             'private' => $privateKey,
             'public' => $publicKey["key"],
         ];
-    }
-
-    /**
-     * @return string
-     */
-    public static function getIssuerUrl()
-    {
-        $webPath = api_get_path(WEB_PATH);
-
-        return trim($webPath, " /");
-    }
-
-    public static function getCoursesForParentTool(ImsLtiTool $tool)
-    {
-        $coursesId = [];
-        if (!$tool->getParent()) {
-            $coursesId = $tool->getChildren()->map(function (ImsLtiTool $tool) {
-                return $tool->getCourse();
-            });
-        }
-
-        return $coursesId;
     }
 }

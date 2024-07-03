@@ -10,9 +10,9 @@ use Doctrine\DBAL\DriverManager;
  */
 class MigrationMoodlePlugin extends Plugin implements HookPluginInterface
 {
-    const SETTING_USER_FILTER = 'user_filter';
-    const SETTING_URL_ID = 'url_id';
-    const SETTING_MOODLE_PATH = 'moodle_path';
+    public const SETTING_USER_FILTER = 'user_filter';
+    public const SETTING_URL_ID = 'url_id';
+    public const SETTING_MOODLE_PATH = 'moodle_path';
 
     public $isAdminPlugin = true;
 

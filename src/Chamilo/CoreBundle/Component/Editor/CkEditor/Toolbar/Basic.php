@@ -64,6 +64,7 @@ class Basic extends Toolbar
         'inserthtml',
         'xml',
         'qmarkersrolls',
+        'codesnippet',
     ];
 
     /**
@@ -157,6 +158,11 @@ class Basic extends Toolbar
 
         $this->defaultPlugins = array_unique(array_merge($this->defaultPlugins, $plugins));
 
+        $editorSettings = api_get_configuration_value('editor_settings');
+        if (!empty($editorSettings) && isset($editorSettings['config']) && !empty($editorSettings['config'])) {
+            $config = array_merge($config, $editorSettings['config']);
+        }
+
         parent::__construct($toolbar, $config, $prefix);
     }
 
@@ -177,7 +183,7 @@ class Basic extends Toolbar
         $config['flash_flvPlayer'] = api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/plugins/flash/swf/player.swf';
 
         if (api_get_configuration_value('enable_uploadimage_editor')) {
-            $config['imageUploadUrl'] = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=ck_uploadimage&curdirpath=/';
+            $config['imageUploadUrl'] = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=ck_uploadimage';
         }
         /*filebrowserFlashBrowseUrl
         filebrowserFlashUploadUrl

@@ -33,6 +33,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     $formSent = $_POST['formSent'];
     $select_type = (int) ($_POST['select_type']);
     $file_type = $_POST['file_type'];
+    $includeUsers = (empty($_POST['include_users']) ? false : true);
+    $includeExtraFields = (isset($_POST['include_extrafields']) && 1 === (int) $_POST['include_extrafields']);
 
     if (2 == $select_type) {
         // Get selected courses from courses list in form sent
@@ -42,12 +44,14 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                 if (!in_array($course['code'], $selected_courses)) {
                     continue;
                 }
-                $courses[] = $course;
+                $courses[$course['real_id']] = $course;
             }
         }
     } else {
         // Get all courses
-        $courses = $course_list;
+        foreach ($course_list as $course) {
+            $courses[$course['real_id']] = $course;
+        }
     }
 
     if (!empty($courses)) {
@@ -59,12 +63,21 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             'CourseCategoryName',
             'Teacher',
             'Language',
-            'Users',
-            'OtherTeachers',
+            'Visibility',
         ];
-
+        if ($includeUsers) {
+            $listToExport[0][] = 'Users';
+            $listToExport[0][] = 'OtherTeachers';
+        }
+        if ($includeExtraFields) {
+            $extraField = new ExtraField('course');
+            $allExtraFields = $extraField->get_all();
+            foreach ($allExtraFields as $extra) {
+                $listToExport[0][] = $extra['display_text'];
+            }
+        }
         $dataToExport = [];
-        foreach ($courses as $course) {
+        foreach ($courses as $courseId => $course) {
             $dataToExport['code'] = str_replace(';', ',', $course['code']);
             $dataToExport['title'] = str_replace(';', ',', $course['title']);
             $dataToExport['category_code'] = str_replace(';', ',', $course['category_code']);
@@ -76,23 +89,47 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             }
             $dataToExport['tutor_name'] = str_replace(';', ',', $course['tutor_name']);
             $dataToExport['course_language'] = str_replace(';', ',', $course['course_language']);
-            $dataToExport['students'] = '';
-            $dataToExport['teachers'] = '';
-            $usersInCourse = CourseManager::get_user_list_from_course_code($course['code']);
+            $dataToExport['visibility'] = str_replace(';', ',', $course['visibility']);
 
-            if (is_array($usersInCourse) && !empty($usersInCourse)) {
-                foreach ($usersInCourse as $user) {
-                    if ($user['status_rel'] == COURSEMANAGER) {
-                        $dataToExport['teachers'] .= $user['username'].'|';
+            if ($includeUsers) {
+                $dataToExport['students'] = '';
+                $dataToExport['teachers'] = '';
+                $usersInCourse = CourseManager::get_user_list_from_course_code($course['code']);
+
+                if (is_array($usersInCourse) && !empty($usersInCourse)) {
+                    foreach ($usersInCourse as $user) {
+                        if ($user['status_rel'] == COURSEMANAGER) {
+                            $dataToExport['teachers'] .= $user['username'].'|';
+                        } else {
+                            $dataToExport['students'] .= $user['username'].'|';
+                        }
+                    }
+                }
+                $dataToExport['students'] = substr($dataToExport['students'], 0, -1);
+                $dataToExport['teachers'] = substr($dataToExport['teachers'], 0, -1);
+            }
+            $listToExport[$courseId] = $dataToExport;
+        }
+
+        if ($includeExtraFields) {
+            foreach ($allExtraFields as $extra) {
+                $default = $extraField->getDefaultValueByFieldId($extra['id']);
+                $fieldValues = $extraField->getAllValuesByFieldId($extra['id']);
+                foreach ($listToExport as $courseId => &$values) {
+                    if ($courseId === 0) {
+                        continue;
+                    }
+                    if (isset($fieldValues[$courseId])) {
+                        if (is_array($fieldValues[$courseId])) {
+                            $values['extra_'.$extra['variable']] = $fieldValues[$courseId];
+                        } else {
+                            $values[$extra['variable']] = $fieldValues[$courseId];
+                        }
                     } else {
-                        $dataToExport['students'] .= $user['username'].'|';
+                        $values[$extra['variable']] = $default;
                     }
                 }
             }
-            $dataToExport['students'] = substr($dataToExport['students'], 0, -1);
-            $dataToExport['teachers'] = substr($dataToExport['teachers'], 0, -1);
-
-            $listToExport[] = $dataToExport;
         }
 
         switch ($file_type) {
@@ -161,9 +198,13 @@ $form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV', 'csv'
 $form->addElement('radio', 'file_type', '', 'XLS', 'xls', null);
 $form->addElement('radio', 'file_type', null, 'XML', 'xml', null, ['id' => 'file_type_xml']);
 
-$form->setDefaults(['select_type' => '1', 'file_type' => 'csv']);
+$form->addElement('checkbox', 'include_users', get_lang('ExportUsers'), '', '1');
+
+$form->addElement('checkbox', 'include_extrafields', get_lang('ExportExtraFields'), '', '1');
+
+$form->setDefaults(['select_type' => '1', 'file_type' => 'csv', 'include_users' => '1', 'include_extrafields' => 0]);
 
 $form->addButtonExport(get_lang('ExportCourses'));
 $form->display();
 
-Display :: display_footer();
+Display::display_footer();

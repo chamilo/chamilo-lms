@@ -1,9 +1,28 @@
 <?php
 
-/* For licensing terms, see /license.txt */
+/* For licensing terms, see /license.txt
+ * This script disables users depending on 3 use cases and sends an email to the user to inform him.
+ * The 3 cases for disabling a user are :
+ *  * Case 1
+ *   If a learner has not validated his terms and conditions and has not connected to the
+ *   platform for more than 3 months, then deactivate his account and email the user
+ *  * Case 2
+ *   If a learner has validated his terms and conditions and has not connected to the platform
+ *   for more than 6 months then deactivate his account and email the learner and his superior.
+ *   The superior of the learner is also removed from this learner (un-assigned).
+ *  * Case 3
+ *   If a learner has completed his courses (a learner is considered to have finished his courses
+ *   if he has a generated the general certificate) and has not connected to the platform for more
+ *   than 6 months then deactivate his account and email the learner.
+ *
+ * We use a configuration setting from configuration.php to define which user is the sender ($senderId)
+ * of the e-mail as this script is called from the command line so has no clear user ID to start with.
+ * This script is either called from the command line manually or through a cronjob.
+ * */
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
+// Use configuration to decide which user will be the emails sender.
 $senderId = api_get_configuration_value('disable_user_conditions_sender_id');
 
 if (empty($senderId)) {

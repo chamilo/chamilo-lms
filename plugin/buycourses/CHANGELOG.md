@@ -1,3 +1,36 @@
+v7.4 - 2022-04-28
+====
+Add subscriptions support.
+
+If the plugin has already been installed, the update.php script must be executed (load plugin/buycourses/update.php in your browser) to update the database structure by adding the plugin_buycourses_subscription, plugin_buycourses_subscription_rel_sale, plugin_buycourses_subscription_period and plugin_buycourses_coupon_rel_subscription_sale.
+
+v7.3 - 2022-04-28
+====
+Add Cecabank payments support.
+
+If the plugin has already been installed, the update.php script must be executed (load plugin/buycourses/update.php in your browser) to update the structure of the tables in the database.
+
+v7.2 - 2021-11-22
+====
+Add Stripe payments support.
+
+If the plugin has already been installed, the update.php script must be executed (load plugin/buycourses/update.php in your browser) to update the structure of the tables in the database.
+
+v7.1 - 2021-10-26
+====
+Fix install issue with DB field type.
+
+v7.0 - 2021-08-12
+====
+Added support for discount coupons.
+Added a better table view for the sales report.
+Multiple fixes to navigation-related issues.
+
+WARNING: Updating this plugin (or Chamilo) without going through the specific update procedure for this plugin will break your sales pages.
+
+The file [your-host]/plugin/buycourses/update.php *MUST* be executed to update the structure of the tables
+in the database.
+
 v6.0 - 2020-11-29
 ====
 Added support for purchase instructions e-mail customization (although this 

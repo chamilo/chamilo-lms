@@ -3,6 +3,8 @@
 
 use ChamiloSession as Session;
 
+exit;
+
 /**
  * This file allows creating new svg and png documents with an online editor.
  *
@@ -121,7 +123,7 @@ $temp_file_2delete = Session::read('temp_realpath_image');
 if (empty($temp_file_2delete)) {
     // Create file
     if (0 != $groupId) {
-        $group_properties = GroupManager :: get_group_properties($groupId);
+        $group_properties = GroupManager::get_group_properties($groupId);
         $groupPath = $group_properties['directory'];
     } else {
         $groupPath = '';

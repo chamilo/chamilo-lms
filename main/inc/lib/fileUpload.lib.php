@@ -12,6 +12,8 @@
  * @todo test and reorganise
  */
 
+use enshrined\svgSanitize\Sanitizer;
+
 /**
  * Changes the file name extension from .php to .phps
  * Useful for securing a site.
@@ -28,7 +30,7 @@ function php2phps($file_name)
 }
 
 /**
- * Renames .htaccess & .HTACCESS to htaccess.txt.
+ * Renames .htaccess & .HTACCESS & .htAccess to htaccess.txt.
  *
  * @param string $filename
  *
@@ -36,7 +38,7 @@ function php2phps($file_name)
  */
 function htaccess2txt($filename)
 {
-    return str_replace(['.htaccess', '.HTACCESS'], ['htaccess.txt', 'htaccess.txt'], $filename);
+    return str_ireplace('.htaccess', 'htaccess.txt', $filename);
 }
 
 /**
@@ -191,6 +193,22 @@ function process_uploaded_file($uploaded_file, $show_output = true)
     return true;
 }
 
+function sanitizeSvgFile(string $fullPath)
+{
+    $fileType = mime_content_type($fullPath);
+
+    if ('image/svg+xml' !== $fileType) {
+        return;
+    }
+
+    $svgContent = file_get_contents($fullPath);
+
+    $sanitizer = new Sanitizer();
+    $cleanSvg = $sanitizer->sanitize($svgContent);
+
+    file_put_contents($fullPath, $cleanSvg);
+}
+
 /**
  * This function does the save-work for the documents.
  * It handles the uploaded file and adds the properties to the database
@@ -325,7 +343,7 @@ function handle_uploaded_document(
             }
 
             // Full path to where we want to store the file with trailing slash
-            $whereToSave = $documentDir.$uploadPath;
+            $whereToSave = Security::cleanPath($documentDir.$uploadPath).'/';
 
             // At least if the directory doesn't exist, tell so
             if (!is_dir($whereToSave)) {
@@ -394,6 +412,7 @@ function handle_uploaded_document(
                     $fileExists = file_exists($fullPath);
 
                     if (moveUploadedFile($uploadedFile, $fullPath)) {
+                        sanitizeSvgFile($fullPath);
                         chmod($fullPath, $filePermissions);
 
                         if ($fileExists && $docId) {
@@ -577,6 +596,7 @@ function handle_uploaded_document(
                     $filePath = $uploadPath.$fileSystemName;
 
                     if (moveUploadedFile($uploadedFile, $fullPath)) {
+                        sanitizeSvgFile($fullPath);
                         chmod($fullPath, $filePermissions);
                         // Put the document data in the database
                         $documentId = add_document(
@@ -739,16 +759,11 @@ function handle_uploaded_document(
     }
 }
 
-/**
- * @param string $file
- * @param string $storePath
- *
- * @return bool
- */
-function moveUploadedFile($file, $storePath)
+function moveUploadedFile(array $file, string $storePath): bool
 {
-    $handleFromFile = isset($file['from_file']) && $file['from_file'] ? true : false;
-    $moveFile = isset($file['move_file']) && $file['move_file'] ? true : false;
+    $handleFromFile = isset($file['from_file']) && $file['from_file'];
+    $moveFile = isset($file['move_file']) && $file['move_file'];
+    $copyFile = isset($file['copy_file']) && $file['copy_file'];
     if ($moveFile) {
         $copied = copy($file['tmp_name'], $storePath);
 
@@ -756,6 +771,14 @@ function moveUploadedFile($file, $storePath)
             return false;
         }
     }
+
+    if ($copyFile) {
+        $copied = copy($file['tmp_name'], $storePath);
+        unlink($file['tmp_name']);
+
+        return $copied;
+    }
+
     if ($handleFromFile) {
         return file_exists($file['tmp_name']);
     } else {
@@ -1342,7 +1365,7 @@ function filter_extension(&$filename)
             if ($skip == 'true') {
                 return 0;
             } else {
-                $new_ext = api_get_setting('upload_extensions_replace_by');
+                $new_ext = getReplacedByExtension();
                 $filename = str_replace('.'.$ext, '.'.$new_ext, $filename);
 
                 return 1;
@@ -1362,7 +1385,7 @@ function filter_extension(&$filename)
             if ($skip == 'true') {
                 return 0;
             } else {
-                $new_ext = api_get_setting('upload_extensions_replace_by');
+                $new_ext = getReplacedByExtension();
                 $filename = str_replace('.'.$ext, '.'.$new_ext, $filename);
 
                 return 1;
@@ -1371,6 +1394,13 @@ function filter_extension(&$filename)
             return 1;
         }
     }
+}
+
+function getReplacedByExtension()
+{
+    $extension = api_get_setting('upload_extensions_replace_by');
+
+    return 'REPLACED_'.api_replace_dangerous_char(str_replace('.', '', $extension));
 }
 
 /**
@@ -1664,13 +1694,13 @@ function search_img_from_html($html_file)
  * @param int    $session_id
  * @param int    $to_group_id             group.id
  * @param int    $to_user_id
- * @param string $base_work_dir           /var/www/chamilo/courses/ABC/document
+ * @param string $base_work_dir           /var/www/chamilo/app/courses/ABC/document or api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/document'
  * @param string $desired_dir_name        complete path of the desired name
  *                                        Example: /folder1/folder2
  * @param string $title                   "folder2"
  * @param int    $visibility              (0 for invisible, 1 for visible, 2 for deleted)
  * @param bool   $generateNewNameIfExists
- * @param bool   $sendNotification        depends in conf setting "send_notification_when_document_added"
+ * @param bool   $sendNotification        depends on conf setting "send_notification_when_document_added"
  *
  * @return string actual directory name if it succeeds,
  *                boolean false otherwise
@@ -2160,4 +2190,68 @@ function add_all_documents_in_folder_to_database(
             }
         }
     }
+}
+
+/**
+ * Get the uploax max filesize from ini php in bytes.
+ *
+ * @return int
+ */
+function getIniMaxFileSizeInBytes($humanReadable = false, $checkMessageSetting = false)
+{
+    $maxSize = 0;
+    $uploadMaxFilesize = ini_get('upload_max_filesize');
+    $fileSizeForTeacher = getFileUploadSizeLimitForTeacher();
+    if (!empty($fileSizeForTeacher)) {
+        $uploadMaxFilesize = $fileSizeForTeacher.'M';
+    }
+
+    if (empty($fileSizeForTeacher) && $checkMessageSetting) {
+        $uploadMaxFilesize = api_get_setting('message_max_upload_filesize'); // in bytes
+        if ($humanReadable) {
+            $uploadMaxFilesize = format_file_size($uploadMaxFilesize);
+        }
+
+        return $uploadMaxFilesize;
+    }
+
+    if ($humanReadable) {
+        return $uploadMaxFilesize;
+    }
+
+    if (preg_match('/^([0-9]+)([a-zA-Z]*)$/', $uploadMaxFilesize, $matches)) {
+        // see http://www.php.net/manual/en/faq.using.php#faq.using.shorthandbytes
+        switch (strtoupper($matches['2'])) {
+            case 'G':
+                $maxSize = $matches['1'] * 1073741824;
+                break;
+            case 'M':
+                $maxSize = $matches['1'] * 1048576;
+                break;
+            case 'K':
+                $maxSize = $matches['1'] * 1024;
+                break;
+            default:
+                $maxSize = $matches['1'];
+        }
+    }
+    $maxSize = (int) $maxSize;
+
+    return $maxSize;
+}
+
+/**
+ * Get the uploax max filesize from configuration.php for trainers in bytes.
+ *
+ * @return int
+ */
+function getFileUploadSizeLimitForTeacher()
+{
+    $size = 0;
+    $settingValue = (int) api_get_configuration_value('file_upload_size_limit_for_teacher'); // setting value in MB
+    if ($settingValue > 0 && (api_is_allowed_to_create_course() && !api_is_platform_admin())) {
+        $size = $settingValue;
+    }
+
+    return $size;
 }

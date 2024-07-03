@@ -3,6 +3,10 @@
 
 namespace Chamilo\CoreBundle\Composer;
 
+use Doctrine\DBAL\Migrations\Tools\Console\Command\GenerateCommand;
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -259,6 +263,40 @@ class ScriptHandler
         foreach ($cssFiles as $file) {
             $fs->copy($appCss.$file, $newPath.$file, true);
         }
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public static function generateDoctrineProxies()
+    {
+        $configurationFile = __DIR__.'/../../../../app/config/configuration.php';
+
+        if (!is_file($configurationFile)) {
+            echo 'app/config/configuration.php file does not exits.'.PHP_EOL;
+
+            return;
+        }
+
+        $helperSet = require __DIR__.'/../../../../cli-config.php';
+
+        $application = ConsoleRunner::createApplication(
+            $helperSet,
+            [
+                new GenerateCommand(),
+            ]
+        );
+
+        $application->setAutoExit(false);
+
+        $input = new ArrayInput([
+            'command' => 'orm:generate:proxies',
+        ]);
+        $output = new BufferedOutput();
+
+        $application->run($input, $output);
+
+        echo $output->fetch();
     }
 
     /**

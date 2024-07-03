@@ -7,7 +7,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 
 $is_allowedToTrack = api_is_platform_admin(true, true) ||
-    api_is_teacher() || api_is_course_tutor();
+    api_is_teacher() || api_is_course_tutor() || api_is_student_boss();
 
 if (!$is_allowedToTrack) {
     api_not_allowed(true);
@@ -76,8 +76,8 @@ $form = new FormValidator(
     null,
     ['id' => 'myform']
 );
-$form->addElement('text', 'from', get_lang('From'));
-$form->addElement('text', 'to', get_lang('Until'));
+$form->addElement('text', 'from', get_lang('From'), ['placeholder' => get_lang('DateFormatddmmyyyy')]);
+$form->addElement('text', 'to', get_lang('Until'), ['placeholder' => get_lang('DateFormatddmmyyyy')]);
 $form->addHidden('user_id', $userId);
 $form->addRule('from', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('from', get_lang('ThisFieldIsRequired').' dd/mm/yyyy', 'callback', 'validateDate');
@@ -103,7 +103,7 @@ function validateDate($value)
 
 function getReport($userId, $from, $to, $addTime = false)
 {
-    $sessionCategories = UserManager::get_sessions_by_category($userId, false);
+    $sessionCategories = UserManager::get_sessions_by_category($userId, false, true, true);
     $report = [];
     $minLogin = 0;
     $maxLogin = 0;
@@ -131,7 +131,7 @@ function getReport($userId, $from, $to, $addTime = false)
                     $record = [
                         customDate($item['login'], true),
                         customDate($item['logout'], true),
-                        api_format_time($item['duration'], 'js'),
+                        api_format_time($item['duration'], 'lang'),
                     ];
 
                     $totalDuration += $item['duration'];
@@ -166,7 +166,7 @@ function getReport($userId, $from, $to, $addTime = false)
                     $record = [
                         customDate($partialMinLogin, true),
                         customDate($partialMaxLogin, true),
-                        api_format_time($partialDuration, 'js'),
+                        api_format_time($partialDuration, 'lang'),
                     ];
                     $report[$sessionId]['courses'][$course['real_id']][] = $record;
                     $report[$sessionId]['name'][$course['real_id']] = $courseInfo['title'].'&nbsp; ('.$session['session_name'].')';
@@ -202,7 +202,7 @@ function getReport($userId, $from, $to, $addTime = false)
             $record = [
                 customDate($item['login'], true),
                 customDate($item['logout'], true),
-                api_format_time($item['duration'], 'js'),
+                api_format_time($item['duration'], 'lang'),
             ];
             $report[0]['courses'][$course['course_id']][] = $record;
             $report[0]['name'][$course['course_id']] = $course['title'];
@@ -236,7 +236,7 @@ function getReport($userId, $from, $to, $addTime = false)
             $record = [
                 customDate($partialMinLogin, true),
                 customDate($partialMaxLogin, true),
-                api_format_time($partialDuration, 'js'),
+                api_format_time($partialDuration, 'lang'),
             ];
 
             $report[0]['courses'][$course['course_id']][] = $record;
@@ -261,7 +261,7 @@ function getReport($userId, $from, $to, $addTime = false)
     $table->setCellContents($row, $column++, customDate($minLogin));
     $table->setCellContents($row, $column++, customDate($maxLogin));
     $table->setRowAttributes($row, ['style' => 'font-weight:bold']);
-    $table->setCellContents($row, $column++, api_format_time($totalDuration, 'js'));
+    $table->setCellContents($row, $column++, api_format_time($totalDuration, 'lang'));
 
     $first = $table->toHtml();
 
@@ -401,8 +401,8 @@ $formByDay = new FormValidator(
     null,
     ['id' => 'by_day']
 );
-$formByDay->addElement('text', 'from', get_lang('From'));
-$formByDay->addElement('text', 'to', get_lang('Until'));
+$formByDay->addElement('text', 'from', get_lang('From'), ['placeholder' => get_lang('DateFormatddmmyyyy')]);
+$formByDay->addElement('text', 'to', get_lang('Until'), ['placeholder' => get_lang('DateFormatddmmyyyy')]);
 $formByDay->addCheckBox('reduced', null, get_lang('ReducedReport'));
 $formByDay->addHidden('user_id', $userId);
 $formByDay->addRule('from', get_lang('ThisFieldIsRequired'), 'required');
@@ -529,7 +529,7 @@ if ($formByDay->validate()) {
         $column = 0;
         $table->setCellContents($row, $column++, customDate($data['login_date'], true));
         $table->setCellContents($row, $column++, customDate($data['logout_date'], true));
-        $table->setCellContents($row, $column, api_format_time($data['diff'], 'js'));
+        $table->setCellContents($row, $column, api_format_time($data['diff'], 'lang'));
 
         $result = getReport($userId, $dateToCheck, $dateToCheck, true);
         $first = $result['first'];
@@ -542,7 +542,7 @@ if ($formByDay->validate()) {
             ).'</div>';
         $tableList .= $table->toHtml();
         if (!$reduced && !empty($total)) {
-            $diff = get_lang('NotInCourse').' '.api_format_time($data['diff'] - $total, 'js');
+            $diff = get_lang('NotInCourse').' '.api_format_time($data['diff'] - $total, 'lang');
             $tableList .= $courseSessionTable;
             $tableList .= $totalCourseSessionTable;
             $tableList .= '<div style="text-align: center;">'.Display::page_subheader3($diff).'</div>';
@@ -588,7 +588,7 @@ if ($formByDay->validate()) {
 $formByDay->setDefaults(['from' => $startDate, 'to' => $endDate]);
 
 Display::display_header('');
-echo Display::page_header(get_lang('DetailsStudentInCourse'));
+echo Display::page_header(get_lang('CertificateOfAchievement'), get_lang('CertificateOfAchievementHelp'));
 echo Display::page_subheader(
     get_lang('User').': '.$userInfo['complete_name']
 );

@@ -2,6 +2,29 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$OpenBadgesBannerText = "Waqaychaqa kani, tukuykunapaq manaqa kani, maymantapachapi hamut'ayta rurayninpi tayqitaqmi. Mana kaniwa maymantapi tariqan, rikusqanmi rurayninpi q'osqomantaqmi riqsichkan yanapaq, tayqikunapaqmi ushankumantaqmi kaniwa, kay riqsinpi kani rurayninpi tayqipi hukninpi simikunapaq. OpenBadges ñisqaqa huk <a href='http://openbadges.org'>http://openbadges.org/</a> piwaymi kani.";
+$OpenBadgesIntroduction = "Kay wataqaqa nisqawan, kaypi llaqtayuqkunamanpaq kawsayninpiqa, tukuykunapaq rikurqaqa wakichaq rurayninpi q'osqonmanapaq.";
+$DesignANewBadgeComment = "Wakichaq rurayniyqaqa kani, wakichaq wakichaykunapaqmi kani kawsayninpiqaqa, wakichaq pachamanapaqmi kani.";
+$TheBadgesWillBeSentToThatBackpack = "Kay riqsinpi hukni qhawaypi kaniqa";
+$BackpackDetails = "Qhawaypi t'ikrayninpi";
+$CriteriaToEarnTheBadge = "Riqsinpi rikurqan";
+$BadgePreview = "Riqsinpi sutiy";
+$DesignNewBadge = "Wakichaq riqsinpi wakichay";
+$TotalX = "Suma: %s";
+$DownloadBadges = "Riqsinpi kawsayninpi kawsay";
+$IssuerDetails = "Riqsinpi hamutyuqkunapaq t'ikrayninpi";
+$CreateBadge = "Riqsinpi wakichay";
+$Badges = "Riqsinpi";
+$StudentsWhoAchievedTheSkillX = "Tukuykuna %s rikurqan";
+$AchievedSkillInCourseX = "Tukuykuna %s kawsayninpi rikurqan";
+$SkillsReport = "Rikurqanpaq wanku";
+$AssignedUsersListToStudentBoss = "Kanmanqaqa tukuykunawan yanapaqman apaqa";
+$AssignUsersToBoss = "Tukuykunawan yanapaqman apaqa";
+$RoleStudentBoss = "Tukuykunawan yanapaqman";
+$CosecantCsc = "Cosecante:\t\t\tcsc(x)";
+$HyperbolicCosecantCsch = "Cosecante hiperbólica:\t\tcsch(x)";
+$ArccosecantArccsc = "Arccosecante:\t\t\tarccsc(x)";
+$HyperbolicArccosecantArccsch = "Arccosecante hiperbólica:\t\tarccsch(x)";
 $ShowAllEvents = "Qhawachiy llipin ruwaykunata";
 $Month = "Killa";
 $Hour = "Tuy";

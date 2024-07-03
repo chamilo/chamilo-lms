@@ -119,6 +119,10 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
         $onlyTeachers = true;
     }
 
+    if (isset($_SESSION['form_values'])) {
+        $default = $_SESSION['form_values'];
+    }
+
     $form = new FormValidator(
         'compose_message',
         null,
@@ -183,6 +187,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
                             'url' => api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users',
                         ]
                     );
+                    $form->addRule('users', get_lang('ThisFieldIsRequired'), 'required');
                 }
             } else {
                 $form->addElement('hidden', 'hidden_user', $default['users'][0], ['id' => 'hidden_user']);
@@ -202,8 +207,8 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
         'content',
         get_lang('Message'),
         false,
-        false,
-        ['ToolbarSet' => 'Messages', 'Width' => '100%', 'Height' => '250', 'style' => true]
+        true,
+        ['ToolbarSet' => 'Messages']
     );
 
     if (isset($_GET['re_id'])) {
@@ -221,7 +226,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
         );
     }
 
-    if (isset($_GET['forward_id'])) {
+    if (isset($_GET['forward_id']) && MessageManager::isUserOwner(api_get_user_id(), (int) $_GET['forward_id'])) {
         $forwardId = (int) $_GET['forward_id'];
         $message_reply_info = MessageManager::get_message_by_id($forwardId);
         $attachments = MessageManager::getAttachmentLinkList($forwardId, MessageManager::MESSAGE_TYPE_INBOX);
@@ -240,6 +245,9 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
         $forwardMessage .= get_lang('To').': '.$receiverInfo['complete_name'].' - '.$receiverInfo['email'].' <br />';
         $default['content'] = '<p><br/></p>'.$forwardMessage.'<br />'.Security::filter_terms($message_reply_info['content']);
     }
+
+    $extrafield = new ExtraField('message');
+    $extraHtml = $extrafield->addElements($form);
 
     if (empty($group_id)) {
         $form->addLabel(
@@ -268,7 +276,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
             get_lang('AddOneMoreFile').'</a></span>&nbsp;('.
             sprintf(
                 get_lang('MaximunFileSizeX'),
-                format_file_size(api_get_setting('message_max_upload_filesize'))
+                getIniMaxFileSizeInBytes(true, true)
             ).')'
         );
     }
@@ -297,6 +305,10 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
         }
 
         if ($check) {
+            if (isset($_SESSION['form_values'])) {
+                unset($_SESSION['form_values']);
+            }
+
             $user_list = $default['users'];
             $file_comments = $_POST['legend'];
             $title = $default['title'];
@@ -306,6 +318,16 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
             $forwardId = isset($_POST['forward_id']) ? $_POST['forward_id'] : false;
 
             if (is_array($user_list) && count($user_list) > 0) {
+                $extraParams = [];
+
+                foreach ($form->exportValues() as $key => $value) {
+                    if (!str_contains($key, 'extra_')) {
+                        continue;
+                    }
+
+                    $extraParams[$key] = $value;
+                }
+
                 // All is well, send the message
                 foreach ($user_list as $userId) {
                     $res = MessageManager::send_message(
@@ -322,7 +344,10 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
                         false,
                         $forwardId,
                         [],
-                        true
+                        true,
+                        false,
+                        0,
+                        $extraParams
                     );
 
                     if ($res) {
@@ -332,6 +357,10 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
                             'confirmation',
                             false
                         ));
+                    } else {
+                        $_SESSION['form_values'] = $default;
+                        header('Location: '.api_request_uri());
+                        exit;
                     }
                 }
                 MessageManager::cleanAudioMessage();
@@ -348,6 +377,8 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
         $form->setConstants(['sec_token' => $token]);
         $html .= $form->returnForm();
     }
+
+    $html .= '<script>$(function () { '.$extraHtml['jquery_ready_content'].' });</script>';
 
     return $html;
 }
@@ -451,10 +482,10 @@ if (!isset($_POST['compose'])) {
             if (isset($_POST['hidden_user'])) {
                 $default['users'] = [$_POST['hidden_user']];
             }
-            $social_right_content .= manageForm($default, null, null, $tpl);
-        } else {
+        } /*else {
             $social_right_content .= Display::return_message(get_lang('ErrorSendingMessage'), 'error');
-        }
+        }*/
+        $social_right_content .= manageForm($default, null, null, $tpl);
     }
 }
 

@@ -255,7 +255,7 @@ class ExerciseLink extends AbstractLink
         $sessionId = $this->get_session_id();
         $courseId = $this->getCourseId();
         $exerciseData = $this->get_exercise_data();
-        $exerciseId = isset($exerciseData['id']) ? (int) $exerciseData['id'] : 0;
+        $exerciseId = isset($exerciseData['iid']) ? (int) $exerciseData['iid'] : 0;
         $stud_id = (int) $stud_id;
 
         if (empty($exerciseId)) {
@@ -472,7 +472,7 @@ class ExerciseLink extends AbstractLink
     {
         $sessionId = $this->get_session_id();
         $data = $this->get_exercise_data();
-        $exerciseId = $data['id'];
+        $exerciseId = $data['iid'];
         $path = isset($data['path']) ? $data['path'] : '';
 
         return api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?'
@@ -514,7 +514,7 @@ class ExerciseLink extends AbstractLink
     public function getLpListToString()
     {
         $data = $this->get_exercise_data();
-        $lpList = Exercise::getLpListFromExercise($data['id'], $this->getCourseId());
+        $lpList = Exercise::getLpListFromExercise($data['iid'], $this->getCourseId());
         $lpListToString = '';
         if (!empty($lpList)) {
             foreach ($lpList as &$list) {

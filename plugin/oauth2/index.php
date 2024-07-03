@@ -8,6 +8,10 @@
  */
 
 /** @var OAuth2 $oAuth2Plugin */
+
+use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
+use League\OAuth2\Client\Token\AccessToken;
+
 $oAuth2Plugin = OAuth2::create();
 
 if ($oAuth2Plugin->get(OAuth2::SETTING_ENABLE) === 'true') {
@@ -30,16 +34,17 @@ if ($oAuth2Plugin->get(OAuth2::SETTING_ENABLE) === 'true') {
     }
 
     if (ChamiloSession::has('oauth2AccessToken')) {
-        $accessToken = new \League\OAuth2\Client\Token\AccessToken(ChamiloSession::read('oauth2AccessToken'));
+        $accessToken = new AccessToken(ChamiloSession::read('oauth2AccessToken'));
         if ($accessToken->hasExpired()) {
             $provider = $oAuth2Plugin->getProvider();
             try {
-                $newAccessToken = $provider->getAccessToken('refresh_token', [
-                    'refresh_token' => $accessToken->getRefreshToken(),
-                ]);
+                $newAccessToken = $provider->getAccessToken(
+                    'refresh_token',
+                    ['refresh_token' => $accessToken->getRefreshToken()]
+                );
                 ChamiloSession::write('oauth2AccessToken', $newAccessToken->jsonSerialize());
-            } catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $exception) {
-                online_logout();
+            } catch (IdentityProviderException|\BadMethodCallException $e) {
+                online_logout(null, true);
             }
         }
     }

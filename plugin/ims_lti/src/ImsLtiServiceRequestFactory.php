@@ -7,8 +7,6 @@
 class ImsLtiServiceRequestFactory
 {
     /**
-     * @param SimpleXMLElement $xml
-     *
      * @return ImsLtiServiceRequest|null
      */
     public static function create(SimpleXMLElement $xml)

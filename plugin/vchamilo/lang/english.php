@@ -4,7 +4,7 @@
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author Valery Fremaux <valery.fremaux@gmail.com>
  */
-$strings['archiverealroot'] = 'Archive container real root (no symlinks here)';
+$strings['archiverealroot'] = 'Cache container real root (system path, no symlinks here)';
 $strings['backtoindex'] = 'Back to instance index';
 $strings['badconnection'] = 'Connection FAILED';
 $strings['cancel'] = 'Cancel';
@@ -45,7 +45,7 @@ $strings['maindatabase'] = 'Database name';
 $strings['manage_instances'] = 'Go to instance manager';
 $strings['newinstance'] = 'Add new instance';
 $strings['no'] = 'No';
-$strings['plugin_comment'] = 'Allows virtualizing chamilo.';
+$strings['plugin_comment'] = 'Allows the virtualization of Chamilo. Use your main Chamilo installation as a hub, then create instances based on the same code but with different databases, and generate snapshots, and manage all instances like VM images.';
 $strings['plugin_title'] = 'Virtual Chamilo';
 $strings['proxysettings'] = 'Proxy settings';
 $strings['registerinstance'] = 'Register an instance';
@@ -115,7 +115,7 @@ $strings['CoursePath'] = 'Path to courses directory';
 $strings['HomePath'] = 'Path to home directory';
 $strings['UploadPath'] = 'Path to upload directory';
 
-$strings['ArchiveUrl'] = 'Archive URL';
+$strings['ArchiveUrl'] = 'Cache URL';
 $strings['HomeUrl'] = 'Home URL';
 $strings['UploadUrl'] = 'Upload URL';
 $strings['CourseUrl'] = 'Course URL';

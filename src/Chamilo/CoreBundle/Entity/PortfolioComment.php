@@ -22,6 +22,17 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class PortfolioComment
 {
+    public const VISIBILITY_VISIBLE = 1;
+    public const VISIBILITY_PER_USER = 2;
+
+    /**
+     * @var int
+     *
+     * Add @ to the next line if portfolio_advanced_sharing config setting is true
+     * ORM\Column(name="visibility", type="smallint", options={"default": 1})
+     */
+    protected $visibility = 1;
+
     /**
      * @var int
      *
@@ -115,12 +126,20 @@ class PortfolioComment
     private $score;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_template", type="boolean", options={"default": false})
+     */
+    private $isTemplate = false;
+
+    /**
      * PortfolioComment constructor.
      */
     public function __construct()
     {
         $this->isImportant = false;
         $this->children = new ArrayCollection();
+        $this->visibility = 1;
     }
 
     public function getId(): int
@@ -248,5 +267,29 @@ class PortfolioComment
     public function getLvl(): int
     {
         return $this->lvl;
+    }
+
+    public function isTemplate(): bool
+    {
+        return $this->isTemplate;
+    }
+
+    public function setIsTemplate(bool $isTemplate): PortfolioComment
+    {
+        $this->isTemplate = $isTemplate;
+
+        return $this;
+    }
+
+    public function getVisibility(): int
+    {
+        return $this->visibility;
+    }
+
+    public function setVisibility(int $visibility): PortfolioComment
+    {
+        $this->visibility = $visibility;
+
+        return $this;
     }
 }

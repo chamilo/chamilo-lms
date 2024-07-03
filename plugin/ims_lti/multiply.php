@@ -3,13 +3,12 @@
 
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 $cidReset = true;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-api_protect_admin_script(false);
+api_protect_admin_script();
 
 $plugin = ImsLtiPlugin::create();
 $webPluginPath = api_get_path(WEB_PLUGIN_PATH).'ims_lti/';
@@ -65,7 +64,7 @@ try {
         $formValues['tool_visible'] = !empty($formValues['tool_visible']);
 
         if (!empty($formValues['all_courses'])) {
-            $courseList  = Database::select('id', Database::get_main_table(TABLE_MAIN_COURSE));
+            $courseList = Database::select('id', Database::get_main_table(TABLE_MAIN_COURSE));
             $formValues['courses'] = array_keys($courseList);
         }
 

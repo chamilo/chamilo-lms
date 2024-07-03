@@ -88,15 +88,10 @@ $tpl->assign('sessions_are_included', $includeSessions);
 $tpl->assign('services_are_included', $includeServices);
 $tpl->assign('pagination', $pagination);
 
-$sessionList = $plugin->getCatalogSessionList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, 'all', 0);
-$coursesExist = true;
-$sessionExist = true;
-if (count($sessionList) <= 0) {
-    $sessionExist = false;
-}
+$countSessions = $plugin->getCatalogSessionList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, 'count');
 
-$tpl->assign('coursesExist', $coursesExist);
-$tpl->assign('sessionExist', $sessionExist);
+$tpl->assign('coursesExist', true);
+$tpl->assign('sessionExist', $countSessions > 0);
 
 $content = $tpl->fetch('buycourses/view/catalog.tpl');
 

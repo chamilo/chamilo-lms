@@ -34,3 +34,4 @@ $strings['group_id_session_admin'] = 'ID de grupo admin de sesiones';
 $strings['group_id_session_admin_help'] = 'El ID de grupo para administradores de sesiones. Si deja este campo vacío, ningún usuario será creado como administrador de sesiones.';
 $strings['group_id_teacher'] = 'ID de grupo profesor';
 $strings['group_id_teacher_help'] = 'El ID de grupo para profesores. Si deja este campo vacío, ningún usuario será creado como profesor.';
+$strings['additional_interaction_required'] = 'Alguna interacción adicional es necesaria para identificarlo/a. Por favor conéctese primero a través de su <a href="https://login.microsoftonline.com" target="_blank">sistema de autenticación</a>, luego regrese aquí para logearse.';

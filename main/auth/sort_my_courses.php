@@ -12,7 +12,7 @@ $auth = new Auth();
 $user_course_categories = CourseManager::get_user_course_categories(api_get_user_id());
 $courses_in_category = $auth->getCoursesInCategory(false);
 
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+$action = isset($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : '';
 $currentUrl = api_get_self();
 
 $interbreadcrumb[] = [
@@ -22,7 +22,9 @@ $interbreadcrumb[] = [
 
 // We are moving the course of the user to a different user defined course category (=Sort My Courses).
 if (isset($_POST['submit_change_course_category'])) {
-    $result = $auth->updateCourseCategory($_POST['course_2_edit_category'], $_POST['course_categories']);
+    $course2EditCategory = Security::remove_XSS($_POST['course_2_edit_category']);
+    $courseCategories = Security::remove_XSS($_POST['course_categories']);
+    $result = $auth->updateCourseCategory($course2EditCategory, $courseCategories);
     if ($result) {
         Display::addFlash(
             Display::return_message(get_lang('EditCourseCategorySucces'))
@@ -36,7 +38,9 @@ if (isset($_POST['submit_change_course_category'])) {
 if (isset($_POST['submit_edit_course_category']) &&
     isset($_POST['title_course_category'])
 ) {
-    $result = $auth->store_edit_course_category($_POST['title_course_category'], $_POST['category_id']);
+    $titleCourseCategory = Security::remove_XSS($_POST['title_course_category']);
+    $categoryId = Security::remove_XSS($_POST['category_id']);
+    $result = $auth->store_edit_course_category($titleCourseCategory, $categoryId);
     if ($result) {
         Display::addFlash(
             Display::return_message(get_lang('CourseCategoryEditStored'))
@@ -52,7 +56,8 @@ if (isset($_POST['create_course_category']) &&
     isset($_POST['title_course_category']) &&
     strlen(trim($_POST['title_course_category'])) > 0
 ) {
-    $result = $auth->store_course_category($_POST['title_course_category']);
+    $titleCourseCategory = Security::remove_XSS($_POST['title_course_category']);
+    $result = $auth->store_course_category($titleCourseCategory);
     if ($result) {
         Display::addFlash(
             Display::return_message(get_lang('CourseCategoryStored'))
@@ -71,16 +76,19 @@ if (isset($_POST['create_course_category']) &&
 
 // We are moving a course or category of the user up/down the list (=Sort My Courses).
 if (isset($_GET['move'])) {
-    if (isset($_GET['course'])) {
-        $result = $auth->move_course($_GET['move'], $_GET['course'], $_GET['category']);
+    $getCourse = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : '';
+    $getMove = Security::remove_XSS($_GET['move']);
+    $getCategory = isset($_GET['category']) ? Security::remove_XSS($_GET['category']) : '';
+    if (!empty($getCourse)) {
+        $result = $auth->move_course($getMove, $getCourse, $getCategory);
         if ($result) {
             Display::addFlash(
                 Display::return_message(get_lang('CourseSortingDone'))
             );
         }
     }
-    if (isset($_GET['category']) && !isset($_GET['course'])) {
-        $result = $auth->move_category($_GET['move'], $_GET['category']);
+    if (!empty($getCategory) && empty($getCourse)) {
+        $result = $auth->move_category($getMove, $getCategory);
         if ($result) {
             Display::addFlash(
                 Display::return_message(get_lang('CategorySortingDone'))
@@ -152,7 +160,8 @@ switch ($action) {
         // we are deleting a course category
         if (isset($_GET['id'])) {
             if (Security::check_token('get')) {
-                $result = $auth->delete_course_category($_GET['id']);
+                $getId = Security::remove_XSS($_GET['id']);
+                $result = $auth->delete_course_category($getId);
                 if ($result) {
                     Display::addFlash(
                         Display::return_message(get_lang('CourseCategoryDeleted'))
@@ -182,7 +191,7 @@ switch ($action) {
         $userId = api_get_user_id();
         $categoryId = isset($_REQUEST['categoryid']) ? (int) $_REQUEST['categoryid'] : 0;
         $option = isset($_REQUEST['option']) ? (int) $_REQUEST['option'] : 0;
-        $redirect = isset($_REQUEST['redirect']) ? $_REQUEST['redirect'] : 0;
+        $redirect = isset($_REQUEST['redirect']) ? Security::remove_XSS($_REQUEST['redirect']) : 0;
 
         if (empty($userId) || empty($categoryId)) {
             api_not_allowed(true);
@@ -205,6 +214,28 @@ switch ($action) {
         header('Location: '.$url);
         exit;
         break;
+}
+
+function generateUnsubscribeForm(string $courseCode, string $secToken): string
+{
+    $alertMessage = api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES);
+
+    $form = new FormValidator(
+        'frm_unsubscribe',
+        'get',
+        api_get_path(WEB_CODE_PATH).'auth/courses.php',
+        '',
+        [
+            'onsubmit' => 'javascript: if (!confirm(\''.addslashes($alertMessage).'\')) return false;',
+        ],
+        FormValidator::LAYOUT_INLINE
+    );
+    $form->addHidden('action', 'unsubscribe');
+    $form->addHidden('sec_token', $secToken);
+    $form->addHidden('course_code', $courseCode);
+    $form->addButton('unsub', get_lang('Unsubscribe'));
+
+    return $form->returnForm();
 }
 
 Display::display_header();
@@ -309,8 +340,7 @@ if (!empty($user_course_categories)) {
                 if (api_get_setting('display_teacher_in_courselist') === 'true') {
                     echo $course['tutor'];
                 }
-                echo '</td><td valign="top">';
-                echo '<div style="float:left;width:110px;">';
+                echo '</td><td class="text-right">';
                 if (api_get_setting('show_courses_descriptions_in_catalog') === 'true') {
                     $icon_title = get_lang('CourseDetails').' - '.$course['title'];
                     $url = api_get_path(
@@ -346,26 +376,12 @@ if (!empty($user_course_categories)) {
                 <?php
                 } else {
                     echo Display::return_icon('down_na.png', get_lang('Down'), '', 22);
-                } ?>
-              </div>
-              <div style="float:left; margin-right:10px;">
-                <?php
-                    if ($course['status'] != 1) {
-                        if ($course['unsubscr'] == 1) {
-                            ?>
-
-                <form action="<?php echo api_get_self(); ?>" method="post" onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding())); ?>')) return false">
-                    <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
-                    <input type="hidden" name="unsubscribe" value="<?php echo $course['code']; ?>" />
-                     <button class="btn btn-default" value="<?php echo get_lang('Unsubscribe'); ?>" name="unsub">
-                    <?php echo get_lang('Unsubscribe'); ?>
-                    </button>
-                </form>
-              </div>
-                  <?php
-                        }
-                    }
+                }
+                if ($course['status'] != 1 && $course['unsubscr'] == 1) {
+                    echo generateUnsubscribeForm($course['code'], $stok);
+                }
                 $key++;
+                echo '</td></tr>';
             }
             echo '</table>';
         }
@@ -393,7 +409,6 @@ if (!empty($courses_without_category)) {
             echo $course['tutor'];
         }
         echo '</td><td class="text-right">';
-        echo '<div>';
         if (api_get_setting('show_courses_descriptions_in_catalog') === 'true') {
             $icon_title = get_lang('CourseDetails').' - '.$course['title'];
             $url = api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'];
@@ -434,31 +449,15 @@ if (!empty($courses_without_category)) {
             <?php
         } else {
             echo Display::return_icon('down_na.png', get_lang('Down'), '', 22);
-        } ?>
-                </div>
-                 <div style="margin-right:10px;">
-            <?php
-                if ($course['status'] != 1) {
-                    if ($course['unsubscr'] == 1) {
-                        ?>
-                <!-- changed link to submit to avoid action by the search tool indexer -->
-                <form action="<?php echo api_get_self(); ?>"
-                      method="post"
-                      onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding())); ?>')) return false;">
-                    <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
-                    <input type="hidden" name="unsubscribe" value="<?php echo $course['code']; ?>" />
-                    <button class="btn btn-default" value="<?php echo get_lang('Unsubscribe'); ?>" name="unsub">
-                        <?php echo get_lang('Unsubscribe'); ?>
-                    </button>
-                </form>
-                </div>
-              <?php
-                    }
-                } ?>
-            </td>
-            </tr>
-            <?php
-            $key++;
+        }
+        if ($course['status'] != 1) {
+            if ($course['unsubscr'] == 1) {
+                echo generateUnsubscribeForm($course['code'], $stok);
+            }
+        }
+        echo '</td></tr>';
+
+        $key++;
     }
 }
 ?>

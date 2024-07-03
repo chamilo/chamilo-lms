@@ -13,9 +13,9 @@ $selectCat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 $catadd = new Category();
 $catadd->set_user_id(api_get_user_id());
 $catadd->set_parent_id($selectCat);
-$catcourse = Category :: load($selectCat);
+$catcourse = Category::load($selectCat);
 $form = new CatForm(
-    CatForm :: TYPE_SELECT_COURSE,
+    CatForm::TYPE_SELECT_COURSE,
     $catadd,
     'add_cat_form',
     null,
@@ -35,6 +35,6 @@ $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$selectCat,
     'name' => get_lang('Gradebook'),
 ];
-Display :: display_header(get_lang('NewCategory'));
+Display::display_header(get_lang('NewCategory'));
 $form->display();
-Display :: display_footer();
+Display::display_footer();

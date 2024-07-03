@@ -245,6 +245,10 @@ switch ($action) {
             exit;
         }
 
+        if (!Security::check_token('get', null, 'social')) {
+            exit;
+        }
+
         $userId = api_get_user_id();
         $messageInfo = MessageManager::get_message_by_id($messageId);
         if (!empty($messageInfo)) {
@@ -252,7 +256,10 @@ switch ($action) {
                 empty($messageInfo['group_id']);
             if ($canDelete || api_is_platform_admin()) {
                 SocialManager::deleteMessage($messageId);
-                echo Display::return_message(get_lang('MessageDeleted'));
+                echo json_encode([
+                    'message' => Display::return_message(get_lang('MessageDeleted')),
+                    'secToken' => Security::get_token('social'),
+                ]);
                 break;
             }
         }
@@ -320,10 +327,12 @@ switch ($action) {
         break;
         // Read the Url using OpenGraph and returns the hyperlinks content
     case 'read_url_with_open_graph':
-        $url = isset($_POST['social_wall_new_msg_main']) ? $_POST['social_wall_new_msg_main'] : '';
+        api_block_anonymous_users(false);
+
+        $url = $_POST['social_wall_new_msg_main'] ?? '';
         $url = trim($url);
         $html = '';
-        if (SocialManager::verifyUrl($url) == true) {
+        if (SocialManager::verifyUrl($url)) {
             $html = Security::remove_XSS(
                 SocialManager::readContentWithOpenGraph($url)
             );

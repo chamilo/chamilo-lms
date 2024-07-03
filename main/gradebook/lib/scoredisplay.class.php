@@ -470,8 +470,9 @@ class ScoreDisplay
                 $div = $this->display_as_div($score, false, $removeEmptyDecimals);
 
                 return
-                    $this->display_as_percent($score).
-                    ' ('.$div.')'.$scoreLabel;
+                    $this->display_as_percent($score).PHP_EOL
+                    .Display::div("($div)", ['class' => 'small'])
+                    .$scoreLabel;
             case SCORE_DIV_SIMPLE_WITH_CUSTOM:         // X - Good!
                 return $this->display_simple_score($score).$scoreLabel;
                 break;

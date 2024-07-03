@@ -14,7 +14,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
  */
 class LessonAnswersShortAnswerLoader implements LoaderInterface
 {
-    const INPUT_WIDTH = 300;
+    public const INPUT_WIDTH = 300;
 
     /**
      * Load the data and return the ID inserted.

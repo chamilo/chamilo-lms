@@ -21,13 +21,24 @@ if (!$ds) {
     exit;
 }
 
+if (api_get_configuration_value('ldap_encrypt_admin_password')) {
+    $ldap_pass = api_decrypt_ldap_password($extldap_config['admin_password']);
+} else {
+    $ldap_pass = $extldap_config['admin_password'];
+}
+$ldapbind = @ldap_bind($ds, $extldap_config['admin_dn'], $ldap_pass);
+if ($ldapbind === false) {
+    echo 'EXTLDAP ERROR : cannot connect with admin login/password';
+
+    return false;
+}
+
 $table = Database::get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT * FROM $table WHERE auth_source = 'ldap' ";
 $result = Database::query($sql);
 while ($user = Database::fetch_array($result, 'ASSOC')) {
     $userId = $user['id'];
     $username = $user['username'];
-    $ldapbind = @ldap_bind($ds, $extldap_config['admin_dn'], $extldap_config['admin_password']);
     $user_search = extldap_get_user_search_string($username);
     $sr = ldap_search($ds, $extldap_config['base_dn'], $user_search);
     if (!$sr) {

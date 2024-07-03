@@ -1,6 +1,6 @@
 <?php
 $strings['plugin_title'] = "Nettoyer les fichiers supprimés";
-$strings['plugin_comment'] = "Élimine de manière définitive les fichiers marqués comme éliminés";
+$strings['plugin_comment'] = "Élimine de manière définitive les fichiers marqués comme éliminés. Activer le plugin dans la région 'menu_administrator' puis y accéder depuis la page d'administration.";
 $strings['tool_enable'] = "Activer plugin";
 $strings['FileList'] = "Liste des fichiers marqués comme éliminés";
 $strings['SizeTotalAllDir'] = "Taille totale (tous les répertoires)";

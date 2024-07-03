@@ -338,5 +338,5 @@ if (api_is_allowed_to_edit() && $counter > 0) {
 }
 
 if ($origin != 'learnpath') {
-    Display:: display_footer();
+    Display::display_footer();
 }

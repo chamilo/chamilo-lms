@@ -266,7 +266,7 @@ class learnpathItem
             error_log("get_id: ".$this->get_id());
         }
         if ($type !== 'sco') {
-            if ($type == TOOL_QUIZ || $type == TOOL_HOTPOTATOES) {
+            if ($type == TOOL_QUIZ || $type == TOOL_HOTPOTATOES || $type == TOOL_H5P) {
                 $this->get_status(
                     true,
                     true
@@ -954,6 +954,7 @@ class learnpathItem
         switch ($type) {
             case TOOL_DOCUMENT:
             case TOOL_QUIZ:
+            case TOOL_H5P:
             case 'sco':
                 // Get the document and, if HTML, open it.
                 if (!is_file($abs_path)) {
@@ -1749,9 +1750,15 @@ class learnpathItem
 
         if (!Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
             $fixedAddedMinute = 5 * 60; // Add only 5 minutes
+            $defaultTimeAdded = api_get_configuration_value('time_to_be_registered_for_abusiveTime');
+            if (!empty($defaultTimeAdded)) {
+                $fixedAddedMinute = $defaultTimeAdded;
+            }
             if ($time > $sessionLifetime) {
-                error_log("fixAbusiveTime: Total time is too big: $time replaced with: $fixedAddedMinute");
-                error_log("item_id : ".$this->db_id." lp_item_view.iid: ".$this->db_item_view_id);
+                if (api_get_setting('server_type') === 'test') {
+                    error_log("fixAbusiveTime: Total time is too big: $time replaced with: $fixedAddedMinute");
+                    error_log("item_id : ".$this->db_id." lp_item_view.iid: ".$this->db_item_view_id);
+                }
                 $time = $fixedAddedMinute;
             }
 
@@ -2337,11 +2344,18 @@ class learnpathItem
                                     /** @var learnpathItem $itemToCheck */
                                     $itemToCheck = $items[$refs_list[$prereqs_string]];
 
-                                    if ($itemToCheck->type === 'quiz') {
+                                    if ($itemToCheck->type === 'quiz' || $itemToCheck->type === 'h5p') {
                                         // 1. Checking the status in current items.
                                         $status = $itemToCheck->get_status(true);
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
 
+                                        // Allow learnpath prerequisite on quiz to unblock if maximum attempt is reached
+                                        if (true === api_get_configuration_value('lp_prerequisit_on_quiz_unblock_if_max_attempt_reached')) {
+                                            $isQuizMaxAttemptReached = $this->isQuizMaxAttemptReached($items[$refs_list[$prereqs_string]]->path, $user_id, $courseId, $this->lp_id, $prereqs_string);
+                                            if ($isQuizMaxAttemptReached) {
+                                                $returnstatus = true;
+                                            }
+                                        }
                                         if (!$returnstatus) {
                                             $explanation = sprintf(
                                                 get_lang('ItemXBlocksThisElement'),
@@ -2354,6 +2368,8 @@ class learnpathItem
                                         if ($this->prevent_reinit == 1) {
                                             // 2. If is completed we check the results in the DB of the quiz.
                                             if ($returnstatus) {
+                                                $checkLastScoreAttempt = api_get_configuration_value('lp_prerequisite_use_last_attempt_only');
+                                                $orderBy = ($checkLastScoreAttempt ? 'ORDER BY exe_date DESC' : 'ORDER BY (exe_result/exe_weighting) DESC');
                                                 $sql = 'SELECT exe_result, exe_weighting
                                                         FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
                                                         WHERE
@@ -2363,7 +2379,7 @@ class learnpathItem
                                                             orig_lp_item_id = '.$prereqs_string.' AND
                                                             status <> "incomplete" AND
                                                             c_id = '.$courseId.'
-                                                        ORDER BY exe_date DESC
+                                                        '.$orderBy.'
                                                         LIMIT 0, 1';
                                                 $rs_quiz = Database::query($sql);
                                                 if ($quiz = Database::fetch_array($rs_quiz)) {
@@ -2433,7 +2449,6 @@ class learnpathItem
                                                             $minScore = $masteryScoreAsMin;
                                                         }
                                                     }
-
                                                     if (isset($minScore) && isset($minScore)) {
                                                         // Taking min/max prerequisites values see BT#5776
                                                         if ($quiz['exe_result'] >= $minScore &&
@@ -2476,6 +2491,13 @@ class learnpathItem
                                                     $prereqs_string,
                                                     $refs_list
                                                 );
+                                            }
+                                            // Allow learnpath prerequisite on quiz to unblock if maximum attempt is reached
+                                            if (true === api_get_configuration_value('lp_prerequisit_on_quiz_unblock_if_max_attempt_reached')) {
+                                                $isQuizMaxAttemptReached = $this->isQuizMaxAttemptReached($items[$refs_list[$prereqs_string]]->path, $user_id, $courseId, $this->lp_id, $prereqs_string);
+                                                if ($isQuizMaxAttemptReached) {
+                                                    $returnstatus = true;
+                                                }
                                             }
                                         }
 
@@ -2635,6 +2657,36 @@ class learnpathItem
     }
 
     /**
+     * Check if max quiz attempt is reached.
+     *
+     * @param $exerciseId
+     * @param $userId
+     * @param $courseId
+     * @param $lpId
+     * @param $lpItemId
+     *
+     * @return bool
+     */
+    public function isQuizMaxAttemptReached($exerciseId, $userId, $courseId, $lpId, $lpItemId)
+    {
+        $objExercise = new Exercise();
+        $objExercise->read($exerciseId);
+        $nbAttempts = $objExercise->selectAttempts();
+        $countAttempts = Tracking::count_student_exercise_attempts(
+            $userId,
+            $courseId,
+            $exerciseId,
+            $lpId,
+            $lpItemId,
+            api_get_session_id()
+        );
+
+        $isMaxAttemptReached = ($nbAttempts > 0 && $countAttempts >= $nbAttempts);
+
+        return $isMaxAttemptReached;
+    }
+
+    /**
      * Reinits all local values as the learnpath is restarted.
      *
      * @return bool True on success, false otherwise
@@ -2675,7 +2727,7 @@ class learnpathItem
             $this->objectives_count = 0;
             $this->objectives = [];
             $this->lesson_location = '';
-            if ($this->type != TOOL_QUIZ) {
+            if ($this->type != TOOL_QUIZ || $this->type != TOOL_H5P) {
                 $this->write_to_db();
             }
         } else {
@@ -2709,64 +2761,57 @@ class learnpathItem
         // in case it's a SCORM, we should get:
         if ($this->type == 'sco' || $this->type == 'au') {
             $status = $this->get_status(true);
-            if ($this->prevent_reinit == 1 &&
-                $status != $this->possible_status[0] && // not attempted
-                $status != $this->possible_status[1]    //incomplete
-            ) {
+            if ($debug) {
+                error_log(
+                    'learnpathItem::save() - SCORM save request received',
+                    0
+                );
+            }
+            // Get all new settings from the URL
+            if ($from_outside) {
                 if ($debug) {
                     error_log(
-                        'learnpathItem::save() - save reinit blocked by setting',
+                        'learnpathItem::save() - Getting item data from outside',
                         0
                     );
                 }
-                // Do nothing because the status has already been set. Don't allow it to change.
-                // TODO: Check there isn't a special circumstance where this should be saved.
-            } else {
-                if ($debug) {
-                    error_log(
-                        'learnpathItem::save() - SCORM save request received',
-                        0
-                    );
-                }
-                // Get all new settings from the URL
-                if ($from_outside) {
-                    if ($debug) {
-                        error_log(
-                            'learnpathItem::save() - Getting item data from outside',
-                            0
-                        );
-                    }
-                    foreach ($_GET as $param => $value) {
-                        switch ($param) {
-                            case 'score':
-                                $this->set_score($value);
-                                if ($debug) {
-                                    error_log(
-                                        'learnpathItem::save() - setting score to '.$value,
-                                        0
-                                    );
-                                }
-                                break;
-                            case 'max':
-                                $this->set_max_score($value);
-                                if ($debug) {
-                                    error_log(
-                                        'learnpathItem::save() - setting view_max_score to '.$value,
-                                        0
-                                    );
-                                }
-                                break;
-                            case 'min':
-                                $this->min_score = $value;
-                                if ($debug) {
-                                    error_log(
-                                        'learnpathItem::save() - setting min_score to '.$value,
-                                        0
-                                    );
-                                }
-                                break;
-                            case 'lesson_status':
-                                if (!empty($value)) {
+                foreach ($_GET as $param => $value) {
+                    switch ($param) {
+                        case 'score':
+                            $this->set_score($value);
+                            if ($debug) {
+                                error_log(
+                                    'learnpathItem::save() - setting score to '.$value,
+                                    0
+                                );
+                            }
+                            break;
+                        case 'max':
+                            $this->set_max_score($value);
+                            if ($debug) {
+                                error_log(
+                                    'learnpathItem::save() - setting view_max_score to '.$value,
+                                    0
+                                );
+                            }
+                            break;
+                        case 'min':
+                            $this->min_score = $value;
+                            if ($debug) {
+                                error_log(
+                                    'learnpathItem::save() - setting min_score to '.$value,
+                                    0
+                                );
+                            }
+                            break;
+                        case 'lesson_status':
+                            if (!empty($value)) {
+                                if ($this->prevent_reinit == 1 &&
+                                    $status != $this->possible_status[0] && // not attempted
+                                    $status != $this->possible_status[1]    // incomplete
+                                ) {
+                                    // do nothing: status was already completed or similar and we don't want to allow the SCO to reinitialize
+                                } else {
                                     $this->set_status($value);
                                     if ($debug) {
                                         error_log(
@@ -2775,61 +2820,60 @@ class learnpathItem
                                         );
                                     }
                                 }
-                                break;
-                            case 'time':
-                                $this->set_time($value);
-                                if ($debug) {
-                                    error_log(
-                                        'learnpathItem::save() - setting time to '.$value,
-                                        0
-                                    );
-                                }
-                                break;
-                            case 'suspend_data':
-                                $this->current_data = $value;
-                                if ($debug) {
-                                    error_log(
-                                        'learnpathItem::save() - setting suspend_data to '.$value,
-                                        0
-                                    );
-                                }
-                                break;
-                            case 'lesson_location':
-                                $this->set_lesson_location($value);
-                                if ($debug) {
-                                    error_log(
-                                        'learnpathItem::save() - setting lesson_location to '.$value,
-                                        0
-                                    );
-                                }
-                                break;
-                            case 'core_exit':
-                                $this->set_core_exit($value);
-                                if ($debug) {
-                                    error_log(
-                                        'learnpathItem::save() - setting core_exit to '.$value,
-                                        0
-                                    );
-                                }
-                                break;
-                            case 'interactions':
-                                break;
-                            case 'objectives':
-                                break;
-                            default:
-                                // Ignore.
-                                break;
-                        }
+                            }
+                            break;
+                        case 'time':
+                            $this->set_time($value);
+                            if ($debug) {
+                                error_log(
+                                    'learnpathItem::save() - setting time to '.$value,
+                                    0
+                                );
+                            }
+                            break;
+                        case 'suspend_data':
+                            $this->current_data = $value;
+                            if ($debug) {
+                                error_log(
+                                    'learnpathItem::save() - setting suspend_data to '.$value,
+                                    0
+                                );
+                            }
+                            break;
+                        case 'lesson_location':
+                            $this->set_lesson_location($value);
+                            if ($debug) {
+                                error_log(
+                                    'learnpathItem::save() - setting lesson_location to '.$value,
+                                    0
+                                );
+                            }
+                            break;
+                        case 'core_exit':
+                            $this->set_core_exit($value);
+                            if ($debug) {
+                                error_log(
+                                    'learnpathItem::save() - setting core_exit to '.$value,
+                                    0
+                                );
+                            }
+                            break;
+                        case 'interactions':
+                        case 'objectives':
+                            break;
+                        default:
+                            // Ignore.
+                            break;
                     }
-                } else {
-                    if ($debug) {
-                        error_log(
-                            'learnpathItem::save() - Using inside item status',
-                            0
-                        );
-                    }
-                    // Do nothing, just let the local attributes be used.
                 }
+            } else {
+                if ($debug) {
+                    error_log(
+                        'learnpathItem::save() - Using inside item status',
+                        0
+                    );
+                }
+                // Do nothing, just let the local attributes be used.
             }
         } else {
             // If not SCO, such messages should not be expected.
@@ -2850,6 +2894,7 @@ class learnpathItem
                     break;
                 case TOOL_HOTPOTATOES:
                     break;
+                case TOOL_H5P:
                 case TOOL_QUIZ:
                     return false;
                     break;
@@ -3582,6 +3627,23 @@ class learnpathItem
         }
     }
 
+    public function isLpItemsCompleted()
+    {
+        $lp = new Learnpath(api_get_course_id(), $this->lp_id, api_get_user_id());
+        $count = $lp->getTotalItemsCountWithoutDirs([TOOL_LP_FINAL_ITEM]);
+        $completed = $lp->get_complete_items_count(true, [TOOL_LP_FINAL_ITEM]);
+        $isCompleted = ($count - $completed == 0);
+
+        return $isCompleted;
+    }
+
+    public function getLpFinalItem()
+    {
+        $lp = new Learnpath(api_get_course_id(), $this->lp_id, api_get_user_id());
+
+        return $lp->getFinalItem();
+    }
+
     /**
      * Writes the current data to the database.
      *
@@ -3612,6 +3674,15 @@ class learnpathItem
             return true;
         }
 
+        // Final item is checked when previous are completed.
+        if ($this->type == 'final_item') {
+            if ($debug) {
+                error_log('learnpathItem::write_to_db() , final item, so not updated.', 0);
+            }
+
+            return false;
+        }
+
         $courseId = api_get_course_int_id();
         $mode = $this->get_lesson_mode();
         $credit = $this->get_credit();
@@ -3629,26 +3700,14 @@ class learnpathItem
         $rs_verified = Database::query($sql);
         $row_verified = Database::fetch_array($rs_verified);
 
-        $my_case_completed = [
-            'completed',
-            'passed',
-            'browsed',
-            'failed',
-        ];
-
         $oldTotalTime = $row_verified['total_time'];
         $this->oldTotalTime = $oldTotalTime;
+        $inserted = false;
 
-        $save = true;
-        if (isset($row_verified) && isset($row_verified['status'])) {
-            if (in_array($row_verified['status'], $my_case_completed)) {
-                $save = false;
-            }
-        }
-
-        if ((($save === false && $this->type === 'sco') ||
-           ($this->type === 'sco' && ($credit === 'no-credit' || $mode === 'review' || $mode === 'browse'))) &&
-           ($this->seriousgame_mode != 1 && $this->type === 'sco')
+        if (
+            $this->type === 'sco' &&
+            ($credit === 'no-credit' || $mode === 'review' || $mode === 'browse') &&
+            $this->seriousgame_mode != 1
         ) {
             if ($debug) {
                 error_log(
@@ -3662,9 +3721,8 @@ class learnpathItem
             }
         } else {
             // Check the row exists.
-            $inserted = false;
             // This a special case for multiple attempts and Chamilo exercises.
-            if ($this->type === 'quiz' &&
+            if (($this->type === 'quiz' || $this->type === 'h5p') &&
                 $this->get_prevent_reinit() == 0 &&
                 $this->get_status() === 'completed'
             ) {
@@ -3767,7 +3825,7 @@ class learnpathItem
                     Database::update($item_view_table, $params, $where);
                 } else {
                     // For all other content types...
-                    if ($this->type === 'quiz') {
+                    if ($this->type === 'quiz' || $this->type === 'h5p') {
                         $my_status = ' ';
                         $total_time = ' ';
                         if (!empty($_REQUEST['exeId'])) {
@@ -3790,7 +3848,7 @@ class learnpathItem
                             error_log('get_type_static: '.$my_type_lp);
                         }
 
-                        // This is a array containing values finished
+                        // This is an array containing values equivalent to a finished state
                         $case_completed = [
                             'completed',
                             'passed',
@@ -4068,8 +4126,48 @@ class learnpathItem
             }
         }
 
+        // It updates the last progress only in case.
+        if (is_object($_SESSION['oLP'])) {
+            $_SESSION['oLP']->updateLpProgress();
+        }
+
         if ($debug) {
             error_log('End of learnpathItem::write_to_db()', 0);
+        }
+
+        // Check if lp is completed to validate the final item
+        if ($this->isLpItemsCompleted()) {
+            $lpFinalItem = $this->getLpFinalItem();
+            if ($lpFinalItem) {
+                $sql = "SELECT iid
+                        FROM $item_view_table
+                        WHERE
+                            c_id = $courseId AND
+                            lp_item_id = {$lpFinalItem->get_id()} AND
+                            lp_view_id = {$this->view_id} AND
+                            status != 'completed'";
+                $rs = Database::query($sql);
+                if (Database::num_rows($rs) > 0) {
+                    $params = [
+                        'total_time' => $this->get_total_time(),
+                        'start_time' => $this->get_current_start_time(),
+                        'score' => $this->get_score(),
+                        'status' => 'completed',
+                        'max_score' => $this->get_max(),
+                        'suspend_data' => $this->current_data,
+                        'lesson_location' => $this->lesson_location,
+                    ];
+                    $where = [
+                        'c_id = ? AND lp_item_id = ? AND lp_view_id = ? AND view_count = ?' => [
+                            $courseId,
+                            $lpFinalItem->get_id(),
+                            $this->view_id,
+                            $this->get_attempt_id(),
+                        ],
+                    ];
+                    Database::update($item_view_table, $params, $where);
+                }
+            }
         }
 
         return true;

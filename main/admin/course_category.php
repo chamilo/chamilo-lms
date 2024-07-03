@@ -7,7 +7,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-$category = isset($_GET['category']) ? $_GET['category'] : null;
+$category = $_GET['category'] ?? null;
 
 $parentInfo = [];
 if (!empty($category)) {
@@ -21,6 +21,9 @@ if (!empty($categoryId)) {
 $action = $_GET['action'] ?? null;
 
 $myCourseListAsCategory = api_get_configuration_value('my_courses_list_as_category');
+
+$baseUrl = api_get_path(WEB_CODE_PATH).'admin/course_category.php?'
+    .http_build_query(['category' => $parentInfo['code'] ?? '']);
 
 if (!empty($action)) {
     if ('export' === $action) {
@@ -48,15 +51,17 @@ if (!empty($action)) {
     if ($action === 'delete') {
         CourseCategory::deleteNode($categoryId);
         Display::addFlash(Display::return_message(get_lang('Deleted')));
-        header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
+        header('Location: '.$baseUrl);
         exit();
     } elseif (($action === 'add' || $action === 'edit') && isset($_POST['formSent']) && $_POST['formSent']) {
+        $newParentCategoryCode = $_POST['parent_id'] ?? $parentInfo['code'] ?? '';
+
         if ($action === 'add') {
             $ret = CourseCategory::addNode(
                 $_POST['code'],
                 $_POST['name'],
                 $_POST['auth_course_child'],
-                $category
+                $newParentCategoryCode
             );
 
             $errorMsg = Display::return_message(get_lang('Created'));
@@ -65,7 +70,9 @@ if (!empty($action)) {
                 $_POST['code'],
                 $_POST['name'],
                 $_POST['auth_course_child'],
-                $categoryId
+                $categoryId,
+                $newParentCategoryCode,
+                $parentInfo['code'] ?? ''
             );
             $categoryInfo = CourseCategory::getCategory($_POST['code']);
             $ret = $categoryInfo['id'];
@@ -86,8 +93,8 @@ if (!empty($action)) {
         header('Location: '.api_get_path(WEB_CODE_PATH).'admin/course_category.php');
         exit;
     } elseif ($action === 'moveUp') {
-        CourseCategory::moveNodeUp($categoryId, $_GET['tree_pos'], $category);
-        header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
+        CourseCategory::moveNodeUp($categoryId, $_GET['tree_pos'], $parentInfo['code'] ?? '');
+        header('Location: '.$baseUrl);
         Display::addFlash(Display::return_message(get_lang('Updated')));
         exit();
     }
@@ -133,15 +140,16 @@ if ($action === 'add' || $action === 'edit') {
     echo '<div class="actions">';
     echo Display::url(
         Display::return_icon('folder_up.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.Security::remove_XSS($category)
+        $baseUrl
     );
     echo '</div>';
 
     $form_title = $action === 'add' ? get_lang('AddACategory') : get_lang('EditNode');
-    if (!empty($category)) {
-        $form_title .= ' '.get_lang('Into').' '.Security::remove_XSS($category);
+    if (!empty($categoryInfo['parent_id'])) {
+        $form_title .= ' '.get_lang('Into').' '.$categoryInfo['parent_id'];
     }
-    $url = api_get_self().'?action='.Security::remove_XSS($action).'&category='.Security::remove_XSS($category).'&id='.Security::remove_XSS($categoryId);
+    $url = $baseUrl.'&'
+        .http_build_query(['action' => Security::remove_XSS($action), 'id' => Security::remove_XSS($categoryId)]);
     $form = new FormValidator('course_category', 'post', $url);
     $form->addElement('header', '', $form_title);
     $form->addElement('hidden', 'formSent', 1);
@@ -161,6 +169,19 @@ if ($action === 'add' || $action === 'edit') {
     }
 
     $form->addRule('code', get_lang('PleaseEnterCategoryInfo'), 'required');
+
+    $categories = ['' => get_lang('Select')];
+
+    foreach (CourseCategory::getAllCategories() as $categoryItemInfo) {
+        if ($categoryId === $categoryItemInfo['code']) {
+            continue;
+        }
+
+        $categories[$categoryItemInfo['code']] = $categoryItemInfo['name'];
+    }
+
+    $form->addSelect('parent_id', get_lang('ParentCategory'), $categories);
+
     $group = [
         $form->createElement(
             'radio',
@@ -210,7 +231,12 @@ if ($action === 'add' || $action === 'edit') {
     } else {
         $class = 'add';
         $text = get_lang('AddCategory');
-        $form->setDefaults(['auth_course_child' => 'TRUE']);
+        $form->setDefaults(
+            [
+                'auth_course_child' => 'TRUE',
+                'parent_id' => $parentInfo['code'] ?? '',
+            ]
+        );
         $form->addButtonCreate($text);
     }
     $form->display();
@@ -232,7 +258,7 @@ if ($action === 'add' || $action === 'edit') {
     if (empty($parentInfo) || $parentInfo['auth_cat_child'] === 'TRUE') {
         $newCategoryLink = Display::url(
             Display::return_icon('new_folder.png', get_lang('AddACategory'), '', ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH).'admin/course_category.php?action=add&category='.Security::remove_XSS($category)
+            $baseUrl.'&action=add'
         );
 
         if (!empty($parentInfo) && $parentInfo['access_url_id'] != $urlId) {
@@ -244,7 +270,7 @@ if ($action === 'add' || $action === 'edit') {
     if (!empty($parentInfo)) {
         echo Display::page_subheader($parentInfo['name'].' ('.$parentInfo['code'].')');
     }
-    echo CourseCategory::listCategories($category);
+    echo CourseCategory::listCategories($parentInfo['code'] ?? '');
 }
 
 Display::display_footer();

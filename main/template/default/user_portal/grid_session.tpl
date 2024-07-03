@@ -21,6 +21,10 @@
                     <span class="category">{{ course.category }}</span>
                     <div class="cribbon"></div>
                 {% endif %}
+                {% if 'show_different_course_language'| api_get_setting is same as 'true' %}
+                    <span class="course-language grid-course">{{ course.course_language }}</span>
+                    <div class="cribbon  cribbon-course-language-grid"></div>
+                {% endif %}
                 {% if course.edit_actions %}
                     <div class="admin-actions">
                         {% if course.document == '' %}
@@ -144,7 +148,7 @@
                     {# Collapsible panel #}
                     {# Foldable #}
                     <a role="button" data-toggle="collapse" data-parent="#page-content" href="#collapse_{{ row.id }}"
-                       aria-expanded="false">
+                       aria-expanded="false" class="collapse-toogle--right collapsed">
                         {{ session_image }} {{ row.title }}
                     </a>
                     {% set collapsable = 'collapse' %}

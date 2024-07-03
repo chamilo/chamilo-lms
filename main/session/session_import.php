@@ -32,16 +32,17 @@ set_time_limit(0);
 $purification_option_for_usernames = false;
 $inserted_in_course = [];
 
+$error_message = '';
+
 $warn = null;
 if (isset($_POST['formSent']) && $_POST['formSent']) {
-    if (isset($_FILES['import_file']['tmp_name']) &&
-        !empty($_FILES['import_file']['tmp_name'])
+    if (!empty($_FILES['import_file']['tmp_name'])
     ) {
         $form_sent = $_POST['formSent'];
-        $file_type = isset($_POST['file_type']) ? $_POST['file_type'] : null;
+        $file_type = $_POST['file_type'] ?? null;
         $send_mail = isset($_POST['sendMail']) && $_POST['sendMail'] ? 1 : 0;
-        $isOverwrite = isset($_POST['overwrite']) && $_POST['overwrite'] ? true : false;
-        $deleteUsersNotInList = isset($_POST['delete_users_not_in_list']) ? true : false;
+        $isOverwrite = isset($_POST['overwrite']) && $_POST['overwrite'];
+        $deleteUsersNotInList = isset($_POST['delete_users_not_in_list']);
         $sessions = [];
         $session_counter = 0;
 
@@ -168,9 +169,14 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
                         // Looking up for the teacher.
                         $username = trim(api_utf8_decode($courseNode->CourseTeacher));
-                        $sql = "SELECT user_id, lastname, firstname FROM $tbl_user WHERE username='$username'";
-                        $rs = Database::query($sql);
-                        list($user_id, $lastname, $firstname) = Database::fetch_array($rs);
+                        $rs = Database::select(
+                            ['user_id', 'lastname', 'firstname'],
+                            $tbl_user,
+                            ['where' => ['username = ?' => $username]],
+                            'first',
+                            'NUM'
+                        );
+                        list($user_id, $lastname, $firstname) = $rs;
 
                         $params['teachers'] = $user_id;
                         CourseManager::create_course($params);
@@ -228,10 +234,27 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                             }
                         }
 
-                        $visibility = trim(api_utf8_decode($node_session->Visibility));
-                        $session_category_id = trim(api_utf8_decode($node_session->SessionCategory));
+                        // Default visibility
+                        $visibilityAfterExpirationPerSession = SESSION_VISIBLE_READ_ONLY;
 
-                        if (!$updatesession) {
+                        if (isset($node_session->VisibilityAfterExpiration)) {
+                            $visibility = trim(api_utf8_decode($node_session->VisibilityAfterExpiration));
+                            switch ($visibility) {
+                                case 'accessible':
+                                    $visibilityAfterExpirationPerSession = SESSION_VISIBLE;
+                                    break;
+                                case 'not_accessible':
+                                    $visibilityAfterExpirationPerSession = SESSION_INVISIBLE;
+                                    break;
+                                case 'read_only':
+                                default:
+                                    $visibilityAfterExpirationPerSession = SESSION_VISIBLE_READ_ONLY;
+                                    break;
+                            }
+                        }
+                        $session_category_id = (int) trim(api_utf8_decode($node_session->SessionCategory));
+
+                        if (!$isOverwrite) {
                             // Always create a session.
                             $unique_name = false; // This MUST be initializead.
                             $i = 0;
@@ -240,7 +263,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 if ($i > 1) {
                                     $suffix = ' - '.$i;
                                 }
-                                $sql = 'SELECT 1 FROM '.$tbl_session.'
+                                $sql = 'SELECT id FROM '.$tbl_session.'
                                         WHERE name="'.Database::escape_string($session_name.$suffix).'"';
                                 $rs = Database::query($sql);
                                 if (Database::result($rs, 0, 0)) {
@@ -252,14 +275,15 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                             }
 
                             // Creating the session.
-                            $sql_session = "INSERT IGNORE INTO $tbl_session SET
+                            $sql_session = "INSERT INTO $tbl_session SET
                                     name = '".Database::escape_string($session_name)."',
                                     id_coach = '$coach_id',
                                     access_start_date = '$date_start',
                                     access_end_date = '$date_end',
-                                    visibility = '$visibility',
-                                    session_category_id = '$session_category_id',
-                                    session_admin_id=".intval($_user['user_id']);
+                                    visibility = '$visibilityAfterExpirationPerSession',
+                                    ".(!empty($session_category_id) ? "session_category_id = '{$session_category_id}'," : "")."
+                                    session_admin_id=".api_get_user_id();
+
                             $rs_session = Database::query($sql_session);
                             $session_id = Database::insert_id();
                             $session_counter++;
@@ -268,14 +292,14 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                             $my_session_result = SessionManager::get_session_by_name($session_name);
                             if ($my_session_result === false) {
                                 // Creating the session.
-                                $sql_session = "INSERT IGNORE INTO $tbl_session SET
+                                $sql_session = "INSERT INTO $tbl_session SET
                                         name = '".Database::escape_string($session_name)."',
                                         id_coach = '$coach_id',
                                         access_start_date = '$date_start',
                                         access_end_date = '$date_end',
-                                        visibility = '$visibility',
-                                        session_category_id = '$session_category_id',
-                                        session_admin_id=".intval($_user['user_id']);
+                                        visibility = '$visibilityAfterExpirationPerSession',
+                                        ".(!empty($session_category_id) ? "session_category_id = '{$session_category_id}'," : "")."
+                                        session_admin_id=".api_get_user_id();
                                 $rs_session = Database::query($sql_session);
                                 $session_id = Database::insert_id();
                                 $session_counter++;
@@ -285,7 +309,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                         id_coach = '$coach_id',
                                         access_start_date = '$date_start',
                                         access_end_date = '$date_end',
-                                        visibility = '$visibility',
+                                        visibility = '$visibilityAfterExpirationPerSession',
                                         session_category_id = '$session_category_id'
                                     WHERE name = '$session_name'";
                                 $rs_session = Database::query($sql_session);
@@ -335,7 +359,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                             c_id = $courseId,
                                             session_id = $session_id";
                                     $rs_course = Database::query($sql_course);
-                                    SessionManager::installCourse($id_session, $courseId);
+                                    SessionManager::installCourse($session_id, $courseId);
                                 }
 
                                 $course_coaches = explode(',', $node_course->Coach);
@@ -346,13 +370,13 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                     $coach_id = UserManager::get_user_id_from_username($course_coach);
                                     if ($coach_id !== false) {
                                         $sql = "INSERT IGNORE INTO $tbl_session_course_user SET
-                                                user_id='$coach_id',
+                                                user_id = '$coach_id',
                                                 c_id = '$courseId',
                                                 session_id = '$session_id',
                                                 status = 2 ";
                                         $rs_coachs = Database::query($sql);
                                     } else {
-                                        $error_message .= get_lang('UserDoesNotExist').' : '.$user.'<br />';
+                                        $error_message .= get_lang('UserDoesNotExist').' : '.$course_coach.'<br />';
                                     }
                                 }
 
@@ -397,8 +421,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             }
         } else {
             // CSV
-            $updateCourseCoaches = isset($_POST['update_course_coaches']) ? true : false;
-            $addOriginalCourseTeachersAsCourseSessionCoaches = isset($_POST['add_me_as_coach']) ? true : false;
+            $updateCourseCoaches = isset($_POST['update_course_coaches']);
+            $addOriginalCourseTeachersAsCourseSessionCoaches = isset($_POST['add_me_as_coach']);
 
             $result = SessionManager::importCSV(
                 $_FILES['import_file']['tmp_name'],
@@ -426,7 +450,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             $error_message = get_lang('ButProblemsOccured').' :<br />'.$error_message;
         }
 
-        if (count($inserted_in_course) > 1) {
+        if (!empty($inserted_in_course)) {
             $warn = get_lang('SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode').': ';
             foreach ($inserted_in_course as $code => $title) {
                 $warn .= ' '.$title.' ('.$code.'),';
@@ -439,12 +463,11 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             }
             Display::addFlash(Display::return_message($warn));
             header('Location: resume_session.php?id_session='.$session_id);
-            exit;
         } else {
-            Display::addFlash(Display::return_message(get_lang('FileImported').' '.$error_message));
+            Display::addFlash(Display::return_message(get_lang('FileImported').' '.$error_message, 'normal', false));
             header('Location: session_list.php');
-            exit;
         }
+        exit;
     } else {
         $error_message = get_lang('NoInputFile');
     }
@@ -453,7 +476,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 // Display the header.
 Display::display_header($tool_name);
 
-if (count($inserted_in_course) > 1) {
+if (!empty($inserted_in_course)) {
     $msg = get_lang('SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode').': ';
     foreach ($inserted_in_course as $code => $title) {
         $msg .= ' '.$title.' ('.$title.'),';
@@ -528,15 +551,15 @@ Display::return_message(get_lang('TheXMLImportLetYouAddMoreInfoAndCreateResource
 $form->display();
 
 ?>
-<p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
-<pre>
+    <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
+    <pre>
 <strong>SessionName</strong>;Coach;<strong>DateStart</strong>;<strong>DateEnd</strong>;Users;Courses;VisibilityAfterExpiration;DisplayStartDate;DisplayEndDate;CoachStartDate;CoachEndDate;Classes
 <strong>Example 1</strong>;username;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,...]|course2[coach1][username1,...];read_only;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd;class1|class2
 <strong>Example 2</strong>;username;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,...]|course2[coach1][username1,...];accessible;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd;class3|class4
 <strong>Example 3</strong>;username;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,...]|course2[coach1][username1,...];not_accessible;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd;class5|class6
 </pre>
-<p><?php echo get_lang('XMLMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
-<pre>
+    <p><?php echo get_lang('XMLMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
+    <pre>
 &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;Sessions&gt;
     &lt;Users&gt;

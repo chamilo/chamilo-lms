@@ -10,12 +10,17 @@
  *
  * @package chamilo.attendance
  */
+
+use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
+use Chamilo\CourseBundle\Entity\CAttendanceResultComment;
+use Chamilo\CourseBundle\Entity\CAttendanceSheet;
+
 class Attendance
 {
     // constants
-    const DONE_ATTENDANCE_LOG_TYPE = 'done_attendance_sheet';
-    const UPDATED_ATTENDANCE_LOG_TYPE = 'updated_attendance_sheet';
-    const LOCKED_ATTENDANCE_LOG_TYPE = 'locked_attendance_sheet';
+    public const DONE_ATTENDANCE_LOG_TYPE = 'done_attendance_sheet';
+    public const UPDATED_ATTENDANCE_LOG_TYPE = 'updated_attendance_sheet';
+    public const LOCKED_ATTENDANCE_LOG_TYPE = 'locked_attendance_sheet';
     public $category_id;
     private $session_id;
     private $course_id;
@@ -181,22 +186,22 @@ class Attendance
                 ) || api_is_drh();
                 if (api_is_allowed_to_edit(null, true) || $isDrhOfCourse) {
                     // Link to edit
-                    $attendance[1] = '<a 
+                    $attendance[1] = '<a
                         href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$student_param.'">'.
                         Security::remove_XSS($attendance[1]).
                         '</a>'.
                         $session_star;
                 } else {
                     // Link to view
-                    $attendance[1] = '<a 
+                    $attendance[1] = '<a
                         href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list_no_edit&attendance_id='.$attendance[0].$student_param.'">'.
                         Security::remove_XSS($attendance[1]).
                         '</a>'.
                         $session_star;
                 }
             } else {
-                $attendance[1] = '<a 
-                    class="muted" 
+                $attendance[1] = '<a
+                    class="muted"
                     href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$student_param.'">'.
                     Security::remove_XSS($attendance[1]).
                     '</a>'.
@@ -264,11 +269,11 @@ class Attendance
                             $message_alert = get_lang('UnlockMessageInformation');
                         }
                         $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.$message_alert.'\')) return false;" href="index.php?'.api_get_cidreq().'&action=lock_attendance&attendance_id='.$attendance[0].'">'.
-                            Display::return_icon('unlock.png', get_lang('LockAttendance')).'</a>';
+                            Display::return_icon('lock-open.png', get_lang('LockAttendance')).'</a>';
                     } else {
                         if (api_is_platform_admin()) {
                             $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToUnlockTheAttendance').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=unlock_attendance&attendance_id='.$attendance[0].'">'.
-                                    Display::return_icon('locked.png', get_lang('UnlockAttendance')).'</a>';
+                                    Display::return_icon('lock-closed.png', get_lang('UnlockAttendance')).'</a>';
                         } else {
                             $actions .= '&nbsp;'.Display::return_icon('locked_na.png', get_lang('LockedAttendance'));
                         }
@@ -689,14 +694,14 @@ class Attendance
         $studentInGroup = [];
 
         if (!empty($current_session_id)) {
-            $a_course_users = CourseManager:: get_user_list_from_course_code(
+            $a_course_users = CourseManager::get_user_list_from_course_code(
                 $current_course_id,
                 $current_session_id,
                 '',
                 'lastname'
             );
         } else {
-            $a_course_users = CourseManager:: get_user_list_from_course_code(
+            $a_course_users = CourseManager::get_user_list_from_course_code(
                 $current_course_id,
                 0,
                 '',
@@ -1301,7 +1306,7 @@ class Attendance
             // Get attendance for current user
             $user_id = (int) $user_id;
             if (count($calendar_ids) > 0) {
-                $sql = "SELECT cal.date_time, att.presence
+                $sql = "SELECT cal.date_time, att.presence, cal.iid as calendar_id
                         FROM $tbl_attendance_sheet att
                         INNER JOIN  $tbl_attendance_calendar cal
                         ON cal.id = att.attendance_calendar_id
@@ -1315,6 +1320,7 @@ class Attendance
                 $res = Database::query($sql);
                 if (Database::num_rows($res) > 0) {
                     while ($row = Database::fetch_array($res)) {
+                        $row['duration'] = Attendance::getAttendanceCalendarExtraFieldValue('duration', $row['calendar_id']);
                         $row['date_time'] = api_convert_and_format_date($row['date_time'], null, date_default_timezone_get());
                         $data[$user_id][] = $row;
                     }
@@ -1563,6 +1569,7 @@ class Attendance
                 $row['date'] = api_format_date($row['date_time'], DATE_FORMAT_SHORT);
                 $row['time'] = api_format_date($row['date_time'], TIME_NO_SEC_FORMAT);
                 $row['groups'] = $this->getGroupListByAttendanceCalendar($row['id'], $course_id);
+                $row['duration'] = Attendance::getAttendanceCalendarExtraFieldValue('duration', $row['id']);
                 if ($type == 'today') {
                     if (date('d-m-Y', api_strtotime($row['date_time'], 'UTC')) == date('d-m-Y', time())) {
                         $data[] = $row;
@@ -1742,10 +1749,11 @@ class Attendance
      *
      * @param int   $attendanceId
      * @param array $groupList
+     * @param array $extraValues
      *
      * @return int affected rows
      */
-    public function attendance_calendar_add($attendanceId, $groupList = [])
+    public function attendance_calendar_add($attendanceId, $groupList = [], $extraValues = [])
     {
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $affected_rows = 0;
@@ -1771,6 +1779,13 @@ class Attendance
             $sql = "UPDATE $tbl_attendance_calendar SET id = iid WHERE iid = $id";
             Database::query($sql);
             $affected_rows++;
+
+            if (!empty($extraValues)) {
+                // It saves extra fields values
+                $extraFieldValue = new ExtraFieldValue('attendance_calendar');
+                $extraValues['item_id'] = $id;
+                $extraFieldValue->saveFieldValues($extraValues);
+            }
         }
         $this->addAttendanceCalendarToGroup($id, $course_id, $groupList);
         //}
@@ -1888,7 +1903,7 @@ class Attendance
      * @param int    $attendanceId
      * @param int    $start_date   start date in tms
      * @param int    $end_date     end date in tms
-     * @param string $repeat_type  daily, weekly, monthlyByDate
+     * @param string $repeat_type  daily, weekly, biweekly, xdays, monthlyByDate
      * @param array  $groupList
      */
     public function attendance_repeat_calendar_add(
@@ -1896,58 +1911,84 @@ class Attendance
         $start_date,
         $end_date,
         $repeat_type,
-        $groupList = []
+        $groupList = [],
+        $extraValues = []
     ) {
         $attendanceId = intval($attendanceId);
         // save start date
         $datetimezone = api_get_utc_datetime($start_date);
         $this->set_date_time($datetimezone);
-        $this->attendance_calendar_add($attendanceId, $groupList);
+        $this->attendance_calendar_add($attendanceId, $groupList, $extraValues);
 
         // 86400 = 24 hours in seconds
         // 604800 = 1 week in seconds
+        // 1296000 = 2 weeks in seconds
+        // 2419200 = 1 month in seconds
+        // 86400 x xdays = interval by x days (in seconds)
         // Saves repeated dates
+        $seconds = 0;
         switch ($repeat_type) {
             case 'daily':
-                $j = 1;
-                for ($i = $start_date + 86400; ($i <= $end_date); $i += 86400) {
-                    $datetimezone = api_get_utc_datetime($i);
-                    $this->set_date_time($datetimezone);
-                    $this->attendance_calendar_add($attendanceId, $groupList);
-                    $j++;
-                }
+                $seconds = 86400;
                 break;
             case 'weekly':
-                $j = 1;
-                for ($i = $start_date + 604800; ($i <= $end_date); $i += 604800) {
-                    $datetimezone = api_get_utc_datetime($i);
-                    $this->set_date_time($datetimezone);
-                    $this->attendance_calendar_add($attendanceId, $groupList);
-                    $j++;
-                }
+                $seconds = 604800;
+                break;
+            case 'biweekly':
+                $seconds = 1296000;
                 break;
             case 'monthlyByDate':
-                $j = 1;
-                //@todo fix bug with february
-                for ($i = $start_date + 2419200; ($i <= $end_date); $i += 2419200) {
-                    $datetimezone = api_get_utc_datetime($i);
-                    $this->set_date_time($datetimezone);
-                    $this->attendance_calendar_add($attendanceId, $groupList);
-                    $j++;
-                }
+                $seconds = 2419200;
+                break;
+            case 'xdays':
+                $seconds = isset($extraValues['xdays_number']) ? (int) $extraValues['xdays_number'] * 86400 : 0;
                 break;
         }
+
+        if ($seconds > 0) {
+            $j = 1;
+            for ($i = $start_date + $seconds; ($i <= $end_date); $i += $seconds) {
+                $datetimezone = api_get_utc_datetime($i);
+                $this->set_date_time($datetimezone);
+                $this->attendance_calendar_add($attendanceId, $groupList, $extraValues);
+                $j++;
+            }
+        }
+    }
+
+    /**
+     * Gets the value of a attendance calendar extra field. Returns null if it was not found.
+     *
+     * @param string $variable   Name of the extra field
+     * @param string $calendarId Calendar id
+     *
+     * @return string Value
+     */
+    public static function getAttendanceCalendarExtraFieldValue($variable, $calendarId)
+    {
+        if (true !== api_get_configuration_value('attendance_calendar_set_duration')) {
+            return false;
+        }
+
+        $extraFieldValues = new ExtraFieldValue('attendance_calendar');
+        $result = $extraFieldValues->get_values_by_handler_and_field_variable($calendarId, $variable);
+        if (!empty($result['value'])) {
+            return $result['value'];
+        }
+
+        return null;
     }
 
     /**
      * edit a datetime inside attendance calendar table.
      *
-     * @param	int	attendance calendar id
-     * @param	int	attendance id
+     * @param int	attendance calendar id
+     * @param int	attendance id
+     * @param array extra values
      *
      * @return int affected rows
      */
-    public function attendance_calendar_edit($calendar_id, $attendanceId)
+    public function attendance_calendar_edit($calendar_id, $attendanceId, $extraValues = [])
     {
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $affected_rows = 0;
@@ -1967,6 +2008,11 @@ class Attendance
                     WHERE c_id = $course_id AND id = '".intval($calendar_id)."'";
             Database::query($sql);
         }
+
+        // It saves extra fields values
+        $extraFieldValue = new ExtraFieldValue('attendance_calendar');
+        $extraValues['item_id'] = $calendar_id;
+        $extraFieldValue->saveFieldValues($extraValues);
 
         // update locked attendance
         $is_all_calendar_done = self::is_all_attendance_calendar_done($attendanceId);
@@ -2505,5 +2551,408 @@ class Attendance
         }
 
         return $data;
+    }
+
+    /**
+     * Clean a sing of a user in attendance sheet.
+     *
+     * @param $userId
+     * @param $attendanceCalendarId
+     *
+     * @return false or void when it is deleted.
+     */
+    public function deleteSignature(
+        $userId,
+        $attendanceCalendarId,
+        $attendanceId
+    ) {
+        $allowSignature = api_get_configuration_value('enable_sign_attendance_sheet');
+        if (!$allowSignature) {
+            return false;
+        }
+
+        $courseId = api_get_course_int_id();
+        $em = Database::getManager();
+        $criteria = [
+            'userId' => $userId,
+            'attendanceCalendarId' => $attendanceCalendarId,
+            'cId' => $courseId,
+        ];
+
+        $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceSheet');
+        $attendanceSheet = $repo->findOneBy($criteria);
+
+        if ($attendanceSheet) {
+            /** @var CAttendanceSheet $attendanceSheet */
+            $attendanceSheet->setPresence(0);
+            $attendanceSheet->setSignature('');
+
+            $em->persist($attendanceSheet);
+            $em->flush();
+            $this->updateUsersResults([$userId], $attendanceId);
+        }
+    }
+
+    /**
+     * It checks if the calendar in a attendance sheet is blocked.
+     *
+     * @param $calendarId
+     *
+     * @return bool
+     */
+    public function isCalendarBlocked($calendarId)
+    {
+        $em = Database::getManager();
+        $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceCalendar');
+
+        $blocked = 0;
+        $attendanceCalendar = $repo->find($calendarId);
+        /** @var CAttendanceCalendar $attendanceCalendar */
+        if ($attendanceCalendar) {
+            $blocked = (int) $attendanceCalendar->getBlocked();
+        }
+
+        $isBlocked = (1 === $blocked);
+
+        return $isBlocked;
+    }
+
+    /**
+     * It blocks/unblocks the calendar in attendance sheet.
+     *
+     * @param $calendarId
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function updateCalendarBlocked($calendarId)
+    {
+        $em = Database::getManager();
+        $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceCalendar');
+        $attendanceCalendar = $repo->find($calendarId);
+
+        /** @var CAttendanceCalendar $attendanceCalendar */
+        if ($attendanceCalendar) {
+            $blocked = !$this->isCalendarBlocked($calendarId);
+            $attendanceCalendar->setBlocked($blocked);
+            $em->persist($attendanceCalendar);
+            $em->flush();
+        }
+    }
+
+    /**
+     * Get the user sign in attendance sheet.
+     *
+     * @param $userId
+     * @param $attendanceCalendarId
+     *
+     * @return false|string
+     */
+    public function getSignature(
+        $userId,
+        $attendanceCalendarId
+    ) {
+        $allowSignature = api_get_configuration_value('enable_sign_attendance_sheet');
+        if (!$allowSignature) {
+            return false;
+        }
+
+        $courseId = api_get_course_int_id();
+        $em = Database::getManager();
+        $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceSheet');
+
+        $criteria = [
+            'userId' => $userId,
+            'attendanceCalendarId' => $attendanceCalendarId,
+            'cId' => $courseId,
+        ];
+        $attendanceSheet = $repo->findOneBy($criteria);
+
+        $signature = "";
+        if ($attendanceSheet) {
+            /** @var CAttendanceSheet $attendanceSheet */
+            $signature = $attendanceSheet->getSignature();
+        }
+
+        return $signature;
+    }
+
+    /**
+     * Exports the attendance sheet to Xls format.
+     */
+    public function exportAttendanceSheetToXls(
+        int $attendanceId,
+        int $studentId,
+        string $courseCode,
+        int $groupId,
+        string $filterType,
+        ?int $myCalendarId
+    ) {
+        $users = $this->get_users_rel_course($attendanceId, $groupId);
+        $calendar = $this->get_attendance_calendar(
+            $attendanceId,
+            $filterType,
+            $myCalendarId,
+            $groupId
+        );
+
+        if (!empty($studentId)) {
+            $userId = $studentId;
+        } else {
+            $userId = api_get_user_id();
+        }
+        $courseInfo = api_get_course_info($courseCode);
+
+        $userPresence = [];
+        if (api_is_allowed_to_edit(null, true) || api_is_drh()) {
+            $userPresence = $this->get_users_attendance_sheet($attendanceId, 0, $groupId);
+        } else {
+            $userPresence = $this->get_users_attendance_sheet($attendanceId, $userId, $groupId);
+        }
+
+        // Set headers pdf.
+        $teacherInfo = CourseManager::get_teacher_list_from_course_code($courseInfo['code']);
+        $teacherName = null;
+        foreach ($teacherInfo as $teacherData) {
+            if ($teacherName != null) {
+                $teacherName = $teacherName." / ";
+            }
+            $teacherName .= api_get_person_name($teacherData['firstname'], $teacherData['lastname']);
+        }
+
+        // Get data table
+        $dataTable = [];
+        $headTable = ['#', get_lang('Name')];
+        foreach ($calendar as $classDay) {
+            $labelDuration = !empty($classDay['duration']) ? get_lang('Duration').' : '.$classDay['duration'] : '';
+            $headTable[] =
+                api_format_date($classDay['date_time'], DATE_FORMAT_NUMBER_NO_YEAR).' '.
+                api_format_date($classDay['date_time'], TIME_NO_SEC_FORMAT).' '.
+                $labelDuration;
+        }
+        $dataTable[] = $headTable;
+        $dataUsersPresence = $userPresence;
+        $count = 1;
+
+        if (!empty($users)) {
+            foreach ($users as $user) {
+                $cols = 1;
+                $result = [];
+                $result['count'] = $count;
+                $result['full_name'] = api_get_person_name($user['firstname'], $user['lastname']);
+                foreach ($calendar as $classDay) {
+                    $commentInfo = $this->getComment($user['user_id'], $classDay['id']);
+                    $comment = '';
+                    if (!empty($commentInfo['comment'])) {
+                        $comment .= $commentInfo['comment'];
+                    }
+                    if (!empty($commentInfo['author'])) {
+                        $comment .= ' - '.get_lang('Author').': '.$commentInfo['author'];
+                    }
+                    $txtComment = !empty($comment) ? '[comment]'.$comment : '';
+                    if (1 == (int) $classDay['done_attendance']) {
+                        if (1 == (int) $dataUsersPresence[$user['user_id']][$classDay['id']]['presence']) {
+                            $result[$classDay['id']] = get_lang('UserAttendedSymbol').$txtComment;
+                        } else {
+                            $result[$classDay['id']] = get_lang('UserNotAttendedSymbol').$txtComment;
+                        }
+                    } else {
+                        $result[$classDay['id']] = ' ';
+                    }
+                    $cols++;
+                }
+                $count++;
+                $dataTable[] = $result;
+            }
+        }
+
+        $filename = get_lang('Attendance').'-'.api_get_local_time();
+        Export::arrayToXlsAndComments($dataTable, $filename);
+
+        exit;
+    }
+
+    /**
+     * Get the user comment in attendance sheet.
+     *
+     * @return false|array The comment text and the author.
+     */
+    public function getComment(
+        int $userId,
+        int $attendanceCalendarId
+    ) {
+        $allowComment = api_get_configuration_value('attendance_allow_comments');
+        if (!$allowComment) {
+            return false;
+        }
+
+        $courseId = api_get_course_int_id();
+        $em = Database::getManager();
+        $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceSheet');
+
+        $criteria = [
+            'userId' => $userId,
+            'attendanceCalendarId' => $attendanceCalendarId,
+            'cId' => $courseId,
+        ];
+        $attendanceSheet = $repo->findOneBy($criteria);
+
+        $comment = "";
+        if ($attendanceSheet) {
+            /** @var CAttendanceSheet $attendanceSheet */
+            $attendanceSheetId = $attendanceSheet->getIid();
+
+            $criteria = [
+                'userId' => $userId,
+                'attendanceSheetId' => $attendanceSheetId,
+            ];
+
+            $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceResultComment');
+            $attendanceResultComment = $repo->findOneBy($criteria);
+
+            $author = '';
+            /** @var CAttendanceResultComment $attendanceResultComment */
+            if ($attendanceResultComment) {
+                $comment = $attendanceResultComment->getComment();
+                $authorId = $attendanceResultComment->getAuthorUserId();
+                if (!empty($authorId)) {
+                    $authorInfo = api_get_user_info($authorId);
+                    $author = api_get_person_name($authorInfo['firstname'], $authorInfo['lastname']);
+                }
+            }
+        }
+
+        $commentInfo = [
+            'comment' => $comment,
+            'author' => $author,
+        ];
+
+        return $commentInfo;
+    }
+
+    /**
+     * Saves the user comment from attendance sheet.
+     *
+     * @return false
+     */
+    public function saveComment(
+        int $userId,
+        int $attendanceCalendarId,
+        string $comment,
+        int $attendanceId
+    ) {
+        $allowComment = api_get_configuration_value('attendance_allow_comments');
+        if (!$allowComment) {
+            return false;
+        }
+
+        $courseId = api_get_course_int_id();
+        $em = Database::getManager();
+        $criteria = [
+            'userId' => $userId,
+            'attendanceCalendarId' => $attendanceCalendarId,
+            'cId' => $courseId,
+        ];
+
+        $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceSheet');
+        $attendanceSheet = $repo->findOneBy($criteria);
+
+        /** @var CAttendanceSheet $attendanceSheet */
+        if (!$attendanceSheet) {
+            $attendanceSheet = new CAttendanceSheet();
+            $attendanceSheet
+                ->setCId($courseId)
+                ->setPresence(0)
+                ->setUserId($userId)
+                ->setAttendanceCalendarId($attendanceCalendarId);
+
+            $em->persist($attendanceSheet);
+            $em->flush();
+        }
+        $this->updateUsersResults([$userId], $attendanceId);
+
+        $attendanceSheetId = $attendanceSheet->getIid();
+
+        // It saves the comment in the current attendance sheet
+        $criteria = [
+            'userId' => $userId,
+            'attendanceSheetId' => $attendanceSheetId,
+        ];
+
+        $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceResultComment');
+        $attendanceResultComment = $repo->findOneBy($criteria);
+
+        /** @var CAttendanceResultComment $attendanceResultComment */
+        if ($attendanceResultComment) {
+            $attendanceResultComment->setComment($comment);
+            $attendanceResultComment->setUpdatedAt(api_get_utc_datetime(null, false, true));
+            $attendanceResultComment->setAuthorUserId(api_get_user_id());
+            $em->persist($attendanceResultComment);
+            $em->flush();
+        } else {
+            $attendanceResultComment = new CAttendanceResultComment();
+            $attendanceResultComment
+                ->setAttendanceSheetId($attendanceSheetId)
+                ->setUserId($userId)
+                ->setComment($comment)
+                ->setAuthorUserId(api_get_user_id());
+
+            $em->persist($attendanceResultComment);
+            $em->flush();
+        }
+    }
+
+    /**
+     * It saves the user sign from attendance sheet.
+     *
+     * @param $userId
+     * @param $attendanceCalendarId
+     * @param $file string in base64
+     *
+     * @return false or void when it is saved.
+     */
+    public function saveSignature(
+        $userId,
+        $attendanceCalendarId,
+        $file,
+        $attendanceId,
+        $courseId = NULL
+    ) {
+        $allowSignature = api_get_configuration_value('enable_sign_attendance_sheet');
+        if (!$allowSignature) {
+            return false;
+        }
+        if (!isset($courseId)) {
+            $courseId = api_get_course_int_id();
+        }
+        $em = Database::getManager();
+        $criteria = [
+            'userId' => $userId,
+            'attendanceCalendarId' => $attendanceCalendarId,
+            'cId' => $courseId,
+        ];
+
+        $repo = $em->getRepository('ChamiloCourseBundle:CAttendanceSheet');
+        $attendanceSheet = $repo->findOneBy($criteria);
+
+        /** @var CAttendanceSheet $attendanceSheet */
+        if ($attendanceSheet) {
+            $attendanceSheet->setPresence(1);
+            $attendanceSheet->setSignature($file);
+            $em->persist($attendanceSheet);
+            $em->flush();
+        } else {
+            $attendanceSheet = new CAttendanceSheet();
+            $attendanceSheet
+                ->setCId($courseId)
+                ->setPresence(1)
+                ->setUserId($userId)
+                ->setAttendanceCalendarId($attendanceCalendarId)
+                ->setSignature($file);
+
+            $em->persist($attendanceSheet);
+            $em->flush();
+        }
+        $this->updateUsersResults([$userId], $attendanceId);
     }
 }

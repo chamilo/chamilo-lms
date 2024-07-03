@@ -121,6 +121,15 @@ class GradebookCategory
     protected $gradeModelId;
 
     /**
+     * Enable skills in subcategory to work independant on assignement.
+     *
+     * @var int
+     *
+     * @ORM\Column(name="allow_skills_by_subcategory", type="integer", nullable=true, options={"default": 1})
+     */
+    //protected $allowSkillsBySubcategory;
+
+    /**
      * @var bool
      *
      * @ORM\Column(
@@ -500,5 +509,25 @@ class GradebookCategory
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAllowSkillsBySubcategory()
+    {
+        return $this->allowSkillsBySubcategory;
+    }
+
+    /**
+     * @param int $allowSkillsBySubcategory
+     *
+     * @return GradebookCategory
+     */
+    public function setAllowSkillsBySubcategory($allowSkillsBySubcategory)
+    {
+        $this->allowSkillsBySubcategory = $allowSkillsBySubcategory;
+
+        return $this;
     }
 }

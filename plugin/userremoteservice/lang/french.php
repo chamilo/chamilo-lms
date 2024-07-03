@@ -15,6 +15,7 @@ $strings['salt_help'] =
 <br/><code>$salt</code> est la valeur saisie ici,
 <br/><code>$userId</code> est le numéro de l\'utilisateur auquel fait référence le paramètre d\'URL <em>username</em> et
 <br/><code>$hash</code> représente la valeur du paramètre d\'URL <em>hash</em>.';
+$strings['hide_link_from_navigation_menu'] = 'Masquer les liens dans le menu';
 
 // Please keep alphabetically sorted
 $strings['CreateService'] = "Ajouter le service au menu";
@@ -22,3 +23,4 @@ $strings['DeleteServices'] = "Retirer les services du menu";
 $strings['ServicesToDelete'] = "Services à retirer du menu";
 $strings['ServiceTitle'] = "Titre du service";
 $strings['ServiceURL'] = "Adresse web du service (URL)";
+$strings['RedirectAccessURL'] = "Adresse à utiliser pour rediriger l'utilisateur au service (URL)";

@@ -11,5 +11,5 @@ has in studying some topics or some challenges they face that might affect their
 This plugin is in an early stage of development and should later (once mainstreamed) be fully
  integrated into Chamilo.
  
-The plugin installation requires the manual creation of a folder or a change in permissions.
-Please mind the installation instructions when enabling it.
+*Prior to installing/uninstalling this plugin, you will need to make sure the src/Chamilo/PluginBundle/Entity folder is
+temporarily writeable by the web server.*

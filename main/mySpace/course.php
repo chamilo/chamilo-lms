@@ -59,7 +59,7 @@ if (api_get_setting('add_users_by_coach') == 'true') {
     }
 }
 
-Display :: display_header(get_lang('Courses'));
+Display::display_header(get_lang('Courses'));
 $user_id = 0;
 $a_courses = [];
 $menu_items = [];
@@ -307,11 +307,11 @@ function get_courses($from, $limit, $column, $direction)
             if (count($userIdList) > 0) {
                 $countStudents = count($userIdList);
                 // tracking data
-                $avgProgressInCourse = Tracking :: get_avg_student_progress($userIdList, $courseCode, [], $sessionId);
-                $avgScoreInCourse = Tracking :: get_avg_student_score($userIdList, $courseCode, [], $sessionId);
-                $avgTimeSpentInCourse = Tracking :: get_time_spent_on_the_course($userIdList, $courseInfo['real_id'], $sessionId);
-                $messagesInCourse = Tracking :: count_student_messages($userIdList, $courseCode, $sessionId);
-                $assignmentsInCourse = Tracking :: count_student_assignments($userIdList, $courseCode, $sessionId);
+                $avgProgressInCourse = Tracking::get_avg_student_progress($userIdList, $courseCode, [], $sessionId);
+                $avgScoreInCourse = Tracking::get_avg_student_score($userIdList, $courseCode, [], $sessionId);
+                $avgTimeSpentInCourse = Tracking::get_time_spent_on_the_course($userIdList, $courseInfo['real_id'], $sessionId);
+                $messagesInCourse = Tracking::count_student_messages($userIdList, $courseCode, $sessionId);
+                $assignmentsInCourse = Tracking::count_student_assignments($userIdList, $courseCode, $sessionId);
                 $avgTimeSpentInCourse = api_time_to_hms($avgTimeSpentInCourse / $countStudents);
                 $avgProgressInCourse = round($avgProgressInCourse / $countStudents, 2);
 
@@ -395,4 +395,4 @@ $form->setDefaults($params);
 $form->display();
 $table->display();
 
-Display :: display_footer();
+Display::display_footer();

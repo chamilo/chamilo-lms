@@ -19,6 +19,7 @@ class AppPlugin
         'content_bottom',
         'header_main',
         'header_center',
+        'header_left_logo',
         'header_left',
         'header_right',
         'pre_footer',
@@ -233,19 +234,22 @@ class AppPlugin
             'embedregistry',
             'exercise_signature',
             'ext_auth_chamilo_logout_button_behaviour',
+            'externalnotificationconnect',
+            'extramenufromwebservice',
             'follow_buttons',
             'formLogin_hide_unhide',
             'google_maps',
             'google_meet',
             'grading_electronic',
             'h5p',
+            'h5pimport',
             'hello_world',
             'ims_lti',
-            'jcapture',
             'justification',
             'kannelsms',
             'keycloak',
             'learning_calendar',
+            'lti_provider',
             'maintenancemode',
             'migrationmoodle',
             'mindmap',
@@ -253,6 +257,7 @@ class AppPlugin
             'notebookteacher',
             'oauth2',
             'olpc_peru_filter',
+            'onlyoffice',
             'openmeetings',
             'pausetraining',
             'pens',
@@ -281,6 +286,7 @@ class AppPlugin
             'whispeakauth',
             'zoom',
             'xapi',
+            'ai_helper',
         ];
 
         return $officialPlugins;
@@ -882,5 +888,31 @@ class AppPlugin
         }
 
         return false;
+    }
+
+    public static function cleanEntitiesInBundle()
+    {
+        $pluginList = [
+            'CourseHomeNotify',
+            'EmbedRegistry',
+            'ImsLti',
+            'LtiProvider',
+            'StudentFollowUp',
+            'WhispeakAuth',
+        ];
+
+        foreach ($pluginList as $pluginName) {
+            $entityPath = api_get_path(SYS_PATH).'src/Chamilo/PluginBundle/Entity/'.$pluginName;
+
+            if (!is_dir($entityPath)) {
+                continue;
+            }
+
+            if (!is_writable($entityPath)) {
+                continue;
+            }
+
+            rmdirr($entityPath);
+        }
     }
 }

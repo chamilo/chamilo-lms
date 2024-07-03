@@ -56,11 +56,11 @@ class LtiScoresResource extends LtiAdvantageServiceResource
     {
         parent::__construct($toolId, $courseId);
 
-        $this->lineItem = Database::getManager()->find('ChamiloPluginBundle:ImsLti\LineItem', (int)$lineItemId);
+        $this->lineItem = Database::getManager()->find('ChamiloPluginBundle:ImsLti\LineItem', (int) $lineItemId);
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function validate()
     {
@@ -177,8 +177,6 @@ class LtiScoresResource extends LtiAdvantageServiceResource
 
     /**
      * @param GradebookResult $result
-     * @param array           $data
-     * @param User            $student
      *
      * @throws OptimisticLockException
      */

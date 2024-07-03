@@ -1,6 +1,8 @@
 <?php
 /* For license terms, see /license.txt */
+
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\PluginBundle\Form\FrmEdit;
 
 $cidReset = true;
 
@@ -67,12 +69,11 @@ if ($form->validate()) {
                 ->setRedirectUrl($formValues['redirect_url'])
                 ->setAdvantageServices(
                     [
-                        'ags' => isset($formValues['1p3_ags'])
-                            ? $formValues['1p3_ags']
-                            : LtiAssignmentGradesService::AGS_NONE,
+                        'ags' => $formValues['1p3_ags'] ?? LtiAssignmentGradesService::AGS_NONE,
                         'nrps' => $formValues['1p3_nrps'],
                     ]
                 )
+                ->setJwksUrl($formValues['jwks_url'])
                 ->publicKey = $formValues['public_key'];
         }
 

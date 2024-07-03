@@ -725,4 +725,700 @@ switch ($action) {
         header('Content-type: application/json');
         echo json_encode($list);
         break;
+    case 'report_quarterly_users':
+
+        $currentQuarterDates = getQuarterDates();
+        $pre1QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-3 month')
+                ->format('Y-m-d')
+        );
+        $pre2QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-6 month')
+                ->format('Y-m-d')
+        );
+        $pre3QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-9 month')
+                ->format('Y-m-d')
+        );
+        $pre4QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-12 month')
+                ->format('Y-m-d')
+        );
+        $pre5QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-15 month')
+                ->format('Y-m-d')
+        );
+
+        // Make de headers for the table
+        $headers = [
+            '',
+            $pre5QuarterDates['quarter_title'],
+            $pre4QuarterDates['quarter_title'],
+            $pre3QuarterDates['quarter_title'],
+            $pre2QuarterDates['quarter_title'],
+            $pre1QuarterDates['quarter_title'],
+            get_lang('YoY'),
+            $currentQuarterDates['quarter_title'].'*',
+        ];
+
+        // Get the data for the number of user registered row (2)
+        $countUsersTotal = UserManager::get_number_of_users(
+            null,
+            null,
+            null
+        );
+        $countUsersPre1Quarter = UserManager::get_number_of_users(
+            null,
+            null,
+            null,
+            null,
+            $pre1QuarterDates['quarter_end']
+        );
+        $countUsersPre2Quarter = UserManager::get_number_of_users(
+            null,
+            null,
+            null,
+            null,
+            $pre2QuarterDates['quarter_end']
+        );
+        $countUsersPre3Quarter = UserManager::get_number_of_users(
+            null,
+            null,
+            null,
+            null,
+            $pre3QuarterDates['quarter_end']
+        );
+        $countUsersPre4Quarter = UserManager::get_number_of_users(
+            null,
+            null,
+            null,
+            null,
+            $pre4QuarterDates['quarter_end']
+        );
+        $countUsersPre5Quarter = UserManager::get_number_of_users(
+            null,
+            null,
+            null,
+            null,
+            $pre5QuarterDates['quarter_end']
+        );
+        // Calculate percent for first row
+        $percentIncrementUsersRegistered = api_calculate_increment_percent(
+            $countUsersPre1Quarter,
+            $countUsersPre5Quarter
+        );
+
+        // Get the data for number of users connected row (3)
+        $countUsersConnectedCurrentQuarter = count(
+            Statistics::getLoginsByDate(
+                $currentQuarterDates['quarter_start'],
+                $currentQuarterDates['quarter_end']
+            )
+        );
+        $countUsersConnectedPre1Quarter = count(
+            Statistics::getLoginsByDate(
+                $pre1QuarterDates['quarter_start'],
+                $pre1QuarterDates['quarter_end']
+            )
+        );
+        $countUsersConnectedPre2Quarter = count(
+            Statistics::getLoginsByDate(
+                $pre2QuarterDates['quarter_start'],
+                $pre2QuarterDates['quarter_end']
+            )
+        );
+        $countUsersConnectedPre3Quarter = count(
+            Statistics::getLoginsByDate(
+                $pre3QuarterDates['quarter_start'],
+                $pre3QuarterDates['quarter_end']
+            )
+        );
+        $countUsersConnectedPre4Quarter = count(
+            Statistics::getLoginsByDate(
+                $pre4QuarterDates['quarter_start'],
+                $pre4QuarterDates['quarter_end']
+            )
+        );
+        $countUsersConnectedPre5Quarter = count(
+            Statistics::getLoginsByDate(
+                $pre5QuarterDates['quarter_start'],
+                $pre5QuarterDates['quarter_end']
+            )
+        );
+
+        // Calculate percent for second row
+        $percentIncrementUsersConnected = api_calculate_increment_percent(
+            $countUsersConnectedPre1Quarter,
+            $countUsersConnectedPre5Quarter
+        );
+
+        //Make de rows with the recollected data
+        $rows = [];
+        $rows[] = [
+            get_lang('NumberOfUsersRegisteredTotal'),
+            $countUsersPre5Quarter,
+            $countUsersPre4Quarter,
+            $countUsersPre3Quarter,
+            $countUsersPre2Quarter,
+            $countUsersPre1Quarter,
+            $percentIncrementUsersRegistered,
+            $countUsersTotal,
+        ];
+        //todo comprobacion + -
+        $rows[] = [
+            get_lang('NumberOfUsersRegisteredCompared'),
+            '-',
+            '+'.($countUsersPre1Quarter - $countUsersPre2Quarter),
+            '+'.($countUsersPre2Quarter - $countUsersPre3Quarter),
+            '+'.($countUsersPre3Quarter - $countUsersPre4Quarter),
+            '+'.($countUsersPre4Quarter - $countUsersPre5Quarter),
+            '-',
+            '+'.($countUsersTotal - $countUsersPre1Quarter),
+        ];
+        $rows[] = [
+            get_lang('NumberOfUsersWhoConnected'),
+            $countUsersConnectedPre5Quarter,
+            $countUsersConnectedPre4Quarter,
+            $countUsersConnectedPre3Quarter,
+            $countUsersConnectedPre2Quarter,
+            $countUsersConnectedPre1Quarter,
+            $percentIncrementUsersConnected,
+            $countUsersConnectedCurrentQuarter,
+        ];
+
+        echo Display::table($headers, $rows, []);
+        echo Display::label(get_lang('IncompleteDataCurrentQuarter'), 'warning');
+        break;
+    case 'report_quarterly_courses':
+
+        $currentQuarterDates = getQuarterDates();
+        $pre1QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-3 month')
+                ->format('Y-m-d')
+        );
+        $pre2QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-6 month')
+                ->format('Y-m-d')
+        );
+        $pre3QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-9 month')
+                ->format('Y-m-d')
+        );
+        $pre4QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-12 month')
+                ->format('Y-m-d')
+        );
+        $pre5QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-15 month')
+                ->format('Y-m-d')
+        );
+
+        // Make the headers for the table
+        $headers = [
+            '',
+            $pre5QuarterDates['quarter_title'],
+            $pre4QuarterDates['quarter_title'],
+            $pre3QuarterDates['quarter_title'],
+            $pre2QuarterDates['quarter_title'],
+            $pre1QuarterDates['quarter_title'],
+            get_lang('YoY'),
+            $currentQuarterDates['quarter_title'].'*',
+        ];
+
+        // Get the data for the rows
+        $countCoursesCurrentQuarter = Statistics::countCourses(null, null, null);
+        $countCoursesPre1Quarter = Statistics::countCourses(null, null, $pre1QuarterDates['quarter_end']);
+        $countCoursesPre2Quarter = Statistics::countCourses(null, null, $pre2QuarterDates['quarter_end']);
+        $countCoursesPre3Quarter = Statistics::countCourses(null, null, $pre3QuarterDates['quarter_end']);
+        $countCoursesPre4Quarter = Statistics::countCourses(null, null, $pre4QuarterDates['quarter_end']);
+        $countCoursesPre5Quarter = Statistics::countCourses(null, null, $pre5QuarterDates['quarter_end']);
+
+        $auxArrayVisibilities = [
+            COURSE_VISIBILITY_OPEN_WORLD,
+            COURSE_VISIBILITY_OPEN_PLATFORM,
+            COURSE_VISIBILITY_REGISTERED,
+        ];
+
+        $countCoursesAvailableCurrentQuarter = Statistics::countCoursesByVisibility($auxArrayVisibilities);
+        $countCoursesAvailablePre1Quarter = Statistics::countCoursesByVisibility(
+            $auxArrayVisibilities,
+            null,
+            $pre1QuarterDates['quarter_end']
+        );
+        $countCoursesAvailablePre2Quarter = Statistics::countCoursesByVisibility(
+            $auxArrayVisibilities,
+            null,
+            $pre2QuarterDates['quarter_end']
+        );
+        $countCoursesAvailablePre3Quarter = Statistics::countCoursesByVisibility(
+            $auxArrayVisibilities,
+            null,
+            $pre3QuarterDates['quarter_end']
+        );
+        $countCoursesAvailablePre4Quarter = Statistics::countCoursesByVisibility(
+            $auxArrayVisibilities,
+            null,
+            $pre4QuarterDates['quarter_end']
+        );
+        $countCoursesAvailablePre5Quarter = Statistics::countCoursesByVisibility(
+            $auxArrayVisibilities,
+            null,
+            $pre5QuarterDates['quarter_end']
+        );
+
+        // Calculate percents for first row
+        $percentIncrementCourses = api_calculate_increment_percent(
+            $countCoursesPre1Quarter,
+            $countCoursesPre5Quarter
+        );
+        // Calculate percents for second row
+        $percentIncrementUsersRegistered = api_calculate_increment_percent(
+            $countCoursesAvailablePre1Quarter,
+            $countCoursesAvailablePre5Quarter
+        );
+
+        //Make the rows with the recollected data
+        $rows = [];
+        $rows[] = [
+            get_lang('NumberOfExistingCoursesTotal'),
+            $countCoursesPre5Quarter,
+            $countCoursesPre4Quarter,
+            $countCoursesPre3Quarter,
+            $countCoursesPre2Quarter,
+            $countCoursesPre1Quarter,
+            $percentIncrementCourses,
+            $countCoursesCurrentQuarter,
+        ];
+        $rows[] = [
+            get_lang('NumberOfAvailableCourses'),
+            $countCoursesAvailablePre5Quarter,
+            $countCoursesAvailablePre4Quarter,
+            $countCoursesAvailablePre3Quarter,
+            $countCoursesAvailablePre2Quarter,
+            $countCoursesAvailablePre1Quarter,
+            $percentIncrementUsersRegistered,
+            $countCoursesAvailableCurrentQuarter,
+        ];
+
+        echo Display::table($headers, $rows, []);
+        echo Display::label(get_lang('IncompleteDataCurrentQuarter'), 'warning');
+    break;
+    case 'report_quarterly_hours_of_training':
+
+        $currentQuarterDates = getQuarterDates();
+        $pre1QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-3 month')
+                ->format('Y-m-d')
+        );
+        $pre2QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-6 month')
+                ->format('Y-m-d')
+        );
+        $pre3QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-9 month')
+                ->format('Y-m-d')
+        );
+        $pre4QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-12 month')
+                ->format('Y-m-d')
+        );
+        $pre5QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-15 month')
+                ->format('Y-m-d')
+        );
+
+        // Make the headers for the table
+        $headers = [
+            '',
+            $pre5QuarterDates['quarter_title'],
+            $pre4QuarterDates['quarter_title'],
+            $pre3QuarterDates['quarter_title'],
+            $pre2QuarterDates['quarter_title'],
+            $pre1QuarterDates['quarter_title'],
+            get_lang('YoY'),
+            $currentQuarterDates['quarter_title'].'*',
+        ];
+
+        // Get data for the row
+        $timeSpentCoursesCurrentQuarter = Tracking::getTotalTimeSpentInCourses(
+            $currentQuarterDates['quarter_start'],
+            $currentQuarterDates['quarter_end']
+        );
+        $timeSpentCourses1PreQuarter = Tracking::getTotalTimeSpentInCourses(
+            $pre1QuarterDates['quarter_start'],
+            $pre1QuarterDates['quarter_end']
+        );
+        $timeSpentCourses2PreQuarter = Tracking::getTotalTimeSpentInCourses(
+            $pre2QuarterDates['quarter_start'],
+            $pre2QuarterDates['quarter_end']
+        );
+        $timeSpentCourses3PreQuarter = Tracking::getTotalTimeSpentInCourses(
+            $pre3QuarterDates['quarter_start'],
+            $pre3QuarterDates['quarter_end']
+        );
+        $timeSpentCourses4PreQuarter = Tracking::getTotalTimeSpentInCourses(
+            $pre4QuarterDates['quarter_start'],
+            $pre4QuarterDates['quarter_end']
+        );
+        $timeSpentCourses5PreQuarter = Tracking::getTotalTimeSpentInCourses(
+            $pre5QuarterDates['quarter_start'],
+            $pre5QuarterDates['quarter_end']
+        );
+
+        // Calculate percent for the row
+        $percentIncrementTimeSpent = api_calculate_increment_percent(
+            $timeSpentCourses1PreQuarter,
+            $timeSpentCourses5PreQuarter
+        );
+
+        //Make the row with the recollected data
+        $rows = [];
+        $rows[] = [
+            get_lang('NumberOfHoursTrainingFollowed'),
+            $timeSpentCourses5PreQuarter,
+            $timeSpentCourses4PreQuarter,
+            $timeSpentCourses3PreQuarter,
+            $timeSpentCourses2PreQuarter,
+            $timeSpentCourses1PreQuarter,
+            $percentIncrementTimeSpent,
+            $timeSpentCoursesCurrentQuarter,
+        ];
+        echo Display::table($headers, $rows, []);
+        echo Display::label(get_lang('IncompleteDataCurrentQuarter'), 'warning');
+
+    break;
+    case 'report_quarterly_number_of_certificates_generated':
+
+        $currentQuarterDates = getQuarterDates();
+        $pre1QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-3 month')
+                ->format('Y-m-d')
+        );
+        $pre2QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-6 month')
+                ->format('Y-m-d')
+        );
+        $pre3QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-9 month')
+                ->format('Y-m-d')
+        );
+        $pre4QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-12 month')
+                ->format('Y-m-d')
+        );
+        $pre5QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-15 month')
+                ->format('Y-m-d')
+        );
+
+        // Make the headers for the table
+        $headers = [
+            '',
+            $pre5QuarterDates['quarter_title'],
+            $pre4QuarterDates['quarter_title'],
+            $pre3QuarterDates['quarter_title'],
+            $pre2QuarterDates['quarter_title'],
+            $pre1QuarterDates['quarter_title'],
+            get_lang('YoY'),
+            $currentQuarterDates['quarter_title'].'*',
+        ];
+
+        // Get data for the row
+        $certificateGeneratedCurrentQuarter = Statistics::countCertificatesByQuarter(
+            null,
+            $currentQuarterDates['quarter_end']
+        );
+        $certificateGenerated1PreQuarter = Statistics::countCertificatesByQuarter(
+            null,
+            $pre1QuarterDates['quarter_end']
+        );
+        $certificateGenerated2PreQuarter = Statistics::countCertificatesByQuarter(
+            null,
+            $pre2QuarterDates['quarter_end']
+        );
+        $certificateGenerated3PreQuarter = Statistics::countCertificatesByQuarter(
+            null,
+            $pre3QuarterDates['quarter_end']
+        );
+        $certificateGenerated4PreQuarter = Statistics::countCertificatesByQuarter(
+            null,
+            $pre4QuarterDates['quarter_end']
+        );
+        $certificateGenerated5PreQuarter = Statistics::countCertificatesByQuarter(
+            null,
+            $pre5QuarterDates['quarter_end']
+        );
+
+        // Calculate percent for the row
+        $percentIncrementCertificateGenerated = api_calculate_increment_percent(
+            $certificateGenerated1PreQuarter,
+            $certificateGenerated5PreQuarter
+        );
+
+        //Make the row with the recollected data
+        $rows = [];
+        $rows[] = [
+            get_lang('NumberOfCertificatesGeneratedTotal'),
+            $certificateGenerated5PreQuarter,
+            $certificateGenerated4PreQuarter,
+            $certificateGenerated3PreQuarter,
+            $certificateGenerated2PreQuarter,
+            $certificateGenerated1PreQuarter,
+            $percentIncrementCertificateGenerated,
+            $certificateGeneratedCurrentQuarter,
+        ];
+
+        echo Display::table($headers, $rows, []);
+        echo Display::label(get_lang('IncompleteDataCurrentQuarter'), 'warning');
+
+    break;
+    case "report_quarterly_sessions_by_duration":
+
+        $currentQuarterDates = getQuarterDates();
+        $pre1QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-3 month')
+                ->format('Y-m-d')
+        );
+        $pre2QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-6 month')
+                ->format('Y-m-d')
+        );
+        $pre3QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-9 month')
+                ->format('Y-m-d')
+        );
+        $pre4QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-12 month')
+                ->format('Y-m-d')
+        );
+        $pre5QuarterDates = getQuarterDates(
+            date_create($currentQuarterDates['quarter_start'])
+                ->modify('-15 month')
+                ->format('Y-m-d')
+        );
+
+        // Make the headers for the table
+        $headers = [
+            get_lang('SessionsByDurationByQuarter'),
+            $pre5QuarterDates['quarter_title'],
+            $pre4QuarterDates['quarter_title'],
+            $pre3QuarterDates['quarter_title'],
+            $pre2QuarterDates['quarter_title'],
+            $pre1QuarterDates['quarter_title'],
+            get_lang('YoY'),
+            $currentQuarterDates['quarter_title'].'*',
+        ];
+
+        // Get the data for the rows
+        $sessionsDurationCurrentQuarter = Statistics::getSessionsByDuration(
+            $currentQuarterDates['quarter_start'],
+            $currentQuarterDates['quarter_end']
+        );
+        $sessionsDuration1PreQuarter = Statistics::getSessionsByDuration(
+            $pre1QuarterDates['quarter_start'],
+            $pre1QuarterDates['quarter_end']
+        );
+        $sessionsDuration2PreQuarter = Statistics::getSessionsByDuration(
+            $pre2QuarterDates['quarter_start'],
+            $pre2QuarterDates['quarter_end']
+        );
+        $sessionsDuration3PreQuarter = Statistics::getSessionsByDuration(
+            $pre3QuarterDates['quarter_start'],
+            $pre3QuarterDates['quarter_end']
+        );
+        $sessionsDuration4PreQuarter = Statistics::getSessionsByDuration(
+            $pre4QuarterDates['quarter_start'],
+            $pre4QuarterDates['quarter_end']
+        );
+        $sessionsDuration5PreQuarter = Statistics::getSessionsByDuration(
+            $pre5QuarterDates['quarter_start'],
+            $pre5QuarterDates['quarter_end']
+        );
+
+        // Calculate percent for the rows
+        $percentIncrementSessionDuration0 = api_calculate_increment_percent(
+            $sessionsDuration1PreQuarter['0'],
+            $sessionsDuration5PreQuarter['0']
+        );
+        $percentIncrementSessionDuration5 = api_calculate_increment_percent(
+            $sessionsDuration1PreQuarter['5'],
+            $sessionsDuration5PreQuarter['5']
+        );
+        $percentIncrementSessionDuration10 = api_calculate_increment_percent(
+            $sessionsDuration1PreQuarter['10'],
+            $sessionsDuration5PreQuarter['10']
+        );
+        $percentIncrementSessionDuration15 = api_calculate_increment_percent(
+            $sessionsDuration1PreQuarter['15'],
+            $sessionsDuration5PreQuarter['15']
+        );
+        $percentIncrementSessionDuration30 = api_calculate_increment_percent(
+            $sessionsDuration1PreQuarter['30'],
+            $sessionsDuration5PreQuarter['30']
+        );
+        $percentIncrementSessionDuration60 = api_calculate_increment_percent(
+            $sessionsDuration1PreQuarter['60'],
+            $sessionsDuration5PreQuarter['60']
+        );
+
+        //Make the rows with the recollected data
+        $rows = [];
+        $rows[] = [
+            '0-5&#8242;',
+            $sessionsDuration5PreQuarter['0'],
+            $sessionsDuration4PreQuarter['0'],
+            $sessionsDuration3PreQuarter['0'],
+            $sessionsDuration2PreQuarter['0'],
+            $sessionsDuration1PreQuarter['0'],
+            $percentIncrementSessionDuration0,
+            $sessionsDurationCurrentQuarter['0'],
+        ];
+        $rows[] = [
+            '6-10&#8242;',
+            $sessionsDuration5PreQuarter['5'],
+            $sessionsDuration4PreQuarter['5'],
+            $sessionsDuration3PreQuarter['5'],
+            $sessionsDuration2PreQuarter['5'],
+            $sessionsDuration1PreQuarter['5'],
+            $percentIncrementSessionDuration5,
+            $sessionsDurationCurrentQuarter['5'],
+        ];
+        $rows[] = [
+            '11-15&#8242;',
+            $sessionsDuration5PreQuarter['10'],
+            $sessionsDuration4PreQuarter['10'],
+            $sessionsDuration3PreQuarter['10'],
+            $sessionsDuration2PreQuarter['10'],
+            $sessionsDuration1PreQuarter['10'],
+            $percentIncrementSessionDuration10,
+            $sessionsDurationCurrentQuarter['10'],
+        ];
+        $rows[] = [
+            '16-30&#8242;',
+            $sessionsDuration5PreQuarter['15'],
+            $sessionsDuration4PreQuarter['15'],
+            $sessionsDuration3PreQuarter['15'],
+            $sessionsDuration2PreQuarter['15'],
+            $sessionsDuration1PreQuarter['15'],
+            $percentIncrementSessionDuration15,
+            $sessionsDurationCurrentQuarter['15'],
+        ];
+        $rows[] = [
+            '31-60&#8242;',
+            $sessionsDuration5PreQuarter['30'],
+            $sessionsDuration4PreQuarter['30'],
+            $sessionsDuration3PreQuarter['30'],
+            $sessionsDuration2PreQuarter['30'],
+            $sessionsDuration1PreQuarter['30'],
+            $percentIncrementSessionDuration30,
+            $sessionsDurationCurrentQuarter['30'],
+        ];
+        $rows[] = [
+            '60-&#8734;&#8242;',
+            $sessionsDuration5PreQuarter['60'],
+            $sessionsDuration4PreQuarter['60'],
+            $sessionsDuration3PreQuarter['60'],
+            $sessionsDuration2PreQuarter['60'],
+            $sessionsDuration1PreQuarter['60'],
+            $percentIncrementSessionDuration60,
+            $sessionsDurationCurrentQuarter['60'],
+        ];
+
+        echo Display::table($headers, $rows, []);
+        echo Display::label(get_lang('IncompleteDataCurrentQuarter'), 'warning');
+    break;
+    case "report_quarterly_courses_and_sessions":
+
+        // Make the headers for the tables
+        $headers = [
+             [
+                get_lang('ListOfCoursesCodes'),
+                get_lang('NumberOfSubscribedUsers').'*',
+                get_lang('NumberOfUsersWhoFinishedCourse'),
+            ],
+            [
+                get_lang('ListOfCoursesCodesAndSessions'),
+                get_lang('NumberOfSubscribedUsers').'*',
+                get_lang('NumberOfUsersWhoFinishedCourse'),
+            ],
+        ];
+
+        // Get the data fot the first table
+        $courses = UserManager::countUsersWhoFinishedCourses();
+
+        //Make the rows for first table
+        $rows = [];
+        foreach ($courses as $course => $data) {
+            $course_url = api_get_path(WEB_CODE_PATH).'course_home/course_home.php?cidReq='.$course;
+            $rows[] = [
+                Display::url($course, $course_url, ['target' => SESSION_LINK_TARGET]),
+                $data['subscribed'],
+                $data['finished'],
+            ];
+        }
+
+        echo Display::table($headers[0], $rows, []);
+
+        //Get the data for the second table (with sessions)
+        $courses = UserManager::countUsersWhoFinishedCoursesInSessions();
+
+        //Make the rows for second table
+        $rows = [];
+        foreach ($courses as $course => $data) {
+            $rows[] = [
+                $course,
+                $data['subscribed'],
+                $data['finished'],
+            ];
+        }
+
+        echo Display::tag('br', '', ['style' => 'margin-top: 25px;']);
+        echo Display::table($headers[1], $rows, []);
+        echo Display::tag('br', '', ['style' => 'margin-top: 25px;']);
+        echo Display::label(get_lang('AllUsersIncludingInactiveIncluded'), 'warning');
+
+        break;
+    case "report_quarterly_total_disk_usage":
+
+        $accessUrlId = api_get_current_access_url_id();
+
+        if (api_is_windows_os()) {
+            $message = get_lang('SpaceUsedOnSystemCannotBeMeasuredOnWindows');
+        } else {
+            $dir = api_get_path(SYS_PATH);
+            $du = exec('du -sh '.$dir, $err);
+            list($size, $none) = explode("\t", $du);
+            unset($none);
+            $limit = 0;
+            if (isset($_configuration[$accessUrlId]['hosting_limit_disk_space'])) {
+                $limit = $_configuration[$accessUrlId]['hosting_limit_disk_space'];
+            }
+            $message = sprintf(get_lang('TotalSpaceUsedByPortalXLimitIsYMB'), $size, $limit);
+        }
+        echo Display::tag('H5', $message, ['style' => 'margin-bottom: 25px;']);
+    break;
 }

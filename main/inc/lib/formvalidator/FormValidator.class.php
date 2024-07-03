@@ -2,17 +2,21 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\UserBundle\Entity\User;
+
 /**
  * Class FormValidator
  * create/manipulate/validate user input.
  */
 class FormValidator extends HTML_QuickForm
 {
-    const LAYOUT_HORIZONTAL = 'horizontal';
-    const LAYOUT_INLINE = 'inline';
-    const LAYOUT_BOX = 'box';
-    const LAYOUT_BOX_NO_LABEL = 'box-no-label';
-    const LAYOUT_GRID = 'grid';
+    public const LAYOUT_HORIZONTAL = 'horizontal';
+    public const LAYOUT_INLINE = 'inline';
+    public const LAYOUT_BOX = 'box';
+    public const LAYOUT_BOX_NO_LABEL = 'box-no-label';
+    public const LAYOUT_GRID = 'grid';
+
+    public const TIMEPICKER_INCREMENT_DEFAULT = 15;
 
     public $with_progress_bar = false;
     private $layout;
@@ -212,6 +216,37 @@ EOT;
         }
 
         $this->applyFilter($name, 'trim');
+        $this->applyFilter($name, 'html_filter');
+        if ($required) {
+            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+        }
+
+        return $element;
+    }
+
+    /**
+     * Adds a text field to the form to be used as internal url (URL without the domain part).
+     * A trim-filter is attached to the field.
+     *
+     * @param string|array $label      The label for the form-element
+     * @param string       $name       The element name
+     * @param bool         $required   (optional)    Is the form-element required (default=true)
+     * @param array        $attributes (optional)    List of attributes for the form-element
+     *
+     * @return HTML_QuickForm_text
+     */
+    public function addInternalUrl($name, $label, $required = true, $attributes = [], $createElement = false)
+    {
+        if ($createElement) {
+            $element = $this->createElement('text', $name, $label, $attributes);
+        } else {
+            $element = $this->addElement('text', $name, $label, $attributes);
+        }
+
+        $this->applyFilter($name, 'trim');
+        $this->applyFilter($name, 'plain_url_filter');
+        $this->addRule($name, get_lang('InsertAValidUrl'), 'internal_url');
+
         if ($required) {
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
         }
@@ -1263,6 +1298,7 @@ EOT;
     {
         $this->addElement('url', $name, $label, $attributes);
         $this->applyFilter($name, 'trim');
+
         $this->addRule($name, get_lang('InsertAValidUrl'), 'url');
 
         if ($required) {
@@ -1590,6 +1626,23 @@ EOT;
     }
 
     /**
+     * @throws Exception
+     */
+    public function addNoSamePasswordRule(string $elementName, User $user)
+    {
+        $passwordRequirements = api_get_configuration_value('password_requirements');
+
+        if (!empty($passwordRequirements) && $passwordRequirements['force_different_password']) {
+            $this->addRule(
+                $elementName,
+                get_lang('NewPasswordCannotBeSameAsCurrent'),
+                'no_same_current_password',
+                $user
+            );
+        }
+    }
+
+    /**
      * @param string $elementName
      * @param string $groupName   if element is inside a group
      *
@@ -1598,36 +1651,40 @@ EOT;
     public function addPasswordRule($elementName, $groupName = '')
     {
         // Constant defined in old config/profile.conf.php
-        if (CHECK_PASS_EASY_TO_FIND === true) {
-            $message = get_lang('PassTooEasy').': '.api_generate_password();
+        if (CHECK_PASS_EASY_TO_FIND !== true) {
+            return;
+        }
 
-            if (!empty($groupName)) {
-                $groupObj = $this->getElement($groupName);
+        $message = get_lang('PassTooEasy').': '.api_generate_password();
 
-                if ($groupObj instanceof HTML_QuickForm_group) {
-                    $elementName = $groupObj->getElementName($elementName);
+        if (empty($groupName)) {
+            $this->addRule(
+                $elementName,
+                $message,
+                'callback',
+                'api_check_password'
+            );
 
-                    if ($elementName === false) {
-                        throw new Exception("The $groupName doesn't have the element $elementName");
-                    }
+            return;
+        }
 
-                    $this->_rules[$elementName][] = [
-                        'type' => 'callback',
-                        'format' => 'api_check_password',
-                        'message' => $message,
-                        'validation' => '',
-                        'reset' => false,
-                        'group' => $groupName,
-                    ];
-                }
-            } else {
-                $this->addRule(
-                    $elementName,
-                    $message,
-                    'callback',
-                    'api_check_password'
-                );
+        $groupObj = $this->getElement($groupName);
+
+        if ($groupObj instanceof HTML_QuickForm_group) {
+            $elementName = $groupObj->getElementName($elementName);
+
+            if ($elementName === false) {
+                throw new Exception("The $groupName doesn't have the element $elementName");
             }
+
+            $this->_rules[$elementName][] = [
+                'type' => 'callback',
+                'format' => 'api_check_password',
+                'message' => $message,
+                'validation' => '',
+                'reset' => false,
+                'group' => $groupName,
+            ];
         }
     }
 
@@ -1768,6 +1825,17 @@ EOT;
         }
     }
 
+    public static function getTimepickerIncrement(): int
+    {
+        $customIncrement = api_get_configuration_value('timepicker_increment');
+
+        if (false !== $customIncrement) {
+            return (int) $customIncrement;
+        }
+
+        return self::TIMEPICKER_INCREMENT_DEFAULT;
+    }
+
     /**
      * @param string $url           page that will handle the upload
      * @param string $inputName
@@ -1775,11 +1843,17 @@ EOT;
      */
     private function addMultipleUploadJavascript($url, $inputName, $urlToRedirect = '')
     {
+        $target = '_blank';
+        if (!empty($_SESSION['oLP']->lti_launch_id)) {
+            $target = '_self';
+        }
         $redirectCondition = '';
         if (!empty($urlToRedirect)) {
             $redirectCondition = "window.location.replace('$urlToRedirect'); ";
         }
+        $maxFileSize = getIniMaxFileSizeInBytes();
         $icon = Display::return_icon('file_txt.gif');
+        $errorUploadMessage = get_lang('FileSizeIsTooBig').' '.get_lang('MaxFileSize').' : '.getIniMaxFileSizeInBytes(true);
         $this->addHtml("
         <script>
         $(function () {
@@ -1812,6 +1886,9 @@ EOT;
                     });
                 });
 
+            var maxFileSize = parseInt('".$maxFileSize."');
+            var counter = 0,
+                total = 0;
             $('#".$inputName."').fileupload({
                 url: url,
                 dataType: 'json',
@@ -1822,17 +1899,59 @@ EOT;
                 previewMaxWidth: 300,
                 previewMaxHeight: 169,
                 previewCrop: true,
-                dropzone: $('#dropzone'),
+                dropZone: $('#dropzone'),
+                maxChunkSize: 10000000, // 10 MB
+                sequentialUploads: true,
+            }).on('fileuploadchunksend', function (e, data) {
+                console.log('fileuploadchunkbeforesend');
+                console.log(data);
+                data.url = url + '&chunkAction=send';
+            }).on('fileuploadchunkdone', function (e, data) {
+                console.log('fileuploadchunkdone');
+                console.log(data);
+                if (data.uploadedBytes >= data.total) {
+                    data.url = url + '&chunkAction=done';
+                    data.submit();
+                }
+            }).on('fileuploadchunkfail', function (e, data) {
+                console.log('fileuploadchunkfail');
+                console.log(data);
+
             }).on('fileuploadadd', function (e, data) {
                 data.context = $('<div class=\"row\" />').appendTo('#files');
+                var errs = [];
                 $.each(data.files, function (index, file) {
-                    var node = $('<div class=\"col-sm-5 file_name\">').text(file.name);
-                    node.appendTo(data.context);
+                    // check size
+                    if (maxFileSize > 0 && data.files[index]['size'] > maxFileSize) {
+                        errs.push(\"".$errorUploadMessage."\");
+                    } else {
+                        // array for all errors
+                        var node = $('<div class=\"col-sm-5 file_name\">').text(file.name);
+                        node.appendTo(data.context);
+                        var iconLoading = $('<div class=\"col-sm-3\">').html(
+                            $('<span id=\"image-loading'+index+'\"/>').html('".Display::return_icon('loading1.gif', get_lang('Uploading'), [], ICON_SIZE_MEDIUM)."')
+                        );
+                        $(data.context.children()[index]).parent().append(iconLoading);
+                        total++;
+                    }
                 });
+
+                // Output errors or submit data
+                if (errs.length > 0) {
+                    alert(\"".get_lang('AnErrorOccured')."\\n\" + errs.join(' '));
+                    return false;
+                } else {
+                    data.submit();
+                }
+
             }).on('fileuploadprocessalways', function (e, data) {
                 var index = data.index,
                     file = data.files[index],
                     node = $(data.context.children()[index]);
+
+                if (maxFileSize > 0 && data.files[index]['size'] > maxFileSize) {
+                    return false;
+                }
                 if (file.preview) {
                     data.context.prepend($('<div class=\"col-sm-4\">').html(file.preview));
                 } else {
@@ -1844,11 +1963,12 @@ EOT;
                         .prop('disabled', !!data.files.error);
                 }
             }).on('fileuploadprogressall', function (e, data) {
-                var progress = parseInt(data.loaded / data.total * 100, 10);
+                var progress = parseInt(data.loaded / data.total * 100, 10) - 2;
                 $('#progress .progress-bar').css(
                     'width',
                     progress + '%'
                 );
+                $('#progress .progress-bar').text(progress + '%');
             }).on('fileuploaddone', function (e, data) {
                 $.each(data.result.files, function (index, file) {
                     if (file.error) {
@@ -1866,17 +1986,23 @@ EOT;
                     }
                     if (file.url) {
                         var link = $('<a>')
-                            .attr({target: '_blank', class : 'panel-image'})
+                            .attr({target: '".$target."', class : 'panel-image'})
                             .prop('href', file.url);
                         $(data.context.children()[index]).parent().wrap(link);
                     }
                     // Update file name with new one from Chamilo
                     $(data.context.children()[index]).parent().find('.file_name').html(file.name);
+                    $('#image-loading'+index).remove();
                     var message = $('<div class=\"col-sm-3\">').html(
                         $('<span class=\"message-image-success\"/>').text('".addslashes(get_lang('UplUploadSucceeded'))."')
                     );
                     $(data.context.children()[index]).parent().append(message);
+                    counter++;
                 });
+                if (counter == total) {
+                    $('#progress .progress-bar').css('width', '100%');
+                    $('#progress .progress-bar').text('100%');
+                }
                 $('#dropzone').removeClass('hover');
                 ".$redirectCondition."
             }).on('fileuploadfail', function (e, data) {
@@ -1952,4 +2078,22 @@ function mobile_phone_number_filter($mobilePhoneNumber)
     $mobilePhoneNumber = str_replace(['+', '(', ')'], '', $mobilePhoneNumber);
 
     return ltrim($mobilePhoneNumber, '0');
+}
+
+/**
+ * Cleans JS from a URL.
+ *
+ * @param string $html URL to clean
+ * @param int    $mode (optional)
+ *
+ * @return string The cleaned URL
+ */
+function plain_url_filter($html, $mode = NO_HTML)
+{
+    $allowed_tags = HTML_QuickForm_Rule_HTML::get_allowed_tags($mode);
+    $html = kses_no_null($html);
+    $html = kses_js_entities($html);
+    $allowed_html_fixed = kses_array_lc($allowed_tags);
+
+    return kses_split($html, $allowed_html_fixed, ['http', 'https']);
 }

@@ -378,7 +378,19 @@ class SystemAnnouncementManager
                     $date_end,
                     false,
                     $title,
-                    $original_content
+                    $original_content,
+                    [],
+                    false,
+                    null,
+                    [],
+                    [],
+                    null,
+                    '',
+                    [],
+                    false,
+                    [],
+                    $params['career_id'] ?? 0,
+                    $params['promotion_id'] ?? 0
                 );
             }
 
@@ -854,6 +866,58 @@ class SystemAnnouncementManager
         return $data;
     }
 
+    public static function isVisibleAnnouncementForUser(
+        int $userId,
+        string $userVisibility,
+        int $careerId,
+        int $promotionId
+    ): bool {
+        $objPromotion = new Promotion();
+
+        $promotionList = [];
+
+        if (!empty($promotionId)) {
+            $promotionList[] = $promotionId;
+        } else {
+            $promotionList = $objPromotion->get_all_promotions_by_career_id($careerId);
+
+            if (!empty($promotionList)) {
+                $promotionList = array_column($promotionList, 'id');
+            }
+        }
+
+        foreach ($promotionList as $promotionId) {
+            $sessionList = SessionManager::get_all_sessions_by_promotion($promotionId);
+
+            foreach ($sessionList as $session) {
+                $sessionId = $session['id'];
+                // Check student
+                if (self::VISIBLE_STUDENT == $userVisibility &&
+                    SessionManager::isUserSubscribedAsStudent($sessionId, $userId)
+                ) {
+                    return true;
+                }
+
+                if (self::VISIBLE_TEACHER == $userVisibility
+                    && SessionManager::user_is_general_coach($userId, $sessionId)
+                ) {
+                    return true;
+                }
+
+                // Check course coach
+                $coaches = SessionManager::getCoachesBySession($sessionId);
+
+                if (self::VISIBLE_TEACHER == $userVisibility
+                    && in_array($userId, $coaches)
+                ) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Displays announcements as an slideshow.
      *
@@ -896,52 +960,18 @@ class SystemAnnouncementManager
 
         $userId = api_get_user_id();
 
-        $promotion = new Promotion();
         $sql .= ' ORDER BY date_start DESC';
         $result = Database::query($sql);
         $announcements = [];
         if (Database::num_rows($result) > 0) {
             while ($announcement = Database::fetch_object($result)) {
                 if ($checkCareers && !empty($announcement->career_id)) {
-                    $promotionList = [];
-                    if (!empty($announcement->promotion_id)) {
-                        $promotionList[] = $announcement->promotion_id;
-                    } else {
-                        $promotionList = $promotion->get_all_promotions_by_career_id($announcement->career_id);
-                        if (!empty($promotionList)) {
-                            $promotionList = array_column($promotionList, 'id');
-                        }
-                    }
-
-                    $show = false;
-                    foreach ($promotionList as $promotionId) {
-                        $sessionList = SessionManager::get_all_sessions_by_promotion($promotionId);
-                        foreach ($sessionList as $session) {
-                            $sessionId = $session['id'];
-                            // Check student
-                            if ($visible === self::VISIBLE_STUDENT &&
-                                SessionManager::isUserSubscribedAsStudent($sessionId, $userId)
-                            ) {
-                                $show = true;
-                                break 2;
-                            }
-
-                            if ($visible === self::VISIBLE_TEACHER &&
-                                SessionManager::user_is_general_coach($userId, $sessionId)
-                            ) {
-                                $show = true;
-                                break 2;
-                            }
-
-                            // Check course coach
-                            $coaches = SessionManager::getCoachesBySession($sessionId);
-
-                            if ($visible === self::VISIBLE_TEACHER && in_array($userId, $coaches)) {
-                                $show = true;
-                                break 2;
-                            }
-                        }
-                    }
+                    $show = self::isVisibleAnnouncementForUser(
+                        $userId,
+                        $visible,
+                        (int) $announcement->career_id,
+                        (int) $announcement->promotion_id
+                    );
 
                     if (false === $show) {
                         continue;

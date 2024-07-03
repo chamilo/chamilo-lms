@@ -12,8 +12,8 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
  */
 class CoursesLoader implements LoaderInterface
 {
-    const LOAD_MODE_REUSE = 'reuse';
-    const LOAD_MODE_DUPLICATE = 'duplicate';
+    public const LOAD_MODE_REUSE = 'reuse';
+    public const LOAD_MODE_DUPLICATE = 'duplicate';
 
     /**
      * @var string Load mode: "reuse" or "duplicate". Default is "duplicate".

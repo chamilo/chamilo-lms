@@ -11,8 +11,6 @@ class ImsLtiServiceReadRequest extends ImsLtiServiceRequest
 {
     /**
      * ImsLtiServiceReadRequest constructor.
-     *
-     * @param SimpleXMLElement $xml
      */
     public function __construct(SimpleXMLElement $xml)
     {

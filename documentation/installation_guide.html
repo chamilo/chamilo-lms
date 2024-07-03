@@ -37,7 +37,7 @@
 
 <p>Thank you for downloading Chamilo</p>
 <ul>
-  <li>You can test Chamilo LMS, as teacher, without installing it, on <a href="http://campus.chamilo.org">Free Campus</a></li>
+  <li>You can test Chamilo LMS, as teacher, without installing it, on <a href="https://campus.chamilo.org">Free Campus</a></li>
 </ul>
 <p>This guide explains how to install Chamilo FREE. Please read this fully before proceeding with the installation.</p>
 <p>Spanish: También puede leer <a href="installation_guide_es_ES.html">esta guía de instalación en español</a>.</p>
@@ -65,7 +65,7 @@
 
 <br />
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="1._Pre-requisites"></a>1. Pre-requisites</h2>
+<h2><a id="1._Pre-requisites"></a>1. Pre-requisites</h2>
 
 Chamilo
 can be installed on Windows, Linux, Mac OS X and UNIX servers
@@ -78,18 +78,18 @@ Chamilo is mainly a LMS running (the so called <span style="font-weight: bold;">
 <ul>
 <li><span style="font-weight: bold;">Apache 2.2+</span></li>
 <li><span style="font-weight: bold;">MySQL 5.6+ or MariaDB 5+</span></li>
-<li><span style="font-weight: bold;">PHP 7.2, 7.3 or 7.4</span></li>
+<li><span style="font-weight: bold;">PHP 7.4</span></li>
 </ul>
 All these pieces of software are free software and freely available. <br /><br />
 To run Chamilo <span style="font-weight: bold;">LMS</span> on your server, you need to install WAMP, LAMP or MAMP:
 <ul>
-  <li>To install <span style="font-weight: bold;">WAMP</span> (AMP on Windows), we recommend the <a href="http://www.apachefriends.org/en/xampp.html">XAMPP</a> .exe installer<a href="http://www.apachefriends.org/en/xampp.html"></a></li>
+  <li>To install <span style="font-weight: bold;">WAMP</span> (AMP on Windows), we recommend the <a href="https://www.apachefriends.org/en/xampp.html">XAMPP</a> .exe installer<a href="https://www.apachefriends.org/en/xampp.html"></a></li>
   <li>To install <span style="font-weight: bold;">LAMP</span>
 (AMP on Linux), use the Package manager of your favourite distribution (Synaptic, RPMFinder etc.).
 For instance, on a Ubuntu server,&nbsp;use Shell or Synaptic following the
-    <a href="http://ubuntuguide.org/wiki/Ubuntu:Feisty#Apache_HTTP_Server">Ubuntuguide on Apache</a> and the following sections
+    <a href="https://ubuntuguide.org/wiki/Ubuntu:Feisty#Apache_HTTP_Server">Ubuntuguide on Apache</a> and the following sections
   </li>
-  <li>To install <span style="font-weight: bold;">MAMP</span> (AMP on Mac OS X), refer to the <a href="http://www.mamp.info/en/index.php">MAMP</a> dedicated website<a href="http://www.mamp.info/en/index.php"></a></li>
+  <li>To install <span style="font-weight: bold;">MAMP</span> (AMP on Mac OS X), refer to the <a href="https://www.mamp.info/en/index.php">MAMP</a> dedicated website<a href="https://www.mamp.info/en/index.php"></a></li>
   <li>Make sure you check the <a href="dependencies.html" title="Dependencies">Dependencies page</a> if you need to know the requirements in more precise way.
 </ul>
 <br />
@@ -101,7 +101,7 @@ only a specific database. Please refer to the MySQL or MariaDB documentation in 
 <br />
 <span class="text-muted">Chamilo versions prior to 1.9.0 required to choose between multiple databases and a deprecated single-database mode.
     This has been cleaned up and simplified to one single database.</span><br />
-<span class="text-muted">If you don't have create permissions for your database user, Chamilo will fail during
+<span class="text-muted">If you don't have "create" permissions for your database user, Chamilo will fail during
     installation because, to maintain the database clear of any remains of other systems, it will try to drop it
     before creating it again. This is explained in some detail in <a href="https://github.com/chamilo/chamilo-lms/issues/2172">this issue report</a></span><br />
 
@@ -141,7 +141,7 @@ only a specific database. Please refer to the MySQL or MariaDB documentation in 
     Once configured (and maybe this has already been done by your hosting provider), you can simply restart the web server to enable the change.
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="2._Installation_of_Chamilo_LMS"></a><span style="font-weight: bold;">2. Installation of Chamilo LMS</span></h2>
+<h2><a id="2._Installation_of_Chamilo_LMS"></a><span style="font-weight: bold;">2. Installation of Chamilo LMS</span></h2>
 <p>
 Before you start installing Chamilo LMS, you must understand that, because we provide Chamilo as free software, many services providers
     have been able to develop extensions of Chamilo, which have made it possible to install Chamilo in many ways:<br />
@@ -164,7 +164,7 @@ This guide only covers these 2 last methods. For other methods, you can always a
   <li>Verify your web server supports .htaccess files (see Rewrite section below)</li>
   <li>Open your web browser and type
     <span style="font-weight: bold;">http://localhost/chamilo/</span> if you install locally for test purposes or
-    <span style="font-weight: bold;">http://www.your-chamilo-domain.com</span> if you install remotely*
+    <span style="font-weight: bold;">https://www.your-chamilo-domain.com</span> if you install remotely*
     </li>
   <li>Follow the web installation process. You can accept all default values. Consider changing the admin password to remember it.&nbsp;</li>
 </ol>
@@ -172,14 +172,14 @@ This guide only covers these 2 last methods. For other methods, you can always a
 <h3>Recommendations</h3>
 <ul>
     <li>We recommend defining a specific Virtual Host for this installation.</li>
-    <li>If you have to install multiple Chamilo instances, avoid the installation of Chamilo in a inside a folder, instead prefer the use of different domains or using subdomains examples:
+    <li>If you have to install multiple Chamilo instances, avoid the installation of Chamilo inside a subfolder, instead prefer the use of different domains or using subdomains examples:
         <ol>
-            <li>http://www.my-domain.com/ (<i class="fa fa-check" aria-hidden="true"></i> recommended)</li>
-            <li>http://chamilo.my-domain.com (<i class="fa fa-check" aria-hidden="true"></i> recommended)</li>
-            <li>http://chamilo2.my-domain.com (<i class="fa fa-check" aria-hidden="true"></i> recommended)</li>
-            <li>http://www.my-domain.com/chamilo (<i class="fa fa-times" aria-hidden="true"></i> not recommended)</li>
-            <li>http://www.my-domain.com/chamilo2 (<i class="fa fa-times" aria-hidden="true"></i> not recommended)</li>
-            <li>http://chamilo.my-domain.com/my-chamilo/ (<i class="fa fa-times" aria-hidden="true"></i> not recommended)</li>
+            <li>https://www.my-domain.com/ (<i class="fa fa-check" aria-hidden="true"></i> recommended)</li>
+            <li>https://chamilo.my-domain.com (<i class="fa fa-check" aria-hidden="true"></i> recommended)</li>
+            <li>https://chamilo2.my-domain.com (<i class="fa fa-check" aria-hidden="true"></i> recommended)</li>
+            <li>https://www.my-domain.com/chamilo (<i class="fa fa-times" aria-hidden="true"></i> not recommended)</li>
+            <li>https://www.my-domain.com/chamilo2 (<i class="fa fa-times" aria-hidden="true"></i> not recommended)</li>
+            <li>https://chamilo.my-domain.com/my-chamilo/ (<i class="fa fa-times" aria-hidden="true"></i> not recommended)</li>
         </ol>
     </li>
 </ul>
@@ -211,7 +211,7 @@ enable sub-languages definition:
 <p>
 If you find a tests/ directory at the root of your package, please delete it.
 This is a development directory that has not been checked for security issues,
-an it should *never* be accessible to final users on a production server.
+and it should *never* be accessible to final users on a production server.
 </p>
 <p><span class="text-muted">On Linux, Mac OS X and BSD operating systems you can use the <em>chmod 0775</em> command for this (although we recommend you seek advice from an
 experienced system administrator to avoid security issues). On Windows, you may need to check the properties of the folders (by right-clicking on them).</span></p>
@@ -265,7 +265,7 @@ To get the best out of Chamilo, you need to finetune your PHP settings. Consider
     magic_quotes_runtime = 0</pre>
 
 <p><strong>Important:</strong> You need to set your <em>date.timezone</em> setting to whatever your server's timezone
-    is. For example, if your server is in the 'America/New_York' timezone, set the date.timezone parameter to this
+    is. For example, if your server is in the 'America/New_York' timezone, set the "date.timezone" parameter to this
     value in your php.ini:</p>
 
 <pre>
@@ -296,11 +296,12 @@ date.timezone = 'America/New_York';
     <li>php-ldap</li>
     <li>php-xapian</li>
     <li>php-xsl</li>
+    <li>php-soap, for SOAP web services</li>
 </ul>
 
 
 <hr />
-<h2><a name="3._Upgrade"></a>3. Upgrade</h2>
+<h2><a id="3._Upgrade"></a>3. Upgrade</h2>
 
 Before upgrading, we <b>heavily</b> recommend you do a full backup of the previous
 Chamilo directories and databases. If you are unsure how to achieve this
@@ -322,19 +323,27 @@ of the Chamilo Association's <a href="https://chamilo.org/providers">official pr
 As this is only a minor version change from previous 1.11.* versions of Chamilo, the only thing you need to do is:
 <ul>
   <li> check that you haven't left any customised stylesheet or image <span class="text-muted">(if you have, make sure you keep a copy on the side*)</span></li>
-  <li> download the Chamilo 1.11 install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
+  <li> download the Chamilo 1.11 installation package from the <a href="https://chamilo.org/download">Chamilo download page</a></li>
   <li> unzip the new files of Chamilo 1.11 over the files of the older version
     (or unzip the files in one folder and then copy the files from there to the
     older version's directory).</li>
   <li> clean your app/cache/twig directory: delete all the contents *in* this directory (do NOT remove the directory itself, only its contents!).
        It will all be re-generated.
       You can also delete the contents of this directory through the "Cleanup of cache and temporary files " option in the "System" box of the Administration page.</li>
+   <li> edit app/config/configuration.php and change manually the <i>$_configuration['system_version']</i> setting to the new version number</li>
   <li> you're done! No other upgrade procedure is required</li>
 </ul>
+    <div><em>Important:</em> If you are updating to 1.11.16 on a system that was initially installed before 2016 (before version 1.11.0),
+    you will need to download <a href="https://raw.githubusercontent.com/chamilo/chamilo-lms/5e0fc76649a7377c12cd0220ad1c0eae3f5eeaeb/tests/scripts/fix_quiz_id_to_iid.php">this file</a>,
+    drop it in your main/inc/ directory, edit it, remove the <pre>exit;</pre> on line 15, then load it in your browser
+    as https://yoursite.com/main/inc/fix_quiz_id_to_iid.php. This will fix an issue with inconsistent quiz, quiz
+    questions and answers internal numbering that existed prior to year 2016 (version 1.11.0). If your system was initially
+    installed with version 1.11.0 or superior, you don't need to do anything.</div>
+
 <h3>3.2 Upgrading from Chamilo 1.10.x</h3>
 <ul>
   <li> check that you haven't left any customised stylesheet or image <span class="text-muted">(if you have, make sure you keep a copy on the side*)</span></li>
-  <li> download the Chamilo 1.11 install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
+  <li> download the Chamilo 1.11 installation package from the <a href="https://chamilo.org/download">Chamilo download page</a></li>
   <li> unzip the new files of Chamilo 1.11 over the files of the older version
     (or unzip the files in one folder and then copy the files from there to the
     older version's directory). Note that you should remove the "home" and
@@ -359,7 +368,7 @@ as was the case between 1.9 and 1.8.
 Although the upgrade script takes the migration in charge, it might be generating
 a very heavy load on your server during the upgrade, and will change your
 database considerably, preserving the data as well as possible (we have tested
-the procedure many times, but remember this is GNU/GPLv3 and we cannot be held
+the procedure many times, but remember this is GNU/GPLv3, and we cannot be held
 responsible for what would happen to your data without professional supervision).
 This is why we *really* recommend you take a full backup of your system before
 you upgrade.</p>
@@ -375,7 +384,7 @@ some manual work, but the upgrade procedure will not touch sublanguages directly
 <ul>
   <li> make sure you don't have tables from previous versions of Chamilo still hanging around. These can cause the upgrade to fail. In particular, tables from versions 1.8.* could have multiple tables for each course, resulting in many tables with the same prefix. Only tables without prefix or with a "c_" prefix exist in 1.9 and superior versions. Make sure none of these tables persist. Take a backup of your database (just in case) and delete these prefixed tables (drop table ...).</li>
   <li> check that you haven't left any customised stylesheet or image <span class="text-muted">(if you have, make sure you keep a copy on the side*)</span></li>
-  <li> download the Chamilo 1.11 install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
+  <li> download the Chamilo 1.11 installation package from the <a href="http:s//chamilo.org/download">Chamilo download page</a></li>
   <li> unzip the new files of Chamilo 1.11 over the files of the older version (or unzip the files in one folder and then copy the files from there to the older version's directory)</li>
   <li> make *absolutely sure* that the .htaccess file of version 1.11 is copied as well</li>
   <li> make sure "AllowOverride All" is present in your Apache configuration, as interpreting the .htaccess files is very important for Chamilo to work (note that the Order-Allow directive has been replaced by "Require all granted" in Apache 2.4)</li>
@@ -432,7 +441,7 @@ In Windows, you may need to check the properties of the folders.
 
 <hr style="width: 100%; height: 2px;" />
 
-<h2><a name="4._Troubleshooting"></a>4. Troubleshooting</h2>
+<h2><a id="4._Troubleshooting"></a>4. Troubleshooting</h2>
 
 
 <p>If you have problems, go to the <a href="https://chamilo.org">Chamilo website</a> and ask a question on the
@@ -440,15 +449,15 @@ In Windows, you may need to check the properties of the folders.
 already an answer to your question.</p>
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="5._Administration_section"></a>5. Administration section</h2>
+<h2><a id="5._Administration_section"></a>5. Administration section</h2>
 
 <p>To access the Chamilo administration section, open browser, go to your Chamilo adress and log in with the admin user.
-Then you will see a "Administration" tab in the webpage header. You can manage users, courses, sessions, portal look
+Then you will see an "Administration" tab in the webpage header. You can manage users, courses, sessions, portal look
 and feel, homepage content, course categories etc. there&nbsp;</p>
 
 <p></p>
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="6._LDAP"></a>6. LDAP</h2>
+<h2><a id="6._LDAP"></a>6. LDAP</h2>
 
 <p>
 <i>This part is optional, only organisations with an LDAP server will need to read this.</i><br />
@@ -560,18 +569,18 @@ that criteria</li>
 </ul>
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="9._WIRIS_mathematical_formulas"></a>7. Mathematical formulas with WIRIS MathType</h2>
+<h2><a id="9._WIRIS_mathematical_formulas"></a>7. Mathematical formulas with WIRIS MathType</h2>
 <p>Installing this plugin you get WIRIS MathType. <br/>
 This activation will not be completed unless you have previously downloaded
-    the <a href="http://www.wiris.com/plugins/ckeditor/download" target="_blank">PHP plugin for CKeditor WIRIS</a>
+    the <a href="https://www.wiris.com/plugins/ckeditor/download" target="_blank" rel="noopener noreferrer">PHP plugin for CKeditor WIRIS</a>
     and unzipped its contents into the main/inc/lib/ckeditor/editor/plugins/ckeditor_wiris/ directory.<br/><br />
     This is necessary because Wiris is proprietary software and its services are
-    <a href="http://www.wiris.com/store/who-pays" target="_blank">commercial</a>.
+    <a href="https://www.wiris.com/store/who-pays" target="_blank" rel="noopener noreferrer">commercial</a>.
     To make adjustments to the plugin, edit configuration.ini file or replace his content by
     configuration.ini.default Chamilo file.</p>
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="10._Xapian_fulltext_indexing"></a>8. Full-text indexation with Xapian</h2>
+<h2><a id="10._Xapian_fulltext_indexing"></a>8. Full-text indexation with Xapian</h2>
 <p>
 <em>Note</em>: This step will require a dedicated server or a virtual dedicated server as the packages involved are not available on most shared hosting solutions.<br />
 On Debian or Ubuntu 10.04 and superior, you will simply need to install the php5-xapian package and restart your web server:
@@ -584,16 +593,16 @@ Then go to your administration page -&gt; Configuration settings -&gt; Search
 and enable the search tool. Follow the recommendations on the page to get the
 complete indexing suite installed. Once you're done, all documents you import
 into your Chamilo portal in a recognized format will be indexed and searchable.
-Chamilo intermediate Administrators training (which you can ask any <a href="http://www.chamilo.org/en/providers">Chamilo's Official Provider</a> for) include a full review of the full-text search feature.</p>
+Chamilo intermediate Administrators training (which you can ask any <a href="https://chamilo.org/en/providers">Chamilo's Official Provider</a> for) include a full review of the full-text search feature.</p>
 <p class="text-muted">
-Note: Xapian's licensing for the PHP extension is a bit different than what is necessary to enter the Debian repositories, so it has been excluded. You can, however, generate your own package by following the <a href="http://trac.xapian.org/wiki/FAQ/PHP%20Bindings%20Package">packaging instructions on Xapian's wiki</a>.
+Note: Xapian's licensing for the PHP extension is a bit different from what is necessary to enter the Debian repositories, so it has been excluded. You can, however, generate your own package by following the <a href="https://trac.xapian.org/wiki/FAQ/PHP%20Bindings%20Package">packaging instructions on Xapian's wiki</a>.
 </p>
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="11._Chamilo_rapid_ppt_conversion"></a>9. Chamilo Rapid - PPT conversion system</h2>
+<h2><a id="11._Chamilo_rapid_ppt_conversion"></a>9. Chamilo Rapid - PPT conversion system</h2>
 <p>
 <em>Note</em>: This step will require a dedicated server or a virtual dedicated server as the packages involved are not available on most shared hosting solutions.<br />
-On Debian or Ubuntu 11.10 and superior, install LibreOffice v3 (or v4) and start it as a headless server:
+On Debian or Ubuntu 22.04 and superior, install LibreOffice v7 (or superior) and start it as a headless server:
 <pre>
 sudo apt-get install libreoffice screen
 sudo adduser rapid
@@ -601,9 +610,11 @@ sudo adduser rapid www-data
 screen
 sudo -s
 su - rapid
-soffice --accept="socket,host=127.0.0.1,port=2002,tcpNoDelay=1;urp;" --headless --nodefault --nofirststartwizard --nolockcheck --nologo --norestore
+/usr/bin/libreoffice --headless --accept="socket,host=127.0.0.1,port=2002;urp;"
 CTRL+a, CTRL+d
 </pre>
+In previous versions of LibreOffice, the command above was more complex. If you still need it, please check previous versions of this installation guide.
+
 Please note that this will effectively launch LibreOffice in a "headless" mode (thanks to the --headless option), in a "headless" terminal (thanks to screen). You can later get back into your "headless" terminal by launching:
 <pre>
 sudo screen -r
@@ -613,7 +624,7 @@ You can then go to your administration page -&gt; <i>Chamilo Rapid</i> and set t
 <em>Note</em>: If you use LibreOffice 4, please note that version 4.2 (available in Ubuntu 14.04) has demonstrated to be more successfull at converting documents than version 4.1, which tended to crash when sending a document for conversion.
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="12._Setting_cron_up"></a>10. Setting chronological tasks</h2>
+<h2><a id="12._Setting_cron_up"></a>10. Setting chronological tasks</h2>
 <p>
 Since Chamilo 1.8.8, a few tasks need to be executed regularly in order to get
 the best out of your server resources. One of such tasks (and the only one
@@ -622,21 +633,21 @@ notifications by e-mail, i.e. when you receive an e-mail from another person or
 from a group inside the internal messaging system of Chamilo, if all e-mails are
 sent immediately, then you might not have the chance to receive them at your
 pace, once a day or even once a week. For cases like this you, as a Chamilo
-administrator, should setup a cron process on the server to check the queue of
+administrator, should set up a cron process on the server to check the queue of
 e-mails and send is timely.</p>
 
 Setting up a cron task is easy and there are several ways to do it. We recommend
-you have a look at the <a href="http://drupal.org/cron">Drupal documentation
+you have a look at the <a href="https://drupal.org/cron">Drupal documentation
 for setting up cron</a> and define your own cron process as:
 <pre>
-35 * * * * wget -O - -q -t 1 http://campus.example.com/main/cron/run.php
+35 * * * * wget -O - -q -t 1 https://campus.example.com/main/cron/run.php
 </pre>
 Make sure you have a look into run.php as maybe you want to change a few
 settings there.
 
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="13._Changing_language_names_order"></a>11. Changing the language's firstname/lastname order</h2>
+<h2><a id="13._Changing_language_names_order"></a>11. Changing the language's firstname/lastname order</h2>
 As Chamilo becomes more popular and crosses many borders now, it frequently happens that administrators want to re-order the firstname and lastname fields in tables, and also on which field it is sorted first.<br/><br />
 This can easily be modified by editing the app/config/configuration.php file, finding the following section, uncommenting the PHP lines and adapting it to your language:<br />
 <pre>// Custom name_order_conventions
@@ -655,17 +666,17 @@ for example. The effect should be immediate.
 Please note that, although Chamilo allows you to define its position, the "title" field does not exist at this time, so no need to worry about it.
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="14._Improving_files_download"></a>12. Improving files download efficiency</h2>
+<h2><a id="14._Improving_files_download"></a>12. Improving files download efficiency</h2>
 File download can be very slow when passing through a PHP script to control permissions. One solution to this
-    is to use the X-Sendfile header, which depends on a module on the webserver. <a href="http://stackoverflow.com/a/3731639/1406662">Check http://stackoverflow.com/a/3731639/1406662 for more details on implementing Sendfile</a>.
+    is to use the X-Sendfile header, which depends on a module on the webserver. <a href="https://stackoverflow.com/a/3731639/1406662">Check https://stackoverflow.com/a/3731639/1406662 for more details on implementing Sendfile</a>.
 Chamilo LMS 1.9.8 (and following versions) supports the X-Sendfile headers, but requires a specific line of configuration to be
     added to configuration.php:
 <pre>
 $_configuration['enable_x_sendfile_headers'] = true;
 </pre>
-If you have issues with files taking a long time to download, make sure you reconfigure your webserver and add this line. You should see an notable difference in download time.
+If you have issues with files taking a long time to download, make sure you reconfigure your webserver and add this line. You should see a notable difference in download time.
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="15._Videoconference"></a>13. Videoconference</h2>
+<h2><a id="15._Videoconference"></a>13. Videoconference</h2>
 <p>
   Chamilo supports the connection to two different videoconference servers: BigBlueButton (versions 0.81, 0.9 and 1.0) and OpenMeetings.<br />
   While BigBlueButton seem easier to install, more clearly documented and more
@@ -675,13 +686,13 @@ If you have issues with files taking a long time to download, make sure you reco
   The decision is up to you, but in any case you will have to install a
   videoconference server separately from the normal Chamilo LMS installation
   process.<br />
-  You will find the <a href="http://docs.bigbluebutton.org/install/install.html">installation guide for BigBlueButton here</a>. Once installed,
+  You will find the <a href="https://docs.bigbluebutton.org/install/install.html">installation guide for BigBlueButton here</a>. Once installed,
   issue a "bbb-conf --secret" on the command line to get the parameters to
   indicate in the "Videoconference" plugin in Chamilo (platform settings page).<br />
   This should make an additional "Videoconference" tool icon appear in every course.<br />
 </p>
 <hr style="width: 100%; height: 2px;" />
-    <h2><a name="16._Rewrite"></a>14. Rewrite</h2>
+    <h2><a id="16._Rewrite"></a>14. Rewrite</h2>
     <p>
     Chamilo LMS 1.10 is the first version to require the web server to allow redirections of requests (and so 1.11 does as well).<br />
     For Apache, this is done through enabling the Rewrite module and either allowing overrides (through .htaccess) or adding a specific configuration section to the VirtualHost defined for Apache.<br />
@@ -743,7 +754,6 @@ If you have issues with files taking a long time to download, make sure you reco
     RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
     RewriteRule ^service/(\d{1,})$ plugin/buycourses/src/service_information.php?service_id=$1 [L]
     RewriteRule ^lti/os$ plugin/ims_lti/outcome_service.php [L]
-    RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
     RewriteRule ^(tests|.git) - [F,L,NC]
   &lt;/Directory&gt;
 
@@ -753,6 +763,23 @@ If you have issues with files taking a long time to download, make sure you reco
       ExpiresByType application/font-woff "access plus 1 month"
     &lt;/IfModule&gt;
     </pre>
+
+    <h4>Special note on sharing questions between courses</h4>
+    In Chamilo 1.11.16, we added the possibility (see configuration.php) to share questions between
+    several courses. This feature, although working great for pure-text questions, does however generate
+    an issue when sharing media files between courses, as one media file in one course will not be
+    visible by a user that sees the question in another course and doesn't have access to the question's
+    original course.<br />
+    To avoid this issue, you can adapt your .htaccess (or the VirtualHost in case you put it there) to allow
+    for media files to be accessed directly (without logging in to the portal). This will also speed up
+    loading these media files, but it introduces a reduction in the level of security, as those specific media
+    files are accessible by anyone having access to the portal itself and knowing the path of the files.<br /><br />
+    To apply the patch, locate this line in your .htaccess:<br /><br />
+    <pre>    RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]</pre>
+    and remove it or comment it out, then put those two lines instead:<br /><br />
+    <pre>    RewriteCond %{REQUEST_URI} !\.(gif|jpg|jpeg|png|webp|ico|icon|swf|avi|mp3|ogg|wav|ttf|otf|eot|woff|webm|mp4)
+    RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA|L]</pre>
+
     <h3>Nginx</h3>
     Nginx doesn't support .htaccess rules, so you have no other option than to apply the following rules (note that your PHP backend configuration may vary).
     These are only the redirection rules to be placed inside a server{} block, as other settings might differ from one installation to another.
@@ -795,14 +822,14 @@ If you have issues with files taking a long time to download, make sure you reco
   }
 
   location /main {
-    rewrite ^/main/admin/?$ /main/admin/index.php last;
+    rewrite ^/main/([^/]+)/?$ /main/$1/index.php last;
   }
 
   location ~ \.php$ {
     client_max_body_size 20M;
     try_files $uri @rewrite;
 
-    fastcgi_pass unix:/var/run/php5-fpm.sock;
+    fastcgi_pass unix:/var/run/php7.4-fpm.sock;
     fastcgi_split_path_info ^(.+\.php)(/.*)$;
     include fastcgi_params;
     fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
@@ -831,6 +858,7 @@ If you have issues with files taking a long time to download, make sure you reco
     deny all;
   }
     </pre>
+
     <h3>Apple on OS X servers</h3>
     <div>
         Scott Steven reports that Apache on OS X requires specific actions<br />
@@ -846,7 +874,7 @@ If you have issues with files taking a long time to download, make sure you reco
     </div>
     <h3>IIS</h3>
     <div>
-        Users @ullfindsmit and @rozepeda on Github were kind enough to contribute to this IIS configuration after testing it based on our
+        Users @ullfindsmit and @rozepeda on GitHub were kind enough to contribute to this IIS configuration after testing it based on our
         configurations above. This has not been tested by the Chamilo team, but the rules look legit:<br /><br />
         <pre>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
@@ -944,10 +972,6 @@ If you have issues with files taking a long time to download, make sure you reco
                     &lt;action type="Rewrite" url="plugin/ims_lti/outcome_service.php" appendQueryString="false" /&gt;
                 &lt;/rule&gt;
                 &lt;rule name="rule v23" stopProcessing="true"&gt;
-                    &lt;match url="^([^/.]+)/?$" /&gt;
-                    &lt;action type="Rewrite" url="user.php?{R:1}" appendQueryString="false" /&gt;
-                &lt;/rule&gt;
-                &lt;rule name="rule v24" stopProcessing="true"&gt;
                     &lt;match url="^(tests|.git)" ignoreCase="false" /&gt;
                     &lt;action type="Rewrite" url="/-" /&gt;
                 &lt;/rule&gt;
@@ -958,7 +982,7 @@ If you have issues with files taking a long time to download, make sure you reco
         </pre>
     </div>
 
-    <h2><a name="17._Git_Upgrade"></a>15. Upgrading from Git</h2>
+    <h2><a id="17._Git_Upgrade"></a>15. Upgrading from Git</h2>
     If you have sufficient experience with Git and have installed your initial Chamilo portal
         from the Git version, you might want to upgrade from 1.9.x to 1.11.x using Git directly.<br />
     Here are a few tips that might help you:<br />
@@ -969,7 +993,7 @@ If you have issues with files taking a long time to download, make sure you reco
     <li>Once you're sure you have a "clean" local Chamilo repository, create a 1.11.x branch with "git checkout -b 1.11.x"</li>
     <li>In the new branch, download all code from the 1.11.x branch upstream: "git pull origin 1.11.x"</li>
     <li>If you never used composer or used it only a few times in the past, you might need to update it (rm -rf ~/.composer/vendor; composer clear-cache) before trying the following command</li>
-    <li>Update composer: "composer update" (you might need to give a Github token here)</li>
+    <li>Update composer: "composer update" (you might need to give a GitHub token here)</li>
     <li>Change permissions on folders app, web, main/lang and main/default_course_document/images</li>
     <li>Go to your portal install page (main/install/) and follow the upgrade procedure</li>
 </ul>
@@ -984,8 +1008,8 @@ If you have issues with files taking a long time to download, make sure you reco
 </div>
 
 <hr />
-    <a href="http://validator.w3.org/check?uri=referer"><img src="//www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" style="margin: 1em; float: right;" height="31" width="88" /></a>
-    <a href="http://jigsaw.w3.org/css-validator/">
+    <a href="https://validator.w3.org/check?uri=referer"><img src="//www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" style="margin: 1em; float: right;" height="31" width="88" /></a>
+    <a href="https://jigsaw.w3.org/css-validator/">
         <img src="//jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />
     </a>
 </body>

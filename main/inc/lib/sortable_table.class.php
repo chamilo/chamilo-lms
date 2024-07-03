@@ -300,22 +300,22 @@ class SortableTable extends HTML_Table
             $params['urlVar'] = $this->param_prefix.'page_nr';
             $params['currentPage'] = $this->page_nr;
             $icon_attributes = ['style' => 'vertical-align: middle;'];
-            $params['prevImg'] = Display:: return_icon(
+            $params['prevImg'] = Display::return_icon(
                 'action_prev.png',
                 get_lang('PreviousPage'),
                 $icon_attributes
             );
-            $params['nextImg'] = Display:: return_icon(
+            $params['nextImg'] = Display::return_icon(
                 'action_next.png',
                 get_lang('NextPage'),
                 $icon_attributes
             );
-            $params['firstPageText'] = Display:: return_icon(
+            $params['firstPageText'] = Display::return_icon(
                 'action_first.png',
                 get_lang('FirstPage'),
                 $icon_attributes
             );
-            $params['lastPageText'] = Display:: return_icon(
+            $params['lastPageText'] = Display::return_icon(
                 'action_last.png',
                 get_lang('LastPage'),
                 $icon_attributes
@@ -355,11 +355,31 @@ class SortableTable extends HTML_Table
         echo $this->return_table();
     }
 
-    public function toArray()
+    public function toArray($applyFilters = false, $stripTags = false)
     {
         $headers = array_column($this->getHeaders(), 'label');
 
-        return array_merge([$headers], $this->table_data);
+        if ($stripTags) {
+            $headers = array_map('strip_tags', $headers);
+        }
+
+        if ($applyFilters) {
+            $data = [];
+
+            foreach ($this->table_data as $row) {
+                $filtered = $this->filter_data($row);
+
+                if ($stripTags) {
+                    $filtered = array_map('strip_tags', $filtered);
+                }
+
+                $data[] = $filtered;
+            }
+        } else {
+            $data = $this->table_data;
+        }
+
+        return array_merge([$headers], $data);
     }
 
     /**
@@ -422,8 +442,15 @@ class SortableTable extends HTML_Table
 
         if (!empty($this->additional_parameters)) {
             foreach ($this->additional_parameters as $key => $value) {
-                $html .= '<input type="hidden" name ="'.Security::remove_XSS($key).'" value ="'
-                    .Security::remove_XSS($value).'" />';
+                if (is_array($value)) {
+                    foreach ($value as $subKey => $subValue) {
+                        $html .= '<input type="hidden" name ="'.Security::remove_XSS($subKey).'" value ="'
+                            .Security::remove_XSS($subValue).'" />';
+                    }
+                } else {
+                    $html .= '<input type="hidden" name ="'.Security::remove_XSS($key).'" value ="'
+                        .Security::remove_XSS($value).'" />';
+                }
             }
         }
         $html .= '<input type="hidden" name="action">';
@@ -805,7 +832,13 @@ class SortableTable extends HTML_Table
         }
 
         foreach ($param as $key => &$value) {
-            $result[] = '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
+            if (is_array($value)) {
+                foreach ($value as $subKey => $subValue) {
+                    $result[] = '<input type="hidden" name="'.$subKey.'" value="'.$subValue.'"/>';
+                }
+            } else {
+                $result[] = '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
+            }
         }
         $result[] = '<select style="width: auto;" class="form-control" name="'.$this->param_prefix
             .'per_page" onchange="javascript: this.form.submit();">';
@@ -942,13 +975,10 @@ class SortableTable extends HTML_Table
      */
     public function get_additional_url_paramstring()
     {
-        $param_string_parts = [];
-        if (is_array($this->additional_parameters) && count($this->additional_parameters) > 0) {
-            foreach ($this->additional_parameters as $key => $value) {
-                $param_string_parts[] = urlencode($key).'='.urlencode($value);
-            }
+        $result = '';
+        if (is_array($this->additional_parameters)) {
+            $result = http_build_query($this->additional_parameters);
         }
-        $result = implode('&amp;', $param_string_parts);
         foreach ($this->other_tables as $index => &$tablename) {
             $param = [];
             if (isset($_GET[$tablename.'_direction'])) {
@@ -968,12 +998,8 @@ class SortableTable extends HTML_Table
             if (isset($_GET[$tablename.'_column'])) {
                 $param[$tablename.'_column'] = intval($_GET[$tablename.'_column']);
             }
-            $param_string_parts = [];
-            foreach ($param as $key => &$value) {
-                $param_string_parts[] = urlencode($key).'='.urlencode($value);
-            }
-            if (count($param_string_parts) > 0) {
-                $result .= '&amp;'.implode('&amp;', $param_string_parts);
+            if (count($param) > 0) {
+                $result .= (strlen($result) > 0 ? '&' : '').http_build_query($param);
             }
         }
 
@@ -1003,9 +1029,9 @@ class SortableTable extends HTML_Table
      * Add a filter to a column. If another filter was already defined for the
      * given column, it will be overwritten.
      *
-     * @param int    $column   The number of the column
-     * @param string $function The name of the filter-function. This should be a
-     *                         function wich requires 1 parameter and returns the filtered value.
+     * @param int            $column   The number of the column
+     * @param string|Closure $function The name of the filter-function. This should be a
+     *                                 function wich requires 1 parameter and returns the filtered value.
      */
     public function set_column_filter($column, $function)
     {

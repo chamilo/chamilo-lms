@@ -122,6 +122,21 @@ if ($is_allowed_to_edit) {
             api_get_self().'?'.api_get_cidreq().'&action=add_lp_category'
         );
     }
+
+    if ('true' === api_get_plugin_setting('ai_helper', 'tool_enable') &&
+        'true' === api_get_plugin_setting('ai_helper', 'tool_lp_enable')
+    ) {
+        $actionLeft .= Display::url(
+            Display::return_icon(
+                'new_learnpath_ai.png',
+                get_lang('LpAiGenerator'),
+                [],
+                ICON_SIZE_MEDIUM
+            ),
+            api_get_self().'?'.api_get_cidreq().'&action=ai_helper'
+        );
+    }
+
     $actions = Display::toolbarAction('actions-lp', [$actionLeft]);
 }
 
@@ -359,7 +374,11 @@ foreach ($categories as $item) {
             }
 
             $url_start_lp = 'lp_controller.php?'.$cidReq.'&action=view&lp_id='.$id;
-            $name = trim(strip_tags(Security::remove_XSS($details['lp_name'])));
+            if (api_get_configuration_value('save_titles_as_html')) {
+                $name = trim(Security::remove_XSS($details['lp_name']));
+            } else {
+                $name = trim(strip_tags(Security::remove_XSS($details['lp_name'])));
+            }
             $extra = null;
 
             if ($is_allowed_to_edit) {
@@ -734,10 +753,12 @@ foreach ($categories as $item) {
                 }
 
                 // Copy
-                $copy = Display::url(
-                    Display::return_icon('cd_copy.png', get_lang('Copy')),
-                    api_get_self().'?'.$cidReq."&action=copy&lp_id=$id"
-                );
+                if (!api_get_configuration_value('lp_hide_copy_option')) {
+                    $copy = Display::url(
+                        Display::return_icon('cd_copy.png', get_lang('Copy')),
+                        api_get_self().'?'.$cidReq."&action=copy&lp_id=$id"
+                    );
+                }
 
                 // Subscribe users
                 $subscribeUsers = '';
@@ -795,7 +816,7 @@ foreach ($categories as $item) {
                         ),
                         'lp_controller.php?'.$cidReq."&action=delete&lp_id=$id",
                         [
-                            'onclick' => "javascript: return confirmation('".addslashes($name)."');",
+                            'onclick' => "javascript: return confirmation('".addslashes(strip_tags($name))."');",
                         ]
                     );
                 } else {
@@ -890,12 +911,6 @@ foreach ($categories as $item) {
                 $dsp_disk = Display::url(
                     Display::return_icon('cd.png', get_lang('ExportShort')),
                     api_get_self()."?$cidReq&action=export&lp_id=$id"
-                );
-            } elseif ($details['lp_type'] == 2) {
-                $dsp_disk = Display::url(
-                    Display::return_icon('cd.png', get_lang('ExportShort')),
-                    api_get_self()."?$cidReq&action=export&lp_id=$id&export_name="
-                    .api_replace_dangerous_char($name).'.zip'
                 );
             } else {
                 $dsp_disk = Display::return_icon(

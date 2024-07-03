@@ -21,6 +21,31 @@ if (!$is_allowedToTrack) {
 }
 
 $action = $_GET['action'] ?? null;
+$additionalProfileField = $_GET['additional_profile_field'] ?? [];
+
+$additionalExtraFieldsInfo = [];
+
+$objExtraField = new ExtraField('user');
+
+foreach ($additionalProfileField as $fieldId) {
+    $additionalExtraFieldsInfo[$fieldId] = $objExtraField->getFieldInfoByFieldId($fieldId);
+}
+
+$defaultExtraFields = [];
+$defaultExtraFieldsFromSettings = api_get_configuration_value('course_log_default_extra_fields');
+$defaultExtraInfo = [];
+
+if (!empty($defaultExtraFieldsFromSettings) && isset($defaultExtraFieldsFromSettings['extra_fields'])) {
+    $defaultExtraFields = $defaultExtraFieldsFromSettings['extra_fields'];
+
+    foreach ($defaultExtraFields as $fieldName) {
+        $extraFieldInfo = UserManager::get_extra_field_information_by_name($fieldName);
+
+        if (!empty($extraFieldInfo)) {
+            $defaultExtraInfo[$extraFieldInfo['id']] = UserManager::get_extra_field_information_by_name($fieldName);
+        }
+    }
+}
 
 $lps = new LearnpathList(
     api_get_user_id(),
@@ -279,8 +304,7 @@ function getCount()
  *
  * @see SortableTable#get_table_data($from)
  */
-function getData($from, $numberOfItems, $column, $direction)
-{
+$getData = function ($from, $numberOfItems, $column, $direction) use ($additionalExtraFieldsInfo) {
     $sessionId = api_get_session_id();
     $courseCode = api_get_course_id();
     $courseId = api_get_course_int_id();
@@ -326,6 +350,13 @@ function getData($from, $numberOfItems, $column, $direction)
         $user[] = $student['firstname'];
         $user[] = $student['lastname'];
         $user[] = $student['username'];
+
+        $objExtraValue = new ExtraFieldValue('user');
+
+        foreach ($additionalExtraFieldsInfo as $fieldInfo) {
+            $extraValue = $objExtraValue->get_values_by_handler_and_field_id($student['id'], $fieldInfo['id'], true);
+            $user[] = $extraValue['value'] ?? null;
+        }
 
         $lpTimeList = [];
         if ($useNewTable) {
@@ -397,7 +428,7 @@ function getData($from, $numberOfItems, $column, $direction)
     }
 
     return $users;
-}
+};
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq(),
@@ -411,6 +442,16 @@ $headers[] = get_lang('FirstName');
 $headers[] = get_lang('LastName');
 $headers[] = get_lang('Username');
 
+$parameters = [];
+$parameters['sec_token'] = Security::get_token();
+$parameters['cidReq'] = api_get_course_id();
+$parameters['id_session'] = api_get_session_id();
+
+foreach ($additionalExtraFieldsInfo as $fieldInfo) {
+    $headers[] = $fieldInfo['display_text'];
+    $parameters['additional_profile_field'] = $fieldInfo['id'];
+}
+
 foreach ($lps as $lp) {
     $lpName = $lp['lp_name'];
     $headers[] = get_lang('Progress').': '.$lpName;
@@ -423,7 +464,7 @@ foreach ($lps as $lp) {
 if (!empty($action)) {
     switch ($action) {
         case 'export':
-            $data = getData(0, 100000, null, null);
+            $data = $getData(0, 100000, null, null);
             $data = array_merge([$headers], $data);
             $name = api_get_course_id().'_'.get_lang('Learnpath').'_'.get_lang('Export');
             Export::arrayToXls($data, $name);
@@ -435,20 +476,24 @@ if (!empty($action)) {
 $actionsLeft = TrackingCourseLog::actionsLeft('lp');
 $actionsCenter = '';
 $actionsRight = Display::url(
-    Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), null, ICON_SIZE_MEDIUM),
-    api_get_self().'?action=export&'.api_get_cidreq()
+    Display::return_icon(
+        'export_excel.png',
+        get_lang('ExportAsXLS'),
+        null,
+        ICON_SIZE_MEDIUM
+    ),
+    api_get_self().'?action=export&'.api_get_cidreq().'&'
+        .http_build_query([
+            'action' => 'export',
+            'additional_profile_field' => $additionalProfileField,
+        ])
 );
 
 // Create a sortable table with user-data
-$parameters = [];
-$parameters['sec_token'] = Security::get_token();
-$parameters['cidReq'] = api_get_course_id();
-$parameters['id_session'] = api_get_session_id();
-
 $table = new SortableTable(
     'lps',
     'getCount',
-    'getData'
+    $getData
 );
 $table->set_additional_parameters($parameters);
 $column = 0;
@@ -456,7 +501,9 @@ foreach ($headers as $header) {
     $table->set_header($column++, $header, false);
 }
 
-$tableToString = $table->return_table();
+$content = [];
+$content[] = TrackingCourseLog::displayAdditionalProfileFields($defaultExtraFields, api_get_self());
+$content[] = $table->return_table();
 $toolbarActions = Display::toolbarAction(
     'toolbarUser',
     [$actionsLeft, $actionsCenter, $actionsRight],
@@ -465,5 +512,5 @@ $toolbarActions = Display::toolbarAction(
 
 $tpl = new Template($tool_name);
 $tpl->assign('actions', $toolbarActions);
-$tpl->assign('content', $tableToString);
+$tpl->assign('content', implode(PHP_EOL, $content));
 $tpl->display_one_col_template();

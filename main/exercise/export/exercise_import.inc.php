@@ -256,6 +256,10 @@ function import_exercise($file)
                 $totalCorrectWeight = $question_array['weighting'][0];
             }
 
+            if (!empty($question_array['default_weighting'])) {
+                $totalCorrectWeight = (float) $question_array['default_weighting'];
+            }
+
             $question->updateWeighting($totalCorrectWeight);
             $question->save($exercise);
             $answer->save();

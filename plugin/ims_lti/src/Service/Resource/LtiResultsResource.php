@@ -40,11 +40,11 @@ class LtiResultsResource extends LtiAdvantageServiceResource
     {
         parent::__construct($toolId, $courseId);
 
-        $this->lineItem = Database::getManager()->find('ChamiloPluginBundle:ImsLti\LineItem', (int)$lineItemId);
+        $this->lineItem = Database::getManager()->find('ChamiloPluginBundle:ImsLti\LineItem', (int) $lineItemId);
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function validate()
     {
@@ -212,7 +212,7 @@ class LtiResultsResource extends LtiAdvantageServiceResource
             $links['prev'] = $page - 1;
         }
 
-        if ($page +1 < $links['last']) {
+        if ($page + 1 < $links['last']) {
             $links['next'] = $page + 1;
         }
 

@@ -7,6 +7,7 @@
  *
  * @author Julio Montoya <gugli100@gmail.com>
  */
+$use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 Exercise::cleanSessionVariables();
@@ -43,8 +44,8 @@ $origin = api_get_origin();
 $logInfo = [
     'tool' => TOOL_QUIZ,
     'tool_id' => $exercise_id,
-    'action' => isset($_REQUEST['learnpath_id']) ? 'learnpath_id' : '',
-    'action_details' => isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : '',
+    'action' => $learnpath_id ? 'learnpath_id' : '',
+    'action_details' => $learnpath_id ?: '',
 ];
 Event::registerLog($logInfo);
 
@@ -61,12 +62,22 @@ if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
     $time_control = true;
 }
 
-$extra_params = '';
+$exerciseUrlParams = [
+    'exerciseId' => $objExercise->iid,
+    'learnpath_id' => $learnpath_id,
+    'learnpath_item_id' => $learnpath_item_id,
+    'learnpath_item_view_id' => $learnpathItemViewId,
+];
 if (isset($_GET['preview'])) {
-    $extra_params = '&preview=1';
+    $exerciseUrlParams['preview'] = 1;
 }
+// It is a lti provider
+if (isset($_GET['lti_launch_id'])) {
+    $exerciseUrlParams['lti_launch_id'] = Security::remove_XSS($_GET['lti_launch_id']);
+}
+
 $exercise_url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.
-    api_get_cidreq().'&exerciseId='.$objExercise->iid.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpathItemViewId.$extra_params;
+    api_get_cidreq().'&'.http_build_query($exerciseUrlParams);
 
 if ($time_control) {
     // Get time left for expiring time
@@ -79,7 +90,7 @@ if ($time_control) {
     $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left, $exercise_url);
 }
 
-if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
+if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp', 'iframe'])) {
     SessionManager::addFlashSessionReadOnly();
     Display::display_header();
 } else {
@@ -102,6 +113,7 @@ $html = '';
 $message = '';
 $html .= '<div class="exercise-overview">';
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+$hideIp = api_get_configuration_value('exercise_hide_ip');
 $editLink = '';
 if ($is_allowed_to_edit) {
     if ($objExercise->sessionId == $sessionId) {
@@ -132,7 +144,7 @@ if (api_get_configuration_value('save_titles_as_html')) {
 
 // Exercise description.
 if (!empty($objExercise->description)) {
-    $html .= Display::div(Security::remove_XSS($objExercise->description), ['class' => 'exercise_description']);
+    $html .= Display::div(Security::remove_XSS($objExercise->description, COURSEMANAGERLOWSECURITY), ['class' => 'exercise_description']);
 }
 
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info(
@@ -308,6 +320,9 @@ if (!empty($attempts)) {
             'date' => api_convert_and_format_date($attempt_result['start_date'], DATE_TIME_FORMAT_LONG),
             'userIp' => $attempt_result['user_ip'],
         ];
+        if (api_is_anonymous() || $hideIp) {
+            unset($row['userIp']);
+        }
         $attempt_link .= PHP_EOL.$teacher_revised;
 
         if (in_array(
@@ -429,6 +444,9 @@ if (!empty($attempts)) {
             }
             break;
     }
+    if (api_is_anonymous() || $hideIp) {
+        unset($header_names[2]); // It removes the 3rd column related to IP
+    }
     $column = 0;
     foreach ($header_names as $item) {
         $table->setHeaderContents(0, $column, $item);
@@ -506,11 +524,13 @@ if ($isLimitReached) {
     );
 }
 
-$html .= Display::tag(
-    'div',
-    $table_content,
-    ['class' => 'table-responsive']
-);
+if (0 == $objExercise->getHideAttemptsTableOnStartPage()) {
+    $html .= Display::tag(
+        'div',
+        $table_content,
+        ['class' => 'table-responsive']
+    );
+}
 $html .= '</div>';
 
 if ($certificateBlock) {

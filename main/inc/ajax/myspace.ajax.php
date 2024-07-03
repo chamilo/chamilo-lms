@@ -11,7 +11,7 @@ $action = $_GET['a'];
 
 // Access restrictions.
 $is_allowedToTrack = api_is_platform_admin(true, true) ||
-    api_is_allowed_to_create_course() || api_is_course_tutor();
+    api_is_allowed_to_create_course() || api_is_course_tutor() || api_is_session_general_coach();
 
 if (!$is_allowedToTrack) {
     exit;

@@ -5,6 +5,8 @@
 use Chamilo\PluginBundle\Entity\XApi\SharedStatement;
 use Xabbuh\XApi\Common\Exception\ConflictException;
 use Xabbuh\XApi\Common\Exception\XApiException;
+use Xabbuh\XApi\Model\StatementId;
+use Xabbuh\XApi\Model\Uuid;
 use Xabbuh\XApi\Serializer\Symfony\Serializer;
 use Xabbuh\XApi\Serializer\Symfony\StatementSerializer;
 
@@ -32,13 +34,19 @@ $countNotSent = count($notSentSharedStatements);
 if ($countNotSent > 0) {
     echo '['.time().'] Trying to send '.$countNotSent.' statements to LRS'.PHP_EOL;
 
-    $client = XApiPlugin::create()->getXApiStatementClient();
+    $client = XApiPlugin::create()->getXapiStatementCronClient();
 
     /** @var SharedStatement $notSentSharedStatement */
     foreach ($notSentSharedStatements as $notSentSharedStatement) {
         $notSentStatement = $statementSerializer->deserializeStatement(
             json_encode($notSentSharedStatement->getStatement())
         );
+
+        if (null == $notSentStatement->getId()) {
+            $notSentStatement = $notSentStatement->withId(
+                StatementId::fromUuid(Uuid::uuid4())
+            );
+        }
 
         try {
             echo '['.time()."] Sending shared statement ({$notSentSharedStatement->getId()})";

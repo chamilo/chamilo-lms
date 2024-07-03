@@ -78,83 +78,83 @@ class xajax
 	/**
 	 * @var array Array of PHP functions that will be callable through javascript wrappers
 	 */
-	var $aFunctions;
+	public array $aFunctions;
 	/**
 	 * @var array Array of object callbacks that will allow Javascript to call PHP methods (key=function name)
 	 */
-	var $aObjects;
+	public array $aObjects;
 	/**
 	 * @var array Array of RequestTypes to be used with each function (key=function name)
 	 */
-	var $aFunctionRequestTypes;
+	public array $aFunctionRequestTypes;
 	/**
 	 * @var array Array of Include Files for any external functions (key=function name)
 	 */
-	var $aFunctionIncludeFiles;
+	public array $aFunctionIncludeFiles;
 	/**
 	 * @var string Name of the PHP function to call if no callable function was found
 	 */
-	var $sCatchAllFunction;
+	public string $sCatchAllFunction;
 	/**
 	 * @var string Name of the PHP function to call before any other function
 	 */
-	var $sPreFunction;
+	public string $sPreFunction;
 	/**
 	 * @var string The URI for making requests to the xajax object
 	 */
-	var $sRequestURI;
+	public string $sRequestURI;
 	/**
 	 * @var string The prefix to prepend to the javascript wraper function name
 	 */
-	var $sWrapperPrefix;
+	public string $sWrapperPrefix;
 	/**
 	 * @var boolean Show debug messages (default false)
 	 */
-	var $bDebug;
+    public bool $bDebug;
 	/**
 	 * @var boolean Show messages in the client browser's status bar (default false)
 	 */
-	var $bStatusMessages;
+    public bool $bStatusMessages;
 	/**
 	 * @var boolean Allow xajax to exit after processing a request (default true)
 	 */
-	var $bExitAllowed;
+    public bool $bExitAllowed;
 	/**
 	 * @var boolean Use wait cursor in browser (default true)
 	 */
-	var $bWaitCursor;
+    public bool $bWaitCursor;
 	/**
-	 * @var boolean Use an special xajax error handler so the errors are sent to the browser properly (default false)
+	 * @var boolean Use a special xajax error handler so the errors are sent to the browser properly (default false)
 	 */
-	var $bErrorHandler;
+    public bool $bErrorHandler;
 	/**
 	 * @var string Specify what, if any, file xajax should log errors to (and more information in a future release)
 	 */
-	var $sLogFile;
+    public string $sLogFile;
 	/**
 	 * @var boolean Clean all output buffers before outputting response (default false)
 	 */
-	var $bCleanBuffer;
+    public bool $bCleanBuffer;
 	/**
 	 * @var string String containing the character encoding used
 	 */
-	var $sEncoding;
+    public string $sEncoding;
 	/**
 	 * @var boolean Decode input request args from UTF-8 (default false)
 	 */
-	var $bDecodeUTF8Input;
+    public bool $bDecodeUTF8Input;
 	/**
 	 * @var boolean Convert special characters to HTML entities (default false)
 	 */
-	var $bOutputEntities;
+    public bool $bOutputEntities;
 	/**
 	 * @var array Array for parsing complex objects
 	 */
-	var $aObjArray;
+    public array $aObjArray;
 	/**
 	 * @var integer Position in $aObjArray
 	 */
-	var $iPos;
+    public int $iPos;
 
 	/**#@-*/
 
@@ -162,12 +162,12 @@ class xajax
 	 * Constructor. You can set some extra xajax options right away or use
 	 * individual methods later to set options.
 	 *
-	 * @param string  defaults to the current browser URI
-	 * @param string  defaults to "xajax_";
-	 * @param string  defaults to XAJAX_DEFAULT_CHAR_ENCODING defined above
-	 * @param boolean defaults to false
+	 * @param string $sRequestURI defaults to the current browser URI
+	 * @param string $sWrapperPrefix defaults to "xajax_";
+	 * @param string $sEncoding defaults to XAJAX_DEFAULT_CHAR_ENCODING defined above
+	 * @param boolean $bDebug defaults to false
 	 */
-	public function __construct($sRequestURI="",$sWrapperPrefix="xajax_",$sEncoding=XAJAX_DEFAULT_CHAR_ENCODING,$bDebug=false)
+	public function __construct(string $sRequestURI = '', string $sWrapperPrefix = 'xajax_', string $sEncoding = XAJAX_DEFAULT_CHAR_ENCODING, bool $bDebug = false)
 	{
 		$this->aFunctions = array();
 		$this->aObjects = array();
@@ -186,16 +186,17 @@ class xajax
 		$this->setCharEncoding($sEncoding);
 		$this->bDecodeUTF8Input = false;
 		$this->bOutputEntities = false;
+        $this->sPreFunction = '';
 	}
 
 	/**
 	 * Sets the URI to which requests will be made.
 	 * <i>Usage:</i> <kbd>$xajax->setRequestURI("http://www.xajaxproject.org");</kbd>
 	 *
-	 * @param string the URI (can be absolute or relative) of the PHP script
-	 *               that will be accessed when an xajax request occurs
+	 * @param string $sRequestURI the URI (can be absolute or relative) of the PHP script
+	 *               that will be accessed when a xajax request occurs
 	 */
-	function setRequestURI($sRequestURI)
+	function setRequestURI(string $sRequestURI)
 	{
 		$this->sRequestURI = $sRequestURI;
 	}
@@ -204,10 +205,10 @@ class xajax
 	 * Sets the prefix that will be appended to the Javascript wrapper
 	 * functions (default is "xajax_").
 	 *
-	 * @param string
+	 * @param string $sPrefix
 	 */
 	//
-	function setWrapperPrefix($sPrefix)
+	function setWrapperPrefix(string $sPrefix)
 	{
 		$this->sWrapperPrefix = $sPrefix;
 	}
@@ -331,9 +332,9 @@ class xajax
 	 * <kbd>XAJAX_DEFAULT_CHAR_ENCODING</kbd> constant.
 	 * <i>Usage:</i> <kbd>$xajax->setCharEncoding("utf-8");</kbd>
 	 *
-	 * @param string the encoding type to use (utf-8, iso-8859-1, etc.)
+	 * @param string $sEncoding the encoding type to use (utf-8, iso-8859-1, etc.)
 	 */
-	function setCharEncoding($sEncoding)
+	function setCharEncoding(string $sEncoding)
 	{
 		$this->sEncoding = $sEncoding;
 	}
@@ -389,8 +390,8 @@ class xajax
 	 * <i>Usage:</i> <kbd>$xajax->registerFunction("myFunction");</kbd>
 	 * or: <kbd>$xajax->registerFunction(array("myFunctionName", &$myObject, "myMethod"));</kbd>
 	 *
-	 * @param mixed  contains the function name or an object callback array
-	 * @param mixed  request type (XAJAX_GET/XAJAX_POST) that should be used
+	 * @param mixed $mFunction contains the function name or an object callback array
+	 * @param mixed $sRequestType request type (XAJAX_GET/XAJAX_POST) that should be used
 	 *               for this function.  Defaults to XAJAX_POST.
 	 */
 	function registerFunction($mFunction,$sRequestType=XAJAX_POST)
@@ -413,14 +414,14 @@ class xajax
 	 *
 	 * <i>Usage:</i> <kbd>$xajax->registerExternalFunction("myFunction","myFunction.inc.php",XAJAX_POST);</kbd>
 	 *
-	 * @param string contains the function name or an object callback array
+	 * @param string $mFunction contains the function name or an object callback array
 	 *               ({@link xajax::registerFunction() see registerFunction} for
 	 *               more info on object callback arrays)
-	 * @param string contains the path and filename of the include file
-	 * @param mixed  the RequestType (XAJAX_GET/XAJAX_POST) that should be used
+	 * @param string $sIncludeFile contains the path and filename of the include file
+	 * @param mixed  $sRequestType the RequestType (XAJAX_GET/XAJAX_POST) that should be used
 	 *		          for this function. Defaults to XAJAX_POST.
 	 */
-	function registerExternalFunction($mFunction,$sIncludeFile,$sRequestType=XAJAX_POST)
+	function registerExternalFunction($mFunction,string $sIncludeFile,$sRequestType=XAJAX_POST)
 	{
 		$this->registerFunction($mFunction, $sRequestType);
 
@@ -442,7 +443,7 @@ class xajax
 	 *
 	 * <i>Usage:</i> <kbd>$xajax->registerCatchAllFunction("myCatchAllFunction");</kbd>
 	 *
-	 * @param string contains the function name or an object callback array
+	 * @param string $mFunction contains the function name or an object callback array
 	 *               ({@link xajax::registerFunction() see registerFunction} for
 	 *               more info on object callback arrays)
 	 */
@@ -468,7 +469,7 @@ class xajax
 	 *
 	 * <i>Usage:</i> <kbd>$xajax->registerPreFunction("myPreFunction");</kbd>
 	 *
-	 * @param string contains the function name or an object callback array
+	 * @param string $mFunction contains the function name or an object callback array
 	 *               ({@link xajax::registerFunction() see registerFunction} for
 	 *               more info on object callback arrays)
 	 */
@@ -500,9 +501,9 @@ class xajax
 	 * Returns the current request mode (XAJAX_GET or XAJAX_POST), or -1 if
 	 * there is none.
 	 *
-	 * @return mixed
+	 * @return int
 	 */
-	function getRequestMode()
+	function getRequestMode(): int
 	{
 		if (!empty($_GET["xajax"]))
 			return XAJAX_GET;
@@ -562,7 +563,7 @@ class xajax
 			set_error_handler("xajaxErrorHandler");
 		}
 
-		if ($this->sPreFunction) {
+		if (!empty($this->sPreFunction)) {
 			if (!$this->_isFunctionCallable($this->sPreFunction)) {
 				$bFoundFunction = false;
 				$objResponse = new xajaxResponse();
@@ -708,18 +709,18 @@ class xajax
 	 *		< ?php $xajax->printJavascript(); ? >
 	 * </code>
 	 *
-	 * @param string the relative address of the folder where xajax has been
+	 * @param string $sJsURI the relative address of the folder where xajax has been
 	 *               installed. For instance, if your PHP file is
 	 *               "http://www.myserver.com/myfolder/mypage.php"
 	 *               and xajax was installed in
 	 *               "http://www.myserver.com/anotherfolder", then $sJsURI
 	 *               should be set to "../anotherfolder". Defaults to assuming
 	 *               xajax is in the same folder as your PHP file.
-	 * @param string the relative folder/file pair of the xajax Javascript
+	 * @param ?string $sJsFile the relative folder/file pair of the xajax Javascript
 	 *               engine located within the xajax installation folder.
 	 *               Defaults to xajax_js/xajax.js.
 	 */
-	function printJavascript($sJsURI="", $sJsFile=NULL)
+	function printJavascript(string $sJsURI="", string $sJsFile=NULL)
 	{
 		print $this->getJavascript($sJsURI, $sJsFile);
 	}
@@ -736,19 +737,19 @@ class xajax
 	 *		< ?php echo $xajaxJSHead; ? >
 	 * </code>
 	 *
-	 * @param string the relative address of the folder where xajax has been
+	 * @param string $sJsURI the relative address of the folder where xajax has been
 	 *               installed. For instance, if your PHP file is
 	 *               "http://www.myserver.com/myfolder/mypage.php"
 	 *               and xajax was installed in
 	 *               "http://www.myserver.com/anotherfolder", then $sJsURI
 	 *               should be set to "../anotherfolder". Defaults to assuming
 	 *               xajax is in the same folder as your PHP file.
-	 * @param string the relative folder/file pair of the xajax Javascript
+	 * @param ?string $sJsFile the relative folder/file pair of the xajax Javascript
 	 *               engine located within the xajax installation folder.
 	 *               Defaults to xajax_js/xajax.js.
 	 * @return string
 	 */
-	function getJavascript($sJsURI="", $sJsFile=NULL)
+	function getJavascript(string $sJsURI="", string $sJsFile=NULL): string
 	{
 		$html = $this->getJavascriptConfig();
 		$html .= $this->getJavascriptInclude($sJsURI, $sJsFile);
@@ -762,7 +763,7 @@ class xajax
 	 *
 	 * @return string
 	 */
-	function getJavascriptConfig()
+	function getJavascriptConfig(): string
 	{
 		$html  = "\t<script type=\"text/javascript\">\n";
 		$html .= "var xajaxRequestUri=\"".$this->sRequestURI."\";\n";
@@ -786,19 +787,19 @@ class xajax
 	 * along with a check to see if the file loaded after six seconds
 	 * (typically called internally by xajax from get/printJavascript).
 	 *
-	 * @param string the relative address of the folder where xajax has been
+	 * @param string $sJsURI the relative address of the folder where xajax has been
 	 *               installed. For instance, if your PHP file is
 	 *               "http://www.myserver.com/myfolder/mypage.php"
 	 *               and xajax was installed in
 	 *               "http://www.myserver.com/anotherfolder", then $sJsURI
 	 *               should be set to "../anotherfolder". Defaults to assuming
 	 *               xajax is in the same folder as your PHP file.
-	 * @param string the relative folder/file pair of the xajax Javascript
+	 * @param ?string $sJsFile the relative folder/file pair of the xajax Javascript
 	 *               engine located within the xajax installation folder.
 	 *               Defaults to xajax_js/xajax.js.
 	 * @return string
 	 */
-	function getJavascriptInclude($sJsURI="", $sJsFile=NULL)
+	function getJavascriptInclude(string $sJsURI="", ?string $sJsFile=NULL): string
 	{
 		if ($sJsFile == NULL) $sJsFile = "xajax_js/xajax.js";
 
@@ -817,7 +818,7 @@ class xajax
 	 * @access private
 	 * @return string
 	 */
-	function _detectURI()
+	function _detectURI(): string
 	{
 		$aURL = array();
 
@@ -883,11 +884,11 @@ class xajax
 	 * Returns true if the function name is associated with an object callback,
 	 * false if not.
 	 *
-	 * @param string the name of the function
+	 * @param string $sFunction the name of the function
 	 * @access private
 	 * @return boolean
 	 */
-	function _isObjectCallback($sFunction)
+	function _isObjectCallback(string $sFunction): bool
 	{
 		if (array_key_exists($sFunction, $this->aObjects)) return true;
 		return false;
@@ -897,11 +898,11 @@ class xajax
 	 * Returns true if the function or object callback can be called, false if
 	 * not.
 	 *
-	 * @param string the name of the function
+	 * @param string $sFunction the name of the function
 	 * @access private
 	 * @return boolean
 	 */
-	function _isFunctionCallable($sFunction)
+	function _isFunctionCallable(string $sFunction): bool
 	{
 		if ($this->_isObjectCallback($sFunction)) {
 			if (is_object($this->aObjects[$sFunction][0])) {
@@ -920,12 +921,12 @@ class xajax
 	 * Calls the function, class method, or object method with the supplied
 	 * arguments.
 	 *
-	 * @param string the name of the function
-	 * @param array  arguments to pass to the function
+	 * @param string $sFunction the name of the function
+	 * @param array  $aArgs arguments to pass to the function
 	 * @access private
 	 * @return mixed the output of the called function or method
 	 */
-	function _callFunction($sFunction, $aArgs)
+	function _callFunction(string $sFunction, array $aArgs)
 	{
 		if ($this->_isObjectCallback($sFunction)) {
 			$mReturn = call_user_func_array($this->aObjects[$sFunction], $aArgs);
@@ -939,15 +940,14 @@ class xajax
 	/**
 	 * Generates the Javascript wrapper for the specified PHP function.
 	 *
-	 * @param string the name of the function
-	 * @param mixed  the request type
+	 * @param string $sFunction the name of the function
+	 * @param mixed  $sRequestType the request type
 	 * @access private
 	 * @return string
 	 */
-	function _wrap($sFunction,$sRequestType=XAJAX_POST)
+	function _wrap(string $sFunction, $sRequestType = XAJAX_POST): string
 	{
-		$js = "function ".$this->sWrapperPrefix."$sFunction(){return xajax.call(\"$sFunction\", arguments, ".$sRequestType.");}\n";
-		return $js;
+		return "function ".$this->sWrapperPrefix."$sFunction(){return xajax.call(\"$sFunction\", arguments, ".$sRequestType.");}\n";
 	}
 
 	/**
@@ -955,14 +955,13 @@ class xajax
 	 * array representation of it to pass as an argument to the PHP function
 	 * being called.
 	 *
-	 * @param string the root tag of the XML
-	 * @param string XML to convert
+	 * @param string $rootTag the root tag of the XML
+	 * @param string $sXml XML to convert
 	 * @access private
 	 * @return array
 	 */
-	function _xmlToArray($rootTag, $sXml)
+	function _xmlToArray(string $rootTag, string $sXml): array
 	{
-		$aArray = array();
 		$sXml = str_replace("<$rootTag>","<$rootTag>|~|",$sXml);
 		$sXml = str_replace("</$rootTag>","</$rootTag>|~|",$sXml);
 		$sXml = str_replace("<e>","<e>|~|",$sXml);
@@ -977,20 +976,19 @@ class xajax
 		$this->aObjArray = explode("|~|",$sXml);
 
 		$this->iPos = 0;
-		$aArray = $this->_parseObjXml($rootTag);
 
-		return $aArray;
+		return $this->_parseObjXml($rootTag);
 	}
 
 	/**
 	 * A recursive function that generates an array from the contents of
 	 * $this->aObjArray.
 	 *
-	 * @param string the root tag of the XML
+	 * @param string $rootTag the root tag of the XML
 	 * @access private
 	 * @return array
 	 */
-	function _parseObjXml($rootTag)
+	function _parseObjXml(string $rootTag): array
 	{
 		$aArray = array();
 
@@ -1076,11 +1074,11 @@ class xajax
 	/**
 	 * Decodes string data from UTF-8 to the current xajax encoding.
 	 *
-	 * @param string data to convert
+	 * @param string $sData data to convert
 	 * @access private
 	 * @return string converted data
 	 */
-	function _decodeUTF8Data($sData)
+	function _decodeUTF8Data(string $sData): string
 	{
 		$sValue = $sData;
 		if ($this->bDecodeUTF8Input)

@@ -85,7 +85,10 @@ function lp_upload_quiz_main()
     $tableList = [
         UNIQUE_ANSWER => get_lang('UniqueSelect'),
         MULTIPLE_ANSWER => get_lang('MultipleSelect'),
+        MULTIPLE_ANSWER_DROPDOWN => get_lang('MultipleAnswerDropdown'),
+        MULTIPLE_ANSWER_DROPDOWN_COMBINATION => get_lang('MultipleAnswerDropdownCombination'),
         FILL_IN_BLANKS => get_lang('FillBlanks'),
+        FILL_IN_BLANKS_COMBINATION => get_lang('FillBlanksCombination'),
         MATCHING => get_lang('Matching'),
         FREE_ANSWER => get_lang('FreeAnswer'),
         GLOBAL_MULTIPLE_ANSWER => get_lang('GlobalMultipleAnswer'),
@@ -328,7 +331,14 @@ function lp_upload_quiz_action_handling()
                 case MULTIPLE_ANSWER:
                     $answer = new MultipleAnswer();
                     break;
+                case MULTIPLE_ANSWER_DROPDOWN:
+                    $answer = new MultipleAnswerDropdown();
+                    break;
+                case MULTIPLE_ANSWER_DROPDOWN_COMBINATION:
+                    $answer = new MultipleAnswerDropdownCombination();
+                    break;
                 case FILL_IN_BLANKS:
+                case FILL_IN_BLANKS_COMBINATION:
                     $answer = new FillBlanks();
                     $question_description_text = '';
                     break;
@@ -360,6 +370,8 @@ function lp_upload_quiz_action_handling()
             }
             switch ($detectQuestionType) {
                 case GLOBAL_MULTIPLE_ANSWER:
+                case MULTIPLE_ANSWER_DROPDOWN:
+                case MULTIPLE_ANSWER_DROPDOWN_COMBINATION:
                 case MULTIPLE_ANSWER:
                 case UNIQUE_ANSWER:
                     $total = 0;
@@ -422,6 +434,9 @@ function lp_upload_quiz_action_handling()
                                         //$total = $total - $score;
                                     }
                                     break;
+                                case MULTIPLE_ANSWER_DROPDOWN_COMBINATION:
+                                    $score = 0;
+                                    break;
                             }
 
                             $objAnswer->createAnswer(
@@ -448,6 +463,7 @@ function lp_upload_quiz_action_handling()
                         if ($questionObj) {
                             switch ($detectQuestionType) {
                                 case GLOBAL_MULTIPLE_ANSWER:
+                                case MULTIPLE_ANSWER_DROPDOWN_COMBINATION:
                                     $questionObj->updateWeighting($globalScore);
                                     break;
                                 case UNIQUE_ANSWER:
@@ -469,6 +485,7 @@ function lp_upload_quiz_action_handling()
                     }
                     break;
                 case FILL_IN_BLANKS:
+                case FILL_IN_BLANKS_COMBINATION:
                     $fillInScoreList = [];
                     $size = [];
                     $globalScore = 0;

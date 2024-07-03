@@ -539,9 +539,10 @@ CKEDITOR.dialog.add( 'image2_chamilo', function( editor ) {
 						id: 'isResponsive',
 						type: 'checkbox',
 						label: lang.responsive,
+						'default' : editor.config.image_responsive != null ? editor.config.image_responsive : false,
 						requiredContent: features.responsive.requiredContent,
 						setup: function ( widget ) {
-							this.setValue( widget.data.isResponsive );
+							//this.setValue( widget.data.isResponsive );
                         },
 						commit: function ( widget ) {
 							var img = widget;

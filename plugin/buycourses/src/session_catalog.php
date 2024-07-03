@@ -115,14 +115,10 @@ $template->assign('showing_sessions', true);
 $template->assign('sessions', $sessionList);
 $template->assign('pagination', $pagination);
 
-$courseList = $plugin->getCatalogCourseList($first, $pageSize, $nameFilter, $minFilter, $maxFilter);
-$coursesExist = true;
-$sessionExist = true;
-if (count($courseList) <= 0) {
-    $coursesExist = false;
-}
-$template->assign('coursesExist', $coursesExist);
-$template->assign('sessionExist', $sessionExist);
+$countCourses = $plugin->getCatalogCourseList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, 'count');
+
+$template->assign('coursesExist', $countCourses > 0);
+$template->assign('sessionExist', true);
 
 $content = $template->fetch('buycourses/view/catalog.tpl');
 

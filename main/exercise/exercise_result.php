@@ -88,14 +88,14 @@ $pageTop = '';
 $pageBottom = '';
 $pageContent = '';
 $courseInfo = api_get_course_info();
-if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
+if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp', 'iframe'])) {
     // So we are not in learnpath tool
     $showHeader = true;
     $showLearnPath = false;
 }
 
 // I'm in a preview mode as course admin. Display the action menu.
-if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
+if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable', 'iframe'])) {
     $pageActions = Display::toolbarAction(
         'exercise_result_actions',
         [
@@ -143,7 +143,7 @@ if ($origin === 'learnpath') {
 $i = $total_score = $max_score = 0;
 $remainingMessage = '';
 $attemptButton = '';
-if ($origin !== 'embeddable') {
+if (!in_array($origin, ['iframe', 'embeddable'])) {
     $attemptButton = Display::toolbarButton(
         get_lang('AnotherAttempt'),
         api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&'.http_build_query(
@@ -178,7 +178,7 @@ if ($objExercise->selectAttempts() > 0) {
             )
         );
 
-        if (!in_array($origin, ['learnpath', 'embeddable'])) {
+        if (!in_array($origin, ['learnpath', 'embeddable', 'iframe'])) {
             $showFooter = true;
         }
 
@@ -307,7 +307,7 @@ ExerciseLib::exercise_time_control_delete(
 
 ExerciseLib::delete_chat_exercise_session($exeId);
 
-if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
+if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp', 'iframe'])) {
     $pageBottom .= '<div class="question-return">';
     $pageBottom .= Display::url(
         get_lang('ReturnToCourseHomepage'),
@@ -321,7 +321,7 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
     }
 
     $showFooter = true;
-} elseif (in_array($origin, ['embeddable', 'mobileapp'])) {
+} elseif (in_array($origin, ['embeddable', 'mobileapp', 'iframe'])) {
     if (api_is_allowed_to_session_edit()) {
         Exercise::cleanSessionVariables();
     }
@@ -341,7 +341,9 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
 
     // Record the results in the learning path, using the SCORM interface (API)
     $pageBottom .= "<script>window.parent.API.void_save_asset('$total_score', '$max_score', 0, 'completed');</script>";
-    $pageBottom .= '<script type="text/javascript">'.$href.'</script>';
+    if (empty($_SESSION['oLP']->lti_launch_id)) {
+        $pageBottom .= '<script type="text/javascript">'.$href.'</script>';
+    }
     $showFooter = false;
 }
 
@@ -360,7 +362,8 @@ function showEmbeddableFinishButton()
     $js = '<script>
         $(function () {
             $(\'.btn-close-quiz\').on(\'click\', function () {
-                window.parent.$(\'video:not(.skip), audio:not(.skip)\').get(0).play();
+                var playerId = window.frameElement.parentElement.parentElement.parentElement.id;
+                window.parent.mejs.players[playerId].play();
             });
         });
     </script>';
@@ -376,6 +379,18 @@ function showEmbeddableFinishButton()
         ),
         ['class' => 'text-center']
     );
+
+    // We check if a tool provider
+    if (isset($_REQUEST['lti_launch_id'])) {
+        $ltiLaunchId = Security::remove_XSS($_REQUEST['lti_launch_id']);
+        global $exeId;
+        $js .= '<script>
+            $(function () {
+                var url = "'.api_get_path(WEB_PLUGIN_PATH).'lti_provider/tool/api/score.php?'.api_get_cidreq().'&lti_tool=quiz&launch_id='.$ltiLaunchId.'&lti_result_id='.$exeId.'";
+                $.get(url);
+            });
+        </script>';
+    }
 
     return $js.PHP_EOL.$html;
 }

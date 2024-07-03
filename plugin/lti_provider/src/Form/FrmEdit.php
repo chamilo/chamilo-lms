@@ -1,10 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+namespace Chamilo\PluginBundle\LtiProvider\Form;
+
 use Chamilo\PluginBundle\Entity\LtiProvider\Platform;
+use Exception;
+use FormValidator;
+use LtiProviderPlugin;
 
 /**
- * Class FrmAdd.
+ * Class FrmEdit.
  */
 class FrmEdit extends FormValidator
 {
@@ -14,7 +19,7 @@ class FrmEdit extends FormValidator
     private $platform;
 
     /**
-     * FrmAdd constructor.
+     * FrmEdit constructor.
      */
     public function __construct(
         string $name,
@@ -28,10 +33,8 @@ class FrmEdit extends FormValidator
 
     /**
      * Build the form.
-     *
-     * @throws Exception
      */
-    public function build(bool $globalMode = true)
+    public function build()
     {
         $plugin = LtiProviderPlugin::create();
         $this->addHeader($plugin->get_lang('ConnectionDetails'));
@@ -42,7 +45,22 @@ class FrmEdit extends FormValidator
         $this->addUrl('key_set_url', $plugin->get_lang('KeySetUrl'));
         $this->addText('client_id', $plugin->get_lang('ClientId'));
         $this->addText('deployment_id', $plugin->get_lang('DeploymentId'));
-        $this->addText('kid', $plugin->get_lang('KeyId'));
+        $this->addText('kid', $plugin->get_lang('KeyId'), false);
+
+        $this->addRadio(
+            'tool_type',
+            get_lang('ToolProvider'),
+            [
+                'quiz' => $plugin->get_lang('Quizzes'),
+                'lp' => $plugin->get_lang('Learnpaths'),
+            ],
+            [
+                'onclick' => 'selectToolProvider(this.value)',
+            ]
+        );
+
+        $this->addElement('html', $plugin->getLearnPathsSelect($this->platform->getClientId()));
+        $this->addElement('html', $plugin->getQuizzesSelect($this->platform->getClientId()));
 
         $this->addButtonCreate($plugin->get_lang('EditPlatform'));
         $this->addHidden('id', $this->platform->getId());
@@ -63,6 +81,13 @@ class FrmEdit extends FormValidator
         $defaults['client_id'] = $this->platform->getClientId();
         $defaults['deployment_id'] = $this->platform->getDeploymentId();
         $defaults['kid'] = $this->platform->getKid();
+
+        $toolProvider = $this->platform->getToolProvider();
+        list($courseCode, $tool) = explode('@@', $toolProvider);
+        list($toolName, $toolId) = explode('-', $tool);
+
+        $defaults['tool_type'] = $toolName;
+        $defaults['tool_provider'] = $toolProvider;
 
         $this->setDefaults($defaults);
     }

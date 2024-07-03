@@ -8,6 +8,7 @@
     <table class="table table-hover table-striped">
         <thead>
             <tr>
+                <th>{{ 'Type'|get_lang }}</th>
                 <th>{{ 'Topic'|get_plugin_lang('ZoomPlugin') }}</th>
                 <th>{{ 'StartTime'|get_lang }}</th>
                 <th>{{ 'ForEveryone'|get_plugin_lang('ZoomPlugin') }}</th>
@@ -22,9 +23,10 @@
         <tbody>
         {% for meeting in meetings %}
             <tr>
-                <td>{{ meeting.meetingInfoGet.topic }}</td>
+                <td>{{ meeting.typeName }}</td>
+                <td>{{ meeting.topic }}</td>
                 <td>{{ meeting.formattedStartTime }}</td>
-                <td>{{ meeting.user ? 'No' : 'Yes' }}</td>
+                <td>{{ meeting.user ? 'No'|get_lang : 'Yes'|get_lang }}</td>
 {#                    <td>{{ meeting.course ? meeting.course : '-' }}</td>#}
 {#                    <td>{{ meeting.session ? meeting.session : '-' }}</td>#}
                 <td>

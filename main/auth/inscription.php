@@ -203,7 +203,7 @@ if ($user_already_registered_show_terms === false &&
         'password',
         'pass1',
         get_lang('Pass'),
-        ['id' => 'pass1', 'size' => 20, 'autocomplete' => 'off']
+        ['id' => 'pass1', 'size' => 20, 'autocomplete' => 'off', 'show_hide' => true]
     );
 
     $form->addElement(
@@ -532,7 +532,7 @@ if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
 
 $showTerms = false;
 // Terms and conditions
-if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_registered_show_terms) {
+if (api_get_setting('allow_terms_conditions') === 'true') {
     if (!api_is_platform_admin()) {
         if (api_get_setting('show_terms_if_profile_completed') === 'true') {
             $userInfo = api_get_user_info();
@@ -893,13 +893,7 @@ if ($form->validate()) {
         if (isset($values['legal_accept_type'])) {
             $cond_array = explode(':', $values['legal_accept_type']);
             if (!empty($cond_array[0]) && !empty($cond_array[1])) {
-                $time = time();
-                $conditionToSave = (int) $cond_array[0].':'.(int) $cond_array[1].':'.$time;
-                UserManager::update_extra_field_value(
-                    $user_id,
-                    'legal_accept',
-                    $conditionToSave
-                );
+                $conditionToSave = (int) $cond_array[0].':'.(int) $cond_array[1].':'.time();
 
                 Event::addEvent(
                     LOG_TERM_CONDITION_ACCEPTED,
@@ -908,29 +902,7 @@ if ($form->validate()) {
                     api_get_utc_datetime()
                 );
 
-                $bossList = UserManager::getStudentBossList($user_id);
-                if (!empty($bossList)) {
-                    $bossList = array_column($bossList, 'boss_id');
-                    $currentUserInfo = api_get_user_info($user_id);
-                    foreach ($bossList as $bossId) {
-                        $subjectEmail = sprintf(
-                            get_lang('UserXSignedTheAgreement'),
-                            $currentUserInfo['complete_name']
-                        );
-                        $contentEmail = sprintf(
-                            get_lang('UserXSignedTheAgreementTheY'),
-                            $currentUserInfo['complete_name'],
-                            api_get_local_time($time)
-                        );
-
-                        MessageManager::send_message_simple(
-                            $bossId,
-                            $subjectEmail,
-                            $contentEmail,
-                            $user_id
-                        );
-                    }
-                }
+                LegalManager::sendEmailToUserBoss($user_id, $conditionToSave);
             }
         }
         $values = api_get_user_info($user_id);
@@ -944,6 +916,7 @@ if ($form->validate()) {
     $_user['language'] = $values['language'];
     $_user['user_id'] = $user_id;
     $_user['status'] = $values['status'] ?? STUDENT;
+    ConditionalLogin::check_conditions($_user);
     Session::write('_user', $_user);
 
     $is_allowedCreateCourse = isset($values['status']) && $values['status'] == 1;

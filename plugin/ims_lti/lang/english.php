@@ -1,7 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
-$strings['plugin_title'] = 'IMS/LTI';
-$strings['plugin_comment'] = 'IMS/LTI';
+$strings['plugin_title'] = 'IMS/LTI client';
+$strings['plugin_comment'] = 'Adds support for IMS/LTI activities integration, where Chamilo acts as an IMS/LTI client';
 
 $strings['enabled'] = 'Enabled';
 $strings['client_id'] = 'Client ID';
@@ -36,7 +36,7 @@ $strings['ShareLauncherName'] = 'Share launcher\'s name';
 $strings['ShareLauncherEmail'] = 'Share launcher\'s email';
 $strings['ShareLauncherPicture'] = 'Share launcher\'s picture';
 $strings['NoTool'] = 'Tool not exists';
-$strings['ToolAddedOnCourseX'] = 'Tool addeed on course <strong>%s</strong>.';
+$strings['ToolAddedOnCourseX'] = 'Tool added to course <strong>%s</strong>.';
 $strings['SupportDeppLinkingHelp'] = 'Contact your Tool Provider to verify if Deep Linking support is mandatory';
 $strings['NoAccessToUrl'] = 'No access to URL';
 $strings['LaunchUrlNotFound'] = 'Launch URL not found';
@@ -49,10 +49,14 @@ $strings['PublicKey'] = 'Public key';
 $strings['PrivateKey'] = 'Private key';
 $strings['PlatformDateUpdated'] = 'Platform data updated';
 $strings['LtiVersion'] = 'LTI Version';
+$strings['PublicKeyType'] = 'Public key type';
+$strings['KeySetUrl'] = 'Keyset URL';
+$strings['RsaKey'] = 'RSA key';
+$strings['PublicKeyset'] = 'Jwks URL';
 $strings['LoginUrl'] = 'Login URL';
 $strings['RedirectUrl'] = 'Redirect URL';
 $strings['AssigmentAndGradesService'] = 'Assigment and Grades Service';
-$strings['DontUseService'] = 'Dont\'t use service';
+$strings['DontUseService'] = 'Don\'t use service';
 $strings['UseService'] = 'Use service';
 $strings['AGServiceSimple'] = 'Synchronize grades only';
 $strings['AGServiceFull'] = 'Synchronize grades and column management';
@@ -70,3 +74,4 @@ $strings['ReplacementUserId'] = 'Replacement for user_id (sub)';
 $strings['ReplacementUserIdHelp'] = 'The current user_id (sub) in launch params will be formed from platform settings and user ID.<br>You can set a replacement for it using some variables like <code>$User.id</code> or <code>$User.username</code>.';
 $strings['AddInCourses'] = 'Add in courses';
 $strings['AddInAllCourses'] = 'Add in all courses';
+$strings['AddInSessions'] = 'Add in sessions';

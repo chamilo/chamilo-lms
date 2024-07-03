@@ -14,38 +14,50 @@ $strings['enableGlobalConference'] = "Activer les conférences globales";
 $strings['enableGlobalConferencePerUser'] = "Activer les conférences globales par utilisateur";
 $strings['globalConferenceAllowRoles'] = "Visibilité du lien de vidéo conférence global pour les profils suivant";
 $strings['globalConferencePerUserAllowRoles'] = "Visibilité du lien de vidéo conférence global par utilisateur pour les profils suivant";
-
 $strings['tool_enable_help'] = "Choisissez si vous voulez activer l'outil de conférence vidéo Zoom.
 Une fois activé, il apparaitra dans les pages d'accueil de tous les cours :
 les enseignants pourront <strong>démarrer</strong> une conférence et les étudiants la <strong>rejoindre</strong>.
 <br/>
 Ce plugin requiert un compte Zoom pour gérer les conférences.
-L'API de Zoom utilise les <em>JSON Web Tokens (JWT)</em> pour autoriser l'accès à un compte.
-<strong>Une <em>clé</em> et un <em>code secret</em> d'API sont requis</strong> pour s'authentifier avec JWT.
-Pour les obtenir, créez une <em>JWT app</em> :
-<br/>1. logguez vous sur <a href=\"https://zoom.us/profile\">Votre profil Zoom</a>
-<br/>2. cliquez sur <em>Avancé / Marketplace d'application</em>
-<br/>3. cliquez sur <em><a href=\"https://marketplace.zoom.us/develop/create\">Develop / build App</a></em>
-<br/>4. choisissez <em>JWT / Create</em>
-<br/>5. Information: remplissez quelques champs à propos de votre \"App\"
-(noms de l'application, de l'entreprise, nom et adresse de courriel de contact)
-<br/>6. cliquez sur <em>Continue</em>
-<br/>7. App Credentials :
-<strong>copiez la clé (API Key) et le code secret (API Secret) dans les champs ci-dessous.</strong>
-<br/>8. cliquez sur <em>Continue</em>
-<br/>9. Feature :
-activez <em>Event Subscriptions</em> pour en ajouter une avec comme endpoint URL
-<code>https://your.chamilo.url/plugin/zoom/endpoint.php</code>
-et ajoutez ces types d'événements :
-<br/>- Start Meeting
-<br/>- End Meeting
-<br/>- Participant/Host joined meeting
-<br/>- Participant/Host left meeting
-<br/>- All Recordings have completed
-<br/>- Recording transcript files have completed
-<br/>puis cliquez sur <em>Done</em> puis sur <em>Save</em>
-et <strong>copiez votre Verification Token dans le champ ci-dessous</strong>.
-<br/>10. cliquez sur <em>Continue</em>
+<p>L'API de Zoom utilise les <em>JSON Web Tokens (JWT)</em> pour autoriser l'accès à un compte. 
+Pour les obtenir, créez une application JWT ou une application OAuth serveur à serveur :</p>
+<blockquote>
+  <p>À partir du 1er juin 2023, Zoom recommande de créer une application OAuth serveur à serveur 
+pour remplacer la fonctionnalité d'une application JWT dans votre compte.</p>
+</blockquote>
+<ol>
+<li>Connectez-vous à votre <a href=\"https://zoom.us/profile\">page de profil Zoom</a></li>
+<li>Cliquez sur Avancé / Marketplace d'application</li>
+<li>Cliquez sur <a href=\"https://marketplace.zoom.us/develop/create\">Développer / Créer une application</a></li>
+<li>Choisissez JWT ou OAuth serveur à serveur, puis Créer</li>
+<li>Informations : Remplissez les champs sur votre \"App\" (noms de l'application et de la société, nom et adresse e-mail de contact)</li>
+<li>Cliquez sur Continuer</li>
+<li>Identifiants de l'application
+<ol>
+<li>Pour une application JWT : Copiez votre clé API (API Key) et votre code secret (API Secret) dans la configuration du plugin</li>
+<li>Pour une application OAuth serveur à serveur : Copiez votre <em>ID de compte</em>, votre <em>ID de client</em> et votre <em>secret de client</em> dans la configuration du plugin</li>
+</ol></li>
+<li>Cliquez sur Continuer</li>
+<li><p>Fonctionnalité : activez les <em>Abonnements aux événements / Event Subscriptions</em> pour en ajouter un nouveau avec comme endpoint URL
+<code>https://your.chamilo.url/plugin/zoom/endpoint.php</code> (validez le point de terminaison pour permettre l'activation de l'application) et ajoutez
+ces types d'événements :</p>
+<ul>
+<li>Démarrer une réunion / Start Meeting</li>
+<li>Terminer une réunion / End Meeting</li>
+<li>Participant/hôte a rejoint la réunion / Participant/Host joined meeting</li>
+<li>Participant/hôte a quitté la réunion / Participant/Host left meeting</li>
+<li>Démarrer un webinar / Start Webinar</li>
+<li>Terminer un webinar / End Webinar</li>
+<li>Participant/hôte a rejoint le webinar / Participant/Host joined webinar</li>
+<li>Participant/hôte a quitté le webinar / Participant/Host left webinar</li>
+<li>Toutes les enregistrements sont terminées / All Recordings have completed</li>
+<li>Les fichiers de transcription d'enregistrement sont terminés / Recording transcript files have completed</li>
+</ul>
+<p>Ensuite, cliquez sur Terminé, puis sur Enregistrer et copiez votre <em>Jeton de vérification / Verification Token</em> si vous avez une application JWT ou le <em>Jeton Secret / Secret
+Token</em> si vous avez une application OAuth serveur à serveur dans la configuration du plugin</p></li>
+<li>cliquez sur Continuer</li>
+<li>Scopes (uniquement pour l'application OAuth serveur à serveur) : cliquez sur <em>Ajouter des scopes / Add Scopes</em> et sélectionnez <em>meeting:write:admin</em>, <em>webinar:write:admin</em>, <em>recording:write:admin</em>. Puis cliquez sur Terminé.</li>
+</ol>
 <br/>
 <strong>Attention</strong> :
 <br/>Zoom n'est <em>PAS</em> un logiciel libre
@@ -136,3 +148,26 @@ $strings['JoinURLNotAvailable'] = "URL pas disponible";
 $strings['Meetings'] = "Conférences";
 $strings['Activity'] = "Activité";
 $strings['ConferenceNotAvailable'] = "Conférence non disponible";
+$strings['SignAttendance'] = "Signer la feuille d'émargement";
+$strings['ReasonToSign'] = "Explication pour signer la feuille d'émargement";
+$strings['ConferenceWithAttendance'] = "Conférence avec signature d'émargement";
+$strings['Sign'] = "Signer";
+$strings['Signature'] = "Signature";
+$strings['Meeting'] = "Meeting";
+$strings['Webinar'] = "Webinar";
+$strings['AudienceType'] = "Type d'audience";
+$strings['AccountEmail'] = "Compte email";
+$strings['NewWebinarCreated'] = "Nouveau webinar créé";
+$strings['UpdateWebinar'] = "Mettre à jour le webinar";
+$strings['WebinarUpdated'] = "Webinar mis à jour";
+$strings['DeleteWebinar'] = "Supprimer le webinar";
+$strings['WebinarDeleted'] = "Webinar supprimé";
+$strings['UrlForSelfRegistration'] = "URL pour l'auto-inscription des participants";
+$strings['RegisterMeToConference'] = "M'inscrire à la visio";
+$strings['UnregisterMeToConference'] = "Me désinscrire de la visio";
+$strings['ForEveryone'] = "Tout le monde";
+$strings['SomeUsers'] = "Utilisateurs inscrits (à inscrire après)";
+$strings['Presenters'] = "Animateurs";
+$strings['RegisteredPresenters'] = "Animateurs enregistrés";
+$strings['enablePresenter_help'] = "Il est nécessaire que l'option <i>Activer l'inscription des participants</i> soit sur Oui.";
+$strings['enablePresenter'] = 'Activer les animateurs';

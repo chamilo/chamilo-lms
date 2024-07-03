@@ -43,7 +43,7 @@ class FlatViewTable extends SortableTable
         $addparams = null,
         $mainCourseCategory = null
     ) {
-        parent:: __construct(
+        parent::__construct(
             'flatviewlist',
             null,
             null,
@@ -62,7 +62,7 @@ class FlatViewTable extends SortableTable
         $this->limit_enabled = $limit_enabled;
         $this->offset = $offset;
         if (isset($addparams)) {
-            $this->set_additional_parameters($addparams);
+            $this->set_additional_parameters($addparams ?: []);
         }
 
         // step 2: generate rows: students

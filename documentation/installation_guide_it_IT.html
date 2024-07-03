@@ -38,7 +38,7 @@
   <p class="p1"><span class="s1">For more up-to-date guides, please check the <a href="installation_guide.html">english version of this guide</a></span></p>
 <p class="p1"><span class="s1">Grazie per aver scaricato Chamilo</span></p>
 <ul>
-  <li class="li2"><span class="s1">Testa le funzionalità di Chamilo nel <a href="http://campus.chamilo.org/"><span class="s2">Free Campus</span></a></span></li>
+  <li class="li2"><span class="s1">Testa le funzionalità di Chamilo nel <a href="https://campus.chamilo.org/"><span class="s2">Free Campus</span></a></span></li>
 </ul>
 <p class="p3"><span class="s1"></span><br></p>
 <p class="p1"><span class="s1">Questa guida spiega come installare Chamilo FREE. Per favore leggi attentamente questa guida prima di procedere all'installazione.</span></p>
@@ -73,7 +73,7 @@
 <p class="p8"><span class="s1"></span><br></p>
 <p class="p2"><span class="s1"><b>Chamilo</b> può essere installato indifferentemente su server Windows, Linux, Mac OS X e Unix. Tuttavia raccomandiamo l’utilizzo di server Linux per sfruttarne al meglio le caratteristiche di flessibilità, controllo remoto e scalabilità.</span></p>
 <p class="p3"><span class="s1"></span><br></p>
-<p class="p2"><span class="s1"><b>Chamilo</b> è principalmente un <b>LMS (Learning Management System)</b> che gira sulla piattaforma composta da <b>Apache (1.3,2.0 or 2.2)</b>, <b>MySQL 5.6+ (o MariaDB</b>) e <b>PHP 7.2, 7.3 o 7.4</b>, meglio nota come piattaforma <b>AMP</b>.</span></p>
+<p class="p2"><span class="s1"><b>Chamilo</b> è principalmente un <b>LMS (Learning Management System)</b> che gira sulla piattaforma composta da <b>Apache 2.2+</b>, <b>MySQL 5.6+ (o MariaDB</b>) e <b>PHP 7.4</b>, meglio nota come piattaforma <b>AMP</b>.</span></p>
 
   <p class="p3"><span class="s1"></span><br></p>
 <p class="p2"><span class="s1">Tutti questi software sono gratuiti e liberamente scaricabili.</span></p>
@@ -100,7 +100,7 @@
   <li class="li2"><span class="s1">Fare il download di Chamilo LMS</span></li>
   <li class="li2"><span class="s1">Effettuare l’unzip</span></li>
   <li class="li2"><span class="s1">Copiare la cartella Chamilo nella tua cartella web sul server Apache. Potrebbe essere C:\xampp\htdocs\ su un server Windows oppure /var/www/html (o /var/www/chamilo) su un server Linux</span></li>
-  <li class="li2"><span class="s1">Apri il tuo browser web (Internet Explorer, Firefox, Chrome,etc.) e digita <a href="http://localhost/chamilo/"><span class="s2">http://localhost/chamilo/</span></a> se stai facendo un’installazione in locale oppure <a href="http://www.dominio.com/chamilo/"><span class="s2">http://www.dominio.com/chamilo/</span></a> se stai facendo una installazione su un server remoto. Raccomandiamo di definire uno specifico Virtual Host per questa installazione se hai le competenze tecniche per poterlo fare</span></li>
+  <li class="li2"><span class="s1">Apri il tuo browser web (Internet Explorer, Firefox, Chrome,etc.) e digita <a href="http://localhost/chamilo/"><span class="s2">http://localhost/chamilo/</span></a> se stai facendo un’installazione in locale oppure <a href="https://www.dominio.com/chamilo/"><span class="s2">https://www.dominio.com/chamilo/</span></a> se stai facendo una installazione su un server remoto. Raccomandiamo di definire uno specifico Virtual Host per questa installazione se hai le competenze tecniche per poterlo fare</span></li>
   <li class="li2"><span class="s1">Segui il processo di installazione web Puoi accettare tutti i valori di default. Considera la possibilità di cambiare la password di amministratore e di ricordartela!</span></li>
 </ol>
 <p class="p3"><span class="s1"></span><br></p>
@@ -206,6 +206,7 @@
   <li class="li2"><span class="s1">php-xsl</span></li>
   <li class="li2"><span class="s1">php-ldap</span></li>
   <li class="li2"><span class="s1">php-xapian</span></li>
+  <li class="li2"><span class="s1">php-soap</span></li>
 </ul>
 <p class="p11"><span class="s1"></span><br></p>
 <p class="p11"><span class="s1"></span><br></p>
@@ -294,7 +295,7 @@
 <ul>
   <li class="li2"><span class="s1">lo username del database Chamilo (per MySQL) sia “chamilo_db_user” ed il tuo login sia “chamilo_user”</span></li>
   <li class="li2"><span class="s1">l’installazione di Chamilo sia in /var/www/chamilo/ ed abbia i permessi settati a 0777 (che non è la configurazione corretta, come sappiamo, ma che poi correggerai)</span></li>
-  <li class="li2"><span class="s1">l’URL del tuo portale sia http://www.portalurl.com/</span></li>
+  <li class="li2"><span class="s1">l’URL del tuo portale sia https://www.portalurl.com/</span></li>
 </ul>
 <p class="p3"><span class="s1"></span><br></p>
 <p class="p2"><span class="s1">Digita al prompt dei comandi:</span></p>
@@ -305,7 +306,7 @@
   <li class="li2"><span class="s1">mkdir /var/www/chamilo/old_version</span></li>
   <li class="li2"><span class="s1">mv /var/www/chamilo/* /var/www/chamilo/old_version/</span></li>
   <li class="li2"><span class="s1">chmod -R 0777 /var/www/chamilo/old_version/</span></li>
-  <li class="li12"><span class="s4">wget <a href="http://chamilo.googlecode.com/files/chamilo-1.9.tar.gz"><span class="s5">http://chamilo.googlecode.com/files/chamilo-1.9.tar.gz</span></a></span></li>
+  <li class="li12"><span class="s4">wget <a href="https://chamilo.googlecode.com/files/chamilo-1.9.tar.gz"><span class="s5">https://chamilo.googlecode.com/files/chamilo-1.9.tar.gz</span></a></span></li>
   <li class="li2"><span class="s1">tar zxvf chamilo-1.9.tar.gz</span></li>
   <li class="li2"><span class="s1">sudo cp -ra chamilo-1.9/* /var/www/chamilo/</span></li>
   <li class="li2"><span class="s1">rm chamilo-1.9.tar.gz</span></li>
@@ -314,7 +315,7 @@
 <p class="p3"><span class="s1"></span><br></p>
 <p class="p2"><span class="s1">Poi:</span></p>
 <ul>
-  <li class="li12"><span class="s4">connetti il tuo browser a <a href="http://www.portalurl.com/main/install/"><span class="s5">http://www.portalurl.com/main/install/</span></a></span></li>
+  <li class="li12"><span class="s4">connetti il tuo browser a <a href="https://www.portalurl.com/main/install/"><span class="s5">https://www.portalurl.com/main/install/</span></a></span></li>
   <li class="li2"><span class="s1">Procedi con l’installazione</span></li>
   <li class="li2"><span class="s1">Correggi i permessi delle cartelle<span class="Apple-converted-space"> </span></span></li>
 </ul>
@@ -449,7 +450,7 @@
   <li class="li6"><span class="s1">8. Formule matematiche con ASCIIMathML</span></li>
 </ol>
 <p class="p8"><span class="s1"></span><br></p>
-<p class="p14"><span class="s1">Le formule matematiche possono essere visualizzate nelle pagine web utilizzando lo script ASCIIMathML.js (una versione customizzata per Chamilo). Per maggiori informazioni relative a questo script ed alla sintassi di ASCIIMath vedere <a href="http://www1.chapman.edu/%7Ejipsen/mathml/asciimath.html"><span class="s2">http://www1.chapman.edu/~jipsen/mathml/asciimath.html</span></a> e <a href="http://dlippman.imathas.com/asciimathtex/AMT.html"><span class="s2">http://dlippman.imathas.com/asciimathtex/AMT.html</span></a>.</span></p>
+<p class="p14"><span class="s1">Le formule matematiche possono essere visualizzate nelle pagine web utilizzando lo script ASCIIMathML.js (una versione customizzata per Chamilo). Per maggiori informazioni relative a questo script ed alla sintassi di ASCIIMath vedere <a href="https://www1.chapman.edu/%7Ejipsen/mathml/asciimath.html"><span class="s2">https://www1.chapman.edu/~jipsen/mathml/asciimath.html</span></a> e <a href="https://dlippman.imathas.com/asciimathtex/AMT.html"><span class="s2">https://dlippman.imathas.com/asciimathtex/AMT.html</span></a>.</span></p>
 <p class="p8"><span class="s1"></span><br></p>
 <p class="p14"><span class="s1">Per scrivere formule con ASCIIMath nei documenti esiste un corrispondente plugin per l’editor online che deve essere attivato. Per fare ciò vedere la sezione di amministrazione della piattaforma, aprendo la pagina “Amministrazione”&gt;”Impostazioni di Configurazione”&gt;”Editor”. Abilitare l’impostazione “ASCIIMathML mathematical editor”.</span></p>
 <p class="p8"><span class="s1"></span><br></p>
@@ -457,33 +458,33 @@
 <ul>
   <li class="li14"><span class="s1">traducendo le notazioni delle formule ASCIIMath in codice MathML. Gli standard di MathML sono supportati attualmente dai seguenti browsers:</span></li>
   <ul>
-    <li class="li14"><span class="s1">Mozilla Firefox, potresti però dover installare i font STIX (<a href="http://www.stixfonts.org"><span class="s2">http://www.stixfonts.org</span></a>) sulle tue macchine client per avere una resa ottimale delle formule;</span></li>
-    <li class="li14"><span class="s1">Internet Explorer 6 o superiore utilizzando l’add-on MathPlayer 2.0 o superiore (<a href="http://ww.dessci.com/en/products/mathplayer"><span class="s2">http://ww.dessci.com/en/products/mathplayer</span></a>);</span></li>
+    <li class="li14"><span class="s1">Mozilla Firefox, potresti però dover installare i font STIX (<a href="https://www.stixfonts.org"><span class="s2">https://www.stixfonts.org</span></a>) sulle tue macchine client per avere una resa ottimale delle formule;</span></li>
+    <li class="li14"><span class="s1">Internet Explorer 6 o superiore utilizzando l’add-on MathPlayer 2.0 o superiore (<a href="https://ww.dessci.com/en/products/mathplayer"><span class="s2">https://ww.dessci.com/en/products/mathplayer</span></a>);</span></li>
     <li class="li14"><span class="s1">Opera 9.5 o superiore</span></li>
   </ul>
   <li class="li14"><span class="s1">per browser che non supportano MathML viene effettuata la conversione della notazione delle formule ASCIIMath in notazione TeX passando tramite un servizio esterno. Il servizio esterno produce e ritorna un’immagine che contiene la formula. Questa modalità è chiamata “image-based fallback”.</span></li>
 </ul>
 <p class="p8"><span class="s1"></span><br></p>
 <p class="p14"><span class="s1">Per fornire un servizio di image-based fallback in un sistema di produzione dovresti installare sul tuo server il software per il rendering TeX quale:</span></p>
-<p class="p14"><span class="s6">- </span><span class="s1">mimeTeX - <a href="http://www.forkosh.dreamhost.com/source_mimetex.html"><span class="s2">http://www.forkosh.dreamhost.com/source_mimetex.html</span></a>. Vedi il capitolo 7 per le istruzioni su come utilizzare questo servizio</span></p>
+<p class="p14"><span class="s6">- </span><span class="s1">mimeTeX - <a href="https://www.forkosh.dreamhost.com/source_mimetex.html"><span class="s2">https://www.forkosh.dreamhost.com/source_mimetex.html</span></a>. Vedi il capitolo 7 per le istruzioni su come utilizzare questo servizio</span></p>
 <ul>
-  <li class="li14"><span class="s6"></span><span class="s1">mathTeX - <a href="http://www.forkosh.com/mathtex.html"><span class="s2">http://www.forkosh.com/mathtex.html</span></a>. Naviga il sito per le istruzioni di installazione</span></li>
+  <li class="li14"><span class="s6"></span><span class="s1">mathTeX - <a href="https://www.forkosh.com/mathtex.html"><span class="s2">https://www.forkosh.com/mathtex.html</span></a>. Naviga il sito per le istruzioni di installazione</span></li>
 </ul>
 <p class="p8"><span class="s1"></span><br></p>
 <p class="p14"><span class="s1">Come alternativa potresti provare qualcuno dei servizi pubblici di rendering in TeX quali:</span></p>
 <ul>
-  <li class="li15"><span class="s6"></span><span class="s4">MathTran - <a href="http://www.mathtran.org/"><span class="s5">http://www.mathtran.org</span></a></span></li>
-  <li class="li15"><span class="s6"></span><span class="s4">Google Chart Tools - <a href="http://code.google.com/apis/charttools"><span class="s5">http://code.google.com/apis/charttools</span></a></span></li>
+  <li class="li15"><span class="s6"></span><span class="s4">MathTran - <a href="https://www.mathtran.org/"><span class="s5">https://www.mathtran.org</span></a></span></li>
+  <li class="li15"><span class="s6"></span><span class="s4">Google Chart Tools - <a href="https://code.google.com/apis/charttools"><span class="s5">https://code.google.com/apis/charttools</span></a></span></li>
 </ul>
 <p class="p16"><span class="s5"></span><br></p>
 <p class="p14"><span class="s1">Apri con un editor di testo il file <b>.../chamilo/main/inc/lib/asciimath/ASCIIMathML.js</b>. Cerca all’inizio del codice che inizializza la variabile <b>AMTcgiloc</b>.</span></p>
 <p class="p14"><span class="s1">Dovresti modificare le impostazioni come nell’esempio seguente:</span></p>
 <p class="p8"><span class="s1"></span><br></p>
 <ul>
-  <li class="li15"><span class="s4">var AMTcgiloc = "<a href="http://mychamiloserver.org/cgi-bin/mimetex.cgi"><span class="s5">http://mychamiloserver.org/cgi-bin/mimetex.cgi</span></a>";</span></li>
-  <li class="li15"><span class="s4">var AMTcgiloc = "<a href="http://mychamiloserver.org/cgi-bin/mathtex.cgi"><span class="s5">http://mychamiloserver.org/cgi-bin/mathtex.cgi</span></a>";</span></li>
-  <li class="li15"><span class="s4">var AMTcgiloc = "<a href="http://www.mathtran.org/cgi-bin/mathtran?tex="><span class="s5">http://www.mathtran.org/cgi-bin/mathtran?tex=</span></a>";</span></li>
-  <li class="li15"><span class="s4">var AMTcgiloc = "<a href="http://chart.apis.google.com/chart?cht=tx&amp;chs=1x0&amp;chl="><span class="s5">http://chart.apis.google.com/chart?cht=tx&amp;chs=1x0&amp;chl=</span></a>";</span></li>
+  <li class="li15"><span class="s4">var AMTcgiloc = "<a href="https://mychamiloserver.org/cgi-bin/mimetex.cgi"><span class="s5">https://mychamiloserver.org/cgi-bin/mimetex.cgi</span></a>";</span></li>
+  <li class="li15"><span class="s4">var AMTcgiloc = "<a href="https://mychamiloserver.org/cgi-bin/mathtex.cgi"><span class="s5">https://mychamiloserver.org/cgi-bin/mathtex.cgi</span></a>";</span></li>
+  <li class="li15"><span class="s4">var AMTcgiloc = "<a href="https://www.mathtran.org/cgi-bin/mathtran?tex="><span class="s5">https://www.mathtran.org/cgi-bin/mathtran?tex=</span></a>";</span></li>
+  <li class="li15"><span class="s4">var AMTcgiloc = "<a href="https://chart.apis.google.com/chart?cht=tx&amp;chs=1x0&amp;chl="><span class="s5">https://chart.apis.google.com/chart?cht=tx&amp;chs=1x0&amp;chl=</span></a>";</span></li>
   <li class="li14"><span class="s1">... o simili</span></li>
 </ul>
 <p class="p8"><span class="s1"></span><br></p>
@@ -494,10 +495,10 @@
   <li class="li6"><span class="s1">9. Formule matematiche con Wiris MathType</span></li>
 </ol>
 <p>
-  Installare il plugin <a href="http://www.wiris.com/plugins/ckeditor/download" target="_blank">PHP plugin for CKeditor WIRIS</a>, decompattarlo nella cartella /main/inc/lib/javascript/ckeditor/plugins/ckeditor_wiris.
+  Installare il plugin <a href="https://www.wiris.com/plugins/ckeditor/download" target="_blank" rel="noopener noreferrer">PHP plugin for CKeditor WIRIS</a>, decompattarlo nella cartella /main/inc/lib/javascript/ckeditor/plugins/ckeditor_wiris.
   A seguito dell’installazione si ottiene un editor Wiris MathType.
   Si segnala che WIRIS è un software proprietario ed i suoi servizi sono servizi
-  <a href="http://www.wiris.com/store/who-pays" target="_blank">commerciali</a>.
+  <a href="https://www.wiris.com/store/who-pays" target="_blank" rel="noopener noreferrer">commerciali</a>.
   Per qualsiasi modifica o configurazione ulteriore del plugin modificare il file configuration.ini o sostituirlo con il file configuration.ini di default di Chamilo.
 
 </p>
@@ -509,15 +510,15 @@
 <p class="p17"><span class="s1">sudo /etc/init.d/apache2 restart</span></p>
 <p class="p16"><span class="s5"></span><br></p>
 <p class="p14"><span class="s1">Poi vai nella pagina di Ammistrazione-&gt; Impostazioni di Configurazione&gt;Ricerca e abilita il tool di ricerca. Segui le raccomandazioni indicate nella pagina per istallare correttamente la funzione di indicizzazione. Una volta terminata tale operazione tutti i documenti che importerai in Chamilo saranno indicizzati e resi ricercabili se ne viene riconosciuto il formato.</span></p>
-<p class="p14"><span class="s1">I corsi di Amministratore Chamilo (che puoi richiedere ai nostri <a href="http://www.chamilo.org/en/providers"><span class="s2">Chamilo's Official Provider</span></a>) comprendono un completo approfondimento della funzione di ricerca full-text.</span></p>
+<p class="p14"><span class="s1">I corsi di Amministratore Chamilo (che puoi richiedere ai nostri <a href="https://chamilo.org/en/providers"><span class="s2">Chamilo's Official Provider</span></a>) comprendono un completo approfondimento della funzione di ricerca full-text.</span></p>
 <p class="p8"><span class="s1"></span><br></p>
 <p class="p8"><span class="s1"></span><br></p>
 <p class="p6"><span class="s1">11. Sistema Chamilo Rapid per conversione file PPT</span></p>
 <p class="p14"><span class="s1">Nota: questo passaggio richiede un server dedicato oppure un server virtuale perchè il pacchetto tipicamente non è supportato dalla maggior parte delle soluzioni di hosting condiviso presenti sul mercato.</span></p>
-<p class="p14"><span class="s1">Su un sistema Debian o Ubuntu 11.10 o superiori basta semplicemente installare LibreOffice.org v3 ed avviarlo come server headless:</span></p>
+<p class="p14"><span class="s1">Su un sistema Debian o Ubuntu 22.04 o superiori basta semplicemente installare LibreOffice v7 ed avviarlo come server headless:</span></p>
 <p class="p8"><span class="s1"></span><br></p>
 <p class="p17"><span class="s1">sudo apt-get install libreoffice</span></p>
-<p class="p17"><span class="s1">sudo soffice -accept="socket,host=127.0.0.1,port=2002,tcpNoDelay=1;urp;" -headless -nodefault -nofirststartwizard -nolockcheck -nologo -norestore &amp;</span></p>
+<p class="p17"><span class="s1">/usr/bin/libreoffice --headless --accept="socket,host=127.0.0.1,port=2002;urp;"</span></p>
 <p class="p8"><span class="s1"></span><br></p>
 <p class="p14"><span class="s1">Poi vai nella pagina di Amministrazione&gt; Chamilo Rapid ed imposta l’host a “localhost”, la porta a “2002”. Salva. Ora vai nel tuo corso, nel tool Percorsi di Apprendimento e dovresti vedere una nuova icona aggiunta. Ora puoi importare un file PPT e dovrebbe funzionare.</span></p>
 <p class="p14"><span class="s1">Nota: qualche volta non funziona così facilmente. Potresti dover necessitare di assistenza da parte di qualche amministratore di sistema con conoscenze di base di Java e PHP o comunque puoi chiedere assistenza ai nostri Provider Ufficiali (con un contratto commerciale di assistenza per questo tipo di servizio)</span></p>
@@ -525,9 +526,9 @@
 <p class="p8"><span class="s1"></span><br></p>
 <p class="p6"><span class="s1">12. Impostare compiti con cadenza regolare</span></p>
 <p class="p14"><span class="s1">Dalla versione 1.8.8 di Chamilo alcuni compiti necessitano di essere eseguiti regolarmente per ottimizzare l’utilizzo delle risorse del server. Uno tra questi (e l’unico al tempo di Chamilo 1.8.8) è quello di inviare messaggi interni di notifica via e-mail, per esempio quando ricevi una mail da un’altra persona all’interno di un gruppo all’interno del sistema di messaggistica di Chamilo. Se tutte le email venissero inviate immediatamente allora non avresti nessuna possibilità di riceverle con scadenze regolarei, una volta al giorno, oppure alla settimana. Per questo tipo di casistica, in qualità di Amministratore Chamilo, dovresti impostare un processo cron sul server per verificare la coda di email da inviare ed inviarli con le cadenze opportune.</span></p>
-<p class="p14"><span class="s1">Impostando un task cron è facile e ci sono diversi modi per farlo. Noi raccomandiamo di guardare il documento <a href="http://drupal.org/cron"><span class="s2">Drupal documentation for setting up cron</span></a> e stabilire i tuoi processi cron in questo modo:</span></p>
+<p class="p14"><span class="s1">Impostando un task cron è facile e ci sono diversi modi per farlo. Noi raccomandiamo di guardare il documento <a href="https://drupal.org/cron"><span class="s2">Drupal documentation for setting up cron</span></a> e stabilire i tuoi processi cron in questo modo:</span></p>
 <p class="p8"><span class="s1"></span><br></p>
-<p class="p18"><span class="s4">35 * * * * wget -O - -q -t 1 <a href="http://campus.example.com/main/cron/run.php"><span class="s7">http://campus.example.com/main/cron/run.php</span></a></span></p>
+<p class="p18"><span class="s4">35 * * * * wget -O - -q -t 1 <a href="https://campus.example.com/main/cron/run.php"><span class="s7">https://campus.example.com/main/cron/run.php</span></a></span></p>
 <p class="p8"><span class="s1"></span><br></p>
 <p class="p14"><span class="s1">Assicurati di controllare il file run.php perchè potresti dover modificare qualche impostazione.</span></p>
 <p class="p8"><span class="s1"></span><br></p>

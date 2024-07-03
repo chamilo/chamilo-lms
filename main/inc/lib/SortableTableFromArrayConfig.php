@@ -32,27 +32,27 @@ class SortableTableFromArrayConfig extends SortableTable
      * Constructor.
      *
      * @param array  $data         All the information of the table
-     * @param int    $column       Default column that will be use in the sorts functions
-     * @param int    $itemsPerPage quantity of pages that we are going to see
+     * @param int    $column       Default column that will be used in the sort functions
+     * @param int    $itemsPerPage Number of items per pages that we are going to see
      * @param string $tableName    Name of the table
-     * @param array  $column_show  An array with binary values 1: we show the column 2: we don't show it
-     * @param array  $column_order an array of integers that let us decide how the columns are going to be sort
-     * @param string $direction
-     * @param bool   $doc_filter   special modification to fix the document name order
+     * @param array  $columnShow   An array with binary values: 1 = show column, 2 = don't show it
+     * @param array  $columnOrder  An array of integers that let us decide how the columns are going to be sort
+     * @param string $direction    ASC/DESC
+     * @param bool   $docFilter    special modification to fix the document name order
      */
     public function __construct(
         $data,
         $column = 1,
         $itemsPerPage = 20,
         $tableName = 'tablename',
-        $column_show = [],
-        $column_order = [],
+        $columnShow = [],
+        $columnOrder = [],
         $direction = 'ASC',
-        $doc_filter = false
+        $docFilter = false
     ) {
-        $this->column_show = $column_show;
-        $this->column_order = $column_order;
-        $this->doc_filter = $doc_filter;
+        $this->column_show = $columnShow;
+        $this->column_order = $columnOrder;
+        $this->doc_filter = $docFilter;
 
         // if data is empty the pagination is handled with query in database
         if (empty($data)) {
@@ -76,7 +76,7 @@ class SortableTableFromArrayConfig extends SortableTable
      */
     public function get_table_data(
         $from = 1,
-        $per_page = null,
+        $perPage = null,
         $column = null,
         $direction = null,
         $sort = true

@@ -19,8 +19,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Skill
 {
-    const STATUS_DISABLED = 0;
-    const STATUS_ENABLED = 1;
+    public const STATUS_DISABLED = 0;
+    public const STATUS_ENABLED = 1;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\SkillBundle\Entity\Profile", inversedBy="skills")
@@ -109,6 +109,11 @@ class Skill
      * @ORM\Column(name="updated_at", type="datetime", nullable=false)
      */
     protected $updatedAt;
+
+    public function __construct()
+    {
+        $this->courses = new ArrayCollection();
+    }
 
     /**
      * @return string
@@ -393,17 +398,19 @@ class Skill
      */
     public function hasItem($typeId, $itemId)
     {
-        if ($this->getItems()->count()) {
-            $found = false;
-            /** @var SkillRelItem $item */
-            foreach ($this->getItems() as $item) {
-                if ($item->getItemId() == $itemId && $item->getItemType() == $typeId) {
-                    $found = true;
-                    break;
+        if (null !== $this->getItems()) {
+            if ($this->getItems()->count()) {
+                $found = false;
+                /** @var SkillRelItem $item */
+                foreach ($this->getItems() as $item) {
+                    if ($item->getItemId() == $itemId && $item->getItemType() == $typeId) {
+                        $found = true;
+                        break;
+                    }
                 }
-            }
 
-            return $found;
+                return $found;
+            }
         }
 
         return false;
@@ -413,6 +420,11 @@ class Skill
     {
         $skillRelItem->setSkill($this);
         $this->items[] = $skillRelItem;
+    }
+
+    public function hasCourses()
+    {
+        return null !== $this->courses;
     }
 
     /**

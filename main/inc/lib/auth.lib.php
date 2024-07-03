@@ -33,6 +33,7 @@ class Auth
         $TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
+        $showCoursesCondition = CoursesAndSessionsCatalog::getCoursesToShowInCatalogueCondition();
         $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true, $hidePrivate);
 
         $sql = "SELECT
@@ -47,6 +48,7 @@ class Auth
                     course_rel_user.user_id = '".$user_id."' AND
                     course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
                     $avoidCoursesCondition
+                    $showCoursesCondition
                     $visibilityCondition
                 ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
         $result = Database::query($sql);

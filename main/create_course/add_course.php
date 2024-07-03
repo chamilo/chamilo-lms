@@ -85,6 +85,17 @@ $form->addElement(
 $form->applyFilter('title', 'html_filter');
 $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
+if ($course_validation_feature) {
+    // Description of the requested course.
+    $form->addElement(
+        'textarea',
+        'description',
+        get_lang('Description'),
+        ['rows' => '3']
+    );
+    $form->addRule('description', get_lang('ThisFieldIsRequired'), 'required');
+}
+
 if (!api_get_configuration_value('course_creation_form_set_course_category_mandatory')) {
     $form->addButtonAdvancedSettings('advanced_params');
     $form->addElement(
@@ -171,14 +182,6 @@ if (!api_get_configuration_value('course_creation_form_hide_course_code')) {
 // The teacher
 $titular = &$form->addElement('hidden', 'tutor_name', '');
 if ($course_validation_feature) {
-    // Description of the requested course.
-    $form->addElement(
-        'textarea',
-        'description',
-        get_lang('Description'),
-        ['rows' => '3']
-    );
-
     // Objectives of the requested course.
     $form->addElement(
         'textarea',
@@ -282,6 +285,49 @@ if (api_get_setting('teacher_can_select_course_template') === 'true') {
     );
 }
 
+//Extra fields to show and mandatory
+$setExtraFieldsMandatory = api_get_configuration_value('course_creation_form_set_extra_fields_mandatory');
+$extraFieldsToShow = api_get_configuration_value('course_creation_by_teacher_extra_fields_to_show');
+$fillExtraField = api_get_configuration_value('course_creation_user_course_extra_field_relation_to_prefill');
+if (false !== $extraFieldsToShow && !empty($extraFieldsToShow['fields'])) {
+    $fieldsRequired = [];
+    if (false !== $setExtraFieldsMandatory && !empty($setExtraFieldsMandatory['fields'])) {
+        $fieldsRequired = $setExtraFieldsMandatory['fields'];
+    }
+    $extra_field = new ExtraField('course');
+    $extra = $extra_field->addElements(
+        $form,
+        0,
+        [],
+        false,
+        false,
+        $extraFieldsToShow['fields'],
+        [],
+        [],
+        false,
+        false,
+        [],
+        [],
+        false,
+        [],
+        $fieldsRequired
+    );
+
+    // Relation to prefill course extra field with user extra field
+    if (false !== $fillExtraField && !empty($fillExtraField['fields'])) {
+        foreach ($fillExtraField['fields'] as $courseVariable => $userVariable) {
+            $extraValue = UserManager::get_extra_user_data_by_field(api_get_user_id(), $userVariable);
+            $values['extra_'.$courseVariable] = $extraValue[$userVariable];
+        }
+    }
+    $htmlHeadXtra[] = '
+    <script>
+    $(function() {
+        '.$extra['jquery_ready_content'].'
+    });
+    </script>';
+}
+
 $form->addElement('html', '</div>');
 
 // Submit button.
@@ -332,7 +378,7 @@ if ($form->validate()) {
 
     if ($course_code_ok) {
         if (!$course_validation_feature) {
-            $params = [];
+            $params = $course_values;
             $params['title'] = $title;
             $params['exemplary_content'] = $exemplary_content;
             $params['wanted_code'] = $wanted_code;

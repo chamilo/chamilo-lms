@@ -3,10 +3,12 @@
 /* For licensing terms, see /license.txt */
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\Common\Proxy\AbstractProxyFactory;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Setup;
 use Symfony\Component\Debug\ExceptionHandler;
 
 /**
@@ -148,18 +150,6 @@ class Database
         $returnManager = false
     ) {
         $config = self::getDoctrineConfig($entityRootPath);
-        $config->setAutoGenerateProxyClasses(true);
-
-        $config->setEntityNamespaces(
-            [
-                'ChamiloUserBundle' => 'Chamilo\UserBundle\Entity',
-                'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
-                'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
-                'ChamiloSkillBundle' => 'Chamilo\SkillBundle\Entity',
-                'ChamiloTicketBundle' => 'Chamilo\TicketBundle\Entity',
-                'ChamiloPluginBundle' => 'Chamilo\PluginBundle\Entity',
-            ]
-        );
 
         $params['charset'] = 'utf8';
         $entityManager = EntityManager::create($params, $config);
@@ -620,7 +610,9 @@ class Database
         $array = [];
         if ($type_result === 'all') {
             while ($row = self::fetch_array($result, $option)) {
-                if (isset($row['id'])) {
+                if (isset($row['iid'])) {
+                    $array[$row['iid']] = $row;
+                } elseif (isset($row['id'])) {
                     $array[$row['id']] = $row;
                 } else {
                     $array[] = $row;
@@ -799,12 +791,25 @@ class Database
 
         $proxyDir = $path.'app/cache/';
 
-        $config = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
+        $config = Setup::createAnnotationMetadataConfiguration(
             $paths,
             $isDevMode,
             $proxyDir,
             $cache,
             $isSimpleMode
+        );
+
+        $config->setAutoGenerateProxyClasses(AbstractProxyFactory::AUTOGENERATE_FILE_NOT_EXISTS);
+
+        $config->setEntityNamespaces(
+            [
+                'ChamiloUserBundle' => 'Chamilo\UserBundle\Entity',
+                'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
+                'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
+                'ChamiloSkillBundle' => 'Chamilo\SkillBundle\Entity',
+                'ChamiloTicketBundle' => 'Chamilo\TicketBundle\Entity',
+                'ChamiloPluginBundle' => 'Chamilo\PluginBundle\Entity',
+            ]
         );
 
         return $config;

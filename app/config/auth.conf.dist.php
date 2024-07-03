@@ -4,6 +4,10 @@
 /**
  * Configuration file for all authentication methods.
  * Uncomment and configure only the section(s) you need.
+ * For MultiURL configuration you can override the configuration
+ * of every variable by defining the same variable in app/config/configuration.php
+ * The configuration in app/config/configuration.php will replace
+ * the configuration in this file.
  * @package chamilo.conf.auth
  */
 
@@ -22,12 +26,21 @@
     'return_url' => api_get_path(WEB_PATH).'?action=fbconnect',
 );*/
 
+$facebookConfig = api_get_configuration_value('facebook_config');
+if (!empty($facebookConfig)) {
+    $facebook_config = $facebookConfig;
+}
 
 /**
  * Shibboleth
  */
 
 // $shibb_login = ...;
+
+$shibbLogin = api_get_configuration_value('shibb_login');
+if (!empty($shibbLogin)) {
+    $shibb_login = $shibbLogin;
+}
 
 /**
  * LDAP
@@ -39,26 +52,26 @@
  * Array of connection parameters
  **/
 $extldap_config = array(
-  //base dommain string
+  //base domain string
   'base_dn' => 'DC=cblue,DC=be',
-  //admin distinguished name
+  //admin distinguished name - might be just a term like "elearning" rather than a whole string
   'admin_dn' => 'CN=admin,dc=cblue,dc=be',
   //admin password
   'admin_password' => 'pass',
   //ldap host
   'host' => array('1.2.3.4', '2.3.4.5', '3.4.5.6'),
   // filter
-  'filter' => '', // no () arround the string
-  //'port' => , default on 389
+  'filter' => '', // no () around the string
+  //'port' => , default on 389 for LDAP, 636 for LDAPS
   'port' => 389,
-  //protocl version (2 or 3)
+  //protocol version (2 or 3)
   'protocol_version' => 3,
   // set this to 0 to connect to AD server
   'referrals' => 0,
   //String used to search the user in ldap. %username will ber replaced by the username.
   //See extldap_get_user_search_string() function below
-  // For Active Directory: 'user_search' => 'sAMAccountName=%username%',  // no () arround the string
-  // For OpenLDAP: 'user_search' => 'uid=%username%',  // no () arround the string
+  // For Active Directory: 'user_search' => 'sAMAccountName=%username%',  // no () around the string
+  // For OpenLDAP: 'user_search' => 'uid=%username%',  // no () around the string
   'user_search' => 'uid=%username%',
   //encoding used in ldap (most common are UTF-8 and ISO-8859-1
   'encoding' => 'UTF-8',
@@ -70,10 +83,13 @@ $extldap_config = array(
   'user_search_import_all_users' => 'uid=*'
 );
 
-
+$ldapConfig = api_get_configuration_value('extldap_config');
+if (!empty($ldapConfig)) {
+    $extldap_config = $ldapConfig;
+}
 
 /**
- * Correspondance array between chamilo user info and ldap user info
+ * Matching array between chamilo user info and ldap user info
  * This array is of this form :
  *  '<chamilo_field> => <ldap_field>
  *
@@ -101,7 +117,7 @@ $extldap_user_correspondance = array(
     'password' => 'userPassword',
     'status' => '!5', // Forcing status to 5; To change this set 'status' => 'func' and implement an extldap_get_status($ldap_array) function
     'active' => '!1', // Forcing active to 1; To change this set 'status' => 'func' and implement an extldap_get_active($ldap_array) function
-    'admin' => 'func' // Using the extldap_get_admin() function to check if user is an administrator based on some ldap user record value
+    'admin' => 'func' // Using the extldap_get_admin() function (defined in main/auth/external_login/ldap.inc.php) to check if user is an administrator based on some ldap user record value
     /* Extras example
     'extra' => array(
         'title' => 'title',
@@ -113,12 +129,9 @@ $extldap_user_correspondance = array(
     ) */
 );
 
-/**
- * Example method to get whether the user is an admin or not. Please implement your logic inside.
- */
-function extldap_get_admin($ldap_array)
-{
-    return 0; // By default users comming from ldap are not Administrators
+$ldapUserCorrespondance = api_get_configuration_value('extldap_user_correspondance');
+if (!empty($ldapUserCorrespondance)) {
+    $extldap_user_correspondance = $ldapUserCorrespondance;
 }
 
 /**
@@ -134,6 +147,10 @@ $langMainInfoDetail .= '<p>More information on OpenID is available at <a href="h
  * CAS
  */
 $cas = [
+    'service_base_url' => '', //The base url of your service required by phpCAS since compliance with
+    //https://github.com/advisories/GHSA-8q72-6qq8-xv64 in version 1.6
+    //with this https://github.com/apereo/phpCAS/commit/b759361d904a2cb2a3bcee9411fc348cfde5d163
+    //It should be the URL of you Chamilo or an array of all the URLs in case of a multiURL installation including https and / at the end
     'force_redirect' => false,
     'replace_login_form' => false,
     //'skip_force_redirect_in' => ['/main/webservices'],
@@ -143,3 +160,8 @@ $cas = [
     // 'fixedServiceURL' => false, // false by default, set to either true or to the service URL string if needed
     // sites might also need proxy_settings in configuration.php
 ];
+
+$casConfig = api_get_configuration_value('cas');
+if (!empty($casConfig)) {
+    $cas = $casConfig;
+}

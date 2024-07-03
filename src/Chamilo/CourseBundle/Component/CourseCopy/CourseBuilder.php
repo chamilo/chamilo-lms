@@ -19,6 +19,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumPost;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumTopic;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Glossary;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\GradeBookBackup;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\H5pTool;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\LearnPathCategory;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Link;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\LinkCategory;
@@ -32,6 +33,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\Resources\Thematic;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\ToolIntro;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Wiki;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Work;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\XapiTool;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use CourseManager;
 use Database;
@@ -103,6 +105,10 @@ class CourseBuilder
     to be added in the course obj (only works with LPs) */
     public $specific_id_list = [];
     public $documentsAddedInText = [];
+    public $itemListToAdd = [];
+
+    public $isXapiEnabled = false;
+    public $isH5pEnabled = false;
 
     /**
      * Create a new CourseBuilder.
@@ -236,6 +242,21 @@ class CourseBuilder
     ) {
         $course = api_get_course_info($courseCode);
         $courseId = $course['real_id'];
+
+        $xapiEnabled = \XApiPlugin::create()->isEnabled();
+        if ($xapiEnabled) {
+            $this->tools_to_build[] = 'xapi_tool';
+            $this->toolToName['xapi_tool'] = RESOURCE_XAPI_TOOL;
+            $this->isXapiEnabled = $xapiEnabled;
+        }
+
+        $h5pEnabled = false; // \H5pImportPlugin::create()->isEnabled();
+        if ($h5pEnabled) {
+            $this->tools_to_build[] = 'h5p_tool';
+            $this->toolToName['h5p_tool'] = RESOURCE_H5P_TOOL;
+            $this->isH5pEnabled = $h5pEnabled;
+        }
+
         foreach ($this->tools_to_build as $tool) {
             if (!empty($parseOnlyToolList) && !in_array($this->toolToName[$tool], $parseOnlyToolList)) {
                 continue;
@@ -244,6 +265,9 @@ class CourseBuilder
             $specificIdList = isset($this->specific_id_list[$tool]) ? $this->specific_id_list[$tool] : null;
             $buildOrphanQuestions = true;
             if ($tool === 'quizzes') {
+                if (!empty($toolsFromPost['quiz'])) {
+                    $specificIdList = array_keys($toolsFromPost['quiz']);
+                }
                 if (!isset($toolsFromPost[RESOURCE_QUIZ][-1])) {
                     $buildOrphanQuestions = false;
                 }
@@ -261,6 +285,9 @@ class CourseBuilder
                     $buildOrphanQuestions
                 );
             } else {
+                if (!empty($toolsFromPost[RESOURCE_LEARNPATH]) && 'learnpaths' === $tool) {
+                    $specificIdList = array_keys($toolsFromPost[RESOURCE_LEARNPATH]);
+                }
                 $this->$function_build(
                     $session_id,
                     $courseId,
@@ -844,6 +871,22 @@ class CourseBuilder
             );
 
             $this->findAndSetDocumentsInText($obj->description);
+            // It searches images from hotspot to build
+            if (HOT_SPOT == $obj->type) {
+                if (is_numeric($obj->picture)) {
+                    $itemDocumentId = (int) $obj->picture;
+                    $document = \DocumentManager::get_document_data_by_id($itemDocumentId, api_get_course_id());
+                    if (file_exists($document['absolute_path'])) {
+                        $directUrl = $document['direct_url'];
+                        $path = str_replace(api_get_path(WEB_PATH), '/', $directUrl);
+                        $this->documentsAddedInText[] = [
+                            0 => $path,
+                            1 => 'local',
+                            2 => 'rel',
+                        ];
+                    }
+                }
+            }
 
             // build the backup resource question object
             $question = new QuizQuestion(
@@ -892,6 +935,11 @@ class CourseBuilder
             $this->course->add_resource($question);
         }
 
+        // Check if a global setting has been set to avoid copying orphan questions
+        if (true === api_get_configuration_value('quiz_discard_orphan_in_course_export')) {
+            $buildOrphanQuestions = false;
+        }
+
         if ($buildOrphanQuestions) {
             // Building a fictional test for collecting orphan questions.
             // When a course is emptied this option should be activated (true).
@@ -933,7 +981,7 @@ class CourseBuilder
                     }
 
                     // Avoid adding the same question twice
-                    if (!isset($this->course->resources[$obj->id])) {
+                    if (!isset($this->course->resources[$obj->iid])) {
                         // find the question category
                         // @todo : need to be adapted for multi category questions in 1.10
                         $question_category_id = TestCategory::getCategoryForQuestion($obj->iid, $courseId);
@@ -951,7 +999,7 @@ class CourseBuilder
                         );
                         $question->addPicture($this);
                         $sql = "SELECT * FROM $table_ans
-                                WHERE question_id = {$obj->id}";
+                                WHERE question_id = {$obj->iid}";
                         $db_result2 = Database::query($sql);
                         if (Database::num_rows($db_result2)) {
                             while ($obj2 = Database::fetch_object($db_result2)) {
@@ -1042,7 +1090,7 @@ class CourseBuilder
                 );
                 $question->addPicture($this);
 
-                $sql = 'SELECT * FROM '.$table_ans.' WHERE question_id = '.$obj->id;
+                $sql = 'SELECT * FROM '.$table_ans.' WHERE question_id = '.$obj->iid;
                 $db_result2 = Database::query($sql);
                 while ($obj2 = Database::fetch_object($db_result2)) {
                     $question->add_answer(
@@ -1479,6 +1527,18 @@ class CourseBuilder
                     $item['launch_data'] = $obj_item->launch_data;
                     $item['audio'] = $obj_item->audio;
                     $items[] = $item;
+                    $this->itemListToAdd[$obj_item->item_type][] = $obj_item->path;
+
+                    if (!empty($obj_item->audio)) {
+                        $audioTitle = basename($obj_item->audio);
+                        // Add LP item audio
+                        $assetAudio = new Asset(
+                            $audioTitle,
+                            '/document'.$obj_item->audio,
+                            '/document'.$obj_item->audio
+                        );
+                        $this->course->add_resource($assetAudio);
+                    }
                 }
 
                 $sql = "SELECT id FROM $table_tool
@@ -1530,7 +1590,8 @@ class CourseBuilder
                     $obj->subscribe_users,
                     $obj->hide_toc_frame,
                     $items,
-                    $accumulateWorkTime
+                    $accumulateWorkTime,
+                    $obj->prerequisite
                 );
                 $extraFieldValue = new \ExtraFieldValue('lp');
                 $lp->extraFields = $extraFieldValue->getAllValuesByItem($obj->id);
@@ -1562,6 +1623,174 @@ class CourseBuilder
                 }
                 closedir($dir);
             }
+        }
+    }
+
+    /**
+     * It builds the resources used in a LP , also it adds the documents related.
+     */
+    public function exportToCourseBuildFormat()
+    {
+        if (empty($this->itemListToAdd)) {
+            return false;
+        }
+        $itemList = $this->itemListToAdd;
+        $courseId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
+        $courseInfo = api_get_course_info_by_id($courseId);
+        if (isset($itemList['document'])) {
+            // Get parents
+            foreach ($itemList['document'] as $documentId) {
+                $documentInfo = \DocumentManager::get_document_data_by_id($documentId, $courseInfo['code'], true);
+                if (!empty($documentInfo['parents'])) {
+                    foreach ($documentInfo['parents'] as $parentInfo) {
+                        if (in_array($parentInfo['iid'], $itemList['document'])) {
+                            continue;
+                        }
+                        $itemList['document'][] = $parentInfo['iid'];
+                    }
+                }
+            }
+
+            foreach ($itemList['document'] as $documentId) {
+                $documentInfo = \DocumentManager::get_document_data_by_id($documentId, $courseInfo['code']);
+                $items = \DocumentManager::get_resources_from_source_html(
+                    $documentInfo['absolute_path'],
+                    true,
+                    TOOL_DOCUMENT
+                );
+
+                if (!empty($items)) {
+                    foreach ($items as $item) {
+                        // Get information about source url
+                        $url = $item[0]; // url
+                        $scope = $item[1]; // scope (local, remote)
+                        $type = $item[2]; // type (rel, abs, url)
+
+                        $origParseUrl = parse_url($url);
+                        $realOrigPath = isset($origParseUrl['path']) ? $origParseUrl['path'] : null;
+
+                        if ($scope == 'local') {
+                            if ($type == 'abs' || $type == 'rel') {
+                                $documentFile = strstr($realOrigPath, 'document');
+                                $documentFile = (string) $documentFile;
+                                $realOrigPath = (string) $realOrigPath;
+                                if (!empty($documentFile) && false !== strpos($realOrigPath, $documentFile)) {
+                                    $documentFile = str_replace('document', '', $documentFile);
+                                    $itemDocumentId = \DocumentManager::get_document_id($courseInfo, $documentFile);
+                                    // Document found! Add it to the list
+                                    if ($itemDocumentId) {
+                                        $itemList['document'][] = $itemDocumentId;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            $this->build_documents(
+                $sessionId,
+                $courseId,
+                true,
+                $itemList['document']
+            );
+        }
+
+        if (isset($itemList['quiz'])) {
+            $this->build_quizzes(
+                $sessionId,
+                $courseId,
+                true,
+                $itemList['quiz']
+            );
+        }
+
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+
+        if (!empty($itemList['thread'])) {
+            $threadList = [];
+            $em = Database::getManager();
+            $repo = $em->getRepository('ChamiloCourseBundle:CForumThread');
+            foreach ($itemList['thread'] as $threadId) {
+                /** @var \Chamilo\CourseBundle\Entity\CForumThread $thread */
+                $thread = $repo->find($threadId);
+                if ($thread) {
+                    $itemList['forum'][] = $thread->getForumId();
+                    $threadList[] = $thread->getIid();
+                }
+            }
+
+            if (!empty($threadList)) {
+                $this->build_forum_topics(
+                    $sessionId,
+                    $courseId,
+                    null,
+                    $threadList
+                );
+            }
+        }
+
+        $forumCategoryList = [];
+        if (isset($itemList['forum'])) {
+            foreach ($itemList['forum'] as $forumId) {
+                $forumInfo = get_forums($forumId);
+                $forumCategoryList[] = $forumInfo['forum_category'];
+            }
+        }
+
+        if (!empty($forumCategoryList)) {
+            $this->build_forum_category(
+                $sessionId,
+                $courseId,
+                true,
+                $forumCategoryList
+            );
+        }
+
+        if (!empty($itemList['forum'])) {
+            $this->build_forums(
+                $sessionId,
+                $courseId,
+                true,
+                $itemList['forum']
+            );
+        }
+
+        if (isset($itemList['link'])) {
+            $this->build_links(
+                $sessionId,
+                $courseId,
+                true,
+                $itemList['link']
+            );
+        }
+
+        if (isset($itemList['xapi']) && $this->isXapiEnabled) {
+            $this->build_xapi_tool(
+                $sessionId,
+                $courseId,
+                true,
+                $itemList['xapi']
+            );
+        }
+
+        if (isset($itemList['h5p']) && $this->isH5pEnabled) {
+            $this->buildH5pTool(
+                $sessionId,
+                $courseId,
+                true,
+                $itemList['h5p']
+            );
+        }
+
+        if (!empty($itemList['student_publication'])) {
+            $this->build_works(
+                $sessionId,
+                $courseId,
+                true,
+                $itemList['student_publication']
+            );
         }
     }
 
@@ -1720,6 +1949,73 @@ class CourseBuilder
     }
 
     /**
+     * Build the xapi tool.
+     */
+    public function build_xapi_tool(
+        $sessionId = 0,
+        $courseId = 0,
+        $withBaseContent = false,
+        $idList = []
+    ) {
+        if (!$this->isXapiEnabled) {
+            return false;
+        }
+
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        if ($withBaseContent) {
+            $sessionCondition = api_get_session_condition(
+                $sessionId,
+                true,
+                true
+            );
+        } else {
+            $sessionCondition = api_get_session_condition($sessionId, true);
+        }
+
+        $idCondition = '';
+        if (!empty($idList)) {
+            $idList = array_map('intval', $idList);
+            $idCondition = ' AND id IN ("'.implode('","', $idList).'") ';
+        }
+
+        $sql = "SELECT * FROM xapi_tool_launch WHERE c_id = $courseId $sessionCondition $idCondition";
+        $rs = Database::query($sql);
+        while ($row = Database::fetch_array($rs, 'ASSOC')) {
+            $xapiTool = new XapiTool($row);
+            $this->course->add_resource($xapiTool);
+        }
+    }
+
+    public function buildH5pTool(
+        $sessionId = 0,
+        $courseId = 0,
+        $withBaseContent = false,
+        $idList = []
+    ) {
+        if (!$this->isH5pEnabled) {
+            return false;
+        }
+
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $sessionCondition = api_get_session_condition($sessionId, true, $withBaseContent);
+
+        $idCondition = '';
+        if (!empty($idList)) {
+            $idList = array_map('intval', $idList);
+            $idCondition = ' AND iid IN ("'.implode('","', $idList).'") ';
+        }
+
+        $sql = "SELECT * FROM plugin_h5p_import WHERE c_id = $courseId $sessionCondition $idCondition";
+        $rs = Database::query($sql);
+        while ($row = Database::fetch_array($rs, 'ASSOC')) {
+            $h5pTool = new H5pTool($row);
+            $this->course->add_resource($h5pTool);
+        }
+    }
+
+    /**
      * Build the Surveys.
      *
      * @param int   $session_id      Internal session ID
@@ -1751,7 +2047,7 @@ class CourseBuilder
         }
 
         $sql = "SELECT * FROM $table_thematic
-                WHERE c_id = $courseId $sessionCondition ";
+                WHERE c_id = $courseId AND active = 1 $sessionCondition ";
         $db_result = Database::query($sql);
         while ($row = Database::fetch_array($db_result, 'ASSOC')) {
             $thematic = new Thematic($row);
@@ -1869,6 +2165,7 @@ class CourseBuilder
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $obj = new Work($row);
+            $this->findAndSetDocumentsInText($row['description']);
             $this->course->add_resource($obj);
         }
     }
@@ -1885,7 +2182,7 @@ class CourseBuilder
     ) {
         $courseInfo = api_get_course_info_by_id($courseId);
         $courseCode = $courseInfo['code'];
-        $cats = Category:: load(
+        $cats = Category::load(
             null,
             null,
             $courseCode,

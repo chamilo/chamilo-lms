@@ -114,6 +114,10 @@ $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
 switch ($action) {
+    case 'delete_msg':
+        $messageId = (int) $_GET['msg_id'];
+        MessageManager::delete_message_by_user_sender(api_get_user_id(), $messageId);
+        break;
     case 'add_work_time':
         if (false === $workingTimeEdit) {
             api_not_allowed(true);
@@ -269,6 +273,228 @@ switch ($action) {
             Display::addFlash(Display::return_message(get_lang('LPWasReset'), 'success'));
             Security::clear_token();
         }
+        break;
+    case 'lp_quiz_to_export_pdf':
+
+        $sessionToExport = isset($_GET['session_to_export']) ? (int) $_GET['session_to_export'] : 0;
+        $sessionInfo = api_get_session_info($sessionToExport);
+        if (empty($sessionInfo)) {
+            api_not_allowed(true);
+        }
+
+        $studentInfo = api_get_user_info($student_id);
+        $lpQuizTable = Tracking::getLpQuizContentToPdf($student_id, $sessionToExport);
+
+        $tpl = new Template('', false, false, false, true, false, false);
+        $tpl->assign('title', get_lang('ElearningResults'));
+        $tpl->assign('session_title', $sessionInfo['name']);
+        $tpl->assign('student', $studentInfo['complete_name']);
+        $tpl->assign('table_test', $lpQuizTable);
+
+        $content = $tpl->fetch($tpl->get_template('my_space/pdf_export_results.tpl'));
+        $params = [
+            'pdf_title' => get_lang('Resume'),
+            'session_info' => $sessionInfo,
+            'course_info' => '',
+            'pdf_date' => '',
+            'student_info' => $studentInfo,
+            'show_grade_generated_date' => true,
+            'show_real_course_teachers' => false,
+            'show_teacher_as_myself' => false,
+            'orientation' => 'P',
+        ];
+
+        @$pdf = new PDF('A4', $params['orientation'], $params);
+        try {
+            $theme = $tpl->theme;
+            $themeName = empty($theme) ? api_get_visual_theme() : $theme;
+            $themeDir = \Template::getThemeDir($theme);
+            $customLetterhead = $themeDir.'images/letterhead.png';
+            $urlPathLetterhead = api_get_path(SYS_CSS_PATH).$customLetterhead;
+
+            $urlWebLetterhead = '#FFFFFF';
+            $fullPage = false;
+            if (file_exists($urlPathLetterhead)) {
+                $fullPage = true;
+                $urlWebLetterhead = 'url('.api_get_path(WEB_CSS_PATH).$customLetterhead.')';
+            }
+
+            if ($fullPage) {
+                $pdf->pdf->SetDisplayMode('fullpage');
+                $pdf->pdf->SetDefaultBodyCSS('background', $urlWebLetterhead);
+                $pdf->pdf->SetDefaultBodyCSS('background-image-resize', '6');
+            }
+
+            @$pdf->content_to_pdf($content,
+                $css = '',
+                $pdf_name = '',
+                $course_code = null,
+                $outputMode = 'D',
+                $saveInFile = false,
+                $fileToSave = null,
+                $returnHtml = false,
+                $addDefaultCss = true,
+                $completeHeader = false
+            );
+        } catch (MpdfException $e) {
+            error_log($e);
+        }
+        break;
+    case 'cert_to_export_pdf':
+
+        $sId = isset($_GET['session_to_export']) ? (int) $_GET['session_to_export'] : 0;
+        $sessionInfo = api_get_session_info($sId);
+        if (empty($sessionInfo)) {
+            api_not_allowed(true);
+        }
+
+        $studentInfo = api_get_user_info($student_id);
+        $tablesToExport = Tracking::getLpCertificateTablesToPdf($student_id, $sId);
+
+        $tpl = new Template('', false, false, false, true, false, false);
+        $tpl->assign('title', get_lang('AttestationOfAttendance'));
+        $tpl->assign('session_title', $sessionInfo['name']);
+        $tpl->assign('student', $studentInfo['complete_name']);
+        $tpl->assign('table_progress', $tablesToExport['progress_table']);
+        $tpl->assign('subtitle', sprintf(get_lang('InSessionXYouHadTheFollowingResults'), $sessionInfo['name']));
+        $tpl->assign('table_course', $tablesToExport['course_table']);
+        $tpl->assign('table_parcours', $tablesToExport['lp_table']);
+
+        $content = $tpl->fetch($tpl->get_template('my_space/pdf_export_certificate.tpl'));
+        $params = [
+            'pdf_title' => get_lang('Resume'),
+            'session_info' => $sessionInfo,
+            'course_info' => '',
+            'pdf_date' => '',
+            'student_info' => $studentInfo,
+            'show_grade_generated_date' => true,
+            'show_real_course_teachers' => false,
+            'show_teacher_as_myself' => false,
+            'orientation' => 'P',
+        ];
+
+        @$pdf = new PDF('A4', $params['orientation'], $params);
+        try {
+            $theme = $tpl->theme;
+            $themeName = empty($theme) ? api_get_visual_theme() : $theme;
+            $themeDir = \Template::getThemeDir($theme);
+            $customLetterhead = $themeDir.'images/letterhead.png';
+            $urlPathLetterhead = api_get_path(SYS_CSS_PATH).$customLetterhead;
+
+            $urlWebLetterhead = '#FFFFFF';
+            $fullPage = false;
+            if (file_exists($urlPathLetterhead)) {
+                $fullPage = true;
+                $urlWebLetterhead = 'url('.api_get_path(WEB_CSS_PATH).$customLetterhead.')';
+            }
+
+            if ($fullPage) {
+                $pdf->pdf->SetDisplayMode('fullpage');
+                $pdf->pdf->SetDefaultBodyCSS('background', $urlWebLetterhead);
+                $pdf->pdf->SetDefaultBodyCSS('background-image-resize', '6');
+            }
+
+            @$pdf->content_to_pdf($content,
+                $css = '',
+                $pdf_name = '',
+                $course_code = null,
+                $outputMode = 'D',
+                $saveInFile = false,
+                $fileToSave = null,
+                $returnHtml = false,
+                $addDefaultCss = true,
+                $completeHeader = false
+            );
+        } catch (MpdfException $e) {
+            error_log($e);
+        }
+        break;
+    case 'lp_stats_to_export_pdf':
+        $categoriesTempList = learnpath::getCategories($courseInfo['real_id']);
+        $categoryTest = new CLpCategory();
+        $categoryTest->setId(0);
+        $categoryTest->setName(get_lang('WithOutCategory'));
+        $categoryTest->setPosition(0);
+        $categories = [
+            $categoryTest,
+        ];
+
+        if (!empty($categoriesTempList)) {
+            $categories = array_merge($categories, $categoriesTempList);
+        }
+
+        $userEntity = api_get_user_entity($student_id);
+        $courseTable = '';
+        /** @var CLpCategory $item */
+        foreach ($categories as $item) {
+            $categoryId = $item->getId();
+            if (!learnpath::categoryIsVisibleForStudent($item, $userEntity, $courseInfo['real_id'], $sessionId)) {
+                continue;
+            }
+
+            $list = new LearnpathList(
+                $student_id,
+                $courseInfo,
+                $sessionId,
+                null,
+                false,
+                $categoryId,
+                false,
+                true
+            );
+            $flatList = $list->get_flat_list();
+            foreach ($flatList as $learnpath) {
+                $lpId = $learnpath['lp_old_id'];
+                $output = Tracking::getLpStatsContentToPdf(
+                    $student_id,
+                    $courseInfo,
+                    $sessionId,
+                    $lpId,
+                    $learnpath['lp_name']
+                );
+                $courseTable .= $output;
+            }
+        }
+
+        $pdfTitle = get_lang('TestResult');
+        $sessionInfo = api_get_session_info($sessionId);
+        $studentInfo = api_get_user_info($student_id);
+        $tpl = new Template('', false, false, false, true, false, false);
+        $tpl->assign('title', $pdfTitle);
+        $tpl->assign('session_title', $sessionInfo['name']);
+        $tpl->assign('session_info', $sessionInfo);
+        $tpl->assign('table_course', $courseTable);
+
+        $content = $tpl->fetch($tpl->get_template('my_space/pdf_lp_stats.tpl'));
+
+        $params = [
+            'pdf_title' => $pdfTitle,
+            'session_info' => $sessionInfo,
+            'course_info' => '',
+            'pdf_date' => '',
+            'student_info' => $studentInfo,
+            'show_grade_generated_date' => true,
+            'show_real_course_teachers' => false,
+            'show_teacher_as_myself' => false,
+            'orientation' => 'P',
+        ];
+        @$pdf = new PDF('A4', $params['orientation'], $params);
+        $pdf->setBackground($tpl->theme);
+        $mode = 'D';
+        $pdfName = $sessionInfo['name'].'_'.$studentInfo['complete_name'];
+        $pdf->set_footer();
+        $result = @$pdf->content_to_pdf(
+            $content,
+            '',
+            $pdfName,
+            null,
+            $mode,
+            false,
+            null,
+            false,
+            true,
+            false
+        );
         break;
     default:
         break;
@@ -455,10 +681,11 @@ while ($row = Database::fetch_array($rs, 'ASSOC')) {
 }
 
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(api_get_user_id(), $courseInfo);
+$drhCanAccessAllStudents = (api_drh_can_access_all_session_content() || api_get_configuration_value('drh_allow_access_to_all_students'));
 
 if (api_is_drh() && !api_is_platform_admin()) {
     if (!empty($student_id)) {
-        if (api_drh_can_access_all_session_content()) {
+        if ($drhCanAccessAllStudents) {
         } else {
             if (!$isDrhOfCourse) {
                 if (api_is_drh() &&
@@ -483,8 +710,13 @@ $token = Security::get_token();
 
 // Actions bar
 echo '<div class="actions">';
-echo '<a href="javascript: window.history.go(-1);">'
-    .Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+if ('session_report' === $origin) {
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/progress_in_session_report.php">'
+        .Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+} else {
+    echo '<a href="javascript: window.history.go(-1);">'
+        .Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+}
 
 echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'
     .Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -502,11 +734,12 @@ if (!empty($student_id) && empty($courseCode)) {
         ['class' => 'ajax', 'data-title' => get_lang('ExportToPDF')]
     );
 }
-
-echo Display::url(
-    Display::return_icon('activity_monitor.png', get_lang('AccessDetails'), '', ICON_SIZE_MEDIUM),
-    api_get_path(WEB_CODE_PATH).'mySpace/access_details_session.php?user_id='.$student_id
-);
+if (true === api_get_configuration_value('course_tracking_student_detail_show_certificate_of_achievement')) {
+    echo Display::url(
+        Display::return_icon('activity_monitor.png', get_lang('AccessDetails'), '', ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH).'mySpace/access_details_session.php?user_id='.$student_id
+    );
+}
 
 if (!empty($user_info['email'])) {
     $send_mail = '<a href="mailto:'.$user_info['email'].'">'.
@@ -937,11 +1170,12 @@ if (!empty($courseInfo)) {
     $details = false;
 }
 
+$hideLpTestAverageIcon = api_get_configuration_value('student_follow_page_hide_lp_tests_average');
 $tpl->assign('user', $userInfo);
 $tpl->assign('details', $details);
+$tpl->assign('hide_lp_test_average', $hideLpTestAverageIcon);
 $templateName = $tpl->get_template('my_space/user_details.tpl');
 $content = $tpl->fetch($templateName);
-
 echo $content;
 
 // Careers.
@@ -1255,7 +1489,8 @@ if (empty($details)) {
                         'export' => 'csv',
                         'session_to_export' => $sId,
                     ]
-                )
+                ),
+                ['class' => 'user-tracking-csv']
             );
             $sessionAction .= Display::url(
                 Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
@@ -1266,12 +1501,13 @@ if (empty($details)) {
                             'export' => 'xls',
                             'session_to_export' => $sId,
                         ]
-                    )
+                    ),
+                ['class' => 'user-tracking-xls']
             );
 
             if (!empty($sId)) {
                 $sessionAction .= Display::url(
-                    Display::return_icon('pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM),
+                    Display::return_icon('attendance_certificate_pdf.png', get_lang('AttestationOfAttendance'), [], ICON_SIZE_MEDIUM),
                     api_get_path(WEB_CODE_PATH).'mySpace/session.php?'
                     .http_build_query(
                         [
@@ -1280,10 +1516,11 @@ if (empty($details)) {
                             'type' => 'attendance',
                             'session_to_export' => $sId,
                         ]
-                    )
+                    ),
+                    ['class' => 'user-tracking-export-pdf']
                 );
                 $sessionAction .= Display::url(
-                    Display::return_icon('pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_MEDIUM),
+                    Display::return_icon('achievement_certificate_pdf.png', get_lang('CertificateOfAchievement'), [], ICON_SIZE_MEDIUM),
                     api_get_path(WEB_AJAX_PATH).'myspace.ajax.php?'
                     .http_build_query(
                         [
@@ -1294,10 +1531,52 @@ if (empty($details)) {
                         ]
                     ),
                     [
-                        'class' => "ajax",
+                        'class' => "ajax user-tracking-achievement",
                         'data-size' => 'sm',
                         'data-title' => get_lang('CertificateOfAchievement'),
                     ]
+                );
+                $sessionAction .= Display::url(
+                    Display::return_icon('test_results_pdf.png', get_lang('TestResult'), [], ICON_SIZE_MEDIUM),
+                    api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?'
+                    .http_build_query(
+                        [
+                            'action' => 'lp_stats_to_export_pdf',
+                            'student' => $student_id,
+                            'id_session' => $sId,
+                            'course' => $courseInfoItem['code'],
+                        ]
+                    ),
+                    ['class' => 'user-tracking-test-results']
+                );
+
+                // New reports from MJTecnoid
+                $sessionAction .= Display::url(
+                    Display::return_icon('achievement_certificate_by_lp_pdf.png', get_lang('CertificateOfAchievement2'), [], ICON_SIZE_MEDIUM),
+                    api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?'
+                    .http_build_query(
+                        [
+                            'action' => 'cert_to_export_pdf',
+                            'student' => $student_id,
+                            'session_to_export' => $sId,
+                            'course' => $courseInfoItem['code'],
+                        ]
+                    ),
+                    ['class' => 'user-tracking-achievement-by-lp']
+                );
+
+                $sessionAction .= Display::url(
+                    Display::return_icon('test_result_by_lp_pdf.png', get_lang('ExportLpQuizResults'), [], ICON_SIZE_MEDIUM),
+                    api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?'
+                    .http_build_query(
+                        [
+                            'action' => 'lp_quiz_to_export_pdf',
+                            'student' => $student_id,
+                            'session_to_export' => $sId,
+                            'course' => $courseInfoItem['code'],
+                        ]
+                    ),
+                    ['class' => 'user-tracking-test-results-by-lp']
                 );
             }
             echo $sessionAction;
@@ -1470,19 +1749,47 @@ if (empty($details)) {
                 }
 
                 // Get time in lp
+                $linkMinTime = '';
+                $formattedLpTime = '';
                 if (!empty($timeCourse)) {
-                    $lpTime = isset($timeCourse[TOOL_LEARNPATH]) ? $timeCourse[TOOL_LEARNPATH] : 0;
-                    $total_time = isset($lpTime[$lp_id]) ? (int) $lpTime[$lp_id] : 0;
+                    $lpTime = $timeCourse[TOOL_LEARNPATH] ?? 0;
+                    $totalLpTime = isset($lpTime[$lp_id]) ? (int) $lpTime[$lp_id] : 0;
+
+                    if (Tracking::minimumTimeAvailable($sessionId, $courseInfo['real_id'])) {
+                        $accumulateWorkTime = learnpath::getAccumulateWorkTimePrerequisite(
+                            $lp_id,
+                            $courseInfo['real_id']
+                        );
+                        if ($accumulateWorkTime > 0) {
+
+                            // If the time spent is less than necessary,
+                            // then we show an icon in the actions column indicating the warning
+                            $formattedLpTime = api_time_to_hms($totalLpTime);
+                            $formattedWorkTime = api_time_to_hms($accumulateWorkTime * 60);
+
+                            if ($totalLpTime < ($accumulateWorkTime * 60)) {
+                                $linkMinTime = Display::return_icon(
+                                    'warning.png',
+                                    get_lang('LpMinTimeWarning').' - '.
+                                    $formattedLpTime.' / '.
+                                    $formattedWorkTime
+                                );
+                            }
+                        } else {
+                            $formattedLpTime = api_time_to_hms($totalLpTime);
+                        }
+                    }
                 } else {
-                    $total_time = Tracking::get_time_spent_in_lp(
+                    $totalLpTime = Tracking::get_time_spent_in_lp(
                         $student_id,
                         $courseCode,
                         [$lp_id],
                         $sessionId
                     );
+                    $formattedLpTime = api_time_to_hms($totalLpTime);
                 }
 
-                if (!empty($total_time)) {
+                if (!empty($totalLpTime)) {
                     $any_result = true;
                 }
 
@@ -1498,10 +1805,6 @@ if (empty($details)) {
                     $start_time = api_convert_and_format_date($start_time, DATE_TIME_FORMAT_LONG);
                 } else {
                     $start_time = '-';
-                }
-
-                if (!empty($total_time)) {
-                    $any_result = true;
                 }
 
                 // Quiz in lp
@@ -1574,16 +1877,12 @@ if (empty($details)) {
                 }
 
                 if (in_array('lp', $columnHeadersKeys)) {
-                    $contentToExport[] = api_html_entity_decode(
-                        stripslashes($lp_name),
-                        ENT_QUOTES,
-                        $charset
-                    );
+                    $contentToExport[] = strip_tags($lp_name);
                     echo Display::tag('td', stripslashes($lp_name));
                 }
                 if (in_array('time', $columnHeadersKeys)) {
-                    $contentToExport[] = api_time_to_hms($total_time);
-                    echo Display::tag('td', api_time_to_hms($total_time));
+                    $contentToExport[] = $formattedLpTime;
+                    echo Display::tag('td', $linkMinTime.$formattedLpTime, ['style' => 'width: 10%']);
                 }
 
                 if (in_array('best_score', $columnHeadersKeys)) {
@@ -2061,7 +2360,7 @@ if (empty($details)) {
 if ($allowMessages === true) {
     // Messages
     echo Display::page_subheader2(get_lang('Messages'));
-    echo MessageManager::getMessagesAboutUserToString($user_info);
+    echo MessageManager::getMessagesAboutUserToString($user_info, 'my_space');
     echo Display::url(
         get_lang('NewMessage'),
         'javascript: void(0);',

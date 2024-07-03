@@ -15,6 +15,7 @@ $user_id = isset($_GET['user_id']) ? (int) $_GET['user_id'] : (int) $_POST['user
 api_protect_super_admin($user_id, null, true);
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 $userInfo = api_get_user_info($user_id);
+$userEntity = api_get_user_entity($user_id);
 
 $htmlHeadXtra[] = '
 <script>
@@ -65,6 +66,7 @@ function confirmation(name) {
 }
 </script>';
 
+$htmlHeadXtra[] = api_get_password_checker_js('#username', '#password');
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $tool_name = get_lang('ModifyUserInfo');
@@ -226,31 +228,60 @@ $group[] = $form->createElement(
     'password',
     'password',
     null,
-    ['onkeydown' => 'javascript: password_switch_radio_button();', 'autocomplete' => 'new-password']
-);
-
-$form->addGroup($group, 'password', null, null, false);
-$form->addPasswordRule('password', 'password');
-
-// Status
-$status = [];
-$status[COURSEMANAGER] = get_lang('Teacher');
-$status[STUDENT] = get_lang('Learner');
-$status[DRH] = get_lang('Drh');
-$status[SESSIONADMIN] = get_lang('SessionsAdmin');
-$status[STUDENT_BOSS] = get_lang('RoleStudentBoss');
-$status[INVITEE] = get_lang('Invitee');
-
-$form->addElement(
-    'select',
-    'status',
-    get_lang('Profile'),
-    $status,
     [
-        'id' => 'status_select',
-        'onchange' => 'javascript: display_drh_list();',
+        'id' => 'password',
+        'autocomplete' => 'new-password',
+        'onkeydown' => 'javascript: password_switch_radio_button();',
+        'show_hide' => true,
+        //'required' => 'required'
     ]
 );
+
+$form->addGroup(
+    $group,
+    'password',
+    '',
+    null,
+    false
+);
+$form->addPasswordRule('password', 'password');
+$form->addNoSamePasswordRule('password', $userEntity);
+
+// Status
+$status = UserManager::getUserStatusList();
+
+$hideSelectProfile = false;
+// to hide the status list if it is not enabled with user_status_show_option for admin sessions.
+if (api_is_session_admin()) {
+    if (true === api_get_configuration_value('user_status_show_options_enabled')) {
+        $userStatusConfig = api_get_configuration_value('user_status_show_option');
+        if (!empty($userStatusConfig)) {
+            $statusConfigHidden = [];
+            foreach ($userStatusConfig as $role => $enabled) {
+                $constStatus = constant($role);
+                if (!$enabled) {
+                    $statusConfigHidden[] = $constStatus;
+                }
+            }
+            $hideSelectProfile = in_array($user_data['status'], $statusConfigHidden);
+        }
+    }
+}
+
+if (!$hideSelectProfile) {
+    $form->addElement(
+        'select',
+        'status',
+        get_lang('Profile'),
+        $status,
+        [
+            'id' => 'status_select',
+            'onchange' => 'javascript: display_drh_list();',
+        ]
+    );
+} else {
+    $form->addElement('hidden', 'status', $user_data['status']);
+}
 
 $display = isset($user_data['status']) && ($user_data['status'] == STUDENT || (isset($_POST['status']) && $_POST['status'] == STUDENT)) ? 'block' : 'none';
 
@@ -286,18 +317,34 @@ $date = sprintf(
 );
 $form->addElement('label', get_lang('RegistrationDate'), $date);
 
+$defaultExpiration = 0;
 if (!$user_data['platform_admin']) {
-    // Expiration Date
-    $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
-    $group = [];
-    $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
-    $group[] = $form->createElement(
-        'DateTimePicker',
-        'expiration_date',
-        null,
-        ['onchange' => 'javascript: enable_expiration_date();']
-    );
-    $form->addGroup($group, 'max_member_group', null, null, false);
+    $hideNeverExpiresOpt = api_get_configuration_value('user_hide_never_expire_option');
+    $lblExpiration = '';
+    if ($hideNeverExpiresOpt) {
+        $lblExpiration = get_lang('ExpirationDate');
+        $defaultExpiration = 1;
+        $group = [];
+        $group[] = $form->createElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('Enabled'), 1);
+        $group[] = $form->createElement(
+            'DateTimePicker',
+            'expiration_date',
+            null
+        );
+    } else {
+        $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
+        $group = [];
+        $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
+        $group[] = $form->createElement(
+            'DateTimePicker',
+            'expiration_date',
+            null,
+            [
+                'onchange' => 'javascript: enable_expiration_date();',
+            ]
+        );
+    }
+    $form->addGroup($group, 'max_member_group', $lblExpiration, null, false);
 
     // Active account or inactive account
     $form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);
@@ -394,122 +441,133 @@ if ($form->validate()) {
 
     $is_user_subscribed_in_course = CourseManager::is_user_subscribed_in_course($user['user_id']);
 
-    if ($user['status'] == DRH && $is_user_subscribed_in_course) {
-        $error_drh = true;
-    } else {
-        $picture_element = $form->getElement('picture');
-        $picture = $picture_element->getValue();
+    $picture_element = $form->getElement('picture');
+    $picture = $picture_element->getValue();
 
-        $picture_uri = $user_data['picture_uri'];
-        if (isset($user['delete_picture']) && $user['delete_picture']) {
-            $picture_uri = UserManager::deleteUserPicture($user_id);
-        } elseif (!empty($picture['name'])) {
-            $picture_uri = UserManager::update_user_picture(
-                $user_id,
-                $_FILES['picture']['name'],
-                $_FILES['picture']['tmp_name'],
-                $user['picture_crop_result']
-            );
-        }
-
-        $lastname = $user['lastname'];
-        $firstname = $user['firstname'];
-        $password = $user['password'];
-        $auth_source = isset($user['auth_source']) ? $user['auth_source'] : $userInfo['auth_source'];
-        $official_code = $user['official_code'];
-        $email = $user['email'];
-        $phone = $user['phone'];
-        $username = isset($user['username']) ? $user['username'] : $userInfo['username'];
-        $status = (int) $user['status'];
-        $platform_admin = (int) $user['platform_admin'];
-        $send_mail = (int) $user['send_mail'];
-        $reset_password = (int) $user['reset_password'];
-        $hr_dept_id = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : null;
-        $language = $user['language'];
-        $address = isset($user['address']) ? $user['address'] : null;
-
-        $expiration_date = null;
-        if (!$user_data['platform_admin'] && $user['radio_expiration_date'] == '1') {
-            $expiration_date = $user['expiration_date'];
-        }
-
-        $active = $user_data['platform_admin'] ? 1 : intval($user['active']);
-
-        //If the user is set to admin the status will be overwrite by COURSEMANAGER = 1
-        if ($platform_admin == 1) {
-            $status = COURSEMANAGER;
-        }
-
-        if (api_get_setting('login_is_email') === 'true') {
-            $username = $email;
-        }
-
-        $template = isset($user['email_template_option']) ? $user['email_template_option'] : [];
-
-        UserManager::update_user(
+    $picture_uri = $user_data['picture_uri'];
+    if (isset($user['delete_picture']) && $user['delete_picture']) {
+        $picture_uri = UserManager::deleteUserPicture($user_id);
+    } elseif (!empty($picture['name'])) {
+        $picture_uri = UserManager::update_user_picture(
             $user_id,
-            $firstname,
-            $lastname,
-            $username,
-            $password,
-            $auth_source,
-            $email,
-            $status,
-            $official_code,
-            $phone,
-            $picture_uri,
-            $expiration_date,
-            $active,
-            null,
-            $hr_dept_id,
-            null,
-            $language,
-            null,
-            $send_mail,
-            $reset_password,
-            $address,
-            $template
+            $_FILES['picture']['name'],
+            $_FILES['picture']['tmp_name'],
+            $user['picture_crop_result']
         );
-
-        $studentBossListSent = isset($user['student_boss']) ? $user['student_boss'] : [];
-        UserManager::subscribeUserToBossList(
-            $user_id,
-            $studentBossListSent,
-            true
-        );
-
-        if (api_get_setting('openid_authentication') === 'true' && !empty($user['openid'])) {
-            $up = UserManager::update_openid($user_id, $user['openid']);
-        }
-
-        $currentUserId = api_get_user_id();
-        if ($user_id != $currentUserId) {
-            $userObj = api_get_user_entity($user_id);
-            if ($platform_admin == 1) {
-                UserManager::addUserAsAdmin($userObj);
-            } else {
-                UserManager::removeUserAdmin($userObj);
-            }
-        }
-
-        $extraFieldValue = new ExtraFieldValue('user');
-        $extraFieldValue->saveFieldValues($user);
-        $userInfo = api_get_user_info($user_id);
-        $message = get_lang('UserUpdated').': '.Display::url(
-            $userInfo['complete_name_with_username'],
-            api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id
-        );
-
-        Session::erase('system_timezone');
-
-        Display::addFlash(Display::return_message($message, 'normal', false));
-        header('Location: user_list.php');
-        exit();
     }
-}
 
-if ($error_drh) {
-    Display::addFlash(Display::return_message(get_lang('StatusCanNotBeChangedToHumanResourcesManager'), 'error'));
+    $lastname = $user['lastname'];
+    $firstname = $user['firstname'];
+    $password = $user['password'];
+    $auth_source = isset($user['auth_source']) ? $user['auth_source'] : $userInfo['auth_source'];
+    $official_code = $user['official_code'];
+    $email = $user['email'];
+    $phone = $user['phone'];
+    $username = isset($user['username']) ? $user['username'] : $userInfo['username'];
+    $status = (int) $user['status'];
+    $platform_admin = 0;
+    // Only platform admin can change user status to admin.
+    if (api_is_platform_admin()) {
+        $platform_admin = (int) $user['platform_admin'];
+    }
+
+    $send_mail = (int) $user['send_mail'];
+    $reset_password = (int) $user['reset_password'];
+    $hr_dept_id = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : null;
+    $language = $user['language'];
+    $address = isset($user['address']) ? $user['address'] : null;
+
+    $expiration_date = null;
+    if (!$user_data['platform_admin'] && $user['radio_expiration_date'] == '1') {
+        if (empty($user['expiration_date'])) {
+            Display::addFlash(Display::return_message(get_lang('EmptyExpirationDate')));
+            header('Location: '.api_get_self().'?user_id='.$user_id);
+            exit();
+        }
+        $expiration_date = $user['expiration_date'];
+    }
+
+    $active = $user_data['platform_admin'] ? 1 : intval($user['active']);
+
+    //If the user is set to admin the status will be overwrite by COURSEMANAGER = 1
+    if ($platform_admin == 1) {
+        $status = COURSEMANAGER;
+    }
+
+    if (api_get_setting('login_is_email') === 'true') {
+        $username = $email;
+    }
+
+    $template = isset($user['email_template_option']) ? $user['email_template_option'] : [];
+
+    UserManager::update_user(
+        $user_id,
+        $firstname,
+        $lastname,
+        $username,
+        $password,
+        $auth_source,
+        $email,
+        $status,
+        $official_code,
+        $phone,
+        $picture_uri,
+        $expiration_date,
+        $active,
+        null,
+        $hr_dept_id,
+        null,
+        $language,
+        null,
+        $send_mail,
+        $reset_password,
+        $address,
+        $template
+    );
+
+    $studentBossListSent = isset($user['student_boss']) ? $user['student_boss'] : [];
+    UserManager::subscribeUserToBossList(
+        $user_id,
+        $studentBossListSent,
+        true
+    );
+
+    if (api_get_setting('openid_authentication') === 'true' && !empty($user['openid'])) {
+        $up = UserManager::update_openid($user_id, $user['openid']);
+    }
+
+    $currentUserId = api_get_user_id();
+    if ($user_id != $currentUserId) {
+        $userObj = api_get_user_entity($user_id);
+        if ($platform_admin == 1) {
+            UserManager::addUserAsAdmin($userObj);
+        } else {
+            UserManager::removeUserAdmin($userObj);
+        }
+    }
+
+    // It updates course relation type as EX-LEARNER if project name (extra field from user_edition_extra_field_to_check) is changed
+    if (false !== api_get_configuration_value('user_edition_extra_field_to_check')) {
+        $extraToCheck = api_get_configuration_value('user_edition_extra_field_to_check');
+        if (isset($user['extra_'.$extraToCheck])) {
+            $extraValueToCheck = $user['extra_'.$extraToCheck];
+            UserManager::updateCourseRelationTypeExLearner($user_id, $extraValueToCheck);
+        }
+    }
+
+    $extraFieldValue = new ExtraFieldValue('user');
+    $extraFieldValue->saveFieldValues($user);
+    $userInfo = api_get_user_info($user_id);
+    $message = get_lang('UserUpdated').': '.Display::url(
+        $userInfo['complete_name_with_username'],
+        api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id
+    );
+
+    Session::erase('system_timezone');
+
+    Display::addFlash(Display::return_message($message, 'normal', false));
+    header('Location: user_list.php');
+    exit();
 }
 
 $actions = [

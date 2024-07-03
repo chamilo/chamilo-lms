@@ -8,11 +8,15 @@
 
 RewriteEngine on
 
+# Disables access to myfile.php/something
+AcceptPathInfo Off
+
 # Prevent execution of PHP from directories used for different types of uploads
 RedirectMatch 403 ^/app/(?!courses/proxy)(cache|courses|home|logs|upload|Resources/public/css)/.*\.ph(p[3457]?|t|tml|ar)$
 RedirectMatch 403 ^/main/default_course_document/images/.*\.ph(p[3457]?|t|tml|ar)$
 RedirectMatch 403 ^/main/lang/.*\.ph(p[3457]?|t|tml|ar)$
 RedirectMatch 403 ^/web/.*\.ph(p[3457]?|t|tml|ar)$
+RedirectMatch 403 ^/app/config/.*\.yml(\.dist)?$
 
 # http://my.chamilo.net/certificates/?id=123 to http://my.chamilo.net/certificates/index.php?id=123
 RewriteCond %{QUERY_STRING} ^id=(.*)$
@@ -30,18 +34,29 @@ RewriteRule ^courses/([^/]+)/scorm/(.*)$ main/document/download_scorm.php?doc_ur
 # Rewrite everything in the document folder of a course to the download script
 # Except certificate resources, which might need to be accessible publicly to all
 RewriteRule ^courses/([^/]+)/document/certificates/(.*)$ app/courses/$1/document/certificates/$2 [QSA,L]
+# Note : since version 2.4.38-3 of Apache a security fix had a side effect that made redirection with space not to work.
+# To fix this issue we did not have a common syntaxis but it work with one of those 2 options :
+# changing at the end of the following line [QSA,L] for [QSA,L,B=\x20?] or for "[QSA,L,B= ?,BNP]"
 RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
 
 # Optimize load of custom per-course icons in courses (avoid download_uploaded_files.php)
 RewriteRule ^courses/([^/]+)/upload/course_home_icons/(.*([\.js|\.css|\.png|\.jpg|\.jpeg|\.gif]))$ app/courses/$1/upload/course_home_icons/$2 [QSA,L]
 # Course upload files
+# Note : since version 2.4.38-3 of Apache a security fix had a side effect that made redirection with space not to work.
+# To fix this issue we did not have a common syntaxis but it work with one of those 2 options :
+# changing at the end of the following line [QSA,L] for [QSA,L,B=\x20?] or for "[QSA,L,B= ?,BNP]"
 RewriteRule ^courses/([^/]+)/upload/([^/]+)/(.*)$ main/document/download_uploaded_files.php?code=$1&type=$2&file=$3 [QSA,L]
 
 # Rewrite everything in the work folder
+# Note : since version 2.4.38-3 of Apache a security fix had a side effect that made redirection with space not to work.
+# To fix this issue we did not have a common syntaxis but it work with one of those 2 options :
+# changing at the end of the following line [QSA,L] for [QSA,L,B=\x20?] or for "[QSA,L,B= ?,BNP]"
 RewriteRule ^courses/([^/]+)/work/(.*)$ main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
 
 RewriteRule ^courses/([^/]+)/course-pic85x85.png$ main/inc/ajax/course.ajax.php?a=get_course_image&code=$1&image=course_image_source [QSA,L]
 RewriteRule ^courses/([^/]+)/course-pic.png$ main/inc/ajax/course.ajax.php?a=get_course_image&code=$1&image=course_image_large_source [QSA,L]
+RewriteRule ^courses/([^/]+)/course-email-pic-cropped.png$ main/inc/ajax/course.ajax.php?a=get_course_image&code=$1&image=course_email_image_source [QSA,L]
+RewriteRule ^courses/([^/]+)/course-email-pic.png$ main/inc/ajax/course.ajax.php?a=get_course_image&code=$1&image=course_email_image_large_source [QSA,L]
 
 # Redirect all courses/ to app/courses/
 RewriteRule ^courses/([^/]+)/(.*)$ app/courses/$1/$2 [QSA,L]
@@ -71,11 +86,10 @@ RewriteRule ^service/(\d{1,})$ plugin/buycourses/src/service_information.php?ser
 # LTI outcome service
 RewriteRule ^lti/os$ plugin/ims_lti/outcome_service.php [L]
 
-# This rule is very generic and should always remain at the bottom of .htaccess
-# http://my.chamilo.net/jdoe to http://my.chamilo.net/user.php?jdoe
-RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
-
 # Deny direct access to user my files
+# Note : since version 2.4.38-3 of Apache a security fix had a side effect that made redirection with space not to work.
+# To fix this issue we did not have a common syntaxis but it work with one of those 2 options :
+# changing at the end of the following line [QSA,L] for [QSA,L,B=\x20?] or for "[QSA,L,B= ?,BNP]"
 RewriteRule ^app/upload/users/([^/]+)/([^/]+)/my_files/(.*)$ main/social/download_my_files.php?user_id=$2&file=$3 [QSA,L]
 
 # Deny access
@@ -89,3 +103,24 @@ AddType application/font-woff .woff .woff2
   ExpiresByType application/font-woff "access plus 1 month"
 </IfModule>
 
+# Force SSL/HTTPS
+# We recommend you place this block in your VirtualHost config rather
+# than uncommenting it below. However, if you have no other way,
+# feel free to uncomment it, but please remember that this file will 
+# be overwritten during your next Chamilo update.
+# Also note this will only work if you have an SSL certificate
+# configured elsewhere in your Apache configuration.
+
+#RewriteCond %{HTTPS} !=on
+#RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+#<IfModule mod_headers.c>
+#  Header always set Content-Security-Policy "upgrade-insecure-requests;"
+#</IfModule>
+
+# Disallow direct access to /main/inc/lib/javascript/bigupload/files
+RedirectMatch 403 ^/main/inc/lib/javascript/bigupload/files
+
+# Disallow MIME sniffing to prevent XSS from unknown/incorrect file extensions
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options nosniff
+</IfModule>

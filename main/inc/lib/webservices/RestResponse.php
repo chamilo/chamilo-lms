@@ -47,10 +47,7 @@ class RestResponse
         $this->errorMessage = $message;
     }
 
-    /**
-     * @return string
-     */
-    public function format()
+    public function format(): string
     {
         $json = ['error' => $this->error];
 
@@ -60,6 +57,9 @@ class RestResponse
             $json['data'] = $this->data;
         }
 
-        return json_encode($json, JSON_PRETTY_PRINT);
+        return json_encode(
+            $json,
+            'test' === api_get_setting('server_type') ? JSON_PRETTY_PRINT : 0
+        );
     }
 }

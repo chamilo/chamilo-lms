@@ -58,9 +58,12 @@ $course_id = api_get_course_int_id();
 $exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 $sessionId = api_get_session_id();
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
-if (empty($exercise_id)) {
-    api_not_allowed(true);
+if ('export_all_exercises_results' !== $action) {
+    if (empty($exercise_id)) {
+        api_not_allowed(true);
+    }
 }
 
 $blockPage = true;
@@ -149,6 +152,15 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
 $objExerciseTmp = new Exercise();
 $exerciseExists = $objExerciseTmp->read($exercise_id);
 
+switch ($action) {
+    case 'export_all_results':
+        $sessionId = api_get_session_id();
+        $courseId = api_get_course_int_id();
+        ExerciseLib::exportExerciseAllResultsZip($sessionId, $courseId, $exercise_id);
+
+        break;
+}
+
 //Send student email @todo move this code in a class, library
 if (isset($_REQUEST['comments']) &&
     $_REQUEST['comments'] === 'update' &&
@@ -199,7 +211,7 @@ if (isset($_REQUEST['comments']) &&
 
         // From the database.
         $marksFromDatabase = $questionListData[$questionId]['marks'];
-        if (in_array($question->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
+        if (in_array($question->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER])) {
             // From the form.
             $params['marks'] = $marks;
             if ($marksFromDatabase != $marks) {
@@ -251,7 +263,7 @@ if (isset($_REQUEST['comments']) &&
                 GROUP BY question_id';
         $res = Database::query($qry);
         $tot = 0;
-        while ($row = Database :: fetch_array($res, 'ASSOC')) {
+        while ($row = Database::fetch_array($res, 'ASSOC')) {
             $marks = $row['marks'];
             if (!$objExerciseTmp->propagate_neg && $marks < 0) {
                 continue;
@@ -417,6 +429,7 @@ if (isset($_REQUEST['comments']) &&
 }
 
 $actions = null;
+$hideIp = api_get_configuration_value('exercise_hide_ip');
 if ($is_allowedToEdit && $origin !== 'learnpath') {
     // the form
     if (api_is_platform_admin() || api_is_course_admin() ||
@@ -428,11 +441,18 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
             Display::return_icon('activity_monitor.png', get_lang('LiveResults'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .= '<a href="stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.
             Display::return_icon('statistics.png', get_lang('ReportByQuestion'), '', ICON_SIZE_MEDIUM).'</a>';
+        $actions .= '<a href="stats_attempts.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.
+            Display::return_icon('survey_reporting_complete.png', get_lang('ReportByAttempts'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&exerciseId='.$exercise_id.'" >'.
         Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .= Display::url(
             Display::return_icon('reload.png', get_lang('RecalculateResults'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'exercise/recalculate_all.php?'.api_get_cidreq()."&exercise=$exercise_id"
+        );
+
+        $actions .= Display::url(
+            Display::return_icon('export_pdf.png', get_lang('ExportExerciseAllResults'), [], ICON_SIZE_MEDIUM),
+            api_get_self().'?'.api_get_cidreq().'&action=export_all_results&exerciseId='.$exercise_id
         );
 
         // clean result before a selected date icon
@@ -689,8 +709,9 @@ if ($is_allowedToEdit || $is_tutor) {
         get_lang('ToolLearnpath'),
         get_lang('Actions'),
     ];
-
+    $indexIp = 8;
     if ($officialCodeInList === 'true') {
+        $indexIp = 9;
         $columns = array_merge([get_lang('OfficialCode')], $columns);
     }
 
@@ -759,6 +780,14 @@ if ($is_allowedToEdit || $is_tutor) {
     if ('true' === $officialCodeInList) {
         $officialCodeRow = ['name' => 'official_code', 'index' => 'official_code', 'width' => '50', 'align' => 'left', 'search' => 'true'];
         $column_model = array_merge([$officialCodeRow], $column_model);
+    }
+
+    if ($hideIp) {
+        // It removes the 9th column related to IP
+        unset($columns[$indexIp]);
+        unset($column_model[$indexIp]);
+        $columns = array_values($columns);
+        $column_model = array_values($column_model);
     }
 
     $action_links = '

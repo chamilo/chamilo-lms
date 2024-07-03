@@ -37,6 +37,21 @@ class OutcomeForm extends EvalForm
         $this->setDefaults();
     }
 
+    protected function build_add_form()
+    {
+        $this->setDefaults(
+            [
+                'hid_user_id' => $this->evaluation_object->get_user_id(),
+                'hid_category_id' => $this->evaluation_object->get_category_id(),
+                'hid_course_code' => $this->evaluation_object->get_course_code(),
+                'created_at' => api_get_utc_datetime(),
+            ]
+        );
+        $this->build_basic_form();
+
+        $this->addButtonCreate(get_lang('AddAssessment'), 'submit');
+    }
+
     /**
      * Builds a basic form that is used in add and edit.
      *
@@ -171,23 +186,5 @@ class OutcomeForm extends EvalForm
             $visibility_default = 0;
         }
         $this->setDefaults(['visible' => $visibility_default]);
-    }
-
-    /**
-     *
-     */
-    protected function build_add_form()
-    {
-        $this->setDefaults(
-            [
-                'hid_user_id' => $this->evaluation_object->get_user_id(),
-                'hid_category_id' => $this->evaluation_object->get_category_id(),
-                'hid_course_code' => $this->evaluation_object->get_course_code(),
-                'created_at' => api_get_utc_datetime(),
-            ]
-        );
-        $this->build_basic_form();
-
-        $this->addButtonCreate(get_lang('AddAssessment'), 'submit');
     }
 }

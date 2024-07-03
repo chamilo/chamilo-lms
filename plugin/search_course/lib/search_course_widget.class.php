@@ -11,8 +11,8 @@
  */
 class SearchCourseWidget
 {
-    const PARAM_ACTION = 'action';
-    const ACTION_SUBSCRIBE = 'subscribe';
+    public const PARAM_ACTION = 'action';
+    public const ACTION_SUBSCRIBE = 'subscribe';
 
     /**
      * Returns $_POST data for $key is it exists or $default otherwise.

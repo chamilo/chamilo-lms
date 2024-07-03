@@ -16,7 +16,7 @@ $includeSessions = $plugin->get('include_sessions') === 'true';
 
 $userInfo = api_get_user_info();
 
-$payouts = $plugin->getPayouts(BuyCoursesPlugin::PAYOUT_STATUS_COMPLETED, false, $userInfo['id']);
+$payouts = $plugin->getPayouts(BuyCoursesPlugin::PAYOUT_STATUS_COMPLETED, 0, $userInfo['id']);
 
 $payoutList = [];
 

@@ -6,7 +6,26 @@
  */
 require __DIR__.'/../../../main/inc/global.inc.php';
 
+if (!empty($_GET['error']) && !empty($_GET['state'])) {
+    if ($_GET['state'] === ChamiloSession::read('oauth2state')) {
+        api_not_allowed(
+            true,
+            Display::return_message(
+                $_GET['error_description'] ?? $_GET['error'],
+                'warning'
+            )
+        );
+    } else {
+        ChamiloSession::erase('oauth2state');
+        exit('Invalid state');
+    }
+}
+
 $plugin = AzureActiveDirectory::create();
+
+if ('true' !== $plugin->get(AzureActiveDirectory::SETTING_ENABLE)) {
+    api_not_allowed(true);
+}
 
 $provider = $plugin->getProvider();
 
@@ -29,10 +48,21 @@ if (empty($_GET['state']) || ($_GET['state'] !== ChamiloSession::read('oauth2sta
 }
 
 // Try to get an access token (using the authorization code grant)
-$token = $provider->getAccessToken('authorization_code', [
-    'code' => $_GET['code'],
-    'resource' => 'https://graph.windows.net',
-]);
+try {
+    $token = $provider->getAccessToken('authorization_code', [
+        'code' => $_GET['code'],
+        'resource' => 'https://graph.windows.net',
+    ]);
+} catch (Exception $exception) {
+    if ($exception->getMessage() == 'interaction_required') {
+        $message = Display::return_message($plugin->get_lang('additional_interaction_required'), 'error', false);
+    } else {
+        $message = Display::return_message($exception->getMessage(), 'error');
+    }
+    Display::addFlash($message);
+    header('Location: '.api_get_path(WEB_PATH));
+    exit;
+}
 
 $me = null;
 
@@ -45,8 +75,11 @@ try {
 
     // We use the e-mail to authenticate the user, so check that at least one
     // e-mail source exists
-    if (empty($me['mail']) || empty($me['mailNickname'])) {
-        throw new Exception('Mail empty');
+    if (empty($me['mail'])) {
+        throw new Exception('The mail field is empty in Azure AD and is needed to set the organisation email for this user.');
+    }
+    if (empty($me['mailNickname'])) {
+        throw new Exception('The mailNickname field is empty in Azure AD and is needed to set the unique Azure ID for this user.');
     }
 
     $extraFieldValue = new ExtraFieldValue('user');
@@ -139,6 +172,8 @@ try {
 
     //TODO add user update management for groups
 
+    //TODO add support if user exists in another URL but is validated in this one, add the user to access_url_rel_user
+
     if (empty($userInfo)) {
         throw new Exception('User '.$userId.' not found.');
     }
@@ -153,10 +188,17 @@ try {
     exit;
 }
 
-$_user['user_id'] = $userInfo['user_id'];
-$_user['uidReset'] = true;
+$userInfo['uidReset'] = true;
 
-ChamiloSession::write('_user', $_user);
+$_GET['redirect_after_not_allow_page'] = 1;
+
+$redirectAfterNotAllowPage = ChamiloSession::read('redirect_after_not_allow_page');
+
+ChamiloSession::clear();
+
+ChamiloSession::write('redirect_after_not_allow_page', $redirectAfterNotAllowPage);
+
+ChamiloSession::write('_user', $userInfo);
 ChamiloSession::write('_user_auth_source', 'azure_active_directory');
 Event::eventLogin($userInfo['user_id']);
 Redirect::session_request_uri(true, $userInfo['user_id']);

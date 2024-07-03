@@ -45,11 +45,19 @@ if (Security::check_token('post') && (
     // Clear token
     Security::clear_token();
     if ($action === 'course_select_form') {
-        $course = CourseSelectForm::get_posted_course('copy_course');
+        $cb = new CourseBuilder('partial');
+        $course = $cb->build(0, null, false, array_keys($_POST['resource']), $_POST['resource']);
+        $course = CourseSelectForm::get_posted_course(null, 0, '', $course);
     } else {
-        $cb = new CourseBuilder();
+        $cb = new CourseBuilder('complete');
         $course = $cb->build();
     }
+
+    // It builds the documents and items related to the LP
+    $cb->exportToCourseBuildFormat();
+    // It builds documents added in text (quizzes, assignments)
+    $cb->restoreDocumentsFromList();
+
     $cr = new CourseRestorer($course);
     $cr->set_file_option($_POST['same_file_name_option']);
     $cr->restore($_POST['destination_course']);
@@ -107,7 +115,15 @@ if (Security::check_token('post') && (
             'post',
             api_get_path(WEB_CODE_PATH).'coursecopy/copy_course.php?'.api_get_cidreq()
         );
-        $form->addElement('select', 'destination_course', get_lang('SelectDestinationCourse'), $courses);
+        $form->addElement(
+            'select',
+            'destination_course',
+            [
+                get_lang('SelectDestinationCourse'),
+                get_lang('YouCanOnlyCopyThisCourseToACourseYouTeach'),
+            ],
+            $courses
+        );
 
         $group = [];
         $group[] = $form->createElement('radio', 'copy_option', null, get_lang('FullCopy'), 'full_copy');

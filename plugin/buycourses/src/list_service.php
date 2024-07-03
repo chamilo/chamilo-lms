@@ -32,7 +32,7 @@ $currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $first = $pageSize * ($currentPage - 1);
 
 $services = $plugin->getServices($first, $pageSize);
-$totalItems = $plugin->getServices(null, null, 'count');
+$totalItems = $plugin->getServices(0, 1000000000, 'count');
 $pagesCount = ceil($totalItems / $pageSize);
 
 $pagination = BuyCoursesPlugin::returnPagination(api_get_self(), $currentPage, $pagesCount, $totalItems);
@@ -43,7 +43,7 @@ $interbreadcrumb[] = [
     'name' => $plugin->get_lang('plugin_title'),
 ];
 
-$templateName = $plugin->get_lang('AvailableCourses');
+$templateName = $plugin->get_lang('Services');
 
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'buycourses/resources/css/style.css');
 

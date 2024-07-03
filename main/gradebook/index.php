@@ -664,6 +664,10 @@ if (!isset($_GET['exportpdf'])) {
     }
 }
 
+if (api_get_configuration_value('allow_skill_rel_items') == true) {
+    $htmlContentExtraClass[] = 'feature-item-user-skill-on';
+}
+
 // LOAD DATA & DISPLAY TABLE
 $is_platform_admin = api_is_platform_admin();
 $is_course_admin = api_is_allowed_to_edit(null, true);
@@ -740,7 +744,7 @@ if (isset($_GET['studentoverview'])) {
     // then Category::load() will create a new 'root' category with empty
     // course and session fields in memory (Category::create_root_category())
 
-    $cats = Category:: load(
+    $cats = Category::load(
         null,
         null,
         $course_code,
@@ -803,8 +807,8 @@ $no_qualification = false;
 // Show certificate link.
 $certificate = [];
 $actionsLeft = '';
-$hideCertificateExport = api_get_setting('hide_certificate_export_link');
-
+$hideCertificateExport = api_get_setting('hide_certificate_export_link') === 'true';
+$hideCertificateExportStudent = api_is_student() && api_get_setting('hide_certificate_export_link_students') === 'true';
 if (!empty($selectCat)) {
     $cat = new Category();
     $course_id = CourseManager::get_course_by_category($selectCat);
@@ -817,12 +821,14 @@ if (!empty($selectCat)) {
                 $stud_id
             );
 
-            if ($hideCertificateExport !== 'true' && isset($certificate['pdf_url'])) {
-                $actionsLeft .= Display::url(
-                    Display::returnFontAwesomeIcon('file-pdf-o').get_lang('DownloadCertificatePdf'),
-                    $certificate['pdf_url'],
-                    ['class' => 'btn btn-default']
-                );
+            if (isset($certificate['pdf_url'])) {
+                if (!$hideCertificateExport && !$hideCertificateExportStudent) {
+                    $actionsLeft .= Display::url(
+                        Display::returnFontAwesomeIcon('file-pdf-o').get_lang('DownloadCertificatePdf'),
+                        $certificate['pdf_url'],
+                        ['class' => 'btn btn-default']
+                    );
+                }
             }
 
             $currentScore = Category::getCurrentScore(
@@ -939,7 +945,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
         $allcat = [];
         $model = ExerciseLib::getCourseScoreModel();
         $allowGraph = api_get_configuration_value('gradebook_hide_graph') === false;
-        $isAllow = api_is_allowed_to_edit(null, true);
+        $isAllowed = api_is_allowed_to_edit(null, true);
         $settings = api_get_configuration_value('gradebook_pdf_export_settings');
         $showFeedBack = true;
         if (isset($settings['hide_feedback_textarea']) && $settings['hide_feedback_textarea']) {
@@ -971,7 +977,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $certificate
                 );
 
-                if ($isAllow && api_get_setting('gradebook_enable_grade_model') === 'true') {
+                if ($isAllowed && api_get_setting('gradebook_enable_grade_model') === 'true') {
                     // Showing the grading system
                     if (!empty($grade_models[$grade_model_id])) {
                         echo Display::return_message(
@@ -985,16 +991,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $exportToPdf = true;
                 }
 
-                $loadStats = [];
-                if (!$isAllow) {
-                    if (api_get_setting('gradebook_detailed_admin_view') === 'true') {
-                        $loadStats = [1, 2, 3];
-                    } else {
-                        if (api_get_configuration_value('gradebook_enable_best_score') !== false) {
-                            $loadStats = [2];
-                        }
-                    }
-                }
+                $loadStats = $isAllowed ? [] : GradebookTable::getExtraStatsColumnsToDisplay();
 
                 $gradebookTable = new GradebookTable(
                     $cat,
@@ -1009,14 +1006,14 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $loadStats
                 );
 
-                if ($isAllow) {
+                if ($isAllowed) {
                     $gradebookTable->td_attributes = [
                         4 => 'class="text-center"',
                     ];
                 }
 
                 $table = '';
-                if ($isAllow) {
+                if ($isAllowed) {
                     $table = $gradebookTable->return_table();
                 } else {
                     if ($allowTable) {

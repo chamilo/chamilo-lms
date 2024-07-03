@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\Repository\AccessUrlRepository;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
+use Chamilo\CoreBundle\Entity\TrackELoginAttempt;
 use Chamilo\UserBundle\Entity\User;
 use Chamilo\UserBundle\Repository\UserRepository;
 use ChamiloSession as Session;
@@ -127,11 +128,77 @@ class UserManager
     }
 
     /**
-     * @param string $raw
+     * Detects and returns the type of encryption of the given encrypted
+     * password.
      *
-     * @return string
+     * @param string $encoded The encrypted password
+     * @param string $salt    The user salt, if any
      */
-    public static function encryptPassword($raw, User $user)
+    public static function detectPasswordEncryption(string $encoded, string $salt): string
+    {
+        $encryption = false;
+
+        $length = strlen($encoded);
+
+        $pattern = '/^\$2y\$04\$[A-Za-z0-9\.\/]{53}$/';
+
+        if ($length == 60 && preg_match($pattern, $encoded)) {
+            $encryption = 'bcrypt';
+        } elseif ($length == 32 && ctype_xdigit($encoded)) {
+            $encryption = 'md5';
+        } elseif ($length == 40 && ctype_xdigit($encoded)) {
+            $encryption = 'sha1';
+        } else {
+            $start = strpos($encoded, '{');
+            if ($start !== false && substr($encoded, -1, 1) == '}') {
+                if (substr($encoded, $start + 1, -1) == $salt) {
+                    $encryption = 'none';
+                }
+            }
+        }
+
+        return $encryption;
+    }
+
+    /**
+     * Checks if the password is correct for this user.
+     * If the password_conversion setting is true, also update the password
+     * in the database to a new encryption method.
+     *
+     * @param string $encoded Encrypted password
+     * @param string $raw     Clear password given through login form
+     * @param string $salt    User salt, if any
+     * @param int    $userId  The user's internal ID
+     */
+    public static function checkPassword(string $encoded, string $raw, string $salt, int $userId): bool
+    {
+        $result = false;
+
+        if (true === api_get_configuration_value('password_conversion')) {
+            $detectedEncryption = self::detectPasswordEncryption($encoded, $salt);
+            if (self::getPasswordEncryption() != $detectedEncryption) {
+                $encoder = new \Chamilo\UserBundle\Security\Encoder($detectedEncryption);
+                $result = $encoder->isPasswordValid($encoded, $raw, $salt);
+                if ($result) {
+                    $raw = $encoder->encodePassword($encoded, $salt);
+                    self::updatePassword($userId, $raw);
+                }
+            } else {
+                $result = self::isPasswordValid($encoded, $raw, $salt);
+            }
+        } else {
+            $result = self::isPasswordValid($encoded, $raw, $salt);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Encrypt the password using the current encoder.
+     *
+     * @param string $raw The clear password
+     */
+    public static function encryptPassword(string $raw, User $user): string
     {
         $encoder = self::getEncoder($user);
 
@@ -142,10 +209,12 @@ class UserManager
     }
 
     /**
-     * @param int    $userId
-     * @param string $password
+     * Update the password of the given user to the given (in-clear) password.
+     *
+     * @param int    $userId   Internal user ID
+     * @param string $password Password in clear
      */
-    public static function updatePassword($userId, $password)
+    public static function updatePassword(int $userId, string $password): void
     {
         $repository = self::getRepository();
         /** @var User $user */
@@ -154,6 +223,23 @@ class UserManager
         $user->setPlainPassword($password);
         $userManager->updateUser($user, true);
         Event::addEvent(LOG_USER_PASSWORD_UPDATE, LOG_USER_ID, $userId);
+    }
+
+    /**
+     * Updates user expiration date.
+     *
+     * @param int    $userId
+     * @param string $expirationDate
+     */
+    public static function updateExpirationDate($userId, $expirationDate)
+    {
+        $repository = self::getRepository();
+        /** @var User $user */
+        $user = $repository->find($userId);
+        $userManager = self::getManager();
+        $expirationDate = api_get_utc_datetime($expirationDate, false, true);
+        $user->setExpirationDate($expirationDate);
+        $userManager->updateUser($user, true);
     }
 
     /**
@@ -491,7 +577,9 @@ class UserManager
                     false,
                     false,
                     false
-                );
+		);
+		// the complete_name is not used in the default Chamilo template but used in a specific template -refs BT#21334
+		$tplSubject->assign('complete_name', stripslashes(api_get_person_name($firstName, $lastName)));
                 $layoutSubject = $tplSubject->get_template('mail/subject_registration_platform.tpl');
                 $emailSubject = $tplSubject->fetch($layoutSubject);
                 $sender_name = api_get_person_name(
@@ -527,6 +615,8 @@ class UserManager
                 $tplContent->assign('original_password', stripslashes($original_password));
                 $tplContent->assign('mailWebPath', $url);
                 $tplContent->assign('new_user', $user);
+                // Adding this variable but not used in default template, used for task BT19518 with a customized template
+                $tplContent->assign('status_type', $status);
 
                 $layoutContent = $tplContent->get_template('mail/content_registration_platform.tpl');
                 $emailBody = $tplContent->fetch($layoutContent);
@@ -1135,7 +1225,7 @@ class UserManager
                 WHERE id_coach = '".$user_id."'";
         Database::query($sql);
 
-        $sql = "UPDATE $table_session SET id_coach = $currentUserId
+        $sql = "UPDATE $table_session SET session_admin_id = $currentUserId
                 WHERE session_admin_id = '".$user_id."'";
         Database::query($sql);
 
@@ -1573,6 +1663,23 @@ class UserManager
         if (!is_null($password)) {
             $user->setPlainPassword($password);
             Event::addEvent(LOG_USER_PASSWORD_UPDATE, LOG_USER_ID, $user_id);
+            $date = api_get_local_time(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                'Y-m-d'
+            );
+            $extraFieldValue = new ExtraFieldValue('user');
+            $extraFieldValue->save(
+                [
+                    'item_id' => $user->getId(),
+                    'variable' => 'password_updated_at',
+                    'value' => $date,
+                ]
+            );
         }
 
         $userManager->updateUser($user, true);
@@ -1600,7 +1707,6 @@ class UserManager
 
         if (!empty($email) && $send_email) {
             $recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
-            $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
             $sender_name = api_get_person_name(
                 api_get_setting('administratorName'),
                 api_get_setting('administratorSurname'),
@@ -1625,46 +1731,120 @@ class UserManager
                 false,
                 false
             );
-            // variables for the default template
             $tplContent->assign('complete_name', stripslashes(api_get_person_name($firstname, $lastname)));
             $tplContent->assign('login_name', $username);
-
             $originalPassword = '';
             if ($reset_password > 0) {
                 $originalPassword = stripslashes($original_password);
             }
             $tplContent->assign('original_password', $originalPassword);
+            // variables for the default template
             $tplContent->assign('portal_url', $url);
-
-            $layoutContent = $tplContent->get_template('mail/user_edit_content.tpl');
-            $emailBody = $tplContent->fetch($layoutContent);
-
-            $mailTemplateManager = new MailTemplateManager();
-
-            if (!empty($emailTemplate) &&
-                isset($emailTemplate['user_edit_content.tpl']) &&
-                !empty($emailTemplate['user_edit_content.tpl'])
-            ) {
-                $userInfo = api_get_user_info($user_id);
-                $emailBody = $mailTemplateManager->parseTemplate($emailTemplate['user_edit_content.tpl'], $userInfo);
-            }
-
+            // Adding this variable but not used in default template, used for task BT19518 with a customized template
+            $tplContent->assign('status_type', $status);
             $creatorInfo = api_get_user_info($creator_id);
             $creatorEmail = isset($creatorInfo['email']) ? $creatorInfo['email'] : '';
-
-            api_mail_html(
-                $recipient_name,
-                $email,
-                $emailsubject,
-                $emailBody,
-                $sender_name,
-                $email_admin,
+            $tplSubject = new Template(
                 null,
-                null,
-                null,
-                null,
-                $creatorEmail
+                false,
+                false,
+                false,
+                false,
+                false
             );
+            // the complete_name is not used in the default Chamilo template but used in a specific template -refs BT#21334
+            $tplSubject->assign('complete_name', stripslashes(api_get_person_name($firstName, $lastName)));
+            $layoutSubject = $tplSubject->get_template('mail/subject_user_edit.tpl');
+            $emailSubject = $tplSubject->fetch($layoutSubject);
+
+            if (!is_null($password) && api_get_configuration_value('send_two_inscription_confirmation_mail')) {
+                // The user has a new password *and* we need to tell him so,
+                // but the configuration is set to send 2 separate e-mails
+                // (one for username, one for password) when sending pass
+                $layoutContent = $tplContent->get_template('mail/new_user_first_email_confirmation.tpl');
+                $emailBody = $tplContent->fetch($layoutContent);
+                $mailTemplateManager = new MailTemplateManager();
+                if (!empty($emailTemplate) &&
+                    isset($emailTemplate['new_user_first_email_confirmation.tpl']) &&
+                    !empty($emailTemplate['new_user_first_email_confirmation.tpl'])
+                ) {
+                    $userInfo = api_get_user_info($user_id);
+                    $emailBody = $mailTemplateManager->parseTemplate(
+                        $emailTemplate['new_user_first_email_confirmation.tpl'],
+                        $userInfo
+                    );
+                }
+
+                api_mail_html(
+                    $recipient_name,
+                    $email,
+                    $emailSubject,
+                    $emailBody,
+                    $sender_name,
+                    $email_admin,
+                    null,
+                    null,
+                    null,
+                    null,
+                    $creatorEmail
+                );
+
+                $layoutContent = $tplContent->get_template('mail/new_user_second_email_confirmation.tpl');
+                $emailBody = $tplContent->fetch($layoutContent);
+                $mailTemplateManager = new MailTemplateManager();
+                if (!empty($emailTemplate) &&
+                    isset($emailTemplate['new_user_second_email_confirmation.tpl']) &&
+                    !empty($emailTemplate['new_user_second_email_confirmation.tpl'])
+                ) {
+                    $userInfo = api_get_user_info($user_id);
+                    $emailBody = $mailTemplateManager->parseTemplate(
+                        $emailTemplate['new_user_second_email_confirmation.tpl'],
+                        $userInfo
+                    );
+                }
+
+                api_mail_html(
+                    $recipient_name,
+                    $email,
+                    $emailSubject,
+                    $emailBody,
+                    $sender_name,
+                    $email_admin,
+                    null,
+                    null,
+                    null,
+                    null,
+                    $creatorEmail
+                );
+            } else {
+                $layoutContent = $tplContent->get_template('mail/user_edit_content.tpl');
+                $emailBody = $tplContent->fetch($layoutContent);
+                $mailTemplateManager = new MailTemplateManager();
+                if (!empty($emailTemplate) &&
+                    isset($emailTemplate['user_edit_content.tpl']) &&
+                    !empty($emailTemplate['user_edit_content.tpl'])
+                ) {
+                    $userInfo = api_get_user_info($user_id);
+                    $emailBody = $mailTemplateManager->parseTemplate(
+                        $emailTemplate['user_edit_content.tpl'],
+                        $userInfo
+                    );
+                }
+
+                api_mail_html(
+                    $recipient_name,
+                    $email,
+                    $emailSubject,
+                    $emailBody,
+                    $sender_name,
+                    $email_admin,
+                    null,
+                    null,
+                    null,
+                    null,
+                    $creatorEmail
+                );
+            }
         }
 
         if (!empty($hook)) {
@@ -2030,12 +2210,21 @@ class UserManager
         $order_by = [],
         $limit_from = false,
         $limit_to = false,
-        $idCampus = null
+        $idCampus = null,
+        $keyword = null,
+        $lastConnectionDate = null,
+        $getCount = false,
+        $filterUsers = null
     ) {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $userUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $return_array = [];
-        $sql = "SELECT user.* FROM $user_table user ";
+
+        if ($getCount) {
+            $sql = "SELECT count(user.id) as nbUsers FROM $user_table user ";
+        } else {
+            $sql = "SELECT user.* FROM $user_table user ";
+        }
 
         if (api_is_multiple_url_enabled()) {
             if ($idCampus) {
@@ -2050,12 +2239,46 @@ class UserManager
             $sql .= " WHERE 1=1 ";
         }
 
+        if (!empty($keyword)) {
+            $keyword = trim(Database::escape_string($keyword));
+            $keywordParts = array_filter(explode(' ', $keyword));
+            $extraKeyword = '';
+            if (!empty($keywordParts)) {
+                $keywordPartsFixed = Database::escape_string(implode('%', $keywordParts));
+                if (!empty($keywordPartsFixed)) {
+                    $extraKeyword .= " OR
+                        CONCAT(user.firstname, ' ', user.lastname) LIKE '%$keywordPartsFixed%' OR
+                        CONCAT(user.lastname, ' ', user.firstname) LIKE '%$keywordPartsFixed%' ";
+                }
+            }
+
+            $sql .= " AND (
+                user.username LIKE '%$keyword%' OR
+                user.firstname LIKE '%$keyword%' OR
+                user.lastname LIKE '%$keyword%' OR
+                user.official_code LIKE '%$keyword%' OR
+                user.email LIKE '%$keyword%' OR
+                CONCAT(user.firstname, ' ', user.lastname) LIKE '%$keyword%' OR
+                CONCAT(user.lastname, ' ', user.firstname) LIKE '%$keyword%'
+                $extraKeyword
+            )";
+        }
+
+        if (!empty($lastConnectionDate)) {
+            $lastConnectionDate = Database::escape_string($lastConnectionDate);
+            $sql .= " AND user.last_login <= '$lastConnectionDate' ";
+        }
+
         if (count($conditions) > 0) {
             foreach ($conditions as $field => $value) {
                 $field = Database::escape_string($field);
                 $value = Database::escape_string($value);
                 $sql .= " AND $field = '$value'";
             }
+        }
+
+        if (!empty($filterUsers)) {
+            $sql .= " AND user.id IN(".implode(',', $filterUsers).")";
         }
 
         if (count($order_by) > 0) {
@@ -2068,6 +2291,13 @@ class UserManager
             $sql .= " LIMIT $limit_from, $limit_to";
         }
         $sql_result = Database::query($sql);
+
+        if ($getCount) {
+            $result = Database::fetch_array($sql_result);
+
+            return $result['nbUsers'];
+        }
+
         while ($result = Database::fetch_array($sql_result)) {
             $result['complete_name'] = api_get_person_name($result['firstname'], $result['lastname']);
             $return_array[] = $result;
@@ -2177,6 +2407,13 @@ class UserManager
 
         $sql_query .= ' WHERE 1 = 1 ';
         if (count($conditions) > 0) {
+
+            $andActive = "";
+            if (isset($conditions['active'])) {
+                $andActive = " AND active = " . (int) $conditions['active'];
+                unset($conditions['active']);
+            }
+
             $temp_conditions = [];
             foreach ($conditions as $field => $value) {
                 $field = Database::escape_string($field);
@@ -2188,16 +2425,21 @@ class UserManager
                 }
             }
             if (!empty($temp_conditions)) {
-                $sql_query .= ' AND '.implode(' '.$condition.' ', $temp_conditions);
+                $sql_query .= ' AND ('.implode(' '.$condition.' ', $temp_conditions).') ';
             }
 
             if (api_is_multiple_url_enabled()) {
                 $sql_query .= ' AND auru.access_url_id = '.api_get_current_access_url_id();
             }
+            $sql_query .= $andActive;
         } else {
             if (api_is_multiple_url_enabled()) {
                 $sql_query .= ' AND auru.access_url_id = '.api_get_current_access_url_id();
             }
+        }
+
+        if (api_is_session_admin() && (api_get_setting('prevent_session_admins_to_manage_all_users') === 'true')) {
+            $sql_query .= ' AND user.creator_id = '.api_get_user_id();
         }
 
         if (!empty($onlyThisUserList)) {
@@ -2871,8 +3113,10 @@ class UserManager
         ];
         $column = (int) $column;
         $sort_direction = '';
-        if (in_array(strtoupper($direction), ['ASC', 'DESC'])) {
-            $sort_direction = strtoupper($direction);
+        if (!empty($direction)) {
+            if (in_array(strtoupper($direction), ['ASC', 'DESC'])) {
+                $sort_direction = strtoupper($direction);
+            }
         }
         $extraFieldType = EntityExtraField::USER_FIELD_TYPE;
         $sqlf = "SELECT * FROM $t_uf WHERE extra_field_type = $extraFieldType ";
@@ -3098,6 +3342,7 @@ class UserManager
      * @param    bool    Whether to prefix the fields indexes with "extra_" (might be used by formvalidator)
      * @param    bool    Whether to return invisible fields as well
      * @param    bool    Whether to split multiple-selection fields or not
+     * @param    mixed   Whether to filter on the value of filter
      *
      * @return array Array of fields => value for the given user
      */
@@ -3149,12 +3394,8 @@ class UserManager
                 } else {
                     $sqlu = "SELECT value as fval
                             FROM $t_ufv
-                            WHERE field_id=".$row['id']." AND item_id = ".$user_id;
+                            WHERE field_id = ".$row['id']." AND item_id = ".$user_id;
                     $resu = Database::query($sqlu);
-                    // get default value
-                    $sql_df = "SELECT default_value as fval_df FROM $t_uf
-                               WHERE id=".$row['id'];
-                    $res_df = Database::query($sql_df);
 
                     if (Database::num_rows($resu) > 0) {
                         $rowu = Database::fetch_array($resu);
@@ -3163,6 +3404,10 @@ class UserManager
                             $fval = explode(';', $rowu['fval']);
                         }
                     } else {
+                        // get default value
+                        $sql_df = "SELECT default_value as fval_df FROM $t_uf
+                               WHERE id = ".$row['id'];
+                        $res_df = Database::query($sql_df);
                         $row_df = Database::fetch_array($res_df);
                         $fval = $row_df['fval_df'];
                     }
@@ -3971,6 +4216,11 @@ class UserManager
             }
         }
 
+        $exlearnerCondition = "";
+        if (false !== api_get_configuration_value('user_edition_extra_field_to_check')) {
+            $exlearnerCondition = " AND scu.status NOT IN(".COURSE_EXLEARNER.")";
+        }
+
         /* This query is very similar to the query below, but it will check the
         session_rel_course_user table if there are courses registered
         to our user or not */
@@ -3979,6 +4229,7 @@ class UserManager
                     c.visibility,
                     c.id as real_id,
                     c.code as course_code,
+                    c.course_language,
                     sc.position,
                     c.unsubscribe
                 FROM $tbl_session_course_user as scu
@@ -3991,6 +4242,7 @@ class UserManager
                     scu.user_id = $user_id AND
                     scu.session_id = $session_id
                     $where_access_url
+                    $exlearnerCondition
                 ORDER BY sc.position ASC";
 
         $myCourseList = [];
@@ -4017,6 +4269,7 @@ class UserManager
                         c.visibility,
                         c.id as real_id,
                         c.code as course_code,
+                        c.course_language,
                         sc.position,
                         c.unsubscribe
                     FROM $tbl_session_course_user as scu
@@ -4034,6 +4287,7 @@ class UserManager
                         s.id_coach = $user_id
                       )
                     $where_access_url
+                    $exlearnerCondition
                     ORDER BY sc.position ASC";
             $result = Database::query($sql);
 
@@ -4405,27 +4659,35 @@ class UserManager
     /**
      * Get the total count of users.
      *
-     * @param int $status        Status of users to be counted
-     * @param int $access_url_id Access URL ID (optional)
-     * @param int $active
+     * @param int|null $status        Status of users to be counted
+     * @param int|null $access_url_id Access URL ID (optional)
      *
      * @return mixed Number of users or false on error
      */
-    public static function get_number_of_users($status = 0, $access_url_id = 1, $active = null)
-    {
-        $t_u = Database::get_main_table(TABLE_MAIN_USER);
-        $t_a = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+    public static function get_number_of_users(
+        int $status = null,
+        int $access_url_id = null,
+        int $active = null,
+        string $dateFrom = null,
+        string $dateUntil = null
+    ) {
+        $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tableAccessUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+
+        if (empty($access_url_id)) {
+            $access_url_id = api_get_current_access_url_id();
+        }
 
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT count(u.id)
-                    FROM $t_u u
-                    INNER JOIN $t_a url_user
+                    FROM $tableUser u
+                    INNER JOIN $tableAccessUrlRelUser url_user
                     ON (u.id = url_user.user_id)
                     WHERE url_user.access_url_id = $access_url_id
             ";
         } else {
             $sql = "SELECT count(u.id)
-                    FROM $t_u u
+                    FROM $tableUser u
                     WHERE 1 = 1 ";
         }
 
@@ -4434,9 +4696,19 @@ class UserManager
             $sql .= " AND u.status = $status ";
         }
 
-        if ($active !== null) {
+        if (isset($active)) {
             $active = (int) $active;
             $sql .= " AND u.active = $active ";
+        }
+
+        if (!empty($dateFrom)) {
+            $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
+            $sql .= " AND u.registration_date >= '$dateFrom' ";
+        }
+
+        if (!empty($dateUntil)) {
+            $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
+            $sql .= " AND u.registration_date <= '$dateUntil' ";
         }
 
         $res = Database::query($sql);
@@ -5349,7 +5621,8 @@ class UserManager
         $lastConnectionDate = null,
         $status = null,
         $keyword = null,
-        $checkSessionVisibility = false
+        $checkSessionVisibility = false,
+        $filterUsers = null
     ) {
         // Database Table Definitions
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -5423,6 +5696,10 @@ class UserManager
         if (!empty($lastConnectionDate)) {
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
             $userConditions .= " AND u.last_login <= '$lastConnectionDate' ";
+        }
+
+        if (!empty($filterUsers)) {
+            $userConditions .= " AND u.id IN(".implode(',', $filterUsers).")";
         }
 
         $sessionConditionsCoach = null;
@@ -5561,6 +5838,7 @@ class UserManager
             if (!empty($column) && !empty($direction)) {
                 // Fixing order due the UNIONs
                 $column = str_replace('u.', '', $column);
+                $column = trim($column);
                 $orderBy = " ORDER BY `$column` $direction ";
             }
         }
@@ -5787,6 +6065,7 @@ class UserManager
                     ON sru.user_id=u.id
                     WHERE
                         sru.c_id="'.$courseId.'" AND
+                        sru.session_id="'.$session.'" AND
                         sru.status = '.SessionEntity::COACH;
         }
 
@@ -5844,11 +6123,18 @@ class UserManager
      * @param string $course_code The course code
      * @param int    $session_id
      * @param int    $user_id     The user id
+     * @param string $startDate   date string
+     * @param string $endDate     date string
      *
      * @return array if there is not information return false
      */
-    public static function get_info_gradebook_certificate($course_code, $session_id, $user_id)
-    {
+    public static function get_info_gradebook_certificate(
+        $course_code,
+        $session_id,
+        $user_id,
+        $startDate = null,
+        $endDate = null
+    ) {
         $tbl_grade_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $tbl_grade_category = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $session_id = (int) $session_id;
@@ -5860,11 +6146,21 @@ class UserManager
             $session_condition = " AND session_id = $session_id";
         }
 
+        $dateConditions = "";
+        if (!empty($startDate)) {
+            $startDate = api_get_utc_datetime($startDate, false, true);
+            $dateConditions .= " AND created_at >= '".$startDate->format('Y-m-d 00:00:00')."' ";
+        }
+        if (!empty($endDate)) {
+            $endDate = api_get_utc_datetime($endDate, false, true);
+            $dateConditions .= " AND created_at <= '".$endDate->format('Y-m-d 23:59:59')."' ";
+        }
+
         $sql = 'SELECT * FROM '.$tbl_grade_certificate.'
                 WHERE cat_id = (
                     SELECT id FROM '.$tbl_grade_category.'
                     WHERE
-                        course_code = "'.Database::escape_string($course_code).'" '.$session_condition.'
+                        course_code = "'.Database::escape_string($course_code).'" '.$session_condition.' '.$dateConditions.'
                     LIMIT 1
                 ) AND user_id='.$user_id;
 
@@ -6037,6 +6333,146 @@ class UserManager
         Database::query($sql);
 
         return true;
+    }
+
+    /**
+     * It updates course relation type as EX-LEARNER if project name (extra field from user_edition_extra_field_to_check) is changed.
+     *
+     * @param $userId
+     * @param $extraValue
+     *
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public static function updateCourseRelationTypeExLearner($userId, $extraValue)
+    {
+        if (false !== api_get_configuration_value('user_edition_extra_field_to_check')) {
+            $extraToCheck = api_get_configuration_value('user_edition_extra_field_to_check');
+
+            // Get the old user extra value to check
+            $userExtra = UserManager::get_extra_user_data_by_field($userId, $extraToCheck);
+            if (isset($userExtra[$extraToCheck]) && $userExtra[$extraToCheck] != $extraValue) {
+                // it searchs the courses with the user old extravalue
+                $extraFieldValues = new ExtraFieldValue('course');
+                $extraItems = $extraFieldValues->get_item_id_from_field_variable_and_field_value($extraToCheck, $userExtra[$extraToCheck], false, false, true);
+                $coursesTocheck = [];
+                if (!empty($extraItems)) {
+                    foreach ($extraItems as $items) {
+                        $coursesTocheck[] = $items['item_id'];
+                    }
+                }
+
+                $tblUserGroupRelUser = Database::get_main_table(TABLE_USERGROUP_REL_USER);
+                $tblUserGroupRelCourse = Database::get_main_table(TABLE_USERGROUP_REL_COURSE);
+                $tblUserGroupRelSession = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
+                $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+                $tblCourseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
+                // To check in main course
+                if (!empty($coursesTocheck)) {
+                    foreach ($coursesTocheck as $courseId) {
+                        $sql = "SELECT id FROM $tblCourseUser
+                                WHERE user_id = $userId AND c_id = $courseId";
+                        $rs = Database::query($sql);
+                        if (Database::num_rows($rs) > 0) {
+                            $id = Database::result($rs, 0, 0);
+                            $sql = "UPDATE $tblCourseUser SET relation_type = ".COURSE_EXLEARNER."
+                                    WHERE id = $id";
+                            Database::query($sql);
+                        }
+                    }
+                }
+
+                // To check in sessions
+                if (!empty($coursesTocheck)) {
+                    $tblSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+                    $sessionsToCheck = [];
+                    foreach ($coursesTocheck as $courseId) {
+                        $sql = "SELECT id, session_id FROM $tblSessionCourseUser
+                                WHERE user_id = $userId AND c_id = $courseId";
+                        $rs = Database::query($sql);
+                        if (Database::num_rows($rs) > 0) {
+                            $row = Database::fetch_array($rs);
+                            $id = $row['id'];
+                            $sessionId = $row['session_id'];
+                            $sql = "UPDATE $tblSessionCourseUser SET status = ".COURSE_EXLEARNER."
+                                    WHERE id = $id";
+                            Database::query($sql);
+                            $sessionsToCheck[] = $sessionId;
+                        }
+                    }
+                    // It checks if user is ex-learner in all courses in the session to update the session relation type
+                    if (!empty($sessionsToCheck)) {
+                        $sessionsToCheck = array_unique($sessionsToCheck);
+                        foreach ($sessionsToCheck as $sessionId) {
+                            $checkAll = Database::query("SELECT count(id) FROM $tblSessionCourseUser WHERE user_id = $userId AND session_id = $sessionId");
+                            $countAll = Database::result($checkAll, 0, 0);
+                            $checkExLearner = Database::query("SELECT count(id) FROM $tblSessionCourseUser WHERE status = ".COURSE_EXLEARNER." AND user_id = $userId AND session_id = $sessionId");
+                            $countExLearner = Database::result($checkExLearner, 0, 0);
+                            if ($countAll > 0 && $countAll == $countExLearner) {
+                                $sql = "UPDATE $tblSessionUser SET relation_type = ".COURSE_EXLEARNER."
+                                    WHERE user_id = $userId AND session_id = $sessionId";
+                                Database::query($sql);
+                            }
+                        }
+                    }
+                }
+                // To check users inside a class
+                $rsUser = Database::query("SELECT usergroup_id FROM $tblUserGroupRelUser WHERE user_id = $userId");
+                if (Database::num_rows($rsUser) > 0) {
+                    while ($rowUser = Database::fetch_array($rsUser)) {
+                        $usergroupId = $rowUser['usergroup_id'];
+
+                        // Count courses with exlearners
+                        $sqlC1 = "SELECT count(id) FROM $tblUserGroupRelCourse WHERE usergroup_id = $usergroupId";
+                        $rsCourses = Database::query($sqlC1);
+                        $countGroupCourses = Database::result($rsCourses, 0, 0);
+
+                        $sqlC2 = "SELECT count(cu.id)
+                                FROM $tblCourseUser cu
+                                INNER JOIN $tblUserGroupRelCourse gc
+                                    ON gc.course_id = cu.c_id
+                                WHERE
+                                    cu.user_id = $userId AND
+                                    usergroup_id = $usergroupId AND
+                                    relation_type = ".COURSE_EXLEARNER;
+                        $rsExCourses = Database::query($sqlC2);
+                        $countExCourses = Database::result($rsExCourses, 0, 0);
+                        $checkedExCourses = $countGroupCourses > 0 && ($countExCourses == $countGroupCourses);
+
+                        // Count sessions with exlearners
+                        $sqlS1 = "SELECT count(id) FROM $tblUserGroupRelSession WHERE usergroup_id = $usergroupId";
+                        $rsSessions = Database::query($sqlS1);
+                        $countGroupSessions = Database::result($rsSessions, 0, 0);
+
+                        $sqlS2 = "SELECT count(su.id)
+                                FROM $tblSessionUser su
+                                INNER JOIN $tblUserGroupRelSession gs
+                                    ON gs.session_id = su.session_id
+                                WHERE
+                                    su.user_id = $userId AND
+                                    usergroup_id = $usergroupId AND
+                                    relation_type = ".COURSE_EXLEARNER;
+                        $rsExSessions = Database::query($sqlS2);
+                        $countExSessions = Database::result($rsExSessions, 0, 0);
+                        $checkedExSessions = $countGroupSessions > 0 && ($countExSessions == $countGroupSessions);
+
+                        // it checks if usergroup user should be set to EXLEARNER
+                        $checkedExClassLearner = false;
+                        if ($countGroupCourses > 0 && $countGroupSessions == 0) {
+                            $checkedExClassLearner = $checkedExCourses;
+                        } elseif ($countGroupCourses == 0 && $countGroupSessions > 0) {
+                            $checkedExClassLearner = $checkedExSessions;
+                        } elseif ($countGroupCourses > 0 && $countGroupSessions > 0) {
+                            $checkedExClassLearner = ($checkedExCourses && $checkedExSessions);
+                        }
+
+                        if ($checkedExClassLearner) {
+                            Database::query("UPDATE $tblUserGroupRelUser SET relation_type = ".COURSE_EXLEARNER." WHERE user_id = $userId AND usergroup_id = $usergroupId");
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -6423,11 +6859,18 @@ SQL;
                     'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
                     'content' => get_lang('Groups'),
                 ],
-                [
+                'classes' => [
                     'url' => $userPath.'class.php?'.api_get_cidreq(),
                     'content' => get_lang('Classes'),
                 ],
             ];
+
+            if (api_get_configuration_value('session_classes_tab_disable')
+                && !api_is_platform_admin()
+                && api_get_session_id()
+            ) {
+                unset($headers['classes']);
+            }
 
             return Display::tabsOnlyLink($headers, $optionSelected);
         }
@@ -6546,6 +6989,58 @@ SQL;
         }
 
         return [];
+    }
+
+    public static function blockIfMaxLoginAttempts(array $userInfo)
+    {
+        if (false === (bool) $userInfo['active'] || null === $userInfo['last_login']) {
+            return;
+        }
+
+        $maxAllowed = (int) api_get_configuration_value('login_max_attempt_before_blocking_account');
+
+        if ($maxAllowed <= 0) {
+            return;
+        }
+
+        $em = Database::getManager();
+
+        $countFailedAttempts = $em
+            ->getRepository(TrackELoginAttempt::class)
+            ->createQueryBuilder('la')
+            ->select('COUNT(la)')
+            ->where('la.username = :username')
+            ->andWhere('la.loginDate >= :last_login')
+            ->andWhere('la.success <> TRUE')
+            ->setParameters(
+                [
+                    'username' => $userInfo['username'],
+                    'last_login' => $userInfo['last_login'],
+                ]
+            )
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        if ($countFailedAttempts >= $maxAllowed) {
+            Database::update(
+                Database::get_main_table(TABLE_MAIN_USER),
+                ['active' => false],
+                ['username = ?' => $userInfo['username']]
+            );
+
+            Display::addFlash(
+                Display::return_message(
+                    sprintf(
+                        get_lang('XAccountDisabledByYAttempts'),
+                        $userInfo['username'],
+                        $countFailedAttempts
+                    ),
+                    'error',
+                    false
+                )
+            );
+        }
     }
 
     /**
@@ -7228,30 +7723,412 @@ SQL;
 
     public static function redirectToResetPassword($userId)
     {
-        if (!api_get_configuration_value('force_renew_password_at_first_login')) {
-            return;
+        $forceRenew = api_get_configuration_value('force_renew_password_at_first_login');
+
+        if ($forceRenew) {
+            $askPassword = self::get_extra_user_data_by_field(
+                $userId,
+                'ask_new_password'
+            );
+
+            if (!empty($askPassword) && isset($askPassword['ask_new_password']) &&
+                1 === (int) $askPassword['ask_new_password']
+            ) {
+                $uniqueId = api_get_unique_id();
+                $userObj = api_get_user_entity($userId);
+
+                $userObj->setConfirmationToken($uniqueId);
+                $userObj->setPasswordRequestedAt(new \DateTime());
+
+                Database::getManager()->persist($userObj);
+                Database::getManager()->flush();
+
+                $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId;
+                api_location($url);
+            }
         }
 
-        $askPassword = self::get_extra_user_data_by_field(
-            $userId,
-            'ask_new_password'
+        $forceRotateDays = api_get_configuration_value('security_password_rotate_days');
+        $forceRotate = false;
+
+        if ($forceRotateDays > 0) {
+            // get the date of the last password update recorded
+            $lastUpdate = self::get_extra_user_data_by_field(
+                $userId,
+                'password_updated_at'
+            );
+
+            if (empty($lastUpdate) or empty($lastUpdate['password_updated_at'])) {
+                $userObj = api_get_user_entity($userId);
+                $registrationDate = $userObj->getRegistrationDate();
+                $now = new \DateTime(null, new DateTimeZone('UTC'));
+                $interval = $now->diff($registrationDate);
+                $daysSince = $interval->format('%a');
+                if ($daysSince > $forceRotateDays) {
+                    $forceRotate = true;
+                }
+            } else {
+                $now = new \DateTime(null, new DateTimeZone('UTC'));
+                // In some cases, old records might contain an incomplete Y-m-d H:i:s format
+                if (strlen($lastUpdate['password_updated_at']) == 10) {
+                    $lastUpdate['password_updated_at'] .= ' 00:00:00';
+                }
+                if (strlen($lastUpdate['password_updated_at']) == 16) {
+                    $lastUpdate['password_updated_at'] .= ':00';
+                }
+                $date = \DateTime::createFromFormat('Y-m-d H:i:s', $lastUpdate['password_updated_at'], new DateTimeZone('UTC'));
+                $interval = $now->diff($date);
+                $daysSince = $interval->format('%a');
+                if ($daysSince > $forceRotateDays) {
+                    $forceRotate = true;
+                }
+            }
+            if ($forceRotate) {
+                $uniqueId = api_get_unique_id();
+                $userObj = api_get_user_entity($userId);
+
+                $userObj->setConfirmationToken($uniqueId);
+                $userObj->setPasswordRequestedAt(new \DateTime());
+
+                Database::getManager()->persist($userObj);
+                Database::getManager()->flush();
+
+                $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId.'&rotate=1';
+                api_location($url);
+            }
+        }
+    }
+
+    /**
+     * It returns the list of user status available.
+     *
+     * @return array
+     */
+    public static function getUserStatusList()
+    {
+        $userStatusConfig = [];
+        // it gets the roles to show in creation/edition user
+        if (true === api_get_configuration_value('user_status_show_options_enabled')) {
+            $userStatusConfig = api_get_configuration_value('user_status_show_option');
+        }
+        // it gets the roles to show in creation/edition user (only for admins)
+        if (true === api_get_configuration_value('user_status_option_only_for_admin_enabled') && api_is_platform_admin()) {
+            $userStatusConfig = api_get_configuration_value('user_status_option_show_only_for_admin');
+        }
+
+        $status = [];
+        if (!empty($userStatusConfig)) {
+            $statusLang = api_get_status_langvars();
+            foreach ($userStatusConfig as $role => $enabled) {
+                if ($enabled) {
+                    $constStatus = constant($role);
+                    $status[$constStatus] = $statusLang[$constStatus];
+                }
+            }
+        } else {
+            $status[COURSEMANAGER] = get_lang('Teacher');
+            $status[STUDENT] = get_lang('Learner');
+            $status[DRH] = get_lang('Drh');
+            $status[SESSIONADMIN] = get_lang('SessionsAdmin');
+            $status[STUDENT_BOSS] = get_lang('RoleStudentBoss');
+            $status[INVITEE] = get_lang('Invitee');
+        }
+
+        return $status;
+    }
+
+    /**
+     * Get the expiration date by user status from configuration value.
+     *
+     * @param $status
+     *
+     * @throws Exception
+     *
+     * @return array
+     */
+    public static function getExpirationDateByRole($status)
+    {
+        $status = (int) $status;
+        $nbDaysByRole = api_get_configuration_value('user_number_of_days_for_default_expiration_date_per_role');
+        $dates = [];
+        if (!empty($nbDaysByRole)) {
+            $date = new DateTime();
+            foreach ($nbDaysByRole as $strVariable => $nDays) {
+                $constStatus = constant($strVariable);
+                if ($status == $constStatus) {
+                    $duration = "P{$nDays}D";
+                    $date->add(new DateInterval($duration));
+                    $newExpirationDate = $date->format('Y-m-d H:i');
+                    $formatted = api_format_date($newExpirationDate, DATE_TIME_FORMAT_LONG_24H);
+                    $dates = ['formatted' => $formatted, 'date' => $newExpirationDate];
+                }
+            }
+        }
+
+        return $dates;
+    }
+
+    public static function getAllowedRolesAsTeacher(): array
+    {
+        if (api_get_configuration_value('course_allow_student_role_to_be_teacher')) {
+            return [
+                STUDENT,
+                COURSEMANAGER,
+                SESSIONADMIN,
+            ];
+        } else {
+            return [
+                COURSEMANAGER,
+                SESSIONADMIN,
+            ];
+        }
+    }
+
+    /**
+     * Count users in courses and if they have certificate.
+     * This function is resource intensive.
+     *
+     * @return array
+     */
+    public static function countUsersWhoFinishedCourses()
+    {
+        $courses = [];
+        $currentAccessUrlId = api_get_current_access_url_id();
+        $sql = "SELECT course.code, cru.user_id
+                FROM course_rel_user cru
+                    JOIN course ON cru.c_id = course.id
+                    JOIN access_url_rel_user auru on cru.user_id = auru.user_id
+                    JOIN access_url_rel_course ON course.id = access_url_rel_course.c_id
+                WHERE access_url_rel_course.access_url_id = $currentAccessUrlId
+                ORDER BY course.code
+        ";
+
+        $res = Database::query($sql);
+        if (Database::num_rows($res) > 0) {
+            while ($row = Database::fetch_array($res)) {
+                if (!isset($courses[$row['code']])) {
+                    $courses[$row['code']] = [
+                        'subscribed' => 0,
+                        'finished' => 0,
+                    ];
+                }
+
+                $courses[$row['code']]['subscribed']++;
+                $entityManager = Database::getManager();
+                $repository = $entityManager->getRepository('ChamiloCoreBundle:GradebookCategory');
+                //todo check when have more than 1 gradebook
+                /** @var \Chamilo\CoreBundle\Entity\GradebookCategory $gradebook */
+                $gradebook = $repository->findOneBy(['courseCode' => $row['code']]);
+
+                if (!empty($gradebook)) {
+                    $finished = 0;
+                    $gb = Category::createCategoryObjectFromEntity($gradebook);
+                    $finished = $gb->is_certificate_available($row['user_id']);
+                    if (!empty($finished)) {
+                        $courses[$row['code']]['finished']++;
+                    }
+                }
+            }
+        }
+
+        return $courses;
+    }
+
+    /**
+     * Count users in sessions and if they have certificate.
+     * This function is resource intensive.
+     *
+     * @return array
+     */
+    public static function countUsersWhoFinishedCoursesInSessions()
+    {
+        $coursesInSessions = [];
+        $currentAccessUrlId = api_get_current_access_url_id();
+        $sql = "SELECT course.code, srcru.session_id, srcru.user_id, session.name
+                FROM session_rel_course_rel_user srcru
+                    JOIN course ON srcru.c_id = course.id
+                    JOIN access_url_rel_session aurs on srcru.session_id = aurs.session_id
+                    JOIN session ON srcru.session_id = session.id
+                WHERE aurs.access_url_id = $currentAccessUrlId
+                ORDER BY course.code, session.name
+        ";
+
+        $res = Database::query($sql);
+        if (Database::num_rows($res) > 0) {
+            while ($row = Database::fetch_array($res)) {
+                $index = $row['code'].' ('.$row['name'].')';
+                if (!isset($coursesInSessions[$index])) {
+                    $coursesInSessions[$index] = [
+                        'subscribed' => 0,
+                        'finished' => 0,
+                    ];
+                }
+
+                $coursesInSessions[$index]['subscribed']++;
+                $entityManager = Database::getManager();
+                $repository = $entityManager->getRepository('ChamiloCoreBundle:GradebookCategory');
+                /** @var \Chamilo\CoreBundle\Entity\GradebookCategory $gradebook */
+                $gradebook = $repository->findOneBy(
+                    [
+                        'courseCode' => $row['code'],
+                        'sessionId' => $row['session_id'],
+                    ]
+                );
+
+                if (!empty($gradebook)) {
+                    $finished = 0;
+                    $gb = Category::createCategoryObjectFromEntity($gradebook);
+                    $finished = $gb->is_certificate_available($row['user_id']);
+                    if (!empty($finished)) {
+                        $coursesInSessions[$index]['finished']++;
+                    }
+                }
+            }
+        }
+
+        return $coursesInSessions;
+    }
+
+    /**
+     * Build the active-column of the table to lock or unlock a certain user
+     * lock = the user can no longer use this account.
+     *
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
+     * @return string Some HTML-code with the lock/unlock button
+     */
+    public static function getActiveFilterForTable(string $active, string $params, array $row): string
+    {
+        if ('1' == $active) {
+            $action = 'Lock';
+            $image = 'accept';
+        } elseif ('-1' == $active) {
+            $action = 'edit';
+            $image = 'warning';
+        } elseif ('0' == $active) {
+            $action = 'Unlock';
+            $image = 'error';
+        }
+
+        if ('edit' === $action) {
+            $langAccountExpired = get_lang('AccountExpired');
+
+            return Display::return_icon(
+                $image.'.png',
+                    $langAccountExpired,
+                [],
+                ICON_SIZE_TINY
+            ).'<span class="sr-only" aria-hidden="true">'.$langAccountExpired.'</span>';
+        }
+
+        if ($row['0'] != api_get_user_id()) {
+            $langAction = get_lang(ucfirst($action));
+            // you cannot lock yourself out otherwise you could disable all the
+            // accounts including your own => everybody is locked out and nobody
+            // can change it anymore.
+            return Display::return_icon(
+                $image.'.png',
+                $langAction,
+                ['onclick' => 'active_user(this);', 'id' => 'img_'.$row['0'], 'style' => 'cursor: pointer;'],
+                ICON_SIZE_TINY
+                ).'<span class="sr-only" aria-hidden="true">'.$langAction.'</span>';
+        }
+
+        return '';
+    }
+
+    public static function getScriptFunctionForActiveFilter(): string
+    {
+        return 'function active_user(element_div) {
+            id_image = $(element_div).attr("id");
+            image_clicked = $(element_div).attr("src");
+            image_clicked_info = image_clicked.split("/");
+            image_real_clicked = image_clicked_info[image_clicked_info.length-1];
+            var status = 1;
+            if (image_real_clicked == "accept.png") {
+                status = 0;
+            }
+            user_id = id_image.split("_");
+            ident = "#img_"+user_id[1];
+            if (confirm("'.get_lang('AreYouSureToEditTheUserStatus', '').'")) {
+                 $.ajax({
+                    contentType: "application/x-www-form-urlencoded",
+                    beforeSend: function(myObject) {
+                        $(ident).attr("src","'.Display::returnIconPath('loading1.gif').'"); //candy eye stuff
+                    },
+                    type: "GET",
+                    url: _p.web_ajax + "user_manager.ajax.php?a=active_user",
+                    data: "user_id=" + user_id[1] + "&status=" + status,
+                    success: function(data) {
+                        if (data == 1) {
+                            $(ident).attr("src", "'.Display::returnIconPath('accept.png', ICON_SIZE_TINY).'");
+                            $(ident).attr("title","'.get_lang('Lock').'");
+                        }
+                        if (data == 0) {
+                            $(ident).attr("src","'.Display::returnIconPath('error.png').'");
+                            $(ident).attr("title","'.get_lang('Unlock').'");
+                        }
+                        if (data == -1) {
+                            $(ident).attr("src", "'.Display::returnIconPath('warning.png').'");
+                            $(ident).attr("title","'.get_lang('ActionNotAllowed').'");
+                        }
+                    }
+                });
+            }
+        }';
+    }
+
+    /**
+     * Get a list of users with the given e-mail address + their "active" field value (0 or 1).
+     *
+     * @param string $mail User id
+     *
+     * @return array List of users e-mails + active field
+     */
+    public static function getUsersByMail(string $mail): array
+    {
+        $resultData = Database::select(
+            'id, active',
+            Database::get_main_table(TABLE_MAIN_USER),
+            [
+                'where' => ['email = ?' => $mail],
+            ],
+            'all',
+            null
         );
 
-        if (!empty($askPassword) && isset($askPassword['ask_new_password']) &&
-            1 === (int) $askPassword['ask_new_password']
-        ) {
-            $uniqueId = api_get_unique_id();
-            $userObj = api_get_user_entity($userId);
-
-            $userObj->setConfirmationToken($uniqueId);
-            $userObj->setPasswordRequestedAt(new \DateTime());
-
-            Database::getManager()->persist($userObj);
-            Database::getManager()->flush();
-
-            $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId;
-            api_location($url);
+        if ($resultData === false) {
+            return [];
         }
+
+        return $resultData;
+    }
+
+    /**
+     * Get whether we can send an e-mail or not.
+     * If the e-mail is not in the database, send the mail.
+     * If the e-mail is in the database but none of its occurences is active, don't send.
+     *
+     * @param string $mail The e-mail address to check
+     *
+     * @return bool Whether we can send an e-mail or not
+     */
+    public function isEmailingAllowed(string $mail): bool
+    {
+        $list = self::getUsersByMail($mail);
+        if (empty($list)) {
+            // No e-mail matches, send the mail
+            return true;
+        }
+        $send = false;
+        foreach ($list as $id => $user) {
+            if ($user['active'] == 1) {
+                // as soon as we find at least one active user, send the mail
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -7346,5 +8223,43 @@ SQL;
         }
 
         return $url;
+    }
+
+   /**
+    * return user hash based on user_id and loggedin user's salt
+    *
+    * @param int user_id id of the user for whom we need the hash
+    *
+    * @return string containing the hash
+    */
+    public static function generateUserHash(int $user_id): string
+    {
+        $currentUserId = api_get_user_id();
+        $userManager = self::getManager();
+        /** @var User $user */
+        $user = self::getRepository()->find($currentUserId);
+        if (empty($user)) {
+            return false;
+        }
+        return rawurlencode(api_encrypt_hash($user_id, $user->getSalt()));
+    }
+
+   /**
+    * return decrypted hash or false
+    *
+    * @param string hash    hash that is to be decrypted
+    *
+    * @return string
+    */
+    public static function decryptUserHash(string $hash): string
+    {
+        $currentUserId = api_get_user_id();
+        $userManager = self::getManager();
+        /** @var User $user */
+        $user = self::getRepository()->find($currentUserId);
+        if (empty($user)) {
+            return false;
+        }
+        return api_decrypt_hash(rawurldecode($hash), $user->getSalt());
     }
 }

@@ -107,10 +107,10 @@ function get_request_data($from, $number_of_items, $column, $direction)
     }
     $sql .= " ORDER BY col$column $direction ";
     $sql .= " LIMIT $from,$number_of_items";
-    $res = Database :: query($sql);
+    $res = Database::query($sql);
 
     $course_requests = [];
-    while ($course_request = Database :: fetch_row($res)) {
+    while ($course_request = Database::fetch_row($res)) {
         $course_request[5] = api_get_local_time($course_request[5]);
         $course_requests[] = $course_request;
     }
@@ -153,10 +153,10 @@ if (!empty($message)) {
     }
 }
 
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
 if (!$course_validation_feature) {
-    Display :: display_footer();
+    Display::display_footer();
     exit;
 }
 
@@ -193,4 +193,4 @@ $table->display();
 
 /* FOOTER */
 
-Display :: display_footer();
+Display::display_footer();

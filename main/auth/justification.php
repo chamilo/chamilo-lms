@@ -70,11 +70,50 @@ if ($formValidator->validate() && isset($_FILES)) {
 }
 
 $userJustifications = $plugin->getUserJustificationList(api_get_user_id());
+
+if (!empty($userJustifications)) {
+    if (count($fields) <= count($userJustifications) && $_REQUEST['a'] != 'notification_sent') {
+        $formValidator->addHtml('<label class="col-sm-2 control-label"></label><a class="btn btn-primary" href="'.api_get_self().'?a=notify_justification" >'.$plugin->get_lang('SendNotificationToAllAdmins').'</a>');
+    }
+}
+
 $userJustificationList = '';
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : '';
 
 $justificationContent = '';
 switch ($action) {
+    case 'notify_justification':
+        $link = api_get_path(WEB_PATH).'plugin/justification/justification_by_user.php?user_id='.api_get_user_id();
+        $notificationEmailSubject = $plugin->get_lang('JustificationsCompleted').': '.$userInfo['complete_name'];
+        $notificationEmailContent = $notificationEmailSubject.' <br /><br />'.'<a href="'.$link.'">'.$link.'</a>';
+        if (api_get_plugin_setting('justification', 'notification_to_creator_only') === 'true') {
+            $sql = "select creator_id from user where user_id = " . api_get_user_id();
+            $result = Database::query($sql);
+            if (Database::num_rows($result) > 0) {
+                $row = Database::fetch_array($result);
+                $sendToAllAdmins = false;
+                MessageManager::send_message_simple(
+                    $row['creator_id'],
+                    $notificationEmailSubject,
+                    $notificationEmailContent,
+                    api_get_user_id());
+            }
+        }
+        if ($sendToAllAdmins) {
+            // get_all_administrators
+            $adminList = UserManager::get_all_administrators();
+            foreach ($adminList as $adminId => $data) {
+                MessageManager::send_message_simple(
+                    $adminId,
+                    $notificationEmailSubject,
+                    $notificationEmailContent,
+                    api_get_user_id());
+            }
+        }
+        Display::addFlash(Display::return_message(get_lang('MessageSent')));
+        header('Location: '.api_get_self().'?a=notification_sent');
+        exit;
+        break;
     case 'edit_justification':
         $justificationId = isset($_REQUEST['justification_id']) ? (int) $_REQUEST['justification_id'] : '';
         $userJustification = $plugin->getUserJustification($justificationId);
@@ -151,11 +190,24 @@ if (!empty($userJustifications)) {
         }
         $actions .= '&nbsp;'.Display::url(get_lang('Delete'), api_get_self().'?a=delete_justification&justification_id='.$userJustification['id'], ['class' => 'btn btn-danger']);
         $table->setCellContents($row, $col++, $actions);
+        $code = $justification['code'];
+        $htmlHeadXtra[] = '<script type="text/javascript" >$(function(){$("#file_'.$code.'_file label").css("color","green");});</script>';
         $row++;
     }
 
     $userJustificationList .= $justificationContent.$table->toHtml();
 }
+
+$htmlHeadXtra[] = '<script type="text/javascript" >
+$(function(){
+    $("#justification label").each(function(){
+        var colorG = $(this).css("color");
+        var lgtxt = $(this).text().replace(/ /g,"").length;
+        if (colorG!="green"&&colorG!="rgb(0, 128, 0)"&&lgtxt>3) {
+            $(this).append("<img src=\"'.api_get_path(WEB_PATH).'main/img/icons/22/warning.png\" />");
+        }
+    });
+});</script>';
 
 $tabs = SocialManager::getHomeProfileTabs('justification');
 $justification = $tabs.$formValidator->returnForm().$userJustificationList;

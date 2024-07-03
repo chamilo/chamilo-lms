@@ -44,6 +44,8 @@ class Ims2Question extends Question
 
                 return $answer;
             case MCMA:
+            case MULTIPLE_ANSWER_DROPDOWN:
+            case MULTIPLE_ANSWER_DROPDOWN_COMBINATION:
                 $answer = new ImsAnswerMultipleChoice($this->iid);
 
                 return $answer;
@@ -65,6 +67,7 @@ class Ims2Question extends Question
 
                 return $answer;
             case HOT_SPOT:
+            case HOT_SPOT_COMBINATION:
                 $answer = new ImsAnswerHotspot($this->iid);
 
                 return $answer;
@@ -132,7 +135,7 @@ class ImsAnswerMultipleChoice extends Answer implements ImsAnswerInterface
     {
         $this->answerList = $this->getAnswersList(true);
         $type = $this->getQuestionType();
-        if ($type == MCMA) {
+        if (in_array($type, [MCMA, MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_COMBINATION])) {
             $cardinality = 'multiple';
         } else {
             $cardinality = 'single';
@@ -153,7 +156,14 @@ class ImsAnswerMultipleChoice extends Answer implements ImsAnswerInterface
 
         // Add the grading
         if (is_array($this->answerList)) {
-            $out .= '    <mapping>'."\n";
+            $out .= '    <mapping';
+
+            if (MULTIPLE_ANSWER_DROPDOWN_COMBINATION == $this->getQuestionType()) {
+                $out .= ' defaultValue="'.$question->selectWeighting().'"';
+            }
+
+            $out .= '>'."\n";
+
             foreach ($this->answerList as $current_answer) {
                 if (isset($current_answer['grade'])) {
                     $out .= ' <mapEntry mapKey="answer_'.$current_answer['iid'].'" mappedValue="'.$current_answer['grade'].'" />'."\n";

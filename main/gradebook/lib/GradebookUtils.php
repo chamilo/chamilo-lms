@@ -1575,14 +1575,7 @@ class GradebookUtils
         $alleval = $cats[0]->get_evaluations($userId);
         $alllink = $cats[0]->get_links($userId);
 
-        $loadStats = [];
-        if (api_get_setting('gradebook_detailed_admin_view') === 'true') {
-            $loadStats = [1, 2, 3];
-        } else {
-            if (api_get_configuration_value('gradebook_enable_best_score') !== false) {
-                $loadStats = [2];
-            }
-        }
+        $loadStats = GradebookTable::getExtraStatsColumnsToDisplay();
 
         $gradebooktable = new GradebookTable(
             $cat,
@@ -1599,18 +1592,6 @@ class GradebookUtils
         $gradebooktable->hideNavigation = true;
         $gradebooktable->userId = $userId;
 
-        if (api_is_allowed_to_edit(null, true)) {
-        } else {
-            if (empty($model)) {
-                $gradebooktable->td_attributes = [
-                    3 => 'class=centered',
-                    4 => 'class=centered',
-                    5 => 'class=centered',
-                    6 => 'class=centered',
-                    7 => 'class=centered',
-                ];
-            }
-        }
         $table = $gradebooktable->return_table();
 
         $graph = '';
@@ -1732,6 +1713,8 @@ class GradebookUtils
         $imgSrcLoading = api_get_path(WEB_LIBRARY_JS_PATH).'loading.gif';
         $imgSrcPdf = Display::return_icon('pdf.png', '', [], ICON_SIZE_MEDIUM, false, true);
 
+        $urlDownload = api_get_path(WEB_CODE_PATH).'gradebook/gradebook_display_certificate.php?'.api_get_cidreq().'&action=download_all_certificates&catId='.$categoryId;
+
         return "<script>
             $(function () {
                 var \$btnExport = $('$buttonSelector'),
@@ -1742,7 +1725,7 @@ class GradebookUtils
                         \$btnExport.find('img').prop('src', '$imgSrcPdf');
                         window.clearInterval(interval);
                         window.removeEventListener('beforeunload', onbeforeunloadListener);
-                        window.location.href = response;
+                        window.location.href = '".$urlDownload."';
                     }
                 }
 

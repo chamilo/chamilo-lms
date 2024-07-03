@@ -51,8 +51,24 @@ class LtiResourceLink extends LtiContentItemType
     private $submission;
 
     /**
-     * @param stdClass $itemData
+     * @throws \Doctrine\ORM\OptimisticLockException
      *
+     * @return ImsLtiTool
+     */
+    public function save(ImsLtiTool $baseTool, Course $course)
+    {
+        $newTool = $this->createTool($baseTool);
+        $newTool->setActiveDeepLinking(false);
+
+        $em = Database::getManager();
+
+        $em->persist($newTool);
+        $em->flush();
+
+        ImsLtiPlugin::create()->addCourseTool($course, $newTool);
+    }
+
+    /**
      * @throws Exception
      */
     protected function validateItemData(stdClass $itemData)
@@ -60,16 +76,14 @@ class LtiResourceLink extends LtiContentItemType
         $this->url = empty($itemData->url) ? '' : $itemData->url;
         $this->title = empty($itemData->title) ? '' : $itemData->title;
         $this->text = empty($itemData->text) ? '' : $itemData->text;
-        $this->custom = empty($itemData->custom) || !is_array($itemData->custom) ? [] : (array)$itemData->custom;
+        $this->custom = empty($itemData->custom) || !is_array($itemData->custom) ? [] : (array) $itemData->custom;
 
         $this->icon = empty($itemData->icon) ? null : $itemData->icon;
 
         if ($this->icon
             && (empty($this->icon->url) || empty($this->icon->width) || empty($this->icon->height))
         ) {
-            throw new Exception(
-                sprintf("Icon properties are missing in data form content item: %s", print_r($itemData, true))
-            );
+            throw new Exception(sprintf("Icon properties are missing in data form content item: %s", print_r($itemData, true)));
         }
 
         $this->thumbnail = empty($itemData->thumbnail) ? null : $itemData->thumbnail;
@@ -77,47 +91,35 @@ class LtiResourceLink extends LtiContentItemType
         if ($this->thumbnail
             && (empty($this->thumbnail->url) || empty($this->thumbnail->width) || empty($this->thumbnail->height))
         ) {
-            throw new Exception(
-                sprintf("Thumbnail URL is missing in data form content item: %s", print_r($itemData, true))
-            );
+            throw new Exception(sprintf("Thumbnail URL is missing in data form content item: %s", print_r($itemData, true)));
         }
 
         $this->iframe = empty($itemData->iframe) ? null : $itemData->iframe;
 
         if ($this->iframe && (empty($this->iframe->width) || empty($this->iframe->height))) {
-            throw new Exception(
-                sprintf("Iframe size is wrong in data form content item: %s", print_r($itemData, true))
-            );
+            throw new Exception(sprintf("Iframe size is wrong in data form content item: %s", print_r($itemData, true)));
         }
 
         $this->lineItem = empty($itemData->lineItem) ? null : $itemData->lineItem;
 
         if ($this->lineItem && empty($this->lineItem->scoreMaximum)) {
-            throw new Exception(
-                sprintf("LineItem properties are missing in data form content item: %s", print_r($itemData, true))
-            );
+            throw new Exception(sprintf("LineItem properties are missing in data form content item: %s", print_r($itemData, true)));
         }
 
         $this->available = empty($itemData->available) ? null : $itemData->available;
 
         if ($this->available && empty($this->available->startDateTime) && empty($this->available->endDateTime)) {
-            throw new Exception(
-                sprintf("LineItem properties are missing in data form content item: %s", print_r($itemData, true))
-            );
+            throw new Exception(sprintf("LineItem properties are missing in data form content item: %s", print_r($itemData, true)));
         }
 
         $this->submission = empty($itemData->submission) ? null : $itemData->submission;
 
         if ($this->submission && empty($this->submission->startDateTime) && empty($this->submission->endDateTime)) {
-            throw new Exception(
-                sprintf("Submission properties are missing in data form content item: %s", print_r($itemData, true))
-            );
+            throw new Exception(sprintf("Submission properties are missing in data form content item: %s", print_r($itemData, true)));
         }
     }
 
     /**
-     * @param ImsLtiTool $baseTool
-     *
      * @return ImsLtiTool
      */
     private function createTool(ImsLtiTool $baseTool)
@@ -144,26 +146,5 @@ class LtiResourceLink extends LtiContentItemType
         }
 
         return $newTool;
-    }
-
-    /**
-     * @param ImsLtiTool $baseTool
-     * @param Course    $course
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     *
-     * @return ImsLtiTool
-     */
-    public function save(ImsLtiTool $baseTool, Course $course)
-    {
-        $newTool = $this->createTool($baseTool);
-        $newTool->setActiveDeepLinking(false);
-
-        $em = Database::getManager();
-
-        $em->persist($newTool);
-        $em->flush();
-
-        ImsLtiPlugin::create()->addCourseTool($course, $newTool);
     }
 }

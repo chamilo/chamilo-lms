@@ -18,12 +18,12 @@ require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 /*  MAIN CODE */
 $group_id = api_get_group_id();
 $user_id = api_get_user_id();
-$current_group = GroupManager:: get_group_properties($group_id);
+$current_group = GroupManager::get_group_properties($group_id);
 // regroup table names for maintenance purpose
 if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
     api_not_allowed(true);
 }
-$tbl_stats_exercices_temp = Database:: get_main_table(track_e_exercices_temp);
+$tbl_stats_exercices_temp = Database::get_main_table(track_e_exercices_temp);
 //on vide la table temp qui recoit les examen complétés
 $query = "TRUNCATE TABLE $tbl_stats_exercices_temp ";
 $result = Database::query($query);
@@ -151,15 +151,15 @@ $table->set_header(10, get_lang('GroupCalendar'), false, 'align="center"');
 $table->set_header(11, get_lang('Details'), false);
 
 // Database table definition
-$table_group_user = Database:: get_course_table(TABLE_GROUP_USER);
-$table_user = Database:: get_main_table(TABLE_MAIN_USER);
+$table_group_user = Database::get_course_table(TABLE_GROUP_USER);
+$table_user = Database::get_main_table(TABLE_MAIN_USER);
 
 //  $tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
-$tbl_personal_agenda = Database:: get_main_table(TABLE_PERSONAL_AGENDA);
-$tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);
-$tbl_stats_exercices = Database:: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-$tbl_stats_exercices_temp = Database:: get_main_table(track_e_exercices_temp);
-$tbl_group_course_info = Database:: get_course_table(TABLE_GROUP);
+$tbl_personal_agenda = Database::get_main_table(TABLE_PERSONAL_AGENDA);
+$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+$tbl_stats_exercices_temp = Database::get_main_table(track_e_exercices_temp);
+$tbl_group_course_info = Database::get_course_table(TABLE_GROUP);
 $course_id = api_get_course_int_id();
 
 //on trouve le vrai groupID
@@ -365,7 +365,7 @@ while ($resulta = Database::fetch_array($result)) {
     }
 
     $diff = abs($diff);
-    $last_connection_date = Tracking:: get_last_connection_date($user_in_groupe, true);
+    $last_connection_date = Tracking::get_last_connection_date($user_in_groupe, true);
     if ($last_connection_date == '') {
         $last_connection_date = get_lang('NoConnexion');
     }

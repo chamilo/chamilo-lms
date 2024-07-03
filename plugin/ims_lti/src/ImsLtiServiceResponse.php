@@ -22,8 +22,7 @@ abstract class ImsLtiServiceResponse
     /**
      * ImsLtiServiceResponse constructor.
      *
-     * @param ImsLtiServiceResponseStatus $statusInfo
-     * @param mixed|null                  $bodyParam
+     * @param mixed|null $bodyParam
      */
     public function __construct(ImsLtiServiceResponseStatus $statusInfo, $bodyParam = null)
     {
@@ -57,8 +56,5 @@ abstract class ImsLtiServiceResponse
         return $xml->asXML();
     }
 
-    /**
-     * @param SimpleXMLElement $xmlBody
-     */
     abstract protected function generateBody(SimpleXMLElement $xmlBody);
 }

@@ -15,6 +15,7 @@ $this_section = SECTION_COURSES;
 $survey_id = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
 $userId = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
 $action = isset($_GET['action']) ? $_GET['action'] : 'overview';
+$lpItemId = isset($_GET['lp_item_id']) ? (int) $_GET['lp_item_id'] : 0;
 $survey_data = SurveyManager::get_survey($survey_id);
 
 if (empty($survey_data)) {
@@ -61,7 +62,7 @@ if (!empty($exportReport) && !empty($format)) {
         case 'xls':
             $filename = 'survey_results_'.$survey_id.'.xlsx';
 
-            SurveyUtil::export_complete_report_xls($survey_data, $filename, $userId);
+            SurveyUtil::export_complete_report_xls($survey_data, $filename, $userId, false, $lpItemId);
             exit;
             break;
         case 'csv-compact':
@@ -69,7 +70,7 @@ if (!empty($exportReport) && !empty($format)) {
             // no break
         case 'csv':
         default:
-            $data = SurveyUtil::export_complete_report($survey_data, $userId, $compact);
+            $data = SurveyUtil::export_complete_report($survey_data, $userId, $compact, $lpItemId);
             $filename = 'survey_results_'.$survey_id.($compact ? '_compact' : '').'.csv';
             header('Content-type: application/octet-stream');
             header('Content-Type: application/force-download');
@@ -142,7 +143,12 @@ $htmlHeadXtra[] = api_get_js('dimple.v2.1.2.min.js');
 
 $htmlHeadXtra[] = '<script>
 
+function formExportSubmit(formId) {
+    $("#"+formId).submit();
+}
 async function exportToPdf() {
+    window.scrollTo(0, 0);
+
     $("#dialog-confirm").dialog({
         autoOpen: false,
         show: "blind",
@@ -158,8 +164,8 @@ async function exportToPdf() {
     $(".question-item audio, #pdf_table audio").hide();
 
     var doc = document.getElementById("question_results");
-    var pdf = new jsPDF("", "pt", "a4");
-    //var a4Height = 841.89;
+    var pdf = new jsPDF("p", "pt", "a4");
+    //A4 height = 842 pts ; A4 width = 595 pts
 
     // Adding title
     pdf.setFontSize(16);
@@ -167,13 +173,14 @@ async function exportToPdf() {
 
     const table = document.getElementById("pdf_table");
     var headerY = 0;
-    await html2canvas(table).then(function(canvas) {
-        var pageData = canvas.toDataURL("image/jpeg", 1);
-        headerY = 530.28/canvas.width * canvas.height;
-        pdf.addImage(pageData, "JPEG", 35, 60, 530, headerY);
-    });
+    var canvas = await html2canvas(table);
+    var pageData = canvas.toDataURL("image/jpeg", 1);
+    headerY = 515/canvas.width * canvas.height;
+    pdf.addImage(pageData, "JPEG", 35, 60, 515, headerY);
 
     var divs = doc.getElementsByClassName("question-item");
+    var currentHeight = 60 + headerY;
+    var maxHeightPerPage = 842;
     var pages = [];
     var page = 1;
     for (var i = 0; i < divs.length; i += 1) {
@@ -197,38 +204,72 @@ async function exportToPdf() {
 
         const title = $(divs[i]).find(".title-question");
         pdf.setFontSize(10);
-        pdf.text(40, positionY, title.text());
+        const lines = pdf.splitTextToSize(title.text(), 515);
+        pdf.text(40, positionY, lines);
 
         var svg = divs[i].querySelector("svg");
         if (svg) {
             svg2pdf(svg, pdf, {
                   xOffset: 150,
-                  yOffset: positionY,
-                  scale: 0.45,
+                  yOffset: positionY + (lines.length * 1),
+                  scale: 0.4,
             });
         }
         var tables = divs[i].getElementsByClassName("display-survey");
         var config= {};
         for (var j = 0; j < tables.length; j += 1) {
-            await html2canvas(tables[j], config).then(function(canvas) {
-                var pageData = canvas.toDataURL("image/jpeg", 0.7);
-                if (pageData) {
-                    pdf.addImage(pageData, "JPEG", 40, positionY + 180, 500, 500/canvas.width * canvas.height);
-                }
-            });
+            const canvas = await html2canvas(tables[j], config);
+            var pageData = canvas.toDataURL("image/jpeg", 0.7);
+            if (pageData) {
+                pdf.addImage(pageData, "JPEG", 40, positionY + 180, 500, 500 / canvas.width * canvas.height);
+            }
         }
 
         var tables = divs[i].getElementsByClassName("open-question");
         for (var j = 0; j < tables.length; j += 1) {
-            await html2canvas(tables[j], config).then(function(canvas) {
-                var pageData = canvas.toDataURL("image/jpeg", 0.7);
-                if (pageData) {
-                    pdf.addImage(pageData, "JPEG", 40, positionY + 10, 500, 500/canvas.width * canvas.height);
+            const canvas = await html2canvas(tables[j]);
+            var canvasWidth = canvas.width;
+            var canvasHeight = canvas.height;
+            var imgWidth = 515;
+            var imgHeight = canvasHeight;
+            var y = j === 0 ? currentHeight + 60 : currentHeight;
+            var renderedHeight = 0;
+
+            while (renderedHeight < imgHeight) {
+                var remainingHeight = imgHeight - renderedHeight;
+                var heightToDraw = Math.min(remainingHeight, maxHeightPerPage - y);
+                var sourceHeight = heightToDraw * (canvasWidth / imgWidth);
+
+                // New canvas for cropping image
+                var sectionCanvas = document.createElement("canvas");
+                sectionCanvas.width = canvasWidth;
+                sectionCanvas.height = sourceHeight;
+                var ctx = sectionCanvas.getContext("2d");
+
+                // Draw the image section on new canvas
+                ctx.drawImage(canvas, 0, renderedHeight, canvasWidth, sourceHeight, 0, 0, canvasWidth, sourceHeight);
+
+                var sectionImgData = sectionCanvas.toDataURL("image/jpeg", 0.7);
+
+                pdf.addImage(sectionImgData, "JPEG", 40, y, imgWidth, heightToDraw);
+
+                renderedHeight += sourceHeight;
+                y = heightToDraw + y;
+
+                if (renderedHeight < imgHeight && remainingHeight > maxHeightPerPage - y) {
+                    pdf.addPage();
+                    page++;
+                    y = 40;
+                    currentHeight = 40;
                 }
-            });
+            }
+
+            if (renderedHeight >= imgHeight) {
+                currentHeight = y;
+            }
         }
 
-        if (i > 0 && (i -1) % 2 === 0 && (i+1 != divs.length)) {
+        if (i > 0 && (i -1) % 2 === 0 && (i+1 !== divs.length)) {
              pdf.addPage();
              page++;
         }

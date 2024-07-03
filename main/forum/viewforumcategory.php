@@ -339,8 +339,8 @@ if ($action != 'add') {
                     }
 
                     // the number of topics and posts
-                    $my_number_threads = isset($forum['number_of_threads']) ? $forum['number_of_threads'] : 0;
-                    $my_number_posts = isset($forum['number_of_posts']) ? $forum['number_of_posts'] : 0;
+                    $my_number_threads = isset($forum['forum_threads']) ? $forum['forum_threads'] : 0;
+                    $my_number_posts = isset($forum['forum_posts']) ? $forum['forum_posts'] : 0;
 
                     $html .= '<div class="row">';
                     $html .= '<div class="col-md-6">';
@@ -469,15 +469,17 @@ if ($action != 'add') {
                     }
 
                     $iconnotify = 'notification_mail_na.png';
+                    $notifyAltText = get_lang('NotifyMe');
                     if (is_array(isset($_SESSION['forum_notification']['forum']) ? $_SESSION['forum_notification']['forum'] : null)) {
                         if (in_array($forum['forum_id'], $_SESSION['forum_notification']['forum'])) {
                             $iconnotify = 'notification_mail.png';
+                            $notifyAltText = get_lang('CancelNotifyMe');
                         }
                     }
 
                     if (!api_is_anonymous() && $hideNotifications == false) {
                         $html .= '<a href="'.$url.'?'.api_get_cidreq().'&forumcategory='.$forumCategoryId.'&action=notify&content=forum&id='.$forum['forum_id'].'">'.
-                            Display::return_icon($iconnotify, get_lang('NotifyMe')).
+                            Display::return_icon($iconnotify, $notifyAltText).
                         '</a>';
                     }
                     $html .= '</div>';

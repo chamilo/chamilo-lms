@@ -10,9 +10,6 @@
     <tr>
         <td>
             {{ item.name }}
-            {#<a href="{{ _p.web_main }}admin/skill_level.php?action=add_level&id={{ item.id }}">#}
-            {#<img src="{{ 'add.png'|icon(22) }}">#}
-            {#</a>#}
         </td>
         <td>
             <ul>
@@ -41,10 +38,14 @@
         </td>
         <td>
             <a href="{{ _p.web_main }}admin/skill_profile.php?action=edit&id={{ item.id }}">
-                <img src="{{ 'edit.png'|icon(22) }}"> </a>
+                <img src="{{ 'edit.png'|icon(22) }}" alt="{{ 'Edit' | get_lang }}" title="{{ 'Edit' | get_lang }}"> </a>
 
             <a href="{{ _p.web_main }}admin/skill_profile.php?action=delete&id={{ item.id }}">
-                <img src="{{ 'delete.png'|icon(22) }}">
+                <img src="{{ 'delete.png'|icon(22) }}" alt="{{ 'Delete' | get_lang }}" title="{{ 'Delete' | get_lang }}">
+            </a>
+
+            <a href="{{ _p.web_main }}admin/skill_level.php?action=add&profile_id={{ item.id }}">
+                <img src="{{ 'add.png'|icon(22) }}" alt="{{ 'AddLevel' | get_lang }}" title="{{ 'AddLevel' | get_lang }}">
             </a>
         </td>
     </tr>

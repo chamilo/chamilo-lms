@@ -511,6 +511,7 @@ class NotebookTeacher
         );
 
         $form->addElement('text', 'note_title', get_lang('NoteTitle'), ['id' => 'note_title']);
+        $form->applyFilter('text', 'html_filter');
         $form->addElement(
             'html_editor',
             'note_comment',

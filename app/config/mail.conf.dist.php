@@ -3,6 +3,9 @@
  *	This file holds the configuration settings
  *	for phpmailer Class.
  *
+ *	The settings can use an optional index at the first level to represent the ID of the
+ *	URL in case you use multi-url for example: $platform_email[2]['SMTP_HOST'] = 'awesome.mail.server'.
+ *
  *	@package chamilo.configuration
  */
 
@@ -37,3 +40,18 @@ $platform_email['DKIM_SELECTOR'] = 'chamilo'; // an indicator of the application
 $platform_email['DKIM_DOMAIN'] = 'mydomain.com'; //the domain for e-mail sending, not necessarily api_get_path(WEB_PATH)
 $platform_email['DKIM_PRIVATE_KEY_STRING'] = ''; //the private key in a string format
 $platform_email['DKIM_PRIVATE_KEY'] = ''; //the private key as the path to a file. The file needs to be accessible to PHP!
+$platform_email['DKIM_PASSPHRASE'] = ''; //the passohrase for the private key defined in the last 2 lines
+// Some e-mail clients do not understand the descriptive LD+JSON format,
+// showing it as a loose JSON string to the final user. If this is your case,
+// you might want to set the variable below to 'false' to disable this header.
+$platform_email['EXCLUDE_JSON'] = false;
+
+// Fill the following only for mail services with OAuth2.0 authentication. Otherwise leave untouched.
+$platform_email['XOAUTH2_METHOD'] = false;
+$platform_email['XOAUTH2_URL_AUTHORIZE'] = 'https://provider.example/oauth2/auth';
+$platform_email['XOAUTH2_URL_ACCES_TOKEN'] = 'https://provider.example/token';
+$platform_email['XOAUTH2_URL_RESOURCE_OWNER_DETAILS'] = 'https://provider.example/userinfo';
+$platform_email['XOAUTH2_SCOPES'] = '';
+$platform_email['XOAUTH2_CLIENT_ID'] = '';
+$platform_email['XOAUTH2_CLIENT_SECRET'] = '';
+$platform_email['XOAUTH2_REFRESH_TOKEN'] = '';

@@ -93,6 +93,7 @@ $user_data = $originalUserInfo = api_get_user_info(
     true,
     true
 );
+$currentUser = api_get_user_entity($user_data['id']);
 $array_list_key = UserManager::get_api_keys(api_get_user_id());
 $id_temp_key = UserManager::get_api_key_id(api_get_user_id(), 'dokeos');
 $value_array = [];
@@ -324,28 +325,64 @@ if (!empty($links) &&
 }
 
 //    PASSWORD, if auth_source is platform
+$allow_users_to_change_email_with_no_password = true;
+if (is_platform_authentication() &&
+    api_get_setting('allow_users_to_change_email_with_no_password') == 'false'
+) {
+    $allow_users_to_change_email_with_no_password = false;
+}
+if (!$allow_users_to_change_email_with_no_password) {
+    $passwordExtraCommentForPasswordChange = get_lang('ToChangeYourEmailMustTypeYourPassword').". ";
+}
+
 if ($showPassword &&
     is_profile_editable() &&
     api_get_setting('profile', 'password') === 'true'
 ) {
-    $form->addElement('password', 'password0', [get_lang('Pass'), get_lang('TypeCurrentPassword')], ['size' => 40]);
+    $form->addElement(
+        'password',
+        'password0',
+        [get_lang('Pass'), $passwordExtraCommentForPasswordChange.get_lang('TypeCurrentPassword')],
+        [
+            'size' => 40,
+            'show_hide' => true,
+        ]
+    );
     $form->addElement(
         'password',
         'password1',
-        [get_lang('NewPass'), get_lang('EnterYourNewPassword')],
-        ['id' => 'password1', 'size' => 40]
+        get_lang('NewPass'),
+        [
+            'id' => 'password1',
+            'size' => 40,
+            'show_hide' => true,
+            'placeholder' => get_lang('EnterYourNewPassword'),
+        ]
     );
     $form->addElement(
         'password',
         'password2',
         [get_lang('Confirmation'), get_lang('RepeatYourNewPassword')],
-        ['size' => 40]
+        [
+            'size' => 40,
+            'show_hide' => true,
+        ]
     );
     //    user must enter identical password twice so we can prevent some user errors
     $form->addRule(['password1', 'password2'], get_lang('PassTwo'), 'compare');
     $form->addPasswordRule('password1');
+    $form->addNoSamePasswordRule('password1', $currentUser);
+} elseif (!$allow_users_to_change_email_with_no_password) {
+    $form->addElement(
+        'password',
+        'password0',
+        [get_lang('Pass'), $passwordExtraCommentForPasswordChange],
+        [
+            'size' => 40,
+            'show_hide' => true,
+        ]
+    );
 }
-
 $form->addHtml($extraLink);
 
 $extraField = new ExtraField('user');
@@ -379,6 +416,7 @@ if (api_get_setting('profile', 'apikeys') == 'true') {
         ['id' => 'id_generate_api_key']
     );
 }
+$form->addHidden('origin', 'profile');
 //    SUBMIT
 if (is_profile_editable()) {
     $form->addButtonUpdate(get_lang('SaveSettings'), 'apply_change');
@@ -411,6 +449,7 @@ if ($form->validate()) {
 
     $wrong_current_password = false;
     $user_data = $form->getSubmitValues(1);
+    $user_data['item_id'] = api_get_user_id();
     /** @var User $user */
     $user = UserManager::getRepository()->find(api_get_user_id());
 
@@ -425,17 +464,18 @@ if ($form->validate()) {
         api_get_setting('profile', 'email') == 'true')
     ) {
         $passwordWasChecked = true;
-        $validPassword = UserManager::isPasswordValid(
+        $validPassword = UserManager::checkPassword(
             $user->getPassword(),
             $user_data['password0'],
-            $user->getSalt()
+            $user->getSalt(),
+            $user->getId()
         );
 
         if ($validPassword) {
             $password = $user_data['password1'];
         } else {
             Display::addFlash(
-                Display:: return_message(
+                Display::return_message(
                     get_lang('CurrentPasswordEmptyOrIncorrect'),
                     'warning',
                     false
@@ -465,7 +505,7 @@ if ($form->validate()) {
 
             if (!check_user_email($user_data['email']) && empty($user_data['password0'])) {
                 Display::addFlash(
-                    Display:: return_message(
+                    Display::return_message(
                         get_lang('ToChangeYourEmailMustTypeYourPassword'),
                         'error',
                         false
@@ -488,7 +528,7 @@ if ($form->validate()) {
             $user_data['picture_uri'] = $new_picture;
 
             Display::addFlash(
-                Display:: return_message(
+                Display::return_message(
                     get_lang('PictureUploaded'),
                     'normal',
                     false
@@ -516,7 +556,7 @@ if ($form->validate()) {
         }
         $form->removeElement('productions_list');
         Display::addFlash(
-            Display:: return_message(get_lang('FileDeleted'), 'normal', false)
+            Display::return_message(get_lang('FileDeleted'), 'normal', false)
         );
     }
 
@@ -529,7 +569,7 @@ if ($form->validate()) {
             $filtered_extension = true;
         } else {
             Display::addFlash(
-                Display:: return_message(
+                Display::return_message(
                     get_lang('ProductionUploaded'),
                     'normal',
                     false
@@ -636,6 +676,25 @@ if ($form->validate()) {
     $sql = rtrim($sql, ',');
     if ($changePassword && !empty($password)) {
         UserManager::updatePassword(api_get_user_id(), $password);
+        if (api_get_configuration_value('security_password_rotate_days') > 0) {
+            $date = api_get_local_time(
+                null,
+                'UTC',
+                'UTC',
+                null,
+                null,
+                null,
+                'Y-m-d H:i:s'
+            );
+            $extraFieldValue = new ExtraFieldValue('user');
+            $extraFieldValue->save(
+                [
+                    'item_id' => $user->getId(),
+                    'variable' => 'password_updated_at',
+                    'value' => $date,
+                ]
+            );
+        }
     }
 
     if (api_get_setting('profile', 'officialcode') === 'true' &&
@@ -649,12 +708,12 @@ if ($form->validate()) {
 
     if ($passwordWasChecked == false) {
         Display::addFlash(
-            Display:: return_message(get_lang('ProfileReg'), 'normal', false)
+            Display::return_message(get_lang('ProfileReg'), 'normal', false)
         );
     } else {
         if ($validPassword) {
             Display::addFlash(
-                Display:: return_message(get_lang('ProfileReg'), 'normal', false)
+                Display::return_message(get_lang('ProfileReg'), 'normal', false)
             );
         }
     }
@@ -739,7 +798,7 @@ if ($allowSocialTool) {
             $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
                 Display::return_icon('inbox.png', get_lang('Messages')).'</a>';
         }
-        $show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
+        $show = isset($_GET['show']) ? '&show='.(int) $_GET['show'] : '';
 
         if (isset($_GET['type']) && $_GET['type'] === 'extended') {
             $actions .= '<a href="profile.php?type=reduced'.$show.'">'.
@@ -802,7 +861,7 @@ if ($allowSocialTool) {
  */
 function is_platform_authentication()
 {
-    $tabUserInfo = api_get_user_info();
+    $tabUserInfo = api_get_user_info(api_get_user_id());
 
     return $tabUserInfo['auth_source'] == PLATFORM_AUTH_SOURCE;
 }

@@ -142,8 +142,14 @@ $form->addLabel(
 );
 
 $form->addButtonUpdate(get_lang('Edit'), 'submit_survey');
-$surveyData['start_date'] = api_get_local_time($surveyData['start_date']);
-$surveyData['end_date'] = api_get_local_time($surveyData['end_date']);
+$surveyData['start_date'] = date(
+    $allowSurveyAvailabilityDatetime ? 'Y-m-d H:i:s' : 'Y-m-d',
+    api_strtotime(api_get_local_time($surveyData['start_date']))
+);
+$surveyData['end_date'] = date(
+    $allowSurveyAvailabilityDatetime ? 'Y-m-d H:i:s' : 'Y-m-d',
+    api_strtotime(api_get_local_time($surveyData['end_date']))
+);
 $form->setDefaults($surveyData);
 
 // The validation or display

@@ -37,7 +37,7 @@ $current_user_id = api_get_user_id();
 
 $userStatus = api_get_user_status($user_id);
 
-$firstLetterUser = isset($_POST['firstLetterUser']) ? $_POST['firstLetterUser'] : null;
+$firstLetterUser = isset($_POST['firstLetterUser']) ? Security::remove_XSS($_POST['firstLetterUser']) : null;
 
 // setting the name of the tool
 $isAdmin = UserManager::is_admin($user_id);
@@ -151,7 +151,7 @@ function search_users($needle, $type = 'multiple')
 
             $rs = Database::query($sql);
             $i = 0;
-            while ($user = Database :: fetch_array($rs)) {
+            while ($user = Database::fetch_array($rs)) {
                 $i++;
                 if ($i <= 10) {
                     $person_name = api_get_person_name($user['firstname'], $user['lastname']);
@@ -167,7 +167,7 @@ function search_users($needle, $type = 'multiple')
             );
         } else {
             $return .= '<select id="origin" class="form-control" name="NoAssignedUsersList[]" multiple="multiple" size="15" ">';
-            while ($user = Database :: fetch_array($rs)) {
+            while ($user = Database::fetch_array($rs)) {
                 $person_name = api_get_person_name($user['firstname'], $user['lastname']);
                 $return .= '<option value="'.$user['user_id'].'" title="'.htmlspecialchars($person_name, ENT_QUOTES).'">'.$person_name.' ('.$user['username'].')</option>';
             }
@@ -287,7 +287,7 @@ if (!empty($filters) && !empty($filterData)) {
 }
 
 if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
-    $user_list = isset($_POST['UsersList']) ? $_POST['UsersList'] : null;
+    $user_list = isset($_POST['UsersList']) ? Security::remove_XSS($_POST['UsersList']) : null;
     switch ($userStatus) {
         case DRH:
         case PLATFORM_ADMIN:

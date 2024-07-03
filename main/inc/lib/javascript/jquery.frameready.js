@@ -2,9 +2,10 @@
  * @param {function} callback
  * @param {string} target
  * @param {Array} resources
+ * @param {function} conditional
  * @constructor
  */
-$.frameReady = function (callback, targetSelector, resources) {
+$.frameReady = function (callback, targetSelector, resources, conditional) {
     /**
      * @type {window}
      */
@@ -46,7 +47,16 @@ $.frameReady = function (callback, targetSelector, resources) {
     targetWindow.onload = function () {
         scripsLoadedCount = 0;
 
+        if (typeof conditional === 'function' && conditional()) {
+            return;
+        }
+
         targetDocument = targetWindow.contentDocument;
+
+        if (!targetDocument) {
+            console.log('frameReady: Can\'t access to contentDocument.');
+            return;
+        }
 
         scripts.forEach(function (script) {
             createScript(script);

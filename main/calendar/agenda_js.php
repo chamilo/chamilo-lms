@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 // use anonymous mode when accessing this course tool
+use Chamilo\CoreBundle\Entity\AgendaEventSubscription;
+
 $use_anonymous = true;
 $typeList = ['personal', 'course', 'admin', 'platform'];
 // Calendar type
@@ -92,19 +94,14 @@ switch ($type) {
         if (api_is_anonymous()) {
             api_not_allowed(true);
         }
-        $extra_field_data = UserManager::get_extra_user_data_by_field(
-            api_get_user_id(),
-            'google_calendar_url'
-        );
-        if (!empty($extra_field_data) &&
-            isset($extra_field_data['google_calendar_url']) &&
-            !empty($extra_field_data['google_calendar_url'])
-        ) {
+        $googleCalendarUrl = Agenda::returnGoogleCalendarUrl(api_get_user_id());
+
+        if (!empty($googleCalendarUrl)) {
             $tpl->assign('use_google_calendar', 1);
-            $tpl->assign('google_calendar_url', $extra_field_data['google_calendar_url']);
+            $tpl->assign('google_calendar_url', $googleCalendarUrl);
         }
         $this_section = SECTION_MYAGENDA;
-        if (!api_is_anonymous()) {
+        if (!api_is_anonymous() && ('true' === api_get_setting('allow_personal_agenda'))) {
             $can_add_events = 1;
         }
         break;
@@ -242,6 +239,7 @@ $form = new FormValidator(
     null,
     ['id' => 'add_event_form']
 );
+$form->addHeader(get_lang('Events'));
 
 $form->addHtml('<span id="calendar_course_info"></span><div id="visible_to_input">');
 
@@ -256,11 +254,14 @@ $agenda->showToForm($form, $sendTo, [], $addOnlyItemsInSendTo);
 $form->addHtml('</div>');
 
 $form->addHtml('<div id="visible_to_read_only" style="display: none">');
-$form->addElement('label', get_lang('To'), '<div id="visible_to_read_only_users"></div>');
+$form->addElement('label', get_lang('To'), '<p id="visible_to_read_only_users" class="form-control-static"></p>');
 $form->addHtml('</div>');
 
-$form->addElement('label', get_lang('Agenda'), '<div id ="color_calendar"></div>');
-$form->addElement('label', get_lang('Date'), '<span id="start_date"></span><span id="end_date"></span>');
+$form->addElement('label', get_lang('Agenda'), '<p class="form-control-static"><span id ="color_calendar"></span></p>');
+$form->addElement(
+    'label',
+    get_lang('Date'), '<p class="form-control-static"><span id="start_date"></span><span id="end_date"></span></p>'
+);
 $form->addElement('text', 'title', get_lang('Title'), ['id' => 'title']);
 $form->addHtmlEditor(
     'content',
@@ -281,31 +282,125 @@ if ('course' === $agenda->type) {
     $form->addElement('textarea', 'comment', get_lang('Comment'), ['id' => 'comment']);
 }
 
+$allowCollectiveInvitations = api_get_configuration_value('agenda_collective_invitations')
+    && 'personal' === $agenda->type;
+$allowEventSubscriptions = api_is_platform_admin()
+    && api_get_configuration_value('agenda_event_subscriptions')
+    && 'personal' === $agenda->type;
+
+if ($allowCollectiveInvitations && $allowEventSubscriptions) {
+    $form->addRadio(
+        'invitation_type',
+        get_lang('Allowed'),
+        [
+            'invitations' => get_lang('Invitations'),
+            'subscriptions' => get_lang('Subscriptions'),
+        ],
+        [
+            'onchange' => "$('#invitations-block, #subscriptions-block').hide(); $('#' + this.value + '-block').show();",
+        ]
+    );
+}
+
+if ($allowCollectiveInvitations) {
+    $form->addHtml(
+        '<div id="invitations-block" style="display:'.($allowEventSubscriptions ? 'none;' : 'block;').'">'
+    );
+    $form->addHeader(get_lang('Invitations'));
+    $form->addSelectAjax(
+        'invitees',
+        get_lang('Invitees'),
+        [],
+        [
+            'multiple' => 'multiple',
+            'url' => api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users',
+        ]
+    );
+    $form->addCheckBox('collective', '', get_lang('IsItEditableByTheInvitees'));
+    $form->addHtml('</div>');
+}
+
+if ($allowEventSubscriptions) {
+    $form->addHtml(
+        '<div id="subscriptions-block" style="display:'.($allowCollectiveInvitations ? 'none;' : 'block;').'">'
+    );
+    $form->addHeader(get_lang('Subscriptions'));
+    $form->addHtml('<div id="form_subscriptions_container" style="position: relative;">');
+    $form->addSelect(
+        'subscription_visibility',
+        get_lang('AllowSubscriptions'),
+        [
+            AgendaEventSubscription::SUBSCRIPTION_NO => get_lang('No'),
+            AgendaEventSubscription::SUBSCRIPTION_ALL => get_lang('AllUsersOfThePlatform'),
+            AgendaEventSubscription::SUBSCRIPTION_CLASS => get_lang('UsersInsideClass'),
+        ],
+        [
+            'onchange' => 'document.getElementById(\'max_subscriptions\').disabled = this.value == 0; document.getElementById(\'form_subscription_item\').disabled = this.value != 2',
+        ]
+    );
+    $form->addSelectAjax(
+        'subscription_item',
+        get_lang('SocialGroup').' / '.get_lang('Class'),
+        [],
+        [
+            'url' => api_get_path(WEB_AJAX_PATH).'usergroup.ajax.php?a=get_class_by_keyword',
+            'disabled' => 'disabled',
+            'dropdownParent' => '#form_subscriptions_container',
+        ]
+    );
+    $form->addNumeric(
+        'max_subscriptions',
+        ['', get_lang('MaxSubscriptionsLeaveEmptyToNotLimit')],
+        [
+            'disabled' => 'disabled',
+            'step' => 1,
+            'min' => 0,
+            'value' => 0,
+        ]
+    );
+    $form->addHtml('</div>');
+    $form->addHtml('<div id="form_subscriptions_edit" style="display: none;"></div>');
+    $form->addHtml('</div>');
+}
+
+if (api_get_configuration_value('agenda_reminders')) {
+    $tpl->assign(
+        'agenda_reminders_js',
+        Agenda::getJsForReminders('#form_add_notification')
+    );
+
+    $form->addHtml('<hr><div id="notification_list"></div>');
+    $form->addButton('add_notification', get_lang('AddNotification'), 'bell-o')->setType('button');
+    $form->addHtml('<hr>');
+}
+
+if (api_get_configuration_value('allow_careers_in_global_agenda') && 'admin' === $agenda->type) {
+    Career::addCareerFieldsToForm($form);
+    $form->addHtml('<hr>');
+}
+
 $form->addHtml('<div id="attachment_block" style="display: none">');
+$form->addHeader(get_lang('FilesAttachment'));
 $form->addLabel(get_lang('Attachment'), '<div id="attachment_text" style="display: none"></div>');
 $form->addHtml('</div>');
 
 $tpl->assign('form_add', $form->returnForm());
 $tpl->assign('legend_list', api_get_configuration_value('agenda_legend'));
 
-$onHoverInfo = api_get_configuration_value('agenda_on_hover_info');
-if (!empty($onHoverInfo)) {
-    $options = $onHoverInfo['options'];
-} else {
-    $options = [
-        'comment' => true,
-        'description' => true,
-    ];
-}
-$tpl->assign('on_hover_info', $options);
+$onHoverInfo = Agenda::returnOnHoverInfo();
+$tpl->assign('on_hover_info', $onHoverInfo);
 
-$settings = api_get_configuration_value('fullcalendar_settings');
-$extraSettings = '';
-if (!empty($settings) && isset($settings['settings']) && !empty($settings['settings'])) {
-    $encoded = json_encode($settings['settings']);
-    $extraSettings = substr($encoded, 1, -1).',';
-}
+$extraSettings = Agenda::returnFullCalendarExtraSettings();
+
 $tpl->assign('fullcalendar_settings', $extraSettings);
+
+$tpl->assign('group_id', (!empty($group_id) ? $group_id : 0));
+
+if (api_is_https()) {
+    $tpl->assign('is_https', 1);
+} else {
+    $tpl->assign('is_https', 0);
+}
 
 $templateName = $tpl->get_template('agenda/month.tpl');
 $content = $tpl->fetch($templateName);

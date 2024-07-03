@@ -6,7 +6,7 @@ use Firebase\JWT\JWT;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-api_protect_course_script(false);
+api_protect_course_script();
 api_block_anonymous_users(false);
 
 $jwt = empty($_REQUEST['JWT']) ? '' : $_REQUEST['JWT'];
@@ -60,8 +60,9 @@ try {
         switch ($contentItemClaim->type) {
             case 'ltiResourceLink':
                 $contentItem = new LtiResourceLink($contentItemClaim);
+                // no break
             default:
-                continue;
+                break;
         }
 
         $contentItem->save($ltiTool, $course);

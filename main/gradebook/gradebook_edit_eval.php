@@ -1,10 +1,9 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 /**
  * Script.
- *
- * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
@@ -32,27 +31,27 @@ if ($form->validate()) {
     $eval->set_course_code($values['hid_course_code']);
     $eval->set_category_id($values['hid_category_id']);
 
-    $parent_cat = Category :: load($values['hid_category_id']);
+    $parent_cat = Category::load($values['hid_category_id']);
     $final_weight = $values['weight_mask'];
 
     $eval->set_weight($final_weight);
     $eval->set_max($values['max']);
+
+    $visible = 1;
     if (empty($values['visible'])) {
         $visible = 0;
-    } else {
-        $visible = 1;
     }
     $eval->set_visible($visible);
     $eval->save();
 
     $logInfo = [
         'tool' => TOOL_GRADEBOOK,
-        'tool_id' => 0,
-        'tool_id_detail' => 0,
         'action' => 'edit-eval',
         'action_details' => '',
     ];
     Event::registerLog($logInfo);
+
+    Skill::saveSkills($form, ITEM_TYPE_GRADEBOOK_EVALUATION, $values['hid_id']);
 
     header('Location: '.Category::getUrl().'editeval=&selectcat='.$eval->get_category_id());
     exit;

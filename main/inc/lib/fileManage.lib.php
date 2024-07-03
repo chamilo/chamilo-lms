@@ -43,7 +43,7 @@ function check_name_exist($file_path)
  *
  * @author - Hugues Peeters
  *
- * @param  $file (String) - the path of file or directory to delete
+ * @param $file (String) - the path of file or directory to delete
  *
  * @return bool - true if the delete succeed, false otherwise
  *
@@ -251,7 +251,9 @@ function move($source, $target, $forceMove = true, $moveContent = false)
                     }
                 }
             } else {
-                return copyDirTo($source, $target);
+                $base = basename($source);
+
+                return copyDirTo($source, $target.'/'.$base);
             }
 
             return true;

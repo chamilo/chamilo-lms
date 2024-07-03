@@ -25,7 +25,7 @@ if (!$is_allowedToEdit) {
 $result = ExerciseLib::get_exam_results_data(
     0,
     0,
-    1,
+    null,
     'asc',
     $exerciseId,
     '',

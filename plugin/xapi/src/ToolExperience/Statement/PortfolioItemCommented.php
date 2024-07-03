@@ -5,7 +5,6 @@
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
 
 use Chamilo\CoreBundle\Entity\PortfolioAttachment;
-use Chamilo\CoreBundle\Entity\PortfolioComment as PortfolioCommentEntity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioComment as PortfolioCommentActivity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioItem as PortfolioItemActivity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User as UserActor;
@@ -14,22 +13,13 @@ use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Replied as RepliedVerb;
 use Xabbuh\XApi\Model\Result;
 use Xabbuh\XApi\Model\Statement;
 
-class PortfolioItemCommented extends BaseStatement
+class PortfolioItemCommented extends PortfolioComment
 {
-    /**
-     * @var \Chamilo\CoreBundle\Entity\PortfolioComment
-     */
-    private $comment;
-
-    public function __construct(PortfolioCommentEntity $comment)
-    {
-        $this->comment = $comment;
-    }
+    use PortfolioAttachmentsTrait;
 
     public function generate(): Statement
     {
-        $portfolioItem = $this->comment->getItem();
-        $commentParent = $this->comment->getParent();
+        $statementId = $this->generateStatementId('portfolio-comment');
 
         $userActor = new UserActor($this->comment->getAuthor());
         $statementResult = new Result(null, null, null, $this->comment->getContent());
@@ -44,18 +34,18 @@ class PortfolioItemCommented extends BaseStatement
             $this->comment->getAuthor()
         );
 
-        if ($commentParent) {
+        if ($this->parentComment) {
             $repliedVerb = new RepliedVerb();
 
-            $itemActivity = new PortfolioItemActivity($portfolioItem);
-            $parentCommentActivity = new PortfolioCommentActivity($commentParent);
+            $itemActivity = new PortfolioItemActivity($this->item);
+            $parentCommentActivity = new PortfolioCommentActivity($this->parentComment);
 
             $contextActivities = $context
                 ->getContextActivities()
                 ->withAddedGroupingActivity($itemActivity->generate());
 
             return new Statement(
-                null,
+                $statementId,
                 $userActor->generate(),
                 $repliedVerb->generate(),
                 $parentCommentActivity->generate(),
@@ -67,11 +57,12 @@ class PortfolioItemCommented extends BaseStatement
                 $attachments
             );
         } else {
-            $itemShared = new PortfolioItemShared($portfolioItem);
+            $itemShared = new PortfolioItemShared($this->item);
 
             $commentedVerb = new CommentedVerb();
 
             return $itemShared->generate()
+                ->withId($statementId)
                 ->withActor($userActor->generate())
                 ->withVerb($commentedVerb->generate())
                 ->withStored($this->comment->getDate())

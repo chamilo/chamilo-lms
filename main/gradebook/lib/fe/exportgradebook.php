@@ -16,74 +16,25 @@
  */
 function print_table($data_array, $header_names, $view, $coursename)
 {
-    $printdata = '<!DOCTYPE html
-     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="'.api_get_language_isocode().'" lang="'.api_get_language_isocode().'">
-<head>
-<title>'.get_lang('Print').'</title>
-<meta http-equiv="Content-Type" content="text/html; charset='.api_get_system_encoding().'" />
+    $styleWebPath = api_get_path(WEB_PUBLIC_PATH).'assets/bootstrap/dist/css/bootstrap.min.css';
 
-
-<style type="text/css">
-body {
-    font-size: 12px;
-    color: #000;
-    margin: 10px;
-    padding: 0;
-}
-
-a:link {text-decoration: none; font-weight : bold; color : black;}
-a:visited {text-decoration: none; font-weight : bold; color : black;}
-a:active {text-decoration: none; font-weight : bold;  color : black;}
-
-.data_table{
-    border-collapse: collapse;
-    width: 100%;
-    padding: 5px;
-    border: 1px;
-}
-.data_table th{
-    padding: 5px;
-    vertical-align: top;
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
-    border-right: 1px solid black;
-    border-left: 1px solid black;
-}
-.data_table tr.row_odd{
-    background-color: #fafafa;
-  }
-.data_table tr.row_even{
-    background-color: #fff;
-}
-.data_table td{
-    padding: 5px;
-      vertical-align: top;
-    border-bottom: 1px solid black;
-    border-right: 1px solid black;
-    border-left: 1px solid black;
-}
-</style>
-</head>
-<body dir="'.api_get_text_direction().'"><div id="main">';
+    $printdata = '<!DOCTYPE html>
+        <html lang="'.api_get_language_isocode().'">
+        <head>
+        <title>'.get_lang('Print').'</title>
+        <meta http-equiv="Content-Type" content="text/html; charset='.api_get_system_encoding().'" />
+        '.api_get_css(api_get_cdn_path($styleWebPath), 'screen,print').'
+        </head>
+        <body dir="'.api_get_text_direction().'"><div id="main">';
 
     $printdata .= '<h2>'.$view.' : '.$coursename.'</h2>';
-    //@todo not necessary here
 
-    $printdata .= '<table border="1" width="90%" cellspacing="1" cellpadding="1">';
-    foreach ($header_names as $header) {
-        $printdata .= '<th>'.$header.'</th>';
-    }
+    $table = new HTML_Table(['class' => 'table table-bordered']);
+    $table->setHeaders($header_names);
+    $table->setData($data_array);
 
-    foreach ($data_array as $data) {
-        $printdata .= '<tr>';
-        foreach ($data as $rowdata) {
-            $printdata .= '<td>'.$rowdata.'</td>';
-        }
-        $printdata .= '</tr>';
-    }
-    $printdata .= '</table></div></body></html>';
+    $printdata .= $table->toHtml();
+    $printdata .= '</div></body></html>';
 
     return $printdata;
 }

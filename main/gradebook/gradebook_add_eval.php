@@ -68,6 +68,8 @@ if ($form->validate()) {
     ];
     Event::registerLog($logInfo);
 
+    Skill::saveSkills($form, ITEM_TYPE_GRADEBOOK_EVALUATION, $eval->get_id());
+
     if (null == $eval->get_course_code()) {
         if (1 == $values['adduser']) {
             //Disabling code when course code is null see issue #2705
@@ -130,4 +132,4 @@ if ($evaladd->get_course_code() == null) {
 Display::display_header(get_lang('NewEvaluation'));
 
 $form->display();
-Display :: display_footer();
+Display::display_footer();

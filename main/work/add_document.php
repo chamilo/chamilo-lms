@@ -82,7 +82,7 @@ if (empty($docId)) {
         '/',
         api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId.'&'.api_get_cidreq(),
         false,
-        false,
+        true,
         false,
         false
     );

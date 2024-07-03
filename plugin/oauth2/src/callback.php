@@ -5,7 +5,26 @@ use League\OAuth2\Client\Token\AccessToken;
 
 require __DIR__.'/../../../main/inc/global.inc.php';
 
+if (!empty($_GET['error']) && !empty($_GET['state'])) {
+    if ($_GET['state'] === ChamiloSession::read('oauth2state')) {
+        api_not_allowed(
+            true,
+            Display::return_message(
+                $_GET['error_description'] ?? $_GET['error'],
+                'warning'
+            )
+        );
+    } else {
+        ChamiloSession::erase('oauth2state');
+        exit('Invalid state');
+    }
+}
+
 $plugin = OAuth2::create();
+
+if ('true' !== $plugin->get(OAuth2::SETTING_ENABLE)) {
+    api_not_allowed(true);
+}
 
 $provider = $plugin->getProvider();
 
@@ -57,7 +76,7 @@ try {
         }
     }
 } catch (Exception $exception) {
-    $message = Display::return_message($exception->getMessage(), 'error');
+    $message = Display::return_message($exception->getMessage(), 'error', false);
     Display::addFlash($message);
     header('Location: '.api_get_path(WEB_PATH));
     exit;
@@ -65,10 +84,17 @@ try {
 
 ConditionalLogin::check_conditions($userInfo);
 
-$_user['user_id'] = $userInfo['user_id'];
-$_user['uidReset'] = true;
+$userInfo['uidReset'] = true;
 
-ChamiloSession::write('_user', $_user);
+$_GET['redirect_after_not_allow_page'] = 1;
+
+$redirectAfterNotAllowPage = ChamiloSession::read('redirect_after_not_allow_page');
+
+ChamiloSession::clear();
+
+ChamiloSession::write('redirect_after_not_allow_page', $redirectAfterNotAllowPage);
+
+ChamiloSession::write('_user', $userInfo);
 ChamiloSession::write('_user_auth_source', 'oauth2');
 
 Redirect::session_request_uri(true, $userInfo['user_id']);

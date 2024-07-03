@@ -23,6 +23,8 @@ var day10 = moment([2010, 6, 10]);
 var array = [2010, 1, 14, 15, 25, 50, 125];
 var day11 = moment(Date.UTC.apply({}, array));
 var day12 = moment.unix(1318781876);
+var day13 = moment("/Date(1198908717056-0700)/", true);
+var day14 = moment("foobazbar", 'L', true);
 
 moment(null);
 moment(undefined);
@@ -158,6 +160,8 @@ var getDay: number = moment().day();
 var getMonth: number = moment().month();
 var getQuater: number = moment().quarter();
 var getYear: number = moment().year();
+
+var date: [number, number, number, number, number, number, number] = moment().toArray();
 
 moment().hours(0).minutes(0).seconds(0).milliseconds(0);
 
@@ -538,3 +542,8 @@ moment.locale('en', {
 // console.log(moment.version);
 
 moment.defaultFormat = 'YYYY-MM-DD HH:mm';
+
+moment.suppressDeprecationWarnings = true;
+moment.deprecationHandler = null;
+moment.deprecationHandler = undefined;
+moment.deprecationHandler = function(name: string | null, msg: string) {}

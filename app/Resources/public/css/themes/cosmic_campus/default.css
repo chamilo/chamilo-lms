@@ -139,7 +139,10 @@ header{
 .navbar-default .navbar-link:hover {
   color: #ededed;
 }
-
+.logo {
+  margin: 50px 0;
+}
+/* Medium-small screens*/
 @media (max-width: 767px) {
   .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
     color: #ededed;
@@ -147,6 +150,9 @@ header{
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
     color: #ededed;
     background-color: #0099c0;
+  }
+  .logo {
+    margin: 24px 0;
   }
 }
 .breadcrumb{
@@ -170,4 +176,22 @@ footer.bgfooter a{
 }
 footer.bgfooter a:hover{
   color: #CCC;
+}
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) {
+  .logo {
+    margin: 25px 0;
+  }
+}
+/* Smalls screens */
+@media (min-width: 320px) and (max-width: 479px) {
+  .logo {
+    margin: 10px 0;
+  }
+}
+/* Landscape phones and down */
+@media only screen and (min-width: 320px) and (max-width: 480px) {
+  .logo {
+    margin: 20px 0;
+  }
 }

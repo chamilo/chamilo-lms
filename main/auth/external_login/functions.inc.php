@@ -105,6 +105,9 @@ function external_add_user($u)
     if (empty($u['status'])) {
         $u['status'] = 5;
     }
+    if (!isset($u['email'])) {
+        $u['email'] = '';
+    }
     if (!isset($u['official_code'])) {
         $u['official_code'] = '';
     }

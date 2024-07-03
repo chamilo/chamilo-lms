@@ -10,13 +10,13 @@ namespace Chamilo\ThemeBundle\Model;
  */
 class TaskModel implements TaskInterface
 {
-    const COLOR_AQUA = 'aqua';
+    public const COLOR_AQUA = 'aqua';
 
-    const COLOR_GREEN = 'green';
+    public const COLOR_GREEN = 'green';
 
-    const COLOR_RED = 'red';
+    public const COLOR_RED = 'red';
 
-    const COLOR_YELLOW = 'yellow';
+    public const COLOR_YELLOW = 'yellow';
 
     /**
      * @var int

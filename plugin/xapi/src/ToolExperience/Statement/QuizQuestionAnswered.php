@@ -53,7 +53,7 @@ class QuizQuestionAnswered extends BaseStatement
 
         $rawResult = $this->attempt->getMarks();
         $maxResult = $this->question->getPonderation();
-        $scaledResult = $rawResult / $maxResult;
+        $scaledResult = $maxResult ? ($rawResult / $maxResult) : 0;
 
         $context = $this->generateContext();
         $contextActivities = $context
@@ -61,7 +61,7 @@ class QuizQuestionAnswered extends BaseStatement
             ->withAddedGroupingActivity($quizActivity->generate());
 
         return new Statement(
-            null,
+            $this->generateStatementId('exercise-question'),
             $userActor->generate(),
             $answeredVerb->generate(),
             $questionActivity->generate(),

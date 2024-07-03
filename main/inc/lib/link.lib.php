@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CLink;
+use GuzzleHttp\Client;
 
 /**
  * Function library for the links tool.
@@ -85,8 +86,8 @@ class Link extends Model
                 WHERE
                     c_id = $courseId AND
                     category_id = '".intval($params['category_id'])."'";
-        $result = Database:: query($sql);
-        list($orderMax) = Database:: fetch_row($result);
+        $result = Database::query($sql);
+        list($orderMax) = Database::fetch_row($result);
         $order = $orderMax + 1;
         $params['display_order'] = $order;
 
@@ -282,9 +283,9 @@ class Link extends Model
                             (int) $selectcategory,
                             $course_int_id
                         );
-                        $result = Database:: query($sql_cat);
-                        if (Database:: num_rows($result) == 1) {
-                            $row = Database:: fetch_array($result);
+                        $result = Database::query($sql_cat);
+                        if (Database::num_rows($result) == 1) {
+                            $row = Database::fetch_array($result);
                             $ic_slide->addValue(
                                 'category',
                                 $row['category_title']
@@ -293,7 +294,7 @@ class Link extends Model
                     }
 
                     $di = new ChamiloIndexer();
-                    isset($_POST['language']) ? $lang = Database:: escape_string(
+                    isset($_POST['language']) ? $lang = Database::escape_string(
                         $_POST['language']
                     ) : $lang = 'english';
                     $di->connectDb(null, null, $lang);
@@ -317,7 +318,7 @@ class Link extends Model
                             $link_id,
                             $did
                         );
-                        Database:: query($sql);
+                        Database::query($sql);
                     }
                 }
                 Display::addFlash(Display::return_message(get_lang('LinkAdded')));
@@ -335,11 +336,11 @@ class Link extends Model
                 $ok = false;
             } else {
                 // Looking for the largest order number for this category.
-                $result = Database:: query(
+                $result = Database::query(
                     "SELECT MAX(display_order) FROM  $tbl_categories
                     WHERE c_id = $course_id "
                 );
-                list($orderMax) = Database:: fetch_row($result);
+                list($orderMax) = Database::fetch_row($result);
                 $order = $orderMax + 1;
                 $order = intval($order);
                 $session_id = api_get_session_id();
@@ -356,7 +357,7 @@ class Link extends Model
                 if ($linkId) {
                     // iid
                     $sql = "UPDATE $tbl_categories SET id = iid WHERE iid = $linkId";
-                    Database:: query($sql);
+                    Database::query($sql);
 
                     // add link_category visibility
                     // course ID is taken from context in api_set_default_visibility
@@ -411,7 +412,7 @@ class Link extends Model
                 // This will make a restore function possible for the platform administrator.
                 $sql = "UPDATE $tbl_link SET on_homepage='0'
                         WHERE c_id = $course_id AND id='".$id."'";
-                Database:: query($sql);
+                Database::query($sql);
 
                 api_item_property_update(
                     $courseInfo,
@@ -429,11 +430,11 @@ class Link extends Model
                 // First we delete the category itself and afterwards all the links of this category.
                 $sql = "DELETE FROM ".$tbl_categories."
                         WHERE c_id = $course_id AND id='".$id."'";
-                Database:: query($sql);
+                Database::query($sql);
 
                 $sql = "DELETE FROM ".$tbl_link."
                         WHERE c_id = $course_id AND category_id='".$id."'";
-                Database:: query($sql);
+                Database::query($sql);
 
                 api_item_property_update(
                     $courseInfo,
@@ -466,15 +467,15 @@ class Link extends Model
             );
             $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
             $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id);
-            $res = Database:: query($sql);
-            if (Database:: num_rows($res) > 0) {
+            $res = Database::query($sql);
+            if (Database::num_rows($res) > 0) {
                 $row = Database::fetch_array($res);
                 $di = new ChamiloIndexer();
                 $di->remove_document($row['search_did']);
             }
             $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
             $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id);
-            Database:: query($sql);
+            Database::query($sql);
 
             // Remove terms from db.
             require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
@@ -554,8 +555,8 @@ class Link extends Model
         // Finding the old category_id.
         $sql = "SELECT * FROM $tbl_link
                 WHERE c_id = $course_id AND id='".$id."'";
-        $result = Database:: query($sql);
-        $row = Database:: fetch_array($result);
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
         $category_id = $row['category_id'];
 
         if ($category_id != $values['category_id']) {
@@ -564,8 +565,8 @@ class Link extends Model
                     WHERE
                         c_id = $course_id AND
                         category_id='".intval($values['category_id'])."'";
-            $result = Database:: query($sql);
-            list($max_display_order) = Database:: fetch_row($result);
+            $result = Database::query($sql);
+            list($max_display_order) = Database::fetch_row($result);
             $max_display_order++;
         } else {
             $max_display_order = $row['display_order'];
@@ -590,8 +591,8 @@ class Link extends Model
         if (api_get_setting('search_enabled') === 'true') {
             $course_int_id = api_get_course_int_id();
             $course_id = api_get_course_id();
-            $link_title = Database:: escape_string($values['title']);
-            $link_description = Database:: escape_string($values['description']);
+            $link_title = Database::escape_string($values['title']);
+            $link_description = Database::escape_string($values['description']);
 
             // Actually, it consists on delete terms from db,
             // insert new ones, create a new search engine document, and remove the old one.
@@ -607,12 +608,12 @@ class Link extends Model
                 TOOL_LINK,
                 $id
             );
-            $res = Database:: query($sql);
+            $res = Database::query($sql);
 
-            if (Database:: num_rows($res) > 0) {
+            if (Database::num_rows($res) > 0) {
                 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
-                $se_ref = Database:: fetch_array($res);
+                $se_ref = Database::fetch_array($res);
                 $specific_fields = get_specific_field_list();
                 $ic_slide = new IndexableChunk();
 
@@ -676,9 +677,9 @@ class Link extends Model
                         $categoryId,
                         $course_int_id
                     );
-                    $result = Database:: query($sql_cat);
-                    if (Database:: num_rows($result) == 1) {
-                        $row = Database:: fetch_array($result);
+                    $result = Database::query($sql_cat);
+                    if (Database::num_rows($result) == 1) {
+                        $row = Database::fetch_array($result);
                         $ic_slide->addValue(
                             'category',
                             $row['category_title']
@@ -687,7 +688,7 @@ class Link extends Model
                 }
 
                 $di = new ChamiloIndexer();
-                isset($_POST['language']) ? $lang = Database:: escape_string($_POST['language']) : $lang = 'english';
+                isset($_POST['language']) ? $lang = Database::escape_string($_POST['language']) : $lang = 'english';
                 $di->connectDb(null, null, $lang);
                 $di->remove_document($se_ref['search_did']);
                 $di->addChunk($ic_slide);
@@ -707,7 +708,7 @@ class Link extends Model
                         TOOL_LINK,
                         $id
                     );
-                    Database:: query($sql);
+                    Database::query($sql);
                     $sql = 'INSERT INTO %s (c_id, id, course_code, tool_id, ref_id_high_level, search_did)
                             VALUES (NULL , \'%s\', \'%s\', %s, %s)';
                     $sql = sprintf(
@@ -719,7 +720,7 @@ class Link extends Model
                         $id,
                         $did
                     );
-                    Database:: query($sql);
+                    Database::query($sql);
                 }
             }
         }
@@ -955,7 +956,7 @@ class Link extends Model
                     $condition
                 ORDER BY link.display_order ASC, ip.session_id DESC";
 
-        $result = Database:: query($sql);
+        $result = Database::query($sql);
 
         return Database::store_result($result);
     }
@@ -1045,7 +1046,7 @@ class Link extends Model
                     switch ($myrow['visibility']) {
                         case '1':
                             $urlVisibility .= '&action=invisible';
-                            $title = get_lang('MakeInvisible');
+                            $title = get_lang('Hide');
                             $toolbar .= Display::toolbarButton(
                                 '',
                                 $urlVisibility,
@@ -1058,7 +1059,7 @@ class Link extends Model
                             break;
                         case '0':
                             $urlVisibility .= '&action=visible';
-                            $title = get_lang('MakeVisible');
+                            $title = get_lang('Show');
                             $toolbar .= Display::toolbarButton(
                                 '',
                                 $urlVisibility,
@@ -1179,7 +1180,7 @@ class Link extends Model
         $categoryId = $category['id'];
         $token = null;
         $tools = '<a href="'.api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=editcategory&id='.$categoryId.'&category_id='.$categoryId.'" title='.get_lang('Modify').'">'.
-            Display:: return_icon(
+            Display::return_icon(
                 'edit.png',
                 get_lang('Modify'),
                 [],
@@ -1189,14 +1190,14 @@ class Link extends Model
         // DISPLAY MOVE UP COMMAND only if it is not the top link.
         if ($currentCategory != 0) {
             $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=up&up='.$categoryId.'&category_id='.$categoryId.'" title="'.get_lang('Up').'">'.
-                Display:: return_icon(
+                Display::return_icon(
                     'up.png',
                     get_lang('Up'),
                     [],
                     ICON_SIZE_SMALL
                 ).'</a>';
         } else {
-            $tools .= Display:: return_icon(
+            $tools .= Display::return_icon(
                 'up_na.png',
                 get_lang('Up'),
                 [],
@@ -1207,14 +1208,14 @@ class Link extends Model
         // DISPLAY MOVE DOWN COMMAND only if it is not the bottom link.
         if ($currentCategory < $countCategories - 1) {
             $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=down&down='.$categoryId.'&category_id='.$categoryId.'">'.
-                Display:: return_icon(
+                Display::return_icon(
                     'down.png',
                     get_lang('Down'),
                     [],
                     ICON_SIZE_SMALL
                 ).'</a>';
         } else {
-            $tools .= Display:: return_icon(
+            $tools .= Display::return_icon(
                 'down_na.png',
                 get_lang('Down'),
                 [],
@@ -1224,7 +1225,7 @@ class Link extends Model
 
         $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=deletecategory&id='.$categoryId."&category_id=$categoryId\"
             onclick=\"javascript: if(!confirm('".get_lang('CategoryDelconfirm')."')) return false;\">".
-            Display:: return_icon(
+            Display::return_icon(
                 'delete.png',
                 get_lang('Delete'),
                 [],
@@ -1277,9 +1278,9 @@ class Link extends Model
             $sql = "SELECT id, display_order FROM $movetable
                     WHERE c_id = $courseId
                     ORDER BY display_order $sortDirection";
-            $linkresult = Database:: query($sql);
+            $linkresult = Database::query($sql);
             $thislinkOrder = 1;
-            while ($sortrow = Database:: fetch_array($linkresult)) {
+            while ($sortrow = Database::fetch_array($linkresult)) {
                 // STEP 2 : FOUND THE NEXT LINK ID AND ORDER, COMMIT SWAP
                 // This part seems unlogic, but it isn't . We first look for the current link with the querystring ID
                 // and we know the next iteration of the while loop is the next one. These should be swapped.
@@ -1287,12 +1288,12 @@ class Link extends Model
                     $nextlinkId = $sortrow['id'];
                     $nextlinkOrder = $sortrow['display_order'];
 
-                    Database:: query(
+                    Database::query(
                         "UPDATE ".$movetable."
                         SET display_order = '$nextlinkOrder'
                         WHERE c_id = $courseId  AND id =  '$thiscatlinkId'"
                     );
-                    Database:: query(
+                    Database::query(
                         "UPDATE ".$movetable."
                         SET display_order = '$thislinkOrder'
                         WHERE c_id = $courseId  AND id =  '$nextlinkId'"
@@ -1553,8 +1554,9 @@ class Link extends Model
             if ($showChildren) {
                 $childrenContent = self::showLinksPerCategory(
                     $myrow['id'],
-                    api_get_course_int_id(),
-                    api_get_session_id()
+                    $course_id,
+                    $session_id,
+                    $showActionLinks
                 );
             }
 
@@ -1681,10 +1683,9 @@ class Link extends Model
             }
         }
 
-        $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_LINK, $linkId);
+        Skill::addSkillsToForm($form, api_get_course_int_id(), api_get_session_id(), ITEM_TYPE_LINK, $linkId);
         $form->addHidden('lp_id', $lpId);
         $form->addButtonSave(get_lang('SaveLink'), 'submitLink');
-        $defaults['skills'] = array_keys($skillList);
         $form->setDefaults($defaults);
 
         return $form;
@@ -1748,6 +1749,27 @@ class Link extends Model
     }
 
     /**
+     * It gets the category by a specific name.
+     *
+     * @param string $name
+     *
+     * @return array
+     */
+    public static function getCategoryByName($name)
+    {
+        $table = Database::get_course_table(TABLE_LINK_CATEGORY);
+        $courseId = api_get_course_int_id();
+        $name = Database::escape_string($name);
+
+        $sql = "SELECT * FROM $table
+                WHERE category_title = '$name' AND c_id = $courseId";
+        $result = Database::query($sql);
+        $category = Database::fetch_array($result, 'ASSOC');
+
+        return $category;
+    }
+
+    /**
      * Move a link up in its category.
      *
      * @param int $id
@@ -1771,25 +1793,18 @@ class Link extends Model
         return self::moveLinkDisplayOrder($id, 'DESC');
     }
 
-    /**
-     * @param string $url
-     *
-     * @return bool
-     */
-    public static function checkUrl($url)
+    public static function checkUrl(string $url): bool
     {
-        // Check if curl is available.
-        if (!in_array('curl', get_loaded_extensions())) {
-            return false;
-        }
-
-        // set URL and other appropriate options
         $defaults = [
-            CURLOPT_URL => $url,
-            CURLOPT_FOLLOWLOCATION => true, // follow redirects accept youtube.com
-            CURLOPT_HEADER => 0,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 4,
+            'allow_redirects' => [
+                'max' => 5, // max number of redirects allowed
+                'strict' => true, // whether to use strict redirects or not
+                'referer' => true, // whether to add the Referer header when redirecting
+                'protocols' => ['http', 'https'], // protocols allowed to be redirected to
+                'track_redirects' => true, // whether to keep track of the number of redirects
+            ],
+            'connect_timeout' => 4,
+            'timeout' => 4,
         ];
 
         $proxySettings = api_get_configuration_value('proxy_settings');
@@ -1797,23 +1812,34 @@ class Link extends Model
         if (!empty($proxySettings) &&
             isset($proxySettings['curl_setopt_array'])
         ) {
-            $defaults[CURLOPT_PROXY] = $proxySettings['curl_setopt_array']['CURLOPT_PROXY'];
-            $defaults[CURLOPT_PROXYPORT] = $proxySettings['curl_setopt_array']['CURLOPT_PROXYPORT'];
+            $defaults['proxy'] = sprintf(
+                '%s:%s',
+                $proxySettings['curl_setopt_array']['CURLOPT_PROXY'],
+                $proxySettings['curl_setopt_array']['CURLOPT_PROXYPORT']
+            );
         }
 
-        // Create a new cURL resource
-        $ch = curl_init();
-        curl_setopt_array($ch, $defaults);
+        $client = new Client(['defaults' => $defaults]);
 
-        // grab URL and pass it to the browser
-        ob_start();
-        $result = curl_exec($ch);
-        ob_get_clean();
+        try {
+            $responseIpv6 = $client->get($url);
 
-        // close cURL resource, and free up system resources
-        curl_close($ch);
+            if (200 === $responseIpv6->getStatusCode()) {
+                return true;
+            }
+        } catch (Exception $e) {
+            try {
+                $responseIpv4 = $client->request('GET', $url, ['force_ip_resolve' => 'v4']);
 
-        return $result;
+                if (200 === $responseIpv4->getStatusCode()) {
+                    return true;
+                }
+            } catch (Exception $e) {
+                return false;
+            }
+        }
+
+        return false;
     }
 
     /**

@@ -283,10 +283,10 @@ $(function () {
 $checked_files = false;
 if (!$view || $view == 'received') {
     $part = 'received';
-} elseif ($view = 'sent') {
+} elseif ($view == 'sent') {
     $part = 'sent';
 } else {
-    header('location: index.php?'.api_get_cidreq().'&view='.$view.'&error=Error');
+    header('location: index.php?'.api_get_cidreq().'&view=received&error=Error');
     exit;
 }
 

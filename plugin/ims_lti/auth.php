@@ -7,7 +7,7 @@ use Firebase\JWT\JWT;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-api_protect_course_script(false);
+api_protect_course_script();
 api_block_anonymous_users(false);
 
 $scope = empty($_REQUEST['scope']) ? '' : trim($_REQUEST['scope']);
@@ -25,6 +25,8 @@ $em = Database::getManager();
 
 $webPath = api_get_path(WEB_PATH);
 $webPluginPath = api_get_path(WEB_PLUGIN_PATH);
+
+$tool = null;
 
 try {
     if (
@@ -64,12 +66,12 @@ try {
         throw LtiAuthException::invalidRequest();
     }
 
-    /** @var ImsLtiTool $tool */
-    $tool = $em
-        ->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', $ltiToolLogin);
-
-    if (empty($tool)) {
-        throw LtiAuthException::invalidRequest();
+    try {
+        /** @var ImsLtiTool $tool */
+        $tool = $em
+            ->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', $ltiToolLogin);
+    } catch (\Exception $e) {
+        api_not_allowed(true);
     }
 
     if ($tool->getClientId() != $clientId) {
@@ -185,7 +187,6 @@ try {
             'data' => "tool:{$tool->getId()}",
             'deep_link_return_url' => $webPluginPath.'ims_lti/item_return2.php',
         ];
-
     } else {
         $jwtContent['https://purl.imsglobal.org/spec/lti/claim/message_type'] = 'LtiResourceLinkRequest';
 
@@ -208,14 +209,20 @@ try {
             if (LtiAssignmentGradesService::AGS_NONE !== $advServices['ags']) {
                 $agsClaim = [
                     'scope' => [
-                        LtiAssignmentGradesService::SCOPE_LINE_ITEM,
                         LtiAssignmentGradesService::SCOPE_LINE_ITEM_READ,
+                        LtiAssignmentGradesService::SCOPE_RESULT_READ,
+                        LtiAssignmentGradesService::SCOPE_SCORE_WRITE,
                     ],
-                    'lineitems' => LtiAssignmentGradesService::getLineItemsUrl(
-                        $course->getId(),
-                        $tool->getId()
-                    ),
                 ];
+
+                if (LtiAssignmentGradesService::AGS_FULL === $advServices['ags']) {
+                    $agsClaim['scope'][] = LtiAssignmentGradesService::SCOPE_LINE_ITEM;
+                }
+
+                $agsClaim['lineitems'] = LtiAssignmentGradesService::getLineItemsUrl(
+                    $course->getId(),
+                    $tool->getId()
+                );
 
                 if ($tool->getLineItems()->count() === 1) {
                     $agsClaim['lineitem'] = LtiAssignmentGradesService::getLineItemUrl(
@@ -256,7 +263,8 @@ try {
             $course,
             $session,
             $platformDomain,
-            ImsLti::V_1P3
+            ImsLti::V_1P3,
+            $tool
         );
     }
 
@@ -289,13 +297,17 @@ try {
     ];
 }
 
+if (!$tool) {
+    exit;
+}
+
 $formActionUrl = $tool->isActiveDeepLinking() ? $tool->getRedirectUrl() : $tool->getLaunchUrl();
 ?>
 <!DOCTYPE html>
 <html>
-<form action="<?php echo $formActionUrl ?>" name="ltiLaunchForm" method="post">
+<form action="<?php echo $formActionUrl; ?>" name="ltiLaunchForm" method="post">
     <?php foreach ($params as $name => $value) { ?>
-    <input type="hidden" name="<?php echo $name ?>" value="<?php echo $value ?>">
+    <input type="hidden" name="<?php echo $name; ?>" value="<?php echo $value; ?>">
     <?php } ?>
 </form>
 <script>document.ltiLaunchForm.submit();</script>

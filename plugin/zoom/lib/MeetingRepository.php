@@ -31,8 +31,19 @@ class MeetingRepository extends EntityRepository
     {
         $matching = [];
         $all = $this->findAll();
+
+        /** @var Meeting $candidate */
         foreach ($all as $candidate) {
-            if ($candidate->startDateTime >= $startDate && $candidate->startDateTime <= $endDate) {
+            if (API\Meeting::TYPE_INSTANT === $candidate->getMeetingInfoGet()->type) {
+                continue;
+            }
+
+            $cantidateEndDate = clone $candidate->startDateTime;
+            $cantidateEndDate->add($candidate->durationInterval);
+
+            if (($candidate->startDateTime >= $startDate && $candidate->startDateTime <= $endDate)
+                || ($candidate->startDateTime <= $startDate && $cantidateEndDate >= $startDate)
+            ) {
                 $matching[] = $candidate;
             }
         }

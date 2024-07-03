@@ -68,7 +68,7 @@ function insertAtCarret() {
            NAME = "jCapture"
            dokuBase ="<?php echo bin2hex(DOKU_BASE); ?>"
            sectok ="<?php echo getSecurityToken(); ?>"
-           cookies ="<?php echo $cookies; ?>"
+           cookies ="<?php echo Security::remove_XSS($cookies); ?>"
            pageName = "<?php echo $pageName; ?>"
            edid = "<?php echo $edid; ?>"
            host ="<?php echo $hostName; ?>"

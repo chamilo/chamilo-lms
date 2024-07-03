@@ -151,7 +151,7 @@ class GlossaryManager
                 'glossary_id' => 0,
                 'c_id' => api_get_course_int_id(),
                 'name' => $values['name'],
-                'description' => $values['description'],
+                'description' => isset($values['description']) ? $values['description'] : "",
                 'display_order' => $max_glossary_item + 1,
                 'session_id' => $session_id,
             ];

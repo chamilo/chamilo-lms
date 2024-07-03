@@ -14,20 +14,20 @@ use Chamilo\TicketBundle\Entity\Ticket;
  */
 class TicketManager
 {
-    const PRIORITY_NORMAL = 'NRM';
-    const PRIORITY_HIGH = 'HGH';
-    const PRIORITY_LOW = 'LOW';
+    public const PRIORITY_NORMAL = 'NRM';
+    public const PRIORITY_HIGH = 'HGH';
+    public const PRIORITY_LOW = 'LOW';
 
-    const SOURCE_EMAIL = 'MAI';
-    const SOURCE_PHONE = 'TEL';
-    const SOURCE_PLATFORM = 'PLA';
-    const SOURCE_PRESENTIAL = 'PRE';
+    public const SOURCE_EMAIL = 'MAI';
+    public const SOURCE_PHONE = 'TEL';
+    public const SOURCE_PLATFORM = 'PLA';
+    public const SOURCE_PRESENTIAL = 'PRE';
 
-    const STATUS_NEW = 'NAT';
-    const STATUS_PENDING = 'PND';
-    const STATUS_UNCONFIRMED = 'XCF';
-    const STATUS_CLOSE = 'CLS';
-    const STATUS_FORWARDED = 'REE';
+    public const STATUS_NEW = 'NAT';
+    public const STATUS_PENDING = 'PND';
+    public const STATUS_UNCONFIRMED = 'XCF';
+    public const STATUS_CLOSE = 'CLS';
+    public const STATUS_FORWARDED = 'REE';
 
     /**
      * Constructor.
@@ -515,7 +515,6 @@ class TicketManager
                 $message = '<h2>'.get_lang('TicketInformation').'</h2><br />'.$helpDeskMessage;
 
                 if (api_get_setting('ticket_warn_admin_no_user_in_category') === 'true') {
-                    $usersInCategory = self::getUsersInCategory($category_id);
                     if (empty($usersInCategory)) {
                         $subject = sprintf(
                             get_lang('WarningCategoryXDoesntHaveUsers'),
@@ -1278,6 +1277,7 @@ class TicketManager
 
                 $result_attach = Database::query($sql);
                 while ($row2 = Database::fetch_assoc($result_attach)) {
+                    $row2['filename'] = Security::remove_XSS($row2['filename']);
                     $archiveURL = $webPath.'ticket/download.php?ticket_id='.$ticketId.'&id='.$row2['id'];
                     $row2['attachment_link'] = $attach_icon.
                         '&nbsp;<a href="'.$archiveURL.'">'.$row2['filename'].'</a>&nbsp;('.$row2['size'].')';
@@ -1357,7 +1357,7 @@ class TicketManager
         $titleEmail = "[$ticketCode] $title";
 
         // Content
-        $href = api_get_path(WEB_CODE_PATH).'/ticket/ticket_details.php?ticket_id='.$ticketId;
+        $href = api_get_path(WEB_CODE_PATH).'ticket/ticket_details.php?ticket_id='.$ticketId;
         $ticketUrl = Display::url($ticketCode, $href);
         $messageEmail = get_lang('TicketNum').": $ticketUrl <br />";
         $messageEmail .= get_lang('Status').": $status <br />";
@@ -2498,5 +2498,48 @@ class TicketManager
         }
 
         return [];
+    }
+
+    public static function notifiyTicketUpdated(int $ticketId, int $categoryId, string $message)
+    {
+        $subject = get_lang('TicketUpdated');
+
+        TicketManager::sendNotification($ticketId, $subject, $message);
+
+        if (empty($categoryId)) {
+            return;
+        }
+
+        $usersInCategory = self::getUsersInCategory($categoryId);
+
+        if (!empty($usersInCategory)) {
+            foreach ($usersInCategory as $data) {
+                if ($data['user_id']) {
+                    self::sendNotification($ticketId, $subject, $message, $data['user_id']);
+                }
+            }
+
+            return;
+        }
+
+        if ('true' === api_get_setting('ticket_send_warning_to_all_admins')) {
+            $categoryInfo = self::getCategory($categoryId);
+
+            $warningNoUsers = sprintf(
+                get_lang('WarningCategoryXDoesntHaveUsers'),
+                $categoryInfo['name']
+            );
+
+            $message = Display::return_message($warningNoUsers, 'warning')
+                .$message;
+
+            $adminsToNotify = UserManager::get_all_administrators();
+
+            foreach ($adminsToNotify as $userId => $data) {
+                if ($data['active']) {
+                    self::sendNotification($ticketId, $subject, $message, $userId);
+                }
+            }
+        }
     }
 }

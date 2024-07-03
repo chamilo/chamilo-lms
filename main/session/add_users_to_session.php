@@ -15,7 +15,7 @@ $xajax->registerFunction('search_users');
 $this_section = SECTION_PLATFORM_ADMIN;
 
 $id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
-$addProcess = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
+$addProcess = isset($_GET['add']) && 'true' === $_GET['add'] ? 'true' : null;
 
 SessionManager::protectSession($id_session);
 
@@ -134,7 +134,6 @@ function search_users($needle, $type)
                             OR firstname LIKE '$needle%'
                         )
                         AND user.status <> 6
-                        AND user.status <> ".DRH."
                     $order_clause LIMIT 11
                 ";
                 break;
@@ -144,7 +143,6 @@ function search_users($needle, $type)
                     FROM $tbl_user user
                     WHERE
                         lastname LIKE '$needle%'
-                        AND user.status <> ".DRH."
                         AND user.status <> 6 $cond_user_id
                     $order_clause
                 ";
@@ -156,7 +154,6 @@ function search_users($needle, $type)
                     LEFT OUTER JOIN $tbl_session_rel_user s ON (s.user_id = user.id)
                     WHERE
                         s.user_id IS NULL
-                        AND user.status <> ".DRH."
                         AND user.status <> 6 $cond_user_id
                     $order_clause
                 ";
@@ -177,12 +174,11 @@ function search_users($needle, $type)
                             WHERE
                                 access_url_id = '$access_url_id' AND
                                 (
-                                    username LIKE '$needle%' OR 
-                                    lastname LIKE '$needle%' OR 
+                                    username LIKE '$needle%' OR
+                                    lastname LIKE '$needle%' OR
                                     firstname LIKE '$needle%'
-                                ) AND 
-                                user.status <> 6 AND 
-                                user.status <> ".DRH."
+                                ) AND
+                                user.status <> 6
                             $order_clause LIMIT 11
                         ";
                         break;
@@ -194,7 +190,6 @@ function search_users($needle, $type)
                             WHERE
                                 access_url_id = $access_url_id
                                 AND lastname LIKE '$needle%'
-                                AND user.status <> ".DRH."
                                 AND user.status <> 6 $cond_user_id
                             $order_clause
                         ";
@@ -210,7 +205,6 @@ function search_users($needle, $type)
                             WHERE
                                 access_url_id = $access_url_id
                                 AND s.user_id IS null
-                                AND user.status <> ".DRH."
                                 AND user.status <> 6 $cond_user_id
                             $order_clause
                         ";
@@ -222,7 +216,7 @@ function search_users($needle, $type)
         $rs = Database::query($sql);
         $i = 0;
         if ($type == 'single') {
-            while ($user = Database:: fetch_array($rs)) {
+            while ($user = Database::fetch_array($rs)) {
                 $i++;
                 if ($i <= 10) {
                     $person_name =
@@ -246,7 +240,7 @@ function search_users($needle, $type)
             $xajax_response->addAssign('ajax_list_users_single', 'innerHTML', api_utf8_encode($return));
         } else {
             $return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
-            while ($user = Database:: fetch_array($rs)) {
+            while ($user = Database::fetch_array($rs)) {
                 $person_name =
                     $user['lastname'].' '.$user['firstname'].' ('.$user['username'].') '.$user['official_code'];
                 if ($showOfficialCode) {
@@ -278,7 +272,7 @@ function add_user_to_session (code, content) {
 	}
 	destination.options[destination.length] = new Option(content,code);
 	destination.selectedIndex = -1;
-	
+
 	$("#remove_user").show();
 	sortOptions(destination.options);
 }
@@ -325,13 +319,15 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
     if ($form_sent == 1) {
         //$notEmptyList = api_get_configuration_value('session_multiple_subscription_students_list_avoid_emptying');
+        $isLimited = api_get_configuration_value('session_course_users_subscription_limited_to_session_users');
 
         // Added a parameter to send emails when registering a user
         SessionManager::subscribeUsersToSession(
             $id_session,
             $UserList,
             null,
-            false
+            false,
+            false === $isLimited
         );
         Display::addFlash(Display::return_message(get_lang('Updated')));
         header('Location: resume_session.php?id_session='.$id_session);
@@ -449,7 +445,6 @@ if ($ajax_search) {
                 AND su.session_id = $id_session
                 AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
             $where_filter
-                AND u.status <> ".DRH."
                 AND u.status <> 6
             $order_clause
            ";
@@ -461,7 +456,7 @@ if ($ajax_search) {
                 ON su.user_id = u.id
                 AND su.session_id = $id_session
                 AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
-            WHERE u.status <> ".DRH." AND u.status <> 6
+            WHERE u.status <> 6
             $order_clause
         ";
     }
@@ -479,7 +474,6 @@ if ($ajax_search) {
                 INNER JOIN $tbl_user_rel_access_url url_user
                 ON (url_user.user_id = u.id)
                 WHERE access_url_id = $access_url_id $where_filter
-                    AND u.status <> ".DRH."
                     AND u.status<>6
                 $order_clause
             ";
@@ -510,7 +504,7 @@ if ($ajax_search) {
         ON $tbl_session_rel_user.user_id = u.id
             AND $tbl_session_rel_user.session_id = $id_session
             AND $tbl_session_rel_user.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
-        WHERE u.status <> ".DRH." AND u.status <> 6 $order_clause
+        WHERE u.status <> 6 $order_clause
     ";
 
     if (api_is_multiple_url_enabled()) {
@@ -526,7 +520,6 @@ if ($ajax_search) {
                     AND $tbl_session_rel_user.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
                 INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id = u.id)
                 WHERE access_url_id = $access_url_id
-                    AND u.status <> ".DRH."
                     AND u.status <> 6
                 $order_clause
             ";
@@ -696,7 +689,7 @@ $newLinks .= Display::url(
                     <select id="first_letter_user" name="firstLetterUser" onchange="change_select(this.value);">
                         <option value="%">--</option>
                         <?php
-                        echo Display:: get_alphabet_options(); ?>
+                        echo Display::get_alphabet_options(); ?>
                     </select>
                     <br/>
                     <br/>

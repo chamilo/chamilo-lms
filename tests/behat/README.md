@@ -26,10 +26,10 @@ sudo apt install google-chrome-stable
 # as the chromedriver in the next step needs to be the same version
 ```
 
-- Download the Chrome driver, unzip and copy into /usr/bin. Check the latest version at https://sites.google.com/a/chromium.org/chromedriver/downloads,
+- Download the Chrome driver, unzip and copy into /usr/bin. Check the latest version at https://sites.google.com/chromium.org/driver/downloads,
 then adapt the following command to the latest version:
 ```
-cd /tmp && wget https://chromedriver.storage.googleapis.com/85.0.4183.83/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/local/bin
+cd /tmp && wget https://chromedriver.storage.googleapis.com/108.0.5359.71/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/local/bin
 ```
 
 - Test if chromedriver is working correctly, the result should be something like:

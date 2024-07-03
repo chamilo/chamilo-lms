@@ -42,7 +42,7 @@ $sql = 'SELECT thread_id, forum_id,filename
         WHERE
             f.c_id = '.$course_id.' AND
             a.c_id = '.$course_id.' AND
-            path LIKE BINARY "'.$doc_url.'"';
+            path LIKE BINARY "'.Database::escape_string($doc_url).'"';
 
 $result = Database::query($sql);
 $row = Database::fetch_array($result);

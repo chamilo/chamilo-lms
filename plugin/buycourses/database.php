@@ -257,6 +257,16 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SALE)) {
     $saleTable->addColumn('status', Types::INTEGER);
     $saleTable->addColumn('payment_type', Types::INTEGER);
     $saleTable->addColumn('invoice', Types::INTEGER);
+    $saleTable->addColumn(
+        'price_without_discount',
+        Types::DECIMAL,
+        ['scale' => 2, 'notnull' => false]
+    );
+    $saleTable->addColumn(
+        'discount_amount',
+        Types::DECIMAL,
+        ['scale' => 2, 'notnull' => false]
+    );
     $saleTable->setPrimaryKey(['id']);
     $saleTable->addForeignKeyConstraint(
         $currencyTable,
@@ -287,6 +297,7 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SERVICES)) {
     $servicesTable->addColumn('video_url', Types::STRING);
     $servicesTable->addColumn('image', Types::STRING);
     $servicesTable->addColumn('service_information', Types::TEXT);
+    $servicesTable->addColumn('tax_perc', Types::INTEGER);
     $servicesTable->setPrimaryKey(['id']);
 }
 
@@ -340,6 +351,16 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SERVICES_SALE)) {
     $servicesNodeTable->addColumn('status', Types::INTEGER);
     $servicesNodeTable->addColumn('payment_type', Types::INTEGER);
     $servicesNodeTable->addColumn('invoice', Types::INTEGER);
+    $servicesNodeTable->addColumn(
+        'price_without_discount',
+        Types::DECIMAL,
+        ['scale' => 2, 'notnull' => false]
+    );
+    $servicesNodeTable->addColumn(
+        'discount_amount',
+        Types::DECIMAL,
+        ['scale' => 2, 'notnull' => false]
+    );
     $servicesNodeTable->setPrimaryKey(['id']);
     $servicesNodeTable->addForeignKeyConstraint(
         $servicesTable,
@@ -414,6 +435,177 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_INVOICE)) {
     $invoiceTable->setPrimaryKey(['id']);
 }
 
+if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON)) {
+    $couponTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_COUPON);
+    $couponTable->addColumn(
+        'id',
+        Types::INTEGER,
+        ['autoincrement' => true, 'unsigned' => true]
+    );
+    $couponTable->addColumn('code', Types::STRING);
+    $couponTable->addColumn('discount_type', Types::INTEGER);
+    $couponTable->addColumn('discount_amount', Types::INTEGER);
+    $couponTable->addColumn('valid_start', Types::DATETIME_MUTABLE);
+    $couponTable->addColumn('valid_end', Types::DATETIME_MUTABLE);
+    $couponTable->addColumn('delivered', Types::INTEGER);
+    $couponTable->addColumn('active', Types::BOOLEAN);
+    $couponTable->setPrimaryKey(['id']);
+}
+
+if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON_ITEM)) {
+    $couponItemTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_COUPON_ITEM);
+    $couponItemTable->addColumn(
+        'id',
+        Types::INTEGER,
+        ['autoincrement' => true, 'unsigned' => true]
+    );
+    $couponItemTable->addColumn('coupon_id', Types::INTEGER);
+    $couponItemTable->addColumn('product_type', Types::INTEGER);
+    $couponItemTable->addColumn('product_id', Types::INTEGER);
+    $couponItemTable->setPrimaryKey(['id']);
+}
+
+if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON_SERVICE)) {
+    $couponService = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_COUPON_SERVICE);
+    $couponService->addColumn(
+        'id',
+        Types::INTEGER,
+        ['autoincrement' => true, 'unsigned' => true]
+    );
+    $couponService->addColumn('coupon_id', Types::INTEGER);
+    $couponService->addColumn('service_id', Types::INTEGER);
+    $couponService->setPrimaryKey(['id']);
+}
+
+if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SUBSCRIPTION)) {
+    $subscriptionTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_SUBSCRIPTION);
+    $subscriptionTable->addColumn(
+        'product_type',
+        Types::INTEGER,
+        ['unsigned' => true]
+    );
+    $subscriptionTable->addColumn(
+        'product_id',
+        Types::INTEGER,
+        ['unsigned' => true]
+    );
+    $subscriptionTable->addColumn(
+        'duration',
+        Types::INTEGER,
+        ['unsigned' => true]
+    );
+    $subscriptionTable->addColumn('currency_id', Types::INTEGER);
+    $subscriptionTable->addColumn('price', Types::DECIMAL);
+    $subscriptionTable->addColumn('tax_perc', Types::INTEGER);
+    $subscriptionTable->setPrimaryKey(['product_type', 'product_id', 'duration']);
+}
+
+if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SUBSCRIPTION_SALE)) {
+    $subscriptionSaleTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_SUBSCRIPTION_SALE);
+    $subscriptionSaleTable->addColumn(
+        'id',
+        Types::INTEGER,
+        ['autoincrement' => true, 'unsigned' => true]
+    );
+    $subscriptionSaleTable->addColumn('currency_id', Types::INTEGER);
+    $subscriptionSaleTable->addColumn('reference', Types::STRING);
+    $subscriptionSaleTable->addColumn('date', Types::DATETIME_MUTABLE);
+    $subscriptionSaleTable->addColumn('user_id', Types::INTEGER);
+    $subscriptionSaleTable->addColumn('product_type', Types::INTEGER);
+    $subscriptionSaleTable->addColumn('product_name', Types::STRING);
+    $subscriptionSaleTable->addColumn('product_id', Types::INTEGER);
+    $subscriptionSaleTable->addColumn('price', Types::DECIMAL);
+    $subscriptionSaleTable->addColumn('price_without_tax', Types::DECIMAL, ['notnull' => false]);
+    $subscriptionSaleTable->addColumn('tax_perc', Types::INTEGER, ['notnull' => false]);
+    $subscriptionSaleTable->addColumn('tax_amount', Types::DECIMAL, ['notnull' => false]);
+    $subscriptionSaleTable->addColumn('status', Types::INTEGER);
+    $subscriptionSaleTable->addColumn('payment_type', Types::INTEGER);
+    $subscriptionSaleTable->addColumn('invoice', Types::INTEGER);
+    $subscriptionSaleTable->addColumn('price_without_discount', Types::DECIMAL);
+    $subscriptionSaleTable->addColumn('discount_amount', Types::DECIMAL);
+    $subscriptionSaleTable->addColumn('subscription_end', Types::DATETIME_MUTABLE);
+    $subscriptionSaleTable->addColumn('expired', Types::BOOLEAN);
+    $subscriptionSaleTable->setPrimaryKey(['id']);
+}
+
+if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_SUBSCRIPTION_PERIOD)) {
+    $subscriptionPeriodTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_SUBSCRIPTION_PERIOD);
+    $subscriptionPeriodTable->addColumn(
+        'duration',
+        Types::INTEGER,
+        ['unsigned' => true]
+    );
+    $subscriptionPeriodTable->addColumn('name', Types::STRING);
+    $subscriptionPeriodTable->setPrimaryKey(['duration']);
+}
+
+if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON_SALE)) {
+    $couponSaleTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_COUPON_SALE);
+    $couponSaleTable->addColumn(
+        'id',
+        Types::INTEGER,
+        ['autoincrement' => true, 'unsigned' => true]
+    );
+    $couponSaleTable->addColumn('coupon_id', Types::INTEGER);
+    $couponSaleTable->addColumn('sale_id', Types::INTEGER);
+    $couponSaleTable->setPrimaryKey(['id']);
+}
+
+if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON_SERVICE_SALE)) {
+    $couponSaleTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_COUPON_SERVICE_SALE);
+    $couponSaleTable->addColumn(
+        'id',
+        Types::INTEGER,
+        ['autoincrement' => true, 'unsigned' => true]
+    );
+    $couponSaleTable->addColumn('coupon_id', Types::INTEGER);
+    $couponSaleTable->addColumn('service_sale_id', Types::INTEGER);
+    $couponSaleTable->setPrimaryKey(['id']);
+}
+
+if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_STRIPE)) {
+    $stripeTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_STRIPE);
+    $stripeTable->addColumn(
+        'id',
+        Types::INTEGER,
+        ['autoincrement' => true, 'unsigned' => true]
+    );
+    $stripeTable->addColumn('account_id', Types::STRING);
+    $stripeTable->addColumn('secret_key', Types::STRING);
+    $stripeTable->addColumn('endpoint_secret', Types::STRING);
+    $stripeTable->setPrimaryKey(['id']);
+}
+
+if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_TPV_CECABANK)) {
+    $tpvCecabankTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_TPV_CECABANK);
+    $tpvCecabankTable->addColumn(
+        'id',
+        Types::INTEGER,
+        ['autoincrement' => true, 'unsigned' => true]
+    );
+    $tpvCecabankTable->addColumn('crypto_key', Types::STRING);
+    $tpvCecabankTable->addColumn('merchant_id', Types::STRING);
+    $tpvCecabankTable->addColumn('acquirer_bin', Types::STRING);
+    $tpvCecabankTable->addColumn('terminal_id', Types::STRING);
+    $tpvCecabankTable->addColumn('cypher', Types::STRING);
+    $tpvCecabankTable->addColumn('exponent', Types::STRING);
+    $tpvCecabankTable->addColumn('supported_payment', Types::STRING);
+    $tpvCecabankTable->addColumn('url', Types::STRING);
+    $tpvCecabankTable->setPrimaryKey(['id']);
+}
+
+if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_COUPON_SUBSCRIPTION_SALE)) {
+    $couponSubscriptionSaleTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_COUPON_SUBSCRIPTION_SALE);
+    $couponSubscriptionSaleTable->addColumn(
+        'id',
+        Types::INTEGER,
+        ['autoincrement' => true, 'unsigned' => true]
+    );
+    $couponSubscriptionSaleTable->addColumn('coupon_id', Types::INTEGER);
+    $couponSubscriptionSaleTable->addColumn('sale_id', Types::INTEGER);
+    $couponSubscriptionSaleTable->setPrimaryKey(['id']);
+}
+
 $queries = $pluginSchema->toSql($platform);
 
 foreach ($queries as $query) {
@@ -430,6 +622,7 @@ $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
 $culqiTable = Database::get_main_table(BuyCoursesPlugin::TABLE_CULQI);
 $globalTable = Database::get_main_table(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG);
 $tpvRedsysTable = Database::get_main_table(BuyCoursesPlugin::TABLE_TPV_REDSYS);
+$stripeTable = Database::get_main_table(BuyCoursesPlugin::TABLE_STRIPE);
 
 $paypalExtraField = Database::select(
     "*",
@@ -496,6 +689,15 @@ Database::insert(
     $commissionTable,
     [
         'commission' => 0,
+    ]
+);
+
+Database::insert(
+    $stripeTable,
+    [
+        'account_id' => '',
+        'secret_key' => '',
+        'endpoint_secret' => '',
     ]
 );
 

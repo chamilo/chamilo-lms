@@ -1,7 +1,17 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+namespace Chamilo\PluginBundle\Form;
+
+use Category;
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Display;
+use Exception;
+use FormValidator;
+use ImsLti;
+use ImsLtiPlugin;
+use LtiAssignmentGradesService;
+use LtiNamesRoleProvisioningService;
 
 /**
  * Class FrmAdd.
@@ -16,9 +26,8 @@ class FrmEdit extends FormValidator
     /**
      * FrmAdd constructor.
      *
-     * @param string          $name
-     * @param array           $attributes
-     * @param ImsLtiTool|null $tool
+     * @param string $name
+     * @param array  $attributes
      */
     public function __construct(
         $name,
@@ -34,8 +43,6 @@ class FrmEdit extends FormValidator
      * Build the form.
      *
      * @param bool $globalMode
-     *
-     * @throws Exception
      */
     public function build($globalMode = true)
     {
@@ -75,12 +82,16 @@ class FrmEdit extends FormValidator
             } elseif ($this->tool->getVersion() === ImsLti::V_1P3) {
                 $this->addText('client_id', $plugin->get_lang('ClientId'), true);
                 $this->freeze(['client_id']);
-                $this->addTextarea(
-                    'public_key',
-                    $plugin->get_lang('PublicKey'),
-                    ['style' => 'font-family: monospace;', 'rows' => 5],
-                    true
-                );
+                if (!empty($this->tool->getJwksUrl())) {
+                    $this->addUrl('jwks_url', $plugin->get_lang('PublicKeyset'));
+                } else {
+                    $this->addTextarea(
+                        'public_key',
+                        $plugin->get_lang('PublicKey'),
+                        ['style' => 'font-family: monospace;', 'rows' => 5],
+                        true
+                    );
+                }
                 $this->addUrl('login_url', $plugin->get_lang('LoginUrl'));
                 $this->addUrl('redirect_url', $plugin->get_lang('RedirectUrl'));
             }
@@ -98,8 +109,8 @@ class FrmEdit extends FormValidator
             ['iframe' => 'iframe', 'window' => 'window']
         );
 
-        if (null === $parent ||
-            (null !== $parent && !$parent->isActiveDeepLinking())
+        if (null === $parent
+            || (null !== $parent && !$parent->isActiveDeepLinking())
         ) {
             $this->addCheckBox(
                 'deep_linking',
@@ -158,7 +169,7 @@ class FrmEdit extends FormValidator
                 'replacement_user_id',
                 [
                     $plugin->get_lang('ReplacementUserId'),
-                    $plugin->get_lang('ReplacementUserIdHelp')
+                    $plugin->get_lang('ReplacementUserIdHelp'),
                 ],
                 false
             );
@@ -200,6 +211,7 @@ class FrmEdit extends FormValidator
                 'version' => $this->tool->getVersion(),
                 'client_id' => $this->tool->getClientId(),
                 'public_key' => $this->tool->publicKey,
+                'jwks_url' => $this->tool->getJwksUrl(),
                 'login_url' => $this->tool->getLoginUrl(),
                 'redirect_url' => $this->tool->getRedirectUrl(),
                 '1p3_ags' => $advServices['ags'],

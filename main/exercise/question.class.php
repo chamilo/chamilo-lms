@@ -44,10 +44,13 @@ abstract class Question
         UNIQUE_ANSWER => ['unique_answer.class.php', 'UniqueAnswer'],
         MULTIPLE_ANSWER => ['multiple_answer.class.php', 'MultipleAnswer'],
         FILL_IN_BLANKS => ['fill_blanks.class.php', 'FillBlanks'],
+        FILL_IN_BLANKS_COMBINATION => ['FillBlanksCombination.php', 'FillBlanksCombination'],
         MATCHING => ['matching.class.php', 'Matching'],
+        MATCHING_COMBINATION => ['MatchingCombination.php', 'MatchingCombination'],
         FREE_ANSWER => ['freeanswer.class.php', 'FreeAnswer'],
         ORAL_EXPRESSION => ['oral_expression.class.php', 'OralExpression'],
         HOT_SPOT => ['hotspot.class.php', 'HotSpot'],
+        HOT_SPOT_COMBINATION => ['HotSpotCombination.php', 'HotSpotCombination'],
         HOT_SPOT_DELINEATION => ['HotSpotDelineation.php', 'HotSpotDelineation'],
         MULTIPLE_ANSWER_COMBINATION => ['multiple_answer_combination.class.php', 'MultipleAnswerCombination'],
         UNIQUE_ANSWER_NO_OPTION => ['unique_answer_no_option.class.php', 'UniqueAnswerNoOption'],
@@ -65,9 +68,13 @@ abstract class Question
         UNIQUE_ANSWER_IMAGE => ['UniqueAnswerImage.php', 'UniqueAnswerImage'],
         DRAGGABLE => ['Draggable.php', 'Draggable'],
         MATCHING_DRAGGABLE => ['MatchingDraggable.php', 'MatchingDraggable'],
+        MATCHING_DRAGGABLE_COMBINATION => ['MatchingDraggableCombination.php', 'MatchingDraggableCombination'],
         //MEDIA_QUESTION => array('media_question.class.php' , 'MediaQuestion')
         ANNOTATION => ['Annotation.php', 'Annotation'],
         READING_COMPREHENSION => ['ReadingComprehension.php', 'ReadingComprehension'],
+        UPLOAD_ANSWER => ['UploadAnswer.php', 'UploadAnswer'],
+        MULTIPLE_ANSWER_DROPDOWN => ['MultipleAnswerDropdown.php', 'MultipleAnswerDropdown'],
+        MULTIPLE_ANSWER_DROPDOWN_COMBINATION => ['MultipleAnswerDropdownCombination.php', 'MultipleAnswerDropdownCombination'],
     ];
 
     /**
@@ -96,13 +103,17 @@ abstract class Question
         // See BT#12611
         $this->questionTypeWithFeedback = [
             MATCHING,
+            MATCHING_COMBINATION,
             MATCHING_DRAGGABLE,
+            MATCHING_DRAGGABLE_COMBINATION,
             DRAGGABLE,
             FILL_IN_BLANKS,
+            FILL_IN_BLANKS_COMBINATION,
             FREE_ANSWER,
             ORAL_EXPRESSION,
             CALCULATED_ANSWER,
             ANNOTATION,
+            UPLOAD_ANSWER,
         ];
     }
 
@@ -238,11 +249,10 @@ abstract class Question
     }
 
     /**
-     * @param int $itemNumber
-     *
-     * @return string
+     * @param int $itemNumber The numerical counter of the question
+     * @param int $exerciseId The iid of the corresponding c_quiz, for specific rules applied to the title
      */
-    public function getTitleToDisplay($itemNumber)
+    public function getTitleToDisplay(int $itemNumber, int $exerciseId): string
     {
         $showQuestionTitleHtml = api_get_configuration_value('save_titles_as_html');
         $title = '';
@@ -251,7 +261,7 @@ abstract class Question
         }
 
         $title .= $showQuestionTitleHtml ? '' : '<strong>';
-        $checkIfShowNumberQuestion = $this->getShowHideConfiguration();
+        $checkIfShowNumberQuestion = $this->getShowHideConfiguration($exerciseId);
         if ($checkIfShowNumberQuestion != 1) {
             $title .= $itemNumber.'. ';
         }
@@ -269,9 +279,11 @@ abstract class Question
      * Gets the respective value to show or hide the number of a question in the exam.
      * If the field does not exist in the database, it will return 0.
      *
-     * @return int
+     * @param int $exerciseId The iid of the corresponding c_quiz, to avoid mix-ups when the question is used in more than one exercise
+     *
+     * @return int 1 if we should hide the numbering for the current question
      */
-    public function getShowHideConfiguration()
+    public function getShowHideConfiguration(int $exerciseId): int
     {
         $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
         $tblQuizRelQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -290,7 +302,8 @@ abstract class Question
                 FROM
                     $tblQuiz as q
                 INNER JOIN  $tblQuizRelQuestion AS qrq ON qrq.exercice_id = q.iid
-                WHERE qrq.question_id = ".$this->iid;
+                WHERE qrq.question_id = ".$this->iid."
+                AND qrq.exercice_id = ".$exerciseId;
             $res = Database::query($sql);
             $result = Database::store_result($res);
             if (is_array($result) &&
@@ -1096,7 +1109,7 @@ abstract class Question
                 );
 
                 // If hotspot, create first answer
-                if ($type == HOT_SPOT || $type == HOT_SPOT_ORDER) {
+                if (in_array($type, [HOT_SPOT, HOT_SPOT_COMBINATION, HOT_SPOT_ORDER])) {
                     $quizAnswer = new CQuizAnswer();
                     $quizAnswer
                         ->setCId($c_id)
@@ -1349,11 +1362,11 @@ abstract class Question
      * @author Olivier Brouckaert
      *
      * @param int $exerciseId - exercise ID
-     * @param int $courseId
+     * @param int $courseId   The ID of the course, to avoid deleting re-used questions
      *
      * @return bool - true if removed, otherwise false
      */
-    public function removeFromList($exerciseId, $courseId = 0)
+    public function removeFromList(int $exerciseId, int $courseId = 0): bool
     {
         $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $id = (int) $this->iid;
@@ -1403,16 +1416,15 @@ abstract class Question
 
     /**
      * Deletes a question from the database
-     * the parameter tells if the question is removed from all exercises (value = 0),
+     * The parameter tells if the question is removed from all exercises (value = 0),
      * or just from one exercise (value = exercise ID).
      *
      * @author Olivier Brouckaert
      *
-     * @param int $deleteFromEx - exercise ID if the question is only removed from one exercise
-     *
-     * @return bool
+     * @param int  $deleteFromEx  Exercise ID if the question is only to be removed from one exercise
+     * @param bool $deletePicture Allow for special cases where the picture would be better left alone
      */
-    public function delete($deleteFromEx = 0)
+    public function delete(int $deleteFromEx = 0, bool $deletePicture = true): bool
     {
         if (empty($this->course)) {
             return false;
@@ -1433,10 +1445,17 @@ abstract class Question
 
         // if the question must be removed from all exercises
         if (!$deleteFromEx) {
+            $courseFilter = " AND c_id = $courseId";
+
+            if (true === api_get_configuration_value('quiz_question_allow_inter_course_linking')) {
+                $courseFilter = '';
+            }
+
             //update the question_order of each question to avoid inconsistencies
             $sql = "SELECT exercice_id, question_order
                     FROM $TBL_EXERCISE_QUESTION
-                    WHERE c_id = $courseId AND question_id = $id";
+                    WHERE question_id = $id
+                        $courseFilter";
 
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
@@ -1445,16 +1464,17 @@ abstract class Question
                         $sql = "UPDATE $TBL_EXERCISE_QUESTION
                                 SET question_order = question_order-1
                                 WHERE
-                                    c_id = $courseId AND
                                     exercice_id = ".intval($row['exercice_id'])." AND
-                                    question_order > ".$row['question_order'];
+                                    question_order > ".$row['question_order']
+                                    .$courseFilter;
                         Database::query($sql);
                     }
                 }
             }
 
             $sql = "DELETE FROM $TBL_EXERCISE_QUESTION
-                    WHERE c_id = $courseId AND question_id = $id";
+                    WHERE question_id = $id
+                        $courseFilter";
             Database::query($sql);
 
             $sql = "DELETE FROM $TBL_QUESTIONS
@@ -1468,8 +1488,8 @@ abstract class Question
             // remove the category of this question in the question_rel_category table
             $sql = "DELETE FROM $TBL_QUIZ_QUESTION_REL_CATEGORY
                     WHERE
-                        c_id = $courseId AND
-                        question_id = $id";
+                        question_id = $id
+                        $courseFilter";
             Database::query($sql);
 
             // Add extra fields.
@@ -1492,7 +1512,9 @@ abstract class Question
                 LOG_QUESTION_ID,
                 $this->iid
             );
-            $this->removePicture();
+            if ($deletePicture) {
+                $this->removePicture();
+            }
         } else {
             // just removes the exercise from the list
             $this->removeFromList($deleteFromEx, $courseId);
@@ -1596,6 +1618,12 @@ abstract class Question
             // Duplicates the picture of the hotspot
             $this->exportPicture($newQuestionId, $courseInfo);
         }
+
+        Event::addEvent(
+            LOG_QUESTION_CREATED,
+            LOG_QUESTION_ID,
+            $newQuestionId
+        );
 
         return $newQuestionId;
     }
@@ -1808,6 +1836,8 @@ abstract class Question
             global $text;
             switch ($this->type) {
                 case UNIQUE_ANSWER:
+                case MULTIPLE_ANSWER_DROPDOWN:
+                case MULTIPLE_ANSWER_DROPDOWN_COMBINATION:
                     $buttonGroup = [];
                     $buttonGroup[] = $form->addButtonSave(
                         $text,
@@ -1817,7 +1847,7 @@ abstract class Question
                     $buttonGroup[] = $form->addButton(
                         'convertAnswer',
                         get_lang('ConvertToMultipleAnswer'),
-                        'dot-circle-o',
+                        'check-square-o',
                         'default',
                         null,
                         null,
@@ -1836,6 +1866,16 @@ abstract class Question
                     $buttonGroup[] = $form->addButton(
                         'convertAnswer',
                         get_lang('ConvertToUniqueAnswer'),
+                        'dot-circle-o',
+                        'default',
+                        null,
+                        null,
+                        null,
+                        true
+                    );
+                    $buttonGroup[] = $form->addButton(
+                        'convertAnswerAlt',
+                        get_lang('ConvertToMultipleAnswerDropdown'),
                         'check-square-o',
                         'default',
                         null,
@@ -2204,6 +2244,7 @@ abstract class Question
 
         switch ($this->type) {
             case FREE_ANSWER:
+            case UPLOAD_ANSWER:
             case ORAL_EXPRESSION:
             case ANNOTATION:
                 $score['revised'] = isset($score['revised']) ? $score['revised'] : false;
@@ -2317,7 +2358,7 @@ abstract class Question
             $header .= $message.'<br />';
         }
 
-        if ($exercise->hideComment && $this->type == HOT_SPOT) {
+        if ($exercise->hideComment && in_array($this->type, [HOT_SPOT, HOT_SPOT_COMBINATION])) {
             $header .= Display::return_message(get_lang('ResultsOnlyAvailableOnline'));
 
             return $header;
@@ -2536,13 +2577,15 @@ abstract class Question
      *
      * @return UniqueAnswer|MultipleAnswer
      */
-    public function swapSimpleAnswerTypes()
+    public function swapSimpleAnswerTypes($index = 0)
     {
         $oppositeAnswers = [
-            UNIQUE_ANSWER => MULTIPLE_ANSWER,
-            MULTIPLE_ANSWER => UNIQUE_ANSWER,
+            UNIQUE_ANSWER => [MULTIPLE_ANSWER],
+            MULTIPLE_ANSWER => [UNIQUE_ANSWER, MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_COMBINATION],
+            MULTIPLE_ANSWER_DROPDOWN => [MULTIPLE_ANSWER],
+            MULTIPLE_ANSWER_DROPDOWN_COMBINATION => [MULTIPLE_ANSWER],
         ];
-        $this->type = $oppositeAnswers[$this->type];
+        $this->type = $oppositeAnswers[$this->type][$index];
         Database::update(
             Database::get_course_table(TABLE_QUIZ_QUESTION),
             ['type' => $this->type],
@@ -2551,11 +2594,16 @@ abstract class Question
         $answerClasses = [
             UNIQUE_ANSWER => 'UniqueAnswer',
             MULTIPLE_ANSWER => 'MultipleAnswer',
+            MULTIPLE_ANSWER_DROPDOWN => 'MultipleAnswerDropdown',
+            MULTIPLE_ANSWER_DROPDOWN_COMBINATION => 'MultipleAnswerDropdownCombination',
         ];
         $swappedAnswer = new $answerClasses[$this->type]();
         foreach ($this as $key => $value) {
             $swappedAnswer->$key = $value;
         }
+
+        $objAnswer = new Answer($swappedAnswer->iid);
+        $_POST['nb_answers'] = $objAnswer->nbrAnswers;
 
         return $swappedAnswer;
     }
@@ -2678,6 +2726,69 @@ abstract class Question
         );
 
         return (int) $result['c'];
+    }
+
+    /**
+     * Count the number of quizzes that use a question.
+     *
+     * @param int $questionId - question ID
+     *
+     * @return int - The number of quizzes where the question is used
+     */
+    public static function countQuizzesUsingQuestion(int $questionId)
+    {
+        $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $result = Database::select(
+            'count(*) as count',
+            $table,
+            [
+                'where' => [
+                    'question_id = ? ' => [
+                        $questionId,
+                    ],
+                ],
+            ],
+            'first'
+        );
+
+        if ($result && isset($result['count'])) {
+            return $result['count'];
+        }
+
+        return 0;
+    }
+
+    /**
+     * Gets the first quiz ID that uses a given question.
+     * The c_quiz_rel_question result with lower iid is the master quiz.
+     *
+     * @param int $questionId - question ID
+     *
+     * @return int The quiz ID
+     */
+    public static function getMasterQuizForQuestion($questionId)
+    {
+        $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+
+        $row = Database::select(
+            '*',
+            $table,
+            [
+                'where' => [
+                    'question_id = ?' => [
+                        $questionId,
+                    ],
+                ],
+                'order' => 'iid ASC',
+            ],
+            'first'
+        );
+
+        if (is_array($row) && isset($row['exercice_id'])) {
+            return $row['exercice_id'];
+        } else {
+            return false;
+        }
     }
 
     /**

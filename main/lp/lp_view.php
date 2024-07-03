@@ -112,7 +112,11 @@ if (!$is_allowed_to_edit) {
 
 $platform_theme = api_get_setting('stylesheets');
 $my_style = $platform_theme;
-$ajaxUrl = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?a=get_item_prerequisites&'.api_get_cidreq();
+$extraParams = '';
+if (isset($_REQUEST['lti_launch_id'])) {
+    $extraParams .= '&lti_launch_id='.Security::remove_XSS($_REQUEST['lti_launch_id']);
+}
+$ajaxUrl = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?a=get_item_prerequisites&'.api_get_cidreq().$extraParams;
 $htmlHeadXtra[] = '<script>
 <!--
 var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';
@@ -130,6 +134,27 @@ $(function() {
 });
 var chamilo_xajax_handler = window.oxajax;
 </script>';
+if (!empty($lp->lti_launch_id)) {
+    if (isset($_REQUEST['from']) && 'lti_provider' == $_REQUEST['from']) {
+        $logout = api_get_path(WEB_PATH).'plugin/lti_provider/tool/logout.php?uid='.api_get_user_id();
+        $htmlHeadXtra[] = '<script>
+            $(function() {
+              if ($("#btn-menu-float").length > 0) {
+                $("#btn-menu-float").find("#home-course").show();
+                $("#btn-menu-float").find("#home-course").attr("href", "'.$logout.'");
+              }
+            });
+        </script>';
+    } else {
+        $htmlHeadXtra[] = '<script>
+                $(function() {
+                  if ($("#btn-menu-float").length > 0) {
+                    $("#btn-menu-float").find("#home-course").hide();
+                  }
+                });
+        </script>';
+    }
+}
 
 $zoomOptions = api_get_configuration_value('quiz_image_zoom');
 if (isset($zoomOptions['options']) && !in_array($origin, ['embeddable', 'noheader'])) {
@@ -237,6 +262,7 @@ if ($debug) {
 
 $get_toc_list = $lp->get_toc();
 $get_teacher_buttons = $lp->get_teacher_toc_buttons();
+$flowButtons = $lp->getFlowLpbuttons();
 $itemType = '';
 foreach ($get_toc_list as $toc) {
     if ($toc['id'] == $lp_item_id) {
@@ -526,6 +552,7 @@ $template->assign('show_audio_player', $show_audioplayer);
 $template->assign('media_player', $mediaplayer);
 $template->assign('toc_list', $get_toc_list);
 $template->assign('teacher_toc_buttons', $get_teacher_buttons);
+$template->assign('flow_buttons', $flowButtons);
 $template->assign('iframe_src', $src);
 $template->assign('navigation_bar_bottom', $navigation_bar_bottom);
 $template->assign('show_left_column', $lp->getHideTableOfContents() == 0);
@@ -534,13 +561,22 @@ $showMenu = 0;
 $settings = api_get_configuration_value('lp_view_settings');
 $display = isset($settings['display']) ? $settings['display'] : false;
 $navigationInTheMiddle = false;
+$addExtraQuitToHomeIcon = false;
 if (!empty($display)) {
     $showMenu = isset($display['show_toolbar_by_default']) && $display['show_toolbar_by_default'] ? 1 : 0;
     $navigationInTheMiddle = isset($display['navigation_in_the_middle']) && $display['navigation_in_the_middle'] ? 1 : 0;
+    $addExtraQuitToHomeIcon = $display['add_extra_quit_to_home_icon'] ?? false;
+
+    $value = (new ExtraFieldValue('lp'))->get_values_by_handler_and_field_variable($lp_id, 'add_extra_quit_button');
+
+    if (is_array($value)) {
+        $addExtraQuitToHomeIcon = $value['value'] !== '0';
+    }
 }
 
 $template->assign('show_toolbar_by_default', $showMenu);
 $template->assign('navigation_in_the_middle', $navigationInTheMiddle);
+$template->assign('add_extra_quit_to_home_icon', $addExtraQuitToHomeIcon);
 
 if ($gamificationMode == 1) {
     $template->assign('gamification_stars', $lp->getCalculateStars($sessionId));
@@ -620,7 +656,22 @@ $template->assign(
     )
 );
 
-$frameReady = Display::getFrameReadyBlock('#content_id, #content_id_blank', $itemType);
+// Check if the 'Open in new window' button for IOs hosts must be hidden
+$iosHideOpenInNewWindow = false;
+if (api_get_configuration_value('lp_ios_hide_open_in_new_window_button') === true) {
+    $iosHideOpenInNewWindow = api_get_configuration_value('lp_ios_hide_open_in_new_window_button');
+}
+$template->assign('ios_hide_open_in_new_window', $iosHideOpenInNewWindow);
+
+$frameReady = Display::getFrameReadyBlock(
+    '#content_id, #content_id_blank',
+    $itemType,
+    'function () {
+        var arr = ["link", "sco", "xapi", "quiz", "h5p"];
+
+        return $.inArray(olms.lms_item_type, arr) !== -1;
+    }'
+);
 $template->assign('frame_ready', $frameReady);
 
 $view = $template->get_template('learnpath/view.tpl');

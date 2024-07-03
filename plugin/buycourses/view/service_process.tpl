@@ -31,10 +31,34 @@
                                     {{ 'Total'|get_plugin_lang('BuyCoursesPlugin')}} :
                                     {{ service.total_price_formatted }}
                                 </div>
+                                {% if service.has_coupon %}
+                                    <div class="price-details-tax">
+                                        {{ 'DiscountAmount'|get_plugin_lang('BuyCoursesPlugin') }}:
+                                        {{ service.discount_amount_formatted }}
+                                    </div>
+                                {% endif %}
+                                <div class="coupon-question">
+                                    {{ 'DoYouHaveACoupon'|get_plugin_lang('BuyCoursesPlugin') }}
+                                </div>
+                                <div class="coupon">
+                                    {{ form_coupon }}
+                                </div>
                             {% else %}
                             <div class="price">
                                 {{ 'Total'|get_plugin_lang('BuyCoursesPlugin')}} :
                                  {{ service.total_price_formatted }}
+                            </div>
+                            {% if service.has_coupon %}
+                                <div class="price-details-tax">
+                                    {{ 'DiscountAmount'|get_plugin_lang('BuyCoursesPlugin') }}:
+                                    {{ service.discount_amount_formatted }}
+                                </div>
+                            {% endif %}
+                            <div class="coupon-question">
+                                {{ 'DoYouHaveACoupon'|get_plugin_lang('BuyCoursesPlugin') }}
+                            </div>
+                            <div class="coupon">
+                                {{ form_coupon }}
                             </div>
                             {% endif %}
 

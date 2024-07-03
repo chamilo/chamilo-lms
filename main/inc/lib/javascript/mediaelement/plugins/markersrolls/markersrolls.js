@@ -21,37 +21,94 @@ Object.assign(mejs.MepDefaults, {
 
 Object.assign(MediaElementPlayer.prototype, {
 	buildmarkersrolls: function buildmarkersrolls(player, controls, layers, media) {
+		var _player$options = player.options,
+		    markersRollsColor = _player$options.markersRollsColor,
+		    markersRollsWidth = _player$options.markersRollsWidth,
+		    markersRolls = _player$options.markersRolls,
+		    classPrefix = _player$options.classPrefix;
+
+		var controlsTotalTime = controls.querySelector('.' + classPrefix + 'time-total');
+
 		var currentPosition = -1,
 		    lastPlayedPosition = -1,
 		    lastMarkerRollCallback = -1,
-		    markersCount = Object.keys(player.options.markersRolls).length;
+		    markersAreRendered = false;
+
+		var markersCount = Object.keys(markersRolls).length;
 
 		if (!markersCount) {
 			return;
 		}
 
-		for (var i = 0, total = markersCount; i < total; ++i) {
-			var marker = document.createElement('span');
+		function createIframeLayer() {
+			var layer = document.createElement('iframe');
 
-			marker.className = this.options.classPrefix + 'time-marker';
-			controls.querySelector('.' + this.options.classPrefix + 'time-total').appendChild(marker);
+			layer.frameBorder = '0';
+			layer.className = classPrefix + 'markersrolls-layer ' + classPrefix + 'overlay ' + classPrefix + 'layer';
+			layer.style.display = 'none';
+			layer.style.backgroundColor = '#9F9F9F';
+			layer.style.border = '0 none';
+			layer.style.boxShadow = '#B0B0B0 0px 0px 20px -10px inset';
+			layer.style.paddingBottom = '40px';
+
+			return layer;
 		}
 
-		var markersRollsLayer = document.createElement('iframe');
-		markersRollsLayer.frameBorder = '0';
-		markersRollsLayer.className = this.options.classPrefix + 'markersrolls-layer' + ' ' + (this.options.classPrefix + 'overlay') + ' ' + (this.options.classPrefix + 'layer');
-		markersRollsLayer.style.display = 'none';
-		markersRollsLayer.style.backgroundColor = '#9F9F9F';
-		markersRollsLayer.style.border = '0 none';
-		markersRollsLayer.style.boxShadow = '#B0B0B0 0px 0px 20px -10px inset';
-		markersRollsLayer.style.paddingBottom = '40px';
+		function createMarker(_ref) {
+			var markerPosition = _ref.markerPosition,
+			    duration = _ref.duration;
+
+			var marker = document.createElement('span');
+
+			marker.className = classPrefix + 'time-marker';
+			marker.style.width = markersRollsWidth + 'px';
+			marker.style.left = 100 * markerPosition / duration + '%';
+			marker.style.background = markersRollsColor;
+
+			return marker;
+		}
+
+		var markersRollsLayer = createIframeLayer();
 
 		layers.appendChild(markersRollsLayer);
 
-		media.addEventListener('durationchange', function () {
-			player.setmarkersrolls(controls);
-		});
-		media.addEventListener('timeupdate', function () {
+		function tryRenderMarkers() {
+			if (markersAreRendered) {
+				return;
+			}
+
+			var duration = media.getDuration();
+
+			if (!duration) {
+				return;
+			}
+
+			for (var markerPosition in markersRolls) {
+				if (!markersRolls.hasOwnProperty(markerPosition)) {
+					continue;
+				}
+
+				markerPosition = parseInt(markerPosition);
+
+				if (markerPosition >= duration || markerPosition < 0) {
+					continue;
+				}
+
+				var marker = createMarker({
+					markerPosition: markerPosition,
+					duration: duration
+				});
+
+				controlsTotalTime.appendChild(marker);
+			}
+
+			markersAreRendered = true;
+		}
+
+		player.markersRollsLoadedMetadata = function () {
+			tryRenderMarkers();
+		};
+		player.markersRollsTimeUpdate = function () {
 			currentPosition = Math.floor(media.currentTime);
 
 			if (lastPlayedPosition > currentPosition) {
@@ -62,7 +119,7 @@ Object.assign(MediaElementPlayer.prototype, {
 				lastPlayedPosition = currentPosition;
 			}
 
-			if (0 === markersCount || !player.options.markersRolls[currentPosition] || currentPosition === lastMarkerRollCallback) {
+			if (0 === markersCount || !markersRolls[currentPosition] || currentPosition === lastMarkerRollCallback) {
 				return;
 			}
 
@@ -70,39 +127,24 @@ Object.assign(MediaElementPlayer.prototype, {
 
 			media.pause();
 
-			markersRollsLayer.src = player.options.markersRolls[currentPosition];
+			markersRollsLayer.src = markersRolls[currentPosition];
 			markersRollsLayer.style.display = 'block';
-		}, false);
-		media.addEventListener('play', function () {
+		};
+		player.markersRollsPlay = function () {
+			tryRenderMarkers();
+
 			markersRollsLayer.style.display = 'none';
 			markersRollsLayer.src = '';
-		}, false);
+		};
+
+		media.addEventListener('loadedmetadata', player.markersRollsLoadedMetadata);
+		media.addEventListener('timeupdate', player.markersRollsTimeUpdate);
+		media.addEventListener('play', player.markersRollsPlay);
 	},
-	setmarkersrolls: function setmarkersrolls(controls) {
-		var markersRolls = controls.querySelectorAll('.' + this.options.classPrefix + 'time-marker');
-
-		var i = 0;
-
-		for (var position in this.options.markersRolls) {
-			if (!this.options.markersRolls.hasOwnProperty(position)) {
-				continue;
-			}
-
-			position = parseInt(position);
-
-			if (position >= this.media.duration || position < 0) {
-				continue;
-			}
-
-			var left = 100 * position / this.media.duration,
-			    marker = markersRolls[i];
-
-			marker.style.width = this.options.markersRollsWidth + 'px';
-			marker.style.left = left + '%';
-			marker.style.background = this.options.markersRollsColor;
-
-			i++;
-		}
+	cleanmarkersrolls: function cleanmarkersrolls(player, controls, layers, media) {
+		media.removeEventListener('loadedmetadata', player.markersRollsLoadedMetadata);
+		media.removeEventListener('timeupdate', player.markersRollsTimeUpdate);
+		media.removeEventListener('play', player.markersRollsPlay);
 	}
 });
 

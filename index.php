@@ -126,15 +126,13 @@ $announcements_block = '';
 $useCookieValidation = api_get_setting('cookie_warning');
 
 if ($useCookieValidation === 'true') {
-    if (isset($_POST['acceptCookies'])) {
-        api_set_site_use_cookie_warning_cookie();
-    } elseif (!api_site_use_cookie_warning_cookie_exist()) {
+    if (!api_site_use_cookie_warning_cookie_exist()) {
         if (Template::isToolBarDisplayedForUser()) {
             $controller->tpl->assign('toolBarDisplayed', true);
         } else {
             $controller->tpl->assign('toolBarDisplayed', false);
         }
-        $controller->tpl->assign('displayCookieUsageWarning', true);
+        $controller->tpl->enableCookieUsageWarning();
     }
 }
 // When loading a chamilo page do not include the hot courses and news
@@ -149,6 +147,20 @@ if (!isset($_REQUEST['include'])) {
         }
     }
     $announcements_block = $controller->return_announcements();
+
+    if (api_get_configuration_value('course_catalog_display_in_home')
+        && ('true' === api_get_setting('course_catalog_published') || !api_is_anonymous())
+    ) {
+        $userCanViewPage = CoursesAndSessionsCatalog::userCanView();
+
+        if (CoursesAndSessionsCatalog::is(CATALOG_SESSIONS)) {
+            $announcements_block .= $userCanViewPage ? CoursesAndSessionsCatalog::sessionList(true) : '';
+        } else {
+            $announcements_block .= $userCanViewPage
+                ? CoursesAndSessionsCatalog::displayCoursesList('display_courses', '', '', true)
+                : '';
+        }
+    }
 }
 if (api_get_configuration_value('show_hot_sessions') === true) {
     $hotSessions = SessionManager::getHotSessions();
@@ -191,10 +203,16 @@ if (api_is_anonymous()) {
 }
 // direct login to course
 if (isset($_GET['firstpage'])) {
-    api_set_firstpage_parameter($_GET['firstpage']);
-    // if we are already logged, go directly to course
-    if (api_user_is_login()) {
-        echo "<script>self.location.href='index.php?firstpage=".Security::remove_XSS($_GET['firstpage'])."'</script>";
+    $firstPage = $_GET['firstpage'];
+    $courseInfo = api_get_course_info($firstPage);
+
+    if (!empty($courseInfo)) {
+        api_set_firstpage_parameter($firstPage);
+
+        // if we are already logged, go directly to course
+        if (api_user_is_login()) {
+            echo "<script>self.location.href='index.php?firstpage=".Security::remove_XSS($firstPage)."'</script>";
+        }
     }
 } else {
     api_delete_firstpage_parameter();

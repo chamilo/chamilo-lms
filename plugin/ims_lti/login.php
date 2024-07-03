@@ -6,7 +6,7 @@ use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_protect_course_script(true);
-api_block_anonymous_users(true);
+api_block_anonymous_users();
 
 $em = Database::getManager();
 
@@ -28,14 +28,15 @@ $params = [
     'target_link_uri' => $tool->getLaunchUrl(),
     'login_hint' => ImsLtiPlugin::getLaunchUserIdClaim($tool, $user),
     'lti_message_hint' => $tool->getId(),
+    'client_id' => $tool->getClientId(),
 ];
 ?>
 <!DOCTYPE html>
 <body>
-<form action="<?php echo $tool->getLoginUrl() ?>" method="post" name="lti_1p3_login" id="lti_1p3_login"
+<form action="<?php echo $tool->getLoginUrl(); ?>" method="post" name="lti_1p3_login" id="lti_1p3_login"
       enctype="application/x-www-form-urlencoded" class="form-horizontal">
     <?php foreach ($params as $name => $value) { ?>
-        <input type="hidden" name="<?php echo $name ?>" value="<?php echo $value ?>">
+        <input type="hidden" name="<?php echo $name; ?>" value="<?php echo $value; ?>">
     <?php } ?>
 </form>
 

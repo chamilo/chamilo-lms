@@ -31,7 +31,7 @@ $t_linkeval_log = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
 $t_user = Database::get_main_table(TABLE_MAIN_USER);
 $visible_log = Security::remove_XSS($_GET['visiblelog']);
 
-$evaledit = Evaluation :: load($visible_log);
+$evaledit = Evaluation::load($visible_log);
 $sql = "SELECT le.name,le.description,le.weight,le.visible,le.type,le.created_at, us.user_id
         FROM $t_linkeval_log le
         INNER JOIN $t_user us
@@ -73,4 +73,4 @@ $table->set_header(5, get_lang('Date'));
 $table->set_header(6, get_lang('GradebookWhoChangedItLog'));
 
 $table->display();
-Display :: display_footer();
+Display::display_footer();

@@ -68,6 +68,7 @@ if (isset($_POST['activeExtension'])) {
             Database::query($sql);
             break;
     }
+    api_flush_settings_cache(api_get_current_access_url_id());
 }
 
 $listActiveServices = [];
@@ -158,7 +159,11 @@ Display::display_header($nameTool);
                 <form method="POST" class="form-horizontal" action="<?php echo api_get_self(); ?>">
                     <?php
                     $form = new FormValidator('ppt2lp');
-                    $form->addElement('text', 'host', get_lang('Host'));
+                    if (api_get_configuration_value('webservice_remote_ppt2png_enable') == true) {
+                        $form->addElement('text', 'host', get_lang('Host'));
+                    } else {
+                        $form->addElement('text', 'host', [get_lang('Host'), 'Remote host disabled - set webservice_remote_ppt2png_enable setting to true in configuration.php to enable']);
+                    }
                     //$form -> addElement('html','<br /><br />');
                     $form->addElement('text', 'port', get_lang('Port'));
                     //$form -> addElement('html','<br /><br />');

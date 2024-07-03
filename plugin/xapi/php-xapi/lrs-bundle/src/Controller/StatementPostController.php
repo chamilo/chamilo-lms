@@ -24,7 +24,7 @@ use XApi\Repository\Api\StatementRepositoryInterface;
 final class StatementPostController
 {
     /**
-     * @var \XApi\Repository\Api\StatementRepositoryInterface
+     * @var StatementRepositoryInterface
      */
     private $repository;
 

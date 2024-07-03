@@ -165,19 +165,19 @@ function get_lang($variable, $returnEmptyIfNotFound = false, $language = null)
 /**
  * Gets the current interface language.
  *
- * @param bool $purified              (optional)    When it is true, a purified (refined)
- *                                    language value will be returned, for example 'french' instead of 'french_unicode'
- * @param bool $setParentLanguageName
+ * @param bool $purified              (optional)    When it is true, a purified (refined) language value will be returned, for example 'french' instead of 'french_unicode'
+ * @param bool $check_sub_language    (optional) Whether we have to consider sub-languages for the determination of a common parent language
+ * @param bool $setParentLanguageName (optional) If $check_sub_language is true and there is a parent, return the parent language rather than the sub-language
  *
  * @throws Exception
  *
  * @return string the current language of the interface
  */
 function api_get_interface_language(
-    $purified = false,
-    $check_sub_language = false,
-    $setParentLanguageName = true
-) {
+    bool $purified = false,
+    bool $check_sub_language = false,
+    bool $setParentLanguageName = true
+): string {
     global $language_interface;
 
     if (empty($language_interface)) {
@@ -188,7 +188,7 @@ function api_get_interface_language(
         static $parent_language_name = null;
 
         if (!isset($parent_language_name)) {
-            // 2. The current language is a sub language so we grab the father's
+            // 2. The current language is a sub language, so we grab the father's
             // setting according to the internalization_database/name_order_convetions.php file
             $language_id = api_get_language_id($language_interface);
             $language_info = api_get_language_info($language_id);
@@ -446,7 +446,13 @@ function api_get_utc_datetime(
     if (is_numeric($time)) {
         $time = (int) $time;
 
-        return gmdate('Y-m-d H:i:s', $time);
+        $gmDate = gmdate('Y-m-d H:i:s', $time);
+
+        if ($returnObj) {
+            return new DateTime($gmDate, new DateTimeZone('UTC'));
+        }
+
+        return $gmDate;
     }
     try {
         $fromTimezone = api_get_timezone();
@@ -1034,6 +1040,65 @@ function api_sort_by_first_name($language = null)
     }
 
     return $sort_by_first_name[$language];
+}
+
+/**
+ * Return an array with the quarter dates.
+ * If no DateTime is not sent, use the current date.
+ *
+ * @param string|null $date (optional) The date or null.
+ *
+ * @return array E.G.: ['quarter_start' => '2022-10-11',
+ *               'quarter_end' => '2022-12-31',
+ *               'quarter_title' => 'Q4 2022']
+ */
+function getQuarterDates(string $date = null): array
+{
+    if (empty($date)) {
+        $date = api_get_utc_datetime();
+    }
+
+    if (strlen($date > 10)) {
+        $date = substr($date, 0, 10);
+    }
+
+    $month = substr($date, 5, 2);
+    $year = substr($date, 0, 4);
+
+    switch ($month) {
+        case $month >= 1 && $month <= 3:
+            $start = "$year-01-01";
+            $end = "$year-03-31";
+            $quarter = 1;
+            break;
+        case $month >= 4 && $month <= 6:
+            $start = "$year-04-01";
+            $end = "$year-06-30";
+            $quarter = 2;
+            break;
+        case $month >= 7 && $month <= 9:
+            $start = "$year-07-01";
+            $end = "$year-09-30";
+            $quarter = 3;
+            break;
+        case $month >= 10 && $month <= 12:
+            $start = "$year-10-01";
+            $end = "$year-12-31";
+            $quarter = 4;
+            break;
+        default:
+            // Should never happen
+            $start = "$year-01-01";
+            $end = "$year-03-31";
+            $quarter = 1;
+            break;
+    }
+
+    return [
+        'quarter_start' => $start,
+        'quarter_end' => $end,
+        'quarter_title' => sprintf(get_lang('QuarterXQY'), $quarter, $year),
+    ];
 }
 
 /**

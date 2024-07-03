@@ -80,7 +80,6 @@ border-color: #8cbf00;
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
   color: #c9ed16;
 }
-
 .navbar-default .navbar-nav > li > .dropdown-menu > li > .divider {
   background-color: #68a814;
 }
@@ -118,6 +117,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#008000', end
 .navbar-default .navbar-link:hover {
   color: #c9ed16;
 }
+.logo {
+  margin: 50px 0;
+}
 .panel-default .panel-heading{
     background-color: #E5E5E5;
 }
@@ -143,4 +145,28 @@ footer.bgfooter a{
 }
 footer.bgfooter a:hover{
   color: #CCC;
+}
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) {
+  .logo {
+    margin: 25px 0;
+  }
+}
+/* Medium-small screens*/
+@media (min-width: 480px) and (max-width: 767px) {
+  .logo {
+    margin: 24px 0;
+  }
+}
+/* Smalls screens */
+@media (min-width: 320px) and (max-width: 479px) {
+  .logo {
+    margin: 10px 0;
+  }
+}
+/* Landscape phones and down */
+@media only screen and (min-width: 320px) and (max-width: 480px) {
+  .logo {
+    margin: 20px 0;
+  }
 }

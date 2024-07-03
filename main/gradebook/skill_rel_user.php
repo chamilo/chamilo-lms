@@ -8,6 +8,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 if (api_get_configuration_value('allow_skill_rel_items') == false) {
     api_not_allowed(true);
 }
+$htmlContentExtraClass[] = 'feature-item-user-skill-on';
 
 api_protect_course_script();
 GradebookUtils::block_students();

@@ -510,7 +510,7 @@ class UniqueAnswer extends Question
             ->setComment($comment)
             ->setPonderation($score)
             ->setPosition($position)
-            ->setDestination('0@@0@@0@@0');
+            ->setDestination(CQuizAnswer::DEFAULT_DESTINATION);
 
         $em->persist($quizAnswer);
         $em->flush();

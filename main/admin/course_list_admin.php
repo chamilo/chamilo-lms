@@ -193,7 +193,10 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
         );
         $actions[] = Display::url(
             Display::return_icon('delete.png', get_lang('Delete')),
-            $path.'admin/course_list_admin.php?delete_course='.$courseCode,
+            $path.'admin/course_list_admin.php?'.http_build_query([
+                  'delete_course' => $courseCode,
+                    'sec_token' => Security::getTokenFromSession(),
+                ]),
             [
                 'onclick' => "javascript: if (!confirm('"
                     .addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."')) return false;",
@@ -287,7 +290,7 @@ function get_course_visibility_icon($visibility)
     }
 }
 
-if (isset($_POST['action'])) {
+if (isset($_POST['action']) && Security::check_token('get')) {
     switch ($_POST['action']) {
         // Delete selected courses
         case 'delete_courses':
@@ -379,7 +382,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
         'name' => get_lang('PlatformAdmin'),
     ];
     $tool_name = get_lang('CourseList');
-    if (isset($_GET['delete_course'])) {
+    if (isset($_GET['delete_course']) && Security::check_token('get')) {
         $result = CourseManager::delete_course($_GET['delete_course']);
         if ($result) {
             Display::addFlash(Display::return_message(get_lang('Deleted')));
@@ -460,6 +463,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     );
 
     $parameters = [];
+    $parameters['sec_token'] = Security::get_token();
     if (isset($_GET['keyword'])) {
         $parameters = ['keyword' => Security::remove_XSS($_GET['keyword'])];
     } elseif (isset($_GET['keyword_code'])) {

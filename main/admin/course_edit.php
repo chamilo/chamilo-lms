@@ -320,6 +320,17 @@ $extra = $extra_field->addElements(
     true
 );
 
+if (api_get_configuration_value('allow_course_multiple_languages')) {
+    // Course Multiple language.
+    $languages = api_get_languages();
+    $cbMultiLanguage = $form->getElementByName('extra_multiple_language');
+    if (isset($cbMultiLanguage)) {
+        foreach ($languages['folder'] as $langFolder) {
+            $cbMultiLanguage->addOption(get_lang($langFolder), $langFolder);
+        }
+    }
+}
+
 if (api_get_configuration_value('multiple_access_url_show_shared_course_marker')) {
     $urls = UrlManager::get_access_url_from_course($courseId);
     $urlToString = '';
@@ -327,6 +338,11 @@ if (api_get_configuration_value('multiple_access_url_show_shared_course_marker')
         $urlToString .= $url['url'].'<br />';
     }
     $form->addLabel('URLs', $urlToString);
+}
+$allowSkillRelItem = api_get_configuration_value('allow_skill_rel_items');
+if ($allowSkillRelItem) {
+    Skill::setSkillsToCourse($form, $courseId);
+    $htmlContentExtraClass[] = 'feature-item-user-skill-on';
 }
 
 $htmlHeadXtra[] = '
@@ -341,13 +357,17 @@ $form->addButtonUpdate(get_lang('ModifyCourseInfo'));
 // Set some default values
 $courseInfo['disk_quota'] = round(DocumentManager::get_course_quota($courseInfo['code']) / 1024 / 1024, 1);
 $courseInfo['real_code'] = $courseInfo['code'];
-$courseInfo['add_teachers_to_sessions_courses'] = isset($courseInfo['add_teachers_to_sessions_courses']) ? $courseInfo['add_teachers_to_sessions_courses'] : 0;
+$courseInfo['add_teachers_to_sessions_courses'] = $courseInfo['add_teachers_to_sessions_courses'] ?? 0;
 $form->setDefaults($courseInfo);
 
 // Validate form
 if ($form->validate()) {
     $course = $form->getSubmitValues();
     $visibility = $course['visibility'];
+
+    /*if ($allowSkillRelItem) {
+        $result = Skill::saveSkillsToCourseFromForm($form);
+    }*/
 
     global $_configuration;
 
@@ -412,16 +432,16 @@ if ($form->validate()) {
     $courseInfoBeforeUpdate = api_get_course_info_by_id($courseId);
     $title = str_replace('&amp;', '&', $title);
     $params = [
-        'course_language' => $course_language,
         'title' => $title,
+        'course_language' => $course_language,
         'category_code' => $category_code,
-        'visual_code' => $visual_code,
         'department_name' => $department_name,
         'department_url' => $department_url,
-        'disk_quota' => $disk_quota,
         'visibility' => $visibility,
         'subscribe' => $subscribe,
         'unsubscribe' => $unsubscribe,
+        'disk_quota' => $disk_quota,
+        'visual_code' => $visual_code,
     ];
     Database::update($course_table, $params, ['id = ?' => $courseId]);
     CourseManager::saveSettingChanges($courseInfoBeforeUpdate, $params);

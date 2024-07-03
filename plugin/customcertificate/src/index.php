@@ -286,6 +286,7 @@ $strInfo .= '((teacher_lastname))<br />';
 $strInfo .= '((official_code))<br />';
 $strInfo .= '((date_certificate))<br />';
 $strInfo .= '((date_certificate_no_time))<br />';
+$strInfo .= '((date_simple_certificate))<br />';
 $strInfo .= '((course_code))<br />';
 $strInfo .= '((course_title))<br />';
 $strInfo .= '((gradebook_grade))<br />';

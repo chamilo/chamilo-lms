@@ -34,7 +34,15 @@ $form->addSelect('status', $plugin->get_lang('OrderStatus'), $saleStatuses, ['co
 $form->addText('user', get_lang('User'), false, ['cols-size' => [0, 0, 0]]);
 $form->addButtonSearch(get_lang('Search'), 'search');
 
-$servicesSales = $plugin->getServiceSales(null, $selectedStatus);
+$servicesSales = $plugin->getServiceSales(0, $selectedStatus);
+
+foreach ($servicesSales as &$sale) {
+    if (isset($sale['discount_amount']) && $sale['discount_amount'] != 0) {
+        $sale['total_discount'] = $plugin->getPriceWithCurrencyFromIsoCode($sale['discount_amount'], $sale['iso_code']);
+        $sale['coupon_code'] = $plugin->getServiceSaleCouponCode($sale['id']);
+    }
+}
+
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => $plugin->get_lang('plugin_title')];
 
 $webPluginPath = api_get_path(WEB_PLUGIN_PATH);
@@ -45,20 +53,27 @@ $templateName = $plugin->get_lang('SalesReport');
 
 $template = new Template($templateName);
 
+$toolbar = Display::url(
+    Display::returnFontAwesomeIcon('file-excel-o').
+    get_lang('GenerateReport'),
+    api_get_path(WEB_PLUGIN_PATH).'buycourses/src/export_report.php',
+    ['class' => 'btn btn-primary']
+);
+
 if ($paypalEnable == 'true' && $commissionsEnable == 'true') {
-    $toolbar = Display::toolbarButton(
+    $toolbar .= Display::toolbarButton(
         $plugin->get_lang('PaypalPayoutCommissions'),
         api_get_path(WEB_PLUGIN_PATH).'buycourses/src/paypal_payout.php',
         'paypal',
         'primary',
         ['title' => $plugin->get_lang('PaypalPayoutCommissions')]
     );
-
-    $template->assign(
-        'actions',
-        Display::toolbarAction('toolbar', [$toolbar])
-    );
 }
+
+$template->assign(
+    'actions',
+    Display::toolbarAction('toolbar', [$toolbar])
+);
 
 if ($commissionsEnable == 'true') {
     $toolbar = Display::toolbarButton(
@@ -84,4 +99,5 @@ $template->assign('sale_status_completed', BuyCoursesPlugin::SERVICE_STATUS_COMP
 $template->assign('invoicing_enable', $invoicingEnable);
 $content = $template->fetch('buycourses/view/service_sales_report.tpl');
 $template->assign('content', $content);
+$template->assign('header', $templateName);
 $template->display_one_col_template();

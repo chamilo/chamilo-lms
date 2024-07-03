@@ -14,24 +14,10 @@
 <!-- START MAIN -->
 <main id="main" dir="{{ text_direction }}" class="{{ section_name }} {{ login_class }}">
     <noscript>{{ "NoJavascript"|get_lang }}</noscript>
-    {% if displayCookieUsageWarning == true %}
+    {% if frmDisplayCookieUsageWarning %}
         <!-- START DISPLAY COOKIES VALIDATION -->
         <div class="toolbar-cookie alert-warning">
-            <form onSubmit="$(this).toggle('slow')" action="" method="post">
-                <input value=1 type="hidden" name="acceptCookies"/>
-                <div class="cookieUsageValidation">
-                    {{ 'YouAcceptCookies' | get_lang }}
-                    <span style="margin-left:20px;" onclick="$(this).next().toggle('slow'); $(this).toggle('slow')">
-                                ({{"More" | get_lang }})
-                            </span>
-                    <div style="display:none; margin:20px 0;">
-                        {{ "HelpCookieUsageValidation" | get_lang}}
-                    </div>
-                    <span style="margin-left:20px;" onclick="$(this).parent().parent().submit()">
-                                ({{"Accept" | get_lang }})
-                            </span>
-                </div>
-            </form>
+            {{ frmDisplayCookieUsageWarning }}
         </div>
         <!-- END DISPLAY COOKIES VALIDATION -->
     {% endif %}
@@ -45,7 +31,7 @@
     {% endif %}
 
     <!-- START CONTENT -->
-    <section id="cm-content">
+    <section id="cm-content"{{ html_content_extra_class }}>
         <div class="container">
             {% if show_header == true %}
                 {% if show_course_shortcut is not null %}

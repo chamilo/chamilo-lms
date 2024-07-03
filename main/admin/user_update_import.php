@@ -85,11 +85,12 @@ function validate_data($users)
  * @param bool  $resetPassword Optional.
  * @param bool  $sendEmail     Optional.
  */
-function updateUsers(
+function _updateUsers(
     $users,
     $resetPassword = false,
-    $sendEmail = false)
-{
+    $sendEmail = false,
+    $askNewPassword = false
+) {
     $usergroup = new UserGroup();
     $extraFieldValue = new ExtraFieldValue('user');
     if (is_array($users)) {
@@ -103,11 +104,20 @@ function updateUsers(
             if (empty($userInfo)) {
                 continue;
             }
+            /*
+            // In specific cases, you might want to only update if the e-mail
+            // in the CSV is different from the e-mail in the database
+            if (!empty($user['Email'])) {
+                if ($user['Email'] == $userInfo['email']) {
+                    continue;
+                }
+            }
+            */
 
             $user_id = $userInfo['user_id'];
-            $firstName = isset($user['FirstName']) ? $user['FirstName'] : $userInfo['firstname'];
-            $lastName = isset($user['LastName']) ? $user['LastName'] : $userInfo['lastname'];
-            $userName = isset($user['NewUserName']) ? $user['NewUserName'] : $userInfo['username'];
+            $firstName = $user['FirstName'] ?? $userInfo['firstname'];
+            $lastName = $user['LastName'] ?? $userInfo['lastname'];
+            $userName = $user['NewUserName'] ?? $userInfo['username'];
             $changePassMethod = 0;
             $password = null;
             $authSource = $userInfo['auth_source'];
@@ -126,12 +136,16 @@ function updateUsers(
                 }
             }
 
-            $email = isset($user['Email']) ? $user['Email'] : $userInfo['email'];
-            $status = isset($user['Status']) ? $user['Status'] : $userInfo['status'];
-            $officialCode = isset($user['OfficialCode']) ? $user['OfficialCode'] : $userInfo['official_code'];
-            $phone = isset($user['PhoneNumber']) ? $user['PhoneNumber'] : $userInfo['phone'];
-            $pictureUrl = isset($user['PictureUri']) ? $user['PictureUri'] : $userInfo['picture_uri'];
-            $expirationDate = isset($user['ExpiryDate']) ? $user['ExpiryDate'] : $userInfo['expiration_date'];
+            $email = $user['Email'] ?? $userInfo['email'];
+            $status = $user['Status'] ?? $userInfo['status'];
+            $officialCode = $user['OfficialCode'] ?? $userInfo['official_code'];
+            $phone = $user['PhoneNumber'] ?? $userInfo['phone'];
+            $pictureUrl = $user['PictureUri'] ?? $userInfo['picture_uri'];
+            $expirationDate = $user['ExpiryDate'] ?? $userInfo['expiration_date'];
+            // Fix wrong date in DB for old users (sometimes would be expiration_date = '9999-12-31 ********') where it should be null
+            if (substr($expirationDate, 0, 4) === '9999') {
+                $expirationDate = null;
+            }
             $active = $userInfo['active'];
             if (isset($user['Active'])) {
                 $user['Active'] = (int) $user['Active'];
@@ -143,12 +157,16 @@ function updateUsers(
 
             $creatorId = $userInfo['creator_id'];
             $hrDeptId = $userInfo['hr_dept_id'];
-            $language = isset($user['Language']) ? $user['Language'] : $userInfo['language'];
+            $language = $user['Language'] ?? $userInfo['language'];
             //$sendEmail = isset($user['SendEmail']) ? $user['SendEmail'] : $userInfo['language'];
             //$sendEmail = false;
             // see BT#17893
             if ($resetPassword && $sendEmail == false) {
                 $sendEmail = true;
+            }
+            $extra = [];
+            if ($askNewPassword) {
+                $extra['ask_new_password'] = 1;
             }
 
             UserManager::update_user(
@@ -167,7 +185,7 @@ function updateUsers(
                 $active,
                 $creatorId,
                 $hrDeptId,
-                null,
+                $extra,
                 $language,
                 '',
                 $sendEmail,
@@ -290,6 +308,14 @@ $form = new FormValidator('user_update_import', 'post', api_get_self());
 $form->addHeader($tool_name);
 $form->addFile('import_file', get_lang('ImportFileLocation'), ['accept' => 'text/csv', 'id' => 'import_file']);
 $form->addCheckBox('reset_password', '', get_lang('AutoGeneratePassword'));
+if (api_get_configuration_value('force_renew_password_at_first_login') == true) {
+    $form->addElement(
+        'checkbox',
+        'ask_new_password',
+        '',
+        get_lang('FirstLoginForceUsersToChangePassword')
+    );
+}
 
 $group = [
     $form->createElement('radio', 'sendMail', '', get_lang('Yes'), 1),
@@ -299,7 +325,7 @@ $form->addGroup($group, '', get_lang('SendMailToUsers'));
 $defaults['sendMail'] = 0;
 
 if ($form->validate()) {
-    if (Security::check_token('post')) {
+    if (Security::check_token()) {
         Security::clear_token();
         $formValues = $form->exportValues();
 
@@ -341,7 +367,9 @@ if ($form->validate()) {
         }
 
         $sendEmail = $_POST['sendMail'] ? true : false;
-        updateUsers($usersToUpdate, isset($formValues['reset_password']), $sendEmail);
+        $askNewPassword = isset($formValues['ask_new_password']);
+
+        _updateUsers($usersToUpdate, isset($formValues['reset_password']), $sendEmail, $askNewPassword);
 
         if (empty($errors)) {
             Display::addFlash(
@@ -359,14 +387,12 @@ if ($form->validate()) {
             );
             Display::addFlash(Display::return_message($warningMessage, 'warning', false));
         }
-
-        header('Location: '.api_get_self());
-        exit;
     } else {
         Display::addFlash(Display::return_message(get_lang('LinkExpired'), 'warning', false));
-        header('Location: '.api_get_self());
-        exit;
     }
+
+    header('Location: '.api_get_self());
+    exit;
 }
 
 Display::display_header($tool_name);

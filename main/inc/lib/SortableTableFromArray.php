@@ -31,7 +31,7 @@ class SortableTableFromArray extends SortableTable
         $get_total_number_function = null,
         $tableId = ''
     ) {
-        parent:: __construct(
+        parent::__construct(
             $tableName,
             $get_total_number_function,
             null,
@@ -76,7 +76,7 @@ class SortableTableFromArray extends SortableTable
      */
     public function get_total_number_of_items()
     {
-        if (isset($this->total_number_of_items) && !empty($this->total_number_of_items)) {
+        if (isset($this->total_number_of_items) && !empty($this->total_number_of_items) && $this->total_number_of_items != -1) {
             return $this->total_number_of_items;
         } else {
             if (!empty($this->table_data)) {

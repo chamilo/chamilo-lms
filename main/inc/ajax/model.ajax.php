@@ -452,19 +452,14 @@ switch ($action) {
                 5
             );
             $userIdList = array_column($userIdList, 'user_id');
-
+            $courseCodeList = array_merge(
+                    $courseCodeList,
+                    CourseManager::getAllCoursesCode()
+            );
             //get students session courses
             if ($sessionId == -1) {
                 $sessionList = SessionManager::get_sessions_list();
                 $sessionIdList = array_column($sessionList, 'id');
-                $courseCodeList = [];
-                foreach ($sessionList as $session) {
-                    $courses = SessionManager::get_course_list_by_session_id($session['id']);
-                    $courseCodeList = array_merge(
-                        $courseCodeList,
-                        array_column($courses, 'code')
-                    );
-                }
             }
             $searchByGroups = true;
         }
@@ -513,7 +508,15 @@ switch ($action) {
         }
 
         if ($action === 'get_user_course_report') {
-            $count = CourseManager::get_count_user_list_from_course_code(
+            $countCourse = CourseManager::get_count_user_list_from_course_code(
+                false,
+                null,
+                $courseCodeList,
+                $userIdList,
+                null,
+                ['where' => $whereCondition, 'extra' => $extra_fields]
+            );
+            $countCourseSession = CourseManager::get_count_user_list_from_course_code(
                 false,
                 null,
                 $courseCodeList,
@@ -521,6 +524,7 @@ switch ($action) {
                 $sessionIdList,
                 ['where' => $whereCondition, 'extra' => $extra_fields]
             );
+            $count = $countCourse + $countCourseSession;
         } else {
             $count = CourseManager::get_count_user_list_from_course_code(
                 true,
@@ -565,6 +569,9 @@ switch ($action) {
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $courseId = $_REQUEST['course'] ?? 0;
         $status = $_REQUEST['status'] ?? 0;
+        if (isset($_REQUEST['work_parent_ids'])) {
+            $whereCondition = ' parent_id IN('.Security::remove_XSS($_REQUEST['work_parent_ids']).')';
+        }
         $count = getAllWork(
             null,
             null,
@@ -642,6 +649,8 @@ switch ($action) {
         $courseId = $_REQUEST['course_id'] ?? 0;
         $exerciseId = $_REQUEST['exercise_id'] ?? 0;
         $status = $_REQUEST['status'] ?? 0;
+        $questionType = $_REQUEST['questionType'] ?? 0;
+        $showAttemptsInSessions = $_REQUEST['showAttemptsInSessions'] ? true : false;
         if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
             $filter_user = (int) $_GET['filter_by_user'];
             if (empty($whereCondition)) {
@@ -676,7 +685,10 @@ switch ($action) {
             '',
             false,
             true,
-            $status
+            $status,
+            $showAttemptsInSessions,
+            $questionType,
+            true
         );
 
         break;
@@ -1471,12 +1483,14 @@ switch ($action) {
             'qualification',
             'sent_date',
             'qualificator_id',
+            'qualificator_fullname',
+            'date_of_qualification',
             'correction',
         ];
         $columns = array_merge($columns, $plagiarismColumns);
         $columns[] = 'actions';
 
-        $sidx = in_array($sidx, $columns) ? $sidx : 'work_name';
+        $sidx = in_array($sidx, $columns) || in_array($sidx, ['firstname', 'lastname']) ? $sidx : 'work_name';
 
         $result = getAllWork(
             $start,
@@ -1583,6 +1597,8 @@ switch ($action) {
             'score',
             'user_ip',
             'status',
+            'qualificator_fullname',
+            'date_of_qualification',
             'actions',
         ];
         $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');
@@ -1590,7 +1606,7 @@ switch ($action) {
             $columns = array_merge(['official_code'], $columns);
         }
 
-        $sidx = in_array($sidx, $columns) ? $sidx : 'course';
+        $sidx = in_array($sidx, $columns) ? $sidx : 'c_id';
 
         $result = ExerciseLib::get_exam_results_data(
             $start,
@@ -1608,11 +1624,15 @@ switch ($action) {
             false,
             false,
             true,
-            $status
+            $status,
+            $showAttemptsInSessions,
+            $questionType,
+            true
         );
 
         break;
     case 'get_exercise_results':
+        $hideIp = api_get_configuration_value('exercise_hide_ip');
         $is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
             api_is_drh() ||
             api_is_student_boss() ||
@@ -1631,10 +1651,20 @@ switch ($action) {
                 'status',
                 'lp',
                 'actions',
+                'exe_result',
+                'revised',
+                'orig_lp_id',
             ];
+            $indexIp = 8;
             $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');
             if ($officialCodeInList === 'true') {
                 $columns = array_merge(['official_code'], $columns);
+                $indexIp = 9;
+            }
+            if ($hideIp) {
+                // It removes the column related to IP
+                unset($columns[$indexIp]);
+                $columns = array_values($columns);
             }
         }
 
@@ -1705,7 +1735,7 @@ switch ($action) {
 
         if (!empty($categoryList)) {
             foreach ($categoryList as $categoryInfo) {
-                $label = 'category_'.$categoryInfo['id'];
+                $label = 'category_'.$categoryInfo['iid'];
                 if ($operation === 'excel') {
                     $columns[] = $label.'_score_percentage';
                     $columns[] = $label.'_only_score';
@@ -1912,6 +1942,10 @@ switch ($action) {
                 $detailButtons[] = Display::url(
                     Display::return_icon('works.png', get_lang('WorksReport')),
                     api_get_path(WEB_CODE_PATH).'mySpace/works_in_session_report.php?session='.$session['id']
+                );
+                $detailButtons[] = Display::url(
+                    Display::return_icon('clock.png', get_lang('ProgressInSessionReport')),
+                    api_get_path(WEB_CODE_PATH).'mySpace/progress_in_session_report.php?session_id='.$session['id']
                 );
                 $detailButtons[] = Display::url(
                     Display::return_icon('2rightarrow.png'),
@@ -2321,7 +2355,7 @@ switch ($action) {
         $result = $new_result;
         break;
     case 'get_careers':
-        $columns = ['name', 'description', 'actions', 'external_career_id'];
+        $columns = ['name', 'description', 'parent_id', 'actions', 'external_career_id'];
         if (!in_array($sidx, $columns)) {
             $sidx = 'name';
         }
@@ -2597,7 +2631,8 @@ switch ($action) {
         if (!empty($result)) {
             $urlUserGroup = api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?'.api_get_cidreq();
             foreach ($result as $group) {
-                $countUsers = count($obj->get_users_by_usergroup($group['id']));
+                $role = $obj->get_user_group_role(api_get_user_id(), $group['id']);
+                $countUsers = count($obj->get_users_by_usergroup($group['id'], [$role]));
                 $group['users'] = $countUsers;
                 if (!empty($countUsers)) {
                     $group['users'] = Display::url(
@@ -2627,8 +2662,8 @@ switch ($action) {
                         break;
                 }
 
-                $role = $obj->getUserRoleToString(api_get_user_id(), $group['id']);
-                $group['status'] = $role;
+                $roleToString = $obj->getUserRoleToString(api_get_user_id(), $group['id']);
+                $group['status'] = $roleToString;
                 $group['actions'] = '';
 
                 if ($isAllow) {

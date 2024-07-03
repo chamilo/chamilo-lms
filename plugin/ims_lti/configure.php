@@ -17,8 +17,7 @@ $toolsRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
 $baseTool = isset($_REQUEST['type']) ? $toolsRepo->find(intval($_REQUEST['type'])) : null;
 $action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : 'add';
 
-/** @var Course $course */
-$course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
+$course = api_get_course_entity(api_get_course_int_id());
 $addedTools = $toolsRepo->findBy(['course' => $course]);
 $globalTools = $toolsRepo->findBy(['parent' => null, 'course' => null]);
 
@@ -35,7 +34,7 @@ $categories = Category::load(null, null, $course->getCode());
 
 switch ($action) {
     case 'add':
-        $form = new FrmAdd('ims_lti_add_tool', [], $baseTool);
+        $form = new \Chamilo\PluginBundle\ImsLti\Form\FrmAdd('ims_lti_add_tool', [], $baseTool);
         $form->build();
 
         if ($baseTool) {
@@ -68,6 +67,10 @@ switch ($action) {
                     !empty($formValues['share_picture'])
                 );
 
+            if (!empty($formValues['replacement_user_id'])) {
+                $tool->setReplacementForUserId($formValues['replacement_user_id']);
+            }
+
             if (!$baseTool) {
                 if (ImsLti::V_1P3 === $formValues['version']) {
                     $tool
@@ -80,12 +83,11 @@ switch ($action) {
                         ->setRedirectUrl($formValues['redirect_url'])
                         ->setAdvantageServices(
                             [
-                                'ags' => isset($formValues['1p3_ags'])
-                                    ? $formValues['1p3_ags']
-                                    : LtiAssignmentGradesService::AGS_NONE,
+                                'ags' => $formValues['1p3_ags'] ?? LtiAssignmentGradesService::AGS_NONE,
                                 'nrps' => $formValues['1p3_nrps'],
                             ]
                         )
+                        ->setJwksUrl($formValues['jwks_url'])
                         ->publicKey = $formValues['public_key'];
                 } elseif (ImsLti::V_1P1 === $formValues['version']) {
                     if (empty($formValues['consumer_key']) && empty($formValues['shared_secret'])) {
@@ -173,7 +175,7 @@ switch ($action) {
             break;
         }
 
-        $form = new FrmEdit('ims_lti_edit_tool', [], $tool);
+        $form = new \Chamilo\PluginBundle\Form\FrmEdit('ims_lti_edit_tool', [], $tool);
         $form->build(false);
 
         if ($form->validate()) {
@@ -197,6 +199,10 @@ switch ($action) {
                     !empty($formValues['share_picture'])
                 );
 
+            if (!empty($formValues['replacement_user_id'])) {
+                $tool->setReplacementForUserId($formValues['replacement_user_id']);
+            }
+
             if (null === $tool->getParent()) {
                 if ($tool->getVersion() === ImsLti::V_1P3) {
                     $tool
@@ -205,12 +211,11 @@ switch ($action) {
                         ->setRedirectUrl($formValues['redirect_url'])
                         ->setAdvantageServices(
                             [
-                                'ags' => isset($formValues['1p3_ags'])
-                                    ? $formValues['1p3_ags']
-                                    : LtiAssignmentGradesService::AGS_NONE,
+                                'ags' => $formValues['1p3_ags'] ?? LtiAssignmentGradesService::AGS_NONE,
                                 'nrps' => $formValues['1p3_nrps'],
                             ]
                         )
+                        ->setJwksUrl($formValues['jwks_url'])
                         ->publicKey = $formValues['public_key'];
                 } elseif ($tool->getVersion() === ImsLti::V_1P1) {
                     $tool
@@ -238,6 +243,9 @@ switch ($action) {
         }
 
         $form->setDefaultValues();
+        break;
+    default:
+        api_not_allowed(true);
         break;
 }
 

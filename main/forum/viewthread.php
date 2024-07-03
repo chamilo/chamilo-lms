@@ -113,7 +113,7 @@ switch ($action) {
     case 'move':
         if (isset($_GET['post'])) {
             $message = move_post_form();
-            Display::addFlash(Display::return_message(get_lang($message)));
+            Display::addFlash(Display::return_message(get_lang($message), 'normal', false));
         }
         header('Location: '.$currentUrl);
         exit;

@@ -42,7 +42,7 @@ $lpItemInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_LP_ITEM, []);
 /** @var array $quizQuestionInfo */
 $quizQuestionInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION, []);
 
-$isValidPassword = UserManager::isPasswordValid($user->getPassword(), $password, $user->getSalt());
+$isValidPassword = UserManager::checkPassword($user->getPassword(), $password, $user->getSalt(), $user->getId());
 $isActive = $user->isActive();
 $isExpired = empty($user->getExpirationDate()) || $user->getExpirationDate() > api_get_utc_datetime(null, false, true);
 

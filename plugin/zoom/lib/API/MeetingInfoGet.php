@@ -49,7 +49,7 @@ class MeetingInfoGet extends MeetingInfo
      *
      * @throws Exception
      */
-    public function update()
+    public function update(): void
     {
         Client::getInstance()->send('PATCH', 'meetings/'.$this->id, [], $this);
     }
@@ -77,17 +77,17 @@ class MeetingInfoGet extends MeetingInfo
     /**
      * Adds a registrant to the meeting.
      *
-     * @param MeetingRegistrant $registrant    with at least 'email' and 'first_name'.
-     *                                         'last_name' will also be recorded by Zoom.
-     *                                         Other properties remain ignored, or not returned by Zoom
-     *                                         (at least while using profile "Pro")
-     * @param string            $occurrenceIds separated by comma
+     * @param RegistrantSchema $registrant    with at least 'email' and 'first_name'.
+     *                                        'last_name' will also be recorded by Zoom.
+     *                                        Other properties remain ignored, or not returned by Zoom
+     *                                        (at least while using profile "Pro")
+     * @param string           $occurrenceIds separated by comma
      *
      * @throws Exception
      *
      * @return CreatedRegistration with unique join_url and registrant_id properties
      */
-    public function addRegistrant($registrant, $occurrenceIds = '')
+    public function addRegistrant(RegistrantSchema $registrant, string $occurrenceIds = ''): CreatedRegistration
     {
         return CreatedRegistration::fromJson(
             Client::getInstance()->send(

@@ -91,9 +91,24 @@ if (isset($action) && $action == 'calendar_add') {
     $a_repeat_type = [
         'daily' => get_lang('RepeatDaily'),
         'weekly' => get_lang('RepeatWeekly'),
+        'biweekly' => get_lang('RepeatBiweekly'),
+        'xdays' => get_lang('RepeatXDays'),
         'monthlyByDate' => get_lang('RepeatMonthlyByDate'),
     ];
-    $form->addElement('select', 'repeat_type', get_lang('RepeatType'), $a_repeat_type);
+
+    $form->addElement(
+        'select',
+        'repeat_type',
+        get_lang('RepeatType'),
+        $a_repeat_type,
+        [
+            'onchange' => "javascript: if(this.value == 'xdays'){document.getElementById('repeat-date-xdaysnumber').style.display='block';}else{document.getElementById('repeat-date-xdaysnumber').style.display='none';}",
+        ]
+    );
+
+    $form->addElement('html', '<div id="repeat-date-xdaysnumber" style="display:none">');
+    $form->addText('xdays_number', get_lang('NumberOfDays'));
+    $form->addElement('html', '</div>');
 
     $form->addElement(
         'date_picker',
@@ -104,8 +119,20 @@ if (isset($action) && $action == 'calendar_add') {
     $defaults['end_date_time'] = date('Y-m-d');
     $form->addElement('html', '</div>');
 
-    $defaults['repeat_type'] = 'weekly';
+    $extraField = new ExtraField('attendance_calendar');
+    $extraField->addElements(
+        $form,
+        0,
+        [], //exclude
+        false, // filter
+        false, // tag as select
+        [], //show only fields
+        [], // order fields
+        [] // extra data
+    );
 
+    $defaults['repeat_type'] = 'weekly';
+    $defaults['xdays_number'] = '0';
     $form->addSelect('groups', get_lang('Group'), $groupIdList);
 
     $form->addButtonCreate(get_lang('Save'));
@@ -142,6 +169,19 @@ if (isset($action) && $action == 'calendar_add') {
                     ['form_name' => 'attendance_calendar_edit'],
                     5
                 );
+
+                $extraField = new ExtraField('attendance_calendar');
+                $extraField->addElements(
+                    $form,
+                    $calendar_id,
+                    [], //exclude
+                    false, // filter
+                    false, // tag as select
+                    [], //show only fields
+                    [], // order fields
+                    [] // extra data
+                );
+
                 $defaults['date_time'] = $calendar['date_time'];
                 $form->addButtonSave(get_lang('Save'));
                 $form->addButtonCancel(get_lang('Cancel'), 'cancel');
@@ -149,6 +189,9 @@ if (isset($action) && $action == 'calendar_add') {
                 $form->display();
                 echo '</div>';
             } else {
+                $extraValueDuration = Attendance::getAttendanceCalendarExtraFieldValue('duration', $calendar['id']);
+                $labelDuration = !empty($extraValueDuration) ? ' - '.get_lang('Duration').': '.$extraValueDuration : '';
+
                 echo Display::return_icon(
                     'lp_calendar_event.png',
                     get_lang('DateTime'),
@@ -160,7 +203,7 @@ if (isset($action) && $action == 'calendar_add') {
                     0,
                     strlen($calendar['date_time']) - 3
                 ).
-                '&nbsp;';
+                '&nbsp;&nbsp;'.$labelDuration;
 
                 if (isset($calendar['groups']) && !empty($calendar['groups'])) {
                     foreach ($calendar['groups'] as $group) {

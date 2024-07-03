@@ -67,3 +67,5 @@ $strings['CreatedAt'] = 'Creado el';
 $strings['ThereIsNoVideoConferenceActive'] = "No hay una videoconferencia actualmente activa";
 $strings['meeting_duration'] = 'Duración de la reunión (en minutos)';
 $strings['big_blue_button_students_start_conference_in_groups'] = 'Permitir a los estudiantes iniciar una videoconferencia en sus grupos.';
+$strings['plugin_bbb_multiple_urls_cron_apply_to_all'] = 'Cerrar automáticamente todas las salas sin actividad en TODOS los campus.';
+$strings['plugin_bbb_multiple_urls_cron_apply_to_all_help'] = 'Opción para entornos multi-url. Permite a la tarea CRON cerrar todas las salas abiertas del campus madre e hijos.';

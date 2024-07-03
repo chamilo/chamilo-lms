@@ -22,9 +22,9 @@ if (!$tool) {
 $imsLtiPlugin = ImsLtiPlugin::create();
 
 $pageTitle = Security::remove_XSS($tool->getName());
+$publicKey = ImsLtiPlugin::getToolPublicKey($tool);
 
-
-$is1p3 = !empty($tool->publicKey) && !empty($tool->getClientId()) &&
+$is1p3 = !empty($publicKey) && !empty($tool->getClientId()) &&
     !empty($tool->getLoginUrl()) && !empty($tool->getRedirectUrl());
 
 if ($is1p3) {

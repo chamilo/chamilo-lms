@@ -137,7 +137,7 @@ $htmlHeadXtra[] = '<script>
                 var action = datos.split(":")[0];
                 if (action && action == "confirm") {
                     var id = datos.split(":")[1];
-                    var sure = "<div class=\"warning-message alert alert-warning\">'.get_lang('ThereAreUsersUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersWithTheDefaultPortalLanguage').'<br /><br /><a href=\"languages.php?action=make_unavailable_confirmed&id="+id+"\" class=\"btn btn-default\"><em class=\"fa fa-eye\"></em> '.get_lang('MakeUnavailable').'</a></div>";
+                    var sure = "<div class=\"warning-message alert alert-warning\">'.get_lang('ThereAreUsersOrCoursesUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersAndCoursesWithTheDefaultPortalLanguage').'<br /><br /><a href=\"languages.php?action=make_unavailable_confirmed&id="+id+"\" class=\"btn btn-default\"><em class=\"fa fa-eye\"></em> '.get_lang('MakeUnavailable').'</a></div>";
                     $("#id_content_message").html(sure);
                     $("html, body").animate({ scrollTop: 0 }, 200);
 				}
@@ -195,13 +195,15 @@ if ($action == 'disable_all_except_default') {
 
 if (isset($_POST['Submit']) && $_POST['Submit']) {
     // changing the name
-    $name = Database::escape_string($_POST['txt_name']);
+    $name = html_filter($_POST['txt_name']);
     $postId = (int) $_POST['edit_id'];
-    $sql = "UPDATE $tbl_admin_languages SET original_name='$name'
-            WHERE id='$postId'";
-    $result = Database::query($sql);
+    Database::update(
+        $tbl_admin_languages,
+        ['original_name' => $name],
+        ['id = ?' => $postId]
+    );
     // changing the Platform language
-    if ($_POST['platformlanguage'] && $_POST['platformlanguage'] != '') {
+    if (isset($_POST['platformlanguage']) && $_POST['platformlanguage'] != '') {
         api_set_setting('platformLanguage', $_POST['platformlanguage'], null, null, $_configuration['access_url']);
     }
 } elseif (isset($_POST['action'])) {
@@ -241,6 +243,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'make_unavailable_confirmed') {
         SubLanguageManager::make_unavailable_language($_GET['id']);
         $platform_language = api_get_setting('platformLanguage');
         UserManager::update_all_user_languages($language_info['english_name'], $platform_language);
+        CourseManager::updateAllCourseLanguages($language_info['english_name'], $platform_language);
         Display::addFlash(Display::return_message(get_lang('LanguageIsNowHidden'), 'confirm'));
     }
 }
@@ -251,8 +254,8 @@ Display::addFlash(Display::return_message(get_lang('PlatformLanguagesExplanation
 // including the header file (which includes the banner itself)
 Display::display_header($tool_name);
 
-echo '<a 
-    id="disable_all_except_default" 
+echo '<a
+    id="disable_all_except_default"
     href="javascript:void(0)" class="btn btn-primary">
     <em class="fa fa-eye"></em> '.get_lang('LanguagesDisableAllExceptDefault').'</a><br /><br />';
 
@@ -271,6 +274,7 @@ while ($row = Database::fetch_array($result_select)) {
     $row_td[] = $row['id'];
     // the first column is the original name of the language OR a form containing the original name
     if ($action == 'edit' and $row['id'] == $_GET['id']) {
+        $checked = '';
         if ($row['english_name'] == api_get_setting('platformLanguage')) {
             $checked = ' checked="checked" ';
         }
@@ -344,4 +348,4 @@ $table->set_form_actions($form_actions);
 echo '<div id="id_content_message">&nbsp;</div>';
 $table->display();
 
-Display :: display_footer();
+Display::display_footer();

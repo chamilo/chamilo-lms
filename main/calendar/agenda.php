@@ -14,10 +14,16 @@ if (!empty($course_info)) {
 
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 
+$group_id = api_get_group_id();
+
 $url = null;
 if (empty($action)) {
     if (!empty($course_info)) {
-        $url = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=course&'.api_get_cidreq();
+        if (!empty($group_id)) {
+            $url = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=course&'.api_get_cidreq().'&user_id=GROUP:'.$group_id;
+        } else {
+            $url = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=course&'.api_get_cidreq();
+        }
     } else {
         $url = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?';
     }
@@ -31,14 +37,27 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-$group_id = api_get_group_id();
 $groupInfo = GroupManager::get_group_properties($group_id);
-$eventId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
-$type = $event_type = isset($_GET['type']) ? $_GET['type'] : null;
+$eventId = $_REQUEST['id'] ?? null;
+$type = $event_type = $_GET['type'] ?? null;
+$messageId = (int) ($_REQUEST['m'] ?? 0);
+$messageInfo = [];
+
+$currentUserId = api_get_user_id();
+
+if ($messageId) {
+    $event_type = 'personal';
+
+    $messageInfo = MessageManager::get_message_by_id($messageId);
+
+    if (!in_array($currentUserId, [$messageInfo['user_receiver_id'], $messageInfo['user_sender_id']])) {
+        api_not_allowed(true);
+    }
+}
 
 $htmlHeadXtra[] = "<script>
 function plus_repeated_event() {
-    if (document.getElementById('options2').style.display == 'none') {
+    if (document.getElementById('options2').style.display === 'none') {
         document.getElementById('options2').style.display = 'block';
     } else {
         document.getElementById('options2').style.display = 'none';
@@ -78,6 +97,15 @@ function add_image_form() {
 }
 </script>';
 
+$agendaRemindersEnabled = api_get_configuration_value('agenda_reminders');
+
+if ($agendaRemindersEnabled) {
+    $htmlHeadXtra[] = '<script>$(function () {'
+        .Agenda::getJsForReminders('#add_event_add_notification')
+        .'});</script>'
+    ;
+}
+
 // setting the name of the tool
 $nameTools = get_lang('Agenda');
 
@@ -107,10 +135,22 @@ if ('course' === $event_type) {
     $agendaUrl = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?'.api_get_cidreq().'&type=course';
 } else {
     $agendaUrl = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?&type='.$event_type;
+
+    if ($messageInfo) {
+        $agendaUrl = api_get_path(WEB_CODE_PATH).'messages/view_message.php?'
+            .http_build_query(
+                [
+                    'type' => $messageInfo['msg_status'] === MESSAGE_STATUS_OUTBOX ? 2 : 1,
+                    'id' => $messageInfo['id'],
+                ]
+            );
+    }
 }
 $course_info = api_get_course_info();
 
 $this_section = $course_info ? SECTION_COURSES : SECTION_MYAGENDA;
+
+$em = Database::getManager();
 
 $content = null;
 if ($allowToEdit) {
@@ -119,18 +159,31 @@ if ($allowToEdit) {
             $actionName = get_lang('Add');
             $form = $agenda->getForm(['action' => 'add']);
 
+            if ($messageInfo) {
+                $form->addHidden('m', $messageInfo['id']);
+            }
+
             if ($form->validate()) {
                 $values = $form->getSubmitValues();
 
-                $sendEmail = isset($values['add_announcement']) ? true : false;
+                $addAsAnnouncement = isset($values['add_announcement']);
                 $allDay = isset($values['all_day']) ? 'true' : 'false';
-                $sendAttachment = isset($_FILES) && !empty($_FILES) ? true : false;
+                $sendAttachment = isset($_FILES) && !empty($_FILES);
                 $attachmentList = $sendAttachment ? $_FILES : null;
-                $attachmentCommentList = isset($values['legend']) ? $values['legend'] : null;
-                $comment = isset($values['comment']) ? $values['comment'] : null;
-                $usersToSend = isset($values['users_to_send']) ? $values['users_to_send'] : '';
+                $attachmentCommentList = $values['legend'] ?? null;
+                $comment = $values['comment'] ?? null;
+                $usersToSend = $values['users_to_send'] ?? '';
                 $startDate = $values['date_range_start'];
                 $endDate = $values['date_range_end'];
+                $notificationCount = $_REQUEST['notification_count'] ?? [];
+                $notificationPeriod = $_REQUEST['notification_period'] ?? [];
+                $careerId = $_REQUEST['career_id'] ?? 0;
+                $promotionId = $_REQUEST['promotion_id'] ?? 0;
+                $subscriptionVisibility = (int) ($_REQUEST['subscription_visibility'] ?? 0);
+                $subscriptionItemId = isset($_REQUEST['subscription_item']) ? (int) $_REQUEST['subscription_item'] : null;
+                $maxSubscriptions = (int) ($_REQUEST['max_subscriptions'] ?? 0);
+
+                $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
 
                 $eventId = $agenda->addEvent(
                     $startDate,
@@ -139,11 +192,20 @@ if ($allowToEdit) {
                     $values['title'],
                     $values['content'],
                     $usersToSend,
-                    $sendEmail,
+                    $addAsAnnouncement,
                     null,
                     $attachmentList,
                     $attachmentCommentList,
-                    $comment
+                    $comment,
+                    '',
+                    $values['invitees'] ?? [],
+                    $values['collective'] ?? false,
+                    $reminders,
+                    (int) $careerId,
+                    (int) $promotionId,
+                    $subscriptionVisibility,
+                    $subscriptionItemId,
+                    $maxSubscriptions
                 );
 
                 if (!empty($values['repeat']) && !empty($eventId)) {
@@ -157,7 +219,7 @@ if ($allowToEdit) {
                     );
                 }
                 $message = Display::return_message(get_lang('AddSuccess'), 'confirmation');
-                if ($sendEmail) {
+                if ($addAsAnnouncement) {
                     $message .= Display::return_message(
                         get_lang('AdditionalMailWasSentToSelectedUsers'),
                         'confirmation'
@@ -167,12 +229,16 @@ if ($allowToEdit) {
                 header("Location: $agendaUrl");
                 exit;
             } else {
+                if (!empty($messageInfo)) {
+                    MessageManager::setDefaultValuesInFormFromMessageInfo($messageInfo, $form);
+                }
+
                 $content = $form->returnForm();
             }
             break;
         case 'edit':
             $actionName = get_lang('Edit');
-            $event = $agenda->get_event($eventId);
+            $event = $agenda->get_event((int) $eventId);
 
             if (empty($event)) {
                 api_not_allowed(true);
@@ -187,14 +253,24 @@ if ($allowToEdit) {
                 $values = $form->getSubmitValues();
 
                 $allDay = isset($values['all_day']) ? 'true' : 'false';
-                $sendEmail = isset($values['add_announcement']) ? true : false;
+                $addAsAnnouncement = isset($values['add_announcement']);
                 $startDate = $values['date_range_start'];
                 $endDate = $values['date_range_end'];
 
-                $sendAttachment = isset($_FILES) && !empty($_FILES) ? true : false;
-                $attachmentList = $sendAttachment ? $_FILES : null;
-                $attachmentCommentList = isset($values['legend']) ? $values['legend'] : '';
-                $comment = isset($values['comment']) ? $values['comment'] : '';
+                $sendAttachment = isset($_FILES) && !empty($_FILES);
+                $attachmentList = $sendAttachment ? $_FILES : [];
+                $attachmentCommentList = $values['legend'] ?? '';
+                $comment = $values['comment'] ?? '';
+                $notificationCount = $_REQUEST['notification_count'] ?? [];
+                $notificationPeriod = $_REQUEST['notification_period'] ?? [];
+                $careerId = $_REQUEST['career_id'] ?? 0;
+                $promotionId = $_REQUEST['promotion_id'] ?? 0;
+                $subscriptionVisibility = (int) ($_REQUEST['subscription_visibility'] ?? 0);
+                $subscriptionItemId = isset($_REQUEST['subscription_item']) ? (int) $_REQUEST['subscription_item'] : null;
+                $maxSubscriptions = (int) ($_REQUEST['max_subscriptions'] ?? 0);
+                $subscribers = $_REQUEST['subscribers'] ?? [];
+
+                $reminders = $notificationCount ? array_map(null, $notificationCount, $notificationPeriod) : [];
 
                 // This is a sub event. Delete the current and create another BT#7803
                 if (!empty($event['parent_event_id'])) {
@@ -211,7 +287,11 @@ if ($allowToEdit) {
                         null,
                         $attachmentList,
                         $attachmentCommentList,
-                        $comment
+                        $comment,
+                        '',
+                        $values['invitees'] ?? [],
+                        $values['collective'] ?? false,
+                        $reminders
                     );
 
                     $message = Display::return_message(get_lang('Updated'), 'confirmation');
@@ -220,7 +300,7 @@ if ($allowToEdit) {
                     exit;
                 }
 
-                $usersToSend = isset($values['users_to_send']) ? $values['users_to_send'] : '';
+                $usersToSend = $values['users_to_send'] ?? '';
 
                 // Editing normal event.
                 $agenda->editEvent(
@@ -235,7 +315,18 @@ if ($allowToEdit) {
                     $attachmentCommentList,
                     $comment,
                     '',
-                    $sendEmail
+                    $addAsAnnouncement,
+                    true,
+                    0,
+                    $values['invitees'] ?? [],
+                    $values['collective'] ?? false,
+                    $reminders,
+                    (int) $careerId,
+                    (int) $promotionId,
+                    $subscriptionVisibility,
+                    $subscriptionItemId,
+                    $maxSubscriptions,
+                    $subscribers
                 );
 
                 if (!empty($values['repeat']) && !empty($eventId)) {
@@ -249,7 +340,7 @@ if ($allowToEdit) {
                     );
                 }
 
-                $deleteAttachmentList = isset($values['delete_attachment']) ? $values['delete_attachment'] : [];
+                $deleteAttachmentList = $values['delete_attachment'] ?? [];
 
                 if (!empty($deleteAttachmentList)) {
                     foreach ($deleteAttachmentList as $deleteAttachmentId => $value) {
@@ -297,6 +388,14 @@ if ($allowToEdit) {
                 $content = $agenda->deleteEvent($eventId);
             }
             break;
+        case 'import_course_agenda_reminders':
+            if (!empty($course_info)) {
+                header('Location: '.api_get_path(WEB_CODE_PATH)
+                    .'admin/import_course_agenda_reminders.php?'.api_get_cidreq().'&type=course'
+                );
+
+                exit();
+            }
     }
 }
 

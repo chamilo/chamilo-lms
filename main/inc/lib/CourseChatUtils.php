@@ -463,7 +463,7 @@ class CourseChatUtils
         $document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
         $group_info = [];
         if ($this->groupId) {
-            $group_info = GroupManager:: get_group_properties($this->groupId);
+            $group_info = GroupManager::get_group_properties($this->groupId);
             $basepath_chat = $group_info['directory'].'/chat_files';
         }
 
@@ -497,6 +497,17 @@ class CourseChatUtils
                         TOOL_DOCUMENT,
                         $doc_id,
                         'FolderCreated',
+                        null,
+                        $group_info,
+                        null,
+                        null,
+                        null
+                    );
+                    api_item_property_update(
+                        $courseInfo,
+                        TOOL_DOCUMENT,
+                        $doc_id,
+                        'invisible',
                         null,
                         $group_info,
                         null,

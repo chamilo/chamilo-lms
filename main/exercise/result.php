@@ -17,7 +17,7 @@ $show_headers = isset($_REQUEST['show_headers']) ? (int) $_REQUEST['show_headers
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $origin = api_get_origin();
 
-if (in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
+if (in_array($origin, ['learnpath', 'embeddable', 'mobileapp', 'iframe'])) {
     $show_headers = false;
 }
 
@@ -98,6 +98,10 @@ if ($show_headers) {
             Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
         echo '</div>';
     }
+}
+
+if (api_get_configuration_value('allow_skill_rel_items') == true) {
+    $htmlContentExtraClass[] = 'feature-item-user-skill-on';
 }
 
 $message = Session::read('attempt_remaining');

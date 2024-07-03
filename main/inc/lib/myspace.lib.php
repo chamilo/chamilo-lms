@@ -2832,7 +2832,7 @@ class MySpace
                         $session_id
                     );
 
-                    $last_login_date_tmp = Tracking:: get_last_connection_date_on_the_course(
+                    $last_login_date_tmp = Tracking::get_last_connection_date_on_the_course(
                         $row_user->user_id,
                         $courseInfo,
                         $session_id,
@@ -2982,12 +2982,12 @@ class MySpace
 
         // the values of the sortable table
         if ($_GET['tracking_user_overview_page_nr']) {
-            $from = $_GET['tracking_user_overview_page_nr'];
+            $from = (int) $_GET['tracking_user_overview_page_nr'];
         } else {
             $from = 0;
         }
         if ($_GET['tracking_user_overview_column']) {
-            $orderby = $_GET['tracking_user_overview_column'];
+            $orderby = (int) $_GET['tracking_user_overview_column'];
         } else {
             $orderby = 0;
         }
@@ -3250,16 +3250,14 @@ class MySpace
      * Get all the data for the sortable table of the reporting progress of
      * all users and all the courses the user is subscribed to.
      *
-     * @param int    $from
-     * @param int    $numberItems
-     * @param int    $column
-     * @param string $direction
-     *
      * @return array
      */
-    public static function get_user_data_tracking_overview($from, $numberItems, $column, $direction)
+    public static function get_user_data_tracking_overview(int $from, int $numberItems, int $column, string $direction)
     {
         $isWestern = api_is_western_name_order();
+        if ($direction !== 'ASC' && $direction != 'DESC') {
+            $direction = 'ASC';
+        }
 
         switch ($column) {
             case '0':
@@ -3567,7 +3565,7 @@ class MySpace
             // coach only will registered users
             $default_status = STUDENT;
             if ($user['create'] == COURSEMANAGER) {
-                $user['id'] = UserManager:: create_user(
+                $user['id'] = UserManager::create_user(
                     $user['FirstName'],
                     $user['LastName'],
                     $default_status,
@@ -3621,7 +3619,8 @@ class MySpace
                     get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".
                     api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator');
 
-                MessageManager::send_message_simple($user['id'], $emailsubject, $emailbody);
+                $emailbody = nl2br($emailbody);
+                MessageManager::send_message_simple($user['id'], $emailsubject, $emailbody, 0, false, false, [], false);
 
                 $userInfo = api_get_user_info($user['id']);
 

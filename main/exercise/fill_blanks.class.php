@@ -10,9 +10,9 @@
  */
 class FillBlanks extends Question
 {
-    const FILL_THE_BLANK_STANDARD = 0;
-    const FILL_THE_BLANK_MENU = 1;
-    const FILL_THE_BLANK_SEVERAL_ANSWER = 2;
+    public const FILL_THE_BLANK_STANDARD = 0;
+    public const FILL_THE_BLANK_MENU = 1;
+    public const FILL_THE_BLANK_SEVERAL_ANSWER = 2;
 
     public $typePicture = 'fill_in_blanks.png';
     public $explanationLangVar = 'FillBlanks';
@@ -63,7 +63,9 @@ class FillBlanks extends Question
             }
         }
 
+        $questionTypes = [FILL_IN_BLANKS => 'fillblanks', FILL_IN_BLANKS_COMBINATION => 'fillblanks_combination'];
         echo '<script>
+            var questionType = "'.$questionTypes[$this->type].'";
             var firstTime = true;
             var originalOrder = new Array();
             var blankSeparatorStart = "'.$blankSeparatorStart.'";
@@ -101,7 +103,9 @@ class FillBlanks extends Question
                 fields += "<div class=\"col-sm-8\">";
                 fields += "<table class=\"data_table\">";
                 fields += "<tr><th style=\"width:220px\">'.get_lang('WordTofind').'</th>";
-                fields += "<th style=\"width:50px\">'.get_lang('QuestionWeighting').'</th>";
+                if (questionType == "fillblanks") {
+                    fields += "<th style=\"width:50px\">'.get_lang('QuestionWeighting').'</th>";
+                }
                 fields += "<th>'.get_lang('BlankInputSize').'</th></tr>";
 
                 if (blanks != null) {
@@ -137,7 +141,12 @@ class FillBlanks extends Question
 
                         fields += "<tr>";
                         fields += "<td>"+blanksWithColor+"</td>";
-                        fields += "<td><input class=\"form-control\" style=\"width:60px\" value=\""+value+"\" type=\"text\" id=\"weighting["+i+"]\" name=\"weighting["+i+"]\" /></td>";
+                        if (questionType == "fillblanks") {
+                            fields += "<td><input class=\"form-control\" style=\"width:60px\" value=\""+value+"\" type=\"text\" id=\"weighting["+i+"]\" name=\"weighting["+i+"]\" /></td>";
+                        } else {
+                          fields += "<input value=\"0\" type=\"hidden\" id=\"weighting["+i+"]\" name=\"weighting["+i+"]\" />";
+                        }
+
                         fields += "<td>";
                         fields += "<input class=\"btn btn-default\" type=\"button\" value=\"-\" onclick=\"changeInputSize(-1, "+i+")\">&nbsp;";
                         fields += "<input class=\"btn btn-default\" type=\"button\" value=\"+\" onclick=\"changeInputSize(1, "+i+")\">&nbsp;";
@@ -357,6 +366,15 @@ class FillBlanks extends Question
         global $text;
         // setting the save button here and not in the question class.php
         $form->addHtml('<div id="defineoneblank" style="color:#D04A66; margin-left:160px">'.get_lang('DefineBlanks').'</div>');
+
+        if (FILL_IN_BLANKS_COMBINATION === $this->type) {
+            //only 1 answer the all deal ...
+            $form->addText('questionWeighting', get_lang('Score'), true, ['value' => 10]);
+            if (!empty($this->iid)) {
+                $defaults['questionWeighting'] = $this->weighting;
+            }
+        }
+
         $form->addButtonSave($text, 'submitQuestion');
 
         if (!empty($this->iid)) {
@@ -448,6 +466,10 @@ class FillBlanks extends Question
                 }
                 // calculate the global weighting for the question
                 $this->weighting += (float) $form->getSubmitValue('weighting['.$i.']');
+            }
+
+            if (FILL_IN_BLANKS_COMBINATION === $this->type) {
+                $this->weighting = $form->getSubmitValue('questionWeighting');
             }
 
             // input width
@@ -543,9 +565,10 @@ class FillBlanks extends Question
 
                 $resultOptions = ['' => '--'];
                 foreach ($listMenu as $item) {
-                    $resultOptions[sha1($item)] = $item;
+                    $resultOptions[sha1($item)] = self::replaceSpecialCharsForMenuValues($item);
                 }
-
+                // It is checked special chars used in menu
+                $correctItem = self::replaceSpecialCharsForMenuValues($correctItem);
                 foreach ($resultOptions as $key => $value) {
                     if ($correctItem == $value) {
                         $selected = $key;
@@ -584,6 +607,40 @@ class FillBlanks extends Question
         }
 
         return $result;
+    }
+
+    /*
+     * It searchs and replaces special chars to show in menu values
+     *
+     * @param string $value The value to parse
+     *
+     * @return string
+     */
+    public static function replaceSpecialCharsForMenuValues($value)
+    {
+        // It replaces supscript numbers
+        $value = preg_replace('/<sup>([0-9]+)<\/sup>/is', "&sub$1;", $value);
+
+        // It replaces subscript numbers
+        $value = preg_replace_callback(
+            "/<sub>([0-9]+)<\/sub>/is",
+            function ($m) {
+                $precode = '&#832';
+                $nb = $m[1];
+                $code = '';
+                if (is_numeric($nb) && strlen($nb) > 1) {
+                    for ($i = 0; $i < strlen($nb); $i++) {
+                        $code .= $precode.$nb[$i].';';
+                    }
+                } else {
+                    $code = $precode.$m[1].';';
+                }
+
+                return $code;
+            },
+            $value);
+
+        return $value;
     }
 
     /**
@@ -649,14 +706,17 @@ class FillBlanks extends Question
      * it is not as simple as equality, because of the type of Fill The Blank question
      * eg : studentAnswer = 'Un' and correctAnswer = 'Un||1||un'.
      *
-     * @param string $studentAnswer [student_answer] of the info array of the answer field
-     * @param string $correctAnswer [words] of the info array of the answer field
-     * @param bool   $fromDatabase
-     *
-     * @return bool
+     * @param string $studentAnswer       [student_answer] of the info array of the answer field
+     * @param string $correctAnswer       [words] of the info array of the answer field
+     * @param bool   $fromDatabase        Optional
+     * @param bool   $studentAnswerIsHash Optional.
      */
-    public static function isStudentAnswerGood($studentAnswer, $correctAnswer, $fromDatabase = false)
-    {
+    public static function isStudentAnswerGood(
+        string $studentAnswer,
+        string $correctAnswer,
+        bool $fromDatabase = false,
+        bool $studentAnswerIsHash = false
+    ): bool {
         $result = false;
         switch (self::getFillTheBlankAnswerType($correctAnswer)) {
             case self::FILL_THE_BLANK_MENU:
@@ -666,7 +726,10 @@ class FillBlanks extends Question
                     $item = $listMenu[0];
                     if (!$fromDatabase) {
                         $item = sha1($item);
-                        $studentAnswer = sha1($studentAnswer);
+
+                        if (!$studentAnswerIsHash) {
+                            $studentAnswer = sha1($studentAnswer);
+                        }
                     }
                     if ($item === $studentAnswer) {
                         $result = true;
@@ -842,6 +905,12 @@ class FillBlanks extends Question
             $commonWords = api_preg_replace("/::::::/", '::', $commonWords);
         }
         $listAnswerResults['common_words'] = explode('::', $commonWords);
+        $listAnswerResults['words_types'] = array_map(
+            function ($word): int {
+                return FillBlanks::getFillTheBlankAnswerType($word);
+            },
+            $listAnswerResults['words']
+        );
 
         return $listAnswerResults;
     }
@@ -1315,10 +1384,6 @@ class FillBlanks extends Question
         $resultsDisabled = false,
         $showTotalScoreAndUserChoices = false
     ) {
-        if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK) {
-            return '';
-        }
-
         return self::getHtmlAnswer(
             $answer,
             $correct,

@@ -188,7 +188,7 @@ class CourseCategory
         $tree_pos = $row['maxTreePos'] + 1;
 
         $params = [
-            'name' => $name,
+            'name' => html_filter($name),
             'code' => $code,
             'parent_id' => empty($parent_id) ? null : $parent_id,
             'tree_pos' => $tree_pos,
@@ -289,34 +289,54 @@ class CourseCategory
      *
      * @return bool
      */
-    public static function editNode($code, $name, $canHaveCourses, $old_code)
-    {
+    public static function editNode(
+        $code,
+        $name,
+        $canHaveCourses,
+        $old_code,
+        ?string $newParentCode = null,
+        ?string $oldParentCode = null
+    ) {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
-        $code = trim(Database::escape_string($code));
-        $name = trim(Database::escape_string($name));
-        $old_code = Database::escape_string($old_code);
-        $canHaveCourses = Database::escape_string($canHaveCourses);
+        $code = CourseManager::generate_course_code($code);
+        $name = html_filter($name);
 
         $code = CourseManager::generate_course_code($code);
         // Updating category
-        $sql = "UPDATE $tbl_category SET
-                    name='$name',
-                    code='$code',
-                    auth_course_child = '$canHaveCourses'
-                WHERE code = '$old_code'";
-        Database::query($sql);
+        Database::update(
+            $tbl_category,
+            [
+                'name' => $name,
+                'code' => $code,
+                'auth_course_child' => $canHaveCourses,
+            ],
+            ['code = ?' => $old_code]
+        );
 
         // Updating children
-        $sql = "UPDATE $tbl_category SET parent_id = '$code'
-            WHERE parent_id = '$old_code'";
-        Database::query($sql);
+        Database::update(
+            $tbl_category,
+            ['parent_id' => $code],
+            ['parent_id = ?' => $old_code]
+        );
 
         // Updating course category
-        $sql = "UPDATE $tbl_course SET category_code = '$code'
-            WHERE category_code = '$old_code' ";
-        Database::query($sql);
+        Database::update(
+            $tbl_course,
+            ['category_code' => $code],
+            ['category_code = ?' => $old_code]
+        );
+
+        Database::update(
+            $tbl_category,
+            ['parent_id' => $newParentCode ?: null],
+            ['code = ?' => $code]
+        );
+
+        self::updateParentCategoryChildrenCount($oldParentCode, -1);
+        self::updateParentCategoryChildrenCount($newParentCode, 1);
 
         return true;
     }
@@ -622,6 +642,7 @@ class CourseCategory
      * @param bool   $avoidCourses
      * @param bool   $checkHidePrivate
      * @param array  $conditions
+     * @param string $courseLanguageFilter
      *
      * @return int
      */
@@ -630,7 +651,9 @@ class CourseCategory
         $keyword = '',
         $avoidCourses = true,
         $checkHidePrivate = true,
-        $conditions = []
+        $conditions = [],
+        $courseLanguageFilter = null,
+        $filterShowInCatalogue = false
     ) {
         return self::getCoursesInCategory(
             $category_code,
@@ -638,12 +661,22 @@ class CourseCategory
             $avoidCourses,
             $checkHidePrivate,
             $conditions,
-            true
+            true,
+            $courseLanguageFilter,
+            $filterShowInCatalogue
         );
     }
 
-    public static function getCoursesInCategory($category_code = '', $keyword = '', $avoidCourses = true, $checkHidePrivate = true, $conditions = [], $getCount = false)
-    {
+    public static function getCoursesInCategory(
+        $category_code = '',
+        $keyword = '',
+        $avoidCourses = true,
+        $checkHidePrivate = true,
+        $conditions = [],
+        $getCount = false,
+        $courseLanguageFilter = null,
+        $filterShowInCatalogue = false
+    ) {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $categoryCode = Database::escape_string($category_code);
         $keyword = Database::escape_string($keyword);
@@ -654,13 +687,25 @@ class CourseCategory
         }
         $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true, $checkHidePrivate);
 
+        $showInCatalogueCondition = '';
+        if ($filterShowInCatalogue) {
+            $showInCatalogueCondition = CoursesAndSessionsCatalog::getCoursesToShowInCatalogueCondition();
+        }
+
         $sqlInjectJoins = '';
+        $courseLanguageWhere = '';
         $where = ' AND 1 = 1 ';
         $sqlInjectWhere = '';
         if (!empty($conditions)) {
             $sqlInjectJoins = $conditions['inject_joins'];
             $where = $conditions['where'];
             $sqlInjectWhere = $conditions['inject_where'];
+        }
+
+        // If have courseLanguageFilter, search for it
+        if (!empty($courseLanguageFilter)) {
+            $courseLanguageFilter = Database::escape_string($courseLanguageFilter);
+            $courseLanguageWhere = "AND course.course_language = '$courseLanguageFilter'";
         }
 
         $categoryFilter = '';
@@ -696,9 +741,11 @@ class CourseCategory
                     $urlCondition
                     course.visibility != '0' AND
                     course.visibility != '4'
+                    $courseLanguageWhere
                     $categoryFilter
                     $searchFilter
                     $avoidCoursesCondition
+                    $showInCatalogueCondition
                     $visibilityCondition
                     $where
                     $sqlInjectWhere

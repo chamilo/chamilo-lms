@@ -37,8 +37,12 @@ $actions = [
     'attendance_set_visible_select',
     'attendance_restore',
     'attendance_sheet_export_to_pdf',
+    'attendance_sheet_export_to_xls',
     'attendance_sheet_list_no_edit',
     'calendar_logins',
+    'lock_attendance',
+    'unlock_attendance',
+    'attendance_sheet_qrcode',
 ];
 
 $actions_calendar = [
@@ -91,7 +95,7 @@ if (!empty($attendance_id)) {
 
 $htmlHeadXtra[] = '<script>
 $(function() {
-    $("table th img").click(function() {
+    $("table th .attendance_lock img").click(function() {
         var col_id = this.id;
         var col_split = col_id.split("_");
         var calendar_id = col_split[2];
@@ -103,7 +107,7 @@ $(function() {
 
             $(".row_odd  td.checkboxes_col_"+calendar_id).css({
                 "opacity":"1",
-                "background-color":"#F9F9F9",   
+                "background-color":"#F9F9F9",
                 "border-left":"none",
                 "border-right":"none"
             });
@@ -125,16 +129,16 @@ $(function() {
 
             $(".row_odd  td.checkboxes_col_"+calendar_id).css({
                 "opacity":"1",
-                "background-color":"#dcdcdc", 
-                "border-left":"1px #bbb solid", 
-                "border-right":"1px #bbb solid", 
+                "background-color":"#dcdcdc",
+                "border-left":"1px #bbb solid",
+                "border-right":"1px #bbb solid",
                 "z-index":"1"
             });
             $(".row_even td.checkboxes_col_"+calendar_id).css({
                 "opacity":"1",
-                "background-color":"#eee", 
-                "border-left":"1px #bbb solid", 
-                "border-right":"1px #bbb solid", 
+                "background-color":"#eee",
+                "border-left":"1px #bbb solid",
+                "border-right":"1px #bbb solid",
                 "z-index":"1"
             });
 
@@ -185,6 +189,24 @@ $(function() {
 });
 
 </script>';
+
+$allowSignature = api_get_configuration_value('enable_sign_attendance_sheet');
+if ($allowSignature) {
+    $htmlHeadXtra[] = api_get_asset('signature_pad/signature_pad.umd.js');
+    $htmlHeadXtra[] = '<style>
+        #search-user {
+          background-image: url("/main/img/icons/22/sn-search.png");
+          background-position: 10px 12px;
+          background-repeat: no-repeat;
+          width: 100%;
+          font-size: 16px;
+          padding: 12px 20px 12px 40px;
+          border: 1px solid #ddd;
+          margin: 12px 0px;
+        }
+    </style>';
+}
+
 $student_param = '';
 $student_id = null;
 
@@ -249,6 +271,30 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance_set_visible_selec
 }
 
 switch ($action) {
+    case 'attendance_sheet_qrcode':
+        header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Pragma: no-cache');
+        $renderer = new \BaconQrCode\Renderer\Image\Png();
+        $renderer->setHeight(256);
+        $renderer->setWidth(256);
+        $writer = new \BaconQrCode\Writer($renderer);
+        $filter = "";
+        if (!empty($_REQUEST['filter'])) {
+            $filter = '&filter='.$_REQUEST['filter'];
+        }
+        $attendanceSheetLink = api_get_path(WEB_CODE_PATH).'attendance/index.php?'.api_get_cidreq().'&action=attendance_sheet_list_no_edit&attendance_id='.$attendance_id.$filter;
+        $filename = "attendanceqrcode".uniqid().".png";
+        if (!is_dir(api_get_path(SYS_UPLOAD_PATH).'attendance')) {
+            @mkdir(
+                api_get_path(SYS_UPLOAD_PATH).'attendance',
+                api_get_permissions_for_new_directories(),
+                true
+            );
+        }
+        $writer->writeFile($attendanceSheetLink, api_get_path(SYS_UPLOAD_PATH).'attendance/'.$filename);
+        echo '<img src="'.api_get_path(WEB_UPLOAD_PATH).'attendance/'.$filename.'" alt="AttendanceQR">';
+        exit;
     case 'attendance_list':
         $attendanceController->attendance_list();
         break;
@@ -318,6 +364,18 @@ switch ($action) {
             $student_id,
             $course_id
         );
+        break;
+    case 'attendance_sheet_export_to_xls':
+        $groupId = isset($_REQUEST['group_id']) ? (int) $_REQUEST['group_id'] : null;
+        $filter = isset($_REQUEST['filter']) ? $_REQUEST['filter'] : null;
+        $attendanceController->attendanceSheetExportToXls(
+            $attendance_id,
+            (int) $student_id,
+            (string) $course_id,
+            $groupId,
+            $filter
+        );
+
         break;
     case 'attendance_sheet_add':
         if ($allowToEdit) {

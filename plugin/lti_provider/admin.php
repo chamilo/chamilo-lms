@@ -27,7 +27,7 @@ $htmlHeadXtra[] = api_get_css(
 $template = new Template($plugin->get_title());
 $template->assign('platforms', $platforms);
 
-$content = $template->fetch('lti_provider/view/admin.tpl');
+$content = $template->fetch('lti_provider/view/provider_admin.tpl');
 
 $template->assign('header', $plugin->get_title());
 $template->assign('content', $content);

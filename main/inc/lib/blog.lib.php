@@ -2520,7 +2520,7 @@ class Blog
         $column_header[] = [get_lang('Email'), false, ''];
         $column_header[] = [get_lang('Register'), false, ''];
 
-        $student_list = CourseManager:: get_student_list_from_course_code(
+        $student_list = CourseManager::get_student_list_from_course_code(
             $currentCourse,
             false,
             $session_id

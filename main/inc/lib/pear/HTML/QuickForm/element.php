@@ -350,9 +350,10 @@ class HTML_QuickForm_element extends HTML_Common
     /**
      * Sets display text for the element
      *
-     * @param     string    $label  Display text for the element
-     * @param     string    $label_for Optionally add a "for" attribute
-     * @since     1.3
+     * @param string|array $label    Display text for the element
+     * @param string|null  $labelFor Optionally add a "for" attribute
+     *
+     * @since 1.3
      */
     public function setLabel($label, $labelFor = null)
     {

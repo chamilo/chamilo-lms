@@ -15,7 +15,7 @@ use Doctrine\DBAL\FetchMode;
  */
 class UserStatus implements TransformPropertyInterface
 {
-    const ROLES = [
+    public const ROLES = [
         User::TEACHER => ['manager', 'coursecreator', 'editingteacher', 'teacher'],
         User::STUDENT => ['student', 'user'],
         INVITEE => ['guest'],

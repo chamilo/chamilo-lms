@@ -47,6 +47,9 @@ class CourseSelectForm
         $list[RESOURCE_THEMATIC] = get_lang('Thematic');
         $list[RESOURCE_ATTENDANCE] = get_lang('Attendance');
         $list[RESOURCE_WORK] = get_lang('ToolStudentPublication');
+        if (\XApiPlugin::create()->isEnabled()) {
+            $list[RESOURCE_XAPI_TOOL] = get_lang('ToolXapiActivity');
+        }
 
         return $list;
     }
@@ -110,12 +113,15 @@ class CourseSelectForm
 
             function checkLearnPath(message){
                 d = document.course_select_form;
+                var backup = (typeof d.destination_course === 'undefined');
                 for (i = 0; i < d.elements.length; i++) {
                     if (d.elements[i].type == "checkbox") {
                         var name = d.elements[i].attributes.getNamedItem('name').nodeValue;
-                        if( name.indexOf('learnpath') > 0){
+                        if( name.indexOf('learnpath') > 0 || name.indexOf('quiz') > 0){
                             if(d.elements[i].checked){
-                                setCheckbox('document',true);
+                                if (!backup) {
+                                    //setCheckbox('document', true);
+                                }
                                 alert(message);
                                 break;
                             }
@@ -360,9 +366,12 @@ class CourseSelectForm
                     case RESOURCE_QUIZQUESTION:
                     case RESOURCE_SURVEYQUESTION:
                     case RESOURCE_SURVEYINVITATION:
-                    case RESOURCE_SCORM:
                         break;
                     default:
+                        $enableScormSelection = api_get_configuration_value('course_backup_allow_scorm_selection_in_select_form');
+                        if (($type == RESOURCE_SCORM) && !$enableScormSelection) {
+                            break;
+                        }
                         if ($showHeader) {
                             echo '<div class="item-backup" onclick="javascript:exp('."'$type'".');">';
                             echo '<em id="img_'.$type.'" class="fa fa-plus-square-o fa-lg"></em>';
@@ -384,6 +393,14 @@ class CourseSelectForm
                                 ),
                                 'warning'
                             );
+                            if ($enableScormSelection) {
+                                 echo Display::return_message(
+                                     get_lang(
+                                         'IfYourLPsAreScormsYouShouldSelectThemFromTheScorms'
+                                     ),
+                                     'warning'
+                                 );
+                             }
                         }
 
                         if ($type == RESOURCE_DOCUMENT) {
@@ -476,18 +493,20 @@ class CourseSelectForm
      */
     public static function display_hidden_scorm_directories($course)
     {
-        if (is_array($course->resources)) {
-            foreach ($course->resources as $type => $resources) {
-                if (!empty($resources) && count($resources) > 0) {
-                    switch ($type) {
-                        case RESOURCE_SCORM:
-                            foreach ($resources as $id => $resource) {
-                                echo '<input
-                                    type="hidden"
-                                    name="resource['.RESOURCE_SCORM.']['.$id.']"
-                                    id="resource['.RESOURCE_SCORM.']['.$id.']" value="On" />';
-                            }
-                            break;
+        if (!api_get_configuration_value('course_backup_allow_scorm_selection_in_select_form')) {
+            if (is_array($course->resources)) {
+                foreach ($course->resources as $type => $resources) {
+                    if (!empty($resources) && count($resources) > 0) {
+                        switch ($type) {
+                            case RESOURCE_SCORM:
+                                foreach ($resources as $id => $resource) {
+                                    echo '<input
+                                        type="hidden"
+                                        name="resource['.RESOURCE_SCORM.']['.$id.']"
+                                        id="resource['.RESOURCE_SCORM.']['.$id.']" value="On" />';
+                                }
+                                break;
+                        }
                     }
                 }
             }
@@ -495,13 +514,13 @@ class CourseSelectForm
     }
 
     /**
-     * Get the posted course.
+     * Get the posted course with all its selected resources.
      *
      * @param string $from         who calls the function?
      *                             It can be copy_course, create_backup, import_backup or recycle_course
      * @param int    $session_id
      * @param string $course_code
-     * @param Course $postedCourse
+     * @param Course $postedCourse Course object as defined in the CourseCopy/Course.php script
      *
      * @return Course The course-object with all resources selected by the user
      *                in the form given by display_form(...)
@@ -511,7 +530,7 @@ class CourseSelectForm
         $course = $postedCourse;
         if (empty($postedCourse)) {
             $cb = new CourseBuilder();
-            $postResource = isset($_POST['resource']) ? $_POST['resource'] : [];
+            $postResource = $_POST['resource'] ?? [];
             $course = $cb->build(0, null, false, array_keys($postResource), $postResource);
         }
 
@@ -520,16 +539,16 @@ class CourseSelectForm
         }
 
         // Create the resource DOCUMENT objects
-        // Loading the results from the checkboxes of ethe javascript
-        $resource = isset($_POST['resource'][RESOURCE_DOCUMENT]) ? $_POST['resource'][RESOURCE_DOCUMENT] : null;
+        // Loading the results from the checkboxes of the javascript
+        $resource = $_POST['resource'][RESOURCE_DOCUMENT] ?? null;
 
         $course_info = api_get_course_info($course_code);
         $table_doc = Database::get_course_table(TABLE_DOCUMENT);
         $table_prop = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $course_id = $course_info['real_id'];
 
-        /* Searching the documents resource that have been set to null because
-        $avoidSerialize is true in the display_form() function*/
+        // Searching the documents resource that have been set to null because
+        // $avoidSerialize is true in the display_form() function
         if ($from === 'copy_course') {
             if (is_array($resource)) {
                 $resource = array_keys($resource);
@@ -626,13 +645,13 @@ class CourseSelectForm
                         }
                         break;
                     case RESOURCE_LEARNPATH:
-                        $lps = isset($_POST['resource'][RESOURCE_LEARNPATH]) ? $_POST['resource'][RESOURCE_LEARNPATH] : null;
+                        $lps = $_POST['resource'][RESOURCE_LEARNPATH] ?? null;
 
                         if (!empty($lps)) {
                             foreach ($lps as $id => $obj) {
                                 $lp_resource = $course->resources[RESOURCE_LEARNPATH][$id];
 
-                                if (isset($lp_resource) && !empty($lp_resource) && isset($lp_resource->items)) {
+                                if (!empty($lp_resource) && isset($lp_resource->items)) {
                                     foreach ($lp_resource->items as $item) {
                                         switch ($item['item_type']) {
                                             //Add links added in a LP see #5760
@@ -651,7 +670,7 @@ class CourseSelectForm
                     case RESOURCE_DOCUMENT:
                         // Mark folders to import which are not selected by the user to import,
                         // but in which a document was selected.
-                        $documents = isset($_POST['resource'][RESOURCE_DOCUMENT]) ? $_POST['resource'][RESOURCE_DOCUMENT] : null;
+                        $documents = $_POST['resource'][RESOURCE_DOCUMENT] ?? null;
                         if (!empty($resources) && is_array($resources)) {
                             foreach ($resources as $id => $obj) {
                                 if (isset($obj->file_type) && $obj->file_type === 'folder' &&
@@ -744,12 +763,15 @@ class CourseSelectForm
             }
             function checkLearnPath(message){
                 d = document.course_select_form;
+                var backup = (typeof d.destination_course === 'undefined');
                 for (i = 0; i < d.elements.length; i++) {
                     if (d.elements[i].type == "checkbox") {
                         var name = d.elements[i].attributes.getNamedItem('name').nodeValue;
-                        if( name.indexOf('learnpath') > 0){
+                        if( name.indexOf('learnpath') > 0 || name.indexOf('quiz') > 0){
                             if(d.elements[i].checked){
-                                setCheckbox('document',true);
+                                if (!backup) {
+                                    //setCheckbox('document', true);
+                                }
                                 alert(message);
                                 break;
                             }

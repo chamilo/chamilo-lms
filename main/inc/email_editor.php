@@ -14,7 +14,7 @@ use ChamiloSession as Session;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (empty(api_get_user_id())) {
+if (empty(api_get_user_id()) || ("true" !== api_get_setting('allow_email_editor'))) {
     api_not_allowed(true);
 }
 

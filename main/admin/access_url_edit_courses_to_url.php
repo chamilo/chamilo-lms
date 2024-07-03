@@ -42,10 +42,10 @@ if (isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id'] != '') {
 $xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '<script>
-function add_user_to_url(code, content) {
+function add_course_to_url(code, content) {
 	document.getElementById("course_to_add").value = "";
 	document.getElementById("ajax_list_courses").innerHTML = "";
-	destination = document.getElementById("destination_users");
+	destination = document.getElementById("destination_courses");
 	destination.options[destination.length] = new Option(content,code);
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
@@ -80,7 +80,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     if ($form_sent == 1) {
         if ($access_url_id == 0) {
             Display::addFlash(Display::return_message(get_lang('SelectURL')));
-            header('Location: access_url_edit_users_to_url.php?');
+            header('Location: access_url_edit_courses_to_url.php?');
         } elseif (is_array($course_list)) {
             UrlManager::update_urls_rel_course($course_list, $access_url_id);
             Display::addFlash(Display::return_message(get_lang('CoursesWereEdited')));
@@ -94,7 +94,7 @@ Display::display_header($tool_name);
 
 echo '<div class="actions">';
 echo Display::url(
-    Display::return_icon('view_more_stats.gif', get_lang('AddUserToURL')),
+    Display::return_icon('view_more_stats.gif', get_lang('AddCoursesToURL')),
     api_get_path(WEB_CODE_PATH).'admin/access_url_add_courses_to_url.php'
 );
 echo '</div>';
@@ -193,11 +193,11 @@ $url_list = UrlManager::get_url_data();
                     <?php
                     } else {
                         ?>
-                        <select id="origin_users" name="no_course_list[]" multiple="multiple" size="15" style="width:380px;">
+                        <select id="origin_courses" name="no_course_list[]" multiple="multiple" size="15" style="width:380px;">
                             <?php
                             foreach ($no_course_list as $no_course) {
                                 ?>
-                                <option value="<?php echo $no_course['id']; ?>"><?php echo $no_course['title'].' ('.$no_course['code'].')'; ?></option>
+                                <option value="<?php echo $no_course['id']; ?>" title="<?php echo htmlentities($no_course['title'], ENT_QUOTES).' ('.$no_course['code'].')'; ?>"><?php echo $no_course['title'].' ('.$no_course['code'].')'; ?></option>
                             <?php
                             }
                         unset($no_course_list); ?>
@@ -211,17 +211,17 @@ $url_list = UrlManager::get_url_data();
                 <?php
                 if ($ajax_search) {
                     ?>
-                    <button class="btn btn-default" type="button" onclick="remove_item(document.getElementById('destination_users'))" >
+                    <button class="btn btn-default" type="button" onclick="remove_item(document.getElementById('destination_courses'))" >
                         <em class="fa fa-arrow-left"></em>
                     </button>
                 <?php
                 } else {
                     ?>
-                    <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" >
+                    <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin_courses'), document.getElementById('destination_courses'))" >
                         <em class="fa fa-arrow-right"></em>
                     </button>
                     <br /><br />
-                    <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" >
+                    <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('destination_courses'), document.getElementById('origin_courses'))" >
                         <em class="fa fa-arrow-left"></em>
                     </button>
                 <?php
@@ -230,11 +230,11 @@ $url_list = UrlManager::get_url_data();
                 <br /><br /><br /><br /><br /><br />
             </td>
             <td align="center">
-                <select id="destination_users" name="course_list[]" multiple="multiple" size="15" style="width:380px;">
+                <select id="destination_courses" name="course_list[]" multiple="multiple" size="15" style="width:380px;">
                     <?php
                     foreach ($course_list as $course) {
                         $courseInfo = api_get_course_info_by_id($course['id']); ?>
-                        <option value="<?php echo $course['id']; ?>">
+                        <option value="<?php echo $course['id']; ?>" title="<?php echo htmlentities($course['title'], ENT_QUOTES).' ('.$courseInfo['code'].')'; ?>">
                             <?php echo $course['title'].' ('.$courseInfo['code'].')'; ?>
                         </option>
                     <?php
@@ -294,34 +294,10 @@ $url_list = UrlManager::get_url_data();
     }
 
     function valide(){
-        var options = document.getElementById('destination_users').options;
+        var options = document.getElementById('destination_courses').options;
         for (i = 0 ; i<options.length ; i++)
             options[i].selected = true;
         document.forms.formulaire.submit();
-    }
-
-    function loadUsersInSelect(select) {
-        var xhr_object = null;
-        if(window.XMLHttpRequest) // Firefox
-            xhr_object = new XMLHttpRequest();
-        else if(window.ActiveXObject) // Internet Explorer
-            xhr_object = new ActiveXObject("Microsoft.XMLHTTP");
-        else  // XMLHttpRequest non supporté par le navigateur
-            alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
-
-        xhr_object.open("POST", "loadUsersInSelect.ajax.php");
-        xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        nosessionUsers = makepost(document.getElementById('origin_users'));
-        sessionUsers = makepost(document.getElementById('destination_users'));
-        nosessionClasses = makepost(document.getElementById('origin_classes'));
-        sessionClasses = makepost(document.getElementById('destination_classes'));
-        xhr_object.send("nosessionusers="+nosessionUsers+"&sessionusers="+sessionUsers+"&nosessionclasses="+nosessionClasses+"&sessionclasses="+sessionClasses);
-        xhr_object.onreadystatechange = function() {
-            if(xhr_object.readyState == 4) {
-                document.getElementById('content_source').innerHTML = result = xhr_object.responseText;
-                //alert(xhr_object.responseText);
-            }
-        }
     }
 
     function makepost(select){

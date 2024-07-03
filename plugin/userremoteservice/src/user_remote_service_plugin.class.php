@@ -6,7 +6,7 @@ use Doctrine\ORM\OptimisticLockException;
 
 class UserRemoteServicePlugin extends Plugin
 {
-    const TABLE = 'plugin_user_remote_service';
+    public const TABLE = 'plugin_user_remote_service';
 
     /**
      * UserRemoteServicePlugin constructor.
@@ -18,6 +18,7 @@ class UserRemoteServicePlugin extends Plugin
             'Sébastien Ducoulombier',
             [
                 'salt' => 'text',
+                'hide_link_from_navigation_menu' => 'boolean',
             ]
         );
         $this->isAdminPlugin = true;
@@ -66,6 +67,14 @@ class UserRemoteServicePlugin extends Plugin
     public function salt()
     {
         return $this->get('salt');
+    }
+
+    /**
+     * @return bool the value of hide_link_from_navigation_menu setting
+     */
+    public function get_hide_link_from_navigation_menu()
+    {
+        return $this->get('hide_link_from_navigation_menu');
     }
 
     /**
@@ -229,6 +238,7 @@ class UserRemoteServicePlugin extends Plugin
                 [
                     get_lang('ServiceTitle'),
                     get_lang('ServiceURL'),
+                    get_lang('RedirectAccessURL'),
                 ],
                 null,
                 'th'
@@ -237,6 +247,7 @@ class UserRemoteServicePlugin extends Plugin
                 $table->addRow([
                     $service->getTitle(),
                     $service->getURL(),
+                    $service->getAccessURL($this->get_name()),
                 ]);
             }
             $html = $table->toHtml();
@@ -278,5 +289,21 @@ class UserRemoteServicePlugin extends Plugin
                 $this->getActiveServiceId()
             )->getCustomUserURL($userInfo['username'], $userInfo['id'], $this->salt())
         );
+    }
+
+    /**
+     * Generates the redirect user specific URL for redirection.
+     *
+     * @throws Exception on hash generation failure
+     *
+     * @return string the specific user redirect URL
+     */
+    public function getActiveServiceSpecificUserUrl()
+    {
+        $userInfo = api_get_user_info();
+
+        return $this->getService(
+                $this->getActiveServiceId()
+            )->getCustomUserRedirectURL($userInfo['id'], $this->salt());
     }
 }

@@ -33,7 +33,7 @@ switch ($action) {
     case 'get_course_image':
         $courseId = ChamiloApi::getCourseIdByDirectory($_REQUEST['code']);
         $courseInfo = api_get_course_info_by_id($courseId);
-        $image = isset($_REQUEST['image']) && in_array($_REQUEST['image'], ['course_image_large_source', 'course_image_source']) ? $_REQUEST['image'] : '';
+        $image = isset($_REQUEST['image']) && in_array($_REQUEST['image'], ['course_image_large_source', 'course_image_source', 'course_email_image_large_source', 'course_email_image_source']) ? $_REQUEST['image'] : '';
         if ($courseInfo && $image) {
             // Arbitrarily set a cache of 10' for the course image to
             // avoid hammering the server with otherwise unfrequently
@@ -303,6 +303,9 @@ switch ($action) {
                 $json['items'][] = [
                     'id' => $user['user_id'],
                     'text' => "{$user['username']} ($userCompleteName)",
+                    'avatarUrl' => UserManager::getUserPicture($user['id']),
+                    'username' => $user['username'],
+                    'completeName' => $userCompleteName,
                 ];
             }
 

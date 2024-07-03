@@ -5,7 +5,7 @@
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
-api_protect_admin_script(true, true);
+api_protect_admin_script(true, true, null, true);
 
 $export = [];
 $export['file_type'] = isset($_REQUEST['file_type']) ? $_REQUEST['file_type'] : null;
@@ -156,7 +156,7 @@ if ($export['addcsvheader'] == '1' && $export['file_type'] === 'csv') {
 
 $res = Database::query($sql);
 while ($user = Database::fetch_array($res, 'ASSOC')) {
-    $studentData = UserManager:: get_extra_user_data(
+    $studentData = UserManager::get_extra_user_data(
         $user['UserId'],
         true,
         false

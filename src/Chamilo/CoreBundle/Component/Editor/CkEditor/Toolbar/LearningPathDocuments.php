@@ -55,6 +55,7 @@ class LearningPathDocuments extends Basic
                 'SpecialChar',
                 'Asciimath',
                 'Asciisvg',
+                'CodeSnippet',
             ],
             '/',
             ['Table', '-', 'CreateDiv'],
@@ -63,6 +64,7 @@ class LearningPathDocuments extends Basic
             ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor'],
             [api_get_setting('allow_spellcheck') === 'true' ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
+            api_get_setting('enabled_wiris') === 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry'] : [''],
             ['PageBreak', 'ShowBlocks', 'Source'],
             ['Toolbarswitch'],
         ];
@@ -90,6 +92,7 @@ class LearningPathDocuments extends Basic
                 'Asciisvg',
                 'Table',
                 'SpecialChar',
+                'CodeSnippet',
             ],
             [
                 'Outdent',
@@ -120,10 +123,12 @@ class LearningPathDocuments extends Basic
             array_merge(['Save'], $this->getNewPageBlock()),
             ['Undo', 'Redo'],
             ['Link', 'Image', 'Video', 'Youtube', 'VimeoEmbed', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['CodeSnippet'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Toolbarswitch'],
             ['Styles', 'Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
+            api_get_setting('enabled_wiris') === 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry'] : [''],
             ['ShowBlocks', 'Source'],
         ];
     }

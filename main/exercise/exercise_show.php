@@ -20,6 +20,7 @@ $origin = api_get_origin();
 $currentUserId = api_get_user_id();
 $printHeaders = 'learnpath' === $origin;
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0; //exe id
+$exportTypeAllResults = ('export' === $_GET['action'] && 'all_results' === $_GET['export_type']);
 
 if (empty($id)) {
     api_not_allowed(true);
@@ -38,15 +39,17 @@ $learnpath_id = $track_exercise_info['orig_lp_id'];
 $learnpath_item_id = $track_exercise_info['orig_lp_item_id'];
 $lp_item_view_id = $track_exercise_info['orig_lp_item_view_id'];
 $isBossOfStudent = false;
-if (api_is_student_boss()) {
-    // Check if boss has access to user info.
-    if (UserManager::userIsBossOfStudent($currentUserId, $student_id)) {
-        $isBossOfStudent = true;
+if (!$exportTypeAllResults) {
+    if (api_is_student_boss()) {
+        // Check if boss has access to user info.
+        if (UserManager::userIsBossOfStudent($currentUserId, $student_id)) {
+            $isBossOfStudent = true;
+        } else {
+            api_not_allowed($printHeaders);
+        }
     } else {
-        api_not_allowed($printHeaders);
+        api_protect_course_script($printHeaders, false, true);
     }
-} else {
-    api_protect_course_script($printHeaders, false, true);
 }
 
 // Database table definitions
@@ -79,6 +82,7 @@ if (empty($nbrQuestions)) {
 if (empty($questionList)) {
     $questionList = Session::read('questionList');
 }
+/* @var Exercise $objExercise */
 if (empty($objExercise)) {
     $objExercise = Session::read('objExercise');
 }
@@ -92,7 +96,8 @@ $is_allowedToEdit =
     api_is_course_tutor() ||
     api_is_session_admin() ||
     api_is_drh() ||
-    api_is_student_boss();
+    api_is_student_boss() ||
+    $exportTypeAllResults;
 
 if (!empty($sessionId) && !$is_allowedToEdit) {
     if (api_is_course_session_coach(
@@ -173,6 +178,10 @@ if ($allowRecordAudio && $allowTeacherCommentAudio) {
 
 if (RESULT_DISABLE_RADAR === (int) $objExercise->results_disabled) {
     $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
+}
+
+if (api_get_configuration_value('allow_skill_rel_items') == true) {
+    $htmlContentExtraClass[] = 'feature-item-user-skill-on';
 }
 
 if ($action !== 'export') {
@@ -437,14 +446,20 @@ foreach ($questionList as $questionId) {
         case MULTIPLE_ANSWER:
         case MULTIPLE_ANSWER_TRUE_FALSE:
         case FILL_IN_BLANKS:
+        case FILL_IN_BLANKS_COMBINATION:
         case CALCULATED_ANSWER:
         case GLOBAL_MULTIPLE_ANSWER:
         case FREE_ANSWER:
+        case UPLOAD_ANSWER:
         case ORAL_EXPRESSION:
         case MATCHING:
+        case MATCHING_COMBINATION:
         case DRAGGABLE:
         case READING_COMPREHENSION:
         case MATCHING_DRAGGABLE:
+        case MATCHING_DRAGGABLE_COMBINATION:
+        case MULTIPLE_ANSWER_DROPDOWN:
+        case MULTIPLE_ANSWER_DROPDOWN_COMBINATION:
             $question_result = $objExercise->manage_answer(
                 $id,
                 $questionId,
@@ -481,6 +496,7 @@ foreach ($questionList as $questionId) {
             $totalScore += $questionResult['score'];
             break;
         case HOT_SPOT:
+        case HOT_SPOT_COMBINATION:
             if ($show_results || $showTotalScoreAndUserChoicesInLastAttempt) {
 //                echo '<table class="table table-bordered table-striped"><tr><td>';
             }
@@ -584,7 +600,7 @@ foreach ($questionList as $questionId) {
         echo '</table>';
     }
 
-    if ($show_results && $answerType != HOT_SPOT) {
+    if ($show_results && !in_array($answerType, [HOT_SPOT_COMBINATION, HOT_SPOT])) {
         echo '</table>';
     }
 
@@ -603,7 +619,7 @@ foreach ($questionList as $questionId) {
         if ($isFeedbackAllowed && $action !== 'export') {
             $name = 'fckdiv'.$questionId;
             $marksname = 'marksName'.$questionId;
-            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
+            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER])) {
                 $url_name = get_lang('EditCommentsAndMarks');
             } else {
                 $url_name = get_lang('AddComments');
@@ -678,7 +694,7 @@ foreach ($questionList as $questionId) {
         }
 
         if ($is_allowedToEdit && $isFeedbackAllowed && $action !== 'export') {
-            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
+            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER])) {
                 $marksname = 'marksName'.$questionId;
                 $arrmarks[] = $questionId;
 
@@ -835,7 +851,7 @@ foreach ($questionList as $questionId) {
         }
     }
 
-    if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
+    if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER])) {
         $scoreToReview = [
             'score' => $my_total_score,
             'comments' => isset($comnt) ? $comnt : null,
@@ -970,7 +986,24 @@ if ('export' === $action) {
         'orientation' => 'P',
     ];
     $pdf = new PDF('A4', $params['orientation'], $params);
-    $pdf->html_to_pdf_with_template($content, false, false, true);
+    if ('all_results' === $_GET['export_type']) {
+        $sessionId = api_get_session_id();
+        $courseId = api_get_course_int_id();
+        $exportName = 'S'.$sessionId.'-C'.$courseId.'-T'.$exercise_id;
+        $baseDir = api_get_path(SYS_ARCHIVE_PATH);
+        $folderName = 'pdfexport-'.$exportName;
+        $exportFolderPath = $baseDir.$folderName;
+        if (!is_dir($exportFolderPath)) {
+            @mkdir($exportFolderPath);
+        }
+        $pdfFileName = $user_info['firstname'].' '.$user_info['lastname'].'-attemptId'.$id.'.pdf';
+        $pdfFileName = api_replace_dangerous_char($pdfFileName);
+        $fileNameToSave = $exportFolderPath.'/'.$pdfFileName;
+        $pdf->html_to_pdf_with_template($content, true, false, true, [], 'F', $fileNameToSave);
+    } else {
+        $pdf->html_to_pdf_with_template($content, false, false, true);
+    }
+
     exit;
 }
 

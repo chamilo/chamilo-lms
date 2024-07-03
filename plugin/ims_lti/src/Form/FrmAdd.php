@@ -1,7 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+namespace Chamilo\PluginBundle\ImsLti\Form;
+
+use Category;
 use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Display;
+use FormValidator;
+use ImsLti;
+use ImsLtiPlugin;
+use LtiAssignmentGradesService;
+use LtiNamesRoleProvisioningService;
 
 /**
  * Class FrmAdd.
@@ -15,14 +24,13 @@ class FrmAdd extends FormValidator
     /**
      * @var bool
      */
-    private $toolIsV1p3 = false;
+    private $toolIsV1p3;
 
     /**
      * FrmAdd constructor.
      *
-     * @param string          $name
-     * @param array           $attributes
-     * @param ImsLtiTool|null $tool
+     * @param string $name
+     * @param array  $attributes
      */
     public function __construct(
         $name,
@@ -32,15 +40,15 @@ class FrmAdd extends FormValidator
         parent::__construct($name, 'POST', '', '', $attributes, self::LAYOUT_HORIZONTAL, true);
 
         $this->baseTool = $tool;
-        $this->toolIsV1p3 = $this->baseTool &&
-            !empty($this->baseTool->publicKey) &&
-            !empty($this->baseTool->getClientId()) &&
-            !empty($this->baseTool->getLoginUrl()) &&
-            !empty($this->baseTool->getRedirectUrl());
+        $this->toolIsV1p3 = $this->baseTool
+            && !empty($this->baseTool->publicKey)
+            && !empty($this->baseTool->getClientId())
+            && !empty($this->baseTool->getLoginUrl())
+            && !empty($this->baseTool->getRedirectUrl());
     }
 
     /**
-     * Build the form
+     * Build the form.
      */
     public function build()
     {
@@ -60,16 +68,29 @@ class FrmAdd extends FormValidator
                     ImsLti::V_1P3 => 'LTI 1.3.0',
                 ]
             );
-            $this->addHtml('<div class="'.ImsLti::V_1P1.'" style="display: block;">');
+            $this->addHtml('<div class="'.ImsLti::V_1P1.'" style="display: none;">');
             $this->addText('consumer_key', $plugin->get_lang('ConsumerKey'), false);
             $this->addText('shared_secret', $plugin->get_lang('SharedSecret'), false);
             $this->addHtml('</div>');
-            $this->addHtml('<div class="'.ImsLti::V_1P3.'" style="display: none;">');
+            $this->addHtml('<div class="'.ImsLti::V_1P3.'" style="display: block;">');
+            $this->addRadio(
+                'public_key_type',
+                $plugin->get_lang('PublicKeyType'),
+                [
+                    ImsLti::LTI_JWK_KEYSET => $plugin->get_lang('KeySetUrl'),
+                    ImsLti::LTI_RSA_KEY => $plugin->get_lang('RsaKey'),
+                ]
+            );
+            $this->addHtml('<div class="'.ImsLti::LTI_JWK_KEYSET.'" style="display: block;">');
+            $this->addUrl('jwks_url', $plugin->get_lang('PublicKeyset'), false);
+            $this->addHtml('</div>');
+            $this->addHtml('<div class="'.ImsLti::LTI_RSA_KEY.'" style="display: none;">');
             $this->addTextarea(
                 'public_key',
                 $plugin->get_lang('PublicKey'),
                 ['style' => 'font-family: monospace;', 'rows' => 5]
             );
+            $this->addHtml('</div>');
             $this->addUrl('login_url', $plugin->get_lang('LoginUrl'), false);
             $this->addUrl('redirect_url', $plugin->get_lang('RedirectUrl'), false);
             $this->addHtml('</div>');
@@ -87,8 +108,8 @@ class FrmAdd extends FormValidator
             ['iframe' => 'iframe', 'window' => 'window']
         );
 
-        if (null === $this->baseTool ||
-            ($this->baseTool && !$this->baseTool->isActiveDeepLinking())
+        if (null === $this->baseTool
+            || ($this->baseTool && !$this->baseTool->isActiveDeepLinking())
         ) {
             $this->addCheckBox(
                 'deep_linking',
@@ -148,7 +169,7 @@ class FrmAdd extends FormValidator
                 'replacement_user_id',
                 [
                     $plugin->get_lang('ReplacementUserId'),
-                    $plugin->get_lang('ReplacementUserIdHelp')
+                    $plugin->get_lang('ReplacementUserIdHelp'),
                 ],
                 false
             );
@@ -169,7 +190,8 @@ class FrmAdd extends FormValidator
     public function setDefaultValues()
     {
         $defaults = [];
-        $defaults['version'] = ImsLti::V_1P1;
+        $defaults['version'] = ImsLti::V_1P3;
+        $defaults['public_key_type'] = ImsLti::LTI_JWK_KEYSET;
 
         if ($this->baseTool) {
             $defaults['name'] = $this->baseTool->getName();
@@ -194,12 +216,18 @@ class FrmAdd extends FormValidator
         $this->setDefaults($defaults);
     }
 
-    public function returnForm()
+    public function returnForm(): string
     {
         $js = "<script>
                 \$(function () {
                     \$('[name=\"version\"]').on('change', function () {
                         $('.".ImsLti::V_1P1.", .".ImsLti::V_1P3."').hide();
+
+                        $('.' + this.value).show();
+                    })
+                    \$('[name=\"public_key_type\"]').on('change', function () {
+                        $('.".ImsLti::LTI_JWK_KEYSET.", .".ImsLti::LTI_RSA_KEY."').hide();
+                        $('[name=\"public_key\"], [name=\"jwks_url\"]').val('');
 
                         $('.' + this.value).show();
                     })

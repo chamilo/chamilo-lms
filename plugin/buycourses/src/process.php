@@ -21,8 +21,10 @@ $paypalEnabled = $plugin->get('paypal_enable') === 'true';
 $transferEnabled = $plugin->get('transfer_enable') === 'true';
 $culqiEnabled = $plugin->get('culqi_enable') === 'true';
 $tpvRedsysEnable = $plugin->get('tpv_redsys_enable') === 'true';
+$stripeEnable = $plugin->get('stripe_enable') === 'true';
+$tpvCecabankEnable = $plugin->get('cecabank_enable') === 'true';
 
-if (!$paypalEnabled && !$transferEnabled && !$culqiEnabled && !$tpvRedsysEnable) {
+if (!$paypalEnabled && !$transferEnabled && !$culqiEnabled && !$tpvRedsysEnable && !$stripeEnable && !$tpvCecabankEnable) {
     api_not_allowed(true);
 }
 
@@ -30,9 +32,21 @@ if (!isset($_REQUEST['t'], $_REQUEST['i'])) {
     api_not_allowed(true);
 }
 
+$currency = $plugin->getSelectedCurrency();
 $buyingCourse = intval($_REQUEST['t']) === BuyCoursesPlugin::PRODUCT_TYPE_COURSE;
 $buyingSession = intval($_REQUEST['t']) === BuyCoursesPlugin::PRODUCT_TYPE_SESSION;
 $queryString = 'i='.intval($_REQUEST['i']).'&t='.intval($_REQUEST['t']);
+
+$coupon = null;
+
+if (isset($_REQUEST['c'])) {
+    $couponCode = $_REQUEST['c'];
+    if ($buyingCourse) {
+        $coupon = $plugin->getCouponByCode($couponCode, BuyCoursesPlugin::PRODUCT_TYPE_COURSE, $_REQUEST['i']);
+    } else {
+        $coupon = $plugin->getCouponByCode($couponCode, BuyCoursesPlugin::PRODUCT_TYPE_SESSION, $_REQUEST['i']);
+    }
+}
 
 if (empty($currentUserId)) {
     Session::write('buy_course_redirect', api_get_self().'?'.$queryString);
@@ -41,10 +55,10 @@ if (empty($currentUserId)) {
 }
 
 if ($buyingCourse) {
-    $courseInfo = $plugin->getCourseInfo($_REQUEST['i']);
+    $courseInfo = $plugin->getCourseInfo($_REQUEST['i'], $coupon);
     $item = $plugin->getItemByProduct($_REQUEST['i'], BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
 } elseif ($buyingSession) {
-    $sessionInfo = $plugin->getSessionInfo($_REQUEST['i']);
+    $sessionInfo = $plugin->getSessionInfo($_REQUEST['i'], $coupon);
     $item = $plugin->getItemByProduct($_REQUEST['i'], BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
 }
 
@@ -60,33 +74,26 @@ if ($form->validate()) {
         exit;
     }
 
-    $saleId = $plugin->registerSale($item['id'], $formValues['payment_type']);
+    $saleId = $plugin->registerSale($item['id'], $formValues['payment_type'], $formValues['c']);
 
     if ($saleId !== false) {
         $_SESSION['bc_sale_id'] = $saleId;
+
+        if (isset($formValues['c'])) {
+            $couponSaleId = $plugin->registerCouponSale($saleId, $formValues['c']);
+            if ($couponSaleId !== false) {
+                $plugin->updateCouponDelivered($formValues['c']);
+                $_SESSION['bc_coupon_id'] = $formValues['c'];
+            }
+        }
+
         header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process_confirm.php');
     }
 
     exit;
 }
 
-$paymentTypesOptions = $plugin->getPaymentTypes();
-
-if (!$paypalEnabled) {
-    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL]);
-}
-
-if (!$transferEnabled) {
-    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER]);
-}
-
-if (!$culqiEnabled) {
-    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_CULQI]);
-}
-
-if (!$tpvRedsysEnable || !file_exists(api_get_path(SYS_PLUGIN_PATH).'buycourses/resources/apiRedsys.php')) {
-    unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_TPV_REDSYS]);
-}
+$paymentTypesOptions = $plugin->getPaymentTypes(true);
 
 $count = count($paymentTypesOptions);
 if ($count === 0) {
@@ -111,9 +118,51 @@ if ($count === 0) {
     $form->addRadio('payment_type', null, $paymentTypesOptions);
 }
 
-$form->addHidden('t', intval($_GET['t']));
-$form->addHidden('i', intval($_GET['i']));
+$form->addHidden('t', intval($_REQUEST['t']));
+$form->addHidden('i', intval($_REQUEST['i']));
+if ($coupon != null) {
+    $form->addHidden('c', intval($coupon['id']));
+}
 $form->addButton('submit', $plugin->get_lang('ConfirmOrder'), 'check', 'success', 'btn-lg pull-right');
+
+$formCoupon = new FormValidator('confirm_coupon');
+if ($formCoupon->validate()) {
+    $formCouponValues = $formCoupon->getSubmitValues();
+
+    if (!$formCouponValues['coupon_code']) {
+        Display::addFlash(
+            Display::return_message($plugin->get_lang('NeedToAddCouponCode'), 'error', false)
+        );
+        header('Location:'.api_get_self().'?'.$queryString);
+        exit;
+    }
+
+    if ($buyingCourse) {
+        $coupon = $plugin->getCouponByCode($formCouponValues['coupon_code'], BuyCoursesPlugin::PRODUCT_TYPE_COURSE, $_REQUEST['i']);
+    } else {
+        $coupon = $plugin->getCouponByCode($formCouponValues['coupon_code'], BuyCoursesPlugin::PRODUCT_TYPE_SESSION, $_REQUEST['i']);
+    }
+
+    if ($coupon == null) {
+        Display::addFlash(
+            Display::return_message($plugin->get_lang('CouponNotValid'), 'error', false)
+        );
+        header('Location:'.api_get_self().'?'.$queryString);
+        exit;
+    }
+
+    Display::addFlash(
+        Display::return_message($plugin->get_lang('CouponRedeemed'), 'success', false)
+    );
+
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.$_REQUEST['i'].'&t='.$_REQUEST['t'].'&c='.$formCouponValues['coupon_code']);
+
+    exit;
+}
+$formCoupon->addText('coupon_code', $plugin->get_lang('CouponsCode'), true);
+$formCoupon->addHidden('t', intval($_GET['t']));
+$formCoupon->addHidden('i', intval($_GET['i']));
+$formCoupon->addButton('submit', $plugin->get_lang('RedeemCoupon'), 'check', 'success', 'btn-lg pull-right');
 
 // View
 $templateName = $plugin->get_lang('PaymentMethods');
@@ -124,6 +173,7 @@ $tpl->assign('item_type', (int) $_GET['t']);
 $tpl->assign('buying_course', $buyingCourse);
 $tpl->assign('buying_session', $buyingSession);
 $tpl->assign('user', api_get_user_info());
+$tpl->assign('form_coupon', $formCoupon->returnForm());
 $tpl->assign('form', $form->returnForm());
 
 if ($buyingCourse) {

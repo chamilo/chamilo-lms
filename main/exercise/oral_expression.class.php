@@ -79,22 +79,25 @@ class OralExpression extends Question
     }
 
     /**
-     * initialize the attributes to generate the file path.
-     *
-     * @param int $sessionId
-     * @param int $userId
-     * @param int $exerciseId
-     * @param int $exeId
+     * Initialize the attributes to generate the file path.
      */
-    public function initFile($sessionId, $userId, $exerciseId, $exeId)
-    {
-        $this->sessionId = (int) $sessionId;
-        $this->userId = (int) $userId;
-        $this->exerciseId = 0;
-        $this->exeId = (int) $exeId;
-        if (!empty($exerciseId)) {
-            $this->exerciseId = (int) $exerciseId;
+    public function initFile(
+        int $sessionId,
+        int $userId,
+        int $exerciseId,
+        int $exeId,
+        int $courseId = 0
+    ): void {
+        if (!empty($courseId)) {
+            $this->course = api_get_course_info_by_id($courseId);
         }
+        $this->sessionId = $sessionId;
+        $this->userId = $userId;
+        $this->exerciseId = 0;
+        if (!empty($exerciseId)) {
+            $this->exerciseId = $exerciseId;
+        }
+        $this->exeId = $exeId;
         $this->storePath = $this->generateDirectory();
         $this->fileName = $this->generateFileName();
         $this->filePath = $this->storePath.$this->fileName;
@@ -121,7 +124,7 @@ class OralExpression extends Question
         $recordAudioView->assign('directory', $directory);
         $recordAudioView->assign('user_id', $this->userId);
         $recordAudioView->assign('file_name', $this->fileName);
-        $recordAudioView->assign('question_id', $this->id);
+        $recordAudioView->assign('question_id', $this->iid);
 
         $template = $recordAudioView->get_template('exercise/oral_expression.tpl');
 
@@ -142,13 +145,13 @@ class OralExpression extends Question
         if ($loadFromDatabase) {
             $em = Database::getManager();
             //Load the real filename just if exists
-            if (isset($this->exeId, $this->userId, $this->id, $this->sessionId, $this->course['real_id'])) {
+            if (isset($this->exeId, $this->userId, $this->iid, $this->sessionId, $this->course['real_id'])) {
                 $result = $em
                     ->getRepository('ChamiloCoreBundle:TrackEAttempt')
                     ->findOneBy([
                         'exeId' => $this->exeId,
                         'userId' => $this->userId,
-                        'questionId' => $this->id,
+                        'questionId' => $this->iid,
                         'sessionId' => $this->sessionId,
                         'cId' => $this->course['real_id'],
                     ]);

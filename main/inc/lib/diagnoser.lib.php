@@ -13,10 +13,10 @@
  */
 class Diagnoser
 {
-    const STATUS_OK = 1;
-    const STATUS_WARNING = 2;
-    const STATUS_ERROR = 3;
-    const STATUS_INFORMATION = 4;
+    public const STATUS_OK = 1;
+    public const STATUS_WARNING = 2;
+    public const STATUS_ERROR = 3;
+    public const STATUS_INFORMATION = 4;
 
     /**
      * Contructor.
@@ -835,7 +835,12 @@ class Diagnoser
 
         $em = Database::getManager();
         $connection = $em->getConnection();
-        $res = $connection->query('SELECT id, code, directory, disk_quota, last_visit FROM course ORDER BY last_visit DESC, code LIMIT 500');
+        $multiUrlQueryExtra = "";
+        if (api_is_multiple_url_enabled()) {
+            $access_url_id = api_get_current_access_url_id();
+            $multiUrlQueryExtra = " WHERE id in (select c_id from access_url_rel_course where access_url_id = ".$access_url_id.")";
+        }
+        $res = $connection->query('SELECT id, code, directory, disk_quota, last_visit FROM course'.$multiUrlQueryExtra.' ORDER BY last_visit DESC, code LIMIT 500');
         $systemPath = api_get_path(SYS_COURSE_PATH);
         $webPath = api_get_path(WEB_COURSE_PATH);
         $courseHomeIcon = Display::return_icon('home.png', get_lang('CourseHome'));

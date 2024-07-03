@@ -1852,24 +1852,69 @@ class CourseHome
     {
         $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
 
+        $toolLink = self::getToolLinks($toolName);
+
         $em = Database::getManager();
         $toolRepo = $em->getRepository('ChamiloCourseBundle:CTool');
 
         /** @var CTool $tool */
-        $tool = $toolRepo->findOneBy(['cId' => $courseId, 'sessionId' => 0, 'name' => $toolName]);
-        $visibility = $tool->getVisibility();
+        $tool = $toolRepo->findOneBy(['cId' => $courseId, 'sessionId' => 0, 'link' => $toolLink]);
 
         if ($allowEditionInSession && $sessionId) {
             $tool = $toolRepo->findOneBy(
-                ['cId' => $courseId, 'sessionId' => $sessionId, 'name' => $toolName]
+                ['cId' => $courseId, 'sessionId' => $sessionId, 'link' => $toolLink]
             );
+        }
 
-            if ($tool) {
-                $visibility = $tool->getVisibility();
-            }
+        if ($tool) {
+            $visibility = $tool->getVisibility();
         }
 
         return $visibility;
+    }
+
+    /**
+     * Get the tools links or one by name defined.
+     *
+     * @param $tool  Optional
+     *
+     * @return string|string[]
+     */
+    public static function getToolLinks($tool = null)
+    {
+        $toolsLinks = [
+            TOOL_DOCUMENT => 'document/document.php',
+            TOOL_CALENDAR_EVENT => 'calendar/agenda.php',
+            TOOL_LINK => 'link/link.php',
+            TOOL_COURSE_DESCRIPTION => 'course_description/index.php',
+            TOOL_LEARNPATH => 'lp/lp_controller.php',
+            TOOL_ANNOUNCEMENT => 'announcements/announcements.php',
+            TOOL_FORUM => 'forum/index.php',
+            TOOL_DROPBOX => 'dropbox/index.php',
+            TOOL_QUIZ => 'exercise/exercise.php',
+            TOOL_USER => 'user/user.php',
+            TOOL_GROUP => 'group/group.php',
+            TOOL_BLOGS => 'blog/blog_admin.php',
+            TOOL_CHAT => 'chat/chat.php',
+            TOOL_STUDENTPUBLICATION => 'work/work.php',
+            TOOL_TRACKING => 'tracking/courseLog.php',
+            TOOL_COURSE_SETTING => 'course_info/infocours.php',
+            TOOL_PORTFOLIO => 'portfolio/index.php',
+            TOOL_COURSE_MAINTENANCE => 'course_info/maintenance.php',
+            TOOL_SURVEY => 'survey/survey_list.php',
+            TOOL_WIKI => 'wiki/index.php',
+            TOOL_GLOSSARY => 'glossary/index.php',
+            TOOL_GRADEBOOK => 'gradebook/index.php',
+            TOOL_NOTEBOOK => 'notebook/index.php',
+            TOOL_ATTENDANCE => 'attendance/index.php',
+            TOOL_COURSE_PROGRESS => 'course_progress/index.php',
+        ];
+
+        if (!empty($tool) && isset($toolsLinks['tool'])) {
+            return $toolsLinks['tool'];
+        }
+
+        return $toolsLinks;
     }
 
     /**

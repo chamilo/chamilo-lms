@@ -19,6 +19,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CQuizAnswer
 {
+    public const DEFAULT_DESTINATION = '0@@0@@0@@0';
+
     /**
      * @var int
      *

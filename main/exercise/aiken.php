@@ -40,8 +40,16 @@ if ((api_is_allowed_to_edit(null, true))) {
             exit;
         }
     }
+    if (isset($_REQUEST['submit_aiken_generated'])) {
+        $id = aikenImportExercise(null, $_REQUEST);
+        if (is_numeric($id) && !empty($id)) {
+            header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$id);
+            exit;
+        }
+    }
 }
 
 Display::display_header(get_lang('ImportAikenQuiz'), 'Exercises');
 aiken_display_form();
+generateAikenForm();
 Display::display_footer();

@@ -14,11 +14,89 @@ require_once __DIR__.'/../global.inc.php';
 $request = HttpRequest::createFromGlobals();
 $isRequestByAjax = $request->isXmlHttpRequest();
 
-$action = $_GET['a'];
+$action = $_REQUEST['a'];
 
 switch ($action) {
+    case 'comment_attendance':
+        $selected = $_REQUEST['selected'];
+        $comment = $_REQUEST['comment'];
+        $attendanceId = (int) $_REQUEST['attendance_id'];
+        if (!empty($selected)) {
+            list($prefix, $userId, $attendanceCalendarId) = explode('-', $selected);
+            $attendance = new Attendance();
+            $attendance->saveComment(
+                (int) $userId,
+                (int) $attendanceCalendarId,
+                $comment,
+                $attendanceId
+            );
+            echo 1;
+            exit;
+        }
+        echo 0;
+        break;
+    case 'get_attendance_comment':
+        $selected = $_REQUEST['selected'];
+        if (!empty($selected)) {
+            list($prefix, $userId, $attendanceCalendarId) = explode('-', $selected);
+            $attendance = new Attendance();
+            $commentInfo = $attendance->getComment(
+                (int) $userId,
+                (int) $attendanceCalendarId
+            );
+            echo json_encode(
+              [
+                  'comment' => $commentInfo['comment'],
+                  'author' => !empty($commentInfo['author']) ? get_lang('Author').': '.$commentInfo['author'] : '',
+              ]
+            );
+        }
+        break;
+    case 'block_attendance_calendar':
+        $calendarId = (int) $_REQUEST['calendar_id'];
+        $attendance = new Attendance();
+        $attendance->updateCalendarBlocked($calendarId);
+        echo (int) $attendance->isCalendarBlocked($calendarId);
+        break;
+    case 'get_attendance_sign':
+        $selected = $_REQUEST['selected'];
+        if (!empty($selected)) {
+            list($prefix, $userId, $attendanceCalendarId) = explode('-', $selected);
+            $attendance = new Attendance();
+            $signature = $attendance->getSignature($userId, $attendanceCalendarId);
+            echo $signature;
+        }
+        break;
+    case 'remove_attendance_sign':
+        $selected = $_REQUEST['selected'];
+        $attendanceId = (int) $_REQUEST['attendance_id'];
+        if (!empty($selected)) {
+            list($prefix, $userId, $attendanceCalendarId) = explode('-', $selected);
+            $attendance = new Attendance();
+            $attendance->deleteSignature($userId, $attendanceCalendarId, $attendanceId);
+        }
+        break;
+    case 'sign_attendance':
+        $selected = $_REQUEST['selected'];
+        $file = isset($_REQUEST['file']) ? $_REQUEST['file'] : '';
+        $file = str_replace(' ', '+', $file);
+        $attendanceId = $_REQUEST['attendance_id'];
+        if (!empty($selected)) {
+            list($prefix, $userId, $attendanceCalendarId, $courseId) = explode('-', $selected);
+            $attendance = new Attendance();
+            $attendance->saveSignature($userId, $attendanceCalendarId, $file, $attendanceId, $courseId);
+            echo 1;
+            exit;
+        }
+        echo 0;
+        break;
+    case 'set_expiration_date':
+        $status = (int) $_REQUEST['status'];
+        $dates = UserManager::getExpirationDateByRole($status);
+        echo json_encode($dates);
+        break;
     case 'get_user_like':
-        if (api_is_platform_admin() || api_is_drh()) {
+        if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
             $query = $_REQUEST['q'];
             $conditions = [
                 'username' => $query,
@@ -43,7 +121,8 @@ switch ($action) {
 
         $courseId = (int) $request->get('course_id');
         $sessionId = (int) $request->get('session_id');
-        $userId = (int) $request->get('user_id');
+        $hash = (string) $request->get('hash');
+        $userId = (int) UserManager::decryptUserHash($hash);
 
         $user_info = api_get_user_info($userId);
 
@@ -352,11 +431,13 @@ switch ($action) {
         }
 
         $qb
-            ->andWhere('u.status != '.DRH.' AND u.status != '.ANONYMOUS)
+            ->andWhere(
+                $qb->expr()->in('u.status', UserManager::getAllowedRolesAsTeacher())
+            )
             ->orderBy(
                 $sortByFirstName
-                    ? 'u.firstname, u.firstname'
-                    : 'u.firstname, u.lastname'
+                    ? 'u.firstname, u.lastname'
+                    : 'u.lastname, u.firstname'
             )
             ->setParameter('q', '%'.$_REQUEST['q'].'%');
 

@@ -81,7 +81,7 @@
                             <div class="block-items-admin">
                                 <ul class="list-items-admin">
                                     {% for url in block_item.items %}
-                                        <li>
+                                        <li{% if url.class %} class="{{ url.class }}"{% endif %}>
                                             <a href="{{ url.url }}">
                                                 {{ url.label }}
                                             </a>

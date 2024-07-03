@@ -1,10 +1,11 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\PluginBundle\Entity\LtiProvider\Platform;
 use Chamilo\PluginBundle\Entity\LtiProvider\PlatformKey;
-use Doctrine\DBAL\DBALException;
+use Chamilo\PluginBundle\Entity\LtiProvider\Result;
 use Doctrine\ORM\OptimisticLockException;
-use Symfony\Component\Filesystem\Filesystem;
+use Doctrine\ORM\Tools\SchemaTool;
 
 /**
  * Description of LtiProvider.
@@ -13,42 +14,174 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class LtiProviderPlugin extends Plugin
 {
-    const TABLE_PLATFORM = 'plugin_lti_provider_platform';
+    public const TABLE_PLATFORM = 'plugin_lti_provider_platform';
+    public const LAUNCH_PATH = 'lti_provider/tool/start.php';
+    public const LOGIN_PATH = 'lti_provider/tool/login.php';
+    public const REDIRECT_PATH = 'lti_provider/tool/start.php';
+    public const JWKS_URL = 'lti_provider/tool/jwks.php';
 
     public $isAdminPlugin = true;
 
     protected function __construct()
     {
-        $version = '1.0';
+        $version = '1.1';
         $author = 'Christian Beeznest';
 
         $message = Display::return_message($this->get_lang('Description'));
 
+        $launchUrlHtml = '';
+        $loginUrlHtml = '';
+        $redirectUrlHtml = '';
+        $jwksUrlHtml = '';
+
         if ($this->areTablesCreated()) {
             $publicKey = $this->getPublicKey();
 
-            $pkHtml = '<div class="form-group">
-                    <label for="lti_provider_public_key" class="col-sm-2 control-label">'
-                .$this->get_lang('PublicKey').'</label>
-                    <div class="col-sm-8">
-                        <pre>'.$publicKey.'</pre>
-                    </div>
-                    <div class="col-sm-2"></div>
-                </div>';
+            $pkHtml = $this->getSettingHtmlReadOnly(
+                $this->get_lang('PublicKey'),
+                'public_key',
+                $publicKey
+            );
+            $launchUrlHtml = $this->getSettingHtmlReadOnly(
+                $this->get_lang('LaunchUrl'),
+                'launch_url',
+                api_get_path(WEB_PLUGIN_PATH).self::LAUNCH_PATH
+            );
+            $loginUrlHtml = $this->getSettingHtmlReadOnly(
+                $this->get_lang('LoginUrl'),
+                'login_url',
+                api_get_path(WEB_PLUGIN_PATH).self::LOGIN_PATH
+            );
+            $redirectUrlHtml = $this->getSettingHtmlReadOnly(
+                $this->get_lang('RedirectUrl'),
+                'redirect_url',
+                api_get_path(WEB_PLUGIN_PATH).self::REDIRECT_PATH
+            );
+            $jwksUrlHtml = $this->getSettingHtmlReadOnly(
+                $this->get_lang('KeySetUrlJwks'),
+                'jwks_url',
+                api_get_path(WEB_PLUGIN_PATH).self::JWKS_URL
+            );
         } else {
             $pkHtml = $this->get_lang('GenerateKeyPairInfo');
         }
 
         $settings = [
             $message => 'html',
-            'name' => 'text',
-            'launch_url' => 'text',
-            'login_url' => 'text',
-            'redirect_url' => 'text',
+            'name' => 'hidden',
+            $launchUrlHtml => 'html',
+            $loginUrlHtml => 'html',
+            $redirectUrlHtml => 'html',
+            $jwksUrlHtml => 'html',
             $pkHtml => 'html',
             'enabled' => 'boolean',
         ];
         parent::__construct($version, $author, $settings);
+    }
+
+    /**
+     * Get the value by default and readonly for the configuration html form.
+     *
+     * @param $label
+     * @param $id
+     * @param $value
+     *
+     * @return string
+     */
+    public function getSettingHtmlReadOnly($label, $id, $value)
+    {
+        $html = '<div class="form-group">
+                    <label for="lti_provider_'.$id.'" class="col-sm-2 control-label">'
+            .$label.'</label>
+                    <div class="col-sm-8">
+                        <pre>'.$value.'</pre>
+                    </div>
+                    <div class="col-sm-2"></div>
+                    <input type="hidden" name="'.$id.'" value="'.$value.'" />
+                </div>';
+
+        return $html;
+    }
+
+    /**
+     * Get a selectbox with quizzes in courses , used for a tool provider.
+     *
+     * @param null $clientId
+     *
+     * @return string
+     */
+    public function getQuizzesSelect($clientId = null)
+    {
+        $courses = CourseManager::get_courses_list();
+        $toolProvider = $this->getToolProvider($clientId);
+        $htmlcontent = '<div class="form-group select-tool" id="select-quiz">
+            <label for="lti_provider_create_platform_kid" class="col-sm-2 control-label">'.$this->get_lang('ToolProvider').'</label>
+            <div class="col-sm-8">
+                <select name="tool_provider" class="sbox-tool" id="sbox-tool-quiz" disabled="disabled">';
+        $htmlcontent .= '<option value="">-- '.$this->get_lang('SelectOneActivity').' --</option>';
+        foreach ($courses as $course) {
+            $courseInfo = api_get_course_info($course['code']);
+            $optgroupLabel = "{$course['title']} : ".get_lang('Quizzes');
+            $htmlcontent .= '<optgroup label="'.$optgroupLabel.'">';
+            $exerciseList = ExerciseLib::get_all_exercises_for_course_id(
+                $courseInfo,
+                0,
+                $course['id'],
+                false
+            );
+            foreach ($exerciseList as $key => $exercise) {
+                $selectValue = "{$course['code']}@@quiz-{$exercise['iid']}";
+                $htmlcontent .= '<option value="'.$selectValue.'" '.($toolProvider == $selectValue ? ' selected="selected"' : '').'>'.Security::remove_XSS($exercise['title']).'</option>';
+            }
+            $htmlcontent .= '</optgroup>';
+        }
+        $htmlcontent .= "</select>";
+        $htmlcontent .= '   </div>
+                    <div class="col-sm-2"></div>
+                    </div>';
+
+        return $htmlcontent;
+    }
+
+    /**
+     * Get a selectbox with quizzes in courses , used for a tool provider.
+     *
+     * @param null $clientId
+     *
+     * @return string
+     */
+    public function getLearnPathsSelect($clientId = null)
+    {
+        $courses = CourseManager::get_courses_list();
+        $toolProvider = $this->getToolProvider($clientId);
+        $htmlcontent = '<div class="form-group select-tool" id="select-lp" style="display:none">
+            <label for="lti_provider_create_platform_kid" class="col-sm-2 control-label">'.$this->get_lang('ToolProvider').'</label>
+            <div class="col-sm-8">
+                <select name="tool_provider" class="sbox-tool" id="sbox-tool-lp" disabled="disabled">';
+        $htmlcontent .= '<option value="">-- '.$this->get_lang('SelectOneActivity').' --</option>';
+        foreach ($courses as $course) {
+            $courseInfo = api_get_course_info($course['code']);
+            $optgroupLabel = "{$course['title']} : ".get_lang('Learnpath');
+            $htmlcontent .= '<optgroup label="'.$optgroupLabel.'">';
+
+            $list = new LearnpathList(
+                api_get_user_id(),
+                $courseInfo
+            );
+
+            $flatList = $list->get_flat_list();
+            foreach ($flatList as $id => $details) {
+                $selectValue = "{$course['code']}@@lp-{$id}";
+                $htmlcontent .= '<option value="'.$selectValue.'" '.($toolProvider == $selectValue ? ' selected="selected"' : '').'>'.Security::remove_XSS($details['lp_name']).'</option>';
+            }
+            $htmlcontent .= '</optgroup>';
+        }
+        $htmlcontent .= "</select>";
+        $htmlcontent .= '   </div>
+                    <div class="col-sm-2"></div>
+                    </div>';
+
+        return $htmlcontent;
     }
 
     /**
@@ -66,6 +199,126 @@ class LtiProviderPlugin extends Plugin
         }
 
         return $publicKey;
+    }
+
+    /**
+     * Get the first access date of a user in a tool.
+     *
+     * @param $courseCode
+     * @param $toolId
+     * @param $userId
+     *
+     * @return string
+     */
+    public function getUserFirstAccessOnToolLp($courseCode, $toolId, $userId)
+    {
+        $dql = "SELECT
+                    a.startDate
+                FROM  ChamiloPluginBundle:LtiProvider\Result a
+                WHERE
+                    a.courseCode = '$courseCode' AND
+                    a.toolName = 'lp' AND
+                    a.toolId = $toolId AND
+                    a.userId = $userId
+                ORDER BY a.startDate";
+        $qb = Database::getManager()->createQuery($dql);
+        $result = $qb->getArrayResult();
+
+        $firstDate = '';
+        if (isset($result[0])) {
+            $startDate = $result[0]['startDate'];
+            $firstDate = $startDate->format('Y-m-d H:i');
+        }
+
+        return $firstDate;
+    }
+
+    /**
+     * Get the results of users in tools lti.
+     *
+     * @param $startDate
+     * @param $endDate
+     *
+     * @return array
+     */
+    public function getToolLearnPathResult($startDate, $endDate)
+    {
+        $dql = "SELECT
+                    a.issuer,
+                    count(DISTINCT(a.userId)) as cnt
+                FROM
+                    ChamiloPluginBundle:LtiProvider\Result a
+                WHERE
+                    a.toolName = 'lp' AND
+                    a.startDate BETWEEN '$startDate' AND '$endDate'
+                GROUP BY a.issuer";
+        $qb = Database::getManager()->createQuery($dql);
+        $issuersValues = $qb->getResult();
+
+        $result = [];
+        if (!empty($issuersValues)) {
+            foreach ($issuersValues as $issuerValue) {
+                $issuer = $issuerValue['issuer'];
+                $dqlLp = "SELECT
+                    a.toolId,
+                    a.userId,
+                    a.courseCode
+                FROM
+                    ChamiloPluginBundle:LtiProvider\Result a
+                WHERE
+                    a.toolName = 'lp' AND
+                    a.startDate BETWEEN '$startDate' AND '$endDate' AND
+                    a.issuer = '".$issuer."'
+                GROUP BY a.toolId, a.userId";
+                $qbLp = Database::getManager()->createQuery($dqlLp);
+                $lpValues = $qbLp->getResult();
+
+                $lps = [];
+                foreach ($lpValues as $lp) {
+                    $uinfo = api_get_user_info($lp['userId']);
+                    $firstAccess = self::getUserFirstAccessOnToolLp($lp['courseCode'], $lp['toolId'], $lp['userId']);
+                    $lps[$lp['toolId']]['users'][$lp['userId']] = [
+                        'firstname' => $uinfo['firstname'],
+                        'lastname' => $uinfo['lastname'],
+                        'first_access' => $firstAccess,
+                    ];
+                }
+                $result[] = [
+                    'issuer' => $issuer,
+                    'count_iss_users' => $issuerValue['cnt'],
+                    'learnpaths' => $lps,
+                ];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get the tool provider.
+     */
+    public function getToolProvider($clientId): string
+    {
+        $toolProvider = '';
+        $platform = Database::getManager()
+            ->getRepository('ChamiloPluginBundle:LtiProvider\Platform')
+            ->findOneBy(['clientId' => $clientId]);
+
+        if ($platform) {
+            $toolProvider = $platform->getToolProvider();
+        }
+
+        return $toolProvider;
+    }
+
+    public function getToolProviderVars($clientId): array
+    {
+        $toolProvider = $this->getToolProvider($clientId);
+        list($courseCode, $tool) = explode('@@', $toolProvider);
+        list($toolName, $toolId) = explode('-', $tool);
+        $vars = ['courseCode' => $courseCode, 'toolName' => $toolName, 'toolId' => $toolId];
+
+        return $vars;
     }
 
     /**
@@ -98,34 +351,25 @@ class LtiProviderPlugin extends Plugin
 
     /**
      * Install the plugin. Set the database up.
+     *
+     * @throws \Doctrine\ORM\Tools\ToolsException
      */
     public function install()
     {
-        $pluginEntityPath = $this->getEntityPath();
+        $em = Database::getManager();
 
-        if (!is_dir($pluginEntityPath)) {
-            if (!is_writable(dirname($pluginEntityPath))) {
-                $message = get_lang('ErrorCreatingDir').': '.$pluginEntityPath;
-                Display::addFlash(Display::return_message($message, 'error'));
-
-                return;
-            }
-
-            mkdir($pluginEntityPath, api_get_permissions_for_new_directories());
+        if ($em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_PLATFORM])) {
+            return;
         }
 
-        $fs = new Filesystem();
-        $fs->mirror(__DIR__.'/Entity/', $pluginEntityPath, null, ['override']);
-
-        $this->createPluginTables();
-    }
-
-    /**
-     * Get current entity sys path.
-     */
-    public function getEntityPath(): string
-    {
-        return api_get_path(SYS_PATH).'src/Chamilo/PluginBundle/Entity/'.$this->getCamelCaseName();
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->createSchema(
+            [
+                $em->getClassMetadata(Platform::class),
+                $em->getClassMetadata(PlatformKey::class),
+                $em->getClassMetadata(Result::class),
+            ]
+        );
     }
 
     /**
@@ -175,18 +419,20 @@ class LtiProviderPlugin extends Plugin
      */
     public function uninstall()
     {
-        $pluginEntityPath = $this->getEntityPath();
-        $fs = new Filesystem();
+        $em = Database::getManager();
 
-        if ($fs->exists($pluginEntityPath)) {
-            $fs->remove($pluginEntityPath);
+        if (!$em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_PLATFORM])) {
+            return;
         }
 
-        try {
-            $this->dropPluginTables();
-        } catch (DBALException $e) {
-            error_log('Error while uninstalling IMS/LTI plugin: '.$e->getMessage());
-        }
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->dropSchema(
+            [
+                $em->getClassMetadata(Platform::class),
+                $em->getClassMetadata(PlatformKey::class),
+                $em->getClassMetadata(Result::class),
+            ]
+        );
     }
 
     public function trimParams(array &$params)
@@ -197,39 +443,50 @@ class LtiProviderPlugin extends Plugin
         }
     }
 
-    /**
-     * Creates the plugin tables on database.
-     */
-    private function createPluginTables(): void
+    public function saveResult($values, $ltiLaunchId = null)
     {
-        if ($this->areTablesCreated()) {
-            return;
+        $em = Database::getManager();
+        if (!empty($ltiLaunchId)) {
+            $repo = $em->getRepository(Result::class);
+
+            /** @var Result $objResult */
+            $objResult = $repo->findOneBy(
+                [
+                    'ltiLaunchId' => $ltiLaunchId,
+                ]
+            );
+            if ($objResult) {
+                $objResult->setScore($values['score']);
+                $objResult->setProgress($values['progress']);
+                $objResult->setDuration($values['duration']);
+                $em->persist($objResult);
+                $em->flush();
+
+                return $objResult->getId();
+            }
+        } else {
+            $objResult = new Result();
+            $objResult
+                ->setIssuer($values['issuer'])
+                ->setUserId($values['user_id'])
+                ->setClientUId($values['client_uid'])
+                ->setCourseCode($values['course_code'])
+                ->setToolId($values['tool_id'])
+                ->setToolName($values['tool_name'])
+                ->setScore(0)
+                ->setProgress(0)
+                ->setDuration(0)
+                ->setStartDate(new DateTime())
+                ->setUserIp(api_get_real_ip())
+                ->setLtiLaunchId($values['lti_launch_id'])
+            ;
+            $em->persist($objResult);
+            $em->flush();
+
+            return $objResult->getId();
         }
 
-        $queries = [
-            "CREATE TABLE plugin_lti_provider_platform (
-                id int NOT NULL AUTO_INCREMENT,
-                issuer varchar(255) NOT NULL,
-                client_id varchar(255) NOT NULL,
-                kid varchar(255) NOT NULL,
-                auth_login_url varchar(255) NOT NULL,
-                auth_token_url varchar(255) NOT NULL,
-                key_set_url varchar(255) NOT NULL,
-                deployment_id varchar(255) NOT NULL,
-                PRIMARY KEY(id)
-            ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
-            "CREATE TABLE plugin_lti_provider_platform_key (
-                    id INT AUTO_INCREMENT NOT NULL,
-                    kid VARCHAR(255) NOT NULL,
-                    public_key LONGTEXT NOT NULL,
-                    private_key LONGTEXT NOT NULL,
-                    PRIMARY KEY(id)
-                ) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB",
-        ];
-
-        foreach ($queries as $query) {
-            Database::query($query);
-        }
+        return false;
     }
 
     private function areTablesCreated(): bool
@@ -268,17 +525,6 @@ class LtiProviderPlugin extends Plugin
             'private' => $privateKey,
             'public' => $publicKey["key"],
         ];
-    }
-
-    /**
-     * Drops the plugin tables on database.
-     */
-    private function dropPluginTables(): bool
-    {
-        Database::query("DROP TABLE IF EXISTS plugin_lti_provider_platform");
-        Database::query("DROP TABLE IF EXISTS plugin_lti_provider_platform_key");
-
-        return true;
     }
 
     /**

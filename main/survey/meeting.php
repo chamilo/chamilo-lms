@@ -44,7 +44,9 @@ if (empty($surveyData)) {
     api_not_allowed(true);
 }
 
-SurveyManager::checkTimeAvailability($surveyData);
+if (!api_is_allowed_to_edit()) {
+    SurveyManager::checkTimeAvailability($surveyData);
+}
 
 $invitations = SurveyUtil::get_invited_users($surveyData['code']);
 $students = isset($invitations['course_users']) ? $invitations['course_users'] : [];
@@ -213,11 +215,11 @@ foreach ($students as $studentId) {
             }
 
             if ($action === 'edit') {
-                $html = '<div class="alert alert-info"><input 
-                    id="'.$item['question_id'].'" 
-                    name="options['.$item['question_id'].']" 
-                    class="question" '.$checked.' 
-                    type="checkbox" 
+                $html = '<div class="alert alert-info"><input
+                    id="'.$item['question_id'].'"
+                    name="options['.$item['question_id'].']"
+                    class="question" '.$checked.'
+                    type="checkbox"
                 /></div>';
             } else {
                 $html = $checked;

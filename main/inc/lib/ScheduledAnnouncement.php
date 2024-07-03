@@ -301,6 +301,10 @@ class ScheduledAnnouncement extends Model
         $result = $this->get_all();
         $extraFieldValue = new ExtraFieldValue('scheduled_announcement');
 
+        // get user extra fields list (only visible to self and filter-able)
+        $extraField = new ExtraField('user');
+        $extraFields = $extraField->get_all(['filter = ? AND visible_to_self = ?' => [1, 1]]);
+
         foreach ($result as $result) {
             if (empty($result['sent'])) {
                 if (!empty($result['date']) && $result['date'] < $now) {
@@ -355,6 +359,7 @@ class ScheduledAnnouncement extends Model
                             // Take original message
                             $message = $result['message'];
                             $userInfo = api_get_user_info($user['user_id']);
+                            $userPicture = UserManager::getUserPicture($user['user_id'], USER_IMAGE_SIZE_ORIGINAL);
 
                             $progress = '';
                             if (!empty($sessionInfo) && !empty($courseInfo)) {
@@ -401,13 +406,28 @@ class ScheduledAnnouncement extends Model
                                 '((general_coach))' => $generalCoach,
                                 '((general_coach_email))' => $generalCoachEmail,
                                 '((session_end_date))' => $endTime,
+                                '((user_username))' => $userInfo['username'],
                                 '((user_complete_name))' => $userInfo['complete_name'],
                                 '((user_firstname))' => $userInfo['firstname'],
                                 '((user_lastname))' => $userInfo['lastname'],
                                 '((user_first_name))' => $userInfo['firstname'],
                                 '((user_last_name))' => $userInfo['lastname'],
+                                '((user_picture))' => $userPicture,
                                 '((lp_progress))' => $progress,
                             ];
+
+                            if (!empty($extraFields)) {
+                                $efv = new ExtraFieldValue('user');
+
+                                foreach ($extraFields as $extraField) {
+                                    $valueExtra = $efv->get_values_by_handler_and_field_variable(
+                                        $user['user_id'],
+                                        $extraField['variable'],
+                                        true
+                                    );
+                                    $tags['(('.strtolower($extraField['variable']).'))'] = $valueExtra['value'];
+                                }
+                            }
 
                             $message = str_replace(array_keys($tags), $tags, $message);
                             $message .= $attachments;
@@ -451,11 +471,21 @@ class ScheduledAnnouncement extends Model
             '((session_end_date))',
             '((general_coach))',
             '((general_coach_email))',
+            '((user_username))',
             '((user_complete_name))',
             '((user_first_name))',
             '((user_last_name))',
+            '((user_picture))',
             '((lp_progress))',
         ];
+        // get user extra fields list (only visible to self and filter-able)
+        $extraField = new ExtraField('user');
+        $extraFields = $extraField->get_all(['filter = ? AND visible_to_self = ?' => [1, 1]]);
+        if (!empty($extraFields)) {
+            foreach ($extraFields as $extraField) {
+                $tags[] = '(('.strtolower($extraField['variable']).'))';
+            }
+        }
 
         return $tags;
     }

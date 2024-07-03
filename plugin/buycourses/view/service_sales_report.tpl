@@ -7,6 +7,10 @@
         <a href="service_sales_report.php" aria-controls="buy-services"
            role="tab">{{ 'Services'|get_plugin_lang('BuyCoursesPlugin') }}</a>
     </li>
+    <li id="buy-subscriptions-tab" role="presentation">
+        <a href="subscription_sales_report.php" aria-controls="buy-subscriptions"
+           role="tab">{{ 'Subscriptions'|get_plugin_lang('BuyCoursesPlugin') }}</a>
+    </li>
 </ul>
 </br>
 </br>
@@ -25,6 +29,8 @@
                     <th class="text-center">{{ 'OrderStatus'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                     <th class="text-center">{{ 'OrderDate'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                     <th class="text-right">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                    <th class="text-right">{{ 'CouponDiscount'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                    <th class="text-right">{{ 'Coupon'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                     {% if invoicing_enable %}
                         <th class="text-right">{{ 'Invoice'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                     {% endif %}
@@ -47,6 +53,8 @@
                         </td>
                         <td class="text-center">{{ sale.buy_date | api_get_local_time}}</td>
                         <td class="text-right">{{ sale.service.total_price }}</td>
+                        <td class="text-right">{{ sale.total_discount }}</td>
+                        <td class="text-right">{{ sale.coupon_code }}</td>
                         {% if invoicing_enable %}
                             <td class="text-center">
                             {% if sale.invoice == 1 %}

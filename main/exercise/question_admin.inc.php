@@ -57,9 +57,15 @@ if (is_object($objQuestion)) {
         $objQuestion->processAnswersCreation($form, $objExercise);
         // TODO: maybe here is the better place to index this tool, including answers text
         // redirect
-        if ($objQuestion->type != HOT_SPOT &&
-            $objQuestion->type != HOT_SPOT_DELINEATION
-        ) {
+        if (in_array($objQuestion->type, [HOT_SPOT, HOT_SPOT_COMBINATION, HOT_SPOT_DELINEATION])) {
+            echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&page='.$page.'&hotspotadmin='.$objQuestion->iid.'&'.api_get_cidreq(
+                ).'"</script>';
+        } elseif (in_array($objQuestion->type, [MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_COMBINATION])) {
+            $url = 'admin.php?'
+                .api_get_cidreq().'&'
+                .http_build_query(['exerciseId' => $exerciseId, 'page' => $page, 'mad_admin' => $objQuestion->iid]);
+            echo '<script type="text/javascript">window.location.href="'.$url.'"</script>';
+        } else {
             if (isset($_GET['editQuestion'])) {
                 if (empty($exerciseId)) {
                     Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
@@ -77,8 +83,6 @@ if (is_object($objQuestion)) {
                 }
                 echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=ItemAdded"</script>';
             }
-        } else {
-            echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&page='.$page.'&hotspotadmin='.$objQuestion->iid.'&'.api_get_cidreq().'"</script>';
         }
     } else {
         if (isset($questionName)) {

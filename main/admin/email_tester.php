@@ -8,7 +8,6 @@ $cidReset = true;
 
 // Including some necessary chamilo files.
 require_once __DIR__.'/../inc/global.inc.php';
-global $platform_email;
 
 api_protect_admin_script();
 
@@ -30,8 +29,8 @@ $form->addHtmlEditor(
 );
 $form->addButtonSend(get_lang('SendMessage'), 'submit', false, ['cols-size' => [2, 8, 2]]);
 $form->setDefaults([
-    'smtp_host' => $platform_email['SMTP_HOST'],
-    'smtp_port' => $platform_email['SMTP_PORT'],
+    'smtp_host' => api_get_mail_configuration_value('SMTP_HOST'),
+    'smtp_port' => api_get_mail_configuration_value('SMTP_PORT'),
 ]);
 $form->freeze(['smtp_host', 'smtp_port']);
 
@@ -48,12 +47,18 @@ if ($form->validate()) {
         $values['subject'],
         $values['content'],
         UserManager::formatUserFullName($user),
-        (!empty($platform_email['SMTP_UNIQUE_SENDER']) ? $platform_email['SMTP_FROM_EMAIL'] : $user->getEmail())
+        (!empty(api_get_mail_configuration_value('SMTP_UNIQUE_SENDER')) ? api_get_mail_configuration_value('SMTP_FROM_EMAIL') : $user->getEmail())
     );
 
-    Display::addFlash(
-        Display::return_message(get_lang('MailingTestSent'), 'success')
-    );
+    if ($mailIsSent) {
+        Display::addFlash(
+            Display::return_message(get_lang('MailingTestSent'), 'success')
+        );
+    } else {
+        Display::addFlash(
+            Display::return_message(get_lang('MailingTestNotSent'), 'error')
+        );
+    }
 
     header('Location: '.api_get_self());
     exit;

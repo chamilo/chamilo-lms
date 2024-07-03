@@ -41,8 +41,15 @@ if (api_is_cas_activated()) {
         }
         $uri = api_get_setting('cas_server_uri') ?: '';
         $hostname = api_get_setting('cas_server') ?: 'localhost';
+        $serviceBaseUrl = '';
 
-        phpCAS::client($version, $hostname, $port, $uri);
+        if (is_array($cas)) {
+            if (array_key_exists('service_base_url', $cas)) {
+                $serviceBaseUrl = $cas['service_base_url'];
+            }
+        }
+
+        phpCAS::client($version, $hostname, $port, $uri, $serviceBaseUrl);
 
         if (is_array($cas) && array_key_exists('noCasServerValidation', $cas) && $cas['noCasServerValidation']) {
             phpCAS::setNoCasServerValidation();

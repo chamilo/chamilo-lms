@@ -4,6 +4,7 @@
     <title>{{ _s.institution }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    {% if include_ldjson %}
     <script type="application/ld+json">
         {
           "@context":       "http://schema.org",
@@ -15,6 +16,7 @@
           }
         }
     </script>
+    {% endif %}
 </head>
 <body style="background-color: #f6f6f6; font-family: sans-serif; -webkit-font-smoothing: antialiased; font-size: 14px; line-height: 1.4; margin: 0; padding: 0; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;">
 <table border="0" cellpadding="0" cellspacing="0" class="body" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background-color: #f6f6f6;">

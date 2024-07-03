@@ -116,6 +116,10 @@
                                 template = template.replace("{close_link}", closeLink);
                             }
                             $('#notificationsContainer').append(template);
+
+                            if (!notifications[i].event_text) {
+                                $('#notificationsContainer li[id="' + notifications[i].id + '"] .notification-event-text').remove();
+                            }
                         }
                     }
 

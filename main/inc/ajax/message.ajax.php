@@ -29,43 +29,16 @@ switch ($action) {
         break;
     case 'mark_notification_as_read':
         if (api_get_configuration_value('notification_event')) {
-            $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
+            $id = $_REQUEST['id'] ?? 0;
             $notificationManager = new NotificationEvent();
             $notificationManager->markAsRead($id);
             echo 1;
         }
         break;
     case 'get_count_message':
+        api_block_anonymous_users(false);
         $userId = api_get_user_id();
-        $invitations = [];
-        // Setting notifications
-        $count_unread_message = 0;
-        if (api_get_setting('allow_message_tool') === 'true') {
-            // get count unread message and total invitations
-            $count_unread_message = MessageManager::getCountNewMessagesFromDB($userId);
-        }
-
-        if (api_get_setting('allow_social_tool') === 'true') {
-            $number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(
-                $userId
-            );
-            $usergroup = new UserGroup();
-            $group_pending_invitations = $usergroup->get_groups_by_user(
-                $userId,
-                GROUP_USER_PERMISSION_PENDING_INVITATION,
-                false
-            );
-            if (!empty($group_pending_invitations)) {
-                $group_pending_invitations = count($group_pending_invitations);
-            } else {
-                $group_pending_invitations = 0;
-            }
-            $invitations = [
-                'ms_friends' => $number_of_new_messages_of_friend,
-                'ms_groups' => $group_pending_invitations,
-                'ms_inbox' => $count_unread_message,
-            ];
-        }
+        $invitations = MessageManager::getMessagesCountForUser($userId);
         header('Content-type:application/json');
         echo json_encode($invitations);
         break;
@@ -149,6 +122,46 @@ switch ($action) {
         }
         header('Content-type:application/json');
         echo json_encode($return);
+        break;
+    case 'add_tags':
+        $idList = $_POST['id'] ?? [];
+        $tagList = $_POST['tags'] ?? [];
+
+        if (false === api_get_configuration_value('enable_message_tags')
+            || api_is_anonymous()
+            || api_get_setting('allow_message_tool') !== 'true'
+            || empty($idList) || empty($tagList)
+        ) {
+            break;
+        }
+
+        $em = Database::getManager();
+        $userId = api_get_user_id();
+
+        $extraFieldValues = new ExtraFieldValue('message');
+
+        foreach ($idList as $messageId) {
+            $messageInfo = MessageManager::get_message_by_id($messageId);
+
+            if ($messageInfo['msg_status'] == MESSAGE_STATUS_OUTBOX
+                && $messageInfo['user_sender_id'] != $userId
+            ) {
+                continue;
+            }
+
+            if (in_array($messageInfo['msg_status'], [MESSAGE_STATUS_UNREAD, MESSAGE_STATUS_NEW])
+                && $messageInfo['user_receiver_id'] != $userId
+            ) {
+                continue;
+            }
+
+            $extraParams = [
+                'item_id' => $messageInfo['id'],
+                'extra_tags' => $tagList,
+            ];
+
+            $extraFieldValues->saveFieldValues($extraParams, false, false, ['tags'], [], false, false);
+        }
         break;
     default:
         echo '';

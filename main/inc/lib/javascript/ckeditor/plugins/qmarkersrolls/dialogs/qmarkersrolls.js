@@ -16,12 +16,12 @@ CKEDITOR.dialog.add('qMarkersrollsDialog', function (editor) {
         currentMarkers = [],
         colorDialog = editor.plugins.colordialog;
 
-    function initPlayer(selectedElement) {
-        fakeImage = selectedElement;
+    function initPlayer(dialog) {
+        fakeImage = dialog.getSelectedElement();
 
         if (!fakeImage ||
             !fakeImage.data( 'cke-real-element-type' ) ||
-            fakeImage.data( 'cke-real-element-type' ) != 'video'
+            'video' !== fakeImage.data('cke-real-element-type')
         ) {
             return;
         }
@@ -32,10 +32,10 @@ CKEDITOR.dialog.add('qMarkersrollsDialog', function (editor) {
 
         if (sourcesList.count() === 0) {
             sourcesList = videoNode.getElementsByTag('source', 'cke');
-        }
 
-        if (sourcesList.count() === 0) {
-            return;
+            if (sourcesList.count() === 0) {
+                return;
+            }
         }
 
         var sourceNode = sourcesList.getItem(0);
@@ -44,35 +44,57 @@ CKEDITOR.dialog.add('qMarkersrollsDialog', function (editor) {
             return;
         }
 
-        pgbProgress = document.getElementById('ck-qmr-progress');
-        pgbProgress.value = 0;
-        pgbProgress.min = 0;
-        pgbProgress.step = 1;
-        pgbProgress.onchange = function () {
-            player.currentTime = this.value;
+        pgbProgress = CKEDITOR.document.getById('ck-qmr-progress');
+        pgbProgress.setAttributes({value: 0});
+        pgbProgress.on('change', function () {
+            var value = pgbProgress.getValue()
 
-            document.getElementById('ck-qmr-current-time').textContent = encodeTime(this.value);
-        };
+            player.$.currentTime = value;
+            dialog.setValueOf('tab-markers', 'txt-hms', encodeTime(value));
+        });
+        pgbProgress.hide();
 
-        var playerContainer = document.getElementById('ck-qmr-player-container');
-        playerContainer.innerHTML = '';
+        var playerContainer = CKEDITOR.document.getById('ck-qmr-player-container');
+        playerContainer.setHtml('');
+        playerContainer.hide();
 
-        player = document.createElement('video');
-        player.className = 'skip';
-        player.controls = false;
-        player.style.maxWidth = '100%';
-        player.style.minWidth = '100%';
-        player.onloadedmetadata = function () {
-            pgbProgress.max = Math.floor(player.duration);
-            playerContainer.appendChild(player);
-        };
-        player.src = sourceNode.getAttribute('src');
+        var sourceType = sourceNode.getAttribute('type');
+
+        var embedVideoTypes = [
+            'video/dailymotion',
+            'video/facebook',
+            'video/twitch',
+            'video/vimeo',
+            'video/youtube',
+        ];
+
+        var isEmbedVideo = -1 !== CKEDITOR.tools.indexOf(embedVideoTypes, sourceType);
+
+        if (isEmbedVideo) {
+            playerContainer.setText(lang.embedVideoSource + ' ' + sourceNode.getAttribute('src'));
+            playerContainer.show();
+        } else {
+            player = new CKEDITOR.dom.element('video');
+            player.setAttributes({
+                'class': 'skip',
+                src: sourceNode.getAttribute('src')
+            });
+            player.removeAttribute('controls');
+            player.setStyles({ maxWidth: '100%', maxHeight: '100%' });
+            player.on('loadedmetadata', function () {
+                pgbProgress.setAttribute('max', Math.floor(player.$.duration));
+                pgbProgress.show();
+
+                playerContainer.append(player);
+                playerContainer.show();
+            });
+        }
     }
 
-    function decodeTime(time) {
-        var parts = time.split(':');
+    function decodeTime(tms) {
+        var parts = tms.split(':');
 
-        if (parts.length != 3) {
+        if (3 !== parts.length) {
             return 0;
         }
 
@@ -221,19 +243,8 @@ CKEDITOR.dialog.add('qMarkersrollsDialog', function (editor) {
                                 html: '<div id="ck-qmr-player-container"></div>'
                             },
                             {
-                                type: 'hbox',
-                                widths: ['100%', '200px'],
-                                children: [
-                                    {
-                                        type: 'html',
-                                        html: '<input type="range" min="0" step="1" id="ck-qmr-progress">'
-                                    },
-                                    {
-                                        type: 'html',
-                                        title: 'Current Time',
-                                        html: '<span id="ck-qmr-current-time">00:00:00</span>'
-                                    },
-                                ]
+                                type: 'html',
+                                html: '<input type="range" min="0" step="1" id="ck-qmr-progress">'
                             },
                             {
                                 type: 'hbox',
@@ -246,35 +257,50 @@ CKEDITOR.dialog.add('qMarkersrollsDialog', function (editor) {
                                             + 'style="max-height: 110px; overflow: hidden auto; list-style: none;"></ul>'
                                     },
                                     {
-                                        type: 'button',
-                                        id: 'btn-assign',
-                                        label: lang.assignQuiz,
-                                        title: lang.assignQuiz,
-                                        onClick: function () {
-                                            var radioQuizzes = document.getElementsByName('ck_qmr_quiz'),
-                                                selected = null;
+                                        type: 'vbox',
+                                        children: [
+                                            {
+                                                type: 'text',
+                                                id: 'txt-hms',
+                                                label: lang.time,
+                                                'default': '00:00:00'
+                                            },
+                                            {
+                                                type: 'button',
+                                                id: 'btn-assign',
+                                                label: lang.assignQuiz,
+                                                title: lang.assignQuiz,
+                                                onClick: function () {
+                                                    var radioQuizzes = document.getElementsByName('ck_qmr_quiz'),
+                                                        selected = null;
 
-                                            radioQuizzes.forEach(function (radio) {
-                                                if (!radio.checked) {
-                                                    return;
+                                                    radioQuizzes.forEach(function (radio) {
+                                                        if (!radio.checked) {
+                                                            return;
+                                                        }
+
+                                                        selected = radio;
+                                                    });
+
+                                                    if (!selected) {
+                                                        return;
+                                                    }
+
+                                                    var tms = this.getDialog()
+                                                        .getContentElement('tab-markers', 'txt-hms')
+                                                        .getValue();
+
+                                                    currentMarkers.push([
+                                                        decodeTime(tms),
+                                                        parseInt(selected.value)
+                                                    ]);
+
+                                                    displayCurrentMarkersList();
+
+                                                    selected.parentElement.remove();
                                                 }
-
-                                                selected = radio;
-                                            });
-
-                                            if (!selected) {
-                                                return;
-                                            }
-
-                                            currentMarkers.push([
-                                                parseInt(pgbProgress.value),
-                                                parseInt(selected.value)
-                                            ]);
-
-                                            displayCurrentMarkersList();
-
-                                            selected.parentElement.remove();
-                                        }
+                                            },
+                                        ]
                                     }
                                 ]
                             },
@@ -344,9 +370,7 @@ CKEDITOR.dialog.add('qMarkersrollsDialog', function (editor) {
 
             document.getElementById('ck-qmr-quizzes-container').innerHTML = '';
 
-            initPlayer(
-                dialog.getSelectedElement()
-            );
+            initPlayer(dialog);
 
             currentMarkers = JSON.parse(
                 videoNode.getAttribute('data-q-markersrolls') || '[]'

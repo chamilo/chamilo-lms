@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CLp;
+
 /**
  * Defines the scorm class, which is meant to contain the scorm items (nuclear elements).
  *
@@ -329,7 +331,8 @@ class scorm extends learnpath
         $courseCode,
         $userMaxScore = 1,
         $sessionId = 0,
-        $userId = 0
+        $userId = 0,
+        $lpName = null
     ) {
         if ($this->debug > 0) {
             error_log('New LP - Entered import_manifest('.$courseCode.')', 0);
@@ -341,6 +344,7 @@ class scorm extends learnpath
         if (empty($userId)) {
             $userId = api_get_user_id();
         }
+        $em = Database::getManager();
         // Get table names.
         $new_lp = Database::get_course_table(TABLE_LP_MAIN);
         $new_lp_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -360,65 +364,79 @@ class scorm extends learnpath
                 $dsp = $row[0] + 1;
             }
             $myname = api_utf8_decode($oOrganization->get_name());
-            $now = api_get_utc_datetime();
-
-            $params = [
-                'c_id' => $courseId,
-                'lp_type' => 2,
-                'name' => $myname,
-                'ref' => $oOrganization->get_ref(),
-                'description' => '',
-                'path' => $this->subdir,
-                'force_commit' => 0,
-                'default_view_mod' => 'embedded',
-                'default_encoding' => $this->manifest_encoding,
-                'js_lib' => 'scorm_api.php',
-                'display_order' => $dsp,
-                'session_id' => $sessionId,
-                'use_max_score' => $userMaxScore,
-                'content_maker' => '',
-                'content_license' => '',
-                'debug' => 0,
-                'theme' => '',
-                'preview_image' => '',
-                'author' => '',
-                'prerequisite' => 0,
-                'hide_toc_frame' => 0,
-                'seriousgame_mode' => 0,
-                'autolaunch' => 0,
-                'category_id' => 0,
-                'max_attempts' => 0,
-                'subscribe_users' => 0,
-                'created_on' => $now,
-                'modified_on' => $now,
-                'publicated_on' => $now,
-            ];
-
-            $lp_id = Database::insert($new_lp, $params);
-
-            if ($lp_id) {
-                $sql = "UPDATE $new_lp SET id = iid WHERE iid = $lp_id";
-                Database::query($sql);
-
-                $this->lp_id = $lp_id;
-
-                // Insert into item_property.
-                api_item_property_update(
-                    $courseInfo,
-                    TOOL_LEARNPATH,
-                    $this->lp_id,
-                    'LearnpathAdded',
-                    $userId
-                );
-
-                api_item_property_update(
-                    $courseInfo,
-                    TOOL_LEARNPATH,
-                    $this->lp_id,
-                    'visible',
-                    $userId
-                );
+            $now = api_get_utc_datetime(null, false, true);
+            if (!empty($lpName)) {
+                $myname = api_utf8_decode($lpName);
             }
+
+            $newScorm = (new CLp())
+                ->setCId($courseId)
+                ->setLpType(2)
+                ->setName($myname)
+                ->setRef($oOrganization->get_ref())
+                ->setDescription('')
+                ->setPath($this->subdir)
+                ->setForceCommit(false)
+                ->setDefaultViewMod('embedded')
+                ->setDefaultEncoding($this->manifest_encoding)
+                ->setJsLib('scorm_api.php')
+                ->setDisplayOrder($dsp)
+                ->setSessionId($sessionId)
+                ->setUseMaxScore($userMaxScore)
+                ->setContentMaker('')
+                ->setContentLicense('')
+                ->setDebug(false)
+                ->setTheme('')
+                ->setPreviewImage('')
+                ->setAuthor('')
+                ->setPrerequisite(0)
+                ->setHideTocFrame(false)
+                ->setSeriousgameMode(false)
+                ->setAutolaunch(0)
+                ->setCategoryId(0)
+                ->setMaxAttempts(0)
+                ->setSubscribeUsers(0)
+                ->setCreatedOn($now)
+                ->setModifiedOn($now)
+                ->setPublicatedOn($now)
+                ->setAccumulateScormTime(1)
+            ;
+
+            $em->persist($newScorm);
+            $em->flush();
+
+            HookLearningPathCreated::create()
+                ->setEventData(['lp' => $newScorm])
+                ->notifyCreated()
+            ;
+
+            $newScorm->setId($newScorm->getIid());
+
+            $em->flush();
+
+            $this->lp_id = $newScorm->getIid();
+
+            // Insert into item_property.
+            api_item_property_update(
+                $courseInfo,
+                TOOL_LEARNPATH,
+                $this->lp_id,
+                'LearnpathAdded',
+                $userId
+            );
+
+            api_item_property_update(
+                $courseInfo,
+                TOOL_LEARNPATH,
+                $this->lp_id,
+                'visible',
+                $userId
+            );
+            Event::addEvent(
+                LOG_LP_CREATE,
+                LOG_LP_ID,
+                $this->lp_id.' - '.$myname
+            );
 
             // Now insert all elements from inside that learning path.
             // Make sure we also get the href and sco/asset from the resources.
@@ -494,7 +512,7 @@ class scorm extends learnpath
                 $item['parameters'] = Database::escape_string($item['parameters']);
 
                 $sql = "INSERT INTO $new_lp_item (c_id, lp_id,item_type,ref,title, path,min_score,max_score, $field_add parent_item_id,previous_item_id,next_item_id, prerequisite,display_order,launch_data, parameters)
-                        VALUES ($courseId, $lp_id, '$type', '$identifier', '$title', '$path' , 0, $max_score, $value_add $parent, $previous, 0, '$prereq', ".$item['rel_order'].", '".$item['datafromlms']."', '".$item['parameters']."' )";
+                        VALUES ($courseId, {$newScorm->getIid()}, '$type', '$identifier', '$title', '$path' , 0, $max_score, $value_add $parent, $previous, 0, '$prereq', ".$item['rel_order'].", '".$item['datafromlms']."', '".$item['parameters']."' )";
 
                 Database::query($sql);
                 if ($this->debug > 1) {
@@ -547,7 +565,7 @@ class scorm extends learnpath
                     $xapian_data = [
                         SE_COURSE_ID => $courseid,
                         SE_TOOL_ID => TOOL_LEARNPATH,
-                        SE_DATA => ['lp_id' => $lp_id, 'lp_item' => $previous, 'document_id' => ''],
+                        SE_DATA => ['lp_id' => $newScorm->getIid(), 'lp_item' => $previous, 'document_id' => ''],
                         SE_USER => api_get_user_id(),
                     ];
                     $ic_slide->xapian_data = serialize($xapian_data);
@@ -559,7 +577,7 @@ class scorm extends learnpath
                         $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
                         $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, ref_id_second_level, search_did)
                                 VALUES (NULL , \'%s\', \'%s\', %s, %s, %s)';
-                        $sql = sprintf($sql, $tbl_se_ref, $courseCode, TOOL_LEARNPATH, $lp_id, $previous, $did);
+                        $sql = sprintf($sql, $tbl_se_ref, $courseCode, TOOL_LEARNPATH, $newScorm->getIid(), $previous, $did);
                         Database::query($sql);
                     }
                 }
@@ -753,6 +771,7 @@ class scorm extends learnpath
             }
 
             $zipFile->extract(
+                PCLZIP_OPT_REPLACE_NEWER,
                 PCLZIP_CB_PRE_EXTRACT,
                 $callBack
             );

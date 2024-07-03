@@ -211,16 +211,17 @@ class AnnouncementEmail
     /**
      * Email message.
      *
-     * @param int $receiverUserId
+     * @param int  $receiverUserId
+     * @param bool $checkUrls      It checks access url of user when multiple_access_urls = true
      *
      * @return string
      */
-    public function message($receiverUserId)
+    public function message($receiverUserId, $checkUrls = false)
     {
         $content = $this->announcement('content');
         $session_id = $this->session_id;
         $courseCode = $this->course('code');
-
+        $courseId = $this->course('real_id');
         $content = AnnouncementManager::parseContent(
             $receiverUserId,
             $content,
@@ -228,6 +229,15 @@ class AnnouncementEmail
             $session_id
         );
 
+        $accessConfig = [];
+        $useMultipleUrl = api_get_configuration_value('multiple_access_urls');
+        if ($useMultipleUrl && $checkUrls) {
+            $accessUrls = api_get_access_url_from_user($receiverUserId, $courseId);
+            if (!empty($accessUrls)) {
+                $accessConfig['multiple_access_urls'] = true;
+                $accessConfig['access_url'] = (int) $accessUrls[0];
+            }
+        }
         // Build the link by hand because api_get_cidreq() doesn't accept course params
         $course_param = 'cidReq='.$courseCode.'&id_session='.$session_id.'&gidReq='.api_get_group_id();
         $course_name = $this->course('title');
@@ -239,7 +249,7 @@ class AnnouncementEmail
             $result .= '<br />';
             $result .= Display::url(
                 $attachment['filename'],
-                api_get_path(WEB_CODE_PATH).
+                api_get_path(WEB_CODE_PATH, $accessConfig).
                 'announcements/download.php?file='.basename($attachment['path']).'&'.$course_param
             );
             $result .= '<br />';
@@ -256,7 +266,7 @@ class AnnouncementEmail
             }
         }
 
-        $result .= '<a href="'.api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.$course_param.'">'.
+        $result .= '<a href="'.api_get_path(WEB_CODE_PATH, $accessConfig).'announcements/announcements.php?'.$course_param.'">'.
             $course_name.'</a><br/>';
 
         return $result;
@@ -313,14 +323,15 @@ class AnnouncementEmail
      * @param bool $sendToDrhUsers       send a copy of the message to the DRH users
      * @param int  $senderId             related to the main user
      * @param bool $directMessage
+     * @param bool $checkUrls            It checks access url of user when multiple_access_urls = true
      *
      * @return array
      */
-    public function send($sendToUsersInSession = false, $sendToDrhUsers = false, $senderId = 0, $directMessage = false)
+    public function send($sendToUsersInSession = false, $sendToDrhUsers = false, $senderId = 0, $directMessage = false, $checkUrls = false)
     {
         $senderId = empty($senderId) ? api_get_user_id() : (int) $senderId;
         $subject = $this->subject($directMessage);
-
+        $courseId = $this->course('real_id');
         // Send email one by one to avoid antispam
         $users = $this->sent_to();
 
@@ -333,7 +344,7 @@ class AnnouncementEmail
         }
         $messageSentTo = [];
         foreach ($users as $user) {
-            $message = $this->message($user['user_id']);
+            $message = $this->message($user['user_id'], $checkUrls);
             $wasSent = MessageManager::messageWasAlreadySent($senderId, $user['user_id'], $subject, $message);
             if ($wasSent === false) {
                 if (!empty($this->logger)) {
@@ -349,7 +360,12 @@ class AnnouncementEmail
                     $message,
                     $senderId,
                     $sendToDrhUsers,
-                    true
+                    true,
+                    [],
+                    true,
+                    [],
+                    $checkUrls,
+                    $courseId
                 );
             } else {
                 if (!empty($this->logger)) {
@@ -386,7 +402,12 @@ class AnnouncementEmail
                                 $message,
                                 $senderId,
                                 false,
-                                true
+                                true,
+                                [],
+                                true,
+                                [],
+                                $checkUrls,
+                                $courseId
                             );
                         }
                     }

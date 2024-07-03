@@ -6,6 +6,8 @@ use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
+use League\OAuth2\Client\Provider\GenericProvider;
+use PHPMailer\PHPMailer\OAuth;
 use PHPMailer\PHPMailer\PHPMailer;
 use Symfony\Component\Finder\Finder;
 
@@ -18,7 +20,7 @@ use Symfony\Component\Finder\Finder;
  */
 
 // PHP version requirement.
-define('REQUIRED_PHP_VERSION', '7.1');
+define('REQUIRED_PHP_VERSION', '7.4');
 define('REQUIRED_MIN_MEMORY_LIMIT', '128');
 define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE', '10');
 define('REQUIRED_MIN_POST_MAX_SIZE', '10');
@@ -47,6 +49,7 @@ define('COURSE_TUTOR', 16); // student is tutor of a course (NOT in session)
 define('STUDENT_BOSS', 17); // student is boss
 define('INVITEE', 20);
 define('HRM_REQUEST', 21); //HRM has request for vinculation with user
+define('COURSE_EXLEARNER', 22);
 
 // Table of status
 $_status_list[COURSEMANAGER] = 'teacher'; // 1
@@ -146,8 +149,10 @@ define('TOOL_NOTEBOOK', 'notebook');
 define('TOOL_ATTENDANCE', 'attendance');
 define('TOOL_COURSE_PROGRESS', 'course_progress');
 define('TOOL_PORTFOLIO', 'portfolio');
+define('TOOL_PORTFOLIO_COMMENT', 'portfolio_comment');
 define('TOOL_PLAGIARISM', 'compilatio');
 define('TOOL_XAPI', 'xapi');
+define('TOOL_H5P', 'h5p');
 
 // CONSTANTS defining Chamilo interface sections
 define('SECTION_CAMPUS', 'mycampus');
@@ -170,6 +175,7 @@ define('SECTION_CUSTOMPAGE', 'custompage');
 define('PLATFORM_AUTH_SOURCE', 'platform');
 define('CAS_AUTH_SOURCE', 'cas');
 define('LDAP_AUTH_SOURCE', 'extldap');
+define('IMS_LTI_SOURCE', 'ims_lti');
 
 // CONSTANT defining the default HotPotatoes files directory
 define('DIR_HOTPOTATOES', '/HotPotatoes_files');
@@ -191,6 +197,10 @@ define('LOG_GROUP_PORTAL_REL_USER_ARRAY', 'soc_gr_user_array');
 define('LOG_GROUP_PORTAL_USER_SUBSCRIBED', 'soc_gr_u_subs');
 define('LOG_GROUP_PORTAL_USER_UNSUBSCRIBED', 'soc_gr_u_unsubs');
 define('LOG_GROUP_PORTAL_USER_UPDATE_ROLE', 'soc_gr_update_role');
+define('LOG_GROUP_PORTAL_COURSE_SUBSCRIBED', 'soc_gr_c_subs');
+define('LOG_GROUP_PORTAL_COURSE_UNSUBSCRIBED', 'soc_gr_c_unsubs');
+define('LOG_GROUP_PORTAL_SESSION_SUBSCRIBED', 'soc_gr_s_subs');
+define('LOG_GROUP_PORTAL_SESSION_UNSUBSCRIBED', 'soc_gr_s_unsubs');
 
 define('LOG_USER_DELETE', 'user_deleted');
 define('LOG_USER_CREATE', 'user_created');
@@ -224,8 +234,15 @@ define('LOG_CAREER_CREATE', 'career_created');
 define('LOG_CAREER_DELETE', 'career_deleted');
 define('LOG_USER_PERSONAL_DOC_DELETED', 'user_doc_deleted');
 define('LOG_WIKI_ACCESS', 'wiki_page_view');
+define('LOG_EXERCISE_CREATE', 'exe_created');
+define('LOG_EXERCISE_UPDATE', 'exe_updated');
+define('LOG_EXERCISE_DELETE', 'exe_deleted');
+define('LOG_LP_CREATE', 'lp_created');
+define('LOG_LP_UPDATE', 'lp_updated');
+define('LOG_LP_DELETE', 'lp_deleted');
 // All results from an exercise
 define('LOG_EXERCISE_RESULT_DELETE', 'exe_result_deleted');
+define('LOG_EXERCISE_RESULT_DELETE_INCOMPLETE', 'exe_incomplete_results_deleted');
 // Logs only the one attempt
 define('LOG_EXERCISE_ATTEMPT_DELETE', 'exe_attempt_deleted');
 define('LOG_LP_ATTEMPT_DELETE', 'lp_attempt_deleted');
@@ -291,7 +308,9 @@ define('LOG_SURVEY_CREATED', 'survey_created');
 define('LOG_SURVEY_DELETED', 'survey_deleted');
 define('LOG_SURVEY_CLEAN_RESULTS', 'survey_clean_results');
 
-define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.\$-]/');
+define('LOG_WS', 'access_ws_');
+
+define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.@\$-]/');
 
 //used when login_is_email setting is true
 define('USERNAME_PURIFIER_MAIL', '/[^0-9A-Za-z_\.@]/');
@@ -518,6 +537,13 @@ define('MATCHING_DRAGGABLE', 19);
 define('ANNOTATION', 20);
 define('READING_COMPREHENSION', 21);
 define('MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY', 22);
+define('UPLOAD_ANSWER', 23);
+define('MATCHING_COMBINATION', 24);
+define('MATCHING_DRAGGABLE_COMBINATION', 25);
+define('HOT_SPOT_COMBINATION', 26);
+define('FILL_IN_BLANKS_COMBINATION', 27);
+define('MULTIPLE_ANSWER_DROPDOWN_COMBINATION', 28);
+define('MULTIPLE_ANSWER_DROPDOWN', 29);
 
 define('EXERCISE_CATEGORY_RANDOM_SHUFFLED', 1);
 define('EXERCISE_CATEGORY_RANDOM_ORDERED', 2);
@@ -547,6 +573,7 @@ define('ITEM_TYPE_ATTENDANCE', 8);
 define('ITEM_TYPE_SURVEY', 9);
 define('ITEM_TYPE_FORUM_THREAD', 10);
 define('ITEM_TYPE_PORTFOLIO', 11);
+define('ITEM_TYPE_GRADEBOOK_EVALUATION', 12);
 
 // one big string with all question types, for the validator in pear/HTML/QuickForm/Rule/QuestionType
 define(
@@ -676,6 +703,8 @@ define('RESOURCE_ATTENDANCE', 'attendance');
 define('RESOURCE_WORK', 'work');
 define('RESOURCE_SESSION_COURSE', 'session_course');
 define('RESOURCE_GRADEBOOK', 'gradebook');
+define('RESOURCE_XAPI_TOOL', 'xapi_tool');
+define('RESOURCE_H5P_TOOL', 'h5p_tool');
 define('ADD_THEMATIC_PLAN', 6);
 
 // Max online users to show per page (whoisonline)
@@ -729,7 +758,7 @@ require_once __DIR__.'/internationalization.lib.php';
  * a slash too, so an additional check about presence of leading system server base is implemented. For example, the function is
  * able to distinguish type difference between /var/www/chamilo/courses/ (SYS) and /chamilo/courses/ (REL).
  * 3. The function api_get_path() returns only these three types of paths, which in some sense are absolute. The function has
- * no a mechanism for processing relative web/system paths, such as: lesson01.html, ./lesson01.html, ../css/my_styles.css.
+ * no mechanism for processing relative web/system paths, such as: lesson01.html, ./lesson01.html, ../css/my_styles.css.
  * It has not been identified as needed yet.
  * 4. Also, resolving the meta-symbols "." and ".." within paths has not been implemented, it is to be identified as needed.
  *
@@ -1311,20 +1340,22 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
  * @param bool Whether to allow session admins as well
  * @param bool Whether to allow HR directors as well
  * @param string An optional message (already passed through get_lang)
+ * @param bool Whether to allow session coach as well
  *
  * @return bool True if user is allowed, false otherwise.
  *              The function also outputs an error message in case not allowed
  *
  * @author Roan Embrechts (original author)
  */
-function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = false, $message = null)
+function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = false, $message = null, $allow_session_coach = false)
 {
     if (!api_is_platform_admin($allow_sessions_admins, $allow_drh)) {
-        api_not_allowed(true, $message);
+        if (!($allow_session_coach && api_is_coach())) {
+            api_not_allowed(true, $message);
 
-        return false;
+            return false;
+        }
     }
-
     api_block_inactive_user();
 
     return true;
@@ -1494,6 +1525,29 @@ function api_get_navigator()
     }
 
     return ['name' => $navigator, 'version' => $version];
+}
+/**
+ * Check if it is a desktop or mobile browser.
+ */
+function api_is_browser_mobile(): bool
+{
+    if (empty($_SERVER['HTTP_USER_AGENT'])) {
+        static $isMobile = false;
+    } elseif (
+        strpos($_SERVER['HTTP_USER_AGENT'], 'Mobile') !== false
+        || strpos($_SERVER['HTTP_USER_AGENT'], 'Android') !== false
+        || strpos($_SERVER['HTTP_USER_AGENT'], 'Silk/') !== false
+        || strpos($_SERVER['HTTP_USER_AGENT'], 'Kindle') !== false
+        || strpos($_SERVER['HTTP_USER_AGENT'], 'BlackBerry') !== false
+        || strpos($_SERVER['HTTP_USER_AGENT'], 'Opera Mini') !== false
+        || strpos($_SERVER['HTTP_USER_AGENT'], 'Opera Mobi') !== false
+    ) {
+        $isMobile = true;
+    } else {
+        $isMobile = false;
+    }
+
+    return $isMobile;
 }
 
 /**
@@ -1766,7 +1820,8 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
     $result['profile_url'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id;
 
     // Send message link
-    $sendMessage = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$user_id;
+    $userIdHash = UserManager::generateUserHash($user_id);
+    $sendMessage = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&hash='.$userIdHash;
     $result['complete_name_with_message_link'] = Display::url(
         $result['complete_name_with_username'],
         $sendMessage,
@@ -1929,15 +1984,20 @@ function api_get_user_entity($userId)
  *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-function api_get_user_info_from_username($username)
+function api_get_user_info_from_username($username, $authSource = null)
 {
     if (empty($username)) {
         return false;
     }
     $username = trim($username);
 
+    $andAuthSource = "";
+    if (isset($authSource)) {
+        $authSource = Database::escape_string($authSource);
+        $andAuthSource = " AND auth_source = '$authSource'";
+    }
     $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_USER)."
-            WHERE username='".Database::escape_string($username)."'";
+            WHERE username='".Database::escape_string($username)."' $andAuthSource";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $resultArray = Database::fetch_array($result);
@@ -2134,6 +2194,11 @@ function api_get_anonymous_id()
         $result = Database::query($sql);
         if (empty(Database::num_rows($result))) {
             $login = uniqid('anon_');
+            $email = ' anonymous@localhost.local';
+            if (api_get_setting('login_is_email') == 'true') {
+                $login = $login."@localhost.local";
+                $email = $login;
+            }
             $anonList = UserManager::get_user_list(['status' => ANONYMOUS], ['registration_date ASC']);
             if (count($anonList) >= $max) {
                 foreach ($anonList as $userToDelete) {
@@ -2146,7 +2211,7 @@ function api_get_anonymous_id()
                 $login,
                 'anon',
                 ANONYMOUS,
-                ' anonymous@localhost',
+                $email,
                 $login,
                 $login
             );
@@ -2480,6 +2545,28 @@ function api_format_course_array($course_data)
 
     $_course['course_image_large'] = $url_image;
 
+    // email pictures
+    // Course image
+    $url_image = null;
+    $_course['course_email_image_source'] = '';
+    $mailPicture = $courseSys.'/course-email-pic-cropped.png';
+    if (file_exists($mailPicture)) {
+        $url_image = $webCourseHome.'/course-email-pic-cropped.png';
+        $_course['course_email_image_source'] = $mailPicture;
+    }
+    $_course['course_email_image'] = $url_image;
+
+    // Course large image
+    $url_image = null;
+    $_course['course_email_image_large_source'] = '';
+    $mailPicture = $courseSys.'/course-email-pic.png';
+    if (file_exists($mailPicture)) {
+        $url_image = $webCourseHome.'/course-email-pic.png';
+        $_course['course_email_image_large_source'] = $mailPicture;
+    }
+
+    $_course['course_email_image_large'] = $url_image;
+
     return $_course;
 }
 
@@ -2496,8 +2583,9 @@ function api_generate_password($length = 8)
         $length = 2;
     }
 
-    $charactersLowerCase = 'abcdefghijkmnopqrstuvwxyz';
-    $charactersUpperCase = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+    $charactersLowerCase = Security::CHAR_LOWER;
+    $charactersUpperCase = Security::CHAR_UPPER;
+
     $minNumbers = 2;
     $length = $length - $minNumbers;
     $minLowerCase = round($length / 2);
@@ -2507,19 +2595,25 @@ function api_generate_password($length = 8)
     $passwordRequirements = api_get_configuration_value('password_requirements');
 
     $factory = new RandomLib\Factory();
-    $generator = $factory->getGenerator(new SecurityLib\Strength(SecurityLib\Strength::MEDIUM));
+    $generator = $factory->getMediumStrengthGenerator();
 
     if (!empty($passwordRequirements)) {
         $length = $passwordRequirements['min']['length'];
         $minNumbers = $passwordRequirements['min']['numeric'];
         $minLowerCase = $passwordRequirements['min']['lowercase'];
         $minUpperCase = $passwordRequirements['min']['uppercase'];
+        $minSpecials = $passwordRequirements['min']['specials'];
 
-        $rest = $length - $minNumbers - $minLowerCase - $minUpperCase;
+        $rest = $length - $minNumbers - $minLowerCase - $minUpperCase - $minSpecials;
         // Add the rest to fill the length requirement
         if ($rest > 0) {
-            $password .= $generator->generateString($rest, $charactersLowerCase.$charactersUpperCase);
+            $password .= $generator->generateString(
+                $rest,
+                $charactersLowerCase.$charactersUpperCase
+            );
         }
+
+        $password .= $generator->generateString($minSpecials, Security::CHAR_SYMBOLS);
     }
 
     // Min digits default 2
@@ -2559,6 +2653,7 @@ function api_check_password($password)
     // Optional
     $minLowerCase = $passwordRequirements['min']['lowercase'];
     $minUpperCase = $passwordRequirements['min']['uppercase'];
+    $minSpecials = $passwordRequirements['min']['specials'];
 
     $minLetters = $minLowerCase + $minUpperCase;
     $passwordLength = api_strlen($password);
@@ -2570,9 +2665,11 @@ function api_check_password($password)
     $digits = 0;
     $lowerCase = 0;
     $upperCase = 0;
+    $specials = 0;
 
     for ($i = 0; $i < $passwordLength; $i++) {
-        $currentCharacterCode = api_ord(api_substr($password, $i, 1));
+        $currentCharacter = api_substr($password, $i, 1);
+        $currentCharacterCode = api_ord($currentCharacter);
         if ($currentCharacterCode >= 65 && $currentCharacterCode <= 90) {
             $upperCase++;
         }
@@ -2582,6 +2679,10 @@ function api_check_password($password)
         }
         if ($currentCharacterCode >= 48 && $currentCharacterCode <= 57) {
             $digits++;
+        }
+
+        if (false !== strpos(Security::CHAR_SYMBOLS, $currentCharacter)) {
+            $specials++;
         }
     }
 
@@ -2595,7 +2696,11 @@ function api_check_password($password)
 
     if (!empty($minLowerCase)) {
         // Lowercase
-        $conditions['min_lowercase'] = $upperCase >= $minLowerCase;
+        $conditions['min_lowercase'] = $lowerCase >= $minLowerCase;
+    }
+
+    if (!empty($minSpecials)) {
+        $conditions['min_specials'] = $specials >= $minSpecials;
     }
 
     // Min letters
@@ -2825,8 +2930,13 @@ function api_get_session_visibility(
 
     // I don't care the session visibility.
     if (empty($row['access_start_date']) && empty($row['access_end_date'])) {
+
         // Session duration per student.
         if (isset($row['duration']) && !empty($row['duration'])) {
+            if (api_get_configuration_value('session_coach_access_after_duration_end') == true && api_is_teacher()) {
+                return SESSION_AVAILABLE;
+            }
+
             $duration = $row['duration'] * 24 * 60 * 60;
             $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser($session_id, $userId);
 
@@ -2895,7 +3005,7 @@ function api_get_session_visibility(
  * the user is not a student.
  *
  * @param int $sessionId
- * @param int $statusId  User status id - if 5 (student), will return empty
+ * @param int $statusId  User status id - if 5 (student) or in student view, will return empty
  *
  * @return string Session icon
  */
@@ -2903,7 +3013,8 @@ function api_get_session_image($sessionId, $statusId)
 {
     $sessionId = (int) $sessionId;
     $image = '';
-    if ($statusId != STUDENT) {
+    $studentView = !empty($_SESSION['studentview']) && $_SESSION['studentview'] == 'studentview';
+    if ($statusId != STUDENT && !$studentView) {
         // Check whether is not a student
         if ($sessionId > 0) {
             $image = '&nbsp;&nbsp;'.Display::return_icon(
@@ -3015,6 +3126,12 @@ function api_get_setting($variable, $key = null)
  */
 function api_get_plugin_setting($plugin, $variable)
 {
+    $settings = api_get_configuration_value('plugin_settings');
+
+    if (!empty($settings) && isset($settings[$plugin]) && isset($settings[$plugin][$variable])) {
+        return $settings[$plugin][$variable];
+    }
+
     $variableName = $plugin.'_'.$variable;
     $result = api_get_setting($variableName);
 
@@ -3875,6 +3992,9 @@ function api_is_anonymous($user_id = null, $db_check = false)
         //if ($_user['user_id'] == 0) {
         // In some cases, api_set_anonymous doesn't seem to be triggered in local.inc.php. Make sure it is.
         // Occurs in agenda for admin links - YW
+        // it occurs when pages are opened directly without entering first the course home page. To fix it add
+        // $use_anonymous = true;
+        // before including global.inc.php in the page
         global $use_anonymous;
         if (isset($use_anonymous) && $use_anonymous) {
             api_set_anonymous();
@@ -4160,7 +4280,7 @@ function convert_sql_date($last_post_datetime)
     list($year, $month, $day) = explode('-', $last_post_date);
     list($hour, $min, $sec) = explode(':', $last_post_time);
 
-    return mktime((int) $hour, (int) $min, (int) $sec, (int) $month, (int) $day, (int) $year);
+    return gmmktime((int) $hour, (int) $min, (int) $sec, (int) $month, (int) $day, (int) $year);
 }
 
 /**
@@ -4862,6 +4982,47 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0, $g
 }
 
 /**
+ * Gets the last item property data from tool of a course id, in chronological order.
+ *
+ * @param string $tool      tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
+ * @param int    $ref       id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
+ * @param int    $sessionId
+ * @param int    $groupId
+ *
+ * @return array with all fields from c_item_property, empty array if not found or false if course could not be found
+ */
+function api_get_last_item_property_info(int $courseId, string $tool, int $ref, int $sessionId = null, int $groupId = null): array
+{
+    $tool = Database::escape_string($tool);
+    // Definition of tables.
+    $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
+    $sessionCondition = " session_id = $sessionId";
+    if (empty($sessionId)) {
+        $sessionCondition = ' (session_id = 0 OR session_id IS NULL) ';
+    }
+
+    $sql = "SELECT * FROM $table
+            WHERE
+                c_id = $courseId AND
+                tool = '$tool' AND
+                ref = $ref AND
+                $sessionCondition ";
+
+    if (!empty($groupId)) {
+        $sql .= " AND to_group_id = $groupId ";
+    }
+    // Add criteria to only get the last one
+    $sql .= "ORDER BY lastedit_date DESC LIMIT 1";
+    $rs = Database::query($sql);
+    $row = [];
+    if (Database::num_rows($rs) > 0) {
+        $row = Database::fetch_array($rs, 'ASSOC');
+    }
+
+    return $row;
+}
+
+/**
  * Displays a combo box so the user can select his/her preferred language.
  *
  * @param string The desired name= value for the select
@@ -5048,6 +5209,9 @@ function languageCodeToCountryIsoCodeForFlags($languageIsoCode)
             break;
         case 'uk': // Ukraine
             $country = 'ua';
+            break;
+        case 'vi': // Vietnam - GH#4231
+            $country = 'vn';
             break;
         case 'zh-TW':
         case 'zh':
@@ -6325,8 +6489,24 @@ function api_get_access_url($id, $returnDefault = true)
  *
  * @return array Array of database results for the current settings of the current access URL
  */
-function &api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0)
+function api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0)
 {
+    // Try getting settings from cache first (avoids query w/ ~375 rows result)
+    $apcVarName = '';
+    $apcVar = [];
+    $cacheAvailable = api_get_configuration_value('apc');
+    if ($cacheAvailable) {
+        $apcVarName = api_get_configuration_value('apc_prefix').'settings';
+        $catName = (empty($cat) ? 'global' : $cat);
+
+        if (apcu_exists($apcVarName)) {
+            $apcVar = apcu_fetch($apcVarName);
+            if (!empty($apcVar[$catName]) && !empty($apcVar[$catName][$ordering]) && isset($apcVar[$catName][$ordering][$url_changeable])) {
+                return $apcVar[$catName][$ordering][$url_changeable];
+            }
+        }
+    }
+    // Could not find settings in cache (or already expired), so query DB
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $access_url = (int) $access_url;
     $where_condition = '';
@@ -6353,6 +6533,19 @@ function &api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $ur
         return [];
     }
     $result = Database::store_result($result, 'ASSOC');
+
+    if ($cacheAvailable) {
+        // If we got here, it means cache is available but the settings
+        // were not recently stored, so now we have them, let's store them
+        if (empty($apcVar[$catName])) {
+            $apcVar[$catName] = [];
+        }
+        if (empty($apcVar[$catName][$ordering])) {
+            $apcVar[$catName][$ordering] = [];
+        }
+        $apcVar[$catName][$ordering][$url_changeable] = $result;
+        apcu_store($apcVarName, $apcVar, 600);
+    }
 
     return $result;
 }
@@ -6777,21 +6970,44 @@ function api_get_current_access_url_id()
  * Gets the registered urls from a given user id.
  *
  * @param int $user_id
+ * @param int $checkCourseId the course id to check url access
  *
  * @return array
  *
  * @author Julio Montoya <gugli100@gmail.com>
  */
-function api_get_access_url_from_user($user_id)
+function api_get_access_url_from_user($user_id, $checkCourseId = null)
 {
     $user_id = (int) $user_id;
     $table_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $table_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+    $includeIds = "";
+    if (isset($checkCourseId)) {
+        $cid = (int) $checkCourseId;
+        $tblUrlCourse = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $sql = "SELECT access_url_id
+            FROM $tblUrlCourse url_rel_course
+            INNER JOIN $table_url u
+            ON (url_rel_course.access_url_id = u.id)
+            WHERE c_id = $cid";
+        $rs = Database::query($sql);
+        $courseUrlIds = [];
+        if (Database::num_rows($rs) > 0) {
+            while ($rowC = Database::fetch_array($rs, 'ASSOC')) {
+                $courseUrlIds[] = $rowC['access_url_id'];
+            }
+        }
+        if (!empty($courseUrlIds)) {
+            $includeIds = " AND access_url_id IN (".implode(',', $courseUrlIds).")";
+        }
+    }
+
     $sql = "SELECT access_url_id
             FROM $table_url_rel_user url_rel_user
             INNER JOIN $table_url u
             ON (url_rel_user.access_url_id = u.id)
-            WHERE user_id = ".intval($user_id);
+            WHERE user_id = $user_id $includeIds
+            ORDER BY access_url_id";
     $result = Database::query($sql);
     $list = [];
     while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -8298,7 +8514,7 @@ function api_set_settings_and_plugins()
     if ($access_url_id != 1) {
         $url_info = api_get_access_url($_configuration['access_url']);
         if ($url_info['active'] == 1) {
-            $settings_by_access = &api_get_settings(null, 'list', $_configuration['access_url'], 1);
+            $settings_by_access = api_get_settings(null, 'list', $_configuration['access_url'], 1);
             foreach ($settings_by_access as &$row) {
                 if (empty($row['variable'])) {
                     $row['variable'] = 0;
@@ -8489,64 +8705,71 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
         return null;
     }
 
-    $translations = [
-        'wordLength' => get_lang('PasswordIsTooShort'),
-        'wordNotEmail' => get_lang('YourPasswordCannotBeTheSameAsYourEmail'),
-        'wordSimilarToUsername' => get_lang('YourPasswordCannotContainYourUsername'),
-        'wordTwoCharacterClasses' => get_lang('WordTwoCharacterClasses'),
-        'wordRepetitions' => get_lang('TooManyRepetitions'),
-        'wordSequences' => get_lang('YourPasswordContainsSequences'),
-        'errorList' => get_lang('ErrorsFound'),
-        'veryWeak' => get_lang('PasswordVeryWeak'),
-        'weak' => get_lang('PasswordWeak'),
-        'normal' => get_lang('PasswordNormal'),
-        'medium' => get_lang('PasswordMedium'),
-        'strong' => get_lang('PasswordStrong'),
-        'veryStrong' => get_lang('PasswordVeryStrong'),
+    $minRequirements = Security::getPasswordRequirements()['min'];
+
+    $options = [
+        'rules' => [],
     ];
 
-    $js = api_get_asset('pwstrength-bootstrap/dist/pwstrength-bootstrap.min.js');
+    if ($minRequirements['length'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['length'],
+            'pattern' => '.',
+            'helpText' => sprintf(
+                get_lang('NewPasswordRequirementMinXLength'),
+                $minRequirements['length']
+            ),
+        ];
+    }
+
+    if ($minRequirements['lowercase'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['lowercase'],
+            'pattern' => '[a-z]',
+            'helpText' => sprintf(
+                get_lang('NewPasswordRequirementMinXLowercase'),
+                $minRequirements['lowercase']
+            ),
+        ];
+    }
+
+    if ($minRequirements['uppercase'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['uppercase'],
+            'pattern' => '[A-Z]',
+            'helpText' => sprintf(
+                get_lang('NewPasswordRequirementMinXUppercase'),
+                $minRequirements['uppercase']
+            ),
+        ];
+    }
+
+    if ($minRequirements['numeric'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['numeric'],
+            'pattern' => '[0-9]',
+            'helpText' => sprintf(
+                get_lang('NewPasswordRequirementMinXNumeric'),
+                $minRequirements['numeric']
+            ),
+        ];
+    }
+
+    if ($minRequirements['specials'] > 0) {
+        $options['rules'][] = [
+            'minChar' => $minRequirements['specials'],
+            'pattern' => '[!"#$%&\'()*+,\-./\\\:;<=>?@[\\]^_`{|}~]',
+            'helpText' => sprintf(
+                get_lang('NewPasswordRequirementMinXSpecials'),
+                $minRequirements['specials']
+            ),
+        ];
+    }
+
+    $js = api_get_js('password-checker/password-checker.js');
     $js .= "<script>
-    var errorMessages = {
-        password_to_short : \"".get_lang('PasswordIsTooShort')."\",
-        same_as_username : \"".get_lang('YourPasswordCannotBeTheSameAsYourUsername')."\"
-    };
-
     $(function() {
-        var lang = ".json_encode($translations).";
-        var options = {
-            common: {
-                onLoad: function () {
-                    //$('#messages').text('Start typing password');
-
-                    var inputGroup = $('".$passwordInputId."').parents('.input-group');
-
-                    if (inputGroup.length > 0) {
-                        inputGroup.find('.progress').insertAfter(inputGroup);
-                    }
-                }
-            },
-            ui: {
-                showVerdictsInsideProgressBar: true
-            },
-            onKeyUp: function (evt) {
-                $(evt.target).pwstrength('outputErrorList');
-            },
-            errorMessages : errorMessages,
-            viewports: {
-                progress: '#password_progress',
-                verdict: '#password-verdict',
-                errors: '#password-errors'
-            },
-            usernameField: '$usernameInputId'
-        };
-        options.i18n = {
-            t: function (key) {
-                var result = lang[key];
-                return result === key ? '' : result; // This assumes you return the
-            }
-        };
-        $('".$passwordInputId."').pwstrength(options);
+        $('".$passwordInputId."').passwordChecker(".json_encode($options).");
     });
     </script>";
 
@@ -8934,7 +9157,22 @@ function api_get_configuration_value($variable)
 
     // Check if variable exists
     if (isset($_configuration[$variable])) {
-        if (is_array($_configuration[$variable])) {
+        if (is_array($_configuration[$variable]) && api_is_multiple_url_enabled() && is_int(array_keys($_configuration[$variable])[0])) {
+            // It has been configured for at least one sub URL, so we will not return the complete variable
+            /*
+             * The idea is that if the first level key of the configuration variable is an int
+             * then it is a multiURL configuration and if it's a string then it's a configuration that is not multiURL.
+             * For example if in app/config/configuration.php you have set :
+             * $_configuration['ticket_project_user_roles'] = [
+             *     'permissions' => [
+             *         1 => [17] // project_id = 1, STUDENT_BOSS = 17
+             *     ]
+             * ];
+             * You do not want to enter this block even if multiURL is activated because the option is configured globally
+             * and you want to return the full array.
+             * The is_int is to consider only the option that are array and configured for multiURL
+             * which means there is an int as the first level key of the array.
+             */
             // Check if it exists for the sub portal
             if (array_key_exists($urlId, $_configuration[$variable])) {
                 return $_configuration[$variable][$urlId];
@@ -8942,11 +9180,45 @@ function api_get_configuration_value($variable)
                 // Try to found element with id = 1 (master portal)
                 if (array_key_exists(1, $_configuration[$variable])) {
                     return $_configuration[$variable][1];
+                } else {
+                    // The value was there for other URLs but not the main URL nor the current URL
+                    return null;
                 }
             }
         }
 
         return $_configuration[$variable];
+    }
+
+    return false;
+}
+
+/**
+ * Gets value of a variable from app/config/mail.conf.php.
+ *
+ * @param string $variable
+ *
+ * @return bool|mixed
+ */
+function api_get_mail_configuration_value($variable)
+{
+    global $_configuration;
+    global $platform_email;
+
+    // Check the current url id, id = 1 by default
+    $urlId = isset($_configuration['access_url']) ? (int) $_configuration['access_url'] : 1;
+
+    $variable = trim($variable);
+
+    // Check if variable exists for the sub portal
+    if (api_is_multiple_url_enabled() && isset($platform_email[$urlId]) && isset($platform_email[$urlId][$variable])) {
+        return $platform_email[$urlId][$variable];
+    } elseif (isset($platform_email[1]) && isset($platform_email[1][$variable])) {
+        // Try to find element with id = 1 (master portal)
+        return $platform_email[1][$variable];
+    } elseif (isset($platform_email[$variable])) {
+        // If variable is not found for the sub portal or master portal, try to find the default element
+        return $platform_email[$variable];
     }
 
     return false;
@@ -9170,7 +9442,10 @@ function api_site_use_cookie_warning_cookie_exist()
  * Given a number of seconds, format the time to show hours, minutes and seconds.
  *
  * @param int    $time         The time in seconds
- * @param string $originFormat Optional. PHP o JS
+ * @param string $originFormat Optional.
+ * PHP (used for scorm)
+ * JS (used in most cases and understood by excel)
+ * LANG (used to present unit in the user language)
  *
  * @return string (00h00'00")
  */
@@ -9189,6 +9464,8 @@ function api_format_time($time, $originFormat = 'php')
 
     if ($originFormat == 'js') {
         $formattedTime = trim(sprintf("%02d : %02d : %02d", $hours, $mins, $secs));
+    } elseif ($originFormat == 'lang') {
+        $formattedTime = trim(sprintf(get_lang('HoursMinutesSeconds'), $hours, $mins, $secs));
     } else {
         $formattedTime = trim(sprintf("%02d$h%02d'%02d\"", $hours, $mins, $secs));
     }
@@ -9266,30 +9543,50 @@ function api_mail_html(
     $additionalParameters = [],
     $sendErrorTo = ''
 ) {
-    global $platform_email;
-
     if (true === api_get_configuration_value('disable_send_mail')) {
         return true;
     }
 
     $mail = new PHPMailer();
-    $mail->Mailer = $platform_email['SMTP_MAILER'];
-    $mail->Host = $platform_email['SMTP_HOST'];
-    $mail->Port = $platform_email['SMTP_PORT'];
-    $mail->CharSet = isset($platform_email['SMTP_CHARSET']) ? $platform_email['SMTP_CHARSET'] : 'UTF-8';
+
+    if (!empty(api_get_mail_configuration_value('XOAUTH2_METHOD'))) {
+        $provider = new GenericProvider([
+            'clientId' => api_get_mail_configuration_value('XOAUTH2_CLIENT_ID'),
+            'clientSecret' => api_get_mail_configuration_value('XOAUTH2_CLIENT_SECRET'),
+            'urlAuthorize' => api_get_mail_configuration_value('XOAUTH2_URL_AUTHORIZE'),
+            'urlAccessToken' => api_get_mail_configuration_value('XOAUTH2_URL_ACCES_TOKEN'),
+            'urlResourceOwnerDetails' => api_get_mail_configuration_value('XOAUTH2_URL_RESOURCE_OWNER_DETAILS'),
+            'scopes' => api_get_mail_configuration_value('XOAUTH2_SCOPES'),
+        ]);
+        $mail->AuthType = 'XOAUTH2';
+        $mail->setOAuth(
+            new OAuth([
+                'provider' => $provider,
+                'clientId' => api_get_mail_configuration_value('XOAUTH2_CLIENT_ID'),
+                'clientSecret' => api_get_mail_configuration_value('XOAUTH2_CLIENT_SECRET'),
+                'refreshToken' => api_get_mail_configuration_value('XOAUTH2_REFRESH_TOKEN'),
+                'userName' => api_get_mail_configuration_value('SMTP_USER'),
+            ])
+        );
+    }
+
+    $mail->Mailer = api_get_mail_configuration_value('SMTP_MAILER');
+    $mail->Host = api_get_mail_configuration_value('SMTP_HOST');
+    $mail->Port = api_get_mail_configuration_value('SMTP_PORT');
+    $mail->CharSet = api_get_mail_configuration_value('SMTP_CHARSET') ?: 'UTF-8';
     // Stay far below SMTP protocol 980 chars limit.
     $mail->WordWrap = 200;
-    $mail->SMTPOptions = $platform_email['SMTPOptions'] ?? [];
+    $mail->SMTPOptions = api_get_mail_configuration_value('SMTPOptions') ?: [];
 
-    if ($platform_email['SMTP_AUTH']) {
+    if (api_get_mail_configuration_value('SMTP_AUTH')) {
         $mail->SMTPAuth = 1;
-        $mail->Username = $platform_email['SMTP_USER'];
-        $mail->Password = $platform_email['SMTP_PASS'];
-        if (isset($platform_email['SMTP_SECURE'])) {
-            $mail->SMTPSecure = $platform_email['SMTP_SECURE'];
+        $mail->Username = api_get_mail_configuration_value('SMTP_USER');
+        $mail->Password = api_get_mail_configuration_value('SMTP_PASS');
+        if (api_get_mail_configuration_value('SMTP_SECURE')) {
+            $mail->SMTPSecure = api_get_mail_configuration_value('SMTP_SECURE');
         }
     }
-    $mail->SMTPDebug = isset($platform_email['SMTP_DEBUG']) ? $platform_email['SMTP_DEBUG'] : 0;
+    $mail->SMTPDebug = api_get_mail_configuration_value('SMTP_DEBUG') ?: 0;
 
     // 5 = low, 1 = high
     $mail->Priority = 3;
@@ -9355,6 +9652,16 @@ function api_mail_html(
         }
     }
 
+    $extendedFooterMessageConfig = api_get_configuration_value('notifications_extended_footer_message');
+    if ($extendedFooterMessageConfig) {
+        $platformLanguage = api_get_interface_language();
+        $extendedFooterMessage = api_get_configuration_value('notifications_extended_footer_message')[$platformLanguage];
+
+        if ($extendedFooterMessage) {
+            $message .= '<br /><hr><i>'.'<p>'.implode('<br/><br/>', $extendedFooterMessage['paragraphs']).'</p>';
+        }
+    }
+
     $mailView = new Template(null, false, false, false, false, false, false);
 
     $noReply = api_get_setting('noreply_email_address');
@@ -9366,11 +9673,52 @@ function api_mail_html(
     if (isset($additionalParameters['link'])) {
         $mailView->assign('link', $additionalParameters['link']);
     }
+    if (isset($additionalParameters['logo'])) {
+        $mailView->assign('logo', $additionalParameters['logo']);
+    } elseif (api_get_configuration_value('email_logo') == true) {
+        $logoSubPath = 'themes/'.api_get_visual_theme().'/images/email-logo.png';
+        $logoSysPath = api_get_path(SYS_PATH).'web/css/'.$logoSubPath;
+        if (file_exists($logoSysPath)) {
+            $logoWebPath = api_get_path(WEB_CSS_PATH).$logoSubPath;
+            $imgTag = \Display::img(
+                $logoWebPath,
+                api_get_setting('siteName'),
+                [
+                    'id' => 'header-logo',
+                    'class' => 'img-responsive'
+                ]
+            );
+            $logoTag = \Display::url($imgTag, api_get_path(WEB_PATH));
+            $mailView->assign('logo', $logoTag);
+        }
+    }
     $mailView->assign('mail_header_style', api_get_configuration_value('mail_header_style'));
     $mailView->assign('mail_content_style', api_get_configuration_value('mail_content_style'));
+    $mailView->assign('include_ldjson', (empty(api_get_mail_configuration_value('EXCLUDE_JSON')) ? true : false));
     $layout = $mailView->get_template('mail/mail.tpl');
     $mail->Body = $mailView->fetch($layout);
 
+    if (isset($additionalParameters['checkUrls'])) {
+        $useMultipleUrl = api_get_configuration_value('multiple_access_urls');
+        if ($useMultipleUrl) {
+            $accessConfig = [];
+            $accessUrls = api_get_access_url_from_user($additionalParameters['userId'], $additionalParameters['courseId']);
+            if (!empty($accessUrls)) {
+                $accessConfig['multiple_access_urls'] = true;
+                $accessConfig['access_url'] = (int) $accessUrls[0];
+                $params = ['variable = ? AND access_url = ?' => ['stylesheets', $accessConfig['access_url']]];
+                $settings = api_get_settings_params_simple($params);
+                if (!empty($settings['selected_value'])) {
+                    $accessConfig['theme_dir'] = \Template::getThemeDir($settings['selected_value']);
+                }
+            }
+            // To replace the current urls by access url user
+            $mail->Body = str_replace(api_get_path(WEB_PATH), api_get_path(WEB_PATH, $accessConfig), $mail->Body);
+            if (!empty($accessConfig['theme_dir'])) {
+                $mail->Body = str_replace('themes/chamilo/', $accessConfig['theme_dir'], $mail->Body);
+            }
+        }
+    }
     // Attachment.
     if (!empty($data_file)) {
         foreach ($data_file as $file_attach) {
@@ -9384,15 +9732,29 @@ function api_mail_html(
     if (is_array($recipient_email)) {
         foreach ($recipient_email as $dest) {
             if (api_valid_email($dest)) {
-                $mail->AddAddress($dest, $recipient_name);
+                if (UserManager::isEmailingAllowed($dest)) {
+                    // Do not send if user is not active = 1
+                    $mail->AddAddress($dest, $recipient_name);
+                }
+            } else {
+                // error_log('e-mail recipient '.$dest.' is not valid.');
+                return 0;
             }
         }
     } else {
         if (api_valid_email($recipient_email)) {
-            $mail->AddAddress($recipient_email, $recipient_name);
+            if (UserManager::isEmailingAllowed($recipient_email)) {
+                // Do not send if user is not active = 1
+                $mail->AddAddress($recipient_email, $recipient_name);
+            }
         } else {
+            // error_log('e-mail recipient '.$recipient_email.' is not valid.');
             return 0;
         }
+    }
+    if (empty($mail->getAllRecipientAddresses())) {
+        // error_log('No valid and active destination e-mail in api_mail_html() with address '.print_r($recipient_email, 1).'. Not sending.');
+        return 0;
     }
 
     if (is_array($extra_headers) && count($extra_headers) > 0) {
@@ -9423,17 +9785,20 @@ function api_mail_html(
     // WordWrap the html body (phpMailer only fixes AltBody) FS#2988
     $mail->Body = $mail->WrapText($mail->Body, $mail->WordWrap);
 
-    if (!empty($platform_email['DKIM']) &&
-        !empty($platform_email['DKIM_SELECTOR']) &&
-        !empty($platform_email['DKIM_DOMAIN']) &&
-        (!empty($platform_email['DKIM_PRIVATE_KEY_STRING']) || !empty($platform_email['DKIM_PRIVATE_KEY']))) {
-        $mail->DKIM_selector = $platform_email['DKIM_SELECTOR'];
-        $mail->DKIM_domain = $platform_email['DKIM_DOMAIN'];
-        if (!empty($platform_email['SMTP_UNIQUE_SENDER'])) {
-            $mail->DKIM_identity = $platform_email['SMTP_FROM_EMAIL'];
+    if (!empty(api_get_mail_configuration_value('DKIM')) &&
+        !empty(api_get_mail_configuration_value('DKIM_SELECTOR')) &&
+        !empty(api_get_mail_configuration_value('DKIM_DOMAIN')) &&
+        (!empty(api_get_mail_configuration_value('DKIM_PRIVATE_KEY_STRING')) || !empty(api_get_mail_configuration_value('DKIM_PRIVATE_KEY')))) {
+        $mail->DKIM_selector = api_get_mail_configuration_value('DKIM_SELECTOR');
+        $mail->DKIM_domain = api_get_mail_configuration_value('DKIM_DOMAIN');
+        if (!empty(api_get_mail_configuration_value('SMTP_UNIQUE_SENDER'))) {
+            $mail->DKIM_identity = api_get_mail_configuration_value('SMTP_FROM_EMAIL');
         }
-        $mail->DKIM_private_string = $platform_email['DKIM_PRIVATE_KEY_STRING'];
-        $mail->DKIM_private = $platform_email['DKIM_PRIVATE_KEY'];
+        $mail->DKIM_private_string = api_get_mail_configuration_value('DKIM_PRIVATE_KEY_STRING');
+        $mail->DKIM_private = api_get_mail_configuration_value('DKIM_PRIVATE_KEY');
+        if (!empty(api_get_mail_configuration_value['DKIM_PASSPHRASE'])) {
+            $mail->DKIM_passphrase = api_get_mail_configuration_value['DKIM_PASSPHRASE'];
+        }
     }
 
     // Send the mail message.
@@ -9442,7 +9807,7 @@ function api_mail_html(
         error_log('ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />');
     }
 
-    if ($mail->SMTPDebug > 1) {
+    if ($mail->SMTPDebug >= 1) {
         error_log(
             "Mail debug:: ".
             "Protocol: ".$mail->Mailer.' :: '.
@@ -9941,8 +10306,6 @@ function api_unserialize_content($type, $serialized, $ignoreErrors = false)
  */
 function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $sender, array $replyToAddress = [])
 {
-    $platformEmail = $GLOBALS['platform_email'];
-
     $noReplyAddress = api_get_setting('noreply_email_address');
     $avoidReplyToAddress = false;
 
@@ -9974,8 +10337,8 @@ function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $se
 
     //If the SMTP configuration only accept one sender
     if (
-        isset($platformEmail['SMTP_UNIQUE_SENDER']) &&
-        $platformEmail['SMTP_UNIQUE_SENDER']
+        !empty(api_get_mail_configuration_value('SMTP_UNIQUE_SENDER')) &&
+        api_get_mail_configuration_value('SMTP_UNIQUE_SENDER')
     ) {
         $senderName = $notification->getDefaultPlatformSenderName();
         $senderEmail = $notification->getDefaultPlatformSenderEmail();
@@ -10190,7 +10553,149 @@ function api_protect_webservices()
 {
     if (api_get_configuration_value('disable_webservices')) {
         echo "Webservices are disabled. \n";
-        echo "To enable, add \$_configuration['disable_webservices'] = true; in configuration.php";
+        echo "To enable, add \$_configuration['disable_webservices'] = false; in configuration.php";
         exit;
     }
+}
+
+function api_filename_has_blacklisted_stream_wrapper(string $filename)
+{
+    if (strpos($filename, '://') > 0) {
+        $wrappers = stream_get_wrappers();
+        $allowedWrappers = ['http', 'https', 'file'];
+
+        foreach ($wrappers as $wrapper) {
+            if (in_array($wrapper, $allowedWrappers)) {
+                continue;
+            }
+
+            if (stripos($filename, $wrapper.'://') === 0) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Calculate the percent between two numbers.
+ *
+ * @return string
+ */
+function api_calculate_increment_percent(int $newValue, int $oldValue)
+{
+    if ($oldValue <= 0) {
+        $result = " - ";
+    } else {
+        $result = ' '.round(100 * (($newValue / $oldValue) - 1), 2).' %';
+    }
+
+    return $result;
+}
+
+/**
+ * Erase settings from cache (because of some update) if applicable.
+ *
+ * @param int $url_id The ID of the present URL
+ */
+function api_flush_settings_cache(int $url_id): bool
+{
+    global $_configuration;
+    $cacheAvailable = api_get_configuration_value('apc');
+    if (!$cacheAvailable) {
+        return false;
+    }
+    $apcRootVarName = api_get_configuration_value('apc_prefix');
+    // Delete the APCu-stored settings array, if present
+    $apcVarName = $apcRootVarName.'settings';
+    apcu_delete($apcVarName);
+    if (api_is_multiple_url_enabled() && $url_id === 1) {
+        // if we are on the main URL of a multi-url portal, we must
+        // invalidate the cache for all other URLs as well as some
+        // main settings span multiple URLs
+        $urls = api_get_access_urls();
+        foreach ($urls as $i => $row) {
+            if ($row['id'] == 1) {
+                continue;
+            }
+            $apcVarName = $_configuration['main_database'].'_'.$row['id'].'_settings';
+            apcu_delete($apcVarName);
+        }
+    }
+
+    return true;
+}
+
+/**
+ * Decrypt sent data with encoded secret defined in app/config/configuration.php
+ * in the variable $_configuration['ldap_admin_password_salt'].
+ *
+ * @param $encryptedText The text to be decrypted
+ */
+function api_decrypt_ldap_password(string $encryptedText): string
+{
+    if (!empty(api_get_configuration_value('ldap_admin_password_salt'))) {
+        $secret = api_get_configuration_value('ldap_admin_password_salt');
+    } else {
+        return false;
+    }
+
+    return api_decrypt_hash($encryptedText,$secret);
+}
+
+/**
+ * Decrypt sent hash encoded with secret
+ *
+ * @param $encryptedText The hash text to be decrypted
+ * @param $secret        The secret used to encoded the hash
+ *
+ * @return string The decrypted text or false
+ */
+function api_decrypt_hash(string $encryptedHash, string $secret): string
+{
+    $iv = base64_decode(substr($encryptedHash, 0, 16), true);
+    $data = base64_decode(substr($encryptedHash, 16), true);
+    $tag = substr($data, strlen($data) - 16);
+    $data = substr($data, 0, strlen($data) - 16);
+
+    try {
+        return openssl_decrypt(
+        $data,
+        'aes-256-gcm',
+        $secret,
+        OPENSSL_RAW_DATA,
+        $iv,
+        $tag
+      );
+    } catch (\Exception $e) {
+        return false;
+    }
+}
+
+/**
+ * Encrypt sent data with secret
+ *
+ * @param $data   The text to be encrypted
+ * @param $secret The secret to use encode data
+ *
+ * @return string The encrypted text or false
+ */
+function api_encrypt_hash($data, $secret)
+{
+  $iv = random_bytes(12);
+  $tag = '';
+
+  $encrypted = openssl_encrypt(
+    $data,
+    'aes-256-gcm',
+    $secret,
+    OPENSSL_RAW_DATA,
+    $iv,
+    $tag,
+    '',
+    16
+  );
+
+  return base64_encode($iv) . base64_encode($encrypted . $tag);
 }

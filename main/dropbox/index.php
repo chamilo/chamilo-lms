@@ -59,14 +59,17 @@ if (isset($_GET['dropbox_direction']) && in_array($_GET['dropbox_direction'], ['
 $sort_params = Security::remove_XSS(implode('&', $sort_params));
 
 // Display the form for adding a new dropbox item.
-if ($action == 'add') {
+if (in_array($action, ['add', 'send_other_users'])) {
     if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
         api_not_allowed();
     }
+    $dropboxId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
     display_add_form(
         $viewReceivedCategory,
         $viewSentCategory,
-        $view
+        $view,
+        $dropboxId,
+        $action
     );
 }
 
@@ -74,6 +77,8 @@ if (isset($_POST['submitWork'])) {
     $check = Security::check_token();
     if ($check) {
         store_add_dropbox();
+
+        echo Display::getFlashToString();
     }
 }
 
@@ -217,7 +222,7 @@ $dropbox_data_sent = [];
 $movelist = [];
 $dropbox_data_recieved = [];
 
-if ($action != 'add') {
+if (!in_array($action, ['add', 'send_other_users'])) {
     // Getting all the categories in the dropbox for the given user
     $dropbox_categories = get_dropbox_categories();
     // Greating the arrays with the categories for the received files and for the sent files
@@ -631,6 +636,9 @@ if ($action != 'add') {
                     '</a>
                     <a href="'.api_get_path(WEB_CODE_PATH).'dropbox/update.php?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=update&id='.$dropbox_file->id.'&'.$sort_params.'">'.
                         Display::return_icon('upload_file.png', get_lang('Update'), '', ICON_SIZE_SMALL).
+                    '</a>
+                    <a href="'.api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=send_other_users&id='.$dropbox_file->id.'&'.$sort_params.'">'.
+                    Display::return_icon('addworkuser.png', get_lang('SendOtherUsers'), '', ICON_SIZE_SMALL).
                     '</a>
                     <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category='.$viewSentCategory.'&view='.$view.'&action=movesent&move_id='.$dropbox_file->id.'&'.$sort_params.'">'.
                         Display::return_icon('move.png', get_lang('Move'), '', ICON_SIZE_SMALL).'

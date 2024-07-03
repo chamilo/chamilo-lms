@@ -50,7 +50,7 @@ class QuizCompleted extends BaseStatement
         $duration = $this->exe->getExeDuration();
 
         return new Statement(
-            null,
+            $this->generateStatementId('exercise'),
             $userActor->generate(),
             $completedVerb->generate(),
             $quizActivity->generate(),

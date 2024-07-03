@@ -48,7 +48,7 @@
 
 <p>Gracias por descargar Chamilo, la suite de aprendizaje de código abierto profesional.</p>
 <ul>
-  <li>Prueba Chamilo en <a href="http://campus.chamilo.org">nuesto Campus libre</a></li>
+  <li>Prueba Chamilo en <a href="https://campus.chamilo.org">nuesto Campus libre</a></li>
 </ul>
 
 <p>Esta guía explica como instalar Chamilo LMS. Por favor, léala completamente antes de proceder con la instalación.</p>
@@ -88,7 +88,7 @@
 <ul>
   <li><span style="font-weight: bold;">Apache 2.2+</span></li>
   <li><span style="font-weight: bold;">MySQL 5.6+ o MariaDB 5+</span></li>
-  <li><span style="font-weight: bold;">PHP 7.2, 7.3 or 7.4</span></li>
+  <li><span style="font-weight: bold;">PHP 7.4</span></li>
 </ul>
 <p>
   Todo este software es software de código abierto y está disponible libremente.
@@ -98,17 +98,17 @@
   <ul>
     <li>
       Para instalar WAMP (AMP en Windows), recomendamos el instalador
-      <a href="http://www.apachefriends.org/en/xampp.html">XAMPP</a>.exe
+      <a href="https://www.apachefriends.org/en/xampp.html">XAMPP</a>.exe
     </li>
 	<li>
 	  Para instalar LAMP (AMP en Linux), use el administrador de paquetes de su distribución favorita
 	  (Synaptic, RPMFinder etc.). Por ejemplo, en un servidor Ubuntu, use Shell o Synaptic siguiendo la
-	  <a href="http://ubuntuguide.org/wiki/Ubuntu:Feisty#Apache_HTTP_Server">Ubuntuguide on Apache</a>
+	  <a href="https://ubuntuguide.org/wiki/Ubuntu:Feisty#Apache_HTTP_Server">Ubuntuguide on Apache</a>
 	  y las secciones siguientes.
 	</li>
 	<li>
 	  Para instalar MAMP (AMP en Mac OS X), referirse al sitio web dedicado a
-	  <a href="http://www.mamp.info/en/index.html">MAMP</a>
+	  <a href="https://www.mamp.info/en/index.html">MAMP</a>
 	</li>
 	<li>Asegúrese de revisar la página Dependencias, si necesita saber los requisitos de una manera más precisa.</li>
   </ul>
@@ -210,7 +210,7 @@ Para instalar, sigue estos sencillos 6 pasos:
   </li>
   <li>Abrir su navegador web (Internet Explorer, Firefox, Chrome, ...) y escribir
     <span style="font-weight: bold;">http://localhost/chamilo/</span> si se instala de manera local o
-    <span style="font-weight: bold;">http://www.tu-dominio-chamilo.com</span> si se instala remotamente.</li>
+    <span style="font-weight: bold;">https://www.tu-dominio-chamilo.com</span> si se instala remotamente.</li>
   <li>Seguir el proceso de instalación web. Usted puede aceptar todos los valores predeterminados.
     Considere cambiar la contraseña de administrador y recuérdela.&nbsp;</li>
 </ol>
@@ -226,12 +226,12 @@ Para instalar, sigue estos sencillos 6 pasos:
     Si tiene que instalar varias instancias de Chamilo, evite la instalación de Chamilo dentro de una carpeta,
     prefiera el uso de diferentes dominios o el uso de ejemplos de subdominios:
     <ol>
-      <li>http://www.mi-dominio.com/ (<i class="fa fa-check" aria-hidden="true"></i> recomendado)</li>
-      <li>http://chamilo.mi-dominio.com (<i class="fa fa-check" aria-hidden="true"></i> recomendado)</li>
-      <li>http://chamilo2.mi-dominio.com (<i class="fa fa-check" aria-hidden="true"></i> recomendado)</li>
-      <li>http://www.mi-dominio.com/chamilo (<i class="fa fa-times" aria-hidden="true"></i> no recomendado)</li>
-      <li>http://www.mi-dominio.com/chamilo2 (<i class="fa fa-times" aria-hidden="true"></i> no recomendado)</li>
-      <li>http://chamilo.mi-dominio.com/my-chamilo/ (<i class="fa fa-times" aria-hidden="true"></i> no recomendado)</li>
+      <li>https://www.mi-dominio.com/ (<i class="fa fa-check" aria-hidden="true"></i> recomendado)</li>
+      <li>https://chamilo.mi-dominio.com (<i class="fa fa-check" aria-hidden="true"></i> recomendado)</li>
+      <li>https://chamilo2.mi-dominio.com (<i class="fa fa-check" aria-hidden="true"></i> recomendado)</li>
+      <li>https://www.mi-dominio.com/chamilo (<i class="fa fa-times" aria-hidden="true"></i> no recomendado)</li>
+      <li>https://www.mi-dominio.com/chamilo2 (<i class="fa fa-times" aria-hidden="true"></i> no recomendado)</li>
+      <li>https://chamilo.mi-dominio.com/my-chamilo/ (<i class="fa fa-times" aria-hidden="true"></i> no recomendado)</li>
     </ol>
   </li>
 </ul>
@@ -354,24 +354,25 @@ date.timezone = 'America/New_York'
 </p>
 
 <ul>
-  <li>php5-session La extensión compartida de sesión para php</li>
-  <li>php5-mysqlnd La extensión compartida de mysql para php</li>
-  <li>php5-zlib La extensión compartida de zlib para php</li>
-  <li>php5-pcre La extensión compartida de pcre para php</li>
-  <li>php5-xml</li>
-  <li>php5-json</li>
-  <li>php5-iconv o php5-mbstring (cualquiera de los dos)</li>
-  <li>php5-gd la extensión de generación de gráficos de PHP</li>
-  <li>php5-intl la extensión de reglas de representación internacionales</li>
+  <li>php-session La extensión compartida de sesión para php</li>
+  <li>php-mysqlnd La extensión compartida de mysql para php</li>
+  <li>php-zlib La extensión compartida de zlib para php</li>
+  <li>php-pcre La extensión compartida de pcre para php</li>
+  <li>php-xml</li>
+  <li>php-json</li>
+  <li>php-iconv o php5-mbstring (cualquiera de los dos)</li>
+  <li>php-gd la extensión de generación de gráficos de PHP</li>
+  <li>php-intl la extensión de reglas de representación internacionales</li>
 </ul>
 
 <p>También puede necesitar  estos módulos y paquetes:</p>
 <ul>
-<li>php5-ctype</li>
-  <li>php5-ldap</li>
-  <li>php5-xapian</li>
-  <li>php5-curl</li>
-  <li>php5-xsl</li>
+<li>php-ctype</li>
+  <li>php-ldap</li>
+  <li>php-xapian</li>
+  <li>php-curl</li>
+  <li>php-xsl</li>
+  <li>php-soap, para los servicios web en SOAP</li>
 </ul>
 
 <hr />
@@ -389,7 +390,12 @@ date.timezone = 'America/New_York'
   Si había cambiado algun archivo de idioma directamente (en vez de usar el método recomendado: sub-idiomas),
   debería tomar una copia de backup de estos cambios antes de actualizar.
 </p>
-
+  <div><em>Important:</em> Si actualiza, hacia 1.11.16, una plataforma instalada antes del 2016 (es decir antes de la versión 1.11.0),
+    será necesario que descargue <a href="https://raw.githubusercontent.com/chamilo/chamilo-lms/5e0fc76649a7377c12cd0220ad1c0eae3f5eeaeb/tests/scripts/fix_quiz_id_to_iid.php">este script</a>,
+    que lo ponga en la carpeta main/inc/, que lo edite para eliminar el <pre>exit;</pre> en la línea 15, y luego que lo cargue en su navegador
+    como https://vuestrositio.com/main/inc/fix_quiz_id_to_iid.php. Este script arreglará un problema de inconsistencia de identificadores internos de
+    ejercicios, preguntas y respuestas que existía antes del año 2016 (antes de la versión 1.11.0). Si el sistema ha sidot instalado por primera
+    vez con una versión 1.11.0 o superior, no hay nada que hacer.</div>
 <div class="text-muted">
   NOTA: Para sistemas Chamilo con bases de datos muy pesadas, algunos de nuestros proveedores
   han desarrollado procedimientos usando más memoria pero acortando el tiempo necesario de la migración por hasta
@@ -425,6 +431,7 @@ date.timezone = 'America/New_York'
       directorio a través de la opción "Limpieza de caché y archivos temporales " en el cuadro "Sistema" de la página
       de Administración.
     </li>
+    <li> Edite el archivo <i>app/config/configuration.php</li> y ubique el parametro <i>$_configuration['system_version']</i> para cambiar el número de versión al número de esta nueva versión que acaba de instalar (por ejemplo, cambiar de '1.11.18' a '1.11.26').</li>
     <li>Ya está! Ningún otro procedimiento de actualización es requerido.</li>
   </ul>
 </div>
@@ -563,10 +570,10 @@ En Windows, puede necesitar propiedades de las carpetas.
 
 <h2><a id="4._Troubleshooting"></a>4. Solución de problemas</h2>
 <p>
-  Si usted tiene problemas, vaya al <a href="http://www.chamilo.org">Sitio Web de Chamilo</a> y haga una
-  pregunta en el <a href="http://www.chamilo.org/forum">foro de soporte</a>. Por favor, primero lea los mensajes
+  Si usted tiene problemas, vaya al <a href="https://chamilo.org">Sitio Web de Chamilo</a> y haga una
+  pregunta en el <a href="https://chamilo.org/forum">foro de soporte</a>. Por favor, primero lea los mensajes
   previos para ver si existe ya una respuesta a su pregunta. Nosotros también mantenemos una lista de
-  <a href="http://www.chamilo.org/FAQ">Preguntas Frecuentes</a>.
+  <a href="https://chamilo.org/FAQ">Preguntas Frecuentes</a>.
 </p>
 <hr style="width: 100%; height: 2px;" />
 
@@ -668,8 +675,8 @@ dominio LDAP: "dc=xx, dc=yy, dc=zz"; //dominio<br />
 <h2><a id="9._WIRIS_mathematical_formulas"></a>7. Fórmulas matemáticas con Wiris MathType</h2>
 <p>
   Instalando este plugin obtendrá Wiris MathType.<br />
-  La activación no se realiza completamente si previamente no ha descargado el <a href="http://www.wiris.com/plugins/ckeditor/download" target="_blank">plugin PHP para CKeditor de WIRIS</a> y descomprimido su contenido en el directorio de Chamilo /main/inc/lib/javascript/ckeditor/plugins/ckeditor_wiris.<br /><br />
-  Esto es necesario debido a que WIRIS es un software propietario y los servicios de WIRIS son <a href="http://www.wiris.com/store/who-pays" target="_blank">comerciales</a>. Para realizar ajustes en el plugin edite el archivo configuration.ini o sustituya su contenido por el de configuration.ini.default que acompaña a Chamilo.
+  La activación no se realiza completamente si previamente no ha descargado el <a href="https://www.wiris.com/plugins/ckeditor/download" target="_blank" rel="noopener noreferrer">plugin PHP para CKeditor de WIRIS</a> y descomprimido su contenido en el directorio de Chamilo /main/inc/lib/javascript/ckeditor/plugins/ckeditor_wiris.<br /><br />
+  Esto es necesario debido a que WIRIS es un software propietario y los servicios de WIRIS son <a href="https://www.wiris.com/store/who-pays" target="_blank" rel="noopener noreferrer">comerciales</a>. Para realizar ajustes en el plugin edite el archivo configuration.ini o sustituya su contenido por el de configuration.ini.default que acompaña a Chamilo.
 </p>
 <hr style="width: 100%; height: 2px;" />
 
@@ -690,7 +697,7 @@ sudo /etc/init.d/apache2 restart
   completa de indexación instalada. Una vez que haya terminado, todos los documentos importados en su
   portal Chamilo en un formato reconocido serán indexados y buscados. En formación de administradores
   de Chamilo ( el cual puede preguntar a cualquier
-  <a href="http://www.chamilo.org/en/providers">Proveedor Oficial de Chamilo</a>) incluyen una revisión
+  <a href="https://chamilo.org/en/providers">Proveedor Oficial de Chamilo</a>) incluyen una revisión
   completa de la función de búsqueda de texto completo.
 </p>
 <hr style="width: 100%; height: 2px;" />
@@ -700,7 +707,7 @@ sudo /etc/init.d/apache2 restart
   Nota: Este paso requiere un servidor dedicado o un servidor dedicado virtual ya que los paquetes involucrados
   no están disponibles en la mayoría de soluciones de hosting compartido. (Consulte con su proveedor):
 </p>
-En Debian o Ubuntu 11.10 y superior, instale LibreOffice.org v3 (o v4) e iniciarlo como un servidor en segundo plano:
+En Debian o Ubuntu 22.04 y superior, instale LibreOffice v7 (o superior) e inícielo como un servidor en segundo plano:
 <pre>
 sudo apt-get install libreoffice screen
 sudo adduser rapid
@@ -708,9 +715,11 @@ sudo adduser rapid www-data
 screen
 sudo -s
 su - rapid
-soffice --accept="socket,host=127.0.0.1,port=2002,tcpNoDelay=1;urp;" --headless --nodefault --nofirststartwizard --nolockcheck --nologo --norestore
+/usr/bin/libreoffice --headless --accept="socket,host=127.0.0.1,port=2002;urp;"
 CTRL+a, CTRL+d
 </pre>
+En versiones previas de LibreOffice, el comando anterior era más complejo. Si lo necesita, verifique versiones anteriores de esta guía de instalación.
+
 Tenga en cuenta que esto ejecutará LibreOffice en modo "headless" (gracias a la opción --headless), en un terminal
 "headless" (gracias a la pantalla). Tu puedes posteriormente regresar a tu terminal "headless" ejecutando:
 <pre>
@@ -743,7 +752,7 @@ sudo screen -r
 </p>
 Configurar una tarea de cron es fácil y hay varias maneras de hacerlo. Le recomendamos echar un vistazo a la
 documentación de Drupal para configurar el cron y definir su propio proceso de cron como:
-<pre>35 * * * * wget -O - -q -t 1 http://campus.example.com/main/cron/run.php</pre>
+<pre>35 * * * * wget -O - -q -t 1 https://campus.example.com/main/cron/run.php</pre>
 
 <p>
   Asegúrese de revisar el run.php tal vez desee cambiar algunas algunas opciones de configuración.
@@ -779,8 +788,8 @@ $_configuration['name_order_conventions'] = array(
 <h2><a id="14._Improving_files_download"></a>12. Mejora de la eficacia de descarga de archivos</h2>
 La descarga de archivos puede ser muy lenta al pasar a través de un script PHP para controlar los permisos.
 Una solución para esto es usar la cabecera X-Sendfile, que depende de un módulo en el servidor web.
-<a href="http://stackoverflow.com/a/3731639/1406662">
-  Consultar http://stackoverflow.com/a/3731639/1406662 para obtener más información sobre la implementación de Sendfile
+<a href="https://stackoverflow.com/a/3731639/1406662">
+  Consultar https://stackoverflow.com/a/3731639/1406662 para obtener más información sobre la implementación de Sendfile
 </a>.
 Chamilo LMS 1.9.8 (y versiones siguientes) es compatible con las cabeceras X-Sendfile, pero requiere una línea
 específica de configuración para ser agregado a configuration.php:
@@ -798,7 +807,7 @@ servidor web y agregar esta línea. Debería ver una diferencia notable en el ti
   ejecución y ofrece más herramientas y conectores.<br />
   La decisión depende de usted, pero en cualquier caso tendrá que instalar un servidor de videoconferencia
   por separado del proceso normal de instalación de Chamilo LMS.<br />
-  Encontrarás <a href="http://docs.bigbluebutton.org/install/install.html">una guía de instalación aquí</a>.
+  Encontrarás <a href="https://docs.bigbluebutton.org/install/install.html">una guía de instalación aquí</a>.
   Una vez instalados, ejecute un "bbb-conf --secret" sobre línea de comandos para obtener los parámetros que se
   solicitan desde la configuración del plugin de la videoconferencia.<br />
   Esto debería hacer que aparezca un icono adicional de la herramienta "Videoconferencia" en cada curso.<br />
@@ -877,7 +886,6 @@ servidor web y agregar esta línea. Debería ver una diferencia notable en el ti
   RewriteRule ^main/newscorm/(.*)$ main/lp/$1 [QSA,L]
   RewriteRule ^service/(\d{1,})$ plugin/buycourses/src/service_information.php?service_id=$1 [L]
   RewriteRule ^lti/os$ plugin/ims_lti/outcome_service.php [L]
-  RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
   RewriteRule ^(tests|.git) - [F,L,NC]
 &lt;/Directory&gt;
 
@@ -887,61 +895,80 @@ AddType application/font-woff .woff .woff2
   ExpiresByType application/font-woff "access plus 1 month"
 &lt;/IfModule&gt;
 </pre>
+
+    <h4>Nota especial para compartir preguntas entre cursos</h4>
+    En Chamilo 1.11.16, hemos añadido la posibilidad (ver configuration.php) de compartir preguntas entre
+    distintos cursos. Esta funcionalidad, aunque funcione bien para preguntas de tipo texto únicamente,
+    genera noobstante un problema cuando se comparten elementos de tipo multimedia entre cursos, ya que un
+    recurso multimedia en un curso no será visible por un usuario que ve esta pregunta desde otro curso y
+    no tiene acceso al curso de origen.<br />
+    Para evitar este problema, puede adaptar su .htacess (o el VirtualHost si lo ha puesto ahí) para
+    permitir el acceso directo a los archivos de tipo multimedia (sin logearse en el portal). Esto también
+    acelerará la carga de estos archivos multimedia, pero introduce una reducción de nivel de seguridad,
+    porque estos archivos ya se ponen disponibles para cualquier persona que tenga acceso a la página
+    principal del portal y conozca la ruta exacta de estos archivos.<br /><br />
+    Para aplicar el parche, ubique esta línea en su .htaccess:<br /><br />
+    <pre>    RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]</pre>
+    Quítela o coméntela, y ponga estas dos líneas en su lugar:<br /><br />
+    <pre>    RewriteCond %{REQUEST_URI} !\.(gif|jpg|jpeg|png|webp|ico|icon|swf|avi|mp3|ogg|wav|ttf|otf|eot|woff|webm|mp4)
+    RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA|L]</pre>
+
 <h3>Nginx</h3>
 Nginx no es compatible con las reglas de .htaccess, por lo que no tiene otra opción que aplicar las siguientes reglas
 (tenga en cuenta que la configuración de back-end de PHP puede variar). Estas son solo las reglas de redireccionamiento
 que se colocarán dentro de un bloque de servidor {}, ya que otras configuraciones pueden diferir de una instalación a otra.
 <pre>
-# Add your own "server {" header here with listen, server_name, access_log, error_log, index, root and error_page params
+  # Add your own "server {" header here with listen, server_name, access_log, error_log, index, root and error_page params
 
-charset utf-8;
+  charset utf-8;
 
-location @rewrite{
-  rewrite ^certificates/$ certificates/index.php last;
-  rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
-  rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
-  rewrite ^/courses/([^/]+)/scorm/(.*([\.js|\.css|\.png|\.jpg|\.jpeg|\.gif]))$ app/courses/$1/scorm/$2 last;
-  rewrite ^/courses/([^/]+)/scorm/(.*)$ /main/document/download_scorm.php?doc_url=/$2&cDir=$1 last;
-  # Alternatively, you can choose to give direct access to all SCORM files, which is much faster but less secure
-  # rewrite "^/courses/([^/]+)/scorm/(.*)$" /app/courses/$1/scorm/$2 break;
+  location @rewrite{
+    rewrite ^certificates/$ certificates/index.php last;
+    rewrite ^/courses/([^/]+)/$ /main/course_home/course_home.php?cDir=$1 last;
+    rewrite ^/courses/([^/]+)/index.php$ /main/course_home/course_home.php?cDir=$1 last;
+    rewrite ^/courses/([^/]+)/scorm/(.*([\.js|\.css|\.png|\.jpg|\.jpeg|\.gif]))$ app/courses/$1/scorm/$2 last;
+    rewrite ^/courses/([^/]+)/scorm/(.*)$ /main/document/download_scorm.php?doc_url=/$2&cDir=$1 last;
+    # Alternatively, you can choose to give direct access to all SCORM files, which is much faster but less secure
+    # rewrite "^/courses/([^/]+)/scorm/(.*)$" /app/courses/$1/scorm/$2 break;
 
-  rewrite "^/courses/([^/]+)/document/certificates/(.*)$" /app/courses/$1/document/certificates/$2 last;
-  rewrite ^/courses/([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 last;
-  rewrite ^/courses/([^/]+)/upload/([^/]+)/(.*)$ /main/document/download_uploaded_files.php?code=$1&type=$2&file=$3 last;
-  rewrite ^/courses/([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 last;
-  rewrite ^/courses/([^/]+)/upload/course_home_icons/(.*([\.png|\.jpg|\.jpeg|\.gif]))$ app/courses/$1/upload/course_home_icons/$2 last;
-  rewrite ^/courses/([^/]+)/(.*)$ /app/courses/$1/$2 last;
-  rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
-  rewrite ^/badge/(\d+) /main/badge/issued.php?issue=$1 last;
-  rewrite ^/skill/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
-  rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
-  rewrite ^/main/exercice/(.*)$ /main/exercise/$1 last;
-  rewrite ^/main/newscorm/(.*)$ /main/lp/$1 last;
-  rewrite ^/service/(\d+)$ /plugin/buycourses/src/service_information.php?service_id=$1 last;
-  rewrite "^/main/upload/users/(.*)/(.*)/my_files/(.*)$" /app/upload/users/$1/$2/my_files/$3 last;
+    rewrite "^/courses/([^/]+)/document/certificates/(.*)$" /app/courses/$1/document/certificates/$2 last;
+    rewrite ^/courses/([^/]+)/document/(.*)$ /main/document/download.php?doc_url=/$2&cDir=$1 last;
+    rewrite ^/courses/([^/]+)/upload/([^/]+)/(.*)$ /main/document/download_uploaded_files.php?code=$1&type=$2&file=$3 last;
+    rewrite ^/courses/([^/]+)/work/(.*)$ /main/work/download.php?file=work/$2&cDir=$1 last;
+    rewrite ^/courses/([^/]+)/upload/course_home_icons/(.*([\.png|\.jpg|\.jpeg|\.gif]))$ app/courses/$1/upload/course_home_icons/$2 last;
+    rewrite ^/courses/([^/]+)/(.*)$ /app/courses/$1/$2 last;
+    rewrite ^/session/([^/]+)/about/?$ /main/session/about.php?session_id=$1 last;
+    rewrite ^/course/([^/]+)/about/?$ /main/course_info/about.php?course_id=$1 last;
+    rewrite ^/badge/(\d+) /main/badge/issued.php?issue=$1 last;
+    rewrite ^/skill/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
+    rewrite ^/badge/(\d+)/user/(\d+)$ /main/badge/issued_all.php?skill=$1&user=$2 last;
+    rewrite ^/main/exercice/(.*)$ /main/exercise/$1 last;
+    rewrite ^/main/newscorm/(.*)$ /main/lp/$1 last;
+    rewrite ^/service/(\d+)$ /plugin/buycourses/src/service_information.php?service_id=$1 last;
+    rewrite "^/main/upload/users/(.*)/(.*)/my_files/(.*)$" /app/upload/users/$1/$2/my_files/$3 last;
 
-  try_files $uri /index.php$is_args$args;
-  break;
-}
+    try_files $uri /index.php$is_args$args;
+    break;
+  }
 
-location / {
- try_files $uri @rewrite;
-}
+  location / {
+    try_files $uri @rewrite;
+  }
 
-location /main {
-  rewrite ^/main/admin/?$ /main/admin/index.php last;
-}
+  location /main {
+    rewrite ^/main/([^/]+)/?$ /main/$1/index.php last;
+  }
 
-location ~ \.php$ {
-  client_max_body_size 20M;
-  try_files $uri @rewrite;
+  location ~ \.php$ {
+    client_max_body_size 20M;
+    try_files $uri @rewrite;
 
-  fastcgi_pass unix:/var/run/php5-fpm.sock;
-  fastcgi_split_path_info ^(.+\.php)(/.*)$;
-  include fastcgi_params;
-  fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-  fastcgi_param HTTPS off;
-}
+    fastcgi_pass unix:/var/run/php7.4-fpm.sock;
+    fastcgi_split_path_info ^(.+\.php)(/.*)$;
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_param HTTPS off;
+  }
 
   # Serve static files directly
   location ~* \.(png|jpe?g|gif|ico|js|css|mp3|swf|flv|mp4|ogg|woff|woff2)$ {
@@ -958,12 +985,13 @@ location ~ \.php$ {
     try_files $uri @rewrite;
   }
 
-location ~ ~\.(ht|git){
-  deny all;
-}
-location ^~ /tests/ {
-  deny all;
-}
+  location ~ ~\.(ht|git){
+    deny all;
+  }
+  location ^~ /tests/ {
+    deny all;
+  }
+
 </pre>
 <h3>Apple en servidores OS X</h3>
 <p>
@@ -1081,10 +1109,6 @@ location ^~ /tests/ {
                     &lt;action type="Rewrite" url="plugin/ims_lti/outcome_service.php" appendQueryString="false" /&gt;
                 &lt;/rule&gt;
                 &lt;rule name="rule v23" stopProcessing="true"&gt;
-                    &lt;match url="^([^/.]+)/?$" /&gt;
-                    &lt;action type="Rewrite" url="user.php?{R:1}" appendQueryString="false" /&gt;
-                &lt;/rule&gt;
-                &lt;rule name="rule v24" stopProcessing="true"&gt;
                     &lt;match url="^(tests|.git)" ignoreCase="false" /&gt;
                     &lt;action type="Rewrite" url="/-" /&gt;
                 &lt;/rule&gt;
@@ -1126,14 +1150,14 @@ location ^~ /tests/ {
 </p>
 <hr style="width: 100%; height: 2px;" />
 
-<a href="http://validator.w3.org/check?uri=referer">
+<a href="https://validator.w3.org/check?uri=referer">
     <img src="//www.w3.org/Icons/valid-xhtml10-blue"
         style="margin:1em;border:0;width:88px;height:31px; float: right;"
         alt="Valid XHTML 1.0 Transitional" />
 </a>
-<a href="http://jigsaw.w3.org/css-validator/check/referer">
+<a href="https://jigsaw.w3.org/css-validator/check/referer">
     <img style="margin:1em;border:0;width:88px;height:31px; float: right;"
-        src="http://jigsaw.w3.org/css-validator/images/vcss-blue"
+        src="https://jigsaw.w3.org/css-validator/images/vcss-blue"
         alt="¡CSS Válido!" />
 </a>
 

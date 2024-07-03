@@ -36,28 +36,17 @@ $to_user_id = null;
 $parent_id = null;
 $lib_path = api_get_path(LIBRARY_PATH);
 $actionsRight = '';
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
-if (isset($_POST['currentFile']) && !empty($_POST['currentFile']) && empty($action)) {
+$action = $_REQUEST['action'] ?? '';
+if (!empty($_POST['currentFile']) && empty($action)) {
     $action = 'replace';
 }
-$allowUseTool = false;
+$allowUseToolWithApiKey = false;
 
 if ($allowDownloadDocumentsByApiKey) {
-    try {
-        if ($action !== 'download') {
-            throw new Exception(get_lang('SelectAnAction'));
-        }
-
-        $username = isset($_GET['username']) ? Security::remove_XSS($_GET['username']) : null;
-        $apiKey = isset($_GET['api_key']) ? Security::remove_XSS($_GET['api_key']) : null;
-        $restApi = Rest::validate($username, $apiKey);
-        $allowUseTool = $restApi ? true : false;
-    } catch (Exception $e) {
-        $allowUseTool = false;
-    }
+    $allowUseToolWithApiKey = $action === 'download' && Rest::isAllowedByRequest();
 }
 
-if (!$allowUseTool) {
+if (!$allowUseToolWithApiKey) {
     api_protect_course_script(true);
     api_protect_course_group(GroupManager::GROUP_TOOL_DOCUMENTS);
 }
@@ -93,23 +82,6 @@ if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] === 'true') {
 Session::erase('draw_dir');
 Session::erase('paint_dir');
 Session::erase('temp_audio_nanogong');
-
-$plugin = new AppPlugin();
-$pluginList = $plugin->getInstalledPlugins();
-$capturePluginInstalled = in_array('jcapture', $pluginList);
-
-if ($capturePluginInstalled) {
-    $jcapturePath = api_get_path(WEB_PLUGIN_PATH).'jcapture/plugin_applet.php';
-    $htmlHeadXtra[]
-        = '<script>
-        $(function() {
-            $("#jcapture").click(function(){
-                $("#appletplace").load("'.$jcapturePath.'");
-            });
-        });
-        </script>
-    ';
-}
 
 if (empty($courseInfo)) {
     api_not_allowed(true);
@@ -215,218 +187,174 @@ $documentIdFromGet = $document_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id
 $currentUrl = api_get_self().'?'.api_get_cidreq().'&id='.$document_id;
 $curdirpath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
 
-switch ($action) {
-    case 'replace':
-        if (($isAllowedToEdit ||
+if ($action && Security::check_token('get')) {
+    switch ($action) {
+        case 'replace':
+            if (($isAllowedToEdit ||
+                    $groupMemberWithUploadRights ||
+                    DocumentManager::isBasicCourseFolder($curdirpath, $sessionId) ||
+                    DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) ||
+                    DocumentManager::is_my_shared_folder(api_get_user_id(), $moveTo, $sessionId)) &&
+                isset($_POST['currentFile'])
+            ) {
+                $fileTarget = $_POST['currentFile'];
+                if (isset($_FILES) && isset($_FILES['file_'.$fileTarget])) {
+                    $fileId = (int) $_POST['id_'.$fileTarget];
+                    if (!$isAllowedToEdit) {
+                        if (api_is_coach()) {
+                            if (!DocumentManager::is_visible_by_id(
+                                $fileId,
+                                $courseInfo,
+                                $sessionId,
+                                api_get_user_id()
+                            )
+                            ) {
+                                api_not_allowed();
+                            }
+                        }
+
+                        if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), '', $fileId, true)) {
+                            api_not_allowed();
+                        }
+                    }
+
+                    $documentInfo = DocumentManager::get_document_data_by_id(
+                        $fileId,
+                        $courseInfo['code'],
+                        false,
+                        $sessionId
+                    );
+                    GroupManager::allowUploadEditDocument(
+                        $userId,
+                        $courseId,
+                        $group_properties,
+                        $documentInfo,
+                        true
+                    );
+                    // Check whether the document is in the database.
+                    if (!empty($documentInfo)) {
+                        $file = $_FILES['file_'.$fileTarget];
+                        if ($documentInfo['filetype'] == 'file') {
+                            $updateDocument = DocumentManager::writeContentIntoDocument(
+                                $courseInfo,
+                                null,
+                                $base_work_dir,
+                                $sessionId,
+                                $fileId,
+                                $groupIid,
+                                $file
+                            );
+                            if ($updateDocument) {
+                                Display::addFlash(
+                                    Display::return_message(
+                                        get_lang('OverwritenFile').': '.$documentInfo['title'],
+                                        'success'
+                                    )
+                                );
+                            } else {
+                                Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
+                            }
+                        }
+                    } else {
+                        Display::addFlash(Display::return_message(get_lang('FileNotFound'), 'warning'));
+                    }
+
+                    header("Location: $currentUrl");
+                    exit;
+                }
+            }
+            break;
+        case 'delete_item':
+            if ($isAllowedToEdit ||
                 $groupMemberWithUploadRights ||
                 DocumentManager::isBasicCourseFolder($curdirpath, $sessionId) ||
                 DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) ||
-                DocumentManager::is_my_shared_folder(api_get_user_id(), $moveTo, $sessionId)) &&
-            isset($_POST['currentFile'])
-        ) {
-            $fileTarget = $_POST['currentFile'];
-            if (isset($_FILES) && isset($_FILES['file_'.$fileTarget])) {
-                $fileId = (int) $_POST['id_'.$fileTarget];
-                if (!$isAllowedToEdit) {
-                    if (api_is_coach()) {
-                        if (!DocumentManager::is_visible_by_id(
-                            $fileId,
-                            $courseInfo,
-                            $sessionId,
-                            api_get_user_id()
-                        )
-                        ) {
+                DocumentManager::is_my_shared_folder(api_get_user_id(), $moveTo, $sessionId)
+            ) {
+                if (isset($_GET['deleteid'])) {
+                    if (!$isAllowedToEdit) {
+                        if (api_is_coach()) {
+                            if (!DocumentManager::is_visible_by_id(
+                                $_GET['deleteid'],
+                                $courseInfo,
+                                $sessionId,
+                                api_get_user_id()
+                            )
+                            ) {
+                                api_not_allowed();
+                            }
+                        }
+
+                        if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), '', $_GET['deleteid'], true)) {
                             api_not_allowed();
                         }
                     }
 
-                    if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), '', $fileId, true)) {
-                        api_not_allowed();
-                    }
-                }
+                    $documentInfo = DocumentManager::get_document_data_by_id(
+                        $_GET['deleteid'],
+                        $courseInfo['code'],
+                        false,
+                        $sessionId
+                    );
 
-                $documentInfo = DocumentManager::get_document_data_by_id(
-                    $fileId,
-                    $courseInfo['code'],
-                    false,
-                    $sessionId
-                );
-                GroupManager::allowUploadEditDocument(
-                    $userId,
-                    $courseId,
-                    $group_properties,
-                    $documentInfo,
-                    true
-                );
-                // Check whether the document is in the database.
-                if (!empty($documentInfo)) {
-                    $file = $_FILES['file_'.$fileTarget];
-                    if ($documentInfo['filetype'] == 'file') {
-                        $updateDocument = DocumentManager::writeContentIntoDocument(
-                            $courseInfo,
-                            null,
-                            $base_work_dir,
-                            $sessionId,
-                            $fileId,
-                            $groupIid,
-                            $file
-                        );
-                        if ($updateDocument) {
-                            Display::addFlash(
-                                Display::return_message(
-                                    get_lang('OverwritenFile').': '.$documentInfo['title'],
-                                    'success'
-                                )
+                    GroupManager::allowUploadEditDocument(
+                        $userId,
+                        $courseId,
+                        $group_properties,
+                        $documentInfo,
+                        true
+                    );
+
+                    // Check whether the document is in the database.
+                    if (!empty($documentInfo)) {
+                        if ($documentInfo['filetype'] != 'link') {
+                            $deleteDocument = DocumentManager::delete_document(
+                                $courseInfo,
+                                null,
+                                $base_work_dir,
+                                $sessionId,
+                                $_GET['deleteid'],
+                                $groupIid
                             );
+                            if ($deleteDocument) {
+                                $certificateId = isset($_GET['delete_certificate_id']) ? $_GET['delete_certificate_id'] : null;
+                                DocumentManager::remove_attach_certificate(
+                                    api_get_course_id(),
+                                    $certificateId
+                                );
+                                Display::addFlash(
+                                    Display::return_message(
+                                        get_lang('DocDeleted').': '.$documentInfo['title'],
+                                        'success'
+                                    )
+                                );
+                            } else {
+                                Display::addFlash(Display::return_message(get_lang('DocDeleteError'), 'warning'));
+                            }
                         } else {
-                            Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
-                        }
-                    }
-                } else {
-                    Display::addFlash(Display::return_message(get_lang('FileNotFound'), 'warning'));
-                }
-
-                header("Location: $currentUrl");
-                exit;
-            }
-        }
-        break;
-    case 'delete_item':
-        if ($isAllowedToEdit ||
-            $groupMemberWithUploadRights ||
-            DocumentManager::isBasicCourseFolder($curdirpath, $sessionId) ||
-            DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) ||
-            DocumentManager::is_my_shared_folder(api_get_user_id(), $moveTo, $sessionId)
-        ) {
-            if (isset($_GET['deleteid'])) {
-                if (!$isAllowedToEdit) {
-                    if (api_is_coach()) {
-                        if (!DocumentManager::is_visible_by_id(
-                            $_GET['deleteid'],
-                            $courseInfo,
-                            $sessionId,
-                            api_get_user_id()
-                        )
-                        ) {
-                            api_not_allowed();
-                        }
-                    }
-
-                    if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), '', $_GET['deleteid'], true)) {
-                        api_not_allowed();
-                    }
-                }
-
-                $documentInfo = DocumentManager::get_document_data_by_id(
-                    $_GET['deleteid'],
-                    $courseInfo['code'],
-                    false,
-                    $sessionId
-                );
-
-                GroupManager::allowUploadEditDocument(
-                    $userId,
-                    $courseId,
-                    $group_properties,
-                    $documentInfo,
-                    true
-                );
-
-                // Check whether the document is in the database.
-                if (!empty($documentInfo)) {
-                    if ($documentInfo['filetype'] != 'link') {
-                        $deleteDocument = DocumentManager::delete_document(
-                            $courseInfo,
-                            null,
-                            $base_work_dir,
-                            $sessionId,
-                            $_GET['deleteid'],
-                            $groupIid
-                        );
-                        if ($deleteDocument) {
-                            $certificateId = isset($_GET['delete_certificate_id']) ? $_GET['delete_certificate_id'] : null;
-                            DocumentManager::remove_attach_certificate(
-                                api_get_course_id(),
-                                $certificateId
-                            );
-                            Display::addFlash(
-                                Display::return_message(
-                                    get_lang('DocDeleted').': '.$documentInfo['title'],
+                            // Cloud Links
+                            $deleteDocument = DocumentManager::deleteCloudLink($courseInfo, $_GET['deleteid']);
+                            if ($deleteDocument) {
+                                Display::addFlash(Display::return_message(
+                                    get_lang('CloudLinkDeleted').': '.$documentInfo['title'],
                                     'success'
-                                )
-                            );
-                        } else {
-                            Display::addFlash(Display::return_message(get_lang('DocDeleteError'), 'warning'));
+                                ));
+                            } else {
+                                Display::addFlash(Display::return_message(
+                                    get_lang('CloudLinkDeleteError').': '.$documentInfo['title'],
+                                    'error'
+                                ));
+                            }
                         }
                     } else {
-                        // Cloud Links
-                        $deleteDocument = DocumentManager::deleteCloudLink($courseInfo, $_GET['deleteid']);
-                        if ($deleteDocument) {
-                            Display::addFlash(Display::return_message(
-                                get_lang('CloudLinkDeleted').': '.$documentInfo['title'],
-                                'success'
-                            ));
-                        } else {
-                            Display::addFlash(Display::return_message(
-                                get_lang('CloudLinkDeleteError').': '.$documentInfo['title'],
-                                'error'
-                            ));
-                        }
+                        Display::addFlash(Display::return_message(get_lang('FileNotFound'), 'warning'));
                     }
-                } else {
-                    Display::addFlash(Display::return_message(get_lang('FileNotFound'), 'warning'));
+                    header("Location: $currentUrl");
+                    exit;
                 }
-                header("Location: $currentUrl");
-                exit;
             }
-        }
-        break;
-    case 'download':
-        // Get the document data from the ID
-        $document_data = DocumentManager::get_document_data_by_id(
-            $document_id,
-            api_get_course_id(),
-            false,
-            $sessionId
-        );
-        if ($sessionId != 0 && !$document_data) {
-            // If there is a session defined and asking for the document *from
-            // the session* didn't work, try it from the course (out of a
-            // session context)
-            $document_data = DocumentManager::get_document_data_by_id(
-                $document_id,
-                api_get_course_id(),
-                false,
-                0
-            );
-        }
-        // Check whether the document is in the database
-        if (empty($document_data)) {
-            api_not_allowed();
-        }
-        // Launch event
-        Event::event_download($document_data['url']);
-
-        // Check visibility of document and paths
-        if (!($isAllowedToEdit || $groupMemberWithUploadRights) &&
-            !DocumentManager::is_visible_by_id($document_id, $courseInfo, $sessionId, api_get_user_id())
-        ) {
-            api_not_allowed(true);
-        }
-        $full_file_name = $base_work_dir.$document_data['path'];
-        if (Security::check_abs_path($full_file_name, $base_work_dir.'/')) {
-            $result = DocumentManager::file_send_for_download($full_file_name, true);
-            if ($result === false) {
-                api_not_allowed(true);
-            }
-        }
-        exit;
-        break;
-    case 'downloadfolder':
-        if (api_get_setting('students_download_folders') == 'true' ||
-            $isAllowedToEdit ||
-            api_is_platform_admin()
-        ) {
+            break;
+        case 'download':
             // Get the document data from the ID
             $document_data = DocumentManager::get_document_data_by_id(
                 $document_id,
@@ -434,11 +362,10 @@ switch ($action) {
                 false,
                 $sessionId
             );
-
             if ($sessionId != 0 && !$document_data) {
-                // If there is a session defined and asking for the
-                // document * from the session* didn't work, try it from the
-                // course (out of a session context)
+                // If there is a session defined and asking for the document *from
+                // the session* didn't work, try it from the course (out of a
+                // session context)
                 $document_data = DocumentManager::get_document_data_by_id(
                     $document_id,
                     api_get_course_id(),
@@ -446,50 +373,201 @@ switch ($action) {
                     0
                 );
             }
-
-            //filter when I am into shared folder, I can download only my shared folder
-            if (DocumentManager::is_any_user_shared_folder($document_data['path'], $sessionId)) {
-                if (DocumentManager::is_my_shared_folder(api_get_user_id(), $document_data['path'], $sessionId) ||
-                    $isAllowedToEdit || api_is_platform_admin()
-                ) {
-                    require 'downloadfolder.inc.php';
-                }
-            } else {
-                require 'downloadfolder.inc.php';
+            // Check whether the document is in the database
+            if (empty($document_data)) {
+                api_not_allowed();
             }
             // Launch event
             Event::event_download($document_data['url']);
-            exit;
-        }
-        break;
-    case 'export_to_pdf':
-        if (api_get_setting('students_export2pdf') == 'true' ||
-            $isAllowedToEdit || api_is_platform_admin()
-        ) {
-            $documentOrientation = api_get_configuration_value('document_pdf_orientation');
-            $orientation = in_array($documentOrientation, ['landscape', 'portrait'])
-                ? $documentOrientation
-                : 'landscape';
 
-            $showHeaderAndFooter = true;
-            if ($is_certificate_mode) {
-                $certificateOrientation = api_get_configuration_value('certificate_pdf_orientation');
-                $orientation = in_array($certificateOrientation, ['landscape', 'portrait'])
-                    ? $certificateOrientation
-                    : 'landscape';
-                $showHeaderAndFooter = !api_get_configuration_value('hide_header_footer_in_certificate');
+            // Check visibility of document and paths
+            if (!($isAllowedToEdit || $groupMemberWithUploadRights) &&
+                !DocumentManager::is_visible_by_id($document_id, $courseInfo, $sessionId, api_get_user_id())
+            ) {
+                api_not_allowed(true);
             }
+            $full_file_name = $base_work_dir.$document_data['path'];
+            if (Security::check_abs_path($full_file_name, $base_work_dir.'/')) {
+                $result = DocumentManager::file_send_for_download($full_file_name, true);
+                if ($result === false) {
+                    api_not_allowed(true);
+                }
+            }
+            exit;
+            break;
+        case 'downloadfolder':
+            if (api_get_setting('students_download_folders') == 'true' ||
+                $isAllowedToEdit ||
+                api_is_platform_admin()
+            ) {
+                // Get the document data from the ID
+                $document_data = DocumentManager::get_document_data_by_id(
+                    $document_id,
+                    api_get_course_id(),
+                    false,
+                    $sessionId
+                );
 
-            DocumentManager::export_to_pdf($document_id, $course_code, $orientation, $showHeaderAndFooter);
-        }
-        break;
-    case 'copytomyfiles':
-        // Copy a file to general my files user's
-        if (api_get_setting('allow_my_files') == 'true' &&
-            api_get_setting('users_copy_files') == 'true' &&
-            api_get_user_id() != 0 &&
-            !api_is_anonymous()
-        ) {
+                if ($sessionId != 0 && !$document_data) {
+                    // If there is a session defined and asking for the
+                    // document * from the session* didn't work, try it from the
+                    // course (out of a session context)
+                    $document_data = DocumentManager::get_document_data_by_id(
+                        $document_id,
+                        api_get_course_id(),
+                        false,
+                        0
+                    );
+                }
+
+                //filter when I am into shared folder, I can download only my shared folder
+                if (DocumentManager::is_any_user_shared_folder($document_data['path'], $sessionId)) {
+                    if (DocumentManager::is_my_shared_folder(api_get_user_id(), $document_data['path'], $sessionId) ||
+                        $isAllowedToEdit || api_is_platform_admin()
+                    ) {
+                        require 'downloadfolder.inc.php';
+                    }
+                } else {
+                    require 'downloadfolder.inc.php';
+                }
+                // Launch event
+                Event::event_download($document_data['url']);
+                exit;
+            }
+            break;
+        case 'export_to_pdf':
+            if (api_get_setting('students_export2pdf') == 'true' ||
+                $isAllowedToEdit || api_is_platform_admin()
+            ) {
+                $documentOrientation = api_get_configuration_value('document_pdf_orientation');
+                $orientation = in_array($documentOrientation, ['landscape', 'portrait'])
+                    ? $documentOrientation
+                    : 'landscape';
+
+                $showHeaderAndFooter = true;
+                if ($is_certificate_mode) {
+                    $certificateOrientation = api_get_configuration_value('certificate_pdf_orientation');
+                    $orientation = in_array($certificateOrientation, ['landscape', 'portrait'])
+                        ? $certificateOrientation
+                        : 'landscape';
+                    $showHeaderAndFooter = !api_get_configuration_value('hide_header_footer_in_certificate');
+                }
+
+                DocumentManager::export_to_pdf($document_id, $course_code, $orientation, $showHeaderAndFooter);
+            }
+            break;
+        case 'copytomyfiles':
+            // Copy a file to general my files user's
+            if (api_get_setting('allow_my_files') == 'true' &&
+                api_get_setting('users_copy_files') == 'true' &&
+                api_get_user_id() != 0 &&
+                !api_is_anonymous()
+            ) {
+                // Get the document data from the ID
+                $document_info = DocumentManager::get_document_data_by_id(
+                    $document_id,
+                    api_get_course_id(),
+                    true,
+                    $sessionId
+                );
+                if ($sessionId != 0 && !$document_info) {
+                    /* If there is a session defined and asking for the document
+                      from the session didn't work, try it from the course
+                    (out of a session context)*/
+                    $document_info = DocumentManager::get_document_data_by_id(
+                        $document_id,
+                        api_get_course_id(),
+                        0
+                    );
+                }
+
+                if (!empty($groupId)) {
+                    GroupManager::allowUploadEditDocument(
+                        $userId,
+                        $courseId,
+                        $group_properties,
+                        $document_info,
+                        true
+                    );
+                }
+
+                $parent_id = $document_info['parent_id'];
+                $my_path = UserManager::getUserPathById(api_get_user_id(), 'system');
+                $user_folder = $my_path.'my_files/';
+                $my_path = null;
+
+                if (!file_exists($user_folder)) {
+                    $perm = api_get_permissions_for_new_directories();
+                    @mkdir($user_folder, $perm, true);
+                }
+
+                $file = $sys_course_path.$courseInfo['directory'].'/document'.$document_info['path'];
+                $copyfile = $user_folder.basename($document_info['path']);
+                $cidReq = Security::remove_XSS($_GET['cidReq']);
+                $id_session = Security::remove_XSS($_GET['id_session']);
+                $gidReq = Security::remove_XSS($_GET['gidReq']);
+                $id = Security::remove_XSS($_GET['id']);
+                if (empty($parent_id)) {
+                    $parent_id = 0;
+                }
+                $file_link = Display::url(
+                    get_lang('SeeFile'),
+                    api_get_path(WEB_CODE_PATH).'social/myfiles.php?'
+                    .api_get_cidreq_params($cidReq, $id_session, $gidReq).
+                    '&parent_id='.$parent_id
+                );
+
+                if (api_get_setting('allow_my_files') === 'false') {
+                    $file_link = '';
+                }
+
+                if (file_exists($copyfile)) {
+                    $message = get_lang('CopyAlreadyDone').'</p><p>';
+                    $message .= '<a class = "btn btn-default" '
+                        .'href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='
+                        .$parent_id.'">'
+                        .get_lang("No")
+                        .'</a>'
+                        .'&nbsp;&nbsp;|&nbsp;&nbsp;'
+                        .'<a class = "btn btn-default" href="'.api_get_self().'?'
+                        .api_get_cidreq().'&amp;action=copytomyfiles&amp;id='
+                        .$document_info['id']
+                        .'&amp;copy=yes">'
+                        .get_lang('Yes')
+                        .'</a></p>';
+                    if (!isset($_GET['copy'])) {
+                        Display::addFlash(Display::return_message($message, 'warning', false));
+                    }
+                    if (isset($_GET['copy']) && $_GET['copy'] === 'yes') {
+                        if (!copy($file, $copyfile)) {
+                            Display::addFlash(Display::return_message(get_lang('CopyFailed'), 'error'));
+                        } else {
+                            Display::addFlash(Display::return_message(
+                                get_lang('OverwritenFile').' '.$file_link,
+                                'confirmation',
+                                false
+                            ));
+                        }
+                    }
+                } else {
+                    if (!@copy($file, $copyfile)) {
+                        Display::addFlash(Display::return_message(get_lang('CopyFailed'), 'error'));
+                    } else {
+                        Display::addFlash(
+                            Display::return_message(get_lang('CopyMade').' '.$file_link, 'confirmation', false)
+                        );
+                    }
+                }
+            }
+            break;
+        case 'convertToPdf':
+            // PDF format as target by default
+            $formatTarget = $_REQUEST['formatTarget']
+                ? strtolower(Security::remove_XSS($_REQUEST['formatTarget']))
+                : 'pdf';
+            $formatType = $_REQUEST['formatType']
+                ? strtolower(Security::remove_XSS($_REQUEST['formatType']))
+                : 'text';
             // Get the document data from the ID
             $document_info = DocumentManager::get_document_data_by_id(
                 $document_id,
@@ -497,170 +575,69 @@ switch ($action) {
                 true,
                 $sessionId
             );
-            if ($sessionId != 0 && !$document_info) {
-                /* If there is a session defined and asking for the document
-                  from the session didn't work, try it from the course
-                (out of a session context)*/
-                $document_info = DocumentManager::get_document_data_by_id(
-                    $document_id,
-                    api_get_course_id(),
-                    0
-                );
-            }
-
-            if (!empty($groupId)) {
-                GroupManager::allowUploadEditDocument(
-                    $userId,
-                    $courseId,
-                    $group_properties,
-                    $document_info,
-                    true
-                );
-            }
-
-            $parent_id = $document_info['parent_id'];
-            $my_path = UserManager::getUserPathById(api_get_user_id(), 'system');
-            $user_folder = $my_path.'my_files/';
-            $my_path = null;
-
-            if (!file_exists($user_folder)) {
-                $perm = api_get_permissions_for_new_directories();
-                @mkdir($user_folder, $perm, true);
-            }
-
             $file = $sys_course_path.$courseInfo['directory'].'/document'.$document_info['path'];
-            $copyfile = $user_folder.basename($document_info['path']);
-            $cidReq = Security::remove_XSS($_GET['cidReq']);
-            $id_session = Security::remove_XSS($_GET['id_session']);
-            $gidReq = Security::remove_XSS($_GET['gidReq']);
-            $id = Security::remove_XSS($_GET['id']);
-            if (empty($parent_id)) {
-                $parent_id = 0;
-            }
-            $file_link = Display::url(
-                get_lang('SeeFile'),
-                api_get_path(WEB_CODE_PATH).'social/myfiles.php?'
-                .api_get_cidreq_params($cidReq, $id_session, $gidReq).
-                '&parent_id='.$parent_id
-            );
-
-            if (api_get_setting('allow_my_files') === 'false') {
-                $file_link = '';
-            }
-
-            if (file_exists($copyfile)) {
-                $message = get_lang('CopyAlreadyDone').'</p><p>';
-                $message .= '<a class = "btn btn-default" '
-                    .'href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='
-                    .$parent_id.'">'
-                    .get_lang("No")
-                    .'</a>'
-                    .'&nbsp;&nbsp;|&nbsp;&nbsp;'
-                    .'<a class = "btn btn-default" href="'.api_get_self().'?'
-                    .api_get_cidreq().'&amp;action=copytomyfiles&amp;id='
-                    .$document_info['id']
-                    .'&amp;copy=yes">'
-                    .get_lang('Yes')
-                    .'</a></p>';
-                if (!isset($_GET['copy'])) {
-                    Display::addFlash(Display::return_message($message, 'warning', false));
-                }
-                if (isset($_GET['copy']) && $_GET['copy'] === 'yes') {
-                    if (!copy($file, $copyfile)) {
-                        Display::addFlash(Display::return_message(get_lang('CopyFailed'), 'error'));
-                    } else {
+            $fileInfo = pathinfo($file);
+            if ($fileInfo['extension'] == $formatTarget) {
+                Display::addFlash(Display::return_message(
+                    get_lang('ConversionToSameFileFormat'),
+                    'warning'
+                ));
+            } elseif (
+                !(in_array($fileInfo['extension'], DocumentManager::getJodconverterExtensionList('from', $formatType))) ||
+                !(in_array($formatTarget, DocumentManager::getJodconverterExtensionList('to', $formatType)))
+            ) {
+                Display::addFlash(Display::return_message(
+                    get_lang('FileFormatNotSupported'),
+                    'warning'
+                ));
+            } else {
+                $convertedFile = $fileInfo['dirname'].DIRECTORY_SEPARATOR
+                    .$fileInfo['filename'].'_from_'.$fileInfo['extension']
+                    .'.'.$formatTarget;
+                $convertedTitle = $document_info['title'];
+                $obj = new OpenofficePresentation(true);
+                if (file_exists($convertedFile)) {
+                    Display::addFlash(Display::return_message(
+                        get_lang('FileExists'),
+                        'error'
+                    ));
+                } else {
+                    $result = $obj->convertCopyDocument(
+                        $file,
+                        $convertedFile,
+                        $convertedTitle
+                    );
+                    if (empty($result)) {
                         Display::addFlash(Display::return_message(
-                            get_lang('OverwritenFile').' '.$file_link,
+                            get_lang('CopyFailed'),
+                            'error'
+                        ));
+                    } else {
+                        $cidReq = Security::remove_XSS($_GET['cidReq']);
+                        $id_session = api_get_session_id();
+                        $gidReq = Security::remove_XSS($_GET['gidReq']);
+                        $file_link = Display::url(
+                            get_lang('SeeFile'),
+                            api_get_path(WEB_CODE_PATH)
+                            .'document/showinframes.php?'
+                            .api_get_cidreq_params($cidReq, $id_session, $gidReq)
+                            .'&id='.current($result)
+                        );
+                        Display::addFlash(Display::return_message(
+                            get_lang('CopyMade').' '.$file_link,
                             'confirmation',
                             false
                         ));
                     }
                 }
-            } else {
-                if (!copy($file, $copyfile)) {
-                    Display::addFlash(Display::return_message(get_lang('CopyFailed'), 'error'));
-                } else {
-                    Display::addFlash(
-                        Display::return_message(get_lang('CopyMade').' '.$file_link, 'confirmation', false)
-                    );
-                }
             }
-        }
-        break;
-    case 'convertToPdf':
-        // PDF format as target by default
-        $formatTarget = $_REQUEST['formatTarget']
-            ? strtolower(Security::remove_XSS($_REQUEST['formatTarget']))
-            : 'pdf';
-        $formatType = $_REQUEST['formatType']
-            ? strtolower(Security::remove_XSS($_REQUEST['formatType']))
-            : 'text';
-        // Get the document data from the ID
-        $document_info = DocumentManager::get_document_data_by_id(
-            $document_id,
-            api_get_course_id(),
-            true,
-            $session_id
-        );
-        $file = $sys_course_path.$courseInfo['directory'].'/document'.$document_info['path'];
-        $fileInfo = pathinfo($file);
-        if ($fileInfo['extension'] == $formatTarget) {
-            Display::addFlash(Display::return_message(
-                get_lang('ConversionToSameFileFormat'),
-                'warning'
-            ));
-        } elseif (
-            !(in_array($fileInfo['extension'], DocumentManager::getJodconverterExtensionList('from', $formatType))) ||
-            !(in_array($formatTarget, DocumentManager::getJodconverterExtensionList('to', $formatType)))
-        ) {
-            Display::addFlash(Display::return_message(
-                get_lang('FileFormatNotSupported'),
-                'warning'
-            ));
-        } else {
-            $convertedFile = $fileInfo['dirname'].DIRECTORY_SEPARATOR
-                .$fileInfo['filename'].'_from_'.$fileInfo['extension']
-                .'.'.$formatTarget;
-            $convertedTitle = $document_info['title'];
-            $obj = new OpenofficePresentation(true);
-            if (file_exists($convertedFile)) {
-                Display::addFlash(Display::return_message(
-                    get_lang('FileExists'),
-                    'error'
-                ));
-            } else {
-                $result = $obj->convertCopyDocument(
-                    $file,
-                    $convertedFile,
-                    $convertedTitle
-                );
-                if (empty($result)) {
-                    Display::addFlash(Display::return_message(
-                        get_lang('CopyFailed'),
-                        'error'
-                    ));
-                } else {
-                    $cidReq = Security::remove_XSS($_GET['cidReq']);
-                    $id_session = api_get_session_id();
-                    $gidReq = Security::remove_XSS($_GET['gidReq']);
-                    $file_link = Display::url(
-                        get_lang('SeeFile'),
-                        api_get_path(WEB_CODE_PATH)
-                        .'document/showinframes.php?'
-                        .api_get_cidreq_params($cidReq, $id_session, $gidReq)
-                        .'&id='.current($result)
-                    );
-                    Display::addFlash(Display::return_message(
-                        get_lang('CopyMade').' '.$file_link,
-                        'confirmation',
-                        false
-                    ));
-                }
-            }
-        }
-        break;
+            break;
+    }
+
+    Security::clear_token();
 }
 
+$secToken = Security::get_token();
 // If no actions we proceed to show the document (Hack in order to use document.php?id=X)
 if (isset($document_id) && empty($action)) {
     // Get the document data from the ID
@@ -1158,7 +1135,7 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
         if (!empty($document_to_move)) {
             if ($document_to_move['filetype'] == 'link') {
                 $real_path_target = $base_work_dir.$moveTo.'/';
-                if (!DocumentManager::cloudLinkExists($_course, $moveTo, $document_to_move['comment'])) {
+                if (!DocumentManager::cloudLinkExists($courseInfo, $moveTo, $document_to_move['comment'])) {
                     $doc_id = $moveFile;
                     //DocumentManager::updateDbInfo($document_to_move['path'], $moveTo.'/', $doc_id);
                     DocumentManager::updateDbInfo(
@@ -1171,7 +1148,7 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
 
                     // Update database item property
                     api_item_property_update(
-                        $_course,
+                        $courseInfo,
                         TOOL_DOCUMENT,
                         $doc_id,
                         'FileMoved',
@@ -1180,7 +1157,7 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
                         null,
                         null,
                         null,
-                        $session_id
+                        $sessionId
                     );
                     Display::addFlash(
                         Display::return_message(
@@ -1384,7 +1361,7 @@ if ($isAllowedToEdit ||
                             }
                         } else {
                             // Cloud Links
-                            if (DocumentManager::deleteCloudLink($_course, $documentId)) {
+                            if (DocumentManager::deleteCloudLink($courseInfo, $documentId)) {
                                 $messages .= Display::return_message(
                                     get_lang('CloudLinkDeleted'),
                                     'confirmation'
@@ -1814,15 +1791,6 @@ if ($isAllowedToEdit ||
         );
     }
 
-    if ($capturePluginInstalled && !$is_certificate_mode) {
-        $actionsLeft .= '<span id="appletplace"></span>';
-        $actionsLeft .= Display::url(
-            Display::return_icon('capture.png', get_lang('CatchScreenCasts'), '', ICON_SIZE_MEDIUM),
-            '#',
-            ['id' => 'jcapture']
-        );
-    }
-
     // Create directory
     if (!$is_certificate_mode) {
         $actionsLeft .= Display::url(
@@ -1893,6 +1861,7 @@ $userIsSubscribed = CourseManager::is_user_subscribed_in_course(
     api_get_user_id(),
     $courseInfo['code']
 );
+global $charset;
 
 $getSizesURL = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=get_dirs_size&'.api_get_cidreq();
 
@@ -2039,27 +2008,21 @@ if (!empty($documentAndFolders)) {
                 $groupMemberWithEditRightsCheckDocument ||
                 DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
             ) {
-                $is_template = isset($document_data['is_template']) ? $document_data['is_template'] : false;
+                $is_template = $document_data['is_template'] ?? false;
+                $isReadOnly = $document_data['readonly'];
 
                 // If readonly, check if it the owner of the file or if the user is an admin
                 if ($document_data['insert_user_id'] == api_get_user_id() || api_is_platform_admin()) {
-                    $edit_icons = DocumentManager::build_edit_icons(
-                        $document_data,
-                        $key,
-                        $is_template,
-                        0,
-                        $is_visible
-                    );
-                } else {
-                    $edit_icons = DocumentManager::build_edit_icons(
-                        $document_data,
-                        $key,
-                        $is_template,
-                        $document_data['readonly'],
-                        $is_visible
-                    );
+                    $isReadOnly = false;
                 }
-                $row[] = $edit_icons;
+
+                $row[] = [
+                    'document_data' => $document_data,
+                    'key' => $key,
+                    'is_template' => $is_template,
+                    'readonly' => $isReadOnly,
+                    'is_visible' => $is_visible,
+                ];
             } else {
                 $row[] = '';
             }
@@ -2109,7 +2072,7 @@ if (!empty($documentAndFolders)) {
                     ICON_SIZE_MEDIUM
                 ),
                 api_get_path(WEB_CODE_PATH).'document/document.php?'
-                    .api_get_cidreq().'&action=downloadfolder&id='.$document_id
+                    .api_get_cidreq().'&action=downloadfolder&id='.$document_id.'&sec_token='.$secToken
             );
         }
     }
@@ -2200,6 +2163,7 @@ if ($groupId) {
 $queryVars['cidReq'] = api_get_course_id();
 $queryVars['id_session'] = api_get_session_id();
 $queryVars['id'] = $document_id;
+$queryVars['sec_token'] = $secToken;
 $table->set_additional_parameters($queryVars);
 $column = 0;
 
@@ -2218,6 +2182,24 @@ if ($isAllowedToEdit ||
     DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
 ) {
     $table->set_header($column++, get_lang('Actions'), false, ['class' => 'td_actions']);
+    $table->set_column_filter(
+        $column - 1,
+        function ($value) {
+            if (is_array($value['document_data'])) {
+                // If the document is not visible by the user, the document_data is an empty string so we cannot call
+                // the method.
+                return DocumentManager::build_edit_icons(
+                    $value['document_data'],
+                    $value['key'],
+                    $value['is_template'],
+                    $value['readonly'],
+                    $value['is_visible']
+                );
+            } else {
+                return '';
+            }
+        }
+    );
 }
 
 // Actions on multiple selected documents

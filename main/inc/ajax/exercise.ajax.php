@@ -10,6 +10,9 @@ use ChamiloSession as Session;
 require_once __DIR__.'/../global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 $debug = false;
+
+ExerciseLib::logPingForCheckingConnection();
+
 // Check if the user has access to the contextual course/session
 api_protect_course_script(true);
 
@@ -166,6 +169,10 @@ switch ($action) {
         $limit = (int) $_REQUEST['rows']; //quantity of rows
         $sidx = $_REQUEST['sidx']; //index to filter
         $sord = $_REQUEST['sord']; //asc or desc
+
+        if (!in_array($sidx, ['firstname', 'lastname', 'start_date'])) {
+            $sidx = 1;
+        }
 
         if (!in_array($sord, ['asc', 'desc'])) {
             $sord = 'desc';
@@ -460,6 +467,12 @@ switch ($action) {
         header('Content-Type: application/json');
 
         $course_info = api_get_course_info_by_id($course_id);
+
+        if (empty($course_info)) {
+            echo json_encode(['error' => true]);
+            exit;
+        }
+
         $course_id = $course_info['real_id'];
 
         // Use have permissions to edit exercises results now?
@@ -487,6 +500,9 @@ switch ($action) {
         // Hot spot coordinates from all questions.
         $hot_spot_coordinates = isset($_REQUEST['hotspot']) ? $_REQUEST['hotspot'] : [];
 
+        // the filenames in upload answer type
+        $uploadAnswerFileNames = isset($_REQUEST['uploadChoice']) ? $_REQUEST['uploadChoice'] : [];
+
         // There is a reminder?
         $remind_list = isset($_REQUEST['remind_list']) && !empty($_REQUEST['remind_list'])
             ? array_keys($_REQUEST['remind_list']) : [];
@@ -501,6 +517,7 @@ switch ($action) {
             error_log("choice = ".print_r($choice, 1)." ");
             error_log("hot_spot_coordinates = ".print_r($hot_spot_coordinates, 1));
             error_log("remind_list = ".print_r($remind_list, 1));
+            error_log("uploadAnswerFileNames = ".print_r($uploadAnswerFileNames, 1));
             error_log("--------------------------------");
         }
 
@@ -528,11 +545,11 @@ switch ($action) {
         if (WhispeakAuthPlugin::questionRequireAuthentify($question_id)) {
             if ($objExercise->type == ONE_PER_PAGE) {
                 echo json_encode(['type' => 'one_per_page']);
-                break;
+                exit;
             }
 
             echo json_encode(['ok' => true]);
-            break;
+            exit;
         } else {
             ChamiloSession::erase(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION);
         }
@@ -653,7 +670,20 @@ switch ($action) {
                     $myChoiceDegreeCertainty = $choiceDegreeCertainty[$my_question_id];
                 }
             }
-
+            if ($objQuestionTmp->type === UPLOAD_ANSWER) {
+                $my_choice = '';
+                if (!empty($uploadAnswerFileNames)) {
+                    // Clean user upload_answer folder
+                    $userUploadAnswerSyspath = UserManager::getUserPathById(api_get_user_id(), 'system').'my_files'.'/upload_answer/'.$exeId.'/'.$my_question_id.'/*';
+                    foreach (glob($userUploadAnswerSyspath) as $file) {
+                        $filename = basename($file);
+                        if (!in_array($filename, $uploadAnswerFileNames[$my_question_id])) {
+                            unlink($file);
+                        }
+                    }
+                    $my_choice = implode('|', $uploadAnswerFileNames[$my_question_id]);
+                }
+            }
             // Getting free choice data.
             if ('all' === $type && in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION])) {
                 $my_choice = isset($_REQUEST['free_choice'][$my_question_id]) && !empty($_REQUEST['free_choice'][$my_question_id])
@@ -721,7 +751,7 @@ switch ($action) {
                     $session_id,
                     $my_question_id
                 );
-                if ($objQuestionTmp->type === HOT_SPOT) {
+                if (in_array($objQuestionTmp->type, [HOT_SPOT, HOT_SPOT_COMBINATION])) {
                     Event::delete_attempt_hotspot(
                         $exeId,
                         api_get_user_id(),
@@ -907,6 +937,66 @@ switch ($action) {
         }
         echo json_encode(['ok' => true, 'savedAnswerMessage' => $savedQuestionsMessage]);
         break;
+    case 'show_question_attempt':
+        $isAllowedToEdit = api_is_allowed_to_edit(null, true, false, false);
+
+        if (!$isAllowedToEdit) {
+            api_not_allowed(true);
+            exit;
+        }
+
+        $questionId = isset($_GET['question']) ? (int) $_GET['question'] : 0;
+        $exerciseId = isset($_REQUEST['exercise']) ? (int) $_REQUEST['exercise'] : 0;
+
+        if (!$questionId || !$exerciseId) {
+            break;
+        }
+
+        $objExercise = new Exercise();
+        $objExercise->read($exerciseId);
+        $objQuestion = Question::read($questionId);
+        $id = '';
+        if (api_get_configuration_value('show_question_id')) {
+            $id = '<h4>#'.$objQuestion->course['code'].'-'.$objQuestion->iid.'</h4>';
+        }
+        echo $id;
+        echo '<p class="lead">'.$objQuestion->get_question_type_name().'</p>';
+        if (in_array($objQuestion->type, [FILL_IN_BLANKS, FILL_IN_BLANKS_COMBINATION])) {
+            echo '<script>
+                $(function() {
+                    $(".selectpicker").selectpicker({});
+                });
+            </script>';
+        }
+
+        // Allows render MathJax elements in a ajax call
+        if (api_get_setting('include_asciimathml_script') === 'true') {
+            echo '<script> MathJax.Hub.Queue(["Typeset",MathJax.Hub]);</script>';
+        }
+
+        if (in_array($objQuestion->type, [HOT_SPOT, HOT_SPOT_COMBINATION])) {
+            echo '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
+        }
+
+        $attemptList = [];
+        if (!empty($exeId)) {
+            $attemptList = Event::getAllExerciseEventByExeId($exeId);
+        }
+
+        $userChoice = isset($attemptList[$questionId]) ? $attemptList[$questionId] : null;
+
+        ExerciseLib::showQuestion(
+            $objExercise,
+            $questionId,
+            false,
+            null,
+            null,
+            false,
+            true,
+            $userChoice,
+            true
+        );
+        break;
     case 'show_question':
         $isAllowedToEdit = api_is_allowed_to_edit(null, true, false, false);
 
@@ -931,7 +1021,7 @@ switch ($action) {
         }
         echo $id;
         echo '<p class="lead">'.$objQuestion->get_question_type_name().'</p>';
-        if ($objQuestion->type === FILL_IN_BLANKS) {
+        if (in_array($objQuestion->type, [FILL_IN_BLANKS, FILL_IN_BLANKS_COMBINATION])) {
             echo '<script>
                 $(function() {
                     $(".selectpicker").selectpicker({});
@@ -1071,6 +1161,110 @@ switch ($action) {
             }
         }
         echo 0;
+        break;
+    case 'upload_answer':
+        api_block_anonymous_users();
+
+        if (isset($_REQUEST['chunkAction']) && 'send' === $_REQUEST['chunkAction']) {
+            // It uploads the files in chunks
+            if (!empty($_FILES)) {
+                $tempDirectory = api_get_path(SYS_ARCHIVE_PATH);
+                $files = $_FILES['files'];
+                $fileList = [];
+                foreach ($files as $name => $array) {
+                    $counter = 0;
+                    foreach ($array as $data) {
+                        $fileList[$counter][$name] = $data;
+                        $counter++;
+                    }
+                }
+                if (!empty($fileList)) {
+                    foreach ($fileList as $n => $file) {
+                        $tmpFile = disable_dangerous_file(
+                            api_replace_dangerous_char($file['name'])
+                        );
+
+                        file_put_contents(
+                            $tempDirectory.$tmpFile,
+                            fopen($file['tmp_name'], 'r'),
+                            FILE_APPEND
+                        );
+                    }
+                }
+            }
+            echo json_encode([
+                'files' => $_FILES,
+                'errorStatus' => 0,
+            ]);
+            exit;
+        } else {
+            if (!empty($_FILES)) {
+                $currentDirectory = Security::remove_XSS($_REQUEST['curdirpath']);
+                $userId = api_get_user_id();
+
+                // Upload answer path is created inside user personal folder my_files/upload_answer/[exe_id]/[question_id]
+                $syspath = UserManager::getUserPathById($userId, 'system').'my_files'.$currentDirectory;
+                @mkdir($syspath, api_get_permissions_for_new_directories(), true);
+                $webpath = UserManager::getUserPathById($userId, 'web').'my_files'.$currentDirectory;
+
+                $files = $_FILES['files'];
+                $fileList = [];
+                foreach ($files as $name => $array) {
+                    $counter = 0;
+                    foreach ($array as $data) {
+                        $fileList[$counter][$name] = $data;
+                        $counter++;
+                    }
+                }
+                $resultList = [];
+                foreach ($fileList as $file) {
+                    $json = [];
+
+                    if (isset($_REQUEST['chunkAction']) && 'done' === $_REQUEST['chunkAction']) {
+                        // to rename and move the finished file
+                        $chunkedFile = api_get_path(SYS_ARCHIVE_PATH).$file['name'];
+                        $file['tmp_name'] = $chunkedFile;
+                        $file['size'] = filesize($chunkedFile);
+                        $file['copy_file'] = true;
+                    }
+
+                    $filename = api_replace_dangerous_char($file['name']);
+                    $filename = disable_dangerous_file($filename);
+
+                    if (isset($file['copy_file']) && $file['copy_file']) {
+                        $uploaded = copy($file['tmp_name'], $syspath.$filename);
+                        @unlink($file['tmp_name']);
+                    } else {
+                        $uploaded = move_uploaded_file($file['tmp_name'], $syspath.$filename);
+                    }
+
+                    if ($uploaded) {
+                        $title = $filename;
+                        $url = $webpath.$filename;
+                        $json['name'] = api_htmlentities($title);
+                        $json['link'] = Display::url(
+                            api_htmlentities($title),
+                            api_htmlentities($url),
+                            ['target' => '_blank']
+                        );
+                        $json['url'] = $url;
+                        $json['size'] = format_file_size($file['size']);
+                        $json['type'] = api_htmlentities($file['type']);
+                        $json['result'] = Display::return_icon(
+                            'accept.png',
+                            get_lang('Uploaded')
+                        );
+                    } else {
+                        $json['name'] = isset($file['name']) ? $filename : get_lang('Unknown');
+                        $json['url'] = '';
+                        $json['error'] = get_lang('Error');
+                    }
+                    $resultList[] = $json;
+                }
+                echo json_encode(['files' => $resultList]);
+                exit;
+            }
+        }
         break;
     default:
         echo '';

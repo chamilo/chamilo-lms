@@ -25,6 +25,8 @@ if (isset($_GET['action']) && in_array($_GET['action'], ['add', 'edit', 'delete'
 
 $id = isset($_GET['id']) ? $_GET['id'] : '';
 
+$profileId = !empty($_GET['profile_id']) ? (int) $_GET['profile_id'] : 0;
+
 $item = null;
 if (!empty($id)) {
     /** @var Level $item */
@@ -40,7 +42,14 @@ $form->addText('short_name', get_lang('ShortName'));
 $form->addSelectFromCollection('profile_id', get_lang('Profile'), $profiles);
 $form->addHidden('action', $action);
 $form->addHidden('id', $id);
-$form->addButtonSave(get_lang('Save'));
+// Submit buttons
+if ($action == 'edit') {
+    $form->addButtonSave(get_lang('Save'));
+} elseif ($action == 'add') {
+    $html_results_enabled[] = $form->createElement('button', 'submit', get_lang('Add'), 'plus', 'primary');
+    $html_results_enabled[] = $form->createElement('button', 'submit_plus', get_lang('Add').'+', 'plus', 'primary');
+    $form->addGroup($html_results_enabled);
+}
 
 if (!empty($item)) {
     $form->setDefaults([
@@ -48,13 +57,17 @@ if (!empty($item)) {
         'short_name' => $item->getShortName(),
         'profile_id' => $item->getProfile()->getId(),
     ]);
+} elseif (!empty($profileId)) {
+    $form->setDefaults([
+        'profile_id' => $profileId,
+    ]);
 }
 
 $formToDisplay = '';
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/skill.php', 'name' => get_lang('ManageSkillsLevels')];
-$interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('SkillLevel')];
+$interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('SkillLevels')];
 
 switch ($action) {
     case 'add':
@@ -62,7 +75,8 @@ switch ($action) {
         if ($form->validate()) {
             $values = $form->exportValues();
             if (isset($values['profile_id']) && !empty($values['profile_id'])) {
-                $profile = $em->getRepository('ChamiloSkillBundle:Profile')->find($values['profile_id']);
+                $profileId = (int) $values['profile_id'];
+                $profile = $em->getRepository('ChamiloSkillBundle:Profile')->find($profileId);
                 if ($profile) {
                     $item = new Level();
                     $item->setName($values['name']);
@@ -76,6 +90,10 @@ switch ($action) {
                 }
             } else {
                 Display::addFlash(Display::return_message(get_lang('YouNeedToCreateASkillProfile')));
+            }
+            if (isset($values['submit_plus'])) {
+                header('Location: '.$listAction.'?action=add&profile_id='.$profileId);
+                exit;
             }
             header('Location: '.$listAction);
             exit;

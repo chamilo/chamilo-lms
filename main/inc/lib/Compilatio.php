@@ -461,7 +461,7 @@ class Compilatio
      */
     public static function isMd5($hash)
     {
-        return preg_match('`^[a-f0-9]{32}$`', $hash);
+        return preg_match('`^[a-f0-9]{32}$`', $hash) || preg_match('`^[a-f0-9]{40}$`', $hash);
     }
 
     /**
@@ -478,7 +478,7 @@ class Compilatio
             return false;
         }
 
-        $table = Database:: get_course_table(TABLE_PLAGIARISM);
+        $table = Database::get_course_table(TABLE_PLAGIARISM);
         $params = [$courseId, $itemId];
         Database::delete($table, ['c_id = ? AND document_id = ?' => $params]);
 

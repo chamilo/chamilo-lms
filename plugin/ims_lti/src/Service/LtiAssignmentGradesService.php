@@ -45,9 +45,6 @@ class LtiAssignmentGradesService extends LtiAdvantageService
     }
 
     /**
-     * @param Request      $request
-     * @param JsonResponse $response
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
@@ -102,9 +99,8 @@ class LtiAssignmentGradesService extends LtiAdvantageService
     }
 
     /**
-     * @param int   $contextId
-     * @param int   $toolId
-     * @param array $extraParams
+     * @param int $contextId
+     * @param int $toolId
      *
      * @return string
      */
@@ -143,10 +139,9 @@ class LtiAssignmentGradesService extends LtiAdvantageService
     }
 
     /**
-     * @param int   $contextId
-     * @param int   $lineItemId
-     * @param int   $toolId
-     * @param array $extraParams
+     * @param int $contextId
+     * @param int $lineItemId
+     * @param int $toolId
      *
      * @return string
      */

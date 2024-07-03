@@ -74,9 +74,13 @@ if ($action == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
 
     if ($allowSurveyAvailabilityDatetime) {
         $defaults['avail_from'] = api_get_local_time($defaults['avail_from']);
-        $defaults['avail_till'] = api_get_local_time($defaults['avail_till']);
+
+        if (!empty($defaults['avail_till'])) {
+            $defaults['avail_till'] = api_get_local_time($defaults['avail_till']);
+        } else {
+            $defaults['end_date'] = null;
+        }
         $defaults['start_date'] = $defaults['avail_from'];
-        $defaults['end_date'] = $defaults['avail_till'];
     }
 
     $link_info = GradebookUtils::isResourceInCourseGradebook(
@@ -176,7 +180,6 @@ if ($allowSurveyAvailabilityDatetime) {
 }
 
 $form->setRequired($startDateElement);
-$form->setRequired($endDateElement);
 
 $form->addElement('checkbox', 'anonymous', null, get_lang('Anonymous'));
 $visibleResults = [
@@ -326,7 +329,7 @@ if ($action === 'edit' && !empty($survey_id)) {
     }
 }
 
-$skillList = Skill::addSkillsToForm($form, ITEM_TYPE_SURVEY, $survey_id);
+Skill::addSkillsToForm($form, api_get_course_int_id(), api_get_session_id(), ITEM_TYPE_SURVEY, $survey_id);
 
 $form->addElement('html', '</div><br />');
 
@@ -344,14 +347,15 @@ if ($action == 'add') {
 $form->addRule('survey_title', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('start_date', get_lang('InvalidDate'), $allowSurveyAvailabilityDatetime ? 'datetime' : 'date');
 $form->addRule('end_date', get_lang('InvalidDate'), $allowSurveyAvailabilityDatetime ? 'datetime' : 'date');
-$form->addRule(
-    ['start_date', 'end_date'],
-    get_lang('StartDateShouldBeBeforeEndDate'),
-    'date_compare',
-    'lte'
-);
 
-$defaults['skills'] = array_keys($skillList);
+if (!empty($endDateElement->getCleanValue())) {
+    $form->addRule(
+        ['start_date', 'end_date'],
+        get_lang('StartDateShouldBeBeforeEndDate'),
+        'date_compare',
+        'lte'
+    );
+}
 
 // Setting the default values
 $form->setDefaults($defaults);
@@ -374,6 +378,22 @@ if ($form->validate()) {
 } else {
     // Displaying the header
     Display::display_header($tool_name);
+    $actionLeft = null;
+    //if is called from learning path
+    if (isset($_GET['lp_id'])) {
+        $lpId = (int) $_GET['lp_id'];
+        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.$lpId.'#resource_tab-6';
+        $actionLeft .= Display::url(
+            Display::return_icon(
+                'back.png',
+                get_lang("BackTo").' '.get_lang("LearningPaths"),
+                null,
+                ICON_SIZE_MEDIUM
+            ),
+            $url
+        );
+        echo Display::toolbarAction('toolbar-forum', [$actionLeft]);
+    }
     $form->display();
 }
 

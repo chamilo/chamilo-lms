@@ -3,7 +3,8 @@
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-api_protect_admin_script();
+$allowSessionAdmins = api_get_plugin_setting('justification', 'access_for_session_admin') === 'true';
+api_protect_admin_script($allowSessionAdmins);
 
 $tool = 'justification';
 $plugin = Justification::create();

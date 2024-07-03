@@ -406,4 +406,4 @@ echo Display::actions($action_array);
 
 </form>
 <?php
-Display :: display_footer();
+Display::display_footer();

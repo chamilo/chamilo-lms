@@ -69,7 +69,8 @@ $form->addHeader($nameTools);
 $form->addLabel(null, Display::return_icon('scorm_logo.jpg', null, ['style' => 'width:230px;height:100px']));
 $form->addElement('hidden', 'curdirpath', $path);
 $form->addElement('hidden', 'tool', $my_tool);
-$form->addElement('file', 'user_file', get_lang('FileToUpload'));
+//$form->addElement('file', 'user_file', get_lang('FileToUpload'));
+$form->addElement('BigUpload', 'user_file', get_lang('FileToUpload'), ['id' => 'bigUploadFile', 'data-origin' => 'learnpath']);
 $form->addProgress();
 $form->addRule('user_file', get_lang('ThisFieldIsRequired'), 'required');
 

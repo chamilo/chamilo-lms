@@ -100,42 +100,7 @@ function load_session_list(div_session, my_user_id) {
     });
 }
 
-function active_user(element_div) {
-    id_image=$(element_div).attr("id");
-    image_clicked=$(element_div).attr("src");
-    image_clicked_info = image_clicked.split("/");
-    image_real_clicked = image_clicked_info[image_clicked_info.length-1];
-    var status = 1;
-    if (image_real_clicked == "accept.png") {
-        status = 0;
-    }
-    user_id=id_image.split("_");
-    ident="#img_"+user_id[1];
-    if (confirm("'.get_lang('AreYouSureToEditTheUserStatus', '').'")) {
-         $.ajax({
-            contentType: "application/x-www-form-urlencoded",
-            beforeSend: function(myObject) {
-                $(ident).attr("src","'.Display::returnIconPath('loading1.gif').'"); }, //candy eye stuff
-            type: "GET",
-            url: "'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=active_user",
-            data: "user_id="+user_id[1]+"&status="+status,
-            success: function(data) {
-                if (data == 1) {
-                    $(ident).attr("src", "'.Display::returnIconPath('accept.png', ICON_SIZE_TINY).'");
-                    $(ident).attr("title","'.get_lang('Lock').'");
-                }
-                if (data == 0) {
-                    $(ident).attr("src","'.Display::returnIconPath('error.png').'");
-                    $(ident).attr("title","'.get_lang('Unlock').'");
-                }
-                if (data == -1) {
-                    $(ident).attr("src", "'.Display::returnIconPath('warning.png').'");
-                    $(ident).attr("title","'.get_lang('ActionNotAllowed').'");
-                }
-            }
-        });
-    }
-}
+'.UserManager::getScriptFunctionForActiveFilter().'
 
 function clear_course_list(div_course) {
     $("div#"+div_course).html("&nbsp;");
@@ -281,7 +246,7 @@ function prepare_user_sql_query($getCount)
     foreach ($keywordList as $keyword) {
         $keywordListValues[$keyword] = null;
         if (isset($_GET[$keyword]) && !empty($_GET[$keyword])) {
-            $keywordListValues[$keyword] = $_GET[$keyword];
+            $keywordListValues[$keyword] = Security::remove_XSS($_GET[$keyword]);
             $atLeastOne = true;
         }
     }
@@ -356,6 +321,8 @@ function prepare_user_sql_query($getCount)
             $sql .= ' AND u.active = 0';
         }
         $sql .= ' ) ';
+    } else {
+        $sql .= ' WHERE 1 = 1 ';
     }
 
     if ($classId) {
@@ -479,6 +446,11 @@ function get_user_data($from, $number_of_items, $column, $direction)
     $from = (int) $from;
     $number_of_items = (int) $number_of_items;
 
+    if (in_array($column, [0, 1, 11])) {
+        $column = 3;
+        $direction = 'ASC';
+    }
+
     $sql .= " ORDER BY col$column $direction ";
     $sql .= " LIMIT $from, $number_of_items";
 
@@ -504,22 +476,44 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 $user[7] = '-1';
             }
         }
-
-        // forget about the expiration date field
-        $users[] = [
-            $user[0], // id
-            $photo,
-            $user[1],
-            $user[2],
-            $user[3],
-            $user[4], // username
-            $user[5], // email
-            $user[6],
-            $user[7], // active
-            api_get_local_time($user[8]),
-            api_get_local_time($user[9], null, null, true),
-            $user[0],
-        ];
+        if (api_get_configuration_value('admin_user_list_add_first_connexion_column')) {
+            $firstConnectionDate = Tracking::get_first_connection_date($user[0]);
+            if ($firstConnectionDate == '') {
+                $firstConnectionDate = get_lang('NoConnexion');
+            }
+            // forget about the expiration date field
+            $users[] = [
+                $user[0], // id
+                $photo,
+                $user[1],
+                $user[2],
+                $user[3],
+                $user[4], // username
+                $user[5], // email
+                $user[6],
+                $user[7], // active
+                api_get_local_time($user[8]),
+                api_get_local_time($user[9], null, null, true),
+                $firstConnectionDate,
+                $user[0],
+            ];
+        } else {
+            // forget about the expiration date field
+            $users[] = [
+                $user[0], // id
+                $photo,
+                $user[1],
+                $user[2],
+                $user[3],
+                $user[4], // username
+                $user[5], // email
+                $user[6],
+                $user[7], // active
+                api_get_local_time($user[8]),
+                api_get_local_time($user[9], null, null, true),
+                $user[0],
+            ];
+        }
     }
 
     return $users;
@@ -570,7 +564,7 @@ function modify_filter($user_id, $url_params, $row)
     $is_admin = in_array($user_id, $_admins_list);
     $statusname = api_get_status_langvars();
     $user_is_anonymous = false;
-    $current_user_status_label = $row['7'];
+    $current_user_status_label = $statusname[$row['7']];
 
     if ($current_user_status_label == $statusname[ANONYMOUS]) {
         $user_is_anonymous = true;
@@ -813,57 +807,6 @@ function modify_filter($user_id, $url_params, $row)
     }
 
     return '<div style="width:205px">'.$result.'</div>';
-}
-
-/**
- * Build the active-column of the table to lock or unlock a certain user
- * lock = the user can no longer use this account.
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @param int    $active the current state of the account
- * @param string $params
- * @param array  $row
- *
- * @return string Some HTML-code with the lock/unlock button
- */
-function active_filter($active, $params, $row)
-{
-    $_user = api_get_user_info();
-
-    if ('1' == $active) {
-        $action = 'Lock';
-        $image = 'accept';
-    } elseif ('-1' == $active) {
-        $action = 'edit';
-        $image = 'warning';
-    } elseif ('0' == $active) {
-        $action = 'Unlock';
-        $image = 'error';
-    }
-
-    $result = '';
-
-    if ('edit' === $action) {
-        $result = Display::return_icon(
-            $image.'.png',
-            get_lang('AccountExpired'),
-            [],
-            16
-        );
-    } elseif ($row['0'] != $_user['user_id']) {
-        // you cannot lock yourself out otherwise you could disable all the
-        // accounts including your own => everybody is locked out and nobody
-        // can change it anymore.
-        $result = Display::return_icon(
-            $image.'.png',
-            get_lang(ucfirst($action)),
-            ['onclick' => 'active_user(this);', 'id' => 'img_'.$row['0']],
-            16
-        );
-    }
-
-    return $result;
 }
 
 /**
@@ -1156,14 +1099,20 @@ $table->set_header(7, get_lang('Profile'));
 $table->set_header(8, get_lang('Active'));
 $table->set_header(9, get_lang('RegistrationDate'));
 $table->set_header(10, get_lang('LatestLogin'));
-$table->set_header(11, get_lang('Action'), false);
+if (api_get_configuration_value('admin_user_list_add_first_connexion_column')) {
+    $table->set_header(11, get_lang('FirstLoginInPlatform'), false);
+    $table->set_header(12, get_lang('Action'), false);
+    $table->set_column_filter(12, 'modify_filter');
+} else {
+    $table->set_header(11, get_lang('Action'), false);
+    $table->set_column_filter(11, 'modify_filter');
+}
 
 $table->set_column_filter(3, 'user_filter');
 $table->set_column_filter(4, 'user_filter');
 $table->set_column_filter(6, 'email_filter');
 $table->set_column_filter(7, 'status_filter');
-$table->set_column_filter(8, 'active_filter');
-$table->set_column_filter(11, 'modify_filter');
+$table->set_column_filter(8, [UserManager::class, 'getActiveFilterForTable']);
 
 // Hide email column if login is email, to avoid column with same data
 if (api_get_setting('login_is_email') === 'true') {

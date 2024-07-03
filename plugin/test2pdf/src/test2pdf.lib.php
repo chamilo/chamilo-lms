@@ -109,7 +109,7 @@ function getQuestionsFromCourse($courseId, $quizId, $sessionId = 0)
             INNER JOIN $tableQuestion b ON a.question_id = b.iid
             INNER JOIN $tableQuiz q ON q.iid = a.exercice_id
             WHERE a.c_id = $courseId AND a.exercice_id = $quizId
-            AND (b.type IN (1, 2, 9, 10, 11, 12, 14))
+            AND (b.type IN (1, 2, 3, 9, 10, 11, 12, 14))
             $conditionSession
             ORDER BY question_order ASC;";
     $res = Database::query($sql);
@@ -136,7 +136,7 @@ function getInfoQuestion($courseId, $id)
     $sql = "SELECT * FROM $tableQuestion
             WHERE
                 iid = $id
-            AND (type IN (1, 2, 9, 10, 11, 12, 14))";
+            AND (type IN (1, 2, 3, 9, 10, 11, 12, 14))";
     $res = Database::query($sql);
     $row = Database::fetch_assoc($res);
 
@@ -165,6 +165,178 @@ function getAnswers($courseId, $id)
     }
 
     return $aux;
+}
+
+/**
+ * Information of an answer type Fill in the blanks.
+ *
+ * @param $answer
+ *
+ * @return array
+ */
+function getAnswerFillInBlanks($answer)
+{
+    $listAnswerResults = [];
+    $listAnswerResults['text'] = '';
+    $listAnswerResults['words_count'] = 0;
+    $listAnswerResults['words_with_bracket'] = [];
+    $listAnswerResults['words'] = [];
+    $listAnswerResults['weighting'] = [];
+    $listAnswerResults['input_size'] = [];
+    $listAnswerResults['switchable'] = '';
+    $listAnswerResults['student_answer'] = [];
+    $listAnswerResults['student_score'] = [];
+    $listAnswerResults['blank_separator_number'] = 0;
+    $listDoubleColon = [];
+
+    api_preg_match("/(.*)::(.*)$/s", $answer, $listResult);
+
+    if (count($listResult) < 2) {
+        $listDoubleColon[] = '';
+        $listDoubleColon[] = '';
+    } else {
+        $listDoubleColon[] = $listResult[1];
+        $listDoubleColon[] = $listResult[2];
+    }
+
+    $listAnswerResults['system_string'] = $listDoubleColon[1];
+
+    // Make sure we only take the last bit to find special marks
+    $listArobaseSplit = explode('@', $listDoubleColon[1]);
+
+    if (count($listArobaseSplit) < 2) {
+        $listArobaseSplit[1] = '';
+    }
+
+    // Take the complete string except after the last '::'
+    $listDetails = explode(':', $listArobaseSplit[0]);
+
+    // < number of item after the ::[score]:[size]:[separator_id]@ , here there are 3
+    if (count($listDetails) < 3) {
+        $listWeightings = explode(',', $listDetails[0]);
+        $listSizeOfInput = [];
+        for ($i = 0; $i < count($listWeightings); $i++) {
+            $listSizeOfInput[] = 200;
+        }
+        $blankSeparatorNumber = 0; // 0 is [...]
+    } else {
+        $listWeightings = explode(',', $listDetails[0]);
+        $listSizeOfInput = explode(',', $listDetails[1]);
+        $blankSeparatorNumber = $listDetails[2];
+    }
+
+    $listSeparators = [
+        ['[', ']'],
+        ['{', '}'],
+        ['(', ')'],
+        ['*', '*'],
+        ['#', '#'],
+        ['%', '%'],
+        ['$', '$'],
+    ];
+
+    $listAnswerResults['text'] = $listDoubleColon[0];
+    $listAnswerResults['weighting'] = $listWeightings;
+    $listAnswerResults['input_size'] = $listSizeOfInput;
+    $listAnswerResults['switchable'] = $listArobaseSplit[1];
+    $listAnswerResults['blank_separator_start'] = $listSeparators[$blankSeparatorNumber][0];
+    $listAnswerResults['blank_separator_end'] = $listSeparators[$blankSeparatorNumber][1];
+    $listAnswerResults['blank_separator_number'] = $blankSeparatorNumber;
+
+    $blankCharStart = $listSeparators[$blankSeparatorNumber][0];
+    $blankCharEnd = $listSeparators[$blankSeparatorNumber][1];
+    $blankCharStartForRegexp = escapeForRegexp($blankCharStart);
+    $blankCharEndForRegexp = escapeForRegexp($blankCharEnd);
+
+    // Get all blanks words
+    $listAnswerResults['words_count'] = api_preg_match_all(
+        '/'.$blankCharStartForRegexp.'[^'.$blankCharEndForRegexp.']*'.$blankCharEndForRegexp.'/',
+        $listDoubleColon[0],
+        $listWords
+    );
+
+    if ($listAnswerResults['words_count'] > 0) {
+        $listAnswerResults['words_with_bracket'] = $listWords[0];
+        // remove [ and ] in string
+        array_walk(
+            $listWords[0],
+            function (&$value, $key, $tabBlankChar) {
+                $trimChars = '';
+                for ($i = 0; $i < count($tabBlankChar); $i++) {
+                    $trimChars .= $tabBlankChar[$i];
+                }
+                $value = trim($value, $trimChars);
+                $key = trim($key);
+            },
+            [$blankCharStart, $blankCharEnd]
+        );
+        $listAnswerResults['words'] = $listWords[0];
+    }
+
+    // Get all common words
+    $commonWords = api_preg_replace(
+        '/'.$blankCharStartForRegexp.'[^'.$blankCharEndForRegexp.']*'.$blankCharEndForRegexp.'/',
+        '::',
+        $listDoubleColon[0]
+    );
+    $listAnswerResults['common_words'] = explode('::', $commonWords);
+
+    return $listAnswerResults;
+}
+
+/**
+ * Escapes text used for question type Fill in the blanks.
+ *
+ * @param $inChar
+ *
+ * @return mixed|string
+ */
+function escapeForRegexp($inChar)
+{
+    $listChars = [
+        ".",
+        "+",
+        "*",
+        "?",
+        "[",
+        "^",
+        "]",
+        "$",
+        "(",
+        ")",
+        "{",
+        "}",
+        "=",
+        "!",
+        ">",
+        "|",
+        ":",
+        "-",
+        ")",
+    ];
+
+    if (in_array($inChar, $listChars)) {
+        return "\\".$inChar;
+    } else {
+        return $inChar;
+    }
+}
+
+/**
+ * Clear the answer entered.
+ *
+ * @param string $answer
+ *
+ * @return string
+ */
+function clearStudentAnswer($answer)
+{
+    $answer = api_html_entity_decode($answer);
+    $answer = api_preg_replace('/\s\s+/', ' ', $answer); // replace excess white spaces
+    $answer = str_replace('&#39;', '&#039;', $answer);
+    $answer = strtr($answer, array_flip(get_html_translation_table(HTML_ENTITIES, ENT_QUOTES)));
+
+    return trim($answer);
 }
 
 /**

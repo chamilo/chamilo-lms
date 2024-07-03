@@ -12,10 +12,12 @@ api_protect_admin_script();
 
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => get_lang('PlatformAdmin')];
 
-$report = isset($_REQUEST['report']) ? $_REQUEST['report'] : '';
+$report = $_REQUEST['report'] ?? '';
 $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_duration'] : '';
 $validated = false;
 $sessionStatusAllowed = api_get_configuration_value('allow_session_status');
+$invoicingMonth = isset($_GET['invoicing_month']) ? (int) $_GET['invoicing_month'] : '';
+$invoicingYear = isset($_GET['invoicing_year']) ? (int) $_GET['invoicing_year'] : '';
 
 if (
 in_array(
@@ -27,12 +29,11 @@ in_array(
     $htmlHeadXtra[] = api_get_asset('chartjs-plugin-labels/build/chartjs-plugin-labels.min.js');
 
     // Prepare variables for the JS charts
-    $url = $reportName = $reportType = $reportOptions = '';
+    $url = $reportName = $reportType = '';
     switch ($report) {
         case 'recentlogins':
-            $url = api_get_path(
-                    WEB_CODE_PATH
-                ).'inc/ajax/statistics.ajax.php?a=recent_logins&session_duration='.$sessionDuration;
+            $url = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=recent_logins&session_duration='
+                .$sessionDuration;
             $reportName = '';
             $reportType = 'line';
             $reportOptions = '';
@@ -353,11 +354,15 @@ $tools = [
         'report=zombies' => get_lang('Zombies'),
         'report=users_active' => get_lang('UserStats'),
         'report=users_online' => get_lang('UsersOnline'),
+        'report=invoicing' => get_lang('InvoicingByAccessUrl'),
+        'report=duplicated_users' => get_lang('DuplicatedUsers'),
+        'report=duplicated_users_by_mail' => get_lang('DuplicatedUsersByMail'),
     ],
     get_lang('System') => [
         'report=activities' => get_lang('ImportantActivities'),
         'report=user_session' => get_lang('PortalUserSessionStats'),
         'report=courses_usage' => get_lang('CoursesUsage'),
+        'report=quarterly_report' => get_lang('QuarterlyReport'),
     ],
     get_lang('Social') => [
         'report=messagereceived' => get_lang('MessagesReceived'),
@@ -368,6 +373,10 @@ $tools = [
         'report=session_by_date' => get_lang('SessionsByDate'),
     ],
 ];
+
+if ('true' === api_get_plugin_setting('lti_provider', 'enabled')) {
+    $tools[get_lang('Users')]['report=lti_tool_lp'] = get_lang('LearningPathLTI');
+}
 
 $course_categories = Statistics::getCourseCategories();
 $content = '';
@@ -382,7 +391,7 @@ switch ($report) {
         $coursesList = [];
         $op = [];
         $today = new DateTime();
-        $reportPost = isset($_POST['report']) ? $_POST['report'] : null;
+        $reportPost = $_POST['report'] ?? null;
         $endDate = $today->format('Y-m-d');
         $pag = 0;
         $fechas = [
@@ -572,8 +581,6 @@ switch ($report) {
                 $sessionCount++;
             }
 
-            $content .= Display::page_subheader2(get_lang('GeneralStats'));
-
             // Coach
             $sql = "SELECT count(DISTINCT(id_coach)) count FROM $tableSession
                     WHERE
@@ -626,6 +633,52 @@ switch ($report) {
                 }
             }
 
+            $content .= Display::page_subheader2(get_lang('UsersReportByCourseInSessions'));
+
+            $tableCourse = new HTML_Table(['class' => 'table table-responsive']);
+            $headers = [
+                get_lang('Course'),
+                get_lang('CountOfSessions'),
+                get_lang('UsersReport'),
+            ];
+
+            $row = 0;
+            $column = 0;
+            foreach ($headers as $header) {
+                $tableCourse->setHeaderContents($row, $column, $header);
+                $column++;
+            }
+            $row++;
+
+            if (!empty($courseSessions)) {
+                $dateStart = null;
+                $dateEnd = null;
+                if (isset($_REQUEST['range_start'])) {
+                    $dateStart = Security::remove_XSS($_REQUEST['range_start']);
+                }
+                if (isset($_REQUEST['range_end'])) {
+                    $dateEnd = Security::remove_XSS($_REQUEST['range_end']);
+                }
+                $conditions = "&date_start=$dateStart&date_end=$dateEnd";
+                arsort($courseSessions);
+                foreach ($courseSessions as $courseId => $count) {
+                    $courseInfo = api_get_course_info_by_id($courseId);
+                    $tableCourse->setCellContents($row, 0, $courseInfo['name']);
+                    $tableCourse->setCellContents($row, 1, $count);
+                    $exportLink = api_get_self().'?report=session_by_date&course_id='.$courseId.'&action=export_users'.$conditions;
+                    $urlExport = Display::url(
+                        Display::return_icon('excel.png', get_lang('UsersReport')),
+                        $exportLink
+                    );
+                    $tableCourse->setCellContents($row, 2, $urlExport);
+                    $row++;
+                }
+            }
+
+            $content .= $tableCourse->toHtml();
+
+            $content .= Display::page_subheader2(get_lang('GeneralStats'));
+
             $table = new HTML_Table(['class' => 'table table-responsive']);
             $row = 0;
             $table->setCellContents($row, 0, get_lang('Weeks'));
@@ -658,32 +711,6 @@ switch ($report) {
                 $content .= '<div class="col-md-4"><h4 class="page-header" id="canvas3_title"></h4><div id="canvas3_table"></div></div>';
             }
             $content .= '</div>';
-
-            $tableCourse = new HTML_Table(['class' => 'table table-responsive']);
-            $headers = [
-                get_lang('Course'),
-                get_lang('CountOfSessions'),
-            ];
-
-            $row = 0;
-            $column = 0;
-            foreach ($headers as $header) {
-                $tableCourse->setHeaderContents($row, $column, $header);
-                $column++;
-            }
-            $row++;
-
-            if (!empty($courseSessions)) {
-                arsort($courseSessions);
-                foreach ($courseSessions as $courseId => $count) {
-                    $courseInfo = api_get_course_info_by_id($courseId);
-                    $tableCourse->setCellContents($row, 0, $courseInfo['name']);
-                    $tableCourse->setCellContents($row, 1, $count);
-                    $row++;
-                }
-            }
-
-            $content .= $tableCourse->toHtml();
 
             $content .= '<div class="row">';
             $content .= '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
@@ -745,6 +772,15 @@ switch ($report) {
 
         $content .= $table->toHtml();
 
+        if (isset($_REQUEST['action']) && 'export_users' === $_REQUEST['action'] && isset($_REQUEST['course_id'])) {
+            $courseId = intval($_REQUEST['course_id']);
+            $startDate = isset($_REQUEST['date_start']) ? Database::escape_string($_REQUEST['date_start']) : null;
+            $endDate = isset($_REQUEST['date_end']) ? Database::escape_string($_REQUEST['date_end']) : null;
+
+            Statistics::exportUserReportByCourseSession($courseId, $startDate, $endDate);
+            exit;
+        }
+
         if (isset($_REQUEST['action']) && 'export' === $_REQUEST['action']) {
             $data = $table->toArray();
             Export::arrayToXls($data);
@@ -771,11 +807,11 @@ switch ($report) {
         break;
     case 'user_session':
         $form = new FormValidator('user_session', 'get');
-        $form->addDateRangePicker('range', get_lang('DateRange'), true);
+        $form->addDateRangePicker('range', get_lang('DateRange'));
         $form->addHidden('report', 'user_session');
         $form->addButtonSearch(get_lang('Search'));
 
-        $date = new DateTime($now);
+        $date = new DateTime('now');
         $startDate = $date->format('Y-m-d').' 00:00:00';
         $endDate = $date->format('Y-m-d').' 23:59:59';
         $start = $startDate;
@@ -867,6 +903,7 @@ switch ($report) {
     case 'courses':
         $content .= '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
         // total amount of courses
+        $courses = [];
         foreach ($course_categories as $code => $name) {
             $courses[$name] = Statistics::countCourses($code);
         }
@@ -880,10 +917,23 @@ switch ($report) {
     case 'coursebylanguage':
         $content .= '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
         $result = Statistics::printCourseByLanguageStats();
-        $content .= Statistics::printStats(get_lang('CountCourseByLanguage'), $result, true);
+        $content .= Statistics::printStats(get_lang('CountCourseByLanguage'), $result);
         break;
     case 'courselastvisit':
         $content .= Statistics::printCourseLastVisit();
+        break;
+    case 'invoicing':
+        if (!empty($invoicingMonth)) {
+            $invoicingMonth = sprintf("%02d", $invoicingMonth);
+            $currentMonth = $invoicingYear.'-'.$invoicingMonth;
+            $lastMonth = date("Y-m", mktime(0, 0, 0, $invoicingMonth, 0, $invoicingYear));
+        } else {
+            $currentMonth = date("Y-m");
+            $lastMonth = date("Y-m", strtotime('-1 month'));
+            $invoicingMonth = date('m');
+            $invoicingYear = date('Y');
+        }
+        $content .= Statistics::printInvoicingByAccessUrl($currentMonth, $lastMonth, $invoicingMonth, $invoicingYear);
         break;
     case 'users_active':
         $content = '';
@@ -995,20 +1045,20 @@ switch ($report) {
                 }
 
                 $certificate = GradebookUtils::get_certificate_by_user_id(0, $userId);
-                $language = isset($extraFields['langue_cible']) ? $extraFields['langue_cible'] : '';
+                $language = $extraFields['langue_cible'] ?? '';
                 //$contract = isset($extraFields['termactivated']) ? $extraFields['termactivated'] : '';
                 $contract = false;
                 $legalAccept = $extraFieldValueUser->get_values_by_handler_and_field_variable($userId, 'legal_accept');
-                if ($legalAccept && isset($legalAccept['value'])) {
+                if ($legalAccept && !empty($legalAccept['value'])) {
                     list($legalId, $legalLanguageId, $legalTime) = explode(':', $legalAccept['value']);
                     if ($legalId) {
                         $contract = true;
                     }
                 }
 
-                $residence = isset($extraFields['terms_paysresidence']) ? $extraFields['terms_paysresidence'] : '';
-                $career = isset($extraFields['filiere_user']) ? $extraFields['filiere_user'] : '';
-                $birthDate = isset($extraFields['terms_datedenaissance']) ? $extraFields['terms_datedenaissance'] : '';
+                $residence = $extraFields['terms_paysresidence'] ?? '';
+                $career = $extraFields['filiere_user'] ?? '';
+                $birthDate = $extraFields['terms_datedenaissance'] ?? '';
 
                 $userLanguage = '';
                 if (!empty($user['language'])) {
@@ -1034,7 +1084,6 @@ switch ($report) {
                 $item[] = $certificate ? get_lang('Yes') : get_lang('No');
                 $item[] = $birthDate;
                 $data[] = $item;
-                $row++;
             }
 
             if (isset($_REQUEST['action_table']) && 'export' === $_REQUEST['action_table']) {
@@ -1144,8 +1193,7 @@ switch ($report) {
                     false,
                     false,
                     null,
-                    $extraConditions,
-                    false
+                    $extraConditions
                 );
 
                 $userIdList = array_column($users, 'user_id');
@@ -1170,7 +1218,7 @@ switch ($report) {
                     $count = $result['count'];
                     $usersFound += $count;
 
-                    $option = $extraFieldOption->get($item['id'], true);
+                    $option = $extraFieldOption->get($item['id']);
                     $item['display_text'] = $option['display_text'];
                     $all[$item['display_text']] = $count;
                 }
@@ -1230,8 +1278,7 @@ switch ($report) {
                     false,
                     false,
                     null,
-                    $extraConditions,
-                    false
+                    $extraConditions
                 );
 
                 $userIdList = array_column($users, 'user_id');
@@ -1279,8 +1326,7 @@ switch ($report) {
                     false,
                     false,
                     null,
-                    $extraConditions,
-                    false
+                    $extraConditions
                 );
 
                 $userIdList = array_column($users, 'user_id');
@@ -1312,7 +1358,7 @@ switch ($report) {
                         if ($validDate) {
                             $date1 = new DateTime($row['value']);
                             $interval = $now->diff($date1);
-                            $years = (int) $interval->y;
+                            $years = $interval->y;
 
                             if ($years >= 16 && $years <= 17) {
                                 $all['16-17']++;
@@ -1348,8 +1394,7 @@ switch ($report) {
                     false,
                     false,
                     null,
-                    $extraConditions,
-                    false
+                    $extraConditions
                 );
 
                 $userIdList = array_column($users, 'user_id');
@@ -1370,7 +1415,7 @@ switch ($report) {
                     $query = Database::query($sql);
                     $result = Database::fetch_array($query);
                     $count = $result['count'];
-                    $option = $extraFieldOption->get($item['id'], true);
+                    $option = $extraFieldOption->get($item['id']);
                     $item['display_text'] = $option['display_text'];
                     $all[$item['display_text']] = $count;
                     $usersFound += $count;
@@ -1398,8 +1443,7 @@ switch ($report) {
                     false,
                     false,
                     null,
-                    $extraConditions,
-                    false
+                    $extraConditions
                 );
 
                 $userIdList = array_column($users, 'user_id');
@@ -1440,8 +1484,7 @@ switch ($report) {
                     false,
                     false,
                     null,
-                    $extraConditions,
-                    false
+                    $extraConditions
                 );
 
                 $total = count($users);
@@ -1485,7 +1528,7 @@ switch ($report) {
         foreach ($intervals as $minutes) {
             $sql = "SELECT count(distinct(user_id))
                 FROM $table WHERE
-                DATE_ADD(tms, INTERVAL '$minutes' MINUTE) > UTC_TIMESTAMP()";
+                tms > DATE_SUB(UTC_TIMESTAMP(), INTERVAL '$minutes' MINUTE)";
             $query = Database::query($sql);
             $counts[$minutes] = 0;
             if (Database::num_rows($query) > 0) {
@@ -1683,6 +1726,219 @@ switch ($report) {
         break;
     case 'logins_by_date':
         $content .= Statistics::printLoginsByDate();
+        break;
+    case 'lti_tool_lp':
+        $content .= Statistics::printLtiLearningPath();
+        break;
+    case 'quarterly_report':
+
+        $htmlHeadXtra[] = '<script>
+                function loadReportQuarterlyUsers () {
+                    $("#tracking-report-quarterly-users")
+                        .html(\'<p><span class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></span></p>\')
+                        .load(_p.web_ajax + "statistics.ajax.php?a=report_quarterly_users");
+            }</script>';
+        $htmlHeadXtra[] = '<script>
+                function loadReportQuarterlyCourses () {
+                    $("#tracking-report-quarterly-courses")
+                        .html(\'<p><span class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></span></p>\')
+                        .load(_p.web_ajax + "statistics.ajax.php?a=report_quarterly_courses");
+            }</script>';
+
+        $htmlHeadXtra[] = '<script>
+                function loadReportQuarterlyHoursOfTraining () {
+                    $("#tracking-report-quarterly-hours-of-training")
+                        .html(\'<p><span class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></span></p>\')
+                        .load(_p.web_ajax + "statistics.ajax.php?a=report_quarterly_hours_of_training");
+            }</script>';
+
+        $htmlHeadXtra[] = '<script>
+                function loadReportQuarterlyCertificatesGenerated () {
+                    $("#tracking-report-quarterly-number-of-certificates-generated")
+                        .html(\'<p><span class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></span></p>\')
+                        .load(_p.web_ajax + "statistics.ajax.php?a=report_quarterly_number_of_certificates_generated");
+            }</script>';
+
+        $htmlHeadXtra[] = '<script>
+                function loadReportQuarterlySessionsByDuration () {
+                    $("#tracking-report-quarterly-sessions-by-duration")
+                        .html(\'<p><span class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></span></p>\')
+                        .load(_p.web_ajax + "statistics.ajax.php?a=report_quarterly_sessions_by_duration");
+            }</script>';
+
+        $htmlHeadXtra[] = '<script>
+                function loadReportQuarterlyCoursesAndSessions () {
+                    $("#tracking-report-quarterly-courses-and-sessions")
+                        .html(\'<p><span class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></span></p>\')
+                        .load(_p.web_ajax + "statistics.ajax.php?a=report_quarterly_courses_and_sessions");
+            }</script>';
+
+        if (api_get_current_access_url_id() === 1) {
+            $htmlHeadXtra[] = '<script>
+                function loadReportQuarterlyTotalDiskUsage () {
+                    $("#tracking-report-quarterly-total-disk-usage")
+                        .html(\'<p><span class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></span></p>\')
+                        .load(_p.web_ajax + "statistics.ajax.php?a=report_quarterly_total_disk_usage");
+            }</script>';
+        }
+
+        $content .= Display::tag('H4', get_lang('ReportQuarterlyUsers'), ['style' => 'margin-bottom: 25px;']);
+        $content .= Display::url(
+            get_lang('Show'),
+            'javascript://',
+            ['onclick' => 'loadReportQuarterlyUsers();', 'class' => 'btn btn-default']
+        );
+        $content .= Display::div('', ['id' => 'tracking-report-quarterly-users', 'style' => 'margin: 30px;']);
+
+        $content .= Display::tag('H4', get_lang('ReportQuarterlyCourses'), ['style' => 'margin-bottom: 25px;']);
+        $content .= Display::url(
+            get_lang('Show'),
+            'javascript://',
+            ['onclick' => 'loadReportQuarterlyCourses();', 'class' => 'btn btn-default']
+        );
+        $content .= Display::div('', ['id' => 'tracking-report-quarterly-courses', 'style' => 'margin: 30px;']);
+
+        $content .= Display::tag('H4', get_lang('ReportQuarterlyHoursOfTraining'), ['style' => 'margin-bottom: 25px;']);
+        $content .= Display::url(
+            get_lang('Show'),
+            'javascript://',
+            ['onclick' => 'loadReportQuarterlyHoursOfTraining();', 'class' => 'btn btn-default']
+        );
+        $content .= Display::div(
+            '',
+            [
+                'id' => 'tracking-report-quarterly-hours-of-training',
+                'style' => 'margin: 30px;',
+            ]
+        );
+        $content .= Display::tag(
+            'H4',
+            get_lang('ReportQuarterlyNumberOfCertificatesGenerated'),
+            ['style' => 'margin-bottom: 25px;']
+        );
+        $content .= Display::url(
+            get_lang('Show'),
+            'javascript://',
+            ['onclick' => 'loadReportQuarterlyCertificatesGenerated();', 'class' => 'btn btn-default']
+        );
+        $content .= Display::div(
+            '',
+            ['id' => 'tracking-report-quarterly-number-of-certificates-generated', 'style' => 'margin: 30px;']
+        );
+        $content .= Display::tag(
+            'H4',
+            get_lang('ReportQuarterlySessionsByDuration'),
+            ['style' => 'margin-bottom: 25px;']
+        );
+        $content .= Display::url(
+            get_lang('Show'),
+            'javascript://',
+            ['onclick' => 'loadReportQuarterlySessionsByDuration();', 'class' => 'btn btn-default']
+        );
+        $content .= Display::div(
+            '',
+            ['id' => 'tracking-report-quarterly-sessions-by-duration', 'style' => 'margin: 30px;']
+        );
+        $content .= Display::tag(
+            'H4',
+            get_lang('ReportQuarterlyCoursesAndSessions'),
+            ['style' => 'margin-bottom: 25px;']
+        );
+        $content .= Display::url(
+            get_lang('Show'),
+            'javascript://',
+            ['onclick' => 'loadReportQuarterlyCoursesAndSessions();', 'class' => 'btn btn-default']
+        );
+        $content .= Display::div(
+            '',
+            [
+                'id' => 'tracking-report-quarterly-courses-and-sessions',
+                'style' => 'margin: 30px;',
+            ]
+        );
+
+        if (api_get_current_access_url_id() === 1) {
+            $content .= Display::tag(
+                'H4',
+                get_lang('ReportQuarterlyTotalDiskUsage'),
+                ['style' => 'margin-bottom: 25px;']
+            );
+            $content .= Display::url(
+                get_lang('Show'),
+                'javascript://',
+                ['onclick' => 'loadReportQuarterlyTotalDiskUsage();', 'class' => 'btn btn-default']
+            );
+            $content .= Display::div(
+                '',
+                [
+                    'id' => 'tracking-report-quarterly-total-disk-usage',
+                    'style' => 'margin: 30px;',
+                ]
+            );
+        }
+
+        break;
+    case 'duplicated_users':
+        $interbreadcrumb[] = [
+            'name' => $tool_name,
+            'url' => 'index.php',
+        ];
+
+        $additionalExtraFieldsInfo = TrackingCourseLog::getAdditionalProfileExtraFields();
+
+        $frmFields = TrackingCourseLog::displayAdditionalProfileFields([], api_get_self());
+        $table = Statistics::returnDuplicatedUsersTable('name', $additionalExtraFieldsInfo);
+
+        if (isset($_GET['action_table'])) {
+            $data = $table->toArray(true, true);
+
+            if ('export_excel' === $_GET['action_table']) {
+                Export::arrayToXls($data);
+            } elseif ('export_csv' === $_GET['action_table']) {
+                Export::arrayToCsv($data);
+            }
+
+            exit;
+        }
+
+        $htmlHeadXtra[] = '<script>'.UserManager::getScriptFunctionForActiveFilter().'</script>';
+
+        $content .= Display::page_subheader2(get_lang('DuplicatedUsers'));
+        $content .= Display::return_message(get_lang('ThisReportOnlyListsUsersThatHaveTheSameFirstnameAndLastname'));
+
+        $content .= $frmFields;
+        $content .= $table->return_table();
+        break;
+    case 'duplicated_users_by_mail':
+        $interbreadcrumb[] = [
+            'name' => $tool_name,
+            'url' => 'index.php',
+        ];
+
+        $additionalExtraFieldsInfo = TrackingCourseLog::getAdditionalProfileExtraFields();
+
+        $frmFields = TrackingCourseLog::displayAdditionalProfileFields([], api_get_self());
+        $table = Statistics::returnDuplicatedUsersTable('email', $additionalExtraFieldsInfo);
+
+        if (isset($_GET['action_table'])) {
+            $data = $table->toArray(true, true);
+
+            if ('export_excel' === $_GET['action_table']) {
+                Export::arrayToXls($data);
+            } elseif ('export_csv' === $_GET['action_table']) {
+                Export::arrayToCsv($data);
+            }
+
+            exit;
+        }
+
+        $htmlHeadXtra[] = '<script>'.UserManager::getScriptFunctionForActiveFilter().'</script>';
+
+        $content .= Display::page_subheader2(get_lang('DuplicatedUsersByMail'));
+        $content .= Display::return_message(get_lang('ThisReportOnlyListsUsersThatHaveTheSameEmail'));
+
+        $content .= $frmFields;
+        $content .= $table->return_table();
         break;
 }
 

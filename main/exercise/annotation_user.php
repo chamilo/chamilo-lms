@@ -34,31 +34,35 @@ $data = [
     ],
 ];
 
-$attemptList = Event::getAllExerciseEventByExeId($exerciseId);
+$questionAttempt = Event::getQuestionAttemptByExeIdAndQuestion($exerciseId, $questionId);
 
-if (!empty($attemptList) && isset($attemptList[$questionId])) {
-    $questionAttempt = $attemptList[$questionId][0];
-    if (!empty($questionAttempt['answer'])) {
-        $answers = explode('|', $questionAttempt['answer']);
-        foreach ($answers as $answer) {
-            $parts = explode(')(', $answer);
-            $type = array_shift($parts);
+if (!empty($questionAttempt['answer'])) {
+    $answers = explode('|', $questionAttempt['answer']);
+    foreach ($answers as $answer) {
+        $parts = explode(')(', $answer);
+        $typeProperties = array_shift($parts);
+        $properties = explode(';', $typeProperties);
 
-            switch ($type) {
-                case 'P':
-                    $points = [];
-                    foreach ($parts as $partPoint) {
-                        $points[] = Geometry::decodePoint($partPoint);
-                    }
-                    $data['answers']['paths'][] = $points;
-                    break;
-                case 'T':
-                    $text = [
-                        'text' => array_shift($parts),
-                    ];
-                    $data['answers']['texts'][] = $text + Geometry::decodePoint($parts[0]);
-                    break;
-            }
+        switch ($properties[0]) {
+            case 'P':
+                $points = [];
+                foreach ($parts as $partPoint) {
+                    $points[] = Geometry::decodePoint($partPoint);
+                }
+                $data['answers']['paths'][] = [
+                    'color' => $properties[1] ?? '#FF0000',
+                    'points' => $points,
+                ];
+                break;
+            case 'T':
+                $text = [
+                    'text' => array_shift($parts),
+                    'color' => $properties[1] ?? '#FF0000',
+                    'fontSize' => $properties[2] ?? '20',
+                ];
+
+                $data['answers']['texts'][] = $text + Geometry::decodePoint($parts[0]);
+                break;
         }
     }
 }

@@ -24,8 +24,7 @@ class LtiAuthException extends Exception
     /**
      * LtiAuthException constructor.
      *
-     * @param int            $code
-     * @param Throwable|null $previous
+     * @param int $code
      */
     public function __construct($code = 0, Throwable $previous = null)
     {
@@ -77,8 +76,6 @@ class LtiAuthException extends Exception
     }
 
     /**
-     * @param Throwable|null $previous
-     *
      * @return LtiAuthException
      */
     public static function invalidRequest(Throwable $previous = null)
@@ -87,8 +84,6 @@ class LtiAuthException extends Exception
     }
 
     /**
-     * @param Throwable|null $previous
-     *
      * @return LtiAuthException
      */
     public static function invalidScope(Throwable $previous = null)
@@ -97,8 +92,6 @@ class LtiAuthException extends Exception
     }
 
     /**
-     * @param Throwable|null $previous
-     *
      * @return LtiAuthException
      */
     public static function unsupportedResponseType(Throwable $previous = null)
@@ -107,8 +100,6 @@ class LtiAuthException extends Exception
     }
 
     /**
-     * @param Throwable|null $previous
-     *
      * @return LtiAuthException
      */
     public static function unauthorizedClient(Throwable $previous = null)
@@ -117,8 +108,6 @@ class LtiAuthException extends Exception
     }
 
     /**
-     * @param Throwable|null $previous
-     *
      * @return LtiAuthException
      */
     public static function accessDenied(Throwable $previous = null)
@@ -127,8 +116,6 @@ class LtiAuthException extends Exception
     }
 
     /**
-     * @param Throwable|null $previous
-     *
      * @return LtiAuthException
      */
     public static function unregisteredRedirectUri(Throwable $previous = null)
@@ -137,8 +124,6 @@ class LtiAuthException extends Exception
     }
 
     /**
-     * @param Throwable|null $previous
-     *
      * @return LtiAuthException
      */
     public static function invalidRespondeMode(Throwable $previous = null)
@@ -147,8 +132,6 @@ class LtiAuthException extends Exception
     }
 
     /**
-     * @param Throwable|null $previous
-     *
      * @return LtiAuthException
      */
     public static function missingResponseMode(Throwable $previous = null)
@@ -157,8 +140,6 @@ class LtiAuthException extends Exception
     }
 
     /**
-     * @param Throwable|null $previous
-     *
      * @return LtiAuthException
      */
     public static function invalidPrompt(Throwable $previous = null)

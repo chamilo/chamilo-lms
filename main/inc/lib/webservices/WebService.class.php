@@ -32,6 +32,16 @@ class WebService
         /** @var User user */
         $this->user = UserManager::getManager()->findUserByUsername($username);
         $this->apiKey = $apiKey;
+
+        $_user = [
+            'user_id' => $this->user->getId(),
+            'status' => $this->user->getStatus(),
+            'uidReset' => true,
+        ];
+        ChamiloSession::write('_user', $_user);
+        ChamiloSession::write('is_allowed_in_course', true);
+
+        Login::init_user($this->user->getId(), true);
     }
 
     /**
@@ -93,10 +103,11 @@ class WebService
             return false;
         }
 
-        return UserManager::isPasswordValid(
+        return UserManager::checkPassword(
             $user->getPassword(),
             $password,
-            $user->getSalt()
+            $user->getSalt(),
+            $user->getId()
         );
     }
 
@@ -106,5 +117,24 @@ class WebService
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected static function throwNotAllowedException()
+    {
+        throw new Exception(get_lang('NotAllowed'));
+    }
+
+    /**
+     * Prevent access to this webservice if the user is not a platform admin
+     * @throws Exception
+     */
+    protected static function protectAdminEndpoint()
+    {
+        if (!api_is_platform_admin()) {
+            self::throwNotAllowedException();
+        }
     }
 }

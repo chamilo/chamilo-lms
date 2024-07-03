@@ -45,20 +45,20 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
                 $limitDate = gmdate($limitDateFormat, strtotime("$limitDate -$resubscriptionOffset"));
             }
 
-            $join = " INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION)."ON id = session_id";
+            $join = " INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION)." s ON s.id = su.session_id";
 
             // User sessions and courses
             $userSessions = Database::select(
-                'session_id, date_end',
-                Database::get_main_table(TABLE_MAIN_SESSION_USER).$join,
+                'su.session_id, s.access_end_date',
+                Database::get_main_table(TABLE_MAIN_SESSION_USER).' su '.$join,
                 [
                     'where' => [
-                        'user_id = ? AND date_end >= ?' => [
+                        'su.user_id = ? AND s.access_end_date >= ?' => [
                             api_get_user_id(),
                             $limitDate,
                         ],
                     ],
-                    'order' => 'date_end DESC',
+                    'order' => 'access_end_date DESC',
                 ]
             );
             $userSessionCourses = [];
@@ -76,7 +76,7 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
                 );
                 foreach ($userSessionCourseResult as $userSessionCourse) {
                     if (!isset($userSessionCourses[$userSessionCourse['c_id']])) {
-                        $userSessionCourses[$userSessionCourse['c_id']] = $userSession['date_end'];
+                        $userSessionCourses[$userSessionCourse['c_id']] = $userSession['access_end_date'];
                     }
                 }
             }

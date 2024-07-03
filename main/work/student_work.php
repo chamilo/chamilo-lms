@@ -82,7 +82,7 @@ $interbreadcrumb[] = [
     'name' => $userInfo['complete_name'],
 ];
 
-Display :: display_header(null);
+Display::display_header(null);
 
 $workPerUser = getWorkPerUser($studentId);
 
@@ -174,4 +174,4 @@ foreach ($workPerUser as $work) {
 echo Display::page_subheader($userInfo['complete_name']);
 echo $table->toHtml();
 
-Display :: display_footer();
+Display::display_footer();

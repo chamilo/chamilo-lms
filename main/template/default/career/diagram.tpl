@@ -80,7 +80,11 @@
                 {% endfor %}
 
                 {% for vertex in vertex_list %}
-                    {{ vertex }}
+                    {% if 0 == iframe %}
+                        {{ vertex |replace({'iframe=1': 'iframe=0',})}}
+                    {% else %}
+                        {{ vertex }}
+                    {% endif %}
                 {% endfor %}
 
                 {% for vertex in connections %}

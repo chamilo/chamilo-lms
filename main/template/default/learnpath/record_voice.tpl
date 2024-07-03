@@ -188,7 +188,7 @@
 
         $('#record-audio-recordrtc, #record-audio-wami').hide();
         var webRTCIsEnabled = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.getUserMedia ||
-                navigator.mediaDevices.getUserMedia;
+          (navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
 
         if (webRTCIsEnabled) {
             useRecordRTC();

@@ -66,6 +66,7 @@ class UnserializeApi
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\ToolIntro::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\Wiki::class,
                     \Chamilo\CourseBundle\Component\CourseCopy\Resources\Work::class,
+                    \Chamilo\CourseBundle\Component\CourseCopy\Resources\XapiTool::class,
                     \Chamilo\CourseBundle\Entity\CLpCategory::class,
                     stdClass::class,
                     Category::class,

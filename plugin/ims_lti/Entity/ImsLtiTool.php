@@ -5,13 +5,13 @@ namespace Chamilo\PluginBundle\Entity\ImsLti;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
+use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
-use PHPExiftool\Driver\Tag\MXF\ViewportAspectRatio;
 
 /**
- * Class ImsLtiTool
+ * Class ImsLtiTool.
  *
  * @ORM\Table(name="plugin_ims_lti_tool")
  * @ORM\Entity()
@@ -25,7 +25,7 @@ class ImsLtiTool
      */
     public $publicKey;
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -75,7 +75,7 @@ class ImsLtiTool
      */
     private $activeDeepLinking = false;
     /**
-     * @var null|string
+     * @var string|null
      *
      * @ORM\Column(name="privacy", type="text", nullable=true, options={"default": null})
      */
@@ -87,6 +87,13 @@ class ImsLtiTool
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
     private $course = null;
+    /**
+     * @var Session|null
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+     */
+    private $session = null;
     /**
      * @var GradebookEvaluation|null
      *
@@ -126,6 +133,13 @@ class ImsLtiTool
      * @ORM\Column(name="redirect_url", type="string", nullable=true)
      */
     private $redirectUrl;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="jwks_url", type="string", nullable=true)
+     */
+    private $jwksUrl;
 
     /**
      * @var array
@@ -176,7 +190,7 @@ class ImsLtiTool
         $this->consumerKey = null;
         $this->sharedSecret = null;
         $this->lineItems = new ArrayCollection();
-        $this->version = \ImsLti::V_1P1;
+        $this->version = \ImsLti::V_1P3;
         $this->launchPresentation = [
             'document_target' => 'iframe',
         ];
@@ -212,7 +226,7 @@ class ImsLtiTool
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getDescription()
     {
@@ -220,7 +234,7 @@ class ImsLtiTool
     }
 
     /**
-     * @param null|string $description
+     * @param string|null $description
      *
      * @return ImsLtiTool
      */
@@ -252,7 +266,7 @@ class ImsLtiTool
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getCustomParams()
     {
@@ -260,7 +274,7 @@ class ImsLtiTool
     }
 
     /**
-     * @param null|string $customParams
+     * @param string|null $customParams
      *
      * @return ImsLtiTool
      */
@@ -280,9 +294,7 @@ class ImsLtiTool
     }
 
     /**
-     * @param array $params
-     *
-     * @return null|string
+     * @return string|null
      */
     public function encodeCustomParams(array $params)
     {
@@ -318,46 +330,6 @@ class ImsLtiTool
         }
 
         return $params;
-    }
-
-    /**
-     * Map the key from custom param.
-     *
-     * @param string $key
-     *
-     * @return string
-     */
-    private static function filterSpecialChars($key)
-    {
-        $newKey = '';
-        $key = strtolower($key);
-        $split = str_split($key);
-
-        foreach ($split as $char) {
-            if (
-                ($char >= 'a' && $char <= 'z') || ($char >= '0' && $char <= '9')
-            ) {
-                $newKey .= $char;
-
-                continue;
-            }
-
-            $newKey .= '_';
-        }
-
-        return $newKey;
-    }
-
-    /**
-     * @param string $value
-     *
-     * @return string
-     */
-    private static function filterSpaces($value)
-    {
-        $newValue = preg_replace('/\s+/', ' ', $value);
-
-        return trim($newValue);
     }
 
     /**
@@ -424,13 +396,35 @@ class ImsLtiTool
     /**
      * Set course.
      *
-     * @param Course|null $course
-     *
      * @return ImsLtiTool
      */
     public function setCourse(Course $course = null)
     {
         $this->course = $course;
+
+        return $this;
+    }
+
+    /**
+     * Get session.
+     *
+     * @return Session|null
+     */
+    public function getSession()
+    {
+        return $this->session;
+    }
+
+    /**
+     * Set session.
+     *
+     * @param Session|null $course
+     *
+     * @return ImsLtiTool
+     */
+    public function setSession(Session $session = null)
+    {
+        $this->session = $session;
 
         return $this;
     }
@@ -506,8 +500,6 @@ class ImsLtiTool
     }
 
     /**
-     * @param ImsLtiTool $parent
-     *
      * @return ImsLtiTool
      */
     public function setParent(ImsLtiTool $parent)
@@ -564,7 +556,7 @@ class ImsLtiTool
     /**
      * Get privacy.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getPrivacy()
     {
@@ -596,7 +588,7 @@ class ImsLtiTool
     /**
      * Get loginUrl.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getLoginUrl()
     {
@@ -637,6 +629,30 @@ class ImsLtiTool
     public function setRedirectUrl($redirectUrl)
     {
         $this->redirectUrl = $redirectUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get jwksUrl.
+     *
+     * @return string|null
+     */
+    public function getJwksUrl()
+    {
+        return $this->jwksUrl;
+    }
+
+    /**
+     * Set jwksUrl.
+     *
+     * @param string|null $jwksUrl
+     *
+     * @return ImsLtiTool
+     */
+    public function setJwksUrl($jwksUrl)
+    {
+        $this->jwksUrl = $jwksUrl;
 
         return $this;
     }
@@ -702,8 +718,6 @@ class ImsLtiTool
     /**
      * Add LineItem to lineItems.
      *
-     * @param LineItem $lineItem
-     *
      * @return $this
      */
     public function addLineItem(LineItem $lineItem)
@@ -756,8 +770,6 @@ class ImsLtiTool
 
     /**
      * Set lineItems.
-     *
-     * @param ArrayCollection $lineItems
      *
      * @return $this
      */
@@ -865,8 +877,6 @@ class ImsLtiTool
     }
 
     /**
-     * @param array $coursesId
-     *
      * @return ArrayCollection
      */
     public function getChildrenInCourses(array $coursesId)
@@ -876,5 +886,45 @@ class ImsLtiTool
                 return in_array($child->getCourse()->getId(), $coursesId);
             }
         );
+    }
+
+    /**
+     * Map the key from custom param.
+     *
+     * @param string $key
+     *
+     * @return string
+     */
+    private static function filterSpecialChars($key)
+    {
+        $newKey = '';
+        $key = strtolower($key);
+        $split = str_split($key);
+
+        foreach ($split as $char) {
+            if (
+                ($char >= 'a' && $char <= 'z') || ($char >= '0' && $char <= '9')
+            ) {
+                $newKey .= $char;
+
+                continue;
+            }
+
+            $newKey .= '_';
+        }
+
+        return $newKey;
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return string
+     */
+    private static function filterSpaces($value)
+    {
+        $newValue = preg_replace('/\s+/', ' ', $value);
+
+        return trim($newValue);
     }
 }

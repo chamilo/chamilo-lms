@@ -85,8 +85,8 @@ $group_properties = [];
 
 $htmlHeadXtra[] = '<script>
 function check_unzip() {
-    if (document.upload.unzip.checked) {        
-        document.upload.if_exists[1].checked=true;        
+    if (document.upload.unzip.checked) {
+        document.upload.if_exists[1].checked=true;
     } else {
         document.upload.if_exists[2].checked=true;
     }
@@ -257,10 +257,11 @@ $form->addElement('hidden', 'curdirpath', $path);
 
 $courseQuota = format_file_size(DocumentManager::get_course_quota() - DocumentManager::documents_total_space());
 $label =
-    get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.
+    get_lang('MaxFileSize').': '.getIniMaxFileSizeInBytes(true).'<br/>'.
     get_lang('DocumentQuota').': '.$courseQuota;
 
-$form->addElement('file', 'file', [get_lang('File'), $label], 'style="width: 250px" id="user_upload"');
+$form->addElement('BigUpload', 'file', [get_lang('File'), $label], ['id' => 'bigUploadFile', 'data-origin' => 'document']);
+//$form->addElement('file', 'file', [get_lang('File'), $label], ['id' => 'user_upload']);
 $form->addElement('text', 'title', get_lang('Title'), ['id' => 'title_file']);
 $form->addElement('textarea', 'comment', get_lang('Comment'));
 

@@ -13,8 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SequenceResource
 {
-    const COURSE_TYPE = 1;
-    const SESSION_TYPE = 2;
+    public const COURSE_TYPE = 1;
+    public const SESSION_TYPE = 2;
 
     /**
      * @var int

@@ -465,6 +465,14 @@ class SurveyManager
                 $extraParams['form_fields'] = '';
             }
 
+            if (!empty($values['end_date'])) {
+                $availTill = $allowSurveyAvailabilityDatetime
+                    ? api_get_utc_datetime($values['end_date'].':59')
+                    : $values['end_date'];
+            } else {
+                $availTill = null;
+            }
+
             $params = [
                 'title' => $values['survey_title'],
                 'subtitle' => $values['survey_subtitle'],
@@ -473,9 +481,7 @@ class SurveyManager
                 'avail_from' => $allowSurveyAvailabilityDatetime
                     ? api_get_utc_datetime($values['start_date'].':00')
                     : $values['start_date'],
-                'avail_till' => $allowSurveyAvailabilityDatetime
-                    ? api_get_utc_datetime($values['end_date'].':59')
-                    : $values['end_date'],
+                'avail_till' => $availTill,
                 'is_shared' => $shared_survey_id,
                 'template' => 'template',
                 'intro' => $values['survey_introduction'],
@@ -658,6 +664,15 @@ class SurveyManager
 
         $table_survey = Database::get_course_table(TABLE_SURVEY);
         $table_survey_question_group = Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);
+        $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
+
+        $sql = "SELECT code
+                FROM $table_survey WHERE survey_id = $survey_id";
+        $res = Database::query($sql);
+        $row = Database::fetch_array($res);
+        if ($row) {
+            $survey_code = $row['code'];
+        }
 
         if ($shared) {
             $table_survey = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY);
@@ -688,6 +703,11 @@ class SurveyManager
 
         // Deleting the questions of the survey
         self::delete_all_survey_questions($survey_id, $shared);
+
+        // Deleting invitations of the survey
+        $sql = "DELETE FROM $table_survey_invitation
+                WHERE c_id = $course_id AND survey_code = '".$survey_code."'";
+        Database::query($sql);
 
         // Update into item_property (delete)
         api_item_property_update(
@@ -911,7 +931,7 @@ class SurveyManager
      *
      * @version February 2007
      */
-    public static function update_survey_answered($survey_data, $user, $survey_code)
+    public static function update_survey_answered($survey_data, $user, $survey_code, $lpItemId = 0)
     {
         if (empty($survey_data)) {
             return false;
@@ -923,7 +943,7 @@ class SurveyManager
 
         $survey_id = (int) $survey_data['survey_id'];
         $course_id = (int) $survey_data['c_id'];
-        $session_id = $survey_data['session_id'];
+        $sessionId = api_get_session_id();
 
         // Getting a list with all the people who have filled the survey
         /*$people_filled = self::get_people_who_filled_survey($survey_id, false, $course_id);
@@ -944,15 +964,26 @@ class SurveyManager
         if ($allow) {
             $answeredAt = "answered_at = '".api_get_utc_datetime()."',";
         }
+        // To select the answers by Lp Item
+        $lpItemCondition = '';
+        if (true === api_get_configuration_value('allow_survey_tool_in_lp')) {
+            $lpItemCondition = " AND c_lp_item_id = $lpItemId";
+        }
+        // To select the answers by session
+        $sessionCondition = '';
+        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
+            $sessionCondition = api_get_session_condition($sessionId);
+        }
 
         // Storing that the user has finished the survey.
         $sql = "UPDATE $table_survey_invitation
                 SET $answeredAt answered = 1
                 WHERE
                     c_id = $course_id AND
-                    session_id = $session_id AND
                     user ='".Database::escape_string($user)."' AND
-                    survey_code='".Database::escape_string($survey_code)."'";
+                    survey_code='".Database::escape_string($survey_code)."'
+                    $sessionCondition
+                    $lpItemCondition";
         Database::query($sql);
     }
 
@@ -972,6 +1003,7 @@ class SurveyManager
             'personality',
             'yesno',
             'multiplechoice',
+            'multiplechoiceother',
             'multipleresponse',
             'open',
             'dropdown',
@@ -979,6 +1011,7 @@ class SurveyManager
             'pagebreak',
             'percentage',
             'score',
+            'selectivedisplay',
         ];
 
         // the images array
@@ -986,6 +1019,7 @@ class SurveyManager
             'yesno' => 'yesno.png',
             'personality' => 'yesno.png',
             'multiplechoice' => 'mcua.png',
+            'multiplechoiceother' => 'mcma.png',
             'multipleresponse' => 'mcma.png',
             'open' => 'open_answer.png',
             'dropdown' => 'dropdown.png',
@@ -993,6 +1027,7 @@ class SurveyManager
             'score' => 'scorequestion.png',
             'comment' => 'commentquestion.png',
             'pagebreak' => 'page_end.png',
+            'selectivedisplay' => 'yesno.png',
         ];
 
         if (in_array($type, $possible_types)) {
@@ -2124,9 +2159,9 @@ class SurveyManager
     public static function emptySurveyFromId($surveyId)
     {
         // Database table definitions
-        $surveyInvitationTable = Database:: get_course_table(TABLE_SURVEY_INVITATION);
-        $surveyAnswerTable = Database:: get_course_table(TABLE_SURVEY_ANSWER);
-        $surveyTable = Database:: get_course_table(TABLE_SURVEY);
+        $surveyInvitationTable = Database::get_course_table(TABLE_SURVEY_INVITATION);
+        $surveyAnswerTable = Database::get_course_table(TABLE_SURVEY_ANSWER);
+        $surveyTable = Database::get_course_table(TABLE_SURVEY);
         $surveyId = (int) $surveyId;
         $surveyData = self::get_survey($surveyId);
         if (empty($surveyData)) {
@@ -2464,7 +2499,7 @@ class SurveyManager
             case 'by_user':
                 if (null === $groupId) {
                     $sessionId = api_get_session_id();
-                    $users = CourseManager:: get_student_list_from_course_code(
+                    $users = CourseManager::get_student_list_from_course_code(
                         api_get_course_id(),
                         !empty($sessionId),
                         $sessionId
@@ -2828,7 +2863,7 @@ class SurveyManager
         if ($currentDate < $startDate) {
             api_not_allowed(
                 true,
-                Display:: return_message(
+                Display::return_message(
                     get_lang('SurveyNotAvailableYet'),
                     'warning',
                     false
@@ -2839,7 +2874,7 @@ class SurveyManager
         if ($currentDate > $endDate) {
             api_not_allowed(
                 true,
-                Display:: return_message(
+                Display::return_message(
                     get_lang('SurveyNotAvailableAnymore'),
                     'warning',
                     false
@@ -2862,16 +2897,41 @@ class SurveyManager
         $surveyCode,
         $courseId,
         $sessionId = 0,
-        $groupId = 0
+        $groupId = 0,
+        $lpItemId = 0
+    ) {
+        $invitationRepo = Database::getManager()->getRepository('ChamiloCourseBundle:CSurveyInvitation');
+
+        $params = [
+            'user' => $userId,
+            'cId' => $courseId,
+            'sessionId' => $sessionId,
+            'groupId' => $groupId,
+            'surveyCode' => $surveyCode,
+        ];
+
+        if (true === api_get_configuration_value('allow_survey_tool_in_lp')) {
+            $params['lpItemId'] = $lpItemId;
+        }
+
+        return $invitationRepo->findBy(
+            $params,
+            ['invitationDate' => 'DESC']
+        );
+    }
+
+    public static function getInvitationsAnswered(
+        $surveyCode,
+        $courseId,
+        $sessionId = 0
     ) {
         $invitationRepo = Database::getManager()->getRepository('ChamiloCourseBundle:CSurveyInvitation');
 
         return $invitationRepo->findBy(
             [
-                'user' => $userId,
                 'cId' => $courseId,
                 'sessionId' => $sessionId,
-                'groupId' => $groupId,
+                'answered' => true,
                 'surveyCode' => $surveyCode,
             ],
             ['invitationDate' => 'DESC']

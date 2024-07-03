@@ -51,7 +51,7 @@ class Draggable extends Question
                 $nb_options++;
             }
         } elseif (!empty($this->iid)) {
-            $defaults['orientation'] = in_array($this->extra, ['h', 'v']) ? $this->extra : 'h';
+            $defaults['orientation'] = in_array($this->extra, ['h', 'v']) ? $this->extra : 'v';
 
             $answer = new Answer($this->iid);
             $answer->read();
@@ -77,7 +77,7 @@ class Draggable extends Question
             $defaults['matches[2]'] = '2';
             $defaults['option[1]'] = get_lang('DefaultMatchingOptA');
             $defaults['option[2]'] = get_lang('DefaultMatchingOptB');
-            $defaults['orientation'] = 'h';
+            $defaults['orientation'] = 'v';
         }
 
         for ($i = 1; $i <= $nb_matches; $i++) {
@@ -90,7 +90,7 @@ class Draggable extends Question
         $form->addRadio(
             'orientation',
             get_lang('ChooseOrientation'),
-            ['h' => get_lang('Horizontal'), 'v' => get_lang('Vertical')]
+            ['v' => get_lang('Vertical'), 'h' => get_lang('Horizontal')]
         );
 
         // DISPLAY MATCHES
@@ -157,7 +157,7 @@ class Draggable extends Question
         if (!empty($this->iid)) {
             $form->setDefaults($defaults);
         } else {
-            $form->setDefaults(['orientation' => 'h']);
+            $form->setDefaults(['orientation' => 'v']);
 
             if (1 == $this->isContent) {
                 $form->setDefaults($defaults);
@@ -223,6 +223,8 @@ class Draggable extends Question
             }
         } else {
             $header .= '<th>'.get_lang('ElementList').'</th>';
+            $header .= '<th>'.get_lang('YourChoice').'</th>';
+            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
         }
         $header .= '<th>'.get_lang('Status').'</th>';
         $header .= '</tr>';

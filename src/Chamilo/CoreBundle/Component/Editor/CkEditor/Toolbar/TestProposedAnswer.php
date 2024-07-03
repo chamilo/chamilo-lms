@@ -62,6 +62,7 @@ class TestProposedAnswer extends Basic
                 api_get_setting('enabled_mathjax') === 'true' ? 'Mathjax' : '',
             ],
             ['Asciimath', 'Asciisvg'],
+            api_get_setting('enabled_wiris') === 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_formulaEditorChemistry'] : [''],
             ['Maximize', 'Source'],
         ];
     }

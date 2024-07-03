@@ -235,7 +235,7 @@ class LegalManager
      *
      * @param int $language language id
      *
-     * @return bool | int the version or false if does not exist
+     * @return bool|int the version or false if does not exist
      */
     public static function get_last_version($language)
     {
@@ -454,5 +454,34 @@ class LegalManager
             'privacy_terms_destruction' => 'destruction',
             'privacy_terms_profiling' => 'profiling',
         ];
+    }
+
+    public static function sendEmailToUserBoss($userId, $conditionToSave)
+    {
+        UserManager::update_extra_field_value($userId, 'legal_accept', $conditionToSave);
+
+        $bossList = UserManager::getStudentBossList($userId);
+
+        if (empty($bossList)) {
+            return;
+        }
+
+        $bossList = array_column($bossList, 'boss_id');
+
+        $currentUserInfo = api_get_user_info($userId);
+
+        foreach ($bossList as $bossId) {
+            $subjectEmail = sprintf(
+                get_lang('UserXSignedTheAgreement'),
+                $currentUserInfo['complete_name']
+            );
+            $contentEmail = sprintf(
+                get_lang('UserXSignedTheAgreementTheDateY'),
+                $currentUserInfo['complete_name'],
+                api_get_local_time()
+            );
+
+            MessageManager::send_message_simple($bossId, $subjectEmail, $contentEmail, $userId);
+        }
     }
 }

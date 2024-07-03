@@ -6,7 +6,7 @@
         <dd>{{ sale.reference }}</dd>
         <dt>{{ 'UserName'|get_lang }}</dt>
         <dd>{{ user.complete_name }}</dd>
-        <dt>{{ 'Course'|get_lang }}</dt>
+        <dt>{{ 'Product'|get_plugin_lang('BuyCoursesPlugin') }}</dt>
         <dd>{{ sale.product }}</dd>
         <dt>{{ 'SalePrice'|get_plugin_lang('BuyCoursesPlugin') }}</dt>
         <dd>{{ sale.currency ~ ' ' ~ sale.price }}</dd>

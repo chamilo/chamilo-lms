@@ -1,0 +1,5 @@
+Chamilo ONLYOFFICE integration plugin uses code from the following 3rd party projects:
+
+JWT           - JSON Web Token implementation (https://github.com/firebase/php-jwt/blob/master/LICENSE)
+License:        BSD
+License File:   3rdparty/jwt/LICENSE

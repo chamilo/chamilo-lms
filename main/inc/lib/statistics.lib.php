@@ -34,31 +34,43 @@ class Statistics
     /**
      * Count courses.
      *
-     * @param string $categoryCode Code of a course category.
-     *                             Default: count all courses.
+     * @param string|null $categoryCode Code of a course category.
+     *                                  Default: count all courses.
+     * @param string|null $dateFrom     dateFrom
+     * @param string|null $dateUntil    dateUntil
      *
      * @return int Number of courses counted
      */
-    public static function countCourses($categoryCode = null)
+    public static function countCourses(string $categoryCode = null, string $dateFrom = null, string $dateUntil = null)
     {
-        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $accessUrlRelCourseTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $urlId = api_get_current_access_url_id();
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT COUNT(*) AS number
-                    FROM ".$course_table." as c, $access_url_rel_course_table as u
-                    WHERE u.c_id = c.id AND access_url_id='".$urlId."'";
+                    FROM ".$courseTable." AS c, $accessUrlRelCourseTable AS u
+                    WHERE u.c_id = c.id AND u.access_url_id = $urlId";
             if (isset($categoryCode)) {
                 $sql .= " AND category_code = '".Database::escape_string($categoryCode)."'";
             }
         } else {
             $sql = "SELECT COUNT(*) AS number
-                    FROM $course_table";
+                    FROM $courseTable AS c
+                    WHERE 1 = 1";
             if (isset($categoryCode)) {
-                $sql .= " WHERE category_code = '".Database::escape_string($categoryCode)."'";
+                $sql .= " AND c.category_code = '".Database::escape_string($categoryCode)."'";
             }
         }
 
+        if (!empty($dateFrom)) {
+            $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
+            $sql .= " AND c.creation_date >= '$dateFrom' ";
+        }
+
+        if (!empty($dateUntil)) {
+            $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
+            $sql .= " AND c.creation_date <= '$dateUntil' ";
+        }
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
 
@@ -68,31 +80,55 @@ class Statistics
     /**
      * Count courses by visibility.
      *
-     * @param int $visibility visibility (0 = closed, 1 = private, 2 = open, 3 = public) all courses
+     * @param array|null  $visibility visibility (0 = closed, 1 = private, 2 = open, 3 = public) all courses
+     * @param string|null $dateFrom   dateFrom
+     * @param string|null $dateUntil  dateUntil
      *
      * @return int Number of courses counted
      */
-    public static function countCoursesByVisibility($visibility = null)
-    {
-        if (!isset($visibility)) {
+    public static function countCoursesByVisibility(
+        array $visibility = null,
+        string $dateFrom = null,
+        string $dateUntil = null
+    ) {
+        if (empty($visibility)) {
             return 0;
+        } else {
+            $visibilityString = '';
+            $auxArrayVisibility = [];
+            if (!is_array($visibility)) {
+                $visibility = [$visibility];
+            }
+            foreach ($visibility as $item) {
+                $auxArrayVisibility[] = (int) $item;
+            }
+            $visibilityString = implode(',', $auxArrayVisibility);
         }
-        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $accessUrlRelCourseTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $urlId = api_get_current_access_url_id();
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT COUNT(*) AS number
-                    FROM $course_table as c, $access_url_rel_course_table as u
-                    WHERE u.c_id = c.id AND access_url_id='".$urlId."'";
-            if (isset($visibility)) {
-                $sql .= " AND visibility = ".intval($visibility);
-            }
+                    FROM $courseTable AS c, $accessUrlRelCourseTable AS u
+                    WHERE u.c_id = c.id AND u.access_url_id = $urlId";
         } else {
-            $sql = "SELECT COUNT(*) AS number FROM $course_table ";
-            if (isset($visibility)) {
-                $sql .= " WHERE visibility = ".intval($visibility);
-            }
+            $sql = "SELECT COUNT(*) AS number
+                    FROM $courseTable AS c
+                    WHERE 1 = 1";
         }
+        $sql .= " AND visibility IN ($visibilityString) ";
+
+        if (!empty($dateFrom)) {
+            $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
+            $sql .= " AND c.creation_date >= '$dateFrom' ";
+        }
+
+        if (!empty($dateUntil)) {
+            $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
+            $sql .= " AND c.creation_date <= '$dateUntil' ";
+        }
+
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
 
@@ -129,7 +165,7 @@ class Statistics
                     FROM $user_table as u, $access_url_rel_user_table as url
                     WHERE
                         u.user_id = url.user_id AND
-                        access_url_id = '".$urlId."'
+                        access_url_id = $urlId
                         $status_filter $active_filter";
             if (isset($categoryCode)) {
                 $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number
@@ -138,7 +174,7 @@ class Statistics
                             c.id = cu.c_id AND
                             c.category_code = '".Database::escape_string($categoryCode)."' AND
                             cu.user_id = url.user_id AND
-                            access_url_id='".$urlId."'
+                            access_url_id = $urlId
                             $status_filter $active_filter";
             }
         } else {
@@ -183,7 +219,7 @@ class Statistics
             $sql = "SELECT DISTINCT(t.c_id) FROM $table t , $access_url_rel_course_table a
                     WHERE
                         t.c_id = a.c_id AND
-                        access_url_id='".$urlId."' AND
+                        access_url_id = $urlId AND
                         access_date BETWEEN '$startDate' AND '$endDate'
                     ";
         } else {
@@ -214,7 +250,7 @@ class Statistics
                     WHERE
                         default_user_id = user.user_id AND
                         user.user_id=url.user_id AND
-                        access_url_id = '".$urlId."'";
+                        access_url_id = $urlId";
         } else {
             $sql = "SELECT count(default_id) AS total_number_of_items
                     FROM $track_e_default, $table_user user
@@ -290,7 +326,7 @@ class Statistics
                     WHERE
                         track_default.default_user_id = user.user_id AND
                         url.user_id = user.user_id AND
-                        access_url_id= $urlId ";
+                        access_url_id = $urlId";
         } else {
             $sql = "SELECT
                        default_event_type  as col0,
@@ -379,9 +415,10 @@ class Statistics
                 }
 
                 // User id.
+                $userIdHash = UserManager::generateUserHash($row[6]);
                 $row[5] = Display::url(
                     $row[5],
-                    api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$row[6],
+                    api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&hash='.$userIdHash,
                     ['class' => 'ajax']
                 );
 
@@ -442,6 +479,131 @@ class Statistics
         }
 
         return $result;
+    }
+
+    /**
+     * Get the number of users by access url .
+     *
+     * @param $currentmonth
+     * @param $lastmonth
+     * @param $invoicingMonth
+     * @param $invoicingYear
+     *
+     * @return string
+     */
+    public static function printInvoicingByAccessUrl(
+        $currentMonth,
+        $lastMonth,
+        $invoicingMonth,
+        $invoicingYear
+    ) {
+        $tblTrackAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+        $tblAccessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $tblAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
+
+        $urls = api_get_access_url_from_user(api_get_user_id());
+        $allowFullUrlAccess = array_search(1, $urls);
+        $whereAccessUrl = '';
+        if (!empty($urls) && false === $allowFullUrlAccess) {
+            $whereAccessUrl = ' AND access_url_rel_user.access_url_id IN('.implode(',', $urls).')';
+        }
+
+        $sql = '
+		    SELECT
+		        DISTINCT access_url.description AS client,
+		        user.lastname,
+		        user.firstname,
+		        course.code AS course_code,
+		        MIN(DATE_FORMAT(track_e_access.access_date,"%d/%m/%Y")) AS start_date,
+		        access_session_id,
+		        CONCAT(coach.lastname,\' \',coach.firstname) AS trainer
+		    FROM '.$tblTrackAccess.' AS track_e_access
+            JOIN '.$tblAccessUrlUser.' AS access_url_rel_user ON access_url_rel_user.user_id=track_e_access.access_user_id
+            JOIN '.$tblAccessUrl.' AS access_url ON access_url.id=access_url_rel_user.access_url_id
+            JOIN '.$tblUser.' AS user ON user.user_id=access_user_id
+            JOIN '.$tblCourse.' AS course ON course.id=track_e_access.c_id
+            JOIN '.$tblSession.' AS session ON session.id=track_e_access.access_session_id
+            JOIN '.$tblUser.' AS coach ON coach.user_id=session.id_coach
+            WHERE
+                access_session_id > 0 AND
+                access_date LIKE \''.$currentMonth.'%\' AND
+                user.status = '.STUDENT.' AND
+                CONCAT(access_user_id,\'-\',access_session_id) NOT IN (SELECT CONCAT(access_user_id,\'-\',access_session_id) FROM '.$tblTrackAccess.' WHERE access_session_id > 0
+                AND access_date LIKE \''.$lastMonth.'%\')
+                '.$whereAccessUrl.'
+            GROUP BY
+                user.lastname,code
+            ORDER BY
+                access_url.description,
+                user.lastname,
+                user.firstname,
+                track_e_access.access_date
+            DESC,course.code
+		';
+        $result = Database::query($sql);
+
+        $monthList = api_get_months_long();
+        array_unshift($monthList, '');
+
+        $nMonth = (int) $invoicingMonth;
+        $content = '<h2>'.get_lang('NumberOfUsers').' '.strtolower($monthList[$nMonth]).' '.$invoicingYear.'</h2><br>';
+
+        $form = new FormValidator('invoice_month', 'get', api_get_self().'?report=invoicing&invoicing_month='.$invoicingMonth.'&invoicing_year='.$invoicingYear);
+        $form->addSelect('invoicing_month', get_lang('Month'), $monthList);
+        $currentYear = date("Y");
+        $yearList = [''];
+        for ($i = 0; $i < 3; $i++) {
+            $y = $currentYear - $i;
+            $yearList[$y] = $y;
+        }
+        $form->addSelect('invoicing_year', get_lang('Year'), $yearList);
+        $form->addButtonSend(get_lang('Filter'));
+        $form->addHidden('report', 'invoicing');
+        $content .= $form->returnForm();
+
+        $content .= '<br>';
+        $content .= '<table border=1 class="table table-bordered data_table">';
+        $content .= '<tr>
+            <th class="th-header">'.get_lang('Portal').'</th>
+            <th class="th-header">'.get_lang('LastName').'</th>
+            <th class="th-header">'.get_lang('FirstName').'</th>
+            <th class="th-header">'.get_lang('Code').'</th>
+            <th class="th-header">'.get_lang('StartDate').'</th>
+            <th class="th-header">'.get_lang('SessionId').'</th>
+            <th class="th-header">'.get_lang('Trainer').'</th>
+        </tr>';
+        $countusers = 0;
+        $lastname = '';
+        $lastportal = '';
+        while ($row = Database::fetch_array($result)) {
+            if (($row['client'] != $lastportal) && ($countusers > 0)) {
+                $content .= '<tr class="row_odd"><td colspan=7>'.get_lang('TotalUser').' '.$lastportal.' : '.$countusers.'</td></tr>';
+                $countusers = 0;
+            }
+            $content .= '<tr>
+                <td>'.$row['client'].'</td>
+                <td>'.$row['lastname'].'</td>
+                <td>'.$row['firstname'].'</td>
+                <td>'.$row['course_code'].'</td>
+                <td>'.$row['start_date'].'</td>
+                <td>'.$row['access_session_id'].'</td>
+                <td>'.$row['trainer'].'</td>
+            </tr>';
+            if ($lastname != $row['lastname'].$row['firstname']) {
+                $countusers++;
+            }
+            $lastname = $row['lastname'].$row['firstname'];
+            $lastportal = $row['client'];
+        }
+        $content .= '<tr class="row_odd">
+            <td colspan=7>'.get_lang('TotalUser').' '.$lastportal.' : '.$countusers.'</td>
+        </tr>';
+        $content .= '</table>';
+
+        return $content;
     }
 
     /**
@@ -519,7 +681,7 @@ class Statistics
         $where_url_last = ' WHERE login_date > DATE_SUB("'.$now.'",INTERVAL 1 %s)';
         if (api_is_multiple_url_enabled()) {
             $table_url = ", $access_url_rel_user_table";
-            $where_url = " WHERE login_user_id=user_id AND access_url_id='".$urlId."'";
+            $where_url = " WHERE login_user_id=user_id AND access_url_id = $urlId";
             $where_url_last = ' AND login_date > DATE_SUB("'.$now.'",INTERVAL 1 %s)';
         }
 
@@ -619,7 +781,7 @@ class Statistics
         $where_url = '';
         if (api_is_multiple_url_enabled()) {
             $table_url = ", $access_url_rel_user_table";
-            $where_url = " AND login_user_id=user_id AND access_url_id='".$urlId."'";
+            $where_url = " AND login_user_id=user_id AND access_url_id = $urlId";
         }
 
         $now = api_get_utc_datetime();
@@ -709,7 +871,7 @@ class Statistics
         $where_url = '';
         if (api_is_multiple_url_enabled()) {
             $table_url = ", $access_url_rel_user_table";
-            $where_url = " AND login_user_id=user_id AND access_url_id='".$urlId."'";
+            $where_url = " AND login_user_id=user_id AND access_url_id = $urlId";
         }
 
         $now = api_get_utc_datetime();
@@ -779,7 +941,7 @@ class Statistics
                     WHERE
                         access_tool IN ('".implode("','", $tools)."') AND
                         t.c_id = a.c_id AND
-                        access_url_id='".$urlId."'
+                        access_url_id = $urlId
                         GROUP BY access_tool
                     ";
         } else {
@@ -825,7 +987,7 @@ class Statistics
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT course_language, count( c.code ) AS number_of_courses
                     FROM $table as c, $access_url_rel_course_table as u
-                    WHERE u.c_id = c.id AND access_url_id='".$urlId."'
+                    WHERE u.c_id = c.id AND access_url_id = $urlId
                     GROUP BY course_language
                     ORDER BY number_of_courses DESC";
         } else {
@@ -854,8 +1016,8 @@ class Statistics
         $url_condition2 = null;
         $table = null;
         if (api_is_multiple_url_enabled()) {
-            $url_condition = ", $access_url_rel_user_table as url WHERE url.user_id=u.user_id AND access_url_id='".$urlId."'";
-            $url_condition2 = " AND url.user_id=u.user_id AND access_url_id='".$urlId."'";
+            $url_condition = ", $access_url_rel_user_table as url WHERE url.user_id=u.user_id AND access_url_id = $urlId";
+            $url_condition2 = " AND url.user_id=u.user_id AND access_url_id = $urlId";
             $table = ", $access_url_rel_user_table as url ";
         }
         $sql = "SELECT COUNT(*) AS n FROM $user_table as u ".$url_condition;
@@ -898,31 +1060,58 @@ class Statistics
         $content .= $form->returnForm();
         $content .= '</div>';
 
-        $table = new SortableTable(
-            'activities',
-            ['Statistics', 'getNumberOfActivities'],
-            ['Statistics', 'getActivitiesData'],
-            7,
-            50,
-            'DESC'
-        );
-        $parameters = [];
+        if (!empty($_GET['keyword'])) {
+            $table = new SortableTable(
+                'activities',
+                ['Statistics', 'getNumberOfActivities'],
+                ['Statistics', 'getActivitiesData'],
+                7,
+                50,
+                'DESC'
+            );
+            $parameters = [];
 
-        $parameters['report'] = 'activities';
-        if (isset($_GET['keyword'])) {
-            $parameters['keyword'] = Security::remove_XSS($_GET['keyword']);
+            $parameters['report'] = 'activities';
+            if (isset($_GET['keyword'])) {
+                $parameters['keyword'] = Security::remove_XSS($_GET['keyword']);
+            }
+
+            $table->set_additional_parameters($parameters);
+            $table->set_header(0, get_lang('EventType'));
+            $table->set_header(1, get_lang('DataType'));
+            $table->set_header(2, get_lang('Value'));
+            $table->set_header(3, get_lang('Course'));
+            $table->set_header(4, get_lang('Session'));
+            $table->set_header(5, get_lang('UserName'));
+            $table->set_header(6, get_lang('IPAddress'));
+            $table->set_header(7, get_lang('Date'));
+            $content .= $table->return_table();
         }
 
-        $table->set_additional_parameters($parameters);
-        $table->set_header(0, get_lang('EventType'));
-        $table->set_header(1, get_lang('DataType'));
-        $table->set_header(2, get_lang('Value'));
-        $table->set_header(3, get_lang('Course'));
-        $table->set_header(4, get_lang('Session'));
-        $table->set_header(5, get_lang('UserName'));
-        $table->set_header(6, get_lang('IPAddress'));
-        $table->set_header(7, get_lang('Date'));
-        $content .= $table->return_table();
+        $content .= '<div class="alert alert-info">'.get_lang('ImportantActivities').' : '.'<br>';
+        $prefix = 'LOG_';
+        $userDefinedConstants = get_defined_constants(true)['user'];
+        $filteredConstants = array_filter($userDefinedConstants, function ($constantName) use ($prefix) {
+            return strpos($constantName, $prefix) === 0;
+        }, ARRAY_FILTER_USE_KEY);
+        $constantNames = array_keys($filteredConstants);
+        $link = api_get_self().'?report=activities&activities_direction=DESC&activities_column=7&keyword=';
+        foreach ($constantNames as $constantName) {
+            if ($constantName != 'LOG_WS') {
+                if (substr($constantName, -3) == '_ID') {
+                    continue;
+                }
+                $content .= '- <a href="'.$link.constant($constantName).'">'.constant($constantName).'</a><br>'.PHP_EOL;
+            } else {
+                $constantValue = constant($constantName);
+                $reflection = new ReflectionClass('Rest');
+                $constants = $reflection->getConstants();
+                foreach ($constants as $name => $value) {
+                    $content .= '- <a href="'.$link.$constantValue.$value.'">'.$constantValue.$value.'</a><br>'.PHP_EOL;
+                }
+            }
+        }
+        $content .= '</div>';
 
         return $content;
     }
@@ -967,7 +1156,7 @@ class Statistics
             $sql = "SELECT * FROM $table t , $access_url_rel_course_table a
                    WHERE
                         t.c_id = a.c_id AND
-                        access_url_id='".$urlId."'
+                        access_url_id = $urlId
                    GROUP BY t.c_id
                    HAVING t.c_id <> ''
                    AND DATEDIFF( '".api_get_utc_datetime()."' , access_date ) <= ".$date_diff;
@@ -977,7 +1166,7 @@ class Statistics
                    HAVING t.c_id <> ''
                    AND DATEDIFF( '".api_get_utc_datetime()."' , access_date ) <= ".$date_diff;
         }
-        $sql .= ' ORDER BY `'.$columns[$column].'` '.$sql_order[$direction];
+        $sql .= ' ORDER BY '.$columns[$column].' '.$sql_order[$direction];
         $from = ($page_nr - 1) * $per_page;
         $sql .= ' LIMIT '.$from.','.$per_page;
 
@@ -999,7 +1188,7 @@ class Statistics
             $table_header[] = [get_lang("LastAccess"), true];
 
             ob_start();
-            Display:: display_sortable_table(
+            Display::display_sortable_table(
                 $table_header,
                 $courses,
                 ['column' => $column, 'direction' => $direction],
@@ -1043,7 +1232,7 @@ class Statistics
             $sql = "SELECT lastname, firstname, username, COUNT($field) AS count_message
                 FROM $access_url_rel_user_table as url, $message_table m
                 LEFT JOIN $user_table u ON m.$field = u.user_id
-                WHERE  url.user_id = m.$field AND  access_url_id='".$urlId."'
+                WHERE  url.user_id = m.$field AND  access_url_id = $urlId
                 GROUP BY m.$field
                 ORDER BY count_message DESC ";
         } else {
@@ -1086,7 +1275,7 @@ class Statistics
                     WHERE
                         uf.relation_type <> '".USER_RELATION_TYPE_RRHH."' AND
                         uf.user_id = url.user_id AND
-                        access_url_id = '".$urlId."'
+                        access_url_id = $urlId
                     GROUP BY uf.user_id
                     ORDER BY count_friend DESC ";
         } else {
@@ -1120,7 +1309,7 @@ class Statistics
         $total = self::countUsers();
         if (api_is_multiple_url_enabled()) {
             $table_url = ", $access_url_rel_user_table";
-            $where_url = " AND login_user_id=user_id AND access_url_id='".$urlId."'";
+            $where_url = " AND login_user_id=user_id AND access_url_id = $urlId";
         } else {
             $table_url = '';
             $where_url = '';
@@ -1304,6 +1493,71 @@ class Statistics
     }
 
     /**
+     * Display learnpath results from lti provider.
+     *
+     * @return false|string
+     */
+    public static function printLtiLearningPath()
+    {
+        $pluginLtiProvider = ('true' === api_get_plugin_setting('lti_provider', 'enabled'));
+
+        if (!$pluginLtiProvider) {
+            return false;
+        }
+
+        $content = Display::page_header(get_lang('LearningPathLTI'));
+        $actions = '';
+        $form = new FormValidator('frm_lti_tool_lp', 'get');
+        $form->addDateRangePicker(
+            'daterange',
+            get_lang('DateRange'),
+            true,
+            ['format' => 'YYYY-MM-DD', 'timePicker' => 'false', 'validate_format' => 'Y-m-d']
+        );
+        $form->addHidden('report', 'lti_tool_lp');
+        $form->addButtonFilter(get_lang('Search'));
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+
+            $result = self::getLtiLearningPathByDate($values['daterange_start'], $values['daterange_end']);
+
+            $table = new HTML_Table(['class' => 'table table-bordered data_table']);
+            $table->setHeaderContents(0, 0, get_lang('URL'));
+            $table->setHeaderContents(0, 1, get_lang('ToolLp'));
+            $table->setHeaderContents(0, 2, get_lang('LastName'));
+            $table->setHeaderContents(0, 3, get_lang('FirstName'));
+            $table->setHeaderContents(0, 4, get_lang('FirstAccess'));
+            $i = 1;
+            foreach ($result as $item) {
+                if (!empty($item['learnpaths'])) {
+                    foreach ($item['learnpaths'] as $lpId => $lpValues) {
+                        $lpName = learnpath::getLpNameById($lpId);
+                        if (count($lpValues['users']) > 0) {
+                            foreach ($lpValues['users'] as $user) {
+                                $table->setCellContents($i, 0, $item['issuer']);
+                                $table->setCellContents($i, 1, $lpName);
+                                $table->setCellContents($i, 2, $user['lastname']);
+                                $table->setCellContents($i, 3, $user['firstname']);
+                                $table->setCellContents($i, 4, $user['first_access']);
+                                $i++;
+                            }
+                        }
+                    }
+                }
+            }
+            $content = $table->toHtml();
+        }
+
+        $content .= $form->returnForm();
+        if (!empty($actions)) {
+            $content .= Display::toolbarAction('lti_tool_lp_toolbar', [$actions]);
+        }
+
+        return $content;
+    }
+
+    /**
      * Display the Logins By Date report and allow export its result to XLS.
      */
     public static function printLoginsByDate()
@@ -1384,7 +1638,7 @@ class Statistics
         return $content;
     }
 
-    public static function getBossTable($bossId)
+    public static function getBossTable($bossId): string
     {
         $students = UserManager::getUsersFollowedByStudentBoss($bossId);
 
@@ -1420,12 +1674,12 @@ class Statistics
     }
 
     /**
-     * @param string $startDate
-     * @param string $endDate
+     * Return a list of logins by date.
      *
-     * @return array
+     * @param string $startDate Start date in YYYY-MM-DD format
+     * @param string $endDate   End date in YYYY-MM-DD format
      */
-    private static function getLoginsByDate($startDate, $endDate)
+    public static function getLoginsByDate($startDate, $endDate): array
     {
         /** @var DateTime $startDate */
         $startDate = api_get_utc_datetime("$startDate 00:00:00");
@@ -1464,5 +1718,440 @@ class Statistics
         $result = Database::store_result($stmt, 'ASSOC');
 
         return $result;
+    }
+
+    /**
+     * Return de number of certificates generated.
+     * This function is resource intensive.
+     */
+    public static function countCertificatesByQuarter(string $dateFrom = null, string $dateUntil = null): int
+    {
+        $tableGradebookCertificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+
+        $condition = "";
+
+        if (!empty($dateFrom) && !empty($dateUntil)) {
+            $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
+            $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
+            $condition = "WHERE (created_at BETWEEN '$dateFrom' AND '$dateUntil')";
+        } elseif (!empty($dateFrom)) {
+            $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
+            $condition = "WHERE created_at >= '$dateFrom'";
+        } elseif (!empty($dateUntil)) {
+            $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
+            $condition = "WHERE created_at <= '$dateUntil'";
+        }
+
+        $sql = "
+            SELECT count(*) AS count
+            FROM $tableGradebookCertificate
+            $condition
+        ";
+
+        $response = Database::query($sql);
+        $obj = Database::fetch_object($response);
+
+        return $obj->count;
+    }
+
+    /**
+     * Get the number of logins by dates.
+     * This function is resource intensive.
+     */
+    public static function getSessionsByDuration(string $dateFrom, string $dateUntil): array
+    {
+        $results = [
+            '0' => 0,
+            '5' => 0,
+            '10' => 0,
+            '15' => 0,
+            '30' => 0,
+            '60' => 0,
+        ];
+
+        if (!empty($dateFrom) && !empty($dateUntil)) {
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+            $accessUrlRelUserTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+            $urlId = api_get_current_access_url_id();
+            $tableUrl = '';
+            $whereUrl = '';
+
+            $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
+            $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
+
+            if (api_is_multiple_url_enabled()) {
+                $tableUrl = ", $accessUrlRelUserTable";
+                $whereUrl = " AND login_user_id = user_id AND access_url_id = $urlId";
+            }
+
+            $sql = "SELECT login_id, TIMESTAMPDIFF(SECOND, login_date, logout_date) AS duration
+            FROM $table $tableUrl
+            WHERE login_date >= '$dateFrom'
+            AND logout_date <= '$dateUntil'
+            $whereUrl
+            ";
+
+            $res = Database::query($sql);
+
+            while ($session = Database::fetch_array($res)) {
+                if ($session['duration'] > 3600) {
+                    $results['60']++;
+                } elseif ($session['duration'] > 1800) {
+                    $results['30']++;
+                } elseif ($session['duration'] > 900) {
+                    $results['15']++;
+                } elseif ($session['duration'] > 600) {
+                    $results['10']++;
+                } elseif ($session['duration'] > 300) {
+                    $results['5']++;
+                } else {
+                    $results['0']++;
+                }
+            }
+        }
+
+        return $results;
+    }
+
+    /**
+     * Return duplicate users at a SortableTableFromArray object.
+     *
+     * @param string $type The type of duplication we are checking for ('name' or 'email')
+     */
+    public static function returnDuplicatedUsersTable(
+        string $type = 'name',
+        array $additionalExtraFieldsInfo
+    ): SortableTableFromArray {
+        if ($type == 'email') {
+            $usersInfo = Statistics::getDuplicatedUserMails($additionalExtraFieldsInfo);
+        } else {
+            $usersInfo = Statistics::getDuplicatedUsers($additionalExtraFieldsInfo);
+        }
+
+        $column = 0;
+
+        $table = new SortableTableFromArray($usersInfo);
+        $table->set_additional_parameters([
+            'report' => 'duplicated_users',
+            'additional_profile_field' => array_keys($additionalExtraFieldsInfo),
+        ]);
+        $table->set_header($column++, get_lang('Id'));
+
+        if ($type == 'email') {
+            $table->set_header($column++, get_lang('Email'));
+        }
+        if (api_is_western_name_order()) {
+            $table->set_header($column++, get_lang('FirstName'));
+            $table->set_header($column++, get_lang('LastName'));
+        } else {
+            $table->set_header($column++, get_lang('LastName'));
+            $table->set_header($column++, get_lang('FirstName'));
+        }
+        if ($type == 'name') {
+            $table->set_header($column++, get_lang('Email'));
+        }
+
+        $table->set_header($column++, get_lang('RegistrationDate'));
+        $table->set_column_filter(
+            $column - 1,
+            function ($value) {
+                return api_convert_and_format_date($value, DATE_TIME_FORMAT_LONG);
+            }
+        );
+        $table->set_header($column++, get_lang('FirstLoginInPlatform'));
+        $table->set_header($column++, get_lang('LatestLoginInPlatform'));
+        $table->set_header($column++, get_lang('Role'));
+        $table->set_column_filter(
+            $column - 1,
+            function ($value) {
+                return api_get_status_langvars()[$value];
+            }
+        );
+        $table->set_header(
+            $column++,
+            get_lang('Courses').' <small class="block">'.get_lang('SubscriptionCount').'<small>'
+        );
+        $table->set_header(
+            $column++,
+            get_lang('Sessions').' <small class="block">'.get_lang('SubscriptionCount').'<small>'
+        );
+
+        foreach ($additionalExtraFieldsInfo as $fieldInfo) {
+            $table->set_header($column++, $fieldInfo['display_text']);
+        }
+
+        $table->set_header($column++, get_lang('Active'));
+        $table->set_column_filter(
+            $column - 1,
+            function ($value) {
+                if ('1' == $value) {
+                    return get_lang('Active');
+                }
+
+                if ('0' == $value) {
+                    return get_lang('Inactive');
+                }
+
+                return get_lang('ActionNotAllowed');
+            }
+        );
+        $table->set_header($column, get_lang('Actions'));
+        $table->set_column_filter(
+            $column,
+            [UserManager::class, 'getActiveFilterForTable']
+        );
+        $table->setHideColumn(0);
+        $table->actionButtons = [
+            'export_excel' => [
+                'label' => get_lang('ExportAsXLS'),
+                'icon' => Display::return_icon('export_excel.png'),
+            ],
+            'export_csv' => [
+                'label' => get_lang('ExportAsCSV'),
+                'icon' => Display::return_icon('export_csv.png'),
+            ],
+        ];
+
+        return $table;
+    }
+
+    /**
+     * It gets lti learnpath results by date.
+     *
+     * @param string $startDate Start date in YYYY-MM-DD format
+     * @param string $endDate   End date in YYYY-MM-DD format
+     */
+    private static function getLtiLearningPathByDate(string $startDate, string $endDate): array
+    {
+        /** @var DateTime $startDate */
+        $startDate = api_get_utc_datetime("$startDate 00:00:00");
+        /** @var DateTime $endDate */
+        $endDate = api_get_utc_datetime("$endDate 23:59:59");
+
+        if (empty($startDate) || empty($endDate)) {
+            return [];
+        }
+
+        require_once api_get_path(SYS_PLUGIN_PATH).'lti_provider/LtiProviderPlugin.php';
+
+        $plugin = LtiProviderPlugin::create();
+
+        $result = $plugin->getToolLearnPathResult($startDate, $endDate);
+
+        return $result;
+    }
+
+    /**
+     * Get a list of users duplicated (firstname and lastname are both the same).
+     *
+     * @param array $additionalExtraFieldsInfo A list of extra fields we want to get in return, additional to the user details
+     */
+    private static function getDuplicatedUsers(array $additionalExtraFieldsInfo): array
+    {
+        $sql = "SELECT firstname, lastname, COUNT(*) as count
+            FROM user
+            GROUP BY firstname, lastname
+            HAVING count > 1
+            ORDER BY lastname, firstname"
+        ;
+
+        $result = Database::query($sql);
+
+        if (1 > Database::num_rows($result)) {
+            return [];
+        }
+
+        $usersInfo = [];
+
+        while ($rowStat = Database::fetch_assoc($result)) {
+            $firstname = Database::escape_string($rowStat['firstname']);
+            $lastname = Database::escape_string($rowStat['lastname']);
+            $subsql = "SELECT id, email, registration_date, status, active
+                FROM user WHERE firstname = '$firstname' AND lastname = '$lastname'"
+            ;
+
+            $subResult = Database::query($subsql);
+
+            if (1 > Database::num_rows($subResult)) {
+                continue;
+            }
+
+            $objExtraValue = new ExtraFieldValue('user');
+
+            while ($rowUser = Database::fetch_assoc($subResult)) {
+                $studentId = $rowUser['id'];
+
+                $studentInfo = [];
+                $studentInfo[] = $rowUser['id'];
+
+                if (api_is_western_name_order()) {
+                    $studentInfo[] = $rowStat['firstname'];
+                    $studentInfo[] = $rowStat['lastname'];
+                } else {
+                    $studentInfo[] = $rowStat['lastname'];
+                    $studentInfo[] = $rowStat['firstname'];
+                }
+
+                $studentInfo[] = $rowUser['email'];
+                $studentInfo[] = $rowUser['registration_date'];
+                $studentInfo[] = Tracking::get_first_connection_date(
+                    $studentId,
+                    DATE_TIME_FORMAT_LONG
+                );
+                $studentInfo[] = Tracking::get_last_connection_date(
+                    $studentId,
+                    true,
+                    false,
+                    DATE_TIME_FORMAT_LONG
+                );
+                $studentInfo[] = $rowUser['status'];
+                $studentInfo[] = Tracking::count_course_per_student($studentId);
+                $studentInfo[] = Tracking::countSessionsPerStudent($studentId);
+
+                foreach ($additionalExtraFieldsInfo as $fieldInfo) {
+                    $extraValue = $objExtraValue->get_values_by_handler_and_field_id($studentId, $fieldInfo['id'], true);
+                    $studentInfo[] = $extraValue['value'] ?? null;
+                }
+
+                $studentInfo[] = $rowUser['active']; // once to show status
+                $studentInfo[] = $rowUser['active']; // twice to show actions
+
+                $usersInfo[] = $studentInfo;
+            }
+        }
+
+        return $usersInfo;
+    }
+
+    /**
+     * Get a list of duplicated user emails.
+     *
+     * @param array $additionalExtraFieldsInfo A list of extra fields we want to get in return, additional to the user details
+     */
+    private static function getDuplicatedUserMails(array $additionalExtraFieldsInfo): array
+    {
+        $sql = "SELECT email, COUNT(*) as count
+            FROM user
+            GROUP BY email
+            HAVING count > 1
+            ORDER BY email"
+        ;
+
+        $result = Database::query($sql);
+
+        if (1 > Database::num_rows($result)) {
+            return [];
+        }
+
+        $usersInfo = [];
+
+        while ($rowStat = Database::fetch_assoc($result)) {
+            $email = Database::escape_string($rowStat['email']);
+            $subsql = "SELECT id, firstname, lastname, registration_date, status, active
+                FROM user WHERE email = '$email'"
+            ;
+
+            $subResult = Database::query($subsql);
+
+            if (1 > Database::num_rows($subResult)) {
+                continue;
+            }
+
+            $objExtraValue = new ExtraFieldValue('user');
+
+            while ($rowUser = Database::fetch_assoc($subResult)) {
+                $studentId = $rowUser['id'];
+
+                $studentInfo = [];
+                $studentInfo[] = $rowUser['id'];
+
+                $studentInfo[] = $rowStat['email'];
+                if (api_is_western_name_order()) {
+                    $studentInfo[] = $rowUser['firstname'];
+                    $studentInfo[] = $rowUser['lastname'];
+                } else {
+                    $studentInfo[] = $rowUser['lastname'];
+                    $studentInfo[] = $rowUser['firstname'];
+                }
+
+                $studentInfo[] = $rowUser['registration_date'];
+                $studentInfo[] = Tracking::get_first_connection_date(
+                    $studentId,
+                    DATE_TIME_FORMAT_LONG
+                );
+                $studentInfo[] = Tracking::get_last_connection_date(
+                    $studentId,
+                    true,
+                    false,
+                    DATE_TIME_FORMAT_LONG
+                );
+                $studentInfo[] = $rowUser['status'];
+                $studentInfo[] = Tracking::count_course_per_student($studentId);
+                $studentInfo[] = Tracking::countSessionsPerStudent($studentId);
+
+                foreach ($additionalExtraFieldsInfo as $fieldInfo) {
+                    $extraValue = $objExtraValue->get_values_by_handler_and_field_id($studentId, $fieldInfo['id'], true);
+                    $studentInfo[] = $extraValue['value'] ?? null;
+                }
+
+                $studentInfo[] = $rowUser['active']; // once to show status
+                $studentInfo[] = $rowUser['active']; // twice to show actions
+
+                $usersInfo[] = $studentInfo;
+            }
+        }
+
+        return $usersInfo;
+    }
+
+    /**
+     * Exports a user report by course and session to an Excel file.
+     */
+    public static function exportUserReportByCourseSession(int $courseId, ?string $startDate = null, ?string $endDate = null): void
+    {
+        $courseInfo = api_get_course_info_by_id($courseId);
+        $sessions = SessionManager::get_session_by_course($courseId, $startDate, $endDate);
+
+        $headers = [
+            get_lang('CourseName'),
+            get_lang('SessionName'),
+            get_lang('LastName'),
+            get_lang('FirstName'),
+            get_lang('Email'),
+            get_lang('EndDate'),
+            get_lang('Score'),
+            get_lang('Progress')
+        ];
+
+        $exportData = [$headers];
+        foreach ($sessions as $session) {
+            $sessionId = (int) $session['id'];
+            $students = SessionManager::get_users_by_session($sessionId);
+
+            foreach ($students as $student) {
+                $studentId = $student['user_id'];
+                $studentInfo = api_get_user_info($studentId);
+                $courseCode = $courseInfo['code'];
+
+                $lastConnection = Tracking::getLastConnectionTimeInSessionCourseLp($studentId, $courseCode, $sessionId);
+                $lastConnectionFormatted = $lastConnection ? date('Y-m-d', $lastConnection) : '';
+
+                $averageScore = round(Tracking::getAverageStudentScore($studentId, $courseCode, [], $sessionId));
+                $averageProgress = round(Tracking::get_avg_student_progress($studentId, $courseCode, [], $sessionId));
+
+                $exportData[] = [
+                    $courseInfo['name'],
+                    $session['name'],
+                    $studentInfo['lastname'],
+                    $studentInfo['firstname'],
+                    $studentInfo['mail'],
+                    $lastConnectionFormatted,
+                    $averageScore,
+                    $averageProgress,
+                ];
+            }
+        }
+
+        Export::arrayToXls($exportData, 'session_report_'.$courseInfo['code'].'_'.date('Y-m-d'));
     }
 }

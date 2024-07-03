@@ -3,7 +3,7 @@
 
 $strings['plugin_title'] = "Gestión SEPE";
 $strings['sepe_enable'] = "Habilitar SEPE";
-$strings['plugin_comment'] = "Configuración de las acciones formativas del SEPE.";
+$strings['plugin_comment'] = "Configuración de las acciones formativas del SEPE (Ministerio de Trabajo de España).";
 $strings['Options'] = "Opciones";
 $strings['Setting'] = "Configuración";
 $strings['sepe_url'] = "URL SEPE";

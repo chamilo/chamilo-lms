@@ -4,9 +4,11 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Fhaculty\Graph\Graph;
 use Gedmo\Mapping\Annotation as Gedmo;
+use UnserializeApi;
 
 /**
  * Class Sequence.
@@ -40,7 +42,7 @@ class Sequence
     protected $graph;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime")
@@ -48,7 +50,7 @@ class Sequence
     protected $createdAt;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at", type="datetime")
@@ -63,88 +65,53 @@ class Sequence
         return $this->name;
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return Sequence
-     */
-    public function setId($id)
+    public function setId(int $id): Sequence
     {
         $this->id = $id;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return Sequence
-     */
-    public function setName($name)
+    public function setName(string $name): Sequence
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getGraph()
+    public function getGraph(): string
     {
         return $this->graph;
     }
 
-    /**
-     * @param string $graph
-     *
-     * @return Sequence
-     */
-    public function setGraph($graph)
+    public function setGraph(string $graph): Sequence
     {
         $this->graph = $graph;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasGraph()
+    public function hasGraph(): bool
     {
-        return !empty($this->graph) ? true : false;
+        return !empty($this->graph);
     }
 
-    /**
-     * @return Graph
-     */
-    public function getUnSerializeGraph()
+    public function getUnSerializeGraph(): Graph
     {
-        return \UnserializeApi::unserialize('sequence_graph', $this->graph);
+        return UnserializeApi::unserialize('sequence_graph', $this->graph);
     }
 
-    /**
-     * @param string $graph
-     *
-     * @return Sequence
-     */
-    public function setGraphAndSerialize($graph)
+    public function setGraphAndSerialize(Graph $graph): Sequence
     {
         $this->setGraph(serialize($graph));
 

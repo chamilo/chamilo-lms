@@ -173,8 +173,13 @@ class AddCourse
             "AuthName AllowLocalAccess
                        AuthType Basic
 
-                       order deny,allow
-                       deny from all
+                       <IfModule mod_authz_core.c>
+                           Require all denied
+                       </IfModule>
+                       <IfModule !mod_authz_core.c>
+                           Order deny,allow
+                           Deny from all
+                       </IfModule>
 
                        php_flag zlib.output_compression off"
         );
@@ -662,7 +667,9 @@ class AddCourse
             'documents_default_visibility' => ['default' => 'visible', 'category' => 'document'],
             'show_course_in_user_language' => ['default' => 2, 'category' => null],
             'email_to_teachers_on_new_work_feedback' => ['default' => 1, 'category' => null],
-            'email_alert_teachers_new_post' => ['default' => 2, 'category' => 'portfolio'],
+            'email_alert_teachers_new_post' => ['default' => 1, 'category' => 'portfolio'],
+            'email_alert_teachers_student_new_comment' => ['default' => 1, 'category' => 'portfolio'],
+            'agenda_share_events_in_sessions' => ['default' => 0, 'category' => 'agenda'],
         ];
 
         $counter = 1;
@@ -847,7 +854,7 @@ class AddCourse
                                         "INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size)
                                         VALUES ($course_id,'$path_documents".$folder_path."','".$title."','folder','0')"
                                     );
-                                    $image_id = Database:: insert_id();
+                                    $image_id = Database::insert_id();
 
                                     Database::insert(
                                         $TABLEITEMPROPERTY,
@@ -898,7 +905,7 @@ class AddCourse
                                         "INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size)
                                         VALUES ($course_id,'$path_documents".$value["file"]."','".$temp[count($temp) - 1]."','file','$file_size')"
                                     );
-                                    $image_id = Database:: insert_id();
+                                    $image_id = Database::insert_id();
                                     if ($image_id) {
                                         $sql = "UPDATE $TABLETOOLDOCUMENT SET id = iid WHERE iid = $image_id";
                                         Database::query($sql);
@@ -1037,7 +1044,7 @@ class AddCourse
             $exercise->description = $html;
             $exercise->save();
 
-            $exercise_id = $exercise->id;
+            $exercise_id = $exercise->iid;
 
             $question = new MultipleAnswer();
             $question->question = get_lang('SocraticIrony');
@@ -1046,7 +1053,7 @@ class AddCourse
             $question->position = 1;
             $question->course = $courseInfo;
             $question->save($exercise);
-            $questionId = $question->id;
+            $questionId = $question->iid;
 
             $answer = new Answer($questionId, $courseInfo['real_id']);
 
@@ -1097,12 +1104,12 @@ class AddCourse
                 "INSERT INTO $TABLEGRADEBOOK (name, description, user_id, course_code, parent_id, weight, visible, certif_min_score, session_id, document_id)
                 VALUES ('$course_code','',1,'$course_code',0,100,0,75,NULL,$example_cert_id)"
             );
-            $gbid = Database:: insert_id();
+            $gbid = Database::insert_id();
             Database::query(
                 "INSERT INTO $TABLEGRADEBOOK (name, description, user_id, course_code, parent_id, weight, visible, certif_min_score, session_id, document_id)
                 VALUES ('$course_code','',1,'$course_code',$gbid,100,1,75,NULL,$example_cert_id)"
             );
-            $gbid = Database:: insert_id();
+            $gbid = Database::insert_id();
             Database::query(
                 "INSERT INTO $TABLEGRADEBOOKLINK (type, ref_id, user_id, course_code, category_id, created_at, weight, visible, locked)
                 VALUES (1,$exercise_id,1,'$course_code',$gbid,'$now',100,1,0)"
@@ -1128,10 +1135,19 @@ class AddCourse
         $tableDocument = Database::get_course_table(TABLE_DOCUMENT);
 
         $now = api_get_utc_datetime();
-        $sql = "INSERT INTO $tableDocument (id, c_id, path,title,filetype,size, readonly, session_id)
-                VALUES ($counter, $course_id, '".$file['path']."', '".$file['title']."', '".$file['filetype']."', '".$file['size']."', 0, 0)";
-        Database::query($sql);
-        $docId = Database:: insert_id();
+        $docId = Database::insert(
+            $tableDocument,
+            [
+                'id' => $counter,
+                'c_id' => $course_id,
+                'path' => $file['path'],
+                'title' => $file['title'],
+                'filetype' => $file['filetype'],
+                'size' => $file['size'],
+                'readonly' => 0,
+                'session_id' => 0,
+            ]
+        );
 
         $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
 
@@ -1329,7 +1345,7 @@ class AddCourse
                 // Default true
                 $addTeacher = isset($params['add_user_as_teacher']) ? $params['add_user_as_teacher'] : true;
                 if ($addTeacher) {
-                    $i_course_sort = CourseManager:: userCourseSort(
+                    $i_course_sort = CourseManager::userCourseSort(
                         $user_id,
                         $code
                     );

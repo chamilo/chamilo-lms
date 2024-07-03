@@ -159,6 +159,85 @@ switch ($action) {
         header('Location: '.$url);
         exit;
         break;
+    case 'download_all_certificates':
+        $courseCode = api_get_course_id();
+        $sessionId = api_get_session_id();
+        $categoryId = (int) $_GET['catId'];
+        $date = api_get_utc_datetime(null, false, true);
+        $pdfName = 'certs_'.$courseCode.'_'.$sessionId.'_'.$categoryId.'_'.$date->format('Y-m-d');
+        $finalFile = api_get_path(SYS_ARCHIVE_PATH)."$pdfName.pdf";
+
+        $result = DocumentManager::file_send_for_download($finalFile, true);
+        if (false === $result) {
+            api_not_allowed(true);
+        }
+        break;
+    case 'download_certificates_report':
+        $exportData = array_map(function ($learner) {
+            return [
+                $learner['user_id'],
+                $learner['username'],
+                $learner['firstname'],
+                $learner['lastname'],
+            ];
+        }, $certificate_list);
+
+        $csvContent = [];
+        $csvHeaders = [];
+        $csvHeaders[] = get_lang('Id');
+        $csvHeaders[] = get_lang('UserName');
+        $csvHeaders[] = get_lang('FirstName');
+        $csvHeaders[] = get_lang('LastName');
+        $csvHeaders[] = get_lang('Score');
+        $csvHeaders[] = get_lang('Date');
+
+        $extraFields = [];
+        $extraFieldsFromSettings = [];
+        $extraFieldsFromSettings = api_get_configuration_value('certificate_export_report_user_extra_fields');
+
+        if (!empty($extraFieldsFromSettings) && isset($extraFieldsFromSettings['extra_fields'])) {
+            $extraFields = $extraFieldsFromSettings['extra_fields'];
+            $usersProfileInfo = [];
+
+            $userIds = array_column($certificate_list, 'user_id', 'user_id');
+
+            foreach ($extraFields as $fieldName) {
+                $extraFieldInfo = UserManager::get_extra_field_information_by_name($fieldName);
+
+                if (!empty($extraFieldInfo)) {
+                    $csvHeaders[] = $fieldName;
+
+                    $usersProfileInfo[$extraFieldInfo['id']] = TrackingCourseLog::getAdditionalProfileInformationOfFieldByUser(
+                        $extraFieldInfo['id'],
+                        $userIds
+                    );
+                }
+            }
+
+            foreach ($exportData as $key => $row) {
+                $list = GradebookUtils::get_list_gradebook_certificates_by_user_id(
+                    $row[0],
+                    $categoryId
+                );
+
+                foreach ($list as $valueCertificate) {
+                    $row[] = $valueCertificate['score_certificate'];
+                    $row[] = api_convert_and_format_date($valueCertificate['created_at']);
+                }
+
+                foreach ($usersProfileInfo as $extraInfo) {
+                    $row[] = $extraInfo[$row[0]][0];
+                }
+
+                $csvContent[] = $row;
+            }
+        }
+
+        array_unshift($csvContent, $csvHeaders);
+
+        $fileName = 'learner_certificate_report_'.api_get_local_time();
+        Export::arrayToCsv($csvContent, $fileName);
+        break;
 }
 
 $interbreadcrumb[] = [
@@ -277,6 +356,11 @@ if (count($certificate_list) > 0 && $hideCertificateExport !== 'true') {
         );
     }
 
+    $actions .= Display::url(
+        Display::return_icon('export_csv.png', get_lang('ExportCertificateReport'), [], ICON_SIZE_MEDIUM),
+        $url.'&action=download_certificates_report'
+    );
+
     if ($allowCustomCertificate) {
         $actions .= Display::url(
             Display::return_icon('file_zip.png', get_lang('ExportAllCertificatesToZIP'), [], ICON_SIZE_MEDIUM),
@@ -322,15 +406,15 @@ if (count($certificate_list) == 0) {
                 ['target' => '_blank', 'class' => 'btn btn-default']
             );
             echo $certificateUrl.PHP_EOL;
-
-            $url .= '&action=export';
-            $pdf = Display::url(
-                Display::return_icon('pdf.png', get_lang('Download')),
-                $url,
-                ['target' => '_blank']
-            );
-            echo $pdf.PHP_EOL;
-
+            if ($hideCertificateExport !== 'true') {
+                $url .= '&action=export';
+                $pdf = Display::url(
+                    Display::return_icon('pdf.png', get_lang('Download')),
+                    $url,
+                    ['target' => '_blank']
+                );
+                echo $pdf.PHP_EOL;
+            }
             echo '<a onclick="return confirmation();" href="gradebook_display_certificate.php?sec_token='.$token.'&'.api_get_cidreq().'&action=delete&cat_id='.$categoryId.'&certificate_id='.$valueCertificate['id'].'">
                     '.Display::return_icon('delete.png', get_lang('Delete')).'
                   </a>'.PHP_EOL;

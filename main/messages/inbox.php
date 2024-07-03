@@ -62,6 +62,7 @@ if ($allowSocial) {
 // Right content
 $social_right_content = '';
 $keyword = '';
+$searchTags = [];
 if ($allowSocial) {
     $actionsLeft = '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
         Display::return_icon('new-message.png', get_lang('ComposeMessage'), [], 32).'</a>';
@@ -72,12 +73,13 @@ if ($allowSocial) {
     if ($form->validate()) {
         $values = $form->getSubmitValues();
         $keyword = $values['keyword'];
+        $searchTags = $values['tags'] ?? [];
     }
     $actionsRight = $form->returnForm();
-    $social_right_content .= Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);
+    $social_right_content .= Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight], [2, 10]);
 }
 
-$social_right_content .= MessageManager::inboxDisplay($keyword);
+$social_right_content .= MessageManager::inboxDisplay($keyword, $searchTags);
 
 $tpl = new Template(null);
 

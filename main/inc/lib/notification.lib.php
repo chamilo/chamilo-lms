@@ -9,29 +9,29 @@
 class Notification extends Model
 {
     // mail_notify_message ("At once", "Daily", "No")
-    const NOTIFY_MESSAGE_AT_ONCE = 1;
-    const NOTIFY_MESSAGE_DAILY = 8;
-    const NOTIFY_MESSAGE_WEEKLY = 12;
-    const NOTIFY_MESSAGE_NO = 0;
+    public const NOTIFY_MESSAGE_AT_ONCE = 1;
+    public const NOTIFY_MESSAGE_DAILY = 8;
+    public const NOTIFY_MESSAGE_WEEKLY = 12;
+    public const NOTIFY_MESSAGE_NO = 0;
 
     // mail_notify_invitation ("At once", "Daily", "No")
-    const NOTIFY_INVITATION_AT_ONCE = 1;
-    const NOTIFY_INVITATION_DAILY = 8;
-    const NOTIFY_INVITATION_WEEKLY = 12;
-    const NOTIFY_INVITATION_NO = 0;
+    public const NOTIFY_INVITATION_AT_ONCE = 1;
+    public const NOTIFY_INVITATION_DAILY = 8;
+    public const NOTIFY_INVITATION_WEEKLY = 12;
+    public const NOTIFY_INVITATION_NO = 0;
 
     // mail_notify_group_message ("At once", "Daily", "No")
-    const NOTIFY_GROUP_AT_ONCE = 1;
-    const NOTIFY_GROUP_DAILY = 8;
-    const NOTIFY_GROUP_WEEKLY = 12;
-    const NOTIFY_GROUP_NO = 0;
+    public const NOTIFY_GROUP_AT_ONCE = 1;
+    public const NOTIFY_GROUP_DAILY = 8;
+    public const NOTIFY_GROUP_WEEKLY = 12;
+    public const NOTIFY_GROUP_NO = 0;
 
     // Notification types
-    const NOTIFICATION_TYPE_MESSAGE = 1;
-    const NOTIFICATION_TYPE_INVITATION = 2;
-    const NOTIFICATION_TYPE_GROUP = 3;
-    const NOTIFICATION_TYPE_WALL_MESSAGE = 4;
-    const NOTIFICATION_TYPE_DIRECT_MESSAGE = 5;
+    public const NOTIFICATION_TYPE_MESSAGE = 1;
+    public const NOTIFICATION_TYPE_INVITATION = 2;
+    public const NOTIFICATION_TYPE_GROUP = 3;
+    public const NOTIFICATION_TYPE_WALL_MESSAGE = 4;
+    public const NOTIFICATION_TYPE_DIRECT_MESSAGE = 5;
     public $table;
     public $columns = [
         'id',
@@ -59,13 +59,11 @@ class Notification extends Model
      */
     public function __construct()
     {
-        // Get config from mail.conf.php, as loaded by global.inc.php
-        $platform_email = $GLOBALS['platform_email'];
         $this->table = Database::get_main_table(TABLE_NOTIFICATION);
-        if (!empty($platform_email['SMTP_FROM_EMAIL'])) {
-            $this->adminEmail = $platform_email['SMTP_FROM_EMAIL'];
-            if (!empty($platform_email['SMTP_FROM_NAME'])) {
-                $this->adminName = $platform_email['SMTP_FROM_NAME'];
+        if (!empty(api_get_mail_configuration_value('SMTP_FROM_EMAIL'))) {
+            $this->adminEmail = api_get_mail_configuration_value('SMTP_FROM_EMAIL');
+            if (!empty(api_get_mail_configuration_value('SMTP_FROM_NAME'))) {
+                $this->adminName = api_get_mail_configuration_value('SMTP_FROM_NAME');
             }
         } else {
             // Default no-reply email
@@ -239,6 +237,7 @@ class Notification extends Model
      * @param array  $attachments
      * @param array  $smsParameters
      * @param bool   $forceTitleWhenSendingEmail force the use of $title as subject instead of "You have a new message"
+     * @param bool   $checkUrls                  It checks access url of user when multiple_access_urls = true
      */
     public function saveNotification(
         $messageId,
@@ -249,11 +248,13 @@ class Notification extends Model
         $senderInfo = [],
         $attachments = [],
         $smsParameters = [],
-        $forceTitleWhenSendingEmail = false
+        $forceTitleWhenSendingEmail = false,
+        $checkUrls = false,
+        $courseId = null
     ) {
         $this->type = (int) $type;
         $messageId = (int) $messageId;
-        $content = $this->formatContent($messageId, $content, $senderInfo);
+        $content = $this->formatContent($messageId, $content, $senderInfo, $checkUrls, $courseId);
         $titleToNotification = $this->formatTitle($title, $senderInfo, $forceTitleWhenSendingEmail);
         $settingToCheck = '';
         $avoid_my_self = false;
@@ -293,7 +294,7 @@ class Notification extends Model
                 $userSetting = $defaultStatus;
 
                 if (!empty($settingInfo)) {
-                    $extra_data = UserManager::get_extra_user_data($user_id);
+                    $extra_data = UserManager::get_extra_user_data_by_field($user_id, $settingToCheck);
 
                     if (isset($extra_data[$settingToCheck])) {
                         $userSetting = $extra_data[$settingToCheck];
@@ -328,13 +329,18 @@ class Notification extends Model
                         }
 
                         if (!empty($userInfo['email'])) {
+                            if ($checkUrls) {
+                                $smsParameters['checkUrls'] = true;
+                                $smsParameters['userId'] = $senderInfo['user_id'];
+                                $smsParameters['courseId'] = $courseId;
+                            }
                             api_mail_html(
                                 $userInfo['complete_name'],
                                 $userInfo['mail'],
                                 Security::filter_terms($titleToNotification),
                                 Security::filter_terms($content),
-                                $this->adminName,
-                                $this->adminEmail,
+                                !empty($senderInfo['complete_name']) ? $senderInfo['complete_name'] : $this->adminName,
+                                !empty($senderInfo['email']) ? $senderInfo['email'] : $this->adminEmail,
                                 $extraHeaders,
                                 $attachments,
                                 false,
@@ -370,11 +376,18 @@ class Notification extends Model
      * @param string $content
      * @param array  $senderInfo result of api_get_user_info() or
      *                           GroupPortalManager:get_group_data()
+     * @param bool   $checkUrls  It checks access url of user when multiple_access_urls = true
+     * @param int    $courseId   The course id will be checked when checkUrls = true
      *
      * @return string
      * */
-    public function formatContent($messageId, $content, $senderInfo)
-    {
+    public function formatContent(
+        $messageId,
+        $content,
+        $senderInfo,
+        $checkUrls = false,
+        $courseId = null
+    ) {
         $hook = HookNotificationContent::create();
         if (!empty($hook)) {
             $hook->setEventData(['content' => $content]);
@@ -382,6 +395,18 @@ class Notification extends Model
             if (isset($data['content'])) {
                 $content = $data['content'];
             }
+        }
+
+        $accessConfig = [];
+        $useMultipleUrl = api_get_configuration_value('multiple_access_urls');
+        if ($useMultipleUrl && $checkUrls) {
+            $accessUrls = api_get_access_url_from_user($senderInfo['user_id'], $courseId);
+            if (!empty($accessUrls)) {
+                $accessConfig['multiple_access_urls'] = true;
+                $accessConfig['access_url'] = (int) $accessUrls[0];
+            }
+            // To replace the current url by access url user
+            $content = str_replace(api_get_path(WEB_PATH), api_get_path(WEB_PATH, $accessConfig), $content);
         }
 
         $newMessageText = $linkToNewMessage = '';
@@ -399,7 +424,7 @@ class Notification extends Model
                 $newMessageText = '';
                 $linkToNewMessage = Display::url(
                     get_lang('SeeMessage'),
-                    api_get_path(WEB_CODE_PATH).'messages/view_message.php?id='.$messageId
+                    api_get_path(WEB_CODE_PATH, $accessConfig).'messages/view_message.php?id='.$messageId
                 );
                 break;
             case self::NOTIFICATION_TYPE_MESSAGE:
@@ -415,7 +440,7 @@ class Notification extends Model
                 }
                 $linkToNewMessage = Display::url(
                     get_lang('SeeMessage'),
-                    api_get_path(WEB_CODE_PATH).'messages/view_message.php?id='.$messageId
+                    api_get_path(WEB_CODE_PATH, $accessConfig).'messages/view_message.php?id='.$messageId
                 );
                 break;
             case self::NOTIFICATION_TYPE_INVITATION:
@@ -427,7 +452,7 @@ class Notification extends Model
                 }
                 $linkToNewMessage = Display::url(
                     get_lang('SeeInvitation'),
-                    api_get_path(WEB_CODE_PATH).'social/invitations.php'
+                    api_get_path(WEB_CODE_PATH, $accessConfig).'social/invitations.php'
                 );
                 break;
             case self::NOTIFICATION_TYPE_GROUP:
@@ -437,15 +462,15 @@ class Notification extends Model
                     $newMessageText = sprintf(get_lang('YouHaveReceivedANewMessageInTheGroupX'), $senderName);
                     $senderName = Display::url(
                         $senderInfoName,
-                        api_get_path(WEB_CODE_PATH).'social/profile.php?'.$senderInfo['user_info']['user_id']
+                        api_get_path(WEB_CODE_PATH, $accessConfig).'social/profile.php?'.$senderInfo['user_info']['user_id']
                     );
                     $newMessageText .= '<br />'.get_lang('User').': '.$senderName;
                 }
-                $groupUrl = api_get_path(WEB_CODE_PATH).'social/group_topics.php?id='.$senderInfo['group_info']['id'].'&topic_id='.$senderInfo['group_info']['topic_id'].'&msg_id='.$senderInfo['group_info']['msg_id'].'&topics_page_nr='.$topicPage;
+                $groupUrl = api_get_path(WEB_CODE_PATH, $accessConfig).'social/group_topics.php?id='.$senderInfo['group_info']['id'].'&topic_id='.$senderInfo['group_info']['topic_id'].'&msg_id='.$senderInfo['group_info']['msg_id'].'&topics_page_nr='.$topicPage;
                 $linkToNewMessage = Display::url(get_lang('SeeMessage'), $groupUrl);
                 break;
         }
-        $preferenceUrl = api_get_path(WEB_CODE_PATH).'auth/profile.php';
+        $preferenceUrl = api_get_path(WEB_CODE_PATH, $accessConfig).'auth/profile.php';
 
         // You have received a new message text
         if (!empty($newMessageText)) {

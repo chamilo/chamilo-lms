@@ -171,7 +171,7 @@ if ($subscriptionSettings['allow_add_users_to_lp']) {
 
 $extraField = new ExtraField('lp');
 $extra = $extraField->addElements($form, 0, ['lp_icon']);
-Skill::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, 0);
+Skill::addSkillsToForm($form, api_get_course_int_id(), api_get_session_id(), ITEM_TYPE_LEARNPATH, 0);
 
 $form->addElement('html', '</div>');
 

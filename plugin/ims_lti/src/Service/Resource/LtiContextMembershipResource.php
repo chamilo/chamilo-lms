@@ -5,7 +5,6 @@ use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\UserBundle\Entity\User;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -48,7 +47,7 @@ class LtiContextMembershipResource extends LtiAdvantageServiceResource
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function validate()
     {
@@ -81,7 +80,7 @@ class LtiContextMembershipResource extends LtiAdvantageServiceResource
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function process()
     {
@@ -170,8 +169,6 @@ class LtiContextMembershipResource extends LtiAdvantageServiceResource
     }
 
     /**
-     * @param array  $members
-     *
      * @return array
      */
     private function getGetData(array $members)

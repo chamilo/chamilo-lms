@@ -77,6 +77,7 @@ class ExtraField extends Model
     public $pageUrl;
     public $extraFieldType = 0;
 
+    public $table;
     public $table_field_options;
     public $table_field_values;
     public $table_field_tag;
@@ -164,6 +165,19 @@ class ExtraField extends Model
                 break;
             case 'lp_view':
                 $this->extraFieldType = EntityExtraField::LP_VIEW_TYPE;
+                break;
+            case 'course_announcement':
+                $this->extraFieldType = EntityExtraField::COURSE_ANNOUNCEMENT;
+                break;
+            case 'message':
+                $this->extraFieldType = EntityExtraField::MESSAGE_TYPE;
+                break;
+            case 'document':
+                $this->extraFieldType = EntityExtraField::DOCUMENT_TYPE;
+                break;
+            case 'attendance_calendar':
+                $this->extraFieldType = EntityExtraField::ATTENDANCE_CALENDAR_TYPE;
+                break;
         }
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
@@ -195,6 +209,10 @@ class ExtraField extends Model
             'exercise',
             'track_exercise',
             'lp_view',
+            'course_announcement',
+            'message',
+            'document',
+            'attendance_calendar',
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {
@@ -647,6 +665,7 @@ class ExtraField extends Model
                 $row['variable'],
                 $row['display_text']
             );
+            $row['options'] = [];
 
             // All the tags of the field
             $sql = "SELECT * FROM $this->table_field_tag
@@ -1080,6 +1099,10 @@ class ExtraField extends Model
                             'extra_'.$field_details['variable'],
                             'trim'
                         );
+                        $form->applyFilter(
+                            'extra_'.$field_details['variable'],
+                            'html_filter'
+                        );
                         if ($freezeElement) {
                             $form->freeze('extra_'.$field_details['variable']);
                         }
@@ -1221,7 +1244,10 @@ class ExtraField extends Model
                             $field_details['display_text']
                         );
 
-                        $defaults['extra_'.$field_details['variable']] = api_get_local_time();
+                        $defaults = [];
+                        if (EntityExtraField::LP_ITEM_FIELD_TYPE !== (int) $field_details['extra_field_type']) {
+                            $defaults['extra_'.$field_details['variable']] = api_get_local_time();
+                        }
                         if (!isset($form->_defaultValues['extra_'.$field_details['variable']])) {
                             $form->setDefaults($defaults);
                         }
@@ -1417,6 +1443,12 @@ class ExtraField extends Model
                                 $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php';
                             }
 
+                            $allowAsTags = 'true';
+
+                            if ('portfolio' === $this->type) {
+                                $allowAsTags = 'false';
+                            }
+
                             $form->setDefaults(
                                 [
                                     'extra_'.$field_details['variable'] => $selectedOptions,
@@ -1435,7 +1467,7 @@ class ExtraField extends Model
                                         }
                                     },
                                     cache: false,
-                                    tags: true,
+                                    tags: $allowAsTags,
                                     tokenSeparators: [','],
                                     placeholder: '".get_lang('StartToType')."'
                                 });
@@ -1496,6 +1528,7 @@ class ExtraField extends Model
                         );
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'html_filter');
                         if ($freezeElement) {
                             $form->freeze('extra_'.$field_details['variable']);
                         }
@@ -1510,6 +1543,7 @@ class ExtraField extends Model
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
                         $form->applyFilter('extra_'.$field_details['variable'], 'mobile_phone_number_filter');
+                        $form->applyFilter('extra_'.$field_details['variable'], 'html_filter');
                         $form->addRule(
                             'extra_'.$field_details['variable'],
                             get_lang('MobilePhoneNumberWrong'),
@@ -1964,6 +1998,13 @@ class ExtraField extends Model
         return false;
     }
 
+    public function getHandlerEntityByFieldVariable(string $variable)
+    {
+        return Database::getManager()
+            ->getRepository('ChamiloCoreBundle:ExtraField')
+            ->findOneBy(['variable' => $variable, 'extraFieldType' => $this->extraFieldType]);
+    }
+
     /**
      * @param array $params
      *
@@ -2193,9 +2234,9 @@ class ExtraField extends Model
     {
         $form = new FormValidator($this->type.'_field', 'post', $url);
 
-        $form->addElement('hidden', 'type', $this->type);
+        $form->addHidden('type', $this->type);
         $id = isset($_GET['id']) ? (int) $_GET['id'] : null;
-        $form->addElement('hidden', 'id', $id);
+        $form->addHidden('id', $id);
 
         // Setting the form elements
         $header = get_lang('Add');
@@ -2207,7 +2248,7 @@ class ExtraField extends Model
             $defaults = $this->get($id, false);
         }
 
-        $form->addElement('header', $header);
+        $form->addHeader($header);
 
         if ('edit' === $action) {
             $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'
@@ -2216,10 +2257,10 @@ class ExtraField extends Model
 
             $form->addText(
                 'display_text',
-                [get_lang('Name'), $translateButton]
+                [get_lang('Title'), $translateButton]
             );
         } else {
-            $form->addElement('text', 'display_text', get_lang('Name'));
+            $form->addText('display_text', get_lang('Title'));
         }
 
         // Field type
@@ -2232,8 +2273,15 @@ class ExtraField extends Model
             $types,
             ['id' => 'field_type']
         );
-        $form->addElement('label', get_lang('Example'), '<div id="example">-</div>');
-        $form->addElement('text', 'variable', get_lang('FieldLabel'), ['class' => 'span5']);
+        $form->addLabel(get_lang('Example'), '<div id="example">-</div>');
+        $form->addElement(
+            'text',
+            'variable',
+            [
+                get_lang('SysId'),
+                get_lang('ExtraFieldIdComment'),
+            ]
+        );
         $form->addElement(
             'text',
             'field_options',
@@ -2257,23 +2305,23 @@ class ExtraField extends Model
                     get_lang('EditExtraFieldOptions'),
                     'extra_field_options.php?type='.$this->type.'&field_id='.$id
                 );
-                $form->addElement('label', null, $url);
+                $form->addLabel(null, $url);
 
                 if (self::FIELD_TYPE_SELECT == $defaults['field_type']) {
                     $urlWorkFlow = Display::url(
                         get_lang('EditExtraFieldWorkFlow'),
                         'extra_field_workflow.php?type='.$this->type.'&field_id='.$id
                     );
-                    $form->addElement('label', null, $urlWorkFlow);
+                    $form->addLabel(null, $urlWorkFlow);
                 }
 
                 $form->freeze('field_options');
             }
         }
-        $form->addElement(
-            'text',
+        $form->addText(
             'default_value',
             get_lang('FieldDefaultValue'),
+            false,
             ['id' => 'default_value']
         );
 
@@ -2304,7 +2352,7 @@ class ExtraField extends Model
         $form->addGroup($group, '', get_lang('FieldLoggeable'), '', false);
         */
 
-        $form->addElement('text', 'field_order', get_lang('FieldOrder'));
+        $form->addNumeric('field_order', get_lang('FieldOrder'), ['step' => 1, 'min' => 0]);
 
         if ('edit' == $action) {
             $option = new ExtraFieldOption($this->type);
@@ -3120,7 +3168,18 @@ JAVASCRIPT;
         $tagRelExtraTable = Database::get_main_table(TABLE_MAIN_EXTRA_FIELD_REL_TAG);
         $tagTable = Database::get_main_table(TABLE_MAIN_TAG);
         $optionsTable = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
-        $value = Database::escape_string(implode("','", $options));
+
+        $cleanOptions = [];
+        foreach ($options as $option) {
+            $cleanOptions[] = Database::escape_string($option);
+        }
+        $cleanOptions = array_filter($cleanOptions);
+
+        if (empty($cleanOptions)) {
+            return [];
+        }
+
+        $value = implode("','", $cleanOptions);
 
         $sql = "SELECT DISTINCT t.*, v.value, o.display_text
                 FROM $tagRelExtraTable te
@@ -3138,6 +3197,58 @@ JAVASCRIPT;
         $result = Database::store_result($result);
 
         return $result;
+    }
+
+    /**
+     * For one given field ID, get all the item_id + value.
+     *
+     * @return array
+     */
+    public function getAllValuesByFieldId(int $fieldId)
+    {
+        $type = $this->get_field_type_by_id($fieldId);
+        $sql = "SELECT item_id, value FROM ".$this->table_field_values." WHERE field_id = $fieldId";
+        $res = Database::query($sql);
+        $values = [];
+        if (Database::num_rows($res) > 0) {
+            while ($row = Database::fetch_array($res)) {
+                if (is_null($row['value'])) {
+                    // If the entry exists but is NULL, consider it an empty string (to reproduce the behaviour of UserManager::get_extra_user_data()
+                    $values[$row['item_id']] = '';
+                } else {
+                    if ($type == self::FIELD_TYPE_SELECT_MULTIPLE) {
+                        $values[$row['item_id']] = explode(';', $row['value']);
+                    } elseif (empty($row['value'])) {
+                        // Avoid "0" values when no value should be set
+                        $values[$row['item_id']] = null;
+                    } else {
+                        $values[$row['item_id']] = $row['value'];
+                    }
+                }
+            }
+        }
+
+        return $values;
+    }
+
+    /**
+     * Gets the default value for one specific field.
+     *
+     * @param int $fieldId Field ID
+     *
+     * @return mixed Default value for the field (could be null, or usually a string)
+     */
+    public function getDefaultValueByFieldId(int $fieldId)
+    {
+        $sql = "SELECT default_value FROM $this->table WHERE id = $fieldId";
+        $res = Database::query($sql);
+        if (Database::num_rows($res) > 0) {
+            $row = Database::fetch_array($res);
+
+            return $row['default_value'];
+        }
+
+        return null;
     }
 
     /**

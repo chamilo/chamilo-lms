@@ -294,6 +294,7 @@ class AttendanceController
         $data['attendance_id'] = $attendance_id;
         $groupId = isset($_REQUEST['group_id']) ? $_REQUEST['group_id'] : null;
         $data['users_in_course'] = $attendance->get_users_rel_course($attendance_id, $groupId);
+        $data['faults'] = [];
 
         $filter_type = 'today';
         if (!empty($_REQUEST['filter'])) {
@@ -349,20 +350,23 @@ class AttendanceController
         );
 
         if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
-            if (isset($_POST['hidden_input'])) {
-                foreach ($_POST['hidden_input'] as $cal_id) {
-                    $users_present = [];
-                    if (isset($_POST['check_presence'][$cal_id])) {
-                        $users_present = $_POST['check_presence'][$cal_id];
+            $check = Security::check_token();
+            if ($check) {
+                if (isset($_POST['hidden_input'])) {
+                    foreach ($_POST['hidden_input'] as $cal_id) {
+                        $users_present = [];
+                        if (isset($_POST['check_presence'][$cal_id])) {
+                            $users_present = $_POST['check_presence'][$cal_id];
+                        }
+                        $attendance->attendance_sheet_add(
+                            $cal_id,
+                            $users_present,
+                            $attendance_id
+                        );
                     }
-                    $attendance->attendance_sheet_add(
-                        $cal_id,
-                        $users_present,
-                        $attendance_id
-                    );
                 }
+                Security::clear_token();
             }
-
             $data['users_in_course'] = $attendance->get_users_rel_course($attendance_id, $groupId);
             $my_calendar_id = null;
             if (is_numeric($filter_type)) {
@@ -399,11 +403,43 @@ class AttendanceController
             );
         }
 
+        $attendanceInfo = $attendance->get_attendance_by_id($attendance_id);
+
+        $allowSignature = api_get_configuration_value('enable_sign_attendance_sheet');
+        $allowComment = api_get_configuration_value('attendance_allow_comments');
+        $func = isset($_REQUEST['func']) ? $_REQUEST['func'] : null;
+        $calendarId = isset($_REQUEST['calendar_id']) ? (int) $_REQUEST['calendar_id'] : null;
+        $fullScreen = ($func == 'fullscreen' && $calendarId > 0 && $allowSignature);
+
         $data['edit_table'] = intval($edit);
         $data['is_locked_attendance'] = $attendance->is_locked_attendance($attendance_id);
+        $data['allowSignature'] = $allowSignature;
+        $data['allowComment'] = $allowComment;
+        $data['fullScreen'] = $fullScreen;
+        $data['attendanceName'] = $attendanceInfo['name'];
+
+        if ($fullScreen) {
+            if (api_is_allowed_to_edit()) {
+                $uinfo = api_get_user_info();
+                $cinfo = api_get_course_info();
+                $data['calendarId'] = $calendarId;
+                $data['trainer'] = api_get_person_name($uinfo['firstname'], $uinfo['lastname']);
+                $data['courseName'] = $cinfo['title'];
+                $attendanceCalendar = $attendance->get_attendance_calendar(
+                    $attendance_id,
+                    'calendar_id',
+                    $calendarId,
+                    $groupId
+                );
+                $data['attendanceCalendar'] = $attendanceCalendar[0];
+                $this->view->set_template('attendance_sheet_fullscreen');
+            }
+        } else {
+            $this->view->set_template('attendance_sheet');
+        }
+
         $this->view->set_data($data);
         $this->view->set_layout('layout');
-        $this->view->set_template('attendance_sheet');
         $this->view->render();
     }
 
@@ -444,7 +480,8 @@ class AttendanceController
                                 $start_datetime,
                                 $end_datetime,
                                 $repeat_type,
-                                $groupList
+                                $groupList,
+                                $_POST
                             );
                             $action = 'calendar_list';
                         } else {
@@ -479,7 +516,7 @@ class AttendanceController
                     $datetime = $_POST['date_time'];
                     $datetimezone = api_get_utc_datetime($datetime);
                     $attendance->set_date_time($datetimezone);
-                    $attendance->attendance_calendar_edit($calendar_id, $attendance_id);
+                    $attendance->attendance_calendar_edit($calendar_id, $attendance_id, $_POST);
                     $data['calendar_id'] = 0;
                     $action = 'calendar_list';
                 } else {
@@ -508,6 +545,41 @@ class AttendanceController
         $this->view->set_layout('layout');
         $this->view->set_template('attendance_calendar');
         $this->view->render();
+    }
+
+    /**
+     * Checks the attendance sheet to export XLS.
+     */
+    public function attendanceSheetExportToXls(
+        int $attendanceId,
+        int $studentId = 0,
+        string $courseCode = '',
+        ?int $groupId,
+        ?string $filter
+    ) {
+        $attendance = new Attendance();
+        $courseInfo = api_get_course_info($courseCode);
+        $attendance->set_course_id($courseInfo['code']);
+
+        $filterType = 'today';
+        if (!empty($filter)) {
+            $filterType = $filter;
+        }
+
+        $myCalendarId = null;
+        if (is_numeric($filterType)) {
+            $myCalendarId = $filterType;
+            $filterType = 'calendar_id';
+        }
+
+        $attendance->exportAttendanceSheetToXls(
+            $attendanceId,
+            $studentId,
+            $courseCode,
+            $groupId,
+            $filterType,
+            $myCalendarId
+        );
     }
 
     /**
@@ -579,9 +651,11 @@ class AttendanceController
         $data_table = [];
         $head_table = ['#', get_lang('Name')];
         foreach ($data_array['attendant_calendar'] as $class_day) {
+            $labelDuration = !empty($class_day['duration']) ? get_lang('Duration').' : '.$class_day['duration'] : '';
             $head_table[] =
                 api_format_date($class_day['date_time'], DATE_FORMAT_NUMBER_NO_YEAR).' '.
-                api_format_date($class_day['date_time'], TIME_NO_SEC_FORMAT);
+                api_format_date($class_day['date_time'], TIME_NO_SEC_FORMAT).' '.
+                $labelDuration;
         }
         $data_table[] = $head_table;
         $data_attendant_calendar = $data_array['attendant_calendar'];

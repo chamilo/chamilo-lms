@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
+use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 
 /**
@@ -27,13 +28,15 @@ class AnnouncementManager
     /**
      * @return array
      */
-    public static function getTags()
+    public static function getTags(array $excluded = [])
     {
         $tags = [
             '((user_name))',
             '((user_email))',
             '((user_firstname))',
             '((user_lastname))',
+            '((user_picture))',
+            '((user_complete_name))',
             '((user_official_code))',
             '((course_title))',
             '((course_link))',
@@ -55,6 +58,10 @@ class AnnouncementManager
             $tags[] = '((general_coach_email))';
         }
 
+        if ($excluded) {
+            return array_diff($tags, $excluded);
+        }
+
         return $tags;
     }
 
@@ -69,11 +76,11 @@ class AnnouncementManager
     public static function parseContent(
         $userId,
         $content,
-        $courseCode,
+        $courseCode = '',
         $sessionId = 0
     ) {
         $readerInfo = api_get_user_info($userId, false, false, true, true, false, true);
-        $courseInfo = api_get_course_info($courseCode);
+        $courseInfo = $courseCode ? api_get_course_info($courseCode) : [];
         $teacherList = '';
         if ($courseInfo) {
             $teacherList = CourseManager::getTeacherListFromCourseCodeToString($courseInfo['code']);
@@ -83,10 +90,9 @@ class AnnouncementManager
         $coaches = '';
         if (!empty($sessionId)) {
             $sessionInfo = api_get_session_info($sessionId);
-            $coaches = CourseManager::get_coachs_from_course_to_string(
-                $sessionId,
-                $courseInfo['real_id']
-            );
+            $coaches = $courseInfo
+                ? CourseManager::get_coachs_from_course_to_string($sessionId, $courseInfo['real_id'])
+                : '';
 
             $generalCoach = api_get_user_info($sessionInfo['id_coach']);
             $generalCoachName = $generalCoach['complete_name'];
@@ -97,6 +103,7 @@ class AnnouncementManager
         $data['user_name'] = '';
         $data['user_firstname'] = '';
         $data['user_lastname'] = '';
+        $data['user_complete_name'] = '';
         $data['user_official_code'] = '';
         $data['user_email'] = '';
         if (!empty($readerInfo)) {
@@ -105,10 +112,12 @@ class AnnouncementManager
             $data['user_firstname'] = $readerInfo['firstname'];
             $data['user_lastname'] = $readerInfo['lastname'];
             $data['user_official_code'] = $readerInfo['official_code'];
+            $data['user_complete_name'] = $readerInfo['complete_name'];
         }
 
+        $data['user_picture'] = UserManager::getUserPicture($userId, USER_IMAGE_SIZE_ORIGINAL);
         $data['course_title'] = $courseInfo['name'] ?? '';
-        $courseLink = api_get_course_url($courseCode, $sessionId);
+        $courseLink = $courseCode ? api_get_course_url($courseCode, $sessionId) : '';
         $data['course_link'] = Display::url($courseLink, $courseLink);
         $data['teachers'] = $teacherList;
 
@@ -146,7 +155,7 @@ class AnnouncementManager
         $tags = self::getTags();
         foreach ($tags as $tag) {
             $simpleTag = str_replace(['((', '))'], '', $tag);
-            $value = isset($data[$simpleTag]) ? $data[$simpleTag] : '';
+            $value = $data[$simpleTag] ?? '';
             $content = str_replace($tag, $value, $content);
         }
 
@@ -471,8 +480,8 @@ class AnnouncementManager
                 Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL)."</a>";
 
             if (api_is_allowed_to_edit(false, true)) {
-                $modify_icons .= "<a 
-                    href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$id."&sec_token=".$stok."\" 
+                $modify_icons .= "<a
+                    href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$id."&sec_token=".$stok."\"
                     onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."')) return false;\">".
                     Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).
                     "</a>";
@@ -1533,6 +1542,7 @@ class AnnouncementManager
      * @param Monolog\Handler\HandlerInterface logger
      * @param int  $senderId
      * @param bool $directMessage
+     * @param bool $checkUrls     It checks access url of user when multiple_access_urls = true
      *
      * @return array
      */
@@ -1544,11 +1554,12 @@ class AnnouncementManager
         $sendToDrhUsers = false,
         $logger = null,
         $senderId = 0,
-        $directMessage = false
+        $directMessage = false,
+        $checkUrls = false
     ) {
         $email = new AnnouncementEmail($courseInfo, $sessionId, $announcementId, $logger);
 
-        return $email->send($sendToUsersInSession, $sendToDrhUsers, $senderId, $directMessage);
+        return $email->send($sendToUsersInSession, $sendToDrhUsers, $senderId, $directMessage, $checkUrls);
     }
 
     /**
@@ -1910,7 +1921,7 @@ class AnnouncementManager
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             if (!in_array($row['id'], $displayed)) {
                 $actionUrl = api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'
-                    .api_get_cidreq_params($courseInfo['code'], $session_id, $row['to_group_id']);
+                    .api_get_cidreq_params($courseInfo['code'], $session_id, $group_id);
                 $sent_to_icon = '';
                 // the email icon
                 if ($row['email_sent'] == '1') {
@@ -2231,5 +2242,41 @@ class AnnouncementManager
         $result = Database::query($sql);
 
         return Database::num_rows($result);
+    }
+
+    public static function createEvent(
+        int $announcementId,
+        string $startDate,
+        string $endDate,
+        array $choosenUsers = [],
+        array $reminders = []
+    ): ?CCalendarEvent {
+        $em = Database::getManager();
+        $announcement = $em->find('ChamiloCourseBundle:CAnnouncement', $announcementId);
+        $agenda = new Agenda('course');
+
+        $eventId = $agenda->addEvent(
+            $startDate,
+            $endDate,
+            '',
+            $announcement->getTitle(),
+            $announcement->getContent(),
+            $choosenUsers,
+            false,
+            null,
+            [],
+            [],
+            null,
+            '',
+            [],
+            false,
+            $reminders
+        );
+
+        if ($eventId) {
+            return $em->find('ChamiloCourseBundle:CCalendarEvent', $eventId);
+        }
+
+        return null;
     }
 }

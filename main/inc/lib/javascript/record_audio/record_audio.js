@@ -74,7 +74,7 @@ window.RecordAudio = (function () {
             }
 
             $.ajax({
-                url: _p.web_ajax + 'record_audio_rtc.ajax.php?' + $.param({
+                url: _p.web_ajax + 'record_audio_rtc.ajax.php?' + _p.web_cid_query + $.param({
                     type: rtcInfo.type,
                     tool: (!!txtName.length ? 'document' : 'exercise')
                 }) + courseParams,
@@ -197,6 +197,8 @@ window.RecordAudio = (function () {
                     saveAudio();
                 }
 
+                $(rtcInfo.plyrPreviewId + '-previous').parents('.form-group').remove();
+
                 tagAudio
                     .removeClass('hidden')
                     .addClass('show')
@@ -249,7 +251,7 @@ window.RecordAudio = (function () {
             var gui = new Wami.GUI({
                 id: wamiInfo.containerId,
                 singleButton: true,
-                recordUrl: _p.web_ajax + 'record_audio_wami.ajax.php?' + $.param({
+                recordUrl: _p.web_ajax + 'record_audio_wami.ajax.php?' + _p.web_cid_query + $.param({
                     waminame: fileName + '.wav',
                     wamidir: wamiInfo.directory,
                     wamiuserid: wamiInfo.userId,

@@ -14,14 +14,14 @@ use ChamiloSession as Session;
 class GradebookDataGenerator
 {
     // Sorting types constants
-    const GDG_SORT_TYPE = 1;
-    const GDG_SORT_NAME = 2;
-    const GDG_SORT_DESCRIPTION = 4;
-    const GDG_SORT_WEIGHT = 8;
-    const GDG_SORT_DATE = 16;
-    const GDG_SORT_ASC = 32;
-    const GDG_SORT_DESC = 64;
-    const GDG_SORT_ID = 128;
+    public const GDG_SORT_TYPE = 1;
+    public const GDG_SORT_NAME = 2;
+    public const GDG_SORT_DESCRIPTION = 4;
+    public const GDG_SORT_WEIGHT = 8;
+    public const GDG_SORT_DATE = 16;
+    public const GDG_SORT_ASC = 32;
+    public const GDG_SORT_DESC = 64;
+    public const GDG_SORT_ID = 128;
     public $userId;
     public $hidePercentage = false;
 

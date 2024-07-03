@@ -10,7 +10,7 @@
  */
 class CreateDrupalUser extends Plugin implements HookPluginInterface
 {
-    const EXTRAFIELD_VARIABLE_NAME = 'drupal_user_id';
+    public const EXTRAFIELD_VARIABLE_NAME = 'drupal_user_id';
 
     /**
      * Class constructor.

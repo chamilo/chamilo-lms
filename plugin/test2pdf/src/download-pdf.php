@@ -30,9 +30,14 @@ $pdf->AddPage();
 
 $pdf->SetFont('Arial', '', 16);
 $pdf->SetTextColor(64);
-$pdf->MultiCell(0, 7, $infoQuiz['title'], 0, 'L', false);
+$pdf->MultiCell(0, 7, $titleQuiz, 0, 'L', false);
 if (!empty($infoQuiz['description'])) {
-    $pdf->WriteHTML(removeQuotes($infoQuiz['description']));
+    $pdf->WriteHTML(
+        PDF::fixImagesPaths(
+            removeQuotes($infoQuiz['description']),
+            $infoCourse
+        )
+    );
 }
 
 // Select all questions of the supported types from the given course
@@ -50,17 +55,36 @@ if ($_GET['type'] == 'question' || $_GET['type'] == 'all') {
         $pdf->SetTextColor(64);
         $pdf->MultiCell(0, 7, ($key + $j).' - '.$infoQuestion['question'], 0, 'L', false);
         if (!empty($infoQuestion['description'])) {
-            $pdf->WriteHTML(removeQuotes($infoQuestion['description']));
+            $pdf->WriteHTML(
+                PDF::fixImagesPaths(
+                    removeQuotes($infoQuestion['description']),
+                    $infoCourse
+                )
+            );
         }
 
         $infoAnswer = getAnswers($courseId, $value);
         foreach ($infoAnswer as $key2 => $value2) {
             $pdf->SetFont('Arial', 'I', 10);
             $pdf->SetTextColor(96);
-            $pdf->Cell(1, 7, '', 0, 0);
-            $pdf->Rect($pdf->x + 2, $pdf->y, 4, 4);
-            $pdf->Cell(7, 7, '', 0, 0);
-            $pdf->MultiCell(0, 5, $letters[$key2].' - '.removeHtml($value2['answer']), 0, 'L', false);
+            if ($infoQuestion['type'] == 3) {
+                $listAnswerInfo = getAnswerFillInBlanks($value2['answer']);
+                $answerText = $listAnswerInfo['text'];
+                if (!empty($listAnswerInfo['words_with_bracket'])) {
+                    foreach ($listAnswerInfo['words_with_bracket'] as $wordWithBracket) {
+                        if (!empty($wordWithBracket)) {
+                            $answerText = str_replace($wordWithBracket, '[_____]', $answerText);
+                        }
+                    }
+                }
+                $answerText = str_replace(['<p>', '</p>'], ['', '. '], $answerText);
+                $pdf->MultiCell(0, 5, removeHtml($answerText), 0, 'L', false);
+            } else {
+                $pdf->Cell(1, 7, '', 0, 0);
+                $pdf->Rect($pdf->x + 2, $pdf->y, 4, 4);
+                $pdf->Cell(7, 7, '', 0, 0);
+                $pdf->MultiCell(0, 5, $letters[$key2].' - '.removeHtml($value2['answer']), 0, 'L', false);
+            }
             $pdf->Ln(1);
         }
         $pdf->Ln(4);
@@ -77,6 +101,7 @@ if ($_GET['type'] == 'answer' || $_GET['type'] == 'all') {
             $answers = '';
             $infoQuestion = getInfoQuestion($courseId, $value);
             if ($infoQuestion['type'] == 2 ||
+                $infoQuestion['type'] == 3 ||
                 $infoQuestion['type'] == 9 ||
                 $infoQuestion['type'] == 11 ||
                 $infoQuestion['type'] == 12 ||
@@ -84,14 +109,24 @@ if ($_GET['type'] == 'answer' || $_GET['type'] == 'all') {
             ) {
                 $infoAnswer = getAnswers($courseId, $value);
                 $answers .= ' '.($key + $j).' -';
-                foreach ($infoAnswer as $key2 => $value2) {
-                    if ($value2['correct'] == 1) {
-                        $answers .= ' '.$letters[$key2].',';
+                if ($infoQuestion['type'] == 3) {
+                    foreach ($infoAnswer as $key2 => $value2) {
+                        $listAnswerInfo = getAnswerFillInBlanks($value2['answer']);
+                        if (!empty($listAnswerInfo['words'])) {
+                            $answersList = implode(', ', $listAnswerInfo['words']);
+                            $answers .= clearStudentAnswer($answersList);
+                        }
                     }
+                } else {
+                    foreach ($infoAnswer as $key2 => $value2) {
+                        if ($value2['correct'] == 1) {
+                            $answers .= ' '.$letters[$key2].',';
+                        }
+                    }
+                    $i = strrpos($answers, ',');
+                    $answers = substr($answers, 0, $i);
+                    $answers .= ' ';
                 }
-                $i = strrpos($answers, ',');
-                $answers = substr($answers, 0, $i);
-                $answers .= ' ';
                 $answerList[] = $answers;
             } else {
                 $infoAnswer = getAnswers($courseId, $value);
@@ -121,4 +156,18 @@ if ($_GET['type'] == 'answer' || $_GET['type'] == 'all') {
     }
 }
 
-$pdf->Output();
+$typeSuffix = 'q';
+switch ($_GET['type']) {
+    case 'question':
+        $typeSuffix = 'Q';
+        break;
+    case 'answer':
+        $typeSuffix = 'A';
+        break;
+    case 'all':
+        $typeSuffix = 'QA';
+        break;
+}
+// Name the file download as something like 'C2-S0-Q34-QA' where C is course ID, S is session ID, Q is quiz ID & QA is the type
+$filename = 'C'.$courseId.'-S'.(empty($sessionId) ? '0' : $sessionId).'-Q'.$quizId.'-'.$typeSuffix;
+$pdf->Output($filename, 'I');

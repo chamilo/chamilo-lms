@@ -246,7 +246,7 @@ if (!isset($_GET['running'])) {
     $educationForm = 'Albert Einstein';
     $adminPhoneForm = '(000) 001 02 03';
     $institutionForm = 'My Organisation';
-    $institutionUrlForm = 'http://www.chamilo.org';
+    $institutionUrlForm = 'https://chamilo.org';
     $languageForm = api_get_interface_language();
 
     $checkEmailByHashSent = 0;

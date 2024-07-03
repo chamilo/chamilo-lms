@@ -19,8 +19,8 @@ use Chamilo\CourseBundle\Entity\CTool;
  */
 class Plugin
 {
-    const TAB_FILTER_NO_STUDENT = '::no-student';
-    const TAB_FILTER_ONLY_STUDENT = '::only-student';
+    public const TAB_FILTER_NO_STUDENT = '::no-student';
+    public const TAB_FILTER_ONLY_STUDENT = '::only-student';
     public $isCoursePlugin = false;
     public $isAdminPlugin = false;
     public $isMailPlugin = false;
@@ -924,7 +924,7 @@ class Plugin
      *
      * @return bool True if plugin is installed/enabled, false otherwise
      */
-    public function isEnabled($checkEnabled = false)
+    public function isEnabled(bool $checkEnabled = false): bool
     {
         $settings = api_get_settings_params_simple(
             [
@@ -1084,7 +1084,9 @@ class Plugin
         $name,
         $courseId,
         $iconName = null,
-        $link = null
+        $link = null,
+        $sessionId = 0,
+        $category = 'plugin'
     ) {
         if (!$this->addCourseTool) {
             return null;
@@ -1101,16 +1103,14 @@ class Plugin
             ->findOneBy([
                 'name' => $name,
                 'cId' => $courseId,
-                'category' => 'plugin',
+                'category' => $category,
             ]);
 
         if (!$tool) {
-            $cToolId = AddCourse::generateToolId($courseId);
             $pluginName = $this->get_name();
 
             $tool = new CTool();
             $tool
-                ->setId($cToolId)
                 ->setCId($courseId)
                 ->setName($name.$visibilityPerStatus)
                 ->setLink($link ?: "$pluginName/start.php")
@@ -1120,8 +1120,15 @@ class Plugin
                 ->setAddress('squaregrey.gif')
                 ->setAddedTool(false)
                 ->setTarget('_self')
-                ->setCategory('plugin')
-                ->setSessionId(0);
+                ->setCategory($category)
+                ->setSessionId($sessionId);
+
+            $em->persist($tool);
+            $em->flush();
+
+            $tool->setId(
+                $tool->getIid()
+            );
 
             $em->persist($tool);
             $em->flush();

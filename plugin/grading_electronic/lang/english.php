@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-$strings['plugin_title'] = 'Grading Electronic';
-$strings['plugin_comment'] = 'This plugin create a text file with information about of the course';
+$strings['plugin_title'] = 'Electronic grading export';
+$strings['plugin_comment'] = 'This plugin creates a text file with additional information about of the course. Use this as a template for similar plugins creating specific reports with additional extra fields.';
 
 $strings['tool_enable'] = 'Enable tool';
 $strings['tool_enable_help'] = '
@@ -10,7 +10,7 @@ $strings['tool_enable_help'] = '
     You need assign the <code>content_top</code> region.
 ';
 
-$strings['PluginDisabled'] = 'Grading Electronic is disabed';
+$strings['PluginDisabled'] = 'Electronic grading is disabed';
 $strings['StudentId'] = 'Student ID';
 $strings['ProviderId'] = 'Provider ID';
 $strings['CourseHours'] = 'Course hours';

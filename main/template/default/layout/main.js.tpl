@@ -285,6 +285,8 @@ $(function() {
         $("#" + inputId).filterByText($("#" + inputId + "-filter"));
     });
 
+    {% set video_context_menu_hidden = 'video_context_menu_hidden'|api_get_configuration_value %}
+
     // Mediaelement
     if ( {{ show_media_element }} == 1) {
         $('video:not(.skip), audio:not(.skip)').mediaelementplayer({
@@ -292,11 +294,24 @@ $(function() {
             //renderers: ['html5', 'flash_video', 'native_flv'],
             features: ['{{ video_features }}'],
             success: function(mediaElement, originalNode, instance) {
+                {% if video_context_menu_hidden %}
+                    $('.mejs__container').on('contextmenu', function(e) {
+                        e.preventDefault();
+                    });
+                {% endif %}
+
                 {{ quiz_markers_rolls_js }}
-            },
-            vrPath: _p.web + 'web/assets/vrview/build/vrview.js'
+            }
+            {% if is_vrview_enabled %}
+                , vrPath: _p.web + 'web/assets/vrview/build/vrview.js'
+            {% endif %}
         });
     }
+    {% if video_context_menu_hidden %}
+        $('video').on('contextmenu', function(e) {
+            e.preventDefault();
+        });
+    {% endif %}
 
     // Table highlight.
     $("form .data_table input:checkbox").click(function () {
@@ -403,6 +418,31 @@ $(function() {
     }
 
     socialLikes();
+
+    {% if 'enable_message_tags'|api_get_configuration_value %}
+        // Used in MessageManager::addTagsFormToInbox
+        $('#frm_inbox_tags').on('submit', function (e) {
+            e.preventDefault();
+
+            var $submit = $(this).find(':submit');
+            var selectedData = $('#form_message_inbox_id input[name="id[]"]').serialize();
+
+            if (selectedData.length <= 0) {
+                return;
+            }
+
+            selectedData += '&'
+                + $('#extra_tags').select2('data').map(function (obj) {
+                    return encodeURI('tags[]=' + obj.id)
+                }).join('&');
+
+            $submit.prop('disabled', true);
+
+            $.post(_p.web_ajax + 'message.ajax.php?a=add_tags', selectedData, function () {
+                window.location.reload();
+            });
+        });
+    {% endif %}
 });
 
 $(window).resize(function() {

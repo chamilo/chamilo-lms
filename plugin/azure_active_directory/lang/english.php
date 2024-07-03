@@ -34,3 +34,4 @@ $strings['group_id_session_admin'] = 'Group ID for session admins';
 $strings['group_id_session_admin_help'] = 'The group ID for session admins. If empty, no user will be automatically created as session admin.';
 $strings['group_id_teacher'] = 'Group ID for teachers';
 $strings['group_id_teacher_help'] = 'The group ID for teachers. If empty, no user will be automatically created as teacher.';
+$strings['additional_interaction_required'] = 'Some additional interaction is required to authenticate you. Please login directly through <a href="https://login.microsoftonline.com" target="_blank">your authentication system</a>, then come back to this page to login.';

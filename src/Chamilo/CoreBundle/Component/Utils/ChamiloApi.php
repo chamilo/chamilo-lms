@@ -293,7 +293,7 @@ class ChamiloApi
      */
     public static function isAjaxRequest()
     {
-        $requestedWith = isset($_SERVER['HTTP_X_REQUESTED_WITH']) ? $_SERVER['HTTP_X_REQUESTED_WITH'] : null;
+        $requestedWith = $_SERVER['HTTP_X_REQUESTED_WITH'] ?? null;
 
         return $requestedWith === 'XMLHttpRequest';
     }

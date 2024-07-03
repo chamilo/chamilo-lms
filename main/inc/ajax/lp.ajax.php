@@ -19,6 +19,12 @@ if ($debug) {
     error_log('----------lp.ajax-------------- action '.$action);
 }
 
+// We check if a tool provider
+if (isset($_REQUEST['lti_launch_id'])) {
+    $ltiLaunchId = Security::remove_XSS($_REQUEST['lti_launch_id']);
+    $_SESSION['oLP']->lti_launch_id = $ltiLaunchId;
+}
+
 switch ($action) {
     case 'get_lp_list_by_course':
         $course_id = (isset($_GET['course_id']) && !empty($_GET['course_id'])) ? (int) $_GET['course_id'] : 0;
@@ -44,7 +50,10 @@ switch ($action) {
         $lpId = isset($_GET['lp_id']) ? $_GET['lp_id'] : false;
         $url = isset($_GET['url']) ? $_GET['url'] : '';
         $addMove = isset($_GET['add_move_button']) && $_GET['add_move_button'] == 1 ? true : false;
-
+        $showOnlyFolders = false;
+        if (isset($_GET['showOnlyFolders'])) {
+            $showOnlyFolders = (1 == (int) $_GET['showOnlyFolders']);
+        }
         echo DocumentManager::get_document_preview(
             $courseInfo,
             $lpId,
@@ -54,7 +63,7 @@ switch ($action) {
             null,
             $url,
             true,
-            false,
+            $showOnlyFolders,
             $folderId,
             false
         );

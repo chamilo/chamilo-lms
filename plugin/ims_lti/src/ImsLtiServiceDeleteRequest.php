@@ -11,8 +11,6 @@ class ImsLtiServiceDeleteRequest extends ImsLtiServiceRequest
 {
     /**
      * ImsLtiDeleteServiceRequest constructor.
-     *
-     * @param SimpleXMLElement $xml
      */
     public function __construct(SimpleXMLElement $xml)
     {

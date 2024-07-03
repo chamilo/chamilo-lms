@@ -28,9 +28,10 @@
   <li><a href="#8.Disable-webservices">Disable webservices</a></li>
   <li><a href="#9.Change-password-first-login">Change password on first login</a></li>
   <li><a href="#10.Hide-breadcrumb">Hide breadcrumb on unauthorized page load</a></li>
+  <li><a href="#11.SVG-and-XSS">SVG and XSS</a></li>
 </ol>
 
-<h2><a name="1.Disclosing-server-info"></a>1. Disclosing server info</h2>
+<h2><a id="1.Disclosing-server-info"></a>1. Disclosing server info</h2>
 <p>
 It is considered a safer behaviour not to disclose server information from your Chamilo page. In order to avoid
     both web server and PHP information disclosure, you might want to take the following actions:
@@ -42,22 +43,22 @@ It is considered a safer behaviour not to disclose server information from your 
 <li>Reload Apache</li>
 </ul>
 
-<h2><a name="2.Keeping-up-to-date"></a>2. Keeping up to date</h2>
+<h2><a id="2.Keeping-up-to-date"></a>2. Keeping up to date</h2>
 <p>
-Make sure you check <a href="http://support.chamilo.org/projects/chamilo-18/wiki/Security_issues">our security
+Make sure you check <a href="https://support.chamilo.org/projects/chamilo-18/wiki/Security_issues">our security
     issues page</a> from time to time.
-You can also follow our security Twitter feed: <a href="http://twitter.com/chamilosecurity">http://twitter.com/chamilosecurity</a>.
+You can also follow our security Twitter feed: <a href="https://twitter.com/chamilosecurity">https://twitter.com/chamilosecurity</a>.
 </p>
 
-<h2><a name="3.Using-safe-browsers"></a>3. Using safe browsers</h2>
+<h2><a id="3.Using-safe-browsers"></a>3. Using safe browsers</h2>
 <p> Additionally to lacking the implementation of features that really improve the quality of your browsing the
     Internet, older browsers tend to have many unresolved security flaws. Using an old browser, you put in danger the
     security of your computer and the data it contains, but you can also put others in danger by letting crackers take
     control of it and attacking others.</p>
 <p>To  avoid being a risk to yourself and others, you should download and install a recent browser. We recommend
-    <a href="http://www.getfirefox.com" target="_blank">the latest stable version of Firefox</a>.</p>
+    <a href="https://www.getfirefox.com" target="_blank" rel="noopener noreferrer">the latest stable version of Firefox</a>.</p>
 
-<h2><a name="4.Moving-config-file"></a>4. Moving your configuration file out of the web directory</h2>
+<h2><a id="4.Moving-config-file"></a>4. Moving your configuration file out of the web directory</h2>
 <p>It is considered unsafe to leave the configuration file inside the app/config/ directory, as it will be directly
     accessible for all users, which could lead crackers to download it, uninterpreted, and read through your
     configuration, which could lead to illicit
@@ -73,7 +74,7 @@ require '/etc/chamilo/configuration.php';
 This will prevent direct access to your settings and make it seem totally the same to Chamilo.
 </p>
 
-<h2><a name="5.Files-permissions"></a>5. Restricting files permissions</h2>
+<h2><a id="5.Files-permissions"></a>5. Restricting files permissions</h2>
         <p>Making all the Chamilo files world-writable will help you install quickly, and it solves many
         issues for people without much admin experience. However, it's more
         secure to make a distinct user owner of all the chamilo files and folders,
@@ -85,7 +86,7 @@ This will prevent direct access to your settings and make it seem totally the sa
         refuse the interpretation of PHP files (except for the root of the courses
         directories).</p>
     <p>Don't hesitate to hire an experienced administrator to do that,
-        it might be a bit more expensive now, but you'll be happy not to have to loose
+        it might be a bit more expensive now, but you'll be happy not to have to lose
         all of your data to a hacker who attacked your site.</p>
     <p>Only the following directories have required (or optional) write 
         permissions from the web server:<br />
@@ -158,7 +159,7 @@ This will prevent direct access to your settings and make it seem totally the sa
         </pre>
     <br />
 <hr />
-<h2><a name="6.HSTS">HTTP Headers Security</a></h2>
+<h2><a id="6.HSTS">HTTP Headers Security</a></h2>
     <p>A relatively recent development in web security, HTTP headers can be modified either
     from the web server or from the application (like Chamilo) to increase the security
         of your visitors.</p>
@@ -175,7 +176,7 @@ This will prevent direct access to your settings and make it seem totally the sa
         security techniques, check <a href="https://scotthelme.co.uk/">Scott Helme's blog</a>.
     <br />
 <hr />
-<h2><a name="7.Direct-web-access">Direct web access to files</a></h2>
+<h2><a id="7.Direct-web-access">Direct web access to files</a></h2>
     <p>If .htaccess is enabled or the .htaccess rules are translated into the
     web server vhost configuration (see installation guide for that), Chamilo
     will do some natural files access protection.<br />
@@ -196,10 +197,30 @@ This will prevent direct access to your settings and make it seem totally the sa
     this way (there is an exception for that). We believe that these resources
     do not contain confidential information. If you *DO* have confidential
     information in images, CSS or JavaScript files, you will need to update
-    these rules to suit your needs.
+    these rules to suit your needs.<br />
+    <br />
+    <h3>Access to "personal" files</h3>
+    In Chamilo 1.*, it is possible to upload files to one's "personal" folder
+    through the social network page, or through any upload popup that allows
+    you to choose the file destination (and you select your personal folder).<br />
+    <br />
+    Due to the development background in Chamilo, these files are then directly
+    accessible by anonymous users, which can lead to personal data leaks. This
+    has been left in this mode by default because many teacher users had used
+    this option to share common images between different courses and blocking
+    the feature would have meant public courses would not have shown the given
+    images.<br />
+    <br />
+    To avoid this issue and make files accessible *only* to authenticated users,
+    please set the following option to 'true' in configuration.php:<br />
+    <br />
+    <pre>
+    $_configuration['block_my_files_access'] = true;</pre>
+    This will prevent anonymous access, but will not prevent access from other
+    authenticated users.
     </p>
 
-<h2><a name="8.Disable-webservices">Disable webservices</a></h2>
+<h2><a id="8.Disable-webservices">Disable webservices</a></h2>
     <p>
         In order to disable webservices add the configuration below:
     <pre>
@@ -207,7 +228,7 @@ This will prevent direct access to your settings and make it seem totally the sa
     </pre>
     </p>
 
-<h2><a name="9.Change-password-first-login">Change password on first login</a></h2>
+<h2><a id="9.Change-password-first-login">Change password on first login</a></h2>
     <p>
         To force users to change their password on their first login, add the configuration below:
     <pre>
@@ -216,7 +237,7 @@ This will prevent direct access to your settings and make it seem totally the sa
     and add the 'ask_new_password' checkbox extra field to users.
     </p>
 
-<h2><a name="10.Hide-breadcrumb">Hide breadcrumb on unauthorized page load</a></h2>
+<h2><a id="10.Hide-breadcrumb">Hide breadcrumb on unauthorized page load</a></h2>
     <p>
         To hide the breadcrumb on pages with the "not allowed" error message, add the configuration below:
     <pre>
@@ -224,9 +245,29 @@ This will prevent direct access to your settings and make it seem totally the sa
     </pre>
     </p>
 
+<h2><a id="11.SVG-and-XSS">SVG and XSS</a></h2>
+    <p>
+        SVG files and HTML files containing inline SVG are vulnerable to XSS attacks. This is a general fact, not
+        immediately related to Chamilo, but that can affect it.<br />
+        As a general rule of thumb, you should not let your portal open to unauthenticated people, and you should not
+        allow unknown or unreliable people to upload content to your portal.<br />
+        But in case you do, or accesses of reliable people get stolen and abused, you might want to take precautions to
+        avoid as much as possible giving the tools to crackers, to damage your portal's reputation.<br />
+        The following are a series of measures you can take to reduce the risk to the maximum when talking about the
+        combination of SVG and XSS.<br />
+    <ul>
+    <li>Disable the SVG editor, in the platform settings</li>
+    <li>In the security section of the platform settings, filter the SVG extension (either through putting it in the blacklist or removing it from the whitelist)</li>
+    <li>Make sure <em>$_configuration['course_introduction_html_strict_filtering'] = true;</em> is commented or is set to true in your configuration.php file</li>
+    <li>Do not make courses "public" if they include student-contributed content</li>
+    <li>Define some Content Security Policies ('security_content_policy') in your configuration.php file</li>
+    <li>Define some XSS Protection clause ('security_xss_protection') in your configuration.php file</li>
+    </ul>
+    </p>
+
     <h2>Authors</h2>
 <ul>
-<li>Yannick Warnier, Zend Certified PHP Engineer, BeezNest Belgium SPRL,
+<li>Yannick Warnier, Chamilo Project Leader, Zend Certified PHP Engineer, BeezNest Belgium SPRL,
     <a href="mailto:yannick.warnier@beeznest.com">yannick.warnier@beeznest.com</a></li>
 </ul>
 </div>

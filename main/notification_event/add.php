@@ -18,7 +18,9 @@ $form = $manager->getAddForm($form);
 if (isset($_POST) && isset($_POST['title']) && $form->validate()) {
     $values = $form->getSubmitValues();
     $manager->save($values);
-    Display::addFlash(Display::return_message(get_lang('Saved')));
+    Display::addFlash(
+        Display::return_message(get_lang('Saved'), 'success')
+    );
     $url = api_get_path(WEB_CODE_PATH).'notification_event/list.php?';
     header('Location: '.$url);
     exit;

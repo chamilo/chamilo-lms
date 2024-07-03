@@ -32,7 +32,7 @@ final class StatementPutController
         $this->repository = $repository;
     }
 
-    public function putStatement(Request $request, Statement $statement)
+    public function putStatement(Request $request, Statement $statement): Response
     {
         if (null === $statementId = $request->query->get('statementId')) {
             throw new BadRequestHttpException('Required statementId parameter is missing.');

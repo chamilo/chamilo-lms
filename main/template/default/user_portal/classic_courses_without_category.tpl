@@ -77,6 +77,11 @@
                         <div class="category">
                             {{ item.category }}
                         </div>
+                        {% if 'show_different_course_language'| api_get_setting is same as 'true' %}
+                            <div class="course_language">
+                                {{ item.course_language }}
+                            </div>
+                        {% endif %}
                         <div class="course_extrafields">
                             {% if item.extrafields|length > 0 %}
                             {% for extrafield in item.extrafields %}

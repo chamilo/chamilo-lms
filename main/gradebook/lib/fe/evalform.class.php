@@ -10,13 +10,13 @@
  */
 class EvalForm extends FormValidator
 {
-    const TYPE_ADD = 1;
-    const TYPE_EDIT = 2;
-    const TYPE_MOVE = 3;
-    const TYPE_RESULT_ADD = 4;
-    const TYPE_RESULT_EDIT = 5;
-    const TYPE_ALL_RESULTS_EDIT = 6;
-    const TYPE_ADD_USERS_TO_EVAL = 7;
+    public const TYPE_ADD = 1;
+    public const TYPE_EDIT = 2;
+    public const TYPE_MOVE = 3;
+    public const TYPE_RESULT_ADD = 4;
+    public const TYPE_RESULT_EDIT = 5;
+    public const TYPE_ALL_RESULTS_EDIT = 6;
+    public const TYPE_ADD_USERS_TO_EVAL = 7;
 
     protected $evaluation_object;
     private $result_object;
@@ -77,6 +77,7 @@ class EvalForm extends FormValidator
                 $this->build_add_user_to_eval();
                 break;
         }
+        $this->protect();
         $this->setDefaults();
     }
 
@@ -169,6 +170,12 @@ class EvalForm extends FormValidator
                 </form>';
         $renderer->setFormTemplate($form_template);
 
+        $skillRelItemsEnabled = api_get_configuration_value('allow_skill_rel_items');
+        $columnSkill = '';
+        if ($skillRelItemsEnabled) {
+            $columnSkill = '<th>'.get_lang('Skills').'</th>';
+        }
+
         if (api_is_western_name_order()) {
             $renderer->setHeaderTemplate(
                 '<tr>
@@ -177,6 +184,7 @@ class EvalForm extends FormValidator
     		      <th>'.get_lang('FirstName').'</th>
     		      <th>'.get_lang('LastName').'</th>
     		      <th>'.get_lang('Qualify').'</th>
+    		      '.$columnSkill.'
     		   </tr>'
             );
         } else {
@@ -187,6 +195,7 @@ class EvalForm extends FormValidator
                   <th>'.get_lang('LastName').'</th>
                   <th>'.get_lang('FirstName').'</th>
                   <th>'.get_lang('Qualify').'</th>
+    		      '.$columnSkill.'
                </tr>'
             );
         }
@@ -196,6 +205,7 @@ class EvalForm extends FormValidator
             {element}
             <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
             </td>
+            '.($skillRelItemsEnabled ? '<td></td>' : '').'
             </tr>';
 
         $results_and_users = [];
@@ -210,8 +220,14 @@ class EvalForm extends FormValidator
 
         foreach ($results_and_users as $result_and_user) {
             $user = $result_and_user['user'];
+            /** @var \Result $result */
             $result = $result_and_user['result'];
             $renderer = &$this->defaultRenderer();
+
+            $columnSkillResult = '';
+            if ($skillRelItemsEnabled) {
+                $columnSkillResult = '<td>'.Skill::getAddSkillsToUserBlock(ITEM_TYPE_GRADEBOOK_EVALUATION, $result->get_evaluation_id(), $result->get_user_id(), $result->get_id()).'</td>';
+            }
 
             if (api_is_western_name_order()) {
                 $user_info = '<td align="left" >'.$user['firstname'].'</td>';
@@ -228,6 +244,7 @@ class EvalForm extends FormValidator
 		      <td align="left">{element} / '.$this->evaluation_object->get_max().'
 		         <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
 		      </td>
+		      '.$columnSkillResult.'
 		   </tr>';
 
             if (empty($model)) {
@@ -269,6 +286,7 @@ class EvalForm extends FormValidator
                   '.$user_info.'
                    <td align="left">{element} <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
                   </td>
+		          '.$columnSkillResult.'
                </tr>';
             }
             $renderer->setElementTemplate($template, 'score['.$result->get_id().']');
@@ -463,21 +481,27 @@ class EvalForm extends FormValidator
      */
     protected function build_add_form()
     {
-        $this->setDefaults(
-            [
-                'hid_user_id' => $this->evaluation_object->get_user_id(),
-                'hid_category_id' => $this->evaluation_object->get_category_id(),
-                'hid_course_code' => $this->evaluation_object->get_course_code(),
-                'created_at' => api_get_utc_datetime(),
-            ]
-        );
+        $this->setDefaults([
+            'hid_user_id' => $this->evaluation_object->get_user_id(),
+            'hid_category_id' => $this->evaluation_object->get_category_id(),
+            'hid_course_code' => $this->evaluation_object->get_course_code(),
+            'created_at' => api_get_utc_datetime(),
+        ]);
         $this->build_basic_form();
         if ($this->evaluation_object->get_course_code() == null) {
             $this->addElement('checkbox', 'adduser', null, get_lang('AddUserToEval'));
         } else {
             $this->addElement('checkbox', 'addresult', null, get_lang('AddResult'));
         }
-        $this->addButtonCreate(get_lang('AddAssessment'), 'submit');
+
+        Skill::addSkillsToForm(
+            $this,
+            api_get_course_int_id(),
+            api_get_session_id(),
+            ITEM_TYPE_GRADEBOOK_EVALUATION
+        );
+
+        $this->addButtonCreate(get_lang('AddAssessment'));
     }
 
     /**
@@ -496,8 +520,11 @@ class EvalForm extends FormValidator
         }
         $weight = $weight_mask = $this->evaluation_object->get_weight();
 
+        $evaluationId = $this->evaluation_object->get_id();
+        $this->addHidden('hid_id', $evaluationId);
+
         $this->setDefaults([
-            'hid_id' => $this->evaluation_object->get_id(),
+            'hid_id' => $evaluationId,
             'name' => $this->evaluation_object->get_name(),
             'description' => $this->evaluation_object->get_description(),
             'hid_user_id' => $this->evaluation_object->get_user_id(),
@@ -509,10 +536,20 @@ class EvalForm extends FormValidator
             'max' => $this->evaluation_object->get_max(),
             'visible' => $this->evaluation_object->is_visible(),
         ]);
-        $id_current = isset($this->id) ? $this->id : null;
-        $this->addElement('hidden', 'hid_id', $id_current);
+
         $this->build_basic_form(1);
-        $this->addButtonSave(get_lang('ModifyEvaluation'), 'submit');
+
+        if (!empty($evaluationId)) {
+            Skill::addSkillsToForm(
+                $this,
+                api_get_course_int_id(),
+                api_get_session_id(),
+                ITEM_TYPE_GRADEBOOK_EVALUATION,
+                $evaluationId
+            );
+        }
+
+        $this->addButtonSave(get_lang('ModifyEvaluation'));
     }
 
     /**
@@ -545,7 +582,7 @@ class EvalForm extends FormValidator
 
         $session_id = api_get_session_id();
         $course_code = api_get_course_id();
-        $all_categories = Category:: load(
+        $all_categories = Category::load(
             null,
             null,
             $course_code,

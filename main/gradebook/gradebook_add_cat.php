@@ -18,7 +18,7 @@ $catadd = new Category();
 $my_user_id = api_get_user_id();
 $catadd->set_user_id($my_user_id);
 $catadd->set_parent_id($get_select_cat);
-$catcourse = Category :: load($get_select_cat);
+$catcourse = Category::load($get_select_cat);
 
 if ($_in_course) {
     $catadd->set_course_code($course_code);
@@ -114,11 +114,11 @@ if (!$_in_course) {
     ];
 }
 $interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq(), 'name' => get_lang('ToolGradebook')];
-Display :: display_header(get_lang('NewCategory'));
+Display::display_header(get_lang('NewCategory'));
 
 $display_form = true;
 if ($display_form) {
     $form->display();
 }
 
-Display :: display_footer();
+Display::display_footer();

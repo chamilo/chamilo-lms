@@ -14,7 +14,7 @@ api_protect_admin_script(true);
 api_protect_limit_for_session_admin();
 
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
-
+$setExpirationDateByRole = (false !== api_get_configuration_value('user_number_of_days_for_default_expiration_date_per_role'));
 $message = null;
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#password');
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
@@ -41,20 +41,38 @@ function password_switch_radio_button() {
 }
 
 var is_platform_id = "'.$is_platform_admin.'";
-
-function updateStatus(){
-    if (document.getElementById("status_select").value=='.STUDENT.') {
+var setExpirationDateByRole = "'.$setExpirationDateByRole.'";
+function updateStatus() {
+    var status = document.getElementById("status_select").value;
+    if (status == '.STUDENT.') {
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="none";
 
-    } else if (document.getElementById("status_select").value=='.COURSEMANAGER.') {
+    } else if (status == '.COURSEMANAGER.') {
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="block";
     } else {
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="none";
     }
+
+    if (setExpirationDateByRole) {
+        setExpirationDatePicker(status);
+    }
 }
+
+function setExpirationDatePicker(status) {
+    $.getJSON("../inc/ajax/user_manager.ajax.php?a=set_expiration_date&status="+status, function(json) {
+        if (json.formatted) {
+            $("#expiration_date_alt_text").text(json.formatted);
+        }
+        if (json.date) {
+            $("#expiration_date").val(json.date);
+            $("#expiration_date_alt").val(json.date);
+        }
+    });
+}
+
 </script>';
 
 if (!empty($_GET['message'])) {
@@ -144,7 +162,7 @@ if (api_get_setting('login_is_email') == 'true') {
 }
 
 // Phone
-$form->addElement('text', 'phone', get_lang('PhoneNumber'), ['autocomplete' => 'off', 'id' => 'phone']);
+$form->addText('phone', get_lang('PhoneNumber'), false, ['autocomplete' => 'off', 'id' => 'phone']);
 // Picture
 $form->addFile(
     'picture',
@@ -214,18 +232,16 @@ $group[] = $form->createElement(
     ]
 );
 
-$form->addGroup($group, 'password', get_lang('Password'));
+$form->addGroup(
+    $group,
+    'password',
+    get_lang('Password')
+);
 $form->addPasswordRule('password', 'password');
 $form->addGroupRule('password', get_lang('EnterPassword'), 'required', null, 1);
 
 // Status
-$status = [];
-$status[COURSEMANAGER] = get_lang('Teacher');
-$status[STUDENT] = get_lang('Learner');
-$status[DRH] = get_lang('Drh');
-$status[SESSIONADMIN] = get_lang('SessionsAdmin');
-$status[STUDENT_BOSS] = get_lang('RoleStudentBoss');
-$status[INVITEE] = get_lang('Invitee');
+$status = UserManager::getUserStatusList();
 
 $form->addElement(
     'select',
@@ -259,18 +275,34 @@ $group[] = $form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1, 
 $group[] = $form->createElement('radio', 'send_mail', null, get_lang('No'), 0, ['id' => 'send_mail_no']);
 $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'));
 // Expiration Date
-$form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
-$group = [];
-$group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
-$group[] = $form->createElement(
-    'DateTimePicker',
-    'expiration_date',
-    null,
-    [
-        'onchange' => 'javascript: enable_expiration_date();',
-    ]
-);
-$form->addGroup($group, 'max_member_group', null, null, false);
+$hideNeverExpiresOpt = api_get_configuration_value('user_hide_never_expire_option');
+$lblExpiration = '';
+$defaultExpiration = 0;
+if ($hideNeverExpiresOpt) {
+    $lblExpiration = get_lang('ExpirationDate');
+    $defaultExpiration = 1;
+    $group = [];
+    $group[] = $form->createElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('Enabled'), 1);
+    $group[] = $form->createElement(
+        'DateTimePicker',
+        'expiration_date',
+        null
+    );
+} else {
+    $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
+    $group = [];
+    $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
+    $group[] = $form->createElement(
+        'DateTimePicker',
+        'expiration_date',
+        null,
+        [
+            'onchange' => 'javascript: enable_expiration_date();',
+        ]
+    );
+}
+$form->addGroup($group, 'max_member_group', $lblExpiration, null, false);
+
 // Active account or inactive account
 $form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);
 $form->addElement('radio', 'active', '', get_lang('Inactive'), 0);
@@ -315,11 +347,18 @@ $defaults['mail']['send_mail'] = 1;
 $defaults['password']['password_auto'] = 1;
 $defaults['active'] = 1;
 $days = api_get_setting('account_valid_duration');
-$defaults['expiration_date'] = api_get_local_time('+'.$days.' day');
+
+$expirationDateDefault = UserManager::getExpirationDateByRole(STUDENT);
+if (!empty($expirationDateDefault)) {
+    $defaults['expiration_date'] = $expirationDateDefault['date'];
+} else {
+    $defaults['expiration_date'] = api_get_local_time('+'.$days.' day');
+}
+
 $defaults['extra_mail_notify_invitation'] = 1;
 $defaults['extra_mail_notify_message'] = 1;
 $defaults['extra_mail_notify_group_message'] = 1;
-$defaults['radio_expiration_date'] = 0;
+$defaults['radio_expiration_date'] = $defaultExpiration;
 $defaults['status'] = STUDENT;
 $form->setDefaults($defaults);
 
@@ -447,7 +486,9 @@ if ($form->validate()) {
 
         Display::addFlash(Display::return_message($message, 'normal', false));
 
-        if (isset($_POST['submit_plus'])) {
+        if (isset($_POST['submit_plus'])
+            || (api_is_session_admin() && api_get_configuration_value('limit_session_admin_list_users'))
+        ) {
             //we want to add more. Prepare report message and redirect to the same page (to clean the form)
             header('Location: user_add.php?sec_token='.$tok);
             exit;

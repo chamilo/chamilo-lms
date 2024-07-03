@@ -71,7 +71,7 @@ class PENSPlugin extends Plugin implements HookPluginInterface
     {
         $pensTable = Database::get_main_table(PENSPlugin::TABLE_PENS);
 
-        $sql = "CREATE TABLE $pensTable (
+        $sql = "CREATE TABLE IF NOT EXISTS $pensTable (
 	        id int unsigned NOT NULL auto_increment,
 	        pens_version varchar(255) NOT NULL,
 	        package_type varchar(255) NOT NULL,

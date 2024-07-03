@@ -7,47 +7,75 @@ $strings['plugin_comment'] = "Zoom Videoconference integration in courses and se
 
 $strings['tool_enable'] = 'Zoom videoconference tool enabled';
 $strings['apiKey'] = 'API Key';
+$strings['apiKey_help'] = 'For a JWT application type (<small>this app type will be deprecated on 6/1/2023</small>)';
 $strings['apiSecret'] = 'API Secret';
+$strings['apiSecret_help'] = 'For a JWT application type (<small>this app type will be deprecated on 6/1/2023</small>)';
 $strings['verificationToken'] = 'Verification Token';
+$strings['verificationToken_help'] = 'For a JWT application type (<small>this app type will be deprecated on 6/1/2023</small>)';
+$strings[ZoomPlugin::SETTING_ACCOUNT_ID] = 'Account ID';
+$strings[ZoomPlugin::SETTING_ACCOUNT_ID.'_help'] = 'For a Server-to-Server OAuth application type';
+$strings[ZoomPlugin::SETTING_CLIENT_ID] = 'Client ID';
+$strings[ZoomPlugin::SETTING_CLIENT_ID.'_help'] = 'For a Server-to-Server OAuth application type';
+$strings[ZoomPlugin::SETTING_CLIENT_SECRET] = 'Client secret';
+$strings[ZoomPlugin::SETTING_CLIENT_SECRET.'_help'] = 'For a Server-to-Server OAuth application type';
+$strings[ZoomPlugin::SETTING_SECRET_TOKEN] = 'Secret token';
+$strings[ZoomPlugin::SETTING_SECRET_TOKEN.'_help'] = 'For a Server-to-Server OAuth application type';
 $strings['enableParticipantRegistration'] = 'Enable participant registration';
+$strings['enablePresenter'] = 'Enable presenter';
+$strings['enablePresenter_help'] = 'It requires that <i>Enable participant registration</i> settings is enabled.';
 $strings['enableCloudRecording'] = 'Automatic recording type';
 $strings['enableGlobalConference'] = 'Enable global conference';
 $strings['enableGlobalConferencePerUser'] = 'Enable global conference per user';
 $strings['globalConferenceAllowRoles'] = "Global conference link only visible for these user roles";
 $strings['globalConferencePerUserAllowRoles'] = "Global conference per user link only visible for these user roles";
+$strings['accountSelector'] = 'Account selector';
+$strings['accountSelector_help'] = 'It allows you to declare the emails of the different accounts with whom you want to open the Zoom videos. Separated by semicolons (account_one@example.come;account_two@exaple.com).';
 
 $strings['tool_enable_help'] = "Choose whether you want to enable the Zoom videoconference tool.
 Once enabled, it will show as an additional course tool in all courses' homepage :
 teachers will be able to <strong>launch</strong> a conference and student to <strong>join</strong> it.
 <br/>
 This plugin requires a Zoom account to manage meetings.
-The Zoom API uses JSON Web Tokens (JWT) to authenticate account-level access.
-<br/>
-JWT apps provide an <strong>API <em>Key</em> and <em>Secret</em></strong> required to authenticate with JWT.
-
-To get them, create a <em>JWT App</em> :
-<br/>1. log into <a href=\"https://zoom.us/profile\">your Zoom profile page</a>
-<br/>2. click on <em>Advanced / Application Marketplace</em>
-<br/>3. click on <em><a href=\"https://marketplace.zoom.us/develop/create\">Develop / build App</a></em>
-<br/>4. choose <em>JWT / Create</em>
-<br/>5. Information: fill in fields about your \"App\"
-(application and company names, contact name and email address)
-<br/>6. Click on <em>Continue</em>
-<br/>7. App Credentials: <strong>copy your API Key and Secret to these fields below</strong>
-<br/>8. click on <em>Continue</em>
-<br/>9. Feature:
-enable <em>Event Subscriptions</em> to add a new one with endpoint URL
-<code>https://your.chamilo.url/plugin/zoom/endpoint.php</code>
-and add these event types:
-<br/>- Start Meeting
-<br/>- End Meeting
-<br/>- Participant/Host joined meeting
-<br/>- Participant/Host left meeting
-<br/>- All Recordings have completed
-<br/>- Recording transcript files have completed
-<br/>then click on <em>Done</em> then on <em>Save</em>
-and <strong>copy your Verification Token to the field below</strong>.
-<br/>10. click on <em>Continue</em>
+<p>The Zoom API uses JSON Web Tokens (JWT) to authenticate account-level access. To get them, create a JWT App or a Server-to-Sever OAuth app:</p>
+<blockquote>
+  <p>From June 1, 2023, Zoom recommend that you create a Server-to-Server OAuth application to replace the funcionality of
+  a JWT app in your account.</p>
+</blockquote>
+<ol>
+<li>Log into your <a href=\"https://zoom.us/profile\">Zoom profile page</a></li>
+<li>Click on Advanced / Application Marketplace</li>
+<li>Click on <a href=\"https://marketplace.zoom.us/develop/create\">Develop / Build App</a></li>
+<li>Choose JWT or Server-to-Serve OAuth and then Create</li>
+<li>Information: Fill in fields about your \"App\" (application and company names, contact name and email address)</li>
+<li>Click on Continue</li>
+<li>App Credentials
+<ol>
+<li>For a JWT application: Copy your API Key and Secret to the plugin configuration</li>
+<li>For a Server-to-Server OAuth application: Copy your <em>Account ID</em>, <em>Client ID</em> and <em>Client secret</em> to the plugin
+configuration</li>
+</ol></li>
+<li>Click on Continue</li>
+<li><p>Feature: enable <em>Event Subscriptions</em> to add a new one with endpoint URL
+<code>https://your.chamilo.url/plugin/zoom/endpoint.php</code> (validate the endpoint to allow to activate the app) and add
+these event types:</p>
+<ul>
+<li>Start Meeting</li>
+<li>End Meeting</li>
+<li>Participant/Host joined meeting</li>
+<li>Participant/Host left meeting</li>
+<li>Start Webinar</li>
+<li>End Webinar</li>
+<li>Participant/Host joined webinar</li>
+<li>Participant/Host left webinar</li>
+<li>All Recordings have completed</li>
+<li>Recording transcript files have completed</li>
+</ul>
+<p>Then click on Done then on Save and copy your <em>Verification Token</em> if you have a JWT application or the <em>Secret
+Token</em> if you have an Server-to-Server OAuth application to the plugin configuration</p></li>
+<li>click on Continue</li>
+<li>Scopes (only for Server-to-Server OAuth application): Click on <em>Add Scopes</em> and select <em>meeting:write:admin</em>,
+<em>webinar:write:admin</em>, <em>recording:write:admin</em>. Then click on Done.</li>
+</ol>
 <br/>
 <strong>Attention</strong>:
 <br/>Zoom is <em>NOT</em> free software and specific rules apply to personal data protection.
@@ -106,6 +134,7 @@ $strings['RecurringWithNoFixedTime'] = "Recurring with no fixed time";
 $strings['RegisterAllCourseUsers'] = "Register all course users";
 $strings['RegisteredUserListWasUpdated'] = "Registered user list updated";
 $strings['RegisteredUsers'] = "Registered users";
+$strings['RegisteredPresenters'] = "Registered presenters";
 $strings['RegisterNoUser'] = "Register no user";
 $strings['RegisterTheseGroupMembers'] = "Register these group members";
 $strings['ScheduleAMeeting'] = "Schedule a meeting";
@@ -142,3 +171,21 @@ $strings['ForEveryone'] = "Everyone";
 $strings['SomeUsers'] = "Some users (Select later)";
 $strings['Activity'] = "Activity";
 $strings['ConferenceNotAvailable'] = "Conference not available";
+$strings['SignAttendance'] = "Sign attendance";
+$strings['ReasonToSign'] = 'Reason to sign attendance';
+$strings['ConferenceWithAttendance'] = "Conference with attendance sign";
+$strings['Sign'] = "Sign";
+$strings['Signature'] = "Signature";
+$strings['Meeting'] = "Meeting";
+$strings['Webinar'] = "Webinar";
+$strings['AudienceType'] = 'Audience type';
+$strings['AccountEmail'] = 'Account email';
+$strings['NewWebinarCreated'] = "New webinar created";
+$strings['UpdateWebinar'] = 'Update webinar';
+$strings['WebinarUpdated'] = "Webinar updated";
+$strings['DeleteWebinar'] = "Delete webinar";
+$strings['WebinarDeleted'] = "Webinar deleted";
+$strings['UrlForSelfRegistration'] = "URL for self registration";
+$strings['RegisterMeToConference'] = "Register me to conference";
+$strings['UnregisterMeToConference'] = "Unregister me to conference";
+$strings['Presenters'] = "Presenters";

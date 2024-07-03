@@ -14,7 +14,7 @@ class HTML_QuickForm_Rule_MaxFileSize extends HTML_QuickForm_Rule
      *
      * @return bool
      */
-    public function validate($elementValue, $maxSize)
+    public function validate($elementValue, $maxSize = 0)
     {
         if (!empty($elementValue['error']) &&
             (UPLOAD_ERR_FORM_SIZE == $elementValue['error'] || UPLOAD_ERR_INI_SIZE == $elementValue['error'])

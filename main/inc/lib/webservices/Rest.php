@@ -9,70 +9,149 @@ use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Chamilo\CourseBundle\Entity\Repository\CNotebookRepository;
 use Chamilo\UserBundle\Entity\User;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
  * Class RestApi.
  */
 class Rest extends WebService
 {
-    const SERVICE_NAME = 'MsgREST';
-    const EXTRA_FIELD_GCM_REGISTRATION = 'gcm_registration_id';
+    public const SERVICE_NAME = 'MsgREST';
+    public const EXTRA_FIELD_GCM_REGISTRATION = 'gcm_registration_id';
 
-    const GET_AUTH = 'authenticate';
-    const GET_USER_MESSAGES = 'user_messages';
-    const GET_USER_COURSES = 'user_courses';
-    const GET_USER_SESSIONS = 'user_sessions';
-    const GET_USERS_SUBSCRIBED_TO_COURSE = 'get_users_subscribed_to_course';
-    const GET_USER_MESSAGES_RECEIVED = 'user_messages_received';
-    const GET_USER_MESSAGES_SENT = 'user_messages_sent';
-    const POST_USER_MESSAGE_READ = 'user_message_read';
-    const POST_USER_MESSAGE_UNREAD = 'user_message_unread';
-    const SAVE_GCM_ID = 'gcm_id';
-    const GET_PROFILE = 'user_profile';
-    const GET_COURSE_INFO = 'course_info';
-    const GET_COURSE_DESCRIPTIONS = 'course_descriptions';
-    const GET_COURSE_DOCUMENTS = 'course_documents';
-    const GET_COURSE_ANNOUNCEMENTS = 'course_announcements';
-    const GET_COURSE_ANNOUNCEMENT = 'course_announcement';
-    const GET_COURSE_AGENDA = 'course_agenda';
-    const GET_COURSE_NOTEBOOKS = 'course_notebooks';
-    const GET_COURSE_FORUM_CATEGORIES = 'course_forumcategories';
-    const GET_COURSE_FORUM = 'course_forum';
-    const GET_COURSE_FORUM_THREAD = 'course_forumthread';
-    const GET_COURSE_LEARNPATHS = 'course_learnpaths';
-    const GET_COURSE_LEARNPATH = 'course_learnpath';
-    const GET_COURSE_LP_PROGRESS = 'course_lp_progress';
-    const SAVE_FORUM_POST = 'save_forum_post';
-    const SAVE_USER_MESSAGE = 'save_user_message';
-    const GET_MESSAGE_USERS = 'message_users';
-    const SAVE_COURSE_NOTEBOOK = 'save_course_notebook';
-    const SAVE_FORUM_THREAD = 'save_forum_thread';
-    const SAVE_COURSE = 'save_course';
-    const SAVE_USER = 'save_user';
-    const SAVE_USER_JSON = 'save_user_json';
-    const SUBSCRIBE_USER_TO_COURSE = 'subscribe_user_to_course';
-    const UNSUBSCRIBE_USER_FROM_COURSE = 'unsubscribe_user_from_course';
-    const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
-    const DELETE_USER_MESSAGE = 'delete_user_message';
-    const SET_MESSAGE_READ = 'set_message_read';
-    const CREATE_CAMPUS = 'add_campus';
-    const EDIT_CAMPUS = 'edit_campus';
-    const DELETE_CAMPUS = 'delete_campus';
-    const SAVE_SESSION = 'save_session';
-    const UPDATE_SESSION = 'update_session';
-    const GET_USERS = 'get_users';
-    const GET_COURSES = 'get_courses';
-    const GET_COURSES_FROM_EXTRA_FIELD = 'get_courses_from_extra_field';
-    const ADD_COURSES_SESSION = 'add_courses_session';
-    const ADD_USERS_SESSION = 'add_users_session';
-    const CREATE_SESSION_FROM_MODEL = 'create_session_from_model';
-    const SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME = 'subscribe_user_to_session_from_username';
-    const GET_SESSION_FROM_EXTRA_FIELD = 'get_session_from_extra_field';
-    const UPDATE_USER_FROM_USERNAME = 'update_user_from_username';
-    const USERNAME_EXIST = 'username_exist';
-    const GET_COURSE_QUIZ_MDL_COMPAT = 'get_course_quiz_mdl_compat';
-    const UPDATE_USER_PAUSE_TRAINING = 'update_user_pause_training';
-    const DELETE_COURSE = 'delete_course';
+    public const GET_AUTH = 'authenticate';
+    public const SAVE_GCM_ID = 'gcm_id';
+    public const LOGOUT = 'logout';
+
+    public const GET_USER_MESSAGES = 'user_messages';
+    public const GET_USER_MESSAGES_RECEIVED = 'user_messages_received';
+    public const DELETE_USER_MESSAGE = 'delete_user_message';
+    public const GET_USER_MESSAGES_SENT = 'user_messages_sent';
+    public const GET_COUNT_NEW_MESSAGES = 'get_count_new_messages';
+    public const SET_MESSAGE_READ = 'set_message_read';
+    public const POST_USER_MESSAGE_READ = 'user_message_read';
+    public const POST_USER_MESSAGE_UNREAD = 'user_message_unread';
+    public const SAVE_USER_MESSAGE = 'save_user_message';
+    public const GET_MESSAGE_USERS = 'message_users';
+    public const VIEW_MESSAGE = 'view_message';
+
+    public const GET_USER_COURSES = 'user_courses';
+    public const GET_USER_COURSES_BY_DATES = 'user_courses_by_dates';
+    public const GET_USER_SESSIONS = 'user_sessions';
+
+    public const VIEW_PROFILE = 'view_user_profile';
+    public const GET_PROFILE = 'user_profile';
+    public const GET_PROFILES_BY_EXTRA_FIELD = 'users_profiles_by_extra_field';
+
+    public const VIEW_MY_COURSES = 'view_my_courses';
+    public const VIEW_COURSE_HOME = 'view_course_home';
+    public const GET_COURSE_INFO = 'course_info';
+    public const GET_COURSE_DESCRIPTIONS = 'course_descriptions';
+    public const GET_COURSE_DOCUMENTS = 'course_documents';
+    public const GET_COURSE_ANNOUNCEMENTS = 'course_announcements';
+    public const GET_COURSE_ANNOUNCEMENT = 'course_announcement';
+    public const GET_COURSE_AGENDA = 'course_agenda';
+    public const GET_COURSE_NOTEBOOKS = 'course_notebooks';
+    public const GET_COURSE_FORUM_CATEGORIES = 'course_forumcategories';
+    public const GET_COURSE_FORUM = 'course_forum';
+    public const GET_COURSE_FORUM_THREAD = 'course_forumthread';
+    public const GET_COURSE_LEARNPATHS = 'course_learnpaths';
+    public const GET_COURSE_LEARNPATH = 'course_learnpath';
+    public const GET_COURSE_LP_PROGRESS = 'course_lp_progress';
+    public const GET_COURSE_LINKS = 'course_links';
+    public const GET_COURSE_WORKS = 'course_works';
+    public const GET_COURSE_EXERCISES = 'course_exercises';
+    public const GET_COURSES_DETAILS_BY_EXTRA_FIELD = 'courses_details_by_extra_field';
+
+    public const SAVE_COURSE_NOTEBOOK = 'save_course_notebook';
+
+    public const SAVE_FORUM_POST = 'save_forum_post';
+    public const SAVE_FORUM_THREAD = 'save_forum_thread';
+    public const SET_THREAD_NOTIFY = 'set_thread_notify';
+    public const DOWNLOAD_FORUM_ATTACHMENT = 'download_forum_attachment';
+
+    public const GET_WORK_LIST = 'get_work_list';
+    public const GET_WORK_STUDENTS_WITHOUT_PUBLICATIONS = 'get_work_students_without_publications';
+    public const GET_WORK_USERS = 'get_work_users';
+    public const GET_WORK_STUDENT_LIST = 'get_work_student_list';
+    public const PUT_WORK_STUDENT_ITEM_VISIBILITY = 'put_course_work_visibility';
+    public const DELETE_WORK_STUDENT_ITEM = 'delete_work_student_item';
+    public const DELETE_WORK_CORRECTIONS = 'delete_work_corrections';
+    public const DOWNLOAD_WORK_FOLDER = 'download_work_folder';
+    public const DOWNLOAD_WORK_COMMENT_ATTACHMENT = 'download_work_comment_attachment';
+    public const DOWNLOAD_WORK = 'download_work';
+
+    public const VIEW_DOCUMENT_IN_FRAME = 'view_document_in_frame';
+
+    public const VIEW_QUIZ_TOOL = 'view_quiz_tool';
+
+    public const VIEW_SURVEY_TOOL = 'view_survey_tool';
+
+    public const CREATE_CAMPUS = 'add_campus';
+    public const EDIT_CAMPUS = 'edit_campus';
+    public const DELETE_CAMPUS = 'delete_campus';
+
+    public const GET_USERS = 'get_users';
+    public const USERNAME_EXIST = 'username_exist';
+    public const SAVE_USER = 'save_user';
+    public const SAVE_USER_GET_APIKEY = 'save_user_get_apikey';
+    public const SAVE_USER_JSON = 'save_user_json';
+    public const UPDATE_USER_FROM_USERNAME = 'update_user_from_username';
+    public const UPDATE_USER_APIKEY = 'update_user_apikey';
+    public const DELETE_USER = 'delete_user';
+    public const GET_USERS_API_KEYS = 'get_users_api_keys';
+    public const GET_USER_API_KEY = 'get_user_api_key';
+    public const GET_USER_LAST_CONNEXION = 'get_user_last_connexion';
+    public const GET_USER_TOTAL_CONNEXION_TIME = 'get_user_total_connexion_time';
+    public const GET_USER_SUB_GROUP = 'get_user_sub_group';
+
+    public const GET_COURSES = 'get_courses';
+    public const GET_COURSES_FROM_EXTRA_FIELD = 'get_courses_from_extra_field';
+    public const SAVE_COURSE = 'save_course';
+    public const DELETE_COURSE = 'delete_course';
+
+    public const GET_SESSION_FROM_EXTRA_FIELD = 'get_session_from_extra_field';
+    public const SAVE_SESSION = 'save_session';
+    public const CREATE_SESSION_FROM_MODEL = 'create_session_from_model';
+    public const UPDATE_SESSION = 'update_session';
+    public const GET_SESSIONS = 'get_sessions';
+
+    public const SUBSCRIBE_USER_TO_COURSE = 'subscribe_user_to_course';
+    public const SUBSCRIBE_USER_TO_COURSE_PASSWORD = 'subscribe_user_to_course_password';
+    public const UNSUBSCRIBE_USER_FROM_COURSE = 'unsubscribe_user_from_course';
+    public const GET_USERS_SUBSCRIBED_TO_COURSE = 'get_users_subscribed_to_course';
+
+    public const ADD_COURSES_SESSION = 'add_courses_session';
+    public const ADD_USERS_SESSION = 'add_users_session';
+    public const SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME = 'subscribe_user_to_session_from_username';
+    public const SUBSCRIBE_USERS_TO_SESSION = 'subscribe_users_to_session';
+    public const UNSUBSCRIBE_USERS_FROM_SESSION = 'unsubscribe_users_from_session';
+    public const GET_USERS_SUBSCRIBED_TO_SESSION = 'get_users_subscribed_to_session';
+
+    public const GET_COURSE_QUIZ_MDL_COMPAT = 'get_course_quiz_mdl_compat';
+
+    public const UPDATE_USER_PAUSE_TRAINING = 'update_user_pause_training';
+
+    public const CHECK_CONDITIONAL_LOGIN = 'check_conditional_login';
+    public const GET_LEGAL_CONDITIONS = 'get_legal_conditions';
+    public const UPDATE_CONDITION_ACCEPTED = 'update_condition_accepted';
+    public const GET_TEST_UPDATES_LIST = 'get_test_updates_list';
+    public const GET_TEST_AVERAGE_RESULTS_LIST = 'get_test_average_results_list';
+
+    public const GET_GROUPS = 'get_groups';
+    public const GROUP_EXISTS = 'group_exists';
+    public const ADD_GROUP = 'add_group';
+    public const DELETE_GROUP = 'delete_group';
+    public const GET_GROUP_SUB_USERS = 'get_group_sub_users';
+    public const GET_GROUP_SUB_COURSES = 'get_group_sub_courses';
+    public const GET_GROUP_SUB_SESSIONS = 'get_group_sub_sessions';
+    public const ADD_GROUP_SUB_USER = 'add_group_sub_user';
+    public const ADD_GROUP_SUB_COURSE = 'add_group_sub_course';
+    public const ADD_GROUP_SUB_SESSION = 'add_group_sub_session';
+    public const DELETE_GROUP_SUB_USER = 'delete_group_sub_user';
+    public const DELETE_GROUP_SUB_COURSE = 'delete_group_sub_course';
+    public const DELETE_GROUP_SUB_SESSION = 'delete_group_sub_session';
+    public const GET_AUDIT_ITEMS = 'get_audit_items';
 
     /**
      * @var Session
@@ -93,6 +172,30 @@ class Rest extends WebService
     public function __construct($username, $apiKey)
     {
         parent::__construct($username, $apiKey);
+    }
+
+    /**
+     * Get user's username or another field if so configured through $_configuration['webservice_return_user_field'].
+     *
+     * @param int $userId
+     */
+    private function __getConfiguredUsernameById(int $userId = null): string
+    {
+        if (empty($userId)) {
+            return '';
+        }
+        $userField = api_get_configuration_value('webservice_return_user_field');
+        if (empty($userField)) {
+            return api_get_user_info($userId)['username'];
+        }
+
+        $fieldValue = new ExtraFieldValue('user');
+        $extraInfo = $fieldValue->get_values_by_handler_and_field_variable($userId, $userField);
+        if (!empty($extraInfo)) {
+            return $extraInfo['value'];
+        } else {
+            return api_get_user_info($userId)['username'];
+        }
     }
 
     /**
@@ -152,8 +255,14 @@ class Rest extends WebService
      */
     public function setCourse($id)
     {
+        global $_course;
+
         if (!$id) {
             $this->course = null;
+
+            ChamiloSession::erase('_real_cid');
+            ChamiloSession::erase('_cid');
+            ChamiloSession::erase('_course');
 
             return;
         }
@@ -167,6 +276,13 @@ class Rest extends WebService
         }
 
         $this->course = $course;
+
+        $courseInfo = api_get_course_info($course->getCode());
+        $_course = $courseInfo;
+
+        ChamiloSession::write('_real_cid', $course->getId());
+        ChamiloSession::write('_cid', $course->getCode());
+        ChamiloSession::write('_course', $courseInfo);
     }
 
     /**
@@ -181,6 +297,9 @@ class Rest extends WebService
         if (!$id) {
             $this->session = null;
 
+            ChamiloSession::erase('session_name');
+            ChamiloSession::erase('id_session');
+
             return;
         }
 
@@ -193,6 +312,9 @@ class Rest extends WebService
         }
 
         $this->session = $session;
+
+        ChamiloSession::write('session_name', $session->getName());
+        ChamiloSession::write('id_session', $session->getId());
     }
 
     /**
@@ -255,6 +377,8 @@ class Rest extends WebService
         $lastMessages = MessageManager::getReceivedMessages($this->user->getId(), 0);
         $messages = [];
 
+        $webPath = api_get_path(WEB_PATH);
+
         foreach ($lastMessages as $message) {
             $hasAttachments = MessageManager::hasAttachments($message['id']);
             $attachmentList = [];
@@ -273,7 +397,7 @@ class Rest extends WebService
                     'pictureUri' => $message['pictureUri'],
                 ],
                 'sendDate' => $message['send_date'],
-                'content' => $message['content'],
+                'content' => str_replace('src="/"', $webPath, $message['content']),
                 'hasAttachments' => $hasAttachments,
                 'attachmentList' => $attachmentList,
                 'url' => '',
@@ -317,15 +441,33 @@ class Rest extends WebService
 
     /**
      * Get the user courses.
+     *
+     * @throws Exception
      */
     public function getUserCourses($userId = 0): array
     {
+        if (!empty($userId)) {
+            if (!api_is_platform_admin() && $userId != $this->user->getId()) {
+                self::throwNotAllowedException();
+            }
+        }
+
         if (empty($userId)) {
             $userId = $this->user->getId();
         }
 
+        Event::courseLogout(
+            [
+                'uid' => $userId,
+                'cid' => api_get_course_id(),
+                'sid' => api_get_session_id(),
+            ]
+        );
+
         $courses = CourseManager::get_courses_list_by_user_id($userId);
         $data = [];
+
+        $webCodePath = api_get_path(WEB_CODE_PATH).'webservices/api/v2.php?';
 
         foreach ($courses as $courseInfo) {
             /** @var Course $course */
@@ -342,6 +484,14 @@ class Rest extends WebService
                 'urlPicture' => $picturePath,
                 'teachers' => $teachers,
                 'isSpecial' => !empty($courseInfo['special_course']),
+                'url' => $webCodePath.http_build_query(
+                    [
+                        'action' => self::VIEW_COURSE_HOME,
+                        'api_key' => $this->apiKey,
+                        'username' => $this->user->getUsername(),
+                        'course' => $course->getId(),
+                    ]
+                ),
             ];
         }
 
@@ -381,22 +531,57 @@ class Rest extends WebService
     /**
      * Get the course descriptions.
      *
-     * @throws Exception
+     * @param array $fields A list of extra fields to include in the answer. Searches for the field in the including course
      *
-     * @return array
+     * @throws Exception
      */
-    public function getCourseDescriptions()
+    public function getCourseDescriptions($fields = []): array
     {
-        $descriptions = CourseDescription::get_descriptions($this->course->getId());
+        Event::event_access_tool(TOOL_COURSE_DESCRIPTION);
+
+        // Check the extra fields criteria (whether to add extra field information or not)
+        $fieldSource = [];
+        if (count($fields) > 0) {
+            // For each field, check where to get it from (quiz or course)
+            $courseExtraField = new ExtraField('course');
+            foreach ($fields as $fieldName) {
+                // The field does not exist on the exercise, so use it from the course
+                $courseFieldExists = $courseExtraField->get_handler_field_info_by_field_variable($fieldName);
+                if ($courseFieldExists === false) {
+                    continue;
+                }
+                $fieldSource[$fieldName] = ['item_type' => 'course', 'id' => $courseFieldExists['id']];
+            }
+        }
+
+        $courseId = $this->course->getId();
+        $descriptions = CourseDescription::get_descriptions($courseId);
         $results = [];
+
+        $webPath = api_get_path(WEB_PATH);
 
         /** @var CourseDescription $description */
         foreach ($descriptions as $description) {
-            $results[] = [
+            $descriptionDetails = [
                 'id' => $description->get_description_type(),
                 'title' => $description->get_title(),
-                'content' => str_replace('src="/', 'src="'.api_get_path(WEB_PATH), $description->get_content()),
+                'content' => str_replace('src="/', 'src="'.$webPath, $description->get_content()),
             ];
+            if (count($fieldSource) > 0) {
+                $extraFieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+                $fieldsSearchString = "SELECT field_id, value FROM $extraFieldValuesTable WHERE item_id = %d AND field_id = %d";
+                foreach ($fieldSource as $fieldName => $fieldDetails) {
+                    $itemId = $courseId;
+                    $result = Database::query(sprintf($fieldsSearchString, $itemId, $fieldDetails['id']));
+                    if (Database::num_rows($result) > 0) {
+                        $row = Database::fetch_assoc($result);
+                        $descriptionDetails['extra_'.$fieldName] = $row['value'];
+                    } else {
+                        $descriptionDetails['extra_'.$fieldName] = '';
+                    }
+                }
+            }
+            $results[] = $descriptionDetails;
         }
 
         return $results;
@@ -411,6 +596,8 @@ class Rest extends WebService
      */
     public function getCourseDocuments($directoryId = 0)
     {
+        Event::event_access_tool(TOOL_DOCUMENT);
+
         /** @var string $path */
         $path = '/';
         $sessionId = $this->session ? $this->session->getId() : 0;
@@ -489,6 +676,8 @@ class Rest extends WebService
      */
     public function getCourseAnnouncements()
     {
+        Event::event_access_tool(TOOL_ANNOUNCEMENT);
+
         $sessionId = $this->session ? $this->session->getId() : 0;
 
         $announcements = AnnouncementManager::getAnnouncements(
@@ -530,6 +719,8 @@ class Rest extends WebService
      */
     public function getCourseAnnouncement($announcementId)
     {
+        Event::event_access_tool(TOOL_ANNOUNCEMENT);
+
         $sessionId = $this->session ? $this->session->getId() : 0;
         $announcement = AnnouncementManager::getAnnouncementInfoById(
             $announcementId,
@@ -565,6 +756,8 @@ class Rest extends WebService
      */
     public function getCourseAgenda()
     {
+        Event::event_access_tool(TOOL_CALENDAR_EVENT);
+
         $sessionId = $this->session ? $this->session->getId() : 0;
 
         $agenda = new Agenda(
@@ -622,6 +815,8 @@ class Rest extends WebService
      */
     public function getCourseNotebooks()
     {
+        Event::event_access_tool(TOOL_NOTEBOOK);
+
         $em = Database::getManager();
         /** @var CNotebookRepository $notebooksRepo */
         $notebooksRepo = $em->getRepository('ChamiloCourseBundle:CNotebook');
@@ -652,6 +847,8 @@ class Rest extends WebService
      */
     public function getCourseForumCategories()
     {
+        Event::event_access_tool(TOOL_FORUM);
+
         $sessionId = $this->session ? $this->session->getId() : 0;
         $webCoursePath = api_get_path(WEB_COURSE_PATH).$this->course->getDirectory().'/upload/forum/images/';
 
@@ -725,6 +922,8 @@ class Rest extends WebService
      */
     public function getCourseForum($forumId)
     {
+        Event::event_access_tool(TOOL_FORUM);
+
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         $sessionId = $this->session ? $this->session->getId() : 0;
@@ -767,6 +966,8 @@ class Rest extends WebService
      */
     public function getCourseForumThread($forumId, $threadId)
     {
+        Event::event_access_tool(TOOL_FORUM);
+
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         $sessionId = $this->session ? $this->session->getId() : 0;
@@ -791,16 +992,236 @@ class Rest extends WebService
                 'author' => api_get_person_name($postInfo['firstname'], $postInfo['lastname']),
                 'date' => api_convert_and_format_date($postInfo['post_date'], DATE_TIME_FORMAT_LONG_24H),
                 'parentId' => $postInfo['post_parent_id'],
+                'attachments' => getAttachedFiles(
+                    $forumId,
+                    $threadId,
+                    $postInfo['iid'],
+                    0,
+                    $this->course->getId()
+                ),
             ];
         }
 
         return $thread;
     }
 
+    public function getCourseLinks(): array
+    {
+        Event::event_access_tool(TOOL_LINK);
+
+        $courseId = $this->course->getId();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $webCodePath = api_get_path(WEB_CODE_PATH);
+        $cidReq = api_get_cidreq();
+
+        $categories = array_merge(
+            [
+                [
+                    'iid' => 0,
+                    'c_id' => $courseId,
+                    'id' => 0,
+                    'category_title' => get_lang('NoCategory'),
+                    'description' => '',
+                    'display_order' => 0,
+                    'session_id' => $sessionId,
+                    'visibility' => 1,
+                ],
+            ],
+            Link::getLinkCategories($courseId, $sessionId)
+        );
+
+        $categories = array_filter(
+            $categories,
+            function (array $category) {
+                return $category['visibility'] != 0;
+            }
+        );
+
+        return array_map(
+            function (array $category) use ($webCodePath, $cidReq, $courseId, $sessionId) {
+                $links = array_filter(
+                    Link::getLinksPerCategory($category['iid'], $courseId, $sessionId),
+                    function (array $link) {
+                        return $link['visibility'] != 0;
+                    }
+                );
+
+                $links = array_map(
+                    function (array $link) use ($webCodePath, $cidReq) {
+                        return [
+                            'id' => (int) $link['id'],
+                            'title' => Security::remove_XSS($link['title']),
+                            'description' => Security::remove_XSS($link['description']),
+                            'visibility' => (int) $link['visibility'],
+                            'url' => $webCodePath."link/link_goto.php?$cidReq&link_id=".$link['id'],
+                        ];
+                    },
+                    $links
+                );
+
+                return [
+                    'id' => (int) $category['iid'],
+                    'title' => Security::remove_XSS($category['category_title']),
+                    'description' => Security::remove_XSS($category['description']),
+                    'visibility' => (int) $category['visibility'],
+                    'links' => $links,
+                ];
+            },
+            $categories
+        );
+    }
+
     /**
-     * @return array
+     * It gets the courses and visible tests of a user by dates.
+     *
+     * @throws Exception
      */
-    public function getUserProfile()
+    public function getUserCoursesByDates(int $userId, string $startDate, string $endDate): array
+    {
+        self::protectAdminEndpoint();
+        $userCourses = CourseManager::get_courses_list_by_user_id($userId);
+        $courses = [];
+        if (!empty($userCourses)) {
+            foreach ($userCourses as $course) {
+                $courseCode = $course['code'];
+                $courseId = $course['real_id'];
+                $exercises = Exercise::exerciseGrid(
+                    0,
+                    '',
+                    0,
+                    $courseId,
+                    0,
+                    true,
+                    0,
+                    0,
+                    0,
+                    null,
+                    false,
+                    false
+                );
+                $trackExercises = Tracking::getUserTrackExerciseByDates(
+                    $userId,
+                    $courseId,
+                    $startDate,
+                    $endDate
+                );
+                $takenExercises = [];
+                if (!empty($trackExercises)) {
+                    $totalSore = 0;
+                    foreach ($trackExercises as $track) {
+                        $takenExercises[] = $track['title'];
+                        $totalSore += $track['score'];
+                    }
+                    $avgScore = round($totalSore / count($trackExercises));
+                    $takenExercises['avg_score'] = $avgScore;
+                }
+                $courses[] = [
+                    'course_code' => $courseCode,
+                    'course_title' => $course['title'],
+                    'visible_tests' => $exercises,
+                    'taken_tests' => $takenExercises,
+                ];
+            }
+        }
+
+        return $courses;
+    }
+
+    /**
+     * Get the list of courses from extra field included count of visible exercises.
+     *
+     * @throws Exception
+     */
+    public function getCoursesByExtraField(string $fieldName, string $fieldValue): array
+    {
+        self::protectAdminEndpoint();
+        $extraField = new ExtraField('course');
+        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($fieldName);
+
+        if (empty($extraFieldInfo)) {
+            throw new Exception("$fieldName not found");
+        }
+
+        $extraFieldValue = new ExtraFieldValue('course');
+        $items = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+            $fieldName,
+            $fieldValue,
+            false,
+            false,
+            true
+        );
+
+        $courses = [];
+        foreach ($items as $item) {
+            $courseId = $item['item_id'];
+            $courses[$courseId] = api_get_course_info_by_id($courseId);
+            $exercises = Exercise::exerciseGrid(
+                0,
+                '',
+                0,
+                $courseId,
+                0,
+                true,
+                0,
+                0,
+                0,
+                null,
+                false,
+                false
+            );
+            $courses[$courseId]['count_visible_tests'] = count($exercises);
+        }
+
+        return $courses;
+    }
+
+    /**
+     * Get the list of users from extra field.
+     *
+     * @param string $fieldName  The name of the extra_field (as in extra_field.variable) we want to filter on.
+     * @param string $fieldValue The value of the extra_field we want to filter on. If a user doesn't have the given extra_field set to that value, it will not be returned.
+     * @param int    $active     Additional filter. If 1, only return active users. Otherwise, return them all.
+     *
+     * @throws Exception
+     */
+    public function getUsersProfilesByExtraField(string $fieldName, string $fieldValue, int $active = 0): array
+    {
+        self::protectAdminEndpoint();
+        $users = [];
+        $extraValues = UserManager::get_extra_user_data_by_value(
+            $fieldName,
+            $fieldValue
+        );
+        if (!empty($extraValues)) {
+            foreach ($extraValues as $value) {
+                $userId = (int) $value;
+                $user = api_get_user_entity($userId);
+                if ($active && !$user->getActive()) {
+                    // If this user is not active, and we only asked for active users, skip to next user.
+                    continue;
+                }
+                $pictureInfo = UserManager::get_user_picture_path_by_id($user->getId(), 'web');
+                $users[$userId] = [
+                    'pictureUri' => $pictureInfo['dir'].$pictureInfo['file'],
+                    'id' => $userId,
+                    'status' => $user->getStatus(),
+                    'fullName' => UserManager::formatUserFullName($user),
+                    'username' => $user->getUsername(),
+                    'officialCode' => $user->getOfficialCode(),
+                    'phone' => $user->getPhone(),
+                    //'extra' => [],
+                ];
+            }
+        }
+
+        return $users;
+    }
+
+    /**
+     * Get one's own profile.
+     */
+    public function getUserProfile(): array
     {
         $pictureInfo = UserManager::get_user_picture_path_by_id($this->user->getId(), 'web');
 
@@ -830,7 +1251,10 @@ class Rest extends WebService
         return $result;
     }
 
-    public function getCourseLpProgress()
+    /**
+     * Get one's own (avg) progress in learning paths.
+     */
+    public function getCourseLpProgress(): array
     {
         $sessionId = $this->session ? $this->session->getId() : 0;
         $userId = $this->user->getId();
@@ -845,11 +1269,11 @@ class Rest extends WebService
 
     /**
      * @throws Exception
-     *
-     * @return array
      */
-    public function getCourseLearnPaths()
+    public function getCourseLearnPaths(): array
     {
+        Event::event_access_tool(TOOL_LEARNPATH);
+
         $sessionId = $this->session ? $this->session->getId() : 0;
         $categoriesTempList = learnpath::getCategories($this->course->getId());
 
@@ -960,10 +1384,8 @@ class Rest extends WebService
 
     /**
      * Start login for a user. Then make a redirect to show the learnpath.
-     *
-     * @param int $lpId
      */
-    public function showLearningPath($lpId)
+    public function showLearningPath(int $lpId)
     {
         $loggedUser['user_id'] = $this->user->getId();
         $loggedUser['status'] = $this->user->getStatus();
@@ -997,6 +1419,8 @@ class Rest extends WebService
      */
     public function saveForumPost(array $postValues, $forumId)
     {
+        Event::event_access_tool(TOOL_FORUM);
+
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         $forum = get_forums($forumId, $this->course->getCode());
@@ -1016,6 +1440,8 @@ class Rest extends WebService
     {
         $data = [];
         $sessionsByCategory = UserManager::get_sessions_by_category($this->user->getId(), false);
+
+        $webCodePath = api_get_path(WEB_CODE_PATH).'webservices/api/v2.php?';
 
         foreach ($sessionsByCategory as $category) {
             $categorySessions = [];
@@ -1038,6 +1464,15 @@ class Rest extends WebService
                         'pictureUrl' => $courseInfo['course_image_large'],
                         'urlPicture' => $courseInfo['course_image_large'],
                         'teachers' => $teachers,
+                        'url' => $webCodePath.http_build_query(
+                            [
+                                'action' => self::VIEW_COURSE_HOME,
+                                'api_key' => $this->apiKey,
+                                'username' => $this->user->getUsername(),
+                                'course' => $courseInfo['real_id'],
+                                'session' => $sessions['session_id'],
+                            ]
+                        ),
                     ];
                 }
 
@@ -1135,6 +1570,8 @@ class Rest extends WebService
      */
     public function saveCourseNotebook($title, $text)
     {
+        Event::event_access_tool(TOOL_NOTEBOOK);
+
         $values = ['note_title' => $title, 'note_comment' => $text];
         $sessionId = $this->session ? $this->session->getId() : 0;
 
@@ -1157,6 +1594,8 @@ class Rest extends WebService
      */
     public function saveForumThread(array $values, $forumId)
     {
+        Event::event_access_tool(TOOL_FORUM);
+
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         $sessionId = $this->session ? $this->session->getId() : 0;
@@ -1170,14 +1609,29 @@ class Rest extends WebService
     }
 
     /**
-     * @return array
+     * Returns an array of users with id, firstname, lastname, email and username.
+     *
+     * @param array $params An array of parameters to filter the results (currently supports 'status', 'id_campus' and 'extra_fields')
+     *
+     * @throws Exception
      */
-    public function getUsersCampus(array $params)
+    public function getUsersCampus(array $params): array
     {
-        $conditions = [
-            'status' => $params['status'],
-        ];
-        $idCampus = $params['id_campus'];
+        self::protectAdminEndpoint();
+
+        if ('*' === $params['status']) {
+            $conditions = [];
+        } else {
+            $conditions = [
+                'status' => $params['status'],
+            ];
+        }
+        $idCampus = !empty($params['id_campus']) ?? 1;
+        $fields = [];
+        if (!empty($params['extra_fields'])) {
+            //extra_fields must be sent as a comma-separated list of extra_field variable names
+            $fields = explode(',', $params['extra_fields']);
+        }
         $users = UserManager::get_user_list($conditions, ['firstname'], false, false, $idCampus);
         $list = [];
         foreach ($users as $item) {
@@ -1186,7 +1640,16 @@ class Rest extends WebService
                 'firstname' => $item['firstname'],
                 'lastname' => $item['lastname'],
                 'email' => $item['email'],
+                'username' => $item['username'],
+                'active' => $item['active'],
             ];
+            foreach ($fields as $field) {
+                $field = trim($field);
+                $value = UserManager::get_extra_user_data_by_field($item['user_id'], $field);
+                if (!empty($value)) {
+                    $listTemp[$field] = $value[$field];
+                }
+            }
             $list[] = $listTemp;
         }
 
@@ -1194,12 +1657,11 @@ class Rest extends WebService
     }
 
     /**
-     * @return array
+     * Returns a list of courses in the given URL. If no URL is provided, we assume we are not in a multi-URL setup and
+     * return all the courses.
      */
-    public function getCoursesCampus(array $params)
+    public function getCoursesCampus(int $campusId = 0): array
     {
-        $idCampus = $params['id_campus'];
-
         return CourseManager::get_courses_list(
             0, //offset
             0, //howMany
@@ -1207,16 +1669,90 @@ class Rest extends WebService
             'ASC',
             -1, //visibility
             null,
-            $idCampus, //$urlId
+            empty($campusId) ? null : $campusId, //$urlId
             true //AlsoSearchCode
         );
     }
 
     /**
-     * @return array
+     * Returns a list of sessions in the given URL. If no URL is provided, we assume we are not in a multi-URL setup and
+     * return all the sessions.
+     *
+     * @param int $campusId Optional
+     *
+     * @throws Exception
      */
-    public function addSession(array $params)
+    public function getSessionsCampus(int $campusId = 0): array
     {
+        self::protectAdminEndpoint();
+
+        $list = SessionManager::get_sessions_list(
+            [],
+            [],
+            null,
+            null,
+            $campusId
+        );
+        $shortList = [];
+        foreach ($list as $session) {
+            $shortList[] = [
+                'id' => $session['id'],
+                'name' => $session['name'],
+                'access_start_date' => $session['access_start_date'],
+                'access_end_date' => $session['access_end_date'],
+            ];
+        }
+
+        return $shortList;
+    }
+
+    /**
+     * Returns an array of groups with id, group_type, name, description, visibility.
+     *
+     * @param array $params An array of parameters to filter the results (currently supports 'type')
+     *
+     * @throws Exception
+     */
+    public function getGroups(array $params): array
+    {
+        self::protectAdminEndpoint();
+
+        if ('*' === $params['type']) {
+            $conditions = [];
+        } else {
+            $conditions = ['where' => ['group_type = ?' => $params['type']]];
+        }
+        $userGroup = new UserGroup();
+        $groups = $userGroup->getDataToExport($conditions);
+        $list = [];
+        /** @var \Chamilo\UserBundle\Entity\Group $item */
+        foreach ($groups as $item) {
+            $listTemp = [
+                'id' => $item['id'],
+                'name' => $item['name'],
+                'description' => $item['description'],
+                'visibility' => $item['visibility'],
+                'type' => $item['group_type'],
+            ];
+            if (in_array($item['group_type'], [0, 1])) {
+                $listTemp['type_name'] = ($item['group_type'] == 0) ? 'class' : 'social';
+            }
+            if (in_array($item['visibility'], [1, 2])) {
+                $listTemp['visibility_name'] = ($item['visibility'] == 1) ? 'open' : 'closed';
+            }
+            $list[] = $listTemp;
+        }
+
+        return $list;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function addSession(array $params): array
+    {
+        self::protectAdminEndpoint();
+
         $name = $params['name'];
         $coach_username = (int) $params['coach_username'];
         $startDate = $params['access_start_date'];
@@ -1266,6 +1802,8 @@ class Rest extends WebService
 
     public function addCourse(array $courseParam): array
     {
+        self::protectAdminEndpoint();
+
         $idCampus = isset($courseParam['id_campus']) ? $courseParam['id_campus'] : 1;
         $title = isset($courseParam['title']) ? $courseParam['title'] : '';
         $wantedCode = isset($courseParam['wanted_code']) ? $courseParam['wanted_code'] : null;
@@ -1304,6 +1842,7 @@ class Rest extends WebService
         $results = [];
         if (!empty($courseInfo)) {
             $results['status'] = true;
+            $results['id'] = $courseInfo['real_id'];
             $results['code_course'] = $courseInfo['code'];
             $results['title_course'] = $courseInfo['title'];
             $extraFieldValues = new ExtraFieldValue('course');
@@ -1322,11 +1861,11 @@ class Rest extends WebService
      * @param $userParam
      *
      * @throws Exception
-     *
-     * @return array
      */
-    public function addUser($userParam)
+    public function addUser($userParam): array
     {
+        self::protectAdminEndpoint();
+
         $firstName = $userParam['firstname'];
         $lastName = $userParam['lastname'];
         $status = $userParam['status'];
@@ -1344,6 +1883,7 @@ class Rest extends WebService
         $hr_dept_id = 0;
         $original_user_id_name = $userParam['original_user_id_name'];
         $original_user_id_value = $userParam['original_user_id_value'];
+        $sendMail = (empty($userParam['send_mail']) ? false : true);
 
         $extra_list = isset($userParam['extra']) ? $userParam['extra'] : [];
         if (isset($userParam['language'])) {
@@ -1356,12 +1896,22 @@ class Rest extends WebService
             $expiration_date = $userParam['expiration_date'];
         }
 
+        // If check_email_duplicates was set, trigger exception (i.e. do not create) if the e-mail is already used
+        if ($userParam['check_email_duplicates']) {
+            if (!empty($email)) {
+                $userFromEmail = api_get_user_info_from_email($email);
+                if (!empty($userFromEmail)) {
+                    throw new Exception(get_lang('EmailUsedTwice'));
+                }
+            }
+        }
+
         // Default language.
         if (empty($language)) {
             $language = api_get_setting('platformLanguage');
         }
 
-        // First check wether the login already exists.
+        // First check whether the login already exists.
         if (!UserManager::is_username_available($loginName)) {
             throw new Exception(get_lang('UserNameNotAvailable'));
         }
@@ -1380,7 +1930,10 @@ class Rest extends WebService
             $auth_source,
             $expiration_date,
             $active,
-            $hr_dept_id
+            $hr_dept_id,
+            [],
+            '',
+            $sendMail
         );
 
         if (empty($userId)) {
@@ -1439,18 +1992,63 @@ class Rest extends WebService
     }
 
     /**
+     * @throws Exception
+     */
+    public function addUserGetApikey(array $userParams): array
+    {
+        list($userId) = $this->addUser($userParams);
+
+        UserManager::add_api_key($userId, self::SERVICE_NAME);
+
+        $apiKey = UserManager::get_api_keys($userId, self::SERVICE_NAME);
+
+        return [
+            'id' => $userId,
+            'api_key' => current($apiKey),
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function updateUserApiKey(int $userId, string $oldApiKey): array
+    {
+        if (!api_is_platform_admin() && $userId != $this->user->getId()) {
+            self::throwNotAllowedException();
+        }
+
+        if (false === $currentApiKeys = UserManager::get_api_keys($userId, self::SERVICE_NAME)) {
+            self::throwNotAllowedException();
+        }
+
+        if (current($currentApiKeys) !== $oldApiKey) {
+            self::throwNotAllowedException();
+        }
+
+        UserManager::update_api_key($userId, self::SERVICE_NAME);
+
+        $apiKey = UserManager::get_api_keys($userId, self::SERVICE_NAME);
+
+        return [
+            'api_key' => current($apiKey),
+        ];
+    }
+
+    /**
      * Subscribe User to Course.
      *
-     * @param array $params
-     *
-     * @return array
+     * @throws Exception
      */
-    public function subscribeUserToCourse($params)
+    public function subscribeUserToCourse(array $params): array
     {
         $course_id = $params['course_id'];
         $course_code = $params['course_code'];
         $user_id = $params['user_id'];
         $status = $params['status'] ?? STUDENT;
+
+        if (!api_is_platform_admin() && $user_id != $this->user->getId()) {
+            self::throwNotAllowedException();
+        }
 
         if (!$course_id && !$course_code) {
             return [false];
@@ -1466,11 +2064,38 @@ class Rest extends WebService
         return [false];
     }
 
+    /**
+     * @throws Exception
+     */
+    public function subscribeUserToCoursePassword($courseCode, $password)
+    {
+        $courseInfo = api_get_course_info($courseCode);
+
+        if (empty($courseInfo)) {
+            throw new Exception(get_lang('NoCourse'));
+        }
+
+        if (sha1($password) === $courseInfo['registration_code']) {
+            CourseManager::processAutoSubscribeToCourse($courseCode);
+
+            return;
+        }
+
+        throw new Exception(get_lang('CourseRegistrationCodeIncorrect'));
+    }
+
+    /**
+     * @throws Exception
+     */
     public function unSubscribeUserToCourse(array $params): array
     {
         $courseId = $params['course_id'];
         $courseCode = $params['course_code'];
         $userId = $params['user_id'];
+
+        if (!api_is_platform_admin() && $userId != $this->user->getId()) {
+            self::throwNotAllowedException();
+        }
 
         if (!$courseId && !$courseCode) {
             return [false];
@@ -1496,9 +2121,28 @@ class Rest extends WebService
         }
     }
 
-    public function setMessageRead($messageId)
+    /**
+     * Set a given message as already read.
+     *
+     * @param $messageId
+     */
+    public function setMessageRead(int $messageId)
     {
-        MessageManager::update_message($this->user->getId(), $messageId);
+        // MESSAGE_STATUS_NEW is also used for messages that have been "read"
+        MessageManager::update_message_status($this->user->getId(), $messageId, MESSAGE_STATUS_NEW);
+    }
+
+    /**
+     * Add a group.
+     *
+     * @param array Params
+     */
+    public function createGroup($params)
+    {
+        self::protectAdminEndpoint();
+
+        $name = $params['name'];
+        $description = $params['description'];
     }
 
     /**
@@ -1596,14 +2240,14 @@ class Rest extends WebService
 
     /**
      * @throws Exception
-     *
-     * @return array
      */
-    public function addCoursesSession(array $params)
+    public function addCoursesSession(array $params): array
     {
+        self::protectAdminEndpoint();
+
         $sessionId = $params['id_session'];
         $courseList = $params['list_courses'];
-        $importAssignments = isset($params['import_assignments']) ? 1 === (int) $params['import_assignments'] : false;
+        $importAssignments = isset($params['import_assignments']) && 1 === (int) $params['import_assignments'];
 
         $result = SessionManager::add_courses_to_session(
             $sessionId,
@@ -1628,15 +2272,33 @@ class Rest extends WebService
     }
 
     /**
-     * @return array
+     * Simple legacy shortcut to subscribeUsersToSession.
+     *
+     * @throws Exception
      */
-    public function addUsersSession(array $params)
+    public function addUsersSession(array $params): array
+    {
+        return self::subscribeUsersToSession($params);
+    }
+
+    /**
+     * Subscribe a list of users to the given session.
+     *
+     * @param array $params Containing 'id_session' and 'list_users' entries
+     *
+     * @throws Exception
+     */
+    public function subscribeUsersToSession(array $params): array
     {
         $sessionId = $params['id_session'];
         $userList = $params['list_users'];
 
         if (!is_array($userList)) {
             $userList = [];
+        }
+
+        if (!api_is_platform_admin() && !in_array($this->user->getId(), $userList)) {
+            self::throwNotAllowedException();
         }
 
         SessionManager::subscribeUsersToSession(
@@ -1653,19 +2315,54 @@ class Rest extends WebService
     }
 
     /**
-     * Creates a session from a model session.
-     *
-     * @param $modelSessionId
-     * @param $sessionName
-     * @param $startDate
-     * @param $endDate
+     * Unsubscribe a given list of users from the given session.
      *
      * @throws Exception
-     *
-     * @return int, the id of the new session
      */
-    public function createSessionFromModel($modelSessionId, $sessionName, $startDate, $endDate, array $extraFields = [])
+    public function unsubscribeUsersFromSession(array $params): array
     {
+        self::protectAdminEndpoint();
+
+        $sessionId = $params['id_session'];
+        $userList = $params['list_users'];
+
+        if (!is_array($userList)) {
+            $userList = [];
+        }
+
+        if (!api_is_platform_admin() && !in_array($this->user->getId(), $userList)) {
+            self::throwNotAllowedException();
+        }
+
+        foreach ($userList as $userId) {
+            SessionManager::unsubscribe_user_from_session(
+                $sessionId,
+                $userId
+            );
+        }
+
+        return [
+            'status' => true,
+            'message' => get_lang('UserUnsubscribed'),
+        ];
+    }
+
+    /**
+     * Creates a session from a model session.
+     *
+     * @throws Exception
+     */
+    public function createSessionFromModel(HttpRequest $request): int
+    {
+        self::protectAdminEndpoint();
+
+        $modelSessionId = $request->request->getInt('modelSessionId');
+        $sessionName = $request->request->get('sessionName');
+        $startDate = $request->request->get('startDate');
+        $endDate = $request->request->get('endDate');
+        $extraFields = $request->request->get('extraFields', []);
+        $duplicateAgendaContent = $request->request->getBoolean('duplicateAgendaContent');
+
         if (empty($modelSessionId) || empty($sessionName) || empty($startDate) || empty($endDate)) {
             throw new Exception(get_lang('NoData'));
         }
@@ -1741,6 +2438,26 @@ class Rest extends WebService
             throw new Exception(get_lang('CoursesNotAddedToSession'));
         }
 
+        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $courseListOrdered = SessionManager::get_course_list_by_session_id($modelSessionId, null, 'position');
+        $count = 0;
+        foreach ($courseListOrdered as $course) {
+            if ($course['position'] == '') {
+                $course['position'] = $count;
+            }
+            // Saving order.
+            $sql = "UPDATE $table SET position = ".$course['position']."
+                    WHERE session_id = $newSessionId AND c_id = '".$course['real_id']."'";
+            Database::query($sql);
+            $count++;
+        }
+
+        if ($duplicateAgendaContent) {
+            foreach ($courseList as $courseId) {
+                SessionManager::importAgendaFromSessionModel($modelSessionId, $newSessionId, $courseId);
+            }
+        }
+
         if (api_is_multiple_url_enabled()) {
             if (api_get_current_access_url_id() != -1) {
                 UrlManager::add_session_to_url(
@@ -1760,14 +2477,9 @@ class Rest extends WebService
     /**
      * subscribes a user to a session.
      *
-     * @param int    $sessionId the session id
-     * @param string $loginName the user's login name
-     *
      * @throws Exception
-     *
-     * @return boolean, whether it worked
      */
-    public function subscribeUserToSessionFromUsername($sessionId, $loginName)
+    public function subscribeUserToSessionFromUsername(int $sessionId, string $loginName): bool
     {
         if (!SessionManager::isValidId($sessionId)) {
             throw new Exception(get_lang('SessionNotFound'));
@@ -1776,6 +2488,10 @@ class Rest extends WebService
         $userId = UserManager::get_user_id_from_username($loginName);
         if (false === $userId) {
             throw new Exception(get_lang('UserNotFound'));
+        }
+
+        if (!api_is_platform_admin() && $userId != $this->user->getId()) {
+            self::throwNotAllowedException();
         }
 
         $subscribed = SessionManager::subscribeUsersToSession(
@@ -1828,19 +2544,48 @@ class Rest extends WebService
     }
 
     /**
-     * updates a user identified by its login name.
+     * Get a list of users subscribed to the given session.
      *
-     * @param array $parameters
+     * @params int $sessionId
+     * @params int $moveInfo Whether to return the "moved_*" fields or not
+     */
+    public function getUsersSubscribedToSession(int $sessionId, int $moveInfo = 0): array
+    {
+        self::protectAdminEndpoint();
+
+        $users = SessionManager::get_users_by_session($sessionId);
+
+        $userList = [];
+        foreach ($users as $user) {
+            $userInfo = [
+                'user_id' => $user['user_id'],
+                'username' => $user['username'],
+                'firstname' => $user['firstname'],
+                'lastname' => $user['lastname'],
+                'status' => $user['relation_type'],
+            ];
+            if (1 === $moveInfo) {
+                $userInfo['moved_to'] = $user['moved_to'];
+                $userInfo['moved_status'] = $user['moved_status'];
+                $userInfo['moved_at'] = $user['moved_at'];
+            }
+            $userList[] = $userInfo;
+        }
+
+        return $userList;
+    }
+
+    /**
+     * Updates a user identified by its login name.
      *
      * @throws Exception on failure
-     *
-     * @return boolean, true on success
+     * @todo make a safe version for use by the final user on its account
      */
-    public function updateUserFromUserName($parameters)
+    public function updateUserFromUserName(array $parameters): bool
     {
         // find user
         $userId = null;
-        if (!is_array($parameters) || empty($parameters)) {
+        if (empty($parameters)) {
             throw new Exception('NoData');
         }
         foreach ($parameters as $name => $value) {
@@ -1855,6 +2600,18 @@ class Rest extends WebService
         if (is_null($userId)) {
             throw new Exception(get_lang('NoData'));
         }
+
+        if (!api_is_platform_admin() && $userId != $this->user->getId()) {
+            self::throwNotAllowedException();
+        }
+
+        if (!empty($parameters['new_login_name'])) {
+            // Make sure the new username, if set, is available
+            if (!UserManager::is_username_available($parameters['new_login_name'])) {
+                throw new Exception(get_lang('LoginAlreadyTaken'));
+            }
+        }
+
         /** @var User $user */
         $user = UserManager::getRepository()->find($userId);
         if (empty($user)) {
@@ -1881,6 +2638,9 @@ class Rest extends WebService
                     break;
                 case 'firstname':
                     $user->setFirstname($value);
+                    break;
+                case 'new_login_name':
+                    $user->setUsername($value);
                     break;
                 case 'phone':
                     $user->setPhone($value);
@@ -2038,6 +2798,20 @@ class Rest extends WebService
     }
 
     /**
+     * Returns whether a user group name exists.
+     *
+     * @param string $name the group name
+     *
+     * @return bool whether the group name exists
+     */
+    public function groupExists($name)
+    {
+        $userGroup = new UserGroup();
+
+        return false !== $userGroup->usergroup_exists($name);
+    }
+
+    /**
      * This service roughly matches what the call to MDL's API core_course_get_contents function returns.
      *
      * @return array
@@ -2067,7 +2841,7 @@ class Rest extends WebService
         $json['modules'] = array_map(
             function (array $exercise) use ($quizIcon) {
                 return [
-                    'id' => $exercise['id'],
+                    'id' => (int) $exercise['id'],
                     'url' => $exercise['url'],
                     'name' => $exercise['name'],
                     'instance' => 1,
@@ -2097,6 +2871,8 @@ class Rest extends WebService
      */
     public function updateSession(array $params): array
     {
+        self::protectAdminEndpoint();
+
         $id = $params['session_id'];
         $reset = $params['reset'] ?? null;
         $name = $params['name'] ?? null;
@@ -2239,7 +3015,1228 @@ class Rest extends WebService
         ];
     }
 
+    public function checkConditionalLogin(): bool
+    {
+        $file = api_get_path(SYS_CODE_PATH).'auth/conditional_login/conditional_login.php';
+
+        if (!file_exists($file)) {
+            return true;
+        }
+
+        include_once $file;
+
+        if (!isset($login_conditions)) {
+            return true;
+        }
+
+        foreach ($login_conditions as $condition) {
+            //If condition fails we redirect to the URL defined by the condition
+            if (!isset($condition['conditional_function'])) {
+                continue;
+            }
+
+            $function = $condition['conditional_function'];
+            $result = $function(['user_id' => $this->user->getId()]);
+
+            if ($result == false) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function getLegalConditions(): array
+    {
+        $language = api_get_language_id(
+            api_get_interface_language()
+        );
+
+        $termPreview = LegalManager::get_last_condition($language);
+
+        if ($termPreview) {
+            return $termPreview;
+        }
+
+        $language = api_get_language_id(
+            api_get_setting('platformLanguage')
+        );
+
+        $termPreview = LegalManager::get_last_condition($language);
+
+        if ($termPreview) {
+            return $termPreview;
+        }
+
+        $language = api_get_language_id('english');
+
+        return LegalManager::get_last_condition($language);
+    }
+
+    public function updateConditionAccepted()
+    {
+        $legalAcceptType = $_POST['legal_accept_type'] ?? null;
+
+        $condArray = explode(':', $legalAcceptType);
+        $condArray = array_map('intval', $condArray);
+
+        if (empty($condArray[0]) || empty($condArray[1])) {
+            return;
+        }
+
+        $conditionToSave = intval($condArray[0]).':'.intval($condArray[1]).':'.time();
+
+        LegalManager::sendEmailToUserBoss(
+            $this->user->getId(),
+            $conditionToSave
+        );
+    }
+
     /**
+     * Get the list of test with last user attempt and his datetime.
+     *
+     * @param array $fields A list of extra fields to include in the answer. Searches for the field in exercise, then in course
+     *
+     * @throws Exception
+     */
+    public function getTestUpdatesList($fields = []): array
+    {
+        self::protectAdminEndpoint();
+
+        $tableCQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+        $tableTrackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+        $resultArray = [];
+
+        // Check the extra fields criteria (whether to add extra field information or not)
+        $fieldSource = [];
+        $extraFieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $fieldsSearchString = "SELECT field_id, value FROM $extraFieldValuesTable WHERE item_id = %d AND field_id = %d";
+        if (count($fields) > 0) {
+            // For each field, check where to get it from (quiz or course)
+            $quizExtraField = new ExtraField('exercise');
+            $courseExtraField = new ExtraField('course');
+            foreach ($fields as $fieldName) {
+                $fieldExists = $quizExtraField->get_handler_field_info_by_field_variable($fieldName);
+                if ($fieldExists === false) {
+                    // The field does not exist on the exercise, so use it from the course
+                    $courseFieldExists = $courseExtraField->get_handler_field_info_by_field_variable($fieldName);
+                    if ($courseFieldExists === false) {
+                        continue;
+                    }
+                    $fieldSource[$fieldName] = ['item_type' => 'course', 'id' => $courseFieldExists['id']];
+                } else {
+                    $fieldSource[$fieldName] = ['item_type' => 'exercise', 'id' => $fieldExists['id']];
+                }
+            }
+        }
+
+        $sql = "
+            SELECT q.iid AS id,
+                q.title,
+                MAX(a.start_date) AS last_attempt_time,
+                u.username AS last_attempt_username,
+                q.c_id
+            FROM $tableCQuiz q
+            JOIN $tableTrackExercises a ON q.iid = a.exe_exo_id
+            JOIN $tableUser u ON a.exe_user_id = u.id
+            GROUP BY q.iid
+        ";
+
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0) {
+            while ($row = Database::fetch_assoc($result)) {
+                // Check the whole extra fields thing
+                if (count($fieldSource) > 0) {
+                    foreach ($fieldSource as $fieldName => $fieldDetails) {
+                        if ($fieldDetails['item_type'] == 'course') {
+                            $itemId = $row['c_id'];
+                        } else {
+                            $itemId = $row['id'];
+                        }
+                        $fieldResult = Database::query(sprintf($fieldsSearchString, $itemId, $fieldDetails['id']));
+                        if (Database::num_rows($fieldResult) > 0) {
+                            $fieldRow = Database::fetch_assoc($fieldResult);
+                            $row['extra_'.$fieldName] = $fieldRow['value'];
+                        } else {
+                            $row['extra_'.$fieldName] = '';
+                        }
+                    }
+                }
+                // Get item authoring data
+                $itemProps = api_get_last_item_property_info($row['c_id'], 'quiz', $row['id']);
+                $row['created_by'] = $this->__getConfiguredUsernameById($itemProps['insert_user_id']);
+                if ($itemProps['insert_user_id'] == $itemProps['lastedit_user_id']) {
+                    $row['updated_by'] = $row['created_by'];
+                } else {
+                    $row['updated_by'] = $this->__getConfiguredUsernameById($itemProps['lastedit_user_id']);
+                }
+                $resultArray[] = $row;
+            }
+        }
+
+        return $resultArray;
+    }
+
+    /**
+     * Get tests results data
+     * Not support sessions
+     * By default, is successful if score greater than 50%.
+     *
+     * @throws Exception
+     *
+     * @return array e.g: [ { "id": 4, "title": "aiken", "updated_by": "-", "type": "1", "completion": 0 } ]
+     */
+    public function getTestAverageResultsList(array $ids = [], ?array $fields = []): array
+    {
+        self::protectAdminEndpoint();
+        $tableTrackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $tableCQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+        $tableCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
+        $resultArray = [];
+        $countUsersInCourses = [];
+        $extraArray = [];
+
+        if (!empty($ids)) {
+            if (!is_array($ids)) {
+                $ids = [$ids];
+            }
+            if (!is_array($fields)) {
+                $fields = [$fields];
+            }
+            if (!empty($fields)) {
+                foreach ($fields as $field) {
+                    $extraArray['extra_'.$field] = '';
+                }
+            }
+
+            $queryUsersInCourses = "
+                SELECT c_id, count(*)
+                FROM $tableCourseRelUser
+                GROUP BY c_id
+                ORDER BY c_id;
+            ";
+
+            $resultUsersInCourses = Database::query($queryUsersInCourses);
+            while ($row = Database::fetch_array($resultUsersInCourses)) {
+                $countUsersInCourses[$row[0]] = $row[1];
+            }
+
+            foreach ($ids as $item) {
+                $item = (int) $item;
+
+                $queryCQuiz = "
+                    SELECT c_id,
+                        title,
+                        feedback_type,
+                        pass_percentage
+                    FROM $tableCQuiz
+                    WHERE iid = $item";
+
+                $resultCQuiz = Database::query($queryCQuiz);
+                if (Database::num_rows($resultCQuiz) <= 0) {
+                    continue;
+                }
+                $row = Database::fetch_assoc($resultCQuiz);
+
+                $cId = $row['c_id'];
+                $title = $row['title'];
+                $type = Exercise::getFeedbackTypeLiteral($row['feedback_type']);
+                $passPercentage = empty($row['pass_percentage']) ? 0.5 : $row['pass_percentage'];
+
+                // Get item authoring data
+                $itemProps = api_get_last_item_property_info($row['c_id'], 'quiz', $item);
+                $createdBy = $this->__getConfiguredUsernameById($itemProps['insert_user_id']);
+                if ($itemProps['insert_user_id'] == $itemProps['lastedit_user_id']) {
+                    $updatedBy = $createdBy;
+                } else {
+                    $updatedBy = $this->__getConfiguredUsernameById($itemProps['lastedit_user_id']);
+                }
+
+                $sql = "
+                    SELECT a.exe_exo_id AS id,
+                           a.exe_user_id,
+                           MAX(a.start_date),
+                           a.exe_result,
+                           a.exe_weighting
+                    FROM $tableTrackExercises a
+                    WHERE a.exe_exo_id = $item
+                    GROUP BY a.exe_exo_id, a.exe_user_id
+                ";
+
+                $result = Database::query($sql);
+                if (Database::num_rows($result) > 0) {
+                    $countAttempts = 0;
+                    $countSuccess = 0;
+                    $scoreSum = 0;
+
+                    while ($row = Database::fetch_assoc($result)) {
+
+                        // If test is badly configured, with all questions at score 0
+                        if ($row['exe_weighting'] == 0) {
+                            continue;
+                        }
+                        $score = $row['exe_result'] / $row['exe_weighting'];
+                        if ($score >= $passPercentage) {
+                            $countSuccess++;
+                        }
+                        $scoreSum += $score;
+                        $countAttempts++;
+                    }
+                    $completionMethod = 'Success on users count';
+                    if ($countAttempts === 0) {
+                        // In some cases, there are no attempts at all. Return 0 completion & score.
+                        $averageScore = 0;
+                        $completion = 0;
+                    } else {
+                        $averageScore = round(($scoreSum / $countAttempts) * 100, 2);
+                        if (empty($countUsersInCourses[$cId])) {
+                            // Users might have all been unsubscribed from the course since taking the test
+                            $completion = $countSuccess / $countAttempts;
+                            $completionMethod = 'Success on attempts count';
+                        } else {
+                            $completion = $countSuccess / $countUsersInCourses[$cId];
+                        }
+                    }
+                    $params = [
+                        'id' => $item,
+                        'title' => $title,
+                        'created_by' => $createdBy,
+                        'updated_by' => $updatedBy,
+                        'type' => $type,
+                        'completion' => $completion,
+                        'completion_method' => $completionMethod,
+                        'number_of_last_attempts' => $countAttempts,
+                        'average_score_in_percent' => $averageScore,
+                    ];
+                    foreach ($extraArray as $name => $value) {
+                        $params[$name] = $value;
+                    }
+                    $resultArray[] = $params;
+                }
+            }
+        }
+
+        return $resultArray;
+    }
+
+    public function logout()
+    {
+        online_logout($this->user->getId());
+
+        Event::courseLogout(
+            [
+                'uid' => $this->user->getId(),
+                'cid' => $this->course ? $this->course->getId() : 0,
+                'sid' => $this->session ? $this->session->getId() : 0,
+            ]
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function setThreadNotify(int $threadId): string
+    {
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+
+        $result = set_notification(
+            'thread',
+            $threadId,
+            false,
+            api_get_user_info($this->user->getId()),
+            api_get_course_info($this->course->getCode())
+        );
+
+        if (false === $result) {
+            self::throwNotAllowedException();
+        }
+
+        return $result;
+    }
+
+    public function getCourseWorks(): array
+    {
+        Event::event_access_tool(TOOL_STUDENTPUBLICATION);
+
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+
+        $isAllowedToEdit = $this->user->getStatus() !== STUDENT;
+
+        $courseId = $this->course->getId();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $courseInfo = api_get_course_info_by_id($this->course->getId());
+
+        $works = array_filter(
+            getWorkListTeacherData($courseId, $sessionId, 0, 0, 0, 'title', 'ASC', ''),
+            function (array $work) use ($isAllowedToEdit, $courseInfo, $courseId, $sessionId) {
+                if (!$isAllowedToEdit
+                    && !userIsSubscribedToWork($this->user->getId(), $work['id'], $courseId)
+                ) {
+                    return false;
+                }
+
+                $visibility = api_get_item_visibility($courseInfo, 'work', $work['id'], $sessionId);
+
+                if (!$isAllowedToEdit && $visibility != 1) {
+                    return false;
+                }
+
+                return true;
+            }
+        );
+
+        return array_map(
+            function (array $work) use ($isAllowedToEdit, $courseInfo) {
+                $work['type'] = 'work.png';
+
+                if (!$isAllowedToEdit) {
+                    $workList = get_work_user_list(
+                        0,
+                        1000,
+                        null,
+                        null,
+                        $work['id'],
+                        ' AND u.id = '.$this->user->getId()
+                    );
+
+                    $count = getTotalWorkComment($workList, $courseInfo);
+                    $lastWork = getLastWorkStudentFromParentByUser($this->user->getId(), $work, $courseInfo);
+
+                    $work['feedback'] = ' '.Display::label('0 '.get_lang('Feedback'), 'warning');
+
+                    if (!empty($count)) {
+                        $work['feedback'] = ' '.Display::label($count.' '.get_lang('Feedback'), 'info');
+                    }
+
+                    $work['last_upload'] = '';
+
+                    if (!empty($lastWork)) {
+                        $work['last_upload'] = !empty($lastWork['qualification'])
+                            ? $lastWork['qualification_rounded'].' - '
+                            : '';
+                        $work['last_upload'] .= api_get_local_time($lastWork['sent_date']);
+                    }
+                }
+
+                return $work;
+            },
+            $works
+        );
+    }
+
+    /**
+     * Returns a list of exercises in the given course. The given course is received through generic param at instanciation.
+     *
+     * @param array $fields A list of extra fields to include in the answer. Searches for the field in exercise, then in course
+     */
+    public function getCourseExercises($fields = []): array
+    {
+        Event::event_access_tool(TOOL_QUIZ);
+
+        $sessionId = $this->session ? $this->session->getId() : 0;
+        $courseInfo = api_get_course_info_by_id($this->course->getId());
+
+        // Check the extra fields criteria (whether to add extra field information or not)
+        $fieldSource = [];
+        if (count($fields) > 0) {
+            // For each field, check where to get it from (quiz or course)
+            $quizExtraField = new ExtraField('exercise');
+            $courseExtraField = new ExtraField('course');
+            foreach ($fields as $fieldName) {
+                $fieldExists = $quizExtraField->get_handler_field_info_by_field_variable($fieldName);
+                if ($fieldExists === false) {
+                    // The field does not exist on the exercise, so use it from the course
+                    $courseFieldExists = $courseExtraField->get_handler_field_info_by_field_variable($fieldName);
+                    if ($courseFieldExists === false) {
+                        continue;
+                    }
+                    $fieldSource[$fieldName] = ['item_type' => 'course', 'id' => $courseFieldExists['id']];
+                } else {
+                    $fieldSource[$fieldName] = ['item_type' => 'exercise', 'id' => $fieldExists['id']];
+                }
+            }
+        }
+        $list = ExerciseLib::get_all_exercises($courseInfo, $sessionId);
+
+        // Now check the whole extra fields thing
+        if (count($fieldSource) > 0) {
+            $extraFieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+            $fieldsSearchString = "SELECT field_id, value FROM $extraFieldValuesTable WHERE item_id = %d AND field_id = %d";
+            foreach ($list as $id => $exercise) {
+                foreach ($fieldSource as $fieldName => $fieldDetails) {
+                    if ($fieldDetails['item_type'] == 'course') {
+                        $itemId = $exercise['c_id'];
+                    } else {
+                        $itemId = $exercise['iid'];
+                    }
+                    $result = Database::query(sprintf($fieldsSearchString, $itemId, $fieldDetails['id']));
+                    if (Database::num_rows($result) > 0) {
+                        $row = Database::fetch_assoc($result);
+                        $list[$id]['extra_'.$fieldName] = $row['value'];
+                    } else {
+                        $list[$id]['extra_'.$fieldName] = '';
+                    }
+                }
+            }
+        }
+        foreach ($list as $id => $row) {
+            // Get item authoring data
+            $itemProps = api_get_last_item_property_info($row['c_id'], 'quiz', $row['iid']);
+            $createdBy = $this->__getConfiguredUsernameById($itemProps['insert_user_id']);
+            if ($itemProps['insert_user_id'] == $itemProps['lastedit_user_id']) {
+                $updatedBy = $createdBy;
+            } else {
+                $updatedBy = $this->__getConfiguredUsernameById($itemProps['lastedit_user_id']);
+            }
+            $list[$id]['created_by'] = $createdBy;
+            $list[$id]['updated_by'] = $updatedBy;
+        }
+
+        return $list;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function putCourseWorkVisibility(int $workId, int $status): bool
+    {
+        Event::event_access_tool(TOOL_STUDENTPUBLICATION);
+
+        $courseInfo = api_get_course_info_by_id($this->course->getId());
+
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+
+        switch ($status) {
+            case 1:
+                return makeVisible($workId, $courseInfo);
+            case 0:
+                return makeInvisible($workId, $courseInfo);
+            default:
+                throw new Exception(get_lang('ActionNotAllowed'));
+        }
+    }
+
+    public function deleteWorkStudentItem(int $workId): string
+    {
+        Event::event_access_tool(TOOL_STUDENTPUBLICATION);
+
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+
+        $courseInfo = api_get_course_info_by_id($this->course->getId());
+
+        $fileDeleted = deleteWorkItem($workId, $courseInfo);
+
+        if ($fileDeleted) {
+            return get_lang('TheDocumentHasBeenDeleted');
+        }
+
+        return get_lang('YouAreNotAllowedToDeleteThisDocument');
+    }
+
+    public function deleteWorkCorrections(int $workId): string
+    {
+        Event::event_access_tool(TOOL_STUDENTPUBLICATION);
+
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+
+        $courseInfo = api_get_course_info_by_id($this->course->getId());
+
+        $result = get_work_user_list(null, null, null, null, $workId);
+
+        if ($result) {
+            foreach ($result as $item) {
+                $workInfo = get_work_data_by_id($item['id']);
+
+                deleteCorrection($courseInfo, $workInfo);
+            }
+        }
+
+        return get_lang('Deleted');
+    }
+
+    public function getWorkList(int $workId): array
+    {
+        $isAllowedToEdit = api_is_allowed_to_edit();
+
+        Event::event_access_tool(TOOL_STUDENTPUBLICATION);
+
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+
+        $userId = $this->user->getId();
+        $courseId = $this->course->getId();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $courseInfo = api_get_course_info_by_id($courseId);
+        $webPath = api_get_path(WEB_PATH);
+
+        $whereCondition = !$isAllowedToEdit ? " AND u.id = $userId" : '';
+
+        $works = get_work_user_list(
+            0,
+            0,
+            'title',
+            'asc',
+            $workId,
+            $whereCondition,
+            null,
+            false,
+            $courseId,
+            $sessionId
+        );
+
+        return array_map(
+            function (array $work) use ($courseInfo, $webPath) {
+                $itemId = $work['id'];
+                $count = getWorkCommentCount($itemId, $courseInfo);
+
+                $work['feedback'] = $count.' '.Display::returnFontAwesomeIcon('comments-o');
+                $work['feedback_clean'] = $count;
+
+                $workInfo = get_work_data_by_id($itemId);
+                $commentsTmp = getWorkComments($workInfo);
+                $comments = [];
+
+                foreach ($commentsTmp as $comment) {
+                    $comment['comment'] = str_replace('src="/', 'src="'.$webPath.'app/', $comment['comment']);
+                    $comments[] = $comment;
+                }
+
+                $work['comments'] = $comments;
+
+                if (empty($workInfo['qualificator_id'])) {
+                    $qualificator_id = Display::label(get_lang('NotRevised'), 'warning');
+                } else {
+                    $qualificator_id = Display::label(get_lang('Revised'), 'success');
+                }
+
+                $work['qualificator_id'] = $qualificator_id;
+
+                return $work;
+            },
+            $works
+        );
+    }
+
+    public function getWorkStudentsWithoutPublications(int $workId): array
+    {
+        Event::event_access_tool(TOOL_STUDENTPUBLICATION);
+
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+
+        return get_list_users_without_publication($workId);
+    }
+
+    public function getWorkUsers(int $workId): array
+    {
+        Event::event_access_tool(TOOL_STUDENTPUBLICATION);
+
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+
+        $courseId = $this->course->getId();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+        $courseInfo = api_get_course_info_by_id($courseId);
+
+        $items = getAllUserToWork($workId, $courseId);
+        $usersAdded = [];
+        $result = [
+            'users_added' => [],
+            'users_to_add' => [],
+        ];
+
+        if (!empty($items)) {
+            foreach ($items as $data) {
+                $usersAdded[] = $data['user_id'];
+
+                $userInfo = api_get_user_info($data['user_id']);
+
+                $result['users_added'][] = [
+                    'user_id' => (int) $data['user_id'],
+                    'complete_name_with_username' => $userInfo['complete_name_with_username'],
+                ];
+            }
+        }
+
+        if (empty($sessionId)) {
+            $status = STUDENT;
+        } else {
+            $status = 0;
+        }
+
+        $userList = CourseManager::get_user_list_from_course_code(
+            $courseInfo['code'],
+            $sessionId,
+            null,
+            null,
+            $status
+        );
+
+        $userToAddList = [];
+        foreach ($userList as $user) {
+            if (!in_array($user['user_id'], $usersAdded)) {
+                $userToAddList[] = $user;
+            }
+        }
+
+        if (!empty($userToAddList)) {
+            foreach ($userToAddList as $user) {
+                $userName = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') ';
+
+                $result['users_to_add'][] = [
+                    'user_id' => (int) $user['user_id'],
+                    'complete_name_with_username' => $userName,
+                ];
+            }
+        }
+
+        return $result;
+    }
+
+    public function getWorkStudentList(int $workId): array
+    {
+        Event::event_access_tool(TOOL_STUDENTPUBLICATION);
+
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+
+        $courseId = $this->course->getId();
+        $courseCode = $this->course->getCode();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $myFolderData = get_work_data_by_id($workId);
+
+        $workParents = [];
+
+        if (empty($myFolderData)) {
+            $workParents = getWorkList($workId, $myFolderData);
+        }
+
+        $workIdList = [];
+
+        if (!empty($workParents)) {
+            foreach ($workParents as $work) {
+                $workIdList[] = $work->id;
+            }
+        }
+
+        $userList = getWorkUserList(
+            $courseCode,
+            $sessionId,
+            0,
+            0,
+            null,
+            null,
+            null
+        );
+
+        return array_map(
+            function ($userId) use ($courseId, $sessionId, $workParents, $workIdList) {
+                $user = api_get_user_info($userId);
+
+                $userWorks = 0;
+
+                if (!empty($workIdList)) {
+                    $userWorks = getUniqueStudentAttempts(
+                        $workIdList,
+                        0,
+                        $courseId,
+                        $sessionId,
+                        $user['user_id']
+                    );
+                }
+
+                $works = $userWorks." / ".count($workParents);
+
+                return [
+                    'id' => $userId,
+                    'complete_name' => api_get_person_name($user['firstname'], $user['lastname']),
+                    'works' => $works,
+                ];
+            },
+            $userList
+        );
+    }
+
+    public function viewUserProfile(int $userId)
+    {
+        $url = api_get_path(WEB_CODE_PATH).'social/profile.php';
+
+        if ($userId) {
+            $url .= '?'.http_build_query(['u' => $userId]);
+        }
+
+        header("Location: $url");
+        exit;
+    }
+
+    public function viewCourseHome()
+    {
+        $url = api_get_course_url($this->course->getCode(), $this->session ? $this->session->getId() : 0);
+
+        header("Location: $url");
+        exit;
+    }
+
+    public function viewDocumentInFrame(int $documentId)
+    {
+        $courseCode = $this->course->getCode();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $url = api_get_path(WEB_CODE_PATH).'document/showinframes.php?'
+            .http_build_query(
+                [
+                    'cidReq' => $courseCode,
+                    'id_session' => $sessionId,
+                    'gidReq' => 0,
+                    'gradebook' => 0,
+                    'origin' => self::SERVICE_NAME,
+                    'id' => $documentId,
+                ]
+            );
+
+        header("Location: $url");
+        exit;
+    }
+
+    public function viewQuizTool()
+    {
+        $courseCode = $this->course->getCode();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'
+            .http_build_query(
+                [
+                    'cidReq' => $courseCode,
+                    'id_session' => $sessionId,
+                    'gidReq' => 0,
+                    'gradebook' => 0,
+                    'origin' => self::SERVICE_NAME,
+                ]
+            );
+
+        header("Location: $url");
+        exit;
+    }
+
+    public function viewSurveyTool()
+    {
+        $courseCode = $this->course->getCode();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $url = api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'
+            .http_build_query(
+                [
+                    'cidReq' => $courseCode,
+                    'id_session' => $sessionId,
+                    'gidReq' => 0,
+                    'gradebook' => 0,
+                    'origin' => self::SERVICE_NAME,
+                ]
+            );
+
+        header("Location: $url");
+        exit;
+    }
+
+    public function viewMessage(int $messageId)
+    {
+        $url = api_get_path(WEB_CODE_PATH).'messages/view_message.php?'.http_build_query(['id' => $messageId]);
+
+        header("Location: $url");
+        exit;
+    }
+
+    public function downloadForumPostAttachment(string $path)
+    {
+        $courseCode = $this->course->getCode();
+        $sessionId = $this->session ? $this->session->getId() : 0;
+
+        $url = api_get_path(WEB_CODE_PATH).'forum/download.php?'
+            .http_build_query(
+                [
+                    'cidReq' => $courseCode,
+                    'id_session' => $sessionId,
+                    'gidReq' => 0,
+                    'gradebook' => 0,
+                    'origin' => self::SERVICE_NAME,
+                    'file' => Security::remove_XSS($path),
+                ]
+            );
+
+        header("Location: $url");
+        exit;
+    }
+
+    public function downloadWorkFolder(int $workId)
+    {
+        $cidReq = api_get_cidreq();
+        $url = api_get_path(WEB_CODE_PATH)."work/downloadfolder.inc.php?id=$workId&$cidReq";
+
+        header("Location: $url");
+        exit;
+    }
+
+    public function downloadWorkCommentAttachment(int $commentId)
+    {
+        $cidReq = api_get_cidreq();
+        $url = api_get_path(WEB_CODE_PATH)."work/download_comment_file.php?comment_id=$commentId&$cidReq";
+
+        header("Location: $url");
+        exit;
+    }
+
+    public function downloadWork(int $workId, bool $isCorrection = false)
+    {
+        $cidReq = api_get_cidreq();
+        $url = api_get_path(WEB_CODE_PATH)."work/download.php?$cidReq&"
+            .http_build_query(
+                [
+                    'id' => $workId,
+                    'correction' => $isCorrection ? 1 : null,
+                ]
+            );
+
+        header("Location: $url");
+        exit;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getAllUsersApiKeys(int $page, int $length, bool $force = false, ?int $urlId = null): array
+    {
+        if (false === api_get_configuration_value('webservice_enable_adminonly_api')
+            || !UserManager::is_admin($this->user->getId())
+        ) {
+            self::throwNotAllowedException();
+        }
+
+        $limitOffset = ($page - 1) * $length;
+
+        $currentUrlId = $urlId ?: api_get_current_access_url_id();
+
+        $data = [];
+        $data['total'] = UserManager::get_number_of_users(0, $currentUrlId);
+        $data['list'] = array_map(
+            function (array $user) use ($force) {
+                $apiKeys = UserManager::get_api_keys($user['id'], self::SERVICE_NAME);
+                $apiKey = $apiKeys ? current($apiKeys) : null;
+
+                if ($force && empty($apiKey)) {
+                    $apiKey = self::generateApiKeyForUser((int) $user['id']);
+                }
+
+                return [
+                    'id' => (int) $user['id'],
+                    'username' => $user['username'],
+                    'api_key' => $apiKey,
+                ];
+            },
+            $users = UserManager::get_user_list([], [], $limitOffset, $length, $currentUrlId)
+        );
+        $data['length'] = count($users);
+
+        if ($page * $length < $data['total']) {
+            $nextPageQueryParams = [
+                'page' => $page + 1,
+                'per_page' => $length,
+                'url_id' => $urlId,
+            ];
+
+            $data['next'] = $this->generateUrl($nextPageQueryParams);
+        }
+
+        return $data;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getUserApiKey(string $username, bool $force = false): array
+    {
+        if (false === api_get_configuration_value('webservice_enable_adminonly_api')
+            || !UserManager::is_admin($this->user->getId())
+        ) {
+            self::throwNotAllowedException();
+        }
+
+        $userInfo = api_get_user_info_from_username($username);
+
+        if (empty($userInfo)) {
+            throw new Exception(get_lang('UserNotFound'));
+        }
+
+        $apiKeys = UserManager::get_api_keys($userInfo['id'], self::SERVICE_NAME);
+        $apiKey = $apiKeys ? current($apiKeys) : null;
+
+        if ($force && empty($apiKey)) {
+            $apiKey = self::generateApiKeyForUser((int) $userInfo['id']);
+        }
+
+        return [
+            'id' => $userInfo['id'],
+            'username' => $userInfo['username'],
+            'api_key' => $apiKey,
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getUserLastConnexion(string $username): array
+    {
+        $userInfo = api_get_user_info_from_username($username);
+
+        if (empty($userInfo)) {
+            throw new Exception(get_lang('UserNotFound'));
+        }
+
+        $lastConnexionDate = Tracking::get_last_connection_date($userInfo['id']);
+
+        return [
+            'id' => $userInfo['id'],
+            'username' => $userInfo['username'],
+            'last_connexion_date' => $lastConnexionDate,
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getUserTotalConnexionTime(string $username): array
+    {
+        $userInfo = api_get_user_info_from_username($username);
+
+        if (empty($userInfo)) {
+            throw new Exception(get_lang('UserNotFound'));
+        }
+
+        $totalConnexionTimeInSecond = Tracking::get_time_spent_on_the_platform($userInfo['id'], 'ever');
+        $totalConnexionTime = api_time_to_hms($totalConnexionTimeInSecond);
+
+        return [
+            'id' => $userInfo['id'],
+            'username' => $userInfo['username'],
+            'total_connexion_time' => $totalConnexionTime,
+        ];
+    }
+
+    public static function isAllowedByRequest(bool $inpersonate = false): bool
+    {
+        $username = $_GET['username'] ?? null;
+        $apiKey = $_GET['api_key'] ?? null;
+
+        if (empty($username) || empty($apiKey)) {
+            return false;
+        }
+
+        try {
+            $restApi = self::validate($username, $apiKey);
+        } catch (Exception $e) {
+            return false;
+        }
+
+        if ($inpersonate) {
+            Login::init_user($restApi->getUser()->getId(), true);
+        }
+
+        return (bool) $restApi;
+    }
+
+    public function viewMyCourses()
+    {
+        $url = api_get_path(WEB_PATH).'user_portal.php?'
+            .http_build_query(['nosession' => 'true']);
+
+        header("Location: $url");
+        exit;
+    }
+
+    /**
+     * Create a group/class.
+     *
+     * @param $params
+     *
+     * @throws Exception
+     */
+    public function addGroup($params): array
+    {
+        self::protectAdminEndpoint();
+
+        if (!empty($params['type'])) {
+            $params['group_type'] = $params['type'];
+        }
+
+        // First check wether the login already exists.
+        $userGroup = new UserGroup();
+        if ($userGroup->usergroup_exists($params['name'])) {
+            throw new Exception($params['name'].' '.get_lang('AlreadyExists'));
+        }
+
+        $groupId = $userGroup->save($params);
+
+        if (empty($groupId)) {
+            throw new Exception(get_lang('NotRegistered'));
+        }
+
+        return [$groupId];
+    }
+
+    /**
+     * Delete a group/class.
+     *
+     * @throws Exception
+     *
+     * @return bool
+     */
+    public function deleteGroup(int $id): array
+    {
+        self::protectAdminEndpoint();
+
+        if (empty($id)) {
+            return false;
+        }
+
+        // First check wether the login already exists.
+        $userGroup = new UserGroup();
+        if (!$userGroup->delete($id)) {
+            throw new Exception(get_lang('NotDeleted'));
+        }
+
+        return [$id];
+    }
+
+    /**
+     * Get the list of users subscribed to the given group/class.
+     *
+     * @return array The list of users (userID => [firstname, lastname, relation_type]
+     */
+    public function getGroupSubscribedUsers(int $groupId): array
+    {
+        $userGroup = new UserGroup();
+
+        return $userGroup->get_all_users_by_group($groupId);
+    }
+
+    /**
+     * Get the list of courses to which the given group/class is subscribed.
+     *
+     * @return array The list of courses (ID => [title]
+     */
+    public function getGroupSubscribedCourses(int $groupId): array
+    {
+        $userGroup = new UserGroup();
+
+        return $userGroup->get_courses_by_usergroup($groupId, true);
+    }
+
+    /**
+     * Get the list of sessions to which the given group/class is subscribed.
+     *
+     * @return array The list of courses (ID => [title]
+     */
+    public function getGroupSubscribedSessions(int $groupId): array
+    {
+        $userGroup = new UserGroup();
+
+        return $userGroup->get_sessions_by_usergroup($groupId, true);
+    }
+
+    /**
+     * Add a new user to the given group/class.
+     *
+     * @param int $relationType (1:admin, 2:reader, etc. See GROUP_USER_PERMISSION_ constants in api.lib.php)
+     *
+     * @return array One item array containing true on success, false otherwise
+     */
+    public function addGroupSubscribedUser(int $groupId, int $userId, int $relationType = 2): array
+    {
+        $userGroup = new UserGroup();
+
+        if (!$userGroup->groupExists($groupId) or !$userGroup->userExists($userId)) {
+            throw new Exception('user_id or group_id does not exist');
+        }
+
+        return [$userGroup->add_user_to_group($userId, $groupId, $relationType)];
+    }
+
+    /**
+     * Get the list of group/class IDs to which the user belongs.
+     *
+     * @return array Array containing the group IDs like ['groups' => [1, 2, 3]]
+     */
+    public function getUserSubGroup(int $userId): array
+    {
+        $userGroup = new UserGroup();
+
+        $res = $userGroup->get_usergroup_by_user($userId);
+
+        return ['groups' => $res];
+    }
+
+    /**
+     * Add a new course to which the given group/class is subscribed.
+     *
+     * @return array One item array containing the ID of the course on success, nothing on failure
+     */
+    public function addGroupSubscribedCourse(int $groupId, int $courseId): array
+    {
+        $userGroup = new UserGroup();
+
+        return [$userGroup->subscribe_courses_to_usergroup($groupId, [$courseId], false)];
+    }
+
+    /**
+     * Add a new session to which the given group/class is subscribed.
+     *
+     * @return array One item array containing the ID of the session on success, nothing on failure
+     */
+    public function addGroupSubscribedSession(int $groupId, int $sessionId): array
+    {
+        $userGroup = new UserGroup();
+
+        return [$userGroup->subscribe_sessions_to_usergroup($groupId, [$sessionId], false)];
+    }
+
+    /**
+     * Remove a user from the given group/class.
+     *
+     * @return array One item array containing true on success, false otherwise
+     */
+    public function deleteGroupSubscribedUser(int $groupId, int $userId): array
+    {
+        $userGroup = new UserGroup();
+
+        return [$userGroup->delete_user_rel_group($userId, $groupId)];
+    }
+
+    /**
+     * Remove a course to which the given group/class is subscribed.
+     *
+     * @return array One item array containing true on success, false otherwise
+     */
+    public function deleteGroupSubscribedCourse(int $groupId, int $courseId): array
+    {
+        $userGroup = new UserGroup();
+
+        return [$userGroup->unsubscribe_courses_from_usergroup($groupId, [$courseId])];
+    }
+
+    /**
+     * Remove a session to which the given group/class is subscribed.
+     *
+     * @return array One item array containing true on success, false otherwise
+     */
+    public function deleteGroupSubscribedSession(int $groupId, int $sessionId): array
+    {
+        $userGroup = new UserGroup();
+
+        return [$userGroup->unsubscribeSessionsFromUserGroup($groupId, [$sessionId], false)];
+    }
+
+    /**
+     * Encode the given parameters (structured array) in JSON format
      * @param array $additionalParams Optional
      *
      * @return string
@@ -2255,5 +4252,62 @@ class Rest extends WebService
         );
 
         return json_encode($params);
+    }
+
+    /**
+     * Get audit items from track_e_default.
+     * @throws Exception
+     */
+    public function getAuditItems(
+        string $defaultEventType,
+        ?int $cId = null,
+        ?int $sessionId = null,
+        ?string $afterDate = null,
+        ?string $beforeDate = null,
+        ?int $userId = null,
+        int $offset = 0,
+        int $limit = 100
+    ): array {
+        self::protectAdminEndpoint();
+
+        return Event::getAuditItems(
+            $defaultEventType,
+            $cId,
+            $sessionId,
+            $afterDate,
+            $beforeDate,
+            $userId,
+            $offset,
+            $limit
+        );
+    }
+
+    /**
+     * Generate an API key for webservices access for the given user ID
+     */
+    protected static function generateApiKeyForUser(int $userId): string
+    {
+        UserManager::add_api_key($userId, self::SERVICE_NAME);
+
+        $apiKeys = UserManager::get_api_keys($userId, self::SERVICE_NAME);
+
+        return current($apiKeys);
+    }
+
+    /**
+     * Helper generating a query URL (to the current script) from an array of parameters
+     * (course, session, api_key and username) commonly used in webservice calls
+     */
+    private function generateUrl(array $additionalParams = []): string
+    {
+        $queryParams = [
+            'course' => $this->course ? $this->course->getId() : null,
+            'session' => $this->session ? $this->session->getId() : null,
+            'api_key' => $this->apiKey,
+            'username' => $this->user->getUsername(),
+        ];
+
+        return api_get_self().'?'
+            .http_build_query(array_merge($queryParams, $additionalParams));
     }
 }

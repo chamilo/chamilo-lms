@@ -27,7 +27,7 @@
                     {% elseif row.course_list_session_style == 3 %}
                         {# Collapsible/Foldable panel #}
                         <a role="button" data-toggle="collapse" data-parent="#page-content" href="#collapse_{{ row.id }}"
-                           aria-expanded="false">
+                           aria-expanded="false" class="collapse-toogle--right collapsed">
                             {{ session_image }} {{ row.title }}
                         </a>
                         {% if row.collapsable_link %}
@@ -119,7 +119,7 @@
                                                 <img src="{{ 'teacher.png'|icon(16) }}" width="16" height="16">
                                                 {% for coach in item.coaches %}
                                                     {{ loop.index > 1 ? ' | ' }}
-                                                    <a href="{{ _p.web_ajax ~ 'user_manager.ajax.php?' ~ {'a': 'get_user_popup', 'user_id': coach.user_id, 'session_id': row.id, 'course_id': item.real_id }|url_encode() }}"
+                                                    <a href="{{ _p.web_ajax ~ 'user_manager.ajax.php?' ~ {'a': 'get_user_popup', 'hash': coach.hash, 'session_id': row.id, 'course_id': item.real_id }|url_encode() }}"
                                                        data-title="{{ coach.full_name }}" class="ajax">
                                                         {{ coach.firstname }}, {{ coach.lastname }}
                                                     </a>
@@ -129,6 +129,11 @@
                                         <div class="category">
                                             {{ item.category }}
                                         </div>
+                                        {% if 'show_different_course_language'| api_get_setting is same as 'true' %}
+                                            <div class="course_language">
+                                                {{ item.course_language }}
+                                            </div>
+                                        {% endif %}
                                         <div class="course_extrafields">
                                             {% if item.extrafields|length > 0 %}
                                             {% for extrafield in item.extrafields %}

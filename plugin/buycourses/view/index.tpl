@@ -20,7 +20,7 @@
 {% endif %}
 
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="thumbnail">
             <a href="src/course_catalog.php">
                 <img src="resources/img/128/buycourses.png">
@@ -33,9 +33,22 @@
             </div>
         </div>
     </div>
+    <div class="col-md-4">
+        <div class="thumbnail">
+            <a href="src/subscription_course_catalog.php">
+                <img src="resources/img/128/buysubscriptions.png">
+            </a>
+            <div class="caption">
+                <p class="text-center">
+                    <a class="btn btn-default btn-sm"
+                       href="src/subscription_course_catalog.php">{{ 'BuySubscriptions'|get_plugin_lang('BuyCoursesPlugin') }}</a>
+                </p>
+            </div>
+        </div>
+    </div>
 
     {% if _u.is_admin %}
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="thumbnail">
                 <a href="src/list.php">
                     <img src="resources/img/128/settings.png">
@@ -48,7 +61,33 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
+            <div class="thumbnail">
+                <a href="src/subscriptions_courses.php">
+                    <img src="resources/img/128/subscriptionssettings.png">
+                </a>
+                <div class="caption">
+                    <p class="text-center">
+                        <a class="btn btn-default btn-sm"
+                           href="src/subscriptions_courses.php">{{ 'ConfigurationOfSubscriptionsAndPrices'|get_plugin_lang('BuyCoursesPlugin') }}</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="thumbnail">
+                <a href="src/coupons.php">
+                    <img src="resources/img/128/discount.png">
+                </a>
+                <div class="caption">
+                    <p class="text-center">
+                        <a class="btn btn-default btn-sm"
+                           href="src/coupons.php">{{ 'CouponsConfiguration'|get_plugin_lang('BuyCoursesPlugin') }}</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
             <div class="thumbnail">
                 <a href="src/paymentsetup.php">
                     <img src="resources/img/128/paymentsettings.png">
@@ -61,7 +100,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="thumbnail">
                 <a href="src/sales_report.php">
                     <img src="resources/img/128/backlogs.png">

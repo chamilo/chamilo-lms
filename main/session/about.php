@@ -20,6 +20,10 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+if ((api_get_setting('course_catalog_published') != 'true' && api_is_anonymous()) || api_get_configuration_value('session_about_block_all_access') == 'true') {
+    api_not_allowed(true);
+}
+
 $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
 
 $em = Database::getManager();
@@ -29,6 +33,16 @@ $session = api_get_session_entity($sessionId);
 if (!$session) {
     api_not_allowed(true);
 }
+
+if (api_is_multiple_url_enabled()) {
+    $accessUrlId = api_get_current_access_url_id();
+    $sessionOnUrl = UrlManager::relation_url_session_exist($sessionId, $accessUrlId);
+
+    if (!$sessionOnUrl) {
+        api_not_allowed(true);
+    }
+}
+
 $htmlHeadXtra[] = api_get_asset('readmore-js/readmore.js');
 $courses = [];
 $sessionCourses = $em->getRepository('ChamiloCoreBundle:Session')->getCoursesOrderedByPosition($session);

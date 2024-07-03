@@ -201,6 +201,7 @@ function show_add_forumcategory_form($lp_id)
     // Setting the form elements.
     $form->addElement('header', get_lang('AddForumCategory'));
     $form->addElement('text', 'forum_category_title', get_lang('Title'), ['autofocus']);
+    $form->applyFilter('forum_category_title', 'html_filter');
     $form->addElement(
         'html_editor',
         'forum_category_comment',
@@ -279,6 +280,7 @@ function show_add_forum_form($inputvalues = [], $lp_id = 0)
 
     // The title of the forum
     $form->addElement('text', 'forum_title', get_lang('Title'), ['autofocus']);
+    $form->applyFilter('forum_title', 'html_filter');
 
     // The comment of the forum.
     $form->addElement(
@@ -434,8 +436,8 @@ function show_add_forum_form($inputvalues = [], $lp_id = 0)
     } else {
         // the default values when editing = the data in the table
         $defaults['forum_id'] = isset($inputvalues['forum_id']) ? $inputvalues['forum_id'] : null;
-        $defaults['forum_title'] = prepare4display(isset($inputvalues['forum_title']) ? $inputvalues['forum_title'] : null);
-        $defaults['forum_comment'] = prepare4display(isset($inputvalues['forum_comment']) ? $inputvalues['forum_comment'] : null);
+        $defaults['forum_title'] = prepare4display(isset($inputvalues['forum_title']) ? $inputvalues['forum_title'] : "");
+        $defaults['forum_comment'] = prepare4display(isset($inputvalues['forum_comment']) ? $inputvalues['forum_comment'] : "");
         $defaults['start_time'] = isset($inputvalues['start_time']) ? api_get_local_time($inputvalues['start_time']) : null;
         $defaults['end_time'] = isset($inputvalues['end_time']) ? api_get_local_time($inputvalues['end_time']) : null;
         $defaults['moderated']['moderated'] = isset($inputvalues['moderated']) ? $inputvalues['moderated'] : 0;
@@ -529,6 +531,7 @@ function show_edit_forumcategory_form($inputvalues = [])
     $form->addElement('header', '', get_lang('EditForumCategory'));
     $form->addElement('hidden', 'forum_category_id');
     $form->addElement('text', 'forum_category_title', get_lang('Title'));
+    $form->applyFilter('forum_category_title', 'html_filter');
 
     $form->addElement(
         'html_editor',
@@ -746,7 +749,9 @@ function store_forum($values, $courseInfo = [], $returnId = false)
     // Forum images
     $has_attachment = false;
     $image_moved = true;
-    if (!empty($_FILES['picture']['name'])) {
+
+    $maxFileSize = getIniMaxFileSizeInBytes();
+    if (!empty($_FILES['picture']['name']) && !($maxFileSize > 0 && $_FILES['picture']['size'] > $maxFileSize)) {
         $upload_ok = process_uploaded_file($_FILES['picture']);
         $has_attachment = true;
     }
@@ -819,7 +824,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         // Move groups from one group to another
         if (isset($values['group_forum'])) {
             $forumData = get_forums($values['forum_id']);
-            $currentGroupId = $forumData['forum_of_group'];
+            $currentGroupId = $forumData['forum_of_group'] ?? 0;
             if ($currentGroupId != $values['group_forum']) {
                 $threads = get_threads($values['forum_id']);
                 $toGroupId = 'NULL';
@@ -1228,7 +1233,7 @@ function return_visible_invisible_icon(
             }
         }
         $html .= 'action=invisible&content='.$content.'&id='.$id.'">'.
-            Display::return_icon('visible.png', get_lang('MakeInvisible'), [], ICON_SIZE_SMALL).'</a>';
+            Display::return_icon('visible.png', get_lang('Hide'), [], ICON_SIZE_SMALL).'</a>';
     }
     if ($current_visibility_status == 0) {
         $html .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
@@ -1238,7 +1243,7 @@ function return_visible_invisible_icon(
             }
         }
         $html .= 'action=visible&content='.$content.'&id='.$id.'">'.
-            Display::return_icon('invisible.png', get_lang('MakeVisible'), [], ICON_SIZE_SMALL).'</a>';
+            Display::return_icon('invisible.png', get_lang('Show'), [], ICON_SIZE_SMALL).'</a>';
     }
 
     return $html;
@@ -1566,13 +1571,17 @@ function get_forum_categories($id = '', $courseId = 0, $sessionId = 0)
     $session_id = $sessionId ?: api_get_session_id();
     $course_id = $courseId ?: api_get_course_int_id();
 
-    $condition_session = api_get_session_condition(
-        $session_id,
-        true,
-        true,
-        'forum_categories.session_id'
-    );
-    $condition_session .= " AND forum_categories.c_id = $course_id AND item_properties.c_id = $course_id";
+    $shareForumInSessions = (1 == api_get_course_setting('share_forums_in_sessions'));
+    $conditionSession = '';
+    if (!$shareForumInSessions) {
+        $conditionSession = api_get_session_condition(
+            $session_id,
+            true,
+            true,
+            'forum_categories.session_id'
+        );
+    }
+    $conditionSession .= " AND forum_categories.c_id = $course_id AND item_properties.c_id = $course_id";
 
     if (empty($id)) {
         $sql = "SELECT *
@@ -1585,7 +1594,7 @@ function get_forum_categories($id = '', $courseId = 0, $sessionId = 0)
                 WHERE
                     item_properties.visibility = 1 AND
                     item_properties.tool = '".TOOL_FORUM_CATEGORY."'
-                    $condition_session
+                    $conditionSession
                 ORDER BY forum_categories.cat_order ASC";
         if (api_is_allowed_to_edit()) {
             $sql = "SELECT *
@@ -1598,7 +1607,7 @@ function get_forum_categories($id = '', $courseId = 0, $sessionId = 0)
                     WHERE
                         item_properties.visibility<>2 AND
                         item_properties.tool='".TOOL_FORUM_CATEGORY."'
-                        $condition_session
+                        $conditionSession
                     ORDER BY forum_categories.cat_order ASC";
         }
     } else {
@@ -1612,7 +1621,7 @@ function get_forum_categories($id = '', $courseId = 0, $sessionId = 0)
                 WHERE
                     item_properties.tool='".TOOL_FORUM_CATEGORY."' AND
                     forum_categories.cat_id = ".intval($id)."
-                    $condition_session
+                    $conditionSession
                 ORDER BY forum_categories.cat_order ASC";
     }
 
@@ -1719,12 +1728,16 @@ function get_forums(
     $session_id = intval($sessionId) ?: api_get_session_id();
     $sessionIdLink = $session_id === 0 ? '' : ' AND threads.session_id = item_properties.session_id';
 
-    $condition_session = api_get_session_condition(
-        $session_id,
-        true,
-        false,
-        'item_properties.session_id'
-    );
+    $shareForumInSessions = (1 == api_get_course_setting('share_forums_in_sessions'));
+    $conditionSession = '';
+    if (!$shareForumInSessions) {
+        $conditionSession = api_get_session_condition(
+            $session_id,
+            true,
+            false,
+            'item_properties.session_id'
+        );
+    }
 
     $course_id = $course_info['real_id'];
 
@@ -1749,7 +1762,7 @@ function get_forums(
                 WHERE
                     item_properties.visibility = 1 AND
                     item_properties.tool = '".TOOL_FORUM."'
-                    $condition_session AND
+                    $conditionSession AND
                     forum.c_id = $course_id AND
                     item_properties.c_id = $course_id
                     $includeGroupsForumSelect
@@ -1784,11 +1797,11 @@ function get_forums(
                     WHERE
                         item_properties.visibility <> 2 AND
                         item_properties.tool = '".TOOL_FORUM."'
-                        $condition_session AND
+                        $conditionSession AND
                         forum.c_id = $course_id AND
                         item_properties.c_id = $course_id
                         $includeGroupsForumSelect
-                    ORDER BY forum_order ASC";
+                    ORDER BY forum.forum_order ASC";
 
             // Select the number of threads of the forums (only the threads that are not deleted).
             $sql2 = "SELECT count(*) AS number_of_threads, threads.forum_id
@@ -2082,12 +2095,16 @@ function get_threads($forum_id, $courseId = null, $sessionId = null)
         $groupCondition = " AND item_properties.to_group_id = '$groupIid' ";
     }
 
-    $sessionCondition = api_get_session_condition(
-        $sessionId,
-        true,
-        false,
-        'item_properties.session_id'
-    );
+    $shareForumInSessions = (1 == api_get_course_setting('share_forums_in_sessions'));
+    $sessionCondition = '';
+    if (!$shareForumInSessions) {
+        $sessionCondition = api_get_session_condition(
+            $sessionId,
+            true,
+            false,
+            'item_properties.session_id'
+        );
+    }
 
     // important note:  it might seem a little bit awkward that we have 'thread.locked as locked' in the sql statement
     // because we also have thread.* in it. This is because thread has a field locked and post also has the same field
@@ -2370,12 +2387,16 @@ function get_thread_information($forumId, $thread_id, $sessionId = null)
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $thread_id = intval($thread_id);
     $sessionId = $sessionId !== null ? intval($sessionId) : api_get_session_id();
-    $sessionCondition = api_get_session_condition(
-        $sessionId,
-        true,
-        false,
-        'threads.session_id'
-    );
+    $shareForumInSessions = (1 == api_get_course_setting('share_forums_in_sessions'));
+    $sessionCondition = '';
+    if (!$shareForumInSessions) {
+        $sessionCondition = api_get_session_condition(
+            $sessionId,
+            true,
+            false,
+            'threads.session_id'
+        );
+    }
     $forumCondition = '';
     if (!empty($forumId)) {
         $forumId = (int) $forumId;
@@ -2849,16 +2870,22 @@ function store_thread(
     $upload_ok = 1;
     $has_attachment = false;
 
+    $maxFileSize = getIniMaxFileSizeInBytes();
     if (!empty($_FILES['user_upload']['name'])) {
-        $upload_ok = process_uploaded_file($_FILES['user_upload']);
-        $has_attachment = true;
+        $upload_ok = 0;
+        $has_attachment = false;
+        if ($maxFileSize > 0 && $_FILES['user_upload']['size'] <= $maxFileSize) {
+            $upload_ok = process_uploaded_file($_FILES['user_upload']);
+            $has_attachment = true;
+        }
     }
 
     if (!$upload_ok) {
         if ($showMessage) {
+            $errorUploadMessage = get_lang('FileSizeIsTooBig').' '.get_lang('MaxFileSize').' : '.getIniMaxFileSizeInBytes(true);
             Display::addFlash(
                 Display::return_message(
-                    get_lang('UplNoFileUploaded'),
+                    $errorUploadMessage,
                     'error',
                     false
                 )
@@ -3181,6 +3208,7 @@ function show_add_post_form($current_forum, $action, $form_values = [], $showPre
     }
 
     $form->addElement('text', 'post_title', get_lang('Title'));
+    $form->applyFilter('post_title', 'html_filter');
     $form->addHtmlEditor(
         'post_text',
         get_lang('Text'),
@@ -3276,7 +3304,7 @@ function show_add_post_form($current_forum, $action, $form_values = [], $showPre
     }
 
     if ($action === 'newthread') {
-        Skill::addSkillsToForm($form, ITEM_TYPE_FORUM_THREAD, 0);
+        Skill::addSkillsToForm($form, api_get_course_int_id(), api_get_session_id(), ITEM_TYPE_FORUM_THREAD, 0);
     }
 
     if (api_is_allowed_to_edit(null, true) && $action == 'newthread') {
@@ -3294,8 +3322,10 @@ function show_add_post_form($current_forum, $action, $form_values = [], $showPre
             null,
             ['id' => 'reply-add-attachment']
         );
+        $form->addRule('user_upload[]', get_lang('FileSizeIsTooBig').' '.get_lang('MaxFileSize').' : '.getIniMaxFileSizeInBytes(true), 'maxfilesize', getIniMaxFileSizeInBytes());
     } else {
-        $form->addFile('user_upload', get_lang('Attachment'));
+        $form->addFile('user_upload', get_lang('Attachment').' ('.get_lang('MaxFileSize').' : '.getIniMaxFileSizeInBytes(true).')');
+        $form->addRule('user_upload', get_lang('FileSizeIsTooBig').' '.get_lang('MaxFileSize').' : '.getIniMaxFileSizeInBytes(true), 'maxfilesize', getIniMaxFileSizeInBytes());
     }
 
     if ($giveRevision) {
@@ -3373,6 +3403,15 @@ function show_add_post_form($current_forum, $action, $form_values = [], $showPre
         }
     }
 
+    if (isset($_REQUEST['action']) && 'replythread' === $_REQUEST['action']) {
+        if (isset($_REQUEST['post_title'])) {
+            $defaults['post_title'] = $_REQUEST['post_title'];
+        }
+
+        if (isset($_REQUEST['post_text'])) {
+            $defaults['post_text'] = $_REQUEST['post_text'];
+        }
+    }
     $form->setDefaults(isset($defaults) ? $defaults : []);
 
     // The course admin can make a thread sticky (=appears with special icon and always on top).
@@ -3415,6 +3454,9 @@ function show_add_post_form($current_forum, $action, $form_values = [], $showPre
                         $threadId = $myThread->getIid();
                         Skill::saveSkills($form, ITEM_TYPE_FORUM_THREAD, $threadId);
                         $postId = $myThread->getThreadLastPost();
+                    } else {
+                        header('Location: '.api_request_uri());
+                        exit;
                     }
                     break;
                 case 'quote':
@@ -3829,6 +3871,29 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
     $upload_ok = 1;
     $new_post_id = 0;
 
+    $errMessage = get_lang('UplNoFileUploaded').' '.get_lang('UplSelectFileFirst');
+    $maxFileSize = getIniMaxFileSizeInBytes();
+
+    if (!empty($_FILES['user_upload']['name'])) {
+        if (is_array($_FILES['user_upload']['name'])) {
+            $totalFileSize = 0;
+            for ($i = 0; $i < count($_FILES['user_upload']['name']); $i++) {
+                $totalFileSize += $_FILES['user_upload']['size'][$i];
+            }
+            if ($totalFileSize > $maxFileSize) {
+                $upload_ok = 0;
+                $errMessage = get_lang('FileSizeIsTooBig').' '.get_lang('MaxFileSize').' : '.getIniMaxFileSizeInBytes(true);
+            }
+        } else {
+            if ($maxFileSize > 0 && $_FILES['user_upload']['size'] <= $maxFileSize) {
+                $upload_ok = process_uploaded_file($_FILES['user_upload']);
+            } else {
+                $upload_ok = 0;
+                $errMessage = get_lang('FileSizeIsTooBig').' '.get_lang('MaxFileSize').' : '.getIniMaxFileSizeInBytes(true);
+            }
+        }
+    }
+
     if ($upload_ok) {
         // We first store an entry in the forum_post table.
         $new_post_id = Database::insert(
@@ -3934,10 +3999,12 @@ function store_reply($current_forum, $values, $courseId = 0, $userId = 0)
     } else {
         Display::addFlash(
             Display::return_message(
-                get_lang('UplNoFileUploaded').' '.get_lang('UplSelectFileFirst'),
+                $errMessage,
                 'error'
             )
         );
+
+        return false;
     }
 
     return $new_post_id;
@@ -4763,7 +4830,7 @@ function move_post_form()
         $values = $form->exportValues();
         store_move_post($values);
     } else {
-        $form->display();
+        return $form->returnForm();
     }
 }
 
@@ -5081,13 +5148,16 @@ function display_forum_search_results($search_term)
             posts.post_text LIKE '%".Database::escape_string(trim($value))."%'
         )";
     }
-
-    $sessionCondition = api_get_session_condition(
-        $session_id,
-        true,
-        false,
-        'item_property.session_id'
-    );
+    $shareForumInSessions = (1 == api_get_course_setting('share_forums_in_sessions'));
+    $sessionCondition = '';
+    if (!$shareForumInSessions) {
+        $sessionCondition = api_get_session_condition(
+            $session_id,
+            true,
+            false,
+            'item_property.session_id'
+        );
+    }
 
     $sql = "SELECT posts.*
             FROM $table_posts posts
@@ -5228,8 +5298,13 @@ function add_forum_attachment_file($file_comment, $last_id)
         }
     }
 
+    $maxFileSize = getIniMaxFileSizeInBytes();
     foreach ($filesData as $attachment) {
         if (empty($attachment['name'])) {
+            continue;
+        }
+
+        if ($maxFileSize > 0 && $attachment['size'] > $maxFileSize) {
             continue;
         }
 
@@ -5324,13 +5399,17 @@ function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
         }
     }
 
+    $maxFileSize = getIniMaxFileSizeInBytes();
     foreach ($filesData as $attachment) {
         if (empty($attachment['name'])) {
             continue;
         }
 
-        $upload_ok = process_uploaded_file($attachment);
+        if ($maxFileSize > 0 && $attachment['size'] > $maxFileSize) {
+            continue;
+        }
 
+        $upload_ok = process_uploaded_file($attachment);
         if (!$upload_ok) {
             continue;
         }
@@ -5797,6 +5876,7 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
     }
 
     $current_thread = get_thread_information($forum_id, $thread_id);
+    $courseInfo = api_get_course_info_by_id($current_thread['c_id']);
 
     // User who subscribed to the thread
     if ($thread_id != 0) {
@@ -5814,8 +5894,21 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
 
     if (is_array($users_to_be_notified)) {
         foreach ($users_to_be_notified as $value) {
-            $userInfo = api_get_user_info($value['user_id']);
-            send_mail($userInfo, $forumInfo, $current_thread, $postInfo);
+            $notifyUser = true;
+            $shareForumsInSessions = api_get_course_setting('share_forums_in_sessions', $courseInfo);
+            if (($shareForumsInSessions === -1 || !$shareForumsInSessions) && $current_thread['session_id'] != 0) {
+                $notifyUser = false;
+                $userSessions = SessionManager::get_sessions_by_user($value['user_id']);
+                foreach ($userSessions as $userSession) {
+                    if ($userSession['session_id'] == $current_thread['session_id']) {
+                        $notifyUser = true;
+                    }
+                }
+            }
+            if ($notifyUser === true) {
+                $userInfo = api_get_user_info($value['user_id']);
+                send_mail($userInfo, $forumInfo, $current_thread, $postInfo);
+            }
         }
     }
 }
@@ -6420,6 +6513,8 @@ function getAttachedFiles(
     if ($result !== false && Database::num_rows($result) > 0) {
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             // name contains an URL to download attachment file and its filename
+            $json['filename'] = $row['filename'];
+            $json['path'] = $row['path'];
             $json['name'] = Display::url(
                 api_htmlentities($row['filename']),
                 api_get_path(WEB_CODE_PATH).'forum/download.php?file='.$row['path'].'&'.api_get_cidreq(),

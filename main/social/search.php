@@ -98,9 +98,10 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
                              <em class="fa fa-user"></em> '.get_lang('SendInvitation').'</a>';
             }
 
+            $userIdHash = UserManager::generateUserHash($user_info['user_id']);
             $sendMessageUrl = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?'.http_build_query([
                 'a' => 'get_user_popup',
-                'user_id' => $user_info['user_id'],
+                'hash' => $userIdHash,
             ]);
 
             $sendMessage = Display::toolbarButton(
@@ -228,7 +229,7 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
             [],
             $totalGroups
         );
-        $block_search .= Display:: panelCollapse(
+        $block_search .= Display::panelCollapse(
             get_lang('Groups'),
             $block_groups,
             'search-groups',

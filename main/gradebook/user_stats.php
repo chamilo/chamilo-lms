@@ -49,7 +49,7 @@ if (isset($_GET['exportpdf'])) {
         true
     );
     $newarray = [];
-    $displayscore = ScoreDisplay :: instance();
+    $displayscore = ScoreDisplay::instance();
     foreach ($data_array as $data) {
         $newarray[] = array_slice($data, 1);
     }

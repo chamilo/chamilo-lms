@@ -30,4 +30,20 @@ class RegistrantRepository extends EntityRepository
 
         return $this->findBy(['meeting' => $meetings, 'user' => $user]);
     }
+
+    public function findByMeetingPaginated(Meeting $meeting, int $from, int $limit, string $column, string $direction)
+    {
+        $queryBuilder = $this->createQueryBuilder('r')
+            ->join('r.user', 'u')
+            ->leftJoin('r.signature', 's')
+            ->where('r.meeting = :meeting')
+            ->setFirstResult($from)
+            ->setMaxResults($limit)
+            ->orderBy($column, $direction)
+        ;
+
+        $queryBuilder->setParameter('meeting', $meeting);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

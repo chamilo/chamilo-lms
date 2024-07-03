@@ -99,11 +99,6 @@ $is_visible = DocumentManager::check_visibility_tree(
     false
 );
 
-if (!$is_allowed_to_edit && !$is_visible) {
-    echo Display::return_message(get_lang('ProtectedDocument'), 'warning');
-    api_not_allowed(false, '&nbsp;');
-}
-
 $pathinfo = pathinfo($header_file);
 $playerSupportedFiles = ['mp3', 'mp4', 'ogv', 'ogg', 'flv', 'm4v', 'webm', 'wav'];
 $playerSupported = false;
@@ -255,6 +250,12 @@ if ($originIsLearnpath) {
     Display::display_header();
 }
 
+if (!$is_allowed_to_edit && !$is_visible) {
+    echo Display::return_message(get_lang('ProtectedDocument'), 'warning');
+    Display::display_footer();
+    exit;
+}
+
 $file_url = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$header_file;
 $file_url_web = $file_url.'?'.api_get_cidreq();
 if ($playerSupported) {
@@ -382,10 +383,11 @@ if (($execute_iframe || $show_web_odf) && !$isChatFolder) {
         );
 
         if (false === $show_web_odf) {
+            $secToken = Security::get_token();
             $actionsLeft .= Display::url(
                 Display::return_icon('pdf.png', get_lang('Export2PDF'), [], ICON_SIZE_MEDIUM),
                 api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(
-                ).'&action=export_to_pdf&id='.$document_id
+                ).'&action=export_to_pdf&id='.$document_id.'&sec_token='.$secToken
             );
         }
     }

@@ -55,7 +55,7 @@ switch ($action) {
         $form->addHeader(get_lang('EditIcon'));
         $form->addHtml('<div class="col-md-7">');
         $form->addText('name', get_lang('Name'));
-        $form->addText('link', get_lang('Links'));
+        $form->addInternalUrl('link', get_lang('Links'));
         $allowedPictureTypes = ['jpg', 'jpeg', 'png'];
         $form->addFile('icon', get_lang('CustomIcon'));
         $form->addRule(
@@ -121,6 +121,10 @@ switch ($action) {
         $iconsTools .= Display::page_header(get_lang('CustomizeIcons'), null, 'h4');
         $iconsTools .= '<div class="row">';
         foreach ($toolList as $tool) {
+            if (str_contains($tool['link'], '../plugin/')) {
+                continue;
+            }
+
             $tool['name'] = Security::remove_XSS(stripslashes($tool['name']));
             $toolIconName = 'Tool'.api_underscore_to_camel_case($tool['name']);
             $toolIconName = isset($$toolIconName) ? get_lang($toolIconName) : $tool['name'];

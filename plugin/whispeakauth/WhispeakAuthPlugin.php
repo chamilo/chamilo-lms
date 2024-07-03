@@ -7,29 +7,29 @@ use Chamilo\PluginBundle\Entity\WhispeakAuth\LogEvent;
 use Chamilo\PluginBundle\Entity\WhispeakAuth\LogEventLp;
 use Chamilo\PluginBundle\Entity\WhispeakAuth\LogEventQuiz;
 use Chamilo\UserBundle\Entity\User;
-use Symfony\Component\Filesystem\Filesystem;
+use Doctrine\ORM\Tools\SchemaTool;
 
 /**
  * Class WhispeakAuthPlugin.
  */
 class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
 {
-    const SETTING_ENABLE = 'enable';
-    const SETTING_MAX_ATTEMPTS = 'max_attempts';
-    const SETTING_2FA = '2fa';
-    const SETTING_API_URL = 'api_url';
-    const SETTING_TOKEN = 'token';
+    public const SETTING_ENABLE = 'enable';
+    public const SETTING_MAX_ATTEMPTS = 'max_attempts';
+    public const SETTING_2FA = '2fa';
+    public const SETTING_API_URL = 'api_url';
+    public const SETTING_TOKEN = 'token';
 
-    const EXTRAFIELD_AUTH_UID = 'whispeak_auth_uid';
-    const EXTRAFIELD_LP_ITEM = 'whispeak_lp_item';
-    const EXTRAFIELD_QUIZ_QUESTION = 'whispeak_quiz_question';
+    public const EXTRAFIELD_AUTH_UID = 'whispeak_auth_uid';
+    public const EXTRAFIELD_LP_ITEM = 'whispeak_lp_item';
+    public const EXTRAFIELD_QUIZ_QUESTION = 'whispeak_quiz_question';
 
-    const SESSION_FAILED_LOGINS = 'whispeak_failed_logins';
-    const SESSION_2FA_USER = 'whispeak_user_id';
-    const SESSION_LP_ITEM = 'whispeak_lp_item';
-    const SESSION_QUIZ_QUESTION = 'whispeak_quiz_question';
-    const SESSION_AUTH_PASSWORD = 'whispeak_auth_password';
-    const SESSION_SENTENCE_TEXT = 'whispeak_sentence_text';
+    public const SESSION_FAILED_LOGINS = 'whispeak_failed_logins';
+    public const SESSION_2FA_USER = 'whispeak_user_id';
+    public const SESSION_LP_ITEM = 'whispeak_lp_item';
+    public const SESSION_QUIZ_QUESTION = 'whispeak_quiz_question';
+    public const SESSION_AUTH_PASSWORD = 'whispeak_auth_password';
+    public const SESSION_SENTENCE_TEXT = 'whispeak_sentence_text';
 
     /**
      * StudentFollowUpPlugin constructor.
@@ -71,6 +71,9 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         return $result ? $result : $result = new self();
     }
 
+    /**
+     * @throws \Doctrine\ORM\Tools\ToolsException
+     */
     public function install()
     {
         $this->installExtraFields();
@@ -83,14 +86,6 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         $this->uninstallHook();
         $this->uninstallExtraFields();
         $this->uninstallEntities();
-    }
-
-    /**
-     * @return string
-     */
-    public function getEntityPath()
-    {
-        return api_get_path(SYS_PATH).'src/Chamilo/PluginBundle/Entity/'.$this->getCamelCaseName();
     }
 
     /**
@@ -408,10 +403,8 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
      * Check if the WhispeakAuth plugin is installed and enabled.
      *
      * @param bool $checkEnabled Check if, additionnally to being installed, the plugin is enabled
-     *
-     * @return bool
      */
-    public function isEnabled($checkEnabled = false)
+    public function isEnabled(bool $checkEnabled = false): bool
     {
         return parent::isEnabled() && 'true' === api_get_plugin_setting('whispeakauth', self::SETTING_ENABLE);
     }
@@ -466,7 +459,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         ChamiloSession::write(
             self::SESSION_QUIZ_QUESTION,
             [
-                'quiz' => (int) $exercise->iId,
+                'quiz' => (int) $exercise->iid,
                 'question' => (int) $questionId,
                 'url_params' => $_SERVER['QUERY_STRING'],
                 'passed' => false,
@@ -475,7 +468,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
 
         $template = new Template('', false, false, false, true, false, false);
         $template->assign('question', $questionId);
-        $template->assign('exercise', $exercise->iId);
+        $template->assign('exercise', $exercise->iid);
         $content = $template->fetch('whispeakauth/view/quiz_question.html.twig');
 
         echo $content;
@@ -726,63 +719,25 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
 
     /**
      * Install the Doctrine's entities.
+     *
+     * @throws \Doctrine\ORM\Tools\ToolsException
      */
     private function installEntities()
     {
-        $pluginEntityPath = $this->getEntityPath();
+        $em = Database::getManager();
 
-        if (!is_dir($pluginEntityPath)) {
-            if (!is_writable(dirname($pluginEntityPath))) {
-                Display::addFlash(
-                    Display::return_message(get_lang('ErrorCreatingDir').": $pluginEntityPath", 'error')
-                );
-
-                return;
-            }
-
-            mkdir($pluginEntityPath, api_get_permissions_for_new_directories());
+        if ($em->getConnection()->getSchemaManager()->tablesExist(['whispeak_log_event'])) {
+            return;
         }
 
-        $fs = new Filesystem();
-        $fs->mirror(__DIR__.'/Entity/', $pluginEntityPath, null, ['override']);
-
-        $schema = Database::getManager()->getConnection()->getSchemaManager();
-
-        if (false === $schema->tablesExist('whispeak_log_event')) {
-            $sql = "CREATE TABLE whispeak_log_event (
-                    id INT AUTO_INCREMENT NOT NULL,
-                    user_id INT NOT NULL,
-                    lp_item_id INT DEFAULT NULL,
-                    lp_id INT DEFAULT NULL,
-                    question_id INT DEFAULT NULL,
-                    quiz_id INT DEFAULT NULL,
-                    datetime DATETIME NOT NULL,
-                    action_status SMALLINT NOT NULL,
-                    discr VARCHAR(255) NOT NULL,
-                    INDEX IDX_A5C4B9FFA76ED395 (user_id),
-                    INDEX IDX_A5C4B9FFDBF72317 (lp_item_id),
-                    INDEX IDX_A5C4B9FF68DFD1EF (lp_id),
-                    INDEX IDX_A5C4B9FF1E27F6BF (question_id),
-                    INDEX IDX_A5C4B9FF853CD175 (quiz_id),
-                    PRIMARY KEY(id)
-                ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB";
-            Database::query($sql);
-            $sql = "ALTER TABLE whispeak_log_event ADD CONSTRAINT FK_A5C4B9FFA76ED395
-                FOREIGN KEY (user_id) REFERENCES user (id)";
-            Database::query($sql);
-            $sql = "ALTER TABLE whispeak_log_event ADD CONSTRAINT FK_A5C4B9FFDBF72317
-                FOREIGN KEY (lp_item_id) REFERENCES c_lp_item (iid)";
-            Database::query($sql);
-            $sql = "ALTER TABLE whispeak_log_event ADD CONSTRAINT FK_A5C4B9FF68DFD1EF
-                FOREIGN KEY (lp_id) REFERENCES c_lp (iid)";
-            Database::query($sql);
-            $sql = "ALTER TABLE whispeak_log_event ADD CONSTRAINT FK_A5C4B9FF1E27F6BF
-                FOREIGN KEY (question_id) REFERENCES c_quiz_question (iid)";
-            Database::query($sql);
-            $sql = "ALTER TABLE whispeak_log_event ADD CONSTRAINT FK_A5C4B9FF853CD175
-                FOREIGN KEY (quiz_id) REFERENCES c_quiz (iid)";
-            Database::query($sql);
-        }
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->createSchema(
+            [
+                $em->getClassMetadata(LogEvent::class),
+                $em->getClassMetadata(LogEventLp::class),
+                $em->getClassMetadata(LogEventQuiz::class),
+            ]
+        );
     }
 
     /**
@@ -831,16 +786,19 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
      */
     private function uninstallEntities()
     {
-        $pluginEntityPath = $this->getEntityPath();
+        $em = Database::getManager();
 
-        $fs = new Filesystem();
-
-        if ($fs->exists($pluginEntityPath)) {
-            $fs->remove($pluginEntityPath);
+        if (!$em->getConnection()->getSchemaManager()->tablesExist(['whispeak_log_event'])) {
+            return;
         }
 
-        $table = Database::get_main_table('whispeak_log_event');
-        $sql = "DROP TABLE IF EXISTS $table";
-        Database::query($sql);
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->dropSchema(
+            [
+                $em->getClassMetadata(LogEvent::class),
+                $em->getClassMetadata(LogEventLp::class),
+                $em->getClassMetadata(LogEventQuiz::class),
+            ]
+        );
     }
 }

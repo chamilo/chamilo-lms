@@ -12,6 +12,7 @@
 namespace XApi\Repository\ORM;
 
 use Doctrine\ORM\EntityRepository;
+use XApi\Repository\Doctrine\Mapping\Context;
 use XApi\Repository\Doctrine\Mapping\Statement;
 use XApi\Repository\Doctrine\Repository\Mapping\StatementRepository as BaseStatementRepository;
 
@@ -33,7 +34,33 @@ final class StatementRepository extends EntityRepository implements BaseStatemen
      */
     public function findStatements(array $criteria)
     {
-        return $this->getQueryBuilder($criteria)->getQuery()->getResult();
+      if (!empty($criteria['registration'])) {
+            $contexts = $this->_em->getRepository(Context::class)->findBy([
+                'registration' => $criteria['registration'],
+            ]);
+
+            $criteria['context'] = $contexts;
+        }
+
+        if (!empty($criteria['verb'])) {
+            $verbs = $this->_em->getRepository(Verb::class)->findBy(['id' => $criteria['verb']]);
+
+            $criteria['verb'] = $verbs;
+        }
+
+        unset(
+            $criteria['registration'],
+            $criteria['related_activities'],
+            $criteria['related_agents'],
+            $criteria['ascending'],
+        );
+
+        return parent::findBy(
+            $criteria,
+            ['created' => 'ASC'],
+            $criteria['limit'] ?? null,
+            $criteria['cursor'] ?? null
+        );
     }
 
     /**
@@ -46,24 +73,5 @@ final class StatementRepository extends EntityRepository implements BaseStatemen
         if ($flush) {
             $this->_em->flush();
         }
-    }
-
-    private function getQueryBuilder(array $criteria): \Doctrine\ORM\QueryBuilder
-    {
-        $qb = $this->createQueryBuilder('statement');
-
-        if (!empty($criteria['verb'])) {
-            $qb->innerJoin('statement.verb', 'verb');
-            $qb->andWhere($qb->expr()->eq('verb.id', ':c_verb'));
-            $qb->setParameter('c_verb', $criteria['verb']);
-        }
-
-        $qb->setFirstResult($criteria['cursor']);
-
-        if (isset($criteria['limit'])) {
-            $qb->setMaxResults($criteria['limit']);
-        }
-
-        return $qb;
     }
 }

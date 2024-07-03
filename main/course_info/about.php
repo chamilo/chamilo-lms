@@ -18,6 +18,10 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+if ((api_get_setting('course_catalog_published') != 'true' && api_is_anonymous()) || api_get_configuration_value('course_about_block_all_access') == 'true') {
+    api_not_allowed(true);
+}
+
 $courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
 
 if (empty($courseId)) {
@@ -181,6 +185,11 @@ foreach ($requirements as $sequence) {
         $hasRequirements = true;
         break;
     }
+}
+
+if ($hasRequirements) {
+    $sequenceList = $sequenceResourceRepo->checkRequirementsForUser($requirements, SequenceResource::COURSE_TYPE, $userId);
+    $allowSubscribe = $sequenceResourceRepo->checkSequenceAreCompleted($sequenceList);
 }
 
 $template = new Template($course->getTitle(), true, true, false, true, false);

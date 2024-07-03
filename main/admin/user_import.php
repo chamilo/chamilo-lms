@@ -41,8 +41,13 @@ function createDirectory($path = null)
                 mkdir($data, api_get_permissions_for_new_directories());
                 $block =
                     '<FilesMatch "\.(csv|xml)$">
-Order allow,deny
-Deny from all
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+</IfModule>
 </FilesMatch>
 Options -Indexes';
 
@@ -68,6 +73,7 @@ function validate_data($users, $checkUniqueEmail = false)
 {
     global $defined_auth_sources;
     $usernames = [];
+    $previousMails = [];
 
     // 1. Check if mandatory fields are set.
     $mandatory_fields = ['LastName', 'FirstName'];
@@ -141,10 +147,19 @@ function validate_data($users, $checkUniqueEmail = false)
 
         if ($checkUniqueEmail) {
             if (!empty($user['Email'])) {
-                $userFromEmail = api_get_user_info_from_email($user['Email']);
-                if (!empty($userFromEmail)) {
-                    $user['message'] .= Display::return_message(get_lang('EmailUsedTwice'), 'warning');
+                if (in_array($user['Email'], $previousMails)) {
+                    $user['message'] .= Display::return_message(get_lang('EmailUsedTwiceInImportFile'), 'warning');
                     $user['has_error'] = true;
+                } else {
+                    $userFromEmail = api_get_user_info_from_email($user['Email']);
+                    if (!empty($userFromEmail)) {
+                        $user['id'] = $userFromEmail['id'];
+                        $user['UserName'] = $userFromEmail['username'];
+                        $user['message'] .= Display::return_message(get_lang('EmailUsedTwice'), 'warning');
+                        $user['has_error'] = true;
+                    } else {
+                        $previousMails[] = $user['Email'];
+                    }
                 }
             }
         }
@@ -400,56 +415,58 @@ function save_data(
             $csv_content = [];
             $csv_row = $header;
             $csv_content[] = $csv_row;
-            foreach ($userSaved as $user) {
+            foreach ($userSaved as $userItem) {
                 $csv_row = [];
-                $csv_row[] = isset($user['id']) ? $user['id'] : '';
-                $csv_row[] = isset($user['FirstName']) ? $user['FirstName'] : '';
-                $csv_row[] = isset($user['LastName']) ? $user['LastName'] : '';
-                $csv_row[] = isset($user['Status']) ? $user['Status'] : '';
-                $csv_row[] = isset($user['Email']) ? $user['Email'] : '';
-                $csv_row[] = isset($user['UserName']) ? $user['UserName'] : '';
-                $csv_row[] = isset($user['message']) ? strip_tags($user['message']) : '';
+                $csv_row[] = isset($userItem['id']) ? $userItem['id'] : '';
+                $csv_row[] = isset($userItem['FirstName']) ? $userItem['FirstName'] : '';
+                $csv_row[] = isset($userItem['LastName']) ? $userItem['LastName'] : '';
+                $csv_row[] = isset($userItem['Status']) ? $userItem['Status'] : '';
+                $csv_row[] = isset($userItem['Email']) ? $userItem['Email'] : '';
+                $csv_row[] = isset($userItem['UserName']) ? $userItem['UserName'] : '';
+                $csv_row[] = isset($userItem['message']) ? strip_tags($userItem['message']) : '';
                 $csv_content[] = $csv_row;
             }
             saveCsvFile($csv_content, $targetFolder.'user_success_'.count($userSaved));
         }
+        unset($userItem);
         if (count($userError) != 0) {
             // Save user with error
             $csv_content = [];
             $csv_row = $header;
             $csv_content[] = $csv_row;
-            foreach ($userError as $user) {
+            foreach ($userError as $userItem) {
                 $csv_row = [];
-                $csv_row[] = isset($user['id']) ? $user['id'] : '';
-                $csv_row[] = isset($user['FirstName']) ? $user['FirstName'] : '';
-                $csv_row[] = isset($user['LastName']) ? $user['LastName'] : '';
-                $csv_row[] = isset($user['Status']) ? $user['Status'] : '-';
-                $csv_row[] = isset($user['Email']) ? $user['Email'] : '';
-                $csv_row[] = isset($user['UserName']) ? $user['UserName'] : '';
-                $csv_row[] = isset($user['message']) ? strip_tags($user['message']) : '';
+                $csv_row[] = isset($userItem['id']) ? $userItem['id'] : '';
+                $csv_row[] = isset($userItem['FirstName']) ? $userItem['FirstName'] : '';
+                $csv_row[] = isset($userItem['LastName']) ? $userItem['LastName'] : '';
+                $csv_row[] = isset($userItem['Status']) ? $userItem['Status'] : '-';
+                $csv_row[] = isset($userItem['Email']) ? $userItem['Email'] : '';
+                $csv_row[] = isset($userItem['UserName']) ? $userItem['UserName'] : '';
+                $csv_row[] = isset($userItem['message']) ? strip_tags($userItem['message']) : '';
                 $csv_content[] = $csv_row;
-                error_log(print_r($csv_row, 1));
             }
             saveCsvFile($csv_content, $targetFolder.'user_error_'.count($userError));
         }
+        unset($userItem);
         if (count($userWarning) != 0) {
             // Save user with warning
             $csv_content = [];
             $csv_row = $header;
             $csv_content[] = $csv_row;
-            foreach ($userWarning as $user) {
+            foreach ($userWarning as $userItem) {
                 $csv_row = [];
-                $csv_row[] = isset($user['id']) ? $user['id'] : '';
-                $csv_row[] = isset($user['FirstName']) ? $user['FirstName'] : '';
-                $csv_row[] = isset($user['LastName']) ? $user['LastName'] : '';
-                $csv_row[] = isset($user['Status']) ? $user['Status'] : '';
-                $csv_row[] = isset($user['Email']) ? $user['Email'] : '';
-                $csv_row[] = isset($user['UserName']) ? $user['UserName'] : '';
-                $csv_row[] = isset($user['message']) ? strip_tags($user['message']) : '';
+                $csv_row[] = isset($userItem['id']) ? $userItem['id'] : '';
+                $csv_row[] = isset($userItem['FirstName']) ? $userItem['FirstName'] : '';
+                $csv_row[] = isset($userItem['LastName']) ? $userItem['LastName'] : '';
+                $csv_row[] = isset($userItem['Status']) ? $userItem['Status'] : '';
+                $csv_row[] = isset($userItem['Email']) ? $userItem['Email'] : '';
+                $csv_row[] = isset($userItem['UserName']) ? $userItem['UserName'] : '';
+                $csv_row[] = isset($userItem['message']) ? strip_tags($userItem['message']) : '';
                 $csv_content[] = $csv_row;
             }
             saveCsvFile($csv_content, $targetFolder.'user_warning_'.count($userWarning));
         }
+        unset($userItem);
     }
 
     return $users;
@@ -689,6 +706,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
     $checkUniqueEmail = isset($_POST['check_unique_email']) ? $_POST['check_unique_email'] : null;
     $sendMail = $_POST['sendMail'] ? true : false;
     $resume = isset($_POST['resume_import']) ? true : false;
+    $askNewPassword = isset($_POST['ask_new_password']) ? true : false;
     $uploadInfo = pathinfo($_FILES['import_file']['name']);
     $ext_import_file = $uploadInfo['extension'];
     $targetFolder = null;
@@ -731,7 +749,14 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
             $users = validate_data($users, $checkUniqueEmail);
             $error_kind_file = false;
         }
+        if ($askNewPassword) {
+            foreach ($users as $userId => $user) {
+                $users[$userId]['ask_new_password'] = 1;
+            }
+        }
 
+        // processUsers() triggers save_data() which uses the $extra_fields
+        // variable defined above as a global list of fields to treat
         processUsers($users, $sendMail, $targetFolder);
 
         if ($error_kind_file) {
@@ -885,6 +910,15 @@ $form->addElement(
     '',
     get_lang('ResumeImport')
 );
+
+if (api_get_configuration_value('force_renew_password_at_first_login') == true) {
+    $form->addElement(
+        'checkbox',
+        'ask_new_password',
+        '',
+        get_lang('FirstLoginForceUsersToChangePassword')
+    );
+}
 
 $form->addButtonImport(get_lang('Import'));
 

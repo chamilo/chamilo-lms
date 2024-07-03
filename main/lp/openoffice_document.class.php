@@ -70,8 +70,8 @@ abstract class OpenofficeDocument extends learnpath
         if (!empty($size)) {
             list($w, $h) = explode('x', $size);
             if (!empty($w) && !empty($h)) {
-                $this->slide_width = $w;
-                $this->slide_height = $h;
+                $this->slide_width = (int) $w;
+                $this->slide_height = (int) $h;
             }
         }
 
@@ -80,6 +80,8 @@ abstract class OpenofficeDocument extends learnpath
         if ($ppt2lp_host == 'localhost') {
             move_uploaded_file($file['tmp_name'], $this->base_work_dir.'/'.$this->file_path);
             $perm = api_get_setting('permissions_for_new_files');
+
+            $changeDirectoryCmd = '';
 
             if (IS_WINDOWS_OS) { // IS_WINDOWS_OS has been defined in main_api.lib.php
                 $converter_path = str_replace('/', '\\', api_get_path(SYS_PATH).'main/inc/lib/ppt2png');
@@ -90,7 +92,8 @@ abstract class OpenofficeDocument extends learnpath
                 $converter_path = api_get_path(SYS_PATH).'main/inc/lib/ppt2png';
                 //$class_path = '-cp .:jodconverter-2.2.1.jar:jodconverter-cli-2.2.1.jar';
                 $class_path = ' -Dfile.encoding=UTF-8 -cp .:jodconverter-2.2.2.jar:jodconverter-cli-2.2.2.jar';
-                $cmd = 'cd '.$converter_path.' && java '.$class_path.' DokeosConverter';
+                $changeDirectoryCmd = "cd $converter_path && ";
+                $cmd = 'java '.$class_path.' DokeosConverter';
             }
 
             $cmd .= ' -p '.api_get_setting('service_ppt2lp', 'port');
@@ -106,6 +109,7 @@ abstract class OpenofficeDocument extends learnpath
 
             $files = [];
             $return = 0;
+            $cmd = $changeDirectoryCmd.escapeshellcmd($cmd);
             $shell = exec($cmd, $files, $return);
 
             if ($return != 0) { // If the java application returns an error code.
@@ -199,6 +203,8 @@ abstract class OpenofficeDocument extends learnpath
         }
 
         if ($ppt2lpHost == 'localhost') {
+            $changeDirectoryCmd = '';
+
             if (IS_WINDOWS_OS) { // IS_WINDOWS_OS has been defined in main_api.lib.php
                 $converterPath = str_replace('/', '\\', api_get_path(SYS_PATH).'main/inc/lib/ppt2png');
                 $classPath = $converterPath.';'.$converterPath.'/jodconverter-2.2.2.jar;'.$converterPath.'/jodconverter-cli-2.2.2.jar';
@@ -206,12 +212,15 @@ abstract class OpenofficeDocument extends learnpath
             } else {
                 $converterPath = api_get_path(SYS_PATH).'main/inc/lib/ppt2png';
                 $classPath = ' -Dfile.encoding=UTF-8 -jar jodconverter-cli-2.2.2.jar';
-                $cmd = 'cd '.$converterPath.' && java '.$classPath.' ';
+                $changeDirectoryCmd = "cd $converterPath && ";
+                $cmd = 'java '.$classPath.' ';
             }
 
             $cmd .= ' -p '.api_get_setting('service_ppt2lp', 'port');
             // Call to the function implemented by child.
-            $cmd .= ' "'.$this->base_work_dir.'/'.$this->file_path.'"  "'.$this->base_work_dir.'/'.$this->created_dir.'"';
+            $cmd .= ' "'.Security::sanitizeExecParam($this->base_work_dir.'/'.$this->file_path)
+                .'"  "'
+                .Security::sanitizeExecParam($this->base_work_dir.'/'.$this->created_dir).'"';
             // To allow openoffice to manipulate docs.
             @chmod($this->base_work_dir, $permissionFolder);
             @chmod($this->base_work_dir.'/'.$this->file_path, $permissionFile);
@@ -221,6 +230,7 @@ abstract class OpenofficeDocument extends learnpath
 
             $files = [];
             $return = 0;
+            $cmd = $changeDirectoryCmd.escapeshellcmd($cmd);
             $shell = exec($cmd, $files, $return);
             // TODO: Chown is not working, root keep user privileges, should be www-data
             @chown($this->base_work_dir.'/'.$this->created_dir, 'www-data');
@@ -335,7 +345,6 @@ abstract class OpenofficeDocument extends learnpath
         }
         $client = new SoapClient(null, $options);
         $result = '';
-
         $file_data = base64_encode(file_get_contents($file['tmp_name']));
         $file_name = $file['name'];
         if (empty($size)) {
@@ -349,7 +358,7 @@ abstract class OpenofficeDocument extends learnpath
         ];
 
         try {
-            $result = $client->__call('wsConvertPpt', ['pptData' => $params]);
+            $result = $client->wsConvertPpt($params);
         } catch (Exception $e) {
             error_log('['.time().'] Chamilo SOAP call error: '.$e->getMessage());
         }

@@ -4,7 +4,7 @@
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author Valery Fremaux <valery.fremaux@gmail.com>
  */
-$strings['archiverealroot'] = 'Container effectif d\'archives (chemin réel)';
+$strings['archiverealroot'] = 'Container effectif de la cache (chemin réel sur disque)';
 $strings['backtoindex'] = 'Retour aux instances';
 $strings['cancel'] = 'Annuler';
 $strings['choose'] = 'Choisir une action...';

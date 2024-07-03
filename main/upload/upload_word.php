@@ -85,7 +85,7 @@ if (!$is_allowed_to_edit) {
 
 $interbreadcrumb[] = ["url" => "../lp/lp_controller.php?action=list", "name" => get_lang("Doc")];
 $nameTools = get_lang("WoogieConversionPowerPoint");
-Display :: display_header($nameTools);
+Display::display_header($nameTools);
 
 echo '<span style="color: #5577af; font-size: 16px; font-family: Arial; margin-left: 10px;">'.
     get_lang("WelcomeWoogieSubtitle").'</span><br>';

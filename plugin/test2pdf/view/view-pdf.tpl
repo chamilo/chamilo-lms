@@ -21,13 +21,13 @@
                     <strong>{{ item.title }}</strong>
                     </td>
                     <td class="text-center">
-                    	<a target="_blank" href="download-pdf.php?type=question&c_id={{course_id}}&id_quiz={{item.id}}" title="{{ 'DownloadOnlyQuestion'|get_plugin_lang('Test2pdfPlugin') }}"><img src="{{ 'pdf.png'|icon(32) }}" /></a>
+                    	<a target="_blank" href="download-pdf.php?type=question&c_id={{course_id}}&id_quiz={{item.iid}}" title="{{ 'DownloadOnlyQuestion'|get_plugin_lang('Test2pdfPlugin') }}"><img src="{{ 'pdf.png'|icon(32) }}" /></a>
                     </td>
                     <td class="text-center">
-                    	<a target="_blank" href="download-pdf.php?type=answer&c_id={{course_id}}&id_quiz={{item.id}}" title="{{ 'DownloadOnlyAnswer'|get_plugin_lang('Test2pdfPlugin') }}"><img src="{{ 'pdf.png'|icon(32) }}" /></a>
+                    	<a target="_blank" href="download-pdf.php?type=answer&c_id={{course_id}}&id_quiz={{item.iid}}" title="{{ 'DownloadOnlyAnswer'|get_plugin_lang('Test2pdfPlugin') }}"><img src="{{ 'pdf.png'|icon(32) }}" /></a>
                     </td>
                     <td class="text-center">
-                    	<a target="_blank" href="download-pdf.php?type=all&c_id={{course_id}}&id_quiz={{item.id}}" title="{{ 'DownloadAll'|get_plugin_lang('Test2pdfPlugin') }}"><img src="{{ 'pdf.png'|icon(32) }}" /></a>
+                    	<a target="_blank" href="download-pdf.php?type=all&c_id={{course_id}}&id_quiz={{item.iid}}" title="{{ 'DownloadAll'|get_plugin_lang('Test2pdfPlugin') }}"><img src="{{ 'pdf.png'|icon(32) }}" /></a>
                     </td>
                 </tr>
                 {% set i = i + 1 %}

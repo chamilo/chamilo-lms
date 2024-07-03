@@ -214,7 +214,7 @@ function search_courses($id_session, $type)
 
             $course_list_destination = [];
             $return .= '<select id="destination" name="SessionCoursesListDestination[]" class="form-control">';
-            while ($course = Database :: fetch_array($rs)) {
+            while ($course = Database::fetch_array($rs)) {
                 $course_list_destination[] = $course['code'];
                 $return .= '<option value="'.$course['code'].'" title="'.@htmlspecialchars($course['title'].' ('.$course['visual_code'].')', ENT_QUOTES, api_get_system_encoding()).'">'.$course['title'].' ('.$course['visual_code'].')</option>';
             }
@@ -395,7 +395,7 @@ if (Security::check_token('post') && (
         $hiddenFields['origin_session'] = $origin_session;
         // Add token to Course select form
         $hiddenFields['sec_token'] = Security::get_token();
-        CourseSelectForm :: display_form($course, $hiddenFields, true);
+        CourseSelectForm::display_form($course, $hiddenFields, true);
         echo '<div style="float:right"><a href="javascript:window.history.go(-1);">'.
             Display::return_icon(
                 'back.png',

@@ -36,6 +36,7 @@ function handleRegions()
             api_get_utc_datetime(),
             $user_id
         );
+        api_flush_settings_cache(api_get_current_access_url_id());
         echo Display::return_message(get_lang('SettingsStored'), 'confirmation');
     }
 
@@ -159,7 +160,7 @@ function handlePluginUpload()
     $form = new FormValidator(
         'plugin_upload',
         'post',
-        'settings.php?category=Plugins#tabs-4'
+        api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins#tabs-4'
     );
     $form->addElement(
         'file',
@@ -237,6 +238,8 @@ function handlePlugins()
         echo Display::return_message(get_lang('SettingsStored'), 'confirmation');
     }
 
+    AppPlugin::cleanEntitiesInBundle();
+
     $all_plugins = $plugin_obj->read_plugins_from_path();
     $installed_plugins = $plugin_obj->getInstalledPlugins();
     $officialPlugins = $plugin_obj->getOfficialPlugins();
@@ -252,7 +255,7 @@ function handlePlugins()
     echo '<table class="table table-hover table-striped table-bordered">';
     echo '<tr>';
     echo '<th width="20px">';
-    echo get_lang('Action');
+    echo get_lang('Installed');
     echo '</th><th>';
     echo get_lang('Description');
     echo '</th>';
@@ -267,6 +270,10 @@ function handlePlugins()
 
     $unknownLabel = get_lang('Unknown');
     foreach ($all_plugins as $pluginName) {
+        if (in_array($pluginName, ['jcapture'])) {
+            continue;
+        }
+
         $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
         if (file_exists($plugin_info_file)) {
             $plugin_info = [
@@ -397,8 +404,9 @@ function handleStylesheets()
     $form = new FormValidator(
         'stylesheet_upload',
         'post',
-        'settings.php?category=Stylesheets#tabs-3'
+        api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Stylesheets#tabs-3'
     );
+    $form->protect();
     $form->addElement(
         'text',
         'name_stylesheet',
@@ -572,7 +580,7 @@ function handleStylesheets()
                     echo Display::return_message('Error - '.get_lang('UplNoFileUploaded'), 'error');
                 }
             } else {
-                Display::return_message('Error - '.get_lang('InvalidImageDimensions'), 'error');
+                echo Display::return_message('Error - '.get_lang('InvalidImageDimensions'), 'error');
             }
         }
     }
@@ -1226,8 +1234,14 @@ function displayTemplates()
     );
     $table->set_header(0, get_lang('Image'), true, ['style' => 'width: 101px;']);
     $table->set_header(1, get_lang('Title'));
-    $table->set_header(2, get_lang('Actions'), false, ['style' => 'width:50px;']);
-    $table->set_column_filter(2, 'actionsFilter');
+    if (true === api_get_configuration_value('template_activate_language_filter')) {
+        $table->set_header(2, get_lang('Language'));
+        $table->set_header(3, get_lang('Actions'), false, ['style' => 'width:50px;']);
+        $table->set_column_filter(3, 'actionsFilter');
+    } else {
+        $table->set_header(2, get_lang('Actions'), false, ['style' => 'width:50px;']);
+        $table->set_column_filter(2, 'actionsFilter');
+    }
     $table->set_column_filter(0, 'searchImageFilter');
     $table->display();
 }
@@ -1284,7 +1298,11 @@ function getTemplateData($from, $number_of_items, $column, $direction)
     $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
 
     // The sql statement.
-    $sql = "SELECT image as col0, title as col1, id as col2 FROM $table_system_template";
+    if (true === api_get_configuration_value('template_activate_language_filter')) {
+        $sql = "SELECT image as col0, title as col1, language as col2, id as col3 FROM $table_system_template";
+    } else {
+        $sql = "SELECT image as col0, title as col1, id as col2 FROM $table_system_template";
+    }
     $sql .= " ORDER BY col$column $direction ";
     $sql .= " LIMIT $from,$number_of_items";
     $result = Database::query($sql);
@@ -1352,6 +1370,8 @@ function searchImageFilter($image)
  */
 function addEditTemplate()
 {
+    $language_interface = api_get_interface_language();
+
     $em = Database::getManager();
     // Initialize the object.
     $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
@@ -1385,6 +1405,11 @@ function addEditTemplate()
         true,
         ['ToolbarSet' => 'Documents', 'Width' => '100%', 'Height' => '400']
     );
+    if (true === api_get_configuration_value('template_activate_language_filter')) {
+        $form->addSelectLanguage('language', get_lang('Language'), null);
+    } else {
+        $form->addHidden('language', $language_interface);
+    }
 
     // Setting the form elements: the form to upload an image to be used with the template.
     if (empty($template->getImage())) {
@@ -1401,6 +1426,7 @@ function addEditTemplate()
         // Forcing get_lang().
         $defaults['title'] = $template->getTitle();
         $defaults['comment'] = $template->getComment();
+        $defaults['language'] = $template->getLanguage();
 
         // Adding an extra field: a hidden field with the id of the template we are editing.
         $form->addElement('hidden', 'template_id');
@@ -1445,8 +1471,7 @@ function addEditTemplate()
     // if the form validates (complies to all rules) we save the information,
     // else we display the form again (with error message if needed)
     if ($form->validate()) {
-        $check = Security::check_token('post');
-
+        $check = Security::check_token('post', null, 'frm');
         if ($check) {
             // Exporting the values.
             $values = $form->exportValues();
@@ -1497,6 +1522,7 @@ function addEditTemplate()
                     ->setTitle($values['title'])
                     ->setComment(Security::remove_XSS($values['comment']))
                     ->setContent(Security::remove_XSS($templateContent, COURSEMANAGERLOWSECURITY))
+                    ->setLanguage($values['language'])
                     ->setImage($new_file_name);
                 $em->persist($template);
                 $em->flush();
@@ -1514,6 +1540,7 @@ function addEditTemplate()
                 $template
                     ->setTitle($values['title'])
                     ->setComment(Security::remove_XSS($values['comment']))
+                    ->setLanguage($values['language'])
                     ->setContent(Security::remove_XSS($templateContent, COURSEMANAGERLOWSECURITY));
 
                 if ($isDelete) {
@@ -1535,12 +1562,14 @@ function addEditTemplate()
                 echo Display::return_message(get_lang('TemplateEdited'), 'confirm');
             }
         }
-        Security::clear_token();
-        displayTemplates();
+        api_flush_settings_cache(api_get_current_access_url_id());
+        Security::clear_token('frm');
+        header('Location: '.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Templates');
+        exit;
     } else {
-        $token = Security::get_token();
-        $form->addElement('hidden', 'sec_token');
-        $form->setConstants(['sec_token' => $token]);
+        $token = Security::get_token('frm');
+        $form->addElement('hidden', 'frm_sec_token');
+        $form->setConstants(['frm_sec_token' => $token]);
         // Display the form.
         $form->display();
     }
@@ -1640,8 +1669,9 @@ function generateSettingsForm($settings, $settings_by_access_list)
     $form = new FormValidator(
         'settings',
         'post',
-        'settings.php?category='.Security::remove_XSS($_GET['category'])
+        api_get_path(WEB_CODE_PATH).'admin/settings.php?category='.Security::remove_XSS($_GET['category'])
     );
+    $form->protect();
 
     $form->addElement(
         'hidden',
@@ -1650,6 +1680,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
     );
 
     $url_id = api_get_current_access_url_id();
+    $hideCompletely = api_get_configuration_value('multiple_url_hide_disabled_settings');
     /*
     if (!empty($_configuration['multiple_access_urls']) && api_is_global_platform_admin() && $url_id == 1) {
         $group = array();
@@ -1662,6 +1693,8 @@ function generateSettingsForm($settings, $settings_by_access_list)
     $url_info = api_get_access_url($url_id);
     $i = 0;
     $addedSettings = [];
+    $globalAdmin = api_is_global_platform_admin();
+
     foreach ($settings as $row) {
         if (in_array($row['variable'], array_keys($settings_to_avoid))) {
             continue;
@@ -1671,10 +1704,8 @@ function generateSettingsForm($settings, $settings_by_access_list)
             continue;
         }
 
-        $addedSettings[] = $row['variable'];
-
         if (!empty($_configuration['multiple_access_urls'])) {
-            if (api_is_global_platform_admin()) {
+            if ($globalAdmin) {
                 if ($row['access_url_locked'] == 0) {
                     if ($url_id == 1) {
                         if ($row['access_url_changeable'] == '1') {
@@ -1717,6 +1748,9 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 // We hide the element in other cases (checkbox, radiobutton) we 'freeze' the element.
                 $hide_element = true;
                 $hideme = ['disabled'];
+                if ($hideCompletely && !$globalAdmin) {
+                    continue;
+                }
             } elseif ($url_info['active'] == 1) {
                 // We show the elements.
                 if (empty($row['variable'])) {
@@ -1740,6 +1774,8 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 // There is no else{} statement because we load the default $row['selected_value'] of the main Chamilo site.
             }
         }
+
+        $addedSettings[] = $row['variable'];
 
         switch ($row['type']) {
             case 'textfield':
@@ -1860,7 +1896,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
             case 'checkbox':
                 // 1. We collect all the options of this variable.
                 $sql = "SELECT * FROM $table_settings_current
-                        WHERE variable='".$row['variable']."' AND access_url =  1";
+                        WHERE variable = '".$row['variable']."' AND access_url =  1";
 
                 $result = Database::query($sql);
                 $group = [];
@@ -1897,9 +1933,11 @@ function generateSettingsForm($settings, $settings_by_access_list)
                                     subkeytext='".$rowkeys['subkeytext']."' AND
                                     access_url =  $access_url";
                         $result_access = Database::query($sql);
-                        $row_access = Database::fetch_array($result_access);
-                        if ($row_access['selected_value'] === 'true' && !$form->isSubmitted()) {
-                            $element->setChecked(true);
+                        if (Database::num_rows($result_access) > 0) {
+                            $row_access = Database::fetch_assoc($result_access);
+                            if ($row_access['selected_value'] === 'true' && !$form->isSubmitted()) {
+                                $element->setChecked(true);
+                            }
                         }
                     } else {
                         if ($rowkeys['selected_value'] === 'true' && !$form->isSubmitted()) {
@@ -1965,6 +2003,11 @@ function generateSettingsForm($settings, $settings_by_access_list)
         }
 
         switch ($row['variable']) {
+            case 'upload_extensions_replace_by':
+                $default_values[$row['variable']] = api_replace_dangerous_char(
+                    str_replace('.', '', $default_values[$row['variable']])
+                );
+                break;
             case 'pdf_export_watermark_enable':
                 $url = PDF::get_watermark(null);
 

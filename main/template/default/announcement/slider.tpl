@@ -1,7 +1,6 @@
 <style>
     .announcement_short {
-        height: 310px;
-        white-space: nowrap;
+        height: 300px;
         overflow: hidden;
         text-overflow: ellipsis;
     }
@@ -28,7 +27,7 @@
                         <div class="announcement_short">
                         {{ announcement.content }}
                         </div>
-                        <a href="{{ _p.web }}news_list.php?id={{ announcement.id }}">{{ "More" | get_lang }}</a>
+                        <a href="{{ _p.web }}news_list.php?id={{ announcement.id }}" class="link-more">{{ "More" | get_lang }}</a>
                     </div>
                 {% else %}
                     <div class="block-image">

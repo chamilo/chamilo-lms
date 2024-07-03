@@ -63,6 +63,13 @@ class PortfolioCategory
     protected $isVisible = true;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="parent_id", type="integer", nullable=false, options={"default": 0})
+     */
+    protected $parentId = 0;
+
+    /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Portfolio", mappedBy="category")
@@ -202,6 +209,26 @@ class PortfolioCategory
     }
 
     /**
+     * @return int
+     */
+    public function getParentId()
+    {
+        return $this->parentId;
+    }
+
+    /**
+     * Set parent id.
+     *
+     * @return PortfolioCategory
+     */
+    public function setParentId(int $parentId)
+    {
+        $this->parentId = $parentId;
+
+        return $this;
+    }
+
+    /**
      * Get items.
      *
      * @param \Chamilo\CoreBundle\Entity\Course|null  $course
@@ -216,7 +243,7 @@ class PortfolioCategory
 
         if ($onlyVisibles) {
             $criteria->andWhere(
-                Criteria::expr()->eq('isVisible', true)
+                Criteria::expr()->eq('visibility', Portfolio::VISIBILITY_VISIBLE)
             );
         }
 

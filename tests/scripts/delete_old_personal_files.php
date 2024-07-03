@@ -1,0 +1,104 @@
+<?php
+/* For licensing terms, see /license.txt */
+/**
+ * Unfinished script: at this point it just looks at the user
+ * personal folder's creation date to determine if the date is
+ * within range. DO NOT USE AS IS.
+ * This script removes old "private" files uploaded by users in
+ * their "my_files" folder in app/upload/users/
+ * It uses parameters in order (all mandatory but the last one).
+ * Delete the exit; statement at line 13.
+ * This script should be located inside the tests/scripts/ folder to work.
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ */
+exit;
+require __DIR__.'/../../main/inc/global.inc.php';
+$simulate = false;
+
+// Process script parameters
+if (PHP_SAPI !== 'cli') {
+    die('This script can only be executed from the command line');
+}
+
+if (!empty($argv[1]) && $argv[1] == '--from') {
+    $from = $argv[2];
+}
+if (!empty($argv[3]) && $argv[3] == '--until') {
+    $until = $argv[4];
+}
+if (!empty($argv[5]) && $argv[5] == '-s') {
+    $simulate = true;
+    echo "Simulation mode is enabled".PHP_EOL;
+}
+if (empty($from) or empty($until)) {
+    echo PHP_EOL."Usage: sudo php ".basename(__FILE__)." [options]".PHP_EOL;
+    echo "Where [options] can be ".PHP_EOL;
+    echo "  --from yyyy-mm-dd    Date from which the content should be removed (e.g. 2017-08-31)".PHP_EOL.PHP_EOL;
+    echo "  --until yyyy-mm-dd   Date up to which the content should be removed (e.g. 2020-08-31)".PHP_EOL.PHP_EOL;
+    echo "  -s                   (optional) Simulate execution - Do not delete anything, just show numbers".PHP_EOL.PHP_EOL;
+    die('Please make sure --from and --until are defined.');
+}
+
+echo "About to delete old personal files created between $from and $until.".PHP_EOL;
+
+echo deletePersonalFiles($from, $until, $simulate);
+
+/**
+ * Delete all data from the tracking tables between the given dates and return a log string.
+ * @param string $from  'yyyy-mm-dd' format date from which to start deleting
+ * @param string $until 'yyyy-mm-dd' format date until which to delete
+ * @param bool   $simulate True if we only want to simulate the deletion and collect data
+ * @return string
+ */
+function deletePersonalFiles(string $from, string $until, bool $simulate): string
+{
+    $log = '';
+    $size = 0;
+    if ($simulate) {
+        $log .= 'Simulation mode ON'.PHP_EOL;
+    }
+    $table = Database::get_main_table(TABLE_MAIN_USER);
+    // Get the list of sessions where access_end_date is within the given range
+    $users = Database::select(
+        'id',
+        $table,
+        [
+            'where' => 'status = 5',
+        ]
+    );
+    $fromTimestamp = api_strtotime($from);
+    $untilTimestamp = api_strtotime($until);
+    $log .= 'Found '.count($users).' non-privileged users to check'.PHP_EOL;
+    foreach ($users as $user) {
+        $path = UserManager::getUserPathById($user['id'], 'system');
+        if (is_dir($path)) {
+            $folderCreationDate = filectime($path);
+            $log .= $path.' was created on '.date('Y-m-d', $folderCreationDate).PHP_EOL;
+            if ($folderCreationDate > $fromTimestamp and $folderCreationDate <= $untilTimestamp) {
+                $log .= 'Folder '.$path.' matches creation time span. Deleting...'.PHP_EOL;
+                $size += folderSize($path);
+                if (!$simulate) {
+                    my_delete($path);
+                }
+            }
+        }
+    }
+    $log .= 'Deleted '.$size.'B user files in total.'.PHP_EOL;
+
+    return $log;
+}
+
+function folderSize($dir)
+{
+    $size = 0;
+    $contents = glob(rtrim($dir, '/').'/*', GLOB_NOSORT);
+    foreach ($contents as $contents_value) {
+        if (is_file($contents_value)) {
+            $size += filesize($contents_value);
+        } else {
+            $size += folderSize($contents_value);
+        }
+    }
+
+    return $size;
+}

@@ -91,6 +91,69 @@ class Export
     }
 
     /**
+     * Export tabular data to XLS-file included comments.
+     *
+     * @param array $data The comment by cell should be added with the prefix [comment] to be added ($txtCellValue.'[comment]'.$txtComment)
+     */
+    public static function arrayToXlsAndComments(
+        array $data,
+        string $filename = 'export'
+    ) {
+        $filePath = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xlsx';
+        $file = new \SplFileObject($filePath, 'w');
+
+        $excel = @new PHPExcel();
+
+        $type = 'Excel2007';
+        $sheet = null;
+        $row = 1;
+        $prependHeaderRow = false;
+        if (null !== $sheet && !$excel->sheetNameExists($sheet)) {
+            $excel->removeSheetByIndex(0);
+        }
+
+        if (null !== $sheet) {
+            if (!$excel->sheetNameExists($sheet)) {
+                $excel->createSheet()->setTitle($sheet);
+            }
+            $excel->setActiveSheetIndexByName($sheet);
+        }
+
+        foreach ($data as $item) {
+            $count = count($item);
+            if ($prependHeaderRow && 1 == $row) {
+                $headers = array_keys($item);
+
+                for ($i = 0; $i < $count; $i++) {
+                    @$excel->getActiveSheet()->setCellValueByColumnAndRow($i, $row, $headers[$i]);
+                }
+                $row++;
+            }
+            $values = array_values($item);
+            for ($i = 0; $i < $count; $i++) {
+                $txtComment = '';
+                $txtValue = $values[$i];
+                if (false !== strpos($values[$i], '[comment]')) {
+                    list($txtValue, $txtComment) = explode('[comment]', $values[$i]);
+                }
+                @$excel->getActiveSheet()->setCellValueByColumnAndRow($i, $row, $txtValue);
+                if (!empty($txtComment)) {
+                    $columnLetter = PHPExcel_Cell::stringFromColumnIndex($i);
+                    $coordinate = $columnLetter.$row;
+                    @$excel->getActiveSheet()->getComment($coordinate)->getText()->createTextRun($txtComment);
+                }
+            }
+            $row++;
+        }
+
+        $writer = \PHPExcel_IOFactory::createWriter($excel, $type);
+        $writer->save($file->getPathname());
+        DocumentManager::file_send_for_download($filePath, true, $filename.'.xlsx');
+
+        exit;
+    }
+
+    /**
      * Export tabular data to XLS-file (as html table).
      *
      * @param array  $data

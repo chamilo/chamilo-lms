@@ -57,7 +57,7 @@ class Dropbox_Work
     public $feedback;
 
     /**
-     * Constructor calls private functions to create a new work or retreive an existing work from DB
+     * Constructor calls private functions to create a new work or retrieve an existing work from DB
      * depending on the number of parameters.
      *
      * @param int    $arg1
@@ -171,7 +171,7 @@ class Dropbox_Work
     }
 
     /**
-     * private function creating existing object by retreiving info from db.
+     * private function creating existing object by retrieving info from db.
      *
      * @param int $id
      */
@@ -263,7 +263,7 @@ class Dropbox_SentWork extends Dropbox_Work
     public $recipients; //array of ['id']['name'] arrays
 
     /**
-     * Constructor calls private functions to create a new work or retreive an existing work from DB
+     * Constructor calls private functions to create a new work or retrieve an existing work from DB
      * depending on the number of parameters.
      *
      * @param int    $arg1
@@ -310,8 +310,8 @@ class Dropbox_SentWork extends Dropbox_Work
 
         $course_id = api_get_course_int_id();
 
-        // Do sanity checks on recipient_ids array & property fillin
-        // The sanity check for ex-coursemembers is already done in base constructor
+        // Do sanity checks on recipient_ids array & property filling
+        // The sanity check for ex-course members is already done in base constructor
         $uploader_id = (int) $uploader_id;
 
         $justSubmit = false;
@@ -386,7 +386,7 @@ class Dropbox_SentWork extends Dropbox_Work
     }
 
     /**
-     * private function creating existing object by retreiving info from db.
+     * private function creating existing object by retrieving info from db.
      *
      * @param int $id
      */
@@ -436,14 +436,20 @@ class Dropbox_Person
 
     /**
      * Constructor for recreating the Dropbox_Person object.
-     *
-     * @param int  $userId
-     * @param bool $isCourseAdmin
-     * @param bool $isCourseTutor
      */
-    public function __construct($userId, $isCourseAdmin, $isCourseTutor)
-    {
-        $course_id = api_get_course_int_id();
+    public function __construct(
+        int $userId,
+        bool $isCourseAdmin,
+        bool $isCourseTutor,
+        int $courseId = 0,
+        int $sessionId = 0
+    ) {
+        if (empty($courseId)) {
+            $courseId = api_get_course_int_id();
+        }
+        if (empty($sessionId)) {
+            $sessionId = api_get_session_id();
+        }
 
         // Fill in properties
         $this->userId = $userId;
@@ -452,10 +458,9 @@ class Dropbox_Person
         $this->receivedWork = [];
         $this->sentWork = [];
 
-        // Note: perhaps include an ex coursemember check to delete old files
+        // Note: perhaps include an ex course member check to delete old files
 
-        $session_id = api_get_session_id();
-        $condition_session = api_get_session_condition($session_id);
+        $condition_session = api_get_session_condition($sessionId);
 
         $post_tbl = Database::get_course_table(TABLE_DROPBOX_POST);
         $person_tbl = Database::get_course_table(TABLE_DROPBOX_PERSON);
@@ -467,7 +472,7 @@ class Dropbox_Person
                 INNER JOIN $person_tbl p
                 ON (r.file_id = p.file_id AND r.c_id = p.c_id)
                 WHERE
-                     r.c_id = $course_id AND
+                     r.c_id = $courseId AND
                      p.user_id = ".intval($this->userId).' AND
                      r.dest_user_id = '.intval($this->userId)." $condition_session ";
 
@@ -483,7 +488,7 @@ class Dropbox_Person
                 INNER JOIN $person_tbl p
                 ON (f.id = p.file_id AND f.c_id = p.c_id)
                 WHERE
-                    f.c_id = $course_id AND
+                    f.c_id = $courseId AND
                     f.uploader_id   = ".intval($this->userId).' AND
                     p.user_id       = '.intval($this->userId)."
                     $condition_session
@@ -496,26 +501,28 @@ class Dropbox_Person
 
     /**
      * Deletes all the received categories and work of this person.
-     *
-     * @param int $id
-     *
-     * @return bool
      */
-    public function deleteReceivedWorkFolder($id)
+    public function deleteReceivedWorkFolder(int $id, int $courseId = 0, int $sessionId = 0): bool
     {
-        $course_id = api_get_course_int_id();
+        if (empty($courseId)) {
+            $courseId = api_get_course_int_id();
+        }
+        if (empty($sessionId)) {
+            $sessionId = api_get_session_id();
+        }
 
-        $id = intval($id);
+        $condition_session = api_get_session_condition($sessionId);
+
         $sql = 'DELETE FROM '.Database::get_course_table(TABLE_DROPBOX_FILE)."
-                WHERE c_id = $course_id AND cat_id = '".$id."' ";
+                WHERE c_id = $courseId $condition_session AND cat_id = $id";
         Database::query($sql);
 
         $sql = 'DELETE FROM '.Database::get_course_table(TABLE_DROPBOX_CATEGORY)."
-                WHERE c_id = $course_id AND cat_id = '".$id."' ";
+                WHERE c_id = $courseId $condition_session AND cat_id = $id";
         Database::query($sql);
 
         $sql = 'DELETE FROM '.Database::get_course_table(TABLE_DROPBOX_POST)."
-                WHERE c_id = $course_id AND cat_id = '".$id."' ";
+                WHERE c_id = $courseId $condition_session AND cat_id = $id";
         Database::query($sql);
 
         return true;
@@ -523,13 +530,15 @@ class Dropbox_Person
 
     /**
      * Deletes a received dropbox file of this person with id=$id.
-     *
-     * @param int $id
      */
-    public function deleteReceivedWork($id)
+    public function deleteReceivedWork(int $id, int $courseId = 0, int $sessionId = 0): void
     {
-        $course_id = api_get_course_int_id();
-        $id = (int) $id;
+        if (empty($courseId)) {
+            $courseId = api_get_course_int_id();
+        }
+        if (empty($sessionId)) {
+            $sessionId = api_get_session_id();
+        }
 
         // index check
         $found = false;
@@ -541,27 +550,28 @@ class Dropbox_Person
         }
 
         if (!$found) {
-            if (!$this->deleteReceivedWorkFolder($id)) {
+            if (!$this->deleteReceivedWorkFolder($id, $courseId, $sessionId)) {
                 exit(get_lang('GeneralError').' (code 216)');
             }
         }
         // Delete entries in person table concerning received works
         $sql = 'DELETE FROM '.Database::get_course_table(TABLE_DROPBOX_PERSON)."
-                WHERE c_id = $course_id AND user_id = '".$this->userId."' AND file_id ='".$id."'";
+                WHERE c_id = $courseId AND user_id = ".$this->userId." AND file_id = $id";
         Database::query($sql);
         removeUnusedFiles(); // Check for unused files
     }
 
     /**
      * Deletes a sent dropbox file of this person with id=$id.
-     *
-     * @param int $id
      */
-    public function deleteSentWork($id)
+    public function deleteSentWork(int $id, int $courseId = 0, int $sessionId = 0): void
     {
-        $course_id = api_get_course_int_id();
-
-        $id = (int) $id;
+        if (empty($courseId)) {
+            $courseId = api_get_course_int_id();
+        }
+        if (empty($sessionId)) {
+            $sessionId = api_get_session_id();
+        }
 
         // index check
         $found = false;
@@ -572,14 +582,14 @@ class Dropbox_Person
             }
         }
         if (!$found) {
-            if (!$this->deleteReceivedWorkFolder($id)) {
+            if (!$this->deleteReceivedWorkFolder($id, $courseId, $sessionId)) {
                 exit(get_lang('GeneralError').' (code 219)');
             }
         }
         //$file_id = $this->sentWork[$index]->id;
         // Delete entries in person table concerning sent works
         $sql = 'DELETE FROM '.Database::get_course_table(TABLE_DROPBOX_PERSON)."
-                WHERE c_id = $course_id AND user_id='".$this->userId."' AND file_id='".$id."'";
+                WHERE c_id = $courseId AND user_id = ".$this->userId." AND file_id = $id";
         Database::query($sql);
         removeMoreIfMailing($id);
         removeUnusedFiles(); // Check for unused files

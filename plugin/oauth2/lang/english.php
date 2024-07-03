@@ -13,6 +13,11 @@ $strings['plugin_comment'] = 'Allow authentication with an <em>OAuth2</em> serve
 
 $strings['enable'] = 'Enable';
 
+$strings['force_redirect'] = 'Force redirect';
+$strings['force_redirect_help'] = 'If set to yes, then if the user is not yet logged in it will be redirected automatically to the SSO server';
+$strings['skip_force_redirect_in'] = 'Skip folders for force redirect';
+$strings['skip_force_redirect_in_help'] = "If force redirect is set to yes, then all pages will redirect unlogged user to the SSO server except from the one defined here in a list separated by commas in the form /main/webservices,/plugin/oauth2";
+
 $strings['client_id'] = 'Client ID';
 $strings['client_id_help'] = '<strong>The <em>OAuth2</em> client identifier</strong>
 the <em>OAuth2</em> server administrator assigned to this Chamilo instance.
@@ -75,6 +80,16 @@ $strings['response_resource_owner_status_help'] = 'The value at this array key s
  <dt>5</dt><dd>Student</dd>
  <dt>6</dt><dd>Anonymous</dd>
 </dl>';
+$strings['response_resource_owner_teacher_status'] = 'Response Resource Owner status value for Course Manager / Teacher';
+$strings['response_resource_owner_teacher_status_help'] = 'If this value matches the value obtained from the <i>Response Resource Owner status key</i>, the user will have the role of Course Manager / Teacher';
+$strings['response_resource_owner_sessadmin_status'] = 'Response Resource Owner status value for Session Administrator';
+$strings['response_resource_owner_sessadmin_status_help'] = 'If this value matches the value obtained from the <i>Response Resource Owner status key</i>, the user will have the role of Session Administrator';
+$strings['response_resource_owner_drh_status'] = 'Response Resource Owner status value for HRM';
+$strings['response_resource_owner_drh_status_help'] = 'If this value matches the value obtained from the <i>Response Resource Owner status key</i>, the user will have the role of HRM';
+$strings['response_resource_owner_student_status'] = 'Response Resource Owner status value for Student';
+$strings['response_resource_owner_student_status_help'] = 'If this value matches the value obtained from the <i>Response Resource Owner status key</i>, the user will have the role of Student';
+$strings['response_resource_owner_anon_status'] = 'Response Resource Owner status value for Anonymous';
+$strings['response_resource_owner_anon_status_help'] = 'If this value matches the value obtained from the <i>Response Resource Owner status key</i>, the user will have the role of Anonymous';
 $strings['response_resource_owner_email'] = 'Response Resource Owner email key';
 $strings['response_resource_owner_username'] = 'Response Resource Owner username key';
 
@@ -109,6 +124,8 @@ to directory <code>/main/template/overrides/layout/</code>.';
 $strings['management_login_name'] = 'Name for the management login';
 $strings['management_login_name_help'] = 'Default value is "Management Login".';
 
+$strings['allow_third_party_login'] = 'Allow third party login';
+
 // please keep these below alphabetically sorted
 $strings['AccountInactive'] = "Account inactive";
 $strings['DefaultFirstname'] = 'OAuth2 User default firstname';
@@ -117,7 +134,11 @@ $strings['FailedUserCreation'] = 'User account creation failed';
 $strings['InternalErrorCannotGetUserInfo'] = 'Internal error: could not get user information';
 $strings['InvalidJsonReceivedFromProvider'] = 'The OAuth2 provider did not provide a valid JSON document';
 $strings['ManagementLogin'] = 'Management Login';
-$strings['NoUserHasThisOauthCode'] = 'No existing user has this OAuth2 code';
+$strings['NoUserAccountAndUserCreationNotAllowed'] = 'This user doesn\'t have an account yet and auto-provisioning is not enabled. Please contact this portal administration team at %s to request access.';
 $strings['OAuth2Id'] = 'OAuth2 identifier';
 $strings['UserNotAllowedOnThisPortal'] = 'This user account is not enabled on this portal';
 $strings['WrongResponseResourceOwnerId'] = 'OAuth2 resource owner identifier value not found at the configured key';
+$strings['IssuerNotFound'] = 'Issuer not found';
+$strings['AuthorizeUrlNotAllowed'] = 'Authorize URL not allowed';
+
+$strings['MessageInfoAboutRedirectToProvider'] = 'You are getting redirected to the common authentication system. Your credentials there are the ones that you typically use for other applications of your organisation. These might be different from the ones you used here previously.';

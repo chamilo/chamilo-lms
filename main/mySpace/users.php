@@ -51,21 +51,45 @@ function get_count_users()
     $sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : null;
     $active = isset($_GET['active']) ? (int) $_GET['active'] : 1;
     $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
-    $status = isset($_GET['status']) ? Security::remove_XSS($_GET['status']) : null;
+    $status = !empty($_GET['status']) ? Security::remove_XSS($_GET['status']) : null;
 
     $lastConnectionDate = null;
     if (!empty($sleepingDays)) {
         $lastConnectionDate = api_get_utc_datetime(strtotime($sleepingDays.' days ago'));
     }
 
-    return SessionManager::getCountUserTracking(
-        $keyword,
-        $active,
-        $lastConnectionDate,
-        null,
-        null,
-        $status
-    );
+    $usersCount = 0;
+    $allowDhrAccessToAllStudents = api_get_configuration_value('drh_allow_access_to_all_students');
+    if ($allowDhrAccessToAllStudents) {
+        $conditions = [];
+        if (isset($status)) {
+            $conditions['status'] = $status;
+        }
+        if (isset($active)) {
+            $conditions['active'] = (int) $active;
+        }
+        $usersCount = UserManager::get_user_list(
+            $conditions,
+            [],
+            false,
+            false,
+            null,
+            $keyword,
+            $lastConnectionDate,
+            true
+        );
+    } else {
+        $usersCount = SessionManager::getCountUserTracking(
+            $keyword,
+            $active,
+            $lastConnectionDate,
+            null,
+            null,
+            $status
+        );
+    }
+
+    return $usersCount;
 }
 
 function get_users($from, $limit, $column, $direction)
@@ -74,7 +98,7 @@ function get_users($from, $limit, $column, $direction)
     $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
     $sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : null;
     $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
-    $status = isset($_GET['status']) ? Security::remove_XSS($_GET['status']) : null;
+    $status = !empty($_GET['status']) ? Security::remove_XSS($_GET['status']) : null;
 
     $lastConnectionDate = null;
     if (!empty($sleepingDays)) {
@@ -100,6 +124,26 @@ function get_users($from, $limit, $column, $direction)
                 null,
                 null,
                 $status
+            );
+            $drhLoaded = true;
+        }
+        $allowDhrAccessToAllStudents = api_get_configuration_value('drh_allow_access_to_all_students');
+        if ($allowDhrAccessToAllStudents) {
+            $conditions = [];
+            if (isset($status)) {
+                $conditions['status'] = $status;
+            }
+            if (isset($active)) {
+                $conditions['active'] = (int) $active;
+            }
+            $students = UserManager::get_user_list(
+                $conditions,
+                [],
+                $from,
+                $limit,
+                null,
+                $keyword,
+                $lastConnectionDate
             );
             $drhLoaded = true;
         }

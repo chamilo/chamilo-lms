@@ -27,19 +27,27 @@ $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
 $page = isset($_GET['page']) ? (int) $_GET['page'] : null;
 $action = isset($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : null;
-$sort = isset($_GET['sort']) && in_array($_GET['sort'], ['name', 'nbr_session', 'date_start', 'date_end'])
-    ? Security::remove_XSS($_GET['sort'])
-    : 'name';
+$columns = ['name', 'nbr_session', 'date_start', 'date_end'];
+$sort = isset($_GET['sort']) && in_array($_GET['sort'], $columns) ? Security::remove_XSS($_GET['sort']) : 'name';
 $idChecked = isset($_REQUEST['idChecked']) ? Security::remove_XSS($_REQUEST['idChecked']) : null;
-$order = isset($_REQUEST['order']) ? Security::remove_XSS($_REQUEST['order']) : 'ASC';
-$keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : null;
+$order = $_REQUEST['order'] ?? 'ASC';
+$order = $order === 'ASC' ? 'DESC' : 'ASC';
+$keyword = null;
 
 if ($action === 'delete_on_session' || $action === 'delete_off_session') {
-    $delete_session = $action == 'delete_on_session' ? true : false;
+    $delete_session = $action === 'delete_on_session' ? true : false;
     SessionManager::delete_session_category($idChecked, $delete_session);
     Display::addFlash(Display::return_message(get_lang('SessionCategoryDelete')));
     header('Location: '.api_get_self().'?sort='.$sort);
     exit();
+}
+
+$frmSearch = new FormValidator('search', 'get', 'session_category_list.php', '', [], FormValidator::LAYOUT_INLINE);
+$frmSearch->addText('keyword', get_lang('Search'), false);
+$frmSearch->addButtonSearch(get_lang('Search'));
+
+if ($frmSearch->validate()) {
+    $keyword = $frmSearch->exportValues()['keyword'];
 }
 
 $interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
@@ -91,7 +99,6 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
 
     $query_rows = "SELECT count(*) as total_rows
                   FROM $tbl_session_category sc $where ";
-    $order = ($order == 'ASC') ? 'DESC' : 'ASC';
     $result_rows = Database::query($query_rows);
     $recorset = Database::fetch_array($result_rows);
     $num = $recorset['total_rows'];
@@ -115,16 +122,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
             </div>
             <div class="col-md-6">
                 <div class="pull-right">
-                    <form method="POST" action="session_category_list.php" class="form-inline">
-                        <div class="form-group">
-                            <input class="form-control" type="text" name="keyword" value="<?php echo $keyword; ?>"
-                                   aria-label="<?php echo get_lang('Search'); ?>"/>
-                            <button class="btn btn-default" type="submit" name="name"
-                                    value="<?php echo get_lang('Search'); ?>"><em
-                                        class="fa fa-search"></em> <?php echo get_lang('Search'); ?></button>
-                            <!-- <a href="session_list.php?search=advanced"><?php echo get_lang('AdvancedSearch'); ?></a> -->
-                        </div>
-                    </form>
+                    <?php echo $frmSearch->returnForm(); ?>
                 </div>
             </div>
         </div>

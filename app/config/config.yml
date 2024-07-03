@@ -110,6 +110,7 @@ twig:
           plugin_footer_left:
           plugin_footer_center:
           plugin_content_bottom:
+          plugin_header_logo:
           plugin_header_left:
           plugin_header_center:
           plugin_header_right:

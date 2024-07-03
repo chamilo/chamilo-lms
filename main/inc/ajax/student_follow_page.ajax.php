@@ -118,31 +118,13 @@ function processViewsInvisible(array $lpViews, bool $state)
 
         [$lpId, $userId, $courseId, $sessionId] = array_map('intval', $parts);
 
-        $lpView = learnpath::findLastView($lpId, $userId, $courseId, $sessionId);
-
-        if (empty($lpView)) {
-            $tblLpView = Database::get_course_table(TABLE_LP_VIEW);
-
-            $lpViewId = Database::insert(
-                $tblLpView,
-                [
-                    'c_id' => $courseId,
-                    'lp_id' => $lpId,
-                    'user_id' => $userId,
-                    'view_count' => 1,
-                    'session_id' => $sessionId,
-                ]
-            );
-            Database::update($tblLpView, ['id' => $lpViewId], ['iid = ?' => $lpViewId]);
-        } else {
-            $lpViewId = $lpView['iid'];
-        }
+        $lpView = learnpath::findLastView($lpId, $userId, $courseId, $sessionId, true);
 
         $extraFieldValue = new ExtraFieldValue('lp_view');
         $extraFieldValue->save(
             [
                 'variable' => StudentFollowPage::VARIABLE_INVISIBLE,
-                'item_id' => $lpViewId,
+                'item_id' => $lpView['iid'],
                 'comment' => json_encode(['user' => api_get_user_id(), 'datetime' => api_get_utc_datetime()]),
                 'value' => $state,
             ]

@@ -3,6 +3,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -219,6 +221,23 @@ class CWiki
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
     protected $sessionId;
+    /**
+     * @var Collection<int, CWikiCategory>
+     *
+     * Add @ to the next lines if api_get_configuration_value('wiki_categories_enabled') is true
+     * ORM\ManyToMany(targetEntity="Chamilo\CourseBundle\Entity\CWikiCategory", inversedBy="wikiPages")
+     * ORM\JoinTable(
+     *     name="c_wiki_rel_category",
+     *     joinColumns={@ORM\JoinColumn(name="wiki_id", referencedColumnName="iid", onDelete="CASCADE")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")}
+     * )
+     */
+    private $categories;
+
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+    }
 
     /**
      * Set pageId.
@@ -844,6 +863,11 @@ class CWiki
         return $this->id;
     }
 
+    public function getIid(): int
+    {
+        return $this->iid;
+    }
+
     /**
      * Set cId.
      *
@@ -866,5 +890,18 @@ class CWiki
     public function getCId()
     {
         return $this->cId;
+    }
+
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(CWikiCategory $category): CWiki
+    {
+        $category->addWikiPage($this);
+        $this->categories->add($category);
+
+        return $this;
     }
 }

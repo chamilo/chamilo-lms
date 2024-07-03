@@ -1,0 +1,23 @@
+<?php
+$strings['plugin_title'] = "H5P import";
+$strings['plugin_comment'] = "Ce plugin permet d'importer des contenus H5P. Ouvrez le fichier README.md pour des instructions d'installation.";
+$strings['tool_enable'] = "Activer le plugin";
+$strings['frame'] = "Frame";
+$strings['frame_help'] = "Afficher le cadre et les boutons en dessous de H5P";
+$strings['embed'] = "Intégrer";
+$strings['embed_help'] = "Afficher le bouton d'intégration (embed)";
+$strings['copyright'] = "Droits d'auteur";
+$strings['copyright_help'] = "Afficher le bouton de droits d'auteur";
+$strings['icon'] = "Icône";
+$strings['icon_help'] = "Afficher l'icône H5P";
+$strings['attempts'] = "Nombre de tentatives";
+$strings['import_h5p_package'] = "Importer un paquet H5P";
+$strings['upload_h5p'] = "Importer";
+$strings['h5p_package'] = "Paquet H5P";
+$strings['h5p_error_loading'] = "Erreur de chargement du paquet H5P";
+$strings['h5p_error_missing_core_asset'] = "Erreur de chargement des assets H5P core";
+$strings['h5p_error_invalid_token'] = "Token de sécurité invalide";
+$strings['h5p_save_content_state'] = "Enregistrer les résultats de l'utilisateur";
+$strings['h5p_save_content_freq'] = "Fréquence d'enregistrement";
+$strings['h5p_save_freq_help'] = "Fréquence à laquelle l'état actuel du contenu doit être enregistré, en secondes";
+$strings['start_attempt'] = "Démarrer la tentative";

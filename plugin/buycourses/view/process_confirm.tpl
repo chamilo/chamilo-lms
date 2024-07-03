@@ -51,7 +51,7 @@
                                         {% if course.coaches|length %}
                                             <ul>
                                                 {% for coach in course.coaches %}
-                                                    <li><em class="fa fa-user fa-fw"></em>{{ coach }}</li>
+                                                    <li><em class="fa fa-user fa-fw"></em>{{ coach.name }}</li>
                                                 {% endfor %}
                                             </ul>
                                         {% endif %}

@@ -92,4 +92,4 @@ Display::display_header(get_lang('Edit'));
 echo $message;
 $form->display();
 
-Display :: display_footer();
+Display::display_footer();

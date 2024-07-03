@@ -247,16 +247,22 @@ class OpenofficePresentation extends OpenofficeDocument
     public function add_command_parameters()
     {
         if (empty($this->slide_width) || empty($this->slide_height)) {
-            list($this->slide_width, $this->slide_height) = explode('x', api_get_setting('service_ppt2lp', 'size'));
+            list($w, $h) = explode('x', api_get_setting('service_ppt2lp', 'size'));
+
+            $this->slide_width = (int) $w;
+            $this->slide_height = (int) $h;
         }
 
-        return ' -w '.$this->slide_width.' -h '.$this->slide_height.' -d oogie "'.$this->base_work_dir.'/'.$this->file_path.'"  "'.$this->base_work_dir.$this->created_dir.'.html"';
+        return ' -w '.$this->slide_width.' -h '.$this->slide_height.' -d oogie '
+            .Security::sanitizeExecParam($this->base_work_dir.'/'.$this->file_path)
+            .'  '
+            .Security::sanitizeExecParam($this->base_work_dir.$this->created_dir.'.html');
     }
 
     public function set_slide_size($width, $height)
     {
-        $this->slide_width = $width;
-        $this->slide_height = $height;
+        $this->slide_width = (int) $width;
+        $this->slide_height = (int) $height;
     }
 
     public function add_docs_to_visio($files = [])

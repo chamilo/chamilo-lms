@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CourseBundle\Entity\CToolIntro;
 
 /**
@@ -32,6 +33,7 @@ $em = Database::getManager();
 $intro_editAllowed = $is_allowed_to_edit = api_is_allowed_to_edit();
 $session_id = api_get_session_id();
 $blogParam = isset($_GET['blog_id']) ? ('&blog_id='.(int) $_GET['blog_id']) : '';
+$cidReq = api_get_cidreq();
 
 $introduction_section = '';
 
@@ -46,7 +48,7 @@ if (!empty($courseId)) {
     $form = new FormValidator(
         'introduction_text',
         'post',
-        api_get_self().'?'.api_get_cidreq().$blogParam
+        api_get_self().'?'.$cidReq.$blogParam
     );
 } else {
     $form = new FormValidator('introduction_text');
@@ -176,7 +178,7 @@ $thematic_description_html = '';
 $thematicItemTwo = '';
 
 if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
-    // Only show this if we're on the course homepage and we're not currently editing
+    // Only show this if we're on the course homepage, and we're not currently editing
     $thematic = new Thematic();
     $displayMode = api_get_course_setting('display_info_advance_inside_homecourse');
     $class1 = '';
@@ -207,15 +209,15 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
     if (!empty($thematic_advance_info)) {
         $thematic_advance = get_lang('CourseThematicAdvance');
         $thematicScore = $thematic->get_total_average_of_thematic_advances().'%';
-        $thematicUrl = api_get_path(WEB_CODE_PATH).'course_progress/index.php?action=thematic_details&'.api_get_cidreq();
+        $thematicUrl = api_get_path(WEB_CODE_PATH).'course_progress/index.php?action=thematic_details&'.$cidReq;
 
-        $thematic_advance_info['thematic_id'] = isset($thematic_advance_info['thematic_id']) ? $thematic_advance_info['thematic_id'] : 0;
-        $thematic_advance_info['start_date'] = isset($thematic_advance_info['start_date']) ? $thematic_advance_info['start_date'] : null;
-        $thematic_advance_info['content'] = isset($thematic_advance_info['content']) ? $thematic_advance_info['content'] : '';
-        $thematic_advance_info['duration'] = isset($thematic_advance_info['duration']) ? $thematic_advance_info['duration'] : 0;
+        $thematic_advance_info['thematic_id'] = $thematic_advance_info['thematic_id'] ?? 0;
+        $thematic_advance_info['start_date'] = $thematic_advance_info['start_date'] ?? null;
+        $thematic_advance_info['content'] = $thematic_advance_info['content'] ?? '';
+        $thematic_advance_info['duration'] = $thematic_advance_info['duration'] ?? 0;
 
         $thematic_info = $thematic->get_thematic_list($thematic_advance_info['thematic_id']);
-        $thematic_info['title'] = isset($thematic_info['title']) ? $thematic_info['title'] : '';
+        $thematic_info['title'] = $thematic_info['title'] ?? '';
 
         if (!empty($thematic_advance_info['start_date'])) {
             $thematic_advance_info['start_date'] = api_get_local_time(
@@ -295,7 +297,7 @@ $editIconButton = '';
 if (api_is_allowed_to_edit() && empty($session_id)) {
     $editIconButton = Display::url(
         '<em class="fa fa-wrench"></em> ',
-        api_get_path(WEB_CODE_PATH).'course_info/tools.php?'.api_get_cidreq(),
+        api_get_path(WEB_CODE_PATH).'course_info/tools.php?'.$cidReq,
         ['class' => 'btn btn-default', 'title' => get_lang('CustomizeIcons')]
     );
 }
@@ -309,12 +311,12 @@ if (api_is_allowed_to_edit() && empty($session_id)) {
 $toolbar = '';
 $textIntro = '';
 if ($intro_dispCommand) {
+    $toolbar .= '<div class="toolbar-edit">';
+    $toolbar .= '<div class="btn-group pull-right" role="group">';
     if (empty($intro_content)) {
         // Displays "Add intro" commands
-        $toolbar .= '<div class="toolbar-edit">';
-        $toolbar .= '<div class="btn-group pull-right" role="group">';
         if (!empty($courseId)) {
-            $textIntro = '<a class="btn btn-default" title="'.addslashes(get_lang('AddIntro')).'" href="'.api_get_self().'?'.api_get_cidreq().$blogParam.'&intro_cmdAdd=1">';
+            $textIntro = '<a class="btn btn-default" title="'.addslashes(get_lang('AddIntro')).'" href="'.api_get_self().'?'.$cidReq.$blogParam.'&intro_cmdAdd=1">';
             $textIntro .= '<em class="fa fa-file-text"></em> ';
             $textIntro .= "</a>";
             $toolbar .= $textIntro.$editIconButton.$toolAllShowHide;
@@ -322,36 +324,35 @@ if ($intro_dispCommand) {
             $toolbar .= '<a class="btn btn-default" href="'.api_get_self().'?intro_cmdAdd=1">'.get_lang('AddIntro').'</a>';
             $toolbar .= $editIconButton.$toolAllShowHide;
         }
-        $toolbar .= '</div></div>';
     } else {
         // Displays "edit intro && delete intro" commands
-        $toolbar .= '<div class="toolbar-edit">';
-        $toolbar .= '<div class="btn-group pull-right" rol="group">';
         if (!empty($courseId)) {
             $toolbar .=
-                '<a class="btn btn-default" href="'.api_get_self().'?'.api_get_cidreq().$blogParam.'&intro_cmdEdit=1" title="'.get_lang('Modify').'">
+                '<a class="btn btn-default" href="'.api_get_self().'?'.$cidReq.$blogParam.'&intro_cmdEdit=1" title="'.get_lang('Modify').'">
                 <em class="fa fa-pencil"></em></a>';
             $toolbar .= $editIconButton.$toolAllShowHide;
-            $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".api_get_cidreq().$blogParam."&intro_cmdDel=1\" onclick=\"javascript:
-                if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
-                "')) return false;\"><em class=\"fa fa-trash-o\"></em></a>";
+            $toolbar .= "<a class=\"btn btn-default\"
+                    href=\"".api_get_self()."?".$cidReq.$blogParam."&intro_cmdDel=1\"
+                    onclick=\"if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."')) return false;\"
+                ><em class=\"fa fa-trash-o\"></em></a>";
         } else {
             $toolbar .=
                 '<a class="btn btn-default" href="'.api_get_self().'?intro_cmdEdit=1" title="'.get_lang('Modify').'">
                 <em class="fa fa-pencil"></em>
                 </a>"';
             $toolbar .= $editIconButton.$toolAllShowHide;
-            $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".api_get_cidreq()."&intro_cmdDel=1\" onclick=\"javascript:
-                if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
-                "')) return false;\"><em class=\"fa fa-trash-o\"></em></a>";
+            $toolbar .= "<a class=\"btn btn-default\"
+                    href=\"".api_get_self()."?".$cidReq."&intro_cmdDel=1\"
+                    onclick=\"if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."')) return false;\"
+                ><em class=\"fa fa-trash-o\"></em></a>";
         }
-        $toolbar .= "</div></div>";
         // Fix for chrome XSS filter for videos in iframes - BT#7930
         $browser = api_get_navigator();
         if (strpos($introduction_section, '<iframe') !== false && $browser['name'] == 'Chrome') {
             header('X-XSS-Protection: 0');
         }
     }
+    $toolbar .= '</div></div>';
 }
 
 $nameSection = get_lang('AddCustomCourseIntro');
@@ -363,7 +364,18 @@ if (!api_is_anonymous()) {
     $intro_content = AnnouncementManager::parseContent(api_get_user_id(), $intro_content, api_get_course_id());
 }
 
-$introduction_section .= '<div class="col-md-12">';
+$showSequencesBlock = false;
+
+if (api_get_configuration_value('resource_sequence_show_dependency_in_course_intro' && $tool == TOOL_COURSE_HOMEPAGE)) {
+    $sequenceResourceRepo = $em->getRepository(SequenceResource::class);
+    $sequences = $sequenceResourceRepo->getDependents($course_id, SequenceResource::COURSE_TYPE);
+    $firstSequence = current($sequences);
+
+    $showSequencesBlock = !empty($firstSequence['dependents']);
+}
+
+$introduction_section .= $showSequencesBlock ? '<div class="col-md-10">' : '<div class="col-md-12">';
+
 if ($intro_dispDefault) {
     if (!empty($intro_content)) {
         $introduction_section .= '<div class="page-course">';
@@ -380,7 +392,29 @@ if ($intro_dispDefault) {
 
 $introduction_section .= $toolbar;
 $introduction_section .= '</div>';
-$introduction_section .= '</div>';
+
+if ($showSequencesBlock) {
+    $sequenceUrl = http_build_query(
+        [
+            'a' => 'get_dependents',
+            'id' => $course_id,
+            'type' => SequenceResource::COURSE_TYPE,
+            'sid' => $session_id,
+        ]
+    );
+
+    $introduction_section .= '<div class="col-md-2 text-center" id="resource-sequence">
+            <span class="fa fa-spinner fa-spin fa-fw" aria-hidden="true"></span>
+        </div>
+        <script>
+        $(function () {
+            $(\'#resource-sequence\').load(_p.web_ajax + \'sequence.ajax.php?'.$sequenceUrl.'&'.$cidReq.'\')
+        });
+        </script>
+    ';
+}
+
+$introduction_section .= '</div>'; //div.row
 
 $browser = api_get_navigator();
 

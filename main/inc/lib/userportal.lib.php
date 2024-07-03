@@ -655,7 +655,7 @@ class IndexManager
         }
         if ($category != '') {
             $result .= '<p><a href="'.api_get_self().'">'
-                .Display:: return_icon('back.png', get_lang('BackToHomePage'))
+                .Display::return_icon('back.png', get_lang('BackToHomePage'))
                 .get_lang('BackToHomePage').'</a></p>';
         }
 
@@ -948,6 +948,22 @@ class IndexManager
             ];
         }
 
+        if (api_get_configuration_value('show_all_my_gradebooks_page')) {
+            $items[] = [
+                'icon' => Display::return_icon('gradebook.png', get_lang('GlobalGradebook')),
+                'link' => api_get_path(WEB_CODE_PATH).'gradebook/all_my_gradebooks.php',
+                'title' => get_lang('GlobalGradebook'),
+            ];
+        }
+
+        if (api_get_configuration_value('show_missing_signatures_page') && api_get_configuration_value('enable_sign_attendance_sheet')) {
+            $items[] = [
+                'icon' => Display::return_icon('attendance.png', get_lang('MyMissingSignatures')),
+                'link' => api_get_path(WEB_CODE_PATH).'attendance/my_missing_signatures.php',
+                'title' => get_lang('MyMissingSignatures'),
+            ];
+        }
+
         if (bbb::showGlobalConferenceLink($userInfo)) {
             $bbb = new bbb('', '', true, api_get_user_id());
             $url = $bbb->getListingUrl();
@@ -1096,6 +1112,7 @@ class IndexManager
 
         if ($isHrm) {
             $items[] = [
+                'class' => 'list-followed-user-courses',
                 'link' => api_get_path(WEB_CODE_PATH).'auth/hrm_courses.php',
                 'title' => get_lang('HrmAssignedUsersCourseList'),
             ];
@@ -1112,6 +1129,7 @@ class IndexManager
                 ];
             } else {
                 $items[] = [
+                    'class' => 'dashboard-page',
                     'link' => api_get_path(WEB_CODE_PATH).'dashboard/index.php',
                     'title' => get_lang('Dashboard'),
                 ];
@@ -1120,11 +1138,13 @@ class IndexManager
 
         if (!api_is_anonymous()) {
             $items[] = [
+                'class' => 'last-visited-course',
                 'icon' => Display::return_icon('clock.png', get_lang('LastVisitedCourse')),
                 'link' => api_get_path(WEB_CODE_PATH).'course_home/last_course.php',
                 'title' => get_lang('LastVisitedCourse'),
             ];
             $items[] = [
+                'class' => 'last-visited-lp',
                 'icon' => Display::return_icon('learnpath.png', get_lang('LastVisitedLp')),
                 'link' => api_get_path(WEB_CODE_PATH).'course_home/last_lp.php',
                 'title' => get_lang('LastVisitedLp'),
@@ -1134,6 +1154,7 @@ class IndexManager
         if (api_is_teacher()) {
             if (api_get_configuration_value('my_courses_show_pending_work')) {
                 $items[] = [
+                    'class' => 'list-pending-student-assignments',
                     'icon' => Display::return_icon('work.png', get_lang('StudentPublicationToCorrect')),
                     'link' => api_get_path(WEB_CODE_PATH).'work/pending.php',
                     'title' => get_lang('StudentPublicationToCorrect'),
@@ -1142,6 +1163,7 @@ class IndexManager
 
             if (api_get_configuration_value('my_courses_show_pending_exercise_attempts')) {
                 $items[] = [
+                    'class' => 'list-pending-exercise-attempts',
                     'icon' => Display::return_icon('quiz.png', get_lang('PendingAttempts')),
                     'link' => api_get_path(WEB_CODE_PATH).'exercise/pending.php',
                     'title' => get_lang('PendingAttempts'),
@@ -2019,8 +2041,9 @@ class IndexManager
                                 $params['category_id'] = $session_box['category_id'];
                                 $params['title'] = $session_box['title'];
                                 $params['id_coach'] = $coachId;
+                                $userIdHash = UserManager::generateUserHash($coachId);
                                 $params['coach_url'] = api_get_path(WEB_AJAX_PATH).
-                                    'user_manager.ajax.php?a=get_user_popup&user_id='.$coachId;
+                                    'user_manager.ajax.php?a=get_user_popup&hash='.$userIdHash;
                                 $params['coach_name'] = !empty($session_box['coach']) ? $session_box['coach'] : null;
                                 $params['coach_avatar'] = UserManager::getUserPicture(
                                     $coachId,

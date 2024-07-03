@@ -75,7 +75,18 @@ if (isset($_GET['action'])) {
             break;
         case 'export_all':
             $data = GroupManager::exportCategoriesAndGroupsToArray(null, true);
-            Export::arrayToCsv($data);
+            switch ($_GET['type']) {
+                case 'csv':
+                    Export::arrayToCsv($data);
+                    exit;
+                    break;
+                case 'xls':
+                    if (!empty($data)) {
+                        Export::arrayToXls($data);
+                        exit;
+                    }
+                    break;
+            }
             exit;
             break;
         case 'export_pdf':
@@ -101,6 +112,11 @@ if (isset($_GET['action'])) {
                     }
                     break;
             }
+            break;
+        case 'export_users':
+            $data = GroupManager::exportStudentsToArray($groupId, true);
+            Export::arrayToCsv($data);
+            exit;
             break;
     }
 }

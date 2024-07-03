@@ -35,7 +35,8 @@ $tool = TOOL_NOTEBOOK;
 // Tracking
 Event::event_access_tool(TOOL_NOTEBOOK);
 
-$action = isset($_GET['action']) ? $_GET['action'] : '';
+$currentUserId = api_get_user_id();
+$action = $_GET['action'] ?? '';
 
 $logInfo = [
     'tool' => TOOL_NOTEBOOK,
@@ -89,6 +90,7 @@ if ($action === 'addnote') {
     // Setting the form elements
     $form->addElement('header', '', get_lang('NoteAddNew'));
     $form->addElement('text', 'note_title', get_lang('NoteTitle'), ['id' => 'note_title']);
+    $form->applyFilter('text', 'html_filter');
     $form->addElement(
         'html_editor',
         'note_comment',
@@ -136,6 +138,15 @@ if ($action === 'addnote') {
         exit;
     }
 
+    // Setting the defaults
+    $defaults = NotebookManager::get_note_information((int) $_GET['notebook_id']);
+
+    if ($currentUserId !== (int) $defaults['user_id']) {
+        echo Display::return_message(get_lang('NotAllowed'), 'error');
+        Display::display_footer();
+        exit();
+    }
+
     // Initialize the object
     $form = new FormValidator(
         'note',
@@ -146,6 +157,7 @@ if ($action === 'addnote') {
     $form->addElement('header', '', get_lang('ModifyNote'));
     $form->addElement('hidden', 'notebook_id');
     $form->addElement('text', 'note_title', get_lang('NoteTitle'), ['size' => '100']);
+    $form->applyFilter('text', 'html_filter');
     $form->addElement(
         'html_editor',
         'note_comment',
@@ -157,8 +169,6 @@ if ($action === 'addnote') {
     );
     $form->addButtonUpdate(get_lang('ModifyNote'), 'SubmitNote');
 
-    // Setting the defaults
-    $defaults = NotebookManager::get_note_information(Security::remove_XSS($_GET['notebook_id']));
     $form->setDefaults($defaults);
 
     // Setting the rules

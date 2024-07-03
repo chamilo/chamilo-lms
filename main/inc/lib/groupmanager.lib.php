@@ -17,45 +17,45 @@ class GroupManager
     /* DEFAULT_GROUP_CATEGORY:
     When group categories aren't available (platform-setting),
     all groups are created in this 'dummy'-category*/
-    const DEFAULT_GROUP_CATEGORY = 2;
+    public const DEFAULT_GROUP_CATEGORY = 2;
 
     /**
      * infinite.
      */
-    const INFINITE = 99999;
+    public const INFINITE = 99999;
     /**
      * No limit on the number of users in a group.
      */
-    const MEMBER_PER_GROUP_NO_LIMIT = 0;
+    public const MEMBER_PER_GROUP_NO_LIMIT = 0;
     /**
      * No limit on the number of groups per user.
      */
-    const GROUP_PER_MEMBER_NO_LIMIT = 0;
+    public const GROUP_PER_MEMBER_NO_LIMIT = 0;
     /**
      * The tools of a group can have 3 states
      * - not available
      * - public
      * - private.
      */
-    const TOOL_NOT_AVAILABLE = 0;
-    const TOOL_PUBLIC = 1;
-    const TOOL_PRIVATE = 2;
-    const TOOL_PRIVATE_BETWEEN_USERS = 3;
+    public const TOOL_NOT_AVAILABLE = 0;
+    public const TOOL_PUBLIC = 1;
+    public const TOOL_PRIVATE = 2;
+    public const TOOL_PRIVATE_BETWEEN_USERS = 3;
 
     /**
      * Constants for the available group tools.
      */
-    const GROUP_TOOL_FORUM = 0;
-    const GROUP_TOOL_DOCUMENTS = 1;
-    const GROUP_TOOL_CALENDAR = 2;
-    const GROUP_TOOL_ANNOUNCEMENT = 3;
-    const GROUP_TOOL_WORK = 4;
-    const GROUP_TOOL_WIKI = 5;
-    const GROUP_TOOL_CHAT = 6;
+    public const GROUP_TOOL_FORUM = 0;
+    public const GROUP_TOOL_DOCUMENTS = 1;
+    public const GROUP_TOOL_CALENDAR = 2;
+    public const GROUP_TOOL_ANNOUNCEMENT = 3;
+    public const GROUP_TOOL_WORK = 4;
+    public const GROUP_TOOL_WIKI = 5;
+    public const GROUP_TOOL_CHAT = 6;
 
-    const DOCUMENT_MODE_SHARE = 0; // By default
-    const DOCUMENT_MODE_READ_ONLY = 1;
-    const DOCUMENT_MODE_COLLABORATION = 2;
+    public const DOCUMENT_MODE_SHARE = 0; // By default
+    public const DOCUMENT_MODE_READ_ONLY = 1;
+    public const DOCUMENT_MODE_COLLABORATION = 2;
 
     /**
      * GroupManager constructor.
@@ -499,7 +499,7 @@ class GroupManager
             // to_group_id is related to c_group_info.iid
             $itemPropertyTable = Database::get_course_table(TABLE_ITEM_PROPERTY);
             $sql = "DELETE FROM $itemPropertyTable
-                    WHERE c_id = $course_id AND to_group_id = $groupIid ";
+                    WHERE to_group_id = $groupIid ";
             Database::query($sql);
 
             // delete the groups
@@ -2447,7 +2447,10 @@ class GroupManager
                     Display::return_icon('user.png', get_lang('GroupMembers'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
 
                 $edit_actions .= '<a href="'.$url.'group_overview.php?action=export&type=xls&'.api_get_cidreq(true, false).'&id='.$this_group['id'].'" title="'.get_lang('ExportUsers').'">'.
-                    Display::return_icon('export_excel.png', get_lang('Export'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                    Display::return_icon('export_group_excel.png', get_lang('Export'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+
+                $edit_actions .= '<a href="'.$url.'group_overview.php?action=export_users&'.api_get_cidreq(true, false).'&id='.$this_group['id'].'" title="'.get_lang('ExportUsers').'">'.
+                    Display::return_icon('export_users_csv.png', get_lang('ExportUsers'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
 
                 if ($surveyGroupExists) {
                     $edit_actions .= Display::url(
@@ -2756,6 +2759,40 @@ class GroupManager
     }
 
     /**
+     * Export all students from a group to an array.
+     * This function works only in a context of a course.
+     *
+     * @param int $groupId
+     *
+     * @return array
+     */
+    public static function exportStudentsToArray($groupId = null)
+    {
+        if (empty($groupId)) {
+            return false;
+        }
+        $data = [];
+        $data[] = [
+            'OfficialCode',
+            'Lastname',
+            'Firsname',
+            'Email',
+        ];
+        $users = self::getStudents($groupId);
+        $count = 1;
+        foreach ($users as $user) {
+            $user = api_get_user_info($user['user_id']);
+            $data[$count][] = $user['official_code'];
+            $data[$count][] = $user['lastname'];
+            $data[$count][] = $user['firstname'];
+            $data[$count][] = $user['email'];
+            $count++;
+        }
+
+        return $data;
+    }
+
+    /**
      * Export all categories/group from a course to an array.
      * This function works only in a context of a course.
      *
@@ -2789,6 +2826,7 @@ class GroupManager
         if ($loadUsers) {
             $data[0][] = 'students';
             $data[0][] = 'tutors';
+            $data[0][] = 'emails';
         }
 
         if (false == $loadUsers) {
@@ -2827,9 +2865,11 @@ class GroupManager
 
             $users = self::getStudents($groupInfo['iid']);
             $userList = [];
+            $emailList = [];
             foreach ($users as $user) {
                 $user = api_get_user_info($user['user_id']);
                 $userList[] = $user['username'];
+                $emailList[] = $user['email'];
             }
 
             $tutors = self::getTutors($groupInfo);
@@ -2837,6 +2877,7 @@ class GroupManager
             foreach ($tutors as $user) {
                 $user = api_get_user_info($user['user_id']);
                 $tutorList[] = $user['username'];
+                $emailList[] = $user['email'];
             }
 
             $userListToString = null;
@@ -2869,6 +2910,9 @@ class GroupManager
             if ($loadUsers) {
                 $data[$count][] = $userListToString;
                 $data[$count][] = $tutorListToString;
+                if (!empty($emailList)) {
+                    $data[$count][] = implode(',', $emailList);
+                }
             }
 
             if (!empty($groupId)) {

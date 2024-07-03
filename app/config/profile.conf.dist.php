@@ -8,7 +8,7 @@
  */
 
 // Autentication, password
-define('CHECK_PASS_EASY_TO_FIND', false);
+define('CHECK_PASS_EASY_TO_FIND', true);
 
 $profileIsEditable = true;
 

@@ -70,6 +70,7 @@ class Positioning extends Plugin
     public function getPositionData($exerciseId, $courseId, $sessionId)
     {
         $table = $this->table;
+        $exerciseId = (int) $exerciseId;
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
 
@@ -83,6 +84,18 @@ class Positioning extends Plugin
 
         if (Database::num_rows($result) > 0) {
             return Database::fetch_array($result, 'ASSOC');
+        } elseif (0 !== $sessionId) {
+            // if no exercise was set in the session, also look for it in the base course
+            $sql = "SELECT * FROM $table
+                WHERE
+                    exercise_id = $exerciseId AND
+                    c_id = $courseId AND
+                    session_id = 0
+                    ";
+            $result = Database::query($sql);
+            if (Database::num_rows($result) > 0) {
+                return Database::fetch_array($result, 'ASSOC');
+            }
         }
 
         return false;
@@ -212,23 +225,33 @@ class Positioning extends Plugin
                     c_id = $courseId AND
                     session_id = $sessionId
                     ";
+        $sqlEnd = '';
 
         if ($isInitial) {
-            $sql .= ' AND is_initial = 1 ';
+            $sqlEnd .= ' AND is_initial = 1 ';
         } else {
-            $sql .= ' AND is_initial = 0 ';
+            $sqlEnd .= ' AND is_initial = 0 ';
         }
 
         if ($isFinal) {
-            $sql .= ' AND is_final = 1 ';
+            $sqlEnd .= ' AND is_final = 1 ';
         } else {
-            $sql .= ' AND is_final = 0 ';
+            $sqlEnd .= ' AND is_final = 0 ';
         }
-
-        $result = Database::query($sql);
+        $result = Database::query($sql.$sqlEnd);
 
         if (Database::num_rows($result) > 0) {
             return Database::fetch_array($result, 'ASSOC');
+        } elseif (0 !== $sessionId) {
+            $sql = "SELECT * FROM $table
+                WHERE
+                    c_id = $courseId AND
+                    session_id = 0
+                    ";
+            $result = Database::query($sql.$sqlEnd);
+            if (Database::num_rows($result) > 0) {
+                return Database::fetch_array($result, 'ASSOC');
+            }
         }
 
         return false;

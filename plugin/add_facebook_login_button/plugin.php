@@ -1,21 +1,18 @@
 <?php
 /**
- * This script is a configuration file for the date plugin. You can use it as a master for other platform plugins (course plugins are slightly different).
- * These settings will be used in the administration interface for plugins (Chamilo configuration settings->Plugins).
- *
- * @package chamilo.plugin
+ * @package chamilo.plugin.add_facebook_login_button
  *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 /**
- * Plugin details (must be present).
+ * Plugin details.
  */
 
 //the plugin title
-$plugin_info['title'] = 'Add a button to login using FACEBOOK account';
+$plugin_info['title'] = 'Add a button to login using a FACEBOOK account';
 
 //the comments that go with the plugin
-$plugin_info['comment'] = "If Facebook authntification is activated, this plugin add a button Facebook Connexion on the login page. Configure plugin to add title, comment and logo. Should be place in login_top region";
+$plugin_info['comment'] = "If Facebook authentication is enabled, this plugin adds a button Facebook Connexion on the login page. Configure the plugin to add a title, a comment and a logo. Should be placed in login_top region";
 //the plugin version
 $plugin_info['version'] = '1.0';
 //the plugin author

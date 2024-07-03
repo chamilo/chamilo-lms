@@ -26,7 +26,7 @@ class ChamiloPens extends Plugin
     /**
      * Database table to be used.
      */
-    const TABLE_NAME = "plugin_pens";
+    public const TABLE_NAME = "plugin_pens";
 
     /**
      * Id of the object.

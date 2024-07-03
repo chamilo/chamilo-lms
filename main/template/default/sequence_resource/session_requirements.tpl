@@ -1,9 +1,19 @@
-<h2 class="page-header">{{ 'RequiredSessions'|get_lang }}</h2>
+{% if 'requirements' == item_type %}
+    <h3>{{ 'RequiredCourses'|get_lang }}</h3>
+{% else %}
+    <h3>{{ 'Dependencies'|get_lang }}</h3>
+{% endif %}
 
 {% for item in sequences %}
+    {% if 'requirements' == item_type %}
+        {% set sessions = item.requirements %}
+    {% else %}
+        {% set sessions = item.dependents %}
+    {% endif %}
+
     <h4>{{ item.name }}</h4>
     <div id="parents">
-        {% for session in item.requirements %}
+        {% for session in sessions %}
             <div class="parent">
                 <div class="big-icon">
                     <img src="{{ 'item-sequence.png'|icon(48) }}" width="48" height="48">
@@ -21,7 +31,7 @@
                 </div>
             </div>
 
-            {% if loop.index != item.requirements|length %}
+            {% if loop.index != sessions|length %}
                 <em class="fa fa-plus fa-3x sequence-plus-icon"></em>
             {% endif %}
         {% endfor %}

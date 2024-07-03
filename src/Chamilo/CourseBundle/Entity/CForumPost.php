@@ -22,9 +22,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CForumPost
 {
-    const STATUS_VALIDATED = 1;
-    const STATUS_WAITING_MODERATION = 2;
-    const STATUS_REJECTED = 3;
+    public const STATUS_VALIDATED = 1;
+    public const STATUS_WAITING_MODERATION = 2;
+    public const STATUS_REJECTED = 3;
 
     /**
      * @var int

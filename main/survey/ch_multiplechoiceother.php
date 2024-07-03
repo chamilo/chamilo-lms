@@ -73,6 +73,20 @@ class ch_multiplechoiceother extends survey_question
             }
         }
         $questionId = $questionData['question_id'];
+
+        $display = 'display:none';
+        $defaultOtherData = '';
+
+        if (!empty($answers)) {
+            $answers = self::decodeOptionValue($answers);
+            if (isset($answers[1])) {
+                $display = '';
+                $defaultOtherData = $answers[1];
+            }
+
+            $answers = $answers[0];
+        }
+
         $question->render($form, $questionData, $answers);
         $form->addHtml(
             '<script>
@@ -89,15 +103,6 @@ class ch_multiplechoiceother extends survey_question
             </script>'
         );
 
-        $display = 'display:none';
-        $defaultOtherData = '';
-        if (!empty($answers)) {
-            $answers = self::decodeOptionValue($answers);
-            if (isset($answers[1])) {
-                $display = '';
-                $defaultOtherData = $answers[1];
-            }
-        }
         $form->addHtml('<div id="other_div_'.$questionId.'" class="multiple_choice_other" style="'.$display.'">');
         $element = $form->addText(
             'other_question'.$questionId,

@@ -11,12 +11,18 @@ require_once '../config.php';
 $plugin = BuyCoursesPlugin::create();
 
 $saleId = $_SESSION['bc_sale_id'];
+$couponId = (!empty($_SESSION['bc_coupon_id']) ?? '');
 
 if (empty($saleId)) {
     api_not_allowed(true);
 }
 
 $sale = $plugin->getSale($saleId);
+
+$coupon = [];
+if (!empty($couponId)) {
+    $coupon = $plugin->getCoupon($couponId, $sale['product_type'], $sale['product_id']);
+}
 
 $userInfo = api_get_user_info($sale['user_id']);
 
@@ -95,11 +101,11 @@ switch ($sale['payment_type']) {
         switch ($sale['product_type']) {
             case BuyCoursesPlugin::PRODUCT_TYPE_COURSE:
                 $buyingCourse = true;
-                $course = $plugin->getCourseInfo($sale['product_id']);
+                $course = $plugin->getCourseInfo($sale['product_id'], $coupon);
                 break;
             case BuyCoursesPlugin::PRODUCT_TYPE_SESSION:
                 $buyingSession = true;
-                $session = $plugin->getSessionInfo($sale['product_id']);
+                $session = $plugin->getSessionInfo($sale['product_id'], $coupon);
                 break;
         }
 
@@ -122,6 +128,7 @@ switch ($sale['payment_type']) {
                 $plugin->cancelSale($sale['id']);
 
                 unset($_SESSION['bc_sale_id']);
+                unset($_SESSION['bc_coupon_id']);
 
                 header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/index.php');
                 exit;
@@ -182,6 +189,7 @@ switch ($sale['payment_type']) {
             );
 
             unset($_SESSION['bc_sale_id']);
+            unset($_SESSION['bc_coupon_id']);
             header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/course_catalog.php');
             exit;
         }
@@ -232,11 +240,11 @@ switch ($sale['payment_type']) {
         switch ($sale['product_type']) {
             case BuyCoursesPlugin::PRODUCT_TYPE_COURSE:
                 $buyingCourse = true;
-                $course = $plugin->getCourseInfo($sale['product_id']);
+                $course = $plugin->getCourseInfo($sale['product_id'], $coupon);
                 break;
             case BuyCoursesPlugin::PRODUCT_TYPE_SESSION:
                 $buyingSession = true;
-                $session = $plugin->getSessionInfo($sale['product_id']);
+                $session = $plugin->getSessionInfo($sale['product_id'], $coupon);
                 break;
         }
 
@@ -256,6 +264,7 @@ switch ($sale['payment_type']) {
                 $plugin->cancelSale($sale['id']);
 
                 unset($_SESSION['bc_sale_id']);
+                unset($_SESSION['bc_coupon_id']);
 
                 Display::addFlash(
                     Display::return_message(
@@ -362,6 +371,227 @@ switch ($sale['payment_type']) {
         echo '<SCRIPT language=javascript>';
         echo 'document.tpv_chamilo.submit();';
         echo '</script>';
+
+        break;
+    case BuyCoursesPlugin::PAYMENT_TYPE_STRIPE:
+        $buyingCourse = false;
+        $buyingSession = false;
+
+        switch ($sale['product_type']) {
+            case BuyCoursesPlugin::PRODUCT_TYPE_COURSE:
+                $buyingCourse = true;
+                $course = $plugin->getCourseInfo($sale['product_id'], $coupon);
+                break;
+            case BuyCoursesPlugin::PRODUCT_TYPE_SESSION:
+                $buyingSession = true;
+                $session = $plugin->getSessionInfo($sale['product_id'], $coupon);
+                break;
+        }
+
+        $form = new FormValidator(
+            'success',
+            'POST',
+            api_get_self(),
+            null,
+            null,
+            FormValidator::LAYOUT_INLINE
+        );
+
+        if ($form->validate()) {
+            $formValues = $form->getSubmitValues();
+
+            if (isset($formValues['cancel'])) {
+                $plugin->cancelSale($sale['id']);
+
+                unset($_SESSION['bc_sale_id']);
+                unset($_SESSION['bc_coupon_id']);
+
+                header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/index.php');
+                exit;
+            }
+
+            $stripeParams = $plugin->getStripeParams();
+            $currency = $plugin->getCurrency($sale['currency_id']);
+
+            \Stripe\Stripe::setApiKey($stripeParams['secret_key']);
+            \Stripe\Stripe::setAppInfo("ChamiloBuyCoursesPlugin");
+
+            $session = \Stripe\Checkout\Session::create([
+                'payment_method_types' => ['card'],
+                'line_items' => [[
+                    'price_data' => [
+                        'unit_amount_decimal' => $sale['price'] * 100,
+                        'currency' => $currency['iso_code'],
+                        'product_data' => [
+                            'name' => $sale['product_name'],
+                        ],
+                    ],
+                    'quantity' => 1,
+                ]],
+                'customer_email' => $_SESSION['_user']['email'],
+                'mode' => 'payment',
+                'success_url' => api_get_path(WEB_PLUGIN_PATH).'buycourses/src/stripe_success.php',
+                'cancel_url' => api_get_path(WEB_PLUGIN_PATH).'buycourses/src/stripe_cancel.php',
+            ]);
+
+            if (!empty($session)) {
+                $plugin->updateSaleReference($saleId, $session->id);
+
+                unset($_SESSION['bc_coupon_id']);
+
+                header('HTTP/1.1 301 Moved Permanently');
+                header('Location: '.$session->url);
+            } else {
+                Display::addFlash(
+                    Display::return_message(
+                        $plugin->get_lang('ErrorOccurred'),
+                         'error',
+                         false
+                        )
+                );
+                header('Location: ../index.php');
+            }
+
+            exit;
+        }
+
+        $form->addButton(
+            'confirm',
+            $plugin->get_lang('ConfirmOrder'),
+            'check',
+            'success',
+            'default',
+            null,
+            ['id' => 'confirm']
+        );
+        $form->addButtonCancel($plugin->get_lang('CancelOrder'), 'cancel');
+
+        $template = new Template();
+
+        if ($buyingCourse) {
+            $template->assign('course', $course);
+        } elseif ($buyingSession) {
+            $template->assign('session', $session);
+        }
+
+        $template->assign('buying_course', $buyingCourse);
+        $template->assign('buying_session', $buyingSession);
+        $template->assign('terms', $globalParameters['terms_and_conditions']);
+        $template->assign('title', $sale['product_name']);
+        $template->assign('price', $sale['price']);
+        $template->assign('currency', $sale['currency_id']);
+        $template->assign('user', $userInfo);
+        $template->assign('transfer_accounts', $transferAccounts);
+        $template->assign('form', $form->returnForm());
+        $template->assign('is_bank_transfer', false);
+
+        $content = $template->fetch('buycourses/view/process_confirm.tpl');
+
+        $template->assign('content', $content);
+        $template->display_one_col_template();
+
+        break;
+
+    case BuyCoursesPlugin::PAYMENT_TYPE_TPV_CECABANK:
+        $buyingCourse = false;
+        $buyingSession = false;
+
+        switch ($sale['product_type']) {
+            case BuyCoursesPlugin::PRODUCT_TYPE_COURSE:
+                $buyingCourse = true;
+                $course = $plugin->getCourseInfo($sale['product_id']);
+                break;
+            case BuyCoursesPlugin::PRODUCT_TYPE_SESSION:
+                $buyingSession = true;
+                $session = $plugin->getSessionInfo($sale['product_id']);
+                break;
+        }
+
+        $cecabankParams = $plugin->getcecabankParams();
+        $currency = $plugin->getCurrency($sale['currency_id']);
+
+        $form = new FormValidator(
+            'success',
+            'POST',
+            api_get_self(),
+            null,
+            null,
+            FormValidator::LAYOUT_INLINE
+        );
+
+        if ($form->validate()) {
+            $formValues = $form->getSubmitValues();
+
+            if (isset($formValues['cancel'])) {
+                $plugin->cancelSale($sale['id']);
+
+                unset($_SESSION['bc_sale_id']);
+                unset($_SESSION['bc_coupon_id']);
+
+                header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/index.php');
+                exit;
+            }
+
+            $urlTpv = $cecabankParams['url'];
+            $currency = $plugin->getCurrency($sale['currency_id']);
+            $signature = $plugin->getCecabankSignature($sale['reference'], $sale['price']);
+
+            echo '<form name="tpv_chamilo" action="'.$urlTpv.'" method="POST">';
+            echo '<input type="hidden" name="MerchantID" value="'.$cecabankParams['merchant_id'].'" />';
+            echo '<input type="hidden" name="AcquirerBIN" value="'.$cecabankParams['acquirer_bin'].'" />';
+            echo '<input type="hidden" name="TerminalID" value="'.$cecabankParams['terminal_id'].'" />';
+            echo '<input type="hidden" name="URL_OK" value="'.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/cecabank_success.php'.'" />';
+            echo '<input type="hidden" name="URL_NOK" value="'.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/cecabank_cancel.php'.'" />';
+            echo '<input type="hidden" name="Firma" value="'.$signature.'" />';
+            echo '<input type="hidden" name="Cifrado" value="'.$cecabankParams['cypher'].'" />';
+            echo '<input type="hidden" name="Num_operacion" value="'.$sale['reference'].'" />';
+            echo '<input type="hidden" name="Importe" value="'.($sale['price'] * 100).'" />';
+            echo '<input type="hidden" name="TipoMoneda" value="978" />';
+            echo '<input type="hidden" name="Exponente" value="'.$cecabankParams['exponent'].'" />';
+            echo '<input type="hidden" name="Pago_soportado" value="'.$cecabankParams['supported_payment'].'" />';
+            echo '</form>';
+
+            echo '<SCRIPT language=javascript>';
+            echo 'document.tpv_chamilo.submit();';
+            echo '</script>';
+
+            exit;
+        }
+
+        $form->addButton(
+            'confirm',
+            $plugin->get_lang('ConfirmOrder'),
+            'check',
+            'success',
+            'default',
+            null,
+            ['id' => 'confirm']
+        );
+        $form->addButtonCancel($plugin->get_lang('CancelOrder'), 'cancel');
+
+        $template = new Template();
+
+        if ($buyingCourse) {
+            $template->assign('course', $course);
+        } elseif ($buyingSession) {
+            $template->assign('session', $session);
+        }
+
+        $template->assign('buying_course', $buyingCourse);
+        $template->assign('buying_session', $buyingSession);
+        $template->assign('terms', $globalParameters['terms_and_conditions']);
+        $template->assign('title', $sale['product_name']);
+        $template->assign('price', $sale['price']);
+        $template->assign('currency', $sale['currency_id']);
+        $template->assign('user', $userInfo);
+        $template->assign('transfer_accounts', $transferAccounts);
+        $template->assign('form', $form->returnForm());
+        $template->assign('is_bank_transfer', false);
+
+        $content = $template->fetch('buycourses/view/process_confirm.tpl');
+
+        $template->assign('content', $content);
+        $template->display_one_col_template();
 
         break;
 }

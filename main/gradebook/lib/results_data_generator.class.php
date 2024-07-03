@@ -11,13 +11,13 @@
 class ResultsDataGenerator
 {
     // Sorting types constants
-    const RDG_SORT_LASTNAME = 1;
-    const RDG_SORT_FIRSTNAME = 2;
-    const RDG_SORT_SCORE = 4;
-    const RDG_SORT_MASK = 8;
+    public const RDG_SORT_LASTNAME = 1;
+    public const RDG_SORT_FIRSTNAME = 2;
+    public const RDG_SORT_SCORE = 4;
+    public const RDG_SORT_MASK = 8;
 
-    const RDG_SORT_ASC = 16;
-    const RDG_SORT_DESC = 32;
+    public const RDG_SORT_ASC = 16;
+    public const RDG_SORT_DESC = 32;
     private $evaluation;
     private $results;
     private $is_course_ind;

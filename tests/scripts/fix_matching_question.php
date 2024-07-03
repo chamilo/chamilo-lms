@@ -28,7 +28,7 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
         $exercise = new Exercise($courseId);
         $exercise->read($exerciseItem['iid']);
 
-        echo '    iid:'.$exercise->iId.' id:'.$exercise->id.'- '.$exercise->title.PHP_EOL;
+        echo '    iid:'.$exercise->iid.' id:'.$exercise->id.'- '.$exercise->title.PHP_EOL;
         $questionList = $exercise->getQuestionList();
         foreach ($questionList as $questionId) {
             $sql = "SELECT * FROM c_quiz_question WHERE type = 4 AND id = $questionId ";

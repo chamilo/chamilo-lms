@@ -132,12 +132,12 @@ class ThematicController
                             continue;
                         }
 
-                        switch ($item[0]) {
+                        switch ($item['type']) {
                             case 'title':
                                 $thematic->set_thematic_attributes(
                                     null,
-                                    $item[1],
-                                    $item[2],
+                                    $item['data1'],
+                                    $item['data2'],
                                     api_get_session_id()
                                 );
                                 $current_thematic = $thematic->thematic_save();
@@ -146,8 +146,8 @@ class ThematicController
                             case 'plan':
                                 $thematic->set_thematic_plan_attributes(
                                     $current_thematic,
-                                    $item[1],
-                                    $item[2],
+                                    $item['data1'],
+                                    $item['data2'],
                                     $description_type
                                 );
                                 $thematic->thematic_plan_save();
@@ -158,9 +158,9 @@ class ThematicController
                                     null,
                                     $current_thematic,
                                     0,
-                                    $item[3],
-                                    $item[1],
-                                    $item[2]
+                                    $item['data3'],
+                                    $item['data1'],
+                                    $item['data2']
                                 );
                                 $thematic->thematic_advance_save();
                                 break;
@@ -210,6 +210,10 @@ class ThematicController
                     $pdfOrientation = api_get_configuration_value('thematic_pdf_orientation');
 
                     $list = $thematic->get_thematic_list();
+                    if ($list === false) {
+                        header('Location: '.api_get_self().'?'.api_get_cidreq());
+                        exit;
+                    }
                     $item = [];
                     $listFinish = [];
                     foreach ($list as $theme) {

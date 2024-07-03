@@ -29,7 +29,7 @@ class IntroductionSection extends Basic
         }
 
         $config['extraPlugins'] = $this->getPluginsToString();
-        $config['fullPage'] = true;
+        $config['fullPage'] = false;
 
         return $config;
     }

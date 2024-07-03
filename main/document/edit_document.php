@@ -272,7 +272,8 @@ if (isset($_POST['comment'])) {
 /* WYSIWYG HTML EDITOR - Program Logic */
 if ($is_allowed_to_edit) {
     if (isset($_POST['formSent']) && $_POST['formSent'] == 1 && !empty($document_id)) {
-        $content = isset($_POST['content']) ? trim(str_replace(["\r", "\n"], '', stripslashes($_POST['content']))) : null;
+        //$content = isset($_POST['content']) ? trim(str_replace(["\r", "\n"], '', stripslashes($_POST['content']))) : null;
+        $content = isset($_POST['content']) ? trim(stripslashes($_POST['content'])) : null;
         $content = Security::remove_XSS($content, COURSEMANAGERLOWSECURITY);
         if ($dir == '/') {
             $dir = '';
@@ -333,6 +334,12 @@ if ($is_allowed_to_edit) {
             }
         }
 
+        // It saves extra fields values
+        $extraFieldValue = new ExtraFieldValue('document');
+        $values = $_REQUEST;
+        $values['item_id'] = $document_id;
+        $extraFieldValue->saveFieldValues($values);
+
         $url = 'document.php?id='.$document_data['parent_id'].'&'.api_get_cidreq().($is_certificate_mode ? '&curdirpath=/certificates&selectcat=1' : '');
 
         $redirectToEditPage = isset($_POST['button_ck']) && 1 === (int) $_POST['button_ck'];
@@ -374,7 +381,7 @@ $groupInfo = GroupManager::get_group_properties(api_get_group_id());
 
 if ($owner_id == api_get_user_id() ||
     api_is_platform_admin() ||
-    $is_allowed_to_edit || GroupManager:: is_user_in_group(
+    $is_allowed_to_edit || GroupManager::is_user_in_group(
         api_get_user_id(),
         $groupInfo
     )
@@ -457,6 +464,19 @@ if ($owner_id == api_get_user_id() ||
     } else {
         $form->addElement('textarea', 'comment', get_lang('Comment'), ['cols-size' => [2, 10, 0]]);
     }
+
+    $itemId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+    $extraField = new ExtraField('document');
+    $extraField->addElements(
+        $form,
+        $itemId,
+        [], //exclude
+        false, // filter
+        false, // tag as select
+        [], //show only fields
+        [], // order fields
+        [] // extra data
+    );
 
     if ($file_type != 'link') {
         if ($owner_id == api_get_user_id() || api_is_platform_admin()) {

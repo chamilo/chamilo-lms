@@ -24,7 +24,10 @@ $name = api_get_plugin_setting('lti_provider', 'name');
 $launchUrl = api_get_plugin_setting('lti_provider', 'launch_url');
 $loginUrl = api_get_plugin_setting('lti_provider', 'login_url');
 $redirectUrl = api_get_plugin_setting('lti_provider', 'redirect_url');
-$publicKey = $plugin->getPublicKey();
+$jwksUrl = api_get_plugin_setting('lti_provider', 'jwks_url');
+if (empty($jwksUrl)) {
+    $jwksUrl = api_get_path(WEB_PLUGIN_PATH).LtiProviderPlugin::JWKS_URL;
+}
 
 try {
     if ($enabled !== 'true') {
@@ -32,10 +35,6 @@ try {
     }
 
     $html = '<div class="row">'
-        .'<div class="col-xs-2 text-right"><strong>'.$plugin->get_lang('Name').'</strong></div>'
-        .'<div class="col-xs-10">'.$name.'</div>'
-        .'</div>'
-        .'<div class="row">'
         .'<div class="col-xs-2 text-right"><strong>'.$plugin->get_lang('LaunchUrl').'</strong></div>'
         .'<div class="col-xs-10">'.$launchUrl.'</div>'
         .'</div>'
@@ -48,8 +47,8 @@ try {
         .'<div class="col-xs-10">'.$redirectUrl.'</div>'
         .'</div>'
         .'<div class="row">'
-        .'<div class="col-xs-2 text-right"><strong>'.$plugin->get_lang('PublicKey').'</strong></div>'
-        .'<div class="col-xs-10"><pre>'.$publicKey.'</pre></div>'
+        .'<div class="col-xs-2 text-right"><strong>'.$plugin->get_lang('KeySetUrlJwks').'</strong></div>'
+        .'<div class="col-xs-10">'.$jwksUrl.'</div>'
         .'</div>';
 
     $response->setContent($html);

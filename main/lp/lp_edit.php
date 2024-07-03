@@ -285,7 +285,24 @@ if ($form->hasElement('extra_authors')) {
     $author->setOptions($options);
 }
 
-$skillList = Skill::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, $lpId);
+Skill::addSkillsToForm($form, api_get_course_int_id(), api_get_session_id(), ITEM_TYPE_LEARNPATH, $lpId);
+
+// select the next lp
+if (true === api_get_configuration_value('lp_enable_flow')) {
+    $nextLpsOptions = learnpath::getNextLpsAvailable(api_get_course_int_id(), $lpId);
+    $nextLpId = learnpath::getFlowNextLpId($lpId, api_get_course_int_id());
+    if (!empty($nextLpId)) {
+        $nextLpsOptions[$nextLpId] = learnPath::getLpNameById($nextLpId);
+    }
+    if (!empty($nextLpsOptions)) {
+        $form->addSelect(
+            'next_lp_id',
+            get_lang('SelectTheNextLp'),
+            $nextLpsOptions
+        );
+        $defaults['next_lp_id'] = $nextLpId;
+    }
+}
 
 // Submit button
 $form->addButtonSave(get_lang('SaveLPSettings'));
@@ -309,7 +326,18 @@ $defaults['expired_on'] = (!empty($expired_on))
     ? api_get_local_time($expired_on)
     : date('Y-m-d 12:00:00', time() + 84600);
 $defaults['subscribe_users'] = $learnPath->getSubscribeUsers();
-$defaults['skills'] = array_keys($skillList);
+
+$display = api_get_configuration_value('lp_view_settings')['display'] ?? [];
+
+if (!empty($display)) {
+    $addExtraQuitToHomeIcon = $display['add_extra_quit_to_home_icon'] ?? false;
+    $value = (new ExtraFieldValue('lp'))->get_values_by_handler_and_field_variable($lpId, 'add_extra_quit_button');
+
+    if (!is_array($value) && $addExtraQuitToHomeIcon) {
+        $defaults['extra_add_extra_quit_button[extra_add_extra_quit_button]'] = true;
+    }
+}
+
 $form->setDefaults($defaults);
 
 Display::display_header(get_lang('CourseSettings'), 'Path');

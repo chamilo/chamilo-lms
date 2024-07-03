@@ -4,8 +4,12 @@
 
 namespace Chamilo\PluginBundle\XApi\Lrs;
 
+use Chamilo\PluginBundle\XApi\Lrs\Util\InternalLogUtil;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Xabbuh\XApi\Common\Exception\NotFoundException;
 use Xabbuh\XApi\Model\Statement;
+use Xabbuh\XApi\Model\StatementId;
 use Xabbuh\XApi\Serializer\Symfony\ActorSerializer;
 use Xabbuh\XApi\Serializer\Symfony\Serializer;
 use Xabbuh\XApi\Serializer\Symfony\SerializerFactory;
@@ -68,23 +72,77 @@ class StatementsController extends BaseController
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @var StatementRepository
      */
-    public function put()
+    private $statementRepository;
+    /**
+     * @var \Symfony\Component\Serializer\Serializer|\Symfony\Component\Serializer\SerializerInterface
+     */
+    private $serializer;
+    /**
+     * @var SerializerFactory
+     */
+    private $serializerFactory;
+
+    public function __construct(Request $httpRequest)
     {
+        parent::__construct($httpRequest);
+
         $pluginEm = XApiPlugin::getEntityManager();
 
-        $putStatementController = new StatementPutController(
-            new StatementRepository(
-                $pluginEm->getRepository(StatementEntity::class)
+        $this->statementRepository = new StatementRepository(
+            $pluginEm->getRepository(StatementEntity::class)
+        );
+        $this->serializer = Serializer::createSerializer();
+        $this->serializerFactory = new SerializerFactory($this->serializer);
+    }
+
+    public function get(): Response
+    {
+        $getStatementController = new StatementGetController(
+            $this->statementRepository,
+            $this->serializerFactory->createStatementSerializer(),
+            $this->serializerFactory->createStatementResultSerializer(),
+            new StatementsFilterFactory(
+                new ActorSerializer($this->serializer)
             )
         );
 
-        $statement = $this->deserializeStatement(
-            $this->httpRequest->getContent()
+        return $getStatementController->getStatement($this->httpRequest);
+    }
+
+    public function head(): Response
+    {
+        $headStatementController = new StatementHeadController(
+            $this->statementRepository,
+            $this->serializerFactory->createStatementSerializer(),
+            $this->serializerFactory->createStatementResultSerializer(),
+            new StatementsFilterFactory(
+                new ActorSerializer($this->serializer)
+            )
         );
 
-        return $putStatementController->putStatement($this->httpRequest, $statement);
+        return $headStatementController->getStatement($this->httpRequest);
+    }
+
+    public function put(): Response
+    {
+        $statement = $this->serializerFactory
+            ->createStatementSerializer()
+            ->deserializeStatement(
+                $this->httpRequest->getContent()
+            )
+        ;
+
+        $putStatementController = new StatementPutController($this->statementRepository);
+
+        $response = $putStatementController->putStatement($this->httpRequest, $statement);
+
+        $this->saveLog(
+            [$this->httpRequest->query->get('statementId')]
+        );
+
+        return $response;
     }
 
     public function post(): Response
@@ -120,5 +178,24 @@ class StatementsController extends BaseController
         $factory = new SerializerFactory(Serializer::createSerializer());
 
         return $factory->createStatementSerializer()->deserializeStatements($content);
+    }
+  
+    /**
+     * @param array<string> $statementsId
+     *
+     * @return void
+     */
+    private function saveLog(array $statementsId)
+    {
+        foreach ($statementsId as $statementId) {
+            try {
+                $storedStatement = $this->statementRepository->findStatementById(
+                    StatementId::fromString($statementId)
+                );
+
+                InternalLogUtil::saveStatementForInternalLog($storedStatement);
+            } catch (NotFoundException $e) {
+            }
+        }
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Entity\XApi;
@@ -9,14 +11,14 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class SharedStatement.
  *
- * @package Chamilo\PluginBundle\Entity\XApi
- *
  * @ORM\Table(
  *     name="xapi_shared_statement",
  *     indexes={
+ *
  *         @ORM\Index(name="idx_uuid", columns={"uuid"})
  *     }
  * )
+ *
  * @ORM\Entity()
  */
 class SharedStatement
@@ -25,22 +27,27 @@ class SharedStatement
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
+     *
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
      */
     private $id;
+
     /**
      * @var string|null
      *
      * @ORM\Column(name="uuid", type="string", nullable=true)
      */
     private $uuid;
+
     /**
      * @var array
      *
      * @ORM\Column(name="statement", type="array")
      */
     private $statement;
+
     /**
      * @var bool
      *
@@ -72,7 +79,7 @@ class SharedStatement
         return $this->uuid;
     }
 
-    public function setUuid(?string $uuid): SharedStatement
+    public function setUuid(?string $uuid): self
     {
         $this->uuid = $uuid;
 
@@ -84,7 +91,7 @@ class SharedStatement
         return $this->statement;
     }
 
-    public function setStatement(array $statement): SharedStatement
+    public function setStatement(array $statement): self
     {
         $this->statement = $statement;
 
@@ -96,7 +103,7 @@ class SharedStatement
         return $this->sent;
     }
 
-    public function setSent(bool $sent): SharedStatement
+    public function setSent(bool $sent): self
     {
         $this->sent = $sent;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
@@ -18,21 +20,21 @@ use Xabbuh\XApi\Model\Statement;
 
 /**
  * Class LearningPathItemViewed.
- *
- * @package Chamilo\PluginBundle\XApi\ToolExperience\Statement
  */
 class LearningPathItemViewed extends BaseStatement
 {
     /**
-     * @var \Chamilo\CourseBundle\Entity\CLpItemView
+     * @var CLpItemView
      */
     private $lpItemView;
+
     /**
-     * @var \Chamilo\CourseBundle\Entity\CLpItem
+     * @var CLpItem
      */
     private $lpItem;
+
     /**
-     * @var \Chamilo\CourseBundle\Entity\CLpView
+     * @var CLpView
      */
     private $lpView;
 
@@ -56,7 +58,8 @@ class LearningPathItemViewed extends BaseStatement
         $context = $this->generateContext();
         $contextActivities = $context
             ->getContextActivities()
-            ->withAddedGroupingActivity($lpActivity->generate());
+            ->withAddedGroupingActivity($lpActivity->generate())
+        ;
 
         return new Statement(
             $this->generateStatementId('learning-path-item'),

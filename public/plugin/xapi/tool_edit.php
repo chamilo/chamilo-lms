@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
@@ -21,6 +23,7 @@ $toolLaunch = $em->find(
 
 if (null === $toolLaunch) {
     header('Location: '.api_get_course_url());
+
     exit;
 }
 
@@ -85,7 +88,8 @@ if ($frmActivity->validate()) {
 
     $toolLaunch
         ->setTitle($values['title'])
-        ->setDescription(empty($values['description']) ? null : $values['description']);
+        ->setDescription(empty($values['description']) ? null : $values['description'])
+    ;
 
     if ($toolIsTinCan && isset($values['allow_multiple_attempts'])) {
         $toolLaunch->setAllowMultipleAttempts(true);
@@ -98,7 +102,8 @@ if ($frmActivity->validate()) {
         $toolLaunch
             ->setLrsUrl($values['lrs_url'])
             ->setLrsAuthUsername($values['lrs_auth_username'])
-            ->setLrsAuthPassword($values['lrs_auth_password']);
+            ->setLrsAuthPassword($values['lrs_auth_password'])
+        ;
     }
 
     $em->persist($toolLaunch);
@@ -109,6 +114,7 @@ if ($frmActivity->validate()) {
     );
 
     header('Location: '.api_get_course_url());
+
     exit;
 }
 

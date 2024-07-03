@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Portfolio;
@@ -13,7 +15,7 @@ class XApiPortfolioItemViewedHookObserver extends XApiActivityHookObserver imple
      * @throws OptimisticLockException
      * @throws ORMException
      */
-    public function hookItemViewed(HookPortfolioItemViewedEventInterface $hookEvent)
+    public function hookItemViewed(HookPortfolioItemViewedEventInterface $hookEvent): void
     {
         /** @var Portfolio $item */
         $item = $hookEvent->getEventData()['portfolio'];

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
@@ -15,17 +17,16 @@ use Xabbuh\XApi\Model\Statement;
 
 /**
  * Class QuizCompleted.
- *
- * @package Chamilo\PluginBundle\XApi\ToolExperience\Statement
  */
 class QuizCompleted extends BaseStatement
 {
     /**
-     * @var \Chamilo\CoreBundle\Entity\TrackEExercises
+     * @var TrackEExercises
      */
     private $exe;
+
     /**
-     * @var \Chamilo\CourseBundle\Entity\CQuiz
+     * @var CQuiz
      */
     private $quiz;
 

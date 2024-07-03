@@ -1,10 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
 
+use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLp as CLpEntity;
+use Chamilo\CourseBundle\Entity\CLpView;
 use Chamilo\CourseBundle\Entity\CLpView as CLpViewEntity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Activity\LearningPath as LearningPathActivity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User as UserActor;
@@ -15,17 +19,16 @@ use Xabbuh\XApi\Model\Statement;
 
 /**
  * Class LearningPathCompleted.
- *
- * @package Chamilo\PluginBundle\XApi\ToolExperience\Statement
  */
 class LearningPathCompleted extends BaseStatement
 {
     /**
-     * @var \Chamilo\CourseBundle\Entity\CLpView
+     * @var CLpView
      */
     private $lpView;
+
     /**
-     * @var \Chamilo\CourseBundle\Entity\CLp
+     * @var CLp
      */
     private $lp;
 

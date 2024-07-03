@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the xAPI package.
  *
@@ -11,12 +13,15 @@
 
 namespace XApi\LrsBundle\Model;
 
+use DateTime;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Xabbuh\XApi\Model\Activity;
 use Xabbuh\XApi\Model\IRI;
 use Xabbuh\XApi\Model\StatementsFilter;
 use Xabbuh\XApi\Model\Verb;
 use Xabbuh\XApi\Serializer\ActorSerializerInterface;
+
+use const FILTER_VALIDATE_BOOLEAN;
 
 /**
  * @author Jérôme Parmentier <jerome.parmentier@acensi.fr>
@@ -66,11 +71,11 @@ class StatementsFilterFactory
         }
 
         if (($since = $parameters->get('since')) !== null) {
-            $filter->since(\DateTime::createFromFormat(\DateTime::ATOM, $since));
+            $filter->since(DateTime::createFromFormat(DateTime::ATOM, $since));
         }
 
         if (($until = $parameters->get('until')) !== null) {
-            $filter->until(\DateTime::createFromFormat(\DateTime::ATOM, $until));
+            $filter->until(DateTime::createFromFormat(DateTime::ATOM, $until));
         }
 
         if ($parameters->filter('ascending', false, FILTER_VALIDATE_BOOLEAN)) {

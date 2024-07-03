@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace XApi\LrsBundle\EventListener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -19,7 +21,7 @@ class SerializerListener
         $this->statementSerializer = $statementSerializer;
     }
 
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(GetResponseEvent $event): void
     {
         $request = $event->getRequest();
 
@@ -31,6 +33,7 @@ class SerializerListener
             switch ($request->attributes->get('xapi_serializer')) {
                 case 'statement':
                     $request->attributes->set('statement', $this->statementSerializer->deserializeStatement($request->getContent()));
+
                     break;
             }
         } catch (BaseSerializerException $e) {

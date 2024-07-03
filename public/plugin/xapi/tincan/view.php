@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
@@ -19,7 +21,7 @@ api_protect_course_script(true);
 
 $request = HttpRequest::createFromGlobals();
 
-$originIsLearnpath = api_get_origin() === 'learnpath';
+$originIsLearnpath = 'learnpath' === api_get_origin();
 
 $user = api_get_user_entity(api_get_user_id());
 
@@ -62,7 +64,8 @@ try {
             $toolLaunch->getLrsAuthUsername(),
             $toolLaunch->getLrsAuthPassword()
         )
-        ->getDocument($state);
+        ->getDocument($state)
+    ;
 } catch (NotFoundException $notFoundException) {
     $stateDocument = null;
 } catch (Exception $exception) {
@@ -71,6 +74,7 @@ try {
     );
 
     header('Location: '.api_get_course_url());
+
     exit;
 }
 
@@ -150,7 +154,7 @@ $pageTitle = $toolLaunch->getTitle();
 $pageContent = '';
 
 if ($toolLaunch->getDescription()) {
-    $pageContent .= PHP_EOL;
+    $pageContent .= \PHP_EOL;
     $pageContent .= "<p class='lead'>{$toolLaunch->getDescription()}</p>";
 }
 

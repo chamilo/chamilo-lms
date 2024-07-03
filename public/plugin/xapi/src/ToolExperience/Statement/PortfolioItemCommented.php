@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
@@ -10,6 +12,7 @@ use Chamilo\PluginBundle\XApi\ToolExperience\Activity\PortfolioItem as Portfolio
 use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User as UserActor;
 use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Commented as CommentedVerb;
 use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Replied as RepliedVerb;
+use Database;
 use Xabbuh\XApi\Model\Result;
 use Xabbuh\XApi\Model\Statement;
 
@@ -26,7 +29,7 @@ class PortfolioItemCommented extends PortfolioComment
 
         $context = $this->generateContext();
 
-        $em = \Database::getManager();
+        $em = Database::getManager();
         $commentAttachments = $em->getRepository(PortfolioAttachment::class)->findFromComment($this->comment);
 
         $attachments = $this->generateAttachments(
@@ -42,7 +45,8 @@ class PortfolioItemCommented extends PortfolioComment
 
             $contextActivities = $context
                 ->getContextActivities()
-                ->withAddedGroupingActivity($itemActivity->generate());
+                ->withAddedGroupingActivity($itemActivity->generate())
+            ;
 
             return new Statement(
                 $statementId,
@@ -56,19 +60,19 @@ class PortfolioItemCommented extends PortfolioComment
                 $context->withContextActivities($contextActivities),
                 $attachments
             );
-        } else {
-            $itemShared = new PortfolioItemShared($this->item);
-
-            $commentedVerb = new CommentedVerb();
-
-            return $itemShared->generate()
-                ->withId($statementId)
-                ->withActor($userActor->generate())
-                ->withVerb($commentedVerb->generate())
-                ->withStored($this->comment->getDate())
-                ->withResult($statementResult)
-                ->withContext($context)
-                ->withAttachments($attachments);
         }
+        $itemShared = new PortfolioItemShared($this->item);
+
+        $commentedVerb = new CommentedVerb();
+
+        return $itemShared->generate()
+            ->withId($statementId)
+            ->withActor($userActor->generate())
+            ->withVerb($commentedVerb->generate())
+            ->withStored($this->comment->getDate())
+            ->withResult($statementResult)
+            ->withContext($context)
+            ->withAttachments($attachments)
+        ;
     }
 }

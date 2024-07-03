@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\XApi\LrsAuth;
+use Symfony\Component\HttpFoundation\Request;
 
 $cidReset = true;
 
@@ -10,7 +13,7 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_protect_admin_script();
 
-$request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+$request = Request::createFromGlobals();
 $plugin = XApiPlugin::create();
 $em = Database::getManager();
 
@@ -19,11 +22,11 @@ $pageActions = '';
 $pageContent = '';
 
 /**
- * @throws \Exception
+ * @return FormValidator
  *
- * @return \FormValidator
+ * @throws Exception
  */
-function createForm(LrsAuth $auth = null)
+function createForm(?LrsAuth $auth = null)
 {
     $pageBaseUrl = api_get_self();
 
@@ -67,7 +70,8 @@ switch ($request->query->getAlpha('action')) {
                 ->setEnabled(isset($values['enabled']))
                 ->setCreatedAt(
                     api_get_utc_datetime(null, false, true)
-                );
+                )
+            ;
 
             $em->persist($auth);
             $em->flush();
@@ -77,6 +81,7 @@ switch ($request->query->getAlpha('action')) {
             );
 
             header('Location: '.$pageBaseUrl);
+
             exit;
         }
 
@@ -85,7 +90,9 @@ switch ($request->query->getAlpha('action')) {
             $pageBaseUrl
         );
         $pageContent = $form->returnForm();
+
         break;
+
     case 'edit':
         $auth = $em->find(LrsAuth::class, $request->query->getInt('id'));
 
@@ -104,7 +111,8 @@ switch ($request->query->getAlpha('action')) {
                 ->setEnabled(isset($values['enabled']))
                 ->setCreatedAt(
                     api_get_utc_datetime(null, false, true)
-                );
+                )
+            ;
 
             $em->persist($auth);
             $em->flush();
@@ -114,6 +122,7 @@ switch ($request->query->getAlpha('action')) {
             );
 
             header('Location: '.$pageBaseUrl);
+
             exit;
         }
 
@@ -122,7 +131,9 @@ switch ($request->query->getAlpha('action')) {
             $pageBaseUrl
         );
         $pageContent = $form->returnForm();
+
         break;
+
     case 'delete':
         $auth = $em->find(LrsAuth::class, $request->query->getInt('id'));
 
@@ -138,7 +149,9 @@ switch ($request->query->getAlpha('action')) {
         );
 
         header('Location: '.$pageBaseUrl);
+
         exit;
+
     case 'list':
     default:
         $pageActions = Display::url(
@@ -177,11 +190,12 @@ switch ($request->query->getAlpha('action')) {
                 $table->setCellContents($row, 1, $auth->getPassword());
                 $table->setCellContents($row, 2, $auth->isEnabled() ? get_lang('Yes') : get_lang('No'));
                 $table->setCellContents($row, 3, api_convert_and_format_date($auth->getCreatedAt()));
-                $table->setCellContents($row, 4, implode(PHP_EOL, $actions));
+                $table->setCellContents($row, 4, implode(\PHP_EOL, $actions));
             }
 
             $pageContent = $table->toHtml();
         }
+
         break;
 }
 

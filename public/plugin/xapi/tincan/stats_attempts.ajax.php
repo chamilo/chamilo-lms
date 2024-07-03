@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
@@ -24,6 +26,7 @@ if (!$request->isXmlHttpRequest()
     || !$course
 ) {
     echo Display::return_message(get_lang('NotAllowed'), 'error');
+
     exit;
 }
 
@@ -39,6 +42,7 @@ $student = api_get_user_entity($request->request->getInt('student'));
 
 if (!$toolLaunch || !$student) {
     echo Display::return_message(get_lang('NotAllowed'), 'error');
+
     exit;
 }
 
@@ -51,6 +55,7 @@ $userIsSubscribedToCourse = CourseManager::is_user_subscribed_in_course(
 
 if (!$userIsSubscribedToCourse) {
     echo Display::return_message(get_lang('NotAllowed'), 'error');
+
     exit;
 }
 
@@ -83,9 +88,11 @@ try {
     );
 } catch (NotFoundException $notFoundException) {
     echo Display::return_message(get_lang('NoResults'), 'warning');
+
     exit;
 } catch (XApiException $exception) {
     echo Display::return_message($exception->getMessage(), 'error');
+
     exit;
 }
 

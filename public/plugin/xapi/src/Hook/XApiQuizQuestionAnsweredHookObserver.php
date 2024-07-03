@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
@@ -8,15 +10,9 @@ use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\PluginBundle\XApi\ToolExperience\Statement\QuizQuestionAnswered;
 
-/**
- * Class XApiQuizQuestionAnsweredHook.
- */
 class XApiQuizQuestionAnsweredHookObserver extends XApiActivityHookObserver implements HookQuizQuestionAnsweredObserverInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function hookQuizQuestionAnswered(HookQuizQuestionAnsweredEventInterface $event)
+    public function hookQuizQuestionAnswered(HookQuizQuestionAnsweredEventInterface $event): void
     {
         $data = $event->getEventData();
 

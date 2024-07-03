@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace XApi\LrsBundle\EventListener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
@@ -11,7 +13,5 @@ use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
  */
 class ExceptionListener
 {
-    public function onKernelException(GetResponseForExceptionEvent $event)
-    {
-    }
+    public function onKernelException(GetResponseForExceptionEvent $event): void {}
 }

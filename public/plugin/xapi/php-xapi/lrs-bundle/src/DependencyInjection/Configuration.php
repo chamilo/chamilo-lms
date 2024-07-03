@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace XApi\LrsBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -16,17 +18,19 @@ final class Configuration implements ConfigurationInterface
 
         $treeBuilder
             ->root('xapi_lrs')
-                ->beforeNormalization()
-                    ->ifTrue(function ($v) { return isset($v['type']) && in_array($v['type'], ['mongodb', 'orm']) && !isset($v['object_manager_service']); })
-                    ->thenInvalid('You need to configure the object manager service when the repository type is "mongodb" or orm".')
-                ->end()
-                ->children()
-                    ->enumNode('type')
-                        ->isRequired()
-                        ->values(['in_memory', 'mongodb', 'orm'])
-                    ->end()
-                    ->scalarNode('object_manager_service')->end()
-                ->end()
+            ->beforeNormalization()
+            ->ifTrue(function ($v) {
+                return isset($v['type']) && \in_array($v['type'], ['mongodb', 'orm']) && !isset($v['object_manager_service']);
+            })
+            ->thenInvalid('You need to configure the object manager service when the repository type is "mongodb" or orm".')
+            ->end()
+            ->children()
+            ->enumNode('type')
+            ->isRequired()
+            ->values(['in_memory', 'mongodb', 'orm'])
+            ->end()
+            ->scalarNode('object_manager_service')->end()
+            ->end()
             ->end()
         ;
 

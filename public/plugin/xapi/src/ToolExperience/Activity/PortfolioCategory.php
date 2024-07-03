@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Activity;
@@ -12,13 +14,11 @@ use Xabbuh\XApi\Model\LanguageMap;
 
 /**
  * Class PortfolioCategory.
- *
- * @package Chamilo\PluginBundle\XApi\ToolExperience\Activity
  */
 class PortfolioCategory extends BaseActivity
 {
     /**
-     * @var \Chamilo\CoreBundle\Entity\PortfolioCategory
+     * @var PortfolioCategoryEntity
      */
     private $category;
 

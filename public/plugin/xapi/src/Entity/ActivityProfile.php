@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Entity\XApi;
@@ -9,9 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class ActivityProfile.
  *
- * @package Chamilo\PluginBundle\Entity\XApi
- *
  * @ORM\Table(name="xapi_activity_profile")
+ *
  * @ORM\Entity()
  */
 class ActivityProfile
@@ -20,22 +21,27 @@ class ActivityProfile
      * @var int
      *
      * @ORM\Column(type="integer", name="id")
+     *
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
      */
     private $id;
+
     /**
      * @var string
      *
      * @ORM\Column(name="profile_id", type="string")
      */
     private $profileId;
+
     /**
      * @var string
      *
      * @ORM\Column(name="activity_id", type="string")
      */
     private $activityId;
+
     /**
      * @var array
      *
@@ -48,7 +54,7 @@ class ActivityProfile
         return $this->id;
     }
 
-    public function setId(int $id): ActivityProfile
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -60,7 +66,7 @@ class ActivityProfile
         return $this->profileId;
     }
 
-    public function setProfileId(string $profileId): ActivityProfile
+    public function setProfileId(string $profileId): self
     {
         $this->profileId = $profileId;
 
@@ -72,7 +78,7 @@ class ActivityProfile
         return $this->activityId;
     }
 
-    public function setActivityId(string $activityId): ActivityProfile
+    public function setActivityId(string $activityId): self
     {
         $this->activityId = $activityId;
 
@@ -84,7 +90,7 @@ class ActivityProfile
         return $this->documentData;
     }
 
-    public function setDocumentData(array $documentData): ActivityProfile
+    public function setDocumentData(array $documentData): self
     {
         $this->documentData = $documentData;
 

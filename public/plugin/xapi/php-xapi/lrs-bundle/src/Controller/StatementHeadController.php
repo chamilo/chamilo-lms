@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the xAPI package.
  *
@@ -16,9 +18,9 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 class StatementHeadController extends StatementGetController
 {
     /**
-     * @throws BadRequestHttpException if the query parameters does not comply with xAPI specification
-     *
      * @return Response
+     *
+     * @throws BadRequestHttpException if the query parameters does not comply with xAPI specification
      */
     public function getStatement(Request $request)
     {

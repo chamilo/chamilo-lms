@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\Lrs\Util;
@@ -16,7 +18,7 @@ use XApiPlugin;
 
 class InternalLogUtil
 {
-    public static function saveStatementForInternalLog(Statement $statement)
+    public static function saveStatementForInternalLog(Statement $statement): void
     {
         if (null === $user = self::getUserFromActor($statement->getActor())) {
             return;
@@ -35,7 +37,8 @@ class InternalLogUtil
         $internalLog
             ->setUser($user)
             ->setVerb($statementVerbString)
-            ->setObjectId($statementObject->getId()->getValue());
+            ->setObjectId($statementObject->getId()->getValue())
+        ;
 
         if (null !== $statementId = $statement->getId()) {
             $internalLog->setStatementId($statementId->getValue());
@@ -69,7 +72,8 @@ class InternalLogUtil
                     )
                     ->setScoreMax(
                         $score->getMax()
-                    );
+                    )
+                ;
             }
         }
 

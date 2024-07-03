@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
@@ -17,21 +19,21 @@ use Xabbuh\XApi\Model\Statement;
 
 /**
  * Class QuizQuestionAnswered.
- *
- * @package Chamilo\PluginBundle\XApi\ToolExperience\Statement
  */
 class QuizQuestionAnswered extends BaseStatement
 {
     /**
-     * @var \Chamilo\CoreBundle\Entity\TrackEAttempt
+     * @var TrackEAttempt
      */
     private $attempt;
+
     /**
-     * @var \Chamilo\CourseBundle\Entity\CQuizQuestion
+     * @var CQuizQuestion
      */
     private $question;
+
     /**
-     * @var \Chamilo\CourseBundle\Entity\CQuiz
+     * @var CQuiz
      */
     private $quiz;
 
@@ -58,7 +60,8 @@ class QuizQuestionAnswered extends BaseStatement
         $context = $this->generateContext();
         $contextActivities = $context
             ->getContextActivities()
-            ->withAddedGroupingActivity($quizActivity->generate());
+            ->withAddedGroupingActivity($quizActivity->generate())
+        ;
 
         return new Statement(
             $this->generateStatementId('exercise-question'),

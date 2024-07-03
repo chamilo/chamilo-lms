@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Activity;
@@ -12,13 +14,11 @@ use Xabbuh\XApi\Model\LanguageMap;
 
 /**
  * Class Quiz.
- *
- * @package Chamilo\PluginBundle\XApi\ToolExperience\Activity
  */
 class Quiz extends BaseActivity
 {
     /**
-     * @var \Chamilo\CourseBundle\Entity\CQuiz
+     * @var CQuiz
      */
     private $quiz;
 

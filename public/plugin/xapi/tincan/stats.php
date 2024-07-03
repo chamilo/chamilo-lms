@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
@@ -21,6 +23,7 @@ $toolLaunch = $em->find(
 
 if (null === $toolLaunch) {
     header('Location: '.api_get_course_url());
+
     exit;
 }
 

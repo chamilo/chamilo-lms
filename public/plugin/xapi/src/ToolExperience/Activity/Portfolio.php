@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Activity;
 
 use Chamilo\UserBundle\Entity\User;
@@ -10,7 +12,9 @@ use Xabbuh\XApi\Model\LanguageMap;
 
 class Portfolio extends BaseActivity
 {
-    /** @var User */
+    /**
+     * @var User
+     */
     private $owner;
 
     public function __construct(User $owner)

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Activity;
@@ -11,13 +13,11 @@ use Xabbuh\XApi\Model\IRI;
 
 /**
  * Class PortfolioComment.
- *
- * @package Chamilo\PluginBundle\XApi\ToolExperience\Activity
  */
 class PortfolioComment extends BaseActivity
 {
     /**
-     * @var \Chamilo\CoreBundle\Entity\PortfolioComment
+     * @var PortfolioCommentEntity
      */
     private $comment;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
 
 use Chamilo\PluginBundle\XApi\ToolExperience\Activity\Portfolio as PortfolioActivity;
@@ -10,7 +12,9 @@ use Xabbuh\XApi\Model\Statement;
 
 class PortfolioDownloaded extends BaseStatement
 {
-    /** @var User */
+    /**
+     * @var User
+     */
     private $owner;
 
     public function __construct(User $owner)

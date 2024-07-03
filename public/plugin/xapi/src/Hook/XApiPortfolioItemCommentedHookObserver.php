@@ -1,18 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\XApi\ToolExperience\Statement\PortfolioItemCommented;
 
-/**
- * Class XApiPortfolioItemCommentedHookObserver.
- */
 class XApiPortfolioItemCommentedHookObserver extends XApiActivityHookObserver implements HookPortfolioItemCommentedObserverInterface
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function hookItemCommented(HookPortfolioItemCommentedEventInterface $hookEvent)
+    public function hookItemCommented(HookPortfolioItemCommentedEventInterface $hookEvent): void
     {
         $comment = $hookEvent->getEventData()['comment'];
 

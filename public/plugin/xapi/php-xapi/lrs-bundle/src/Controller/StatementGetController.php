@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the xAPI package.
  *
@@ -11,6 +13,8 @@
 
 namespace XApi\LrsBundle\Controller;
 
+use DateTime;
+use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,12 +32,14 @@ use XApi\LrsBundle\Response\AttachmentResponse;
 use XApi\LrsBundle\Response\MultipartResponse;
 use XApi\Repository\Api\StatementRepositoryInterface;
 
+use const FILTER_VALIDATE_BOOLEAN;
+
 /**
  * @author Jérôme Parmentier <jerome.parmentier@acensi.fr>
  */
 class StatementGetController
 {
-    protected static $getParameters = [
+    protected static array $getParameters = [
         'statementId' => true,
         'voidedStatementId' => true,
         'agent' => true,
@@ -65,17 +71,18 @@ class StatementGetController
     }
 
     /**
-     * @throws BadRequestHttpException if the query parameters does not comply with xAPI specification
-     *
      * @return Response
+     *
+     * @throws BadRequestHttpException if the query parameters does not comply with xAPI specification
      */
     public function getStatement(Request $request)
     {
-        $query = new ParameterBag(\array_intersect_key($request->query->all(), self::$getParameters));
+        $query = new ParameterBag(array_intersect_key($request->query->all(), self::$getParameters));
 
         $this->validate($query);
 
         $includeAttachments = $query->filter('attachments', false, FILTER_VALIDATE_BOOLEAN);
+
         try {
             if (($statementId = $query->get('statementId')) !== null) {
                 $statement = $this->repository->findStatementById(StatementId::fromString($statementId));
@@ -92,14 +99,15 @@ class StatementGetController
             }
         } catch (NotFoundException $e) {
             $response = $this->buildMultiStatementsResponse([], $query)
-                             ->setStatusCode(Response::HTTP_NOT_FOUND)
-                             ->setContent('');
-        } catch (\Exception $exception) {
+                ->setStatusCode(Response::HTTP_NOT_FOUND)
+                ->setContent('')
+            ;
+        } catch (Exception $exception) {
             $response = Response::create('', Response::HTTP_BAD_REQUEST);
         }
 
-        $now = new \DateTime();
-        $response->headers->set('X-Experience-API-Consistent-Through', $now->format(\DateTime::ATOM));
+        $now = new DateTime();
+        $response->headers->set('X-Experience-API-Consistent-Through', $now->format(DateTime::ATOM));
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;
@@ -171,7 +179,7 @@ class StatementGetController
      *
      * @throws BadRequestHttpException if the parameters does not comply with the xAPI specification
      */
-    protected function validate(ParameterBag $query)
+    protected function validate(ParameterBag $query): void
     {
         $hasStatementId = $query->has('statementId');
         $hasVoidedStatementId = $query->has('voidedStatementId');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Activity;
@@ -9,6 +11,7 @@ use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Xabbuh\XApi\Model\Activity;
 use Xabbuh\XApi\Model\Interaction\ChoiceInteractionDefinition;
 use Xabbuh\XApi\Model\Interaction\InteractionComponent;
+use Xabbuh\XApi\Model\Interaction\InteractionDefinition;
 use Xabbuh\XApi\Model\Interaction\LongFillInInteractionDefinition;
 use Xabbuh\XApi\Model\Interaction\MatchingInteractionDefinition;
 use Xabbuh\XApi\Model\Interaction\OtherInteractionDefinition;
@@ -18,8 +21,6 @@ use Xabbuh\XApi\Model\LanguageMap;
 
 /**
  * Class QuizQuestion.
- *
- * @package Chamilo\PluginBundle\XApi\ToolExperience\Activity
  */
 class QuizQuestion extends BaseActivity
 {
@@ -45,7 +46,7 @@ class QuizQuestion extends BaseActivity
     }
 
     /**
-     * @return \Xabbuh\XApi\Model\Interaction\InteractionDefinition
+     * @return InteractionDefinition
      */
     private function generateActivityDefinitionFromQuestionType()
     {
@@ -93,6 +94,7 @@ class QuizQuestion extends BaseActivity
                     [implode('[,]', $correctResponsesPattern)],
                     $choices
                 );
+
             case DRAGGABLE:
                 $choices = [];
 
@@ -105,7 +107,7 @@ class QuizQuestion extends BaseActivity
                     }
                 }
 
-                $correctResponsesPattern = array_slice($objAnswer->autoId, 0, $objAnswer->nbrAnswers / 2);
+                $correctResponsesPattern = \array_slice($objAnswer->autoId, 0, $objAnswer->nbrAnswers / 2);
 
                 return new SequencingInteractionDefinition(
                     $titleMap,
@@ -116,10 +118,12 @@ class QuizQuestion extends BaseActivity
                     [implode('[,]', $correctResponsesPattern)],
                     $choices
                 );
+
             case MATCHING:
             case MATCHING_DRAGGABLE:
                 /** @var array|InteractionComponent[] $source */
                 $source = [];
+
                 /** @var array|InteractionComponent[] $source */
                 $target = [];
                 $correctResponsesPattern = [];
@@ -149,8 +153,10 @@ class QuizQuestion extends BaseActivity
                     $source,
                     $target
                 );
+
             case FREE_ANSWER:
                 return new LongFillInInteractionDefinition($titleMap, $descriptionMap, $type);
+
             case FILL_IN_BLANKS:
             case HOT_SPOT:
             case HOT_SPOT_DELINEATION:

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\Lrs;
@@ -23,8 +25,6 @@ use XApiPlugin;
 
 /**
  * Class StatementsController.
- *
- * @package Chamilo\PluginBundle\XApi\Lrs
  */
 class StatementsController extends BaseController
 {
@@ -32,10 +32,12 @@ class StatementsController extends BaseController
      * @var StatementRepository
      */
     private $statementRepository;
+
     /**
      * @var \Symfony\Component\Serializer\Serializer|\Symfony\Component\Serializer\SerializerInterface
      */
     private $serializer;
+
     /**
      * @var SerializerFactory
      */
@@ -106,7 +108,7 @@ class StatementsController extends BaseController
     {
         $content = $this->httpRequest->getContent();
 
-        if (substr($content, 0, 1) !== '[') {
+        if ('[' !== substr($content, 0, 1)) {
             $content = "[$content]";
         }
 
@@ -128,10 +130,8 @@ class StatementsController extends BaseController
 
     /**
      * @param array<string> $statementsId
-     *
-     * @return void
      */
-    private function saveLog(array $statementsId)
+    private function saveLog(array $statementsId): void
     {
         foreach ($statementsId as $statementId) {
             try {

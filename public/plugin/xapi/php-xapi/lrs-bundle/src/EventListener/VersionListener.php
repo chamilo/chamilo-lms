@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the xAPI package.
  *
@@ -20,7 +22,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
  */
 class VersionListener
 {
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(GetResponseEvent $event): void
     {
         if (!$event->isMasterRequest()) {
             return;
@@ -47,7 +49,7 @@ class VersionListener
         throw new BadRequestHttpException(sprintf('xAPI version "%s" is not supported.', $version));
     }
 
-    public function onKernelResponse(FilterResponseEvent $event)
+    public function onKernelResponse(FilterResponseEvent $event): void
     {
         if (!$event->isMasterRequest()) {
             return;

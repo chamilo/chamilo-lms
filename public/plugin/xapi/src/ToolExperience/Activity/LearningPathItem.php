@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Activity;
@@ -12,13 +14,11 @@ use Xabbuh\XApi\Model\LanguageMap;
 
 /**
  * Class LearningPathItem.
- *
- * @package Chamilo\PluginBundle\XApi\ToolExperience\Activity
  */
 class LearningPathItem extends BaseActivity
 {
     /**
-     * @var \Chamilo\CourseBundle\Entity\CLpItem
+     * @var CLpItem
      */
     private $lpItem;
 

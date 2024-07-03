@@ -1,18 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\XApi\ToolExperience\Statement\PortfolioItemShared;
 
-/**
- * Class XApiPortfolioItemAddedHookObserver.
- */
 class XApiPortfolioItemAddedHookObserver extends XApiActivityHookObserver implements HookPortfolioItemAddedObserverInterface
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function hookItemAdded(HookPortfolioItemAddedEventInterface $hookEvent)
+    public function hookItemAdded(HookPortfolioItemAddedEventInterface $hookEvent): void
     {
         $item = $hookEvent->getEventData()['portfolio'];
 

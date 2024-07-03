@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the xAPI package.
  *
@@ -21,7 +23,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
  */
 final class XApiLrsExtension extends Extension
 {
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
@@ -36,19 +38,23 @@ final class XApiLrsExtension extends Extension
         switch ($config['type']) {
             case 'in_memory':
                 break;
+
             case 'mongodb':
                 $loader->load('doctrine.xml');
                 $loader->load('mongodb.xml');
 
                 $container->setAlias('xapi_lrs.doctrine.object_manager', $config['object_manager_service']);
                 $container->setAlias('xapi_lrs.repository.statement', 'xapi_lrs.repository.statement.doctrine');
+
                 break;
+
             case 'orm':
                 $loader->load('doctrine.xml');
                 $loader->load('orm.xml');
 
                 $container->setAlias('xapi_lrs.doctrine.object_manager', $config['object_manager_service']);
                 $container->setAlias('xapi_lrs.repository.statement', 'xapi_lrs.repository.statement.doctrine');
+
                 break;
         }
     }

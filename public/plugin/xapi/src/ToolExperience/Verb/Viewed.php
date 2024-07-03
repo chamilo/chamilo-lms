@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Verb;
 
 /**
  * Class Viewed.
- *
- * @package Chamilo\PluginBundle\XApi\ToolExperience\Verb
  */
 class Viewed extends BaseVerb
 {

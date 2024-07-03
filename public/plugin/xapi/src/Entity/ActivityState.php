@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Entity\XApi;
@@ -9,9 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class ActivityState.
  *
- * @package Chamilo\PluginBundle\Entity\XApi
- *
  * @ORM\Table(name="xapi_activity_state")
+ *
  * @ORM\Entity()
  */
 class ActivityState
@@ -20,28 +21,34 @@ class ActivityState
      * @var int
      *
      * @ORM\Column(type="integer", name="id")
+     *
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
      */
     private $id;
+
     /**
      * @var string
      *
      * @ORM\Column(name="state_id", type="string")
      */
     private $stateId;
+
     /**
      * @var string
      *
      * @ORM\Column(name="activity_id", type="string")
      */
     private $activityId;
+
     /**
      * @var array
      *
      * @ORM\Column(name="agent", type="json")
      */
     private $agent;
+
     /**
      * @var array
      *
@@ -54,7 +61,7 @@ class ActivityState
         return $this->id;
     }
 
-    public function setId(int $id): ActivityState
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -66,7 +73,7 @@ class ActivityState
         return $this->stateId;
     }
 
-    public function setStateId(string $stateId): ActivityState
+    public function setStateId(string $stateId): self
     {
         $this->stateId = $stateId;
 
@@ -78,7 +85,7 @@ class ActivityState
         return $this->activityId;
     }
 
-    public function setActivityId(string $activityId): ActivityState
+    public function setActivityId(string $activityId): self
     {
         $this->activityId = $activityId;
 
@@ -90,7 +97,7 @@ class ActivityState
         return $this->agent;
     }
 
-    public function setAgent(array $agent): ActivityState
+    public function setAgent(array $agent): self
     {
         $this->agent = $agent;
 
@@ -102,7 +109,7 @@ class ActivityState
         return $this->documentData;
     }
 
-    public function setDocumentData(array $documentData): ActivityState
+    public function setDocumentData(array $documentData): self
     {
         $this->documentData = $documentData;
 

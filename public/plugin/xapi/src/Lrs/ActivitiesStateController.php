@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\Lrs;
@@ -12,8 +14,6 @@ use Xabbuh\XApi\Serializer\Symfony\Serializer;
 
 /**
  * Class ActivitiesStateController.
- *
- * @package Chamilo\PluginBundle\XApi\Lrs
  */
 class ActivitiesStateController extends BaseController
 {
@@ -105,7 +105,8 @@ class ActivitiesStateController extends BaseController
             $state
                 ->setActivityId($activityId)
                 ->setAgent(json_decode($agent, true))
-                ->setStateId($stateId);
+                ->setStateId($stateId)
+            ;
         } else {
             $state = $em->find(ActivityState::class, $state['id']);
         }

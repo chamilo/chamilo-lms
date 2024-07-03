@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\Lrs;
@@ -9,8 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class AboutController.
- *
- * @package Chamilo\PluginBundle\XApi\Lrs
  */
 class AboutController extends BaseController
 {

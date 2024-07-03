@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Entity\XApi;
@@ -12,7 +14,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Class Cmi5Item.
  *
  * @Gedmo\Tree(type="nested")
+ *
  * @ORM\Table(name="xapi_cmi5_item")
+ *
  * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
  */
 class Cmi5Item
@@ -21,86 +25,102 @@ class Cmi5Item
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
+     *
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
      */
     private $id;
+
     /**
      * @var string
      *
      * @ORM\Column(name="identifier", type="string")
      */
     private $identifier;
+
     /**
      * @var string
      *
      * @ORM\Column(name="type", type="string")
      */
     private $type;
+
     /**
      * @var array;
      *
      * @ORM\Column(name="title", type="json")
      */
     private $title;
+
     /**
      * @var array
      *
      * @ORM\Column(name="description", type="json")
      */
     private $description;
+
     /**
      * @var string|null
      *
      * @ORM\Column(name="url", type="string", nullable=true)
      */
     private $url;
+
     /**
      * @var string|null
      *
      * @ORM\Column(name="activity_type", type="string", nullable=true)
      */
     private $activityType;
+
     /**
      * @var string|null
      *
      * @ORM\Column(name="launch_method", type="string", nullable=true)
      */
     private $launchMethod;
+
     /**
      * @var string|null
      *
      * @ORM\Column(name="move_on", type="string", nullable=true)
      */
     private $moveOn;
+
     /**
      * @var float|null
      *
      * @ORM\Column(name="mastery_score", type="float", nullable=true)
      */
     private $masteryScore;
+
     /**
      * @var string|null
      *
      * @ORM\Column(name="launch_parameters", type="string", nullable=true)
      */
     private $launchParameters;
+
     /**
      * @var string|null
      *
      * @ORM\Column(name="entitlement_key", type="string", nullable=true)
      */
     private $entitlementKey;
+
     /**
      * @var string|null
      *
      * @ORM\Column(name="status", type="string", nullable=true)
      */
     private $status;
+
     /**
-     * @var \Chamilo\PluginBundle\Entity\XApi\ToolLaunch
+     * @var ToolLaunch
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\ToolLaunch", inversedBy="items")
+     *
      * @ORM\JoinColumn(name="tool_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $tool;
@@ -109,50 +129,60 @@ class Cmi5Item
      * @var int
      *
      * @Gedmo\TreeLeft()
+     *
      * @ORM\Column(name="lft", type="integer")
      */
     private $lft;
+
     /**
      * @var int
      *
      * @Gedmo\TreeLevel()
+     *
      * @ORM\Column(name="lvl", type="integer")
      */
     private $lvl;
+
     /**
      * @var int
      *
      * @Gedmo\TreeRight()
+     *
      * @ORM\Column(name="rgt", type="integer")
      */
     private $rgt;
+
     /**
-     * @var \Chamilo\PluginBundle\Entity\XApi\Cmi5Item
+     * @var Cmi5Item
      *
      * @Gedmo\TreeRoot()
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Cmi5Item")
+     *
      * @ORM\JoinColumn(name="tree_root", referencedColumnName="id", onDelete="CASCADE")
      */
     private $root;
+
     /**
-     * @var \Chamilo\PluginBundle\Entity\XApi\Cmi5Item|null
+     * @var Cmi5Item|null
      *
      * @Gedmo\TreeParent()
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\XApi\Cmi5Item", inversedBy="children")
+     *
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $parent;
+
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\Entity\XApi\Cmi5Item", mappedBy="parent")
+     *
      * @ORM\OrderBy({"lft"="ASC"})
      */
     private $children;
 
-    /**
-     * Cmi5Item constructor.
-     */
     public function __construct()
     {
         $this->children = new ArrayCollection();
@@ -163,7 +193,7 @@ class Cmi5Item
         return $this->id;
     }
 
-    public function setId(int $id): Cmi5Item
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -175,7 +205,7 @@ class Cmi5Item
         return $this->identifier;
     }
 
-    public function setIdentifier(string $identifier): Cmi5Item
+    public function setIdentifier(string $identifier): self
     {
         $this->identifier = $identifier;
 
@@ -187,7 +217,7 @@ class Cmi5Item
         return $this->type;
     }
 
-    public function setType(string $type): Cmi5Item
+    public function setType(string $type): self
     {
         $this->type = $type;
 
@@ -199,7 +229,7 @@ class Cmi5Item
         return $this->title;
     }
 
-    public function setTitle(array $title): Cmi5Item
+    public function setTitle(array $title): self
     {
         $this->title = $title;
 
@@ -211,7 +241,7 @@ class Cmi5Item
         return $this->description;
     }
 
-    public function setDescription(array $description): Cmi5Item
+    public function setDescription(array $description): self
     {
         $this->description = $description;
 
@@ -223,7 +253,7 @@ class Cmi5Item
         return $this->url;
     }
 
-    public function setUrl(?string $url): Cmi5Item
+    public function setUrl(?string $url): self
     {
         $this->url = $url;
 
@@ -235,7 +265,7 @@ class Cmi5Item
         return $this->activityType;
     }
 
-    public function setActivityType(?string $activityType): Cmi5Item
+    public function setActivityType(?string $activityType): self
     {
         $this->activityType = $activityType;
 
@@ -247,7 +277,7 @@ class Cmi5Item
         return $this->launchMethod;
     }
 
-    public function setLaunchMethod(?string $launchMethod): Cmi5Item
+    public function setLaunchMethod(?string $launchMethod): self
     {
         $this->launchMethod = $launchMethod;
 
@@ -259,7 +289,7 @@ class Cmi5Item
         return $this->moveOn;
     }
 
-    public function setMoveOn(?string $moveOn): Cmi5Item
+    public function setMoveOn(?string $moveOn): self
     {
         $this->moveOn = $moveOn;
 
@@ -271,7 +301,7 @@ class Cmi5Item
         return $this->masteryScore;
     }
 
-    public function setMasteryScore(?float $masteryScore): Cmi5Item
+    public function setMasteryScore(?float $masteryScore): self
     {
         $this->masteryScore = $masteryScore;
 
@@ -283,7 +313,7 @@ class Cmi5Item
         return $this->launchParameters;
     }
 
-    public function setLaunchParameters(?string $launchParameters): Cmi5Item
+    public function setLaunchParameters(?string $launchParameters): self
     {
         $this->launchParameters = $launchParameters;
 
@@ -295,25 +325,19 @@ class Cmi5Item
         return $this->entitlementKey;
     }
 
-    public function setEntitlementKey(?string $entitlementKey): Cmi5Item
+    public function setEntitlementKey(?string $entitlementKey): self
     {
         $this->entitlementKey = $entitlementKey;
 
         return $this;
     }
 
-    /**
-     * @return \Chamilo\PluginBundle\Entity\XApi\Cmi5Item|null
-     */
-    public function getParent(): ?Cmi5Item
+    public function getParent(): ?self
     {
         return $this->parent;
     }
 
-    /**
-     * @param \Chamilo\PluginBundle\Entity\XApi\Cmi5Item|null $parent
-     */
-    public function setParent(?Cmi5Item $parent): Cmi5Item
+    public function setParent(?self $parent): self
     {
         $this->parent = $parent;
 
@@ -325,7 +349,7 @@ class Cmi5Item
         return $this->children;
     }
 
-    public function setChildren(ArrayCollection $children): Cmi5Item
+    public function setChildren(ArrayCollection $children): self
     {
         $this->children = $children;
 
@@ -337,35 +361,26 @@ class Cmi5Item
         return $this->status;
     }
 
-    public function setStatus(?string $status): Cmi5Item
+    public function setStatus(?string $status): self
     {
         $this->status = $status;
 
         return $this;
     }
 
-    /**
-     * @return \Chamilo\PluginBundle\Entity\XApi\ToolLaunch
-     */
     public function getTool(): ToolLaunch
     {
         return $this->tool;
     }
 
-    /**
-     * @param \Chamilo\PluginBundle\Entity\XApi\ToolLaunch $tool
-     */
-    public function setTool(ToolLaunch $tool): Cmi5Item
+    public function setTool(ToolLaunch $tool): self
     {
         $this->tool = $tool;
 
         return $this;
     }
 
-    /**
-     * @return \Chamilo\PluginBundle\Entity\XApi\Cmi5Item
-     */
-    public function getRoot(): Cmi5Item
+    public function getRoot(): self
     {
         return $this->root;
     }

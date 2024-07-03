@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
@@ -64,7 +66,8 @@ try {
             $toolLaunch->getLrsAuthUsername(),
             $toolLaunch->getLrsAuthPassword()
         )
-        ->getDocument($state);
+        ->getDocument($state)
+    ;
 
     $data = $stateDocument->getData()->getData();
 
@@ -103,6 +106,7 @@ try {
     );
 
     header('Location: '.api_get_course_url());
+
     exit;
 }
 
@@ -111,13 +115,15 @@ try {
         ->getXApiStateClient()
         ->createOrReplaceDocument(
             new StateDocument($state, $documentData)
-        );
+        )
+    ;
 } catch (Exception $exception) {
     Display::addFlash(
         Display::return_message($exception->getMessage(), 'error')
     );
 
     header('Location: '.api_get_course_url());
+
     exit;
 }
 
@@ -136,7 +142,7 @@ $activityLaunchUrl = $toolLaunch->getLaunchUrl().'?'
         ],
         null,
         '&',
-        PHP_QUERY_RFC3986
+        \PHP_QUERY_RFC3986
     );
 
 header("Location: $activityLaunchUrl");

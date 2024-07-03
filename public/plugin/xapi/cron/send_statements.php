@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\XApi\SharedStatement;
@@ -12,11 +14,11 @@ use Xabbuh\XApi\Serializer\Symfony\StatementSerializer;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
-if (php_sapi_name() !== 'cli') {
+if (\PHP_SAPI !== 'cli') {
     exit;
 }
 
-echo 'XAPI: Cron to send statements.'.PHP_EOL;
+echo 'XAPI: Cron to send statements.'.\PHP_EOL;
 
 $em = Database::getManager();
 $serializer = Serializer::createSerializer();
@@ -28,11 +30,12 @@ $notSentSharedStatements = $em
         ['uuid' => null, 'sent' => false],
         null,
         100
-    );
+    )
+;
 $countNotSent = count($notSentSharedStatements);
 
 if ($countNotSent > 0) {
-    echo '['.time().'] Trying to send '.$countNotSent.' statements to LRS'.PHP_EOL;
+    echo '['.time().'] Trying to send '.$countNotSent.' statements to LRS'.\PHP_EOL;
 
     $client = XApiPlugin::create()->getXapiStatementCronClient();
 
@@ -55,25 +58,26 @@ if ($countNotSent > 0) {
 
             echo "\t\tStatement ID received: \"{$sentStatement->getId()->getValue()}\"";
         } catch (ConflictException $e) {
-            echo $e->getMessage().PHP_EOL;
+            echo $e->getMessage().\PHP_EOL;
 
             continue;
         } catch (XApiException $e) {
-            echo $e->getMessage().PHP_EOL;
+            echo $e->getMessage().\PHP_EOL;
 
             continue;
         }
 
         $notSentSharedStatement
             ->setUuid($sentStatement->getId()->getValue())
-            ->setSent(true);
+            ->setSent(true)
+        ;
 
         $em->persist($notSentSharedStatement);
 
-        echo "\t\tShared statement updated".PHP_EOL;
+        echo "\t\tShared statement updated".\PHP_EOL;
     }
 
     $em->flush();
 } else {
-    echo 'No statements to process.'.PHP_EOL;
+    echo 'No statements to process.'.\PHP_EOL;
 }

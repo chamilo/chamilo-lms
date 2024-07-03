@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\Lrs;
 
 use Chamilo\PluginBundle\Entity\XApi\LrsAuth;
 use Database;
+use Exception;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -16,8 +19,6 @@ use Xabbuh\XApi\Common\Exception\XApiException;
 
 /**
  * Class LrsRequest.
- *
- * @package Chamilo\PluginBundle\XApi\Lrs
  */
 class LrsRequest
 {
@@ -26,15 +27,12 @@ class LrsRequest
      */
     private $request;
 
-    /**
-     * LrsRequest constructor.
-     */
     public function __construct()
     {
         $this->request = HttpRequest::createFromGlobals();
     }
 
-    public function send()
+    public function send(): void
     {
         try {
             $this->alternateRequestSyntax();
@@ -50,7 +48,7 @@ class LrsRequest
                 $httpException->getMessage(),
                 $httpException->getStatusCode()
             );
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $response = HttpResponse::create($exception->getMessage(), HttpResponse::HTTP_BAD_REQUEST);
         }
 
@@ -60,7 +58,7 @@ class LrsRequest
     }
 
     /**
-     * @throws \Xabbuh\XApi\Common\Exception\AccessDeniedException
+     * @throws AccessDeniedException
      */
     private function validateAuth(): bool
     {
@@ -80,7 +78,7 @@ class LrsRequest
 
         $parts = explode(':', $authDecoded, 2);
 
-        if (empty($parts) || count($parts) !== 2) {
+        if (empty($parts) || 2 !== \count($parts)) {
             throw new AccessDeniedException();
         }
 
@@ -90,7 +88,8 @@ class LrsRequest
             ->getRepository(LrsAuth::class)
             ->findOneBy(
                 ['username' => $username, 'password' => $password, 'enabled' => true]
-            );
+            )
+        ;
 
         if (null == $auth) {
             throw new AccessDeniedException();
@@ -99,7 +98,7 @@ class LrsRequest
         return true;
     }
 
-    private function validateVersion()
+    private function validateVersion(): void
     {
         $version = $this->request->headers->get('X-Experience-API-Version');
 
@@ -131,7 +130,7 @@ class LrsRequest
         $segments = array_map('ucfirst', $segments);
         $controllerName = implode('', $segments).'Controller';
 
-        return "Chamilo\\PluginBundle\\XApi\Lrs\\$controllerName";
+        return "Chamilo\\PluginBundle\\XApi\\Lrs\\$controllerName";
     }
 
     private function getMethodName(): string
@@ -142,7 +141,7 @@ class LrsRequest
     }
 
     /**
-     * @throws \Xabbuh\XApi\Common\Exception\AccessDeniedException
+     * @throws AccessDeniedException
      */
     private function generateResponse(string $controllerName, string $methodName): HttpResponse
     {
@@ -152,23 +151,21 @@ class LrsRequest
             throw new NotFoundHttpException();
         }
 
-        if ($controllerName !== AboutController::class) {
+        if (AboutController::class !== $controllerName) {
             $this->validateAuth();
             $this->validateVersion();
         }
 
         /** @var HttpResponse $response */
-        $response = call_user_func(
+        return \call_user_func(
             [
                 new $controllerName($this->request),
                 $methodName,
             ]
         );
-
-        return $response;
     }
 
-    private function alternateRequestSyntax()
+    private function alternateRequestSyntax(): void
     {
         if ('POST' !== $this->request->getMethod()) {
             return;
@@ -209,7 +206,7 @@ class LrsRequest
         ];
 
         foreach ($this->request->request as $key => $value) {
-            if (in_array($key, $headerNames, true)) {
+            if (\in_array($key, $headerNames, true)) {
                 $this->request->headers->set($key, $value);
             } else {
                 $this->request->query->set($key, $value);

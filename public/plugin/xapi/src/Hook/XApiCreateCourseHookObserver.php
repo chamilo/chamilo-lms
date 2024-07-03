@@ -1,15 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
-/**
- * Class XApiCreateCourseHookObserver.
- */
 class XApiCreateCourseHookObserver extends HookObserver implements HookCreateCourseObserverInterface
 {
-    /**
-     * XApiCreateCourseHookObserver constructor.
-     */
     protected function __construct()
     {
         parent::__construct(
@@ -18,10 +14,7 @@ class XApiCreateCourseHookObserver extends HookObserver implements HookCreateCou
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function hookCreateCourse(HookCreateCourseEventInterface $hook)
+    public function hookCreateCourse(HookCreateCourseEventInterface $hook): void
     {
         $data = $hook->getEventData();
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the xAPI package.
  *
@@ -21,17 +23,11 @@ use XApi\Repository\Doctrine\Repository\Mapping\StatementRepository as BaseState
  */
 final class StatementRepository extends EntityRepository implements BaseStatementRepository
 {
-    /**
-     * {@inheritdoc}
-     */
     public function findStatement(array $criteria)
     {
         return parent::findOneBy($criteria);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function findStatements(array $criteria)
     {
         if (!empty($criteria['registration'])) {
@@ -53,10 +49,7 @@ final class StatementRepository extends EntityRepository implements BaseStatemen
         return parent::findBy($criteria, ['created' => 'ASC']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function storeStatement(Statement $mappedStatement, $flush = true)
+    public function storeStatement(Statement $mappedStatement, $flush = true): void
     {
         $this->_em->persist($mappedStatement);
 

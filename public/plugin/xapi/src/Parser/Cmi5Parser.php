@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\Parser;
@@ -10,14 +12,9 @@ use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Class Cmi5Parser.
- *
- * @package Chamilo\PluginBundle\XApi\Parser
  */
 class Cmi5Parser extends PackageParser
 {
-    /**
-     * {@inheritDoc}
-     */
     public function parse(): ToolLaunch
     {
         $content = file_get_contents($this->filePath);
@@ -47,7 +44,8 @@ class Cmi5Parser extends PackageParser
             ->setAllowMultipleAttempts(false)
             ->setCreatedAt(api_get_utc_datetime(null, false, true))
             ->setCourse($this->course)
-            ->setSession($this->session);
+            ->setSession($this->session)
+        ;
 
         $toc = $this->generateToC($xml);
 
@@ -87,7 +85,7 @@ class Cmi5Parser extends PackageParser
             ->filterXPath('//*')
             ->reduce(
                 function (Crawler $node, $i) {
-                    return in_array($node->nodeName(), ['au', 'block']);
+                    return \in_array($node->nodeName(), ['au', 'block']);
                 }
             )
             ->each(
@@ -109,28 +107,30 @@ class Cmi5Parser extends PackageParser
                             $this->getLanguageStrings(
                                 $node->filterXPath('//description')
                             )
-                        );
+                        )
+                    ;
 
                     if ('au' === $node->nodeName()) {
                         $launchParametersNode = $node->filterXPath('//launchParameters');
                         $entitlementKeyNode = $node->filterXPath('//entitlementKey');
                         $url
                             = $item
-                            ->setUrl(
-                                $this->parseLaunchUrl(
-                                    trim($node->filterXPath('//url')->text())
+                                ->setUrl(
+                                    $this->parseLaunchUrl(
+                                        trim($node->filterXPath('//url')->text())
+                                    )
                                 )
-                            )
-                            ->setActivityType($activityType ?: null)
-                            ->setLaunchMethod($launchMethod ?: null)
-                            ->setMoveOn($moveOn ?: 'NotApplicable')
-                            ->setMasteryScore((float) $masteryMode ?: null)
-                            ->setLaunchParameters(
-                                $launchParametersNode->count() > 0 ? trim($launchParametersNode->text()) : null
-                            )
-                            ->setEntitlementKey(
-                                $entitlementKeyNode->count() > 0 ? trim($entitlementKeyNode->text()) : null
-                            );
+                                ->setActivityType($activityType ?: null)
+                                ->setLaunchMethod($launchMethod ?: null)
+                                ->setMoveOn($moveOn ?: 'NotApplicable')
+                                ->setMasteryScore((float) $masteryMode ?: null)
+                                ->setLaunchParameters(
+                                    $launchParametersNode->count() > 0 ? trim($launchParametersNode->text()) : null
+                                )
+                                ->setEntitlementKey(
+                                    $entitlementKeyNode->count() > 0 ? trim($entitlementKeyNode->text()) : null
+                                )
+                        ;
                     }
 
                     $parentNode = $node->parents()->first();
@@ -141,7 +141,8 @@ class Cmi5Parser extends PackageParser
 
                     return $item;
                 }
-            );
+            )
+        ;
 
         foreach ($blocksMap as $itemPos => $parentIdentifier) {
             foreach ($items as $item) {
@@ -167,7 +168,7 @@ class Cmi5Parser extends PackageParser
             $baseUrl = str_replace(
                 api_get_path(SYS_COURSE_PATH),
                 api_get_path(WEB_COURSE_PATH),
-                dirname($this->filePath)
+                \dirname($this->filePath)
             );
 
             return "$baseUrl/$url";

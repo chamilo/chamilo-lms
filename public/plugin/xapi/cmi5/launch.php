@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\XApi\Cmi5Item;
@@ -74,7 +76,8 @@ $context = (new Context())
         api_get_setting('Institution').' - '.api_get_setting('siteName')
     )
     ->withLanguage(api_get_language_isocode())
-    ->withRegistration($registration);
+    ->withRegistration($registration)
+;
 
 $statementUuid = Uuid::uuid5(
     $plugin->get(XApiPlugin::SETTING_UUID_NAMESPACE),
@@ -95,17 +98,17 @@ $statement = new Statement(
 
 $statementClient = XApiPlugin::create()->getXApiStatementClient();
 
-//try {
+// try {
 //    $statementClient->storeStatement($statement);
-//} catch (ConflictException $e) {
+// } catch (ConflictException $e) {
 //    echo Display::return_message($e->getMessage(), 'error');
 //
 //    exit;
-//} catch (XApiException $e) {
+// } catch (XApiException $e) {
 //    echo Display::return_message($e->getMessage(), 'error');
 //
 //    exit;
-//}
+// }
 
 $viewSessionId = (string) Uuid::uuid4();
 
@@ -146,7 +149,8 @@ try {
         ->getXApiStateClient()
         ->createOrReplaceDocument(
             new StateDocument($state, $documentData)
-        );
+        )
+    ;
 } catch (Exception $exception) {
     echo Display::return_message($exception->getMessage(), 'error');
 

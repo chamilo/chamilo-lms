@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
@@ -15,8 +17,6 @@ use XApiPlugin;
 
 /**
  * Class BaseStatement.
- *
- * @package Chamilo\PluginBundle\XApi\ToolExperience\Statement
  */
 abstract class BaseStatement
 {
@@ -48,6 +48,7 @@ abstract class BaseStatement
             ->withLanguage(api_get_language_isocode())
             ->withContextActivities(
                 new ContextActivities(null, $groupingActivities)
-            );
+            )
+        ;
     }
 }

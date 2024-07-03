@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the xAPI package.
  *
@@ -11,6 +13,7 @@
 
 namespace XApi\LrsBundle\Response;
 
+use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Xabbuh\XApi\Model\Attachment;
@@ -29,10 +32,7 @@ class AttachmentResponse extends Response
         $this->attachment = $attachment;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function prepare(Request $request)
+    public function prepare(Request $request): void
     {
         if (!$this->headers->has('Content-Type')) {
             $this->headers->set('Content-Type', $this->attachment->getContentType());
@@ -43,30 +43,24 @@ class AttachmentResponse extends Response
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @throws \LogicException
+     * @throws LogicException
      */
-    public function sendContent()
+    public function sendContent(): void
     {
-        throw new \LogicException('An AttachmentResponse is only meant to be part of a multipart Response.');
+        throw new LogicException('An AttachmentResponse is only meant to be part of a multipart Response.');
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @throws \LogicException when the content is not null
+     * @throws LogicException when the content is not null
      */
-    public function setContent($content)
+    public function setContent($content): void
     {
         if (null !== $content) {
-            throw new \LogicException('The content cannot be set on an AttachmentResponse instance.');
+            throw new LogicException('The content cannot be set on an AttachmentResponse instance.');
         }
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return string|null
      */
     public function getContent()

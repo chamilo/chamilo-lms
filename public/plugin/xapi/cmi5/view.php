@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\XApi\Cmi5Item;
@@ -25,6 +27,7 @@ if (null === $toolLaunch
     || 'cmi5' !== $toolLaunch->getActivityType()
 ) {
     header('Location: '.api_get_course_url());
+
     exit;
 }
 
@@ -42,7 +45,8 @@ $query = $em->createQueryBuilder()
     ->from(Cmi5Item::class, 'item')
     ->where('item.tool = :tool')
     ->setParameter('tool', $toolLaunch->getId())
-    ->getQuery();
+    ->getQuery()
+;
 
 $tocHtml = $itemsRepo->buildTree(
     $query->getArrayResult(),

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\Importer;
@@ -8,17 +10,12 @@ use Exception;
 
 /**
  * Class XmlImporter.
- *
- * @package Chamilo\PluginBundle\XApi\Importer
  */
 class XmlPackageImporter extends PackageImporter
 {
-    /**
-     * {@inheritDoc}
-     */
     public function import(): string
     {
-        if (!in_array($this->packageFileInfo['name'], ['tincan.xml', 'cmi5.xml'])) {
+        if (!\in_array($this->packageFileInfo['name'], ['tincan.xml', 'cmi5.xml'])) {
             throw new Exception('Invalid package');
         }
 

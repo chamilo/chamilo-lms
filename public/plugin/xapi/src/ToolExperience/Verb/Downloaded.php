@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Verb;
 
 class Downloaded extends BaseVerb

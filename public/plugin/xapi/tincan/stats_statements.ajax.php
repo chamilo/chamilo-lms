@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
@@ -21,6 +23,7 @@ if (!$request->isXmlHttpRequest()
     || !$course
 ) {
     echo Display::return_message(get_lang('NotAllowed'), 'error');
+
     exit;
 }
 
@@ -36,6 +39,7 @@ $attempt = $request->request->get('attempt');
 
 if (!$toolLaunch || !$attempt) {
     echo Display::return_message(get_lang('NoResults'), 'error');
+
     exit;
 }
 
@@ -49,15 +53,18 @@ $activity = new Activity(
 
 $filter = new StatementsFilter();
 $filter
-    ->byRegistration($attempt);
+    ->byRegistration($attempt)
+;
 
 try {
     $result = $xapiStatementClient->getStatements($filter);
 } catch (XApiException $xApiException) {
     echo Display::return_message($xApiException->getMessage(), 'error');
+
     exit;
 } catch (Exception $exception) {
     echo Display::return_message($exception->getMessage(), 'error');
+
     exit;
 }
 
@@ -65,6 +72,7 @@ $statements = $result->getStatements();
 
 if (count($statements) <= 0) {
     echo Display::return_message(get_lang('NoResults'), 'warning');
+
     exit;
 }
 

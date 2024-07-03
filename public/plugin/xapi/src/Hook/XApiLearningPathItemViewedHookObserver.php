@@ -1,17 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\XApi\ToolExperience\Statement\LearningPathItemViewed;
 
-/**
- * Class XApiLearningPathItemViewedHookObserver.
- */
 class XApiLearningPathItemViewedHookObserver extends XApiActivityHookObserver implements HookLearningPathItemViewedObserverInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function hookLearningPathItemViewed(HookLearningPathItemViewedEventInterface $event)
     {
         $data = $event->getEventData();

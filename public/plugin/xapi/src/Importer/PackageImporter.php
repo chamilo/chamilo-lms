@@ -1,38 +1,39 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\Importer;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Exception;
 
 /**
  * Class AbstractImporter.
- *
- * @package Chamilo\PluginBundle\XApi\Importer
  */
 abstract class PackageImporter
 {
     /**
-     * @var \Chamilo\CoreBundle\Entity\Course
+     * @var Course
      */
     protected $course;
+
     /**
      * @var string
      */
     protected $courseDirectoryPath;
+
     /**
      * @var array
      */
     protected $packageFileInfo;
+
     /**
      * @var string
      */
     protected $packageType;
 
-    /**
-     * AbstractImporter constructor.
-     */
     protected function __construct(array $fileInfo, Course $course)
     {
         $this->packageFileInfo = $fileInfo;
@@ -54,9 +55,9 @@ abstract class PackageImporter
     }
 
     /**
-     * @throws \Exception
-     *
      * @return mixed
+     *
+     * @throws Exception
      */
     abstract public function import(): string;
 

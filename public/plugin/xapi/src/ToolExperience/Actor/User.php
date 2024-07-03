@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Actor;
@@ -11,8 +13,6 @@ use Xabbuh\XApi\Model\IRI;
 
 /**
  * Class User.
- *
- * @package Chamilo\PluginBundle\XApi\ToolExperience\Actor
  */
 class User extends BaseActor
 {

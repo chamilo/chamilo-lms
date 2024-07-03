@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\Importer;
@@ -11,14 +13,9 @@ use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class ZipImporter.
- *
- * @package Chamilo\PluginBundle\XApi\Importer
  */
 class ZipPackageImporter extends PackageImporter
 {
-    /**
-     * {@inheritDoc}
-     */
     public function import(): string
     {
         $zipFile = new PclZip($this->packageFileInfo['tmp_name']);
@@ -31,7 +28,7 @@ class ZipPackageImporter extends PackageImporter
                     throw new Exception("File \"{$zipEntry['filename']}\" contains a PHP script");
                 }
 
-                if (in_array($zipEntry['filename'], ['tincan.xml', 'cmi5.xml'])) {
+                if (\in_array($zipEntry['filename'], ['tincan.xml', 'cmi5.xml'])) {
                     $this->packageType = explode('.', $zipEntry['filename'], 2)[0];
                 }
 
@@ -55,9 +52,9 @@ class ZipPackageImporter extends PackageImporter
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
-    protected function validateEnoughSpace(int $packageSize)
+    protected function validateEnoughSpace(int $packageSize): void
     {
         $courseSpaceQuota = DocumentManager::get_course_quota($this->course->getCode());
 

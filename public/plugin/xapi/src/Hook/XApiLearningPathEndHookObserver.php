@@ -1,15 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\XApi\ToolExperience\Statement\LearningPathCompleted;
 
-/**
- * Class XApiLearningPathEndHookObserver.
- */
 class XApiLearningPathEndHookObserver extends XApiActivityHookObserver implements HookLearningPathEndObserverInterface
 {
-    public function notifyLearningPathEnd(HookLearningPathEndEventInterface $event)
+    public function notifyLearningPathEnd(HookLearningPathEndEventInterface $event): void
     {
         $data = $event->getEventData();
         $em = Database::getManager();

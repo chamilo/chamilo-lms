@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\Entity\XApi;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class LrsAuth.
  *
- * @package Chamilo\PluginBundle\Entity\XApi
- *
  * @ORM\Table(name="xapi_lrs_auth")
+ *
  * @ORM\Entity()
  */
 class LrsAuth
@@ -20,30 +22,36 @@ class LrsAuth
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
+     *
      * @ORM\Id()
+     *
      * @ORM\GeneratedValue()
      */
     private $id;
+
     /**
      * @var string
      *
      * @ORM\Column(name="username", type="string")
      */
     private $username;
+
     /**
      * @var string
      *
      * @ORM\Column(name="password", type="string")
      */
     private $password;
+
     /**
      * @var bool
      *
      * @ORM\Column(name="enabled", type="boolean")
      */
     private $enabled;
+
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
      */
@@ -59,7 +67,7 @@ class LrsAuth
         return $this->username;
     }
 
-    public function setUsername(string $username): LrsAuth
+    public function setUsername(string $username): self
     {
         $this->username = $username;
 
@@ -71,7 +79,7 @@ class LrsAuth
         return $this->password;
     }
 
-    public function setPassword(string $password): LrsAuth
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 
@@ -83,19 +91,19 @@ class LrsAuth
         return $this->enabled;
     }
 
-    public function setEnabled(bool $enabled): LrsAuth
+    public function setEnabled(bool $enabled): self
     {
         $this->enabled = $enabled;
 
         return $this;
     }
 
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): LrsAuth
+    public function setCreatedAt(DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 

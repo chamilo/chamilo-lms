@@ -1,18 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\XApi\ToolExperience\Statement\QuizCompleted;
 
-/**
- * Class XApiQuizEndHookObserver.
- */
 class XApiQuizEndHookObserver extends XApiActivityHookObserver implements HookQuizEndObserverInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function hookQuizEnd(HookQuizEndEventInterface $hookEvent)
+    public function hookQuizEnd(HookQuizEndEventInterface $hookEvent): void
     {
         $data = $hookEvent->getEventData();
         $em = Database::getManager();

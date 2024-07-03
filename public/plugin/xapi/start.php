@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
@@ -26,7 +28,8 @@ $table = new SortableTable(
     'tbl_xapi',
     function () use ($em, $course, $session, $isAllowedToEdit) {
         return $em->getRepository(ToolLaunch::class)
-            ->countByCourseAndSession($course, $session, !$isAllowedToEdit);
+            ->countByCourseAndSession($course, $session, !$isAllowedToEdit)
+        ;
     },
     function ($start, $limit, $orderBy, $orderDir) use ($toolLaunchRepo, $course, $session, $isAllowedToEdit) {
         $tools = $toolLaunchRepo->findByCourseAndSession($course, $session, ['title' => $orderDir], $limit, $start);
@@ -79,7 +82,7 @@ $table->set_column_filter(
         );
 
         if ($description) {
-            $data .= PHP_EOL.Display::tag('small', $description, ['class' => 'text-muted']);
+            $data .= \PHP_EOL.Display::tag('small', $description, ['class' => 'text-muted']);
         }
 
         if ($wasAddedInLp) {
@@ -117,7 +120,7 @@ if ($isAllowedToEdit) {
                 );
             }
 
-            return implode(PHP_EOL, $actions);
+            return implode(\PHP_EOL, $actions);
         }
     );
 }

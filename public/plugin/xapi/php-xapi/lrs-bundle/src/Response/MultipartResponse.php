@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the xAPI package.
  *
@@ -11,6 +13,7 @@
 
 namespace XApi\LrsBundle\Response;
 
+use LogicException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,6 +26,7 @@ class MultipartResponse extends Response
     protected $subtype;
     protected $boundary;
     protected $statementPart;
+
     /**
      * @var Response[]
      */
@@ -53,7 +57,7 @@ class MultipartResponse extends Response
      */
     public function addAttachmentPart(AttachmentResponse $part)
     {
-        if ($part->getContent() !== null) {
+        if (null !== $part->getContent()) {
             $this->parts[] = $part;
         }
 
@@ -76,9 +80,6 @@ class MultipartResponse extends Response
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function prepare(Request $request)
     {
         foreach ($this->parts as $part) {
@@ -91,9 +92,6 @@ class MultipartResponse extends Response
         return parent::prepare($request);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function sendContent()
     {
         $content = '';
@@ -112,20 +110,16 @@ class MultipartResponse extends Response
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @throws \LogicException when the content is not null
+     * @throws LogicException when the content is not null
      */
-    public function setContent($content)
+    public function setContent($content): void
     {
         if (null !== $content) {
-            throw new \LogicException('The content cannot be set on a MultipartResponse instance.');
+            throw new LogicException('The content cannot be set on a MultipartResponse instance.');
         }
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return false
      */
     public function getContent()

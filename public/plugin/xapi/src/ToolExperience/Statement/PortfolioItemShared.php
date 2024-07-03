@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
@@ -12,8 +14,6 @@ use Xabbuh\XApi\Model\Statement;
 
 /**
  * Class PortfolioItemShared.
- *
- * @package Chamilo\PluginBundle\XApi\ToolExperience\Statement
  */
 class PortfolioItemShared extends PortfolioItemStatement
 {

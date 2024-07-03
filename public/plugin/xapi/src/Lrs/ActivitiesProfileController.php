@@ -1,16 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\Lrs;
 
 use Chamilo\PluginBundle\Entity\XApi\ActivityProfile;
+use Database;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class ActivitiesProfileController.
- *
- * @package Chamilo\PluginBundle\XApi\Lrs
  */
 class ActivitiesProfileController extends BaseController
 {
@@ -19,7 +20,7 @@ class ActivitiesProfileController extends BaseController
         $profileId = $this->httpRequest->query->get('profileId');
         $activityId = $this->httpRequest->query->get('activityId');
 
-        $em = \Database::getManager();
+        $em = Database::getManager();
         $profileRepo = $em->getRepository(ActivityProfile::class);
 
         /** @var ActivityProfile $activityProfile */
@@ -50,7 +51,7 @@ class ActivitiesProfileController extends BaseController
         $activityId = $this->httpRequest->query->get('activityId');
         $documentData = $this->httpRequest->getContent();
 
-        $em = \Database::getManager();
+        $em = Database::getManager();
         $profileRepo = $em->getRepository(ActivityProfile::class);
 
         /** @var ActivityProfile $activityProfile */
@@ -65,7 +66,8 @@ class ActivitiesProfileController extends BaseController
             $activityProfile = new ActivityProfile();
             $activityProfile
                 ->setProfileId($profileId)
-                ->setActivityId($activityId);
+                ->setActivityId($activityId)
+            ;
         }
 
         $activityProfile->setDocumentData(json_decode($documentData, true));

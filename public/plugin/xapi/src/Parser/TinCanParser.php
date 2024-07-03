@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\XApi\Parser;
@@ -9,14 +11,9 @@ use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Class TinCanParser.
- *
- * @package Chamilo\PluginBundle\XApi\Parser
  */
 class TinCanParser extends PackageParser
 {
-    /**
-     * {@inheritDoc}
-     */
     public function parse(): ToolLaunch
     {
         $content = file_get_contents($this->filePath);
@@ -35,7 +32,8 @@ class TinCanParser extends PackageParser
             ->setCreatedAt(api_get_utc_datetime(null, false, true))
             ->setActivityId($activityNode->attr('id'))
             ->setActivityType($activityNode->attr('type'))
-            ->setLaunchUrl($this->parseLaunchUrl($nodeLaunch));
+            ->setLaunchUrl($this->parseLaunchUrl($nodeLaunch))
+        ;
 
         if ($nodeName) {
             $toolLaunch->setTitle($nodeName->text());
@@ -58,7 +56,7 @@ class TinCanParser extends PackageParser
             $baseUrl = str_replace(
                 api_get_path(SYS_COURSE_PATH),
                 api_get_path(WEB_COURSE_PATH),
-                dirname($this->filePath)
+                \dirname($this->filePath)
             );
 
             return "$baseUrl/$launchUrl";

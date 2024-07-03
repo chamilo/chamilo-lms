@@ -42,8 +42,9 @@ echo count($defined_terms) . " terms were found in language files" . PHP_EOL;
 // Now get all terms found in all PHP, TPL, and Twig files of Chamilo (this takes some time and memory)
 $usedTerms = [];
 $l = strlen(api_get_path(SYS_PATH));
-$pathfile = api_get_path(SYS_PATH) . "main/template/default/gamification/my_progress.html.twig";
-$files = [$pathfile]; // Process only the specific file for now
+$pathfile = api_get_path(SYS_PATH) . "main/template/"; //Path for the missing files, should be adapted for other use
+$files = getAllPhpFiles($pathfile);
+//$files = [$pathfile]; // Process only the specific file for now
 $rootLength = strlen(api_get_path(SYS_PATH));
 $countFiles = 0;
 $countReplaces = 0;

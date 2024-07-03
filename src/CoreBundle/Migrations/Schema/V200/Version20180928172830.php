@@ -51,7 +51,8 @@ class Version20180928172830 extends AbstractMigrationChamilo
             $lpTools = $this->connection
                 ->prepare("SELECT c_id, session_id, link FROM c_tool WHERE link LIKE '%lp_controller.php%'")
                 ->executeQuery()
-                ->fetchAllAssociative();
+                ->fetchAllAssociative()
+            ;
 
             $this->writeFile('tool_links', serialize($lpTools));
 

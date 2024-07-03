@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\XApi\SharedStatement;
+use Chamilo\CoreBundle\Entity\XApiSharedStatement;
 use Xabbuh\XApi\Common\Exception\ConflictException;
 use Xabbuh\XApi\Common\Exception\XApiException;
 use Xabbuh\XApi\Model\StatementId;
@@ -25,7 +25,7 @@ $serializer = Serializer::createSerializer();
 $statementSerializer = new StatementSerializer($serializer);
 
 $notSentSharedStatements = $em
-    ->getRepository(SharedStatement::class)
+    ->getRepository(XApiSharedStatement::class)
     ->findBy(
         ['uuid' => null, 'sent' => false],
         null,
@@ -39,7 +39,6 @@ if ($countNotSent > 0) {
 
     $client = XApiPlugin::create()->getXapiStatementCronClient();
 
-    /** @var SharedStatement $notSentSharedStatement */
     foreach ($notSentSharedStatements as $notSentSharedStatement) {
         $notSentStatement = $statementSerializer->deserializeStatement(
             json_encode($notSentSharedStatement->getStatement())

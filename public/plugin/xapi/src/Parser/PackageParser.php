@@ -8,7 +8,7 @@ namespace Chamilo\PluginBundle\XApi\Parser;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
+use Chamilo\CoreBundle\Entity\XApiToolLaunch;
 use Exception;
 
 /**
@@ -60,5 +60,5 @@ abstract class PackageParser
         }
     }
 
-    abstract public function parse(): ToolLaunch;
+    abstract public function parse(): XApiToolLaunch;
 }

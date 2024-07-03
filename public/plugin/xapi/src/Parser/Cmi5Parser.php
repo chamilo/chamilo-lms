@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\Parser;
 
-use Chamilo\PluginBundle\Entity\XApi\Cmi5Item;
-use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
+use Chamilo\CoreBundle\Entity\XApiCmi5Item;
+use Chamilo\CoreBundle\Entity\XApiToolLaunch;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -15,14 +15,14 @@ use Symfony\Component\DomCrawler\Crawler;
  */
 class Cmi5Parser extends PackageParser
 {
-    public function parse(): ToolLaunch
+    public function parse(): XApiToolLaunch
     {
         $content = file_get_contents($this->filePath);
         $xml = new Crawler($content);
 
         $courseNode = $xml->filterXPath('//courseStructure/course');
 
-        $toolLaunch = new ToolLaunch();
+        $toolLaunch = new XApiToolLaunch();
         $toolLaunch
             ->setTitle(
                 current(
@@ -74,13 +74,13 @@ class Cmi5Parser extends PackageParser
     }
 
     /**
-     * @return array|\Chamilo\PluginBundle\Entity\XApi\Cmi5Item[]
+     * @return array<int, XApiCmi5Item>
      */
-    private function generateToC(Crawler $xml)
+    private function generateToC(Crawler $xml): array
     {
         $blocksMap = [];
 
-        /** @var array|Cmi5Item[] $items */
+        /** @var array|XApiCmi5Item[] $items */
         $items = $xml
             ->filterXPath('//*')
             ->reduce(
@@ -94,7 +94,7 @@ class Cmi5Parser extends PackageParser
 
                     list($id, $activityType, $launchMethod, $moveOn, $masteryMode) = $node->extract($attributes)[0];
 
-                    $item = new Cmi5Item();
+                    $item = new XApiCmi5Item();
                     $item
                         ->setIdentifier($id)
                         ->setType($node->nodeName())

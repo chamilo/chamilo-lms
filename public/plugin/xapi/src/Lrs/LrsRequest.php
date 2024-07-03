@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\Lrs;
 
-use Chamilo\PluginBundle\Entity\XApi\LrsAuth;
+use Chamilo\CoreBundle\Entity\XApiLrsAuth;
 use Database;
 use Exception;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
@@ -85,7 +85,7 @@ class LrsRequest
         list($username, $password) = $parts;
 
         $auth = Database::getManager()
-            ->getRepository(LrsAuth::class)
+            ->getRepository(XApiLrsAuth::class)
             ->findOneBy(
                 ['username' => $username, 'password' => $password, 'enabled' => true]
             )

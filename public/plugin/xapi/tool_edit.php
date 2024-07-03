@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
+use Chamilo\CoreBundle\Entity\XApiToolLaunch;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -17,7 +17,7 @@ $request = HttpRequest::createFromGlobals();
 $em = Database::getManager();
 
 $toolLaunch = $em->find(
-    ToolLaunch::class,
+    XApiToolLaunch::class,
     $request->query->getInt('edit')
 );
 

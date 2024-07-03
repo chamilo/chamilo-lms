@@ -2,21 +2,14 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\XApi\ActivityProfile;
-use Chamilo\PluginBundle\Entity\XApi\ActivityState;
-use Chamilo\PluginBundle\Entity\XApi\Cmi5Item;
-use Chamilo\PluginBundle\Entity\XApi\InternalLog;
-use Chamilo\PluginBundle\Entity\XApi\LrsAuth;
-use Chamilo\PluginBundle\Entity\XApi\SharedStatement;
-use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
+use Chamilo\CoreBundle\Entity\XApiToolLaunch;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
 use Doctrine\ORM\ORMException;
-use Doctrine\ORM\Tools\SchemaTool;
 use GuzzleHttp\RequestOptions;
 use Http\Adapter\Guzzle6\Client;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
-use Ramsey\Uuid\Uuid;
+use Symfony\Component\Uid\Uuid;
 use Xabbuh\XApi\Client\Api\StatementsApiClientInterface;
 use Xabbuh\XApi\Client\XApiClientBuilder;
 use Xabbuh\XApi\Model\Agent;
@@ -93,34 +86,6 @@ class XApiPlugin extends Plugin implements HookPluginInterface
      */
     public function install()
     {
-        $em = Database::getManager();
-
-        $tablesExists = $em->getConnection()->getSchemaManager()->tablesExist(
-            [
-                'xapi_shared_statement',
-                'xapi_tool_launch',
-                'xapi_lrs_auth',
-                'xapi_cmi5_item',
-                'xapi_activity_state',
-                'xapi_activity_profile',
-                'xapi_internal_log',
-
-                'xapi_attachment',
-                'xapi_object',
-                'xapi_result',
-                'xapi_verb',
-                'xapi_extensions',
-                'xapi_context',
-                'xapi_actor',
-                'xapi_statement',
-            ]
-        );
-
-        if ($tablesExists) {
-            return;
-        }
-
-        $this->installPluginDbTables();
         $this->installInitialConfig();
         $this->addCourseTools();
         $this->installHook();
@@ -132,7 +97,6 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     public function uninstall()
     {
         $this->uninstallHook();
-        $this->uninstallPluginDbTables();
         $this->deleteCourseTools();
     }
 
@@ -170,39 +134,6 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         HookPortfolioCommentEdited::create()->detach($portfolioCommentEditedHook);
 
         return 1;
-    }
-
-    public function uninstallPluginDbTables()
-    {
-        $em = Database::getManager();
-        $pluginEm = self::getEntityManager();
-
-        $schemaTool = new SchemaTool($em);
-        $schemaTool->dropSchema(
-            [
-                $em->getClassMetadata(ActivityProfile::class),
-                $em->getClassMetadata(ActivityState::class),
-                $em->getClassMetadata(SharedStatement::class),
-                $em->getClassMetadata(ToolLaunch::class),
-                $em->getClassMetadata(LrsAuth::class),
-                $em->getClassMetadata(Cmi5Item::class),
-                $em->getClassMetadata(InternalLog::class),
-            ]
-        );
-
-        $pluginSchemaTool = new SchemaTool($pluginEm);
-        $pluginSchemaTool->dropSchema(
-            [
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Attachment::class),
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\StatementObject::class),
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Result::class),
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Verb::class),
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Extensions::class),
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Context::class),
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Actor::class),
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Statement::class),
-            ]
-        );
     }
 
     /**
@@ -507,7 +438,7 @@ class XApiPlugin extends Plugin implements HookPluginInterface
         $session = api_get_session_entity();
 
         $tools = Database::getManager()
-            ->getRepository(ToolLaunch::class)
+            ->getRepository(XApiToolLaunch::class)
             ->findByCourseAndSession($course, $session);
 
         $importIcon = Display::return_icon('import_scorm.png');
@@ -525,7 +456,6 @@ class XApiPlugin extends Plugin implements HookPluginInterface
             )
             .'</li>';
 
-        /** @var ToolLaunch $tool */
         foreach ($tools as $tool) {
             $toolAnchor = Display::url(
                 Security::remove_XSS($tool->getTitle()),
@@ -554,47 +484,11 @@ class XApiPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * @throws \Doctrine\ORM\Tools\ToolsException
-     */
-    private function installPluginDbTables()
-    {
-        $em = Database::getManager();
-        $pluginEm = self::getEntityManager();
-
-        $schemaTool = new SchemaTool($em);
-        $schemaTool->createSchema(
-            [
-                $em->getClassMetadata(SharedStatement::class),
-                $em->getClassMetadata(ToolLaunch::class),
-                $em->getClassMetadata(LrsAuth::class),
-                $em->getClassMetadata(Cmi5Item::class),
-                $em->getClassMetadata(ActivityState::class),
-                $em->getClassMetadata(ActivityProfile::class),
-                $em->getClassMetadata(InternalLog::class),
-            ]
-        );
-
-        $pluginSchemaTool = new SchemaTool($pluginEm);
-        $pluginSchemaTool->createSchema(
-            [
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Attachment::class),
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\StatementObject::class),
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Result::class),
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Verb::class),
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Extensions::class),
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Context::class),
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Actor::class),
-                $pluginEm->getClassMetadata(\XApi\Repository\Doctrine\Mapping\Statement::class),
-            ]
-        );
-    }
-
-    /**
      * @throws \Exception
      */
     private function installInitialConfig()
     {
-        $uuidNamespace = Uuid::uuid1();
+        $uuidNamespace = Uuid::v1()->toRfc4122();
 
         $pluginName = $this->get_name();
         $urlId = api_get_current_access_url_id();

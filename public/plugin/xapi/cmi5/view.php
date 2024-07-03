@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\XApi\Cmi5Item;
-use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
+use Chamilo\CoreBundle\Entity\XApiCmi5Item;
+use Chamilo\CoreBundle\Entity\XApiToolLaunch;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Xabbuh\XApi\Model\LanguageMap;
 
@@ -19,7 +19,7 @@ $request = HttpRequest::createFromGlobals();
 $em = Database::getManager();
 
 $toolLaunch = $em->find(
-    ToolLaunch::class,
+    XApiToolLaunch::class,
     $request->query->getInt('id')
 );
 
@@ -38,18 +38,16 @@ $cidReq = api_get_cidreq();
 $user = api_get_user_entity(api_get_user_id());
 $interfaceLanguage = api_get_interface_language();
 
-$itemsRepo = $em->getRepository(Cmi5Item::class);
+$itemsRepo = $em->getRepository(XApiCmi5Item::class);
 
-$query = $em->createQueryBuilder()
-    ->select('item')
-    ->from(Cmi5Item::class, 'item')
-    ->where('item.tool = :tool')
+$query = $itemsRepo->createQueryBuilder('item');
+$query
+    ->where($query->expr()->eq('item.tool', ':tool'))
     ->setParameter('tool', $toolLaunch->getId())
-    ->getQuery()
 ;
 
 $tocHtml = $itemsRepo->buildTree(
-    $query->getArrayResult(),
+    $query->getQuery()->getArrayResult(),
     [
         'decorate' => true,
         'rootOpen' => '<ul>',

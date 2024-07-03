@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\Parser;
 
-use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
+use Chamilo\CoreBundle\Entity\XApiToolLaunch;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -14,7 +14,7 @@ use Symfony\Component\DomCrawler\Crawler;
  */
 class TinCanParser extends PackageParser
 {
-    public function parse(): ToolLaunch
+    public function parse(): XApiToolLaunch
     {
         $content = file_get_contents($this->filePath);
 
@@ -25,7 +25,7 @@ class TinCanParser extends PackageParser
         $nodeDescription = $activityNode->filter('description');
         $nodeLaunch = $activityNode->filter('launch');
 
-        $toolLaunch = new ToolLaunch();
+        $toolLaunch = new XApiToolLaunch();
         $toolLaunch
             ->setCourse($this->course)
             ->setSession($this->session)

@@ -46,7 +46,7 @@ class XApiToolLaunch
     private ?string $activityType = null;
 
     #[ORM\Column]
-    private ?bool $allowMultipleAttempts = null;
+    private ?bool $allowMultipleAttempts = true;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $lrsUrl = null;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
+use Chamilo\CoreBundle\Entity\XApiToolLaunch;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -16,7 +16,7 @@ $plugin = XApiPlugin::create();
 $isAllowedToEdit = api_is_allowed_to_edit();
 
 $em = Database::getManager();
-$toolLaunchRepo = $em->getRepository(ToolLaunch::class);
+$toolLaunchRepo = $em->getRepository(XApiToolLaunch::class);
 
 $course = api_get_course_entity();
 $session = api_get_session_entity();
@@ -27,7 +27,7 @@ $cidReq = api_get_cidreq();
 $table = new SortableTable(
     'tbl_xapi',
     function () use ($em, $course, $session, $isAllowedToEdit) {
-        return $em->getRepository(ToolLaunch::class)
+        return $em->getRepository(XApiToolLaunch::class)
             ->countByCourseAndSession($course, $session, !$isAllowedToEdit)
         ;
     },
@@ -36,7 +36,6 @@ $table = new SortableTable(
 
         $data = [];
 
-        /** @var ToolLaunch $toolLaunch */
         foreach ($tools as $toolLaunch) {
             $wasAddedInLp = $toolLaunchRepo->wasAddedInLp($toolLaunch);
 

@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\Lrs;
 
-use Chamilo\PluginBundle\Entity\XApi\ActivityProfile;
+use Chamilo\CoreBundle\Entity\XApiActivityProfile;
 use Database;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,9 +21,9 @@ class ActivitiesProfileController extends BaseController
         $activityId = $this->httpRequest->query->get('activityId');
 
         $em = Database::getManager();
-        $profileRepo = $em->getRepository(ActivityProfile::class);
+        $profileRepo = $em->getRepository(XApiActivityProfile::class);
 
-        /** @var ActivityProfile $activityProfile */
+        /** @var XApiActivityProfile $activityProfile */
         $activityProfile = $profileRepo->findOneBy(
             [
                 'profileId' => $profileId,
@@ -52,9 +52,9 @@ class ActivitiesProfileController extends BaseController
         $documentData = $this->httpRequest->getContent();
 
         $em = Database::getManager();
-        $profileRepo = $em->getRepository(ActivityProfile::class);
+        $profileRepo = $em->getRepository(XApiActivityProfile::class);
 
-        /** @var ActivityProfile $activityProfile */
+        /** @var XApiActivityProfile $activityProfile */
         $activityProfile = $profileRepo->findOneBy(
             [
                 'profileId' => $profileId,
@@ -63,7 +63,7 @@ class ActivitiesProfileController extends BaseController
         );
 
         if (empty($activityProfile)) {
-            $activityProfile = new ActivityProfile();
+            $activityProfile = new XApiActivityProfile();
             $activityProfile
                 ->setProfileId($profileId)
                 ->setActivityId($activityId)

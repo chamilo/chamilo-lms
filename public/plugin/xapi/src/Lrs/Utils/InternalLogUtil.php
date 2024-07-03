@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\Lrs\Util;
 
-use Chamilo\PluginBundle\Entity\XApi\InternalLog;
+use Chamilo\CoreBundle\Entity\XApiInternalLog;
 use Database;
 use UserManager;
 use Xabbuh\XApi\Model\Activity;
@@ -33,7 +33,7 @@ class InternalLogUtil
         $languageIso = api_get_language_isocode();
         $statementVerbString = XApiPlugin::extractVerbInLanguage($statement->getVerb()->getDisplay(), $languageIso);
 
-        $internalLog = new InternalLog();
+        $internalLog = new XApiInternalLog();
         $internalLog
             ->setUser($user)
             ->setVerb($statementVerbString)

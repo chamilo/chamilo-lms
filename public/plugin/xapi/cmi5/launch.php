@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\XApi\Cmi5Item;
+use Chamilo\CoreBundle\Entity\XApiCmi5Item;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Xabbuh\XApi\Model\Account;
 use Xabbuh\XApi\Model\Activity;
@@ -32,7 +32,7 @@ $request = HttpRequest::createFromGlobals();
 
 $em = Database::getManager();
 
-$item = $em->find(Cmi5Item::class, $request->query->getInt('id'));
+$item = $em->find(XApiCmi5Item::class, $request->query->getInt('id'));
 $toolLaunch = $item->getTool();
 
 if ($toolLaunch->getId() !== $request->query->getInt('tool')) {

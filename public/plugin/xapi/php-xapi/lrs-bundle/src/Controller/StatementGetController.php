@@ -57,18 +57,12 @@ class StatementGetController
         'cursor' => true,
     ];
 
-    protected $repository;
-    protected $statementSerializer;
-    protected $statementResultSerializer;
-    protected $statementsFilterFactory;
-
-    public function __construct(StatementRepositoryInterface $repository, StatementSerializerInterface $statementSerializer, StatementResultSerializerInterface $statementResultSerializer, StatementsFilterFactory $statementsFilterFactory)
-    {
-        $this->repository = $repository;
-        $this->statementSerializer = $statementSerializer;
-        $this->statementResultSerializer = $statementResultSerializer;
-        $this->statementsFilterFactory = $statementsFilterFactory;
-    }
+    public function __construct(
+        protected readonly StatementRepositoryInterface $repository,
+        protected readonly StatementSerializerInterface $statementSerializer,
+        protected readonly StatementResultSerializerInterface $statementResultSerializer,
+        protected readonly StatementsFilterFactory $statementsFilterFactory
+    ) {}
 
     /**
      * @return Response

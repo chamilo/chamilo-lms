@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\XApi\SharedStatement;
+use Chamilo\CoreBundle\Entity\XApiSharedStatement;
 use Xabbuh\XApi\Model\Statement;
 use Xabbuh\XApi\Serializer\Symfony\Serializer;
 use Xabbuh\XApi\Serializer\Symfony\StatementSerializer;
@@ -33,14 +33,12 @@ abstract class XApiActivityHookObserver extends HookObserver
     /**
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
-     *
-     * @return \Chamilo\PluginBundle\Entity\XApi\SharedStatement|null
      */
-    protected function saveSharedStatement(Statement $statement)
+    protected function saveSharedStatement(Statement $statement): XApiSharedStatement
     {
         $statementSerialized = $this->serializeStatement($statement);
 
-        $sharedStmt = new SharedStatement(
+        $sharedStmt = new XApiSharedStatement(
             json_decode($statementSerialized, true)
         );
 

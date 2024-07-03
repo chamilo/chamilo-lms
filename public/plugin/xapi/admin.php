@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\XApi\LrsAuth;
+use Chamilo\CoreBundle\Entity\XApiLrsAuth;
 use Symfony\Component\HttpFoundation\Request;
 
 $cidReset = true;
@@ -26,7 +26,7 @@ $pageContent = '';
  *
  * @throws Exception
  */
-function createForm(?LrsAuth $auth = null)
+function createForm(?XApiLrsAuth $auth = null)
 {
     $pageBaseUrl = api_get_self();
 
@@ -63,7 +63,7 @@ switch ($request->query->getAlpha('action')) {
         if ($form->validate()) {
             $values = $form->exportValues();
 
-            $auth = new LrsAuth();
+            $auth = new XApiLrsAuth();
             $auth
                 ->setUsername($values['username'])
                 ->setPassword($values['password'])
@@ -94,7 +94,7 @@ switch ($request->query->getAlpha('action')) {
         break;
 
     case 'edit':
-        $auth = $em->find(LrsAuth::class, $request->query->getInt('id'));
+        $auth = $em->find(XApiLrsAuth::class, $request->query->getInt('id'));
 
         if (null == $auth) {
             api_not_allowed(true);
@@ -135,7 +135,7 @@ switch ($request->query->getAlpha('action')) {
         break;
 
     case 'delete':
-        $auth = $em->find(LrsAuth::class, $request->query->getInt('id'));
+        $auth = $em->find(XApiLrsAuth::class, $request->query->getInt('id'));
 
         if (null == $auth) {
             api_not_allowed(true);
@@ -160,7 +160,7 @@ switch ($request->query->getAlpha('action')) {
         );
         $pageContent = Display::return_message(get_lang('NoData'), 'warning');
 
-        $auths = $em->getRepository(LrsAuth::class)->findAll();
+        $auths = $em->getRepository(XApiLrsAuth::class)->findAll();
 
         if (count($auths) > 0) {
             $row = 0;

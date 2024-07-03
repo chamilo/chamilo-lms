@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\XApi\ToolLaunch;
+use Chamilo\CoreBundle\Entity\XApiToolLaunch;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Xabbuh\XApi\Common\Exception\NotFoundException;
 use Xabbuh\XApi\Model\Activity;
@@ -29,7 +29,7 @@ $em = Database::getManager();
 
 $attemptId = $request->request->get('attempt_id');
 $toolLaunch = $em->find(
-    ToolLaunch::class,
+    XApiToolLaunch::class,
     $request->request->getInt('id')
 );
 

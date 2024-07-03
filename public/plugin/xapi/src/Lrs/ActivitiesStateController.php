@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\Lrs;
 
-use Chamilo\PluginBundle\Entity\XApi\ActivityState;
+use Chamilo\CoreBundle\Entity\XApiActivityState;
 use Database;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -101,14 +101,14 @@ class ActivitiesStateController extends BaseController
         $em = Database::getManager();
 
         if (empty($state)) {
-            $state = new ActivityState();
+            $state = new XApiActivityState();
             $state
                 ->setActivityId($activityId)
                 ->setAgent(json_decode($agent, true))
                 ->setStateId($stateId)
             ;
         } else {
-            $state = $em->find(ActivityState::class, $state['id']);
+            $state = $em->find(XApiActivityState::class, $state['id']);
         }
 
         $state->setDocumentData(json_decode($documentData, true));

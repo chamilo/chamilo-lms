@@ -48,7 +48,7 @@ do
             $composer phpcs $modified_files
             if [ $? -ne 0 ]
             then
-                echo >&2 "A coding standards regressions was introduced, please fix it before pushing."
+                echo >&2 "A coding standards regression was introduced, please fix it before pushing."
                 exit 1
             fi
         fi

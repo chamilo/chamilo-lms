@@ -1,90 +1,130 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Script to switch all PHP files in Chamilo to a more Gettext-like syntax.
+ * Script to switch all language variables in Chamilo to a more Gettext-like syntax.
  */
 /**
  * Includes and declarations.
  */
 die('Remove the "die()" statement on line '.__LINE__.' to execute this script'.PHP_EOL);
 require_once __DIR__.'/../../public/main/inc/global.inc.php';
-$path = api_get_path(SYS_LANG_PATH).'english';
+$path = api_get_path(SYS_PATH) . 'main/lang/english'; // Adjusted path
 ini_set('memory_limit', '128M');
+
 /**
  * Main code.
  */
 $terms = [];
 $list = SubLanguageManager::get_lang_folder_files_list($path);
+
+// Verify that the directory content is being read
+echo "Reading language files from: $path\n";
+
 foreach ($list as $entry) {
-    $file = $path.'/'.$entry;
+    $file = $path . '/' . $entry;
+    echo "Processing language file: $file\n"; // Add debug message
     if (is_file($file)) {
-        $terms = array_merge($terms, SubLanguageManager::get_all_language_variable_in_file($file, true));
+        $file_terms = SubLanguageManager::get_all_language_variable_in_file($file, true);
+        //print_r($file_terms); // Debug: print terms loaded from the file
+        $terms = array_merge($terms, $file_terms);
     }
 }
+
 foreach ($terms as $index => $translation) {
     $terms[$index] = trim(rtrim($translation, ';'), '"');
 }
-// get only the array keys (the language variables defined in language files)
-$defined_terms = array_flip(array_keys($terms));
-echo count($defined_terms)." terms were found in language files".PHP_EOL;
 
-// now get all terms found in all PHP files of Chamilo (this takes some
-// time and memory)
+// Get only the array keys (the language variables defined in language files)
+$defined_terms = array_flip(array_keys($terms));
+echo count($defined_terms) . " terms were found in language files" . PHP_EOL;
+//print_r($defined_terms); // Debug: print the terms found
+
+// Now get all terms found in all PHP, TPL, and Twig files of Chamilo (this takes some time and memory)
 $usedTerms = [];
 $l = strlen(api_get_path(SYS_PATH));
-$files = getAllPhpFiles(api_get_path(SYS_PATH));
+$pathfile = api_get_path(SYS_PATH) . "main/template/default/gamification/my_progress.html.twig";
+$files = [$pathfile]; // Process only the specific file for now
 $rootLength = strlen(api_get_path(SYS_PATH));
 $countFiles = 0;
 $countReplaces = 0;
+
 // Browse files
 foreach ($files as $file) {
-    if ('vendor' === substr($file, $rootLength, 6) || 'web' === substr($file, $rootLength, 3)) {
-        continue;
-    }
-    //echo 'Analyzing '.$file.PHP_EOL;
-    $shortFile = substr($file, $l);
-    //echo 'Analyzing '.$shortFile.PHP_EOL;
+    echo "Analyzing $file" . PHP_EOL;
     $lines = file($file);
+    $newContent = ''; // Store new file content
+    $fileModified = false;
+
     // Browse lines inside file $file
-    foreach ($lines as $line) {
-        $myTerms = [];
-        $res = preg_match_all('/get_lang\(([\'"](\\w*)[\'"])\)/m', $line, $myTerms);
+    foreach ($lines as $lineIndex => $line) {
+        $lineModified = false;
+
+        // Regular expression for {{ 'variable'|get_lang|format() }}
+        $res = preg_match_all('/\{\{\s*([\'"]\w+[\'"])\s*\|\s*get_lang\s*\|\s*format\s*\((.*?)\)\s*\}\}/m', $line, $myTerms);
         if ($res > 0) {
-            foreach ($myTerms[2] as $term) {
-                echo "Found term $term - ".print_r($myTerms, 1).PHP_EOL;
-                if ('lang' == substr($term, 0, 4)) {
-                    $term = substr($term, 4);
-                }
-                if (!empty($terms[$term])) {
+            echo "Match found for get_lang|format in line: $line" . PHP_EOL;
+            foreach ($myTerms[1] as $index => $quotedTerm) {
+                $term = trim($quotedTerm, '\'\"');
+                if (isset($terms[$term])) {
                     $translation = $terms[$term];
-                    $quotedTerm = $myTerms[1][0];
-                    //echo "Would do sed -i \"s#$quotedTerm#'$translation'#g\" $file here\n";
-                    system("sed -i \"s#$term#'$translation'#g\" $file");
+                    echo "Replacing $quotedTerm with '$translation'" . PHP_EOL;
+                    $line = str_replace($quotedTerm, "'$translation'", $line);
+                    $lineModified = true;
                     $countReplaces++;
-                }
-            }
-        } else {
-            $res = 0;
-            $res = preg_match_all('/\{\s*([\'"](\\w*)[\'"])\s*\|get_lang\}/m', $line, $myTerms);
-            if ($res > 0) {
-                foreach ($myTerms[2] as $term) {
-                    echo "Found term $term".PHP_EOL;
-                    if ('lang' == substr($term, 0, 4)) {
-                        $term = substr($term, 4);
-                    }
-                    if (!empty($terms[$term])) {
-                        $translation = $terms[$term];
-                        $quotedTerm = $myTerms[1][0];
-                        //echo "Would do sed -i \"s#$quotedTerm#'$translation'#g\" $file here\n";
-                        system("sed -i \"s#$term#'$translation'#g\" $file");
-                        $countReplaces++;
-                    }
+                } else {
+                    echo "Term $term not found in language file" . PHP_EOL; // Debug: term not found
                 }
             }
         }
+
+        // Regular expression for {{ 'variable'|get_lang }}
+        $res = preg_match_all('/\{\{\s*([\'"]\w+[\'"])\s*\|\s*get_lang\s*\}\}/m', $line, $myTerms);
+        if ($res > 0) {
+            echo "Match found for get_lang in line: $line" . PHP_EOL;
+            foreach ($myTerms[1] as $index => $quotedTerm) {
+                $term = trim($quotedTerm, '\'\"');
+                if (isset($terms[$term])) {
+                    $translation = $terms[$term];
+                    echo "Replacing $quotedTerm with '$translation'" . PHP_EOL;
+                    $line = str_replace($quotedTerm, "'$translation'", $line);
+                    $lineModified = true;
+                    $countReplaces++;
+                } else {
+                    echo "Term $term not found in language file" . PHP_EOL; // Debug: term not found
+                }
+            }
+        }
+
+        // Regular expression for get_lang('variable') or get_lang("variable")
+        $res = preg_match_all('/get_lang\(([\'"](\w+)[\'"])\)/m', $line, $myTerms);
+        if ($res > 0) {
+            echo "Match found for get_lang() in line: $line" . PHP_EOL;
+            foreach ($myTerms[2] as $index => $term) {
+                if (isset($terms[$term])) {
+                    $translation = $terms[$term];
+                    $quotedTerm = $myTerms[1][$index];
+                    echo "Replacing $quotedTerm with '$translation'" . PHP_EOL;
+                    $line = str_replace($quotedTerm, "'$translation'", $line);
+                    $lineModified = true;
+                    $countReplaces++;
+                } else {
+                    echo "Term $term not found in language file" . PHP_EOL; // Debug: term not found
+                }
+            }
+        }
+
+        $newContent .= $line; // Add modified line to new content
+        if ($lineModified) {
+            $fileModified = true;
+        }
     }
+
+    // Write the modified content back to the file if there were modifications
+    if ($fileModified) {
+        file_put_contents($file, $newContent);
+    }
+
     $countFiles++;
-    flush();
 }
 
 echo "Done analyzing $countFiles files, with $countReplaces replacements!\n";

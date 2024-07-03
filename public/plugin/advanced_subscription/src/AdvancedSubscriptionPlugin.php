@@ -1491,7 +1491,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         Database::query($sql);
 
         /* Delete settings */
-        $settingsTable = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+        $settingsTable = Database::get_main_table(TABLE_MAIN_SETTINGS);
         Database::query("DELETE FROM $settingsTable WHERE subkey = 'advanced_subscription'");
     }
 

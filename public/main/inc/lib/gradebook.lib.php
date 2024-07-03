@@ -42,7 +42,7 @@ class Gradebook extends Model
     public static function is_active($c_id = null)
     {
         $name = 'gradebook';
-        $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+        $table = Database::get_main_table(TABLE_MAIN_SETTINGS);
         $sql = "SELECT * from $table
                 WHERE variable='course_hide_tools' AND subkey='$name'
                 LIMIT 1";

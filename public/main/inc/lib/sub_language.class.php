@@ -356,7 +356,7 @@ class SubLanguageManager
         }
         $language_id = intval($language_id);
         $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $tbl_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+        $tbl_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS);
         $sql = "SELECT * FROM $tbl_admin_languages
                 WHERE id = $language_id";
         $result = Database::query($sql);

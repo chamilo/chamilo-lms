@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Platform settings.
  */
-#[ORM\Table(name: 'settings_current', options: ['row_format' => 'DYNAMIC'])]
+#[ORM\Table(name: 'settings', options: ['row_format' => 'DYNAMIC'])]
 #[ORM\Index(columns: ['access_url'], name: 'access_url')]
 #[ORM\UniqueConstraint(name: 'unique_setting', columns: ['variable', 'subkey', 'access_url'])]
 #[ORM\Entity]

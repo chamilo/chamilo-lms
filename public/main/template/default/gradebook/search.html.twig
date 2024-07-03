@@ -5,8 +5,8 @@
         <table class="table table-hover table-striped">
             <thead>
                 <tr>
-                    <th>{{ "FirstName"|get_lang }}</th>
-                    <th>{{ "LastName"|get_lang }}</th>
+                    <th>{{ 'First name'|get_lang }}</th>
+                    <th>{{ 'Last name'|get_lang }}</th>
                     <th class="text-right">&nbsp;</th>
                 </tr>
             </thead>
@@ -17,7 +17,7 @@
                         <td>{{ user.lastname }}</td>
                         <td class="text-right">
                             <a href="{{ _p.web_main }}gradebook/search.php?id={{ user.id }}" class="btn btn--plain">
-                                <em class="fa fa-external-link"></em> {{ "Certificates"|get_lang }}
+                                <em class="fa fa-external-link"></em> {{ 'Certificates'|get_lang }}
                             </a>
                         </td>
                     </tr>
@@ -31,15 +31,15 @@
     <h2>{{ user_info.complete_name }}</h2>
 
     {% if course_list is not empty %}
-        <h3 class="page-header">{{ "Courses"|get_lang }}</h3>
+        <h3 class="page-header">{{ 'Courses'|get_lang }}</h3>
 
         <div class="table-responsive">
             <table class="table table-hover table-striped">
                 <thead>
                     <tr>
-                        <th>{{ "Course"|get_lang }}</th>
-                        <th class="text-right">{{ "Score"|get_lang }}</th>
-                        <th class="text-center">{{ "Date"|get_lang }}</th>
+                        <th>{{ 'Course'|get_lang }}</th>
+                        <th class="text-right">{{ 'Score'|get_lang }}</th>
+                        <th class="text-center">{{ 'Date'|get_lang }}</th>
                         <th class="text-right">&nbsp;</th>
                     </tr>
                 </thead>
@@ -62,16 +62,16 @@
     {% endif %}
 
     {% if session_list is not empty %}
-        <h3 class="page-header">{{ "Sessions"|get_lang }}</h3>
+        <h3 class="page-header">{{ 'Course sessions'|get_lang }}</h3>
 
         <div class="table-responsive">
             <table class="table table-hover table-striped">
                 <thead>
                     <tr>
-                        <th>{{ "Session"|get_lang }}</th>
-                        <th>{{ "Course"|get_lang }}</th>
-                        <th class="text-right">{{ "Score"|get_lang }}</th>
-                        <th class="text-center">{{ "Date"|get_lang }}</th>
+                        <th>{{ 'Session'|get_lang }}</th>
+                        <th>{{ 'Course'|get_lang }}</th>
+                        <th class="text-right">{{ 'Score'|get_lang }}</th>
+                        <th class="text-center">{{ 'Date'|get_lang }}</th>
                         <th class="text-right">&nbsp;</th>
                     </tr>
                 </thead>

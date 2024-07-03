@@ -9,7 +9,7 @@
         </div>
         <div class="panel-body">
             {% if not user.course_list %}
-                <div class="alert alert-warning">{{ 'UserHasNoCourse'|get_lang }}</div>
+                <div class="alert alert-warning">{{ 'This user is not subscribed to any course'|get_lang }}</div>
             {% else %}
                 {{ user.course_list }}
             {% endif %}

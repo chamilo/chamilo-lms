@@ -34,13 +34,13 @@
                     </li>
                 {% endif %}
                 <li>
-                    {{ 'FromDateXToDateY'|get_lang|format(survey.avail_from|api_convert_and_format_date(2), survey.avail_till|api_convert_and_format_date(2)) }}
+                    {{ 'From %s to %s'|get_lang|format(survey.avail_from|api_convert_and_format_date(2), survey.avail_till|api_convert_and_format_date(2)) }}
                 </li>
             </ul>
         </div>
     </div>
 {% else %}
     <div class="alert alert-info">
-        {{ 'NoPendingSurveys'|get_lang }}
+        {{ 'No pending surveys'|get_lang }}
     </div>
 {% endfor %}

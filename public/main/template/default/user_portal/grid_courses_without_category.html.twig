@@ -51,7 +51,7 @@
                             </div>
                             <div class="block-author">
                                 {% if item.teachers | length > 6 %}
-                                    <a id="plist-{{ loop.index }}" data-trigger="focus" tabindex="0" role="button" class="btn btn--plain panel_popover" data-toggle="popover" title="{{ 'CourseTeachers' | get_lang }}" data-html="true">
+                                    <a id="plist-{{ loop.index }}" data-trigger="focus" tabindex="0" role="button" class="btn btn--plain panel_popover" data-toggle="popover" title="{{ 'Teachers' | get_lang }}" data-html="true">
                                         <i class="fa fa-graduation-cap" aria-hidden="true"></i>
                                     </a>
                                     <div id="popover-content-plist-{{ loop.index }}" class="hide">
@@ -86,7 +86,7 @@
                                                         {{ teacher.firstname }} {{ teacher.lastname }}
                                                     </a>
                                                 </h5>
-                                                <p>{{ 'Teacher' | get_lang }}</p>
+                                                <p>{{ 'Trainer' | get_lang }}</p>
                                             </div>
                                         {% elseif item.teachers | length <= 6 %}
                                             <a href="{{ teacher.url }}" class="ajax"
@@ -105,14 +105,14 @@
                                     <div class="course-student-info">
                                         <div class="student-info">
                                             {% if (item.student_info.progress is not null) %}
-                                                {{ "StudentCourseProgressX" | get_lang | format(item.student_info.progress) }}
+                                                {{ 'Progress: %s %%' | get_lang | format(item.student_info.progress) }}
                                             {% endif %}
 
                                             {% if (item.student_info.score is not null) %}
-                                                {{ "StudentCourseScoreX" | get_lang | format(item.student_info.score) }}
+                                                {{ 'Score: %s %%' | get_lang | format(item.student_info.score) }}
                                             {% endif %}
                                             {% if (item.student_info.certificate is not null) %}
-                                                <span title="{{ "StudentCourseCertificateX" | get_lang | format(item.student_info.certificate) }}">
+                                                <span title="{{ 'Certificate: %s' | get_lang | format(item.student_info.certificate) }}">
                                                     <i class="fa fa-certificate" aria-hidden="true"></i>
                                                     {{ item.student_info.certificate }}
                                                 </span>

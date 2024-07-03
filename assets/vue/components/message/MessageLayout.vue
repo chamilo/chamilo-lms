@@ -2,7 +2,6 @@
   <div class="message-layout flex">
     <div class="sidebar">
       <UserProfileCard />
-      <SocialSideMenu />
     </div>
     <div class="content flex-grow">
       <router-view></router-view>
@@ -11,7 +10,6 @@
 </template>
 <script setup>
 import UserProfileCard from "../social/UserProfileCard.vue"
-import SocialSideMenu from "../social/SocialSideMenu.vue"
 import { onMounted, provide } from "vue"
 import { useSocialInfo } from "../../composables/useSocialInfo"
 import { useSecurityStore } from "../../store/securityStore"

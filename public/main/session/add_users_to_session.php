@@ -52,7 +52,7 @@ $form->addSelectAjax(
     [
         'id' => 'users',
         'multiple' => 'multiple',
-        'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=user_by_role&status='.STUDENT,
+        'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=user_by_all_roles',
     ]
 );
 

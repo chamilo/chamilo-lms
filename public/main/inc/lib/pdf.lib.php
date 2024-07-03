@@ -383,7 +383,9 @@ class PDF
         $fileToSave = null,
         $returnHtml = false,
         $addDefaultCss = false,
-        $completeHeader = true
+        $completeHeader = true,
+        $disableFooter = false,
+        $disablePagination = false
     ) {
         $urlAppend = '';
 
@@ -399,7 +401,7 @@ class PDF
 
         // Formatting the pdf
         $courseInfo = api_get_course_info($courseCode);
-        self::format_pdf($courseInfo, $completeHeader);
+        self::format_pdf($courseInfo, $completeHeader, $disablePagination);
         $document_html = preg_replace($clean_search, '', $document_html);
 
         //absolute path for frames.css //TODO: necessary?
@@ -475,8 +477,6 @@ class PDF
 
         if ($addDefaultCss) {
             $basicStyles = [
-                //api_get_bootstrap_and_font_awesome(true, true),
-                //api_get_path(SYS_PUBLIC_PATH).'build/css/app.css',
                 api_get_path(SYS_PUBLIC_PATH).'build/css/themes/'.api_get_visual_theme().'/default.css',
             ];
             foreach ($basicStyles as $style) {
@@ -486,6 +486,9 @@ class PDF
         }
 
         @$this->pdf->WriteHTML($document_html);
+        if ($disableFooter) {
+            $this->pdf->SetHTMLFooter('');
+        }
 
         if (empty($pdf_name)) {
             $output_file = 'pdf_'.date('Y-m-d-his').'.pdf';
@@ -726,23 +729,15 @@ class PDF
      * @param array $courseInfo General course information (to fill headers)
      * @param bool  $complete   Whether we want headers, footers and watermark or not
      */
-    public function format_pdf($courseInfo, $complete = true)
+    public function format_pdf($courseInfo, $complete = true, $disablePagination = false)
     {
         $courseCode = null;
         if (!empty($courseInfo)) {
             $courseCode = $courseInfo['code'];
         }
 
-        /*$pdf->SetAuthor('Documents Chamilo');
-        $pdf->SetTitle('title');
-        $pdf->SetSubject('Exported from Chamilo Documents');
-        $pdf->SetKeywords('Chamilo Documents');
-        */
-        // TODO: To be read from the html document.
         $this->pdf->directionality = api_get_text_direction();
-        //$this->pdf->useOnlyCoreFonts = true;
         $this->pdf->onlyCoreFonts = true;
-        // Use different Odd/Even headers and footers and mirror margins
         $this->pdf->mirrorMargins = 1;
 
         // Add decoration only if not stated otherwise
@@ -751,7 +746,6 @@ class PDF
             if ('true' == api_get_setting('pdf_export_watermark_enable')) {
                 $watermark_file = self::get_watermark($courseCode);
                 if ($watermark_file) {
-                    //http://mpdf1.com/manual/index.php?tid=269&searchstring=watermark
                     $this->pdf->SetWatermarkImage($watermark_file);
                     $this->pdf->showWatermarkImage = true;
                 } else {
@@ -777,17 +771,22 @@ class PDF
                 }
             }
 
-            if (empty($this->custom_header)) {
-                self::set_header($courseInfo);
+            if ($disablePagination) {
+                $this->pdf->SetHTMLHeader('');
+                $this->pdf->SetHTMLFooter('');
             } else {
-                $this->pdf->SetHTMLHeader($this->custom_header, 'E');
-                $this->pdf->SetHTMLHeader($this->custom_header, 'O');
-            }
+                if (empty($this->custom_header)) {
+                    self::set_header($courseInfo);
+                } else {
+                    $this->pdf->SetHTMLHeader($this->custom_header, 'E');
+                    $this->pdf->SetHTMLHeader($this->custom_header, 'O');
+                }
 
-            if (empty($this->custom_footer)) {
-                self::set_footer();
-            } else {
-                $this->pdf->SetHTMLFooter($this->custom_footer);
+                if (empty($this->custom_footer)) {
+                    self::set_footer();
+                } else {
+                    $this->pdf->SetHTMLFooter($this->custom_footer);
+                }
             }
         }
     }

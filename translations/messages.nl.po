@@ -21876,6 +21876,9 @@ msgstr "Heel zwak"
 msgid "You have been assigned the learner %s"
 msgstr "U bent toegewezen aan de student %s"
 
+msgid "You have been assigned the learner %s with url %s"
+msgstr "U bent als tutor toegewezen aan student %s. U kunt zijn profiel bekijken van hier: %s"
+
 msgid "You have been assigned as tutor for the learner %s.<br/>"
 msgstr "U bent als tutor toegewezen aan student %s. U kunt zijn profiel bekijken van hier: %s"
 
@@ -25205,3 +25208,6 @@ msgstr ""
 
 msgid "%02d h %02d m %02d s"
 msgstr ""
+
+msgid "The attempted oral questions are %s"
+msgstr "De mondelinge vragen die werden geprobeerd zijn %s"

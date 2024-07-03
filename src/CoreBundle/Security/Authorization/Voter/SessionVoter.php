@@ -7,11 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Doctrine\Common\Collections\Criteria;
-use SessionManager;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -19,6 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @todo remove legacy code.
+ *
  * @extends Voter<'VIEW'|'EDIT'|'DELETE', Session>
  */
 class SessionVoter extends Voter
@@ -85,48 +83,24 @@ class SessionVoter extends Voter
                     $userIsCourseCoach = $session->hasCourseCoachInCourse($user, $currentCourse);
                     $userIsStudent = $session->hasUserInCourse($user, $currentCourse, Session::STUDENT);
                 }
-                $duration = (int) $session->getDuration();
-                if (0 === $duration) {
-                    // General coach.
-                    if ($userIsGeneralCoach && $session->isActiveForCoach()) {
-                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
 
-                        return true;
-                    }
+                $visibilityForUser = $session->setAccessVisibilityByUser($user);
 
-                    // Course-Coach access.
-                    if ($userIsCourseCoach && $session->isActiveForCoach()) {
-                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
-
-                        return true;
-                    }
-
-                    // Student access.
-                    if ($userIsStudent && $session->isActiveForStudent()) {
-                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_STUDENT);
-
-                        return true;
-                    }
+                if ($userIsStudent && Session::LIST_ONLY == $visibilityForUser) {
+                    return false;
                 }
 
-                if ($this->sessionIsAvailableByDuration($session, $user)) {
-                    if ($userIsGeneralCoach) {
-                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
+                if ($userIsGeneralCoach || $userIsCourseCoach) {
+                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
+                } elseif ($userIsStudent) { // Student access.
+                    $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_STUDENT);
+                }
 
-                        return true;
-                    }
-
-                    if ($userIsCourseCoach) {
-                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER);
-
-                        return true;
-                    }
-
-                    if ($userIsStudent) {
-                        $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_STUDENT);
-
-                        return true;
-                    }
+                if (
+                    ($userIsGeneralCoach || $userIsCourseCoach || $userIsStudent)
+                    && Session::INVISIBLE != $visibilityForUser
+                ) {
+                    return true;
                 }
 
                 return false;
@@ -146,43 +120,6 @@ class SessionVoter extends Voter
 
         // User don't have access to the session
         return false;
-    }
-
-    private function sessionIsAvailableByDuration(Session $session, User $user): bool
-    {
-        $duration = $session->getDuration() * 24 * 60 * 60;
-
-        if (0 === $user->getTrackECourseAccess()->count()) {
-            return true;
-        }
-
-        $criteria = Criteria::create()->where(
-            Criteria::expr()->eq('session', $session)
-        );
-
-        /** @var TrackECourseAccess|null $trackECourseAccess */
-        $trackECourseAccess = $user->getTrackECourseAccess()->matching($criteria)->first();
-
-        $currentTime = time();
-        $firstAccess = 0;
-
-        if (null !== $trackECourseAccess) {
-            $firstAccess = $trackECourseAccess->getLoginCourseDate()->getTimestamp();
-        }
-
-        $userDurationData = SessionManager::getUserSession(
-            $user->getId(),
-            $session->getId()
-        );
-        $userDuration = 0;
-
-        if (isset($userDurationData['duration'])) {
-            $userDuration = (int) $userDurationData['duration'] * 24 * 60 * 60;
-        }
-
-        $totalDuration = $firstAccess + $duration + $userDuration;
-
-        return $totalDuration > $currentTime;
     }
 
     private function canEditSession(User $user, Session $session, bool $checkSession = true): bool

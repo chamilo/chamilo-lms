@@ -3,7 +3,6 @@
     <div class="md:basis-1/3 lg:basis-1/4 2xl:basis-1/6 flex flex-col">
       <UserProfileCard v-if="!isLoading && !isGroup" />
       <GroupInfoCard v-if="!isLoading && isGroup" />
-      <SocialSideMenu v-if="!isLoading && !isGroup" />
       <SocialGroupMenu v-if="!isLoading && isGroup" />
     </div>
     <div class="md:basis-2/3 lg:basis-3/4 2xl:basis-5/6">
@@ -13,7 +12,6 @@
 </template>
 <script setup>
 import UserProfileCard from "../social/UserProfileCard.vue"
-import SocialSideMenu from "../social/SocialSideMenu.vue"
 import { provide } from "vue"
 import { useSocialInfo } from "../../composables/useSocialInfo"
 import SocialGroupMenu from "../social/SocialGroupMenu.vue"

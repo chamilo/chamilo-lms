@@ -45,10 +45,10 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     }
 }
 
-$session_list = SessionManager::get_sessions_list([], ['name']);
+$session_list = SessionManager::get_sessions_list([], ['title']);
 $sessionList = [];
 foreach ($session_list as $session) {
-    $sessionList[$session['id']] = $session['name'];
+    $sessionList[$session['id']] = $session['title'];
 }
 Display::display_header($tool_name);
 ?>

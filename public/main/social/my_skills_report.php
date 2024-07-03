@@ -74,7 +74,7 @@ if ($isStudent) {
     if ($frmStudents->validate()) {
         $selectedStudent = (int) $frmStudents->exportValue('student');
 
-        $sql = "SELECT s.name, sru.acquired_skill_at, c.title, c.directory, c.id as course_id
+        $sql = "SELECT s.title, sru.acquired_skill_at, c.title, c.directory, c.id as course_id
                 FROM $skillTable s
                 INNER JOIN $skillRelUserTable sru
                 ON s.id = sru.skill_id
@@ -88,7 +88,7 @@ if ($isStudent) {
         while ($resultData = Database::fetch_assoc($result)) {
             $tableRow = [
                 'complete_name' => $followedStudents[$selectedStudent]['completeName'],
-                'skill_name' => SkillModel::translateName($resultData['name']),
+                'skill_name' => SkillModel::translateName($resultData['title']),
                 'achieved_at' => api_format_date($resultData['acquired_skill_at'], DATE_FORMAT_NUMBER),
                 'course_image' => Display::return_icon(
                     'course.png',

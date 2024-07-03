@@ -4,7 +4,9 @@
   <!--  <SessionListWrapper :sessions="sessions"/>-->
   <SessionCategoryView
     v-if="!isLoading"
-    :result-sessions="sessions"
+    :uncategorized-sessions="uncategorizedSessions"
+    :categories="categories"
+    :categories-with-sessions="categoriesWithSessions"
   />
 </template>
 
@@ -14,5 +16,5 @@ import SessionTabs from "../../../components/session/SessionTabs.vue"
 import { useSession } from "./session"
 import SessionsLoading from "./SessionsLoading.vue"
 
-const { sessions, isLoading } = useSession("past")
+const { isLoading, uncategorizedSessions, categories, categoriesWithSessions } = useSession("past")
 </script>

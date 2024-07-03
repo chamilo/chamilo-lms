@@ -28,7 +28,7 @@
                                style="width:600px"
                                class="form-control" readonly value="{{ conference_url }}">
                         <button onclick="copyTextToClipBoard('share_button');" class="btn btn--plain">
-                            <span class="fa fa-copy"></span> {{ 'CopyTextToClipboard' | get_lang }}
+                            <span class="fa fa-copy"></span> {{ 'Copy text' | get_lang }}
                         </button>
                     </div>
                 </div>

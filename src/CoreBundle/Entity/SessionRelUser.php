@@ -76,12 +76,12 @@ class SessionRelUser
     protected ?Session $session = null;
 
     #[Assert\NotNull]
-    #[Groups(['session_rel_user:read', 'session:item:read'])]
+    #[Groups(['session_rel_user:read', 'session:item:read', 'user_subscriptions:sessions'])]
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'sessionsRelUser')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    #[Groups(['session_rel_user:read', 'session:item:read'])]
+    #[Groups(['session_rel_user:read', 'session:item:read', 'user_subscriptions:sessions'])]
     #[Assert\Choice(callback: [Session::class, 'getRelationTypeList'], message: 'Choose a valid relation type.')]
     #[ORM\Column(name: 'relation_type', type: 'integer')]
     protected int $relationType;

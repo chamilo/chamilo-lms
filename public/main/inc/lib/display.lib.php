@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\ColorThemeRepository;
 use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -2458,7 +2459,7 @@ class Display
             });
         </script>';
             $html = '
-        <div class="display-panel-collapse">
+        <div class="display-panel-collapse mb-2">
             <div class="display-panel-collapse__header" id="card_'.$idAccordion.'">
                 <a role="button"
                     class="mdi mdi-chevron-down"
@@ -2659,5 +2660,37 @@ class Display
                 </div>
             </div>
             ";
+    }
+
+    public static function getFrameReadyBlock(
+        string $frameName,
+        string $itemType = '',
+        string $jsConditionalFunction = 'function () { return false; }'
+    ): string {
+
+        if (in_array($itemType, ['link', 'sco', 'xapi', 'quiz', 'h5p', 'forum'])) {
+            return false;
+        }
+
+        $colorThemeRepo = Container::$container->get(ColorThemeRepository::class);
+        $router = Container::getRouter();
+
+        $colorTheme = $colorThemeRepo->getActiveOne();
+        $colorThemeItem = '';
+
+        if ($colorTheme) {
+            $colorThemeItem = '{ type: "stylesheet", src: "'.$router->generate('chamilo_color_theme').'" },';
+        }
+
+        return '$.frameReady(function() {},
+            "'.$frameName.'",
+            [
+                { type: "script", src: "/build/runtime.js" },
+                { type: "script", src: "/build/legacy_framereadyloader.js" },
+                { type: "stylesheet", src: "/build/legacy_framereadyloader.css" },
+                '.$colorThemeItem.'
+            ],
+            '.$jsConditionalFunction
+            .');';
     }
 }

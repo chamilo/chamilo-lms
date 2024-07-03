@@ -2,9 +2,8 @@
 namespace Chamilo\Tests;
 
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
-use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\Client;
+use ApiPlatform\Symfony\Bundle\Test\Client;
 use Chamilo\CoreBundle\Entity\User;
-use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 
 abstract class AbstractApiTest extends ApiTestCase
 {

@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Display;
 use Doctrine\ORM\Event\PostPersistEventArgs;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -33,7 +34,8 @@ class SkillRelUserListener
         // Notification of badge assignation
         $url = $this->router->generate(
             'badge_issued_all',
-            ['skillId' => $skill->getId(), 'userId' => $user->getId()]
+            ['skillId' => $skill->getId(), 'userId' => $user->getId()],
+            UrlGeneratorInterface::ABSOLUTE_URL
         );
 
         $message = sprintf(

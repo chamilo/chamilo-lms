@@ -1,0 +1,25 @@
+.p-chip {
+  @apply inline-flex items-center text-gray-90 bg-support-2 rounded-full px-3 py-0;
+
+  & &-text {
+    @apply text-caption my-2 mx-0;
+  }
+
+  & &-icon {
+    @apply mr-2;
+
+    &.pi {
+      @apply text-caption;
+    }
+  }
+
+  & &-remove-icon {
+    @apply text-caption cursor-pointer ml-2 rounded-full transition-none outline-none
+      focus-visible:outline-none focus-visible:drop-shadow-lg
+      focus:outline-none;
+  }
+
+  & img {
+    @apply rounded-full w-9 h-9 -ml-3 mr-2;
+  }
+}

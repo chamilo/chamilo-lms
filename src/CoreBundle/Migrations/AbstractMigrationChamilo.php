@@ -25,6 +25,7 @@ use DateTimeZone;
 use Doctrine\Migrations\AbstractMigration;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 abstract class AbstractMigrationChamilo extends AbstractMigration
@@ -158,6 +159,21 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
 
         if (isset($_configuration[$variable])) {
             return $_configuration[$variable];
+        }
+
+        return false;
+    }
+
+    public function getMailConfigurationValue(string $variable, array $configuration = []): mixed
+    {
+        global $platform_email;
+
+        if ($configuration) {
+            $platform_email = $configuration;
+        }
+
+        if (isset($platform_email[$variable])) {
+            return $platform_email[$variable];
         }
 
         return false;
@@ -331,5 +347,59 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         }
 
         return $this->entityManager->find(Session::class, $id);
+    }
+
+    public function getMailConfigurationValueFromFile(string $variable): ?string
+    {
+        global $platform_email;
+
+        $rootPath = $this->container->get('kernel')->getProjectDir();
+        $oldConfigPath = $rootPath.'/app/config/mail.conf.php';
+
+        $configFileLoaded = \in_array($oldConfigPath, get_included_files(), true);
+
+        if (!$configFileLoaded) {
+            include_once $oldConfigPath;
+        }
+
+        $settingValue = $this->getConfigurationValue($variable, $platform_email);
+
+        if (\is_bool($settingValue)) {
+            $selectedValue = var_export($settingValue, true);
+        } else {
+            $selectedValue = (string) $settingValue;
+        }
+
+        return $selectedValue;
+    }
+
+    private function generateFilePath(string $filename): string
+    {
+        $cacheDir = $this->container->get('kernel')->getCacheDir();
+
+        return $cacheDir.'/migration_'.$filename;
+    }
+
+    protected function writeFile(string $filename, string $content): void
+    {
+        $fullFilename = $this->generateFilePath($filename);
+
+        $fs = new Filesystem();
+        $fs->dumpFile($fullFilename, $content);
+    }
+
+    protected function readFile(string $filename): string
+    {
+        $fullFilename = $this->generateFilePath($filename);
+
+        return file_get_contents($fullFilename);
+    }
+
+    protected function removeFile(string $filename): void
+    {
+        $fullFilename = $this->generateFilePath($filename);
+
+        $fs = new Filesystem();
+        $fs->remove($fullFilename);
     }
 }

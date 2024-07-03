@@ -3629,6 +3629,11 @@ class Exercise
             $nbrAnswers = 1;
         }
 
+        $generatedFilesHtml = '';
+        if ($answerType == ORAL_EXPRESSION) {
+            $generatedFilesHtml = ExerciseLib::getOralFileAudio($exeId, $questionId);
+        }
+
         $user_answer = '';
         // Get answer list for matching
         $sql = "SELECT iid, answer
@@ -4209,7 +4214,7 @@ class Exercise
                                         $listMenu = FillBlanks::getFillTheBlankMenuAnswers($correctAnswer, false);
                                         if (!empty($studentAnswer)) {
                                             foreach ($listMenu as $key => $item) {
-                                                if ($key == $correctAnswer) {
+                                                if (sha1($item) === $studentAnswer) {
                                                     $studentAnswerToShow = $item;
                                                     break;
                                                 }
@@ -6143,7 +6148,7 @@ class Exercise
             'open_question' => $arrques,
             'open_answer' => $arrans,
             'answer_type' => $answerType,
-            'generated_oral_file' => '',
+            'generated_oral_file' => $generatedFilesHtml,
             'user_answered' => $userAnsweredQuestion,
             'correct_answer_id' => $correctAnswerId,
             'answer_destination' => $answerDestination,
@@ -7818,7 +7823,7 @@ class Exercise
                         ];
                         $exercise_actions .= Display::div(
                             implode(PHP_EOL, $button),
-                            ['class' => 'exercise_save_now_button']
+                            ['class' => 'exercise_save_now_button mb-4']
                         );
                     }
 
@@ -7838,7 +7843,7 @@ class Exercise
                     ];
                     $exercise_actions = Display::div(
                         implode(PHP_EOL, $button),
-                        ['class' => 'exercise_save_now_button']
+                        ['class' => 'exercise_save_now_button mb-4']
                     );
                 }
 
@@ -10678,7 +10683,8 @@ class Exercise
         $user_info,
         $url_email,
         $teachers
-    ) {
+    ): void {
+
         // Email configuration settings
         $courseCode = api_get_course_id();
         $courseInfo = api_get_course_info($courseCode);
@@ -10692,9 +10698,6 @@ class Exercise
             }
             $answer_type = $item['answer_type'];
             if (!empty($question) && (!empty($answer) || !empty($file)) && ORAL_EXPRESSION == $answer_type) {
-                if (!empty($file)) {
-                    $file = Display::url($file, $file);
-                }
                 $oral_question_list .= '<br />
                     <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
                     <tr>
@@ -10703,7 +10706,7 @@ class Exercise
                     </tr>
                     <tr>
                         <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>
-                        <td valign="top" bgcolor="#F3F3F3">'.$answer.$file.'</td>
+                        <td valign="top" bgcolor="#F3F3F3"><p>'.$answer.'</p><p>'.$file.'</p></td>
                     </tr></table>';
             }
         }
@@ -10730,22 +10733,22 @@ class Exercise
                         </tr>
                     </table>';
             $msg .= '<br />'.sprintf(
-                    get_lang('A learner has attempted one or more oral questionAreX'),
+                    get_lang('The attempted oral questions are %s'),
                     $oral_question_list
                 ).'<br />';
             $msg1 = str_replace('#exercise#', $this->exercise, $msg);
             $msg = str_replace('#firstName#', $user_info['firstname'], $msg1);
             $msg1 = str_replace('#lastName#', $user_info['lastname'], $msg);
             $msg = str_replace('#mail#', $user_info['email'], $msg1);
-            $msg = str_replace('#course#', $courseInfo['name'], $msg1);
+            $msg1 = str_replace('#course#', $courseInfo['name'], $msg);
 
             if (!in_array($origin, ['learnpath', 'embeddable'])) {
-                $msg .= '<br /><a href="#url#">'.get_lang(
+                $msg1 .= '<br /><a href="#url#">'.get_lang(
                         'Click this link to check the answer and/or give feedback'
                     ).'</a>';
             }
-            $msg1 = str_replace('#url#', $url_email, $msg);
-            $mail_content = $msg1;
+            $msg = str_replace('#url#', $url_email, $msg1);
+            $mail_content = $msg;
             $subject = get_lang('A learner has attempted one or more oral question');
 
             if (!empty($teachers)) {

@@ -121,11 +121,11 @@ function search_usergroup_sessions($needle, $type)
     if (!empty($needle) && !empty($type)) {
         if ('searchbox' == $type) {
             $session_list = SessionManager::get_sessions_list(
-                ['s.name' => ['operator' => 'LIKE', 'value' => "%$needle%"]]
+                ['s.title' => ['operator' => 'LIKE', 'value' => "%$needle%"]]
             );
         } elseif ('single' != $type) {
             $session_list = SessionManager::get_sessions_list(
-                ['s.name' => ['operator' => 'LIKE', 'value' => "$needle%"]]
+                ['s.title' => ['operator' => 'LIKE', 'value' => "$needle%"]]
             );
         }
         if ('single' != $type) {

@@ -78,7 +78,7 @@ foreach ($students as $student) {
         }
         $userReportList[$studentId]['message'] .= $newLine."User# $studentId (".$disabledUser['username'].") to be disabled. Case 1. Last connection: $lastDate - 3 months: $date3Months ";
 
-        $language = $disabledUser['language'];
+        $language = $disabledUser['locale'];
         $subject = get_lang('AccountDisabled', null, $language).': '.$disabledUser['complete_name'];
         $content = get_lang('DisableUserCase1', null, $language);
 
@@ -132,7 +132,7 @@ foreach ($students as $student) {
             continue;
         }
 
-        $language = $disabledUser['language'];
+        $language = $disabledUser['locale'];
         $subject = get_lang('AccountDisabled', null, $language).': '.$disabledUser['complete_name'];
         $content = get_lang('DisableUserCase3Student', null, $language);
 
@@ -194,8 +194,8 @@ foreach ($students as $student) {
 
         $userReportList[$studentId]['message'] .= $newLine."User# $studentId (".$disabledUser['username'].") to be disabled. Case 2 . Last connection: $lastDate - 6 months: $date6Months ";
 
-        $subject = get_lang('AccountDisabled', null, $disabledUser['language']).': '.$disabledUser['complete_name'];
-        $content = get_lang('DisableUserCase2', null, $disabledUser['language']);
+        $subject = get_lang('AccountDisabled', null, $disabledUser['locale']).': '.$disabledUser['complete_name'];
+        $content = get_lang('DisableUserCase2', null, $disabledUser['locale']);
 
         $userReportList[$studentId]['message'] .= $newLine.'Mail will be send to: '.$disabledUser['username'].$newLine.'Subject: '.$subject.$newLine.'Content: '.$content.$newLine;
 
@@ -206,8 +206,8 @@ foreach ($students as $student) {
         if (!empty($studentBoss)) {
             $bossInfo = api_get_user_info($studentBoss);
             if ($bossInfo) {
-                $subjectBoss = get_lang('AccountDisabled', null, $bossInfo['language']).': '.$disabledUser['complete_name'];
-                $contentBoss = sprintf(get_lang('DisableUserCase2StudentX', null, $bossInfo['language']), $disabledUser['complete_name']);
+                $subjectBoss = get_lang('AccountDisabled', null, $bossInfo['locale']).': '.$disabledUser['complete_name'];
+                $contentBoss = sprintf(get_lang('DisableUserCase2StudentX', null, $bossInfo['locale']), $disabledUser['complete_name']);
                 $userReportList[$studentId]['message'] .= $newLine.'Mail will be send to: '.$bossInfo['username'].$newLine.'Subject: '.$subjectBoss.$newLine.'Content: '.$contentBoss.$newLine;
             }
         }

@@ -536,5 +536,11 @@
     "Error fetching friends list": "Error fetching friends list",
     "Error fetching users": "Error fetching users",
     "Search users for friends": "Search users for friends",
-    "Business card": "\u05db\u05e8\u05d8\u05d9\u05e1 \u05d1\u05d9\u05e7\u05d5\u05e8"
+    "Contact Us": "Contact Us",
+    "Business card": "\u05db\u05e8\u05d8\u05d9\u05e1 \u05d1\u05d9\u05e7\u05d5\u05e8",
+    "Teacher profile picture": "Teacher profile picture",
+    "Picture": "\u05ea\u05de\u05d5\u05e0\u05d4",
+    "Sender profile picture": "Sender profile picture",
+    "Receiver profile picture": "Receiver profile picture",
+    "Carbon copy receiver profile picture": "Carbon copy receiver profile picture"
 }

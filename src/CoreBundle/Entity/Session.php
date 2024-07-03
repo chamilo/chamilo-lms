@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
+use ApiPlatform\Core\Serializer\Filter\GroupFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
@@ -13,17 +14,20 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Entity\Listener\SessionListener;
 use Chamilo\CoreBundle\Repository\SessionRepository;
+use Chamilo\CoreBundle\State\UserSessionSubscriptionsStateProvider;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ReadableCollection;
 use Doctrine\ORM\Mapping as ORM;
+use LogicException;
 use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -32,17 +36,69 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Get(
+            uriTemplate: '/sessions/{id}',
             normalizationContext: [
-                'groups' => ['session:read', 'session:item:read'],
+                'groups' => ['session:basic'],
             ],
             security: "is_granted('ROLE_ADMIN') or is_granted('VIEW', object)"
         ),
         new Put(security: "is_granted('ROLE_ADMIN')"),
         new GetCollection(security: "is_granted('ROLE_ADMIN')"),
+        new GetCollection(
+            uriTemplate: '/users/{id}/session_subscriptions/past.{_format}',
+            uriVariables: [
+                'id' => new Link(
+                    fromClass: User::class,
+                ),
+            ],
+            paginationEnabled: false,
+            normalizationContext: [
+                'groups' => [
+                    'user_subscriptions:sessions',
+                ],
+            ],
+            security: "is_granted('ROLE_USER')",
+            name: 'user_session_subscriptions_past',
+            provider: UserSessionSubscriptionsStateProvider::class,
+        ),
+        new GetCollection(
+            uriTemplate: '/users/{id}/session_subscriptions/current.{_format}',
+            uriVariables: [
+                'id' => new Link(
+                    fromClass: User::class,
+                ),
+            ],
+            paginationEnabled: false,
+            normalizationContext: [
+                'groups' => [
+                    'user_subscriptions:sessions',
+                ],
+            ],
+            security: "is_granted('ROLE_USER')",
+            name: 'user_session_subscriptions_current',
+            provider: UserSessionSubscriptionsStateProvider::class,
+        ),
+        new GetCollection(
+            uriTemplate: '/users/{id}/session_subscriptions/upcoming.{_format}',
+            uriVariables: [
+                'id' => new Link(
+                    fromClass: User::class,
+                ),
+            ],
+            paginationEnabled: false,
+            normalizationContext: [
+                'groups' => [
+                    'user_subscriptions:sessions',
+                ],
+            ],
+            security: "is_granted('ROLE_USER')",
+            name: 'user_session_subscriptions_upcoming',
+            provider: UserSessionSubscriptionsStateProvider::class,
+        ),
         new Post(security: "is_granted('ROLE_ADMIN')"),
         new Delete(security: "is_granted('DELETE', object)"),
     ],
-    normalizationContext: ['groups' => ['session:read']],
+    normalizationContext: ['groups' => ['session:basic']],
     denormalizationContext: ['groups' => ['session:write']],
     security: "is_granted('ROLE_ADMIN')"
 )]
@@ -51,15 +107,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\EntityListeners([SessionListener::class])]
 #[ORM\Entity(repositoryClass: SessionRepository::class)]
 #[UniqueEntity('title')]
-#[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial'])]
-#[ApiFilter(filterClass: PropertyFilter::class)]
-#[ApiFilter(filterClass: OrderFilter::class, properties: ['id', 'title'])]
+#[ApiFilter(SearchFilter::class, properties: ['title' => 'partial'])]
+#[ApiFilter(PropertyFilter::class)]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'title'])]
+#[ApiFilter(GroupFilter::class, arguments: ['parameterName' => 'groups'])]
 class Session implements ResourceWithAccessUrlInterface, Stringable
 {
-    public const VISIBLE = 1;
-    public const READ_ONLY = 2;
+    public const READ_ONLY = 1;
+    public const VISIBLE = 2;
     public const INVISIBLE = 3;
     public const AVAILABLE = 4;
+    public const LIST_ONLY = 5;
+
     public const STUDENT = 0;
     public const DRH = 1;
     public const COURSE_COACH = 2;
@@ -67,11 +126,13 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     public const SESSION_ADMIN = 4;
 
     #[Groups([
+        'session:basic',
         'session:read',
         'session_rel_user:read',
         'session_rel_course_rel_user:read',
         'course:read',
         'track_e_exercise:read',
+        'user_subscriptions:sessions',
     ])]
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -85,12 +146,14 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'session:read',
         'session_rel_user:read',
         'session_rel_course_rel_user:read',
+        'user_subscriptions:sessions',
     ])]
     #[ORM\OrderBy(['position' => 'ASC'])]
     #[ORM\OneToMany(
         mappedBy: 'session',
         targetEntity: SessionRelCourse::class,
         cascade: ['persist'],
+        fetch: 'EXTRA_LAZY',
         orphanRemoval: true
     )]
     protected Collection $courses;
@@ -105,6 +168,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         mappedBy: 'session',
         targetEntity: SessionRelUser::class,
         cascade: ['persist', 'remove'],
+        fetch: 'EXTRA_LAZY',
         orphanRemoval: true
     )]
     protected Collection $users;
@@ -163,6 +227,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
     #[Assert\NotBlank]
     #[Groups([
+        'session:basic',
         'session:read',
         'session:write',
         'session_rel_course_rel_user:read',
@@ -171,11 +236,13 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'course:read',
         'track_e_exercise:read',
         'calendar_event:read',
+        'user_subscriptions:sessions',
     ])]
     #[ORM\Column(name: 'title', type: 'string', length: 150)]
     protected string $title;
 
     #[Groups([
+        'session:basic',
         'session:read',
         'session:write',
     ])]
@@ -189,15 +256,15 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     #[ORM\Column(name: 'show_description', type: 'boolean', nullable: true)]
     protected ?bool $showDescription;
 
-    #[Groups(['session:read', 'session:write'])]
+    #[Groups(['session:read', 'session:write', 'user_subscriptions:sessions'])]
     #[ORM\Column(name: 'duration', type: 'integer', nullable: true)]
     protected ?int $duration = null;
 
-    #[Groups(['session:read'])]
+    #[Groups(['session:basic', 'session:read'])]
     #[ORM\Column(name: 'nbr_courses', type: 'integer', unique: false, nullable: false)]
     protected int $nbrCourses;
 
-    #[Groups(['session:read'])]
+    #[Groups(['session:basic', 'session:read'])]
     #[ORM\Column(name: 'nbr_users', type: 'integer', unique: false, nullable: false)]
     protected int $nbrUsers;
 
@@ -206,6 +273,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     protected int $nbrClasses;
 
     #[Groups([
+        'session:basic',
         'session:read',
         'session:write',
     ])]
@@ -221,6 +289,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'session:write',
         'session_rel_user:read',
         'session_rel_course_rel_user:read',
+        'user_subscriptions:sessions',
     ])]
     #[ORM\Column(name: 'display_start_date', type: 'datetime', unique: false, nullable: true)]
     protected ?DateTime $displayStartDate;
@@ -230,6 +299,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'session:write',
         'session_rel_user:read',
         'session_rel_course_rel_user:read',
+        'user_subscriptions:sessions',
     ])]
     #[ORM\Column(name: 'display_end_date', type: 'datetime', unique: false, nullable: true)]
     protected ?DateTime $displayEndDate;
@@ -277,7 +347,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     #[ORM\Column(name: 'status', type: 'integer', nullable: false)]
     protected int $status;
 
-    #[Groups(['session:read', 'session:write', 'session_rel_user:read'])]
+    #[Groups(['session:read', 'session:write', 'session_rel_user:read', 'user_subscriptions:sessions'])]
     #[ORM\ManyToOne(targetEntity: SessionCategory::class, inversedBy: 'sessions')]
     #[ORM\JoinColumn(name: 'session_category_id', referencedColumnName: 'id')]
     protected ?SessionCategory $category = null;
@@ -293,9 +363,13 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     /**
      * Image illustrating the session (was extra field 'image' in 1.11).
      */
+    #[Groups(['user_subscriptions:sessions'])]
     #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['remove'])]
     #[ORM\JoinColumn(name: 'image_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     protected ?Asset $image = null;
+
+    #[Groups(['user_subscriptions:sessions', 'session:read', 'session:item:read'])]
+    private int $accessVisibility = 0;
 
     public function __construct()
     {
@@ -339,8 +413,8 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     public static function getStatusList(): array
     {
         return [
-            self::VISIBLE => 'status_visible',
             self::READ_ONLY => 'status_read_only',
+            self::VISIBLE => 'status_visible',
             self::INVISIBLE => 'status_invisible',
             self::AVAILABLE => 'status_available',
         ];
@@ -530,6 +604,9 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this;
     }
 
+    /**
+     * @return Collection<int, SessionRelCourseRelUser>
+     */
     public function getAllUsersFromCourse(int $status): Collection
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq('status', $status));
@@ -686,6 +763,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         ;
     }
 
+    #[Groups(['user_subscriptions:sessions'])]
     public function getGeneralCoachesSubscriptions(): Collection
     {
         $criteria = Criteria::create()->where(Criteria::expr()->eq('relationType', self::GENERAL_COACH));
@@ -853,8 +931,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     {
         $now = new DateTime();
 
-        return (null === $this->accessStartDate || $this->accessStartDate < $now)
-            && (null === $this->accessEndDate || $now < $this->accessEndDate);
+        return (!$this->accessStartDate || $now >= $this->accessStartDate) && (!$this->accessEndDate || $now <= $this->accessEndDate);
     }
 
     public function addCourse(Course $course): self
@@ -1183,14 +1260,168 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     {
         $now = new DateTime('now');
 
-        if (!empty($start) && !empty($end) && ($now >= $start && $now <= $end)) {
-            return true;
+        if (!empty($start) && !empty($end)) {
+            return $now >= $start && $now <= $end;
         }
 
-        if (!empty($start) && $now >= $start) {
-            return true;
+        if (!empty($start)) {
+            return $now >= $start;
         }
 
         return !empty($end) && $now <= $end;
+    }
+
+    /**
+     * @return Collection<int, SessionRelCourseRelUser>
+     */
+    #[Groups(['user_subscriptions:sessions'])]
+    public function getCourseCoachesSubscriptions(): Collection
+    {
+        return $this->getAllUsersFromCourse(self::COURSE_COACH);
+    }
+
+    public function isAvailableByDurationForUser(User $user): bool
+    {
+        $duration = $this->duration * 24 * 60 * 60;
+
+        if (0 === $user->getTrackECourseAccess()->count()) {
+            return true;
+        }
+
+        $trackECourseAccess = $user->getFirstAccessToSession($this);
+
+        $firstAccess = $trackECourseAccess
+            ? $trackECourseAccess->getLoginCourseDate()->getTimestamp()
+            : 0;
+
+        $userDurationData = $user->getSubscriptionToSession($this);
+
+        $userDuration = $userDurationData
+            ? ($userDurationData->getDuration() * 24 * 60 * 60)
+            : 0;
+
+        $totalDuration = $firstAccess + $duration + $userDuration;
+        $currentTime = time();
+
+        return $totalDuration > $currentTime;
+    }
+
+    public function getDaysLeftByUser(User $user): int
+    {
+        $userSessionSubscription = $user->getSubscriptionToSession($this);
+
+        $duration = $this->duration;
+
+        if ($userSessionSubscription) {
+            $duration += $userSessionSubscription->getDuration();
+        }
+
+        $courseAccess = $user->getFirstAccessToSession($this);
+
+        if (!$courseAccess) {
+            return $duration;
+        }
+
+        $endDateInSeconds = $courseAccess->getLoginCourseDate()->getTimestamp() + $duration * 24 * 60 * 60;
+        $currentTime = time();
+
+        return (int) round(($endDateInSeconds - $currentTime) / 60 / 60 / 24);
+    }
+
+    private function getAccessVisibilityByDuration(User $user): int
+    {
+        // Session duration per student.
+        if ($this->getDuration() > 0) {
+            if ($this->hasCoach($user)) {
+                return self::AVAILABLE;
+            }
+
+            $duration = $this->getDuration() * 24 * 60 * 60;
+            $courseAccess = $user->getFirstAccessToSession($this);
+
+            // If there is a session duration but there is no previous
+            // access by the user, then the session is still available
+            if (!$courseAccess) {
+                return self::AVAILABLE;
+            }
+
+            $currentTime = time();
+            $firstAccess = $courseAccess->getLoginCourseDate()->getTimestamp();
+            $userSessionSubscription = $user->getSubscriptionToSession($this);
+            $userDuration = $userSessionSubscription
+                ? $userSessionSubscription->getDuration() * 24 * 60 * 60
+                : 0;
+
+            $totalDuration = $firstAccess + $duration + $userDuration;
+
+            return $totalDuration > $currentTime ? self::AVAILABLE : $this->visibility;
+        }
+
+        return self::AVAILABLE;
+    }
+
+    /**
+     * Checks whether the user is a course or session coach.
+     */
+    public function hasCoach(User $user): bool
+    {
+        return $this->hasUserAsGeneralCoach($user) || $this->hasCoachInCourseList($user);
+    }
+
+    private function getAcessVisibilityByDates(User $user): int
+    {
+        $now = new DateTime();
+
+        $userIsCoach = $this->hasCoach($user);
+
+        $sessionEndDate = $userIsCoach && $this->coachAccessEndDate
+            ? $this->coachAccessEndDate
+            : $this->accessEndDate;
+
+        if (!$userIsCoach && $this->accessStartDate && $now < $this->accessStartDate) {
+            return self::LIST_ONLY;
+        }
+
+        if ($sessionEndDate) {
+            return $now <= $sessionEndDate ? self::AVAILABLE : $this->visibility;
+        }
+
+        return self::AVAILABLE;
+    }
+
+    public function setAccessVisibilityByUser(User $user, bool $ignoreVisibilityForAdmins = true): int
+    {
+        if (($user->isAdmin() || $user->isSuperAdmin()) && $ignoreVisibilityForAdmins) {
+            $this->accessVisibility = self::AVAILABLE;
+        } elseif (!$this->getAccessStartDate() && !$this->getAccessEndDate()) {
+            // I don't care the session visibility.
+            $this->accessVisibility = $this->getAccessVisibilityByDuration($user);
+        } else {
+            $this->accessVisibility = $this->getAcessVisibilityByDates($user);
+        }
+
+        return $this->accessVisibility;
+    }
+
+    public function getAccessVisibility(): int
+    {
+        if (0 === $this->accessVisibility) {
+            throw new LogicException('Access visibility by user is not set');
+        }
+
+        return $this->accessVisibility;
+    }
+
+    public function getClosedOrHiddenCourses(): Collection
+    {
+        $closedVisibilities = [
+            Course::CLOSED,
+            Course::HIDDEN,
+        ];
+
+        return $this->courses->filter(fn (SessionRelCourse $sessionRelCourse) => \in_array(
+            $sessionRelCourse->getCourse()->getVisibility(),
+            $closedVisibilities
+        ));
     }
 }

@@ -9,6 +9,14 @@ async function find(userIri) {
 }
 
 /**
+ * @param {number} userId
+ * @returns {Promise<Object>}
+ */
+async function findById(userId) {
+  return await baseService.get(`/api/users/${userId}`)
+}
+
+/**
  * @param {Object} searchParams
  * @returns {Promise<{totalItems, items}>}
  */
@@ -34,6 +42,7 @@ async function findBySearchTerm(term) {
 
 export default {
   find,
+  findById,
   findAll,
   findByUsername,
   findBySearchTerm,

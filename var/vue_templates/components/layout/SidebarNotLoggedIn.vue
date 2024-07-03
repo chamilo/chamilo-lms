@@ -1,35 +1,23 @@
 <script setup>
 import { computed, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
-import { useRoute, useRouter } from "vue-router"
+import { useRouter } from "vue-router"
 import PanelMenu from "primevue/panelmenu"
 import Dropdown from "primevue/dropdown"
 import SidebarLogin from "../SidebarLogin.vue"
 import PageList from "../../../../assets/vue/components/page/PageList.vue"
+import { useLocale } from "../../../../assets/vue/composables/locale"
 
 const { t } = useI18n()
 const router = useRouter()
-const route = useRoute()
 
-const currentLanguage = window.languages.find((language) => document.querySelector("html").lang === language.isocode)
+const { languageList, currentLanguageFromList, reloadWithLocale } = useLocale()
 
-const selectedCity = ref({
-  label: currentLanguage ? currentLanguage.originalName : "English",
-  isoCode: currentLanguage ? currentLanguage.isocode : "en_US",
-})
+const selectedCity = ref({ label: currentLanguageFromList.originalName, isoCode: currentLanguageFromList.isocode })
 
-watch(selectedCity, ({ isoCode }) => {
-  const newUrl = router.resolve({
-    path: route.path,
-    query: {
-      _locale: isoCode,
-    },
-  })
+watch(selectedCity, ({ isoCode }) => reloadWithLocale(isoCode))
 
-  window.location.href = newUrl.fullPath
-})
-
-const languageItems = window.languages.map((language) => ({
+const languageItems = languageList.map((language) => ({
   label: language.originalName,
   isoCode: language.isocode,
 }))
@@ -44,8 +32,8 @@ const menuItems = computed(() => [
     label: t("Login"),
     items: [
       {
-        id: 'login-form-item',
-      }
+        id: "login-form-item",
+      },
     ],
   },
   {
@@ -136,9 +124,7 @@ watch(
               />
             </a>
 
-            <SidebarLogin
-              v-else-if="item.id && 'login-form-item' === item.id"
-            />
+            <SidebarLogin v-else-if="item.id && 'login-form-item' === item.id" />
 
             <a
               v-else

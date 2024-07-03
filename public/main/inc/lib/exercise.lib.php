@@ -132,10 +132,14 @@ class ExerciseLib
                 case MATCHING_DRAGGABLE:
                     if (DRAGGABLE == $answerType) {
                         $isVertical = 'v' === $objQuestionTmp->extra;
-                        $s .= '<div><p class="small">'
+                        $s .= '<p class="small">'
                             .get_lang('Sort the following options from the list as you see fit by dragging them to the lower areas. You can put them back in this area to modify your answer.')
-                            .'</p><ul class="exercise-draggable-answer '.($isVertical ? '' : 'list-inline')
-                            .'" id="question-'.$questionId.'" data-question="'.$questionId.'">';
+                            .'</p>
+                            <div class="w-full ui-widget ui-helper-clearfix">
+                                <div class="clearfix">
+                                    <ul class="exercise-draggable-answer '.($isVertical ? 'vertical' : 'list-inline w-full').'"
+                                        id="question-'.$questionId.'" data-question="'.$questionId.'">
+                            ';
                     } else {
                         $s .= '<div id="drag'.$questionId.'_question" class="drag_question">
                                <table class="table table-hover table-striped data_table">';
@@ -202,6 +206,10 @@ class ExerciseLib
                         global $exercise_stat_info;
                         if (!empty($exercise_stat_info)) {
                             echo $objQuestionTmp->returnRecorder((int) $exercise_stat_info['exe_id']);
+                            $generatedFile = self::getOralFileAudio($exercise_stat_info['exe_id'], $questionId);
+                            if (!empty($generatedFile)) {
+                                echo $generatedFile;
+                            }
                         }
                     }
 
@@ -1375,10 +1383,10 @@ HTML;
                     $answerCorrect = $objAnswerTmp->isCorrect($answerId);
                     $windowId = $questionId.'_'.$counterAnswer;
                     if ($answerCorrect) {
-                        $s .= '<div class="droppable-item">
-                            <span class="number">'.$counterAnswer.'</span>
-                            <div id="drop_'.$windowId.'" class="droppable"></div>
-                            </div>';
+                        $s .= '<div class="droppable-item '.($isVertical ? 'w-full' : '').' flex items-center justify-between p-4 mb-4 bg-gray-200 rounded-md">';
+                        $s .= '<span class="number text-lg font-bold">'.$counterAnswer.'</span>';
+                        $s .= '<div id="drop_'.$windowId.'" class="droppable border-2 border-dashed border-gray-400 p-4 bg-white rounded-md"></div>';
+                        $s .= '</div>';
                         $counterAnswer++;
                     }
                 }
@@ -1609,7 +1617,7 @@ HOTSPOT;
 
         $sql = "SELECT qz.title quiz_title,
                         c.title course_title,
-                        s.name session_name,
+                        s.title session_name,
                         qz.iid as quiz_id,
                         qz.c_id,
                         qz.session_id
@@ -4489,8 +4497,7 @@ EOT;
                     $comnt = Event::get_comments($exeId, $questionId);
                     $teacherAudio = self::getOralFeedbackAudio(
                         $exeId,
-                        $questionId,
-                        api_get_user_id()
+                        $questionId
                     );
 
                     if (!empty($comnt) || $teacherAudio) {
@@ -5112,15 +5119,60 @@ EOT;
     }
 
     /**
-     * Get the audio componen for a teacher audio feedback.
+     * Retrieves the generated audio files for an oral question in an exercise attempt.
      *
-     * @param int $attemptId
-     * @param int $questionId
-     * @param int $userId
+     * @param int  $trackExerciseId The ID of the tracked exercise.
+     * @param int  $questionId      The ID of the question.
+     * @param bool $returnUrls      (Optional) If set to true, only the URLs of the audio files are returned. Default is false.
      *
-     * @return string
+     * @return array|string If $returnUrls is true, returns an array of URLs of the audio files. Otherwise, returns an HTML string with audio tags.
      */
-    public static function getOralFeedbackAudio($attemptId, $questionId, $userId)
+    public static function getOralFileAudio(int $trackExerciseId, int $questionId, bool $returnUrls = false): array|string
+    {
+        /** @var TrackEExercise $trackExercise */
+        $trackExercise = Container::getTrackEExerciseRepository()->find($trackExerciseId);
+
+        if (null === $trackExercise) {
+            return $returnUrls ? [] : '';
+        }
+
+        $questionAttempt = $trackExercise->getAttemptByQuestionId($questionId);
+
+        if (null === $questionAttempt) {
+            return $returnUrls ? [] : '';
+        }
+
+        $basePath = rtrim(api_get_path(WEB_PATH), '/');
+        $assetRepo = Container::getAssetRepository();
+
+        if ($returnUrls) {
+            $urls = [];
+            foreach ($questionAttempt->getAttemptFiles() as $attemptFile) {
+                $urls[] = $basePath.$assetRepo->getAssetUrl($attemptFile->getAsset());
+            }
+
+            return $urls;
+        } else {
+            $html = '';
+            foreach ($questionAttempt->getAttemptFiles() as $attemptFile) {
+                $html .= Display::tag(
+                    'audio',
+                    '',
+                    [
+                        'src' => $basePath.$assetRepo->getAssetUrl($attemptFile->getAsset()),
+                        'controls' => '',
+                    ]
+                );
+            }
+
+            return $html;
+        }
+    }
+
+    /**
+     * Get the audio component for a teacher audio feedback.
+     */
+    public static function getOralFeedbackAudio(int $attemptId, int $questionId): string
     {
         /** @var TrackEExercise $tExercise */
         $tExercise = Container::getTrackEExerciseRepository()->find($attemptId);

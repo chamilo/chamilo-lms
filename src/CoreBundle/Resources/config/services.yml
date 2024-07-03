@@ -5,6 +5,9 @@ services:
         public: true
         autoconfigure: true
 
+    csrf.token_manager:
+        class: Symfony\Component\Security\Csrf\CsrfTokenManager
+
     chamilo_core.translation.loader.po:
         class: Symfony\Component\Translation\Loader\PoFileLoader
         tags:

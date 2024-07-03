@@ -1,10 +1,20 @@
 import "mediaelement/build/mediaelementplayer.min.css"
 import "mediaelement/full"
 
-const videoSelector = "video:not(.skip), audio:not(.skip)"
+import iconSprite from "../../css/scss/libs/mediaelementjs/icons.svg"
+
+const videoSelector = "video:not(.skip, .uppy-Webcam-video), audio:not(.skip)"
 
 const mejsOptions = {
-  iconSprite: "/build/libs/mediaelement/mejs-controls.svg",
+  iconSprite,
+
+  /**
+   * @param {HTMLDivElement} media
+   * @param {HTMLVideoElement|HTMLAudioElement|HTMLIFrameElement} node
+   */
+  success(media, node) {
+    node.classList.add("not-prose")
+  },
 }
 
 function newVideosCallback(newVideo) {
@@ -52,9 +62,7 @@ function loader() {
 }
 
 function domLoader() {
-  document.addEventListener("DOMContentLoaded", function () {
-    loader()
-  })
+  addedNodesCallback(document)
 }
 
 export function useMediaElementLoader() {

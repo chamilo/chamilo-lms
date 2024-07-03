@@ -16,7 +16,7 @@
 
             {% if item.show_actions %}
                 <div class="float-right">
-                    <a class="btn btn--secondary-outline btn-sm" title="{{ "Edit"|get_lang }}"
+                    <a class="btn btn--secondary-outline btn-sm" title="{{ 'Edit'|get_lang }}"
                        href="{{ url('legacy_main', { 'name' : 'session/resume_session.php', 'id_session' : row.id }) }}">
                         {{ 'ActionIcon::EDIT' | mdi_icon }}
                     </a>
@@ -71,15 +71,15 @@
                     <div class="card-report">
                         <div class="student-info">
                             {% if (item.student_info.progress is not null) %}
-                                {{ "StudentCourseProgressX" | get_lang | format(item.student_info.progress) }}
+                                {{ 'Progress: %s %%' | get_lang | format(item.student_info.progress) }}
                             {% endif %}
 
                             {% if (item.student_info.score is not null) %}
-                                {{ "StudentCourseScoreX" | get_lang | format(item.student_info.score) }}
+                                {{ 'Score: %s %%' | get_lang | format(item.student_info.score) }}
                             {% endif %}
 
                             {% if (item.student_info.certificate is not null) %}
-                                {{ "StudentCourseCertificateX" | get_lang | format(item.student_info.certificate) }}
+                                {{ 'Certificate: %s' | get_lang | format(item.student_info.certificate) }}
                             {% endif %}
                         </div>
                     </div>

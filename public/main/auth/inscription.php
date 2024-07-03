@@ -662,7 +662,7 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
                     $infoMessage = Display::return_message(
                             get_lang('The terms and conditions have not yet been validated by your tutor'),
                             'warning',
-                            true
+                            false
                         );
                 }
 

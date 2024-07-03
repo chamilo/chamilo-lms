@@ -1,6 +1,7 @@
 import { defineStore } from "pinia"
 import { useSecurityStore } from "./securityStore"
-import messageRelUSerService from "../services/messagereluser"
+import { messageService } from "../services/message"
+import { MESSAGE_TYPE_INBOX } from "../components/message/constants"
 
 export const useMessageRelUserStore = defineStore("messageRelUser", {
   state: () => ({
@@ -10,16 +11,25 @@ export const useMessageRelUserStore = defineStore("messageRelUser", {
     async findUnreadCount() {
       const securityStore = useSecurityStore()
 
-      const response = await messageRelUSerService.findAll({
-        params: {
-          read: false,
-          receiver: securityStore.user["@id"],
+      try {
+        const params = {
+          "order[sendDate]": "desc",
+          "receivers.read": false,
+          "receivers.receiver": securityStore.user["@id"],
           itemsPerPage: 1,
-        },
-      })
-      const json = await response.json()
+          msgType: MESSAGE_TYPE_INBOX,
+        }
+        const response = await messageService.countUnreadMessages(params)
 
-      this.countUnread = json["hydra:totalItems"]
+        if (response && response["hydra:totalItems"] !== undefined) {
+          this.countUnread = response["hydra:totalItems"]
+        } else {
+          this.countUnread = 0
+        }
+      } catch (error) {
+        console.error("Error fetching unread count:", error)
+        this.countUnread = 0
+      }
     },
   },
 })

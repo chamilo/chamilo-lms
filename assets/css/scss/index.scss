@@ -36,6 +36,7 @@
 @import "atoms/toast";
 @import "atoms/wysiwyg";
 
+@import "molecules/chip";
 @import "molecules/course_tool";
 @import "molecules/datepicker";
 @import "molecules/empty_state";
@@ -75,6 +76,9 @@
 @import 'catalog_session';
 //@import 'jqueryui';
 @import 'lp';
+@import "messages";
 @import "userreluser";
 @import 'social';
 @import 'skill';
+
+@import "libs/mediaelementjs/styles";

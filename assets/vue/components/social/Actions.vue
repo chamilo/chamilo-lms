@@ -1,40 +1,34 @@
 <template>
   <div class="text-grey-8 q-gutter-xs">
-    <q-btn
+    <button
       v-if="enableFeedback"
-      :label="socialPost.countFeedbackLikes"
       :loading="isLoading.like"
       :title="$t('Like')"
-      class="gt-xs"
-      dense
-      flat
-      icon="mdi-heart-plus"
-      size="12px"
+      class="gt-xs dense flat"
       @click="onLikeComment"
-    />
-    <q-btn
+    >
+      <i class="mdi mdi-heart-plus mdi-24px"></i>
+      {{ socialPost.countFeedbackLikes }}
+    </button>
+    <button
       v-if="enableFeedback && !disableDislike"
-      :label="socialPost.countFeedbackDislikes"
       :loading="isLoading.dislike"
       :title="$t('Dislike')"
-      class="gt-xs"
-      dense
-      flat
-      icon="mdi-heart-remove"
-      size="12px"
+      class="gt-xs dense flat"
       @click="onDisikeComment"
-    />
-    <q-btn
+    >
+      <i class="mdi mdi-heart-remove mdi-24px"></i>
+      {{ socialPost.countFeedbackDislikes }}
+    </button>
+    <button
       v-if="isOwner"
       :loading="isLoading.delete"
       :title="$t('Delete')"
-      class="gt-xs"
-      dense
-      flat
-      icon="delete"
-      size="12px"
+      class="gt-xs dense flat"
       @click="onDeleteComment"
-    />
+    >
+      <i class="mdi mdi-delete mdi-24px"></i>
+    </button>
   </div>
 </template>
 

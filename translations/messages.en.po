@@ -21722,6 +21722,9 @@ msgstr "Very weak"
 msgid "You have been assigned the learner %s"
 msgstr "You have been assigned the learner %s"
 
+msgid "You have been assigned the learner %s with url %s"
+msgstr "You have been assigned the learner %s with url %s"
+
 msgid "You have been assigned as tutor for the learner %s.<br/>"
 msgstr "You have been assigned as tutor for the learner %s.<br/>"
 
@@ -22487,8 +22490,8 @@ msgstr "Posted deadline for sending the work (Visible to the learner)"
 msgid "Follow up message about student %s"
 msgstr "Follow up message about student %s"
 
-msgid "Hi,<br/><br/>"
-msgstr "Hi,<br/><br/>"
+msgid "Hi,<br/><br/>User %s sent a follow up message about student %s.<br/><br/>The message can be seen here %s"
+msgstr "Hi,<br/><br/>User %s sent a follow up message about student %s.<br/><br/>The message can be seen here %s"
 
 msgid "Include services"
 msgstr "Include services"
@@ -27519,3 +27522,6 @@ msgstr "Obtained the following skills"
 
 msgid "Certificate Footer"
 msgstr ""
+
+msgid "The attempted oral questions are %s"
+msgstr "The attempted oral questions are %s"

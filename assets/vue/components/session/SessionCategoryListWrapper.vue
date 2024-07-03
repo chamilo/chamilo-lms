@@ -1,3 +1,21 @@
+<script setup>
+import SessionListCategoryWrapper from "../../components/session/SessionListCategoryWrapper"
+import BaseIcon from "../basecomponents/BaseIcon.vue"
+
+const props = defineProps({
+  categories: {
+    type: Array,
+    required: true,
+  },
+  categoryWithSessions: {
+    type: Map,
+    required: true,
+  },
+})
+
+const getSessionsFromCategory = (category) => props.categoryWithSessions.get(category["@id"]).sessions
+</script>
+
 <template>
   <div
     v-if="categories.length"
@@ -15,26 +33,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import SessionListCategoryWrapper from "../../components/session/SessionListCategoryWrapper"
-import { toRefs } from "vue"
-import BaseIcon from "../basecomponents/BaseIcon.vue"
-
-const props = defineProps({
-  categories: {
-    type: Array,
-    required: true,
-  },
-  categoryWithSessions: {
-    type: Array,
-    required: true,
-  },
-})
-
-const { categoryWithSessions } = toRefs(props)
-
-function getSessionsFromCategory(category) {
-  return categoryWithSessions.value[category._id]["sessions"]
-}
-</script>

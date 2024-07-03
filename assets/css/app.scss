@@ -619,6 +619,131 @@ form .field {
   display: none;
 }
 
+.sub-item-indent {
+  padding-left: 20px;
+}
+
+.sub-item-indent.active {
+  background-color: #e0e0e0;
+  color: #333;
+  font-weight: bold;
+}
+
+.easy-donut {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.easy-donut .percent {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+.stat-widget-five {
+  display: flex;
+  align-items: center;
+}
+.stat-widget-five .fa, .stat-widget-five .mdi-icon {
+  margin-right: 1rem;
+}
+
+.toggle-password {
+  position: absolute !important;
+  top: 65% !important;
+  transform: translateY(-50%);
+  right: 0.75rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.toggle-password i {
+  font-size: 24px;
+}
+
+#legacy_content {
+  .exercise-overview {
+    padding: 30px 10px 60px;
+  }
+  .question-result {
+    padding-top: 30px;
+  }
+
+  .exercise-draggable-answer.full-width {
+    width: 100%;
+  }
+
+  .exercise-draggable-answer.list-inline {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .exercise-draggable-answer.vertical {
+    @apply flex flex-col w-full;
+  }
+
+  .exercise-draggable-answer.horizontal {
+    @apply flex flex-wrap;
+  }
+
+  .droppable-item {
+    @apply flex items-center justify-between p-4 mb-4 rounded-md;
+  }
+
+  .number {
+    @apply text-lg font-bold;
+  }
+
+  .droppable, .ui-droppable {
+    @apply border-2 border-dashed p-4 bg-white rounded-md min-h-[50px];
+  }
+
+  .question_options .question-answer__items--vertical .droppable {
+    width: 98%;
+  }
+
+  .ui-dragging {
+    @apply w-full flex items-center justify-center p-4 border-2 border-dashed;
+  }
+
+  .vertical .ui-draggable-dragging {
+    width: 80%;
+  }
+
+  .question-answer__items--vertical {
+    @apply flex flex-col w-full;
+  }
+
+  .question-answer__items--horizontal {
+    @apply flex flex-row flex-wrap;
+  }
+}
+
+.btn:hover {
+  cursor: pointer;
+  color: #fff;
+}
+
+.btn.btn--success.btn-large:hover {
+  background-color: #28a745;
+}
+
+.btn.btn--warning.question-validate-btn:hover {
+  background-color: #ffc107;
+}
+
+.btn.btn--info:hover {
+  background-color: #17a2b8;
+}
+
+.btn.btn--success:hover {
+  background-color: #28a745;
+}
+
+.btn.btn--danger:hover {
+  background-color: #dc3545;
+}
+
 //@import 'primevue-md-light-indigo/theme.css';
 //@import '~primevue/resources/primevue.min.css';
 //@import '~primeflex/primeflex.css';

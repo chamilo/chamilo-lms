@@ -8,7 +8,9 @@
 
   <SessionCategoryView
     v-if="!isLoading"
-    :result-sessions="sessions"
+    :uncategorized-sessions="uncategorizedSessions"
+    :categories="categories"
+    :categories-with-sessions="categoriesWithSessions"
   />
 </template>
 
@@ -19,5 +21,5 @@ import SessionCategoryView from "../../../components/session/SessionCategoryView
 import { useSession } from "./session"
 import SessionsLoading from "./SessionsLoading.vue"
 
-const { sessions, isLoading } = useSession()
+const { isLoading, uncategorizedSessions, categories, categoriesWithSessions } = useSession("current")
 </script>

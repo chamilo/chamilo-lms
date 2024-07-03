@@ -17,12 +17,11 @@ services:
 
     # Sets the user access in a course listener
     Chamilo\CoreBundle\EventListener\CourseAccessListener:
-        arguments:
-            - '@doctrine.orm.entity_manager'
-        tags:
-            - {name: kernel.event_listener, event: chamilo_course.course.access}
+      tags:
+        - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
-    # Sets the user access in a course session listener
+
+  # Sets the user access in a course session listener
     Chamilo\CoreBundle\EventListener\SessionAccessListener:
         tags:
             - {name: kernel.event_listener, event: chamilo_course.course.session}
@@ -92,10 +91,6 @@ services:
             - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
 
     Chamilo\CoreBundle\Entity\Listener\UserRelUserListener:
-        tags:
-            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
-
-    Chamilo\CoreBundle\Entity\Listener\MessageListener:
         tags:
             - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
 

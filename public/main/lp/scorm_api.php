@@ -203,6 +203,7 @@ olms.asset_timer = 0;
 olms.userfname = '<?php echo addslashes(trim($user['firstname'])); ?>';
 olms.userlname = '<?php echo addslashes(trim($user['lastname'])); ?>';
 olms.execute_stats = false;
+olms.lms_lp_item_parents = '';
 
 var courseUrl = '?cid='+olms.lms_course_id+'&sid='+olms.lms_session_id;
 var statsUrl = 'lp_controller.php' + courseUrl + '&action=stats';
@@ -1661,6 +1662,8 @@ function switch_item(current_item, next_item)
             });
         }
     }
+
+    updateItemParentNames();
     var mysrc = '<?php echo api_get_path(WEB_CODE_PATH); ?>lp/lp_controller.php?action=content&lp_id=' + olms.lms_lp_id +
                 '&item_id=' + next_item + '&cid=' + olms.lms_course_id + '&sid=' + olms.lms_session_id;
     var cont_f = $("#content_id");
@@ -1706,35 +1709,73 @@ function switch_item(current_item, next_item)
             if ($("#lp_media_file").length != 0) {
                 $("#lp_media_file").html(result);
             }
-
-            LPViewUtils.setHeightLPToc();
         }
     });*/
 
     // @todo add loadForumThread inside lp_nav.php to do only one request instead of 3!
     //loadForumThread(olms.lms_lp_id, next_item);
-    //checkCurrentItemPosition(olms.lms_item_id);
+    checkCurrentItemPosition(olms.lms_item_id);
 
     return true;
 }
 
 /**
+* Decodes HTML entities in a string
+* @param {string} str - The string with HTML entities
+* @returns {string} - The decoded string
+*/
+function decodeHtmlEntities(str) {
+    var txt = document.createElement("textarea");
+    txt.innerHTML = str;
+    return txt.value;
+}
+
+/**
+* Updates the 'item-parent-names' div with the titles of the current item's parents.
+*/
+function updateItemParentNames() {
+    var parentNamesContainer = document.getElementById('item-parent-names');
+    if (parentNamesContainer) {
+        parentNamesContainer.innerHTML = '';
+
+        // Ensure olms.lms_lp_item_parents is an array
+        var parentNames = Array.isArray(olms.lms_lp_item_parents) ? olms.lms_lp_item_parents : [];
+
+        parentNames.forEach(function(parentTitle) {
+            var h3 = document.createElement('h3');
+            h3.className = 'text-h5';
+            h3.textContent = decodeHtmlEntities(parentTitle);
+            parentNamesContainer.appendChild(h3);
+        });
+    }
+}
+
+/**
  * Hide or show the navigation buttons if the current item is the First or Last
  */
-var checkCurrentItemPosition = function(position) {
-    if (position == 'first') {
-        $("#scorm-previous").hide();
-        $("#scorm-next").show();
-    } else if (position == 'none') {
-        $("#scorm-previous").show();
-        $("#scorm-next").show();
-    } else if (position == 'last') {
-        $("#scorm-previous").show();
-        $("#scorm-next").hide();
-    } else if (position == 'both') {
-        $("#scorm-previous").hide();
-        $("#scorm-next").hide();
-    }
+var checkCurrentItemPosition = function(lpItemId) {
+    var currentItem = $.getJSON(
+        '<?php echo api_get_path(WEB_AJAX_PATH); ?>lp.ajax.php' + courseUrl,
+        {
+            a: 'check_item_position',
+            lp_item: lpItemId
+        }
+    ).done(function(parsedResponse,statusText,jqXhr) {
+        var position = jqXhr.responseJSON;
+        if (position == 'first') {
+            $("#scorm-previous").hide();
+            $("#scorm-next").show();
+        } else if (position == 'none') {
+            $("#scorm-previous").show();
+            $("#scorm-next").show();
+        } else if (position == 'last') {
+            $("#scorm-previous").show();
+            $("#scorm-next").hide();
+        } else if (position == 'both') {
+          $("#scorm-previous").hide();
+          $("#scorm-next").hide();
+        }
+    });
 }
 
 /**

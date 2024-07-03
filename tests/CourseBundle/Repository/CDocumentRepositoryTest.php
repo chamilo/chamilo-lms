@@ -440,7 +440,7 @@ class CDocumentRepositoryTest extends AbstractApiTest
                 'headers' => ['Content-Type' => 'application/json'],
             ]
         );
-        $this->assertResponseStatusCodeSame(403); // Unauthorized
+        $this->assertResponseStatusCodeSame(200); // Course OPEN_PLATFORM, then document is accesible
 
         $client->request('GET', '/api/documents', [
             'query' => [
@@ -449,7 +449,8 @@ class CDocumentRepositoryTest extends AbstractApiTest
                 'cid' => $courseId,
             ],
         ]);
-        $this->assertResponseStatusCodeSame(200);
+
+        $this->assertResponseStatusCodeSame(200); // Course OPEN_PLATFORM, then documents is accesible
 
         // Test access with another user. He CAN see the file, the cid is pass as a parameter
         // and the course is open to the world by default.

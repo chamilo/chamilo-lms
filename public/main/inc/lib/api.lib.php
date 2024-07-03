@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserCourseCategory;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\ServiceHelper\MailHelper;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
 use ChamiloSession as Session;
@@ -19,6 +20,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
 use Chamilo\CoreBundle\Component\Utils\ActionIcon;
@@ -1138,7 +1140,7 @@ function api_protect_teacher_script()
  */
 function api_block_anonymous_users($printHeaders = true)
 {
-    $isAuth = Container::getAuthorizationChecker()->isGranted('IS_AUTHENTICATED_FULLY');
+    $isAuth = Container::getAuthorizationChecker()->isGranted('IS_AUTHENTICATED');
 
     if (false === $isAuth) {
         api_not_allowed($printHeaders);
@@ -2073,7 +2075,9 @@ function api_get_cidreq($addSessionId = true, $addGroupId = true, $origin = '')
 
     if (!empty($url)) {
         $url .= '&gradebook='.(int) api_is_in_gradebook();
-        $url .= '&origin='.$origin;
+        if (false !== $origin) {
+            $url .= '&origin=' . $origin;
+        }
     }
 
     return $url;
@@ -2291,10 +2295,12 @@ function api_generate_password(int $length = 8, $useRequirements = true): string
 
     $charactersLowerCase = 'abcdefghijkmnopqrstuvwxyz';
     $charactersUpperCase = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+    $charactersSpecials = '!@#$%^&*()_+-=[]{}|;:,.<>?';
     $minNumbers = 2;
     $length = $length - $minNumbers;
     $minLowerCase = round($length / 2);
     $minUpperCase = $length - $minLowerCase;
+    $minSpecials = 1; // Default minimum special characters
 
     $password = '';
     $passwordRequirements = $useRequirements ? Security::getPasswordRequirements() : [];
@@ -2307,8 +2313,9 @@ function api_generate_password(int $length = 8, $useRequirements = true): string
         $minNumbers = $passwordRequirements['min']['numeric'];
         $minLowerCase = $passwordRequirements['min']['lowercase'];
         $minUpperCase = $passwordRequirements['min']['uppercase'];
+        $minSpecials = $passwordRequirements['min']['specials'];
 
-        $rest = $length - $minNumbers - $minLowerCase - $minUpperCase;
+        $rest = $length - $minNumbers - $minLowerCase - $minUpperCase - $minSpecials;
         // Add the rest to fill the length requirement
         if ($rest > 0) {
             $password .= $generator->generateString($rest, $charactersLowerCase.$charactersUpperCase);
@@ -2325,6 +2332,11 @@ function api_generate_password(int $length = 8, $useRequirements = true): string
 
     // Min uppercase
     $password .= $generator->generateString($minUpperCase, $charactersUpperCase);
+
+    // Min special characters
+    $password .= $generator->generateString($minSpecials, $charactersSpecials);
+
+    // Shuffle the password to ensure randomness
     $password = str_shuffle($password);
 
     return $password;
@@ -2550,6 +2562,9 @@ function api_get_session_visibility(
     // If start date was set.
     if (!empty($row['access_start_date'])) {
         $visibility = $now > api_strtotime($row['access_start_date'], 'UTC') ? SESSION_AVAILABLE : SESSION_INVISIBLE;
+    } else {
+        // If there's no start date, assume it's available until the end date
+        $visibility = SESSION_AVAILABLE;
     }
 
     // If the end date was set.
@@ -3516,7 +3531,7 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false)
  */
 function api_is_anonymous()
 {
-    return !Container::getAuthorizationChecker()->isGranted('IS_AUTHENTICATED_FULLY');
+    return !Container::getAuthorizationChecker()->isGranted('IS_AUTHENTICATED');
 }
 
 /**
@@ -7106,6 +7121,62 @@ function api_format_time($time, $originFormat = 'php')
     return $formattedTime;
 }
 
+function api_set_noreply_and_from_address_to_mailer(
+    TemplatedEmail $email,
+    array $sender,
+    array $replyToAddress = []
+): void {
+    $validator = Container::getLegacyHelper()->getValidator();
+    $emailConstraint = new Assert\Email();
+
+    $noReplyAddress = api_get_setting('noreply_email_address');
+    $avoidReplyToAddress = false;
+
+    if (!empty($noReplyAddress)) {
+        // $avoidReplyToAddress = api_get_configuration_value('mail_no_reply_avoid_reply_to');
+    }
+
+    // Default values
+    $notification = new Notification();
+    $defaultSenderName = $notification->getDefaultPlatformSenderName();
+    $defaultSenderEmail = $notification->getDefaultPlatformSenderEmail();
+
+    // If the parameter is set don't use the admin.
+    $senderName = !empty($sender['name']) ? $sender['name'] : $defaultSenderName;
+    $senderEmail = !empty($sender['email']) ? $sender['email'] : $defaultSenderEmail;
+
+    // Send errors to the platform admin
+    $adminEmail = api_get_setting('admin.administrator_email');
+
+    $adminEmailValidation = $validator->validate($adminEmail, $emailConstraint);
+
+    if (!empty($adminEmail) && 0 === $adminEmailValidation->count()) {
+        $email
+            ->getHeaders()
+            ->addIdHeader('Errors-To', $adminEmail)
+        ;
+    }
+
+    if (!$avoidReplyToAddress && !empty($replyToAddress)) {
+        $replyToEmailValidation = $validator->validate($replyToAddress['mail'], $emailConstraint);
+
+        if (0 === $replyToEmailValidation->count()) {
+            $email->addReplyTo(new Address($replyToAddress['mail'], $replyToAddress['name']));
+        }
+    }
+
+    if ('true' === api_get_setting('mail.smtp_unique_sender')) {
+        $senderName = $defaultSenderName;
+        $senderEmail = $defaultSenderEmail;
+
+        $email->sender(new Address($senderEmail, $senderName));
+    }
+
+    if ($senderEmail) {
+        $email->from(new Address($senderEmail, $senderName));
+    }
+}
+
 /**
  * Sends an email
  * Sender name and email can be specified, if not specified
@@ -7134,93 +7205,24 @@ function api_mail_html(
     $extra_headers = [],
     $data_file = [],
     $embeddedImage = false,
-    $additionalParameters = []
+    $additionalParameters = [],
+    string $sendErrorTo = null
 ) {
-    if (!api_valid_email($recipientEmail)) {
-        return false;
-    }
+    $mailHelper = Container::$container->get(MailHelper::class);
 
-    // Default values
-    $notification = new Notification();
-    $defaultEmail = $notification->getDefaultPlatformSenderEmail();
-    $defaultName = $notification->getDefaultPlatformSenderName();
-
-    // If the parameter is set don't use the admin.
-    $senderName = !empty($senderName) ? $senderName : $defaultName;
-    $senderEmail = !empty($senderEmail) ? $senderEmail : $defaultEmail;
-
-    // Reply to first
-    $replyToName = '';
-    $replyToEmail = '';
-    if (isset($extra_headers['reply_to'])) {
-        $replyToEmail = $extra_headers['reply_to']['mail'];
-        $replyToName = $extra_headers['reply_to']['name'];
-    }
-
-    try {
-        $bus = Container::getMessengerBus();
-        //$sendMessage = new \Chamilo\CoreBundle\Message\SendMessage();
-        //$bus->dispatch($sendMessage);
-
-        $message = new TemplatedEmail();
-        $message->subject($subject);
-
-        $list = api_get_setting('announcement.send_all_emails_to', true);
-        if (!empty($list) && isset($list['emails'])) {
-            foreach ($list['emails'] as $email) {
-                $message->cc($email);
-            }
-        }
-
-        // Attachment
-        if (!empty($data_file)) {
-            foreach ($data_file as $file_attach) {
-                if (!empty($file_attach['path']) && !empty($file_attach['filename'])) {
-                    $message->attachFromPath($file_attach['path'], $file_attach['filename']);
-                }
-            }
-        }
-
-        $noReply = api_get_setting('noreply_email_address');
-        $automaticEmailText = '';
-        if (!empty($noReply)) {
-            $automaticEmailText = '<br />'.get_lang('This is an automatic email message. Please do not reply to it.');
-        }
-
-        $params = [
-            'mail_header_style' => api_get_setting('mail.mail_header_style'),
-            'mail_content_style' => api_get_setting('mail.mail_content_style'),
-            'link' => $additionalParameters['link'] ?? '',
-            'automatic_email_text' => $automaticEmailText,
-            'content' => $body,
-            'theme' => api_get_visual_theme(),
-        ];
-
-        if (!empty($senderEmail)) {
-            $message->from(new Address($senderEmail, $senderName));
-        }
-
-        if (!empty($recipientEmail)) {
-            $message->to(new Address($recipientEmail, $recipientName));
-        }
-
-        if (!empty($replyToEmail)) {
-            $message->replyTo(new Address($replyToEmail, $replyToName));
-        }
-
-        $message
-            ->htmlTemplate('@ChamiloCore/Mailer/Default/default.html.twig')
-            ->textTemplate('@ChamiloCore/Mailer/Default/default.text.twig')
-        ;
-        $message->context($params);
-        Container::getMailer()->send($message);
-
-        return true;
-    } catch (Exception $e) {
-        error_log($e->getMessage());
-    }
-
-    return 1;
+    return $mailHelper->send(
+        $recipientName,
+        $recipientEmail,
+        $subject,
+        $body,
+        $senderName,
+        $senderEmail,
+        $extra_headers,
+        $data_file,
+        $embeddedImage,
+        $additionalParameters,
+        $sendErrorTo
+    );
 }
 
 /**

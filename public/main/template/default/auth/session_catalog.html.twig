@@ -15,7 +15,7 @@
             <div class="col-md-6">
                 <form method="post" action="{{ _p.web_self }}?action=display_sessions">
                     <div class="form-group">
-                        <label>{{ "ByDate"|get_lang }}</label>
+                        <label>{{ 'By date'|get_lang }}</label>
                         <div class="input-group">
                             <input type="date" name="date" id="date" title="{{ 'Date'|get_lang }}"
                                    class="form-control" value="{{ search_date }}" readonly>
@@ -30,9 +30,9 @@
             </div>
             <div class="col-md-6">
                 <form method="post" action="{{ _p.web_self }}?action=search_tag">
-                    <label>{{ "ByTag"|get_lang }}</label>
+                    <label>{{ 'By tag'|get_lang }}</label>
                     <div class="input-group">
-                        <input type="text" name="search_tag" title="{{ 'ByTag'|get_lang }}" class="form-control"
+                        <input type="text" name="search_tag" title="{{ 'By tag'|get_lang }}" class="form-control"
                                value="{{ search_tag }}"/>
                         <span class="input-group-btn">
                             <button class="btn btn--plain" type="submit">
@@ -72,7 +72,7 @@
                                 <a href="{{ coach.url }}" class="ajax" data-title="{{ coach.name }}">
                                     {{ coach.name }}
                                 </a>
-                                <p>{{ 'SessionGeneralCoach'|get_lang }}</p>
+                                <p>{{ 'Session general coach'|get_lang }}</p>
                             </div>
                         {% endfor %}
                     {% endif %}
@@ -105,7 +105,7 @@
                                 <div class="btn-group btn-group-sm" role="group">
                                     {% if not item.sequences is empty %}
                                         <a class="btn btn--primary btn-sm" role="button"
-                                           title="{{ 'SeeSequences'|get_lang }}" data-toggle="popover"
+                                           title="{{ 'See sequences'|get_lang }}" data-toggle="popover"
                                            id="session-{{ item.id }}-sequences">
                                             <i class="fas fa-sitemap"></i>
                                         </a>
@@ -128,7 +128,7 @@
                                         {% for sequence in item.sequences %}
                                         content += '<p class="lead">{{ sequence.title }}</p>';
                                         {% if sequence.requirements %}
-                                        content += '<p><em class="fa fa-sort-amount-desc"></em> {{ 'RequiredSessions'|get_lang }}</p>';
+                                        content += '<p><em class="fa fa-sort-amount-desc"></em> {{ 'Required sessions'|get_lang }}</p>';
                                         content += '<ul>';
 
                                         {% for requirement in sequence.requirements %}
@@ -141,7 +141,7 @@
                                         {% endif %}
 
                                         {% if sequence.dependencies %}
-                                        content += '<p><em class="fa fa-sort-amount-desc"></em> {{ 'DependentSessions'|get_lang }}</p>';
+                                        content += '<p><em class="fa fa-sort-amount-desc"></em> {{ 'Dependent sessions'|get_lang }}</p>';
                                         content += '<ul>';
 
                                         {% for dependency in sequence.dependencies %}
@@ -158,7 +158,7 @@
                                         {% endif %}
                                         {% endfor %}
                                         {% else %}
-                                        content = "{{ 'NoDependencies'|get_lang }}";
+                                        content = "{{ 'No dependencies'|get_lang }}";
                                         {% endif %}
 
                                         return content;

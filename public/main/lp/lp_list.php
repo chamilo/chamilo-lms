@@ -815,10 +815,15 @@ foreach ($categories as $category) {
                 $user
             );
 
+            $forumSessionIcon = '';
+            if ($is_allowed_to_edit && learnpath::isForumFromBaseCourse((int) $id)) {
+                $forumSessionIcon = Display::getMdiIcon('alert-circle', 'ch-tool-icon', '', 22, get_lang('This Learningpath includes a forum from the base course, so once users in a session will participate in this forum, it will start to appear in the forum tool in the session, whereas by default forums from the base course do not appear in the session.'));
+            }
+
             $listData[] = [
                 'learnpath_icon' => $icon_learnpath,
                 'url_start' => $url_start_lp,
-                'title' => $my_title,
+                'title' => $my_title . $forumSessionIcon,
                 'session_image' => $sessionImage,
                 'extra' => $extra,
                 'start_time' => $start_time,

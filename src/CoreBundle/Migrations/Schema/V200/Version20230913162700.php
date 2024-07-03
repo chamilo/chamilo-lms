@@ -11,7 +11,13 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Doctrine\DBAL\Schema\Schema;
+use Exception;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+
+use const PHP_URL_PATH;
 
 final class Version20230913162700 extends AbstractMigrationChamilo
 {
@@ -23,6 +29,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
     public function up(Schema $schema): void
     {
         $documentRepo = $this->container->get(CDocumentRepository::class);
+        $resourceNodeRepo = $this->container->get(ResourceNodeRepository::class);
 
         $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
         $updateConfigurations = [
@@ -55,6 +62,8 @@ final class Version20230913162700 extends AbstractMigrationChamilo
             foreach ($updateConfigurations as $config) {
                 $this->updateContent($config, $courseDirectory, $courseId, $documentRepo);
             }
+
+            $this->updateHtmlContent($courseDirectory, $courseId, $documentRepo, $resourceNodeRepo);
         }
     }
 
@@ -65,7 +74,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
         } elseif (isset($config['fields'])) {
             $fields = $config['fields'];
         } else {
-            throw new \Exception('No field or fields specified for updating.');
+            throw new Exception('No field or fields specified for updating.');
         }
 
         foreach ($fields as $field) {
@@ -87,6 +96,39 @@ final class Version20230913162700 extends AbstractMigrationChamilo
         }
     }
 
+    private function updateHtmlContent($courseDirectory, $courseId, $documentRepo, $resourceNodeRepo): void
+    {
+        $sql = "SELECT iid, resource_node_id FROM c_document WHERE filetype = 'file'";
+        $result = $this->connection->executeQuery($sql);
+        $items = $result->fetchAllAssociative();
+
+        foreach ($items as $item) {
+            $document = $documentRepo->find($item['iid']);
+            if ($document) {
+                $resourceNode = $document->getResourceNode();
+                if ($resourceNode && $resourceNode->hasResourceFile()) {
+                    $resourceFile = $resourceNode->getResourceFile();
+                    $filePath = $resourceFile->getTitle();
+                    if ($resourceFile && $resourceFile->getMimeType() === 'text/html') {
+                        error_log("Verifying HTML file: " . $filePath);
+
+                        try {
+                            $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode);
+                            $updatedContent = $this->replaceOldURLsWithNew($content, $courseDirectory, $courseId, $documentRepo);
+
+                            if ($content !== $updatedContent) {
+                                $documentRepo->updateResourceFileContent($document, $updatedContent);
+                                $documentRepo->update($document);
+                            }
+                        } catch (\Exception $e) {
+                            error_log("Error processing file $filePath: " . $e->getMessage());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private function replaceOldURLsWithNew($itemDataText, $courseDirectory, $courseId, $documentRepo): array|string|null
     {
         $contentText = $itemDataText;
@@ -94,11 +136,10 @@ final class Version20230913162700 extends AbstractMigrationChamilo
         preg_match_all($specificCoursePattern, $contentText, $matches);
 
         foreach ($matches[2] as $index => $fullUrl) {
-
             $videoPath = parse_url($fullUrl, PHP_URL_PATH) ?: $fullUrl;
             $actualCourseDirectory = $matches[5][$index];
             if ($actualCourseDirectory !== $courseDirectory) {
-                $videoPath = preg_replace("/^\/courses\/$actualCourseDirectory\//i", "/courses/$courseDirectory/", $videoPath);
+                $videoPath = preg_replace("/^\\/courses\\/$actualCourseDirectory\\//i", "/courses/$courseDirectory/", $videoPath);
             }
 
             $documentPath = str_replace('/courses/'.$courseDirectory.'/document/', '/', $videoPath);
@@ -114,7 +155,7 @@ final class Version20230913162700 extends AbstractMigrationChamilo
                 if ($document) {
                     $newUrl = $documentRepo->getResourceFileUrl($document);
                     if ($newUrl) {
-                        $replacement = $matches[1][$index] . '="' . $newUrl . '"';
+                        $replacement = $matches[1][$index].'="'.$newUrl.'"';
                         $contentText = str_replace($matches[0][$index], $replacement, $contentText);
                     }
                 }
@@ -132,8 +173,8 @@ final class Version20230913162700 extends AbstractMigrationChamilo
             if ($documentFile) {
                 $newUrl = $documentRepo->getResourceFileUrl($documentFile);
                 if (!empty($newUrl)) {
-                    $patternForReplacement = '/' . preg_quote($matches[0][$index], '/') . '/';
-                    $replacement = $matches[1][$index] . '="' . $newUrl . '"';
+                    $patternForReplacement = '/'.preg_quote($matches[0][$index], '/').'/';
+                    $replacement = $matches[1][$index].'="'.$newUrl.'"';
                     $contentText = preg_replace($patternForReplacement, $replacement, $contentText, 1);
                 }
             }
@@ -146,17 +187,17 @@ final class Version20230913162700 extends AbstractMigrationChamilo
             $documentRepo = $this->container->get(CDocumentRepository::class);
             $kernel = $this->container->get('kernel');
             $rootPath = $kernel->getProjectDir();
-            $appCourseOldPath = $rootPath . '/app' . $videoPath;
+            $appCourseOldPath = $rootPath.'/app'.$videoPath;
             $title = basename($appCourseOldPath);
 
             $courseRepo = $this->container->get(CourseRepository::class);
             $course = $courseRepo->find($courseId);
             if (!$course) {
-                throw new \Exception("Course with ID $courseId not found.");
+                throw new Exception("Course with ID $courseId not found.");
             }
 
             $document = $documentRepo->findCourseResourceByTitle($title, $course->getResourceNode(), $course);
-            if ($document !== null) {
+            if (null !== $document) {
                 return $document;
             }
 
@@ -168,49 +209,55 @@ final class Version20230913162700 extends AbstractMigrationChamilo
                     ->setReadonly(false)
                     ->setCreator($this->getAdmin())
                     ->setParent($course)
-                    ->addCourseLink($course);
+                    ->addCourseLink($course)
+                ;
 
                 $this->entityManager->persist($document);
                 $this->entityManager->flush();
 
                 $documentRepo->addFileFromPath($document, $title, $appCourseOldPath);
+
                 return $document;
-            } else {
-                $generalCoursesPath = $rootPath . '/app/courses/';
-                $foundPath = $this->recursiveFileSearch($generalCoursesPath, $title);
-                if ($foundPath) {
-                    $document = new CDocument();
-                    $document->setFiletype('file')
-                        ->setTitle($title)
-                        ->setComment(null)
-                        ->setReadonly(false)
-                        ->setCreator($this->getAdmin())
-                        ->setParent($course)
-                        ->addCourseLink($course);
-
-                    $this->entityManager->persist($document);
-                    $this->entityManager->flush();
-
-                    $documentRepo->addFileFromPath($document, $title, $foundPath);
-                    error_log("File found in new location: " . $foundPath);
-                    return $document;
-                } else {
-                    throw new \Exception("File not found in any location.");
-                }
             }
-        } catch (\Exception $e) {
-            error_log('Migration error: ' . $e->getMessage());
+            $generalCoursesPath = $rootPath.'/app/courses/';
+            $foundPath = $this->recursiveFileSearch($generalCoursesPath, $title);
+            if ($foundPath) {
+                $document = new CDocument();
+                $document->setFiletype('file')
+                    ->setTitle($title)
+                    ->setComment(null)
+                    ->setReadonly(false)
+                    ->setCreator($this->getAdmin())
+                    ->setParent($course)
+                    ->addCourseLink($course)
+                ;
+
+                $this->entityManager->persist($document);
+                $this->entityManager->flush();
+
+                $documentRepo->addFileFromPath($document, $title, $foundPath);
+                error_log('File found in new location: '.$foundPath);
+
+                return $document;
+            }
+
+            throw new Exception('File not found in any location.');
+        } catch (Exception $e) {
+            error_log('Migration error: '.$e->getMessage());
+
             return null;
         }
     }
 
-    private function recursiveFileSearch($directory, $title) {
-        $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($directory));
+    private function recursiveFileSearch($directory, $title)
+    {
+        $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory));
         foreach ($iterator as $file) {
             if ($file->isFile() && $file->getFilename() === $title) {
                 return $file->getRealPath();
             }
         }
+
         return null;
     }
 }

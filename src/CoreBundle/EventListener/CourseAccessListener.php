@@ -7,10 +7,11 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
-use Chamilo\CourseBundle\Event\CourseAccess;
-use Doctrine\ORM\EntityManager;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\ServiceHelper\CidReqHelper;
+use Chamilo\CoreBundle\ServiceHelper\UserHelper;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 /**
  * In and outs of a course
@@ -18,31 +19,38 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class CourseAccessListener
 {
-    protected ?Request $request = null;
-
     public function __construct(
-        private readonly EntityManager $em,
-        RequestStack $requestStack
-    ) {
-        $this->request = $requestStack->getCurrentRequest();
-    }
+        private readonly EntityManagerInterface $em,
+        private readonly CidReqHelper $cidReqHelper,
+        private readonly UserHelper $userHelper
+    ) {}
 
-    public function __invoke(CourseAccess $event): void
+    public function onKernelRequest(RequestEvent $event): void
     {
-        // CourseAccess
-        $user = $event->getUser();
-        $course = $event->getCourse();
-        $ip = $this->request->getClientIp();
+        if (!$event->isMainRequest() || $event->getRequest()->attributes->get('access_checked')) {
+            // If it's not the main request or we've already handled access in this request, do nothing
+            return;
+        }
 
-        $access = new TrackECourseAccess();
-        $access
-            ->setCId($course->getId())
-            ->setUser($user)
-            ->setSessionId(0)
-            ->setUserIp($ip)
-        ;
+        $courseId = (int) $this->cidReqHelper->getCourseId();
+        $sessionId = (int) $this->cidReqHelper->getSessionId();
 
-        $this->em->persist($access);
-        $this->em->flush();
+        if ($courseId > 0) {
+            $user = $this->userHelper->getCurrent();
+            if ($user) {
+                $ip = $event->getRequest()->getClientIp();
+                $accessRepository = $this->em->getRepository(TrackECourseAccess::class);
+                $access = $accessRepository->findExistingAccess($user, $courseId, $sessionId);
+
+                if ($access) {
+                    $accessRepository->updateAccess($access);
+                } else {
+                    $accessRepository->recordAccess($user, $courseId, $sessionId, $ip);
+                }
+
+                // Set a flag on the request to indicate that access has been checked
+                $event->getRequest()->attributes->set('access_checked', true);
+            }
+        }
     }
 }

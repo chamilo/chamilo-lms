@@ -7,25 +7,19 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\ServiceHelper;
 
 use Chamilo\CoreBundle\Entity\User;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserHelper
 {
     public function __construct(
-        private readonly TokenStorageInterface $tokenStorage,
+        private readonly Security $security,
     ) {}
 
     public function getCurrent(): ?User
     {
-        $token = $this->tokenStorage->getToken();
-
-        if (!$token) {
-            return null;
-        }
-
         /** @var User|null $user */
-        $user = $token->getUser();
+        $user = $this->security->getUser();
 
         return $user instanceof UserInterface ? $user : null;
     }

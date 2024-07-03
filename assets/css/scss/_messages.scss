@@ -1,0 +1,27 @@
+.message-list {
+  &__actions {
+    @apply flex gap-2 justify-end items-center flex-wrap mb-4;
+  }
+
+  &__searcher-container {
+    @apply flex justify-end;
+
+    .p-inputgroup {
+      @apply md:w-1/3;
+    }
+  }
+}
+
+.message-show {
+  &__tags-container {
+    @apply flex justify-end gap-2 items-center;
+  }
+
+  &__tags {
+    @apply flex gap-2;
+  }
+
+  &__tag-searcher.field {
+    @apply mb-0;
+  }
+}

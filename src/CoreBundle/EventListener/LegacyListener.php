@@ -26,6 +26,9 @@ use Twig\Environment;
  */
 class LegacyListener
 {
+    /**
+     * @psalm-suppress ContainerDependency
+     */
     public function __construct(
         private readonly Environment $twig,
         private readonly TokenStorageInterface $tokenStorage,

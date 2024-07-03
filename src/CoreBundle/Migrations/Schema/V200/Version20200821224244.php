@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-final class Version20200821224243 extends AbstractMigrationChamilo
+final class Version20200821224244 extends AbstractMigrationChamilo
 {
     private const OLD_MESSAGE_STATUS_NEW = 0;
     private const OLD_MESSAGE_STATUS_UNREAD = 1;

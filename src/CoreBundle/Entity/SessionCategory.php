@@ -36,7 +36,7 @@ class SessionCategory implements Stringable
     protected AccessUrl $url;
     #[ORM\OneToMany(targetEntity: Session::class, mappedBy: 'category')]
     protected Collection $sessions;
-    #[Groups(['session_category:read', 'session_category:write', 'session:read', 'session_rel_user:read'])]
+    #[Groups(['session_category:read', 'session_category:write', 'session:read', 'session_rel_user:read', 'user_subscriptions:sessions'])]
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'string', length: 100, nullable: false, unique: false)]
     protected string $title;

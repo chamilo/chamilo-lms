@@ -7,8 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
@@ -32,7 +32,8 @@ final class CCalendarEventRepository extends ResourceRepository
         array $users,
         Course $course,
         ?Session $session = null,
-        ?CGroup $group = null
+        ?CGroup $group = null,
+        array $remindersInfo = [],
     ): CCalendarEvent {
         $event = (new CCalendarEvent())
             ->setTitle($announcement->getTitle())
@@ -70,6 +71,16 @@ final class CCalendarEventRepository extends ResourceRepository
 
                 $event->addResourceToUserList($sendTo['users'], $course, $session, $group);
             }
+        }
+
+        foreach ($remindersInfo as $reminderInfo) {
+            $reminder = new AgendaReminder();
+            $reminder->count = (int) $reminderInfo[0];
+            $reminder->period = $reminderInfo[1];
+
+            $reminder->decodeDateInterval();
+
+            $event->addReminder($reminder);
         }
 
         $em->persist($event);

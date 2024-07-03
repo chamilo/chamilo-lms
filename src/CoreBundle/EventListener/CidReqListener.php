@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\EventListener;
 use Chamilo\CoreBundle\Controller\EditorController;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
@@ -40,7 +41,7 @@ class CidReqListener
         private readonly AuthorizationCheckerInterface $authorizationChecker,
         private readonly TranslatorInterface $translator,
         private readonly EntityManagerInterface $entityManager,
-        private readonly TokenStorageInterface $tokenStorage,
+        private readonly TokenStorageInterface $tokenStorage
     ) {}
 
     /**
@@ -270,6 +271,21 @@ class CidReqListener
             ChamiloSession::erase('course_already_visited');
         }
 
+        $courseId = $sessionHandler->get('cid', 0);
+        $sessionId = $sessionHandler->get('sid', 0);
+        $ip = $request->getClientIp();
+        if (0 !== $courseId) {
+            $token = $this->tokenStorage->getToken();
+            if (null !== $token) {
+                /** @var User $user */
+                $user = $token->getUser();
+                if ($user instanceof UserInterface) {
+                    $this->entityManager->getRepository(TrackECourseAccess::class)
+                        ->logoutAccess($user, $courseId, $sessionId, $ip)
+                    ;
+                }
+            }
+        }
         $sessionHandler->remove('toolgroup');
         $sessionHandler->remove('_cid');
         $sessionHandler->remove('cid');

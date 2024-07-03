@@ -169,12 +169,12 @@ class SkillModel extends Model
      * @param $skills
      * @param string $imageSize mini|small|big
      * @param string $style
-     * @param bool   $showBadge
-     * @param bool   $showTitle
+     * @param bool $showBadge
+     * @param bool $showTitle
      *
      * @return string
      */
-    public function processSkillListSimple($skills, $imageSize = 'mini', $style = '', $showBadge = true, $showTitle = true)
+    public function processSkillListSimple($skills, string $imageSize = 'mini', string $style = '', bool $showBadge = true, bool $showTitle = true): string
     {
         if (empty($skills)) {
             return '';
@@ -206,7 +206,14 @@ class SkillModel extends Model
                 $skillEntity = $skillRepo->find($skill['id']);
                 $url = $this->getWebIconPath($skillEntity);
 
-                $item = '<div class="item"><img src="'.$url.$imageParams.'" /></div>';
+                $badgeImage = Display::img(
+                    $url.$imageParams,
+                    $skillEntity->getTitle(),
+                    null,
+                    false
+                );
+
+                $item = '<div class="item">'.$badgeImage.'</div>';
             }
 
             $title = '<div class="caption">'.$skill['title'].'</div>';
@@ -765,14 +772,14 @@ class SkillModel extends Model
     }
 
     /**
-     * @param int  $userId
-     * @param int  $courseId
-     * @param int  $sessionId
+     * @param int $userId
+     * @param int $courseId
+     * @param int $sessionId
      * @param bool $addTitle
      *
      * @return array
      */
-    public function getUserSkillsTable($userId, $courseId = 0, $sessionId = 0, $addTitle = true)
+    public function getUserSkillsTable(int $userId, int $courseId = 0, int $sessionId = 0, bool $addTitle = true): array
     {
         $skills = $this->getUserSkills($userId, true, $courseId, $sessionId);
         $courseTempList = [];
@@ -808,10 +815,11 @@ class SkillModel extends Model
                 $asset = $assetRepo->find($resultData['asset_id']);
             }
 
+            $skillTitle = self::translateName($resultData['title']);
             $image = $asset ? $assetRepo->getAssetUrl($asset) : '/img/icons/32/badges-default.png';
             $badgeImage = Display::img(
                 $image,
-                '',
+                $skillTitle,
                 ['width' => '40'],
                 false
             );
@@ -819,7 +827,7 @@ class SkillModel extends Model
                 'skill_id' => $resultData['id'],
                 'asset_id' => $resultData['asset_id'],
                 'skill_badge' => $badgeImage,
-                'skill_title' => self::translateName($resultData['title']),
+                'skill_title' => $skillTitle,
                 'short_code' => $resultData['short_code'],
                 'skill_url' => $resultData['url'],
                 'achieved_at' => api_get_local_time($resultData['acquired_skill_at']),
@@ -837,7 +845,7 @@ class SkillModel extends Model
         $isHierarchicalTable = ('true' === api_get_setting('skill.skills_hierarchical_view_in_user_tracking'));
         $allowLevels = api_get_setting('skill.skill_levels_names', true);
 
-        $tableResult = '<div id="skillList">';
+        $tableResult = '<div id="skillList" class="bg-white p-6 shadow-lg rounded-lg mt-4 mb-14">';
         if ($isHierarchicalTable) {
             $tableResult = '<div class="table-responsive">';
         }
@@ -1790,7 +1798,7 @@ class SkillModel extends Model
         // This procedure is for check if there is already a Skill with no Parent (Root by default)
         $gradeBookList = [];
         foreach ($allGradeBooks as $gradebook) {
-            $gradeBookList[$gradebook['id']] = $gradebook['name'];
+            $gradeBookList[$gradebook['id']] = $gradebook['title'];
         }
 
         $translateUrl = api_get_path(WEB_CODE_PATH).'skills/skill_translate.php?';
@@ -1815,7 +1823,7 @@ class SkillModel extends Model
             );
         }
 
-        $form->addText('name', [get_lang('Name'), $translateNameButton], true, ['id' => 'name']);
+        $form->addText('title', [get_lang('Name'), $translateNameButton], true, ['id' => 'title']);
         $form->addText('short_code', [get_lang('Short code'), $translateCodeButton], false, ['id' => 'short_code']);
 
         // Cannot change parent of root

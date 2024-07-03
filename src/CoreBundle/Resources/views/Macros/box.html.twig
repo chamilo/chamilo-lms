@@ -122,40 +122,52 @@
 
 {% macro reporting_user_details(user) %}
     {% autoescape false %}
-    <div class="parameters">
-        <dl class="dl-horizontal">
+    <div class="parameters mt-4 mb-4">
+        <dl class="dl-horizontal mb-4">
             {% if user.status %}
-                <dt>{{ 'Status'|trans }}</dt>
-
-                {% if user.status == 1 %}
-                    <dd>{{ 'Trainer' | trans }}</dd>
-                {% else %}
-                    <dd>{{ 'Learner' | trans }}</dd>
-                {% endif %}
+                <div class="flex mb-2">
+                    <dt class="w-1/3 font-semibold">{{ 'Status'|trans }}</dt>
+                    <dd class="w-2/3">
+                        {% if user.status == 1 %}
+                            {{ 'Trainer' | trans }}
+                        {% else %}
+                            {{ 'Learner' | trans }}
+                        {% endif %}
+                    </dd>
+                </div>
             {% endif %}
-
-            <dt>{{ 'Official code'|trans }}</dt>
-            {% if user.officialCode is defined %}
-                <dd>{{ user.officialCode }}</dd>
-            {% else %}
-                <dd>{{ 'No official code'|trans }}</dd>
-            {% endif %}
-            <dt>{{ 'OnLine'|trans }}</dt>
-            <dd>
-{#                {{ user.user_is_online }}#}
-{#                {{ user.online }}#}
-            </dd>
-            <dt>{{ 'Tel'|trans }}</dt>
-            <dd>{{ user.phone == '' ? 'NoTel'|trans : user.phone }}</dd>
-
+            <div class="flex mb-2">
+                <dt class="w-1/3 font-semibold">{{ 'Official code'|trans }}</dt>
+                <dd class="w-2/3">
+                    {% if user.officialCode is defined %}
+                        {{ user.officialCode }}
+                    {% else %}
+                        {{ 'No official code'|trans }}
+                    {% endif %}
+                </dd>
+            </div>
+            <div class="flex mb-2">
+                <dt class="w-1/3 font-semibold">{{ 'OnLine'|trans }}</dt>
+                <dd class="w-2/3">
+                    {#                {{ user.user_is_online }}#}
+                    {#                {{ user.online }}#}
+                </dd>
+            </div>
+            <div class="flex mb-2">
+                <dt class="w-1/3 font-semibold">{{ 'Tel'|trans }}</dt>
+                <dd class="w-2/3">{{ user.phone == '' ? 'NoTel'|trans : user.phone }}</dd>
+            </div>
             {% if user.timezone is defined %}
-                <dt>{{ 'Timezone'|trans }}</dt>
-                <dd>{{ user.timezone }}</dd>
+                <div class="flex mb-2">
+                    <dt class="w-1/3 font-semibold">{{ 'Timezone'|trans }}</dt>
+                    <dd class="w-2/3">{{ user.timezone }}</dd>
+                </div>
             {% endif %}
-
             {% if user.legal is defined %}
-                <dt>{{ 'Legal'|trans }}</dt>
-                <dd>{{ user.legal.url_send }}</dd>
+                <div class="flex mb-2">
+                    <dt class="w-1/3 font-semibold">{{ 'Legal'|trans }}</dt>
+                    <dd class="w-2/3">{{ user.legal.url_send }}</dd>
+                </div>
             {% endif %}
         </dl>
     </div>

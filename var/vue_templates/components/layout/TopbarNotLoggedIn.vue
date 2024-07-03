@@ -1,9 +1,7 @@
 <script setup>
 import { computed } from "vue"
 import Menubar from "primevue/menubar"
-import headerLogoPath from "../../../../assets/css/themes/chamilo/images/header-logo.svg"
-
-const headerLogo = headerLogoPath
+import PlatformLogo from "../../../../assets/vue/components/layout/PlatformLogo.vue"
 
 const menuItems = computed(() => [])
 </script>
@@ -12,10 +10,7 @@ const menuItems = computed(() => [])
   <div class="app-topbar">
     <Menubar :model="menuItems">
       <template #start>
-        <img
-          :src="headerLogo"
-          alt="Chamilo LMS"
-        />
+        <PlatformLogo />
       </template>
       <template #end />
     </Menubar>

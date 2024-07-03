@@ -1,5 +1,5 @@
 .btn {
-  @apply cursor-default font-semibold gap-2 inline-flex justify-center px-6 py-3 rounded-md transition;
+  @apply cursor-default font-semibold gap-2 inline-flex justify-center px-6 py-3 rounded-md transition flex-none;
   font-size: 1rem;
   line-height: 1rem;
 
@@ -152,6 +152,11 @@
     &.disabled {
       @apply bg-gray-10 border-gray-25 cursor-default select-none text-gray-50;
     }
+  }
+
+  &-sm {
+    @apply px-4 py-2;
+    font-size: 13px;
   }
 }
 

@@ -1,53 +1,46 @@
 <template>
-  <div class="section-header section-header--h2">
-    <h2
-      class="mr-auto"
-      v-text="title"
-    />
+  <div class="message-list">
+    <SectionHeader :title="title">
+      <BaseButton
+        icon="email-plus"
+        only-icon
+        type="black"
+        @click="goToCompose"
+      />
 
-    <BaseButton
-      icon="email-plus"
-      only-icon
-      type="black"
-      @click="goToCompose"
-    />
+      <BaseButton
+        :disabled="isLoading"
+        icon="refresh"
+        only-icon
+        type="black"
+        @click="refreshMessages"
+      />
 
-    <BaseButton
-      :disabled="isLoading"
-      icon="refresh"
-      only-icon
-      type="black"
-      @click="refreshMessages"
-    />
+      <BaseButton
+        :disabled="0 === selectedItems.length || isLoading"
+        icon="delete"
+        only-icon
+        type="black"
+        @click="showDlgConfirmDeleteMultiple"
+      />
 
-    <BaseButton
-      :disabled="0 === selectedItems.length || isLoading"
-      icon="delete"
-      only-icon
-      type="black"
-      @click="showDlgConfirmDeleteMultiple"
-    />
+      <BaseButton
+        :disabled="0 === selectedItems.length || isLoading"
+        icon="multiple-marked"
+        only-icon
+        popup-identifier="course-messages-list-tmenu"
+        type="black"
+        @click="mToggleMessagesList"
+      />
 
-    <BaseButton
-      :disabled="0 === selectedItems.length || isLoading"
-      icon="multiple-marked"
-      only-icon
-      popup-identifier="course-messages-list-tmenu"
-      type="black"
-      @click="mToggleMessagesList"
-    />
+      <BaseMenu
+        id="course-messages-list-tmenu"
+        ref="mMessageList"
+        :model="mItemsMarkAs"
+      />
+    </SectionHeader>
 
-    <BaseMenu
-      id="course-messages-list-tmenu"
-      ref="mMessageList"
-      :model="mItemsMarkAs"
-    />
-  </div>
-
-  <hr />
-
-  <div class="message-container">
-    <div class="message-actions">
+    <div class="message-list__actions">
       <BaseButton
         :label="t('Inbox')"
         icon="inbox"
@@ -100,21 +93,70 @@
       @page="onPage($event)"
       @sort="sortingChanged($event)"
     >
+      <template #header>
+        <form
+          class="message-list__searcher-container"
+          @submit.prevent="onSearch"
+        >
+          <InputGroup>
+            <InputText
+              v-model="searchText"
+              :placeholder="t('Search')"
+              type="text"
+            />
+            <BaseButton
+              icon="search"
+              type="primary"
+              is-submit
+            />
+            <BaseButton
+              icon="close"
+              type="primary"
+              @click="onResetSearch"
+            />
+          </InputGroup>
+        </form>
+      </template>
+
       <Column selection-mode="multiple" />
-      <Column :header="t('From')">
+      <Column :header="showingInbox ? t('From') : t('To')">
         <template #body="slotProps">
           <div
-            v-if="slotProps.data.sender"
+            v-if="showingInbox && slotProps.data.sender"
             class="flex items-center gap-2"
           >
-            <BaseUserAvatar :image-url="slotProps.data.sender.illustrationUrl" :alt="t('Picture')" />
-
-            {{ slotProps.data.sender.username }}
+            <MessageCommunicationParty
+              :username="slotProps.data.sender.username"
+              :full-name="slotProps.data.sender.fullName"
+              :profile-image-url="slotProps.data.sender.illustrationUrl"
+            />
           </div>
           <div
-            v-else
+            v-else-if="showingInbox && !slotProps.data.sender"
             v-t="'No sender'"
           />
+          <div v-else-if="!showingInbox">
+            <div
+              v-for="receiverTo in slotProps.data.receiversTo"
+              :key="receiverTo['@id']"
+            >
+              <MessageCommunicationParty
+                :username="receiverTo.receiver.username"
+                :full-name="receiverTo.receiver.fullName"
+                :profile-image-url="receiverTo.receiver.illustrationUrl"
+              />
+            </div>
+            <div
+              v-for="receiverCc in slotProps.data.receiversCc"
+              :key="receiverCc['@id']"
+            >
+              <MessageCommunicationParty
+                :username="receiverCc.receiver.username"
+                :full-name="receiverCc.receiver.fullName"
+                :profile-image-url="receiverCc.receiver.illustrationUrl"
+              />
+            </div>
+          </div>
         </template>
       </Column>
       <Column
@@ -144,7 +186,7 @@
         field="sendDate"
       >
         <template #body="slotProps">
-          {{ relativeDatetime(slotProps.data.sendDate) }}
+          {{ abbreviatedDatetime(slotProps.data.sendDate) }}
         </template>
       </Column>
       <Column :header="t('Actions')">
@@ -169,7 +211,7 @@ import { useRoute, useRouter } from "vue-router"
 import { useFormatDate } from "../../composables/formatDate"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
-import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
+import MessageCommunicationParty from "./MessageCommunicationParty.vue"
 import BaseTag from "../../components/basecomponents/BaseTag.vue"
 import DataTable from "primevue/datatable"
 import Column from "primevue/column"
@@ -179,8 +221,10 @@ import { MESSAGE_STATUS_DELETED, MESSAGE_TYPE_INBOX } from "../../components/mes
 import { GET_USER_MESSAGE_TAGS } from "../../graphql/queries/MessageTag"
 import { useNotification } from "../../composables/notification"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
-import SocialSideMenu from "../../components/social/SocialSideMenu.vue"
 import { useSecurityStore } from "../../store/securityStore"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
+import InputGroup from "primevue/inputgroup"
+import InputText from "primevue/inputtext"
 
 const route = useRoute()
 const router = useRouter()
@@ -193,7 +237,7 @@ const notification = useNotification()
 
 const messageRelUserStore = useMessageRelUserStore()
 
-const { relativeDatetime } = useFormatDate()
+const { abbreviatedDatetime } = useFormatDate()
 
 const mItemsMarkAs = ref([
   {
@@ -268,6 +312,9 @@ const totalItems = computed(() => store.getters["message/getTotalItems"])
 
 const title = ref(null)
 
+const selectedTag = ref(null)
+const searchText = ref("")
+
 const selectedItems = ref([])
 
 const rowClass = (data) => {
@@ -288,15 +335,33 @@ function loadMessages(reset = true) {
     dtMessages.value.resetPage()
   }
 
+  fetchPayload.msgType = MESSAGE_TYPE_INBOX
+
+  if (selectedTag.value) {
+    fetchPayload["receivers.tags.tag"] = selectedTag.value.tag
+  }
+
+  if (showingInbox.value) {
+    fetchPayload["receivers.receiver"] = securityStore.user["@id"]
+  } else {
+    fetchPayload.sender = securityStore.user["@id"]
+  }
+
+  if (searchText.value) {
+    fetchPayload.search = searchText.value
+  }
+
   store.dispatch("message/fetchAll", fetchPayload)
 }
 
+const showingInbox = ref(false)
+
 function showInbox() {
+  showingInbox.value = true
   title.value = t("Inbox")
+  selectedTag.value = null
 
   fetchPayload = {
-    msgType: MESSAGE_TYPE_INBOX,
-    "receivers.receiver": securityStore.user["@id"],
     "order[sendDate]": "desc",
     itemsPerPage: initialRowsPerPage,
     page: 1,
@@ -306,12 +371,11 @@ function showInbox() {
 }
 
 function showInboxByTag(tag) {
+  showingInbox.value = true
   title.value = tag.tag
+  selectedTag.value = tag
 
   fetchPayload = {
-    msgType: MESSAGE_TYPE_INBOX,
-    "receivers.receiver": securityStore.user["@id"],
-    "receivers.tags.tag": tag.tag,
     "order[sendDate]": "desc",
     itemsPerPage: initialRowsPerPage,
     page: 1,
@@ -321,11 +385,11 @@ function showInboxByTag(tag) {
 }
 
 function showUnread() {
+  showingInbox.value = true
   title.value = t("Unread")
+  selectedTag.value = null
 
   fetchPayload = {
-    msgType: MESSAGE_TYPE_INBOX,
-    "receivers.receiver": securityStore.user["@id"],
     "order[sendDate]": "desc",
     "receivers.read": false,
     itemsPerPage: initialRowsPerPage,
@@ -336,10 +400,11 @@ function showUnread() {
 }
 
 function showSent() {
+  showingInbox.value = false
   title.value = t("Sent")
+  selectedTag.value = null
 
   fetchPayload = {
-    msgType: MESSAGE_TYPE_INBOX,
     sender: securityStore.user["@id"],
     "order[sendDate]": "desc",
     itemsPerPage: initialRowsPerPage,
@@ -431,4 +496,26 @@ function showDlgConfirmDeleteMultiple() {
 onMounted(() => {
   showInbox()
 })
+
+function onSearch() {
+  fetchPayload = {
+    "order[sendDate]": "desc",
+    itemsPerPage: initialRowsPerPage,
+    page: 1,
+  }
+
+  loadMessages()
+}
+
+function onResetSearch() {
+  searchText.value = ""
+
+  fetchPayload = {
+    "order[sendDate]": "desc",
+    itemsPerPage: initialRowsPerPage,
+    page: 1,
+  }
+
+  loadMessages()
+}
 </script>

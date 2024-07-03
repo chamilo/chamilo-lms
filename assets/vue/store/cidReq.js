@@ -82,7 +82,7 @@ export const useCidReqStore = defineStore("cidReq", () => {
     }
   }
 
-  const setSessionByIri = async (sId) => {
+  const setSessionByIri = async (sId, useBasic = true) => {
     const sessionIri = `/api/sessions/${sId}`
 
     if (session.value && sessionIri === session.value["@id"]) {
@@ -90,7 +90,7 @@ export const useCidReqStore = defineStore("cidReq", () => {
     }
 
     try {
-      session.value = await sessionService.find(sessionIri)
+      session.value = await sessionService.find(sessionIri, useBasic)
     } catch (error) {
       console.error(error)
     }
@@ -101,7 +101,8 @@ export const useCidReqStore = defineStore("cidReq", () => {
    * @param {number|null} sId
    * @returns {Promise<Awaited<void>[]>|Promise<void>}
    */
-  const setCourseAndSessionById = (cId, sId = undefined) => {
+  const setCourseAndSessionById = (cId, sId = undefined, useBasic = true) => {
+
     if (!cId) {
       return resetCid()
     }
@@ -112,7 +113,7 @@ export const useCidReqStore = defineStore("cidReq", () => {
       return coursePromise
     }
 
-    const sessionPromise = setSessionByIri(sId)
+    const sessionPromise = setSessionByIri(sId, useBasic)
 
     return Promise.all([coursePromise, sessionPromise])
   }

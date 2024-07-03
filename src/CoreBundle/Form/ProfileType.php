@@ -28,8 +28,10 @@ class ProfileType extends AbstractType
 {
     private LanguageRepository $languageRepository;
 
-    public function __construct(LanguageRepository $languageRepository, private readonly SettingsManager $settingsManager)
-    {
+    public function __construct(
+        LanguageRepository $languageRepository,
+        private readonly SettingsManager $settingsManager
+    ) {
         $this->languageRepository = $languageRepository;
     }
 
@@ -72,7 +74,8 @@ class ProfileType extends AbstractType
 
         if ('true' === $this->settingsManager->getSetting('use_users_timezone')) {
             $builder
-                ->add('timezone', TimezoneType::class, ['label' => 'Timezone', 'required' => true]);
+                ->add('timezone', TimezoneType::class, ['label' => 'Timezone', 'required' => true])
+            ;
         }
 
         $builder

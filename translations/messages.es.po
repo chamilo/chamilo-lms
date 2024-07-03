@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2024-05-03 06:23+0000\n"
+"PO-Revision-Date: 2024-05-31 08:49+0000\n"
 "Last-Translator: Yannick Warnier <ywarnier@chamilo.org>\n"
 "Language-Team: Spanish <https://translation.chamilo.org/projects/chamilo/"
 "messages/es/>\n"
@@ -21750,6 +21750,9 @@ msgstr "Muy débil"
 msgid "You have been assigned the learner %s"
 msgstr "Se le ha asignado el estudiante %s"
 
+msgid "You have been assigned the learner %s with url %s"
+msgstr "Usted ha sido asignado(a) como tutor del estudiante %s. Puede acceder a su perfil aquí: %s"
+
 msgid "You have been assigned as tutor for the learner %s.<br/>"
 msgstr "Usted ha sido asignado(a) como tutor del estudiante %s. Puede acceder a su perfil aquí: %s"
 
@@ -22515,8 +22518,8 @@ msgstr "Fecha límite publicada para enviar el trabajo (visible para el alumno)"
 msgid "Follow up message about student %s"
 msgstr "Mensaje de seguimiento sobre alumno %s"
 
-msgid "Hi,<br/><br/>"
-msgstr "Hola,<br/><br/>"
+msgid "Hi,<br/><br/>User %s sent a follow up message about student %s.<br/><br/>The message can be seen here %s"
+msgstr "Hola,<br/><br/>El usuario %s ha enviado un mensaje de seguimiento sobre el alumno %s.<br/><br/>El mensaje se puede ver en %s"
 
 msgid "Include services"
 msgstr "Incluir los servicios"
@@ -25276,7 +25279,6 @@ msgstr "Recordarme"
 msgid "My Skills"
 msgstr "Mis competencias"
 
-#, fuzzy
 msgid "Text appearing at the end of the test when the user has failed."
 msgstr "Texto que aparece al final del examen cuando el usuario no ha aprobado."
 
@@ -25287,8 +25289,7 @@ msgid "Learn more about Chamilo and its use, official references links"
 msgstr "Aprenda más sobre Chamilo y su uso, enlaces a referencias oficiales"
 
 msgid "Manage the skills of your users, through courses and badges"
-msgstr ""
-"Gestione las habilidades de sus usuarios, a través de cursos y distintivos"
+msgstr "Gestione las habilidades de sus usuarios, a través de cursos y distintivos"
 
 msgid "Signed in as"
 msgstr "Conectado como"
@@ -25308,13 +25309,11 @@ msgstr ""
 "Otros usuarios no podrán verlos."
 
 msgid "Select 'Yes' to remove the button to delete all announcements, as this can be used by mistake by teachers."
-msgstr ""
-"Seleccione 'Sí' para eliminar el botón de borrar todos los anuncios, ya que "
+msgstr "Seleccione 'Sí' para eliminar el botón de borrar todos los anuncios, ya que "
 "los formadores pueden usarlo por error."
 
 msgid "This gives the HRM a little more power by allowing them to edit/delete agenda events in the course-session."
-msgstr ""
-"Esto otorga al responable RRHH un poco más de poder al permitirle editar/"
+msgstr "Esto otorga al responable RRHH un poco más de poder al permitirle editar/"
 "eliminar eventos de la agenda en la sesión del curso."
 
 msgid "Default calendar display mode"
@@ -25768,3 +25767,1676 @@ msgstr ""
 "Si no se proporciona, el código del curso se genera automáticamente en base "
 "al título del curso, así que active esta opción para eliminar por completo "
 "el campo de código del formulario de creación de cursos."
+
+msgid "When not empty, only the courses from the given categories will appear in the courses catalogue."
+msgstr ""
+"Cuando no esté vacío, solo los cursos de las categorías dadas aparecerán en "
+"el catálogo de cursos."
+
+msgid "When enabled, only the courses with the extra field ‘show_in_catalogue’ set to 1 will appear in the catalogue."
+msgstr ""
+"Cuando esté activado, solo los cursos con el campo adicional "
+"'show_in_catalogue' establecido en 1 aparecerán en el catálogo."
+
+msgid "Show donate message on course creation page"
+msgstr "Mostrar mensaje de donación en la página de creación de curso"
+
+msgid "Give a category code to use as course templates. Only those courses will show in the drop-down at course creation time, and users won’t see the courses in this category from the courses catalogue."
+msgstr ""
+"Asigne un código de categoría para usar como plantillas de curso. Solo esos "
+"cursos se mostrarán en el menú desplegable al momento de crear un curso, y "
+"los usuarios no verán los cursos de esta categoría en el catálogo de cursos."
+
+msgid "Add a button to unsubscribe from a course on the ‘My courses’ page."
+msgstr ""
+"Agregue un botón para darse de baja de un curso en la página 'Mis cursos'."
+
+msgid "Show unsubscribe button in ‘My courses’"
+msgstr "Mostrar botón de cancelar suscripción en 'Mis cursos'"
+
+msgid "Configure this array with the internal IDs of the extra fields you want to show by default in the main course stats page."
+msgstr ""
+"Configure este arreglo con los ID internos de los campos de perfil que desea "
+"mostrar por defecto en la página principal de estadísticas del curso."
+
+msgid "Only show matching courses in catalogue"
+msgstr "Mostrar solo los cursos correspondientes en el catálogo"
+
+msgid "The fields defined in this array will appear as additional fields in the course creation form."
+msgstr ""
+"Los campos definidos en este arreglo aparecerán como campos adicionales en "
+"el formulario de creación de cursos."
+
+msgid "Only show matching categories in courses catalogue"
+msgstr "Muestra solo las categorías coincidentes en el catálogo de cursos"
+
+msgid "Extra fields to show on course creation form"
+msgstr "Campos de perfil para mostrar en el formulario de creación de cursos"
+
+msgid "When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow coaches in session courses to adapt tool visibilities to their needs."
+msgstr ""
+"Al utilizar las sesiones, el comportamiento predeterminado es usar la "
+"visibilidad de la herramienta definida en el curso base. Esta configuración "
+"cambia eso para permitir que los tutores en los cursos de sesión adapten la "
+"visibilidad de las herramientas a sus necesidades."
+
+msgid "Sort users by specific info by default"
+msgstr "Ordenar usuarios por información específica de forma predeterminada"
+
+msgid "Hide documents download icon"
+msgstr "Ocultar icono de descarga de documentos"
+
+msgid "Compilatio is an anti-cheating service that compares text between two submissions and reports if there is a high probability the content (usually assignments) is not genuine."
+msgstr ""
+"Compilatio es un servicio antiplagio que compara el texto entre dos entregas "
+"e informa si hay una alta probabilidad de que el contenido (generalmente "
+"trabajos) no sea auténtico."
+
+msgid "Provide link to a bug reporting platform if not using the internal ticket manager."
+msgstr ""
+"Proporcionar un enlace a una plataforma de reporte de errores si no se "
+"utiliza el gestor de tickets interno."
+
+msgid "Set strict hosts list for cloud links"
+msgstr "Establecer lista estricta de hosts para enlaces en la nube"
+
+msgid "In the documents tool, hide the download icon from users."
+msgstr ""
+"En la herramienta de documentos, oculta el icono de descarga a los usuarios."
+
+msgid "In the course progress tool, you can print a PDF of the different elements. Set ‘portrait’ or ‘landscape’ (technical terms) to change it."
+msgstr ""
+"En la herramienta de progreso del curso, puedes imprimir un PDF de los "
+"diferentes elementos. Establece 'portrait' o 'landscape' (términos técnicos) "
+"para cambiarlo."
+
+msgid "When enabled, this option disables as well as possible the copy-pasting mechanisms. Useful in restrictive exams setups."
+msgstr ""
+"Cuando está activada, esta opción deshabilita lo mejor posible los "
+"mecanismos de copiar y pegar. Útil en configuraciones de exámenes "
+"restrictivos."
+
+msgid "PDF orientation for course progress"
+msgstr "Orientación del PDF para el avance temático"
+
+msgid "Some pages allow you to promote the portal or a course on social networks. Enable this setting to remove the links."
+msgstr ""
+"Algunas páginas le permiten promocionar el portal o un curso en redes "
+"sociales. Active esta configuración para eliminar los enlaces."
+
+msgid "The fields defined in this array will be mandatory in the course creation form."
+msgstr ""
+"Los campos definidos en este arreglo serán obligatorios en el formulario de "
+"creación de cursos."
+
+msgid "Hide social media links"
+msgstr "Ocultar enlaces de redes sociales"
+
+msgid "Make a virtual keyboard appear. This is useful when setting up restrictive exams in a physical room where students have no keyboard to limit their ability to cheat."
+msgstr ""
+"Haga aparecer un teclado virtual. Esto es útil al configurar exámenes "
+"restrictivos en una sala física donde los alumnos no tienen teclado para "
+"limitar su capacidad de hacer trampa."
+
+msgid "Disable copy-pasting"
+msgstr "Desactivar copiar y pegar"
+
+msgid "Compilatio settings"
+msgstr "Configuración de Compilatio"
+
+msgid "Whenever someone creates a new item in the documents tool, send a notification to users."
+msgstr ""
+"Cada vez que alguien crea un nuevo elemento en la herramienta de documentos, "
+"envía una notificación a los usuarios."
+
+msgid "Provide the name of the template folder from main/template/ to change the appearance and structure of this portal."
+msgstr ""
+"Proporcione el nombre de la carpeta de plantillas de main/template/ para "
+"cambiar la apariencia y estructura de este portal."
+
+msgid "If not empty, the course creation process will look for some fields in the user profile and auto-fill them for the course. For example, a teacher specialized in digital marketing could automatically set a « digital marketing » flag on each course (s)he creates."
+msgstr ""
+"Si no está vacío, el proceso de creación del curso buscará algunos campos en "
+"el perfil del usuario y los completará automáticamente para el curso. Por "
+"ejemplo, un tutor especializado en marketing digital podría establecer "
+"automáticamente una etiqueta de «marketing digital» en cada curso que crea."
+
+msgid "A general certificate is a certificate grouping all the accomplishments by the user in the courses (s)he followed."
+msgstr ""
+"Un certificado general es un certificado que agrupa todos los logros del "
+"usuario en los cursos que ha seguido."
+
+msgid "Extra fields to require on course creation form"
+msgstr ""
+"Campos de perfil adicionales para requerir en el formulario de creación de "
+"cursos"
+
+msgid "Send notification to students when document added"
+msgstr "Enviar notificación a los alumnos cuando se añada un documento"
+
+msgid "Set ‘portrait’ or ‘landscape’ (technical terms) for PDF certificates."
+msgstr ""
+"Establezca 'portrait' o 'landscape' (términos técnicos) para los "
+"certificados en PDF."
+
+msgid "Enable sharing options for group document"
+msgstr "Habilitar opciones de compartición para el documento de grupo"
+
+msgid "PDF orientation for certificates"
+msgstr "Orientación de PDF para certificados"
+
+msgid "The fields defined in this array will appear on the course settings page."
+msgstr ""
+"Los campos definidos en este arreglo aparecerán en la página de "
+"configuración del curso."
+
+msgid "Configure the Compilatio connection details here."
+msgstr "Configure los detalles de conexión de Compilatio aquí."
+
+msgid "The documents tool can integrate links to files in the cloud. The list of cloud services is limited to a hardcoded list, but you can define the ‘links’ array that will contain a list of your own list of services/URLs. The list defined here will replace the default list."
+msgstr ""
+"La herramienta de documentos puede integrar enlaces a archivos en la nube. "
+"La lista de servicios en la nube está limitada a una lista predefinida, pero "
+"puedes definir el arreglo 'enlaces' que contendrá una lista de tus propios "
+"servicios/URLs. La lista definida aquí reemplazará la lista predeterminada."
+
+msgid "Extra fields to show in course settings"
+msgstr "Campos de perfil para mostrar en la configuración del curso"
+
+msgid "Enable this if you have X-sendfile enabled at the web server level and you want to add the required headers for browsers to pick it up."
+msgstr ""
+"Actívelo si tiene X-sendfile habilitado a nivel del servidor web y desea "
+"agregar las cabeceras necesarias para que los navegadores puedan detectarlo."
+
+msgid "Use virtual keyboard"
+msgstr "Utilizar el teclado virtual"
+
+msgid "Enable Compilatio"
+msgstr "Activar Compilatio"
+
+msgid "Prefill course fields with fields from user"
+msgstr "Rellene previamente los campos del curso con campos del usuario"
+
+msgid "Enable general certificate"
+msgstr "Activar certificado general"
+
+msgid "Bug report link"
+msgstr "Enlace de informe de errores"
+
+msgid "Layout template"
+msgstr "Plantilla de diseño"
+
+msgid "Enable X-sendfile headers"
+msgstr "Activar encabezados X-sendfile"
+
+msgid "Order of user lastname and firstname"
+msgstr "Orden de apellido y nombre del usuario"
+
+msgid "Allow tool visibility edition in sessions"
+msgstr "Permitir la edición de la visibilidad de herramientas en sesiones"
+
+msgid "Enable sharing options for document inside group category"
+msgstr ""
+"Habilitar opciones de compartición para el documento dentro de la categoría "
+"de grupo"
+
+msgid "Allow users to include HTML in title fields in several places. This allows for some styling of titles, notably in test questions."
+msgstr ""
+"Permitir a los usuarios incluir HTML en los campos de título en varios "
+"lugares. Esto permite aplicar estilos a los títulos, especialmente en las "
+"preguntas de exámenes."
+
+msgid "Show link to download test results"
+msgstr "Mostrar enlace para descargar resultados del ejercicio"
+
+msgid "Block sending test notifications to general coach"
+msgstr "Bloquear el envío de notificaciones de prueba al tutor general"
+
+msgid "Allow the teacher to rate the open, oral expression and annotation question types with a decimal score."
+msgstr ""
+"Permita al tutor calificar los tipos de preguntas de expresión oral abierta "
+"y anotación con una puntuación decimal."
+
+msgid "Select between the following forms for the display of users' score in various reports: 1 = SCORE_AVERAGE (5 / 10); 2 = SCORE_PERCENT (50%); 3 = SCORE_DIV_PERCENT (5 / 10 (50%)). Use the numerical ID of the form you want to use."
+msgstr ""
+"Seleccione entre las siguientes formas para mostrar la puntuación de los "
+"usuarios en varios informes: 1 = PROMEDIO_PUNTUACIÓN (5 / 10); 2 = "
+"PORCENTAJE_PUNTUACIÓN (50%); 3 = PUNTUACIÓN_DIV_PORCENTAJE (5 / 10 (50%)). "
+"Utilice el ID numérico de la forma que desea usar."
+
+msgid "Hide the fact that open questions (including audio and annotations) have a score by hiding the score display in all learner-facing reports."
+msgstr ""
+"Oculte el hecho de que las preguntas abiertas (incluyendo audio y "
+"anotaciones) tienen una puntuación ocultando la visualización de la "
+"puntuación en todos los informes orientados a los alumnos."
+
+msgid "Prevent the use of images copy-paste as base64 in the editor to avoid filling the database with images."
+msgstr ""
+"Evita el uso de copiar y pegar imágenes como base64 en el editor para no "
+"llenar la base de datos con imágenes."
+
+msgid "Enable test images zooming"
+msgstr "Activar el zoom en imágenes de ejercicios"
+
+msgid "Set this to false to disable the 'previous' button when answering questions in a test, thus forcing users to always move ahead."
+msgstr ""
+"Establezca esto en falso para desactivar el botón 'anterior' al responder "
+"preguntas en un examen, obligando así a los usuarios a avanzar siempre."
+
+msgid "Disable new test attempts"
+msgstr "Desactivar nuevos intentos de ejercicio"
+
+msgid "Generate certificate when ending a quiz. The quiz needs to be linked in the gradebook tool and have a pass percentage configured."
+msgstr ""
+"Generar certificado al finalizar un cuestionario. El cuestionario debe estar "
+"vinculado en la herramienta de evaluaciones y tener configurado un "
+"porcentaje de aprobación."
+
+msgid "When using this option, an additional option will appear in the test's configuration. When using a test with multiple question categories and asking for a distribution by category, this will allow the user to navigate questions per category. Once a category is finished, (s)he moves to the next category and cannot return to the previous category."
+msgstr ""
+"Al utilizar esta opción, aparecerá una opción adicional en la configuración "
+"del ejercicio. Al usar un ejercicio con múltiples categorías de preguntas y "
+"solicitar una distribución por categoría, esto permitirá al usuario navegar "
+"las preguntas por categoría. Una vez que se termina una categoría, el alumno "
+"pasa a la siguiente categoría y no puede regresar a la categoría anterior."
+
+msgid "The auto-launch feature allows the teacher to set an exercise to open immediately upon accessing the course homepage. Enable this option and click on the rocket icon in the list of tests to enable."
+msgstr ""
+"La función de auto-lanzamiento permite al tutor configurar un ejercicio para "
+"que se abra inmediatamente al acceder a la página principal del curso. "
+"Active esta opción y haga clic en el icono del cohete en la lista de "
+"ejercicios para habilitar."
+
+msgid "Learners completing a test usually sends notifications to coaches, including the general session coach. Enable this option to omit the general coach from these notifications."
+msgstr ""
+"Los alumnos que completan una prueba suelen enviar notificaciones a los "
+"tutores, incluyendo al tutor general de la lección. Active esta opción para "
+"omitir al tutor general de estas notificaciones."
+
+msgid "Enable this feature to allow users to zoom on images used in the tests."
+msgstr ""
+"Active esta función para permitir a los usuarios ampliar las imágenes "
+"utilizadas en los ejercicios."
+
+msgid "The default test results page shows a user datasheet (photo, name, etc) which might, in some contexts, be considered as pushing the limits of personal data treatment. Enable this option to remove user details from the test results."
+msgstr ""
+"La página de resultados del ejercicio por defecto muestra una hoja de datos "
+"del usuario (foto, nombre, etc.) que, en algunos contextos, podría "
+"considerarse como un exceso en el tratamiento de datos personales. Active "
+"esta opción para eliminar los detalles del usuario de los resultados del "
+"ejercicio."
+
+msgid "Hide question ribbon (right/wrong) in test results"
+msgstr ""
+"Ocultar la cinta de pregunta (correcto/incorrecto) en los resultados del "
+"ejercicio"
+
+msgid "Add checkbox for answers count confirmation"
+msgstr ""
+"Añadir casilla de verificación para confirmación del número de respuestas"
+
+msgid "Prevent copy-pasting images in WYSIWYG editor"
+msgstr "Evitar copiar y pegar imágenes en el editor WYSIWYG"
+
+msgid "Disable 'clean results' for teachers"
+msgstr "Desactivar 'limpiar resultados' para profesores"
+
+msgid "List of WYSIWYG files drivers"
+msgstr "Lista de controladores de archivos WYSIWYG"
+
+msgid "Full WYSIWYG editor toolbar"
+msgstr "Barra de herramientas completa del editor WYSIWYG"
+
+msgid "Allow teachers to provide feedback to users through audio (alternatively to text) on each question in a test."
+msgstr ""
+"Permita que los tutores proporcionen retroalimentación a los usuarios "
+"mediante audio (alternativamente a texto) en cada pregunta de una prueba."
+
+msgid "Enable selecting mandatory questions"
+msgstr "Habilitar la selección de preguntas obligatorias"
+
+msgid "Save titles as HTML"
+msgstr "Guardar títulos como HTML"
+
+msgid "Test notification settings at test-level"
+msgstr "Configurar notificaciones de ejercicios a nivel de ejercicio"
+
+msgid "Show question pagination for teachers"
+msgstr "Mostrar paginación de preguntas para tutores"
+
+msgid "Always show test description on results page"
+msgstr "Muestra siempre la descripción del ejercicio en la página de resultados"
+
+msgid "Audio feedback to submitted answers"
+msgstr "Retroalimentación de audio para las respuestas enviadas"
+
+msgid "Decimal score in open question types"
+msgstr "Puntuación decimal en tipos de preguntas abiertas"
+
+msgid "Generic configuration array to reconfigure the WYSIWYG editor globally."
+msgstr ""
+"Configuración genérica en formato array para reconfigurar el editor WYSIWYG "
+"globalmente."
+
+msgid "Add question feedback if incorrect answer"
+msgstr "Añadir retroalimentación a la pregunta si la respuesta es incorrecta"
+
+msgid "Disable the option to delete test results from the tests list. This is often used when less-careful teachers manage courses, to avoid critical mistakes."
+msgstr ""
+"Desactive la opción de eliminar resultados de ejercicios de la lista de "
+"ejercicios. Esto se utiliza a menudo cuando tutores menos cuidadosos "
+"gestionan cursos, para evitar errores críticos."
+
+msgid "Show the expected choice and a status (right/wrong) for each answer on the test results page (if the test has been configured to show results)."
+msgstr ""
+"Mostrar la opción esperada y un estado (correcto/incorrecto) para cada "
+"respuesta en la página de resultados del ejercicio (si el ejercicio ha sido "
+"configurado para mostrar resultados)."
+
+msgid "Show the username (instead or, or as well as, the user info) on the test results page."
+msgstr ""
+"Muestre el nombre de usuario (en lugar de, o además de, la información del "
+"usuario) en la página de resultados del ejercicio."
+
+msgid "Show question IDs in tests"
+msgstr "Mostrar los ID de las preguntas en los ejercicios"
+
+msgid "Show 'previous' button in test to navigate questions"
+msgstr "Mostrar botón 'anterior' en el test para navegar entre las preguntas"
+
+msgid "This option adds a checkbox at the end of each test asking the user to confirm the number of answers saved. This provides better auditing data for critical tests."
+msgstr ""
+"Esta opción añade una casilla de verificación al final de cada ejercicio "
+"solicitando al usuario que confirme el número de respuestas guardadas. Esto "
+"proporciona mejores datos de auditoría para ejercicios críticos."
+
+msgid "Show score for certainty degree questions"
+msgstr "Muestra la puntuación para las preguntas de grado de certeza"
+
+msgid "Question pagination length for teachers"
+msgstr "Longitud de paginación de preguntas para tutores"
+
+msgid "Enable player renderers for YouTube, Vimeo, Facebook, DailyMotion, Twitch medias"
+msgstr ""
+"Habilitar reproductores para medios de YouTube, Vimeo, Facebook, "
+"DailyMotion, Twitch"
+
+msgid "Make sure users are all set to start the test by providing a simulation of the question-saving process before entering the test. This allows for early detection of some connection issues and reduces user experience frictions."
+msgstr ""
+"Asegúrese de que todos los alumnos estén listos para comenzar el ejercicio "
+"proporcionando una simulación del proceso de guardado de preguntas antes de "
+"entrar al ejercicio. Esto permite la detección temprana de algunos problemas "
+"de conexión y reduce las fricciones en la experiencia del usuario."
+
+msgid "In test results, a ribbon appears by default to indicate if the answer was right or wrong. Enable this option to remove the ribbon globally."
+msgstr ""
+"En los resultados de los exámenes, una cinta aparece por defecto para "
+"indicar si la respuesta fue correcta o incorrecta. Active esta opción para "
+"eliminar la cinta globalmente."
+
+msgid "Show username in test results page"
+msgstr "Muestre el nombre de usuario en la página de resultados del ejercicio"
+
+msgid "Enable test categories"
+msgstr "Habilitar categorías de ejercicios"
+
+msgid "If enabled, this option allows users to use a ‘lang’ attribute in HTML elements to define the langage the content of that element is written in. Enable multiple elements with different ‘lang’ attributes and Chamilo will display the content in the langage of the user only."
+msgstr ""
+"Si está habilitada, esta opción permite a los usuarios utilizar un atributo "
+"'lang' en elementos HTML para definir el idioma en el que está escrito el "
+"contenido de ese elemento. Habilite múltiples elementos con diferentes "
+"atributos 'lang' y Chamilo mostrará el contenido solo en el idioma del "
+"usuario."
+
+msgid "When enabled, teachers cannot delete tests nor questions, change tests visibility, download to QTI, clean results, etc."
+msgstr ""
+"Cuando está activado, los tutores no pueden eliminar ejercicios ni "
+"preguntas, cambiar la visibilidad de los ejercicios, descargar a QTI, "
+"limpiar resultados, etc."
+
+msgid "Number of questions to show on every page when using the question pagination for teachers option."
+msgstr ""
+"Número de preguntas a mostrar en cada página al utilizar la opción de "
+"paginación de preguntas para tutores."
+
+msgid "Hide user info on test results page"
+msgstr ""
+"Ocultar información del usuario en la página de resultados del ejercicio"
+
+msgid "Video player renderers"
+msgstr "Reproductores de video"
+
+msgid "Block copy-pasting in tests"
+msgstr "Bloquear el copiar y pegar en exámenes"
+
+msgid "Add score in mail notification of test submission"
+msgstr ""
+"Añada la puntuación en la notificación por correo de la entrega del ejercicio"
+
+msgid "Enable display of best score attempt"
+msgstr "Activar visualización del mejor intento de puntuación"
+
+msgid "Enable test results page configuration"
+msgstr "Habilitar la configuración de la página de resultados del ejercicio"
+
+msgid "For tests with many questions, use pagination if the number of questions is higher than this setting. Set to 0 to prevent using pagination."
+msgstr ""
+"Para ejercicios con muchas preguntas, utilice la paginación si el número de "
+"preguntas es superior a esta configuración. Establezca en 0 para evitar el "
+"uso de la paginación."
+
+msgid "Provide a list of courses and tests' IDs that will show the best score attempt for any learner in the reports. "
+msgstr ""
+"Proporcione una lista de identificadores de cursos y ejercicios que "
+"mostrarán el mejor intento de puntuación para cualquier alumno en los "
+"informes. "
+
+msgid "Enable the selection of mandatory questions in a test when using random categories."
+msgstr ""
+"Active la selección de preguntas obligatorias en un ejercicio cuando utilice "
+"categorías aleatorias."
+
+msgid "On the test results page, display a link to download the results as a file."
+msgstr ""
+"En la página de resultados del ejercicio, muestre un enlace para descargar "
+"los resultados como archivo."
+
+msgid "Allow teachers to edit tests in learning paths"
+msgstr "Permitir a los tutores editar pruebas en lecciones"
+
+msgid "Test categories are not enabled by default because they add a level of complexity. Enable this feature to show all test categories related management icons appear."
+msgstr ""
+"Las categorías de ejercicios no están habilitadas por defecto porque añaden "
+"un nivel de complejidad. Active esta función para que aparezcan todos los "
+"iconos de gestión relacionados con las categorías de ejercicios."
+
+msgid "Enable the configuration of test submission notifications at the test level rather than the course level. Falls back to course-level settings if not defined at test-level."
+msgstr ""
+"Habilite la configuración de notificaciones de entrega de ejercicios a nivel "
+"de ejercicio en lugar de a nivel de curso. Revierte a la configuración a "
+"nivel de curso si no está definida a nivel de ejercicio."
+
+msgid "Allow images drag&drop in WYSIWYG editor"
+msgstr "Permitir arrastrar y soltar imágenes en el editor WYSIWYG"
+
+msgid "Disable new test attempts globally. Usually used when there is a problem with tests in general and you want some time to analyse without blocking the whole platform."
+msgstr ""
+"Desactivar globalmente nuevos intentos de ejercicio. Se utiliza "
+"habitualmente cuando hay un problema con los ejercicios en general y se "
+"desea tener tiempo para analizar sin bloquear toda la plataforma."
+
+msgid "Add the learner's score to the e-mail notification sent to the teacher after a test was submitted."
+msgstr ""
+"Agregue la puntuación del alumno al correo electrónico de notificación "
+"enviado al tutor después de que se entregue un ejercicio."
+
+msgid "Limit teachers' permissions over tests"
+msgstr "Limitar los permisos de los tutores en los ejercicios"
+
+msgid "Define an array of settings you want to apply to all tests results pages. Settings can be 'hide_question_score', 'hide_expected_answer', 'hide_category_table', 'hide_correct_answered_questions', 'hide_total_score' and possibly more in the future. Look for ‘getPageConfigurationAttribute’ in the code to see what’s in use."
+msgstr ""
+"Defina un arreglo de configuraciones que desee aplicar a todas las páginas "
+"de resultados de ejercicios. Las configuraciones pueden ser "
+"'hide_question_score', 'hide_expected_answer', 'hide_category_table', "
+"'hide_correct_answered_questions', 'hide_total_score' y posiblemente más en "
+"el futuro. Busque ‘getPageConfigurationAttribute’ en el código para ver qué "
+"está en uso."
+
+msgid "Allow tests auto-launch"
+msgstr "Permitir el auto-lanzamiento de ejercicios"
+
+msgid "Additional links for teachers in tests list"
+msgstr "Enlaces adicionales para tutores en la lista de ejercicios"
+
+msgid "Enable recording of all answers (even temporary) in the track_e_attempt_recording table. This feautre is experimentaland can create issues in the reporting pages when attempting to grade a test."
+msgstr ""
+"Active la grabación de todas las respuestas (incluso temporales) en la tabla "
+"track_e_attempt_recording. Esta característica es experimental y puede "
+"causar problemas en las páginas de informes al intentar calificar un "
+"ejercicio."
+
+msgid "Configure callback elements to generate new action icons for teachers to the right side of the tests list, in the form of an array, e.g. ['myplugin' => ['MyPlugin', 'urlGeneratorCallback']]"
+msgstr ""
+"Configure los elementos de callback para generar nuevos iconos de acción "
+"para los tutores en el lado derecho de la lista de ejercicios, en forma de "
+"un arreglo, por ejemplo, ['myplugin' => ['MyPlugin', 'urlGeneratorCallback']]"
+
+msgid "Array containing the names of the drivers for files access from the WYSIWYG editor."
+msgstr ""
+"Array que contiene los nombres de los controladores para el acceso a "
+"archivos desde el editor WYSIWYG."
+
+msgid "Tests score format"
+msgstr "Formato de puntuación de ejercicios"
+
+msgid "Enable image upload as file when doing a copy in the content or a drag and drop."
+msgstr ""
+"Habilite la carga de imágenes como archivo al realizar una copia en el "
+"contenido o un arrastrar y soltar."
+
+msgid "Lock questions of previous categories in a test"
+msgstr "Bloquear las preguntas de las categorías anteriores en un ejercicio"
+
+msgid "Add answer-saving process check before test"
+msgstr ""
+"Añada un proceso de verificación para guardar respuestas antes del ejercicio"
+
+msgid "Show expected choice in test results"
+msgstr "Muestre la opción esperada en los resultados del ejercicio"
+
+msgid "Round score in test exports"
+msgstr "Puntuación redondeada en las exportaciones de ejercicios"
+
+msgid "Hide open questions' score"
+msgstr "Ocultar la puntuación de las preguntas abiertas"
+
+msgid "Hide the context menu on video player"
+msgstr "Ocultar el menú contextual en el reproductor de video"
+
+msgid "Support multi-language HTML content"
+msgstr "Soporte para contenido HTML multilenguaje"
+
+msgid "Block copy/paste/save/print keys and right-clicks in exercises."
+msgstr ""
+"Bloquear las teclas de copiar/pegar/guardar/imprimir y clics derechos en "
+"ejercicios."
+
+msgid "By default, Chamilo prevents you from editing tests that are included inside a learning path. This is to avoid changes that would affect learners (past and future) differently regarding the results and/or progress in the learning path. This option allows teachers to bypass this restriction."
+msgstr ""
+"De forma predeterminada, Chamilo impide editar pruebas que están incluidas "
+"dentro de una lección. Esto es para evitar cambios que afectarían a los "
+"alumnos (pasados y futuros) de manera diferente en cuanto a los resultados y/"
+"o el progreso en la lección. Esta opción permite a los tutores eludir esta "
+"restricción."
+
+msgid "Generate certificate on test end"
+msgstr "Generar certificado al finalizar el ejercicio"
+
+msgid "WYSIWYG editor settings"
+msgstr "Configuración del editor WYSIWYG"
+
+msgid "Show questions' internal IDs to let users take note of issues on specific questions and report them more efficiently."
+msgstr ""
+"Mostrar los IDs internos de las preguntas para que los usuarios puedan tomar "
+"nota de los problemas en preguntas específicas e informarlos de manera más "
+"eficiente."
+
+msgid "Show the full toolbar in all WYSIWYG editor boxes around the platform."
+msgstr ""
+"Muestra la barra de herramientas completa en todos los cuadros de editor "
+"WYSIWYG de la plataforma."
+
+msgid "By default, Chamilo does not show a score for the certainty degree question types."
+msgstr ""
+"Por defecto, Chamilo no muestra una puntuación para los tipos de preguntas "
+"de grado de certeza."
+
+msgid "By default, Chamilo allows you to show feedback on each answer in a question. With this option, an additional field is created to provide pre-defined feedback to the whole question. This feedback will only appear if the user answered incorrectly."
+msgstr ""
+"De forma predeterminada, Chamilo le permite mostrar retroalimentación en "
+"cada respuesta de una pregunta. Con esta opción, se crea un campo adicional "
+"para proporcionar retroalimentación predefinida a toda la pregunta. Esta "
+"retroalimentación solo aparecerá si el usuario respondió incorrectamente."
+
+msgid "Enable extra test answers recording"
+msgstr "Activar el registro de respuestas adicionales del ejercicio"
+
+msgid "Visual effect to enable forum categories folding/unfolding."
+msgstr ""
+"Efecto visual para habilitar el plegado/desplegado de categorías de foros."
+
+msgid "Keep session active in tests"
+msgstr "Mantener la sesión activa en los ejercicios"
+
+msgid "The default behaviour is to make questions orphan when the only test using them is deleted. When enabled, this option ensure that all questions that would otherwise end up orphan are deleted as well."
+msgstr ""
+"El comportamiento predeterminado es dejar las preguntas huérfanas cuando se "
+"elimina el único ejercicio que las utiliza. Cuando se activa, esta opción "
+"garantiza que todas las preguntas que de otro modo quedarían huérfanas "
+"también se eliminen."
+
+msgid "Hide user IP from test reports"
+msgstr "Ocultar la IP del usuario de los informes de ejercicios"
+
+msgid "When exporting a course, do not export the questions that are not part of any test."
+msgstr ""
+"Al exportar un curso, no exportar las preguntas que no forman parte de "
+"ningún ejercicio."
+
+msgid "Add user extra fields in exercise category report"
+msgstr ""
+"Añadir campos de perfil de usuario en el informe de categoría de ejercicio"
+
+msgid "Quick image addition to question"
+msgstr "Adición rápida de imagen a la pregunta"
+
+msgid "Enable to display to the final user a page with the list of pending tests across all courses."
+msgstr ""
+"Habilitar para mostrar al usuario final una página con la lista de "
+"ejercicios pendientes en todos los cursos."
+
+msgid "Forum categories language filter"
+msgstr "Filtro de idioma para categorías de foros"
+
+msgid "Add a language filter to the forum view to only see categries configured in a specific language. Requires using the 'language' extra field on the 'forum_category' entity."
+msgstr ""
+"Agregar un filtro de idioma a la vista del foro para ver solo las categorías "
+"configuradas en un idioma específico. Requiere el uso del campo adicional "
+"'language' en la entidad 'forum_category'."
+
+msgid "Bypass HTML filtering in test end messages"
+msgstr "Evitar el filtrado HTML en los mensajes de finalización del ejercicio"
+
+msgid "Set the course ID (numerical) of a course reserverd to use as a global forum. This replaces the 'Social groups' link in the social network by a link to the forum of that course."
+msgstr ""
+"Establezca el ID del curso (numérico) de un curso reservado para usar como "
+"foro global. Esto reemplaza el enlace de 'Grupos sociales' en la red social "
+"por un enlace al foro de ese curso."
+
+msgid "Display a popup with the list of answered/unanswered questions before submitting the test."
+msgstr ""
+"Mostrar un popup con la lista de preguntas respondidas/no respondidas antes "
+"de enviar el ejercicio."
+
+msgid "Consider messages at the end of tests are always safe. Removing the filter makes it possible to use JavaScript there."
+msgstr ""
+"Los mensajes al final de los ejercicios siempre son seguros. Eliminar el "
+"filtro permite usar JavaScript allí."
+
+msgid "Bypass HTML filtering in test questions"
+msgstr "Omitir el filtrado HTML en las preguntas del ejercicio"
+
+msgid "Fold forum categories"
+msgstr "Contraer categorías de foros"
+
+msgid "Forum post review"
+msgstr "Revisión de publicación en el foro"
+
+msgid "Hide the possibility to assign a language to a forum post review."
+msgstr ""
+"Oculte la posibilidad de asignar un idioma a la revisión de una publicación "
+"en el foro."
+
+msgid "Hide forum post review language"
+msgstr "Ocultar idioma de revisión de publicación en foro"
+
+msgid "Enable this option to display, on the 'My progress' page, the results of all tests you have taken, even the ones that have been deleted."
+msgstr ""
+"Active esta opción para mostrar, en la página 'Mi progreso', los resultados "
+"de todos los ejercicios que ha realizado, incluso los que han sido "
+"eliminados."
+
+msgid "Discard orphan questions in course export"
+msgstr "Descartar preguntas huérfanas en la exportación del curso"
+
+msgid "Default glossary view"
+msgstr "Vista predeterminada del glosario"
+
+msgid "Hide test attempts table on test start page"
+msgstr ""
+"Ocultar la tabla de intentos de ejercicio en la página de inicio del "
+"ejercicio"
+
+msgid "Check all answers before submitting test"
+msgstr "Revisar todas las respuestas antes de enviar el ejercicio"
+
+msgid "Score grades model"
+msgstr "Modelo de calificación de puntuaciones"
+
+msgid "Enable this option to enable notifications coming from the base course forum, even if following the course through a session."
+msgstr ""
+"Active esta opción para recibir notificaciones del foro del curso base, "
+"incluso si sigue el curso a través de una sesión."
+
+msgid "Hide gradebook charts"
+msgstr "Ocultar gráficos en la herramienta de Evaluaciones"
+
+msgid "Hide the question incremental numbering when taking a test."
+msgstr ""
+"Oculte la numeración incremental de las preguntas al realizar un ejercicio."
+
+msgid "By default, it is only possible to limit the time per test. Limiting it per question adds an extra layer of possibilities, and you can (carefully) combine both."
+msgstr ""
+"Por defecto, solo es posible limitar el tiempo por ejercicio. Limitarlo por "
+"pregunta añade una capa extra de posibilidades, y puede combinar ambos (con "
+"cuidado)."
+
+#, fuzzy
+msgid "Define an array with the list of user extra fields to add to the report."
+msgstr ""
+"Defina un arreglo con la lista de campos de perfil adicionales para agregar "
+"al informe."
+
+msgid "By default, we show user information and its IP address, but this might be considered personal data, so this option allows you to remove this info from all test reports."
+msgstr ""
+"Por defecto, mostramos la información del usuario y su dirección IP, pero "
+"esto podría considerarse datos personales, por lo que esta opción le permite "
+"eliminar esta información de todos los informes de ejercicios."
+
+msgid "Show deleted tests in 'My progress'"
+msgstr "Mostrar ejercicios eliminados en 'Mi progreso'"
+
+msgid "Keep session active by maintaining a regular ping signal to the server every x seconds, define here. We recommend once every 300 seconds."
+msgstr ""
+"Mantener la sesión activa manteniendo una señal de ping regular al servidor "
+"cada x segundos, definido aquí. Recomendamos una vez cada 300 segundos."
+
+msgid "Choose which view ('table' or 'list') will be used by default in the glossary tool."
+msgstr ""
+"Elija qué vista ('table' o 'list') se utilizará por defecto en la "
+"herramienta de glosario."
+
+msgid "Forum notifications from base course as well"
+msgstr "Notificaciones del foro también del curso base"
+
+msgid "Show test attempts from users in all sessions where the general coach has access in pending tests report."
+msgstr ""
+"Mostrar los intentos de ejercicio de los usuarios en todas las lecciones "
+"donde el tutor general tenga acceso en el informe de ejercicios pendientes."
+
+msgid "Global pending tests list"
+msgstr "Lista global de ejercicios pendientes"
+
+msgid "Embeddable question types"
+msgstr "Tipos de preguntas integrables"
+
+msgid "By default, only single answer and multiple answer questions are considered when deciding whether a test can be embedded in a video or not. With this option, you can decide that more question types are available. Be aware that not all question types fit nicely in the space assigned to videos. Questions types are availalble in the code in question.class.php."
+msgstr ""
+"Por defecto, solo se consideran las preguntas de respuesta única y múltiple "
+"al decidir si un ejercicio puede incrustarse en un video o no. Con esta "
+"opción, puede decidir que más tipos de preguntas estén disponibles. Tenga en "
+"cuenta que no todos los tipos de preguntas se ajustan bien en el espacio "
+"asignado a los videos. Los tipos de preguntas están disponibles en el código "
+"en question.class.php."
+
+msgid "Remove HTML tags in glossary export"
+msgstr "Eliminar etiquetas HTML en la exportación del glosario"
+
+msgid "Show test attempts from all sessions in pending tests report"
+msgstr ""
+"Mostrar los intentos de ejercicio de todas las sesiones en el informe de "
+"ejercicios pendientes"
+
+msgid "Hide the table showing all previous attempts on the test start page."
+msgstr ""
+"Oculte la tabla que muestra todos los intentos anteriores en la página de "
+"inicio del ejercicio."
+
+msgid "Use course as global forum"
+msgstr "Utilizar un curso como foro global"
+
+msgid "Show test attempts from users in all sessions to the teacher in the base course."
+msgstr ""
+"Mostrar los intentos de ejercicio de los usuarios en todas las sesiones al "
+"tutor en el curso base."
+
+msgid "Consider questions text in tests are always safe. Removing the filter makes it possible to use JavaScript there."
+msgstr ""
+"Considere que el texto de las preguntas en los ejercicios siempre es seguro. "
+"Eliminar el filtro permite el uso de JavaScript en ellos."
+
+msgid "Automatically delete questions when deleting test"
+msgstr "Eliminar automáticamente las preguntas al borrar el ejercicio"
+
+msgid "Enable time per question in tests"
+msgstr "Activar tiempo por pregunta en ejercicios"
+
+msgid "Enable an additional icon in the test questions list to add an image as question description. This vastly accelerates question edition when the questions are in the title and the description only includes an image."
+msgstr ""
+"Habilitar un icono adicional en la lista de preguntas del ejercicio para "
+"agregar una imagen como descripción de la pregunta. Esto acelera "
+"considerablemente la edición de preguntas cuando las preguntas están en el "
+"título y la descripción solo incluye una imagen."
+
+msgid "Enable this option to allow asking for a review or a translation to one's post in a forum. When extensively configured, can be used to collaborate with other users in a language-learning forum."
+msgstr ""
+"Habilite esta opción para permitir solicitar una revisión o una traducción "
+"de la publicación de uno en un foro. Cuando está configurado extensivamente, "
+"se puede utilizar para colaborar con otros usuarios en un foro de "
+"aprendizaje de idiomas."
+
+msgid "Show test attempts from all sessions in base course"
+msgstr "Mostrar ejercicios de todas las lecciones en el curso base"
+
+msgid "Define an array of score ranges and colors to display reports using this model. This allows you to show colors rather than numerical grades."
+msgstr ""
+"Defina un arreglo de rangos de puntuación y colores para mostrar informes "
+"utilizando este modelo. Esto le permite mostrar colores en lugar de "
+"calificaciones numéricas."
+
+msgid "Gradebook comments"
+msgstr "Comentarios en la herramienta de evaluaciones"
+
+msgid "Add additional columns to the gradebook's main report (1 = ranking, 2 = best score, 3 = average)."
+msgstr ""
+"Añadir columnas adicionales al informe principal de la herramienta de "
+"evaluaciones (1 = clasificación, 2 = mejor puntuación, 3 = promedio)."
+
+msgid "Hide gradebook table for learners"
+msgstr "Ocultar la tabla de la herramienta de evaluaciones para alumnos"
+
+msgid "Improve speed when rendering gradebook student reports using Doctrine APCU cache. APCu is an optional but recommended PHP extension."
+msgstr ""
+"Mejorar la velocidad al generar informes de alumnos en la herramienta de "
+"evaluaciones utilizando la caché APCU de Doctrine. APCu es una extensión PHP "
+"opcional pero recomendada."
+
+msgid "Allow multiple evaluation attempts in gradebook"
+msgstr ""
+"Permitir varios intentos de evaluación en la herramienta de evaluaciones"
+
+msgid "Gradebook reports score style"
+msgstr "Estilo de puntuación de informes de la herramienta de evaluaciones"
+
+msgid "User extra fields in gradebook flat view"
+msgstr ""
+"Campos de perfil de usuario en la vista plana de la herramienta de "
+"evaluaciones"
+
+msgid "If your portal is resources-limited, reducing the generation of the dynamic gradebok charts with potentially thousands of results is a good option."
+msgstr ""
+"Si su portal tiene recursos limitados, reducir la generación de los gráficos "
+"dinámicos de la herramienta de evaluaciones (con potencialmente miles de "
+"resultados) es una buena opción."
+
+msgid "Hide percentage in best/average gradebook results"
+msgstr ""
+"Ocultar porcentaje en los resultados promedio/mejores de la herramienta de "
+"evaluaciones"
+
+msgid "Language switcher in main menu"
+msgstr "Selector de idioma en el menú principal"
+
+msgid "Use country flags for languages. This is not enabled by default because some languages are not strictly attached to a country, which can lead to frustration for some users."
+msgstr ""
+"Utilizar banderas de países para los idiomas. Esto no está habilitado de "
+"forma predeterminada porque algunos idiomas no están estrictamente "
+"vinculados a un país, lo que puede causar frustración para algunos usuarios."
+
+msgid "Gradebook extra statistics"
+msgstr "Estadísticas adicionales en la herramienta de evaluaciones"
+
+msgid "Multiple-language document templates"
+msgstr "Plantillas de documentos multilingües"
+
+msgid "When using inter-gradebook dependencies, you can choose a list of mandatory courses that will be required before approving any gradebook that has dependencies."
+msgstr ""
+"Al utilizar dependencias entre herramientas de evaluaciones, puede elegir "
+"una lista de cursos obligatorios que serán necesarios antes de aprobar "
+"cualquier herramienta de evaluaciones que tenga dependencias."
+
+msgid "Invisible tests visible in learning paths"
+msgstr "Hacer visibles en lecciones los ejercicios invisibles"
+
+msgid "Multiple-language courses"
+msgstr "Cursos multilingües"
+
+msgid "Use APCu caching to speed up gradebok"
+msgstr "Utilice el caché APCu para acelerar la herramienta de evaluaciones"
+
+msgid "Enables a mechanism of gradebook dependencies that lets people know which other items they need to go through first in order to complete the gradebook."
+msgstr ""
+"Activa un mecanismo de dependencias en la herramienta de evaluaciones que "
+"permite a los alumnos saber qué otros elementos necesitan completar primero "
+"para finalizar los elementos de la evaluación."
+
+msgid "Language flags"
+msgstr "Banderas de idiomas"
+
+msgid "Enable document templates (at the platform or course level) to be configured for specific languages."
+msgstr ""
+"Habilitar la posibilidad de usar plantillas de documentos (a nivel de "
+"plataforma o curso) para idiomas específicos."
+
+msgid "Add the given columns ('variables' array) to the main results table in the gradebook."
+msgstr ""
+"Agregar las columnas dadas (array 'variables') a la tabla de resultados "
+"principales en la herramienta de evaluaciones."
+
+msgid "Cache results in the gradebook"
+msgstr "Poner resultados en caché en la herramienta de evaluaciones"
+
+msgid "Avoid learners clicking on items from the gradebook by removing the links on the items."
+msgstr ""
+"Evitar que los alumnos hagan clic en elementos de la herramienta de "
+"evaluaciones eliminando los enlaces de los ítems."
+
+msgid "Enable skills by gradebook's subcategory"
+msgstr "Habilite competencias por subcategoría de evaluaciones"
+
+msgid "Add gradebook score style configuration in the flat view. See api.lib.php in order to find the options: examples SCORE_DIV = 1, SCORE_PERCENT = 2, etc"
+msgstr ""
+"Añada configuración de estilo de puntuación en la herramienta de "
+"evaluaciones en la vista plana. Consulte api.lib.php para encontrar las "
+"opciones: ejemplos SCORE_DIV = 1, SCORE_PERCENT = 2, etc"
+
+msgid "Enable gradebook comments so teachers can add a comment to the overall performance of the learner in this course. The comment will appear in the PDF export for the learner."
+msgstr ""
+"Activar comentarios en la herramienta de evaluaciones para que los tutores "
+"puedan agregar un comentario sobre el rendimiento general del alumno en este "
+"curso. El comentario aparecerá en la exportación en PDF para el alumno."
+
+msgid "Generate a block inside the side menu where a few badges can be shown as pending approval. Requires gradebooks to be listed here, by (numerical) ID."
+msgstr ""
+"Generar un bloque dentro del menú lateral donde se puedan mostrar algunas "
+"insignias como pendientes de aprobación. Requiere que las evaluaciones se "
+"listen aquí, por ID (numérico)."
+
+msgid "Display a language selector in the main menu that immediately updates the language preference of the user. This can be useful in multilingual portals where learners have to switch from one language to another for their learning."
+msgstr ""
+"Mostrar un selector de idioma en el menú principal que actualice "
+"inmediatamente la preferencia de idioma del usuario. Esto puede ser útil en "
+"portales multilingües donde los alumnos tienen que cambiar de un idioma a "
+"otro para su aprendizaje."
+
+msgid "Skills are normally attributed for completing a whole gradebook. By enabling this option, you allow skills to be attached to sub-sections of gradebooks."
+msgstr ""
+"Las competencias suelen otorgarse por completar toda la herramienta de "
+"evaluaciones. Al activar esta opción, permite que las competencias se "
+"asignen a subsecciones de la herramienta de evaluaciones."
+
+msgid "Mandatory courses for gradebook dependencies"
+msgstr "Cursos obligatorios para dependencias de la herramienta de evaluaciones"
+
+msgid "Hide gradebook button 'download PDF report'"
+msgstr "Ocultar botón 'descargar informe PDF' de la herramienta de evaluaciones"
+
+msgid "Use global score display setting in gradebook"
+msgstr ""
+"Utilice la configuración de visualización de puntuación global en la "
+"herramienta de evaluaciones"
+
+msgid "Hide item links for learners in gradebook"
+msgstr "Ocultar enlaces de ítems para alumnos en la herramienta de evaluaciones"
+
+msgid "Gradebook PDF export options"
+msgstr "Opciones de exportación de PDF de la herramienta de evaluaciones"
+
+msgid "Change the PDF export for learners based on the provided settings ('hide_score_weight', 'hide_feedback_textarea', ...)"
+msgstr ""
+"Modificar la exportación en PDF para alumnos basada con la configuración "
+"proporcionada ('hide_score_weight', 'hide_feedback_textarea', ...)"
+
+msgid "Reduce gradebook load time by hiding the results table (but still giving access to certificates, skills, etc)."
+msgstr ""
+"Reducir el tiempo de carga del libro de calificaciones ocultando la tabla de "
+"resultados (pero manteniendo el acceso a certificados, habilidades, etc.)."
+
+msgid "Inter-gradebook dependencies"
+msgstr "Dependencias entre herramientas de evaluaciones"
+
+msgid "Enable courses managed in more than one language. This option adds a language selector within the course page to let users switch easily, and adds a 'multiple_language' extra field to courses which allows for remote management procedures."
+msgstr ""
+"Habilite cursos gestionados en más de un idioma. Esta opción añade un "
+"selector de idioma dentro de la página del curso para permitir a los "
+"usuarios cambiar fácilmente, y añade un campo de perfil 'multiple_language' "
+"a los cursos que permite procedimientos de gestión remota."
+
+msgid "Put some of the large calculations of averages in cached fields for the links and evaluations to increase speed (considerably). The potential negative impact is that it can take some time to refresh the gradebook results tables."
+msgstr ""
+"Colocar algunos de los grandes cálculos de promedios en campos almacenados "
+"en caché para los enlaces y evaluaciones para aumentar la velocidad "
+"(considerablemente). El posible impacto negativo es que puede tomar unos "
+"minutos con datos pasados en la tablas de resultados (en la misma "
+"herramienta de evaluaciones)."
+
+msgid "Custom score display in gradebook's standalone column"
+msgstr ""
+"Visualización personalizada de puntuaciones en una columna independiente de "
+"la herramienta de evaluaciones"
+
+msgid "Gradebook badges sidebar"
+msgstr "Barra lateral de insignias de la herramienta de evaluaciones"
+
+msgid "Make tests marked as 'invisible' in the tests tool appear when they are included in a learning path."
+msgstr ""
+"Hacer que los ejercicios marcados como 'invisible' en la herramienta de "
+"ejercicios aparezcan cuando se incluyan en una lección."
+
+msgid "Use test settings for grades display"
+msgstr "Utilice la configuración de ejercicios para mostrar las calificaciones"
+
+msgid "Learning paths subscription settings"
+msgstr "Configuración de suscripción a lecciones"
+
+msgid "Disable JS files that Chamilo usually adds to HTML files in the learning path (while displaying them)."
+msgstr ""
+"Desactivar los archivos JS que Chamilo suele añadir a los archivos HTML en "
+"la lección (mientras se muestran)."
+
+msgid "Hide 'My learning paths' page"
+msgstr "Ocultar la página 'Mis lecciones'"
+
+msgid "Add a minimum time field to learning paths. If the user has not spent that much time on the learning path, the last item of the learning path cannot be completed."
+msgstr ""
+"Agregar un campo de tiempo mínimo a las lecciones. Si el usuario no ha "
+"pasado ese tiempo en la lección, no se puede completar el último elemento de "
+"la lección."
+
+msgid "Set this to 'left' or 'right' to change the side of the learning path menu."
+msgstr ""
+"Establezca esto en 'left' (izquierda) o 'right' (derecha) para cambiar el "
+"lado del menú de la lección."
+
+msgid "Minimum time to complete learning path"
+msgstr "Tiempo mínimo para completar la lección"
+
+msgid "Export learning paths in the Chamilo backup format"
+msgstr "Exportar lecciones en el formato de exportación de cursos de Chamilo"
+
+msgid "Display tests from learning paths even if invisible"
+msgstr "Mostrar ejercicios de lecciones incluso si están ocultos"
+
+msgid "Use username as student_id in SCORM communication"
+msgstr "Usar el nombre de usuario como student_id en la comunicación SCORM"
+
+msgid "Foldable learning paths' categories"
+msgstr "Categorías de lecciones plegables"
+
+msgid "Normally, all .htaccess files are filtered and removed when importing content in Chamilo. This feature allows .htaccess to be imported if it is present in a SCORM package."
+msgstr ""
+"Normalmente, todos los archivos .htaccess se filtran y eliminan al importar "
+"contenido en la plataforma. Esta función permite que se importe .htaccess si "
+"está presente en un paquete SCORM."
+
+msgid "Hide requirements label in learning paths"
+msgstr "Ocultar etiqueta de requisitos en lecciones"
+
+msgid "Show hidden exercises that were added to a LP in the exercise list. If we are in a session, the test is invisible in the base course, it is included in a LP and the setting to show it is not specifically set to true, then hide it."
+msgstr ""
+"Mostrar ejercicios ocultos que se agregaron a una lección en la lista de "
+"ejercicios. Si estamos en una sesión, el ejercicio es invisible en el curso "
+"base, está incluido en una lección y la configuración para mostrarlo no está "
+"específicamente establecida, entonces ocultarlo."
+
+msgid "SCORM import within course import"
+msgstr "Importación de SCORM dentro de la importación del curso"
+
+msgid "Hide time from learning paths records"
+msgstr "Ocultar el tiempo de los registros de lecciones"
+
+msgid "Use learning path score as progress"
+msgstr "Utilizar la puntuación de la lección como progreso"
+
+msgid "Hide learning paths time spent in reports in general."
+msgstr "Ocultar el tiempo dedicado en lecciones de los informes en general."
+
+msgid "Use extra field as student_id in SCORM communication"
+msgstr "Usar el campo de perfil como student_id en la comunicación SCORM"
+
+msgid "Learning path menu location"
+msgstr "Ubicación del menú de lección"
+
+msgid "Teachers can access blocked learning paths"
+msgstr "Los profesores pueden acceder a lecciones bloqueadas"
+
+msgid "Export all files when exporting a learning path"
+msgstr "Exportar todos los archivos al exportar una lección"
+
+msgid "Learning path's prerequisites"
+msgstr "Pre-requisitos de la lección"
+
+msgid "Learning paths categories can be managed in sessions"
+msgstr "Las categorías de lecciones pueden gestionarse en sesiones"
+
+msgid "Disable JS in learning paths view"
+msgstr "Desactivar JS en la vista de lecciones"
+
+msgid "Configure additional options for the learning paths subscription feature. Options include 'allow_add_users_to_lp' and 'allow_add_users_to_lp_category'."
+msgstr ""
+"Configure opciones adicionales para la función de suscripción a lecciones. "
+"Las opciones incluyen 'allow_add_users_to_lp' y "
+"'allow_add_users_to_lp_category'."
+
+msgid "Add learning paths and tests info to ticket reporting"
+msgstr "Añadir información de lecciones y ejercicios al reporte de tickets"
+
+msgid "When exporting a LP, all files and folders in the same path of an html will be exported too."
+msgstr ""
+"Al exportar una lección, todos los archivos y carpetas en la misma ruta de "
+"un html también serán exportados."
+
+msgid "Use learning path item status from other sessions"
+msgstr "Utilizar estado del ítem de lección de otras sesiones"
+
+msgid "Allow users to complete prerequisites in a learning path if the corresponding item was already completed in another session."
+msgstr ""
+"Permitir a los usuarios completar los requisitos previos en una lección si "
+"el elemento correspondiente ya se completó en otra sesión."
+
+#, fuzzy
+msgid "The page 'My learning path' was added in 1.11. Use this option to hide it."
+msgstr ""
+"La página 'Mis lecciones' se añadió en la 1.11. Active esta opción para "
+"ocultarla."
+
+msgid "On the learning paths lists, display a visual element to show that other learning paths are currently blocked by some prerequisites rule."
+msgstr ""
+"En las listas de lecciones, mostrar un elemento visual para indicar que "
+"otras lecciones están actualmente bloqueadas por alguna regla de requisitos "
+"previos."
+
+msgid "This helps with browser compatibility by preventing tricky JS events to execute."
+msgstr ""
+"Esto ayuda con la compatibilidad del navegador al evitar la ejecución de "
+"eventos JS complicados."
+
+msgid "Enable the possibility to export any of your learning paths in a Chamilo course backup format."
+msgstr ""
+"Habilitar la posibilidad de exportar cualquiera de sus lecciones en un "
+"formato de copia de seguridad de curso de Chamilo."
+
+msgid "Enable to allow users to fold the categories in the learning paths list."
+msgstr ""
+"Habilitar para permitir a los usuarios contraer las categorías en la lista "
+"de lecciones."
+
+msgid "Prevent beforeunload JS event in learning path"
+msgstr "Evitar el evento JS beforeunload en la lección"
+
+msgid "Teachers do not need to pass complete learning paths to have access to a prerequisites-blocked learning path."
+msgstr ""
+"Los profesores no necesitan completar lecciones completas para tener acceso "
+"a una lección con bloqueo por requisitos previos."
+
+msgid "Allow .htaccess from SCORM packages"
+msgstr "Permitir .htaccess de paquetes SCORM"
+
+msgid "Hide the pre-requisites tooltip on learning path items. This is mostly an estaethic choice."
+msgstr ""
+"Ocultar el tooltip de requisitos previos en los elementos de la lección. "
+"Esto es principalmente una elección estética."
+
+msgid "Enable to copy the directory structure of SCORM packages when restoring a course (from the course maintenance tool)."
+msgstr ""
+"Habilitar para copiar la estructura de directorios de paquetes SCORM al "
+"restaurar un curso (desde la herramienta de mantenimiento del curso)."
+
+msgid "This is useful when using SCORM content with only one large SCO. SCORM does not communicate progress, so this is a trick to use the score as progress. Enabling this option will let you configure this on a per-learning path basis."
+msgstr ""
+"Esto es útil al usar contenido SCORM con un único SCO grande. SCORM no "
+"comunica el progreso, por lo que este truco se puede usar para poner la "
+"puntuación como progreso. Habilitar esta opción le permitirá configurar esto "
+"para cada lección individualmente."
+
+msgid "Give the name of the extra field to be used as student_id for all SCORM communication."
+msgstr ""
+"Indique el nombre del campo adicional que se utilizará como student_id para "
+"toda la comunicación SCORM."
+
+msgid "Foldable learning paths' items"
+msgstr "Elementos de lección plegables"
+
+msgid "Display link to learning path on course home when invisible"
+msgstr ""
+"Mostrar enlace a la lección en la página principal del curso cuando esté "
+"oculto"
+
+msgid "Show max progress instead of average for learning paths reporting"
+msgstr ""
+"Mostrar el progreso máximo en lugar del promedio en los informes de lecciones"
+
+msgid "Enable editing tests even if they have been included in a learning path. The default is to prevent edition if the test is in a learning path, because that can affect consistency of tracking among many learners if test modifications are significant."
+msgstr ""
+"Permitir la edición de ejercicios incluso si han sido incluidos en una "
+"lección. La configuración predeterminada es evitar la edición si el "
+"ejercicio está en una lección, porque eso puede afectar la consistencia del "
+"seguimiento entre muchos alumnos si las modificaciones del ejercicio son "
+"significativas."
+
+msgid "Download button after finishing learning paths"
+msgstr "Botón de descarga después de completar lecciones"
+
+msgid "Show download files button after finishing all LP. Example: if ABC is the course code, and 1 and 100 are the doc id, choose: ['courses' => ['ABC' => [1, 100]]]."
+msgstr ""
+"Mostrar botón de descarga de archivos después de finalizar todas las "
+"lecciones. Ejemplo: si ABC es el código del curso, y 1 y 100 son los ids de "
+"documento, elija: ['courses' => ['ABC' => [1, 100]]]."
+
+msgid "Select max progress vs average for learning paths at course level"
+msgstr ""
+"Seleccione el progreso máximo vs el promedio para lecciones a nivel de curso"
+
+msgid "This adds an 'unlocked' column in the learning paths list if the learner is subscribed to the given learning path and has access to it."
+msgstr ""
+"Esto añade una columna 'desbloqueado' en la lista de lecciones si el alumno "
+"está suscrito a la lección correspondiente y tiene acceso a ella."
+
+msgid "Edition of tests included in learning paths"
+msgstr "Edición de ejercicios incluidos en lecciones"
+
+msgid "Fixed encoding in learning path"
+msgstr "Codificación fija en las lecciones"
+
+msgid "Display tests in list of learning path tests even if invisible"
+msgstr ""
+"Muestre ejercicios en la lista de ejercicios de la lección incluso si están "
+"invisibles"
+
+msgid "When a test is used as prerequisite for an item in the learning path, use the last attempt of the test only as validation for the prerequisite (default is to use best attempt)."
+msgstr ""
+"Cuando un ejercicio se utiliza como requisito previo para un elemento de una "
+"lección, utilizar únicamente el último intento del ejercicio como validación "
+"para el requisito previo (por defecto se utiliza el mejor intento)."
+
+msgid "Enable subscription to learning paths and learning path categories to groups/classes."
+msgstr ""
+"Habilite la suscripción a lecciones y categorías de lecciones para grupos/"
+"clases."
+
+msgid "Learning path display settings"
+msgstr "Configuración de visualización de la lección"
+
+msgid "Use last score in learning path test prerequisites"
+msgstr ""
+"Utilice la última puntuación en los requisitos previos del ejercicio en "
+"lecciones"
+
+msgid "Learners can export learning paths"
+msgstr "Los alumnos pueden exportar lecciones"
+
+msgid "Reduce resource usage by ignoring a check on the text encoding in imported learning paths."
+msgstr ""
+"Reducir el uso de recursos ignorando la verificación de la codificación de "
+"texto en lecciones importadas."
+
+msgid "Enable this to allow learners to download the learning paths as SCORM packages."
+msgstr ""
+"Activar para permitir que los alumnos descarguen las lecciones como paquetes "
+"SCORM."
+
+msgid "Learning paths subscription for classes"
+msgstr "Suscripción a lecciones para clases"
+
+msgid "Unlocked information in learning paths list"
+msgstr "Información desbloqueada en la lista de lecciones"
+
+msgid "Enable redefinition of the setting to show the best progress instead of averages in reporting of learnpaths at a course level."
+msgstr ""
+"Habilitar la redefinición de la configuración para mostrar el mejor progreso "
+"en lugar de promedios en los informes de lecciones a nivel de curso."
+
+msgid "Configure additional options for the learning paths display. Options include 'show_reporting_icon', 'hide_lp_arrow_navigation', 'show_toolbar_by_default', 'navigation_in_the_middle' and 'add_extra_quit_to_home_icon'."
+msgstr ""
+"Configure opciones adicionales para la visualización de lecciones. Las "
+"opciones incluyen 'show_reporting_icon', 'hide_lp_arrow_navigation', "
+"'show_toolbar_by_default', 'navigation_in_the_middle' y "
+"'add_extra_quit_to_home_icon'."
+
+msgid "Video features"
+msgstr "Funciones de vídeo"
+
+msgid "Add a custom extra footer for notifications emails for a specific language, for example for privacy policy notices. Multiple languages and paragraphs can be added."
+msgstr ""
+"Añadir un pie de página personalizado adicional para los correos "
+"electrónicos de notificaciones para un idioma específico, por ejemplo, para "
+"avisos de políticas de privacidad. Se pueden añadir varios idiomas y "
+"párrafos."
+
+msgid "Hide e-mail content to bring users to platform"
+msgstr ""
+"Ocultar el contenido del correo electrónico para dirigir a los usuarios a la "
+"plataforma"
+
+msgid "Upload SCORM from cache dir"
+msgstr "Subir SCORM desde el directorio de temporales"
+
+msgid "Allows users to add feedback (likes or dislikes) to posts in social wall."
+msgstr ""
+"Permite a los usuarios añadir retroalimentación (me gusta o no me gusta) a "
+"las publicaciones en el muro social."
+
+msgid "If the SCO is not sending a status, take over and update the status based on what can be observed in Chamilo."
+msgstr ""
+"Si el SCO no envía un estado, tomar el control y actualizar el estado en "
+"función de lo que se pueda observar en Chamilo."
+
+msgid "The 'who is online' page (if enabled) will show a picture and a name for each user currently online. Enable this option to hide the names."
+msgstr ""
+"La página 'quién está en línea' (si está habilitada) mostrará una foto y un "
+"nombre para cada usuario que esté en línea. Active esta opción para ocultar "
+"los nombres."
+
+msgid "Max login attempts before lockdown"
+msgstr "Intentos máximos de inicio de sesión antes del bloqueo"
+
+msgid "Add acquisition column in learner follow-up"
+msgstr "Añadir columna de adquisición en el seguimiento del alumno"
+
+msgid "During special CSV cron imports of users, automatically replace e-mails with dummy e-mail username@example.com."
+msgstr ""
+"Durante las importaciones automáticas de usuarios en CSV mediante cron, "
+"reemplazar automáticamente los correos electrónicos por el correo ficticio "
+"username@example.com."
+
+msgid "Allow private messages between teachers about a learner"
+msgstr "Permitir mensajes privados entre tutores sobre un alumno"
+
+msgid "Extended notifications footer"
+msgstr "Pie de página extendido para notificaciones"
+
+msgid "PDF export resolution"
+msgstr "Resolución de exportación a PDF"
+
+msgid "Double validation for registration process"
+msgstr "Doble validación para el proceso de registro"
+
+msgid "If the 'My progress' page takes too long to load, you might want to remove the processing of generic statistics for the user. In this case enable this setting."
+msgstr ""
+"Si la página 'Mi progreso' tarda demasiado en cargar, es posible que desee "
+"desactivar el procesamiento de estadísticas generales para el usuario. En "
+"este caso, active esta configuración."
+
+msgid "Order of tools on 'My progress' page"
+msgstr "Orden de herramientas en la página 'Mi progreso'"
+
+msgid "This represents the resolution of generated PDF files (in dot per inch, or dpi). The default is 96. Increasing it will give you better resolution PDF files but will also increase the weight and generation time of the files."
+msgstr ""
+"Esto representa la resolución de los archivos PDF generados (en puntos por "
+"pulgada, o dpi). El valor predeterminado es 96. Aumentarlo le proporcionará "
+"archivos PDF de mejor resolución, pero también aumentará el peso y el tiempo "
+"de generación de los archivos."
+
+msgid "This is one simple measure to increase the security of your portal by asking users to immediately change their password, so the one that was transfered by e-mail is no longer valid and they then will use one that they came up with and that they are the only person to know."
+msgstr ""
+"Esta es una medida simple para aumentar la seguridad de su portal "
+"solicitando a los usuarios que cambien su contraseña de inmediato, de modo "
+"que la que se transfirió por correo electrónico ya no sea válida y luego "
+"utilicen una que hayan creado y de la que solo ellos tienen conocimiento."
+
+msgid "Generate random username"
+msgstr "Generar nombre de usuario aleatorio"
+
+msgid "Extra e-mail HTML body attributes"
+msgstr "Atributos HTML adicionales para el cuerpo del correo electrónico"
+
+msgid "Adds the option to define prerequisites with start and end dates for learnpath items."
+msgstr ""
+"Agregar la opción de definir requisitos previos con fechas de inicio y fin "
+"para los elementos de la lección."
+
+msgid "Filter messages between a teacher and a learner between the session start end dates"
+msgstr ""
+"Filtrar mensajes entre un tutor y un alumno entre las fechas de inicio y fin "
+"de la sesión"
+
+msgid "Extra e-mail HTML header attributes"
+msgstr "Atributos adicionales del encabezado HTML del correo electrónico"
+
+msgid "If a learning path is set to invisible but the teacher/coach decided to make it available from the course homepage, this option prevents Chamilo from hiding the link on the course homepage."
+msgstr ""
+"Si una lección está configurada como invisible pero el tutor decide hacerla "
+"disponible desde la página principal del curso, esta opción impide que "
+"Chamilo oculte el enlace en la página principal del curso."
+
+msgid "In specific implementations like online exams, you might want to prevent user access to the 'My progress' page."
+msgstr ""
+"En implementaciones específicas como exámenes en línea, es posible que desee "
+"evitar el acceso del usuario a la página 'Mi progreso'."
+
+msgid "Navigate between learning paths"
+msgstr "Navegar entre lecciones"
+
+msgid "Send 2 registration e-mails"
+msgstr "Enviar dos correos electrónicos de registro"
+
+msgid "UNO converter binaries"
+msgstr "Binarios del convertidor UNO"
+
+msgid "Hide main navigation menu"
+msgstr "Ocultar el menú de navegación principal"
+
+msgid "Allow anonymous users to send e-mails from the platform. In this day and age of information security this is not a recommended option."
+msgstr ""
+"Permitir que usuarios anónimos envíen correos electrónicos desde la "
+"plataforma. En esta era de la seguridad de la información, esta no es una "
+"opción recomendada."
+
+msgid "Admins can see personal messages"
+msgstr "Los administradores pueden ver mensajes personales"
+
+msgid "Simply display a confirmation request on the registration page before going forward with the user creation."
+msgstr ""
+"Simplemente muestre una solicitud de confirmación en la página de registro "
+"antes de proceder con la creación del usuario."
+
+msgid "Send two separate e-mails on registration. One for the username, another one for the password."
+msgstr ""
+"Enviar dos correos electrónicos separados al registrarse. Uno para el nombre "
+"de usuario, otro para la contraseña."
+
+msgid "Hide percentage sign in average of tests in learning paths in learner follow-up"
+msgstr ""
+"Ocultar el signo de porcentaje en el promedio de ejercicios en lecciones en "
+"los reportes del alumno"
+
+msgid "Show sender's e-mail address in notifications"
+msgstr ""
+"Mostrar la dirección de correo electrónico del remitente en las "
+"notificaciones"
+
+msgid "Given as array of e-mail addresses. Does not work for all cronjobs yet."
+msgstr ""
+"Dado como un arreglo de direcciones de correo electrónico. Todavía no "
+"funciona para todas las tareas programadas."
+
+msgid "Show learning paths to learners with their availability dates, rather than hiding them until the date comes."
+msgstr ""
+"Mostrar lecciones a los alumnos con sus fechas de disponibilidad, en lugar "
+"de ocultarlas hasta que llegue la fecha."
+
+msgid "Default offered pagination numbers in tables"
+msgstr "Opciones de paginación predeterminadas ofrecidas en tablas"
+
+msgid "Force password renewal at first login"
+msgstr "Obligar a la renovación de la contraseña en el primer inicio de sesión"
+
+msgid "Proxy settings"
+msgstr "Configuración de proxy"
+
+msgid "Allow admins to upload a SCORM package (in zip form) into the cache directory and to use it as import source on the SCORM upload page."
+msgstr ""
+"Permita a los administradores subir un paquete SCORM (en formato zip) al "
+"directorio de temporales en el servidor, y utilizarlo como fuente de "
+"importación en la página de carga de SCORM."
+
+msgid "Number of failed login attempts to tolerate before the user account is locked and has to be unlocked by an admin."
+msgstr ""
+"Número de intentos fallidos de inicio de sesión que se tolerarán antes de "
+"que la cuenta de usuario se bloquee y deba ser desbloqueada por un "
+"administrador."
+
+msgid "Allow administrators to see personal messages between a teacher and a learner. Please make sure you include a note in your terms and conditions as this might affect privacy protection."
+msgstr ""
+"Permitir que los administradores vean mensajes personales entre un tutor y "
+"un alumno. Por favor, asegúrese de incluir una nota en sus términos y "
+"condiciones, ya que esto podría afectar la protección de la privacidad."
+
+msgid "Allow learners to see messages about them between teachers"
+msgstr "Permitir a los alumnos ver mensajes sobre ellos entre tutores"
+
+msgid "Update SCO status autonomously"
+msgstr "Actualizar el estado del SCO de forma autónoma"
+
+#, fuzzy
+msgid "Give the system path to the UNO converter library to enable some extra exporting features."
+msgstr ""
+"Indique la ruta del sistema a la biblioteca del convertidor UNO para "
+"habilitar algunas características adicionales de exportación."
+
+msgid "Webservices return user field"
+msgstr "Los servicios web devuelven el campo de usuario"
+
+msgid "Prefer short e-mail versions with a link to the messaging space on the platform to increase platform-based engagement."
+msgstr ""
+"Preferir versiones cortas de correo electrónico con un enlace al espacio de "
+"mensajería en la plataforma para aumentar la participación/actividad "
+"centrada en la plataforma."
+
+msgid "Default number of table rows"
+msgstr "Número predeterminado de filas de tabla"
+
+msgid "When using Chamilo for a specific purpose (like one massive online exam), you might want to reduce distraction even more by removing the side menu."
+msgstr ""
+"Al utilizar Chamilo para un propósito específico (como un examen masivo en "
+"línea), podría querer reducir aún más las distracciones eliminando el menú "
+"lateral."
+
+msgid "Hides the icon of percentage in 'Average of tests in Learning Paths' indication on a student tracking"
+msgstr ""
+"Ocultar el icono de porcentaje en la indicación de 'Promedio de ejercicios "
+"en lecciones' en el seguimiento de alumnos"
+
+msgid "Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it."
+msgstr ""
+"Algunas características de Chamilo se conectarán al exterior desde el "
+"servidor. Por ejemplo, para asegurarse de que un contenido externo existe al "
+"crear un enlace o mostrar una página incrustada en la lección. Si su "
+"servidor Chamilo utiliza un proxy para salir de su red, este sería el lugar "
+"para configurarlo."
+
+msgid "Disable 'dislike' for social posts"
+msgstr "Desactivar 'no me gusta' para publicaciones sociales"
+
+msgid "Include learning paths not subscribed to on learner follow-up page"
+msgstr ""
+"Incluir lecciones a las que no se ha suscrito en la página de seguimiento "
+"del alumno"
+
+msgid "E-mail addresses to send cronjobs execution reports"
+msgstr ""
+"Direcciones de correo electrónico para enviar informes de ejecución de "
+"cronjobs"
+
+msgid "Ask REST webservices (v2.php) to return another identifier for fields related to user ID. This is useful if the external system doesn't really deal with user IDs as they are in Chamilo, as it helps the external system match the user data return with some external data that is know to Chamilo. For example, if you use an external authentication system, you can return the extra field used to match the user with the external authentication system rather than user.id."
+msgstr ""
+"Solicite a los servicios web REST (v2.php) que devuelvan otro identificador "
+"para los campos relacionados con el ID de usuario. Esto es útil si el "
+"sistema externo no maneja los ID de usuario como lo hace Chamilo, ya que "
+"ayuda al sistema externo a coincidir los datos del usuario devueltos con "
+"algunos datos externos que son conocidos por Chamilo. Por ejemplo, si "
+"utiliza un sistema de autenticación externo, puede devolver el campo "
+"adicional utilizado para coincidir al usuario con el sistema de "
+"autenticación externo en lugar de user.id."
+
+msgid "Hide the complete username in 'who is online'"
+msgstr "Ocultar el nombre de usuario completo en 'quién está en línea'"
+
+msgid "Date-based learning path items prerequisites"
+msgstr "Elementos de la lección basados en fechas como prerrequisitos"
+
+msgid "Minimal time increment (in minutes) when selecting a date and time with the timepicker widget. For example, it might not be useful to have less than 5 or 15 minutes increments when talking about assignment submission, availability of a test, start time of a session, etc."
+msgstr ""
+"Incremento mínimo de tiempo (en minutos) al seleccionar una fecha y hora con "
+"el widget de selección de tiempo. Por ejemplo, puede que no sea útil tener "
+"incrementos de menos de 5 o 15 minutos cuando se habla de la entrega de un "
+"trabajo, la disponibilidad de un ejercicio, la hora de inicio de una "
+"lección, etc."
+
+msgid "Update users e-mail to dummy value during imports"
+msgstr ""
+"Actualice el correo electrónico de los usuarios a un valor ficticio durante "
+"las importaciones"
+
+msgid "Add column to learner follow-up page to show acquisition status by a learner on a learning path."
+msgstr ""
+"Añadir columna a la página de seguimiento del alumno para mostrar el estado "
+"de adquisición de una lección por parte del alumno."
+
+msgid "Allow exchange of messages from teachers/bosses about a user from the tracking page of that user."
+msgstr ""
+"Permitir el intercambio de mensajes de tutores/jefes sobre un alumno desde "
+"la página de seguimiento de ese usuario."
+
+msgid "Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500]."
+msgstr ""
+"Establezca las opciones que desea que aparezcan en la navegación alrededor "
+"de una tabla para mostrar menos o más filas en una página. Ej. [50, 100, "
+"200, 500]."
+
+msgid "Display learning path availability to learners"
+msgstr "Mostrar la disponibilidad de la lección a los alumnos"
+
+msgid "Timepicker increment"
+msgstr "Incremento del selector de hora"
+
+msgid "When importing users (batch processes), automatically generate a random string for username. Otherwise, the username will be generated on the basis of the firstname and lastname, or the prefix of the e-mail."
+msgstr ""
+"Al importar usuarios (procesos por lotes), se generará automáticamente una "
+"cadena aleatoria para el nombre de usuario. De lo contrario, el nombre de "
+"usuario se generará en base al nombre y apellido, o al prefijo del correo "
+"electrónico."
+
+msgid "Hide disabled settings in sub-URLs"
+msgstr "Ocultar configuraciones deshabilitadas en sub-URLs"
+
+msgid "If exchange of messages about a user are enabled, this option will allow the corresponding user to see the messages. This is to comply with rules of transparency the organization may need to comply to."
+msgstr ""
+"Si el intercambio de mensajes sobre un usuario está habilitado, esta opción "
+"permitirá que el usuario correspondiente vea los mensajes. Esto es para "
+"cumplir con las reglas de transparencia que la organización pueda desear "
+"acatar."
+
+msgid "E-mail editor for anonymous"
+msgstr "Editor de correo electrónico para anónimos"
+
+msgid "Prevent access to 'My progress'"
+msgstr "Impedir acceso a 'Mi progreso'"
+
+msgid "How many rows should be shown in all tables by default."
+msgstr "Cuántas filas deben mostrarse por defecto en todas las tablas."
+
+msgid "Remove the thumb down option for social posts feedback. Only keep thumb up (like)."
+msgstr ""
+"Eliminar la opción de pulgar hacia abajo (únicamente esta) para la "
+"retroalimentación de publicaciones sociales. Mantener únicamente el pulgar "
+"hacia arriba (me gusta), si la opción de me gusta/no me gusta está activada."
+
+msgid "Like/Dislike for social posts"
+msgstr "Me gusta/No me gusta para publicaciones sociales"
+
+msgid "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video."
+msgstr ""
+"Array de características adicionales que puede habilitar para el reproductor "
+"de video en Chamilo. Las opciones incluyen 'speed', que le permite cambiar "
+"la velocidad de reproducción de un video."
+
+msgid "Unlock learning path item if max attempt is reached for test prerequisite"
+msgstr ""
+"Desbloquear ítem de lección si se alcanza el número máximo de intentos en el "
+"ejercicio configurado como requisito previo"
+
+msgid "Set to yes to hide settings completely in a sub-URL if the setting is disabled in the main URL (where the access_url_changeable field = 0)"
+msgstr ""
+"Activar para ocultar completamente los ajustes en una sub-URL si el ajuste "
+"está desactivado en la URL principal (donde el campo access_url_changeable = "
+"0)"
+
+msgid "Send score in percentage in test results notification"
+msgstr ""
+"Envíe la puntuación en porcentaje en la notificación de resultados del "
+"ejercicio"
+
+msgid "Add visibility information for learning paths on learner follow-up page"
+msgstr ""
+"Añadir información de visibilidad para lecciones en la página de seguimiento "
+"de alumnos"
+
+msgid "Teachers can access learners messages only within session timeframe"
+msgstr ""
+"Los tutores pueden acceder a los mensajes de los alumnos solo dentro del "
+"período de la lección."
+
+msgid "Add the possibility to select a 'next' learning path and show buttons inside the learning path to move from one to the next."
+msgstr ""
+"Añadir la posibilidad de seleccionar una lección 'siguiente' y mostrar "
+"botones dentro de la lección para avanzar de una a la siguiente."
+
+msgid "Change the order of tools shown on the 'My progress' page for learners. Options include 'quizzes', 'learning_paths' and 'skills'."
+msgstr ""
+"Cambiar el orden de las herramientas mostradas en la página 'Mi progreso' "
+"para alumnos. Las opciones incluyen 'quizzes' (ejercicios), 'learning_paths' "
+"(lecciones) y 'skills' (competencias)."
+
+msgid "Skip generic data in learner self-tracking page"
+msgstr "Omita datos genéricos en la página de auto-seguimiento del alumno"

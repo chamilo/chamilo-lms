@@ -111,13 +111,13 @@ final class Version20231110194300 extends AbstractMigrationChamilo
         }
 
         $content = file_get_contents($webpackConfigPath);
-        $pattern = "/(const themes = \[\s*\")([^\"\]]+)(\"\s*\])/";
+        $pattern = '/(const themes = \\[\\s*")([^"\\]]+)("\\s*\\])/';
         $replacement = function ($matches) use ($newThemes) {
             $existingThemes = explode('", "', trim($matches[2], '"'));
             $allThemes = array_unique(array_merge($existingThemes, $newThemes));
             $newThemesString = implode('", "', $allThemes);
 
-            return $matches[1] . $newThemesString . $matches[3];
+            return $matches[1].$newThemesString.$matches[3];
         };
 
         $newContent = preg_replace_callback($pattern, $replacement, $content);

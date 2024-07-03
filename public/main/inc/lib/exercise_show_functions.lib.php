@@ -185,7 +185,13 @@ class ExerciseShowFunctions
             echo Display::tag('p', Security::remove_XSS($answer));
         }
 
-        if ($showAlertIfNotCorrected && !$questionScore && EXERCISE_FEEDBACK_TYPE_EXAM != $feedback_type) {
+        $comment = Event::get_comments($trackExerciseId, $questionId);
+        $teacherAudio = ExerciseLib::getOralFeedbackAudio(
+                        $trackExerciseId,
+                        $questionId
+                    );
+
+        if ($showAlertIfNotCorrected && !$questionScore && EXERCISE_FEEDBACK_TYPE_EXAM != $feedback_type && empty($comment) && empty($teacherAudio)) {
             echo Display::tag('p', ExerciseLib::getNotCorrectedYetText());
         }
     }

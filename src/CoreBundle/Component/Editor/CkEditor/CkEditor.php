@@ -67,9 +67,30 @@ class CkEditor extends Editor
         $javascript = $this->toJavascript($config);
 
         // it replaces [browser] by image picker callback
-        $javascript = str_replace('"[browser]"', $this->getImagePicker(), $javascript);
+        $javascript = str_replace('"[browser]"', $this->getFileManagerPicker(), $javascript);
 
         return "<script>
+            window.addEventListener('message', function(event) {
+                // Check if the received message contains the URL data
+                if (event.data.url) {
+                    // Check if we are in an iframe
+                    if (window.parent !== window) {
+                        // Send the message to the parent window
+                        window.parent.postMessage(event.data, '*');
+                        // Access the callback function in the parent window
+                        const parentWindow = window.parent.window[0].window;
+                        if (parentWindow && parentWindow.tinyMCECallback) {
+                            parentWindow.tinyMCECallback(event.data.url);
+                            delete parentWindow.tinyMCECallback;
+                        }
+                    } else if (window.tinyMCECallback) {
+                        // Handle the message in the main context
+                        window.tinyMCECallback(event.data.url);
+                        delete window.tinyMCECallback;
+                    }
+                }
+            });
+
             document.addEventListener('DOMContentLoaded', function() {
                 window.chEditors = window.chEditors || [];
                 window.chEditors.push($javascript)
@@ -142,10 +163,8 @@ class CkEditor extends Editor
 
     /**
      * Get a custom image picker.
-     *
-     * @return string
      */
-    private function getImagePicker()
+    private function getImagePicker(): string
     {
         return 'function (cb, value, meta) {
             var input = document.createElement("input");
@@ -166,6 +185,59 @@ class CkEditor extends Editor
             };
             input.click();
         }';
+    }
+
+    /**
+     * Generates a JavaScript function for TinyMCE file manager picker.
+     *
+     * @param bool $onlyPersonalfiles if true, only shows personal files
+     *
+     * @return string javaScript function as string
+     */
+    private function getFileManagerPicker($onlyPersonalfiles = true): string
+    {
+        $user = api_get_user_entity();
+        $course = api_get_course_entity();
+
+        if ($onlyPersonalfiles) {
+            if (null !== $user) {
+                $resourceNodeId = $user->getResourceNode()->getId();
+                $url = api_get_path(WEB_PATH).'resources/filemanager/personal_list/'.$resourceNodeId;
+            }
+        } else {
+            if (null !== $course) {
+                $resourceNodeId = $course->getResourceNode()->getId();
+                $url = api_get_path(WEB_PATH).'resources/document/'.$resourceNodeId.'/manager?'.api_get_cidreq().'&type=images';
+            } elseif (null !== $user) {
+                $resourceNodeId = $user->getResourceNode()->getId();
+                $url = api_get_path(WEB_PATH).'resources/filemanager/personal_list/'.$resourceNodeId;
+            }
+        }
+
+        if (!isset($url)) {
+            return $this->getImagePicker();
+        }
+
+        return '
+            function(cb, value, meta) {
+                window.tinyMCECallback = cb;
+                let fileType = meta.filetype;
+                let fileManagerUrl = "'.$url.'";
+
+                if (fileType === "image") {
+                    fileManagerUrl += "?type=images";
+                } else if (fileType === "file") {
+                    fileManagerUrl += "?type=files";
+                }
+
+                tinymce.activeEditor.windowManager.openUrl({
+                    title: "File Manager",
+                    url: fileManagerUrl,
+                    width: 950,
+                    height: 450
+                });
+            }
+        ';
     }
 
     /**

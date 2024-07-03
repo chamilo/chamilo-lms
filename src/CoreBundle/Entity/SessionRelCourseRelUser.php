@@ -74,6 +74,7 @@ class SessionRelCourseRelUser
     #[Groups([
         'session:read',
         'session_rel_course_rel_user:read',
+        'user_subscriptions:sessions',
     ])]
     #[ORM\ManyToOne(targetEntity: UserAlias::class, cascade: ['persist'], inversedBy: 'sessionRelCourseRelUsers')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
@@ -90,13 +91,14 @@ class SessionRelCourseRelUser
         'session:read',
         'session_rel_course_rel_user:read',
         'session_rel_user:read',
+        'user_subscriptions:sessions',
     ])]
     #[MaxDepth(1)]
     #[ORM\ManyToOne(targetEntity: Course::class, cascade: ['persist'], inversedBy: 'sessionRelCourseRelUsers')]
     #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected Course $course;
 
-    #[Groups(['session:item:read'])]
+    #[Groups(['session:item:read', 'user_subscriptions:sessions'])]
     #[ORM\Column(name: 'status', type: 'integer')]
     protected int $status;
 

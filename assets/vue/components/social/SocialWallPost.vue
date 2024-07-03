@@ -78,7 +78,7 @@
             v-for="(comment, index) in comments"
             :key="index"
             :comment="comment"
-            @comment-deleted="onCommentDeleted($event)"
+            @comment-deleted="onCommentDeleted(comment)"
           />
         </div>
 
@@ -116,9 +116,8 @@ const { relativeDatetime } = useFormatDate()
 let comments = reactive([])
 const attachments = ref([])
 const securityStore = useSecurityStore()
+const currentUser = securityStore.user;
 
-const currentUser = inject("social-user")
-const isCurrentUser = inject("is-current-user")
 const isOwner = computed(() => currentUser["@id"] === props.post.sender["@id"])
 
 onMounted(() => {
@@ -152,8 +151,8 @@ async function loadComments() {
   comments.push(...data["hydra:member"])
 }
 
-function onCommentDeleted(event) {
-  const index = comments.findIndex((comment) => comment["@id"] === event.comment["@id"])
+function onCommentDeleted(eventComment) {
+  const index = comments.findIndex((comment) => comment["@id"] === eventComment["@id"])
   if (-1 !== index) {
     comments.splice(index, 1)
   }

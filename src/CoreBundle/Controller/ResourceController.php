@@ -291,6 +291,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
         );
 
+        // Convert the file name to ASCII using iconv
+        $zipName = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $zipName);
+
         $disposition = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             $zipName // Transliterator::transliterate($zipName)
@@ -453,10 +456,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         return new Response(null, Response::HTTP_NO_CONTENT);
     }
 
-    /**
-     * @return mixed|StreamedResponse
-     */
-    private function processFile(Request $request, ResourceNode $resourceNode, string $mode = 'show', string $filter = '', ?array $allUserInfo = null)
+    private function processFile(Request $request, ResourceNode $resourceNode, string $mode = 'show', string $filter = '', ?array $allUserInfo = null): mixed
     {
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
@@ -505,6 +505,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
                     $response = $server->getImageResponse($fileName, $params);
 
+                    // Convert the file name to ASCII using iconv
+                    $fileName = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $fileName);
+
                     $disposition = $response->headers->makeDisposition(
                         ResponseHeaderBag::DISPOSITION_INLINE,
                         basename($fileName)
@@ -523,6 +526,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
                         $replacementValues = $allUserInfo[1];
                         $content = str_replace($tagsToReplace, $replacementValues, $content);
                     }
+
+                    // Convert the file name to ASCII using iconv
+                    $fileName = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $fileName);
 
                     $response = new Response();
                     $disposition = $response->headers->makeDisposition(
@@ -554,9 +560,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
                         $content = str_replace('</head>', $links.'</head>', $content);
                     }
                     $response->setContent($content);
-                    /*$contents = $this->renderView('@ChamiloCore/Resource/view_html.twig', [
-                        'category' => '...',
-                    ]);*/
 
                     return $response;
                 }
@@ -572,7 +575,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
         );
 
-        // Transliterator::transliterate($fileName)
+        // Convert the file name to ASCII using iconv
+        $fileName = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $fileName);
+
         $disposition = $response->headers->makeDisposition(
             $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
             $fileName

@@ -1,11 +1,6 @@
 <template>
   <div v-if="item">
-    <div class="flex gap-4 items-center">
-      <h2
-        class="mr-auto"
-        v-text="item.title"
-      />
-
+    <SectionHeader :title="item.title">
       <BaseButton
         :disabled="isLoading"
         icon="reply"
@@ -35,12 +30,13 @@
         type="black"
         @click="confirmDelete"
       />
-    </div>
+    </SectionHeader>
 
-    <hr />
-
-    <div class="flex justify-end gap-2">
-      <div v-if="myReceiver">
+    <div
+      v-if="myReceiver"
+      class="message-show__tags-container"
+    >
+      <div class="message-show__tags">
         <BaseChip
           v-for="tag in myReceiver.tags"
           :key="tag['@id']"
@@ -52,18 +48,18 @@
       </div>
 
       <BaseAutocomplete
-        v-if="item.sender && item.sender['@id'] !== securityStore.user['@id']"
         id="search-tags"
         v-model="foundTag"
         :label="t('Tags')"
         :search="onSearchTags"
         option-label="tag"
+        class="message-show__tag-searcher"
         @item-select="onItemSelect"
       />
     </div>
 
-    <div>
-      <span class="mr-2">{{ t("From") }}</span>
+    <div class="field space-x-4">
+      <span>{{ t("From") }}</span>
       <MessageCommunicationParty
         v-if="item.sender"
         :username="item.sender.username"
@@ -76,8 +72,8 @@
       />
     </div>
 
-    <div>
-      <span class="mr-2">{{ t("To") }}</span>
+    <div class="field space-x-4">
+      <span>{{ t("To") }}</span>
       <MessageCommunicationParty
         v-for="receiver in item.receiversTo"
         :key="receiver.receiver.id"
@@ -87,8 +83,8 @@
       />
     </div>
 
-    <div>
-      <span class="mr-2">{{ t("Cc") }}</span>
+    <div class="field space-x-4">
+      <span>{{ t("Cc") }}</span>
       <MessageCommunicationParty
         v-for="receiver in item.receiversCc"
         :key="receiver.receiver.id"
@@ -100,40 +96,40 @@
 
     <hr />
 
-    <p v-text="relativeDatetime(item.sendDate)" />
+    <p v-text="abbreviatedDatetime(item.sendDate)" />
 
     <div v-html="item.content" />
 
-    <BaseCard>
-      <template #header>
-        <p class="m-3">{{ item.attachments.length }} {{ $t("Attachments") }}</p>
-      </template>
+    <template v-if="item.attachments && item.attachments.length > 0">
+      <BaseCard>
+        <template #header>
+          <p class="m-3">{{ item.attachments.length }} {{ $t("Attachments") }}</p>
+        </template>
 
-      <div
-        v-if="item.attachments && item.attachments.length > 0"
-        class="q-gutter-y-sm q-gutter-x-sm row"
-      >
-        <div
-          v-for="(attachment, index) in item.attachments"
-          :key="index"
-        >
-          <div v-if="attachment.resourceNode.resourceFile.audio">
-            <audio controls>
+        <ul class="space-y-2">
+          <li
+            v-for="(attachment, index) in item.attachments"
+            :key="index"
+          >
+            <audio
+              v-if="attachment.resourceNode.resourceFile.audio"
+              controls
+            >
               <source :src="attachment.downloadUrl" />
             </audio>
-          </div>
 
-          <BaseButton
-            v-else
-            :href="attachment.downloadUrl"
-            icon="attachment"
-            type="primary"
-          >
-            {{ attachment.resourceNode.resourceFile.originalName }}
-          </BaseButton>
-        </div>
-      </div>
-    </BaseCard>
+            <a
+              v-else
+              :href="attachment.downloadUrl"
+              class="btn btn--plain"
+            >
+              <BaseIcon icon="attachment" />
+              {{ attachment.resourceNode.resourceFile.originalName }}
+            </a>
+          </li>
+        </ul>
+      </BaseCard>
+    </template>
     <Loading :visible="isLoading" />
   </div>
 </template>
@@ -155,6 +151,8 @@ import messageTagService from "../../services/messageTagService"
 import { useSecurityStore } from "../../store/securityStore"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import MessageCommunicationParty from "./MessageCommunicationParty.vue"
+import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const confirm = useConfirm()
 const { t } = useI18n()
@@ -167,7 +165,7 @@ const route = useRoute()
 const router = useRouter()
 const messageRelUserStore = useMessageRelUserStore()
 
-const { relativeDatetime } = useFormatDate()
+const { abbreviatedDatetime } = useFormatDate()
 
 let id = route.params.id
 if (isEmpty(id)) {
@@ -256,6 +254,10 @@ async function onSearchTags(query) {
 
   const { items } = await messageTagService.searchUserTags(securityStore.user["@id"], query)
 
+  if (!items.length) {
+    items.push({ tag: query })
+  }
+
   isLoadingSelect.value = false
 
   return items
@@ -274,7 +276,7 @@ async function onItemSelect({ value }) {
       return
     }
   } else {
-    const existingIndex = getTagIndex(value["@id"]) >= 0
+    const existingIndex = getTagIndex(value) >= 0
 
     if (existingIndex) {
       return

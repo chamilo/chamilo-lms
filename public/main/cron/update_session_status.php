@@ -50,7 +50,7 @@ while ($session = Database::fetch_array($result, 'ASSOC')) {
     $params = [
         'status' => $status,
     ];
-    if ($test === false) {
+    if ($test != true) {
         Database::update($table, $params, ['id = ?' => $id]);
     }
 

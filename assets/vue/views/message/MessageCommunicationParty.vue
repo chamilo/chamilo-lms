@@ -1,12 +1,13 @@
 <template>
-  <div class="flex items-center gap-0">
+  <div class="basic-user-info">
     <BaseUserAvatar
       :image-url="profileImageUrl"
       :alt="t('Picture')"
-      class="mr-2 mb-2"
-      size="small"
     />
-    <p>{{ fullName }} ({{ username }})</p>
+    <div class="basic-user-info__caption">
+      <div v-text="fullName" />
+      <div v-text="username" />
+    </div>
   </div>
 </template>
 

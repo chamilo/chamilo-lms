@@ -375,7 +375,8 @@ class CourseController extends ToolBaseController
         Course $course,
         IllustrationRepository $illustrationRepository,
         CCourseDescriptionRepository $courseDescriptionRepository,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        Request $request
     ): Response {
         $courseId = $course->getId();
 
@@ -512,6 +513,7 @@ class CourseController extends ToolBaseController
             'url' => '',
             'is_premium' => '',
             'token' => '',
+            'base_url' => $request->getSchemeAndHttpHost(),
         ];
 
         $metaInfo = '<meta property="og:url" content="'.$urlCourse.'" />';
@@ -556,7 +558,9 @@ class CourseController extends ToolBaseController
             ->getQuery()
         ;
 
-        return $query->getOneOrNullResult();
+        $results = $query->getResult();
+
+        return \count($results) > 0 ? $results[0] : null;
     }
 
     #[Route('/{id}/getToolIntro', name: 'chamilo_core_course_gettoolintro')]

@@ -561,7 +561,7 @@ class ScormApi
             $return .= "updateGamification('$stars', '$score'); \n";
 
             $position = $myLP->isFirstOrLastItem($item_id);
-            $return .= "checkCurrentItemPosition('$position'); \n";
+            $return .= "checkCurrentItemPosition('$item_id'); \n";
 
             if ($mediaplayer) {
                 $return .= $mediaplayer;
@@ -817,6 +817,21 @@ class ScormApi
             update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');
             $updateMinTime"
         ;
+
+        $lpItemParents = $mylp->getCurrentItemParentNames($mylp->get_current_item_id());
+        $titleItemParents = '';
+        if (!empty($lpItemParents)) {
+            // Escape HTML entities
+            $escapedParents = array_map(function($parentTitle) {
+                return htmlspecialchars($parentTitle, ENT_QUOTES, 'UTF-8');
+            }, $lpItemParents);
+
+            // Encode JSON without escaping Unicode characters
+            $titleItemParents = json_encode($escapedParents, JSON_UNESCAPED_UNICODE | JSON_HEX_APOS | JSON_HEX_QUOT);
+        }
+        if (!empty($titleItemParents)) {
+            $return .= "olms.lms_lp_item_parents={$titleItemParents};";
+        }
 
         //$return .= 'updateGamificationValues(); ';
         $mylp->set_error_msg('');

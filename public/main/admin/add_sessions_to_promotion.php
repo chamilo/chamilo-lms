@@ -335,7 +335,7 @@ function search_sessions($needle, $type)
     $return = '';
     if (!empty($needle) && !empty($type)) {
         $session_list = SessionManager::get_sessions_list(
-            ['s.name' => ['operator' => 'LIKE', 'value' => "$needle%"]]
+            ['s.title' => ['operator' => 'LIKE', 'value' => "$needle%"]]
         );
         $return .= '<select id="session_not_in_promotion" name="session_not_in_promotion_name[]" multiple="multiple" size="15" style="width:360px;">';
         foreach ($session_list as $row) {

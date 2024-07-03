@@ -69,13 +69,17 @@ function search() {
 
 async function fetchGroups(userId) {
   try {
-    const response = await axios.get( `/social-network/groups/${userId}`)
-    groups.value = response.data.groups
-    goToUrl.value = response.data.groups.find(group => group.go_to)?.go_to || ''
+    const response = await axios.get(`/social-network/groups/${userId}`)
+    if (response.data) {
+      groups.value = response.data.items
+      goToUrl.value = response.data.go_to
+    }
   } catch (error) {
-    console.error('Error fetching groups:', error)
+    groups.value = []
+    goToUrl.value = ''
   }
 }
+
 
 watchEffect(() => {
   if (user.value && user.value.id) {

@@ -276,7 +276,7 @@ if (false) {
  * Show the sessions in which this user is subscribed.
  */
 //$sessions = SessionManager::get_sessions_by_user($userId, true);
-$sessions = Container::getSessionRepository()->getSessionsByUser($user, api_get_url_entity());
+$sessions = Container::getSessionRepository()->getSessionsByUser($user, api_get_url_entity())->getQuery()->getResult();
 
 $personal_course_list = [];
 $courseToolInformationTotal = null;

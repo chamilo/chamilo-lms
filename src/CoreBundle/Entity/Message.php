@@ -16,9 +16,10 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use Chamilo\CoreBundle\Entity\Listener\MessageListener;
+use Chamilo\CoreBundle\Filter\SearchOrFilter;
 use Chamilo\CoreBundle\Repository\MessageRepository;
 use Chamilo\CoreBundle\State\MessageByGroupStateProvider;
+use Chamilo\CoreBundle\State\MessageProcessor;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -33,7 +34,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(columns: ['group_id'], name: 'idx_message_group')]
 #[ORM\Index(columns: ['msg_type'], name: 'idx_message_type')]
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
-#[ORM\EntityListeners([MessageListener::class])]
 #[ApiResource(
     operations: [
         new Get(security: "is_granted('VIEW', object)"),
@@ -58,7 +58,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: [
         'groups' => ['message:write'],
     ],
-    security: "is_granted('ROLE_USER')"
+    security: "is_granted('ROLE_USER')",
+    processor: MessageProcessor::class,
 )]
 #[ApiFilter(filterClass: OrderFilter::class, properties: ['title', 'sendDate'])]
 #[ApiFilter(
@@ -76,6 +77,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     BooleanFilter::class,
     properties: ['receivers.read']
 )]
+#[ApiFilter(SearchOrFilter::class, properties: ['title', 'content'])]
 class Message
 {
     public const MESSAGE_TYPE_INBOX = 1;
@@ -157,8 +159,14 @@ class Message
     /**
      * @var Collection<int, MessageAttachment>
      */
-    #[Groups(['message:read'])]
-    #[ORM\OneToMany(mappedBy: 'message', targetEntity: MessageAttachment::class, cascade: ['remove', 'persist'])]
+    #[Assert\Valid]
+    #[Groups(['message:read', 'message:write'])]
+    #[ORM\OneToMany(
+        mappedBy: 'message',
+        targetEntity: MessageAttachment::class,
+        cascade: ['persist'],
+        orphanRemoval: true,
+    )]
     protected Collection $attachments;
 
     #[ORM\OneToMany(mappedBy: 'message', targetEntity: MessageFeedback::class, orphanRemoval: true)]
@@ -374,10 +382,27 @@ class Message
         return $this->attachments;
     }
 
-    public function addAttachment(MessageAttachment $attachment): self
+    public function addAttachment(MessageAttachment $attachment): static
     {
-        $this->attachments->add($attachment);
-        $attachment->setMessage($this);
+        if (!$this->attachments->contains($attachment)) {
+            $this->attachments->add($attachment);
+            $attachment
+                ->setMessage($this)
+                ->setParent($this->sender)
+                ->setCreator($this->sender)
+            ;
+        }
+
+        return $this;
+    }
+
+    public function removeAttachment(MessageAttachment $attachment): static
+    {
+        if ($this->attachments->removeElement($attachment)) {
+            if ($attachment->getMessage() === $this) {
+                $attachment->setMessage(null);
+            }
+        }
 
         return $this;
     }

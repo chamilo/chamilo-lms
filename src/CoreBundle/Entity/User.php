@@ -18,9 +18,8 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Controller\Api\UserSkillsController;
 use Chamilo\CoreBundle\Entity\Listener\UserListener;
-use Chamilo\CoreBundle\Filter\SearchOr;
+use Chamilo\CoreBundle\Filter\SearchOrFilter;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\State\UserStateProvider;
 use Chamilo\CoreBundle\Traits\UserCreatorTrait;
 use Chamilo\CourseBundle\Entity\CGroupRelTutor;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
@@ -64,7 +63,6 @@ use UserManager;
     ],
     normalizationContext: ['groups' => ['user:read']],
     denormalizationContext: ['groups' => ['user:write']],
-    provider: UserStateProvider::class,
     security: 'is_granted("ROLE_USER")'
 )]
 #[ORM\Table(name: 'user')]
@@ -80,7 +78,7 @@ use UserManager;
         'lastname' => 'partial',
     ]
 )]
-#[ApiFilter(SearchOr::class, properties: ['username', 'firstname', 'lastname'])]
+#[ApiFilter(SearchOrFilter::class, properties: ['username', 'firstname', 'lastname'])]
 #[ApiFilter(filterClass: BooleanFilter::class, properties: ['isActive'])]
 class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface, LegacyPasswordAuthenticatedUserInterface, ExtraFieldItemInterface, Stringable
 {
@@ -133,6 +131,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'message:read',
         'user_rel_user:read',
         'social_post:read',
+        'user_subscriptions:sessions',
     ])]
     public ?string $illustrationUrl = null;
 
@@ -164,6 +163,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'user_rel_user:read',
         'social_post:read',
         'track_e_exercise:read',
+        'user_subscriptions:sessions',
     ])]
     #[ORM\Column(name: 'username', type: 'string', length: 100, unique: true)]
     protected string $username;
@@ -173,11 +173,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     #[ApiProperty(iris: ['http://schema.org/name'])]
     #[Assert\NotBlank]
-    #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read', 'track_e_exercise:read', 'user_rel_user:read'])]
+    #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read', 'track_e_exercise:read', 'user_rel_user:read', 'user_subscriptions:sessions'])]
     #[ORM\Column(name: 'firstname', type: 'string', length: 64, nullable: true)]
     protected ?string $firstname = null;
 
-    #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read', 'track_e_exercise:read', 'user_rel_user:read'])]
+    #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read', 'track_e_exercise:read', 'user_rel_user:read', 'user_subscriptions:sessions'])]
     #[ORM\Column(name: 'lastname', type: 'string', length: 64, nullable: true)]
     protected ?string $lastname = null;
 
@@ -713,6 +713,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'course:read',
         'course_rel_user:read',
         'message:read',
+        'user_subscriptions:sessions',
     ])]
     protected string $fullName;
 
@@ -2480,5 +2481,34 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         }
 
         return $this;
+    }
+
+    public function getSubscriptionToSession(Session $session): ?SessionRelUser
+    {
+        $criteria = Criteria::create();
+        $criteria->where(
+            Criteria::expr()->eq('session', $session)
+        );
+
+        $match = $this->sessionsRelUser->matching($criteria);
+
+        if ($match->count() > 0) {
+            return $match->first();
+        }
+
+        return null;
+    }
+
+    public function getFirstAccessToSession(Session $session): ?TrackECourseAccess
+    {
+        $criteria = Criteria::create()
+            ->where(
+                Criteria::expr()->eq('sessionId', $session->getId())
+            )
+        ;
+
+        $match = $this->trackECourseAccess->matching($criteria);
+
+        return $match->count() > 0 ? $match->first() : null;
     }
 }

@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceIllustrationInterface;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Twig\SettingsHelper;
+use Security;
 use Sylius\Bundle\SettingsBundle\Model\SettingsInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\AbstractExtension;
@@ -64,6 +65,7 @@ class ChamiloExtension extends AbstractExtension
             new TwigFunction('chamilo_settings_all', $this->getSettings(...)),
             new TwigFunction('chamilo_settings_get', $this->getSettingsParameter(...)),
             new TwigFunction('chamilo_settings_has', [$this, 'hasSettingsParameter']),
+            new TwigFunction('password_checker_js', [$this, 'getPasswordCheckerJs'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -94,6 +96,120 @@ class ChamiloExtension extends AbstractExtension
     public function getSettingsParameter($name)
     {
         return $this->helper->getSettingsParameter($name);
+    }
+
+    /**
+     * Generates and returns JavaScript code for a password strength checker.
+     */
+    public function getPasswordCheckerJs(string $passwordInputId): ?string
+    {
+        $checkPass = api_get_setting('allow_strength_pass_checker');
+        $useStrengthPassChecker = 'true' === $checkPass;
+
+        if (false === $useStrengthPassChecker) {
+            return null;
+        }
+
+        $minRequirements = Security::getPasswordRequirements()['min'];
+
+        $options = [
+            'rules' => [],
+        ];
+
+        if ($minRequirements['length'] > 0) {
+            $options['rules'][] = [
+                'minChar' => $minRequirements['length'],
+                'pattern' => '.',
+                'helpText' => sprintf(
+                    get_lang('Minimum %s characters in total'),
+                    $minRequirements['length']
+                ),
+            ];
+        }
+
+        if ($minRequirements['lowercase'] > 0) {
+            $options['rules'][] = [
+                'minChar' => $minRequirements['lowercase'],
+                'pattern' => '[a-z]',
+                'helpText' => sprintf(
+                    get_lang('Minimum %s lowercase characters'),
+                    $minRequirements['lowercase']
+                ),
+            ];
+        }
+
+        if ($minRequirements['uppercase'] > 0) {
+            $options['rules'][] = [
+                'minChar' => $minRequirements['uppercase'],
+                'pattern' => '[A-Z]',
+                'helpText' => sprintf(
+                    get_lang('Minimum %s uppercase characters'),
+                    $minRequirements['uppercase']
+                ),
+            ];
+        }
+
+        if ($minRequirements['numeric'] > 0) {
+            $options['rules'][] = [
+                'minChar' => $minRequirements['numeric'],
+                'pattern' => '[0-9]',
+                'helpText' => sprintf(
+                    get_lang('Minimum %s numerical (0-9) characters'),
+                    $minRequirements['numeric']
+                ),
+            ];
+        }
+
+        if ($minRequirements['specials'] > 0) {
+            $options['rules'][] = [
+                'minChar' => $minRequirements['specials'],
+                'pattern' => '[!"#$%&\'()*+,\-./\\\:;<=>?@[\\]^_`{|}~]',
+                'helpText' => sprintf(
+                    get_lang('Minimum %s special characters'),
+                    $minRequirements['specials']
+                ),
+            ];
+        }
+
+        return "<script>
+        (function($) {
+            $.fn.passwordCheckerChange = function(options) {
+                var settings = $.extend({
+                    rules: []
+                }, options );
+
+                return this.each(function() {
+                    var \$passwordInput = $(this);
+                    var \$requirements = $('#password-requirements');
+
+                    function validatePassword(password) {
+                        var html = '';
+
+                        settings.rules.forEach(function(rule) {
+                            var isValid = new RegExp(rule.pattern).test(password) && password.length >= rule.minChar;
+                            var color = isValid ? 'green' : 'red';
+                            html += '<li style=\"color:' + color + '\">' + rule.helpText + '</li>';
+                        });
+
+                        \$requirements.html(html);
+                    }
+
+                    \$passwordInput.on('input', function() {
+                        validatePassword(\$passwordInput.val());
+                        \$requirements.show();
+                    });
+
+                    \$passwordInput.on('blur', function() {
+                        \$requirements.hide();
+                    });
+                });
+            };
+        }(jQuery));
+
+        $(function() {
+            $('".$passwordInputId."').passwordCheckerChange(".json_encode($options).');
+        });
+        </script>';
     }
 
     /**

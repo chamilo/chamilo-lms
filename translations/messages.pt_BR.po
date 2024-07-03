@@ -21722,6 +21722,9 @@ msgstr "Muito fraco"
 msgid "You have been assigned the learner %s"
 msgstr "A você foi designado o(a) aluno(a) %s"
 
+msgid "You have been assigned the learner %s with url %s"
+msgstr "Você foi designado como tutor para o aluno(a) %s. Você pode acessar o perfil dele(a) aqui: %s"
+
 msgid "You have been assigned as tutor for the learner %s.<br/>"
 msgstr "Você foi designado como tutor para o aluno(a) %s. Você pode acessar o perfil dele(a) aqui: %s"
 
@@ -25052,3 +25055,5 @@ msgstr ""
 msgid "%02d h %02d m %02d s"
 msgstr ""
 
+msgid "The attempted oral questions are %s"
+msgstr "A tentativas para as perguntas orais são %s"

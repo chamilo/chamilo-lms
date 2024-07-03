@@ -1,41 +1,80 @@
-import { ref, watch } from "vue"
-import { useQuery } from "@vue/apollo-composable"
-import {
-  GET_SESSION_REL_USER_UPCOMMING,
-  GET_SESSION_REL_USER_PAST,
-  GET_SESSION_REL_USER_CURRENT,
-} from "../../../graphql/queries/SessionRelUser"
+import { ref } from "vue"
 import { useSecurityStore } from "../../../store/securityStore"
+import sessionService from "../../../services/sessionService"
+import isEmpty from "lodash/isEmpty"
 
-export function useSession(type = null) {
+export function useSession(type) {
   const securityStore = useSecurityStore()
 
-  const sessions = ref(null)
   const isLoading = ref(false)
 
+  const uncategorizedSessions = ref([])
+  const categories = ref([])
+  const categoriesWithSessions = ref([])
+
+  function getUncategorizedSessions(sessions) {
+    return sessions.filter((session) => isEmpty(session.category))
+  }
+
+  function getCategories(sessions) {
+    let categoryList = []
+
+    sessions.forEach((session) => {
+      if (session.category) {
+        const alreadyAdded = categoryList.findIndex((cat) => cat["@id"] === session.category["@id"]) >= 0
+
+        if (!alreadyAdded) {
+          categoryList.push(session.category)
+        }
+      }
+    })
+
+    return categoryList
+  }
+
+  /**
+   * @param {Array<object>} sessions
+   * @returns {Map<string, { sessions }>}
+   */
+  function getCategoriesWithSessions(sessions) {
+    let categoriesIn = new Map()
+
+    sessions.forEach(function (session) {
+      if (isEmpty(session.category)) {
+        return
+      }
+
+      let sessionsInCategory = []
+
+      if (categoriesIn.has(session.category["@id"])) {
+        sessionsInCategory = categoriesIn.get(session.category["@id"]).sessions
+      }
+
+      sessionsInCategory.push(session)
+
+      categoriesIn.set(session.category["@id"], { sessions: sessionsInCategory })
+    })
+
+    return categoriesIn
+  }
+
   if (securityStore.isAuthenticated) {
-    let variables = {
-      user: securityStore.user["@id"],
-    }
-
-    let finalQuery = GET_SESSION_REL_USER_CURRENT
-
-    if ("upcomming" === type) {
-      finalQuery = GET_SESSION_REL_USER_UPCOMMING
-    } else if ("past" === type) {
-      finalQuery = GET_SESSION_REL_USER_PAST
-    }
-
     isLoading.value = true
 
-    const { result, loading } = useQuery(finalQuery, variables, { fetchPolicy: "no-cache" })
-
-    watch(result, (newResult) => (sessions.value = newResult))
-    watch(loading, (newLoading) => (isLoading.value = newLoading))
+    sessionService
+      .findUserSubscriptions(securityStore.user["@id"], type)
+      .then(({ items }) => {
+        uncategorizedSessions.value = getUncategorizedSessions(items)
+        categories.value = getCategories(items)
+        categoriesWithSessions.value = getCategoriesWithSessions(items)
+      })
+      .finally(() => (isLoading.value = false))
   }
 
   return {
-    sessions,
     isLoading,
+    uncategorizedSessions,
+    categories,
+    categoriesWithSessions,
   }
 }

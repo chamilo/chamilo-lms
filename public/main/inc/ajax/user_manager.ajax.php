@@ -299,6 +299,36 @@ switch ($action) {
         header('Content-Type: application/json');
         echo json_encode(['items' => $items]);
         break;
+    case 'user_by_all_roles':
+        api_block_anonymous_users(false);
+
+        $urlId = api_get_current_access_url_id();
+
+        $roleList = ['ROLE_STUDENT', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'];
+
+        $users = Container::getUserRepository()->findByRoleList(
+            $roleList,
+            $_REQUEST['q'],
+            $urlId
+        );
+
+        if (!$users) {
+            echo json_encode([]);
+            break;
+        }
+
+        $items = [];
+
+        foreach ($users as $user) {
+            $items[] = [
+                'id' => $user->getId(),
+                'text' => UserManager::formatUserFullName($user, true),
+            ];
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode(['items' => $items]);
+        break;
     default:
         echo '';
 }

@@ -62,7 +62,7 @@ if ($createForm->validate()) {
     $extraFieldValue->saveFieldValues($skillValues);
     if ($created) {
         $url = api_get_path(WEB_CODE_PATH).'skills/skill_edit.php?id='.$created;
-        $link = Display::url($skillValues['name'], $url);
+        $link = Display::url($skillValues['title'], $url);
         Display::addFlash(
             Display::return_message(get_lang('The skill has been created').': '.$link, 'success', false)
         );

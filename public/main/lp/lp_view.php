@@ -59,6 +59,7 @@ if (false === $visibility &&
 }
 
 $lp_item_id = $oLP->get_current_item_id();
+$lpCurrentItemId = isset($_GET['lp_item_id']) ? (int) $_GET['lp_item_id'] : $oLP->get_current_item_id();
 $lpType = $lp->getLpType();
 
 if (!api_is_allowed_to_edit(null, true)) {
@@ -188,10 +189,12 @@ chamilo_courseCode = "'.$course_code.'";
 $get_toc_list = $oLP->get_toc();
 $get_teacher_buttons = $oLP->get_teacher_toc_buttons();
 
+$itemType = '';
 $type_quiz = false;
 foreach ($get_toc_list as $toc) {
-    if ($toc['id'] == $lp_item_id && 'quiz' === $toc['type']) {
-        $type_quiz = true;
+    if ($toc['id'] == $lpCurrentItemId) {
+        $itemType = $toc['type'];
+        $type_quiz = 'quiz' === $toc['type'];
     }
 }
 
@@ -534,7 +537,7 @@ if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id()
 $template->assign('lp_accumulate_work_time', $lpMinTime);
 $template->assign('lp_mode', $lp->getDefaultViewMod());
 $template->assign('lp_title_scorm', stripslashes($lp->getTitle()));
-$template->assign('lp_item_parents', $oLP->getCurrentItemParentNames($oLP->get_current_item_id()));
+$template->assign('lp_item_parents', $oLP->getCurrentItemParentNames($lpCurrentItemId));
 
 // @todo Fix lp_view_accordion
 /*if ('true' === api_get_setting('lp.lp_view_accordion') && 1 == $lpType) {
@@ -559,9 +562,16 @@ $template->assign('menu_location', $menuLocation);
 $template->assign('disable_js_in_lp_view', (int) ('true' === api_get_setting('lp.disable_js_in_lp_view')));
 $template->assign('lp_preview_image', '<img src="'.$lpPreviewImagePath.'" alt="'.$oLP->getNameNoTags().'" />');
 
-//$frameReady = Display::getFrameReadyBlock('#content_id, #content_id_blank');
-//$template->assign('frame_ready', $frameReady);
-$template->assign('frame_ready', '');
+$frameReady = Display::getFrameReadyBlock(
+    '#content_id, #content_id_blank',
+    $itemType,
+    'function () {
+        var arr = ["link", "sco", "xapi", "quiz", "h5p", "forum"];
+
+        return $.inArray(olms.lms_item_type, arr) !== -1;
+    }'
+);
+$template->assign('frame_ready', $frameReady);
 $template->displayTemplate('@ChamiloCore/LearnPath/view.html.twig');
 
 // Restore a global setting.

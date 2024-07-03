@@ -12,8 +12,14 @@
   }
 }
 
-.p-dropdown-clear-icon {
-  @apply absolute top-1/2 -mt-2;
+.p-dropdown {
+  &-clear-icon {
+    @apply absolute top-1/2 -mt-2;
+  }
+
+  & &-clear-icon {
+    @apply right-12;
+  }
 }
 
 .p-dropdown-trigger {

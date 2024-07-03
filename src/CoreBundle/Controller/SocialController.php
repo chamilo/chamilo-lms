@@ -237,6 +237,30 @@ class SocialController extends AbstractController
         ]);
     }
 
+    #[Route('/delete-legal', name: 'chamilo_core_social_delete_legal')]
+    public function deleteLegal(Request $request, TranslatorInterface $translator): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $userId = $data['userId'] ?? null;
+
+        if (!$userId) {
+            return $this->json(['error' => $translator->trans('User ID not provided')], Response::HTTP_BAD_REQUEST);
+        }
+
+        $extraFieldValue = new ExtraFieldValue('user');
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'legal_accept');
+        if ($value && isset($value['id'])) {
+            $extraFieldValue->delete($value['id']);
+        }
+
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'termactivated');
+        if ($value && isset($value['id'])) {
+            $extraFieldValue->delete($value['id']);
+        }
+
+        return $this->json(['success' => true, 'message' => $translator->trans('Legal acceptance revoked successfully.')]);
+    }
+
     #[Route('/handle-privacy-request', name: 'chamilo_core_social_handle_privacy_request')]
     public function handlePrivacyRequest(
         Request $request,
@@ -312,25 +336,26 @@ class SocialController extends AbstractController
     ): JsonResponse {
         $baseUrl = $requestStack->getCurrentRequest()->getBaseUrl();
         $cid = (int) $settingsManager->getSetting('forum.global_forums_course_id');
-        $groupsArray = [];
-        $threadsArray = [];
+        $items = [];
+        $goToUrl = '';
+
         if (!empty($cid)) {
             $threads = $forumThreadRepository->getThreadsBySubscriptions($userId, $cid);
             foreach ($threads as $thread) {
                 $threadId = $thread->getIid();
                 $forumId = (int) $thread->getForum()->getIid();
-                $threadsArray[] = [
+                $items[] = [
                     'id' => $threadId,
                     'name' => $thread->getTitle(),
                     'description' => '',
                     'url' => $baseUrl.'/main/forum/viewthread.php?cid='.$cid.'&sid=0&gid=0&forum='.$forumId.'&thread='.$threadId,
-                    'go_to' => $baseUrl.'/main/forum/index.php?cid='.$cid.'&sid=0&gid=0',
                 ];
             }
+            $goToUrl = $baseUrl.'/main/forum/index.php?cid='.$cid.'&sid=0&gid=0';
         } else {
             $groups = $usergroupRepository->getGroupsByUser($userId);
             foreach ($groups as $group) {
-                $groupsArray[] = [
+                $items[] = [
                     'id' => $group->getId(),
                     'name' => $group->getTitle(),
                     'description' => $group->getDescription(),
@@ -339,11 +364,10 @@ class SocialController extends AbstractController
             }
         }
 
-        if (!empty($threadsArray)) {
-            return $this->json(['groups' => $threadsArray]);
-        }
-
-        return $this->json(['groups' => $groupsArray]);
+        return $this->json([
+            'items' => $items,
+            'go_to' => $goToUrl,
+        ]);
     }
 
     #[Route('/group/{groupId}/discussion/{discussionId}/messages', name: 'chamilo_core_social_group_discussion_messages')]
@@ -958,6 +982,53 @@ class SocialController extends AbstractController
         }
 
         return new JsonResponse(['success' => 'Group and image saved successfully'], Response::HTTP_OK);
+    }
+
+    #[Route('/terms-restrictions/{userId}', name: 'chamilo_core_social_terms_restrictions')]
+    public function checkTermsRestrictions(
+        int $userId,
+        UserRepository $userRepo,
+        ExtraFieldRepository $extraFieldRepository,
+        TranslatorInterface $translator,
+        SettingsManager $settingsManager
+    ): JsonResponse {
+        /** @var User $user */
+        $user = $userRepo->find($userId);
+
+        if (!$user) {
+            return $this->json(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $isAdmin = $user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_SUPER_ADMIN');
+
+        $termActivated = false;
+        $blockButton = false;
+        $infoMessage = '';
+
+        if (!$isAdmin) {
+            if ('true' === $settingsManager->getSetting('ticket.show_terms_if_profile_completed')) {
+                $extraFieldValue = new ExtraFieldValue('user');
+                $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'termactivated');
+                if (isset($value['value'])) {
+                    $termActivated = !empty($value['value']) && 1 === (int) $value['value'];
+                }
+
+                if (false === $termActivated) {
+                    $blockButton = true;
+                    $infoMessage .= $translator->trans('The terms and conditions have not yet been validated by your tutor.').'&nbsp;';
+                }
+
+                if (!$user->isProfileCompleted()) {
+                    $blockButton = true;
+                    $infoMessage .= $translator->trans('You must first fill your profile to enable the terms and conditions validation.');
+                }
+            }
+        }
+
+        return $this->json([
+            'blockButton' => $blockButton,
+            'infoMessage' => $infoMessage,
+        ]);
     }
 
     /**

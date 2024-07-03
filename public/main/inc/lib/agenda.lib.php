@@ -3594,4 +3594,34 @@ class Agenda
 
         return $eventDate->format(DateTime::ISO8601);
     }
+
+    public static function getJsForReminders(string $cssSelectorBtnAdd): string
+    {
+        return '
+            var template = \'<div class="flex flex-row items-center gap-4">\' +
+                \'<input min="0" step="1" id="notification_count[]" type="number" name="notification_count[]">\' +
+                \'<select name="notification_period[]" id="form_notification_period[]">\' +
+                \'<option value="i">'.get_lang('Minutes').'</option>\' +
+                \'<option value="h">'.get_lang('Hours').'</option>\' +
+                \'<option value="d">'.get_lang('Days').'</option>\' +
+                \'</select>\' +
+                \'<p class="form-control-static">'.get_lang('Before').'</p>\' +
+                \'<button class="btn btn--danger delete-notification" type="button" aria-label="'.get_lang('Delete').'">\' +
+                \'<i class="mdi mdi-close" aria-hidden="true"></i>\' +
+                \'</button>\' +
+                \'</div>\';
+
+            $("'.$cssSelectorBtnAdd.'").on("click", function (e) {
+                e.preventDefault();
+
+                $(template).appendTo("#notification_list");
+                $("#notification_list select").selectpicker("refresh");
+            });
+
+            $("#notification_list").on("click", ".delete-notification", function (e) {
+                e.preventDefault();
+
+                $(this).parents(".form-group").remove();
+            });';
+    }
 }

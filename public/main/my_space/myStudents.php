@@ -365,7 +365,7 @@ switch ($action) {
 
                     $courseTable .= '<tr>
                         <td>
-                            <a href="'.api_get_course_url($courseId).'?sid='.$sId.'">'.
+                            <a href="'.api_get_course_url($courseId, $sId).'">'.
                         $course->getTitle().'</a>
                         </td>
                         <td >'.$time_spent_on_course.'</td>
@@ -518,7 +518,7 @@ switch ($action) {
                     foreach ($bossList as $boss) {
                         $studentFullName = UserManager::formatUserFullName($student);
                         $content = sprintf(
-                            get_lang('Hi,<br/><br/>'),
+                            get_lang('Hi,<br/><br/>User %s sent a follow up message about student %s.<br/><br/>The message can be seen here %s'),
                             UserManager::formatUserFullName($currentUser),
                             $studentFullName,
                             $link
@@ -528,7 +528,7 @@ switch ($action) {
                             ->setContent($content)
                             ->setSender(api_get_user_entity())
                             ->addReceiverTo(api_get_user_entity($boss['boss_id']))
-                            ->setMsgType(Message::MESSAGE_TYPE_CONVERSATION)
+                            ->setMsgType(Message::MESSAGE_TYPE_INBOX)
                         ;
                         $em->persist($message);
                     }
@@ -902,6 +902,16 @@ $userGroups = $userGroupManager->getNameListByUser(
 $userInfoExtra = [];
 $userInfoExtra['groups'] = $userGroupManager;
 $userInfoExtra['online'] = $online;
+
+$bossList = [];
+$studentBossList = Usermanager::getStudentBossList($studentId);
+foreach ($studentBossList as $boss) {
+    $bossInfo = api_get_user_info($boss['boss_id']);
+    if ($bossInfo) {
+        $bossList[] = $bossInfo['complete_name_with_username'];
+    }
+}
+$userInfoExtra['boss_list'] = $bossList;
 
 if (!empty($courseCode)) {
     $userInfoExtra['url_access'] = Display::url(
@@ -1408,7 +1418,7 @@ if (empty($details)) {
 
                     echo '<tr>
                     <td>
-                        <a href="'.api_get_course_url($courseId).'?sid='.$sId.'">'.
+                        <a href="'.api_get_course_url($courseId, $sId).'">'.
                         $course->getTitle().'
                         </a>
                     </td>
@@ -1695,7 +1705,7 @@ if (empty($details)) {
                 // Get last connection time in lp
                 $start_time = Tracking::get_last_connection_time_in_lp(
                     $studentId,
-                    $course,
+                    $course->getCode(),
                     $lp_id,
                     $sessionId
                 );

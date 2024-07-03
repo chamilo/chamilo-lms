@@ -18,18 +18,34 @@
       </router-link>
     </template>
     <template #title>
-      <div v-if="disabled">
-        <span v-if="session"> {{ session.title }} - </span>
-        {{ course.title }}
+      <div class="course-card__title">
+        <div v-if="disabled">
+          <div
+            v-if="session"
+            class="session__title"
+            v-text="session.title"
+          />
+          {{ course.title }}
+        </div>
+        <router-link
+          v-else
+          :to="{ name: 'CourseHome', params: { id: course._id }, query: { sid: sessionId } }"
+          class="course-card__home-link"
+        >
+          <div
+            v-if="session"
+            class="session__title"
+            v-text="session.title"
+          />
+          {{ course.title }}
+        </router-link>
+
+        <div
+          v-if="sessionDisplayDate"
+          class="session__display-date"
+          v-text="sessionDisplayDate"
+        />
       </div>
-      <router-link
-        v-else
-        :to="{ name: 'CourseHome', params: { id: course._id }, query: { sid: sessionId } }"
-        class="course-card__home-link"
-      >
-        <span v-if="session"> {{ session.title }} - </span>
-        {{ course.title }}
-      </router-link>
     </template>
     <template #footer>
       <TeacherBar :teachers="teachers" />
@@ -41,6 +57,10 @@
 import Card from "primevue/card"
 import TeacherBar from "../TeacherBar"
 import { computed } from "vue"
+import { isEmpty } from "lodash"
+import { useFormatDate } from "../../composables/formatDate"
+
+const { abbreviatedDatetime } = useFormatDate()
 
 // eslint-disable-next-line no-undef
 const props = defineProps({
@@ -66,6 +86,12 @@ const props = defineProps({
 })
 
 const teachers = computed(() => {
+  if (props.session?.courseCoachesSubscriptions) {
+    return props.session.courseCoachesSubscriptions
+      .filter((srcru) => srcru.course["@id"] === props.course["@id"])
+      .map((srcru) => srcru.user)
+  }
+
   if (props.course.users && props.course.users.edges) {
     return props.course.users.edges.map((edge) => ({
       id: edge.node.id,
@@ -74,5 +100,21 @@ const teachers = computed(() => {
   }
 
   return []
+})
+
+const sessionDisplayDate = computed(() => {
+  const dateString = []
+
+  if (props.session) {
+    if (!isEmpty(props.session.displayStartDate)) {
+      dateString.push(abbreviatedDatetime(props.session.displayStartDate))
+    }
+
+    if (!isEmpty(props.session.displayEndDate)) {
+      dateString.push(abbreviatedDatetime(props.session.displayEndDate))
+    }
+  }
+
+  return dateString.join(" — ")
 })
 </script>

@@ -1,0 +1,116 @@
+.mejs {
+  &__container {
+    @apply bg-transparent rounded-lg inline-block max-w-full
+      md:max-w-none
+      focus:outline-none focus:drop-shadow-lg;
+
+    video {
+      @apply rounded-lg w-full h-full object-contain;
+    }
+  }
+
+  &__mediaelement {
+    > [id^="mejs_"] {
+      @apply w-full h-full;
+    }
+  }
+
+  &__poster {
+    @apply rounded-lg max-w-full bg-contain
+      md:max-w-none;
+
+    &-img {
+      @apply rounded-lg object-contain;
+    }
+  }
+
+  &__overlay {
+    @apply bg-support-3 rounded-lg max-w-full
+      md:max-w-none;
+
+    &-error {
+      @apply w-full h-full;
+
+      img {
+        @apply rounded-lg object-contain w-full h-full;
+      }
+    }
+
+    &-loading {
+      svg {
+        @apply fill-current;
+      }
+
+      &-bg-img {
+        @apply block text-white;
+      }
+    }
+
+    &-play {
+      @apply cursor-pointer;
+    }
+
+    &-button {
+      @apply bg-transparent border-0 text-white;
+
+      svg {
+        @apply fill-current;
+      }
+    }
+  }
+
+  &__controls {
+    &:not([style*="display: none"]) {
+      @apply bg-none bg-white border border-gray-30 rounded-b-lg;
+
+      button {
+        @apply text-gray-90;
+      }
+      svg {
+        @apply fill-current;
+      }
+    }
+  }
+
+  &__currenttime,
+  &__duration {
+    @apply text-gray-90;
+  }
+
+  &__time-total,
+  &__time-buffering,
+  &__time-loaded {
+    @apply bg-gray-30 rounded-lg overflow-hidden;
+  }
+
+  &__time-hovered {
+    @apply bg-gray-5 rounded-lg;
+  }
+
+  &__time-current {
+    @apply bg-primary rounded-none;
+  }
+
+  &__time-handle-content {
+    @apply border-support-3;
+  }
+
+  &__volume {
+    &-button > &-slider {
+      @apply bg-white;
+    }
+
+    &-total {
+      @apply bg-gray-90 border-gray-90;
+    }
+
+    &-current,
+    &-handle {
+      @apply bg-gray-90;
+    }
+
+    &-handle {
+      @apply border-gray-90;
+    }
+  }
+}

@@ -12,7 +12,7 @@ async function createPost(params) {
  * @returns {Promise<Object>}
  */
 async function sendPostLike(postIri) {
-  return baseService.post(`${postIri}/like`)
+  return baseService.post(`${postIri}/like`, {}, true)
 }
 
 /**
@@ -20,7 +20,7 @@ async function sendPostLike(postIri) {
  * @returns {Promise<Object>}
  */
 async function sendPostDislike(postIri) {
-  return baseService.post(`${postIri}/dislike`)
+  return baseService.post(`${postIri}/dislike`, {}, true)
 }
 
 /**
@@ -89,6 +89,29 @@ export default {
       return response.data
     } catch (error) {
       console.error("Error accepting the term:", error)
+      throw error
+    }
+  },
+
+  async revokeAcceptTerm(userId) {
+    try {
+      const response = await axios.post(`${API_URL}/delete-legal`, {
+        userId,
+      })
+
+      return response.data
+    } catch (error) {
+      console.error("Error revoking acceptance:", error)
+      throw error
+    }
+  },
+
+  async checkTermsRestrictions(userId) {
+    try {
+
+      return await baseService.get(`${API_URL}/terms-restrictions/${userId}`);
+    } catch (error) {
+      console.error("Error checking terms restrictions:", error)
       throw error
     }
   },

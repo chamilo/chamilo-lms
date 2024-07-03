@@ -698,7 +698,7 @@ class FillBlanks extends Question
                     $item = $listMenu[0];
                     if (!$fromDatabase) {
                         $item = sha1($item);
-                        $studentAnswer = sha1($studentAnswer);
+                        //$studentAnswer = sha1($studentAnswer);
                     }
                     if ($item === $studentAnswer) {
                         $result = true;

@@ -2893,7 +2893,7 @@ class SessionManager
 
                 // Subscribe all the users from the session to this course inside the session
                 self::insertUsersInCourse(
-                    array_column($user_list, 'id'),
+                    array_column($user_list, 'user_id'),
                     $courseId,
                     $sessionId,
                     ['visibility' => $sessionVisibility],
@@ -9840,6 +9840,9 @@ class SessionManager
         }
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     public static function insertUsersInCourse(
         array $studentIds,
         int $courseId,
@@ -9847,18 +9850,16 @@ class SessionManager
         array $relationInfo = [],
         bool $updateSession = true
     ) {
+        $em = Database::getManager();
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
 
-        $em = Database::getManager();
 
         $relationInfo = array_merge(['visibility' => 0, 'status' => Session::STUDENT], $relationInfo);
 
         foreach ($studentIds as $studentId) {
             $user = api_get_user_entity($studentId);
-
-            $session
-                ->addUserInCourse($relationInfo['status'], $user, $course)
+            $session->addUserInCourse($relationInfo['status'], $user, $course)
                 ->setVisibility($relationInfo['visibility']);
 
             Event::logUserSubscribedInCourseSession($user, $course, $session);
@@ -9868,8 +9869,12 @@ class SessionManager
             }
         }
 
-        $em->persist($session);
-        $em->flush();
+       try {
+            $em->persist($session);
+            $em->flush();
+        } catch (\Exception $e) {
+            error_log("Error executing flush: " . $e->getMessage());
+        }
     }
 
     public static function getCareersFromSession(int $sessionId): array

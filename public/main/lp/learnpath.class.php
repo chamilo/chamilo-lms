@@ -1357,17 +1357,17 @@ class learnpath
         if (false === $hideArrows) {
             $icon = Display::getMdiIcon('chevron-left');
             $previousIcon = '
-                <a class="icon-toolbar" id="scorm-previous" href="#"
+                <button class="icon-toolbar" id="scorm-previous" type="button"
                     onclick="switch_item('.$mycurrentitemid.',\'previous\');return false;" title="'.$previousText.'">
                     '.$icon.'<span class="sr-only">'.$previousText.'</span>
-                </a>';
+                </button>';
 
             $icon = Display::getMdiIcon('chevron-right');
             $nextIcon = '
-                <a class="icon-toolbar" id="scorm-next" href="#"
+                <button class="icon-toolbar" id="scorm-next" type="button"
                     onclick="switch_item('.$mycurrentitemid.',\'next\');return false;" title="'.$nextText.'">
                     '.$icon.'<span class="sr-only">'.$nextText.'</span>
-                </a>';
+                </button>';
         }
 
         if ('fullscreen' === $this->mode) {
@@ -2660,14 +2660,14 @@ class learnpath
         if ($isAllow && false == $hideIcons) {
             if ($this->get_lp_session_id() == api_get_session_id()) {
                 $html .= '<div id="actions_lp" class="actions_lp"><hr>';
-                $html .= '<div class="flex flex-row justify-center mb-2">';
+                $html .= '<div class="flex flex-wrap gap-1 justify-center">';
                 $html .= "<a
-                    class='btn btn-sm btn--plain mx-1'
+                    class='btn btn-sm btn--plain'
                     href='lp_controller.php?".api_get_cidreq()."&action=add_item&type=step&lp_id=".$this->lp_id."&isStudentView=false'
                     target='_parent'>".
                     Display::getMdiIcon('pencil').get_lang('Edit')."</a>";
                 $html .= '<a
-                    class="btn btn-sm btn--plain mx-1"
+                    class="btn btn-sm btn--plain"
                     href="lp_controller.php?'.api_get_cidreq()."&action=edit&lp_id=".$this->lp_id.'&isStudentView=false">'.
                     Display::getMdiIcon('hammer-wrench').get_lang('Settings').'</a>';
                 $html .= '</div>';
@@ -6794,7 +6794,10 @@ class learnpath
             }
         </script>';
         $moveIcon = Display::getMdiIcon('cursor-move', 'ch-tool-icon', '', 16, get_lang('Move'));
+        $userRights = api_is_allowed_to_edit(false, true);
         foreach ($a_forums as $forum) {
+            $forumSession = $forum->getFirstResourceLink()->getSession();
+            $isForumSession = (null !== $forumSession);
             $forumId = $forum->getIid();
             $title = Security::remove_XSS($forum->getTitle());
             $link = Display::url(
@@ -6814,7 +6817,7 @@ class learnpath
             $return .= Display::getMdiIcon('comment-quote', 'ch-tool-icon', null, 16, get_lang('Forum'));
 
             $moveLink = Display::url(
-                $title.' '.$link,
+                $title,
                 api_get_self().'?'.
                 api_get_cidreq().'&action=add_item&type='.TOOL_FORUM.'&forum_id='.$forumId.'&lp_id='.$this->lp_id,
                 [
@@ -6826,12 +6829,12 @@ class learnpath
                 ]
             );
             $return .= '<a onclick="javascript:toggle_forum('.$forumId.');" style="cursor:hand; vertical-align:middle">
-                            <img
-                                src="'.Display::returnIconPath('add.png').'"
-                                id="forum_'.$forumId.'_opener" align="absbottom"
-                             />
-                        </a>
-                        '.$moveLink;
+                    <img
+                        src="'.Display::returnIconPath('add.png').'"
+                        id="forum_'.$forumId.'_opener" align="absbottom"
+                     />
+                </a>
+                '.$moveLink;
             $return .= '</li>';
 
             $return .= '<div style="display:none" id="forum_'.$forumId.'_content">';
@@ -7966,6 +7969,31 @@ class learnpath
         }
 
         return $link;
+    }
+
+    /**
+     * Checks if any forum items in a given learning path are from the base course.
+     */
+    public static function isForumFromBaseCourse(int $learningPathId): bool
+    {
+        $itemRepository = Container::getLpItemRepository();
+        $forumRepository = Container::getForumRepository();
+        $forums = $itemRepository->findItemsByLearningPathAndType($learningPathId, 'forum');
+
+        /* @var CLpItem $forumItem */
+        foreach ($forums as $forumItem) {
+            $forumId = (int) $forumItem->getPath();
+            $forum = $forumRepository->find($forumId);
+
+            if ($forum !== null) {
+                $forumSession = $forum->getFirstResourceLink()->getSession();
+                if ($forumSession === null) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

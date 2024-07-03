@@ -2,21 +2,14 @@
   <Avatar
     :image="`${imageUrl}?w=${imageSize}&h=${imageSize}&fit=crop`"
     :shape="shape"
-    :size="size"
-    class="rounded-full"
-    :class="avatarClass"
+    :size="'normal' !== size ? size : undefined"
     :aria-label="alt"
-    :pt="{
-      image: {
-        style: 'width: 100%;'
-      }
-    }"
   />
 </template>
 
 <script setup>
-import Avatar from "primevue/avatar";
-import { computed } from "vue";
+import Avatar from "primevue/avatar"
+import { computed } from "vue"
 
 const props = defineProps({
   imageUrl: {
@@ -33,7 +26,7 @@ const props = defineProps({
     type: String,
     require: false,
     default: "normal",
-    validator: (value) => ["small", "normal", "large", "xlarge"].includes(value),
+    validator: (value) => ["normal", "large", "xlarge"].includes(value),
   },
   shape: {
     type: String,
@@ -41,30 +34,19 @@ const props = defineProps({
     default: "circle",
     validator: (value) => ["circle", "square"].includes(value),
   },
-});
+})
 
 const imageSize = computed(() => {
   // these numbers are approximate, they were calculated with a size
   // allowing to see the image clearly
   if (props.size === "xlarge") {
-    return 250;
-  } else if (props.size === "large") {
-    return 125;
+    return 112
   }
-  return 75;
-});
 
-const avatarClass = computed(() => {
-  let clazz = ""
-  if (props.size === "xlarge") {
-    clazz += "h-28 w-28 "
-  } else if (props.size === "large") {
-    clazz += "h-16 w-16 "
-  } else if (props.size === "normal") {
-    clazz += "h-10 w-10 " // base size 40px
-  } else if (props.size === "small") {
-    clazz += "h-8 w-8 "
+  if (props.size === "large") {
+    return 64
   }
-  return clazz
+
+  return 32
 })
 </script>

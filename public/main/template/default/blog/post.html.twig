@@ -61,7 +61,7 @@
             <div class="card" id="blog-header">
                 <div class="panel-heading">
                     <div id="post-action" class="text-right">
-                        <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'Actions'|get_lang }}">
+                        <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'Detail'|get_lang }}">
                             {{ post.actions }}
                         </div>
                     </div>
@@ -78,7 +78,7 @@
                                 </li>
                                 <li class="comments">
                                     <i class="fa fa-comment-o"
-                                       aria-hidden="true"></i> {{ 'XComments'|get_lang|format(post.n_comments) }}
+                                       aria-hidden="true"></i> {{ '%s comments'|get_lang|format(post.n_comments) }}
                                 </li>
                                 <li class="autor">
                                     <i class="fa fa-user" aria-hidden="true"></i>
@@ -102,7 +102,7 @@
                         {{ post.frm_rating ?: '' }}
                     </article>
                     <div class="comments-post">
-                        <h3 class="title">{{ 'XComments'|get_lang|format(post.n_comments) }}</h3>
+                        <h3 class="title">{{ '%s comments'|get_lang|format(post.n_comments) }}</h3>
                         <div id="list-comments" class="media-list">
                             {% for item in post.comments %}
                                 {{ nested.comment_template(item) }}
@@ -142,7 +142,7 @@
             </div>
             <div id="task-blog" class="card">
                 <div class="card-body">
-                    <h5 class="card-title">{{ 'MyTasks'|get_lang }}</h5>
+                    <h5 class="card-title">{{ 'My tasks'|get_lang }}</h5>
                     {{ task }}
                 </div>
             </div>

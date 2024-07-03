@@ -36,11 +36,11 @@ $(function () {
 {{ search_form }}
 
 {% if not certificate_students is empty %}
-    <h2 class="page-header">{{ "GradebookListOfStudentsCertificates" | get_lang }}</h2>
+    <h2 class="page-header">{{ 'List of learner certificates' | get_lang }}</h2>
     {% if not export_all_link is null %}
         <div class="actions">
             <a href="{{ export_all_link }}" class="btn btn--info">
-                <em class="fa fa-check"></em> {{ 'ExportAllCertificatesToPDF' | get_lang }}
+                <em class="fa fa-check"></em> {{ 'Export all certificates to PDF' | get_lang }}
             </a>
         </div>
     {% endif %}
@@ -48,7 +48,7 @@ $(function () {
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>{{ 'Student' | get_lang }}</th>
+                <th>{{ 'Learner' | get_lang }}</th>
                 <th>{{ 'Sesion' | get_lang }}</th>
                 <th>{{ 'Course' | get_lang }}</th>
                 <th>{{ 'Date' | get_lang }}</th>
@@ -57,7 +57,7 @@ $(function () {
         </thead>
         <tfoot>
             <tr>
-                <th>{{ 'Student' | get_lang }}</th>
+                <th>{{ 'Learner' | get_lang }}</th>
                 <th>{{ 'Sesion' | get_lang }}</th>
                 <th>{{ 'Course' | get_lang }}</th>
                 <th>{{ 'Date' | get_lang }}</th>
@@ -87,7 +87,7 @@ $(function () {
         </tbody>
     </table>
 {% else %}
-    <p class="alert alert-info">{{ 'NoResults' | get_lang }}</p>
+    <p class="alert alert-info">{{ 'No results found' | get_lang }}</p>
 {% endif %}
 
 {% endautoescape %}

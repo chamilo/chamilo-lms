@@ -24,7 +24,7 @@
         <tr>
             <th>{{ 'Path' | get_lang }}</th>
             <th>{{ 'Size' | get_lang }}</th>
-            <th>{{ 'Actions' | get_lang }}</th>
+            <th>{{ 'Detail' | get_lang }}</th>
         </tr>
     {% for file in files %}
         <tr>
@@ -43,6 +43,6 @@
     {% endfor %}
     </table>
 {% else %}
-    {{ 'NoData' | get_lang }}
+    {{ 'No data available' | get_lang }}
 {% endif %}
 

@@ -6,12 +6,12 @@
                 <h4 class="panel-title">
                     <a role="button" data-toggle="collapse" data-parent="#sn-avatar"
                        href="#sn-avatar-one" aria-expanded="true" aria-controls="sn-avatar-one">
-                        {{ "Profile" | get_lang }}
+                        {{ 'Profile' | get_lang }}
                     </a>
                     {% if user.is_admin == 1 %}
                         <div class="pull-right">
                             <a class="btn btn--plain btn-sm btn-social-edit"
-                               title="{{ "Edit"|get_lang }}"
+                               title="{{ 'Edit'|get_lang }}"
                                href="{{ url('index') }}main/admin/user_edit.php?user_id={{ user.id }}"
                             >
                                 {{ 'ActionIcon::EDIT' | mdi_icon }}
@@ -87,7 +87,7 @@
                                 <li class="item">
                                     <a href="{{ vcard_user_link }}">
                                         {{ 'ObjectIcon::VCARD'|mdi_icon_t(22, 'ch-tool-icon', 'BusinessCard') }}
-                                        {{ "BusinessCard" | get_lang }}
+                                        {{ 'Business card' | get_lang }}
                                     </a>
                                 </li>
                             {% endif %}
@@ -131,8 +131,8 @@
                                             onclick="javascript:chatWith('{{ user.id }}', '{{ user.complete_name }}', '{{ user.user_is_online }}','{{ user.avatar_small }}')"
                                             href="javascript:void(0);"
                                         >
-                                            <img src="{{ "online.png" | icon }}" alt="{{ "Online" | get_lang }}">
-                                            {{ "Chat" | get_lang }} ({{ "Online" | get_lang }})
+                                            <img src="{{ "online.png" | icon }}" alt="{{ 'Online' | get_lang }}">
+                                            {{ 'Chat' | get_lang }} ({{ 'Online' | get_lang }})
                                         </a>
                                     </li>
                                 {% endif %}
@@ -150,7 +150,7 @@
                         {% if not profile_edition_link is empty %}
                             <li class="item">
                                 <a class="btn btn--plain btn-sm btn-block" href="{{ profile_edition_link }}">
-                                    <em class="fa fa-edit"></em>{{ "EditProfile" | get_lang }}
+                                    <em class="fa fa-edit"></em>{{ 'Edit profile' | get_lang }}
                                 </a>
                             </li>
                         {% endif %}

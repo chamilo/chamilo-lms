@@ -84,6 +84,7 @@ class StatementsFilterFactory
             $filter->descending();
         }
 
+        $filter->cursor($parameters->getInt('cursor'));
         $filter->limit($parameters->getInt('limit'));
 
         return $filter;

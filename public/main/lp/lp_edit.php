@@ -333,8 +333,11 @@ if ($form->validate()) {
     }
 
     if (isset($_REQUEST['remove_picture']) && $_REQUEST['remove_picture']) {
-        if ($lp->getResourceNode()->hasResourceFile()) {
-            $lp->getResourceNode()->setResourceFile(null);
+        $resourceFiles = $lp->getResourceNode()->getResourceFiles();
+
+        foreach ($resourceFiles as $resourceFile) {
+            $em->remove($resourceFile);
+            $em->flush();
         }
     }
 

@@ -92,7 +92,7 @@ final class IllustrationRepository extends ResourceRepository
             ->select('node')
             ->from(ResourceNode::class, 'node')
             ->innerJoin('node.resourceType', 'type')
-            ->innerJoin('node.resourceFile', 'file')
+            ->innerJoin('node.resourceFiles', 'file')
             ->where('node.parent = :parent')
             ->andWhere('type.title = :name')
             ->setParameters([

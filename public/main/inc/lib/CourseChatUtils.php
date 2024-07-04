@@ -485,13 +485,7 @@ class CourseChatUtils
             $resourceNode = $resource->getResourceNode();
         }
 
-        if ($resourceNode->hasResourceFile()) {
-            //$resourceFile = $resourceNode->getResourceFile();
-            //$fileName = $this->getFilename($resourceFile);
-            return $this->repository->getResourceNodeFileContent($resourceNode);
-        }
-
-        return '';
+        return $this->repository->getResourceNodeFileContent($resourceNode);
 
         $remove = 0;
         $content = [];

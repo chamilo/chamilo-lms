@@ -112,7 +112,7 @@
             :key="index"
           >
             <audio
-              v-if="attachment.resourceNode.resourceFile.audio"
+              v-if="attachment.resourceNode.firstResourceFile.audio"
               controls
             >
               <source :src="attachment.downloadUrl" />
@@ -124,7 +124,7 @@
               class="btn btn--plain"
             >
               <BaseIcon icon="attachment" />
-              {{ attachment.resourceNode.resourceFile.originalName }}
+              {{ attachment.resourceNode.firstResourceFile.originalName }}
             </a>
           </li>
         </ul>

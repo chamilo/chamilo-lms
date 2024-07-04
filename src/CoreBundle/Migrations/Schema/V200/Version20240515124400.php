@@ -53,8 +53,7 @@ final class Version20240515124400 extends AbstractMigrationChamilo
                     $resourceFile = $resourceFileRepository->findOneBy(['originalName' => $fileName]);
 
                     if ($resourceFile) {
-                        $resourceFileId = $resourceFile->getId();
-                        $resourceNode = $resourceNodeRepository->findOneBy(['resourceFile' => $resourceFileId]);
+                        $resourceNode = $resourceFile->getResourceNode();
 
                         if ($resourceNode) {
                             $downUserId = $download->getDownUserId();
@@ -66,7 +65,7 @@ final class Version20240515124400 extends AbstractMigrationChamilo
                             $firstResourceLink = $resourceNode->getResourceLinks()->first();
                             if ($firstResourceLink && $user) {
                                 $resourceLinkId = $firstResourceLink->getId();
-                                $url = $resourceNode->getResourceFile()->getOriginalName();
+                                $url = $resourceNode->getResourceFiles()->first()->getOriginalName();
                                 echo "Resource link $resourceLinkId Down id {$download->getDownId()} for $url: user ".$user->getFullname()."\n";
 
                                 $this->connection->executeUpdate('UPDATE track_e_downloads SET resource_link_id = ? WHERE down_id = ?', [$resourceLinkId, $download->getDownId()]);

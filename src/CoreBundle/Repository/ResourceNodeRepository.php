@@ -66,8 +66,9 @@ class ResourceNodeRepository extends MaterializedPathRepository
     public function getResourceNodeFileContent(ResourceNode $resourceNode): string
     {
         try {
-            if ($resourceNode->hasResourceFile()) {
-                $resourceFile = $resourceNode->getResourceFile();
+            $resourceFile = $resourceNode->getResourceFiles()->first();
+
+            if ($resourceFile) {
                 $fileName = $this->getFilename($resourceFile);
 
                 return $this->getFileSystem()->read($fileName);
@@ -85,8 +86,9 @@ class ResourceNodeRepository extends MaterializedPathRepository
     public function getResourceNodeFileStream(ResourceNode $resourceNode)
     {
         try {
-            if ($resourceNode->hasResourceFile()) {
-                $resourceFile = $resourceNode->getResourceFile();
+            $resourceFile = $resourceNode->getResourceFiles()->first();
+
+            if ($resourceFile) {
                 $fileName = $this->getFilename($resourceFile);
 
                 return $this->getFileSystem()->readStream($fileName);
@@ -140,7 +142,7 @@ class ResourceNodeRepository extends MaterializedPathRepository
     {
         $qb = $this->createQueryBuilder('node')
             ->select('SUM(file.size) as total')
-            ->innerJoin('node.resourceFile', 'file')
+            ->innerJoin('node.resourceFiles', 'file')
             ->innerJoin('node.resourceLinks', 'l')
             ->where('node.resourceType = :type')
             ->andWhere('node.parent = :parentNode')

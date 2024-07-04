@@ -243,8 +243,8 @@ class ResourceListener
                     ->setOriginalName($uploadedFile->getFilename())
                     ->setFile($uploadedFile)
                 ;
-                $em->persist($resourceFile);
-                $resourceNode->setResourceFile($resourceFile);
+                $resourceNode->addResourceFile($resourceFile);
+                $em->persist($resourceNode);
             }
         }
 

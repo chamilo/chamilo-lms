@@ -228,7 +228,7 @@ class ResourceNodeRepositoryTest extends AbstractApiTest
         ;
         $em->persist($resourceFile);
 
-        $resourceNode->setContent('')->setResourceFile($resourceFile);
+        $resourceNode->setContent('')->addResourceFile($resourceFile);
         $em->persist($resourceNode);
         $em->flush();
 

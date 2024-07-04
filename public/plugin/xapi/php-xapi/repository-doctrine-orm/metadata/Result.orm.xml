@@ -1,0 +1,28 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+        http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="XApi\Repository\Doctrine\Mapping\Result" table="xapi_result">
+        <id name="identifier" type="integer">
+            <generator strategy="AUTO" />
+        </id>
+
+        <field name="hasScore" type="boolean" />
+        <field name="scaled" type="float" nullable="true" />
+        <field name="raw" type="float" nullable="true" />
+        <field name="min" type="float" nullable="true" />
+        <field name="max" type="float" nullable="true" />
+        <field name="success" type="boolean" nullable="true" />
+        <field name="completion" type="boolean" nullable="true" />
+        <field name="response" type="string" nullable="true" />
+        <field name="duration" type="string" nullable="true" />
+
+        <one-to-one field="extensions" target-entity="XApi\Repository\Doctrine\Mapping\Extensions">
+            <cascade>
+                <cascade-all />
+            </cascade>
+            <join-column referenced-column-name="identifier" />
+        </one-to-one>
+    </entity>
+</doctrine-mapping>

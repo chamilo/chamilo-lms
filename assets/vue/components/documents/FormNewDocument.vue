@@ -9,7 +9,8 @@
 
     <BaseTinyEditor
       v-if="
-        (item.resourceNode && item.resourceNode.resourceFile && item.resourceNode.resourceFile.text) || item.newDocument
+        (item.resourceNode && item.resourceNode.firstResourceFile && item.resourceNode.firstResourceFile.text) ||
+        item.newDocument
       "
       v-model="item.contentFile"
       :title="t('Content')"

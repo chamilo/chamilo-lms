@@ -148,9 +148,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $firstResourceLink = $resourceNode->getResourceLinks()->first();
         if ($firstResourceLink && $user) {
             $resourceLinkId = $firstResourceLink->getId();
-            $url = $resourceNode->getResourceFile()->getOriginalName();
+            $url = $resourceNode->getResourceFiles()->first()->getOriginalName();
             $downloadRepository = $entityManager->getRepository(TrackEDownloads::class);
-            $downloadId = $downloadRepository->saveDownload($user->getId(), $resourceLinkId, $url);
+            $downloadRepository->saveDownload($user->getId(), $resourceLinkId, $url);
         }
 
         $cid = (int) $request->query->get('cid');
@@ -236,9 +236,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $firstResourceLink = $resourceNode->getResourceLinks()->first();
             if ($firstResourceLink) {
                 $resourceLinkId = $firstResourceLink->getId();
-                $url = $resourceNode->getResourceFile()->getOriginalName();
+                $url = $resourceNode->getResourceFiles()->first()->getOriginalName();
                 $downloadRepository = $entityManager->getRepository(TrackEDownloads::class);
-                $downloadId = $downloadRepository->saveDownload($user->getId(), $resourceLinkId, $url);
+                $downloadRepository->saveDownload($user->getId(), $resourceLinkId, $url);
             }
 
             // Redirect to download single file.
@@ -251,12 +251,17 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $type = $repo->getResourceType();
 
         $criteria = Criteria::create()
-            ->where(Criteria::expr()->neq('resourceFile', null)) // must have a file
+            ->where(Criteria::expr()->neq('resourceFiles', null)) // must have a file
             ->andWhere(Criteria::expr()->eq('resourceType', $type)) // only download same type
         ;
 
         $qb = $resourceNodeRepo->getChildrenQueryBuilder($resourceNode);
-        $qb->addCriteria($criteria);
+        $qbAlias = $qb->getRootAliases()[0];
+
+        $qb
+            ->leftJoin(sprintf('%s.resourceFiles', $qbAlias), 'resourceFiles') // must have a file
+            ->addCriteria($criteria)
+        ;
 
         /** @var ArrayCollection|ResourceNode[] $children */
         $children = $qb->getQuery()->getResult();
@@ -281,7 +286,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 /** @var ResourceNode $node */
                 foreach ($children as $node) {
                     $stream = $repo->getResourceNodeFileStream($node);
-                    $fileName = $node->getResourceFile()->getOriginalName();
+                    $fileName = $node->getResourceFiles()->first()->getOriginalName();
                     // $fileToDisplay = basename($node->getPathForDisplay());
                     // $fileToDisplay = str_replace($rootNodePath, '', $node->getPathForDisplay());
                     // error_log($fileToDisplay);
@@ -464,13 +469,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->trans('Unauthorised view access to resource')
         );
 
-        $resourceFile = $resourceNode->getResourceFile();
+        $resourceFile = $resourceNode->getResourceFiles()->first();
 
-        if (null === $resourceFile) {
-            throw new NotFoundHttpException($this->trans('File not found for resource'));
+        if (!$resourceFile) {
+            throw $this->createNotFoundException($this->trans('File not found for resource'));
         }
 
-        $fileName = $resourceNode->getResourceFile()->getOriginalName();
+        $fileName = $resourceFile->getOriginalName();
         $mimeType = $resourceFile->getMimeType();
         $resourceNodeRepo = $this->getResourceNodeRepository();
 

@@ -2214,10 +2214,10 @@ class DocumentManager
             'rootOpen' => '<ul id="doc_list" class="list-group lp_resource">',
             'rootClose' => '</ul>',
             //'childOpen' => '<li class="doc_resource lp_resource_element ">',
-            'childOpen' => function ($child) {
+            'childOpen' => function ($child) {;
                 $id = $child['id'];
                 $disableDrag = '';
-                if (!$child['resourceFile']) {
+                if (!$child['resourceFiles']) {
                     $disableDrag = ' disable_drag ';
                 }
 
@@ -2230,12 +2230,12 @@ class DocumentManager
             'childClose' => '</li>',
             'nodeDecorator' => function ($node) use ($icon, $folderIcon) {
                 $disableDrag = '';
-                if (!$node['resourceFile']) {
+                if (!$node['resourceFiles']) {
                     $disableDrag = ' disable_drag ';
                 }
 
                 $link = '<div class="flex flex-row gap-1 h-4 item_data '.$disableDrag.' ">';
-                $file = $node['resourceFile'];
+                $file = $node['resourceFiles'] ? current($node['resourceFiles']) : null;
                 $extension = '';
                 if ($file) {
                     $extension = pathinfo($file['title'], PATHINFO_EXTENSION);
@@ -2243,7 +2243,7 @@ class DocumentManager
 
                 $folder = $folderIcon;
 
-                if ($node['resourceFile']) {
+                if ($node['resourceFiles']) {
                     $link .= '<a class="moved ui-sortable-handle" href="#">';
                     $link .= $icon;
                     $link .= '</a>';
@@ -2272,12 +2272,12 @@ class DocumentManager
             ->from(ResourceNode::class, 'node')
             ->innerJoin('node.resourceType', 'type')
             ->innerJoin('node.resourceLinks', 'links')
-            ->leftJoin('node.resourceFile', 'file')
+            ->innerJoin('node.resourceFiles', 'files')
+            ->addSelect('files')
             ->where('type = :type')
             ->andWhere('links.course = :course')
             ->setParameters(['type' => $type, 'course' => $course])
             ->orderBy('node.parent', 'ASC')
-            ->addSelect('file')
         ;
 
         $sessionId = api_get_session_id();

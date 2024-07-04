@@ -37,8 +37,9 @@ class ResourceNodeListener
      */
     public function preUpdate(ResourceNode $resourceNode, PreUpdateEventArgs $event)
     {
-        if ($resourceNode->hasResourceFile() && $resourceNode->hasEditableTextContent()) {
-            $fileName = $this->resourceNodeRepository->getFilename($resourceNode->getResourceFile());
+        if ($resourceNode->hasEditableTextContent()) {
+            $resourceFile = $resourceNode->getResourceFiles()->first();
+            $fileName = $this->resourceNodeRepository->getFilename($resourceFile);
             if ($fileName) {
                 $content = $resourceNode->getContent();
                 // Skip saving null.

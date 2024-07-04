@@ -346,9 +346,11 @@ class MessageRepositoryTest extends AbstractApiTest
                         '@type' => 'http://schema.org/MediaObject',
                         'resourceNode' => [
                             '@type' => 'ResourceNode',
-                            'resourceFile' => [
-                                '@type' => 'http://schema.org/MediaObject',
-                                '@id' => $resourceFileId,
+                            'resourceFiles' => [
+                                [
+                                    '@type' => 'http://schema.org/MediaObject',
+                                    '@id' => $resourceFileId,
+                                ],
                             ],
                         ],
                     ],

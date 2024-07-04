@@ -3987,7 +3987,7 @@ function getWorkComment(CStudentPublicationComment $commentEntity, array $course
             $filePath = '';
             $deleteUrl = api_get_path(WEB_CODE_PATH).
                 'work/view.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_attachment&comment_id='.$id;
-            $fileName = $commentEntity->getResourceNode()->getResourceFile()->getTitle();
+            $fileName = $commentEntity->getResourceNode()->getResourceFiles()->first()->getTitle();
         }
         $comment['comment'] = $commentEntity->getComment();
         $comment['delete_file_url'] = $deleteUrl;
@@ -4016,10 +4016,7 @@ function deleteCommentFile($id, $courseInfo = [])
     /** @var CStudentPublicationComment $commentEntity */
     $commentEntity = $repo->findOneBy($criteria);
 
-    if ($commentEntity->getResourceNode()->hasResourceFile()) {
-        $file = $commentEntity->getResourceNode()->getResourceFile();
-
-        $commentEntity->getResourceNode()->setResourceFile(null);
+    foreach ($commentEntity->getResourceNode()->getResourceFiles() as $file) {
         $em->remove($file);
         $em->flush();
     }
@@ -5969,7 +5966,7 @@ function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false, 
             $title = $titleCorrection = $studentPublication->getCorrection()->getTitle();
         }
         if ($hasFile) {
-            $title = $studentPublication->getResourceNode()->getResourceFile()->getTitle();
+            $title = $studentPublication->getResourceNode()->getResourceFiles()->first()->getTitle();
         }
 
         $title = str_replace(' ', '_', $title);

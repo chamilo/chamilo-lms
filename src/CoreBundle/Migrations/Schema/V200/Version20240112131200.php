@@ -57,7 +57,7 @@ final class Version20240112131200 extends AbstractMigrationChamilo
 
         if ($schema->hasTable('resource_node')) {
             error_log('Perform the changes in the resource_node table');
-            $this->addSql('ALTER TABLE resource_node CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE resource_file_id resource_file_id INT DEFAULT NULL, CHANGE parent_id parent_id INT DEFAULT NULL;');
+            $this->addSql('ALTER TABLE resource_node CHANGE id id INT AUTO_INCREMENT NOT NULL, CHANGE parent_id parent_id INT DEFAULT NULL;');
         }
 
         if ($schema->hasTable('resource_file')) {

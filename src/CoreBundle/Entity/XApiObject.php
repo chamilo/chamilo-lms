@@ -90,7 +90,7 @@ class XApiObject
     /**
      * @var Collection<int, self>
      */
-    #[ORM\OneToMany(mappedBy: 'group', targetEntity: self::class)]
+    #[ORM\OneToMany(mappedBy: 'group', targetEntity: self::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(referencedColumnName: 'identifier')]
     private Collection $members;
 

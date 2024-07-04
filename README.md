@@ -116,9 +116,24 @@ php bin/console cache:clear
 yarn install
 yarn dev
 ~~~~
+
+Note for developers in pre-alpha stage: the doctrine command will try to update
+your database schema to the expected database schema in a fresh installation.
+This is not always perfect, as Doctrine will take the fastest route to do this.
+For example, if you have a migration to rename a table (which would apply just
+fine to a system in Chamilo 1 being *migrated*), Doctrine might consider that
+the destination table does not exist and the original (which should not be
+there in a new installation) is still there, so it will just drop the old
+table and create a new one, losing all records in that table in the process.
+To avoid this, prefer executing migrations with the following instead.
+```
+php bin/console doctrine:migrations:execute "Chamilo\CoreBundle\Migrations\Schema\V200\Version[date]"
+```
+This will respect the migration logic and do the required data processing.
+
 This will update the JS (yarn) and PHP (composer) dependencies in the public/build folder.
 
-Some times there are conflicts with existing files so to avoid those here are some hints :
+Sometimes there are conflicts with existing files so to avoid those here are some hints :
 - for composer errors you can remove the vendor folder and composer.lock file
 - for yarn erros you can remove yarn.lock .yarn/cache/* node_modules/*
 - when opening Chamilo, it does not load, then you can delete var/cache/*

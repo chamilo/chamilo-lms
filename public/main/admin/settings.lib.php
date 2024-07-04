@@ -1342,7 +1342,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
 {
     global $_configuration, $settings_to_avoid, $convert_byte_to_mega_list;
     $em = Database::getManager();
-    $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS);
 
     $form = new FormValidator(
         'settings',
@@ -1721,7 +1721,7 @@ function searchSetting($search)
     if (empty($search)) {
         return [];
     }
-    $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS);
     $sql = "SELECT * FROM $table_settings_current
             WHERE category <> 'Plugins' ORDER BY id ASC ";
     $result = Database::store_result(Database::query($sql), 'ASSOC');

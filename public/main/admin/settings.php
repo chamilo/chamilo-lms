@@ -30,7 +30,7 @@ $_SESSION['this_section'] = $this_section;
 api_protect_admin_script();
 
 // Database table definitions.
-$table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+$table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS);
 
 // Setting breadcrumbs.
 $interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'admin', 'name' => get_lang('Administration')];

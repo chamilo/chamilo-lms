@@ -14,17 +14,6 @@
         <!--          <h1>Course List</h1>-->
         <!--        </v-flex>-->
         <v-flex lg12>
-          <DataFilter
-            :handle-filter="onSendFilter"
-            :handle-reset="resetFilter"
-          >
-            <CourseFilterForm
-              ref="filterForm"
-              slot="filter"
-              :values="filters"
-            />
-          </DataFilter>
-
           <br />
 
           <v-data-table
@@ -74,7 +63,6 @@ import { mapActions, mapGetters } from "vuex"
 import { mapFields } from "vuex-map-fields"
 import ListMixin from "../../mixins/ListMixin"
 import ActionCell from "../../components/ActionCell.vue"
-import CourseFilterForm from "../../components/course/Filter.vue"
 import DataFilter from "../../components/DataFilter.vue"
 import Toolbar from "../../components/Toolbar.vue"
 

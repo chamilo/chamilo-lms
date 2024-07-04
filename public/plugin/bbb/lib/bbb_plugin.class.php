@@ -239,7 +239,7 @@ class BBBPlugin extends Plugin
      */
     public function uninstall()
     {
-        $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+        $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS);
         $t_options = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
         $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
 

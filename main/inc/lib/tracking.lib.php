@@ -9053,6 +9053,9 @@ class Tracking
 
         $tblTrackCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $tblLpView = Database::get_course_table(TABLE_LP_VIEW);
+        $tblLpItemView = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
+        $tblLp = Database::get_course_table(TABLE_LP_MAIN);
 
         switch ($reportType) {
             case 'time_report':
@@ -9086,10 +9089,11 @@ class Tracking
                     get_lang('TheoreticalTime')
                 ];
                 $extraField = api_get_configuration_value('billing_report_lp_extra_field');
-                $sql = "SELECT lv.user_id, lv.session_id, lv.c_id, lv.lp_id, liv.start_time
+                $sql = "SELECT lv.user_id, lv.session_id, lv.c_id, lv.lp_id, liv.start_time, l.name AS lp_name
                     FROM $tblLpView lv
-                    INNER JOIN c_lp_item_view liv ON lv.iid = liv.lp_view_id
-                    INNER JOIN c_lp_item li ON li.iid = liv.lp_item_id
+                    INNER JOIN $tblLpItemView liv ON lv.iid = liv.lp_view_id
+                    INNER JOIN $tblLpItem li ON li.iid = liv.lp_item_id
+                    INNER JOIN $tblLp l ON l.id = li.lp_id
                     WHERE lv.user_id IN (" . implode(',', $selectedUserList) . ")
                       AND liv.start_time >= UNIX_TIMESTAMP('$startDate')
                       AND liv.start_time <= UNIX_TIMESTAMP('$endDate')
@@ -9127,7 +9131,7 @@ class Tracking
                     $user['firstname'],
                     $session['name'],
                     $course['title'],
-                    $row['lp_id'],
+                    $row['lp_name'],
                     date('Y-m-d H:i:s', $row['start_time']),
                     $extraFieldValue['value'] ?? '',
                 ];

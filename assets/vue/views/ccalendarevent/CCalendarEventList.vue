@@ -69,7 +69,7 @@
         />
 
         <BaseButton
-          v-if="showDeleteButton"
+          v-if="allowToEdit && showDeleteButton"
           :label="t('Delete')"
           icon="delete"
           type="danger"
@@ -149,6 +149,7 @@ import { useCalendarActionButtons } from "../../composables/calendar/calendarAct
 import { useCalendarEvent } from "../../composables/calendar/calendarEvent"
 import resourceLinkService from "../../services/resourceLinkService"
 import { useSecurityStore } from "../../store/securityStore"
+import { useCourseSettings } from "../../store/courseSettingStore"
 
 const store = useStore()
 const securityStore = useSecurityStore()
@@ -174,6 +175,23 @@ const { t } = useI18n()
 const { appLocale } = useLocale()
 const route = useRoute()
 const isGlobal = ref(route.query.type === "global")
+
+const courseSettingsStore = useCourseSettings()
+const allowUserEditAgenda = ref(false);
+
+watch([course, session], async ([newCourse, newSession]) => {
+  if (newCourse && newCourse.id) {
+    const sessionId = newSession ? newSession.id : null;
+    await courseSettingsStore.loadCourseSettings(newCourse.id, sessionId);
+    const setting = courseSettingsStore.getSetting("allow_user_edit_agenda");
+    allowUserEditAgenda.value = setting === "1";
+    if (allowUserEditAgenda.value) {
+      showAddButton.value = true;
+    }
+  } else {
+    allowUserEditAgenda.value = false;
+  }
+}, { immediate: true });
 
 let currentEvent = null
 
@@ -265,6 +283,7 @@ const calendarOptions = ref({
     let event = eventClickInfo.event.toPlainObject()
 
     if (event.extendedProps["@type"] && event.extendedProps["@type"] === "Session") {
+      allowToEdit.value = allowUserEditAgenda.value && (event.extendedProps.resourceNode.creator.id === securityStore.user.id)
       sessionState.sessionAsEvent = event
       sessionState.showSessionDialog = true
 
@@ -278,7 +297,7 @@ const calendarOptions = ref({
     item.value["endDate"] = event.end
     item.value["parentResourceNodeId"] = event.extendedProps.resourceNode.creator.id
 
-    allowToEdit.value = isEditableByUser(item.value, securityStore.user.id)
+    allowToEdit.value = (isEditableByUser(item.value, securityStore.user.id) || allowUserEditAgenda.value) && (event.extendedProps.resourceNode.creator.id === securityStore.user.id)
     allowToSubscribe.value = !allowToEdit.value && allowSubscribeToEvent(item.value)
     allowToUnsubscribe.value = !allowToEdit.value && allowUnsubscribeToEvent(item.value, securityStore.user.id)
 
@@ -325,8 +344,8 @@ const allowAction = (eventType) => {
   return contextRules[currentContext.value].includes(eventType)
 }
 
-const showEditButton = computed(() => allowAction(item.value.type))
-const showDeleteButton = computed(() => allowAction(item.value.type))
+const showEditButton = computed(() => allowToEdit.value && allowAction(item.value.type));
+const showDeleteButton = computed(() => (isEditableByUser(item.value, securityStore.user.id) || allowUserEditAgenda.value) && allowAction(item.value.type));
 
 const cal = ref(null)
 

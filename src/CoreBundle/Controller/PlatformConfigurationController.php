@@ -135,6 +135,7 @@ class PlatformConfigurationController extends AbstractController
         $courseSettingsManager->setCourse($course);
         $settings = [
             'show_course_in_user_language' => $courseSettingsManager->getCourseSettingValue('show_course_in_user_language'),
+            'allow_user_edit_agenda' => $courseSettingsManager->getCourseSettingValue('allow_user_edit_agenda'),
         ];
 
         return new JsonResponse(['settings' => $settings]);

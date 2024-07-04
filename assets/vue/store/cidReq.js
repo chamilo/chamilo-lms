@@ -67,7 +67,7 @@ export const useCidReqStore = defineStore("cidReq", () => {
     isCourseLoaded.value = false
 
     const coursePromise = courseService.find(courseIri, { sid })
-    const courseSettingsPromise = courseSettingsStore.loadCourseSettings(cId)
+    const courseSettingsPromise = courseSettingsStore.loadCourseSettings(cId, sid)
 
     try {
       await Promise.all([coursePromise, courseSettingsPromise]).then((responses) => (course.value = responses[0]))

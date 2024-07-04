@@ -179,11 +179,12 @@ watch(
 
 async function asyncFind(query) {
   const { items } = await userService.findBySearchTerm(query)
-
-  return items.map((member) => ({
-    name: member.fullName,
-    value: member["@id"],
-  }))
+  return items
+    .filter(member => member.active === 1)
+    .map(member => ({
+      name: member.fullName,
+      value: member["@id"],
+    }))
 }
 
 function onUploadSuccess({ response }) {

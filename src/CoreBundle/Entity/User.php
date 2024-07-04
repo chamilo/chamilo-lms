@@ -643,6 +643,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[ORM\Column(name: 'expiration_date', type: 'datetime', unique: false, nullable: true)]
     protected ?DateTime $expirationDate = null;
 
+    #[Groups(['user:read', 'user_json:read'])]
     #[ORM\Column(name: 'active', type: 'integer')]
     protected int $active;
 

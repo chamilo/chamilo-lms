@@ -714,7 +714,9 @@ class Plugin
      */
     public function addTab($tabName, $url, $userFilter = null)
     {
-        $sql = "SELECT * FROM settings
+        $table = Database::get_main_table(TABLE_MAIN_SETTINGS);
+        $sql = "SELECT *
+                FROM $table
                 WHERE
                     variable = 'show_tabs' AND
                     subkey LIKE 'custom_tab_%'";

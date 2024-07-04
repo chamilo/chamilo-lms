@@ -80,7 +80,7 @@
       :rows="initialRowsPerPage"
       :rows-per-page-options="[10, 20, 50]"
       :total-records="totalItems"
-      :value="items"
+      :value="filteredItems"
       current-page-report-template="{first} to {last} of {totalRecords}"
       data-key="@id"
       lazy
@@ -329,6 +329,10 @@ const rowClass = (data) => {
 
 let fetchPayload = {}
 
+const filteredItems = computed(() => {
+  return items.value.filter(item => item.status !== MESSAGE_STATUS_DELETED)
+})
+
 function loadMessages(reset = true) {
   if (reset) {
     store.dispatch("message/resetList")
@@ -448,16 +452,20 @@ function findMyReceiver(message) {
 }
 
 async function deleteMessage(message) {
-  if (message.sender["@id"] === securityStore.user["@id"]) {
-    message.status = MESSAGE_STATUS_DELETED
-
-    await store.dispatch("message/update", message)
-  } else {
-    const myReceiver = findMyReceiver(message)
-
-    if (myReceiver) {
-      await store.dispatch("messagereluser/del", myReceiver)
+  try {
+    if (message.sender["@id"] === securityStore.user["@id"]) {
+      message.status = MESSAGE_STATUS_DELETED
+      await store.dispatch("message/update", message)
+    } else {
+      const myReceiver = findMyReceiver(message)
+      if (myReceiver) {
+        await store.dispatch("messagereluser/del", myReceiver)
+      }
     }
+    notification.showSuccessNotification(t("Message deleted"))
+    loadMessages()
+  } catch (e) {
+    notification.showErrorNotification(t("Error deleting message"))
   }
 }
 
@@ -467,10 +475,6 @@ function showDlgConfirmDeleteSingle({ data }) {
     message: t(`Are you sure you want to delete "${data.title}"?`),
     accept: async () => {
       await deleteMessage(data)
-
-      loadMessages()
-
-      notification.showSuccessNotification(t("Message deleted"))
     },
   })
 }
@@ -483,12 +487,8 @@ function showDlgConfirmDeleteMultiple() {
       for (const message of selectedItems.value) {
         await deleteMessage(message)
       }
-
-      loadMessages()
-
-      notification.showSuccessNotification(t("Messages deleted"))
-
       selectedItems.value = []
+      loadMessages()
     },
   })
 }

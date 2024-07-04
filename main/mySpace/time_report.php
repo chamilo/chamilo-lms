@@ -35,14 +35,42 @@ if (api_is_platform_admin()) {
     );
 }
 
+$formValidator->addElement('checkbox', 'select_all_users', get_lang('SelectAllUsers'), null, ['id' => 'select_all_users']);
+$userOptions = [];
 foreach ($userList as $user) {
     $userOptions[$user['user_id']] = $user['lastname'].' '.$user['firstname'];
 }
-
 $formValidator->addElement('select', 'users', get_lang('SelectUsers'), $userOptions, [
     'multiple' => 'multiple',
-    'class' => 'select2'
+    'id' => 'user_selector'
 ]);
+
+$htmlHeadXtra[] = '
+<script>
+    $(function() {
+        var selectAllCheckbox = $("#select_all_users");
+        var userSelector = $("#user_selector");
+
+        userSelector.select2({
+            placeholder: "' . get_lang('SelectAnOption2') . '",
+            allowClear: true,
+            width: "100%"
+        });
+
+        selectAllCheckbox.on("change", function() {
+            if (this.checked) {
+                var allOptions = userSelector.find("option");
+                var allValues = [];
+                allOptions.each(function() {
+                    allValues.push($(this).val());
+                });
+                userSelector.val(allValues).trigger("change");
+            } else {
+                userSelector.val(null).trigger("change");
+            }
+        });
+    });
+</script>';
 
 // Date selectors
 $formValidator->addDatePicker('start_date', get_lang('StartDate'));
@@ -83,7 +111,7 @@ if ($formValidator->validate()) {
             $rows = $data['rows'];
             array_unshift($rows, $headers);
             $fileName = get_lang('Export').'-'.$reportTypeValues[$reportType].'_'.api_get_local_time();
-            Export::arrayToXls($rows, $fileName);
+            Export::arrayToCsv($rows, $fileName);
         }
     }
 }

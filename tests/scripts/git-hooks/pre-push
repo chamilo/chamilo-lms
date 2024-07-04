@@ -42,7 +42,7 @@ do
         fi
 
         # Run coding standards check over modified files.
-        modified_files=`git diff --diff-filter=d --name-only "$range"`
+        modified_files=$(git diff --diff-filter=d --name-only "$range" | grep -v '\.\(jpg\|jpeg\|png\|gif\|bmp\|svg\|webp\)$')
         if [ -n "$modified_files" ]
         then
             $composer phpcs $modified_files

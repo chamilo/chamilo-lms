@@ -110,17 +110,13 @@
         style="min-width: 8rem"
       >
         <template #body="{ data }">
-          <router-link
-            v-slot="{ navigate }"
-            :to="'/main/session/resume_session.php?id_session=' + data.id"
+          <BaseAppLink
+            :url="'/main/session/resume_session.php?id_session=' + data.id"
+            class="p-button-sm"
           >
-            <Button
-              :label="$t('Go to the session')"
-              class="p-button-sm"
-              icon="pi pi-external-link"
-              @click="navigate"
-            />
-          </router-link>
+            <BaseIcon icon="link-external" />
+            {{ t("Go to the session") }}
+          </BaseAppLink>
         </template>
       </Column>
       <template #expansion="item">
@@ -182,17 +178,13 @@
               style="min-width: 8rem"
             >
               <template #body="{ data }">
-                <router-link
-                  v-slot="{ navigate }"
-                  :to="{ name: 'CourseHome', params: { id: data.course.id } }"
-                >
-                  <Button
-                    :label="$t('Go to the course')"
+                <BaseAppLink :to="{ name: 'CourseHome', params: { id: data.course.id } }">
+                  <BaseIcon
+                    icon="link-external"
                     class="p-button-sm"
-                    icon="pi pi-external-link"
-                    @click="navigate"
                   />
-                </router-link>
+                  {{ t("Go to the course") }}
+                </BaseAppLink>
               </template>
             </Column>
           </DataTable>
@@ -211,10 +203,14 @@ import { FilterMatchMode } from "primevue/api"
 import Button from "primevue/button"
 import DataTable from "primevue/datatable"
 import Column from "primevue/column"
+import BaseAppLink from "../../components/basecomponents/BaseAppLink.vue"
+import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 
 export default {
   name: "SessionCatalog",
   components: {
+    BaseIcon,
+    BaseAppLink,
     DataTable,
     Column,
     Button,

@@ -33,12 +33,7 @@
     }
 
     &__badge {
-      @apply bg-error text-white rounded-full text-tiny font-semibold absolute;
-      height: 15px;
-      line-height: 14px;
-      right: -3px;
-      top: -4px;
-      width: 15px;
+      @apply bg-error text-white rounded-full text-tiny font-semibold absolute text-center h-4 w-4 -top-1 -right-1;
     }
 
     &--unread {

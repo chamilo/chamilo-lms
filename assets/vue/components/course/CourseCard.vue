@@ -6,7 +6,7 @@
         :src="course.illustrationUrl"
         :alt="course.title"
       />
-      <router-link
+      <BaseAppLink
         v-else
         :to="{ name: 'CourseHome', params: { id: course._id }, query: { sid: sessionId } }"
         class="course-card__home-link"
@@ -15,7 +15,7 @@
           :src="course.illustrationUrl"
           :alt="course.title"
         />
-      </router-link>
+      </BaseAppLink>
     </template>
     <template #title>
       <div class="course-card__title">
@@ -27,7 +27,7 @@
           />
           {{ course.title }}
         </div>
-        <router-link
+        <BaseAppLink
           v-else
           :to="{ name: 'CourseHome', params: { id: course._id }, query: { sid: sessionId } }"
           class="course-card__home-link"
@@ -38,7 +38,7 @@
             v-text="session.title"
           />
           {{ course.title }}
-        </router-link>
+        </BaseAppLink>
 
         <div
           v-if="sessionDisplayDate"
@@ -59,6 +59,7 @@ import TeacherBar from "../TeacherBar"
 import { computed } from "vue"
 import { isEmpty } from "lodash"
 import { useFormatDate } from "../../composables/formatDate"
+import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 
 const { abbreviatedDatetime } = useFormatDate()
 

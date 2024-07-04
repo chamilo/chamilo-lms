@@ -11,16 +11,16 @@
       class="menu-list"
     >
       <li :class="['menu-item', { active: isActive('/social') }]">
-        <router-link to="/social">
+        <BaseAppLink to="/social">
           <i
             aria-hidden="true"
             class="mdi mdi-home"
           ></i>
           {{ t("Home") }}
-        </router-link>
+        </BaseAppLink>
       </li>
       <li :class="['menu-item', { active: isActive('/resources/messages') }]">
-        <router-link to="/resources/messages">
+        <BaseAppLink to="/resources/messages">
           <i
             aria-hidden="true"
             class="mdi mdi-email"
@@ -31,10 +31,10 @@
             class="badge badge-warning"
             >{{ unreadMessagesCount }}</span
           >
-        </router-link>
+        </BaseAppLink>
       </li>
       <li :class="['menu-item', { active: isActive('/resources/friends/invitations') }]">
-        <router-link :to="{ name: 'Invitations' }">
+        <BaseAppLink :to="{ name: 'Invitations' }">
           <i
             aria-hidden="true"
             class="mdi mdi-mailbox"
@@ -45,16 +45,16 @@
             class="badge badge-warning"
             >{{ invitationsCount }}</span
           >
-        </router-link>
+        </BaseAppLink>
       </li>
       <li :class="['menu-item', { active: isActive('/resources/friends') }]">
-        <router-link :to="{ name: 'UserRelUserList' }">
+        <BaseAppLink :to="{ name: 'UserRelUserList' }">
           <i
             aria-hidden="true"
             class="mdi mdi-handshake"
           ></i>
           {{ t("My friends") }}
-        </router-link>
+        </BaseAppLink>
       </li>
       <li :class="['menu-item', { active: isActive(groupLink) }]">
         <a
@@ -68,7 +68,7 @@
           ></i>
           {{ t("Social groups") }}
         </a>
-        <router-link
+        <BaseAppLink
           v-else
           :to="groupLink"
         >
@@ -77,40 +77,40 @@
             class="mdi mdi-group"
           ></i>
           {{ t("Social groups") }}
-        </router-link>
+        </BaseAppLink>
       </li>
       <li :class="['menu-item', { active: isActive('/social/search') }]">
-        <router-link to="/social/search">
+        <BaseAppLink to="/social/search">
           <i
             aria-hidden="true"
             class="mdi mdi-magnify"
           ></i>
           {{ t("Search") }}
-        </router-link>
+        </BaseAppLink>
       </li>
       <li :class="['menu-item', { active: isActive('/resources/personal_files') }]">
-        <router-link :to="{ name: 'PersonalFileList', params: { node: currentNodeId } }">
+        <BaseAppLink :to="{ name: 'PersonalFileList', params: { node: currentNodeId } }">
           <i class="mdi mdi-briefcase"></i>
           {{ t("My files") }}
-        </router-link>
+        </BaseAppLink>
       </li>
       <li :class="['menu-item', { active: isActive('/resources/users/personal_data') }]">
-        <router-link to="/resources/users/personal_data">
+        <BaseAppLink to="/resources/users/personal_data">
           <i
             aria-hidden="true"
             class="mdi mdi-account"
           ></i>
           {{ t("Personal data") }}
-        </router-link>
+        </BaseAppLink>
       </li>
       <li :class="['menu-item', { active: isActive('/social', 'promoted') }]">
-        <router-link :to="{ path: '/social', query: { filterType: 'promoted' } }">
+        <BaseAppLink :to="{ path: '/social', query: { filterType: 'promoted' } }">
           <i
             aria-hidden="true"
             class="mdi mdi-star"
           ></i>
           {{ t("Promoted messages") }}
-        </router-link>
+        </BaseAppLink>
       </li>
     </ul>
     <ul
@@ -118,13 +118,13 @@
       class="menu-list"
     >
       <li class="menu-item">
-        <router-link to="/social">
+        <BaseAppLink to="/social">
           <i
             aria-hidden="true"
             class="mdi mdi-home"
           ></i>
           {{ t("Home") }}
-        </router-link>
+        </BaseAppLink>
       </li>
       <li class="menu-item">
         <a
@@ -152,6 +152,7 @@ import { computed, inject, onMounted, ref, watchEffect } from "vue"
 import { useSecurityStore } from "../../store/securityStore"
 import axios from "axios"
 import { usePlatformConfig } from "../../store/platformConfig"
+import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 
 const { t } = useI18n()
 const route = useRoute()

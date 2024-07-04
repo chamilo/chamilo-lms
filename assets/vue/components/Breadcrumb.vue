@@ -5,31 +5,13 @@
   >
     <Breadcrumb :model="itemList">
       <template #item="{ item, props }">
-        <router-link
-          v-if="item.route"
-          v-slot="{ href, navigate }"
+        <BaseAppLink
           :to="item.route"
-          custom
-        >
-          <a
-            :href="href"
-            v-bind="props.action"
-            @click="navigate"
-          >
-            <span :class="[item.icon]" />
-            <span
-              v-if="item.label"
-              v-text="item.label"
-            />
-          </a>
-        </router-link>
-        <a
-          v-else
-          :href="item.url !== '#' ? item.url : undefined"
+          :url="item.url"
           v-bind="props.action"
         >
-          <span>{{ item.label }}</span>
-        </a>
+          {{ item.label }}
+        </BaseAppLink>
       </template>
 
       <template #separator> /</template>
@@ -49,6 +31,7 @@ import { useI18n } from "vue-i18n"
 import Breadcrumb from "primevue/breadcrumb"
 import { useCidReqStore } from "../store/cidReq"
 import { storeToRefs } from "pinia"
+import BaseAppLink from "./basecomponents/BaseAppLink.vue"
 
 const legacyItems = ref(window.breadcrumb)
 

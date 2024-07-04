@@ -1,6 +1,6 @@
 <template>
   <div class="flex">
-    <router-link
+    <BaseAppLink
       v-for="(tab, index) in tabs"
       :key="tab.title"
       class="px-4 py-2 font-semibold"
@@ -14,7 +14,7 @@
       :aria-selected="selectedTab === index ? 'true' : 'false'"
     >
       {{ tab.title }}
-    </router-link>
+    </BaseAppLink>
   </div>
 </template>
 
@@ -23,6 +23,9 @@
  * Component that will render a tab interface WITHOUT content. Every tab should be a router link. So, when user
  * change tab the route of the url will change
  */
+
+import BaseAppLink from "./BaseAppLink.vue"
+
 defineProps({
   tabs: {
     type: Array,

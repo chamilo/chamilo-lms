@@ -4,27 +4,32 @@
       <PlatformLogo />
     </div>
     <div class="app-topbar__items">
-      <PrimeButton
-        v-if="'false' !== platformConfigStore.getSetting('display.show_link_ticket_notification')"
-        :icon="chamiloIconToClass['ticket']"
+      <BaseAppLink
+        v-if="'false' === platformConfigStore.getSetting('display.show_link_ticket_notification')"
+        :url="ticketUrl"
         class="item-button"
-        icon-class="item-button__icon"
-        link
-        unstyled
-        @click="btnTicketsOnClick"
-      />
+      >
+        <BaseIcon
+          icon="ticket"
+          class="item-button__icon"
+        />
+      </BaseAppLink>
 
-      <PrimeButton
-        :badge="btnInboxBadge"
-        :class="{ 'item-button--unread': !!btnInboxBadge }"
-        :icon="chamiloIconToClass['inbox']"
-        badge-class="item-button__badge"
+      <BaseAppLink
+        :to="{ name: 'MessageList' }"
         class="item-button"
-        icon-class="item-button__icon"
-        link
-        unstyled
-        @click="btnInboxOnClick"
-      />
+        :class="{ 'item-button--unread': !!btnInboxBadge }"
+      >
+        <BaseIcon
+          icon="inbox"
+          class="item-button__icon"
+        />
+        <span
+          v-if="btnInboxBadge"
+          class="item-button__badge"
+          v-text="btnInboxBadge"
+        />
+      </BaseAppLink>
     </div>
     <div class="app-topbar__end">
       <Avatar
@@ -54,13 +59,15 @@ import Avatar from "primevue/avatar"
 import Menu from "primevue/menu"
 import PrimeButton from "primevue/button"
 import { usePlatformConfig } from "../../store/platformConfig"
-import { chamiloIconToClass } from "../basecomponents/ChamiloIcons"
 import { useCidReq } from "../../composables/cidReq"
 import { useMessageRelUserStore } from "../../store/messageRelUserStore"
 
 import { useNotification } from "../../composables/notification"
 import { useI18n } from "vue-i18n"
 import PlatformLogo from "./PlatformLogo.vue"
+import BaseAppLink from "../basecomponents/BaseAppLink.vue"
+import BaseIcon from "../basecomponents/BaseIcon.vue"
+import { useCidReqStore } from "../../store/cidReq"
 
 const { t } = useI18n()
 
@@ -77,14 +84,17 @@ const router = useRouter()
 const platformConfigStore = usePlatformConfig()
 const messageRelUserStore = useMessageRelUserStore()
 const notification = useNotification()
+const cidReqStore = useCidReqStore()
 
-const btnTicketsOnClick = () => {
-  const { cid, sid, gid } = useCidReq()
+const ticketUrl = computed(() => {
+  const searchParms = new URLSearchParams()
+  searchParms.append("project_id", "1")
+  searchParms.append("cid", cidReqStore.course?.id ?? 0)
+  searchParms.append("sid", cidReqStore.session?.id ?? 0)
+  searchParms.append("gid", cidReqStore.group?.id ?? 0)
 
-  window.location = window.location.origin + `/main/ticket/tickets.php?project_id=1&cid=${cid}&sid=${sid}&gid=${gid}`
-}
-
-const btnInboxOnClick = async () => await router.push({ name: "MessageList" })
+  return "/main/ticket/tickets.php?" + searchParms.toString()
+})
 
 const elUserSubmenu = ref(null)
 const userSubmenuItems = computed(() => [
@@ -93,7 +103,7 @@ const userSubmenuItems = computed(() => [
     items: [
       {
         label: t("My profile"),
-        command: async () => await router.push({ name: "AccountHome" }),
+        url: router.resolve({ name: "AccountHome" }).href,
       },
       {
         label: t("My General Certificate"),

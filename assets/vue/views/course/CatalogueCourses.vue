@@ -134,7 +134,7 @@
         style="min-width: 8rem"
       >
         <template #body="{ data }">
-          <router-link
+          <BaseAppLink
             v-slot="{ navigate }"
             :to="{ name: 'CourseHome', params: { id: data.id } }"
           >
@@ -144,7 +144,7 @@
               icon="pi pi-external-link"
               @click="navigate"
             />
-          </router-link>
+          </BaseAppLink>
         </template>
       </Column>
       <template #footer>
@@ -163,6 +163,7 @@ import DataTable from "primevue/datatable"
 import Column from "primevue/column"
 import Rating from "primevue/rating"
 import TeacherBar from "../../components/TeacherBar.vue"
+import BaseAppLink from "../../components/basecomponents/BaseAppLink.vue"
 
 const status = ref(null)
 const courses = ref([])

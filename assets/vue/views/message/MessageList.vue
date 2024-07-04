@@ -165,12 +165,12 @@
         field="title"
       >
         <template #body="slotProps">
-          <router-link
+          <BaseAppLink
             class="text-primary"
             :to="{ name: 'MessageShow', query: { id: slotProps.data['@id'] } }"
           >
             {{ slotProps.data.title }}
-          </router-link>
+          </BaseAppLink>
 
           <BaseTag
             v-for="tag in findMyReceiver(slotProps.data)?.tags"
@@ -225,6 +225,7 @@ import { useSecurityStore } from "../../store/securityStore"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import InputGroup from "primevue/inputgroup"
 import InputText from "primevue/inputtext"
+import BaseAppLink from "../../components/basecomponents/BaseAppLink.vue"
 
 const route = useRoute()
 const router = useRouter()

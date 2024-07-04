@@ -46,35 +46,16 @@
             role="menuitem"
           >
             <div class="p-menuitem-content">
-              <router-link
-                v-if="item.route"
-                v-slot="{ href, navigate }"
+              <BaseAppLink
                 :to="item.route"
-                custom
-              >
-                <a
-                  :href="href"
-                  class="p-menuitem-link"
-                  v-bind="props.action"
-                  @click="navigate"
-                >
-                  <span
-                    class="p-menuitem-text"
-                    v-text="item.label"
-                  />
-                </a>
-              </router-link>
-              <a
-                v-else-if="item.url"
-                :href="item.url"
+                :url="item.url"
                 class="p-menuitem-link"
-                v-bind="props.action"
               >
                 <span
                   class="p-menuitem-text"
                   v-text="item.label"
                 />
-              </a>
+              </BaseAppLink>
             </div>
           </li>
         </ul>
@@ -95,6 +76,7 @@ import { useI18n } from "vue-i18n"
 import BaseInputGroup from "../basecomponents/BaseInputGroup.vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import AdminBlockExtraContent from "./AdminBlockExtraContent.vue"
+import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 
 const { t } = useI18n()
 

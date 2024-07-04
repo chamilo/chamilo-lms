@@ -1,49 +1,28 @@
 <template>
   <div class="course-tool">
-    <router-link
-      v-if="tool.to"
+    <BaseAppLink
       :aria-labelledby="`course-tool-${tool.iid}`"
+      :class="cardCustomClass"
       :to="tool.to"
+      :url="tool.url"
       class="course-tool__link hover:primary-gradient"
-      :class="cardCustomClass"
     >
       <span
         :class="tool.tool.icon + ' ' + iconCustomClass"
         aria-hidden="true"
         class="course-tool__icon mdi"
       />
-    </router-link>
-    <a
-      v-else
-      :aria-labelledby="`course-tool-${tool.iid}`"
-      :href="tool.url"
-      class="course-tool__link"
-      :class="cardCustomClass"
-    >
-      <span
-        :class="tool.tool.icon + ' ' + iconCustomClass"
-        aria-hidden="true"
-        class="course-tool__icon mdi"
-      />
-    </a>
+    </BaseAppLink>
 
-    <router-link
-      v-if="tool.to"
+    <BaseAppLink
       :id="`course-tool-${tool.iid}`"
       :class="titleCustomClass"
       :to="tool.to"
+      :url="tool.url"
       class="course-tool__title"
     >
       {{ tool.tool.titleToShow }}
-    </router-link>
-    <a
-      v-else
-      :id="`course-tool-${tool.iid}`"
-      v-t="tool.tool.titleToShow"
-      :href="tool.url"
-      class="course-tool__title"
-      :class="titleCustomClass"
-    />
+    </BaseAppLink>
 
     <div class="course-tool__options">
       <button
@@ -96,6 +75,7 @@ import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../../store/cidReq"
+import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 
 const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()

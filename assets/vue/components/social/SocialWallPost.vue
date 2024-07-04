@@ -14,19 +14,19 @@
 
         <div class="flex flex-col">
           <div v-if="null === post.userReceiver || post.sender['@id'] === post.userReceiver['@id']">
-            <router-link :to="{ name: 'SocialWall', query: { id: post.sender['@id'] } }">
+            <BaseAppLink :to="{ name: 'SocialWall', query: { id: post.sender['@id'] } }">
               {{ post.sender.fullName }}
-            </router-link>
+            </BaseAppLink>
           </div>
 
           <div v-else>
-            <router-link :to="{ name: 'SocialWall', query: { id: post.sender['@id'] } }">
+            <BaseAppLink :to="{ name: 'SocialWall', query: { id: post.sender['@id'] } }">
               {{ post.sender.fullName }}
-            </router-link>
+            </BaseAppLink>
             &raquo;
-            <router-link :to="{ name: 'SocialWall', query: { id: post.userReceiver['@id'] } }">
+            <BaseAppLink :to="{ name: 'SocialWall', query: { id: post.userReceiver['@id'] } }">
               {{ post.userReceiver.fullName }}
-            </router-link>
+            </BaseAppLink>
           </div>
 
           <small>
@@ -102,6 +102,7 @@ import BaseCard from "../basecomponents/BaseCard.vue"
 import { SOCIAL_TYPE_PROMOTED_MESSAGE } from "./constants"
 import { useFormatDate } from "../../composables/formatDate"
 import { useSecurityStore } from "../../store/securityStore"
+import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 
 const props = defineProps({
   post: {

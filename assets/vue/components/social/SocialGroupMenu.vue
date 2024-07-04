@@ -11,31 +11,31 @@
       class="menu-list"
     >
       <li class="menu-item">
-        <router-link to="/social">
+        <BaseAppLink to="/social">
           <i
             class="mdi mdi-home"
             aria-hidden="true"
           ></i>
           {{ t("Home") }}
-        </router-link>
+        </BaseAppLink>
       </li>
       <li class="menu-item">
-        <router-link :to="{ name: '', params: { group_id: groupInfo.id } }">
+        <BaseAppLink :to="{ name: '', params: { group_id: groupInfo.id } }">
           <i
             class="mdi mdi-account-multiple-outline"
             aria-hidden="true"
           ></i>
           {{ t("Waiting list") }}
-        </router-link>
+        </BaseAppLink>
       </li>
       <li class="menu-item">
-        <router-link :to="{ name: 'UserGroupInvite', params: { group_id: groupInfo.id } }">
+        <BaseAppLink :to="{ name: 'UserGroupInvite', params: { group_id: groupInfo.id } }">
           <i
             class="mdi mdi-account-plus"
             aria-hidden="true"
           ></i>
           {{ t("Invite friends") }}
-        </router-link>
+        </BaseAppLink>
       </li>
       <li
         v-if="groupInfo.isAllowedToLeave"
@@ -52,13 +52,13 @@
     </ul>
     <ul v-else>
       <li class="menu-item">
-        <router-link to="/social">
+        <BaseAppLink to="/social">
           <i
             class="mdi mdi-home"
             aria-hidden="true"
           ></i>
           {{ t("Home") }}
-        </router-link>
+        </BaseAppLink>
       </li>
     </ul>
   </BaseCard>
@@ -72,6 +72,7 @@ import { useSecurityStore } from "../../store/securityStore"
 import axios from "axios"
 import { useNotification } from "../../composables/notification"
 import { useSocialInfo } from "../../composables/useSocialInfo"
+import BaseAppLink from "../basecomponents/BaseAppLink.vue"
 
 const { t } = useI18n()
 const route = useRoute()

@@ -95,8 +95,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $resourceNode = $resource->getResourceNode();
         $resourceName = $resource->getResourceName();
 
-        if ($resourceNode->hasResourceFile()) {
-            $resourceFile = $resourceNode->getResourceFile();
+        foreach ($resourceNode->getResourceFiles() as $resourceFile) {
             if (null !== $resourceFile) {
                 $originalName = $resourceFile->getOriginalName();
                 $originalExtension = pathinfo($originalName, PATHINFO_EXTENSION);
@@ -236,20 +235,16 @@ abstract class ResourceRepository extends ServiceEntityRepository
             throw new LogicException('Resource node is null');
         }
 
-        $resourceFile = $resourceNode->getResourceFile();
-        if (null === $resourceFile) {
-            $resourceFile = new ResourceFile();
-        }
-
         $em = $this->getEntityManager();
+
+        $resourceFile = new ResourceFile();
         $resourceFile
             ->setFile($file)
             ->setDescription($description)
             ->setTitle($resource->getResourceName())
             ->setResourceNode($resourceNode)
         ;
-        $em->persist($resourceFile);
-        $resourceNode->setResourceFile($resourceFile);
+        $resourceNode->addResourceFile($resourceFile);
         $em->persist($resourceNode);
 
         if ($flush) {
@@ -371,7 +366,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->innerJoin('resource.resourceNode', 'node')
             ->innerJoin('node.resourceLinks', 'links')
             ->innerJoin('node.resourceType', 'type')
-            ->leftJoin('node.resourceFile', 'file')
+            ->leftJoin('node.resourceFiles', 'file')
             ->where('type.title = :type')
             ->setParameter('type', $resourceTypeName, Types::STRING)
             ->addSelect('node')
@@ -488,7 +483,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->innerJoin('resource.resourceNode', 'node')
         //    ->innerJoin('node.creator', 'userCreator')
             ->leftJoin('node.resourceLinks', 'links')
-//            ->leftJoin('node.resourceFile', 'file')
             ->where('node.id = :id')
             ->setParameters([
                 'id' => $resourceNodeId,
@@ -503,8 +497,8 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $em = $this->getEntityManager();
         $children = $resource->getResourceNode()->getChildren();
         foreach ($children as $child) {
-            if ($child->hasResourceFile()) {
-                $em->remove($child->getResourceFile());
+            foreach ($child->getResourceFiles() as $resourceFile) {
+                $em->remove($resourceFile);
             }
             $resourceNode = $this->getResourceFromResourceNode($child->getId());
             if (null !== $resourceNode) {
@@ -572,7 +566,9 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $resourceNode = $resource->getResourceNode();
         if ($resourceNode->hasResourceFile()) {
             $resourceNode->setContent($content);
-            $resourceNode->getResourceFile()->setSize(\strlen($content));
+            foreach ($resourceNode->getResourceFiles() as $resourceFile) {
+                $resourceFile->setSize(\strlen($content));
+            }
 
             return true;
         }
@@ -587,20 +583,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
             $resourceNode = $resource->getResourceNode();
             $resourceNode->setTitle($title);
         }
-
-        // if ($resourceNode->hasResourceFile()) {
-        // $resourceNode->getResourceFile()->getFile()->
-        // $resourceNode->getResourceFile()->setTitle($title);
-        // $resourceFile->setTitle($title);
-
-        /*$fileName = $this->getResourceNodeRepository()->getFilename($resourceFile);
-        error_log('$fileName');
-        error_log($fileName);
-        error_log($title);
-        $this->getResourceNodeRepository()->getFileSystem()->rename($fileName, $title);
-        $resourceFile->setTitle($title);
-        $resourceFile->setOriginalName($title);*/
-        // }
     }
 
     public function toggleVisibilityPublishedDraft(AbstractResource $resource): void
@@ -712,7 +694,7 @@ abstract class ResourceRepository extends ServiceEntityRepository
             ->select('SUM(file.size) as total')
             ->innerJoin('resource.resourceNode', 'node')
             ->innerJoin('node.resourceLinks', 'l')
-            ->innerJoin('node.resourceFile', 'file')
+            ->innerJoin('node.resourceFiles', 'file')
             ->where('l.course = :course')
             ->andWhere('file IS NOT NULL')
             ->setParameters(

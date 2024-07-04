@@ -9,9 +9,9 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
-use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Doctrine\DBAL\Schema\Schema;
 use Exception;
 use RecursiveDirectoryIterator;
@@ -103,27 +103,38 @@ final class Version20230913162700 extends AbstractMigrationChamilo
         $items = $result->fetchAllAssociative();
 
         foreach ($items as $item) {
+            /** @var CDocument $document */
             $document = $documentRepo->find($item['iid']);
-            if ($document) {
-                $resourceNode = $document->getResourceNode();
-                if ($resourceNode && $resourceNode->hasResourceFile()) {
-                    $resourceFile = $resourceNode->getResourceFile();
-                    $filePath = $resourceFile->getTitle();
-                    if ($resourceFile && $resourceFile->getMimeType() === 'text/html') {
-                        error_log("Verifying HTML file: " . $filePath);
+            if (!$document) {
+                continue;
+            }
 
-                        try {
-                            $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode);
-                            $updatedContent = $this->replaceOldURLsWithNew($content, $courseDirectory, $courseId, $documentRepo);
+            $resourceNode = $document->getResourceNode();
 
-                            if ($content !== $updatedContent) {
-                                $documentRepo->updateResourceFileContent($document, $updatedContent);
-                                $documentRepo->update($document);
-                            }
-                        } catch (\Exception $e) {
-                            error_log("Error processing file $filePath: " . $e->getMessage());
-                        }
+            if (!$resourceNode || !$resourceNode->hasResourceFile()) {
+                continue;
+            }
+
+            $resourceFile = $resourceNode->getResourceFiles()->first();
+
+            if (!$resourceFile) {
+                continue;
+            }
+
+            $filePath = $resourceFile->getTitle();
+            if ('text/html' === $resourceFile->getMimeType()) {
+                error_log('Verifying HTML file: '.$filePath);
+
+                try {
+                    $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode);
+                    $updatedContent = $this->replaceOldURLsWithNew($content, $courseDirectory, $courseId, $documentRepo);
+
+                    if ($content !== $updatedContent) {
+                        $documentRepo->updateResourceFileContent($document, $updatedContent);
+                        $documentRepo->update($document);
                     }
+                } catch (Exception $e) {
+                    error_log("Error processing file $filePath: ".$e->getMessage());
                 }
             }
         }

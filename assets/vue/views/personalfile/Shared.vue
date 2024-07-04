@@ -1,22 +1,26 @@
 <template>
-  <Button :label="$t('Back')" icon="pi pi-chevron-left" @click="goBack" />
+  <Button
+    :label="$t('Back')"
+    icon="pi pi-chevron-left"
+    @click="goBack"
+  />
   <DataTable
     v-model:filters="filters"
     v-model:selection="selectedItems"
-    :globalFilterFields="['resourceNode.title', 'resourceNode.updatedAt']"
+    :global-filter-fields="['resourceNode.title', 'resourceNode.updatedAt']"
     :lazy="true"
     :loading="isLoading"
     :paginator="true"
     :rows="10"
-    :rowsPerPageOptions="[5, 10, 20, 50]"
-    :totalRecords="totalItems"
+    :rows-per-page-options="[5, 10, 20, 50]"
+    :total-records="totalItems"
     :value="itemsShared"
     class="p-datatable-sm"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-    dataKey="iid"
-    filterDisplay="menu"
-    paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-    responsiveLayout="scroll"
+    current-page-report-template="Showing {first} to {last} of {totalRecords}"
+    data-key="iid"
+    filter-display="menu"
+    paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+    responsive-layout="scroll"
     @page="onPage($event)"
     @sort="sortingChanged($event)"
   >
@@ -26,7 +30,7 @@
       field="resourceNode.title"
     >
       <template #body="slotProps">
-        <div v-if="slotProps.data && slotProps.data.resourceNode && slotProps.data.resourceNode.resourceFile">
+        <div v-if="slotProps.data && slotProps.data.resourceNode && slotProps.data.resourceNode.firstResourceFile">
           <ResourceFileLink :resource="slotProps.data" />
         </div>
         <div v-else>
@@ -45,12 +49,12 @@
     <Column
       :header="$t('Size')"
       :sortable="true"
-      field="resourceNode.resourceFile.size"
+      field="resourceNode.firstResourceFile.size"
     >
       <template #body="slotProps">
         {{
-          slotProps.data.resourceNode.resourceFile
-            ? prettyBytes(slotProps.data.resourceNode.resourceFile.size)
+          slotProps.data.resourceNode.firstResourceFile
+            ? prettyBytes(slotProps.data.resourceNode.firstResourceFile.size)
             : ""
         }}
       </template>
@@ -117,7 +121,7 @@ export default {
       columns: [
         { label: t("Title"), field: "title", name: "title", sortable: true },
         { label: t("Modified"), field: "resourceNode.updatedAt", name: "updatedAt", sortable: true },
-        { label: t("Size"), field: "resourceNode.resourceFile.size", name: "size", sortable: true },
+        { label: t("Size"), field: "resourceNode.firstResourceFile.size", name: "size", sortable: true },
         { label: t("Actions"), name: "action", sortable: false },
       ],
       pageOptions: [10, 20, 50, t("All")],

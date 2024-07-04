@@ -68,7 +68,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         ],
     ]
 )]
-#[ApiFilter(filterClass: OrderFilter::class, properties: ['id', 'title', 'resourceFile', 'createdAt', 'updatedAt'])]
+#[ApiFilter(filterClass: OrderFilter::class, properties: ['id', 'title', 'createdAt', 'updatedAt'])]
 #[ApiFilter(filterClass: PropertyFilter::class)]
 #[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial'])]
 class ResourceNode implements Stringable
@@ -111,14 +111,6 @@ class ResourceNode implements Stringable
     #[Groups(['ctool:read', 'c_tool_intro:read'])]
     #[ORM\OneToMany(mappedBy: 'resourceNode', targetEntity: ResourceLink::class, cascade: ['persist', 'remove'])]
     protected Collection $resourceLinks;
-
-    /**
-     * ResourceFile available file for this node.
-     */
-    #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write', 'message:read'])]
-    #[ORM\OneToOne(inversedBy: 'resourceNode', targetEntity: ResourceFile::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
-    #[ORM\JoinColumn(name: 'resource_file_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    protected ?ResourceFile $resourceFile = null;
 
     #[Assert\NotNull]
     #[Groups(['resource_node:read', 'resource_node:write', 'document:write'])]
@@ -189,6 +181,20 @@ class ResourceNode implements Stringable
     #[ORM\Column(type: 'uuid', unique: true)]
     protected ?UuidV4 $uuid = null;
 
+    /**
+     * ResourceFile available file for this node.
+     *
+     * @var Collection<int, ResourceFile>
+     */
+    #[Groups(['resource_node:read', 'resource_node:write', 'document:read', 'document:write', 'message:read'])]
+    #[ORM\OneToMany(
+        mappedBy: 'resourceNode',
+        targetEntity: ResourceFile::class,
+        cascade: ['persist', 'remove'],
+        fetch: 'EXTRA_LAZY',
+    )]
+    private Collection $resourceFiles;
+
     public function __construct()
     {
         $this->public = false;
@@ -198,6 +204,7 @@ class ResourceNode implements Stringable
         $this->comments = new ArrayCollection();
         $this->createdAt = new DateTime();
         $this->fileEditableText = false;
+        $this->resourceFiles = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -478,8 +485,8 @@ class ResourceNode implements Stringable
 
     public function hasEditableTextContent(): bool
     {
-        if ($this->hasResourceFile()) {
-            $mimeType = $this->getResourceFile()->getMimeType();
+        if ($resourceFile = $this->resourceFiles->first()) {
+            $mimeType = $resourceFile->getMimeType();
 
             if (str_contains($mimeType, 'text')) {
                 return true;
@@ -489,26 +496,7 @@ class ResourceNode implements Stringable
         return false;
     }
 
-    public function hasResourceFile(): bool
-    {
-        return null !== $this->resourceFile;
-    }
-
-    public function getResourceFile(): ?ResourceFile
-    {
-        return $this->resourceFile;
-    }
-
-    public function setResourceFile(?ResourceFile $resourceFile = null): self
-    {
-        $this->resourceFile = $resourceFile;
-
-        $resourceFile?->setResourceNode($this);
-
-        return $this;
-    }
-
-    public function getIcon(): string
+    public function getIcon(?string $additionalClass = null): string
     {
         $class = 'fa fa-folder';
         if ($this->hasResourceFile()) {
@@ -521,13 +509,17 @@ class ResourceNode implements Stringable
             }
         }
 
+        if ($additionalClass) {
+            $class .= " $additionalClass";
+        }
+
         return '<i class="'.$class.'"></i>';
     }
 
     public function isResourceFileAnImage(): bool
     {
-        if ($this->hasResourceFile()) {
-            $mimeType = $this->getResourceFile()->getMimeType();
+        if ($resourceFile = $this->resourceFiles->first()) {
+            $mimeType = $resourceFile->getMimeType();
             if (str_contains($mimeType, 'image')) {
                 return true;
             }
@@ -538,8 +530,8 @@ class ResourceNode implements Stringable
 
     public function isResourceFileAVideo(): bool
     {
-        if ($this->hasResourceFile()) {
-            $mimeType = $this->getResourceFile()->getMimeType();
+        if ($resourceFile = $this->resourceFiles->first()) {
+            $mimeType = $resourceFile->getMimeType();
             if (str_contains($mimeType, 'video')) {
                 return true;
             }
@@ -550,28 +542,19 @@ class ResourceNode implements Stringable
 
     public function getThumbnail(RouterInterface $router): string
     {
-        $size = 'fa-3x';
-        $class = sprintf('fa fa-folder %s', $size);
-        if ($this->hasResourceFile()) {
-            $class = sprintf('far fa-file %s', $size);
-            if ($this->isResourceFileAnImage()) {
-                $class = sprintf('far fa-file-image %s', $size);
-                $params = [
-                    'id' => $this->getId(),
-                    'tool' => $this->getResourceType()->getTool(),
-                    'type' => $this->getResourceType()->getTitle(),
-                    'filter' => 'editor_thumbnail',
-                ];
-                $url = $router->generate('chamilo_core_resource_view', $params);
+        if ($this->isResourceFileAnImage()) {
+            $params = [
+                'id' => $this->getId(),
+                'tool' => $this->getResourceType()->getTool(),
+                'type' => $this->getResourceType()->getTitle(),
+                'filter' => 'editor_thumbnail',
+            ];
+            $url = $router->generate('chamilo_core_resource_view', $params);
 
-                return sprintf("<img src='%s'/>", $url);
-            }
-            if ($this->isResourceFileAVideo()) {
-                $class = sprintf('far fa-file-video %s', $size);
-            }
+            return sprintf("<img src='%s'/>", $url);
         }
 
-        return '<i class="'.$class.'"></i>';
+        return $this->getIcon('fa-3x');
     }
 
     /**
@@ -628,5 +611,46 @@ class ResourceNode implements Stringable
         $this->public = $public;
 
         return $this;
+    }
+
+    public function hasResourceFile(): bool
+    {
+        return $this->resourceFiles->count() > 0;
+    }
+
+    /**
+     * @return Collection<int, ResourceFile>
+     */
+    public function getResourceFiles(): Collection
+    {
+        return $this->resourceFiles;
+    }
+
+    public function addResourceFile(ResourceFile $resourceFile): static
+    {
+        if (!$this->resourceFiles->contains($resourceFile)) {
+            $this->resourceFiles->add($resourceFile);
+            $resourceFile->setResourceNode($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResourceFile(ResourceFile $resourceFile): static
+    {
+        if ($this->resourceFiles->removeElement($resourceFile)) {
+            // set the owning side to null (unless already changed)
+            if ($resourceFile->getResourceNode() === $this) {
+                $resourceFile->setResourceNode(null);
+            }
+        }
+
+        return $this;
+    }
+
+    #[Groups(['resource_node:read', 'document:read', 'message:read'])]
+    public function getFirstResourceFile(): ?ResourceFile
+    {
+        return $this->resourceFiles->first() ?: null;
     }
 }

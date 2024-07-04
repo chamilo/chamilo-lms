@@ -45,7 +45,7 @@
       field="resourceNode.title"
     >
       <template #body="slotProps">
-        <div v-if="slotProps.data && slotProps.data.resourceNode && slotProps.data.resourceNode.resourceFile">
+        <div v-if="slotProps.data && slotProps.data.resourceNode && slotProps.data.resourceNode.firstResourceFile">
           <ResourceFileLink :resource="slotProps.data" />
         </div>
         <div v-else>
@@ -73,10 +73,14 @@
     <Column
       :header="$t('Size')"
       :sortable="true"
-      field="resourceNode.resourceFile.size"
+      field="resourceNode.firstResourceFile.size"
     >
       <template #body="slotProps">
-        {{ slotProps.data.resourceNode.resourceFile ? prettyBytes(slotProps.data.resourceNode.resourceFile.size) : "" }}
+        {{
+          slotProps.data.resourceNode.firstResourceFile
+            ? prettyBytes(slotProps.data.resourceNode.firstResourceFile.size)
+            : ""
+        }}
       </template>
     </Column>
 
@@ -171,7 +175,7 @@ export default {
       columns: [
         { label: t("Title"), field: "title", name: "title", sortable: true },
         { label: t("Modified"), field: "resourceNode.updatedAt", name: "updatedAt", sortable: true },
-        { label: t("Size"), field: "resourceNode.resourceFile.size", name: "size", sortable: true },
+        { label: t("Size"), field: "resourceNode.firstResourceFile.size", name: "size", sortable: true },
         { label: t("Actions"), name: "action", sortable: false },
       ],
       pageOptions: [10, 20, 50, t("All")],

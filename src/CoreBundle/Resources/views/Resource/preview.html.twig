@@ -3,7 +3,7 @@
 {% block content %}
     {% autoescape false %}
         <h3>{{ resource }} </h3>
-        {% if resource.resourceNode.resourceFile %}
+        {% if resource.resourceNode.firstResourceFile %}
             {% if resource.resourceNode.isResourceFileAnImage %}
                 Preview:
                 <br />
@@ -43,7 +43,7 @@
                 {{ resource.resourceNode.slug }}
             </a>
             <br />
-            Size: {{ resource.resourceNode.resourceFile.size }}
+            Size: {{ resource.resourceNode.firstResourceFile.size }}
             <br /><br />
         {% endif %}
     {% endautoescape %}

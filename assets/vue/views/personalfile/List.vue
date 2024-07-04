@@ -36,20 +36,20 @@
   <DataTable
     v-model:filters="filters"
     v-model:selection="selectedItems"
-    :globalFilterFields="['resourceNode.title', 'resourceNode.updatedAt']"
+    :global-filter-fields="['resourceNode.title', 'resourceNode.updatedAt']"
     :lazy="true"
     :loading="isLoading"
     :paginator="true"
     :rows="10"
-    :rowsPerPageOptions="[5, 10, 20, 50]"
-    :totalRecords="totalItems"
+    :rows-per-page-options="[5, 10, 20, 50]"
+    :total-records="totalItems"
     :value="items"
     class="p-datatable-sm"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-    dataKey="iid"
-    filterDisplay="menu"
-    paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-    responsiveLayout="scroll"
+    current-page-report-template="Showing {first} to {last} of {totalRecords}"
+    data-key="iid"
+    filter-display="menu"
+    paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+    responsive-layout="scroll"
     @page="onPage($event)"
     @sort="sortingChanged($event)"
   >
@@ -59,7 +59,7 @@
       field="resourceNode.title"
     >
       <template #body="slotProps">
-        <div v-if="slotProps.data && slotProps.data.resourceNode && slotProps.data.resourceNode.resourceFile">
+        <div v-if="slotProps.data && slotProps.data.resourceNode && slotProps.data.resourceNode.firstResourceFile">
           <ResourceFileLink :resource="slotProps.data" />
           <v-icon
             v-if="slotProps.data.resourceLinkListFromEntity && slotProps.data.resourceLinkListFromEntity.length > 0"
@@ -82,12 +82,12 @@
     <Column
       :header="$t('Size')"
       :sortable="true"
-      field="resourceNode.resourceFile.size"
+      field="resourceNode.firstResourceFile.size"
     >
       <template #body="slotProps">
         {{
-          slotProps.data.resourceNode.resourceFile
-            ? prettyBytes(slotProps.data.resourceNode.resourceFile.size)
+          slotProps.data.resourceNode.firstResourceFile
+            ? prettyBytes(slotProps.data.resourceNode.firstResourceFile.size)
             : ""
         }}
       </template>
@@ -181,14 +181,35 @@
     </template>
   </Dialog>
 
-  <Dialog v-model:visible="deleteItemDialog" :modal="true" :style="{ width: '450px' }" header="Confirm">
+  <Dialog
+    v-model:visible="deleteItemDialog"
+    :modal="true"
+    :style="{ width: '450px' }"
+    header="Confirm"
+  >
     <div class="confirmation-content">
-      <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem"></i>
-      <span>Are you sure you want to delete <b>{{ itemToDelete?.title }}</b>?</span>
+      <i
+        class="pi pi-exclamation-triangle p-mr-3"
+        style="font-size: 2rem"
+      ></i>
+      <span
+        >Are you sure you want to delete <b>{{ itemToDelete?.title }}</b
+        >?</span
+      >
     </div>
     <template #footer>
-      <Button class="p-button-text" icon="pi pi-times" label="No" @click="deleteItemDialog = false" />
-      <Button class="p-button-text" icon="pi pi-check" label="Yes" @click="deleteItemButton" />
+      <Button
+        class="p-button-text"
+        icon="pi pi-times"
+        label="No"
+        @click="deleteItemDialog = false"
+      />
+      <Button
+        class="p-button-text"
+        icon="pi pi-check"
+        label="Yes"
+        @click="deleteItemButton"
+      />
     </template>
   </Dialog>
 
@@ -203,7 +224,7 @@
         class="pi pi-exclamation-triangle p-mr-3"
         style="font-size: 2rem"
       />
-      <span v-if="item">{{ $t('Are you sure you want to delete the selected items?') }}</span>
+      <span v-if="item">{{ $t("Are you sure you want to delete the selected items?") }}</span>
     </div>
     <template #footer>
       <Button
@@ -221,18 +242,33 @@
     </template>
   </Dialog>
 
-  <Dialog v-model:visible="detailsDialogVisible" :header="selectedItem.title || 'Item Details'" :modal="true" :style="{ width: '50%' }">
+  <Dialog
+    v-model:visible="detailsDialogVisible"
+    :header="selectedItem.title || 'Item Details'"
+    :modal="true"
+    :style="{ width: '50%' }"
+  >
     <div v-if="Object.keys(selectedItem).length > 0">
       <p><strong>Title:</strong> {{ selectedItem.resourceNode.title }}</p>
       <p><strong>Modified:</strong> {{ relativeDatetime(selectedItem.resourceNode.updatedAt) }}</p>
-      <p><strong>Size:</strong> {{ prettyBytes(selectedItem.resourceNode.resourceFile.size) }}</p>
-      <p><strong>URL:</strong> <a :href="selectedItem.contentUrl" target="_blank">Open File</a></p>
+      <p><strong>Size:</strong> {{ prettyBytes(selectedItem.resourceNode.firstResourceFile.size) }}</p>
+      <p>
+        <strong>URL:</strong>
+        <a
+          :href="selectedItem.contentUrl"
+          target="_blank"
+          >Open File</a
+        >
+      </p>
     </div>
     <template #footer>
-      <Button class="p-button-text" label="Close" @click="closeDetailsDialog" />
+      <Button
+        class="p-button-text"
+        label="Close"
+        @click="closeDetailsDialog"
+      />
     </template>
   </Dialog>
-
 </template>
 
 <script>
@@ -280,9 +316,9 @@ export default {
           sortable: true,
         },
         {
-          name: "resourceNode.resourceFile.size",
+          name: "resourceNode.firstResourceFile.size",
           label: t("Size"),
-          field: "resourceNode.resourceFile.size",
+          field: "resourceNode.firstResourceFile.size",
           sortable: true,
         },
         { name: "action", label: t("Actions"), field: "action", sortable: false },
@@ -290,7 +326,7 @@ export default {
       columns: [
         { label: t("Title"), field: "title", name: "title", sortable: true },
         { label: t("Modified"), field: "resourceNode.updatedAt", name: "updatedAt", sortable: true },
-        { label: t("Size"), field: "resourceNode.resourceFile.size", name: "size", sortable: true },
+        { label: t("Size"), field: "resourceNode.firstResourceFile.size", name: "size", sortable: true },
         { label: t("Actions"), name: "action", sortable: false },
       ],
       pageOptions: [10, 20, 50, t("All")],
@@ -316,7 +352,7 @@ export default {
   created() {
     this.resetList = true
     this.onUpdateOptions(this.options)
-    this.isFromEditor = window.location.search.includes('editor=tinymce');
+    this.isFromEditor = window.location.search.includes("editor=tinymce")
   },
   computed: {
     // From crud.js list function
@@ -348,15 +384,15 @@ export default {
       selectedItem: {},
       itemToDelete: null,
       isFromEditor: false,
-    };
+    }
   },
   methods: {
     showHandler(item) {
-      this.selectedItem = item;
-      this.detailsDialogVisible = true;
+      this.selectedItem = item
+      this.detailsDialogVisible = true
     },
     closeDetailsDialog() {
-      this.detailsDialogVisible = false;
+      this.detailsDialogVisible = false
     },
     // prime
     onPage(event) {
@@ -421,7 +457,7 @@ export default {
       this.itemDialog = true
     },
     confirmDeleteItem(item) {
-      console.log('confirmDeleteItem :::', item)
+      console.log("confirmDeleteItem :::", item)
       this.item = { ...item }
       this.itemToDelete = { ...item }
       this.deleteItemDialog = true
@@ -440,21 +476,31 @@ export default {
       this.selectedItems = null
     },
     deleteItemButton() {
-      console.log("deleteItem", this.itemToDelete);
+      console.log("deleteItem", this.itemToDelete)
       if (this.itemToDelete && this.itemToDelete.id) {
         this.deleteItem(this.itemToDelete)
           .then(() => {
-            this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Item deleted successfully', life: 3000 });
-            this.deleteItemDialog = false;
-            this.itemToDelete = null;
-            this.onUpdateOptions(this.options);
+            this.$toast.add({
+              severity: "success",
+              summary: "Success",
+              detail: "Item deleted successfully",
+              life: 3000,
+            })
+            this.deleteItemDialog = false
+            this.itemToDelete = null
+            this.onUpdateOptions(this.options)
           })
-          .catch(error => {
-            console.error("Error deleting the item:", error);
-            this.$toast.add({ severity: 'error', summary: 'Error', detail: 'An error occurred while deleting the item', life: 3000 });
-          });
+          .catch((error) => {
+            console.error("Error deleting the item:", error)
+            this.$toast.add({
+              severity: "error",
+              summary: "Error",
+              detail: "An error occurred while deleting the item",
+              life: 3000,
+            })
+          })
       } else {
-        console.error("No item to delete or item ID is missing");
+        console.error("No item to delete or item ID is missing")
       }
     },
     onRowSelected(items) {

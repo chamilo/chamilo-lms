@@ -124,8 +124,6 @@ class ResourceFile implements Stringable
     protected ?File $file = null;
     #[ORM\Column(name: 'crop', type: 'string', length: 255, nullable: true)]
     protected ?string $crop = null;
-    #[ORM\OneToOne(mappedBy: 'resourceFile', targetEntity: ResourceNode::class)]
-    protected ResourceNode $resourceNode;
 
     /**
      * @var string[]
@@ -149,6 +147,10 @@ class ResourceFile implements Stringable
     #[Gedmo\Timestampable(on: 'update')]
     #[ORM\Column(type: 'datetime')]
     protected $updatedAt;
+
+    #[ORM\ManyToOne(inversedBy: 'resourceFiles')]
+    private ?ResourceNode $resourceNode = null;
+
     public function __construct()
     {
         $this->size = 0;
@@ -217,16 +219,7 @@ class ResourceFile implements Stringable
 
         return $this;
     }
-    public function getResourceNode(): ResourceNode
-    {
-        return $this->resourceNode;
-    }
-    public function setResourceNode(ResourceNode $resourceNode): self
-    {
-        $this->resourceNode = $resourceNode;
 
-        return $this;
-    }
     /*public function isEnabled(): bool
         {
             return $this->enabled;
@@ -336,6 +329,18 @@ class ResourceFile implements Stringable
             // otherwise the event listeners won't be called and the file is lost
             $this->updatedAt = new DateTimeImmutable();
         }
+
+        return $this;
+    }
+
+    public function getResourceNode(): ?ResourceNode
+    {
+        return $this->resourceNode;
+    }
+
+    public function setResourceNode(?ResourceNode $resourceNode): static
+    {
+        $this->resourceNode = $resourceNode;
 
         return $this;
     }

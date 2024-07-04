@@ -39,7 +39,7 @@
               slot="item.resourceNode.title"
               slot-scope="{ item }"
             >
-              <div v-if="item['resourceNode']['resourceFile']">
+              <div v-if="item.resourceNode.firstResourceFile">
                 <a
                   data-fancybox="gallery"
                   :href=" item['contentUrl'] "
@@ -102,7 +102,7 @@ export default {
             headers: [
                 {text: 'Title', value: 'resourceNode.title', sortable: true},
                 {text: 'Modified', value: 'resourceNode.updatedAt', sortable: true},
-                {text: 'Size', value: 'resourceNode.resourceFile.size', sortable: true},
+                {text: 'Size', value: 'resourceNode.firstResourceFile.size', sortable: true},
                 {text: 'Actions', value: 'action', sortable: false}
             ],
             selected: [],

@@ -13,34 +13,28 @@
       <h6 v-text="item.title" />
     </div>
 
-    <div
-      class="document-show__section"
-    >
+    <div class="document-show__section">
       <div class="document-show__content-side">
-        <div
-          v-if="item['resourceNode']['resourceFile']"
-        >
+        <div v-if="item.resourceNode.firstResourceFile">
           <img
-            v-if="item.resourceNode.resourceFile.image"
+            v-if="item.resourceNode.firstResourceFile.image"
             :src="item.contentUrl + '&w=500'"
             :alt="item.title"
           />
 
           <video
-            v-else-if="item['resourceNode']['resourceFile']['video']"
+            v-else-if="item.resourceNode.firstResourceFile.video"
             controls
           >
             <source :src="item['contentUrl']" />
           </video>
 
           <iframe
-            v-if="'text/html' === item['resourceNode']['resourceFile']['mimeType']"
+            v-if="'text/html' === item.resourceNode.firstResourceFile.mimeType"
             :src="item['contentUrl']"
           />
         </div>
-        <div
-          v-else
-        >
+        <div v-else>
           <BaseIcon icon="folder-generic" />
         </div>
       </div>
@@ -51,9 +45,7 @@
             <th v-text="$t('Author')" />
             <td v-text="item.resourceNode.creator.username" />
           </tr>
-          <tr
-           v-if="item.comment"
-          >
+          <tr v-if="item.comment">
             <th v-text="$t('Comment')" />
             <td v-text="item.comment" />
           </tr>
@@ -66,18 +58,18 @@
           <tr>
             <th v-text="$t('Updated at')" />
             <td>
-              {{ item["resourceNode"] ? relativeDatetime(item["resourceNode"].updatedAt) : "" }}
+              {{ item.resourceNode ? relativeDatetime(item.resourceNode.updatedAt) : "" }}
             </td>
           </tr>
-          <tr v-if="item['resourceNode']['resourceFile']">
+          <tr v-if="item.resourceNode.firstResourceFile">
             <th v-text="$t('File')" />
             <td>
-                <a
-                  :href="item['downloadUrl']"
-                  class="btn btn--primary"
-                >
-                  <BaseIcon icon="download" /> {{ $t("Download file") }}
-                </a>
+              <a
+                :href="item['downloadUrl']"
+                class="btn btn--primary"
+              >
+                <BaseIcon icon="download" /> {{ $t("Download file") }}
+              </a>
             </td>
           </tr>
         </table>

@@ -100,7 +100,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         'id',
         'resourceNode.title',
         'resourceNode.createdAt',
-        'resourceNode.resourceFile.size',
+        'resourceNode.firstResourceFile.size',
         'resourceNode.updatedAt',
     ]
 )]

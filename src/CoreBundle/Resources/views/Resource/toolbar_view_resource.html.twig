@@ -1,6 +1,6 @@
 {% autoescape false %}
 
-{% if resource.resourceNode.resourceFile %}
+{% if resource.resourceNode.firstResourceFile %}
     <a class="btn btn--success"
        href="{{ url('chamilo_core_resource_view', {
            'id': resource.resourceNode.id,
@@ -12,7 +12,7 @@
         {{ 'Download' | trans}}    {# {{ resource.resourceNode.slug }}#}
     </a>
     <br />
-    {{ 'Size' | trans }}: {{ resource.resourceNode.resourceFile.size | format_file_size }}
+    {{ 'Size' | trans }}: {{ resource.resourceNode.firstResourceFile.size | format_file_size }}
     <br /><br />
 {% endif %}
 

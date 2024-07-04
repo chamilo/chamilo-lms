@@ -36,7 +36,7 @@ $TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
 if (!$objQuestion->getResourceNode()->hasResourceFile()) {
     api_not_allowed();
 }
-$resourceFile = $objQuestion->getResourceNode()->getResourceFile();
+$resourceFile = $objQuestion->getResourceNode()->getResourceFiles()->first();
 $pictureWidth = $resourceFile->getWidth();
 $pictureHeight = $resourceFile->getHeight();
 $imagePath = $questionRepo->getHotSpotImageUrl($objQuestion).'?'.api_get_cidreq();

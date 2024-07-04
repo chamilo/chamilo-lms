@@ -52,9 +52,9 @@ final class Version20240515094800 extends AbstractMigrationChamilo
         }
 
         if ($hasTblVerb) {
-            $this->addSql("ALTER TABLE xapi_verb CHANGE display display LONGTEXT NOT NULL COMMENT '(DC2Type:json)'");
+            $this->addSql("ALTER TABLE xapi_verb CHANGE display display LONGTEXT NULL COMMENT '(DC2Type:json)'");
         } else {
-            $this->addSql("CREATE TABLE xapi_verb (identifier INT AUTO_INCREMENT NOT NULL, id VARCHAR(255) NOT NULL, display LONGTEXT NOT NULL COMMENT '(DC2Type:json)', PRIMARY KEY(identifier)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
+            $this->addSql("CREATE TABLE xapi_verb (identifier INT AUTO_INCREMENT NOT NULL, id VARCHAR(255) NOT NULL, display LONGTEXT NULL COMMENT '(DC2Type:json)', PRIMARY KEY(identifier)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC");
         }
 
         if ($hasTblObject) {

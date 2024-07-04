@@ -20,8 +20,8 @@ class XApiVerb
     #[ORM\Column(length: 255)]
     private ?string $id = null;
 
-    #[ORM\Column]
-    private array $display = [];
+    #[ORM\Column(nullable: true)]
+    private ?array $display = null;
 
     public function getIdentifier(): ?int
     {
@@ -40,12 +40,12 @@ class XApiVerb
         return $this;
     }
 
-    public function getDisplay(): array
+    public function getDisplay(): ?array
     {
         return $this->display;
     }
 
-    public function setDisplay(array $display): static
+    public function setDisplay(?array $display): static
     {
         $this->display = $display;
 

@@ -714,7 +714,9 @@ class Plugin
      */
     public function addTab($tabName, $url, $userFilter = null)
     {
-        $sql = "SELECT * FROM settings_current
+        $table = Database::get_main_table(TABLE_MAIN_SETTINGS);
+        $sql = "SELECT *
+                FROM $table
                 WHERE
                     variable = 'show_tabs' AND
                     subkey LIKE 'custom_tab_%'";
@@ -791,7 +793,7 @@ class Plugin
      */
     public function deleteTab($key)
     {
-        $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+        $table = Database::get_main_table(TABLE_MAIN_SETTINGS);
         $sql = "SELECT *
                 FROM $table
                 WHERE variable = 'show_tabs'
@@ -868,7 +870,7 @@ class Plugin
                 echo "<script>location.href = '".Security::remove_XSS($_SERVER['REQUEST_URI'])."';</script>";
             }
         } else {
-            $settingsCurrentTable = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+            $settingsCurrentTable = Database::get_main_table(TABLE_MAIN_SETTINGS);
             $conditions = [
                 'where' => [
                     "variable = 'show_tabs' AND title = ? AND comment = ? " => [

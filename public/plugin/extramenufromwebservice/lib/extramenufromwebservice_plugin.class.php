@@ -58,7 +58,7 @@ class ExtraMenuFromWebservicePlugin extends Plugin
             'list_fonts_imports' => 'text',
         ];
 
-        $tableSettings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+        $tableSettings = Database::get_main_table(TABLE_MAIN_SETTINGS);
         $urlId = api_get_current_access_url_id();
 
         foreach ($settings as $variable) {

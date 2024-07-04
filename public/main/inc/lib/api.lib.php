@@ -2773,7 +2773,7 @@ function api_get_plugin_setting($plugin, $variable)
             $variableName,
         ],
     ];
-    $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $table = Database::get_main_table(TABLE_MAIN_SETTINGS);
     $result = Database::select(
         'selected_value',
         $table,
@@ -2816,7 +2816,7 @@ function api_get_plugin_setting($plugin, $variable)
  */
 function api_get_settings_params($params)
 {
-    $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $table = Database::get_main_table(TABLE_MAIN_SETTINGS);
 
     return Database::select('*', $table, ['where' => $params]);
 }
@@ -2828,7 +2828,7 @@ function api_get_settings_params($params)
  */
 function api_get_settings_params_simple($params)
 {
-    $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $table = Database::get_main_table(TABLE_MAIN_SETTINGS);
 
     return Database::select('*', $table, ['where' => $params], 'one');
 }
@@ -2838,7 +2838,7 @@ function api_get_settings_params_simple($params)
  */
 function api_delete_settings_params($params)
 {
-    $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $table = Database::get_main_table(TABLE_MAIN_SETTINGS);
 
     return Database::delete($table, $params);
 }
@@ -4484,7 +4484,7 @@ function api_set_setting_option($params)
  */
 function api_set_setting_simple($params)
 {
-    $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $table = Database::get_main_table(TABLE_MAIN_SETTINGS);
     $url_id = api_get_current_access_url_id();
 
     if (empty($params['id'])) {
@@ -4523,7 +4523,7 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
     if (empty($var)) {
         return false;
     }
-    $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS);
     $var = Database::escape_string($var);
     $value = Database::escape_string($value);
     $access_url = (int) $access_url;
@@ -4629,7 +4629,7 @@ function api_set_settings_category($category, $value = null, $access_url = 1, $f
         return false;
     }
     $category = Database::escape_string($category);
-    $t_s = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $t_s = Database::get_main_table(TABLE_MAIN_SETTINGS);
     $access_url = (int) $access_url;
     if (empty($access_url)) {
         $access_url = 1;
@@ -4760,7 +4760,7 @@ function api_get_access_url($id, $returnDefault = true)
  */
 function &api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0)
 {
-    $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $table = Database::get_main_table(TABLE_MAIN_SETTINGS);
     $access_url = (int) $access_url;
     $where_condition = '';
     if (1 == $url_changeable) {
@@ -7002,7 +7002,7 @@ function api_get_supported_image_extensions($supportVectors = true)
  */
 function api_register_campus($listCampus = true)
 {
-    $tbl_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $tbl_settings = Database::get_main_table(TABLE_MAIN_SETTINGS);
 
     $sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='registered'";
     Database::query($sql);

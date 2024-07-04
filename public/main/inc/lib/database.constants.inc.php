@@ -26,7 +26,7 @@ define('TABLE_MAIN_SYSTEM_ANNOUNCEMENTS', 'sys_announcement');
 define('TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS', 'announcement_rel_group');
 define('TABLE_MAIN_LANGUAGE', 'language');
 define('TABLE_MAIN_SETTINGS_OPTIONS', 'settings_options');
-define('TABLE_MAIN_SETTINGS_CURRENT', 'settings_current');
+define('TABLE_MAIN_SETTINGS', 'settings');
 define('TABLE_MAIN_SESSION', 'session');
 define('TABLE_MAIN_SESSION_CATEGORY', 'session_category');
 define('TABLE_MAIN_SESSION_COURSE', 'session_rel_course');

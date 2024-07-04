@@ -19,7 +19,7 @@ use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
 function getCustomTabs()
 {
     $urlId = api_get_current_access_url_id();
-    $tableSettingsCurrent = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $tableSettingsCurrent = Database::get_main_table(TABLE_MAIN_SETTINGS);
     $sql = "SELECT * FROM $tableSettingsCurrent
             WHERE
                 variable = 'show_tabs' AND

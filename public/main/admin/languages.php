@@ -114,7 +114,7 @@ unset($_SESSION['disabled_languages']);
 
 // setting the table that is needed for the styles management (there is a check if it exists later in this code)
 $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-$tbl_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+$tbl_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS);
 
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $url = api_get_self();

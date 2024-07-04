@@ -231,10 +231,8 @@ onMounted(() => {
     layoutMenuItems.value = [
       {
         label: t("New page"),
-        command: () => {
-          router.push({ name: "PageCreate" })
-        },
-      }
+        url: router.resolve({ name: "PageCreate" }).href,
+      },
     ]
   }
 })

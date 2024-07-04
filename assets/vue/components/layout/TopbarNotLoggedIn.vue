@@ -30,11 +30,11 @@ const languageItems = languageList.map((language) => ({
 const menuItems = computed(() => [
   {
     label: t("Home"),
-    command: async () => await router.push({ name: "Index" }),
+    url: router.resolve({ name: "Index" }).href,
   },
   {
     label: t("FAQ"),
-    command: async () => await router.push({ name: "Faq" }),
+    url: router.resolve({ name: "Faq" }).href,
   },
   {
     label: t("Registration"),
@@ -42,7 +42,7 @@ const menuItems = computed(() => [
   },
   {
     label: t("Demo"),
-    command: async () => await router.push({ name: "Demo" }),
+    url: router.resolve({ name: "Demo" }).href,
   },
   {
     label: t("Contact"),

@@ -120,9 +120,11 @@ class SecurityController extends AbstractController
     public function checkSession(): JsonResponse
     {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return new JsonResponse(['isAuthenticated' => true]);
+            $user = $this->userHelper->getCurrent();
+            $data = $this->serializer->serialize($user, 'jsonld', ['groups' => ['user_json:read']]);
+            return new JsonResponse(['isAuthenticated' => true, 'user' => json_decode($data)], Response::HTTP_OK);
         }
 
-        return new JsonResponse(['isAuthenticated' => false]);
+        return new JsonResponse(['isAuthenticated' => false], Response::HTTP_OK);
     }
 }

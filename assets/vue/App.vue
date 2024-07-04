@@ -189,7 +189,8 @@ watch(
   },
 )
 
-onMounted(() => {
+onMounted(async () => {
   mejsLoader()
-})
+  await securityStore.checkSession()
+});
 </script>

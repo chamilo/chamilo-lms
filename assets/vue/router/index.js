@@ -169,21 +169,24 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
+  const securityStore = useSecurityStore()
+
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    try {
-      const response = await securityService.checkSession()
-      const isAuthenticated = response.isAuthenticated
-      if (isAuthenticated) {
-        next()
-      } else {
-        next({ name: 'Login', query: { redirect: to.fullPath } })
-      }
-    } catch (error) {
-      console.error('Error checking session:', error)
-      next({ name: 'Login', query: { redirect: to.fullPath } })
+
+    if (!securityStore.isLoading) {
+      await securityStore.checkSession()
+    }
+
+    if (securityStore.isAuthenticated) {
+      next();
+    } else {
+      next({
+        path: "/login",
+        query: { redirect: to.fullPath },
+      })
     }
   } else {
-    next() // make sure to always call next()!
+    next()
   }
 })
 

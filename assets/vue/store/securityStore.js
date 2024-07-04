@@ -1,10 +1,11 @@
 import { defineStore } from "pinia"
 import { isEmpty } from "lodash"
 import { computed, ref } from "vue"
+import securityService from "../services/securityService"
 
 export const useSecurityStore = defineStore("security", () => {
-  const user = ref()
-
+  const user = ref(null)
+  const isLoading = ref(true)
   const isAuthenticated = computed(() => !isEmpty(user.value))
 
   const hasRole = computed(() => (role) => {
@@ -35,8 +36,27 @@ export const useSecurityStore = defineStore("security", () => {
 
   const isAdmin = computed(() => hasRole.value("ROLE_SUPER_ADMIN") || hasRole.value("ROLE_ADMIN"))
 
+
+  async function checkSession() {
+    isLoading.value = true
+    try {
+      const response = await securityService.checkSession()
+      if (response.isAuthenticated) {
+        user.value = response.user
+      } else {
+        user.value = null
+      }
+    } catch (error) {
+      console.error("Error checking session:", error)
+      user.value = null
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     user,
+    isLoading,
     isAuthenticated,
     hasRole,
     isStudent,
@@ -47,5 +67,6 @@ export const useSecurityStore = defineStore("security", () => {
     isCourseAdmin,
     isSessionAdmin,
     isAdmin,
+    checkSession,
   }
 })

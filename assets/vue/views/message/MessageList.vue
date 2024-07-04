@@ -330,7 +330,7 @@ const rowClass = (data) => {
 let fetchPayload = {}
 
 const filteredItems = computed(() => {
-  return items.value.filter(item => item.status !== MESSAGE_STATUS_DELETED)
+  return items.value.filter((item) => item.status !== MESSAGE_STATUS_DELETED)
 })
 
 function loadMessages(reset = true) {

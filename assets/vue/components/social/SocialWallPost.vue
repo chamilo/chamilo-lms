@@ -93,7 +93,7 @@
 
 <script setup>
 import WallCommentForm from "./SocialWallCommentForm.vue"
-import { computed, inject, onMounted, reactive, ref } from "vue"
+import { computed, onMounted, reactive, ref } from "vue"
 import WallComment from "./SocialWallComment.vue"
 import WallActions from "./Actions"
 import axios from "axios"
@@ -116,7 +116,7 @@ const { relativeDatetime } = useFormatDate()
 let comments = reactive([])
 const attachments = ref([])
 const securityStore = useSecurityStore()
-const currentUser = securityStore.user;
+const currentUser = securityStore.user
 
 const isOwner = computed(() => currentUser["@id"] === props.post.sender["@id"])
 

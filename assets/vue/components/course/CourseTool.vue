@@ -47,7 +47,12 @@
 
     <div class="course-tool__options">
       <button
-        v-if="(isAllowedToEdit) && !isSorting && !isCustomizing && (session?.id ? 'true' === getSetting('course.allow_edit_tool_visibility_in_session') : true)"
+        v-if="
+          isAllowedToEdit &&
+          !isSorting &&
+          !isCustomizing &&
+          (session?.id ? 'true' === getSetting('course.allow_edit_tool_visibility_in_session') : true)
+        "
         @click="changeVisibility(tool)"
       >
         <BaseIcon
@@ -85,9 +90,9 @@
 </template>
 
 <script setup>
-import { computed, inject, onMounted, ref } from "vue"
+import { computed, inject } from "vue"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
-import {useSecurityStore} from "../../store/securityStore";
+import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { storeToRefs } from "pinia"
 import { useCidReqStore } from "../../store/cidReq"
@@ -106,7 +111,7 @@ const isCustomizing = inject("isCustomizing")
 const props = defineProps({
   isAllowedToEdit: {
     type: Boolean,
-    required: true
+    required: true,
   },
   tool: {
     type: Object,

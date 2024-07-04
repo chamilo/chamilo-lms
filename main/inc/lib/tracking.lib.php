@@ -9065,14 +9065,14 @@ class Tracking
                     get_lang('EndingAccessDate'),
                     get_lang('TimeSpent')
                 ];
-                $sql = "SELECT user_id, session_id, c_id, login_course_date, logout_course_date, (logout_course_date - login_course_date) as time
-                        FROM $tblTrackCourseAccess
-                        WHERE login_course_date >= '$startDate'
-                          AND login_course_date <= '$endDate'
-                          AND logout_course_date >= '$startDate'
-                          AND logout_course_date <= '$endDate'
-                          AND user_id IN (" . implode(',', $selectedUserList) . ")
-                        ORDER BY user_id, login_course_date";
+                $sql = "SELECT user_id, session_id, c_id, login_course_date, logout_course_date, (logout_course_date - login_course_date) AS time
+                    FROM $tblTrackCourseAccess
+                    WHERE login_course_date >= '$startDate'
+                      AND login_course_date <= '$endDate'
+                      AND logout_course_date >= '$startDate'
+                      AND logout_course_date <= '$endDate'
+                      AND user_id IN (" . implode(',', $selectedUserList) . ")
+                    ORDER BY user_id, login_course_date";
                 break;
 
             case 'billing_report':
@@ -9087,15 +9087,15 @@ class Tracking
                 ];
                 $extraField = api_get_configuration_value('billing_report_lp_extra_field');
                 $sql = "SELECT lv.user_id, lv.session_id, lv.c_id, lv.lp_id, liv.start_time
-                        FROM $tblLpView lv
-                        INNER JOIN c_lp_item_view liv on lv.iid = liv.lp_view_id
-                        INNER JOIN c_lp_item li on li.iid = liv.lp_item_id
-                        WHERE lv.user_id IN (" . implode(',', $selectedUserList) . ")
-                          AND liv.start_time >= '$startDate'
-                          AND liv.start_time <= '$endDate'
-                          AND lv.progress = 100
-                          AND li.item_type = '".TOOL_LP_FINAL_ITEM."'
-                        ORDER BY lv.user_id, liv.start_time";
+                    FROM $tblLpView lv
+                    INNER JOIN c_lp_item_view liv ON lv.iid = liv.lp_view_id
+                    INNER JOIN c_lp_item li ON li.iid = liv.lp_item_id
+                    WHERE lv.user_id IN (" . implode(',', $selectedUserList) . ")
+                      AND liv.start_time >= UNIX_TIMESTAMP('$startDate')
+                      AND liv.start_time <= UNIX_TIMESTAMP('$endDate')
+                      AND lv.progress = 100
+                      AND li.item_type = '".TOOL_LP_FINAL_ITEM."'
+                    ORDER BY lv.user_id, liv.start_time";
                 break;
 
             default:
@@ -9118,7 +9118,7 @@ class Tracking
                     $course['title'],
                     $row['login_course_date'],
                     $row['logout_course_date'],
-                    $row['time'],
+                    gmdate('H:i:s', $row['time']),
                 ];
             } else if ($reportType == 'billing_report') {
                 $extraFieldValue = (new ExtraFieldValue('lp'))->get_values_by_handler_and_field_variable($row['lp_id'], $extraField);
@@ -9128,7 +9128,7 @@ class Tracking
                     $session['name'],
                     $course['title'],
                     $row['lp_id'],
-                    $row['start_time'],
+                    date('Y-m-d H:i:s', $row['start_time']),
                     $extraFieldValue['value'] ?? '',
                 ];
             }

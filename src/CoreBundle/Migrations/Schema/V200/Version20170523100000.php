@@ -9,7 +9,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-class Version20240605103700 extends AbstractMigrationChamilo
+class Version20170523100000 extends AbstractMigrationChamilo
 {
     public function up(Schema $schema): void
     {

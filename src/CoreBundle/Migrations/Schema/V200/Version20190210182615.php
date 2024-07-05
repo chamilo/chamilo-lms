@@ -25,9 +25,9 @@ class Version20190210182615 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE session CHANGE position position INT DEFAULT 0 NOT NULL');
         }
 
-        $this->addSql('UPDATE session SET promotion_id = NULL WHERE promotion_id = 0');
+        $this->addSql('UPDATE session SET promotion_id = NULL WHERE promotion_id = 0 OR promotion_id NOT IN (SELECT id FROM promotion)');
         if (!$table->hasForeignKey('FK_D044D5D4139DF194')) {
-            $this->addSql('ALTER TABLE session ADD CONSTRAINT FK_D044D5D4139DF194 FOREIGN KEY (promotion_id) REFERENCES promotion (id) ON DELETE CASCADE');
+            $this->addSql('ALTER TABLE session ADD CONSTRAINT FK_D044D5D4139DF194 FOREIGN KEY (promotion_id) REFERENCES promotion (id) ON DELETE SET NULL');
             $this->addSql('CREATE INDEX IDX_D044D5D4139DF194 ON session (promotion_id);');
         }
 
@@ -38,6 +38,7 @@ class Version20190210182615 extends AbstractMigrationChamilo
         }
 
         if (!$table->hasForeignKey('FK_D044D5D4EF87E278')) {
+            $this->addSql('UPDATE session SET session_admin_id = NULL WHERE session_admin_id NOT IN (SELECT id FROM user)');
             $this->addSql('ALTER TABLE session ADD CONSTRAINT FK_D044D5D4EF87E278 FOREIGN KEY(session_admin_id) REFERENCES user(id);');
         }
 
@@ -114,26 +115,38 @@ class Version20190210182615 extends AbstractMigrationChamilo
             $sessionId = (int) $item['id'];
 
             if (!empty($coachId)) {
-                $sql = "SELECT * FROM session_rel_user
-                        WHERE user_id = $coachId AND session_id = $sessionId AND relation_type = 3 ";
-                $result = $this->connection->executeQuery($sql);
-                $exists = $result->fetchAllAssociative();
-                if (empty($exists)) {
-                    $sql = "INSERT INTO session_rel_user (relation_type, duration, registered_at, user_id, session_id)
-                            VALUES (3, 0, NOW(), $coachId, $sessionId)";
-                    $this->connection->executeQuery($sql);
+                $sqlUser = "SELECT * FROM user
+                            WHERE id = $coachId";
+                $resultUser = $this->connection->executeQuery($sqlUser);
+                $existsUser = $resultUser->fetchAllAssociative();
+                if (!empty($existsUser)) {
+                    $sql = "SELECT * FROM session_rel_user
+                            WHERE user_id = $coachId AND session_id = $sessionId AND relation_type = 3 ";
+                    $result = $this->connection->executeQuery($sql);
+                    $exists = $result->fetchAllAssociative();
+                    if (empty($exists)) {
+                        $sql = "INSERT INTO session_rel_user (relation_type, duration, registered_at, user_id, session_id)
+                                VALUES (3, 0, NOW(), $coachId, $sessionId)";
+                        $this->connection->executeQuery($sql);
+                    }
                 }
             }
 
             if (!empty($adminId)) {
-                $sql = "SELECT * FROM session_rel_user
-                        WHERE user_id = $adminId AND session_id = $sessionId AND relation_type = 4 ";
-                $result = $this->connection->executeQuery($sql);
-                $exists = $result->fetchAllAssociative();
-                if (empty($exists)) {
-                    $sql = "INSERT INTO session_rel_user (relation_type, duration, registered_at, user_id, session_id)
-                            VALUES (4, 0, NOW(), $adminId, $sessionId)";
-                    $this->connection->executeQuery($sql);
+                $sqlUser = "SELECT * FROM user
+                            WHERE id = $adminId";
+                $resultUser = $this->connection->executeQuery($sqlUser);
+                $existsUser = $resultUser->fetchAllAssociative();
+                if (!empty($existsUser)) {
+                    $sql = "SELECT * FROM session_rel_user
+                            WHERE user_id = $adminId AND session_id = $sessionId AND relation_type = 4 ";
+                    $result = $this->connection->executeQuery($sql);
+                    $exists = $result->fetchAllAssociative();
+                    if (empty($exists)) {
+                        $sql = "INSERT INTO session_rel_user (relation_type, duration, registered_at, user_id, session_id)
+                                VALUES (4, 0, NOW(), $adminId, $sessionId)";
+                        $this->connection->executeQuery($sql);
+                    }
                 }
             }
         }

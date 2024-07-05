@@ -3,6 +3,8 @@
 /* See license terms in /license.txt */
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use Masterminds\HTML5;
 use Mpdf\Mpdf;
 use Mpdf\Output\Destination;
@@ -476,8 +478,9 @@ class PDF
         }
 
         if ($addDefaultCss) {
+            $themeHelper = Container::$container->get(ThemeHelper::class);
             $basicStyles = [
-                api_get_path(SYS_PUBLIC_PATH).'build/css/themes/'.api_get_visual_theme().'/default.css',
+                $themeHelper->getThemeAssetUrl('default.css'),
             ];
             foreach ($basicStyles as $style) {
                 $cssContent = file_get_contents($style);

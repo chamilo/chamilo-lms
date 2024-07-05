@@ -96,7 +96,6 @@ class Version20170627122900 extends AbstractMigrationChamilo
             'registration' => 'required_profile_fields',
             'profile' => 'changeable_options',
             'timezone_value' => 'timezone',
-            'stylesheets' => 'theme',
             'platformLanguage' => 'platform_language',
             'languagePriority1' => 'language_priority_1',
             'languagePriority2' => 'language_priority_2',
@@ -276,7 +275,6 @@ class Version20170627122900 extends AbstractMigrationChamilo
             'users_copy_files' => 'document',
             'timezone' => 'platform',
             'enable_profile_user_address_geolocalization' => 'profile',
-            'theme' => 'platform',
             'exercise_hide_label' => 'exercise',
         ];
 
@@ -319,6 +317,7 @@ class Version20170627122900 extends AbstractMigrationChamilo
             'sso_force_redirect',
             'activate_email_template',
             'sso_authentication_subclass',
+            'stylesheets',
         ];
 
         foreach ($settings as $setting) {

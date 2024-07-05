@@ -9,7 +9,7 @@ use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Repository\ColorThemeRepository;
+use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -695,7 +695,7 @@ class Display
             if (is_file($alternateCssPath.$theme.$image)) {
                 $icon = $alternateWebCssPath.$theme.$image;
             }
-            // Checking the theme icons folder example: app/Resources/public/css/themes/chamilo/icons/XXX
+            // Checking the theme icons folder example: var/themes/chamilo/icons/XXX
             if (is_file($alternateCssPath.$theme.$size_extra.$image)) {
                 $icon = $alternateWebCssPath.$theme.$size_extra.$image;
             } elseif (is_file($code_path.'img/icons/'.$size_extra.$image)) {
@@ -2672,15 +2672,13 @@ class Display
             return false;
         }
 
-        $colorThemeRepo = Container::$container->get(ColorThemeRepository::class);
-        $router = Container::getRouter();
+        $themeHelper = Container::$container->get(ThemeHelper::class);
 
-        $colorTheme = $colorThemeRepo->getActiveOne();
-        $colorThemeItem = '';
+        $themeColorsUrl = $themeHelper->getThemeAssetUrl('colors.css');
 
-        if ($colorTheme) {
-            $colorThemeItem = '{ type: "stylesheet", src: "'.$router->generate('chamilo_color_theme').'" },';
-        }
+        $colorThemeItem = $themeColorsUrl
+            ? '{ type: "stylesheet", src: "'.$themeColorsUrl.'" },'
+            : '';
 
         return '$.frameReady(function() {},
             "'.$frameName.'",

@@ -14,6 +14,13 @@ oneup_flysystem:
             local:
                 location: '%kernel.project_dir%/var/cache/resource'
 
+        themes_adapter:
+            local:
+                location: '%kernel.project_dir%/var/themes'
+        themes_cache_adapter:
+            local:
+                location: '%kernel.project_dir%/var/cache/themes'
+
     filesystems:
         asset:
             adapter: asset_adapter
@@ -30,3 +37,10 @@ oneup_flysystem:
             adapter: resource_cache_adapter
             mount: resource_cache
             visibility: private
+
+        themes:
+            adapter: themes_adapter
+            mount: themes
+        themes_cache:
+            adapter: themes_cache_adapter
+            mount: themes_cache

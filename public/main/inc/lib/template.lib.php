@@ -762,27 +762,6 @@ class Template
     }
 
     /**
-     * @param string $theme
-     *
-     * @return string
-     */
-    public static function getPortalIcon($theme)
-    {
-        // Default root chamilo favicon
-        $icon = 'favicon.ico';
-
-        // Added to verify if in the current Chamilo Theme exist a favicon
-        $themeUrl = api_get_path(SYS_CSS_PATH).'themes/'.$theme.'/images/';
-
-        // If exist pick the current chamilo theme favicon.
-        if (is_file($themeUrl.'favicon.ico')) {
-            $icon = 'build/css/themes/'.$theme.'/images/favicon.ico';
-        }
-
-        return $icon;
-    }
-
-    /**
      * Show footer js template.
      */
     public function show_footer_js_template()

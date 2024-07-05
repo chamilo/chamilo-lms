@@ -8,10 +8,13 @@ namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
+use Chamilo\CoreBundle\Entity\AccessUrlRelColorTheme;
 use Chamilo\CoreBundle\Entity\ColorTheme;
-use Chamilo\CoreBundle\Repository\ColorThemeRepository;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Filesystem\Filesystem;
+use Chamilo\CoreBundle\ServiceHelper\AccessUrlHelper;
+use Doctrine\ORM\EntityManagerInterface;
+use League\Flysystem\FilesystemException;
+use League\Flysystem\FilesystemOperator;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 use const PHP_EOL;
 
@@ -19,23 +22,27 @@ final class ColorThemeStateProcessor implements ProcessorInterface
 {
     public function __construct(
         private readonly ProcessorInterface $persistProcessor,
-        private readonly ParameterBagInterface $parameterBag,
-        private readonly ColorThemeRepository $colorThemeRepository,
+        private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly EntityManagerInterface $entityManager,
+        #[Autowire(service: 'oneup_flysystem.themes_filesystem')] private readonly FilesystemOperator $filesystem,
     ) {}
 
+    /**
+     * @throws FilesystemException
+     */
     public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
     {
         \assert($data instanceof ColorTheme);
-
-        $data->setActive(true);
 
         /** @var ColorTheme $colorTheme */
         $colorTheme = $this->persistProcessor->process($data, $operation, $uriVariables, $context);
 
         if ($colorTheme) {
-            $this->colorThemeRepository->deactivateAllExcept($colorTheme);
+            $accessUrlRelColorTheme = (new AccessUrlRelColorTheme())->setColorTheme($colorTheme);
 
-            $projectDir = $this->parameterBag->get('kernel.project_dir');
+            $this->accessUrlHelper->getCurrent()->addColorTheme($accessUrlRelColorTheme);
+
+            $this->entityManager->flush();
 
             $contentParts = [];
             $contentParts[] = ':root {';
@@ -46,12 +53,9 @@ final class ColorThemeStateProcessor implements ProcessorInterface
 
             $contentParts[] = '}';
 
-            $dirName = $projectDir."/var/theme/{$colorTheme->getSlug()}";
-
-            $fs = new Filesystem();
-            $fs->mkdir($dirName);
-            $fs->dumpFile(
-                $dirName.'/colors.css',
+            $this->filesystem->createDirectory($colorTheme->getSlug());
+            $this->filesystem->write(
+                $colorTheme->getSlug().DIRECTORY_SEPARATOR.'colors.css',
                 implode(PHP_EOL, $contentParts)
             );
         }

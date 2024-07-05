@@ -147,6 +147,12 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
     #[ORM\Column(name: 'email', type: 'string', length: 255, nullable: true)]
     protected ?string $email = null;
 
+    /**
+     * @var Collection<int, AccessUrlRelColorTheme>
+     */
+    #[ORM\OneToMany(mappedBy: 'url', targetEntity: AccessUrlRelColorTheme::class, cascade: ['persist'], orphanRemoval: true)]
+    private Collection $colorThemes;
+
     public function __construct()
     {
         $this->description = '';
@@ -159,6 +165,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
         $this->sessionCategories = new ArrayCollection();
         $this->courseCategory = new ArrayCollection();
         $this->children = new ArrayCollection();
+        $this->colorThemes = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -489,5 +496,55 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
     public function setResourceName(string $name): self
     {
         return $this->setUrl($name);
+    }
+
+    public function getActiveColorTheme(): ?AccessUrlRelColorTheme
+    {
+        $criteria = Criteria::create();
+        $criteria->where(
+            Criteria::expr()->eq('active', true)
+        );
+
+        return $this->colorThemes->matching($criteria)->first() ?: null;
+    }
+
+    /**
+     * @return Collection<int, AccessUrlRelColorTheme>
+     */
+    public function getColorThemes(): Collection
+    {
+        return $this->colorThemes;
+    }
+
+    public function addColorTheme(AccessUrlRelColorTheme $colorTheme): static
+    {
+        if (!$this->colorThemes->contains($colorTheme)) {
+            $this->colorThemes->add($colorTheme);
+            $colorTheme->setUrl($this);
+        }
+
+        return $this;
+    }
+
+    public function removeColorTheme(AccessUrlRelColorTheme $colorTheme): static
+    {
+        if ($this->colorThemes->removeElement($colorTheme)) {
+            // set the owning side to null (unless already changed)
+            if ($colorTheme->getUrl() === $this) {
+                $colorTheme->setUrl(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getColorThemeByTheme(ColorTheme $theme): ?AccessUrlRelColorTheme
+    {
+        $criteria = Criteria::create();
+        $criteria->where(
+            Criteria::expr()->eq('colorTheme', $theme)
+        );
+
+        return $this->colorThemes->matching($criteria)->first() ?:  null;
     }
 }

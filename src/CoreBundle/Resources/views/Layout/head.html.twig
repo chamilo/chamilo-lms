@@ -4,7 +4,7 @@
     <link href="https://chamilo.org/the-association/" rel="author" />
     <link href="https://chamilo.org/the-association/" rel="copyright" />
     <link rel="apple-touch-icon" href="{{ url('index') ~ 'apple-touch-icon.png' }}" />
-    {# <link rel="shortcut icon" href="{{ url('index') ~  favico}}" type="image/x-icon" /> #}
+    <link rel="shortcut icon" href="{{ theme_asset('images/favicon.ico') }}" type="image/x-icon" />
     <title>
         {%- block title %}
             {{ chamilo_settings_get('platform.institution') }} - {{ chamilo_settings_get('platform.site_name') }}
@@ -35,20 +35,11 @@
             {{ encore_entry_link_tags('css/scorm') }}
         {% endif %}
 
-        {% if color_theme_link is defined %}
-            {{ color_theme_link|raw }}
-        {% endif %}
+        {{ theme_asset_link_tag('colors.css') }}
 
-        {# Files app.css is generated from "assets/css/app.scss" file using the file webpack.config.js #}
-        {#    {{ encore_entry_link_tags('app') }} #}
-        {% if theme is defined %}
-            {#    <link rel="stylesheet" href="{{ url('index') ~ 'build/css/themes/'~ theme ~'/default.css' }}"/> #}
-        {% endif %}
-        {#    {{ encore_entry_link_tags('vue') }} #}
-        {# <link rel="stylesheet" href="{{ url('index') ~ 'build/css/print.css' }}" media="print" /> #}
+        {# <link rel="stylesheet" href="theme_asset('print.css')" media="print" /> #}
     {% endblock %}
-    {# app.js is generated using the file webpack.config.js and using yarn read /assets/README.md for more info #}
-    {# <script src="{{ url('index') ~ 'build/libs/ckeditor/ckeditor.js' }}"></script> #}
+
     {{ encore_entry_script_tags('legacy_free-jqgrid') }}
     {{ encore_entry_script_tags('legacy_app') }}
     {{ encore_entry_script_tags('legacy_lp') }}

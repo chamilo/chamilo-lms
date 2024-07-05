@@ -193,8 +193,3 @@ services:
         class: Chamilo\CoreBundle\Settings\WebServiceSettingsSchema
         tags:
             - {name: sylius.settings_schema, alias: chamilo_core.settings.webservice, namespace: webservice}
-
-    chamilo_core.settings.stylesheets:
-      class: Chamilo\CoreBundle\Settings\StylesheetsSettingsSchema
-      tags:
-        - { name: sylius.settings_schema, alias: chamilo_core.settings.stylesheets, namespace: stylesheets }

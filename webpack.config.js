@@ -135,18 +135,6 @@ Encore.copyFiles({
   to: "libs/select2/js/[name].[ext]",
 })
 
-const themes = ["chamilo"]
-
-// Add Chamilo themes
-themes.forEach(function (theme) {
-  Encore.addStyleEntry("css/themes/" + theme + "/default", "./assets/css/themes/" + theme + "/default.css")
-  // Copy images from themes into public/build
-  Encore.copyFiles({
-    from: "assets/css/themes/" + theme + "/images",
-    to: "css/themes/" + theme + "/images/[name].[ext]",
-  })
-})
-
 // Fix free-jqgrid languages files
 // Encore.addPlugin(new FileManagerPlugin({
 //     onEnd: {

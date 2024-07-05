@@ -57,7 +57,7 @@ $settings = null;
 
 // Build the form.
 if (!empty($_GET['category']) &&
-    !in_array($_GET['category'], ['Plugins', 'stylesheets', 'Search'])
+    !in_array($_GET['category'], ['Plugins', 'Search'])
 ) {
     $my_category = isset($_GET['category']) ? $_GET['category'] : null;
     $settings_array = getCategorySettings($my_category);

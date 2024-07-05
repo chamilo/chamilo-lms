@@ -17,12 +17,9 @@ final class Version20231110194300 extends AbstractMigrationChamilo
         return 'Copy custom theme folder to assets and update webpack.config';
     }
 
-    public function up(Schema $schema): void
+    private function getDefaultThemeNames(): array
     {
-        $kernel = $this->container->get('kernel');
-        $rootPath = $kernel->getProjectDir();
-
-        $customThemesFolders = [
+        return [
             'academica',
             'chamilo',
             'chamilo_red',
@@ -52,76 +49,50 @@ final class Version20231110194300 extends AbstractMigrationChamilo
             'simplex',
             'tasty_olive',
         ];
+    }
+
+    public function up(Schema $schema): void
+    {
+        $kernel = $this->container->get('kernel');
+        $rootPath = $kernel->getProjectDir();
+
+        $defaulThemesFolders = $this->getDefaultThemeNames();
 
         $sourceDir = $rootPath.'/app/Resources/public/css/themes';
-        $destinationDir = $rootPath.'/assets/css/themes/';
-        $chamiloDefaultCssPath = $destinationDir.'chamilo/default.css';
 
         if (!is_dir($sourceDir)) {
             return;
         }
 
+        $filesystem = $this->container->get('oneup_flysystem.themes_filesystem');
+
         $finder = new Finder();
         $finder->directories()->in($sourceDir)->depth('== 0');
-        $newThemes = [];
+
         foreach ($finder as $folder) {
-            $folderName = $folder->getRelativePathname();
+            $themeFolderName = $folder->getRelativePathname();
 
-            if (!\in_array($folderName, $customThemesFolders, true)) {
-                $sourcePath = $folder->getRealPath();
-                $destinationPath = $destinationDir.$folderName;
+            if (\in_array($themeFolderName, $defaulThemesFolders, true)) {
+                continue;
+            }
 
-                if (!file_exists($destinationPath)) {
-                    $this->copyDirectory($sourcePath, $destinationPath);
-                    $newThemes[] = $folderName;
+            if ($filesystem->directoryExists($themeFolderName)) {
+                continue;
+            }
 
-                    if (file_exists($chamiloDefaultCssPath)) {
-                        $newThemeDefaultCssPath = $destinationPath.'/default.css';
-                        copy($chamiloDefaultCssPath, $newThemeDefaultCssPath);
-                    }
+            $filesystem->createDirectory($themeFolderName);
+
+            $directory = (new Finder())->in($folder->getRealPath());
+
+            foreach ($directory as $file) {
+                if (!$file->isFile()) {
+                    continue;
                 }
+
+                $newFileRelativePathname = $themeFolderName.DIRECTORY_SEPARATOR.$file->getRelativePathname();
+                $fileContents = $file->getContents();
+                $filesystem->write($newFileRelativePathname, $fileContents);
             }
         }
-
-        $this->updateWebpackConfig($rootPath, $newThemes);
-    }
-
-    private function copyDirectory($src, $dst): void
-    {
-        $dir = opendir($src);
-        @mkdir($dst);
-        while (false !== ($file = readdir($dir))) {
-            if (('.' !== $file) && ('..' !== $file)) {
-                if (is_dir($src.'/'.$file)) {
-                    $this->copyDirectory($src.'/'.$file, $dst.'/'.$file);
-                } else {
-                    copy($src.'/'.$file, $dst.'/'.$file);
-                }
-            }
-        }
-        closedir($dir);
-    }
-
-    private function updateWebpackConfig(string $rootPath, array $newThemes): void
-    {
-        $webpackConfigPath = $rootPath.'/webpack.config.js';
-
-        if (!file_exists($webpackConfigPath)) {
-            return;
-        }
-
-        $content = file_get_contents($webpackConfigPath);
-        $pattern = '/(const themes = \\[\\s*")([^"\\]]+)("\\s*\\])/';
-        $replacement = function ($matches) use ($newThemes) {
-            $existingThemes = explode('", "', trim($matches[2], '"'));
-            $allThemes = array_unique(array_merge($existingThemes, $newThemes));
-            $newThemesString = implode('", "', $allThemes);
-
-            return $matches[1].$newThemesString.$matches[3];
-        };
-
-        $newContent = preg_replace_callback($pattern, $replacement, $content);
-
-        file_put_contents($webpackConfigPath, $newContent);
     }
 }

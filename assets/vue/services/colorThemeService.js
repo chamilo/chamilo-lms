@@ -5,12 +5,10 @@ const url = "/api/color_themes"
 /**
  * Gets the color themes
  *
- * @returns {Promise<Array>}
+ * @returns {Promise<{totalItems, items}>}
  */
-async function getThemes() {
-  const { items } = await baseService.getCollection(url)
-
-  return items
+async function findAllByCurrentUrl() {
+  return await baseService.getCollection("/api/access_url_rel_color_themes")
 }
 
 /**
@@ -35,7 +33,18 @@ async function updateTheme({ iri = null, title, colors }) {
   })
 }
 
+/**
+ * @param {string} iri
+ * @returns {Promise<Object>}
+ */
+async function changePlatformColorTheme(iri) {
+  return baseService.post("/api/access_url_rel_color_themes", {
+    colorTheme: iri,
+  })
+}
+
 export default {
-  getThemes,
   updateTheme,
+  findAllByCurrentUrl,
+  changePlatformColorTheme,
 }

@@ -1,5 +1,6 @@
 import { onMounted, ref, watch } from "vue"
 import Color from "colorjs.io"
+import { usePlatformConfig } from "../store/platformConfig"
 
 export const useTheme = () => {
   let colors = {}
@@ -69,5 +70,20 @@ export const useTheme = () => {
     getColorTheme,
     getColors,
     setColors,
+  }
+}
+
+export function useVisualTheme() {
+  const platformConfigStore = usePlatformConfig()
+
+  const themeName = platformConfigStore.visualTheme
+
+  function getThemeAssetUrl(path) {
+    return `/themes/${platformConfigStore.visualTheme}/${path}`
+  }
+
+  return {
+    themeName,
+    getThemeAssetUrl,
   }
 }

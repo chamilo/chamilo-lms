@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
+use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use Chamilo\CourseBundle\Entity\CLpRelUser;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
@@ -8391,24 +8392,27 @@ class learnpath
     /**
      * In order to use the lp icon option you need to create the "lp_icon" LP extra field
      * and put the images in.
-     *
-     * @return array
      */
-    public static function getIconSelect()
+    public static function getIconSelect(): array
     {
-        $theme = api_get_visual_theme();
-        $path = api_get_path(SYS_PUBLIC_PATH).'css/themes/'.$theme.'/lp_icons/';
+        $theme = Container::$container->get(ThemeHelper::class)->getVisualTheme();
+        $filesystem = Container::$container->get('oneup_flysystem.themes_filesystem');
+
+        if (!$filesystem->directoryExists("$theme/lp_icons")) {
+            return [];
+        }
+
         $icons = ['' => get_lang('Please select an option')];
 
-        if (is_dir($path)) {
-            $finder = new Finder();
-            $finder->files()->in($path);
-            $allowedExtensions = ['jpeg', 'jpg', 'png'];
-            /** @var SplFileInfo $file */
-            foreach ($finder as $file) {
-                if (in_array(strtolower($file->getExtension()), $allowedExtensions)) {
-                    $icons[$file->getFilename()] = $file->getFilename();
-                }
+        $iconFiles = $filesystem->listContents("$theme/lp_icons");
+        $allowedExtensions = ['image/jpeg', 'image/jpg', 'image/png'];
+
+        foreach ($iconFiles as $iconFile) {
+            $mimeType = $filesystem->mimeType($iconFile->path());
+
+            if (in_array($mimeType, $allowedExtensions)) {
+                $basename = basename($iconFile->path());
+                $icons[$basename] = $basename;
             }
         }
 
@@ -8432,12 +8436,7 @@ class learnpath
         return $icon;
     }
 
-    /**
-     * @param int $lpId
-     *
-     * @return string
-     */
-    public static function getSelectedIconHtml($lpId)
+    public static function getSelectedIconHtml(int $lpId): string
     {
         $icon = self::getSelectedIcon($lpId);
 
@@ -8445,8 +8444,8 @@ class learnpath
             return '';
         }
 
-        $theme = api_get_visual_theme();
-        $path = api_get_path(WEB_PUBLIC_PATH).'css/themes/'.$theme.'/lp_icons/'.$icon;
+        $themeHelper = Container::$container->get(ThemeHelper::class);
+        $path = $themeHelper->getThemeAssetUrl("lp_icons/$icon");
 
         return Display::img($path);
     }

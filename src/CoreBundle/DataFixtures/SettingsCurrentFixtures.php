@@ -1114,7 +1114,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'pdf_logo_header',
                     'title' => 'PDF header logo',
-                    'comment' => 'Whether to use the image at css/themes/[your-css]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)',
+                    'comment' => 'Whether to use the image at var/themes/[your-theme]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)',
                 ],
             ],
             'mail' => [

@@ -139,7 +139,7 @@ class SettingsManager implements SettingsManagerInterface
      * Get a specific configuration setting, getting from the previously stored
      * PHP session data whenever possible.
      *
-     * @param string $name       The setting name (composed if in a category, i.e. 'platform.theme')
+     * @param string $name       The setting name (composed if in a category, i.e. 'platform.institution')
      * @param bool   $loadFromDb Whether to load from the database
      */
     public function getSetting(string $name, bool $loadFromDb = false): mixed
@@ -658,7 +658,6 @@ class SettingsManager implements SettingsManagerInterface
             // 'donotlistcampus' =>'null',
             'show_email_addresses' => 'Platform',
             'service_ppt2lp' => 'NULL',
-            'stylesheets' => 'stylesheets',
             'upload_extensions_list_type' => 'Security',
             'upload_extensions_blacklist' => 'Security',
             'upload_extensions_whitelist' => 'Security',
@@ -920,7 +919,6 @@ class SettingsManager implements SettingsManagerInterface
             'siteName' => 'site_name',
             'InstitutionUrl' => 'institution_url',
             'registration' => 'required_profile_fields',
-            'stylesheets' => 'theme',
             'platformLanguage' => 'platform_language',
             'languagePriority1' => 'language_priority_1',
             'languagePriority2' => 'language_priority_2',

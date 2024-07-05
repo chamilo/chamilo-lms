@@ -7,11 +7,12 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\State\ColorThemeStateProcessor;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -21,7 +22,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new Post(),
         new Put(),
-        new GetCollection(),
     ],
     denormalizationContext: [
         'groups' => ['color_theme:write'],
@@ -39,7 +39,7 @@ class ColorTheme
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['color_theme:write'])]
+    #[Groups(['color_theme:write', 'access_url_rel_color_theme:read'])]
     #[ORM\Column(length: 255)]
     private string $title;
 
@@ -54,8 +54,16 @@ class ColorTheme
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
-    #[ORM\Column]
-    private bool $active = false;
+    /**
+     * @var Collection<int, AccessUrlRelColorTheme>
+     */
+    #[ORM\OneToMany(mappedBy: 'colorTheme', targetEntity: AccessUrlRelColorTheme::class, orphanRemoval: true)]
+    private Collection $urls;
+
+    public function __construct()
+    {
+        $this->urls = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -98,14 +106,32 @@ class ColorTheme
         return $this;
     }
 
-    public function isActive(): ?bool
+    /**
+     * @return Collection<int, AccessUrlRelColorTheme>
+     */
+    public function getUrls(): Collection
     {
-        return $this->active;
+        return $this->urls;
     }
 
-    public function setActive(bool $active): static
+    public function addUrl(AccessUrlRelColorTheme $url): static
     {
-        $this->active = $active;
+        if (!$this->urls->contains($url)) {
+            $this->urls->add($url);
+            $url->setColorTheme($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUrl(AccessUrlRelColorTheme $url): static
+    {
+        if ($this->urls->removeElement($url)) {
+            // set the owning side to null (unless already changed)
+            if ($url->getColorTheme() === $this) {
+                $url->setColorTheme(null);
+            }
+        }
 
         return $this;
     }

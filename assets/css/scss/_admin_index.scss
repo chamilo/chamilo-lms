@@ -13,18 +13,30 @@
 
 .admin-colors {
   &__container {
-    @apply flex flex-col md:flex-row gap-4 mt-6;
+    @apply flex flex-col mt-6;
   }
 
   &__settings {
-    @apply space-y-4 flex-1;
+    @apply flex flex-col gap-4
+      md:flex-row;
+
+    &-form {
+      @apply flex-1;
+
+      &-title {
+        @apply mb-4;
+      }
+    }
 
     .row-group {
-      @apply flex flex-col gap-4 items-start md:items-end md:grid md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3;
+      @apply flex flex-col gap-4 items-start
+        sm:grid sm:grid-cols-2
+        md:items-end
+        xl:grid-cols-3;
     }
-  }
 
-  &__preview {
-    @apply space-y-4 flex-1;
+    &-preview {
+      @apply space-y-4 flex-1;
+    }
   }
 }

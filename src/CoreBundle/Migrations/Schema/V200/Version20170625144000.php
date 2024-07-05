@@ -137,7 +137,9 @@ class Version20170625144000 extends AbstractMigrationChamilo
         }
 
         $this->addSql('UPDATE c_student_publication_comment SET work_id = NULL WHERE work_id = 0');
+        $this->addSql('UPDATE c_student_publication_comment SET work_id = NULL WHERE work_id NOT IN (SELECT iid FROM c_student_publication)');
         $this->addSql('UPDATE c_student_publication_comment SET user_id = NULL WHERE user_id = 0');
+        $this->addSql('UPDATE c_student_publication_comment SET user_id = NULL WHERE user_id NOT IN (SELECT id FROM user)');
 
         $this->addSql('ALTER TABLE c_student_publication_comment CHANGE work_id work_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_student_publication_comment CHANGE user_id user_id INT DEFAULT NULL');

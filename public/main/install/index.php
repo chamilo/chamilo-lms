@@ -714,6 +714,40 @@ $installerData = [
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="../../build/legacy_app.css">
+    <style>
+        :root {
+            --color-primary-base: 97 53 131;
+            --color-primary-gradient: 36 77 103;
+            --color-primary-button-text: 46 117 163;
+            --color-primary-button-alternative-text: 255 255 255;
+
+            --color-secondary-base: 243 126 47;
+            --color-secondary-gradient: 224 100 16;
+            --color-secondary-button-text: 255 255 255;
+
+            --color-tertiary-base: 51 51 51;
+            --color-tertiary-gradient: 0 0 0;
+            --color-tertiary-button-text: 255 255 255;
+
+            --color-success-base: 119 170 12;
+            --color-success-gradient: 83 127 0;
+            --color-success-button-text: 255 255 255;
+
+            --color-info-base: 13 123 253;
+            --color-info-gradient: 0 84 211;
+            --color-info-button-text: 255 255 255;
+
+            --color-warning-base: 245 206 1;
+            --color-warning-gradient: 186 152 0;
+            --color-warning-button-text: 0 0 0;
+
+            --color-danger-base: 223 59 59;
+            --color-danger-gradient: 180 0 21;
+            --color-danger-button-text: 255 255 255;
+
+            --color-form-base: 46 117 163;
+        }
+    </style>
     <link rel="stylesheet" href="../../build/app.css">
     <link rel="stylesheet" href="../../build/vue.css">
     <script type="text/javascript" src="../../build/legacy_app.js"></script>

@@ -47,6 +47,8 @@ class Version20170625123000 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_attendance_calendar CHANGE attendance_id attendance_id INT DEFAULT NULL;');
 
         if (false === $table->hasForeignKey('FK_AA3A9AB8163DDA15')) {
+            $this->addSql('UPDATE c_attendance_calendar SET attendance_id = NULL WHERE attendance_id = 0;');
+            $this->addSql('DELETE FROM c_attendance_calendar where attendance_id IS NOT NULL AND attendance_id NOT IN (SELECT iid FROM c_attendance);');
             $this->addSql('ALTER TABLE c_attendance_calendar ADD CONSTRAINT FK_AA3A9AB8163DDA15 FOREIGN KEY (attendance_id) REFERENCES c_attendance (iid) ON DELETE CASCADE');
         }
 
@@ -70,7 +72,8 @@ class Version20170625123000 extends AbstractMigrationChamilo
 
         // ALTER TABLE c_attendance_sheet DROP c_id
 
-        $this->addSql('DELETE FROM c_attendance_sheet WHERE user_id NOT IN (SELECT id FROM user)');
+        $this->addSql('DELETE FROM c_attendance_sheet WHERE user_id IS NOT NULL AND user_id NOT IN (SELECT id FROM user)');
+        $this->addSql('DELETE FROM c_attendance_sheet WHERE attendance_calendar_id IS NOT NULL AND attendance_calendar_id NOT IN (SELECT iid FROM c_attendance_calendar)');
         if (false === $table->hasForeignKey('FK_AD1394FAA76ED395')) {
             $this->addSql('ALTER TABLE c_attendance_sheet ADD CONSTRAINT FK_AD1394FAA76ED395 FOREIGN KEY (user_id) REFERENCES user (id);');
         }
@@ -98,7 +101,9 @@ class Version20170625123000 extends AbstractMigrationChamilo
         }
 
         $this->addSql('DELETE FROM c_attendance_sheet_log WHERE attendance_id = 0');
+        $this->addSql('DELETE FROM c_attendance_sheet_log WHERE attendance_id IS NOT NULL AND attendance_id NOT IN (SELECT iid FROM c_attendance)');
         $this->addSql('DELETE FROM c_attendance_sheet_log WHERE lastedit_user_id = 0');
+        $this->addSql('DELETE FROM c_attendance_sheet_log WHERE lastedit_user_id IS NOT NULL AND lastedit_user_id NOT IN (SELECT id from user)');
 
         $this->addSql('ALTER TABLE c_attendance_sheet_log CHANGE attendance_id attendance_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_attendance_sheet_log CHANGE lastedit_user_id lastedit_user_id INT DEFAULT NULL');
@@ -136,8 +141,8 @@ class Version20170625123000 extends AbstractMigrationChamilo
 
         $this->addSql('UPDATE c_attendance_result SET attendance_id = NULL WHERE attendance_id = 0');
         $this->addSql('UPDATE c_attendance_result SET user_id = NULL WHERE user_id = 0');
-
-        $this->addSql('DELETE FROM c_attendance_result WHERE user_id NOT IN (SELECT id FROM user)');
+        $this->addSql('DELETE FROM c_attendance_result WHERE attendance_id IS NOT NULL and attendance_id NOT IN (SELECT iid FROM c_attendance)');
+        $this->addSql('DELETE FROM c_attendance_result WHERE user_id IS NOT NULL and user_id NOT IN (SELECT id FROM user)');
 
         // ALTER TABLE c_attendance_result DROP c_id, ;
         $this->addSql('ALTER TABLE c_attendance_result CHANGE user_id user_id INT DEFAULT NULL, CHANGE attendance_id attendance_id INT DEFAULT NULL ');
@@ -166,7 +171,9 @@ class Version20170625123000 extends AbstractMigrationChamilo
 
         // ALTER TABLE c_attendance_calendar_rel_group DROP c_id,
         $this->addSql('UPDATE c_attendance_calendar_rel_group SET group_id = NULL WHERE group_id = 0');
+        $this->addSql('DELETE FROM c_attendance_calendar_rel_group WHERE group_id IS NOT NULL AND group_id NOT IN (SELECT iid FROM c_group_info)');
         $this->addSql('UPDATE c_attendance_calendar_rel_group SET calendar_id = NULL WHERE calendar_id = 0');
+        $this->addSql('DELETE FROM c_attendance_calendar_rel_group WHERE calendar_id IS NOT NULL AND calendar_id NOT IN (SELECT iid FROM c_attendance_calendar)');
         $this->addSql('ALTER TABLE c_attendance_calendar_rel_group CHANGE group_id group_id INT DEFAULT NULL, CHANGE calendar_id calendar_id INT DEFAULT NULL;');
 
         if (false === $table->hasForeignKey('FK_C2AB1FACFE54D947')) {

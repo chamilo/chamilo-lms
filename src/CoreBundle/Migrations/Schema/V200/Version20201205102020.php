@@ -65,18 +65,21 @@ final class Version20201205102020 extends AbstractMigrationChamilo
         } else {
             $table = $schema->getTable('skill_rel_course');
             if (!$table->hasForeignKey('FK_E7CEC7FA5585C142')) {
+                $this->addSql('DELETE FROM skill_rel_course WHERE skill_id NOT IN (SELECT id FROM skill)');
                 $this->addSql(
                     'ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA5585C142 FOREIGN KEY (skill_id) REFERENCES skill (id) ON DELETE CASCADE'
                 );
             }
 
             if (!$table->hasForeignKey('FK_E7CEC7FA91D79BD3')) {
+                $this->addSql('DELETE FROM skill_rel_course WHERE c_id NOT IN (SELECT id FROM course)');
                 $this->addSql(
                     'ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE'
                 );
             }
 
             if (!$table->hasForeignKey('FK_E7CEC7FA613FECDF')) {
+                $this->addSql('DELETE FROM skill_rel_course WHERE session_id NOT IN (SELECT id FROM session)');
                 $this->addSql(
                     'ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE'
                 );
@@ -89,24 +92,28 @@ final class Version20201205102020 extends AbstractMigrationChamilo
         }
 
         if (!$table->hasForeignKey('FK_79D3D95A5585C142')) {
+            $this->addSql('DELETE FROM skill_rel_user WHERE skill_id NOT IN (SELECT id FROM skill)');
             $this->addSql(
                 'ALTER TABLE skill_rel_user ADD CONSTRAINT FK_79D3D95A5585C142 FOREIGN KEY (skill_id) REFERENCES skill (id) ON DELETE CASCADE'
             );
         }
 
         if (!$table->hasForeignKey('FK_79D3D95A591CC992')) {
+            $this->addSql('UPDATE skill_rel_user SET course_id = NULL WHERE course_id NOT IN (SELECT id FROM course)');
             $this->addSql(
-                'ALTER TABLE skill_rel_user ADD CONSTRAINT FK_79D3D95A591CC992 FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE CASCADE'
+                'ALTER TABLE skill_rel_user ADD CONSTRAINT FK_79D3D95A591CC992 FOREIGN KEY (course_id) REFERENCES course (id) ON DELETE SET NULL'
             );
         }
 
         if (!$table->hasForeignKey('FK_79D3D95A613FECDF')) {
+		$this->addSql('UPDATE skill_rel_user SET session_id = NULL WHERE session_id NOT IN (SELECT id FROM session)');
             $this->addSql(
-                'ALTER TABLE skill_rel_user ADD CONSTRAINT FK_79D3D95A613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE'
+                'ALTER TABLE skill_rel_user ADD CONSTRAINT FK_79D3D95A613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE SET NULL'
             );
         }
 
         if (!$table->hasForeignKey('FK_79D3D95AA76ED395')) {
+            $this->addSql('DELETE FROM skill_rel_user WHERE user_id NOT IN (SELECT id FROM user)');
             $this->addSql(
                 'ALTER TABLE skill_rel_user ADD CONSTRAINT FK_79D3D95AA76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE'
             );
@@ -117,12 +124,14 @@ final class Version20201205102020 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE skill_rel_profile CHANGE profile_id profile_id INT DEFAULT NULL');
 
         if (!$table->hasForeignKey('FK_6E73EA8D5585C142')) {
+            $this->addSql('DELETE FROM skill_rel_profile WHERE skill_id NOT IN (SELECT id FROM skill)');
             $this->addSql(
                 'ALTER TABLE skill_rel_profile ADD CONSTRAINT FK_6E73EA8D5585C142 FOREIGN KEY (skill_id) REFERENCES skill (id) ON DELETE CASCADE'
             );
         }
 
         if (!$table->hasForeignKey('FK_6E73EA8DCCFA12B8')) {
+            $this->addSql('DELETE FROM skill_rel_profile WHERE profile_id NOT IN (SELECT id FROM skill_profile)');
             $this->addSql(
                 'ALTER TABLE skill_rel_profile ADD CONSTRAINT FK_6E73EA8DCCFA12B8 FOREIGN KEY (profile_id) REFERENCES skill_profile (id) ON DELETE CASCADE'
             );
@@ -141,12 +150,14 @@ final class Version20201205102020 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE skill_rel_gradebook CHANGE gradebook_id gradebook_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE skill_rel_gradebook CHANGE skill_id skill_id INT DEFAULT NULL');
 
+        $this->addSql('DELETE FROM skill_rel_gradebook WHERE skill_id NOT IN (SELECT id FROM skill)');
         if (!$table->hasForeignKey('FK_4AC0B45E5585C142')) {
             $this->addSql(
                 'ALTER TABLE skill_rel_gradebook ADD CONSTRAINT FK_4AC0B45E5585C142 FOREIGN KEY (skill_id) REFERENCES skill (id) ON DELETE CASCADE'
             );
         }
 
+        $this->addSql('DELETE FROM skill_rel_gradebook WHERE gradebook_id NOT IN (SELECT id FROM gradebook_category)');
         if (!$table->hasForeignKey('FK_4AC0B45EAD3ED51C')) {
             $this->addSql(
                 'ALTER TABLE skill_rel_gradebook ADD CONSTRAINT FK_4AC0B45EAD3ED51C FOREIGN KEY (gradebook_id) REFERENCES gradebook_category (id) ON DELETE CASCADE'

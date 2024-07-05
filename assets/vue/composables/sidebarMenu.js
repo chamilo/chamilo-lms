@@ -3,12 +3,11 @@ import { computed } from "vue"
 import { useSecurityStore } from "../store/securityStore"
 import { usePlatformConfig } from "../store/platformConfig"
 import { useEnrolledStore } from "../store/enrolledStore"
-import { useRoute, useRouter } from "vue-router"
+import { useRoute } from "vue-router"
 import { useSocialMenuItems } from "./useSocialMenuItems"
 
 export function useSidebarMenu() {
   const { t } = useI18n()
-  const router = useRouter()
   const route = useRoute()
   const securityStore = useSecurityStore()
   const platformConfigStore = usePlatformConfig()
@@ -33,7 +32,7 @@ export function useSidebarMenu() {
       items.push({
         icon: "mdi mdi-home",
         label: t("Home"),
-        url: router.resolve({ name: "Home" }).href,
+        route: { name: "Home" },
       })
     }
 
@@ -49,14 +48,14 @@ export function useSidebarMenu() {
       if (enrolledStore.isEnrolledInCourses) {
         courseItems.push({
           label: t("My courses"),
-          url: router.resolve({ name: "MyCourses" }).href,
+          route: { name: "MyCourses" },
         })
       }
 
       if (enrolledStore.isEnrolledInSessions) {
         courseItems.push({
           label: t("My sessions"),
-          url: router.resolve({ name: "MySessions" }).href,
+          route: { name: "MySessions" },
         })
       }
 
@@ -65,7 +64,7 @@ export function useSidebarMenu() {
           icon: "mdi mdi-book-open-page-variant",
           label: courseItems.length > 1 ? t("Course") : courseItems[0].label,
           items: courseItems.length > 1 ? courseItems : undefined,
-          url: 1 === courseItems.length ? courseItems[0].url : undefined,
+          route: 1 === courseItems.length ? courseItems[0].route : undefined,
           class: courseItems.length > 0 ? courseItems[0].class : "",
         })
       }
@@ -82,14 +81,14 @@ export function useSidebarMenu() {
         items.push({
           icon: "mdi mdi-bookmark-multiple",
           label: t("Courses catalogue"),
-          url: router.resolve({ name: "CatalogueCourses" }).href,
+          route: { name: "CatalogueCourses" },
         })
       }
       if (showCatalogue > 0) {
         items.push({
           icon: "mdi mdi-bookmark-multiple-outline",
           label: t("Sessions catalogue"),
-          url: () => router.resolve({ name: "CatalogueSessions" }).href,
+          route: { name: "CatalogueSessions" },
         })
       }
     }
@@ -98,7 +97,7 @@ export function useSidebarMenu() {
       items.push({
         icon: "mdi mdi-calendar-text",
         label: t("Events"),
-        url: () => router.resolve({ name: "CCalendarEventList" }).href,
+        route: { name: "CCalendarEventList" },
       })
     }
 
@@ -139,7 +138,7 @@ export function useSidebarMenu() {
         if (newItem.isLink && newItem.route) {
           newItem.url = newItem.route
         } else if (newItem.route) {
-          newItem.url = router.resolve(newItem.route).href
+          // nothing to do
         } else if (newItem.link) {
           newItem.url = newItem.link
         }
@@ -185,7 +184,7 @@ export function useSidebarMenu() {
       const adminItems = [
         {
           label: t("Administration"),
-          url: router.resolve({ name: "AdminIndex" }).href,
+          route: { name: "AdminIndex" },
         },
       ]
 

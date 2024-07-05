@@ -104,18 +104,6 @@
         }
       }
 
-      &[aria-expanded="false"] {
-        .p-submenu-icon {
-          @apply rotate-90;
-        }
-      }
-
-      &[aria-expanded="true"] {
-        .p-submenu-icon {
-          @apply rotate-180;
-        }
-      }
-
       > .p-panelmenu-header-content a {
         .p-menuitem-text {
           @apply order-2 grow text-body-2 font-semibold whitespace-nowrap;

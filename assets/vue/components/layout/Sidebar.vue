@@ -8,10 +8,11 @@
         class="app-sidebar__panel"
         @click="handlePanelHeaderClick"
       >
-        <PanelMenu :model="menuItemsBeforeMyCourse" />
-        <PanelMenu
+        <BaseSidebarPanelMenu v-model="menuItemsBeforeMyCourse" />
+
+        <BaseSidebarPanelMenu
           v-if="enrolledStore.isInitialized"
-          :model="menuItemMyCourse"
+          v-model="menuItemMyCourse"
         />
         <div
           v-else
@@ -34,7 +35,8 @@
             icon="sync"
           />
         </div>
-        <PanelMenu :model="menuItemsAfterMyCourse" />
+
+        <BaseSidebarPanelMenu v-model="menuItemsAfterMyCourse" />
       </div>
       <div class="app-sidebar__bottom">
         <PageList category-title="footer_private" />
@@ -71,7 +73,6 @@
 
 <script setup>
 import { onMounted, ref, watch } from "vue"
-import PanelMenu from "primevue/panelmenu"
 import ToggleButton from "primevue/togglebutton"
 import { useI18n } from "vue-i18n"
 import { useSecurityStore } from "../../store/securityStore"
@@ -79,6 +80,7 @@ import { useSidebarMenu } from "../../composables/sidebarMenu"
 import PageList from "../page/PageList.vue"
 import { useEnrolledStore } from "../../store/enrolledStore"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
+import BaseSidebarPanelMenu from "../basecomponents/BaseSidebarPanelMenu.vue"
 
 const { t } = useI18n()
 const securityStore = useSecurityStore()

@@ -27,6 +27,8 @@ export const chamiloIconToClass = {
   "checkbox-multiple-blank-outline": "",
   "chevron-left": "",
   "chevron-right": "",
+  "unfold": "mdi mdi-chevron-down",
+  "fold": "mdi mdi-chevron-up",
   "close": "mdi mdi-close",
   "cog": "mdi mdi-cog",
   "confirm": "mdi mdi-check",

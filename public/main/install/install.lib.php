@@ -345,7 +345,7 @@ function get_config_param_from_db($param = '')
 {
     $param = Database::escape_string($param);
 
-    if (false !== ($res = Database::query("SELECT * FROM settings_current WHERE variable = '$param'"))) {
+    if (false !== ($res = Database::query("SELECT * FROM settings WHERE variable = '$param'"))) {
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
 
@@ -1275,7 +1275,7 @@ function installSettings(
     ];
 
     foreach ($settings as $variable => $value) {
-        $sql = "UPDATE settings_current
+        $sql = "UPDATE settings
                 SET selected_value = '$value'
                 WHERE variable = '$variable'";
         Database::query($sql);
@@ -1436,7 +1436,7 @@ function installSchemas($container, $upgrade = false)
         $settingsManager->updateSchemas($accessUrl);
     } else {
         error_log('Install settings');
-        // Installing schemas (filling settings_current table)
+        // Installing schemas (filling settings table)
         $settingsManager->installSchemas($accessUrl);
     }
 }
@@ -1667,7 +1667,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
 
             if ($result) {
                 error_log('Migrations files were executed ('.date('Y-m-d H:i:s').')');
-                $sql = "UPDATE settings_current SET selected_value = '2.0.0'
+                $sql = "UPDATE settings SET selected_value = '2.0.0'
                         WHERE variable = 'chamilo_database_version'";
                 $connection->executeQuery($sql);
                 if ($processFiles) {

@@ -96,6 +96,7 @@ class Version20170625144000 extends AbstractMigrationChamilo
         */
 
         $this->addSql('UPDATE c_student_publication_assignment SET publication_id = NULL WHERE publication_id = 0');
+        $this->addSql('UPDATE c_student_publication_assignment SET publication_id = NULL WHERE publication_id NOT IN (SELECT iid FROM c_student_publication)');
         $this->addSql(
             'ALTER TABLE c_student_publication_assignment CHANGE publication_id publication_id INT DEFAULT NULL'
         );
@@ -184,6 +185,11 @@ class Version20170625144000 extends AbstractMigrationChamilo
             $this->addSql('DROP INDEX document ON c_student_publication_rel_document;');
         }
 
+        $this->addSql('UPDATE c_student_publication_rel_document SET work_id = NULL WHERE work_id = 0');
+        $this->addSql('UPDATE c_student_publication_rel_document SET work_id = NULL WHERE work_id NOT IN (SELECT iid FROM c_student_publication)');
+        $this->addSql('UPDATE c_student_publication_rel_document SET document_id = NULL WHERE document_id = 0');
+        $this->addSql('UPDATE c_student_publication_rel_document SET document_id = NULL WHERE document_id NOT IN (SELECT iid FROM c_document)');
+
         $this->addSql('ALTER TABLE c_student_publication_rel_document CHANGE work_id work_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_student_publication_rel_document CHANGE document_id document_id INT DEFAULT NULL');
 
@@ -217,6 +223,11 @@ class Version20170625144000 extends AbstractMigrationChamilo
         if ($table->hasIndex('user')) {
             $this->addSql('DROP INDEX user ON c_student_publication_rel_user');
         }
+
+        $this->addSql('UPDATE c_student_publication_rel_user SET work_id = NULL WHERE work_id = 0');
+        $this->addSql('UPDATE c_student_publication_rel_user SET work_id = NULL WHERE work_id NOT IN (SELECT iid FROM c_student_publication)');
+        $this->addSql('UPDATE c_student_publication_rel_user SET user_id = NULL WHERE user_id = 0');
+        $this->addSql('UPDATE c_student_publication_rel_user SET user_id = NULL WHERE user_id NOT IN (SELECT id FROM user)');
 
         $this->addSql('ALTER TABLE c_student_publication_rel_user CHANGE work_id work_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_student_publication_rel_user CHANGE user_id user_id INT DEFAULT NULL');

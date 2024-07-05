@@ -144,8 +144,6 @@ class Version20170625144000 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_student_publication_comment CHANGE work_id work_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_student_publication_comment CHANGE user_id user_id INT DEFAULT NULL');
 
-        $this->addSql('DELETE FROM c_student_publication_comment WHERE work_id NOT IN (SELECT iid FROM c_student_publication)');
-
         if ($table->hasIndex('work')) {
             $this->addSql('DROP INDEX work ON c_student_publication_comment');
         }

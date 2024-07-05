@@ -18,13 +18,6 @@ class Version20170525122900 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        if (false === $schema->hasTable('resource_file')) {
-            $this->addSql(
-                'CREATE TABLE resource_file (id INT AUTO_INCREMENT NOT NULL, title VARCHAR(255) NOT NULL, original_name LONGTEXT DEFAULT NULL, size INT NOT NULL, dimensions LONGTEXT DEFAULT NULL COMMENT "(DC2Type:simple_array)", crop VARCHAR(255) DEFAULT NULL, mime_type LONGTEXT DEFAULT NULL, description longtext DEFAULT NULL, metadata LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:array)\', ADD resource_node_id INT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_83BF96AA1BAD783F (resource_node_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
-            );
-            $this->addSql('ALTER TABLE resource_file ADD CONSTRAINT FK_83BF96AA1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id)');
-        }
-
         if (false === $schema->hasTable('resource_node')) {
             $this->addSql(
                 'CREATE TABLE IF NOT EXISTS resource_node (id INT AUTO_INCREMENT NOT NULL, resource_type_id INT NOT NULL, creator_id INT NOT NULL, parent_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, level INT DEFAULT NULL, path VARCHAR(3000) DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_8A5F48FF98EC6B7B (resource_type_id), INDEX IDX_8A5F48FF61220EA6 (creator_id), INDEX IDX_8A5F48FF727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
@@ -34,6 +27,13 @@ class Version20170525122900 extends AbstractMigrationChamilo
             );
             $this->addSql('CREATE UNIQUE INDEX UNIQ_8A5F48FFD17F50A6 ON resource_node (uuid)');
             $this->addSql('ALTER TABLE resource_node ADD public TINYINT(1) NOT NULL');
+        }
+
+        if (false === $schema->hasTable('resource_file')) {
+            $this->addSql(
+                'CREATE TABLE resource_file (id INT AUTO_INCREMENT NOT NULL, title VARCHAR(255) NOT NULL, original_name LONGTEXT DEFAULT NULL, size INT NOT NULL, dimensions LONGTEXT DEFAULT NULL COMMENT "(DC2Type:simple_array)", crop VARCHAR(255) DEFAULT NULL, mime_type LONGTEXT DEFAULT NULL, description longtext DEFAULT NULL, metadata LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:array)\', resource_node_id INT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_83BF96AA1BAD783F (resource_node_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC'
+            );
+            $this->addSql('ALTER TABLE resource_file ADD CONSTRAINT FK_83BF96AA1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id)');
         }
 
         if (!$schema->hasTable('resource_link')) {

@@ -14,7 +14,7 @@ class Version20240414120300 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Update configuration title and comment values in settings_current';
+        return 'Update configuration title and comment values in settings';
     }
 
     public function up(Schema $schema): void
@@ -29,13 +29,13 @@ class Version20240414120300 extends AbstractMigrationChamilo
 
         foreach ($settingsToUpdate as $settingData) {
             $variableExists = $this->connection->fetchOne(
-                'SELECT COUNT(*) FROM settings_current WHERE variable = ?',
+                'SELECT COUNT(*) FROM settings WHERE variable = ?',
                 [$settingData['name']]
             );
 
             if ($variableExists) {
                 $this->addSql(
-                    'UPDATE settings_current SET title = :title, comment = :comment WHERE variable = :name',
+                    'UPDATE settings SET title = :title, comment = :comment WHERE variable = :name',
                     [
                         'title' => $settingData['title'],
                         'comment' => $settingData['comment'],

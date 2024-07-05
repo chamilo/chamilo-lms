@@ -69,7 +69,7 @@ final class Version20240507160300 extends AbstractMigrationChamilo
 
     private function fetchSplitSetting(): array
     {
-        $sql = "SELECT * FROM settings_current WHERE variable = 'split_users_upload_directory' AND access_url = 1";
+        $sql = "SELECT * FROM settings WHERE variable = 'split_users_upload_directory' AND access_url = 1";
         $result = $this->connection->executeQuery($sql);
 
         return $result->fetchAssociative() ?? [];

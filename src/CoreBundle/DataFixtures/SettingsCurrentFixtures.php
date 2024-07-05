@@ -1617,6 +1617,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'View courses in a grid layout',
                     'comment' => 'View courses in a layout with several courses per line. Otherwise, the layout will show one course per line.',
                 ],
+                [
+                    'name' => 'show_course_duration',
+                    'title' => 'Show courses duration',
+                    'comment' => 'Display the course duration next to the course title in the course catalogue and the courses list.',
+                ],
             ],
             'certificate' => [
                 [

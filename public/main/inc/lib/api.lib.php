@@ -2281,6 +2281,10 @@ function api_format_course_array(Course $course = null)
     $courseData['course_image'] = $image.'?filter=course_picture_small';
     $courseData['course_image_large'] = $image.'?filter=course_picture_medium';
 
+    if ('true' === api_get_setting('course.show_course_duration') && null !== $course->getDuration()) {
+        $courseData['duration'] = $course->getDuration();
+    }
+
     return $courseData;
 }
 

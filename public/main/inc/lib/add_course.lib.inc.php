@@ -842,6 +842,10 @@ class AddCourse
                 ->setCreator(api_get_user_entity())
             ;
 
+            if (isset($params['duration'])) {
+                $course->setDuration($params['duration']);
+            }
+
             if (!empty($categories)) {
                 if (!is_array($categories)) {
                     $categories = [$categories];

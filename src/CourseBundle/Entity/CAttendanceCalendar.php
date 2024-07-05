@@ -43,6 +43,9 @@ class CAttendanceCalendar
     )]
     protected Collection $sheets;
 
+    #[ORM\Column(name: 'duration', type: 'integer', nullable: true)]
+    protected ?int $duration = null;
+
     public function getIid(): ?int
     {
         return $this->iid;
@@ -110,6 +113,18 @@ class CAttendanceCalendar
     public function setSheets(Collection $sheets): self
     {
         $this->sheets = $sheets;
+
+        return $this;
+    }
+
+    public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(?int $duration): self
+    {
+        $this->duration = $duration;
 
         return $this;
     }

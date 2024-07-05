@@ -342,6 +342,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     #[ORM\JoinColumn(name: 'room_id', referencedColumnName: 'id')]
     protected ?Room $room;
 
+    #[Groups(['course:read', 'course_rel_user:read', 'course:write'])]
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $duration = null;
+
     public function __construct()
     {
         $this->visibility = self::OPEN_PLATFORM;
@@ -1167,6 +1171,18 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public function getDefaultIllustration(int $size): string
     {
         return '/img/session_default.svg';
+    }
+
+    public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(?int $duration): self
+    {
+        $this->duration = $duration;
+
+        return $this;
     }
 
     public function getResourceIdentifier(): int

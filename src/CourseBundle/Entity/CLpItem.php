@@ -114,6 +114,9 @@ class CLpItem implements Stringable
     #[ORM\Column(name: 'lvl', type: 'integer')]
     protected ?int $lvl;
 
+    #[ORM\Column(name: 'duration', type: 'integer', nullable: true)]
+    protected ?int $duration = null;
+
     public function __construct()
     {
         $this->children = new ArrayCollection();
@@ -528,6 +531,18 @@ class CLpItem implements Stringable
     public function setRoot(?self $root): self
     {
         $this->root = $root;
+
+        return $this;
+    }
+
+    public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(?int $duration): self
+    {
+        $this->duration = $duration;
 
         return $this;
     }

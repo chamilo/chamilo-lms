@@ -155,6 +155,9 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
     #[ORM\Column(name: 'display_question_number', type: 'boolean', options: ['default' => true])]
     protected bool $displayQuestionNumber;
 
+    #[ORM\Column(name: 'duration', type: 'integer', nullable: true)]
+    protected ?int $duration = null;
+
     public function __construct()
     {
         $this->title = '';
@@ -622,6 +625,18 @@ class CSurvey extends AbstractResource implements ResourceInterface, Stringable
     public function getIid(): ?int
     {
         return $this->iid;
+    }
+
+    public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(?int $duration): self
+    {
+        $this->duration = $duration;
+
+        return $this;
     }
 
     public function getResourceName(): string

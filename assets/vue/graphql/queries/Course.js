@@ -9,6 +9,7 @@ export const GET_STICKY_COURSES = gql`
                     title
                     illustrationUrl
                     sticky
+                    duration
                 }
             }
         }

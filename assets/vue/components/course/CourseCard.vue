@@ -26,6 +26,9 @@
             v-text="session.title"
           />
           {{ course.title }}
+          <span v-if="showCourseDuration && course.duration">
+            ({{ (course.duration / 60 / 60).toFixed(2) }} hours)
+          </span>
         </div>
         <BaseAppLink
           v-else
@@ -60,6 +63,7 @@ import { computed } from "vue"
 import { isEmpty } from "lodash"
 import { useFormatDate } from "../../composables/formatDate"
 import BaseAppLink from "../basecomponents/BaseAppLink.vue"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const { abbreviatedDatetime } = useFormatDate()
 
@@ -85,6 +89,9 @@ const props = defineProps({
     default: false,
   },
 })
+
+const platformConfigStore = usePlatformConfig()
+const showCourseDuration = computed(() => 'true' === platformConfigStore.getSetting("course.show_course_duration"))
 
 const teachers = computed(() => {
   if (props.session?.courseCoachesSubscriptions) {

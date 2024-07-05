@@ -32,7 +32,7 @@ final class Version20240704120500 extends AbstractMigrationChamilo
 
     private function migrateStudentPublicationDuration(): void
     {
-        $sql = 'SELECT selected_value FROM settings_current WHERE variable = "considered_working_time" AND selected_value IS NOT NULL AND selected_value != "" AND selected_value != "false"';
+        $sql = 'SELECT selected_value FROM settings WHERE variable = "considered_working_time" AND selected_value IS NOT NULL AND selected_value != "" AND selected_value != "false"';
         $selectedValue = $this->connection->fetchOne($sql);
 
         if ($selectedValue) {

@@ -36,7 +36,7 @@ class Version20240704185300 extends AbstractMigrationChamilo
             if ($entry->isDir()) {
                 error_log(
                     sprintf(
-                        "Moving theme directory: %s %s",
+                        "Moving theme directory: %s to %s",
                         $entry->getRealPath(),
                         $themesDirectory.'/'
                     )
@@ -44,5 +44,6 @@ class Version20240704185300 extends AbstractMigrationChamilo
                 $filesystem->rename($entry->getRealPath(), $themesDirectory.'/'.$entry->getRelativePathname());
             }
         }
+        $filesystem->remove($themeDirectory);
     }
 }

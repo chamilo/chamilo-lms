@@ -149,6 +149,9 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     #[ORM\JoinColumn(name: 'asset_id', referencedColumnName: 'id')]
     protected ?Asset $asset = null;
 
+    #[ORM\Column(name: 'duration', type: 'integer', nullable: true)]
+    protected ?int $duration = null;
+
     public function __construct()
     {
         $now = new DateTime();
@@ -598,6 +601,18 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     public function setAsset(?Asset $asset): self
     {
         $this->asset = $asset;
+
+        return $this;
+    }
+
+    public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(?int $duration): self
+    {
+        $this->duration = $duration;
 
         return $this;
     }

@@ -252,6 +252,14 @@ $form->addRule('disk_quota', get_lang('This field should be numeric'), 'numeric'
 $form->addText('video_url', get_lang('Video URL'), false);
 $form->addCheckBox('sticky', null, get_lang('Sticky'));
 
+if ('true' === api_get_setting('course.show_course_duration')) {
+    $form->addElement('text', 'duration', get_lang('Duration (in minutes)'), [
+        'id' => 'duration',
+        'maxlength' => 10,
+    ]);
+    $form->addRule('duration', get_lang('This field should be numeric'), 'numeric');
+}
+
 // Extra fields
 $extraField = new ExtraField('course');
 $extra = $extraField->addElements(
@@ -289,12 +297,21 @@ $courseInfo['disk_quota'] = round(DocumentManager::get_course_quota($courseInfo[
 $courseInfo['real_code'] = $courseInfo['code'];
 $courseInfo['add_teachers_to_sessions_courses'] = $courseInfo['add_teachers_to_sessions_courses'] ?? 0;
 
+// Set default duration in minutes
+if (isset($courseInfo['duration'])) {
+    $courseInfo['duration'] = $courseInfo['duration'] / 60;
+}
+
 $form->setDefaults($courseInfo);
 
 // Validate form
 if ($form->validate()) {
     $course = $form->getSubmitValues();
     $visibility = $course['visibility'];
+
+    if (isset($course['duration'])) {
+        $course['duration'] = $course['duration'] * 60;
+    }
 
     // @todo should be check in the CidReqListener
     /*global $_configuration;
@@ -362,8 +379,12 @@ if ($form->validate()) {
         ->setUnsubscribe($course['unsubscribe'])
         ->setVisibility($visibility)
         ->setSticky(1 === (int) ($course['sticky'] ?? 0))
-        ->setVideoUrl($params['video_url'] ?? '')
+        ->setVideoUrl($course['video_url'] ?? '')
     ;
+
+    if (isset($course['duration'])) {
+        $courseEntity->setDuration($course['duration']);
+    }
 
     $em->persist($courseEntity);
     $em->flush();

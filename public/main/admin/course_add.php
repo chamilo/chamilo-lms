@@ -148,6 +148,14 @@ $form->addCheckBox('sticky', null, get_lang('Sticky'));
 $obj = new GradeModel();
 $obj->fill_grade_model_select_in_form($form);
 
+if ('true' === api_get_setting('course.show_course_duration')) {
+    $form->addElement('text', 'duration', get_lang('Duration (in minutes)'), [
+        'id' => 'duration',
+        'maxlength' => 10,
+    ]);
+    $form->addRule('duration', get_lang('This field should be numeric'), 'numeric');
+}
+
 //Extra fields
 $extra_field = new ExtraField('course');
 $extra = $extra_field->addElements($form);
@@ -182,20 +190,24 @@ $form->setDefaults($values);
 
 // Validate the form
 if ($form->validate()) {
-    $course = $form->exportValues();
+    $courseData = $form->exportValues();
 
-    $course_teachers = isset($course['course_teachers']) ? $course['course_teachers'] : null;
-    $course['exemplary_content'] = empty($course['exemplary_content']) ? false : true;
-    $course['teachers'] = $course_teachers;
-    $course['wanted_code'] = $course['visual_code'];
-    $course['gradebook_model_id'] = isset($course['gradebook_model_id']) ? $course['gradebook_model_id'] : null;
+    $course_teachers = isset($courseData['course_teachers']) ? $courseData['course_teachers'] : null;
+    $courseData['exemplary_content'] = empty($courseData['exemplary_content']) ? false : true;
+    $courseData['teachers'] = $course_teachers;
+    $courseData['wanted_code'] = $courseData['visual_code'];
+    $courseData['gradebook_model_id'] = isset($courseData['gradebook_model_id']) ? $courseData['gradebook_model_id'] : null;
 
-    if (!empty($course['course_language'])) {
-        $translator = Container::$container->get('translator');
-        $translator->setLocale($course['course_language']);
+    if (isset($courseData['duration'])) {
+        $courseData['duration'] = $courseData['duration'] * 60; // Convert minutes to seconds
     }
 
-    $course = CourseManager::create_course($course);
+    if (!empty($courseData['course_language'])) {
+        $translator = Container::$container->get('translator');
+        $translator->setLocale($courseData['course_language']);
+    }
+
+    $course = CourseManager::create_course($courseData);
     if (null !== $course) {
         Display::addFlash(
             Display::return_message(

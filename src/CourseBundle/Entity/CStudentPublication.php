@@ -173,6 +173,9 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     #[ORM\Column(name: 'filesize', type: 'integer', nullable: true)]
     protected ?int $fileSize = null;
 
+    #[ORM\Column(name: 'duration', type: 'integer', nullable: true)]
+    protected ?int $duration = null;
+
     public function __construct()
     {
         $this->description = '';
@@ -499,6 +502,18 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     public function setComments(Collection $comments): self
     {
         $this->comments = $comments;
+
+        return $this;
+    }
+
+    public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(?int $duration): self
+    {
+        $this->duration = $duration;
 
         return $this;
     }

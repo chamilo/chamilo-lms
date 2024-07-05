@@ -82,6 +82,7 @@ class PlatformConfigurationController extends AbstractController
                 'forum.global_forums_course_id',
                 'document.students_download_folders',
                 'social.hide_social_groups_block',
+                'course.show_course_duration',
             ];
 
             $user = $this->userHelper->getCurrent();

@@ -40,7 +40,7 @@
       <template #loading>
         {{ $t("Loading courses. Please wait.") }}
       </template>
-      <Column header="">
+      <Column header="" style="min-width: 5rem">
         <template #body="{ data }">
           <img
             :alt="data.title"
@@ -53,43 +53,54 @@
         :header="$t('Title')"
         :sortable="true"
         field="title"
-        style="min-width: 10rem"
+        style="min-width: 8rem; text-align: center;"
       >
         <template #body="{ data }">
           {{ data.title }}
         </template>
       </Column>
       <Column
+        v-if="showCourseDuration"
         :header="$t('Course description')"
         :sortable="true"
         field="description"
-        style="min-width: 12rem"
+        style="min-width: 8rem; text-align: center;"
       >
         <template #body="{ data }">
           {{ data.description }}
         </template>
       </Column>
+
+      <Column
+        :header="$t('Duration')"
+        :sortable="true"
+        field="duration"
+        style="min-width: 8rem; text-align: center;"
+      >
+        <template #body="{ data }">
+          <div v-if="data.duration" class="course-duration">
+            {{ (data.duration / 60 / 60).toFixed(2) }} hours
+          </div>
+        </template>
+      </Column>
+
       <Column
         :header="$t('Teachers')"
         :sortable="true"
         field="teachers"
-        style="min-width: 20rem"
+        style="min-width: 10rem; text-align: center;"
       >
         <template #body="{ data }">
-          <TeacherBar
-            :teachers="
-              data.teachers.map((teacher) => ({
-                ...teacher.user,
-              }))
-            "
-          />
+          <div v-if="data.teachers && data.teachers.length > 0">
+            {{ data.teachers.map(teacher => teacher.user.fullName).join(', ') }}
+          </div>
         </template>
       </Column>
       <Column
         :header="$t('Language')"
         :sortable="true"
         field="courseLanguage"
-        style="min-width: 7rem"
+        style="min-width: 5rem; text-align: center;"
       >
         <template #body="{ data }">
           {{ data.courseLanguage }}
@@ -99,7 +110,7 @@
         :header="$t('Categories')"
         :sortable="true"
         field="categories"
-        style="min-width: 11rem"
+        style="min-width: 8rem; text-align: center;"
       >
         <template #body="{ data }">
           <span
@@ -116,7 +127,7 @@
         :header="$t('Ranking')"
         :sortable="true"
         field="trackCourseRanking.realTotalScore"
-        style="min-width: 8rem"
+        style="min-width: 10rem; text-align: center;"
       >
         <template #body="{ data }">
           <Rating
@@ -131,20 +142,20 @@
       <Column
         field="link"
         header=""
-        style="min-width: 8rem"
+        style="min-width: 10rem; text-align: center;"
       >
         <template #body="{ data }">
-          <BaseAppLink
+          <router-link
             v-slot="{ navigate }"
             :to="{ name: 'CourseHome', params: { id: data.id } }"
           >
             <Button
               :label="$t('Go to the course')"
-              class="p-button-sm"
+              class="btn btn--primary text-white"
               icon="pi pi-external-link"
               @click="navigate"
             />
-          </BaseAppLink>
+          </router-link>
         </template>
       </Column>
       <template #footer>
@@ -163,11 +174,15 @@ import DataTable from "primevue/datatable"
 import Column from "primevue/column"
 import Rating from "primevue/rating"
 import TeacherBar from "../../components/TeacherBar.vue"
-import BaseAppLink from "../../components/basecomponents/BaseAppLink.vue"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const status = ref(null)
 const courses = ref([])
 const filters = ref(null)
+
+const platformConfigStore = usePlatformConfig()
+const showCourseDuration = 'true' === platformConfigStore.getSetting("course.show_course_duration")
+
 
 const load = function () {
   status.value = true
@@ -176,7 +191,13 @@ const load = function () {
     .then((response) => {
       status.value = false
       if (Array.isArray(response.data)) {
-        response.data.forEach((course) => (course.courseLanguage = getOriginalLanguageName(course.courseLanguage)))
+        response.data.forEach((course) => {
+          course.courseLanguage = getOriginalLanguageName(course.courseLanguage)
+
+          if (course.duration) {
+            course.duration = course.duration
+          }
+        })
         courses.value = response.data
       }
     })
@@ -265,3 +286,24 @@ const onRatingChange = function (event, trackCourseRanking, courseId) {
 load()
 initFilters()
 </script>
+<style scoped>
+.p-datatable .p-datatable-thead > tr > th {
+  text-align: center !important;
+}
+
+.course-image {
+  width: 100px;
+  height: auto;
+}
+
+.course-duration {
+  text-align: center;
+  font-weight: bold;
+}
+
+.btn--primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: #fff;
+}
+</style>

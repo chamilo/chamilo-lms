@@ -90,6 +90,9 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface, Strin
     #[ORM\Column(name: 'mandatory', type: 'integer')]
     protected int $mandatory;
 
+    #[ORM\Column(name: 'duration', type: 'integer', nullable: true)]
+    protected ?int $duration = null;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -350,6 +353,18 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface, Strin
     public function getIid(): ?int
     {
         return $this->iid;
+    }
+
+    public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(?int $duration): self
+    {
+        $this->duration = $duration;
+
+        return $this;
     }
 
     public function getResourceIdentifier(): int|Uuid

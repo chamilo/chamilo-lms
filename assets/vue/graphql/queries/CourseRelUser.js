@@ -8,7 +8,8 @@ export const GET_COURSE_REL_USER = gql`
                     course {
                         _id,
                         title,
-                        illustrationUrl
+                        illustrationUrl,
+                        duration,
                         users(status: 1, first: 4) {
                             edges {
                                 node {

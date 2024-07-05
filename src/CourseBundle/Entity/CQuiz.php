@@ -152,6 +152,9 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     #[ORM\OneToMany(mappedBy: 'quiz', targetEntity: TrackEExercise::class)]
     protected Collection $attempts;
 
+    #[ORM\Column(name: 'duration', type: 'integer', nullable: true)]
+    protected ?int $duration = null;
+
     public function __construct()
     {
         $this->questions = new ArrayCollection();
@@ -654,6 +657,18 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
         return $this->questionsCategories instanceof ArrayCollection ?
             $this->questionsCategories :
             new ArrayCollection($this->questionsCategories->toArray());
+    }
+
+    public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(?int $duration): self
+    {
+        $this->duration = $duration;
+
+        return $this;
     }
 
     public function getResourceIdentifier(): int|Uuid

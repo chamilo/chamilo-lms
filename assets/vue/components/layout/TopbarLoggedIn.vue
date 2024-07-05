@@ -5,7 +5,7 @@
     </div>
     <div class="app-topbar__items">
       <BaseAppLink
-        v-if="'false' === platformConfigStore.getSetting('display.show_link_ticket_notification')"
+        v-if="'false' !== platformConfigStore.getSetting('display.show_link_ticket_notification')"
         :url="ticketUrl"
         class="item-button"
       >

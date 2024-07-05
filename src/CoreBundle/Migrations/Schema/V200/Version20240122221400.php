@@ -58,10 +58,10 @@ final class Version20240122221400 extends AbstractMigrationChamilo
         $this->connection->executeStatement($updateLanguageQuery, [$newIsoCode, $sublanguage['id']]);
         error_log('Updated language table for id '.$sublanguage['id']);
 
-        // Check and update in settings_current
-        $updateSettingsQuery = "UPDATE settings_current SET selected_value = ? WHERE variable = 'platform_language' AND selected_value = ?";
+        // Check and update in settings
+        $updateSettingsQuery = "UPDATE settings SET selected_value = ? WHERE variable = 'platform_language' AND selected_value = ?";
         $this->connection->executeStatement($updateSettingsQuery, [$newIsoCode, $sublanguage['english_name']]);
-        error_log('Updated settings_current for language '.$sublanguage['english_name']);
+        error_log('Updated settings for language '.$sublanguage['english_name']);
 
         // Check and update in user table
         $updateUserQuery = 'UPDATE user SET locale = ? WHERE locale = ?';

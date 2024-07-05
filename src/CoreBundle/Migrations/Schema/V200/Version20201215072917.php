@@ -18,17 +18,17 @@ class Version20201215072917 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        $settingExists = $this->connection->fetchOne("SELECT COUNT(*) FROM settings_current WHERE variable = 'allow_careers_in_global_agenda'");
+        $settingExists = $this->connection->fetchOne("SELECT COUNT(*) FROM settings WHERE variable = 'allow_careers_in_global_agenda'");
 
         $selectedValue = $this->getConfigurationSelectedValue();
 
         if (0 == $settingExists) {
             $this->addSql(
-                "INSERT INTO settings_current (access_url, variable, category, selected_value, title, access_url_changeable, access_url_locked) VALUES (1, 'allow_careers_in_global_agenda', 'agenda', '$selectedValue', 'Allow careers and promotions in global agenda', 1, 0)"
+                "INSERT INTO settings (access_url, variable, category, selected_value, title, access_url_changeable, access_url_locked) VALUES (1, 'allow_careers_in_global_agenda', 'agenda', '$selectedValue', 'Allow careers and promotions in global agenda', 1, 0)"
             );
         } else {
             $this->addSql(
-                "UPDATE settings_current SET selected_value = '$selectedValue' WHERE variable = 'allow_careers_in_global_agenda'"
+                "UPDATE settings SET selected_value = '$selectedValue' WHERE variable = 'allow_careers_in_global_agenda'"
             );
         }
 
@@ -65,7 +65,7 @@ class Version20201215072917 extends AbstractMigrationChamilo
 
     public function down(Schema $schema): void
     {
-        $this->addSql("DELETE FROM settings_current WHERE variable = 'allow_careers_in_global_agenda'");
+        $this->addSql("DELETE FROM settings WHERE variable = 'allow_careers_in_global_agenda'");
 
         if ($schema->getTable('c_calendar_event')->hasColumn('career_id')) {
             $this->addSql('ALTER TABLE c_calendar_event DROP FOREIGN KEY FK_C_CALENDAR_EVENT_CAREER');

@@ -17,7 +17,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Migrate configuration values to settings_current';
+        return 'Migrate configuration values to settings';
     }
 
     public function up(Schema $schema): void
@@ -30,7 +30,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 $category = strtolower($category);
                 $result = $this->connection
                     ->executeQuery(
-                        "SELECT COUNT(1) FROM settings_current WHERE variable = '$variable' AND category = '{$category}'"
+                        "SELECT COUNT(1) FROM settings WHERE variable = '$variable' AND category = '{$category}'"
                     )
                 ;
                 $count = $result->fetchNumeric()[0];
@@ -43,11 +43,11 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 }
                 if (empty($count)) {
                     $this->addSql(
-                        "INSERT INTO settings_current (access_url, variable, category, selected_value, title, access_url_changeable, access_url_locked) VALUES (1, '{$variable}', '{$category}', '{$selectedValue}', '{$variable}', 1, 1)"
+                        "INSERT INTO settings (access_url, variable, category, selected_value, title, access_url_changeable, access_url_locked) VALUES (1, '{$variable}', '{$category}', '{$selectedValue}', '{$variable}', 1, 1)"
                     );
                 } else {
                     $this->addSql(
-                        "UPDATE settings_current SET selected_value = '{$selectedValue}', category = '{$category}' WHERE variable = '$variable' AND category = '{$category}'"
+                        "UPDATE settings SET selected_value = '{$selectedValue}', category = '{$category}' WHERE variable = '$variable' AND category = '{$category}'"
                     );
                 }
             }
@@ -55,7 +55,7 @@ class Version20230216122900 extends AbstractMigrationChamilo
 
         // Rename setting for hierarchical skill presentation.
         $this->addSql(
-            "UPDATE settings_current SET variable = 'skills_hierarchical_view_in_user_tracking', title = 'skills_hierarchical_view_in_user_tracking' WHERE variable = 'table_of_hierarchical_skill_presentation'"
+            "UPDATE settings SET variable = 'skills_hierarchical_view_in_user_tracking', title = 'skills_hierarchical_view_in_user_tracking' WHERE variable = 'table_of_hierarchical_skill_presentation'"
         );
 
         // Insert extra fields required.
@@ -248,13 +248,13 @@ class Version20230216122900 extends AbstractMigrationChamilo
                 $category = strtolower($category);
                 $result = $this->connection
                     ->executeQuery(
-                        "SELECT COUNT(1) FROM settings_current WHERE variable = '$variable' AND category = '$category'"
+                        "SELECT COUNT(1) FROM settings WHERE variable = '$variable' AND category = '$category'"
                     )
                 ;
                 $count = $result->fetchNumeric()[0];
                 if (!empty($count)) {
                     $this->addSql(
-                        "DELETE FROM settings_current WHERE variable = '{$variable}' AND category = '$category'"
+                        "DELETE FROM settings WHERE variable = '{$variable}' AND category = '$category'"
                     );
                 }
             }

@@ -95,11 +95,11 @@ class Version20170625144000 extends AbstractMigrationChamilo
         }
         */
 
-        $this->addSql('UPDATE c_student_publication_assignment SET publication_id = NULL WHERE publication_id = 0');
-        $this->addSql('UPDATE c_student_publication_assignment SET publication_id = NULL WHERE publication_id NOT IN (SELECT iid FROM c_student_publication)');
         $this->addSql(
             'ALTER TABLE c_student_publication_assignment CHANGE publication_id publication_id INT DEFAULT NULL'
         );
+        $this->addSql('UPDATE c_student_publication_assignment SET publication_id = NULL WHERE publication_id = 0');
+        $this->addSql('UPDATE c_student_publication_assignment SET publication_id = NULL WHERE publication_id NOT IN (SELECT iid FROM c_student_publication)');
 
         if (false === $table->hasForeignKey('FK_25687EB838B217A7')) {
             $this->addSql(

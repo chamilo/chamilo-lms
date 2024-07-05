@@ -716,7 +716,7 @@ $installerData = [
     <link rel="stylesheet" href="../../build/legacy_app.css">
     <style>
         :root {
-            --color-primary-base: 97 53 131;
+            --color-primary-base: 46 117 163;
             --color-primary-gradient: 36 77 103;
             --color-primary-button-text: 46 117 163;
             --color-primary-button-alternative-text: 255 255 255;

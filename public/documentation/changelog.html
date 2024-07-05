@@ -19,72 +19,35 @@
 <div class="version" aria-label="2.0">
     <a id="2.0"></a>
 
-    <h1>Chamilo 2.0 - [release name],  2024-mm-dd</h1>
+    <h1>Chamilo 2.0 alpha 1 - [release name not defined],  2024-07-05</h1>
     <h3>Release notes - summary</h3>
     <p>Chamilo 2.0 is a major release that starts a new branch for the Chamilo software.
-    It is based on Chamilo 1.11.10, but includes tons of backend changes that will make
+    It is based on Chamilo 1.11.10 and includes tons of backend changes that will make
     developing Chamilo more "mainstream" in the future, by adopting more widely-known libraries,
     with the notable inclusions of Symfony as a main controller and framework (except for
-    some legacy tools not yet converted) and VueJS as a main UI framework.<br />
-    For the first time in more than 14 years (since its launch in 2010), Chamilo changes appearance, with a totally
-    new and streamlined set of icons, and a design that will allow more flexibility and speed across devices.</p>
+    some legacy tools not yet converted) and VueJS as our main frontend framework.<br />
+    For the first time in more than 14 years (since its launch in 2010),
+    Chamilo changes appearance, with a new and streamlined (open source) set of
+    icons, and a design that will allow more flexibility and speed across devices.</p>
     <h3>Release name</h3>
-    <p><a href="https://en.wikipedia.org/wiki/"></a>Not assigned</p>
+    <p><a href="https://en.wikipedia.org/wiki/"></a>Not assigned yet</p>
 
     <h3>Security fixes</h3>
     <ul aria-live="off">
         <li>None</li>
     </ul>
 
-    <h3>Possibly breaking changes</h3>
+    <h3>Added</h3>.
+    <ul aria-live="off">
+        <li>Messages: Messaging can now be made to several people at once from the messages interface (and replies can be made to the same users).</li>
+        <li>Added <a href="https://api-platform.com/">API Platform</a> endpoint "/api". See <a href="https://github.com/chamilo/chamilo-lms/wiki/webservices-api-latest">wiki</a>.</li>
+    </ul>
+
+    <h3>Changed</h3>
     <ul aria-live="off">
         <li>Database: All "name" fields have been renamed "title" for consistency across the system.</li>
         <li>Database: As much as possible, tables containing records that had been deleted in Chamilo 1.* are migrated without such records. This means less "ghost" content, but also that the content deleted that way in Chamilo 1.* now has become completely unrecoverable.</li>
-    </ul>
-
-    <h3>Notable new Features</h3>.
-    <h4>For end-users</h4>
-    <ul aria-live="off">
-        <li>Messages: Messaging can now be made to several people at once from the messages interface (and replies can be made to the same users).</li>
-    </ul>
-    <h4>For teachers/trainers</h4>
-    <ul aria-live="off">
-        <li></li>
-    </ul>
-    <h4>For Chamilo admins</h4>
-    <ul aria-live="off">
-        <li></li>
-    </ul>
-    <h4>For developers or sysadmins</h4>
-    <ul aria-live="off">
         <li>Messages: Message attachment are no longer replicated the number of times they are received (for example through an announcement). This saves considerable space on large portals.</li>
-    </ul>
-
-    <h3>General improvements (including major features, minor features and patches)</h3>
-    <ul aria-live="off">
-        <li></li>
-    </ul>
-
-    <h3>Stylesheets and theming changes</h3>
-    <ul aria-live="off">
-        <li></li>
-    </ul>
-
-    <h3>Web services changes</h3>
-    Web services are now documented at https://github.com/chamilo/chamilo-lms/wiki/webservices-api-latest, including
-    its own changelog. If you need consistent tracking of these changes, we recommend you use that page for more
-    complete information.
-
-    In Chamilo 2.0, we have moved from SOAP and REST individual implementations to using
-    <a href="https://api-platform.com/">API Platform</a> to generate web services. This enables more flexibility for
-    us and for users of our API, as there are more ways to access our data, while providing us with easy ways to
-    develop new services.
-    <ul aria-live="off">
-        <li>Added API Platform endpoint "/api"</li>
-    </ul>
-
-    <h3>Removals</h3>
-    <ul aria-live="off">
         <li>Plugins: Many plugins that seemed either unused or were not maintained by their maintainers. They could be included later on, and their tables have not been removed in the database, but they are not available in the list of plugins.</li>
         <li>Wiki: The wiki tool is not available *yet*. It will be included again in future versions, but there were too many changes required to include it in v2.0.</li>
         <li>Blogs: The blogs tool is not available. It might be included again in future versions, but there were too many changes required to include it in v2.0.</li>
@@ -96,9 +59,122 @@
     <h3>Known issues</h3>
     <ul aria-live="off">
         <li>DB title vs name fields: There have been *many* (several hundreds) database changes between v1.* and v2.0. These changes include renaming all "name" fields in all tables to "title", to follow a common standard. This particular change has required dozens of hours of expert work, because the "name" text is very common and the Chamilo 1.* was not *that* well structured. However, we may still have missed a few ones. If you find one, please report it as an issue in our repository.</li>
-        <li>Customizations in course tools (titles, icons, etc) at the course level are lost in migration.</li>
+        <li>Customizations of in-course tools (titles, icons, etc) at the course level are lost in migration.</li>
     </ul>
+</div>
+<div class="syntax-description">
+    <h2>Syntax and terminology</h2>
+    <p>To ensure this changelog is the most useful, we are using a specific syntax and terms for this changelog, provided below:</p>
+    <h3>Versions</h3>
+    <div>
+        Each version is shortly described, with:
+    <ul>
+        <li>a version number using <a href="http://semver.org/">Semantic Versioning</a></li>
+        <li>a version name, which is the name of a town or village visited at least once by one of our development team members, preferably with a link to the place in OpenStreetmap or on Wikipedia</li>
+        <li>a release date</li>
+        <li>an optional, short history explaining the relationship between the version and the place</li>
+    </ul>
+    </div>
+    <h3>Sections</h3>
+    <div>
+        Inside each version block, different sections are laid out to ease the reading of the changelog:
+        <ul>
+            <li>Security fixes: any known vulnerability was fixed in this version.</li>
+            <li>Added: New features. Big & small.</li>
+            <li>Changed: Processes that have changed or improved. Might require power users to be trained on these changes. Includes breaking changes requiring special attention from admins. Includes removals.</li>
+            <li>Fixed: Any known issue that has been fixed. These are not considered improvements because they should have worked in the first place.</li>
+        </ul>
+        Within those sections, you will find different markers helping you filtering out specific topics like theming, web services, database, etc.<br />
+    </div>
+    <h3>Syntax</h3>
+    <div>
+        Every change comes with a link to the change in our versions tracking system, a link to the reported issue or task (if any) and a short description of the change's purpose or effect.<br />
+        A commit message will typically show as follows:
+        <pre>
+    [Minor: ][Tool: ][Subtool: ][Description][ - refs #1234]
+        </pre>
+        where:
+        <ul>
+            <li>[Minor :] can be added or not. If added, this will *not* appear in the changelog because... it's a minor, non-process-affecting change.</li>
+            <li>[Tool: ] is one of the tools/features below.</li>
+            <li>[Subtool: ] is usually used only when the tool is "Plugin: ", to indicate which plugin we're talking about.</li>
+            <li>[Description] is a short sentence (verbs like 'add', 'remove', 'change' are not conjugated, so they appear as these infinitive versions without the English 'to') describing the change.</li>
+            <li>[ - refs #1234] indicates the ID of the issue on Github (or something like 'BT#1234' if from another, private, ticketing system)</li>
+        </ul>
+    </div>
+    <h3>Tools/features terminology</h3>
+    <div>
+        We use a short terminology to group all changes applying to the same tool. We use a term in singular even when talking about multiples. The names we use for these tools/features are:
+        <ul>
+            <li>Admin</li>
+            <li>Announcement</li>
+            <li>Attendance</li>
+            <li>Blog</li>
+            <li>Calendar</li>
+            <li>Career</li>
+            <li>Chat</li>
+            <li>CI (for Continuous Integration, automated tests, etc)</li>
+            <li>Course description</li>
+            <li>Course Progress</li>
+            <li>Cron</li>
+            <li>Dashboard</li>
+            <li>Display</li>
+            <li>Document</li>
+            <li>Dropbox</li>
+            <li>Quiz (not exercise)</li>
+            <li>Extra Fields</li>
+            <li>Forum</li>
+            <li>Glossary</li>
+            <li>Gradebook</li>
+            <li>Group</li>
+            <li>Help</li>
+            <li>Install (includes upgrade stuff)</li>
+            <li>Language</li>
+            <li>Link</li>
+            <li>Learnpath (for LP or Learning Paths)</li>
+            <li>Maintenance</li>
+            <li>Message</li>
+            <li>Notebook</li>
+            <li>Optimization</li>
+            <li>Portfolio</li>
+            <li>Privacy</li>
+            <li>Search (for fulltext search)</li>
+            <li>Security</li>
+            <li>Session</li>
+            <li>Skill</li>
+            <li>Social (for social network)</li>
+            <li>SSO (for Single Sign On methods)</li>
+            <li>Survey</li>
+            <li>System: stuff that have mostly to do with hosting and finetuning at server level</li>
+            <li>Template</li>
+            <li>Ticket</li>
+            <li>Tracking</li>
+            <li>User</li>
+            <li>Webservice</li>
+            <li>Wiki</li>
+            <li>Work</li>
+        </ul>
+    </div>
+    <h3>Hashtags</h3>
+    <div>
+        Commit messages must include (at the end) an indication of the *type* of change:
+        <ul>
+            <li>#security</li>
+            <li>#add</li>
+            <li>#change</li>
+            <li>#fix</li>
+        </ul>
+
+        Other tags might include:
+        <ul>
+            <li>#legal: indicates that this feature helps Chamilo provide information to comply with some law (can be in any country)</li>
+            <li>#scorm: indicates that this feature relates to the SCORM standard</li>
+            <li>#fresh-users: indicates that this feature helps prevent drama with fresh users lacking experience and prone to error</li>
+            <li>#breaking: indicates that this feature might potentially break some previous feature or make previous data inaccessible</li>
+        </ul>
+    </div>
 </div>
 
 </body>
 </html>
+=

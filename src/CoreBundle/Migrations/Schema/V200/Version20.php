@@ -143,8 +143,8 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('UPDATE ticket_message SET subject = "Ticket #"+ id WHERE subject IS NULL');
         $this->addSql('ALTER TABLE ticket_message CHANGE subject subject VARCHAR(255) NOT NULL');
 
-        $this->addSql('UPDATE settings_current SET variable = "No name" WHERE variable IS NULL');
-        $this->addSql('ALTER TABLE settings_current CHANGE variable variable VARCHAR(190) NOT NULL;');
+        $this->addSql('UPDATE settings SET variable = "No name" WHERE variable IS NULL');
+        $this->addSql('ALTER TABLE settings CHANGE variable variable VARCHAR(190) NOT NULL;');
 
         // Global tool.
         if (false === $schema->hasTable('tool')) {
@@ -215,7 +215,7 @@ class Version20 extends AbstractMigrationChamilo
         ");
 
         $this->addSql("
-            UPDATE settings_current
+            UPDATE settings
             SET selected_value = COALESCE((
                 SELECT isocode
                 FROM language

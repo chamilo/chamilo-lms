@@ -10,11 +10,20 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Priority migrations are database changes that *need* to happen before anything else
+ * because the related Entities in the code used for the migration already use 
+ * the new structure (entities cannot be changed on the fly).
+ * An instance of this class is called at the beginning of any migration process.
+ */
 class PriorityMigrationHelper
 {
     private Connection $connection;
     private LoggerInterface $logger;
 
+    /**
+     * Constructor
+     */
     public function __construct(Connection $connection, LoggerInterface $logger)
     {
         $this->connection = $connection;

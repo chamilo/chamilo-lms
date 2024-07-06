@@ -707,6 +707,7 @@ $installerData = [
 ];
 ?>
 <!DOCTYPE html>
+<html lang="<?php echo $installationLanguage ?>" class="no-js h-100">
 <head>
     <title>
         &mdash; <?php echo $translator->trans('Chamilo installation').' &mdash; '.$translator->trans('Version').' '.$new_version; ?>

@@ -1,0 +1,97 @@
+<?php
+
+declare(strict_types=1);
+
+/* For licensing terms, see /license.txt */
+
+namespace Chamilo\CoreBundle\Migrations\Schema\V200;
+
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Connection;
+use Psr\Log\LoggerInterface;
+
+class PriorityMigrationHelper
+{
+    private Connection $connection;
+    private LoggerInterface $logger;
+
+    public function __construct(Connection $connection, LoggerInterface $logger)
+    {
+        $this->connection = $connection;
+        $this->logger = $logger;
+    }
+
+    public function executeUp(Schema $schema): void
+    {
+        $this->logger->info('Executing PriorityMigrationHelper up method.');
+        $this->renameSettingsTableUp();
+        $this->addDurationFields($schema);
+    }
+
+    public function executeDown(Schema $schema): void
+    {
+        $this->logger->info('Executing PriorityMigrationHelper down method.');
+        $this->renameSettingsTableDown();
+        $this->removeDurationFields($schema);
+    }
+
+    private function addDurationFields(Schema $schema): void
+    {
+        $tables = [
+            'course',
+            'c_survey',
+            'c_quiz',
+            'c_quiz_question',
+            'c_lp',
+            'c_lp_item',
+            'c_student_publication',
+            'c_attendance_calendar'
+        ];
+
+        foreach ($tables as $tableName) {
+            $table = $schema->getTable($tableName);
+            if (!$table->hasColumn('duration')) {
+                $this->connection->executeQuery("ALTER TABLE $tableName ADD duration INT DEFAULT NULL");
+            }
+        }
+    }
+
+    private function removeDurationFields(Schema $schema): void
+    {
+        $tables = [
+            'course',
+            'c_survey',
+            'c_quiz',
+            'c_quiz_question',
+            'c_lp',
+            'c_lp_item',
+            'c_student_publication',
+            'c_attendance_calendar'
+        ];
+
+        foreach ($tables as $tableName) {
+            $table = $schema->getTable($tableName);
+            if ($table->hasColumn('duration')) {
+                $this->connection->executeQuery("ALTER TABLE $tableName DROP COLUMN duration");
+            }
+        }
+    }
+
+    private function renameSettingsTableUp(): void
+    {
+        $schemaManager = $this->connection->createSchemaManager();
+
+        if ($schemaManager->tablesExist(['settings_current']) && !$schemaManager->tablesExist(['settings'])) {
+            $this->connection->executeQuery('RENAME TABLE settings_current TO settings');
+        }
+    }
+
+    private function renameSettingsTableDown(): void
+    {
+        $schemaManager = $this->connection->createSchemaManager();
+
+        if ($schemaManager->tablesExist(['settings']) && !$schemaManager->tablesExist(['settings_current'])) {
+            $this->connection->executeQuery('RENAME TABLE settings TO settings_current');
+        }
+    }
+}

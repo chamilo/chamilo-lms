@@ -117,7 +117,7 @@ $institutionForm = 'My Organisation';
 $session_lifetime = 360000;
 //$installLanguage = isset($_SESSION['install_language']) ? $_SESSION['install_language'] : 'english';
 $installLanguage = '';
-$installationGuideLink = '../../documentation/install.html';
+$installationGuideLink = '../../documentation/installation_guide.html';
 
 // Setting the error reporting levels.
 error_reporting(E_ALL);

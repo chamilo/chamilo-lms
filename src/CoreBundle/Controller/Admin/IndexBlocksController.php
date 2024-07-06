@@ -675,7 +675,7 @@ class IndexBlocksController extends BaseController
         ];
         $items[] = [
             'class' => 'item-installation-guide',
-            'url' => $this->generateUrl('legacy_main', ['name' => '../documentation/installation.html']),
+            'url' => $this->generateUrl('legacy_main', ['name' => '../documentation/installation_guide.html']),
             'label' => $this->translator->trans('Installation guide'),
         ];
         $items[] = [

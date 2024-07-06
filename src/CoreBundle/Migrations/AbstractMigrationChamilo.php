@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use DateTime;
 use DateTimeZone;
+use Doctrine\DBAL\Connection;
 use Doctrine\Migrations\AbstractMigration;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -38,7 +39,10 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
 
     private LoggerInterface $logger;
 
-    public function __construct($connection, LoggerInterface $logger)
+    /**
+     * Constructor
+     */
+    public function __construct(Connection $connection, LoggerInterface $logger)
     {
         parent::__construct($connection, $logger);
         $this->logger = $logger;

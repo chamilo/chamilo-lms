@@ -4,7 +4,7 @@
 <link href="https://chamilo.org/the-association/" rel="author" />
 <link href="https://chamilo.org/the-association/" rel="copyright" />
 {{ prefetch }}
-{{ favico }}
+<link rel="shortcut icon" href="{{ theme_asset('images/favicon.ico') }}" type="image/x-icon" />
 {{ browser_specific_head }}
 <link rel="apple-touch-icon" href="{{ _p.web }}apple-touch-icon.png" />
 <link href="{{ _p.web_plugin }}advanced_subscription/views/css/style.css" rel="stylesheet" type="text/css">

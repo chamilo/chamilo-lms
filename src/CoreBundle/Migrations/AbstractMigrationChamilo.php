@@ -22,8 +22,10 @@ use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use DateTime;
 use DateTimeZone;
+use Doctrine\DBAL\Connection;
 use Doctrine\Migrations\AbstractMigration;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -34,6 +36,22 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
 
     protected ?EntityManagerInterface $entityManager = null;
     protected ?ContainerInterface $container = null;
+
+    private LoggerInterface $logger;
+
+    /**
+     * Constructor
+     */
+    public function __construct(Connection $connection, LoggerInterface $logger)
+    {
+        parent::__construct($connection, $logger);
+        $this->logger = $logger;
+    }
+
+    protected function getLogger(): LoggerInterface
+    {
+        return $this->logger;
+    }
 
     public function setEntityManager(EntityManagerInterface $entityManager): void
     {

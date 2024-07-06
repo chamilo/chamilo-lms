@@ -9,12 +9,22 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 use Chamilo\CoreBundle\DataFixtures\LanguageFixtures;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Connection;
+use Psr\Log\LoggerInterface;
 
 /**
  * Migrate file to updated to Chamilo 2.0.
  */
 class Version20 extends AbstractMigrationChamilo
 {
+    private PriorityMigrationHelper $priorityMigrationHelper;
+
+    public function __construct(Connection $connection, LoggerInterface $logger)
+    {
+        parent::__construct($connection, $logger);
+        $this->priorityMigrationHelper = new PriorityMigrationHelper($connection, $logger);
+    }
+
     public function getDescription(): string
     {
         return 'Basic changes';
@@ -22,6 +32,8 @@ class Version20 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        $this->priorityMigrationHelper->executeUp($schema);
+
         $this->addSql('set sql_mode=""');
         // Optimize bulk operations - see https://dev.mysql.com/doc/refman/5.6/en//optimizing-innodb-bulk-data-loading.html
         // $this->addSql('set autocommit=0');
@@ -579,5 +591,8 @@ class Version20 extends AbstractMigrationChamilo
         }
     }
 
-    public function down(Schema $schema): void {}
+    public function down(Schema $schema): void
+    {
+        $this->priorityMigrationHelper->executeDown($schema);
+    }
 }

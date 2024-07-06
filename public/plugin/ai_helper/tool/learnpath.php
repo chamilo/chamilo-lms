@@ -5,7 +5,7 @@
 Create a learnpath with contents based on existing knowledge.
  */
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Framework\Container;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 require_once __DIR__.'/../AiHelperPlugin.php';
@@ -49,7 +49,7 @@ switch ($apiName) {
         if (!empty($resultText)) {
             $style = api_get_css_asset('bootstrap/dist/css/bootstrap.min.css');
             $style .= api_get_css_asset('fontawesome/css/font-awesome.min.css');
-            $style .= api_get_css(ChamiloApi::getEditorDocStylePath());
+            $style .= Container::getThemeHelper()->getThemeAssetLinkTag('document.css');
             $style .= api_get_css_asset('ckeditor/plugins/codesnippet/lib/highlight/styles/default.css');
             $style .= api_get_asset('ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js');
             $style .= '<script>hljs.initHighlightingOnLoad();</script>';

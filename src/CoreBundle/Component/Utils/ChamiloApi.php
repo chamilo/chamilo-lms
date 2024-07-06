@@ -296,22 +296,6 @@ class ChamiloApi
     }
 
     /**
-     * Get the stylesheet path for HTML documents created with CKEditor.
-     */
-    public static function getEditorDocStylePath(): string
-    {
-        $visualTheme = api_get_visual_theme();
-
-        $cssFile = api_get_path(SYS_CSS_PATH).sprintf('themes/%s/document.css', $visualTheme);
-
-        if (is_file($cssFile)) {
-            return api_get_path(WEB_CSS_PATH).sprintf('themes/%s/document.css', $visualTheme);
-        }
-
-        return api_get_path(WEB_CSS_PATH).'document.css';
-    }
-
-    /**
      * Get the stylesheet path for HTML blocks created with CKEditor.
      */
     public static function getEditorBlockStylePath(): string

@@ -18,6 +18,7 @@ export const useMessageRelUserStore = defineStore("messageRelUser", {
           "receivers.receiver": securityStore.user["@id"],
           itemsPerPage: 1,
           msgType: MESSAGE_TYPE_INBOX,
+          status: 0,
         }
         const response = await messageService.countUnreadMessages(params)
 

@@ -34,7 +34,7 @@ final class Version20230720143000 extends AbstractMigrationChamilo
             $path = "users/{$id}/";
 
             $variable = 'split_users_upload_directory';
-            // Query the 'selected_value' from the 'settings_current' table where the 'variable' is 'split_users_upload_directory'
+            // Query the 'selected_value' from the 'settings' table where the 'variable' is 'split_users_upload_directory'
             $query = $this->entityManager->createQuery('SELECT s.selectedValue FROM Chamilo\CoreBundle\Entity\SettingsCurrent s WHERE s.variable = :variable')
                 ->setParameter('variable', $variable)
             ;

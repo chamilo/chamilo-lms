@@ -80,7 +80,7 @@
       :rows="initialRowsPerPage"
       :rows-per-page-options="[10, 20, 50]"
       :total-records="totalItems"
-      :value="filteredItems"
+      :value="items"
       current-page-report-template="{first} to {last} of {totalRecords}"
       data-key="@id"
       lazy
@@ -90,8 +90,8 @@
       sort-field="sendDate"
       :sort-order="-1"
       striped-rows
-      @page="onPage($event)"
-      @sort="sortingChanged($event)"
+      @page="onPage"
+      @sort="sortingChanged"
     >
       <template #header>
         <form
@@ -330,10 +330,6 @@ const rowClass = (data) => {
 
 let fetchPayload = {}
 
-const filteredItems = computed(() => {
-  return items.value.filter((item) => item.status !== MESSAGE_STATUS_DELETED)
-})
-
 function loadMessages(reset = true) {
   if (reset) {
     store.dispatch("message/resetList")
@@ -341,6 +337,7 @@ function loadMessages(reset = true) {
   }
 
   fetchPayload.msgType = MESSAGE_TYPE_INBOX
+  fetchPayload.status = 0
 
   if (selectedTag.value) {
     fetchPayload["receivers.tags.tag"] = selectedTag.value.tag
@@ -464,6 +461,7 @@ async function deleteMessage(message) {
       }
     }
     notification.showSuccessNotification(t("Message deleted"))
+    await messageRelUserStore.findUnreadCount()
     loadMessages()
   } catch (e) {
     notification.showErrorNotification(t("Error deleting message"))

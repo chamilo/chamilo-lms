@@ -214,10 +214,10 @@
         <BaseDivider layout="vertical" />
 
         <div class="admin-colors__settings-preview">
-          <h6>{{ t("You can see examples of how chamilo will look here") }}</h6>
+          <h6>{{ t('You can see examples of how chamilo will look here') }}</h6>
 
           <div>
-            <p class="mb-3 text-lg">{{ t("Buttons") }}</p>
+            <p class="mb-3 text-lg">{{ t('Buttons') }}</p>
             <div class="flex flex-row flex-wrap mb-3">
               <BaseButton
                 :label="t('Primary')"
@@ -403,7 +403,7 @@
             />
           </div>
           <div>
-            <p class="mb-3 text-lg">{{ t("Some more elements") }}</p>
+            <p class="mb-3 text-lg">{{ t('Some more elements') }}</p>
             <div class="course-tool cursor-pointer">
               <div class="course-tool__link hover:primary-gradient hover:bg-primary-gradient/10">
                 <span
@@ -411,7 +411,7 @@
                   class="course-tool__icon mdi mdi-bookshelf"
                 />
               </div>
-              <p class="course-tool__title">{{ t("Documents") }}</p>
+              <p class="course-tool__title">{{ t('Documents') }}</p>
             </div>
           </div>
         </div>

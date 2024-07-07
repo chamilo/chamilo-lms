@@ -12,7 +12,6 @@ export default {
     },
     {
       name: 'UserRelUserAdd',
-      //path: ':id',
       path: 'add',
       component: () => import('../views/userreluser/UserRelUserAdd.vue')
     },

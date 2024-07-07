@@ -1,39 +1,39 @@
 <template>
-  <BaseCard plain class="my-groups-card bg-white mb-3">
+  <BaseCard plain class="my-groups-card bg-white mt-3 mb-3">
     <template #header>
-      <div class="px-2 py-2 -mb-2 bg-gray-15">
-        <h2 class="text-h5">{{ t('My communities') }}</h2>
+      <div class="px-4 py-3 bg-gray-200">
+        <h2 class="text-xl font-semibold">{{ t('My communities') }}</h2>
       </div>
     </template>
-    <hr class="-mt-2 mb-4 -mx-4">
-    <div class="px-2">
-      <ul class="mb-3">
+    <hr class="my-2">
+    <div class="px-4">
+      <ul class="mb-4">
         <li
-          class="list-group-item"
+          class="mb-2"
           v-for="group in groups"
           :key="group.id"
         >
-          <a :href="group.url || '#'" v-if="group.url">{{ group.name }}</a>
+          <a :href="group.url || '#'" v-if="group.url" class="text-blue-600 hover:underline">{{ group.name }}</a>
           <span v-else>{{ group.name }}</span>
         </li>
       </ul>
-      <div v-if="isValidGlobalForumsCourse" class="text-center mb-3">
+      <div v-if="isValidGlobalForumsCourse" class="text-center mb-4">
         <a :href="goToUrl" class="btn btn-primary">{{ t('See all communities') }}</a>
       </div>
       <div v-else >
-        <div v-if="isCurrentUser" class="input-group mb-3">
+        <div v-if="isCurrentUser" class="flex items-center mb-4">
           <input
             type="search"
-            class="form-control"
+            class="flex-grow p-2 h-[44px] border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Search"
             v-model="searchQuery"
           >
           <button
-            class="btn btn-outline-secondary"
+            class="p-2 h-[44px] bg-gray-200 border border-gray-300 rounded-r-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="button"
             @click="search"
           >
-            <i class="mdi mdi-magnify"></i>
+            <i class="mdi mdi-magnify text-gray-700"></i>
           </button>
         </div>
       </div>

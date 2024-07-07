@@ -1,8 +1,4 @@
 <template>
-  <h3 v-t="'Requests'" />
-
-  <hr />
-
   <div
     v-if="loading"
     class="space-y-4"

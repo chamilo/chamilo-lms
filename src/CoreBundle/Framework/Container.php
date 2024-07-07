@@ -41,6 +41,7 @@ use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CoreBundle\ServiceHelper\ContainerHelper;
+use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
@@ -643,5 +644,10 @@ class Container
     public static function getTrackELoginRecordRepository(): TrackELoginRecordRepository
     {
         return self::$container->get(TrackELoginRecordRepository::class);
+    }
+
+    public static function getThemeHelper(): ThemeHelper
+    {
+        return self::$container->get(ThemeHelper::class);
     }
 }

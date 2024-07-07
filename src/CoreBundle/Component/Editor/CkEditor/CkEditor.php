@@ -7,10 +7,10 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor;
 
 use Chamilo\CoreBundle\Component\Editor\Editor;
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\SystemTemplate;
 use Chamilo\CoreBundle\Entity\Templates;
+use Chamilo\CoreBundle\Framework\Container;
 use Database;
 
 class CkEditor extends Editor
@@ -42,7 +42,7 @@ class CkEditor extends Editor
 
         if ('' === $value || '<html><head><title></title></head><body></body></html>' === $value) {
             $style = api_get_bootstrap_and_font_awesome();
-            $style .= api_get_css(ChamiloApi::getEditorDocStylePath());
+            $style .= Container::getThemeHelper()->getThemeAssetLinkTag('document.css');
         }
 
         $html = '<textarea id="'.$this->getTextareaId().'" name="'.$this->getName().'" >

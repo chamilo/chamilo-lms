@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Class WrapHtmlReplacingFilePaths.
@@ -27,7 +27,7 @@ class WrapHtmlReplacingFilePaths extends ReplaceFilePaths
 
         $style = api_get_css_asset('bootstrap/dist/css/bootstrap.min.css');
         $style .= api_get_css_asset('fontawesome/css/font-awesome.min.css');
-        $style .= api_get_css(ChamiloApi::getEditorDocStylePath());
+        $style .= Container::getThemeHelper()->getThemeAssetLinkTag('document.css');
 
         $content = "<!DOCTYPE html><head>$style</head><body>$content</body>";
 

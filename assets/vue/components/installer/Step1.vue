@@ -15,7 +15,7 @@
         <Dropdown
           v-model="installerData.langIso"
           :filter="true"
-          :options="languages"
+          :options="availableLanguages"
           input-id="language_list"
           option-label="english_name"
           option-value="isocode"
@@ -87,6 +87,7 @@ import Dropdown from 'primevue/dropdown';
 import Button from 'primevue/button';
 
 import languages from '../../utils/languages';
+const availableLanguages = languages.filter((language) => ["en_US", "fr_FR"].includes(language.isocode))
 
 const { t } = useI18n();
 

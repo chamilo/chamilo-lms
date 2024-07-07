@@ -132,8 +132,9 @@ export function useSidebarMenu() {
       const styledSocialItems = socialItems.value.map((item) => {
         const newItem = {
           ...item,
-          class: `sub-item-indent${isActive(item) ? " active" : ""}`,
-        }
+          class: `sub-item-indent${isActive(item) ? ' active' : ''}`,
+          icon: item.icon ? `${item.icon} icon-spacing` : null
+        };
 
         if (newItem.isLink && newItem.route) {
           newItem.url = newItem.route

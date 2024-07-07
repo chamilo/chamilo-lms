@@ -66,8 +66,18 @@ putenv('APP_DEBUG=1');
 
 session_start();
 
+Container::$session = new HttpSession();
+
 require_once 'install.lib.php';
 $installationLanguage = 'en_US';
+
+if (!empty($_POST['language_list']) && !ChamiloSession::has('install_language')) {
+    $search = ['../', '\\0'];
+    $installationLanguage = str_replace($search, '', urldecode($_POST['language_list']));
+    ChamiloSession::write('install_language', $installationLanguage);
+} elseif (ChamiloSession::has('install_language')) {
+  $installationLanguage = ChamiloSession::read('install_language');
+}
 
 // Set translation
 $translator = new Translator($installationLanguage);
@@ -78,8 +88,6 @@ $translator->addResource(
     $installationLanguage
 );
 Container::$translator = $translator;
-
-Container::$session = new HttpSession();
 
 // The function api_get_setting() might be called within the installation scripts.
 // We need to provide some limited support for it through initialization of the
@@ -109,14 +117,12 @@ $adminFirstName = get_lang('John');
 $loginForm = 'admin';
 $passForm = '';
 $institutionUrlForm = 'https://chamilo.org';
-$languageForm = '';
+$languageForm = $installationLanguage;
 $campusForm = 'My campus';
 $educationForm = 'Albert Einstein';
 $adminPhoneForm = '(000) 001 02 03';
 $institutionForm = 'My Organisation';
 $session_lifetime = 360000;
-//$installLanguage = isset($_SESSION['install_language']) ? $_SESSION['install_language'] : 'english';
-$installLanguage = '';
 $installationGuideLink = '../../documentation/installation_guide.html';
 
 // Setting the error reporting levels.
@@ -225,7 +231,6 @@ if (!isset($_GET['running'])) {
     $loginForm = 'admin';
     $passForm = api_generate_password(12, false);
     $institutionUrlForm = 'https://chamilo.org';
-    $languageForm = api_get_language_isocode();
     $checkEmailByHashSent = 0;
     $userMailCanBeEmpty = 1;
     $allowSelfReg = 'approval';
@@ -707,6 +712,7 @@ $installerData = [
 ];
 ?>
 <!DOCTYPE html>
+<html lang="<?php echo $installationLanguage ?>" class="no-js h-100">
 <head>
     <title>
         &mdash; <?php echo $translator->trans('Chamilo installation').' &mdash; '.$translator->trans('Version').' '.$new_version; ?>

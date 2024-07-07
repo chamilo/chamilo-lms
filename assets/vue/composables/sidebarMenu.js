@@ -80,7 +80,7 @@ export function useSidebarMenu() {
       if (showCatalogue == 0 || showCatalogue == 2) {
         items.push({
           icon: "mdi mdi-bookmark-multiple",
-          label: t("Courses catalogue"),
+          label: t("Explore more courses"),
           route: { name: "CatalogueCourses" },
         })
       }

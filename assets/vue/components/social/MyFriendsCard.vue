@@ -1,30 +1,30 @@
 <template>
   <BaseCard plain class="my-groups-card bg-white mb-3">
     <template #header>
-      <div class="px-4 py-2 -mb-2 bg-gray-15">
-        <h2 class="text-h5">{{ t('My friends') }}</h2>
+      <div class="px-4 py-3 bg-gray-200">
+        <h2 class="text-xl font-semibold">{{ t('My friends') }}</h2>
       </div>
     </template>
-    <hr class="-mt-2 mb-4 -mx-4">
-    <div>
-      <div v-if="isCurrentUser" class="input-group mb-3">
+    <hr class="my-2">
+    <div class="px-4">
+      <div v-if="isCurrentUser" class="flex items-center mb-4">
         <input
           type="search"
-          class="form-control"
+          class="flex-grow p-2 h-[44px] border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Search"
           v-model="searchQuery"
           @input="fetchFriends"
         >
         <button
-          class="btn btn-outline-secondary"
+          class="p-2 h-[44px] bg-gray-200 border border-gray-300 rounded-r-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           type="button"
           @click="search"
         >
-          <i class="mdi mdi-magnify"></i>
+          <i class="mdi mdi-magnify text-gray-700"></i>
         </button>
       </div>
-      <ul class="list-group">
-        <li v-for="friend in limitedFriends" :key="friend.id" class="list-group-item friend-item d-flex align-items-center">
+      <ul class="list-group mb-4">
+        <li v-for="friend in limitedFriends" :key="friend.id" class="list-group-item friend-item d-flex align-items-center mb-2">
           <a :href="`/social?id=${friend.friend.id}`" class="d-flex align-items-center text-decoration-none">
             <BaseUserAvatar :image-url="friend.friend.illustrationUrl" class="mr-2" :alt="t('Picture')" />
             <span>{{ friend.friend.firstname }} {{ friend.friend.lastname }} <small class="text-muted">({{ friend.friend.username }})</small></span>

@@ -400,19 +400,21 @@
     background: none;
   }
 
-  .tab-header {
+  .tab {
+    padding: 0.5rem 1rem;
     cursor: pointer;
-    padding: 0.75rem 1rem;
-    border-bottom: 3px solid transparent;
+    border-bottom: 2px solid transparent;
     transition: border-color 0.3s;
   }
 
-  .tab-header:hover {
-    border-bottom: 3px solid #64B5F6;
+  .tab:hover {
+    border-bottom: 2px solid #d1d5db;
   }
 
-  .active-tab:hover {
-    border-bottom: 3px solid #1976D2;
+  .tab-active {
+    border-bottom: 2px solid #3b82f6;
+    color: #3b82f6;
+    font-weight: bold;
   }
 }
 
@@ -1035,4 +1037,65 @@
 
 .circle-gray {
   color: gray;
+}
+
+.icon-spacing {
+  margin-right: 8px;
+}
+
+#social-wall-container {
+  .tab {
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
+  }
+
+  .tab:hover {
+     background-color: #e2e8f0;
+  }
+
+  .tab-active {
+    background-color: #3b82f6;
+    color: white;
+  }
+}
+
+#social-group-container {
+  .user-invite-card {
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .user-invite-card .flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .user-invite-card .flex h4 {
+    margin: 0;
+  }
+
+  .user-invite-card .flex span {
+    display: block;
+    margin-top: 0.25rem;
+    color: #6b7280;
+  }
+
+  .user-invite-card .flex .space-x-2 {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .user-invite-card .flex .space-x-2 button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+  }
 }

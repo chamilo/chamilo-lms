@@ -1169,6 +1169,13 @@ class IndexManager
                     'title' => get_lang('PendingAttempts'),
                 ];
             }
+
+            $items[] = [
+                'class' => 'time-report',
+                'icon' => Display::return_icon('quiz.png', get_lang('TimeReport')),
+                'link' => api_get_path(WEB_CODE_PATH).'mySpace/time_report.php',
+                'title' => get_lang('TimeReport'),
+            ];
         }
 
         return $items;

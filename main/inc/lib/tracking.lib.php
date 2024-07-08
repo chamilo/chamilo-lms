@@ -9033,6 +9033,114 @@ class Tracking
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     * Generates a report based on the specified type and selected users within a date range.
+     *
+     * @param string $reportType        The type of report to generate ('time_report' or 'billing_report').
+     * @param array $selectedUserList   An array of user IDs to include in the report.
+     * @param string $startDate         The start date for the report in 'Y-m-d H:i:s' format.
+     * @param string $endDate           The end date for the report in 'Y-m-d H:i:s' format.
+     *
+     * @return array                    An array containing the report data. The first element is an array of headers,
+     *                                  followed by the rows of data.
+     * @throws Exception                Throws an exception if an invalid report type is provided.
+     */
+    public static function generateReport(string $reportType, array $selectedUserList, string $startDate, string $endDate): array
+    {
+        if (empty($selectedUserList)) {
+            return ['headers' => [], 'rows' => []];
+        }
+
+        $tblTrackCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $tblLpView = Database::get_course_table(TABLE_LP_VIEW);
+        $tblLpItemView = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
+        $tblLp = Database::get_course_table(TABLE_LP_MAIN);
+
+        switch ($reportType) {
+            case 'time_report':
+                $headers = [
+                    get_lang('Lastname'),
+                    get_lang('Firstname'),
+                    get_lang('SessionName'),
+                    get_lang('CourseName'),
+                    get_lang('StartingAccessDate'),
+                    get_lang('EndingAccessDate'),
+                    get_lang('TimeSpent')
+                ];
+                $sql = "SELECT user_id, session_id, c_id, login_course_date, logout_course_date, (UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) AS time
+                    FROM $tblTrackCourseAccess
+                    WHERE login_course_date >= '$startDate'
+                      AND login_course_date <= '$endDate'
+                      AND logout_course_date >= '$startDate'
+                      AND logout_course_date <= '$endDate'
+                      AND user_id IN (" . implode(',', $selectedUserList) . ")
+                    ORDER BY user_id, login_course_date";
+                break;
+
+            case 'billing_report':
+                $headers = [
+                    get_lang('Lastname'),
+                    get_lang('Firstname'),
+                    get_lang('SessionName'),
+                    get_lang('CourseName'),
+                    get_lang('LearningpathName'),
+                    get_lang('ValidationDate'),
+                    get_lang('TheoreticalTime')
+                ];
+                $extraField = api_get_configuration_value('billing_report_lp_extra_field');
+                $sql = "SELECT lv.user_id, lv.session_id, lv.c_id, lv.lp_id, liv.start_time, l.name AS lp_name
+                    FROM $tblLpView lv
+                    INNER JOIN $tblLpItemView liv ON lv.iid = liv.lp_view_id
+                    INNER JOIN $tblLpItem li ON li.iid = liv.lp_item_id
+                    INNER JOIN $tblLp l ON l.id = li.lp_id
+                    WHERE lv.user_id IN (" . implode(',', $selectedUserList) . ")
+                      AND liv.start_time >= UNIX_TIMESTAMP('$startDate')
+                      AND liv.start_time <= UNIX_TIMESTAMP('$endDate')
+                      AND lv.progress = 100
+                      AND li.item_type = '".TOOL_LP_FINAL_ITEM."'
+                    ORDER BY lv.user_id, liv.start_time";
+                break;
+
+            default:
+                throw new Exception('Invalid report type');
+        }
+
+        $result = Database::query($sql);
+        $rows = [];
+
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $user = api_get_user_info($row['user_id']);
+            $session = api_get_session_info($row['session_id']);
+            $course = api_get_course_info_by_id($row['c_id']);
+
+            if ($reportType == 'time_report') {
+                $rows[] = [
+                    $user['lastname'],
+                    $user['firstname'],
+                    $session['name'],
+                    $course['title'],
+                    $row['login_course_date'],
+                    $row['logout_course_date'],
+                    gmdate('H:i:s', $row['time']),
+                ];
+            } else if ($reportType == 'billing_report') {
+                $extraFieldValue = (new ExtraFieldValue('lp'))->get_values_by_handler_and_field_variable($row['lp_id'], $extraField);
+                $rows[] = [
+                    $user['lastname'],
+                    $user['firstname'],
+                    $session['name'],
+                    $course['title'],
+                    $row['lp_name'],
+                    date('Y-m-d H:i:s', $row['start_time']),
+                    $extraFieldValue['value'] ?? '',
+                ];
+            }
+        }
+
+        return ['headers' => $headers, 'rows' => $rows];
+    }
+
     private static function countSubscribedCoursesPerUser()
     {
     }

@@ -43,7 +43,7 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Resourc
     /**
      * @var Collection<int, CLp>
      */
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: CLp::class, cascade: ['detach'])]
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: CLp::class, cascade: ['detach', 'persist'])]
     protected Collection $lps;
 
     public function __construct()

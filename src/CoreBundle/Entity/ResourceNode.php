@@ -97,7 +97,7 @@ class ResourceNode implements Stringable
 
     #[Groups(['resource_node:read'])]
     #[Assert\NotNull]
-    #[ORM\ManyToOne(targetEntity: ResourceType::class, inversedBy: 'resourceNodes')]
+    #[ORM\ManyToOne(targetEntity: ResourceType::class, inversedBy: 'resourceNodes', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'resource_type_id', referencedColumnName: 'id', nullable: false)]
     protected ResourceType $resourceType;
 

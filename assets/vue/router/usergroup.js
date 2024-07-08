@@ -20,7 +20,6 @@ export default {
       name: 'UserGroupSearch',
       path: 'search',
       component: () => import('../views/usergroup/Search.vue'),
-      props: (route) => ({ q: route.query.q })
     },
     {
       name: 'UserGroupInvite',

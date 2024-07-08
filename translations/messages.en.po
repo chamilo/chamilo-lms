@@ -27525,3 +27525,120 @@ msgstr ""
 
 msgid "The attempted oral questions are %s"
 msgstr "The attempted oral questions are %s"
+
+msgid "Configure Chamilo colors"
+msgstr "Configure Chamilo colors"
+
+msgid "Primary color"
+msgstr "Primary color"
+
+msgid "Primary color hover/background"
+msgstr "Primary color hover/background"
+
+msgid "Primary color button text"
+msgstr "Primary color button text"
+
+msgid "Primary color button alternative text"
+msgstr "Primary color button alternative text"
+
+msgid "Secondary color"
+msgstr "Secondary color"
+
+msgid "Secondary color hover/background"
+msgstr "Secondary color hover/background"
+
+msgid "Secondary color button text"
+msgstr "Secondary color button text"
+
+msgid "Tertiary color"
+msgstr "Tertiary color"
+
+msgid "Tertiary color hover/background"
+msgstr "Tertiary color hover/background"
+
+msgid "Success color"
+msgstr "Success color"
+
+msgid "Success color hover/background"
+msgstr "Success color hover/background"
+
+msgid "Success color button text"
+msgstr "Success color button text"
+
+msgid "Info color"
+msgstr "Info color"
+
+msgid "Info color hover/background"
+msgstr "Info color hover/background"
+
+msgid "Info color button text"
+msgstr "Info color button text"
+
+msgid "Warning color"
+msgstr "Warning color"
+
+msgid "Warning color hover/background"
+msgstr "Warning color hover/background"
+
+msgid "Warning color button text"
+msgstr "Warning color button text"
+
+msgid "Danger color"
+msgstr "Danger color"
+
+msgid "Danger color hover/background"
+msgstr "Danger color hover/background"
+
+msgid "Form outline color"
+msgstr "Form outline color"
+
+msgid "Hide advanced mode"
+msgstr "Hide advanced mode"
+
+msgid "Show advanced mode"
+msgstr "Show advanced mode"
+
+msgid "You can see examples of how chamilo will look here"
+msgstr "You can see examples of how chamilo will look here"
+
+msgid "Buttons"
+msgstr "Buttons"
+
+msgid "Primary alternative"
+msgstr "Primary alternative"
+
+msgid "Tertiary"
+msgstr "Tertiary"
+
+msgid "Warning"
+msgstr "Warning"
+
+msgid "Danger"
+msgstr "Danger"
+
+msgid "Dropdowns"
+msgstr "Dropdowns"
+
+msgid "Checkbox and radio buttons"
+msgstr "Checkbox and radio buttons"
+
+msgid "Toggle"
+msgstr "Toggle"
+
+msgid "Hide all"
+msgstr "Hide all"
+
+msgid "This is the default form"
+msgstr "This is the default form"
+
+msgid "This is a form with an error"
+msgstr "This is a form with an error"
+
+msgid "Show dialog'"
+msgstr "Show dialog'"
+
+msgid "Dialog example"
+msgstr "Dialog example"
+
+msgid "Some more elements"
+msgstr "Some more elements"

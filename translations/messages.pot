@@ -27524,3 +27524,120 @@ msgstr ""
 
 msgid "The attempted oral questions are %s"
 msgstr ""
+
+msgid "Configure Chamilo colors"
+msgstr ""
+
+msgid "Primary color"
+msgstr ""
+
+msgid "Primary color hover/background"
+msgstr ""
+
+msgid "Primary color button text"
+msgstr ""
+
+msgid "Primary color button alternative text"
+msgstr ""
+
+msgid "Secondary color"
+msgstr ""
+
+msgid "Secondary color hover/background"
+msgstr ""
+
+msgid "Secondary color button text"
+msgstr ""
+
+msgid "Tertiary color"
+msgstr ""
+
+msgid "Tertiary color hover/background"
+msgstr ""
+
+msgid "Success color"
+msgstr ""
+
+msgid "Success color hover/background"
+msgstr ""
+
+msgid "Success color button text"
+msgstr ""
+
+msgid "Info color"
+msgstr ""
+
+msgid "Info color hover/background"
+msgstr ""
+
+msgid "Info color button text"
+msgstr ""
+
+msgid "Warning color"
+msgstr ""
+
+msgid "Warning color hover/background"
+msgstr ""
+
+msgid "Warning color button text"
+msgstr ""
+
+msgid "Danger color"
+msgstr ""
+
+msgid "Danger color hover/background"
+msgstr ""
+
+msgid "Form outline color"
+msgstr ""
+
+msgid "Hide advanced mode"
+msgstr ""
+
+msgid "Show advanced mode"
+msgstr ""
+
+msgid "You can see examples of how chamilo will look here"
+msgstr ""
+
+msgid "Buttons"
+msgstr ""
+
+msgid "Primary alternative"
+msgstr ""
+
+msgid "Tertiary"
+msgstr ""
+
+msgid "Warning"
+msgstr ""
+
+msgid "Danger"
+msgstr ""
+
+msgid "Dropdowns"
+msgstr ""
+
+msgid "Checkbox and radio buttons"
+msgstr ""
+
+msgid "Toggle"
+msgstr ""
+
+msgid "Hide all"
+msgstr ""
+
+msgid "This is the default form"
+msgstr ""
+
+msgid "This is a form with an error"
+msgstr ""
+
+msgid "Show dialog'"
+msgstr ""
+
+msgid "Dialog example"
+msgstr ""
+
+msgid "Some more elements"
+msgstr ""

@@ -60,13 +60,10 @@ export function useSocialMenuItems() {
     return isCurrentUser.value ? [
       { icon: 'mdi mdi-home', label: t("Home"), route: '/social' },
       { icon: 'mdi mdi-email', label: t("Messages"), route: '/resources/messages', badgeCount: unreadMessagesCount.value },
-      { icon: 'mdi mdi-mailbox', label: t("Invitations"), route: { name: 'Invitations' }, badgeCount: invitationsCount.value },
       { icon: 'mdi mdi-handshake', label: t("My friends"), route: { name: 'UserRelUserList' } },
       { icon: 'mdi mdi-group', label: t("Social groups"), route: groupLink.value, isLink: isValidGlobalForumsCourse.value },
-      { icon: 'mdi mdi-magnify', label: t("Search"), route: '/social/search' },
       { icon: 'mdi mdi-briefcase', label: t("My files"), route: { name: 'PersonalFileList', params: { node: securityStore.user.resourceNode.id } } },
       { icon: 'mdi mdi-account', label: t("Personal data"), route: '/resources/users/personal_data' },
-      { icon: 'mdi mdi-star', label: t("Promoted messages"), route: { path: '/social', query: { filterType: 'promoted' } } }
     ] : [
       { icon: 'mdi mdi-home', label: t("Home"), route: '/social' },
       { icon: 'mdi mdi-email', label: t("Send message"), link: `/main/inc/ajax/user_manager.ajax.php?a=get_user_popup&user_id=${user.value.id}`, isExternal: true }

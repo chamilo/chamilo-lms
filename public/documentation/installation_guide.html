@@ -5,6 +5,84 @@
     <title>Installation guide for Chamilo 2</title>
 </head>
 <body>
-
+  <h1>Chamilo installation guide</h1>
+  <p>
+      This is the official Chamilo installation guide for version 2+.
+  </p>
+  <h2>Requirements</h2>
+This version of Chamilo requires the following software stack.
+  It might be installed in other contexts as PHP is very portable, but the following has been thoroughly tested for production environments.
+  <ul>
+      <li>Apache 2.4+</li>
+      <li>MariaDB 10+ or MySQL 5+</li>
+      <li>PHP 8.2+</li>
+  </ul>
+  Within PHP, Chamilo requires or benefits from the following extensions:
+  <ul>
+      <li>session (php-session, usually shipped with PHP)</li>
+      <li>mysql</li>
+      <li>zip</li>
+      <li>zlib</li>
+      <li>pcre</li>
+      <li>xml</li>
+      <li>intl</li>
+      <li>json</li>
+      <li>gd</li>
+      <li>curl</li>
+      <li>mbstring</li>
+      <li>exif</li>
+      <li>opcache</li>
+      <li>iconv</li>
+      <li>ldap (optional)</li>
+      <li>xapian (optional)</li>
+  </ul>
+  <h2>Database</h2>
+You will need a database user with privilege to fully use (and optionally create) a database.<br>
+Although progress has been made to support multiple database management systems, Chamilo currently only supports MariaDB and MySQL.<br>
+Setup a new user in your database system either through visual tools or directly in the terminal:<br>
+  <pre>
+      mysql> GRANT ALL PRIVILEGES ON [db-name].* TO [db-user]@[db-host] IDENTIFIED BY '[db-password]';
+      mysql> FLUSH PRIVILEGES;
+      mysql> CREATE DATABASE [db-name];
+      mysql> exit;
+  </pre>
+where:
+<ul>
+    <li>[db-name] is the name of your database</li>
+    <li>[db-user] is the user that will have permissions to access this database</li>
+    <li>[db-host] is the name of the database server (use <em>localhost</em> when using the same machine for web server and database server - if you use a hosted service, your hosting provider will usually give you this name somewhere)</li>
+    <li>[db-password] is the password this user will use to connect to this database on this host. Use common sense to not make it too easy to guess (use special characters, lowercase and uppercase, numbers, and a length of *at least* 8 characters)</li>
+</ul>
+  <h2>Web server</h2>
+Chamilo 2+ only requires a working web server setup to work. You can run it on localhost with the default installation of any web server, provided you configure your DocumentRoot as the path pointing to Chamilo's <em>public/</em> subfolder.<br>
+Here is a minimal example Apache vhost configuration file for an installation on the http://my.chamilo.local/ URL (replace all values between brackets, including the brackets, to your custom values):
+  <pre>
+&lt;VirtualHost *:80&gt;
+    ServerAdmin [your-email]
+    ServerName [my.chamilo.local]
+    DocumentRoot [/var/www/chamilo/public/]
+    # The following might not even be required
+    ErrorLog /var/log/apache2/[my.chamilo.local]-error.log
+    CustomLog /var/log/apache2/[my.chamilo.local]-access.log combined
+    DirectoryIndex index.php index.html
+    Options Indexes FollowSymLinks
+&lt;/VirtualHost&gt;
+  </pre>
+After setting up this virtual host, don't forget to enable it (example here on Debian/Ubuntu's command line):
+  <pre>
+      a2ensite [my.chamilo.local]
+      systemctl reload apache2
+  </pre>
+  Then you should be able to direct your browser to your URL (e.g. <em>[http://my.chamilo.local]</em>).<br>
+  Chamilo will pick it up from there and offer the installation wizard to help guide you through the rest of the process.
+  <h2>Help available</h2>
+  If you are struggling with this guide, don't hesitate to ask for help on <a href="https://github.com/chamilo/chamilo-lms/discussions">our community forum.</a><br>
+  If you have reasons to seek professional assistance and warranties, please contact <a href="https://chamilo.org/providers">one of our official providers</a>. They contribute heavily to the project and will be able to help you out quickly and efficiently, for configurations from 10 to 1M users.<br>
+  <hr />
+  Last updated: 2024-07-07
+  <a href="http://validator.w3.org/check?uri=referer"><img src="//www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" style="margin: 1em; float: right;" height="31" width="88" /></a>
+  <a href="http://jigsaw.w3.org/css-validator/">
+      <img src="//jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />
+  </a>
 </body>
 </html>

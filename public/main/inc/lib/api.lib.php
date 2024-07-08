@@ -3782,7 +3782,7 @@ function api_get_themes($getOnlyThemeFromVirtualInstance = false)
         return $list;
     };
 
-    $dir = api_get_path(SYS_CSS_PATH).'themes/';
+    $dir = Container::getProjectDir().'var/themes/';
     $list = $readCssFolder($dir);
 
     if (!empty($virtualTheme)) {

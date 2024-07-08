@@ -9082,4 +9082,10 @@ $IfYourLPsAreScormsYouShouldSelectThemFromTheScorms = "Si sus lecciones de apren
 $QuestionsWithNoAutomaticCorrection = "Preguntas sin corrección automática";
 $UsersReportByCourseInSessions = "Reporte de progreso de usuarios por curso, en todas las sesiones";
 $UsersReport = "Reporte de usuarios";
+$SelectAllUsers = "Seleccionar todos los usuarios";
+$SelectUsers = "Seleccionar usuarios";
+$ValidationDate = "Fecha de validación";
+$LearningpathName = "Nombre de lección";
+$StartingAccessDate = "Fecha de inicio de acceso";
+$EndingAccessDate = "Fecha de finalización del acceso";
 ?>

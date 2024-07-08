@@ -9057,4 +9057,10 @@ $IfYourLPsAreScormsYouShouldSelectThemFromTheScorms = "If your Learning paths ar
 $QuestionsWithNoAutomaticCorrection = "Questions with no automatic correction";
 $UsersReportByCourseInSessions = "Report of user progress by course, in all sessions";
 $UsersReport = "Users report";
+$SelectAllUsers = "Salect all users";
+$SelectUsers = "Select users";
+$ValidationDate = "Validation date";
+$LearningpathName = "Learningpath name";
+$StartingAccessDate = "Starting access date";
+$EndingAccessDate = "Ending access date";
 ?>

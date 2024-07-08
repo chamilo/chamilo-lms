@@ -656,12 +656,15 @@ while ($row = Database::fetch_array($rs)) {
 $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
 
 // Get the list of sessions where the user is subscribed as student
-$sql = 'SELECT scu.session_id, scu.c_id
-        FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' scu
+$sql = 'SELECT DISTINCT sc.session_id, sc.c_id
+        FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE).' sc
         INNER JOIN '.$sessionTable.' as s
-        ON (s.id = scu.session_id)
-        WHERE user_id = '.$student_id.'
-        ORDER BY display_end_date DESC
+        ON (s.id = sc.session_id)
+        INNER JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' as scu
+        ON (scu.session_id = sc.session_id)
+        WHERE s.id = scu.session_id
+        AND user_id = '.$student_id.'
+        ORDER BY display_end_date DESC, position ASC
         ';
 $rs = Database::query($sql);
 $tmp_sessions = [];

@@ -9068,7 +9068,7 @@ class Tracking
                     get_lang('EndingAccessDate'),
                     get_lang('TimeSpent')
                 ];
-                $sql = "SELECT user_id, session_id, c_id, login_course_date, logout_course_date, (logout_course_date - login_course_date) AS time
+                $sql = "SELECT user_id, session_id, c_id, login_course_date, logout_course_date, (UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) AS time
                     FROM $tblTrackCourseAccess
                     WHERE login_course_date >= '$startDate'
                       AND login_course_date <= '$endDate'

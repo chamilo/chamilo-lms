@@ -199,7 +199,7 @@ if ($form->validate()) {
     $courseData['gradebook_model_id'] = isset($courseData['gradebook_model_id']) ? $courseData['gradebook_model_id'] : null;
 
     if (isset($courseData['duration'])) {
-        $courseData['duration'] = $courseData['duration'] * 60; // Convert minutes to seconds
+        $courseData['duration'] = (int) $courseData['duration'] * 60; // Convert minutes to seconds
     }
 
     if (!empty($courseData['course_language'])) {

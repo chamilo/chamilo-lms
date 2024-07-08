@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Priority migrations are database changes that *need* to happen before anything else
- * because the related Entities in the code used for the migration already use 
+ * because the related Entities in the code used for the migration already use
  * the new structure (entities cannot be changed on the fly).
  * An instance of this class is called at the beginning of any migration process.
  */
@@ -46,6 +46,8 @@ class PriorityMigrationHelper
 
     private function addDurationFields(Schema $schema): void
     {
+        $schemaManager = $this->connection->createSchemaManager();
+
         $tables = [
             'course',
             'c_survey',
@@ -58,8 +60,8 @@ class PriorityMigrationHelper
         ];
 
         foreach ($tables as $tableName) {
-            $table = $schema->getTable($tableName);
-            if (!$table->hasColumn('duration')) {
+            $columns = $schemaManager->listTableColumns($tableName);
+            if (!array_key_exists('duration', $columns)) {
                 $this->connection->executeQuery("ALTER TABLE $tableName ADD duration INT DEFAULT NULL");
             }
         }
@@ -67,6 +69,8 @@ class PriorityMigrationHelper
 
     private function removeDurationFields(Schema $schema): void
     {
+        $schemaManager = $this->connection->createSchemaManager();
+
         $tables = [
             'course',
             'c_survey',
@@ -79,8 +83,8 @@ class PriorityMigrationHelper
         ];
 
         foreach ($tables as $tableName) {
-            $table = $schema->getTable($tableName);
-            if ($table->hasColumn('duration')) {
+            $columns = $schemaManager->listTableColumns($tableName);
+            if (array_key_exists('duration', $columns)) {
                 $this->connection->executeQuery("ALTER TABLE $tableName DROP COLUMN duration");
             }
         }

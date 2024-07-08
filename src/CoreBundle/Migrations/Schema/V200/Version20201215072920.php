@@ -15,7 +15,7 @@ use Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use Doctrine\DBAL\Schema\Schema;
 
-final class Version20201215072918 extends AbstractMigrationChamilo
+final class Version20201215072920 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
@@ -133,7 +133,11 @@ final class Version20201215072918 extends AbstractMigrationChamilo
         }
 
         if ($schema->hasTable('agenda_reminder')) {
-            $this->updateAgendaReminders($oldNewEventMap);
+            $tblAgendaReminder = $schema->getTable('agenda_reminder');
+
+            if ($tblAgendaReminder->hasColumn('type')) {
+                $this->updateAgendaReminders($oldNewEventMap);
+            }
         }
     }
 

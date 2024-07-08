@@ -51,7 +51,11 @@ class Version20240323181500 extends AbstractMigrationChamilo
         $this->entityManager->flush();
 
         if ($schema->hasTable('agenda_reminder')) {
-            $this->updateAgendaReminders($oldNewEventIdMap);
+            $tblAgendaReminder = $schema->getTable('agenda_reminder');
+
+            if ($tblAgendaReminder->hasColumn('type')) {
+                $this->updateAgendaReminders($oldNewEventIdMap);
+            }
         }
     }
 

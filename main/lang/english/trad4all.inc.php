@@ -9063,4 +9063,6 @@ $ValidationDate = "Validation date";
 $LearningpathName = "Learningpath name";
 $StartingAccessDate = "Starting access date";
 $EndingAccessDate = "Ending access date";
+$TimeReport = "Time report";
+$BillingReport = "Billing report";
 ?>

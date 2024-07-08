@@ -8997,4 +8997,6 @@ $ValidationDate = "Date de validation";
 $LearningpathName = "Nom du parcours";
 $StartingAccessDate = "Date de début d'accès";
 $EndingAccessDate = "Date de fin d'accès";
+$TimeReport = "Rapport de temps";
+$BillingReport = "Rapport de facturation";
 ?>

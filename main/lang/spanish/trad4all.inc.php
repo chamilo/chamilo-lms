@@ -9088,4 +9088,6 @@ $ValidationDate = "Fecha de validación";
 $LearningpathName = "Nombre de lección";
 $StartingAccessDate = "Fecha de inicio de acceso";
 $EndingAccessDate = "Fecha de finalización del acceso";
+$TimeReport = "Informe de tiempo de accesso";
+$BillingReport = "Informe de facturación";
 ?>

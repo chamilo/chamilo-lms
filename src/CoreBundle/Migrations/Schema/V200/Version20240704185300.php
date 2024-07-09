@@ -30,20 +30,29 @@ class Version20240704185300 extends AbstractMigrationChamilo
         $finder = new Finder();
         $filesystem = new Filesystem();
 
+        if (!$filesystem->exists($themeDirectory)) {
+            return;
+        }
+
         $finder->directories()->in($themeDirectory)->depth('== 0');
 
         foreach ($finder as $entry) {
             if ($entry->isDir()) {
-                error_log(
+                $this->write(
                     sprintf(
                         "Moving theme directory: %s to %s",
                         $entry->getRealPath(),
-                        $themesDirectory.'/'
+                        $themesDirectory.DIRECTORY_SEPARATOR
                     )
                 );
-                $filesystem->rename($entry->getRealPath(), $themesDirectory.'/'.$entry->getRelativePathname());
+                $filesystem->rename(
+                    $entry->getRealPath(),
+                    $themesDirectory.DIRECTORY_SEPARATOR.$entry->getRelativePathname(),
+                    true
+                );
             }
         }
+
         $filesystem->remove($themeDirectory);
     }
 }

@@ -196,44 +196,6 @@ $logInfo = [
 Event::registerLog($logInfo);
 
 $survey_invitation['survey_id'] = $surveyId;
-// the following code is commented for the moment because 
-// in Chamilo 2 we can have various survey with the same code
-// for the multi-language functionnality for a survey if needed
-// it will need to be reimplemented in a different way.
-// The code is commented for the moment because it blocks
-// the normal use when many surveys have the same code.
-/*
-// Checking if there is another survey with this code.
-// If this is the case there will be a language choice
-$sql = "SELECT * FROM $table_survey
-        WHERE
-            code = '".Database::escape_string($survey->getCode())."'";
-$result = Database::query($sql);
-
-if (Database::num_rows($result) > 1) {
-    if (isset($_POST['language'])) {
-        $survey_invitation['survey_id'] = $_POST['language'];
-    } else {
-        Display::display_header(get_lang('Surveys'));
-        $frmLangUrl = api_get_self().'?'.api_get_cidreq().'&'
-            .http_build_query([
-                'course' => Security::remove_XSS($_GET['course']),
-                'invitationcode' => Security::remove_XSS($_GET['invitationcode']),
-            ]);
-
-        echo '<form id="language" name="language" method="POST" action="'.$frmLangUrl.'">';
-        echo '<select name="language">';
-        while ($row = Database::fetch_assoc($result)) {
-            echo '<option value="'.$row['iid'].'">'.$row['lang'].'</option>';
-        }
-        echo '</select>';
-        echo '<button type="submit" name="Submit" class="next">'.get_lang('Validate').'</button>';
-        echo '</form>';
-        Display::display_footer();
-        exit();
-    }
-}
- */
 
 // Checking time availability
 SurveyManager::checkTimeAvailability($survey);

@@ -74,6 +74,7 @@ class ChamiloExtension extends AbstractExtension
             new TwigFunction('password_checker_js', [$this, 'getPasswordCheckerJs'], ['is_safe' => ['html']]),
             new TwigFunction('theme_asset', $this->getThemeAssetUrl(...)),
             new TwigFunction('theme_asset_link_tag', $this->getThemeAssetLinkTag(...), ['is_safe' => ['html']]),
+            new TwigFunction('theme_asset_base64', $this->getThemeAssetBase64Encoded(...)),
         ];
     }
 
@@ -228,13 +229,18 @@ class ChamiloExtension extends AbstractExtension
         return 'chamilo_extension';
     }
 
-    public function getThemeAssetUrl(string $path, bool $absolute = false): string
+    public function getThemeAssetUrl(string $path, bool $absoluteUrl = false): string
     {
-        return $this->themeHelper->getThemeAssetUrl($path, $absolute);
+        return $this->themeHelper->getThemeAssetUrl($path, $absoluteUrl);
     }
 
     public function getThemeAssetLinkTag(string $path, bool $absoluteUrl = false): string
     {
         return $this->themeHelper->getThemeAssetLinkTag($path, $absoluteUrl);
+    }
+
+    public function getThemeAssetBase64Encoded(string $path): string
+    {
+        return $this->themeHelper->getAssetBase64Encoded($path);
     }
 }

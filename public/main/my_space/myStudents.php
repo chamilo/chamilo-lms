@@ -426,7 +426,7 @@ switch ($action) {
             $pdf->setBackground($tpl->theme);
             @$pdf->content_to_pdf(
                 $content,
-                '',
+                null,
                 '',
                 null,
                 'D',

@@ -5931,10 +5931,9 @@ EOT;
 
                                         @$pdf = new PDF();
                                         $filename = get_lang('Exercise');
-                                        $cssFile = api_get_path(SYS_CSS_PATH).'themes/chamilo/default.css';
                                         $pdfPath = @$pdf->content_to_pdf(
                                             "<html><body>$pdfContent</body></html>",
-                                            file_get_contents($cssFile),
+                                            null,
                                             $filename,
                                             api_get_course_id(),
                                             'F',

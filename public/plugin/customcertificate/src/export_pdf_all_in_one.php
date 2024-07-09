@@ -629,7 +629,7 @@ if ($exportAllInOne) {
 
         $pdf->content_to_pdf(
             $certificateContent,
-            '',
+            null,
             'certificate'.date('Y_m_d_His'),
             null,
             'D',
@@ -656,10 +656,10 @@ if ($exportAllInOne) {
         $pdf = new PDF($params['format'], $params['orientation'], $params);
         if ($exportZip) {
             $filePath = $archivePath.$fileName.'.pdf';
-            $pdf->content_to_pdf($content, '', $fileName, null, 'F', true, $filePath, false, false, false);
+            $pdf->content_to_pdf($content, null, $fileName, null, 'F', true, $filePath, false, false, false);
             $fileList[] = $filePath;
         } else {
-            $pdf->content_to_pdf($content, '', $fileName, null, 'D', false, null, false, false, false);
+            $pdf->content_to_pdf($content, null, $fileName, null, 'D', false, null, false, false, false);
         }
     }
 

@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * Prints an HTML page with a table containing the gradebook data.
  *
@@ -126,12 +128,7 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
     $footer .= '<div align="right" style="font-weight: bold;">{PAGENO}/{nb}</div>';
 
     // preparing content pdf
-    $css_file = api_get_path(SYS_CSS_PATH).'themes/'.api_get_setting('stylesheets').'/print.css';
-    if (file_exists($css_file)) {
-        $css = @file_get_contents($css_file);
-    } else {
-        $css = '';
-    }
+    $css = Container::getThemeHelper()->getAssetContents('print.css');
     $items_per_page = 30;
     $count_pages = ceil(count($data_table) / $items_per_page);
     $content_table = '';

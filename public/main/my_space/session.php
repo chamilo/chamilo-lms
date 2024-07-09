@@ -267,7 +267,7 @@ switch ($action) {
             $pdf->set_footer();
             $result = @$pdf->content_to_pdf(
                 $content,
-                '',
+                null,
                 $pdfName,
                 null,
                 $mode,

@@ -40,7 +40,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
     private LoggerInterface $logger;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct(Connection $connection, LoggerInterface $logger)
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Metadata\Operation;
@@ -16,9 +18,6 @@ class AccessUrlRelColorThemeStateProvider implements ProviderInterface
         private readonly AccessUrlHelper $accessUrlHelper,
     ) {}
 
-    /**
-     * @inheritdoc
-     */
     public function provide(Operation $operation, array $uriVariables = [], array $context = [])
     {
         $colorThemes = $this->accessUrlHelper->getCurrent()->getColorThemes();

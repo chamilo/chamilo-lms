@@ -8,8 +8,8 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\DataFixtures\LanguageFixtures;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
-use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Schema\Schema;
 use Psr\Log\LoggerInterface;
 
 /**

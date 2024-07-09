@@ -16,6 +16,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
+use const DIRECTORY_SEPARATOR;
+
 final class ThemeHelper
 {
     public const DEFAULT_THEME = 'chamilo';
@@ -27,7 +29,8 @@ final class ThemeHelper
         private readonly CidReqHelper $cidReqHelper,
         private readonly SettingsCourseManager $settingsCourseManager,
         private readonly RouterInterface $router,
-        #[Autowire(service: 'oneup_flysystem.themes_filesystem')] private readonly FilesystemOperator $filesystem,
+        #[Autowire(service: 'oneup_flysystem.themes_filesystem')]
+        private readonly FilesystemOperator $filesystem,
     ) {}
 
     /**

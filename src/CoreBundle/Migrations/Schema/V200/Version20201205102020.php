@@ -106,7 +106,7 @@ final class Version20201205102020 extends AbstractMigrationChamilo
         }
 
         if (!$table->hasForeignKey('FK_79D3D95A613FECDF')) {
-		$this->addSql('UPDATE skill_rel_user SET session_id = NULL WHERE session_id NOT IN (SELECT id FROM session)');
+            $this->addSql('UPDATE skill_rel_user SET session_id = NULL WHERE session_id NOT IN (SELECT id FROM session)');
             $this->addSql(
                 'ALTER TABLE skill_rel_user ADD CONSTRAINT FK_79D3D95A613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE SET NULL'
             );

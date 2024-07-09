@@ -21,7 +21,7 @@ final class AccessUrlRelColorThemeStateProcessor implements ProcessorInterface
 
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): AccessUrlRelColorTheme
     {
-        assert($data instanceof AccessUrlRelColorTheme);
+        \assert($data instanceof AccessUrlRelColorTheme);
 
         $accessUrl = $this->accessUrlHelper->getCurrent();
         $accessUrl->getActiveColorTheme()?->setActive(false);

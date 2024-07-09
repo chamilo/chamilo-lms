@@ -545,6 +545,6 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
             Criteria::expr()->eq('colorTheme', $theme)
         );
 
-        return $this->colorThemes->matching($criteria)->first() ?:  null;
+        return $this->colorThemes->matching($criteria)->first() ?: null;
     }
 }

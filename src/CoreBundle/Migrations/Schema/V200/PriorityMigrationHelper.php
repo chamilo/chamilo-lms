@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
-use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Schema\Schema;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -22,7 +22,7 @@ class PriorityMigrationHelper
     private LoggerInterface $logger;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct(Connection $connection, LoggerInterface $logger)
     {
@@ -56,12 +56,12 @@ class PriorityMigrationHelper
             'c_lp',
             'c_lp_item',
             'c_student_publication',
-            'c_attendance_calendar'
+            'c_attendance_calendar',
         ];
 
         foreach ($tables as $tableName) {
             $columns = $schemaManager->listTableColumns($tableName);
-            if (!array_key_exists('duration', $columns)) {
+            if (!\array_key_exists('duration', $columns)) {
                 $this->connection->executeQuery("ALTER TABLE $tableName ADD duration INT DEFAULT NULL");
             }
         }
@@ -79,12 +79,12 @@ class PriorityMigrationHelper
             'c_lp',
             'c_lp_item',
             'c_student_publication',
-            'c_attendance_calendar'
+            'c_attendance_calendar',
         ];
 
         foreach ($tables as $tableName) {
             $columns = $schemaManager->listTableColumns($tableName);
-            if (array_key_exists('duration', $columns)) {
+            if (\array_key_exists('duration', $columns)) {
                 $this->connection->executeQuery("ALTER TABLE $tableName DROP COLUMN duration");
             }
         }

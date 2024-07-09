@@ -96,9 +96,19 @@ export default {
       parentResourceNodeId: parentResourceNodeId.value,
     })
 
+    if (route.query.type === 'image') {
+      uppy.value.on('file-added', (file) => {
+        const fileTypes = ['image/jpeg', 'image/png', 'image/gif']
+        if (!fileTypes.includes(file.type)) {
+          uppy.value.removeFile(file.id)
+          alert('Only image files are allowed for upload.')
+        }
+      })
+    }
+
     uppy.value.on("complete", (result) => {
-      router.push({ name: "FileManagerList" });
-    });
+      router.push({ name: "FileManagerList", query: route.query, params: { node: route.params.node } })
+    })
 
     return {
       uppy,

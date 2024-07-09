@@ -15,5 +15,11 @@ export default {
       component: () => import('../views/filemanager/Upload.vue'),
       meta: { emptyLayout: true },
     },
+    {
+      name: 'CourseDocumentsUploadFile',
+      path: '/course-upload',
+      meta: { emptyLayout: true },
+      component: () => import('../views/documents/DocumentsUpload.vue')
+    },
   ],
 };

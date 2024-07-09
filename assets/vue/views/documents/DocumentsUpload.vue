@@ -12,7 +12,6 @@
       <Dashboard
         :plugins="['Webcam', 'ImageEditor']"
         :props="{
-          //metaFields: [{id: 'name', name: 'Name', placeholder: 'file name'}],
           proudlyDisplayPoweredByUppy: false,
           width: '100%',
           height: '350px',
@@ -88,7 +87,7 @@ const isUncompressZipEnabled = ref(false)
 const fileExistsOption = ref("rename")
 
 const resourceNode = computed(() => store.getters["resourcenode/getResourceNode"])
-const parentResourceNodeId = ref(Number(route.params.node))
+const parentResourceNodeId = ref(Number(route.query.parentResourceNodeId || route.params.node))
 const resourceLinkList = ref(
   JSON.stringify([
     {
@@ -130,7 +129,18 @@ uppy.value = new Uppy()
     onCreated(response.body)
   })
   .on('complete', () => {
-    router.back()
+    console.log("Upload complete, redirecting...");
+    setTimeout(() => {
+      if (route.query.tab) {
+        router.push({
+          name: route.query.tab === 'documents' ? 'FileManagerList' : 'FileManagerList',
+          params: { node: parentResourceNodeId.value },
+          query: { cid, sid, gid, filetype, tab: route.query.tab }
+        })
+      } else {
+        router.back()
+      }
+    }, 2000); // 2 segundos de retraso
   })
 
 uppy.value.setMeta({
@@ -164,11 +174,15 @@ watch(fileExistsOption, () => {
 })
 
 function back() {
-  if (!resourceNode.value) {
-    return
+  let queryParams = { cid, sid, gid, filetype, tab: route.query.tab }
+  if (route.query.tab) {
+    router.push({
+      name: route.query.tab === 'documents' ? 'FileManagerList' : 'FileManagerList',
+      params: { node: parentResourceNodeId.value },
+      query: queryParams
+    })
+  } else {
+    router.back()
   }
-
-  let queryParams = { cid, sid, gid, filetype }
-  router.push({ name: "DocumentsList", params: { node: resourceNode.value.id }, query: queryParams })
 }
 </script>

@@ -6,7 +6,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users(true);
 
-if (!api_is_student()) {
+if (api_is_student()) {
     api_not_allowed(true);
 }
 

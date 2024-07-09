@@ -64,7 +64,7 @@ class PDF
         $this->params['pdf_date_only'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_FORMAT_LONG);
 
         $params = [
-            'tempDir' => api_get_path(SYS_ARCHIVE_PATH).'mpdf',
+            'tempDir' => Container::getParameter('kernel.cache_dir').'/mpdf',
             'mode' => 'utf-8',
             'format' => $pageFormat,
             'orientation' => $orientation,
@@ -77,9 +77,9 @@ class PDF
         ];
 
         // Default value is 96 set in the mpdf library file config.php
-        $value = api_get_setting('platform.pdf_img_dpi');
-        if (!empty($value)) {
-            $params['img_dpi'] = (int) $value;
+        $value = (int) api_get_setting('platform.pdf_img_dpi');
+        if ($value) {
+            $params['img_dpi'] = $value;
         }
         $this->pdf = new Mpdf($params);
     }

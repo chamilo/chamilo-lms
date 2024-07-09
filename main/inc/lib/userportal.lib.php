@@ -1169,7 +1169,9 @@ class IndexManager
                     'title' => get_lang('PendingAttempts'),
                 ];
             }
-
+        }
+ 
+        if (!api_is_student()) {
             $items[] = [
                 'class' => 'time-report',
                 'icon' => Display::return_icon('statistics.png', get_lang('TimeReport')),

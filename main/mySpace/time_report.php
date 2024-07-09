@@ -6,7 +6,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users(true);
 
-if (!api_is_platform_admin() && !api_is_teacher()) {
+if (!api_is_student()) {
     api_not_allowed(true);
 }
 
@@ -52,7 +52,7 @@ $htmlHeadXtra[] = '
         var userSelector = $("#user_selector");
 
         userSelector.select2({
-            placeholder: "' . get_lang('SelectAnOption2') . '",
+            placeholder: "' . get_lang('SelectAnOption') . '",
             allowClear: true,
             width: "100%"
         });

@@ -9060,8 +9060,8 @@ class Tracking
         switch ($reportType) {
             case 'time_report':
                 $headers = [
-                    get_lang('Lastname'),
-                    get_lang('Firstname'),
+                    get_lang('LastName'),
+                    get_lang('FirstName'),
                     get_lang('SessionName'),
                     get_lang('CourseName'),
                     get_lang('StartingAccessDate'),
@@ -9079,16 +9079,17 @@ class Tracking
                 break;
 
             case 'billing_report':
+                $extraFieldVariable = api_get_configuration_value('billing_report_lp_extra_field');
+                $extraField = (new ExtraField('lp'))->get_handler_field_info_by_field_variable($extraFieldVariable);
                 $headers = [
-                    get_lang('Lastname'),
-                    get_lang('Firstname'),
+                    get_lang('LastName'),
+                    get_lang('FirstName'),
                     get_lang('SessionName'),
                     get_lang('CourseName'),
                     get_lang('LearningpathName'),
                     get_lang('ValidationDate'),
-                    get_lang('TheoreticalTime')
+                    $extraField['display_text']
                 ];
-                $extraField = api_get_configuration_value('billing_report_lp_extra_field');
                 $sql = "SELECT lv.user_id, lv.session_id, lv.c_id, lv.lp_id, liv.start_time, l.name AS lp_name
                     FROM $tblLpView lv
                     INNER JOIN $tblLpItemView liv ON lv.iid = liv.lp_view_id
@@ -9125,7 +9126,7 @@ class Tracking
                     gmdate('H:i:s', $row['time']),
                 ];
             } else if ($reportType == 'billing_report') {
-                $extraFieldValue = (new ExtraFieldValue('lp'))->get_values_by_handler_and_field_variable($row['lp_id'], $extraField);
+                $extraFieldValue = (new ExtraFieldValue('lp'))->get_values_by_handler_and_field_variable($row['lp_id'], $extraFieldVariable);
                 $rows[] = [
                     $user['lastname'],
                     $user['firstname'],

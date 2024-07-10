@@ -91,6 +91,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'redirect_index_to_url_for_logged_users' => '',
                     'default_menu_entry_for_course_or_session' => 'my_courses',
                     'notification_event' => 'false',
+                    'access_to_personal_file_for_all' => 'false',
                 ]
             )
             ->setTransformer(
@@ -282,6 +283,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                 ]
             )
             ->add('notification_event', YesNoType::class)
+            ->add('access_to_personal_file_for_all', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

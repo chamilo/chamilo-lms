@@ -23,7 +23,7 @@
 
 @layer components {
   .card {
-    @apply rounded shadow-lg w-full;
+    @apply rounded bg-white drop-shadow-lg w-full;
   }
 
   // Buttons with icons.
@@ -151,15 +151,6 @@
     .btn:hover, .plane:hover {
       @apply bg-gray-25 text-gray-90;
     }
-  }
-
-  // Card
-  .card {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-    background-color: #fff;
-    margin-bottom: 20px;
   }
 
   .card .flex {

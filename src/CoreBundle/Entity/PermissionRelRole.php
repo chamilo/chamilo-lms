@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PermissionRelRoleRepository::class)]
-#[ORM\Table(name: 'permission_rel_roles')]
+#[ORM\Table(name: 'permission_rel_role')]
 /**
  * The PermissionRelRole entity makes the link between roles 
  * (defined in security.yaml) and permissions (defined by the 

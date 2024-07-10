@@ -16,7 +16,7 @@ final class Version20240709222700 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Insert default data into permissions and permission_rel_roles tables';
+        return 'Insert default data into permission and permission_rel_role tables';
     }
 
     public function up(Schema $schema): void
@@ -42,7 +42,7 @@ final class Version20240709222700 extends AbstractMigrationChamilo
             }
 
             foreach ($roles as $roleName => $roleCode) {
-                if (in_array($roleCode, $permissionsMapping[$permData['slug']])) {
+                if (in_array($roleCode, $Mapping[$permData['slug']])) {
                     $permissionRelRoleRepository = $this->entityManager->getRepository(PermissionRelRole::class);
                     $existingRelation = $permissionRelRoleRepository->findOneBy([
                         'permission' => $permission,
@@ -68,7 +68,7 @@ final class Version20240709222700 extends AbstractMigrationChamilo
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DELETE FROM permission_rel_roles');
-        $this->addSql('DELETE FROM permissions');
+        $this->addSql('DELETE FROM permission_rel_role');
+        $this->addSql('DELETE FROM permission');
     }
 }

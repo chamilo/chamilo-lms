@@ -7479,7 +7479,7 @@ function api_protect_webservices()
  * Checks if a set of roles have a specific permission.
  *
  * @param string $permissionSlug The slug of the permission to check.
- * @param array $roles An array of role codes to check against.
+ * @param array  $roles          An array of role codes to check against.
  * @return bool True if any of the roles have the permission, false otherwise.
  */
 function api_get_permission(string $permissionSlug, array $roles): bool

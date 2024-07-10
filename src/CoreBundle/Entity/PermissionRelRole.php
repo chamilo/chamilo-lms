@@ -12,6 +12,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PermissionRelRoleRepository::class)]
 #[ORM\Table(name: 'permission_rel_roles')]
+/**
+ * The PermissionRelRole entity makes the link between roles 
+ * (defined in security.yaml) and permissions (defined by the 
+ * Permission entity) to define which user role can do what.
+ */
 class PermissionRelRole
 {
     #[ORM\Id]

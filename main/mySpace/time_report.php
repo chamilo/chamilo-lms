@@ -16,7 +16,7 @@ $formValidator = new FormValidator('time_report_form', 'post', api_get_self());
 $userId = api_get_user_id();
 $userOptions = [];
 
-if (api_is_platform_admin()) {
+if (api_is_platform_admin() || (api_is_session_admin() && api_get_setting('prevent_session_admins_to_manage_all_users') !== 'true')) {
     $userList = UserManager::get_user_list();
 } else {
     $userList = $studentList = UserManager::getUsersFollowedByUser(

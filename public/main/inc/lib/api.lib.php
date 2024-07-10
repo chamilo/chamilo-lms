@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserCourseCategory;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Service\PermissionService;
 use Chamilo\CoreBundle\ServiceHelper\MailHelper;
 use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -7472,4 +7473,18 @@ function api_protect_webservices()
         echo "To enable, add \$_configuration['disable_webservices'] = true; in configuration.php";
         exit;
     }
+}
+
+/**
+ * Checks if a set of roles have a specific permission.
+ *
+ * @param string $permissionSlug The slug of the permission to check.
+ * @param array $roles An array of role codes to check against.
+ * @return bool True if any of the roles have the permission, false otherwise.
+ */
+function api_get_permission(string $permissionSlug, array $roles): bool
+{
+    $permissionService = Container::$container->get(PermissionService::class);
+
+    return $permissionService->hasPermission($permissionSlug, $roles);
 }

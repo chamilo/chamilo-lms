@@ -89,17 +89,17 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
 }
 
 /**
- * This function get a content html for export inside a pdf file.
- *
- * @param    array    table headers
- * @param    array    table body
- * @param    array    pdf headers
- * @param    array    pdf footers
+ * Allows to generate a PDF based on tabulated content.
  */
-function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footers_pdf, $title_pdf)
-{
+function export_pdf_with_html(
+    array $headers_table,
+    array $data_table,
+    array $headers_pdf,
+    array $footers_pdf,
+    string $title_pdf
+): never {
     $header = '';
-    if (is_array($headers_pdf)) {
+    if ($headers_pdf) {
         // preparing headers pdf
         $header = '<br/><br/>
                         <table width="100%" cellspacing="1" cellpadding="5" border="0" class="strong">

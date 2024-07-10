@@ -1,20 +1,28 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Service;
+declare(strict_types=1);
+
+namespace Chamilo\CoreBundle\ServiceHelper;
 
 use Chamilo\CoreBundle\Repository\PermissionRelRoleRepository;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class PermissionService
+class PermissionServiceHelper
 {
-    private PermissionRelRoleRepository $permissionRelRoleRepository;
+    public function __construct(
+        private ParameterBagInterface $parameterBag,
+        private PermissionRelRoleRepository $permissionRelRoleRepository
+    ) {}
 
-    public function __construct(PermissionRelRoleRepository $permissionRelRoleRepository)
+    public function getUserRoles(): array
     {
-        $this->permissionRelRoleRepository = $permissionRelRoleRepository;
+        $roles = $this->parameterBag->get('security.role_hierarchy.roles');
+
+        return array_filter(array_keys($roles), function ($role) {
+            return !str_starts_with($role, 'ROLE_CURRENT_') && $role !== 'ROLE_ANONYMOUS';
+        });
     }
 
     public function hasPermission(string $permissionSlug, array $roles): bool

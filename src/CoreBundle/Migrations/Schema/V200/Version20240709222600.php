@@ -13,13 +13,13 @@ final class Version20240709222600 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Create permissions and permission_rel_roles tables';
+        return 'Create permission and permission_rel_role tables';
     }
 
     public function up(Schema $schema): void
     {
         $this->addSql('
-            CREATE TABLE IF NOT EXISTS permissions (
+            CREATE TABLE IF NOT EXISTS permission (
                 id INT AUTO_INCREMENT NOT NULL,
                 title VARCHAR(255) NOT NULL,
                 slug VARCHAR(255) NOT NULL,
@@ -30,7 +30,7 @@ final class Version20240709222600 extends AbstractMigrationChamilo
         ');
 
         $this->addSql('
-            CREATE TABLE IF NOT EXISTS permission_rel_roles (
+            CREATE TABLE IF NOT EXISTS permission_rel_role (
                 id INT AUTO_INCREMENT NOT NULL,
                 permission_id INT NOT NULL,
                 role_code VARCHAR(50) NOT NULL,
@@ -38,14 +38,14 @@ final class Version20240709222600 extends AbstractMigrationChamilo
                 updated_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime)\',
                 INDEX IDX_43723A27FED90CCA (permission_id),
                 PRIMARY KEY(id),
-                CONSTRAINT FK_43723A27FED90CCA FOREIGN KEY (permission_id) REFERENCES permissions (id)
+                CONSTRAINT FK_43723A27FED90CCA FOREIGN KEY (permission_id) REFERENCES permission (id)
             ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC
         ');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP TABLE IF EXISTS permission_rel_roles');
-        $this->addSql('DROP TABLE IF EXISTS permissions');
+        $this->addSql('DROP TABLE IF EXISTS permission_rel_role');
+        $this->addSql('DROP TABLE IF EXISTS permission');
     }
 }

@@ -1,0 +1,49 @@
+{% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+    <h1>{{ 'Permissions Management'|trans }}</h1>
+    <form method="post">
+        <button type="submit" class="save-button btn btn--primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer mt-4 mb-4">{{ 'Save permissions'|trans }}</button>
+        <table class="permissions-table">
+            <thead>
+            <tr>
+                <th>{{ 'Permission '|trans }} <br> ({{ 'slug'|trans }})</th>
+                {% for role in roles %}
+                    <th>
+                        {{ role|trans }}<br>
+                        <input type="checkbox" class="select-all" data-role="{{ role }}" style="margin-top: 5px;">
+                    </th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for permission in permissions %}
+                <tr>
+                    <td>{{ permission.title|trans }} <br> ({{ permission.slug }})</td>
+                    {% for role in roles %}
+                        <td>
+                            <input type="checkbox" name="permissions[{{ permission.slug }}][{{ role }}]"
+                                   {% if forms[permission.slug].vars.value[role] %}checked="checked"{% endif %}>
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" class="save-button btn btn--primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer mt-4">{{ 'Save permissions'|trans }}</button>
+    </form>
+    <script>
+      document.addEventListener('DOMContentLoaded', (event) => {
+        document.querySelectorAll('.select-all').forEach((checkbox) => {
+          checkbox.addEventListener('click', function() {
+            const role = this.getAttribute('data-role');
+            const checkboxes = document.querySelectorAll(`input[name*="[${role}]"]`);
+            const isChecked = this.checked;
+            checkboxes.forEach((cb) => {
+              cb.checked = isChecked;
+            });
+          });
+        });
+      });
+    </script>
+{% endblock %}

@@ -104,6 +104,6 @@ services:
     Chamilo\CoreBundle\Filter\SocialWallFilter:
         tags: [ 'api_platform.filter' ]
 
-    Chamilo\CoreBundle\Service\PermissionService:
+    Chamilo\CoreBundle\ServiceHelper\PermissionServiceHelper:
       arguments:
         $permissionRelRoleRepository: '@Chamilo\CoreBundle\Repository\PermissionRelRoleRepository'

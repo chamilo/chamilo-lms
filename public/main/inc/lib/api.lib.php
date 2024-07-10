@@ -11,8 +11,8 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserCourseCategory;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Service\PermissionService;
 use Chamilo\CoreBundle\ServiceHelper\MailHelper;
+use Chamilo\CoreBundle\ServiceHelper\PermissionServiceHelper;
 use Chamilo\CoreBundle\ServiceHelper\ThemeHelper;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -6348,15 +6348,9 @@ function api_get_roles()
 
 function api_get_user_roles(): array
 {
-    $roles = [
-        'ROLE_TEACHER',
-        'ROLE_STUDENT',
-        'ROLE_RRHH',
-        'ROLE_SESSION_MANAGER',
-        'ROLE_STUDENT_BOSS',
-        'ROLE_INVITEE',
-        'ROLE_USER',
-    ];
+    $permissionService = Container::$container->get(PermissionServiceHelper::class);
+
+    $roles = $permissionService->getUserRoles();
 
     return array_combine($roles, $roles);
 }
@@ -7484,7 +7478,7 @@ function api_protect_webservices()
  */
 function api_get_permission(string $permissionSlug, array $roles): bool
 {
-    $permissionService = Container::$container->get(PermissionService::class);
+    $permissionService = Container::$container->get(PermissionServiceHelper::class);
 
     return $permissionService->hasPermission($permissionSlug, $roles);
 }

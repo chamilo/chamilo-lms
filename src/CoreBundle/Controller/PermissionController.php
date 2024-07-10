@@ -17,6 +17,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+/**
+ * The Permission controller manages the /permissions page to control what roles has what permission
+ */
 class PermissionController extends AbstractController
 {
 
